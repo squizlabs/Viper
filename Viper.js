@@ -24,9 +24,6 @@
 
 function Viper(id, options, callback)
 {
-    this.scripts = ['ViperSelection', 'ViperDOMRange', 'ViperElementMetrics', 'ViperTextMetrics',
-    'ViperIERange', 'ViperMozRange', 'XPath', 'ViperPlugin', 'ViperPluginManager', 'ViperUndoManager', 'ViperChangeTracker'];
-
     this.id             = id;
     this.caretInterval  = null;
     this.caret          = null;
@@ -59,15 +56,10 @@ function Viper(id, options, callback)
 
     // Callback methods which are added by external objects.
     this.callbacks = {};
-    this.stylesURL = '';
-    this.viperURL  = '';
 
     if (!options) {
         options = {};
     }
-
-    // First load the required scripts.
-    var viperURL = options.viperURL || './viper';
 
     this.init();
 
@@ -136,6 +128,12 @@ Viper.prototype = {
         if (callback) {
             callback.call(this);
         }
+
+    },
+
+    getPluginManager: function()
+    {
+        return this.ViperPluginManager;
 
     },
 
@@ -2233,6 +2231,87 @@ Viper.prototype = {
 
     },
 
+
+    /**
+     * Returns true if the given key event matches the given key combinations.
+     *
+     * @param {event}  e    The DOMEvent.
+     * @param {string} keys The key combination string, e.g. CTRL+B or alt+shift+k.
+     *
+     * @return {boolean} Returns true if keys atch.
+     */
+    isKey: function(e, keys)
+    {
+        var eKeys = [];
+        if (e.ctrlKey === true || e.metaKey === true) {
+            eKeys.push('ctrl');
+        }
+
+        if (e.shiftKey === true) {
+            eKeys.push('shift');
+        }
+
+        if (e.altKey === true) {
+            eKeys.push('alt');
+        }
+
+        switch (e.keyCode) {
+            case 13:
+                eKeys.push('enter');
+            break;
+
+            case dfx.DOM_VK_LEFT:
+                eKeys.push('left');
+            break;
+
+            case dfx.DOM_VK_RIGHT:
+                eKeys.push('right');
+            break;
+
+            case dfx.DOM_VK_UP:
+                eKeys.push('up');
+            break;
+
+            case dfx.DOM_VK_DOWN:
+                eKeys.push('down');
+            break;
+
+            case 9:
+                eKeys.push('tab');
+            break;
+
+            case dfx.DOM_VK_DELETE:
+                eKeys.push('delete');
+            break;
+
+            default:
+                var code = e.which;
+
+                // Other characters (a-z0-9..).
+                if (code) {
+                    eKeys.push(String.fromCharCode(code).toLowerCase());
+                }
+            break;
+        }//end switch
+
+        eKeys = eKeys.sort();
+
+        keys       = keys.toLowerCase().split('+').sort();
+        var kCount = keys.length;
+        if (kCount !== eKeys.length) {
+            return false;
+        }
+
+        for (var i = 0; i < kCount; i++) {
+            if (keys[i] !== eKeys[i]) {
+                return false;
+            }
+        }
+
+        return true;
+
+    },
+
     /**
      * Handle the keyDown event.
      *
@@ -2245,6 +2324,29 @@ Viper.prototype = {
         if (this.pluginActive() === true && this.ViperPluginManager.allowTextInput !== true) {
             return;
         }
+
+        if (e.ctrlKey === false
+            && e.altKey === false
+            && e.shiftKey === false
+            && e.metaKey === false
+        ) {
+            // Nothing special about this key let the browser handle it unless
+            // the track changes is activated or no plugin is direcly modifying it.
+            if (ViperChangeTracker.isTracking() === true) {
+                // TODO: Call InsertNodeAtCaret.
+                // TODO: Implement isSpecialKey for DELETE, BACKSPACE, ENTER.
+            } else if (this.isSpecialKey(e) === false) {
+                return true;
+            }
+        }
+
+        var returnValue = this.fireCallbacks('Viper:keyDown', e);
+        if (returnValue === false) {
+            dfx.preventDefault(e);
+            return false;
+        }
+
+        return;
 
         //if (!this.ViperPluginManager.fireKeyDown(e)) {
         //    return false;
@@ -2771,33 +2873,28 @@ Viper.prototype = {
             }
         }
 
-        this._fireCallbacks(callbackList, data, doneCallback);
+        return this._fireCallbacks(callbackList, data, doneCallback);
 
     },
 
-    _fireCallbacks: function(callbacks, data, doneCallback)
+    _fireCallbacks: function(callbacks, data, doneCallback, retVal)
     {
-        if (callbacks.length === 0) {
+        if (callbacks.length === 0 || retVal === false) {
             if (doneCallback) {
-                doneCallback.call(this, data);
+                doneCallback.call(this, data, retVal);
             }
 
-            return;
+            return retVal;
         }
 
         var callback = callbacks.shift();
         if (dfx.isFn(callback) === true) {
             var self   = this;
             var retVal = callback.call(this, data, function(retVal) {
-                if (retVal !== false) {
-                    // If the function does use callback method then call self.
-                    self._fireCallbacks(callbacks, data, doneCallback);
-                }
+                self._fireCallbacks(callbacks, data, doneCallback, retVal);
             });
 
-            if (retVal !== false) {
-                this._fireCallbacks(callbacks, data, doneCallback);
-            }
+            return this._fireCallbacks(callbacks, data, doneCallback, retVal);
         }
 
     },

@@ -29,7 +29,7 @@ for (var j = 0; j < jsFiles.length; j++) {
 document.write('<style type="text/css">@import url("../../viper.css");</style>');
 
 // Viper default plugins.
-var plugins    = 'ViperCopyPastePlugin|ViperFormatPlugin|ViperKeyboardEditorPlugin|ViperListPlugin|ViperRedoPlugin|ViperTableEditorPlugin|ViperToolbarPlugin|ViperTrackChangesPlugin';
+var plugins    = 'ViperCopyPastePlugin|ViperCoreStylesPlugin|ViperFormatPlugin|ViperKeyboardEditorPlugin|ViperListPlugin|ViperRedoPlugin|ViperTableEditorPlugin|ViperToolbarPlugin|ViperTrackChangesPlugin';
 plugins        = plugins.split('|');
 var pluginCss  = [];
 var c = 0;

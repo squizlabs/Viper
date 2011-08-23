@@ -10,6 +10,14 @@
     <script type="text/javascript">
         dfx.addLoadEvent(function() {
             var viper = new Viper('test');
+            var pluginSets = {
+                all: {
+                    plugins: ['ViperCoreStylesPlugin']
+                }
+            };
+
+            viper.setPluginSets(pluginSets);
+            viper.getPluginManager().usePluginSet('all');
             viper.setEditableElement(document.getElementById('editable'));
         });
     </script>

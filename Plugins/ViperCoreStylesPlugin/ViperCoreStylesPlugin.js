@@ -98,20 +98,26 @@ ViperCoreStylesPlugin.prototype = {
             this.toolbarPlugin.addButton(name, 'align-justify', 'Block Justfy', function () {
                 self.handleJustfy('justify');
             });
-        } else {
-            var shortcuts = {
-                strong: 'CTRL+B',
-                em: 'CTRL+I',
-                u: 'CTRL+U'
-            };
-
-            dfx.foreach(shortcuts, function(type) {
-                var keys = shortcuts[type];
-                self.viper.ViperPluginManager.addKeyPressListener(keys, this, function() {
-                    return self.handleStyle(type);
-                });
-            });
         }
+
+        var shortcuts = {
+            strong: 'CTRL+B',
+            em: 'CTRL+I',
+            u: 'CTRL+U'
+        };
+
+        dfx.foreach(shortcuts, function(type) {
+            var keys = shortcuts[type];
+            self.viper.registerCallback('Viper:keyDown', 'ViperCoreStylesPlugin', function(e) {
+                if (self.viper.isKey(e, 'CTRL+B') === true) {
+                    return self.handleStyle('strong');
+                } else if (self.viper.isKey(e, 'CTRL+I') === true) {
+                    return self.handleStyle('em');
+                } else if (self.viper.isKey(e, 'CTRL+U') === true) {
+                    return self.handleStyle('u');
+                }
+            });
+        });
 
         var tagNames = {
             em: 'Italic',
@@ -706,7 +712,7 @@ ViperCoreStylesPlugin.prototype = {
 
                     dfx.removeEmptyNodes(this.viper.element);
                     this.viper.fireNodesChanged('ViperCoreStylesPlugin:removeStyle');
-                    return true;
+                    return false;
                 }
             }
 
@@ -718,7 +724,8 @@ ViperCoreStylesPlugin.prototype = {
         this.viper.fireNodesChanged('ViperCoreStylesPlugin:applyStyle');
         this.viper.focus();
 
-        return true;
+        // Prevent event bubbling etc.
+        return false;
 
     },
 

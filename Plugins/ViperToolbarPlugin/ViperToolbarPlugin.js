@@ -235,7 +235,7 @@ ViperToolbarPlugin.prototype = {
 
     },
 
-    setButtonShortcut: function(plugin, buttonName, keys, fn, data)
+    /*setButtonShortcut: function(plugin, buttonName, keys, fn, data)
     {
         var self = this;
         this.viper.ViperPluginManager.addKeyPressListener(keys, this, function(e, evtData) {
@@ -243,7 +243,7 @@ ViperToolbarPlugin.prototype = {
             return plugin[fn].call(plugin, e, evtData);
         }, data);
 
-    },
+    },*/
 
     setActiveButtonTitle: function(buttonName, title)
     {
