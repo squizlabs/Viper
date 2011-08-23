@@ -1,0 +1,3 @@
+[submodule "DfxJSLib"]
+	path = DfxJSLib
+	url = git@github.com:squizlabs/DfxJSLib.git
