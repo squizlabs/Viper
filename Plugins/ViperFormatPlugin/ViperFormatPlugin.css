@@ -1,0 +1,59 @@
+.ViperFormatPlugin-menu {
+    display: block;
+    background: transparent url(formats_bg.png) no-repeat 0 100%;
+    height: 235px;
+    width: 154px;
+    position: absolute;
+    left: 0px;
+    top: 14px;
+    text-align: left;
+    cursor: default;
+}
+
+.ViperFormatPlugin-menu div {
+    margin-left: 2px;
+    margin-right: 8px;
+    padding: 1px 0 1px 15px;
+}
+
+.ViperFormatPlugin-menu-shadow {
+    height: 3px;
+    background: transparent url(shadow_word_pain.png) repeat-x;
+    margin-left: 1px !important;
+    margin-right: 7px !important;
+}
+
+.ViperFormatPlugin-menu div.active {
+    background-color: #666;
+    color: #FFF;
+}
+
+.ViperFormatPlugin-menu div.hover {
+    background-color: #C4C4C4;
+    color: #000;
+}
+
+.ViperFormatPlugin-menu-item.active {
+    background-color: #666;
+    color: #FFF;
+}
+
+.ViperToolbarPlugin-button.align-left {
+    background-position: -210px 0;
+}
+
+.ViperToolbarPlugin-button.align-center {
+    background-position: -240px 0;
+}
+
+.ViperToolbarPlugin-button.align-right {
+    background-position: -270px 0;
+}
+
+.ViperToolbarPlugin-button.align-justify {
+    background-position: -300px 0;
+}
+
+.ViperToolbarPlugin-button.format {
+    background-position: -330px 0;
+}

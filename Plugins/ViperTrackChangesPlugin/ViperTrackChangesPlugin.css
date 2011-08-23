@@ -1,0 +1,68 @@
+.ViperToolbarPlugin-button.track-changes {
+    background-position: -720px 0;
+}
+
+.ViperTrackChanges-stb-left {
+    float: left;
+    margin-right: 20px;
+}
+
+.ViperTrackChanges-stb-mid {
+    float: left;
+}
+
+.ViperTrackChanges-stb-right {
+    float: right;
+    margin-left: 20px;
+}
+
+.ViperTrackChanges-stb-right .ButtonWidgetType-disabled,
+.ViperTrackChanges-stb-right .ButtonWidgetType {
+    float: left;
+}
+
+.ViperTrackChanges-stb-right .ButtonWidgetType-black {
+    float: left;
+    margin-left: 5px;
+}
+
+.ButtonWidgetType-content.ViperTrackChanges-stb-switch {
+    background: transparent url(icon-switch.png) no-repeat 0 50%;
+    height: 100%;
+    width: 100%;
+    padding-left: 16px;
+}
+
+.ButtonWidgetType-content.ViperTrackChanges-stb-comment {
+    background: transparent url(icon-comment.png) no-repeat 0 50%;
+    height: 100%;
+    width: 100%;
+    padding-left: 16px;
+}
+
+.ViperTrackChanges-stb-optItem {
+    float: left;
+    margin-right: 10px;
+}
+
+.ViperTrackChanges-stb-optItem.first {
+    margin-left: 5px;
+}
+
+.ViperTrackChanges-stb-optItem.last {
+    margin-right: -4px;
+}
+
+.ViperTrackChanges-stb-optItem .RadioButtonWidgetType {
+    margin-top: 2px;
+    margin-left: 5px;
+}
+
+.ViperTrackChanges-stb-optItem label {
+    float: left;
+    cursor: pointer;
+}
+
+#subToolbar-TrackChanges {
+    width: 835px;
+}

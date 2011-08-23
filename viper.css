@@ -1,0 +1,431 @@
+.editable_attribute {
+    outline: none;
+}
+
+#caret, .viper_caret {
+    width: 1px !important;
+    background-color: #000;
+    z-index: 750 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    position: absolute !important;
+    border: 0 !important;
+}
+
+._viper-CTNode {
+    color: #000 !important;
+    border: 1px solid;
+}
+
+._viper-CTNode ._viper-CTNode {
+    border: none;
+}
+
+._viper-CTNode.CT-green {
+    background-color: #D4F1D0;
+    border-color: #93DC8A;
+}
+
+._viper-CTNode.CT-blue {
+    background-color: #D3E1F1;
+    border-color: #90B5DC;
+}
+
+._viper-CTNode.CT-red {
+    background-color: #F1D5D5;
+    border-color: #DD9595;
+}
+
+._viper-CTNode.CT-yellow {
+    background-color: #FFF6AE;
+    border-color: #FEED5D;
+}
+
+._viper-CTNode.CT-orange {
+    background-color: #FBE3D1;
+    border-color: #F4B88C;
+}
+
+._viper-CTNode.CT-purple {
+    background-color: #EAD7EB;
+    border-color: #CA9BCD;
+}
+
+._viper-CTNode.CT-pink {
+    background-color: #FEDAF7;
+    border-color: #FEA2EB;
+}
+
+._viper-CTNode.CT-disabled {
+    display: none;
+}
+
+._viper-CT-marker {
+    position: absolute;
+    height: 2px;
+    margin-left: -2px;
+    background: transparent url(lines.png) repeat-x 0 0px;
+}
+
+._viper-CT-marker-teardrop {
+    background: transparent url(teardrops.png) no-repeat 0 0;
+    width: 8px;
+    height: 9px;
+    cursor: pointer;
+    margin-top: -5px;
+    margin-left: -1px;
+}
+
+._viper-CT-marker-teardrop.orientationLeft {
+    margin-left: auto;
+    margin-right: -3px;
+}
+
+._viper-CT-lineBox {
+    min-height: 2px;
+    position: absolute;
+    overflow: visible;
+    width: 11px;
+    background: transparent url(elles-right.png) no-repeat 0 0;
+    display: none;
+}
+
+.orientationLeft ._viper-CT-lineBox {
+    background-image: url(elles-left.png);
+}
+
+._viper-CT-lineBox.visible {
+    display: block;
+}
+
+._viper-CT-infoBox {
+    position: absolute;
+    border: 2px solid #27B914;
+    margin-left: 10px;
+    margin-top: -23px;
+    top: 100%;
+    width: 250px;
+    font: 12px arial;
+}
+
+._viper-CT-infoBoxHolder.orientationLeft ._viper-CT-infoBox {
+    margin-left: -253px;
+}
+
+._viper-CT-infoBox-top {
+    padding: 2px 3px 2px 5px;
+    color: #FFF;
+}
+
+._viper-CT-infoBox-bottom {
+    background-color: #FFF;
+    padding: 3px 3px 3px 5px;
+}
+
+._viper-CT-infoBoxHolder {
+    position: absolute;
+    margin-left: 26px;
+    top: 0;
+    z-index: 751;
+    width: 280px;
+}
+
+._viper-CT-infoBoxHolder.orientationLeft {
+    margin-left: 0;
+}
+
+._viper-CT-marker.selected,
+._viper-CT-lineBox.selected {
+    z-index: 900;
+}
+
+/* Green */
+._viper-CT-lineBox.CT-green {
+    background-position: 0px 100%;
+}
+
+._viper-CT-lineBox.CT-green.selected {
+    background-position: -11px 100%;
+}
+
+._viper-CT-lineBox.CT-green ._viper-CT-infoBox {
+    background-color: #27B914;
+    border-color: #27B914;
+}
+
+._viper-CT-marker.CT-green {
+    background-position: 0 -143px;
+}
+
+._viper-CT-marker.CT-green.selected {
+    background-position: 0 -132px;
+}
+
+._viper-CT-marker.CT-green ._viper-CT-marker-teardrop {
+    background-position: 0 0;
+}
+
+/* Blue */
+._viper-CT-lineBox.CT-blue {
+    background-position: -22px 100%;
+}
+
+._viper-CT-lineBox.CT-blue.selected {
+    background-position: -33px 100%;
+}
+
+._viper-CT-lineBox.CT-blue ._viper-CT-infoBox {
+    background-color: #216BB8;
+    border-color: #216BB8;
+}
+
+._viper-CT-marker.CT-blue {
+    background-position: 0 -121px;
+}
+
+._viper-CT-marker.CT-blue.selected {
+    background-position: 0 -110px;
+}
+
+._viper-CT-marker.CT-blue ._viper-CT-marker-teardrop {
+    background-position: -8px 0;
+}
+
+/* Red */
+._viper-CT-lineBox.CT-red {
+    background-position: -45px 100%;
+}
+
+._viper-CT-lineBox.CT-red.selected {
+    background-position: -55px 100%;
+}
+
+._viper-CT-lineBox.CT-red ._viper-CT-infoBox {
+    background-color: #BB2B2B;
+    border-color: #BB2B2B;
+}
+
+._viper-CT-marker.CT-red {
+    background-position: 0 -99px;
+}
+
+._viper-CT-marker.CT-red.selected {
+    background-position: 0 -88px;
+}
+
+._viper-CT-marker.CT-red ._viper-CT-marker-teardrop {
+    background-position: -16px 0;
+}
+
+/* Yellow */
+._viper-CT-lineBox.CT-yellow {
+    background-position: -67px 100%;
+}
+
+._viper-CT-lineBox.CT-yellow.selected {
+    background-position: -77px 100%;
+}
+
+._viper-CT-lineBox.CT-yellow ._viper-CT-infoBox {
+    background-color: #FEED5D;
+    border-color: #FEED5D;
+}
+
+._viper-CT-lineBox.CT-yellow ._viper-CT-infoBox-top {
+    color: #000;
+}
+
+._viper-CT-marker.CT-yellow {
+    background-position: 0 -77px;
+}
+
+._viper-CT-marker.CT-yellow.selected {
+    background-position: 0 -66px;
+}
+
+._viper-CT-marker.CT-yellow ._viper-CT-marker-teardrop {
+    background-position: -24px 0;
+}
+
+/* Orange */
+._viper-CT-lineBox.CT-orange {
+    background-position: -88px 100%;
+}
+
+._viper-CT-lineBox.CT-orange.selected {
+    background-position: -99px 100%;
+}
+
+._viper-CT-lineBox.CT-orange ._viper-CT-infoBox {
+    background-color: #E97119;
+    border-color: #E97119;
+}
+
+._viper-CT-marker.CT-orange {
+    background-position: 0 -55px;
+}
+
+._viper-CT-marker.CT-orange.selected {
+    background-position: 0 -44px;
+}
+
+._viper-CT-marker.CT-orange ._viper-CT-marker-teardrop {
+    background-position: -32px 0;
+}
+
+/* Purple */
+._viper-CT-lineBox.CT-purple {
+    background-position: -110px 100%;
+}
+
+._viper-CT-lineBox.CT-purple.selected {
+    background-position: -121px 100%;
+}
+
+._viper-CT-lineBox.CT-purple ._viper-CT-infoBox {
+    background-color: #95379B;
+    border-color: #95379B;
+}
+
+._viper-CT-marker.CT-purple {
+    background-position: 0 -33px;
+}
+
+._viper-CT-marker.CT-purple.selected {
+    background-position: 0 -22px;
+}
+
+._viper-CT-marker.CT-purple ._viper-CT-marker-teardrop {
+    background-position: -40px 0;
+}
+
+/* Pink */
+._viper-CT-lineBox.CT-pink {
+    background-position: -133px 100%;
+}
+
+._viper-CT-lineBox.CT-pink.selected {
+    background-position: -143px 100%;
+}
+
+._viper-CT-lineBox.CT-pink ._viper-CT-infoBox {
+    background-color: #FC44D7;
+    border-color: #FC44D7;
+}
+
+._viper-CT-marker.CT-pink {
+    background-position: 0 -11px;
+}
+
+._viper-CT-marker.CT-pink.selected {
+    background-position: 0 0;
+}
+
+._viper-CT-marker.CT-pink ._viper-CT-marker-teardrop {
+    background-position: -48px 0;
+}
+
+._viper-CT-infoBox-actionBtns {
+    width: 37px;
+    position: absolute;
+    top: 0;
+    right: 1px;
+    height: 16px;
+    cursor: pointer;
+}
+
+._viper-CT-infoBox-top.reject ._viper-CT-infoBox-actionBtns {
+    background-position: 0 -34px;
+}
+
+._viper-CT-infoBox-top.approve ._viper-CT-infoBox-actionBtns {
+    background-position: 0 -17px;
+}
+
+._viper-CT-infoBox-top.approve .clickToAccept {
+    display: block;
+}
+
+._viper-CT-infoBox-top.reject .clickToReject {
+    display: block;
+}
+
+._viper-CT-infoBox-top.approve .changeBoxTitle,
+._viper-CT-infoBox-top.reject .changeBoxTitle {
+    display: none;
+}
+
+._viper-CT-infoBox-top .clickToReject,
+._viper-CT-infoBox-top .clickToAccept {
+    display: none;
+}
+
+._viper-CT-infoBox-actionBtns-reject {
+    float: right;
+    width: 17px;
+    height: 100%;
+    background: transparent url(actions.png) no-repeat 0 -34px;
+}
+
+._viper-CT-infoBox-top.reject ._viper-CT-infoBox-actionBtns-reject {
+    background-position: 0 -51px;
+}
+
+._viper-CT-infoBox-actionBtns-approve {
+    float: left;
+    width: 17px;
+    height: 100%;
+    background: transparent url(actions.png) no-repeat 0 0;
+}
+
+._viper-CT-infoBox-top.approve ._viper-CT-infoBox-actionBtns-approve {
+    background-position: 0 -17px;
+}
+
+._viper-CT-infoBox textarea {
+    border: 1px solid #333;
+    width: 400px;
+    max-height: 500px;
+    min-height: 65px;
+    padding: 3px;
+}
+
+.viperCommentDiv {
+    overflow: hidden;
+    max-height: 55px;
+    min-height: 55px;
+    position: relative;
+}
+
+._viper-CT-lineBox.active {
+    z-index: 900;
+}
+
+._viper-CT-lineBox.active .viperCommentDiv {
+    overflow: auto;
+    max-height: 700px;
+}
+
+._viper-CT-marker.CT-ins,
+._viper-CT-marker.CT-hidden {
+    height: 0;
+}
+
+._viper-CT-marker.CT-ins.show {
+    height: 2px;
+}
+
+._viper-CT-lineBox.CT-ins,
+._viper-CT-lineBox.CT-ins.visible {
+    display: none;
+}
+
+._viper-CT-lineBox.CT-ins.show {
+    display: block;
+}
+
+._viper-CT-infoBox-top .changeBoxTitle {
+    width: 210px;
+    white-space: nowrap;
+    overflow: hidden;
+}
