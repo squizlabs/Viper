@@ -1,5 +1,6 @@
 body {
-    background-color: #EEE;
+    background-color: #DDD;
+    color: #000;
 }
 
 .center {
@@ -7,4 +8,7 @@ body {
     margin: 20px 100px;
 }
 
-
+a {
+    color: #339666;
+    text-decoration: none;
+}

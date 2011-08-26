@@ -12,21 +12,25 @@
             var viper = new Viper('test');
             var pluginSets = {
                 all: {
-                    plugins: ['ViperCoreStylesPlugin']
+                    plugins: ['ViperCoreStylesPlugin', 'ViperKeyboardEditorPlugin']
                 }
             };
 
             viper.setPluginSets(pluginSets);
             viper.getPluginManager().usePluginSet('all');
             viper.setEditableElement(document.getElementById('editable'));
+            ViperChangeTracker.enableChangeTracking();
         });
     </script>
 </head>
-<body id="editable">
+<body>
     <h1>Simple Viper Example</h1>
     <div>
+        This text cannot be edited.
+    </div>
+    <div id="editable">
         <p>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc id nunc risus, et pharetra nulla. Pellentesque sed nulla nisi. Nulla congue turpis eleifend mauris bibendum sed sodales purus posuere. Suspendisse tincidunt, orci commodo porta lobortis, enim ligula pharetra lectus, vel dapibus libero lectus nec lacus. Suspendisse non vestibulum eros. Vivamus consectetur volutpat est in blandit. Vestibulum luctus eros eget magna viverra vel volutpat orci viverra. Nunc vestibulum blandit auctor. Sed id nunc erat. Aenean imperdiet ipsum egestas orci pellentesque ut vehicula arcu varius.
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc id <a href="http://www.google.com">nunc risus</a>, et pharetra nulla. Pellentesque sed nulla nisi. Nulla congue turpis eleifend mauris bibendum sed sodales purus posuere. Suspendisse tincidunt, orci commodo porta lobortis, enim ligula pharetra lectus, vel dapibus libero lectus nec lacus. Suspendisse non vestibulum eros. Vivamus consectetur volutpat est in blandit. Vestibulum luctus eros eget magna viverra vel volutpat orci viverra. Nunc vestibulum blandit auctor. Sed id nunc erat. Aenean imperdiet ipsum egestas orci pellentesque ut vehicula arcu varius.
         </p>
         <ul>
             <li><strong>Mauris sollicitudin <em><sub>fermentum</sub> vestibulum</em>.</strong></li>
@@ -37,7 +41,7 @@
                     <li>Phasellus in dignissim nulla. In <em>turpis</em> libero, dapibus et ornare eget, tincidunt et tortor.</li>
                     <li>Quisque pharetra, purus at sodales fermentum, purus neque luctus ligula, vel molestie arcu libero a tortor.
                         <ul>
-                            <li>In eleifend porttitor pharetra. </li>
+                            <li>In eleifend porttitor pharetra.</li>
                             <li>Nulla et metus id est vestibulum interdum. Praesent odio elit, malesuada vel pulvinar at, venenatis vel purus.</li>
                         </ul>
                     </li>
@@ -47,14 +51,56 @@
             <li>Morbi sit amet lorem arcu, eu pulvinar enim. Vivamus posuere porta accumsan.</li>
         </ul>
         <p class="center">
-        Aliquam auctor enim eu dui gravida tempus. Praesent massa dui, ultrices sed vulputate at, gravida a dui. Maecenas vitae purus nibh, at vestibulum dolor. Vivamus auctor, neque vel eleifend sodales, mauris enim elementum orci, eget molestie massa sapien sed lorem. Praesent nunc quam, condimentum vel laoreet in, rhoncus vel urna. Nunc in orci at magna volutpat aliquet. Cras lectus quam, viverra cursus pellentesque eget, adipiscing sed magna. Proin porttitor ultricies nisl. Praesent suscipit lobortis urna, facilisis commodo tortor tincidunt eu. Nullam varius ante at purus pellentesque ultrices. Etiam purus ipsum, scelerisque a sodales in, auctor sit amet dui. Etiam dignissim pretium diam, nec viverra elit pharetra sed.
+        Aliquam auctor enim eu dui gravida tempus. <a href="http://www.google.com"><strong>Praesent</strong> <em>massa dui</em></a>, ultrices sed vulputate at, gravida a dui. Maecenas vitae purus nibh, at vestibulum dolor. Vivamus auctor, neque vel eleifend sodales, mauris enim elementum orci, eget molestie massa sapien sed lorem. Praesent nunc quam, condimentum vel laoreet in, rhoncus vel urna. Nunc in orci at magna volutpat aliquet. Cras lectus quam, viverra cursus pellentesque eget, adipiscing sed magna. Proin porttitor ultricies nisl. Praesent suscipit lobortis urna, facilisis commodo tortor tincidunt eu. Nullam varius ante at purus pellentesque ultrices. Etiam purus ipsum, scelerisque a sodales in, auctor sit amet dui. Etiam dignissim pretium diam, nec viverra elit pharetra sed.
         </p>
         <p>
         Etiam tincidunt metus at risus vulputate vitae aliquam ligula ultricies. Integer mollis facilisis est vitae egestas. Cras a ultricies eros. Vestibulum placerat ipsum ac justo fringilla ultricies. Aenean sagittis massa quis urna mollis placerat. Nam magna orci, pharetra eu pretium sit amet, tincidunt et purus. Aenean non ipsum nulla. Vivamus volutpat velit vel felis commodo ullamcorper. Nunc a orci purus, iaculis auctor sem. Mauris tincidunt est sed diam consequat vehicula. Sed tempus ultrices leo, et dapibus eros dignissim ac. Nunc est massa, luctus blandit eleifend vitae, mollis id nisi. In mi nulla, egestas eget dictum quis, placerat ut augue. Vestibulum at arcu velit, eu varius nulla.
         </p>
+        <table border="1" cellpadding="2" cellspacing="3">
+            <tr>
+                <th>Col1 Header</th>
+                <th>Col2 Header</th>
+                <th>Col3 Header</th>
+            </tr>
+            <tr>
+                <td>nec porta ante</td>
+                <td>sapien vel aliquet</td>
+                <td>
+                    <ul>
+                        <li>purus neque luctus ligula, vel molestie arcu</li>
+                        <li>purus neque luctus</li>
+                        <li>vel molestie arcu</li>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td>nec porta ante</td>
+                <td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td>
+            </tr>
+            <tr>
+                <td rowspan="2">nec <strong>porta</strong> ante</td>
+                <td>sapien vel aliquet</td>
+                <td>purus neque luctus ligula, vel molestie arcu</td>
+            </tr>
+            <tr>
+                <td>sapien vel aliquet</td>
+                <td>purus neque luctus ligula, vel molestie arcu</td>
+            </tr>
+        </table>
         <p>
         Aenean non nisi nisl, nec porta ante. Aenean nec enim nibh, et laoreet mi. Etiam sed nunc at enim volutpat consectetur id id est. Nunc luctus sem eu neque elementum eu scelerisque eros vehicula. Phasellus velit magna, condimentum et volutpat sit amet, pulvinar vel risus. Morbi sit amet nisl sit amet enim sodales euismod et in ante. Donec ullamcorper metus et neque convallis suscipit at sed massa. In hac habitasse platea dictumst. Pellentesque felis mauris, posuere aliquam dictum quis, imperdiet in justo. Vivamus eu tortor quis purus interdum rhoncus. Aliquam erat volutpat. Aenean ullamcorper nisl ut est faucibus iaculis. Donec non sapien a felis pulvinar gravida.
         </p>
+        <pre>
+            Etiam tincidunt metus at          risus vulputate vitae aliquam ligula ultricies.
+
+                    Integer mollis facilisis
+        </pre>
+        <p>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc id nunc risus, et pharetra nulla. Pellentesque sed nulla nisi. Nulla congue turpis eleifend mauris bibendum sed sodales purus posuere. Suspendisse tincidunt, orci commodo porta lobortis, enim ligula pharetra lectus, vel dapibus libero lectus nec lacus. Suspendisse non vestibulum eros. Vivamus consectetur volutpat est in blandit. Vestibulum luctus eros eget magna viverra vel volutpat orci viverra. Nunc vestibulum blandit auctor. Sed id nunc erat. Aenean imperdiet ipsum egestas orci pellentesque ut vehicula arcu varius.
+        </p>
+    </div>
+    <div>
+        This text cannot be edited.
     </div>
 </body>
 </html>

@@ -25,8 +25,18 @@
 function ViperKeyboardEditorPlugin(viper)
 {
     this.viper = viper;
-    this.viper.ViperPluginManager.addKeyPressListener('SHIFT+ENTER', this, 'handleSoftEnter');
-    this.viper.ViperPluginManager.addKeyPressListener('ENTER', this, 'handleEnter');
+    var self   = this;
+
+    // Make sure Viper fires the keyDown event for ENTER.
+    this.viper.addSpecialKey(13);
+
+    this.viper.registerCallback('Viper:keyDown', 'ViperKeyboardEditorPlugin', function(e) {
+        if (viper.isKey(e, 'ENTER') === true) {
+            return self.handleEnter();
+        } else if (viper.isKey(e, 'SHIFT+ENTER') === true) {
+            return self.handleSoftEnter(e);
+        }
+    });
 
 }
 
@@ -147,6 +157,22 @@ ViperKeyboardEditorPlugin.prototype = {
             return this.handleSoftEnter();
         }
 
+        if (ViperChangeTracker.isTracking() !== true) {
+            // Track changes is not turned on.. Let the browser do everything.
+            return true;
+        }
+
+        // Because track changes is enabled we need to add extra info to elements
+        return this._handleEnter(returnFirstBlock);
+
+    },
+
+    _handleEnter: function(returnFirstBlock)
+    {
+        if (this.viper.inlineMode === true) {
+            return this.handleSoftEnter();
+        }
+
         var range = this.viper.getCurrentRange();
 
         // If the range is not collapsed then remove the contents of the selection.
@@ -165,7 +191,7 @@ ViperKeyboardEditorPlugin.prototype = {
                     // Lists are special they are handled by the ViperListPlugin.
                     var listPlugin = this.viper.ViperPluginManager.getPlugin('ViperListPlugin');
                     if (listPlugin && listPlugin.handleEnter(parent) === false) {
-                        return true;
+                        return false;
                     }
 
                     break;
@@ -235,7 +261,7 @@ ViperKeyboardEditorPlugin.prototype = {
         } else if (tag === 'pre') {
             // If the text is in a PRE tag then we need to insert a new line character.
             this.insertTextAtRange(range, "\n");
-            return true;
+            return false;
         } else if (tag === 'td' || tag === 'th') {
             // Cannot create a new TD tag so need the move td contents in to a P tag.
             var bookmark = this.viper.createBookmark(range);
@@ -350,52 +376,48 @@ ViperKeyboardEditorPlugin.prototype = {
             return parent;
         }
 
-        return true;
+        return false;
 
     },
 
+    /**
+     * Handles shift + enter.
+     *
+     * Creates a new BR tag at the position of the caret. If the caret is inside a
+     * PRE tag then it will create a new P tag and move the caret inside the P tag.
+     *
+     * @return {boolean} False when it modified the content to prevent event bubbling.
+     */
     handleSoftEnter: function(e)
     {
         if (this._isKeyword() === true) {
-            return true;
+            return false;
         }
 
-        var range = this.viper.getCurrentRange();
         if (e) {
+            var range     = this.viper.getCurrentRange();
             var startNode = range.getStartNode();
             if (startNode && dfx.isTag(startNode.parentNode, 'pre') === true) {
                 // Break out from PRE tag.
                 var p = Viper.document.createElement('p');
                 dfx.setHtml(p, '&nbsp;');
-                dfx.insertAfter(startNode.parentNode, p);
-                range.setStart(p.firstChild, 0);
-                range.collapse(true);
-                ViperSelection.addRange(range);
-                this.viper.fireNodesChanged('ViperKeyboardEditorPlugin:softEnter');
-                return;
+                this.viper.insertAfter(startNode.parentNode, p);
+                this.viper.setCaretAtStart(p);
+                return false;
             }
         }
 
         var node = Viper.document.createElement('br');
         this.viper.insertNodeAtCaret(node);
-        range = this.viper.getCurrentRange();
 
         if (dfx.isTag(node.previousSibling, 'br') === true) {
-            // Insert a text node in between these br tags.
-            var text = Viper.document.createTextNode(String.fromCharCode(160));
-            dfx.insertAfter(node.previousSibling, text);
+            // The previous sibling is also a br tag and to be able to position
+            // caret between these two br tags we need to insert a text node in
+            // between them.
+            this.viper.insertAfter(node.previousSibling, this.viper.createSpaceNode());
         }
 
-        if (!node.nextSibling || node.nextSibling.nodeType !== dfx.TEXT_NODE) {
-            var text = Viper.document.createTextNode(String.fromCharCode(160));
-            dfx.insertAfter(node, text);
-        }
-
-        range.setStart(node.nextSibling, 0);
-        range.collapse(true);
-        this.viper.fireNodesChanged('ViperKeyboardEditorPlugin:softEnter');
-
-        return true;
+        return !this.viper.setCaretAfterNode(node);
 
     },
 
