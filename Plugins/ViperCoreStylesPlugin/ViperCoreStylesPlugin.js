@@ -119,6 +119,21 @@ ViperCoreStylesPlugin.prototype = {
             });
         });
 
+        this.viper.registerCallback('Viper:keyPress', 'ViperCoreStylesPlugin', function(e) {
+            if (self._onChangeAddStyle && self.viper.isInputKey(e) === true) {
+                var char = String.fromCharCode(e.which);
+                return self.viper.insertTextAtCaret(char);
+            }
+        });
+
+        this.viper.registerCallback('Viper:nodesInserted', 'ViperCoreStylesPlugin', function(data) {
+            return self._wrapNodeWithActiveStyle(data.node, data.range);
+        });
+
+        this.viper.registerCallback('Viper:charInsert', 'ViperCoreStylesPlugin', function(data) {
+            self._onChangeAddStyle = null;
+        });
+
         var tagNames = {
             em: 'Italic',
             strong: 'Bold',
@@ -680,9 +695,14 @@ ViperCoreStylesPlugin.prototype = {
         } else {
             // Start a new style tag.
             var styleTag = Viper.document.createElement(style);
-
-            dfx.insertAfter(nodes.prevNode, styleTag);
             styleTag.appendChild(node);
+
+            if (nodes.prevNode) {
+                this.viper.insertAfter(nodes.prevNode, styleTag);
+            } else if (nodes.nextNode) {
+                this.viper.insertBefore(nodes.nextNode, styleTag);
+            }
+
             range.setStart(node, 1);
             range.collapse(true);
             ViperSelection.addRange(range);
@@ -702,6 +722,7 @@ ViperCoreStylesPlugin.prototype = {
         if (range.collapsed === true) {
             // Range is collapsed. We need to listen for next insertion.
             this._onChangeAddStyle = style;
+            return false;
         } else {
             if (dfx.getParents(startNode, style).length > 0) {
                 if (dfx.getParents(endNode, style).length > 0) {

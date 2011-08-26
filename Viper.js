@@ -627,7 +627,8 @@ Viper.prototype = {
                  }
             }//end if
 
-            if (this.ViperPluginManager.fireNodeInserted(newNode, newRange) === false) {
+            //if (this.ViperPluginManager.fireNodeInserted(newNode, newRange) === false) {
+            if (this.fireCallbacks('Viper:nodesInserted', {node: newNode, range: newRange}) === false) {
                 noBlock = false;
             }
 
@@ -2232,10 +2233,6 @@ Viper.prototype = {
                 prevNode = Viper.document.createTextNode('');
                 dfx.insertBefore(bookmark.start, prevNode);
                 nextNode = prevNode;
-            } else if (!prevNode && nextNode) {
-                prevNode = nextNode;
-            } else if (!nextNode && prevNode) {
-                nextNode = prevNode;
             }
         } else {
             var prevElem = null;
@@ -2495,6 +2492,22 @@ Viper.prototype = {
 
     },
 
+    isInputKey: function(e)
+    {
+         if (e.which !== 0
+            && e.which !== dfx.DOM_VK_DELETE
+            && e.ctrlKey !== true
+            && e.altKey !== true
+            && e.shiftKey !== true
+            && e.metaKey !== true
+        ) {
+            return true;
+        }
+
+        return false;
+
+    },
+
     /**
      * Returns true if the given key event is using a registered special key.
      *
@@ -2544,6 +2557,12 @@ Viper.prototype = {
             return false;
         }
 
+        var returnValue = this.fireCallbacks('Viper:keyDown', e);
+        if (returnValue === false) {
+            dfx.preventDefault(e);
+            return false;
+        }
+
         if (e.ctrlKey === false
             && e.altKey === false
             && e.shiftKey === false
@@ -2554,12 +2573,6 @@ Viper.prototype = {
             if (this.isSpecialKey(e) === false) {
                 return true;
             }
-        }
-
-        var returnValue = this.fireCallbacks('Viper:keyDown', e);
-        if (returnValue === false) {
-            dfx.preventDefault(e);
-            return false;
         }
 
         return;
@@ -2622,6 +2635,11 @@ Viper.prototype = {
         if (returnValue === false) {
             dfx.preventDefault(e);
             return false;
+        }
+
+        if (this.isInputKey(e) === true) {
+            this.fireCallbacks('Viper:charInsert', String.fromCharCode(e.which));
+            return true;
         }
 
         return true;
