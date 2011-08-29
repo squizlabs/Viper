@@ -267,6 +267,12 @@ Viper.prototype = {
             }
         });
 
+        if (navigator.userAgent.match(/iPad/i) != null) {
+            setInterval(function() {
+                self.fireSelectionChanged();
+            }, 500);
+        }
+
     },
 
     /**
@@ -2306,6 +2312,20 @@ Viper.prototype = {
 
     },
 
+    fireSelectionChanged: function()
+    {
+        var range = this.getCurrentRange();
+        if (!this._prevRange
+            || this._prevRange.startContainer !== range.startContainer
+            || this._prevRange.endContainer !== range.endContainer
+            || this._prevRange.startOffset !== range.startOffset
+            || this._prevRange.endOffset !== range.endOffset
+        ) {
+            this._prevRange = range;
+            this.fireCallbacks('Viper:selectionChanged', range);
+        }
+    },
+
     /**
      * Returns true if the given key event matches the given key combinations.
      *
@@ -2532,16 +2552,7 @@ Viper.prototype = {
             return false;
         }
 
-        var range = this.getCurrentRange();
-        if (!this._prevRange
-            || this._prevRange.startContainer !== range.startContainer
-            || this._prevRange.endContainer !== range.endContainer
-            || this._prevRange.startOffset !== range.startOffset
-            || this._prevRange.endOffset !== range.endOffset
-        ) {
-            this._prevRange = range;
-            this.fireCallbacks('Viper:selectionChanged', range);
-        }
+        this.fireSelectionChanged();
 
     },
 
@@ -2571,6 +2582,8 @@ Viper.prototype = {
             return false;
         }
 
+        this.fireSelectionChanged();
+
     },
 
     mouseUp: function(e)
@@ -2580,9 +2593,7 @@ Viper.prototype = {
             return false;
         }
 
-        var range = this.getCurrentRange();
-        this._prevRange = range;
-        this.fireCallbacks('Viper:selectionChanged', range);
+        this.fireSelectionChanged();
 
     },
 

@@ -33,6 +33,10 @@ function ViperInlineToolbarPlugin(viper)
         self.updateToolbar(range);
     });
 
+    this.viper.registerCallback('Viper:mouseDown', 'ViperInlineToolbarPlugin', function(range) {
+        self.hideToolbar();
+    });
+
 }
 
 ViperInlineToolbarPlugin.prototype = {
