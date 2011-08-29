@@ -129,32 +129,22 @@ ViperCoreStylesPlugin.prototype = {
             self._onChangeAddStyle = null;
         });
 
+        // Inline toolbar.
+        var inlineToolbarPlugin = this.viper.ViperPluginManager.getPlugin('ViperInlineToolbarPlugin');
         this.viper.registerCallback('ViperInlineToolbarPlugin:updateToolbar', 'ViperCoreStylesPlugin', function(data) {
-            var bold = document.createElement('div');
-            dfx.setHtml(bold, 'B');
-            var em = document.createElement('div');
-            dfx.setHtml(em, 'I');
-            var u = document.createElement('div');
-            dfx.setHtml(u, 'U');
+            var bold = inlineToolbarPlugin.createButton('B', 'strong', '', function() {
+                return self.handleStyle('strong');
+            });
+            var em = inlineToolbarPlugin.createButton('I', 'em', '', function() {
+                return self.handleStyle('en');
+            });
+            var u = inlineToolbarPlugin.createButton('U', 'u', '', function() {
+                return self.handleStyle('u');
+            });
 
             data.container.appendChild(bold);
             data.container.appendChild(em);
             data.container.appendChild(u);
-
-            dfx.addEvent(bold, 'mousedown', function() {
-                self.handleStyle('strong');
-                return false;
-            });
-
-            dfx.addEvent(em, 'mousedown', function() {
-                self.handleStyle('em');
-                return false;
-            });
-
-            dfx.addEvent(u, 'mousedown', function() {
-                self.handleStyle('u');
-                return false;
-            });
 
         });
 

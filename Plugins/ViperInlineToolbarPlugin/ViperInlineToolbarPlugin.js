@@ -22,9 +22,10 @@
  */
 function ViperInlineToolbarPlugin(viper)
 {
-    this.viper   = viper;
-    this.toolbar = null;
+    this.viper           = viper;
+    this.toolbar         = null;
     this._innerContainer = null;
+    this._lineage        = null;
 
     this.createToolbar();
 
@@ -46,10 +47,14 @@ ViperInlineToolbarPlugin.prototype = {
         var main     = document.createElement('div');
         this.toolbar = main;
 
+        this._lineage = document.createElement('ul');
+        this.toolbar.appendChild(this._lineage);
+
         this._innerContainer = document.createElement('div');
         this.toolbar.appendChild(this._innerContainer);
 
         dfx.addClass(this.toolbar, 'ViperInlineToolbarPlugin');
+        dfx.addClass(this._lineage, 'ViperInlineToolbarPlugin-lineage');
         dfx.addClass(this._innerContainer, 'ViperInlineToolbarPlugin-inner');
 
         document.body.appendChild(this.toolbar);
@@ -66,8 +71,9 @@ ViperInlineToolbarPlugin.prototype = {
             return;
         }
 
-        dfx.empty(this._innerContainer);
-        this.viper.fireCallbacks('ViperInlineToolbarPlugin:updateToolbar', {container: this._innerContainer, range: range});
+        var lineage = this._getSelectionLineage(range);
+        this._updateLineage(lineage);
+        this._updateInnerContainer(range, lineage);
 
         var rangeCoords  = range.rangeObj.getBoundingClientRect();
         var scrollCoords = dfx.getScrollCoords();
@@ -84,9 +90,73 @@ ViperInlineToolbarPlugin.prototype = {
         dfx.addClass(this.toolbar, 'visible');
     },
 
+    createButton: function(content, parentTag, customClass, clickAction)
+    {
+        var button = document.createElement('div');
+        dfx.setHtml(button, content);
+        dfx.addClass(button, 'ViperInlineToolbarPlugin-button');
+
+        if (customClass) {
+            dfx.addClass(button, customClass);
+        }
+
+        if (clickAction) {
+            dfx.addEvent(button, 'mousedown.ViperInlineToolbarPlugin', clickAction);
+        }
+
+        return button;
+
+    },
+
+    _updateLineage: function(lineage)
+    {
+        dfx.empty(this._lineage);
+
+        var c = lineage.length;
+        for (var i = 0; i < c; i++) {
+            var tagName = lineage[i].tagName;
+            var parent  = document.createElement('li');
+            dfx.setHtml(parent, tagName.toUpperCase());
+            this._lineage.appendChild(parent);
+        }
+
+    },
+
+    _updateInnerContainer: function(range, lineage)
+    {
+        dfx.empty(this._innerContainer);
+        this.viper.fireCallbacks('ViperInlineToolbarPlugin:updateToolbar', {container: this._innerContainer, range: range, lineage: lineage});
+
+    },
+
     hideToolbar: function()
     {
         dfx.removeClass(this.toolbar, 'visible');
+
+    },
+
+    _getSelectionLineage: function(range)
+    {
+        var lineage      = [];
+        var parent       = range.getCommonElement();
+        var viperElement = this.viper.getViperElement();
+
+        if (parent === viperElement) {
+            return lineage;
+        }
+
+        lineage.push(parent);
+
+        parent = parent.parentNode;
+
+        while (parent !== viperElement) {
+            lineage.push(parent);
+            parent = parent.parentNode;
+        }
+
+        lineage = lineage.reverse();
+
+        return lineage;
 
     }
 
