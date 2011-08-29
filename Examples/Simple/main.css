@@ -12,3 +12,13 @@ a {
     color: #339666;
     text-decoration: none;
 }
+
+#rotate {
+    -webkit-transform: rotate(30deg);
+    -moz-transform: rotate(30deg);
+    width: 300px;
+    float: right;
+    border: 1px solid #666;
+    padding: 5px;
+    margin-right: 10px;
+}

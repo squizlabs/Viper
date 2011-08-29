@@ -24,26 +24,14 @@
 
 function Viper(id, options, callback)
 {
-    this.id             = id;
-    this.caretInterval  = null;
-    this.caret          = null;
-    this.CARET_LEFT     = 1;
-    this.CARET_RIGHT    = 2;
-    this.currRange      = null;
-    this.enabled        = false;
-    this.caretContainer = null;
-    this.caretHeight    = 0;
-    this.caretAtStart   = true;
-    this.caretInterval  = null;
-    this.inlineMode     = false;
-    this._caretColour   = '#000';
-    this._browserType   = null;
-    this._document      = document;
-    this._canCleanDom   = true;
-    this._specialKeys   = [];
-
-    this._isTextChange     = false;
-    this._fireNodesChanged = false;
+    this.id           = id;
+    this._document    = document;
+    this._browserType = null;
+    this._canCleanDom = true;
+    this._specialKeys = [];
+    this._prevRange   = null;
+    this.enabled      = false;
+    this.inlineMode   = false;
 
     this.ViperUndoManager   = null;
     this.ViperPluginManager = null;
@@ -247,9 +235,7 @@ Viper.prototype = {
         this._removeEvents(elem);
         var self = this;
         dfx.addEvent(elem, 'mouseup.viper', function(e) {
-            setTimeout(function() {
-                self.mouseUp(e);
-            }, 200);
+            return self.mouseUp(e);
         });
 
         dfx.addEvent(this._document, 'mousedown.viper', function(e) {
@@ -268,31 +254,7 @@ Viper.prototype = {
         });
 
         dfx.addEvent(elem, 'keyup.viper', function(e) {
-           // self.fireCallbacks('Viper:keyup');
-           // self.fireCaretUpdated();
-           // if (self._fireNodesChanged) {
-           //     if (self.isBrowser('firefox') === true) {
-           //         // I <3 _moz_dirty.....
-           //         var range = self.getCurrentRange();
-           //         if (range.startContainer && range.startContainer.parentNode) {
-           //              if (range.startContainer.nodeType === dfx.TEXT_NODE
-           //                  && range.startContainer.data.length < 2
-           //              ) {
-           //                  self.cleanDOM(range.startContainer.parentNode, 'br');
-           //              }
-           //         }
-           //
-           //         if (range.endContainer
-           //             && range.startContainer !== range.endContainer
-           //             && range.endContainer.parentNode
-           //         ) {
-           //             self.cleanDOM(range.endContainer.parentNode, 'br');
-           //         }
-           //     }//end if
-           //
-           //     self._fireNodesChanged = false;
-           //     self.fireNodesChanged('Viper:insertNode', null, self._isTextChange);
-           // }//end if
+            return self.keyUp(e);
         });
 
         dfx.addEvent(elem, 'blur.viper', function(e) {
@@ -636,10 +598,7 @@ Viper.prototype = {
                 return false;
             }
 
-            // Let the browser handle character insertion.
-            //this.fireNodesChanged('Viper:insertNode', true, true);
-            this._fireNodesChanged = true;
-            this._isTextChange     = true;
+            this.fireNodesChanged([newNode.parentNode]);
             return;
         } else {
             // We need to import nodes from a document fragment into the current
@@ -898,7 +857,7 @@ Viper.prototype = {
 
         ViperSelection.addRange(range);
 
-        this.fireNodesChanged(null, true);
+        this.fireNodesChanged([this.element]);
 
     },
 
@@ -1949,8 +1908,8 @@ Viper.prototype = {
 
         dfx.insertAfter(node, newNode);
 
-        // Fire nodes changed.
-        this.fireCallbacks('Viper:nodesChanged', {nodes: [node.parentNode]});
+        this.fireNodesChanged([node.parentNode]);
+
     },
 
     /**
@@ -1973,8 +1932,8 @@ Viper.prototype = {
 
         dfx.insertBefore(node, newNode);
 
-        // Fire nodes changed.
-        this.fireCallbacks('Viper:nodesChanged', {nodes: [node.parentNode]});
+        this.fireNodesChanged([node.parentNode]);
+
     },
 
 
@@ -2348,71 +2307,6 @@ Viper.prototype = {
     },
 
     /**
-     * Handles arrow, delete key events.
-     *
-     * @param {event} e The event object.
-     *
-     * return {void|boolean} Returns false if default event needs to be blocked.
-     */
-    _handleAncillaryKey: function(e)
-    {
-        var key            = e.keyCode;
-        var preventDefault = true;
-        var shiftKey       = e.shiftKey;
-
-        switch (key) {
-            case dfx.DOM_VK_DELETE:
-                if (ViperChangeTracker.isTracking() !== true && this.isBrowser('firefox') !== true) {
-                    preventDefault = false;
-                } else {
-                    var ret = this.deleteContents();
-                    if (ret === false) {
-                        preventDefault = false;
-                    }
-                }
-
-                this.ViperPluginManager.fireKeyPressed(e);
-            break;
-
-            case 46:
-                if (this.isBrowser('firefox') && e.type === 'keypress' || !this.isBrowser('firefox') && e.type === 'keydown') {
-                    // Key 46 type keydown is the DELETE key unless you are FF in which case it is keypress.
-                    this.deleteContents(true);
-                    this.ViperPluginManager.fireKeyPressed(e);
-                } else {
-                    preventDefault = false;
-                }
-            break;
-
-            case dfx.DOM_VK_DOWN:
-            case dfx.DOM_VK_UP:
-            case dfx.DOM_VK_LEFT:
-            case dfx.DOM_VK_RIGHT:
-                this.ViperPluginManager.fireCaretPositioned();
-                preventDefault = false;
-            break;
-
-            default:
-                // Ignore key.
-                preventDefault = false;
-            break;
-        }//end switch
-
-        if (preventDefault === true) {
-            dfx.preventDefault(e);
-            return false;
-        }
-
-        if (key === 46 && (this.isBrowser('firefox') && e.type === 'keypress' || !this.isBrowser('firefox') && e.type === 'keydown')) {
-            this._fireNodesChanged = true;
-        }
-
-        return true;
-
-    },
-
-
-    /**
      * Returns true if the given key event matches the given key combinations.
      *
      * @param {event}  e    The DOMEvent.
@@ -2575,21 +2469,6 @@ Viper.prototype = {
             }
         }
 
-        return;
-
-     //       // IE does not fire keyPress event if ctrl is also pressed.
-     //       // E.g. CTRL + B (Bold) will not fire keyPress so ViperPluginManager
-     //       // needs to be notified here for IE.
-     //       if (!this.ViperPluginManager.fireKeyPressed(e)) {
-     //           return false;
-     //       }
-     //
-     //   switch (e.keyCode) {
-     //       case 27:
-     //           // ESC: Disable Viper.
-     //           this.fireClickedOutside();
-     //       break;
-
     },
 
 
@@ -2646,6 +2525,67 @@ Viper.prototype = {
 
     },
 
+    keyUp: function(e)
+    {
+        if (this.fireCallbacks('Viper:keyUp', e) === false) {
+            dfx.preventDefault(e);
+            return false;
+        }
+
+        var range = this.getCurrentRange();
+        if (!this._prevRange
+            || this._prevRange.startContainer !== range.startContainer
+            || this._prevRange.endContainer !== range.endContainer
+            || this._prevRange.startOffset !== range.startOffset
+            || this._prevRange.endOffset !== range.endOffset
+        ) {
+            this._prevRange = range;
+            this.fireCallbacks('Viper:selectionChanged', range);
+        }
+
+    },
+
+    mouseDown: function(e)
+    {
+        var target = dfx.getMouseEventTarget(e);
+
+        if (this.isChildOfElems(target, [this.element]) !== true) {
+            // Ask plugins if its one of their element.
+            if (this.isPluginElement(target) !== true) {
+                // TODO: Fire clicked outside.
+            } else {
+                // TODO: should have getPluginForElement() which would pass the
+                // plugin name to the event below so that plugins can
+                // enable/disable themselves.
+                // TODO: Better name for this..
+                return this.fireCallbacks('Viper:pluginMouseDown');
+            }
+        }
+
+        // TODO: Should this fire after mouseDown?
+        this.fireCaretUpdated();
+
+        // Mouse down in active element.
+        if (this.fireCallbacks('Viper:mouseDown', e) === false) {
+            dfx.preventDefault(e);
+            return false;
+        }
+
+    },
+
+    mouseUp: function(e)
+    {
+        if (this.fireCallbacks('Viper:mouseUp', e) === false) {
+            dfx.preventDefault(e);
+            return false;
+        }
+
+        var range = this.getCurrentRange();
+        this._prevRange = range;
+        this.fireCallbacks('Viper:selectionChanged', range);
+
+    },
+
     focus: function()
     {
         if (this.element) {
@@ -2668,94 +2608,20 @@ Viper.prototype = {
 
     },
 
-    mouseUp: function(e, target)
-    {
-        if (this.ViperPluginManager.fireClicked(e) === false) {
-            return false;
-        }
-
-        var range = this.getCurrentRange();
-
-        if (!range) {
-            var target = dfx.getMouseEventTarget(e);
-            if (dfx.isStubElement(target) === true) {
-                var range = ViperSelection.createRange();
-                range.selectNodeContents(target);
-                ViperSelection.addRange(range);
-            }
-        } else if (range.collapsed === true) {
-            var target = dfx.getMouseEventTarget(e);
-            if (dfx.isStubElement(target) === true) {
-                range.selectNodeContents(target);
-            } else if (range.startContainer.nodeType !== dfx.TEXT_NODE) {
-                var startCont = range.startContainer;
-                var elem      = startCont.childNodes[range.startOffset];
-                var selNode   = null;
-                if (elem) {
-                    if (elem.firstChild) {
-                        selNode = range._getFirstSelectableChild(elem);
-                        if (selNode && dfx.isBlank(selNode.data) === true) {
-                            selNode.data = '';
-                        }
-                    } else if (dfx.isStubElement(elem) === false) {
-                        dfx.setHtml(elem, '&nbsp;');
-                        selNode = elem.firstChild;
-                    }
-
-                    if (selNode) {
-                        range.setStart(selNode, 0);
-                        range.collapse(true);
-                    }
-                }
-            } else if (range.startOffset === 1 && range.startContainer.data === String.fromCharCode(160)) {
-                // If the node is just a space (i.e. &nbsp) then set the range before it.
-                // that way space will be removed when a new character is inserted (see Viper.insertNodeAtCaret()).
-                range.setStart(range.startContainer, 0);
-                range.collapse(true);
-            }//end if
-        }//end if
-
-        ViperSelection._lastRange = null;
-
-        if (this.caret) {
-            this.caret.style.visibility = 'hidden';
-        }
-
-        this.ViperPluginManager.fireSelectionChanged(range);
-        this.fireCaretUpdated(range);
-
-    },
-
     fireCaretUpdated: function(range)
     {
         range = range || this.getCurrentRange();
         this.fireCallbacks('caretPositioned', {range: range});
 
-        //this.ViperPluginManager.fireCaretUpdated();
-
     },
 
-    fireNodesChanged: function(type, noFocus, isTextChange)
+    fireNodesChanged: function(nodes)
     {
-        type = type || 'text_change';
-
-        if (isTextChange === true) {
-            type = 'text_change';
-        }
-
-        this._isTextChange = false;
-
-        this.fireCallbacks('nodesChanged');
-
-        // Add the changes to undo history.
-        this.ViperUndoManager.add('viper', type);
+        this.fireCallbacks('Viper:nodesChanged', nodes);
 
         // Update the markers.
+        // TODO: Should be a callback?
         ViperChangeTracker.updatePositionMarkers(true);
-
-        if (noFocus !== true) {
-            this.focus();
-        }
 
     },
 
@@ -2791,47 +2657,6 @@ Viper.prototype = {
         }
 
         return false;
-
-    },
-
-    mouseDown: function(e, target)
-    {
-        if (e) {
-            if (this.ViperPluginManager.fireMouseDown(e) === false) {
-                return false;
-            }
-        }
-
-        if (!target) {
-            target = dfx.getMouseEventTarget(e);
-        }
-
-        if (target !== this.element) {
-            if (dfx.isTag(target, 'html') === true) {
-                // Scroll bars..
-                return;
-            }
-
-            var elems = [this.element, dfx.getId('Help'), dfx.getId('HelpEditingToolbarIcon')];
-            if (this._subElementActive === true) {
-                if (target === this._mainElem || dfx.isChildOf(target, this._mainElem) === true) {
-                    // Restore main element.
-                    this.setSubElementState(null, false);
-                    return;
-                }
-            }
-
-            if (this.isChildOfElems(target, elems) === false) {
-                if (this.isChildOfClass(target, '_viper-CT-marker', true) === false
-                    && this.isChildOfClass(target, '_viper-CT-infoBoxHolder', true) === false
-                ) {
-                    //TODO: fire clickedOutside.
-                    //this.fireClickedOutside(target);
-                }
-            } else {
-                this.fireCaretUpdated();
-            }
-        }//end if
 
     },
 
@@ -2928,7 +2753,7 @@ Viper.prototype = {
 
     isPluginElement: function(element)
     {
-        return this.ViperPluginManager.isPluginElement(element);
+        return this.getPluginManager().isPluginElement(element);
 
     },
 
