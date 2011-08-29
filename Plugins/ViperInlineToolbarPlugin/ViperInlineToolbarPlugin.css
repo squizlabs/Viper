@@ -1,13 +1,15 @@
 .ViperInlineToolbarPlugin {
-    background-color: #CCC;
-    color: #000;
+    background-color: #f1f1f1;
+    color: #424242;
+    font-family: Arial;
     position: absolute;
-    border: 1px solid #666;
-    padding: 5px;
+    border: 1px solid #9c9c9c;
+    padding: 10px;
     opacity: 0;
     display: none;
-    box-shadow: 0px 0px 5px #777;
-    border-radius: 5px;
+    box-shadow: 0px 0px 10px rgba(0,0,0,0.5);
+    -webkit-box-shadow: 0px 0px 10px rgba(0,0,0,0.5);
+    border-radius: 10px;
     -moz-transition-property: opacity, left, top;
     -moz-transition-duration: 0.2s;
     -moz-transition-timing-function: ease-out;
@@ -24,11 +26,19 @@
 }
 
 .ViperInlineToolbarPlugin-inner div {
-    background-color: #EEE;
-    border: 1px solid #666;
-    border-radius: 5px;
+    background-color: #e4e4e4;
+    border: 1px solid #c2c1c1;
+    border-radius: 4px;
     cursor: pointer;
     display: inline-block;
     margin-left: 5px;
-    padding: 2px 6px;
+    padding: 0 5px;
+    min-width: 25px;
+    line-height: 32px;
+    font-size: 21px;
+    text-align: center;
+    box-shadow: 0 1px 0 #fff inset;
+}
+.ViperInlineToolbarPlugin-inner div:first-child {
+    margin-left: 0;
 }
