@@ -37,7 +37,7 @@ for (var j = 0; j < plugins.length; j++) {
     document.write('<script type="text/javascript" src="../../Plugins/' + plugins[j] + '/' + plugins[j] + '.js"></script>');
     pluginCss.push(plugins[j] + '/' + plugins[j] + '.css');
     if ((plugins.length - 1) === j || (j !== 0 && (j % 30) === 0)) {
-        document.write('<style type="text/css">@import url("../../Plugins/' + pluginCss.join('");\n@import url("../../Plugins/') + '</style>');
+        document.write('<style type="text/css">@import url("../../Plugins/' + pluginCss.join('");\n@import url("../../Plugins/') + '");</style>');
         pluginCss = [];
     }
 }
