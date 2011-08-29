@@ -13,6 +13,11 @@
     -moz-transition-timing-function: ease-out;
 }
 
+.ViperInlineToolbarPlugin.calcWidth {
+    visibility: hidden;
+    display: block;
+}
+
 .ViperInlineToolbarPlugin.visible {
     opacity: 1;
     display: block;

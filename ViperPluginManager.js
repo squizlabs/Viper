@@ -238,13 +238,15 @@ ViperPluginManager.prototype = {
                 } else if (this._pluginSettings[pluginName]) {
                     pluginObj.setSettings(this._pluginSettings[pluginName]);
                 }
-
-                // Call the start method of the plugin after settings are set.
-                if (pluginObj.start) {
-                    pluginObj.start();
-                }
             }
         }//end for
+
+        // Call the start method of the plugins.
+        for (var pluginName in this.plugins) {
+            if (this.plugins[pluginName].start) {
+                this.plugins[pluginName].start();
+            }
+        }
 
     },
 

@@ -12,14 +12,13 @@
             var viper = new Viper('test');
             var pluginSets = {
                 all: {
-                    plugins: ['ViperCoreStylesPlugin', 'ViperKeyboardEditorPlugin', 'ViperInlineToolbarPlugin']
+                    plugins: ['ViperCoreStylesPlugin', 'ViperKeyboardEditorPlugin', 'ViperInlineToolbarPlugin', 'ViperRedoPlugin', 'ViperListPlugin', 'ViperToolbarPlugin']
                 }
             };
 
             viper.setPluginSets(pluginSets);
             viper.getPluginManager().usePluginSet('all');
             viper.setEditableElement(document.getElementById('editable'));
-           // ViperChangeTracker.enableChangeTracking();
         });
     </script>
 </head>

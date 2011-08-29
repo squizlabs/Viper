@@ -60,18 +60,13 @@ ViperCoreStylesPlugin.prototype = {
             this.toolbarPlugin.addButton(name, 'strong', 'Strong (' + ctrlName + ' + B)', function () {
                 self.handleStyle('strong');
             });
-            this.toolbarPlugin.setButtonShortcut(this, 'strong', 'CTRL+B', 'handleKeyPress', 'strong');
 
             this.toolbarPlugin.addButton(name, 'emphasise', 'Emphasise (' + ctrlName + ' + I)', function () {
                 self.handleStyle('em');
             });
-            this.toolbarPlugin.setButtonShortcut(this, 'emphasise', 'CTRL+I', 'handleKeyPress', 'em');
-
             this.toolbarPlugin.addButton(name, 'underline', 'Underline (' + ctrlName + ' + U)', function () {
                 self.handleStyle('u');
             });
-            this.toolbarPlugin.setButtonShortcut(this, 'underline', 'CTRL+U', 'handleKeyPress', 'u');
-
             this.toolbarPlugin.addButton(name, 'remove-format', 'Remove Format', function () {
                 self.removeFormat();
             });

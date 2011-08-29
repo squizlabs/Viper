@@ -24,9 +24,14 @@
 function ViperRedoPlugin(viper)
 {
     this.viper = viper;
-    this.viper.ViperPluginManager.addKeyPressListener('CTRL+Z', this, 'handleUndo');
-    this.viper.ViperPluginManager.addKeyPressListener('CTRL+Y', this, 'handleRedo');
-
+    var self   = this;
+    this.viper.registerCallback('Viper:keyDown', 'ViperRedoPlugin', function(e) {
+        if (viper.isKey(e, 'CTRL+Z') === true) {
+            return self.handleUndo();
+        } else if (viper.isKey(e, 'CTRL+SHIFT+Z') === true) {
+            return self.handleRedo();
+        }
+    });
 }
 
 ViperRedoPlugin.prototype = {
@@ -50,13 +55,7 @@ ViperRedoPlugin.prototype = {
             this.toolbarPlugin.addButton(name, 'redo', 'Redo (' + ctrlName + ' + Y)', function () {
                 return self.handleRedo();
             });
-
-            this.toolbarPlugin.setButtonDisabled('redo');
         }
-
-        this.viper.registerCallback('ViperUndoManager:newUndoTask', 'ViperRedoPlugin', function() {
-            self._updateButtonStates();
-        });
 
     },
 
@@ -65,7 +64,7 @@ ViperRedoPlugin.prototype = {
         this.viper.ViperUndoManager.undo();
         this._updateButtonStates();
 
-        return true;
+        return false;
 
     },
 
@@ -74,7 +73,7 @@ ViperRedoPlugin.prototype = {
         this.viper.ViperUndoManager.redo();
         this._updateButtonStates();
 
-        return true;
+        return false;
 
     },
 

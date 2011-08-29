@@ -34,12 +34,14 @@ ViperListPlugin.prototype = {
     {
         var self = this;
         this.toolbarPlugin = this.viper.ViperPluginManager.getPlugin('ViperToolbarPlugin');
-        this.toolbarPlugin.addButton('List', 'list-ordered', 'Insert/Remove Ordered List', function () {
-            self.oderedList();
-        });
-        this.toolbarPlugin.addButton('List', 'list-unordered', 'Insert/Remove Un-ordered List', function () {
-            self.unoderedList();
-        });
+        if (this.toolbarPlugin) {
+            this.toolbarPlugin.addButton('List', 'list-ordered', 'Insert/Remove Ordered List', function () {
+                self.oderedList();
+            });
+            this.toolbarPlugin.addButton('List', 'list-unordered', 'Insert/Remove Un-ordered List', function () {
+                self.unoderedList();
+            });
+        }
 
         // Change Tracker.
         ViperChangeTracker.addChangeType('makeList', 'Formatted', 'insert');

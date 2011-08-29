@@ -72,6 +72,10 @@ ViperInlineToolbarPlugin.prototype = {
         var rangeCoords  = range.rangeObj.getBoundingClientRect();
         var scrollCoords = dfx.getScrollCoords();
 
+        dfx.addClass(this.toolbar, 'calcWidth');
+        var toolbarWidth = dfx.getElementWidth(this.toolbar);
+        dfx.removeClass(this.toolbar, 'calcWidth');
+
         var left = (rangeCoords.left + ((rangeCoords.right - rangeCoords.left) / 2) + scrollCoords.x);
         var top  = (rangeCoords.bottom + 10 + scrollCoords.y);
 

@@ -13,7 +13,8 @@
 
 .ViperToolbarPlugin {
     position: fixed;
-    top: 38px;
+    top: 0;
+    left: 0;
     height: 29px;
     background: transparent url(bar_bg.png) repeat-x scroll 0% 0px;
     z-index: 800;
