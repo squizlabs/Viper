@@ -65,14 +65,14 @@ ViperInlineToolbarPlugin.prototype = {
         dfx.empty(this._innerContainer);
         this.viper.fireCallbacks('ViperInlineToolbarPlugin:updateToolbar', {container: this._innerContainer, range: range});
 
-        var endCoords   = range.getRangeCoords();
-        var startCoords = range.getRangeCoords(true);
+        var rangeCoords  = range.rangeObj.getBoundingClientRect();
+        var scrollCoords = dfx.getScrollCoords();
 
-        var midX   = startCoords.x + ((endCoords.x - startCoords.x) / 2);
-        var bottom = endCoords.y + 20;
+        var left = (rangeCoords.left + ((rangeCoords.right - rangeCoords.left) / 2) + scrollCoords.x);
+        var top  = (rangeCoords.bottom + 10 + scrollCoords.y);
 
-        dfx.setStyle(this.toolbar, 'left', midX + 'px');
-        dfx.setStyle(this.toolbar, 'top', bottom + 'px');
+        dfx.setStyle(this.toolbar, 'left', left + 'px');
+        dfx.setStyle(this.toolbar, 'top', top + 'px');
         dfx.addClass(this.toolbar, 'visible');
     },
 
