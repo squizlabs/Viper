@@ -45,18 +45,16 @@ function ViperInlineToolbarPlugin(viper)
 
     dfx.addEvent(window, 'gestureend', function() {
             var zoom   = document.documentElement.clientWidth / window.innerWidth;
-            var scale  = 1 / zoom;
-            if (scale >= 1) {
-                scale = 1;
-                self._margin = 10;
+            var scale  = 1.2 / zoom;
+            if (scale >= 1.2) {
+                scale = 1.2;
+                self._margin = 20;
             } else if (scale <= 0.5) {
                 scale = 0.5;
                 self._margin = -12;
             } else {
                 self._margin = (-6 * zoom);
             }
-
-            console.info('zoom: '+zoom + 'scale: '+scale);
 
             self.updateToolbar();
             dfx.setStyle(self.toolbar, '-webkit-transform', 'scale(' + scale + ', ' + scale + ')');
