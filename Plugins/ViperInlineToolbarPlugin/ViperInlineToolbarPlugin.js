@@ -106,7 +106,6 @@ ViperInlineToolbarPlugin.prototype = {
     _updatePosition: function(range, verticalOnly)
     {
         var rangeCoords  = range.rangeObj.getBoundingClientRect();
-        console.info(range.rangeObj.getBoundingClientRect(), range.rangeObj.getClientRects());
         var scrollCoords = dfx.getScrollCoords();
 
         if (verticalOnly !== true) {
@@ -118,8 +117,7 @@ ViperInlineToolbarPlugin.prototype = {
             dfx.setStyle(this.toolbar, 'left', left + 'px');
         }
 
-        console.info(rangeCoords.bottom);
-        var top  = (rangeCoords.bottom + 10 + scrollCoords.y);
+        var top = (rangeCoords.bottom + 10 + scrollCoords.y);
 
         dfx.setStyle(this.toolbar, 'top', top + 'px');
         dfx.addClass(this.toolbar, 'visible');
