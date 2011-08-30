@@ -44,20 +44,7 @@ function ViperInlineToolbarPlugin(viper)
     });
 
     dfx.addEvent(window, 'gestureend', function() {
-            var zoom   = document.documentElement.clientWidth / window.innerWidth;
-            var scale  = 1.2 / zoom;
-            if (scale >= 1.2) {
-                scale = 1.2;
-                self._margin = 20;
-            } else if (scale <= 0.5) {
-                scale = 0.5;
-                self._margin = -12;
-            } else {
-                self._margin = (-6 * zoom);
-            }
-
-            self.updateToolbar();
-            dfx.setStyle(self.toolbar, '-webkit-transform', 'scale(' + scale + ', ' + scale + ')');
+        self.updateToolbar();
     });
 
 }
@@ -107,6 +94,8 @@ ViperInlineToolbarPlugin.prototype = {
 
     updateToolbar: function(range)
     {
+        this._scaleToolbar();
+
         range = range || this.viper.getCurrentRange();
 
         var lineage = this._getSelectionLineage(range);
@@ -128,6 +117,35 @@ ViperInlineToolbarPlugin.prototype = {
 
         var lineage = this._getSelectionLineage(range);
         this._updateActiveButtons(lineage);
+
+    },
+
+     hideToolbar: function()
+    {
+        dfx.removeClass(this.toolbar, 'visible');
+
+    },
+
+    _scaleToolbar: function()
+    {
+        if (!this.toolbar) {
+            return;
+        }
+
+        var self = this;
+        var zoom   = (document.documentElement.clientWidth / window.innerWidth);
+        var scale  = 1.2 / zoom;
+        if (scale >= 1.2) {
+            scale = 1.2;
+            self._margin = 20;
+        } else if (scale <= 0.5) {
+            scale = 0.5;
+            self._margin = -12;
+        } else {
+            self._margin = (-6 * zoom);
+        }
+
+        dfx.setStyle(self.toolbar, '-webkit-transform', 'scale(' + scale + ', ' + scale + ')');
 
     },
 
@@ -232,12 +250,6 @@ ViperInlineToolbarPlugin.prototype = {
     {
         dfx.empty(this._innerContainer);
         this.viper.fireCallbacks('ViperInlineToolbarPlugin:updateToolbar', {container: this._innerContainer, range: range, lineage: lineage});
-
-    },
-
-    hideToolbar: function()
-    {
-        dfx.removeClass(this.toolbar, 'visible');
 
     },
 
