@@ -146,7 +146,8 @@ ViperInlineToolbarPlugin.prototype = {
                     var range = viper.getCurrentRange();
                     range.selectNode(selectionElem);
                     ViperSelection.addRange(range);
-                    viper.fireSelectionChanged(range);
+                    viper.fireSelectionChanged();
+                    self._updatePosition(range, true);
                     return false;
                 });
             }) (parent, lineage[i]);
@@ -156,7 +157,9 @@ ViperInlineToolbarPlugin.prototype = {
         dfx.setHtml(parent, 'Selection');
         this._lineage.appendChild(parent);
         dfx.addEvent(parent, 'mousedown.ViperInlineToolbarPlugin', function() {
+            self._lineageClicked = true;
             ViperSelection.addRange(originalRange);
+            viper.fireSelectionChanged(originalRange);
             return false;
         });
 
