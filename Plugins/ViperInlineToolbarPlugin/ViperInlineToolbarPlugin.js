@@ -14,8 +14,7 @@
  * along with this program as the file license.txt. If not, see
  * <http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt>
  *
- * @package    CMS
- * @subpackage Editing
+ * @package    Viper
  * @author     Squiz Pty Ltd <products@squiz.net>
  * @copyright  2010 Squiz Pty Ltd (ACN 084 670 600)
  * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt GPLv2
@@ -86,14 +85,6 @@ ViperInlineToolbarPlugin.prototype = {
 
     updateToolbar: function(range)
     {
-        // Determine what type of selection this is..
-        if (range.collapsed === true) {
-            // Hide the toolbar.
-            // TODO: What about images, links etc?
-            this.hideToolbar();
-            return;
-        }
-
         var lineage = this._getSelectionLineage(range);
         if (this._lineageClicked === true) {
             this._lineageClicked = false;
@@ -101,8 +92,14 @@ ViperInlineToolbarPlugin.prototype = {
             return;
         }
 
-        this._updateLineage(lineage);
         this._updateInnerContainer(range, lineage);
+
+        if (!dfx.getHtml(this._innerContainer)) {
+            this.hideToolbar();
+            return;
+        }
+
+        this._updateLineage(lineage);
         this._updatePosition(range);
 
         var lineage = this._getSelectionLineage(range);
@@ -137,6 +134,10 @@ ViperInlineToolbarPlugin.prototype = {
     _updatePosition: function(range, verticalOnly)
     {
         var rangeCoords  = range.rangeObj.getBoundingClientRect();
+        if (!rangeCoords) {
+            return;
+        }
+
         var scrollCoords = dfx.getScrollCoords();
 
         if (verticalOnly !== true) {
@@ -182,6 +183,10 @@ ViperInlineToolbarPlugin.prototype = {
                     return false;
                 });
             }) (parent, lineage[i]);
+        }
+
+        if (originalRange.collapsed === true) {
+            return;
         }
 
         var parent  = document.createElement('li');

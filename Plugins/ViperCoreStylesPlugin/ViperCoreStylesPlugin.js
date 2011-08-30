@@ -133,15 +133,25 @@ ViperCoreStylesPlugin.prototype = {
         var inlineToolbarPlugin = this.viper.ViperPluginManager.getPlugin('ViperInlineToolbarPlugin');
         if (inlineToolbarPlugin) {
             this.viper.registerCallback('ViperInlineToolbarPlugin:updateToolbar', 'ViperCoreStylesPlugin', function(data) {
-                    var bold = inlineToolbarPlugin.createButton('B', 'strong', 'bold', function() {
-                return self.handleStyle('strong');
-            });
-            var em = inlineToolbarPlugin.createButton('I', 'em', 'em', function() {
-                return self.handleStyle('em');
-            });
-            var u = inlineToolbarPlugin.createButton('U', 'u', 'underline', function() {
-                return self.handleStyle('u');
-            });
+                if (data.range.collapsed === true) {
+                    return;
+                }
+
+                for (var i = 0; i < data.lineage.length; i++) {
+                    if (dfx.isTag(data.lineage[i], 'a') === true) {
+                        return;
+                    }
+                }
+
+                var bold = inlineToolbarPlugin.createButton('B', 'strong', 'bold', function() {
+                    return self.handleStyle('strong');
+                });
+                var em = inlineToolbarPlugin.createButton('I', 'em', 'em', function() {
+                    return self.handleStyle('em');
+                });
+                var u = inlineToolbarPlugin.createButton('U', 'u', 'underline', function() {
+                    return self.handleStyle('u');
+                });
 
                 data.container.appendChild(bold);
                 data.container.appendChild(em);
