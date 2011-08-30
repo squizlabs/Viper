@@ -27,7 +27,7 @@ function ViperInlineToolbarPlugin(viper)
     this._innerContainer = null;
     this._lineage        = null;
 
-    this.createToolbar();
+    this._createToolbar();
 
     var self = this;
     this.viper.registerCallback('Viper:selectionChanged', 'ViperInlineToolbarPlugin', function(range) {
@@ -42,7 +42,7 @@ function ViperInlineToolbarPlugin(viper)
 
 ViperInlineToolbarPlugin.prototype = {
 
-    createToolbar: function()
+    _createToolbar: function()
     {
         var main     = document.createElement('div');
         this.toolbar = main;
@@ -58,6 +58,24 @@ ViperInlineToolbarPlugin.prototype = {
         dfx.addClass(this._innerContainer, 'ViperInlineToolbarPlugin-inner');
 
         document.body.appendChild(this.toolbar);
+
+    },
+
+    createButton: function(content, parentTag, customClass, clickAction)
+    {
+        var button = document.createElement('div');
+        dfx.setHtml(button, content);
+        dfx.addClass(button, 'ViperInlineToolbarPlugin-button');
+
+        if (customClass) {
+            dfx.addClass(button, customClass);
+        }
+
+        if (clickAction) {
+            dfx.addEvent(button, 'mousedown.ViperInlineToolbarPlugin', clickAction);
+        }
+
+        return button;
 
     },
 
@@ -82,7 +100,7 @@ ViperInlineToolbarPlugin.prototype = {
         var toolbarWidth = dfx.getElementWidth(this.toolbar);
         dfx.removeClass(this.toolbar, 'calcWidth');
 
-        var left = (rangeCoords.left + ((rangeCoords.right - rangeCoords.left) / 2) + scrollCoords.x);
+        var left = (rangeCoords.left + ((rangeCoords.right - rangeCoords.left) / 2) + scrollCoords.x) - (toolbarWidth / 2);
         var top  = (rangeCoords.bottom + 10 + scrollCoords.y);
 
         dfx.setStyle(this.toolbar, 'left', left + 'px');
@@ -90,35 +108,38 @@ ViperInlineToolbarPlugin.prototype = {
         dfx.addClass(this.toolbar, 'visible');
     },
 
-    createButton: function(content, parentTag, customClass, clickAction)
-    {
-        var button = document.createElement('div');
-        dfx.setHtml(button, content);
-        dfx.addClass(button, 'ViperInlineToolbarPlugin-button');
-
-        if (customClass) {
-            dfx.addClass(button, customClass);
-        }
-
-        if (clickAction) {
-            dfx.addEvent(button, 'mousedown.ViperInlineToolbarPlugin', clickAction);
-        }
-
-        return button;
-
-    },
-
     _updateLineage: function(lineage)
     {
         dfx.empty(this._lineage);
 
-        var c = lineage.length;
+        var viper = this.viper;
+        var c     = lineage.length;
+
+        var originalRange = viper.getCurrentRange().cloneRange();
+
         for (var i = 0; i < c; i++) {
             var tagName = lineage[i].tagName;
             var parent  = document.createElement('li');
             dfx.setHtml(parent, tagName.toUpperCase());
             this._lineage.appendChild(parent);
+
+            (function(clickElem, selectionElem) {
+                dfx.addEvent(clickElem, 'mousedown.ViperInlineToolbarPlugin', function() {
+                    var range = viper.getCurrentRange();
+                    range.selectNode(selectionElem);
+                    ViperSelection.addRange(range);
+                    return false;
+                });
+            }) (parent, lineage[i]);
         }
+
+        var parent  = document.createElement('li');
+        dfx.setHtml(parent, 'Selection');
+        this._lineage.appendChild(parent);
+        dfx.addEvent(parent, 'mousedown.ViperInlineToolbarPlugin', function() {
+            ViperSelection.addRange(originalRange);
+            return false;
+        });
 
     },
 

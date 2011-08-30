@@ -1,12 +1,7 @@
 .ViperInlineToolbarPlugin {
-<<<<<<< HEAD
     background-color: #f1f1f1;
     color: #424242;
     font-family: Arial;
-=======
-    background-color: #E0DEDE;
-    color: #000;
->>>>>>> Added createButton method to ViperInlineToolbar plugin.
     position: absolute;
     border: 1px solid #9c9c9c;
     padding: 10px;
@@ -30,8 +25,7 @@
     display: block;
 }
 
-<<<<<<< HEAD
-.ViperInlineToolbarPlugin-inner div {
+.ViperInlineToolbarPlugin-inner .ViperInlineToolbarPlugin-button {
     background-color: #e4e4e4;
     border: 1px solid #c2c1c1;
     border-radius: 4px;
@@ -47,7 +41,8 @@
 }
 .ViperInlineToolbarPlugin-inner div:first-child {
     margin-left: 0;
-=======
+}
+
 .ViperInlineToolbarPlugin-lineage {
     font-size: 12px;
     color: #666;
@@ -62,5 +57,4 @@
     display: inline;
     padding: 7px;
     cursor: pointer;
->>>>>>> Added createButton method to ViperInlineToolbar plugin.
 }

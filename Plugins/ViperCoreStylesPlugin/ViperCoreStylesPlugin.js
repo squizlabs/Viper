@@ -131,22 +131,24 @@ ViperCoreStylesPlugin.prototype = {
 
         // Inline toolbar.
         var inlineToolbarPlugin = this.viper.ViperPluginManager.getPlugin('ViperInlineToolbarPlugin');
-        this.viper.registerCallback('ViperInlineToolbarPlugin:updateToolbar', 'ViperCoreStylesPlugin', function(data) {
-            var bold = inlineToolbarPlugin.createButton('B', 'strong', '', function() {
+        if (inlineToolbarPlugin) {
+            this.viper.registerCallback('ViperInlineToolbarPlugin:updateToolbar', 'ViperCoreStylesPlugin', function(data) {
+                    var bold = inlineToolbarPlugin.createButton('B', 'strong', '', function() {
                 return self.handleStyle('strong');
             });
             var em = inlineToolbarPlugin.createButton('I', 'em', '', function() {
-                return self.handleStyle('en');
+                return self.handleStyle('em');
             });
             var u = inlineToolbarPlugin.createButton('U', 'u', '', function() {
                 return self.handleStyle('u');
             });
 
-            data.container.appendChild(bold);
-            data.container.appendChild(em);
-            data.container.appendChild(u);
+                data.container.appendChild(bold);
+                data.container.appendChild(em);
+                data.container.appendChild(u);
 
-        });
+            });
+        }
 
         var tagNames = {
             em: 'Italic',
