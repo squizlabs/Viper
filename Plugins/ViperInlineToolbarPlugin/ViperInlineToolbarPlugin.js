@@ -26,6 +26,7 @@ function ViperInlineToolbarPlugin(viper)
     this.toolbar         = null;
     this._innerContainer = null;
     this._lineage        = null;
+    this._lineageClicked = false;
 
     this._createToolbar();
 
@@ -81,6 +82,12 @@ ViperInlineToolbarPlugin.prototype = {
 
     updateToolbar: function(range)
     {
+        if (this._lineageClicked === true) {
+            this._lineageClicked = false;
+            this._updatePosition(range, true);
+            return;
+        }
+
         // Determine what type of selection this is..
         if (range.collapsed === true) {
             // Hide the toolbar.
@@ -92,20 +99,31 @@ ViperInlineToolbarPlugin.prototype = {
         var lineage = this._getSelectionLineage(range);
         this._updateLineage(lineage);
         this._updateInnerContainer(range, lineage);
+        this._updatePosition(range);
 
+    },
+
+    _updatePosition: function(range, verticalOnly)
+    {
         var rangeCoords  = range.rangeObj.getBoundingClientRect();
+        console.info(range.rangeObj.getBoundingClientRect(), range.rangeObj.getClientRects());
         var scrollCoords = dfx.getScrollCoords();
 
-        dfx.addClass(this.toolbar, 'calcWidth');
-        var toolbarWidth = dfx.getElementWidth(this.toolbar);
-        dfx.removeClass(this.toolbar, 'calcWidth');
+        if (verticalOnly !== true) {
+            dfx.addClass(this.toolbar, 'calcWidth');
+            var toolbarWidth = dfx.getElementWidth(this.toolbar);
+            dfx.removeClass(this.toolbar, 'calcWidth');
 
-        var left = (rangeCoords.left + ((rangeCoords.right - rangeCoords.left) / 2) + scrollCoords.x) - (toolbarWidth / 2);
+            var left = (rangeCoords.left + ((rangeCoords.right - rangeCoords.left) / 2) + scrollCoords.x) - (toolbarWidth / 2);
+            dfx.setStyle(this.toolbar, 'left', left + 'px');
+        }
+
+        console.info(rangeCoords.bottom);
         var top  = (rangeCoords.bottom + 10 + scrollCoords.y);
 
-        dfx.setStyle(this.toolbar, 'left', left + 'px');
         dfx.setStyle(this.toolbar, 'top', top + 'px');
         dfx.addClass(this.toolbar, 'visible');
+
     },
 
     _updateLineage: function(lineage)
@@ -117,6 +135,7 @@ ViperInlineToolbarPlugin.prototype = {
 
         var originalRange = viper.getCurrentRange().cloneRange();
 
+        var self = this;
         for (var i = 0; i < c; i++) {
             var tagName = lineage[i].tagName;
             var parent  = document.createElement('li');
@@ -125,9 +144,11 @@ ViperInlineToolbarPlugin.prototype = {
 
             (function(clickElem, selectionElem) {
                 dfx.addEvent(clickElem, 'mousedown.ViperInlineToolbarPlugin', function() {
+                    self._lineageClicked = true;
                     var range = viper.getCurrentRange();
                     range.selectNode(selectionElem);
                     ViperSelection.addRange(range);
+                    viper.fireSelectionChanged();
                     return false;
                 });
             }) (parent, lineage[i]);

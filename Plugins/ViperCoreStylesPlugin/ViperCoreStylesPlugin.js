@@ -759,7 +759,7 @@ ViperCoreStylesPlugin.prototype = {
         }//end if
 
         this.viper.fireNodesChanged('ViperCoreStylesPlugin:applyStyle');
-        this.viper.focus();
+        this.viper.fireSelectionChanged();
 
         // Prevent event bubbling etc.
         return false;
