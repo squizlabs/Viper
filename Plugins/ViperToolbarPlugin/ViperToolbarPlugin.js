@@ -176,8 +176,7 @@ ViperToolbarPlugin.prototype = {
 
     getIconURL: function(plugin, buttonName)
     {
-        //var url = this.viper.ViperPluginManager.getPluginStylesURL(plugin) + '/' + buttonName + '.png';
-        var url = window.location + '/__web/Systems/GUI/Widgets/Viper/Web/viper/plugins/ViperToolbarPlugin/transparent.png';
+        var url = '../../Plugins/ViperToolbarPlugin/transparent.png';
         return url;
 
     },
