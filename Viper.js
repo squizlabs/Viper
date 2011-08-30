@@ -2312,9 +2312,9 @@ Viper.prototype = {
 
     },
 
-    fireSelectionChanged: function()
+    fireSelectionChanged: function(range)
     {
-        var range = this.getCurrentRange();
+        range = range || this.getCurrentRange();
         if (!this._prevRange
             || this._prevRange.startContainer !== range.startContainer
             || this._prevRange.endContainer !== range.endContainer

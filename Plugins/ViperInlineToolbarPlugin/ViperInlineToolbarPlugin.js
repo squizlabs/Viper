@@ -146,7 +146,7 @@ ViperInlineToolbarPlugin.prototype = {
                     var range = viper.getCurrentRange();
                     range.selectNode(selectionElem);
                     ViperSelection.addRange(range);
-                    viper.fireSelectionChanged();
+                    viper.fireSelectionChanged(range);
                     return false;
                 });
             }) (parent, lineage[i]);
