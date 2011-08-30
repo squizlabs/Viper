@@ -84,7 +84,6 @@ ViperInlineToolbarPlugin.prototype = {
     {
         if (this._lineageClicked === true) {
             this._lineageClicked = false;
-            this._updatePosition(range, true);
             return;
         }
 
@@ -135,9 +134,9 @@ ViperInlineToolbarPlugin.prototype = {
 
         var self = this;
         for (var i = 0; i < c; i++) {
-            var tagName = lineage[i].tagName;
+            var tagName = lineage[i].tagName.toLowerCase();
             var parent  = document.createElement('li');
-            dfx.setHtml(parent, tagName.toUpperCase());
+            dfx.setHtml(parent, this.getReadableTagName(tagName));
             this._lineage.appendChild(parent);
 
             (function(clickElem, selectionElem) {
@@ -160,6 +159,7 @@ ViperInlineToolbarPlugin.prototype = {
             self._lineageClicked = true;
             ViperSelection.addRange(originalRange);
             viper.fireSelectionChanged(originalRange);
+            self._updatePosition(originalRange, true);
             return false;
         });
 
@@ -201,6 +201,42 @@ ViperInlineToolbarPlugin.prototype = {
 
         return lineage;
 
+    },
+
+    getReadableTagName: function(tagName)
+    {
+        switch (tagName) {
+            case 'strong':
+                tagName = 'Bold';
+            break;
+
+            case 'u':
+                tagName = 'Underline';
+            break;
+
+            case 'em':
+            case 'i':
+                tagName = 'Italic';
+            break;
+
+            case 'li':
+                tagName = 'List Item';
+            break;
+
+            case 'ul':
+                tagName = 'Unordered List';
+            break;
+
+            case 'ol':
+                tagName = 'Ordered List';
+            break;
+
+            default:
+                tagName = tagName.toUpperCase();
+            break;
+        }
+
+        return tagName;
     }
 
 };

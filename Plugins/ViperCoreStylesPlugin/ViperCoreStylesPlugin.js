@@ -133,13 +133,13 @@ ViperCoreStylesPlugin.prototype = {
         var inlineToolbarPlugin = this.viper.ViperPluginManager.getPlugin('ViperInlineToolbarPlugin');
         if (inlineToolbarPlugin) {
             this.viper.registerCallback('ViperInlineToolbarPlugin:updateToolbar', 'ViperCoreStylesPlugin', function(data) {
-                    var bold = inlineToolbarPlugin.createButton('B', 'strong', '', function() {
+                    var bold = inlineToolbarPlugin.createButton('B', 'strong', 'bold', function() {
                 return self.handleStyle('strong');
             });
-            var em = inlineToolbarPlugin.createButton('I', 'em', '', function() {
+            var em = inlineToolbarPlugin.createButton('I', 'em', 'em', function() {
                 return self.handleStyle('em');
             });
-            var u = inlineToolbarPlugin.createButton('U', 'u', '', function() {
+            var u = inlineToolbarPlugin.createButton('U', 'u', 'underline', function() {
                 return self.handleStyle('u');
             });
 
@@ -759,6 +759,10 @@ ViperCoreStylesPlugin.prototype = {
         }//end if
 
         this.viper.fireNodesChanged('ViperCoreStylesPlugin:applyStyle');
+
+        var inlineToolbarPlugin = this.viper.ViperPluginManager.getPlugin('ViperInlineToolbarPlugin');
+        inlineToolbarPlugin._lineageClicked = true;
+
         this.viper.fireSelectionChanged();
 
         // Prevent event bubbling etc.
