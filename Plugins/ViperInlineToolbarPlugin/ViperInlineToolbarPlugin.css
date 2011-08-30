@@ -141,7 +141,6 @@
 
 .ViperInlineToolbarPlugin-inner .ViperInlineToolbarPlugin-button {
     background-color: #242323;
-<<<<<<< HEAD
     border: none;
     box-shadow: 0 2px 2px rgba(0, 0, 0, 0.6), 0 1px 0 rgba(255, 255, 255, 0.9) inset;
     background: -webkit-gradient(linear, left top, left bottom, from(#e9e9eb), to(#c9c9d0));
@@ -151,9 +150,6 @@
 }
 
 .ViperInlineToolbarPlugin-inner .ViperInlineToolbarPlugin-button:hover {
-    background: -webkit-gradient(linear, left top, left bottom, from(#b8b8b8), to(#9f9f9f));
-    background: -moz-linear-gradient(top,  #b8b8b8,  #9f9f9f);
-=======
     border: 1px solid #000;
     box-shadow: 0 1px 0 rgba(255,255,255,0.5) inset;
     background: -webkit-gradient(linear, left top, left bottom, from(#4a4949), to(#000)); /* for webkit browsers */
@@ -164,7 +160,4 @@
     color: #FFF;
     background: -webkit-gradient(linear, left top, left bottom, from(#606060), to(#272727)); /* for webkit browsers */
     background: -moz-linear-gradient(top,  #606060,  #272727); /* for firefox 3.6+ */
->>>>>>> Added zooming and scaling to InlineToolbar.
-}
-
 } /* end tablet overrides */
