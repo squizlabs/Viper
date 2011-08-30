@@ -62,7 +62,7 @@ ViperInlineToolbarPlugin.prototype = {
 
     },
 
-    createButton: function(content, parentTag, customClass, clickAction)
+    createButton: function(content, tagName, customClass, clickAction)
     {
         var button = document.createElement('div');
         dfx.setHtml(button, content);
@@ -76,17 +76,16 @@ ViperInlineToolbarPlugin.prototype = {
             dfx.addEvent(button, 'mousedown.ViperInlineToolbarPlugin', clickAction);
         }
 
+        if (tagName) {
+            dfx.attr(button, 'data-ViperInlineToolbarPlugin-tag', tagName);
+        }
+
         return button;
 
     },
 
     updateToolbar: function(range)
     {
-        if (this._lineageClicked === true) {
-            this._lineageClicked = false;
-            return;
-        }
-
         // Determine what type of selection this is..
         if (range.collapsed === true) {
             // Hide the toolbar.
@@ -96,9 +95,42 @@ ViperInlineToolbarPlugin.prototype = {
         }
 
         var lineage = this._getSelectionLineage(range);
+        if (this._lineageClicked === true) {
+            this._lineageClicked = false;
+            this._updateActiveButtons(lineage);
+            return;
+        }
+
         this._updateLineage(lineage);
         this._updateInnerContainer(range, lineage);
         this._updatePosition(range);
+
+        var lineage = this._getSelectionLineage(range);
+        this._updateActiveButtons(lineage);
+
+    },
+
+    _updateActiveButtons: function(lineage)
+    {
+        var buttons = dfx.getClass('ViperInlineToolbarPlugin-button', this._innerContainer);
+        var c       = buttons.length;
+        var lc      = lineage.length;
+
+        for (var i = 0; i < c; i++) {
+            var active = false;
+            var tag    = dfx.attr(buttons[i], 'data-ViperInlineToolbarPlugin-tag');
+            for (var j = 0; j < lc; j++) {
+                if (dfx.isTag(lineage[j], tag) === true) {
+                    dfx.addClass(buttons[i], 'active');
+                    active = true;
+                    break;
+                }
+            }
+
+            if (active === false) {
+                dfx.removeClass(buttons[i], 'active');
+            }
+        }
 
     },
 

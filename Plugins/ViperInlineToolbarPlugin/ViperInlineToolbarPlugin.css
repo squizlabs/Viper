@@ -65,6 +65,11 @@
     margin-left: 0;
 }
 
+.ViperInlineToolbarPlugin-inner .ViperInlineToolbarPlugin-button.active {
+    background-color: #5a8bd0;
+    color: #FFF;
+}
+
 .ViperInlineToolbarPlugin-lineage {
     background-color: #e0dede;
     font-size: 11px;
