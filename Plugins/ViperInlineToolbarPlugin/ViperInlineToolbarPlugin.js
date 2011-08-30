@@ -94,7 +94,9 @@ ViperInlineToolbarPlugin.prototype = {
 
     updateToolbar: function(range)
     {
-        this._scaleToolbar();
+        if (navigator.userAgent.match(/iPad/i) != null) {
+            this._scaleToolbar();
+        }
 
         range = range || this.viper.getCurrentRange();
 
