@@ -1,0 +1,732 @@
+/* Squiz Central - main styles */
+
+/* clear browser defaults
+********************************************************/
+* {margin:0; padding: 0; text-rendering: optimizelegibility;}
+html {
+/*     min-width: 979px; */
+}
+body {
+/*     min-width: 979px; */
+	font-size: 76%;
+	line-height: 1.3;
+    font-family: Palatino, Georgia, Times, 'Times New Roman', Serif;
+    color: #57473b;
+    background: #2C190B url(images/wood-panel-repeater.jpg) 50% 0 repeat;
+    padding-bottom: 20px;
+}
+p {
+    margin: 0.5em 0 1.5em 0;
+    }
+ul,ol {
+    margin: 1.4em 2em 2em;
+    }
+ul ul, ol ol, ul ol, ol ul {
+    margin-top: 0.5em;
+    margin-bottom: 1em;
+}
+#content_col li {
+    margin: 0 0 1.3em 0;
+}
+hr {
+    clear: both;
+    height: 1px;
+    border: none;
+    padding-top: 25px;
+    margin-bottom: 25px;
+    background: transparent url(images/hr-bg.png) 50% 100% no-repeat;
+}
+
+/* Headings
+*******************************************************/
+h1,h2 {
+    color: #000;
+    font-size: 2.5em;
+    font-weight: bold;
+    margin: 0.1em 0 0.5em;
+}
+h2 {
+    padding: 0;
+    color: #3C3A26;
+    font-size: 2em;
+    font-weight: normal;
+    line-height: 1.1em;
+    margin-bottom: 0.4em;
+    margin-top: 0;
+}
+h3 {
+    font-size: 1.6em;
+    line-height: 1.1em;
+    margin: 1.4em 0 0.3em;
+}
+h3,
+h3 a,
+h3 a:visited {
+    color: #000;
+    font-weight: normal;
+    text-decoration: none;
+    line-height: 1.1em;
+}
+h4 {
+    color:#000;
+    font-size:1.2em;
+    margin-top:1.4em;
+    line-height: 1.1em;
+}
+h5 {
+    color:#8D6B3E;
+    font-size:1.1em;
+    margin-top:1.5em;
+    line-height: 1.1em;
+}
+h6 {
+    color: #000;
+    font-size: 1em;
+    line-height: 1.1em;
+}
+h3,h4,h5,h6 {
+    clear: both;
+}
+
+a img {border: none;}
+
+/* generic layout framework
+********************************************************/
+.fl-right {float: right;}
+.fl-left {float: left;}
+.cl-right {clear: right;}
+.cl-left {clear: left;}
+.no-border {border: none !important;}
+.mrg-left {margin-left: 1.6em;}
+.mrg-right {margin-right: 1.6em;}
+.mrg-both {margin-left: 1em; margin-right: 1em;}
+.mrg-top {margin-top: 1em;}
+
+#content a,
+#content a:visited {
+    color: #3774b3;
+    text-decoration: underline;
+    padding: 0.1em 0;
+    border-radius: 6px;
+}
+#content a:hover {
+    background-color: #daecfd;
+    text-decoration: none;
+}
+.screen_hide {
+    display: block;
+    position: absolute;
+    left: -9999px;
+}
+
+/* default transitions
+********************************************************/
+* {
+    -moz-transition-property: : color, background-color, border-color;
+    -moz-transition-duration: 0.3s;
+    -moz-transition-timing-function: ease;
+    -webkit-transition-property: : color, background-color, border-color;
+    -webkit-transition-duration: 0.3s;
+    -webkit-transition-timing-function: ease;
+}
+
+
+/* main page containers
+********************************************************/
+/*
+#drawImage {
+    z-index: 1;
+    min-height: 1028px;
+    background: transparent url(images/drawBg.jpg) 50% 0 no-repeat;
+}
+*/
+#pageWidth {
+    z-index: 2;
+    position: relative;
+    margin: 0 auto;
+    width: 930px;
+    padding: 55px 0 50px;
+    font-size: 1.3em;
+}
+
+
+/* Breadcrumb
+********************************************************/
+#lineageList {
+    list-style-type: none;
+    margin: 0;
+    padding: 0 15px 0 10px;
+    overflow: hidden;
+    font-family: Georgia, Times, Serif;
+}
+#lineageList .lineage-home {
+    float: left;
+    width: 35px;
+    overflow: hidden;
+}
+#lineageList .lineage-home a,
+#lineageList .lineage-home a:visited {
+    display: block;
+    height: 29px;
+    background: transparent url(images/lineage-home.png) 0 0 no-repeat;
+}
+#lineageList .lineage-item {
+    float: left;
+    line-height: 23px;
+    background: transparent url(images/lineage-arrow.png) 0 60% no-repeat;
+    padding-left: 16px;
+    margin: 0 0 0 9px;
+    font-size: 0.9em;
+    font-style: italic;
+    text-shadow: 0 1px 0 #FFF;
+}
+#lineageList .lineage-item a,
+#lineageList .lineage-item a:visited {
+    color: #797557;
+    text-decoration: none;
+}
+#lineageList .lineage-item a:hover {
+    color: #000;
+}
+
+/* Content containers and header
+********************************************************/
+#contentHolder {
+    width: 880px;
+    margin: 0 auto;
+    position: relative;
+    background: transparent url(images/paperHoles.png) 0 36px repeat-y;
+}
+#contentInner {
+    background: transparent url(images/paperFeeder.png) 0 0 no-repeat;
+}
+#contentPadder {
+    border: 1px solid transparent;
+    padding: 20px 41px;
+}
+#assetDetails {
+    margin-bottom: 1.5em;
+    padding-bottom: 1em;
+    background: transparent url(images/pageHeader-dots.png) 0 100% repeat-x;
+    position: relative;
+}
+.level1.level2 #assetDetails { /* removes the bottom border on level 2 pages (tabs) as it is not required  */
+/*     border-bottom-width: 0; */
+    padding-bottom: 0;
+    background-image: none;
+}
+.level1.level2.level3 #assetDetails { /* adds the bottom border back in for level 3 (articles) and below */
+/*     border-bottom-width: 1px; */
+    padding-bottom: inherit;
+    background-image: url(images/pageHeader-dots.png);
+}
+#assetDetails h2 {
+}
+#assetDetails #subArticleLink {
+    display: none;
+}
+.level1.level2.level3 #assetDetails #subArticleLink {
+    display: block;
+}
+#assetDetails #subArticleLink {
+    position: absolute;
+    right: 0;
+    bottom: 18%;
+    background: transparent url(images/subArticleLink-arrow.png) 0 -50px no-repeat;
+    padding-left: 23px;
+    font-size: 1.4em;
+    color: #89887a;
+    text-decoration: none;
+    opacity: 0.6;
+    -moz-transition: all 0.7s ease;
+}
+#assetDetails #subArticleLink:hover {
+    opacity: 1;
+    background-position: 0 0;
+}
+#assetDetails #subArticleLink .subArticleCount {
+    border-radius: 1em;
+    background-color: #f0e4bf;
+    color: #605c45;
+    font-weight: bold;
+    padding: 0.1em 0.45em;
+    margin-left: 0.3em;
+    font-family: Times, 'Times New Roman', Serif;
+}
+#assetDetails .dates {
+    color: #44422C;
+    font-size: 0.85em;
+    margin: 0.5em 0;
+    line-height: 1em;
+}
+#assetDetails .dates strong {
+    color: #a19057;
+    padding-left: 0.4em;
+    font-weight: normal;
+}
+.level1 #assetDetails .dates { /* removes the dates information from level 1 and 2 pages (draws and tabs) */
+    display: none;
+}
+.level1.level2.level3 #assetDetails .dates { /* adds the dates information for level 3 and below (articles) */
+    display: block;
+}
+.editMode-1 #assetDetails .dates { /* hides the created and updated names and dates when in edit mode */
+/*     display: none !important; */
+}
+#content {
+    padding: 30px 39px 20px;
+    min-height: 550px;
+    *height: 550px;
+    background: #FEFFF9 url(images/paperTexture.jpg) 0 0 repeat;
+    line-height: 1.5;
+}
+#contentClear {
+    clear: both;
+}
+
+/* Child Lists
+*******************************************************/
+.pageBreak {
+    background: transparent url(images/pageBreak-bg.png) 100% 0 no-repeat;
+    margin: 2em -73px 0 -38px;
+    height: 34px;
+}
+#content .childListBlock {
+    padding: 1em;
+}
+#content .childListBlock:before {
+    content: "%attribute~name:786%";
+    display: block;
+    color: #DBD9D1;
+    font-size: 1.8em;
+    margin: -0.5em 0 0.5em -0.5em;
+}
+.level1.level2.level3 #content .childListBlock:before {
+    content: "%attribute~name:787%";
+}
+#content .childListBlock .childList {
+    margin: 0;
+}
+#content .childList .childListItem {
+    background: none;
+    margin: 0 0 10px 0;
+    padding: 0;
+}
+#content .childListItem a,
+#content .childListItem a:visited {
+    display: block;
+    text-decoration: none;
+    background: transparent url(images/childListItem-bullet.png) 7px 0.7em no-repeat;
+    padding: 7px 7px 7px 37px;
+    border: 1px solid #FEFFF9;
+}
+#content .childListItem a strong,
+#content .childListItem a:visited strong {
+    display: block;
+    position: relative;
+    font-size: 1em;
+    font-family: Georgia, Times, Serif;
+    padding-right: 8em;
+    background: transparent url(images/childListItem-dots.png) 0 100% repeat-x;
+    color: #000;
+}
+#content .childListItem .childListItem-name,
+#content .childListItem .childListItem-date {
+    background-color: #FEFFF9;
+    line-height: 1em;
+    padding: 0.2em 0.3em;
+    border-radius: 6px;
+}
+#content .childListItem a:hover .childListItem-name {
+    color: #3774b3 !important;
+    background-color: #daecfd;
+}
+#content .childListItem .childListItem-date {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    padding: 0 0 0 0.3em;
+    font-weight: normal;
+}
+#content .childListItem a p,
+#content .childListItem a:visited p {
+    color: #8b7a6e;
+    margin-bottom: 0;
+    padding-left: 6px;
+}
+
+/* Content/article styles
+*******************************************************/
+#content strong {
+    color: #000;
+}
+#content em {
+    color: #1D802B;
+    font-weight: bold;
+}
+#content img {
+    border: 29px solid #FFF;
+    border-image: url(images/imageBorder.png) 29 round;
+    -webkit-border-image: url(images/imageBorder.png) 29 round;
+    -moz-border-image: url(images/imageBorder.png) 29 round;
+}
+#content .colour-red {
+    color: #a42b23;
+}
+#content .colour-green {
+    color: #4ea725;
+}
+#content .next-prev {
+    overflow: hidden;
+    clear: both;
+    height: 27px;
+    margin: 2em -29px -17px -33px;
+    padding: 12px 187px 11px 187px;
+    background: transparent url(http://manuals.matrix.squizsuite.net/__designs/matrix-library/bg-page-bottom.png) 50% 0 no-repeat;
+}
+#content .next-prev a {
+    display: block;
+    overflow: hidden;
+    float: left;
+    width: 159px;
+    height: 27px;
+    line-height: 29px;
+    color: #6F6F6F;
+    font-family: Times;
+    font-size: 14px;
+    text-align: center;
+    text-decoration: none;
+    background-image: url(http://manuals.matrix.squizsuite.net/__designs/matrix-library/button-next-prev.png);
+    background-repeat: no-repeat;
+    background-position: 100% 0;
+}
+#content .next-prev a:hover {
+    background-position: 100% -27px;
+    color: #000;
+}
+#content .next-prev.last a {
+    background-position: 100% -108px;
+}
+#content .next-prev.last a:hover {
+    background-position: 100% -135px;
+}
+#content .next-prev a:first-child {
+    background-position: 0 -54px;
+}
+#content .next-prev a:first-child:hover {
+    background-position: 0 -81px;
+}
+#content .next-prev.first a:first-child {
+    margin-left: 68px;
+    background-position: 100% 0;
+}
+#content .next-prev.first a:first-child:hover {
+    background-position: 100% -27px;
+}
+#content pre,
+#content > code {
+    display: block;
+    background-color: #f9f8b1;
+    color: #333;
+    font-family: courier;
+    font-size: 1em;
+    text-shadow: 0 0 5px #F9F8B1;
+    padding: 1em;
+    margin: 2em 0;
+    overflow: auto;
+    border-radius: 4px;
+    box-shadow: 0 0 4px rgba(0,0,0,0.2) inset;
+    -webkit-box-shadow: 0 0 4px rgba(0,0,0,0.2) inset;
+    background-image: url(images/bgTexture-light.png);
+}
+#content > code {
+    font-size: 0.97em;
+}
+#content pre code {
+    font-size: 1.2em;
+}
+#content pre strong,
+#content pre b {
+    color: #0c7de5;
+    font-weight: normal;
+}
+#content pre.two-col {
+    float: left;
+    width: 277px;
+    margin-left: 10px;
+background-color: #f9f8b1;
+    margin: 2em 0;
+    border-radius: 10px;
+}
+
+/* Content Lists ********************/
+#content ol {
+    margin-left: 2em;
+}
+#content ol.alpha {
+    list-style-type: lower-alpha;
+}
+#content ol.roman {
+    list-style-type: lower-roman;
+}
+#content ul {
+    list-style: none;
+}
+#content li {
+    position: relative;
+    margin: 0.6em 0;
+    line-height: 1.2;
+}
+#content ul li {
+    padding: 0.3em 0 0.3em 29px;
+    background: transparent url(http://manuals.matrix.squizsuite.net/__designs/matrix-library/bullet-content.gif) 0 0.4em no-repeat;
+}
+#content ul li li {
+    margin: 0 0 0.6em 0;
+    padding-left: 25px;
+    background: transparent url(http://manuals.matrix.squizsuite.net/__designs/matrix-library/bullet-lvl2.png) 0 0.4em no-repeat;
+}
+#content ul li li li {
+    margin: 0 0 0.2em 0;
+    padding-left: 17px;
+    background: transparent url(http://manuals.matrix.squizsuite.net/__designs/matrix-library/bullet-lvl3.png) 0 0.6em no-repeat;
+}
+#content ul ul {
+    margin-bottom: 0;
+}
+#content ul.two-col {
+    margin-left: 65px;
+    overflow: hidden;
+}
+#content ul.three-col,
+#content ul.four-col {
+    overflow: hidden;
+    margin-bottom: 1em;
+}
+#content ul.screens {
+    margin-left: 50px;
+    margin-bottom: 1.5em;
+}
+#content ul.clear li {
+    clear: both;
+}
+#content ul.two-col li {
+    float: left;
+    width: 40%;
+    margin: 0;
+    background-image: url(http://manuals.matrix.squizsuite.net/__designs/matrix-library/bullet-cols.png);
+}
+#content ul.three-col li {
+    float: left;
+    width: 27%;
+    margin: 0;
+    padding: 0.3em 0.3em 0.3em 25px;
+    background-image: url(http://manuals.matrix.squizsuite.net/__designs/matrix-library/bullet-cols.png);
+}
+#content ul.four-col li,
+#content ul.screens li {
+    float: left;
+    width: 25%;
+    margin: 0;
+    background-image: url(http://manuals.matrix.squizsuite.net/__designs/matrix-library/bullet-cols.png);
+}
+#content ul.four-col li {
+    width: 18%;
+}
+#content ul.screens li {
+    background: transparent url(http://manuals.matrix.squizsuite.net/__designs/matrix-library/bullet-screens.gif) 0 0.3em no-repeat;
+}
+#content ul.no-bull li {
+    background: none;
+    padding-left: 0;
+}
+
+/* content blocks */
+#content .intro {
+    font-size: 1.2em;
+    background: transparent url(images/hr-bg.png) 50% 100% no-repeat;
+    padding: 1em 1em 35px;
+    border-radius: 4px;
+}
+#content .intro:first-letter {
+    display: block;
+    font-size: 2.3em;
+    text-align: center;
+    text-transform: uppercase;
+    color: #000;
+    float: left;
+    background: transparent url(images/dropCap-bg.png) 50% 36% no-repeat;
+    text-align: center;
+    padding: 0.25em 0.5em 0.3em;
+    margin: -0.1em 0.1em 0 -0.3em;
+}
+#content .caption {
+    display: block;
+    padding: 0 0 13px;
+    background: transparent url(http://manuals.matrix.squizsuite.net/__designs/matrix-library/content-break.png) 50% 100% no-repeat;
+    font-family: Times;
+    text-align: center;
+    color: #4c3d0f;
+    font-style: italic;
+    font-size: 105%;
+}
+#content .caption strong {
+    color: #000;
+}
+#content .caption img {
+    margin-bottom: 5px;
+}
+#content .bookmarks {
+    color: #a3a384;
+    margin: 30px 0 35px 0;
+    background: transparent url(http://manuals.matrix.squizsuite.net/__designs/matrix-library/bookmark-top.png) 0 15px no-repeat;
+}
+#content .bookmarks p {
+    text-align: center;
+    font-family: Times;
+    font-style: italic;
+}
+#content .bookmarks ol {
+    background: transparent url(http://manuals.matrix.squizsuite.net/__designs/matrix-library/bookmark-bottom.png) 50% 100% no-repeat;
+    padding: 20px 0 35px 52px;
+    column-count: 2;
+    -moz-column-count: 2;
+    -webkit-column-count: 2;
+}
+#content .bookmarks li {
+    position: inherit;
+    margin: 0.4em 0 0.5em 25px;
+    line-height: 1.3em;
+    -webkit-column-break-inside: avoid;
+    -moz-column-break-inside: avoid;
+}
+#content .bookmarks li a,
+#content .bookmarks li a:visited {
+    text-decoration: none;
+    color: #222;
+}
+#content .bookmarks li a:hover {
+    color: #3774b3;
+}
+
+/* content tables */
+#content table {
+    border: 1px solid #c9c2a9;
+    border-bottom: none;
+    border-right: none;
+    margin-bottom: 0.7em;
+    border-spacing: 0;
+    border-collapse: collapse;
+}
+#content td,
+#content th {
+    border: 1px solid #c9c2a9;
+    border-top: none;
+    border-left: none;
+    padding: 10px;
+    text-align: left;
+    vertical-align: top;
+    border-spacing: 0;
+    border-collapse: collapse;
+}
+#content td.small {
+    font-size: 0.8em;
+}
+#content th {
+    vertical-align: middle;
+    background-color: #EAE3CC;
+}
+#content th p {
+    display: inline;
+}
+
+#content .tip {
+    clear: both;
+    background: #f0f8f9 url(http://manuals.matrix.squizsuite.net/__designs/matrix-library/icon-tip.png) 20px 50% no-repeat;
+    padding: 1.5em 2em 1.7em 83px;
+    color: #2c6ba6;
+    border: 1px solid #d0e3e9;
+    border-radius: 6px;
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    margin: 1em 0 2em 0;
+}
+#content .tip:before {
+    content: "Tip: ";
+    color: #000;
+    font-weight: bold;
+}
+#content .notes {
+    clear: both;
+    background: #fdfbe4 url(images/notes-bg.png) 18px 18px no-repeat;
+    padding: 1.5em 2em 1.7em 83px;
+    color: #8f5226;
+    border: 1px solid #ebe29a;
+    border-radius: 6px;
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    margin: 1em 0 2em 0;
+}
+#content .notes:before {
+    content: "Note: ";
+    color: #000;
+    font-weight: bold;
+}
+#content .complete {
+    background: #eaf6e6 url(http://manuals.matrix.squizsuite.net/__designs/matrix-library/icon_finish.png) 10px 50% no-repeat;
+    padding: 1.2em 10px 1em 60px;
+    color: #486f35;
+    border: 1px solid #cfe3ce;
+    border-radius: 7px;
+}
+.moviePlayer {
+    background: #000 url(http://www.squizlabs.com/__designs/labs-inside/movie-preloader.gif) 50% 50% no-repeat;
+    border: 1px solid #CCC;
+}
+.moviePlayer .moviePlayer {
+    border: none;
+}
+
+/* Search Result Lists
+*******************************************************/
+#content .result.featureResult {
+    clear: both;
+    background-color: #f0f8f9;
+    padding: 1em;
+    margin-bottom: 1em;
+    color: #2c6ba6;
+    border: 1px solid #d0e3e9;
+}
+#content #searchResults {
+    list-style: none;
+}
+#content #searchResults li.result {
+    background: none;
+    padding-left: 0;
+    margin-bottom: 1.7em;
+}
+#content .searchResult-title {
+    font-weight: bold;
+    font-size: 1.2em;
+}
+#content .featureResult .searchResult-title a {
+    color: #2C6BA6 !important;
+}
+#content .searchrResult-summary b {
+    background-color: #fcfcd2;
+}
+#content .searchResult-link {
+    color: #79a578;
+}
+#content .searchResult-link .searchResult-filesize {
+    color: #ADADAD;
+}
+#content .searchResults-pages {
+    text-align: center;
+    font-size: 1.1em;
+    color: #ADADAD;
+}
+
+/* Footer
+*******************************************************/
+#footer {}
