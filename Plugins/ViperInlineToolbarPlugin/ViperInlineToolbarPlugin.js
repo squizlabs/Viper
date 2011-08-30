@@ -26,6 +26,7 @@ function ViperInlineToolbarPlugin(viper)
     this._innerContainer = null;
     this._lineage        = null;
     this._lineageClicked = false;
+    this._margin = 10;
 
     this._createToolbar();
 
@@ -36,6 +37,29 @@ function ViperInlineToolbarPlugin(viper)
 
     this.viper.registerCallback('Viper:mouseDown', 'ViperInlineToolbarPlugin', function(range) {
         self.hideToolbar();
+    });
+
+    dfx.addEvent(window, 'gesturestart', function() {
+        self.hideToolbar();
+    });
+
+    dfx.addEvent(window, 'gestureend', function() {
+            var zoom   = document.documentElement.clientWidth / window.innerWidth;
+            var scale  = 1 / zoom;
+            if (scale >= 1) {
+                scale = 1;
+                self._margin = 10;
+            } else if (scale <= 0.5) {
+                scale = 0.5;
+                self._margin = -12;
+            } else {
+                self._margin = (-6 * zoom);
+            }
+
+            console.info('zoom: '+zoom + 'scale: '+scale);
+
+            self.updateToolbar();
+            dfx.setStyle(self.toolbar, '-webkit-transform', 'scale(' + scale + ', ' + scale + ')');
     });
 
 }
@@ -85,6 +109,8 @@ ViperInlineToolbarPlugin.prototype = {
 
     updateToolbar: function(range)
     {
+        range = range || this.viper.getCurrentRange();
+
         var lineage = this._getSelectionLineage(range);
         if (this._lineageClicked === true) {
             this._lineageClicked = false;
@@ -133,6 +159,8 @@ ViperInlineToolbarPlugin.prototype = {
 
     _updatePosition: function(range, verticalOnly)
     {
+        range = range || this.viper.getCurrentRange();
+
         var rangeCoords  = range.rangeObj.getBoundingClientRect();
         if (!rangeCoords) {
             return;
@@ -149,7 +177,7 @@ ViperInlineToolbarPlugin.prototype = {
             dfx.setStyle(this.toolbar, 'left', left + 'px');
         }
 
-        var top = (rangeCoords.bottom + 10 + scrollCoords.y);
+        var top = (rangeCoords.bottom + this._margin + scrollCoords.y);
 
         dfx.setStyle(this.toolbar, 'top', top + 'px');
         dfx.addClass(this.toolbar, 'visible');
