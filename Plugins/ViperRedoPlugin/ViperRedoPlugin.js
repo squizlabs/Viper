@@ -14,8 +14,7 @@
  * along with this program as the file license.txt. If not, see
  * <http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt>
  *
- * @package    CMS
- * @subpackage Editing
+ * @package    Viper
  * @author     Squiz Pty Ltd <products@squiz.net>
  * @copyright  2010 Squiz Pty Ltd (ACN 084 670 600)
  * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt GPLv2
@@ -62,7 +61,6 @@ ViperRedoPlugin.prototype = {
     handleUndo: function()
     {
         this.viper.ViperUndoManager.undo();
-        this._updateButtonStates();
 
         return false;
 
@@ -71,7 +69,6 @@ ViperRedoPlugin.prototype = {
     handleRedo: function()
     {
         this.viper.ViperUndoManager.redo();
-        this._updateButtonStates();
 
         return false;
 

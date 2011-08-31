@@ -2539,6 +2539,9 @@ Viper.prototype = {
 
         if (this.isInputKey(e) === true) {
             this.fireCallbacks('Viper:charInsert', String.fromCharCode(e.which));
+
+            var range = this.getCurrentRange();
+            this.fireNodesChanged([range.getStartNode()]);
             return true;
         }
 
@@ -2634,6 +2637,12 @@ Viper.prototype = {
         // Update the markers.
         // TODO: Should be a callback?
         ViperChangeTracker.updatePositionMarkers(true);
+
+        if (nodes.length === 1 && nodes[0].nodeType === dfx.TEXT_NODE) {
+            this.ViperUndoManager.add('Viper', 'text_change');
+        } else {
+            this.ViperUndoManager.add();
+        }
 
     },
 
@@ -2775,6 +2784,14 @@ Viper.prototype = {
             return;
         }
 
+        if (dfx.isArray(type) === true) {
+            for (var i = 0; i < type.length; i++) {
+                this.registerCallback(type[i], namespace, callback);
+            }
+
+            return;
+        }
+
         if (!this.callbacks[type]) {
             this.callbacks[type] = {
                 namespaces: {},
@@ -2897,6 +2914,19 @@ Viper.prototype = {
         html     = this._fixHtml(html);
 
         return html;
+
+    },
+
+    getRawHTML: function(elem)
+    {
+        elem = elem || this.element;
+        return dfx.getHtml(elem);
+
+    },
+
+    setRawHTML: function(html)
+    {
+        dfx.setHtml(this.element, html);
 
     },
 

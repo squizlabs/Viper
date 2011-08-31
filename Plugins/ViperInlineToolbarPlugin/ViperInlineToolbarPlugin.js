@@ -45,7 +45,7 @@ function ViperInlineToolbarPlugin(viper)
     });
 
     // Hide the toolbar when user clicks anywhere.
-    this.viper.registerCallback('Viper:mouseDown', 'ViperInlineToolbarPlugin', function(range) {
+    this.viper.registerCallback(['Viper:mouseDown', 'ViperUndoManager:undo'], 'ViperInlineToolbarPlugin', function(range) {
         self.hideToolbar();
     });
 
