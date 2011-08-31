@@ -502,17 +502,6 @@ ViperMozRange.prototype = {
 
     },
 
-    getStartNode: function()
-    {
-        if (this.startContainer.nodeType === dfx.ELEMENT_NODE) {
-            return this.startContainer.childNodes[this.startOffset];
-        }
-
-        return this.startContainer;
-
-    },
-
-
     // Extensions to the W3CRange standard.
     getCommonElement: function()
     {

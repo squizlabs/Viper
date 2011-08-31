@@ -2312,10 +2312,11 @@ Viper.prototype = {
 
     },
 
-    fireSelectionChanged: function(range)
+    fireSelectionChanged: function(range, forceUpdate)
     {
         range = range || this.getCurrentRange();
         if (!this._prevRange
+            || forceUpdate === true
             || this._prevRange.startContainer !== range.startContainer
             || this._prevRange.endContainer !== range.endContainer
             || this._prevRange.startOffset !== range.startOffset

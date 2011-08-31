@@ -741,39 +741,38 @@ ViperCoreStylesPlugin.prototype = {
     handleStyle: function(style)
     {
         // Determine if we need to apply or remove the styles.
-        var range     = this.viper.getCurrentRange();
-        var startNode = range.startContainer;
-        var endNode   = range.endContainer;
+        var range = this.viper.getCurrentRange();
 
         if (range.collapsed === true) {
             // Range is collapsed. We need to listen for next insertion.
             this._onChangeAddStyle = style;
             return false;
-        } else {
-            if (dfx.getParents(startNode, style).length > 0) {
-                if (dfx.getParents(endNode, style).length > 0) {
-                    // This selection is already bold, remove its styles.
-                    var changeid = ViperChangeTracker.startBatchChange('removedFormat');
-                    this.viper.removeStyle(style);
-                    ViperChangeTracker.endBatchChange(changeid);
+        }
 
-                    dfx.removeEmptyNodes(this.viper.element);
-                    this.viper.fireNodesChanged('ViperCoreStylesPlugin:removeStyle');
-                    return false;
-                }
-            }
+        var startNode = range.getStartNode();
+        var endNode   = range.getEndNode();
 
-            dfx.removeEmptyNodes(this.viper.element);
-            this.applyTag(style);
-            this.caretUpdated();
-        }//end if
+        var commonParent = range.getCommonElement();
 
-        this.viper.fireNodesChanged('ViperCoreStylesPlugin:applyStyle');
+        if (dfx.isTag(startNode, style) === true
+            || (dfx.getParents(startNode, style).length > 0
+            && dfx.getParents(endNode, style).length > 0)
+        ) {
+            // This selection is already bold, remove its styles.
+            var changeid = ViperChangeTracker.startBatchChange('removedFormat');
+            this.viper.removeStyle(style);
+            ViperChangeTracker.endBatchChange(changeid);
 
-        var inlineToolbarPlugin = this.viper.ViperPluginManager.getPlugin('ViperInlineToolbarPlugin');
-        inlineToolbarPlugin._lineageClicked = true;
+            this.viper.fireNodesChanged([commonParent]);
+            this.viper.fireSelectionChanged(null, true);
+            return false;
+        }
 
-        this.viper.fireSelectionChanged();
+        // Apply the new tag.
+        this.applyTag(style);
+
+        this.viper.fireNodesChanged([commonParent]);
+        this.viper.fireSelectionChanged(null, true);
 
         // Prevent event bubbling etc.
         return false;
