@@ -1363,11 +1363,16 @@ Viper.prototype = {
     surroundContents: function(tag)
     {
         var range = this.getCurrentRange();
-        var otag  = tag;
+
+        if (range.collapsed === true) {
+            return;
+        }
 
         if (this.rangeInViperBounds() !== true) {
             return;
         }
+
+        var otag = tag;
 
         if (ViperChangeTracker.isTracking() === true
             && ViperChangeTracker.getCurrentMode() === 'original'
@@ -1377,92 +1382,90 @@ Viper.prototype = {
             tag = 'span';
         }
 
-        if (range.collapsed !== true) {
-            var startContainer = range.getStartNode();
-            var endContainer   = range.getEndNode();
-            if (startContainer === endContainer) {
-                // Selected contents from same node.
-                if (startContainer.nodeType === dfx.TEXT_NODE) {
-                    // Selection is a text node.
-                    // Just wrap the contents with the specified node.
-                    var node         = Viper.document.createElement(tag);
-                    var rangeContent = range.toString();
-                    dfx.setNodeTextContent(node, rangeContent);
+        var startContainer = range.getStartNode();
+        var endContainer   = range.getEndNode();
+        if (startContainer === endContainer) {
+            // Selected contents from same node.
+            if (startContainer.nodeType === dfx.TEXT_NODE) {
+                // Selection is a text node.
+                // Just wrap the contents with the specified node.
+                var node         = Viper.document.createElement(tag);
+                var rangeContent = range.toString();
+                dfx.setNodeTextContent(node, rangeContent);
 
-                    if (ViperChangeTracker.isTracking() === true) {
-                        if (ViperChangeTracker.getCurrentMode() === 'original') {
-                            ViperChangeTracker.setCTData(node, 'tagName', otag);
-                        }
-
-                        ViperChangeTracker.addChange('formatChange', [node]);
+                if (ViperChangeTracker.isTracking() === true) {
+                    if (ViperChangeTracker.getCurrentMode() === 'original') {
+                        ViperChangeTracker.setCTData(node, 'tagName', otag);
                     }
 
-                    range.deleteContents();
-                    range.insertNode(node);
+                    ViperChangeTracker.addChange('formatChange', [node]);
+                }
 
-                    range.setStart(node.firstChild, 0);
-                    range.setEnd(node.firstChild, node.firstChild.length);
-                    ViperSelection.addRange(range);
-                } else {
-                    var self     = this;
-                    var changeid = null;
-                    if (ViperChangeTracker.isTracking() === true) {
-                        changeid = ViperChangeTracker.addChange('formatChange', [newElem]);
-                    }
+                range.deleteContents();
+                range.insertNode(node);
 
-                    this._wrapElement(startContainer.childNodes[range.startOffset], tag, function(newElem) {
-                        if (changeid !== null) {
-                            if (ViperChangeTracker.getCurrentMode() === 'original') {
-                                ViperChangeTracker.setCTData(newElem, 'tagName', otag);
-                            }
-
-                            // Add new class to wrap element to mark it as "changed".
-                            ViperChangeTracker.addNodeToChange(changeid, newElem);
-                        }
-                    });
-                }//end if
+                range.setStart(node.firstChild, 0);
+                range.setEnd(node.firstChild, node.firstChild.length);
+                ViperSelection.addRange(range);
             } else {
-                var bookmark       = this.createBookmark();
-                var startContainer = null;
-                var endContainer   = null;
-                startContainer     = bookmark.start.previousSibling;
-                endContainer       = bookmark.end.nextSibling;
-                if (!endContainer) {
-                    // TODO: When the bookmark is moved to its own class
-                    // need to handle these type of cases (e.g. use getAdjNode() etc.).
-                    endContainer = Viper.document.createTextNode('');
-                    dfx.insertAfter(bookmark.end, endContainer);
-                }
-
-                if (!startContainer) {
-                    // TODO: When the bookmark is moved to its own class
-                    // need to handle these type of cases (e.g. use getAdjNode() etc.).
-                    startContainer = Viper.document.createTextNode('');
-                    dfx.insertBefore(bookmark.start, startContainer);
-                }
-
-                var elements = dfx.getElementsBetween(startContainer, endContainer);
-                var c        = elements.length;
                 var self     = this;
                 var changeid = null;
                 if (ViperChangeTracker.isTracking() === true) {
-                    changeid = ViperChangeTracker.addChange('formatChange');
+                    changeid = ViperChangeTracker.addChange('formatChange', [newElem]);
                 }
 
-                for (var i = 0; i < c; i++) {
-                    this._wrapElement(elements[i], tag, function(newElem) {
-                        if (changeid !== null) {
-                            if (ViperChangeTracker.getCurrentMode() === 'original') {
-                                ViperChangeTracker.setCTData(newElem, 'tagName', otag);
-                            }
-
-                            ViperChangeTracker.addNodeToChange(changeid, newElem);
+                this._wrapElement(startContainer.childNodes[range.startOffset], tag, function(newElem) {
+                    if (changeid !== null) {
+                        if (ViperChangeTracker.getCurrentMode() === 'original') {
+                            ViperChangeTracker.setCTData(newElem, 'tagName', otag);
                         }
-                    });
-                }
 
-                this.selectBookmark(bookmark);
+                        // Add new class to wrap element to mark it as "changed".
+                        ViperChangeTracker.addNodeToChange(changeid, newElem);
+                    }
+                });
             }//end if
+        } else {
+            var bookmark       = this.createBookmark();
+            var startContainer = null;
+            var endContainer   = null;
+            startContainer     = bookmark.start.previousSibling;
+            endContainer       = bookmark.end.nextSibling;
+            if (!endContainer) {
+                // TODO: When the bookmark is moved to its own class
+                // need to handle these type of cases (e.g. use getAdjNode() etc.).
+                endContainer = Viper.document.createTextNode('');
+                dfx.insertAfter(bookmark.end, endContainer);
+            }
+
+            if (!startContainer) {
+                // TODO: When the bookmark is moved to its own class
+                // need to handle these type of cases (e.g. use getAdjNode() etc.).
+                startContainer = Viper.document.createTextNode('');
+                dfx.insertBefore(bookmark.start, startContainer);
+            }
+
+            var elements = dfx.getElementsBetween(startContainer, endContainer);
+            var c        = elements.length;
+            var self     = this;
+            var changeid = null;
+            if (ViperChangeTracker.isTracking() === true) {
+                changeid = ViperChangeTracker.addChange('formatChange');
+            }
+
+            for (var i = 0; i < c; i++) {
+                this._wrapElement(elements[i], tag, function(newElem) {
+                    if (changeid !== null) {
+                        if (ViperChangeTracker.getCurrentMode() === 'original') {
+                            ViperChangeTracker.setCTData(newElem, 'tagName', otag);
+                        }
+
+                        ViperChangeTracker.addNodeToChange(changeid, newElem);
+                    }
+                });
+            }
+
+            this.selectBookmark(bookmark);
         }//end if
 
     },
@@ -1483,22 +1486,43 @@ Viper.prototype = {
             return;
         }
 
+        if (dfx.getParents(parent, tag).length > 0) {
+            // This element is already inside the specified tag.
+            // TODO: This may cause problems with spans etc and may need to check
+            // specific attributes as well.
+            // Also, what if we do want to wrap the element anyway? Have force option?
+            return;
+        }
+
         if (parent.nodeType === dfx.TEXT_NODE) {
             if (dfx.isBlank(parent.data) !== true) {
-                // If the previous sibling is type of tag then append this text
-                // node to that.
                 if (parent.previousSibling && parent.previousSibling.nodeType === dfx.TEXT_NODE) {
                     if (parent.previousSibling.nodeValue === '') {
                         dfx.remove(parent.previousSibling);
                     }
                 }
 
+                // If the previous/next sibling is type of specified tag then
+                // add this text node to that sibling.
                 if (parent.previousSibling
-                    && parent.previousSibling.tagName
-                    && parent.previousSibling.tagName.toLowerCase() === tag
-                    && !dfx.attr(parent.previousSibling, 'viperbookmark')) {
+                    && dfx.isTag(parent.previousSibling, tag) === true
+                    && !dfx.attr(parent.previousSibling, 'viperbookmark')
+                ) {
+                    // Add it to the preivous sibling.
                     parent.previousSibling.appendChild(parent);
+                } else if (parent.nextSibling
+                    && dfx.isTag(parent.nextSibling, tag) === true
+                    && !dfx.attr(parent.nextSibling, 'viperbookmark')
+                ) {
+                    if (parent.nextSibling.firstChild) {
+                        // Add it before the first child of the next sibling.
+                        dfx.insertBefore(parent.nextSibling.firstChild, parent);
+                    } else {
+                        // Add it to the next sibling.
+                        parent.nextSibling.appendChild(parent);
+                    }
                 } else {
+                    // Create the tag and add it to DOM.
                     var elem = Viper.document.createElement(tag);
                     dfx.setNodeTextContent(elem, parent.nodeValue);
                     dfx.insertBefore(parent, elem);
