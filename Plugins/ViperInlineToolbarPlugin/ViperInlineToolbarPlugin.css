@@ -1,4 +1,4 @@
-.ViperInlineToolbarPlugin {
+.ViperITP {
     margin-top: 3px;
     background-color: #E0DEDE;
     color: #424242;
@@ -22,7 +22,7 @@
     -webkit-transition-timing-function: ease-out;
 }
 
-.ViperInlineToolbarPlugin:before {
+.ViperITP:before {
     content: "";
     width: 0px;
     height: 0px;
@@ -34,24 +34,24 @@
     border-bottom-color: #E0DEDE;
 }
 
-.ViperInlineToolbarPlugin.calcWidth {
+.ViperITP.calcWidth {
     visibility: hidden;
     display: block;
 }
 
-.ViperInlineToolbarPlugin.visible {
+.ViperITP.visible {
     opacity: 1;
     display: block;
 }
 
-.ViperInlineToolbarPlugin-inner {
+.ViperITP-inner {
     padding: 0.4em 0.5em 0.6em;
     border-bottom-left-radius: 0.75em;
     border-bottom-right-radius: 0.75em;
     text-align: center;
 }
 
-.ViperInlineToolbarPlugin-inner .ViperInlineToolbarPlugin-button {
+.ViperITP-inner .ViperITP-button {
     background-color: #e4e4e4;
     border: 1px solid #c2c1c1;
     border-radius: 0.3em;
@@ -64,20 +64,20 @@
     text-align: center;
     box-shadow: 0 1px 0 #fff inset;
 }
-.ViperInlineToolbarPlugin-inner .ViperInlineToolbarPlugin-button:hover {
+.ViperITP-inner .ViperITP-button:hover {
     background-color: #d3d3d3;
     color: #000;
 }
-.ViperInlineToolbarPlugin-inner .ViperInlineToolbarPlugin-button:first-child {
+.ViperITP-inner .ViperITP-button:first-child {
     margin-left: 0;
 }
 
-.ViperInlineToolbarPlugin-inner .ViperInlineToolbarPlugin-button.active {
+.ViperITP-inner .ViperITP-button.active {
     background-color: #5a8bd0;
     color: #FFF;
 }
 
-.ViperInlineToolbarPlugin-lineage {
+.ViperITP-lineage {
 /*     background-color: #e0dede; */
     font-size: 1.2em;
     color: #858585;
@@ -92,17 +92,17 @@
 /*     border-top-right-radius: 0.8em; */
 }
 
-.ViperInlineToolbarPlugin-lineage li {
+.ViperITP-lineage li {
     display: inline-block;
     cursor: pointer;
     padding: 0 0.8em 0 0.5em;
     background: transparent url(images/lineageDivider.png) 100% 50% no-repeat;
 }
-.ViperInlineToolbarPlugin-lineage li:last-child {
+.ViperITP-lineage li:last-child {
     background: none;
     padding-right: 7px;
 }
-.ViperInlineToolbarPlugin-lineage li:hover {
+.ViperITP-lineage li:hover {
     color: #000;
 }
 
@@ -110,26 +110,26 @@
 
 @media screen and (max-width: 2024px) {
 
-.ViperInlineToolbarPlugin {
+.ViperITP {
     background-color: #2b2b2b;
     color: #2b2b2b;
     text-shadow: 0 1px 0 #fff;
     border: 1px solid #000;
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.7), 0 1px 0 #646464 inset;
     -webkit-box-shadow: 0 0 15px rgba(0, 0, 0, 0.7), 0 1px 0 #646464 inset;
-    
+
 }
 
-.ViperInlineToolbarPlugin:before {
+.ViperITP:before {
     border-bottom-color: #2b2b2b;
 }
 
-.ViperInlineToolbarPlugin-inner {
+.ViperITP-inner {
     background: -webkit-gradient(linear, left top, left bottom, from(#919097), to(#727179));
     background: -moz-linear-gradient(top,  #919097,  #727179);
 }
 
-.ViperInlineToolbarPlugin-lineage {
+.ViperITP-lineage {
     /* background-color: rgba(0, 0, 0, 0.7); */
     border-bottom: 1px solid #999999;
     color: #222222;
@@ -140,16 +140,16 @@
 /*     line-height: 24px; */
 }
 
-.ViperInlineToolbarPlugin-lineage li {
+.ViperITP-lineage li {
     background-image: url(images/lineageDivider-dark.png);
     color: #AAA;
 }
 
-.ViperInlineToolbarPlugin-lineage li:hover {
+.ViperITP-lineage li:hover {
     color: #fff;
 }
 
-.ViperInlineToolbarPlugin-inner .ViperInlineToolbarPlugin-button {
+.ViperITP-inner .ViperITP-button {
     background-color: #242323;
     border: none;
     box-shadow: 0 2px 2px rgba(0, 0, 0, 0.6), 0 1px 0 rgba(255, 255, 255, 0.9) inset;
@@ -157,12 +157,12 @@
     background: -moz-linear-gradient(top,  #e9e9eb,  #c9c9d0);
 }
 
-.ViperInlineToolbarPlugin-inner .ViperInlineToolbarPlugin-button:hover {
+.ViperITP-inner .ViperITP-button:hover {
     background: -webkit-gradient(linear, left top, left bottom, from(#b8b8b9), to(#a0a0a2));
     background: -moz-linear-gradient(top,  #b8b8b9,  #a0a0a2);
 }
 
-.ViperInlineToolbarPlugin-inner .ViperInlineToolbarPlugin-button.active {
+.ViperITP-inner .ViperITP-button.active {
     background: -webkit-gradient(linear, left top, left bottom, from(#3987f2), to(#205caf));
     background: -moz-linear-gradient(top,  #3987f2,  #205caf);
     box-shadow: 0 0px 5px rgba(0, 0, 0, 0.85) inset;

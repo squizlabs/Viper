@@ -79,31 +79,61 @@ ViperInlineToolbarPlugin.prototype = {
         this._innerContainer = document.createElement('div');
         this._toolbar.appendChild(this._innerContainer);
 
-        dfx.addClass(this._toolbar, 'ViperInlineToolbarPlugin');
-        dfx.addClass(this._lineage, 'ViperInlineToolbarPlugin-lineage');
-        dfx.addClass(this._innerContainer, 'ViperInlineToolbarPlugin-inner');
+        this._subSectionContainer = document.createElement('div');
+        this._toolbar.appendChild(this._subSectionContainer);
+
+        dfx.addClass(this._toolbar, 'ViperITP');
+        dfx.addClass(this._lineage, 'ViperITP-lineage');
+        dfx.addClass(this._innerContainer, 'ViperITP-inner');
+        dfx.addClass(this._subSectionContainer, 'ViperITP-subSectionWrapper');
 
         document.body.appendChild(this._toolbar);
 
     },
 
     /**
+     * Creates a button group.
+     *
+     * @param {string} customClass Custom class to apply to the group.
+     *
+     * @return {DOMElement} The button group element.
+     */
+    createButtonGroup: function(customClass)
+    {
+        var group = document.createElement('div');
+        dfx.addClass(group, 'VITP-group');
+
+        if (customClass) {
+            dfx.addClass(group, customClass);
+        }
+
+        this._innerContainer.appendChild(group);
+
+        return group;
+
+    },
+
+    /**
      * Creates a toolbar button.
      *
-     * @param {string}   content     The content of the button.
-     * @param {string}   tagName     The tagName that activates the button.
-     *                               E.g. Selecting a strong tag will activate the
-     *                               button with tagName set to 'strong'.
-     * @param {string}   customClass Class to add to the button for extra styling.
-     * @param {function} clickAction The function to call when the button is clicked.
+     * @param {string}     content      The content of the button.
+     * @param {string}     isActive     True if the button is active.
+     * @param {string}     customClass  Class to add to the button for extra styling.
+     * @param {function}   clickAction  The function to call when the button is clicked.
+     * @param {DOMElement} groupElement The group element that was created by createButtonGroup.
+     * @param {DOMElement} subSection   The sub section element see createSubSection.
      *
      * @return {DOMElement} The new button element.
      */
-    createButton: function(content, tagName, customClass, clickAction)
+    createButton: function(content, isActive, customClass, clickAction, groupElement, subSection)
     {
+        if (!content) {
+            content = '&nbsp;';
+        }
+
         var button = document.createElement('div');
         dfx.setHtml(button, content);
-        dfx.addClass(button, 'ViperInlineToolbarPlugin-button');
+        dfx.addClass(button, 'ViperITP-button');
 
         if (customClass) {
             dfx.addClass(button, customClass);
@@ -112,17 +142,56 @@ ViperInlineToolbarPlugin.prototype = {
         if (clickAction) {
             var self = this;
             dfx.addEvent(button, 'mousedown.ViperInlineToolbarPlugin', function() {
+                // Show subsection if there is one..
+                if (subSection) {
+                    self._showSubSection(subSection);
+                }
+
                 self._lineageClicked = false;
                 return clickAction.call(this);
             });
         }
 
-        if (tagName) {
-            dfx.attr(button, 'data-ViperInlineToolbarPlugin-tag', tagName);
+        if (isActive === true) {
+            dfx.addClass(button, 'active');
+        }
+
+        if (groupElement) {
+            // Add this button to the group.
+            groupElement.appendChild(button);
+        } else {
+            this._innerContainer.appendChild(button);
         }
 
         return button;
 
+    },
+
+    /**
+     * Creates a sub section element.
+     *
+     * @param {DOMElement} contentElement The content element.
+     * @param {boolean}    active         True if the subsection is active.
+     * @param {string}     customClass    Custom class to apply to the group.
+     *
+     * @return {DOMElement} The sub section element.
+     */
+    createSubSection: function(contentElement, active, customClass)
+    {
+        var section = document.createElement('div');
+        dfx.addClass(section, 'ViperITP-subSection');
+
+        if (active === true) {
+            dfx.addClass(section, 'active');
+        }
+
+        if (customClass) {
+            dfx.addClass(section, customClass);
+        }
+
+        section.appendChild(contentElement);
+
+        return section;
     },
 
     /**
@@ -142,13 +211,6 @@ ViperInlineToolbarPlugin.prototype = {
 
         var lineage = this._getSelectionLineage(range);
 
-        this._updateActiveButtons(lineage);
-
-        if (this._lineageClicked === true) {
-            this._lineageClicked = false;
-            return;
-        }
-
         this._updateInnerContainer(range, lineage);
 
         if (!dfx.getHtml(this._innerContainer)) {
@@ -156,11 +218,13 @@ ViperInlineToolbarPlugin.prototype = {
             return;
         }
 
+        if (this._lineageClicked === true) {
+            this._lineageClicked = false;
+            return;
+        }
+
         this._updateLineage(lineage);
         this._updatePosition(range);
-
-        var lineage = this._getSelectionLineage(range);
-        this._updateActiveButtons(lineage);
 
     },
 
@@ -219,6 +283,22 @@ ViperInlineToolbarPlugin.prototype = {
 
     },
 
+    _showSubSection: function(subSectionElement)
+    {
+        // Hide other subsections.
+        var activeSubSection = dfx.getClass('visible', this._subSectionContainer);
+        if (activeSubSection.lengt > 0) {
+            if (activeSubSection[0] === subSectionElement) {
+                return;
+            } else {
+                dfx.removeClass(activeSubSection, 'visible');
+            }
+        }
+
+        dfx.addClass(subSectionElement, 'visible');
+
+    },
+
     /**
      * Scales the toolbar using CSS transforms.
      *
@@ -252,29 +332,29 @@ ViperInlineToolbarPlugin.prototype = {
      *
      * @param {array} lineage The lineage array.
      */
-    _updateActiveButtons: function(lineage)
-    {
-        var buttons = dfx.getClass('ViperInlineToolbarPlugin-button', this._innerContainer);
-        var c       = buttons.length;
-        var lc      = lineage.length;
-
-        for (var i = 0; i < c; i++) {
-            var active = false;
-            var tag    = dfx.attr(buttons[i], 'data-ViperInlineToolbarPlugin-tag');
-            for (var j = 0; j < lc; j++) {
-                if (dfx.isTag(lineage[j], tag) === true) {
-                    dfx.addClass(buttons[i], 'active');
-                    active = true;
-                    break;
-                }
-            }
-
-            if (active === false) {
-                dfx.removeClass(buttons[i], 'active');
-            }
-        }
-
-    },
+   // _updateActiveButtons: function(lineage)
+   // {
+   //     var buttons = dfx.getClass('ViperInlineToolbarPlugin-button', this._innerContainer);
+   //     var c       = buttons.length;
+   //     var lc      = lineage.length;
+   //
+   //     for (var i = 0; i < c; i++) {
+   //         var active = false;
+   //         var tag    = dfx.attr(buttons[i], 'data-ViperInlineToolbarPlugin-tag');
+   //         for (var j = 0; j < lc; j++) {
+   //             if (dfx.isTag(lineage[j], tag) === true) {
+   //                 dfx.addClass(buttons[i], 'active');
+   //                 active = true;
+   //                 break;
+   //             }
+   //         }
+   //
+   //         if (active === false) {
+   //             dfx.removeClass(buttons[i], 'active');
+   //         }
+   //     }
+   //
+   // },
 
     /**
      * Upudates the position of the inline toolbar.
@@ -382,7 +462,14 @@ ViperInlineToolbarPlugin.prototype = {
     _updateInnerContainer: function(range, lineage)
     {
         dfx.empty(this._innerContainer);
-        this.viper.fireCallbacks('ViperInlineToolbarPlugin:updateToolbar', {container: this._innerContainer, range: range, lineage: lineage});
+
+        var data = {
+            container: this._innerContainer,
+            range: range,
+            lineage: lineage
+        };
+
+        this.viper.fireCallbacks('ViperInlineToolbarPlugin:updateToolbar', data);
 
     },
 

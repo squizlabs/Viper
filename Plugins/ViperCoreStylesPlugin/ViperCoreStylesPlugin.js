@@ -130,35 +130,9 @@ ViperCoreStylesPlugin.prototype = {
         });
 
         // Inline toolbar.
-        var inlineToolbarPlugin = this.viper.ViperPluginManager.getPlugin('ViperInlineToolbarPlugin');
-        if (inlineToolbarPlugin) {
-            this.viper.registerCallback('ViperInlineToolbarPlugin:updateToolbar', 'ViperCoreStylesPlugin', function(data) {
-                if (data.range.collapsed === true) {
-                    return;
-                }
-
-                for (var i = 0; i < data.lineage.length; i++) {
-                    if (dfx.isTag(data.lineage[i], 'a') === true) {
-                        return;
-                    }
-                }
-
-                var bold = inlineToolbarPlugin.createButton('B', 'strong', 'bold', function() {
-                    return self.handleStyle('strong');
-                });
-                var em = inlineToolbarPlugin.createButton('I', 'em', 'em', function() {
-                    return self.handleStyle('em');
-                });
-                var u = inlineToolbarPlugin.createButton('U', 'u', 'underline', function() {
-                    return self.handleStyle('u');
-                });
-
-                data.container.appendChild(bold);
-                data.container.appendChild(em);
-                data.container.appendChild(u);
-
-            });
-        }
+        this.viper.registerCallback('ViperInlineToolbarPlugin:updateToolbar', 'ViperCoreStylesPlugin', function(data) {
+            self._createInlineToolbarContent(data);
+        });
 
         var tagNames = {
             em: 'Italic',
@@ -474,6 +448,44 @@ ViperCoreStylesPlugin.prototype = {
             dfx.setStyle(node, 'text-align', style);
             ViperChangeTracker.removeTrackChanges(node);
         });
+
+    },
+
+    _createInlineToolbarContent: function(data)
+    {
+        var inlineToolbarPlugin = this.viper.ViperPluginManager.getPlugin('ViperInlineToolbarPlugin');
+
+        if (data.range.collapsed === true) {
+            return;
+        }
+
+        var activeStates = {};
+        for (var i = 0; i < data.lineage.length; i++) {
+            if (dfx.isTag(data.lineage[i], 'a') === true) {
+                // Dont want to show style buttons for links.
+                return;
+            } else if (dfx.isTag(data.lineage[i], 'strong') === true) {
+                activeStates.strong = true;
+            } else if (dfx.isTag(data.lineage[i], 'em') === true) {
+                activeStates.em = true;
+            } else if (dfx.isTag(data.lineage[i], 'u') === true) {
+                activeStates.u = true;
+            }
+        }
+
+        var self = this;
+
+        var buttonGroup = inlineToolbarPlugin.createButtonGroup();
+
+        var bold = inlineToolbarPlugin.createButton('B', activeStates.strong, 'bold', function() {
+            return self.handleStyle('strong');
+        }, buttonGroup);
+        var em = inlineToolbarPlugin.createButton('I', activeStates.em, 'em', function() {
+            return self.handleStyle('em');
+        }, buttonGroup);
+        var u = inlineToolbarPlugin.createButton('U', activeStates.u, 'underline', function() {
+            return self.handleStyle('u');
+        }, buttonGroup);
 
     },
 

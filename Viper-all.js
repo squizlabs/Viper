@@ -20,13 +20,17 @@
  * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt GPLv2
  */
 
+// Include DfxJSLib.
+document.write('<script type="text/javascript" src="../../DfxJSLib/mysource.js"></script>');
+
 // Viper core files.
-var jsFiles = 'Viper.js|ViperChangeTracker.js|ViperDOMRange.js|ViperElementMetrics.js|ViperIERange.js|ViperMozRange.js|ViperPluginManager.js|ViperSelection.js|ViperTextMetrics.js|ViperUndoManager.js|XPath.js';
+var jsFiles = 'Viper.js|ViperChangeTracker.js|ViperTools.js|ViperDOMRange.js|ViperIERange.js|ViperMozRange.js|ViperSelection.js|ViperPluginManager.js|ViperUndoManager.js|XPath.js';
 jsFiles     = jsFiles.split('|');
 for (var j = 0; j < jsFiles.length; j++) {
-    document.write('<script type="text/javascript" src="../../' + jsFiles[j] + '"></script>');
+    document.write('<script type="text/javascript" src="../../Lib/' + jsFiles[j] + '"></script>');
 }
-document.write('<style type="text/css">@import url("../../viper.css");</style>');
+
+document.write('<style type="text/css">@import url("../../Css/viper.css");</style>');
 
 // Viper default plugins.
 var plugins    = 'ViperCopyPastePlugin|ViperCoreStylesPlugin|ViperFormatPlugin|ViperKeyboardEditorPlugin|ViperListPlugin|ViperRedoPlugin|ViperTableEditorPlugin|ViperToolbarPlugin|ViperTrackChangesPlugin|ViperInlineToolbarPlugin|ViperLinkPlugin';
