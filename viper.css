@@ -65,6 +65,7 @@
     height: 2px;
     margin-left: -2px;
     background: transparent url(lines.png) repeat-x 0 0px;
+    z-index: 100;
 }
 
 ._viper-CT-marker-teardrop {

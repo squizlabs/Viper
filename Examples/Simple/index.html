@@ -22,6 +22,7 @@
             viper.setPluginSets(pluginSets);
             viper.getPluginManager().usePluginSet('all');
             viper.setEditableElement(document.getElementById('editable'));
+            ViperChangeTracker.enableChangeTracking();
         });
     </script>
 </head>

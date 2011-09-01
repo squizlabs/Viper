@@ -2597,6 +2597,39 @@ Viper.prototype = {
             return false;
         }
 
+        var range = this.getCurrentRange();
+        if (range.collapsed === false) {
+            // A few range adjustments for double click word selection etc.
+            var startNode = range.getStartNode();
+            var endNode   = range.getEndNode();
+            if (startNode && startNode.nodeType === dfx.TEXT_NODE
+                && endNode && endNode.nodeType === dfx.TEXT_NODE
+                && startNode.data.length === range.startOffset
+                && range.endOffset === 0
+                && startNode.nextSibling
+                && startNode.nextSibling === endNode.previousSibling
+                && startNode.nextSibling.nodeType !== dfx.TEXT_NODE
+            ) {
+                // When a word is double clicked and the word is wrapped with a tag
+                // e.g. strong then select the strong tag.
+                range.selectNode(startNode.nextSibling);
+                ViperSelection.addRange(range);
+            } else if (endNode && endNode.nodeType === dfx.TEXT_NODE
+                && range.endOffset === 0
+                && endNode !== startNode
+                && endNode.previousSibling
+                && endNode.previousSibling.nodeType !== dfx.TEXT_NODE
+            ) {
+                // When a word at the end of a tag is double clicked then move the
+                // end of the range to the last selectable child of that tag.
+                var textChild = range._getLastSelectableChild(endNode.previousSibling);
+                if (textChild) {
+                    range.setEnd(textChild, textChild.data.length);
+                    ViperSelection.addRange(range);
+                }
+            }
+        }
+
         this.fireSelectionChanged();
 
     },
