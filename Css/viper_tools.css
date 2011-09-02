@@ -1,6 +1,4 @@
 .Viper-button {
-    background-color: #e4e4e4;
-    border: 1px solid #c2c1c1;
     border-radius: 0.3em;
     cursor: pointer;
     display: inline-block;
@@ -9,34 +7,40 @@
     min-width: 1.7em;
     font-size: 1.8em;
     text-align: center;
-    box-shadow: 0 1px 0 #fff inset;
 }
-.Viper-button:hover {
-    background-color: #d3d3d3;
-    color: #000;
-}
+
 .Viper-button:first-child {
     margin-left: 0;
 }
 
-.Viper-button.active {
-    background-color: #5a8bd0;
-    color: #FFF;
-}
+/* Button Groups */
 
 .Viper-buttonGroup {
     display: inline-block;
-    margin-right: 10px;
+    margin-left: 0.6em;
 }
 
-.Viper-buttonGroup .Viper-button {
+.Viper-buttonGroup:first-child {
     margin-left: 0;
 }
 
+.Viper-buttonGroup .Viper-button {
+    border-radius: 0;
+    margin: 0;
+}
 
-/* Tablet Overrides */
+.Viper-buttonGroup .Viper-button:first-child {
+    border-top-left-radius: 0.3em;
+    border-bottom-left-radius: 0.3em;
+}
 
-@media screen and (max-width: 2024px) {
+.Viper-buttonGroup .Viper-button:last-child {
+    border-top-right-radius: 0.3em;
+    border-bottom-right-radius: 0.3em;
+}
+
+/* Theme - Dark Grey (default) */
+
 .Viper-button {
     background-color: #242323;
     border: none;
@@ -46,6 +50,7 @@
 }
 
 .Viper-button:hover {
+    color: #000;
     background: -webkit-gradient(linear, left top, left bottom, from(#b8b8b9), to(#a0a0a2));
     background: -moz-linear-gradient(top,  #b8b8b9,  #a0a0a2);
 }
@@ -57,4 +62,21 @@
     color: #FFF;
     text-shadow: 0 -1px 0 rgba(0,0,0,0.9);
 }
-} /* end tablet overrides */
+
+/* Theme - Light Grey */
+
+.themeLight .Viper-button {
+    background-color: #e4e4e4;
+    border: 1px solid #c2c1c1;
+    box-shadow: 0 1px 0 #fff inset;
+}
+
+.themeLight .Viper-button.active {
+    background-color: #5a8bd0;
+    color: #FFF;
+}
+
+.themeLight .Viper-button:hover {
+    background-color: #d3d3d3;
+    color: #000;
+}
