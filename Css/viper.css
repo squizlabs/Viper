@@ -66,12 +66,12 @@
     position: absolute;
     height: 2px;
     margin-left: -2px;
-    background: transparent url(lines.png) repeat-x 0 0px;
+    background: transparent url(../Images/lines.png) repeat-x 0 0px;
     z-index: 100;
 }
 
 ._viper-CT-marker-teardrop {
-    background: transparent url(teardrops.png) no-repeat 0 0;
+    background: transparent url(../Images/teardrops.png) no-repeat 0 0;
     width: 8px;
     height: 9px;
     cursor: pointer;
@@ -89,12 +89,12 @@
     position: absolute;
     overflow: visible;
     width: 11px;
-    background: transparent url(elles-right.png) no-repeat 0 0;
+    background: transparent url(../Images/elles-right.png) no-repeat 0 0;
     display: none;
 }
 
 .orientationLeft ._viper-CT-lineBox {
-    background-image: url(elles-left.png);
+    background-image: url(../Images/elles-left.png);
 }
 
 ._viper-CT-lineBox.visible {
@@ -367,7 +367,7 @@
     float: right;
     width: 17px;
     height: 100%;
-    background: transparent url(actions.png) no-repeat 0 -34px;
+    background: transparent url(../Images/actions.png) no-repeat 0 -34px;
 }
 
 ._viper-CT-infoBox-top.reject ._viper-CT-infoBox-actionBtns-reject {
@@ -378,7 +378,7 @@
     float: left;
     width: 17px;
     height: 100%;
-    background: transparent url(actions.png) no-repeat 0 0;
+    background: transparent url(../Images/actions.png) no-repeat 0 0;
 }
 
 ._viper-CT-infoBox-top.approve ._viper-CT-infoBox-actionBtns-approve {
