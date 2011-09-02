@@ -2651,8 +2651,25 @@ Viper.prototype = {
                     range.setEnd(textChild, textChild.data.length);
                     ViperSelection.addRange(range);
                 }
+            } else if (startNode
+                && endNode
+                && startNode.nodeType === dfx.TEXT_NODE
+                && endNode.nodeType === dfx.TEXT_NODE
+                && range.startOffset === 0
+                && range.endOffset === endNode.data.length
+            ) {
+                // Whole tag content is selected, move the range to the tag instead.
+                // E.g. if the whole contents of a paragraph is selected then the
+                // range will be set on that paragraph element and not the contents.
+                var commonElem = range.getCommonElement();
+                var firstSelectable = range._getFirstSelectableChild(commonElem);
+                var lastSelectable  = range._getLastSelectableChild(commonElem);
+                if (firstSelectable === startNode && lastSelectable === endNode) {
+                    range.selectNode(commonElem);
+                    ViperSelection.addRange(range);
+                }
             }
-        }
+        }//end if
 
         this.fireSelectionChanged();
 

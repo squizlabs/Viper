@@ -459,6 +459,10 @@ ViperCoreStylesPlugin.prototype = {
             return;
         }
 
+        if (data.lineage.length > 0 && dfx.isBlockElement(data.lineage[(data.lineage.length - 1)]) === true) {
+            return;
+        }
+
         var activeStates = {};
         for (var i = 0; i < data.lineage.length; i++) {
             if (dfx.isTag(data.lineage[i], 'a') === true) {

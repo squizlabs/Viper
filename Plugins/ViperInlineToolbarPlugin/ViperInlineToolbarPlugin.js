@@ -290,7 +290,14 @@ ViperInlineToolbarPlugin.prototype = {
     {
         range = range || this.viper.getCurrentRange();
 
-        var rangeCoords = range.rangeObj.getBoundingClientRect();
+        var rangeCoords  = null;
+        var selectedNode = this._getNodeSelection(range);
+        if (selectedNode !== null) {
+            rangeCoords = this._getElementCoords(selectedNode);
+        } else {
+            rangeCoords = range.rangeObj.getBoundingClientRect();
+        }
+
         if (!rangeCoords) {
             return;
         }
@@ -315,6 +322,61 @@ ViperInlineToolbarPlugin.prototype = {
 
     },
 
+    _getElementCoords: function(element)
+    {
+        var elemRect = dfx.getBoundingRectangle(element);
+        return {
+            left: elemRect.x1,
+            right: elemRect.x2,
+            top: elemRect.y1,
+            bottom: elemRect.y2
+        };
+
+    },
+
+    _getNodeSelection: function(range)
+    {
+        // Webkit seems to get the range incorrectly when range is set on a node.
+        // For example: <p>text</p><p>text</p> if the range.selectNode is called for
+        // the first P then the next getCurrentRange call returns range start as
+        // first P and range end as before the first character of the next 2nd P tag.
+        if (range.startOffset !== 0 && range.endOffset !== 0) {
+            return null;
+        }
+
+        var startNode = range.getStartNode();
+        var endNode   = range.getEndNode();
+        var common    = range.getCommonElement();
+
+        var startParent = startNode;
+        while (startParent && startParent.parentNode !== common) {
+            startParent = startParent.parentNode;
+        }
+
+        var endParent = endNode;
+        while (endParent && endParent.parentNode !== common) {
+            endParent = endParent.parentNode;
+        }
+
+        var nextSibling = startParent.nextSibling;
+        if (!nextSibling) {
+            return startNode.parentNode;
+        }
+
+        while (nextSibling.nodeType === dfx.TEXT_NODE
+            && dfx.isBlank(nextSibling.data) === true
+        ) {
+            nextSibling = nextSibling.nextSibling;
+        }
+
+        if (nextSibling === endParent) {
+            return startParent;
+        }
+
+        return null;
+
+    },
+
     /**
      * Updates the contents of the lineage container.
      *
@@ -331,6 +393,10 @@ ViperInlineToolbarPlugin.prototype = {
 
         // Create lineage items.
         for (var i = 0; i < c; i++) {
+            if (!lineage[i].tagName) {
+                continue;
+            }
+
             var tagName = lineage[i].tagName.toLowerCase();
             var parent  = document.createElement('li');
             dfx.setHtml(parent, this.getReadableTagName(tagName));
@@ -357,8 +423,10 @@ ViperInlineToolbarPlugin.prototype = {
             }) (parent, lineage[i]);
         }//end for
 
-        if (this._originalRange.collapsed === true) {
-            // No need to add the 'Selection' item as its collapsed.
+        if (this._originalRange.collapsed === true
+            || (lineage[(lineage.length - 1)].nodeType !== dfx.TEXT_NODE)
+        ) {
+            // No need to add the 'Selection' item as its collapsed or a node is selected.
             return;
         }
 
@@ -407,15 +475,18 @@ ViperInlineToolbarPlugin.prototype = {
     _getSelectionLineage: function(range)
     {
         var lineage      = [];
-        var parent       = range.getCommonElement();
-        var viperElement = this.viper.getViperElement();
 
-        var startNode = range.getStartNode();
-
-        if (startNode.nodeType !== dfx.TEXT_NODE) {
-            // Add this node selection to the lineage.
+        var parent        = null;
+        var nodeSelection = this._getNodeSelection(range);
+        if (nodeSelection) {
+            parent = nodeSelection;
+        } else {
+            parent        = range.getCommonElement();
+            var startNode = range.getStartNode();
             lineage.push(startNode);
         }
+
+        var viperElement = this.viper.getViperElement();
 
         if (parent === viperElement) {
             return lineage;
@@ -425,7 +496,7 @@ ViperInlineToolbarPlugin.prototype = {
 
         parent = parent.parentNode;
 
-        while (parent !== viperElement) {
+        while (parent && parent !== viperElement) {
             lineage.push(parent);
             parent = parent.parentNode;
         }
