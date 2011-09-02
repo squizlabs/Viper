@@ -50,6 +50,11 @@ ViperFormatPlugin.prototype = {
         var name = 'Format';
         var self = this;
 
+        // Inline toolbar.
+        this.viper.registerCallback('ViperInlineToolbarPlugin:updateToolbar', 'ViperFormatPlugin', function(data) {
+            self._createInlineToolbarContent(data);
+        });
+
         ViperChangeTracker.addChangeType('textFormatChange', 'Formatted', 'format');
         ViperChangeTracker.setDescriptionCallback('textFormatChange', function(node) {
             var format = self._getFormat(node);
@@ -59,69 +64,71 @@ ViperFormatPlugin.prototype = {
         var menu = document.createElement('div');
         dfx.addClass(menu, 'ViperFormatPlugin-menu');
         this.toolbarPlugin   = this.viper.ViperPluginManager.getPlugin('ViperToolbarPlugin');
-        var subToolbarPlugin = this.viper.ViperPluginManager.getPlugin('ViperSubToolbarPlugin');
-        var button = this.toolbarPlugin.addButton(name, 'format', 'Format', function (e) {
-            // Add document mousedown event for hiding the menu.
-            dfx.addEvent(document, 'mousedown.ViperFormatPlugin', function() {
-                dfx.setStyle(menu, 'display', 'none');
-                self._range = null;
-                dfx.removeEvent(document, 'mousedown.ViperFormatPlugin');
+        if (this.toolbarPlugin) {
+            var subToolbarPlugin = this.viper.ViperPluginManager.getPlugin('ViperSubToolbarPlugin');
+            var button = this.toolbarPlugin.addButton(name, 'format', 'Format', function (e) {
+                // Add document mousedown event for hiding the menu.
+                dfx.addEvent(document, 'mousedown.ViperFormatPlugin', function() {
+                    dfx.setStyle(menu, 'display', 'none');
+                    self._range = null;
+                    dfx.removeEvent(document, 'mousedown.ViperFormatPlugin');
+                });
+
+                if (subToolbarPlugin && subToolbarPlugin.isActive() === true) {
+                    dfx.setStyle(menu, 'margin-top', '30px');
+                } else {
+                    dfx.setStyle(menu, 'margin-top', '0px');
+                }
+
+                dfx.setStyle(menu, 'display', 'block');
+                self._range       = self.viper.getCurrentRange();
+                var currentFormat = self._getFormat(self._range.startContainer);
+                if (currentFormat !== null) {
+                    dfx.removeClass(dfx.getClass('ViperFormatPlugin-menu-item', menu), 'active');
+                    dfx.addClass(dfx.getClass('ViperFormatPlugin-menu-' + currentFormat, menu)[0], 'active');
+                }
+
+                dfx.preventDefault(e);
+                dfx.stopPropagation(e);
+                return false;
             });
 
-            if (subToolbarPlugin && subToolbarPlugin.isActive() === true) {
-                dfx.setStyle(menu, 'margin-top', '30px');
-            } else {
-                dfx.setStyle(menu, 'margin-top', '0px');
+            dfx.setStyle(menu, 'display', 'none');
+            button.appendChild(menu);
+
+            var shadow = document.createElement('div');
+            menu.appendChild(shadow);
+            dfx.addClass(shadow, 'ViperFormatPlugin-menu-shadow');
+
+            var fsize = 24;
+            for (var tag in this.styleTags) {
+                if (this.styleTags.hasOwnProperty(tag) === false) {
+                    continue;
+                }
+
+                var item = document.createElement('div');
+                dfx.addClass(item, 'ViperFormatPlugin-menu-item ViperFormatPlugin-menu-' + tag);
+                menu.appendChild(item);
+                dfx.setHtml(item, this.styleTags[tag]);
+                dfx.setStyle(item, 'font', fsize + 'px arial');
+                if (fsize > 12) {
+                    fsize -= 2;
+                }
+
+                (function(el, tagName) {
+                    dfx.addEvent(el, 'mousedown', function() {
+                        self.handleFormat(tagName);
+                    });
+                }) (item, tag);
             }
 
-            dfx.setStyle(menu, 'display', 'block');
-            self._range       = self.viper.getCurrentRange();
-            var currentFormat = self._getFormat(self._range.startContainer);
-            if (currentFormat !== null) {
-                dfx.removeClass(dfx.getClass('ViperFormatPlugin-menu-item', menu), 'active');
-                dfx.addClass(dfx.getClass('ViperFormatPlugin-menu-' + currentFormat, menu)[0], 'active');
-            }
-
-            dfx.preventDefault(e);
-            dfx.stopPropagation(e);
-            return false;
-        });
-
-        dfx.setStyle(menu, 'display', 'none');
-        button.appendChild(menu);
-
-        var shadow = document.createElement('div');
-        menu.appendChild(shadow);
-        dfx.addClass(shadow, 'ViperFormatPlugin-menu-shadow');
-
-        var fsize = 24;
-        for (var tag in this.styleTags) {
-            if (this.styleTags.hasOwnProperty(tag) === false) {
-                continue;
-            }
-
-            var item = document.createElement('div');
-            dfx.addClass(item, 'ViperFormatPlugin-menu-item ViperFormatPlugin-menu-' + tag);
-            menu.appendChild(item);
-            dfx.setHtml(item, this.styleTags[tag]);
-            dfx.setStyle(item, 'font', fsize + 'px arial');
-            if (fsize > 12) {
-                fsize -= 2;
-            }
-
-            (function(el, tagName) {
-                dfx.addEvent(el, 'mousedown', function() {
-                    self.handleFormat(tagName);
-                });
-            }) (item, tag);
+            dfx.hover(menu.childNodes, function(e) {
+                var target = dfx.getMouseEventTarget(e);
+                dfx.addClass(target, 'hover');
+            }, function(e) {
+                dfx.removeClass(menu.childNodes, 'hover');
+            });
         }
-
-        dfx.hover(menu.childNodes, function(e) {
-            var target = dfx.getMouseEventTarget(e);
-            dfx.addClass(target, 'hover');
-        }, function(e) {
-            dfx.removeClass(menu.childNodes, 'hover');
-        });
 
         ViperChangeTracker.setApproveCallback('textFormatChange', function(clone, node) {
             ViperChangeTracker.removeTrackChanges(node);
@@ -148,6 +155,36 @@ ViperFormatPlugin.prototype = {
         });
 
     },
+
+    _createInlineToolbarContent: function(data)
+    {
+        var inlineToolbarPlugin = this.viper.ViperPluginManager.getPlugin('ViperInlineToolbarPlugin');
+
+        if (data.range.collapsed === true) {
+            return;
+        }
+
+        var self = this;
+
+        var headingSubSectionContents = document.createElement('div');
+        for (var i = 1; i <= 6; i++) {
+            (function(headingCount) {
+                var headingButton = inlineToolbarPlugin.createButton('H' + headingCount, false, null, function() {
+                    console.info('heading: ' + headingCount);
+                });
+                headingSubSectionContents.appendChild(headingButton);
+            }) (i);
+        }
+
+        var headingsSubSection = inlineToolbarPlugin.createSubSection(headingSubSectionContents);
+        var formatsSubSection = inlineToolbarPlugin.createSubSection('');
+
+        var buttonGroup = inlineToolbarPlugin.createButtonGroup();
+        var formats  = inlineToolbarPlugin.createButton('Aa', false, 'formats', null, buttonGroup, formatsSubSection);
+        var headings = inlineToolbarPlugin.createButton('Hh', false, 'headings', null, buttonGroup, headingsSubSection);
+
+    },
+
 
     _addChangeTrackInfo: function(node)
     {

@@ -23,7 +23,7 @@ function ViperInlineToolbarPlugin(viper)
 {
     this.viper           = viper;
     this._toolbar        = null;
-    this._innerContainer = null;
+    this._toolsContainer = null;
     this._lineage        = null;
     this._lineageClicked = false;
     this._margin         = 10;
@@ -76,15 +76,15 @@ ViperInlineToolbarPlugin.prototype = {
         this._lineage = document.createElement('ul');
         this._toolbar.appendChild(this._lineage);
 
-        this._innerContainer = document.createElement('div');
-        this._toolbar.appendChild(this._innerContainer);
+        this._toolsContainer = document.createElement('div');
+        this._toolbar.appendChild(this._toolsContainer);
 
         this._subSectionContainer = document.createElement('div');
         this._toolbar.appendChild(this._subSectionContainer);
 
         dfx.addClass(this._toolbar, 'ViperITP');
         dfx.addClass(this._lineage, 'ViperITP-lineage');
-        dfx.addClass(this._innerContainer, 'ViperITP-inner');
+        dfx.addClass(this._toolsContainer, 'ViperITP-tools');
         dfx.addClass(this._subSectionContainer, 'ViperITP-subSectionWrapper');
 
         document.body.appendChild(this._toolbar);
@@ -100,7 +100,7 @@ ViperInlineToolbarPlugin.prototype = {
      */
     createButtonGroup: function(customClass)
     {
-        return this._innerContainer.appendChild(ViperTools.createButtonGroup(customClass));
+        return this._toolsContainer.appendChild(ViperTools.createButtonGroup(customClass));
 
     },
 
@@ -118,19 +118,27 @@ ViperInlineToolbarPlugin.prototype = {
      */
     createButton: function(content, isActive, customClass, clickAction, groupElement, subSection)
     {
+        var self = this;
         if (clickAction) {
-            var self    = this;
             var originalAction = clickAction;
             clickAction = function() {
                 self._lineageClicked = false;
                 return originalAction.call(this);
+            };
+        } else if (subSection) {
+            clickAction = function(subSectionState) {
+                if (subSectionState === true) {
+                    dfx.addClass(self._toolbar, 'subSectionVisible');
+                } else {
+                    dfx.removeClass(self._toolbar, 'subSectionVisible');
+                }
             };
         }
 
         var button = ViperTools.createButton(content, isActive, customClass, clickAction, groupElement, subSection);
 
         if (!groupElement) {
-            this._innerContainer.appendChild(button);
+            this._toolsContainer.appendChild(button);
         }
 
         return button;
@@ -148,7 +156,9 @@ ViperInlineToolbarPlugin.prototype = {
      */
     createSubSection: function(contentElement, active, customClass)
     {
-        return ViperTools.createSubSection(contentElement, active, customClass);
+        var subSection = ViperTools.createSubSection(contentElement, active, customClass);
+        this._subSectionContainer.appendChild(subSection);
+        return subSection;
 
     },
 
@@ -171,7 +181,7 @@ ViperInlineToolbarPlugin.prototype = {
 
         this._updateInnerContainer(range, lineage);
 
-        if (!dfx.getHtml(this._innerContainer)) {
+        if (!dfx.getHtml(this._toolsContainer)) {
             this.hideToolbar();
             return;
         }
@@ -241,22 +251,6 @@ ViperInlineToolbarPlugin.prototype = {
 
     },
 
-    _showSubSection: function(subSectionElement)
-    {
-        // Hide other subsections.
-        var activeSubSection = dfx.getClass('visible', this._subSectionContainer);
-        if (activeSubSection.lengt > 0) {
-            if (activeSubSection[0] === subSectionElement) {
-                return;
-            } else {
-                dfx.removeClass(activeSubSection, 'visible');
-            }
-        }
-
-        dfx.addClass(subSectionElement, 'visible');
-
-    },
-
     /**
      * Scales the toolbar using CSS transforms.
      *
@@ -286,35 +280,6 @@ ViperInlineToolbarPlugin.prototype = {
     },
 
     /**
-     * Updates the status of the buttons in the toolbar by checking the given lineage.
-     *
-     * @param {array} lineage The lineage array.
-     */
-   // _updateActiveButtons: function(lineage)
-   // {
-   //     var buttons = dfx.getClass('ViperInlineToolbarPlugin-button', this._innerContainer);
-   //     var c       = buttons.length;
-   //     var lc      = lineage.length;
-   //
-   //     for (var i = 0; i < c; i++) {
-   //         var active = false;
-   //         var tag    = dfx.attr(buttons[i], 'data-ViperInlineToolbarPlugin-tag');
-   //         for (var j = 0; j < lc; j++) {
-   //             if (dfx.isTag(lineage[j], tag) === true) {
-   //                 dfx.addClass(buttons[i], 'active');
-   //                 active = true;
-   //                 break;
-   //             }
-   //         }
-   //
-   //         if (active === false) {
-   //             dfx.removeClass(buttons[i], 'active');
-   //         }
-   //     }
-   //
-   // },
-
-    /**
      * Upudates the position of the inline toolbar.
      *
      * @param {DOMRange} range        The DOMRange object.
@@ -336,6 +301,8 @@ ViperInlineToolbarPlugin.prototype = {
             dfx.addClass(this._toolbar, 'calcWidth');
             var toolbarWidth = dfx.getElementWidth(this._toolbar);
             dfx.removeClass(this._toolbar, 'calcWidth');
+
+            dfx.setStyle(this._toolbar, 'width', toolbarWidth + 'px');
 
             var left = ((rangeCoords.left + ((rangeCoords.right - rangeCoords.left) / 2) + scrollCoords.x) - (toolbarWidth / 2));
             dfx.setStyle(this._toolbar, 'left', left + 'px');
@@ -419,10 +386,9 @@ ViperInlineToolbarPlugin.prototype = {
      */
     _updateInnerContainer: function(range, lineage)
     {
-        dfx.empty(this._innerContainer);
+        dfx.empty(this._toolsContainer);
 
         var data = {
-            container: this._innerContainer,
             range: range,
             lineage: lineage
         };

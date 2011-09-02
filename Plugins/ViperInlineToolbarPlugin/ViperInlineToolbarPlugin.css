@@ -34,7 +34,9 @@
     border-bottom-color: #E0DEDE;
 }
 
-.ViperITP.calcWidth {
+.ViperITP.calcWidth,
+.ViperITP.calcWidth .ViperITP-subSectionWrapper,
+.ViperITP.calcWidth .ViperITP-subSectionWrapper .Viper-subSection {
     visibility: hidden;
     display: block;
 }
@@ -44,37 +46,27 @@
     display: block;
 }
 
-.ViperITP-inner {
+.ViperITP-tools {
     padding: 0.4em 0.5em 0.6em;
     border-bottom-left-radius: 0.75em;
     border-bottom-right-radius: 0.75em;
     text-align: center;
 }
 
-.ViperITP-inner .ViperITP-button {
-    background-color: #e4e4e4;
-    border: 1px solid #c2c1c1;
-    border-radius: 0.3em;
-    cursor: pointer;
-    display: inline-block;
-    margin-left: 0.3em;
-    line-height: 1.6em;
-    min-width: 1.7em;
-    font-size: 1.8em;
-    text-align: center;
-    box-shadow: 0 1px 0 #fff inset;
-}
-.ViperITP-inner .ViperITP-button:hover {
-    background-color: #d3d3d3;
-    color: #000;
-}
-.ViperITP-inner .ViperITP-button:first-child {
-    margin-left: 0;
+.ViperITP.subSectionVisible .ViperITP-tools {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
 }
 
-.ViperITP-inner .ViperITP-button.active {
-    background-color: #5a8bd0;
-    color: #FFF;
+.ViperITP .ViperITP-subSectionWrapper {
+    display: none;
+    background-color: #54535A;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.ViperITP.subSectionVisible .ViperITP-subSectionWrapper {
+    display: block;
 }
 
 .ViperITP-lineage {
@@ -106,6 +98,18 @@
     color: #000;
 }
 
+.ViperITP-subSectionWrapper {
+    padding: 0.4em 0.5em 0.6em;
+}
+
+.ViperITP-subSectionWrapper .Viper-subSection {
+    display: none;
+}
+
+.ViperITP-subSectionWrapper .Viper-subSection.active {
+    display: block;
+}
+
 /* Tablet Overrides */
 
 @media screen and (max-width: 2024px) {
@@ -124,7 +128,7 @@
     border-bottom-color: #2b2b2b;
 }
 
-.ViperITP-inner {
+.ViperITP-tools {
     background: -webkit-gradient(linear, left top, left bottom, from(#919097), to(#727179));
     background: -moz-linear-gradient(top,  #919097,  #727179);
 }
@@ -147,26 +151,5 @@
 
 .ViperITP-lineage li:hover {
     color: #fff;
-}
-
-.ViperITP-inner .ViperITP-button {
-    background-color: #242323;
-    border: none;
-    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.6), 0 1px 0 rgba(255, 255, 255, 0.9) inset;
-    background: -webkit-gradient(linear, left top, left bottom, from(#e9e9eb), to(#c9c9d0));
-    background: -moz-linear-gradient(top,  #e9e9eb,  #c9c9d0);
-}
-
-.ViperITP-inner .ViperITP-button:hover {
-    background: -webkit-gradient(linear, left top, left bottom, from(#b8b8b9), to(#a0a0a2));
-    background: -moz-linear-gradient(top,  #b8b8b9,  #a0a0a2);
-}
-
-.ViperITP-inner .ViperITP-button.active {
-    background: -webkit-gradient(linear, left top, left bottom, from(#3987f2), to(#205caf));
-    background: -moz-linear-gradient(top,  #3987f2,  #205caf);
-    box-shadow: 0 0px 5px rgba(0, 0, 0, 0.85) inset;
-    color: #FFF;
-    text-shadow: 0 -1px 0 rgba(0,0,0,0.9);
 }
 } /* end tablet overrides */
