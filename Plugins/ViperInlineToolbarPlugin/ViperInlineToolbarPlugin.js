@@ -100,16 +100,7 @@ ViperInlineToolbarPlugin.prototype = {
      */
     createButtonGroup: function(customClass)
     {
-        var group = document.createElement('div');
-        dfx.addClass(group, 'VITP-group');
-
-        if (customClass) {
-            dfx.addClass(group, customClass);
-        }
-
-        this._innerContainer.appendChild(group);
-
-        return group;
+        return this._innerContainer.appendChild(ViperTools.createButtonGroup(customClass));
 
     },
 
@@ -127,39 +118,18 @@ ViperInlineToolbarPlugin.prototype = {
      */
     createButton: function(content, isActive, customClass, clickAction, groupElement, subSection)
     {
-        if (!content) {
-            content = '&nbsp;';
-        }
-
-        var button = document.createElement('div');
-        dfx.setHtml(button, content);
-        dfx.addClass(button, 'ViperITP-button');
-
-        if (customClass) {
-            dfx.addClass(button, customClass);
-        }
-
         if (clickAction) {
-            var self = this;
-            dfx.addEvent(button, 'mousedown.ViperInlineToolbarPlugin', function() {
-                // Show subsection if there is one..
-                if (subSection) {
-                    self._showSubSection(subSection);
-                }
-
+            var self    = this;
+            var originalAction = clickAction;
+            clickAction = function() {
                 self._lineageClicked = false;
-                return clickAction.call(this);
-            });
+                return originalAction.call(this);
+            };
         }
 
-        if (isActive === true) {
-            dfx.addClass(button, 'active');
-        }
+        var button = ViperTools.createButton(content, isActive, customClass, clickAction, groupElement, subSection);
 
-        if (groupElement) {
-            // Add this button to the group.
-            groupElement.appendChild(button);
-        } else {
+        if (!groupElement) {
             this._innerContainer.appendChild(button);
         }
 
@@ -178,20 +148,8 @@ ViperInlineToolbarPlugin.prototype = {
      */
     createSubSection: function(contentElement, active, customClass)
     {
-        var section = document.createElement('div');
-        dfx.addClass(section, 'ViperITP-subSection');
+        return ViperTools.createSubSection(contentElement, active, customClass);
 
-        if (active === true) {
-            dfx.addClass(section, 'active');
-        }
-
-        if (customClass) {
-            dfx.addClass(section, customClass);
-        }
-
-        section.appendChild(contentElement);
-
-        return section;
     },
 
     /**

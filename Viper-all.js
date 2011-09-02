@@ -20,9 +20,6 @@
  * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt GPLv2
  */
 
-// Include DfxJSLib.
-document.write('<script type="text/javascript" src="../../DfxJSLib/mysource.js"></script>');
-
 // Viper core files.
 var jsFiles = 'Viper.js|ViperChangeTracker.js|ViperTools.js|ViperDOMRange.js|ViperIERange.js|ViperMozRange.js|ViperSelection.js|ViperPluginManager.js|ViperUndoManager.js|XPath.js';
 jsFiles     = jsFiles.split('|');

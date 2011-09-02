@@ -1,0 +1,50 @@
+.Viper-button {
+    background-color: #e4e4e4;
+    border: 1px solid #c2c1c1;
+    border-radius: 0.3em;
+    cursor: pointer;
+    display: inline-block;
+    margin-left: 0.3em;
+    line-height: 1.6em;
+    min-width: 1.7em;
+    font-size: 1.8em;
+    text-align: center;
+    box-shadow: 0 1px 0 #fff inset;
+}
+.Viper-button:hover {
+    background-color: #d3d3d3;
+    color: #000;
+}
+.Viper-button:first-child {
+    margin-left: 0;
+}
+
+.Viper-button.active {
+    background-color: #5a8bd0;
+    color: #FFF;
+}
+
+/* Tablet Overrides */
+
+@media screen and (max-width: 2024px) {
+.Viper-button {
+    background-color: #242323;
+    border: none;
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.6), 0 1px 0 rgba(255, 255, 255, 0.9) inset;
+    background: -webkit-gradient(linear, left top, left bottom, from(#e9e9eb), to(#c9c9d0));
+    background: -moz-linear-gradient(top,  #e9e9eb,  #c9c9d0);
+}
+
+.Viper-button:hover {
+    background: -webkit-gradient(linear, left top, left bottom, from(#b8b8b9), to(#a0a0a2));
+    background: -moz-linear-gradient(top,  #b8b8b9,  #a0a0a2);
+}
+
+.Viper-button.active {
+    background: -webkit-gradient(linear, left top, left bottom, from(#3987f2), to(#205caf));
+    background: -moz-linear-gradient(top,  #3987f2,  #205caf);
+    box-shadow: 0 0px 5px rgba(0, 0, 0, 0.85) inset;
+    color: #FFF;
+    text-shadow: 0 -1px 0 rgba(0,0,0,0.9);
+}
+} /* end tablet overrides */
