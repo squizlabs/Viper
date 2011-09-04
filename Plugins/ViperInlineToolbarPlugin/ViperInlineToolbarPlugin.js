@@ -306,6 +306,7 @@ ViperInlineToolbarPlugin.prototype = {
 
         if (verticalOnly !== true) {
             dfx.addClass(this._toolbar, 'calcWidth');
+            dfx.setStyle(this._toolbar, 'width', 'auto');
             var toolbarWidth = dfx.getElementWidth(this._toolbar);
             dfx.removeClass(this._toolbar, 'calcWidth');
 
