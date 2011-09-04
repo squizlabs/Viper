@@ -171,7 +171,7 @@ ViperInlineToolbarPlugin.prototype = {
      */
     updateToolbar: function(range)
     {
-        if (navigator.userAgent.match(/iPad/i) !== null) {
+        if (this.viper.isBrowser('msie') === false) {
             this._scaleToolbar();
         }
 
@@ -262,20 +262,20 @@ ViperInlineToolbarPlugin.prototype = {
             return;
         }
 
-        var self  = this;
         var zoom  = (document.documentElement.clientWidth / window.innerWidth);
         var scale = (1.2 / zoom);
         if (scale >= 1.2) {
             scale        = 1.2;
-            self._margin = 20;
+            this._margin = 20;
         } else if (scale <= 0.5) {
             scale        = 0.5;
-            self._margin = -12;
+            this._margin = -12;
         } else {
-            self._margin = (-6 * zoom);
+            this._margin = (-6 * zoom);
         }
 
-        dfx.setStyle(self._toolbar, '-webkit-transform', 'scale(' + scale + ', ' + scale + ')');
+        dfx.setStyle(this._toolbar, '-webkit-transform', 'scale(' + scale + ', ' + scale + ')');
+        dfx.setStyle(this._toolbar, '-moz-transform', 'scale(' + scale + ', ' + scale + ')');
 
     },
 
@@ -325,12 +325,13 @@ ViperInlineToolbarPlugin.prototype = {
 
     _getElementCoords: function(element)
     {
-        var elemRect = dfx.getBoundingRectangle(element);
+        var elemRect     = dfx.getBoundingRectangle(element);
+        var scrollCoords = dfx.getScrollCoords();
         return {
             left: elemRect.x1,
             right: elemRect.x2,
-            top: elemRect.y1,
-            bottom: elemRect.y2
+            top: elemRect.y1 - scrollCoords.y,
+            bottom: elemRect.y2 - scrollCoords.y
         };
 
     },
