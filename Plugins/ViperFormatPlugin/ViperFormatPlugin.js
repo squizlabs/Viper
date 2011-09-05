@@ -158,6 +158,15 @@ ViperFormatPlugin.prototype = {
 
     _createInlineToolbarContent: function(data)
     {
+        if (!data.lineage) {
+            return;
+        }
+
+        var selectedNode = data.lineage[data.current];
+        if (this._canFormatTag(selectedNode) !== true) {
+            return;
+        }
+
         var inlineToolbarPlugin = this.viper.ViperPluginManager.getPlugin('ViperInlineToolbarPlugin');
 
         if (data.range.collapsed === true) {
@@ -170,7 +179,7 @@ ViperFormatPlugin.prototype = {
         for (var i = 1; i <= 6; i++) {
             (function(headingCount) {
                 var headingButton = inlineToolbarPlugin.createButton('H' + headingCount, false, null, function() {
-                    console.info('heading: ' + headingCount);
+                    self.handleFormat('h' + headingCount);
                 });
                 headingSubSectionContents.appendChild(headingButton);
             }) (i);
@@ -181,10 +190,47 @@ ViperFormatPlugin.prototype = {
 
         var buttonGroup = inlineToolbarPlugin.createButtonGroup();
         var formats  = inlineToolbarPlugin.createButton('Aa', false, 'formats', null, buttonGroup, formatsSubSection);
+
+        // If Any heading is active on the current selection activate the button.
+        var headingActive = false;
+
+        //var parents       = dfx.getParents();
+
         var headings = inlineToolbarPlugin.createButton('Hh', false, 'headings', null, buttonGroup, headingsSubSection);
 
     },
 
+    _canFormatTag: function(node)
+    {
+        if (node.nodeType === dfx.TEXT_NODE) {
+            // If this is a text selection then dont show the tools.
+            return false;
+        } else if (dfx.isBlockElement(node) === false) {
+            return false;
+        } else {
+            switch (node.tagName.toLowerCase()) {
+                case 'li':
+                case 'ul':
+                case 'ol':
+                    return false;
+                break;
+
+                default:
+                    // Check the selection length if the length is too long then
+                    // dont show the tools.
+                    var textContent = dfx.getNodeTextContent(node);
+                    if (textContent && textContent.length > 80) {
+                        return false;
+                    }
+
+                    return true;
+                break;
+            }
+        }
+
+        return true;
+
+    },
 
     _addChangeTrackInfo: function(node)
     {
@@ -196,34 +242,41 @@ ViperFormatPlugin.prototype = {
 
     handleFormat: function(type)
     {
-        this.viper.focus();
-
         var range = this.viper.getCurrentRange();
+        if (this._range) {
+            this.viper.focus();
+            range = this.viper.getCurrentRange();
 
-        // Range could be starting from a DOMText and ending on a DOMNode. Handle it.
-        if (this.viper.isChildOfElems(this._range.startContainer, [this._range.endContainer]) === true) {
-            var child = range._getFirstSelectableChild(this._range.endContainer);
-            range.setStart(child, 0);
+            // Range could be starting from a DOMText and ending on a DOMNode. Handle it.
+            if (this.viper.isChildOfElems(this._range.startContainer, [this._range.endContainer]) === true) {
+                var child = range._getFirstSelectableChild(this._range.endContainer);
+                range.setStart(child, 0);
+            }
+
+            // Set the range again.
+            range.setStart(this._range.startContainer, this._range.startOffset);
+            range.setEnd(this._range.endContainer, this._range.endOffset);
         }
 
-        // Set the range again.
-        range.setStart(this._range.startContainer, this._range.startOffset);
-        range.setEnd(this._range.endContainer, this._range.endOffset);
+        var selectedNode = range.getNodeSelection();
+        var elemsBetween = [];
+        if (selectedNode === null) {
+            var startNode = range.getStartNode();
+            if (dfx.isChildOf(startNode, this.viper.element) === false) {
+                // TODO: Should we handle this case in createBookmark?
+                range.setStart(this.viper.element, 0);
+                range.setEnd(this.viper.element, this.viper.element.childNodes.length);
+            }
 
+            ViperSelection.addRange(range);
 
-        var startNode = range.getStartNode();
-        if (dfx.isChildOf(startNode, this.viper.element) === false) {
-            // TODO: Should we handle this case in createBookmark?
-            range.setStart(this.viper.element, 0);
-            range.setEnd(this.viper.element, this.viper.element.childNodes.length);
-        }
-
-        ViperSelection.addRange(range);
-
-        var bookmark     = this.viper.createBookmark();
-        var elemsBetween = dfx.getElementsBetween(bookmark.start, bookmark.end);
-        if (range.collapsed === true) {
-            elemsBetween.unshift(bookmark.start);
+            var bookmark     = this.viper.createBookmark();
+            var elemsBetween = dfx.getElementsBetween(bookmark.start, bookmark.end);
+            if (range.collapsed === true) {
+                elemsBetween.unshift(bookmark.start);
+            }
+        } else {
+            elemsBetween.push(selectedNode);
         }
 
         var s = this.styleTags;
@@ -235,7 +288,12 @@ ViperFormatPlugin.prototype = {
             var tagName = dfx.getTagName(elem);
             if (s[tagName]) {
                 // Convert this element to specified tag.
-                self._createNewNode(elem, type);
+                var newElem = self._createNewNode(elem, type);
+                if (selectedNode !== null && newElem) {
+                    // This is a single node selection so select the new node.
+                    range.selectNode(newElem);
+                    ViperSelection.addRange(range);
+                }
             } else {
                 var textNodes = null;
                 if (elem.nodeType === dfx.TEXT_NODE) {
@@ -269,7 +327,7 @@ ViperFormatPlugin.prototype = {
             this.viper.selectBookmark(bookmark);
         }
 
-        this.viper.fireNodesChanged('ViperFormatPlugin:format');
+        this.viper.fireNodesChanged([this.viper.getViperElement()]);
 
     },
 

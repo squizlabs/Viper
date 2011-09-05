@@ -21,12 +21,13 @@
  */
 function ViperInlineToolbarPlugin(viper)
 {
-    this.viper           = viper;
-    this._toolbar        = null;
-    this._toolsContainer = null;
-    this._lineage        = null;
-    this._lineageClicked = false;
-    this._margin         = 10;
+    this.viper               = viper;
+    this._toolbar            = null;
+    this._toolsContainer     = null;
+    this._lineage            = null;
+    this._lineageClicked     = false;
+    this._currentLineageItem = null;
+    this._margin             = 10;
 
     // Create the toolbar.
     this._createToolbar();
@@ -175,14 +176,18 @@ ViperInlineToolbarPlugin.prototype = {
             this._scaleToolbar();
         }
 
+        dfx.removeClass(this._toolbar, 'subSectionVisible');
+
         range = range || this.viper.getCurrentRange();
 
+        this._currentLineageItem = null;
         var lineage = this._getSelectionLineage(range);
 
         this._updateInnerContainer(range, lineage);
 
         if (!dfx.getHtml(this._toolsContainer)) {
             this.hideToolbar();
+            this._lineageClicked = false;
             return;
         }
 
@@ -291,7 +296,7 @@ ViperInlineToolbarPlugin.prototype = {
         range = range || this.viper.getCurrentRange();
 
         var rangeCoords  = null;
-        var selectedNode = this._getNodeSelection(range);
+        var selectedNode = range.getNodeSelection(range);
         if (selectedNode !== null) {
             rangeCoords = this._getElementCoords(selectedNode);
         } else {
@@ -304,14 +309,14 @@ ViperInlineToolbarPlugin.prototype = {
 
         var scrollCoords = dfx.getScrollCoords();
 
+        dfx.addClass(this._toolbar, 'calcWidth');
+        dfx.setStyle(this._toolbar, 'width', 'auto');
+        var toolbarWidth = dfx.getElementWidth(this._toolbar);
+        dfx.removeClass(this._toolbar, 'calcWidth');
+
+        dfx.setStyle(this._toolbar, 'width', toolbarWidth + 'px');
+
         if (verticalOnly !== true) {
-            dfx.addClass(this._toolbar, 'calcWidth');
-            dfx.setStyle(this._toolbar, 'width', 'auto');
-            var toolbarWidth = dfx.getElementWidth(this._toolbar);
-            dfx.removeClass(this._toolbar, 'calcWidth');
-
-            dfx.setStyle(this._toolbar, 'width', toolbarWidth + 'px');
-
             var left = ((rangeCoords.left + ((rangeCoords.right - rangeCoords.left) / 2) + scrollCoords.x) - (toolbarWidth / 2));
             dfx.setStyle(this._toolbar, 'left', left + 'px');
         }
@@ -333,49 +338,6 @@ ViperInlineToolbarPlugin.prototype = {
             top: elemRect.y1 - scrollCoords.y,
             bottom: elemRect.y2 - scrollCoords.y
         };
-
-    },
-
-    _getNodeSelection: function(range)
-    {
-        // Webkit seems to get the range incorrectly when range is set on a node.
-        // For example: <p>text</p><p>text</p> if the range.selectNode is called for
-        // the first P then the next getCurrentRange call returns range start as
-        // first P and range end as before the first character of the next 2nd P tag.
-        if (range.startOffset !== 0 && range.endOffset !== 0) {
-            return null;
-        }
-
-        var startNode = range.getStartNode();
-        var endNode   = range.getEndNode();
-        var common    = range.getCommonElement();
-
-        var startParent = startNode;
-        while (startParent && startParent.parentNode !== common) {
-            startParent = startParent.parentNode;
-        }
-
-        var endParent = endNode;
-        while (endParent && endParent.parentNode !== common) {
-            endParent = endParent.parentNode;
-        }
-
-        var nextSibling = startParent.nextSibling;
-        if (!nextSibling) {
-            return startNode.parentNode;
-        }
-
-        while (nextSibling.nodeType === dfx.TEXT_NODE
-            && dfx.isBlank(nextSibling.data) === true
-        ) {
-            nextSibling = nextSibling.nextSibling;
-        }
-
-        if (nextSibling === endParent) {
-            return startParent;
-        }
-
-        return null;
 
     },
 
@@ -404,12 +366,13 @@ ViperInlineToolbarPlugin.prototype = {
             dfx.setHtml(parent, this.getReadableTagName(tagName));
             this._lineage.appendChild(parent);
 
-            (function(clickElem, selectionElem) {
+            (function(clickElem, selectionElem, index) {
                 // When clicked set the user selection to the selected element.
                 dfx.addEvent(clickElem, 'mousedown.ViperInlineToolbarPlugin', function() {
                     // We set the _lineageClicked to true here so that when the
                     // fireSelectionChanged is called we do not update the lineage again.
                     self._lineageClicked = true;
+                    self._currentLineageItem = index;
 
                     // Set the range.
                     var range = viper.getCurrentRange();
@@ -422,7 +385,7 @@ ViperInlineToolbarPlugin.prototype = {
 
                     return false;
                 });
-            }) (parent, lineage[i]);
+            }) (parent, lineage[i], i);
         }//end for
 
         if (this._originalRange.collapsed === true
@@ -439,7 +402,8 @@ ViperInlineToolbarPlugin.prototype = {
 
         dfx.addEvent(parent, 'mousedown.ViperInlineToolbarPlugin', function() {
             // When clicked set the selection to the original selection.
-            self._lineageClicked = true;
+            self._lineageClicked     = true;
+            self._currentLineageItem = (self._lineage.length - 1);
             ViperSelection.addRange(self._originalRange);
             viper.fireSelectionChanged(self._originalRange);
             self._updatePosition(self._originalRange, true);
@@ -458,9 +422,14 @@ ViperInlineToolbarPlugin.prototype = {
     {
         dfx.empty(this._toolsContainer);
 
+        if (this._currentLineageItem === null) {
+            this._currentLineageItem = (lineage.length - 1);
+        }
+
         var data = {
             range: range,
-            lineage: lineage
+            lineage: lineage,
+            current: this._currentLineageItem
         };
 
         this.viper.fireCallbacks('ViperInlineToolbarPlugin:updateToolbar', data);
@@ -479,7 +448,7 @@ ViperInlineToolbarPlugin.prototype = {
         var lineage      = [];
 
         var parent        = null;
-        var nodeSelection = this._getNodeSelection(range);
+        var nodeSelection = range.getNodeSelection(range);
         if (nodeSelection) {
             parent = nodeSelection;
         } else {
@@ -494,13 +463,15 @@ ViperInlineToolbarPlugin.prototype = {
             return lineage;
         }
 
-        lineage.push(parent);
-
-        parent = parent.parentNode;
-
-        while (parent && parent !== viperElement) {
+        if (parent) {
             lineage.push(parent);
+
             parent = parent.parentNode;
+
+            while (parent && parent !== viperElement) {
+                lineage.push(parent);
+                parent = parent.parentNode;
+            }
         }
 
         lineage = lineage.reverse();

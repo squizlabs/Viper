@@ -695,6 +695,51 @@ ViperDOMRange.prototype = {
 
         return this.endContainer;
 
+    },
+
+    getNodeSelection: function(range)
+    {
+        range = range || this;
+
+        // Webkit seems to get the range incorrectly when range is set on a node.
+        // For example: <p>text</p><p>text</p> if the range.selectNode is called for
+        // the first P then the next getCurrentRange call returns range start as
+        // first P and range end as before the first character of the next 2nd P tag.
+        if (range.startOffset !== 0 && range.endOffset !== 0) {
+            return null;
+        }
+
+        var startNode = range.getStartNode();
+        var endNode   = range.getEndNode();
+        var common    = range.getCommonElement();
+
+        var startParent = startNode;
+        while (startParent && startParent.parentNode !== common) {
+            startParent = startParent.parentNode;
+        }
+
+        var endParent = endNode;
+        while (endParent && endParent.parentNode !== common) {
+            endParent = endParent.parentNode;
+        }
+
+        var nextSibling = startParent.nextSibling;
+        if (!nextSibling) {
+            return startNode.parentNode;
+        }
+
+        while (nextSibling.nodeType === dfx.TEXT_NODE
+            && dfx.isBlank(nextSibling.data) === true
+        ) {
+            nextSibling = nextSibling.nextSibling;
+        }
+
+        if (nextSibling === endParent) {
+            return startParent;
+        }
+
+        return null;
+
     }
 
 };

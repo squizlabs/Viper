@@ -451,6 +451,18 @@ ViperCoreStylesPlugin.prototype = {
 
     },
 
+    _canStyleNode: function(node)
+    {
+        if (dfx.isBlockElement(node) === true) {
+            if (dfx.isTag(node, 'li') !== true) {
+                return false;
+            }
+        }
+
+        return true;
+
+    },
+
     _createInlineToolbarContent: function(data)
     {
         var inlineToolbarPlugin = this.viper.ViperPluginManager.getPlugin('ViperInlineToolbarPlugin');
@@ -459,7 +471,7 @@ ViperCoreStylesPlugin.prototype = {
             return;
         }
 
-        if (data.lineage.length > 0 && dfx.isBlockElement(data.lineage[(data.lineage.length - 1)]) === true) {
+        if (this._canStyleNode(data.lineage[data.current]) !== true) {
             return;
         }
 
@@ -683,24 +695,6 @@ ViperCoreStylesPlugin.prototype = {
 
     },
 
-    nodeInserted: function(node, range)
-    {
-        return this._wrapNodeWithActiveStyle(node, range);
-
-    },
-
-    mouseDown: function()
-    {
-        this._onChangeAddStyle = null;
-
-    },
-
-    caretPositioned: function()
-    {
-        this._onChangeAddStyle = null;
-
-    },
-
     _wrapNodeWithActiveStyle: function(node, range)
     {
         if (!node || !this._onChangeAddStyle || !range) {
@@ -808,54 +802,6 @@ ViperCoreStylesPlugin.prototype = {
         this.viper.ViperHistoryManager.begin();
         this.viper.surroundContents(tag);
         this.viper.ViperHistoryManager.end();
-
-    },
-
-    selectionChanged: function()
-    {
-        var range     = this.viper.getCurrentRange();
-        var startNode = range.startContainer;
-        var endNode   = range.endContainer;
-        var boldFound = false;
-        var emFound   = false;
-
-        startNode = startNode.parentNode;
-
-        while (startNode.parentNode) {
-            if (startNode === document) {
-                break;
-            }
-
-            switch (startNode.tagName.toLowerCase()) {
-                case 'strong':
-                    if (this.toolbarPlugin) {
-                        this.toolbarPlugin.setButtonActive('bold');
-                    }
-                    boldFound = true;
-                break;
-
-                case 'em':
-                    if (this.toolbarPlugin) {
-                        this.toolbarPlugin.setButtonActive('italic');
-                    }
-                    emFound = true;
-                break;
-
-                default:
-                    // Ignore.
-                break;
-            }
-
-            startNode = startNode.parentNode;
-        }//end while
-
-        if (!emFound && this.toolbarPlugin) {
-            this.toolbarPlugin.setButtonInactive('italic');
-        }
-
-        if (!boldFound && this.toolbarPlugin) {
-            this.toolbarPlugin.setButtonInactive('bold');
-        }
 
     },
 
