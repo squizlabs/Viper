@@ -171,7 +171,7 @@ ViperInlineToolbarPlugin.prototype = {
      */
     updateToolbar: function(range)
     {
-        if (this.viper.isBrowser('msie') === false) {
+        if (navigator.userAgent.match(/iPad/i) !== null) {
             this._scaleToolbar();
         }
 
