@@ -61,7 +61,7 @@
     margin: 0;
 }
 
-.ViperITP-lineage li {
+.ViperITP-lineage li.ViperITP-lineageItem {
     display: inline-block;
     cursor: pointer;
     padding: 0 0.8em 0 0.5em;
@@ -69,9 +69,13 @@
     background-repeat: no-repeat;
 }
 
-.ViperITP-lineage li:last-child {
+.ViperITP-lineage li.ViperITP-lineageItem:last-child {
     background-image: none !important;
     padding-right: 0.4em;
+}
+
+.ViperITP-lineage li.ViperITP-lineageItem.selected {
+    color: #F00;
 }
 
 .ViperITP .ViperITP-subSectionWrapper {
@@ -137,6 +141,12 @@
 
 .ViperITP .ViperITP-subSectionWrapper {
     background-color: #54535A;
+}
+
+
+.Viper-button.selected.toggleSubSectionButton {
+    background: -webkit-gradient(linear, left top, left bottom, from(#818088), to(#CCC));
+    background: -moz-linear-gradient(top,  #818088,  #CCC);
 }
 
 /* Theme - Light Grey */

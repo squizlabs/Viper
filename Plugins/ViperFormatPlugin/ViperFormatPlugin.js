@@ -158,49 +158,89 @@ ViperFormatPlugin.prototype = {
 
     _createInlineToolbarContent: function(data)
     {
-        if (!data.lineage) {
+        if (!data.lineage || data.range.collapsed === true) {
             return;
         }
 
-        var selectedNode = data.lineage[data.current];
-        if (this._canFormatTag(selectedNode) !== true) {
-            return;
-        }
-
+        var self                = this;
+        var selectedNode        = data.lineage[data.current];
         var inlineToolbarPlugin = this.viper.ViperPluginManager.getPlugin('ViperInlineToolbarPlugin');
 
-        if (data.range.collapsed === true) {
-            return;
-        }
+        var headingsSubSection = null;
+        var hasActiveHeading   = false;
+        if (this._canShowHeadingOptions(selectedNode) === true) {
+            // Headings format section.
+            var headingSubSectionContents = document.createElement('div');
 
-        var self = this;
+            for (var i = 1; i <= 6; i++) {
+                (function(headingCount) {
+                    var active  = false;
+                    var tagName = 'h' + headingCount;
+                    for (var j = 0; j < data.lineage.length; j++) {
+                        if (dfx.isTag(data.lineage[j], tagName) === true) {
+                            active           = true;
+                            hasActiveHeading = true;
+                            break;
+                        }
+                    }
 
-        var headingSubSectionContents = document.createElement('div');
-        for (var i = 1; i <= 6; i++) {
-            (function(headingCount) {
-                var headingButton = inlineToolbarPlugin.createButton('H' + headingCount, false, null, function() {
-                    self.handleFormat('h' + headingCount);
-                });
-                headingSubSectionContents.appendChild(headingButton);
-            }) (i);
-        }
+                    var headingButton = inlineToolbarPlugin.createButton('H' + headingCount, active, null, function() {
+                        self.handleFormat(tagName);
+                    });
+                    headingSubSectionContents.appendChild(headingButton);
+                }) (i);
+            }
 
-        var headingsSubSection = inlineToolbarPlugin.createSubSection(headingSubSectionContents);
-        var formatsSubSection = inlineToolbarPlugin.createSubSection('');
+            headingsSubSection = inlineToolbarPlugin.createSubSection(headingSubSectionContents);
+        }//end if
+
+        var formatsSubSection = null;
+        var hasActiveFormat   = false;
+        if (this._canShowFormattingOptions(selectedNode) === true) {
+            // Formats section.
+            var formatsSubSectionContents = document.createElement('div');
+
+            var formatButtons = {
+                quote: 'Quote',
+                pre: 'PRE',
+                div: 'DIV',
+                p: 'P'
+            };
+
+            for (var tagName in formatButtons) {
+                (function() {
+                    var active = false;
+                    for (var j = 0; j < data.lineage.length; j++) {
+                        if (dfx.isTag(data.lineage[j], tagName) === true) {
+                            active           = true;
+                            hasActiveFormat = true;
+                            break;
+                        }
+                    }
+
+                    var button = inlineToolbarPlugin.createButton(formatButtons[tagName], active, null, function() {
+                        self.handleFormat(tagName);
+                    });
+                    formatsSubSectionContents.appendChild(button);
+                })
+                (tagName);
+            }
+
+            formatsSubSection = inlineToolbarPlugin.createSubSection(formatsSubSectionContents);
+        }//end if
 
         var buttonGroup = inlineToolbarPlugin.createButtonGroup();
-        var formats  = inlineToolbarPlugin.createButton('Aa', false, 'formats', null, buttonGroup, formatsSubSection);
+        if (formatsSubSection) {
+            inlineToolbarPlugin.createButton('Aa', hasActiveFormat, 'formats', null, buttonGroup, formatsSubSection, hasActiveFormat);
+        }
 
-        // If Any heading is active on the current selection activate the button.
-        var headingActive = false;
-
-        //var parents       = dfx.getParents();
-
-        var headings = inlineToolbarPlugin.createButton('Hh', false, 'headings', null, buttonGroup, headingsSubSection);
+        if (headingsSubSection) {
+            inlineToolbarPlugin.createButton('Hh', hasActiveHeading, 'headings', null, buttonGroup, headingsSubSection, hasActiveHeading);
+        }
 
     },
 
-    _canFormatTag: function(node)
+    _canShowHeadingOptions: function(node)
     {
         if (node.nodeType === dfx.TEXT_NODE) {
             // If this is a text selection then dont show the tools.
@@ -223,6 +263,31 @@ ViperFormatPlugin.prototype = {
                         return false;
                     }
 
+                    return true;
+                break;
+            }
+        }
+
+        return true;
+
+    },
+
+    _canShowFormattingOptions: function(node)
+    {
+        if (node.nodeType === dfx.TEXT_NODE) {
+            // If this is a text selection then dont show the tools.
+            return false;
+        } else if (dfx.isBlockElement(node) === false) {
+            return false;
+        } else {
+            switch (node.tagName.toLowerCase()) {
+                case 'li':
+                case 'ul':
+                case 'ol':
+                    return false;
+                break;
+
+                default:
                     return true;
                 break;
             }
@@ -328,6 +393,7 @@ ViperFormatPlugin.prototype = {
         }
 
         this.viper.fireNodesChanged([this.viper.getViperElement()]);
+        this.viper.fireSelectionChanged(null, true);
 
     },
 

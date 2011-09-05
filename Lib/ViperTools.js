@@ -23,19 +23,22 @@ var ViperTools = {
     /**
      * Creates a toolbar button.
      *
-     * @param {string}     content      The content of the button.
-     * @param {string}     isActive     True if the button is active.
-     * @param {string}     customClass  Class to add to the button for extra styling.
-     * @param {function}   clickAction  The function to call when the button is clicked.
-     *                                  Note that this action is ignored if the
-     *                                  subSection param is specified. Clicking will
-     *                                  then toggle the sub section visibility.
-     * @param {DOMElement} groupElement The group element that was created by createButtonGroup.
-     * @param {DOMElement} subSection   The sub section element see createSubSection.
+     * @param {string}     content        The content of the button.
+     * @param {string}     isActive       True if the button is active.
+     * @param {string}     customClass    Class to add to the button for extra styling.
+     * @param {function}   clickAction    The function to call when the button is clicked.
+     *                                    Note that this action is ignored if the
+     *                                    subSection param is specified. Clicking will
+     *                                    then toggle the sub section visibility.
+     * @param {DOMElement} groupElement   The group element that was created by createButtonGroup.
+     * @param {DOMElement} subSection     The sub section element see createSubSection.
+     * @param {boolean}    showSubSection If true then sub section will be visible.
+     *                                    If another button later on also has this set to true
+     *                                    then that button's sub section visible.
      *
      * @return {DOMElement} The new button element.
      */
-    createButton: function(content, isActive, customClass, clickAction, groupElement, subSection)
+    createButton: function(content, isActive, customClass, clickAction, groupElement, subSection, showSubSection)
     {
         if (!content) {
             content = '&nbsp;';
@@ -50,13 +53,15 @@ var ViperTools = {
         }
 
         if (subSection) {
+            dfx.addClass(button, 'toggleSubSectionButton');
+
             // Show/hide subsection if there is one..
             dfx.addEvent(button, 'mousedown.Viper', function(e) {
                 var state = ViperTools.toggleSubSection(subSection);
                 dfx.preventDefault(e);
 
                 if (clickAction) {
-                    clickAction.call(this, state);
+                    clickAction.call(this, state, button);
                 }
 
                 return false;
@@ -64,12 +69,18 @@ var ViperTools = {
         } else if (clickAction) {
             dfx.addEvent(button, 'mousedown.Viper', function(e) {
                 dfx.preventDefault(e);
-                return clickAction.call(this);
+                return clickAction.call(this, button);
             });
         }
 
         if (isActive === true) {
             dfx.addClass(button, 'active');
+        }
+
+        if (subSection && showSubSection === true) {
+            if (clickAction) {
+                clickAction.call(this, ViperTools.toggleSubSection(subSection), button);
+            }
         }
 
         if (groupElement) {
@@ -124,6 +135,7 @@ var ViperTools = {
         }
 
         dfx.addClass(subSectionElement, 'active');
+
         return true;
 
     }

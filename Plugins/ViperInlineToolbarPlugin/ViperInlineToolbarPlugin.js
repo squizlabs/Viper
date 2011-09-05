@@ -108,16 +108,19 @@ ViperInlineToolbarPlugin.prototype = {
     /**
      * Creates a toolbar button.
      *
-     * @param {string}     content      The content of the button.
-     * @param {string}     isActive     True if the button is active.
-     * @param {string}     customClass  Class to add to the button for extra styling.
-     * @param {function}   clickAction  The function to call when the button is clicked.
-     * @param {DOMElement} groupElement The group element that was created by createButtonGroup.
-     * @param {DOMElement} subSection   The sub section element see createSubSection.
+     * @param {string}     content        The content of the button.
+     * @param {string}     isActive       True if the button is active.
+     * @param {string}     customClass    Class to add to the button for extra styling.
+     * @param {function}   clickAction    The function to call when the button is clicked.
+     * @param {DOMElement} groupElement   The group element that was created by createButtonGroup.
+     * @param {DOMElement} subSection     The sub section element see createSubSection.
+     * @param {boolean}    showSubSection If true then sub section will be visible.
+     *                                    If another button later on also has this set to true
+     *                                    then that button's sub section visible.
      *
      * @return {DOMElement} The new button element.
      */
-    createButton: function(content, isActive, customClass, clickAction, groupElement, subSection)
+    createButton: function(content, isActive, customClass, clickAction, groupElement, subSection, showSubSection)
     {
         var self = this;
         if (clickAction) {
@@ -127,16 +130,26 @@ ViperInlineToolbarPlugin.prototype = {
                 return originalAction.call(this);
             };
         } else if (subSection) {
-            clickAction = function(subSectionState) {
+            clickAction = function(subSectionState, buttonElement) {
                 if (subSectionState === true) {
                     dfx.addClass(self._toolbar, 'subSectionVisible');
+
+                    // Remove selected state from other buttons in the toolbar.
+                    var mainTools = subSection.parentNode.previousSibling;
+                    dfx.removeClass(dfx.getClass('selected', mainTools), 'selected');
+                    dfx.addClass(buttonElement, 'selected');
                 } else {
                     dfx.removeClass(self._toolbar, 'subSectionVisible');
+                    dfx.removeClass(button, 'selected');
                 }
             };
+
+            if (showSubSection === true) {
+                dfx.addClass(this._toolbar, 'subSectionVisible');
+            }
         }
 
-        var button = ViperTools.createButton(content, isActive, customClass, clickAction, groupElement, subSection);
+        var button = ViperTools.createButton(content, isActive, customClass, clickAction, groupElement, subSection, showSubSection);
 
         if (!groupElement) {
             this._toolsContainer.appendChild(button);
@@ -351,9 +364,10 @@ ViperInlineToolbarPlugin.prototype = {
         // Remove the contents of the lineage container.
         dfx.empty(this._lineage);
 
-        var viper = this.viper;
-        var c     = lineage.length;
-        var self  = this;
+        var viper    = this.viper;
+        var c        = lineage.length;
+        var self     = this;
+        var linElems = [];
 
         // Create lineage items.
         for (var i = 0; i < c; i++) {
@@ -363,8 +377,10 @@ ViperInlineToolbarPlugin.prototype = {
 
             var tagName = lineage[i].tagName.toLowerCase();
             var parent  = document.createElement('li');
+            dfx.addClass(parent, 'ViperITP-lineageItem');
             dfx.setHtml(parent, this.getReadableTagName(tagName));
             this._lineage.appendChild(parent);
+            linElems.push(parent);
 
             (function(clickElem, selectionElem, index) {
                 // When clicked set the user selection to the selected element.
@@ -373,6 +389,9 @@ ViperInlineToolbarPlugin.prototype = {
                     // fireSelectionChanged is called we do not update the lineage again.
                     self._lineageClicked = true;
                     self._currentLineageItem = index;
+
+                    dfx.removeClass(linElems, 'selected');
+                    dfx.addClass(clickElem, 'selected');
 
                     // Set the range.
                     var range = viper.getCurrentRange();
@@ -397,13 +416,19 @@ ViperInlineToolbarPlugin.prototype = {
 
         // Add the original user selection to the lineage.
         var parent = document.createElement('li');
+        dfx.addClass(parent, 'ViperITP-lineageItem selected');
         dfx.setHtml(parent, 'Selection');
+        linElems.push(parent);
         this._lineage.appendChild(parent);
 
         dfx.addEvent(parent, 'mousedown.ViperInlineToolbarPlugin', function() {
             // When clicked set the selection to the original selection.
             self._lineageClicked     = true;
             self._currentLineageItem = (self._lineage.length - 1);
+
+            dfx.removeClass(linElems, 'selected');
+            dfx.addClass(parent, 'selected');
+
             ViperSelection.addRange(self._originalRange);
             viper.fireSelectionChanged(self._originalRange);
             self._updatePosition(self._originalRange, true);
