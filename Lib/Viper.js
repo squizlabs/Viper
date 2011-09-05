@@ -33,7 +33,7 @@ function Viper(id, options, callback)
     this.enabled      = false;
     this.inlineMode   = false;
 
-    this.ViperUndoManager   = null;
+    this.ViperHistoryManager   = null;
     this.ViperPluginManager = null;
 
     this._settings = {
@@ -145,7 +145,7 @@ Viper.prototype = {
      */
     init: function()
     {
-        this.ViperUndoManager   = new ViperUndoManager(this);
+        this.ViperHistoryManager   = new ViperHistoryManager(this);
         this.ViperPluginManager = new ViperPluginManager(this);
 
         ViperChangeTracker.init(this, false);
@@ -361,7 +361,7 @@ Viper.prototype = {
         this.element = elem;
         this.initEditableElement();
         this.setEnabled(true);
-        this.ViperUndoManager.setActiveElement(elem);
+        this.ViperHistoryManager.setActiveElement(elem);
         this.inlineMode = false;
         elem.setAttribute('contentEditable', true);
         dfx.setStyle(elem, 'outline', 'none');
@@ -2713,9 +2713,9 @@ Viper.prototype = {
         ViperChangeTracker.updatePositionMarkers(true);
 
         if (nodes.length === 1 && nodes[0].nodeType === dfx.TEXT_NODE) {
-            this.ViperUndoManager.add('Viper', 'text_change');
+            this.ViperHistoryManager.add('Viper', 'text_change');
         } else {
-            this.ViperUndoManager.add();
+            this.ViperHistoryManager.add();
         }
 
     },

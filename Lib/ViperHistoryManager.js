@@ -21,7 +21,7 @@
  * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt GPLv2
  */
 
-function ViperUndoManager(viper)
+function ViperHistoryManager(viper)
 {
     this.viper = viper;
 
@@ -38,7 +38,7 @@ function ViperUndoManager(viper)
 
 }
 
-ViperUndoManager.prototype = {
+ViperHistoryManager.prototype = {
 
     /**
      * Creates a new undo task.
@@ -93,7 +93,7 @@ ViperUndoManager.prototype = {
             this.batchTask = task;
         }
 
-        this.viper.fireCallbacks('ViperUndoManager:add');
+        this.viper.fireCallbacks('ViperHistoryManager:add');
 
     },
 
@@ -131,7 +131,7 @@ ViperUndoManager.prototype = {
         // Fire nodesChanged event.
         this._ignoreAdd = true;
         this.viper.fireNodesChanged([this.viper.getViperElement()]);
-        this.viper.fireCallbacks('ViperUndoManager:undo');
+        this.viper.fireCallbacks('ViperHistoryManager:undo');
         this._ignoreAdd = false;
 
     },
@@ -157,7 +157,7 @@ ViperUndoManager.prototype = {
         // Fire nodesChanged event.
         this._ignoreAdd = true;
         this.viper.fireNodesChanged([this.viper.getViperElement()]);
-        this.viper.fireCallbacks('ViperUndoManager:redo');
+        this.viper.fireCallbacks('ViperHistoryManager:redo');
         this._ignoreAdd = false;
 
         return this.redoHistory.length;

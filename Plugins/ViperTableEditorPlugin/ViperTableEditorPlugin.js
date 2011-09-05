@@ -161,11 +161,11 @@ ViperTableEditorPlugin.prototype = {
             ViperChangeTracker.setNodeTypeVisibility('removedTableCol', showRemoved);
         });
 
-        this.viper.registerCallback('ViperUndoManager:undo', 'ViperTableEditor', function() {
+        this.viper.registerCallback('ViperHistoryManager:undo', 'ViperTableEditor', function() {
             self.hideCellButtons();
         });
 
-        this.viper.registerCallback('ViperUndoManager:redo', 'ViperTableEditor', function() {
+        this.viper.registerCallback('ViperHistoryManager:redo', 'ViperTableEditor', function() {
             self.hideCellButtons();
         });
 

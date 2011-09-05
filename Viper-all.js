@@ -21,7 +21,7 @@
  */
 
 // Viper core files.
-var jsFiles = 'Viper.js|ViperChangeTracker.js|ViperTools.js|ViperDOMRange.js|ViperIERange.js|ViperMozRange.js|ViperSelection.js|ViperPluginManager.js|ViperUndoManager.js|XPath.js';
+var jsFiles = 'Viper.js|ViperChangeTracker.js|ViperTools.js|ViperDOMRange.js|ViperIERange.js|ViperMozRange.js|ViperSelection.js|ViperPluginManager.js|ViperHistoryManager.js|XPath.js';
 jsFiles     = jsFiles.split('|');
 for (var j = 0; j < jsFiles.length; j++) {
     document.write('<script type="text/javascript" src="../../Lib/' + jsFiles[j] + '"></script>');
@@ -30,7 +30,7 @@ for (var j = 0; j < jsFiles.length; j++) {
 document.write('<style type="text/css">@import url("../../Css/viper.css");</style>');
 
 // Viper default plugins.
-var plugins    = 'ViperCopyPastePlugin|ViperCoreStylesPlugin|ViperFormatPlugin|ViperKeyboardEditorPlugin|ViperListPlugin|ViperRedoPlugin|ViperTableEditorPlugin|ViperToolbarPlugin|ViperTrackChangesPlugin|ViperInlineToolbarPlugin|ViperLinkPlugin';
+var plugins    = 'ViperCopyPastePlugin|ViperCoreStylesPlugin|ViperFormatPlugin|ViperKeyboardEditorPlugin|ViperListPlugin|ViperHistoryPlugin|ViperTableEditorPlugin|ViperToolbarPlugin|ViperTrackChangesPlugin|ViperInlineToolbarPlugin|ViperLinkPlugin';
 plugins        = plugins.split('|');
 var pluginCss  = [];
 var c = 0;

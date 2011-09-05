@@ -193,7 +193,7 @@ ViperTrackChangesPlugin.prototype = {
     addComment: function()
     {
         this.viper.focus();
-        var info     = ViperUndoManager.createNodeChangeInfo(this.viper.element);
+        var info     = ViperHistoryManager.createNodeChangeInfo(this.viper.element);
         var bookmark = this.viper.createBookmark();
         var elements = dfx.getElementsBetween(bookmark.start, bookmark.end);
 

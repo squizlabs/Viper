@@ -805,9 +805,9 @@ ViperCoreStylesPlugin.prototype = {
 
     applyTag: function(tag)
     {
-        this.viper.ViperUndoManager.begin();
+        this.viper.ViperHistoryManager.begin();
         this.viper.surroundContents(tag);
-        this.viper.ViperUndoManager.end();
+        this.viper.ViperHistoryManager.end();
 
     },
 

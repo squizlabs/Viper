@@ -130,13 +130,13 @@ var ViperChangeTracker = {
             }
         });
 
-        this._viper.registerCallback('ViperUndoManager:undo', 'ViperChangeTracker', function() {
+        this._viper.registerCallback('ViperHistoryManager:undo', 'ViperChangeTracker', function() {
             // We have to reload the changes because undo will remove all DOM
             // node references.
            self.reLoad();
         });
 
-        this._viper.registerCallback('ViperUndoManager:redo', 'ViperChangeTracker', function() {
+        this._viper.registerCallback('ViperHistoryManager:redo', 'ViperChangeTracker', function() {
             self.reLoad();
         });
 
