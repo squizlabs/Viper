@@ -31,6 +31,10 @@ function ViperRedoPlugin(viper)
             return self.handleRedo();
         }
     });
+
+    this.viper.registerCallback(['ViperUndoManager:add', 'ViperUndoManager:undo', 'ViperUndoManager:redo'], 'ViperRedoPlugin', function(e) {
+        self._updateButtonStates();
+    });
 }
 
 ViperRedoPlugin.prototype = {
@@ -49,11 +53,10 @@ ViperRedoPlugin.prototype = {
             this.toolbarPlugin.addButton(name, 'undo', 'Undo (' + ctrlName + ' + Z)', function () {
                 return self.handleUndo();
             });
-            this.toolbarPlugin.setButtonDisabled('undo');
-
             this.toolbarPlugin.addButton(name, 'redo', 'Redo (' + ctrlName + ' + Y)', function () {
                 return self.handleRedo();
             });
+            this._updateButtonStates();
         }
 
     },
