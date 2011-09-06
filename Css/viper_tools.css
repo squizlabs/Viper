@@ -2,10 +2,11 @@
     border-radius: 0.3em;
     cursor: pointer;
     display: inline-block;
+    font-size: 1.6em;
+    line-height: 1.7em;
     margin-left: 0.3em;
-    line-height: 1.6em;
-    min-width: 1.7em;
-    font-size: 1.8em;
+    min-width: 1em;
+    padding: 0 0.5em;
     text-align: center;
 }
 
@@ -41,37 +42,54 @@
 
 /* Theme - Dark Grey */
 
-.Viper-button {
+.themeDark .Viper-button {
     background-color: #242323;
     border: none;
-    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.6), 0 1px 0 rgba(255, 255, 255, 0.9) inset;
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.3), 0 1px 0 rgba(255, 255, 255, 0.9) inset;
     background: -webkit-gradient(linear, left top, left bottom, from(#e9e9eb), to(#c9c9d0));
     background: -moz-linear-gradient(top,  #e9e9eb,  #c9c9d0);
 }
 
-.Viper-button:hover {
-/*     color: #000; */
-    background: -webkit-gradient(linear, left top, left bottom, from(#b8b8b9), to(#a0a0a2));
-    background: -moz-linear-gradient(top,  #b8b8b9,  #a0a0a2);
+.themeDark .Viper-button:hover {
+    background: -webkit-gradient(linear, left top, left bottom, from(#d8d8da), to(#b8b8ca));
+    background: -moz-linear-gradient(top,  #c8c8c9,  #a8a8b9);
+    text-shadow: 0 1px 0 rgba(255,255,255,0.5);
 }
 
-.Viper-button.active {
-    background: -webkit-gradient(linear, left top, left bottom, from(#3987f2), to(#205caf));
-    background: -moz-linear-gradient(top,  #3987f2,  #205caf);
-    box-shadow: 0 0px 5px rgba(0, 0, 0, 0.85) inset;
+.themeDark .Viper-button.active,
+.themeDark .Viper-button.active:hover,
+.themeDark .Viper-button.selected,
+.themeDark .Viper-button.selected:hover {
     color: #FFF;
     text-shadow: 0 -1px 0 rgba(0,0,0,0.5);
+    box-shadow: 0 0 0.2em rgba(0, 0, 0, 0.85) inset;
+}
+
+.themeDark .Viper-button.selected,
+.themeDark .Viper-button.selected:hover {
+    background: #54535A;
+    border-color: #555;
+}
+
+.themeDark .Viper-button.active,
+.themeDark .Viper-button.active:hover,
+.themeDark .Viper-button.active.selected,
+.themeDark .Viper-button.active.selected:hover {
+    background: -webkit-gradient(linear, left top, left bottom, from(#3987f2), to(#205caf));
+    background: -moz-linear-gradient(top,  #3987f2,  #205caf);
+}
+
+.themeDark .Viper-buttonGroup .Viper-button {
+    border-left: 1px solid #898989;
+}
+
+.themeDark .Viper-buttonGroup .Viper-button:first-child,
+.themeDark .Viper-buttonGroup .Viper-button.active,
+.themeDark .Viper-buttonGroup .Viper-button.selected {
+    border-left: none;
 }
 
 /* Theme - Light Grey */
-
-.themeLight .Viper-buttonGroup .Viper-button {
-    border-left-width: 0;
-}
-
-.themeLight .Viper-buttonGroup .Viper-button:first-child {
-    border-left-width: 1px;
-}
 
 .themeLight .Viper-button {
     background-color: #e4e4e4;
@@ -83,9 +101,8 @@
 
 .themeLight .Viper-button:hover {
     background-color: #d3d3d3;
-/*     color: #000; */
-    background: -webkit-gradient(linear, left top, left bottom, from(#d8d8da), to(#b8b8c9));
-    background: -moz-linear-gradient(top,  #d8d8da,  #b8b8c9);
+    background: -webkit-gradient(linear, left top, left bottom, from(#d8d8da), to(#b8b8c0));
+    background: -moz-linear-gradient(top,  #d8d8da,  #b8b8c0);
 }
 
 .themeLight .Viper-button.active,
@@ -94,17 +111,27 @@
 .themeLight .Viper-button.selected:hover {
     color: #FFF;
     text-shadow: 0 -1px 0 rgba(0,0,0,0.5);
-    box-shadow: 0 0 3px 0px rgba(0, 0, 0, 0.6) inset;
-}
-
-.themeLight .Viper-button.active,
-.themeLight .Viper-button.active:hover {
-    background: #5a8bd0;
-    border-color: #2e568d;
+    box-shadow: 0 0 0.2em 0 rgba(0, 0, 0, 0.6) inset;
 }
 
 .themeLight .Viper-button.selected,
 .themeLight .Viper-button.selected:hover {
     background: #888;
     border-color: #555;
+}
+
+.themeLight .Viper-button.active,
+.themeLight .Viper-button.active:hover,
+.themeLight .Viper-button.active.selected,
+.themeLight .Viper-button.active.selected:hover {
+    background: #5a8bd0;
+    border-color: #2e568d;
+}
+
+.themeLight .Viper-buttonGroup .Viper-button {
+    border-left-width: 0;
+}
+
+.themeLight .Viper-buttonGroup .Viper-button:first-child {
+    border-left-width: 1px;
 }
