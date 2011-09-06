@@ -21,13 +21,13 @@
  */
 function ViperInlineToolbarPlugin(viper)
 {
-    this.viper               = viper;
-    this._toolbar            = null;
-    this._toolsContainer     = null;
-    this._lineage            = null;
-    this._lineageClicked     = false;
-    this._currentLineageItem = null;
-    this._margin             = 10;
+    this.viper                = viper;
+    this._toolbar             = null;
+    this._toolsContainer      = null;
+    this._lineage             = null;
+    this._lineageClicked      = false;
+    this._currentLineageIndex = null;
+    this._margin              = 10;
 
     // Create the toolbar.
     this._createToolbar();
@@ -193,7 +193,10 @@ ViperInlineToolbarPlugin.prototype = {
 
         range = range || this.viper.getCurrentRange();
 
-        this._currentLineageItem = null;
+        if (this._lineageClicked !== true) {
+            this._setCurrentLineageIndex(null);
+        }
+
         var lineage = this._getSelectionLineage(range);
 
         this._updateInnerContainer(range, lineage);
@@ -388,7 +391,7 @@ ViperInlineToolbarPlugin.prototype = {
                     // We set the _lineageClicked to true here so that when the
                     // fireSelectionChanged is called we do not update the lineage again.
                     self._lineageClicked = true;
-                    self._currentLineageItem = index;
+                    self._setCurrentLineageIndex(index);
 
                     dfx.removeClass(linElems, 'selected');
                     dfx.addClass(clickElem, 'selected');
@@ -424,7 +427,7 @@ ViperInlineToolbarPlugin.prototype = {
         dfx.addEvent(parent, 'mousedown.ViperInlineToolbarPlugin', function() {
             // When clicked set the selection to the original selection.
             self._lineageClicked     = true;
-            self._currentLineageItem = (self._lineage.length - 1);
+            self._setCurrentLineageIndex(self._lineage.length - 1);
 
             dfx.removeClass(linElems, 'selected');
             dfx.addClass(parent, 'selected');
@@ -447,17 +450,23 @@ ViperInlineToolbarPlugin.prototype = {
     {
         dfx.empty(this._toolsContainer);
 
-        if (this._currentLineageItem === null) {
-            this._currentLineageItem = (lineage.length - 1);
+        if (this._currentLineageIndex === null) {
+            this._setCurrentLineageIndex(lineage.length - 1);
         }
 
         var data = {
             range: range,
             lineage: lineage,
-            current: this._currentLineageItem
+            current: this._currentLineageIndex
         };
 
         this.viper.fireCallbacks('ViperInlineToolbarPlugin:updateToolbar', data);
+
+    },
+
+    _setCurrentLineageIndex: function(index)
+    {
+        this._currentLineageIndex = index;
 
     },
 
