@@ -207,8 +207,8 @@ ViperFormatPlugin.prototype = {
                 p: 'P'
             };
 
-            for (var tagName in formatButtons) {
-                (function() {
+            for (var tag in formatButtons) {
+                (function(tagName) {
                     var active = false;
                     for (var j = 0; j < data.lineage.length; j++) {
                         if (dfx.isTag(data.lineage[j], tagName) === true) {
@@ -223,7 +223,7 @@ ViperFormatPlugin.prototype = {
                     });
                     formatsSubSectionContents.appendChild(button);
                 })
-                (tagName);
+                (tag);
             }
 
             formatsSubSection = inlineToolbarPlugin.createSubSection(formatsSubSectionContents);

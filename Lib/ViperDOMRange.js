@@ -705,16 +705,24 @@ ViperDOMRange.prototype = {
         // For example: <p>text</p><p>text</p> if the range.selectNode is called for
         // the first P then the next getCurrentRange call returns range start as
         // first P and range end as before the first character of the next 2nd P tag.
-        if (range.startOffset !== 0 && range.endOffset !== 0) {
-            return null;
-        }
-
         var startNode = range.getStartNode();
         var endNode   = range.getEndNode();
         var common    = range.getCommonElement();
 
         if (startNode && !endNode) {
             return startNode;
+        }
+
+        if (startNode.nodeType === dfx.TEXT_NODE && range.startOffset !== 0) {
+            return null;
+        } else if (startNode.previousSibling) {
+            return null;
+        }
+
+        if (endNode.nodeType === dfx.TEXT_NODE && range.endOffset !== 0) {
+            return null;
+        } else if (endNode.nextSibling) {
+            return null;
         }
 
         var startParent = startNode;
