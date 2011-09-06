@@ -123,10 +123,10 @@ a img {border: none;}
 ********************************************************/
 * {
     -moz-transition-property: : color, background-color, border-color;
-    -moz-transition-duration: 0.3s;
+/*     -moz-transition-duration: 0.3s; */
     -moz-transition-timing-function: ease;
     -webkit-transition-property: : color, background-color, border-color;
-    -webkit-transition-duration: 0.3s;
+/*     -webkit-transition-duration: 0.3s; */
     -webkit-transition-timing-function: ease;
 }
 
