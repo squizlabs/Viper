@@ -39,7 +39,7 @@
     border-bottom-right-radius: 0.3em;
 }
 
-/* Theme - Dark Grey (default) */
+/* Theme - Dark Grey */
 
 .Viper-button {
     background-color: #242323;
@@ -50,7 +50,7 @@
 }
 
 .Viper-button:hover {
-    color: #000;
+/*     color: #000; */
     background: -webkit-gradient(linear, left top, left bottom, from(#b8b8b9), to(#a0a0a2));
     background: -moz-linear-gradient(top,  #b8b8b9,  #a0a0a2);
 }
@@ -60,23 +60,51 @@
     background: -moz-linear-gradient(top,  #3987f2,  #205caf);
     box-shadow: 0 0px 5px rgba(0, 0, 0, 0.85) inset;
     color: #FFF;
-    text-shadow: 0 -1px 0 rgba(0,0,0,0.9);
+    text-shadow: 0 -1px 0 rgba(0,0,0,0.5);
 }
 
 /* Theme - Light Grey */
 
-.themeLight .Viper-button {
-    background-color: #e4e4e4;
-    border: 1px solid #c2c1c1;
-    box-shadow: 0 1px 0 #fff inset;
+.themeLight .Viper-buttonGroup .Viper-button {
+    border-left-width: 0;
 }
 
-.themeLight .Viper-button.active {
-    background-color: #5a8bd0;
-    color: #FFF;
+.themeLight .Viper-buttonGroup .Viper-button:first-child {
+    border-left-width: 1px;
+}
+
+.themeLight .Viper-button {
+    background-color: #e4e4e4;
+    border: 1px solid #AAA;
+    box-shadow: 0 1px 0 rgba(255,255,255,0.95) inset;
+    background: -webkit-gradient(linear, left top, left bottom, from(#e9e9eb), to(#c9c9d0));
+    background: -moz-linear-gradient(top,  #e9e9eb,  #c9c9d0);
 }
 
 .themeLight .Viper-button:hover {
     background-color: #d3d3d3;
-    color: #000;
+/*     color: #000; */
+    background: -webkit-gradient(linear, left top, left bottom, from(#d8d8da), to(#b8b8c9));
+    background: -moz-linear-gradient(top,  #d8d8da,  #b8b8c9);
+}
+
+.themeLight .Viper-button.active,
+.themeLight .Viper-button.active:hover,
+.themeLight .Viper-button.selected,
+.themeLight .Viper-button.selected:hover {
+    color: #FFF;
+    text-shadow: 0 -1px 0 rgba(0,0,0,0.5);
+    box-shadow: 0 0 3px 0px rgba(0, 0, 0, 0.6) inset;
+}
+
+.themeLight .Viper-button.active,
+.themeLight .Viper-button.active:hover {
+    background: #5a8bd0;
+    border-color: #2e568d;
+}
+
+.themeLight .Viper-button.selected,
+.themeLight .Viper-button.selected:hover {
+    background: #888;
+    border-color: #555;
 }

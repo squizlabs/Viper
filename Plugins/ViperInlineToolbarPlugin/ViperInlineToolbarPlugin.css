@@ -2,7 +2,7 @@
     z-index: 1000;
     margin-top: 3px;
     font-family: Arial, Sans Serif;
-    font-size: 8px;
+    font-size: 9px;
     position: absolute;
     border: 1px solid transparent;
     opacity: 0;
@@ -59,6 +59,7 @@
     list-style: none;
     padding: 0;
     margin: 0;
+    border-bottom:  1px solid transparent;
 }
 
 .ViperITP-lineage li.ViperITP-lineageItem {
@@ -89,6 +90,17 @@
 .ViperITP.subSectionVisible .ViperITP-subSectionWrapper {
     display: block;
     opacity: 1;
+}
+
+.ViperITP  .ViperITP-subSectionWrapper:before {
+    content: "";
+    width: 0px;
+    height: 0px;
+    display: block;
+    position: absolute;
+    left: 50%;
+    margin: -8px 0 0 -4px;
+    border: 4px solid transparent;
 }
 
 .ViperITP .Viper-subSection {
@@ -124,8 +136,12 @@
     background: -moz-linear-gradient(top,  #919097,  #727179);
 }
 
+.ViperITP.subSectionVisible .ViperITP-tools {
+    padding-bottom: 0.7em;
+}
+
 .ViperITP-lineage {
-    border-bottom: 1px solid #999999;
+    border-bottom-color: #999999;
     color: #222222;
     text-shadow: 0 -1px 0 #000;
 }
@@ -143,39 +159,60 @@
     background-color: #54535A;
 }
 
-
-.Viper-button.selected.toggleSubSectionButton {
-    background: -webkit-gradient(linear, left top, left bottom, from(#818088), to(#CCC));
-    background: -moz-linear-gradient(top,  #818088,  #CCC);
+.ViperITP  .ViperITP-subSectionWrapper:before {
+    border-bottom-color: #54535A;
 }
 
 /* Theme - Light Grey */
 
-.ViperITP.themeLight {
-    background-color: #E0DEDE;
+.themeLight.ViperITP {
+/*     background-color: #E0DEDE; */
     color: #424242;
     text-shadow: 0 1px 0 #FFF;
-    border-color: #9c9c9c;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.7), 0 1px 0 #fff inset;
-    -webkit-box-shadow: 0 0 15px rgba(0, 0, 0, 0.7), 0 1px 0 #fff inset;
+/*     border-color: #9c9c9c; */
+    border-width: 1px 0 0;
+/*     box-shadow: 0 0 15px rgba(0, 0, 0, 0.7), 0 1px 0 #fff inset; */
+/*     -webkit-box-shadow: 0 0 15px rgba(0, 0, 0, 0.7), 0 1px 0 #fff inset; */
+    box-shadow: 0 2px 9px rgba(0, 0, 0, 0.8), 0 1px 0 rgba(255,255,255,0.4) inset;
 }
 
-.ViperITP.themeLight:before {
-    border-bottom-color: #E0DEDE;
+.themeLight.ViperITP:before {
+/*     border-bottom-color: #E0DEDE; */
 }
 
-.ViperITP.themeLight .ViperITP-lineage li {
-    background-image: url(images/lineageDivider.png);
+.themeLight.ViperITP .ViperITP-lineage {
+/*     color: #858585; */
+/*     text-shadow: 0 1px 0 #FFF; */
+    border-bottom-color: #FFF;
+    padding-top: 0.1em;
+    color: #CCC;
 }
 
-.ViperITP.themeLight.ViperITP-lineage li:hover {
-    color: #000;
+.themeLight.ViperITP .ViperITP-lineage li {
+/*     background-image: url(images/lineageDivider.png); */
+/*     color: #858585; */
 }
 
-.ViperITP.themeLight .ViperITP-lineage {
-    color: #858585;
+.themeLight.ViperITP .ViperITP-lineage li:hover {
+/*     color: #333; */
 }
 
-.ViperITP.themeLight .ViperITP:before {
-    border-bottom-color: #E0DEDE;
+.themeLight .ViperITP-tools {
+    background: -webkit-gradient(linear, left top, left bottom, from(#f1f1f1), to(#dddcdc));
+    background: -moz-linear-gradient(top,  #f1f1f1,  #dddcdc);
+    padding: 0.5em 0.5em;
+/*     -moz-transition: padding 0.3s ease; */
+}
+
+.themeLight.ViperITP.subSectionVisible .ViperITP-tools {
+    padding-bottom: 0.7em;
+}
+
+.themeLight.ViperITP .ViperITP-subSectionWrapper {
+    background-color: #FFF;
+    box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.themeLight.ViperITP  .ViperITP-subSectionWrapper:before {
+    border-bottom-color: #FFF;
 }
