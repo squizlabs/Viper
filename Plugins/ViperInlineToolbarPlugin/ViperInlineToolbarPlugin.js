@@ -449,6 +449,7 @@ ViperInlineToolbarPlugin.prototype = {
     _updateInnerContainer: function(range, lineage)
     {
         dfx.empty(this._toolsContainer);
+        dfx.empty(this._subSectionContainer);
 
         if (this._currentLineageIndex === null) {
             this._setCurrentLineageIndex(lineage.length - 1);

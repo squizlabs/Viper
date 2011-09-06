@@ -277,7 +277,7 @@ ViperFormatPlugin.prototype = {
         if (node.nodeType === dfx.TEXT_NODE) {
             // If this is a text selection then dont show the tools.
             return false;
-        } else if (dfx.isBlockElement(node) === false) {
+        } else if (dfx.isBlockElement(node) === false && dfx.isTag(node, 'quote') === false) {
             return false;
         } else {
             switch (node.tagName.toLowerCase()) {
