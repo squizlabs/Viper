@@ -719,10 +719,16 @@ ViperDOMRange.prototype = {
             return null;
         }
 
-        if (endNode.nodeType === dfx.TEXT_NODE && range.endOffset !== 0) {
-            return null;
-        } else if (endNode.nextSibling) {
-            return null;
+        if (endNode.nodeType === dfx.TEXT_NODE) {
+            if (range.endOffset !== 0) {
+                if (range.endOffset === endNode.data.length
+                    && startNode.parentNode === endNode.parentNode
+                ) {
+                    return startNode.parentNode;
+                } else {
+                    return null;
+                }
+            }
         }
 
         var startParent = startNode;
