@@ -427,7 +427,7 @@ ViperInlineToolbarPlugin.prototype = {
         dfx.addEvent(parent, 'mousedown.ViperInlineToolbarPlugin', function() {
             // When clicked set the selection to the original selection.
             self._lineageClicked     = true;
-            self._setCurrentLineageIndex(self._lineage.length - 1);
+            self._setCurrentLineageIndex(lineage.length - 1);
 
             dfx.removeClass(linElems, 'selected');
             dfx.addClass(parent, 'selected');
