@@ -83,7 +83,7 @@ ViperInlineToolbarPlugin.prototype = {
         this._subSectionContainer = document.createElement('div');
         this._toolbar.appendChild(this._subSectionContainer);
 
-        dfx.addClass(this._toolbar, 'ViperITP');
+        dfx.addClass(this._toolbar, 'ViperITP themeDark');
         dfx.addClass(this._lineage, 'ViperITP-lineage');
         dfx.addClass(this._toolsContainer, 'ViperITP-tools');
         dfx.addClass(this._subSectionContainer, 'ViperITP-subSectionWrapper');
@@ -252,15 +252,31 @@ ViperInlineToolbarPlugin.prototype = {
             break;
 
             case 'li':
-                tagName = 'List Item';
+                tagName = 'Item';
             break;
 
             case 'ul':
-                tagName = 'Unordered List';
+                tagName = 'List';
             break;
 
             case 'ol':
-                tagName = 'Ordered List';
+                tagName = 'List';
+            break;
+
+            case 'td':
+                tagName = 'Cell';
+            break;
+
+            case 'tr':
+                tagName = 'Row';
+            break;
+
+            case 'th':
+                tagName = 'Header';
+            break;
+
+            case 'a':
+                tagName = 'Link';
             break;
 
             default:
@@ -329,7 +345,6 @@ ViperInlineToolbarPlugin.prototype = {
         dfx.setStyle(this._toolbar, 'width', 'auto');
         var toolbarWidth = dfx.getElementWidth(this._toolbar);
         dfx.removeClass(this._toolbar, 'calcWidth');
-
         dfx.setStyle(this._toolbar, 'width', toolbarWidth + 'px');
 
         if (verticalOnly !== true) {
@@ -387,7 +402,7 @@ ViperInlineToolbarPlugin.prototype = {
 
             (function(clickElem, selectionElem, index) {
                 // When clicked set the user selection to the selected element.
-                dfx.addEvent(clickElem, 'mousedown.ViperInlineToolbarPlugin', function() {
+                dfx.addEvent(clickElem, 'mousedown.ViperInlineToolbarPlugin', function(e) {
                     // We set the _lineageClicked to true here so that when the
                     // fireSelectionChanged is called we do not update the lineage again.
                     self._lineageClicked = true;
@@ -404,6 +419,8 @@ ViperInlineToolbarPlugin.prototype = {
 
                     // Update the position of the toolbar vertically only.
                     self._updatePosition(range, true);
+
+                    dfx.preventDefault(e);
 
                     return false;
                 });
@@ -424,7 +441,7 @@ ViperInlineToolbarPlugin.prototype = {
         linElems.push(parent);
         this._lineage.appendChild(parent);
 
-        dfx.addEvent(parent, 'mousedown.ViperInlineToolbarPlugin', function() {
+        dfx.addEvent(parent, 'mousedown.ViperInlineToolbarPlugin', function(e) {
             // When clicked set the selection to the original selection.
             self._lineageClicked     = true;
             self._setCurrentLineageIndex(lineage.length - 1);
@@ -435,6 +452,9 @@ ViperInlineToolbarPlugin.prototype = {
             ViperSelection.addRange(self._originalRange);
             viper.fireSelectionChanged(self._originalRange);
             self._updatePosition(self._originalRange, true);
+
+            dfx.preventDefault(e);
+
             return false;
         });
 
@@ -484,12 +504,15 @@ ViperInlineToolbarPlugin.prototype = {
 
         var parent        = null;
         var nodeSelection = range.getNodeSelection(range);
+
         if (nodeSelection) {
             parent = nodeSelection;
         } else {
             parent        = range.getCommonElement();
             var startNode = range.getStartNode();
-            lineage.push(startNode);
+            if (startNode.nodeType !== dfx.TEXT_NODE || dfx.isBlank(startNode.data) !== true) {
+                lineage.push(startNode);
+            }
         }
 
         var viperElement = this.viper.getViperElement();

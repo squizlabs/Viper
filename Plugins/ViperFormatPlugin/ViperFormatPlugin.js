@@ -34,7 +34,8 @@ function ViperFormatPlugin(viper)
         h6: 'Heading 6',
         p: 'Paragraph',
         pre: 'Preformatted',
-        address: 'Address'
+        address: 'Address',
+        quote: 'Quote'
     };
 
     this.toolbarPlugin = null;
@@ -284,6 +285,11 @@ ViperFormatPlugin.prototype = {
                 case 'li':
                 case 'ul':
                 case 'ol':
+                case 'table':
+                case 'tr':
+                case 'td':
+                case 'th':
+                case 'tbody':
                     return false;
                 break;
 
@@ -347,6 +353,15 @@ ViperFormatPlugin.prototype = {
         var s = this.styleTags;
         s.div = 1;
 
+        if (elemsBetween.length === 1) {
+            selectedNode = elemsBetween[0];
+            if (bookmark) {
+                dfx.remove(bookmark.start);
+                dfx.remove(bookmark.end);
+                bookmark = null;
+            }
+        }
+
         var self = this;
         dfx.foreach(elemsBetween, function(i) {
             var elem    = elemsBetween[i];
@@ -382,7 +397,9 @@ ViperFormatPlugin.prototype = {
                         var newElem = document.createElement(type);
                         self._addChangeTrackInfo(newElem);
                         self._moveChildElements(blockParent, newElem);
-                        blockParent.appendChild(newElem);
+                        dfx.insertBefore(blockParent, newElem);
+                        range.selectNode(newElem);
+                        ViperSelection.addRange(range);
                     }
                 });
             }//end if
