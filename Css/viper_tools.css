@@ -43,14 +43,16 @@
 /* Theme - Dark Grey */
 
 .themeDark .Viper-button {
-    background-color: #242323;
+    background-color: #dadade;
     border: none;
     box-shadow: 0 2px 2px rgba(0, 0, 0, 0.3), 0 1px 0 rgba(255, 255, 255, 0.9) inset;
     background: -webkit-gradient(linear, left top, left bottom, from(#e9e9eb), to(#c9c9d0));
     background: -moz-linear-gradient(top,  #e9e9eb,  #c9c9d0);
+/*     -ms-filter: "progid:DXImageTransform.Microsoft.gradient (GradientType=0, startColorstr=#e9e9eb, endColorstr=#c9c9d0)"; */
 }
 
 .themeDark .Viper-button:hover {
+    background: #c9c9cd;
     background: -webkit-gradient(linear, left top, left bottom, from(#d8d8da), to(#b8b8ca));
     background: -moz-linear-gradient(top,  #c8c8c9,  #a8a8b9);
     text-shadow: 0 1px 0 rgba(255,255,255,0.5);
@@ -65,18 +67,19 @@
     box-shadow: 0 0 0.2em rgba(0, 0, 0, 0.85) inset;
 }
 
+.themeDark .Viper-button.active,
+.themeDark .Viper-button.active:hover {
+/* .themeDark .Viper-button.active.selected, */
+/* .themeDark .Viper-button.active.selected:hover { */
+    background: #2d73d2;
+    background: -webkit-gradient(linear, left top, left bottom, from(#3987f2), to(#205caf));
+    background: -moz-linear-gradient(top,  #3987f2,  #205caf);
+}
+
 .themeDark .Viper-button.selected,
 .themeDark .Viper-button.selected:hover {
     background: #54535A;
     border-color: #555;
-}
-
-.themeDark .Viper-button.active,
-.themeDark .Viper-button.active:hover,
-.themeDark .Viper-button.active.selected,
-.themeDark .Viper-button.active.selected:hover {
-    background: -webkit-gradient(linear, left top, left bottom, from(#3987f2), to(#205caf));
-    background: -moz-linear-gradient(top,  #3987f2,  #205caf);
 }
 
 .themeDark .Viper-buttonGroup .Viper-button {
@@ -92,7 +95,7 @@
 /* Theme - Light Grey */
 
 .themeLight .Viper-button {
-    background-color: #e4e4e4;
+    background-color: #dadade;
     border: 1px solid #AAA;
     box-shadow: 0 1px 0 rgba(255,255,255,0.95) inset;
     background: -webkit-gradient(linear, left top, left bottom, from(#e9e9eb), to(#c9c9d0));
@@ -100,7 +103,7 @@
 }
 
 .themeLight .Viper-button:hover {
-    background-color: #d3d3d3;
+    background-color: #c9c9cd;
     background: -webkit-gradient(linear, left top, left bottom, from(#d8d8da), to(#b8b8c0));
     background: -moz-linear-gradient(top,  #d8d8da,  #b8b8c0);
 }

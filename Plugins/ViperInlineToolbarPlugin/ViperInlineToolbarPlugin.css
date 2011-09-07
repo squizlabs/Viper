@@ -29,7 +29,7 @@
     left: 50%;
     margin: -23px 0 0 -10px;
     border: 12px solid transparent;
-    border-bottom-color: #000;
+/*     border-bottom-color: #000; */
 }
 
 .ViperITP.calcWidth,
@@ -136,8 +136,10 @@
 }
 
 .themeDark .ViperITP-tools {
+    background: #919097;
     background: -webkit-gradient(linear, left top, left bottom, from(#919097), to(#727179));
     background: -moz-linear-gradient(top,  #919097,  #727179);
+/*     -ms-filter: "progid:DXImageTransform.Microsoft.gradient (GradientType=0, startColorstr=#919097, endColorstr=#727179)"; */
     border-top-color: #A2A1A8;
 }
 
@@ -174,7 +176,7 @@
     background-color: #E0DEDE;
     color: #424242;
     text-shadow: 0 1px 0 #FFF;
-    border-width: 1px 0 0;
+    border-width: 1px;
     border-color: #999;
     box-shadow: 0 2px 9px rgba(0, 0, 0, 0.8), 0 1px 0 rgba(255,255,255,0.4) inset;
 }
@@ -204,6 +206,7 @@
 }
 
 .themeLight .ViperITP-tools {
+    background: #e7e7e7;
     background: -webkit-gradient(linear, left top, left bottom, from(#f1f1f1), to(#dcdcdc));
     background: -moz-linear-gradient(top,  #f1f1f1,  #dcdcdc);
     padding: 0.5em 0.5em;
