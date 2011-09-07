@@ -640,6 +640,16 @@ background-color: #f9f8b1;
     display: inline;
 }
 
+#content table caption {
+    caption-side: top;
+    margin-bottom: 10px;
+    border-radius: 3px;
+    border: 1px solid #EAE3CC;
+    padding: 0.3em;
+    font-size: 0.9em;
+    background-color: #f4f1e5;
+}
+
 #content .tip {
     clear: both;
     background: #f0f8f9 url(http://manuals.matrix.squizsuite.net/__designs/matrix-library/icon-tip.png) 20px 50% no-repeat;
