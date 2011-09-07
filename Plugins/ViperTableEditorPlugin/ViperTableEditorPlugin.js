@@ -28,15 +28,11 @@ function ViperTableEditorPlugin(viper)
     this.activeCell    = null;
     this.vCellButtons  = null;
     this.hCellButtons  = null;
-    this._subToolbar   = null;
     this._lastNode     = null;
 
     // Table properties.
     this._currentTablePropView = 'cell';
     this._settingsWidgets      = {};
-
-    this.viper.ViperPluginManager.addKeyPressListener('TAB', this, 'handleTab');
-    this.viper.ViperPluginManager.addKeyPressListener('SHIFT+TAB', this, 'handleTab');
 
 }
 
@@ -54,23 +50,6 @@ ViperTableEditorPlugin.prototype = {
         this.toolbarPlugin = this.viper.ViperPluginManager.getPlugin('ViperToolbarPlugin');
         this.toolbarPlugin.addButton('TableEditor', 'table', 'Insert/Edit Table', function () {
             self.insertTable();
-        });
-
-        this.viper.ViperPluginManager.addKeyPressListener('DELETE', this, 'handleDelete');
-
-        dfx.removeEvent(document, 'click.TableEditorPlugin');
-        dfx.addEvent(document, 'click.TableEditorPlugin', function(e) {
-            if (self.viper.ViperPluginManager.getActivePlugin() === 'TableEditor') {
-                var target = dfx.getMouseEventTarget(e);
-                if (dfx.hasClass(target, 'ViperTableEditorPlugin-cellButton') !== true) {
-                    if (dfx.isChildOf(target, self._subToolbar) === false) {
-                        self.viper.ViperPluginManager.setActivePlugin(null);
-                        if (dfx.isChildOf(target, self.viper.element) === false) {
-                            self.viper.mouseDown(null, target);
-                        }
-                    }
-                }
-            }
         });
 
         this.viper.registerCallback('setHtml', 'TablePlugin', function(data) {
@@ -351,16 +330,6 @@ ViperTableEditorPlugin.prototype = {
 
         this.showVerticalCellButtons(coords);
         this.showHorizontalCellButtons(coords);
-
-        if (!this._subToolbar) {
-            this._setupSubToolbar();
-            this.updateSettings(cell);
-        } else {
-            var subToolbarPlugin = this.viper.ViperPluginManager.getPlugin('ViperSubToolbarPlugin');
-            if (subToolbarPlugin) {
-                subToolbarPlugin.showToolbar('TableEditor');
-            }
-        }
 
     },
 
@@ -1029,9 +998,7 @@ ViperTableEditorPlugin.prototype = {
     isPluginElement: function(elem)
     {
         if (dfx.hasClass(elem, 'ViperTableEditorPlugin-cellButton') !== true) {
-            if (dfx.isChildOf(elem, self._subToolbar) === false) {
-                return false;
-            }
+            return false;
         }
 
         return true;
@@ -1044,603 +1011,313 @@ ViperTableEditorPlugin.prototype = {
 
     },
 
-    _setupSubToolbar: function()
+    setTableHeaders: function(table)
     {
-        var subToolbarPlugin = this.viper.ViperPluginManager.getPlugin('ViperSubToolbarPlugin');
-        if (!subToolbarPlugin) {
-            return;
-        }
-
-        var toolbar  = subToolbarPlugin.createToolBar('TableEditor');
-        var c        = 'ViperTableEditor-stb';
-        var contents = '<div class="' + c + '-left"></div>';
-        contents    += '<div class="' + c + '-right"></div>';
-        dfx.setHtml(toolbar, contents);
-        this._subToolbar = toolbar;
-
-        var self = this;
-        this.includeWidgets(['Button', 'RadioButton', 'SpinButton', 'TextField', 'Select'], function() {
-            var changePropTypeBtn = self.createWidget(c + '-switchToolbar', 'Button');
-            changePropTypeBtn.setName('Table Properties');
-            changePropTypeBtn.setButtonIconClassName(c + '-switch');
-            changePropTypeBtn.create(function(changePropTypeBtnEl) {
-                dfx.addClass(changePropTypeBtn.domElem, c + '-tableProperties');
-                changePropTypeBtn.setMinWidth('110px');
-                dfx.getClass(c + '-right', toolbar)[0].appendChild(changePropTypeBtnEl);
-            });
-
-            self._currentTablePropView = 'cell';
-
-            changePropTypeBtn.addClickEvent(function() {
-                if (self._currentTablePropView === 'table') {
-                    changePropTypeBtn.setName('Table Properties');
-                    dfx.removeClass(changePropTypeBtn.domElem, c + '-cellProperties');
-                    dfx.addClass(changePropTypeBtn.domElem, c + '-tableProperties');
-                    self._showProperties('cell');
-                } else {
-                    dfx.removeClass(changePropTypeBtn.domElem, c + '-tableProperties');
-                    dfx.addClass(changePropTypeBtn.domElem, c + '-cellProperties');
-                    changePropTypeBtn.setName('Cell Properties');
-                    self._showProperties('table');
-                }
-            });
-
-            self._setupTableProperties(function(tablePropertiesEl) {
-                self._setupCellProperties(function(cellPropertiesEl) {
-                    dfx.getClass(c + '-left', toolbar)[0].appendChild(tablePropertiesEl);
-                    dfx.getClass(c + '-left', toolbar)[0].appendChild(cellPropertiesEl);
-                    self._showProperties(self._currentTablePropView);
-                    subToolbarPlugin.showToolbar('TableEditor');
-                });
-            });
-        });
-
-    },
-
-    _setupTableProperties: function(callback)
-    {
-        var props = {
-            tableBorder: 'Table Border',
-            cellPadding: 'Cell Padding',
-            cellSpacing: 'Cell Spacing'
+        var cellHeadings  = [];
+        var usedHeaderids = [];
+        var rowCount      = 1
+        var headings      = {
+            col: [],
+            row: [],
         };
 
-        this._settingsWidgets.table = {};
+        var tableRows = dfx.getTag('tr', table);
+        for (var k = 0; k < tableRows.length; k++) {
+            var cellCount = 1;
+            var row       = tableRows[k];
 
-        var self = this;
-        var c    = 'ViperTableEditor-stb';
-        var div  = document.createElement('div');
-        dfx.addClass(div, c + '-propertiesWrapper');
-        dfx.addClass(div, c + '-tableProps');
+            for (var j = 0; j < row.childNodes.length; j++) {
+                var cell = row.childNodes[j];
 
-        var content = '';
-        content    += '<div class="' + c + '-propContainer" id="' + c + '-propContainer-tableWidth"><label>Table Width</label>';
-        content    += '<div class="' + c + '-propWrapper ' + c + '-tableWidth-wrapper"></div></div>';
-
-        dfx.foreach(props, function(propid) {
-            content += '<div class="' + c + '-propContainer" id="' + c + '-propContainer-' + propid + '"><label>' + props[propid] + '</label>';
-            content += '<div class="' + c + '-propWrapper ' + c + '-' + propid + '-wrapper"></div></div>';
-        });
-
-        dfx.setHtml(div, content);
-
-        // Table width.
-        var tableWidth     = this.createWidget(c + '-tableWidth', 'TextField');
-        var tableWidthType = this.createWidget(c + '-tableWidthType', 'Select');
-        tableWidthType.addItems({
-            px: 'px',
-            pc: '%'
-        });
-
-        tableWidthType.setSelectedEventValueType('value');
-        tableWidthType.addItemSelectedEvent(function(type) {
-            self._changeTableSettingValue('widthType', type);
-        });
-
-        this._settingsWidgets.table.widthType = tableWidthType;
-        this._settingsWidgets.table.width     = tableWidth;
-
-        tableWidth.create(function(tableWidthEl) {
-            tableWidth.setWidth(25);
-            var t = null;
-            dfx.addEvent(tableWidth.domEl, 'keyup', function() {
-                if (t) {
-                    clearTimeout(t);
-                    t = null;
+                // Skip text nodes.
+                if (cell.nodeType === dfx.TEXT_NODE) {
+                    continue;
                 }
 
-                t = setTimeout(function() {
-                    var width = parseInt(tableWidth.getValue());
-                    self._changeTableSettingValue('width', width);
-                }, 500);
-            });
-
-            self._makeOptionEditable(tableWidth.domEl);
-            var parent = dfx.getClass(c + '-tableWidth-wrapper', div)[0];
-            parent.appendChild(tableWidthEl);
-            tableWidthType.create(function(tableWidthTypeEl) {
-                dfx.insertAfter(parent, tableWidthTypeEl);
-            });
-        });
-
-        dfx.foreach(props, function(propid) {
-            (function(propid) {
-                var widgetid = c + '-' + propid;
-                var widget   = self.createWidget(widgetid, 'SpinButton', 0);
-                widget.setInitialValue(0);
-                widget.allowEmptyValue(true);
-                widget.create(function(el) {
-                    self._makeOptionEditable(widget.domEl);
-                    dfx.getClass(widgetid + '-wrapper', div)[0].appendChild(el);
-                });
-
-                widget.addOnChangeEvent(function(val) {
-                    self._changeTableSettingValue(propid, val);
-                });
-
-                self._settingsWidgets.table[propid] = widget;
-            }) (propid);
-        });
-
-        callback.call(this, div);
-
-    },
-
-    _makeOptionEditable: function(elem)
-    {
-        /*
-         // Options with textbox needs to call this method so that Viper
-         // will ignore keypress events. This also removed the viper caret.
-         var self = this;
-         dfx.addEvent(elem, 'focus', function() {
-            ViperPluginManager.setActivePlugin('TableEditor', false);
-         });
-
-         dfx.addEvent(elem, 'blur', function() {
-            ViperPluginManager.setActivePlugin(null);
-         });
-        */
-
-    },
-
-    _setupCellProperties: function(callback)
-    {
-        this._settingsWidgets.cell = {};
-
-        var self = this;
-        var c    = 'ViperTableEditor-stb';
-        var div  = document.createElement('div');
-        dfx.addClass(div, c + '-propertiesWrapper');
-        dfx.addClass(div, c + '-cellProps');
-
-        var content = '<div class="' + c + '-propContainer" id="' + c + '-propContainer-colWidth"><label>Column Width</label>';
-        content    += '<div class="' + c + '-propWrapper ' + c + '-columnWidth-wrapper"></div>';
-        content    += '<div class="' + c + '-propWrapper ' + c + '-columnWidthSel-wrapper"></div></div>';
-        content    += '<div class="' + c + '-optionListWrapper"></div>';
-        dfx.setHtml(div, content);
-
-        var colWidthText = this.createWidget(c + '-colWidth-txt', 'TextField');
-        colWidthText.create(function(colWidthTextEl) {
-            var t = null;
-            dfx.addEvent(colWidthText.domEl, 'keyup', function() {
-                if (t) {
-                    clearTimeout(t);
-                    t = null;
+                // Find the real cell number, taking rowspans into account.
+                while (dfx.isset(cellHeadings[rowCount]) === true
+                    && dfx.isset(cellHeadings[rowCount][cellCount]) === true
+                ) {
+                    cellCount++;
                 }
 
-                t = setTimeout(function() {
-                    var width = parseInt(colWidthText.getValue());
-                    self._changeSettingValue('width', width);
-                }, 500);
-            });
+                // Determine colspan and rowspan for the cell. If nothing is set,
+                // assume a value of 1. These come out as string values but we turn them
+                // into integers for easier comparison and addition.
+                var colspan = cell.getAttribute('colspan') || 1;
+                var rowspan = cell.getAttribute('rowspan') || 1;
 
-            self._makeOptionEditable(colWidthText.domEl);
-            colWidthText.setWidth(25);
-            dfx.getClass(c + '-columnWidth-wrapper', div)[0].appendChild(colWidthTextEl);
-        });
+                if (dfx.isTag(cell, 'th') === true && dfx.isBlank(dfx.getHtml(cell)) === false) {
+                    // This is a table header, so figure out an ID-based representation
+                    // of the cell content. We'll use this later as a basis for the ID attribute
+                    // although it may be prefixed with the ID of another header to make it unique.
 
-        var colWidthSel = this.createWidget(c + '-colWidth-sel', 'Select');
-        colWidthSel.addItems({
-            px: 'px',
-            pc: '%'
-        });
+                    var cellid = 'r' + rowCount + 'c' + cellCount;
 
-        colWidthSel.setSelectedEventValueType('value');
-        colWidthSel.addItemSelectedEvent(function(type) {
-            self._changeSettingValue('widthType', type);
-        });
+                    if (rowspan > 1) {
+                        if (dfx.isset(headings.row[rowCount]) === true
+                            && headings.row[rowCount].rowspan <= rowspan
+                        ) {
+                            // This heading is replacing a heading set higher up
+                            // so we need to remove the higher heading from the IDs so
+                            // we can replace it with our own later on.
+                            var oldidLen = headings.row[rowCount].id.length;
+                            for (var i = 1; i < rowspan; i++) {
+                                var oldid = headings.row[(rowCount + i)].id;
+                                oldid     = oldid.substr(0, ((oldidLen + 1) * -1));
+                                headings.row[(rowCount + i)].id = dfx.trim(oldid);
+                            }
 
-        this._settingsWidgets.cell.widthType = colWidthSel;
-        this._settingsWidgets.cell.width     = colWidthText;
+                            headings.row[rowCount].id = '';
+                        }//end if
 
-        colWidthSel.create(function(colWidthSelEl) {
-            dfx.getClass(c + '-columnWidthSel-wrapper', div)[0].appendChild(colWidthSelEl);
-        });
+                        for (var i = 0; i < rowspan; i++) {
+                            if (dfx.isset(headings.row[(rowCount + i)]) === false) {
+                                headings.row[(rowCount + i)] = {
+                                    id: '',
+                                    rowspan: rowspan
+                                };
+                            } else if (headings.row[(rowCount + i)].id !== '') {
+                                headings.row[(rowCount + i)].id += '-';
+                            }
 
-        // Cell Appearance props.
-        var optsList = this.viper.ViperPluginManager.getPlugin('ViperSubToolbarPlugin').createOptionsList('Appearance');
-        dfx.addClass(optsList.main, c + '-optionList');
-        (dfx.getClass(c + '-optionListWrapper', div)[0]).appendChild(optsList.main);
-        this._createOptionList(optsList.contentEl);
+                            headings.row[(rowCount + i)].id      += cellid;
+                            headings.row[(rowCount + i)].rowspan  = rowspan;
 
-        callback.call(this, div);
+                            cellHeadings[(rowCount + i)][cellCount] = {
+                                id: headings.row[(rowCount + i)].id,
+                                row: (rowCount + i)
+                            };
+                        }//end for
 
-    },
-
-    _createOptionList: function(parent)
-    {
-        var div  = null;
-        var self = this;
-        var opts = {
-            tableHeader: 'Table Header',
-            noTextWrap: 'No Text Wrap'
-        };
-
-        // Vert Align.
-        div       = document.createElement('div');
-        var label = document.createElement('label');
-        parent.appendChild(div);
-        dfx.setHtml(label, 'Align');
-        div.appendChild(label);
-        dfx.addClass(div, 'ViperTableEditor-stb-optItem');
-        div.id = 'ViperTableEditor-opts-vert';
-        dfx.addClass(div, 'first');
-
-        var alignType = {
-            top: 'Align to top',
-            middle: 'Align to middle',
-            bottom: 'Align to bottom'
-        };
-
-        this._settingsWidgets.cell.valign = div;
-        dfx.foreach(alignType, function(i) {
-            var alignDiv = document.createElement('div');
-            dfx.attr(alignDiv, 'title', alignType[i]);
-            dfx.addClass(alignDiv, 'ViperTableEditor-stb-align');
-            dfx.addClass(alignDiv, 'ViperTableEditor-stb-align-' + i);
-            (function(el, alignType) {
-                dfx.addEvent(el, 'click', function() {
-                    dfx.removeClass(dfx.getClass('ViperTableEditor-stb-align', el.parentNode), 'active');
-                    dfx.addClass(el, 'active');
-                    self._changeSettingValue('valign', alignType);
-                });
-            }) (alignDiv, i);
-
-            div.appendChild(alignDiv);
-        });
-
-        dfx.foreach(opts, function(i) {
-            div       = document.createElement('div');
-            var label = document.createElement('label');
-            parent.appendChild(div);
-            dfx.setHtml(label, opts[i]);
-            div.appendChild(label);
-            dfx.addClass(div, 'ViperTableEditor-stb-optItem');
-            div.id = 'ViperTableEditor-opts-' + i;
-
-            var radioBtn = self.createWidget(null, 'RadioButton', null, false);
-            self._settingsWidgets.cell[i] = radioBtn;
-
-            radioBtn.create(function(radioBtnEl) {
-                dfx.attr(label, 'for', radioBtn.id);
-                div.appendChild(radioBtnEl);
-                radioBtn._addEvents();
-            });
-
-            (function(radioBtnWidget, type) {
-                radioBtnWidget.addCheckedEvent(function(checked) {
-                    self._changeSettingValue(type, checked);
-                });
-            }) (radioBtn, i);
-        });
-
-        if (div) {
-            dfx.addClass(div, 'last');
-        }
-
-    },
-
-    _showProperties: function(type)
-    {
-        if (!this._subToolbar) {
-            return;
-        }
-
-        var c = 'ViperTableEditor-stb';
-        dfx.removeClass(dfx.getClass(c + '-propertiesWrapper', this._subToolbar), 'show');
-        dfx.addClass(dfx.getClass(c + '-' + type + 'Props', this._subToolbar)[0], 'show');
-
-        this._currentTablePropView = type;
-
-        this.viper.ViperPluginManager.getPlugin('ViperSubToolbarPlugin').showToolbar('TableEditor');
-
-    },
-
-    _changeTableSettingValue: function(type, value)
-    {
-        if (!this.activeCell || !type) {
-            return;
-        }
-
-        var table = this.getCellTable(this.activeCell);
-        if (!table) {
-            return;
-        }
-
-        var changed = false;
-        switch (type) {
-            case 'tableBorder':
-                if (parseInt(dfx.attr(table, 'border')) !== parseInt(value)) {
-                    dfx.attr(table, 'border', value);
-                    changed = true;
-                }
-            break;
-
-            case 'width':
-                if (!value) {
-                    value = '';
-                } else {
-                    var widthType = this._settingsWidgets.table.widthType.getValue();
-                    if (widthType === 'pc') {
-                        value += '%';
+                        cellid = headings.row[rowCount].id;
                     } else {
-                        value += 'px';
-                    }
-                }
+                        if (dfx.isset(headings.row[rowCount]) === true
+                            && dfx.isset(headings.row[rowCount].id) === true
+                        ) {
+                            cellid = headings.row[rowCount].id + '-' + cellid;
+                        }
+                    }//end if
 
-                if (dfx.setStyle(table, 'width') !== value) {
-                    dfx.setStyle(table, 'width', value);
-                    changed = true;
-                }
-            break;
+                    if (colspan > 1) {
+                        if (dfx.isset(headings.col[cellCount]) === true
+                            && headings.col[cellCount].colspan <= colspan
+                        ) {
+                            // This heading is replacing a heading set higher up
+                            // so we need to remove the higher heading from the IDs so
+                            // we can replace it with our own later on.
+                            var oldidLen = headings.col[cellCount].id.length;
+                            for (var i = 1; i < colspan; i++) {
+                                var oldid = headings.col[(cellCount + i)].id
+                                var newid = oldid.substr(0, ((oldidLen + 1) * -1));
+                                headings.col[(cellCount + i)].id = dfx.trim(newid);
 
-            case 'widthType':
-                var width = parseInt(dfx.getStyle(table, 'width'));
-                if (width) {
-                    if (value === 'pc') {
-                        value = '%';
-                    }
+                                var oldHeading = cellHeadings[(rowCount - 1)][(cellCount + i)].id;
+                                var newHeading = oldHeading.replace(oldid, '');
+                                cellHeadings[(rowCount - 1)][(cellCount + i)].id = newHeading;
+                            }
 
-                    if (dfx.setStyle(table, 'width') !== (width + value)) {
-                        dfx.setStyle(table, 'width', width + value);
-                        changed = true;
-                    }
-                }
-            break;
+                            headings.col[cellCount].id = '';
+                        }//end if
 
-            default:
-                value = parseInt(value);
-                if (isNaN(value) === true) {
-                    value = '';
-                }
+                        for (var i = 0; i < colspan; i++) {
+                            if (dfx.isset(headings.col[(cellCount + i)]) === false) {
+                                headings.col[(cellCount + i)] = {
+                                    id: '',
+                                    colspan: colspan
+                                };
+                            } else if (headings.col[(cellCount + i)].id !== '') {
+                                headings.col[(cellCount + i)].id += '-';
+                            }
 
-                var currVal = parseInt(dfx.attr(table, type));
-                if (isNaN(currVal) === true) {
-                    currVal = '';
-                }
+                            headings.col[(cellCount + i)].id     += cellid;
+                            headings.col[(cellCount + i)].colspan = colspan;
 
-                if (currVal !== value) {
-                    dfx.attr(table, type, value);
-                    changed = true;
-                }
-            break;
-        }//end switch
+                            if (dfx.isset(cellHeadings[rowCount]) === false) {
+                                cellHeadings[rowCount] = [];
+                            }
 
-        if (changed === true) {
-            // Update button locations.
-            this._updatecellButtonPositions(this.activeCell);
-            this._nodesUpdated(true);
-        }
+                            cellHeadings[rowCount][(cellCount + i)] = {
+                                id: headings.col[(cellCount + i)].id,
+                                row: rowCount
+                            };
 
-    },
+                            if (dfx.isset(cellHeadings[(rowCount - 1)][(cellCount + i)]) === true) {
+                                cellHeadings[rowCount][(cellCount + i)].id = cellHeadings[(rowCount - 1)][(cellCount + i)].id + ' ' + cellHeadings[rowCount][(cellCount + i)].id;
+                            }
+                        }//end for
 
-    _changeSettingValue: function(type, value)
-    {
-        if (!this.activeCell || !type) {
-            return;
-        }
+                        cellid = headings.col[cellCount].id;
+                    } else {
+                        if (dfx.isset(headings.col[cellCount]) === true
+                            && dfx.isset(headings.col[cellCount].id) === true
+                        ) {
+                            cellid = headings.col[cellCount].id + '-' + cellid;
+                        }
 
-        var changed = false;
-        if (type === 'tableHeader') {
-            var toType = 'th';
-            if (value !== true) {
-                toType = 'td';
-            }
+                        if (dfx.isset(cellHeadings[rowCount]) === false) {
+                            cellHeadings[rowCount] = [];
+                        }
 
-            if (dfx.isTag(this.activeCell, toType) === true) {
-                // Nothing to do..
-                return;
-            }
+                        if (dfx.isset(cellHeadings[rowCount][cellCount]) === false) {
+                            cellHeadings[rowCount][cellCount] = {
+                                id: cellid,
+                                row: rowCount
+                            };
+                        }
+                    }//end if
 
-            var newEl = document.createElement(toType);
-            var clone = this.activeCell.cloneNode(true);
-            while (clone.firstChild) {
-                newEl.appendChild(clone.firstChild);
-            }
-
-            // Copy width and white-space styles to the new element.
-            var whiteSpace = dfx.getStyle(clone, 'white-space');
-            if (whiteSpace === 'nowrap') {
-                dfx.setStyle(newEl, 'white-space', 'nowrap');
-            }
-
-            // Copy valign.
-            var valign = dfx.getStyle(clone, 'vertical-align');
-            if (valign) {
-                dfx.setStyle(newEl, 'vertical-align', valign);
-            }
-
-            var width = dfx.getStyle(clone, 'width');
-            if (width) {
-                dfx.setStyle(newEl, 'width', width);
-            }
-
-            dfx.insertBefore(this.activeCell, newEl);
-            dfx.remove(this.activeCell);
-            this.setActiveCell(newEl);
-            changed = true;
-            this.moveCaretToCell(this.activeCell);
-        } else if (type === 'noTextWrap') {
-            var style = 'normal';
-            if (value === true) {
-                style = 'nowrap';
-            }
-
-            if (dfx.getStyle(this.activeCell, 'white-space') !== style) {
-                dfx.setStyle(this.activeCell, 'white-space', style);
-                changed = true;
-                this.moveCaretToCell(this.activeCell);
-            }
-        } else if (type === 'width') {
-            if (!value) {
-                value = '';
-            } else {
-                var widthType = this._settingsWidgets.cell.widthType.getValue();
-                if (widthType === 'pc') {
-                    value += '%';
+                    cell.setAttribute('id', cellid);
+                    usedHeaderids.push(cellid);
                 } else {
-                    value += 'px';
-                }
-            }
+                    // Copy the headings down from the column above.
+                    if (rowCount > 1) {
+                        for (var i = 0; i < colspan; i++) {
+                            cellHeadings[rowCount][(cellCount + i)] = cellHeadings[(rowCount - 1)][(cellCount + i)];
+                        }
+                    } else {
+                        for (var i = 0; i < colspan; i++) {
+                            if (dfx.isset(cellHeadings[rowCount]) === false) {
+                                cellHeadings[rowCount] = [];
+                            }
 
-            if (dfx.getStyle(this.activeCell, 'width') !== value) {
-                dfx.setStyle(this.activeCell, 'width', value);
-                changed = true;
-            }
-        } else if (type === 'widthType') {
-            var width = parseInt(dfx.getStyle(this.activeCell, 'width'));
-            if (width) {
-                if (value === 'pc') {
-                    value = '%';
-                }
+                            cellHeadings[rowCount][(cellCount + i)] = {
+                                id: '#td',
+                                row: rowCount
+                            };
+                        }
+                    }
 
-                if (dfx.getStyle(this.activeCell, 'width') !== (width + value)) {
-                    dfx.setStyle(this.activeCell, 'width', width + value);
-                    changed = true;
-                }
-            }
-        } else if (type === 'valign') {
-            if (dfx.getStyle(this.activeCell, 'vertical-align') !== value) {
-                dfx.setStyle(this.activeCell, 'vertical-align', value);
-                changed = true;
-            }
-        }//end if
+                    // TODO: Dont do this if it has headers attribute.
+                    if (dfx.isBlank(dfx.getHtml(cell)) === false) {
+                        var headers = cellHeadings[rowCount][cellCount].id;
+                        for (var i = 1; i < cellCount; i++) {
+                            // Skip column headers. We only want to use our own column header.
+                            if (cellHeadings[rowCount][i].row !== rowCount) {
+                                continue;
+                            }
 
-        if (changed === true) {
-            // Update button locations.
-            this._updatecellButtonPositions(this.activeCell);
-            this._nodesUpdated(true);
+                            headers += ' ' + cellHeadings[rowCount][i].id;
+                        }
+
+                        var headerids = [];
+
+                        headers = headers.split(' ');
+                        var headersLen = headers.length;
+                        for (var i = 0; i < headersLen; i++) {
+                            var header = headers[i];
+                            var subHeaders = header.split('-');
+                            var numHeaders = subHeaders.length;
+                            var lastHeader = '';
+                            for (var m = 0; m < numHeaders; m++) {
+                                var subHeader = subHeaders.shift();
+                                if (lastHeader === '') {
+                                    lastHeader = subHeader;
+                                } else {
+                                    lastHeader += '-' + subHeader;
+                                }
+
+                                headerids.push(lastHeader);
+                            }
+                        }
+
+                        headerids = this.arrayUnique(headerids);
+                        headerids = this.arrayIntersect(headerids, usedHeaderids);
+                        cell.setAttribute('headers', headerids.join(' '));
+                    }//end if
+
+                    for (var i = 0; i < rowspan; i++) {
+                        for (var m = 0; m < colspan; m++) {
+                            cellHeadings[(rowCount + i)][(cellCount + m)] = cellHeadings[rowCount][(cellCount + m)];
+                        }
+                    }
+                }//end if
+
+                cellCount += colspan;
+            }//end for
+
+            rowCount++;
+        }//end for
+    },
+
+    getHeadersContent: function(element)
+    {
+        var headers = element.getAttribute('headers');
+        if (!headers) {
+            return '';
         }
+
+        var parts   = headers.split(' ');
+        var content = [];
+        for (var i = 0; i < parts.length; i++) {
+            var part = parts[i];
+
+            content.push(dfx.getHtml(dfx.getId(part)));
+        }
+
+        content.push(dfx.getHtml(element));
+        content = content.join(' ');
+
+        return content;
 
     },
 
-    // Updates the setting values on sub toolbar when a table cell is picked.
-    updateSettings: function(cell)
+    getCellContent: function (table, row, column)
     {
-        if (!cell) {
-            cell = this.activeCell;
+        var rows = dfx.getTag('tr', table);
+        if (!rows[row]) {
+            return null;
         }
 
-        if (!cell) {
-            return;
+        var rowElem = rows[row];
+
+        var cols = dfx.getTag(['td', 'th'], rowElem);
+        if (!cols[column]) {
+            return null;
         }
 
-        // Turn on/off cell header setting.
-        if (this._settingsWidgets.cell && this._settingsWidgets.cell.tableHeader) {
-            if (dfx.isTag(cell, 'th') === true) {
-                this._settingsWidgets.cell.tableHeader.check();
-            } else {
-                this._settingsWidgets.cell.tableHeader.uncheck();
+        return dfx.getHtml(cols[column]);
+
+    },
+
+    arrayUnique: function(array)
+    {
+        var tmp    = {};
+        var unique = [];
+        var count  = array.length;
+
+        for (var i = 0; i < count; i++) {
+            tmp[array[i]] = array[i];
+        }
+
+        for (var item in tmp) {
+            unique.push(tmp[item]);
+        }
+
+        return unique;
+
+    },
+
+    arrayIntersect: function(array1, array2)
+    {
+        var tmp    = {};
+        var unique = [];
+        var count  = array2.length;
+
+        for (var i = 0; i < count; i++) {
+            tmp[array2[i]] = array2[i];
+        }
+
+        count = array1.length;
+        for (var i = count; i >= 0; i--) {
+            if (dfx.isset(tmp[array1[i]]) === false) {
+                dfx.unset(array1, i);
             }
         }
 
-        // Turn on/off cell no-text-wrap setting.
-        if (this._settingsWidgets.cell && this._settingsWidgets.cell.noTextWrap) {
-            if (dfx.getStyle(cell, 'white-space') === 'nowrap') {
-                this._settingsWidgets.cell.noTextWrap.check();
-            } else {
-                this._settingsWidgets.cell.noTextWrap.uncheck();
-            }
-        }
-
-        if (this._settingsWidgets.cell && this._settingsWidgets.cell.valign) {
-            var val  = dfx.getStyle(cell, 'vertical-align');
-            var btns = dfx.getClass('ViperTableEditor-stb-align', this._settingsWidgets.cell.valign);
-            dfx.removeClass(btns, 'active');
-
-            if (val) {
-                dfx.addClass(dfx.getClass('ViperTableEditor-stb-align-' + val, this._settingsWidgets.cell.valign), 'active');
-            }
-        }
-
-        // Width and withd type.
-        if (this._settingsWidgets.cell && this._settingsWidgets.cell.width) {
-            // Note: Not using dfx.getStyle since we need the actual CSS style
-            // and not the element width even if CSS width is not set.
-            var widthStyle = cell.style.width;
-            var width      = parseInt(widthStyle);
-            this._settingsWidgets.cell.width.setValue(width);
-
-            // Update the width type.
-            var widthType = 'px';
-            if (this._settingsWidgets.cell.widthType) {
-                if (widthStyle.indexOf('%') > 0) {
-                    widthType = 'pc';
-                }
-            }
-
-            this._settingsWidgets.cell.widthType.setValue(widthType, true);
-        }//end if
-
-        // Table properties.
-        var table = this.getCellTable(cell);
-        if (this._settingsWidgets.table && table) {
-            if (this._settingsWidgets.table.tableBorder) {
-                var val = NaN;
-                if (dfx.attr(table, 'border') !== 'undefined') {
-                    val = parseInt(dfx.attr(table, 'border'));
-                }
-
-                this._settingsWidgets.table.tableBorder.setValue(val);
-            }
-
-            if (this._settingsWidgets.table.cellPadding) {
-                var val = NaN;
-                if (dfx.attr(table, 'cellpadding') !== 'undefined') {
-                    val = parseInt(dfx.attr(table, 'cellpadding'));
-                }
-
-                this._settingsWidgets.table.cellPadding.setValue(val);
-            }
-
-            if (this._settingsWidgets.table.cellSpacing) {
-                var val = NaN;
-                if (dfx.attr(table, 'cellspacing') !== 'undefined') {
-                    val = parseInt(dfx.attr(table, 'cellspacing'));
-                }
-
-                this._settingsWidgets.table.cellSpacing.setValue(val);
-            }
-
-            if (this._settingsWidgets.table.width) {
-                // Note: Not using dfx.getStyle since we need the actual CSS style
-                // and not the element width even if CSS width is not set.
-                var widthStyle = table.style.width;
-                var width      = parseInt(widthStyle);
-                this._settingsWidgets.table.width.setValue(width);
-
-                // Update the width type.
-                var widthType = 'px';
-                if (this._settingsWidgets.table.widthType) {
-                    if (widthStyle.indexOf('%') > 0) {
-                        widthType = 'pc';
-                    }
-                }
-
-                this._settingsWidgets.table.widthType.setValue(widthType, true);
-            }//end if
-        }//end if
+        return array1;
 
     }
+
 
 };
