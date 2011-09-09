@@ -1,10 +1,7 @@
 .ViperTEP-cellToolsIcon {
     position: absolute;
-    background-color: #CCC;
-    border: 1px solid #666;
-    box-shadow: 0 0 5px #666;
-    border-radius: 15px;
-    width: 25px;
-    height: 25px;
+    background: url(table-icon.png) no-repeat;
+    width: 42px;
+    height: 47px;
     z-index: 100;
 }

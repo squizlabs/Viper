@@ -64,6 +64,7 @@ ViperTableEditorPlugin.prototype = {
         });
 
         this.viper.registerCallback('Viper:selectionChanged', 'ViperTableEditorPlugin', function(range) {
+            self.hideToolbar();
             var cell = self._getRangeCellElement(range);
             if (cell) {
                 // Show cell Tools.
@@ -73,36 +74,7 @@ ViperTableEditorPlugin.prototype = {
 
         this._initChangeTrackerCallbacks();
 
-    },
-
-    _getRangeCellElement: function(range)
-    {
-        var commonElement = range.getCommonElement();
-        var cellElement   = null;
-
-        if (dfx.isTag(commonElement, 'td') === false
-            && dfx.isTag(commonElement, 'th') === false
-        ) {
-            // Check if any of the parents td or th.
-            var parents = dfx.getParents(commonElement, null, this.viper.getViperElement());
-            var plen    = parents.length;
-            for (var i = 0; i < plen; i++) {
-                if (dfx.isTag(parents[i], 'td') === true
-                    || dfx.isTag(parents[i], 'th') === true
-                ) {
-                    cellElement = parents[i];
-                    break;
-                }
-            }
-        } else {
-            cellElement = commonElement;
-        }
-
-        if (!cellElement) {
-            return false;
-        }
-
-        return cellElement;
+        this._createToolbar();
 
     },
 
@@ -124,110 +96,379 @@ ViperTableEditorPlugin.prototype = {
         dfx.addClass(overlay, 'ViperTEP-cellToolsIcon');
 
         var cellCoords   = dfx.getBoundingRectangle(cell);
-        var overlayWidth = 25;
+        var overlayWidth = 42;
 
         dfx.setStyle(overlay, 'top', cellCoords.y2 + 5 + 'px');
         dfx.setStyle(overlay, 'left', cellCoords.x1 + ((cellCoords.x2 - cellCoords.x1) / 2) - (overlayWidth / 2) + 'px');
 
         document.body.appendChild(overlay);
 
-        //var inlineToolbarPlugin = this.viper.ViperPluginManager.getPlugin('ViperInlineToolbarPlugin');
         var self = this;
         dfx.addEvent(overlay, 'click', function() {
             dfx.remove(overlay);
             var range = self.viper.getCurrentRange();
-            range.selectNode(cell);
+            range.collapse(true);
             ViperSelection.addRange(range);
-            self.viper.fireSelectionChanged();
+            self.showTableTools(cell);
+            //self.viper.fireSelectionChanged();
         });
 
     },
 
-    isTableCell: function(elem)
+    showTableTools: function(cell)
     {
-        if (!elem) {
+        this.setActiveCell(cell);
+        this.updateToolbar(cell);
+
+    },
+
+    /**
+     * Creates the inline toolbar.
+     *
+     * The toolbar is added to the BODY element.
+     */
+    _createToolbar: function()
+    {
+        var main      = document.createElement('div');
+        this._toolbar = main;
+
+        this._lineage = document.createElement('ul');
+        this._toolbar.appendChild(this._lineage);
+
+        this._toolsContainer = document.createElement('div');
+        this._toolbar.appendChild(this._toolsContainer);
+
+        this._subSectionContainer = document.createElement('div');
+        this._toolbar.appendChild(this._subSectionContainer);
+
+        dfx.addClass(this._toolbar, 'ViperITP themeDark');
+        dfx.addClass(this._lineage, 'ViperITP-lineage');
+        dfx.addClass(this._toolsContainer, 'ViperITP-tools');
+        dfx.addClass(this._subSectionContainer, 'ViperITP-subSectionWrapper');
+
+        document.body.appendChild(this._toolbar);
+
+    },
+
+    /**
+     * Creates a button group.
+     *
+     * @param {string} customClass Custom class to apply to the group.
+     *
+     * @return {DOMElement} The button group element.
+     */
+    createButtonGroup: function(customClass)
+    {
+        return this._toolsContainer.appendChild(ViperTools.createButtonGroup(customClass));
+
+    },
+
+    /**
+     * Creates a toolbar button.
+     *
+     * @param {string}     content        The content of the button.
+     * @param {string}     isActive       True if the button is active.
+     * @param {string}     customClass    Class to add to the button for extra styling.
+     * @param {function}   clickAction    The function to call when the button is clicked.
+     * @param {DOMElement} groupElement   The group element that was created by createButtonGroup.
+     * @param {DOMElement} subSection     The sub section element see createSubSection.
+     * @param {boolean}    showSubSection If true then sub section will be visible.
+     *                                    If another button later on also has this set to true
+     *                                    then that button's sub section visible.
+     *
+     * @return {DOMElement} The new button element.
+     */
+    createButton: function(content, isActive, customClass, clickAction, groupElement, subSection, showSubSection)
+    {
+        var self = this;
+        if (clickAction) {
+            var originalAction = clickAction;
+            clickAction = function() {
+                self._lineageClicked = false;
+                return originalAction.call(this);
+            };
+        } else if (subSection) {
+            clickAction = function(subSectionState, buttonElement) {
+                if (subSectionState === true) {
+                    dfx.addClass(self._toolbar, 'subSectionVisible');
+
+                    // Remove selected state from other buttons in the toolbar.
+                    var mainTools = subSection.parentNode.previousSibling;
+                    dfx.removeClass(dfx.getClass('selected', mainTools), 'selected');
+                    dfx.addClass(buttonElement, 'selected');
+                } else {
+                    dfx.removeClass(self._toolbar, 'subSectionVisible');
+                    dfx.removeClass(button, 'selected');
+                }
+            };
+
+            if (showSubSection === true) {
+                dfx.addClass(this._toolbar, 'subSectionVisible');
+            }
+        }
+
+        var button = ViperTools.createButton(content, isActive, customClass, clickAction, groupElement, subSection, showSubSection);
+
+        if (!groupElement) {
+            this._toolsContainer.appendChild(button);
+        }
+
+        return button;
+
+    },
+
+    /**
+     * Creates a sub section element.
+     *
+     * @param {DOMElement} contentElement The content element.
+     * @param {boolean}    active         True if the subsection is active.
+     * @param {string}     customClass    Custom class to apply to the group.
+     *
+     * @return {DOMElement} The sub section element.
+     */
+    createSubSection: function(contentElement, active, customClass)
+    {
+        var subSection = ViperTools.createSubSection(contentElement, active, customClass);
+        this._subSectionContainer.appendChild(subSection);
+        return subSection;
+
+    },
+
+    /**
+     * Upudates the toolbar.
+     *
+     * This method is usually called by the Viper:selectionChanged event.
+     *
+     * @param {DOMRange} range The DOMRange object.
+     */
+    updateToolbar: function(cell, type)
+    {
+        this.hideToolbar();
+
+        if (navigator.userAgent.match(/iPad/i) !== null) {
+            this._scaleToolbar();
+        }
+
+        dfx.removeClass(this._toolbar, 'subSectionVisible');
+
+        this._updateLineage();
+        this._updateInnerContainer(cell, type);
+        this._updatePosition(cell, type);
+
+    },
+
+    showActiveSubSection: function()
+    {
+        dfx.addClass(this._toolbar, 'subSectionVisible');
+    },
+
+    hideActiveSubSection: function()
+    {
+        dfx.removeClass(this._toolbar, 'subSectionVisible');
+    },
+
+    /**
+     * Scales the toolbar using CSS transforms.
+     *
+     * Used on iPad only to scale the toolbar as user zooms in/out.
+     */
+    _scaleToolbar: function()
+    {
+        if (!this._toolbar) {
+            return;
+        }
+
+        var zoom  = (document.documentElement.clientWidth / window.innerWidth);
+        var scale = (1.2 / zoom);
+        if (scale >= 1.2) {
+            scale        = 1.2;
+            this._margin = 20;
+        } else if (scale <= 0.5) {
+            scale        = 0.5;
+            this._margin = -12;
+        } else {
+            this._margin = (-6 * zoom);
+        }
+
+        dfx.setStyle(this._toolbar, '-webkit-transform', 'scale(' + scale + ', ' + scale + ')');
+        dfx.setStyle(this._toolbar, '-moz-transform', 'scale(' + scale + ', ' + scale + ')');
+
+    },
+
+    /**
+     * Upudates the position of the inline toolbar.
+     */
+    _updatePosition: function(cell, verticalOnly)
+    {
+        var rangeCoords = this._getElementCoords(cell);
+
+        if (!rangeCoords) {
+            return;
+        }
+
+        var scrollCoords = dfx.getScrollCoords();
+
+        dfx.addClass(this._toolbar, 'calcWidth');
+        dfx.setStyle(this._toolbar, 'width', 'auto');
+        var toolbarWidth = dfx.getElementWidth(this._toolbar);
+        dfx.removeClass(this._toolbar, 'calcWidth');
+        dfx.setStyle(this._toolbar, 'width', toolbarWidth + 'px');
+
+        if (verticalOnly !== true) {
+            var left = ((rangeCoords.left + ((rangeCoords.right - rangeCoords.left) / 2) + scrollCoords.x) - (toolbarWidth / 2));
+            dfx.setStyle(this._toolbar, 'left', left + 'px');
+        }
+
+        var top = (rangeCoords.bottom + scrollCoords.y + 10);
+
+        dfx.setStyle(this._toolbar, 'top', top + 'px');
+        dfx.addClass(this._toolbar, 'visible');
+
+    },
+
+    _getElementCoords: function(element)
+    {
+        var elemRect     = dfx.getBoundingRectangle(element);
+        var scrollCoords = dfx.getScrollCoords();
+        return {
+            left: elemRect.x1,
+            right: elemRect.x2,
+            top: elemRect.y1 - scrollCoords.y,
+            bottom: elemRect.y2 - scrollCoords.y
+        };
+
+    },
+
+    _updateLineage: function()
+    {
+        var self = this;
+
+        dfx.empty(this._lineage);
+
+        var table  = document.createElement('li');
+        dfx.addClass(table, 'ViperITP-lineageItem');
+        dfx.setHtml(table, 'Table');
+        this._lineage.appendChild(table);
+        dfx.addEvent(table, 'mousedown', function() {
+            self.updateToolbar(self.getActiveCell(), 'table');
+        });
+
+        var row  = document.createElement('li');
+        dfx.addClass(row, 'ViperITP-lineageItem');
+        dfx.setHtml(row, 'Row');
+        this._lineage.appendChild(row);
+        dfx.addEvent(row, 'mousedown', function() {
+            self.updateToolbar(self.getActiveCell(), 'row');
+        });
+
+        var col  = document.createElement('li');
+        dfx.addClass(col, 'ViperITP-lineageItem');
+        dfx.setHtml(col, 'Column');
+        this._lineage.appendChild(col);
+        dfx.addEvent(col, 'mousedown', function() {
+            self.updateToolbar(self.getActiveCell(), 'col');
+        });
+
+        var cell  = document.createElement('li');
+        dfx.addClass(cell, 'ViperITP-lineageItem');
+        dfx.setHtml(cell, 'Cell');
+        this._lineage.appendChild(cell);
+        dfx.addEvent(cell, 'mousedown', function() {
+            self.updateToolbar(self.getActiveCell(), 'cell');
+        });
+
+    },
+
+    _updateInnerContainer: function(cell, type)
+    {
+        dfx.empty(this._toolsContainer);
+        dfx.empty(this._subSectionContainer);
+
+        switch (type) {
+            case 'cell':
+            default:
+                this._createCellProperties(cell);
+            break;
+        }
+
+    },
+
+    _createCellProperties: function(cell)
+    {
+        var isActive = false;
+        if (dfx.isTag(cell, 'th') === true) {
+            isActive = true;
+        }
+
+        var button = null;
+        var self   = this;
+        button = this.createButton('Heading', isActive, '', function() {
+            // Switch between header and normal cell.
+            if (dfx.isTag(cell, 'th') === true) {
+                var newCell = self.convertToCell(cell);
+                self.updateToolbar(newCell);
+            } else {
+                var newCell = self.convertToHeader(cell);
+                self.updateToolbar(newCell);
+            }
+        });
+
+        var subSection = document.createElement('div');
+        var wrapper    = document.createElement('div');
+        var mergeUp = this.createButton('U', false, '', function() {
+        });
+        var mergeDown = this.createButton('D', false, '', function() {
+        });
+        var span = document.createElement('span');
+        dfx.setHtml(span, 'Merge');
+
+        var mergeLeft = this.createButton('L', false, '', function() {
+        });
+        var mergeRight = this.createButton('R', false, '', function() {
+        });
+
+        wrapper.appendChild(mergeUp);
+        wrapper.appendChild(mergeDown);
+        wrapper.appendChild(span);
+        wrapper.appendChild(mergeLeft);
+        wrapper.appendChild(mergeRight);
+
+        var splitWrapper = document.createElement('div');
+
+        var splitVert = this.createButton('V', false, '', function() {
+            self.splitVertical(cell);
+            self.updateToolbar(cell);
             return false;
-        }
+        });
+        var span = document.createElement('span');
+        dfx.setHtml(span, 'Split');
 
-        var node = elem;
-        while (node && node !== this.viper.element) {
-            if (node.nodeType === dfx.ELEMENT_NODE) {
-                var tagName = node.tagName.toLowerCase();
-                if (tagName === 'td' || tagName === 'th') {
-                    return node;
-                }
-            }
+        var splitHor = this.createButton('H', false, '', function() {
+            self.splitHorizontal(cell);
+            self.updateToolbar(cell);
+        });
 
-            node = node.parentNode;
-        }
+        splitWrapper.appendChild(splitVert);
+        splitWrapper.appendChild(span);
+        splitWrapper.appendChild(splitHor);
 
-        return false;
+        subSection.appendChild(wrapper);
+        subSection.appendChild(splitWrapper);
+        this.createSubSection(subSection, true);
+        this.showActiveSubSection();
 
     },
 
-    handleDelete: function()
+    /**
+     * Hides the inline toolbar.
+     */
+    hideToolbar: function()
     {
-        var range = this.viper.getCurrentRange();
-        if (range.startOffset === 0 && range.startContainer.nodeType === dfx.TEXT_NODE) {
-            node = range.startContainer.parentNode;
-            while (node && node !== this.viper.element) {
-                if (node.nodeType === dfx.ELEMENT_NODE && node.tagName.toLowerCase() === 'td') {
-                    if (dfx.getNodeTextContent(node).length === 0) {
-                        dfx.setHtml(node, '&nbsp;');
-                        range.setStart(node.firstChild, 0);
-                        range.collapse(true);
-                    }
-
-                    return true;
-                }
-
-                node = node.parentNode;
-            }
-        }
+        dfx.removeClass(this._toolbar, 'visible');
+        this.hideActiveSubSection();
 
     },
 
-    remove: function()
-    {
-        this.hideCellButtons();
-        dfx.removeEvent(document, 'click.TableEditorPlugin');
-
-    },
-
-    caretUpdated: function()
-    {
-        var range = this.viper.getCurrentRange();
-        this._caretUpdated(range.startContainer);
-
-    },
-
-    _caretUpdated: function(cell)
-    {
-        if (!cell) {
-            return;
-        }
-
-        var keywordPlugin = this.viper.ViperPluginManager.getPlugin('ViperKeywordPlugin');
-
-        if (keywordPlugin && keywordPlugin.isKeyword(cell) === true) {
-            return;
-        }
-
-        while (cell && cell !== this.viper.element) {
-            if (cell.nodeType === dfx.ELEMENT_NODE) {
-                var tagName = cell.tagName.toLowerCase();
-                if (tagName === 'td' || tagName === 'th') {
-                    this.showCellButtons(cell);
-                    return;
-                }
-            }
-
-            cell = cell.parentNode;
-        }
-
-        this.hideCellButtons(cell);
-
-    },
 
     setActiveCell: function(cell)
     {
@@ -235,238 +476,91 @@ ViperTableEditorPlugin.prototype = {
 
     },
 
-    _updatecellButtonPositions: function(cell)
+    getActiveCell: function(cell)
     {
-        this.showCellButtons(cell, true);
+        return this.activeCell;
 
     },
 
-    hideCellButtons: function(noDisable)
+    convertToHeader: function(cell)
     {
-        try {
-            var cellTable = this.getCellTable(this.activeCell);
-            if (cellTable) {
-                // Remove the delHighlight class when cell buttons are removed.
-                dfx.removeClass(dfx.getClass('delHighlight', cellTable), 'delHighlight');
-            }
-
-            if (noDisable !== true) {
-                this.setActiveCell(null);
-            }
-
-            dfx.remove(dfx.getClass('ViperTableEditorPlugin-cellButtonsWrapper'));
-            this.vCellButtons = null;
-            this.hCellButtons = null;
-
-            if (noDisable !== true) {
-                this.viper.ViperPluginManager.setActivePlugin(null);
-                this.viper.ViperPluginManager.getPlugin('ViperSubToolbarPlugin').hideToolbar('TableEditor');
-            }
-        } catch (e) {
-            // Nodes might have been removed and trying to remove them again
-            // will cause an exception. Not important so ignore it.
-        }//end try
-
-    },
-
-    showCellButtons: function(cell, noSet)
-    {
-        if (!cell) {
-            return;
+        if (dfx.isTag(cell, 'td') === false) {
+            return false;
         }
 
-        this.hideCellButtons(true);
-
-        this.setActiveCell(cell, noSet);
-
-        var coords = dfx.getBoundingRectangle(cell);
-
-        if (this.vCellButtons === null) {
-            this.vCellButtons = this.createVerticalCellButtons();
+        var elem = document.createElement('th');
+        while (cell.firstChild) {
+            elem.appendChild(cell.firstChild);
         }
 
-        if (this.hCellButtons === null) {
-            this.hCellButtons = this.createHorizontalCellButtons();
+        // TODO: Copy, attributes etc.
+        dfx.insertBefore(cell, elem);
+        dfx.remove(cell);
+
+        return elem;
+
+    },
+
+    convertToCell: function(cell)
+    {
+        if (dfx.isTag(cell, 'th') === false) {
+            return false;
         }
 
-        var wrapper = document.createElement('div');
-        dfx.addClass(wrapper, 'ViperTableEditorPlugin-cellButtonsWrapper');
-        wrapper.appendChild(this.vCellButtons);
-        wrapper.appendChild(this.hCellButtons);
-
-        document.body.appendChild(wrapper);
-
-        if (noSet !== true) {
-            this.viper.ViperPluginManager.setActivePlugin('TableEditor');
-            // Text can be changed while this plugin is active.
-            this.viper.ViperPluginManager.allowTextInput = true;
+        var elem = document.createElement('td');
+        while (cell.firstChild) {
+            elem.appendChild(cell.firstChild);
         }
 
-        this.showVerticalCellButtons(coords);
-        this.showHorizontalCellButtons(coords);
+        // TODO: Copy, attributes etc.
+        dfx.insertBefore(cell, elem);
+        dfx.remove(cell);
+
+        return elem;
 
     },
 
-    showHorizontalCellButtons: function(coords)
-    {
-        // Position the vertical buttons.
-        dfx.setStyle(this.hCellButtons, 'visibility', 'hidden');
-        dfx.setStyle(this.hCellButtons, 'display', 'block');
-        var h = 14;
-        var w = 42;
-
-        dfx.setStyle(this.hCellButtons, 'top', (coords.y1 - h) + 'px');
-        dfx.setStyle(this.hCellButtons, 'left', (coords.x2 - ((coords.x2 - coords.x1) / 2) - (w / 2)) + 'px');
-        dfx.setStyle(this.hCellButtons, 'visibility', 'visible');
-
-    },
-
-    showVerticalCellButtons: function(coords)
-    {
-        // Position the vertical buttons.
-        dfx.setStyle(this.vCellButtons, 'visibility', 'hidden');
-        dfx.setStyle(this.vCellButtons, 'display', 'block');
-        var h = 42;
-        var w = 14;
-
-        dfx.setStyle(this.vCellButtons, 'top', (coords.y1 + ((coords.y2 - coords.y1) / 2) - (h / 2)) + 'px');
-        dfx.setStyle(this.vCellButtons, 'left', (coords.x1 - w) + 'px');
-        dfx.setStyle(this.vCellButtons, 'visibility', 'visible');
-
-    },
-
-    createVerticalCellButtons: function()
-    {
-        var main = document.createElement('div');
-        dfx.addClass(main, 'ViperTableEditorPlugin-v-cellButtons');
-        var insertRowAfter = document.createElement('div');
-        dfx.attr(insertRowAfter, 'title', 'Insert row below');
-        dfx.addClass(insertRowAfter, 'down');
-        var insertRowBefore = document.createElement('div');
-        dfx.attr(insertRowBefore, 'title', 'Insert row above');
-        dfx.addClass(insertRowBefore, 'up');
-        var removeRow = document.createElement('div');
-        dfx.addClass(removeRow, 'delete');
-        dfx.attr(removeRow, 'title', 'Delete row');
-
-        dfx.addClass([insertRowAfter, insertRowBefore, removeRow], 'ViperTableEditorPlugin-cellButton');
-
-        main.appendChild(insertRowBefore);
-        main.appendChild(removeRow);
-        main.appendChild(insertRowAfter);
-
-        var self = this;
-        dfx.addEvent(insertRowAfter, 'click', function() {
-            self.insertRowAfter();
-        });
-
-        dfx.addEvent(insertRowBefore, 'click', function() {
-            self.insertRowBefore();
-        });
-
-        dfx.addEvent(removeRow, 'click', function() {
-            self.removeRow();
-        });
-
-        // Hover events.
-        dfx.hover(insertRowAfter, function() {
-            dfx.addClass(main, 'after');
-        }, function() {
-            dfx.removeClass(main, 'after');
-        });
-
-        dfx.hover(insertRowBefore, function() {
-            dfx.addClass(main, 'before');
-        }, function() {
-            dfx.removeClass(main, 'before');
-        });
-
-        dfx.hover(removeRow, function() {
-            dfx.addClass(main, 'delete');
-            if (self.activeCell && self.activeCell.parentNode) {
-                dfx.addClass(self.activeCell.parentNode, 'delHighlight');
-            }
-        }, function() {
-            dfx.removeClass(main, 'delete');
-            if (self.activeCell && self.activeCell.parentNode) {
-                dfx.removeClass(self.activeCell.parentNode, 'delHighlight');
-            }
-        });
-
-        return main;
-
-    },
-
-    createHorizontalCellButtons: function()
-    {
-        var main = document.createElement('div');
-        dfx.addClass(main, 'ViperTableEditorPlugin-h-cellButtons');
-        var insertColAfter = document.createElement('div');
-        dfx.attr(insertColAfter, 'title', 'Insert column to the right');
-        dfx.addClass(insertColAfter, 'right');
-        var insertColBefore = document.createElement('div');
-        dfx.attr(insertColBefore, 'title', 'Insert column to the left');
-        dfx.addClass(insertColBefore, 'left');
-        var removeCol = document.createElement('div');
-        dfx.addClass(removeCol, 'delete');
-        dfx.attr(removeCol, 'title', 'Delete column');
-
-        dfx.addClass([insertColAfter, insertColBefore, removeCol], 'ViperTableEditorPlugin-cellButton');
-
-        main.appendChild(insertColBefore);
-        main.appendChild(removeCol);
-        main.appendChild(insertColAfter);
-
-        var self = this;
-        dfx.addEvent(insertColAfter, 'click', function() {
-            self.insertColAfter();
-        });
-
-        dfx.addEvent(insertColBefore, 'click', function() {
-            self.insertColBefore();
-        });
-
-        dfx.addEvent(removeCol, 'click', function() {
-            self.removeCol();
-        });
-
-        // Hover events.
-        dfx.hover(insertColAfter, function() {
-            dfx.addClass(main, 'right');
-        }, function() {
-            dfx.removeClass(main, 'right');
-        });
-
-        dfx.hover(insertColBefore, function() {
-            dfx.addClass(main, 'left');
-        }, function() {
-            dfx.removeClass(main, 'left');
-        });
-
-        dfx.hover(removeCol, function() {
-            dfx.addClass(main, 'delete');
-            var table = self.getCellTable(self.activeCell);
-            dfx.addClass(self.getColumnCells(table, self._getColNum(self.activeCell)), 'delHighlight');
-        }, function() {
-            dfx.removeClass(main, 'delete');
-            var table = self.getCellTable(self.activeCell);
-            dfx.removeClass(self.getColumnCells(table, self._getColNum(self.activeCell)), 'delHighlight');
-        });
-
-        return main;
-
-    },
-
+    /**
+     * Splits specified cell horizontally only if it has colspan > 1.
+     *
+     * @param {DOMNode} cell The table cell to split.
+     *
+     * @return {DOMNode} The new column that was created.
+     */
     splitHorizontal: function(cell)
     {
         if (!cell || !cell.getAttribute('colspan')) {
             return;
         }
 
-        console.info(cell);
+        var tagName = dfx.getTagName(cell);
+        var elem    = document.createElement(tagName);
+
+        var colspan = (parseInt(cell.getAttribute('colspan')) - 1);
+        if (colspan > 1) {
+            cell.setAttribute('colspan', colspan);
+        } else {
+            dfx.removeAttr(cell, 'colspan');
+        }
+
+        var rowspan = cell.getAttribute('rowspan');
+        if (rowspan > 1) {
+            elem.setAttribute('rowspan', rowspan);
+        }
+
+        dfx.insertAfter(cell, elem);
+
+        return elem;
 
     },
 
+    /**
+     * Splits specified cell vertically only if it has rowspan > 1.
+     *
+     * @param {DOMNode} cell The table cell to split.
+     *
+     * @return {DOMNode} The new row that was created.
+     */
     splitVertical: function(cell)
     {
         if (!cell || !cell.getAttribute('rowspan')) {
@@ -474,9 +568,17 @@ ViperTableEditorPlugin.prototype = {
         }
 
         var row     = cell.parentNode;
-        var nextRow = this._getNextRow(row);
-        if (!nextRow) {
-            return false;
+        var rowspan = (parseInt(cell.getAttribute('rowspan')) - 1);
+        var i       = rowspan;
+        var nextRow = row;
+
+        while (i > 0) {
+            nextRow = this._getNextRow(nextRow);
+            if (!nextRow) {
+                return false;
+            }
+
+            i--;
         }
 
         var tagName        = dfx.getTagName(cell);
@@ -484,11 +586,15 @@ ViperTableEditorPlugin.prototype = {
         var nextRowColumns = this._getRowColumns(nextRow);
 
         var elem       = document.createElement(tagName);
-        var rowspan    = (parseInt(cell.getAttribute('rowspan')) - 1);
         if (rowspan > 1) {
             cell.setAttribute('rowspan', rowspan);
         } else {
             dfx.removeAttr(cell, 'rowspan');
+        }
+
+        var colspan = cell.getAttribute('colspan');
+        if (colspan > 1) {
+            elem.setAttribute('colspan', colspan);
         }
 
         if (colNum < nextRowColumns.length) {
@@ -597,93 +703,6 @@ ViperTableEditorPlugin.prototype = {
         }
 
         this._nodesUpdated();
-
-    },
-
-    _getColNum: function(cell)
-    {
-        if (!cell) {
-            return null;
-        }
-
-        var tr = cell.parentNode;
-        if (!tr) {
-            return null;
-        }
-
-        var ln = tr.childNodes.length;
-        var c  = 0;
-        for (var i = 0; i < ln; i++) {
-            var node = tr.childNodes[i];
-            if (node.nodeType === dfx.ELEMENT_NODE) {
-                var tagName = node.tagName.toLowerCase();
-                if (tagName === 'td' || tagName === 'th') {
-                    if (node === cell) {
-                        break;
-                    }
-
-                    c++;
-                }
-            }
-        }
-
-        return c;
-
-    },
-
-    _getColumn: function(row, colNum)
-    {
-        var ln = row.childNodes.length;
-        for (var i = 0; i < ln; i++) {
-            var node = row.childNodes[i];
-            if (node.nodeType === dfx.ELEMENT_NODE) {
-                var tagName = node.tagName.toLowerCase();
-                if (tagName === 'td' || tagName === 'th') {
-                    if (colNum === 0) {
-                        return node;
-                    }
-
-                    colNum--;
-                }
-            }
-        }
-
-    },
-
-    _getPreviousRow: function(row)
-    {
-        while (row = row.previousSibling) {
-            if (row.nodeType === dfx.ELEMENT_NODE) {
-                var tagName = row.tagName.toLowerCase();
-                if (tagName === 'tr' || tagName === 'th') {
-                    return row;
-                }
-            }
-        }
-
-    },
-
-    _getNextRow: function(row, goPrev)
-    {
-        while (row = row.nextSibling) {
-            if (row.nodeType === dfx.ELEMENT_NODE) {
-                var tagName = row.tagName.toLowerCase();
-                if (tagName === 'tr' || tagName === 'th') {
-                    return row;
-                }
-            }
-        }
-
-        if (goPrev === true) {
-            return this._getPreviousRow(row);
-        }
-
-    },
-
-    _getRowColumns: function(row)
-    {
-        var tags = dfx.getTag(['td', 'th'], row);
-        return tags;
 
     },
 
@@ -1006,35 +1025,9 @@ ViperTableEditorPlugin.prototype = {
 
     },
 
-    handleTab: function(e)
-    {
-        if (this.activeCell !== null) {
-            var cell = null;
-            if (e.shiftKey !== true) {
-                cell = this.getNextCell(this.activeCell);
-            } else {
-                cell = this.getPrevCell(this.activeCell);
-            }
-
-            this.moveCaretToCell(cell);
-            return true;
-        }
-
-    },
-
     isPluginElement: function(elem)
     {
-        if (dfx.hasClass(elem, 'ViperTableEditorPlugin-cellButton') !== true) {
-            return false;
-        }
-
-        return true;
-
-    },
-
-    _nodesUpdated: function(noFocus)
-    {
-        this.viper.fireNodesChanged('ViperTableEditorPlugin:update', noFocus);
+        return false;
 
     },
 
@@ -1346,7 +1339,125 @@ ViperTableEditorPlugin.prototype = {
 
     },
 
-        _initChangeTrackerCallbacks: function()
+    _getRangeCellElement: function(range)
+    {
+        var commonElement = range.getCommonElement();
+        var cellElement   = null;
+
+        if (dfx.isTag(commonElement, 'td') === false
+            && dfx.isTag(commonElement, 'th') === false
+        ) {
+            // Check if any of the parents td or th.
+            var parents = dfx.getParents(commonElement, null, this.viper.getViperElement());
+            var plen    = parents.length;
+            for (var i = 0; i < plen; i++) {
+                if (dfx.isTag(parents[i], 'td') === true
+                    || dfx.isTag(parents[i], 'th') === true
+                ) {
+                    cellElement = parents[i];
+                    break;
+                }
+            }
+        } else {
+            cellElement = commonElement;
+        }
+
+        if (!cellElement) {
+            return false;
+        }
+
+        return cellElement;
+
+    },
+
+    _getColNum: function(cell)
+    {
+        if (!cell) {
+            return null;
+        }
+
+        var tr = cell.parentNode;
+        if (!tr) {
+            return null;
+        }
+
+        var ln = tr.childNodes.length;
+        var c  = 0;
+        for (var i = 0; i < ln; i++) {
+            var node = tr.childNodes[i];
+            if (node.nodeType === dfx.ELEMENT_NODE) {
+                var tagName = node.tagName.toLowerCase();
+                if (tagName === 'td' || tagName === 'th') {
+                    if (node === cell) {
+                        break;
+                    }
+
+                    c++;
+                }
+            }
+        }
+
+        return c;
+
+    },
+
+    _getColumn: function(row, colNum)
+    {
+        var ln = row.childNodes.length;
+        for (var i = 0; i < ln; i++) {
+            var node = row.childNodes[i];
+            if (node.nodeType === dfx.ELEMENT_NODE) {
+                var tagName = node.tagName.toLowerCase();
+                if (tagName === 'td' || tagName === 'th') {
+                    if (colNum === 0) {
+                        return node;
+                    }
+
+                    colNum--;
+                }
+            }
+        }
+
+    },
+
+    _getPreviousRow: function(row)
+    {
+        while (row = row.previousSibling) {
+            if (row.nodeType === dfx.ELEMENT_NODE) {
+                var tagName = row.tagName.toLowerCase();
+                if (tagName === 'tr' || tagName === 'th') {
+                    return row;
+                }
+            }
+        }
+
+    },
+
+    _getNextRow: function(row, goPrev)
+    {
+        while (row = row.nextSibling) {
+            if (row.nodeType === dfx.ELEMENT_NODE) {
+                var tagName = row.tagName.toLowerCase();
+                if (tagName === 'tr' || tagName === 'th') {
+                    return row;
+                }
+            }
+        }
+
+        if (goPrev === true) {
+            return this._getPreviousRow(row);
+        }
+
+    },
+
+    _getRowColumns: function(row)
+    {
+        var tags = dfx.getTag(['td', 'th'], row);
+        return tags;
+
+    },
+
+    _initChangeTrackerCallbacks: function()
     {
         // Tracking Inserts.
         ViperChangeTracker.addChangeType('insertedTable', 'Inserted', 'insert');

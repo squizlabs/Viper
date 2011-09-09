@@ -519,6 +519,10 @@ ViperInlineToolbarPlugin.prototype = {
         } else {
             parent        = range.getCommonElement();
             var startNode = range.getStartNode();
+            if (!startNode) {
+                return lineage;
+            }
+
             if (startNode.nodeType !== dfx.TEXT_NODE || dfx.isBlank(startNode.data) !== true) {
                 lineage.push(startNode);
             }
