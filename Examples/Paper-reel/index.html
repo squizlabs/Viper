@@ -7,11 +7,12 @@
     <script type="text/javascript" src="../../DfxJSLib/mysource.js"></script>
     <script type="text/javascript" src="../../Viper-all.js"></script>
     <script type="text/javascript">
+        var viper = null;
         dfx.addLoadEvent(function() {
-            var viper = new Viper('test');
+            viper = new Viper('test');
             var pluginSets = {
                 all: {
-                    plugins: ['ViperCoreStylesPlugin', 'ViperKeyboardEditorPlugin', 'ViperInlineToolbarPlugin', 'ViperHistoryPlugin', 'ViperListPlugin', 'ViperFormatPlugin', 'ViperToolbarPlugin']
+                    plugins: ['ViperCoreStylesPlugin', 'ViperKeyboardEditorPlugin', 'ViperInlineToolbarPlugin', 'ViperHistoryPlugin', 'ViperListPlugin', 'ViperFormatPlugin', 'ViperToolbarPlugin', 'ViperTableEditorPlugin']
                 }
             };
 
@@ -111,13 +112,12 @@
         <td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td>
     </tr>
     <tr>
-        <td rowspan="2">nec <strong>porta</strong> ante</td>
+        <td>nec <strong>porta</strong> ante</td>
         <td>sapien vel aliquet</td>
-        <td>purus neque luctus ligula, vel molestie arcu</td>
+        <td id="x" rowspan="2">purus neque luctus ligula, vel molestie arcu</td>
     </tr>
     <tr>
-        <td>sapien vel aliquet</td>
-        <td>purus neque luctus ligula, vel molestie arcu</td>
+        <td colspan="2">sapien vel aliquet</td>
     </tr>
     </tbody>
 </table>

@@ -709,6 +709,10 @@ ViperDOMRange.prototype = {
         var endNode   = range.getEndNode();
         var common    = range.getCommonElement();
 
+        if (!startNode && !endNode) {
+            return null;
+        }
+
         if (startNode && !endNode) {
             return startNode;
         }

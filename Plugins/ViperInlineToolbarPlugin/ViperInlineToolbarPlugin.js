@@ -279,6 +279,10 @@ ViperInlineToolbarPlugin.prototype = {
                 tagName = 'Link';
             break;
 
+            case 'blockquote':
+                tagName = 'Quote';
+            break;
+
             default:
                 tagName = tagName.toUpperCase();
             break;
@@ -396,6 +400,11 @@ ViperInlineToolbarPlugin.prototype = {
             var tagName = lineage[i].tagName.toLowerCase();
             var parent  = document.createElement('li');
             dfx.addClass(parent, 'ViperITP-lineageItem');
+
+            if (i === (c - 1)) {
+                dfx.addClass(parent, 'selected');
+            }
+
             dfx.setHtml(parent, this.getReadableTagName(tagName));
             this._lineage.appendChild(parent);
             linElems.push(parent);
@@ -510,6 +519,10 @@ ViperInlineToolbarPlugin.prototype = {
         } else {
             parent        = range.getCommonElement();
             var startNode = range.getStartNode();
+            if (!startNode) {
+                return lineage;
+            }
+
             if (startNode.nodeType !== dfx.TEXT_NODE || dfx.isBlank(startNode.data) !== true) {
                 lineage.push(startNode);
             }

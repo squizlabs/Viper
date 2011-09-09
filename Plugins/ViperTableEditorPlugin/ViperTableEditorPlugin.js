@@ -28,15 +28,11 @@ function ViperTableEditorPlugin(viper)
     this.activeCell    = null;
     this.vCellButtons  = null;
     this.hCellButtons  = null;
-    this._subToolbar   = null;
     this._lastNode     = null;
 
     // Table properties.
     this._currentTablePropView = 'cell';
     this._settingsWidgets      = {};
-
-    this.viper.ViperPluginManager.addKeyPressListener('TAB', this, 'handleTab');
-    this.viper.ViperPluginManager.addKeyPressListener('SHIFT+TAB', this, 'handleTab');
 
 }
 
@@ -46,119 +42,17 @@ ViperTableEditorPlugin.prototype = {
     {
         if (this.viper.isBrowser('firefox') === true) {
             // Disable table editing.
-            document.execCommand("enableInlineTableEditing", false, false);
-            document.execCommand("enableObjectResizing", false, false);
+            setTimeout(function() {
+                document.execCommand("enableInlineTableEditing", false, false);
+                document.execCommand("enableObjectResizing", false, false);
+            }, 500);
+
         }
 
         var self = this;
         this.toolbarPlugin = this.viper.ViperPluginManager.getPlugin('ViperToolbarPlugin');
         this.toolbarPlugin.addButton('TableEditor', 'table', 'Insert/Edit Table', function () {
             self.insertTable();
-        });
-
-        this.viper.ViperPluginManager.addKeyPressListener('DELETE', this, 'handleDelete');
-
-        dfx.removeEvent(document, 'click.TableEditorPlugin');
-        dfx.addEvent(document, 'click.TableEditorPlugin', function(e) {
-            if (self.viper.ViperPluginManager.getActivePlugin() === 'TableEditor') {
-                var target = dfx.getMouseEventTarget(e);
-                if (dfx.hasClass(target, 'ViperTableEditorPlugin-cellButton') !== true) {
-                    if (dfx.isChildOf(target, self._subToolbar) === false) {
-                        self.viper.ViperPluginManager.setActivePlugin(null);
-                        if (dfx.isChildOf(target, self.viper.element) === false) {
-                            self.viper.mouseDown(null, target);
-                        }
-                    }
-                }
-            }
-        });
-
-        this.viper.registerCallback('setHtml', 'TablePlugin', function(data) {
-            self.hideCellButtons();
-        });
-
-        // Tracking Inserts.
-        ViperChangeTracker.addChangeType('insertedTable', 'Inserted', 'insert');
-        ViperChangeTracker.addChangeType('insertedTableRow', 'Inserted', 'insert');
-        ViperChangeTracker.addChangeType('insertedTableCol', 'Inserted', 'insert');
-        ViperChangeTracker.setDescriptionCallback('insertedTable', function(node) {
-            return 'Table';
-        });
-        ViperChangeTracker.setDescriptionCallback('insertedTableRow', function(node) {
-            return 'Table row';
-        });
-        ViperChangeTracker.setDescriptionCallback('insertedTableCol', function(node) {
-            return 'Table column';
-        });
-
-        ViperChangeTracker.setApproveCallback('insertedTable', function(clone, node) {
-            ViperChangeTracker.removeTrackChanges(node);
-        });
-        ViperChangeTracker.setApproveCallback('insertedTableRow', function(clone, node) {
-            ViperChangeTracker.removeTrackChanges(node);
-        });
-        ViperChangeTracker.setApproveCallback('insertedTableCol', function(clone, node) {
-            ViperChangeTracker.removeTrackChanges(node);
-        });
-
-        ViperChangeTracker.setRejectCallback('insertedTable', function(clone, node) {
-            self.removeTable(node);
-        });
-        ViperChangeTracker.setRejectCallback('insertedTableRow', function(clone, node) {
-            self.removeRow(node);
-        });
-        ViperChangeTracker.setRejectCallback('insertedTableCol', function(clone, node) {
-            self.removeCol(node);
-        });
-
-        // Tracking Deletes.
-        ViperChangeTracker.addChangeType('removedTable', 'Deleted', 'remove');
-        ViperChangeTracker.addChangeType('removedTableRow', 'Deleted', 'remove');
-        ViperChangeTracker.addChangeType('removedTableCol', 'Deleted', 'remove');
-        ViperChangeTracker.setDescriptionCallback('removedTable', function(node) {
-            return 'Table';
-        });
-        ViperChangeTracker.setDescriptionCallback('removedTableRow', function(node) {
-            return 'Table row';
-        });
-        ViperChangeTracker.setDescriptionCallback('removedTableCol', function(node) {
-            return 'Table column';
-        });
-
-        ViperChangeTracker.setApproveCallback('removedTable', function(clone, node) {
-            dfx.remove(node);
-        });
-        ViperChangeTracker.setApproveCallback('removedTableRow', function(clone, node) {
-            dfx.remove(node);
-        });
-        ViperChangeTracker.setApproveCallback('removedTableCol', function(clone, node) {
-            dfx.remove(node);
-        });
-
-        ViperChangeTracker.setRejectCallback('removedTable', function(clone, node) {
-            ViperChangeTracker.removeTrackChanges(node);
-        });
-        ViperChangeTracker.setRejectCallback('removedTableRow', function(clone, node) {
-            ViperChangeTracker.removeTrackChanges(node);
-        });
-        ViperChangeTracker.setRejectCallback('removedTableCol', function(clone, node) {
-            ViperChangeTracker.removeTrackChanges(node);
-        });
-
-        this.viper.registerCallback('ViperChangeTracker:modeChange', 'ViperTableEditor', function(changedTo) {
-            var showInserted = true;
-            var showRemoved  = false;
-            if (changedTo === 'original') {
-                showInserted = false;
-                showRemoved  = true;
-            }
-
-            ViperChangeTracker.setNodeTypeVisibility('insertedTable', showInserted);
-            ViperChangeTracker.setNodeTypeVisibility('insertedTableRow', showInserted);
-            ViperChangeTracker.setNodeTypeVisibility('insertedTableCol', showInserted);
-            ViperChangeTracker.setNodeTypeVisibility('removedTable', showRemoved);
-            ViperChangeTracker.setNodeTypeVisibility('removedTableRow', showRemoved);
-            ViperChangeTracker.setNodeTypeVisibility('removedTableCol', showRemoved);
         });
 
         this.viper.registerCallback('ViperHistoryManager:undo', 'ViperTableEditor', function() {
@@ -169,348 +63,549 @@ ViperTableEditorPlugin.prototype = {
             self.hideCellButtons();
         });
 
-    },
-
-    clicked: function(e, elem)
-    {
-        if (!elem) {
-            elem = dfx.getMouseEventTarget(e);
-        }
-
-        var cell = this.isTableCell(elem);
-        if (cell !== false) {
-            this.showCellButtons(cell);
-        } else {
-            this.hideCellButtons();
-        }
-
-    },
-
-    isTableCell: function(elem)
-    {
-        if (!elem) {
-            return false;
-        }
-
-        var node = elem;
-        while (node && node !== this.viper.element) {
-            if (node.nodeType === dfx.ELEMENT_NODE) {
-                var tagName = node.tagName.toLowerCase();
-                if (tagName === 'td' || tagName === 'th') {
-                    return node;
-                }
+        this.viper.registerCallback('Viper:selectionChanged', 'ViperTableEditorPlugin', function(range) {
+            self.hideToolbar();
+            var cell = self._getRangeCellElement(range);
+            if (cell) {
+                // Show cell Tools.
+                return self.showCellToolsIcon(cell);
             }
+        });
 
-            node = node.parentNode;
-        }
+        this._initChangeTrackerCallbacks();
 
-        return false;
-
-    },
-
-    handleDelete: function()
-    {
-        var range = this.viper.getCurrentRange();
-        if (range.startOffset === 0 && range.startContainer.nodeType === dfx.TEXT_NODE) {
-            node = range.startContainer.parentNode;
-            while (node && node !== this.viper.element) {
-                if (node.nodeType === dfx.ELEMENT_NODE && node.tagName.toLowerCase() === 'td') {
-                    if (dfx.getNodeTextContent(node).length === 0) {
-                        dfx.setHtml(node, '&nbsp;');
-                        range.setStart(node.firstChild, 0);
-                        range.collapse(true);
-                    }
-
-                    return true;
-                }
-
-                node = node.parentNode;
-            }
-        }
+        this._createToolbar();
 
     },
 
-    remove: function()
-    {
-        this.hideCellButtons();
-        dfx.removeEvent(document, 'click.TableEditorPlugin');
-
-    },
-
-    caretUpdated: function()
-    {
-        var range = this.viper.getCurrentRange();
-        this._caretUpdated(range.startContainer);
-
-    },
-
-    _caretUpdated: function(cell)
+    showCellToolsIcon: function(cell)
     {
         if (!cell) {
             return;
         }
 
-        var keywordPlugin = this.viper.ViperPluginManager.getPlugin('ViperKeywordPlugin');
+        var overlayid = this.viper.getId() + '-ViperTEP';
+        var overlay   = dfx.getId(overlayid);
 
-        if (keywordPlugin && keywordPlugin.isKeyword(cell) === true) {
-            return;
+        if (overlay) {
+            dfx.remove(overlay);
         }
 
-        while (cell && cell !== this.viper.element) {
-            if (cell.nodeType === dfx.ELEMENT_NODE) {
-                var tagName = cell.tagName.toLowerCase();
-                if (tagName === 'td' || tagName === 'th') {
-                    this.showCellButtons(cell);
-                    return;
-                }
-            }
+        overlay    = document.createElement('div');
+        overlay.id = overlayid;
+        dfx.addClass(overlay, 'ViperTEP-cellToolsIcon');
 
-            cell = cell.parentNode;
-        }
+        var cellCoords   = dfx.getBoundingRectangle(cell);
+        var overlayWidth = 42;
 
-        this.hideCellButtons(cell);
+        dfx.setStyle(overlay, 'top', cellCoords.y2 + 5 + 'px');
+        dfx.setStyle(overlay, 'left', cellCoords.x1 + ((cellCoords.x2 - cellCoords.x1) / 2) - (overlayWidth / 2) + 'px');
+
+        document.body.appendChild(overlay);
+
+        var self = this;
+        dfx.addEvent(overlay, 'click', function() {
+            dfx.remove(overlay);
+            var range = self.viper.getCurrentRange();
+            range.collapse(true);
+            ViperSelection.addRange(range);
+            self.showTableTools(cell);
+            //self.viper.fireSelectionChanged();
+        });
 
     },
 
-    setActiveCell: function(cell, noUpdate)
+    showTableTools: function(cell)
+    {
+        this.setActiveCell(cell);
+        this.updateToolbar(cell);
+
+    },
+
+    /**
+     * Creates the inline toolbar.
+     *
+     * The toolbar is added to the BODY element.
+     */
+    _createToolbar: function()
+    {
+        var main      = document.createElement('div');
+        this._toolbar = main;
+
+        this._lineage = document.createElement('ul');
+        this._toolbar.appendChild(this._lineage);
+
+        this._toolsContainer = document.createElement('div');
+        this._toolbar.appendChild(this._toolsContainer);
+
+        this._subSectionContainer = document.createElement('div');
+        this._toolbar.appendChild(this._subSectionContainer);
+
+        dfx.addClass(this._toolbar, 'ViperITP themeDark');
+        dfx.addClass(this._lineage, 'ViperITP-lineage');
+        dfx.addClass(this._toolsContainer, 'ViperITP-tools');
+        dfx.addClass(this._subSectionContainer, 'ViperITP-subSectionWrapper');
+
+        document.body.appendChild(this._toolbar);
+
+    },
+
+    /**
+     * Creates a button group.
+     *
+     * @param {string} customClass Custom class to apply to the group.
+     *
+     * @return {DOMElement} The button group element.
+     */
+    createButtonGroup: function(customClass)
+    {
+        return this._toolsContainer.appendChild(ViperTools.createButtonGroup(customClass));
+
+    },
+
+    /**
+     * Creates a toolbar button.
+     *
+     * @param {string}     content        The content of the button.
+     * @param {string}     isActive       True if the button is active.
+     * @param {string}     customClass    Class to add to the button for extra styling.
+     * @param {function}   clickAction    The function to call when the button is clicked.
+     * @param {DOMElement} groupElement   The group element that was created by createButtonGroup.
+     * @param {DOMElement} subSection     The sub section element see createSubSection.
+     * @param {boolean}    showSubSection If true then sub section will be visible.
+     *                                    If another button later on also has this set to true
+     *                                    then that button's sub section visible.
+     *
+     * @return {DOMElement} The new button element.
+     */
+    createButton: function(content, isActive, customClass, clickAction, groupElement, subSection, showSubSection)
+    {
+        var self = this;
+        if (clickAction) {
+            var originalAction = clickAction;
+            clickAction = function() {
+                self._lineageClicked = false;
+                return originalAction.call(this);
+            };
+        } else if (subSection) {
+            clickAction = function(subSectionState, buttonElement) {
+                if (subSectionState === true) {
+                    dfx.addClass(self._toolbar, 'subSectionVisible');
+
+                    // Remove selected state from other buttons in the toolbar.
+                    var mainTools = subSection.parentNode.previousSibling;
+                    dfx.removeClass(dfx.getClass('selected', mainTools), 'selected');
+                    dfx.addClass(buttonElement, 'selected');
+                } else {
+                    dfx.removeClass(self._toolbar, 'subSectionVisible');
+                    dfx.removeClass(button, 'selected');
+                }
+            };
+
+            if (showSubSection === true) {
+                dfx.addClass(this._toolbar, 'subSectionVisible');
+            }
+        }
+
+        var button = ViperTools.createButton(content, isActive, customClass, clickAction, groupElement, subSection, showSubSection);
+
+        if (!groupElement) {
+            this._toolsContainer.appendChild(button);
+        }
+
+        return button;
+
+    },
+
+    /**
+     * Creates a sub section element.
+     *
+     * @param {DOMElement} contentElement The content element.
+     * @param {boolean}    active         True if the subsection is active.
+     * @param {string}     customClass    Custom class to apply to the group.
+     *
+     * @return {DOMElement} The sub section element.
+     */
+    createSubSection: function(contentElement, active, customClass)
+    {
+        var subSection = ViperTools.createSubSection(contentElement, active, customClass);
+        this._subSectionContainer.appendChild(subSection);
+        return subSection;
+
+    },
+
+    /**
+     * Upudates the toolbar.
+     *
+     * This method is usually called by the Viper:selectionChanged event.
+     *
+     * @param {DOMRange} range The DOMRange object.
+     */
+    updateToolbar: function(cell, type)
+    {
+        this.hideToolbar();
+
+        if (navigator.userAgent.match(/iPad/i) !== null) {
+            this._scaleToolbar();
+        }
+
+        dfx.removeClass(this._toolbar, 'subSectionVisible');
+
+        this._updateLineage();
+        this._updateInnerContainer(cell, type);
+        this._updatePosition(cell, type);
+
+    },
+
+    showActiveSubSection: function()
+    {
+        dfx.addClass(this._toolbar, 'subSectionVisible');
+    },
+
+    hideActiveSubSection: function()
+    {
+        dfx.removeClass(this._toolbar, 'subSectionVisible');
+    },
+
+    /**
+     * Scales the toolbar using CSS transforms.
+     *
+     * Used on iPad only to scale the toolbar as user zooms in/out.
+     */
+    _scaleToolbar: function()
+    {
+        if (!this._toolbar) {
+            return;
+        }
+
+        var zoom  = (document.documentElement.clientWidth / window.innerWidth);
+        var scale = (1.2 / zoom);
+        if (scale >= 1.2) {
+            scale        = 1.2;
+            this._margin = 20;
+        } else if (scale <= 0.5) {
+            scale        = 0.5;
+            this._margin = -12;
+        } else {
+            this._margin = (-6 * zoom);
+        }
+
+        dfx.setStyle(this._toolbar, '-webkit-transform', 'scale(' + scale + ', ' + scale + ')');
+        dfx.setStyle(this._toolbar, '-moz-transform', 'scale(' + scale + ', ' + scale + ')');
+
+    },
+
+    /**
+     * Upudates the position of the inline toolbar.
+     */
+    _updatePosition: function(cell, verticalOnly)
+    {
+        var rangeCoords = this._getElementCoords(cell);
+
+        if (!rangeCoords) {
+            return;
+        }
+
+        var scrollCoords = dfx.getScrollCoords();
+
+        dfx.addClass(this._toolbar, 'calcWidth');
+        dfx.setStyle(this._toolbar, 'width', 'auto');
+        var toolbarWidth = dfx.getElementWidth(this._toolbar);
+        dfx.removeClass(this._toolbar, 'calcWidth');
+        dfx.setStyle(this._toolbar, 'width', toolbarWidth + 'px');
+
+        if (verticalOnly !== true) {
+            var left = ((rangeCoords.left + ((rangeCoords.right - rangeCoords.left) / 2) + scrollCoords.x) - (toolbarWidth / 2));
+            dfx.setStyle(this._toolbar, 'left', left + 'px');
+        }
+
+        var top = (rangeCoords.bottom + scrollCoords.y + 10);
+
+        dfx.setStyle(this._toolbar, 'top', top + 'px');
+        dfx.addClass(this._toolbar, 'visible');
+
+    },
+
+    _getElementCoords: function(element)
+    {
+        var elemRect     = dfx.getBoundingRectangle(element);
+        var scrollCoords = dfx.getScrollCoords();
+        return {
+            left: elemRect.x1,
+            right: elemRect.x2,
+            top: elemRect.y1 - scrollCoords.y,
+            bottom: elemRect.y2 - scrollCoords.y
+        };
+
+    },
+
+    _updateLineage: function()
+    {
+        var self = this;
+
+        dfx.empty(this._lineage);
+
+        var table  = document.createElement('li');
+        dfx.addClass(table, 'ViperITP-lineageItem');
+        dfx.setHtml(table, 'Table');
+        this._lineage.appendChild(table);
+        dfx.addEvent(table, 'mousedown', function() {
+            self.updateToolbar(self.getActiveCell(), 'table');
+        });
+
+        var row  = document.createElement('li');
+        dfx.addClass(row, 'ViperITP-lineageItem');
+        dfx.setHtml(row, 'Row');
+        this._lineage.appendChild(row);
+        dfx.addEvent(row, 'mousedown', function() {
+            self.updateToolbar(self.getActiveCell(), 'row');
+        });
+
+        var col  = document.createElement('li');
+        dfx.addClass(col, 'ViperITP-lineageItem');
+        dfx.setHtml(col, 'Column');
+        this._lineage.appendChild(col);
+        dfx.addEvent(col, 'mousedown', function() {
+            self.updateToolbar(self.getActiveCell(), 'col');
+        });
+
+        var cell  = document.createElement('li');
+        dfx.addClass(cell, 'ViperITP-lineageItem');
+        dfx.setHtml(cell, 'Cell');
+        this._lineage.appendChild(cell);
+        dfx.addEvent(cell, 'mousedown', function() {
+            self.updateToolbar(self.getActiveCell(), 'cell');
+        });
+
+    },
+
+    _updateInnerContainer: function(cell, type)
+    {
+        dfx.empty(this._toolsContainer);
+        dfx.empty(this._subSectionContainer);
+
+        switch (type) {
+            case 'cell':
+            default:
+                this._createCellProperties(cell);
+            break;
+        }
+
+    },
+
+    _createCellProperties: function(cell)
+    {
+        var isActive = false;
+        if (dfx.isTag(cell, 'th') === true) {
+            isActive = true;
+        }
+
+        var button = null;
+        var self   = this;
+        button = this.createButton('Heading', isActive, '', function() {
+            // Switch between header and normal cell.
+            if (dfx.isTag(cell, 'th') === true) {
+                var newCell = self.convertToCell(cell);
+                self.updateToolbar(newCell);
+            } else {
+                var newCell = self.convertToHeader(cell);
+                self.updateToolbar(newCell);
+            }
+        });
+
+        var subSection = document.createElement('div');
+        var wrapper    = document.createElement('div');
+        var mergeUp = this.createButton('U', false, '', function() {
+        });
+        var mergeDown = this.createButton('D', false, '', function() {
+        });
+        var span = document.createElement('span');
+        dfx.setHtml(span, 'Merge');
+
+        var mergeLeft = this.createButton('L', false, '', function() {
+        });
+        var mergeRight = this.createButton('R', false, '', function() {
+        });
+
+        wrapper.appendChild(mergeUp);
+        wrapper.appendChild(mergeDown);
+        wrapper.appendChild(span);
+        wrapper.appendChild(mergeLeft);
+        wrapper.appendChild(mergeRight);
+
+        var splitWrapper = document.createElement('div');
+
+        var splitVert = this.createButton('V', false, '', function() {
+            self.splitVertical(cell);
+            self.updateToolbar(cell);
+            return false;
+        });
+        var span = document.createElement('span');
+        dfx.setHtml(span, 'Split');
+
+        var splitHor = this.createButton('H', false, '', function() {
+            self.splitHorizontal(cell);
+            self.updateToolbar(cell);
+        });
+
+        splitWrapper.appendChild(splitVert);
+        splitWrapper.appendChild(span);
+        splitWrapper.appendChild(splitHor);
+
+        subSection.appendChild(wrapper);
+        subSection.appendChild(splitWrapper);
+        this.createSubSection(subSection, true);
+        this.showActiveSubSection();
+
+    },
+
+    /**
+     * Hides the inline toolbar.
+     */
+    hideToolbar: function()
+    {
+        dfx.removeClass(this._toolbar, 'visible');
+        this.hideActiveSubSection();
+
+    },
+
+
+    setActiveCell: function(cell)
     {
         this.activeCell = cell;
 
-        if (noUpdate !== true) {
-            this.updateSettings(cell);
+    },
+
+    getActiveCell: function(cell)
+    {
+        return this.activeCell;
+
+    },
+
+    convertToHeader: function(cell)
+    {
+        if (dfx.isTag(cell, 'td') === false) {
+            return false;
         }
 
-    },
+        var elem = document.createElement('th');
+        while (cell.firstChild) {
+            elem.appendChild(cell.firstChild);
+        }
 
-    _updatecellButtonPositions: function(cell)
-    {
-        this.showCellButtons(cell, true);
+        // TODO: Copy, attributes etc.
+        dfx.insertBefore(cell, elem);
+        dfx.remove(cell);
 
-    },
-
-    hideCellButtons: function(noDisable)
-    {
-        try {
-            var cellTable = this.getCellTable(this.activeCell);
-            if (cellTable) {
-                // Remove the delHighlight class when cell buttons are removed.
-                dfx.removeClass(dfx.getClass('delHighlight', cellTable), 'delHighlight');
-            }
-
-            if (noDisable !== true) {
-                this.setActiveCell(null);
-            }
-
-            dfx.remove(dfx.getClass('ViperTableEditorPlugin-cellButtonsWrapper'));
-            this.vCellButtons = null;
-            this.hCellButtons = null;
-
-            if (noDisable !== true) {
-                this.viper.ViperPluginManager.setActivePlugin(null);
-                this.viper.ViperPluginManager.getPlugin('ViperSubToolbarPlugin').hideToolbar('TableEditor');
-            }
-        } catch (e) {
-            // Nodes might have been removed and trying to remove them again
-            // will cause an exception. Not important so ignore it.
-        }//end try
+        return elem;
 
     },
 
-    showCellButtons: function(cell, noSet)
+    convertToCell: function(cell)
     {
-        if (!cell) {
+        if (dfx.isTag(cell, 'th') === false) {
+            return false;
+        }
+
+        var elem = document.createElement('td');
+        while (cell.firstChild) {
+            elem.appendChild(cell.firstChild);
+        }
+
+        // TODO: Copy, attributes etc.
+        dfx.insertBefore(cell, elem);
+        dfx.remove(cell);
+
+        return elem;
+
+    },
+
+    /**
+     * Splits specified cell horizontally only if it has colspan > 1.
+     *
+     * @param {DOMNode} cell The table cell to split.
+     *
+     * @return {DOMNode} The new column that was created.
+     */
+    splitHorizontal: function(cell)
+    {
+        if (!cell || !cell.getAttribute('colspan')) {
             return;
         }
 
-        this.hideCellButtons(true);
+        var tagName = dfx.getTagName(cell);
+        var elem    = document.createElement(tagName);
 
-        this.setActiveCell(cell, noSet);
-
-        var coords = dfx.getBoundingRectangle(cell);
-
-        if (this.vCellButtons === null) {
-            this.vCellButtons = this.createVerticalCellButtons();
-        }
-
-        if (this.hCellButtons === null) {
-            this.hCellButtons = this.createHorizontalCellButtons();
-        }
-
-        var wrapper = document.createElement('div');
-        dfx.addClass(wrapper, 'ViperTableEditorPlugin-cellButtonsWrapper');
-        wrapper.appendChild(this.vCellButtons);
-        wrapper.appendChild(this.hCellButtons);
-
-        document.body.appendChild(wrapper);
-
-        if (noSet !== true) {
-            this.viper.ViperPluginManager.setActivePlugin('TableEditor');
-            // Text can be changed while this plugin is active.
-            this.viper.ViperPluginManager.allowTextInput = true;
-        }
-
-        this.showVerticalCellButtons(coords);
-        this.showHorizontalCellButtons(coords);
-
-        if (!this._subToolbar) {
-            this._setupSubToolbar();
-            this.updateSettings(cell);
+        var colspan = (parseInt(cell.getAttribute('colspan')) - 1);
+        if (colspan > 1) {
+            cell.setAttribute('colspan', colspan);
         } else {
-            var subToolbarPlugin = this.viper.ViperPluginManager.getPlugin('ViperSubToolbarPlugin');
-            if (subToolbarPlugin) {
-                subToolbarPlugin.showToolbar('TableEditor');
-            }
+            dfx.removeAttr(cell, 'colspan');
         }
 
-    },
+        var rowspan = cell.getAttribute('rowspan');
+        if (rowspan > 1) {
+            elem.setAttribute('rowspan', rowspan);
+        }
 
-    showHorizontalCellButtons: function(coords)
-    {
-        // Position the vertical buttons.
-        dfx.setStyle(this.hCellButtons, 'visibility', 'hidden');
-        dfx.setStyle(this.hCellButtons, 'display', 'block');
-        var h = 14;
-        var w = 42;
+        dfx.insertAfter(cell, elem);
 
-        dfx.setStyle(this.hCellButtons, 'top', (coords.y1 - h) + 'px');
-        dfx.setStyle(this.hCellButtons, 'left', (coords.x2 - ((coords.x2 - coords.x1) / 2) - (w / 2)) + 'px');
-        dfx.setStyle(this.hCellButtons, 'visibility', 'visible');
+        return elem;
 
     },
 
-    showVerticalCellButtons: function(coords)
+    /**
+     * Splits specified cell vertically only if it has rowspan > 1.
+     *
+     * @param {DOMNode} cell The table cell to split.
+     *
+     * @return {DOMNode} The new row that was created.
+     */
+    splitVertical: function(cell)
     {
-        // Position the vertical buttons.
-        dfx.setStyle(this.vCellButtons, 'visibility', 'hidden');
-        dfx.setStyle(this.vCellButtons, 'display', 'block');
-        var h = 42;
-        var w = 14;
+        if (!cell || !cell.getAttribute('rowspan')) {
+            return false;
+        }
 
-        dfx.setStyle(this.vCellButtons, 'top', (coords.y1 + ((coords.y2 - coords.y1) / 2) - (h / 2)) + 'px');
-        dfx.setStyle(this.vCellButtons, 'left', (coords.x1 - w) + 'px');
-        dfx.setStyle(this.vCellButtons, 'visibility', 'visible');
+        var row     = cell.parentNode;
+        var rowspan = (parseInt(cell.getAttribute('rowspan')) - 1);
+        var i       = rowspan;
+        var nextRow = row;
 
-    },
-
-    createVerticalCellButtons: function()
-    {
-        var main = document.createElement('div');
-        dfx.addClass(main, 'ViperTableEditorPlugin-v-cellButtons');
-        var insertRowAfter = document.createElement('div');
-        dfx.attr(insertRowAfter, 'title', 'Insert row below');
-        dfx.addClass(insertRowAfter, 'down');
-        var insertRowBefore = document.createElement('div');
-        dfx.attr(insertRowBefore, 'title', 'Insert row above');
-        dfx.addClass(insertRowBefore, 'up');
-        var removeRow = document.createElement('div');
-        dfx.addClass(removeRow, 'delete');
-        dfx.attr(removeRow, 'title', 'Delete row');
-
-        dfx.addClass([insertRowAfter, insertRowBefore, removeRow], 'ViperTableEditorPlugin-cellButton');
-
-        main.appendChild(insertRowBefore);
-        main.appendChild(removeRow);
-        main.appendChild(insertRowAfter);
-
-        var self = this;
-        dfx.addEvent(insertRowAfter, 'click', function() {
-            self.insertRowAfter();
-        });
-
-        dfx.addEvent(insertRowBefore, 'click', function() {
-            self.insertRowBefore();
-        });
-
-        dfx.addEvent(removeRow, 'click', function() {
-            self.removeRow();
-        });
-
-        // Hover events.
-        dfx.hover(insertRowAfter, function() {
-            dfx.addClass(main, 'after');
-        }, function() {
-            dfx.removeClass(main, 'after');
-        });
-
-        dfx.hover(insertRowBefore, function() {
-            dfx.addClass(main, 'before');
-        }, function() {
-            dfx.removeClass(main, 'before');
-        });
-
-        dfx.hover(removeRow, function() {
-            dfx.addClass(main, 'delete');
-            if (self.activeCell && self.activeCell.parentNode) {
-                dfx.addClass(self.activeCell.parentNode, 'delHighlight');
+        while (i > 0) {
+            nextRow = this._getNextRow(nextRow);
+            if (!nextRow) {
+                return false;
             }
-        }, function() {
-            dfx.removeClass(main, 'delete');
-            if (self.activeCell && self.activeCell.parentNode) {
-                dfx.removeClass(self.activeCell.parentNode, 'delHighlight');
-            }
-        });
 
-        return main;
+            i--;
+        }
 
-    },
+        var tagName        = dfx.getTagName(cell);
+        var colNum         = this._getColNum(cell);
+        var nextRowColumns = this._getRowColumns(nextRow);
 
-    createHorizontalCellButtons: function()
-    {
-        var main = document.createElement('div');
-        dfx.addClass(main, 'ViperTableEditorPlugin-h-cellButtons');
-        var insertColAfter = document.createElement('div');
-        dfx.attr(insertColAfter, 'title', 'Insert column to the right');
-        dfx.addClass(insertColAfter, 'right');
-        var insertColBefore = document.createElement('div');
-        dfx.attr(insertColBefore, 'title', 'Insert column to the left');
-        dfx.addClass(insertColBefore, 'left');
-        var removeCol = document.createElement('div');
-        dfx.addClass(removeCol, 'delete');
-        dfx.attr(removeCol, 'title', 'Delete column');
+        var elem       = document.createElement(tagName);
+        if (rowspan > 1) {
+            cell.setAttribute('rowspan', rowspan);
+        } else {
+            dfx.removeAttr(cell, 'rowspan');
+        }
 
-        dfx.addClass([insertColAfter, insertColBefore, removeCol], 'ViperTableEditorPlugin-cellButton');
+        var colspan = cell.getAttribute('colspan');
+        if (colspan > 1) {
+            elem.setAttribute('colspan', colspan);
+        }
 
-        main.appendChild(insertColBefore);
-        main.appendChild(removeCol);
-        main.appendChild(insertColAfter);
+        if (colNum < nextRowColumns.length) {
+            var nextRowCol = this._getColumn(nextRow, colNum);
+            dfx.insertBefore(nextRowCol, elem);
+        } else {
+            var nextRowCol = this._getColumn(nextRow, (nextRowColumns.length - 1));
+            dfx.insertAfter(nextRowCol, elem);
+        }
 
-        var self = this;
-        dfx.addEvent(insertColAfter, 'click', function() {
-            self.insertColAfter();
-        });
-
-        dfx.addEvent(insertColBefore, 'click', function() {
-            self.insertColBefore();
-        });
-
-        dfx.addEvent(removeCol, 'click', function() {
-            self.removeCol();
-        });
-
-        // Hover events.
-        dfx.hover(insertColAfter, function() {
-            dfx.addClass(main, 'right');
-        }, function() {
-            dfx.removeClass(main, 'right');
-        });
-
-        dfx.hover(insertColBefore, function() {
-            dfx.addClass(main, 'left');
-        }, function() {
-            dfx.removeClass(main, 'left');
-        });
-
-        dfx.hover(removeCol, function() {
-            dfx.addClass(main, 'delete');
-            var table = self.getCellTable(self.activeCell);
-            dfx.addClass(self.getColumnCells(table, self._getColNum(self.activeCell)), 'delHighlight');
-        }, function() {
-            dfx.removeClass(main, 'delete');
-            var table = self.getCellTable(self.activeCell);
-            dfx.removeClass(self.getColumnCells(table, self._getColNum(self.activeCell)), 'delHighlight');
-        });
-
-        return main;
+        return elem;
 
     },
 
@@ -608,86 +703,6 @@ ViperTableEditorPlugin.prototype = {
         }
 
         this._nodesUpdated();
-
-    },
-
-    _getColNum: function(cell)
-    {
-        if (!cell) {
-            return null;
-        }
-
-        var tr = cell.parentNode;
-        if (!tr) {
-            return null;
-        }
-
-        var ln = tr.childNodes.length;
-        var c  = 0;
-        for (var i = 0; i < ln; i++) {
-            var node = tr.childNodes[i];
-            if (node.nodeType === dfx.ELEMENT_NODE) {
-                var tagName = node.tagName.toLowerCase();
-                if (tagName === 'td' || tagName === 'th') {
-                    if (node === cell) {
-                        break;
-                    }
-
-                    c++;
-                }
-            }
-        }
-
-        return c;
-
-    },
-
-    _getColumn: function(row, colNum)
-    {
-        var ln = row.childNodes.length;
-        for (var i = 0; i < ln; i++) {
-            var node = row.childNodes[i];
-            if (node.nodeType === dfx.ELEMENT_NODE) {
-                var tagName = node.tagName.toLowerCase();
-                if (tagName === 'td' || tagName === 'th') {
-                    if (colNum === 0) {
-                        return node;
-                    }
-
-                    colNum--;
-                }
-            }
-        }
-
-    },
-
-    _getPreviousRow: function(row)
-    {
-        while (row = row.previousSibling) {
-            if (row.nodeType === dfx.ELEMENT_NODE) {
-                var tagName = row.tagName.toLowerCase();
-                if (tagName === 'tr' || tagName === 'th') {
-                    return row;
-                }
-            }
-        }
-
-    },
-
-    _getNextRow: function(row, goPrev)
-    {
-        while (row = row.nextSibling) {
-            if (row.nodeType === dfx.ELEMENT_NODE) {
-                var tagName = row.tagName.toLowerCase();
-                if (tagName === 'tr' || tagName === 'th') {
-                    return row;
-                }
-            }
-        }
-
-        if (goPrev === true) {
-            return this._getPreviousRow(row);
-        }
 
     },
 
@@ -1010,636 +1025,523 @@ ViperTableEditorPlugin.prototype = {
 
     },
 
-    handleTab: function(e)
-    {
-        if (this.activeCell !== null) {
-            var cell = null;
-            if (e.shiftKey !== true) {
-                cell = this.getNextCell(this.activeCell);
-            } else {
-                cell = this.getPrevCell(this.activeCell);
-            }
-
-            this.moveCaretToCell(cell);
-            return true;
-        }
-
-    },
-
     isPluginElement: function(elem)
     {
-        if (dfx.hasClass(elem, 'ViperTableEditorPlugin-cellButton') !== true) {
-            if (dfx.isChildOf(elem, self._subToolbar) === false) {
-                return false;
-            }
-        }
-
-        return true;
+        return false;
 
     },
 
-    _nodesUpdated: function(noFocus)
+    setTableHeaders: function(table)
     {
-        this.viper.fireNodesChanged('ViperTableEditorPlugin:update', noFocus);
-
-    },
-
-    _setupSubToolbar: function()
-    {
-        var subToolbarPlugin = this.viper.ViperPluginManager.getPlugin('ViperSubToolbarPlugin');
-        if (!subToolbarPlugin) {
-            return;
-        }
-
-        var toolbar  = subToolbarPlugin.createToolBar('TableEditor');
-        var c        = 'ViperTableEditor-stb';
-        var contents = '<div class="' + c + '-left"></div>';
-        contents    += '<div class="' + c + '-right"></div>';
-        dfx.setHtml(toolbar, contents);
-        this._subToolbar = toolbar;
-
-        var self = this;
-        this.includeWidgets(['Button', 'RadioButton', 'SpinButton', 'TextField', 'Select'], function() {
-            var changePropTypeBtn = self.createWidget(c + '-switchToolbar', 'Button');
-            changePropTypeBtn.setName('Table Properties');
-            changePropTypeBtn.setButtonIconClassName(c + '-switch');
-            changePropTypeBtn.create(function(changePropTypeBtnEl) {
-                dfx.addClass(changePropTypeBtn.domElem, c + '-tableProperties');
-                changePropTypeBtn.setMinWidth('110px');
-                dfx.getClass(c + '-right', toolbar)[0].appendChild(changePropTypeBtnEl);
-            });
-
-            self._currentTablePropView = 'cell';
-
-            changePropTypeBtn.addClickEvent(function() {
-                if (self._currentTablePropView === 'table') {
-                    changePropTypeBtn.setName('Table Properties');
-                    dfx.removeClass(changePropTypeBtn.domElem, c + '-cellProperties');
-                    dfx.addClass(changePropTypeBtn.domElem, c + '-tableProperties');
-                    self._showProperties('cell');
-                } else {
-                    dfx.removeClass(changePropTypeBtn.domElem, c + '-tableProperties');
-                    dfx.addClass(changePropTypeBtn.domElem, c + '-cellProperties');
-                    changePropTypeBtn.setName('Cell Properties');
-                    self._showProperties('table');
-                }
-            });
-
-            self._setupTableProperties(function(tablePropertiesEl) {
-                self._setupCellProperties(function(cellPropertiesEl) {
-                    dfx.getClass(c + '-left', toolbar)[0].appendChild(tablePropertiesEl);
-                    dfx.getClass(c + '-left', toolbar)[0].appendChild(cellPropertiesEl);
-                    self._showProperties(self._currentTablePropView);
-                    subToolbarPlugin.showToolbar('TableEditor');
-                });
-            });
-        });
-
-    },
-
-    _setupTableProperties: function(callback)
-    {
-        var props = {
-            tableBorder: 'Table Border',
-            cellPadding: 'Cell Padding',
-            cellSpacing: 'Cell Spacing'
+        var cellHeadings  = [];
+        var usedHeaderids = [];
+        var rowCount      = 1
+        var headings      = {
+            col: [],
+            row: [],
         };
 
-        this._settingsWidgets.table = {};
+        var tableRows = dfx.getTag('tr', table);
+        for (var k = 0; k < tableRows.length; k++) {
+            var cellCount = 1;
+            var row       = tableRows[k];
 
-        var self = this;
-        var c    = 'ViperTableEditor-stb';
-        var div  = document.createElement('div');
-        dfx.addClass(div, c + '-propertiesWrapper');
-        dfx.addClass(div, c + '-tableProps');
+            for (var j = 0; j < row.childNodes.length; j++) {
+                var cell = row.childNodes[j];
 
-        var content = '';
-        content    += '<div class="' + c + '-propContainer" id="' + c + '-propContainer-tableWidth"><label>Table Width</label>';
-        content    += '<div class="' + c + '-propWrapper ' + c + '-tableWidth-wrapper"></div></div>';
-
-        dfx.foreach(props, function(propid) {
-            content += '<div class="' + c + '-propContainer" id="' + c + '-propContainer-' + propid + '"><label>' + props[propid] + '</label>';
-            content += '<div class="' + c + '-propWrapper ' + c + '-' + propid + '-wrapper"></div></div>';
-        });
-
-        dfx.setHtml(div, content);
-
-        // Table width.
-        var tableWidth     = this.createWidget(c + '-tableWidth', 'TextField');
-        var tableWidthType = this.createWidget(c + '-tableWidthType', 'Select');
-        tableWidthType.addItems({
-            px: 'px',
-            pc: '%'
-        });
-
-        tableWidthType.setSelectedEventValueType('value');
-        tableWidthType.addItemSelectedEvent(function(type) {
-            self._changeTableSettingValue('widthType', type);
-        });
-
-        this._settingsWidgets.table.widthType = tableWidthType;
-        this._settingsWidgets.table.width     = tableWidth;
-
-        tableWidth.create(function(tableWidthEl) {
-            tableWidth.setWidth(25);
-            var t = null;
-            dfx.addEvent(tableWidth.domEl, 'keyup', function() {
-                if (t) {
-                    clearTimeout(t);
-                    t = null;
+                // Skip text nodes.
+                if (cell.nodeType === dfx.TEXT_NODE) {
+                    continue;
                 }
 
-                t = setTimeout(function() {
-                    var width = parseInt(tableWidth.getValue());
-                    self._changeTableSettingValue('width', width);
-                }, 500);
-            });
-
-            self._makeOptionEditable(tableWidth.domEl);
-            var parent = dfx.getClass(c + '-tableWidth-wrapper', div)[0];
-            parent.appendChild(tableWidthEl);
-            tableWidthType.create(function(tableWidthTypeEl) {
-                dfx.insertAfter(parent, tableWidthTypeEl);
-            });
-        });
-
-        dfx.foreach(props, function(propid) {
-            (function(propid) {
-                var widgetid = c + '-' + propid;
-                var widget   = self.createWidget(widgetid, 'SpinButton', 0);
-                widget.setInitialValue(0);
-                widget.allowEmptyValue(true);
-                widget.create(function(el) {
-                    self._makeOptionEditable(widget.domEl);
-                    dfx.getClass(widgetid + '-wrapper', div)[0].appendChild(el);
-                });
-
-                widget.addOnChangeEvent(function(val) {
-                    self._changeTableSettingValue(propid, val);
-                });
-
-                self._settingsWidgets.table[propid] = widget;
-            }) (propid);
-        });
-
-        callback.call(this, div);
-
-    },
-
-    _makeOptionEditable: function(elem)
-    {
-        /*
-         // Options with textbox needs to call this method so that Viper
-         // will ignore keypress events. This also removed the viper caret.
-         var self = this;
-         dfx.addEvent(elem, 'focus', function() {
-            ViperPluginManager.setActivePlugin('TableEditor', false);
-         });
-
-         dfx.addEvent(elem, 'blur', function() {
-            ViperPluginManager.setActivePlugin(null);
-         });
-        */
-
-    },
-
-    _setupCellProperties: function(callback)
-    {
-        this._settingsWidgets.cell = {};
-
-        var self = this;
-        var c    = 'ViperTableEditor-stb';
-        var div  = document.createElement('div');
-        dfx.addClass(div, c + '-propertiesWrapper');
-        dfx.addClass(div, c + '-cellProps');
-
-        var content = '<div class="' + c + '-propContainer" id="' + c + '-propContainer-colWidth"><label>Column Width</label>';
-        content    += '<div class="' + c + '-propWrapper ' + c + '-columnWidth-wrapper"></div>';
-        content    += '<div class="' + c + '-propWrapper ' + c + '-columnWidthSel-wrapper"></div></div>';
-        content    += '<div class="' + c + '-optionListWrapper"></div>';
-        dfx.setHtml(div, content);
-
-        var colWidthText = this.createWidget(c + '-colWidth-txt', 'TextField');
-        colWidthText.create(function(colWidthTextEl) {
-            var t = null;
-            dfx.addEvent(colWidthText.domEl, 'keyup', function() {
-                if (t) {
-                    clearTimeout(t);
-                    t = null;
+                // Find the real cell number, taking rowspans into account.
+                while (dfx.isset(cellHeadings[rowCount]) === true
+                    && dfx.isset(cellHeadings[rowCount][cellCount]) === true
+                ) {
+                    cellCount++;
                 }
 
-                t = setTimeout(function() {
-                    var width = parseInt(colWidthText.getValue());
-                    self._changeSettingValue('width', width);
-                }, 500);
-            });
+                // Determine colspan and rowspan for the cell. If nothing is set,
+                // assume a value of 1. These come out as string values but we turn them
+                // into integers for easier comparison and addition.
+                var colspan = cell.getAttribute('colspan') || 1;
+                var rowspan = cell.getAttribute('rowspan') || 1;
 
-            self._makeOptionEditable(colWidthText.domEl);
-            colWidthText.setWidth(25);
-            dfx.getClass(c + '-columnWidth-wrapper', div)[0].appendChild(colWidthTextEl);
-        });
+                if (dfx.isTag(cell, 'th') === true && dfx.isBlank(dfx.getHtml(cell)) === false) {
+                    // This is a table header, so figure out an ID-based representation
+                    // of the cell content. We'll use this later as a basis for the ID attribute
+                    // although it may be prefixed with the ID of another header to make it unique.
 
-        var colWidthSel = this.createWidget(c + '-colWidth-sel', 'Select');
-        colWidthSel.addItems({
-            px: 'px',
-            pc: '%'
-        });
+                    var cellid = 'r' + rowCount + 'c' + cellCount;
 
-        colWidthSel.setSelectedEventValueType('value');
-        colWidthSel.addItemSelectedEvent(function(type) {
-            self._changeSettingValue('widthType', type);
-        });
+                    if (rowspan > 1) {
+                        if (dfx.isset(headings.row[rowCount]) === true
+                            && headings.row[rowCount].rowspan <= rowspan
+                        ) {
+                            // This heading is replacing a heading set higher up
+                            // so we need to remove the higher heading from the IDs so
+                            // we can replace it with our own later on.
+                            var oldidLen = headings.row[rowCount].id.length;
+                            for (var i = 1; i < rowspan; i++) {
+                                var oldid = headings.row[(rowCount + i)].id;
+                                oldid     = oldid.substr(0, ((oldidLen + 1) * -1));
+                                headings.row[(rowCount + i)].id = dfx.trim(oldid);
+                            }
 
-        this._settingsWidgets.cell.widthType = colWidthSel;
-        this._settingsWidgets.cell.width     = colWidthText;
+                            headings.row[rowCount].id = '';
+                        }//end if
 
-        colWidthSel.create(function(colWidthSelEl) {
-            dfx.getClass(c + '-columnWidthSel-wrapper', div)[0].appendChild(colWidthSelEl);
-        });
+                        for (var i = 0; i < rowspan; i++) {
+                            if (dfx.isset(headings.row[(rowCount + i)]) === false) {
+                                headings.row[(rowCount + i)] = {
+                                    id: '',
+                                    rowspan: rowspan
+                                };
+                            } else if (headings.row[(rowCount + i)].id !== '') {
+                                headings.row[(rowCount + i)].id += '-';
+                            }
 
-        // Cell Appearance props.
-        var optsList = this.viper.ViperPluginManager.getPlugin('ViperSubToolbarPlugin').createOptionsList('Appearance');
-        dfx.addClass(optsList.main, c + '-optionList');
-        (dfx.getClass(c + '-optionListWrapper', div)[0]).appendChild(optsList.main);
-        this._createOptionList(optsList.contentEl);
+                            headings.row[(rowCount + i)].id      += cellid;
+                            headings.row[(rowCount + i)].rowspan  = rowspan;
 
-        callback.call(this, div);
+                            cellHeadings[(rowCount + i)][cellCount] = {
+                                id: headings.row[(rowCount + i)].id,
+                                row: (rowCount + i)
+                            };
+                        }//end for
 
-    },
-
-    _createOptionList: function(parent)
-    {
-        var div  = null;
-        var self = this;
-        var opts = {
-            tableHeader: 'Table Header',
-            noTextWrap: 'No Text Wrap'
-        };
-
-        // Vert Align.
-        div       = document.createElement('div');
-        var label = document.createElement('label');
-        parent.appendChild(div);
-        dfx.setHtml(label, 'Align');
-        div.appendChild(label);
-        dfx.addClass(div, 'ViperTableEditor-stb-optItem');
-        div.id = 'ViperTableEditor-opts-vert';
-        dfx.addClass(div, 'first');
-
-        var alignType = {
-            top: 'Align to top',
-            middle: 'Align to middle',
-            bottom: 'Align to bottom'
-        };
-
-        this._settingsWidgets.cell.valign = div;
-        dfx.foreach(alignType, function(i) {
-            var alignDiv = document.createElement('div');
-            dfx.attr(alignDiv, 'title', alignType[i]);
-            dfx.addClass(alignDiv, 'ViperTableEditor-stb-align');
-            dfx.addClass(alignDiv, 'ViperTableEditor-stb-align-' + i);
-            (function(el, alignType) {
-                dfx.addEvent(el, 'click', function() {
-                    dfx.removeClass(dfx.getClass('ViperTableEditor-stb-align', el.parentNode), 'active');
-                    dfx.addClass(el, 'active');
-                    self._changeSettingValue('valign', alignType);
-                });
-            }) (alignDiv, i);
-
-            div.appendChild(alignDiv);
-        });
-
-        dfx.foreach(opts, function(i) {
-            div       = document.createElement('div');
-            var label = document.createElement('label');
-            parent.appendChild(div);
-            dfx.setHtml(label, opts[i]);
-            div.appendChild(label);
-            dfx.addClass(div, 'ViperTableEditor-stb-optItem');
-            div.id = 'ViperTableEditor-opts-' + i;
-
-            var radioBtn = self.createWidget(null, 'RadioButton', null, false);
-            self._settingsWidgets.cell[i] = radioBtn;
-
-            radioBtn.create(function(radioBtnEl) {
-                dfx.attr(label, 'for', radioBtn.id);
-                div.appendChild(radioBtnEl);
-                radioBtn._addEvents();
-            });
-
-            (function(radioBtnWidget, type) {
-                radioBtnWidget.addCheckedEvent(function(checked) {
-                    self._changeSettingValue(type, checked);
-                });
-            }) (radioBtn, i);
-        });
-
-        if (div) {
-            dfx.addClass(div, 'last');
-        }
-
-    },
-
-    _showProperties: function(type)
-    {
-        if (!this._subToolbar) {
-            return;
-        }
-
-        var c = 'ViperTableEditor-stb';
-        dfx.removeClass(dfx.getClass(c + '-propertiesWrapper', this._subToolbar), 'show');
-        dfx.addClass(dfx.getClass(c + '-' + type + 'Props', this._subToolbar)[0], 'show');
-
-        this._currentTablePropView = type;
-
-        this.viper.ViperPluginManager.getPlugin('ViperSubToolbarPlugin').showToolbar('TableEditor');
-
-    },
-
-    _changeTableSettingValue: function(type, value)
-    {
-        if (!this.activeCell || !type) {
-            return;
-        }
-
-        var table = this.getCellTable(this.activeCell);
-        if (!table) {
-            return;
-        }
-
-        var changed = false;
-        switch (type) {
-            case 'tableBorder':
-                if (parseInt(dfx.attr(table, 'border')) !== parseInt(value)) {
-                    dfx.attr(table, 'border', value);
-                    changed = true;
-                }
-            break;
-
-            case 'width':
-                if (!value) {
-                    value = '';
-                } else {
-                    var widthType = this._settingsWidgets.table.widthType.getValue();
-                    if (widthType === 'pc') {
-                        value += '%';
+                        cellid = headings.row[rowCount].id;
                     } else {
-                        value += 'px';
-                    }
-                }
+                        if (dfx.isset(headings.row[rowCount]) === true
+                            && dfx.isset(headings.row[rowCount].id) === true
+                        ) {
+                            cellid = headings.row[rowCount].id + '-' + cellid;
+                        }
+                    }//end if
 
-                if (dfx.setStyle(table, 'width') !== value) {
-                    dfx.setStyle(table, 'width', value);
-                    changed = true;
-                }
-            break;
+                    if (colspan > 1) {
+                        if (dfx.isset(headings.col[cellCount]) === true
+                            && headings.col[cellCount].colspan <= colspan
+                        ) {
+                            // This heading is replacing a heading set higher up
+                            // so we need to remove the higher heading from the IDs so
+                            // we can replace it with our own later on.
+                            var oldidLen = headings.col[cellCount].id.length;
+                            for (var i = 1; i < colspan; i++) {
+                                var oldid = headings.col[(cellCount + i)].id
+                                var newid = oldid.substr(0, ((oldidLen + 1) * -1));
+                                headings.col[(cellCount + i)].id = dfx.trim(newid);
 
-            case 'widthType':
-                var width = parseInt(dfx.getStyle(table, 'width'));
-                if (width) {
-                    if (value === 'pc') {
-                        value = '%';
-                    }
+                                var oldHeading = cellHeadings[(rowCount - 1)][(cellCount + i)].id;
+                                var newHeading = oldHeading.replace(oldid, '');
+                                cellHeadings[(rowCount - 1)][(cellCount + i)].id = newHeading;
+                            }
 
-                    if (dfx.setStyle(table, 'width') !== (width + value)) {
-                        dfx.setStyle(table, 'width', width + value);
-                        changed = true;
-                    }
-                }
-            break;
+                            headings.col[cellCount].id = '';
+                        }//end if
 
-            default:
-                value = parseInt(value);
-                if (isNaN(value) === true) {
-                    value = '';
-                }
+                        for (var i = 0; i < colspan; i++) {
+                            if (dfx.isset(headings.col[(cellCount + i)]) === false) {
+                                headings.col[(cellCount + i)] = {
+                                    id: '',
+                                    colspan: colspan
+                                };
+                            } else if (headings.col[(cellCount + i)].id !== '') {
+                                headings.col[(cellCount + i)].id += '-';
+                            }
 
-                var currVal = parseInt(dfx.attr(table, type));
-                if (isNaN(currVal) === true) {
-                    currVal = '';
-                }
+                            headings.col[(cellCount + i)].id     += cellid;
+                            headings.col[(cellCount + i)].colspan = colspan;
 
-                if (currVal !== value) {
-                    dfx.attr(table, type, value);
-                    changed = true;
-                }
-            break;
-        }//end switch
+                            if (dfx.isset(cellHeadings[rowCount]) === false) {
+                                cellHeadings[rowCount] = [];
+                            }
 
-        if (changed === true) {
-            // Update button locations.
-            this._updatecellButtonPositions(this.activeCell);
-            this._nodesUpdated(true);
-        }
+                            cellHeadings[rowCount][(cellCount + i)] = {
+                                id: headings.col[(cellCount + i)].id,
+                                row: rowCount
+                            };
 
-    },
+                            if (dfx.isset(cellHeadings[(rowCount - 1)][(cellCount + i)]) === true) {
+                                cellHeadings[rowCount][(cellCount + i)].id = cellHeadings[(rowCount - 1)][(cellCount + i)].id + ' ' + cellHeadings[rowCount][(cellCount + i)].id;
+                            }
+                        }//end for
 
-    _changeSettingValue: function(type, value)
-    {
-        if (!this.activeCell || !type) {
-            return;
-        }
+                        cellid = headings.col[cellCount].id;
+                    } else {
+                        if (dfx.isset(headings.col[cellCount]) === true
+                            && dfx.isset(headings.col[cellCount].id) === true
+                        ) {
+                            cellid = headings.col[cellCount].id + '-' + cellid;
+                        }
 
-        var changed = false;
-        if (type === 'tableHeader') {
-            var toType = 'th';
-            if (value !== true) {
-                toType = 'td';
-            }
+                        if (dfx.isset(cellHeadings[rowCount]) === false) {
+                            cellHeadings[rowCount] = [];
+                        }
 
-            if (dfx.isTag(this.activeCell, toType) === true) {
-                // Nothing to do..
-                return;
-            }
+                        if (dfx.isset(cellHeadings[rowCount][cellCount]) === false) {
+                            cellHeadings[rowCount][cellCount] = {
+                                id: cellid,
+                                row: rowCount
+                            };
+                        }
+                    }//end if
 
-            var newEl = document.createElement(toType);
-            var clone = this.activeCell.cloneNode(true);
-            while (clone.firstChild) {
-                newEl.appendChild(clone.firstChild);
-            }
-
-            // Copy width and white-space styles to the new element.
-            var whiteSpace = dfx.getStyle(clone, 'white-space');
-            if (whiteSpace === 'nowrap') {
-                dfx.setStyle(newEl, 'white-space', 'nowrap');
-            }
-
-            // Copy valign.
-            var valign = dfx.getStyle(clone, 'vertical-align');
-            if (valign) {
-                dfx.setStyle(newEl, 'vertical-align', valign);
-            }
-
-            var width = dfx.getStyle(clone, 'width');
-            if (width) {
-                dfx.setStyle(newEl, 'width', width);
-            }
-
-            dfx.insertBefore(this.activeCell, newEl);
-            dfx.remove(this.activeCell);
-            this.setActiveCell(newEl);
-            changed = true;
-            this.moveCaretToCell(this.activeCell);
-        } else if (type === 'noTextWrap') {
-            var style = 'normal';
-            if (value === true) {
-                style = 'nowrap';
-            }
-
-            if (dfx.getStyle(this.activeCell, 'white-space') !== style) {
-                dfx.setStyle(this.activeCell, 'white-space', style);
-                changed = true;
-                this.moveCaretToCell(this.activeCell);
-            }
-        } else if (type === 'width') {
-            if (!value) {
-                value = '';
-            } else {
-                var widthType = this._settingsWidgets.cell.widthType.getValue();
-                if (widthType === 'pc') {
-                    value += '%';
+                    cell.setAttribute('id', cellid);
+                    usedHeaderids.push(cellid);
                 } else {
-                    value += 'px';
+                    // Copy the headings down from the column above.
+                    if (rowCount > 1) {
+                        for (var i = 0; i < colspan; i++) {
+                            cellHeadings[rowCount][(cellCount + i)] = cellHeadings[(rowCount - 1)][(cellCount + i)];
+                        }
+                    } else {
+                        for (var i = 0; i < colspan; i++) {
+                            if (dfx.isset(cellHeadings[rowCount]) === false) {
+                                cellHeadings[rowCount] = [];
+                            }
+
+                            cellHeadings[rowCount][(cellCount + i)] = {
+                                id: '#td',
+                                row: rowCount
+                            };
+                        }
+                    }
+
+                    // TODO: Dont do this if it has headers attribute.
+                    if (dfx.isBlank(dfx.getHtml(cell)) === false) {
+                        var headers = cellHeadings[rowCount][cellCount].id;
+                        for (var i = 1; i < cellCount; i++) {
+                            // Skip column headers. We only want to use our own column header.
+                            if (cellHeadings[rowCount][i].row !== rowCount) {
+                                continue;
+                            }
+
+                            headers += ' ' + cellHeadings[rowCount][i].id;
+                        }
+
+                        var headerids = [];
+
+                        headers = headers.split(' ');
+                        var headersLen = headers.length;
+                        for (var i = 0; i < headersLen; i++) {
+                            var header = headers[i];
+                            var subHeaders = header.split('-');
+                            var numHeaders = subHeaders.length;
+                            var lastHeader = '';
+                            for (var m = 0; m < numHeaders; m++) {
+                                var subHeader = subHeaders.shift();
+                                if (lastHeader === '') {
+                                    lastHeader = subHeader;
+                                } else {
+                                    lastHeader += '-' + subHeader;
+                                }
+
+                                headerids.push(lastHeader);
+                            }
+                        }
+
+                        headerids = this.arrayUnique(headerids);
+                        headerids = this.arrayIntersect(headerids, usedHeaderids);
+                        cell.setAttribute('headers', headerids.join(' '));
+                    }//end if
+
+                    for (var i = 0; i < rowspan; i++) {
+                        for (var m = 0; m < colspan; m++) {
+                            cellHeadings[(rowCount + i)][(cellCount + m)] = cellHeadings[rowCount][(cellCount + m)];
+                        }
+                    }
+                }//end if
+
+                cellCount += colspan;
+            }//end for
+
+            rowCount++;
+        }//end for
+    },
+
+    getHeadersContent: function(element)
+    {
+        var headers = element.getAttribute('headers');
+        if (!headers) {
+            return '';
+        }
+
+        var parts   = headers.split(' ');
+        var content = [];
+        for (var i = 0; i < parts.length; i++) {
+            var part = parts[i];
+
+            content.push(dfx.getHtml(dfx.getId(part)));
+        }
+
+        content.push(dfx.getHtml(element));
+        content = content.join(' ');
+
+        return content;
+
+    },
+
+    getCellContent: function (table, row, column)
+    {
+        var rows = dfx.getTag('tr', table);
+        if (!rows[row]) {
+            return null;
+        }
+
+        var rowElem = rows[row];
+
+        var cols = dfx.getTag(['td', 'th'], rowElem);
+        if (!cols[column]) {
+            return null;
+        }
+
+        return dfx.getHtml(cols[column]);
+
+    },
+
+    arrayUnique: function(array)
+    {
+        var tmp    = {};
+        var unique = [];
+        var count  = array.length;
+
+        for (var i = 0; i < count; i++) {
+            tmp[array[i]] = array[i];
+        }
+
+        for (var item in tmp) {
+            unique.push(tmp[item]);
+        }
+
+        return unique;
+
+    },
+
+    arrayIntersect: function(array1, array2)
+    {
+        var tmp    = {};
+        var unique = [];
+        var count  = array2.length;
+
+        for (var i = 0; i < count; i++) {
+            tmp[array2[i]] = array2[i];
+        }
+
+        count = array1.length;
+        for (var i = count; i >= 0; i--) {
+            if (dfx.isset(tmp[array1[i]]) === false) {
+                dfx.unset(array1, i);
+            }
+        }
+
+        return array1;
+
+    },
+
+    _getRangeCellElement: function(range)
+    {
+        var commonElement = range.getCommonElement();
+        var cellElement   = null;
+
+        if (dfx.isTag(commonElement, 'td') === false
+            && dfx.isTag(commonElement, 'th') === false
+        ) {
+            // Check if any of the parents td or th.
+            var parents = dfx.getParents(commonElement, null, this.viper.getViperElement());
+            var plen    = parents.length;
+            for (var i = 0; i < plen; i++) {
+                if (dfx.isTag(parents[i], 'td') === true
+                    || dfx.isTag(parents[i], 'th') === true
+                ) {
+                    cellElement = parents[i];
+                    break;
                 }
             }
+        } else {
+            cellElement = commonElement;
+        }
 
-            if (dfx.getStyle(this.activeCell, 'width') !== value) {
-                dfx.setStyle(this.activeCell, 'width', value);
-                changed = true;
-            }
-        } else if (type === 'widthType') {
-            var width = parseInt(dfx.getStyle(this.activeCell, 'width'));
-            if (width) {
-                if (value === 'pc') {
-                    value = '%';
+        if (!cellElement) {
+            return false;
+        }
+
+        return cellElement;
+
+    },
+
+    _getColNum: function(cell)
+    {
+        if (!cell) {
+            return null;
+        }
+
+        var tr = cell.parentNode;
+        if (!tr) {
+            return null;
+        }
+
+        var ln = tr.childNodes.length;
+        var c  = 0;
+        for (var i = 0; i < ln; i++) {
+            var node = tr.childNodes[i];
+            if (node.nodeType === dfx.ELEMENT_NODE) {
+                var tagName = node.tagName.toLowerCase();
+                if (tagName === 'td' || tagName === 'th') {
+                    if (node === cell) {
+                        break;
+                    }
+
+                    c++;
                 }
+            }
+        }
 
-                if (dfx.getStyle(this.activeCell, 'width') !== (width + value)) {
-                    dfx.setStyle(this.activeCell, 'width', width + value);
-                    changed = true;
+        return c;
+
+    },
+
+    _getColumn: function(row, colNum)
+    {
+        var ln = row.childNodes.length;
+        for (var i = 0; i < ln; i++) {
+            var node = row.childNodes[i];
+            if (node.nodeType === dfx.ELEMENT_NODE) {
+                var tagName = node.tagName.toLowerCase();
+                if (tagName === 'td' || tagName === 'th') {
+                    if (colNum === 0) {
+                        return node;
+                    }
+
+                    colNum--;
                 }
             }
-        } else if (type === 'valign') {
-            if (dfx.getStyle(this.activeCell, 'vertical-align') !== value) {
-                dfx.setStyle(this.activeCell, 'vertical-align', value);
-                changed = true;
-            }
-        }//end if
-
-        if (changed === true) {
-            // Update button locations.
-            this._updatecellButtonPositions(this.activeCell);
-            this._nodesUpdated(true);
         }
 
     },
 
-    // Updates the setting values on sub toolbar when a table cell is picked.
-    updateSettings: function(cell)
+    _getPreviousRow: function(row)
     {
-        if (!cell) {
-            cell = this.activeCell;
-        }
-
-        if (!cell) {
-            return;
-        }
-
-        // Turn on/off cell header setting.
-        if (this._settingsWidgets.cell && this._settingsWidgets.cell.tableHeader) {
-            if (dfx.isTag(cell, 'th') === true) {
-                this._settingsWidgets.cell.tableHeader.check();
-            } else {
-                this._settingsWidgets.cell.tableHeader.uncheck();
+        while (row = row.previousSibling) {
+            if (row.nodeType === dfx.ELEMENT_NODE) {
+                var tagName = row.tagName.toLowerCase();
+                if (tagName === 'tr' || tagName === 'th') {
+                    return row;
+                }
             }
         }
 
-        // Turn on/off cell no-text-wrap setting.
-        if (this._settingsWidgets.cell && this._settingsWidgets.cell.noTextWrap) {
-            if (dfx.getStyle(cell, 'white-space') === 'nowrap') {
-                this._settingsWidgets.cell.noTextWrap.check();
-            } else {
-                this._settingsWidgets.cell.noTextWrap.uncheck();
+    },
+
+    _getNextRow: function(row, goPrev)
+    {
+        while (row = row.nextSibling) {
+            if (row.nodeType === dfx.ELEMENT_NODE) {
+                var tagName = row.tagName.toLowerCase();
+                if (tagName === 'tr' || tagName === 'th') {
+                    return row;
+                }
             }
         }
 
-        if (this._settingsWidgets.cell && this._settingsWidgets.cell.valign) {
-            var val  = dfx.getStyle(cell, 'vertical-align');
-            var btns = dfx.getClass('ViperTableEditor-stb-align', this._settingsWidgets.cell.valign);
-            dfx.removeClass(btns, 'active');
-
-            if (val) {
-                dfx.addClass(dfx.getClass('ViperTableEditor-stb-align-' + val, this._settingsWidgets.cell.valign), 'active');
-            }
+        if (goPrev === true) {
+            return this._getPreviousRow(row);
         }
 
-        // Width and withd type.
-        if (this._settingsWidgets.cell && this._settingsWidgets.cell.width) {
-            // Note: Not using dfx.getStyle since we need the actual CSS style
-            // and not the element width even if CSS width is not set.
-            var widthStyle = cell.style.width;
-            var width      = parseInt(widthStyle);
-            this._settingsWidgets.cell.width.setValue(width);
+    },
 
-            // Update the width type.
-            var widthType = 'px';
-            if (this._settingsWidgets.cell.widthType) {
-                if (widthStyle.indexOf('%') > 0) {
-                    widthType = 'pc';
-                }
+    _getRowColumns: function(row)
+    {
+        var tags = dfx.getTag(['td', 'th'], row);
+        return tags;
+
+    },
+
+    _initChangeTrackerCallbacks: function()
+    {
+        // Tracking Inserts.
+        ViperChangeTracker.addChangeType('insertedTable', 'Inserted', 'insert');
+        ViperChangeTracker.addChangeType('insertedTableRow', 'Inserted', 'insert');
+        ViperChangeTracker.addChangeType('insertedTableCol', 'Inserted', 'insert');
+        ViperChangeTracker.setDescriptionCallback('insertedTable', function(node) {
+            return 'Table';
+        });
+        ViperChangeTracker.setDescriptionCallback('insertedTableRow', function(node) {
+            return 'Table row';
+        });
+        ViperChangeTracker.setDescriptionCallback('insertedTableCol', function(node) {
+            return 'Table column';
+        });
+
+        ViperChangeTracker.setApproveCallback('insertedTable', function(clone, node) {
+            ViperChangeTracker.removeTrackChanges(node);
+        });
+        ViperChangeTracker.setApproveCallback('insertedTableRow', function(clone, node) {
+            ViperChangeTracker.removeTrackChanges(node);
+        });
+        ViperChangeTracker.setApproveCallback('insertedTableCol', function(clone, node) {
+            ViperChangeTracker.removeTrackChanges(node);
+        });
+
+        ViperChangeTracker.setRejectCallback('insertedTable', function(clone, node) {
+            self.removeTable(node);
+        });
+        ViperChangeTracker.setRejectCallback('insertedTableRow', function(clone, node) {
+            self.removeRow(node);
+        });
+        ViperChangeTracker.setRejectCallback('insertedTableCol', function(clone, node) {
+            self.removeCol(node);
+        });
+
+        // Tracking Deletes.
+        ViperChangeTracker.addChangeType('removedTable', 'Deleted', 'remove');
+        ViperChangeTracker.addChangeType('removedTableRow', 'Deleted', 'remove');
+        ViperChangeTracker.addChangeType('removedTableCol', 'Deleted', 'remove');
+        ViperChangeTracker.setDescriptionCallback('removedTable', function(node) {
+            return 'Table';
+        });
+        ViperChangeTracker.setDescriptionCallback('removedTableRow', function(node) {
+            return 'Table row';
+        });
+        ViperChangeTracker.setDescriptionCallback('removedTableCol', function(node) {
+            return 'Table column';
+        });
+
+        ViperChangeTracker.setApproveCallback('removedTable', function(clone, node) {
+            dfx.remove(node);
+        });
+        ViperChangeTracker.setApproveCallback('removedTableRow', function(clone, node) {
+            dfx.remove(node);
+        });
+        ViperChangeTracker.setApproveCallback('removedTableCol', function(clone, node) {
+            dfx.remove(node);
+        });
+
+        ViperChangeTracker.setRejectCallback('removedTable', function(clone, node) {
+            ViperChangeTracker.removeTrackChanges(node);
+        });
+        ViperChangeTracker.setRejectCallback('removedTableRow', function(clone, node) {
+            ViperChangeTracker.removeTrackChanges(node);
+        });
+        ViperChangeTracker.setRejectCallback('removedTableCol', function(clone, node) {
+            ViperChangeTracker.removeTrackChanges(node);
+        });
+
+        this.viper.registerCallback('ViperChangeTracker:modeChange', 'ViperTableEditor', function(changedTo) {
+            var showInserted = true;
+            var showRemoved  = false;
+            if (changedTo === 'original') {
+                showInserted = false;
+                showRemoved  = true;
             }
 
-            this._settingsWidgets.cell.widthType.setValue(widthType, true);
-        }//end if
-
-        // Table properties.
-        var table = this.getCellTable(cell);
-        if (this._settingsWidgets.table && table) {
-            if (this._settingsWidgets.table.tableBorder) {
-                var val = NaN;
-                if (dfx.attr(table, 'border') !== 'undefined') {
-                    val = parseInt(dfx.attr(table, 'border'));
-                }
-
-                this._settingsWidgets.table.tableBorder.setValue(val);
-            }
-
-            if (this._settingsWidgets.table.cellPadding) {
-                var val = NaN;
-                if (dfx.attr(table, 'cellpadding') !== 'undefined') {
-                    val = parseInt(dfx.attr(table, 'cellpadding'));
-                }
-
-                this._settingsWidgets.table.cellPadding.setValue(val);
-            }
-
-            if (this._settingsWidgets.table.cellSpacing) {
-                var val = NaN;
-                if (dfx.attr(table, 'cellspacing') !== 'undefined') {
-                    val = parseInt(dfx.attr(table, 'cellspacing'));
-                }
-
-                this._settingsWidgets.table.cellSpacing.setValue(val);
-            }
-
-            if (this._settingsWidgets.table.width) {
-                // Note: Not using dfx.getStyle since we need the actual CSS style
-                // and not the element width even if CSS width is not set.
-                var widthStyle = table.style.width;
-                var width      = parseInt(widthStyle);
-                this._settingsWidgets.table.width.setValue(width);
-
-                // Update the width type.
-                var widthType = 'px';
-                if (this._settingsWidgets.table.widthType) {
-                    if (widthStyle.indexOf('%') > 0) {
-                        widthType = 'pc';
-                    }
-                }
-
-                this._settingsWidgets.table.widthType.setValue(widthType, true);
-            }//end if
-        }//end if
+            ViperChangeTracker.setNodeTypeVisibility('insertedTable', showInserted);
+            ViperChangeTracker.setNodeTypeVisibility('insertedTableRow', showInserted);
+            ViperChangeTracker.setNodeTypeVisibility('insertedTableCol', showInserted);
+            ViperChangeTracker.setNodeTypeVisibility('removedTable', showRemoved);
+            ViperChangeTracker.setNodeTypeVisibility('removedTableRow', showRemoved);
+            ViperChangeTracker.setNodeTypeVisibility('removedTableCol', showRemoved);
+        });
 
     }
 

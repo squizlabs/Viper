@@ -35,7 +35,7 @@ function ViperFormatPlugin(viper)
         p: 'Paragraph',
         pre: 'Preformatted',
         address: 'Address',
-        quote: 'Quote'
+        blockquote: 'Quote'
     };
 
     this.toolbarPlugin = null;
@@ -202,7 +202,7 @@ ViperFormatPlugin.prototype = {
             var formatsSubSectionContents = document.createElement('div');
 
             var formatButtons = {
-                quote: 'Quote',
+                blockquote: 'Quote',
                 pre: 'PRE',
                 div: 'DIV',
                 p: 'P'
@@ -278,7 +278,7 @@ ViperFormatPlugin.prototype = {
         if (node.nodeType === dfx.TEXT_NODE) {
             // If this is a text selection then dont show the tools.
             return false;
-        } else if (dfx.isBlockElement(node) === false && dfx.isTag(node, 'quote') === false) {
+        } else if (dfx.isBlockElement(node) === false && dfx.isTag(node, 'blockquote') === false) {
             return false;
         } else {
             switch (node.tagName.toLowerCase()) {

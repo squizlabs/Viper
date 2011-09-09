@@ -1,0 +1,252 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>Viper - Simple Example</title>
+    <link rel="stylesheet" media="screen" href="main.css">
+    <script type="text/javascript" src="../../DfxJSLib/mysource.js"></script>
+    <script type="text/javascript" src="../../Viper-all.js"></script>
+    <script type="text/javascript">
+        var viper = null;
+        dfx.addLoadEvent(function() {
+            viper = new Viper('test');
+            var pluginSets = {
+                all: {
+                    plugins: ['ViperCoreStylesPlugin', 'ViperKeyboardEditorPlugin', 'ViperInlineToolbarPlugin', 'ViperHistoryPlugin', 'ViperListPlugin', 'ViperFormatPlugin', 'ViperToolbarPlugin', 'ViperTableEditorPlugin']
+                }
+            };
+
+            viper.setPluginSets(pluginSets);
+            viper.getPluginManager().usePluginSet('all');
+            viper.setEditableElement(document.getElementById('content'));
+        });
+    </script>
+</head>
+<body spellcheck="false">
+
+<div id="pageWidth">
+<div id="contentHolder">
+<div id="contentInner">
+<div id="contentPadder">
+
+<div id="lineage">
+    <strong class="screen_hide">Current lineage:</strong>
+    <ol id="lineageList">
+        <li class="lineage-home"><a title="Central Home" href="#"><span class="screen_hide">Home</span></a></li>
+        <li class="lineage-item"><a href="#">Articles</a></li>
+        <li class="lineage-item"><a href="#">Viper Example</a></li>
+    </ol>
+</div>
+
+<div id="content" spellcheck="false">
+<h1>Table Editing with Viper</h1>
+<p>Book the MATR102 course online today.</p>
+<table border="1" cellpadding="2" cellspacing="3">
+    <caption><strong>Table 1.2:</strong> The table caption text goes here la</caption>
+    <tr>
+        <th>Col1 Header</th>
+        <th>Col2 Header</th>
+        <th>Col3 Header</th>
+    </tr>
+    <tr>
+        <td>nec porta ante</td>
+        <td>sapien vel aliquet</td>
+        <td>
+            <ul>
+                <li>purus neque luctus ligula, vel molestie arcu</li>
+                <li>purus neque luctus</li>
+                <li>vel molestie arcu</li>
+            </ul>
+        </td>
+    </tr>
+    <tr>
+        <td>nec porta ante</td>
+        <td id="x" colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td>
+    </tr>
+    <tr>
+        <td>nec <strong>porta</strong> ante</td>
+        <td>sapien vel aliquet</td>
+        <td rowspan="2">purus neque luctus ligula, vel molestie arcu</td>
+    </tr>
+    <tr>
+        <td colspan="2">sapien vel aliquet</td>
+    </tr>
+</table>
+
+
+<table border="1" cellpadding="2" cellspacing="3">
+    <caption><strong>Table 1.2:</strong> The table caption text goes here la</caption>
+    <tr>
+        <th>Col1 Header</th>
+        <th>Col2 Header</th>
+        <th>Col3 Header</th>
+    </tr>
+    <tr>
+        <td>nec porta ante</td>
+        <td>sapien vel aliquet</td>
+        <td>
+            <ul>
+                <li>purus neque luctus ligula, vel molestie arcu</li>
+                <li>purus neque luctus</li>
+                <li>vel molestie arcu</li>
+            </ul>
+        </td>
+    </tr>
+    <tr>
+        <td>nec porta ante</td>
+        <td id="x2" colspan="2" rowspan="3">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td>
+    </tr>
+    <tr>
+        <td>nec <strong>porta</strong> ante</td>
+    </tr>
+    <tr>
+        <td>sapien vel aliquet</td>
+    </tr>
+</table>
+
+
+<TABLE border="1"
+          summary="This table summarizes travel expenses
+                   incurred during August trips to
+                   San Jose and Seattle">
+<CAPTION>
+  Travel Expense Report
+</CAPTION>
+<TR>
+  <TH></TH>
+  <TH>Meals</TH>
+  <TH>Hotels</TH>
+  <TH>Transport</TH>
+  <Th>subtotals</Th>
+</TR>
+<TR>
+  <TH colspan="5">San Jose</TH>
+</TR>
+<TR>
+  <Th>25-Aug-97</Th>
+  <TD>37.74</TD>
+  <TD>112.00</TD>
+  <TD>45.00</TD>
+  <TD></TD>
+</TR>
+<TR>
+  <Th>26-Aug-97</Th>
+  <TD>27.28</TD>
+  <TD>112.00</TD>
+  <TD>45.00</TD>
+  <TD></TD>
+</TR>
+<TR>
+  <Th>subtotals</Th>
+  <TD>65.02</TD>
+  <TD>224.00</TD>
+  <TD>90.00</TD>
+  <TD>379.02</TD>
+</TR>
+<TR>
+  <TH colspan="5">Seattle</TH>
+</TR>
+<TR>
+  <Th>27-Aug-97</Th>
+  <TD>96.25</TD>
+  <TD>109.00</TD>
+  <TD>36.00</TD>
+  <TD></TD>
+</TR>
+<TR>
+  <Th>28-Aug-97</Th>
+  <TD>35.00</TD>
+  <TD>109.00</TD>
+  <TD>36.00</TD>
+  <TD></TD>
+</TR>
+<TR>
+  <Th>subtotals</Th>
+  <TD>131.25</TD>
+  <TD>218.00</TD>
+  <TD>72.00</TD>
+  <TD>421.25</TD>
+</TR>
+<TR>
+  <TH>Totals</TH>
+  <TD>196.27</TD>
+  <TD>442.00</TD>
+  <TD>162.00</TD>
+  <TD>800.27</TD>
+</TR>
+</TABLE>
+
+<table>
+    <tr>
+        <td></td>
+        <th colspan="3">Imported</th>
+        <th colspan="3">Domestic</th>
+    </tr>
+    <tr>
+        <td></td>
+        <th>Apricots</th>
+        <th colspan="2">Cherries</th>
+        <th>Apricots</th>
+        <th colspan="2">Cherries</th>
+    </tr>
+    <tr>
+        <td></td>
+        <td></td>
+        <th>A Grade</th>
+        <th>B Grade</th>
+        <td></td>
+        <th>A Grade</th>
+        <th>B Grade</th>
+    </tr>
+    <tr>
+        <th id="perth" colspan="7">Perth</th>
+    </tr>
+    <tr>
+        <th id="perth-wholesale">Wholesale</th>
+        <td>$1.00</td>
+        <td>$9.00</td>
+        <td>$6.00</td>
+        <td>$1.20</td>
+        <td>$13.00</td>
+        <td>$9.00</td>
+    </tr>
+    <tr>
+        <th id="perth-retail">Retail</th>
+        <td>$2.00</td>
+        <td>$12.00</td>
+        <td>$8.00</td>
+        <td>$1.80</td>
+        <td>$16.00</td>
+        <td>$12.50</td>
+    </tr>
+    <tr>
+        <th id="adelaide" colspan="7">Adelaide</th>
+    </tr>
+    <tr>
+        <th id="adelaide-wholesale">Wholesale</th>
+        <td>$1.20</td>
+        <td>N/A</td>
+        <td>$7.00</td>
+        <td>$1.00</td>
+        <td>$11.00</td>
+        <td>$6.00</td>
+    </tr>
+    <tr>
+        <th id="adelaide-retail">Retail</th>
+        <td>$1.60</td>
+        <td>N/A</td>
+        <td>$11.00</td>
+        <td>$2.00</td>
+        <td>$13.00</td>
+        <td>$10.00</td>
+    </tr>
+</table>
+
+
+    </div><!-- #content -->
+    </div>
+    </div>
+    </div>
+    </div><!-- #pageWidth -->
+</body>
+</html>
