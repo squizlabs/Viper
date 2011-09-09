@@ -100,6 +100,11 @@ ViperTableEditorPlugin.prototype = {
 
         dfx.setStyle(overlay, 'top', cellCoords.y2 + 5 + 'px');
         dfx.setStyle(overlay, 'left', cellCoords.x1 + ((cellCoords.x2 - cellCoords.x1) / 2) - (overlayWidth / 2) + 'px');
+        dfx.hover(overlay, function() {
+            dfx.addClass(cell, 'Viper-tableHighlight');
+        }, function() {
+            dfx.removeClass(cell, 'Viper-tableHighlight');
+        });
 
         document.body.appendChild(overlay);
 
