@@ -30,6 +30,8 @@ function ViperTableEditorPlugin(viper)
     this.hCellButtons  = null;
     this._lastNode     = null;
 
+    this._buttonClicked = false;
+
     // Table properties.
     this._currentTablePropView = 'cell';
     this._settingsWidgets      = {};
@@ -63,7 +65,18 @@ ViperTableEditorPlugin.prototype = {
             self.hideCellButtons();
         });
 
+        this.viper.registerCallback('Viper:mouseUp', 'ViperTableEditor', function() {
+            if (self._buttonClicked === true) {
+                self._buttonClicked = false;
+                return false;
+            }
+
+            return true;
+        });
+
+
         this.viper.registerCallback('Viper:selectionChanged', 'ViperTableEditorPlugin', function(range) {
+            self._buttonClicked = false;
             self.hideToolbar();
             var cell = self._getRangeCellElement(range);
             if (cell) {
@@ -100,6 +113,12 @@ ViperTableEditorPlugin.prototype = {
 
         dfx.setStyle(overlay, 'top', cellCoords.y2 + 5 + 'px');
         dfx.setStyle(overlay, 'left', cellCoords.x1 + ((cellCoords.x2 - cellCoords.x1) / 2) - (overlayWidth / 2) + 'px');
+        dfx.hover(overlay, function() {
+            dfx.addClass(cell, 'Viper-tableHighlight');
+        }, function() {
+            dfx.removeClass(cell, 'Viper-tableHighlight');
+        });
+
         dfx.hover(overlay, function() {
             dfx.addClass(cell, 'Viper-tableHighlight');
         }, function() {
@@ -186,13 +205,7 @@ ViperTableEditorPlugin.prototype = {
     createButton: function(content, isActive, customClass, clickAction, groupElement, subSection, showSubSection)
     {
         var self = this;
-        if (clickAction) {
-            var originalAction = clickAction;
-            clickAction = function() {
-                self._lineageClicked = false;
-                return originalAction.call(this);
-            };
-        } else if (subSection) {
+        if (subSection) {
             clickAction = function(subSectionState, buttonElement) {
                 if (subSectionState === true) {
                     dfx.addClass(self._toolbar, 'subSectionVisible');
@@ -441,14 +454,15 @@ ViperTableEditorPlugin.prototype = {
         var splitWrapper = document.createElement('div');
 
         var splitVert = this.createButton('V', false, '', function() {
+            self._buttonClicked = true;
             self.splitVertical(cell);
             self.updateToolbar(cell);
-            return false;
         });
         var span = document.createElement('span');
         dfx.setHtml(span, 'Split');
 
         var splitHor = this.createButton('H', false, '', function() {
+            self._buttonClicked = true;
             self.splitHorizontal(cell);
             self.updateToolbar(cell);
         });
@@ -886,9 +900,13 @@ ViperTableEditorPlugin.prototype = {
     {
         if (cell) {
             var range = this.viper.getCurrentRange();
-            range.setStart(cell, 0);
-            range.moveStart('character', 1);
-            range.moveStart('character', -1);
+            var child = range._getFirstSelectableChild(cell);
+            if (!child) {
+                cell = document.createTextNode(' ');
+                child.appendChild(cell);
+            }
+
+            range.setStart(child, 0);
             range.collapse(true);
             return range;
         } else {
