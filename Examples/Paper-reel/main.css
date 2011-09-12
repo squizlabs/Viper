@@ -618,6 +618,10 @@ background-color: #f9f8b1;
     border-spacing: 0;
     border-collapse: collapse;
 }
+#content table.dark {
+    border-color: #2b2b2b;
+    color: #FFF;
+}
 #content td,
 #content th {
     border: 1px solid #c9c2a9;
@@ -629,12 +633,22 @@ background-color: #f9f8b1;
     border-spacing: 0;
     border-collapse: collapse;
 }
+#content table.dark td,
+#content table.dark th {
+    border-color: #5b5b5b;
+}
 #content td.small {
     font-size: 0.8em;
 }
 #content th {
     vertical-align: middle;
     background-color: #EAE3CC;
+}
+#content table.dark th {
+    background-color: #2b2b2b;
+}
+#content table.dark td {
+    background-color: #777;
 }
 #content th p {
     display: inline;
