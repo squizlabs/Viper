@@ -11,3 +11,8 @@
     background-image: url(tableHighlight.png) !important;
     background-repeat: repeat !important;
 }
+
+.ViperITP-highlight {
+    position: absolute;
+    z-index: 200;
+}
