@@ -31,6 +31,8 @@ function ViperTableEditorPlugin(viper)
     this._lastNode     = null;
 
     this._buttonClicked = false;
+    this._tableRawCells = null;
+    this._currentType   = null;
 
     // Table properties.
     this._currentTablePropView = 'cell';
@@ -87,7 +89,6 @@ ViperTableEditorPlugin.prototype = {
 
 
         this.viper.registerCallback('Viper:selectionChanged', 'ViperTableEditorPlugin', function(range) {
-            self._buttonClicked = false;
             if (showToolbar === false) {
                 self.hideCellToolsIcon();
                 self.hideToolbar();
@@ -106,6 +107,8 @@ ViperTableEditorPlugin.prototype = {
         if (!cell) {
             return;
         }
+
+        this.hideToolbar();
 
         var overlayid = this.viper.getId() + '-ViperTEP';
         var overlay   = dfx.getId(overlayid);
@@ -154,14 +157,14 @@ ViperTableEditorPlugin.prototype = {
         }
     },
 
-    showTableTools: function(cell)
+    showTableTools: function(cell, type)
     {
         if (!cell) {
             return;
         }
 
         this.setActiveCell(cell);
-        this.updateToolbar(cell);
+        this.updateToolbar(cell, type);
 
     },
 
@@ -287,6 +290,8 @@ ViperTableEditorPlugin.prototype = {
             this._scaleToolbar();
         }
 
+        this._currentType = type;
+
         dfx.removeClass(this._toolbar, 'subSectionVisible');
 
         // Set highlight to active cell.
@@ -295,6 +300,7 @@ ViperTableEditorPlugin.prototype = {
         this._updateLineage();
         this._updateInnerContainer(cell, type);
         this._updatePosition(cell, type);
+        this.highlightActiveCell(type);
 
     },
 
@@ -306,6 +312,12 @@ ViperTableEditorPlugin.prototype = {
     hideActiveSubSection: function()
     {
         dfx.removeClass(this._toolbar, 'subSectionVisible');
+    },
+
+    tableUpdated: function()
+    {
+        this._tableRawCells = null;
+
     },
 
     /**
@@ -391,6 +403,7 @@ ViperTableEditorPlugin.prototype = {
         dfx.setHtml(table, 'Table');
         this._lineage.appendChild(table);
         dfx.addEvent(table, 'mousedown', function(e) {
+            self._buttonClicked = true;
             self.updateToolbar(self.getActiveCell(), 'table');
             dfx.preventDefault(e);
             return false;
@@ -399,7 +412,7 @@ ViperTableEditorPlugin.prototype = {
             self.highlightActiveCell('table');
         }, function() {
             self.removeHighlights();
-            self.highlightActiveCell();
+            self.highlightActiveCell(self._currentType);
         });
 
         var row  = document.createElement('li');
@@ -407,6 +420,7 @@ ViperTableEditorPlugin.prototype = {
         dfx.setHtml(row, 'Row');
         this._lineage.appendChild(row);
         dfx.addEvent(row, 'mousedown', function(e) {
+            self._buttonClicked = true;
             self.updateToolbar(self.getActiveCell(), 'row');
             dfx.preventDefault(e);
             return false;
@@ -415,7 +429,7 @@ ViperTableEditorPlugin.prototype = {
             self.highlightActiveCell('row');
         }, function() {
             self.removeHighlights();
-            self.highlightActiveCell();
+            self.highlightActiveCell(self._currentType);
         });
 
         var col  = document.createElement('li');
@@ -423,6 +437,7 @@ ViperTableEditorPlugin.prototype = {
         dfx.setHtml(col, 'Column');
         this._lineage.appendChild(col);
         dfx.addEvent(col, 'mousedown', function(e) {
+            self._buttonClicked = true;
             self.updateToolbar(self.getActiveCell(), 'col');
             dfx.preventDefault(e);
             return false;
@@ -431,15 +446,24 @@ ViperTableEditorPlugin.prototype = {
             self.highlightActiveCell('col');
         }, function() {
             self.removeHighlights();
-            self.highlightActiveCell();
+            self.highlightActiveCell(self._currentType);
         });
 
         var cell  = document.createElement('li');
         dfx.addClass(cell, 'ViperITP-lineageItem');
         dfx.setHtml(cell, 'Cell');
         this._lineage.appendChild(cell);
-        dfx.addEvent(cell, 'mousedown', function() {
+        dfx.addEvent(cell, 'mousedown', function(e) {
+            self._buttonClicked = true;
             self.updateToolbar(self.getActiveCell(), 'cell');
+            dfx.preventDefault(e);
+            return false;
+        });
+        dfx.hover(cell, function() {
+            self.highlightActiveCell('cell');
+        }, function() {
+            self.removeHighlights();
+            self.highlightActiveCell(self._currentType);
         });
 
     },
@@ -517,6 +541,10 @@ ViperTableEditorPlugin.prototype = {
             default:
                 this._createCellProperties(cell);
             break;
+
+            case 'col':
+                this._createColProperties(cell);
+            break;
         }
 
     },
@@ -585,28 +613,61 @@ ViperTableEditorPlugin.prototype = {
             wrapper.appendChild(mergeRight);
         }
 
+        var canSplit     = false;
         var splitWrapper = document.createElement('div');
 
-        var splitVert = this.createButton('V', false, '', function() {
-            self._buttonClicked = true;
-            self.splitVertical(cell);
-            self.updateToolbar(cell);
-        });
+        if (this.getColspan(cell) > 1) {
+            canSplit = true;
+            var splitVert = this.createButton('V', false, '', function() {
+                self._buttonClicked = true;
+                self.splitVertical(cell);
+                self.updateToolbar(cell);
+            });
+            splitWrapper.appendChild(splitVert);
+        }
+
         var span = document.createElement('span');
         dfx.setHtml(span, 'Split');
-
-        var splitHor = this.createButton('H', false, '', function() {
-            self._buttonClicked = true;
-            self.splitHorizontal(cell);
-            self.updateToolbar(cell);
-        });
-
-        splitWrapper.appendChild(splitVert);
         splitWrapper.appendChild(span);
-        splitWrapper.appendChild(splitHor);
+
+        if (this.getRowspan(cell) > 1) {
+            canSplit = true;
+            var splitHor = this.createButton('H', false, '', function() {
+                self._buttonClicked = true;
+                self.splitHorizontal(cell);
+                self.updateToolbar(cell);
+            });
+            splitWrapper.appendChild(splitHor);
+        }
 
         subSection.appendChild(wrapper);
-        subSection.appendChild(splitWrapper);
+        if (canSplit === true) {
+            subSection.appendChild(splitWrapper);
+        }
+
+        this.createSubSection(subSection, true);
+        this.showActiveSubSection();
+
+    },
+
+    _createColProperties: function(cell)
+    {
+        var self = this;
+        var insertLeft = this.createButton('L', false, '', function() {
+            self._buttonClicked = true;
+            self.insertColBefore(cell);
+            self.updateToolbar(cell, 'col');
+        });
+
+        var insertRight = this.createButton('R', false, '', function() {
+            self._buttonClicked = true;
+            self.insertColAfter(cell);
+            self.updateToolbar(cell, 'col');
+        });
+
+        var subSection = document.createElement('div');
+        subSection.appendChild(insertLeft);
+        subSection.appendChild(insertRight);
         this.createSubSection(subSection, true);
         this.showActiveSubSection();
 
@@ -667,7 +728,7 @@ ViperTableEditorPlugin.prototype = {
     canMergeDown: function(cell)
     {
         var rowspan = this.getRowspan(cell);
-        var colNum  = this._getColNum(cell);
+        var colNum  = this.getColNum(cell);
         var row     = cell.parentNode;
 
         while (rowspan >= 1) {
@@ -693,7 +754,7 @@ ViperTableEditorPlugin.prototype = {
     canMergeUp: function(cell)
     {
         var rowspan = this.getRowspan(cell);
-        var colNum  = this._getColNum(cell);
+        var colNum  = this.getColNum(cell);
         var row     = cell.parentNode;
         var newCell = null;
 
@@ -732,6 +793,8 @@ ViperTableEditorPlugin.prototype = {
         cell.setAttribute('colspan', colspan);
         dfx.remove(mergeCell);
 
+        this.tableUpdated();
+
         return cell;
 
     },
@@ -748,6 +811,8 @@ ViperTableEditorPlugin.prototype = {
         cell.setAttribute('colspan', colspan);
         dfx.remove(mergeCell);
 
+        this.tableUpdated();
+
         return cell;
     },
 
@@ -759,6 +824,8 @@ ViperTableEditorPlugin.prototype = {
         this._moveCellContent(mergeCell, cell);
         cell.setAttribute('rowspan', rowspan);
         dfx.remove(mergeCell);
+
+        this.tableUpdated();
 
         return cell;
 
@@ -772,6 +839,8 @@ ViperTableEditorPlugin.prototype = {
         this._moveCellContent(cell, mergeCell);
         mergeCell.setAttribute('rowspan', rowspan);
         dfx.remove(cell);
+
+        this.tableUpdated();
 
         return mergeCell;
 
@@ -800,9 +869,14 @@ ViperTableEditorPlugin.prototype = {
             elem.appendChild(cell.firstChild);
         }
 
-        // TODO: Copy, attributes etc.
+        for (var i = 0; i < cell.attributes.length; i++) {
+            elem.setAttribute(cell.attributes[i].nodeName, cell.attributes[i].nodeValue);
+        }
+
         dfx.insertBefore(cell, elem);
         dfx.remove(cell);
+
+        this.tableUpdated();
 
         return elem;
 
@@ -819,22 +893,27 @@ ViperTableEditorPlugin.prototype = {
             elem.appendChild(cell.firstChild);
         }
 
-        // TODO: Copy, attributes etc.
+        for (var i = 0; i < cell.attributes.length; i++) {
+            elem.setAttribute(cell.attributes[i].nodeName, cell.attributes[i].nodeValue);
+        }
+
         dfx.insertBefore(cell, elem);
         dfx.remove(cell);
+
+        this.tableUpdated();
 
         return elem;
 
     },
 
     /**
-     * Splits specified cell horizontally only if it has colspan > 1.
+     * Splits specified cell vertically only if it has rowspan > 1.
      *
      * @param {DOMNode} cell The table cell to split.
      *
-     * @return {DOMNode} The new column that was created.
+     * @return {DOMNode} The new row that was created.
      */
-    splitHorizontal: function(cell)
+    splitVertical: function(cell)
     {
         if (!cell || !cell.getAttribute('colspan')) {
             return;
@@ -857,18 +936,20 @@ ViperTableEditorPlugin.prototype = {
 
         dfx.insertAfter(cell, elem);
 
+        this.tableUpdated();
+
         return elem;
 
     },
 
     /**
-     * Splits specified cell vertically only if it has rowspan > 1.
+     * Splits specified cell horizontally only if it has colspan > 1.
      *
      * @param {DOMNode} cell The table cell to split.
      *
-     * @return {DOMNode} The new row that was created.
+     * @return {DOMNode} The new column that was created.
      */
-    splitVertical: function(cell)
+    splitHorizontal: function(cell)
     {
         if (!cell || !cell.getAttribute('rowspan')) {
             return false;
@@ -889,7 +970,7 @@ ViperTableEditorPlugin.prototype = {
         }
 
         var tagName        = dfx.getTagName(cell);
-        var colNum         = this._getColNum(cell);
+        var colNum         = this.getColNum(cell);
         var nextRowColumns = this._getRowCells(nextRow);
 
         var elem       = document.createElement(tagName);
@@ -911,6 +992,8 @@ ViperTableEditorPlugin.prototype = {
             var nextRowCol = this.getCell(nextRow, (nextRowColumns.length - 1));
             dfx.insertAfter(nextRowCol, elem);
         }
+
+        this.tableUpdated();
 
         return elem;
 
@@ -966,8 +1049,6 @@ ViperTableEditorPlugin.prototype = {
         // Set the range to the new row cell.
         this.moveCaretToCell(clone.childNodes[cellNum]);
 
-        this._nodesUpdated();
-
     },
 
     removeRow: function(tr)
@@ -1000,7 +1081,7 @@ ViperTableEditorPlugin.prototype = {
         }
 
         if (elem) {
-            var colNum = this._getColNum(this.activeCell);
+            var colNum = this.getColNum(this.activeCell);
             var column = this.getCell(elem, colNum);
 
             this.moveCaretToCell(column);
@@ -1009,67 +1090,67 @@ ViperTableEditorPlugin.prototype = {
             this.removeTable(table);
         }
 
-        this._nodesUpdated();
-
     },
 
-    insertColAfter: function()
+    insertColAfter: function(cell)
     {
-        this.insertCol();
+        var table    = this.getCellTable(cell);
+        var rows     = dfx.getTag('tr', table);
+        var rln      = rows.length;
+        var colNum   = (this.getColNum(cell) + (this.getColspan(cell) - 1));
 
-    },
-
-    insertColBefore: function()
-    {
-        this.insertCol(true);
-
-    },
-
-    insertCol: function(before)
-    {
-        var table         = this.activeCell.parentNode.parentNode;
-        var rows          = dfx.getTag('tr', table);
-        var activeCellRow = this.activeCell.parentNode;
-        var colNum        = this._getColNum(this.activeCell);
-
-        var changeid = ViperChangeTracker.startBatchChange('insertedTableCol');
-
-        var td;
-        var rln = rows.length;
+        var td = null;
         for (var i = 0; i < rln; i++) {
-            var col = this.getCell(rows[i], colNum);
-            td      = document.createElement(col.tagName);
-            dfx.setHtml(td, '&nbsp;');
-            if (i === 0) {
-                dfx.setStyle(td, 'width', '100px');
-            }
+            var col     = this.getCell(i, colNum);
+            var cellPos = this.getCellPosition(col);
 
-            if (before === true) {
-                dfx.insertBefore(col, td);
+            if ((cellPos.col !== colNum && col !== cell) || (col !== cell && this.getColspan(col) > 1)) {
+                col.setAttribute('colspan', (this.getColspan(col) + 1));
+            } else if (cellPos.row < i) {
+                if (td) {
+                    td.setAttribute('rowspan', (this.getRowspan(td) + 1));
+                }
+                continue;
             } else {
+                td = document.createElement(col.tagName);
+                dfx.setHtml(td, '&nbsp;');
+
                 dfx.insertAfter(col, td);
             }
+        }
 
-            if (changeid !== null) {
-                ViperChangeTracker.addNodeToChange(changeid, td);
+        this.tableUpdated();
+
+    },
+
+    insertColBefore: function(cell)
+    {
+        var table    = this.getCellTable(cell);
+        var rows     = dfx.getTag('tr', table);
+        var rln      = rows.length;
+        var colNum   = this.getColNum(cell);
+
+        var td = null;
+        for (var i = 0; i < rln; i++) {
+            var col     = this.getCell(i, colNum);
+            var cellPos = this.getCellPosition(col);
+
+            if (cellPos.col !== colNum && col !== cell) {
+                col.setAttribute('colspan', (this.getColspan(col) + 1));
+            } else if (cellPos.row < i) {
+                if (td) {
+                    td.setAttribute('rowspan', (this.getRowspan(td) + 1));
+                }
+                continue;
+            } else {
+                td = document.createElement(col.tagName);
+                dfx.setHtml(td, '&nbsp;');
+
+                dfx.insertBefore(col, td);
             }
         }
 
-        if (changeid) {
-            ViperChangeTracker.endBatchChange(changeid);
-        }
-
-        if (activeCellRow) {
-            if (before !== true) {
-                colNum++;
-            }
-
-            var column = this.getCell(activeCellRow, colNum);
-
-            this.moveCaretToCell(column);
-        }
-
-        this._nodesUpdated();
+        this.tableUpdated();
 
     },
 
@@ -1096,7 +1177,7 @@ ViperTableEditorPlugin.prototype = {
             col = this.activeCell;
         }
 
-        var colNum = this._getColNum(col);
+        var colNum = this.getColNum(col);
         if (colNum === null) {
             return;
         }
@@ -1137,13 +1218,11 @@ ViperTableEditorPlugin.prototype = {
             this.moveCaretToCell(nextCell);
         }
 
-        this._nodesUpdated();
-
     },
 
     getNextCell: function(cell)
     {
-        var pos = this._getCellPosition(cell);
+        var pos = this.getCellPosition(cell);
         if (!pos) {
             return null;
         }
@@ -1155,7 +1234,7 @@ ViperTableEditorPlugin.prototype = {
 
     getPreviousCell: function(cell)
     {
-        var pos = this._getCellPosition(cell);
+        var pos = this.getCellPosition(cell);
         if (!pos) {
             return null;
         }
@@ -1203,8 +1282,6 @@ ViperTableEditorPlugin.prototype = {
         }
 
         this.hideCellButtons();
-        this._nodesUpdated();
-
     },
 
     getCellTable: function(cell, tbody)
@@ -1308,8 +1385,6 @@ ViperTableEditorPlugin.prototype = {
         }
 
         dfx.setStyle(table, 'display', '');
-
-        this._nodesUpdated();
 
         if (firstCol) {
             var range = this.viper.getCurrentRange();
@@ -1714,7 +1789,7 @@ ViperTableEditorPlugin.prototype = {
 
     },
 
-    _getColNum: function(cell)
+    getColNum: function(cell)
     {
         if (!cell) {
             return null;
@@ -1761,7 +1836,7 @@ ViperTableEditorPlugin.prototype = {
 
     },
 
-    _getCellPosition: function(cell)
+    getCellPosition: function(cell)
     {
         var cells = this._getCellsExpanded();
         var rows    = cells.length;
@@ -1783,6 +1858,10 @@ ViperTableEditorPlugin.prototype = {
 
     _getCellsExpanded: function()
     {
+        if (this._tableRawCells) {
+            return this._tableRawCells;
+        }
+
         var tableCells = this._getTableCells();
         var rawCells   = [];
         dfx.foreach(tableCells, function(rowNum) {
@@ -1812,6 +1891,8 @@ ViperTableEditorPlugin.prototype = {
                 }
             });
         });
+
+        this._tableRawCells = rawCells;
 
         return rawCells;
 
