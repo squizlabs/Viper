@@ -257,16 +257,6 @@ Viper.prototype = {
             return self.keyUp(e);
         });
 
-        dfx.addEvent(elem, 'blur.viper', function(e) {
-            self.cleanDOM();
-
-            var range          = self.getCurrentRange();
-            var lastSelectable = range._getLastSelectableChild(elem);
-            if (lastSelectable && lastSelectable.nodeType === dfx.TEXT_NODE) {
-                lastSelectable.data = dfx.rtrim(lastSelectable.data);
-            }
-        });
-
         if (navigator.userAgent.match(/iPad/i) != null) {
             setInterval(function() {
                 self.fireSelectionChanged();
