@@ -1,4 +1,5 @@
 .Viper-button {
+    position: relative;
     border-radius: 0.3em;
     cursor: pointer;
     display: inline-block;
@@ -58,6 +59,7 @@
     text-shadow: 0 1px 0 rgba(255,255,255,0.5);
 }
 
+.themeDark .Viper-button:active,
 .themeDark .Viper-button.active,
 .themeDark .Viper-button.active:hover,
 .themeDark .Viper-button.selected,
@@ -76,6 +78,7 @@
     background: -moz-linear-gradient(top,  #3987f2,  #205caf);
 }
 
+.themeDark .Viper-button:active,
 .themeDark .Viper-button.selected,
 .themeDark .Viper-button.selected:hover {
     background: #54535A;
@@ -108,6 +111,7 @@
     background: -moz-linear-gradient(top,  #d8d8da,  #b8b8c0);
 }
 
+.themeLight .Viper-button:active,
 .themeLight .Viper-button.active,
 .themeLight .Viper-button.active:hover,
 .themeLight .Viper-button.selected,
@@ -117,6 +121,7 @@
     box-shadow: 0 0 0.2em 0 rgba(0, 0, 0, 0.6) inset;
 }
 
+.themeLight .Viper-button:active,
 .themeLight .Viper-button.selected,
 .themeLight .Viper-button.selected:hover {
     background: #888;
@@ -137,4 +142,156 @@
 
 .themeLight .Viper-buttonGroup .Viper-button:first-child {
     border-left-width: 1px;
+}
+
+/* Button Icons */
+
+.Viper-button .buttonIcon {
+    position: absolute;
+    width: 25px;
+    height: 20px;
+    left: 50%;
+    top: 50%;
+    margin: -10px 0 0 -12px;
+    background-image: url(../Images/buttonIcons.png);
+}
+
+/* Arrow Up */
+.icon-arrowUp .buttonIcon {
+    background-position: 0 0;
+}
+.icon-arrowUp:active .buttonIcon,
+.icon-arrowUp.active .buttonIcon,
+.icon-arrowUp.selected .buttonIcon {
+    background-position: -33px 0;
+}
+
+/* Arrow Down */
+.icon-arrowDown .buttonIcon {
+    background-position: 0 -27px;
+}
+.icon-arrowDown:active .buttonIcon,
+.icon-arrowDown.active .buttonIcon,
+.icon-arrowDown.selected .buttonIcon {
+    background-position: -33px -27px;
+}
+
+/* Delete */
+.icon-delete .buttonIcon {
+    background-position: 0 -54px;
+}
+.icon-delete:active .buttonIcon,
+.icon-delete.active .buttonIcon,
+.icon-delete.selected .buttonIcon {
+    background-position: -33px -54px;
+}
+
+/* Add Up */
+.icon-addUp .buttonIcon {
+    background-position: 0 -81px;
+}
+.icon-addUp:active .buttonIcon,
+.icon-addUp.active .buttonIcon,
+.icon-addUp.selected .buttonIcon {
+    background-position: -33px -81px;
+}
+
+/* Add Down */
+.icon-addDown .buttonIcon {
+    background-position: 0 -108px;
+}
+.icon-addDown:active .buttonIcon,
+.icon-addDown.active .buttonIcon,
+.icon-addDown.selected .buttonIcon {
+    background-position: -33px -108px;
+}
+
+/* Arrow Left */
+.icon-arrowLeft .buttonIcon {
+    background-position: 0 -135px;
+}
+.icon-arrowLeft:active .buttonIcon,
+.icon-arrowLeft.active .buttonIcon,
+.icon-arrowLeft.selected .buttonIcon {
+    background-position: -33px -135px;
+}
+
+/* Arrow Right */
+.icon-arrowRight .buttonIcon {
+    background-position: 0 -162px;
+}
+.icon-arrowRight:active .buttonIcon,
+.icon-arrowRight.active .buttonIcon,
+.icon-arrowRight.selected .buttonIcon {
+    background-position: -33px -162px;
+}
+
+/* Arrow Left */
+.icon-arrowLeft .buttonIcon {
+    background-position: 0 -135px;
+}
+.icon-arrowLeft:active .buttonIcon,
+.icon-arrowLeft.active .buttonIcon,
+.icon-arrowLeft.selected .buttonIcon {
+    background-position: -33px -135px;
+}
+
+/* Arrow Right */
+.icon-arrowRight .buttonIcon {
+    background-position: 0 -162px;
+}
+.icon-arrowRight:active .buttonIcon,
+.icon-arrowRight.active .buttonIcon,
+.icon-arrowRight.selected .buttonIcon {
+    background-position: -33px -162px;
+}
+
+/* Split Horiz */
+.icon-splitHoriz .buttonIcon {
+    background-position: 0 -189px;
+}
+.icon-splitHoriz:active .buttonIcon,
+.icon-splitHoriz.active .buttonIcon,
+.icon-splitHoriz.selected .buttonIcon {
+    background-position: -33px -189px;
+}
+
+/* Split Vert */
+.icon-splitVert .buttonIcon {
+    background-position: 0 -216px;
+}
+.icon-splitVert:active .buttonIcon,
+.icon-splitVert.active .buttonIcon,
+.icon-splitVert.selected .buttonIcon {
+    background-position: -33px -216px;
+}
+
+/* Move */
+.icon-move .buttonIcon {
+    background-position: 0 -243px;
+}
+.icon-move:active .buttonIcon,
+.icon-move.active .buttonIcon,
+.icon-move.selected .buttonIcon {
+    background-position: -33px -243px;
+}
+
+/* Add Left */
+.icon-addLeft .buttonIcon {
+    background-position: 0 -270px;
+}
+.icon-addLeft:active .buttonIcon,
+.icon-addLeft.active .buttonIcon,
+.icon-addLeft.selected .buttonIcon {
+    background-position: -33px -270px;
+}
+
+/* Add Right */
+.icon-addRight .buttonIcon {
+    background-position: 0 -297px;
+}
+.icon-addRight:active .buttonIcon,
+.icon-addRight.active .buttonIcon,
+.icon-addRight.selected .buttonIcon {
+    background-position: -33px -297px;
 }
