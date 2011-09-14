@@ -354,6 +354,7 @@ ViperTableEditorPlugin.prototype = {
     tableUpdated: function()
     {
         this._tableRawCells = null;
+        this.viper.fireNodesChanged([this.getCellTable(this.activeCell)]);
 
     },
 
@@ -726,6 +727,13 @@ ViperTableEditorPlugin.prototype = {
             self.updateToolbar(cell, 'col');
         });
 
+        var removeCol = this.createButton('', false, 'icon-delete', function() {
+            self._buttonClicked = true;
+            self.removeCol(cell);
+            self.hideToolbar();
+            self.removeHighlights();
+        });
+
     },
 
     _createRowProperties: function(cell)
@@ -747,6 +755,7 @@ ViperTableEditorPlugin.prototype = {
             self._buttonClicked = true;
             self.removeRow(cell);
             self.hideToolbar();
+            self.removeHighlights();
         });
 
     },
@@ -1292,53 +1301,42 @@ ViperTableEditorPlugin.prototype = {
 
     },
 
-    removeCol: function(col)
+    removeCol: function(cell)
     {
-        if (!col) {
-            col = this.activeCell;
-        }
+        var table    = this.getCellTable(cell);
+        var cellPos  = this.getCellPosition(cell);
+        var cells    = this._getCellsExpanded();
+        var rowCount = cells.length;
+        var colspan  = this.getColspan(cell);
 
-        var colNum = this.getColNum(col);
-        if (colNum === null) {
-            return;
-        }
+        var processedCells = [];
+        for (var i = 0; i < rowCount; i++) {
+            for (var j = cellPos.col; j < (cellPos.col + colspan); j++) {
+                var rowCell = cells[i][j];
+                if (processedCells.inArray(rowCell) === true) {
+                    continue;
+                }
 
-        var row      = col.parentNode;
-        var table    = this.getRowTable(row);
-        var rows     = dfx.getTag('tr', table);
-        var changeid = null;
+                var rowCellColspan = this.getColspan(rowCell);
+                if (rowCellColspan > colspan || (rowCellColspan > 1 && this.getCellPosition(rowCell).col !== cellPos.col)) {
+                    // Reduce colspan.
+                    rowCell.setAttribute('colspan', (rowCellColspan - 1));
+                } else {
+                    // Remove cell.
+                    dfx.remove(rowCell);
+                }
 
-        if (ViperChangeTracker.isTrackingNode(col) !== true) {
-            changeid = ViperChangeTracker.startBatchChange('removedTableCol');
-        }
-
-        var rln = rows.length;
-        for (var i = 0; i < rln; i++) {
-            col = this.getCell(rows[i], colNum);
-            if (changeid) {
-                var del = document.createElement('del');
-                dfx.insertBefore(col, del);
-                del.appendChild(col);
-                dfx.removeClass(col, 'delHighlight');
-                ViperChangeTracker.addNodeToChange(changeid, del);
-            } else {
-                dfx.remove(col);
+                processedCells.push(rowCell);
             }
         }
 
-        ViperChangeTracker.endBatchChange(changeid);
-
-        if (colNum > 0) {
-            colNum--;
+        // if the table is now empty then remove it.
+        var rows = dfx.getTag('td', table);
+        if (rows.length === 0) {
+            dfx.remove(table);
         }
 
-        var nextCell = this.getCell(row, colNum);
-        if (!nextCell) {
-            this.removeTable(table, true);
-        } else {
-            this.moveCaretToCell(nextCell);
-        }
-
+        this.tableUpdated();
     },
 
     getNextCell: function(cell)
