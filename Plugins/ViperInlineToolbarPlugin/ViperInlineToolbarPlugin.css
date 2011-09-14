@@ -159,7 +159,8 @@
 }
 
 .themeDark .ViperITP-lineage .ViperITP-lineageItem.selected {
-    color: #FFF;
+    color: #5a8bd0;
+    font-weight: bold;
 }
 
 .themeDark.ViperITP .ViperITP-subSectionWrapper {
