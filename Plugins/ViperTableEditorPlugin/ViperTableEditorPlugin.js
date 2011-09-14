@@ -692,9 +692,16 @@ ViperTableEditorPlugin.prototype = {
             self.updateToolbar(cell, 'row');
         });
 
+        var removeRow = this.createButton('', false, 'icon-delete', function() {
+            self._buttonClicked = true;
+            self.removeRow(cell);
+            self.hideToolbar();
+        });
+
         var subSection = document.createElement('div');
         subSection.appendChild(insertBefore);
         subSection.appendChild(insertAfter);
+        subSection.appendChild(removeRow);
         this.createSubSection(subSection, true);
         this.showActiveSubSection();
 
@@ -707,6 +714,7 @@ ViperTableEditorPlugin.prototype = {
     {
         dfx.removeClass(this._toolbar, 'visible');
         this.hideActiveSubSection();
+        this.removeHighlights();
 
     },
 
@@ -1109,44 +1117,52 @@ ViperTableEditorPlugin.prototype = {
 
     },
 
-
-    removeRow: function(tr)
+    removeRow: function(cell)
     {
-        if (!tr) {
-            tr = this.activeCell.parentNode;
-        }
+        var table    = this.getCellTable(cell);
+        var tr       = this.getCellRow(cell);
+        var cellPos  = this.getCellPosition(cell);
+        var cells    = this._getCellsExpanded();
+        var rowCells = cells[cellPos.row];
+        var rlen     = rowCells.length;
 
-        var elem = this._getNextRow(tr);
-        var pos  = 'parent';
-        if (!elem) {
-            elem = this._getPreviousRow(tr);
-            if (!elem) {
-                elem = null;
-            } else {
-                pos = 'after';
+        var nextRowCells = this._getRowCells(this._getNextRow(tr));
+
+        var processedCells = [];
+        for (var i = 0; i < rlen; i++) {
+            var rowCell = rowCells[i];
+            if (processedCells.inArray(rowCell) === true) {
+                continue;
             }
-        } else {
-            pos = 'before';
+
+            processedCells.push(rowCell);
+
+            var rowspan = this.getRowspan(rowCell);
+            if (rowspan > 1) {
+                rowCell.setAttribute('rowspan', (rowspan - 1));
+
+                var rowPos = this.getCellPosition(rowCell).row;
+                if (rowPos === cellPos.row) {
+                    // Move cell down.
+                    if (cells[(rowPos + 1)].find(rowCell) < cells[(rowPos + 1)].find(nextRowCells[0])) {
+                        dfx.insertBefore(nextRowCells[0], rowCell);
+                    } else {
+                        dfx.insertAfter(nextRowCells[0], rowCell);
+                    }
+                }
+
+                continue;
+            }
+
+            dfx.remove(rowCell);
         }
 
-        if (ViperChangeTracker.isTracking() === true && ViperChangeTracker.isTrackingNode(tr) !== true) {
-            var del = document.createElement('del');
-            dfx.insertBefore(tr, del);
-            del.appendChild(tr);
-            dfx.removeClass(tr, 'delHighlight');
-            ViperChangeTracker.addChange('removedTableRow', [del]);
-        } else {
-            dfx.remove(tr);
-        }
+        dfx.remove(tr);
 
-        if (elem) {
-            var colNum = this.getColNum(this.activeCell);
-            var column = this.getCell(elem, colNum);
-
-            this.moveCaretToCell(column);
-        } else {
-            var table = this.getCellTable(this.activeCell);
-            this.removeTable(table);
+        // if the table is now empty then remove it.
+        var rows = dfx.getTag('tr', table);
+        if (rows.length === 0) {
+            dfx.remove(table);
         }
 
         this.tableUpdated();
@@ -1370,6 +1386,14 @@ ViperTableEditorPlugin.prototype = {
     getRowTable: function(row, tbody)
     {
         return this.getCellTable(row);
+
+    },
+
+    getCellRow: function(cell)
+    {
+        var rows     = dfx.getTag('tr', this.getCellTable(cell));
+        var cellPos  = this.getCellPosition(cell);
+        return rows[cellPos.row];
 
     },
 

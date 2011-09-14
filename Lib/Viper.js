@@ -2702,7 +2702,7 @@ Viper.prototype = {
         // TODO: Should be a callback?
         ViperChangeTracker.updatePositionMarkers(true);
 
-        if (nodes.length === 1 && nodes[0].nodeType === dfx.TEXT_NODE) {
+        if (nodes.length === 1 && nodes[0] && nodes[0].nodeType === dfx.TEXT_NODE) {
             this.ViperHistoryManager.add('Viper', 'text_change');
         } else {
             this.ViperHistoryManager.add();
