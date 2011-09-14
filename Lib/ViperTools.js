@@ -41,10 +41,18 @@ var ViperTools = {
     createButton: function(content, isActive, customClass, clickAction, groupElement, subSection, showSubSection)
     {
         if (!content) {
-            content = '&nbsp;';
+            if (customClass) {
+                // Must be an icon button.
+                content = '<span class="buttonIcon"></span>';
+            } else {
+                content = '';
+            }
+
+            content += '&nbsp;';
         }
 
         var button = document.createElement('div');
+
         dfx.setHtml(button, content);
         dfx.addClass(button, 'Viper-button');
 
