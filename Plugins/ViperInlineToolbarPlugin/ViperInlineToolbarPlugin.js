@@ -88,6 +88,10 @@ ViperInlineToolbarPlugin.prototype = {
         dfx.addClass(this._toolsContainer, 'ViperITP-tools');
         dfx.addClass(this._subSectionContainer, 'ViperITP-subSectionWrapper');
 
+        if (navigator.userAgent.match(/iPad/i) !== null) {
+            dfx.addClass(this._toolbar, 'device-ipad');
+        }
+
         document.body.appendChild(this._toolbar);
 
     },
@@ -304,16 +308,16 @@ ViperInlineToolbarPlugin.prototype = {
         }
 
         var zoom  = (document.documentElement.clientWidth / window.innerWidth);
-        var scale = (1.2 / zoom);
-        if (scale >= 1.2) {
-            scale        = 1.2;
-            this._margin = 20;
-        } else if (scale <= 0.5) {
-            scale        = 0.5;
-            this._margin = -12;
-        } else {
-            this._margin = (-6 * zoom);
+        if (zoom === 1) {
+            var scale = 1;
+            this._margin = 15;
+            dfx.setStyle(this._toolbar, '-webkit-transform', 'scale(' + scale + ', ' + scale + ')');
+            dfx.setStyle(this._toolbar, '-moz-transform', 'scale(' + scale + ', ' + scale + ')');
+            return;
         }
+
+        var scale = (1 / zoom) + 0.2;
+        this._margin = (15 - (((1 - scale) / 0.1) * 5));
 
         dfx.setStyle(this._toolbar, '-webkit-transform', 'scale(' + scale + ', ' + scale + ')');
         dfx.setStyle(this._toolbar, '-moz-transform', 'scale(' + scale + ', ' + scale + ')');
@@ -368,8 +372,8 @@ ViperInlineToolbarPlugin.prototype = {
         var elemRect     = dfx.getBoundingRectangle(element);
         var scrollCoords = dfx.getScrollCoords();
         return {
-            left: elemRect.x1,
-            right: elemRect.x2,
+            left: elemRect.x1 - scrollCoords.x,
+            right: elemRect.x2 - scrollCoords.x,
             top: elemRect.y1 - scrollCoords.y,
             bottom: elemRect.y2 - scrollCoords.y
         };

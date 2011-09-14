@@ -47,6 +47,16 @@ function ViperToolbarPlugin(viper)
 
     this.viper.registerCallback('viperEnabled', 'ViperToolbarPlugin', function() {});
 
+    // During zooming hide the toolbar.
+    dfx.addEvent(window, 'gesturestart', function() {
+        dfx.setStyle(self.toolbar, 'display', 'none');
+    });
+
+    // Update and show the toolbar after zoom.
+    dfx.addEvent(window, 'gestureend', function() {
+        dfx.setStyle(self.toolbar, 'display', 'block');
+    });
+
 }
 
 ViperToolbarPlugin.prototype = {
