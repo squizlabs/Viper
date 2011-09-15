@@ -670,7 +670,7 @@ ViperTableEditorPlugin.prototype = {
         });
         mergeSubWrapper.appendChild(mergeRight);
 
-        var mergeSubSection = this.createSubSection(mergeSubWrapper, true);
+        var mergeSubSection = this.createSubSection(mergeSubWrapper, false);
         this.createButton('', false, 'Toggle Merge Options', false, 'icon-move', null, null, mergeSubSection);
 
     },
