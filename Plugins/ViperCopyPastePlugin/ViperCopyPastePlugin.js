@@ -36,6 +36,15 @@ function ViperCopyPastePlugin(viper)
     this._tmpNode      = null;
     this._isFirefox    = viper.isBrowser('firefox');
     this._isMSIE       = viper.isBrowser('msie');
+
+    var self = this;
+    this.viper.registerCallback('Viper:editableElementChanged', 'ViperCopyPastePlugin', function() {
+        self._init();
+    });
+
+    this.viper.registerCallback('Viper:keyDown', 'ViperCopyPastePlugin', function(e) {
+        return self.keyDown(e);
+    });
 }
 
 ViperCopyPastePlugin.prototype = {
@@ -60,16 +69,17 @@ ViperCopyPastePlugin.prototype = {
 
     },
 
-    start: function()
+    _init: function()
     {
-        var elem = this.viper.getEditableElement();
+        var elem = this.viper.getViperElement();
+
         if (!elem) {
             return;
         }
 
         var self = this;
         if (this._isMSIE !== true && this._isFirefox !== true) {
-            elem.onpaste = function(e) {
+            elem.onpaste = function(e) {console.info();
                 if (!e.clipboardData || self._canPaste() === false) {
                     return;
                 }
@@ -105,7 +115,7 @@ ViperCopyPastePlugin.prototype = {
     keyDown: function (e)
     {
         if (this._isMSIE === true ||this._isFirefox === true) {
-            this._fakePaste(e);
+            return this._fakePaste(e);
         }
 
         return true;
@@ -231,7 +241,7 @@ ViperCopyPastePlugin.prototype = {
     _fakePaste: function(e)
     {
         if ((e.metaKey !== true && e.ctrlKey !== true) || e.keyCode !== 86) {
-            return false;
+            return true;
         }
 
         this._beforePaste();
@@ -390,11 +400,18 @@ ViperCopyPastePlugin.prototype = {
             range.setStart(this._tmpNode, 0);
             range.collapse(true);
 
-            var prevBlock = keyboardEditor.handleEnter(true);
+            var prevBlock = keyboardEditor.splitAtRange(true);
             prevBlock     = prevBlock.nextSibling;
 
-            var changeid = ViperChangeTracker.startBatchChange('textAdded');
+            var changeid  = ViperChangeTracker.startBatchChange('textAdded');
+            var prevChild = null;
             while (fragment.firstChild) {
+                if (prevChild === fragment.firstChild) {
+                    console.info('fail');
+                    break;
+                }
+
+                prevChild = fragment.firstChild;
                 var ctNode = null;
                 if (dfx.isBlockElement(fragment.firstChild) === true) {
                     ctNode = fragment.firstChild;

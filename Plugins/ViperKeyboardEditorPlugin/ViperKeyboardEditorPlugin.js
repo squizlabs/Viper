@@ -41,7 +41,7 @@ function ViperKeyboardEditorPlugin(viper)
 }
 
 ViperKeyboardEditorPlugin.prototype = {
-    start: function()
+    init: function()
     {
         var self = this;
 
@@ -173,6 +173,12 @@ ViperKeyboardEditorPlugin.prototype = {
             return this.handleSoftEnter();
         }
 
+        return this.splitAtRange(returnFirstBlock);
+
+    },
+
+    splitAtRange: function(returnFirstBlock)
+    {
         var range = this.viper.getCurrentRange();
 
         // If the range is not collapsed then remove the contents of the selection.
@@ -377,7 +383,6 @@ ViperKeyboardEditorPlugin.prototype = {
         }
 
         return false;
-
     },
 
     /**

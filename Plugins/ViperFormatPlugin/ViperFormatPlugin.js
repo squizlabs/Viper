@@ -46,7 +46,7 @@ function ViperFormatPlugin(viper)
 
 ViperFormatPlugin.prototype = {
 
-    start: function()
+    init: function()
     {
         var name = 'Format';
         var self = this;

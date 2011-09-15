@@ -27,7 +27,7 @@ function ViperLinkPlugin(viper)
 
 ViperLinkPlugin.prototype = {
 
-    start: function()
+    init: function()
     {
         var inlineToolbarPlugin = this.viper.ViperPluginManager.getPlugin('ViperInlineToolbarPlugin');
         if (inlineToolbarPlugin) {

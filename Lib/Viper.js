@@ -362,6 +362,8 @@ Viper.prototype = {
 
         this.focus();
 
+        this.fireCallbacks('Viper:editableElementChanged', {element: elem});
+
     },
 
     initEditableElement: function()
@@ -585,7 +587,6 @@ Viper.prototype = {
                  }
             }//end if
 
-            //if (this.ViperPluginManager.fireNodeInserted(newNode, newRange) === false) {
             if (this.fireCallbacks('Viper:nodesInserted', {node: newNode, range: newRange}) === false) {
                 noBlock = false;
             }

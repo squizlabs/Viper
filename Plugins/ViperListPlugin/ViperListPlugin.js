@@ -30,7 +30,7 @@ function ViperListPlugin(viper)
 
 ViperListPlugin.prototype = {
 
-    start: function()
+    init: function()
     {
         var self = this;
         this.toolbarPlugin = this.viper.ViperPluginManager.getPlugin('ViperToolbarPlugin');

@@ -43,7 +43,7 @@ function ViperTableEditorPlugin(viper)
 
 ViperTableEditorPlugin.prototype = {
 
-    start: function()
+    init: function()
     {
         if (this.viper.isBrowser('firefox') === true) {
             // Disable table editing.

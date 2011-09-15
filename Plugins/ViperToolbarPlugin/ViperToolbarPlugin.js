@@ -32,20 +32,6 @@ function ViperToolbarPlugin(viper)
     this.createToolbar();
 
     var self = this;
-    this.viper.ViperPluginManager.registerCallback('pluginRemoved', 'toolbarPluginRemoved', function(pluginName) {
-        // Remove plugin button.
-        if (self.pluginButtons[pluginName]) {
-            var pln = self.pluginButtons[pluginName].length;
-            for (var i = 0; i < pln; i++) {
-                var buttonName = self.pluginButtons[pluginName][i];
-                dfx.remove(self.buttons[buttonName]);
-            }
-        }
-    });
-
-    this.viper.registerCallback('viperDisabled', 'ViperToolbarPlugin', function() {});
-
-    this.viper.registerCallback('viperEnabled', 'ViperToolbarPlugin', function() {});
 
     // During zooming hide the toolbar.
     dfx.addEvent(window, 'gesturestart', function() {

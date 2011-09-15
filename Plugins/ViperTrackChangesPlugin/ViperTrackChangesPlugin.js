@@ -38,7 +38,7 @@ function ViperTrackChangesPlugin(viper)
 }
 
 ViperTrackChangesPlugin.prototype = {
-    start: function()
+    init: function()
     {
         var self = this;
 

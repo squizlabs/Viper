@@ -45,7 +45,7 @@ ViperCoreStylesPlugin.prototype = {
 
     },
 
-    start: function()
+    init: function()
     {
         var name = 'CoreStylesKBS';
         var self = this;

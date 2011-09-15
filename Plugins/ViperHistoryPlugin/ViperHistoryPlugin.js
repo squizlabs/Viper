@@ -38,7 +38,7 @@ function ViperHistoryPlugin(viper)
 }
 
 ViperHistoryPlugin.prototype = {
-    start: function()
+    init: function()
     {
         var self           = this;
         this.toolbarPlugin = this.viper.ViperPluginManager.getPlugin('ViperToolbarPlugin');
