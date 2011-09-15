@@ -631,16 +631,30 @@ ViperTableEditorPlugin.prototype = {
             }
         });
 
-        var subSection = document.createElement('div');
-        var wrapper    = document.createElement('div');
-        var canMerge   = false;
+        if (this.getColspan(cell) > 1) {
+            this.createButton('', false, 'icon-splitVert', function() {
+                self._buttonClicked = true;
+                self.splitVertical(cell);
+                self.updateToolbar(cell);
+            });
+        }
 
+        if (this.getRowspan(cell) > 1) {
+            this.createButton('', false, 'icon-splitHoriz', function() {
+                self._buttonClicked = true;
+                self.splitHorizontal(cell);
+                self.updateToolbar(cell);
+            });
+        }
+
+        var mergeSubWrapper = document.createElement('div');
+        var canMerge        = false;
         if (this.canMergeUp(cell) !== false) {
             var mergeUp = this.createButton('', false, 'icon-arrowUp', function() {
                 self._buttonClicked = true;
                 self.updateToolbar(self.mergeUp(cell));
             });
-            wrapper.appendChild(mergeUp);
+            mergeSubWrapper.appendChild(mergeUp);
             canMerge = true;
         }
 
@@ -649,14 +663,8 @@ ViperTableEditorPlugin.prototype = {
                 self._buttonClicked = true;
                 self.updateToolbar(self.mergeDown(cell));
             });
-            wrapper.appendChild(mergeDown);
+            mergeSubWrapper.appendChild(mergeDown);
             canMerge = true;
-        }
-
-        if (canMerge === true) {
-            var span = document.createElement('span');
-            dfx.setHtml(span, 'Merge');
-            wrapper.appendChild(span);
         }
 
         if (this.canMergeLeft(cell) !== false) {
@@ -664,7 +672,7 @@ ViperTableEditorPlugin.prototype = {
                 self._buttonClicked = true;
                 self.updateToolbar(self.mergeLeft(cell));
             });
-            wrapper.appendChild(mergeLeft);
+            mergeSubWrapper.appendChild(mergeLeft);
         }
 
         if (this.canMergeRight(cell) !== false) {
@@ -672,43 +680,13 @@ ViperTableEditorPlugin.prototype = {
                 self._buttonClicked = true;
                 self.updateToolbar(self.mergeRight(cell));
             });
-            wrapper.appendChild(mergeRight);
+            mergeSubWrapper.appendChild(mergeRight);
         }
 
-        var canSplit     = false;
-        var splitWrapper = document.createElement('div');
-
-        if (this.getColspan(cell) > 1) {
-            canSplit = true;
-            var splitVert = this.createButton('', false, 'icon-splitVert', function() {
-                self._buttonClicked = true;
-                self.splitVertical(cell);
-                self.updateToolbar(cell);
-            });
-            splitWrapper.appendChild(splitVert);
+        if (canMerge === true) {
+            var mergeSubSection = this.createSubSection(mergeSubWrapper, true);
+            this.createButton('', false, 'icon-move', null, null, mergeSubSection);
         }
-
-        var span = document.createElement('span');
-        dfx.setHtml(span, 'Split');
-        splitWrapper.appendChild(span);
-
-        if (this.getRowspan(cell) > 1) {
-            canSplit = true;
-            var splitHor = this.createButton('', false, 'icon-splitHoriz', function() {
-                self._buttonClicked = true;
-                self.splitHorizontal(cell);
-                self.updateToolbar(cell);
-            });
-            splitWrapper.appendChild(splitHor);
-        }
-
-        subSection.appendChild(wrapper);
-        if (canSplit === true) {
-            subSection.appendChild(splitWrapper);
-        }
-
-        this.createSubSection(subSection, true);
-        this.showActiveSubSection();
 
     },
 
