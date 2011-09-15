@@ -249,6 +249,8 @@ ViperTableEditorPlugin.prototype = {
      *
      * @param {string}     content        The content of the button.
      * @param {string}     isActive       True if the button is active.
+     * @param {string}     titleAttr      The title attribute of the button.
+     * @param {boolean}    disabled       True if the button is disabled.
      * @param {string}     customClass    Class to add to the button for extra styling.
      * @param {function}   clickAction    The function to call when the button is clicked.
      * @param {DOMElement} groupElement   The group element that was created by createButtonGroup.
@@ -259,7 +261,7 @@ ViperTableEditorPlugin.prototype = {
      *
      * @return {DOMElement} The new button element.
      */
-    createButton: function(content, isActive, customClass, clickAction, groupElement, subSection, showSubSection)
+    createButton: function(content, isActive, titleAttr, disabled, customClass, clickAction, groupElement, subSection, showSubSection)
     {
         var self = this;
         if (subSection) {
@@ -282,7 +284,7 @@ ViperTableEditorPlugin.prototype = {
             }
         }
 
-        var button = ViperTools.createButton(content, isActive, customClass, clickAction, groupElement, subSection, showSubSection);
+        var button = ViperTools.createButton(content, isActive, titleAttr, disabled, customClass, clickAction, groupElement, subSection, showSubSection);
 
         if (!groupElement) {
             this._toolsContainer.appendChild(button);
@@ -620,7 +622,7 @@ ViperTableEditorPlugin.prototype = {
         }
 
         var self = this;
-        this.createButton('Heading', isActive, '', function() {
+        this.createButton('Heading', isActive, 'Toggle Heading', false, '', function() {
             // Switch between header and normal cell.
             if (dfx.isTag(cell, 'th') === true) {
                 var newCell = self.convertToCell(cell);
@@ -631,81 +633,64 @@ ViperTableEditorPlugin.prototype = {
             }
         });
 
-        if (this.getColspan(cell) > 1) {
-            this.createButton('', false, 'icon-splitVert', function() {
-                self._buttonClicked = true;
-                self.splitVertical(cell);
-                self.updateToolbar(cell);
-            });
-        }
+        this.createButton('', false, 'Split Vertically', (this.getColspan(cell) <= 1), 'icon-splitVert', function() {
+            self._buttonClicked = true;
+            self.splitVertical(cell);
+            self.updateToolbar(cell);
+        });
 
-        if (this.getRowspan(cell) > 1) {
-            this.createButton('', false, 'icon-splitHoriz', function() {
-                self._buttonClicked = true;
-                self.splitHorizontal(cell);
-                self.updateToolbar(cell);
-            });
-        }
+        this.createButton('', false, 'Split Horizontally', (this.getRowspan(cell) <= 1), 'icon-splitHoriz', function() {
+            self._buttonClicked = true;
+            self.splitHorizontal(cell);
+            self.updateToolbar(cell);
+        });
 
         var mergeSubWrapper = document.createElement('div');
-        var canMerge        = false;
-        if (this.canMergeUp(cell) !== false) {
-            var mergeUp = this.createButton('', false, 'icon-arrowUp', function() {
-                self._buttonClicked = true;
-                self.updateToolbar(self.mergeUp(cell));
-            });
-            mergeSubWrapper.appendChild(mergeUp);
-            canMerge = true;
-        }
+        var mergeUp = this.createButton('', false, 'Merge Up', (this.canMergeUp(cell) === false), 'icon-arrowUp', function() {
+            self._buttonClicked = true;
+            self.updateToolbar(self.mergeUp(cell));
+        });
+        mergeSubWrapper.appendChild(mergeUp);
 
-        if (this.canMergeDown(cell) !== false) {
-            var mergeDown = this.createButton('', false, 'icon-arrowDown', function() {
-                self._buttonClicked = true;
-                self.updateToolbar(self.mergeDown(cell));
-            });
-            mergeSubWrapper.appendChild(mergeDown);
-            canMerge = true;
-        }
+        var mergeDown = this.createButton('', false, 'Merge Down', (this.canMergeDown(cell) === false), 'icon-arrowDown', function() {
+            self._buttonClicked = true;
+            self.updateToolbar(self.mergeDown(cell));
+        });
+        mergeSubWrapper.appendChild(mergeDown);
 
-        if (this.canMergeLeft(cell) !== false) {
-            var mergeLeft = this.createButton('', false, 'icon-arrowLeft', function() {
-                self._buttonClicked = true;
-                self.updateToolbar(self.mergeLeft(cell));
-            });
-            mergeSubWrapper.appendChild(mergeLeft);
-        }
+        var mergeLeft = this.createButton('', false, 'Merge Left', (this.canMergeLeft(cell) === false), 'icon-arrowLeft', function() {
+            self._buttonClicked = true;
+            self.updateToolbar(self.mergeLeft(cell));
+        });
+        mergeSubWrapper.appendChild(mergeLeft);
 
-        if (this.canMergeRight(cell) !== false) {
-            var mergeRight = this.createButton('', false, 'icon-arrowRight', function() {
-                self._buttonClicked = true;
-                self.updateToolbar(self.mergeRight(cell));
-            });
-            mergeSubWrapper.appendChild(mergeRight);
-        }
+        var mergeRight = this.createButton('', false, 'Merge Right', (this.canMergeRight(cell) === false), 'icon-arrowRight', function() {
+            self._buttonClicked = true;
+            self.updateToolbar(self.mergeRight(cell));
+        });
+        mergeSubWrapper.appendChild(mergeRight);
 
-        if (canMerge === true) {
-            var mergeSubSection = this.createSubSection(mergeSubWrapper, true);
-            this.createButton('', false, 'icon-move', null, null, mergeSubSection);
-        }
+        var mergeSubSection = this.createSubSection(mergeSubWrapper, true);
+        this.createButton('', false, 'Toggle Merge Options', false, 'icon-move', null, null, mergeSubSection);
 
     },
 
     _createColProperties: function(cell)
     {
         var self = this;
-        var insertLeft = this.createButton('', false, 'icon-addLeft', function() {
+        var insertLeft = this.createButton('', false, 'Insert Column Before', false, 'icon-addLeft', function() {
             self._buttonClicked = true;
             self.insertColBefore(cell);
             self.updateToolbar(cell, 'col');
         });
 
-        var insertRight = this.createButton('', false, 'icon-addRight', function() {
+        var insertRight = this.createButton('', false, 'Insert Column After', false, 'icon-addRight', function() {
             self._buttonClicked = true;
             self.insertColAfter(cell);
             self.updateToolbar(cell, 'col');
         });
 
-        var removeCol = this.createButton('', false, 'icon-delete', function() {
+        var removeCol = this.createButton('', false, 'Remove Column', false, 'icon-delete', function() {
             self._buttonClicked = true;
             self.removeCol(cell);
             self.hideToolbar();
@@ -717,19 +702,19 @@ ViperTableEditorPlugin.prototype = {
     _createRowProperties: function(cell)
     {
         var self = this;
-        var insertBefore = this.createButton('', false, 'icon-addUp', function() {
+        var insertBefore = this.createButton('', false, 'Insert Row Before', false, 'icon-addUp', function() {
             self._buttonClicked = true;
             self.insertRowBefore(cell);
             self.updateToolbar(cell, 'row');
         });
 
-        var insertAfter = this.createButton('', false, 'icon-addDown', function() {
+        var insertAfter = this.createButton('', false, 'Insert Row After', false, 'icon-addDown', function() {
             self._buttonClicked = true;
             self.insertRowAfter(cell);
             self.updateToolbar(cell, 'row');
         });
 
-        var removeRow = this.createButton('', false, 'icon-delete', function() {
+        var removeRow = this.createButton('', false, 'Remove Row', false, 'icon-delete', function() {
             self._buttonClicked = true;
             self.removeRow(cell);
             self.hideToolbar();

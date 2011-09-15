@@ -25,6 +25,8 @@ var ViperTools = {
      *
      * @param {string}     content        The content of the button.
      * @param {string}     isActive       True if the button is active.
+     * @param {string}     titleAttr      The title attribute for the button.
+     * @param {boolean}    disabled       True if the button is disabled.
      * @param {string}     customClass    Class to add to the button for extra styling.
      * @param {function}   clickAction    The function to call when the button is clicked.
      *                                    Note that this action is ignored if the
@@ -38,7 +40,7 @@ var ViperTools = {
      *
      * @return {DOMElement} The new button element.
      */
-    createButton: function(content, isActive, customClass, clickAction, groupElement, subSection, showSubSection)
+    createButton: function(content, isActive, titleAttr, disabled, customClass, clickAction, groupElement, subSection, showSubSection)
     {
         if (!content) {
             if (customClass) {
@@ -53,8 +55,20 @@ var ViperTools = {
 
         var button = document.createElement('div');
 
+        if (titleAttr) {
+            if (disabled === true) {
+                titleAttr = '[Disabled] ' + titleAttr;
+            }
+
+            button.setAttribute('title', titleAttr);
+        }
+
         dfx.setHtml(button, content);
         dfx.addClass(button, 'Viper-button');
+
+        if (disabled === true) {
+            dfx.addClass(button, 'disabled');
+        }
 
         if (customClass) {
             dfx.addClass(button, customClass);

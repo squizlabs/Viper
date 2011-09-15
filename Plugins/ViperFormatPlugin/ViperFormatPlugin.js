@@ -185,7 +185,7 @@ ViperFormatPlugin.prototype = {
                         }
                     }
 
-                    var headingButton = inlineToolbarPlugin.createButton('H' + headingCount, active, null, function() {
+                    var headingButton = inlineToolbarPlugin.createButton('H' + headingCount, active,  'Convert to Heading ' + headingCount, false, null, function() {
                         self.handleFormat(tagName);
                     });
                     headingSubSectionContents.appendChild(headingButton);
@@ -219,7 +219,7 @@ ViperFormatPlugin.prototype = {
                         }
                     }
 
-                    var button = inlineToolbarPlugin.createButton(formatButtons[tagName], active, null, function() {
+                    var button = inlineToolbarPlugin.createButton(formatButtons[tagName], active,  'Convert to ' + formatButtons[tagName], false, null, function() {
                         self.handleFormat(tagName);
                     });
                     formatsSubSectionContents.appendChild(button);
@@ -232,11 +232,11 @@ ViperFormatPlugin.prototype = {
 
         var buttonGroup = inlineToolbarPlugin.createButtonGroup();
         if (formatsSubSection) {
-            inlineToolbarPlugin.createButton('Aa', hasActiveFormat, 'formats', null, buttonGroup, formatsSubSection, hasActiveFormat);
+            inlineToolbarPlugin.createButton('Aa', hasActiveFormat,  'Toggle Formats', false, 'formats', null, buttonGroup, formatsSubSection, hasActiveFormat);
         }
 
         if (headingsSubSection) {
-            inlineToolbarPlugin.createButton('Hh', hasActiveHeading, 'headings', null, buttonGroup, headingsSubSection, hasActiveHeading);
+            inlineToolbarPlugin.createButton('Hh', hasActiveHeading,  'Toggle Headings', false, 'headings', null, buttonGroup, headingsSubSection, hasActiveHeading);
         }
 
     },

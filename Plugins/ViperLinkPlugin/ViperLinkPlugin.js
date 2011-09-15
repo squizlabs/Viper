@@ -35,7 +35,7 @@ ViperLinkPlugin.prototype = {
             this.viper.registerCallback('ViperInlineToolbarPlugin:updateToolbar', 'ViperLinkPlugin', function(data) {
                 for (var i = 0; i < data.lineage.length; i++) {
                     if (dfx.isTag(data.lineage[i], 'a') === true) {
-                        var removeLink = inlineToolbarPlugin.createButton('Remove Link', 'a', 'removeLink', function() {
+                        var removeLink = inlineToolbarPlugin.createButton('Remove Link', 'a', 'Remove Link', false, 'removeLink', function() {
                             self.removeLink(data.lineage[i]);
                         });
 

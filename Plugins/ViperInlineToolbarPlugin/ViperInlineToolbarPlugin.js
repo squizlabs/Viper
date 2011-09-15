@@ -114,6 +114,8 @@ ViperInlineToolbarPlugin.prototype = {
      *
      * @param {string}     content        The content of the button.
      * @param {string}     isActive       True if the button is active.
+     * @param {string}     titleAttr      The title attribute of the button.
+     * @param {boolean}    disabled       True if the button is disabled.
      * @param {string}     customClass    Class to add to the button for extra styling.
      * @param {function}   clickAction    The function to call when the button is clicked.
      * @param {DOMElement} groupElement   The group element that was created by createButtonGroup.
@@ -124,7 +126,7 @@ ViperInlineToolbarPlugin.prototype = {
      *
      * @return {DOMElement} The new button element.
      */
-    createButton: function(content, isActive, customClass, clickAction, groupElement, subSection, showSubSection)
+    createButton: function(content, isActive, titleAttr, disabled, customClass, clickAction, groupElement, subSection, showSubSection)
     {
         var self = this;
         if (clickAction) {
@@ -153,7 +155,7 @@ ViperInlineToolbarPlugin.prototype = {
             }
         }
 
-        var button = ViperTools.createButton(content, isActive, customClass, clickAction, groupElement, subSection, showSubSection);
+        var button = ViperTools.createButton(content, isActive, titleAttr, disabled, customClass, clickAction, groupElement, subSection, showSubSection);
 
         if (!groupElement) {
             this._toolsContainer.appendChild(button);
