@@ -130,7 +130,6 @@ ViperTableEditorPlugin.prototype = {
             self.updateToolbar(self.getActiveCell(), self._currentType);
         });
 
-        this._initChangeTrackerCallbacks();
         this._createToolbar();
 
     },
@@ -196,7 +195,6 @@ ViperTableEditorPlugin.prototype = {
             return;
         }
 
-        this.setActiveCell(cell);
         this.updateToolbar(cell, type);
 
     },
@@ -320,6 +318,9 @@ ViperTableEditorPlugin.prototype = {
      */
     updateToolbar: function(cell, type)
     {
+        this._tableRawCells = null;
+        this.setActiveCell(cell);
+
         this.removeHighlights();
         this.hideToolbar();
 
@@ -618,9 +619,8 @@ ViperTableEditorPlugin.prototype = {
             isActive = true;
         }
 
-        var button = null;
-        var self   = this;
-        button = this.createButton('Heading', isActive, '', function() {
+        var self = this;
+        this.createButton('Heading', isActive, '', function() {
             // Switch between header and normal cell.
             if (dfx.isTag(cell, 'th') === true) {
                 var newCell = self.convertToCell(cell);
@@ -636,18 +636,18 @@ ViperTableEditorPlugin.prototype = {
         var canMerge   = false;
 
         if (this.canMergeUp(cell) !== false) {
-            var mergeUp = this.createButton('U', false, '', function() {
+            var mergeUp = this.createButton('', false, 'icon-arrowUp', function() {
                 self._buttonClicked = true;
-                self.showTableTools(self.mergeUp(cell));
+                self.updateToolbar(self.mergeUp(cell));
             });
             wrapper.appendChild(mergeUp);
             canMerge = true;
         }
 
         if (this.canMergeDown(cell) !== false) {
-            var mergeDown = this.createButton('D', false, '', function() {
+            var mergeDown = this.createButton('', false, 'icon-arrowDown', function() {
                 self._buttonClicked = true;
-                self.showTableTools(self.mergeDown(cell));
+                self.updateToolbar(self.mergeDown(cell));
             });
             wrapper.appendChild(mergeDown);
             canMerge = true;
@@ -660,17 +660,17 @@ ViperTableEditorPlugin.prototype = {
         }
 
         if (this.canMergeLeft(cell) !== false) {
-            var mergeLeft = this.createButton('L', false, '', function() {
+            var mergeLeft = this.createButton('', false, 'icon-arrowLeft', function() {
                 self._buttonClicked = true;
-                self.showTableTools(self.mergeLeft(cell));
+                self.updateToolbar(self.mergeLeft(cell));
             });
             wrapper.appendChild(mergeLeft);
         }
 
         if (this.canMergeRight(cell) !== false) {
-            var mergeRight = this.createButton('R', false, '', function() {
+            var mergeRight = this.createButton('', false, 'icon-arrowRight', function() {
                 self._buttonClicked = true;
-                self.showTableTools(self.mergeRight(cell));
+                self.updateToolbar(self.mergeRight(cell));
             });
             wrapper.appendChild(mergeRight);
         }
@@ -1039,51 +1039,63 @@ ViperTableEditorPlugin.prototype = {
      */
     splitHorizontal: function(cell)
     {
-        if (!cell || !cell.getAttribute('rowspan')) {
+        var rowspan = this.getRowspan(cell);
+        if (!cell || rowspan <= 1) {
             return false;
         }
 
-        var row     = cell.parentNode;
-        var rowspan = (parseInt(cell.getAttribute('rowspan')) - 1);
-        var i       = rowspan;
-        var nextRow = row;
+        var rows    = dfx.getTag('tr', this.getCellTable(cell));
+        var cellPos = this.getCellPosition(cell);
+        var cells   = this._getCellsExpanded();
 
-        while (i > 0) {
-            nextRow = this._getNextRow(nextRow);
-            if (!nextRow) {
-                return false;
-            }
-
-            i--;
-        }
-
-        var tagName        = dfx.getTagName(cell);
-        var colNum         = this.getColNum(cell);
-        var nextRowColumns = this._getRowCells(nextRow);
-
-        var elem       = document.createElement(tagName);
-        if (rowspan > 1) {
-            cell.setAttribute('rowspan', rowspan);
+        // Decrease the rowspan of this cell by 1.
+        if (rowspan > 2) {
+            cell.setAttribute('rowspan', (rowspan - 1));
         } else {
             dfx.removeAttr(cell, 'rowspan');
         }
 
-        var colspan = cell.getAttribute('colspan');
+        var colspan = this.getColspan(cell);
+        var newCell = document.createElement(dfx.getTagName(cell));
         if (colspan > 1) {
-            elem.setAttribute('colspan', colspan);
+            newCell.setAttribute('colspan', colspan);
         }
 
-        if (colNum < nextRowColumns.length) {
-            var nextRowCol = this.getCell(nextRow, colNum);
-            dfx.insertBefore(nextRowCol, elem);
+        // Find the new cell's insertion point.
+        // Next row is startRowPosition + originalRowspan - 1 (minus 1 since default rowspan is 1).
+        var nextRowIndex = (cellPos.row + rowspan - 1);
+        var rowCells     = this._getRowCells(rows[nextRowIndex]);
+
+        if (cellPos.col === 0) {
+            dfx.insertBefore(rowCells[0], newCell);
         } else {
-            var nextRowCol = this.getCell(nextRow, (nextRowColumns.length - 1));
-            dfx.insertAfter(nextRowCol, elem);
+            var cellIndex = cellPos.col;
+
+            // Look behind to see if there is a real column.
+            var inserted = false;
+            while (cells[nextRowIndex][--cellIndex]) {
+                if (this.getCellPosition(cells[nextRowIndex][cellIndex]).row === nextRowIndex) {
+                    inserted = true;
+                    dfx.insertAfter(cells[nextRowIndex][cellIndex], newCell);
+                    break;
+                }
+            }
+
+            if (inserted === false) {
+                // Look forward.
+                cellIndex = cellPos.col;
+                while (cells[nextRowIndex][++cellIndex]) {
+                    if (this.getCellPosition(cells[nextRowIndex][cellIndex]).row === nextRowIndex) {
+                        dfx.insertBefore(cells[nextRowIndex][cellIndex], newCell);
+                        break;
+                    }
+                }
+            }
         }
 
         this.tableUpdated();
 
-        return elem;
+        return newCell;
 
     },
 
@@ -1391,14 +1403,7 @@ ViperTableEditorPlugin.prototype = {
             }
         }
 
-        if (ViperChangeTracker.isTracking() === true) {
-            var del = document.createElement('del');
-            dfx.insertBefore(table, del);
-            del.appendChild(table);
-            ViperChangeTracker.addChange('removedTable', [del]);
-        } else {
-            dfx.remove(table);
-        }
+        dfx.remove(table);
 
         this.hideCellButtons();
     },
@@ -1450,8 +1455,6 @@ ViperTableEditorPlugin.prototype = {
         var table = document.createElement('table');
         // First hide the table so we can determine if there are borders etc.
         dfx.setStyle(table, 'display', 'none');
-
-        ViperChangeTracker.addChange('insertedTable', [table]);
 
         var tbody    = document.createElement('tbody');
         var firstCol = null;
@@ -2084,94 +2087,6 @@ ViperTableEditorPlugin.prototype = {
         while (fromCell.firstChild) {
             toCell.appendChild(fromCell.firstChild);
         }
-
-    },
-
-    _initChangeTrackerCallbacks: function()
-    {
-        // Tracking Inserts.
-        ViperChangeTracker.addChangeType('insertedTable', 'Inserted', 'insert');
-        ViperChangeTracker.addChangeType('insertedTableRow', 'Inserted', 'insert');
-        ViperChangeTracker.addChangeType('insertedTableCol', 'Inserted', 'insert');
-        ViperChangeTracker.setDescriptionCallback('insertedTable', function(node) {
-            return 'Table';
-        });
-        ViperChangeTracker.setDescriptionCallback('insertedTableRow', function(node) {
-            return 'Table row';
-        });
-        ViperChangeTracker.setDescriptionCallback('insertedTableCol', function(node) {
-            return 'Table column';
-        });
-
-        ViperChangeTracker.setApproveCallback('insertedTable', function(clone, node) {
-            ViperChangeTracker.removeTrackChanges(node);
-        });
-        ViperChangeTracker.setApproveCallback('insertedTableRow', function(clone, node) {
-            ViperChangeTracker.removeTrackChanges(node);
-        });
-        ViperChangeTracker.setApproveCallback('insertedTableCol', function(clone, node) {
-            ViperChangeTracker.removeTrackChanges(node);
-        });
-
-        ViperChangeTracker.setRejectCallback('insertedTable', function(clone, node) {
-            self.removeTable(node);
-        });
-        ViperChangeTracker.setRejectCallback('insertedTableRow', function(clone, node) {
-            self.removeRow(node);
-        });
-        ViperChangeTracker.setRejectCallback('insertedTableCol', function(clone, node) {
-            self.removeCol(node);
-        });
-
-        // Tracking Deletes.
-        ViperChangeTracker.addChangeType('removedTable', 'Deleted', 'remove');
-        ViperChangeTracker.addChangeType('removedTableRow', 'Deleted', 'remove');
-        ViperChangeTracker.addChangeType('removedTableCol', 'Deleted', 'remove');
-        ViperChangeTracker.setDescriptionCallback('removedTable', function(node) {
-            return 'Table';
-        });
-        ViperChangeTracker.setDescriptionCallback('removedTableRow', function(node) {
-            return 'Table row';
-        });
-        ViperChangeTracker.setDescriptionCallback('removedTableCol', function(node) {
-            return 'Table column';
-        });
-
-        ViperChangeTracker.setApproveCallback('removedTable', function(clone, node) {
-            dfx.remove(node);
-        });
-        ViperChangeTracker.setApproveCallback('removedTableRow', function(clone, node) {
-            dfx.remove(node);
-        });
-        ViperChangeTracker.setApproveCallback('removedTableCol', function(clone, node) {
-            dfx.remove(node);
-        });
-
-        ViperChangeTracker.setRejectCallback('removedTable', function(clone, node) {
-            ViperChangeTracker.removeTrackChanges(node);
-        });
-        ViperChangeTracker.setRejectCallback('removedTableRow', function(clone, node) {
-            ViperChangeTracker.removeTrackChanges(node);
-        });
-        ViperChangeTracker.setRejectCallback('removedTableCol', function(clone, node) {
-            ViperChangeTracker.removeTrackChanges(node);
-        });
-
-        this.viper.registerCallback('ViperChangeTracker:modeChange', 'ViperTableEditor', function(changedTo) {
-            var showInserted = true;
-            var showRemoved  = false;
-            if (changedTo === 'original') {
-                showInserted = false;
-                showRemoved  = true;
-            }
-
-            ViperChangeTracker.setNodeTypeVisibility('insertedTable', showInserted);
-            ViperChangeTracker.setNodeTypeVisibility('insertedTableRow', showInserted);
-            ViperChangeTracker.setNodeTypeVisibility('insertedTableCol', showInserted);
-            ViperChangeTracker.setNodeTypeVisibility('removedTable', showRemoved);
-            ViperChangeTracker.setNodeTypeVisibility('removedTableRow', showRemoved);
-            ViperChangeTracker.setNodeTypeVisibility('removedTableCol', showRemoved);
-        });
 
     }
 
