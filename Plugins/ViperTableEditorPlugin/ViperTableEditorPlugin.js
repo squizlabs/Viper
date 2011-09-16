@@ -357,7 +357,10 @@ ViperTableEditorPlugin.prototype = {
     tableUpdated: function()
     {
         this._tableRawCells = null;
-        this.viper.fireNodesChanged([this.getCellTable(this.activeCell)]);
+        var table = this.getCellTable(this.activeCell);
+        this.viper.fireNodesChanged([table]);
+
+        this.setTableHeaders(table);
 
     },
 
@@ -1527,8 +1530,8 @@ ViperTableEditorPlugin.prototype = {
                 // Determine colspan and rowspan for the cell. If nothing is set,
                 // assume a value of 1. These come out as string values but we turn them
                 // into integers for easier comparison and addition.
-                var colspan = cell.getAttribute('colspan') || 1;
-                var rowspan = cell.getAttribute('rowspan') || 1;
+                var colspan = this.getColspan(cell);
+                var rowspan = this.getRowspan(cell);
 
                 if (dfx.isTag(cell, 'th') === true && dfx.isBlank(dfx.getHtml(cell)) === false) {
                     // This is a table header, so figure out an ID-based representation
@@ -1566,6 +1569,10 @@ ViperTableEditorPlugin.prototype = {
 
                             headings.row[(rowCount + i)].id      += cellid;
                             headings.row[(rowCount + i)].rowspan  = rowspan;
+
+                            if (dfx.isset(cellHeadings[(rowCount + i)]) === false) {
+                                cellHeadings[(rowCount + i)] = [];
+                            }
 
                             cellHeadings[(rowCount + i)][cellCount] = {
                                 id: headings.row[(rowCount + i)].id,
@@ -1625,7 +1632,9 @@ ViperTableEditorPlugin.prototype = {
                                 row: rowCount
                             };
 
-                            if (dfx.isset(cellHeadings[(rowCount - 1)][(cellCount + i)]) === true) {
+                            if (dfx.isset(cellHeadings[(rowCount - 1)]) === true
+                                && dfx.isset(cellHeadings[(rowCount - 1)][(cellCount + i)]) === true
+                            ) {
                                 cellHeadings[rowCount][(cellCount + i)].id = cellHeadings[(rowCount - 1)][(cellCount + i)].id + ' ' + cellHeadings[rowCount][(cellCount + i)].id;
                             }
                         }//end for
@@ -1656,6 +1665,10 @@ ViperTableEditorPlugin.prototype = {
                     // Copy the headings down from the column above.
                     if (rowCount > 1) {
                         for (var i = 0; i < colspan; i++) {
+                            if (dfx.isset(cellHeadings[rowCount]) === false) {
+                                cellHeadings[rowCount] = [];
+                            }
+
                             cellHeadings[rowCount][(cellCount + i)] = cellHeadings[(rowCount - 1)][(cellCount + i)];
                         }
                     } else {
@@ -1711,6 +1724,10 @@ ViperTableEditorPlugin.prototype = {
 
                     for (var i = 0; i < rowspan; i++) {
                         for (var m = 0; m < colspan; m++) {
+                            if (dfx.isset(cellHeadings[(rowCount + i)]) === false) {
+                                cellHeadings[(rowCount + i)] = [];
+                            }
+
                             cellHeadings[(rowCount + i)][(cellCount + m)] = cellHeadings[rowCount][(cellCount + m)];
                         }
                     }
