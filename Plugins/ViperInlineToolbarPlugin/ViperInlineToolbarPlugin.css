@@ -226,3 +226,58 @@
 .themeLight.ViperITP  .ViperITP-subSectionWrapper:before {
     border-bottom-color: #F9F9F9;
 }
+
+/* SubSection Lists */
+
+.subSectionList {
+    margin: -0.6em;
+    padding: 0;
+    list-style: none;
+    text-align: left;
+}
+
+.subSectionList .subSectionList-item {
+    position: relative;
+    border-top: 1px solid #727179;
+    border-bottom: 1px solid #404046;
+    padding: 0.4em;
+    color: #FFF;
+    text-shadow: none;
+}
+
+.subSectionList .subSectionList-item:after {
+    display: block;
+    clear: both;
+    content: "";
+    background-color: red;
+}
+
+.subSectionList .subSectionList-item:first-child {
+    border-top: none;
+}
+
+.subSectionList .subSectionList-item:last-child {
+    border-bottom: none;
+}
+.subSectionList .subSectionList-item .listItem-text {
+    display: block;
+    font-size: 1.3em;
+/*     line-height: 1.9em; */
+    padding: 0.45em 0 0.4em 0.2em;
+    max-width: 15em;
+}
+
+/* subSection List - Cell Lineage */
+
+.cellLineage .Viper-button {
+    /*
+position: absolute;
+    right: 0;
+    top: 0;
+*/
+    float: right;
+    margin: 0 0 0 0.5em;
+}
+.cellLineage .subSectionList-item {
+/*     padding-right: 1em; */
+}
