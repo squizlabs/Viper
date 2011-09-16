@@ -79,9 +79,12 @@ var ViperTools = {
 
             // Show/hide subsection if there is one..
             dfx.addEvent(button, 'mousedown.Viper', function(e) {
-                var state = ViperTools.toggleSubSection(subSection);
                 dfx.preventDefault(e);
+                if (dfx.hasClass(button, 'disabled') === true) {
+                    return false;
+                }
 
+                var state = ViperTools.toggleSubSection(subSection);
                 if (clickAction) {
                     clickAction.call(this, state, button);
                 }
@@ -91,6 +94,10 @@ var ViperTools = {
         } else if (clickAction) {
             dfx.addEvent(button, 'mousedown.Viper', function(e) {
                 dfx.preventDefault(e);
+                if (dfx.hasClass(button, 'disabled') === true) {
+                    return false;
+                }
+
                 return clickAction.call(this, button);
             });
         }
