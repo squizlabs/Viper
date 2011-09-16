@@ -493,13 +493,13 @@ ViperCoreStylesPlugin.prototype = {
 
         var buttonGroup = inlineToolbarPlugin.createButtonGroup();
 
-        var bold = inlineToolbarPlugin.createButton('Bold', activeStates.strong, 'Toggle Bold', false, 'bold', function() {
+        var bold = inlineToolbarPlugin.createButton('B', activeStates.strong, 'Bold', false, 'bold', function() {
             return self.handleStyle('strong');
         }, buttonGroup);
-        var em = inlineToolbarPlugin.createButton('Italic', activeStates.em, 'Toggle Italic', false, 'em', function() {
+        var em = inlineToolbarPlugin.createButton('I', activeStates.em, 'Italic', false, 'italic', function() {
             return self.handleStyle('em');
         }, buttonGroup);
-        var u = inlineToolbarPlugin.createButton('Underline', activeStates.u, 'Toggle Underline', false, 'underline', function() {
+        var u = inlineToolbarPlugin.createButton('U', activeStates.u, 'Underline', false, 'underline', function() {
             return self.handleStyle('u');
         }, buttonGroup);
 
