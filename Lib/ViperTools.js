@@ -45,7 +45,7 @@ var ViperTools = {
         if (!content) {
             if (customClass) {
                 // Must be an icon button.
-                content = '<span class="buttonIcon"></span>';
+                content = '<span class="buttonIcon ' + customClass + '"></span>';
             } else {
                 content = '';
             }
