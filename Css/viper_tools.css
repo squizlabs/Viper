@@ -1,297 +1,216 @@
 .Viper-button {
-    position: relative;
-    border-radius: 0.3em;
-    cursor: pointer;
-    display: inline-block;
-    font-size: 1.6em;
-    line-height: 1.7em;
-    margin-left: 0.3em;
-    min-width: 1em;
-    padding: 0 0.5em;
-    text-align: center;
+  position: relative;
+  border-radius: 0.3em;
+  cursor: pointer;
+  display: inline-block;
+  font-size: 1.6em;
+  line-height: 1.7em;
+  margin-left: 0.3em;
+  min-width: 1em;
+  padding: 0 0.5em;
+  text-align: center;
 }
-
 .Viper-button:first-child {
-    margin-left: 0;
+  margin-left: 0;
 }
-
+.Viper-button.disabled {
+  opacity: 0.3;
+}
 /* Button Groups */
-
 .Viper-buttonGroup {
-    display: inline-block;
-    margin-left: 0.6em;
+  display: inline-block;
+  margin-left: 0.6em;
 }
-
 .Viper-buttonGroup:first-child {
-    margin-left: 0;
+  margin-left: 0;
 }
-
 .Viper-buttonGroup .Viper-button {
-    border-radius: 0;
-    margin: 0;
+  border-radius: 0;
+  margin: 0;
 }
-
 .Viper-buttonGroup .Viper-button:first-child {
-    border-top-left-radius: 0.3em;
-    border-bottom-left-radius: 0.3em;
+  border-top-left-radius: 0.3em;
+  border-bottom-left-radius: 0.3em;
 }
-
 .Viper-buttonGroup .Viper-button:last-child {
-    border-top-right-radius: 0.3em;
-    border-bottom-right-radius: 0.3em;
+  border-top-right-radius: 0.3em;
+  border-bottom-right-radius: 0.3em;
 }
-
 /* Theme - Dark Grey */
-
-.themeDark .Viper-button {
-    background-color: #dadade;
-    border: none;
-    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.3), 0 1px 0 rgba(255, 255, 255, 0.9) inset;
-    background: -webkit-gradient(linear, left top, left bottom, from(#e9e9eb), to(#c9c9d0));
-    background: -moz-linear-gradient(top,  #e9e9eb,  #c9c9d0);
-/*     -ms-filter: "progid:DXImageTransform.Microsoft.gradient (GradientType=0, startColorstr=#e9e9eb, endColorstr=#c9c9d0)"; */
+.themeDark .Viper-button, .themeDark .Viper-button.disabled:hover {
+  background-color: #dadade;
+  border: none;
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.3), 0 1px 0 rgba(255, 255, 255, 0.9) inset;
+  background: -webkit-gradient(linear, left top, left bottom, from(#e9e9eb), to(#c9c9d0));
+  background: -moz-linear-gradient(top, #e9e9eb, #c9c9d0);
+  /*     -ms-filter: "progid:DXImageTransform.Microsoft.gradient (GradientType=0, startColorstr=#e9e9eb, endColorstr=#c9c9d0)"; */
 }
-
 .themeDark .Viper-button:hover {
-    background: #c9c9cd;
-    background: -webkit-gradient(linear, left top, left bottom, from(#d8d8da), to(#b8b8ca));
-    background: -moz-linear-gradient(top,  #c8c8c9,  #a8a8b9);
-    text-shadow: 0 1px 0 rgba(255,255,255,0.5);
+  background: #c9c9cd;
+  background: -webkit-gradient(linear, left top, left bottom, from(#d8d8da), to(#b8b8ca));
+  background: -moz-linear-gradient(top, #c8c8c9, #a8a8b9);
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
 }
-
 .themeDark .Viper-button:active,
 .themeDark .Viper-button.active,
 .themeDark .Viper-button.active:hover,
 .themeDark .Viper-button.selected,
 .themeDark .Viper-button.selected:hover {
-    color: #FFF;
-    text-shadow: 0 -1px 0 rgba(0,0,0,0.5);
-    box-shadow: 0 0 0.2em rgba(0, 0, 0, 0.85) inset;
+  color: #FFF;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 0.2em rgba(0, 0, 0, 0.85) inset;
 }
-
-.themeDark .Viper-button.active,
-.themeDark .Viper-button.active:hover {
-/* .themeDark .Viper-button.active.selected, */
-/* .themeDark .Viper-button.active.selected:hover { */
-    background: #2d73d2;
-    background: -webkit-gradient(linear, left top, left bottom, from(#3987f2), to(#205caf));
-    background: -moz-linear-gradient(top,  #3987f2,  #205caf);
+.themeDark .Viper-button.active, .themeDark .Viper-button.active:hover {
+  background: #2d73d2;
+  background: -webkit-gradient(linear, left top, left bottom, from(#3987f2), to(#205caf));
+  background: -moz-linear-gradient(top, #3987f2, #205caf);
 }
-
-.themeDark .Viper-button:active,
-.themeDark .Viper-button.selected,
-.themeDark .Viper-button.selected:hover {
-    background: #54535A;
-    border-color: #555;
+.themeDark .Viper-button:active, .themeDark .Viper-button.selected, .themeDark .Viper-button.selected:hover {
+  background: #54535A;
+  border-color: #555;
 }
-
 .themeDark .Viper-buttonGroup .Viper-button {
-    border-left: 1px solid #898989;
+  border-left: 1px solid #898989;
 }
-
-.themeDark .Viper-buttonGroup .Viper-button:first-child,
-.themeDark .Viper-buttonGroup .Viper-button.active,
-.themeDark .Viper-buttonGroup .Viper-button.selected {
-    border-left: none;
+.themeDark .Viper-buttonGroup .Viper-button:first-child, .themeDark .Viper-buttonGroup .Viper-button.active, .themeDark .Viper-buttonGroup .Viper-button.selected {
+  border-left: none;
 }
-
 /* Theme - Light Grey */
-
-.themeLight .Viper-button {
-    background-color: #dadade;
-    border: 1px solid #AAA;
-    box-shadow: 0 1px 0 rgba(255,255,255,0.95) inset;
-    background: -webkit-gradient(linear, left top, left bottom, from(#e9e9eb), to(#c9c9d0));
-    background: -moz-linear-gradient(top,  #e9e9eb,  #c9c9d0);
+.themeLight .Viper-button, .themeLight .Viper-button.disabled:hover {
+  background-color: #dadade;
+  border: 1px solid #AAA;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.95) inset;
+  background: -webkit-gradient(linear, left top, left bottom, from(#e9e9eb), to(#c9c9d0));
+  background: -moz-linear-gradient(top, #e9e9eb, #c9c9d0);
 }
-
 .themeLight .Viper-button:hover {
-    background-color: #c9c9cd;
-    background: -webkit-gradient(linear, left top, left bottom, from(#d8d8da), to(#b8b8c0));
-    background: -moz-linear-gradient(top,  #d8d8da,  #b8b8c0);
+  background-color: #c9c9cd;
+  background: -webkit-gradient(linear, left top, left bottom, from(#d8d8da), to(#b8b8c0));
+  background: -moz-linear-gradient(top, #d8d8da, #b8b8c0);
 }
-
 .themeLight .Viper-button:active,
 .themeLight .Viper-button.active,
 .themeLight .Viper-button.active:hover,
 .themeLight .Viper-button.selected,
 .themeLight .Viper-button.selected:hover {
-    color: #FFF;
-    text-shadow: 0 -1px 0 rgba(0,0,0,0.5);
-    box-shadow: 0 0 0.2em 0 rgba(0, 0, 0, 0.6) inset;
+  color: #FFF;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 0.2em 0 rgba(0, 0, 0, 0.6) inset;
 }
-
-.themeLight .Viper-button:active,
-.themeLight .Viper-button.selected,
-.themeLight .Viper-button.selected:hover {
-    background: #888;
-    border-color: #555;
+.themeLight .Viper-button:active, .themeLight .Viper-button.selected, .themeLight .Viper-button.selected:hover {
+  background: #888;
+  border-color: #555;
 }
-
 .themeLight .Viper-button.active,
 .themeLight .Viper-button.active:hover,
 .themeLight .Viper-button.active.selected,
 .themeLight .Viper-button.active.selected:hover {
-    background: #5a8bd0;
-    border-color: #2e568d;
+  background: #5a8bd0;
+  border-color: #2e568d;
 }
-
 .themeLight .Viper-buttonGroup .Viper-button {
-    border-left-width: 0;
+  border-left-width: 0;
 }
-
 .themeLight .Viper-buttonGroup .Viper-button:first-child {
-    border-left-width: 1px;
+  border-left-width: 1px;
 }
-
-/* Button Icons */
-
-.Viper-button .buttonIcon {
-    position: absolute;
-    width: 25px;
-    height: 20px;
-    left: 50%;
-    top: 50%;
-    margin: -10px 0 0 -12px;
-    background-image: url(../Images/buttonIcons.png);
+/* Buttons */
+.buttonIcon {
+  position: absolute;
+  width: 25px;
+  height: 20px;
+  left: 50%;
+  top: 50%;
+  margin: -10px 0 0 -12.5px;
+  background-image: url(../Images/buttonIcons.png);
 }
-
-/* Arrow Up */
-.icon-arrowUp .buttonIcon {
-    background-position: 0 0;
+.buttonIcon.icon-arrowUp {
+  background-position: 0 0px;
 }
-.icon-arrowUp:active .buttonIcon,
-.icon-arrowUp.active .buttonIcon,
-.icon-arrowUp.selected .buttonIcon {
-    background-position: -33px 0;
+.Viper-button:active .buttonIcon.icon-arrowUp, .Viper-button.active .buttonIcon.icon-arrowUp, .Viper-button.selected .buttonIcon.icon-arrowUp {
+  background-position: -33px 0px;
 }
-
-/* Arrow Down */
-.icon-arrowDown .buttonIcon {
-    background-position: 0 -27px;
+.buttonIcon.icon-arrowDown {
+  background-position: 0 -27px;
 }
-.icon-arrowDown:active .buttonIcon,
-.icon-arrowDown.active .buttonIcon,
-.icon-arrowDown.selected .buttonIcon {
-    background-position: -33px -27px;
+.Viper-button:active .buttonIcon.icon-arrowDown, .Viper-button.active .buttonIcon.icon-arrowDown, .Viper-button.selected .buttonIcon.icon-arrowDown {
+  background-position: -33px -27px;
 }
-
-/* Delete */
-.icon-delete .buttonIcon {
-    background-position: 0 -54px;
+.buttonIcon.icon-delete {
+  background-position: 0 -54px;
 }
-.icon-delete:active .buttonIcon,
-.icon-delete.active .buttonIcon,
-.icon-delete.selected .buttonIcon {
-    background-position: -33px -54px;
+.Viper-button:active .buttonIcon.icon-delete, .Viper-button.active .buttonIcon.icon-delete, .Viper-button.selected .buttonIcon.icon-delete {
+  background-position: -33px -54px;
 }
-
-/* Add Up */
-.icon-addUp .buttonIcon {
-    background-position: 0 -81px;
+.buttonIcon.icon-addUp {
+  background-position: 0 -81px;
 }
-.icon-addUp:active .buttonIcon,
-.icon-addUp.active .buttonIcon,
-.icon-addUp.selected .buttonIcon {
-    background-position: -33px -81px;
+.Viper-button:active .buttonIcon.icon-addUp, .Viper-button.active .buttonIcon.icon-addUp, .Viper-button.selected .buttonIcon.icon-addUp {
+  background-position: -33px -81px;
 }
-
-/* Add Down */
-.icon-addDown .buttonIcon {
-    background-position: 0 -108px;
+.buttonIcon.icon-addDown {
+  background-position: 0 -108px;
 }
-.icon-addDown:active .buttonIcon,
-.icon-addDown.active .buttonIcon,
-.icon-addDown.selected .buttonIcon {
-    background-position: -33px -108px;
+.Viper-button:active .buttonIcon.icon-addDown, .Viper-button.active .buttonIcon.icon-addDown, .Viper-button.selected .buttonIcon.icon-addDown {
+  background-position: -33px -108px;
 }
-
-/* Arrow Left */
-.icon-arrowLeft .buttonIcon {
-    background-position: 0 -135px;
+.buttonIcon.icon-arrowLeft {
+  background-position: 0 -135px;
 }
-.icon-arrowLeft:active .buttonIcon,
-.icon-arrowLeft.active .buttonIcon,
-.icon-arrowLeft.selected .buttonIcon {
-    background-position: -33px -135px;
+.Viper-button:active .buttonIcon.icon-arrowLeft, .Viper-button.active .buttonIcon.icon-arrowLeft, .Viper-button.selected .buttonIcon.icon-arrowLeft {
+  background-position: -33px -135px;
 }
-
-/* Arrow Right */
-.icon-arrowRight .buttonIcon {
-    background-position: 0 -162px;
+.buttonIcon.icon-arrowRight {
+  background-position: 0 -162px;
 }
-.icon-arrowRight:active .buttonIcon,
-.icon-arrowRight.active .buttonIcon,
-.icon-arrowRight.selected .buttonIcon {
-    background-position: -33px -162px;
+.Viper-button:active .buttonIcon.icon-arrowRight, .Viper-button.active .buttonIcon.icon-arrowRight, .Viper-button.selected .buttonIcon.icon-arrowRight {
+  background-position: -33px -162px;
 }
-
-/* Arrow Left */
-.icon-arrowLeft .buttonIcon {
-    background-position: 0 -135px;
+.buttonIcon.icon-splitHoriz {
+  background-position: 0 -189px;
 }
-.icon-arrowLeft:active .buttonIcon,
-.icon-arrowLeft.active .buttonIcon,
-.icon-arrowLeft.selected .buttonIcon {
-    background-position: -33px -135px;
+.Viper-button:active .buttonIcon.icon-splitHoriz, .Viper-button.active .buttonIcon.icon-splitHoriz, .Viper-button.selected .buttonIcon.icon-splitHoriz {
+  background-position: -33px -189px;
 }
-
-/* Arrow Right */
-.icon-arrowRight .buttonIcon {
-    background-position: 0 -162px;
+.buttonIcon.icon-splitVert {
+  background-position: 0 -216px;
 }
-.icon-arrowRight:active .buttonIcon,
-.icon-arrowRight.active .buttonIcon,
-.icon-arrowRight.selected .buttonIcon {
-    background-position: -33px -162px;
+.Viper-button:active .buttonIcon.icon-splitVert, .Viper-button.active .buttonIcon.icon-splitVert, .Viper-button.selected .buttonIcon.icon-splitVert {
+  background-position: -33px -216px;
 }
-
-/* Split Horiz */
-.icon-splitHoriz .buttonIcon {
-    background-position: 0 -189px;
+.buttonIcon.icon-move {
+  background-position: 0 -243px;
 }
-.icon-splitHoriz:active .buttonIcon,
-.icon-splitHoriz.active .buttonIcon,
-.icon-splitHoriz.selected .buttonIcon {
-    background-position: -33px -189px;
+.Viper-button:active .buttonIcon.icon-move, .Viper-button.active .buttonIcon.icon-move, .Viper-button.selected .buttonIcon.icon-move {
+  background-position: -33px -243px;
 }
-
-/* Split Vert */
-.icon-splitVert .buttonIcon {
-    background-position: 0 -216px;
+.buttonIcon.icon-addLeft {
+  background-position: 0 -270px;
 }
-.icon-splitVert:active .buttonIcon,
-.icon-splitVert.active .buttonIcon,
-.icon-splitVert.selected .buttonIcon {
-    background-position: -33px -216px;
+.Viper-button:active .buttonIcon.icon-addLeft, .Viper-button.active .buttonIcon.icon-addLeft, .Viper-button.selected .buttonIcon.icon-addLeft {
+  background-position: -33px -270px;
 }
-
-/* Move */
-.icon-move .buttonIcon {
-    background-position: 0 -243px;
+.buttonIcon.icon-addRight {
+  background-position: 0 -297px;
 }
-.icon-move:active .buttonIcon,
-.icon-move.active .buttonIcon,
-.icon-move.selected .buttonIcon {
-    background-position: -33px -243px;
+.Viper-button:active .buttonIcon.icon-addRight, .Viper-button.active .buttonIcon.icon-addRight, .Viper-button.selected .buttonIcon.icon-addRight {
+  background-position: -33px -297px;
 }
-
-/* Add Left */
-.icon-addLeft .buttonIcon {
-    background-position: 0 -270px;
+.buttonIcon.icon-move {
+  background-position: 0 -324px;
 }
-.icon-addLeft:active .buttonIcon,
-.icon-addLeft.active .buttonIcon,
-.icon-addLeft.selected .buttonIcon {
-    background-position: -33px -270px;
+.Viper-button:active .buttonIcon.icon-move, .Viper-button.active .buttonIcon.icon-move, .Viper-button.selected .buttonIcon.icon-move {
+  background-position: -33px -324px;
 }
-
-/* Add Right */
-.icon-addRight .buttonIcon {
-    background-position: 0 -297px;
+.buttonIcon.icon-headingCheck {
+  background-position: 0 -351px;
 }
-.icon-addRight:active .buttonIcon,
-.icon-addRight.active .buttonIcon,
-.icon-addRight.selected .buttonIcon {
-    background-position: -33px -297px;
+.Viper-button:active .buttonIcon.icon-headingCheck, .Viper-button.active .buttonIcon.icon-headingCheck, .Viper-button.selected .buttonIcon.icon-headingCheck {
+  background-position: -33px -351px;
+}
+.buttonIcon.icon-headerAbbr {
+  background-position: 0 -378px;
+}
+.Viper-button:active .buttonIcon.icon-headerAbbr, .Viper-button.active .buttonIcon.icon-headerAbbr, .Viper-button.selected .buttonIcon.icon-headerAbbr {
+  background-position: -33px -378px;
 }
