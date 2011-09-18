@@ -2659,6 +2659,23 @@ Viper.prototype = {
                     range.selectNode(commonElem);
                     ViperSelection.addRange(range);
                 }
+            } else if (startNode && startNode.nodeType === dfx.TEXT_NODE
+                && endNode && endNode.nodeType === dfx.TEXT_NODE
+                && startNode.data.length === range.startOffset
+                && startNode !== endNode
+                && startNode.nextSibling
+                && startNode.nextSibling.nodeType !== dfx.TEXT_NODE
+            ) {
+                // A range starts at the end of a text node and the next sibling
+                // is not a text node so move the range inside the first selectable
+                // child of the next sibling. This usually happens in FF when you
+                // double click a word which is at the start of a strong/em/u tag,
+                // we move the range inside the tag.
+                var firstSelectable = range._getFirstSelectableChild(startNode.nextSibling);
+                if (firstSelectable) {
+                    range.setStart(firstSelectable, 0);
+                    ViperSelection.addRange(range);
+                }
             }
         }//end if
 
