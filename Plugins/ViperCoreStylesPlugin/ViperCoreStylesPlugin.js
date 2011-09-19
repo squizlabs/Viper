@@ -489,6 +489,43 @@ ViperCoreStylesPlugin.prototype = {
             }
         }
 
+        //if (data.lineage.length === 1 && data.lineage[data.current].nodeType === dfx.TEXT_NODE) {
+            var startNode = data.range.getStartNode();
+            var endNode   = data.range.getEndNode();
+            var tagNames  = ['strong', 'em', 'u'];
+            var foundTags = [];
+            while (startNode.parentNode
+                && dfx.isBlockElement(startNode.parentNode) !== true
+                && startNode.parentNode !== this.viper.getViperElement
+            ) {
+                var pos = tagNames.find(dfx.getTagName(startNode.parentNode));
+                if (pos >= 0) {
+                    foundTags.push(tagNames[pos]);
+                }
+
+                startNode = startNode.parentNode;
+            }
+
+            while (endNode.parentNode
+                && dfx.isBlockElement(endNode.parentNode) !== true
+                && endNode.parentNode !== this.viper.getViperElement
+            ) {
+                var tagName = dfx.getTagName(endNode.parentNode);
+                var pos = foundTags.find(tagName);
+                if (pos >= 0) {
+                    if (tagName === 'strong') {
+                        activeStates.strong = true;
+                    } else if (tagName === 'em') {
+                        activeStates.em = true;
+                    } else if (tagName === 'u') {
+                        activeStates.u = true;
+                    }
+                }
+
+                endNode = endNode.parentNode;
+            }
+       // }//end if
+
         var self = this;
 
         var buttonGroup = inlineToolbarPlugin.createButtonGroup();
