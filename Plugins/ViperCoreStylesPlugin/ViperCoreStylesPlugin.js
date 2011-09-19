@@ -774,7 +774,7 @@ ViperCoreStylesPlugin.prototype = {
             ViperChangeTracker.endBatchChange(changeid);
 
             this.viper.fireNodesChanged([commonParent]);
-            this.viper.fireSelectionChanged(null, true);
+            this.viper.fireSelectionChanged(this.viper.adjustRange(), true);
             return false;
         }
 
@@ -782,7 +782,7 @@ ViperCoreStylesPlugin.prototype = {
         this.applyTag(style);
 
         this.viper.fireNodesChanged([commonParent]);
-        this.viper.fireSelectionChanged(null, true);
+        this.viper.fireSelectionChanged(this.viper.adjustRange(), true);
 
         // Prevent event bubbling etc.
         return false;
