@@ -211,7 +211,7 @@ ViperFormatPlugin.prototype = {
             for (var tag in formatButtons) {
                 (function(tagName) {
                     var active = false;
-                    for (var j = 0; j < data.lineage.length; j++) {
+                    for (var j = data.current; j < data.lineage.length; j++) {
                         if (dfx.isTag(data.lineage[j], tagName) === true) {
                             active           = true;
                             hasActiveFormat = true;
