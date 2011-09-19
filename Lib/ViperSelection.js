@@ -148,6 +148,15 @@ var ViperSelection = {
             }
         }
 
+    },
+
+    removeAllRanges: function()
+    {
+        var selection = ViperSelection._getSelection();
+        if (selection.removeAllRanges) {
+            selection.removeAllRanges();
+        }
+
     }
 
 };
