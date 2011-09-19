@@ -464,7 +464,9 @@ Viper.prototype = {
 
     getCurrentRange: function()
     {
-        return ViperSelection.getRangeAt(0);
+        var range =  ViperSelection.getRangeAt(0);
+        return range;
+        //return this.adjustRange(range);
 
     },
 
@@ -1545,13 +1547,32 @@ Viper.prototype = {
                             callback.call(this, elem);
                         }
                     }
+                } else if (!parent.firstChild) {
+                    // This is the tag we want however its empty, remove it.
+                    parent.parentNode.removeChild(parent);
+                } else if (parent.previousSibling
+                    && dfx.isTag(parent.previousSibling, tag) === true
+                    && !dfx.attr(parent.previousSibling, 'viperbookmark')
+                ) {
+                    // This is the tag we are looking for but there is already one
+                    // of these tags before this one so move its children to that tag.
+                    while (parent.firstChild) {
+                        parent.previousSibling.appendChild(parent.firstChild);
+                    }
+
+                    parent.parentNode.removeChild(parent);
                 }
             } else {
                 // Because the node contains block level elements
                 // we have to find the non block elements and wrap content around them.
-                var c = parent.childNodes.length;
+                var c        = parent.childNodes.length;
+                var children = [];
                 for (var i = 0; i < c; i++) {
-                    this._wrapElement(parent.childNodes[i], tag, callback);
+                    children.push(parent.childNodes[i]);
+                }
+
+                for (var i = 0; i < c; i++) {
+                    this._wrapElement(children[i], tag, callback);
                 }
             }//end if
         }//end if
@@ -2613,42 +2634,79 @@ Viper.prototype = {
         }
 
         var range = this.getCurrentRange();
-        if (range.collapsed === false) {
-            // A few range adjustments for double click word selection etc.
-            var startNode = range.getStartNode();
-            var endNode   = range.getEndNode();
-            if (startNode && startNode.nodeType === dfx.TEXT_NODE
-                && endNode && endNode.nodeType === dfx.TEXT_NODE
-                && startNode.data.length === range.startOffset
-                && range.endOffset === 0
-                && startNode.nextSibling
-                && startNode.nextSibling === endNode.previousSibling
-                && startNode.nextSibling.nodeType !== dfx.TEXT_NODE
-            ) {
-                // When a word is double clicked and the word is wrapped with a tag
-                // e.g. strong then select the strong tag.
-                range.selectNode(startNode.nextSibling);
+        this.adjustRange(range);
+
+        this.fireSelectionChanged();
+
+    },
+
+    /**
+     * Adjusts the given range so a better selection is made.
+     *
+     * @param {ViperDOMRange} The range object.
+     *
+     * @return {ViperDOMRange} The updated range.
+     */
+    adjustRange: function(range)
+    {
+        range = range || this.getCurrentRange();
+        if (range.collapsed !== false) {
+            return range;
+        }
+
+        // A few range adjustments for double click word selection etc.
+        var startNode = range.getStartNode();
+        var endNode   = range.getEndNode();
+        if (!endNode && range.startContainer.nodeType === dfx.ELEMENT_NODE) {
+            var lastSelectable = range._getLastSelectableChild(range.startContainer);
+            if (lastSelectable) {
+                endNode = lastSelectable;
+                range.endOffset = endNode.data.length;
+            }
+        }
+
+        if (startNode && startNode.nodeType === dfx.TEXT_NODE
+            && endNode && endNode.nodeType === dfx.TEXT_NODE
+            && startNode.data.length === range.startOffset
+            && range.endOffset === 0
+            && startNode.nextSibling
+            && startNode.nextSibling === endNode.previousSibling
+            && startNode.nextSibling.nodeType !== dfx.TEXT_NODE
+        ) {
+            // When a word is double clicked and the word is wrapped with a tag
+            // e.g. strong then select the strong tag.
+            range.selectNode(startNode.nextSibling);
+            ViperSelection.addRange(range);
+        } else if (endNode && endNode.nodeType === dfx.TEXT_NODE
+            && range.endOffset === 0
+            && endNode !== startNode
+            && endNode.previousSibling
+            && endNode.previousSibling.nodeType !== dfx.TEXT_NODE
+        ) {
+            // When a word at the end of a tag is double clicked then move the
+            // end of the range to the last selectable child of that tag.
+            var textChild = range._getLastSelectableChild(endNode.previousSibling);
+            if (textChild) {
+                range.setEnd(textChild, textChild.data.length);
                 ViperSelection.addRange(range);
-            } else if (endNode && endNode.nodeType === dfx.TEXT_NODE
-                && range.endOffset === 0
-                && endNode !== startNode
-                && endNode.previousSibling
-                && endNode.previousSibling.nodeType !== dfx.TEXT_NODE
-            ) {
-                // When a word at the end of a tag is double clicked then move the
-                // end of the range to the last selectable child of that tag.
-                var textChild = range._getLastSelectableChild(endNode.previousSibling);
-                if (textChild) {
-                    range.setEnd(textChild, textChild.data.length);
+            }
+        } else if (startNode
+            && endNode
+            && startNode.nodeType === dfx.TEXT_NODE
+            && endNode.nodeType === dfx.TEXT_NODE
+            && range.startOffset === 0
+            && range.endOffset === endNode.data.length
+        ) {
+            if (range.endOffset === 0 && !endNode.previousSibling) {
+                // In Webkit, when a whole paragraph is selected sometimes the range
+                // starts from the beginning of the next paragraph causing range to
+                // span two paragraphs.. If this is the case then move the range...
+                var lastSelectable  = range._getLastSelectableChild(endNode.parentNode.previousSibling.previousSibling);
+                if (lastSelectable) {
+                    range.setEnd(lastSelectable, lastSelectable.data.length);
                     ViperSelection.addRange(range);
                 }
-            } else if (startNode
-                && endNode
-                && startNode.nodeType === dfx.TEXT_NODE
-                && endNode.nodeType === dfx.TEXT_NODE
-                && range.startOffset === 0
-                && range.endOffset === endNode.data.length
-            ) {
+            } else {
                 // Whole tag content is selected, move the range to the tag instead.
                 // E.g. if the whole contents of a paragraph is selected then the
                 // range will be set on that paragraph element and not the contents.
@@ -2659,27 +2717,27 @@ Viper.prototype = {
                     range.selectNode(commonElem);
                     ViperSelection.addRange(range);
                 }
-            } else if (startNode && startNode.nodeType === dfx.TEXT_NODE
-                && endNode && endNode.nodeType === dfx.TEXT_NODE
-                && startNode.data.length === range.startOffset
-                && startNode !== endNode
-                && startNode.nextSibling
-                && startNode.nextSibling.nodeType !== dfx.TEXT_NODE
-            ) {
-                // A range starts at the end of a text node and the next sibling
-                // is not a text node so move the range inside the first selectable
-                // child of the next sibling. This usually happens in FF when you
-                // double click a word which is at the start of a strong/em/u tag,
-                // we move the range inside the tag.
-                var firstSelectable = range._getFirstSelectableChild(startNode.nextSibling);
-                if (firstSelectable) {
-                    range.setStart(firstSelectable, 0);
-                    ViperSelection.addRange(range);
-                }
+            }
+        } else if (startNode && startNode.nodeType === dfx.TEXT_NODE
+            && endNode && endNode.nodeType === dfx.TEXT_NODE
+            && startNode.data.length === range.startOffset
+            && startNode !== endNode
+            && startNode.nextSibling
+            && startNode.nextSibling.nodeType !== dfx.TEXT_NODE
+        ) {
+            // A range starts at the end of a text node and the next sibling
+            // is not a text node so move the range inside the first selectable
+            // child of the next sibling. This usually happens in FF when you
+            // double click a word which is at the start of a strong/em/u tag,
+            // we move the range inside the tag.
+            var firstSelectable = range._getFirstSelectableChild(startNode.nextSibling);
+            if (firstSelectable) {
+                range.setStart(firstSelectable, 0);
+                ViperSelection.addRange(range);
             }
         }//end if
 
-        this.fireSelectionChanged();
+        return range;
 
     },
 
