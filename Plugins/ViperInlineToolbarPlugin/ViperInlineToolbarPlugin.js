@@ -38,7 +38,16 @@ function ViperInlineToolbarPlugin(viper)
     this.viper.registerCallback('Viper:selectionChanged', 'ViperInlineToolbarPlugin', function(range) {
         if (self._lineageClicked !== true) {
             // Not selection change due to a lineage click so update the range object.
-            self._originalRange = range.cloneRange();
+
+            // Note we can use cloneRange here but for whatever reason Firefox seems
+            // to not do the cloning bit of cloneRange...
+            self._originalRange = {
+                startContainer: range.startContainer,
+                endContainer: range.endContainer,
+                startOffset: range.startOffset,
+                endOffset: range.endOffset,
+                collapased: range.collapsed
+            }
         }
 
         // Update the toolbar position, contents and lineage for this new selection.
@@ -427,6 +436,7 @@ ViperInlineToolbarPlugin.prototype = {
                     dfx.addClass(clickElem, 'selected');
 
                     // Set the range.
+                    ViperSelection.removeAllRanges();
                     var range = viper.getCurrentRange();
                     range.selectNode(selectionElem);
                     ViperSelection.addRange(range);
@@ -464,9 +474,13 @@ ViperInlineToolbarPlugin.prototype = {
             dfx.removeClass(linElems, 'selected');
             dfx.addClass(parent, 'selected');
 
-            ViperSelection.addRange(self._originalRange);
-            viper.fireSelectionChanged(self._originalRange);
-            self._updatePosition(self._originalRange, true);
+            ViperSelection.removeAllRanges();
+            var range = self.viper.getCurrentRange();
+            range.setStart(self._originalRange.startContainer, self._originalRange.startOffset);
+            range.setEnd(self._originalRange.endContainer, self._originalRange.endOffset);
+            ViperSelection.addRange(range);
+            viper.fireSelectionChanged(range);
+            self._updatePosition(range, true);
 
             dfx.preventDefault(e);
 
