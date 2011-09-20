@@ -711,15 +711,34 @@ ViperDOMRange.prototype = {
 
         if (!startNode && !endNode) {
             return null;
-        }
-
-        if (startNode && !endNode) {
+        } else if (startNode && !endNode) {
             return startNode;
         }
 
-        if (startNode.nodeType === dfx.TEXT_NODE && range.startOffset !== 0) {
-            return null;
-        } else if (startNode.previousSibling) {
+        // We may need to adjust the "startNode" depending on its offset.
+        if (startNode.nodeType === dfx.TEXT_NODE) {
+            if (range.startOffset !== 0) {
+                if (range.startOffset !== startNode.data.length) {
+                    return null;
+                } else {
+                    // Range is at the end of a text node, if there is no next sibling
+                    // then find the next selectable node and change the startNode to that.
+                    if (startNode.nextSibling) {
+                        return null;
+                    } else {
+                        this.moveStart(ViperDOMRange.CHARACTER_UNIT, 1);
+                        startNode = range.getStartNode();
+                    }
+                }
+            }
+        } else if (startNode.nodeType === dfx.ELEMENT_NODE
+            && endNode.nodeType === dfx.ELEMENT_NODE
+            && common === startNode
+        ) {
+            return startNode;
+        }
+
+        if (startNode.previousSibling) {
             if (startNode.previousSibling.nodeType !== dfx.TEXT_NODE
                 || startNode.previousSibling.data.length !== 0
             ) {
@@ -754,7 +773,8 @@ ViperDOMRange.prototype = {
             return startNode.parentNode;
         }
 
-        while (nextSibling.nodeType === dfx.TEXT_NODE
+        while (nextSibling
+            && nextSibling.nodeType === dfx.TEXT_NODE
             && dfx.isBlank(nextSibling.data) === true
         ) {
             nextSibling = nextSibling.nextSibling;

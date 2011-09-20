@@ -234,9 +234,16 @@ Viper.prototype = {
 
         this._removeEvents(elem);
         var self = this;
-        dfx.addEvent(elem, 'mouseup.viper', function(e) {
-            return self.mouseUp(e);
-        });
+
+        if (this.isBrowser('msie') === true) {
+            dfx.addEvent(elem, 'mouseup.viper', function(e) {
+                return self.mouseUp(e);
+            });
+        } else {
+            dfx.addEvent(this._document, 'mouseup.viper', function(e) {
+                return self.mouseUp(e);
+            });
+        }
 
         dfx.addEvent(this._document, 'mousedown.viper', function(e) {
             return self.mouseDown(e);
@@ -1981,10 +1988,6 @@ Viper.prototype = {
 
     selectBookmark: function(bookmark)
     {
-        if (this.element) {
-            this.element.focus();
-        }
-
         var range       = this.getCurrentRange();
         var startPos    = null;
         var endPos      = null;
