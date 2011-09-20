@@ -435,15 +435,16 @@ ViperInlineToolbarPlugin.prototype = {
                     dfx.removeClass(linElems, 'selected');
                     dfx.addClass(clickElem, 'selected');
 
-                    // Set the range.
-                    ViperSelection.removeAllRanges();
-                    var range = viper.getCurrentRange();
-                    range.selectNode(selectionElem);
-                    ViperSelection.addRange(range);
-                    viper.fireSelectionChanged();
-
-                    // Update the position of the toolbar vertically only.
-                    self._updatePosition(range, true);
+                    if (self.viper.isBrowser('msie') === true) {
+                        // IE changes the range when the mouse is released on an element
+                        // that is not part of viper causing Viper to lose focus..
+                        // Use time out to set the range back in to Viper..
+                        setTimeout(function() {
+                            self._selectNode(selectionElem);
+                        }, 50);
+                    } else {
+                        self._selectNode(selectionElem);
+                    }
 
                     dfx.preventDefault(e);
 
@@ -474,18 +475,46 @@ ViperInlineToolbarPlugin.prototype = {
             dfx.removeClass(linElems, 'selected');
             dfx.addClass(parent, 'selected');
 
-            ViperSelection.removeAllRanges();
-            var range = self.viper.getCurrentRange();
-            range.setStart(self._originalRange.startContainer, self._originalRange.startOffset);
-            range.setEnd(self._originalRange.endContainer, self._originalRange.endOffset);
-            ViperSelection.addRange(range);
-            viper.fireSelectionChanged(range);
-            self._updatePosition(range, true);
+            if (self.viper.isBrowser('msie') === true) {
+                // IE changes the range when the mouse is released on an element
+                // that is not part of viper causing Viper to lose focus..
+                // Use time out to set the range back in to Viper..
+                setTimeout(function() {
+                    self._selectPreviousRange();
+                }, 50);
+            } else {
+                self._selectPreviousRange();
+            }
 
             dfx.preventDefault(e);
-
             return false;
         });
+
+    },
+
+    _selectNode: function(node)
+    {
+        // Set the range.
+        ViperSelection.removeAllRanges();
+        var range = viper.getCurrentRange();
+        range.selectNode(node);
+        ViperSelection.addRange(range);
+        viper.fireSelectionChanged();
+
+        // Update the position of the toolbar vertically only.
+        this._updatePosition(range, true);
+
+    },
+
+    _selectPreviousRange: function()
+    {
+        ViperSelection.removeAllRanges();
+        var range = this.viper.getCurrentRange();
+        range.setStart(this._originalRange.startContainer, this._originalRange.startOffset);
+        range.setEnd(this._originalRange.endContainer, this._originalRange.endOffset);
+        ViperSelection.addRange(range);
+        viper.fireSelectionChanged(range);
+        this._updatePosition(range, true);
 
     },
 

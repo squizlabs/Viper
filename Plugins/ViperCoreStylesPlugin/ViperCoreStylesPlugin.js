@@ -489,9 +489,11 @@ ViperCoreStylesPlugin.prototype = {
             }
         }
 
-        //if (data.lineage.length === 1 && data.lineage[data.current].nodeType === dfx.TEXT_NODE) {
-            var startNode = data.range.getStartNode();
-            var endNode   = data.range.getEndNode();
+        // If the selection is between multiple elements then find out if the range
+        // start and end are in same style tags.
+        var startNode = data.range.getStartNode();
+        var endNode   = data.range.getEndNode();
+        if (startNode && endNode) {
             var tagNames  = ['strong', 'em', 'u'];
             var foundTags = [];
             while (startNode.parentNode
@@ -524,7 +526,7 @@ ViperCoreStylesPlugin.prototype = {
 
                 endNode = endNode.parentNode;
             }
-       // }//end if
+        }
 
         var self = this;
 
