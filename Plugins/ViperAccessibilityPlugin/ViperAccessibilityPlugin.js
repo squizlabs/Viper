@@ -25,9 +25,75 @@ function ViperAccessibilityPlugin(viper)
 {
     this.viper = viper;
 
+    this._elemContainer = document.createElement('div');
+
 }
 
 ViperAccessibilityPlugin.prototype = {
+    init: function()
+    {
+        var self = this;
+        this.toolbarPlugin = this.viper.ViperPluginManager.getPlugin('ViperToolbarPlugin');
+        if (this.toolbarPlugin) {
+            this.toolbarPlugin.addButton('ViperVAP', 'format', 'Show Accessibility', function () {
+                var violations = self.check();
+                if (!violations || violations.length === 0) {
+                    return;
+                }
+
+                self.showViolations(violations);
+            });
+        }
+
+        document.body.appendChild(this._elemContainer);
+
+    },
+
+    check: function()
+    {
+        var violations = dfx.accessibility.runChecks(this.viper.getViperElement(), 'WCAG1AAA');
+        return violations;
+
+    },
+
+    showViolations: function(violations)
+    {
+        dfx.empty(this._elemContainer);
+
+        var eln = violations.length;
+        for (var i = 0; i < eln; i++) {
+            var violation = violations[i];
+            var info      = dfx.accessibility.getViolationInfo(violation.standard, violation.section, violation.technique);
+            if (!info) {
+                continue;
+            }
+
+            this._showViolation(info, violation.element);
+
+        }
+
+    },
+
+    _showViolation: function(info, element)
+    {
+        var elem = document.createElement('div');
+        var rect = dfx.getBoundingRectangle(element);
+        dfx.addClass(elem, 'ViperVAP-violation');
+        dfx.setStyle(elem, 'left', rect.x2 + 'px');
+        dfx.setStyle(elem, 'top', rect.y2 + 'px');
+
+        var titleAttr = info.standard + ' ' + info.section;
+        if (info.technique) {
+            titleAttr += ' [' + info.technique.id + ']: ' + info.technique.title
+        } else {
+            titleAttr += ': ' + info.summary;
+        }
+
+        elem.setAttribute('title', titleAttr);
+
+        this._elemContainer.appendChild(elem);
+
+    }
 
 
 };

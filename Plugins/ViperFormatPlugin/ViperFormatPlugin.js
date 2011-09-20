@@ -243,6 +243,10 @@ ViperFormatPlugin.prototype = {
 
     _canShowHeadingOptions: function(node)
     {
+        if (!node) {
+            return false;
+        }
+
         if (node.nodeType === dfx.TEXT_NODE) {
             // If this is a text selection then dont show the tools.
             return false;
@@ -275,6 +279,10 @@ ViperFormatPlugin.prototype = {
 
     _canShowFormattingOptions: function(node)
     {
+        if (!node) {
+            return false;
+        }
+
         if (node.nodeType === dfx.TEXT_NODE) {
             // If this is a text selection then dont show the tools.
             return false;
