@@ -229,8 +229,19 @@
 
 /* SubSection Lists */
 
+.subSectionList-title {
+    background-color: rgba(255,255,255,0.2);
+    border-top: 1px solid #404046;
+    border-bottom: 1px solid #727179;
+    border-radius: 0.3em;
+    padding: 0.4em;
+    text-shadow: none;
+    color: #DCDCDC;
+    font-size: 1.2em;
+    max-width: 18em;
+}
 .subSectionList {
-    margin: -0.6em;
+    margin: 0.3em -0.6em -0.6em -0.6em;
     padding: 0;
     list-style: none;
     text-align: left;
@@ -262,7 +273,6 @@
 .subSectionList .subSectionList-item .listItem-text {
     display: block;
     font-size: 1.3em;
-/*     line-height: 1.9em; */
     padding: 0.45em 0 0.4em 0.2em;
     max-width: 15em;
 }
@@ -270,14 +280,6 @@
 /* subSection List - Cell Lineage */
 
 .cellLineage .Viper-button {
-    /*
-position: absolute;
-    right: 0;
-    top: 0;
-*/
     float: right;
     margin: 0 0 0 0.5em;
-}
-.cellLineage .subSectionList-item {
-/*     padding-right: 1em; */
 }
