@@ -200,6 +200,11 @@ ViperInlineToolbarPlugin.prototype = {
      */
     updateToolbar: function(range)
     {
+        if (range.collapsed === true) {
+            this.hideToolbar();
+            return;
+        }
+
         if (navigator.userAgent.match(/iPad/i) !== null) {
             this._scaleToolbar();
         }
@@ -526,6 +531,10 @@ ViperInlineToolbarPlugin.prototype = {
      */
     _updateInnerContainer: function(range, lineage)
     {
+        if (!lineage || lineage.length === 0) {
+            return;
+        }
+
         dfx.empty(this._toolsContainer);
         dfx.empty(this._subSectionContainer);
 

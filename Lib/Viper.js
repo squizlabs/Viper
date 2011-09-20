@@ -470,7 +470,6 @@ Viper.prototype = {
     {
         var range =  ViperSelection.getRangeAt(0);
         return range;
-        //return this.adjustRange(range);
 
     },
 
@@ -2633,8 +2632,7 @@ Viper.prototype = {
             return false;
         }
 
-        var range = this.getCurrentRange();
-        this.adjustRange(range);
+        this.adjustRange();
 
         this.fireSelectionChanged();
 
