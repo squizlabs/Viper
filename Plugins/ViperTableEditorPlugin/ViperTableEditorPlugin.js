@@ -45,16 +45,15 @@ ViperTableEditorPlugin.prototype = {
 
     init: function()
     {
-        if (this.viper.isBrowser('firefox') === true) {
-            // Disable table editing.
-            setTimeout(function() {
+        var self = this;
+        this.viper.registerCallback('Viper:editableElementChanged', 'ViperCopyPastePlugin', function() {
+            if (self.viper.isBrowser('firefox') === true) {
+                // Disable Firefox table editing.
                 document.execCommand("enableInlineTableEditing", false, false);
                 document.execCommand("enableObjectResizing", false, false);
-            }, 500);
+            }
+        });
 
-        }
-
-        var self = this;
         this.toolbarPlugin = this.viper.ViperPluginManager.getPlugin('ViperToolbarPlugin');
         this.toolbarPlugin.addButton('TableEditor', 'table', 'Insert/Edit Table', function () {
             self.insertTable();
@@ -169,7 +168,7 @@ ViperTableEditorPlugin.prototype = {
         document.body.appendChild(overlay);
 
         var self = this;
-        dfx.addEvent(overlay, 'click', function() {
+        dfx.addEvent(overlay, 'mousedown', function() {
             dfx.remove(overlay);
             var range = self.viper.getCurrentRange();
             range.collapse(true);

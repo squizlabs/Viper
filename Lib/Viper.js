@@ -299,7 +299,6 @@ Viper.prototype = {
         if (enabled === true && this.enabled === false) {
             this._addEvents();
             var range = this.getCurrentRange();
-            this.element.focus();
             this.setRange(range._getFirstSelectableChild(this.element), 0);
             this.enabled = true;
             this.fireCallbacks('viperEnabled');
@@ -366,8 +365,6 @@ Viper.prototype = {
         if (this.getSetting('changeTracking') === true) {
             ViperChangeTracker.enableChangeTracking();
         }
-
-        this.focus();
 
         this.fireCallbacks('Viper:editableElementChanged', {element: elem});
 
