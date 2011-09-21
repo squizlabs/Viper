@@ -1,0 +1,10 @@
+.ViperVAP-violation {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    background-color: #F00;
+    border: 1px solid #777;
+    z-index: 40;
+    margin-left: -14px;
+    margin-top: -15px;
+}
