@@ -29,6 +29,8 @@ function ViperSourceViewPlugin(viper)
     this._sourceView   = null;
     this._sourceCont   = null;
 
+    this._originalSource = null;
+
 }
 
 ViperSourceViewPlugin.prototype = {
@@ -50,7 +52,8 @@ ViperSourceViewPlugin.prototype = {
                 self.showSourceView();
             });
         } else {
-            this._editor.getSession().setValue(this.viper.getHtml());
+            this._originalSource = this.viper.getHtml();
+            this._editor.getSession().setValue(this._originalSource);
             dfx.removeClass(this._sourceView, 'hidden');
             this._editor.resize();
         }
@@ -73,10 +76,11 @@ ViperSourceViewPlugin.prototype = {
 
     },
 
-    updateContents: function()
+    updateContents: function(content)
     {
-        var value = this._editor.getSession().getValue();
+        var value = content || this._editor.getSession().getValue();
         this.viper.setHtml(value);
+
     },
 
     _createSourceView: function(callback)
@@ -104,11 +108,22 @@ ViperSourceViewPlugin.prototype = {
             self.hideSourceView();
         });
 
+        var revertBtn = document.createElement('button');
+        dfx.setHtml(revertBtn, 'Revert');
+        dfx.addClass(revertBtn, 'ViperSVP-cancelBtn');
+        bottom.appendChild(revertBtn);
+        dfx.addEvent(revertBtn, 'click', function() {
+            // Revert contents.
+            self.updateContents(self._originalSource);
+        });
+
         var cancelBtn = document.createElement('button');
         dfx.setHtml(cancelBtn, 'Cancel');
         dfx.addClass(cancelBtn, 'ViperSVP-cancelBtn');
         bottom.appendChild(cancelBtn);
         dfx.addEvent(cancelBtn, 'click', function() {
+            // Revert contents.
+            self.updateContents(self._originalSource);
             self.hideSourceView();
         });
 
@@ -143,6 +158,11 @@ ViperSourceViewPlugin.prototype = {
             var HTMLMode = require("ace/mode/html").Mode;
             editor.getSession().setMode(new HTMLMode());
             callback.call(this);
+
+            editor.getSession().addEventListener("tokenizerUpdate", function() {
+                // Update page content.
+                self.updateContents();
+            });
         });
 
     },

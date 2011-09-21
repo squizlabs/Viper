@@ -40,19 +40,19 @@
  * @param module a name for the payload
  * @param payload a function to call with (require, exports, module) params
  */
- 
+
 (function() {
-    
+
 var global = (function() {
     return this;
 })();
-    
+
 // if we find an existing require function use it.
 if (global.require && global.define) {
     require.packaged = true;
     return;
 }
-    
+
 var _define = function(module, deps, payload) {
     if (typeof module !== 'string') {
         if (_define.original)
@@ -69,12 +69,12 @@ var _define = function(module, deps, payload) {
 
     if (!define.modules)
         define.modules = {};
-        
+
     define.modules[module] = payload;
 };
 if (global.define)
     _define.original = global.define;
-    
+
 global.define = _define;
 
 
@@ -98,11 +98,11 @@ var _require = function(module, callback) {
         var payload = lookup(module);
         if (!payload && _require.original)
             return _require.original.apply(window, arguments);
-        
+
         if (callback) {
             callback();
         }
-    
+
         return payload;
     }
     else {
@@ -113,7 +113,7 @@ var _require = function(module, callback) {
 
 if (global.require)
     _require.original = global.require;
-    
+
 global.require = _require;
 require.packaged = true;
 
@@ -1969,7 +1969,7 @@ function buildKeyHash(command) {
         ckbf = commandKeyBindingFunc
 
     if (!binding.sender) {
-        throw new Error('All key bindings must have a sender');   
+        throw new Error('All key bindings must have a sender');
     }
     if (!binding.mac && binding.mac !== null) {
         throw new Error('All key bindings must have a mac key binding');
@@ -1979,7 +1979,7 @@ function buildKeyHash(command) {
     }
     if(!binding[platform]) {
         // No keymapping for this platform.
-        return;   
+        return;
     }
     if (typeof binding.sender == 'string') {
         var targets = splitSafe(binding.sender, "\\|", null, true);
@@ -1988,7 +1988,7 @@ function buildKeyHash(command) {
                 ckb[target] = { };
             }
             key.split("|").forEach(function(keyPart) {
-                parseKeys(keyPart, command, ckb[target]);        
+                parseKeys(keyPart, command, ckb[target]);
             });
         });
     } else if (typecheck.isFunction(binding.sender)) {
@@ -1996,18 +1996,18 @@ function buildKeyHash(command) {
             command: command,
             sender:  binding.sender
         };
-        
+
         keyData = parseKeys(key);
         if (!ckbf[keyData.hashId]) {
             ckbf[keyData.hashId] = { };
         }
         if (!ckbf[keyData.hashId][keyData.key]) {
-            ckbf[keyData.hashId][keyData.key] = [ val ];   
+            ckbf[keyData.hashId][keyData.key] = [ val ];
         } else {
             ckbf[keyData.hashId][keyData.key].push(val);
         }
     } else {
-        throw new Error('Key binding must have a sender that is a string or function');   
+        throw new Error('Key binding must have a sender that is a string or function');
     }
 }
 
@@ -2016,15 +2016,15 @@ function findKeyCommand(env, sender, hashId, textOrKey) {
     if (typecheck.isNumber(textOrKey)) {
         textOrKey = keyUtil.keyCodeToString(textOrKey);
     }
-    
-    // Check bindings with functions as sender first.    
+
+    // Check bindings with functions as sender first.
     var bindFuncs = (commandKeyBindingFunc[hashId]  || {})[textOrKey] || [];
     for (var i = 0; i < bindFuncs.length; i++) {
         if (bindFuncs[i].sender(env, sender, hashId, textOrKey)) {
             return bindFuncs[i].command;
         }
     }
-    
+
     var ckbr = commmandKeyBinding[sender];
     return ckbr && ckbr[hashId] && ckbr[hashId][textOrKey];
 }
@@ -2032,7 +2032,7 @@ function findKeyCommand(env, sender, hashId, textOrKey) {
 function execKeyCommand(env, sender, hashId, textOrKey) {
     var command = findKeyCommand(env, sender, hashId, textOrKey);
     if (command) {
-        return exec(command, env, sender, { });   
+        return exec(command, env, sender, { });
     } else {
         return false;
     }
@@ -2069,7 +2069,7 @@ function addCommand(command) {
     commands[command.name] = command;
 
     if (command.bindKey) {
-        buildKeyHash(command);   
+        buildKeyHash(command);
     }
 
     commandNames.push(command.name);
@@ -2102,7 +2102,7 @@ function removeCommand(command) {
             }
         }
     }
-    
+
     var ckbf = commandKeyBindingFunc;
     for (var k1 in ckbf) {
         for (var k2 in ckbf[k1]) {
@@ -2137,7 +2137,7 @@ function defaultArgsProvider(request, callback) {
         // If the parameter is already valid, then don't ask for it anymore.
         if (request.getParamStatus(param) != Status.VALID ||
             // Ask for optional parameters as well.
-            param.defaultValue === null) 
+            param.defaultValue === null)
         {
             var paramPrompt = param.description;
             if (param.defaultValue === null) {
@@ -2150,7 +2150,7 @@ function defaultArgsProvider(request, callback) {
                 return;
             } else {
                 args[param.name] = value;
-            }           
+            }
         }
     }
     callback();
@@ -2160,14 +2160,14 @@ function defaultArgsProvider(request, callback) {
  * Entry point for keyboard accelerators or anything else that wants to execute
  * a command. A new request object is created and a check performed, if the
  * passed in arguments are VALID/INVALID or INCOMPLETE. If they are INCOMPLETE
- * the ArgumentProvider on the sender is called or otherwise the default 
+ * the ArgumentProvider on the sender is called or otherwise the default
  * ArgumentProvider to get the still required arguments.
  * If they are valid (or valid after the ArgumentProvider is done), the command
  * is executed.
- * 
+ *
  * @param command   Either a command, or the name of one
  * @param env       Current environment to execute the command in
- * @param sender    String that should be the same as the senderObject stored on 
+ * @param sender    String that should be the same as the senderObject stored on
  *                  the environment in env[sender]
  * @param args      Arguments for the command
  * @param typed     (Optional)
@@ -2187,26 +2187,26 @@ function exec(command, env, sender, args, typed) {
         args: args || {},
         typed: typed
     });
-    
+
     /**
-     * Executes the command and ensures request.done is called on the request in 
+     * Executes the command and ensures request.done is called on the request in
      * case it's not marked to be done already or async.
      */
     function execute() {
         command.exec(env, request.args, request);
-        
+
         // If the request isn't asnync and isn't done, then make it done.
         if (!request.isAsync && !request.isDone) {
             request.done();
         }
     }
-    
-    
+
+
     if (request.getStatus() == Status.INVALID) {
-        console.error("Canon.exec: Invalid parameter(s) passed to " + 
+        console.error("Canon.exec: Invalid parameter(s) passed to " +
                             command.name);
-        return false;   
-    } 
+        return false;
+    }
     // If the request isn't complete yet, try to complete it.
     else if (request.getStatus() == Status.INCOMPLETE) {
         // Check if the sender has a ArgsProvider, otherwise use the default
@@ -2214,7 +2214,7 @@ function exec(command, env, sender, args, typed) {
         var argsProvider;
         var senderObj = env[sender];
         if (!senderObj || !senderObj.getArgsProvider ||
-            !(argsProvider = senderObj.getArgsProvider())) 
+            !(argsProvider = senderObj.getArgsProvider()))
         {
             argsProvider = defaultArgsProvider;
         }
@@ -2313,7 +2313,7 @@ oop.implement(Request.prototype, EventEmitter);
  */
 Request.prototype.getParamStatus = function(param) {
     var args = this.args || {};
-    
+
     // Check if there is already a value for this parameter.
     if (param.name in args) {
         // If there is no value set and then the value is VALID if it's not
@@ -2322,33 +2322,33 @@ Request.prototype.getParamStatus = function(param) {
             if (param.defaultValue === null) {
                 return Status.VALID;
             } else {
-                return Status.INCOMPLETE;   
-            } 
+                return Status.INCOMPLETE;
+            }
         }
-        
+
         // Check if the parameter value is valid.
         var reply,
             // The passed in value when parsing a type is a string.
             argsValue = args[param.name].toString();
-        
-        // Type.parse can throw errors. 
+
+        // Type.parse can throw errors.
         try {
             reply = param.type.parse(argsValue);
         } catch (e) {
-            return Status.INVALID;   
+            return Status.INVALID;
         }
-        
+
         if (reply.status != Status.VALID) {
-            return reply.status;   
+            return reply.status;
         }
-    } 
+    }
     // Check if the param is marked as required.
     else if (param.defaultValue === undefined) {
         // The parameter is not set on the args object but it's required,
         // which means, things are invalid.
         return Status.INCOMPLETE;
     }
-    
+
     return Status.VALID;
 }
 
@@ -2357,15 +2357,15 @@ Request.prototype.getParamStatus = function(param) {
  */
 Request.prototype.getParamNameStatus = function(paramName) {
     var params = this.command.params || [];
-    
+
     for (var i = 0; i < params.length; i++) {
         if (params[i].name == paramName) {
-            return this.getParamStatus(params[i]);   
+            return this.getParamStatus(params[i]);
         }
     }
-    
-    throw "Parameter '" + paramName + 
-                "' not defined on command '" + this.command.name + "'"; 
+
+    throw "Parameter '" + paramName +
+                "' not defined on command '" + this.command.name + "'";
 }
 
 /**
@@ -2383,7 +2383,7 @@ Request.prototype.getStatus = function() {
 
     var status = [];
     for (var i = 0; i < params.length; i++) {
-        status.push(this.getParamStatus(params[i]));        
+        status.push(this.getParamStatus(params[i]));
     }
 
     return Status.combine(status);
@@ -2460,11 +2460,11 @@ Request.prototype.done = function(content) {
     if (content) {
         this.output(content);
     }
-    
+
     // Ensure to finish the request only once.
     if (!this.isDone) {
         this.isDone = true;
-        this._dispatchEvent('output', {});   
+        this._dispatchEvent('output', {});
     }
 };
 exports.Request = Request;
@@ -2510,7 +2510,7 @@ exports.Request = Request;
  *
  * ***** END LICENSE BLOCK ***** */
 define('pilot/console', ['require', 'exports', 'module' ], function(require, exports, module) {
-    
+
 /**
  * This object represents a "safe console" object that forwards debugging
  * messages appropriately without creating a dependency on Firebug in Firefox.
@@ -2548,7 +2548,7 @@ if (typeof(window) === 'undefined') {
 
 });
 define('pilot/stacktrace', ['require', 'exports', 'module' , 'pilot/useragent', 'pilot/console'], function(require, exports, module) {
-    
+
 var ua = require("pilot/useragent");
 var console = require('pilot/console');
 
@@ -3463,7 +3463,7 @@ exports.copyArray = function(array){
     for (i=0, l=array.length; i<l; i++) {
         if (array[i] && typeof array[i] == "object")
             copy[i] = this.copyObject( array[i] );
-        else 
+        else
             copy[i] = array[i]
     }
     return copy;
@@ -3473,7 +3473,7 @@ exports.deepCopy = function (obj) {
     if (typeof obj != "object") {
         return obj;
     }
-    
+
     var copy = obj.constructor();
     for (var key in obj) {
         if (typeof obj[key] == "object") {
@@ -5223,7 +5223,7 @@ exports.preventDefault = function(e) {
 };
 
 exports.getDocumentX = function(e) {
-    if (e.clientX) {        
+    if (e.clientX) {
         return e.clientX + dom.getPageScrollLeft();
     } else {
         return e.pageX;
@@ -5246,7 +5246,7 @@ exports.getButton = function(e) {
         return 0;
     else if (e.type == "contextmenu")
         return 2;
-        
+
     // DOM Event
     if (e.preventDefault) {
         return e.button;
@@ -5352,7 +5352,7 @@ exports.addMultiMouseDownListener = function(el, button, count, timeout, callbac
             clicks = 0;
             callback(e);
         }
-        
+
         if (isButton)
             return exports.preventDefault(e);
     };
@@ -5674,7 +5674,7 @@ var Editor =function(renderer, session) {
     this.unsetStyle = function(style) {
         this.renderer.unsetStyle(style);
     };
-    
+
     this.setFontSize = function(size) {
         this.container.style.fontSize = size;
     };
@@ -5716,7 +5716,7 @@ var Editor =function(renderer, session) {
         }
         this.textInput.focus();
     };
-    
+
     this.isFocused = function() {
         return this.textInput.isFocused();
     };
@@ -6758,10 +6758,10 @@ var TextInput = function(parentNode, host) {
     var onTextInput = function(e) {
         setTimeout(function () {
             if (!inCompostion)
-                sendText(e.data);                
+                sendText(e.data);
         }, 0);
     };
-    
+
     var onKeyPress = function(e) {
         if (useragent.isIE && text.value.charCodeAt(0) > 128) return;
         setTimeout(function() {
@@ -6840,8 +6840,8 @@ var TextInput = function(parentNode, host) {
             // All browsers except old IE
             event.addListener(text, "input", onTextInput);
     }
-    
-    
+
+
     event.addListener(text, "paste", function(e) {
         // Mark that the next input text comes from past.
         pasted = true;
@@ -6850,7 +6850,7 @@ var TextInput = function(parentNode, host) {
         if (e.clipboardData && e.clipboardData.getData) {
             sendText(e.clipboardData.getData("text/plain"));
             e.preventDefault();
-        } 
+        }
         else {
             // If a browser doesn't support any of the things above, use the regular
             // method to detect the pasted input.
@@ -6998,7 +6998,7 @@ var DRAG_OFFSET = 5; // pixels
 
 var MouseHandler = function(editor) {
     this.editor = editor;
-    
+
     this.browserFocus = new BrowserFocus();
     event.addListener(editor.container, "mousedown", function(e) {
         editor.focus();
@@ -7048,7 +7048,7 @@ var MouseHandler = function(editor) {
             || !this.editor.isFocused()
         )
             return;
-        
+
         var pageX = event.getDocumentX(e);
         var pageY = event.getDocumentY(e);
         var pos = this.$getEventPosition(e);
@@ -7308,13 +7308,13 @@ var EventEmitter = require("pilot/event_emitter").EventEmitter;
  * This class keeps track of the focus state of the given window.
  * Focus changes for example when the user switches a browser tab,
  * goes to the location bar or switches to another application.
- */ 
+ */
 var BrowserFocus = function(win) {
     win = win || window;
-    
+
     this.lastFocus = new Date().getTime();
     this._isFocused = true;
-    
+
     var _self = this;
     event.addListener(win, "blur", function(e) {
         _self._setFocused(false);
@@ -7328,18 +7328,18 @@ var BrowserFocus = function(win) {
 (function(){
 
     oop.implement(this, EventEmitter);
-    
+
     this.isFocused = function() {
         return this._isFocused;
     };
-    
+
     this._setFocused = function(isFocused) {
         if (this._isFocused == isFocused)
             return;
-            
+
         if (isFocused)
             this.lastFocus = new Date().getTime();
-            
+
         this._isFocused = isFocused;
         this._emit("changeFocus");
     };
@@ -7966,7 +7966,7 @@ var EditSession = function(text, mode) {
                     folds:  removedFolds
                 });
             }
-            
+
             this.$informUndoManager.schedule();
         }
 
@@ -7978,7 +7978,7 @@ var EditSession = function(text, mode) {
         this.doc.setValue(text);
         this.selection.moveCursorTo(0, 0);
         this.selection.clearSelection();
-        
+
         this.$resetRowCache(0);
         this.$deltas = [];
         this.$deltasDoc = [];
@@ -8017,7 +8017,7 @@ var EditSession = function(text, mode) {
             var self = this;
             this.$syncInformUndoManager = function() {
                 self.$informUndoManager.cancel();
-                
+
                 if (self.$deltasFold.length) {
                     self.$deltas.push({
                         group: "fold",
@@ -8025,7 +8025,7 @@ var EditSession = function(text, mode) {
                     });
                     self.$deltasFold = [];
                 }
-                
+
                 if (self.$deltasDoc.length) {
                     self.$deltas.push({
                         group: "doc",
@@ -8033,14 +8033,14 @@ var EditSession = function(text, mode) {
                     });
                     self.$deltasDoc = [];
                 }
-                
+
                 if (self.$deltas.length > 0) {
                     undoManager.execute({
                         action: "aceupdate",
                         args: [self.$deltas, self]
                     });
                 }
-                
+
                 self.$deltas = [];
             }
             this.$informUndoManager =
@@ -8309,7 +8309,7 @@ var EditSession = function(text, mode) {
 
         this.bgTokenizer.setDocument(this.getDocument());
         this.bgTokenizer.start(0);
-        
+
         this.tokenRe = mode.tokenRe;
         this.nonTokenRe = mode.nonTokenRe;
 
@@ -8725,7 +8725,7 @@ var EditSession = function(text, mode) {
     this.$clipRowToDocument = function(row) {
         return Math.max(0, Math.min(row, this.doc.getLength()-1));
     };
-    
+
     this.$clipPositionToDocument = function(row, column) {
         column = Math.max(0, column);
 
@@ -8741,7 +8741,7 @@ var EditSession = function(text, mode) {
                 column = Math.min(this.doc.getLine(row).length, column);
             }
         }
-        
+
         return {
             row: row,
             column: column
@@ -9264,7 +9264,7 @@ var EditSession = function(text, mode) {
                 column: 0
             }
         }
-        
+
         var line;
         var docRow = 0;
         var docColumn = 0;
@@ -9284,7 +9284,7 @@ var EditSession = function(text, mode) {
             }
         }
         var doCache = !rowCache.length || i == rowCache.length;
-        
+
         // clamp row before clamping column, for selection on last line
         var maxRow = this.getLength() - 1;
 
@@ -9352,7 +9352,7 @@ var EditSession = function(text, mode) {
         if (foldLine) {
             return foldLine.idxToPosition(docColumn);
         }
-        
+
         return {
             row: docRow,
             column: docColumn
@@ -9363,12 +9363,12 @@ var EditSession = function(text, mode) {
         // Normalize the passed in arguments.
         if (typeof docColumn === "undefined")
             var pos = this.$clipPositionToDocument(docRow.row, docRow.column);
-        else 
+        else
             pos = this.$clipPositionToDocument(docRow, docColumn);
 
         docRow = pos.row;
         docColumn = pos.column;
-        
+
         var LL = this.$rowCache.length;
 
         var wrapData;
@@ -9427,7 +9427,7 @@ var EditSession = function(text, mode) {
 
             screenRow += this.getRowLength(row);
             row = rowEnd;
-                        
+
             if (doCache) {
                 rowCache.push({
                     docRow: row,
@@ -9592,11 +9592,11 @@ var Range = require("ace/range").Range;
 
 /**
  * Keeps cursor position and the text selection of an edit session.
- * 
+ *
  * The row/columns used in the selection are in document coordinates
  * representing ths coordinates as thez appear in the document
  * before applying soft wrap and folding.
- */ 
+ */
 var Selection = function(session) {
     this.session = session;
     this.doc = session.getDocument();
@@ -10003,11 +10003,11 @@ var Selection = function(session) {
             row = fold.start.row;
             column = fold.start.column;
         }
-        
+
         this.$preventUpdateDesiredColumnOnChange = true;
         this.selectionLead.setPosition(row, column);
         this.$preventUpdateDesiredColumnOnChange = false;
-        
+
         if (!preventUpdateDesiredColumn)
             this.$updateDesiredColumn(this.selectionLead.column);
     };
@@ -10391,7 +10391,7 @@ var Mode = function() {
         + unicode.packages.Nd
         + unicode.packages.Pc + "\\$_]+", "g"
     );
-    
+
     this.nonTokenRe = new RegExp("^(?:[^"
         + unicode.packages.L
         + unicode.packages.Mn + unicode.packages.Mc
@@ -10425,7 +10425,7 @@ var Mode = function() {
 
         return "";
     };
-    
+
     this.createWorker = function(session) {
         return null;
     };
@@ -10491,7 +10491,7 @@ var Mode = function() {
 
         editor.session.$selectionOccurrences = [];
     };
-    
+
     this.createModeDelegates = function (mapping) {
         if (!this.$embeds) {
             return;
@@ -10502,7 +10502,7 @@ var Mode = function() {
                 this.$modes[this.$embeds[i]] = new mapping[this.$embeds[i]]();
             }
         }
-        
+
         var delegations = ['toggleCommentLines', 'getNextLineIndent', 'checkOutdent', 'autoOutdent', 'transformAction'];
 
         for (var i = 0; i < delegations.length; i++) {
@@ -10515,13 +10515,13 @@ var Mode = function() {
             } (this));
         }
     }
-    
+
     this.$delegator = function(method, args, defaultHandler) {
         var state = args[0];
-        
+
         for (var i = 0; i < this.$embeds.length; i++) {
             if (!this.$modes[this.$embeds[i]]) continue;
-            
+
             var split = state.split(this.$embeds[i]);
             if (!split[0] && split[1]) {
                 args[0] = split[1];
@@ -10532,7 +10532,7 @@ var Mode = function() {
         var ret = defaultHandler.apply(this, args);
         return defaultHandler ? ret : undefined;
     };
-    
+
     this.transformAction = function(state, action, editor, session, param) {
         if (this.$behaviour) {
             var behaviours = this.$behaviour.getBehaviours();
@@ -10547,7 +10547,7 @@ var Mode = function() {
         }
         return false;
     }
-    
+
 }).call(Mode.prototype);
 
 exports.Mode = Mode;
@@ -10602,23 +10602,23 @@ var Tokenizer = function(rules) {
         var ruleRegExps = [];
         var matchTotal = 0;
         var mapping = this.matchMappings[key] = {};
-        
+
         for ( var i = 0; i < state.length; i++) {
             // Count number of matching groups. 2 extra groups from the full match
             // And the catch-all on the end (used to force a match);
             var matchcount = new RegExp("(?:(" + state[i].regex + ")|(.))").exec("a").length - 2;
-        
+
             // Replace any backreferences and offset appropriately.
             var adjustedregex = state[i].regex.replace(/\\([0-9]+)/g, function (match, digit) {
                 return "\\" + (parseInt(digit, 10) + matchTotal + 1);
             });
-            
+
             mapping[matchTotal] = {
                 rule: i,
                 len: matchcount
             };
             matchTotal += matchcount;
-            
+
             ruleRegExps.push(adjustedregex);
         }
 
@@ -10634,16 +10634,16 @@ var Tokenizer = function(rules) {
         var mapping = this.matchMappings[currentState];
         var re = this.regExps[currentState];
         re.lastIndex = 0;
-        
+
         var match, tokens = [];
-        
+
         var lastIndex = 0;
-        
+
         var token = {
             type: null,
             value: ""
         };
-        
+
         while (match = re.exec(line)) {
             var type = "text";
             var rule = null;
@@ -10652,18 +10652,18 @@ var Tokenizer = function(rules) {
             for (var i = 0; i < match.length-2; i++) {
                 if (match[i + 1] !== undefined) {
                     rule = state[mapping[i].rule];
-                    
+
                     if (mapping[i].len > 1) {
                         value = match.slice(i+2, i+1+mapping[i].len);
                     }
-                    
+
                     // compute token type
                     if (typeof rule.token == "function")
                         type = rule.token.apply(this, value);
                     else
                         type = rule.token;
 
-                    var next = rule.next;                    
+                    var next = rule.next;
                     if (next && next !== currentState) {
                         currentState = next;
                         state = this.rules[currentState];
@@ -10689,7 +10689,7 @@ var Tokenizer = function(rules) {
                         if (token.type) {
                             tokens.push(token);
                         }
-                    
+
                         token = {
                             type: type[i],
                             value: value[i]
@@ -10697,10 +10697,10 @@ var Tokenizer = function(rules) {
                     }
                 }
             }
-            
+
             if (lastIndex == line.length)
                 break;
-            
+
             lastIndex = re.lastIndex;
         };
 
@@ -10794,7 +10794,7 @@ var TextHighlightRules = function() {
     this.getRules = function() {
         return this.$rules;
     };
-    
+
     this.embedRules = function (HighlightRules, prefix, escapeRules, states) {
         var embedRules = new HighlightRules().getRules();
         if (states) {
@@ -10808,17 +10808,17 @@ var TextHighlightRules = function() {
             }
         }
         this.addRules(embedRules, prefix);
-        
+
         for (var i = 0; i < states.length; i++) {
             Array.prototype.unshift.apply(this.$rules[states[i]], lang.deepCopy(escapeRules));
         }
-        
+
         if (!this.$embeds) {
             this.$embeds = [];
         }
         this.$embeds.push(prefix);
     }
-    
+
     this.getEmbeds = function() {
         return this.$embeds;
     }
@@ -10882,7 +10882,7 @@ var Behaviour = function() {
         }
         this.$behaviours[name][action] = callback;
     }
-    
+
     this.addBehaviours = function (behaviours) {
         for (var key in behaviours) {
             for (var action in behaviours[key]) {
@@ -10890,13 +10890,13 @@ var Behaviour = function() {
             }
         }
     }
-    
+
     this.remove = function (name) {
         if (this.$behaviours && this.$behaviours[name]) {
             delete this.$behaviours[name];
         }
     }
-    
+
     this.inherit = function (mode, filter) {
         if (typeof mode === "function") {
             var behaviours = new mode().getBehaviours(filter);
@@ -10905,7 +10905,7 @@ var Behaviour = function() {
         }
         this.addBehaviours(behaviours);
     }
-    
+
     this.getBehaviours = function (filter) {
         if (!filter) {
             return this.$behaviours;
@@ -11480,7 +11480,7 @@ var EventEmitter = require("pilot/event_emitter").EventEmitter;
  */
 var Anchor = exports.Anchor = function(doc, row, column) {
     this.document = doc;
-    
+
     if (typeof column == "undefined")
         this.setPosition(row.row, row.column);
     else
@@ -11493,31 +11493,31 @@ var Anchor = exports.Anchor = function(doc, row, column) {
 (function() {
 
     oop.implement(this, EventEmitter);
-    
+
     this.getPosition = function() {
         return this.$clipPositionToDocument(this.row, this.column);
     };
-    
+
     this.getDocument = function() {
         return this.document;
     };
-    
+
     this.onChange = function(e) {
         var delta = e.data;
         var range = delta.range;
-            
+
         if (range.start.row == range.end.row && range.start.row != this.row)
             return;
-            
+
         if (range.start.row > this.row)
             return;
-            
+
         if (range.start.row == this.row && range.start.column > this.column)
             return;
-    
+
         var row = this.row;
         var column = this.column;
-        
+
         if (delta.action === "insertText") {
             if (range.start.row === row && range.start.column <= column) {
                 if (range.start.row === range.end.row) {
@@ -11542,7 +11542,7 @@ var Anchor = exports.Anchor = function(doc, row, column) {
                     column = range.start.column;
                 else
                     column = Math.max(0, column - (range.end.column - range.start.column));
-                
+
             } else if (range.start.row !== range.end.row && range.start.row < row) {
                 if (range.end.row == row) {
                     column = Math.max(0, column - range.end.column) + range.start.column;
@@ -11578,15 +11578,15 @@ var Anchor = exports.Anchor = function(doc, row, column) {
         else {
             pos = this.$clipPositionToDocument(row, column);
         }
-        
+
         if (this.row == pos.row && this.column == pos.column)
             return;
-            
+
         var old = {
             row: this.row,
             column: this.column
         };
-        
+
         this.row = pos.row;
         this.column = pos.column;
         this._dispatchEvent("change", {
@@ -11594,14 +11594,14 @@ var Anchor = exports.Anchor = function(doc, row, column) {
             value: pos
         });
     };
-    
+
     this.detach = function() {
         this.document.removeEventListener("change", this.$onChange);
     };
-    
+
     this.$clipPositionToDocument = function(row, column) {
         var pos = {};
-    
+
         if (row >= this.document.getLength()) {
             pos.row = Math.max(0, this.document.getLength() - 1);
             pos.column = this.document.getLine(pos.row).length;
@@ -11614,13 +11614,13 @@ var Anchor = exports.Anchor = function(doc, row, column) {
             pos.row = row;
             pos.column = Math.min(this.document.getLine(pos.row).length, Math.max(0, column));
         }
-        
+
         if (column < 0)
             pos.column = 0;
-            
+
         return pos;
     };
-    
+
 }).call(Anchor.prototype);
 
 });
@@ -11667,7 +11667,7 @@ var oop = require("pilot/oop");
 var EventEmitter = require("pilot/event_emitter").EventEmitter;
 
 var BackgroundTokenizer = function(tokenizer, editor) {
-    this.running = false;    
+    this.running = false;
     this.lines = [];
     this.currentLine = 0;
     this.tokenizer = tokenizer;
@@ -11758,7 +11758,7 @@ var BackgroundTokenizer = function(tokenizer, editor) {
     this.$tokenizeRows = function(firstRow, lastRow) {
         if (!this.doc)
             return [];
-            
+
         var rows = [];
 
         // determine start state
@@ -11853,7 +11853,7 @@ function Folding() {
         var foldLine = this.getFoldLine(row);
         if (!foldLine)
             return null;
-            
+
         var folds = foldLine.folds;
         for (var i = 0; i < folds.length; i++) {
             var fold = folds[i];
@@ -11935,7 +11935,7 @@ function Folding() {
         var foldLine = foldLine || this.getFoldLine(row);
         if (!foldLine)
             return null;
-            
+
         var lastFold = {
             end: { column: 0 }
         };
@@ -12052,7 +12052,7 @@ function Folding() {
         var startColumn = fold.start.column;
         var endRow = fold.end.row;
         var endColumn = fold.end.column;
-        
+
         // --- Some checking ---
         if (fold.placeholder.length < 2)
             throw "Placeholder has to be at least 2 characters";
@@ -12710,7 +12710,7 @@ Search.SELECTION = 2;
         oop.mixin(this.$options, options);
         return this;
     };
-    
+
     this.getOptions = function() {
         return lang.copyObject(this.$options);
     };
@@ -14108,7 +14108,7 @@ var Marker = function(parentEl) {
     this.setSession = function(session) {
         this.session = session;
     };
-    
+
     this.setMarkers = function(markers) {
         this.markers = markers;
     };
@@ -14162,7 +14162,7 @@ var Marker = function(parentEl) {
 
     /**
      * Draws a marker, which spans a range of text in a single line
-     */ 
+     */
     this.drawTextMarker = function(stringBuilder, range, clazz, layerConfig) {
         // selection start
         var row = range.start.row;
@@ -14600,7 +14600,7 @@ var Text = function(parentEl) {
         "lparen": true
     };
 
-    this.$renderToken = function(stringBuilder, screenColumn, token, value) {        
+    this.$renderToken = function(stringBuilder, screenColumn, token, value) {
         var self = this;
         var replaceReg = /\t|&|<|( +)|([\v\f \u00a0\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200a\u200b\u2028\u2029\u3000])|[\u1100-\u115F]|[\u11A3-\u11A7]|[\u11FA-\u11FF]|[\u2329-\u232A]|[\u2E80-\u2E99]|[\u2E9B-\u2EF3]|[\u2F00-\u2FD5]|[\u2FF0-\u2FFB]|[\u3000-\u303E]|[\u3041-\u3096]|[\u3099-\u30FF]|[\u3105-\u312D]|[\u3131-\u318E]|[\u3190-\u31BA]|[\u31C0-\u31E3]|[\u31F0-\u321E]|[\u3220-\u3247]|[\u3250-\u32FE]|[\u3300-\u4DBF]|[\u4E00-\uA48C]|[\uA490-\uA4C6]|[\uA960-\uA97C]|[\uAC00-\uD7A3]|[\uD7B0-\uD7C6]|[\uD7CB-\uD7FB]|[\uF900-\uFAFF]|[\uFE10-\uFE19]|[\uFE30-\uFE52]|[\uFE54-\uFE66]|[\uFE68-\uFE6B]|[\uFF01-\uFF60]|[\uFFE0-\uFFE6]/g;
         var replaceFunc = function(c, a, b, tabIdx, idx4) {
@@ -14663,7 +14663,7 @@ var Text = function(parentEl) {
                 "'>"
             );
         }
-        
+
         for (var i = 0; i < tokens.length; i++) {
             var token = tokens[i];
             var value = token.value;
@@ -14677,12 +14677,12 @@ var Text = function(parentEl) {
             else {
                 while (chars + value.length >= splitChars) {
                     screenColumn = self.$renderToken(
-                        stringBuilder, screenColumn, 
+                        stringBuilder, screenColumn,
                         token, value.substring(0, splitChars - chars)
                     );
                     value = value.substring(splitChars - chars);
                     chars = splitChars;
-                    
+
                     if (!onlyContents) {
                         stringBuilder.push("</div>",
                             "<div class='ace_line' style='height:",
