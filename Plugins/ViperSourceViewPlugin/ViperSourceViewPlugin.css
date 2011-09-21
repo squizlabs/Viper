@@ -1,0 +1,95 @@
+.ViperToolbarPlugin-button.sourceView {
+    background-position: -690px 0;
+}
+
+.ViperSourceViewPlugin {
+    position: fixed;
+    left: 50%;
+    margin-left: -375px;
+    top: 50%;
+    margin-top: -275px;
+    padding: 10px;
+    border: 1px solid #666;
+    box-shadow: 0 0 13px #222;
+    z-index: 150;
+    border-radius: 5px;
+    background: -webkit-gradient(linear, left top, left bottom, from(#919097), to(#727179));
+    background: -moz-linear-gradient(center top , #919097, #727179) repeat scroll 0 0 transparent;
+    border-top-color: #A2A1A8;
+}
+
+.ViperSourceViewPlugin.hidden {
+    display: block;
+    visibility: hidden;
+    left: -9999px;
+    top: -9999px;
+}
+
+.ViperSourceViewPlugin .ViperSVP-bottom {
+    position: relative;
+    text-align: right;
+    padding: 5px;
+}
+
+.ViperSourceViewPlugin .ViperSVP-source {
+    position: relative;
+    width: 750px;
+    height: 550px;
+}
+
+.ViperSourceViewPlugin .ViperSVP-resizeHandle {
+    width: 12px;
+    height: 12px;
+    background-color: #0F0;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+}
+
+.ViperSourceViewPlugin .ui-resizable-handle {
+    width: 12px;
+    height: 12px;
+    background-color: green;
+}
+
+.ViperSourceViewPlugin .ui-resizable-se {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    cursor: se-resize;
+}
+
+.ViperSourceViewPlugin .ViperSVP-cancelBtn,
+.ViperSourceViewPlugin .ViperSVP-updateBtn {
+    background: -webkit-gradient(linear, left top, left bottom, from(#E9E9EB), to(#C9C9D0));
+    background: -moz-linear-gradient(center top , #E9E9EB, #C9C9D0) repeat scroll 0 0 transparent;
+    border: medium none;
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.3), 0 1px 0 rgba(255, 255, 255, 0.9) inset;
+    border-radius: 0.2em;
+    margin-left: 10px;
+    cursor: pointer;
+    padding: 2px;
+}
+.ViperSourceViewPlugin .ViperSVP-cancelBtn:hover ,
+.ViperSourceViewPlugin .ViperSVP-updateBtn:hover {
+    background: #c9c9cd;
+    background: -webkit-gradient(linear, left top, left bottom, from(#d8d8da), to(#b8b8ca));
+    background: -moz-linear-gradient(top, #c8c8c9, #a8a8b9);
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+.ViperSourceViewPlugin .ace-twilight .ace_gutter {
+    background: none repeat scroll 0 0 #54535A;
+    border-color: #555555;
+    border-bottom-left-radius: 5px;
+    border-top-left-radius: 5px;
+    color: #AAA;
+}
+
+.ViperSourceViewPlugin .ace-twilight .ace_print_margin {
+    background-color: #666;
+}
+
+.ViperSourceViewPlugin.ui-draggable {
+    cursor: move;
+}

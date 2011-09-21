@@ -214,6 +214,32 @@ Viper.prototype = {
     },
 
     /**
+     * Returns the path to the Viper JS file directory.
+     *
+     * Plugins can use this to load extra JS files.
+     *
+     * @return {string} Path to JS file directory.
+     */
+    getViperPath: function()
+    {
+        var scripts = document.getElementsByTagName('script');
+        var path    = null;
+        var c       = scripts.length;
+        for (var i = 0; i < c; i++) {
+            if (scripts[i].src) {
+                if (scripts[i].src.match(/\/Lib\/Viper\.js/)) {
+                    // library, so we can extract the path and include the rest.
+                    path = scripts[i].src.replace(/\/Lib\/Viper\.js/,'');
+                    break;
+                }
+            }
+        }
+
+        return path;
+
+    },
+
+    /**
      * Adds the events required for mouse navigating and key navigating/typing.
      *
      * @return {void}
