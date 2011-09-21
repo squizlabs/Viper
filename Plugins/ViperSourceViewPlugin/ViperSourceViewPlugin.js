@@ -114,6 +114,7 @@ ViperSourceViewPlugin.prototype = {
         bottom.appendChild(revertBtn);
         dfx.addEvent(revertBtn, 'click', function() {
             // Revert contents.
+            self._editor.getSession().setValue(self._originalSource);
             self.updateContents(self._originalSource);
         });
 
