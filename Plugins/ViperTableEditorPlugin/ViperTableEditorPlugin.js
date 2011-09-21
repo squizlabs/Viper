@@ -59,6 +59,13 @@ ViperTableEditorPlugin.prototype = {
             self.insertTable();
         });
 
+        this.toolbarPlugin.addButton('TableEditor', 'format', 'Set Table Headers', function () {
+            var tables = dfx.getTag('table', self.viper.getViperElement());
+            for (var i = 0; i < tables.length; i++) {
+                self.setTableHeaders(tables[i]);
+            }
+        });
+
         if (navigator.userAgent.match(/iPad/i) === null) {
             var showToolbar = false;
             this.viper.registerCallback('Viper:mouseUp', 'ViperTableEditor', function(e) {
@@ -175,6 +182,12 @@ ViperTableEditorPlugin.prototype = {
             ViperSelection.addRange(range);
             self.showTableTools(cell);
         });
+
+        // TODO: For testing only.
+        var cellContent = this.getHeadersContent(cell);
+        if (cellContent) {
+            console.info(cellContent);
+        }
 
     },
 
@@ -358,8 +371,6 @@ ViperTableEditorPlugin.prototype = {
         this._tableRawCells = null;
         var table = this.getCellTable(this.activeCell);
         this.viper.fireNodesChanged([table]);
-
-        this.setTableHeaders(table);
 
     },
 
@@ -723,6 +734,12 @@ ViperTableEditorPlugin.prototype = {
             self.removeHighlights();
         });
 
+        this.createButton('UP', false, 'Move UP', false, 'icon-addUp', function() {
+            self._buttonClicked = true;
+            self.moveRowUp(cell);
+            self.updateToolbar(cell, 'row');
+        });
+
     },
 
     /**
@@ -735,7 +752,6 @@ ViperTableEditorPlugin.prototype = {
         //this.removeHighlights();
 
     },
-
 
     setActiveCell: function(cell)
     {
@@ -1199,6 +1215,37 @@ ViperTableEditorPlugin.prototype = {
 
     },
 
+    moveRowUp: function(cell)
+    {
+        var table    = this.getCellTable(cell, true);
+        var tr       = this.getCellRow(cell);
+        var cellPos  = this.getCellPosition(cell);
+        var cells    = this._getCellsExpanded();
+        var rowCells = cells[cellPos.row];
+        var rlen     = rowCells.length;
+        var trs      = dfx.getTag('tr', table);
+
+        if (cellPos.row === 0) {
+            return false;
+        }
+
+        for (var i = 0; i < rlen; i++) {
+            var pos = this.getCellPosition(rowCells[i]);
+            console.info(pos);
+        }
+
+        return;
+
+        var rowspan = this.getRowspan(cell);
+        var prevRow = trs[(cellPos.row - 1)]
+        for (var i = 0; i < rowspan; i++) {
+            dfx.insertBefore(prevRow, trs[(cellPos.row + i)]);
+        }
+
+        return cell;
+
+    },
+
     insertColAfter: function(cell)
     {
         var table    = this.getCellTable(cell);
@@ -1498,6 +1545,26 @@ ViperTableEditorPlugin.prototype = {
 
     setTableHeaders: function(table)
     {
+        var headers = dfx.find(table, '[headers]');
+        if (headers.length > 0) {
+            console.info('Cannot set table headers; they are already set.', table);
+            return;
+        }
+
+        var tableId = table.getAttribute('id');
+
+        if (!tableId) {
+            while (!tableId) {
+                tableId = dfx.getUniqueId().substr(-5, 5);
+                var tElem = dfx.getId(tableId);
+                if (tElem) {
+                    tableId = null;
+                }
+            }
+
+            table.setAttribute('id', tableId);
+        }
+
         var cellHeadings  = [];
         var usedHeaderids = [];
         var rowCount      = 1
@@ -1537,7 +1604,10 @@ ViperTableEditorPlugin.prototype = {
                     // of the cell content. We'll use this later as a basis for the ID attribute
                     // although it may be prefixed with the ID of another header to make it unique.
 
-                    var cellid = 'r' + rowCount + 'c' + cellCount;
+                    var cellid = cell.getAttribute('id');
+                    if (!cellid) {
+                        cellid = tableId + 'r' + rowCount + 'c' + cellCount;
+                    }
 
                     if (rowspan > 1) {
                         if (dfx.isset(headings.row[rowCount]) === true
