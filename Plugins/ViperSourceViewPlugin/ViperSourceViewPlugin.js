@@ -30,6 +30,7 @@ function ViperSourceViewPlugin(viper)
     this._sourceCont   = null;
 
     this._originalSource = null;
+    this._inNewWindow    = false;
 
 }
 
@@ -44,16 +45,20 @@ ViperSourceViewPlugin.prototype = {
 
     },
 
-    showSourceView: function()
+    showSourceView: function(content)
     {
         var self = this;
         if (!this._sourceView) {
             this._createSourceView(function() {
-                self.showSourceView();
+                self.showSourceView(content);
             });
         } else {
-            this._originalSource = this.viper.getHtml();
-            this._editor.getSession().setValue(this._originalSource);
+            if (!content) {
+                content = this.getContents();
+                this._originalSource = content;
+            }
+
+            this._editor.getSession().setValue(content);
             dfx.removeClass(this._sourceView, 'hidden');
             this._editor.resize();
         }
@@ -62,7 +67,15 @@ ViperSourceViewPlugin.prototype = {
 
     hideSourceView: function()
     {
-        dfx.addClass(this._sourceView, 'hidden');
+        if (this._inNewWindow === true && this._childWindow) {
+            this._childWindow.close();
+            this._inNewWindow = false;
+            this._childWindow = false;
+            dfx.remove(this._sourceView);
+            this._sourceView = null;
+        } else {
+            dfx.addClass(this._sourceView, 'hidden');
+        }
 
     },
 
@@ -76,10 +89,17 @@ ViperSourceViewPlugin.prototype = {
 
     },
 
-    updateContents: function(content)
+    updatePageContents: function(content)
     {
         var value = content || this._editor.getSession().getValue();
         this.viper.setHtml(value);
+
+    },
+
+    updateSourceContents: function(content)
+    {
+        var value = content || this.viper.getHtml();
+        this._editor.getSession().setValue(value);
 
     },
 
@@ -99,34 +119,7 @@ ViperSourceViewPlugin.prototype = {
         dfx.addClass(bottom, 'ViperSVP-bottom');
         elem.appendChild(bottom);
 
-        var updateBtn = document.createElement('button');
-        dfx.setHtml(updateBtn, 'Update');
-        dfx.addClass(updateBtn, 'ViperSVP-updateBtn');
-        bottom.appendChild(updateBtn);
-        dfx.addEvent(updateBtn, 'click', function() {
-            self.updateContents();
-            self.hideSourceView();
-        });
-
-        var revertBtn = document.createElement('button');
-        dfx.setHtml(revertBtn, 'Revert');
-        dfx.addClass(revertBtn, 'ViperSVP-cancelBtn');
-        bottom.appendChild(revertBtn);
-        dfx.addEvent(revertBtn, 'click', function() {
-            // Revert contents.
-            self._editor.getSession().setValue(self._originalSource);
-            self.updateContents(self._originalSource);
-        });
-
-        var cancelBtn = document.createElement('button');
-        dfx.setHtml(cancelBtn, 'Cancel');
-        dfx.addClass(cancelBtn, 'ViperSVP-cancelBtn');
-        bottom.appendChild(cancelBtn);
-        dfx.addEvent(cancelBtn, 'click', function() {
-            // Revert contents.
-            self.updateContents(self._originalSource);
-            self.hideSourceView();
-        });
+        this.createSourceViewButtons(bottom, false);
 
         this._sourceView = elem;
         document.body.appendChild(this._sourceView);
@@ -149,8 +142,7 @@ ViperSourceViewPlugin.prototype = {
         });
 
         // Setup resizing.
-        jQuery(elem).draggable({
-        });
+        jQuery(elem).draggable();
 
         this._includeAce(function() {
             var editor   = ace.edit(source);
@@ -158,12 +150,19 @@ ViperSourceViewPlugin.prototype = {
             editor.setTheme("ace/theme/twilight");
             var HTMLMode = require("ace/mode/html").Mode;
             editor.getSession().setMode(new HTMLMode());
-            callback.call(this);
+            self.initEditorEvents(editor);
 
-            editor.getSession().addEventListener("tokenizerUpdate", function() {
-                // Update page content.
-                self.updateContents();
-            });
+            callback.call(this);
+        });
+
+    },
+
+    initEditorEvents: function(editor)
+    {
+        var self = this;
+        editor.getSession().addEventListener("tokenizerUpdate", function() {
+            // Update page content.
+            self.updatePageContents();
         });
 
     },
@@ -184,7 +183,84 @@ ViperSourceViewPlugin.prototype = {
             dfx.includeScripts(scripts, callback);
         }
 
-    }
+    },
+
+    openInNewWindow: function()
+    {
+        // Hide current editor.
+        this.hideSourceView();
+
+        // Add this Viper plugin object to global var.
+        var viperid = 'Viper-' + this.viper.getId() + '-ViperSVP';
+        window[viperid] = this;
+
+        var path = this.viper.getViperPath();
+        path    += '/Plugins/ViperSourceViewPlugin/AceEditor.html' + '?viperid=' + viperid;
+        this._childWindow = window.open(path, "Viper Source View", "width=850,height=800,0,status=0,scrollbars=1");
+        this._inNewWindow = true;
+
+    },
+
+    createSourceViewButtons: function(wrapper, newWindow)
+    {
+        var self = this;
+
+        var updateBtn = document.createElement('button');
+        dfx.setHtml(updateBtn, 'Update');
+        dfx.addClass(updateBtn, 'ViperSVP-updateBtn');
+        wrapper.appendChild(updateBtn);
+        dfx.addEvent(updateBtn, 'click', function() {
+            self.updatePageContents();
+            self.hideSourceView();
+        });
+
+        var revertBtn = document.createElement('button');
+        dfx.setHtml(revertBtn, 'Revert');
+        dfx.addClass(revertBtn, 'ViperSVP-cancelBtn');
+        wrapper.appendChild(revertBtn);
+        dfx.addEvent(revertBtn, 'click', function() {
+            // Revert contents.
+            self._editor.getSession().setValue(self._originalSource);
+            self.updatePageContents(self._originalSource);
+        });
+
+        var cancelBtn = document.createElement('button');
+        dfx.setHtml(cancelBtn, 'Cancel');
+        dfx.addClass(cancelBtn, 'ViperSVP-cancelBtn');
+        wrapper.appendChild(cancelBtn);
+        dfx.addEvent(cancelBtn, 'click', function() {
+            // Revert contents.
+            self.updatePageContents(self._originalSource);
+            self.hideSourceView();
+        });
+
+        if (newWindow !== true) {
+            var newWindowBtn = document.createElement('button');
+            dfx.setHtml(newWindowBtn, 'New Window');
+            dfx.addClass(newWindowBtn, 'ViperSVP-cancelBtn');
+            wrapper.appendChild(newWindowBtn);
+            dfx.addEvent(newWindowBtn, 'click', function() {
+                self.openInNewWindow();
+            });
+        } else {
+            var backToNormalBtn = document.createElement('button');
+            dfx.setHtml(backToNormalBtn, 'Back to Normal View');
+            dfx.addClass(backToNormalBtn, 'ViperSVP-cancelBtn');
+            wrapper.appendChild(backToNormalBtn);
+            dfx.addEvent(backToNormalBtn, 'click', function() {
+                var value = self._editor.getSession().getValue();
+                self.hideSourceView();
+                self.showSourceView(value);
+            });
+        }
+
+    },
+
+    getContents: function()
+    {
+        return this.viper.getHtml();
+
+    },
 
 
 };

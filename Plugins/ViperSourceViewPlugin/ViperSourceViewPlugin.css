@@ -93,3 +93,29 @@
 .ViperSourceViewPlugin.ui-draggable {
     cursor: move;
 }
+
+.ViperSourceViewPlugin-windowTools {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 10px;
+    border: 1px solid #666;
+    box-shadow: 0 0 13px #222;
+    z-index: 150;
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
+    background: -webkit-gradient(linear, left top, left bottom, from(#919097), to(#727179));
+    background: -moz-linear-gradient(center top , #919097, #727179) repeat scroll 0 0 transparent;
+    border-top-color: #A2A1A8;
+    text-align: center;
+}
+
+#ViperSourceViewPlugin-window #editor {
+    margin: 0;
+    position: absolute;
+    top: 0;
+    bottom: 41px;
+    left: 0;
+    right: 0;
+}
