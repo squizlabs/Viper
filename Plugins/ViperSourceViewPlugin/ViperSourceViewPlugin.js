@@ -44,8 +44,12 @@ ViperSourceViewPlugin.prototype = {
             self.toggleSourceView();
         });
 
+        var updateTimer = null;
         this.viper.registerCallback('Viper:nodesChanged', 'ViperSourceViewPlugin', function(nodes) {
-            self.updateSourceContents();
+            clearTimeout(updateTimer);
+            updateTimer = setTimeout(function() {
+                self.updateSourceContents();
+            }, 250);
         });
 
     },
@@ -78,6 +82,7 @@ ViperSourceViewPlugin.prototype = {
             this._childWindow = false;
             dfx.remove(this._sourceView);
             this._sourceView = null;
+            this._editor     = null;
         } else {
             dfx.addClass(this._sourceView, 'hidden');
         }
@@ -103,6 +108,10 @@ ViperSourceViewPlugin.prototype = {
 
     updateSourceContents: function(content)
     {
+        if (!this._editor) {
+            return;
+        }
+
         this._ignoreUpdate = true;
         var value = content || this.viper.getHtml();
         this._editor.getSession().setValue(value);
@@ -208,8 +217,19 @@ ViperSourceViewPlugin.prototype = {
 
         var path = this.viper.getViperPath();
         path    += '/Plugins/ViperSourceViewPlugin/AceEditor.html' + '?viperid=' + viperid;
-        this._childWindow = window.open(path, "Viper Source View", "width=850,height=800,0,status=0,scrollbars=1");
+        var childWindow   = window.open(path, "Viper Source View", "width=850,height=800,0,status=0,scrollbars=1");
+        this._childWindow = childWindow;
         this._inNewWindow = true;
+
+        // Detect if the window is closed and reset SourceView..
+        var interval = null;
+        var self     = this;
+        interval = setInterval(function() {
+            if (!childWindow || childWindow.closed === true) {
+                clearInterval(interval);
+                self.hideSourceView();
+            }
+        }, 700);
 
     },
 
