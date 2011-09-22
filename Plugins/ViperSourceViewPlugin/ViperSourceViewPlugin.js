@@ -32,6 +32,7 @@ function ViperSourceViewPlugin(viper)
     this._originalSource = null;
     this._inNewWindow    = false;
 
+    this._ignoreUpdate = false;
 }
 
 ViperSourceViewPlugin.prototype = {
@@ -41,6 +42,10 @@ ViperSourceViewPlugin.prototype = {
         this.toolbarPlugin = this.viper.ViperPluginManager.getPlugin('ViperToolbarPlugin');
         this.toolbarPlugin.addButton('ViperSourceViewPlugin', 'sourceView', 'Show Source View', function () {
             self.toggleSourceView();
+        });
+
+        this.viper.registerCallback('Viper:nodesChanged', 'ViperSourceViewPlugin', function(nodes) {
+            self.updateSourceContents();
         });
 
     },
@@ -98,6 +103,7 @@ ViperSourceViewPlugin.prototype = {
 
     updateSourceContents: function(content)
     {
+        this._ignoreUpdate = true;
         var value = content || this.viper.getHtml();
         this._editor.getSession().setValue(value);
 
@@ -161,8 +167,14 @@ ViperSourceViewPlugin.prototype = {
     {
         var self = this;
         editor.getSession().addEventListener("tokenizerUpdate", function() {
+            if (self._ignoreUpdate === true) {
+                self._ignoreUpdate = false;
+                return;
+            }
+
             // Update page content.
             self.updatePageContents();
+
         });
 
     },
