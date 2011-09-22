@@ -37,17 +37,21 @@ function ViperCopyPastePlugin(viper)
     this._isFirefox    = viper.isBrowser('firefox');
     this._isMSIE       = viper.isBrowser('msie');
 
-    var self = this;
-    this.viper.registerCallback('Viper:editableElementChanged', 'ViperCopyPastePlugin', function() {
-        self._init();
-    });
-
-    this.viper.registerCallback('Viper:keyDown', 'ViperCopyPastePlugin', function(e) {
-        return self.keyDown(e);
-    });
 }
 
 ViperCopyPastePlugin.prototype = {
+    init: function()
+    {
+        var self = this;
+        this.viper.registerCallback('Viper:editableElementChanged', 'ViperCopyPastePlugin', function() {
+            self._init();
+        });
+
+        this.viper.registerCallback('Viper:keyDown', 'ViperCopyPastePlugin', function(e) {
+            return self.keyDown(e);
+        });
+
+    },
 
     setSettings: function(settings)
     {
@@ -79,7 +83,7 @@ ViperCopyPastePlugin.prototype = {
 
         var self = this;
         if (this._isMSIE !== true && this._isFirefox !== true) {
-            elem.onpaste = function(e) {console.info();
+            elem.onpaste = function(e) {
                 if (!e.clipboardData || self._canPaste() === false) {
                     return;
                 }
@@ -407,7 +411,6 @@ ViperCopyPastePlugin.prototype = {
             var prevChild = null;
             while (fragment.firstChild) {
                 if (prevChild === fragment.firstChild) {
-                    console.info('fail');
                     break;
                 }
 
@@ -481,6 +484,11 @@ ViperCopyPastePlugin.prototype = {
         // This is required for the list-style-type CSS.
         content = content.replace(new RegExp('<(\\w[^>]*) _viperlistst="([^"]*)"([^>]*)', 'gi'), "<$1 style=\"$2\"$3");
 
+        // Page breaks?
+        content = content.replace('<br clear="all">', '<br style="page-break-before: always;" />');
+
+        content = this._removeWordTags(content);
+
         content = this._convertDelNInsTags(content);
 
         return content;
@@ -503,6 +511,54 @@ ViperCopyPastePlugin.prototype = {
             }
 
             dfx.remove(ins);
+        }
+
+        content = dfx.getHtml(tmp);
+
+        return content;
+
+    },
+
+    _removeWordTags: function(content)
+    {
+        var tmp = document.createElement('div');
+        dfx.setHtml(tmp, content);
+
+        // Remove the link tags with no href attributes. Usualy for the footnotes.
+        var aTags = dfx.getTag('a', tmp);
+        var c     = aTags.length;
+        for (var i = 0; i < c; i++) {
+            if (!aTags[i].getAttribute('href')) {
+                var parent = aTags[i].parentNode;
+                dfx.remove(aTags[i]);
+                if (dfx.isBlank(dfx.getHtml(parent)) === true) {
+                    dfx.remove(parent);
+                }
+            }
+        }
+
+        // Remove divs with ids starting with ftn (Footnotes).
+        var tags = dfx.getTag('div', tmp);
+        var c    = tags.length;
+        for (var i = 0; i < c; i++) {
+            var id = tags[i].getAttribute('id');
+            if (id && id.indexOf('ftn') === 0) {
+                var parent = tags[i].parentNode;
+                dfx.remove(tags[i]);
+                if (dfx.isBlank(dfx.getHtml(parent)) === true) {
+                    dfx.remove(parent);
+                }
+            }
+        }
+
+        // Remove empty P tags.
+        tags = dfx.getTag('p', tmp);
+        var c    = tags.length;
+        for (var i = 0; i < c; i++) {
+            var tagContent = dfx.getHtml(tags[i]);
+            if (tagContent === '&nbsp;' || dfx.isBlank(tagContent) === true) {
+                dfx.remove(tags[i]);
+            }
         }
 
         content = dfx.getHtml(tmp);
