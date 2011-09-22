@@ -1047,7 +1047,9 @@ ViperTableEditorPlugin.prototype = {
         var nextRowIndex = (cellPos.row + rowspan - 1);
         var rowCells     = this._getRowCells(rows[nextRowIndex]);
 
-        if (cellPos.col === 0) {
+        if (rowCells.length === 0) {
+            rows[nextRowIndex].appendChild(newCell);
+        } else if (cellPos.col === 0) {
             dfx.insertBefore(rowCells[0], newCell);
         } else {
             var cellIndex = cellPos.col;
