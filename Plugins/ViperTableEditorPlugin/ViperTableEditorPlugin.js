@@ -54,6 +54,17 @@ ViperTableEditorPlugin.prototype = {
             }
         });
 
+        this.viper.registerCallback('Viper:keyDown', 'ViperCopyPastePlugin', function(e) {
+            if (e.which === 9) {
+                // Tab.
+                self.removeHighlights();
+                self.moveCaretToNextCell();
+                dfx.preventDefault(e);
+                return false;
+            }
+
+        });
+
         this.toolbarPlugin = this.viper.ViperPluginManager.getPlugin('ViperToolbarPlugin');
         this.toolbarPlugin.addButton('TableEditor', 'table', 'Insert/Edit Table', function () {
             self.insertTable();
@@ -744,12 +755,6 @@ ViperTableEditorPlugin.prototype = {
             self.removeHighlights();
         });
 
-        this.createButton('UP', false, 'Move UP', false, 'icon-addUp', function() {
-            self._buttonClicked = true;
-            self.moveRowUp(cell);
-            self.updateToolbar(cell, 'row');
-        });
-
     },
 
     /**
@@ -1227,37 +1232,6 @@ ViperTableEditorPlugin.prototype = {
 
     },
 
-    moveRowUp: function(cell)
-    {
-        var table    = this.getCellTable(cell, true);
-        var tr       = this.getCellRow(cell);
-        var cellPos  = this.getCellPosition(cell);
-        var cells    = this._getCellsExpanded();
-        var rowCells = cells[cellPos.row];
-        var rlen     = rowCells.length;
-        var trs      = dfx.getTag('tr', table);
-
-        if (cellPos.row === 0) {
-            return false;
-        }
-
-        for (var i = 0; i < rlen; i++) {
-            var pos = this.getCellPosition(rowCells[i]);
-            console.info(pos);
-        }
-
-        return;
-
-        var rowspan = this.getRowspan(cell);
-        var prevRow = trs[(cellPos.row - 1)]
-        for (var i = 0; i < rowspan; i++) {
-            dfx.insertBefore(prevRow, trs[(cellPos.row + i)]);
-        }
-
-        return cell;
-
-    },
-
     insertColAfter: function(cell)
     {
         var table    = this.getCellTable(cell);
@@ -1405,16 +1379,57 @@ ViperTableEditorPlugin.prototype = {
             var range = this.viper.getCurrentRange();
             var child = range._getFirstSelectableChild(cell);
             if (!child) {
-                cell = document.createTextNode(' ');
-                child.appendChild(cell);
+                dfx.setHtml(cell, '&nbsp;');
+                child = cell.firstChild;
             }
 
             range.setStart(child, 0);
             range.collapse(true);
+            ViperSelection.addRange(range);
             return range;
         } else {
             this.hideCellButtons();
         }
+
+    },
+
+    moveCaretToNextCell: function()
+    {
+        var range = this.viper.getCurrentRange();
+        var cell  = this._getRangeCellElement(range);
+
+        if (!cell) {
+            return false;
+        }
+
+        this.setActiveCell(cell);
+
+        var node = cell.nextSibling;
+        while (node) {
+            if (dfx.isTag(node, 'th') === true || dfx.isTag(node, 'td') === true) {
+                break;
+            }
+
+            if (!node.nextSibling) {
+                // Get next row.
+                var nextRow = this._getNextRow(node.parentNode);
+                if (!nextRow) {
+                    return false;
+                } else {
+                    node = nextRow.firstChild;
+                }
+            } else {
+                node = node.nextSibling;
+            }
+        }
+
+        if (!node) {
+            return false;
+        }
+
+        this.moveCaretToCell(node);
+
+        return true;
 
     },
 

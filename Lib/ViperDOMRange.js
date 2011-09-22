@@ -497,7 +497,11 @@ ViperDOMRange.prototype = {
 
     _isSelectable: function(container)
     {
-        if (container && container.nodeType === dfx.TEXT_NODE && container.data.length !== 0) {
+        if (container
+            && container.nodeType === dfx.TEXT_NODE
+            && container.data.length !== 0
+            && container.data.indexOf("\n") !== 0
+        ) {
             return true;
         }
 
