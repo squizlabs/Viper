@@ -69,6 +69,11 @@ ViperTableEditorPlugin.prototype = {
         if (navigator.userAgent.match(/iPad/i) === null) {
             var showToolbar = false;
             this.viper.registerCallback('Viper:mouseUp', 'ViperTableEditor', function(e) {
+                var target = dfx.getMouseEventTarget(e);
+                if (target === self._toolbar || dfx.isChildOf(target, self._toolbar) === true) {
+                    return false;
+                }
+
                 if (self._buttonClicked === true) {
                     self._buttonClicked = false;
                     return false;
@@ -330,7 +335,7 @@ ViperTableEditorPlugin.prototype = {
      *
      * @param {DOMRange} range The DOMRange object.
      */
-    updateToolbar: function(cell, type)
+    updateToolbar: function(cell, type, activeSubSection)
     {
         this._tableRawCells = null;
         this.setActiveCell(cell);
@@ -350,7 +355,7 @@ ViperTableEditorPlugin.prototype = {
         this.highlightActiveCell();
 
         this._updateLineage(type);
-        this._updateInnerContainer(cell, type);
+        this._updateInnerContainer(cell, type, activeSubSection);
         this._updatePosition(cell, type);
         this.highlightActiveCell(type);
 
@@ -605,7 +610,7 @@ ViperTableEditorPlugin.prototype = {
 
     },
 
-    _updateInnerContainer: function(cell, type)
+    _updateInnerContainer: function(cell, type, activeSubSection)
     {
         dfx.empty(this._toolsContainer);
         dfx.empty(this._subSectionContainer);
@@ -613,7 +618,7 @@ ViperTableEditorPlugin.prototype = {
         switch (type) {
             case 'cell':
             default:
-                this._createCellProperties(cell);
+                this._createCellProperties(cell, activeSubSection);
             break;
 
             case 'col':
@@ -627,7 +632,7 @@ ViperTableEditorPlugin.prototype = {
 
     },
 
-    _createCellProperties: function(cell)
+    _createCellProperties: function(cell, activeSubSection)
     {
         var isActive = false;
         if (dfx.isTag(cell, 'th') === true) {
@@ -661,30 +666,35 @@ ViperTableEditorPlugin.prototype = {
         var mergeSubWrapper = document.createElement('div');
         var mergeUp = this.createButton('', false, 'Merge Up', (this.canMergeUp(cell) === false), 'icon-arrowUp', function() {
             self._buttonClicked = true;
-            self.updateToolbar(self.mergeUp(cell));
+            self.updateToolbar(self.mergeUp(cell), 'cell', 'merge');
         });
         mergeSubWrapper.appendChild(mergeUp);
 
         var mergeDown = this.createButton('', false, 'Merge Down', (this.canMergeDown(cell) === false), 'icon-arrowDown', function() {
             self._buttonClicked = true;
-            self.updateToolbar(self.mergeDown(cell));
+            self.updateToolbar(self.mergeDown(cell), 'cell', 'merge');
         });
         mergeSubWrapper.appendChild(mergeDown);
 
         var mergeLeft = this.createButton('', false, 'Merge Left', (this.canMergeLeft(cell) === false), 'icon-arrowLeft', function() {
             self._buttonClicked = true;
-            self.updateToolbar(self.mergeLeft(cell));
+            self.updateToolbar(self.mergeLeft(cell), 'cell', 'merge');
         });
         mergeSubWrapper.appendChild(mergeLeft);
 
         var mergeRight = this.createButton('', false, 'Merge Right', (this.canMergeRight(cell) === false), 'icon-arrowRight', function() {
             self._buttonClicked = true;
-            self.updateToolbar(self.mergeRight(cell));
+            self.updateToolbar(self.mergeRight(cell), 'cell', 'merge');
         });
         mergeSubWrapper.appendChild(mergeRight);
 
+        var mergeSubActive = false;
+        if (activeSubSection === 'merge') {
+            mergeSubActive = true;
+        }
+
         var mergeSubSection = this.createSubSection(mergeSubWrapper, false);
-        this.createButton('', false, 'Toggle Merge Options', false, 'icon-move', null, null, mergeSubSection);
+        this.createButton('', false, 'Toggle Merge Options', false, 'icon-move', null, null, mergeSubSection, mergeSubActive);
 
     },
 
