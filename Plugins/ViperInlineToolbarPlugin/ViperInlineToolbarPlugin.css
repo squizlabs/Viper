@@ -238,7 +238,6 @@
     text-shadow: none;
     color: #DCDCDC;
     font-size: 1.2em;
-    max-width: 18em;
 }
 .subSectionList {
     margin: 0.3em -0.6em -0.6em -0.6em;
@@ -287,11 +286,12 @@
 /* subSection inputs */
 .inputLabel {
     color: #DDD;
-    
-    font-size: 1.2em;
+    font-size: 1.3em;
     text-shadow: none;
+    padding-right: 0.5em;
 }
-#testInput {
+.Viper-subSection input[type=text],
+.Viper-subSection textarea {
 -moz-transition-property: color, background;
 -moz-transition-duration: 0.3s;
 -webkit-transition-property: color, background;
@@ -299,14 +299,20 @@
     border-radius: 0.3em;
     font-size: 1.4em;
     border: none;
+    border-top: 1px solid #000;
+    border-bottom: 1px solid #777;
     padding: 0.3em;
     background: #2b2b2b;
     color: #FFF;
     color: #5A8BD0;
     outline: none;
     font-weight: bold;
+    box-shadow: 0 0 3px #000 inset;
+    
 }
-#testInput.active {
+.Viper-subSection input[type=text].active,
+.Viper-subSection textarea.active {
     color: #FFF;
     background: #5A8BD0;
+    border-top-color: #193153;
 }
