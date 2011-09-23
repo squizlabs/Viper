@@ -314,5 +314,6 @@
 .Viper-subSection textarea.active {
     color: #FFF;
     background: #5A8BD0;
-    border-top-color: #193153;
+    background: #205caf;
+/*     border-top-color: #193153; */
 }
