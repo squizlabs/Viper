@@ -33,7 +33,6 @@
     left: 50%;
     margin: -23px 0 0 -10px;
     border: 12px solid transparent;
-/*     border-bottom-color: #000; */
 }
 
 .ViperITP.calcWidth,
@@ -313,7 +312,5 @@
 .Viper-subSection input[type=text].active,
 .Viper-subSection textarea.active {
     color: #FFF;
-    background: #5A8BD0;
     background: #205caf;
-/*     border-top-color: #193153; */
 }
