@@ -214,3 +214,15 @@
 .Viper-button:active .buttonIcon.icon-headerAbbr, .Viper-button.active .buttonIcon.icon-headerAbbr, .Viper-button.selected .buttonIcon.icon-headerAbbr {
   background-position: -33px -378px;
 }
+.buttonIcon.icon-class {
+  background-position: 0 -405px;
+}
+.Viper-button:active .buttonIcon.icon-class, .Viper-button.active .buttonIcon.icon-class, .Viper-button.selected .buttonIcon.icon-class {
+  background-position: -33px -405px;
+}
+.buttonIcon.icon-anchor {
+  background-position: 0 -432px;
+}
+.Viper-button:active .buttonIcon.icon-anchor, .Viper-button.active .buttonIcon.icon-anchor, .Viper-button.selected .buttonIcon.icon-anchor {
+  background-position: -33px -432px;
+}
