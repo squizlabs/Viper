@@ -421,11 +421,14 @@ Viper.prototype = {
                 var range = this.getCurrentRange();
                 if (this.inlineMode !== true && dfx.getStyle(this.element, 'display') === 'block') {
                     dfx.setHtml(this.element, '<p>&nbsp;</p>');
-                    range.setStart(this.element.firstChild.firstChild);
+                    range.setStart(this.element.firstChild.firstChild, 0);
                 } else {
                     dfx.setHtml(this.element, '&nbsp;');
-                    range.setStart(this.element.firstChild);
+                    range.setStart(this.element.firstChild, 0);
                 }
+
+                range.collapse(true);
+                ViperSelection.addRange(range);
             }
         }//end if
 
@@ -915,8 +918,21 @@ Viper.prototype = {
 
     _deleteFromSelection: function(range)
     {
+        var moveBeforeParent = false;
+        if (range.startContainer.nodeType === dfx.TEXT_NODE
+            && range.startOffset === 0
+            && !range.startContainer.previousSibling
+        ) {
+            moveBeforeParent = range.startContainer.parentNode;
+        }
+
         // Book mark the range.
-        var bookmark = this.createBookmark();
+        var bookmark = this.createBookmark(range);
+
+        if (moveBeforeParent) {
+            // Move the range to before parent.
+            dfx.insertBefore(moveBeforeParent, bookmark.start);
+        }
 
         // Remove all elements in between.
         var elements = dfx.getElementsBetween(bookmark.start, bookmark.end);
@@ -2020,7 +2036,12 @@ Viper.prototype = {
         ) {
             // Bookmark is collapsed.
             if (bookmark.end.nextSibling) {
-                startPos = dfx.getFirstChild(bookmark.end.nextSibling);
+                if ((dfx.isTag(bookmark.end.nextSibling, 'span') !== true || dfx.hasClass(bookmark.end.nextSibling, 'viperBookmark') === false)) {
+                    startPos = dfx.getFirstChild(bookmark.end.nextSibling);
+                } else {
+                    startPos = document.createTextNode('');
+                    dfx.insertAfter(bookmark.end, startPos);
+                }
             } else if (bookmark.start.previousSibling) {
                 startPos = dfx.getFirstChild(bookmark.start.previousSibling);
                 if (startPos.nodeType === dfx.TEXT_NODE) {

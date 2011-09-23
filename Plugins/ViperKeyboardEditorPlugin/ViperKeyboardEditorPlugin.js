@@ -177,9 +177,9 @@ ViperKeyboardEditorPlugin.prototype = {
 
     },
 
-    splitAtRange: function(returnFirstBlock)
+    splitAtRange: function(returnFirstBlock, range)
     {
-        var range = this.viper.getCurrentRange();
+        range = range || this.viper.getCurrentRange();
 
         // If the range is not collapsed then remove the contents of the selection.
         if (range.collapsed !== true) {
