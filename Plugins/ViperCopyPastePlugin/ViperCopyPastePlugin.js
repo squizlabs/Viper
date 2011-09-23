@@ -51,6 +51,8 @@ ViperCopyPastePlugin.prototype = {
             return self.keyDown(e);
         });
 
+        this.pasteElement = this._createPasteDiv();
+
     },
 
     setSettings: function(settings)
@@ -334,17 +336,15 @@ ViperCopyPastePlugin.prototype = {
 
     _handleFormattedPaste: function(stripTags, e)
     {
-        div = this._createPasteDiv();
-        this.pasteElement = div;
+        dfx.empty(this.pasteElement);
+        this.pasteElement.focus();
 
-        var self    = this;
-        div.onpaste = function(e) {
+        var self = this;
+        this.pasteElement.onpaste = function(e) {
             setTimeout(function() {
                self._handleFormattedPasteValue(stripTags);
             }, 100);
         };
-
-        div.focus();
 
         return true;
 
@@ -404,7 +404,7 @@ ViperCopyPastePlugin.prototype = {
             range.setStart(this._tmpNode, 0);
             range.collapse(true);
 
-            var prevBlock = keyboardEditor.splitAtRange(true);
+            var prevBlock = keyboardEditor.splitAtRange(true, range);
             prevBlock     = prevBlock.nextSibling;
 
             var changeid  = ViperChangeTracker.startBatchChange('textAdded');
@@ -455,13 +455,13 @@ ViperCopyPastePlugin.prototype = {
     _cleanWordPaste: function(content)
     {
         // Meta and link tags.
-        content = content.replace(/<(meta|link)[^>]+>/g, "");
+        content = content.replace(/<(meta|link)[^>]+>/gi, "");
 
         // Comments.
-        content = content.replace(/<!--(.|\s)*?-->/g, '');
+        content = content.replace(/<!--(.|\s)*?-->/gi, '');
 
         // Remove style tags.
-        content = content.replace(/<style>[\s\S]*?<\/style>/g, '');
+        content = content.replace(/<style>[\s\S]*?<\/style>/gi, '');
 
         // Remove span and o:p etc. tags.
         content = content.replace(/<\/?span[^>]*>/gi, "");
@@ -478,6 +478,8 @@ ViperCopyPastePlugin.prototype = {
 
         // Remove class, lang and style attributes.
         content = content.replace(/<(\w[^>]*) (class|lang)=([^ |>]*)([^>]*)/gi, "<$1$4");
+        content = content.replace(/<(\w[^>]*) (align)=([^ |>]*)([^>]*)/gi, "<$1$4");
+        content = content.replace(/<(\w[^>]*) (dir)=([^ |>]*)([^>]*)/gi, "<$1$4");
         content = content.replace(new RegExp('<(\\w[^>]*) style="([^"]*)"([^>]*)', 'gi'), "<$1$3");
 
         // Convert viperListst attributes to style attributes.
@@ -485,7 +487,7 @@ ViperCopyPastePlugin.prototype = {
         content = content.replace(new RegExp('<(\\w[^>]*) _viperlistst="([^"]*)"([^>]*)', 'gi'), "<$1 style=\"$2\"$3");
 
         // Page breaks?
-        content = content.replace('<br clear="all">', '<br style="page-break-before: always;" />');
+        content = content.replace('<br clear="all">', '');
 
         content = this._removeWordTags(content);
 
@@ -551,6 +553,107 @@ ViperCopyPastePlugin.prototype = {
             }
         }
 
+        // Convert [strong + em ] + font + p tags to heading tags.
+        var tags = dfx.find(tmp, 'font > p');
+        var c    = tags.length;
+        for (var i = 0; i < c; i++) {
+            var parent      = tags[i].parentNode;
+            var fontCount   = 0;
+            var strongCount = 0;
+            var emCount     = 0;
+            var headingType = 0;
+            var fontSize    = 0;
+            var lastParent  = null;
+            while (parent) {
+                var tagName = dfx.getTagName(parent);
+                if (tagName === 'font') {
+                    lastParent = parent;
+                    fontCount++;
+                    if (parent.getAttribute('size')) {
+                        fontSize = parent.getAttribute('size');
+                    }
+                } else if (tagName === 'em') {
+                    lastParent = parent;
+                    emCount++;
+                } else if (tagName === 'strong') {
+                    lastParent = parent;
+                    strongCount++;
+                    break;
+                } else {
+                    break;
+                }
+
+                if (!parent.parentNode) {
+                    break;
+                }
+
+                parent = parent.parentNode;
+            }
+
+            if (strongCount >= 1) {
+                if (fontCount >= 3 && fontSize >= 5) {
+                    // H1.
+                    headingType = 1;
+                } else if (fontCount >= 3 && fontSize >= 4) {
+                    headingType = 2;
+                } else if (fontCount === 2 && emCount === 0) {
+                    headingType = 3;
+                } else if (fontCount === 2 && emCount >= 1) {
+                    headingType = 4;
+                }
+            } else if (emCount === 0 && fontCount === 2) {
+                headingType = 5;
+            } else if (emCount === 1 && fontCount === 2) {
+                headingType = 6;
+            }
+
+            if (headingType > 0) {
+                var heading = document.createElement('h' + headingType);
+                while (tags[i].firstChild) {
+                    heading.appendChild(tags[i].firstChild);
+                }
+
+                dfx.insertBefore(lastParent, heading);
+                dfx.remove(tags[i]);
+            }
+        }//end for
+
+        // Remove font tags.
+        var moreFontTags = true;
+        while (moreFontTags === true) {
+            var tags = dfx.getTag('font', tmp);
+            if (tags.length === 0) {
+                moreFontTags = false;
+                break;
+            }
+
+            var c    = tags.length;
+            for (var i = 0; i < c; i++) {
+                // Find first none font parent and move the content up.
+                var parent = tags[i];
+                while (parent.parentNode) {
+                    if (dfx.isTag(parent.parentNode, 'font') !== true) {
+                        break;
+                    }
+
+                    parent = parent.parentNode;
+                }
+
+                while (tags[i].firstChild) {
+                    dfx.insertBefore(parent, tags[i].firstChild);
+                }
+
+                dfx.remove(tags[i]);
+            }
+        }
+
+        // Remove empty tags.
+        var tags = dfx.getTag('*', tmp);
+        var c    = tags.length;
+        for (var i = 0; i < c; i++) {
+            this.removeEmptyNodes(tags[i]);
+        }
+
         // Remove empty P tags.
         tags = dfx.getTag('p', tmp);
         var c    = tags.length;
@@ -559,6 +662,14 @@ ViperCopyPastePlugin.prototype = {
             if (tagContent === '&nbsp;' || dfx.isBlank(tagContent) === true) {
                 dfx.remove(tags[i]);
             }
+        }
+
+        // Clean up list tags.
+        tags = dfx.getTag('ol,ul', tmp);
+        var c    = tags.length;
+        for (var i = 0; i < c; i++) {
+            dfx.removeAttr(tags[i], 'type');
+            dfx.removeAttr(tags[i], 'start');
         }
 
         content = dfx.getHtml(tmp);
@@ -648,7 +759,7 @@ ViperCopyPastePlugin.prototype = {
                     // Start a new list.
                     ul        = document.createElement(listType);
                     indentLvl = {};
-                    dfx.attr(ul, '_viperlistst', 'list-style-type:' + listStyle);
+                    //dfx.attr(ul, '_viperlistst', 'list-style-type:' + listStyle);
 
                     indentLvl[marginLeft] = ul;
                     dfx.insertBefore(pEl, ul);
@@ -663,7 +774,7 @@ ViperCopyPastePlugin.prototype = {
                         } else if (marginLeft > prevMargin) {
                             // Sub list, create a new list.
                             ul = document.createElement(listType);
-                            dfx.attr(ul, '_viperlistst', 'list-style-type:' + listStyle);
+                            //dfx.attr(ul, '_viperlistst', 'list-style-type:' + listStyle);
                             li.appendChild(ul);
 
                             // Indent list.
@@ -691,6 +802,18 @@ ViperCopyPastePlugin.prototype = {
 
     },
 
+    removeEmptyNodes: function(node)
+    {
+        if (node && node.nodeType === dfx.ELEMENT_NODE) {
+            if ((!node.firstChild || dfx.isBlank(dfx.getHtml(node)) === true) && dfx.isStubElement(node) === false) {
+                var parent = node.parentNode;
+                parent.removeChild(node);
+                this.removeEmptyNodes(parent);
+            }
+        }
+
+    },
+
     _createListItemFromElement: function(elem)
     {
         var li = document.createElement('li');
@@ -705,10 +828,10 @@ ViperCopyPastePlugin.prototype = {
     _cleanPaste: function(content)
     {
         // Some generic content cleanup. Change all b/i tags to strong/em.
-        content = content.replace(/<b(\s+|>)/g, "<strong$1");
-        content = content.replace(/<\/b(\s+|>)/g, "</strong$1");
-        content = content.replace(/<i(\s+|>)/g, "<em$1");
-        content = content.replace(/<\/i(\s+|>)/g, "</em$1");
+        content = content.replace(/<b(\s+|>)/gi, "<strong$1");
+        content = content.replace(/<\/b(\s+|>)/gi, "</strong$1");
+        content = content.replace(/<i(\s+|>)/gi, "<em$1");
+        content = content.replace(/<\/i(\s+|>)/gi, "</em$1");
         return content;
 
     },
