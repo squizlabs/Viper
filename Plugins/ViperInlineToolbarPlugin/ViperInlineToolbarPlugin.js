@@ -55,7 +55,14 @@ function ViperInlineToolbarPlugin(viper)
     });
 
     // Hide the toolbar when user clicks anywhere.
-    this.viper.registerCallback(['Viper:mouseDown', 'ViperHistoryManager:undo'], 'ViperInlineToolbarPlugin', function(range) {
+    this.viper.registerCallback(['Viper:mouseDown', 'ViperHistoryManager:undo'], 'ViperInlineToolbarPlugin', function(data) {
+        if (data.target) {
+            var target = dfx.getMouseEventTarget(data);
+            if (target === self._toolbar || dfx.isChildOf(target, self._toolbar) === true) {
+                return false;
+            }
+        }
+
         self.hideToolbar();
     });
 
@@ -171,6 +178,77 @@ ViperInlineToolbarPlugin.prototype = {
         }
 
         return button;
+
+    },
+
+    /**
+     * Creates a textbox.
+     *
+     * @param {DOMNode}  node   Element to select.
+     * @param {string}   value  The initial value of the textbox.
+     * @param {string}   label  The label of the textbox.
+     * @param {function} action The function to call when the textbox value is updated.
+     *
+     * @return {DOMNode} If label specified the label element else the textbox element.
+     */
+    createTextbox: function(node, value, label, action)
+    {
+        var textBox = document.createElement('input');
+        textBox.type  = 'text';
+        textBox.size  = 10;
+        textBox.value = value;
+
+        var self  = this;
+        dfx.addEvent(textBox, 'mousedown', function(e) {
+            textBox.focus();
+            dfx.preventDefault(e);
+            return false;
+        });
+
+        dfx.addEvent(textBox, 'focus', function(e) {
+            dfx.preventDefault(e);
+            return false;
+        });
+
+        dfx.addEvent(textBox, 'mouseup', function(e) {
+            dfx.preventDefault(e);
+            return false;
+        });
+
+        var t = null;
+        dfx.addEvent(textBox, 'keyup', function(e) {
+            if (e.which === 13) {
+                textBox.blur();
+
+                var range = self.viper.getCurrentRange();
+                ViperSelection.removeAllRanges();
+                range.selectNode(node);
+                ViperSelection.addRange(range);
+
+                self.viper.focus();
+
+                action.call(textBox, textBox.value);
+                return;
+            }
+
+            dfx.addClass(textBox, 'active');
+
+            clearTimeout(t);
+            t = setTimeout(function() {
+                dfx.removeClass(textBox, 'active');
+
+                action.call(textBox, textBox.value);
+            }, 1500);
+        });
+
+        if (label) {
+            var labelElem = document.createElement('label');
+            dfx.setHtml(labelElem, label);
+            labelElem.appendChild(textBox);
+            return labelElem;
+        }
+
+        return textBox;
 
     },
 

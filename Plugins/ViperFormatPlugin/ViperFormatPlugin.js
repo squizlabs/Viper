@@ -239,6 +239,28 @@ ViperFormatPlugin.prototype = {
             inlineToolbarPlugin.createButton('Hh', hasActiveHeading,  'Toggle Headings', false, 'headings', null, buttonGroup, headingsSubSection, hasActiveHeading);
         }
 
+        if (selectedNode.nodeType === dfx.ELEMENT_NODE) {
+            var attrSubSectionCont = document.createElement('div');
+            var idTextBox = inlineToolbarPlugin.createTextbox(selectedNode, selectedNode.getAttribute('id'), 'ID', function(value) {
+                if (selectedNode) {
+                    selectedNode.setAttribute('id', value);
+                }
+
+            });
+            var classTextBox = inlineToolbarPlugin.createTextbox(selectedNode, selectedNode.getAttribute('class'), 'Class', function(value) {
+                if (selectedNode) {
+                    selectedNode.setAttribute('class', value);
+                }
+
+            });
+            attrSubSectionCont.appendChild(idTextBox);
+            attrSubSectionCont.appendChild(classTextBox);
+
+            var attrSubSection = inlineToolbarPlugin.createSubSection(attrSubSectionCont);
+
+            inlineToolbarPlugin.createButton('Attr', false, 'Attr', false, 'attr', null, null, attrSubSection);
+        }
+
     },
 
     _canShowHeadingOptions: function(node)
