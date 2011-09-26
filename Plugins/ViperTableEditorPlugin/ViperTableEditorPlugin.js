@@ -46,7 +46,7 @@ ViperTableEditorPlugin.prototype = {
     init: function()
     {
         var self = this;
-        this.viper.registerCallback('Viper:editableElementChanged', 'ViperCopyPastePlugin', function() {
+        this.viper.registerCallback('Viper:editableElementChanged', 'ViperTableEditor', function() {
             if (self.viper.isBrowser('firefox') === true) {
                 // Disable Firefox table editing.
                 document.execCommand("enableInlineTableEditing", false, false);
@@ -54,9 +54,9 @@ ViperTableEditorPlugin.prototype = {
             }
         });
 
-        this.viper.registerCallback('Viper:keyDown', 'ViperCopyPastePlugin', function(e) {
+        this.viper.registerCallback('Viper:keyDown', 'ViperTableEditor', function(e) {
             if (e.which === 9) {
-                // Tab.
+                // Handle tab key.
                 self.removeHighlights();
                 self.moveCaretToNextCell();
                 dfx.preventDefault(e);
@@ -82,6 +82,7 @@ ViperTableEditorPlugin.prototype = {
             this.viper.registerCallback('Viper:mouseUp', 'ViperTableEditor', function(e) {
                 var target = dfx.getMouseEventTarget(e);
                 if (target === self._toolbar || dfx.isChildOf(target, self._toolbar) === true) {
+                    self._buttonClicked = false;
                     return false;
                 }
 
@@ -1005,6 +1006,7 @@ ViperTableEditorPlugin.prototype = {
 
         var tagName = dfx.getTagName(cell);
         var elem    = document.createElement(tagName);
+        dfx.setHtml(elem, '&nbsp;');
 
         var colspan = (parseInt(cell.getAttribute('colspan')) - 1);
         if (colspan > 1) {
@@ -1053,6 +1055,7 @@ ViperTableEditorPlugin.prototype = {
 
         var colspan = this.getColspan(cell);
         var newCell = document.createElement(dfx.getTagName(cell));
+        dfx.setHtml(newCell, '&nbsp;');
         if (colspan > 1) {
             newCell.setAttribute('colspan', colspan);
         }
@@ -1120,6 +1123,7 @@ ViperTableEditorPlugin.prototype = {
                 rowCell.setAttribute('rowspan', (rowspan + 1));
             } else {
                 var newCell = document.createElement(dfx.getTagName(rowCell));
+                dfx.setHtml(newCell, '&nbsp;');
 
                 var colspan = this.getColspan(rowCell);
                 if (colspan > 1) {
@@ -1162,6 +1166,7 @@ ViperTableEditorPlugin.prototype = {
                 rowCell.setAttribute('rowspan', (rowspan + 1));
             } else {
                 var newCell = document.createElement(dfx.getTagName(rowCell));
+                dfx.setHtml(newCell, '&nbsp;');
 
                 var colspan = this.getColspan(rowCell);
                 if (colspan > 1) {
@@ -1404,12 +1409,8 @@ ViperTableEditorPlugin.prototype = {
 
         this.setActiveCell(cell);
 
-        var node = cell.nextSibling;
+        var node = cell;
         while (node) {
-            if (dfx.isTag(node, 'th') === true || dfx.isTag(node, 'td') === true) {
-                break;
-            }
-
             if (!node.nextSibling) {
                 // Get next row.
                 var nextRow = this._getNextRow(node.parentNode);
@@ -1420,6 +1421,10 @@ ViperTableEditorPlugin.prototype = {
                 }
             } else {
                 node = node.nextSibling;
+            }
+
+            if (dfx.isTag(node, 'th') === true || dfx.isTag(node, 'td') === true) {
+                break;
             }
         }
 
