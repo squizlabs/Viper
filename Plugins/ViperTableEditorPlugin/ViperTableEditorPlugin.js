@@ -583,7 +583,13 @@ ViperTableEditorPlugin.prototype = {
             break;
 
             case 'row':
-                element = activeCell.parentNode;
+                if (this.getRowspan(activeCell) > 1) {
+                    coords         = dfx.getBoundingRectangle(activeCell.parentNode);
+                    var cellCoords = dfx.getBoundingRectangle(activeCell);
+                    coords.y2      = cellCoords.y2;
+                } else {
+                    element = activeCell.parentNode;
+                }
             break;
 
             case 'col':
