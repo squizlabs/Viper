@@ -963,15 +963,57 @@ ViperTableEditorPlugin.prototype = {
 
         for (var i = 0; i < mergeCells.length; i++) {
             this._moveCellContent(mergeCells[i], cell);
+
+            var colspan = this.getColspan(mergeCells[i]);
+            if (colspan > 1) {
+                cell.setAttribute('colspan', this.getColspan(cell) + colspan);
+            }
+
             dfx.remove(mergeCells[i]);
         }
 
-        if (this._getRowCells(parent).length === 0) {
-            dfx.remove(parent);
-        } else {
-            var rowspan = this.getRowspan(cell) + this.getRowspan(mergeCells[0]);
-            cell.setAttribute('rowspan', rowspan);
-        }
+        var rowspan = this.getRowspan(cell) + this.getRowspan(mergeCells[0]);
+        cell.setAttribute('rowspan', rowspan);
+
+        // Do we remove next row?
+        var rows = this._getRowCells(parent);
+        if (rows.length === 0) {
+            var cells    = this._getCellsExpanded(true);
+            var cellPos  = this.getCellPosition(cell);
+            var rowCells = cells[cellPos.row];
+            var remove   = true;
+            var rowspan  = this.getRowspan(cell);
+
+            for (var i = 0; i < rowCells.length; i++) {
+                var pos = this.getCellPosition(rowCells[i]);
+                if (pos.row !== cellPos.row || rowspan !== this.getRowspan(rowCells[i])) {
+                    remove = false;
+                    break;
+                }
+            }
+
+            if (remove === true) {
+                // Remove row.
+                dfx.remove(parent);
+
+                // Reduce rowspan.
+                var processedCells = [];
+                for (var i = 0; i < rowCells.length; i++) {
+                    if (processedCells.inArray(rowCells[i]) === true) {
+                        continue;
+                    }
+
+                    processedCells.push(rowCells[i]);
+
+                    var newRowspan = (this.getRowspan(rowCells[i]) - 1);
+                    if (newRowspan > 1) {
+                        rowCells[i].setAttribute('rowspan', newRowspan);
+                    } else {
+                        dfx.removeAttr(rowCells[i], 'rowspan');
+                    }
+                }
+            }
+        }//end if
 
         this.tableUpdated();
 
@@ -1018,6 +1060,7 @@ ViperTableEditorPlugin.prototype = {
             var pos = this.getCellPosition(rowCells[i]);
             if (pos.row !== prevPos || rowspan !== this.getRowspan(rowCells[i])) {
                 remove = false;
+                break;
             }
         }
 
