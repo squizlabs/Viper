@@ -786,15 +786,52 @@ ViperTableEditorPlugin.prototype = {
     */
     canMergeLeft: function(cell)
     {
-        var prevCell = this.getPreviousCell(cell);
-        var cellPos  = this.getCellPosition(cell);
-        if (prevCell) {
-            var pCellPos = this.getCellPosition(prevCell);
-            if (pCellPos.row === cellPos.row) {
-                if (this.getRowspan(cell) === this.getRowspan(prevCell)) {
-                    return prevCell;
-                }
+        var cells   = this._getCellsExpanded();
+        var cellPos = this.getCellPosition(cell);
+        var rowspan = this.getRowspan(cell);
+
+        if (cellPos.col === 0) {
+            // First column so cannot merge left.
+            return false;
+        }
+
+        var processedCells = [];
+        var rowspans       = 0;
+        var prevColspan    = null;
+        for (var i = 0; i < rowspan; i++) {
+            // Check each previous cell, make sure:
+            // - First one start from current cell's row position
+            // - They all have the same colspan
+            // - Total rowspan must be the same as current cell's rowspan.
+            var prevCell = cells[(cellPos.row + i)][(cellPos.col - 1)];
+            if (processedCells.inArray(prevCell) === true) {
+                continue;
             }
+
+            processedCells.push(prevCell);
+
+            var pos = this.getCellPosition(prevCell);
+            if (i === 0 && pos.row !== cellPos.row) {
+                // First previous cell must be at the same level as the current cell.
+                return false;
+            }
+
+            rowspans += this.getRowspan(prevCell);
+
+            if (rowspans > rowspan) {
+                // Total rowspan must be the same as current cell's rowspan.
+                return false;
+            } else if (prevColspan !== null && prevColspan !== this.getColspan(prevCell)) {
+                // - They all have the same colspan.
+                return false;
+            }
+
+            prevColspan = this.getColspan(prevCell);
+        }
+
+        if (rowspans === rowspan) {
+            // Total rowspan must be the same as current cell's rowspan.
+            return processedCells;
         }
 
         return false;
@@ -803,11 +840,53 @@ ViperTableEditorPlugin.prototype = {
 
     canMergeRight: function(cell)
     {
-        var nextCell = this.getNextCell(cell);
-        if (nextCell) {
-            if (this.getRowspan(nextCell) === this.getRowspan(cell)) {
-                return nextCell;
+        var cells   = this._getCellsExpanded();
+        var cellPos = this.getCellPosition(cell);
+        var rowspan = this.getRowspan(cell);
+        var colspan = this.getColspan(cell);
+
+        if (cell === (cells[cellPos.row][(cells[cellPos.row].length - 1)])) {
+            // Last column so cannot merge right.
+            return false;
+        }
+
+        var processedCells = [];
+        var rowspans       = 0;
+        var prevColspan    = null;
+        for (var i = 0; i < rowspan; i++) {
+            // Check each next cell, make sure:
+            // - First one start from current cell's row position
+            // - They all have the same colspan
+            // - Total rowspan must be the same as current cell's rowspan.
+            var nextCell = cells[(cellPos.row + i)][(cellPos.col + colspan)];
+            if (processedCells.inArray(nextCell) === true) {
+                continue;
             }
+
+            processedCells.push(nextCell);
+
+            var pos = this.getCellPosition(nextCell);
+            if (i === 0 && pos.row !== cellPos.row) {
+                // First previous cell must be at the same level as the current cell.
+                return false;
+            }
+
+            rowspans += this.getRowspan(nextCell);
+
+            if (rowspans > rowspan) {
+                // Total rowspan must be the same as current cell's rowspan.
+                return false;
+            } else if (prevColspan !== null && prevColspan !== this.getColspan(nextCell)) {
+                // - They all have the same colspan.
+                return false;
+            }
+
+            prevColspan = this.getColspan(nextCell);
+        }
+
+        if (rowspans === rowspan) {
+            // Total rowspan must be the same as current cell's rowspan.
+            return processedCells;
         }
 
         return false;
@@ -917,15 +996,18 @@ ViperTableEditorPlugin.prototype = {
 
     mergeLeft: function(cell)
     {
-        var mergeCell = this.canMergeLeft(cell);
-        if (!mergeCell) {
+        var mergeCells = this.canMergeLeft(cell);
+        if (!mergeCells || mergeCells.length === 0) {
             return;
         }
 
-        var colspan = this.getColspan(cell) + this.getColspan(mergeCell);
-        this._moveCellContent(mergeCell, cell);
-        cell.setAttribute('colspan', colspan);
-        dfx.remove(mergeCell);
+        var newColspan = (this.getColspan(cell) + this.getColspan(mergeCells[0]));
+        cell.setAttribute('colspan', newColspan);
+
+        for (var i = 0; i < mergeCells.length; i++) {
+            this._moveCellContent(mergeCells[i], cell);
+            dfx.remove(mergeCells[i]);
+        }
 
         this.tableUpdated();
 
@@ -935,15 +1017,18 @@ ViperTableEditorPlugin.prototype = {
 
     mergeRight: function(cell)
     {
-        var mergeCell = this.canMergeRight(cell);
-        if (!mergeCell) {
+        var mergeCells = this.canMergeRight(cell);
+        if (!mergeCells || mergeCells.length === 0) {
             return;
         }
 
-        var colspan = this.getColspan(cell) + this.getColspan(mergeCell);
-        this._moveCellContent(mergeCell, cell);
-        cell.setAttribute('colspan', colspan);
-        dfx.remove(mergeCell);
+        var newColspan = (this.getColspan(cell) + this.getColspan(mergeCells[0]));
+        cell.setAttribute('colspan', newColspan);
+
+        for (var i = 0; i < mergeCells.length; i++) {
+            this._moveCellContent(mergeCells[i], cell);
+            dfx.remove(mergeCells[i]);
+        }
 
         this.tableUpdated();
 
@@ -963,12 +1048,6 @@ ViperTableEditorPlugin.prototype = {
 
         for (var i = 0; i < mergeCells.length; i++) {
             this._moveCellContent(mergeCells[i], cell);
-
-            var colspan = this.getColspan(mergeCells[i]);
-            if (colspan > 1) {
-                cell.setAttribute('colspan', this.getColspan(cell) + colspan);
-            }
-
             dfx.remove(mergeCells[i]);
         }
 
