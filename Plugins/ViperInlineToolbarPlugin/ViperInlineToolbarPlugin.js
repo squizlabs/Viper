@@ -232,11 +232,11 @@ ViperInlineToolbarPlugin.prototype = {
                 return;
             }
 
-            dfx.addClass(textBox, 'active');
+            dfx.addClass(labelElem, 'active');
 
             clearTimeout(t);
             t = setTimeout(function() {
-                dfx.removeClass(textBox, 'active');
+                dfx.removeClass(labelElem, 'active');
 
                 action.call(textBox, textBox.value);
             }, 1500);
