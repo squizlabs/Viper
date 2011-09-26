@@ -194,6 +194,7 @@ ViperInlineToolbarPlugin.prototype = {
     createTextbox: function(node, value, label, action)
     {
         var textBox = document.createElement('input');
+        dfx.addClass(textBox, 'ViperITP-input');
         textBox.type  = 'text';
         textBox.size  = 10;
         textBox.value = value;
@@ -243,7 +244,8 @@ ViperInlineToolbarPlugin.prototype = {
 
         if (label) {
             var labelElem = document.createElement('label');
-            dfx.setHtml(labelElem, label);
+            dfx.addClass(labelElem, 'ViperITP-label');
+            dfx.setHtml(labelElem, '<span class="ViperITP-labelText">' + label + '</span>');
             labelElem.appendChild(textBox);
             return labelElem;
         }
