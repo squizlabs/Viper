@@ -283,34 +283,64 @@
 }
 
 /* subSection inputs */
-.inputLabel {
+
+.ViperITP-label {
+    display: block;
+    clear: both;
+    text-align: left;
     color: #DDD;
-    font-size: 1.3em;
-    text-shadow: none;
-    padding-right: 0.5em;
-}
-.Viper-subSection input[type=text],
-.Viper-subSection textarea {
--moz-transition-property: color, background;
--moz-transition-duration: 0.3s;
--webkit-transition-property: color, background;
--webkit-transition-duration: 0.3s;
+    background: rgba(0,0,0,0.2);
     border-radius: 0.3em;
-    font-size: 1.4em;
-    border: none;
+    -moz-transition-property: color, background;
+    -moz-transition-duration: 0.3s;
+    -webkit-transition-property: color, background;
+    -webkit-transition-duration: 0.3s;
     border-top: 1px solid #000;
     border-bottom: 1px solid #777;
-    padding: 0.3em;
     background: #2b2b2b;
-    color: #FFF;
+    color: #5A8BD0;
+    box-shadow: 0 0 3px #000 inset;
+}
+.ViperITP-label.active {
+    background: #205caf;
+}
+.ViperITP-label:after {
+    display: block;
+    content: "";
+    clear: both;
+}
+.ViperITP-labelText {
+    float: left;
+    width: 30%;
+    max-width: 30%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: #DDD;
+    font-size: 1.2em;
+    line-height: 1.6em;
+    text-shadow: none;
+    padding: 0 0.4em;
+    margin: 0.25em 0 0 0.3em;
+    background-color: #404040;
+    border-radius: 0.2em;
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
+}
+.ViperITP-label.active .ViperITP-labelText {
+    background-color: #366cb7;
+}
+.ViperITP-input[type=text],
+.Viper-subSection textarea {
+    float: left;
+    width: 57%;
+    font-size: 1.4em;
+    border: none;
+    padding: 0.3em;
+    background: transparent;
     color: #5A8BD0;
     outline: none;
     font-weight: bold;
-    box-shadow: 0 0 3px #000 inset;
-    
 }
-.Viper-subSection input[type=text].active,
-.Viper-subSection textarea.active {
+.ViperITP-label.active .ViperITP-input[type=text] {
     color: #FFF;
-    background: #205caf;
 }
