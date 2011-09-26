@@ -787,9 +787,13 @@ ViperTableEditorPlugin.prototype = {
     canMergeLeft: function(cell)
     {
         var prevCell = this.getPreviousCell(cell);
+        var cellPos  = this.getCellPosition(cell);
         if (prevCell) {
-            if (this.getRowspan(prevCell) === this.getRowspan(cell)) {
-                return prevCell;
+            var pCellPos = this.getCellPosition(prevCell);
+            if (pCellPos.row === cellPos.row) {
+                if (this.getRowspan(cell) === this.getRowspan(prevCell)) {
+                    return prevCell;
+                }
             }
         }
 
@@ -2200,9 +2204,8 @@ ViperTableEditorPlugin.prototype = {
                 var rowCell = tableCells[rowNum][j].cell;
                 var rowspan = tableCells[rowNum][j].rowspan;
                 var colspan = tableCells[rowNum][j].colspan;
-
+                var modifier = 0;
                 for (var i = 0; i < rowspan; i++) {
-                    var modifier = 0;
                     for (var k = 0; k < colspan; k++) {
                         if (!rawCells[(rowNum + i)]) {
                             rawCells[(rowNum + i)] = [];
