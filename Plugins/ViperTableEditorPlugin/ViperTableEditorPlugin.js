@@ -1054,45 +1054,41 @@ ViperTableEditorPlugin.prototype = {
         var rowspan = this.getRowspan(cell) + this.getRowspan(mergeCells[0]);
         cell.setAttribute('rowspan', rowspan);
 
-        // Do we remove next row?
-        var rows = this._getRowCells(parent);
-        if (rows.length === 0) {
-            var cells    = this._getCellsExpanded(true);
-            var cellPos  = this.getCellPosition(cell);
-            var rowCells = cells[cellPos.row];
-            var remove   = true;
-            var rowspan  = this.getRowspan(cell);
-
-            for (var i = 0; i < rowCells.length; i++) {
-                var pos = this.getCellPosition(rowCells[i]);
-                if (pos.row !== cellPos.row || rowspan !== this.getRowspan(rowCells[i])) {
-                    remove = false;
+        var cells    = this._getCellsExpanded(true);
+        var rowCells = this._getRowCells(parent);
+        if (rowCells.length === 0) {
+            // Find the row index.
+            var rows     = dfx.getTag('tr', this.getCellTable(cell));
+            var rowIndex = -1;
+            for (var i = 0; i < rows.length; i++) {
+                if (rows[i] === parent) {
+                    rowIndex = i;
                     break;
                 }
             }
 
-            if (remove === true) {
-                // Remove row.
-                dfx.remove(parent);
-
-                // Reduce rowspan.
+            if (rowIndex >= 0) {
                 var processedCells = [];
-                for (var i = 0; i < rowCells.length; i++) {
-                    if (processedCells.inArray(rowCells[i]) === true) {
+                cells = cells[rowIndex];
+                for (var i = 0; i < cells.length; i++) {
+                    if (processedCells.inArray(cells[i]) === true) {
                         continue;
                     }
 
-                    processedCells.push(rowCells[i]);
+                    processedCells.push(cells[i]);
 
-                    var newRowspan = (this.getRowspan(rowCells[i]) - 1);
-                    if (newRowspan > 1) {
-                        rowCells[i].setAttribute('rowspan', newRowspan);
+                    var rowspan = (this.getRowspan(cells[i]) - 1);
+                    if (rowspan > 1) {
+                        cells[i].setAttribute('rowspan', rowspan);
                     } else {
-                        dfx.removeAttr(rowCells[i], 'rowspan');
+                        dfx.removeAttr(cells[i], 'rowspan');
                     }
                 }
             }
-        }//end if
+
+            dfx.remove(parent);
+
+        }
 
         this.tableUpdated();
 
