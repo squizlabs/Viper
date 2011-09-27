@@ -77,9 +77,14 @@ ViperTableEditorPlugin.prototype = {
             }
         });
 
-        if (navigator.userAgent.match(/iPad/i) === null) {
+        if (this._isiPad() === false) {
             var showToolbar = false;
             this.viper.registerCallback('Viper:mouseUp', 'ViperTableEditor', function(e) {
+                var range = self.viper.getCurrentRange();
+                if (range.collapsed === false) {
+                    return true;
+                }
+
                 var target = dfx.getMouseEventTarget(e);
                 if (target === self._toolbar || dfx.isChildOf(target, self._toolbar) === true) {
                     self._buttonClicked = false;
@@ -114,6 +119,10 @@ ViperTableEditorPlugin.prototype = {
 
 
             this.viper.registerCallback('Viper:selectionChanged', 'ViperTableEditorPlugin', function(range) {
+                if (range.collapsed === false) {
+                    return;
+                }
+
                 if (showToolbar === false) {
                     self.hideCellToolsIcon();
                     self.hideToolbar();
@@ -209,16 +218,47 @@ ViperTableEditorPlugin.prototype = {
         dfx.setStyle(tools, 'top', cellCoords.y2 + 5 + 'px');
         dfx.setStyle(tools, 'left', cellCoords.x1 + ((cellCoords.x2 - cellCoords.x1) / 2) - (toolsWidth / 2) + 'px');
 
-        dfx.hover(tools, function() {
-            self.setActiveCell(cell);
-            self.highlightActiveCell();
-            dfx.removeClass(btns, 'hidden');
-            dfx.setStyle(tools, 'margin-left', '-45px');
-        }, function() {
-            self.removeHighlights();
-            dfx.addClass(btns, 'hidden');
-            dfx.setStyle(tools, 'margin-left', '0');
-        });
+        if (this._isiPad() === false) {
+            dfx.hover(tableBtn, function() {
+                self.setActiveCell(cell);
+                self.highlightActiveCell('table');
+            }, function() {
+                self.removeHighlights();
+            });
+            dfx.hover(rowBtn, function() {
+                self.setActiveCell(cell);
+                self.highlightActiveCell('row');
+            }, function() {
+                self.removeHighlights();
+            });
+            dfx.hover(colBtn, function() {
+                self.setActiveCell(cell);
+                self.highlightActiveCell('col');
+            }, function() {
+                self.removeHighlights();
+            });
+            dfx.hover(cellBtn, function() {
+                self.setActiveCell(cell);
+                self.highlightActiveCell('cell');
+            }, function() {
+                self.removeHighlights();
+            });
+
+            dfx.hover(tools, function() {
+                self.setActiveCell(cell);
+                self.highlightActiveCell();
+                dfx.removeClass(btns, 'hidden');
+                dfx.setStyle(tools, 'margin-left', '-45px');
+            }, function() {
+                self.removeHighlights();
+                dfx.addClass(btns, 'hidden');
+                dfx.setStyle(tools, 'margin-left', '0');
+            });
+        } else {
+            dfx.addEvent(tools, 'click', function() {
+                showTools('cell');
+            });
+        }
 
         document.body.appendChild(tools);
 
@@ -274,7 +314,7 @@ ViperTableEditorPlugin.prototype = {
         dfx.addClass(this._toolsContainer, 'ViperITP-tools');
         dfx.addClass(this._subSectionContainer, 'ViperITP-subSectionWrapper');
 
-        if (navigator.userAgent.match(/iPad/i) !== null) {
+        if (this._isiPad() === true) {
             dfx.addClass(this._toolbar, 'device-ipad');
         }
 
@@ -377,7 +417,7 @@ ViperTableEditorPlugin.prototype = {
         this.removeHighlights();
         this.hideToolbar();
 
-        if (navigator.userAgent.match(/iPad/i) !== null) {
+        if (this._isiPad() === true) {
             this._scaleToolbar();
         }
 
@@ -411,6 +451,15 @@ ViperTableEditorPlugin.prototype = {
         var table = this.getCellTable(this.activeCell);
         this.viper.fireNodesChanged([table]);
 
+    },
+
+    _isiPad: function()
+    {
+        if (navigator.userAgent.match(/iPad/i) !== null) {
+            return true;
+        }
+
+        return false;
     },
 
     /**
