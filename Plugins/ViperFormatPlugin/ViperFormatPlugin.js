@@ -252,17 +252,26 @@ ViperFormatPlugin.prototype = {
             var active = false;
             if (this._inlineToolbarActiveSubSection === 'anchor') {
                 active = true;
-                this._inlineToolbarActiveSubSection = null;
             }
 
+            var attrBtnGroup           = inlineToolbarPlugin.createButtonGroup();
             var anchorIDSubSectionCont = document.createElement('div');
-            var attrSubSection = inlineToolbarPlugin.createSubSection(anchorIDSubSectionCont);
-            inlineToolbarPlugin.createButton('', false, '', false, 'anchorID', null, null, attrSubSection, active);
+            var anchorIdSubSection     = inlineToolbarPlugin.createSubSection(anchorIDSubSectionCont);
 
             var id = '';
+            var anchorBtnActive = false;
             if (selectedNode.nodeType === dfx.ELEMENT_NODE) {
                 id = selectedNode.getAttribute('id');
+                if (id) {
+                    anchorBtnActive = true;
+                }
             }
+
+            inlineToolbarPlugin.createButton('', anchorBtnActive, 'Anchor name (ID)', false, 'anchorID', function(subSectionState) {
+                if (subSectionState === true) {
+                    self._inlineToolbarActiveSubSection = 'anchor';
+                }
+            }, attrBtnGroup, anchorIdSubSection, active);
 
             var idTextBox = inlineToolbarPlugin.createTextbox(selectedNode, id, 'ID', function(value) {
                 if (selectedNode.nodeType === dfx.ELEMENT_NODE) {
@@ -295,7 +304,10 @@ ViperFormatPlugin.prototype = {
                         self.viper.adjustRange();
 
                         // We want to keep this textbox open so set this var.
-                        self._inlineToolbarActiveSubSection = 'anchor';
+                        if (dfx.hasClass(anchorIdSubSection, 'active') === true) {
+                            self._inlineToolbarActiveSubSection = 'anchor';
+                        }
+
                         self.viper.fireCallbacks('Viper:selectionChanged', rangeClone);
                     }
                 }//end if
@@ -309,19 +321,27 @@ ViperFormatPlugin.prototype = {
             var active = false;
             if (this._inlineToolbarActiveSubSection === 'class') {
                 active = true;
-                this._inlineToolbarActiveSubSection = null;
             }
 
-            var classIDSubSectionCont = document.createElement('div');
-            var attrSubSection = inlineToolbarPlugin.createSubSection(classIDSubSectionCont);
-            inlineToolbarPlugin.createButton('', false, '', false, 'cssClass', null, null, attrSubSection, active);
+            var classSubSectionCont = document.createElement('div');
+            var classSubSection = inlineToolbarPlugin.createSubSection(classSubSectionCont);
 
-            var id = '';
+            var className = '';
+            var classBtnActive = false;
             if (selectedNode.nodeType === dfx.ELEMENT_NODE) {
-                id = selectedNode.getAttribute('class');
+                className = selectedNode.getAttribute('class');
+                if (className) {
+                    classBtnActive = true;
+                }
             }
 
-            var classTextBox = inlineToolbarPlugin.createTextbox(selectedNode, id, 'Class', function(value) {
+            inlineToolbarPlugin.createButton('', classBtnActive, 'Class name', false, 'cssClass', function(subSectionState) {
+                if (subSectionState === true) {
+                    self._inlineToolbarActiveSubSection = 'class';
+                }
+            }, attrBtnGroup, classSubSection, active);
+
+            var classTextBox = inlineToolbarPlugin.createTextbox(selectedNode, className, 'Class', function(value) {
                 if (selectedNode.nodeType === dfx.ELEMENT_NODE) {
                     // Set the attribute of this node.
                     selectedNode.setAttribute('class', value);
@@ -352,13 +372,21 @@ ViperFormatPlugin.prototype = {
                         self.viper.adjustRange();
 
                         // We want to keep this textbox open so set this var.
-                        self._inlineToolbarActiveSubSection = 'class';
+                        if (dfx.hasClass(classSubSection, 'active') === true) {
+                            self._inlineToolbarActiveSubSection = 'class';
+                        }
+
                         self.viper.fireCallbacks('Viper:selectionChanged', rangeClone);
                     }
                 }//end if
             });
-            classIDSubSectionCont.appendChild(classTextBox);
+            classSubSectionCont.appendChild(classTextBox);
+            if (active === true) {
+                classTextBox.focus();
+            }
         }//end if
+
+        this._inlineToolbarActiveSubSection = null;
 
     },
 

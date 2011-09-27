@@ -122,13 +122,8 @@ ViperInlineToolbarPlugin.prototype = {
     createButton: function(content, isActive, titleAttr, disabled, customClass, clickAction, groupElement, subSection, showSubSection)
     {
         var self = this;
-        if (clickAction) {
+        if (subSection) {
             var originalAction = clickAction;
-            clickAction = function() {
-                self._lineageClicked = false;
-                return originalAction.call(this);
-            };
-        } else if (subSection) {
             clickAction = function(subSectionState, buttonElement) {
                 if (subSectionState === true) {
                     dfx.addClass(self._toolbar, 'subSectionVisible');
@@ -141,11 +136,21 @@ ViperInlineToolbarPlugin.prototype = {
                     dfx.removeClass(self._toolbar, 'subSectionVisible');
                     dfx.removeClass(button, 'selected');
                 }
+
+                if (originalAction) {
+                    originalAction.call(this, subSectionState);
+                }
             };
 
             if (showSubSection === true) {
                 dfx.addClass(this._toolbar, 'subSectionVisible');
             }
+        } else if (clickAction) {
+            var originalAction = clickAction;
+            clickAction = function() {
+                self._lineageClicked = false;
+                return originalAction.call(this);
+            };
         }
 
         var button = ViperTools.createButton(content, isActive, titleAttr, disabled, customClass, clickAction, groupElement, subSection, showSubSection);
