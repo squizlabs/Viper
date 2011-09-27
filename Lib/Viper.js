@@ -2492,7 +2492,6 @@ Viper.prototype = {
     isInputKey: function(e)
     {
          if (e.which !== 0
-            && e.which !== dfx.DOM_VK_DELETE
             && e.ctrlKey !== true
             && e.altKey !== true
             && e.shiftKey !== true
