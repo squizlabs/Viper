@@ -16,6 +16,9 @@
 .Viper-button.disabled {
   opacity: 0.3;
 }
+.Viper-button.hidden {
+  display: none;
+}
 /* Button Groups */
 .Viper-buttonGroup {
   display: inline-block;
