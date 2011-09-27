@@ -36,6 +36,10 @@ function ViperInlineToolbarPlugin(viper)
 
     // Called when the selection is changed.
     this.viper.registerCallback('Viper:selectionChanged', 'ViperInlineToolbarPlugin', function(range) {
+        if (self.viper.rangeInViperBounds(range) === false) {
+            return;
+        }
+
         if (self._lineageClicked !== true) {
             // Not selection change due to a lineage click so update the range object.
 
@@ -56,9 +60,14 @@ function ViperInlineToolbarPlugin(viper)
 
     // Hide the toolbar when user clicks anywhere.
     this.viper.registerCallback(['Viper:mouseDown', 'ViperHistoryManager:undo'], 'ViperInlineToolbarPlugin', function(data) {
-        if (data.target) {
+        if (data && data.target) {
             var target = dfx.getMouseEventTarget(data);
             if (target === self._toolbar || dfx.isChildOf(target, self._toolbar) === true) {
+                if (dfx.isTag(target, 'input') === true) {
+                    // Allow event to bubble so the input element can get focus etc.
+                    return true;
+                }
+
                 return false;
             }
         }
@@ -79,38 +88,6 @@ function ViperInlineToolbarPlugin(viper)
 }
 
 ViperInlineToolbarPlugin.prototype = {
-
-    /**
-     * Creates the inline toolbar.
-     *
-     * The toolbar is added to the BODY element.
-     */
-    _createToolbar: function()
-    {
-        var main      = document.createElement('div');
-        this._toolbar = main;
-
-        this._lineage = document.createElement('ul');
-        this._toolbar.appendChild(this._lineage);
-
-        this._toolsContainer = document.createElement('div');
-        this._toolbar.appendChild(this._toolsContainer);
-
-        this._subSectionContainer = document.createElement('div');
-        this._toolbar.appendChild(this._subSectionContainer);
-
-        dfx.addClass(this._toolbar, 'ViperITP themeDark');
-        dfx.addClass(this._lineage, 'ViperITP-lineage');
-        dfx.addClass(this._toolsContainer, 'ViperITP-tools');
-        dfx.addClass(this._subSectionContainer, 'ViperITP-subSectionWrapper');
-
-        if (navigator.userAgent.match(/iPad/i) !== null) {
-            dfx.addClass(this._toolbar, 'device-ipad');
-        }
-
-        document.body.appendChild(this._toolbar);
-
-    },
 
     /**
      * Creates a button group.
@@ -200,25 +177,12 @@ ViperInlineToolbarPlugin.prototype = {
         textBox.value = value;
 
         var self  = this;
-        dfx.addEvent(textBox, 'mousedown', function(e) {
-            textBox.focus();
-            dfx.preventDefault(e);
-            return false;
-        });
-
-        dfx.addEvent(textBox, 'focus', function(e) {
-            dfx.preventDefault(e);
-            return false;
-        });
-
-        dfx.addEvent(textBox, 'mouseup', function(e) {
-            dfx.preventDefault(e);
-            return false;
-        });
 
         var t = null;
         dfx.addEvent(textBox, 'keyup', function(e) {
             if (e.which === 13) {
+                dfx.removeClass(labelElem, 'active');
+                clearTimeout(t);
                 textBox.blur();
 
                 var range = self.viper.getCurrentRange();
@@ -237,7 +201,6 @@ ViperInlineToolbarPlugin.prototype = {
             clearTimeout(t);
             t = setTimeout(function() {
                 dfx.removeClass(labelElem, 'active');
-
                 action.call(textBox, textBox.value);
             }, 1500);
         });
@@ -267,6 +230,11 @@ ViperInlineToolbarPlugin.prototype = {
     {
         var subSection = ViperTools.createSubSection(contentElement, active, customClass);
         this._subSectionContainer.appendChild(subSection);
+
+        if (active === true) {
+            dfx.addClass(this._toolbar, 'subSectionVisible');
+        }
+
         return subSection;
 
     },
@@ -389,6 +357,38 @@ ViperInlineToolbarPlugin.prototype = {
         }//end switch
 
         return tagName;
+
+    },
+
+    /**
+     * Creates the inline toolbar.
+     *
+     * The toolbar is added to the BODY element.
+     */
+    _createToolbar: function()
+    {
+        var main      = document.createElement('div');
+        this._toolbar = main;
+
+        this._lineage = document.createElement('ul');
+        this._toolbar.appendChild(this._lineage);
+
+        this._toolsContainer = document.createElement('div');
+        this._toolbar.appendChild(this._toolsContainer);
+
+        this._subSectionContainer = document.createElement('div');
+        this._toolbar.appendChild(this._subSectionContainer);
+
+        dfx.addClass(this._toolbar, 'ViperITP themeDark');
+        dfx.addClass(this._lineage, 'ViperITP-lineage');
+        dfx.addClass(this._toolsContainer, 'ViperITP-tools');
+        dfx.addClass(this._subSectionContainer, 'ViperITP-subSectionWrapper');
+
+        if (navigator.userAgent.match(/iPad/i) !== null) {
+            dfx.addClass(this._toolbar, 'device-ipad');
+        }
+
+        document.body.appendChild(this._toolbar);
 
     },
 

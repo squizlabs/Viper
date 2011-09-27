@@ -522,9 +522,9 @@ Viper.prototype = {
 
     },
 
-    rangeInViperBounds: function()
+    rangeInViperBounds: function(range)
     {
-        var range = this.getCurrentRange();
+        range = range || this.getCurrentRange();
         if (range === null || this.isOutOfBounds(range.startContainer) || this.isOutOfBounds(range.endContainer)) {
             return false;
         }

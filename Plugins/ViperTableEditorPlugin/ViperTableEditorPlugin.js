@@ -669,42 +669,42 @@ ViperTableEditorPlugin.prototype = {
             }
         });
 
-        this.createButton('', false, 'Split Vertically', (this.getColspan(cell) <= 1), 'icon-splitVert', function() {
+        var splitBtnGroup = this.createButtonGroup();
+        this.createButton('', false, 'Split Vertically', (this.getColspan(cell) <= 1), 'splitVert', function() {
             self._buttonClicked = true;
             self.splitVertical(cell);
             self.updateToolbar(cell);
-        });
+        }, splitBtnGroup);
 
-        this.createButton('', false, 'Split Horizontally', (this.getRowspan(cell) <= 1), 'icon-splitHoriz', function() {
+        this.createButton('', false, 'Split Horizontally', (this.getRowspan(cell) <= 1), 'splitHoriz', function() {
             self._buttonClicked = true;
             self.splitHorizontal(cell);
             self.updateToolbar(cell);
-        });
+        }, splitBtnGroup);
 
         var mergeSubWrapper = document.createElement('div');
-        var mergeUp = this.createButton('', false, 'Merge Up', (this.canMergeUp(cell) === false), 'icon-arrowUp', function() {
+        var mergeBtnGroup   = this.createButtonGroup();
+        mergeSubWrapper.appendChild(splitBtnGroup);
+        mergeSubWrapper.appendChild(mergeBtnGroup);
+        var mergeUp = this.createButton('', false, 'Merge Up', (this.canMergeUp(cell) === false), 'mergeUp', function() {
             self._buttonClicked = true;
             self.updateToolbar(self.mergeUp(cell), 'cell', 'merge');
-        });
-        mergeSubWrapper.appendChild(mergeUp);
+        }, mergeBtnGroup);
 
-        var mergeDown = this.createButton('', false, 'Merge Down', (this.canMergeDown(cell) === false), 'icon-arrowDown', function() {
+        var mergeDown = this.createButton('', false, 'Merge Down', (this.canMergeDown(cell) === false), 'mergeDown', function() {
             self._buttonClicked = true;
             self.updateToolbar(self.mergeDown(cell), 'cell', 'merge');
-        });
-        mergeSubWrapper.appendChild(mergeDown);
+        }, mergeBtnGroup);
 
-        var mergeLeft = this.createButton('', false, 'Merge Left', (this.canMergeLeft(cell) === false), 'icon-arrowLeft', function() {
+        var mergeLeft = this.createButton('', false, 'Merge Left', (this.canMergeLeft(cell) === false), 'mergeLeft', function() {
             self._buttonClicked = true;
             self.updateToolbar(self.mergeLeft(cell), 'cell', 'merge');
-        });
-        mergeSubWrapper.appendChild(mergeLeft);
+        }, mergeBtnGroup);
 
-        var mergeRight = this.createButton('', false, 'Merge Right', (this.canMergeRight(cell) === false), 'icon-arrowRight', function() {
+        var mergeRight = this.createButton('', false, 'Merge Right', (this.canMergeRight(cell) === false), 'mergeRight', function() {
             self._buttonClicked = true;
             self.updateToolbar(self.mergeRight(cell), 'cell', 'merge');
-        });
-        mergeSubWrapper.appendChild(mergeRight);
+        }, mergeBtnGroup);
 
         var mergeSubActive = false;
         if (activeSubSection === 'merge') {
@@ -712,26 +712,26 @@ ViperTableEditorPlugin.prototype = {
         }
 
         var mergeSubSection = this.createSubSection(mergeSubWrapper, false);
-        this.createButton('', false, 'Toggle Merge Options', false, 'icon-move', null, null, mergeSubSection, mergeSubActive);
+        this.createButton('', false, 'Toggle Merge Options', false, 'splitMerge', null, null, mergeSubSection, mergeSubActive);
 
     },
 
     _createColProperties: function(cell)
     {
         var self = this;
-        var insertLeft = this.createButton('', false, 'Insert Column Before', false, 'icon-addLeft', function() {
+        var insertLeft = this.createButton('', false, 'Insert Column Before', false, 'addLeft', function() {
             self._buttonClicked = true;
             self.insertColBefore(cell);
             self.updateToolbar(cell, 'col');
         });
 
-        var insertRight = this.createButton('', false, 'Insert Column After', false, 'icon-addRight', function() {
+        var insertRight = this.createButton('', false, 'Insert Column After', false, 'addRight', function() {
             self._buttonClicked = true;
             self.insertColAfter(cell);
             self.updateToolbar(cell, 'col');
         });
 
-        var removeCol = this.createButton('', false, 'Remove Column', false, 'icon-delete', function() {
+        var removeCol = this.createButton('', false, 'Remove Column', false, 'delete', function() {
             self._buttonClicked = true;
             self.removeCol(cell);
             self.hideToolbar();
@@ -743,19 +743,19 @@ ViperTableEditorPlugin.prototype = {
     _createRowProperties: function(cell)
     {
         var self = this;
-        var insertBefore = this.createButton('', false, 'Insert Row Before', false, 'icon-addUp', function() {
+        var insertBefore = this.createButton('', false, 'Insert Row Before', false, 'addAbove', function() {
             self._buttonClicked = true;
             self.insertRowBefore(cell);
             self.updateToolbar(cell, 'row');
         });
 
-        var insertAfter = this.createButton('', false, 'Insert Row After', false, 'icon-addDown', function() {
+        var insertAfter = this.createButton('', false, 'Insert Row After', false, 'addBelow', function() {
             self._buttonClicked = true;
             self.insertRowAfter(cell);
             self.updateToolbar(cell, 'row');
         });
 
-        var removeRow = this.createButton('', false, 'Remove Row', false, 'icon-delete', function() {
+        var removeRow = this.createButton('', false, 'Remove Row', false, 'delete', function() {
             self._buttonClicked = true;
             self.removeRow(cell);
             self.hideToolbar();
