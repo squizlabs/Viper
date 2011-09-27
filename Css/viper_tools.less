@@ -87,13 +87,15 @@
     border-color: #555;
 }
 
-.themeDark .Viper-buttonGroup .Viper-button {
+.themeDark .Viper-buttonGroup .Viper-button,
+.themeDark .Viper-buttonGroup .Viper-button.disabled:hover {
     border-left: 1px solid #898989;
 }
 
 .themeDark .Viper-buttonGroup .Viper-button:first-child,
 .themeDark .Viper-buttonGroup .Viper-button.active,
-.themeDark .Viper-buttonGroup .Viper-button.selected {
+.themeDark .Viper-buttonGroup .Viper-button.selected,
+.themeDark .Viper-buttonGroup .Viper-button.disabled:first-child:hover {
     border-left: none;
 }
 
@@ -149,6 +151,19 @@
 
 /* Buttons */
 
+// Text button tweaks
+
+.Viper-button.bold {
+    font-weight: bold;
+}
+.Viper-button.italic {
+    font-style: italic;
+    font-family: Georgia, Arial;
+}
+.Viper-button.underline {
+    text-decoration: underline;
+}
+
 // Button Vars
 
 @iconSpriteLocation: 1;
@@ -172,72 +187,72 @@
     
 // Icon definitions
     
-    // Arrow Up
-    &.icon-arrowUp {
+    // Merge Up
+    &.mergeUp {
         .icon (1);
     }
-    // Arrow Down
-    &.icon-arrowDown {
+    // Merge Down
+    &.mergeDown {
         .icon (2);
     }
     // Delete
-    &.icon-delete {
+    &.delete {
         .icon (3);
     }
-    // Add Up
-    &.icon-addUp {
+    // Add Above
+    &.addAbove {
         .icon (4);
     }
-    // Add Down
-    &.icon-addDown {
+    // Add Below
+    &.addBelow {
         .icon (5);
     }
-    // Arrow Left
-    &.icon-arrowLeft {
+    // Merge Left
+    &.mergeLeft {
         .icon (6);
     }
     // Arrow Right
-    &.icon-arrowRight {
+    &.mergeRight {
         .icon (7);
     }
     // Split Horiz
-    &.icon-splitHoriz {
+    &.splitHoriz {
         .icon (8);
     }
     // Split Vert
-    &.icon-splitVert {
+    &.splitVert {
         .icon (9);
     }
     // Move
-    &.icon-move {
+    &.move {
         .icon (10);
     }
     // Add Left
-    &.icon-addLeft {
+    &.addLeft {
         .icon (11);
     }
     // Add Right
-    &.icon-addRight {
+    &.addRight {
         .icon (12);
     }
-    // Merge
-    &.icon-move {
+    // Split & Merge
+    &.splitMerge {
         .icon (13);
     }
     // TD Heading Checker
-    &.icon-headingCheck {
+    &.headingCheck {
         .icon (14);
     }
     // TH Abbreviation
-    &.icon-headerAbbr {
+    &.headerAbbr {
         .icon (15);
     }
-    // Class
-    &.icon-class {
+    // CSS Class
+    &.cssClass {
         .icon (16);
     }
-    // Anchor
-    &.icon-anchor {
+    // Anchor / ID
+    &.anchorID {
         .icon (17);
     }
     

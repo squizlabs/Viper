@@ -69,10 +69,13 @@
   background: #54535A;
   border-color: #555;
 }
-.themeDark .Viper-buttonGroup .Viper-button {
+.themeDark .Viper-buttonGroup .Viper-button, .themeDark .Viper-buttonGroup .Viper-button.disabled:hover {
   border-left: 1px solid #898989;
 }
-.themeDark .Viper-buttonGroup .Viper-button:first-child, .themeDark .Viper-buttonGroup .Viper-button.active, .themeDark .Viper-buttonGroup .Viper-button.selected {
+.themeDark .Viper-buttonGroup .Viper-button:first-child,
+.themeDark .Viper-buttonGroup .Viper-button.active,
+.themeDark .Viper-buttonGroup .Viper-button.selected,
+.themeDark .Viper-buttonGroup .Viper-button.disabled:first-child:hover {
   border-left: none;
 }
 /* Theme - Light Grey */
@@ -115,6 +118,16 @@
   border-left-width: 1px;
 }
 /* Buttons */
+.Viper-button.bold {
+  font-weight: bold;
+}
+.Viper-button.italic {
+  font-style: italic;
+  font-family: Georgia, Arial;
+}
+.Viper-button.underline {
+  text-decoration: underline;
+}
 .buttonIcon {
   position: absolute;
   width: 25px;
@@ -124,105 +137,105 @@
   margin: -10px 0 0 -12.5px;
   background-image: url(../Images/buttonIcons.png);
 }
-.buttonIcon.icon-arrowUp {
+.buttonIcon.mergeUp {
   background-position: 0 0px;
 }
-.Viper-button:active .buttonIcon.icon-arrowUp, .Viper-button.active .buttonIcon.icon-arrowUp, .Viper-button.selected .buttonIcon.icon-arrowUp {
+.Viper-button:active .buttonIcon.mergeUp, .Viper-button.active .buttonIcon.mergeUp, .Viper-button.selected .buttonIcon.mergeUp {
   background-position: -33px 0px;
 }
-.buttonIcon.icon-arrowDown {
+.buttonIcon.mergeDown {
   background-position: 0 -27px;
 }
-.Viper-button:active .buttonIcon.icon-arrowDown, .Viper-button.active .buttonIcon.icon-arrowDown, .Viper-button.selected .buttonIcon.icon-arrowDown {
+.Viper-button:active .buttonIcon.mergeDown, .Viper-button.active .buttonIcon.mergeDown, .Viper-button.selected .buttonIcon.mergeDown {
   background-position: -33px -27px;
 }
-.buttonIcon.icon-delete {
+.buttonIcon.delete {
   background-position: 0 -54px;
 }
-.Viper-button:active .buttonIcon.icon-delete, .Viper-button.active .buttonIcon.icon-delete, .Viper-button.selected .buttonIcon.icon-delete {
+.Viper-button:active .buttonIcon.delete, .Viper-button.active .buttonIcon.delete, .Viper-button.selected .buttonIcon.delete {
   background-position: -33px -54px;
 }
-.buttonIcon.icon-addUp {
+.buttonIcon.addAbove {
   background-position: 0 -81px;
 }
-.Viper-button:active .buttonIcon.icon-addUp, .Viper-button.active .buttonIcon.icon-addUp, .Viper-button.selected .buttonIcon.icon-addUp {
+.Viper-button:active .buttonIcon.addAbove, .Viper-button.active .buttonIcon.addAbove, .Viper-button.selected .buttonIcon.addAbove {
   background-position: -33px -81px;
 }
-.buttonIcon.icon-addDown {
+.buttonIcon.addBelow {
   background-position: 0 -108px;
 }
-.Viper-button:active .buttonIcon.icon-addDown, .Viper-button.active .buttonIcon.icon-addDown, .Viper-button.selected .buttonIcon.icon-addDown {
+.Viper-button:active .buttonIcon.addBelow, .Viper-button.active .buttonIcon.addBelow, .Viper-button.selected .buttonIcon.addBelow {
   background-position: -33px -108px;
 }
-.buttonIcon.icon-arrowLeft {
+.buttonIcon.mergeLeft {
   background-position: 0 -135px;
 }
-.Viper-button:active .buttonIcon.icon-arrowLeft, .Viper-button.active .buttonIcon.icon-arrowLeft, .Viper-button.selected .buttonIcon.icon-arrowLeft {
+.Viper-button:active .buttonIcon.mergeLeft, .Viper-button.active .buttonIcon.mergeLeft, .Viper-button.selected .buttonIcon.mergeLeft {
   background-position: -33px -135px;
 }
-.buttonIcon.icon-arrowRight {
+.buttonIcon.mergeRight {
   background-position: 0 -162px;
 }
-.Viper-button:active .buttonIcon.icon-arrowRight, .Viper-button.active .buttonIcon.icon-arrowRight, .Viper-button.selected .buttonIcon.icon-arrowRight {
+.Viper-button:active .buttonIcon.mergeRight, .Viper-button.active .buttonIcon.mergeRight, .Viper-button.selected .buttonIcon.mergeRight {
   background-position: -33px -162px;
 }
-.buttonIcon.icon-splitHoriz {
+.buttonIcon.splitHoriz {
   background-position: 0 -189px;
 }
-.Viper-button:active .buttonIcon.icon-splitHoriz, .Viper-button.active .buttonIcon.icon-splitHoriz, .Viper-button.selected .buttonIcon.icon-splitHoriz {
+.Viper-button:active .buttonIcon.splitHoriz, .Viper-button.active .buttonIcon.splitHoriz, .Viper-button.selected .buttonIcon.splitHoriz {
   background-position: -33px -189px;
 }
-.buttonIcon.icon-splitVert {
+.buttonIcon.splitVert {
   background-position: 0 -216px;
 }
-.Viper-button:active .buttonIcon.icon-splitVert, .Viper-button.active .buttonIcon.icon-splitVert, .Viper-button.selected .buttonIcon.icon-splitVert {
+.Viper-button:active .buttonIcon.splitVert, .Viper-button.active .buttonIcon.splitVert, .Viper-button.selected .buttonIcon.splitVert {
   background-position: -33px -216px;
 }
-.buttonIcon.icon-move {
+.buttonIcon.move {
   background-position: 0 -243px;
 }
-.Viper-button:active .buttonIcon.icon-move, .Viper-button.active .buttonIcon.icon-move, .Viper-button.selected .buttonIcon.icon-move {
+.Viper-button:active .buttonIcon.move, .Viper-button.active .buttonIcon.move, .Viper-button.selected .buttonIcon.move {
   background-position: -33px -243px;
 }
-.buttonIcon.icon-addLeft {
+.buttonIcon.addLeft {
   background-position: 0 -270px;
 }
-.Viper-button:active .buttonIcon.icon-addLeft, .Viper-button.active .buttonIcon.icon-addLeft, .Viper-button.selected .buttonIcon.icon-addLeft {
+.Viper-button:active .buttonIcon.addLeft, .Viper-button.active .buttonIcon.addLeft, .Viper-button.selected .buttonIcon.addLeft {
   background-position: -33px -270px;
 }
-.buttonIcon.icon-addRight {
+.buttonIcon.addRight {
   background-position: 0 -297px;
 }
-.Viper-button:active .buttonIcon.icon-addRight, .Viper-button.active .buttonIcon.icon-addRight, .Viper-button.selected .buttonIcon.icon-addRight {
+.Viper-button:active .buttonIcon.addRight, .Viper-button.active .buttonIcon.addRight, .Viper-button.selected .buttonIcon.addRight {
   background-position: -33px -297px;
 }
-.buttonIcon.icon-move {
+.buttonIcon.splitMerge {
   background-position: 0 -324px;
 }
-.Viper-button:active .buttonIcon.icon-move, .Viper-button.active .buttonIcon.icon-move, .Viper-button.selected .buttonIcon.icon-move {
+.Viper-button:active .buttonIcon.splitMerge, .Viper-button.active .buttonIcon.splitMerge, .Viper-button.selected .buttonIcon.splitMerge {
   background-position: -33px -324px;
 }
-.buttonIcon.icon-headingCheck {
+.buttonIcon.headingCheck {
   background-position: 0 -351px;
 }
-.Viper-button:active .buttonIcon.icon-headingCheck, .Viper-button.active .buttonIcon.icon-headingCheck, .Viper-button.selected .buttonIcon.icon-headingCheck {
+.Viper-button:active .buttonIcon.headingCheck, .Viper-button.active .buttonIcon.headingCheck, .Viper-button.selected .buttonIcon.headingCheck {
   background-position: -33px -351px;
 }
-.buttonIcon.icon-headerAbbr {
+.buttonIcon.headerAbbr {
   background-position: 0 -378px;
 }
-.Viper-button:active .buttonIcon.icon-headerAbbr, .Viper-button.active .buttonIcon.icon-headerAbbr, .Viper-button.selected .buttonIcon.icon-headerAbbr {
+.Viper-button:active .buttonIcon.headerAbbr, .Viper-button.active .buttonIcon.headerAbbr, .Viper-button.selected .buttonIcon.headerAbbr {
   background-position: -33px -378px;
 }
-.buttonIcon.icon-class {
+.buttonIcon.cssClass {
   background-position: 0 -405px;
 }
-.Viper-button:active .buttonIcon.icon-class, .Viper-button.active .buttonIcon.icon-class, .Viper-button.selected .buttonIcon.icon-class {
+.Viper-button:active .buttonIcon.cssClass, .Viper-button.active .buttonIcon.cssClass, .Viper-button.selected .buttonIcon.cssClass {
   background-position: -33px -405px;
 }
-.buttonIcon.icon-anchor {
+.buttonIcon.anchorID {
   background-position: 0 -432px;
 }
-.Viper-button:active .buttonIcon.icon-anchor, .Viper-button.active .buttonIcon.icon-anchor, .Viper-button.selected .buttonIcon.icon-anchor {
+.Viper-button:active .buttonIcon.anchorID, .Viper-button.active .buttonIcon.anchorID, .Viper-button.selected .buttonIcon.anchorID {
   background-position: -33px -432px;
 }
