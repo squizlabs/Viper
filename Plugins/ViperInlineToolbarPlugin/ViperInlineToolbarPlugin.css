@@ -31,8 +31,14 @@
     display: block;
     position: absolute;
     left: 50%;
-    margin: -23px 0 0 -10px;
+    margin: -23px 0 0 -12px;
     border: 12px solid transparent;
+}
+
+.ViperITP.compact:before {
+    border-width: 6px;
+    margin-top: -12px;
+    margin-left: -6px;
 }
 
 .ViperITP.calcWidth,
@@ -53,6 +59,13 @@
     border-bottom-right-radius: 0.75em;
     text-align: center;
     border-top: 1px solid transparent;
+}
+
+.ViperITP.compact .ViperITP-tools {
+    border-radius: 0.75em;
+/*     background: none; */
+/*     border: none; */
+/*     padding: 0.1em; */
 }
 
 .ViperITP.subSectionVisible .ViperITP-tools {
@@ -132,6 +145,11 @@
     border-color: #2b2b2b;
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.7), 0 1px 0 #646464 inset;
     -webkit-box-shadow: 0 0 15px rgba(0, 0, 0, 0.7), 0 1px 0 #646464 inset;
+}
+
+.themeDark.ViperITP.compact {
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.7);
+    -webkit-box-shadow: 0 0 15px rgba(0, 0, 0, 0.7);
 }
 
 .themeDark.ViperITP:before {
