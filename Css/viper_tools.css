@@ -239,3 +239,27 @@
 .Viper-button:active .buttonIcon.anchorID, .Viper-button.active .buttonIcon.anchorID, .Viper-button.selected .buttonIcon.anchorID {
   background-position: -33px -432px;
 }
+.buttonIcon.table {
+  background-position: 0 -459px;
+}
+.Viper-button:active .buttonIcon.table, .Viper-button.active .buttonIcon.table, .Viper-button.selected .buttonIcon.table {
+  background-position: -33px -459px;
+}
+.buttonIcon.tableRow {
+  background-position: 0 -486px;
+}
+.Viper-button:active .buttonIcon.tableRow, .Viper-button.active .buttonIcon.tableRow, .Viper-button.selected .buttonIcon.tableRow {
+  background-position: -33px -486px;
+}
+.buttonIcon.tableCol {
+  background-position: 0 -513px;
+}
+.Viper-button:active .buttonIcon.tableCol, .Viper-button.active .buttonIcon.tableCol, .Viper-button.selected .buttonIcon.tableCol {
+  background-position: -33px -513px;
+}
+.buttonIcon.tableCell {
+  background-position: 0 -540px;
+}
+.Viper-button:active .buttonIcon.tableCell, .Viper-button.active .buttonIcon.tableCell, .Viper-button.selected .buttonIcon.tableCell {
+  background-position: -33px -540px;
+}
