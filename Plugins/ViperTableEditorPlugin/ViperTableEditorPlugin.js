@@ -165,40 +165,62 @@ ViperTableEditorPlugin.prototype = {
 
         this.hideToolbar();
 
-        var overlayid = this.viper.getId() + '-ViperTEP';
-        var overlay   = dfx.getId(overlayid);
+        var toolsid = this.viper.getId() + '-ViperTEP';
+        var tools   = dfx.getId(toolsid);
 
-        if (overlay) {
-            dfx.remove(overlay);
+        if (tools) {
+            dfx.remove(tools);
         }
 
-        overlay    = document.createElement('div');
-        overlay.id = overlayid;
-        dfx.addClass(overlay, 'ViperTEP-cellToolsIcon');
-
-        var cellCoords   = dfx.getBoundingRectangle(cell);
-        var overlayWidth = 42;
-
-        dfx.setStyle(overlay, 'top', cellCoords.y2 + 5 + 'px');
-        dfx.setStyle(overlay, 'left', cellCoords.x1 + ((cellCoords.x2 - cellCoords.x1) / 2) - (overlayWidth / 2) + 'px');
-
-        dfx.hover(overlay, function() {
-            self.setActiveCell(cell);
-            self.highlightActiveCell();
-        }, function() {
-            self.removeHighlights();
-        });
-
-        document.body.appendChild(overlay);
-
-        var self = this;
-        dfx.addEvent(overlay, 'mousedown', function() {
-            dfx.remove(overlay);
+        var self      = this;
+        var showTools = function(type) {
+            dfx.remove(tools);
             var range = self.viper.getCurrentRange();
             range.collapse(true);
             ViperSelection.addRange(range);
-            self.showTableTools(cell);
+            self.showTableTools(cell, type);
+        };
+
+        tools    = document.createElement('div');
+        tools.id = toolsid;
+        dfx.addClass(tools, 'ViperITP themeDark compact visible');
+
+        var buttonGroup = ViperTools.createButtonGroup('ViperITP-tools');
+        var tableBtn = this.createButton('', false, '', false, 'table', function() {
+            showTools('table');
+        }, buttonGroup);
+        var rowBtn   = this.createButton('', false, '', false, 'tableRow hidden', function() {
+            showTools('row');
+        }, buttonGroup);
+        var colBtn   = this.createButton('', false, '', false, 'tableCol hidden', function() {
+            showTools('col');
+        }, buttonGroup);
+        var cellBtn  = this.createButton('', false, '', false, 'tableCell hidden', function() {
+            showTools('cell');
+        }, buttonGroup);
+
+        var btns = [rowBtn, colBtn, cellBtn];
+
+        tools.appendChild(buttonGroup);
+
+        var cellCoords   = dfx.getBoundingRectangle(cell);
+        var toolsWidth = 42;
+
+        dfx.setStyle(tools, 'top', cellCoords.y2 + 5 + 'px');
+        dfx.setStyle(tools, 'left', cellCoords.x1 + ((cellCoords.x2 - cellCoords.x1) / 2) - (toolsWidth / 2) + 'px');
+
+        dfx.hover(tools, function() {
+            self.setActiveCell(cell);
+            self.highlightActiveCell();
+            dfx.removeClass(btns, 'hidden');
+            dfx.setStyle(tools, 'margin-left', '-45px');
+        }, function() {
+            self.removeHighlights();
+            dfx.addClass(btns, 'hidden');
+            dfx.setStyle(tools, 'margin-left', '0');
         });
+
+        document.body.appendChild(tools);
 
         // TODO: For testing only.
         var cellContent = this.getHeadersContent(cell);
@@ -210,11 +232,11 @@ ViperTableEditorPlugin.prototype = {
 
     hideCellToolsIcon: function()
     {
-        var overlayid = this.viper.getId() + '-ViperTEP';
-        var overlay   = dfx.getId(overlayid);
+        var toolsid = this.viper.getId() + '-ViperTEP';
+        var tools   = dfx.getId(toolsid);
 
-        if (overlay) {
-            dfx.remove(overlay);
+        if (tools) {
+            dfx.remove(tools);
         }
     },
 
