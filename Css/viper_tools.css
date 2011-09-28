@@ -266,3 +266,27 @@
 .Viper-button:active .buttonIcon.tableCell, .Viper-button.active .buttonIcon.tableCell, .Viper-button.selected .buttonIcon.tableCell {
   background-position: -33px -540px;
 }
+.buttonIcon.listUL {
+  background-position: 0 -567px;
+}
+.Viper-button:active .buttonIcon.listUL, .Viper-button.active .buttonIcon.listUL, .Viper-button.selected .buttonIcon.listUL {
+  background-position: -33px -567px;
+}
+.buttonIcon.listOL {
+  background-position: 0 -594px;
+}
+.Viper-button:active .buttonIcon.listOL, .Viper-button.active .buttonIcon.listOL, .Viper-button.selected .buttonIcon.listOL {
+  background-position: -33px -594px;
+}
+.buttonIcon.listIndent {
+  background-position: 0 -621px;
+}
+.Viper-button:active .buttonIcon.listIndent, .Viper-button.active .buttonIcon.listIndent, .Viper-button.selected .buttonIcon.listIndent {
+  background-position: -33px -621px;
+}
+.buttonIcon.listOutdent {
+  background-position: 0 -648px;
+}
+.Viper-button:active .buttonIcon.listOutdent, .Viper-button.active .buttonIcon.listOutdent, .Viper-button.selected .buttonIcon.listOutdent {
+  background-position: -33px -648px;
+}
