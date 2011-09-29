@@ -122,6 +122,7 @@
 }
 
 .ViperITP .Viper-subSection {
+    position: relative;
     -moz-transition-duration: 0.3s;
     -moz-transition-property: opacity;
     -moz-transition-timing-function: ease-out;
@@ -303,6 +304,7 @@
 /* subSection inputs */
 
 .ViperITP-label {
+    position: relative;
     display: block;
     clear: both;
     text-align: left;
@@ -328,16 +330,21 @@
     clear: both;
 }
 .ViperITP-labelText {
-    float: left;
+/*     float: left; */
+/*     width: 20%; */
+/*     max-width: 20%; */
+    position: absolute;
+    left: 0;
+    top: 0;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
     color: #DDD;
     font-size: 1.2em;
-    line-height: 1.6em;
+    line-height: 1.65em;
     text-shadow: none;
     padding: 0 0.4em;
-    margin: 0.25em 0 0 0.3em;
+    margin: 0.25em 0 0 0.2em;
     background-color: #404040;
     border-radius: 0.2em;
     box-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
@@ -347,16 +354,53 @@
 }
 .ViperITP-input[type=text],
 .Viper-subSection textarea {
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
     float: left;
-    width: 57%;
+    width: 100%;
     font-size: 1.4em;
     border: none;
     padding: 0.3em;
+    padding-left: 0;
     background: transparent;
     color: #5A8BD0;
     outline: none;
     font-weight: bold;
 }
+.ViperITP-input.error[type=text] {
+    color: #d24d4d;
+}
 .ViperITP-label.active .ViperITP-input[type=text] {
     color: #FFF;
+}
+
+/* Temp new styles for tweaking Link in new window button layout */
+
+.ViperITP-label.linkNewWindow {
+    margin-right: 3.5em;
+/*     direction: rtl; */
+}
+
+.Viper-button.linkNewWindow {
+    position: absolute;
+    right: 0.3em;
+    top: 0.4em;
+}
+.subSection-linkURL {
+    -moz-transition-property: margin-left margin-right;
+    -moz-transition-duration: 0.3s;
+    -moz-transition-timing-function: ease;
+}
+.subSection-linkURL:hover {
+    position: relative;
+    margin: -0.6em -15em -0.7em;
+    background-color: #54535A;
+    padding: 0.5em;
+    border-radius: 0.5em;
+    border: 1px solid #2b2b2b;
+}
+.subSection-linkURL:hover .Viper-button.linkNewWindow {
+    right: 0.3em;
+    top: 0.3em;
 }

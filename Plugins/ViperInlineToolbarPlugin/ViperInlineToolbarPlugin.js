@@ -223,7 +223,6 @@ ViperInlineToolbarPlugin.prototype = {
 
             document.body.appendChild(span);
             var width = dfx.getElementWidth(span);
-            console.info(width);
             dfx.setStyle(labelElem, 'padding-left', width + 'px');
             labelElem.appendChild(span);
             labelElem.appendChild(textBox);

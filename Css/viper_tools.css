@@ -290,3 +290,15 @@
 .Viper-button:active .buttonIcon.listOutdent, .Viper-button.active .buttonIcon.listOutdent, .Viper-button.selected .buttonIcon.listOutdent {
   background-position: -33px -648px;
 }
+.buttonIcon.link {
+  background-position: 0 -675px;
+}
+.Viper-button:active .buttonIcon.link, .Viper-button.active .buttonIcon.link, .Viper-button.selected .buttonIcon.link {
+  background-position: -33px -675px;
+}
+.buttonIcon.linkNewWindow {
+  background-position: 0 -702px;
+}
+.Viper-button:active .buttonIcon.linkNewWindow, .Viper-button.active .buttonIcon.linkNewWindow, .Viper-button.selected .buttonIcon.linkNewWindow {
+  background-position: -33px -702px;
+}

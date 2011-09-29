@@ -7,12 +7,12 @@
     <script type="text/javascript" src="../../DfxJSLib/mysource.js"></script>
     <script type="text/javascript" src="../../Viper-all.js"></script>
    <script type="text/javascript">
-        var viiper = null;
+        var viper = null;
         dfx.addLoadEvent(function() {
-            viiper = new Viper('test');
+            viper = new Viper('test');
             var pluginSets = {
                 all: {
-                    plugins: ['ViperCoreStylesPlugin', 'ViperKeyboardEditorPlugin', 'ViperInlineToolbarPlugin', 'ViperHistoryPlugin', 'ViperListPlugin', 'ViperFormatPlugin', 'ViperToolbarPlugin', 'ViperTableEditorPlugin']
+                    plugins: ['ViperCoreStylesPlugin', 'ViperKeyboardEditorPlugin', 'ViperInlineToolbarPlugin', 'ViperHistoryPlugin', 'ViperListPlugin', 'ViperFormatPlugin', 'ViperToolbarPlugin', 'ViperTableEditorPlugin', 'ViperCopyPastePlugin']
                 }
             };
 
@@ -26,53 +26,87 @@
 
 <div id="pageWidth">
 
-<!-- /* VITP - Table tool buttons*/ -->
-<div class="ViperITP themeDark compact visible" style="left: 23%; top: 302px; wiidth: 250px;"><div class="ViperITP-tools Viper-buttonGroup"><div class="Viper-button icon table"><span class="buttonIcon table"></span>&nbsp;</div><div class="Viper-button icon tableRow"><span class="buttonIcon tableRow"></span>&nbsp;</div><div class="Viper-button icon tableCol"><span class="buttonIcon tableCol"></span>&nbsp;</div><div class="Viper-button icon tableCell"><span class="buttonIcon tableCell"></span>&nbsp;</div></div>
+<!-- /* VITP - text selection link */ -->
+<div class="ViperITP themeDark visible" style="left: 11%; top: 242px; wiidth: 250px;"><ul class="ViperITP-lineage">
+    <li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem selected">Selection</li>
+</ul><div class="ViperITP-tools"><div class="Viper-buttonGroup"><div title="Bold" class="Viper-button bold">B</div><div title="Italic" class="Viper-button italic">I</div><div title="Underline" class="Viper-button underline">U</div></div><div class="Viper-button icon link"><span class="buttonIcon link"></span>&nbsp;</div></div>
 </div>
-<!-- /* END VITP - Table tool buttons*/ -->
+<!-- /* END VITP -  text selection link */ -->
 
-<!-- /* VITP - Table tool buttons*/ -->
-<div class="ViperITP themeDark visible" style="left: 23%; top: 402px; wiidth: 250px;"><ul class="ViperITP-lineage">
-    <li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem selected">Item</li>
-</ul><div class="ViperITP-tools"><div class="Viper-buttonGroup"><div title="Bold" class="Viper-button bold">B</div><div title="Italic" class="Viper-button italic">I</div><div title="Underline" class="Viper-button underline">U</div></div><div class="Viper-buttonGroup"><div class="Viper-button icon listUL"><span class="buttonIcon listUL"></span>&nbsp;</div><div class="Viper-button icon listOL"><span class="buttonIcon listOL"></span>&nbsp;</div><div class="Viper-button icon listIndent"><span class="buttonIcon listIndent"></span>&nbsp;</div><div class="Viper-button icon listOutdent"><span class="buttonIcon listOutdent"></span>&nbsp;</div></div></div>
-</div>
-<!-- /* END VITP - Table tool buttons*/ -->
-
-<!-- /* VITP - Table Row*/ -->
-<div class="ViperITP themeDark subSection-Visible visible" style="left: 10%; top: 532px;">
-
-<ul class="ViperITP-lineage">
-    <li class="ViperITP-lineageItem">Table</li><li class="ViperITP-lineageItem selected">Row</li><li class="ViperITP-lineageItem">Column</li><li class="ViperITP-lineageItem">Cell</li>
-</ul>
-<div class="ViperITP-tools">
-    <div class="Viper-button icon icon-addUp"><span class="buttonIcon icon-addUp"></span>&nbsp;</div><div class="Viper-button icon icon-addDown"><span class="buttonIcon icon-addDown"></span>&nbsp;</div><!-- <div class="Viper-buttonGroup"><div class="Viper-button">Header</div><div class="Viper-button">Footer</div></div> --><div class="Viper-button icon icon-delete"><span class="buttonIcon icon-delete"></span>&nbsp;</div></div>
+<!-- /* VITP - text selection link with sub */ -->
+<div class="ViperITP themeDark visible subSectionVisible" style="left: 45%; top: 195px; width: 132px;"><ul class="ViperITP-lineage">
+    <li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem selected">Link</li>
+</ul><div class="ViperITP-tools"><div class="Viper-buttonGroup"><div title="Bold" class="Viper-button bold">B</div><div title="Italic" class="Viper-button italic">I</div><div title="Underline" class="Viper-button underline">U</div></div><div class="Viper-button icon link active"><span class="buttonIcon link"></span>&nbsp;</div></div>
 
 <div class="ViperITP-subSectionWrapper">
     <div class="Viper-subSection active">
         <div>
+        <label class="ViperITP-label linkNewWindow" style="padding-left: 36px;"><span class="ViperITP-labelText">URL</span><input type="text" class="ViperITP-input" value="http://www.slideshare.net/yiibu/pragmatic-responsive-design" rows="1"></label>
             <div>
-                <span>Promote to</span><div class="Viper-button">Header</div><div class="Viper-button">Footer</div>
+                <div class="Viper-button icon linkNewWindow"><span class="buttonIcon linkNewWindow"></span>&nbsp;</div>
             </div>
         </div>
     </div>
 </div>
-</div>
-<!-- /* END VITP - Table Row*/ -->
-
-<!-- /* VITP - Table Col*/ -->
-<div class="ViperITP themeDark visible" style="left: 40%; top: 532px;">
-
-<ul class="ViperITP-lineage">
-    <li class="ViperITP-lineageItem">Table</li><li class="ViperITP-lineageItem">Row</li><li class="ViperITP-lineageItem selected">Column</li><li class="ViperITP-lineageItem ">Cell</li>
-</ul>
-<div class="ViperITP-tools"><div class="Viper-button icon icon-addLeft"><span class="buttonIcon icon-addLeft"></span>&nbsp;</div><div class="Viper-button icon icon-addRight"><span class="buttonIcon icon-addRight"></span>&nbsp;</div></div>
-
 
 </div>
-<!-- /* END VITP - Table Col*/ -->
+<!-- /* END VITP -  text selection link with sub */ -->
+
+<!-- /* VITP - text selection link with sub */ -->
+<div class="ViperITP themeDark visible subSectionVisible" style="left: 45%; top: 315px; width: 132px;"><ul class="ViperITP-lineage">
+    <li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem selected">Link</li>
+</ul><div class="ViperITP-tools"><div class="Viper-buttonGroup"><div title="Bold" class="Viper-button bold">B</div><div title="Italic" class="Viper-button italic">I</div><div title="Underline" class="Viper-button underline">U</div></div><div class="Viper-button icon link active"><span class="buttonIcon link"></span>&nbsp;</div></div>
+
+<div class="ViperITP-subSectionWrapper">
+    <div class="Viper-subSection active">
+        <div class="subSection-linkURL">
+        <label class="ViperITP-label linkNewWindow" style="padding-left: 36px;"><span class="ViperITP-labelText">URL</span><input type="text" class="ViperITP-input" value="http://www.slideshare.net/yiibu/pragmatic-responsive-design" rows="1"></label>
+            <div>
+                <div class="Viper-button icon linkNewWindow"><span class="buttonIcon linkNewWindow"></span>&nbsp;</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</div>
+<!-- /* END VITP -  text selection link with sub */ -->
+
+<!-- /* VITP - text selection link with sub */ -->
+<div class="ViperITP themeDark visible subSectionVisible" style="left: 45%; top: 435px; width: 200px;"><ul class="ViperITP-lineage">
+    <li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem selected">Link</li>
+</ul><div class="ViperITP-tools"><div class="Viper-buttonGroup"><div title="Bold" class="Viper-button bold">B</div><div title="Italic" class="Viper-button italic">I</div><div title="Underline" class="Viper-button underline">U</div></div><div class="Viper-button icon link active"><span class="buttonIcon link"></span>&nbsp;</div></div>
+
+<div class="ViperITP-subSectionWrapper">
+    <div class="Viper-subSection active">
+        <div>
+        <label class="ViperITP-label linkNewWindow" style="padding-left: 36px;"><span class="ViperITP-labelText">URL</span><input type="text" class="ViperITP-input error" value="http://www.slideshare.net/yiibu/pragmatic-responsive-design" rows="1"></label>
+            <div>
+                <div class="Viper-button icon linkNewWindow"><span class="buttonIcon linkNewWindow"></span>&nbsp;</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</div>
+<!-- /* END VITP -  text selection link with sub */ -->
+
+<!-- /* VITP - Table tool buttons*/ -->
+<div class="ViperITP themeDark compact visible" style="left: 11%; top: 352px; wiidth: 250px;"><div class="ViperITP-tools Viper-buttonGroup"><div class="Viper-button icon table"><span class="buttonIcon table"></span>&nbsp;</div><div class="Viper-button icon tableRow"><span class="buttonIcon tableRow"></span>&nbsp;</div><div class="Viper-button icon tableCol"><span class="buttonIcon tableCol"></span>&nbsp;</div><div class="Viper-button icon tableCell"><span class="buttonIcon tableCell"></span>&nbsp;</div></div>
+</div>
+<!-- /* END VITP - Table tool buttons*/ -->
+
+<!-- /* VITP - List buttons*/ -->
+<div class="ViperITP themeDark visible" style="left: 5%; top: 432px; wiidth: 250px;"><ul class="ViperITP-lineage">
+    <li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem selected">Item</li>
+</ul><div class="ViperITP-tools"><div class="Viper-buttonGroup"><div title="Bold" class="Viper-button bold">B</div><div title="Italic" class="Viper-button italic">I</div><div title="Underline" class="Viper-button underline">U</div></div><div class="Viper-buttonGroup"><div class="Viper-button icon listUL"><span class="buttonIcon listUL"></span>&nbsp;</div><div class="Viper-button icon listOL"><span class="buttonIcon listOL"></span>&nbsp;</div><div class="Viper-button icon listIndent"><span class="buttonIcon listIndent"></span>&nbsp;</div><div class="Viper-button icon listOutdent"><span class="buttonIcon listOutdent"></span>&nbsp;</div></div></div>
+</div>
+<!-- /* END VITP - List buttons*/ -->
+
+
+
 
 <!-- /* VITP - Table Cell - TD*/ -->
-<div class="ViperITP themeDark subSectionVisible visible" style="left: 63%; width:207px; top: 302px;">
+<div class="ViperITP themeDark subSectionVisible viisible" style="left: 63%; width:207px; top: 302px;">
 
 <ul class="ViperITP-lineage">
     <li class="ViperITP-lineageItem">Table</li><li class="ViperITP-lineageItem">Row</li><li class="ViperITP-lineageItem">Column</li><li class="ViperITP-lineageItem selected">Cell</li>
@@ -92,27 +126,6 @@
 </div>
 </div>
 <!-- /* END VITP - Table Cell - TD*/ -->
-
-<!-- /* VITP - Table Cell - TH*/ -->
-<div class="ViperITP themeDark subSectionVisible visible" style="left: 63%; top: 602px;">
-
-<ul class="ViperITP-lineage">
-    <li class="ViperITP-lineageItem">Table</li><li class="ViperITP-lineageItem">Row</li><li class="ViperITP-lineageItem">Column</li><li class="ViperITP-lineageItem selected">Cell</li>
-</ul>
-<div class="ViperITP-tools">
-    <div class="Viper-button">Heading</div><div class="Viper-button icon selected icon-merge"><span class="buttonIcon icon-move"></span>&nbsp;</div><div class="Viper-buttonGroup"><div class="Viper-button icon icon-anchor"><span class="buttonIcon icon-anchor"></span>&nbsp;</div><div class="Viper-button icon icon-class"><span class="buttonIcon icon-class"></span>&nbsp;</div></div><div class="Viper-button icon icon-headingCheck"><span class="buttonIcon icon-headingCheck"></span>&nbsp;</div></div>
-
-<div class="ViperITP-subSectionWrapper">
-    <div class="Viper-subSection active">
-        <div>
-            <div>
-                <div class="Viper-buttonGroup"><div class="Viper-button icon icon-splitVert"><span class="buttonIcon icon-splitVert"></span>&nbsp;</div><div class="Viper-button icon icon-splitHoriz"><span class="buttonIcon icon-splitHoriz"></span>&nbsp;</div></div><div class="Viper-buttonGroup"><div class="Viper-button icon icon-arrowLeft"><span class="buttonIcon icon-arrowLeft"></span>&nbsp;</div><div class="Viper-button icon icon-splitVert"><span class="buttonIcon icon-arrowUp"></span>&nbsp;</div><div class="Viper-button icon icon-arrowDown"><span class="buttonIcon icon-arrowDown"></span>&nbsp;</div><div class="Viper-button icon icon-arrowRight"><span class="buttonIcon icon-arrowRight"></span>&nbsp;</div></div>
-            </div>
-        </div>
-    </div>
-</div>
-</div>
-<!-- /* END VITP - Table Cell - TH*/ -->
 
 
 
