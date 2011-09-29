@@ -291,9 +291,23 @@ Viper.prototype = {
         });
 
         if (navigator.userAgent.match(/iPad/i) != null) {
+            // On the iPad we need to detect selection changes every few ms.
             setInterval(function() {
                 self.fireSelectionChanged();
             }, 500);
+
+            // Add scaling.
+            dfx.addEvent(window, 'gestureend', function() {
+                var elements = dfx.getClass('Viper-scalable');
+                var c        = elements.length;
+                for (var i = 0; i < c; i++) {
+                    var scale = ViperTools.scaleElement(elements[i]);
+                    self.fireCallbacks('Viper:elementScaled', {
+                        element: elements[i],
+                        scale: scale
+                    });
+                }
+            });
         }
 
     },

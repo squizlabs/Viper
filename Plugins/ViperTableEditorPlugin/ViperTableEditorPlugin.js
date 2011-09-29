@@ -33,7 +33,7 @@ function ViperTableEditorPlugin(viper)
     this._buttonClicked = false;
     this._tableRawCells = null;
     this._currentType   = null;
-    this._margin        = 10;
+    this._margin        = 15;
 
     // Table properties.
     this._currentTablePropView = 'cell';
@@ -152,20 +152,39 @@ ViperTableEditorPlugin.prototype = {
             });
         }
 
-        // During zooming hide the toolbar.
-        dfx.addEvent(window, 'gesturestart', function() {
-            self.hideToolbar();
-        });
+        if (this._isiPad() === true) {
+            // During zooming hide the toolbar.
+            dfx.addEvent(window, 'gesturestart', function() {
+                self.hideToolbar();
+            });
 
-        // Update and show the toolbar after zoom.
-        dfx.addEvent(window, 'gestureend', function() {
-            self.updateToolbar(self.getActiveCell(), self._currentType);
-        });
+            this.viper.registerCallback('Viper:elementScaled', 'ViperTableEditorPlugin', function(data) {
+                if (data.element !== self._toolbar) {
+                    return false;
+                }
+
+                if (data.scale === 1) {
+                    self._margin = 15;
+                } else {
+                    self._margin = (15 - (((1 - data.scale) / 0.1) * 5));
+                }
+
+                self.updateToolbar(self.getActiveCell(), self._currentType);
+            });
+        }//end if
 
         this._createToolbar();
 
     },
 
+    /**
+     * Shows the cell tools icon for the given cell element.
+     *
+     * When the icon is hovered, it will be converted to list of buttons where user
+     * can pick between table/row/column/cell properties.
+     *
+     * @param {DOMNode} cell The table cell (TD/TH) element to point to and edit.
+     */
     showCellToolsIcon: function(cell)
     {
         if (!cell) {
@@ -180,6 +199,8 @@ ViperTableEditorPlugin.prototype = {
         if (tools) {
             dfx.remove(tools);
         }
+
+        this.setActiveCell(cell);
 
         var self      = this;
         var showTools = function(type) {
@@ -219,6 +240,7 @@ ViperTableEditorPlugin.prototype = {
         dfx.setStyle(tools, 'left', cellCoords.x1 + ((cellCoords.x2 - cellCoords.x1) / 2) - (toolsWidth / 2) + 'px');
 
         if (this._isiPad() === false) {
+            // On Hover of the buttons highlight the table/row/col/cell.
             dfx.hover(tableBtn, function() {
                 self.setActiveCell(cell);
                 self.highlightActiveCell('table');
@@ -244,6 +266,7 @@ ViperTableEditorPlugin.prototype = {
                 self.removeHighlights();
             });
 
+            // On hover show the list of available table properties buttons.
             dfx.hover(tools, function() {
                 self.setActiveCell(cell);
                 self.highlightActiveCell();
@@ -255,6 +278,7 @@ ViperTableEditorPlugin.prototype = {
                 dfx.setStyle(tools, 'margin-left', '0');
             });
         } else {
+            // On iPad just show the tools.
             dfx.addEvent(tools, 'click', function() {
                 showTools('cell');
             });
@@ -309,7 +333,7 @@ ViperTableEditorPlugin.prototype = {
         this._subSectionContainer = document.createElement('div');
         this._toolbar.appendChild(this._subSectionContainer);
 
-        dfx.addClass(this._toolbar, 'ViperITP themeDark');
+        dfx.addClass(this._toolbar, 'ViperITP themeDark Viper-scalable');
         dfx.addClass(this._lineage, 'ViperITP-lineage');
         dfx.addClass(this._toolsContainer, 'ViperITP-tools');
         dfx.addClass(this._subSectionContainer, 'ViperITP-subSectionWrapper');
@@ -417,10 +441,6 @@ ViperTableEditorPlugin.prototype = {
         this.removeHighlights();
         this.hideToolbar();
 
-        if (this._isiPad() === true) {
-            this._scaleToolbar();
-        }
-
         this._currentType = type;
 
         dfx.removeClass(this._toolbar, 'subSectionVisible');
@@ -460,34 +480,6 @@ ViperTableEditorPlugin.prototype = {
         }
 
         return false;
-    },
-
-    /**
-     * Scales the toolbar using CSS transforms.
-     *
-     * Used on iPad only to scale the toolbar as user zooms in/out.
-     */
-    _scaleToolbar: function()
-    {
-        if (!this._toolbar) {
-            return;
-        }
-
-        var zoom  = (document.documentElement.clientWidth / window.innerWidth);
-        if (zoom === 1) {
-            var scale = 1;
-            this._margin = 15;
-            dfx.setStyle(this._toolbar, '-webkit-transform', 'scale(' + scale + ', ' + scale + ')');
-            dfx.setStyle(this._toolbar, '-moz-transform', 'scale(' + scale + ', ' + scale + ')');
-            return;
-        }
-
-        var scale = (1 / zoom) + 0.2;
-        this._margin = (15 - (((1 - scale) / 0.1) * 5));
-
-        dfx.setStyle(this._toolbar, '-webkit-transform', 'scale(' + scale + ', ' + scale + ')');
-        dfx.setStyle(this._toolbar, '-moz-transform', 'scale(' + scale + ', ' + scale + ')');
-
     },
 
     /**

@@ -27,7 +27,7 @@ function ViperInlineToolbarPlugin(viper)
     this._lineage             = null;
     this._lineageClicked      = false;
     this._currentLineageIndex = null;
-    this._margin              = 10;
+    this._margin              = 15;
 
     // Create the toolbar.
     this._createToolbar();
@@ -75,14 +75,18 @@ function ViperInlineToolbarPlugin(viper)
         self.hideToolbar();
     });
 
-    // During zooming hide the toolbar.
-    dfx.addEvent(window, 'gesturestart', function() {
-        self.hideToolbar();
-    });
+    this.viper.registerCallback('Viper:elementScaled', 'ViperInlineToolbarPlugin', function(data) {
+       if (data.element !== self._toolbar) {
+           return false;
+       }
 
-    // Update and show the toolbar after zoom.
-    dfx.addEvent(window, 'gestureend', function() {
-        self.updateToolbar();
+       if (data.scale === 1) {
+           self._margin = 15;
+       } else {
+           self._margin = (15 - (((1 - data.scale) / 0.1) * 5));
+       }
+
+       self.updateToolbar();
     });
 
 }
@@ -213,8 +217,17 @@ ViperInlineToolbarPlugin.prototype = {
         if (label) {
             var labelElem = document.createElement('label');
             dfx.addClass(labelElem, 'ViperITP-label');
-            dfx.setHtml(labelElem, '<span class="ViperITP-labelText">' + label + '</span>');
+            var span = document.createElement('span');
+            dfx.addClass(span, 'ViperITP-labelText');
+            dfx.setHtml(span, label);
+
+            document.body.appendChild(span);
+            var width = dfx.getElementWidth(span);
+            console.info(width);
+            dfx.setStyle(labelElem, 'padding-left', width + 'px');
+            labelElem.appendChild(span);
             labelElem.appendChild(textBox);
+
             return labelElem;
         }
 
@@ -253,18 +266,14 @@ ViperInlineToolbarPlugin.prototype = {
      */
     updateToolbar: function(range)
     {
+        range = range || this.viper.getCurrentRange();
+
         if (range.collapsed === true) {
             this.hideToolbar();
             return;
         }
 
-        if (navigator.userAgent.match(/iPad/i) !== null) {
-            this._scaleToolbar();
-        }
-
         dfx.removeClass(this._toolbar, 'subSectionVisible');
-
-        range = range || this.viper.getCurrentRange();
 
         if (this._lineageClicked !== true) {
             this._setCurrentLineageIndex(null);
@@ -272,7 +281,9 @@ ViperInlineToolbarPlugin.prototype = {
 
         var lineage = this._getSelectionLineage(range);
 
+        dfx.addClass(this._toolbar, 'calcWidth');
         this._updateInnerContainer(range, lineage);
+        dfx.removeClass(this._toolbar, 'calcWidth');
 
         if (!dfx.getHtml(this._toolsContainer)) {
             this.hideToolbar();
@@ -384,7 +395,7 @@ ViperInlineToolbarPlugin.prototype = {
         this._subSectionContainer = document.createElement('div');
         this._toolbar.appendChild(this._subSectionContainer);
 
-        dfx.addClass(this._toolbar, 'ViperITP themeDark');
+        dfx.addClass(this._toolbar, 'ViperITP themeDark Viper-scalable');
         dfx.addClass(this._lineage, 'ViperITP-lineage');
         dfx.addClass(this._toolsContainer, 'ViperITP-tools');
         dfx.addClass(this._subSectionContainer, 'ViperITP-subSectionWrapper');
@@ -394,34 +405,6 @@ ViperInlineToolbarPlugin.prototype = {
         }
 
         document.body.appendChild(this._toolbar);
-
-    },
-
-    /**
-     * Scales the toolbar using CSS transforms.
-     *
-     * Used on iPad only to scale the toolbar as user zooms in/out.
-     */
-    _scaleToolbar: function()
-    {
-        if (!this._toolbar) {
-            return;
-        }
-
-        var zoom  = (document.documentElement.clientWidth / window.innerWidth);
-        if (zoom === 1) {
-            var scale = 1;
-            this._margin = 15;
-            dfx.setStyle(this._toolbar, '-webkit-transform', 'scale(' + scale + ', ' + scale + ')');
-            dfx.setStyle(this._toolbar, '-moz-transform', 'scale(' + scale + ', ' + scale + ')');
-            return;
-        }
-
-        var scale = (1 / zoom) + 0.2;
-        this._margin = (15 - (((1 - scale) / 0.1) * 5));
-
-        dfx.setStyle(this._toolbar, '-webkit-transform', 'scale(' + scale + ', ' + scale + ')');
-        dfx.setStyle(this._toolbar, '-moz-transform', 'scale(' + scale + ', ' + scale + ')');
 
     },
 

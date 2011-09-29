@@ -1,3 +1,7 @@
+.ViperToolbarPlugin-button.table {
+    background-position: -600px 0;
+}
+
 .ViperTEP-cellToolsIcon {
     position: absolute;
     background: url(table-icon.png) no-repeat;

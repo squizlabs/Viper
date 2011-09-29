@@ -167,6 +167,25 @@ var ViperTools = {
 
         return true;
 
+    },
+
+    scaleElement: function(element)
+    {
+        var zoom  = (document.documentElement.clientWidth / window.innerWidth);
+        if (zoom === 1) {
+            var scale = 1;
+            dfx.setStyle(element, '-webkit-transform', 'scale(' + scale + ', ' + scale + ')');
+            dfx.setStyle(element, '-moz-transform', 'scale(' + scale + ', ' + scale + ')');
+            return;
+        }
+
+        var scale = ((1 / zoom) + 0.2);
+
+        dfx.setStyle(element, '-webkit-transform', 'scale(' + scale + ', ' + scale + ')');
+        dfx.setStyle(element, '-moz-transform', 'scale(' + scale + ', ' + scale + ')');
+
+        return scale;
+
     }
 
 };
