@@ -43,6 +43,21 @@ ViperListPlugin.prototype = {
             });
         }
 
+        this.viper.registerCallback('Viper:keyDown', 'ViperListPlugin', function(e) {
+            if (e.which === 9) {
+                // Handle tab key.
+                var range     = self.viper.getCurrentRange();
+                var startNode = range.getStartNode();
+                if (startNode && self._isListElement(startNode) === true) {
+                    self.tabRange(range, e.shiftKey);
+
+                    dfx.preventDefault(e);
+                    return false;
+                }
+            }
+
+        });
+
         // Change Tracker.
         ViperChangeTracker.addChangeType('makeList', 'Formatted', 'insert');
         ViperChangeTracker.addChangeType('removedList-ol', 'Formatted', 'format');
@@ -510,6 +525,251 @@ ViperListPlugin.prototype = {
 
             this.viper.selectBookmark(bookmark);
         }//end if
+
+    },
+
+    tabRange: function(range, outdent)
+    {
+        var startNode = range.getStartNode();
+        var endNode   = range.getEndNode();
+
+        var listItems = [];
+        if (startNode === endNode) {
+            listItems.push(this._getListItem(startNode));
+        } else {
+            var elems = dfx.getElementsBetween(startNode, endNode);
+            elems.unshift(startNode);
+            elems.push(endNode);
+
+            var c = elems.length;
+            for (var i = 0; i < c; i++) {
+                if (dfx.isTag(elems[i], 'li') === false) {
+                    var li = this._getListItem(elems[i]);
+                    if (li && listItems.inArray(li) === false) {
+                        listItems.push(li);
+                    }
+                } else {
+                    listItems.push(elems[i]);
+                }
+            }
+        }
+
+        // Bookmark.
+        var bookmark = this.viper.createBookmark();
+
+        var updated = false;
+        if (outdent !== true) {
+            updated = this.indentListItems(listItems);
+        } else {
+            updated = this.outdentListItems(listItems);
+        }
+
+        this.viper.selectBookmark(bookmark);
+
+        if (updated === true) {
+            this.viper.fireNodesChanged([range.getCommonElement()]);
+        }
+
+    },
+
+    indentListItems: function(listItems)
+    {
+        if (!listItems || listItems.length === 0) {
+            return false;
+        }
+
+        var c = listItems.length;
+        for (var i = 0; i < c; i++) {
+            if (this.indentListItem(listItems[i]) === false) {
+                return false;
+            }
+        }
+
+        return true;
+
+    },
+
+    indentListItem: function(li)
+    {
+        if (!li) {
+            return;
+        }
+
+        // There is no previous list item, do not indent.
+        var prevItem  = this.getPreviousItem(li);
+        if (!prevItem) {
+            return false;
+        }
+
+        // Check if this item has its own sub list. If there is a sub list then
+        // move this item in to that list and move the sub list to the previous
+        // list item.
+        var subList = this.getSubListItem(li);
+        if (subList) {
+            var itemContents = this.getItemContents(li);
+            var newItem      = document.createElement('li');
+
+            // Move the contents of the item to the list.
+            while (itemContents.length > 0) {
+                newItem.appendChild(itemContents.shift());
+            }
+
+            this.addItemToList(newItem, subList, 0);
+
+            // Move the sublist to the previous item.
+            prevItem.appendChild(subList);
+
+            // This item is no longer needed..
+            dfx.remove(li);
+        } else {
+            // Check if the previous list item has a sub list.
+            subList = this.getSubListItem(prevItem);
+            if (subList) {
+                // Previous item has a sub list, add this item to that sub list.
+                subList.appendChild(li);
+            } else {
+                // Create a new list using the same list type.
+                var listElement = this._getListElement(li);
+
+                var tagName     = dfx.getTagName(listElement);
+                var newList     = document.createElement(tagName);
+
+                // Add the list item to this new list.
+                newList.appendChild(li);
+
+                // Add the new list to the previous item.
+                prevItem.appendChild(newList);
+            }
+        }//end if
+
+    },
+
+    getSubListItem: function(li)
+    {
+        for (var node = li.firstChild; node; node = node.nextSibling) {
+            if (dfx.isTag(node, 'ul') === true || dfx.isTag(node, 'ol') === true) {
+                return node;
+            }
+        }
+
+        return null;
+
+    },
+
+    addItemToList: function(li, list, pos)
+    {
+        if (!li || !list || dfx.isTag(li, 'li') === false) {
+            return false;
+        }
+
+        pos = pos || 0;
+
+        var tags = dfx.getTag('li', list);
+
+        if (tags.length <= pos) {
+            list.appendChild(li);
+        } else {
+            dfx.insertBefore(tags[pos], li);
+        }
+
+        return true;
+
+    },
+
+    /**
+     * Returns item's contents excluding sub lists.
+     *
+     * @param {DOMNode} li The list item.
+     *
+     * @return {array} List of DOMNodes.
+     */
+    getItemContents: function(li)
+    {
+        var contentElements = [];
+        for (var node = li.firstChild; node; node = node.nextSibling) {
+            if (dfx.isTag(node, 'ul') === true || dfx.isTag(node, 'ol') === true) {
+                continue;
+            }
+
+            contentElements.push(node);
+        }
+
+        return contentElements;
+
+    },
+
+
+    outdentListItems: function(listItems)
+    {
+        if (!listItems || listItems.length === 0) {
+            return;
+        }
+
+        // Filter list elements so that its only 1 list and their sub lists.
+        var filteredItems = this._getFilteredItems(listItems);
+        if (filteredItems.length === 0) {
+            return false;
+        }
+
+    },
+
+    _getFilteredItems: function(listItems)
+    {
+        var topListElement = this._getListElement(listItems[0]);
+        var filteredItems  = [];
+        for (var i = 0; i < listItems.length; i++) {
+            var listElem = this._getListElement(listItems[i]);
+            if (listElem !== topListElement) {
+                // Must be the child of the top list element if not then do nothing.
+                if (dfx.isChildOf(listElem, topListElement) === false) {
+                    continue;
+                }
+
+                if (filteredItems.inArray(listElem) === false) {
+                    var add = true;
+                    for (var j = 0; j < filteredItems.length; j++) {
+                        if (dfx.isChildOf(listElem, filteredItems[j]) === false) {
+                            add = false;
+                            break;
+                        }
+                    }
+
+                    if (add === true) {
+                        filteredItems.push(listElem);
+                    }
+                }
+            } else if (filteredItems.inArray(listItems[i]) === false) {
+                filteredItems.push(listItems[i]);
+            }
+        }
+
+        return filteredItems;
+
+    },
+
+    getPreviousItem: function(li)
+    {
+        while (li.previousSibling) {
+            li = li.previousSibling;
+            if (dfx.isTag(li, 'li') === true) {
+                return li;
+            }
+        }
+
+        return null;
+
+    },
+
+    getNextItem: function(li)
+    {
+        while (li.nextSibling) {
+            li = li.nextSibling;
+            if (dfx.isTag(li, 'li') === true) {
+                return li;
+            }
+        }
+
+        return null;
 
     },
 
