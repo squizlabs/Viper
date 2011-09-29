@@ -708,14 +708,90 @@ ViperListPlugin.prototype = {
     outdentListItems: function(listItems)
     {
         if (!listItems || listItems.length === 0) {
-            return;
-        }
-
-        // Filter list elements so that its only 1 list and their sub lists.
-        var filteredItems = this._getFilteredItems(listItems);
-        if (filteredItems.length === 0) {
             return false;
         }
+
+        var c = listItems.length;
+        for (var i = 0; i < c; i++) {
+            if (this.outdentListItem(listItems[i]) === false) {
+                return false;
+            }
+        }
+
+        return true;
+
+    },
+
+    outdentListItem: function(li)
+    {
+        if (!li) {
+            return false;
+        }
+
+        var list           = this._getListElement(li);
+        var parentListItem = this._getListItem(list);
+
+        var siblingItems = [];
+        for (var node = li.nextSibling; node; node = node.nextSibling) {
+            if (dfx.isTag(node, 'li') === true) {
+                siblingItems.push(node);
+            }
+        }
+
+        if (parentListItem) {
+            if (siblingItems.length > 0) {
+                // Move these (next) siblings under a new list and place the new list
+                // under the current item.
+                // Create a new list of the same type.
+                var newList = document.createElement(this.getListType(li));
+                for (var i = 0; i < siblingItems.length; i++) {
+                    newList.appendChild(siblingItems[i]);
+                }
+
+                li.appendChild(newList);
+            }
+
+            // Now move this list item after the parent list item.
+            dfx.insertAfter(parentListItem, li);
+            return true;
+        } else {
+            // There is no parent list.. We need to break out of the current list
+            // and make this list item a new paragraph.
+            var p = document.createElement('p');
+            while (li.firstChild) {
+                p.appendChild(li.firstChild);
+            }
+
+            if (siblingItems.length === 0) {
+                // No next siblings. Place the new p under the list element.
+                dfx.insertAfter(list, p);
+                dfx.remove(li);
+            } else {
+                // Create a new list element of the same type.
+                var newList = document.createElement(this.getListType(li));
+                for (var i = 0; i < siblingItems.length; i++) {
+                    newList.appendChild(siblingItems[i]);
+                }
+
+                // Add the paragraph and the new list after the list element.
+                dfx.insertAfter(list, p);
+                dfx.insertAfter(p, newList);
+                dfx.remove(li);
+            }
+        }
+
+        return true;
+
+    },
+
+    getListType: function(li)
+    {
+        var list = this._getListElement(li);
+        if (!list) {
+            return false;
+        }
+
+        return dfx.getTagName(list);
 
     },
 
