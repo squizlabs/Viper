@@ -608,29 +608,29 @@ ViperListPlugin.prototype = {
         // Check if this item has its own sub list. If there is a sub list then
         // move this item in to that list and move the sub list to the previous
         // list item.
-        var subList = this.getSubListItem(li);
+        // Check if the previous list item has a sub list.
+        var subList = this.getSubListItem(prevItem);
         if (subList) {
-            var itemContents = this.getItemContents(li);
-            var newItem      = document.createElement('li');
-
-            // Move the contents of the item to the list.
-            while (itemContents.length > 0) {
-                newItem.appendChild(itemContents.shift());
-            }
-
-            this.addItemToList(newItem, subList, 0);
-
-            // Move the sublist to the previous item.
-            prevItem.appendChild(subList);
-
-            // This item is no longer needed..
-            dfx.remove(li);
+            // Previous item has a sub list, add this item to that sub list.
+            subList.appendChild(li);
         } else {
-            // Check if the previous list item has a sub list.
-            subList = this.getSubListItem(prevItem);
+            var subList = this.getSubListItem(li);
             if (subList) {
-                // Previous item has a sub list, add this item to that sub list.
-                subList.appendChild(li);
+                var itemContents = this.getItemContents(li);
+                var newItem      = document.createElement('li');
+
+                // Move the contents of the item to the list.
+                while (itemContents.length > 0) {
+                    newItem.appendChild(itemContents.shift());
+                }
+
+                this.addItemToList(newItem, subList, 0);
+
+                // Move the sublist to the previous item.
+                prevItem.appendChild(subList);
+
+                // This item is no longer needed..
+                dfx.remove(li);
             } else {
                 // Create a new list using the same list type.
                 var listElement = this._getListElement(li);
@@ -644,7 +644,7 @@ ViperListPlugin.prototype = {
                 // Add the new list to the previous item.
                 prevItem.appendChild(newList);
             }
-        }//end if
+        }
 
         return true;
 
@@ -740,44 +740,58 @@ ViperListPlugin.prototype = {
 
         if (parentListItem) {
             if (siblingItems.length > 0) {
-                // Move these (next) siblings under a new list and place the new list
-                // under the current item.
-                // Create a new list of the same type.
-                var newList = document.createElement(this.getListType(li));
-                for (var i = 0; i < siblingItems.length; i++) {
-                    newList.appendChild(siblingItems[i]);
+                // Move these (next) siblings under an exisiting sub list or
+                // under a new list (and place the new list under the current item).
+
+                var subList = this.getSubListItem(li);
+                if (!subList) {
+                    // Create a new list of the same type.
+                    subList = document.createElement(this.getListType(li));
+                    li.appendChild(subList);
                 }
 
-                li.appendChild(newList);
+                for (var i = 0; i < siblingItems.length; i++) {
+                    subList.appendChild(siblingItems[i]);
+                }
             }
 
             // Now move this list item after the parent list item.
             dfx.insertAfter(parentListItem, li);
+
+            if (dfx.getTag('li', list).length === 0) {
+                // If the old list item is now empty, remove it.
+                dfx.remove(list);
+            }
+
             return true;
         } else {
-            // There is no parent list.. We need to break out of the current list
-            // and make this list item a new paragraph.
-            var p = document.createElement('p');
-            while (li.firstChild) {
-                p.appendChild(li.firstChild);
-            }
+            return false;
 
-            if (siblingItems.length === 0) {
-                // No next siblings. Place the new p under the list element.
-                dfx.insertAfter(list, p);
-                dfx.remove(li);
-            } else {
-                // Create a new list element of the same type.
-                var newList = document.createElement(this.getListType(li));
-                for (var i = 0; i < siblingItems.length; i++) {
-                    newList.appendChild(siblingItems[i]);
+            /*
+                DISABLED - Do not break out of lists.
+                // There is no parent list.. We need to break out of the current list
+                // and make this list item a new paragraph.
+                var p = document.createElement('p');
+                while (li.firstChild) {
+                    p.appendChild(li.firstChild);
                 }
 
-                // Add the paragraph and the new list after the list element.
-                dfx.insertAfter(list, p);
-                dfx.insertAfter(p, newList);
-                dfx.remove(li);
-            }
+                if (siblingItems.length === 0) {
+                    // No next siblings. Place the new p under the list element.
+                    dfx.insertAfter(list, p);
+                    dfx.remove(li);
+                } else {
+                    // Create a new list element of the same type.
+                    var newList = document.createElement(this.getListType(li));
+                    for (var i = 0; i < siblingItems.length; i++) {
+                        newList.appendChild(siblingItems[i]);
+                    }
+
+                    // Add the paragraph and the new list after the list element.
+                    dfx.insertAfter(list, p);
+                    dfx.insertAfter(p, newList);
+                    dfx.remove(li);
+            }*/
         }
 
         return true;
