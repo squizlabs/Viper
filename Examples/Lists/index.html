@@ -1,0 +1,152 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>Viper - Simple Example</title>
+    <link rel="stylesheet" media="screen" href="main.css">
+    <script type="text/javascript" src="../../DfxJSLib/mysource.js"></script>
+    <script type="text/javascript" src="../../Viper-all.js"></script>
+    <script type="text/javascript">
+        var viper = null;
+        dfx.addLoadEvent(function() {
+            viper = new Viper('test');
+            var pluginSets = {
+                all: {
+                    plugins: ['ViperCoreStylesPlugin', 'ViperKeyboardEditorPlugin', 'ViperInlineToolbarPlugin', 'ViperHistoryPlugin', 'ViperListPlugin', 'ViperFormatPlugin', 'ViperToolbarPlugin', 'ViperTableEditorPlugin', 'ViperCopyPastePlugin']
+                }
+            };
+
+            viper.setPluginSets(pluginSets);
+            viper.getPluginManager().usePluginSet('all');
+            viper.setEditableElement(document.getElementById('content'));
+        });
+    </script>
+</head>
+<body spellcheck="false">
+
+<div id="pageWidth">
+<div id="contentHolder">
+<div id="contentInner">
+<div id="contentPadder">
+
+<div id="lineage">
+    <strong class="screen_hide">Current lineage:</strong>
+    <ol id="lineageList">
+        <li class="lineage-home"><a title="Central Home" href="#"><span class="screen_hide">Home</span></a></li>
+        <li class="lineage-item"><a href="#">Articles</a></li>
+        <li class="lineage-item"><a href="#">Viper Example</a></li>
+    </ol>
+</div>
+
+<div id="content" spellcheck="false">
+    <h1>Simple Viper Example</h1>
+        <p>Australian governments at all levels have <u><strong><em>endorsed</em></strong></u> WCAG 2.0, and require all government websites (federal, state and territory) to meet the new guidelines at the minimum compliance level (Single A) by the end of 2012. In addition, the Australian Government requires all federal websites to meet the medium conformance level (Double A) by the end of 2014.</p>
+
+<ul>
+<li>Audit of Homepage and 6 Section Landing pages</li>
+<li>4 additional templates</li>
+<li>Audit of 20 additional pages for content</li>
+<li>Accessibility audit report</li>
+<li>Recommendations and action plan</li>
+<li>Squiz Matrix content accessibility guide</li>
+</ul>
+
+<h3>Accessibility Audit format</h3>
+
+<ul>
+<li>Validate HTML/CSS and review code of selected pages to A or AA standard</li>
+<li>Review colour contrast of selected pages</li>
+<li>Review content of selected pages for accessibility issues</li>
+<li>Compile error report with examples</li>
+<li>Propose recommendations to meet required Accessibility standard</li>
+</ul>
+
+<ul>
+<li>Validate HTML/CSS and review code of selected pages to A or AA standard</li>
+<li>Review colour contrast of selected pages</li>
+<li>Review content of selected pages for accessibility issues</li>
+<li>Compile error report with examples</li>
+<li>Propose recommendations to meet required Accessibility standard</li>
+</ul>
+
+<ol>
+<li>Validate HTML/CSS and review code of selected pages to A or AA standard</li>
+<li>Review colour contrast of selected pages</li>
+<li>Review content of selected pages for accessibility issues</li>
+<li>Compile error report with examples</li>
+<li>Propose recommendations to meet required Accessibility standard</li>
+</ol>
+
+<ul>
+<li>Validate HTML/CSS and review code of selected pages to A or AA standard
+    <ol>
+        <li>purus neque luctus ligula, vel molestie arcu</li>
+        <li>purus neque luctus</li>
+        <li>vel molestie arcu
+            <ol>
+                <li>Validate HTML/CSS and review code of selected pages to A or AA standard</li>
+                <li>Review colour contrast of selected pages</li>
+                <li>Review content of selected pages for accessibility issues</li>
+            </ol>
+        </li>
+    </ol>
+</li>
+<li>Review colour contrast of selected pages</li>
+<li>Review content of selected pages for accessibility issues</li>
+<li>Compile error report with examples</li>
+<li>Propose recommendations to meet required Accessibility standard</li>
+</ul>
+
+<ul>
+<li>Validate HTML/CSS and review code of selected pages to A or AA standard
+    <ol>
+        <li>purus neque luctus ligula, vel molestie arcu
+            <ol>
+                <li>Validate HTML/CSS and review code of selected pages to A or AA standard</li>
+                <li>Review colour contrast of selected pages</li>
+                <li>Review content of selected pages for accessibility issues
+                    <ul>
+                        <li>Validate HTML/CSS and review code of selected pages to A or AA standard</li>
+                        <li>Review colour contrast of selected pages</li>
+                        <li>Review content of selected pages for accessibility issues</li>
+                    </ul>
+                </li>
+            </ol>
+        </li>
+        <li>purus neque luctus</li>
+        <li>vel molestie arcu
+            <ul>
+                <li>Validate HTML/CSS and review code of selected pages to A or AA standard</li>
+                <li>Review colour contrast of selected pages</li>
+                <li>Review content of selected pages for accessibility issues</li>
+            </ul>
+        </li>
+    </ol>
+    purus neque <strong>luctus</strong> ligula
+    <ol>
+        <li>purus neque luctus ligula, vel molestie arcu</li>
+        <li>purus neque luctus</li>
+        <li>vel molestie arcu
+            <ul>
+                <li>Validate HTML/CSS and review code of selected pages to A or AA standard</li>
+                <li>Review colour contrast of selected pages</li>
+                <li>Review content of selected pages for accessibility issues</li>
+            </ul>
+        </li>
+    </ol>
+</li>
+<li>Review colour contrast of selected pages</li>
+<li>Review content of selected pages for accessibility issues</li>
+<li>Compile error report with examples</li>
+<li>Propose recommendations to meet required Accessibility standard</li>
+</ul>
+
+
+
+    </div><!-- #content -->
+    </div>
+    </div>
+    </div>
+    </div><!-- #pageWidth -->
+</body>
+</html>
