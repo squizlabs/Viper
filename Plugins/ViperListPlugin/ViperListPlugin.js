@@ -544,6 +544,10 @@ ViperListPlugin.prototype = {
             var c = elems.length;
             for (var i = 0; i < c; i++) {
                 if (dfx.isTag(elems[i], 'li') === false) {
+                    if (elems[i].nodeType === dfx.TEXT_NODE && elems[i].data.indexOf("\n ") === 0) {
+                        continue;
+                    }
+
                     var li = this._getListItem(elems[i]);
                     if (li && listItems.inArray(li) === false) {
                         listItems.push(li);
@@ -592,7 +596,7 @@ ViperListPlugin.prototype = {
     indentListItem: function(li)
     {
         if (!li) {
-            return;
+            return false;
         }
 
         // There is no previous list item, do not indent.
@@ -641,6 +645,8 @@ ViperListPlugin.prototype = {
                 prevItem.appendChild(newList);
             }
         }//end if
+
+        return true;
 
     },
 
