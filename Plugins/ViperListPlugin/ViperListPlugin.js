@@ -62,6 +62,11 @@ ViperListPlugin.prototype = {
 
         });
 
+        // Inline toolbar.
+        this.viper.registerCallback('ViperInlineToolbarPlugin:updateToolbar', 'ViperListPlugin', function(data) {
+            self._updateInlineToolbar(data);
+        });
+
         this._initTrackChanges();
 
     },
@@ -316,7 +321,19 @@ ViperListPlugin.prototype = {
 
     },
 
-    tabRange: function(range, outdent)
+    canIncreaseIndent: function(range)
+    {
+        return this.tabRange(range, false, true);
+
+    },
+
+    canDecreaseIndent: function(range)
+    {
+        return this.tabRange(range, true, true);
+
+    },
+
+    tabRange: function(range, outdent, testOnly)
     {
         var startNode = range.getStartNode();
         var endNode   = range.getEndNode();
@@ -347,24 +364,29 @@ ViperListPlugin.prototype = {
         }
 
         // Bookmark.
-        var bookmark = this.viper.createBookmark();
+        if (testOnly !== true) {
+            var bookmark = this.viper.createBookmark();
+        }
 
         var updated = false;
         if (outdent !== true) {
-            updated = this.indentListItems(listItems);
+            updated = this.indentListItems(listItems, testOnly);
         } else {
-            updated = this.outdentListItems(listItems);
+            updated = this.outdentListItems(listItems, testOnly);
         }
 
-        this.viper.selectBookmark(bookmark);
-
-        if (updated === true) {
-            this.viper.fireNodesChanged([range.getCommonElement()]);
+        if (testOnly !== true) {
+            this.viper.selectBookmark(bookmark);
+            if (updated === true) {
+                this.viper.fireNodesChanged([range.getCommonElement()]);
+            }
         }
+
+        return updated;
 
     },
 
-    indentListItems: function(listItems)
+    indentListItems: function(listItems, testOnly)
     {
         if (!listItems || listItems.length === 0) {
             return false;
@@ -377,7 +399,7 @@ ViperListPlugin.prototype = {
             if (subList) {
                 var firstItem = listItems.shift();
                 if (this._isWholeList(listItems) === true) {
-                    return this.indentListItem(firstItem, true);
+                    return this.indentListItem(firstItem, true, testOnly);
                 }
 
                 listItems.unshift(firstItem);
@@ -386,7 +408,7 @@ ViperListPlugin.prototype = {
 
         var c = listItems.length;
         for (var i = 0; i < c; i++) {
-            if (this.indentListItem(listItems[i]) === false) {
+            if (this.indentListItem(listItems[i], false, testOnly) === false) {
                 return false;
             }
         }
@@ -395,7 +417,7 @@ ViperListPlugin.prototype = {
 
     },
 
-    indentListItem: function(li, includeSublist)
+    indentListItem: function(li, includeSublist, testOnly)
     {
         if (!li) {
             return false;
@@ -413,11 +435,19 @@ ViperListPlugin.prototype = {
         // Check if the previous list item has a sub list.
         var prevSubList = this.getSubListItem(prevItem);
         if (prevSubList && includeSublist !== true) {
+            if (testOnly === true) {
+                return true;
+            }
+
             // Previous item has a sub list, add this item to that sub list.
             prevSubList.appendChild(li);
         } else {
             var subList = this.getSubListItem(li);
             if (subList && includeSublist !== true) {
+                if (testOnly === true) {
+                    return true;
+                }
+
                 var itemContents = this.getItemContents(li);
                 var newItem      = document.createElement('li');
 
@@ -434,6 +464,10 @@ ViperListPlugin.prototype = {
                 // This item is no longer needed..
                 dfx.remove(li);
             } else {
+                if (testOnly === true) {
+                    return true;
+                }
+
                 // If the previous item has a sub list then join to that.
                 if (prevSubList) {
                     prevSubList.appendChild(li);
@@ -457,7 +491,7 @@ ViperListPlugin.prototype = {
 
     },
 
-    outdentListItems: function(listItems)
+    outdentListItems: function(listItems, testOnly)
     {
         if (!listItems || listItems.length === 0) {
             return false;
@@ -472,8 +506,12 @@ ViperListPlugin.prototype = {
                     var li = listItems[i];
                     var subList = this.getSubListItem(li);
                     if (subList) {
-                        return;
+                        return false;
                     }
+                }
+
+                if (testOnly === true) {
+                    return true;
                 }
 
                 // Conver to P tags.
@@ -500,7 +538,7 @@ ViperListPlugin.prototype = {
             if (subList) {
                 var firstItem = listItems.shift();
                 if (this._isWholeList(listItems) === true) {
-                    return this.outdentListItem(firstItem, true);
+                    return this.outdentListItem(firstItem, testOnly);
                 }
 
                 listItems.unshift(firstItem);
@@ -509,7 +547,7 @@ ViperListPlugin.prototype = {
 
         var c = listItems.length;
         for (var i = 0; i < c; i++) {
-            if (this.outdentListItem(listItems[i]) === false) {
+            if (this.outdentListItem(listItems[i], testOnly) === false) {
                 return false;
             }
         }
@@ -518,7 +556,7 @@ ViperListPlugin.prototype = {
 
     },
 
-    outdentListItem: function(li)
+    outdentListItem: function(li, testOnly)
     {
         if (!li) {
             return false;
@@ -535,10 +573,13 @@ ViperListPlugin.prototype = {
         }
 
         if (parentListItem) {
+            if (testOnly === true) {
+                return true;
+            }
+
             if (siblingItems.length > 0) {
                 // Move these (next) siblings under an exisiting sub list or
                 // under a new list (and place the new list under the current item).
-
                 var subList = this.getSubListItem(li);
                 if (!subList) {
                     // Create a new list of the same type.
@@ -566,17 +607,27 @@ ViperListPlugin.prototype = {
 
     },
 
-    convertRangeToList: function(range)
+    convertRangeToList: function(range, testOnly)
     {
         var startNode = range.getStartNode();
         var endNode   = range.getEndNode();
-        var bookmark  = this.viper.createBookmark();
+        var bookmarn  = null;
+
+        if (testOnly !== true) {
+            bookmark  = this.viper.createBookmark();
+        }
 
         var pElems = [];
         if (startNode === endNode) {
             pElems.push(this._getParaElement(startNode));
         } else {
-            var elems = dfx.getElementsBetween(bookmark.start, bookmark.end);
+            var elems = null;
+            if (testOnly === true) {
+                elems = dfx.getElementsBetween(startNode, endNode);
+            } else {
+                elems = dfx.getElementsBetween(bookmark.start, bookmark.end);
+            }
+
             var c     = elems.length;
             for (var i = 0; i < c; i++) {
                 var p = this._getParaElement(elems[i]);
@@ -587,7 +638,9 @@ ViperListPlugin.prototype = {
         }
 
         if (pElems.length === 0) {
-            return;
+            return false;
+        } else if (testOnly === true) {
+            return true;
         }
 
         // Get the previous list if there is one.
@@ -723,40 +776,6 @@ ViperListPlugin.prototype = {
 
     },
 
-    _getFilteredItems: function(listItems)
-    {
-        var topListElement = this._getListElement(listItems[0]);
-        var filteredItems  = [];
-        for (var i = 0; i < listItems.length; i++) {
-            var listElem = this._getListElement(listItems[i]);
-            if (listElem !== topListElement) {
-                // Must be the child of the top list element if not then do nothing.
-                if (dfx.isChildOf(listElem, topListElement) === false) {
-                    continue;
-                }
-
-                if (filteredItems.inArray(listElem) === false) {
-                    var add = true;
-                    for (var j = 0; j < filteredItems.length; j++) {
-                        if (dfx.isChildOf(listElem, filteredItems[j]) === false) {
-                            add = false;
-                            break;
-                        }
-                    }
-
-                    if (add === true) {
-                        filteredItems.push(listElem);
-                    }
-                }
-            } else if (filteredItems.inArray(listItems[i]) === false) {
-                filteredItems.push(listItems[i]);
-            }
-        }
-
-        return filteredItems;
-
-    },
-
     getPreviousItem: function(li)
     {
         while (li.previousSibling) {
@@ -780,6 +799,66 @@ ViperListPlugin.prototype = {
         }
 
         return null;
+
+    },
+
+    _updateInlineToolbar: function(data)
+    {
+        // If range is not inside a list element but in a P tag then
+        // show list creation tools.
+        var range     = data.range;
+        var startNode = range.getStartNode();
+
+        var makeList = false;
+        var indent   = false;
+
+        if (startNode && this._isListElement(startNode) === true) {
+            makeList = true;
+            indent   = true;
+        } else if ((dfx.isTag(startNode, 'p') === true || (startNode.nodeType === dfx.TEXT_NODE && dfx.isTag(dfx.getFirstBlockParent(startNode), 'p') === true))) {
+            makeList = true;
+        }
+
+        if (makeList !== true && indent !== true) {
+            return;
+        }
+
+        var self = this;
+        var inlineToolbarPlugin = this.viper.ViperPluginManager.getPlugin('ViperInlineToolbarPlugin');
+        var buttonGroup         = inlineToolbarPlugin.createButtonGroup();
+        if (makeList === true) {
+            var canMakeUL = false;
+            var canMakeOL = false;
+            var list = this._getListElement(range.getStartNode());
+            if (!list && this.convertRangeToList(range, true) === true) {
+                canMakeUL = true;
+                canMakeOL = true;
+            } else if (dfx.isTag(list, 'ol') === true) {
+                canMakeUL = true;
+                canMakeOL = false;
+            } else if (dfx.isTag(list, 'ul') === true) {
+                canMakeUL = false;
+                canMakeOL = true;
+            }
+
+            inlineToolbarPlugin.createButton('', false, 'Make Unordered List', !canMakeUL, 'listUL', function() {
+                self.makeList();
+            }, buttonGroup);
+            inlineToolbarPlugin.createButton('', false, 'Make Ordered List', !canMakeOL, 'listOL', function() {
+                self.makeList(true);
+            }, buttonGroup);
+
+        }
+
+        if (indent === true) {
+            inlineToolbarPlugin.createButton('', false, 'Indent List', !this.canIncreaseIndent(range), 'listIndent', function() {
+                self.tabRange(range);
+            }, buttonGroup);
+            inlineToolbarPlugin.createButton('', false, 'Outdent List', !this.canDecreaseIndent(range), 'listOutdent', function() {
+                self.tabRange(range, true);
+            }, buttonGroup);
+
+        }
 
     },
 
