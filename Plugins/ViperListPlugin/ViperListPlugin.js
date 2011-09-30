@@ -62,223 +62,7 @@ ViperListPlugin.prototype = {
 
         });
 
-        // Change Tracker.
-        ViperChangeTracker.addChangeType('makeList', 'Formatted', 'insert');
-        ViperChangeTracker.addChangeType('removedList-ol', 'Formatted', 'format');
-        ViperChangeTracker.addChangeType('removedList-ul', 'Formatted', 'format');
-        ViperChangeTracker.addChangeType('makeList-change', 'Formatted', 'format');
-        ViperChangeTracker.addChangeType('addedListItem', 'Inserted', 'insert');
-        ViperChangeTracker.addChangeType('breakListUP', 'Formatted', 'format');
-        ViperChangeTracker.addChangeType('breakListUPDown', 'Formatted', 'format');
-        ViperChangeTracker.addChangeType('breakListDown', 'Formatted', 'format');
-
-        ViperChangeTracker.setDescriptionCallback('makeList', function(node) {
-            var listType = 'ordered';
-            if (dfx.isTag(node, 'ul') === true) {
-                listType = 'un-ordered';
-            }
-
-            return 'Changed to ' + listType + ' list';
-        });
-        ViperChangeTracker.setApproveCallback('makeList', function(clone, node) {
-            ViperChangeTracker.removeTrackChanges(node);
-        });
-        ViperChangeTracker.setRejectCallback('makeList', function(clone, node) {
-            var children = [];
-            dfx.foreach(node.childNodes, function(i) {
-                children.push(node.childNodes[i]);
-            });
-
-            while (child = children.shift()) {
-                self.removeListItem(child, true);
-            }
-
-            dfx.remove(node);
-        });
-
-        ViperChangeTracker.setDescriptionCallback('removedList-ol', function(node) {
-            return 'Removed from ordered list';
-        });
-        ViperChangeTracker.setApproveCallback('removedList-ol', function(clone, node) {
-            ViperChangeTracker.removeTrackChanges(node);
-        });
-        ViperChangeTracker.setRejectCallback('removedList-ol', function(clone, node) {
-            // Just create a new list.
-            var list = document.createElement('ol');
-            dfx.insertBefore(node, list);
-            list.appendChild(self._createListItem(node));
-        });
-
-        ViperChangeTracker.setDescriptionCallback('removedList-ul', function(node) {
-            return 'Removed from un-ordered list';
-        });
-        ViperChangeTracker.setApproveCallback('removedList-ul', function(clone, node) {
-            ViperChangeTracker.removeTrackChanges(node);
-        });
-        ViperChangeTracker.setRejectCallback('removedList-ul', function(clone, node) {
-            // Just create a new list.
-            var list = document.createElement('ul');
-            dfx.insertBefore(node, list);
-            list.appendChild(self._createListItem(node));
-        });
-
-        ViperChangeTracker.setDescriptionCallback('makeList-change', function(node) {
-            var listType = 'unordered';
-            if (dfx.isTag(node, 'ol') === true) {
-                listType = 'ordered';
-            }
-
-            return 'Changed to ' + listType + ' list';
-        });
-        ViperChangeTracker.setApproveCallback('makeList-change', function(clone, node) {
-            ViperChangeTracker.removeTrackChanges(node);
-        });
-        ViperChangeTracker.setRejectCallback('makeList-change', function(clone, node) {
-            var newTag = 'ol'
-            if (dfx.isTag(node, 'ol') === true) {
-                newTag = 'ul';
-            }
-
-            var newList = document.createElement(newTag);
-            while (node.firstChild) {
-                newList.appendChild(node.firstChild);
-            }
-
-            dfx.insertBefore(node, newList);
-            dfx.remove(node);
-        });
-
-        // List break.
-        ViperChangeTracker.setDescriptionCallback('breakListUP', function(node) {
-            return 'Removed from list';
-        });
-        ViperChangeTracker.setApproveCallback('breakListUP', function(clone, node) {
-            ViperChangeTracker.removeTrackChanges(node);
-        });
-        ViperChangeTracker.setRejectCallback('breakListUP', function(clone, node) {
-            var prevList = node.previousSibling;
-            if (dfx.isTag(prevList, 'ul') === true || dfx.isTag(prevList, 'ol') === true) {
-                if (self.isListNode(node) === true) {
-                    // Import children.
-                    while (node.firstChild) {
-                        prevList.appendChild(node.firstChild);
-                    }
-
-                    dfx.remove(node);
-                } else {
-                    var li = node;
-                    if (dfx.isTag(li, 'li') === false) {
-                        li = self._createListItem(node)
-                    }
-
-                    prevList.appendChild(li);
-                }
-            }
-        });
-
-        // List break.
-        ViperChangeTracker.setDescriptionCallback('breakListUPDown', function(node) {
-            return 'Removed from list';
-        });
-        ViperChangeTracker.setApproveCallback('breakListUPDown', function(clone, node) {
-            ViperChangeTracker.removeTrackChanges(node);
-        });
-        ViperChangeTracker.setRejectCallback('breakListUPDown', function(clone, node) {
-            var prevList = node.previousSibling;
-            var nextList = node.nextSibling;
-            if (dfx.isTag(prevList, 'ul') === true || dfx.isTag(prevList, 'ol') === true) {
-                if (self.isListNode(node) === true) {
-                    // Import children.
-                    while (node.firstChild) {
-                        prevList.appendChild(node.firstChild);
-                    }
-
-                    dfx.remove(node);
-                } else {
-                    var li = node;
-                    if (dfx.isTag(li, 'li') === false) {
-                        li = self._createListItem(node)
-                    }
-
-                    prevList.appendChild(li);
-                }
-
-                if (nextList) {
-                    // Join lists...
-                    while (nextList.firstChild) {
-                        var li = nextList.firstChild;
-                        if (dfx.isTag(nextList.firstChild, 'li') === false) {
-                            li = self._createListItem(nextList.firstChild);
-                        }
-
-                        prevList.appendChild(li);
-                    }
-
-                    dfx.remove(nextList);
-                }
-            } else if (dfx.isTag(nextList, 'ul') === true || dfx.isTag(nextList, 'ol') === true) {
-                if (self.isListNode(node) === true) {
-                    // Import children.
-                    if (nextList.firstChild) {
-                        dfx.insertBefore(nextList.firstChild, node.childNodes);
-                    } else {
-                        while (node.firstChild) {
-                            nextList.appendChild(node.firstChild);
-                        }
-                    }
-
-                    dfx.remove(node);
-                } else {
-                    var li = node;
-                    if (dfx.isTag(li, 'li') === false) {
-                        li = self._createListItem(node)
-                    }
-
-                    // Join to this list..
-                    if (nextList.firstChild) {
-                        dfx.insertBefore(nextList.firstChild, li);
-                    } else {
-                        nextList.appendChild(li);
-                    }
-                }//end if
-            }//end if
-        });
-
-         // List break.
-        ViperChangeTracker.setDescriptionCallback('breakListDown', function(node) {
-            return 'Removed from list';
-        });
-        ViperChangeTracker.setApproveCallback('breakListDown', function(clone, node) {
-            ViperChangeTracker.removeTrackChanges(node);
-        });
-        ViperChangeTracker.setRejectCallback('breakListDown', function(clone, node) {
-            var nextList = node.nextSibling;
-            if (dfx.isTag(nextList, 'ul') === true || dfx.isTag(nextList, 'ol') === true) {
-                if (self.isListNode(node) === true) {
-                    // Import children.
-                    if (nextList.firstChild) {
-                        dfx.insertBefore(nextList.firstChild, node.childNodes);
-                    } else {
-                        while (node.firstChild) {
-                            nextList.appendChild(node.firstChild);
-                        }
-                    }
-
-                    dfx.remove(node);
-                } else {
-                    var li = node;
-                    if (dfx.isTag(li, 'li') === false) {
-                        li = self._createListItem(node)
-                    }
-
-                    if (nextList.firstChild) {
-                        dfx.insertBefore(nextList.firstChild, li);
-                    } else {
-                        nextList.appendChild(li);
-                    }
-                }//end if
-            }//end if
-        });
+        this._initTrackChanges();
 
     },
 
@@ -1434,6 +1218,230 @@ ViperListPlugin.prototype = {
         }
 
         return true;
+
+    },
+
+    _initTrackChanges: function()
+    {
+        var self = this;
+
+        // Change Tracker.
+        ViperChangeTracker.addChangeType('makeList', 'Formatted', 'insert');
+        ViperChangeTracker.addChangeType('removedList-ol', 'Formatted', 'format');
+        ViperChangeTracker.addChangeType('removedList-ul', 'Formatted', 'format');
+        ViperChangeTracker.addChangeType('makeList-change', 'Formatted', 'format');
+        ViperChangeTracker.addChangeType('addedListItem', 'Inserted', 'insert');
+        ViperChangeTracker.addChangeType('breakListUP', 'Formatted', 'format');
+        ViperChangeTracker.addChangeType('breakListUPDown', 'Formatted', 'format');
+        ViperChangeTracker.addChangeType('breakListDown', 'Formatted', 'format');
+
+        ViperChangeTracker.setDescriptionCallback('makeList', function(node) {
+            var listType = 'ordered';
+            if (dfx.isTag(node, 'ul') === true) {
+                listType = 'un-ordered';
+            }
+
+            return 'Changed to ' + listType + ' list';
+        });
+        ViperChangeTracker.setApproveCallback('makeList', function(clone, node) {
+            ViperChangeTracker.removeTrackChanges(node);
+        });
+        ViperChangeTracker.setRejectCallback('makeList', function(clone, node) {
+            var children = [];
+            dfx.foreach(node.childNodes, function(i) {
+                children.push(node.childNodes[i]);
+            });
+
+            while (child = children.shift()) {
+                self.removeListItem(child, true);
+            }
+
+            dfx.remove(node);
+        });
+
+        ViperChangeTracker.setDescriptionCallback('removedList-ol', function(node) {
+            return 'Removed from ordered list';
+        });
+        ViperChangeTracker.setApproveCallback('removedList-ol', function(clone, node) {
+            ViperChangeTracker.removeTrackChanges(node);
+        });
+        ViperChangeTracker.setRejectCallback('removedList-ol', function(clone, node) {
+            // Just create a new list.
+            var list = document.createElement('ol');
+            dfx.insertBefore(node, list);
+            list.appendChild(self._createListItem(node));
+        });
+
+        ViperChangeTracker.setDescriptionCallback('removedList-ul', function(node) {
+            return 'Removed from un-ordered list';
+        });
+        ViperChangeTracker.setApproveCallback('removedList-ul', function(clone, node) {
+            ViperChangeTracker.removeTrackChanges(node);
+        });
+        ViperChangeTracker.setRejectCallback('removedList-ul', function(clone, node) {
+            // Just create a new list.
+            var list = document.createElement('ul');
+            dfx.insertBefore(node, list);
+            list.appendChild(self._createListItem(node));
+        });
+
+        ViperChangeTracker.setDescriptionCallback('makeList-change', function(node) {
+            var listType = 'unordered';
+            if (dfx.isTag(node, 'ol') === true) {
+                listType = 'ordered';
+            }
+
+            return 'Changed to ' + listType + ' list';
+        });
+        ViperChangeTracker.setApproveCallback('makeList-change', function(clone, node) {
+            ViperChangeTracker.removeTrackChanges(node);
+        });
+        ViperChangeTracker.setRejectCallback('makeList-change', function(clone, node) {
+            var newTag = 'ol'
+            if (dfx.isTag(node, 'ol') === true) {
+                newTag = 'ul';
+            }
+
+            var newList = document.createElement(newTag);
+            while (node.firstChild) {
+                newList.appendChild(node.firstChild);
+            }
+
+            dfx.insertBefore(node, newList);
+            dfx.remove(node);
+        });
+
+        // List break.
+        ViperChangeTracker.setDescriptionCallback('breakListUP', function(node) {
+            return 'Removed from list';
+        });
+        ViperChangeTracker.setApproveCallback('breakListUP', function(clone, node) {
+            ViperChangeTracker.removeTrackChanges(node);
+        });
+        ViperChangeTracker.setRejectCallback('breakListUP', function(clone, node) {
+            var prevList = node.previousSibling;
+            if (dfx.isTag(prevList, 'ul') === true || dfx.isTag(prevList, 'ol') === true) {
+                if (self.isListNode(node) === true) {
+                    // Import children.
+                    while (node.firstChild) {
+                        prevList.appendChild(node.firstChild);
+                    }
+
+                    dfx.remove(node);
+                } else {
+                    var li = node;
+                    if (dfx.isTag(li, 'li') === false) {
+                        li = self._createListItem(node)
+                    }
+
+                    prevList.appendChild(li);
+                }
+            }
+        });
+
+        // List break.
+        ViperChangeTracker.setDescriptionCallback('breakListUPDown', function(node) {
+            return 'Removed from list';
+        });
+        ViperChangeTracker.setApproveCallback('breakListUPDown', function(clone, node) {
+            ViperChangeTracker.removeTrackChanges(node);
+        });
+        ViperChangeTracker.setRejectCallback('breakListUPDown', function(clone, node) {
+            var prevList = node.previousSibling;
+            var nextList = node.nextSibling;
+            if (dfx.isTag(prevList, 'ul') === true || dfx.isTag(prevList, 'ol') === true) {
+                if (self.isListNode(node) === true) {
+                    // Import children.
+                    while (node.firstChild) {
+                        prevList.appendChild(node.firstChild);
+                    }
+
+                    dfx.remove(node);
+                } else {
+                    var li = node;
+                    if (dfx.isTag(li, 'li') === false) {
+                        li = self._createListItem(node)
+                    }
+
+                    prevList.appendChild(li);
+                }
+
+                if (nextList) {
+                    // Join lists...
+                    while (nextList.firstChild) {
+                        var li = nextList.firstChild;
+                        if (dfx.isTag(nextList.firstChild, 'li') === false) {
+                            li = self._createListItem(nextList.firstChild);
+                        }
+
+                        prevList.appendChild(li);
+                    }
+
+                    dfx.remove(nextList);
+                }
+            } else if (dfx.isTag(nextList, 'ul') === true || dfx.isTag(nextList, 'ol') === true) {
+                if (self.isListNode(node) === true) {
+                    // Import children.
+                    if (nextList.firstChild) {
+                        dfx.insertBefore(nextList.firstChild, node.childNodes);
+                    } else {
+                        while (node.firstChild) {
+                            nextList.appendChild(node.firstChild);
+                        }
+                    }
+
+                    dfx.remove(node);
+                } else {
+                    var li = node;
+                    if (dfx.isTag(li, 'li') === false) {
+                        li = self._createListItem(node)
+                    }
+
+                    // Join to this list..
+                    if (nextList.firstChild) {
+                        dfx.insertBefore(nextList.firstChild, li);
+                    } else {
+                        nextList.appendChild(li);
+                    }
+                }//end if
+            }//end if
+        });
+
+         // List break.
+        ViperChangeTracker.setDescriptionCallback('breakListDown', function(node) {
+            return 'Removed from list';
+        });
+        ViperChangeTracker.setApproveCallback('breakListDown', function(clone, node) {
+            ViperChangeTracker.removeTrackChanges(node);
+        });
+        ViperChangeTracker.setRejectCallback('breakListDown', function(clone, node) {
+            var nextList = node.nextSibling;
+            if (dfx.isTag(nextList, 'ul') === true || dfx.isTag(nextList, 'ol') === true) {
+                if (self.isListNode(node) === true) {
+                    // Import children.
+                    if (nextList.firstChild) {
+                        dfx.insertBefore(nextList.firstChild, node.childNodes);
+                    } else {
+                        while (node.firstChild) {
+                            nextList.appendChild(node.firstChild);
+                        }
+                    }
+
+                    dfx.remove(node);
+                } else {
+                    var li = node;
+                    if (dfx.isTag(li, 'li') === false) {
+                        li = self._createListItem(node)
+                    }
+
+                    if (nextList.firstChild) {
+                        dfx.insertBefore(nextList.firstChild, li);
+                    } else {
+                        nextList.appendChild(li);
+                    }
+                }//end if
+            }//end if
+        });
 
     }
 
