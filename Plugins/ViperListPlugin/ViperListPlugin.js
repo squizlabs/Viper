@@ -669,61 +669,6 @@ ViperListPlugin.prototype = {
 
     },
 
-    getSubListItem: function(li)
-    {
-        for (var node = li.firstChild; node; node = node.nextSibling) {
-            if (dfx.isTag(node, 'ul') === true || dfx.isTag(node, 'ol') === true) {
-                return node;
-            }
-        }
-
-        return null;
-
-    },
-
-    addItemToList: function(li, list, pos)
-    {
-        if (!li || !list || dfx.isTag(li, 'li') === false) {
-            return false;
-        }
-
-        pos = pos || 0;
-
-        var tags = dfx.getTag('li', list);
-
-        if (tags.length <= pos) {
-            list.appendChild(li);
-        } else {
-            dfx.insertBefore(tags[pos], li);
-        }
-
-        return true;
-
-    },
-
-    /**
-     * Returns item's contents excluding sub lists.
-     *
-     * @param {DOMNode} li The list item.
-     *
-     * @return {array} List of DOMNodes.
-     */
-    getItemContents: function(li)
-    {
-        var contentElements = [];
-        for (var node = li.firstChild; node; node = node.nextSibling) {
-            if (dfx.isTag(node, 'ul') === true || dfx.isTag(node, 'ol') === true) {
-                continue;
-            }
-
-            contentElements.push(node);
-        }
-
-        return contentElements;
-
-    },
-
-
     outdentListItems: function(listItems)
     {
         if (!listItems || listItems.length === 0) {
@@ -828,6 +773,60 @@ ViperListPlugin.prototype = {
         }
 
         return true;
+
+    },
+
+    getSubListItem: function(li)
+    {
+        for (var node = li.firstChild; node; node = node.nextSibling) {
+            if (dfx.isTag(node, 'ul') === true || dfx.isTag(node, 'ol') === true) {
+                return node;
+            }
+        }
+
+        return null;
+
+    },
+
+    addItemToList: function(li, list, pos)
+    {
+        if (!li || !list || dfx.isTag(li, 'li') === false) {
+            return false;
+        }
+
+        pos = pos || 0;
+
+        var tags = dfx.getTag('li', list);
+
+        if (tags.length <= pos) {
+            list.appendChild(li);
+        } else {
+            dfx.insertBefore(tags[pos], li);
+        }
+
+        return true;
+
+    },
+
+    /**
+     * Returns item's contents excluding sub lists.
+     *
+     * @param {DOMNode} li The list item.
+     *
+     * @return {array} List of DOMNodes.
+     */
+    getItemContents: function(li)
+    {
+        var contentElements = [];
+        for (var node = li.firstChild; node; node = node.nextSibling) {
+            if (dfx.isTag(node, 'ul') === true || dfx.isTag(node, 'ol') === true) {
+                continue;
+            }
+
+            contentElements.push(node);
+        }
+
+        return contentElements;
 
     },
 
@@ -1193,6 +1192,17 @@ ViperListPlugin.prototype = {
             if (firstParent === lastParent) {
                 parentList = firstParent;
                 sameParent = true;
+            } else {
+                for (var node = last.parentNode; last; node = node.parentNode) {
+                    var tagName = dfx.getTagName(node);
+                    if (tagName !== 'li' && tagName !== 'ol' && tagName !== 'ul') {
+                        break;
+                    } else if (this.getNextItem(node)) {
+                        break;
+                    } else if (node === firstParent) {
+                        return true;
+                    }
+                }
             }
         } else {
             sameParent = true;
