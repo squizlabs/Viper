@@ -245,6 +245,16 @@
     border-bottom-color: #F9F9F9;
 }
 
+/* SubSection Rows */
+
+.subSectionRow {
+    position: relative;
+    margin-top: 0.5em;
+}
+.subSectionRow:first-child {
+    margin-top: 0;
+}
+
 /* SubSection Lists */
 
 .subSectionList-title {
@@ -310,7 +320,7 @@
     text-align: left;
     color: #DDD;
     background: rgba(0,0,0,0.2);
-    border-radius: 0.3em;
+    border-radius: 0.4em;
     -moz-transition-property: color, background;
     -moz-transition-duration: 0.3s;
     -webkit-transition-property: color, background;
@@ -374,25 +384,49 @@
 .ViperITP-label.active .ViperITP-input[type=text] {
     color: #FFF;
 }
+.ViperITP-msgBox {
+    margin-top: 0.4em;
+    border-radius: 0.4em;
+    border: 1px solid #747379;
+    color: #cacad1;
+    padding: 0.3em 0.3em 0.3em 20px;
+    text-shadow: none;
+    font-size: 1.1em;
+    font-weight: bold;
+    text-align: left;
+    background: #646468 url(../../Images/msg-spinner.gif) 3px 49% no-repeat;
+}
+.ViperITP-msgBox.pass {
+    background-color: #54874b;
+    border-color: #6aaa60;
+    color: #c7e7c2;
+    background-image: url(../../Images/msg-pass.png);
+}
+.ViperITP-msgBox.fail {
+    background-color: #952424;
+    border-color: #ad4c4c;
+    color: #f8d6d6;
+    background-image: url(../../Images/msg-fail.png);
+}
 
 /* Temp new styles for tweaking Link in new window button layout */
 
 .ViperITP-label.linkNewWindow {
-    margin-right: 3.5em;
-/*     direction: rtl; */
+    margin-right: 3.6em;
 }
 
 .Viper-button.linkNewWindow {
     position: absolute;
-    right: 0.3em;
-    top: 0.4em;
+    right: 0;
+    top: 0;
 }
 .subSection-linkURL {
     -moz-transition-property: margin-left margin-right;
     -moz-transition-duration: 0.3s;
     -moz-transition-timing-function: ease;
 }
-.subSection-linkURL:hover {
+.subSection-linkURL:hover,
+.subSection-linkURL:focus {
     position: relative;
     margin: -0.6em -15em -0.7em;
     background-color: #54535A;
