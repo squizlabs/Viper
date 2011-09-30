@@ -582,6 +582,20 @@ ViperListPlugin.prototype = {
             return false;
         }
 
+        // If the current list items is starting with a list and ends up selecting
+        // its whole sublist then move them all by 1 level.
+        if (listItems.length > 1) {
+            var subList = this.getSubListItem(listItems[0]);
+            if (subList) {
+                var firstItem = listItems.shift();
+                if (this._isWholeList(listItems) === true) {
+                    return this.indentListItem(firstItem, true);
+                }
+
+                listItems.unshift(firstItem);
+            }
+        }
+
         var c = listItems.length;
         for (var i = 0; i < c; i++) {
             if (this.indentListItem(listItems[i]) === false) {
@@ -593,7 +607,7 @@ ViperListPlugin.prototype = {
 
     },
 
-    indentListItem: function(li)
+    indentListItem: function(li, includeSublist)
     {
         if (!li) {
             return false;
@@ -610,12 +624,12 @@ ViperListPlugin.prototype = {
         // list item.
         // Check if the previous list item has a sub list.
         var subList = this.getSubListItem(prevItem);
-        if (subList) {
+        if (subList && includeSublist !== true) {
             // Previous item has a sub list, add this item to that sub list.
             subList.appendChild(li);
         } else {
             var subList = this.getSubListItem(li);
-            if (subList) {
+            if (subList && includeSublist !== true) {
                 var itemContents = this.getItemContents(li);
                 var newItem      = document.createElement('li');
 
@@ -709,6 +723,20 @@ ViperListPlugin.prototype = {
     {
         if (!listItems || listItems.length === 0) {
             return false;
+        }
+
+        // If the current list items is starting with a list and ends up selecting
+        // its whole sublist then move them all by 1 level.
+        if (listItems.length > 1) {
+            var subList = this.getSubListItem(listItems[0]);
+            if (subList) {
+                var firstItem = listItems.shift();
+                if (this._isWholeList(listItems) === true) {
+                    return this.outdentListItem(firstItem, true);
+                }
+
+                listItems.unshift(firstItem);
+            }
         }
 
         var c = listItems.length;
@@ -1163,6 +1191,7 @@ ViperListPlugin.prototype = {
             }
         } else {
             sameParent = true;
+            parentList = elems[0].parentNode;
         }
 
         if (sameParent === true) {
