@@ -623,10 +623,10 @@ ViperListPlugin.prototype = {
         // move this item in to that list and move the sub list to the previous
         // list item.
         // Check if the previous list item has a sub list.
-        var subList = this.getSubListItem(prevItem);
-        if (subList && includeSublist !== true) {
+        var prevSubList = this.getSubListItem(prevItem);
+        if (prevSubList && includeSublist !== true) {
             // Previous item has a sub list, add this item to that sub list.
-            subList.appendChild(li);
+            prevSubList.appendChild(li);
         } else {
             var subList = this.getSubListItem(li);
             if (subList && includeSublist !== true) {
@@ -646,17 +646,22 @@ ViperListPlugin.prototype = {
                 // This item is no longer needed..
                 dfx.remove(li);
             } else {
-                // Create a new list using the same list type.
-                var listElement = this._getListElement(li);
+                // If the previous item has a sub list then join to that.
+                if (prevSubList) {
+                    prevSubList.appendChild(li);
+                } else {
+                    // Create a new list using the same list type.
+                    var listElement = this._getListElement(li);
 
-                var tagName     = dfx.getTagName(listElement);
-                var newList     = document.createElement(tagName);
+                    var tagName     = dfx.getTagName(listElement);
+                    var newList     = document.createElement(tagName);
 
-                // Add the list item to this new list.
-                newList.appendChild(li);
+                    // Add the list item to this new list.
+                    newList.appendChild(li);
 
-                // Add the new list to the previous item.
-                prevItem.appendChild(newList);
+                    // Add the new list to the previous item.
+                    prevItem.appendChild(newList);
+                }
             }
         }
 
