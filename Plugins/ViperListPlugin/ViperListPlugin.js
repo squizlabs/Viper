@@ -53,6 +53,10 @@ ViperListPlugin.prototype = {
 
                     dfx.preventDefault(e);
                     return false;
+                } else if ((dfx.isTag(startNode, 'p') === true || (startNode.nodeType === dfx.TEXT_NODE && dfx.isTag(dfx.getFirstBlockParent(startNode), 'p') === true))) {
+                    self.convertRangeToList(range);
+                    dfx.preventDefault(e);
+                    return false;
                 }
             }
 
@@ -675,6 +679,36 @@ ViperListPlugin.prototype = {
             return false;
         }
 
+        if (this._isWholeList(listItems) === true) {
+            // Get the parent list.
+            var list = this._getListElement(listItems[0]);
+            if (!this._getListElement(list)) {
+                // First check for sub lists.
+                for (var i = 0; i < listItems.length; i++) {
+                    var li = listItems[i];
+                    var subList = this.getSubListItem(li);
+                    if (subList) {
+                        return;
+                    }
+                }
+
+                // Conver to P tags.
+                for (var i = 0; i < listItems.length; i++) {
+                    var li = listItems[i];
+                    var p  = document.createElement('p');
+                    while (li.firstChild) {
+                        p.appendChild(li.firstChild);
+                    }
+
+                    dfx.insertBefore(list, p);
+                }
+
+                dfx.remove(list);
+
+                return true;
+            }
+        }
+
         // If the current list items is starting with a list and ends up selecting
         // its whole sublist then move them all by 1 level.
         if (listItems.length > 1) {
@@ -742,35 +776,99 @@ ViperListPlugin.prototype = {
             }
 
             return true;
-        } else {
-            return false;
+        }//end if
 
-            /*
-                DISABLED - Do not break out of lists.
-                // There is no parent list.. We need to break out of the current list
-                // and make this list item a new paragraph.
-                var p = document.createElement('p');
-                while (li.firstChild) {
-                    p.appendChild(li.firstChild);
+        return false;
+
+    },
+
+    convertRangeToList: function(range)
+    {
+        var startNode = range.getStartNode();
+        var endNode   = range.getEndNode();
+        var bookmark  = this.viper.createBookmark();
+
+        var pElems = [];
+        if (startNode === endNode) {
+            pElems.push(this._getParaElement(startNode));
+        } else {
+            var elems = dfx.getElementsBetween(bookmark.start, bookmark.end);
+            var c     = elems.length;
+            for (var i = 0; i < c; i++) {
+                var p = this._getParaElement(elems[i]);
+                if (p && pElems.inArray(p) === false) {
+                    pElems.push(p);
+                }
+            }
+        }
+
+        if (pElems.length === 0) {
+            return;
+        }
+
+        // Get the previous list if there is one.
+        var list  = null;
+        var atEnd = true;
+        for (var node = pElems[0].previousSibling; node; node = node.previousSibling) {
+            if (node.nodeType === dfx.ELEMENT_NODE) {
+                if (dfx.isTag(node, 'ol') === true || dfx.isTag(node, 'ul') === true) {
+                    list  = node;
+                    atEnd = true;
                 }
 
-                if (siblingItems.length === 0) {
-                    // No next siblings. Place the new p under the list element.
-                    dfx.insertAfter(list, p);
-                    dfx.remove(li);
-                } else {
-                    // Create a new list element of the same type.
-                    var newList = document.createElement(this.getListType(li));
-                    for (var i = 0; i < siblingItems.length; i++) {
-                        newList.appendChild(siblingItems[i]);
+                break;
+            }
+        }
+
+        if (list === null) {
+            // There was no list before the first element. Check if there is a list
+            // element after the last p element.
+            for (var node = pElems[(pElems.length - 1)].nextSibling; node; node = node.nextSibling) {
+                if (node.nodeType === dfx.ELEMENT_NODE) {
+                    if (dfx.isTag(node, 'ol') === true || dfx.isTag(node, 'ul') === true) {
+                        list  = node;
+                        atEnd = false;
                     }
 
-                    // Add the paragraph and the new list after the list element.
-                    dfx.insertAfter(list, p);
-                    dfx.insertAfter(p, newList);
-                    dfx.remove(li);
-            }*/
+                    break;
+                }
+            }
         }
+
+        if (list === null) {
+            // No list found, create a new list.
+            list = document.createElement('ul');
+            dfx.insertBefore(pElems[0], list);
+            atEnd = true;
+        }
+
+        var listItems = [];
+        for (var i = 0; i < pElems.length; i++) {
+            var p  = pElems[i];
+            var li = document.createElement('li');
+            while (p.firstChild) {
+                li.appendChild(p.firstChild);
+            }
+
+            listItems.push(li);
+        }
+
+        if (atEnd === true) {
+            // Append the new list items to the end of the list.
+            for (var i = 0; i < listItems.length; i++) {
+                list.appendChild(listItems[i]);
+            }
+        } else {
+            // To the start of the list.
+            for (var i = 0; i < listItems.length; i++) {
+                dfx.insertBefore(list.firstChild, listItems[i]);
+            }
+        }
+
+        // Select bookmark.
+        this.viper.selectBookmark(bookmark);
+
+        this.viper.fireNodesChanged(this.viper.getViperElement());
 
         return true;
 
@@ -1172,6 +1270,20 @@ ViperListPlugin.prototype = {
         }
 
         return null;
+
+    },
+
+    _getParaElement: function(element)
+    {
+        if (!element || element === this.viper.getViperElement()) {
+            return;
+        }
+
+        if (dfx.isTag(element, 'p') === true) {
+            return element;
+        }
+
+        return this._getParaElement(element.parentNode);
 
     },
 
