@@ -53,7 +53,7 @@ ViperListPlugin.prototype = {
 
                     dfx.preventDefault(e);
                     return false;
-                } else if ((dfx.isTag(startNode, 'p') === true || (startNode.nodeType === dfx.TEXT_NODE && dfx.isTag(dfx.getFirstBlockParent(startNode), 'p') === true))) {
+                } else if ((dfx.isTag(startNode, 'p') === true || ((startNode.nodeType === dfx.TEXT_NODE || dfx.isStubElement(startNode) === true) && dfx.isTag(dfx.getFirstBlockParent(startNode), 'p') === true))) {
                     self.convertRangeToList(range);
                     dfx.preventDefault(e);
                     return false;
