@@ -348,7 +348,9 @@ ViperListPlugin.prototype = {
 
             var c = elems.length;
             for (var i = 0; i < c; i++) {
-                if (dfx.isTag(elems[i], 'li') === false) {
+                if (!elems[i]) {
+                    continue;
+                } else if (dfx.isTag(elems[i], 'li') === false) {
                     if (elems[i].nodeType === dfx.TEXT_NODE && elems[i].data.indexOf("\n ") === 0) {
                         continue;
                     }
@@ -624,6 +626,8 @@ ViperListPlugin.prototype = {
             var elems = null;
             if (testOnly === true) {
                 elems = dfx.getElementsBetween(startNode, endNode);
+                elems.shift(startNode);
+                elems.push(endNode);
             } else {
                 elems = dfx.getElementsBetween(bookmark.start, bookmark.end);
             }
@@ -1019,7 +1023,7 @@ ViperListPlugin.prototype = {
 
     _createListItem: function(element)
     {
-        if (!element) {
+        if (!element || (element.nodeType === dfx.TEXT_NODE && element.data.indexOf("\n") === 0)) {
             return null;
         }
 
