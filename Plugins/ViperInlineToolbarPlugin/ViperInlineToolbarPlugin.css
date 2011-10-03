@@ -340,9 +340,6 @@
     clear: both;
 }
 .ViperITP-labelText {
-/*     float: left; */
-/*     width: 20%; */
-/*     max-width: 20%; */
     position: absolute;
     left: 0;
     top: 0;
@@ -362,6 +359,17 @@
 .ViperITP-label.active .ViperITP-labelText {
     background-color: #366cb7;
 }
+.ViperITP-label.required .ViperITP-labelText:after {
+    content: "";
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    margin-left: 3px;
+    background: transparent url(../../Images/required-star.png) 0 50% no-repeat;
+}
+.ViperITP-label.required.active .ViperITP-labelText:after {
+    background-image: url(../../Images/required-star-active.png);
+}
 .ViperITP-input[type=text],
 .Viper-subSection textarea {
     box-sizing: border-box;
@@ -378,23 +386,35 @@
     outline: none;
     font-weight: bold;
 }
+.ViperITP-label.required .ViperITP-input[type=text],
+.ViperITP-label.required .Viper-subSection textarea {
+    padding-left: 11px;
+}
 .ViperITP-input.error[type=text] {
     color: #d24d4d;
 }
 .ViperITP-label.active .ViperITP-input[type=text] {
     color: #FFF;
 }
+.ViperITP-input::-webkit-input-placeholder {
+    color: #666;
+    font-style: italic; 
+}
+.ViperITP-input:-moz-placeholder {
+    color: #666;
+    font-style: italic;
+}
 .ViperITP-msgBox {
     margin-top: 0.4em;
     border-radius: 0.4em;
     border: 1px solid #747379;
     color: #cacad1;
-    padding: 0.3em 0.3em 0.3em 20px;
+    padding: 0.3em 0.3em 0.3em 22px;
     text-shadow: none;
     font-size: 1.1em;
     font-weight: bold;
     text-align: left;
-    background: #646468 url(../../Images/msg-spinner.gif) 3px 49% no-repeat;
+    background: #646468 url(../../Images/msg-spinner.gif) 3px 0.25em no-repeat;
 }
 .ViperITP-msgBox.pass {
     background-color: #54874b;
@@ -407,6 +427,21 @@
     border-color: #ad4c4c;
     color: #f8d6d6;
     background-image: url(../../Images/msg-fail.png);
+}
+.ViperITP-msgBox.failAccessibility {
+    background-color: #4faadf;
+    border-color: #87cef6;
+    color: #dbecf6;
+    background-image: url(../../Images/msg-failAccessibility.png);
+}
+.failAccessibility a,
+.failAccessibility a:visited {
+    color: #dbecf6;
+    text-decoration: none;
+    border-bottom: 1px solid #b1d6eb;
+}
+.failAccessibility a:hover {
+    border-color: #FFF;
 }
 
 /* Temp new styles for tweaking Link in new window button layout */
