@@ -57,7 +57,7 @@ var ViperTools = {
 
         if (titleAttr) {
             if (disabled === true) {
-                titleAttr = '[Disabled] ' + titleAttr;
+                titleAttr = titleAttr + ' [Not available]';
             }
 
             button.setAttribute('title', titleAttr);
