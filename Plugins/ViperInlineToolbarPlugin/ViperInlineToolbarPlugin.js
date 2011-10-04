@@ -35,8 +35,10 @@ function ViperInlineToolbarPlugin(viper)
     var self = this;
 
     // Called when the selection is changed.
+    var clickedInToolbar = false;
     this.viper.registerCallback('Viper:selectionChanged', 'ViperInlineToolbarPlugin', function(range) {
-        if (self.viper.rangeInViperBounds(range) === false) {
+        if (clickedInToolbar === true || self.viper.rangeInViperBounds(range) === false) {
+            clickedInToolbar = false;
             return;
         }
 
@@ -60,9 +62,11 @@ function ViperInlineToolbarPlugin(viper)
 
     // Hide the toolbar when user clicks anywhere.
     this.viper.registerCallback(['Viper:mouseDown', 'ViperHistoryManager:undo'], 'ViperInlineToolbarPlugin', function(data) {
+        clickedInToolbar = false;
         if (data && data.target) {
             var target = dfx.getMouseEventTarget(data);
             if (target === self._toolbar || dfx.isChildOf(target, self._toolbar) === true) {
+                clickedInToolbar = true;
                 if (dfx.isTag(target, 'input') === true) {
                     // Allow event to bubble so the input element can get focus etc.
                     return true;
@@ -170,14 +174,16 @@ ViperInlineToolbarPlugin.prototype = {
     /**
      * Creates a textbox.
      *
-     * @param {DOMNode}  node   Element to select.
-     * @param {string}   value  The initial value of the textbox.
-     * @param {string}   label  The label of the textbox.
-     * @param {function} action The function to call when the textbox value is updated.
+     * @param {DOMNode}  node       Element to select.
+     * @param {string}   value      The initial value of the textbox.
+     * @param {string}   label      The label of the textbox.
+     * @param {function} action     The function to call when the textbox value is updated.
+     * @param {boolean}  required   True if this field is required.
+     * @param {boolean}  expandable If true then the textbox will expand when focused.
      *
      * @return {DOMNode} If label specified the label element else the textbox element.
      */
-    createTextbox: function(node, value, label, action)
+    createTextbox: function(node, value, label, action, required, expandable)
     {
         var textBox = document.createElement('input');
         dfx.addClass(textBox, 'ViperITP-input');
@@ -194,10 +200,12 @@ ViperInlineToolbarPlugin.prototype = {
                 clearTimeout(t);
                 textBox.blur();
 
-                var range = self.viper.getCurrentRange();
-                ViperSelection.removeAllRanges();
-                range.selectNode(node);
-                ViperSelection.addRange(range);
+                if (node) {
+                    var range = self.viper.getCurrentRange();
+                    ViperSelection.removeAllRanges();
+                    range.selectNode(node);
+                    ViperSelection.addRange(range);
+                }
 
                 self.viper.focus();
 
@@ -220,6 +228,14 @@ ViperInlineToolbarPlugin.prototype = {
             var span = document.createElement('span');
             dfx.addClass(span, 'ViperITP-labelText');
             dfx.setHtml(span, label);
+
+            if (required === true) {
+                dfx.addClass(labelElem, 'required');
+            }
+
+            if (expandable === true) {
+                dfx.addClass(labelElem, 'expandable');
+            }
 
             document.body.appendChild(span);
             var width = dfx.getElementWidth(span);
@@ -253,6 +269,19 @@ ViperInlineToolbarPlugin.prototype = {
         }
 
         return subSection;
+
+    },
+
+    /**
+     * Creates a new sub section row and returns the new DOMElement.
+     *
+     * @return {DOMElement} The sub section row element.
+     */
+    createSubSectionRow: function()
+    {
+        var elem = document.createElement('div');
+        dfx.addClass(elem, 'subSectionRow');
+        return elem;
 
     },
 
@@ -372,6 +401,15 @@ ViperInlineToolbarPlugin.prototype = {
         }//end switch
 
         return tagName;
+
+    },
+
+    selectLineageItem: function(index)
+    {
+        var tags = dfx.getTag('li', this._lineage);
+        if (tags[index]) {
+            dfx.trigger(tags[index], 'mousedown');
+        }
 
     },
 
@@ -552,10 +590,10 @@ ViperInlineToolbarPlugin.prototype = {
                 // that is not part of viper causing Viper to lose focus..
                 // Use time out to set the range back in to Viper..
                 setTimeout(function() {
-                    self._selectPreviousRange();
+                    self.selectPreviousRange();
                 }, 50);
             } else {
-                self._selectPreviousRange();
+                self.selectPreviousRange();
             }
 
             dfx.preventDefault(e);
@@ -578,7 +616,7 @@ ViperInlineToolbarPlugin.prototype = {
 
     },
 
-    _selectPreviousRange: function()
+    selectPreviousRange: function()
     {
         ViperSelection.removeAllRanges();
         var range = this.viper.getCurrentRange();
