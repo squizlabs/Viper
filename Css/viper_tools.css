@@ -302,3 +302,9 @@
 .Viper-button:active .buttonIcon.linkNewWindow, .Viper-button.active .buttonIcon.linkNewWindow, .Viper-button.selected .buttonIcon.linkNewWindow {
   background-position: -33px -702px;
 }
+.buttonIcon.linkRemove {
+  background-position: 0 -729px;
+}
+.Viper-button:active .buttonIcon.linkRemove, .Viper-button.active .buttonIcon.linkRemove, .Viper-button.selected .buttonIcon.linkRemove {
+  background-position: -33px -729px;
+}
