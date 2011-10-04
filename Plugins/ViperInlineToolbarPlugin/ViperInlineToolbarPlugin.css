@@ -339,6 +339,10 @@
     content: "";
     clear: both;
 }
+.ViperITP-label.disabled {
+    opacity: 0.4;
+    filter: alpha(opacity = 40);
+}
 .ViperITP-labelText {
     position: absolute;
     left: 0;

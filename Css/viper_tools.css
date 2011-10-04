@@ -15,6 +15,7 @@
 }
 .Viper-button.disabled {
   opacity: 0.3;
+  filter: alpha(opacity = 50);
 }
 .Viper-button.hidden {
   display: none;
