@@ -107,11 +107,17 @@ ViperLinkPlugin.prototype = {
             var rangeClone     = data.range.cloneRange();
             var currentIsLink  = false;
 
+            if (dfx.isBlockElement(data.lineage[data.current]) === true) {
+                return;
+            }
+
             if (dfx.isTag(data.lineage[data.current], 'a') === true) {
                 // If the selection is a whole A tag then by default show the
                 // link sub section.
                 subSectionActive = true;
                 currentIsLink    = true;
+            } else {
+                subSectionActive = false;
             }
 
             // Get the link from lineage.
@@ -145,7 +151,7 @@ ViperLinkPlugin.prototype = {
 
             if (isLink === true) {
                 // Add the remove link button.
-                inlineToolbarPlugin.createButton('', isLink, 'Remove Link', false, 'linkRemove', function() {
+                inlineToolbarPlugin.createButton('', false, 'Remove Link', false, 'linkRemove', function() {
                     self.removeLink(link);
                 }, group);
             }

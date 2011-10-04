@@ -229,6 +229,12 @@ ViperInlineToolbarPlugin.prototype = {
             dfx.addClass(span, 'ViperITP-labelText');
             dfx.setHtml(span, label);
 
+            document.body.appendChild(span);
+            var width = dfx.getElementWidth(span);
+            dfx.setStyle(labelElem, 'padding-left', width + 'px');
+            labelElem.appendChild(span);
+            labelElem.appendChild(textBox);
+
             if (required === true) {
                 dfx.addClass(labelElem, 'required');
             }
@@ -236,12 +242,6 @@ ViperInlineToolbarPlugin.prototype = {
             if (expandable === true) {
                 dfx.addClass(labelElem, 'expandable');
             }
-
-            document.body.appendChild(span);
-            var width = dfx.getElementWidth(span);
-            dfx.setStyle(labelElem, 'padding-left', width + 'px');
-            labelElem.appendChild(span);
-            labelElem.appendChild(textBox);
 
             return labelElem;
         }
