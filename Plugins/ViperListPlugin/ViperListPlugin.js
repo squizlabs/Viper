@@ -819,7 +819,7 @@ ViperListPlugin.prototype = {
         if (startNode && this._isListElement(startNode) === true) {
             makeList = true;
             indent   = true;
-        } else if ((dfx.isTag(startNode, 'p') === true || (startNode.nodeType === dfx.TEXT_NODE && dfx.isTag(dfx.getFirstBlockParent(startNode), 'p') === true))) {
+        } else if ((dfx.isTag(startNode, 'p') === true || (startNode.nodeType === dfx.TEXT_NODE && dfx.isTag(startNode.parentNode, 'p') === true))) {
             makeList = true;
         }
 
