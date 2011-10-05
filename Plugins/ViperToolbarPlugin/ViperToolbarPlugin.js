@@ -34,13 +34,18 @@ function ViperToolbarPlugin(viper)
     var self = this;
 
     // During zooming hide the toolbar.
+    var parent = null;
     dfx.addEvent(window, 'gesturestart', function() {
-        dfx.setStyle(self.toolbar, 'display', 'none');
+        if (!parent) {
+            parent = self.toolbar.parentNode;
+        }
+
+        parent.removeChild(self.toolbar);
     });
 
     // Update and show the toolbar after zoom.
     dfx.addEvent(window, 'gestureend', function() {
-        dfx.setStyle(self.toolbar, 'display', 'block');
+        parent.appendChild(self.toolbar);
     });
 
 }
