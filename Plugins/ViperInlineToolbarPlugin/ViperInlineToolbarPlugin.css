@@ -436,7 +436,7 @@
 }
 .ViperITP-input::-webkit-input-placeholder {
     color: #666;
-    font-style: italic; 
+    font-style: italic;
 }
 .ViperITP-input:-moz-placeholder {
     color: #666;
@@ -507,17 +507,7 @@
     -webkit-transition-timing-function: ease;
     z-index: 2;
 }
-.ViperITP-label.expandable:hover,
 .ViperITP-label.expandable.active {
     position: relative;
-/*     margin: -0.6em -15em -0.7em; */
     margin: 0 -15em;
-/*     background-color: #54535A; */
-/*     padding: 0.5em; */
-/*     border-radius: 0.5em; */
-/*     border: 1px solid #2b2b2b; */
-}
-.subSection-linkURL:hover .Viper-button.linkNewWindow {
-/*     right: 0.3em; */
-/*     top: 0.3em; */
 }
