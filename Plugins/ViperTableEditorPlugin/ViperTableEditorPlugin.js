@@ -58,7 +58,12 @@ ViperTableEditorPlugin.prototype = {
             if (e.which === 9) {
                 // Handle tab key.
                 self.removeHighlights();
-                self.moveCaretToNextCell();
+                if (self.moveCaretToNextCell() === false) {
+                    // Create a new row.
+                    self.insertRowAfter(self.activeCell);
+                    self.moveCaretToNextCell();
+                }
+
                 dfx.preventDefault(e);
                 return false;
             }
@@ -736,13 +741,13 @@ ViperTableEditorPlugin.prototype = {
         this.createButton('', false, 'Split Vertically', (this.getColspan(cell) <= 1), 'splitVert', function() {
             self._buttonClicked = true;
             self.splitVertical(cell);
-            self.updateToolbar(cell);
+            self.updateToolbar(cell, 'cell', 'merge');
         }, splitBtnGroup);
 
         this.createButton('', false, 'Split Horizontally', (this.getRowspan(cell) <= 1), 'splitHoriz', function() {
             self._buttonClicked = true;
             self.splitHorizontal(cell);
-            self.updateToolbar(cell);
+            self.updateToolbar(cell, 'cell', 'merge');
         }, splitBtnGroup);
 
         var mergeSubWrapper = document.createElement('div');
@@ -775,7 +780,7 @@ ViperTableEditorPlugin.prototype = {
         }
 
         var mergeSubSection = this.createSubSection(mergeSubWrapper, false);
-        this.createButton('', false, 'Toggle Merge Options', false, 'splitMerge', null, null, mergeSubSection, mergeSubActive);
+        this.createButton('', false, 'Toggle Merge/Split Options', false, 'splitMerge', null, null, mergeSubSection, mergeSubActive);
 
     },
 
