@@ -33,7 +33,7 @@ ViperLinkPlugin.prototype = {
 
     },
 
-    rangeToLink: function(range, url)
+    rangeToLink: function(range, url, title)
     {
         if (!range || !url) {
             return;
@@ -45,6 +45,10 @@ ViperLinkPlugin.prototype = {
 
         var a = document.createElement('a');
         a.setAttribute('href', url);
+
+        if (title) {
+            a.setAttribute('title', title);
+        }
 
         for (var node = bookmark.start.nextSibling; node && node !== bookmark.end; node = node.nextSibling) {
             a.appendChild(node);
@@ -91,6 +95,16 @@ ViperLinkPlugin.prototype = {
 
     },
 
+    setLinkURL: function(link, url)
+    {
+        if (!link) {
+            return;
+        }
+
+        link.setAttribute('href', url);
+
+    },
+
     _initInlineToolbar: function()
     {
         var inlineToolbarPlugin = this.viper.ViperPluginManager.getPlugin('ViperInlineToolbarPlugin');
@@ -101,9 +115,6 @@ ViperLinkPlugin.prototype = {
         var self = this;
         var subSectionActive = false;
         this.viper.registerCallback('ViperInlineToolbarPlugin:updateToolbar', 'ViperLinkPlugin', function(data) {
-            var group          = inlineToolbarPlugin.createButtonGroup();
-            var subSectionCont = document.createElement('div');
-            var subSection     = inlineToolbarPlugin.createSubSection(subSectionCont);
             var rangeClone     = data.range.cloneRange();
             var currentIsLink  = false;
 
@@ -120,6 +131,13 @@ ViperLinkPlugin.prototype = {
                 subSectionActive = false;
             }
 
+            if (currentIsLink !== true
+                && (data.lineage[data.current].nodeType !== dfx.TEXT_NODE
+                || dfx.isTag(data.lineage[data.current].parentNode, 'a') === false)
+                && rangeClone.collapsed === true) {
+                return;
+            }
+
             // Get the link from lineage.
             var link     = null;
             var linIndex = -1;
@@ -131,13 +149,19 @@ ViperLinkPlugin.prototype = {
                 }
             }
 
-            var isLink = false;
-            var url    = '';
+            var isLink    = false;
+            var url       = '';
+            var titleAttr = '';
             if (link) {
                 // Get the current value from the link tag.
-                url    = link.getAttribute('href');
-                isLink = true;
+                url       = link.getAttribute('href');
+                titleAttr = link.getAttribute('title') || '';
+                isLink    = true;
             }
+
+            var group          = inlineToolbarPlugin.createButtonGroup();
+            var subSectionCont = document.createElement('div');
+            var subSection     = inlineToolbarPlugin.createSubSection(subSectionCont);
 
             // Link button.
             if (currentIsLink !== true && link) {
@@ -156,15 +180,21 @@ ViperLinkPlugin.prototype = {
                 }, group);
             }
 
-            // Link sub section.
-            var urlTextbox = inlineToolbarPlugin.createTextbox(null, url, 'URL', function(value) {
+            var setLinkAttributes = function(url, title) {
                 subSectionActive = true;
                 ViperSelection.addRange(rangeClone);
+
                 if (!link) {
-                    link = self.rangeToLink(data.range, value);
+                    link = self.rangeToLink(data.range, url, title);
                 } else {
-                    link.setAttribute('href', value);
+                    self.setLinkURL(link, url);
+                    self.setLinkTitle(link, title);
                 }
+            };
+
+            // Link sub section.
+            var urlTextbox = inlineToolbarPlugin.createTextbox(null, url, 'URL', function(value) {
+                setLinkAttributes(value, (dfx.getTag('input', subSectionCont)[1]).value);
             }, true, true);
 
             var newWindowBtnActive = false;
@@ -182,10 +212,8 @@ ViperLinkPlugin.prototype = {
                 }
             }, group);
 
-            var titleTextbox = inlineToolbarPlugin.createTextbox(null, '', 'Title', function(value) {
-                self.setLinkTitle(link, value);
-                subSectionActive = true;
-                ViperSelection.addRange(rangeClone);
+            var titleTextbox = inlineToolbarPlugin.createTextbox(null, titleAttr, 'Title', function(value) {
+                setLinkAttributes(urlTextbox.lastChild.value, value);
             }, false, true);
 
             var urlRow = inlineToolbarPlugin.createSubSectionRow();

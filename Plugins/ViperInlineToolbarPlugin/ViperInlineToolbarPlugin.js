@@ -52,7 +52,7 @@ function ViperInlineToolbarPlugin(viper)
                 endContainer: range.endContainer,
                 startOffset: range.startOffset,
                 endOffset: range.endOffset,
-                collapased: range.collapsed
+                collapsed: range.collapsed
             }
         }
 
@@ -194,10 +194,17 @@ ViperInlineToolbarPlugin.prototype = {
         var self  = this;
 
         var t = null;
+        dfx.addEvent(textBox, 'focus', function(e) {
+            dfx.addClass(labelElem, 'active');
+        });
+
+        dfx.addEvent(textBox, 'blur', function(e) {
+            dfx.removeClass(labelElem, 'active');
+            clearTimeout(t);
+        });
+
         dfx.addEvent(textBox, 'keyup', function(e) {
             if (e.which === 13) {
-                dfx.removeClass(labelElem, 'active');
-                clearTimeout(t);
                 textBox.blur();
 
                 if (node) {
@@ -212,8 +219,6 @@ ViperInlineToolbarPlugin.prototype = {
                 action.call(textBox, textBox.value);
                 return;
             }
-
-            dfx.addClass(labelElem, 'active');
 
             clearTimeout(t);
             t = setTimeout(function() {
@@ -295,11 +300,6 @@ ViperInlineToolbarPlugin.prototype = {
     updateToolbar: function(range)
     {
         range = range || this.viper.getCurrentRange();
-
-        if (range.collapsed === true) {
-            this.hideToolbar();
-            return;
-        }
 
         dfx.removeClass(this._toolbar, 'subSectionVisible');
 
