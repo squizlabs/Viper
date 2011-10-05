@@ -67,6 +67,29 @@ ViperListPlugin.prototype = {
             self._updateInlineToolbar(data);
         });
 
+        this.viper.registerCallback('Viper:editableElementChanged', 'ViperCopyPastePlugin', function() {
+            var touched = false;
+            var x       = null;
+            dfx.addEvent(self.viper.getViperElement(), 'touchstart', function(e) {
+                x       = e.pageX;
+                touched = true;
+            });
+
+            dfx.addEvent(self.viper.getViperElement(), 'touchmove', function(e) {
+                if (touched === true && x < e.pageX) {
+                    self.indentListItems([e.target]);
+                } else if (touched === true && x > e.pageX) {
+                    self.outdentListItems([e.target]);
+                }
+
+                touched = false;
+            });
+
+            dfx.addEvent(self.viper.getViperElement(), 'touchend', function(e) {
+                touched = false;
+            });
+        });
+
         this._initTrackChanges();
 
     },
@@ -819,7 +842,7 @@ ViperListPlugin.prototype = {
         if (startNode && this._isListElement(startNode) === true) {
             makeList = true;
             indent   = true;
-        } else if ((dfx.isTag(startNode, 'p') === true || (startNode.nodeType === dfx.TEXT_NODE && dfx.isTag(startNode.parentNode, 'p') === true))) {
+        } else if (range.collapsed === false && (dfx.isTag(startNode, 'p') === true || (startNode.nodeType === dfx.TEXT_NODE && dfx.isTag(startNode.parentNode, 'p') === true))) {
             makeList = true;
         }
 
