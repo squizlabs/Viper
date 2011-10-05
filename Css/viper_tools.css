@@ -308,3 +308,9 @@
 .Viper-button:active .buttonIcon.linkRemove, .Viper-button.active .buttonIcon.linkRemove, .Viper-button.selected .buttonIcon.linkRemove {
   background-position: -33px -729px;
 }
+.buttonIcon.image {
+  background-position: 0 -756px;
+}
+.Viper-button:active .buttonIcon.image, .Viper-button.active .buttonIcon.image, .Viper-button.selected .buttonIcon.image {
+  background-position: -33px -756px;
+}
