@@ -247,6 +247,11 @@ ViperFormatPlugin.prototype = {
             || data.range.startContainer === data.range.endContainer
         ) {
             var rangeClone = data.range.cloneRange();
+            for (var i = 0; i < data.lineage.length; i++) {
+                if (dfx.isTag(data.lineage[i], 'a') === true) {
+                    return;
+                }
+            }
 
             // Anchor.
             var active = false;
