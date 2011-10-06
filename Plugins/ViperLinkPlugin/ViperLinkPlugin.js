@@ -50,8 +50,9 @@ ViperLinkPlugin.prototype = {
             a.setAttribute('title', title);
         }
 
-        for (var node = bookmark.start.nextSibling; node && node !== bookmark.end; node = node.nextSibling) {
-            a.appendChild(node);
+        var elems = dfx.getElementsBetween(bookmark.start, bookmark.end);
+        for (var i = 0; i < elems.length; i++) {
+            a.appendChild(elems[i]);
         }
 
         dfx.insertAfter(bookmark.start, a);
@@ -121,7 +122,14 @@ ViperLinkPlugin.prototype = {
             var rangeClone     = data.range.cloneRange();
             var currentIsLink  = false;
 
+            // Check if we need to show the link options.
             if (dfx.isBlockElement(data.lineage[data.current]) === true) {
+                return;
+            }
+
+            var startNode = data.range.getStartNode();
+            var endNode   = data.range.getEndNode();
+            if (startNode.parentNode !== endNode.parentNode) {
                 return;
             }
 
