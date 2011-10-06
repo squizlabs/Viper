@@ -75,7 +75,7 @@ ViperListPlugin.prototype = {
             showToolbar = false;
         });
 
-        this.viper.registerCallback('Viper:editableElementChanged', 'ViperCopyPastePlugin', function() {
+        this.viper.registerCallback('Viper:editableElementChanged', 'ViperListPlugin', function() {console.info(1);
             var touched = false;
             var x       = null;
             dfx.addEvent(self.viper.getViperElement(), 'touchstart', function(e) {
