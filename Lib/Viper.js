@@ -2651,6 +2651,15 @@ Viper.prototype = {
             return false;
         }
 
+        if (e.which === dfx.DOM_VK_DELETE) {
+            // Check if the content is now empty.
+            var html = dfx.getHtml(this.element);
+            if (!html || html === '<br>') {
+                dfx.setHtml(this.element, '');
+                this.initEditableElement();
+            }
+        }
+
         this.fireSelectionChanged();
 
     },
