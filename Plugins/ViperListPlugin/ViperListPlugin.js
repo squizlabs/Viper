@@ -928,7 +928,7 @@ ViperListPlugin.prototype = {
                 canMakeOL = true;
             }
 
-            inlineToolbarPlugin.createButton('', dfx.isTag(startNode, 'ul'), 'Make Unordered List', !canMakeUL, 'listUL', function() {
+            inlineToolbarPlugin.createButton('', dfx.isTag(list, 'ul'), 'Make Unordered List', !canMakeUL, 'listUL', function() {
                 if (dfx.isTag(list, 'ol') === true) {
                     var newList = self.toggleListType(list);
 
@@ -951,7 +951,7 @@ ViperListPlugin.prototype = {
                     ViperSelection.addRange(range);
                 }
             }, buttonGroup);
-            inlineToolbarPlugin.createButton('', dfx.isTag(startNode, 'ol'), 'Make Ordered List', !canMakeOL, 'listOL', function() {
+            inlineToolbarPlugin.createButton('', dfx.isTag(list, 'ol'), 'Make Ordered List', !canMakeOL, 'listOL', function() {
                 if (dfx.isTag(list, 'ul') === true) {
                     var newList = self.toggleListType(list);
 
