@@ -466,8 +466,44 @@ ViperInlineToolbarPlugin.prototype = {
             rangeCoords = range.rangeObj.getBoundingClientRect();
         }
 
+        if (!rangeCoords || (rangeCoords.left === 0 && rangeCoords.top === 0 && this.viper.isBrowser('firefox') === true)) {
+            var startNode = range.getStartNode();
+            var endNode   = range.getEndNode();
+            if (startNode.nodeType === dfx.TEXT_NODE
+                && startNode.data.indexOf("\n") === 0
+                && endNode.nodeType === dfx.TEXT_NODE
+                && range.endOffset === endNode.data.length
+            ) {
+                range.setStart(endNode, endNode.data.length);
+                range.collapse(true);
+                rangeCoords = range.rangeObj.getBoundingClientRect();
+            }
+        }
+
         if (!rangeCoords) {
-            return;
+            if (this.viper.isBrowser('chrome') === true || this.viper.isBrowser('safari') === true) {
+                // Webkit bug workaround. https://bugs.webkit.org/show_bug.cgi?id=65324
+                var startNode = range.getStartNode();
+                if (startNode.nodeType == dfx.TEXT_NODE) {
+                    if (range.startOffset < startNode.data.length) {
+                        range.setEnd(startNode, (range.startOffset + 1));
+                        rangeCoords = range.rangeObj.getBoundingClientRect();
+                        range.collapse(true);
+                        if (rangeCoords) {
+                            rangeCoords.right = rangeCoords.left;
+                        }
+                    } else if (range.startOffset > 0) {
+                        range.setStart(startNode, (range.startOffset - 1));
+                        rangeCoords = range.rangeObj.getBoundingClientRect();
+                        range.collapse(false);
+                        if (rangeCoords) {
+                            rangeCoords.right = rangeCoords.left;
+                        }
+                    }
+                }
+            } else {
+                return;
+            }
         }
 
         var scrollCoords = dfx.getScrollCoords();
