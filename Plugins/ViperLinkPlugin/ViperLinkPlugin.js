@@ -66,7 +66,7 @@ ViperLinkPlugin.prototype = {
 
     removeLink: function(linkTag)
     {
-        if (!linkTag) {
+        if (!linkTag && linkTag.parentNode) {
             return;
         }
 
@@ -77,11 +77,14 @@ ViperLinkPlugin.prototype = {
             this.viper.insertBefore(linkTag, linkTag.firstChild);
         }
 
+        dfx.remove(linkTag);
+
         var range = this.viper.getCurrentRange();
         range.setStart(firstChild, 0);
         range.setEnd(lastChild, lastChild.data.length);
         ViperSelection.addRange(range);
-        this.viper.fireSelectionChanged();
+        this.viper.fireSelectionChanged(true);
+        this.viper.fireNodesChanged([this.viper.getViperElement()]);
 
     },
 
