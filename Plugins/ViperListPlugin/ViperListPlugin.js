@@ -894,6 +894,10 @@ ViperListPlugin.prototype = {
         var indent   = false;
 
         if (startNode && this._isListElement(startNode) === true) {
+            if (range.collapsed === true) {
+                return;
+            }
+
             makeList = true;
             indent   = true;
         } else if (range.collapsed === false && (dfx.isTag(startNode, 'p') === true || (startNode.nodeType === dfx.TEXT_NODE && dfx.isTag(startNode.parentNode, 'p') === true))) {
