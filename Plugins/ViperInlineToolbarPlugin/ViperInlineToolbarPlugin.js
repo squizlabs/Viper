@@ -220,6 +220,8 @@ ViperInlineToolbarPlugin.prototype = {
                 return;
             }
 
+            dfx.addClass(labelElem, 'active');
+
             clearTimeout(t);
             t = setTimeout(function() {
                 dfx.removeClass(labelElem, 'active');
