@@ -310,6 +310,9 @@ ViperInlineToolbarPlugin.prototype = {
         }
 
         var lineage = this._getSelectionLineage(range);
+        if (!lineage || lineage.length === 0) {
+            return;
+        }
 
         dfx.addClass(this._toolbar, 'calcWidth');
         this._updateInnerContainer(range, lineage);
