@@ -87,6 +87,8 @@ ViperTableEditorPlugin.prototype = {
             this.viper.registerCallback('Viper:mouseUp', 'ViperTableEditor', function(e) {
                 var range = self.viper.getCurrentRange();
                 if (range.collapsed === false) {
+                    self.removeHighlights();
+                    self.hideCellToolsIcon();
                     return true;
                 }
 
