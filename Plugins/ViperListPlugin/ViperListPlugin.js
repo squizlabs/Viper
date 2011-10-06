@@ -63,8 +63,16 @@ ViperListPlugin.prototype = {
         });
 
         // Inline toolbar.
+        var showToolbar = false;
+        this.viper.registerCallback('Viper:mouseUp', 'ViperListPlugin', function(e) {
+            showToolbar = true;
+        });
         this.viper.registerCallback('ViperInlineToolbarPlugin:updateToolbar', 'ViperListPlugin', function(data) {
-            self._updateInlineToolbar(data);
+            if (showToolbar === true) {
+                self._updateInlineToolbar(data);
+            }
+
+            showToolbar = false;
         });
 
         this.viper.registerCallback('Viper:editableElementChanged', 'ViperCopyPastePlugin', function() {
@@ -738,6 +746,54 @@ ViperListPlugin.prototype = {
 
     },
 
+    toggleListType: function(list)
+    {
+        var newListType = null;
+        if (dfx.isTag(list, 'ol') === true) {
+            newListType = 'ul';
+        } else if (dfx.isTag(list, 'ul') === true) {
+            newListType = 'ol';
+        }
+
+        if (!newListType) {
+            return false;
+        }
+
+        var newList = document.createElement(newListType);
+        while (list.firstChild) {
+            newList.appendChild(list.firstChild);
+        }
+
+        dfx.insertBefore(list, newList);
+        dfx.remove(list);
+
+        return newList;
+
+    },
+
+    listToParagraphs: function(list)
+    {
+        var pTags = [];
+        for (var node = list.firstChild; node; node = node.nextSibling) {
+            if (dfx.isTag(node, 'li') !== true) {
+                continue;
+            }
+
+            var p = document.createElement('p');
+            while (node.firstChild) {
+                p.appendChild(node.firstChild);
+            }
+
+            dfx.insertBefore(list, p);
+            pTags.push(p);
+        }
+
+        dfx.remove(list);
+
+        return pTags;
+
+    },
+
     getSubListItem: function(li)
     {
         for (var node = li.firstChild; node; node = node.nextSibling) {
@@ -856,23 +912,47 @@ ViperListPlugin.prototype = {
         if (makeList === true) {
             var canMakeUL = false;
             var canMakeOL = false;
-            var list = this._getListElement(range.getStartNode());
+            var list      = null;
+            if (dfx.isTag(startNode, 'ul') === true || dfx.isTag(startNode, 'ol') === true) {
+                list = startNode;
+            } else {
+                list = this._getListElement(startNode);
+            }
+
             if (!list && this.convertRangeToList(range, true) === true) {
                 canMakeUL = true;
                 canMakeOL = true;
             } else if (dfx.isTag(list, 'ol') === true) {
                 canMakeUL = true;
-                canMakeOL = false;
+                canMakeOL = true;
             } else if (dfx.isTag(list, 'ul') === true) {
-                canMakeUL = false;
+                canMakeUL = true;
                 canMakeOL = true;
             }
 
-            inlineToolbarPlugin.createButton('', false, 'Make Unordered List', !canMakeUL, 'listUL', function() {
-                self.makeList();
+            inlineToolbarPlugin.createButton('', dfx.isTag(startNode, 'ul'), 'Make Unordered List', !canMakeUL, 'listUL', function() {
+                if (dfx.isTag(list, 'ol') === true || dfx.isTag(list, 'ul') !== true) {
+                    self.makeList();
+                } else {
+                    var pTags = self.listToParagraphs(list);
+                    var range = self.viper.getCurrentRange();
+                    range.setStart(range._getFirstSelectableChild(pTags[0]), 0);
+                    var lastChild = range._getLastSelectableChild(pTags[(pTags.length - 1)]);
+                    range.setEnd(lastChild, lastChild.data.length);
+                    ViperSelection.addRange(range);
+                }
             }, buttonGroup);
-            inlineToolbarPlugin.createButton('', false, 'Make Ordered List', !canMakeOL, 'listOL', function() {
-                self.makeList(true);
+            inlineToolbarPlugin.createButton('', dfx.isTag(startNode, 'ol'), 'Make Ordered List', !canMakeOL, 'listOL', function() {
+                if (dfx.isTag(list, 'ul') === true || dfx.isTag(list, 'ol') !== true) {
+                    self.makeList(true);
+                } else {
+                    var pTags = self.listToParagraphs(list);
+                    var range = self.viper.getCurrentRange();
+                    range.setStart(range._getFirstSelectableChild(pTags[0]), 0);
+                    var lastChild = range._getLastSelectableChild(pTags[(pTags.length - 1)]);
+                    range.setEnd(lastChild, lastChild.data.length);
+                    ViperSelection.addRange(range);
+                }
             }, buttonGroup);
 
         }
