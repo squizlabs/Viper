@@ -246,8 +246,6 @@ ViperListPlugin.prototype = {
 
                 list = this._makeList(tag, elem);
                 dfx.insertAfter(insertAfter, list);
-                if (removeInsAfter === true) {
-                }
 
                 this.viper.selectBookmark(bookmark);
             } else {
@@ -931,7 +929,18 @@ ViperListPlugin.prototype = {
             }
 
             inlineToolbarPlugin.createButton('', dfx.isTag(startNode, 'ul'), 'Make Unordered List', !canMakeUL, 'listUL', function() {
-                if (dfx.isTag(list, 'ol') === true || dfx.isTag(list, 'ul') !== true) {
+                if (dfx.isTag(list, 'ol') === true) {
+                    var newList = self.toggleListType(list);
+
+                    var range = self.viper.getCurrentRange();
+                    range.setStart(range._getFirstSelectableChild(newList), 0);
+                    var lastChild = range._getLastSelectableChild(newList);
+                    range.setEnd(lastChild, lastChild.data.length);
+                    ViperSelection.addRange(range);
+
+                    self.viper.fireSelectionChanged();
+                    self.viper.fireNodesChanged([self.viper.getViperElement()]);
+                } else if (dfx.isTag(list, 'ul') !== true) {
                     self.makeList();
                 } else {
                     var pTags = self.listToParagraphs(list);
@@ -943,7 +952,18 @@ ViperListPlugin.prototype = {
                 }
             }, buttonGroup);
             inlineToolbarPlugin.createButton('', dfx.isTag(startNode, 'ol'), 'Make Ordered List', !canMakeOL, 'listOL', function() {
-                if (dfx.isTag(list, 'ul') === true || dfx.isTag(list, 'ol') !== true) {
+                if (dfx.isTag(list, 'ul') === true) {
+                    var newList = self.toggleListType(list);
+
+                    var range = self.viper.getCurrentRange();
+                    range.setStart(range._getFirstSelectableChild(newList), 0);
+                    var lastChild = range._getLastSelectableChild(newList);
+                    range.setEnd(lastChild, lastChild.data.length);
+                    ViperSelection.addRange(range);
+
+                    self.viper.fireSelectionChanged();
+                    self.viper.fireNodesChanged([self.viper.getViperElement()]);
+                } else if (dfx.isTag(list, 'ol') !== true) {
                     self.makeList(true);
                 } else {
                     var pTags = self.listToParagraphs(list);
