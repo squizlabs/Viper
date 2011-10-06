@@ -472,6 +472,10 @@ ViperInlineToolbarPlugin.prototype = {
         if (!rangeCoords || (rangeCoords.left === 0 && rangeCoords.top === 0 && this.viper.isBrowser('firefox') === true)) {
             var startNode = range.getStartNode();
             var endNode   = range.getEndNode();
+            if (!startNode || !endNode) {
+                return;
+            }
+
             if (startNode.nodeType === dfx.TEXT_NODE
                 && startNode.data.indexOf("\n") === 0
                 && endNode.nodeType === dfx.TEXT_NODE
