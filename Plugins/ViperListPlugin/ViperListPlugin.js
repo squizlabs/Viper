@@ -75,7 +75,7 @@ ViperListPlugin.prototype = {
             showToolbar = false;
         });
 
-        this.viper.registerCallback('Viper:editableElementChanged', 'ViperListPlugin', function() {console.info(1);
+        this.viper.registerCallback('Viper:editableElementChanged', 'ViperListPlugin', function() {
             var touched = false;
             var x       = null;
             dfx.addEvent(self.viper.getViperElement(), 'touchstart', function(e) {
