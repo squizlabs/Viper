@@ -1078,7 +1078,7 @@ ViperTableEditorPlugin.prototype = {
         }
 
         var newColspan = (this.getColspan(cell) + this.getColspan(mergeCells[0]));
-        cell.setAttribute('colspan', newColspan);
+        this.setColspan(cell, newColspan);
 
         for (var i = 0; i < mergeCells.length; i++) {
             this._moveCellContent(mergeCells[i], cell);
@@ -1099,7 +1099,7 @@ ViperTableEditorPlugin.prototype = {
         }
 
         var newColspan = (this.getColspan(cell) + this.getColspan(mergeCells[0]));
-        cell.setAttribute('colspan', newColspan);
+        this.setColspan(cell, newColspan);
 
         for (var i = 0; i < mergeCells.length; i++) {
             this._moveCellContent(mergeCells[i], cell);
@@ -1128,7 +1128,7 @@ ViperTableEditorPlugin.prototype = {
         }
 
         var rowspan = this.getRowspan(cell) + this.getRowspan(mergeCells[0]);
-        cell.setAttribute('rowspan', rowspan);
+        this.setRowspan(cell, rowspan);
 
         var cells    = this._getCellsExpanded(true);
         var rowCells = this._getRowCells(parent);
@@ -1154,11 +1154,7 @@ ViperTableEditorPlugin.prototype = {
                     processedCells.push(cells[i]);
 
                     var rowspan = (this.getRowspan(cells[i]) - 1);
-                    if (rowspan > 1) {
-                        cells[i].setAttribute('rowspan', rowspan);
-                    } else {
-                        dfx.removeAttr(cells[i], 'rowspan');
-                    }
+                    this.setRowspan(cells[i], rowspan);
                 }
             }
 
@@ -1187,7 +1183,7 @@ ViperTableEditorPlugin.prototype = {
         var firstCell = mergeCells[0];
 
         for (var i = 1; i < mergeCells.length; i++) {
-            firstCell.setAttribute('colspan', this.getColspan(firstCell) + this.getColspan(mergeCells[i]));
+            this.setColspan(firstCell, this.getColspan(firstCell) + this.getColspan(mergeCells[i]));
             this._moveCellContent(mergeCells[i], firstCell);
             dfx.remove(mergeCells[i]);
         }
@@ -1197,7 +1193,7 @@ ViperTableEditorPlugin.prototype = {
         dfx.remove(cell);
 
         var rowspan = this.getRowspan(firstCell) + this.getRowspan(cell);
-        firstCell.setAttribute('rowspan', rowspan);
+        this.setRowspan(firstCell, rowspan);
 
         this.setActiveCell(firstCell);
 
@@ -1229,11 +1225,7 @@ ViperTableEditorPlugin.prototype = {
                 processedCells.push(rowCells[i]);
 
                 var newRowspan = (this.getRowspan(rowCells[i]) - 1);
-                if (newRowspan > 1) {
-                    rowCells[i].setAttribute('rowspan', newRowspan);
-                } else {
-                    dfx.removeAttr(rowCells[i], 'rowspan');
-                }
+                this.setRowspan(rowCells[i], newRowspan);
             }
         }
 
@@ -1250,9 +1242,29 @@ ViperTableEditorPlugin.prototype = {
 
     },
 
+    setRowspan: function(cell, rowspan)
+    {
+        if (rowspan > 1) {
+            cell.setAttribute('rowspan', rowspan);
+        } else {
+            dfx.removeAttr(cell, 'rowspan');
+        }
+
+    },
+
     getColspan: function(cell)
     {
         return parseInt(cell.getAttribute('colspan') || 1);
+
+    },
+
+    setColspan: function(cell, colspan)
+    {
+        if (colspan > 1) {
+            cell.setAttribute('colspan', colspan);
+        } else {
+            dfx.removeAttr(cell, 'colspan');
+        }
 
     },
 
@@ -1322,15 +1334,11 @@ ViperTableEditorPlugin.prototype = {
         dfx.setHtml(elem, '&nbsp;');
 
         var colspan = (parseInt(cell.getAttribute('colspan')) - 1);
-        if (colspan > 1) {
-            cell.setAttribute('colspan', colspan);
-        } else {
-            dfx.removeAttr(cell, 'colspan');
-        }
+        this.setColspan(cell, colspan);
 
         var rowspan = cell.getAttribute('rowspan');
         if (rowspan > 1) {
-            elem.setAttribute('rowspan', rowspan);
+            this.setRowspan(elem, rowspan);
         }
 
         dfx.insertAfter(cell, elem);
@@ -1360,17 +1368,13 @@ ViperTableEditorPlugin.prototype = {
         var cells   = this._getCellsExpanded();
 
         // Decrease the rowspan of this cell by 1.
-        if (rowspan > 2) {
-            cell.setAttribute('rowspan', (rowspan - 1));
-        } else {
-            dfx.removeAttr(cell, 'rowspan');
-        }
+        this.setRowspan(cell, (rowspan - 1));
 
         var colspan = this.getColspan(cell);
         var newCell = document.createElement(dfx.getTagName(cell));
         dfx.setHtml(newCell, '&nbsp;');
         if (colspan > 1) {
-            newCell.setAttribute('colspan', colspan);
+            this.setColspan(newCell, colspan);
         }
 
         // Find the new cell's insertion point.
@@ -1433,14 +1437,14 @@ ViperTableEditorPlugin.prototype = {
             var rowspan    = this.getRowspan(rowCell);
             if (rowspan > 1 && this.getCellPosition(rowCell).row < cellPos.row) {
                 // Increase the rowspan instead of creating a new cell.
-                rowCell.setAttribute('rowspan', (rowspan + 1));
+                this.setRowspan(rowCell, (rowspan + 1));
             } else {
                 var newCell = document.createElement(dfx.getTagName(rowCell));
                 dfx.setHtml(newCell, '&nbsp;');
 
                 var colspan = this.getColspan(rowCell);
                 if (colspan > 1) {
-                    newCell.setAttribute('colspan', colspan);
+                    this.setColspan(newCell, colspan);
                 }
 
                 newRow.appendChild(newCell);
@@ -1476,14 +1480,14 @@ ViperTableEditorPlugin.prototype = {
             var rowspan = this.getRowspan(rowCell);
             if (rowspan > 1 && rowCell !== cell && (this.getCellPosition(rowCell).row + this.getRowspan(rowCell) - 1) > cellPos.row) {
                 // Increase the rowspan instead of creating a new cell.
-                rowCell.setAttribute('rowspan', (rowspan + 1));
+                this.setRowspan(rowCell, (rowspan + 1));
             } else {
                 var newCell = document.createElement(dfx.getTagName(rowCell));
                 dfx.setHtml(newCell, '&nbsp;');
 
                 var colspan = this.getColspan(rowCell);
                 if (colspan > 1) {
-                    newCell.setAttribute('colspan', colspan);
+                    this.setColspan(newCell, colspan);
                 }
 
                 newRow.appendChild(newCell);
@@ -1520,7 +1524,7 @@ ViperTableEditorPlugin.prototype = {
 
             var rowspan = this.getRowspan(rowCell);
             if (rowspan > 1) {
-                rowCell.setAttribute('rowspan', (rowspan - 1));
+                this.setRowspan(rowCell, (rowspan - 1));
 
                 var rowPos = this.getCellPosition(rowCell).row;
                 if (rowPos === cellPos.row) {
@@ -1563,10 +1567,10 @@ ViperTableEditorPlugin.prototype = {
             var cellPos = this.getCellPosition(col);
 
             if ((cellPos.col !== colNum && col !== cell) || (col !== cell && this.getColspan(col) > 1)) {
-                col.setAttribute('colspan', (this.getColspan(col) + 1));
+                this.setColspan(col, (this.getColspan(col) + 1));
             } else if (cellPos.row < i) {
                 if (td) {
-                    td.setAttribute('rowspan', (this.getRowspan(td) + 1));
+                    this.setRowspan(td, (this.getRowspan(td) + 1));
                 }
                 continue;
             } else {
@@ -1594,10 +1598,10 @@ ViperTableEditorPlugin.prototype = {
             var cellPos = this.getCellPosition(col);
 
             if (cellPos.col !== colNum && col !== cell) {
-                col.setAttribute('colspan', (this.getColspan(col) + 1));
+                this.setColspan(col, (this.getColspan(col) + 1));
             } else if (cellPos.row < i) {
                 if (td) {
-                    td.setAttribute('rowspan', (this.getRowspan(td) + 1));
+                    this.setRowspan(td, (this.getRowspan(td) + 1));
                 }
                 continue;
             } else {
@@ -1648,7 +1652,7 @@ ViperTableEditorPlugin.prototype = {
                 var rowCellColspan = this.getColspan(rowCell);
                 if (rowCellColspan > colspan || (rowCellColspan > 1 && this.getCellPosition(rowCell).col !== cellPos.col)) {
                     // Reduce colspan.
-                    rowCell.setAttribute('colspan', (rowCellColspan - 1));
+                    this.setColspan(rowCell, (rowCellColspan - 1));
                 } else {
                     // Remove cell.
                     dfx.remove(rowCell);
