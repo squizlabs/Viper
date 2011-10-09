@@ -1529,10 +1529,11 @@ ViperTableEditorPlugin.prototype = {
                 var rowPos = this.getCellPosition(rowCell).row;
                 if (rowPos === cellPos.row) {
                     // Move cell down.
-                    if (cells[(rowPos + 1)].find(rowCell) < cells[(rowPos + 1)].find(nextRowCells[0])) {
-                        dfx.insertBefore(nextRowCells[0], rowCell);
+                    var nextRowPos = cells[(rowPos + 1)].find(rowCell);
+                    if (nextRowPos > 0) {
+                        dfx.insertAfter(cells[(rowPos + 1)][(nextRowPos - 1)], rowCell);
                     } else {
-                        dfx.insertAfter(nextRowCells[0], rowCell);
+                        dfx.insertBefore(cells[(rowPos + 1)][(nextRowPos + this.getColspan(rowCell))], rowCell);
                     }
                 }
 
