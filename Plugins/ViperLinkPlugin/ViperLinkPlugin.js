@@ -129,7 +129,7 @@ ViperLinkPlugin.prototype = {
 
             var startNode = data.range.getStartNode();
             var endNode   = data.range.getEndNode();
-            if (startNode.parentNode !== endNode.parentNode) {
+            if (startNode && endNode && startNode.parentNode !== endNode.parentNode) {
                 return;
             }
 
