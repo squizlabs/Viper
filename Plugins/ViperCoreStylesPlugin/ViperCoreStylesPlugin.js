@@ -55,45 +55,53 @@ ViperCoreStylesPlugin.prototype = {
             ctrlName = 'CMD';
         }
 
-        this.toolbarPlugin = this.viper.ViperPluginManager.getPlugin('ViperToolbarPlugin');
-        if (this.toolbarPlugin) {
-            this.toolbarPlugin.addButton(name, 'strong', 'Strong (' + ctrlName + ' + B)', function () {
+        var toolbarPlugin  = this.viper.ViperPluginManager.getPlugin('ViperToolbarPlugin');
+        this.toolbarPlugin = toolbarPlugin;
+        if (toolbarPlugin) {
+            var toolbarButtons = {};
+            var btnGroup = toolbarPlugin.createButtonGroup();
+            toolbarButtons.strong = toolbarPlugin.createButton('B', false, 'Bold', false, 'bold', function() {
                 self.handleStyle('strong');
-            });
-
-            this.toolbarPlugin.addButton(name, 'emphasise', 'Emphasise (' + ctrlName + ' + I)', function () {
+            }, btnGroup);
+            toolbarButtons.em = toolbarPlugin.createButton('I', false, 'Icalic', false, 'italic', function() {
                 self.handleStyle('em');
-            });
-            this.toolbarPlugin.addButton(name, 'underline', 'Underline (' + ctrlName + ' + U)', function () {
+            }, btnGroup);
+            toolbarButtons.u = toolbarPlugin.createButton('U', false, 'Underline', false, 'underline', function() {
                 self.handleStyle('u');
-            });
-            this.toolbarPlugin.addButton(name, 'remove-format', 'Remove Format', function () {
+            }, btnGroup);
+            toolbarButtons.rmFormat = toolbarPlugin.createButton('RF', false, 'Remove Format', false, 'removeFormat', function() {
                 self.removeFormat();
-            });
+            }, btnGroup);
 
-            this.toolbarPlugin.addButton(name, 'subscript', 'Subscript', function () {
+            var btnGroup2 = toolbarPlugin.createButtonGroup();
+            toolbarButtons.sub = toolbarPlugin.createButton('Sub', false, 'Subscript', false, 'subscript', function() {
                 self.handleStyle('sub');
-            });
-            this.toolbarPlugin.addButton(name, 'superscript', 'Superscript', function () {
+            }, btnGroup2);
+            toolbarButtons.sup = toolbarPlugin.createButton('Sup', false, 'Superscript', false, 'superscript', function() {
                 self.handleStyle('sup');
-            });
-            this.toolbarPlugin.addButton(name, 'strikethrough', 'Strikethrough', function () {
+            }, btnGroup2);
+            toolbarButtons.strike = toolbarPlugin.createButton('St', false, 'Strikethrough', false, 'strikethrough', function() {
                 self.handleStyle('strike');
-            });
+            }, btnGroup2);
 
-            this.toolbarPlugin.addButton(name, 'align-left', 'Left Justfy', function () {
+            var btnGroup3 = toolbarPlugin.createButtonGroup();
+            toolbarButtons.justfyLeft = toolbarPlugin.createButton('JL', false, 'Left Justfy', false, 'justfyLeft', function() {
                 self.handleJustfy('left');
-            });
-            this.toolbarPlugin.addButton(name, 'align-center', 'Center Justfy', function () {
+            }, btnGroup3);
+            toolbarButtons.justCenter = toolbarPlugin.createButton('JC', false, 'Center Justfy', false, 'justfyCenter', function() {
                 self.handleJustfy('center');
-            });
-            this.toolbarPlugin.addButton(name, 'align-right', 'Right Justfy', function () {
+            }, btnGroup3);
+            toolbarButtons.justfyRight = toolbarPlugin.createButton('JR', false, 'Right Justfy', false, 'justfyRight', function() {
                 self.handleJustfy('right');
-            });
-            this.toolbarPlugin.addButton(name, 'align-justify', 'Block Justfy', function () {
+            }, btnGroup3);
+            toolbarButtons.justLeft = toolbarPlugin.createButton('JB', false, 'Block Justfy', false, 'justfyBlock', function() {
                 self.handleJustfy('justify');
+            }, btnGroup3);
+
+            this.viper.registerCallback('ViperToolbarPlugin:updateToolbar', 'ViperCoreStylesPlugin', function(data) {
+                self._updateToolbarButtonStates(toolbarButtons, data.range);
             });
-        }
+        }//end if
 
         var shortcuts = {
             strong: 'CTRL+B',
@@ -451,99 +459,6 @@ ViperCoreStylesPlugin.prototype = {
 
     },
 
-    _canStyleNode: function(node)
-    {
-        if (dfx.isBlockElement(node) === true) {
-            if (dfx.isTag(node, 'li') !== true) {
-                return false;
-            }
-        }
-
-        return true;
-
-    },
-
-    _createInlineToolbarContent: function(data)
-    {
-        var inlineToolbarPlugin = this.viper.ViperPluginManager.getPlugin('ViperInlineToolbarPlugin');
-
-        if (data.range.collapsed === true) {
-            return;
-        }
-
-        if (this._canStyleNode(data.lineage[data.current]) !== true) {
-            return;
-        }
-
-        var activeStates = {};
-        for (var i = 0; i < data.lineage.length; i++) {
-            if (dfx.isTag(data.lineage[i], 'a') === true) {
-                // Dont want to show style buttons for links.
-                return;
-            } else if (dfx.isTag(data.lineage[i], 'strong') === true) {
-                activeStates.strong = true;
-            } else if (dfx.isTag(data.lineage[i], 'em') === true) {
-                activeStates.em = true;
-            } else if (dfx.isTag(data.lineage[i], 'u') === true) {
-                activeStates.u = true;
-            }
-        }
-
-        // If the selection is between multiple elements then find out if the range
-        // start and end are in same style tags.
-        var startNode = data.range.getStartNode();
-        var endNode   = data.range.getEndNode();
-        if (startNode && endNode) {
-            var tagNames  = ['strong', 'em', 'u'];
-            var foundTags = [];
-            while (startNode.parentNode
-                && dfx.isBlockElement(startNode.parentNode) !== true
-                && startNode.parentNode !== this.viper.getViperElement
-            ) {
-                var pos = tagNames.find(dfx.getTagName(startNode.parentNode));
-                if (pos >= 0) {
-                    foundTags.push(tagNames[pos]);
-                }
-
-                startNode = startNode.parentNode;
-            }
-
-            while (endNode.parentNode
-                && dfx.isBlockElement(endNode.parentNode) !== true
-                && endNode.parentNode !== this.viper.getViperElement
-            ) {
-                var tagName = dfx.getTagName(endNode.parentNode);
-                var pos = foundTags.find(tagName);
-                if (pos >= 0) {
-                    if (tagName === 'strong') {
-                        activeStates.strong = true;
-                    } else if (tagName === 'em') {
-                        activeStates.em = true;
-                    } else if (tagName === 'u') {
-                        activeStates.u = true;
-                    }
-                }
-
-                endNode = endNode.parentNode;
-            }
-        }
-
-        var self = this;
-
-        var buttonGroup = inlineToolbarPlugin.createButtonGroup();
-
-        var bold = inlineToolbarPlugin.createButton('B', activeStates.strong, 'Bold', false, 'bold', function() {
-            return self.handleStyle('strong');
-        }, buttonGroup);
-        var em = inlineToolbarPlugin.createButton('I', activeStates.em, 'Italic', false, 'italic', function() {
-            return self.handleStyle('em');
-        }, buttonGroup);
-        var u = inlineToolbarPlugin.createButton('U', activeStates.u, 'Underline', false, 'underline', function() {
-            return self.handleStyle('u');
-        }, buttonGroup);
-
-    },
-
     handleJustfy: function(type)
     {
         var range = this.viper.getCurrentRange();
@@ -897,6 +812,161 @@ ViperCoreStylesPlugin.prototype = {
             this.toolbarPlugin.setButtonInactive(style);
         }
 
+    },
+
+    _canStyleNode: function(node)
+    {
+        if (dfx.isBlockElement(node) === true) {
+            if (dfx.isTag(node, 'li') !== true) {
+                return false;
+            }
+        }
+
+        return true;
+
+    },
+
+    _createInlineToolbarContent: function(data)
+    {
+        var inlineToolbarPlugin = this.viper.ViperPluginManager.getPlugin('ViperInlineToolbarPlugin');
+
+        if (data.range.collapsed === true) {
+            return;
+        }
+
+        if (this._canStyleNode(data.lineage[data.current]) !== true) {
+            return;
+        }
+
+        var activeStates = {};
+        for (var i = 0; i < data.lineage.length; i++) {
+            if (dfx.isTag(data.lineage[i], 'a') === true) {
+                // Dont want to show style buttons for links.
+                return;
+            } else if (dfx.isTag(data.lineage[i], 'strong') === true) {
+                activeStates.strong = true;
+            } else if (dfx.isTag(data.lineage[i], 'em') === true) {
+                activeStates.em = true;
+            } else if (dfx.isTag(data.lineage[i], 'u') === true) {
+                activeStates.u = true;
+            }
+        }
+
+        // If the selection is between multiple elements then find out if the range
+        // start and end are in same style tags.
+        var tagNames  = ['strong', 'em', 'u'];
+        var states    = this._getActiveStates(data.range, tagNames);
+        for (var i = 0; i < states.length; i++) {
+            var tagName = states[i];
+            if (tagName === 'strong') {
+                activeStates.strong = true;
+            } else if (tagName === 'em') {
+                activeStates.em = true;
+            } else if (tagName === 'u') {
+                activeStates.u = true;
+            }
+        }
+
+        var self = this;
+
+        var buttonGroup = inlineToolbarPlugin.createButtonGroup();
+
+        var bold = inlineToolbarPlugin.createButton('B', activeStates.strong, 'Bold', false, 'bold', function() {
+            return self.handleStyle('strong');
+        }, buttonGroup);
+        var em = inlineToolbarPlugin.createButton('I', activeStates.em, 'Italic', false, 'italic', function() {
+            return self.handleStyle('em');
+        }, buttonGroup);
+        var u = inlineToolbarPlugin.createButton('U', activeStates.u, 'Underline', false, 'underline', function() {
+            return self.handleStyle('u');
+        }, buttonGroup);
+
+    },
+
+    _updateToolbarButtonStates: function(buttons, range)
+    {
+        var startNode = range.getStartNode();
+
+        if (this._canStyleNode(startNode) !== true) {
+            for (var btn in buttons) {
+                this.toolbarPlugin.disableButton(buttons[btn]);
+            }
+
+            return;
+        }
+
+        var tagNames = [];
+        for (var btn in buttons) {
+            this.toolbarPlugin.enableButton(buttons[btn]);
+            this.toolbarPlugin.setButtonInactive(buttons[btn]);
+            tagNames.push(btn);
+        }
+
+        // Active states.
+        var states = this._getActiveStates(range, tagNames);
+        for (var i = 0; i < states.length; i++) {
+            this.toolbarPlugin.setButtonActive(buttons[states[i]]);
+        }
+
+    },
+
+    _getActiveStates: function(range, tagNames)
+    {
+        var activeStates = [];
+        var startNode    = range.getStartNode();
+        var endNode      = range.getEndNode();
+        if (!endNode) {
+            endNode = startNode;
+
+        }
+
+        if (startNode && endNode) {
+            if (startNode === endNode
+                || range.getNodeSelection()
+            ) {
+                while (startNode
+                    && dfx.isBlockElement(startNode) !== true
+                    && startNode !== this.viper.getViperElement()
+                ) {
+                    var pos = tagNames.find(dfx.getTagName(startNode));
+                    if (pos >= 0) {
+                        activeStates.push(tagNames[pos]);
+                    }
+
+                    startNode = startNode.parentNode;
+                }
+            } else {
+                var foundTags = [];
+                while (startNode
+                    && dfx.isBlockElement(startNode) !== true
+                    && startNode !== this.viper.getViperElement()
+                ) {
+                    var pos = tagNames.find(dfx.getTagName(startNode));
+                    if (pos >= 0) {
+                        foundTags.push(tagNames[pos]);
+                    }
+
+                    startNode = startNode.parentNode;
+                }
+
+                while (endNode
+                    && dfx.isBlockElement(endNode) !== true
+                    && endNode !== this.viper.getViperElement()
+                ) {
+                    var tagName = dfx.getTagName(endNode);
+                    var pos = foundTags.find(tagName);
+                    if (pos >= 0) {
+                        activeStates.push(tagName);
+                    }
+
+                    endNode = endNode.parentNode;
+                }
+            }//end if
+        }//end if
+
+        return activeStates;
+
     }
+
 
 };

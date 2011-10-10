@@ -23,34 +23,28 @@
 
 function ViperToolbarPlugin(viper)
 {
-    this.viper = viper;
-    this.toolbar       = null;
-    this.buttons       = {};
-    this.buttonTitles  = {};
-    this.buttonEvents  = {};
-    this.pluginButtons = {};
+    this.viper    = viper;
+    this._toolbar = null;
+
     this.createToolbar();
 
     var self = this;
-
-    // During zooming hide the toolbar.
-    var parent = null;
-    dfx.addEvent(window, 'gesturestart', function() {
-        if (!parent) {
-            parent = self.toolbar.parentNode;
-        }
-
-        parent.removeChild(self.toolbar);
+    this.viper.registerCallback('Viper:selectionChanged', 'ViperToolbarPlugin', function(range) {
+        self._updateToolbar(range);
     });
 
-    // Update and show the toolbar after zoom.
-    dfx.addEvent(window, 'gestureend', function() {
-        parent.appendChild(self.toolbar);
+    this.viper.registerCallback('Viper:editableElementChanged', 'ViperToolbarPlugin', function() {
+        self._updateToolbar();
     });
 
 }
 
 ViperToolbarPlugin.prototype = {
+    init: function()
+    {
+        Viper.document.body.appendChild(this._toolbar);
+
+    },
 
     setSettings: function(settings)
     {
@@ -71,199 +65,116 @@ ViperToolbarPlugin.prototype = {
 
     createToolbar: function()
     {
-        if (this.toolbar === null) {
-            var id       = this.viper.id + '-ViperToolbarPlugin';
-            this.toolbar = dfx.getId(id);
-            if (!this.toolbar) {
-                this.toolbar    = Viper.document.createElement('div');
-                this.toolbar.id = id;
-                dfx.setUnselectable(this.toolbar, true);
-                dfx.addClass(this.toolbar, 'ViperToolbarPlugin');
-
-                var span = Viper.document.createElement('span');
-                this.toolbar.appendChild(span);
-
-                this._append();
-            }
-        } else if (dfx.getId(this.toolbar.id)) {
-            this._append();
-            // Apply button events again.
-            for (var name in this.buttons) {
-                dfx.addEvent(this.buttons[name], 'mousedown', this.buttonEvents[name]);
-            }
-        }//end if
+        var elem = document.createElement('div');
+        dfx.addClass(elem, 'ViperTP-bar themeDark Viper-scalable');
+        this._toolbar = elem;
 
     },
 
     setParentElement: function(parent)
     {
-        dfx.setStyle(this.toolbar, 'position', 'absolute');
-        dfx.setStyle(this.toolbar, 'top', '0px');
-        parent.appendChild(this.toolbar);
-
-    },
-
-    _append: function()
-    {
-        if (dfx.getId('EditingContents')) {
-            dfx.insertBefore(dfx.getId('EditingContents'), this.toolbar);
-        } else {
-            Viper.document.body.appendChild(this.toolbar);
-        }
-
-    },
-
-    _setBgPosY: function(buttonEl, pos)
-    {
-        // Set the background Y dimension. Setting bg-pos-y works for IE/Safari
-        // but not Firefox. Setting bg-pos works for Firefox but not IE. So both
-        // are needed.
-        var bgPosY = dfx.getStyle(buttonEl, 'background-position-y');
-        var bgPos  = dfx.getStyle(buttonEl, 'background-position');
-
-        if (bgPosY) {
-            dfx.setStyle(buttonEl, 'background-position-y', (pos + 'px'));
-        } else if (bgPos) {
-            bgPos    = bgPos.split(' ');
-            bgPos[1] = pos + 'px';
-            dfx.setStyle(buttonEl, 'background-position', bgPos.join(' '));
-        }
-
-    },
-
-    setButtonActive: function(button)
-    {
-        if (this.buttons[button]) {
-            var buttonEl = this.buttons[button];
-            dfx.addClass(buttonEl, 'active');
-            dfx.removeClass(buttonEl, 'disabled');
-
-            this._setBgPosY(buttonEl, -38);
-
-            if (this.buttonTitles[button]) {
-                this.buttons[button].title = this.buttonTitles[button][1];
-            }
-        }
-
-    },
-
-    setButtonInactive: function(button)
-    {
-        if (this.buttons[button]) {
-            var buttonEl = this.buttons[button];
-            dfx.removeClass(buttonEl, 'active');
-            dfx.removeClass(buttonEl, 'disabled');
-            this._setBgPosY(buttonEl, 0);
-
-            if (this.buttonTitles[button]) {
-                this.buttons[button].title = this.buttonTitles[button][0];
-            }
-        }
-
-    },
-
-    setButtonDisabled: function(button)
-    {
-        if (this.buttons[button]) {
-            var buttonEl = this.buttons[button];
-            dfx.addClass(buttonEl, 'disabled');
-            dfx.removeClass(buttonEl, 'active');
-            if (this.buttonTitles[button]) {
-                this.buttons[button].title = '';
-            }
-        }
-
-    },
-
-    getIconURL: function(plugin, buttonName)
-    {
-        var url = '../../Plugins/ViperToolbarPlugin/transparent.png';
-        return url;
+        dfx.setStyle(this._toolbar, 'position', 'absolute');
+        dfx.setStyle(this._toolbar, 'top', '0px');
+        parent.appendChild(this._toolbar);
 
     },
 
     /**
-     * Adds a button to the toolbar.
+     * Creates a button group.
+     *
+     * @param {string} customClass Custom class to apply to the group.
+     *
+     * @return {DOMElement} The button group element.
      */
-    addButton: function(plugin, name, title, actionFn)
+    createButtonGroup: function(customClass)
     {
-        var icon = Viper.document.createElement('img');
-        dfx.setUnselectable(icon, true);
-        icon.id    = 'ViperToolbarPlugin-' + name;
-        icon.src   = this.getIconURL('ViperToolbarPlugin', 'transparent');
-        icon.title = title;
-        dfx.addClass(icon, 'ViperToolbarPlugin-button');
+        var group = document.createElement('div');
+        dfx.addClass(group, 'Viper-buttonGroup');
 
-        var iconUrl = this.getIconURL(plugin, name);
-        dfx.addClass(icon, name);
-
-        var self = this;
-        dfx.hover(icon, function() {
-            self._setBgPosY(icon, -19);
-        }, function() {
-            if (dfx.hasClass(icon, 'active') === true) {
-                self._setBgPosY(icon, -38);
-            } else {
-                self._setBgPosY(icon, 0);
-            }
-        });
-
-        this.buttonEvents[name] = actionFn;
-        dfx.addEvent(icon, 'mousedown', function(e) {
-            if (dfx.hasClass(icon, 'disabled') === false && self.viper.isEnabled() !== false) {
-                self.viper.fireCallbacks('toolbarButtonClicked');
-                actionFn(e);
-                dfx.preventDefault(e);
-                return false;
-            }
-        });
-
-        if (!this.pluginButtons[plugin]) {
-            this.pluginButtons[plugin] = [];
+        if (customClass) {
+            dfx.addClass(group, customClass);
         }
 
-        this.pluginButtons[plugin].push(name);
-        this.buttons[name] = icon;
+        this._toolbar.appendChild(group);
 
-        var wrapper = Viper.document.createElement('span');
-        wrapper.appendChild(icon);
-
-        this.toolbar.firstChild.appendChild(wrapper);
-        this.buttonTitles[name] = [title, title];
-
-        return wrapper;
+        return group;
 
     },
 
-    /*setButtonShortcut: function(plugin, buttonName, keys, fn, data)
+    /**
+     * Creates a toolbar button.
+     *
+     * @param {string}     content        The content of the button.
+     * @param {string}     isActive       True if the button is active.
+     * @param {string}     titleAttr      The title attribute for the button.
+     * @param {boolean}    disabled       True if the button is disabled.
+     * @param {string}     customClass    Class to add to the button for extra styling.
+     * @param {function}   clickAction    The function to call when the button is clicked.
+     *                                    Note that this action is ignored if the
+     *                                    subSection param is specified. Clicking will
+     *                                    then toggle the sub section visibility.
+     * @param {DOMElement} groupElement   The group element that was created by createButtonGroup.
+     * @param {DOMElement} subSection     The sub section element see createSubSection.
+     * @param {boolean}    showSubSection If true then sub section will be visible.
+     *                                    If another button later on also has this set to true
+     *                                    then that button's sub section visible.
+     *
+     * @return {DOMElement} The new button element.
+     */
+    createButton: function(content, isActive, titleAttr, disabled, customClass, clickAction, groupElement, subSection, showSubSection)
     {
-        var self = this;
-        this.viper.ViperPluginManager.addKeyPressListener(keys, this, function(e, evtData) {
-            self.viper.fireCallbacks('toolbarButtonClicked');
-            return plugin[fn].call(plugin, e, evtData);
-        }, data);
+        var button = ViperTools.createButton(content, isActive, titleAttr, disabled, customClass, clickAction, groupElement, subSection, showSubSection);
 
-    },*/
+        if (!groupElement) {
+            this._toolbar.appendChild(button);
+        }
 
-    setActiveButtonTitle: function(buttonName, title)
+        return button;
+    },
+
+    disableButton: function(buttonElement)
     {
-        this.buttonTitles[name][1] = title;
+        dfx.addClass(buttonElement, 'disabled');
+        dfx.removeClass(buttonElement, 'active');
+    },
 
+    enableButton: function(buttonElement)
+    {
+        dfx.removeClass(buttonElement, 'disabled');
+
+    },
+
+    setButtonInactive: function(buttonElement)
+    {
+        dfx.removeClass(buttonElement, 'active');
+    },
+
+    setButtonActive: function(buttonElement)
+    {
+        dfx.addClass(buttonElement, 'active');
     },
 
     remove: function()
     {
-        dfx.remove(this.toolbar);
+        dfx.remove(this._toolbar);
 
     },
 
     isPluginElement: function(element)
     {
-        if (element !== this.toolbar && dfx.isChildOf(element, this.toolbar) === false) {
+        if (element !== this._toolbar && dfx.isChildOf(element, this._toolbar) === false) {
             return false;
         }
 
         return true;
+
+    },
+
+    _updateToolbar: function(range)
+    {
+        range = range || this.viper.getCurrentRange();
+
+        this.viper.fireCallbacks('ViperToolbarPlugin:updateToolbar', {range: range});
 
     }
 

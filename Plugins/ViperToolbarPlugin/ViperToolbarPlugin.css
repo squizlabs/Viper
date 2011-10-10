@@ -28,31 +28,3 @@
 .ViperTP.device-ipad {
     font-size: 13px;
 }
-
-.ViperToolbarPlugin-button {
-    margin-right: 2px;
-    margin-top: 1px;
-    text-align: center;
-    background: url(viperTools.png) no-repeat 0 0 transparent;
-}
-
-.ViperToolbarPlugin-button.disabled {
-    opacity: 0.5;
-    filter: alpha(opacity = 50);
-    cursor: not-allowed;
-}
-
-.ViperToolbarPlugin {
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 29px;
-    background: transparent url(bar_bg.png) repeat-x scroll 0% 0px;
-    z-index: 800;
-    width: 100%;
-    text-align: center;
-}
-
-.ViperToolbarPlugin span {
-    position: relative;
-}

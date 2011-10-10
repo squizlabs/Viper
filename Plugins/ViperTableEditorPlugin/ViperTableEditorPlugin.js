@@ -65,16 +65,9 @@ ViperTableEditorPlugin.prototype = {
         });
 
         this.toolbarPlugin = this.viper.ViperPluginManager.getPlugin('ViperToolbarPlugin');
-        this.toolbarPlugin.addButton('TableEditor', 'table', 'Insert/Edit Table', function () {
-            self.insertTable();
-        });
+        if (this.toolbarPlugin) {
 
-        this.toolbarPlugin.addButton('TableEditor', 'format', 'Set Table Headers', function () {
-            var tables = dfx.getTag('table', self.viper.getViperElement());
-            for (var i = 0; i < tables.length; i++) {
-                self.setTableHeaders(tables[i]);
-            }
-        });
+        }
 
         if (this._isiPad() === false) {
             var showToolbar = false;

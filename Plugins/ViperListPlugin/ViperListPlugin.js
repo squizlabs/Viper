@@ -33,15 +33,42 @@ ViperListPlugin.prototype = {
     init: function()
     {
         var self = this;
-        this.toolbarPlugin = this.viper.ViperPluginManager.getPlugin('ViperToolbarPlugin');
-        if (this.toolbarPlugin) {
-            this.toolbarPlugin.addButton('List', 'list-ordered', 'Insert/Remove Ordered List', function () {
-                self.oderedList();
-            });
-            this.toolbarPlugin.addButton('List', 'list-unordered', 'Insert/Remove Un-ordered List', function () {
-                self.unoderedList();
+        var toolbarPlugin = this.viper.ViperPluginManager.getPlugin('ViperToolbarPlugin');
+        if (toolbarPlugin) {
+            var self            = this;
+            this._toolbarPlugin = toolbarPlugin;
+            var toolbarButtons  = {};
+
+            var btnGroup = toolbarPlugin.createButtonGroup();
+            toolbarButtons.ul = toolbarPlugin.createButton('', false, 'Make Unordered List', false, 'listUL', function() {
+                return self.unoderedList();
+            }, btnGroup);
+            toolbarButtons.ol = toolbarPlugin.createButton('', false, 'Make Ordered List', false, 'listOL', function() {
+                return self.oderedList();
+            }, btnGroup);
+            toolbarButtons.indent = toolbarPlugin.createButton('', false, 'Indent List', false, 'listIndent', function() {
+                self.tabRange();
+            }, btnGroup);
+            toolbarButtons.outdent = toolbarPlugin.createButton('', false, 'Outdent List', false, 'listOutdent', function() {
+                self.tabRange(null, true);
+            }, btnGroup);
+            this.viper.registerCallback('ViperToolbarPlugin:updateToolbar', 'ViperListPlugin', function(data) {
+                self._updateToolbar(toolbarButtons, data.range);
             });
         }
+
+        // Inline toolbar.
+        var showToolbar = false;
+        this.viper.registerCallback('Viper:mouseUp', 'ViperListPlugin', function(e) {
+            showToolbar = true;
+        });
+        this.viper.registerCallback('ViperInlineToolbarPlugin:updateToolbar', 'ViperListPlugin', function(data) {
+            if (showToolbar === true) {
+                self._updateInlineToolbar(data);
+            }
+
+            showToolbar = false;
+        });
 
         this.viper.registerCallback('Viper:keyDown', 'ViperListPlugin', function(e) {
             if (e.which === 9) {
@@ -60,19 +87,6 @@ ViperListPlugin.prototype = {
                 }
             }
 
-        });
-
-        // Inline toolbar.
-        var showToolbar = false;
-        this.viper.registerCallback('Viper:mouseUp', 'ViperListPlugin', function(e) {
-            showToolbar = true;
-        });
-        this.viper.registerCallback('ViperInlineToolbarPlugin:updateToolbar', 'ViperListPlugin', function(data) {
-            if (showToolbar === true) {
-                self._updateInlineToolbar(data);
-            }
-
-            showToolbar = false;
         });
 
         this.viper.registerCallback('Viper:editableElementChanged', 'ViperListPlugin', function() {
@@ -364,6 +378,7 @@ ViperListPlugin.prototype = {
 
     tabRange: function(range, outdent, testOnly)
     {
+        range         = range || this.viper.getCurrentRange();
         var startNode = range.getStartNode();
         var endNode   = range.getEndNode();
 
@@ -883,24 +898,23 @@ ViperListPlugin.prototype = {
 
     },
 
-    _updateInlineToolbar: function(data)
+    _getButtonStatuses: function(range, mainToolbar)
     {
-        // If range is not inside a list element but in a P tag then
-        // show list creation tools.
-        var range     = data.range;
         var startNode = range.getStartNode();
-
-        var makeList = false;
-        var indent   = false;
+        var makeList  = false;
+        var indent    = false;
+        var canMakeUL = false;
+        var canMakeOL = false;
+        var list      = null;
 
         if (startNode && this._isListElement(startNode) === true) {
-            if (range.collapsed === true) {
+            if (range.collapsed === true && mainToolbar !== true) {
                 return;
             }
 
             makeList = true;
             indent   = true;
-        } else if (range.collapsed === false && (dfx.isTag(startNode, 'p') === true || (startNode.nodeType === dfx.TEXT_NODE && dfx.isTag(startNode.parentNode, 'p') === true))) {
+        } else if ((range.collapsed === false || mainToolbar === true) && (dfx.isTag(startNode, 'p') === true || (startNode.nodeType === dfx.TEXT_NODE && dfx.isTag(startNode.parentNode, 'p') === true))) {
             makeList = true;
         }
 
@@ -908,13 +922,7 @@ ViperListPlugin.prototype = {
             return;
         }
 
-        var self = this;
-        var inlineToolbarPlugin = this.viper.ViperPluginManager.getPlugin('ViperInlineToolbarPlugin');
-        var buttonGroup         = inlineToolbarPlugin.createButtonGroup();
         if (makeList === true) {
-            var canMakeUL = false;
-            var canMakeOL = false;
-            var list      = null;
             if (dfx.isTag(startNode, 'ul') === true || dfx.isTag(startNode, 'ol') === true) {
                 list = startNode;
             } else {
@@ -931,8 +939,97 @@ ViperListPlugin.prototype = {
                 canMakeUL = true;
                 canMakeOL = true;
             }
+        }
 
-            inlineToolbarPlugin.createButton('', dfx.isTag(list, 'ul'), 'Make Unordered List', !canMakeUL, 'listUL', function() {
+        var increaseIndent = false;
+        var decreaseIndent = false;
+        if (indent === true) {
+            increaseIndent = this.canIncreaseIndent(range);
+            decreaseIndent = this.canDecreaseIndent(range);
+        }
+
+        var statuses = {
+            ul: canMakeUL,
+            ol: canMakeOL,
+            increaseIndent: increaseIndent,
+            decreaseIndent: decreaseIndent,
+            list: list
+        };
+
+        return statuses;
+
+    },
+
+    _updateToolbar: function(toolbarButtons, range)
+    {
+        var toolbarPlugin = this.viper.ViperPluginManager.getPlugin('ViperToolbarPlugin');
+        if (!toolbarPlugin) {
+            return;
+        }
+
+        var statuses = this._getButtonStatuses(range, true);
+        if (!statuses) {
+            for (var btn in toolbarButtons) {
+                toolbarPlugin.disableButton(toolbarButtons[btn]);
+            }
+
+            return;
+        }
+
+        if (statuses.ul === true) {
+            toolbarPlugin.enableButton(toolbarButtons.ul);
+            if (dfx.isTag(statuses.list, 'ul') === true) {
+                toolbarPlugin.setButtonActive(toolbarButtons.ul);
+            } else {
+                toolbarPlugin.setButtonInactive(toolbarButtons.ul);
+            }
+        } else {
+            toolbarPlugin.disableButton(toolbarButtons.ul);
+        }
+
+        if (statuses.ol === true) {
+            toolbarPlugin.enableButton(toolbarButtons.ol);
+            if (dfx.isTag(statuses.list, 'ol') === true) {
+                toolbarPlugin.setButtonActive(toolbarButtons.ol);
+            } else {
+                toolbarPlugin.setButtonInactive(toolbarButtons.ol);
+            }
+        } else {
+            toolbarPlugin.disableButton(toolbarButtons.ol);
+        }
+
+        if (statuses.increaseIndent === true) {
+            toolbarPlugin.enableButton(toolbarButtons.indent);
+        } else {
+            toolbarPlugin.disableButton(toolbarButtons.indent);
+        }
+
+        if (statuses.decreaseIndent === true) {
+            toolbarPlugin.enableButton(toolbarButtons.outdent);
+        } else {
+            toolbarPlugin.disableButton(toolbarButtons.outdent);
+        }
+
+    },
+
+    _updateInlineToolbar: function(data)
+    {
+        var inlineToolbarPlugin = this.viper.ViperPluginManager.getPlugin('ViperInlineToolbarPlugin');
+        if (!inlineToolbarPlugin) {
+            return;
+        }
+
+        var self     = this;
+        var statuses = this._getButtonStatuses(data.range);
+        if (!statuses) {
+            return;
+        }
+
+        if (statuses.ul === true || statuses.ol === true) {
+            var list = statuses.list;
+
+            var buttonGroup = inlineToolbarPlugin.createButtonGroup();
+            inlineToolbarPlugin.createButton('', dfx.isTag(list, 'ul'), 'Make Unordered List', !statuses.ul, 'listUL', function() {
                 if (dfx.isTag(list, 'ol') === true) {
                     var newList = self.toggleListType(list);
 
@@ -955,7 +1052,8 @@ ViperListPlugin.prototype = {
                     ViperSelection.addRange(range);
                 }
             }, buttonGroup);
-            inlineToolbarPlugin.createButton('', dfx.isTag(list, 'ol'), 'Make Ordered List', !canMakeOL, 'listOL', function() {
+
+            inlineToolbarPlugin.createButton('', dfx.isTag(list, 'ol'), 'Make Ordered List', !statuses.ol, 'listOL', function() {
                 if (dfx.isTag(list, 'ul') === true) {
                     var newList = self.toggleListType(list);
 
@@ -981,14 +1079,13 @@ ViperListPlugin.prototype = {
 
         }
 
-        if (indent === true) {
-            inlineToolbarPlugin.createButton('', false, 'Indent List', !this.canIncreaseIndent(range), 'listIndent', function() {
+        if (statuses.increaseIndent === true || statuses.decreaseIndent === true) {
+            inlineToolbarPlugin.createButton('', false, 'Indent List', !statuses.increaseIndent, 'listIndent', function() {
                 self.tabRange(range);
             }, buttonGroup);
-            inlineToolbarPlugin.createButton('', false, 'Outdent List', !this.canDecreaseIndent(range), 'listOutdent', function() {
+            inlineToolbarPlugin.createButton('', false, 'Outdent List', !statuses.decreaseIndent, 'listOutdent', function() {
                 self.tabRange(range, true);
             }, buttonGroup);
-
         }
 
     },

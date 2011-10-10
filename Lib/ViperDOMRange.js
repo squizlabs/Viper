@@ -724,6 +724,11 @@ ViperDOMRange.prototype = {
             && range.collapsed === true
         ) {
             return null;
+        } else if (startNode.nodeType === dfx.ELEMENT_NODE
+            && range.endContainer.nodeType === dfx.ELEMENT_NODE
+            && startNode.nextSibling === endNode
+        ) {
+            return startNode;
         }
 
         // We may need to adjust the "startNode" depending on its offset.

@@ -35,7 +35,7 @@ ViperAccessibilityPlugin.prototype = {
         var self = this;
         this.toolbarPlugin = this.viper.ViperPluginManager.getPlugin('ViperToolbarPlugin');
         if (this.toolbarPlugin) {
-            this.toolbarPlugin.addButton('ViperVAP', 'format', 'Show Accessibility', function () {
+            this.toolbarPlugin.createButton('Access', false, 'Check Accessibility Violations', false, '', function() {
                 var violations = self.check();
                 if (!violations || violations.length === 0) {
                     return;

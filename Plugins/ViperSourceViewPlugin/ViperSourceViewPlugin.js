@@ -40,9 +40,11 @@ ViperSourceViewPlugin.prototype = {
     {
         var self = this;
         this.toolbarPlugin = this.viper.ViperPluginManager.getPlugin('ViperToolbarPlugin');
-        this.toolbarPlugin.addButton('ViperSourceViewPlugin', 'sourceView', 'Show Source View', function () {
-            self.toggleSourceView();
-        });
+        if (this.toolbarPlugin) {
+            this.toolbarPlugin.createButton('Source', false, 'Toggle Source View', false, 'sourceView', function() {
+                self.toggleSourceView();
+            });
+        }
 
         var updateTimer = null;
         this.viper.registerCallback('Viper:nodesChanged', 'ViperSourceViewPlugin', function(nodes) {

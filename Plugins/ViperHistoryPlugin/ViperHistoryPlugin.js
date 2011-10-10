@@ -32,31 +32,33 @@ function ViperHistoryPlugin(viper)
         }
     });
 
-    this.viper.registerCallback(['ViperHistoryManager:add', 'ViperHistoryManager:undo', 'ViperHistoryManager:redo'], 'ViperHistoryPlugin', function(e) {
-        self._updateButtonStates();
-    });
 }
 
 ViperHistoryPlugin.prototype = {
     init: function()
     {
-        var self           = this;
-        this.toolbarPlugin = this.viper.ViperPluginManager.getPlugin('ViperToolbarPlugin');
-        if (dfx.isset(this.toolbarPlugin) === true) {
-            var name = 'Redo';
+        var toolbarPlugin = this.viper.ViperPluginManager.getPlugin('ViperToolbarPlugin');
+        if (toolbarPlugin) {
+            var self            = this;
+            this._toolbarPlugin = toolbarPlugin;
+            var toolbarButtons  = {};
 
-            var ctrlName = 'CTRL';
-            if (navigator.platform.toLowerCase().indexOf('mac') !== false) {
-                ctrlName = 'CMD';
-            }
-
-            this.toolbarPlugin.addButton(name, 'undo', 'Undo (' + ctrlName + ' + Z)', function () {
+            var btnGroup = toolbarPlugin.createButtonGroup();
+            toolbarButtons.undo = toolbarPlugin.createButton('Undo', false, 'Undo', false, '', function() {
                 return self.handleUndo();
-            });
-            this.toolbarPlugin.addButton(name, 'redo', 'Redo (' + ctrlName + ' + Y)', function () {
+            }, btnGroup);
+            toolbarButtons.redo = toolbarPlugin.createButton('Redo', false, 'Redo', false, '', function() {
                 return self.handleRedo();
+            }, btnGroup);
+            this.viper.registerCallback('ViperToolbarPlugin:updateToolbar', 'ViperHistoryPlugin', function(data) {
+                self._updateToolbarButtonStates(toolbarButtons);
             });
-            this._updateButtonStates();
+
+            this._updateToolbarButtonStates(toolbarButtons);
+
+            this.viper.registerCallback(['ViperHistoryManager:add', 'ViperHistoryManager:undo', 'ViperHistoryManager:redo'], 'ViperHistoryPlugin', function(e) {
+                self._updateToolbarButtonStates(toolbarButtons);
+            });
         }
 
     },
@@ -77,22 +79,22 @@ ViperHistoryPlugin.prototype = {
 
     },
 
-    _updateButtonStates: function()
+    _updateToolbarButtonStates: function(toolbarButtons)
     {
-        if (!this.toolbarPlugin) {
+        if (!this._toolbarPlugin) {
             return;
         }
 
         if (this.viper.ViperHistoryManager.getUndoCount() > 1) {
-            this.toolbarPlugin.setButtonInactive('undo');
+            this._toolbarPlugin.enableButton(toolbarButtons.undo);
         } else {
-            this.toolbarPlugin.setButtonDisabled('undo');
+            this._toolbarPlugin.disableButton(toolbarButtons.undo);
         }
 
         if (this.viper.ViperHistoryManager.getRedoCount() > 0) {
-            this.toolbarPlugin.setButtonInactive('redo');
+            this._toolbarPlugin.enableButton(toolbarButtons.redo);
         } else {
-            this.toolbarPlugin.setButtonDisabled('redo');
+            this._toolbarPlugin.disableButton(toolbarButtons.redo);
         }
 
     }

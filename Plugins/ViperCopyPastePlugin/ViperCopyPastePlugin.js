@@ -25,7 +25,6 @@ function ViperCopyPastePlugin(viper)
 {
     this.viper = viper;
 
-    this.toolbarPlugin = null;
     this.pasteElement  = null;
     this.pasteValue    = null;
     this.rangeObj      = null;
