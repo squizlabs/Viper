@@ -23,21 +23,15 @@
 
 function ViperTableEditorPlugin(viper)
 {
-    this.viper = viper;
-    this.toolbarPlugin = null;
-    this.activeCell    = null;
-    this.vCellButtons  = null;
-    this.hCellButtons  = null;
-    this._lastNode     = null;
+    this.viper             = viper;
+    this.toolbarPlugin     = null;
+    this.activeCell        = null;
+    this._highlightElement = null;
 
     this._buttonClicked = false;
     this._tableRawCells = null;
     this._currentType   = null;
     this._margin        = 15;
-
-    // Table properties.
-    this._currentTablePropView = 'cell';
-    this._settingsWidgets      = {};
 
 }
 
@@ -691,6 +685,7 @@ ViperTableEditorPlugin.prototype = {
         dfx.setStyle(hElem, 'left', coords.x1 + 'px');
 
         document.body.appendChild(hElem);
+        this._highlightElement = hElem;
 
         dfx.addEvent(hElem, 'mousedown', function() {
             dfx.remove(hElem);
@@ -789,23 +784,32 @@ ViperTableEditorPlugin.prototype = {
     _createColProperties: function(cell)
     {
         var self = this;
-        var insertLeft = this.createButton('', false, 'Insert Column Before', false, 'addLeft', function() {
+        this.createButton('', false, 'Insert Column Before', false, 'addLeft', function() {
             self._buttonClicked = true;
             self.insertColBefore(cell);
             self.updateToolbar(cell, 'col');
         });
 
-        var insertRight = this.createButton('', false, 'Insert Column After', false, 'addRight', function() {
+        this.createButton('', false, 'Insert Column After', false, 'addRight', function() {
             self._buttonClicked = true;
             self.insertColAfter(cell);
             self.updateToolbar(cell, 'col');
         });
 
         var removeCol = this.createButton('', false, 'Remove Column', false, 'delete', function() {
+            var table = self.getCellTable(cell);
             self._buttonClicked = true;
             self.removeCol(cell);
             self.hideToolbar();
             self.removeHighlights();
+
+            self._setCaretToStart(table);
+        });
+
+        dfx.hover(removeCol, function() {
+            dfx.addClass(self._highlightElement, 'delete');
+        }, function() {
+            dfx.removeClass(self._highlightElement, 'delete');
         });
 
     },
@@ -813,23 +817,32 @@ ViperTableEditorPlugin.prototype = {
     _createRowProperties: function(cell)
     {
         var self = this;
-        var insertBefore = this.createButton('', false, 'Insert Row Before', false, 'addAbove', function() {
+        this.createButton('', false, 'Insert Row Before', false, 'addAbove', function() {
             self._buttonClicked = true;
             self.insertRowBefore(cell);
             self.updateToolbar(cell, 'row');
         });
 
-        var insertAfter = this.createButton('', false, 'Insert Row After', false, 'addBelow', function() {
+        this.createButton('', false, 'Insert Row After', false, 'addBelow', function() {
             self._buttonClicked = true;
             self.insertRowAfter(cell);
             self.updateToolbar(cell, 'row');
         });
 
         var removeRow = this.createButton('', false, 'Remove Row', false, 'delete', function() {
+            var table = self.getCellTable(cell);
             self._buttonClicked = true;
             self.removeRow(cell);
             self.hideToolbar();
             self.removeHighlights();
+
+            self._setCaretToStart(table);
+        });
+
+        dfx.hover(removeRow, function() {
+            dfx.addClass(self._highlightElement, 'delete');
+        }, function() {
+            dfx.removeClass(self._highlightElement, 'delete');
         });
 
     },
@@ -2247,6 +2260,23 @@ ViperTableEditorPlugin.prototype = {
         }
 
         return array1;
+
+    },
+
+    _setCaretToStart: function(table)
+    {
+        // Set the caret to the first cell of the table.
+        var cells = dfx.getTag('td,th', table);
+        if (cells.length > 0) {
+            if (dfx.getHtml(cells[0]) === '') {
+                dfx.setHtml(cells[0], '&nbsp;');
+            }
+
+            var range = this.viper.getCurrentRange();
+            range.setStart(range._getFirstSelectableChild(cells[0]), 0);
+            range.collapse(true);
+            ViperSelection.addRange(range);
+        }
 
     },
 
