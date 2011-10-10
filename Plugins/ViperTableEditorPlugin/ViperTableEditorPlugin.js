@@ -1508,42 +1508,54 @@ ViperTableEditorPlugin.prototype = {
         var tr       = this.getCellRow(cell);
         var cellPos  = this.getCellPosition(cell);
         var cells    = this._getCellsExpanded();
-        var rowCells = cells[cellPos.row];
-        var rlen     = rowCells.length;
+        var rowspan  = this.getRowspan(cell);
 
-        var nextRowCells = this._getRowCells(this._getNextRow(tr));
-
-        var processedCells = [];
-        for (var i = 0; i < rlen; i++) {
-            var rowCell = rowCells[i];
-            if (processedCells.inArray(rowCell) === true) {
-                continue;
-            }
-
-            processedCells.push(rowCell);
-
-            var rowspan = this.getRowspan(rowCell);
-            if (rowspan > 1) {
-                this.setRowspan(rowCell, (rowspan - 1));
-
-                var rowPos = this.getCellPosition(rowCell).row;
-                if (rowPos === cellPos.row) {
-                    // Move cell down.
-                    var nextRowPos = cells[(rowPos + 1)].find(rowCell);
-                    if (nextRowPos > 0) {
-                        dfx.insertAfter(cells[(rowPos + 1)][(nextRowPos - 1)], rowCell);
-                    } else {
-                        dfx.insertBefore(cells[(rowPos + 1)][(nextRowPos + this.getColspan(rowCell))], rowCell);
-                    }
-                }
-
-                continue;
-            }
-
-            dfx.remove(rowCell);
+        var nextRowIndex = (cellPos.row + rowspan);
+        var nextRow = tr;
+        for (var i = 0; i < rowspan; i++) {
+            var rowToRemove = nextRow;
+            nextRow  = this._getNextRow(nextRow);
+            rowToRemove.parentNode.removeChild(rowToRemove);
         }
 
-        dfx.remove(tr);
+        var rowCells   = cells[cellPos.row];
+        var cellsToMove = [];
+        for (var i = 0; i < rowCells.length; i++) {
+            var rowCell        = rowCells[i];
+            var rowCellPos     = this.getCellPosition(rowCell);
+            var rowCellRowspan = this.getRowspan(rowCell);
+            if (rowCellPos.row !== cellPos.row || rowCellRowspan > rowspan) {
+                if (rowCellPos.row === cellPos.row) {
+                    cellsToMove.push(rowCell);
+                }
+
+                this.setRowspan(rowCell, rowCellRowspan - rowspan);
+            }
+        }
+
+        for (var i = 0; i < cellsToMove.length; i++) {
+            var rowCell        = cellsToMove[i];
+            var rowCellPos     = this.getCellPosition(rowCell);
+            var rowCellRowspan = this.getRowspan(rowCell);
+            rowCells           = cells[(cellPos.row + rowspan)];
+
+            var index = rowCells.find(rowCell);
+            if (index > 0) {
+                for (var j = (index - 1); j >= 0; j--) {
+                    if (this.getCellPosition(rowCells[j]).row === nextRowIndex) {
+                        dfx.insertAfter(rowCells[j], rowCell);
+                        break;
+                    }
+                }
+            } else if (index === 0) {
+                for (var j = 0; j < rowCells.length; j++) {
+                    if (this.getCellPosition(rowCells[j]).row === nextRowIndex) {
+                        dfx.insertBefore(rowCells[j], rowCell);
+                        break;
+                    }
+                }
+            }
+        }//end for
 
         // if the table is now empty then remove it.
         var rows = dfx.getTag('tr', table);
