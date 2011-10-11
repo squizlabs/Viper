@@ -474,7 +474,7 @@ ViperCoreStylesPlugin.prototype = {
         common     = this.getFirstBlockParent(common);
         if (dfx.isChildOf(common, this.viper.element) === true) {
             this.setJustfyChangeTrackInfo(common);
-            dfx.setStyle(common, 'text-align', type);
+            this.toggleJustify(common, type);
         } else {
             var parent       = null;
             var bookmark     = null;
@@ -492,7 +492,7 @@ ViperCoreStylesPlugin.prototype = {
             while (node = elemsBetween.shift()) {
                 if (dfx.isBlockElement(node) === true) {
                     this.setJustfyChangeTrackInfo(node);
-                    dfx.setStyle(node, 'text-align', type);
+                    this.toggleJustify(parent, type);
                     // Reset the parent var to crate a new P tag if there
                     // are more siblings.
                     parent = null;
@@ -500,7 +500,7 @@ ViperCoreStylesPlugin.prototype = {
                     // If we havent found a good parent and the node's parent is a block
                     // element then set the style of that parent.
                     this.setJustfyChangeTrackInfo(parent);
-                    dfx.setStyle(parent, 'text-align', type);
+                    this.toggleJustify(parent, type);
                     parent = null;
                 } else {
                     // This is not a block element so we need to insert
@@ -509,7 +509,7 @@ ViperCoreStylesPlugin.prototype = {
                     if (parent === null) {
                         parent = Viper.document.createElement('p');
                         this.setJustfyChangeTrackInfo(parent);
-                        dfx.setStyle(parent, 'text-align', type);
+                        this.toggleJustify(parent, type);
 
                         // Insert the new P tag before this node.
                         dfx.insertBefore(node, parent);
@@ -532,6 +532,16 @@ ViperCoreStylesPlugin.prototype = {
         this.viper.fireNodesChanged('ViperCoreStylesPlugin:justify');
         this.viper.fireSelectionChanged(null, true);
 
+    },
+
+    toggleJustify: function(node, type)
+    {
+        var current = dfx.getStyle(node, 'text-align');
+        if (current === type) {
+            dfx.setStyle(node, 'text-align', '');
+        } else {
+            dfx.setStyle(node, 'text-align', type);
+        }
     },
 
     /**
@@ -919,10 +929,6 @@ ViperCoreStylesPlugin.prototype = {
 
         if (states.alignment) {
             var justify = states.alignment;
-            if (!justify || justify === 'start') {
-                justify = 'left';
-            }
-
             for (var j in buttons.justify) {
                 if (j === justify) {
                     this.toolbarPlugin.setButtonActive(buttons.justify[j]);
