@@ -60,13 +60,14 @@ ViperCoreStylesPlugin.prototype = {
         if (toolbarPlugin) {
             var toolbarButtons = {};
             var btnGroup = toolbarPlugin.createButtonGroup();
-            toolbarButtons.strong = toolbarPlugin.createButton('B', false, 'Bold', false, 'bold', function() {
+            toolbarButtons.styles = {};
+            toolbarButtons.styles.strong = toolbarPlugin.createButton('B', false, 'Bold', false, 'bold', function() {
                 self.handleStyle('strong');
             }, btnGroup);
-            toolbarButtons.em = toolbarPlugin.createButton('I', false, 'Icalic', false, 'italic', function() {
+            toolbarButtons.styles.em = toolbarPlugin.createButton('I', false, 'Icalic', false, 'italic', function() {
                 self.handleStyle('em');
             }, btnGroup);
-            toolbarButtons.u = toolbarPlugin.createButton('U', false, 'Underline', false, 'underline', function() {
+            toolbarButtons.styles.u = toolbarPlugin.createButton('U', false, 'Underline', false, 'underline', function() {
                 self.handleStyle('u');
             }, btnGroup);
             toolbarButtons.rmFormat = toolbarPlugin.createButton('RF', false, 'Remove Format', false, 'removeFormat', function() {
@@ -74,27 +75,28 @@ ViperCoreStylesPlugin.prototype = {
             }, btnGroup);
 
             var btnGroup2 = toolbarPlugin.createButtonGroup();
-            toolbarButtons.sub = toolbarPlugin.createButton('Sub', false, 'Subscript', false, 'subscript', function() {
+            toolbarButtons.styles.sub = toolbarPlugin.createButton('Sub', false, 'Subscript', false, 'subscript', function() {
                 self.handleStyle('sub');
             }, btnGroup2);
-            toolbarButtons.sup = toolbarPlugin.createButton('Sup', false, 'Superscript', false, 'superscript', function() {
+            toolbarButtons.styles.sup = toolbarPlugin.createButton('Sup', false, 'Superscript', false, 'superscript', function() {
                 self.handleStyle('sup');
             }, btnGroup2);
-            toolbarButtons.strike = toolbarPlugin.createButton('St', false, 'Strikethrough', false, 'strikethrough', function() {
+            toolbarButtons.styles.strike = toolbarPlugin.createButton('St', false, 'Strikethrough', false, 'strikethrough', function() {
                 self.handleStyle('strike');
             }, btnGroup2);
 
             var btnGroup3 = toolbarPlugin.createButtonGroup();
-            toolbarButtons.justfyLeft = toolbarPlugin.createButton('JL', false, 'Left Justfy', false, 'justfyLeft', function() {
+            toolbarButtons.justify = {};
+            toolbarButtons.justify.left = toolbarPlugin.createButton('JL', false, 'Left Justify', false, 'justifyLeft', function() {
                 self.handleJustfy('left');
             }, btnGroup3);
-            toolbarButtons.justCenter = toolbarPlugin.createButton('JC', false, 'Center Justfy', false, 'justfyCenter', function() {
+            toolbarButtons.justify.center = toolbarPlugin.createButton('JC', false, 'Center Justify', false, 'justifyCenter', function() {
                 self.handleJustfy('center');
             }, btnGroup3);
-            toolbarButtons.justfyRight = toolbarPlugin.createButton('JR', false, 'Right Justfy', false, 'justfyRight', function() {
+            toolbarButtons.justify.right = toolbarPlugin.createButton('JR', false, 'Right Justify', false, 'justifyRight', function() {
                 self.handleJustfy('right');
             }, btnGroup3);
-            toolbarButtons.justLeft = toolbarPlugin.createButton('JB', false, 'Block Justfy', false, 'justfyBlock', function() {
+            toolbarButtons.justify.justify = toolbarPlugin.createButton('JB', false, 'Block Justify', false, 'justifyBlock', function() {
                 self.handleJustfy('justify');
             }, btnGroup3);
 
@@ -528,6 +530,7 @@ ViperCoreStylesPlugin.prototype = {
         }//end if
 
         this.viper.fireNodesChanged('ViperCoreStylesPlugin:justify');
+        this.viper.fireSelectionChanged(null, true);
 
     },
 
@@ -896,7 +899,7 @@ ViperCoreStylesPlugin.prototype = {
         }
 
         var tagNames = [];
-        for (var btn in buttons) {
+        for (var btn in buttons.styles) {
             this.toolbarPlugin.enableButton(buttons[btn]);
             this.toolbarPlugin.setButtonInactive(buttons[btn]);
             tagNames.push(btn);
@@ -905,7 +908,28 @@ ViperCoreStylesPlugin.prototype = {
         // Active states.
         var states = this._getActiveStates(range, tagNames);
         for (var i = 0; i < states.length; i++) {
-            this.toolbarPlugin.setButtonActive(buttons[states[i]]);
+            this.toolbarPlugin.setButtonActive(buttons.styles[states[i]]);
+        }
+
+        if (range.collapsed === false) {
+            this.toolbarPlugin.enableButton(buttons.rmFormat);
+        } else {
+            this.toolbarPlugin.disableButton(buttons.rmFormat);
+        }
+
+        if (states.alignment) {
+            var justify = states.alignment;
+            if (!justify || justify === 'start') {
+                justify = 'left';
+            }
+
+            for (var j in buttons.justify) {
+                if (j === justify) {
+                    this.toolbarPlugin.setButtonActive(buttons.justify[j]);
+                } else {
+                    this.toolbarPlugin.setButtonInactive(buttons.justify[j]);
+                }
+            }
         }
 
     },
@@ -917,10 +941,24 @@ ViperCoreStylesPlugin.prototype = {
         var endNode      = range.getEndNode();
         if (!endNode) {
             endNode = startNode;
-
         }
 
         if (startNode && endNode) {
+            // Justify.
+            var parent = startNode;
+            if (dfx.isBlockElement(startNode) !== true) {
+                parent = dfx.getFirstBlockParent(startNode);
+            }
+
+            if (endNode === parent
+                || parent === dfx.getFirstBlockParent(endNode)
+            ) {
+                var alignment = dfx.getStyle(parent, 'text-align');
+                if (alignment) {
+                    activeStates.alignment = alignment;
+                }
+            }
+
             if (startNode === endNode
                 || range.getNodeSelection()
             ) {

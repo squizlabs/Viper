@@ -41,7 +41,7 @@ ViperSourceViewPlugin.prototype = {
         var self = this;
         this.toolbarPlugin = this.viper.ViperPluginManager.getPlugin('ViperToolbarPlugin');
         if (this.toolbarPlugin) {
-            this.toolbarPlugin.createButton('Source', false, 'Toggle Source View', false, 'sourceView', function() {
+            this.toolbarPlugin.createButton('&lt;/&gt;', false, 'Toggle Source View', false, 'sourceView', function() {
                 self.toggleSourceView();
             });
         }

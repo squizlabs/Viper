@@ -152,6 +152,7 @@ ViperToolbarPlugin.prototype = {
     setButtonActive: function(buttonElement)
     {
         dfx.addClass(buttonElement, 'active');
+        dfx.removeClass(buttonElement, 'disabled');
     },
 
     remove: function()
