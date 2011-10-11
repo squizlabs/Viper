@@ -43,6 +43,10 @@ function Viper(id, options, callback)
     this._subElementActive = false;
     this._mainElem         = null;
 
+    // This var is used to store the range of Viper before it loses focus. Any plugins
+    // that steal focus from Viper element can use getPreviousRange.
+    this._viperRange = null;
+
     // Callback methods which are added by external objects.
     this.callbacks = {};
 
@@ -290,6 +294,14 @@ Viper.prototype = {
             return self.keyUp(e);
         });
 
+        dfx.addEvent(elem, 'blur.viper', function(e) {
+            self._viperRange = self.getCurrentRange().cloneRange();
+        });
+
+        dfx.addEvent(elem, 'focus.viper', function(e) {
+            self._viperRange = null;
+        });
+
         if (navigator.userAgent.match(/iPad/i) != null) {
             // On the iPad we need to detect selection changes every few ms.
             setInterval(function() {
@@ -509,6 +521,13 @@ Viper.prototype = {
 
     },
 
+    /**
+     * Returns the current range.
+     *
+     * Note that this range may be out side of Viper element.
+     *
+     * @return {ViperDOMRange} The Vipe DOMRange object.
+     */
     getCurrentRange: function()
     {
         var range =  ViperSelection.getRangeAt(0);
@@ -516,8 +535,35 @@ Viper.prototype = {
 
     },
 
+    /**
+     * Returns the range that was set before Viper lost focus.
+     *
+     * Plugins that steal focus from the Viper element may need to give the focus
+     * back to Viper element and also select the text/node that selected before they
+     * took the focus. In that case this method should be used instead of the
+     * getCurrentRange.
+     *
+     * @return {ViperDOMRange} The Vipe DOMRange object.
+     */
+    getViperRange: function()
+    {
+        if (this._viperRange) {
+            return this._viperRange;
+        }
+
+        return this.getCurrentRange();
+
+    },
+
+    /**
+     * Returns the caret coords.
+     *
+     * @return {object} The x and y position of the caret.
+     */
     getCaretCoords: function()
     {
+        // TODO: Change this to range coords.
+
         var coords = {};
         try {
             var bookmark = this.createBookmark();
@@ -536,6 +582,13 @@ Viper.prototype = {
 
     },
 
+    /**
+     * Returns true if given selection is in side the Viper element false otherwise.
+     *
+     * @param {ViperDOMRange} range The range object to check.
+     *
+     * @return {boolean} True if range is inside Viper element.
+     */
     rangeInViperBounds: function(range)
     {
         range = range || this.getCurrentRange();
@@ -547,6 +600,13 @@ Viper.prototype = {
 
     },
 
+    /**
+     * Checks if specified element is inside Viper element.
+     *
+     * @param {DOMNode} element The element to test.
+     *
+     * @return {boolean} True if the element is inside Viper element.
+     */
     isOutOfBounds: function(element)
     {
         if (element === this.element || dfx.isChildOf(element, this.element) === true) {

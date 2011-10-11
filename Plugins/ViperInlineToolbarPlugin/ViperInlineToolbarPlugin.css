@@ -24,7 +24,8 @@
     font-size: 13px;
 }
 .ViperITP.forTopbar {
-    z-index: 802;
+    z-index: 1002;
+    position: fixed;
 }
 
 .ViperITP:before {

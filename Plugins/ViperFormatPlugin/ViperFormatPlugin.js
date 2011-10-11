@@ -335,33 +335,118 @@ ViperFormatPlugin.prototype = {
     {
         var toolbar  = this.toolbarPlugin;
         var btnGroup = toolbar.createButtonGroup();
+        var self     = this;
+
+        var _updateValue = function(textBox, attr) {
+            var range   = self.viper.getViperRange();
+            var element = range.getNodeSelection();
+            var value   = '';
+            if (element) {
+                value = element.getAttribute(attr);
+            }
+
+            textBox.value = value;
+            return value;
+        };
 
         // Anchor.
         var anchorSubContent = document.createElement('div');
-        var idTextbox = toolbar.createTextbox(null, '', 'ID', function() {
+        var idTextbox = toolbar.createTextbox('', 'ID', function(value) {
+            // Apply the ID to the selection.
+            self._setAttributeForSelection(self.viper.getCurrentRange(), 'id', value);
         });
         anchorSubContent.appendChild(idTextbox);
 
         var anchorSubSection = toolbar.createSubSection(anchorSubContent, true);
         var anchorTools   = toolbar.createToolsPopup('Anchor ID', null, [anchorSubSection], null, function() {
-            dfx.getTag('input', idTextbox)[0].value = '';
+            _updateValue(dfx.getTag('input', idTextbox)[0], 'id');
         });
 
-        toolbar.createButton('', false, 'Anchor ID', false, 'anchorID', function() {
-        }, btnGroup, anchorTools);
-
+        var idButton = toolbar.createButton('', false, 'Anchor ID', false, 'anchorID', null, btnGroup, anchorTools);
 
         // Class.
         var classSubContent = document.createElement('div');
-        var classTextbox = toolbar.createTextbox(null, '', 'Class', function() {
+        var classTextbox = toolbar.createTextbox('', 'Class', function(value) {
+            self._setAttributeForSelection(self.viper.getCurrentRange(), 'class', value);
         });
         classSubContent.appendChild(classTextbox);
 
         var classSubSection = toolbar.createSubSection(classSubContent, true);
-        var classTools   = toolbar.createToolsPopup('Class', null, [classSubSection]);
+        var classTools   = toolbar.createToolsPopup('Class', null, [classSubSection], null, function() {
+            _updateValue(dfx.getTag('input', classTextbox)[0], 'class');
+        });
 
-        toolbar.createButton('', false, 'CSS Class', false, 'cssClass', function() {
-        }, btnGroup, classTools);
+        var classButton = toolbar.createButton('', false, 'CSS Class', false, 'cssClass', null, btnGroup, classTools);
+
+        this.viper.registerCallback('ViperToolbarPlugin:updateToolbar', 'ViperFormatPlugin', function(data) {
+            if (_updateValue(dfx.getTag('input', idTextbox)[0], 'id')) {
+                toolbar.setButtonActive(idButton);
+            } else {
+                toolbar.setButtonInactive(idButton);
+            }
+
+            if (_updateValue(dfx.getTag('input', classTextbox)[0], 'class')) {
+                toolbar.setButtonActive(classButton);
+            } else {
+                toolbar.setButtonInactive(classButton);
+            }
+        });
+
+    },
+
+    _setAttributeForElement: function(element, attr, value)
+    {
+        if (element.nodeType === dfx.ELEMENT_NODE) {
+            // Set the attribute of this element.
+            element.setAttribute(attr, value);
+            return element;
+        }
+
+        return null;
+
+    },
+
+    _setAttributeForSelection: function(range, attr, value)
+    {
+        // Wrap the selection with span tag.
+        var bookmark = self.viper.createBookmark();
+
+        // Move the elements between start and end of bookmark to the new
+        // span tag. Then select the new span tag and update selection.
+        var span = null;
+        if (bookmark.start && bookmark.end) {
+            if (bookmark.start.nextSibling
+                && bookmark.start.nextSibling.nodeType === dfx.ELEMENT_NODE
+                && bookmark.start.nextSibling === bookmark.end.previousSibling
+            ) {
+                span = bookmark.start.nextSibling;
+                self.viper.removeBookmarks();
+                this._setAttributeForElement(span, attr, value);
+            } else {
+                var span     = document.createElement('span');
+                span.setAttribute(attr, value);
+
+                var start = bookmark.start.nextSibling;
+                while (start !== bookmark.end) {
+                    var elem = start;
+                    start = start.nextSibling;
+                    span.appendChild(elem);
+                }
+
+                dfx.insertBefore(bookmark.start, span);
+                self.viper.removeBookmark(bookmark);
+            }//end if
+
+            range.selectNode(span);
+            ViperSelection.addRange(range);
+            self.viper.adjustRange();
+
+            self.viper.fireCallbacks('Viper:selectionChanged', range);
+
+            return span;
+        }
+
+        return null;
 
     },
 

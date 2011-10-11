@@ -26,6 +26,8 @@ function ViperToolbarPlugin(viper)
     this.viper    = viper;
     this._toolbar = null;
 
+    this._activePopup = null;
+
     this.createToolbar();
 
     var self = this;
@@ -72,6 +74,11 @@ ViperToolbarPlugin.prototype = {
         var elem = document.createElement('div');
         dfx.addClass(elem, 'ViperTP-bar themeDark Viper-scalable');
         this._toolbar = elem;
+
+        dfx.addEvent(elem, 'mousedown', function(e) {
+            dfx.preventDefault(e);
+            return false;
+        });
 
     },
 
@@ -126,8 +133,9 @@ ViperToolbarPlugin.prototype = {
     {
         var button = ViperTools.createButton(content, isActive, titleAttr, disabled, customClass, clickAction, groupElement);
         if (toolsPopup) {
+            var self = this;
             dfx.addEvent(button, 'mousedown', function() {
-                dfx.removeClass(dfx.getClass('selected', this._toolbar), 'selected')
+                dfx.removeClass(dfx.getClass('selected', this._toolbar), 'selected');
 
                 var toolPopups = dfx.getClass('ViperITP forTopbar');
                 for (var i = 0; i < toolPopups.length; i++) {
@@ -137,9 +145,14 @@ ViperToolbarPlugin.prototype = {
                 }
 
                 if (toolsPopup.element.parentNode) {
-                    toolsPopup.element.parentNode.removeChild(toolsPopup.element);
+                    self.closePopup(toolsPopup);
+                    self._activePopup = null;
                 } else {
-                    toolsPopup.init();
+                    self._activePopup = toolsPopup;
+                    if (toolsPopup.init) {
+                        toolsPopup.init();
+                    }
+
                     document.body.appendChild(toolsPopup.element);
                     var toolsWidth = dfx.getElementWidth(toolsPopup.element);
                     dfx.addClass(button, 'selected');
@@ -163,7 +176,6 @@ ViperToolbarPlugin.prototype = {
     /**
      * Creates a textbox.
      *
-     * @param {DOMNode}  node       Element to select.
      * @param {string}   value      The initial value of the textbox.
      * @param {string}   label      The label of the textbox.
      * @param {function} action     The function to call when the textbox value is updated.
@@ -172,7 +184,7 @@ ViperToolbarPlugin.prototype = {
      *
      * @return {DOMNode} If label specified the label element else the textbox element.
      */
-    createTextbox: function(node, value, label, action, required, expandable)
+    createTextbox: function(value, label, action, required, expandable)
     {
         var textBox = document.createElement('input');
         dfx.addClass(textBox, 'ViperITP-input');
@@ -188,34 +200,32 @@ ViperToolbarPlugin.prototype = {
         });
 
         dfx.addEvent(textBox, 'blur', function(e) {
+            ViperSelection.addRange(self.viper.getViperRange());
+
             dfx.removeClass(labelElem, 'active');
             clearTimeout(t);
+            if (self._activePopup) {
+                self.closePopup(self._activePopup);
+                self._activePopup = null;
+            }
         });
 
         dfx.addEvent(textBox, 'keyup', function(e) {
             if (e.which === 13) {
-                textBox.blur();
-
-                if (node) {
-                    var range = self.viper.getCurrentRange();
-                    ViperSelection.removeAllRanges();
-                    range.selectNode(node);
-                    ViperSelection.addRange(range);
-                }
-
                 self.viper.focus();
-
                 action.call(textBox, textBox.value);
                 return;
             }
 
             dfx.addClass(labelElem, 'active');
 
-            clearTimeout(t);
-            t = setTimeout(function() {
-                dfx.removeClass(labelElem, 'active');
-                action.call(textBox, textBox.value);
-            }, 1500);
+          //  clearTimeout(t);
+          //  t = setTimeout(function() {
+          //      ViperSelection.addRange(self.viper.getViperRange());
+          //
+          //      dfx.removeClass(labelElem, 'active');
+          //      action.call(textBox, textBox.value);
+          //  }, 1500);
         });
 
         if (label) {
@@ -259,6 +269,14 @@ ViperToolbarPlugin.prototype = {
             dfx.setHtml(tools, '<div class="ViperITP-header">' + title + '</div>');
         }
 
+        dfx.addEvent(tools, 'mousedown', function(e) {
+            var target = dfx.getMouseEventTarget(e);
+            if (dfx.isTag(target, 'input') !== true) {
+                dfx.preventDefault(e);
+                return false;
+            }
+        });
+
         if (toolsContentElement) {
             dfx.addClass(toolsContentElement, 'ViperITP-tools');
             tools.appendChild(toolsContentElement);
@@ -290,6 +308,19 @@ ViperToolbarPlugin.prototype = {
         }
 
         return popup;
+
+    },
+
+    closePopup: function(popup)
+    {
+        popup = popup || this._activePopup;
+
+        if (!popup || !popup.element || !popup.element.parentNode) {
+            return;
+        }
+
+        popup.element.parentNode.removeChild(popup.element);
+        dfx.removeClass(dfx.getClass('selected', this._toolbar), 'selected');
 
     },
 
