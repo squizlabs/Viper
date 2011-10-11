@@ -907,6 +907,10 @@ ViperListPlugin.prototype = {
         var canMakeOL = false;
         var list      = null;
 
+        if (!startNode) {
+            return;
+        }
+
         if (startNode && this._isListElement(startNode) === true) {
             if (range.collapsed === true && mainToolbar !== true) {
                 return;
