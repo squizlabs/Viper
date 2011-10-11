@@ -122,11 +122,13 @@ ViperToolbarPlugin.prototype = {
      *
      * @return {DOMElement} The new button element.
      */
-    createButton: function(content, isActive, titleAttr, disabled, customClass, clickAction, groupElement, toolsPopup)
+    createButton: function(content, isActive, titleAttr, disabled, customClass, clickAction, groupElement, toolsPopup, parentElement)
     {
         var button = ViperTools.createButton(content, isActive, titleAttr, disabled, customClass, clickAction, groupElement);
         if (toolsPopup) {
             dfx.addEvent(button, 'mousedown', function() {
+                dfx.removeClass(dfx.getClass('selected', this._toolbar), 'selected')
+
                 var toolPopups = dfx.getClass('ViperITP forTopbar');
                 for (var i = 0; i < toolPopups.length; i++) {
                     if (toolPopups[i] !== toolsPopup.element && toolPopups[i].parentNode) {
@@ -140,6 +142,7 @@ ViperToolbarPlugin.prototype = {
                     toolsPopup.init();
                     document.body.appendChild(toolsPopup.element);
                     var toolsWidth = dfx.getElementWidth(toolsPopup.element);
+                    dfx.addClass(button, 'selected');
 
                     var elemDim = dfx.getBoundingRectangle(button);
                     dfx.setStyle(toolsPopup.element, 'left', elemDim.x1 + ((elemDim.x2 - elemDim.x1) / 2) - (toolsWidth / 2)  + 'px');
@@ -149,7 +152,9 @@ ViperToolbarPlugin.prototype = {
         }
 
         if (!groupElement) {
-            this._toolbar.appendChild(button);
+            if (!parentElement) {
+                this._toolbar.appendChild(button);
+            }
         }
 
         return button;
