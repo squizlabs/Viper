@@ -64,10 +64,9 @@ ViperFormatPlugin.prototype = {
             return self.styleTags[format];
         });
 
-        var menu = document.createElement('div');
-        dfx.addClass(menu, 'ViperFormatPlugin-menu');
         this.toolbarPlugin   = this.viper.ViperPluginManager.getPlugin('ViperToolbarPlugin');
         if (this.toolbarPlugin) {
+            this._createToolbarContent();
         }
 
         ViperChangeTracker.setApproveCallback('textFormatChange', function(clone, node) {
@@ -329,6 +328,40 @@ ViperFormatPlugin.prototype = {
         }//end if
 
         this._inlineToolbarActiveSubSection = null;
+
+    },
+
+    _createToolbarContent: function()
+    {
+        var toolbar  = this.toolbarPlugin;
+        var btnGroup = toolbar.createButtonGroup();
+
+        // Anchor.
+        var anchorSubContent = document.createElement('div');
+        var idTextbox = toolbar.createTextbox(null, '', 'ID', function() {
+        });
+        anchorSubContent.appendChild(idTextbox);
+
+        var anchorSubSection = toolbar.createSubSection(anchorSubContent, true);
+        var anchorTools   = toolbar.createToolsPopup('Anchor ID', null, [anchorSubSection], null, function() {
+            dfx.getTag('input', idTextbox)[0].value = '';
+        });
+
+        toolbar.createButton('', false, 'Anchor ID', false, 'anchorID', function() {
+        }, btnGroup, anchorTools);
+
+
+        // Class.
+        var classSubContent = document.createElement('div');
+        var classTextbox = toolbar.createTextbox(null, '', 'Class', function() {
+        });
+        classSubContent.appendChild(classTextbox);
+
+        var classSubSection = toolbar.createSubSection(classSubContent, true);
+        var classTools   = toolbar.createToolsPopup('Class', null, [classSubSection]);
+
+        toolbar.createButton('', false, 'CSS Class', false, 'cssClass', function() {
+        }, btnGroup, classTools);
 
     },
 
