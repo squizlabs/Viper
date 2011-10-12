@@ -910,8 +910,8 @@ ViperCoreStylesPlugin.prototype = {
 
         var tagNames = [];
         for (var btn in buttons.styles) {
-            this.toolbarPlugin.enableButton(buttons[btn]);
-            this.toolbarPlugin.setButtonInactive(buttons[btn]);
+            this.toolbarPlugin.enableButton(buttons.styles[btn]);
+            this.toolbarPlugin.setButtonInactive(buttons.styles[btn]);
             tagNames.push(btn);
         }
 
