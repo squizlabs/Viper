@@ -57,8 +57,16 @@ ViperHistoryManager.prototype = {
             return;
         }
 
-        var task = {
-            content: this.viper.getRawHTML()
+        var range = this.viper.getCurrentRange();
+        var task  = {
+            content: this.viper.getRawHTML(),
+            range: {
+                startContainer: XPath.getPath(range.startContainer),
+                endContainer: XPath.getPath(range.endContainer),
+                startOffset: range.startOffset,
+                endOffset: range.endOffset,
+                collapsed: range.collapsed
+            }
         };
 
         var modify = false;
@@ -112,8 +120,16 @@ ViperHistoryManager.prototype = {
         }
 
         // Get the current state of the content and add it to redo list.
+        var range        = this.viper.getCurrentRange();
         var currentState = {
-            content: this.viper.getRawHTML()
+            content: this.viper.getRawHTML(),
+            range: {
+                startContainer: XPath.getPath(range.startContainer),
+                endContainer: XPath.getPath(range.endContainer),
+                startOffset: range.startOffset,
+                endOffset: range.endOffset,
+                collapsed: range.collapsed
+            }
         };
 
         // Add this undo to redo.
@@ -127,6 +143,8 @@ ViperHistoryManager.prototype = {
 
         // Set the contents.
         this.viper.setRawHTML(task.content);
+
+        this._selectTaskRange(task);
 
         // Fire nodesChanged event.
         this._ignoreAdd = true;
@@ -154,6 +172,8 @@ ViperHistoryManager.prototype = {
 
         // Set the contents.
         this.viper.setRawHTML(task.content);
+
+        this._selectTaskRange(task);
 
         // Fire nodesChanged event.
         this._ignoreAdd = true;
@@ -199,6 +219,24 @@ ViperHistoryManager.prototype = {
             // Add the initial content.
             this.add();
         }
+
+    },
+
+    _selectTaskRange: function(task)
+    {
+        // Select.
+        try {
+            var startContainer = XPath.getNode(task.range.startContainer);
+            var endContainer   = XPath.getNode(task.range.endContainer);
+            var range = this.viper.getCurrentRange();
+            range.setStart(startContainer, task.range.startOffset);
+            range.setEnd(endContainer, task.range.endOffset);
+            if (task.range.collapsed === true) {
+                range.collapse(true);
+            }
+
+            ViperSelection.addRange(range);
+        } catch (e) {}
 
     },
 
