@@ -379,6 +379,14 @@ ViperFormatPlugin.prototype = {
         var classButton = toolbar.createButton('', false, 'CSS Class', false, 'cssClass', null, btnGroup, classTools);
 
         this.viper.registerCallback('ViperToolbarPlugin:updateToolbar', 'ViperFormatPlugin', function(data) {
+            if (data.range.collapsed === true) {
+                toolbar.disableButton(idButton);
+                toolbar.disableButton(classButton);
+            } else {
+                toolbar.enableButton(idButton);
+                toolbar.enableButton(classButton);
+            }
+
             if (_updateValue(dfx.getTag('input', idTextbox)[0], 'id')) {
                 toolbar.setButtonActive(idButton);
             } else {
