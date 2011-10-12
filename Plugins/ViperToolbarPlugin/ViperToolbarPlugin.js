@@ -157,9 +157,11 @@ ViperToolbarPlugin.prototype = {
                     var toolsWidth = dfx.getElementWidth(toolsPopup.element);
                     dfx.addClass(button, 'selected');
 
+                    var scrollCoords = dfx.getScrollCoords();
+
                     var elemDim = dfx.getBoundingRectangle(button);
-                    dfx.setStyle(toolsPopup.element, 'left', elemDim.x1 + ((elemDim.x2 - elemDim.x1) / 2) - (toolsWidth / 2)  + 'px');
-                    dfx.setStyle(toolsPopup.element, 'top', elemDim.y2 + 8 + 'px');
+                    dfx.setStyle(toolsPopup.element, 'left', elemDim.x1 + ((elemDim.x2 - elemDim.x1) / 2) - (toolsWidth / 2) - scrollCoords.x  + 'px');
+                    dfx.setStyle(toolsPopup.element, 'top', elemDim.y2 + 8 - scrollCoords.y + 'px');
                 }
             });
         }
