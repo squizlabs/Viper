@@ -206,10 +206,6 @@ ViperToolbarPlugin.prototype = {
 
             dfx.removeClass(labelElem, 'active');
             clearTimeout(t);
-            if (self._activePopup) {
-                self.closePopup(self._activePopup);
-                self._activePopup = null;
-            }
         });
 
         dfx.addEvent(textBox, 'keyup', function(e) {
@@ -220,14 +216,6 @@ ViperToolbarPlugin.prototype = {
             }
 
             dfx.addClass(labelElem, 'active');
-
-          //  clearTimeout(t);
-          //  t = setTimeout(function() {
-          //      ViperSelection.addRange(self.viper.getViperRange());
-          //
-          //      dfx.removeClass(labelElem, 'active');
-          //      action.call(textBox, textBox.value);
-          //  }, 1500);
         });
 
         if (label) {
