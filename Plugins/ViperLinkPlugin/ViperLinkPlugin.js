@@ -31,6 +31,8 @@ ViperLinkPlugin.prototype = {
     {
         this._initInlineToolbar();
 
+        this._initToolbar();
+
     },
 
     rangeToLink: function(range, url, title)
@@ -106,6 +108,29 @@ ViperLinkPlugin.prototype = {
         }
 
         link.setAttribute('href', url);
+
+    },
+
+    getLinkFromRange: function(range)
+    {
+        var selectedNode = range.getNodeSelection();
+        if (selectedNode && dfx.isTag(selectedNode, 'a') === true) {
+            return selectedNode;
+        }
+
+        var viperElem = this.viper.getViperElement();
+        var common    = range.getCommonElement();
+        while (common) {
+            if (dfx.isTag(common, 'a') === true) {
+                return common;
+            } else if (common === viperElem || dfx.isBlockElement(common) === true) {
+                break;
+            }
+
+            common = common.parentNode;
+        }
+
+        return null;
 
     },
 
@@ -234,7 +259,91 @@ ViperLinkPlugin.prototype = {
             subSectionCont.appendChild(urlRow);
             subSectionCont.appendChild(titleTextbox);
         });
+    },
+
+    _initToolbar: function()
+    {
+        var toolbar = this.viper.ViperPluginManager.getPlugin('ViperToolbarPlugin');
+        if (!toolbar) {
+            return;
+        }
+
+        // Link var is updated when the updateToolbar event callback is called.
+        var link = null;
+
+        var setLinkAttributes = function(url, title) {
+            if (!link) {
+                link = self.rangeToLink(self.viper.getViperRange(), url, title);
+            } else {
+                self.setLinkURL(link, url);
+                self.setLinkTitle(link, title);
+            }
+        };
+
+        var self     = this;
+        var btnGroup = toolbar.createButtonGroup();
+
+        // Create Link button and popup.
+        var createLinkSubContent = document.createElement('div');
+
+        // URL text box.
+        var url = toolbar.createTextbox('', 'URL', function(value) {
+            setLinkAttributes(value, (dfx.getTag('input', createLinkSubContent)[1]).value);
+        });
+        createLinkSubContent.appendChild(url);
+
+        // Title text box.
+        var title = toolbar.createTextbox('', 'Title', function(value) {
+            setLinkAttributes((dfx.getTag('input', createLinkSubContent)[0]).value, value);
+        });
+        createLinkSubContent.appendChild(title);
+
+        var createLinkSubSection = toolbar.createSubSection(createLinkSubContent, true);
+        var urlTools = toolbar.createToolsPopup('Anchor ID', null, [createLinkSubSection], null, function() {
+            if (link) {
+                var range = self.viper.getViperRange();
+                range.selectNode(link);
+                ViperSelection.addRange(range);
+            }
+        });
+
+        var urlBtn = toolbar.createButton('', false, 'Toggle Link Options', false, 'link', null, btnGroup, urlTools);
+
+        // Remove Link.
+        var removeLinkBtn = toolbar.createButton('', false, 'Remove Link', false, 'linkRemove', function() {
+            if (link) {
+                self.removeLink(link);
+            }
+        }, btnGroup);
+
+        // Update the buttons when the toolbar updates it self.
+        this.viper.registerCallback('ViperToolbarPlugin:updateToolbar', 'ViperLinkPlugin', function(data) {
+            var range = data.range;
+            link      = self.getLinkFromRange(range);
+
+            if (link) {
+                toolbar.setButtonActive(urlBtn);
+                toolbar.enableButton(removeLinkBtn);
+
+                (dfx.getTag('input', createLinkSubContent)[0]).value = link.getAttribute('href');
+                (dfx.getTag('input', createLinkSubContent)[1]).value = link.getAttribute('title');
+            } else {
+                toolbar.setButtonInactive(urlBtn);
+                if (range.collapsed === true) {
+                    toolbar.disableButton(urlBtn);
+                    toolbar.closePopup(urlTools);
+                } else {
+                    toolbar.enableButton(urlBtn);
+                }
+
+                toolbar.disableButton(removeLinkBtn);
+
+                (dfx.getTag('input', createLinkSubContent)[0]).value = '';
+                (dfx.getTag('input', createLinkSubContent)[1]).value = '';
+            }//end if
+        });
 
     }
+
 
 };
