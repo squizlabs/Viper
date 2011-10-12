@@ -382,6 +382,8 @@ ViperFormatPlugin.prototype = {
             if (data.range.collapsed === true) {
                 toolbar.disableButton(idButton);
                 toolbar.disableButton(classButton);
+                toolbar.closePopup(classTools);
+                toolbar.closePopup(anchorTools);
             } else {
                 toolbar.enableButton(idButton);
                 toolbar.enableButton(classButton);
