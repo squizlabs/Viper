@@ -328,8 +328,15 @@ ViperLinkPlugin.prototype = {
                 (dfx.getTag('input', createLinkSubContent)[0]).value = link.getAttribute('href');
                 (dfx.getTag('input', createLinkSubContent)[1]).value = link.getAttribute('title');
             } else {
+                var startNode = data.range.getStartNode();
+                var endNode   = data.range.getEndNode();
                 toolbar.setButtonInactive(urlBtn);
-                if (range.collapsed === true) {
+
+                if (range.collapsed === true
+                    || startNode
+                    && endNode
+                    && startNode.parentNode !== endNode.parentNode
+                ) {
                     toolbar.disableButton(urlBtn);
                     toolbar.closePopup(urlTools);
                 } else {
