@@ -41,9 +41,9 @@ ViperLinkPlugin.prototype = {
             return;
         }
 
-        range = range || this.viper.getCurrentRange();
+        range = range || this.viper.getViperRange();
 
-        var bookmark = this.viper.createBookmark();
+        var bookmark = this.viper.createBookmark(range);
 
         var a = document.createElement('a');
         a.setAttribute('href', url);
@@ -57,9 +57,12 @@ ViperLinkPlugin.prototype = {
             a.appendChild(elems[i]);
         }
 
-        dfx.insertAfter(bookmark.start, a);
+        dfx.insertBefore(bookmark.start, a);
 
-        this.viper.selectBookmark(bookmark);
+        this.viper.removeBookmark(bookmark);
+        range.selectNode(a);
+        ViperSelection.addRange(range);
+
         this.viper.fireSelectionChanged();
         this.viper.fireNodesChanged([this.viper.getViperElement()]);
 
@@ -82,7 +85,7 @@ ViperLinkPlugin.prototype = {
 
         dfx.remove(linkTag);
 
-        var range = this.viper.getCurrentRange();
+        var range = this.viper.getViperRange();
         range.setStart(firstChild, 0);
         range.setEnd(lastChild, lastChild.data.length);
         ViperSelection.addRange(range);
@@ -299,7 +302,7 @@ ViperLinkPlugin.prototype = {
         createLinkSubContent.appendChild(title);
 
         var createLinkSubSection = toolbar.createSubSection(createLinkSubContent, true);
-        var urlTools = toolbar.createToolsPopup('Anchor ID', null, [createLinkSubSection], null, function() {
+        var urlTools = toolbar.createToolsPopup('Insert Link', null, [createLinkSubSection], null, function() {
             if (link) {
                 var range = self.viper.getViperRange();
                 range.selectNode(link);
@@ -351,6 +354,5 @@ ViperLinkPlugin.prototype = {
         });
 
     }
-
 
 };
