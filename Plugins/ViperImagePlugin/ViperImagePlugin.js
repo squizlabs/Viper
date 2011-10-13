@@ -226,7 +226,6 @@ ViperImagePlugin.prototype = {
             image     = range.getNodeSelection();
             if (image && dfx.isTag(image, 'img') === true) {
                 toolbar.setButtonActive(urlBtn);
-                toolbar.enableButton(removeImageBtn);
 
                 (dfx.getTag('input', createImageSubContent)[0]).value = image.getAttribute('src');
                 (dfx.getTag('input', createImageSubContent)[1]).value = image.getAttribute('alt');
@@ -235,10 +234,14 @@ ViperImagePlugin.prototype = {
                 dfx.empty(previewBox);
                 setPreviewContent(image.cloneNode(true));
             } else {
+                if (image) {
+                    toolbar.disableButton(urlBtn);
+                } else {
+                    toolbar.enableButton(urlBtn);
+                }
+
                 toolbar.setButtonInactive(urlBtn);
                 toolbar.closePopup(imgTools);
-                toolbar.enableButton(urlBtn);
-                toolbar.disableButton(removeImageBtn);
 
                 (dfx.getTag('input', createImageSubContent)[0]).value = '';
                 (dfx.getTag('input', createImageSubContent)[1]).value = '';
