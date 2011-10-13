@@ -31,6 +31,18 @@ ViperImagePlugin.prototype = {
     {
         this._initToolbar();
 
+        var self = this;
+        this.viper.registerCallback('Viper:mouseDown', 'ViperImagePlugin', function(e) {
+            var target = dfx.getMouseEventTarget(e);
+            if (dfx.isTag(target, 'img') === true) {
+                var range = self.viper.getViperRange();
+                range.selectNode(target);
+                ViperSelection.addRange(range);
+                dfx.preventDefault(e);
+                return false;
+            }
+        });
+
     },
 
     rangeToImage: function(range, url, alt)
@@ -208,11 +220,6 @@ ViperImagePlugin.prototype = {
 
         var createImageSubSection = toolbar.createSubSection(createImageSubContent, true);
         var imgTools = toolbar.createToolsPopup('Insert Image', null, [createImageSubSection], null, function() {
-           // if (image) {
-           //     var range = self.viper.getViperRange();
-           //     range.selectNode(image);
-           //     ViperSelection.addRange(range);
-           // }
         });
 
         // Add the preview panel to the popup contents.
