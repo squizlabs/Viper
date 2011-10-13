@@ -295,7 +295,7 @@ Viper.prototype = {
         });
 
         dfx.addEvent(elem, 'blur.viper', function(e) {
-            self._viperRange = self.getCurrentRange().cloneRange();
+            self._viperRange = self._currentRange;
         });
 
         dfx.addEvent(elem, 'focus.viper', function(e) {
@@ -531,6 +531,7 @@ Viper.prototype = {
     getCurrentRange: function()
     {
         var range =  ViperSelection.getRangeAt(0);
+        this._currentRange = range.cloneRange();
         return range;
 
     },
@@ -2209,7 +2210,7 @@ Viper.prototype = {
             this.removeBookmarks(this.element);
         }
 
-        var currRange      = range || this.getCurrentRange();
+        var currRange      = range || this.getViperRange();
         var range          = currRange.cloneRange();
         var startContainer = range.startContainer;
         var endContainer   = range.endContainer;
