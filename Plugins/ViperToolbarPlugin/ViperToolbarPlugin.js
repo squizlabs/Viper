@@ -202,15 +202,13 @@ ViperToolbarPlugin.prototype = {
         });
 
         dfx.addEvent(textBox, 'blur', function(e) {
-            ViperSelection.addRange(self.viper.getViperRange());
-
             dfx.removeClass(labelElem, 'active');
             clearTimeout(t);
         });
 
         dfx.addEvent(textBox, 'keyup', function(e) {
             if (e.which === 13) {
-                self.viper.focus();
+                //self.viper.focus();
                 action.call(textBox, textBox.value);
                 return;
             }
