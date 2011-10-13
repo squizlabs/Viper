@@ -58,16 +58,8 @@ ViperListPlugin.prototype = {
         }
 
         // Inline toolbar.
-        var showToolbar = false;
-        this.viper.registerCallback('Viper:mouseUp', 'ViperListPlugin', function(e) {
-            showToolbar = true;
-        });
         this.viper.registerCallback('ViperInlineToolbarPlugin:updateToolbar', 'ViperListPlugin', function(data) {
-            if (showToolbar === true) {
-                self._updateInlineToolbar(data);
-            }
-
-            showToolbar = false;
+            self._updateInlineToolbar(data);
         });
 
         this.viper.registerCallback('Viper:keyDown', 'ViperListPlugin', function(e) {
@@ -77,7 +69,6 @@ ViperListPlugin.prototype = {
                 var startNode = range.getStartNode();
                 if (startNode && self._isListElement(startNode) === true) {
                     self.tabRange(range, e.shiftKey);
-
                     dfx.preventDefault(e);
                     return false;
                 } else if ((dfx.isTag(startNode, 'p') === true || ((startNode.nodeType === dfx.TEXT_NODE || dfx.isStubElement(startNode) === true) && dfx.isTag(dfx.getFirstBlockParent(startNode), 'p') === true))) {
@@ -378,13 +369,20 @@ ViperListPlugin.prototype = {
 
     tabRange: function(range, outdent, testOnly)
     {
-        range         = range || this.viper.getCurrentRange();
+        range         = range || this.viper.getViperRange();
         var startNode = range.getStartNode();
         var endNode   = range.getEndNode();
+        if (!endNode && startNode.nodeType === dfx.ELEMENT_NODE) {
+            endNode = startNode;
+        }
 
         var listItems = [];
         if (startNode === endNode) {
-            listItems.push(this._getListItem(startNode));
+            if (dfx.isTag(startNode, 'ul') === true || dfx.isTag(startNode, 'ol') === true) {
+                listItems.push(startNode);
+            } else {
+                listItems.push(this._getListItem(startNode));
+            }
         } else {
             var elems = dfx.getElementsBetween(startNode, endNode);
             elems.unshift(startNode);
@@ -608,7 +606,15 @@ ViperListPlugin.prototype = {
             return false;
         }
 
-        var list           = this._getListElement(li);
+        var list      = null;
+        var isSubList = false;
+        if (dfx.isTag(li, 'ul') === true || dfx.isTag(li, 'ol') === true) {
+            list      = li;
+            isSubList = true;
+        } else {
+            list = this._getListElement(li);
+        }
+
         var parentListItem = this._getListItem(list);
 
         var siblingItems = [];
@@ -638,8 +644,22 @@ ViperListPlugin.prototype = {
                 }
             }
 
-            // Now move this list item after the parent list item.
-            dfx.insertAfter(parentListItem, li);
+            if (isSubList === true) {
+                // For each child move them after the parent list item.
+                var childItems = [];
+                for (var node = li.firstChild; node; node = node.nextSibling) {
+                    if (dfx.isTag(node, 'li') === true) {
+                        childItems.push(node);
+                    }
+                }
+
+                for (var i = childItems.length; i >= 0; i--) {
+                    dfx.insertAfter(parentListItem, childItems[i]);
+                }
+            } else {
+                // Now move this list item after the parent list item.
+                dfx.insertAfter(parentListItem, li);
+            }
 
             if (dfx.getTag('li', list).length === 0) {
                 // If the old list item is now empty, remove it.
@@ -1025,6 +1045,7 @@ ViperListPlugin.prototype = {
 
         var self     = this;
         var statuses = this._getButtonStatuses(data.range);
+
         if (!statuses) {
             return;
         }
@@ -1085,10 +1106,10 @@ ViperListPlugin.prototype = {
 
         if (statuses.increaseIndent === true || statuses.decreaseIndent === true) {
             inlineToolbarPlugin.createButton('', false, 'Indent List', !statuses.increaseIndent, 'listIndent', function() {
-                self.tabRange(range);
+                self.tabRange();
             }, buttonGroup);
             inlineToolbarPlugin.createButton('', false, 'Outdent List', !statuses.decreaseIndent, 'listOutdent', function() {
-                self.tabRange(range, true);
+                self.tabRange(null, true);
             }, buttonGroup);
         }
 
