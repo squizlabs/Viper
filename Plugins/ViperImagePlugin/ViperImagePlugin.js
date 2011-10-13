@@ -69,6 +69,32 @@ ViperImagePlugin.prototype = {
 
     },
 
+    removeImage: function(image)
+    {
+        if (image && dfx.isTag(image, 'img') === true) {
+            // If there are text nodes around then move the range to one of them,
+            // else create a new text node and move the range to it.
+            var node  = null;
+            var start = 0;
+            if (image.nextSibling && image.nextSibling.nodeType === dfx.TEXT_NODE) {
+                node = image.nextSibling;
+            } else if (image.previousSibling && image.previousSibling.nodeType === dfx.TEXT_NODE) {
+                node  = image.previousSibling;
+                start = node.data.length;
+            } else {
+                node = document.createTextNode(' ');
+                dfx.insertAfter(image, node);
+            }
+
+            dfx.remove(image);
+
+            var range = this.viper.getViperRange();
+            range.setStart(node, start);
+            range.collapse(true);
+            ViperSelection.addRange(range);
+        }
+    },
+
     setImageAlt: function(image, alt)
     {
         if (!image) {
@@ -193,13 +219,6 @@ ViperImagePlugin.prototype = {
         createImageSubContent.appendChild(previewBox);
 
         var urlBtn = toolbar.createButton('', false, 'Toggle Image Options', false, 'image', null, btnGroup, imgTools);
-
-        // Remove Image.
-        var removeImageBtn = toolbar.createButton('', false, 'Remove Image', false, 'imageRemove', function() {
-            if (image) {
-                self.removeImage(image);
-            }
-        }, btnGroup);
 
         // Update the buttons when the toolbar updates it self.
         this.viper.registerCallback('ViperToolbarPlugin:updateToolbar', 'ViperImagePlugin', function(data) {
