@@ -67,7 +67,7 @@ ViperListPlugin.prototype = {
         this.viper.registerCallback('Viper:keyDown', 'ViperListPlugin', function(e) {
             if (e.which === 9) {
                 // Handle tab key.
-                var range     = self.viper.getCurrentRange();
+                var range     = self.viper.getViperRange();
                 var startNode = range.getStartNode();
                 if (startNode && self._isListElement(startNode) === true) {
                     if (self.tabRange(range, e.shiftKey, true) === true) {
@@ -693,7 +693,11 @@ ViperListPlugin.prototype = {
 
         var pElems = [];
         if (startNode === endNode) {
-            pElems.push(this._getParaElement(startNode));
+            if (bookmark && bookmark.start) {
+                pElems.push(this._getParaElement(bookmark.start));
+            } else {
+                pElems.push(this._getParaElement(startNode));
+            }
         } else {
             var elems = null;
             if (testOnly === true) {
@@ -764,6 +768,7 @@ ViperListPlugin.prototype = {
             }
 
             listItems.push(li);
+            dfx.remove(p);
         }
 
         if (atEnd === true) {
