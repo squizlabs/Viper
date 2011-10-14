@@ -41,10 +41,12 @@ ViperListPlugin.prototype = {
 
             var btnGroup = toolbarPlugin.createButtonGroup();
             toolbarButtons.ul = toolbarPlugin.createButton('', false, 'Make Unordered List', false, 'listUL', function() {
-                return self.unoderedList();
+                var statuses = self._getButtonStatuses();
+                return self._makeListButtonAction(statuses.list, 'ul');
             }, btnGroup);
             toolbarButtons.ol = toolbarPlugin.createButton('', false, 'Make Ordered List', false, 'listOL', function() {
-                return self.oderedList();
+                var statuses = self._getButtonStatuses();
+                return self._makeListButtonAction(statuses.list, 'ol');
             }, btnGroup);
             toolbarButtons.indent = toolbarPlugin.createButton('', false, 'Indent List', false, 'listIndent', function() {
                 self.tabRange();
@@ -926,6 +928,7 @@ ViperListPlugin.prototype = {
 
     _getButtonStatuses: function(range, mainToolbar)
     {
+        range         = range || this.viper.getViperRange();
         var startNode = range.getStartNode();
         var makeList  = false;
         var indent    = false;
@@ -1042,6 +1045,45 @@ ViperListPlugin.prototype = {
 
     },
 
+    _makeListButtonAction: function(list, listType)
+    {
+        var currentType = '';
+        var newType     = '';
+        if (!list) {
+            currentType = listType;
+        } else {
+            currentType = dfx.getTagName(list);
+            if (currentType === 'ul') {
+                newType = 'ol';
+            } else {
+                newType = 'ul';
+            }
+        }
+
+        var self = this;
+        if (currentType !== listType) {
+            var newList = self.toggleListType(list);
+
+            var range = self.viper.getCurrentRange();
+            range.setStart(range._getFirstSelectableChild(newList), 0);
+            var lastChild = range._getLastSelectableChild(newList);
+            range.setEnd(lastChild, lastChild.data.length);
+            ViperSelection.addRange(range);
+
+            self.viper.fireSelectionChanged();
+            self.viper.fireNodesChanged([self.viper.getViperElement()]);
+        } else if (currentType !== newType) {
+            self.makeList(listType === 'ol');
+        } else {
+            var pTags = self.listToParagraphs(list);
+            var range = self.viper.getCurrentRange();
+            range.setStart(range._getFirstSelectableChild(pTags[0]), 0);
+            var lastChild = range._getLastSelectableChild(pTags[(pTags.length - 1)]);
+            range.setEnd(lastChild, lastChild.data.length);
+            ViperSelection.addRange(range);
+        }
+    },
+
     _updateInlineToolbar: function(data)
     {
         var inlineToolbarPlugin = this.viper.ViperPluginManager.getPlugin('ViperInlineToolbarPlugin');
@@ -1061,51 +1103,11 @@ ViperListPlugin.prototype = {
 
             var buttonGroup = inlineToolbarPlugin.createButtonGroup();
             inlineToolbarPlugin.createButton('', dfx.isTag(list, 'ul'), 'Make Unordered List', !statuses.ul, 'listUL', function() {
-                if (dfx.isTag(list, 'ol') === true) {
-                    var newList = self.toggleListType(list);
-
-                    var range = self.viper.getCurrentRange();
-                    range.setStart(range._getFirstSelectableChild(newList), 0);
-                    var lastChild = range._getLastSelectableChild(newList);
-                    range.setEnd(lastChild, lastChild.data.length);
-                    ViperSelection.addRange(range);
-
-                    self.viper.fireSelectionChanged();
-                    self.viper.fireNodesChanged([self.viper.getViperElement()]);
-                } else if (dfx.isTag(list, 'ul') !== true) {
-                    self.makeList();
-                } else {
-                    var pTags = self.listToParagraphs(list);
-                    var range = self.viper.getCurrentRange();
-                    range.setStart(range._getFirstSelectableChild(pTags[0]), 0);
-                    var lastChild = range._getLastSelectableChild(pTags[(pTags.length - 1)]);
-                    range.setEnd(lastChild, lastChild.data.length);
-                    ViperSelection.addRange(range);
-                }
+                self._makeListButtonAction(list, 'ul');
             }, buttonGroup);
 
             inlineToolbarPlugin.createButton('', dfx.isTag(list, 'ol'), 'Make Ordered List', !statuses.ol, 'listOL', function() {
-                if (dfx.isTag(list, 'ul') === true) {
-                    var newList = self.toggleListType(list);
-
-                    var range = self.viper.getCurrentRange();
-                    range.setStart(range._getFirstSelectableChild(newList), 0);
-                    var lastChild = range._getLastSelectableChild(newList);
-                    range.setEnd(lastChild, lastChild.data.length);
-                    ViperSelection.addRange(range);
-
-                    self.viper.fireSelectionChanged();
-                    self.viper.fireNodesChanged([self.viper.getViperElement()]);
-                } else if (dfx.isTag(list, 'ol') !== true) {
-                    self.makeList(true);
-                } else {
-                    var pTags = self.listToParagraphs(list);
-                    var range = self.viper.getCurrentRange();
-                    range.setStart(range._getFirstSelectableChild(pTags[0]), 0);
-                    var lastChild = range._getLastSelectableChild(pTags[(pTags.length - 1)]);
-                    range.setEnd(lastChild, lastChild.data.length);
-                    ViperSelection.addRange(range);
-                }
+                self._makeListButtonAction(list, 'ol');
             }, buttonGroup);
 
         }
