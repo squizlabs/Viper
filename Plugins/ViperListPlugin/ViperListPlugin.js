@@ -68,7 +68,10 @@ ViperListPlugin.prototype = {
                 var range     = self.viper.getCurrentRange();
                 var startNode = range.getStartNode();
                 if (startNode && self._isListElement(startNode) === true) {
-                    self.tabRange(range, e.shiftKey);
+                    if (self.tabRange(range, e.shiftKey, true) === true) {
+                        self.tabRange(range, e.shiftKey);
+                    }
+
                     dfx.preventDefault(e);
                     return false;
                 } else if ((dfx.isTag(startNode, 'p') === true || ((startNode.nodeType === dfx.TEXT_NODE || dfx.isStubElement(startNode) === true) && dfx.isTag(dfx.getFirstBlockParent(startNode), 'p') === true))) {
@@ -372,6 +375,7 @@ ViperListPlugin.prototype = {
         range         = range || this.viper.getViperRange();
         var startNode = range.getStartNode();
         var endNode   = range.getEndNode();
+
         if (!endNode && startNode.nodeType === dfx.ELEMENT_NODE) {
             endNode = startNode;
         }
@@ -392,7 +396,7 @@ ViperListPlugin.prototype = {
             for (var i = 0; i < c; i++) {
                 if (!elems[i]) {
                     continue;
-                } else if (dfx.isTag(elems[i], 'li') === false) {
+                } else if (dfx.isTag(elems[i], 'li') === false && dfx.isTag(elems[i], 'ol') === false && dfx.isTag(elems[i], 'ul') === false) {
                     if (elems[i].nodeType === dfx.TEXT_NODE && elems[i].data.indexOf("\n ") === 0) {
                         continue;
                     }
@@ -618,9 +622,11 @@ ViperListPlugin.prototype = {
         var parentListItem = this._getListItem(list);
 
         var siblingItems = [];
-        for (var node = li.nextSibling; node; node = node.nextSibling) {
-            if (dfx.isTag(node, 'li') === true) {
-                siblingItems.push(node);
+        if (isSubList !== true) {
+            for (var node = li.nextSibling; node; node = node.nextSibling) {
+                if (dfx.isTag(node, 'li') === true) {
+                    siblingItems.push(node);
+                }
             }
         }
 
@@ -677,7 +683,7 @@ ViperListPlugin.prototype = {
     {
         var startNode = range.getStartNode();
         var endNode   = range.getEndNode();
-        var bookmarn  = null;
+        var bookmark  = null;
 
         if (testOnly !== true) {
             bookmark  = this.viper.createBookmark();
@@ -690,7 +696,7 @@ ViperListPlugin.prototype = {
             var elems = null;
             if (testOnly === true) {
                 elems = dfx.getElementsBetween(startNode, endNode);
-                elems.shift(startNode);
+                elems.unshift(startNode);
                 elems.push(endNode);
             } else {
                 elems = dfx.getElementsBetween(bookmark.start, bookmark.end);
