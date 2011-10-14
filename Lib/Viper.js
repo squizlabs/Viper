@@ -1495,9 +1495,10 @@ Viper.prototype = {
             tag = 'span';
         }
 
-        var startContainer = range.getStartNode();
-        var endContainer   = range.getEndNode();
-        if (startContainer === endContainer) {
+       var startContainer = range.getStartNode();
+       var endContainer   = range.getEndNode();
+
+       if (startContainer === endContainer) {
             // Selected contents from same node.
             if (startContainer.nodeType === dfx.TEXT_NODE) {
                 // Selection is a text node.
@@ -1776,6 +1777,10 @@ Viper.prototype = {
         var range        = this.getCurrentRange();
         var startNode    = range.getStartNode();
         var endNode      = range.getEndNode();
+        if (!endNode) {
+            endNode = startNode;
+        }
+
         var startParents = dfx.getParents(startNode, style, this.element);
         var endParents   = dfx.getParents(endNode, style, this.element);
 

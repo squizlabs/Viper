@@ -728,10 +728,14 @@ ViperCoreStylesPlugin.prototype = {
 
         var startNode = range.getStartNode();
         var endNode   = range.getEndNode();
+        if (!endNode) {
+            endNode = startNode;
+        }
 
         var commonParent = range.getCommonElement();
 
-        if (dfx.isTag(startNode, style) === true
+        if (dfx.isTag(commonParent, style) === true
+            || dfx.isTag(startNode, style) === true
             || (dfx.getParents(startNode, style).length > 0
             && dfx.getParents(endNode, style).length > 0)
         ) {
