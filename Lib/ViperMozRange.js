@@ -543,7 +543,7 @@ ViperMozRange.prototype = {
 
         var previous = posSpan.previousSibling;
         var next     = posSpan.nextSibling;
-        var c        = jQuery(posSpan).position();
+        var c        = dfxjQuery(posSpan).position();
         var coords   = {
             x: c.left,
             y: c.top

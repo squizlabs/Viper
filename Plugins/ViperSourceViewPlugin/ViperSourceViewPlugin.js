@@ -148,7 +148,7 @@ ViperSourceViewPlugin.prototype = {
         };
 
         // Setup resizing.
-        jQuery(elem).resizable({
+        dfxjQuery(elem).resizable({
                 handles: 'se',
                 resize: function(e, ui) {
                     resizeElements(ui);
@@ -159,7 +159,7 @@ ViperSourceViewPlugin.prototype = {
         });
 
         // Setup resizing.
-        jQuery(elem).draggable();
+        dfxjQuery(elem).draggable();
 
         this._includeAce(function() {
             var editor   = ace.edit(source);

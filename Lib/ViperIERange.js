@@ -1031,7 +1031,7 @@ ViperIERange.prototype = {
 
         var previous = shy.previousSibling;
         var next     = shy.nextSibling;
-        var c        = jQuery(shy).position();
+        var c        = dfxjQuery(shy).position();
         var coords   = {
             x: c.left,
             y: c.top

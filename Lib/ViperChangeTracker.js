@@ -140,7 +140,7 @@ var ViperChangeTracker = {
             self.reLoad();
         });
 
-        jQuery(window).resize(function() {
+        dfxjQuery(window).resize(function() {
           self.updatePositionMarkers(true);
         });
 
