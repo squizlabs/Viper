@@ -2245,6 +2245,7 @@ Viper.prototype = {
         dfx.addClass(startBookmark, 'viperBookmark viperBookmark_start');
         dfx.setHtml(startBookmark, '&nbsp;');
         startBookmark.setAttribute('viperBookmark', 'start');
+
         try {
             range.insertNode(startBookmark);
 
@@ -2268,6 +2269,25 @@ Viper.prototype = {
             } else {
                 // Should not happen...
                 this.element.appendChild(startBookmark);
+            }
+        }
+
+        if (this.isBrowser('chrome') === true || this.isBrowser('safari') === true) {
+            // Sigh.. Move the range where its suppose to be instead of Webkit deciding that it should
+            // move the end of range to the begining of the next sibling -.-.
+            if (!endBookmark.previousSibling) {
+                var node = endBookmark.parentNode.previousSibling;
+                while (node) {
+                    if (node.nodeType !== dfx.TEXT_NODE || dfx.isBlank(node.data) === false) {
+                        break;
+                    }
+
+                    node = node.previousSibling;
+                }
+
+                if (node === startBookmark.parentNode) {
+                    startBookmark.parentNode.appendChild(endBookmark);
+                }
             }
         }
 
