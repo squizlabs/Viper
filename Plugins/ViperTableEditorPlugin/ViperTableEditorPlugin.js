@@ -709,6 +709,10 @@ ViperTableEditorPlugin.prototype = {
             case 'row':
                 this._createRowProperties(cell);
             break;
+
+            case 'table':
+                this._createTableProperties(cell);
+            break;
         }
 
     },
@@ -845,6 +849,15 @@ ViperTableEditorPlugin.prototype = {
 
     },
 
+    _createTableProperties: function(cell)
+    {
+        var self = this;
+        this.createButton('CAPTION', false, 'Create Table Caption', false, '', function() {
+            var table = self.getCellTable(cell);
+            self.createTableCaption(table);
+        });
+    },
+
     /**
      * Hides the inline toolbar.
      */
@@ -865,6 +878,31 @@ ViperTableEditorPlugin.prototype = {
     getActiveCell: function(cell)
     {
         return this.activeCell;
+
+    },
+
+    createTableCaption: function(table)
+    {
+        var caption  = null;
+        var captions = dfx.getTag('caption', table);
+        if (captions.length > 0) {
+            caption = captions[0];
+        } else {
+            caption = document.createElement('caption');
+            dfx.setHtml(caption, '&nbsp;');
+
+            dfx.insertBefore(table.firstChild, caption);
+        }
+
+        var range      = this.viper.getCurrentRange();
+        var selectNode = range._getFirstSelectableChild(caption);
+        range.setStart(selectNode, 0);
+        range.collapse(true);
+        ViperSelection.addRange(range);
+        this.viper.fireSelectionChanged();
+
+        this.removeHighlights();
+        this.hideCellToolsIcon();
 
     },
 
