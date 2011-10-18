@@ -1058,10 +1058,14 @@ ViperListPlugin.prototype = {
             currentType = listType;
         } else {
             currentType = dfx.getTagName(list);
-            if (currentType === 'ul') {
-                newType = 'ol';
+            if (listType !== currentType) {
+                if (currentType === 'ul') {
+                    newType = 'ol';
+                } else {
+                    newType = 'ul';
+                }
             } else {
-                newType = 'ul';
+                newType = listType;
             }
         }
 
