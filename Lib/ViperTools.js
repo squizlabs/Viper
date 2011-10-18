@@ -102,6 +102,11 @@ var ViperTools = {
             });
         }
 
+        dfx.addEvent(button, 'mouseup.Viper', function(e) {
+            dfx.preventDefault(e);
+            return false;
+        });
+
         if (isActive === true) {
             dfx.addClass(button, 'active');
         }

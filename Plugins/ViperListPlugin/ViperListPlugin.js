@@ -1075,15 +1075,15 @@ ViperListPlugin.prototype = {
             var newList = self.toggleListType(list);
 
             var range = self.viper.getCurrentRange();
-            range.setStart(range._getFirstSelectableChild(newList), 0);
-            var lastChild = range._getLastSelectableChild(newList);
-            range.setEnd(lastChild, lastChild.data.length);
+            range.selectNode(newList);
             ViperSelection.addRange(range);
 
-            self.viper.fireSelectionChanged();
+            self.viper.fireSelectionChanged(range, true);
             self.viper.fireNodesChanged([self.viper.getViperElement()]);
         } else if (currentType !== newType) {
             self.makeList(listType === 'ol');
+            this.viper.adjustRange();
+            self.viper.fireSelectionChanged(null, true);
         } else {
             var pTags = self.listToParagraphs(list);
             var range = self.viper.getCurrentRange();
@@ -1091,7 +1091,9 @@ ViperListPlugin.prototype = {
             var lastChild = range._getLastSelectableChild(pTags[(pTags.length - 1)]);
             range.setEnd(lastChild, lastChild.data.length);
             ViperSelection.addRange(range);
+            self.viper.fireSelectionChanged(range, true);
         }
+
     },
 
     _updateInlineToolbar: function(data)
