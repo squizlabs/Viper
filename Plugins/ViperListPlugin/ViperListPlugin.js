@@ -427,6 +427,7 @@ ViperListPlugin.prototype = {
 
         if (testOnly !== true) {
             this.viper.selectBookmark(bookmark);
+            this.viper.adjustRange();
             if (updated === true) {
                 this.viper.fireNodesChanged([range.getCommonElement()]);
             }
