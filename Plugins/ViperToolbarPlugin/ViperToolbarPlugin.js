@@ -135,6 +135,10 @@ ViperToolbarPlugin.prototype = {
         if (toolsPopup) {
             var self = this;
             dfx.addEvent(button, 'mousedown', function() {
+                if (dfx.hasClass(button, 'disabled') === true) {
+                    return;
+                }
+
                 dfx.removeClass(dfx.getClass('selected', this._toolbar), 'selected');
 
                 var toolPopups = dfx.getClass('ViperITP forTopbar');

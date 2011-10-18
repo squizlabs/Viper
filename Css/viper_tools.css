@@ -16,6 +16,7 @@
 .Viper-button.disabled {
   opacity: 0.3;
   filter: alpha(opacity = 50);
+  cursor: default;
 }
 .Viper-button.hidden {
   display: none;
@@ -48,6 +49,7 @@
   background: -webkit-gradient(linear, left top, left bottom, from(#e9e9eb), to(#c9c9d0));
   background: -moz-linear-gradient(top, #e9e9eb, #c9c9d0);
   /*     -ms-filter: "progid:DXImageTransform.Microsoft.gradient (GradientType=0, startColorstr=#e9e9eb, endColorstr=#c9c9d0)"; */
+
 }
 .themeDark .Viper-button:hover {
   background: #c9c9cd;
