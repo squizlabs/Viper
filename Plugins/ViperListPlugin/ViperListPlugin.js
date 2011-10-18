@@ -72,6 +72,9 @@ ViperListPlugin.prototype = {
                 if (startNode && self._isListElement(startNode) === true) {
                     if (self.tabRange(range, e.shiftKey, true) === true) {
                         self.tabRange(range, e.shiftKey);
+                    } else if (dfx.getParents(startNode, 'td', self.viper.getViperElement()).length > 0) {
+                        // If the list is inside a TD tag then do not prevent default action.
+                        return;
                     }
 
                     dfx.preventDefault(e);
