@@ -221,7 +221,8 @@
 }
 
 .themeDark.ViperITP .ViperITP-subSectionWrapper {
-    background-color: #54535A;
+/*     background-color: #54535A; */
+    background: #54535A url(../../Images/bgTexture-dark1.gif) 0 0 repeat;
 }
 
 .themeDark.ViperITP .ViperITP-subSectionWrapper:before {
