@@ -72,6 +72,9 @@ ViperListPlugin.prototype = {
                 if (startNode && self._isListElement(startNode) === true) {
                     if (self.tabRange(range, e.shiftKey, true) === true) {
                         self.tabRange(range, e.shiftKey);
+                    } else if (dfx.getParents(startNode, 'td', self.viper.getViperElement()).length > 0) {
+                        // If the list is inside a TD tag then do not prevent default action.
+                        return;
                     }
 
                     dfx.preventDefault(e);
@@ -427,6 +430,7 @@ ViperListPlugin.prototype = {
 
         if (testOnly !== true) {
             this.viper.selectBookmark(bookmark);
+            this.viper.adjustRange();
             if (updated === true) {
                 this.viper.fireNodesChanged([range.getCommonElement()]);
             }
@@ -1058,10 +1062,14 @@ ViperListPlugin.prototype = {
             currentType = listType;
         } else {
             currentType = dfx.getTagName(list);
-            if (currentType === 'ul') {
-                newType = 'ol';
+            if (listType !== currentType) {
+                if (currentType === 'ul') {
+                    newType = 'ol';
+                } else {
+                    newType = 'ul';
+                }
             } else {
-                newType = 'ul';
+                newType = listType;
             }
         }
 
@@ -1070,15 +1078,15 @@ ViperListPlugin.prototype = {
             var newList = self.toggleListType(list);
 
             var range = self.viper.getCurrentRange();
-            range.setStart(range._getFirstSelectableChild(newList), 0);
-            var lastChild = range._getLastSelectableChild(newList);
-            range.setEnd(lastChild, lastChild.data.length);
+            range.selectNode(newList);
             ViperSelection.addRange(range);
 
-            self.viper.fireSelectionChanged();
+            self.viper.fireSelectionChanged(range, true);
             self.viper.fireNodesChanged([self.viper.getViperElement()]);
         } else if (currentType !== newType) {
             self.makeList(listType === 'ol');
+            this.viper.adjustRange();
+            self.viper.fireSelectionChanged(null, true);
         } else {
             var pTags = self.listToParagraphs(list);
             var range = self.viper.getCurrentRange();
@@ -1086,7 +1094,9 @@ ViperListPlugin.prototype = {
             var lastChild = range._getLastSelectableChild(pTags[(pTags.length - 1)]);
             range.setEnd(lastChild, lastChild.data.length);
             ViperSelection.addRange(range);
+            self.viper.fireSelectionChanged(range, true);
         }
+
     },
 
     _updateInlineToolbar: function(data)
