@@ -326,3 +326,27 @@
 .Viper-button:active .buttonIcon.accessRerun, .Viper-button.active .buttonIcon.accessRerun, .Viper-button.selected .buttonIcon.accessRerun {
   background-position: -33px -783px;
 }
+.buttonIcon.locate {
+  background-position: 0 -810px;
+}
+.Viper-button:active .buttonIcon.locate, .Viper-button.active .buttonIcon.locate, .Viper-button.selected .buttonIcon.locate {
+  background-position: -33px -810px;
+}
+.buttonIcon.sourceView {
+  background-position: 0 -837px;
+}
+.Viper-button:active .buttonIcon.sourceView, .Viper-button.active .buttonIcon.sourceView, .Viper-button.selected .buttonIcon.sourceView {
+  background-position: -33px -837px;
+}
+.buttonIcon.nextIssue {
+  background-position: 0 -864px;
+}
+.Viper-button:active .buttonIcon.nextIssue, .Viper-button.active .buttonIcon.nextIssue, .Viper-button.selected .buttonIcon.nextIssue {
+  background-position: -33px -864px;
+}
+.buttonIcon.prevIssue {
+  background-position: 0 -891px;
+}
+.Viper-button:active .buttonIcon.prevIssue, .Viper-button.active .buttonIcon.prevIssue, .Viper-button.selected .buttonIcon.prevIssue {
+  background-position: -33px -891px;
+}
