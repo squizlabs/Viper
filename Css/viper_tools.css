@@ -224,6 +224,12 @@
 .Viper-button:active .buttonIcon.headingCheck, .Viper-button.active .buttonIcon.headingCheck, .Viper-button.selected .buttonIcon.headingCheck {
   background-position: -33px -351px;
 }
+.buttonIcon.accessAudit {
+  background-position: 0 -351px;
+}
+.Viper-button:active .buttonIcon.accessAudit, .Viper-button.active .buttonIcon.accessAudit, .Viper-button.selected .buttonIcon.accessAudit {
+  background-position: -33px -351px;
+}
 .buttonIcon.headerAbbr {
   background-position: 0 -378px;
 }
@@ -313,4 +319,10 @@
 }
 .Viper-button:active .buttonIcon.image, .Viper-button.active .buttonIcon.image, .Viper-button.selected .buttonIcon.image {
   background-position: -33px -756px;
+}
+.buttonIcon.accessRerun {
+  background-position: 0 -783px;
+}
+.Viper-button:active .buttonIcon.accessRerun, .Viper-button.active .buttonIcon.accessRerun, .Viper-button.selected .buttonIcon.accessRerun {
+  background-position: -33px -783px;
 }
