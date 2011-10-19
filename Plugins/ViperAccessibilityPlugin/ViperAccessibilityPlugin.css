@@ -8,3 +8,274 @@
     margin-left: -14px;
     margin-top: -15px;
 }
+
+.ViperAP-wrapper {
+    position: relative;
+    z-index: 1;
+    margin: -0.6em;
+/*     border-top: 1px solid #464647; */
+    text-align: left;
+/*     max-height: 300px; */
+/*     overflow-y: scroll; */
+}
+/*
+.ViperAP-wrapper:after {
+    content: "";
+    position: fixed;
+    z-index: 2;
+    height: 10px;
+    width: 100%;
+    border: 1px solid red;
+    left: 0;
+    bottom: 0;
+    box-shadow: 0 -5px 5px #2b2b2b inset;
+}
+*/
+.ViperAP-obliv {
+    position: relative;
+    z-index: 2;
+    height: 6px;
+/*     box-shadow: 0 0 5px #2b2b2b; */
+/*     margin-top: -20px; */
+    background: transparent url(Images/oblivShadows.png) 0 0 repeat-x;
+}
+.ViperAP-obliv.oblivBottom {
+    background-position: 0 -6px;
+    border-bottom-left-radius: 0.6em;
+    border-bottom-right-radius: 0.6em;
+    padding-bottom: 3px;
+}
+
+.ViperAP-issueList {
+    list-style: none;
+    padding: 5px 0 10px 0;
+    margin: -6px 0 -6px 0;
+    max-height: 300px;
+    overflow: auto;
+    border-bottom-left-radius: 0.6em;
+    border-bottom-right-radius: 0.6em;
+}
+
+.ViperAP-issueItem {
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid #2b2b2b;
+    border-top: 1px solid #6c6c6d;
+    border-radius: 0.5em;
+    padding: 0.6em 2em 0.6em 2.2em;
+    font-size: 1.3em;
+    color: #FFF;
+    text-shadow: 0 -1px 0 #000;
+}
+.ViperAP-issueItem:hover {
+    cursor: pointer;
+    background-color: #2b2b2b;
+    border-top-color: #5b5b5c;
+}
+.ViperAP-issueItem:after {
+    content: "";
+    position: absolute;
+    width: 9px;
+    height: 14px;
+    right: 0.7em;
+    top: 50%;
+    margin-top: -7px;
+    background: transparent url(Images/issueImages.png) 0 -42px no-repeat;
+}
+.ViperAP-issueItem.complete {
+    opacity: 0.4;
+}
+
+.ViperAP-issueType {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 1.6em;
+    height: 100%;
+    border-top-left-radius: 0.5em;
+    border-bottom-left-radius: 0.5em;
+}
+.ViperAP-issueType.error {
+    background-color: #952424;
+}
+.ViperAP-issueType.warning {
+    background-color: #c5a00c;
+}
+.ViperAP-issueType.manual {
+    background-color: #6c6b72;
+}
+.ViperAP-issueType:before {
+    content: "";
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    left: 50%;
+    top: 50%;
+    margin: -7px 0 0 -7px;
+    background: transparent url(Images/issueImages.png) 0 0 no-repeat;
+}
+.ViperAP-issueType.warning:before {
+    background-position: 0 -14px;
+}
+.ViperAP-issueType.manual:before {
+    background-position: 0 -28px;
+}
+
+.ViperAP-issueTitle {
+    display: block;
+    line-height: 1.5em;
+}
+
+/* Issue Nav/Lineage */
+.ViperITP-tools.issueNav {
+    text-align: right;
+}
+
+.ViperAP-issueNav {
+    float: left;
+    padding-left: 0.3em;
+    font-size: 1.3em;
+    font-weight: bold;
+    line-height: 2.4em;
+    color: #FFF;
+    text-shadow: 0 -1px 0 rgba(0,0,0,0.4);
+}
+.ViperAP-issueNav a,
+.ViperAP-issueNav a:visited {
+    text-decoration: none;
+    color: #FFF;
+}
+.ViperAP-issueNav a:before {
+    content: "";
+    display: inline-block;
+    width: 10px;
+    height: 11px;
+    margin-right: 0.5em;
+    background: transparent url(Images/issueImages.png) 0 -68px no-repeat;
+}
+.ViperAP-issueNav a:after {
+    content: "";
+    display: inline-block;
+    position: relative;
+    width: 10px;
+    height: 32px;
+    margin-left: 1em;
+    margin-top: -16px;
+    top: 12px;
+    background: transparent url(Images/issueImages.png) 0 -79px no-repeat;
+}
+.issueNav-divider {
+    visibility: hidden;
+}
+
+/* Detail Pane */
+
+.ViperAP-issuePane {
+    padding: 0px 0 10px 0;
+    margin: -6px 0 -6px 0;
+/*     max-height: 300px; */
+    overflow: auto;
+    border-bottom-left-radius: 0.6em;
+    border-bottom-right-radius: 0.6em;
+    text-shadow: none;
+    font-size: 1.36em;
+}
+.ViperAP-issueDetails {
+    position: relative;
+    color: #FFF;
+    background-color: #2b2b2b;
+    padding: 1.2em 2.8em 1.2em 2.8em;
+    border-bottom: 1px solid #2b2b2b;
+}
+.ViperAP-issueDetails .ViperAP-issueType {
+    border-radius: 0;
+    border-top-right-radius: 0.5em;
+    border-bottom-right-radius: 0.5em;
+}
+.issueTitle {
+    border-bottom: 1px solid #000;
+    padding-bottom: 1em;
+}
+.issueWcag {
+    border-top: 1px solid #5b5b5b;
+    padding-top: 1em;
+/*     line-height: 1.75em; */
+}
+.issueWcag em {
+    display: inline-block;
+    margin-top: 0.5em;
+    color: #8f8f94;
+    font-style: normal;
+    font-weight: bold;
+    min-width: 5.5em;
+}
+.issueWcag a,
+.issueWcag a:visited {
+    display: inline-block;
+    color: #dbdbe1;
+    font-style: normal;
+    text-decoration: none;
+    border-bottom: 1px solid #87878e;
+}
+.issueWcag a:after {
+    content: "";
+    display: inline-block;
+    width: 12px;
+    height: 11px;
+    margin: 0 0 -2px 0.5em;
+    background: transparent url(Images/issueImages.png) 0 -58px no-repeat;
+}
+.ViperAP-issueResolution {
+    border-top: 1px solid #6c6c6d;
+    padding: 0.5em 0.8em 0 0.8em;
+}
+.ViperAP-issueResolution .resolutionHeader {
+    font-size: 0.75em;
+    margin-right: -0.3em;
+    text-align: right;
+}
+.ViperAP-issueResolution .resolutionHeader strong {
+    font-size: 1.4em;
+    color: #9b99a5;
+    text-shadow: 0 -1px 0 rgba(0,0,0,0.6);
+    display: inline-block;
+    float: left;
+    line-height: 1.8em;
+}
+.ViperAP-issueResolution .resolutionInstructions {
+    padding: 1em 0;
+    color: #FFF;
+}
+.ViperAP-issueResolution .resolutionActions {
+    font-size: 0.73em;
+/*     padding: 1em 0 0; */
+    text-align: center;
+}
+.resolutionCol-left {
+/*     display: inline-block; */
+    float: left;
+/*     width: 40%; */
+}
+.resolutionCol-right {
+    display: inline-block;
+    width: 60%;
+}
+.ViperAP-issueResolution .ViperITP-label {
+    margin-bottom: 1em;
+}
+.resolutionActions .imagePreview {
+    width: 100px;
+    margin: 0 auto 1em auto;
+    border: 1px solid #8F8F8F;
+    box-shadow: 0 1px 3px #2b2b2b;
+}
+.resolutionActions .imagePreview img {
+    width: 100%;
+}
+.ViperAP-issueResolution .resolutionApply {
+    /*
+border-top: 1px solid #3c3c3c;
+    box-shadow: 0 1px rgba(255,255,255,0.2) inset;
+    padding-top: 1em;
+*/
+}
