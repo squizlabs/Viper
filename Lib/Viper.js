@@ -2810,6 +2810,7 @@ Viper.prototype = {
         // A few range adjustments for double click word selection etc.
         var startNode = range.getStartNode();
         var endNode   = range.getEndNode();
+
         if (!endNode && range.startContainer.nodeType === dfx.ELEMENT_NODE) {
             var lastSelectable = range._getLastSelectableChild(range.startContainer);
             if (lastSelectable) {
@@ -2828,7 +2829,10 @@ Viper.prototype = {
         ) {
             // When a word is double clicked and the word is wrapped with a tag
             // e.g. strong then select the strong tag.
-            range.selectNode(startNode.nextSibling);
+            var firstSelectable = range._getFirstSelectableChild(startNode.nextSibling);
+            var lastSelectable  = range._getLastSelectableChild(startNode.nextSibling);
+            range.setStart(firstSelectable, 0);
+            range.setEnd(lastSelectable, lastSelectable.data.length);
             ViperSelection.addRange(range);
         } else if (endNode && endNode.nodeType === dfx.TEXT_NODE
             && range.endOffset === 0
@@ -2857,17 +2861,6 @@ Viper.prototype = {
                 var lastSelectable  = range._getLastSelectableChild(endNode.parentNode.previousSibling.previousSibling);
                 if (lastSelectable) {
                     range.setEnd(lastSelectable, lastSelectable.data.length);
-                    ViperSelection.addRange(range);
-                }
-            } else {
-                // Whole tag content is selected, move the range to the tag instead.
-                // E.g. if the whole contents of a paragraph is selected then the
-                // range will be set on that paragraph element and not the contents.
-                var commonElem = range.getCommonElement();
-                var firstSelectable = range._getFirstSelectableChild(commonElem);
-                var lastSelectable  = range._getLastSelectableChild(commonElem);
-                if (firstSelectable === startNode && lastSelectable === endNode) {
-                    range.selectNode(commonElem);
                     ViperSelection.addRange(range);
                 }
             }

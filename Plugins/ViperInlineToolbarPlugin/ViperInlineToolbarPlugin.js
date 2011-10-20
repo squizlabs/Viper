@@ -652,7 +652,12 @@ ViperInlineToolbarPlugin.prototype = {
         // Set the range.
         ViperSelection.removeAllRanges();
         var range = viper.getCurrentRange();
-        range.selectNode(node);
+
+        var first = range._getFirstSelectableChild(node);
+        var last = range._getLastSelectableChild(node);
+        range.setStart(first, 0);
+        range.setEnd(last, last.data.length);
+
         ViperSelection.addRange(range);
         viper.fireSelectionChanged();
 
@@ -688,7 +693,7 @@ ViperInlineToolbarPlugin.prototype = {
         dfx.empty(this._toolsContainer);
         dfx.empty(this._subSectionContainer);
 
-        if (this._currentLineageIndex === null) {
+        if (this._currentLineageIndex === null || this._currentLineageIndex > lineage.length) {
             this._setCurrentLineageIndex(lineage.length - 1);
         }
 
