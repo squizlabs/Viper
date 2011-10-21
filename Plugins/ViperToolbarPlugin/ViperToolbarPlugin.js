@@ -272,10 +272,6 @@ ViperToolbarPlugin.prototype = {
         if (toolsContentElement) {
             dfx.addClass(toolsContentElement, 'ViperITP-tools');
             tools.appendChild(toolsContentElement);
-
-            if (hideToolsBar === true) {
-                dfx.setStyle(toolsContentElement, 'display', 'none');
-            }
         }
 
         if (customClass) {
