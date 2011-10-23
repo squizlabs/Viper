@@ -279,3 +279,30 @@ border-top: 1px solid #3c3c3c;
     padding-top: 1em;
 */
 }
+
+
+/*
+    Popup styles.
+*/
+.ViperAP-middle .ViperAP-issueList,
+.ViperAP-middle .ViperAP-issueDetailsWrapper {
+    display: none;
+}
+
+.ViperAP-middle.issueList .ViperAP-issueList,
+.ViperAP-middle.issueDetails .ViperAP-issueDetailsWrapper {
+    display: block;
+}
+
+.ViperAP-middle.issueDetails {
+    overflow: hidden;
+}
+
+.ViperAP-middle .ViperAP-issueDetailsWrapper {
+    width: 99999px;
+}
+
+.ViperAP-issuePane {
+    width: 320px;
+    float: left;
+}

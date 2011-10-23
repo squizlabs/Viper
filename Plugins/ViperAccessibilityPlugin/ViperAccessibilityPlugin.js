@@ -26,6 +26,8 @@ function ViperAccessibilityPlugin(viper)
     this.viper = viper;
 
     this._issueList = null;
+    this._issueDetailsWrapper = null;
+    this._resultsMiddle = null;
 
 }
 
@@ -131,7 +133,7 @@ ViperAccessibilityPlugin.prototype = {
         }, null, null, mainPanel);
         mainPanel.appendChild(showAllBtn);
 
-        toolbar.createButton('', false, 'Accessibility Auditor', false, 'accessRerun', null, null, aaTools);
+        toolbar.createButton('', false, 'Accessibility Auditor', false, 'accessAudit', null, null, aaTools);
 
     },
 
@@ -168,10 +170,24 @@ ViperAccessibilityPlugin.prototype = {
         dfx.addClass(topObv, 'ViperAP-obliv oblivTop');
         results.appendChild(topObv);
 
+        var middle = document.createElement('div');
+        this._resultsMiddle = middle;
+
+        dfx.addClass(middle, 'ViperAP-middle issueList');
         var list = document.createElement('ol');
         dfx.addClass(list, 'ViperAP-issueList');
         results.appendChild(list);
         this._issueList = list;
+
+        // Create the issue details wrapper.
+        this._issueDetailsWrapper = document.createElement('div');
+        dfx.addClass(this._issueDetailsWrapper, 'ViperAP-issueDetailsWrapper');
+        results.appendChild(this._issueDetailsWrapper);
+
+        middle.appendChild(list);
+        middle.appendChild(this._issueDetailsWrapper);
+
+        results.appendChild(middle);
 
         var bottomObv = document.createElement('div');
         dfx.addClass(bottomObv, 'ViperAP-obliv oblivBottom');
@@ -181,9 +197,36 @@ ViperAccessibilityPlugin.prototype = {
 
     },
 
+    _showIssueDetails: function(issue, li)
+    {
+        // First move the details div to the correct position.
+        var index = this._getIssueIndex(li);
+
+        dfx.setStyle(this._issueDetailsWrapper, 'margin-left', (index * 320 * -1) + 'px');
+
+        dfx.removeClass(this._resultsMiddle, 'issueList');
+        dfx.addClass(this._resultsMiddle, 'issueDetails');
+
+
+    },
+
+    _getIssueIndex: function(li)
+    {
+        var index = 0;
+        for (var node = li; node; node = node.previousSibling) {
+            if (dfx.isTag(node, 'li') === true) {
+                index++;
+            }
+        }
+
+        return index;
+
+    },
+
     _updateIssues: function(msgs)
     {
         dfx.empty(this._issueList);
+        dfx.empty(this._issueDetailsWrapper);
 
         var c = msgs.length;
         for (var i = 0; i < c; i++) {
@@ -198,27 +241,65 @@ ViperAccessibilityPlugin.prototype = {
         var li = document.createElement('li');
         dfx.addClass(li, 'ViperAP-issueItem');
 
-        var issueType = '';
-        switch (msg.type) {
-            case HTMLCS.ERROR:
-                type = 'error';
-            break;
+        var issueType = this._getIssueType(msg);
 
-            case HTMLCS.WARNING:
-                type = 'warning';
-            break;
-
-            case HTMLCS.NOTICE:
-                type = 'manual';
-            break;
-        }
-
-        var liContent = '<span class="ViperAP-issueType ' + type + '"></span>';
+        var liContent = '<span class="ViperAP-issueType ' + issueType + '"></span>';
         liContent    += '<span class="ViperAP-issueTitle">' + msg.msg + '</span>';
 
         dfx.setHtml(li, liContent);
 
+        this._createIssueDetail(msg);
+
+        var self = this;
+        dfx.addEvent(li, 'mousedown', function(e) {
+            self._showIssueDetails(msg, li);
+            dfx.preventDefault(e);
+            return false;
+        });
+
         return li;
+
+    },
+
+    _createIssueDetail: function(issue)
+    {
+        var main = document.createElement('div');
+        dfx.addClass(main, 'ViperAP-issuePane');
+
+        var issueType = this._getIssueType(issue);
+
+        var content = '<div class="ViperAP-issueDetails">';
+        content    += '<span class="ViperAP-issueType ' + issueType + '"></span>';
+        content    += '<div class="issueTitle">' + issue.msg + '</div>';
+        content    += '<div class="issueWcag">';
+        content    += '<strong>WCAG References</strong><br>';
+        content    += '<em>Category: </em> <a href="#">Non-text Content</a><br>';
+        content    += '<em>Technique: </em> <a href="#">H28</a><br>';
+        content    += '</div></div><!-- End References -->';
+
+        dfx.setHtml(main, content);
+
+        this._issueDetailsWrapper.appendChild(main);
+    },
+
+    _getIssueType: function(issue)
+    {
+        var issueType = '';
+        switch (issue.type) {
+            case HTMLCS.ERROR:
+                issueType = 'error';
+            break;
+
+            case HTMLCS.WARNING:
+                issueType = 'warning';
+            break;
+
+            case HTMLCS.NOTICE:
+                issueType = 'manual';
+            break;
+        }
+
+        return issueType;
 
     }
 
