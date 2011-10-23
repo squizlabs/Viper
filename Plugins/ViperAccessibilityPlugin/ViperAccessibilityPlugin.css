@@ -239,9 +239,32 @@
 .resolutionActions .imagePreview img {
     width: 100%;
 }
-.ViperAP-issueResolution .resolutionApply {
+
+/*
+    Popup styles.
+*/
+.ViperAP-middle .ViperAP-issueList,
+.ViperAP-middle .ViperAP-issueDetailsWrapper {
+    display: none;
 }
 
+.ViperAP-middle.issueList .ViperAP-issueList,
+.ViperAP-middle.issueDetails .ViperAP-issueDetailsWrapper {
+    display: block;
+}
+
+.ViperAP-middle.issueDetails {
+    overflow: hidden;
+}
+
+.ViperAP-middle .ViperAP-issueDetailsWrapper {
+    width: 99999px;
+}
+
+.ViperAP-issuePane {
+    width: 320px;
+    float: left;
+}
 /*
     Popup styles.
 */
