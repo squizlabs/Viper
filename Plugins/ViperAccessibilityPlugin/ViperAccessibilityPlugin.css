@@ -259,6 +259,7 @@
 .ViperAP-issueDetailsWrapper {
     overflow: hidden;
     display: inline-block;
+    vertical-align: top;
 }
 
 .ViperAP-issueList {

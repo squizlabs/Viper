@@ -399,10 +399,46 @@ ViperAccessibilityPlugin.prototype = {
         content    += '<em>Category: </em> <a href="#">Non-text Content</a><br>';
         content    += '<em>Technique: </em> <a href="#">H28</a><br>';
         content    += '</div></div><!-- End References -->';
-
         dfx.setHtml(main, content);
 
+        var resolutionCont = document.createElement('div');
+        content  = '<div class="ViperAP-issueResolution">';
+        content += '<div class="resolutionHeader"><strong>Resolution</strong>';
+        dfx.setHtml(resolutionCont, content);
+        main.appendChild(resolutionCont);
+
+        var resolutionHeader = dfx.getClass('resolutionHeader', resolutionCont)[0];
+        // Create resolution tools.
+        var locateBtn = this._toolbar.createButton('', false, 'Locate Element', false, 'locate', function() {
+        }, null, null, resolutionHeader);
+        var sourceViewBtn = this._toolbar.createButton('', false, 'Show in Source View', false, 'sourceView', function() {
+        }, null, null, resolutionHeader);
+        var doneBtn = this._toolbar.createButton('Done', false, 'Mark as done', false, '', function() {
+        }, null, null, resolutionHeader);
+
+        resolutionHeader.appendChild(locateBtn);
+        resolutionHeader.appendChild(sourceViewBtn);
+        resolutionHeader.appendChild(doneBtn);
+
+        this._addResolutionContent(issue, main);
+
         this._issueDetailsWrapper.appendChild(main);
+    },
+
+
+    _addResolutionContent: function(issue, detailsElement)
+    {
+        var instructions = document.createElement('div');
+        dfx.addClass(instructions, 'resolutionInstructions');
+        dfx.setHtml(instructions, '&nbsp;');
+
+        var resolutionActions = document.createElement('div');
+        dfx.addClass(resolutionActions, 'resolutionActions');
+        dfx.setHtml(resolutionActions, '&nbsp;');
+
+        detailsElement.appendChild(instructions);
+        detailsElement.appendChild(resolutionActions);
+
     },
 
     _getIssueType: function(issue)
