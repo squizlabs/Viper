@@ -268,25 +268,33 @@
 /*
     Popup styles.
 */
-.ViperAP-middle .ViperAP-issueList,
-.ViperAP-middle .ViperAP-issueDetailsWrapper {
-    display: none;
+.ViperAP-middle {
+    position: relative;
 }
 
-.ViperAP-middle.issueList .ViperAP-issueList,
-.ViperAP-middle.issueDetails .ViperAP-issueDetailsWrapper {
-    display: block;
+.resultsCont.ViperAP-wrapper {
+    overflow: hidden;
+    width: 320px;
 }
 
-.ViperAP-middle.issueDetails {
+.ViperAP-middle {
     overflow: hidden;
 }
 
-.ViperAP-middle .ViperAP-issueDetailsWrapper {
-    width: 99999px;
+.ViperAP-issueDetailsWrapper {
+    overflow: hidden;
+    display: inline-block;
+}
+
+.ViperAP-issueList {
+    display: inline-block;
+    width: 320px;
+    -moz-transition-duration: 0.3s;
+    -moz-transition-property: margin-left;
+    -moz-transition-timing-function: ease-out;
 }
 
 .ViperAP-issuePane {
     width: 320px;
-    float: left;
+    display: inline-block;
 }
