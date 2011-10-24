@@ -29,6 +29,9 @@ function ViperAccessibilityPlugin(viper)
     this._resultsMiddle       = null;
     this._issueCount          = 0;
     this._currentIssue        = 1;
+    this._prevIssueBtn        = null;
+    this._nextIssueBtn        = null;
+    this._toolbar             = null;
 }
 
 ViperAccessibilityPlugin.prototype = {
@@ -68,7 +71,8 @@ ViperAccessibilityPlugin.prototype = {
             return;
         }
 
-        var self = this;
+        this._toolbar = toolbar;
+        var self      = this;
 
         // Create the sub section and set it as active as its always visible.
         var subSectionCont = this._createSubSection();
@@ -124,6 +128,7 @@ ViperAccessibilityPlugin.prototype = {
         };
 
         var checkContentBtn = toolbar.createButton('Check Content', false, 'Check Content', false, '', function() {
+            self._toolbar.disableButton(checkContentBtn);
              _updateResults();
         }, null, null, checkPanel);
         checkPanel.appendChild(checkContentBtn);
@@ -147,6 +152,8 @@ ViperAccessibilityPlugin.prototype = {
         detailTools.appendChild(detailToolsWrapper);
 
         var listLink = document.createElement('a');
+        listLink.setAttribute('title', 'Show Issue List');
+        listLink.setAttribute('href', 'javascript:');
         detailToolsWrapper.appendChild(listLink);
         dfx.setHtml(listLink, 'List');
 
@@ -180,6 +187,8 @@ ViperAccessibilityPlugin.prototype = {
             self.nextIssue();
         }, prevNextGroup);
         detailTools.appendChild(prevNextGroup);
+        this._prevIssueBtn = prevButton;
+        this._nextIssueBtn = nextButton;
 
     },
 
@@ -213,6 +222,19 @@ ViperAccessibilityPlugin.prototype = {
     _updateIssueNumber: function()
     {
         this._issueCountContainer.data = 'Issue ' + this._currentIssue + ' of ' + this._issueCount;
+
+        // Update the issue statuses.
+        if (this._currentIssue <= 1) {
+            // Disable previous button.
+            this._toolbar.disableButton(this._prevIssueBtn);
+        } else if (this._currentIssue >= this._issueCount) {
+            // Disable next button.
+            this._toolbar.disableButton(this._nextIssueBtn);
+        } else {
+            // Enable both buttons.
+            this._toolbar.enableButton(this._nextIssueBtn);
+            this._toolbar.enableButton(this._prevIssueBtn);
+        }
 
     },
 
