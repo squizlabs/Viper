@@ -127,7 +127,7 @@
 }
 
 /* Issue Nav/Lineage */
-.ViperITP-tools.issueNav {
+.ViperAP-tools.issueNav {
     text-align: right;
 }
 
@@ -313,4 +313,25 @@ border-top: 1px solid #3c3c3c;
 .ViperAP-issuePane {
     width: 320px;
     display: inline-block;
+}
+
+.ViperAP-issuePane,
+.ViperAP-issueList {
+    -moz-transition-duration: 0.3s;
+    -moz-transition-property: margin-left;
+    -moz-transition-timing-function: ease-out;
+}
+
+/*
+    Tools section
+*/
+.ViperAP-toolsWrapper .ViperAP-tools {
+    display: none;
+    overflow: hidden;
+}
+
+.ViperAP-toolsWrapper.checkTools .ViperAP-checkTools,
+.ViperAP-toolsWrapper.listTools .ViperAP-listTools,
+.ViperAP-toolsWrapper.detailTools .ViperAP-detailTools {
+    display: block;
 }

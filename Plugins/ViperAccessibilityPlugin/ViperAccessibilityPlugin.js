@@ -23,12 +23,12 @@
 
 function ViperAccessibilityPlugin(viper)
 {
-    this.viper = viper;
-
-    this._issueList = null;
+    this.viper                = viper;
+    this._issueList           = null;
     this._issueDetailsWrapper = null;
-    this._resultsMiddle = null;
-
+    this._resultsMiddle       = null;
+    this._issueCount          = 0;
+    this._currentIssue        = 1;
 }
 
 ViperAccessibilityPlugin.prototype = {
@@ -74,11 +74,13 @@ ViperAccessibilityPlugin.prototype = {
         var subSectionCont = this._createSubSection();
         var subSection     = toolbar.createSubSection(subSectionCont, false);
 
-        var toolsSection = document.createElement('div');
+        var toolsSection   = document.createElement('div');
+        this._toolsSection = toolsSection;
+        dfx.addClass(toolsSection, 'ViperAP-toolsWrapper checkTools');
 
         // Main pannel showing All and rerun buttons.
         var mainPanel = document.createElement('div');
-        dfx.setStyle(mainPanel, 'display', 'none');
+        dfx.addClass(mainPanel, 'ViperAP-tools ViperAP-listTools');
 
         var aaTools = toolbar.createToolsPopup('Accessibility Auditor', toolsSection, [subSection]);
         dfx.setStyle(aaTools.element, 'width', '320px');
@@ -86,6 +88,7 @@ ViperAccessibilityPlugin.prototype = {
         // Check button panel.
         // Check panel will show a check button which will start checking issues.
         var checkPanel = document.createElement('div');
+        dfx.addClass(checkPanel, 'ViperAP-tools ViperAP-checkTools');
         toolsSection.appendChild(checkPanel);
 
         var _updateResults =  function() {
@@ -100,8 +103,8 @@ ViperAccessibilityPlugin.prototype = {
             // Run the HTMLCS checks.
             self.runChecks(function() {
                 // Hide loading sub section and show the main panel and results panel.
-                dfx.setStyle(checkPanel, 'display', 'none');
-                dfx.setStyle(mainPanel, 'display', 'block');
+                dfx.removeClass(toolsSection, 'checkTools');
+                dfx.addClass(toolsSection, 'listTools');
 
                 // Get the messages from HTMLCS.
                 var msgs = HTMLCS.getMessages();
@@ -134,6 +137,82 @@ ViperAccessibilityPlugin.prototype = {
         mainPanel.appendChild(showAllBtn);
 
         toolbar.createButton('', false, 'Accessibility Auditor', false, 'accessAudit', null, null, aaTools);
+
+        // Create the detail tools.
+        var detailTools = document.createElement('div');
+        dfx.addClass(detailTools, 'ViperAP-tools ViperAP-detailTools issueNav');
+
+        var detailToolsWrapper = document.createElement('div');
+        dfx.addClass(detailToolsWrapper, 'ViperAP-issueNav');
+        detailTools.appendChild(detailToolsWrapper);
+
+        var listLink = document.createElement('a');
+        detailToolsWrapper.appendChild(listLink);
+        dfx.setHtml(listLink, 'List');
+
+        var divider = document.createElement('span');
+        dfx.addClass(divider, 'issueNav-divider');
+        dfx.setHtml(divider, ' &gt; ');
+        detailToolsWrapper.appendChild(divider);
+
+        this._issueCountContainer = document.createTextNode('Issue 0 of 0');
+        detailToolsWrapper.appendChild(this._issueCountContainer);
+
+        toolsSection.appendChild(detailTools);
+
+        // List Link event.
+        dfx.addEvent(dfx.getTag('a', detailTools)[0], 'mousedown', function() {
+            // Show the list tools.
+            dfx.removeClass(toolsSection, 'checkTools');
+            dfx.removeClass(toolsSection, 'detailTools');
+            dfx.addClass(toolsSection, 'listTools');
+
+            // Show the list.
+            dfx.setStyle(self._issueList, 'margin-left', 0);
+        });
+
+        // Create detail prev, next button group.
+        var prevNextGroup = toolbar.createButtonGroup();
+        var prevButton    = toolbar.createButton('', false, 'Previous Issue', false, 'prevIssue', function() {
+            self.previousIssue();
+        }, prevNextGroup);
+        var nextButton    = toolbar.createButton('', false, 'Next Issue', false, 'nextIssue', function() {
+            self.nextIssue();
+        }, prevNextGroup);
+        detailTools.appendChild(prevNextGroup);
+
+    },
+
+    previousIssue: function()
+    {
+        if (this._currentIssue <= 1) {
+            return;
+        }
+
+        this._currentIssue--;
+        margin = ((this._currentIssue - 1) * 320 * -1);
+
+        dfx.setStyle(this._issueDetailsWrapper.firstChild, 'margin-left', margin + 'px');
+        this._updateIssueNumber();
+    },
+
+    nextIssue: function()
+    {
+        if (this._currentIssue >= this._issueCount) {
+            return;
+        }
+
+        margin = (this._currentIssue * 320 * -1);
+        this._currentIssue++;
+
+        dfx.setStyle(this._issueDetailsWrapper.firstChild, 'margin-left', margin + 'px');
+        this._updateIssueNumber();
+
+    },
+
+    _updateIssueNumber: function()
+    {
+        this._issueCountContainer.data = 'Issue ' + this._currentIssue + ' of ' + this._issueCount;
 
     },
 
@@ -202,6 +281,9 @@ ViperAccessibilityPlugin.prototype = {
         // First move the details div to the correct position.
         var index = this._getIssueIndex(li);
 
+        this._currentIssue = index;
+        this._updateIssueNumber();
+
         // Move the detail panel to the start.
         dfx.setStyle(this._issueDetailsWrapper.firstChild, 'margin-left', ((index - 1) * 320 * -1) + 'px');
 
@@ -210,6 +292,10 @@ ViperAccessibilityPlugin.prototype = {
         dfx.removeClass(this._resultsMiddle, 'issueList');
         dfx.addClass(this._resultsMiddle, 'issueDetails');
 
+        // Show the details navigation.
+        dfx.removeClass(this._toolsSection, 'checkTools');
+        dfx.removeClass(this._toolsSection, 'listTools');
+        dfx.addClass(this._toolsSection, 'detailTools');
 
     },
 
@@ -232,6 +318,9 @@ ViperAccessibilityPlugin.prototype = {
         dfx.empty(this._issueDetailsWrapper);
 
         var c = msgs.length;
+        this._issueCount   = c;
+        this._currentIssue = 1;
+
         for (var i = 0; i < c; i++) {
             var msg = msgs[i];
             this._issueList.appendChild(this._createIssue(msg));
