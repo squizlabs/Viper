@@ -659,6 +659,7 @@ ViperCoreStylesPlugin.prototype = {
 
         this.caretUpdated();
         this.viper.fireNodesChanged('ViperCoreStylesPlugin:removeFormat');
+        this.viper.fireSelectionChanged();
 
     },
 
