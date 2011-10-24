@@ -1130,9 +1130,11 @@ ViperListPlugin.prototype = {
         if (statuses.increaseIndent === true || statuses.decreaseIndent === true) {
             inlineToolbarPlugin.createButton('', false, 'Indent List', !statuses.increaseIndent, 'listIndent', function() {
                 self.tabRange();
+                self.viper.fireSelectionChanged();
             }, buttonGroup);
             inlineToolbarPlugin.createButton('', false, 'Outdent List', !statuses.decreaseIndent, 'listOutdent', function() {
                 self.tabRange(null, true);
+                self.viper.fireSelectionChanged();
             }, buttonGroup);
         }
 
