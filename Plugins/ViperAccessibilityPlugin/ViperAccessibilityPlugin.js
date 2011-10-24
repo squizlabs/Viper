@@ -285,7 +285,12 @@ ViperAccessibilityPlugin.prototype = {
         this._updateIssueNumber();
 
         // Move the detail panel to the start.
+        dfx.addClass(this._issueDetailsWrapper.firstChild, 'instant');
         dfx.setStyle(this._issueDetailsWrapper.firstChild, 'margin-left', ((index - 1) * 320 * -1) + 'px');
+        var self = this;
+        setTimeout(function() {
+            dfx.removeClass(self._issueDetailsWrapper.firstChild, 'instant');
+        }, 500);
 
         dfx.setStyle(this._issueList, 'margin-left', '-320px');
 
