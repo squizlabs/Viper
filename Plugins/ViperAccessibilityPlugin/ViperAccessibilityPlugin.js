@@ -202,7 +202,10 @@ ViperAccessibilityPlugin.prototype = {
         // First move the details div to the correct position.
         var index = this._getIssueIndex(li);
 
-        dfx.setStyle(this._issueDetailsWrapper, 'margin-left', (index * 320 * -1) + 'px');
+        // Move the detail panel to the start.
+        dfx.setStyle(this._issueDetailsWrapper.firstChild, 'margin-left', ((index - 1) * 320 * -1) + 'px');
+
+        dfx.setStyle(this._issueList, 'margin-left', '-320px');
 
         dfx.removeClass(this._resultsMiddle, 'issueList');
         dfx.addClass(this._resultsMiddle, 'issueDetails');
@@ -233,6 +236,10 @@ ViperAccessibilityPlugin.prototype = {
             var msg = msgs[i];
             this._issueList.appendChild(this._createIssue(msg));
         }
+
+        // Update the widths of containers.
+        dfx.setStyle(this._resultsMiddle, 'width', ((c * 320) + 320) + 'px');
+        dfx.setStyle(this._issueDetailsWrapper, 'width', (c * 320) + 'px');
 
     },
 
