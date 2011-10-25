@@ -58,16 +58,34 @@ ViperHistoryManager.prototype = {
         }
 
         var range = this.viper.getCurrentRange();
-        var task  = {
-            content: this.viper.getRawHTML(),
-            range: {
-                startContainer: XPath.getPath(range.startContainer),
-                endContainer: XPath.getPath(range.endContainer),
-                startOffset: range.startOffset,
-                endOffset: range.endOffset,
-                collapsed: range.collapsed
+        if (this.viper.rangeInViperBounds(range) === false) {
+            // Set the range to be the first selectable element of Viper element.
+            var child = range._getFirstSelectableChild(this.viper.getViperElement());
+            if (!child) {
+                range = null;
+            } else {
+                range.setStart(child, 0);
+                range.collapse(true);
             }
-        };
+        }
+
+        if (!range) {
+            var task  = {
+                content: this.viper.getRawHTML(),
+                range: null
+            };
+        } else {
+            var task  = {
+                content: this.viper.getRawHTML(),
+                range: {
+                    startContainer: XPath.getPath(range.startContainer),
+                    endContainer: XPath.getPath(range.endContainer),
+                    startOffset: range.startOffset,
+                    endOffset: range.endOffset,
+                    collapsed: range.collapsed
+                }
+            };
+        }
 
         var modify = false;
         if (action === 'text_change' && this._lastAction === action) {
@@ -224,6 +242,10 @@ ViperHistoryManager.prototype = {
 
     _selectTaskRange: function(task)
     {
+        if (!task || !task.range) {
+            return;
+        }
+
         // Select.
         try {
             var startContainer = XPath.getNode(task.range.startContainer);
