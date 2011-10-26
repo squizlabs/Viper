@@ -44,10 +44,10 @@ ViperHistoryPlugin.prototype = {
             var toolbarButtons  = {};
 
             var btnGroup = toolbarPlugin.createButtonGroup();
-            toolbarButtons.undo = toolbarPlugin.createButton('Undo', false, 'Undo', false, '', function() {
+            toolbarButtons.undo = toolbarPlugin.createButton('', false, 'Undo', false, 'historyUndo', function() {
                 return self.handleUndo();
             }, btnGroup);
-            toolbarButtons.redo = toolbarPlugin.createButton('Redo', false, 'Redo', false, '', function() {
+            toolbarButtons.redo = toolbarPlugin.createButton('', false, 'Redo', false, 'historyRedo', function() {
                 return self.handleRedo();
             }, btnGroup);
             this.viper.registerCallback('ViperToolbarPlugin:updateToolbar', 'ViperHistoryPlugin', function(data) {

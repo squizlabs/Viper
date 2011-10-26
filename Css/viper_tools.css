@@ -352,3 +352,63 @@
 .Viper-button:active .buttonIcon.prevIssue, .Viper-button.active .buttonIcon.prevIssue, .Viper-button.selected .buttonIcon.prevIssue {
   background-position: -33px -891px;
 }
+.buttonIcon.justifyLeft {
+  background-position: 0 -918px;
+}
+.Viper-button:active .buttonIcon.justifyLeft, .Viper-button.active .buttonIcon.justifyLeft, .Viper-button.selected .buttonIcon.justifyLeft {
+  background-position: -33px -918px;
+}
+.buttonIcon.justifyRight {
+  background-position: 0 -945px;
+}
+.Viper-button:active .buttonIcon.justifyRight, .Viper-button.active .buttonIcon.justifyRight, .Viper-button.selected .buttonIcon.justifyRight {
+  background-position: -33px -945px;
+}
+.buttonIcon.justifyCenter {
+  background-position: 0 -972px;
+}
+.Viper-button:active .buttonIcon.justifyCenter, .Viper-button.active .buttonIcon.justifyCenter, .Viper-button.selected .buttonIcon.justifyCenter {
+  background-position: -33px -972px;
+}
+.buttonIcon.justifyBlock {
+  background-position: 0 -999px;
+}
+.Viper-button:active .buttonIcon.justifyBlock, .Viper-button.active .buttonIcon.justifyBlock, .Viper-button.selected .buttonIcon.justifyBlock {
+  background-position: -33px -999px;
+}
+.buttonIcon.subscript {
+  background-position: 0 -1026px;
+}
+.Viper-button:active .buttonIcon.subscript, .Viper-button.active .buttonIcon.subscript, .Viper-button.selected .buttonIcon.subscript {
+  background-position: -33px -1026px;
+}
+.buttonIcon.superscript {
+  background-position: 0 -1053px;
+}
+.Viper-button:active .buttonIcon.superscript, .Viper-button.active .buttonIcon.superscript, .Viper-button.selected .buttonIcon.superscript {
+  background-position: -33px -1053px;
+}
+.buttonIcon.strikethrough {
+  background-position: 0 -1080px;
+}
+.Viper-button:active .buttonIcon.strikethrough, .Viper-button.active .buttonIcon.strikethrough, .Viper-button.selected .buttonIcon.strikethrough {
+  background-position: -33px -1080px;
+}
+.buttonIcon.removeFormat {
+  background-position: 0 -1107px;
+}
+.Viper-button:active .buttonIcon.removeFormat, .Viper-button.active .buttonIcon.removeFormat, .Viper-button.selected .buttonIcon.removeFormat {
+  background-position: -33px -1107px;
+}
+.buttonIcon.historyUndo {
+  background-position: 0 -1134px;
+}
+.Viper-button:active .buttonIcon.historyUndo, .Viper-button.active .buttonIcon.historyUndo, .Viper-button.selected .buttonIcon.historyUndo {
+  background-position: -33px -1134px;
+}
+.buttonIcon.historyRedo {
+  background-position: 0 -1161px;
+}
+.Viper-button:active .buttonIcon.historyRedo, .Viper-button.active .buttonIcon.historyRedo, .Viper-button.selected .buttonIcon.historyRedo {
+  background-position: -33px -1161px;
+}

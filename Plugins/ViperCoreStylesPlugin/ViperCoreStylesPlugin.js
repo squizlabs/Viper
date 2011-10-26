@@ -70,33 +70,33 @@ ViperCoreStylesPlugin.prototype = {
             toolbarButtons.styles.u = toolbarPlugin.createButton('U', false, 'Underline', false, 'underline', function() {
                 self.handleStyle('u');
             }, btnGroup);
-            toolbarButtons.rmFormat = toolbarPlugin.createButton('RF', false, 'Remove Format', false, 'removeFormat', function() {
+            toolbarButtons.rmFormat = toolbarPlugin.createButton('', false, 'Remove Format', false, 'removeFormat', function() {
                 self.removeFormat();
-            }, btnGroup);
+            }, false);
 
             var btnGroup2 = toolbarPlugin.createButtonGroup();
-            toolbarButtons.styles.sub = toolbarPlugin.createButton('Sub', false, 'Subscript', false, 'subscript', function() {
+            toolbarButtons.styles.sub = toolbarPlugin.createButton('', false, 'Subscript', false, 'subscript', function() {
                 self.handleStyle('sub');
             }, btnGroup2);
-            toolbarButtons.styles.sup = toolbarPlugin.createButton('Sup', false, 'Superscript', false, 'superscript', function() {
+            toolbarButtons.styles.sup = toolbarPlugin.createButton('', false, 'Superscript', false, 'superscript', function() {
                 self.handleStyle('sup');
             }, btnGroup2);
-            toolbarButtons.styles.strike = toolbarPlugin.createButton('St', false, 'Strikethrough', false, 'strikethrough', function() {
+            toolbarButtons.styles.strike = toolbarPlugin.createButton('', false, 'Strikethrough', false, 'strikethrough', function() {
                 self.handleStyle('strike');
             }, btnGroup2);
 
             var btnGroup3 = toolbarPlugin.createButtonGroup();
             toolbarButtons.justify = {};
-            toolbarButtons.justify.left = toolbarPlugin.createButton('JL', false, 'Left Justify', false, 'justifyLeft', function() {
+            toolbarButtons.justify.left = toolbarPlugin.createButton('', false, 'Left Justify', false, 'justifyLeft', function() {
                 self.handleJustfy('left');
             }, btnGroup3);
-            toolbarButtons.justify.center = toolbarPlugin.createButton('JC', false, 'Center Justify', false, 'justifyCenter', function() {
+            toolbarButtons.justify.center = toolbarPlugin.createButton('', false, 'Center Justify', false, 'justifyCenter', function() {
                 self.handleJustfy('center');
             }, btnGroup3);
-            toolbarButtons.justify.right = toolbarPlugin.createButton('JR', false, 'Right Justify', false, 'justifyRight', function() {
+            toolbarButtons.justify.right = toolbarPlugin.createButton('', false, 'Right Justify', false, 'justifyRight', function() {
                 self.handleJustfy('right');
             }, btnGroup3);
-            toolbarButtons.justify.justify = toolbarPlugin.createButton('JB', false, 'Block Justify', false, 'justifyBlock', function() {
+            toolbarButtons.justify.justify = toolbarPlugin.createButton('', false, 'Block Justify', false, 'justifyBlock', function() {
                 self.handleJustfy('justify');
             }, btnGroup3);
 
