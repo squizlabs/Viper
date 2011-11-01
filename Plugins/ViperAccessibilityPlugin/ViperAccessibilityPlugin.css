@@ -18,26 +18,26 @@
 
 .ViperAP-issueList {
     list-style: none;
-    margin: -6px 0 -6px 0;
-    border-bottom-left-radius: 0.6em;
-    border-bottom-right-radius: 0.6em;
+    margin: 0;
     border-top: 1px solid #2b2b2b;
 }
 
 .ViperAP-issueItem {
     position: relative;
-    overflow: hidden;
-    border-bottom: 1px solid #2b2b2b;
-    border-top: 1px solid #6c6c6d;
-    border-radius: 0.5em;
+    border-bottom: 1px solid #000;
+    border-top: 1px solid #4b4b4b;
     padding: 0.6em 2em 0.6em 2.2em;
     font-size: 1.3em;
     text-shadow: 0 -1px 0 #000;
-    margin: 2px;
+    background-color: #2b2b2b;
+}
+.ViperAP-issueItem:last-child {
+    border-bottom-left-radius: 0.5em;
+    border-bottom-right-radius: 0.5em;
 }
 .ViperAP-issueItem:hover {
     cursor: pointer;
-    background-color: #2b2b2b;
+    background-color: #3b3b3b;
     border-top-color: #5b5b5c;
 }
 .ViperAP-issueItem:after {
@@ -57,20 +57,22 @@
 .ViperAP-issueType {
     position: absolute;
     left: 0;
-    top: 0;
+    top: -1px;
     width: 1.6em;
     height: 100%;
-    border-top-left-radius: 0.5em;
-    border-bottom-left-radius: 0.5em;
+    border-top: 1px solid #FFF;
 }
 .ViperAP-issueType.error {
     background-color: #952424;
+    border-top-color: #c76161;
 }
 .ViperAP-issueType.warning {
     background-color: #c5a00c;
+    border-top-color: #f2d560;
 }
 .ViperAP-issueType.manual {
     background-color: #6c6b72;
+    border-top-color: #828188;
 }
 .ViperAP-issueType:before {
     content: "";
@@ -106,16 +108,18 @@
 .ViperAP-issueNav {
     float: left;
     padding-left: 0.3em;
-    font-size: 1.3em;
+    font-size: 1.35em;
     font-weight: bold;
-    line-height: 2.4em;
-    color: #FFF;
-    text-shadow: 0 -1px 0 rgba(0,0,0,0.4);
+    color: #000;
+    text-shadow: 0 1px 0 rgba(255,255,255,0.3);
 }
 .ViperAP-issueNav a,
 .ViperAP-issueNav a:visited {
+    position: relative;
+    display: inline-block;
     text-decoration: none;
-    color: #FFF;
+    color: #000;
+    padding: 0.45em 20px 0.25em 0;
 }
 .ViperAP-issueNav a:before {
     content: "";
@@ -123,17 +127,17 @@
     width: 10px;
     height: 11px;
     margin-right: 0.5em;
-    background: transparent url(Images/issueImages.png) 0 -68px no-repeat;
+    margin-bottom: -1px;
+    background: transparent url(Images/issueImages.png) 0 -67px no-repeat;
 }
 .ViperAP-issueNav a:after {
     content: "";
-    display: inline-block;
-    position: relative;
-    width: 10px;
+    position: absolute;
+    width: 12px;
     height: 32px;
-    margin-left: 1em;
-    margin-top: -16px;
-    top: 12px;
+    margin-top: -10px;
+    top: 50%;
+    right: 0;
     background: transparent url(Images/issueImages.png) 0 -79px no-repeat;
 }
 .issueNav-divider {
@@ -144,24 +148,21 @@
 
 .ViperAP-issuePane {
     padding: 0px 0 10px 0;
-    margin: -6px 0 -6px 0;
+    margin: 0;
     overflow: auto;
     border-bottom-left-radius: 0.6em;
     border-bottom-right-radius: 0.6em;
     text-shadow: none;
     font-size: 1.36em;
+    border-top: 1px solid #2b2b2b;
 }
 .ViperAP-issueDetails {
     position: relative;
     color: #FFF;
     background-color: #2b2b2b;
     padding: 1.2em 2.8em 1.2em 2.8em;
+    border-top: 1px solid #4b4b4b;
     border-bottom: 1px solid #2b2b2b;
-}
-.ViperAP-issueDetails .ViperAP-issueType {
-    border-radius: 0;
-    border-top-right-radius: 0.5em;
-    border-bottom-right-radius: 0.5em;
 }
 .issueTitle {
     border-bottom: 1px solid #000;
@@ -252,6 +253,10 @@
     width: 320px;
 }
 
+.ViperITP.subSectionVisible .ViperAP-toolsWrapper.ViperITP-tools {
+    padding-bottom: 0.6em;
+}
+
 .ViperAP-middle {
     overflow: hidden;
 }
@@ -265,27 +270,23 @@
 .ViperAP-issueList {
     display: inline-block;
     width: 320px;
-    -moz-transition-duration: 0.3s;
-    -moz-transition-property: margin-left;
-    -moz-transition-timing-function: ease-out;
 }
 
 .ViperAP-issuePane {
     width: 320px;
     display: inline-block;
+    vertical-align: top;
 }
 
 .ViperAP-issuePane,
 .ViperAP-issueList {
-    -moz-transition-duration: 0.3s;
-    -moz-transition-property: margin-left;
-    -moz-transition-timing-function: ease-out;
+    -moz-transition: margin 0.2s ease-in;
+    -webkit-transition: margin 0.2s ease-in;
 }
 
 .ViperAP-issuePane.instant {
     -moz-transition-duration: 0s;
-    -moz-transition-property: margin-left;
-    -moz-transition-timing-function: ease-out;
+    -webkit-transition-duration: 0s;
 }
 
 /*
@@ -293,7 +294,6 @@
 */
 .ViperAP-toolsWrapper .ViperAP-tools {
     display: none;
-    overflow: hidden;
 }
 
 .ViperAP-toolsWrapper.checkTools .ViperAP-checkTools,
