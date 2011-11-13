@@ -41,11 +41,11 @@ ViperListPlugin.prototype = {
 
             var btnGroup = toolbarPlugin.createButtonGroup();
             toolbarButtons.ul = toolbarPlugin.createButton('', false, 'Make Unordered List', false, 'listUL', function() {
-                var statuses = self._getButtonStatuses();
+                var statuses = self._getButtonStatuses(null, true);
                 return self._makeListButtonAction(statuses.list, 'ul');
             }, btnGroup);
             toolbarButtons.ol = toolbarPlugin.createButton('', false, 'Make Ordered List', false, 'listOL', function() {
-                var statuses = self._getButtonStatuses();
+                var statuses = self._getButtonStatuses(null, true);
                 return self._makeListButtonAction(statuses.list, 'ol');
             }, btnGroup);
             toolbarButtons.indent = toolbarPlugin.createButton('', false, 'Indent List', false, 'listIndent', function() {
