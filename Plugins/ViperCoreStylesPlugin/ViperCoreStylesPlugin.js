@@ -100,6 +100,11 @@ ViperCoreStylesPlugin.prototype = {
                 self.handleJustfy('justify');
             }, btnGroup3);
 
+            toolbarButtons.other    = {};
+            toolbarButtons.other.hr = toolbarPlugin.createButton('HR', false, 'Horizontal Rule', false, '', function() {
+                self.handleHR();
+            }, btnGroup3);
+
             this.viper.registerCallback('ViperToolbarPlugin:updateToolbar', 'ViperCoreStylesPlugin', function(data) {
                 self._updateToolbarButtonStates(toolbarButtons, data.range);
             });
@@ -566,6 +571,18 @@ ViperCoreStylesPlugin.prototype = {
 
             ViperChangeTracker.addChange('alignmentChange', [node]);
         }
+
+    },
+
+    handleHR: function()
+    {
+        var hr = document.createElement('hr');
+
+        var keyboardEditorPlugin = this.viper.ViperPluginManager.getPlugin('ViperKeyboardEditorPlugin');
+        var prev = keyboardEditorPlugin.splitAtRange(true);
+        dfx.insertAfter(prev, hr);
+        this.viper.fireNodesChanged('ViperCoreStylesPlugin:hr');
+        this.viper.fireSelectionChanged(null, true);
 
     },
 
