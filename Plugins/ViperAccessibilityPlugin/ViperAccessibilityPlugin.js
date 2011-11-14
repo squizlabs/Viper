@@ -55,7 +55,7 @@ ViperAccessibilityPlugin.prototype = {
                 _runChecks();
             };
 
-            script.src = 'https://raw.github.com/squizlabs/HTMLCodeSniffer/master/HTMLCS.js';
+            script.src = 'https://raw.github.com/squizlabs/HTML_CodeSniffer/master/HTMLCS.js';
             document.head.appendChild(script);
             return;
         }
