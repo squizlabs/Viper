@@ -257,8 +257,21 @@ ViperListPlugin.prototype = {
                     removeInsAfter = true;
                 }
 
-                list = this._makeList(tag, elem);
-                dfx.insertAfter(insertAfter, list);
+                if (dfx.isTag(elem[0], 'td') === true) {
+                    var td = elem[0];
+                    var p = document.createElement('p');
+                    while (td.firstChild) {
+                        p.appendChild(td.firstChild);
+                    }
+
+                    elem = [p];
+
+                    list = this._makeList(tag, elem);
+                    td.appendChild(list);
+                } else {
+                    list = this._makeList(tag, elem);
+                    dfx.insertAfter(insertAfter, list);
+                }
 
                 this.viper.selectBookmark(bookmark);
             } else {
@@ -699,9 +712,9 @@ ViperListPlugin.prototype = {
         var pElems = [];
         if (startNode === endNode) {
             if (bookmark && bookmark.start) {
-                pElems.push(this._getParaElement(bookmark.start));
+                pElems.push(this._getValidParentElement(bookmark.start));
             } else {
-                pElems.push(this._getParaElement(startNode));
+                pElems.push(this._getValidParentElement(startNode));
             }
         } else {
             var elems = null;
@@ -715,7 +728,7 @@ ViperListPlugin.prototype = {
 
             var c     = elems.length;
             for (var i = 0; i < c; i++) {
-                var p = this._getParaElement(elems[i]);
+                var p = this._getValidParentElement(elems[i]);
                 if (p && pElems.inArray(p) === false) {
                     pElems.push(p);
                 }
@@ -957,7 +970,7 @@ ViperListPlugin.prototype = {
 
             makeList = true;
             indent   = true;
-        } else if ((range.collapsed === false || mainToolbar === true) && (dfx.isTag(startNode, 'p') === true || (startNode.nodeType === dfx.TEXT_NODE && dfx.isTag(startNode.parentNode, 'p') === true))) {
+        } else if ((range.collapsed === false || mainToolbar === true) && (dfx.isTag(startNode, 'p') === true || (startNode.nodeType === dfx.TEXT_NODE && (dfx.isTag(startNode.parentNode, 'p') === true || dfx.isTag(startNode.parentNode, 'td') === true)))) {
             makeList = true;
         }
 
@@ -1409,17 +1422,17 @@ ViperListPlugin.prototype = {
 
     },
 
-    _getParaElement: function(element)
+    _getValidParentElement: function(element)
     {
         if (!element || element === this.viper.getViperElement()) {
             return;
         }
 
-        if (dfx.isTag(element, 'p') === true) {
+        if (dfx.isTag(element, 'p') === true || dfx.isTag(element, 'td') === true) {
             return element;
         }
 
-        return this._getParaElement(element.parentNode);
+        return this._getValidParentElement(element.parentNode);
 
     },
 
