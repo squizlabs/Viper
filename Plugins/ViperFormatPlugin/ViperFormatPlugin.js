@@ -624,7 +624,13 @@ ViperFormatPlugin.prototype = {
                         var newElem = document.createElement(type);
                         self._addChangeTrackInfo(newElem);
                         self._moveChildElements(blockParent, newElem);
-                        dfx.insertBefore(blockParent, newElem);
+
+                        if (t === 'td') {
+                            blockParent.appendChild(newElem);
+                        } else {
+                            dfx.insertBefore(blockParent, newElem);
+                        }
+
                         range.selectNode(newElem);
                         ViperSelection.addRange(range);
                     }
