@@ -723,6 +723,7 @@ ViperDOMRange.prototype = {
             && range.startOffset === 0
             && range.endOffset === endNode.data.length
             && range.collapsed === false
+            && endNode.nextSibling
         ) {
             return null;
         } else if (startNode.nodeType === dfx.TEXT_NODE
