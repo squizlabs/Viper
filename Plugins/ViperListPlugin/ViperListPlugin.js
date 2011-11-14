@@ -1085,6 +1085,7 @@ ViperListPlugin.prototype = {
             self.makeList(listType === 'ol');
             this.viper.adjustRange();
             self.viper.fireSelectionChanged(null, true);
+            self.viper.fireNodesChanged([self.viper.getViperElement()]);
         } else {
             var bookmark = this.viper.createBookmark();
             var range    = self.viper.getCurrentRange();
