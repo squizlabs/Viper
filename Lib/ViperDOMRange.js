@@ -720,6 +720,14 @@ ViperDOMRange.prototype = {
         } else if (startNode.nodeType === dfx.TEXT_NODE
             && endNode.nodeType === dfx.TEXT_NODE
             && startNode === endNode
+            && range.startOffset === 0
+            && range.endOffset === endNode.data.length
+            && range.collapsed === false
+        ) {
+            return null;
+        } else if (startNode.nodeType === dfx.TEXT_NODE
+            && endNode.nodeType === dfx.TEXT_NODE
+            && startNode === endNode
             && range.startOffset === startNode.data.length
             && range.collapsed === true
         ) {
