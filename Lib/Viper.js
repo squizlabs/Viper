@@ -1844,13 +1844,13 @@ Viper.prototype = {
                 }
             });
 
-            if (start.firstChild) {
+            if (start.firstChild && dfx.isBlank(dfx.getNodeTextContent(start)) !== true) {
                 dfx.insertBefore(startTopParent, start);
             }
 
             dfx.insertBefore(startTopParent, div.childNodes);
 
-            if (end.firstChild) {
+            if (end.firstChild && dfx.isBlank(dfx.getNodeTextContent(end)) !== true) {
                 dfx.insertBefore(startTopParent, end);
             }
 
