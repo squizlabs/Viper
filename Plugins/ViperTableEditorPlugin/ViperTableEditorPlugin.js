@@ -1944,20 +1944,11 @@ ViperTableEditorPlugin.prototype = {
         }
 
         table.appendChild(tbody);
-        var bookmark = this.viper.createBookmark();
 
         // Insert table to the bookmarks position.
-        var splitInfo = this.viper.splitNodeAtBookmark('p', bookmark);
-        if (splitInfo) {
-            if (splitInfo.prevNode) {
-                dfx.insertAfter(splitInfo.prevNode, table);
-            } else if (splitInfo.nextNode) {
-                dfx.insertBefore(splitInfo.nextNode, table);
-                if (this.viper.elementIsEmpty(splitInfo.nextNode) === true) {
-                    dfx.remove(splitInfo.nextNode);
-                }
-            }
-        }
+        var keyboardEditorPlugin = this.viper.ViperPluginManager.getPlugin('ViperKeyboardEditorPlugin');
+        var prevNode = keyboardEditorPlugin.splitAtRange(true, range);
+        dfx.insertAfter(prevNode, table);
 
         // Now determine if we need to add borders or width to this table.
         // Done over here so that if there are CSS styles applied to tables
