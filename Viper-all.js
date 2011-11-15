@@ -30,7 +30,7 @@ for (var j = 0; j < jsFiles.length; j++) {
 document.write('<style type="text/css">@import url("../../Css/viper.css");</style>');
 
 // Viper default plugins.
-var plugins    = 'ViperCopyPastePlugin|ViperCoreStylesPlugin|ViperFormatPlugin|ViperKeyboardEditorPlugin|ViperListPlugin|ViperHistoryPlugin|ViperTableEditorPlugin|ViperToolbarPlugin|ViperTrackChangesPlugin|ViperInlineToolbarPlugin|ViperLinkPlugin|ViperAccessibilityPlugin|ViperSourceViewPlugin|ViperImagePlugin|ViperSearchReplacePlugin|ViperAcronymPlugin|ViperAbbrPlugin';
+var plugins    = 'ViperCopyPastePlugin|ViperCoreStylesPlugin|ViperFormatPlugin|ViperKeyboardEditorPlugin|ViperListPlugin|ViperHistoryPlugin|ViperTableEditorPlugin|ViperToolbarPlugin|ViperTrackChangesPlugin|ViperInlineToolbarPlugin|ViperLinkPlugin|ViperAccessibilityPlugin|ViperSourceViewPlugin|ViperImagePlugin|ViperSearchReplacePlugin|ViperAcronymPlugin|ViperAbbrPlugin|ViperLangPlugin';
 plugins        = plugins.split('|');
 var pluginCss  = [];
 var c = 0;
