@@ -84,7 +84,7 @@ ViperAcronymPlugin.prototype = {
         range.setStart(firstChild, 0);
         range.setEnd(lastChild, lastChild.data.length);
         ViperSelection.addRange(range);
-        this.viper.fireSelectionChanged(true);
+        this.viper.fireSelectionChanged(range, true);
         this.viper.fireNodesChanged([this.viper.getViperElement()]);
 
     },
@@ -146,7 +146,9 @@ ViperAcronymPlugin.prototype = {
                 return;
             }
 
-            if (dfx.isTag(data.lineage[data.current], 'acronym') === true) {
+            if (dfx.isTag(data.lineage[data.current], 'abbr') === true) {
+                return;
+            } else if (dfx.isTag(data.lineage[data.current], 'acronym') === true) {
                 // If the selection is a whole A tag then by default show the
                 // acronym sub section.
                 subSectionActive = true;
@@ -160,6 +162,14 @@ ViperAcronymPlugin.prototype = {
                 || dfx.isTag(data.lineage[data.current].parentNode, 'acronym') === false)
                 && rangeClone.collapsed === true) {
                 return;
+            } else if (data.lineage[data.current].nodeType === dfx.TEXT_NODE) {
+                var rangeText = data.range.toString();
+                if (rangeText.length > 6
+                    || rangeText.length < 2
+                    || rangeText.match(/\s/)
+                ) {
+                    return;
+                }
             }
 
             // Get the acronym from lineage.
@@ -187,17 +197,17 @@ ViperAcronymPlugin.prototype = {
 
             // Acronym button.
             if (currentIsAcronym !== true && acronym) {
-                inlineToolbarPlugin.createButton('', isAcronym, 'Toggle Acronym Options', false, 'acronym', function() {
+                inlineToolbarPlugin.createButton('Acr', isAcronym, 'Toggle Acronym Options', false, 'acronym', function() {
                     // Select the whole acronym using the lineage.
                     inlineToolbarPlugin.selectLineageItem(linIndex);
                 }, group);
             } else {
-                inlineToolbarPlugin.createButton('', isAcronym, 'Toggle Acronym Options', false, 'acronym', null, group, subSection, subSectionActive);
+                inlineToolbarPlugin.createButton('Acr', isAcronym, 'Toggle Acronym Options', false, 'acronym', null, group, subSection, subSectionActive);
             }
 
             if (isAcronym === true) {
                 // Add the remove acronym button.
-                inlineToolbarPlugin.createButton('', false, 'Remove Acronym', false, 'acronymRemove', function() {
+                inlineToolbarPlugin.createButton('RAcr', false, 'Remove Acronym', false, 'acronymRemove', function() {
                     self.removeAcronym(acronym);
                 }, group);
             }
@@ -216,7 +226,7 @@ ViperAcronymPlugin.prototype = {
             // Sub section.
             var titleTextbox = inlineToolbarPlugin.createTextbox(null, titleAttr, 'Title', function(value) {
                 setAcronymAttributes(value);
-            }, false, true);
+            }, false, false);
 
             subSectionCont.appendChild(titleTextbox);
         });

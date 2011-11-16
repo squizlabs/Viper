@@ -84,7 +84,7 @@ ViperAbbrPlugin.prototype = {
         range.setStart(firstChild, 0);
         range.setEnd(lastChild, lastChild.data.length);
         ViperSelection.addRange(range);
-        this.viper.fireSelectionChanged(true);
+        this.viper.fireSelectionChanged(range, true);
         this.viper.fireNodesChanged([this.viper.getViperElement()]);
 
     },
@@ -146,7 +146,9 @@ ViperAbbrPlugin.prototype = {
                 return;
             }
 
-            if (dfx.isTag(data.lineage[data.current], 'abbr') === true) {
+            if (dfx.isTag(data.lineage[data.current], 'acronym') === true) {
+                return;
+            } else if (dfx.isTag(data.lineage[data.current], 'abbr') === true) {
                 // If the selection is a whole A tag then by default show the
                 // abbr sub section.
                 subSectionActive = true;
@@ -160,6 +162,14 @@ ViperAbbrPlugin.prototype = {
                 || dfx.isTag(data.lineage[data.current].parentNode, 'abbr') === false)
                 && rangeClone.collapsed === true) {
                 return;
+            } else if (data.lineage[data.current].nodeType === dfx.TEXT_NODE) {
+                var rangeText = data.range.toString();
+                if (rangeText.length > 6
+                    || rangeText.length < 2
+                    || rangeText.match(/\s/)
+                ) {
+                    return;
+                }
             }
 
             // Get the abbr from lineage.
@@ -187,17 +197,17 @@ ViperAbbrPlugin.prototype = {
 
             // Abbr button.
             if (currentIsAbbr !== true && abbr) {
-                inlineToolbarPlugin.createButton('', isAbbr, 'Toggle Abbr Options', false, 'abbr', function() {
+                inlineToolbarPlugin.createButton('Abbr', isAbbr, 'Toggle Abbr Options', false, 'abbr', function() {
                     // Select the whole abbr using the lineage.
                     inlineToolbarPlugin.selectLineageItem(linIndex);
                 }, group);
             } else {
-                inlineToolbarPlugin.createButton('', isAbbr, 'Toggle Abbr Options', false, 'abbr', null, group, subSection, subSectionActive);
+                inlineToolbarPlugin.createButton('Abbr', isAbbr, 'Toggle Abbr Options', false, 'abbr', null, group, subSection, subSectionActive);
             }
 
             if (isAbbr === true) {
                 // Add the remove abbr button.
-                inlineToolbarPlugin.createButton('', false, 'Remove Abbr', false, 'abbrRemove', function() {
+                inlineToolbarPlugin.createButton('RAbbr', false, 'Remove Abbr', false, 'abbrRemove', function() {
                     self.removeAbbr(abbr);
                 }, group);
             }
@@ -216,7 +226,7 @@ ViperAbbrPlugin.prototype = {
             // Sub section.
             var titleTextbox = inlineToolbarPlugin.createTextbox(null, titleAttr, 'Title', function(value) {
                 setAbbrAttributes(value);
-            }, false, true);
+            }, false, false);
 
             subSectionCont.appendChild(titleTextbox);
         });

@@ -89,7 +89,7 @@ ViperLinkPlugin.prototype = {
         range.setStart(firstChild, 0);
         range.setEnd(lastChild, lastChild.data.length);
         ViperSelection.addRange(range);
-        this.viper.fireSelectionChanged(true);
+        this.viper.fireSelectionChanged(range, true);
         this.viper.fireNodesChanged([this.viper.getViperElement()]);
 
     },
