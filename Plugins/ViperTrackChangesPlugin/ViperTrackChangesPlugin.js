@@ -42,54 +42,9 @@ ViperTrackChangesPlugin.prototype = {
     {
         var self = this;
 
-        this.toolbarPlugin = this.viper.ViperPluginManager.getPlugin('ViperToolbarPlugin');
-        this.toolbarPlugin.addButton('TrackChanges', 'track-changes', 'Track Changes', function () {
-            if (!self.subToolbarPlugin) {
-                self._setupSubToolbar(function() {
-                    self.toggleTrackChanges();
-                });
-            } else {
-                self.toggleTrackChanges();
-            }
-        });
-
-        // Setup sub toolbar.
-        if (ViperChangeTracker.isTracking() === true) {
-            this._setupSubToolbar(function() {
-                // Check again incase there was a long delay.
-                if (ViperChangeTracker.isTracking() === true) {
-                    self._barActive = true;
-                    self.subToolbarPlugin.showToolbar('TrackChanges');
-                    self.toolbarPlugin.setButtonActive('track-changes');
-                }
-            });
-        }
-
-        this.viper.registerCallback('ViperChangeTracker:tracking', 'ViperTrackChangesPlugin', function(isTracking) {
-            if (isTracking === true) {
-                self._setupSubToolbar(function() {
-                    // Check again incase there was a long delay.
-                    if (ViperChangeTracker.isTracking() === true) {
-                        self._barActive = true;
-                        self.subToolbarPlugin.showToolbar('TrackChanges');
-                        self.toolbarPlugin.setButtonActive('track-changes');
-                    }
-                });
-            }
-        });
-
-        this.viper.registerCallback('ViperSubToolbar:hideToolbar', 'ViperTrackChangesPlugin', function(barid) {
-            if (barid !== 'TrackChanges'
-                && self._barActive === true
-                && ViperChangeTracker.isTracking() === true
-            ) {
-                self.subToolbarPlugin.showToolbar('TrackChanges');
-                self.toolbarPlugin.setButtonActive('track-changes');
-            }
-        });
+        this._setupToolbar();
 
         ViperChangeTracker.addChangeType('viperComment', 'Comment', 'comment');
-
         ViperChangeTracker.setRejectCallback('viperComment', function(clone, node) {
             while (node.firstChild) {
                 dfx.insertBefore(node, node.firstChild);
@@ -222,189 +177,36 @@ ViperTrackChangesPlugin.prototype = {
 
     },
 
-    _setupSubToolbar: function(callback)
+    enableTracking: function()
     {
-        this._initialising = true;
-        ViperChangeTracker.setActionDisplayState('format', true);
-        ViperChangeTracker.setActionDisplayState('comment', true);
-
-        var subToolbarPlugin = this.viper.ViperPluginManager.getPlugin('ViperSubToolbarPlugin');
-        if (!subToolbarPlugin) {
-            return;
-        }
-
-        var toolbar = subToolbarPlugin.createToolBar('TrackChanges');
-
-        var c        = 'ViperTrackChanges-stb';
-        var contents = '<div class="' + c + '-left"></div>';
-        contents    += '<div class="' + c + '-mid"></div>';
-        contents    += '<div class="' + c + '-right"></div>';
-        dfx.setHtml(toolbar, contents);
-
-        var self = this;
-
-        this.includeWidgets(['Button', 'RadioButton'], function() {
-            var switchToOriginal = self.createWidget('ViperTrackChanges-switchMode', 'Button');
-            switchToOriginal.setName('Switch to Original');
-            switchToOriginal.setButtonIconClassName(c + '-switch');
-            switchToOriginal.create(function(el) {
-                switchToOriginal.setMinWidth('120px');
-                dfx.addClass(switchToOriginal.domElem, 'ViperTrackChanges-switchMode-original');
-                (dfx.getClass(c + '-left', toolbar)[0]).appendChild(el);
-            });
-
-            switchToOriginal.addClickEvent(function() {
-                if (ViperChangeTracker.getCurrentMode() === 'final') {
-                    ViperChangeTracker.activateOriginalMode();
-                    switchToOriginal.setName('Switch to Final');
-                    dfx.removeClass(switchToOriginal.domElem, 'ViperTrackChanges-switchMode-original');
-                    dfx.addClass(switchToOriginal.domElem, 'ViperTrackChanges-switchMode-final');
-                    self.changeViewSettings('original');
-                } else {
-                    ViperChangeTracker.activateFinalMode();
-                    switchToOriginal.setName('Switch to Original');
-                    dfx.removeClass(switchToOriginal.domElem, 'ViperTrackChanges-switchMode-final');
-                    dfx.addClass(switchToOriginal.domElem, 'ViperTrackChanges-switchMode-original');
-                    self.changeViewSettings('final');
-                }
-            });
-
-            var addComment = self.createWidget('ViperTrackChanges-addComment', 'Button');
-            addComment.setName('Add Comment');
-            addComment.setButtonIconClassName(c + '-comment');
-            addComment.create(function(el) {
-                addComment.setMinWidth('105px');
-                (dfx.getClass(c + '-right', toolbar)[0]).appendChild(el);
-            });
-
-            addComment.addClickEvent(function() {
-                // Call blur() because we can not have focus on the button.
-                // If button has focus while user is typing a comment it will
-                // fire events for that button when space/enter is pressed.
-                if (addComment.buttonParts.content) {
-                    addComment.buttonParts.content.blur();
-                }
-
-                self.addComment();
-            });
-
-            var toggleTracking = self.createWidget('ViperTrackChanges-toggleTracking', 'Button', 'ButtonWidgetType-black');
-            toggleTracking.setName('Disable Tracking');
-
-            toggleTracking.create(function(el) {
-                toggleTracking.setMinWidth('101px');
-                dfx.addClass(el, 'ViperTrackChanges-toggleTracking-disable');
-                (dfx.getClass(c + '-right', toolbar)[0]).appendChild(el);
-            });
-
-            toggleTracking.addClickEvent(function() {
-                if (ViperChangeTracker.isTracking() === true) {
-                    toggleTracking.setName('Enable Tracking');
-                    dfx.removeClass(toggleTracking.domElem, 'ViperTrackChanges-toggleTracking-disable');
-                    dfx.addClass(toggleTracking.domElem, 'ViperTrackChanges-toggleTracking-enable');
-                    ViperChangeTracker.disableChangeTracking();
-                    addComment.disable();
-                } else {
-                    toggleTracking.setName('Disable Tracking');
-                    dfx.removeClass(toggleTracking.domElem, 'ViperTrackChanges-toggleTracking-enable');
-                    dfx.addClass(toggleTracking.domElem, 'ViperTrackChanges-toggleTracking-disable');
-                    ViperChangeTracker.enableChangeTracking();
-                    addComment.enable();
-                }
-            });
-
-            var optsList = subToolbarPlugin.createOptionsList('Display');
-            (dfx.getClass(c + '-mid', toolbar)[0]).appendChild(optsList.main);
-            self._createOptionList(optsList.contentEl);
-            self.changeViewSettings('final');
-
-            this._initialising    = false;
-            self.subToolbarPlugin = subToolbarPlugin;
-            callback.call(self, subToolbarPlugin);
-            return;
-        });
+        ViperChangeTracker.enableChangeTracking();
 
     },
 
-    changeViewSettings: function(mode)
+    disableTracking: function()
     {
-        mode += 'Mode';
-        if (!this.viewSettings[mode]) {
-            return;
-        }
-
-        var self = this;
-        dfx.foreach(this.optionCheckboxes, function(i) {
-            if (self.viewSettings[mode][i]) {
-                self.optionCheckboxes[i].check();
-            } else {
-                self.optionCheckboxes[i].uncheck();
-            }
-        });
+        ViperChangeTracker.disableChangeTracking();
 
     },
 
-    updateViewSetting: function(type, display)
-    {
-        var mode = ViperChangeTracker.getCurrentMode() + 'Mode';
-        this.viewSettings[mode][type] = display;
 
-    },
-
-    _createOptionList: function(parent)
+    _setupToolbar: function()
     {
-        var div           = null;
         var self          = this;
-        var opts          = ViperChangeTracker.getActionTypes();
-        var displayStates = ViperChangeTracker.getActionDisplayStates();
-
-        dfx.foreach(opts, function(i) {
-            self.viewSettings.finalMode[i]    = displayStates[i];
-            self.viewSettings.originalMode[i] = displayStates[i];
-
-            div       = Viper.document.createElement('div');
-            var label = Viper.document.createElement('label');
-            parent.appendChild(div);
-            dfx.setHtml(label, opts[i]);
-            div.appendChild(label);
-            dfx.addClass(div, 'ViperTrackChanges-stb-optItem');
-            div.id = 'ViperTrackChanges-opts-' + i;
-
-            var radioBtn = self.createWidget(null, 'RadioButton', null, displayStates[i]);
-
-            self.optionCheckboxes[i] = radioBtn;
-            radioBtn.create(function(radioBtnEl) {
-                dfx.attr(label, 'for', radioBtn.id);
-                div.appendChild(radioBtnEl);
-                radioBtn._addEvents();
-            });
-
-            (function(radioBtnWidget, type) {
-                radioBtnWidget.addCheckedEvent(function(checked) {
-                    self.toggleChangeTypeDisplayState(type, checked);
-                });
-            }) (radioBtn, i);
-
-            if (i === 'Inserts') {
-                dfx.addClass(div, 'first');
+        var tcEnabled     = false;
+        var toolbarPlugin = this.viper.ViperPluginManager.getPlugin('ViperToolbarPlugin');
+        var tcBtn = toolbarPlugin.createButton('TC', false, 'Toggle Track Changes', false, '', function() {
+            if (tcEnabled === true) {
+                tcEnabled = false;
+                toolbarPlugin.setButtonInactive(tcBtn);
+                self.disableTracking();
+            } else {
+                tcEnabled = true;
+                toolbarPlugin.setButtonActive(tcBtn);
+                self.enableTracking();
             }
         });
-
-        self.viewSettings.originalMode.insert = true;
-        self.viewSettings.originalMode.remove = false;
-
-        if (div) {
-            dfx.addClass(div, 'last');
-        }
-
-    },
-
-    toggleChangeTypeDisplayState: function(type, display)
-    {
-        this.updateViewSetting(type, display);
-        ViperChangeTracker.setActionDisplayState(type, display, !this._initialising, true);
 
     }
-
 
 };
