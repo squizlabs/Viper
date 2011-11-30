@@ -1,0 +1,91 @@
+<html>
+    <head>
+        <title>Viper Test Runner</title>
+        <style>
+        body {
+            margin: 50px;
+            background-color: #EEE;
+            font-size: 20px;
+        }
+
+        #content {
+            width: 800px;
+            height: 600px;
+            margin: auto;
+            margin-top: 90px;
+        }
+
+        #menu {
+            position: fixed;
+            right: 100px;
+            width: 100px;
+            top: 50px;
+        }
+        </style>
+
+        <script type="text/javascript" src="../DfxJSLib/dfx.js"></script>
+        <script type="text/javascript" src="../Viper-all.js"></script>
+        <script type="text/javascript">
+            var viper = null;
+            dfx.addLoadEvent(function() {
+                var contentElement = dfx.getId('content');
+
+                viper = new Viper('test');
+                var pluginSets = {
+                    all: {
+                        plugins: ['ViperCoreStylesPlugin', 'ViperKeyboardEditorPlugin', 'ViperInlineToolbarPlugin', 'ViperHistoryPlugin', 'ViperListPlugin', 'ViperFormatPlugin', 'ViperToolbarPlugin', 'ViperTableEditorPlugin', 'ViperCopyPastePlugin', 'ViperImagePlugin', 'ViperLinkPlugin', 'ViperSearchReplacePlugin', 'ViperAcronymPlugin', 'ViperAbbrPlugin', 'ViperLangPlugin', 'ViperTrackChangesPlugin']
+                    }
+                };
+
+                viper.setPluginSets(pluginSets);
+                viper.getPluginManager().usePluginSet('all');
+                viper.setEditableElement(contentElement);
+
+                dfx.getId('jsRes').value = '';
+
+                var jsExec   = dfx.getId('jsExec');
+                jsExec.value = '';
+
+                dfx.addEvent(jsExec, 'focus', function(e) {
+                    jsExec.value = '';
+                });
+
+                // We are not going to use paste() until this Sikuli bug is fixed:
+                // https://bugs.launchpad.net/sikuli/+bug/769837
+                //dfx.addEvent(jsExec, 'paste', function(e) {
+                //        eval(jsExec.value);
+                //    }, 100);
+                //});
+            });
+
+            function gHtml(selector)
+            {
+                if (selector) {
+                    dfx.getId('jsRes').value = dfx.getHtml(dfxjQuery(selector)[0]);
+                } else {
+                    dfx.getId('jsRes').value = dfx.getHtml(dfx.getId('content')).replace("\n", '');
+                }
+
+            }
+
+            function execJS()
+            {
+                var val = dfx.getId('jsExec').value;
+                dfx.getId('jsRes').value  = '';
+                dfx.getId('jsExec').value = '';
+
+                // Execute JS.
+                eval(val);
+
+            }
+        </script>
+    </head>
+    <body spellcheck="false">
+        <div id="content">__TEST_CONTENT__</div>
+        <div id="menu">
+            <textarea id="jsExec" accesskey="J"></textarea>
+            <button onclick="execJS()">Exec</button>
+            <textarea id="jsRes" accesskey="R"></textarea>
+        </div>
+    </body>
+</html>
