@@ -119,7 +119,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarUnitTest extends Abstrac
         $word = $this->find('Lorem');
         $this->selectText('Lorem');
         $this->click($word);
-        $this->wait(2);
+        sleep(2);
 
         try {
             $this->getInlineToolbar();
@@ -141,7 +141,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarUnitTest extends Abstrac
     {
         $this->selectText('Lorem');
         $this->keyDown('Key.RIGHT');
-        $this->wait(2);
+        sleep(2);
 
         try {
             $this->getInlineToolbar();
@@ -239,7 +239,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarUnitTest extends Abstrac
         $this->selectText('Lorem');
 
         $this->click($this->_getToolbarArrow());
-        $this->wait(2);
+        sleep(2);
         $this->getInlineToolbar();
 
     }//end testClickOnToolbarNotHideToolbar()
