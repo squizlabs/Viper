@@ -125,20 +125,6 @@ abstract class AbstractSikuliUnitTest extends PHPUnit_Framework_TestCase
     }//end find()
 
 
-    /**
-     * Pauses the script for the specified amount of seconds.
-     *
-     * @param integer $seconds The number of seconds to wait.
-     *
-     * @return void
-     */
-    protected function wait($seconds)
-    {
-        $this->callFunc('wait', array($seconds));
-
-    }//end wait()
-
-
     /*
         Mouse & Keyboard
     */
