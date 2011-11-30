@@ -19,15 +19,31 @@
  * @copyright  2010 Squiz Pty Ltd (ACN 084 670 600)
  * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt GPLv2
  */
+var dfxScripts = document.getElementsByTagName('script');
+var path       = null;
+
+// Loop through all the script tags that exist in the document and find the one
+// that has included this file.
+var dfxScriptsLen = dfxScripts.length;
+for (var i = 0; i < dfxScriptsLen; i++) {
+    if (dfxScripts[i].src) {
+        if (dfxScripts[i].src.match(/Viper-all\.js/)) {
+            // We have found our appropriate <script> tag that includes the
+            // DfxJSLib library, so we can extract the path and include the rest.
+            path = dfxScripts[i].src.replace(/Viper-all\.js/,'');
+            break;
+        }
+    }
+}
 
 // Viper core files.
 var jsFiles = 'Viper.js|ViperChangeTracker.js|ViperTools.js|ViperDOMRange.js|ViperIERange.js|ViperMozRange.js|ViperSelection.js|ViperPluginManager.js|ViperHistoryManager.js|XPath.js';
 jsFiles     = jsFiles.split('|');
 for (var j = 0; j < jsFiles.length; j++) {
-    document.write('<script type="text/javascript" src="../../Lib/' + jsFiles[j] + '"></script>');
+    document.write('<script type="text/javascript" src="' + path + '/Lib/' + jsFiles[j] + '"></script>');
 }
 
-document.write('<style type="text/css">@import url("../../Css/viper.css");</style>');
+document.write('<style type="text/css">@import url("' + path + '/Css/viper.css");</style>');
 
 // Viper default plugins.
 var plugins    = 'ViperCopyPastePlugin|ViperCoreStylesPlugin|ViperFormatPlugin|ViperKeyboardEditorPlugin|ViperListPlugin|ViperHistoryPlugin|ViperTableEditorPlugin|ViperToolbarPlugin|ViperTrackChangesPlugin|ViperInlineToolbarPlugin|ViperLinkPlugin|ViperAccessibilityPlugin|ViperSourceViewPlugin|ViperImagePlugin|ViperSearchReplacePlugin|ViperAcronymPlugin|ViperAbbrPlugin|ViperLangPlugin';
@@ -35,10 +51,10 @@ plugins        = plugins.split('|');
 var pluginCss  = [];
 var c = 0;
 for (var j = 0; j < plugins.length; j++) {
-    document.write('<script type="text/javascript" src="../../Plugins/' + plugins[j] + '/' + plugins[j] + '.js"></script>');
+    document.write('<script type="text/javascript" src="' + path + 'Plugins/' + plugins[j] + '/' + plugins[j] + '.js"></script>');
     pluginCss.push(plugins[j] + '/' + plugins[j] + '.css');
     if ((plugins.length - 1) === j || (j !== 0 && (j % 30) === 0)) {
-        document.write('<style type="text/css">@import url("../../Plugins/' + pluginCss.join('");\n@import url("../../Plugins/') + '");</style>');
+        document.write('<style type="text/css">@import url("' + path + 'Plugins/' + pluginCss.join('");\n@import url("' + path + '/Plugins/') + '");</style>');
         pluginCss = [];
     }
 }
