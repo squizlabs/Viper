@@ -101,8 +101,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
             $this->reloadPage();
         } else {
             $this->selectBrowser(self::$_browser);
-            $this->reloadPage();
-           // $this->goToURL($dest);
+            $this->goToURL($dest);
             self::$_testRun = TRUE;
         }
 
@@ -359,6 +358,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         $this->type($js);
         $this->keyDown('Key.TAB');
         $this->keyDown('Key.ENTER');
+        sleep(1);
         $this->keyDown($this->_getAccessKeys('r'));
         $this->keyDown('Key.CMD + a');
         $this->keyDown('Key.CMD + c');
@@ -421,7 +421,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
     protected function reloadPage()
     {
         $this->keyDown('Key.CMD + r');
-        $this->wait(1);
+        sleep(1);
 
     }//end reloadPage()
 
@@ -438,8 +438,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         $this->keyDown('Key.CMD+l');
         $this->type($url);
         $this->keyDown('Key.ENTER');
-
-        $this->wait(1);
+        sleep(1);
 
     }//end goToURL()
 
