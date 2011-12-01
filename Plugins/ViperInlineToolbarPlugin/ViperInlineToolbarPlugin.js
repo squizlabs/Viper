@@ -521,8 +521,19 @@ ViperInlineToolbarPlugin.prototype = {
         dfx.removeClass(this._toolbar, 'calcWidth');
         dfx.setStyle(this._toolbar, 'width', toolbarWidth + 'px');
 
+        var windowDim = dfx.getWindowDimensions();
+
         if (verticalOnly !== true) {
             var left = ((rangeCoords.left + ((rangeCoords.right - rangeCoords.left) / 2) + scrollCoords.x) - (toolbarWidth / 2));
+            dfx.removeClass(this._toolbar, 'orientationLeft orientationRight');
+            if (left < 0) {
+                left += (toolbarWidth / 2);
+                dfx.addClass(this._toolbar, 'orientationLeft');
+            } else if (left + toolbarWidth > windowDim.width) {
+                left -= (toolbarWidth / 2);
+                dfx.addClass(this._toolbar, 'orientationRight');
+            }
+
             dfx.setStyle(this._toolbar, 'left', left + 'px');
         }
 

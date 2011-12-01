@@ -122,6 +122,23 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
     }//end tearDown()
 
 
+    /**
+     * Returns the name of the current browser.
+     *
+     * @return string
+     */
+    protected function getBrowserName()
+    {
+        return self::$_browser;
+
+    }//end getBrowserName()
+
+
+    /**
+     * Returns the region of the browser window.
+     *
+     * @return string
+     */
     protected function getBrowserWindow()
     {
         return self::$_window;
@@ -255,7 +272,11 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
     protected function inlineToolbarButtonExists($buttonIcon)
     {
         $toolbar = $this->getInlineToolbar();
-        return $this->exists($buttonIcon, $toolbar);
+
+        $pattern = $this->createPattern($buttonIcon);
+        $pattern = $this->similar($pattern, 0.98);
+
+        return $this->exists($pattern, $toolbar);
 
     }//end inlineToolbarButtonExists()
 
@@ -270,7 +291,11 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
     protected function topToolbarButtonExists($buttonIcon)
     {
         $toolbar = $this->getTopToolbar();
-        return $this->exists($buttonIcon, $toolbar);
+
+        $pattern = $this->createPattern($buttonIcon);
+        $pattern = $this->similar($pattern, 0.98);
+
+        return $this->exists($pattern, $toolbar);
 
     }//end inlineToolbarButtonExists()
 

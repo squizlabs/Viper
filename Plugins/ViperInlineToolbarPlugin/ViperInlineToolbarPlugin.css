@@ -39,6 +39,24 @@
     border: 12px solid transparent;
 }
 
+.ViperITP.orientationLeft {
+    margin-left: -15px;
+}
+
+.ViperITP.orientationRight {
+    margin-left: 12px;
+}
+
+.ViperITP.orientationLeft:before {
+    left: 0;
+    margin-left: 3px;
+}
+
+.ViperITP.orientationRight:before {
+    left: 100%;
+    margin-left: -25px;
+}
+
 .ViperITP.compact:before {
     border-width: 6px;
     margin-top: -12px;

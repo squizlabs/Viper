@@ -5,6 +5,12 @@ require_once 'AbstractViperUnitTest.php';
 class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarUnitTest extends AbstractViperUnitTest
 {
 
+
+    /**
+     * Returns the match variable for the toolbar arrow.
+     *
+     * @return string
+     */
     private function _getToolbarArrow()
     {
         $toolbarPattern = $this->createPattern(dirname(__FILE__).'/Images/arrow_up.png');
@@ -13,18 +19,24 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarUnitTest extends Abstrac
         $toolbar = $this->find($toolbarPattern);
         return $toolbar;
 
-    }//end
+    }//end _getToolbarArrow()
 
+
+    /**
+     * Returns the center location of the toolbar arrow.
+     *
+     * @return string
+     */
     private function _getToolbarArrowLocation()
     {
         $loc = $this->getCenter($this->_getToolbarArrow());
         return $loc;
 
-    }//end
+    }//end _getToolbarArrowLocation()
 
 
     /**
-     * Test for inline toolbar.
+     * Test that VITP is not shown when page is loaded.
      *
      * @return void
      */
@@ -42,7 +54,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarUnitTest extends Abstrac
 
 
     /**
-     * Test for inline toolbar.
+     * Test that VITP is positioned correctly for a simple word selection.
      *
      * @return void
      */
@@ -65,7 +77,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarUnitTest extends Abstrac
 
 
     /**
-     * Test for inline toolbar.
+     * Test that VITP is positioned correctly for a paragraph selection.
      *
      * @return void
      */
@@ -85,19 +97,19 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarUnitTest extends Abstrac
 
 
     /**
-     * Test for inline toolbar.
+     * Test that VITP is positioned correctly for multiple paragraph selection.
      *
      * @return void
      */
     public function testMultiParagraphSelectionPosition()
     {
         $start = $this->find('Lorem');
-        $end = $this->find('consectetur');
+        $end   = $this->find('consectetur');
         $this->selectText('Lorem', 'consectetur');
 
         $leftX  = $this->getX($this->getTopLeft($start));
         $rightX = $this->getX($this->getTopRight($end));
-        $center = $leftX + (($rightX - $leftX) / 2);
+        $center = ($leftX + (($rightX - $leftX) / 2));
 
         $wordY    = $this->getY($this->getBottomLeft($end));
         $toolbarY = $this->getY($this->getTopLeft($this->_getToolbarArrow()));
@@ -110,7 +122,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarUnitTest extends Abstrac
 
 
     /**
-     * Test for inline toolbar.
+     * Test that VITP is removed when mouse is clicked in content.
      *
      * @return void
      */
@@ -133,7 +145,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarUnitTest extends Abstrac
 
 
     /**
-     * Test for inline toolbar.
+     * Test that VITP is hidden when caret is moved using keyboard.
      *
      * @return void
      */
@@ -155,7 +167,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarUnitTest extends Abstrac
 
 
     /**
-     * Test for inline toolbar.
+     * Test that VITP lineage is correct when there is only one parent and a selection.
      *
      * @return void
      */
@@ -170,7 +182,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarUnitTest extends Abstrac
 
 
     /**
-     * Test for inline toolbar.
+     * Test that VITP lineage is correct when there are more than one parent in same paragraph.
      *
      * @return void
      */
@@ -181,11 +193,11 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarUnitTest extends Abstrac
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Bold</li><li class="ViperITP-lineageItem selected">Selection</li>', $lineage);
 
-    }//end testMultiParentSameParagraph()
+    }//end testLineageMultiParentSameParagraph()
 
 
     /**
-     * Test for inline toolbar.
+     * Test that VITP lineage is correct when a whole node is selected, e.g. not show 'Selection'.
      *
      * @return void
      */
@@ -200,7 +212,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarUnitTest extends Abstrac
 
 
     /**
-     * Test for inline toolbar.
+     * Test that VITP lineage is correct when multiple parents are selected in the same paragraph.
      *
      * @return void
      */
@@ -215,7 +227,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarUnitTest extends Abstrac
 
 
     /**
-     * Test for inline toolbar.
+     * Test that VITP lineage is correct when multiple parents are selected in different paragraphs.
      *
      * @return void
      */
@@ -230,7 +242,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarUnitTest extends Abstrac
 
 
     /**
-     * Test for inline toolbar.
+     * Test that VITP does not close when mouse is clicked on it.
      *
      * @return void
      */

@@ -41,7 +41,13 @@
                 viper.getPluginManager().usePluginSet('all');
                 viper.setEditableElement(contentElement);
 
-                dfx.getId('jsRes').value = '';
+                var jsRes = dfx.getId('jsRes');
+                jsRes.value = '';
+                dfx.addEvent(jsRes, 'copy', function() {
+                    setTimeout(function() {
+                        viper.focus();
+                    }, 100);
+                });
 
                 var jsExec   = dfx.getId('jsExec');
                 jsExec.value = '';

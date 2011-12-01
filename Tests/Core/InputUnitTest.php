@@ -7,7 +7,7 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
 
 
     /**
-     * Unit Test for Viper.
+     * Test that typing standard characters work.
      *
      * @return void
      */
@@ -15,15 +15,24 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
     {
         $text = $this->selectText('Lorem');
         $this->keyDown('Key.DELETE');
-        $this->type('Testing input');
 
-        $this->assertHTMLMatch('<p>Testing input</p><p>EIB MOZ</p>');
+        $chars  = '`1234567890-=qwertyuiop[]asdfghjkl;zxcvbnm,.';
+        $chars .= 'QWERTYUIOPASDFGHJKLZXCVBNM';
+        $chars .= '~!@#$%^&*()_+{}|:"<>?   . ';
 
-    }//end testNoToolbarAtStart()
+        $this->type($chars);
+
+        $expected  = '`1234567890-=qwertyuiop[]asdfghjkl;zxcvbnm,.';
+        $expected .= 'QWERTYUIOPASDFGHJKLZXCVBNM';
+        $expected .= '~!@#$%^&amp;*()_+{}|:"&lt;&gt;?   . ';
+
+        $this->assertHTMLMatch('<p>'.$expected.'</p><p>EIB MOZ</p>');
+
+    }//end testTextType()
 
 
     /**
-     * Unit Test for Viper.
+     * Test that typing replaces the selected text.
      *
      * @return void
      */
@@ -39,7 +48,7 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
 
 
     /**
-     * Unit Test for Viper.
+     * Test that using UP, DOWN, RIGHT, and LEFT arrows move caret correctly.
      *
      * @return void
      */
@@ -82,7 +91,7 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
 
 
     /**
-     * Unit Test for Viper.
+     * Test that removing characters using BACKSPACE works.
      *
      * @return void
      */
@@ -107,7 +116,7 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
 
 
     /**
-     * Unit Test for Viper.
+     * Test that removing characters using DELETE works.
      *
      * @return void
      */
@@ -132,11 +141,11 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
 
         $this->assertHTMLMatch('<p>IB MOZ</p>');
 
-    }//end testBackspace()
+    }//end testDelete()
 
 
     /**
-     * Unit Test for Viper.
+     * Test that holding down SHIFT does select text.
      *
      * @return void
      */
@@ -153,7 +162,7 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
         $this->type('p');
         $this->assertHTMLMatch('<p>pp</p>');
 
-    }//end testBackspace()
+    }//end testKeyboardSelection()
 
 
 }//end class
