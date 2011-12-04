@@ -348,6 +348,22 @@ abstract class AbstractSikuliUnitTest extends PHPUnit_Framework_TestCase
 
 
     /**
+     * Creates a new Location object.
+     *
+     * @param integer $x The X position of the new location.
+     * @param integer $y The Y position of the new location.
+     *
+     * @return string
+     */
+    protected function createLocation($x, $y)
+    {
+        $var = $this->callFunc('Location', array($x, $y), NULL, TRUE);
+        return $var;
+
+    }//end createLocation()
+
+
+    /**
      * Sets the default region to use for find commands if not specified.
      *
      * @param string $region The region variable.
