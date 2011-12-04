@@ -16,7 +16,7 @@ class Viper_Tests_ViperCoreStylesPlugin_ItalicUnitTest extends AbstractViperUnit
         $this->selectText('Lorem');
 
         $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_italic.png');
-        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic_active.png'));
+        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic_active.png'), 'Toolbar button is not active');
 
         $this->assertHTMLMatch('<p><em>Lorem</em> xtn dolor</p><p>sit amet <strong>consectetur</strong></p>');
 
@@ -33,7 +33,7 @@ class Viper_Tests_ViperCoreStylesPlugin_ItalicUnitTest extends AbstractViperUnit
         $this->selectText('xtn');
 
         $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_italic.png');
-        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic_active.png'));
+        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic_active.png'), 'Toolbar button is not active');
 
         $this->assertHTMLMatch('<p>Lorem <em>xtn</em> dolor</p><p>sit amet <strong>consectetur</strong></p>');
 
@@ -50,7 +50,7 @@ class Viper_Tests_ViperCoreStylesPlugin_ItalicUnitTest extends AbstractViperUnit
         $this->selectText('dolor');
 
         $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_italic.png');
-        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic_active.png'));
+        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic_active.png'), 'Toolbar button is not active');
 
         $this->assertHTMLMatch('<p>Lorem xtn <em>dolor</em></p><p>sit amet <strong>consectetur</strong></p>');
 
@@ -70,13 +70,13 @@ class Viper_Tests_ViperCoreStylesPlugin_ItalicUnitTest extends AbstractViperUnit
 
         // Inline Toolbar icon should not be displayed.
         $this->assertFalse($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic.png'));
-        $this->assertFalse($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic_active.png'));
+        $this->assertFalse($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic_active.png'), 'Toolbar button is not active');
 
         // Click the Top Toolbar icon to make whole paragraph italic.
         $this->clickTopToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_italic.png');
 
         $this->assertHTMLMatch('<p><em>Lorem xtn dolor</em></p><p>sit amet <strong>consectetur</strong></p>');
-        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic_active.png'));
+        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic_active.png'), 'Toolbar button is not active');
 
     }//end testParagraphSelection()
 
@@ -135,9 +135,10 @@ class Viper_Tests_ViperCoreStylesPlugin_ItalicUnitTest extends AbstractViperUnit
         $this->keyDown('Key.CMD + i');
 
         $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_italic_active.png');
-        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic.png'));
 
         $this->assertHTMLMatch('<p>Lorem xtn dolor</p><p>sit amet consectetur</p>');
+
+        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic.png'));
 
     }//end testRemoveItalic()
 

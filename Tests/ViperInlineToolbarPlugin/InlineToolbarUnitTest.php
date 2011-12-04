@@ -11,9 +11,14 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarUnitTest extends Abstrac
      *
      * @return string
      */
-    private function _getToolbarArrow()
+    private function _getToolbarArrow($pos=NULL)
     {
-        $toolbarPattern = $this->createPattern(dirname(__FILE__).'/Images/arrow_up.png');
+        $img = 'arrow_up';
+        if ($pos !== NULL) {
+            $img .= '_'.$pos;
+        }
+
+        $toolbarPattern = $this->createPattern(dirname(__FILE__).'/Images/'.$img.'.png');
         $toolbarPattern = $this->similar($toolbarPattern, 0.90);
 
         $toolbar = $this->find($toolbarPattern);
@@ -27,9 +32,9 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarUnitTest extends Abstrac
      *
      * @return string
      */
-    private function _getToolbarArrowLocation()
+    private function _getToolbarArrowLocation($pos=NULL)
     {
-        $loc = $this->getCenter($this->_getToolbarArrow());
+        $loc = $this->getCenter($this->_getToolbarArrow($pos));
         return $loc;
 
     }//end _getToolbarArrowLocation()
@@ -255,6 +260,64 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarUnitTest extends Abstrac
         $this->getInlineToolbar();
 
     }//end testClickOnToolbarNotHideToolbar()
+
+
+    /**
+     * Test that VITP does not close when mouse is clicked on it.
+     *
+     * @return void
+     */
+    public function testPositionOrientationLeft()
+    {
+        $this->resizeWindow(1100, 800);
+
+        $word = $this->find('Lorem');
+        $this->selectText('Lorem');
+
+        $wordX    = $this->getX($this->getCenter($word));
+        $toolbarX = $this->getX($this->_getToolbarArrowLocation());
+        $this->assertTrue(($wordX + 2 > $toolbarX) || ($wordX - 2 < $toolbarX), 'X Position of toolbar arrow is incorrect.');
+
+        $wordY    = $this->getY($this->getBottomLeft($word));
+        $toolbarY = $this->getY($this->getTopLeft($this->_getToolbarArrow()));
+        $this->assertTrue(($wordY + 10 < $toolbarY) && ($wordY + 15 > $toolbarY), 'Y Position of toolbar arrow is incorrect.');
+
+        try {
+            $this->find(dirname(__FILE__).'/Images/toolbarLeft.png', NULL, 0.83);
+        } catch (Exception $e) {
+            $this->fail('Left side of the toolbar is off screen');
+        }
+
+    }//end testPositionOrientationLeft()
+
+
+    /**
+     * Test that VITP does not close when mouse is clicked on it.
+     *
+     * @return void
+     */
+    public function testPositionOrientationRight()
+    {
+        $this->resizeWindow(1100, 800);
+
+        $word = $this->find('GUX');
+        $this->selectText('GUX');
+
+        $wordX    = $this->getX($this->getCenter($word));
+        $toolbarX = $this->getX($this->_getToolbarArrowLocation('right'));
+        $this->assertTrue(($wordX + 2 > $toolbarX) || ($wordX - 2 < $toolbarX), 'X Position of toolbar arrow is incorrect.');
+
+        $wordY    = $this->getY($this->getBottomLeft($word));
+        $toolbarY = $this->getY($this->getTopLeft($this->_getToolbarArrow('right')));
+        $this->assertTrue(($wordY + 10 < $toolbarY) && ($wordY + 15 > $toolbarY), 'Y Position of toolbar arrow is incorrect.');
+
+        try {
+            $this->find(dirname(__FILE__).'/Images/toolbarRight.png', NULL, 0.83);
+        } catch (Exception $e) {
+            $this->fail('Right side of the toolbar is off screen');
+        }
+
+    }//end testPositionOrientationRight()
 
 
 }//end class
