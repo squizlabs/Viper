@@ -29,10 +29,32 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      */
     private static $_testRun = FALSE;
 
+    /**
+     * Name of the browser that the tests are running on.
+     *
+     * @var string
+     */
     private static $_browser = NULL;
 
+    /**
+     * The browser's window object.
+     *
+     * @var string
+     */
     private static $_window = NULL;
 
+    /**
+     * Size of the browser window.
+     *
+     * @var array
+     */
+    private static $_windowSize = NULL;
+
+    /**
+     * Region object of the Viper Top toolbar.
+     *
+     * @var string
+     */
     private static $_topToolbar = NULL;
 
 
@@ -40,6 +62,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      * Setup test.
      *
      * @return void
+     * @throws Exception If browser is invalud.
      */
     protected function setUp()
     {
@@ -51,7 +74,6 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
             }
 
             self::$_browser = $browser;
-
         }//end if
 
         // Create a new Sikuli connection if its not connected already.
@@ -74,7 +96,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
                 break;
             } else if (count($paths) > 0) {
                 // Check for HTML file that has the same name as the directory.
-                $filePath = $baseDir.'/'.implode('/', $paths).'/'.$paths[count($paths) - 1].'.html';
+                $filePath = $baseDir.'/'.implode('/', $paths).'/'.$paths[(count($paths) - 1)].'.html';
                 if (file_exists($filePath) === TRUE) {
                     $testFileContent = trim(file_get_contents($filePath));
                     break;
@@ -96,11 +118,13 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
 
         // Change browser and then change the URL.
         if (self::$_testRun === TRUE) {
+            $this->resizeWindow(1300, 800);
             $this->setDefaultRegion(self::$_window);
             // URL is already changed to the test runner, so just reload.
             $this->reloadPage();
         } else {
             $this->selectBrowser(self::$_browser);
+            $this->resizeWindow(1300, 800);
             $this->goToURL($dest);
             self::$_testRun = TRUE;
         }
@@ -147,6 +171,63 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
 
 
     /**
+     * Returns the size of the browser window.
+     *
+     * @return array
+     */
+    protected function getBrowserWindowSize()
+    {
+        $w = $this->getW($this->getBrowserWindow());
+        $h = $this->getH($this->getBrowserWindow());
+
+        self::$_windowSize = array(
+                              'w' => $w,
+                              'h' => $h,
+                             );
+
+        return self::$_windowSize;
+
+    }//end getBrowserWindowSize()
+
+
+    /**
+     * Resizes the browser window.
+     *
+     * @param integer $w The width of the window.
+     * @param integer $h The height of the window.
+     *
+     * @return void
+     */
+    protected function resizeWindow($w, $h)
+    {
+        if (is_array(self::$_windowSize) === TRUE) {
+            if (self::$_windowSize['w'] === $w && self::$_windowSize['h'] === $h) {
+                return;
+            }
+        }
+
+        // Update the self::$_window object.
+        $this->selectBrowser($this->getBrowserName());
+
+        $window = $this->getBrowserWindow();
+
+        $bottomRight = $this->getBottomRight($window);
+        $newLocation = $this->createLocation(
+            ($this->getX($window) + $w),
+            ($this->getY($window) + $h)
+        );
+
+        $this->dragDrop($bottomRight, $newLocation);
+
+        // Update the self::$_window object.
+        $this->selectBrowser($this->getBrowserName());
+
+        $size = $this->getBrowserWindowSize();
+
+    }//end resizeWindow()
+
+
+    /**
      * Assert that given HTML string matches the test page's HTML.
      *
      * @param string $html The HTML string to compare.
@@ -175,6 +256,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
 
     }//end assertHasHTML()
 
+
     /**
      * Changes the active application to the specified browser.
      *
@@ -196,8 +278,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
             break;
         }
 
-        $window        = $this->callFunc('window', array($windowNum), $app, TRUE);
-        self::$_window = $window;
+        self::$_window = $this->callFunc('window', array($windowNum), $app, TRUE);
 
         $this->setDefaultRegion(self::$_window);
 
@@ -217,7 +298,8 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         $match = $this->find($toolbarPattern, self::$_window);
         $this->setX($match, ($this->getX($match) - 200));
         $this->setW($match, ($this->getW($match) + 400));
-        $this->setH($match, ($this->getH($match) + 60));
+        $this->setH($match, ($this->getH($match) + 200));
+
         return $match;
 
     }//end getInlineToolbar()
@@ -259,7 +341,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
 
         return $region;
 
-    }//end getInlineToolbar()
+    }//end getTopToolbar()
 
 
     /**
@@ -297,7 +379,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
 
         return $this->exists($pattern, $toolbar);
 
-    }//end inlineToolbarButtonExists()
+    }//end topToolbarButtonExists()
 
 
     /**
@@ -313,7 +395,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         $match   = $this->find($buttonIcon, $toolbar);
         $this->click($match);
 
-    }//end clickInlineToolbarButton()
+    }//end clickTopToolbarButton()
 
 
     /**
@@ -360,7 +442,6 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
                     $keys = 'Key.CTRL';
                 }
             break;
-
         }//end switch
 
         $keys .= ' + '.$key;
@@ -470,6 +551,8 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
 
     /**
      * Returns the HTML of the test page.
+     *
+     * @param string $selector The jQuery selector to use for finding the element.
      *
      * @return string
      */
