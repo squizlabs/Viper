@@ -80,9 +80,9 @@
             function gHtml(selector)
             {
                 if (selector) {
-                    dfx.getId('jsRes').value = dfx.getHtml(dfxjQuery(selector)[0]);
+                    return dfx.getHtml(dfxjQuery(selector)[0]);
                 } else {
-                    dfx.getId('jsRes').value = dfx.getHtml(dfx.getId('content')).replace("\n", '');
+                    return dfx.getHtml(dfx.getId('content')).replace("\n", '');
                 }
 
             }

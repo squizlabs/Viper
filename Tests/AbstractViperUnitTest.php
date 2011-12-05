@@ -477,6 +477,8 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      */
     protected function execJS($js)
     {
+        $js = 'dfx.getId("jsRes").value = '.$js;
+
         $this->keyDown($this->_getAccessKeys('j'));
         $this->type($js);
         $this->keyDown('Key.TAB');
@@ -487,6 +489,11 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         $this->keyDown('Key.CMD + c');
 
         $text = $this->getClipboard();
+
+        if (strpos($text, "u'") === 0) {
+            $text = substr($text, 2, -1);
+        }
+
         return $text;
 
     }//end execJS()
@@ -579,10 +586,6 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
             $text = $this->execJS('gHtml()');
         } else {
             $text = $this->execJS('gHtml("'.$selector.'")');
-        }
-
-        if (strpos($text, "u'") === 0) {
-            $text = substr($text, 2, -1);
         }
 
         return $text;
