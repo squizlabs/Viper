@@ -113,6 +113,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
 
         // Put the current test file contents to the main test file.
         $contents = str_replace('__TEST_CONTENT__', $testFileContent, self::$_testContent);
+        $contents = str_replace('__TEST_TITLE__', $this->getName(), $contents);
         $dest     = $baseDir.'/test_tmp.html';
         file_put_contents($dest, $contents);
 
