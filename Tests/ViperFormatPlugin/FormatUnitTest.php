@@ -175,6 +175,73 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractViperUnitTest
     }//end testHeading()
 
 
+    /**
+     * Test that creating anchor works.
+     *
+     * @return void
+     */
+    public function testCreateAnchor()
+    {
+        $dir = dirname(__FILE__).'/Images/';
+        $this->selectText('Lorem');
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_anchor.png');
+        $this->clickInlineToolbarButton($dir.'input_anchor.png');
+        $this->type('test');
+        $this->keyDown('Key.ENTER');
+
+        $this->assertHTMLMatch('<p><span id="test">Lorem</span> xtn dolor</p><p>sit amet <strong>consectetur</strong></p>');
+
+        $this->click($this->find('Lorem'));
+        $this->selectText('Lorem');
+        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_anchor_active.png'), 'Anchor icon in Top Toolbar should be active.');
+        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_anchor_active.png'), 'Anchor icon in VITP should be active');
+
+    }//end testCreateAnchor()
+
+
+    /**
+     * Test that adding class works.
+     *
+     * @return void
+     */
+    public function testAddClassAttr()
+    {
+        $dir = dirname(__FILE__).'/Images/';
+
+        $this->selectText('Lorem');
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_class.png');
+        $this->clickInlineToolbarButton($dir.'input_class.png');
+        $this->type('test');
+        $this->keyDown('Key.ENTER');
+
+        $this->assertHTMLMatch('<p><span class="test">Lorem</span> xtn dolor</p><p>sit amet <strong>consectetur</strong></p>');
+
+        $this->click($this->find('Lorem'));
+        $this->selectText('Lorem');
+        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_class_active.png'), 'Class icon in Top Toolbar should be active.');
+        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_class_active.png'), 'Class icon in VITP should be active.');
+
+    }//end testAddClassAttr()
+
+
+    /**
+     * Test that selecting text does not show formatting icons in VITP.
+     *
+     * @return void
+     */
+    public function testMultiParentNoOpts()
+    {
+        $this->selectText('amet', 'consectetur');
+
+        $dir = dirname(__FILE__).'/Images/';
+        $this->assertFalse($this->inlineToolbarButtonExists($dir.'toolbarIcon_heading.png'), 'VITP Heading icon should not be available for text selection');
+        $this->assertFalse($this->inlineToolbarButtonExists($dir.'toolbarIcon_div.png'), 'VITP format icons should not be available for text selection');
+        $this->assertFalse($this->inlineToolbarButtonExists($dir.'toolbarIcon_class.png'), 'Class icon in VITP should not be active.');
+        $this->assertFalse($this->inlineToolbarButtonExists($dir.'toolbarIcon_anchor.png'), 'Anchor icon in VITP should not be active.');
+
+    }//end testMultiParentNoOpts()
+
+
 }//end class
 
 ?>
