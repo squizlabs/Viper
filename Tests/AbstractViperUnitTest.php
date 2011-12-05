@@ -147,6 +147,22 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
 
 
     /**
+     * Cleans up after all tests are completed.
+     *
+     * @return void
+     */
+    public static function tearDownAfterClass()
+    {
+        $path = dirname(__FILE__).'/test_tmp.html';
+        if (file_exists($path) === TRUE) {
+            // Remove the tmp file.
+            unlink($path);
+        }
+
+    }//end tearDownAfterClass()
+
+
+    /**
      * Returns the name of the current browser.
      *
      * @return string
