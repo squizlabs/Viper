@@ -1979,6 +1979,9 @@ ViperTableEditorPlugin.prototype = {
             ViperSelection.addRange(range);
         }
 
+        this.viper.fireSelectionChanged();
+        this.viper.fireNodesChanged([table]);
+
     },
 
     isPluginElement: function(elem)
