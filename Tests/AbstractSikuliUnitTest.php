@@ -176,6 +176,20 @@ abstract class AbstractSikuliUnitTest extends PHPUnit_Framework_TestCase
 
 
     /**
+     * Move the mouse pointer to a location indicated by PSRML.
+     *
+     * @param string $psmrl A Pattern, String, Match, Region or Location.
+     *
+     * @return void
+     */
+    protected function mouseMove($psmrl)
+    {
+        $this->callFunc('mouseMove', array($psmrl));
+
+    }//end mouseMove()
+
+
+    /**
      * Returns a valid Sikuli key combination string.
      *
      * @param string $keysStr Keys combination.
