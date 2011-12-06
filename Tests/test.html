@@ -34,6 +34,13 @@
             font-weight: bold;
             padding: 5px 0;
         }
+
+        #windowTarget {
+            position: fixed;
+            left: 0;
+            top: 0;
+            z-index: 999999;
+        }
         </style>
 
         <script type="text/javascript" src="../DfxJSLib/dfx.js"></script>
@@ -93,6 +100,9 @@
                 dfx.getId('jsRes').value  = '';
                 dfx.getId('jsExec').value = '';
 
+                val  = 'var jsResult = ' + val + ';';
+                val += 'dfx.getId("jsRes").value = dfx.jsonEncode(jsResult);';
+
                 // Execute JS.
                 eval(val);
 
@@ -100,6 +110,7 @@
         </script>
     </head>
     <body spellcheck="false">
+        <img id="windowTarget" src="./Core/Images/window-target.png"/>
         <div id="content">__TEST_CONTENT__</div>
         <div id="menu">
             <textarea id="jsExec" accesskey="J"></textarea>

@@ -245,6 +245,81 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
 
 
     /**
+     * Returns the location of the page relative to the screen.
+     *
+     * @return array
+     */
+    protected function getPageTopLeft()
+    {
+        $targetIcon = $this->find(dirname(__FILE__).'/Core/Images/window-target.png');
+        $topLeft    = $this->getTopLeft($targetIcon);
+        $loc        = array(
+                       'x' => $this->getX($topLeft),
+                       'y' => $this->getY($topLeft),
+                      );
+
+        return $loc;
+
+    }//end getPageTopLeft()
+
+
+    /**
+     * Returns a new Region object relative to the top left of the test page.
+     *
+     * @param array $rect The rectangle (x1, y1, x2, y2).
+     *
+     * @return string
+     */
+    protected function getRegionOnPage(array $rect)
+    {
+        $pageLoc = $this->getPageTopLeft();
+
+        $x = ($pageLoc['x'] + $rect['x1']);
+        $y = ($pageLoc['y'] + $rect['y1']);
+        $w = ($rect['x2'] - $rect['x1']);
+        $h = ($rect['y2'] - $rect['y1']);
+
+        $region = $this->createRegion($x, $y, $w, $h);
+        return $region;
+
+    }//end getRegionOnPage()
+
+
+    /**
+     * Returns the X position of given location relative to the page.
+     *
+     * @param string $loc The location variable.
+     *
+     * @return integer
+     */
+    protected function getPageX($loc)
+    {
+        $pageLoc = $this->getPageTopLeft();
+        $x       = ($this->getX($loc) - $pageLoc['x']);
+
+        return $x;
+
+    }//end getPageX()
+
+
+    /**
+     * Returns the Y position of given location relative to the page.
+     *
+     * @param string $loc The location variable.
+     *
+     * @return integer
+     */
+    protected function getPageY($loc)
+    {
+        $pageLoc = $this->getPageTopLeft();
+        $y       = ($this->getY($loc) - $pageLoc['y']);
+
+        return $y;
+
+    }//end getPageY()
+
+
+    /**
      * Assert that given HTML string matches the test page's HTML.
      *
      * @param string $html The HTML string to compare.
@@ -477,8 +552,6 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      */
     protected function execJS($js)
     {
-        $js = 'dfx.getId("jsRes").value = '.$js;
-
         $this->keyDown($this->_getAccessKeys('j'));
         $this->type($js);
         $this->keyDown('Key.TAB');
@@ -489,10 +562,11 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         $this->keyDown('Key.CMD + c');
 
         $text = $this->getClipboard();
-
         if (strpos($text, "u'") === 0) {
             $text = substr($text, 2, -1);
         }
+
+        $text = json_decode($text, TRUE);
 
         return $text;
 
@@ -591,6 +665,21 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         return $text;
 
     }//end getHtml()
+
+
+    /**
+     * Returns the rectangle for a DOM element found using the specified selector.
+     *
+     * @param string $selector The jQuery selector to use for finding the element.
+     *
+     * @return array
+     */
+    protected function getBoundingRectangle($selector)
+    {
+        $rect = $this->execJS('dfx.getBoundingRectangle(dfxjQuery("'.$selector.'")[0])');
+        return $rect;
+
+    }//end getBoundingRectangle()
 
 
 }//end class
