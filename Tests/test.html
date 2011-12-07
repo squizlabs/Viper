@@ -84,16 +84,22 @@
                 //});
             });
 
+            /**
+             * Returns the HTML contents of the specified element.
+             */
             function gHtml(selector)
             {
                 if (selector) {
-                    return dfx.getHtml(dfxjQuery(selector)[0]);
+                    return dfx.getHtml(dfxjQuery(selector)[0]).replace("\n", '');
                 } else {
                     return dfx.getHtml(dfx.getId('content')).replace("\n", '');
                 }
 
             }
 
+            /**
+             * Executes the JS string set as the value of jsExec textarea.
+             */
             function execJS()
             {
                 var val = dfx.getId('jsExec').value;
@@ -107,6 +113,50 @@
                 eval(val);
 
             }
+
+            /**
+             * Returns the bounding rectangle values of the specified element.
+             */
+            function gBRec(selector, index)
+            {
+                return dfx.getBoundingRectangle(dfxjQuery(selector)[index]);
+
+            }
+
+            /**
+             * Returns the specified table's structure.
+             */
+            function gTS(index)
+            {
+                var struct = {
+                    rows: []
+                };
+
+                var table = dfx.getTag('table')[0];
+                var rows  = dfx.getTag('tr', table);
+                for (var i = 0; i < rows.length; i++) {
+                    var row   = rows[i];
+                    var cells = dfx.getTag('td', row);
+
+                    var rowInfo = {
+                        cells: []
+                    };
+
+                    for (var j = 0; j < cells.length; j++) {
+                        var cell = cells[j];
+                        rowInfo.cells.push({
+                            rowspan: cell.getAttribute('rowspan') || 0,
+                            colspan: cell.getAttribute('colspan') || 0,
+                        });
+                    }
+
+                    struct.rows.push(rowInfo);
+                }//end for
+
+                return struct;
+
+            }
+
         </script>
     </head>
     <body spellcheck="false">
