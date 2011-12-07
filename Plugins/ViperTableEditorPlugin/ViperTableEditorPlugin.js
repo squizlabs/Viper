@@ -79,7 +79,7 @@ ViperTableEditorPlugin.prototype = {
         if (this._isiPad() === false) {
             var showToolbar = false;
             this.viper.registerCallback('Viper:mouseUp', 'ViperTableEditor', function(e) {
-                var range = self.viper.getCurrentRange();
+                var range = self.viper.getViperRange();
                 if (range.collapsed === false) {
                     self.removeHighlights();
                     self.hideCellToolsIcon();
@@ -88,11 +88,6 @@ ViperTableEditorPlugin.prototype = {
 
                 var target = dfx.getMouseEventTarget(e);
                 if (target === self._toolbar || dfx.isChildOf(target, self._toolbar) === true) {
-                    self._buttonClicked = false;
-                    return false;
-                }
-
-                if (self._buttonClicked === true) {
                     self._buttonClicked = false;
                     return false;
                 }
