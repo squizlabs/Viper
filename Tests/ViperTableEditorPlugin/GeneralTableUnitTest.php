@@ -7,21 +7,6 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
 
 
     /**
-     * Returns the full path of the specified image file name.
-     *
-     * @param string $img The image file name.
-     *
-     * @return string
-     */
-    private function _getImg($img)
-    {
-        $path = dirname(__FILE__).'/Images/'.$img;
-        return $path;
-
-    }//end _getImg()
-
-
-    /**
      * Creates a blank 3x3 table.
      *
      * @return void
@@ -29,7 +14,7 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
     private function _insertTable()
     {
         $this->selectText('IPSUM');
-        $this->clickTopToolbarButton($this->_getImg('toolbarIcon_createTable.png'));
+        $this->clickTopToolbarButton($this->getImg('toolbarIcon_createTable.png'));
 
     }//end _insertTable()
 
@@ -67,7 +52,7 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
         // Click inside the cell.
         $this->click($region);
 
-        $icon = $this->find($this->_getImg('icon_tableEditor.png'), NULL, 0.9);
+        $icon = $this->find($this->getImg('icon_tableEditor.png'), NULL, 0.9);
 
         // Check that position is correct.
         $iconX = $this->getPageX($this->getCenter($icon));
@@ -84,10 +69,10 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
         usleep(200);
 
         // Check to make sure the table editing tools appear.
-        $this->find($this->_getImg('icon_tableEditingTools.png'));
+        $this->find($this->getImg('icon_tableEditingTools.png'));
 
         // Check the highlight for table icon.
-        $this->mouseMove($this->_getImg('icon_tools_table.png'));
+        $this->mouseMove($this->getImg('icon_tools_table.png'));
         usleep(200);
 
         $highlightRect = $this->getBoundingRectangle('.ViperITP-highlight');
@@ -100,7 +85,7 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
         }
 
         // Check the highlight for row.
-        $this->mouseMove($this->_getImg('icon_tools_row.png'));
+        $this->mouseMove($this->getImg('icon_tools_row.png'));
         usleep(200);
 
         // Note that +1 or -1 is for cellpadding.
@@ -114,7 +99,7 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
         }
 
         // Check the highlight for cell.
-        $this->mouseMove($this->_getImg('icon_tools_col.png'));
+        $this->mouseMove($this->getImg('icon_tools_col.png'));
         usleep(200);
 
         $highlightRect = $this->getBoundingRectangle('.ViperITP-highlight');
@@ -127,7 +112,7 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
         }
 
         // Check the highlight for cell.
-        $this->mouseMove($this->_getImg('icon_tools_cell.png'));
+        $this->mouseMove($this->getImg('icon_tools_cell.png'));
         usleep(200);
 
         $highlightRect = $this->getBoundingRectangle('.ViperITP-highlight');
