@@ -157,6 +157,36 @@
 
             }
 
+            /**
+             * Inserts a new table.
+             */
+            function insTable(rows, cols)
+            {
+                return viper.getPluginManager().getPlugin('ViperTableEditorPlugin').insertTable(rows, cols);
+
+            }
+
+            function gTblBStatus()
+            {
+                var btns = {
+                    splitVert: false,
+                    splitHoriz: false,
+                    mergeUp: false,
+                    mergeDown: false,
+                    mergeLeft: false,
+                    mergeRight: false
+                };
+
+                for (var btn in btns) {
+                    if (dfx.hasClass(dfx.getClass(btn)[0], 'disabled') === false){
+                        btns[btn] = true;
+                    }
+                }
+
+                return btns;
+
+            }//end gTblBStatus()
+
         </script>
     </head>
     <body spellcheck="false">
