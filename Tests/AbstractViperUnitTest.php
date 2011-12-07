@@ -3,7 +3,7 @@ require_once 'AbstractSikuliUnitTest.php';
 
 
 /**
- * An abstract class that all Sikuli unit tests must extend.
+ * An abstract class that all Viper unit tests must extend.
  */
 abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
 {
@@ -674,9 +674,9 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      *
      * @return array
      */
-    protected function getBoundingRectangle($selector)
+    protected function getBoundingRectangle($selector, $index=0)
     {
-        $rect = $this->execJS('dfx.getBoundingRectangle(dfxjQuery("'.$selector.'")[0])');
+        $rect = $this->execJS('gBRec("'.$selector.'", '.$index.')');
         return $rect;
 
     }//end getBoundingRectangle()
