@@ -8,6 +8,19 @@ require_once 'AbstractViperUnitTest.php';
 abstract class AbstractViperTableEditorPluginUnitTest extends AbstractViperUnitTest
 {
 
+    /**
+     * Creates a blank 3x3 table.
+     *
+     * @return void
+     */
+    protected function insertTable($rows=3, $cols=3)
+    {
+        $this->selectText('IPSUM');
+        $this->execJS('insTable('.$rows.','.$cols.')');
+        //$this->clickTopToolbarButton($this->getImg('toolbarIcon_createTable.png'));
+
+    }//end insertTable()
+
 
     /**
      * Returns the full path of the specified image file name.

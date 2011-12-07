@@ -7,26 +7,13 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
 
 
     /**
-     * Creates a blank 3x3 table.
-     *
-     * @return void
-     */
-    private function _insertTable()
-    {
-        $this->selectText('IPSUM');
-        $this->clickTopToolbarButton($this->getImg('toolbarIcon_createTable.png'));
-
-    }//end _insertTable()
-
-
-    /**
      * Test that creating a new table works.
      *
      * @return void
      */
     public function testCreateTable()
     {
-        $this->_insertTable();
+        $this->insertTable();
 
         $this->assertHTMLMatch('<p>Lorem </p><table style="width: 300px; " border="1"><tbody><tr><td style="width: 100px; ">&nbsp;</td><td style="width: 100px; ">&nbsp;</td><td style="width: 100px; ">&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p> dolor</p><p>sit amet <strong>consectetur</strong></p>');
 
@@ -40,7 +27,7 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
      */
     public function testTableEditingIconAndTools()
     {
-        $this->_insertTable();
+        $this->insertTable();
 
         // Get the first cell of the table.
         $tableRect = $this->getBoundingRectangle('table');
