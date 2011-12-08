@@ -1,39 +1,9 @@
 <?php
 
-require_once 'AbstractViperUnitTest.php';
+require_once 'AbstractViperTableEditorPluginUnitTest.php';
 
-class Viper_Tests_ViperTableEditorPlugin_MergAndSplitUnitTest extends AbstractViperTableEditorPluginUnitTest
+class Viper_Tests_ViperTableEditorPlugin_MergeAndSplitUnitTest extends AbstractViperTableEditorPluginUnitTest
 {
-
-
-    protected function assertIconStatusesCorrect(
-        $splitVert,
-        $splitHoriz,
-        $mergeUp,
-        $mergeDown,
-        $mergeLeft,
-        $mergeRight
-    ) {
-        $icons = array(
-                  'splitV',
-                  'splitH',
-                  'mergeUp',
-                  'mergeDown',
-                  'mergeLeft',
-                  'mergeRight',
-                 );
-
-        $statuses = $this->execJS('gTblBStatus()');
-
-        foreach ($statuses as $btn => $status) {
-            if ($status === TRUE && $$btn === FALSE) {
-                $this->fail('Expected '.$btn.' button to be disabled.');
-            } else if ($status === FALSE && $$btn === TRUE) {
-                $this->fail('Expected '.$btn.' button to be enabled.');
-            }
-        }
-
-    }
 
 
     /**

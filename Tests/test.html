@@ -126,7 +126,7 @@
             /**
              * Returns the specified table's structure.
              */
-            function gTS(index)
+            function gTS(index, incContent)
             {
                 var struct = {
                     rows: []
@@ -144,11 +144,17 @@
 
                     for (var j = 0; j < cells.length; j++) {
                         var cell = cells[j];
-                        rowInfo.cells.push({
+                        var cellInfo = {
                             rowspan: cell.getAttribute('rowspan') || 0,
                             colspan: cell.getAttribute('colspan') || 0,
                             heading: dfx.isTag(cell, 'th')
-                        });
+                        };
+
+                        if (incContent) {
+                            cellInfo.content = dfx.getHtml(cell);
+                        }
+
+                        rowInfo.cells.push(cellInfo);
                     }
 
                     struct.rows.push(rowInfo);

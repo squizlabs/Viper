@@ -90,9 +90,9 @@ abstract class AbstractViperTableEditorPluginUnitTest extends AbstractViperUnitT
      *
      * @return array
      */
-    protected function getTableStructure($index=0)
+    protected function getTableStructure($index=0, $incContent=FALSE)
     {
-        return $this->execJS('gTS('.$index.')');
+        return $this->execJS('gTS('.$index.', '.$incContent.')');
 
     }//end getTableStructure()
 
@@ -156,10 +156,58 @@ abstract class AbstractViperTableEditorPluginUnitTest extends AbstractViperUnitT
                     $this->fail('Expected ['.$r.', '.$c.'] to be a normal cell but it was a heading cell');
                 }
 
+                if (isset($cell['content']) === TRUE
+                    || isset($expected[$r][$c]['content']) === TRUE
+                ) {
+                    $this->assertEquals($expected[$r][$c]['content'], $cell['content'], 'Content of cell ['.$c.', '.$c.'] did not match');
+                }
+
             }//end foreach
         }//end foreach
 
     }//end assertTableStructure()
+
+
+    /**
+     * Checks that the icon statuses are correct.
+     *
+     * @param boolean $splitVert  The status of the split vertical button.
+     * @param boolean $splitHoriz The status of the split horizontal button.
+     * @param boolean $mergeUp    The status of the merge up button.
+     * @param boolean $mergeDown  The status of the merge down button.
+     * @param boolean $mergeLeft  The status of the merge left button.
+     * @param boolean $mergeRight The status of the merge right button.
+     *
+     * @return void
+     */
+    protected function assertIconStatusesCorrect(
+        $splitVert,
+        $splitHoriz,
+        $mergeUp,
+        $mergeDown,
+        $mergeLeft,
+        $mergeRight
+    ) {
+        $icons = array(
+                  'splitV',
+                  'splitH',
+                  'mergeUp',
+                  'mergeDown',
+                  'mergeLeft',
+                  'mergeRight',
+                 );
+
+        $statuses = $this->execJS('gTblBStatus()');
+
+        foreach ($statuses as $btn => $status) {
+            if ($status === TRUE && $$btn === FALSE) {
+                $this->fail('Expected '.$btn.' button to be disabled.');
+            } else if ($status === FALSE && $$btn === TRUE) {
+                $this->fail('Expected '.$btn.' button to be enabled.');
+            }
+        }
+
+    }//end assertIconStatusesCorrect()
 
 
 }//end class

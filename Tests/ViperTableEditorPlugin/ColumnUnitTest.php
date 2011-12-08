@@ -1,6 +1,6 @@
 <?php
 
-require_once 'AbstractViperUnitTest.php';
+require_once 'AbstractViperTableEditorPluginUnitTest.php';
 
 class Viper_Tests_ViperTableEditorPlugin_ColumnUnitTest extends AbstractViperTableEditorPluginUnitTest
 {
