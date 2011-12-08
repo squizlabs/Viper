@@ -46,7 +46,7 @@ abstract class AbstractViperTableEditorPluginUnitTest extends AbstractViperUnitT
      */
     protected function clickCell($cellNum)
     {
-        $cellRect = $this->getBoundingRectangle('td', $cellNum);
+        $cellRect = $this->getBoundingRectangle('td,th', $cellNum);
         $region   = $this->getRegionOnPage($cellRect);
 
         // Click inside the cell.
@@ -143,6 +143,19 @@ abstract class AbstractViperTableEditorPluginUnitTest extends AbstractViperUnitT
                 } else if (isset($expected[$r][$c]['colspan']) === TRUE) {
                     $this->fail('Expected colspan='.$expected[$r][$c]['colspan'].' but found colspan=1 on ['.$r.', '.$c.']');
                 }
+
+                if (isset($cell['heading']) === FALSE
+                    && isset($expected[$r][$c]['heading']) === TRUE
+                    && $expected[$r][$c]['heading'] === TRUE
+                ) {
+                    $this->fail('Expected ['.$r.', '.$c.'] to be a heading cell');
+                } else if (isset($cell['heading']) === TRUE
+                    && $cell['heading'] === TRUE
+                    && isset($expected[$r][$c]['heading']) === FALSE
+                ) {
+                    $this->fail('Expected ['.$r.', '.$c.'] to be a normal cell but it was a heading cell');
+                }
+
             }//end foreach
         }//end foreach
 

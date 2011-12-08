@@ -376,6 +376,112 @@ class Viper_Tests_ViperTableEditorPlugin_MergAndSplitUnitTest extends AbstractVi
     }//end testMergeSplit3()
 
 
+    /**
+     * Test that merging and splitting cells work.
+     *
+     * @return void
+     */
+    public function testMergeSplit4()
+    {
+        $this->insertTable(2, 3);
+        sleep(1);
+
+        $this->showTools(0, 'cell');
+        $heading = $this->find('Heading');
+        $this->click($heading);
+        usleep(100);
+        $this->click($heading);
+        usleep(100);
+        $this->click($heading);
+
+        $this->click($this->find($this->getImg('icon_mergeSplit.png'), NULL, 0.83));
+        $this->click($this->find($this->getImg('icon_mergeRight.png'), NULL, 0.83));
+        $expected = array(
+                     array(
+                      array(
+                       'heading' => TRUE,
+                       'colspan' => 2,
+                      ),
+                      array(),
+                     ),
+                     array(array(), array(), array()),
+                    );
+        $struct = $this->getTableStructure();
+        $this->assertTableStructure($expected, $struct);
+        sleep(1);
+
+        $this->click($this->find($this->getImg('icon_splitVert.png'), NULL, 0.83));
+        $expected = array(
+                     array(
+                      array(
+                       'heading' => TRUE,
+                      ),
+                      array(
+                       'heading' => TRUE,
+                      ),
+                      array(),
+                     ),
+                     array(array(), array(), array()),
+                    );
+        $struct = $this->getTableStructure();
+        $this->assertTableStructure($expected, $struct);
+        sleep(1);
+
+        $this->showTools(0, 'cell');
+        $this->click($this->find($this->getImg('icon_mergeSplit.png'), NULL, 0.83));
+        $this->click($this->find($this->getImg('icon_mergeDown.png'), NULL, 0.83));
+        $expected = array(
+                     array(
+                      array(
+                       'heading' => TRUE,
+                       'rowspan' => 2,
+                      ),
+                      array('heading' => TRUE),
+                      array(),
+                     ),
+                     array(array(), array()),
+                    );
+        $struct = $this->getTableStructure();
+        $this->assertTableStructure($expected, $struct);
+        sleep(1);
+
+        $this->showTools(0, 'cell');
+        $this->click($this->find($this->getImg('icon_mergeSplit.png'), NULL, 0.83));
+        $this->click($this->find($this->getImg('icon_splitHoriz.png'), NULL, 0.83));
+        $expected = array(
+                     array(
+                      array(
+                       'heading' => TRUE,
+                      ),
+                      array(
+                       'heading' => TRUE,
+                      ),
+                      array(),
+                     ),
+                     array(array('heading' => TRUE), array(), array()),
+                    );
+        $struct = $this->getTableStructure();
+        $this->assertTableStructure($expected, $struct);
+        sleep(1);
+
+        $this->showTools(0, 'cell');
+        $this->click($heading);
+        $expected = array(
+                     array(
+                      array(),
+                      array(
+                       'heading' => TRUE,
+                      ),
+                      array(),
+                     ),
+                     array(array('heading' => TRUE), array(), array()),
+                    );
+        $struct = $this->getTableStructure();
+        $this->assertTableStructure($expected, $struct);
+
+    }//end testMergeSplit4()
+
+
 }//end class
 
 ?>
