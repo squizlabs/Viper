@@ -312,8 +312,16 @@ abstract class AbstractSikuliUnitTest extends PHPUnit_Framework_TestCase
      */
     protected function type($text, $modifiers=NULL, $psmrl=NULL)
     {
+        $retval    = NULL;
         $modifiers = $this->_extractKeys($modifiers);
-        return $this->callFunc('type', array($psmrl, $text, $modifiers));
+        if (is_numeric($text) === TRUE) {
+            $text   = "'".$text."'";
+            $retval = $this->callFunc('type', array($psmrl, $text, $modifiers, '_noQuotes' => TRUE));
+        } else {
+            $retval = $this->callFunc('type', array($psmrl, $text, $modifiers));
+        }
+
+        return $retval;
 
     }//end type()
 
