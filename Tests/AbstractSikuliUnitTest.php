@@ -623,6 +623,7 @@ abstract class AbstractSikuliUnitTest extends PHPUnit_Framework_TestCase
     protected function setLocation($locObj, $x, $y)
     {
         $loc = $this->callFunc('setLocation', array($x, $y), $locObj);
+        return $loc;
 
     }//end setLocation()
 

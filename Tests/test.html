@@ -87,10 +87,11 @@
             /**
              * Returns the HTML contents of the specified element.
              */
-            function gHtml(selector)
+            function gHtml(selector, index)
             {
+                index = index || 0;
                 if (selector) {
-                    return dfx.getHtml(dfxjQuery(selector)[0]).replace("\n", '');
+                    return dfx.getHtml(dfxjQuery(selector)[index]).replace("\n", '');
                 } else {
                     return dfx.getHtml(dfx.getId('content')).replace("\n", '');
                 }

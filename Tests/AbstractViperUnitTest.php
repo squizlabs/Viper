@@ -507,6 +507,22 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
 
 
     /**
+     * Clicks the lineage item in the Inline Toolbar.
+     *
+     * @param integer $index The index of the lineage item.
+     *
+     * @return void
+     */
+    protected function selectInlineToolbarLineageItem($index)
+    {
+        $rect   = $this->getBoundingRectangle('.ViperITP-lineageItem', $index);
+        $region = $this->getRegionOnPage($rect);
+        $this->click($region);
+
+    }//end selectInlineToolbarLineageItem()
+
+
+    /**
      * Returns the accesskey combination depending on OS and browser.
      *
      * @param string $key The key to include in the combination.
@@ -586,7 +602,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      */
     protected function selectText($startWord, $endWord=NULL)
     {
-        if (empty($endWord) === TRUE || $startWord === $endWord) {
+        if (empty($endWord) === TRUE) {
             $ipsum = $this->find($startWord, $this->getBrowserWindow());
             $this->doubleClick($ipsum);
             return;
@@ -650,16 +666,17 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
     /**
      * Returns the HTML of the test page.
      *
-     * @param string $selector The jQuery selector to use for finding the element.
+     * @param string  $selector The jQuery selector to use for finding the element.
+     * @param integer $index    The element index of the resulting array.
      *
      * @return string
      */
-    protected function getHtml($selector=NULL)
+    protected function getHtml($selector=NULL, $index=0)
     {
         if ($selector === NULL) {
             $text = $this->execJS('gHtml()');
         } else {
-            $text = $this->execJS('gHtml("'.$selector.'")');
+            $text = $this->execJS('gHtml("'.$selector.'", '.$index.')');
         }
 
         return $text;
@@ -670,7 +687,8 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
     /**
      * Returns the rectangle for a DOM element found using the specified selector.
      *
-     * @param string $selector The jQuery selector to use for finding the element.
+     * @param string  $selector The jQuery selector to use for finding the element.
+     * @param integer $index    The element index of the resulting array.
      *
      * @return array
      */
