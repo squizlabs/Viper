@@ -654,6 +654,123 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperUni
     }//end testRemoveWholeList()
 
 
+    /**
+     * Test a list can be converted to another list type.
+     *
+     * @return void
+     */
+    public function testConvertListType()
+    {
+        $this->selectText('additional');
+        $this->selectInlineToolbarLineageItem(0);
+
+        sleep(1);
+        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_orderedList.png');
+
+        $actTagCounts = $this->execJS('gTagCounts("p,ul,ol")');
+        $expected     = array(
+                         'p'  => 5,
+                         'ul' => 0,
+                         'ol' => 1,
+                        );
+
+        $this->assertEquals($expected, $actTagCounts, 'Content tag counts did not match');
+
+    }//end testConvertListType()
+
+
+    /**
+     * Test a list can be converted to another list type.
+     *
+     * @return void
+     */
+    public function testConvertListTypeWithSubList()
+    {
+        $this->selectText('additional');
+        $this->keyDown('Key.TAB');
+        $this->keyDown('Key.DOWN');
+        $this->keyDown('Key.TAB');
+
+        $this->selectText('additional');
+        $this->selectInlineToolbarLineageItem(0);
+
+        sleep(1);
+        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_orderedList.png');
+
+        $expected = array(
+                     array(
+                      'ul'      => array(
+                                    array('content' => '4 additional templates'),
+                                    array('content' => 'Audit for content'),
+                                   ),
+                      'content' => 'Audit Landing pages',
+                     ),
+                     array('content' => 'Accessibility audit report'),
+                     array('content' => 'Recommendations action plan'),
+                     array('content' => 'Squiz Matrix guide'),
+                    );
+
+        $this->assertListEqual($expected, TRUE);
+
+        sleep(1);
+        $actTagCounts = $this->execJS('gTagCounts("p,ul,ol")');
+        $expected     = array(
+                         'p'  => 5,
+                         'ul' => 1,
+                         'ol' => 1,
+                        );
+
+        $this->assertEquals($expected, $actTagCounts, 'Content tag counts did not match');
+
+    }//end testConvertListTypeWithSubList()
+
+
+    /**
+     * Test a list can be converted to another list type.
+     *
+     * @return void
+     */
+    public function testConvertSubListType()
+    {
+        $this->selectText('Matrix');
+        $this->keyDown('Key.TAB');
+        $this->keyDown('Key.UP');
+        $this->keyDown('Key.TAB');
+
+        $this->selectText('Matrix');
+        $this->selectInlineToolbarLineageItem(2);
+
+        sleep(1);
+        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_orderedList.png');
+
+        $expected = array(
+                     array('content' => 'Audit Landing pages'),
+                     array('content' => '4 additional templates'),
+                     array('content' => 'Audit for content'),
+                     array(
+                      'ol'      => array(
+                                    array('content' => 'Recommendations action plan'),
+                                    array('content' => 'Squiz Matrix guide'),
+                                   ),
+                      'content' => 'Accessibility audit report',
+                     ),
+                    );
+
+        $this->assertListEqual($expected, TRUE);
+
+        sleep(1);
+        $actTagCounts = $this->execJS('gTagCounts("p,ul,ol")');
+        $expected     = array(
+                         'p'  => 5,
+                         'ul' => 1,
+                         'ol' => 1,
+                        );
+
+        $this->assertEquals($expected, $actTagCounts, 'Content tag counts did not match');
+
+    }//end testConvertSubListType()
+
+
 }//end class
 
 ?>
