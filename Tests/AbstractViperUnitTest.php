@@ -51,6 +51,16 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
     private static $_windowSize = NULL;
 
     /**
+     * Default size of the browser window.
+     *
+     * @var array
+     */
+    private static $_defaultWindowSize = array(
+                                          'w' => 1300,
+                                          'h' => 800,
+                                         );
+
+    /**
      * Region object of the Viper Top toolbar.
      *
      * @var string
@@ -119,13 +129,14 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
 
         // Change browser and then change the URL.
         if (self::$_testRun === TRUE) {
-            $this->resizeWindow(1300, 800);
+            $this->resizeWindow();
             $this->setDefaultRegion(self::$_window);
+
             // URL is already changed to the test runner, so just reload.
             $this->reloadPage();
         } else {
             $this->selectBrowser(self::$_browser);
-            $this->resizeWindow(1300, 800);
+            $this->resizeWindow();
             $this->goToURL($dest);
             self::$_testRun = TRUE;
         }
@@ -208,6 +219,36 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
 
 
     /**
+     * Returns the default browser window size.
+     *
+     * @return array
+     */
+    protected function getDefaultWindowSize()
+    {
+        return $this->_defaultWindowSize;
+
+    }//end getDefaultWindowSize()
+
+
+    /**
+     * Set the default browser window size.
+     *
+     * @param integer $w The width of the window.
+     * @param integer $h The height of the window.
+     *
+     * @return void
+     */
+    protected function setDefaultWindowSize($w, $h)
+    {
+        $this->_defaultWindowSize = array(
+                                     'w' => $w,
+                                     'h' => $h,
+                                    );
+
+    }//end setDefaultWindowSize()
+
+
+    /**
      * Resizes the browser window.
      *
      * @param integer $w The width of the window.
@@ -215,8 +256,20 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      *
      * @return void
      */
-    protected function resizeWindow($w, $h)
+    protected function resizeWindow($w=NULL, $h=NULL)
     {
+        if ($w === NULL || $h === NULL) {
+            $size = $this->getDefaultWindowSize();
+
+            if ($w === NULL) {
+                $w = $size['w'];
+            }
+
+            if ($h === NULL) {
+                $h = $size['h'];
+            }
+        }
+
         if (is_array(self::$_windowSize) === TRUE) {
             if (self::$_windowSize['w'] === $w && self::$_windowSize['h'] === $h) {
                 return;
@@ -337,16 +390,53 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
     /**
      * Assert that given HTML string matches the test page's HTML.
      *
-     * @param string $html The HTML string to compare.
+     * @param string  $html             The HTML string to compare.
+     * @param integer $pos              If specified then, the specified HTML must
+     *                                  start from that pos.
+     * @param string  $msg              The message for the assertion.
+     * @param boolean $ignoreExtraSpace If TRUE then extra spaces will be removed
+     *                                  from the content.
      *
      * @return void
      */
-    protected function assertHasHTML($html)
+    protected function assertHasHTML($html, $pos=NULL, $msg=NULL, $ignoreExtraSpace=FALSE)
     {
-        $pageHtml = $this->getHtml();
-        $this->assertTrue(strpos($pageHtml, $html) !== FALSE);
+        $pageHtml = str_replace('\n', '', $this->getHtml());
+        $html     = str_replace("\n", '', $html);
+
+        if ($ignoreExtraSpace === TRUE) {
+            $pageHtml = preg_replace('/\s\s+/', ' ', $pageHtml);
+        }
+
+        if ($msg === NULL) {
+            $msg = 'Specified HTML not found in page content';
+        }
+
+        if ($pos === NULL) {
+            if (strpos($pageHtml, $html) === FALSE) {
+                $this->fail($msg);
+            }
+        } else if (strpos($pageHtml, $html) !== $pos) {
+            $this->fail($msg);
+        }
 
     }//end assertHasHTML()
+
+
+    /**
+     * Asserts that given list and the list on test page have the same structure.
+     *
+     * @param array   $expected   The expected array structure.
+     * @param boolean $incContent If TRUE then each list item content is also compared.
+     *
+     * @return void
+     */
+    protected function assertListEqual(array $expected, $incContent=FALSE)
+    {
+        $actual = $this->execJS('gListS(null, '.((int) $incContent).')');
+        $this->assertEquals($expected, $actual);
+
+    }//end assertListEqual()
 
 
     /**
@@ -496,9 +586,14 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      * @param string $buttonIcon Path to the image file.
      *
      * @return void
+     * @throws Exception If the specified icon file not found.
      */
     protected function clickInlineToolbarButton($buttonIcon)
     {
+        if (file_exists($buttonIcon) === FALSE) {
+            throw new Exception('File not found: '.$buttonIcon);
+        }
+
         $toolbar = $this->getInlineToolbar();
         $match   = $this->find($buttonIcon, $toolbar);
         $this->click($match);
@@ -581,6 +676,8 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         if (strpos($text, "u'") === 0) {
             $text = substr($text, 2, -1);
         }
+
+        $text = str_replace('\xa0', ' ', $text);
 
         $text = json_decode($text, TRUE);
 

@@ -195,6 +195,76 @@
 
             }//end gTblBStatus()
 
+
+            function gListS(listElem, incContent)
+            {
+                var list = [];
+
+                listElem = listElem || dfx.getTag('ul,ol', dfx.getId('content'))[0];
+
+                for (var i = 0; i < listElem.childNodes.length; i++) {
+                    var node = listElem.childNodes[i];
+                    if (dfx.isTag(node, 'li') === true) {
+                        var item     = 'li';
+                        var subLists = dfx.getTag('ul,ol', node);
+                        if (subLists.length > 0) {
+                            item = {};
+                            item[dfx.getTagName(subLists[0])] = gListS(subLists[0], incContent);
+                        }
+
+                        if (incContent) {
+                            if (typeof item === 'string') {
+                                item = {};
+                            }
+
+                            var content = '';
+                            for (var child = node.firstChild; child; child = child.nextSibling) {
+                                if (dfx.isTag(child, 'ul') === true  || dfx.isTag(child, 'ol') === true) {
+                                    break;
+                                } else if (child.nodeType === dfx.TEXT_NODE) {
+                                    content += child.data;
+                                } else {
+                                    content += child.outerHTML;
+                                }
+                            }
+
+                            item.content = content;
+                        }//end if
+
+                        list.push(item);
+                    }
+                }
+
+                return list;
+
+            }
+
+            function gTagCounts(tagNames)
+            {
+                tagNames = tagNames || '*';
+                var tagCounts = {};
+                var tags = dfx.getTag(tagNames, dfx.getId('content'));
+                for (var i = 0; i < tags.length; i++) {
+                    var tagName = dfx.getTagName(tags[i]);
+                    if (!tagCounts[tagName]) {
+                        tagCounts[tagName] = 1;
+                    } else {
+                        tagCounts[tagName]++;
+                    }
+                }
+
+                tagNames = tagNames.split(',');
+
+                for (var i = 0; i < tagNames.length; i++) {
+                    if (!tagCounts[tagNames[i]]) {
+                        tagCounts[tagNames[i]] = 0;
+                    }
+                }
+
+                return tagCounts;
+
+            }
+
         </script>
     </head>
     <body spellcheck="false">
