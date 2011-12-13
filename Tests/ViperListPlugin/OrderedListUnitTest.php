@@ -2,7 +2,7 @@
 
 require_once 'AbstractViperUnitTest.php';
 
-class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperUnitTest
+class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractViperUnitTest
 {
 
 
@@ -32,18 +32,18 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperUni
     {
         $this->selectText('XabcX', 'VmumV');
 
-        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_unorderedList.png'));
-        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_unorderedList.png'));
+        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_orderedList.png'));
+        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_orderedList.png'));
 
         $this->selectText('XabcX', 'TicT');
 
-        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_unorderedList.png'));
-        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_unorderedList.png'));
+        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_orderedList.png'));
+        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_orderedList.png'));
 
         $this->selectText('VmumV');
 
-        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_unorderedList.png'));
-        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_unorderedList.png'));
+        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_orderedList.png'));
+        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_orderedList.png'));
 
     }//end testListIconsOnSelection()
 
@@ -57,20 +57,20 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperUni
     {
         $this->selectText('VmumV');
 
-        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_unorderedList.png');
+        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_orderedList.png');
 
-        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_unorderedList_active.png'));
-        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_unorderedList_active.png'));
+        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_orderedList_active.png'));
+        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_orderedList_active.png'));
         $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_indent_disabled.png'));
         $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_indent_disabled.png'));
         $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_outdent.png'));
         $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_outdent.png'));
 
-        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_unorderedList_active.png');
+        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_orderedList_active.png');
         sleep(1);
 
-        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_unorderedList.png'));
-        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_unorderedList.png'));
+        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_orderedList.png'));
+        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_orderedList.png'));
         $this->assertFalse($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_indent_disabled.png'));
         $this->assertFalse($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_indent_disabled.png'));
         $this->assertFalse($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_outdent.png'));
@@ -88,20 +88,20 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperUni
     {
         $this->selectText('XabcX', 'VmumV');
 
-        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_unorderedList.png');
+        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_orderedList.png');
 
-        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_unorderedList_active.png'));
-        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_unorderedList_active.png'));
+        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_orderedList_active.png'));
+        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_orderedList_active.png'));
         $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_indent_disabled.png'));
         $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_indent_disabled.png'));
         $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_outdent.png'));
         $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_outdent.png'));
 
-        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_unorderedList_active.png');
+        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_orderedList_active.png');
         sleep(1);
 
-        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_unorderedList.png'));
-        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_unorderedList.png'));
+        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_orderedList.png'));
+        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_orderedList.png'));
         $this->assertFalse($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_indent_disabled.png'));
         $this->assertFalse($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_indent_disabled.png'));
         $this->assertFalse($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_outdent.png'));
@@ -119,13 +119,13 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperUni
     {
         $this->selectText('VmumV');
 
-        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_unorderedList.png');
+        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_orderedList.png');
 
         $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_outdent.png');
         sleep(1);
 
-        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_unorderedList.png'));
-        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_unorderedList.png'));
+        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_orderedList.png'));
+        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_orderedList.png'));
         $this->assertFalse($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_indent_disabled.png'));
         $this->assertFalse($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_indent_disabled.png'));
         $this->assertFalse($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_outdent.png'));
@@ -143,7 +143,7 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperUni
     {
         $this->selectText('XabcX', 'TicT');
 
-        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_unorderedList.png');
+        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_orderedList.png');
         sleep(1);
 
         $this->selectText('VmumV');
@@ -151,7 +151,7 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperUni
         $this->keyDown('Key.SHIFT + Key.TAB');
 
         $this->assertHasHTML(
-            '<p>XabcX uuuuuu. VmumV</p><ul><li>cPOc ccccc dddd. TicT</li></ul><p>ZnnZ aaaa bbbb. YepeY</p>',
+            '<p>XabcX uuuuuu. VmumV</p><ol><li>cPOc ccccc dddd. TicT</li></ol><p>ZnnZ aaaa bbbb. YepeY</p>',
             0,
             'Outdent of first item in the list should convert it to P tag.'
         );
@@ -168,7 +168,7 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperUni
     {
         $this->selectText('XabcX', 'TicT');
 
-        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_unorderedList.png');
+        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_orderedList.png');
         sleep(1);
 
         $this->selectText('TicT');
@@ -176,7 +176,7 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperUni
         $this->keyDown('Key.SHIFT + Key.TAB');
 
         $this->assertHasHTML(
-            '<ul><li>XabcX uuuuuu. VmumV</li></ul><p>cPOc ccccc dddd. TicT</p><p>ZnnZ aaaa bbbb. YepeY</p>',
+            '<ol><li>XabcX uuuuuu. VmumV</li></ol><p>cPOc ccccc dddd. TicT</p><p>ZnnZ aaaa bbbb. YepeY</p>',
             0,
             'Outdent of first item in the list should convert it to P tag.'
         );
@@ -193,7 +193,7 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperUni
     {
         $this->selectText('XabcX', 'TicT');
 
-        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_unorderedList.png');
+        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_orderedList.png');
         sleep(1);
 
         $this->selectText('VmumV');
@@ -205,7 +205,7 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperUni
         $this->keyDown('Key.TAB');
 
         $this->assertHasHTML(
-            '<ul><li>XabcX uuuuuu. VmumV</li><li>cPOc ccccc dddd. TicT</li></ul><p>ZnnZ aaaa bbbb. YepeY</p>',
+            '<ol><li>XabcX uuuuuu. VmumV</li><li>cPOc ccccc dddd. TicT</li></ol><p>ZnnZ aaaa bbbb. YepeY</p>',
             0,
             'Indent of first item should do nothing.'
         );
@@ -222,7 +222,7 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperUni
     {
         $this->selectText('XabcX', 'TicT');
 
-        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_unorderedList.png');
+        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_orderedList.png');
         sleep(1);
 
         $this->selectText('TicT');
@@ -230,7 +230,7 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperUni
         $this->keyDown('Key.TAB');
 
         $this->assertHasHTML(
-            '<ul><li>XabcX uuuuuu. VmumV<ul><li>cPOc ccccc dddd. TicT</li></ul></li></ul><p>ZnnZ aaaa bbbb. YepeY</p>',
+            '<ol><li>XabcX uuuuuu. VmumV<ol><li>cPOc ccccc dddd. TicT</li></ol></li></ol><p>ZnnZ aaaa bbbb. YepeY</p>',
             0,
             'Indent of last item should indent the last item.'
         );
@@ -247,7 +247,7 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperUni
     {
         $this->selectText('XabcX', 'TicT');
 
-        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_unorderedList.png');
+        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_orderedList.png');
         sleep(1);
 
         $this->selectText('TicT');
@@ -256,7 +256,7 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperUni
         $this->keyDown('Key.SHIFT + Key.TAB');
 
         $this->assertHasHTML(
-            '<ul><li>XabcX uuuuuu. VmumV</li><li>cPOc ccccc dddd. TicT</li></ul><p>ZnnZ aaaa bbbb. YepeY</p>',
+            '<ol><li>XabcX uuuuuu. VmumV</li><li>cPOc ccccc dddd. TicT</li></ol><p>ZnnZ aaaa bbbb. YepeY</p>',
             0,
             'Outdent of 2nd level list item should work.'
         );
@@ -284,8 +284,8 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperUni
 
         $expected = array(
                      array(
-                      'ul' => array(
-                               array('ul' => array('li')),
+                      'ol' => array(
+                               array('ol' => array('li')),
                                'li',
                                'li',
                               ),
@@ -303,7 +303,7 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperUni
         $expected = array(
                      'li',
                      array(
-                      'ul' => array(
+                      'ol' => array(
                                'li',
                                'li',
                                'li',
@@ -330,7 +330,7 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperUni
 
         $expected = array(
                      array(
-                      'ul'      => array(
+                      'ol'      => array(
                                     array('content' => '4 <strong>additional templates</strong>'),
                                     array('content' => '<strong>Audit for content</strong>'),
                                     array('content' => '<strong>Accessibility audit report</strong>'),
@@ -353,7 +353,7 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperUni
                      array('content' => 'Audit Landing pages'),
                      array('content' => '4 additional templates'),
                      array(
-                      'ul'      => array(
+                      'ol'      => array(
                                     array('content' => '<strong>Accessibility audit report</strong>'),
                                     array('content' => '<strong>Recommendations action</strong> plan'),
                                    ),
@@ -384,7 +384,7 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperUni
 
         $expected = array(
                      array(
-                      'ul'      => array(
+                      'ol'      => array(
                                     array('content' => '4 '),
                                     array('content' => 'Accessibility audit report'),
                                     array('content' => 'Recommendations action plan'),
@@ -431,12 +431,12 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperUni
 
         $expected = array(
                      array(
-                      'ul' => array('li'),
+                      'ol' => array('li'),
                      ),
                      array(
-                      'ul' => array(
+                      'ol' => array(
                                array(
-                                'ul' => array('li'),
+                                'ol' => array('li'),
                                ),
                                'li',
                               ),
@@ -464,8 +464,8 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperUni
         $actTagCounts = $this->execJS('gTagCounts("p,ul,ol")');
         $expected     = array(
                          'p'  => 11,
-                         'ul' => 0,
                          'ol' => 0,
+                         'ul' => 0,
                         );
 
         $this->assertEquals($expected, $actTagCounts, 'Content tag counts did not match');
@@ -502,10 +502,10 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperUni
                      array('content' => 'Audit Landing pages'),
                      array('content' => '4 additional templates'),
                      array(
-                      'ul'      => array(
+                      'ol'      => array(
                                     array('content' => 'Test 2'),
                                     array(
-                                     'ul'      => array(
+                                     'ol'      => array(
                                                    array('content' => 'Test 4'),
                                                   ),
                                      'content' => 'Test 3',
@@ -610,7 +610,7 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperUni
 
         $expected = array(
                      array(
-                      'ul'      => array(
+                      'ol'      => array(
                                     array('content' => 'Audit for content'),
                                    ),
                       'content' => 'Audit Landing pages',
@@ -645,8 +645,8 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperUni
         $actTagCounts = $this->execJS('gTagCounts("p,ul,ol")');
         $expected     = array(
                          'p'  => 5,
-                         'ul' => 0,
                          'ol' => 0,
+                         'ul' => 0,
                         );
 
         $this->assertEquals($expected, $actTagCounts, 'Content tag counts did not match');
