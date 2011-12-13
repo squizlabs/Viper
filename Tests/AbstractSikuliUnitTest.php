@@ -690,12 +690,12 @@ abstract class AbstractSikuliUnitTest extends PHPUnit_Framework_TestCase
     /**
      * Highlights the specified region for given seconds.
      *
-     * @param integer $seconds The number of seconds to highlight.
      * @param string  $region  The region variable.
+     * @param integer $seconds The number of seconds to highlight.
      *
      * @return void
      */
-    protected function highlight($seconds, $region=NULL)
+    protected function highlight($region=NULL, $seconds=1)
     {
         if ($region === NULL) {
             $region = $this->_defaultRegion;
