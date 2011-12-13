@@ -49,6 +49,23 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperUni
 
 
     /**
+     * Test that list tools are not available when selection is inside a non P element.
+     *
+     * @return void
+     */
+    public function testNoToolsForNonPTag()
+    {
+        $rect1 = $this->getBoundingRectangle('h2', 0);
+        sleep(1);
+        $this->doubleClick($this->getTopLeft($this->getRegionOnPage($rect1)));
+
+        $this->assertFalse($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_unorderedList.png'));
+        $this->assertFalse($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_unorderedList.png'));
+
+    }//end testNoToolsForNonPTag()
+
+
+    /**
      * Test that unordered list is added and removed when toolbar icon is clicked.
      *
      * @return void
@@ -677,6 +694,28 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperUni
         $this->assertEquals($expected, $actTagCounts, 'Content tag counts did not match');
 
     }//end testConvertListType()
+
+
+    /**
+     * Test a list can be converted to another list type.
+     *
+     * @return void
+     */
+    public function testConvertListTypeWithItemSelection()
+    {
+        $this->selectText('Matrix');
+        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_unorderedList.png');
+
+        $actTagCounts = $this->execJS('gTagCounts("p,ul,ol")');
+        $expected     = array(
+                         'p'  => 5,
+                         'ul' => 0,
+                         'ol' => 1,
+                        );
+
+        $this->assertEquals($expected, $actTagCounts, 'Content tag counts did not match');
+
+    }//end testConvertListTypeWithItemSelection()
 
 
     /**
