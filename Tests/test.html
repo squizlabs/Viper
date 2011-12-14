@@ -63,8 +63,9 @@
 
                 var jsRes = dfx.getId('jsRes');
                 jsRes.value = '';
+                var t = null;
                 dfx.addEvent(jsRes, 'copy', function() {
-                    setTimeout(function() {
+                    t = setTimeout(function() {
                         viper.focus();
                     }, 100);
                 });
@@ -73,6 +74,7 @@
                 jsExec.value = '';
 
                 dfx.addEvent(jsExec, 'focus', function(e) {
+                    clearTimeout(t);
                     jsExec.value = '';
                 });
             });
