@@ -90,7 +90,7 @@ class Viper_Tests_ViperTableEditorPlugin_RowUnitTest extends AbstractViperTableE
 
         $this->click($this->find($this->getImg('icon_insertRowAfter.png'), NULL, 0.83));
 
-        $this->click($this->find('Lorem'));
+        $this->clickCell(2);
 
         $this->showTools(3, 'row');
         $this->click($this->find($this->getImg('icon_trash.png'), NULL, 0.83));

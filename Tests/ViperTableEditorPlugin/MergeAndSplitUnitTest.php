@@ -176,6 +176,8 @@ class Viper_Tests_ViperTableEditorPlugin_MergeAndSplitUnitTest extends AbstractV
         $this->assertTableStructure($expected, $struct);
         sleep(1);
 
+        $this->showTools(6, 'cell');
+        $this->click($this->find($this->getImg('icon_mergeSplit.png'), NULL, 0.83));
         $this->clickInlineToolbarButton($this->getImg('icon_splitHoriz.png'));
         $expected = array(
                      array(array(), array(), array(), array(), array()),
@@ -250,6 +252,9 @@ class Viper_Tests_ViperTableEditorPlugin_MergeAndSplitUnitTest extends AbstractV
         $struct = $this->getTableStructure();
         $this->assertTableStructure($expected, $struct);
         sleep(1);
+
+        // Click another cell to hide the tools incase its covert the 2nd cell.
+        $this->selectText('Lorem');
 
         $this->showTools(2, 'cell');
         $this->click($this->find($this->getImg('icon_mergeSplit.png'), NULL, 0.83));
@@ -357,12 +362,12 @@ class Viper_Tests_ViperTableEditorPlugin_MergeAndSplitUnitTest extends AbstractV
         sleep(1);
 
         $this->showTools(0, 'cell');
-        $heading = $this->find('Heading');
-        $this->click($heading);
+
+        $this->toggleCellHeading();
         usleep(100);
-        $this->click($heading);
+        $this->toggleCellHeading();
         usleep(100);
-        $this->click($heading);
+        $this->toggleCellHeading();
 
         $this->click($this->find($this->getImg('icon_mergeSplit.png'), NULL, 0.83));
         $this->click($this->find($this->getImg('icon_mergeRight.png'), NULL, 0.83));
@@ -435,7 +440,8 @@ class Viper_Tests_ViperTableEditorPlugin_MergeAndSplitUnitTest extends AbstractV
         sleep(1);
 
         $this->showTools(0, 'cell');
-        $this->click($heading);
+        $this->toggleCellHeading();
+
         $expected = array(
                      array(
                       array(),

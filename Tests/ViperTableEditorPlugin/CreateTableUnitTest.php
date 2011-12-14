@@ -16,7 +16,9 @@ class Viper_Tests_ViperTableEditorPlugin_CreateTableUnitTest extends AbstractVip
         $this->insertTable(2, 3);
         sleep(1);
 
-        $this->showTools(0, 'cell');
+        $this->clickCell(0);
+        usleep(300);
+
         $this->type('One');
         $this->keyDown('Key.TAB');
         $this->type('Two');
@@ -30,8 +32,7 @@ class Viper_Tests_ViperTableEditorPlugin_CreateTableUnitTest extends AbstractVip
         $this->type('Six');
 
         $this->showTools(0, 'cell');
-        $this->click($this->find($this->getImg('icon_mergeSplit.png'), NULL, 0.83));
-        $this->clickInlineToolbarButton($this->getImg('icon_mergeRight.png'));
+        $this->clickMergeSplitIcon('icon_mergeRight.png');
 
         $struct   = $this->getTableStructure(0, TRUE);
         $expected = array(
@@ -84,12 +85,10 @@ class Viper_Tests_ViperTableEditorPlugin_CreateTableUnitTest extends AbstractVip
         $this->type('By Gender');
 
         $this->showTools(0, 'cell');
-        $this->click($this->find($this->getImg('icon_mergeSplit.png'), NULL, 0.83));
-        $this->clickInlineToolbarButton($this->getImg('icon_mergeRight.png'));
+        $this->clickMergeSplitIcon('icon_mergeRight.png');
 
         $this->showTools(1, 'cell');
-        $this->click($this->find($this->getImg('icon_mergeSplit.png'), NULL, 0.83));
-        $this->clickInlineToolbarButton($this->getImg('icon_mergeDown.png'));
+        $this->clickMergeSplitIcon('icon_mergeDown.png');
 
         // Click within the fourth cell of the second row (under the "By Gender" heading) and merge options.
         $this->showTools(6, 'cell');
@@ -132,8 +131,7 @@ class Viper_Tests_ViperTableEditorPlugin_CreateTableUnitTest extends AbstractVip
 
         // Click within the third cell of the first row (the one that has "By Gender").
         $this->showTools(2, 'cell');
-        $this->click($this->find($this->getImg('icon_mergeSplit.png'), NULL, 0.83));
-        $this->clickInlineToolbarButton($this->getImg('icon_mergeRight.png'));
+        $this->clickMergeSplitIcon('icon_mergeRight.png');
 
         $this->clickCell(3);
         $this->type('Males');
@@ -161,36 +159,35 @@ class Viper_Tests_ViperTableEditorPlugin_CreateTableUnitTest extends AbstractVip
         $this->type('2');
 
         $this->showTools(5, 'cell');
-        $this->click($this->find($this->getImg('icon_mergeSplit.png'), NULL, 0.83));
-        $this->clickInlineToolbarButton($this->getImg('icon_mergeDown.png'));
+        $this->clickMergeSplitIcon('icon_mergeDown.png');
 
         $this->showTools(0, 'cell');
-        $this->click($this->find('Heading'));
+        $this->toggleCellHeading();
 
         $this->showTools(1, 'cell');
-        $this->click($this->find('Heading'));
+        $this->toggleCellHeading();
 
         $this->showTools(2, 'cell');
-        $this->click($this->find('Heading'));
+        $this->toggleCellHeading();
         $this->clickCell(0);
         usleep(300);
 
         $this->showTools(3, 'cell');
-        $this->click($this->find('Heading'));
+        $this->toggleCellHeading();
 
         $this->showTools(4, 'cell');
-        $this->click($this->find('Heading'));
+        $this->toggleCellHeading();
 
         $this->showTools(5, 'cell');
-        $this->click($this->find('Heading'));
+        $this->toggleCellHeading();
 
         $this->showTools(6, 'cell');
-        $this->click($this->find('Heading'));
+        $this->toggleCellHeading();
         $this->clickCell(0);
         usleep(300);
 
         $this->showTools(10, 'cell');
-        $this->click($this->find('Heading'));
+        $this->toggleCellHeading();
 
         // Last checks.
         // Survery cell.
@@ -269,7 +266,7 @@ class Viper_Tests_ViperTableEditorPlugin_CreateTableUnitTest extends AbstractVip
                       ),
                       array(
                        'rowspan' => '2',
-                       'content' => 'AllGenders&nbsp;',
+                       'content' => 'All Genders&nbsp;',
                        'heading' => TRUE,
                       ),
                       array(

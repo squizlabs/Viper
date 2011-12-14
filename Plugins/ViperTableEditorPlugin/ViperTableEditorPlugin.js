@@ -722,7 +722,7 @@ ViperTableEditorPlugin.prototype = {
         }
 
         var self = this;
-        this.createButton('Heading', isActive, 'Toggle Heading', false, '', function() {
+        this.createButton('Heading', isActive, 'Toggle Heading', false, 'cellHeading', function() {
             // Switch between header and normal cell.
             if (dfx.isTag(cell, 'th') === true) {
                 var newCell = self.convertToCell(cell);

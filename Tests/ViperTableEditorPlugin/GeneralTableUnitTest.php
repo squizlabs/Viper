@@ -7,6 +7,21 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
 
 
     /**
+     * Returns the difference in pixel between two positions.
+     *
+     * @param integer $pos1 A position.
+     * @param integer $pos2 A position.
+     *
+     * @return integer
+     */
+    private function _posDiff($pos1, $pos2)
+    {
+        return abs((int) ($pos1 - $pos2));
+
+    }//end _posDiff()
+
+
+    /**
      * Test that creating a new table works.
      *
      * @return void
@@ -39,7 +54,8 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
         // Click inside the cell.
         $this->click($region);
 
-        $icon = $this->find($this->getImg('icon_tableEditor.png'), NULL, 0.9);
+        $toolIconRect = $this->getBoundingRectangle('#test-ViperTEP', 0);
+        $icon         = $this->getRegionOnPage($toolIconRect);
 
         // Check that position is correct.
         $iconX = $this->getPageX($this->getCenter($icon));
@@ -48,8 +64,8 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
         $cellCenter = ($cellRect['x1'] + (($cellRect['x2'] - $cellRect['x1']) / 2));
         $cellBottom = $cellRect['y2'];
 
-        $this->assertTrue((($cellCenter + 3) >= $iconX && ($cellCenter - 3) <= $iconX), 'Y Position of table editing icon is incorrect.');
-        $this->assertTrue(($cellBottom <= $iconY && $cellBottom + 5 > $iconY), 'Y Position of table editing icon is incorrect.');
+        $this->assertTrue((($cellCenter + 3) >= $iconX && ($cellCenter - 3) <= $iconX), 'X Position of table editing icon is incorrect.');
+        $this->assertTrue(($cellBottom <= $iconY && $cellBottom + 10 > $iconY), 'Y Position of table editing icon is incorrect.');
 
         // Move mouse on top of the icon.
         $this->mouseMove($icon);
@@ -63,10 +79,10 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
         usleep(200);
 
         $highlightRect = $this->getBoundingRectangle('.ViperITP-highlight');
-        if ($highlightRect['x1'] !== $tableRect['x1']
-            || $highlightRect['x2'] !== $tableRect['x2']
-            || $highlightRect['y1'] !== $tableRect['y1']
-            || $highlightRect['y2'] !== $tableRect['y2']
+        if (($this->_posDiff($highlightRect['x1'], $tableRect['x1']) > 3)
+            || ($this->_posDiff($highlightRect['x2'], $tableRect['x2']) > 3)
+            || ($this->_posDiff($highlightRect['y1'], $tableRect['y1']) > 3)
+            || ($this->_posDiff($highlightRect['y2'], $tableRect['y2']) > 3)
         ) {
             $this->fail('Highlight of table is not in the correct position');
         }
@@ -77,10 +93,10 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
 
         // Note that +1 or -1 is for cellpadding.
         $highlightRect = $this->getBoundingRectangle('.ViperITP-highlight');
-        if ((int) $highlightRect['x1'] !== (int) $tableRect['x1']
-            || (int) $highlightRect['x2'] !== (int) $tableRect['x2']
-            || $highlightRect['y1'] !== ($cellRect['y1'] - 1)
-            || $highlightRect['y2'] !== ($cellRect['y2'] + 1)
+        if (($this->_posDiff($highlightRect['x1'], $tableRect['x1']) > 3)
+            || ($this->_posDiff($highlightRect['x2'], $tableRect['x2']) > 3)
+            || ($this->_posDiff($highlightRect['y1'], $cellRect['y1']) > 3)
+            || ($this->_posDiff($highlightRect['y2'], $cellRect['y2']) > 3)
         ) {
             $this->fail('Highlight of row is not in the correct position');
         }
@@ -90,10 +106,10 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
         usleep(200);
 
         $highlightRect = $this->getBoundingRectangle('.ViperITP-highlight');
-        if ($highlightRect['x1'] !== ($cellRect['x1'] - 1)
-            || $highlightRect['x2'] !== ($cellRect['x2'] + 1)
-            || $highlightRect['y1'] !== $tableRect['y1']
-            || $highlightRect['y2'] !== $tableRect['y2']
+        if (($this->_posDiff($highlightRect['x1'], $cellRect['x1']) > 3)
+            || ($this->_posDiff($highlightRect['x2'], $cellRect['x2']) > 3)
+            || ($this->_posDiff($highlightRect['y1'], $tableRect['y1']) > 3)
+            || ($this->_posDiff($highlightRect['y2'], $tableRect['y2']) > 3)
         ) {
             $this->fail('Highlight of col is not in the correct position');
         }
@@ -103,10 +119,10 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
         usleep(200);
 
         $highlightRect = $this->getBoundingRectangle('.ViperITP-highlight');
-        if ($highlightRect['x1'] !== ($cellRect['x1'] - 1)
-            || $highlightRect['x2'] !== ($cellRect['x2'] + 1)
-            || $highlightRect['y1'] !== ($cellRect['y1'] - 1)
-            || $highlightRect['y2'] !== ($cellRect['y2'] + 1)
+        if (($this->_posDiff($highlightRect['x1'], $cellRect['x1']) > 3)
+            || ($this->_posDiff($highlightRect['x2'], $cellRect['x2']) > 3)
+            || ($this->_posDiff($highlightRect['y1'], $cellRect['y1']) > 3)
+            || ($this->_posDiff($highlightRect['y2'], $cellRect['y2']) > 3)
         ) {
             $this->fail('Highlight of cell is not in the correct position');
         }

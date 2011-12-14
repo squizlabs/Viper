@@ -17,7 +17,6 @@ abstract class AbstractViperTableEditorPluginUnitTest extends AbstractViperUnitT
     {
         $this->selectText('IPSUM');
         $this->execJS('insTable('.$rows.','.$cols.')');
-        //$this->clickTopToolbarButton($this->getImg('toolbarIcon_createTable.png'));
 
     }//end insertTable()
 
@@ -68,9 +67,11 @@ abstract class AbstractViperTableEditorPluginUnitTest extends AbstractViperUnitT
         $this->clickCell($cellNum);
         usleep(100);
 
-        $icon = $this->find($this->getImg('icon_tableEditor.png'), NULL, 0.9);
+        $toolIconRect = $this->getBoundingRectangle('#test-ViperTEP', 0);
+        $region       = $this->getRegionOnPage($toolIconRect);
+
         // Move mouse on top of the icon.
-        $this->mouseMove($icon);
+        $this->mouseMove($region);
         usleep(100);
 
         // Check the highlight for row.
@@ -84,6 +85,36 @@ abstract class AbstractViperTableEditorPluginUnitTest extends AbstractViperUnitT
 
 
     /**
+     * Clicks the given merge/split button in inline table toolbar.
+     *
+     * @param string $icon The icon to click.
+     *
+     * @return void
+     */
+    protected function clickMergeSplitIcon($icon)
+    {
+        $this->clickInlineToolbarButton($this->getImg('icon_mergeSplit.png'));
+        $this->mouseMove($this->createLocation(200, 200));
+        $this->clickInlineToolbarButton($this->getImg($icon));
+
+    }//end clickMergeSplitIcon()
+
+
+    /**
+     * Toggle's the cell heading option.
+     *
+     * @return void
+     */
+    protected function toggleCellHeading()
+    {
+        $toolIconRect = $this->getBoundingRectangle('.cellHeading', 0);
+        $region       = $this->getRegionOnPage($toolIconRect);
+        $this->click($region);
+
+    }//end toggleCellHeading()
+
+
+    /**
      * Returns the table structure.
      *
      * @param integer $index The table index on the page.
@@ -92,7 +123,7 @@ abstract class AbstractViperTableEditorPluginUnitTest extends AbstractViperUnitT
      */
     protected function getTableStructure($index=0, $incContent=FALSE)
     {
-        return $this->execJS('gTS('.$index.', '.$incContent.')');
+        return $this->execJS('gTS('.$index.', '.((int) $incContent).')');
 
     }//end getTableStructure()
 
@@ -159,6 +190,13 @@ abstract class AbstractViperTableEditorPluginUnitTest extends AbstractViperUnitT
                 if (isset($cell['content']) === TRUE
                     || isset($expected[$r][$c]['content']) === TRUE
                 ) {
+                    // First remove the great Firefox br tag from the end...
+                    $cell['content'] = str_replace('<br>', '', $cell['content']);
+
+                    // Convert all nbsp; in both to space.
+                    $cell['content'] = str_replace('&nbsp;', ' ', $cell['content']);
+                    $expected[$r][$c]['content'] = str_replace('&nbsp;', ' ', $expected[$r][$c]['content']);
+
                     $this->assertEquals($expected[$r][$c]['content'], $cell['content'], 'Content of cell ['.$c.', '.$c.'] did not match');
                 }
 
