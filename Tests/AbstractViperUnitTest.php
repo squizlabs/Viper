@@ -55,10 +55,10 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      *
      * @var array
      */
-    private static $_defaultWindowSize = array(
-                                          'w' => 1300,
-                                          'h' => 800,
-                                         );
+    private $_defaultWindowSize = array(
+                                   'w' => 1300,
+                                   'h' => 800,
+                                  );
 
     /**
      * Region object of the Viper Top toolbar.
@@ -66,6 +66,46 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      * @var string
      */
     private static $_topToolbar = NULL;
+
+
+    /**
+     * Returns the path of a test file.
+     *
+     * @param string $type The type of the file, js or html.
+     *
+     * @return string
+     */
+    private function _getTestFile($type)
+    {
+        $baseDir   = dirname(__FILE__);
+        $className = get_class($this);
+        $paths     = explode('_', $className);
+        array_shift($paths);
+        array_shift($paths);
+
+        // Find the HTML file for this test.
+        $testFileContent = '';
+        $jsPath          = NULL;
+        $count = count($paths);
+        while ($count > 0) {
+            $last     = array_pop($paths);
+            $filePath = $baseDir.'/'.implode('/', $paths).'/'.$last.'.'.$type;
+            if (file_exists($filePath) === TRUE) {
+                return $filePath;
+            } else if (count($paths) > 0) {
+                // Check for HTML file that has the same name as the directory.
+                $filePath = $baseDir.'/'.implode('/', $paths).'/'.$paths[(count($paths) - 1)].'.'.$type;
+                if (file_exists($filePath) === TRUE) {
+                    return $filePath;
+                }
+            }
+
+            $count = count($paths);
+        }
+
+        return NULL;
+
+    }//end _getTestFile()
 
 
     /**
@@ -86,35 +126,25 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
             self::$_browser = $browser;
         }//end if
 
+        $baseDir = dirname(__FILE__);
+
+        // Get the test HTML file.
+        $htmlFilePath    = $this->_getTestFile('html');
+        $testFileContent = '';
+        if ($htmlFilePath !== NULL) {
+            $testFileContent = trim(file_get_contents($htmlFilePath));
+        }
+
+        // Get the test JS file.
+        $jsFilePath = $this->_getTestFile('js');
+        $jsInclude  = '';
+        if ($jsFilePath !== NULL) {
+            $jsFilePath = str_replace($baseDir, '.', $jsFilePath);
+            $jsInclude  = '<script type="text/javascript" src="'.$jsFilePath.'"></script>';
+        }
+
         // Create a new Sikuli connection if its not connected already.
         parent::setUp();
-
-        $baseDir   = dirname(__FILE__);
-        $className = get_class($this);
-        $paths     = explode('_', $className);
-        array_shift($paths);
-        array_shift($paths);
-
-        // Find the HTML file for this test.
-        $testFileContent = '';
-        $count = count($paths);
-        while ($count > 0) {
-            $last     = array_pop($paths);
-            $filePath = $baseDir.'/'.implode('/', $paths).'/'.$last.'.html';
-            if (file_exists($filePath) === TRUE) {
-                $testFileContent = trim(file_get_contents($filePath));
-                break;
-            } else if (count($paths) > 0) {
-                // Check for HTML file that has the same name as the directory.
-                $filePath = $baseDir.'/'.implode('/', $paths).'/'.$paths[(count($paths) - 1)].'.html';
-                if (file_exists($filePath) === TRUE) {
-                    $testFileContent = trim(file_get_contents($filePath));
-                    break;
-                }
-            }
-
-            $count = count($paths);
-        }
 
         // Create the test file.
         if (self::$_testContent === NULL) {
@@ -124,6 +154,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         // Put the current test file contents to the main test file.
         $contents = str_replace('__TEST_CONTENT__', $testFileContent, self::$_testContent);
         $contents = str_replace('__TEST_TITLE__', $this->getName(), $contents);
+        $contents = str_replace('__TEST_JS_INCLUDE__', $jsInclude, $contents);
         $dest     = $baseDir.'/test_tmp.html';
         file_put_contents($dest, $contents);
 
@@ -448,6 +479,10 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      */
     protected function selectBrowser($browser)
     {
+        if ($browser === 'Firefox') {
+            $browser = '/Applications/Firefox.app';
+        }
+
         $app       = $this->switchApp($browser);
         $windowNum = 0;
         switch ($browser) {

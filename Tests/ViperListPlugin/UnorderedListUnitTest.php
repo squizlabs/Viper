@@ -1,68 +1,9 @@
 <?php
 
-require_once 'AbstractViperUnitTest.php';
+require_once 'AbstractViperListPluginUnitTest.php';
 
-class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperUnitTest
+class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperListPluginUnitTest
 {
-
-
-    /**
-     * Overrides the default window size of the browser for list tests.
-     *
-     * @return array
-     */
-    protected function getDefaultWindowSize()
-    {
-        $size = array(
-                 'w' => 1300,
-                 'h' => 1100,
-                );
-
-        return $size;
-
-    }//end getDefaultWindowSize()
-
-
-    /**
-     * Test that unordered list icon is displayed for paragraph and text selection.
-     *
-     * @return void
-     */
-    public function testListIconsOnSelection()
-    {
-        $this->selectText('XabcX', 'VmumV');
-
-        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_unorderedList.png'));
-        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_unorderedList.png'));
-
-        $this->selectText('XabcX', 'TicT');
-
-        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_unorderedList.png'));
-        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_unorderedList.png'));
-
-        $this->selectText('VmumV');
-
-        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_unorderedList.png'));
-        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_unorderedList.png'));
-
-    }//end testListIconsOnSelection()
-
-
-    /**
-     * Test that list tools are not available when selection is inside a non P element.
-     *
-     * @return void
-     */
-    public function testNoToolsForNonPTag()
-    {
-        $rect1 = $this->getBoundingRectangle('h2', 0);
-        sleep(1);
-        $this->doubleClick($this->getTopLeft($this->getRegionOnPage($rect1)));
-
-        $this->assertFalse($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_unorderedList.png'));
-        $this->assertFalse($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_unorderedList.png'));
-
-    }//end testNoToolsForNonPTag()
 
 
     /**
@@ -76,22 +17,14 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperUni
 
         $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_unorderedList.png');
 
-        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_unorderedList_active.png'));
-        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_unorderedList_active.png'));
-        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_indent_disabled.png'));
-        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_indent_disabled.png'));
-        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_outdent.png'));
-        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_outdent.png'));
+        $this->assertIconStatusesCorrect('active', TRUE, FALSE, TRUE);
+
+        $this->selectText('VmumV');
 
         $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_unorderedList_active.png');
         sleep(1);
 
-        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_unorderedList.png'));
-        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_unorderedList.png'));
-        $this->assertFalse($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_indent_disabled.png'));
-        $this->assertFalse($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_indent_disabled.png'));
-        $this->assertFalse($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_outdent.png'));
-        $this->assertFalse($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_outdent.png'));
+        $this->assertIconStatusesCorrect(TRUE, TRUE, NULL, NULL);
 
     }//end testListCreationFromTextSelection()
 
@@ -106,23 +39,10 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperUni
         $this->selectText('XabcX', 'VmumV');
 
         $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_unorderedList.png');
-
-        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_unorderedList_active.png'));
-        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_unorderedList_active.png'));
-        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_indent_disabled.png'));
-        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_indent_disabled.png'));
-        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_outdent.png'));
-        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_outdent.png'));
+        $this->assertIconStatusesCorrect('active', TRUE, FALSE, TRUE);
 
         $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_unorderedList_active.png');
-        sleep(1);
-
-        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_unorderedList.png'));
-        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_unorderedList.png'));
-        $this->assertFalse($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_indent_disabled.png'));
-        $this->assertFalse($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_indent_disabled.png'));
-        $this->assertFalse($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_outdent.png'));
-        $this->assertFalse($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_outdent.png'));
+        $this->assertIconStatusesCorrect(TRUE, TRUE, NULL, NULL);
 
     }//end testListCreationFromParaSelection()
 
@@ -137,16 +57,8 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperUni
         $this->selectText('VmumV');
 
         $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_unorderedList.png');
-
         $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_outdent.png');
-        sleep(1);
-
-        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_unorderedList.png'));
-        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_unorderedList.png'));
-        $this->assertFalse($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_indent_disabled.png'));
-        $this->assertFalse($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_indent_disabled.png'));
-        $this->assertFalse($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_outdent.png'));
-        $this->assertFalse($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_outdent.png'));
+        $this->assertIconStatusesCorrect(TRUE, TRUE, NULL, NULL);
 
     }//end testOutdentTextSelection()
 
@@ -288,15 +200,11 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperUni
      */
     public function testIndentOutdentItems()
     {
-        $rect1 = $this->getBoundingRectangle('li', 1);
-        sleep(1);
-        $rect2 = $this->getBoundingRectangle('li', 4);
-
-        $this->dragDrop($this->getRegionOnPage($rect1), $this->getRegionOnPage($rect2));
+        $this->selectText('oNo', 'action');
         $this->keyDown('Key.TAB');
 
-        $rect3 = $this->getBoundingRectangle('li', 2);
-        $this->dragDrop($this->getRegionOnPage($rect3), $this->getRegionOnPage($rect3));
+        sleep(1);
+        $this->selectText('content');
         $this->keyDown('Key.TAB');
 
         $expected = array(
@@ -313,8 +221,7 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperUni
         $this->assertListEqual($expected);
 
         sleep(1);
-        $rect4 = $this->getBoundingRectangle('li', 1);
-        $this->click($this->getTopLeft($this->getRegionOnPage($rect4)));
+        $this->selectText('oNo');
         $this->keyDown('Key.SHIFT + Key.TAB');
 
         $expected = array(
@@ -341,19 +248,19 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperUni
      */
     public function testIndentSelectionKeptStyleApplied()
     {
-        $this->selectText('additional', 'action');
+        $this->selectText('oNo', 'action');
         $this->keyDown('Key.TAB');
         $this->keyDown('Key.CMD + b');
 
         $expected = array(
                      array(
                       'ul'      => array(
-                                    array('content' => '4 <strong>additional templates</strong>'),
+                                    array('content' => '4 <strong>oNo templates</strong>'),
                                     array('content' => '<strong>Audit for content</strong>'),
                                     array('content' => '<strong>Accessibility audit report</strong>'),
                                     array('content' => '<strong>Recommendations action</strong> plan'),
                                    ),
-                      'content' => 'Audit Landing pages',
+                      'content' => 'aaa bbbbb ccccc',
                      ),
                      array('content' => 'Squiz Matrix guide'),
                     );
@@ -362,13 +269,13 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperUni
 
         sleep(1);
 
-        $this->selectText('additional', 'content');
+        $this->selectText('oNo', 'content');
         $this->keyDown('Key.SHIFT + Key.TAB');
         $this->keyDown('Key.CMD + b');
 
         $expected = array(
-                     array('content' => 'Audit Landing pages'),
-                     array('content' => '4 additional templates'),
+                     array('content' => 'aaa bbbbb ccccc'),
+                     array('content' => '4 oNo templates'),
                      array(
                       'ul'      => array(
                                     array('content' => '<strong>Accessibility audit report</strong>'),
@@ -391,11 +298,11 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperUni
      */
     public function testRemoveListItems()
     {
-        $this->selectText('additional', 'action');
+        $this->selectText('oNo', 'action');
         $this->keyDown('Key.TAB');
 
         sleep(1);
-        $this->selectText('additional', 'content');
+        $this->selectText('oNo', 'content');
         $this->keyDown('Key.BACKSPACE');
         sleep(1);
 
@@ -406,7 +313,7 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperUni
                                     array('content' => 'Accessibility audit report'),
                                     array('content' => 'Recommendations action plan'),
                                    ),
-                      'content' => 'Audit Landing pages',
+                      'content' => 'aaa bbbbb ccccc',
                      ),
                      array('content' => 'Squiz Matrix guide'),
                     );
@@ -423,8 +330,9 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperUni
      */
     public function testListKeyboardNav()
     {
-        $this->selectText('additional');
+        $this->selectText('oNo');
 
+        $this->keyDown('Key.RIGHT');
         $this->keyDown('Key.TAB');
         $this->keyDown('Key.DOWN');
 
@@ -472,7 +380,7 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperUni
      */
     public function testListToPara()
     {
-        $this->selectText('additional');
+        $this->selectText('oNo');
         $this->selectInlineToolbarLineageItem(0);
 
         sleep(1);
@@ -497,7 +405,7 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperUni
      */
     public function testNewItemCreation()
     {
-        $this->selectText('additional');
+        $this->selectText('oNo');
         $this->keyDown('Key.RIGHT + Key.RIGHT');
         $this->keyDown('Key.CMD + Key.RIGHT');
         $this->keyDown('Key.ENTER');
@@ -516,8 +424,8 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperUni
         $this->type('Test 5');
 
         $expected = array(
-                     array('content' => 'Audit Landing pages'),
-                     array('content' => '4 additional templates'),
+                     array('content' => 'aaa bbbbb ccccc'),
+                     array('content' => '4 oNo templates'),
                      array(
                       'ul'      => array(
                                     array('content' => 'Test 2'),
@@ -548,7 +456,7 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperUni
      */
     public function testRemoveItemFromList()
     {
-        $this->selectText('additional');
+        $this->selectText('oNo');
         $this->selectInlineToolbarLineageItem(1);
         sleep(1);
 
@@ -557,9 +465,10 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperUni
 
         // Remove the item element.
         $this->keyDown('Key.BACKSPACE');
+        sleep(1);
 
         $expected = array(
-                     array('content' => 'Audit Landing pages'),
+                     array('content' => 'aaa bbbbb ccccc'),
                      array('content' => 'Audit for content'),
                      array('content' => 'Accessibility audit report'),
                      array('content' => 'Recommendations action plan'),
@@ -577,7 +486,7 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperUni
      */
     public function testRemoveSubListFromList()
     {
-        $this->selectText('additional');
+        $this->selectText('oNo');
         $this->keyDown('Key.TAB');
         sleep(1);
 
@@ -591,7 +500,7 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperUni
         $this->keyDown('Key.BACKSPACE');
 
         $expected = array(
-                     array('content' => 'Audit Landing pages'),
+                     array('content' => 'aaa bbbbb ccccc'),
                      array('content' => 'Audit for content'),
                      array('content' => 'Accessibility audit report'),
                      array('content' => 'Recommendations action plan'),
@@ -607,14 +516,16 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperUni
      *
      * @return void
      */
-    public function testRemoveSubListItemFromList()
+    public function testRemoveSubListItemFromList2()
     {
-        $this->selectText('additional');
+        $this->selectText('oNo');
         $this->keyDown('Key.TAB');
+        $this->keyDown('Key.RIGHT');
         $this->keyDown('Key.DOWN');
         $this->keyDown('Key.TAB');
 
-        $this->selectText('additional');
+        sleep(1);
+        $this->selectText('oNo');
 
         $this->selectInlineToolbarLineageItem(3);
         sleep(1);
@@ -624,13 +535,14 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperUni
 
         // Remove the item element.
         $this->keyDown('Key.BACKSPACE');
+        sleep(1);
 
         $expected = array(
                      array(
                       'ul'      => array(
                                     array('content' => 'Audit for content'),
                                    ),
-                      'content' => 'Audit Landing pages',
+                      'content' => 'aaa bbbbb ccccc',
                      ),
                      array('content' => 'Accessibility audit report'),
                      array('content' => 'Recommendations action plan'),
@@ -648,9 +560,8 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperUni
      */
     public function testRemoveWholeList()
     {
-        $this->selectText('additional');
+        $this->selectText('oNo');
         $this->selectInlineToolbarLineageItem(0);
-
         sleep(1);
 
         // Remove everything except the last list item.
@@ -659,6 +570,7 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperUni
         // Remove the whole list.
         $this->keyDown('Key.BACKSPACE');
 
+        sleep(1);
         $actTagCounts = $this->execJS('gTagCounts("p,ul,ol")');
         $expected     = array(
                          'p'  => 5,
@@ -678,7 +590,7 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperUni
      */
     public function testConvertListType()
     {
-        $this->selectText('additional');
+        $this->selectText('oNo');
         $this->selectInlineToolbarLineageItem(0);
 
         sleep(1);
@@ -725,24 +637,24 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperUni
      */
     public function testConvertListTypeWithSubList()
     {
-        $this->selectText('additional');
+        $this->selectText('oNo');
+        $this->keyDown('Key.RIGHT');
         $this->keyDown('Key.TAB');
         $this->keyDown('Key.DOWN');
         $this->keyDown('Key.TAB');
 
-        $this->selectText('additional');
-        $this->selectInlineToolbarLineageItem(0);
-
         sleep(1);
+        $this->selectText('oNo');
+        $this->selectInlineToolbarLineageItem(0);
         $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_orderedList.png');
 
         $expected = array(
                      array(
                       'ul'      => array(
-                                    array('content' => '4 additional templates'),
+                                    array('content' => '4 oNo templates'),
                                     array('content' => 'Audit for content'),
                                    ),
-                      'content' => 'Audit Landing pages',
+                      'content' => 'aaa bbbbb ccccc',
                      ),
                      array('content' => 'Accessibility audit report'),
                      array('content' => 'Recommendations action plan'),
@@ -772,6 +684,7 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperUni
     public function testConvertSubListType()
     {
         $this->selectText('Matrix');
+        $this->keyDown('Key.RIGHT');
         $this->keyDown('Key.TAB');
         $this->keyDown('Key.UP');
         $this->keyDown('Key.TAB');
@@ -783,8 +696,8 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperUni
         $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_orderedList.png');
 
         $expected = array(
-                     array('content' => 'Audit Landing pages'),
-                     array('content' => '4 additional templates'),
+                     array('content' => 'aaa bbbbb ccccc'),
+                     array('content' => '4 oNo templates'),
                      array('content' => 'Audit for content'),
                      array(
                       'ol'      => array(
