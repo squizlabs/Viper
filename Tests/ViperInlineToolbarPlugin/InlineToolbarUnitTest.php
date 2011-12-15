@@ -59,10 +59,12 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarUnitTest extends Abstrac
     private function _assertPosition($targetX, $targetY, $orientation=NULL)
     {
         $toolbarX = $this->getX($this->_getToolbarArrowLocation($orientation));
-        $this->assertTrue(($targetX + 2 > $toolbarX) && ($targetX - 2 < $toolbarX), 'X Position of toolbar arrow is incorrect.');
+        $diff     = abs($targetX - $toolbarX);
+        $this->assertTrue(($diff <= 2), 'X Position of toolbar arrow is incorrect. Difference was '.$diff.' pixels');
 
         $toolbarY = $this->getY($this->getTopLeft($this->_getToolbarArrow($orientation)));
-        $this->assertTrue(($targetY + 10 < $toolbarY) && ($targetY + 15 > $toolbarY), 'Y Position of toolbar arrow is incorrect.');
+        $diff     = abs($targetY - $toolbarY);
+        $this->assertTrue(($diff <= 15), 'Y Position of toolbar arrow is incorrect. Difference was '.$diff.' pixels');
 
     }//end _assertPosition()
 
@@ -109,8 +111,8 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarUnitTest extends Abstrac
      */
     public function testParagraphSelectionPosition()
     {
-        $para = $this->find('ABC');
-        $this->selectText('ABC');
+        $para = $this->find('AbC');
+        $this->selectText('AbC');
 
         $wordY = $this->getY($this->getBottomLeft($para));
         $wordX = $this->getX($this->getCenter($para));
@@ -276,7 +278,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarUnitTest extends Abstrac
      */
     public function testLineageMultiParentSameParagraph()
     {
-        $this->selectText('XYZ');
+        $this->selectText('Xyz');
 
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Bold</li><li class="ViperITP-lineageItem selected">Selection</li>', $lineage);
@@ -306,7 +308,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarUnitTest extends Abstrac
      */
     public function testLineageDiffParentSameParagraph()
     {
-        $this->selectText('ZON', 'XYZ');
+        $this->selectText('ZON', 'XyZ');
 
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem selected">Selection</li>', $lineage);
