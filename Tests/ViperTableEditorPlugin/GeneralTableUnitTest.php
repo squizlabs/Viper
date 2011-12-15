@@ -130,6 +130,117 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
     }//end testTableEditingIconAndTools()
 
 
+    /**
+     * Test that table navigation (TAB) with keyboard works.
+     *
+     * @return void
+     */
+    public function testTableKeyboardNav()
+    {
+        $this->insertTable(2, 3);
+
+        $this->clickCell(0);
+        $this->keyDown('Key.TAB');
+        $this->keyDown('Key.TAB');
+        $this->type('2');
+        $this->keyDown('Key.TAB');
+        $this->type('3');
+        $this->keyDown('Key.SHIFT + Key.TAB');
+        $this->keyDown('Key.SHIFT + Key.TAB');
+        $this->type('1');
+
+        usleep(500);
+        $actual   = $this->getTableStructure(0, TRUE);
+        $expected = array(
+                     array(
+                      array('content' => '&nbsp;'),
+                      array('content' => '1 '),
+                      array('content' => '2 '),
+                     ),
+                     array(
+                      array('content' => '3 '),
+                      array('content' => '&nbsp;'),
+                      array('content' => '&nbsp;'),
+                     ),
+                    );
+        $this->assertTableStructure($expected, $actual);
+
+    }//end testTableKeyboardNav()
+
+
+    /**
+     * Test that table navigation (TAB) with keyboard works.
+     *
+     * @return void
+     */
+    public function testTableKeyboardNavWithRowNColSpan()
+    {
+        $this->insertTable(3, 3);
+        $this->showTools(0, 'cell');
+        $this->clickMergeSplitIcon('icon_mergeDown.png');
+
+        $this->showTools(3, 'cell');
+        $this->clickMergeSplitIcon('icon_mergeRight.png');
+
+        $this->clickCell(0);
+
+        // Make sure caret does not go out of table.
+        $this->keyDown('Key.SHIFT + Key.TAB');
+        $this->keyDown('Key.SHIFT + Key.TAB');
+        $this->keyDown('Key.SHIFT + Key.TAB');
+
+        $this->keyDown('Key.TAB');
+        $this->keyDown('Key.TAB');
+        $this->keyDown('Key.TAB');
+
+        $this->type('2');
+        $this->keyDown('Key.TAB');
+        $this->type('3');
+        $this->keyDown('Key.SHIFT + Key.TAB');
+        $this->keyDown('Key.SHIFT + Key.TAB');
+        $this->type('1');
+        $this->keyDown('Key.TAB');
+        $this->keyDown('Key.TAB');
+        $this->keyDown('Key.TAB');
+        $this->keyDown('Key.TAB');
+        $this->keyDown('Key.TAB');
+        $this->type('5');
+        $this->keyDown('Key.SHIFT + Key.TAB');
+        $this->type('4');
+
+        usleep(500);
+        $actual   = $this->getTableStructure(0, TRUE);
+        $expected = array(
+                     array(
+                      array(
+                       'rowspan' => 2,
+                       'content' => '  ',
+                      ),
+                      array('content' => ' '),
+                      array('content' => '1 '),
+                     ),
+                     array(
+                      array(
+                       'colspan' => 2,
+                       'content' => '2  ',
+                      ),
+                     ),
+                     array(
+                      array('content' => '3 '),
+                      array('content' => ' '),
+                      array('content' => '4 '),
+                     ),
+                     array(
+                      array('content' => '5 '),
+                      array('content' => ' '),
+                      array('content' => ' '),
+                     ),
+                    );
+        $this->assertTableStructure($expected, $actual);
+
+    }//end testTableKeyboardNavWithRowNColSpan()
+
+
 }//end class
 
 ?>
