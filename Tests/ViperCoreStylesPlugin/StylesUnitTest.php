@@ -116,6 +116,37 @@ class Viper_Tests_ViperCoreStylesPlugin_StylesUnitTest extends AbstractViperUnit
     }//end testRemoveUnderlineKeepOthers()
 
 
+    /**
+     * Tests that adding styles spanning multiple paragraphs work.
+     *
+     * @return void
+     */
+    public function testMultiParaApplyStyle()
+    {
+        $this->selectText('Lorem', 'amet');
+        $this->keyDown('Key.CMD + b');
+
+        $this->assertHTMLMatch('<p><strong>Lorem xtn dolor</strong></p><p><strong>sit amet</strong> <strong>consectetur</strong></p>');
+
+    }//end testMultiParaApplyStyle()
+
+
+    /**
+     * Tests that adding styles spanning multiple paragraphs work.
+     *
+     * @return void
+     */
+    public function testMultiParaRemoveStyle()
+    {
+        $this->selectText('Lorem', 'amet');
+        $this->keyDown('Key.CMD + b');
+        $this->keyDown('Key.CMD + b');
+
+        $this->assertHTMLMatch('<p>Lorem xtn dolor</p><p>sit amet <strong>consectetur</strong></p>');
+
+    }//end testMultiParaRemoveStyle()
+
+
 }//end class
 
 ?>

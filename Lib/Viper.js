@@ -1887,6 +1887,12 @@ Viper.prototype = {
             div.appendChild(clone);
             this.removeTagFromChildren(div, style);
             dfx.insertAfter(startTopParent, div.childNodes);
+
+            if (dfx.isTag(startTopParent, style) === true
+                && startTopParent.childNodes.length === 0
+            ) {
+                dfx.remove(startTopParent);
+            }
         }//end if
 
         // End of selection is in the style tag.
@@ -1911,6 +1917,12 @@ Viper.prototype = {
             div.appendChild(clone);
             this.removeTagFromChildren(div, style);
             dfx.insertBefore(endTopParent, div.childNodes);
+
+            if (dfx.isTag(endTopParent, style) === true
+                && endTopParent.childNodes.length === 0
+            ) {
+                dfx.remove(endTopParent);
+            }
         }//end if
 
         var originalBookmark = {
