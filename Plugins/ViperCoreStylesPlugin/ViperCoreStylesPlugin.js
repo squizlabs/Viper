@@ -547,6 +547,7 @@ ViperCoreStylesPlugin.prototype = {
         } else {
             dfx.setStyle(node, 'text-align', type);
         }
+
     },
 
     /**

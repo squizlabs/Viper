@@ -823,6 +823,10 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
             $text = $this->execJS('gHtml("'.$selector.'", '.$index.')');
         }
 
+        // Google Chrome always adds an extra space at the end of a style attribute
+        // remove it here...
+        $text = preg_replace('#style="(.+)\s"#', 'style="$1"', $text);
+
         return $text;
 
     }//end getHtml()
