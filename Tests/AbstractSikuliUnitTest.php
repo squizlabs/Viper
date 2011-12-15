@@ -964,6 +964,10 @@ abstract class AbstractSikuliUnitTest extends PHPUnit_Framework_TestCase
                         }
                     }//end if
                 }//end foreach
+
+                if ($isError === TRUE && empty($content) === TRUE) {
+                    $isError = FALSE;
+                }
             }//end if
 
             ob_flush();
