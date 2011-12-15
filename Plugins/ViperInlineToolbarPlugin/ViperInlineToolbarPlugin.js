@@ -93,6 +93,10 @@ function ViperInlineToolbarPlugin(viper)
        self.updateToolbar();
     });
 
+    dfx.addEvent(window, 'resize', function() {
+        self._updatePosition();
+    });
+
 }
 
 ViperInlineToolbarPlugin.prototype = {

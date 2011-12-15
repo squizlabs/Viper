@@ -48,6 +48,14 @@ ViperTableEditorPlugin.prototype = {
             }
         });
 
+        dfx.addEvent(window, 'resize', function() {
+            var cell = self.getActiveCell();
+            if (cell) {
+                self._updatePosition(cell);
+                self.highlightActiveCell(self._currentType);
+            }
+        });
+
         this.viper.registerCallback('Viper:keyDown', 'ViperTableEditor', function(e) {
             if (e.which === 9) {
                 // Handle tab key.
