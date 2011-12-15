@@ -241,6 +241,52 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
     }//end testTableKeyboardNavWithRowNColSpan()
 
 
+    /**
+     * Test that table is removed when its last row is deleted.
+     *
+     * @return void
+     */
+    public function testRemoveTableOnLastRowDelete()
+    {
+        $this->insertTable(2, 2);
+
+        $this->showTools(0, 'row');
+        $this->click($this->find($this->getImg('icon_trash.png'), NULL, 0.83));
+
+        $this->showTools(0, 'row');
+        $this->click($this->find($this->getImg('icon_trash.png'), NULL, 0.83));
+
+        $actTagCounts = $this->execJS('gTagCounts("table")');
+        $expected     = array('table' => 0);
+
+        $this->assertEquals($expected, $actTagCounts, 'Table was not removed from the page after its last row was removed');
+
+    }//end testRemoveTableOnLastRowDelete()
+
+
+    /**
+     * Test that table is removed when its last column is deleted.
+     *
+     * @return void
+     */
+    public function testRemoveTableOnLastColDelete()
+    {
+        $this->insertTable(2, 2);
+
+        $this->showTools(0, 'col');
+        $this->click($this->find($this->getImg('icon_trash.png'), NULL, 0.83));
+
+        $this->showTools(0, 'col');
+        $this->click($this->find($this->getImg('icon_trash.png'), NULL, 0.83));
+
+        $actTagCounts = $this->execJS('gTagCounts("table")');
+        $expected     = array('table' => 0);
+
+        $this->assertEquals($expected, $actTagCounts, 'Table was not removed from the page after its last column was removed');
+
+    }//end testRemoveTableOnLastColDelete()
+
+
 }//end class
 
 ?>
