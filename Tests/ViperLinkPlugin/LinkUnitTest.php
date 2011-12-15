@@ -49,7 +49,10 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->type('Squiz Labs');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com" title="Squiz Labs">Lorem</a> xtn dolor</p><p>sit amet <strong>consectetur</strong></p>');
+        $this->assertHTMLMatch(
+            '<p><a href="http://www.squizlabs.com" title="Squiz Labs">Lorem</a> xtn dolor</p><p>sit amet <strong>consectetur</strong></p>',
+            '<p><a title="Squiz Labs" href="http://www.squizlabs.com">Lorem</a> xtn dolor</p><p>sit amet <strong>consectetur</strong></p>'
+        );
 
     }//end testCreateLinkPlainTextWithTitle()
 
@@ -73,7 +76,10 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->type('Squiz Labs');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com" title="Squiz Labs">Lorem</a> xtn dolor</p><p>sit amet <strong>consectetur</strong></p>');
+        $this->assertHTMLMatch(
+            '<p><a href="http://www.squizlabs.com" title="Squiz Labs">Lorem</a> xtn dolor</p><p>sit amet <strong>consectetur</strong></p>',
+            '<p><a title="Squiz Labs" href="http://www.squizlabs.com">Lorem</a> xtn dolor</p><p>sit amet <strong>consectetur</strong></p>'
+        );
 
         $this->selectText('Lorem');
         $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_link_subActive.png'), 'Toolbar button icon is not correct');
@@ -132,7 +138,10 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->type('Squiz Labs');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>Lorem xtn dolor</p><p>sit amet <strong><a href="http://www.squizlabs.com" title="Squiz Labs">consectetur</a></strong></p>');
+        $this->assertHTMLMatch(
+            '<p>Lorem xtn dolor</p><p>sit amet <strong><a href="http://www.squizlabs.com" title="Squiz Labs">consectetur</a></strong></p>',
+            '<p>Lorem xtn dolor</p><p>sit amet <strong><a title="Squiz Labs" href="http://www.squizlabs.com">consectetur</a></strong></p>'
+        );
 
     }//end testSelectNodeThenCreateLink()
 
@@ -209,7 +218,7 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->click($text);
 
         $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_removeLink.png'), 'Remove link icon should be available.');
-        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_link.png'), 'Link icon should be available.');
+        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_link_active.png'), 'Link icon should be available.');
 
     }//end testClickShowInlineToolbar()
 

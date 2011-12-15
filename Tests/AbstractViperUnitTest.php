@@ -406,14 +406,24 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
     /**
      * Assert that given HTML string matches the test page's HTML.
      *
-     * @param string $html The HTML string to compare.
+     * @param string $html          The HTML string to compare.
+     * @param string $alternateHtml An alternate HTML incase the first argument does
+     *                              not match. This can be used to provide a similar
+     *                              HTML for different browsers
+     *                              (e.g. order of attributes in different browsers).
      *
      * @return void
      */
-    protected function assertHTMLMatch($html)
+    protected function assertHTMLMatch($html, $alternateHtml=NULL)
     {
         $pageHtml = $this->getHtml();
-        $this->assertEquals($html, $pageHtml);
+
+        if ($html !== $pageHtml) {
+                $this->assertEquals($html, $pageHtml);
+            } else {
+                $this->assertEquals($alternateHtml, $pageHtml);
+            }
+        }
 
     }//end assertHTMLMatch()
 
