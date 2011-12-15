@@ -419,6 +419,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         $pageHtml = $this->getHtml();
 
         if ($html !== $pageHtml) {
+            if ($alternateHtml === NULL) {
                 $this->assertEquals($html, $pageHtml);
             } else {
                 $this->assertEquals($alternateHtml, $pageHtml);
