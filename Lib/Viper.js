@@ -2680,25 +2680,43 @@ Viper.prototype = {
             // the track changes is activated or no plugin is direcly modifying it.
             if (this.isSpecialKey(e) === false) {
                 if (this.isBrowser('firefox') === true) {
-                    // When element is empty Firefox puts <br _moz_dirty="" type="_moz">
-                    // in to the element which stops text typing, so remove the br tag
-                    // and add an empty text node and set the range to that node.
-                    var range = this.getCurrentRange();
-                    if (range.startContainer === range.endContainer
-                        && dfx.isTag(range.startContainer, 'br') === true)
-                    {
-                        var textNode = document.createTextNode('');
-                        dfx.insertAfter(range.startContainer, textNode);
-                        dfx.remove(range.startContainer);
-                        range.setStart(textNode, 0);
-                        range.collapse(true);
-                        ViperSelection.addRange(range);
-                    }
+                    this._firefoxKeyDown();
                 }//end if
 
                 return true;
             }//end if
         }//end if
+
+    },
+
+    _firefoxKeyDown: function()
+    {
+        var range = this.getCurrentRange();
+        var elem  = this.getViperElement();
+        if (elem.childNodes.length === 0
+            || (elem.childNodes.length === 1 && dfx.isTag(elem.childNodes[0], 'br') === true)
+        ) {
+            dfx.setHtml(this.element, '<p></p>');
+            var textNode = document.createTextNode('');
+            this.element.firstChild.appendChild(textNode);
+            range.setStart(textNode, 0);
+            range.collapse(true);
+            ViperSelection.addRange(range);
+        }
+
+        // When element is empty Firefox puts <br _moz_dirty="" type="_moz">
+        // in to the element which stops text typing, so remove the br tag
+        // and add an empty text node and set the range to that node.
+        if (range.startContainer === range.endContainer
+            && dfx.isTag(range.startContainer, 'br') === true)
+        {
+            var textNode = document.createTextNode('');
+            dfx.insertAfter(range.startContainer, textNode);
+            dfx.remove(range.startContainer);
+            range.setStart(textNode, 0);
+            range.collapse(true);
+            ViperSelection.addRange(range);
+        }
 
     },
 

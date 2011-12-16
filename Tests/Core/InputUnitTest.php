@@ -165,6 +165,23 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
     }//end testKeyboardSelection()
 
 
+    /**
+     * Test that selecting the whole content is possible with short cut.
+     *
+     * @return void
+     */
+    public function testSelectAllAndRemove()
+    {
+        $this->selectText('Lorem');
+        $this->keyDown('Key.CMD + a');
+        $this->keyDown('Key.DELETE');
+
+        $this->type('abc');
+        $this->assertHTMLMatch('<p>abc</p>');
+
+    }//end testSelectAllAndRemove()
+
+
 }//end class
 
 ?>
