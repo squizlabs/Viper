@@ -2695,6 +2695,7 @@ Viper.prototype = {
         var elem  = this.getViperElement();
         if (elem.childNodes.length === 0
             || (elem.childNodes.length === 1 && dfx.isTag(elem.childNodes[0], 'br') === true)
+            || (elem === range.startContainer && elem === range.endContainer && range.startOffset === 0)
         ) {
             dfx.setHtml(this.element, '<p></p>');
             var textNode = document.createTextNode('');
