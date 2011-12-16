@@ -26,4 +26,5 @@
 }
 .ViperTP.device-ipad {
     font-size: 13px;
+    display: none !important;
 }
