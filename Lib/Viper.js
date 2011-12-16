@@ -1888,10 +1888,11 @@ Viper.prototype = {
             this.removeTagFromChildren(div, style);
             dfx.insertAfter(startTopParent, div.childNodes);
 
-            if (dfx.isTag(startTopParent, style) === true
-                && startTopParent.childNodes.length === 0
-            ) {
-                dfx.remove(startTopParent);
+            if (dfx.isTag(startTopParent, style) === true) {
+                this.removeEmptyNodes(startTopParent);
+                if (startTopParent.childNodes.length === 0) {
+                    dfx.remove(startTopParent);
+                }
             }
         }//end if
 
@@ -1918,10 +1919,11 @@ Viper.prototype = {
             this.removeTagFromChildren(div, style);
             dfx.insertBefore(endTopParent, div.childNodes);
 
-            if (dfx.isTag(endTopParent, style) === true
-                && endTopParent.childNodes.length === 0
-            ) {
-                dfx.remove(endTopParent);
+            if (dfx.isTag(endTopParent, style) === true) {
+                this.removeEmptyNodes(endTopParent);
+                if (endTopParent.childNodes.length === 0) {
+                    dfx.remove(endTopParent);
+                }
             }
         }//end if
 
@@ -3403,13 +3405,13 @@ Viper.prototype = {
             elem = this.element;
         }
 
-        this._cleanDOM(elem, tag);
+        this._cleanDOM(elem, tag, true);
 
         return elem;
 
     },
 
-    _cleanDOM: function(elem, tag)
+    _cleanDOM: function(elem, tag, topLevel)
     {
         if (!elem) {
             return;
@@ -3419,7 +3421,7 @@ Viper.prototype = {
             this._cleanDOM(elem.firstChild, tag);
         }
 
-        if (elem === this.element) {
+        if (elem === this.element || topLevel === true) {
             return;
         }
 
@@ -3518,7 +3520,7 @@ Viper.prototype = {
             return;
         }
 
-        this._cleanDOM(element);
+        this.cleanDOM(element);
 
         return element;
 

@@ -132,7 +132,7 @@ class Viper_Tests_ViperCoreStylesPlugin_StylesUnitTest extends AbstractViperUnit
 
 
     /**
-     * Tests that adding styles spanning multiple paragraphs work.
+     * Tests that removing styles spanning multiple paragraphs work.
      *
      * @return void
      */
@@ -145,6 +145,24 @@ class Viper_Tests_ViperCoreStylesPlugin_StylesUnitTest extends AbstractViperUnit
         $this->assertHTMLMatch('<p>Lorem xtn dolor</p><p>sit amet <strong>consectetur</strong></p>');
 
     }//end testMultiParaRemoveStyle()
+
+
+    /**
+     * Tests that removing multiple styles spanning multiple paragraphs work.
+     *
+     * @return void
+     */
+    public function testMultiParaRemoveStyles()
+    {
+        $this->selectText('Lorem', 'amet');
+        $this->keyDown('Key.CMD + b');
+        $this->keyDown('Key.CMD + i');
+        $this->keyDown('Key.CMD + i');
+        $this->keyDown('Key.CMD + b');
+
+        $this->assertHTMLMatch('<p>Lorem xtn dolor</p><p>sit amet <strong>consectetur</strong></p>');
+
+    }//end testMultiParaRemoveStyles()
 
 
 }//end class
