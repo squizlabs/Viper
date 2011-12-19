@@ -416,7 +416,8 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      */
     protected function assertHTMLMatch($html, $alternateHtml=NULL)
     {
-        $pageHtml = $this->getHtml();
+        $pageHtml = str_replace('\n', '', $this->getHtml());
+        $html     = str_replace("\n", '', $html);
 
         if ($html !== $pageHtml) {
             if ($alternateHtml === NULL) {
@@ -424,6 +425,8 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
             } else {
                 $this->assertEquals($alternateHtml, $pageHtml);
             }
+        } else {
+            $this->assertEquals($html, $pageHtml);
         }
 
     }//end assertHTMLMatch()
@@ -715,6 +718,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         $this->keyDown('Key.ENTER');
         sleep(1);
         $this->keyDown($this->_getAccessKeys('r'));
+        usleep(500);
         $this->keyDown('Key.CMD + a');
         $this->keyDown('Key.CMD + c');
 

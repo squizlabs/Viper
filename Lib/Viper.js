@@ -3500,8 +3500,12 @@ Viper.prototype = {
                 break;
             }//end switch
         } else if (node.nodeType === dfx.TEXT_NODE && !tag) {
-            if (dfx.trim(node.data, "\f\n\r\t\v\u2028\u2029") === '' && dfx.isTag(node.parentNode, 'td') === false) {
-                dfx.remove(node);
+            if (dfx.isTag(node.parentNode, 'td') === false) {
+                if (dfx.trim(node.data, "\f\n\r\t\v\u2028\u2029") === '') {
+                    dfx.remove(node);
+                } else if (dfx.trim(node.data) === '' && node.data.indexOf("\n") === 0) {
+                    dfx.remove(node);
+                }
             }
         }//end if
 
