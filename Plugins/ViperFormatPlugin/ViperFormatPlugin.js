@@ -341,7 +341,7 @@ ViperFormatPlugin.prototype = {
             var range   = self.viper.getViperRange();
             var element = range.getNodeSelection();
             var value   = '';
-            if (element) {
+            if (element && element.nodeType === dfx.ELEMENT_NODE) {
                 value = element.getAttribute(attr);
             }
 
