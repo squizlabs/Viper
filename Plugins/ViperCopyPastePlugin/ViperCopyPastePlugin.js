@@ -454,6 +454,7 @@ ViperCopyPastePlugin.prototype = {
     _cleanWordPaste: function(content)
     {
         // Meta and link tags.
+        content = dfx.trim(content);
         content = content.replace(/<(meta|link)[^>]+>/gi, "");
 
         // Comments.
@@ -479,7 +480,29 @@ ViperCopyPastePlugin.prototype = {
         content = content.replace(/<(\w[^>]*) (class|lang)=([^ |>]*)([^>]*)/gi, "<$1$4");
         content = content.replace(/<(\w[^>]*) (align)=([^ |>]*)([^>]*)/gi, "<$1$4");
         content = content.replace(/<(\w[^>]*) (dir)=([^ |>]*)([^>]*)/gi, "<$1$4");
-        content = content.replace(new RegExp('<(\\w[^>]*) style="([^"]*)"([^>]*)', 'gi'), "<$1$3");
+
+        var self = this;
+        content  = content.replace(new RegExp('<(\\w[^>]*) style="([^"]*)"([^>]*)', 'gi'), function() {
+            var styles      = arguments[2];
+            var stylesList  = styles.split(';');
+            var validStyles = [];
+            var replacement = '';
+            for (var i = 0; i < stylesList.length; i++) {
+                var style = dfx.trim(stylesList[i].replace("\n", ''));
+                if (self.isAllowedStyle(style) === true) {
+                    validStyles.push(style);
+                }
+            }
+
+            if (validStyles.length > 0) {
+                styles      = validStyles.join(';');
+                replacement = '<' + arguments[1] + ' style="' + styles + '"' + arguments[3];
+            } else {
+                replacement = '<' + arguments[1] + arguments[3];
+            }
+
+            return replacement;
+        });
 
         // Convert viperListst attributes to style attributes.
         // This is required for the list-style-type CSS.
@@ -493,6 +516,22 @@ ViperCopyPastePlugin.prototype = {
         content = this._convertDelNInsTags(content);
 
         return content;
+
+    },
+
+    isAllowedStyle: function(style)
+    {
+        if (style.indexOf('mso-') === 0) {
+            return false;
+        }
+
+        var styleName     = style.split(':');
+        var allowedStyles = ['height', 'width', 'padding', 'text-align', 'text-indent', 'border-collapse', 'border', 'border-top', 'border-bottom', 'border-right', 'border-left'];
+        if (allowedStyles.find(styleName[0]) >= 0) {
+            return true;
+        }
+
+        return false;
 
     },
 
@@ -529,9 +568,16 @@ ViperCopyPastePlugin.prototype = {
         var aTags = dfx.getTag('a', tmp);
         var c     = aTags.length;
         for (var i = 0; i < c; i++) {
-            if (!aTags[i].getAttribute('href')) {
-                var parent = aTags[i].parentNode;
-                dfx.remove(aTags[i]);
+            var aTag = aTags[i];
+            if (!aTag.getAttribute('href')) {
+                if (dfx.isBlank(dfx.getHtml(aTag)) === false) {
+                    while (aTag.firstChild) {
+                        dfx.insertBefore(aTag, aTag.firstChild);
+                    }
+                }
+
+                var parent = aTag.parentNode;
+                dfx.remove(aTag);
                 if (dfx.isBlank(dfx.getHtml(parent)) === true) {
                     dfx.remove(parent);
                 }
