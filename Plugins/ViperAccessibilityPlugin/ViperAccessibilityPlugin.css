@@ -332,3 +332,77 @@
 .ViperAP-toolsWrapper.detailTools .ViperAP-detailTools {
     display: block;
 }
+
+.ViperAP-listTools-left {
+    float: left;
+    color: #000000;
+    font-size: 1.35em;
+    padding-left: 0.3em;
+    line-height: 25px;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.ViperAP-listTools-right {
+    text-align: right;
+}
+
+.ViperAP-divider {
+    border-left: 1px solid #555;
+    margin-left: 5px;
+    margin-right: 7px;
+    box-shadow: 1px 0 0 #AAA;
+}
+
+.ViperAP-cont.settingsCont {
+    background-color: #2B2B2B;
+    color: #EEE;
+    text-shadow: none;
+}
+
+.ViperAP-cont.settingsCont .listFilters,
+.ViperAP-cont.settingsCont .accessStandard,
+.ViperAP-cont.settingsCont .reCheckSec {
+    padding: 10px;
+    border-bottom: 1px solid #000;
+}
+
+.ViperAP-cont.settingsCont .reCheckSec {
+    color: #222;
+    text-align: center;
+}
+
+.ViperAP-cont.settingsCont h1 {
+    font-size: 16px;
+    font-weight: normal;
+    color: #FFF;
+}
+
+.ViperAP-cont.settingsCont p {
+    color: #666;
+    font-size: 12px;
+}
+
+.Viper-checkbox-text {
+    font-size: 12px;
+    padding-left: 10px;
+}
+
+.Viper-radiobtn-label {
+    display: block;
+    margin: 5px 0;
+}
+
+.Viper-radio-text {
+    padding-left: 10px;
+    font-size: 12px;
+}
+
+.ViperAP-highlight {
+    position: absolute;
+    z-index: 200;
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(0, 0, 0, 0.5);
+    border-radius: 3px 3px 3px 3px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.8), 0 0 3px rgba(255, 255, 255, 0.5) inset;
+    margin: -1px 0 0 -1px;
+}
