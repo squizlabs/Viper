@@ -100,7 +100,7 @@ var ViperTools = {
 
                 return clickAction.call(this, button);
             });
-        }
+        }//end if
 
         dfx.addEvent(button, 'mouseup.Viper', function(e) {
             dfx.preventDefault(e);
@@ -123,6 +123,70 @@ var ViperTools = {
         }
 
         return button;
+
+    },
+
+    /**
+     * Creates a checkbox.
+     *
+     * @param {string}  label   The label for the checkbox.
+     * @param {boolean} checked True if checked by default.
+     *
+     * @return {DOMElement} The checkbox element.
+     */
+    createCheckbox: function(label, checked)
+    {
+        var labelElem = document.createElement('label');
+        dfx.addClass(labelElem, 'Viper-checkbox-label');
+
+        var checkbox  = document.createElement('input');
+        checkbox.type = 'checkbox';
+        dfx.addClass(checkbox, 'Viper-checkbox');
+        checkbox.checked = checked || false;
+
+        var span = document.createElement('span');
+        dfx.addClass(span, 'Viper-checkbox-text');
+        dfx.setHtml(span, label);
+
+        labelElem.appendChild(checkbox);
+        labelElem.appendChild(span);
+
+        return labelElem;
+
+    },
+
+
+    /**
+     * Creates a radio button.
+     *
+     * @parma {string}  name    The name of the group the radio button belongs to.
+     * @param {string}  value   The value of the radio button.
+     * @param {string}  label   The label for the radio button.
+     * @param {boolean} checked True if checked by default.
+     *
+     * @return {DOMElement} The checkbox element.
+     */
+    createRadiobutton: function(name, value, label, checked)
+    {
+        var labelElem = document.createElement('label');
+        dfx.addClass(labelElem, 'Viper-radiobtn-label');
+
+        var radio     = document.createElement('input');
+        radio.type    = 'radio';
+        radio.name    = name;
+        radio.value   = value;
+        radio.checked = checked || false;
+
+        dfx.addClass(radio, 'Viper-radiobtn');
+
+        var span = document.createElement('span');
+        dfx.addClass(span, 'Viper-radio-text');
+        dfx.setHtml(span, label);
+
+        labelElem.appendChild(radio);
+        labelElem.appendChild(span);
+
+        return labelElem;
 
     },
 
@@ -155,6 +219,7 @@ var ViperTools = {
         }
 
         return section;
+
     },
 
     toggleSubSection: function(subSectionElement)
@@ -176,7 +241,7 @@ var ViperTools = {
 
     scaleElement: function(element)
     {
-        var zoom  = (document.documentElement.clientWidth / window.innerWidth);
+        var zoom = (document.documentElement.clientWidth / window.innerWidth);
         if (zoom === 1) {
             var scale = 1;
             dfx.setStyle(element, '-webkit-transform', 'scale(' + scale + ', ' + scale + ')');
