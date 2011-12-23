@@ -56,12 +56,12 @@ ViperSourceViewPlugin.prototype = {
 
     },
 
-    showSourceView: function(content)
+    showSourceView: function(content, callback)
     {
         var self = this;
         if (!this._sourceView) {
             this._createSourceView(function() {
-                self.showSourceView(content);
+                self.showSourceView(content, callback);
             });
         } else {
             if (!content) {
@@ -72,6 +72,10 @@ ViperSourceViewPlugin.prototype = {
             this._editor.getSession().setValue(content);
             dfx.removeClass(this._sourceView, 'hidden');
             this._editor.resize();
+
+            if (callback) {
+                callback.call(this);
+            }
         }
 
     },
@@ -158,8 +162,8 @@ ViperSourceViewPlugin.prototype = {
                 }
         });
 
-        // Setup resizing.
-        dfxjQuery(elem).draggable();
+        // Setup dragging.
+        //dfxjQuery(elem).draggable();
 
         this._includeAce(function() {
             var editor   = ace.edit(source);
@@ -172,6 +176,17 @@ ViperSourceViewPlugin.prototype = {
             callback.call(this);
         });
 
+    },
+
+    scrollToText: function(text)
+    {
+        var self = this;
+        this._editor.find(text);
+        setTimeout(function() {
+            var anchor = self._editor.getSelection().getSelectionAnchor();
+            self._editor.navigateTo(anchor.row, anchor.column);
+            self._editor.replace('');
+        }, 500);
     },
 
     initEditorEvents: function(editor)
@@ -203,7 +218,7 @@ ViperSourceViewPlugin.prototype = {
             scripts.push(path + '/src/theme-twilight.js');
             scripts.push(path + '/src/mode-html.js');
 
-            dfx.includeScripts(scripts, callback);
+            this._includeScripts(scripts, callback);
         }
 
     },
@@ -296,5 +311,54 @@ ViperSourceViewPlugin.prototype = {
 
     },
 
+    _includeScripts: function(scripts, callback)
+    {
+        var self = this;
+        var _includeScripts = function(scripts, callback) {
+            if (scripts.length === 0) {
+                callback.call(this);
+                return;
+            }
+
+            var script = scripts.shift();
+            self._includeScript(script, function() {
+                _includeScripts(scripts, callback);
+            });
+        };
+
+        _includeScripts(scripts.concat([]), callback);
+
+    },
+
+
+    /**
+     * Includes the specified JS file.
+     *
+     * @param {string}   src      The URL to the JS file.
+     * @param {function} callback The function to call once the script is loaded.
+     */
+    _includeScript: function(src, callback) {
+        var script    = document.createElement('script');
+        script.onload = function() {
+            script.onload = null;
+            script.onreadystatechange = null;
+            callback.call(this);
+        };
+
+        script.onreadystatechange = function() {
+            if (/^(complete|loaded)$/.test(this.readyState) === true) {
+                script.onreadystatechange = null;
+                script.onload();
+            }
+        }
+
+        script.src = src;
+
+        if (document.head) {
+            document.head.appendChild(script);
+        } else {
+            document.getElementsByTagName('head')[0].appendChild(script);
+        }
+    }
 
 };
