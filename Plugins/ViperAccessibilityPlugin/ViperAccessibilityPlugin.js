@@ -44,6 +44,8 @@ function ViperAccessibilityPlugin(viper)
     this._htmlCSsrc           = 'https://raw.github.com/squizlabs/HTML_CodeSniffer/master/HTMLCS.js';
     this._standard            = 'WCAG2AAA';
     this._includeNotices      = false;
+    this._loadedScripts       = [];
+    this._loadCallbacks       = {};
 
     this._htmlCSsrc = 'file:///Users/sdanis/Sites/HTML_CodeSniffer/HTMLCS.js';
 
@@ -791,11 +793,30 @@ ViperAccessibilityPlugin.prototype = {
         var scriptUrl = url + '/resolutions.js';
         var cssUrl    = url + '/resolutions.css';
 
-        var self = this;
-        this._includeCss(cssUrl, function() {});
-        this._includeScript(scriptUrl, function() {
-            callback.call(self);
-        });
+        if (this._loadedScripts.find(scriptUrl) >= 0) {
+            callback.call(this);
+            return;
+        }
+
+        // Load the script file only once. Any multiple requests to load the same
+        // script file will be added to the loadCallbacks, once the file is available
+        // all the callbacks will be executed.
+        if (!this._loadCallbacks[scriptUrl]) {
+            this._loadCallbacks[scriptUrl] = [callback];
+
+            var self = this;
+            this._includeCss(cssUrl, function() {});
+            this._includeScript(scriptUrl, function() {
+                for (var i = 0; i < self._loadCallbacks[scriptUrl].length; i++) {
+                    self._loadCallbacks[scriptUrl][i].call(self);
+                }
+
+                delete self._loadCallbacks[scriptUrl];
+            });
+
+        } else {
+            this._loadCallbacks[scriptUrl].push(callback);
+        }
 
     },
 
