@@ -683,7 +683,15 @@ ViperAccessibilityPlugin.prototype = {
         var locateBtn     = this._toolbar.createButton('', false, 'Locate Element', false, 'locate', function() {
             self.pointToElement(issue.element);
         }, null, null, resolutionHeader);
-        var sourceViewBtn = this._toolbar.createButton('', false, 'Show in Source View', false, 'sourceView', function() {}, null, null, resolutionHeader);
+        var sourceViewBtn = this._toolbar.createButton('', false, 'Show in Source View', false, 'sourceView', function() {
+            var tmpText = document.createTextNode('__SCROLL_TO_HERE__');
+            dfx.insertAfter(issue.element, tmpText);
+
+            var sourceViewPlugin = self.viper.getPluginManager().getPlugin('ViperSourceViewPlugin');
+            sourceViewPlugin.showSourceView(null, function() {
+                sourceViewPlugin.scrollToText('__SCROLL_TO_HERE__');
+            });
+        }, null, null, resolutionHeader);
         var doneBtn = this._toolbar.createButton('Done', false, 'Mark as done', false, '', function() {}, null, null, resolutionHeader);
 
         resolutionHeader.appendChild(locateBtn);
