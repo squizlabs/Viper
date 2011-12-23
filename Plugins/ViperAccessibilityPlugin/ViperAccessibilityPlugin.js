@@ -43,6 +43,7 @@ function ViperAccessibilityPlugin(viper)
     this._mainPanelLeft       = null;
     this._htmlCSsrc           = 'https://raw.github.com/squizlabs/HTML_CodeSniffer/master/HTMLCS.js';
     this._standard            = 'WCAG2AAA';
+    this._includeNotices      = false;
 
     this._htmlCSsrc = 'file:///Users/sdanis/Sites/HTML_CodeSniffer/HTMLCS.js';
 
@@ -101,7 +102,7 @@ ViperAccessibilityPlugin.prototype = {
         var mainPanel = document.createElement('div');
         dfx.addClass(mainPanel, 'ViperAP-tools ViperAP-listTools');
 
-        var aaTools = toolbar.createToolsPopup('Accessibility Auditor', toolsSection, [subSection]);
+        var aaTools = toolbar.createToolsPopup('Accessibility Auditor - ' + this._standard, toolsSection, [subSection]);
         dfx.setStyle(aaTools.element, 'width', '320px');
         this._aaTools = aaTools;
 
@@ -357,7 +358,7 @@ ViperAccessibilityPlugin.prototype = {
         var listFilters = document.createElement('div');
         dfx.addClass(listFilters, 'listFilters');
         dfx.setHtml(listFilters, '<h1>List Filters</h1><p>Errors and Warnings are always shown and cannot be hidden. Notices will be automatically shown if there are not other issues.</p>');
-        var includeNoticesChbox = ViperTools.createCheckbox('Always include Notices', true);
+        var includeNoticesChbox = ViperTools.createCheckbox('Always include Notices', this._includeNotices);
         listFilters.appendChild(includeNoticesChbox);
         div.appendChild(listFilters);
 
@@ -392,7 +393,8 @@ ViperAccessibilityPlugin.prototype = {
             }
 
             if (value !== null) {
-                self._standard = value;
+                self._standard       = value;
+                self._includeNotices = includeNoticesChbox.firstChild.checked;
                 self.updateResults();
             }
         });
@@ -456,7 +458,6 @@ ViperAccessibilityPlugin.prototype = {
         var list           = null;
         var firstList      = null;
         var pages          = 0;
-        this._issueCount   = c;
         this._currentIssue = 1;
         this._currentList  = 1;
         this._errorCount   = 0;
@@ -467,6 +468,27 @@ ViperAccessibilityPlugin.prototype = {
         var listsInner = document.createElement('div');
         dfx.addClass(listsInner, 'ViperAP-issueListInner');
         this._issueList.appendChild(listsInner);
+
+        // Filter msgs.
+        if (this._includeNotices !== true) {
+            var newMsgs = [];
+            for (var i = 0; i < c; i++) {
+                var msg = msgs[i];
+                if (msg.type !== HTMLCS.NOTICE) {
+                    newMsgs.push(msg);
+                }
+            }
+
+            if (newMsgs.length > 0) {
+                // There are errors and/or warnings. If no errors or warnings then
+                // the notices will be displayed even if includeNotices settings
+                // is disabled.
+                msgs = newMsgs;
+                c    = msgs.length;
+            }
+        }
+
+        this._issueCount = c;
 
         // Create multiple issue lists for pagination.
         for (var i = 0; i < c; i++) {
@@ -631,7 +653,7 @@ ViperAccessibilityPlugin.prototype = {
         content    += '<div class="issueTitle">' + issue.msg + '</div>';
         content    += '<div class="issueWcag">';
         content    += '<strong>' + code.standard + ' References</strong><br>';
-        content    += '<em>Principle: </em> <a target="_blank" href="http://www.w3.org/TR/2008/REC-WCAG20-20081211/#' + code.principle + '">' + dfx.ucFirst(code.principle) + '</a><br>';
+        content    += '<em>Principle: </em> <a target="_blank" href="http://www.w3.org/TR/2008/REC-WCAG20-20081211/#' + code.principleName + '">' + dfx.ucFirst(code.principleName) + '</a><br>';
         content    += '<em>Techniques: </em> ';
 
         var techStrs = [];
@@ -701,25 +723,27 @@ ViperAccessibilityPlugin.prototype = {
 
         if (sections[1].indexOf('Principle') === 0) {
             var principle = sections[1].replace('Principle', '');
+            var principleName = '';
             switch (principle) {
                 case '1':
-                    principle = 'perceivable';
+                    principleName = 'perceivable';
                 break;
 
                 case '2':
-                    principle = 'operable';
+                    principleName = 'operable';
                 break;
 
                 case '3':
-                    principle = 'understandable';
+                    principleName = 'understandable';
                 break;
 
                 case '4':
-                    principle = 'robust';
+                    principleName = 'robust';
                 break;
             }
 
-            parsed.principle = principle;
+            parsed.principle     = principle;
+            parsed.principleName = principleName;
         }
 
         if (sections[2].indexOf('Guideline') === 0) {
@@ -741,16 +765,55 @@ ViperAccessibilityPlugin.prototype = {
 
     _addResolutionContent: function(issue, detailsElement)
     {
-        var instructions = document.createElement('div');
-        dfx.addClass(instructions, 'resolutionInstructions');
-        dfx.setHtml(instructions, '&nbsp;');
+        // Load resolution content.
+        var code = this._parseCode(issue.code);
+        var self = this;
 
-        var resolutionActions = document.createElement('div');
-        dfx.addClass(resolutionActions, 'resolutionActions');
-        dfx.setHtml(resolutionActions, '&nbsp;');
+        this._loadCodeScript(code, function() {
+            var content = self._getCodeContent(code, issue);
+            if (!content) {
+                return;
+            }
 
-        detailsElement.appendChild(instructions);
-        detailsElement.appendChild(resolutionActions);
+            dfx.addClass(content, 'resolutionContent');
+            detailsElement.appendChild(content);
+        });
+
+    },
+
+    _loadCodeScript: function(code, callback)
+    {
+        var url = this.viper.getViperPath();
+        url    += 'Plugins/ViperAccessibilityPlugin/Resolutions/';
+        url    += code.standard + '/Principle' + code.principle;
+        url    += '/Guideline' + code.guideline.replace('.', '_');
+
+        var scriptUrl = url + '/resolutions.js';
+        var cssUrl    = url + '/resolutions.css';
+
+        var self = this;
+        this._includeCss(cssUrl, function() {});
+        this._includeScript(scriptUrl, function() {
+            callback.call(self);
+        });
+
+    },
+
+    _getCodeContent: function(code, issue)
+    {
+        var propStr = 'ViperAccessibilityPlugin_' + code.standard + '_Principle' + code.principle + '_Guideline' + code.guideline.replace('.', '_');
+        var prop = window[propStr];
+        if (!prop) {
+            return null;
+        }
+
+        var fn = prop['res_' + code.section.replace('.', '_')];
+        if (!fn) {
+            return null;
+        }
+
+        var content = fn.call(prop, issue.element, code);
+        return content;
 
     },
 
@@ -777,6 +840,68 @@ ViperAccessibilityPlugin.prototype = {
 
         return issueType;
 
+    },
+
+    /**
+     * Includes the specified JS file.
+     *
+     * @param {string}   src      The URL to the JS file.
+     * @param {function} callback The function to call once the script is loaded.
+     */
+    _includeScript: function(src, callback) {
+        var script    = document.createElement('script');
+        script.onload = function() {
+            script.onload = null;
+            script.onreadystatechange = null;
+            callback.call(this);
+        };
+
+        script.onreadystatechange = function() {
+            if (/^(complete|loaded)$/.test(this.readyState) === true) {
+                script.onreadystatechange = null;
+                script.onload();
+            }
+        }
+
+        script.src = src;
+
+        if (document.head) {
+            document.head.appendChild(script);
+        } else {
+            document.getElementsByTagName('head')[0].appendChild(script);
+        }
+    },
+
+    /**
+     * Includes the specified JS file.
+     *
+     * @param {string}   src      The URL to the JS file.
+     * @param {function} callback The function to call once the script is loaded.
+     */
+    _includeCss: function(href, callback) {
+        var link    = document.createElement('link');
+        link.rel    = 'stylesheet';
+        link.media  = 'screen';
+        link.onload = function() {
+            link.onload = null;
+            link.onreadystatechange = null;
+            callback.call(this);
+        };
+
+        link.onreadystatechange = function() {
+            if (/^(complete|loaded)$/.test(this.readyState) === true) {
+                link.onreadystatechange = null;
+                link.onload();
+            }
+        }
+
+        link.href = href;
+
+        if (document.head) {
+            document.head.appendChild(link);
+        } else {
+            document.getElementsByTagName('head')[0].appendChild(link);
+        }
     }
 
 };

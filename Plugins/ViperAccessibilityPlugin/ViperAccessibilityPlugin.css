@@ -406,3 +406,13 @@
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.8), 0 0 3px rgba(255, 255, 255, 0.5) inset;
     margin: -1px 0 0 -1px;
 }
+
+.ViperAP-cont .resolutionContent {
+    padding: 10px;
+    font-size: 0.75em;
+}
+
+.ViperAP-cont .resolutionContent p {
+    color: #EEE;
+    font-size: 1.4em;
+}

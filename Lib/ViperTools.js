@@ -127,6 +127,64 @@ var ViperTools = {
     },
 
     /**
+     * Creates a textbox.
+     *
+     * @param {string}   value      The initial value of the textbox.
+     * @param {string}   label      The label of the textbox.
+     * @param {boolean}  required   True if this field is required.
+     * @param {boolean}  expandable If true then the textbox will expand when focused.
+     *
+     * @return {DOMNode} If label specified the label element else the textbox element.
+     */
+    createTextbox: function(value, label, required, expandable)
+    {
+        var textBox = document.createElement('input');
+        dfx.addClass(textBox, 'Viper-input');
+        textBox.type  = 'text';
+        textBox.size  = 10;
+        textBox.value = value;
+
+        var self  = this;
+
+        var t = null;
+        dfx.addEvent(textBox, 'focus', function(e) {
+            dfx.addClass(labelElem, 'active');
+        });
+
+        dfx.addEvent(textBox, 'blur', function(e) {
+            dfx.removeClass(labelElem, 'active');
+            clearTimeout(t);
+        });
+
+        if (label) {
+            var labelElem = document.createElement('label');
+            dfx.addClass(labelElem, 'Viper-label');
+            var span = document.createElement('span');
+            dfx.addClass(span, 'Viper-labelText');
+            dfx.setHtml(span, label);
+
+            document.body.appendChild(span);
+            var width = dfx.getElementWidth(span);
+            dfx.setStyle(labelElem, 'padding-left', width + 'px');
+            labelElem.appendChild(span);
+            labelElem.appendChild(textBox);
+
+            if (required === true) {
+                dfx.addClass(labelElem, 'required');
+            }
+
+            if (expandable === true) {
+                dfx.addClass(labelElem, 'expandable');
+            }
+
+            return labelElem;
+        }
+
+        return textBox;
+
+    },
+
+    /**
      * Creates a checkbox.
      *
      * @param {string}  label   The label for the checkbox.
