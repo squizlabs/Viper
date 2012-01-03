@@ -335,7 +335,12 @@ ViperCopyPastePlugin.prototype = {
 
     _handleFormattedPaste: function(stripTags, e)
     {
-        dfx.empty(this.pasteElement);
+        if (!this.pasteElement) {
+            this.pasteElement = this._createPasteDiv();
+        } else {
+            dfx.empty(this.pasteElement);
+        }
+
         this.pasteElement.focus();
 
         var self = this;
