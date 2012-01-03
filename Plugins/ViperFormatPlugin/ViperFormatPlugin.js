@@ -625,7 +625,7 @@ ViperFormatPlugin.prototype = {
                         self._addChangeTrackInfo(newElem);
                         self._moveChildElements(blockParent, newElem);
 
-                        if (t === 'td') {
+                        if (t === 'td' || t == 'th') {
                             blockParent.appendChild(newElem);
                         } else {
                             dfx.insertBefore(blockParent, newElem);
