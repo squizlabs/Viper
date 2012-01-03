@@ -347,6 +347,7 @@ ViperCopyPastePlugin.prototype = {
         this.pasteElement.onpaste = function(e) {
             setTimeout(function() {
                self._handleFormattedPasteValue(stripTags);
+               self.viper.focus();
             }, 100);
         };
 
