@@ -60,14 +60,21 @@ ViperSourceViewPlugin.prototype = {
     {
         var self = this;
         if (!this._sourceView) {
+            if (!content) {
+                content = this.getContents();
+            }
+
+            this._originalSource = content;
+
             this._createSourceView(function() {
                 self.showSourceView(content, callback);
             });
         } else {
             if (!content) {
                 content = this.getContents();
-                this._originalSource = content;
             }
+
+            this._originalSource = content;
 
             this._editor.getSession().setValue(content);
             dfx.removeClass(this._sourceView, 'hidden');
@@ -108,6 +115,11 @@ ViperSourceViewPlugin.prototype = {
     updatePageContents: function(content)
     {
         var value = content || this._editor.getSession().getValue();
+
+        if (this._originalSource === value) {
+            return;
+        }
+
         this.viper.setHtml(value);
 
     },
@@ -185,8 +197,13 @@ ViperSourceViewPlugin.prototype = {
         setTimeout(function() {
             var anchor = self._editor.getSelection().getSelectionAnchor();
             self._editor.navigateTo(anchor.row, anchor.column);
-            self._editor.replace('');
         }, 500);
+    },
+
+    replaceSelection: function(replacement)
+    {
+        this._editor.replace(replacement);
+
     },
 
     initEditorEvents: function(editor)
