@@ -191,7 +191,27 @@
     text-shadow: none;
     font-size: 1.36em;
     border-top: 1px solid #2b2b2b;
+    position: relative;
 }
+
+.ViperAP-issuePane .issueDoneDiv {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 65px;
+    height: 65px;
+    background: transparent url(Images/done.png); no-repeat;
+}
+
+.ViperAP-issuePane.issueDone .issueDoneDiv {
+    display: block;
+}
+
+.ViperAP-issuePane.issueDone .ViperAP-issueDetails {
+    opacity: 0.5;
+}
+
 .ViperAP-issueDetails {
     position: relative;
     color: #FFF;
