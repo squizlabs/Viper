@@ -500,7 +500,7 @@ ViperDOMRange.prototype = {
         if (container
             && container.nodeType === dfx.TEXT_NODE
             && container.data.length !== 0
-            && container.data.indexOf("\n") !== 0
+            && container.data.match(/^\n\s*$/) === null
         ) {
             return true;
         }
