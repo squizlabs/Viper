@@ -841,6 +841,28 @@ ViperCopyPastePlugin.prototype = {
             }//end if
         }//end for
 
+        // Make sure the sub lists are inside list items.
+        var lists = dfx.getTag('ul,ol', div);
+        var lc    = lists.length;
+        for (var i = 0; i < lc; i++) {
+            var list = lists[i];
+            if (dfx.isTag(list.parentNode, 'ul') === true
+                || dfx.isTag(list.parentNode, 'ol') === true
+            ) {
+                // This sub list is sitting outside of an LI tag.
+                // Find the previous list item and add this list to that item.
+                var prevSibling = list.previousSibling;
+                while (prevSibling) {
+                    if (dfx.isTag(prevSibling, 'li') === true) {
+                        prevSibling.appendChild(list);
+                        break;
+                    }
+
+                    prevSibling = prevSibling.previousSibling;
+                }
+            }
+        }
+
         content = dfx.getHtml(div);
 
         return content;
