@@ -22,17 +22,20 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
 
 
     /**
-     * Test that creating a new table works.
+     * Asserts that the highlight is in correct position.
+     *
+     * @param integer $actual   The highlight position.
+     * @param integer $expected The expected position.
+     * @param integer $maxDiff  The max difference between two positions.
      *
      * @return void
      */
-    public function testCreateTable()
+    public function assertHighlightPos($actual, $expected, $maxDiff=3)
     {
-        $this->insertTable();
+        $diff = abs((int) ($actual - $expected));
+        $this->assertTrue(($diff <= $maxDiff), 'Table highlight is not correct. Diff = '.$diff);
 
-        $this->assertHTMLMatch('<p>Lorem </p><table style="width: 300px; " border="1"><tbody><tr><td style="width: 100px; ">&nbsp;</td><td style="width: 100px; ">&nbsp;</td><td style="width: 100px; ">&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p> dolor</p><p>sit amet <strong>consectetur</strong></p>');
-
-    }//end testCreateTable()
+    }//end assertHighlightPos()
 
 
     /**
@@ -128,6 +131,411 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
         }
 
     }//end testTableEditingIconAndTools()
+
+
+    /**
+     * Tests that table highlights work in complex tables.
+     *
+     * Complex tables have tbody, thead, tfoot, caption, cells with rowspan and colspan.
+     *
+     * @return void
+     */
+    public function testComplextTableHighlights()
+    {
+        $table   = $this->getBoundingRectangle('table');
+        $tbody   = $this->getBoundingRectangle('tbody');
+        $tfoot   = $this->getBoundingRectangle('tfoot');
+        $thead   = $this->getBoundingRectangle('thead');
+        $caption = $this->getBoundingRectangle('caption');
+
+        $firstCell = $this->getBoundingRectangle('th');
+
+        // Test highlights in heading.
+        $this->clickCell(0);
+
+        $toolIconRect = $this->getBoundingRectangle('#test-ViperTEP', 0);
+        $icon         = $this->getRegionOnPage($toolIconRect);
+
+        // Move mouse on top of the icon.
+        $this->mouseMove($icon);
+        usleep(200);
+
+        // Check the highlight for table.
+        $this->mouseMove($this->getImg('icon_tools_table.png'));
+        usleep(200);
+        $highlight = $this->getBoundingRectangle('.ViperITP-highlight');
+        $this->assertHighlightPos($highlight['x1'], $table['x1']);
+        $this->assertHighlightPos($highlight['x2'], $table['x2']);
+        $this->assertHighlightPos($highlight['y1'], $table['y1']);
+        $this->assertHighlightPos($highlight['y2'], $tfoot['y2']);
+
+        // Check the highlight for row.
+        $this->mouseMove($this->getImg('icon_tools_row.png'));
+        usleep(200);
+        $highlight = $this->getBoundingRectangle('.ViperITP-highlight');
+        $this->assertHighlightPos($highlight['x1'], $tbody['x1']);
+        $this->assertHighlightPos($highlight['x2'], $tbody['x2']);
+        $this->assertHighlightPos($highlight['y1'], $thead['y1']);
+        $this->assertHighlightPos($highlight['y2'], $thead['y2']);
+
+        // Check the highlight for col.
+        $this->mouseMove($this->getImg('icon_tools_col.png'));
+        usleep(200);
+        $highlight = $this->getBoundingRectangle('.ViperITP-highlight');
+        $this->assertHighlightPos($highlight['x1'], $firstCell['x1']);
+        $this->assertHighlightPos($highlight['x2'], $firstCell['x2']);
+        $this->assertHighlightPos($highlight['y1'], $thead['y1']);
+        $this->assertHighlightPos($highlight['y2'], $tfoot['y2']);
+
+        // Check the highlight for col.
+        $this->mouseMove($this->getImg('icon_tools_cell.png'));
+        usleep(200);
+        $highlight = $this->getBoundingRectangle('.ViperITP-highlight');
+        $this->assertHighlightPos($highlight['x1'], $firstCell['x1']);
+        $this->assertHighlightPos($highlight['x2'], $firstCell['x2']);
+        $this->assertHighlightPos($highlight['y1'], $firstCell['y1']);
+        $this->assertHighlightPos($highlight['y2'], $firstCell['y2']);
+
+        // Test highlights in a cell with colspan.
+        $this->clickCell(8);
+        $colspanCell = $this->getBoundingRectangle('td', 5);
+
+        $toolIconRect = $this->getBoundingRectangle('#test-ViperTEP', 0);
+        $icon         = $this->getRegionOnPage($toolIconRect);
+
+        // Move mouse on top of the icon.
+        $this->mouseMove($icon);
+        usleep(200);
+
+        // Check the highlight for table.
+        $this->mouseMove($this->getImg('icon_tools_table.png'));
+        usleep(200);
+        $highlight = $this->getBoundingRectangle('.ViperITP-highlight');
+        $this->assertHighlightPos($highlight['x1'], $table['x1']);
+        $this->assertHighlightPos($highlight['x2'], $table['x2']);
+        $this->assertHighlightPos($highlight['y1'], $caption['y1']);
+        $this->assertHighlightPos($highlight['y2'], $tfoot['y2']);
+
+        // Check the highlight for row.
+        $this->mouseMove($this->getImg('icon_tools_row.png'));
+        usleep(200);
+        $highlight = $this->getBoundingRectangle('.ViperITP-highlight');
+        $this->assertHighlightPos($highlight['x1'], $tbody['x1']);
+        $this->assertHighlightPos($highlight['x2'], $tbody['x2']);
+        $this->assertHighlightPos($highlight['y1'], $colspanCell['y1']);
+        $this->assertHighlightPos($highlight['y2'], $colspanCell['y2']);
+
+        // Check the highlight for col.
+        $this->mouseMove($this->getImg('icon_tools_col.png'));
+        usleep(200);
+        $highlight = $this->getBoundingRectangle('.ViperITP-highlight');
+        $this->assertHighlightPos($highlight['x1'], $colspanCell['x1']);
+        $this->assertHighlightPos($highlight['x2'], $colspanCell['x2']);
+        $this->assertHighlightPos($highlight['y1'], $thead['y1']);
+        $this->assertHighlightPos($highlight['y2'], $tfoot['y2']);
+
+        // Check the highlight for col.
+        $this->mouseMove($this->getImg('icon_tools_cell.png'));
+        usleep(200);
+        $highlight = $this->getBoundingRectangle('.ViperITP-highlight');
+        $this->assertHighlightPos($highlight['x1'], $colspanCell['x1']);
+        $this->assertHighlightPos($highlight['x2'], $colspanCell['x2']);
+        $this->assertHighlightPos($highlight['y1'], $colspanCell['y1']);
+        $this->assertHighlightPos($highlight['y2'], $colspanCell['y2']);
+
+        // Test highlights in a row with rowspan.
+        $this->clickCell(11);
+        $colspanCell = $this->getBoundingRectangle('td', 8);
+
+        $toolIconRect = $this->getBoundingRectangle('#test-ViperTEP', 0);
+        $icon         = $this->getRegionOnPage($toolIconRect);
+
+        // Move mouse on top of the icon.
+        $this->mouseMove($icon);
+        usleep(200);
+
+        // Check the highlight for table.
+        $this->mouseMove($this->getImg('icon_tools_table.png'));
+        usleep(200);
+        $highlight = $this->getBoundingRectangle('.ViperITP-highlight');
+        $this->assertHighlightPos($highlight['x1'], $table['x1']);
+        $this->assertHighlightPos($highlight['x2'], $table['x2']);
+        $this->assertHighlightPos($highlight['y1'], $caption['y1']);
+        $this->assertHighlightPos($highlight['y2'], $tfoot['y2']);
+
+        // Check the highlight for row.
+        $this->mouseMove($this->getImg('icon_tools_row.png'));
+        usleep(200);
+        $highlight = $this->getBoundingRectangle('.ViperITP-highlight');
+        $this->assertHighlightPos($highlight['x1'], $tbody['x1']);
+        $this->assertHighlightPos($highlight['x2'], $tbody['x2']);
+        $this->assertHighlightPos($highlight['y1'], $colspanCell['y1']);
+        $this->assertHighlightPos($highlight['y2'], $colspanCell['y2']);
+
+        // Check the highlight for col.
+        $this->mouseMove($this->getImg('icon_tools_col.png'));
+        usleep(200);
+        $highlight = $this->getBoundingRectangle('.ViperITP-highlight');
+        $this->assertHighlightPos($highlight['x1'], $colspanCell['x1']);
+        $this->assertHighlightPos($highlight['x2'], $colspanCell['x2']);
+        $this->assertHighlightPos($highlight['y1'], $thead['y1']);
+        $this->assertHighlightPos($highlight['y2'], $tfoot['y2']);
+
+        // Check the highlight for col.
+        $this->mouseMove($this->getImg('icon_tools_cell.png'));
+        usleep(200);
+        $highlight = $this->getBoundingRectangle('.ViperITP-highlight');
+        $this->assertHighlightPos($highlight['x1'], $colspanCell['x1']);
+        $this->assertHighlightPos($highlight['x2'], $colspanCell['x2']);
+        $this->assertHighlightPos($highlight['y1'], $colspanCell['y1']);
+        $this->assertHighlightPos($highlight['y2'], $colspanCell['y2']);
+
+        // Test highlights in footer.
+        $this->clickCell(3);
+        $colspanCell = $this->getBoundingRectangle('td', 0);
+
+        $toolIconRect = $this->getBoundingRectangle('#test-ViperTEP', 0);
+        $icon         = $this->getRegionOnPage($toolIconRect);
+
+        // Move mouse on top of the icon.
+        $this->mouseMove($icon);
+        usleep(200);
+
+        // Check the highlight for table.
+        $this->mouseMove($this->getImg('icon_tools_table.png'));
+        usleep(200);
+        $highlight = $this->getBoundingRectangle('.ViperITP-highlight');
+        $this->assertHighlightPos($highlight['x1'], $table['x1']);
+        $this->assertHighlightPos($highlight['x2'], $table['x2']);
+        $this->assertHighlightPos($highlight['y1'], $caption['y1']);
+        $this->assertHighlightPos($highlight['y2'], $tfoot['y2']);
+
+        // Check the highlight for row.
+        $this->mouseMove($this->getImg('icon_tools_row.png'));
+        usleep(200);
+        $highlight = $this->getBoundingRectangle('.ViperITP-highlight');
+        $this->assertHighlightPos($highlight['x1'], $tbody['x1']);
+        $this->assertHighlightPos($highlight['x2'], $tbody['x2']);
+        $this->assertHighlightPos($highlight['y1'], $colspanCell['y1']);
+        $this->assertHighlightPos($highlight['y2'], $colspanCell['y2']);
+
+        // Check the highlight for col.
+        $this->mouseMove($this->getImg('icon_tools_col.png'));
+        usleep(200);
+        $highlight = $this->getBoundingRectangle('.ViperITP-highlight');
+        $this->assertHighlightPos($highlight['x1'], $colspanCell['x1']);
+        $this->assertHighlightPos($highlight['x2'], $colspanCell['x2']);
+        $this->assertHighlightPos($highlight['y1'], $thead['y1']);
+        $this->assertHighlightPos($highlight['y2'], $tfoot['y2']);
+
+        // Check the highlight for col.
+        $this->mouseMove($this->getImg('icon_tools_cell.png'));
+        usleep(200);
+        $highlight = $this->getBoundingRectangle('.ViperITP-highlight');
+        $this->assertHighlightPos($highlight['x1'], $colspanCell['x1']);
+        $this->assertHighlightPos($highlight['x2'], $colspanCell['x2']);
+        $this->assertHighlightPos($highlight['y1'], $colspanCell['y1']);
+        $this->assertHighlightPos($highlight['y2'], $colspanCell['y2']);
+
+    }//end testComplextTableHighlights()
+
+
+    /**
+     * Tests that table highlights work in complex tables with no footer.
+     *
+     * @return void
+     */
+    public function testComplextTableHighlightsNoFooter()
+    {
+        $this->execJS('dfx.remove(dfx.getTag("tfoot"))');
+
+        $table   = $this->getBoundingRectangle('table');
+        $tbody   = $this->getBoundingRectangle('tbody');
+        $thead   = $this->getBoundingRectangle('thead');
+        $caption = $this->getBoundingRectangle('caption');
+
+        $cell = $this->getBoundingRectangle('td', 4);
+        sleep(1);
+
+        // Test highlights in heading.
+        $this->clickCell(7);
+
+        $toolIconRect = $this->getBoundingRectangle('#test-ViperTEP', 0);
+        $icon         = $this->getRegionOnPage($toolIconRect);
+
+        // Move mouse on top of the icon.
+        $this->mouseMove($icon);
+        usleep(200);
+
+        // Check the highlight for table.
+        $this->mouseMove($this->getImg('icon_tools_table.png'));
+        usleep(200);
+        $highlight = $this->getBoundingRectangle('.ViperITP-highlight');
+        $this->assertHighlightPos($highlight['x1'], $table['x1']);
+        $this->assertHighlightPos($highlight['x2'], $table['x2']);
+        $this->assertHighlightPos($highlight['y1'], $caption['y1']);
+        $this->assertHighlightPos($highlight['y2'], $tbody['y2']);
+
+        // Check the highlight for row.
+        $this->mouseMove($this->getImg('icon_tools_row.png'));
+        usleep(200);
+        $highlight = $this->getBoundingRectangle('.ViperITP-highlight');
+        $this->assertHighlightPos($highlight['x1'], $tbody['x1']);
+        $this->assertHighlightPos($highlight['x2'], $tbody['x2']);
+        $this->assertHighlightPos($highlight['y1'], $cell['y1']);
+        $this->assertHighlightPos($highlight['y2'], $cell['y2']);
+
+        // Check the highlight for col.
+        $this->mouseMove($this->getImg('icon_tools_col.png'));
+        usleep(200);
+        $highlight = $this->getBoundingRectangle('.ViperITP-highlight');
+        $this->assertHighlightPos($highlight['x1'], $cell['x1']);
+        $this->assertHighlightPos($highlight['x2'], $cell['x2']);
+        $this->assertHighlightPos($highlight['y1'], $thead['y1']);
+        $this->assertHighlightPos($highlight['y2'], $tbody['y2']);
+
+        // Check the highlight for col.
+        $this->mouseMove($this->getImg('icon_tools_cell.png'));
+        usleep(200);
+        $highlight = $this->getBoundingRectangle('.ViperITP-highlight');
+        $this->assertHighlightPos($highlight['x1'], $cell['x1']);
+        $this->assertHighlightPos($highlight['x2'], $cell['x2']);
+        $this->assertHighlightPos($highlight['y1'], $cell['y1']);
+        $this->assertHighlightPos($highlight['y2'], $cell['y2']);
+
+    }//end testComplextTableHighlightsNoFooter()
+
+
+    /**
+     * Tests that table highlights work in complex tables with no header.
+     *
+     * @return void
+     */
+    public function testComplextTableHighlightsNoHeader()
+    {
+        $this->execJS('dfx.remove(dfx.getTag("thead"))');
+
+        $table   = $this->getBoundingRectangle('table');
+        $tbody   = $this->getBoundingRectangle('tbody');
+        $tfoot   = $this->getBoundingRectangle('tfoot');
+        $caption = $this->getBoundingRectangle('caption');
+
+        $cell = $this->getBoundingRectangle('td', 4);
+        sleep(1);
+
+        // Test highlights in heading.
+        $this->clickCell(4);
+
+        $toolIconRect = $this->getBoundingRectangle('#test-ViperTEP', 0);
+        $icon         = $this->getRegionOnPage($toolIconRect);
+
+        // Move mouse on top of the icon.
+        $this->mouseMove($icon);
+        usleep(200);
+
+        // Check the highlight for table.
+        $this->mouseMove($this->getImg('icon_tools_table.png'));
+        usleep(200);
+        $highlight = $this->getBoundingRectangle('.ViperITP-highlight');
+        $this->assertHighlightPos($highlight['x1'], $table['x1']);
+        $this->assertHighlightPos($highlight['x2'], $table['x2']);
+        $this->assertHighlightPos($highlight['y1'], $caption['y1']);
+        $this->assertHighlightPos($highlight['y2'], $tfoot['y2']);
+
+        // Check the highlight for row.
+        $this->mouseMove($this->getImg('icon_tools_row.png'));
+        usleep(200);
+        $highlight = $this->getBoundingRectangle('.ViperITP-highlight');
+        $this->assertHighlightPos($highlight['x1'], $tbody['x1']);
+        $this->assertHighlightPos($highlight['x2'], $tbody['x2']);
+        $this->assertHighlightPos($highlight['y1'], $cell['y1']);
+        $this->assertHighlightPos($highlight['y2'], $cell['y2']);
+
+        // Check the highlight for col.
+        $this->mouseMove($this->getImg('icon_tools_col.png'));
+        usleep(200);
+        $highlight = $this->getBoundingRectangle('.ViperITP-highlight');
+        $this->assertHighlightPos($highlight['x1'], $cell['x1']);
+        $this->assertHighlightPos($highlight['x2'], $cell['x2']);
+        $this->assertHighlightPos($highlight['y1'], $tbody['y1']);
+        $this->assertHighlightPos($highlight['y2'], $tfoot['y2']);
+
+        // Check the highlight for col.
+        $this->mouseMove($this->getImg('icon_tools_cell.png'));
+        usleep(200);
+        $highlight = $this->getBoundingRectangle('.ViperITP-highlight');
+        $this->assertHighlightPos($highlight['x1'], $cell['x1']);
+        $this->assertHighlightPos($highlight['x2'], $cell['x2']);
+        $this->assertHighlightPos($highlight['y1'], $cell['y1']);
+        $this->assertHighlightPos($highlight['y2'], $cell['y2']);
+
+    }//end testComplextTableHighlightsNoHeader()
+
+
+    /**
+     * Tests that table highlights work in complex tables with no caption.
+     *
+     * @return void
+     */
+    public function testComplextTableHighlightsNoCaption()
+    {
+        $this->execJS('dfx.remove(dfx.getTag("caption"))');
+
+        $table   = $this->getBoundingRectangle('table');
+        $tbody   = $this->getBoundingRectangle('tbody');
+        $tfoot   = $this->getBoundingRectangle('tfoot');
+        $thead   = $this->getBoundingRectangle('thead');
+
+        $cell = $this->getBoundingRectangle('td', 4);
+        sleep(1);
+
+        // Test highlights in heading.
+        $this->clickCell(7);
+
+        $toolIconRect = $this->getBoundingRectangle('#test-ViperTEP', 0);
+        $icon         = $this->getRegionOnPage($toolIconRect);
+
+        // Move mouse on top of the icon.
+        $this->mouseMove($icon);
+        usleep(200);
+
+        // Check the highlight for table.
+        $this->mouseMove($this->getImg('icon_tools_table.png'));
+        usleep(200);
+        $highlight = $this->getBoundingRectangle('.ViperITP-highlight');
+        $this->assertHighlightPos($highlight['x1'], $table['x1']);
+        $this->assertHighlightPos($highlight['x2'], $table['x2']);
+        $this->assertHighlightPos($highlight['y1'], $thead['y1']);
+        $this->assertHighlightPos($highlight['y2'], $tfoot['y2']);
+
+        // Check the highlight for row.
+        $this->mouseMove($this->getImg('icon_tools_row.png'));
+        usleep(200);
+        $highlight = $this->getBoundingRectangle('.ViperITP-highlight');
+        $this->assertHighlightPos($highlight['x1'], $tbody['x1']);
+        $this->assertHighlightPos($highlight['x2'], $tbody['x2']);
+        $this->assertHighlightPos($highlight['y1'], $cell['y1']);
+        $this->assertHighlightPos($highlight['y2'], $cell['y2']);
+
+        // Check the highlight for col.
+        $this->mouseMove($this->getImg('icon_tools_col.png'));
+        usleep(200);
+        $highlight = $this->getBoundingRectangle('.ViperITP-highlight');
+        $this->assertHighlightPos($highlight['x1'], $cell['x1']);
+        $this->assertHighlightPos($highlight['x2'], $cell['x2']);
+        $this->assertHighlightPos($highlight['y1'], $thead['y1']);
+        $this->assertHighlightPos($highlight['y2'], $tfoot['y2']);
+
+        // Check the highlight for col.
+        $this->mouseMove($this->getImg('icon_tools_cell.png'));
+        usleep(200);
+        $highlight = $this->getBoundingRectangle('.ViperITP-highlight');
+        $this->assertHighlightPos($highlight['x1'], $cell['x1']);
+        $this->assertHighlightPos($highlight['x2'], $cell['x2']);
+        $this->assertHighlightPos($highlight['y1'], $cell['y1']);
+        $this->assertHighlightPos($highlight['y2'], $cell['y2']);
+
+    }//end testComplextTableHighlightsNoCaption()
 
 
     /**
@@ -257,7 +665,7 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
         $this->click($this->find($this->getImg('icon_trash.png'), NULL, 0.83));
 
         $actTagCounts = $this->execJS('gTagCounts("table")');
-        $expected     = array('table' => 0);
+        $expected     = array('table' => 1);
 
         $this->assertEquals($expected, $actTagCounts, 'Table was not removed from the page after its last row was removed');
 
@@ -280,7 +688,7 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
         $this->click($this->find($this->getImg('icon_trash.png'), NULL, 0.83));
 
         $actTagCounts = $this->execJS('gTagCounts("table")');
-        $expected     = array('table' => 0);
+        $expected     = array('table' => 1);
 
         $this->assertEquals($expected, $actTagCounts, 'Table was not removed from the page after its last column was removed');
 

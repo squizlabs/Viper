@@ -646,7 +646,18 @@ ViperTableEditorPlugin.prototype = {
             break;
 
             case 'table':
-                element = this.getCellTable(activeCell, true);
+                var table = this.getCellTable(activeCell);
+                var tfoot = dfx.getTag('tfoot', table);
+                coords    = dfx.getBoundingRectangle(table);
+
+                if (this.viper.isBrowser('firefox') === true) {
+                    // Caption height fix..
+                    var caption = dfx.getTag('caption', table);
+                    if (caption.length > 0) {
+                        caption = caption[0];
+                        coords.y2 += dfx.getElementHeight(caption);
+                    }
+                }
             break;
 
             case 'row':
@@ -662,7 +673,19 @@ ViperTableEditorPlugin.prototype = {
             case 'col':
                 // Column is a bit harder to calculate.
                 // Get the tables rectangle.
-                coords = dfx.getBoundingRectangle(this.getCellTable(activeCell, true));
+                var table   = this.getCellTable(activeCell);
+                var caption = dfx.getTag('caption', table);
+                coords      = dfx.getBoundingRectangle(table);
+
+                if (caption.length > 0) {
+                    var captionHeight = dfx.getElementHeight(caption[0]);
+                    coords.y1 += captionHeight;
+
+                    if (this.viper.isBrowser('firefox') === true) {
+                        // Firefox caption height fix.
+                        coords.y2 += captionHeight;
+                    }
+                }
 
                 // Get the width and height of the cell.
                 var cellRect = dfx.getBoundingRectangle(activeCell);
@@ -1876,7 +1899,7 @@ ViperTableEditorPlugin.prototype = {
         this.hideCellButtons();
     },
 
-    getCellTable: function(cell, tbody)
+    getCellTable: function(cell)
     {
         if (!cell) {
             return null;
@@ -1887,8 +1910,6 @@ ViperTableEditorPlugin.prototype = {
             if (node.nodeType === dfx.ELEMENT_NODE) {
                 var tagName = node.tagName.toLowerCase();
                 if (tagName === 'table') {
-                    return node;
-                } else if (tbody === true && tagName === 'tbody') {
                     return node;
                 }
             }
