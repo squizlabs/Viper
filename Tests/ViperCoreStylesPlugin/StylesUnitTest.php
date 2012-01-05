@@ -165,6 +165,27 @@ class Viper_Tests_ViperCoreStylesPlugin_StylesUnitTest extends AbstractViperUnit
     }//end testMultiParaRemoveStyles()
 
 
+    /**
+     * Tests that applying styles to whole paragraph and selecting the P in lineage shows paragraph tools.
+     *
+     * @return void
+     */
+    public function testSelectParaAfterStyling()
+    {
+        $this->selectText('Lorem', 'dolor');
+        $this->keyDown('Key.CMD + b');
+        $this->keyDown('Key.CMD + i');
+        $this->keyDown('Key.CMD + u');
+
+        $this->selectInlineToolbarLineageItem(0);
+
+        // Make sure bold icon is not shown in the toolbar.
+        $this->assertFalse($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_bold_active.png'));
+        $this->assertFalse($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_bold.png'));
+
+    }//end testSelectParaAfterStyling()
+
+
 }//end class
 
 ?>

@@ -674,7 +674,7 @@ ViperInlineToolbarPlugin.prototype = {
         range.setEnd(last, last.data.length);
 
         ViperSelection.addRange(range);
-        viper.fireSelectionChanged();
+        viper.fireSelectionChanged(range, true);
 
         // Update the position of the toolbar vertically only.
         this._updatePosition(range, true);
