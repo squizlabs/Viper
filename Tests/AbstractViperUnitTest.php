@@ -837,6 +837,18 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
 
 
     /**
+     * Returns the text that is selected.
+     *
+     * @return string
+     */
+    protected function getSelectedText()
+    {
+        return $this->execJS('viper.getViperRange().toString()');
+
+    }//end getSelectedText()
+
+
+    /**
      * Returns the rectangle for a DOM element found using the specified selector.
      *
      * @param string  $selector The jQuery selector to use for finding the element.
