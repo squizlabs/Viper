@@ -315,6 +315,29 @@ class Viper_Tests_ViperTableEditorPlugin_CreateTableUnitTest extends AbstractVip
     }//end testCreateTableStructure2()
 
 
+    /**
+     * Tests that its possible to create a table in a list.
+     *
+     * @return void
+     */
+    public function testCreateTableInList()
+    {
+        $this->selectText('consectetur');
+        $this->keyDown('Key.RIGHT');
+        $this->keyDown('Key.TAB');
+
+        $this->execJS('insTable(1, 1)');
+        sleep(1);
+
+        // TODO: Note, Google Chrome seems to add white space at the end of the style attribute..
+        $this->assertHTMLMatch(
+            '<p>Lorem IPSUM dolor</p><ul><li>sit amet <strong>consectetur</strong><table style="width: 300px;" border="1"><tbody><tr><td style="width: 100px;">&nbsp;</td></tr></tbody></table></li></ul>',
+            '<p>Lorem IPSUM dolor</p><ul><li>sit amet <strong>consectetur</strong><table style="width: 300px; " border="1"><tbody><tr><td style="width: 100px;">&nbsp;</td></tr></tbody></table></li></ul>'
+        );
+
+    }//end testCreateTableInList()
+
+
 }//end class
 
 ?>

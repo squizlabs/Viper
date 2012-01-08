@@ -193,15 +193,7 @@ ViperKeyboardEditorPlugin.prototype = {
             var blockQuote = dfx.getParents(range.startContainer, 'blockquote', this.viper.element);
 
             while (parent) {
-                if (parent.tagName.toLowerCase() === 'li') {
-                    // Lists are special they are handled by the ViperListPlugin.
-                    var listPlugin = this.viper.ViperPluginManager.getPlugin('ViperListPlugin');
-                    if (listPlugin && listPlugin.handleEnter(parent) === false) {
-                        return false;
-                    }
-
-                    break;
-                } else if (dfx.isBlockElement(parent) === true) {
+                if (dfx.isBlockElement(parent) === true) {
                     if (blockQuote.length === 0 || dfx.isTag(parent, 'blockquote') === true) {
                         break;
                     }
