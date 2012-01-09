@@ -129,8 +129,8 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarUnitTest extends Abstrac
     public function testMultiParagraphSelectionPosition()
     {
         $start = $this->find('Lorem');
-        $end   = $this->find('consectetur');
-        $this->selectText('Lorem', 'consectetur');
+        $end   = $this->find('Cat');
+        $this->selectText('Lorem', 'Cat');
 
         $leftX  = $this->getX($this->getTopLeft($start));
         $width  = ($this->execJS('dfx.getElementWidth(dfxjQuery("p")[0])') / 2);
@@ -195,8 +195,8 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarUnitTest extends Abstrac
     {
         $this->resizeWindow(1100, 800);
 
-        $word = $this->find('GUX');
-        $this->selectText('GUX');
+        $word = $this->find('Goat');
+        $this->selectText('Goat');
 
         $wordX = $this->getX($this->getCenter($word));
         $wordY = $this->getY($this->getBottomLeft($word));
@@ -293,7 +293,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarUnitTest extends Abstrac
      */
     public function testLineageNodeSelection()
     {
-        $this->selectText('consectetur');
+        $this->selectText('XyZ', 'DFG');
 
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem selected">Bold</li>', $lineage);
@@ -346,6 +346,234 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarUnitTest extends Abstrac
 
     }//end testClickOnToolbarNotHideToolbar()
 
+
+    /**
+     * Test that VITP changes when the format of the selected text changes to bold.
+     *
+     * @return void
+     */
+    public function testLineageChangesWhenBoldIsApplied()
+    {
+        $this->selectText('Lorem');
+
+        $lineage = $this->getHtml('.ViperITP-lineage');
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem selected">Selection</li>', $lineage);
+
+        $this->selectText('Lorem');
+        $this->keyDown('Key.CMD + b');
+
+        $lineage = $this->getHtml('.ViperITP-lineage');
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem selected">Bold</li>', $lineage);
+
+    }//end testLineageChangesWhenBoldIsApplied()
+
+
+    /**
+     * Test that VITP changes when the format of the selected text changes to italics.
+     *
+     * @return void
+     */
+    public function testLineageChangesWhenItalicIsApplied()
+    {
+        $this->selectText('Lorem');
+
+        $lineage = $this->getHtml('.ViperITP-lineage');
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem selected">Selection</li>', $lineage);
+
+        $this->selectText('Lorem');
+        $this->keyDown('Key.CMD + i');
+
+        $lineage = $this->getHtml('.ViperITP-lineage');
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem selected">Italic</li>', $lineage);
+
+    }//end testLineageChangesWhenItalicIsApplied()
+
+
+    /**
+     * Test that VITP changes when the format of the selected text changes to underlined.
+     *
+     * @return void
+     */
+    public function testLineageChangesWhenUnderlineIsApplied()
+    {
+        $this->selectText('Lorem');
+
+        $lineage = $this->getHtml('.ViperITP-lineage');
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem selected">Selection</li>', $lineage);
+
+        $this->selectText('Lorem');
+        $this->keyDown('Key.CMD + u');
+
+        $lineage = $this->getHtml('.ViperITP-lineage');
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem selected">Underline</li>', $lineage);
+
+    }//end testLineageChangesWhenUnderlineIsApplied()
+
+
+    /**
+     * Test that VITP changes when bold is removed from the selected text.
+     *
+     * @return void
+     */
+    public function testLineageChangesWhenBoldIsRemoved()
+    {
+        $this->selectText('XyZ', 'DFG');
+
+        $lineage = $this->getHtml('.ViperITP-lineage');
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem selected">Bold</li>', $lineage);
+
+
+        $this->selectText('XyZ', 'DFG');
+        $this->keyDown('Key.CMD + b');
+
+        $lineage = $this->getHtml('.ViperITP-lineage');
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem selected">Selection</li>', $lineage);
+
+    }//end testLineageChangesWhenBoldIsRemoved()
+
+
+    /**
+     * Test that VITP changes when italic is removed from the selected text.
+     *
+     * @return void
+     */
+    public function testLineageChangesWhenItalicIsRemoved()
+    {
+        $this->selectText('Food', 'Source');
+
+        $lineage = $this->getHtml('.ViperITP-lineage');
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem selected">Italic</li>', $lineage);
+
+
+        $this->selectText('Food', 'Source');
+        $this->keyDown('Key.CMD + i');
+
+        $lineage = $this->getHtml('.ViperITP-lineage');
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem selected">Selection</li>', $lineage);
+
+    }//end testLineageChangesWhenItalicIsRemoved()
+
+
+    /**
+     * Test that VITP changes when underline is removed from the selected text.
+     *
+     * @return void
+     */
+    public function testLineageChangesWhenUnderlineIsRemoved()
+    {
+        $this->selectText('WoW', 'Test');
+
+        $lineage = $this->getHtml('.ViperITP-lineage');
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem selected">Underline</li>', $lineage);
+
+
+        $this->selectText('WoW', 'cool');
+        $this->keyDown('Key.CMD + u');
+
+        $lineage = $this->getHtml('.ViperITP-lineage');
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem selected">Selection</li>', $lineage);
+
+    }//end testLineageChangesWhenUnderlineIsRemoved()
+
+
+    /**
+     * Test that when you select the Bold tag in the lineage both words in the tag are highlighted.
+     *
+     * @return void
+     */
+    public function testSelectingTheBoldTagInTheLineage()
+    {
+        $this->selectText('XyZ');
+
+        $lineage = $this->getHtml('.ViperITP-lineage');
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Bold</li><li class="ViperITP-lineageItem selected">Selection</li>', $lineage);
+
+        $this->selectInlineToolbarLineageItem(1);
+
+        $lineage = $this->getHtml('.ViperITP-lineage');
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem selected">Bold</li><li class="ViperITP-lineageItem">Selection</li>', $lineage);
+
+        $this->assertEquals('XyZ DFG', $this->getSelectedText(), 'Bold text is not selected.');
+
+        $this->selectText('DFG');
+        $this->selectInlineToolbarLineageItem(1);
+        $this->assertEquals('XyZ DFG', $this->getSelectedText(), 'Bold text is not selected.');
+
+    }//end testSelectingTheBoldTagInTheLineage()
+
+
+    /**
+     * Test that when you select the Underline tag in the lineage both words in the tag are highlighted.
+     *
+     * @return void
+     */
+    public function testSelectingTheUnderlineTagInTheLineage()
+    {
+        $this->selectText('WoW');
+
+        $lineage = $this->getHtml('.ViperITP-lineage');
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Underline</li><li class="ViperITP-lineageItem selected">Selection</li>', $lineage);
+
+        $this->selectInlineToolbarLineageItem(1);
+
+        $lineage = $this->getHtml('.ViperITP-lineage');
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem selected">Underline</li><li class="ViperITP-lineageItem">Selection</li>', $lineage);
+
+        $this->assertEquals('WoW Test', $this->getSelectedText(), 'Underlined text is not selected.');
+
+        $this->selectText('Test');
+        $this->selectInlineToolbarLineageItem(1);
+        $this->assertEquals('WoW Test', $this->getSelectedText(), 'Underlined text is not selected.');
+
+    }//end testSelectingTheUnderlineTagInTheLineage()
+
+
+    /**
+     * Test that when you select the Italic tag in the lineage both words in the tag are highlighted.
+     *
+     * @return void
+     */
+    public function testSelectingTheItalicTagInTheLineage()
+    {
+        $this->selectText('Food');
+
+        $lineage = $this->getHtml('.ViperITP-lineage');
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Italic</li><li class="ViperITP-lineageItem selected">Selection</li>', $lineage);
+
+        $this->selectInlineToolbarLineageItem(1);
+
+        $lineage = $this->getHtml('.ViperITP-lineage');
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem selected">Italic</li><li class="ViperITP-lineageItem">Selection</li>', $lineage);
+
+        $this->assertEquals('Food Source', $this->getSelectedText(), 'Italics text is not selected.');
+
+        $this->selectText('Source');
+        $this->selectInlineToolbarLineageItem(1);
+        $this->assertEquals('Food Source', $this->getSelectedText(), 'Italics text is not selected.');
+
+    }//end testSelectingTheItalicTagInTheLineage()
+
+
+    /**
+     * Test that when you select the P tag in the lineage the paragraph is highlighted.
+     *
+     * @return void
+     */
+    public function testSelectingThePTagInTheLineage()
+    {
+        $this->selectText('XyZ');
+
+        $lineage = $this->getHtml('.ViperITP-lineage');
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Bold</li><li class="ViperITP-lineageItem selected">Selection</li>', $lineage);
+
+        $this->selectInlineToolbarLineageItem(0);
+
+        $lineage = $this->getHtml('.ViperITP-lineage');
+        $this->assertEquals('<li class="ViperITP-lineageItem selected">P</li><li class="ViperITP-lineageItem">Bold</li><li class="ViperITP-lineageItem">Selection</li>', $lineage);
+
+        $this->assertEquals('aaaa bbb ZON XyZ DFG Food Source WoW Test', $this->getSelectedText(), 'Paragraph is not selected.');
+
+    }//end testSelectingThePTagInTheLineage()
 
 }//end class
 
