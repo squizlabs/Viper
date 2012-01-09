@@ -694,6 +694,23 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
 
     }//end testRemoveTableOnLastColDelete()
 
+    /**
+     * Tests that right arrow moves caret out of table.
+     *
+     * @return void
+     */
+    public function testTableNavEndFromFooter()
+    {
+        $this->clickCell(3);
+        $this->keyDown('Key.RIGHT');
+        usleep(100);
+        $this->keyDown('t');
+
+        $html = $this->getHtml('p', 3);
+        $this->assertEquals('&nbsp;t', $html);
+
+    }//end testTableNavFooter()
+
 
 }//end class
 

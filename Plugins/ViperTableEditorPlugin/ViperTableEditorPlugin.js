@@ -73,6 +73,31 @@ ViperTableEditorPlugin.prototype = {
 
                 dfx.preventDefault(e);
                 return false;
+            } else if (e.which === 39) {
+                // Right arrow.
+                // If the range is at the end of a table (last cell) then move the
+                // caret outside even if there is no next sibling.
+                var range = self.viper.getCurrentRange();
+                if (range.collapsed === true) {
+                    var startNode = range.getStartNode();
+                    if (startNode.nodeType === dfx.TEXT_NODE && range.endOffset === startNode.data.length) {
+                        var cell     = self.getActiveCell();
+                        if (startNode === range._getLastSelectableChild(cell)) {
+                            if (!self._getNextRow(cell.parentNode)) {
+                                // End of table.
+                                var table = self.getCellTable(cell);
+                                if (!table.nextSibling || table.nextSibling.data && table.nextSibling.data.match(/^\n\s*$/)) {
+                                    var newNode = document.createElement('p');
+                                    dfx.setHtml(newNode, '&nbsp;');
+                                    dfx.insertAfter(table, newNode);
+                                    range.setStart(newNode.firstChild, 0);
+                                    range.collapse(true);
+                                    ViperSelection.addRange(range);
+                                }
+                            }
+                        }
+                    }
+                }
             }
 
         });
