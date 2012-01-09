@@ -185,7 +185,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
 
             $this->goToURL($dest);
             self::$_testRun = TRUE;
-        }
+        }//end if
 
     }//end setUp()
 
@@ -240,7 +240,6 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
                 continue;
             }
 
-            $this->highlight($f);
             try {
                 $f = $this->find($baseDir.'/Core/Images/calibrate1.png', NULL, $i);
             } catch (Exception $e) {
@@ -261,7 +260,6 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
                 continue;
             }
 
-            $this->highlight($f);
             try {
                 $f = $this->find($baseDir.'/Core/Images/calibrate2.png', NULL, $i);
             } catch (Exception $e) {
@@ -274,10 +272,11 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
 
         $this->find($baseDir.'/Core/Images/calibrate1.png', NULL, $similarity);
         $this->keyDown('Key.DOWN');
+        usleep(500);
         $this->find($baseDir.'/Core/Images/calibrate2.png', NULL, $similarity);
         $this->find($baseDir.'/Core/Images/topToolbarPattern.png', NULL, $similarity);
 
-        $this->setAutoWaitTimeout(3);
+        $this->setAutoWaitTimeout(2);
 
         $this->selectText('TpT');
         $this->find($baseDir.'/Core/Images/vitpPattern.png', NULL, $similarity);
