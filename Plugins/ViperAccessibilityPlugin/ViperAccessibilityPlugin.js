@@ -535,7 +535,7 @@ ViperAccessibilityPlugin.prototype = {
                 }
 
                 self._currentList--;
-                dfx.setStyle(firstList, 'margin-left', (-1 * this._containerWidth * (self._currentList - 1)) + 'px');
+                dfx.setStyle(firstList, 'margin-left', (-1 * self._containerWidth * (self._currentList - 1)) + 'px');
 
                 // Update page counter.
                 dfx.setHtml(pageCounter, 'Pg ' + self._currentList + ' of ' + self._pageCount);
@@ -555,7 +555,7 @@ ViperAccessibilityPlugin.prototype = {
                 }
 
                 self._currentList++;
-                dfx.setStyle(firstList, 'margin-left', (-1 * this._containerWidth * (self._currentList - 1)) + 'px');
+                dfx.setStyle(firstList, 'margin-left', (-1 * self._containerWidth * (self._currentList - 1)) + 'px');
 
                 // Update page counter.
                 dfx.setHtml(pageCounter, 'Pg ' + self._currentList + ' of ' + self._pageCount);
