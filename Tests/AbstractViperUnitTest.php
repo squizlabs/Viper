@@ -67,6 +67,13 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      */
     private static $_topToolbar = NULL;
 
+    /**
+     * The default similarity setting.
+     *
+     * @var float
+     */
+    private static $_similarity = NULL;
+
 
     /**
      * Returns the path of a test file.
@@ -168,6 +175,14 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         } else {
             $this->selectBrowser(self::$_browser);
             $this->resizeWindow();
+
+            try {
+                $this->_calibrate();
+            } catch (Exception $e) {
+                echo $e;
+                exit;
+            }
+
             $this->goToURL($dest);
             self::$_testRun = TRUE;
         }
@@ -187,6 +202,89 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
     {
 
     }//end tearDown()
+
+
+    /**
+     * Cleans up after all tests are completed.
+     *
+     * @return void
+     * @throws Exception If it fails to calibrate.
+     */
+    private function _calibrate()
+    {
+        // Calibrate image recognition.
+        $baseDir = dirname(__FILE__);
+        $dest    = $baseDir.'/calibrate.html';
+        self::goToURL($dest);
+
+        $this->selectText('TpT');
+        sleep(1);
+        $this->setAutoWaitTimeout(0.5);
+
+        $similarity = NULL;
+        for ($i = 0.99; $i >= 0; $i -= 0.01) {
+            try {
+                $f = $this->find($baseDir.'/Core/Images/vitpPattern.png', NULL, $i);
+            } catch (Exception $e) {
+                continue;
+            }
+
+            $similarity = $i;
+            break;
+        }
+
+        for ($i = $similarity; $i >= 0; $i -= 0.01) {
+            try {
+                $f = $this->find($baseDir.'/Core/Images/calibrate2.png', NULL, $i);
+            } catch (Exception $e) {
+                continue;
+            }
+
+            $this->highlight($f);
+            try {
+                $f = $this->find($baseDir.'/Core/Images/calibrate1.png', NULL, $i);
+            } catch (Exception $e) {
+                $similarity = $i;
+                break;
+            }
+
+            throw new Exception('Failed to calibrate.');
+        }
+
+        $this->keyDown('Key.UP');
+        $this->keyDown('Key.UP');
+
+        for ($i = $similarity; $i >= 0; $i -= 0.01) {
+            try {
+                $f = $this->find($baseDir.'/Core/Images/calibrate1.png', NULL, $i);
+            } catch (Exception $e) {
+                continue;
+            }
+
+            $this->highlight($f);
+            try {
+                $f = $this->find($baseDir.'/Core/Images/calibrate2.png', NULL, $i);
+            } catch (Exception $e) {
+                $similarity = $i;
+                break;
+            }
+
+            throw new Exception('Failed to calibrate.');
+        }
+
+        $this->find($baseDir.'/Core/Images/calibrate1.png', NULL, $similarity);
+        $this->keyDown('Key.DOWN');
+        $this->find($baseDir.'/Core/Images/calibrate2.png', NULL, $similarity);
+        $this->find($baseDir.'/Core/Images/topToolbarPattern.png', NULL, $similarity);
+
+        $this->setAutoWaitTimeout(3);
+
+        $this->selectText('TpT');
+        $this->find($baseDir.'/Core/Images/vitpPattern.png', NULL, $similarity);
+
+        self::$_similarity = $similarity;
+
+    }//end _calibrate()
 
 
     /**
@@ -524,7 +622,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
     protected function getInlineToolbar()
     {
         $toolbarPattern = $this->createPattern(dirname(__FILE__).'/Core/Images/vitpPattern.png');
-        $toolbarPattern = $this->similar($toolbarPattern, 0.83);
+        $toolbarPattern = $this->similar($toolbarPattern, self::$_similarity);
 
         $match = $this->find($toolbarPattern, self::$_window);
         $this->setX($match, ($this->getX($match) - 200));
@@ -549,7 +647,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
 
         // Find the toolbar pattern.
         $toolbarPattern = $this->createPattern(dirname(__FILE__).'/Core/Images/topToolbarPattern.png');
-        $toolbarPattern = $this->similar($toolbarPattern, 0.83);
+        $toolbarPattern = $this->similar($toolbarPattern, self::$_similarity);
         $match          = $this->find($toolbarPattern, self::$_window);
 
         // Create a new region.
@@ -587,7 +685,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         $toolbar = $this->getInlineToolbar();
 
         $pattern = $this->createPattern($buttonIcon);
-        $pattern = $this->similar($pattern, 0.98);
+        $pattern = $this->similar($pattern, self::$_similarity);
 
         return $this->exists($pattern, $toolbar);
 
@@ -606,7 +704,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         $toolbar = $this->getTopToolbar();
 
         $pattern = $this->createPattern($buttonIcon);
-        $pattern = $this->similar($pattern, 0.98);
+        $pattern = $this->similar($pattern, self::$_similarity);
 
         return $this->exists($pattern, $toolbar);
 

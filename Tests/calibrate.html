@@ -1,0 +1,49 @@
+<html>
+    <head>
+     <style>
+        body {
+            margin: 50px;
+            background-color: #EEE;
+            font-size: 20px;
+        }
+
+        #content {
+            text-align: center;
+        }
+
+        #windowTarget {
+            position: fixed;
+            left: 0;
+            top: 0;
+            z-index: 999999;
+        }
+        </style>
+        <script type="text/javascript" src="../DfxJSLib/dfx.js"></script>
+        <script type="text/javascript" src="../Viper-all.js"></script>
+        <script type="text/javascript" src="./test.js"></script>
+        <script type="text/javascript">
+            var viper = null;
+            dfx.addLoadEvent(function() {
+                viper = new Viper('test');
+                var pluginSets = {
+                    all: {
+                        plugins: ['ViperCoreStylesPlugin', 'ViperKeyboardEditorPlugin', 'ViperInlineToolbarPlugin', 'ViperHistoryPlugin', 'ViperListPlugin', 'ViperFormatPlugin', 'ViperToolbarPlugin', 'ViperTableEditorPlugin', 'ViperCopyPastePlugin', 'ViperImagePlugin', 'ViperLinkPlugin', 'ViperSearchReplacePlugin', 'ViperAcronymPlugin', 'ViperAbbrPlugin', 'ViperLangPlugin', 'ViperTrackChangesPlugin']
+                    }
+                };
+
+                viper.setPluginSets(pluginSets);
+                viper.getPluginManager().usePluginSet('all');
+                viper.setEditableElement(dfx.getId('content'));
+
+                viper.focus();
+            });
+        </script>
+    </head>
+    <body spellcheck="false">
+        <img id="windowTarget" src="./Core/Images/window-target.png"/>
+        <div id="content">
+            <p>WoW</p>
+            <p><strong>TpT</strong></p>
+        </div>
+    </body>
+</html>

@@ -101,8 +101,9 @@ abstract class AbstractSikuliUnitTest extends PHPUnit_Framework_TestCase
     /**
      * Find a particular GUI element.
      *
-     * @param string $ps     A Pattern object or Path to an image file or text.
-     * @param string $region Region or a Match object.
+     * @param string $ps         A Pattern object or Path to an image file or text.
+     * @param string $region     Region or a Match object.
+     * @param float  $similarity The similarity setting.
      *
      * @return string
      */
@@ -123,6 +124,25 @@ abstract class AbstractSikuliUnitTest extends PHPUnit_Framework_TestCase
         return $var;
 
     }//end find()
+
+
+    /**
+     * Sets the auto timeout.
+     *
+     * @param float  $timeout The timeout in seconds.
+     * @param string $region  Region object.
+     *
+     * @return void
+     */
+    protected function setAutoWaitTimeout($timeout, $region=NULL)
+    {
+        if ($region === NULL) {
+            $region = $this->_defaultRegion;
+        }
+
+        $this->callFunc('setAutoWaitTimeout', array($timeout), $region);
+
+    }//end setAutoWaitTimeout()
 
 
     /*
@@ -172,7 +192,7 @@ abstract class AbstractSikuliUnitTest extends PHPUnit_Framework_TestCase
     {
         $this->callFunc('dragDrop', array($start, $end));
 
-    }//end dragDrop
+    }//end dragDrop()
 
 
     /**
@@ -618,7 +638,7 @@ abstract class AbstractSikuliUnitTest extends PHPUnit_Framework_TestCase
      * @param integer $x      The new X position.
      * @param integer $y      The new Y position.
      *
-     * @return void
+     * @return string
      */
     protected function setLocation($locObj, $x, $y)
     {
@@ -663,7 +683,7 @@ abstract class AbstractSikuliUnitTest extends PHPUnit_Framework_TestCase
      *
      * @param string $name The name of the application to switch to.
      *
-     * @return void
+     * @return string
      */
     protected function switchApp($name)
     {
@@ -783,7 +803,7 @@ abstract class AbstractSikuliUnitTest extends PHPUnit_Framework_TestCase
 
         return $var;
 
-    }//end _callFunc()
+    }//end callFunc()
 
 
     /**
