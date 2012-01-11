@@ -1,9 +1,9 @@
-ViperAccessibilityPlugin_WCAG2AAA_Principle1_Guideline1_1 = {
+ViperAccessibilityPlugin_WCAG2_Principle1_Guideline1_1 = {
     hasCss: true,
 
-    res_1_1_1: function(element, code) {
+    res_1_1_1: function(element, code, callback) {
         var div = document.createElement('div');
-        dfx.addClass(div, 'ViperAP-WCAG2AAA_Principle1_Guideline1_1_1');
+        dfx.addClass(div, 'ViperAP-WCAG2_Principle1_Guideline1_1_1');
 
         if (code.techniques[0] === 'H37') {
             dfx.setHtml(div, '<p>Add an alt attribute to your img element. This should describe the purpose or content of the image.</p>');
@@ -27,7 +27,7 @@ ViperAccessibilityPlugin_WCAG2AAA_Principle1_Guideline1_1 = {
             div.appendChild(content);
         }//end if
 
-        return div;
+        callback.call(this, div);
     }
 
 };

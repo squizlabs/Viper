@@ -1,17 +1,17 @@
-.ViperAP-WCAG2AAA_Principle1_Guideline1_1_1 img.thumb {
+.ViperAP-WCAG2_Principle1_Guideline1_1_1 img.thumb {
     border: 1px solid #BBBBBB;
     box-shadow: 0 0 6px #000000;
     width: 85px;
     max-height: 85px;
 }
 
-.ViperAP-WCAG2AAA_Principle1_Guideline1_1_1 .editing {
+.ViperAP-WCAG2_Principle1_Guideline1_1_1 .editing {
     float: right;
     width: 200px;
     text-align: center;
 }
 
-.ViperAP-WCAG2AAA_Principle1_Guideline1_1_1 .editing .Viper-button {
+.ViperAP-WCAG2_Principle1_Guideline1_1_1 .editing .Viper-button {
     margin-top: 20px;
 }
 

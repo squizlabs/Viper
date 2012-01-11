@@ -330,7 +330,8 @@
 }
 
 .ViperAP-issuePane,
-.ViperAP-issueList {
+.ViperAP-issueList,
+.ViperAP-issueListWrapper {
     -moz-transition: margin 0.2s ease-in;
     -webkit-transition: margin 0.2s ease-in;
 }
@@ -435,4 +436,34 @@
 .ViperAP-cont .resolutionContent p {
     color: #EEE;
     font-size: 1.4em;
+}
+
+/* Pointer */
+.ViperAP-pointer {
+    width: 70px;
+    height: 70px;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    z-index: 9999;
+}
+
+.ViperAP-pointer-hidden {
+    visibility: hidden;
+}
+
+.ViperAP-pointer-down {
+    background: url(Images/pointer_down.png) no-repeat 50%;
+}
+
+.ViperAP-pointer-up {
+    background: url(Images/pointer_up.png) no-repeat 50%;
+}
+
+.ViperAP-pointer-left {
+    background: url(Images/pointer_left.png) no-repeat 50%;
+}
+
+.ViperAP-pointer-right {
+    background: url(Images/pointer_right.png) no-repeat 50%;
 }

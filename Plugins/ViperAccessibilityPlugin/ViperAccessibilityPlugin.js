@@ -45,10 +45,16 @@ function ViperAccessibilityPlugin(viper)
     this._listPageCounter     = null;
     this._mainPanelLeft       = null;
     this._htmlCSsrc           = 'https://raw.github.com/squizlabs/HTML_CodeSniffer/master/HTMLCS.js';
-    this._standard            = 'WCAG2AAA';
     this._includeNotices      = false;
     this._loadedScripts       = [];
     this._loadCallbacks       = {};
+    this._includedCSS         = [];
+    this._standard            = 'WCAG2AAA';
+    this._standards           = {
+        WCAG2AAA: 'WCAG 2.0 AAA',
+        WCAG2AA: 'WCAG 2.0 AA',
+        WCAG2A: 'WCAG 2.0 A'
+    }
 
     this._htmlCSsrc = 'file:///Users/sdanis/Sites/HTML_CodeSniffer/HTMLCS.js';
 
@@ -59,6 +65,18 @@ ViperAccessibilityPlugin.prototype = {
     {
         var self = this;
         this._createToolbarItems();
+
+    },
+
+    setSettings: function(settings)
+    {
+        if (!settings) {
+            return;
+        }
+
+        if (settings.standards) {
+            this._standards = standards;
+        }
 
     },
 
@@ -109,6 +127,7 @@ ViperAccessibilityPlugin.prototype = {
 
         var aaTools = toolbar.createToolsPopup('Accessibility Auditor - ' + this._standard, toolsSection, [subSection]);
         dfx.setStyle(aaTools.element, 'width', this._containerWidth + 'px');
+        aaTools.element.id = this.viper.getId() + '-VAP';
         this._aaTools = aaTools;
 
         // Check button panel.
@@ -373,15 +392,14 @@ ViperAccessibilityPlugin.prototype = {
         dfx.setHtml(standards, '<h1>Accessibility Standard</h1><p>Choose which standard you would like to check your content against.</p>');
         div.appendChild(standards);
 
-        var trippleA = ViperTools.createRadiobutton('standard', 'WCAG2AAA', 'Tripple A (WCAG 2.0 AAA)', true);
-        var doubleA  = ViperTools.createRadiobutton('standard', 'WCAG2AA', 'Double A (WCAG 2.0 AA)');
-        var singleA  = ViperTools.createRadiobutton('standard', 'WCAG2A', 'Single A (WCAG 2.0 A)');
-        var sec508   = ViperTools.createRadiobutton('standard', 'Section508', 'Section 508 (U.S. Federal Agencies 1998)');
+        for (var standardId in this._standards) {
+            var selected = false;
+            if (standardId === this._standard) {
+                selected = true;
+            }
 
-        standards.appendChild(trippleA);
-        standards.appendChild(doubleA);
-        standards.appendChild(singleA);
-        standards.appendChild(sec508);
+            standards.appendChild(ViperTools.createRadiobutton('standard', standardId, this._standards[standardId], selected));
+        }
 
         // Re check button.
         var self       = this;
@@ -538,11 +556,11 @@ ViperAccessibilityPlugin.prototype = {
                 dfx.setStyle(firstList, 'margin-left', (-1 * self._containerWidth * (self._currentList - 1)) + 'px');
 
                 // Update page counter.
-                dfx.setHtml(pageCounter, 'Pg ' + self._currentList + ' of ' + self._pageCount);
+                dfx.setHtml(pageCounter, self._currentList + ' of ' + self._pageCount);
             });
 
             dfx.addClass(pageCounter, 'ViperAP-listNav-pageCounter');
-            dfx.setHtml(pageCounter, 'Pg 1 of ' + self._pageCount);
+            dfx.setHtml(pageCounter, '1 of ' + self._pageCount);
             listNav.appendChild(pageCounter);
 
             // Show next list of issues.
@@ -558,7 +576,7 @@ ViperAccessibilityPlugin.prototype = {
                 dfx.setStyle(firstList, 'margin-left', (-1 * self._containerWidth * (self._currentList - 1)) + 'px');
 
                 // Update page counter.
-                dfx.setHtml(pageCounter, 'Pg ' + self._currentList + ' of ' + self._pageCount);
+                dfx.setHtml(pageCounter, self._currentList + ' of ' + self._pageCount);
             });
 
             this._issueList.appendChild(listNav);
@@ -611,7 +629,7 @@ ViperAccessibilityPlugin.prototype = {
 
         this._pageCount = listCount;
 
-        dfx.setHtml(this._listPageCounter, 'Pg ' + this._currentList + ' of ' + listCount);
+        dfx.setHtml(this._listPageCounter, this._currentList + ' of ' + listCount);
 
     },
 
@@ -717,7 +735,7 @@ ViperAccessibilityPlugin.prototype = {
         }//end switch
 
         var liContent = '<span class="ViperAP-issueType ' + issueType + '"></span>';
-        liContent    += '<span class="ViperAP-issueTitle">' + dfx.ellipsize(msg.msg, 140) + '</span>';
+        liContent    += '<span class="ViperAP-issueTitle">' + dfx.ellipsize(msg.msg, 130) + '</span>';
 
         dfx.setHtml(li, liContent);
 
@@ -738,210 +756,112 @@ ViperAccessibilityPlugin.prototype = {
     {
         var main = document.createElement('div');
         dfx.addClass(main, 'ViperAP-issuePane');
-
-        var issueType = this._getIssueType(issue);
-
-        var code = this._parseCode(issue.code);
-
-        var content = '<div class="ViperAP-issueDetails">';
-        content    += '<span class="ViperAP-issueType ' + issueType + '"></span>';
-        content    += '<div class="issueTitle">' + issue.msg + '</div>';
-        content    += '<div class="issueWcag">';
-        content    += '<strong>' + code.standard + ' References</strong><br>';
-        content    += '<em>Principle: </em> <a target="_blank" href="http://www.w3.org/TR/2008/REC-WCAG20-20081211/#' + code.principleName + '">' + dfx.ucFirst(code.principleName) + '</a><br>';
-        content    += '<em>Techniques: </em> ';
-
-        var techStrs = [];
-        for (var i = 0; i < code.techniques.length; i++) {
-            techStrs.push('<a target="_blank" href="http://www.w3.org/TR/2010/NOTE-WCAG20-TECHS-20101014/' + code.techniques[i] + '">' + code.techniques[i] + '</a>');
-        }
-
-        content += techStrs.join(', ');
-        content += '<br>';
-        content += '</div></div><div class="issueDoneDiv"></div><!-- End References -->';
-        dfx.setHtml(main, content);
-
-        var resolutionCont = document.createElement('div');
-
-        content  = '<div class="ViperAP-issueResolution">';
-        content += '<div class="resolutionHeader"><strong>Resolution</strong>';
-        dfx.setHtml(resolutionCont, content);
-
-        main.appendChild(resolutionCont);
-
-        var resolutionHeader = dfx.getClass('resolutionHeader', resolutionCont)[0];
-
-        // Create resolution tools.
-        var self          = this;
-        var locateBtn     = this._toolbar.createButton('', false, 'Locate Element', false, 'locate', function() {
-            self.pointToElement(issue.element);
-        }, null, null, resolutionHeader);
-        var sourceViewBtn = this._toolbar.createButton('', false, 'Show in Source View', false, 'sourceView', function() {
-            var tmpText = document.createTextNode('__SCROLL_TO_HERE__');
-            dfx.insertAfter(issue.element, tmpText);
-            var sourceViewPlugin = self.viper.getPluginManager().getPlugin('ViperSourceViewPlugin');
-            var contents = sourceViewPlugin.getContents();
-            dfx.remove(tmpText);
-            sourceViewPlugin.showSourceView(contents, function() {
-                sourceViewPlugin.scrollToText('__SCROLL_TO_HERE__');
-                setTimeout(function() {
-                    sourceViewPlugin.replaceSelection('');
-                }, 500);
-            });
-        }, null, null, resolutionHeader);
-        var doneBtn = this._toolbar.createButton('Done', false, 'Mark as done', false, '', function() {
-            self.markAsDone();
-        }, null, null, resolutionHeader);
-
-        resolutionHeader.appendChild(locateBtn);
-        resolutionHeader.appendChild(sourceViewBtn);
-        resolutionHeader.appendChild(doneBtn);
-
-        this._addResolutionContent(issue, main);
-
         this._issueDetailsWrapper.appendChild(main);
+
+        var self = this;
+        this._loadStandard(issue.code, function(standardObj) {
+            var issueType = this._getIssueType(issue);
+
+            standardObj.getReferenceContent(issue, function(refContent) {
+                var references = document.createElement('div');
+                dfx.addClass(references, 'ViperAP-issueDetails');
+
+                var content = '<span class="ViperAP-issueType ' + issueType + '"></span>';
+                content    += '<div class="issueTitle">' + issue.msg + '</div>';
+
+                dfx.setHtml(references, content);
+                references.appendChild(refContent);
+
+                var issueDoneDiv = document.createElement('div');
+                dfx.addClass(issueDoneDiv, 'issueDoneDiv');
+                references.appendChild(issueDoneDiv);
+
+                main.appendChild(references);
+            }, self);
+
+            standardObj.getResolutionContent(issue, function(resContent) {
+                var resolutionCont = document.createElement('div');
+                dfx.addClass(resolutionCont, 'ViperAP-issueResolution');
+                dfx.setHtml(resolutionCont, '<div class="resolutionHeader"><strong>Resolution</strong></div>');
+                main.appendChild(resolutionCont);
+
+                var resolutionHeader = dfx.getClass('resolutionHeader', resolutionCont)[0];
+
+                // Create resolution tools.
+                var locateBtn     = self._toolbar.createButton('', false, 'Locate Element', false, 'locate', function() {
+                    self.pointToElement(issue.element);
+                }, null, null, resolutionHeader);
+                var sourceViewBtn = self._toolbar.createButton('', false, 'Show in Source View', false, 'sourceView', function() {
+                    var tmpText = document.createTextNode('__SCROLL_TO_HERE__');
+                    dfx.insertAfter(issue.element, tmpText);
+                    var sourceViewPlugin = self.viper.getPluginManager().getPlugin('ViperSourceViewPlugin');
+                    var contents = sourceViewPlugin.getContents();
+                    dfx.remove(tmpText);
+                    sourceViewPlugin.showSourceView(contents, function() {
+                        sourceViewPlugin.scrollToText('__SCROLL_TO_HERE__');
+                        setTimeout(function() {
+                            sourceViewPlugin.replaceSelection('');
+                        }, 500);
+                    });
+                }, null, null, resolutionHeader);
+                var doneBtn = self._toolbar.createButton('Done', false, 'Mark as done', false, '', function() {
+                    self.markAsDone();
+                }, null, null, resolutionHeader);
+
+                resolutionHeader.appendChild(locateBtn);
+                resolutionHeader.appendChild(sourceViewBtn);
+                resolutionHeader.appendChild(doneBtn);
+
+                if (resContent) {
+                    resolutionCont.appendChild(resContent);
+                }
+            }, self);
+        });
 
     },
 
     pointToElement: function(element)
     {
-        if (!element) {
-            return;
-        }
+        this.pointer.container = this._aaTools.element;
+        this.pointer.pointTo(null, null, element);
+        return;
 
-        var rect = dfx.getBoundingRectangle(element);
-
-        var highlight = document.createElement('div');
-        dfx.addClass(highlight, 'ViperAP-highlight');
-        dfx.setStyle(highlight, 'left', rect.x1 + 'px');
-        dfx.setStyle(highlight, 'width', (rect.x2 - rect.x1) + 'px');
-        dfx.setStyle(highlight, 'top', rect.y1 + 'px');
-        dfx.setStyle(highlight, 'height', (rect.y2 - rect.y1) + 'px');
-
-        document.body.appendChild(highlight);
-        setTimeout(function() {
-            dfx.remove(highlight);
-        }, 2000);
+        //if (!element) {
+        //    return;
+        //}
+        //
+        //
+        //var rect = dfx.getBoundingRectangle(element);
+        //
+        //var highlight = document.createElement('div');
+        //dfx.addClass(highlight, 'ViperAP-highlight');
+        //dfx.setStyle(highlight, 'left', rect.x1 + 'px');
+        //dfx.setStyle(highlight, 'width', (rect.x2 - rect.x1) + 'px');
+        //dfx.setStyle(highlight, 'top', rect.y1 + 'px');
+        //dfx.setStyle(highlight, 'height', (rect.y2 - rect.y1) + 'px');
+        //
+        //document.body.appendChild(highlight);
+        //setTimeout(function() {
+        //    dfx.remove(highlight);
+        //}, 2000);
     },
 
-    _parseCode: function(code)
+    _loadStandard: function(issueCode, callback)
     {
-        var sections = code.split('.');
-        var parsed   = {};
-        parsed.standard = sections[0];
-
-        if (sections[1].indexOf('Principle') === 0) {
-            var principle = sections[1].replace('Principle', '');
-            var principleName = '';
-            switch (principle) {
-                case '1':
-                    principleName = 'perceivable';
-                break;
-
-                case '2':
-                    principleName = 'operable';
-                break;
-
-                case '3':
-                    principleName = 'understandable';
-                break;
-
-                case '4':
-                    principleName = 'robust';
-                break;
-            }
-
-            parsed.principle     = principle;
-            parsed.principleName = principleName;
-        }
-
-        if (sections[2].indexOf('Guideline') === 0) {
-            parsed.guideline = sections[2].replace('Guideline', '').replace('_', '.');
-        }
-
-        parsed.section = sections[3].replace('_', '.');
-
-        parsed.techniques = [];
-
-        var techniques = sections[4].split(',');
-        for (var i = 0; i < techniques.length; i++) {
-            parsed.techniques.push(techniques[i]);
-        }
-
-        return parsed;
-
-    },
-
-    _addResolutionContent: function(issue, detailsElement)
-    {
-        // Load resolution content.
-        var code = this._parseCode(issue.code);
-        var self = this;
-
-        this._loadCodeScript(code, function() {
-            var content = self._getCodeContent(code, issue);
-            if (!content) {
-                return;
-            }
-
-            dfx.addClass(content, 'resolutionContent');
-            detailsElement.appendChild(content);
-        });
-
-    },
-
-    _loadCodeScript: function(code, callback)
-    {
+        // Load the standard's file.
         var url = this.viper.getViperPath();
         url    += 'Plugins/ViperAccessibilityPlugin/Resolutions/';
-        url    += code.standard + '/Principle' + code.principle;
-        url    += '/Guideline' + code.guideline.replace('.', '_');
 
-        var scriptUrl = url + '/resolutions.js';
-        var cssUrl    = url + '/resolutions.css';
-
-        if (this._loadedScripts.find(scriptUrl) >= 0) {
-            callback.call(this);
-            return;
+        // First part of the issueCode must the standard name.
+        var parts    = issueCode.split('.');
+        var standard = parts[0];
+        if (standard.indexOf('WCAG2') === 0) {
+            standard = 'WCAG2';
         }
 
-        // Load the script file only once. Any multiple requests to load the same
-        // script file will be added to the loadCallbacks, once the file is available
-        // all the callbacks will be executed.
-        if (!this._loadCallbacks[scriptUrl]) {
-            this._loadCallbacks[scriptUrl] = [callback];
+        var standardScriptUrl = url + standard + '/' + standard + '.js';
 
-            var self = this;
-            this._includeCss(cssUrl, function() {});
-            this._includeScript(scriptUrl, function() {
-                for (var i = 0; i < self._loadCallbacks[scriptUrl].length; i++) {
-                    self._loadCallbacks[scriptUrl][i].call(self);
-                }
-
-                delete self._loadCallbacks[scriptUrl];
-            });
-
-        } else {
-            this._loadCallbacks[scriptUrl].push(callback);
-        }
-
-    },
-
-    _getCodeContent: function(code, issue)
-    {
-        var propStr = 'ViperAccessibilityPlugin_' + code.standard + '_Principle' + code.principle + '_Guideline' + code.guideline.replace('.', '_');
-        var prop = window[propStr];
-        if (!prop) {
-            return null;
-        }
-
-        var fn = prop['res_' + code.section.replace('.', '_')];
-        if (!fn) {
-            return null;
-        }
-
-        var content = fn.call(prop, issue.element, code);
-        return content;
+        this.loadObject(standardScriptUrl, 'ViperAccessibilityPlugin_' + standard, callback);
 
     },
 
@@ -985,13 +905,46 @@ ViperAccessibilityPlugin.prototype = {
 
     },
 
+    loadObject: function(src, objName, callback)
+    {
+        if (this._loadedScripts.find(src) >= 0) {
+            callback.call(this, window[objName]);
+            return;
+        }
+
+        // Load the script file only once. Any multiple requests to load the same
+        // script file will be added to the loadCallbacks, once the file is available
+        // all the callbacks will be executed.
+        if (!this._loadCallbacks[src]) {
+            this._loadCallbacks[src] = [callback];
+
+            var self = this;
+            this.includeScript(src, function() {
+                for (var i = 0; i < self._loadCallbacks[src].length; i++) {
+                    self._loadCallbacks[src][i].call(self, window[objName]);
+                }
+
+                delete self._loadCallbacks[src];
+            });
+
+        } else {
+            this._loadCallbacks[src].push(callback);
+        }//end if
+
+    },
+
     /**
      * Includes the specified JS file.
      *
      * @param {string}   src      The URL to the JS file.
      * @param {function} callback The function to call once the script is loaded.
      */
-    _includeScript: function(src, callback) {
+    includeScript: function(src, callback) {
+        //if (this._loadedScripts.find(src) >= 0) {
+        //    callback.call(this);
+        //    return;
+        //}
+
         var script    = document.createElement('script');
         script.onload = function() {
             script.onload = null;
@@ -1021,14 +974,19 @@ ViperAccessibilityPlugin.prototype = {
      * @param {string}   src      The URL to the JS file.
      * @param {function} callback The function to call once the script is loaded.
      */
-    _includeCss: function(href, callback) {
+    includeCss: function(href) {
+        if (this._includedCSS.find(href) >= 0) {
+            return;
+        }
+
+        this._includedCSS.push(href);
+
         var link    = document.createElement('link');
         link.rel    = 'stylesheet';
         link.media  = 'screen';
         link.onload = function() {
             link.onload = null;
             link.onreadystatechange = null;
-            callback.call(this);
         };
 
         link.onreadystatechange = function() {
@@ -1045,6 +1003,225 @@ ViperAccessibilityPlugin.prototype = {
         } else {
             document.getElementsByTagName('head')[0].appendChild(link);
         }
+    },
+
+    pointer:
+    {
+        pointer: null,
+        pointerDim: {},
+        container: null,
+
+        pointTo: function(elemid, elemClass, elem) {
+            if (!elem) {
+                if (!elemid || elemid === '') {
+                    if (!elemClass || elemClass === '') {
+                        return;
+                    }
+
+                    // Get the first element that has the elemClass.
+                    var celems = dfx.getClass(elemClass);
+                    var cln    = celems.length;
+                    for (var i = 0; i < cln; i++) {
+                        if (dfx.getElementWidth(celems[i]) > 0) {
+                            elem = celems[i];
+                            break;
+                        }
+                    }
+                } else if (elemClass && elemClass !== '*') {
+                    elem = dfx.getClass(elemClass, dfx.getId(elemid))[0];
+                } else {
+                    // Get the elem element using the DOM element id.
+                    elem = dfx.getId(elemid);
+                }
+            }//end if
+
+            // If the specified elem is not in the DOM then we cannot point to it.
+            if (!elem) {
+                return;
+            }
+
+            // Do not point to elem if its hidden.
+            if (dfx.getStyle(elem, 'visibility', 'hidden') === true) {
+                return;
+            }
+
+            // Get element coords.
+            var rect = dfx.getBoundingRectangle(elem);
+
+            // If we cannot get the position then dont do anything,
+            // most likely element is hidden.
+            if (rect.x1 === 0
+                && rect.x2 === 0
+                || rect.x1 === rect.x2
+                || rect.y1 === rect.y2
+            ) {
+                return;
+            }
+
+            // Determine where to show the arrow.
+            var winDim = dfx.getWindowDimensions();
+
+            var pointer = this.getPointer();
+
+            dfx.setStyle(pointer, 'display', 'block');
+            if (dfxjQuery.support.opacity === true) {
+                dfx.setOpacity(pointer, 1);
+            }
+
+            var pointerRect = dfx.getBoundingRectangle(pointer);
+            var pointerH    = (pointerRect.y2 - pointerRect.y1);
+            var pointerW    = (pointerRect.x2 - pointerRect.x1);
+
+            this.pointerDim.height = pointerH;
+            this.pointerDim.width  = pointerW;
+
+            var bounceHeight = 20;
+            var scroll       = dfx.getScrollCoords();
+
+            // Scroll in to view if not visible.
+            if (elem.scrollIntoView && (rect.y1 < scroll.y || rect.y1 > scroll.y + winDim.height)) {
+                elem.scrollIntoView(false);
+            }
+
+            // Try to position the pointer.
+            if ((rect.y1 - pointerH - bounceHeight) > scroll.y) {
+                // Arrow direction down.
+                this.showPointer(elem, 'down');
+            } else if ((rect.y2 + pointerH) < (winDim.height - scroll.y)) {
+                // Up.
+                this.showPointer(elem, 'up');
+            } else if ((rect.y2 + pointerW) < winDim.width) {
+                // Left.
+                this.showPointer(elem, 'left');
+            } else if ((rect.y1 - pointerW) > 0) {
+                // Right.
+                this.showPointer(elem, 'right');
+            }
+        },
+
+        getPointer: function() {
+            if (!this.pointer) {
+                this.pointer = document.createElement('div');
+                var c        = 'ViperAP';
+                dfx.addClass(this.pointer, c + '-pointer');
+                dfx.addClass(this.pointer, c + '-pointer-hidden');
+                document.body.appendChild(this.pointer);
+            }
+
+            return this.pointer;
+        },
+
+        showPointer: function(elem, direction) {
+            var c = 'ViperAP';
+
+            this._removeDirectionClasses();
+            dfx.addClass(this.pointer, c + '-pointer-' + direction);
+            dfx.removeClass(this.pointer, c + '-pointer-hidden');
+
+            var rect         = dfx.getBoundingRectangle(elem);
+            var top          = 0;
+            var left         = 0;
+            var bounceHeight = 20;
+            switch (direction) {
+                case 'up':
+                    bounceHeight = (-bounceHeight);
+                    top          = rect.y2;
+                    if ((rect.x2 - rect.x1) < 250) {
+                        left = (this.getRectMidPnt(rect) - (this.pointerDim.width / 2));
+                    } else {
+                        left = rect.x1;
+                    }
+                break;
+
+                case 'left':
+                    left = rect.x2;
+                    top  = this.getRectMidPnt(rect, true);
+                break;
+
+                case 'right':
+                    left = (rect.x1 - this.pointerDim.width);
+                    top  = this.getRectMidPnt(rect, true);
+                break;
+
+                case 'down':
+                default:
+                    top = (rect.y1 - this.pointerDim.height);
+                    if ((rect.x2 - rect.x1) < 250) {
+                        left = (this.getRectMidPnt(rect) - (this.pointerDim.width / 2));
+                    } else {
+                        left = rect.x1;
+                    }
+                break;
+            }//end switch
+
+            dfx.setStyle(this.pointer, 'top', top + 'px');
+            dfx.setStyle(this.pointer, 'left', left + 'px');
+
+            // Check if the help window is under the pointer then re-position it.
+            // Unless it is an element within the ViperAP pop-up.
+            var coords    = dfx.getBoundingRectangle(this.container);
+            rect          = dfx.getBoundingRectangle(this.pointer);
+            var posOffset = 20;
+            var newPos    = null;
+            var midX      = (rect.x1 + ((rect.x2 - rect.x1) / 2));
+            var midY      = (rect.y1 + ((rect.y2 - rect.y1) / 2));
+            if (coords.x1 <= midX
+                && coords.x2 >= midX
+                && coords.y1 <= midY
+                && coords.y2 >= midY
+            ) {
+                var self = this;
+                dfx.setStyle(this.container, 'opacity', 0.5);
+                setTimeout(function() {
+                    dfx.setStyle(self.container, 'opacity', 1);
+                }, 4000);
+            }
+
+            // Stop all pointer animations.
+            dfx.stop(this.pointer);
+
+            clearTimeout(this._fadeTimer);
+            var self = this;
+            dfx.bounce(this.pointer, 4, bounceHeight, function() {
+                self._fadeTimer = setTimeout(function() {
+                    if (dfxjQuery.support.opacity === true) {
+                        dfx.fadeOut(self.pointer, 600);
+                    } else {
+                        dfx.setStyle(self.pointer, 'display', 'none');
+                    }
+                }, 1000);
+            });
+        },
+
+        hidePointer: function() {
+            if (this.pointer) {
+                // Stop all animations.
+                dfx.stop(this.pointer);
+                // Fade out.
+                dfx.fadeOut(this.pointer, 200);
+            }
+        },
+
+        getRectMidPnt: function(rect, height) {
+            var midPnt = 0;
+            if (height === true) {
+                midPnt = (rect.y1 + ((rect.y2 - rect.y1) / 2));
+            } else {
+                midPnt = (rect.x1 + ((rect.x2 - rect.x1) / 2));
+            }
+
+            return midPnt;
+        },
+
+        _removeDirectionClasses: function() {
+            var c = 'ViperAP';
+            var d = ['down', 'up', 'left', 'right'];
+            var l = d.length;
+            for (var i = 0; i < l; i++) {
+                dfx.removeClass(this.pointer, c + '-pointer-' + d[i]);
+            }
+        }
+
     }
 
 };
