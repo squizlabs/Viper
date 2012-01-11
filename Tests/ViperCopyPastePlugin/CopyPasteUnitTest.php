@@ -58,7 +58,7 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
     {
         // Open Word doc, copy its contents.
         $retval = NULL;
-      
+
         system('open '.escapeshellarg(dirname(__FILE__).'/test1.docx'), $retval);
 
         if ($retval === 1) {
@@ -76,6 +76,7 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
         $this->keyDown('Key.CMD + c');
         $this->keyDown('Key.CMD + w');
         $this->keyDown('Key.CMD + q');
+        sleep(5);
 
         $this->switchApp($this->getBrowserName());
         $this->selectText('Lorem');
@@ -83,7 +84,7 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
         $this->keyDown('Key.CMD + v');
 
         sleep(5);
-        
+
         $this->assertHTMLMatch('<p>&nbsp;</p><p>Test\u2026 <strong><em>bold and italic</em> just bold.</strong></p>\n<p>New paragraph\u2026</p><p>&nbsp;</p>');
 
     }//end testMSWordSimpleCopyPaste()

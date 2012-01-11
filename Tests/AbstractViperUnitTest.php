@@ -824,6 +824,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
             $text = substr($text, 2, -1);
         }
 
+        $text = str_replace("\n", '\n', $text);
         $text = str_replace('\\\\"', '\\"', $text);
         $text = str_replace('\xa0', ' ', $text);
 
