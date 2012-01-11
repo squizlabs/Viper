@@ -137,14 +137,11 @@ class Viper_Tests_ViperCoreStylesPlugin_StylesInTablesUnitTest extends AbstractV
 
         $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_bold.png');
         $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_italic.png');
-        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_underline.png');
         $this->mouseMove($this->createLocation(0, 0));
         $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_bold_active.png'));
         $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_bold_active.png'));
         $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic_active.png'));
         $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic_active.png'));
-        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_underline_active.png'));
-        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_underline_active.png'));
 
         $this->click($textLoc);
         $this->dragDrop($this->getTopLeft($textLoc), $this->getBottomRight($textLoc));
@@ -152,20 +149,15 @@ class Viper_Tests_ViperCoreStylesPlugin_StylesInTablesUnitTest extends AbstractV
         $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_bold_active.png'));
         $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic_active.png'));
         $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic_active.png'));
-        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_underline_active.png'));
-        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_underline_active.png'));
 
         $this->doubleClick($textLoc);
         $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_bold_active.png'));
         $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_bold_active.png'));
         $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic_active.png'));
         $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic_active.png'));
-        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_underline_active.png'));
-        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_underline_active.png'));
 
         $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_bold_active.png');
         $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_italic_active.png');
-        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_underline_active.png');
         $this->assertEquals('UnaU TiuT XabcX Mnu', $this->getHtml('td,th', 3));
 
     }//end testStylingInTableMultipleStyles()
