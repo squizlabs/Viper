@@ -1,0 +1,41 @@
+table.ViperCharMapPlugin {
+    -moz-border-bottom-colors: none;
+    -moz-border-image: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    border-collapse: collapse;
+    border-color: #444;
+    border-spacing: 0;
+    border-style: solid none none solid;
+    border-width: 1px medium medium 1px;
+    margin-bottom: 0.7em;
+}
+
+table.ViperCharMapPlugin td {
+    -moz-border-bottom-colors: none;
+    -moz-border-image: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    border-collapse: collapse;
+    border-color: #444;
+    border-right: 1px solid #444;
+    border-spacing: 0;
+    border-style: none solid solid none;
+    border-width: medium 1px 1px medium;
+    padding: 10px;
+    text-align: left;
+    vertical-align: top;
+    cursor: pointer;
+    text-shadow: none;
+    color: #EEE;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+table.ViperCharMapPlugin td:hover {
+    background: #2d73d2;
+    background: -moz-linear-gradient(center top , #3987F2, #205CAF) repeat scroll 0 0 transparent;
+    background: -webkit-gradient(linear, left top, left bottom, from(#3987f2), to(#205caf));
+}
