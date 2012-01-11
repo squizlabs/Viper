@@ -573,7 +573,95 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarUnitTest extends Abstrac
 
         $this->assertEquals('aaaa bbb ZON XyZ DFG Food Source WoW Test', $this->getSelectedText(), 'Paragraph is not selected.');
 
+        $this->selectInlineToolbarLineageItem(2);
+        $this->assertEquals('XyZ', $this->getSelectedText(), 'XyZ is not selected');
+
+
     }//end testSelectingThePTagInTheLineage()
+
+
+    /**
+     * Test the order of the Bold, Italic and Underline lineage
+     *
+     * @return void
+     */
+    public function testOrderOfBoldItalicAndUnderlineLineage()
+    {
+        $this->selectText('IPSUM');
+
+        $lineage = $this->getHtml('.ViperITP-lineage');
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem selected">Selection</li>', $lineage);
+
+        $this->selectText('IPSUM');
+        $this->keyDown('Key.CMD + b');
+        $this->keyDown('Key.CMD + i');
+        $this->keyDown('Key.CMD + u');
+        $lineage = $this->getHtml('.ViperITP-lineage');
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Bold</li><li class="ViperITP-lineageItem">Italic</li><li class="ViperITP-lineageItem selected">Underline</li>', $lineage);
+
+        $this->selectText('IPSUM');
+        $this->keyDown('Key.CMD + b');
+        $lineage = $this->getHtml('.ViperITP-lineage');
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Italic</li><li class="ViperITP-lineageItem selected">Underline</li>', $lineage);
+
+        $this->selectText('IPSUM');
+        $this->keyDown('Key.CMD + u');
+        $lineage = $this->getHtml('.ViperITP-lineage');
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem selected">Italic</li>', $lineage);
+
+        $this->selectText('IPSUM');
+        $this->keyDown('Key.CMD + u');
+        $lineage = $this->getHtml('.ViperITP-lineage');
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Italic</li><li class="ViperITP-lineageItem selected">Underline</li>', $lineage);
+
+        $this->selectText('IPSUM');
+        $this->keyDown('Key.CMD + b');
+        $lineage = $this->getHtml('.ViperITP-lineage');
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Italic</li><li class="ViperITP-lineageItem">Underline</li><li class="ViperITP-lineageItem selected">Bold</li>', $lineage);
+
+        $this->selectText('IPSUM');
+        $this->keyDown('Key.CMD + i');
+        $lineage = $this->getHtml('.ViperITP-lineage');
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Underline</li><li class="ViperITP-lineageItem selected">Bold</li>', $lineage);
+
+        $this->selectText('IPSUM');
+        $this->keyDown('Key.CMD + i');
+        $lineage = $this->getHtml('.ViperITP-lineage');
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Underline</li><li class="ViperITP-lineageItem">Bold</li><li class="ViperITP-lineageItem selected">Italic</li>', $lineage);
+
+    }//end testOrderOfBoldItalicAndUnderlineLineage()
+
+
+    /**
+     * Test selecting Bold, Italic and Underline in the lineage.
+     *
+     * @return void
+     */
+    public function testSelectingBoldItalicAndUnderline()
+    {
+        $this->selectText('IPSUM', 'dolor');
+        $this->keyDown('Key.CMD + b');
+        $this->keyDown('Key.CMD + i');
+        $this->keyDown('Key.CMD + u');
+
+        $lineage = $this->getHtml('.ViperITP-lineage');
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Bold</li><li class="ViperITP-lineageItem">Italic</li><li class="ViperITP-lineageItem selected">Underline</li>', $lineage);
+
+        $this->selectText('IPSUM');
+        $this->selectInlineToolbarLineageItem(3);
+        $this->assertEquals('IPSUM dolor', $this->getSelectedText(), 'Formatted text is not selected');
+
+        $this->selectText('dolor');
+        $this->selectInlineToolbarLineageItem(1);
+        $this->assertEquals('IPSUM dolor', $this->getSelectedText(), 'Formatted text is not selected');
+
+        $this->selectText('IPSUM');
+        $this->selectInlineToolbarLineageItem(2);
+        $this->assertEquals('IPSUM dolor', $this->getSelectedText(), 'Formatted text is not selected');
+
+
+    }//end testSelectingBoldItalicAndUnderline()
+
 
 }//end class
 

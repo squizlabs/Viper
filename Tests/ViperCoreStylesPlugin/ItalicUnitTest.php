@@ -19,7 +19,7 @@ class Viper_Tests_ViperCoreStylesPlugin_ItalicUnitTest extends AbstractViperUnit
         $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic_active.png'), 'Italic icon in the inline toolbar is not active');
         $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic_active.png'), 'Italic icon in the top toolbar is not active');
 
-        $this->assertHTMLMatch('<p><em>Lorem</em> XuT dolor</p><p>sit <em>amet</em> <strong>WoW</strong> <u>food</u></p>');
+        $this->assertHTMLMatch('<p><em>Lorem</em> XuT dolor</p><p>sit <em>amet</em> <strong>WoW</strong></p>');
 
     }//end testStartOfParaItalic()
 
@@ -37,7 +37,7 @@ class Viper_Tests_ViperCoreStylesPlugin_ItalicUnitTest extends AbstractViperUnit
         $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic_active.png'), 'Italic icon in the inline toolbar is not active');
         $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic_active.png'), 'Italic icon in the top toolbar is not active');
 
-        $this->assertHTMLMatch('<p>Lorem <em>XuT</em> dolor</p><p>sit <em>amet</em> <strong>WoW</strong> <u>food</u></p>');
+        $this->assertHTMLMatch('<p>Lorem <em>XuT</em> dolor</p><p>sit <em>amet</em> <strong>WoW</strong></p>');
 
     }//end testMidOfParaItalic()
 
@@ -55,7 +55,7 @@ class Viper_Tests_ViperCoreStylesPlugin_ItalicUnitTest extends AbstractViperUnit
         $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic_active.png'), 'Italic icon in the inline toolbar is not active');
         $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic_active.png'), 'Italic icon in the top toolbar is not active');
 
-        $this->assertHTMLMatch('<p>Lorem XuT <em>dolor</em></p><p>sit <em>amet</em> <strong>WoW</strong> <u>food</u></p>');
+        $this->assertHTMLMatch('<p>Lorem XuT <em>dolor</em></p><p>sit <em>amet</em> <strong>WoW</strong></p>');
 
     }//end testEndOfParaItalic()
 
@@ -73,7 +73,7 @@ class Viper_Tests_ViperCoreStylesPlugin_ItalicUnitTest extends AbstractViperUnit
         $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic_active.png'), 'Italic icon in the inline toolbar is not active');
         $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic_active.png'), 'Italic icon in the top toolbar is not active');
 
-        $this->assertHTMLMatch('<p>Lorem <em>XuT dolor</em></p><p>sit <em>amet</em> <strong>WoW</strong> <u>food</u></p>');
+        $this->assertHTMLMatch('<p>Lorem <em>XuT dolor</em></p><p>sit <em>amet</em> <strong>WoW</strong></p>');
 
         $this->selectText('dolor');
 
@@ -81,7 +81,7 @@ class Viper_Tests_ViperCoreStylesPlugin_ItalicUnitTest extends AbstractViperUnit
         $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic.png'), 'Italic icon in the inline toolbar is still active');
         $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic.png'), 'Italic icon in the top toolbar is still active');
 
-        $this->assertHTMLMatch('<p>Lorem <em>XuT </em>dolor</p><p>sit <em>amet</em> <strong>WoW</strong> <u>food</u></p>');
+        $this->assertHTMLMatch('<p>Lorem <em>XuT </em>dolor</p><p>sit <em>amet</em> <strong>WoW</strong></p>');
 
         $this->selectText('XuT');
         $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic_active.png'), 'Italic icon in the inline toolbar is not active');
@@ -103,7 +103,7 @@ class Viper_Tests_ViperCoreStylesPlugin_ItalicUnitTest extends AbstractViperUnit
         $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic_active.png'), 'Italic icon in the inline toolbar is not active');
         $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic_active.png'), 'Italic icon in the top toolbar is not active');
 
-        $this->assertHTMLMatch('<p><em>Lorem</em> XuT dolor</p><p>sit <em>amet</em> <strong>WoW</strong> <u>food</u></p>');
+        $this->assertHTMLMatch('<p><em>Lorem</em> XuT dolor</p><p>sit <em>amet</em> <strong>WoW</strong></p>');
 
         $this->selectText('Lorem');
         $this->keyDown('Key.CMD + i');
@@ -111,7 +111,7 @@ class Viper_Tests_ViperCoreStylesPlugin_ItalicUnitTest extends AbstractViperUnit
         $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic.png'), 'Italic icon in the inline toolbar is still active');
         $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic.png'), 'Italic icon in the top toolbar is still active');
 
-        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p>sit <em>amet</em> <strong>WoW</strong> <u>food</u></p>');
+        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p>sit <em>amet</em> <strong>WoW</strong></p>');
 
     }//end testShortcutCommandForItalics()
 
@@ -134,7 +134,7 @@ class Viper_Tests_ViperCoreStylesPlugin_ItalicUnitTest extends AbstractViperUnit
         // Click the Top Toolbar icon to make whole paragraph italics.
         $this->clickTopToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_italic.png');
 
-        $this->assertHTMLMatch('<p><em>Lorem XuT dolor</em></p><p>sit <em>amet</em> <strong>WoW</strong> <u>food</u></p>');
+        $this->assertHTMLMatch('<p><em>Lorem XuT dolor</em></p><p>sit <em>amet</em> <strong>WoW</strong></p>');
         $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic_active.png'), 'Italic icon is not active in the top toolbar');
 
         // Inline Toolbar icon is now displayed
@@ -145,7 +145,7 @@ class Viper_Tests_ViperCoreStylesPlugin_ItalicUnitTest extends AbstractViperUnit
         $this->selectInlineToolbarLineageItem(1);
         $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_italic_active.png');
 
-        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p>sit <em>amet</em> <strong>WoW</strong> <u>food</u></p>');
+        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p>sit <em>amet</em> <strong>WoW</strong></p>');
         $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic.png'), 'Italic icon is still active in the top toolbar');
 
         // Inline Toolbar icon should not be displayed.
@@ -171,7 +171,7 @@ class Viper_Tests_ViperCoreStylesPlugin_ItalicUnitTest extends AbstractViperUnit
         $this->selectText('XuT', 'dolor');
         $this->keyDown('Key.CMD + i');
 
-        $this->assertHTMLMatch('<p><em>Lorem XuT dolor</em></p><p>sit <em>amet</em> <strong>WoW</strong> <u>food</u></p>');
+        $this->assertHTMLMatch('<p><em>Lorem XuT dolor</em></p><p>sit <em>amet</em> <strong>WoW</strong></p>');
 
     }//end testAdjacentWordStyling()
 
@@ -192,7 +192,7 @@ class Viper_Tests_ViperCoreStylesPlugin_ItalicUnitTest extends AbstractViperUnit
         $this->selectText('dolor');
         $this->keyDown('Key.CMD + i');
 
-        $this->assertHTMLMatch('<p><em>Lorem</em> <em>XuT</em> <em>dolor</em></p><p>sit <em>amet</em> <strong>WoW</strong> <u>food</u></p>');
+        $this->assertHTMLMatch('<p><em>Lorem</em> <em>XuT</em> <em>dolor</em></p><p>sit <em>amet</em> <strong>WoW</strong></p>');
 
     }//end testSpaceSeparatedAdjacentWordStyling()
 
@@ -207,7 +207,7 @@ class Viper_Tests_ViperCoreStylesPlugin_ItalicUnitTest extends AbstractViperUnit
         $this->selectText('amet');
         $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_italic_active.png');
 
-        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p>sit amet <strong>WoW</strong> <u>food</u></p>');
+        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p>sit amet <strong>WoW</strong></p>');
 
         $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic.png'), 'Italic icon is still active in the inline toolbar');
 
