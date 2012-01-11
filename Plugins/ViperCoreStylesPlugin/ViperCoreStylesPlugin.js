@@ -25,8 +25,8 @@ function ViperCoreStylesPlugin(viper)
 {
     this.viper = viper;
 
-    this.styleTags     = ['strong', 'em', 'u', 'sub', 'sup', 'strike'];
-    this.buttons       = ['strong', 'emphasise', 'underline', 'subscript', 'superscript', 'strikethrough'];
+    this.styleTags     = ['strong', 'em', 'sub', 'sup', 'del'];
+    this.buttons       = ['strong', 'emphasise', 'subscript', 'superscript', 'del'];
     this.toolbarPlugin = null;
     this.activeStyles  = [];
 
@@ -67,9 +67,6 @@ ViperCoreStylesPlugin.prototype = {
             toolbarButtons.styles.em = toolbarPlugin.createButton('I', false, 'Icalic', false, 'italic', function() {
                 self.handleStyle('em');
             }, btnGroup);
-            toolbarButtons.styles.u = toolbarPlugin.createButton('U', false, 'Underline', false, 'underline', function() {
-                self.handleStyle('u');
-            }, btnGroup);
             toolbarButtons.rmFormat = toolbarPlugin.createButton('', false, 'Remove Format', false, 'removeFormat', function() {
                 self.removeFormat();
             }, false);
@@ -81,8 +78,8 @@ ViperCoreStylesPlugin.prototype = {
             toolbarButtons.styles.sup = toolbarPlugin.createButton('', false, 'Superscript', false, 'superscript', function() {
                 self.handleStyle('sup');
             }, btnGroup2);
-            toolbarButtons.styles.strike = toolbarPlugin.createButton('', false, 'Strikethrough', false, 'strikethrough', function() {
-                self.handleStyle('strike');
+            toolbarButtons.styles.del = toolbarPlugin.createButton('', false, 'Strikethrough', false, 'strikethrough', function() {
+                self.handleStyle('del');
             }, btnGroup2);
 
             var btnGroup3 = toolbarPlugin.createButtonGroup();
@@ -123,8 +120,6 @@ ViperCoreStylesPlugin.prototype = {
                     return self.handleStyle('strong');
                 } else if (self.viper.isKey(e, 'CTRL+I') === true) {
                     return self.handleStyle('em');
-                } else if (self.viper.isKey(e, 'CTRL+U') === true) {
-                    return self.handleStyle('u');
                 }
             });
         });
@@ -155,7 +150,7 @@ ViperCoreStylesPlugin.prototype = {
             u: 'Underline',
             sub: 'Subscript',
             sup: 'Superscript',
-            strike: 'Strikethrough'
+            del: 'Strikethrough'
         };
 
         this.viper.registerCallback('ViperChangeTracker:modeChange', 'ViperCoreStylesPlugin', function(mode) {
@@ -883,14 +878,12 @@ ViperCoreStylesPlugin.prototype = {
                 activeStates.strong = true;
             } else if (dfx.isTag(data.lineage[i], 'em') === true) {
                 activeStates.em = true;
-            } else if (dfx.isTag(data.lineage[i], 'u') === true) {
-                activeStates.u = true;
             }
         }
 
         // If the selection is between multiple elements then find out if the range
         // start and end are in same style tags.
-        var tagNames  = ['strong', 'em', 'u'];
+        var tagNames  = ['strong', 'em'];
         var states    = this._getActiveStates(data.range, tagNames);
         for (var i = 0; i < states.length; i++) {
             var tagName = states[i];
@@ -898,8 +891,6 @@ ViperCoreStylesPlugin.prototype = {
                 activeStates.strong = true;
             } else if (tagName === 'em') {
                 activeStates.em = true;
-            } else if (tagName === 'u') {
-                activeStates.u = true;
             }
         }
 
@@ -912,9 +903,6 @@ ViperCoreStylesPlugin.prototype = {
         }, buttonGroup);
         var em = inlineToolbarPlugin.createButton('I', activeStates.em, 'Italic', false, 'italic', function() {
             return self.handleStyle('em');
-        }, buttonGroup);
-        var u = inlineToolbarPlugin.createButton('U', activeStates.u, 'Underline', false, 'underline', function() {
-            return self.handleStyle('u');
         }, buttonGroup);
 
     },
