@@ -58,7 +58,8 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
     {
         // Open Word doc, copy its contents.
         $retval = NULL;
-        system('open '.dirname(__FILE__).'/test1.docx', $retval);
+      
+        system('open '.escapeshellarg(dirname(__FILE__).'/test1.docx'), $retval);
 
         if ($retval === 1) {
             $this->markTestSkipped('MS Word is not available');
@@ -81,6 +82,8 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
 
         $this->keyDown('Key.CMD + v');
 
+        sleep(5);
+        
         $this->assertHTMLMatch('<p>&nbsp;</p><p>Test\u2026 <strong><em>bold and italic</em> just bold.</strong></p>\n<p>New paragraph\u2026</p><p>&nbsp;</p>');
 
     }//end testMSWordSimpleCopyPaste()
