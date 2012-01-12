@@ -299,6 +299,8 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
 
         $this->setAutoWaitTimeout(2);
 
+        $this->keyDown('Key.UP');
+
         $this->selectText('TpT');
         $this->find($baseDir.'/Core/Images/vitpPattern.png', NULL, $similarity);
 
