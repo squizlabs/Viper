@@ -56,7 +56,7 @@ function ViperAccessibilityPlugin(viper)
         WCAG2A: 'WCAG 2.0 A'
     }
 
-    this._htmlCSsrc = 'file:///Users/sdanis/Sites/HTML_CodeSniffer/HTMLCS.js';
+    this._htmlCSsrc = '../../../HTML_CodeSniffer/HTMLCS.js';
 
 }
 
