@@ -250,8 +250,29 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
             throw new Exception('Failed to calibrate.');
         }
 
+        $this->keyDown('Key.DOWN');
+        sleep(2);
+
+        for ($i = $similarity; $i >= 0; $i -= 0.01) {
+            try {
+                $f = $this->find($baseDir.'/Core/Images/calibrate2.png', NULL, $i);
+            } catch (Exception $e) {
+                continue;
+            }
+
+            try {
+                $f = $this->find($baseDir.'/Core/Images/calibrate1.png', NULL, $i);
+            } catch (Exception $e) {
+                $similarity = $i;
+                break;
+            }
+
+            throw new Exception('Failed to calibrate.');
+        }
+
         $this->keyDown('Key.UP');
         $this->keyDown('Key.UP');
+        sleep(1);
 
         for ($i = $similarity; $i >= 0; $i -= 0.01) {
             try {
@@ -272,7 +293,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
 
         $this->find($baseDir.'/Core/Images/calibrate1.png', NULL, $similarity);
         $this->keyDown('Key.DOWN');
-        usleep(500);
+        sleep(2);
         $this->find($baseDir.'/Core/Images/calibrate2.png', NULL, $similarity);
         $this->find($baseDir.'/Core/Images/topToolbarPattern.png', NULL, $similarity);
 

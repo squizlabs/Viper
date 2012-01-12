@@ -968,6 +968,11 @@ abstract class AbstractSikuliUnitTest extends PHPUnit_Framework_TestCase
                             break(2);
                         }
 
+                        if (strpos($line, 'Using substitute bounding box at') === 0) {
+                            $isError = FALSE;
+                            continue;
+                        }
+
                         // DEBUG.
                         // echo $line."\n";ob_flush();
 
