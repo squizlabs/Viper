@@ -176,11 +176,16 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
             $this->selectBrowser(self::$_browser);
             $this->resizeWindow();
 
-            try {
-                $this->_calibrate();
-            } catch (Exception $e) {
-                echo $e;
-                exit;
+            $similarity = getenv('VIPER_TEST_SIMILARITY');
+            if (is_numeric($similarity) === TRUE) {
+                self::$_similarity = (float) $similarity;
+            } else {
+                try {
+                    $this->_calibrate();
+                } catch (Exception $e) {
+                    echo $e;
+                    exit;
+                }
             }
 
             $this->goToURL($dest);
