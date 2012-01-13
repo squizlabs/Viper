@@ -1,6 +1,6 @@
 <?php
 
-    $opts = getopt('s::b::u::t::');
+    $opts = getopt('s::b::u::t::c::');
 
     $browsers = array(
                  'Firefox',
@@ -31,6 +31,10 @@
     $test = NULL;
     if (isset($opts['t']) === TRUE) {
         $test = $opts['t'];
+    }
+
+    if (isset($opts['c']) === TRUE) {
+         putenv('VIPER_TEST_SIMILARITY='.$opts['c']);
     }
 
     foreach ($browsers as $browser) {
