@@ -5,12 +5,12 @@ ViperAccessibilityPlugin_WCAG2 = {
         var code = this._parseCode(issue.code);
 
         var content = '<strong>' + code.standard + ' References</strong><br>';
-        content    += '<em>Principle: </em> <a target="_blank" href="http://www.w3.org/TR/2008/REC-WCAG20-20081211/#' + code.principleName + '">' + dfx.ucFirst(code.principleName) + '</a><br>';
+        content    += '<em>Principle: </em> <a target="_blank" href="http://www.w3.org/TR/WCAG20/#' + code.principleName + '">' + dfx.ucFirst(code.principleName) + '</a><br>';
         content    += '<em>Techniques: </em> ';
 
         var techStrs = [];
         for (var i = 0; i < code.techniques.length; i++) {
-            techStrs.push('<a target="_blank" href="http://www.w3.org/TR/2010/NOTE-WCAG20-TECHS-20101014/' + code.techniques[i] + '">' + code.techniques[i] + '</a>');
+            techStrs.push('<a target="_blank" href="http://www.w3.org/TR/WCAG20-TECHS/' + code.techniques[i] + '">' + code.techniques[i] + '</a>');
         }
 
         content += techStrs.join(', ');
