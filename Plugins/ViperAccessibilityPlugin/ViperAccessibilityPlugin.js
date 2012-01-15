@@ -779,26 +779,7 @@ ViperAccessibilityPlugin.prototype = {
     {
         this.pointer.container = this._aaTools.element;
         this.pointer.pointTo(null, null, element);
-        return;
 
-        //if (!element) {
-        //    return;
-        //}
-        //
-        //
-        //var rect = dfx.getBoundingRectangle(element);
-        //
-        //var highlight = document.createElement('div');
-        //dfx.addClass(highlight, 'ViperAP-highlight');
-        //dfx.setStyle(highlight, 'left', rect.x1 + 'px');
-        //dfx.setStyle(highlight, 'width', (rect.x2 - rect.x1) + 'px');
-        //dfx.setStyle(highlight, 'top', rect.y1 + 'px');
-        //dfx.setStyle(highlight, 'height', (rect.y2 - rect.y1) + 'px');
-        //
-        //document.body.appendChild(highlight);
-        //setTimeout(function() {
-        //    dfx.remove(highlight);
-        //}, 2000);
     },
 
     _loadStandard: function(issueCode, callback)
