@@ -636,68 +636,23 @@ ViperAccessibilityPlugin.prototype = {
     /**
      * Marks current issue as done.
      */
-    markAsDone: function()
+    toggleIssueCompleteState: function()
     {
         var issueElement = this.getIssueElement(this._currentIssue);
-        dfx.addClass(issueElement, 'issueDone');
+        dfx.toggleClass(issueElement, 'issueDone');
 
-        this._issueCount--;
+        var listItem = dfx.getClass('ViperAP-issueItem')[(this._currentIssue - 1)];
+        dfx.toggleClass(listItem, 'issueDone');
 
-        var issueType = this._getIssueTypeFromElement(issueElement);
-        switch (issueType) {
-            case HTMLCS.ERROR:
-                this._errorCount--;
-            break;
-
-            case HTMLCS.WARNING:
-                this._warningCount--;
-            break;
-
-            case HTMLCS.NOTICE:
-                this._noticeCount--;
-            break;
-
-            default:
-                // Unknown type.
-            break;
-        }//end switch
-
-        this._updateNumberOfIssuesContainer();
-
-        var self = this;
-        setTimeout(function() {
-            if (self._currentIssue > self._issueCount) {
-                self.previousIssue();
-            }
-
-            dfx.remove(issueElement);
-            self._updateIssueNumber();
-        }, 500);
-
-        // Remove it from the list.
-        var listItem    = dfx.getClass('ViperAP-issueItem')[(this._currentIssue - 1)];
-        var currentList = listItem.parentNode;
-        var prevList    = currentList;
-        if (listItem) {
-            dfx.remove(listItem);
-        }
-
-        // Move the first issue from each list after the current one to the previous
-        // list.
-        for (var list = currentList.nextSibling; list; list = list.nextSibling) {
-            if (!list.firstChild) {
-                dfx.remove(list);
-                break;
-            }
-
-            prevList.appendChild(list.firstChild);
-            prevList = list;
-            if (!list.firstChild) {
-                // This list has no items, remove it and update the page count.
-                dfx.remove(list);
-                self.updatePageCount();
-                break;
-            }
+        if (dfx.hasClass(issueElement, 'issueDone') === true) {
+            var self = this;
+            setTimeout(function() {
+                if (self._currentIssue > self._issueCount) {
+                    self.previousIssue();
+                } else {
+                    self.nextIssue();
+                }
+            }, 500);
         }
 
     },
@@ -805,7 +760,7 @@ ViperAccessibilityPlugin.prototype = {
                     });
                 }, null, null, resolutionHeader);
                 var doneBtn = self._toolbar.createButton('Done', false, 'Mark as done', false, '', function() {
-                    self.markAsDone();
+                    self.toggleIssueCompleteState();
                 }, null, null, resolutionHeader);
 
                 resolutionHeader.appendChild(locateBtn);
@@ -824,26 +779,7 @@ ViperAccessibilityPlugin.prototype = {
     {
         this.pointer.container = this._aaTools.element;
         this.pointer.pointTo(null, null, element);
-        return;
 
-        //if (!element) {
-        //    return;
-        //}
-        //
-        //
-        //var rect = dfx.getBoundingRectangle(element);
-        //
-        //var highlight = document.createElement('div');
-        //dfx.addClass(highlight, 'ViperAP-highlight');
-        //dfx.setStyle(highlight, 'left', rect.x1 + 'px');
-        //dfx.setStyle(highlight, 'width', (rect.x2 - rect.x1) + 'px');
-        //dfx.setStyle(highlight, 'top', rect.y1 + 'px');
-        //dfx.setStyle(highlight, 'height', (rect.y2 - rect.y1) + 'px');
-        //
-        //document.body.appendChild(highlight);
-        //setTimeout(function() {
-        //    dfx.remove(highlight);
-        //}, 2000);
     },
 
     _loadStandard: function(issueCode, callback)
