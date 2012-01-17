@@ -249,6 +249,78 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractViperUnitTest
     }//end testMultiParentNoOpts()
 
 
+    /**
+     * Tests changing a paragraph to a div and then back again.
+     *
+     * @return void
+     */
+    public function testChangingAParagraphToADiv()
+    {
+        $this->selectText('Lorem', 'dolor');
+        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_div.png');
+
+        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_div_Active.png'), 'Div icon is not active in the inline toolbar');
+
+        $this->assertHTMLMatch('<div>Lorem xtn dolor</div><p>sit amet <strong>WoW</strong></p>');
+
+        $this->selectText('Lorem', 'dolor');
+        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_p.png');
+
+        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_p_active.png'), 'P icon is not active in the inline toolbar');
+
+        $this->assertHTMLMatch('<p>Lorem xtn dolor</p><p>sit amet <strong>WoW</strong></p>');
+
+    }//end testChangingAParagraphToADiv()
+
+
+     /**
+     * Tests changing a paragraph to a PRE and then back again.
+     *
+     * @return void
+     */
+    public function testChangingAParagraphToAPre()
+    {
+        $this->selectText('Lorem', 'dolor');
+        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_pre.png');
+
+        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_pre_Active.png'), 'Pre icon is not active in the inline toolbar');
+
+        $this->assertHTMLMatch('<pre>Lorem xtn dolor</pre><p>sit amet <strong>WoW</strong></p>');
+
+        $this->selectText('Lorem', 'dolor');
+        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_p.png');
+
+        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_p_active.png'), 'P icon is not active in the inline toolbar');
+
+        $this->assertHTMLMatch('<p>Lorem xtn dolor</p><p>sit amet <strong>WoW</strong></p>');
+
+    }//end testChangingAParagraphToAPre()
+
+
+     /**
+     * Tests changing a paragraph to a Quote and then back again.
+     *
+     * @return void
+     */
+    public function testChangingAParagraphToAQuote()
+    {
+        $this->selectText('Lorem', 'dolor');
+        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_blockquote.png');
+
+        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_blockquote_active.png'), 'Quote icon is not active in the inline toolbar');
+
+        $this->assertHTMLMatch('<blockquote>Lorem xtn dolor</blockquote><p>sit amet <strong>WoW</strong></p>');
+
+        $this->selectText('Lorem', 'dolor');
+        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_p.png');
+
+        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_p_active.png'), 'P icon is not active in the inline toolbar');
+
+        $this->assertHTMLMatch('<p>Lorem xtn dolor</p><p>sit amet <strong>WoW</strong></p>');
+
+    }//end testChangingAParagraphToAPre()
+
+
 }//end class
 
 ?>
