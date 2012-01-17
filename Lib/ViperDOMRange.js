@@ -775,11 +775,17 @@ ViperDOMRange.prototype = {
             if (range.endOffset !== 0) {
                 if (range.endOffset === endNode.data.length
                     && startNode.parentNode === endNode.parentNode
+                    || this._getLastSelectableChild(startNode.parentNode) === endNode
                 ) {
                     return startNode.parentNode;
                 } else {
                     return null;
                 }
+            }
+        } else if (!endNode.nextSibling && dfx.isTag(endNode, 'br') === true) {
+            // Handle Firefox _moz_dirty at the end of an element.
+            if (this._getLastSelectableChild(startNode.parentNode) === endNode.previousSibling) {
+                return startNode.parentNode;
             }
         }
 
