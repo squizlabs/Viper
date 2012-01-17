@@ -211,6 +211,28 @@ class Viper_Tests_ViperCoreStylesPlugin_StylesUnitTest extends AbstractViperUnit
 
     }//end testBoldAndItalic()
 
+
+     /**
+     * Tests selecting text in a paragraph.
+     *
+     * @return void
+     */
+    public function testSelectingTextInAParagraph()
+    {
+        $dir = dirname(__FILE__).'/Images/';
+
+        $this->selectText('Lorem', 'dolor');
+        $this->assertFalse($this->inlineToolbarButtonExists($dir.'toolbarIcon_italic.png'), 'Italic icon appears in the inline toolbar');
+        $this->assertFalse($this->topToolbarButtonExists($dir.'toolbarIcon_italic_active.png'), 'Active Italic icon appears in the inline toolbar');
+        $this->assertFalse($this->inlineToolbarButtonExists($dir.'toolbarIcon_bold.png'), 'Bold icon appears in the inline toolbar');
+        $this->assertFalse($this->inlineToolbarButtonExists($dir.'toolbarIcon_bold_active.png'), 'Active Bold icon appears in the inline toolbar');
+
+        $this->selectText('sit', 'WoW');
+        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_italic_active.png'), 'Active Italic icon does not appear in the inline toolbar');
+        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_bold_active.png'), 'Active Bold icon does not appear in the inline toolbar');
+
+    }//end testSelectingTextInAParagraph()
+
 }//end class
 
 ?>
