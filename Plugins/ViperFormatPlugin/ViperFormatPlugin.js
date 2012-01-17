@@ -376,7 +376,9 @@ ViperFormatPlugin.prototype = {
         var classButton = toolbar.createButton('', false, 'CSS Class', false, 'cssClass', null, btnGroup, classTools);
 
         this.viper.registerCallback('ViperToolbarPlugin:updateToolbar', 'ViperFormatPlugin', function(data) {
-            if (data.range.collapsed === true) {
+            if (data.range.collapsed === true
+                || data.range.startContainer.parentNode !== data.range.endContainer.parentNode
+            ) {
                 toolbar.disableButton(idButton);
                 toolbar.disableButton(classButton);
                 toolbar.closePopup(classTools);
