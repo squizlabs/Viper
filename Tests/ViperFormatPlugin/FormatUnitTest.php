@@ -318,7 +318,7 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractViperUnitTest
 
         $this->assertHTMLMatch('<p>Lorem xtn dolor</p><p>sit amet <strong>WoW</strong></p>');
 
-    }//end testChangingAParagraphToAPre()
+    }//end testChangingAParagraphToAQuote()
 
 
 }//end class
