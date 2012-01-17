@@ -40,9 +40,11 @@ class Viper_Tests_ViperFormatPlugin_ParagraphUnitTest extends AbstractViperUnitT
 
         $this->selectText('Lorem', 'dolor');
         $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_toggle_formats_subActive.png'), 'Toogle formats icon is not selected');
+        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_p_active.png'), 'P icon is not active');
 
         $this->selectText('sit', 'WoW');
         $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_toggle_formats_subActive.png'), 'Toogle formats icon is not selected');
+        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_p_active.png'), 'P icon is not active');
 
     }//end testSelectingParagraphsWithFormattedTextShowsCorrectIcons()
 
