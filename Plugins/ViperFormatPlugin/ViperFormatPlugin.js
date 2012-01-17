@@ -182,7 +182,6 @@ ViperFormatPlugin.prototype = {
         if (selectedNode.nodeType === dfx.ELEMENT_NODE
             || data.range.startContainer === data.range.endContainer
         ) {
-            var rangeClone = data.range.cloneRange();
             for (var i = 0; i < data.lineage.length; i++) {
                 if (dfx.isTag(data.lineage[i], 'a') === true) {
                     return;
@@ -220,8 +219,6 @@ ViperFormatPlugin.prototype = {
                     selectedNode.setAttribute('id', value);
                     self._inlineToolbarActiveSubSection = 'anchor';
                 } else {
-                    ViperSelection.addRange(rangeClone);
-
                     // Wrap the selection with span tag.
                     var bookmark = self.viper.createBookmark();
                     var span     = document.createElement('span');
@@ -240,8 +237,9 @@ ViperFormatPlugin.prototype = {
                         dfx.insertBefore(bookmark.start, span);
                         self.viper.removeBookmark(bookmark);
 
-                        rangeClone.selectNode(span);
-                        ViperSelection.addRange(rangeClone);
+                        var range = self.viper.getCurrentRange();
+                        range.selectNode(span);
+                        ViperSelection.addRange(range);
                         self.viper.adjustRange();
 
                         // We want to keep this textbox open so set this var.
@@ -249,7 +247,7 @@ ViperFormatPlugin.prototype = {
                             self._inlineToolbarActiveSubSection = 'anchor';
                         }
 
-                        self.viper.fireCallbacks('Viper:selectionChanged', rangeClone);
+                        self.viper.fireCallbacks('Viper:selectionChanged', range);
                     }
                 }//end if
             });
@@ -288,8 +286,6 @@ ViperFormatPlugin.prototype = {
                     selectedNode.setAttribute('class', value);
                     self._inlineToolbarActiveSubSection = 'class';
                 } else {
-                    ViperSelection.addRange(rangeClone);
-
                     // Wrap the selection with span tag.
                     var bookmark = self.viper.createBookmark();
                     var span     = document.createElement('span');
@@ -308,8 +304,9 @@ ViperFormatPlugin.prototype = {
                         dfx.insertBefore(bookmark.start, span);
                         self.viper.removeBookmark(bookmark);
 
-                        rangeClone.selectNode(span);
-                        ViperSelection.addRange(rangeClone);
+                        var range = self.viper.getCurrentRange();
+                        range.selectNode(span);
+                        ViperSelection.addRange(range);
                         self.viper.adjustRange();
 
                         // We want to keep this textbox open so set this var.
@@ -317,7 +314,7 @@ ViperFormatPlugin.prototype = {
                             self._inlineToolbarActiveSubSection = 'class';
                         }
 
-                        self.viper.fireCallbacks('Viper:selectionChanged', rangeClone);
+                        self.viper.fireCallbacks('Viper:selectionChanged', range);
                     }
                 }//end if
             });
@@ -353,7 +350,7 @@ ViperFormatPlugin.prototype = {
         var anchorSubContent = document.createElement('div');
         var idTextbox = toolbar.createTextbox('', 'ID', function(value) {
             // Apply the ID to the selection.
-            self._setAttributeForSelection(self.viper.getCurrentRange(), 'id', value);
+            self._setAttributeForSelection('id', value);
         });
         anchorSubContent.appendChild(idTextbox);
 
@@ -367,7 +364,7 @@ ViperFormatPlugin.prototype = {
         // Class.
         var classSubContent = document.createElement('div');
         var classTextbox = toolbar.createTextbox('', 'Class', function(value) {
-            self._setAttributeForSelection(self.viper.getCurrentRange(), 'class', value);
+            self._setAttributeForSelection('class', value);
         });
         classSubContent.appendChild(classTextbox);
 
@@ -416,8 +413,10 @@ ViperFormatPlugin.prototype = {
 
     },
 
-    _setAttributeForSelection: function(range, attr, value)
+    _setAttributeForSelection: function(attr, value)
     {
+        var range = this.viper.getViperRange();
+
         // Wrap the selection with span tag.
         var bookmark = self.viper.createBookmark();
 

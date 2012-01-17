@@ -34,14 +34,13 @@ ViperAcronymPlugin.prototype = {
 
     },
 
-    rangeToAcronym: function(range, title)
+    rangeToAcronym: function(title)
     {
-        if (!range || !title) {
+        if (!title) {
             return;
         }
 
-        range = range || this.viper.getViperRange();
-
+        var range    = this.viper.getViperRange();
         var bookmark = this.viper.createBookmark(range);
 
         var elem = document.createElement('acronym');
@@ -97,6 +96,8 @@ ViperAcronymPlugin.prototype = {
 
         elem.setAttribute('title', title);
 
+        this.viper.selectElement(elem);
+
     },
 
     getAcronymFromRange: function(range)
@@ -132,11 +133,10 @@ ViperAcronymPlugin.prototype = {
         var self = this;
         var subSectionActive = false;
         this.viper.registerCallback('ViperInlineToolbarPlugin:updateToolbar', 'ViperAcronymPlugin', function(data) {
-            var rangeClone       = data.range.cloneRange();
             var currentIsAcronym = false;
 
             // Check if we need to show the acronym options.
-            if (rangeClone.collapsed === true || dfx.isBlockElement(data.lineage[data.current]) === true) {
+            if (data.range.collapsed === true || dfx.isBlockElement(data.lineage[data.current]) === true) {
                 return;
             }
 
@@ -160,7 +160,7 @@ ViperAcronymPlugin.prototype = {
             if (currentIsAcronym !== true
                 && (data.lineage[data.current].nodeType !== dfx.TEXT_NODE
                 || dfx.isTag(data.lineage[data.current].parentNode, 'acronym') === false)
-                && rangeClone.collapsed === true) {
+                && data.range.collapsed === true) {
                 return;
             } else if (data.lineage[data.current].nodeType === dfx.TEXT_NODE) {
                 var rangeText = data.range.toString();
@@ -214,10 +214,8 @@ ViperAcronymPlugin.prototype = {
 
             var setAcronymAttributes = function(title) {
                 subSectionActive = true;
-                ViperSelection.addRange(rangeClone);
-
                 if (!acronym) {
-                    acronym = self.rangeToAcronym(data.range, title);
+                    acronym = self.rangeToAcronym(title);
                 } else {
                     self.setTitle(acronym, title);
                 }
@@ -243,7 +241,7 @@ ViperAcronymPlugin.prototype = {
 
         var setAcronymAttributes = function(title) {
             if (!acronym) {
-                acronym = self.rangeToAcronym(self.viper.getViperRange(), title);
+                acronym = self.rangeToAcronym(title);
             } else {
                 self.setTitle(acronym, title);
             }

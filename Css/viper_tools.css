@@ -412,3 +412,6 @@
 .Viper-button:active .buttonIcon.historyRedo, .Viper-button.active .buttonIcon.historyRedo, .Viper-button.selected .buttonIcon.historyRedo {
   background-position: -33px -1161px;
 }
+.__viper_selHighlight {
+  background-color: #CCC;
+}

@@ -34,13 +34,13 @@ ViperAbbrPlugin.prototype = {
 
     },
 
-    rangeToAbbr: function(range, title)
+    rangeToAbbr: function(title)
     {
-        if (!range || !title) {
+        if (!title) {
             return;
         }
 
-        range = range || this.viper.getViperRange();
+        var range = this.viper.getViperRange();
 
         var bookmark = this.viper.createBookmark(range);
 
@@ -48,7 +48,8 @@ ViperAbbrPlugin.prototype = {
         elem.setAttribute('title', title);
 
         var elems = dfx.getElementsBetween(bookmark.start, bookmark.end);
-        for (var i = 0; i < elems.length; i++) {
+        var c     = elems.length;
+        for (var i = 0; i < c; i++) {
             elem.appendChild(elems[i]);
         }
 
@@ -97,6 +98,8 @@ ViperAbbrPlugin.prototype = {
 
         elem.setAttribute('title', title);
 
+        this.viper.selectElement(elem);
+
     },
 
     getAbbrFromRange: function(range)
@@ -132,11 +135,10 @@ ViperAbbrPlugin.prototype = {
         var self = this;
         var subSectionActive = false;
         this.viper.registerCallback('ViperInlineToolbarPlugin:updateToolbar', 'ViperAbbrPlugin', function(data) {
-            var rangeClone       = data.range.cloneRange();
             var currentIsAbbr = false;
 
             // Check if we need to show the abbr options.
-            if (rangeClone.collapsed === true || dfx.isBlockElement(data.lineage[data.current]) === true) {
+            if (data.range.collapsed === true || dfx.isBlockElement(data.lineage[data.current]) === true) {
                 return;
             }
 
@@ -152,7 +154,7 @@ ViperAbbrPlugin.prototype = {
                 // If the selection is a whole A tag then by default show the
                 // abbr sub section.
                 subSectionActive = true;
-                currentIsAbbr = true;
+                currentIsAbbr    = true;
             } else {
                 subSectionActive = false;
             }
@@ -160,7 +162,7 @@ ViperAbbrPlugin.prototype = {
             if (currentIsAbbr !== true
                 && (data.lineage[data.current].nodeType !== dfx.TEXT_NODE
                 || dfx.isTag(data.lineage[data.current].parentNode, 'abbr') === false)
-                && rangeClone.collapsed === true) {
+                && data.range.collapsed === true) {
                 return;
             } else if (data.lineage[data.current].nodeType === dfx.TEXT_NODE) {
                 var rangeText = data.range.toString();
@@ -183,12 +185,12 @@ ViperAbbrPlugin.prototype = {
                 }
             }
 
-            var isAbbr = false;
+            var isAbbr    = false;
             var titleAttr = '';
             if (abbr) {
                 // Get the current value from the abbr tag.
                 titleAttr = abbr.getAttribute('title') || '';
-                isAbbr = true;
+                isAbbr    = true;
             }
 
             var group          = inlineToolbarPlugin.createButtonGroup();
@@ -212,24 +214,19 @@ ViperAbbrPlugin.prototype = {
                 }, group);
             }
 
-            var setAbbrAttributes = function(title) {
-                subSectionActive = true;
-                ViperSelection.addRange(rangeClone);
-
-                if (!abbr) {
-                    abbr = self.rangeToAbbr(data.range, title);
-                } else {
-                    self.setTitle(abbr, title);
-                }
-            };
-
             // Sub section.
             var titleTextbox = inlineToolbarPlugin.createTextbox(null, titleAttr, 'Title', function(value) {
-                setAbbrAttributes(value);
+                subSectionActive = true;
+                if (!abbr) {
+                    abbr = self.rangeToAbbr(value);
+                } else {
+                    self.setTitle(abbr, value);
+                }
             }, false, false);
 
             subSectionCont.appendChild(titleTextbox);
         });
+
     },
 
     _initToolbar: function()
@@ -239,16 +236,7 @@ ViperAbbrPlugin.prototype = {
             return;
         }
 
-        var abbr = null;
-
-        var setAbbrAttributes = function(title) {
-            if (!abbr) {
-                abbr = self.rangeToAbbr(self.viper.getViperRange(), title);
-            } else {
-                self.setTitle(abbr, title);
-            }
-        };
-
+        var abbr     = null;
         var self     = this;
         var btnGroup = toolbar.createButtonGroup();
 
@@ -257,7 +245,11 @@ ViperAbbrPlugin.prototype = {
 
         // Title text box.
         var title = toolbar.createTextbox('', 'Abbr', function(value) {
-            setAbbrAttributes(value);
+            if (!abbr) {
+                abbr = self.rangeToAbbr(value);
+            } else {
+                self.setTitle(abbr, value);
+            }
         });
         createAbbrSubContent.appendChild(title);
 

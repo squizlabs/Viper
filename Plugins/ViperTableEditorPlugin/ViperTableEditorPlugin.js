@@ -241,7 +241,7 @@ ViperTableEditorPlugin.prototype = {
         tools.id = toolsid;
         dfx.addClass(tools, 'ViperITP themeDark compact visible');
 
-        var buttonGroup = ViperTools.createButtonGroup('ViperITP-tools');
+        var buttonGroup = this.viper.ViperTools.createButtonGroup('ViperITP-tools');
         var tableBtn    = this.createButton('', false, '', false, 'table', function() {
             showTools('table');
         }, buttonGroup);
@@ -382,7 +382,7 @@ ViperTableEditorPlugin.prototype = {
      */
     createButtonGroup: function(customClass)
     {
-        return this._toolsContainer.appendChild(ViperTools.createButtonGroup(customClass));
+        return this._toolsContainer.appendChild(this.viper.ViperTools.createButtonGroup(customClass));
 
     },
 
@@ -426,7 +426,7 @@ ViperTableEditorPlugin.prototype = {
             }
         }
 
-        var button = ViperTools.createButton(content, isActive, titleAttr, disabled, customClass, clickAction, groupElement, subSection, showSubSection);
+        var button = this.viper.ViperTools.createButton(content, isActive, titleAttr, disabled, customClass, clickAction, groupElement, subSection, showSubSection);
 
         if (!groupElement) {
             this._toolsContainer.appendChild(button);
@@ -447,7 +447,7 @@ ViperTableEditorPlugin.prototype = {
      */
     createSubSection: function(contentElement, active, customClass)
     {
-        var subSection = ViperTools.createSubSection(contentElement, active, customClass);
+        var subSection = this.viper.ViperTools.createSubSection(contentElement, active, customClass);
         this._subSectionContainer.appendChild(subSection);
         return subSection;
 

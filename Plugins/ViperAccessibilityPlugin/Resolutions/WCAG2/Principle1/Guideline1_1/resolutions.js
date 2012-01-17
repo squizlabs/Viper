@@ -1,7 +1,7 @@
 ViperAccessibilityPlugin_WCAG2_Principle1_Guideline1_1 = {
     hasCss: true,
 
-    res_1_1_1: function(element, code, callback) {
+    res_1_1_1: function(element, code, callback, viper) {
         var div = document.createElement('div');
         dfx.addClass(div, 'ViperAP-WCAG2_Principle1_Guideline1_1_1');
 
@@ -15,10 +15,10 @@ ViperAccessibilityPlugin_WCAG2_Principle1_Guideline1_1 = {
             dfx.addClass(clone, 'thumb');
             content.appendChild(clone);
 
-            var alt = ViperTools.createTextbox('', 'Alt', true, false);
+            var alt = viper.ViperTools.createTextbox('', 'Alt', true, false);
             editingCont.appendChild(alt);
 
-            var applyChanges = ViperTools.createButton('Apply Changes', false, 'Apply Changes', false, '', function() {
+            var applyChanges = viper.ViperTools.createButton('Apply Changes', false, 'Apply Changes', false, '', function() {
                 element.setAttribute('alt', alt.lastChild.value);
             });
             editingCont.appendChild(applyChanges);

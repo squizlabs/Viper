@@ -33,8 +33,9 @@ function Viper(id, options, callback)
     this.enabled      = false;
     this.inlineMode   = false;
 
-    this.ViperHistoryManager   = null;
-    this.ViperPluginManager = null;
+    this.ViperHistoryManager = null;
+    this.ViperPluginManager  = null;
+    this.ViperTools          = null;
 
     this._settings = {
         changeTracking: false
@@ -149,8 +150,9 @@ Viper.prototype = {
      */
     init: function()
     {
-        this.ViperHistoryManager   = new ViperHistoryManager(this);
-        this.ViperPluginManager = new ViperPluginManager(this);
+        this.ViperHistoryManager = new ViperHistoryManager(this);
+        this.ViperPluginManager  = new ViperPluginManager(this);
+        this.ViperTools          = new ViperTools(this);
 
         ViperChangeTracker.init(this, false);
         this._setupCoreTrackChangeActions();
@@ -299,6 +301,7 @@ Viper.prototype = {
         });
 
         dfx.addEvent(elem, 'focus.viper', function(e) {
+            self.highlightToSelection();
             self._viperRange = null;
         });
 
@@ -555,6 +558,83 @@ Viper.prototype = {
         return this.getCurrentRange();
 
     },
+
+    /**
+     * Selects the specified element.
+     *
+     * @param {DOMNode} element The element to select.
+     */
+    selectElement: function(element)
+    {
+        var range = this.getViperRange();
+        range.selectNode(element);
+        ViperSelection.addRange(range);
+
+    },
+
+
+    /**
+     * Rturns a DOMElement if all of its contents is selected, null otherwise.
+     *
+     * @param {DOMRange} range The range to check.
+     *
+     * @return {DOMNode}
+     */
+    getWholeElementSelection: function(range)
+    {
+        range = range || this.getViperRange();
+
+        if (range.startContainer.nodeType === dfx.TEXT_NODE
+            && range.startOffset === 0
+        ) {
+            // Must not have a previous sibling.
+            var sibling = range.startContainer.previousSibling;
+            while (sibling) {
+                if (sibling.nodeType !== dfx.TEXT_NODE
+                    || dfx.isBlank(sibling.data) === false
+                ) {
+                    return null;
+                }
+
+                sibling = sibling.previousSibling;
+            }
+
+            var parent = range.startContainer.parentNode;
+
+            // Check the end.
+            if (range.endContainer.nodeType === dfx.TEXT_NODE) {
+                if (range.endOffset !== range.endContainer.data.length) {
+                    return null;
+                }
+
+                // Check if this is the last selectable element.
+                var lastSelectable = range._getLastSelectableChild(parent);
+                if (range.endContainer !== lastSelectable) {
+                    // Check if there are empty textnodes after this.
+                    var sibling = range.endContainer.nextSibling;
+                    while (sibling) {
+                        if (sibling.nodeType !== dfx.TEXT_NODE
+                            || dfx.isBlank(sibling.data) === false
+                        ) {
+                            return null;
+                        }
+
+                        sibling = sibling.nextSibling;
+                    }
+
+                    if (sibling !== lastSelectable) {
+                        return null;
+                    }
+                }
+
+                return parent;
+            }
+        }
+
+        return null;
+
+    },
+
 
     /**
      * Returns the caret coords.
@@ -1473,15 +1553,15 @@ Viper.prototype = {
      * For example, if the specified node is a STRONG tag, which is an inline
      * ELEMENT_NODE then it cannot be a parent to block element (i.e. P, DIV).
      */
-    surroundContents: function(tag)
+    surroundContents: function(tag, attributes, range, keepSelection)
     {
-        var range = this.getCurrentRange();
+        range = range || this.getCurrentRange();
 
         if (range.collapsed === true) {
             return;
         }
 
-        if (this.rangeInViperBounds() !== true) {
+        if (this.rangeInViperBounds(range) !== true) {
             return;
         }
 
@@ -1503,7 +1583,9 @@ Viper.prototype = {
             if (startContainer.nodeType === dfx.TEXT_NODE) {
                 // Selection is a text node.
                 // Just wrap the contents with the specified node.
-                var node         = Viper.document.createElement(tag);
+                var node = Viper.document.createElement(tag);
+                this._setWrapperElemAttributes(node, attributes);
+
                 var rangeContent = range.toString();
                 dfx.setNodeTextContent(node, rangeContent);
 
@@ -1518,9 +1600,11 @@ Viper.prototype = {
                 range.deleteContents();
                 range.insertNode(node);
 
-                range.setStart(node.firstChild, 0);
-                range.setEnd(node.firstChild, node.firstChild.length);
-                ViperSelection.addRange(range);
+                if (keepSelection !== true) {
+                    range.setStart(node.firstChild, 0);
+                    range.setEnd(node.firstChild, node.firstChild.length);
+                    ViperSelection.addRange(range);
+                }
             } else {
                 var self     = this;
                 var changeid = null;
@@ -1537,7 +1621,7 @@ Viper.prototype = {
                         // Add new class to wrap element to mark it as "changed".
                         ViperChangeTracker.addNodeToChange(changeid, newElem);
                     }
-                });
+                }, attributes);
             }//end if
         } else {
             var bookmark       = this.createBookmark();
@@ -1576,10 +1660,15 @@ Viper.prototype = {
 
                         ViperChangeTracker.addNodeToChange(changeid, newElem);
                     }
-                });
+                }, attributes);
             }
 
-            this.selectBookmark(bookmark);
+            if (keepSelection !== true) {
+                this.selectBookmark(bookmark);
+            } else {
+                dfx.remove(bookmark.start);
+                dfx.remove(bookmark.end);
+            }
         }//end if
 
     },
@@ -1592,7 +1681,7 @@ Viper.prototype = {
      * @param function callback A callback function that will be called when a
      *                          new tag is created.
      */
-    _wrapElement: function(parent, tag, callback)
+    _wrapElement: function(parent, tag, callback, attributes)
     {
         if (!parent) {
             return;
@@ -1638,6 +1727,8 @@ Viper.prototype = {
                 } else {
                     // Create the tag and add it to DOM.
                     var elem = Viper.document.createElement(tag);
+                    this._setWrapperElemAttributes(elem, attributes);
+
                     dfx.setNodeTextContent(elem, parent.nodeValue);
                     dfx.insertBefore(parent, elem);
                     dfx.remove(parent);
@@ -1660,6 +1751,8 @@ Viper.prototype = {
                         parent.previousSibling.appendChild(parent);
                     } else {
                         var elem = Viper.document.createElement(tag);
+                        this._setWrapperElemAttributes(elem, attributes);
+
                         dfx.insertBefore(parent, elem);
                         elem.appendChild(parent);
                         this.removeTagFromChildren(elem, tag);
@@ -1697,6 +1790,24 @@ Viper.prototype = {
                 }
             }//end if
         }//end if
+
+    },
+
+    _setWrapperElemAttributes: function(element, attributes)
+    {
+        if (!element || !attributes) {
+            return;
+        }
+
+        if (attributes.cssClass) {
+            dfx.addClass(element, attributes.cssClass);
+        }
+
+        if (attributes.attributes) {
+            for (var attr in attributes.attributes) {
+                element.setAttribute(attr, attributes.attributes[attr]);
+            }
+        }
 
     },
 
@@ -2471,6 +2582,78 @@ Viper.prototype = {
             nextNode: nextNode,
             midNode: midNode
         };
+
+    },
+
+    /**
+     * Highlights the current Viper selection.
+     *
+     * This method is useful when Viper loses focus and selection needs to be shown,
+     * E.g. when a textbox takes focus the Viper selection will be lost, this method
+     * will be similar to bookmarking a selection but visible to the user.
+     *
+     * If the range is collaped nothing will be highlighted.
+     *
+     * @return {DOMNode}
+     */
+    highlightSelection: function()
+    {
+        var viperRange   = this.getViperRange();
+
+        var attributes = {
+            cssClass: '__viper_selHighlight',
+        }
+
+        var startNode = viperRange.getStartNode();
+        if (dfx.isTag(startNode, 'span') === true) {
+            dfx.addClass(startNode, '__viper_selHighlight __viper_cleanOnly');
+        }
+
+        this.surroundContents('span', attributes, viperRange, true);
+
+    },
+
+    highlightToSelection: function()
+    {
+        // There should be one...
+        var highlights = dfx.getClass('__viper_selHighlight', this.element);
+        if (highlights.length === 0) {
+            return;
+        }
+
+        var range     = this.getCurrentRange();
+        var c         = highlights.length;
+        var startDone = false;
+        var child     = null;
+
+        if (c === 1 && dfx.hasClass(highlights[0], '__viper_cleanOnly') === true) {
+            dfx.removeClass(highlights[0], '__viper_cleanOnly');
+            dfx.removeClass(highlights[0], '__viper_selHighlight');
+            range.selectNode(highlights[0]);
+            ViperSelection.addRange(range);
+            return;
+        }
+
+        for (var i = 0; i < c; i++) {
+            while (highlights[i].firstChild) {
+                child = highlights[i].firstChild;
+                dfx.insertBefore(highlights[i], child);
+
+                if (startDone === false) {
+                    // Set the selection start.
+                    startDone = true;
+                    range.setStart(child, 0);
+                }
+            }
+
+            dfx.remove(highlights[i]);
+
+            if (i === (c - 1)) {
+                range.setEnd(child, child.data.length);
+            }
+        }
+
+        ViperSelection.addRange(range);
 
     },
 

@@ -136,7 +136,7 @@ ViperToolbarPlugin.prototype = {
      */
     createButton: function(content, isActive, titleAttr, disabled, customClass, clickAction, groupElement, toolsPopup, parentElement)
     {
-        var button = ViperTools.createButton(content, isActive, titleAttr, disabled, customClass, clickAction, groupElement);
+        var button = this.viper.ViperTools.createButton(content, isActive, titleAttr, disabled, customClass, clickAction, groupElement);
         if (toolsPopup) {
             var self = this;
             dfx.addEvent(button, 'mousedown', function() {
@@ -207,6 +207,7 @@ ViperToolbarPlugin.prototype = {
 
         var t = null;
         dfx.addEvent(textBox, 'focus', function(e) {
+            self.viper.highlightSelection();
             dfx.addClass(labelElem, 'active');
         });
 
@@ -217,7 +218,7 @@ ViperToolbarPlugin.prototype = {
 
         dfx.addEvent(textBox, 'keyup', function(e) {
             if (e.which === 13) {
-                //self.viper.focus();
+                self.viper.focus();
                 action.call(textBox, textBox.value);
                 return;
             }
@@ -328,7 +329,7 @@ ViperToolbarPlugin.prototype = {
      */
     createSubSection: function(contentElement, active, customClass)
     {
-        var subSection = ViperTools.createSubSection(contentElement, active, customClass);
+        var subSection = this.viper.ViperTools.createSubSection(contentElement, active, customClass);
         return subSection;
 
     },
