@@ -29,7 +29,6 @@ ViperAcronymPlugin.prototype = {
 
     init: function()
     {
-        this._initInlineToolbar();
         this._initToolbar();
 
     },
@@ -121,113 +120,6 @@ ViperAcronymPlugin.prototype = {
 
         return null;
 
-    },
-
-    _initInlineToolbar: function()
-    {
-        var inlineToolbarPlugin = this.viper.ViperPluginManager.getPlugin('ViperInlineToolbarPlugin');
-        if (!inlineToolbarPlugin) {
-            return;
-        }
-
-        var self = this;
-        var subSectionActive = false;
-        this.viper.registerCallback('ViperInlineToolbarPlugin:updateToolbar', 'ViperAcronymPlugin', function(data) {
-            var currentIsAcronym = false;
-
-            // Check if we need to show the acronym options.
-            if (data.range.collapsed === true || dfx.isBlockElement(data.lineage[data.current]) === true) {
-                return;
-            }
-
-            var startNode = data.range.getStartNode();
-            var endNode   = data.range.getEndNode();
-            if (startNode && endNode && startNode.parentNode !== endNode.parentNode) {
-                return;
-            }
-
-            if (dfx.isTag(data.lineage[data.current], 'abbr') === true) {
-                return;
-            } else if (dfx.isTag(data.lineage[data.current], 'acronym') === true) {
-                // If the selection is a whole A tag then by default show the
-                // acronym sub section.
-                subSectionActive = true;
-                currentIsAcronym = true;
-            } else {
-                subSectionActive = false;
-            }
-
-            if (currentIsAcronym !== true
-                && (data.lineage[data.current].nodeType !== dfx.TEXT_NODE
-                || dfx.isTag(data.lineage[data.current].parentNode, 'acronym') === false)
-                && data.range.collapsed === true) {
-                return;
-            } else if (data.lineage[data.current].nodeType === dfx.TEXT_NODE) {
-                var rangeText = data.range.toString();
-                if (rangeText.length > 6
-                    || rangeText.length < 2
-                    || rangeText.match(/\s/)
-                ) {
-                    return;
-                }
-            }
-
-            // Get the acronym from lineage.
-            var acronym     = null;
-            var linIndex = -1;
-            for (var i = data.current; i >= 0; i--) {
-                if (dfx.isTag(data.lineage[i], 'acronym') === true) {
-                    acronym     = data.lineage[i];
-                    linIndex = i;
-                    break;
-                }
-            }
-
-            var isAcronym = false;
-            var titleAttr = '';
-            if (acronym) {
-                // Get the current value from the acronym tag.
-                titleAttr = acronym.getAttribute('title') || '';
-                isAcronym = true;
-            }
-
-            var group          = inlineToolbarPlugin.createButtonGroup();
-            var subSectionCont = document.createElement('div');
-            var subSection     = inlineToolbarPlugin.createSubSection(subSectionCont);
-
-            // Acronym button.
-            if (currentIsAcronym !== true && acronym) {
-                inlineToolbarPlugin.createButton('Acr', isAcronym, 'Toggle Acronym Options', false, 'acronym', function() {
-                    // Select the whole acronym using the lineage.
-                    inlineToolbarPlugin.selectLineageItem(linIndex);
-                }, group);
-            } else {
-                inlineToolbarPlugin.createButton('Acr', isAcronym, 'Toggle Acronym Options', false, 'acronym', null, group, subSection, subSectionActive);
-            }
-
-            if (isAcronym === true) {
-                // Add the remove acronym button.
-                inlineToolbarPlugin.createButton('RAcr', false, 'Remove Acronym', false, 'acronymRemove', function() {
-                    self.removeAcronym(acronym);
-                }, group);
-            }
-
-            var setAcronymAttributes = function(title) {
-                subSectionActive = true;
-                if (!acronym) {
-                    acronym = self.rangeToAcronym(title);
-                } else {
-                    self.setTitle(acronym, title);
-                }
-            };
-
-            // Sub section.
-            var titleTextbox = inlineToolbarPlugin.createTextbox(null, titleAttr, 'Title', function(value) {
-                setAcronymAttributes(value);
-            }, false, false);
-
-            subSectionCont.appendChild(titleTextbox);
-        });
     },
 
     _initToolbar: function()
