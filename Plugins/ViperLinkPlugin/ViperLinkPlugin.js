@@ -35,14 +35,13 @@ ViperLinkPlugin.prototype = {
 
     },
 
-    rangeToLink: function(range, url, title)
+    rangeToLink: function(url, title)
     {
-        if (!range || !url) {
+        if (!url) {
             return;
         }
 
-        range = range || this.viper.getViperRange();
-
+        var range    = this.viper.getViperRange();
         var bookmark = this.viper.createBookmark(range);
 
         var a = document.createElement('a');
@@ -147,8 +146,8 @@ ViperLinkPlugin.prototype = {
         var self = this;
         var subSectionActive = false;
         this.viper.registerCallback('ViperInlineToolbarPlugin:updateToolbar', 'ViperLinkPlugin', function(data) {
-            var rangeClone     = data.range.cloneRange();
-            var currentIsLink  = false;
+            var range         = data.range;
+            var currentIsLink = false;
 
             // Check if we need to show the link options.
             if (dfx.isBlockElement(data.lineage[data.current]) === true) {
@@ -173,7 +172,7 @@ ViperLinkPlugin.prototype = {
             if (currentIsLink !== true
                 && (data.lineage[data.current].nodeType !== dfx.TEXT_NODE
                 || dfx.isTag(data.lineage[data.current].parentNode, 'a') === false)
-                && rangeClone.collapsed === true) {
+                && range.collapsed === true) {
                 return;
             }
 
@@ -221,10 +220,8 @@ ViperLinkPlugin.prototype = {
 
             var setLinkAttributes = function(url, title) {
                 subSectionActive = true;
-                ViperSelection.addRange(rangeClone);
-
                 if (!link) {
-                    link = self.rangeToLink(data.range, url, title);
+                    link = self.rangeToLink(url, title);
                 } else {
                     self.setLinkURL(link, url);
                     self.setLinkTitle(link, title);
@@ -276,7 +273,7 @@ ViperLinkPlugin.prototype = {
 
         var setLinkAttributes = function(url, title) {
             if (!link) {
-                link = self.rangeToLink(self.viper.getViperRange(), url, title);
+                link = self.rangeToLink(url, title);
             } else {
                 self.setLinkURL(link, url);
                 self.setLinkTitle(link, title);

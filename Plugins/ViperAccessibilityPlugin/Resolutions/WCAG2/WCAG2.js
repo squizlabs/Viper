@@ -32,7 +32,7 @@ ViperAccessibilityPlugin_WCAG2 = {
         if (obj) {
             var fn = obj['res_' + code.section.replace('.', '_')];
             if (dfx.isFn(fn) === true) {
-                fn.call(obj, issue.element, code, callback);
+                fn.call(obj, issue.element, code, callback, vap.viper);
             }
 
             return;
@@ -56,7 +56,7 @@ ViperAccessibilityPlugin_WCAG2 = {
 
             var fn = obj['res_' + code.section.replace('.', '_')];
             if (dfx.isFn(fn) === true) {
-                fn.call(obj, issue.element, code, callback);
+                fn.call(obj, issue.element, code, callback, vap.viper);
             } else {
                 callback.call(this);
             }

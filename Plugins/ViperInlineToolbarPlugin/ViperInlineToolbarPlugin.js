@@ -110,7 +110,7 @@ ViperInlineToolbarPlugin.prototype = {
      */
     createButtonGroup: function(customClass)
     {
-        return this._toolsContainer.appendChild(ViperTools.createButtonGroup(customClass));
+        return this._toolsContainer.appendChild(this.viper.ViperTools.createButtonGroup(customClass));
 
     },
 
@@ -165,7 +165,7 @@ ViperInlineToolbarPlugin.prototype = {
             };
         }
 
-        var button = ViperTools.createButton(content, isActive, titleAttr, disabled, customClass, clickAction, groupElement, subSection, showSubSection);
+        var button = this.viper.ViperTools.createButton(content, isActive, titleAttr, disabled, customClass, clickAction, groupElement, subSection, showSubSection);
 
         if (!groupElement) {
             this._toolsContainer.appendChild(button);
@@ -199,6 +199,7 @@ ViperInlineToolbarPlugin.prototype = {
 
         var t = null;
         dfx.addEvent(textBox, 'focus', function(e) {
+            self.viper.highlightSelection();
             dfx.addClass(labelElem, 'active');
         });
 
@@ -209,17 +210,7 @@ ViperInlineToolbarPlugin.prototype = {
 
         dfx.addEvent(textBox, 'keyup', function(e) {
             if (e.which === 13) {
-                textBox.blur();
-
-                if (node) {
-                    var range = self.viper.getCurrentRange();
-                    ViperSelection.removeAllRanges();
-                    range.selectNode(node);
-                    ViperSelection.addRange(range);
-                }
-
                 self.viper.focus();
-
                 action.call(textBox, textBox.value);
                 return;
             }
@@ -229,6 +220,7 @@ ViperInlineToolbarPlugin.prototype = {
             clearTimeout(t);
             t = setTimeout(function() {
                 dfx.removeClass(labelElem, 'active');
+                self.viper.focus();
                 action.call(textBox, textBox.value);
             }, 1500);
         });
@@ -272,7 +264,7 @@ ViperInlineToolbarPlugin.prototype = {
      */
     createSubSection: function(contentElement, active, customClass)
     {
-        var subSection = ViperTools.createSubSection(contentElement, active, customClass);
+        var subSection = this.viper.ViperTools.createSubSection(contentElement, active, customClass);
         this._subSectionContainer.appendChild(subSection);
 
         if (active === true) {

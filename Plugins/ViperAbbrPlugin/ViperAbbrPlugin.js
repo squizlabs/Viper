@@ -29,18 +29,17 @@ ViperAbbrPlugin.prototype = {
 
     init: function()
     {
-        this._initInlineToolbar();
         this._initToolbar();
 
     },
 
-    rangeToAbbr: function(range, title)
+    rangeToAbbr: function(title)
     {
-        if (!range || !title) {
+        if (!title) {
             return;
         }
 
-        range = range || this.viper.getViperRange();
+        var range = this.viper.getViperRange();
 
         var bookmark = this.viper.createBookmark(range);
 
@@ -48,7 +47,8 @@ ViperAbbrPlugin.prototype = {
         elem.setAttribute('title', title);
 
         var elems = dfx.getElementsBetween(bookmark.start, bookmark.end);
-        for (var i = 0; i < elems.length; i++) {
+        var c     = elems.length;
+        for (var i = 0; i < c; i++) {
             elem.appendChild(elems[i]);
         }
 
@@ -97,6 +97,8 @@ ViperAbbrPlugin.prototype = {
 
         elem.setAttribute('title', title);
 
+        this.viper.selectElement(elem);
+
     },
 
     getAbbrFromRange: function(range)
@@ -122,116 +124,6 @@ ViperAbbrPlugin.prototype = {
 
     },
 
-    _initInlineToolbar: function()
-    {
-        var inlineToolbarPlugin = this.viper.ViperPluginManager.getPlugin('ViperInlineToolbarPlugin');
-        if (!inlineToolbarPlugin) {
-            return;
-        }
-
-        var self = this;
-        var subSectionActive = false;
-        this.viper.registerCallback('ViperInlineToolbarPlugin:updateToolbar', 'ViperAbbrPlugin', function(data) {
-            var rangeClone       = data.range.cloneRange();
-            var currentIsAbbr = false;
-
-            // Check if we need to show the abbr options.
-            if (rangeClone.collapsed === true || dfx.isBlockElement(data.lineage[data.current]) === true) {
-                return;
-            }
-
-            var startNode = data.range.getStartNode();
-            var endNode   = data.range.getEndNode();
-            if (startNode && endNode && startNode.parentNode !== endNode.parentNode) {
-                return;
-            }
-
-            if (dfx.isTag(data.lineage[data.current], 'acronym') === true) {
-                return;
-            } else if (dfx.isTag(data.lineage[data.current], 'abbr') === true) {
-                // If the selection is a whole A tag then by default show the
-                // abbr sub section.
-                subSectionActive = true;
-                currentIsAbbr = true;
-            } else {
-                subSectionActive = false;
-            }
-
-            if (currentIsAbbr !== true
-                && (data.lineage[data.current].nodeType !== dfx.TEXT_NODE
-                || dfx.isTag(data.lineage[data.current].parentNode, 'abbr') === false)
-                && rangeClone.collapsed === true) {
-                return;
-            } else if (data.lineage[data.current].nodeType === dfx.TEXT_NODE) {
-                var rangeText = data.range.toString();
-                if (rangeText.length > 6
-                    || rangeText.length < 2
-                    || rangeText.match(/\s/)
-                ) {
-                    return;
-                }
-            }
-
-            // Get the abbr from lineage.
-            var abbr     = null;
-            var linIndex = -1;
-            for (var i = data.current; i >= 0; i--) {
-                if (dfx.isTag(data.lineage[i], 'abbr') === true) {
-                    abbr     = data.lineage[i];
-                    linIndex = i;
-                    break;
-                }
-            }
-
-            var isAbbr = false;
-            var titleAttr = '';
-            if (abbr) {
-                // Get the current value from the abbr tag.
-                titleAttr = abbr.getAttribute('title') || '';
-                isAbbr = true;
-            }
-
-            var group          = inlineToolbarPlugin.createButtonGroup();
-            var subSectionCont = document.createElement('div');
-            var subSection     = inlineToolbarPlugin.createSubSection(subSectionCont);
-
-            // Abbr button.
-            if (currentIsAbbr !== true && abbr) {
-                inlineToolbarPlugin.createButton('Abbr', isAbbr, 'Toggle Abbr Options', false, 'abbr', function() {
-                    // Select the whole abbr using the lineage.
-                    inlineToolbarPlugin.selectLineageItem(linIndex);
-                }, group);
-            } else {
-                inlineToolbarPlugin.createButton('Abbr', isAbbr, 'Toggle Abbr Options', false, 'abbr', null, group, subSection, subSectionActive);
-            }
-
-            if (isAbbr === true) {
-                // Add the remove abbr button.
-                inlineToolbarPlugin.createButton('RAbbr', false, 'Remove Abbr', false, 'abbrRemove', function() {
-                    self.removeAbbr(abbr);
-                }, group);
-            }
-
-            var setAbbrAttributes = function(title) {
-                subSectionActive = true;
-                ViperSelection.addRange(rangeClone);
-
-                if (!abbr) {
-                    abbr = self.rangeToAbbr(data.range, title);
-                } else {
-                    self.setTitle(abbr, title);
-                }
-            };
-
-            // Sub section.
-            var titleTextbox = inlineToolbarPlugin.createTextbox(null, titleAttr, 'Title', function(value) {
-                setAbbrAttributes(value);
-            }, false, false);
-
-            subSectionCont.appendChild(titleTextbox);
-        });
-    },
-
     _initToolbar: function()
     {
         var toolbar = this.viper.ViperPluginManager.getPlugin('ViperToolbarPlugin');
@@ -239,16 +131,7 @@ ViperAbbrPlugin.prototype = {
             return;
         }
 
-        var abbr = null;
-
-        var setAbbrAttributes = function(title) {
-            if (!abbr) {
-                abbr = self.rangeToAbbr(self.viper.getViperRange(), title);
-            } else {
-                self.setTitle(abbr, title);
-            }
-        };
-
+        var abbr     = null;
         var self     = this;
         var btnGroup = toolbar.createButtonGroup();
 
@@ -257,7 +140,11 @@ ViperAbbrPlugin.prototype = {
 
         // Title text box.
         var title = toolbar.createTextbox('', 'Abbr', function(value) {
-            setAbbrAttributes(value);
+            if (!abbr) {
+                abbr = self.rangeToAbbr(value);
+            } else {
+                self.setTitle(abbr, value);
+            }
         });
         createAbbrSubContent.appendChild(title);
 

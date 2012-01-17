@@ -70,7 +70,7 @@ ViperSearchReplacePlugin.prototype = {
         });
         searchReplaceSubContent.appendChild(replace);
 
-        var findNext = toolbar.createButton('Find Next', false, 'Find Next', false, '', function() {
+        var findNext = toolbar.createButton('Find Next', false, 'Find Next', false, 'findNext', function() {
             // Find again.
             if (self.find((dfx.getTag('input', searchReplaceSubContent)[0]).value) === false) {
                 alert('Not found');
@@ -78,12 +78,12 @@ ViperSearchReplacePlugin.prototype = {
         });
         searchReplaceSubContent.appendChild(findNext);
 
-        var replaceBtn = toolbar.createButton('Replace', false, 'Replace', false, '', function() {
+        var replaceBtn = toolbar.createButton('Replace', false, 'Replace', false, 'replaceText', function() {
             self.replace((dfx.getTag('input', searchReplaceSubContent)[1]).value);
         });
         searchReplaceSubContent.appendChild(replaceBtn);
 
-        var replaceAllBtn = toolbar.createButton('Replace All', false, 'Replace All', false, '', function() {
+        var replaceAllBtn = toolbar.createButton('Replace All', false, 'Replace All', false, 'replaceAll', function() {
             while (self.find((dfx.getTag('input', searchReplaceSubContent)[0]).value) === true) {
                 self.replace((dfx.getTag('input', searchReplaceSubContent)[1]).value);
             }
@@ -99,7 +99,7 @@ ViperSearchReplacePlugin.prototype = {
             }
         });
 
-        var searchBtn = toolbar.createButton('', false, 'Toggle Search & Replace', false, 'link', null, btnGroup, searchTools);
+        var searchBtn = toolbar.createButton('Search', false, 'Toggle Search & Replace', false, 'searchReplace', null, btnGroup, searchTools);
 
         // Update the buttons when the toolbar updates it self.
         this.viper.registerCallback('ViperToolbarPlugin:updateToolbar', 'ViperSearchReplacePlugin', null);

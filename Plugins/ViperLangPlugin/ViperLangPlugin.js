@@ -30,105 +30,112 @@ ViperLangPlugin.prototype = {
     init: function()
     {
         var self = this;
-
-        // Inline toolbar.
-        this.viper.registerCallback('ViperInlineToolbarPlugin:updateToolbar', 'ViperLangPlugin', function(data) {
-            self._createInlineToolbarContent(data);
-        });
+        this._initToolbarContent();
 
     },
 
-    _createInlineToolbarContent: function(data)
+    getLangElemFromRange: function()
     {
-        if (!data.lineage || data.range.collapsed === true) {
+        var range      = this.viper.getViperRange();
+        var commonElem = range.getCommonElement();
+        var viperElem  = this.viper.getViperElement();
+
+        var element = this.viper.getWholeElementSelection(range);
+        if (element) {
+            commonElem = element;
+        }
+
+        while (commonElem && commonElem !== viperElem) {
+            var lang = commonElem.getAttribute('lang');
+            if (lang) {
+                return commonElem;
+            }
+
+            commonElem = commonElem.parentNode;
+        }
+
+        return null;
+
+    },
+
+    rangeToLang: function(lang)
+    {
+        var attributes = {
+            attributes: {
+                lang: lang
+            }
+        };
+
+        var element = this.viper.getWholeElementSelection();
+        if (element) {
+            element.setAttribute('lang', lang);
+            this.viper.selectElement(element);
+        } else {
+            this.viper.surroundContents('span', attributes);
+        }
+
+        this.viper.fireSelectionChanged();
+        this.viper.fireNodesChanged([this.viper.getViperElement()]);
+
+    },
+
+    _initToolbarContent: function()
+    {
+        var toolbar = this.viper.ViperPluginManager.getPlugin('ViperToolbarPlugin');
+        if (!toolbar) {
             return;
         }
 
-        var self                = this;
-        var selectedNode        = data.lineage[data.current];
-        var inlineToolbarPlugin = this.viper.ViperPluginManager.getPlugin('ViperInlineToolbarPlugin');
+        var lang     = null;
+        var self     = this;
+        var btnGroup = toolbar.createButtonGroup();
 
-        if (selectedNode.nodeType === dfx.ELEMENT_NODE
-            || data.range.startContainer === data.range.endContainer
-        ) {
-            var rangeClone = data.range.cloneRange();
-            for (var i = 0; i < data.lineage.length; i++) {
-                if (dfx.isTag(data.lineage[i], 'a') === true) {
-                    return;
-                }
+        // Create Language button and popup.
+        var createLanguageSubContent = document.createElement('div');
+
+        // URL text box.
+        var langTextbox = toolbar.createTextbox('', 'Language', function(value) {
+            self.rangeToLang(value);
+        });
+        createLanguageSubContent.appendChild(langTextbox);
+
+        var createLanguageSubSection = toolbar.createSubSection(createLanguageSubContent, true);
+        var langTools = toolbar.createToolsPopup('Language', null, [createLanguageSubSection], null, function() {
+            if (lang) {
+                var range = self.viper.getViperRange();
+                range.selectNode(lang);
+                ViperSelection.addRange(range);
             }
+        });
 
-            // Anchor.
-            var active = false;
-            if (this._inlineToolbarActiveSubSection === 'lang') {
-                active = true;
+        var langBtn = toolbar.createButton('', false, 'Toggle Language Options', false, 'lang', null, btnGroup, langTools);
+
+        // Remove Language.
+        var removeLanguageBtn = toolbar.createButton('', false, 'Remove Language', false, 'langRemove', function() {
+            if (lang) {
+                self.removeLanguage(lang);
             }
+        }, btnGroup);
 
-            var attrBtnGroup       = inlineToolbarPlugin.createButtonGroup();
-            var langSubSectionCont = document.createElement('div');
-            var langIdSubSection   = inlineToolbarPlugin.createSubSection(langSubSectionCont);
+        // Update the buttons when the toolbar updates it self.
+        this.viper.registerCallback('ViperToolbarPlugin:updateToolbar', 'ViperLangPlugin', function(data) {
+            lang = self.getLangElemFromRange();
 
-            var lang = '';
-            var langBtnActive = false;
-            if (selectedNode.nodeType === dfx.ELEMENT_NODE) {
-                lang = selectedNode.getAttribute('lang');
-                if (lang) {
-                    langBtnActive = true;
-                }
-            }
+            if (lang) {
+                toolbar.setButtonActive(langBtn);
+                toolbar.enableButton(removeLanguageBtn);
 
-            inlineToolbarPlugin.createButton('', langBtnActive, 'Language', false, 'lang', function(subSectionState) {
-                if (subSectionState === true) {
-                    self._inlineToolbarActiveSubSection = 'lang';
-                }
-            }, attrBtnGroup, langIdSubSection, active);
+                (dfx.getTag('input', createLanguageSubContent)[0]).value = lang.getAttribute('lang');
+            } else {
+                var startNode = data.range.getStartNode();
+                var endNode   = data.range.getEndNode();
+                toolbar.setButtonInactive(langBtn);
 
-            var langTextBox = inlineToolbarPlugin.createTextbox(selectedNode, lang, 'Language', function(value) {
-                if (selectedNode.nodeType === dfx.ELEMENT_NODE) {
-                    // Set the attribute of this node.
-                    selectedNode.setAttribute('lang', value);
-                    self._inlineToolbarActiveSubSection = 'lang';
-                } else {
-                    ViperSelection.addRange(rangeClone);
+                toolbar.disableButton(removeLanguageBtn);
 
-                    // Wrap the selection with span tag.
-                    var bookmark = self.viper.createBookmark();
-                    var span     = document.createElement('span');
-                    span.setAttribute('lang', value);
-
-                    // Move the elements between start and end of bookmark to the new
-                    // span tag. Then select the new span tag and update selection.
-                    if (bookmark.start && bookmark.end) {
-                        var start = bookmark.start.nextSibling;
-                        while (start !== bookmark.end) {
-                            var elem = start;
-                            start = start.nextSibling;
-                            span.appendChild(elem);
-                        }
-
-                        dfx.insertBefore(bookmark.start, span);
-                        self.viper.removeBookmark(bookmark);
-
-                        rangeClone.selectNode(span);
-                        ViperSelection.addRange(rangeClone);
-                        self.viper.adjustRange();
-
-                        // We want to keep this textbox open so set this var.
-                        if (dfx.hasClass(langIdSubSection, 'active') === true) {
-                            self._inlineToolbarActiveSubSection = 'lang';
-                        }
-
-                        self.viper.fireCallbacks('Viper:selectionChanged', rangeClone);
-                    }
-                }//end if
-            });
-            langSubSectionCont.appendChild(langTextBox);
-            if (active === true) {
-                langTextBox.focus();
-            }
-        }//end if
-
-        this._inlineToolbarActiveSubSection = null;
+                (dfx.getTag('input', createLanguageSubContent)[0]).value = '';
+            }//end if
+        });
 
     }
 

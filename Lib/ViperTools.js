@@ -1,4 +1,10 @@
-var ViperTools = {
+function ViperTools(viper)
+{
+    this.viper = viper;
+
+}
+
+ViperTools.prototype = {
 
     /**
      * Creates a button group.
@@ -74,6 +80,7 @@ var ViperTools = {
             dfx.addClass(button, customClass);
         }
 
+        var self = this;
         if (subSection) {
             dfx.addClass(button, 'toggleSubSectionButton');
 
@@ -84,7 +91,7 @@ var ViperTools = {
                     return false;
                 }
 
-                var state = ViperTools.toggleSubSection(subSection);
+                var state = self.viper.ViperTools.toggleSubSection(subSection);
                 if (clickAction) {
                     clickAction.call(this, state, button);
                 }
@@ -113,7 +120,7 @@ var ViperTools = {
 
         if (subSection && showSubSection === true) {
             if (clickAction) {
-                clickAction.call(this, ViperTools.toggleSubSection(subSection), button);
+                clickAction.call(this, this.viper.ViperTools.toggleSubSection(subSection), button);
             }
         }
 

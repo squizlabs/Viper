@@ -382,7 +382,7 @@ ViperAccessibilityPlugin.prototype = {
         var listFilters = document.createElement('div');
         dfx.addClass(listFilters, 'listFilters');
         dfx.setHtml(listFilters, '<h1>List Filters</h1><p>Errors and Warnings are always shown and cannot be hidden. Notices will be automatically shown if there are not other issues.</p>');
-        var includeNoticesChbox = ViperTools.createCheckbox('Always include Notices', this._includeNotices);
+        var includeNoticesChbox = this.viper.ViperTools.createCheckbox('Always include Notices', this._includeNotices);
         listFilters.appendChild(includeNoticesChbox);
         div.appendChild(listFilters);
 
@@ -398,14 +398,14 @@ ViperAccessibilityPlugin.prototype = {
                 selected = true;
             }
 
-            standards.appendChild(ViperTools.createRadiobutton('standard', standardId, this._standards[standardId], selected));
+            standards.appendChild(this.viper.ViperTools.createRadiobutton('standard', standardId, this._standards[standardId], selected));
         }
 
         // Re check button.
         var self       = this;
         var reCheckSec = document.createElement('div');
         dfx.addClass(reCheckSec, 'reCheckSec');
-        var reCheck = ViperTools.createButton('Re-check Content', false, 'Re-check Content', false, '', function() {
+        var reCheck = this.viper.ViperTools.createButton('Re-check Content', false, 'Re-check Content', false, '', function() {
             var radioBtns = document.getElementsByName('standard');
             var value     = null;
             for (var i = 0; i < radioBtns.length; i++) {
