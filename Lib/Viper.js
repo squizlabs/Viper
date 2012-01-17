@@ -572,7 +572,6 @@ Viper.prototype = {
 
     },
 
-
     /**
      * Rturns a DOMElement if all of its contents is selected, null otherwise.
      *
@@ -632,6 +631,36 @@ Viper.prototype = {
         }
 
         return null;
+
+    },
+
+    /**
+     * Sets the selection starting from start and ending at end element.
+     *
+     * @param {DOMNode} start The start of the selection.
+     * @param {DOMNode} end   The end of the selection.
+     */
+    selectNodeToNode: function(start, end)
+    {
+        var range = this.getViperRange();
+
+        if (start === end) {
+            range.selectNode(start);
+        } else {
+            if (start.nodeType === dfx.ELEMENT_NODE) {
+                start = range._getFirstSelectableElement(start);
+            }
+
+            if (end.nodeType === dfx.ELEMENT_NODE) {
+                end = range._getLastSelectableElement(end);
+            }
+
+            range.setStart(start, 0);
+            range.setEnd(end, end.data.length);
+        }
+
+        ViperSelection.addRange(range);
+        this.fireCallbacks('Viper:selectionChanged', range);
 
     },
 

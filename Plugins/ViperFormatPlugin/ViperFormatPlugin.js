@@ -180,7 +180,7 @@ ViperFormatPlugin.prototype = {
 
         // Anchor and Class.
         if (selectedNode.nodeType === dfx.ELEMENT_NODE
-            || data.range.startContainer === data.range.endContainer
+            || data.range.startContainer.parentNode === data.range.endContainer.parentNode
         ) {
             for (var i = 0; i < data.lineage.length; i++) {
                 if (dfx.isTag(data.lineage[i], 'a') === true) {
@@ -217,6 +217,30 @@ ViperFormatPlugin.prototype = {
                 if (selectedNode.nodeType === dfx.ELEMENT_NODE) {
                     // Set the attribute of this node.
                     selectedNode.setAttribute('id', value);
+
+                    if (dfx.isBlank(dfx.trim(value)) === true && dfx.isTag(selectedNode, 'span') === true) {
+                        var remove = true;
+                        for (var i = 0; i < selectedNode.attributes.length; i++) {
+                            if (dfx.isBlank(dfx.trim(selectedNode.attributes[i].value)) === false) {
+                                remove = false;
+                            }
+                        }
+
+                        if (remove === true) {
+                            // Span tag was most likely created just for the class attribute
+                            // remove the span as its no longer needed.
+                            var selectionStart = selectedNode.firstChild;
+                            var selectionEnd   = selectedNode.lastChild;
+                            while (selectedNode.firstChild) {
+                                dfx.insertBefore(selectedNode, selectedNode.firstChild);
+                            }
+
+                            dfx.remove(selectedNode);
+                            self.viper.selectNodeToNode(selectionStart, selectionEnd);
+                            self.viper.fireCallbacks('Viper:selectionChanged', self.viper.getViperRange());
+                        }
+                    }
+
                     self._inlineToolbarActiveSubSection = 'anchor';
                 } else {
                     // Wrap the selection with span tag.
@@ -284,6 +308,30 @@ ViperFormatPlugin.prototype = {
                 if (selectedNode.nodeType === dfx.ELEMENT_NODE) {
                     // Set the attribute of this node.
                     selectedNode.setAttribute('class', value);
+
+                    if (dfx.isBlank(dfx.trim(value)) === true && dfx.isTag(selectedNode, 'span') === true) {
+                        var remove = true;
+                        for (var i = 0; i < selectedNode.attributes.length; i++) {
+                            if (dfx.isBlank(dfx.trim(selectedNode.attributes[i].value)) === false) {
+                                remove = false;
+                            }
+                        }
+
+                        if (remove === true) {
+                            // Span tag was most likely created just for the class attribute
+                            // remove the span as its no longer needed.
+                            var selectionStart = selectedNode.firstChild;
+                            var selectionEnd   = selectedNode.lastChild;
+                            while (selectedNode.firstChild) {
+                                dfx.insertBefore(selectedNode, selectedNode.firstChild);
+                            }
+
+                            dfx.remove(selectedNode);
+                            self.viper.selectNodeToNode(selectionStart, selectionEnd);
+                            self.viper.fireCallbacks('Viper:selectionChanged', self.viper.getViperRange());
+                        }
+                    }
+
                     self._inlineToolbarActiveSubSection = 'class';
                 } else {
                     // Wrap the selection with span tag.
