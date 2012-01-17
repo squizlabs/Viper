@@ -774,8 +774,8 @@ ViperDOMRange.prototype = {
         if (endNode.nodeType === dfx.TEXT_NODE) {
             if (range.endOffset !== 0) {
                 if (range.endOffset === endNode.data.length
-                    && startNode.parentNode === endNode.parentNode
-                    || this._getLastSelectableChild(startNode.parentNode) === endNode
+                    && (startNode.parentNode === endNode.parentNode
+                    || this._getLastSelectableChild(startNode.parentNode) === endNode)
                 ) {
                     return startNode.parentNode;
                 } else {
