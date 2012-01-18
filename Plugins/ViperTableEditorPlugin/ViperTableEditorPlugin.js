@@ -124,11 +124,6 @@ ViperTableEditorPlugin.prototype = {
                     return false;
                 }
 
-                if (self._buttonClicked === true) {
-                    self._buttonClicked = false;
-                    return false;
-                }
-
                 var target = dfx.getMouseEventTarget(e);
                 if (!target) {
                     return;
@@ -1374,11 +1369,19 @@ ViperTableEditorPlugin.prototype = {
              return false;
          }
 
-         var pos   = this.getCellPosition(cell);
-         var cells = this._getCellsExpanded(true);
+         var pos     = this.getCellPosition(cell);
+         var cells   = this._getCellsExpanded(true);
+         var colspan = this.getColspan(cell);
 
          for (var i = 0; i < cells.length; i++) {
-             if (this.getColspan(cells[i][pos.col]) !== this.getColspan(cells[i][(pos.col - 1)])) {
+             var currColspan = this.getColspan(cells[i][pos.col]);
+             var prevColspan = this.getColspan(cells[i][(pos.col - 1)]);
+             var currRowspan = this.getRowspan(cells[i][pos.col]);
+             var prevRowspan = this.getRowspan(cells[i][(pos.col - 1)]);
+
+             if (colspan !== currColspan || currColspan !== prevColspan) {
+                 return false;
+             } else if (currRowspan !== prevRowspan) {
                  return false;
              }
          }
@@ -1389,15 +1392,23 @@ ViperTableEditorPlugin.prototype = {
 
     canMoveColRight: function(cell)
     {
-         var pos   = this.getCellPosition(cell);
-         var cells = this._getCellsExpanded(true);
+         var pos     = this.getCellPosition(cell);
+         var cells   = this._getCellsExpanded(true);
+         var colspan = this.getColspan(cell);
 
          if (!cells[pos.row][(pos.col + 1)]) {
              return false;
          }
 
          for (var i = 0; i < cells.length; i++) {
-             if (this.getColspan(cells[i][pos.col]) !== this.getColspan(cells[i][(pos.col + 1)])) {
+             var currColspan = this.getColspan(cells[i][pos.col]);
+             var nextColspan = this.getColspan(cells[i][(pos.col + 1)]);
+             var currRowspan = this.getRowspan(cells[i][pos.col]);
+             var nextRowspan = this.getRowspan(cells[i][(pos.col + 1)]);
+
+             if (colspan !== currColspan || currColspan !== nextColspan) {
+                 return false;
+             } else if (currRowspan !== nextRowspan) {
                  return false;
              }
          }
