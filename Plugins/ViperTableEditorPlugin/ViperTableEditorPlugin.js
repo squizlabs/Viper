@@ -124,6 +124,11 @@ ViperTableEditorPlugin.prototype = {
                     return false;
                 }
 
+                if (self._buttonClicked === true) {
+                    self._buttonClicked = false;
+                    return false;
+                }
+
                 var target = dfx.getMouseEventTarget(e);
                 if (!target) {
                     return;
@@ -891,7 +896,6 @@ ViperTableEditorPlugin.prototype = {
         });
 
         this.createButton('', false, 'Insert Row After', false, 'addBelow', function() {
-            self._buttonClicked = true;
             self.insertRowAfter(cell);
             self.updateToolbar(cell, 'row');
         });
