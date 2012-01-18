@@ -715,6 +715,87 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarUnitTest extends Abstrac
 
     }//end testPChangesToPreInLineage()
 
+
+    /**
+     * Test selecting the H1 tag in the toolbar.
+     *
+     * @return void
+     */
+    public function testSelectingH1Tag()
+    {
+        $this->selectText('Unit');
+
+        $lineage = $this->getHtml('.ViperITP-lineage');
+        $this->assertEquals('<li class="ViperITP-lineageItem">H1</li><li class="ViperITP-lineageItem selected">Selection</li>', $lineage);
+
+        $this->selectInlineToolbarLineageItem(0);
+        $lineage = $this->getHtml('.ViperITP-lineage');
+        $this->assertEquals('<li class="ViperITP-lineageItem selected">H1</li><li class="ViperITP-lineageItem">Selection</li>', $lineage);
+        
+        $this->assertEquals('Inline Toolbar Unit Test', $this->getSelectedText(), 'The H1 tag is not selected');
+        
+        $this->selectInlineToolbarLineageItem(1);
+        $lineage = $this->getHtml('.ViperITP-lineage');
+        $this->assertEquals('<li class="ViperITP-lineageItem">H1</li><li class="ViperITP-lineageItem selected">Selection</li>', $lineage);
+        
+        $this->assertEquals('Unit', $this->getSelectedText(), 'Original text is not selected');
+
+    }//end testSelectingH1Tag()
+
+
+    /**
+     * Test selecting the H2 tag in the toolbar.
+     *
+     * @return void
+     */
+    public function testSelectingH2Tag()
+    {
+        $this->selectText('Two');
+
+        $lineage = $this->getHtml('.ViperITP-lineage');
+        $this->assertEquals('<li class="ViperITP-lineageItem">H2</li><li class="ViperITP-lineageItem selected">Selection</li>', $lineage);
+
+        $this->selectInlineToolbarLineageItem(0);
+        $lineage = $this->getHtml('.ViperITP-lineage');
+        $this->assertEquals('<li class="ViperITP-lineageItem selected">H2</li><li class="ViperITP-lineageItem">Selection</li>', $lineage);
+        
+        $this->assertEquals('Heading Two', $this->getSelectedText(), 'The H2 tag is not selected');
+        
+        $this->selectInlineToolbarLineageItem(1);
+        $lineage = $this->getHtml('.ViperITP-lineage');
+        $this->assertEquals('<li class="ViperITP-lineageItem">H2</li><li class="ViperITP-lineageItem selected">Selection</li>', $lineage);
+        
+        $this->assertEquals('Two', $this->getSelectedText(), 'Original text is not selected');
+
+    }//end testSelectingH2Tag()
+    
+
+    /**
+     * Test selecting the H3 tag in the toolbar.
+     *
+     * @return void
+     */
+    public function testSelectingH3Tag()
+    {
+        $this->selectText('Three');
+
+        $lineage = $this->getHtml('.ViperITP-lineage');
+        $this->assertEquals('<li class="ViperITP-lineageItem">H3</li><li class="ViperITP-lineageItem selected">Selection</li>', $lineage);
+
+        $this->selectInlineToolbarLineageItem(0);
+        $lineage = $this->getHtml('.ViperITP-lineage');
+        $this->assertEquals('<li class="ViperITP-lineageItem selected">H3</li><li class="ViperITP-lineageItem">Selection</li>', $lineage);
+        
+        $this->assertEquals('Heading Three', $this->getSelectedText(), 'The H3 tag is not selected');
+        
+        $this->selectInlineToolbarLineageItem(1);
+        $lineage = $this->getHtml('.ViperITP-lineage');
+        $this->assertEquals('<li class="ViperITP-lineageItem">H3</li><li class="ViperITP-lineageItem selected">Selection</li>', $lineage);
+        
+        $this->assertEquals('Three', $this->getSelectedText(), 'Original text is not selected');
+
+    }//end testSelectingH3Tag()
+    
 }//end class
 
 ?>
