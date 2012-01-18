@@ -94,7 +94,9 @@ function ViperInlineToolbarPlugin(viper)
     });
 
     dfx.addEvent(window, 'resize', function() {
-        self._updatePosition();
+        if (dfx.hasClass(self._toolbar, 'visible') === true) {
+            self._updatePosition();
+        }
     });
 
 }
