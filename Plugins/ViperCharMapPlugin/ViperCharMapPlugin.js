@@ -177,39 +177,45 @@ ViperCharMapPlugin.prototype = {
             return str;
         };
 
-        // Currency.
-        var chars   = '$|&cent;|&pound;|&curren;|&yen';
-        var htmlEnt = '|1547|2546|2547|2555|2801|3065|3647|6107';
-        htmlEnt    += _getRange(8352, 8377);
-        htmlEnt    += '43064|65020|65129|65284|65504|65505|65509|65510';
-        chars      += htmlEnt.replace(/\|/g, ';|&#') + ';';
-        chars       = chars.split('|');
-        categories.push({
-            name: 'Currency',
-            chars: chars
-        });
+        var chars    = '$|&cent;|&pound;|&curren;|&yen';
+        var htmlEnt  = '|1547|2546|2547|2801|3065|3647|6107';
+        htmlEnt     += _getRange(8352, 8375);
+        htmlEnt     += '|65020|65129|65284|65504|65505|65509|65510';
+        chars       += htmlEnt.replace(/\|/g, ';|&#') + ';';
+        chars        = chars.split('|');
+        var currency = chars;
 
-        chars  = '&Agrave;|&agrave;|&Aacute;|&aacute;|&Acirc;|&acirc;|&Atilde;|&atilde;|&Auml;|&auml;|&Aring;|&aring;|&#256;|&#257;|&AElig;|&aelig;|&Ccedil;|&ccedil;|&ETH;|&eth;|&Egrave;|&egrave;|&Eacute;|&eacute;|&Ecirc;|&ecirc;|&Euml;|&euml;|&#274;|&#275;|&Igrave;|&igrave;|&Iacute;|&iacute;';
-        chars += '|&Icirc;|&icirc;|&Iuml;|&iuml;|&#298;|&#299;|&micro;|&Ntilde;|&ntilde;|&Ograve;|&ograve;|&Oacute;|&oacute;|&Ocirc;|&ocirc;|&Otilde;|&otilde;|&Ouml;|&ouml;|&#332;|&#333;|&Oslash;|&oslash;|&OElig;|&oelig;|&Scaron;|&scaron;|&szlig;|&THORN;|&thorn;|&Ugrave;|&ugrave;|&Uacute;|&uacute;|&Ucirc;|&ucirc;|&Uuml;|&uuml;|&#362;|&#363;|&Yacute;|&yacute;|&yuml;|&Yuml;';
-        chars  = chars.split('|');
+        chars     = '&Agrave;|&agrave;|&Aacute;|&aacute;|&Acirc;|&acirc;|&Atilde;|&atilde;|&Auml;|&auml;|&Aring;|&aring;|&#256;|&#257;|&AElig;|&aelig;|&Ccedil;|&ccedil;|&ETH;|&eth;|&Egrave;|&egrave;|&Eacute;|&eacute;|&Ecirc;|&ecirc;|&Euml;|&euml;|&#274;|&#275;|&Igrave;|&igrave;|&Iacute;|&iacute;';
+        chars    += '|&Icirc;|&icirc;|&Iuml;|&iuml;|&#298;|&#299;|&micro;|&Ntilde;|&ntilde;|&Ograve;|&ograve;|&Oacute;|&oacute;|&Ocirc;|&ocirc;|&Otilde;|&otilde;|&Ouml;|&ouml;|&#332;|&#333;|&Oslash;|&oslash;|&OElig;|&oelig;|&Scaron;|&scaron;|&szlig;|&THORN;|&thorn;|&Ugrave;|&ugrave;|&Uacute;|&uacute;|&Ucirc;|&ucirc;|&Uuml;|&uuml;|&#362;|&#363;|&Yacute;|&yacute;|&yuml;|&Yuml;';
+        chars     = chars.split('|');
+        var latin = chars;
+
+        chars     = '&sup1;|&sup2;|&sup3;|&times;|&divide;|&frac14;|&frac12;|&frac34;|&ordf;|&ordm;|&not;|&deg;|&plusmn;|&Delta;|&fnof;|&Omega;|&circ;|&tilde;|&ndash;|&mdash;|&dagger;|&Dagger;|&bull;|&hellip;|&lsquo;|&rsquo;|&ldquo;|&rdquo;|&lsaquo;|&rsaquo;|&radic;|&infin;|&int;|&part;|&ne;|&le;|&ge;|&sum;|&permil;|&prod;|&pi;|&loz;';
+        chars     = chars.split('|');
+        var maths = chars;
+
+        chars       = '&uml;|&macr;|&acute;|&cedil;|&iexcl;|&iquest;|&middot;|&brvbar;|&laquo;|&raquo;|&para;|&sect;|&copy;|&reg;|&trade;';
+        chars       = chars.split('|');
+        var symbols = chars;
+
+        categories.push({
+            name: 'Symbols',
+            chars: symbols
+        });
 
         categories.push({
             name: 'Latin',
-            chars: chars
+            chars: latin
         });
 
-        chars = '&sup1;|&sup2;|&sup3;|&times;|&divide;|&frac14;|&frac12;|&frac34;|&ordf;|&ordm;|&not;|&deg;|&plusmn;|&Delta;|&fnof;|&Omega;|&circ;|&tilde;|&ndash;|&mdash;|&dagger;|&Dagger;|&bull;|&hellip;|&lsquo;|&rsquo;|&ldquo;|&rdquo;|&lsaquo;|&rsaquo;|&radic;|&infin;|&int;|&part;|&ne;|&le;|&ge;|&sum;|&permil;|&prod;|&pi;|&loz;';
-        chars = chars.split('|');
         categories.push({
             name: 'Mathematics',
-            chars: chars
+            chars: maths
         });
 
-        chars = '&uml;|&macr;|&acute;|&cedil;|&iexcl;|&iquest;|&middot;|&brvbar;|&laquo;|&raquo;|&para;|&sect;|&copy;|&reg;|&trade;';
-        chars = chars.split('|');
         categories.push({
-            name: 'Symbols',
-            chars: chars
+            name: 'Currency',
+            chars: currency
         });
 
         return categories;

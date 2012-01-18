@@ -36,7 +36,6 @@ table.VCMP-table td {
     text-shadow: none;
     color: #FFF;
     font-size: 14px;
-    font-weight: bold;
     width: 15px;
 }
 
@@ -98,8 +97,7 @@ table.VCMP-table td {
     margin-left: -5px;
     margin-top: -5px;
     position: fixed;
-    font-size: 2.2em;
-    font-weight: bold;
+    font-size: 2.3em;
     padding: 6px 10px;
     display: none;
 }
