@@ -18,22 +18,22 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractViperUnitTest
         $dir = dirname(__FILE__).'/Images/';
         $this->clickTopToolbarButton($dir.'toolbarIcon_alignLeft.png');
         $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_alignLeft_active.png'));
-        $this->assertHTMLMatch('<p style="text-align: left;">Lorem xtn dolor</p><p>sit amet <strong>consectetur</strong></p>');
+        $this->assertHTMLMatch('<p style="text-align: left;">Lorem xtn dolor</p><p>sit amet <strong>WoW</strong></p>');
 
         $this->selectText('Lorem');
         $this->clickTopToolbarButton($dir.'toolbarIcon_alignCenter.png');
         $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_alignCenter_active.png'));
-        $this->assertHTMLMatch('<p style="text-align: center;">Lorem xtn dolor</p><p>sit amet <strong>consectetur</strong></p>');
+        $this->assertHTMLMatch('<p style="text-align: center;">Lorem xtn dolor</p><p>sit amet <strong>WoW</strong></p>');
 
         $this->selectText('Lorem');
         $this->clickTopToolbarButton($dir.'toolbarIcon_alignRight.png');
         $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_alignRight_active.png'));
-        $this->assertHTMLMatch('<p style="text-align: right;">Lorem xtn dolor</p><p>sit amet <strong>consectetur</strong></p>');
+        $this->assertHTMLMatch('<p style="text-align: right;">Lorem xtn dolor</p><p>sit amet <strong>WoW</strong></p>');
 
         $this->selectText('Lorem');
         $this->clickTopToolbarButton($dir.'toolbarIcon_alignJustify.png');
         $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_alignJustify_active.png'));
-        $this->assertHTMLMatch('<p style="text-align: justify;">Lorem xtn dolor</p><p>sit amet <strong>consectetur</strong></p>');
+        $this->assertHTMLMatch('<p style="text-align: justify;">Lorem xtn dolor</p><p>sit amet <strong>WoW</strong></p>');
 
     }//end testAlignment()
 
@@ -45,14 +45,14 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractViperUnitTest
      */
     public function testAlignmentInNoneBlockTag()
     {
-        $this->selectText('consectetur');
+        $this->selectText('WoW');
         $this->keyDown('Key.RIGHT');
         $this->keyDown('Key.LEFT');
 
         $dir = dirname(__FILE__).'/Images/';
         $this->clickTopToolbarButton($dir.'toolbarIcon_alignCenter.png');
         $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_alignCenter_active.png'));
-        $this->assertHTMLMatch('<p>Lorem xtn dolor</p><p style="text-align: center;">sit amet <strong>consectetur</strong></p>');
+        $this->assertHTMLMatch('<p>Lorem xtn dolor</p><p style="text-align: center;">sit amet <strong>WoW</strong></p>');
 
     }//end testAlignmentInNoneBlockTag()
 
@@ -72,7 +72,7 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractViperUnitTest
         $this->assertFalse($this->inlineToolbarButtonExists($dir.'toolbarIcon_div.png'), 'VITP format icons should not be available for text selection');
 
         $this->click($text);
-        $this->selectText('consectetur');
+        $this->selectText('WoW');
         $this->assertFalse($this->inlineToolbarButtonExists($dir.'toolbarIcon_heading.png'), 'VITP Heading icon should not be available for text selection');
         $this->assertFalse($this->inlineToolbarButtonExists($dir.'toolbarIcon_div.png'), 'VITP format icons should not be available for text selection');
 
@@ -111,7 +111,7 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractViperUnitTest
             }
 
             $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_'.$tag.'_active.png'), 'Toolbar icon not found: toolbarIcon_'.$tag.'_active.png');
-            $this->assertHTMLMatch('<'.$tag.'>Lorem xtn dolor</'.$tag.'><p>sit amet <strong>consectetur</strong></p>');
+            $this->assertHTMLMatch('<'.$tag.'>Lorem xtn dolor</'.$tag.'><p>sit amet <strong>WoW</strong></p>');
 
             for ($j = 0; $j < $count; $j++) {
                 if ($j === $i) {
@@ -161,7 +161,7 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractViperUnitTest
             $this->clickInlineToolbarButton($dir.'toolbarIcon_'.$tag.'.png');
 
             $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_'.$tag.'_active.png'), 'Toolbar icon not found: toolbarIcon_'.$tag.'_active.png');
-            $this->assertHTMLMatch('<'.$tag.'>Lorem xtn dolor</'.$tag.'><p>sit amet <strong>consectetur</strong></p>');
+            $this->assertHTMLMatch('<'.$tag.'>Lorem xtn dolor</'.$tag.'><p>sit amet <strong>WoW</strong></p>');
 
             for ($j = 0; $j < $count; $j++) {
                 if ($j === $i) {
@@ -189,7 +189,7 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractViperUnitTest
         $this->type('test');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p><span id="test">Lorem</span> xtn dolor</p><p>sit amet <strong>consectetur</strong></p>');
+        $this->assertHTMLMatch('<p><span id="test">Lorem</span> xtn dolor</p><p>sit amet <strong>WoW</strong></p>');
 
         $this->click($this->find('dolor'));
         sleep(1);
@@ -218,7 +218,7 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractViperUnitTest
         $this->type('test');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p><span class="test">Lorem</span> xtn dolor</p><p>sit amet <strong>consectetur</strong></p>');
+        $this->assertHTMLMatch('<p><span class="test">Lorem</span> xtn dolor</p><p>sit amet <strong>WoW</strong></p>');
 
         $this->click($this->find('Lorem'));
         $this->selectText('Lorem');
@@ -238,7 +238,7 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractViperUnitTest
      */
     public function testMultiParentNoOpts()
     {
-        $this->selectText('amet', 'consectetur');
+        $this->selectText('amet', 'WoW');
 
         $dir = dirname(__FILE__).'/Images/';
         $this->assertFalse($this->inlineToolbarButtonExists($dir.'toolbarIcon_heading.png'), 'VITP Heading icon should not be available for text selection');
@@ -256,15 +256,17 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractViperUnitTest
      */
     public function testChangingAParagraphToADiv()
     {
+        $dir = dirname(__FILE__).'/Images/';
+
         $this->selectText('Lorem', 'dolor');
-        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_div.png');
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_div.png');
 
         $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_div_Active.png'), 'Div icon is not active in the inline toolbar');
 
         $this->assertHTMLMatch('<div>Lorem xtn dolor</div><p>sit amet <strong>WoW</strong></p>');
 
         $this->selectText('Lorem', 'dolor');
-        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_p.png');
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_p.png');
 
         $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_p_active.png'), 'P icon is not active in the inline toolbar');
 
@@ -280,15 +282,17 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractViperUnitTest
      */
     public function testChangingAParagraphToAPre()
     {
+        $dir = dirname(__FILE__).'/Images/';
+
         $this->selectText('Lorem', 'dolor');
-        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_pre.png');
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_pre.png');
 
         $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_pre_Active.png'), 'Pre icon is not active in the inline toolbar');
 
         $this->assertHTMLMatch('<pre>Lorem xtn dolor</pre><p>sit amet <strong>WoW</strong></p>');
 
         $this->selectText('Lorem', 'dolor');
-        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_p.png');
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_p.png');
 
         $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_p_active.png'), 'P icon is not active in the inline toolbar');
 
@@ -304,15 +308,17 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractViperUnitTest
      */
     public function testChangingAParagraphToAQuote()
     {
+        $dir = dirname(__FILE__).'/Images/';
+
         $this->selectText('Lorem', 'dolor');
-        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_blockquote.png');
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_blockquote.png');
 
         $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_blockquote_active.png'), 'Quote icon is not active in the inline toolbar');
 
         $this->assertHTMLMatch('<blockquote>Lorem xtn dolor</blockquote><p>sit amet <strong>WoW</strong></p>');
 
         $this->selectText('Lorem', 'dolor');
-        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_p.png');
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_p.png');
 
         $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_p_active.png'), 'P icon is not active in the inline toolbar');
 
