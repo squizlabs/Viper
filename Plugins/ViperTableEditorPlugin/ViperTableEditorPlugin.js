@@ -61,10 +61,10 @@ ViperTableEditorPlugin.prototype = {
                 // Handle tab key.
                 self.removeHighlights();
 
-                if (e.shiftKey === true) {
+                if (e.shiftKey === true && self.activeCell) {
                     self.moveCaretToPreviousCell() === false
                 } else {
-                    if (self.moveCaretToNextCell() === false) {
+                    if (self.activeCell && self.moveCaretToNextCell() === false) {
                         // Create a new row.
                         self.insertRowAfter(self.activeCell);
                         self.moveCaretToNextCell();
