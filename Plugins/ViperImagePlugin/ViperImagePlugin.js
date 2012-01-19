@@ -216,6 +216,10 @@ ViperImagePlugin.prototype = {
 
         // Test URL.
         dfx.addEvent(urlTextbox, 'blur', function() {
+            if (dfx.isBlank(dfx.trim(urlTextbox.value)) === true) {
+                return;
+            }
+
             // Show loading box.
             setPreviewContent(false, true);
 
