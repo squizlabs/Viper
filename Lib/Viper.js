@@ -2641,7 +2641,7 @@ Viper.prototype = {
         var range = this.getViperRange();
         if (range.collapsed === true) {
             var span = document.createElement('span');
-            dfx.addClass(span, '__viper_selHighlight __viper_cleanOnly');
+            dfx.addClass(span, '__viper_selHighlight');
             dfx.setStyle(span, 'border-right', '1px solid #000');
             range.insertNode(span);
         } else {
@@ -2672,23 +2672,50 @@ Viper.prototype = {
         }
 
         for (var i = 0; i < c; i++) {
-            while (highlights[i].firstChild) {
-                child = highlights[i].firstChild;
-                dfx.insertBefore(highlights[i], child);
+            if (highlights[i].firstChild) {
+                while (highlights[i].firstChild) {
+                    child = highlights[i].firstChild;
+                    dfx.insertBefore(highlights[i], child);
 
-                if (startDone === false) {
-                    // Set the selection start.
-                    startDone = true;
-                    range.setStart(child, 0);
+                    if (startDone === false) {
+                        // Set the selection start.
+                        startDone = true;
+                        range.setStart(child, 0);
+                    }
                 }
-            }
 
-            dfx.remove(highlights[i]);
+                dfx.remove(highlights[i]);
 
-            if (i === (c - 1)) {
-                range.setEnd(child, child.data.length);
-            }
-        }
+                if (i === (c - 1)) {
+                    range.setEnd(child, child.data.length);
+                }
+            } else {
+                if (highlights[i].nextSibling.nodeType === dfx.TEXT_NODE) {
+                    var nextSibling = highlights[i].nextSibling;
+                    if (startDone === false) {
+                        range.setStart(nextSibling, 0);
+                        startDone = true;
+                    }
+
+                    dfx.remove(highlights[i]);
+
+                    if (i === (c - 1)) {
+                        range.setEnd(nextSibling, 0);
+                    }
+                } else {
+                    var textNode = document.createTextNode('');
+                    dfx.insertAfter(highlights[i], textNode);
+                    range.setStart(textNode, 0);
+                    range.collapse(true);
+
+                    dfx.remove(highlights[i]);
+
+                    if (i === (c - 1)) {
+                        range.setEnd(textNode, 0);
+                    }
+                }//end if
+            }//end if
+        }//end for
 
         ViperSelection.addRange(range);
 
