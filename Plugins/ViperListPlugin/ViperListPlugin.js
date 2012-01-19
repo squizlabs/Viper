@@ -693,7 +693,59 @@ ViperListPlugin.prototype = {
             }
 
             return true;
-        }//end if
+        } else {
+            if (testOnly === true) {
+                return true;
+            }
+
+            // Convert this item to a paragraph.
+            var p = document.createElement('p');
+            while (li.firstChild) {
+                p.appendChild(li.firstChild);
+            }
+
+            // If there are more list items after this item then move them in to a
+            // new list or if this item is the first in the list then just move it out.
+            var firstItem = true;
+            for (var node = li.previousSibling; node; node = node.previousSibling) {
+                if (dfx.isTag(node, 'li') === true) {
+                    firstItem = false;
+                    break;
+                }
+            }
+
+            if (siblingItems.length === 0) {
+                if (firstItem === true) {
+                    // This is the only item in the list.
+                    dfx.insertBefore(list, p);
+                    dfx.remove(list);
+                } else {
+                    // Last item on the list. Add the p tag after the list.
+                    dfx.insertAfter(list, p);
+                    dfx.remove(li);
+                }
+            } else {
+                if (firstItem === true) {
+                    // This is the only item in the list.
+                    dfx.insertBefore(list, p);
+                    dfx.remove(li);
+                } else {
+                    // Move the list items after this item to a new list.
+                    var newList = document.createElement(dfx.getTagName(list));
+                    for (var i = 0; i < siblingItems.length; i++) {
+                        newList.appendChild(siblingItems[i]);
+                    }
+
+                    dfx.remove(li);
+
+                    dfx.insertAfter(list, newList);
+                    dfx.insertAfter(list, p);
+                }
+            }
+
+            return true;
+
+        }
 
         return false;
 
