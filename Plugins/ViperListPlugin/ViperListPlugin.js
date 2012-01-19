@@ -846,6 +846,24 @@ ViperListPlugin.prototype = {
             for (var i = 0; i < listItems.length; i++) {
                 list.appendChild(listItems[i]);
             }
+
+            // If there is another list right after the current list, join them.
+            var listType = dfx.getTagName(list);
+            for (var node = list.nextSibling; node; node = node.nextSibling) {
+                if (node.nodeType !== dfx.TEXT_NODE) {
+                    if (dfx.isTag(node, listType) === true) {
+                        while(node.firstChild) {
+                            list.appendChild(node.firstChild);
+                        }
+
+                        dfx.remove(node);
+                    }
+
+                    break;
+                } else if (dfx.isBlank(dfx.trim(node.data)) !== true) {
+                    break;
+                }
+            }
         } else {
             // To the start of the list.
             for (var i = 0; i < listItems.length; i++) {
