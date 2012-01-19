@@ -150,9 +150,9 @@ Viper.prototype = {
      */
     init: function()
     {
+        this.ViperTools          = new ViperTools(this);
         this.ViperHistoryManager = new ViperHistoryManager(this);
         this.ViperPluginManager  = new ViperPluginManager(this);
-        this.ViperTools          = new ViperTools(this);
 
         ViperChangeTracker.init(this, false);
         this._setupCoreTrackChangeActions();
@@ -2638,7 +2638,15 @@ Viper.prototype = {
             dfx.addClass(startNode, '__viper_selHighlight __viper_cleanOnly');
         }
 
-        this.surroundContents('span', attributes, viperRange, true);
+        var range = this.getViperRange();
+        if (range.collapsed === true) {
+            var span = document.createElement('span');
+            dfx.addClass(span, '__viper_selHighlight __viper_cleanOnly');
+            dfx.setStyle(span, 'border-right', '1px solid #000');
+            range.insertNode(span);
+        } else {
+            this.surroundContents('span', attributes, viperRange, true);
+        }
 
     },
 
