@@ -699,9 +699,16 @@ ViperListPlugin.prototype = {
             }
 
             // Convert this item to a paragraph.
-            var p = document.createElement('p');
+            var subList = null;
+            var p       = document.createElement('p');
             while (li.firstChild) {
-                p.appendChild(li.firstChild);
+                if (dfx.isTag(li.firstChild, 'ul') === true || dfx.isTag(li.firstChild, 'ol') === true) {
+                    // Sub list needs to go after the p tag.
+                    subList = li.firstChild;
+                    li.removeChild(li.firstChild);
+                } else {
+                    p.appendChild(li.firstChild);
+                }
             }
 
             // If there are more list items after this item then move them in to a
@@ -741,6 +748,12 @@ ViperListPlugin.prototype = {
                     dfx.insertAfter(list, newList);
                     dfx.insertAfter(list, p);
                 }
+            }
+
+            if (subList) {
+                // Put the sub list that was in the original list element right after
+                // the P tag.
+                dfx.insertAfter(p, subList);
             }
 
             return true;
