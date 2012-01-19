@@ -197,6 +197,25 @@ class Viper_Tests_ViperTableEditorPlugin_RowUnitTest extends AbstractViperTableE
     }//end testRowInsert5()
 
 
+    /**
+     * Test inserting a row before the table doesn't close the inline toobar.
+     *
+     * @return void
+     */
+    public function testInsertingRowBeforeTheTable()
+    {
+        $this->clickCell(2);
+       $this->type('Add some text to make the cell big so that it causes the bug and some more and more and more and more and more and more text.');
+        
+        $this->showTools(1, 'row');
+
+        $this->click($this->find($this->getImg('icon_insertRowBefore.png'), NULL, 0.80));
+        
+        $this->assertTrue($this->exists($this->getImg('row_tools.png')));
+        
+    }//end testRowInsert5()
+    
+    
 }//end class
 
 ?>
