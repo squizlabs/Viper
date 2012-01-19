@@ -694,6 +694,7 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
 
     }//end testRemoveTableOnLastColDelete()
 
+
     /**
      * Tests that right arrow moves caret out of table.
      *
@@ -710,6 +711,24 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
         $this->assertEquals('&nbsp;t', $html);
 
     }//end testTableNavFooter()
+
+
+    /**
+     * Tests that inline toolbar stays open after row move operation.
+     *
+     * @return void
+     */
+    public function testInlineToolbarStaysOpenAfterMove()
+    {
+        $this->execJS('dfx.setHtml(dfx.getTag("td")[6], "&nbsp;")');
+
+        $this->showTools(7, 'row');
+        $this->clickInlineToolbarButton($this->getImg('icon_moveRowUp.png'));
+
+        sleep(1);
+        $this->assertTrue($this->inlineToolbarButtonExists($this->getImg('icon_trash.png')));
+
+    }//end testInlineToolbarStaysOpenAfterMove()
 
 
 }//end class

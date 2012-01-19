@@ -2,9 +2,22 @@ function ViperTools(viper)
 {
     this.viper = viper;
 
+    var self = this;
+    this.viper.registerCallback('Viper:mouseUp', 'ViperTools', function(e) {
+        if (self._preventMouseUp === true) {
+            self._preventMouseUp = false;
+            return false;
+        }
+    });
+
 }
 
 ViperTools.prototype = {
+
+    /**
+     * If true then the next mouse up event will not fire.
+     */
+    _preventMouseUp: false,
 
     /**
      * Creates a button group.
@@ -80,12 +93,14 @@ ViperTools.prototype = {
             dfx.addClass(button, customClass);
         }
 
-        var self = this;
+        var preventMouseUp = false;
+        var self           = this;
         if (subSection) {
             dfx.addClass(button, 'toggleSubSectionButton');
 
             // Show/hide subsection if there is one..
             dfx.addEvent(button, 'mousedown.Viper', function(e) {
+                self._preventMouseUp = true;
                 dfx.preventDefault(e);
                 if (dfx.hasClass(button, 'disabled') === true) {
                     return false;
@@ -100,6 +115,7 @@ ViperTools.prototype = {
             });
         } else if (clickAction) {
             dfx.addEvent(button, 'mousedown.Viper', function(e) {
+                self._preventMouseUp = true;
                 dfx.preventDefault(e);
                 if (dfx.hasClass(button, 'disabled') === true) {
                     return false;

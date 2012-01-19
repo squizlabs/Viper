@@ -1425,9 +1425,14 @@ ViperTableEditorPlugin.prototype = {
             return false;
         }
 
-        var rowspan          = this.getRowspan(cell);
-        var cellRow          = this.getCellRow(cell);
-        var prevRow          = this.getPreviousRow(cellRow);
+        var rowspan = this.getRowspan(cell);
+        var cellRow = this.getCellRow(cell);
+        var prevRow = this.getPreviousRow(cellRow);
+
+        if (!prevRow) {
+            return false;
+        }
+
         var rowCellsCount    = this._getRowCellCount(cellRow);
         var prevRowCellCount = this._getRowCellCount(prevRow);
 
