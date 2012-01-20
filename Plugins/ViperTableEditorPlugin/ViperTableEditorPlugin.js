@@ -80,7 +80,7 @@ ViperTableEditorPlugin.prototype = {
                 var range = self.viper.getCurrentRange();
                 if (range.collapsed === true) {
                     var startNode = range.getStartNode();
-                    if (startNode.nodeType === dfx.TEXT_NODE && range.endOffset === startNode.data.length) {
+                    if (startNode && startNode.nodeType === dfx.TEXT_NODE && range.endOffset === startNode.data.length) {
                         var cell     = self.getActiveCell();
                         if (startNode === range._getLastSelectableChild(cell)) {
                             if (!self.getNextRow(cell.parentNode)) {
