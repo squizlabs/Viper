@@ -19,6 +19,7 @@
  * @copyright  2010 Squiz Pty Ltd (ACN 084 670 600)
  * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt GPLv2
  */
+
 function ViperLinkPlugin(viper)
 {
     this.viper = viper;
@@ -32,6 +33,47 @@ ViperLinkPlugin.prototype = {
         this._initInlineToolbar();
 
         this._initToolbar();
+
+        var self = this;
+        this.viper.registerCallback('Viper:keyUp', 'ViperLinkPlugin', function(e) {
+            // Listening for the space character.
+            if (e.which !== 32) {
+                return;
+            }
+
+            var range = self.viper.getViperRange();
+            if (range.collapsed !== true) {
+                return;
+            }
+
+            var startNode = range.getStartNode();
+            if (startNode.nodeType !== dfx.TEXT_NODE) {
+                return;
+            }
+
+            // If the text node content up to the current caret position ends with
+            // a URL then convert the text to an A tag.
+            var text = startNode.data.substr(0, (range.startOffset - 1));
+            var url  = text.match(/ ((http:\/\/|www\.)\S+)$/);
+            if (!url) {
+                return;
+            }
+
+            url        = url[1];
+            var length = url.length;
+            var a      = document.createElement('a');
+            a.setAttribute('href', url);
+            dfx.setHtml(a, url);
+
+            var nextNode = startNode.splitText((range.startOffset - 1 - length));
+            dfx.insertBefore(nextNode, a);
+
+            nextNode.data = nextNode.data.slice(length);
+
+            range.setStart(nextNode, 1);
+            range.collapse(true);
+            ViperSelection.addRange(range);
+        });
 
     },
 
