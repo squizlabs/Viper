@@ -151,6 +151,8 @@
     left: 50%;
     margin: -8px 0 0 -4px;
     border: 4px solid transparent;
+    -moz-transition: left 0.2s ease-out;
+    -webkit-transition: left 0.2s ease-out;
 }
 
 .ViperITP.forTopbar  .ViperITP-subSectionWrapper:before {
