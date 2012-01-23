@@ -187,18 +187,23 @@ abstract class AbstractViperTableEditorPluginUnitTest extends AbstractViperUnitT
                     $this->fail('Expected ['.$r.', '.$c.'] to be a normal cell but it was a heading cell');
                 }
 
-                if (isset($cell['content']) === TRUE
-                    || isset($expected[$r][$c]['content']) === TRUE
-                ) {
-                    // First remove the great Firefox br tag from the end...
-                    $cell['content'] = str_replace('<br>', '', $cell['content']);
-
-                    // Convert all nbsp; in both to space.
-                    $cell['content'] = str_replace('&nbsp;', ' ', $cell['content']);
-                    $expected[$r][$c]['content'] = str_replace('&nbsp;', ' ', $expected[$r][$c]['content']);
-
-                    $this->assertEquals($expected[$r][$c]['content'], $cell['content'], 'Content of cell ['.$c.', '.$c.'] did not match');
+                $expectedContent = '&nbsp;';
+                if (isset($expected[$r][$c]['content']) === TRUE) {
+                    $expectedContent = $expected[$r][$c]['content'];
                 }
+
+                if (isset($cell['content']) === FALSE) {
+                    $cell['content'] = '';
+                }
+
+                // First remove the great Firefox br tag from the end...
+                $cell['content'] = str_replace('<br>', '', $cell['content']);
+
+                // Convert all nbsp; in both to space.
+                $cell['content'] = str_replace('&nbsp;', ' ', $cell['content']);
+                $expectedContent = str_replace('&nbsp;', ' ', $expectedContent);
+
+                $this->assertEquals($expectedContent, $cell['content'], 'Content of cell ['.$c.', '.$c.'] did not match');
 
             }//end foreach
         }//end foreach
