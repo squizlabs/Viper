@@ -144,33 +144,20 @@ class Viper_Tests_ViperTableEditorPlugin_RowUnitTest extends AbstractViperTableE
 
         $this->click($this->find($this->getImg('icon_trash.png'), NULL, 0.83));
 
-        $this->assertHTMLMatch('<p>Lorem IPSUM dolor</p>
-<p>sit amet <strong>consectetur</strong></p>
-<table style="width: 300px;" border="1" cellspacing="2" cellpadding="2">
-    <tbody>
-        <tr>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>All Genders</td>
-            <td>Male</td>
-            <td>Females</td>
-        </tr>
-        <tr>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-        </tr>
-        <tr>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-        </tr>
-    </tbody>
-</table>');
+        $struct   = $this->getTableStructure(0, TRUE);
+        $expected = array(
+                     array(
+                      array(),
+                      array(),
+                      array('content' => 'All Genders'),
+                      array('content' => 'Male'),
+                      array('content' => 'Females'),
+                     ),
+                     array(array(), array(), array(), array(), array()),
+                     array(array(), array(), array(), array(), array()),
+                    );
+
+        $this->assertTableStructure($expected, $struct);
 
     }//end testRowspanChangesWhenYouDeleteTheLastRow()
 
@@ -186,29 +173,24 @@ class Viper_Tests_ViperTableEditorPlugin_RowUnitTest extends AbstractViperTableE
 
         $this->click($this->find($this->getImg('icon_trash.png'), NULL, 0.83));
 
-        $this->assertHTMLMatch('<p>Lorem IPSUM dolor</p><p>sit amet <strong>consectetur</strong></p>
-            <table style="width: 300px;" border="1" cellpadding="2" cellspacing="2">
-            <tbody>
-            <tr>
-            <td style="width: 100px;" colspan="2">&nbsp;Survey&nbsp;</td>
-            <td>All Genders</td>
-            <td style="width: 100px;" colspan="2">By Gender&nbsp;</td>
-            </tr>
-            <tr>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            </tr>
-            <tr>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            </tr>
-            </tbody></table>');
+        $struct   = $this->getTableStructure(0, TRUE);
+        $expected = array(
+                     array(
+                      array(
+                       'colspan' => 2,
+                       'content' => '&nbsp;Survey&nbsp;'
+                      ),
+                      array('content' => 'All Genders'),
+                      array(
+                       'colspan' => 2,
+                       'content' => 'By Gender&nbsp;'
+                      ),
+                     ),
+                     array(array(), array(), array(), array(), array()),
+                     array(array(), array(), array(), array(), array()),
+                    );
+
+        $this->assertTableStructure($expected, $struct);
 
     }//end testRowspanChangesWhenYouDeleteTheLastRow()
 

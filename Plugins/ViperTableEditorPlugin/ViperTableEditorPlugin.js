@@ -41,6 +41,8 @@ ViperTableEditorPlugin.prototype = {
     {
         var self = this;
         this.viper.registerCallback('Viper:editableElementChanged', 'ViperTableEditor', function() {
+            self._initTable();
+
             if (self.viper.isBrowser('firefox') === true) {
                 // Disable Firefox table editing.
                 document.execCommand("enableInlineTableEditing", false, false);
@@ -131,6 +133,8 @@ ViperTableEditorPlugin.prototype = {
 
                 var cell = self._getCellElement(target);
                 if (cell) {
+                    self._initTable(self.getCellTable(cell));
+
                     self.hideCellToolsIcon();
                     self.removeHighlights();
 
@@ -202,6 +206,26 @@ ViperTableEditorPlugin.prototype = {
         this._createToolbar();
 
     },
+
+    _initTable: function(table)
+    {
+        var cells = [];
+        if (!table) {
+            cells = dfx.getTag('td, th', this.viper.getViperElement());
+        } else {
+            cells = dfx.getTag('td,th', table);
+        }
+
+        var c = cells.length;
+        for (var i = 0; i < c; i++) {
+            var html = dfx.getHtml(cells[i]);
+            if (html === '') {
+                dfx.setHtml(cells[i], '&nbsp;');
+            }
+        }
+
+    },
+
 
     /**
      * Shows the cell tools icon for the given cell element.
