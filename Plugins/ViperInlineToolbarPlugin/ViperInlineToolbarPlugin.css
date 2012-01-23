@@ -143,8 +143,7 @@
     display: block;
 }
 
-.ViperITP  .ViperITP-subSectionWrapper:before {
-    content: "";
+.ViperITP  .ViperITP-subSectionWrapper .subSectionArrow {
     width: 0px;
     height: 0px;
     display: block;
@@ -243,7 +242,7 @@
     background: #54535A url(../../Images/bgTexture-dark1.gif) 0 0 repeat;
 }
 
-.themeDark.ViperITP .ViperITP-subSectionWrapper:before {
+.themeDark.ViperITP .ViperITP-subSectionWrapper .subSectionArrow {
     border-bottom-color: #54535A;
 }
 
