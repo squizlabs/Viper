@@ -69,7 +69,11 @@ ViperListPlugin.prototype = {
                 // Handle tab key.
                 var range     = self.viper.getViperRange();
                 var startNode = range.getStartNode();
-                if (startNode && self._isListElement(startNode) === true) {
+                if (!startNode) {
+                    return;
+                }
+
+                if (self._isListElement(startNode) === true) {
                     if (self.tabRange(range, e.shiftKey, true) === true) {
                         self.tabRange(range, e.shiftKey);
                     } else if (dfx.getParents(startNode, 'td', self.viper.getViperElement()).length > 0) {
