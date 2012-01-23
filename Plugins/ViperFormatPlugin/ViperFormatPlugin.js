@@ -58,6 +58,10 @@ ViperFormatPlugin.prototype = {
             self._createInlineToolbarContent(data);
         });
 
+        this.viper.registerCallback('ViperInlineToolbarPlugin:lineageClicked', 'ViperFormatPlugin', function(data) {
+            self._inlineToolbarActiveSubSection = null;
+        });
+
         ViperChangeTracker.addChangeType('textFormatChange', 'Formatted', 'format');
         ViperChangeTracker.setDescriptionCallback('textFormatChange', function(node) {
             var format = self._getFormat(node);
