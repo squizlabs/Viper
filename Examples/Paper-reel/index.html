@@ -8,7 +8,7 @@
     <script type="text/javascript" src="../../Viper-all.js"></script>
     <script type="text/javascript">
         var viper = null;
-        dfx.addLoadEvent(function() {
+        ViperReadyCallback = function() {
             viper = new Viper('test');
             var pluginSets = {
                 all: {
@@ -19,7 +19,7 @@
             viper.setPluginSets(pluginSets);
             viper.getPluginManager().usePluginSet('all');
             viper.setEditableElement(document.getElementById('content'));
-        });
+        };
     </script>
 </head>
 <body spellcheck="false">
