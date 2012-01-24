@@ -45,6 +45,10 @@ ViperLangPlugin.prototype = {
             commonElem = element;
         }
 
+        if (dfx.isChildOf(commonElem, viperElem) === false) {
+            return;
+        }
+
         while (commonElem && commonElem !== viperElem) {
             var lang = commonElem.getAttribute('lang');
             if (lang) {
