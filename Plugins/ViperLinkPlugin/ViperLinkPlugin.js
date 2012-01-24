@@ -31,9 +31,13 @@ ViperLinkPlugin.prototype = {
     init: function()
     {
         this.initInlineToolbar();
+        this.initToolbar();
+        this.enableAutoLink();
 
-        //this.initToolbar();
+    },
 
+    enableAutoLink: function()
+    {
         var self = this;
         this.viper.registerCallback('Viper:keyUp', 'ViperLinkPlugin', function(e) {
             // Listening for the space character.
@@ -186,190 +190,121 @@ ViperLinkPlugin.prototype = {
         }
 
         var self = this;
+        var subSectionActive = false;
         this.viper.registerCallback('ViperInlineToolbarPlugin:updateToolbar', 'ViperLinkPlugin', function(data) {
-            self.getInlineToolbarContent(data);
+            var range         = data.range;
+            var currentIsLink = false;
+
+            // Check if we need to show the link options.
+            if (dfx.isBlockElement(data.lineage[data.current]) === true) {
+                return;
+            }
+
+            var startNode = data.range.getStartNode();
+            var endNode   = data.range.getEndNode();
+            if (startNode && endNode && startNode.parentNode !== endNode.parentNode) {
+                return;
+            }
+
+            if (dfx.isTag(data.lineage[data.current], 'a') === true) {
+                // If the selection is a whole A tag then by default show the
+                // link sub section.
+                subSectionActive = true;
+                currentIsLink    = true;
+            } else {
+                subSectionActive = false;
+            }
+
+            if (currentIsLink !== true
+                && (data.lineage[data.current].nodeType !== dfx.TEXT_NODE
+                || dfx.isTag(data.lineage[data.current].parentNode, 'a') === false)
+                && range.collapsed === true) {
+                return;
+            }
+
+            // Get the link from lineage.
+            var link     = null;
+            var linIndex = -1;
+            for (var i = data.current; i >= 0; i--) {
+                if (dfx.isTag(data.lineage[i], 'a') === true) {
+                    link     = data.lineage[i];
+                    linIndex = i;
+                    break;
+                }
+            }
+
+            var isLink    = false;
+            var url       = '';
+            var titleAttr = '';
+            if (link) {
+                // Get the current value from the link tag.
+                url       = link.getAttribute('href');
+                titleAttr = link.getAttribute('title') || '';
+                isLink    = true;
+            }
+
+            var group          = inlineToolbarPlugin.createButtonGroup();
+            var subSectionCont = document.createElement('div');
+            var subSection     = inlineToolbarPlugin.createSubSection(subSectionCont);
+
+            // Link button.
+            if (currentIsLink !== true && link) {
+                inlineToolbarPlugin.createButton('', isLink, 'Toggle Link Options', false, 'link', function() {
+                    // Select the whole link using the lineage.
+                    inlineToolbarPlugin.selectLineageItem(linIndex);
+                }, group);
+            } else {
+                inlineToolbarPlugin.createButton('', isLink, 'Toggle Link Options', false, 'link', null, group, subSection, subSectionActive);
+            }
+
+            if (isLink === true) {
+                // Add the remove link button.
+                inlineToolbarPlugin.createButton('', false, 'Remove Link', false, 'linkRemove', function() {
+                    self.removeLink(link);
+                }, group);
+            }
+
+            var setLinkAttributes = function(url, title) {
+                subSectionActive = true;
+                if (!link) {
+                    link = self.rangeToLink(url, title);
+                } else {
+                    self.setLinkURL(link, url);
+                    self.setLinkTitle(link, title);
+                }
+            };
+
+            // Link sub section.
+            var urlTextbox = inlineToolbarPlugin.createTextbox(null, url, 'URL', function(value) {
+                setLinkAttributes(value, (dfx.getTag('input', subSectionCont)[1]).value);
+            }, true, true);
+
+            var newWindowBtnActive = false;
+            if (link && link.getAttribute('target') === '_blank') {
+                newWindowBtnActive = true;
+            }
+
+            var newWindowBtn = inlineToolbarPlugin.createButton('', newWindowBtnActive, 'Toggle Open in New Window', false, 'linkNewWindow', function() {
+                if (link.getAttribute('target') === '_blank') {
+                    dfx.removeAttr(link, 'target');
+                    dfx.removeClass(newWindowBtn, 'active');
+                } else {
+                    link.setAttribute('target', '_blank');
+                    dfx.addClass(newWindowBtn, 'active');
+                }
+            }, group);
+
+            var titleTextbox = inlineToolbarPlugin.createTextbox(null, titleAttr, 'Title', function(value) {
+                setLinkAttributes(urlTextbox.lastChild.value, value);
+            }, false, true);
+
+            var urlRow = inlineToolbarPlugin.createSubSectionRow();
+            urlRow.appendChild(urlTextbox);
+            urlRow.appendChild(newWindowBtn);
+
+            subSectionCont.appendChild(urlRow);
+            subSectionCont.appendChild(titleTextbox);
         });
-    },
-
-    getInlineToolbarContent: function(data)
-    {
-        var inlineToolbarPlugin = this.viper.ViperPluginManager.getPlugin('ViperInlineToolbarPlugin');
-        if (!inlineToolbarPlugin) {
-            return;
-        }
-
-        var self          = this;
-        var range         = data.range;
-        var currentIsLink = false;
-
-        // Do not show the link options if current selection is a block element.
-        if (dfx.isBlockElement(data.lineage[data.current]) === true) {
-            return;
-        }
-
-        var startNode = data.range.getStartNode();
-        var endNode   = data.range.getEndNode();
-        if (startNode && endNode && startNode.parentNode !== endNode.parentNode) {
-            return;
-        }
-
-        if (dfx.isTag(data.lineage[data.current], 'a') === true) {
-            // If the selection is a whole A tag then by default show the
-            // link sub section.
-            // TODO: SHOW SUB SECTION BY DEFAULT.
-            currentIsLink = true;
-        }
-
-        if (currentIsLink !== true
-            && (data.lineage[data.current].nodeType !== dfx.TEXT_NODE
-            || dfx.isTag(data.lineage[data.current].parentNode, 'a') === false)
-            && range.collapsed === true) {
-            return;
-        }
-
-        // Get the link from lineage.
-        var link     = null;
-        var linIndex = -1;
-        for (var i = data.current; i >= 0; i--) {
-            if (dfx.isTag(data.lineage[i], 'a') === true) {
-                link     = data.lineage[i];
-                linIndex = i;
-                break;
-            }
-        }
-
-        this.getToolbarContent(inlineToolbarPlugin, link);
-
-    },
-
-    getToolbarContent: function(toolbarPlugin, link)
-    {
-        var range  = this.viper.getViperRange();
-
-        var url       = '';
-        var titleAttr = '';
-        if (link) {
-            // Get the current value from the link tag.
-            url       = link.getAttribute('href');
-            titleAttr = link.getAttribute('title') || '';
-        }
-
-        // The link sub section.
-        var content    = document.createElement('div');
-        var subSection = toolbarPlugin.createSubSection(content);
-
-        var isLink = false;
-        if (link) {
-            isLink = true;
-        }
-
-        var mainBtnGroup = toolbarPlugin.createButtonGroup();
-
-        // Link button.
-        toolbarPlugin.createButton('', isLink, 'Toggle Link Options', false, 'link', null, mainBtnGroup, subSection, false);
-
-        if (isLink === true) {
-            // Since the selection is inside a link, add the remove link button.
-            toolbarPlugin.createButton('', false, 'Remove Link', false, 'linkRemove', function() {
-                self.removeLink(link);
-            }, mainBtnGroup);
-        }
-
-        // Function that sets the attributes of the current link.
-        var self = this;
-        var setLinkAttributes = function(url, title) {
-            if (!link) {
-                link = self.rangeToLink(url, title);
-            } else {
-                self.setLinkURL(link, url);
-                self.setLinkTitle(link, title);
-            }
-        };
-
-        // URL textbox.
-        var urlTextbox = toolbarPlugin.createTextbox(null, url, 'URL', function(value) {
-            setLinkAttributes(value, (dfx.getTag('input', content)[1]).value);
-        }, true, true);
-
-        var titleTextbox = toolbarPlugin.createTextbox(null, titleAttr, 'Title', function(value) {
-            setLinkAttributes(urlTextbox.lastChild.value, value);
-        }, false, true);
-
-        var urlRow = toolbarPlugin.createSubSectionRow();
-        urlRow.appendChild(urlTextbox);
-
-        var titleRow = toolbarPlugin.createSubSectionRow();
-        titleRow.appendChild(titleTextbox);
-
-        content.appendChild(urlRow);
-        content.appendChild(titleRow);
-
-
-    },
-
-    _getToolbarContent: function(toolbarPlugin, data)
-    {
-        var group          = toolbarPlugin.createButtonGroup();
-        var subSectionCont = document.createElement('div');
-        var subSection     = toolbarPlugin.createSubSection(subSectionCont);
-
-        // Link button.
-        if (currentIsLink !== true && link) {
-            toolbarPlugin.createButton('', isLink, 'Toggle Link Options', false, 'link', function() {
-                // Select the whole link using the lineage.
-                toolbarPlugin.selectLineageItem(linIndex);
-            }, group);
-        } else {
-            toolbarPlugin.createButton('', isLink, 'Toggle Link Options', false, 'link', null, group, subSection, false);
-        }
-
-        if (isLink === true) {
-            // Add the remove link button.
-            toolbarPlugin.createButton('', false, 'Remove Link', false, 'linkRemove', function() {
-                self.removeLink(link);
-            }, group);
-        }
-
-        var setLinkAttributes = function(url, title) {
-            if (!link) {
-                link = self.rangeToLink(url, title);
-            } else {
-                self.setLinkURL(link, url);
-                self.setLinkTitle(link, title);
-            }
-        };
-
-        // Link sub section.
-        var urlTextbox = toolbarPlugin.createTextbox(null, url, 'URL', function(value) {
-            setLinkAttributes(value, (dfx.getTag('input', subSectionCont)[1]).value);
-        }, true, true);
-
-        var newWindowBtnActive = false;
-        if (link && link.getAttribute('target') === '_blank') {
-            newWindowBtnActive = true;
-        }
-
-        var newWindowBtn = toolbarPlugin.createButton('', newWindowBtnActive, 'Toggle Open in New Window', false, 'linkNewWindow', function() {
-            if (link.getAttribute('target') === '_blank') {
-                dfx.removeAttr(link, 'target');
-                dfx.removeClass(newWindowBtn, 'active');
-            } else {
-                link.setAttribute('target', '_blank');
-                dfx.addClass(newWindowBtn, 'active');
-            }
-        }, group);
-
-        var titleTextbox = toolbarPlugin.createTextbox(null, titleAttr, 'Title', function(value) {
-            setLinkAttributes(urlTextbox.lastChild.value, value);
-        }, false, true);
-
-        var urlRow = toolbarPlugin.createSubSectionRow();
-        urlRow.appendChild(urlTextbox);
-        urlRow.appendChild(newWindowBtn);
-
-        subSectionCont.appendChild(urlRow);
-        subSectionCont.appendChild(titleTextbox);
-
     },
 
     initToolbar: function()
