@@ -1,0 +1,8 @@
+.emailLink .subSectionRow.subjectRow {
+    display: block;
+}
+
+.subSectionRow.subjectRow,
+.emailLink .subSectionRow.titleRow {
+    display: none;
+}

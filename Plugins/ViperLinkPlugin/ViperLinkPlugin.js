@@ -81,7 +81,14 @@ ViperLinkPlugin.prototype = {
 
     },
 
-    rangeToLink: function(url, title)
+    isEmail: function(url)
+    {
+        return /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/.test(url);
+
+    },
+
+
+    rangeToLink: function(url, title, subject)
     {
         if (!url) {
             return;
@@ -91,6 +98,17 @@ ViperLinkPlugin.prototype = {
         var bookmark = this.viper.createBookmark(range);
 
         var a = document.createElement('a');
+
+        // Check if its email link.
+        var isEmail = this.isEmail(url);
+
+        if (isEmail === true) {
+            url = 'mailto:' + url;
+            if (subject) {
+                url += '?subject=' + subject;
+            }
+        }
+
         a.setAttribute('href', url);
 
         if (title) {
@@ -149,10 +167,20 @@ ViperLinkPlugin.prototype = {
 
     },
 
-    setLinkURL: function(link, url)
+    setLinkURL: function(link, url, subject)
     {
         if (!link) {
             return;
+        }
+
+        // Check if its email link.
+        var isEmail = this.isEmail(url);
+
+        if (isEmail === true) {
+            url = 'mailto:' + url;
+            if (subject) {
+                url += '?subject=' + subject;
+            }
         }
 
         link.setAttribute('href', url);
@@ -190,121 +218,171 @@ ViperLinkPlugin.prototype = {
         }
 
         var self = this;
-        var subSectionActive = false;
         this.viper.registerCallback('ViperInlineToolbarPlugin:updateToolbar', 'ViperLinkPlugin', function(data) {
-            var range         = data.range;
-            var currentIsLink = false;
+            self.updateInlineToolbar(data);
+        });
+    },
 
-            // Check if we need to show the link options.
-            if (dfx.isBlockElement(data.lineage[data.current]) === true) {
-                return;
+    updateInlineToolbar: function(data)
+    {
+        var inlineToolbarPlugin = this.viper.ViperPluginManager.getPlugin('ViperInlineToolbarPlugin');
+
+        var self          = this;
+        var range         = data.range;
+        var currentIsLink = false;
+
+        // Check if we need to show the link options.
+        if (dfx.isBlockElement(data.lineage[data.current]) === true) {
+            return;
+        }
+
+        var startNode = data.range.getStartNode();
+        var endNode   = data.range.getEndNode();
+        if (startNode && endNode && startNode.parentNode !== endNode.parentNode) {
+            return;
+        }
+
+        if (dfx.isTag(data.lineage[data.current], 'a') === true) {
+            // If the selection is a whole A tag then by default show the
+            // link sub section.
+            currentIsLink    = true;
+        }
+
+        if (currentIsLink !== true
+            && (data.lineage[data.current].nodeType !== dfx.TEXT_NODE
+            || dfx.isTag(data.lineage[data.current].parentNode, 'a') === false)
+            && range.collapsed === true) {
+            return;
+        }
+
+        // Get the link from lineage.
+        var link     = null;
+        var linIndex = -1;
+        for (var i = data.current; i >= 0; i--) {
+            if (dfx.isTag(data.lineage[i], 'a') === true) {
+                link     = data.lineage[i];
+                linIndex = i;
+                break;
             }
+        }
 
-            var startNode = data.range.getStartNode();
-            var endNode   = data.range.getEndNode();
-            if (startNode && endNode && startNode.parentNode !== endNode.parentNode) {
-                return;
-            }
+        var isLink    = false;
+        var url       = '';
+        var titleAttr = '';
+        var isEmail   = false;
+        var subject   = '';
+        if (link) {
+            // Get the current value from the link tag.
+            url       = link.getAttribute('href');
+            titleAttr = link.getAttribute('title') || '';
+            isLink    = true;
 
-            if (dfx.isTag(data.lineage[data.current], 'a') === true) {
-                // If the selection is a whole A tag then by default show the
-                // link sub section.
-                subSectionActive = true;
-                currentIsLink    = true;
-            } else {
-                subSectionActive = false;
-            }
+            if (url.indexOf('mailto:') === 0) {
+                isEmail = true;
+                url     = url.replace('mailto:', '');
 
-            if (currentIsLink !== true
-                && (data.lineage[data.current].nodeType !== dfx.TEXT_NODE
-                || dfx.isTag(data.lineage[data.current].parentNode, 'a') === false)
-                && range.collapsed === true) {
-                return;
-            }
-
-            // Get the link from lineage.
-            var link     = null;
-            var linIndex = -1;
-            for (var i = data.current; i >= 0; i--) {
-                if (dfx.isTag(data.lineage[i], 'a') === true) {
-                    link     = data.lineage[i];
-                    linIndex = i;
-                    break;
+                // Get subject from mailto link.
+                var subjectIndex = url.indexOf('?subject=');
+                if (subjectIndex >= 0) {
+                    subject = url.substr(subjectIndex + 9);
+                    url     = url.substr(0, subjectIndex);
                 }
             }
+        }
 
-            var isLink    = false;
-            var url       = '';
-            var titleAttr = '';
-            if (link) {
-                // Get the current value from the link tag.
-                url       = link.getAttribute('href');
-                titleAttr = link.getAttribute('title') || '';
-                isLink    = true;
-            }
+        var group          = inlineToolbarPlugin.createButtonGroup();
+        var subSectionCont = document.createElement('div');
+        var subSection     = inlineToolbarPlugin.createSubSection(subSectionCont);
 
-            var group          = inlineToolbarPlugin.createButtonGroup();
-            var subSectionCont = document.createElement('div');
-            var subSection     = inlineToolbarPlugin.createSubSection(subSectionCont);
+        if (isEmail === true) {
+            dfx.addClass(subSectionCont, 'emailLink');
+        }
 
-            // Link button.
-            if (currentIsLink !== true && link) {
-                inlineToolbarPlugin.createButton('', isLink, 'Toggle Link Options', false, 'link', function() {
-                    // Select the whole link using the lineage.
-                    inlineToolbarPlugin.selectLineageItem(linIndex);
-                }, group);
+        // Link button.
+        if (currentIsLink !== true && link) {
+            inlineToolbarPlugin.createButton('', isLink, 'Toggle Link Options', false, 'link', function() {
+                // Select the whole link using the lineage.
+                inlineToolbarPlugin.selectLineageItem(linIndex);
+            }, group);
+        } else {
+            inlineToolbarPlugin.createButton('', isLink, 'Toggle Link Options', false, 'link', null, group, subSection, false);
+        }
+
+        if (isLink === true) {
+            // Add the remove link button.
+            inlineToolbarPlugin.createButton('', false, 'Remove Link', false, 'linkRemove', function() {
+                self.removeLink(link);
+            }, group);
+        }
+
+        var setLinkAttributes = function(url, title, subject) {
+            if (!link) {
+                link = self.rangeToLink(url, title, subject);
             } else {
-                inlineToolbarPlugin.createButton('', isLink, 'Toggle Link Options', false, 'link', null, group, subSection, subSectionActive);
-            }
+                self.setLinkURL(link, url, subject);
 
-            if (isLink === true) {
-                // Add the remove link button.
-                inlineToolbarPlugin.createButton('', false, 'Remove Link', false, 'linkRemove', function() {
-                    self.removeLink(link);
-                }, group);
-            }
-
-            var setLinkAttributes = function(url, title) {
-                subSectionActive = true;
-                if (!link) {
-                    link = self.rangeToLink(url, title);
-                } else {
-                    self.setLinkURL(link, url);
+                if (!subject) {
                     self.setLinkTitle(link, title);
                 }
-            };
-
-            // Link sub section.
-            var urlTextbox = inlineToolbarPlugin.createTextbox(null, url, 'URL', function(value) {
-                setLinkAttributes(value, (dfx.getTag('input', subSectionCont)[1]).value);
-            }, true, true);
-
-            var newWindowBtnActive = false;
-            if (link && link.getAttribute('target') === '_blank') {
-                newWindowBtnActive = true;
             }
 
-            var newWindowBtn = inlineToolbarPlugin.createButton('', newWindowBtnActive, 'Toggle Open in New Window', false, 'linkNewWindow', function() {
-                if (link.getAttribute('target') === '_blank') {
-                    dfx.removeAttr(link, 'target');
-                    dfx.removeClass(newWindowBtn, 'active');
-                } else {
-                    link.setAttribute('target', '_blank');
-                    dfx.addClass(newWindowBtn, 'active');
-                }
-            }, group);
+            if (link.href.indexOf('mailto:') === 0) {
+                // Show subject field and hide title field.
+                dfx.addClass(subSectionCont, 'emailLink');
+            } else {
+                // Show title field, hide subject field.
+                dfx.removeClass(subSectionCont, 'emailLink');
+            }
 
-            var titleTextbox = inlineToolbarPlugin.createTextbox(null, titleAttr, 'Title', function(value) {
-                setLinkAttributes(urlTextbox.lastChild.value, value);
-            }, false, true);
+        };
 
-            var urlRow = inlineToolbarPlugin.createSubSectionRow();
-            urlRow.appendChild(urlTextbox);
-            urlRow.appendChild(newWindowBtn);
+        // Link sub section.
+        var urlTextbox = inlineToolbarPlugin.createTextbox(null, url, 'URL', function(value) {
+            setLinkAttributes(value,
+                (dfx.getTag('input', subSectionCont)[1]).value,
+                (dfx.getTag('input', subSectionCont)[2]).value
+            );
+        }, true, true);
 
-            subSectionCont.appendChild(urlRow);
-            subSectionCont.appendChild(titleTextbox);
-        });
+        // Subect textbox, this text box only appears if the URL entered in urlTextbox
+        // is an email address.
+        var subjectTextbox = inlineToolbarPlugin.createTextbox(null, subject, 'Subject', function(value) {
+            setLinkAttributes(
+                (dfx.getTag('input', subSectionCont)[0]).value,
+                (dfx.getTag('input', subSectionCont)[1]).value,
+                value
+            );
+        }, false, true);
+
+        // Title textbox, this textbox is hidden if the URL entered is an email address.
+        var titleTextbox = inlineToolbarPlugin.createTextbox(null, titleAttr, 'Title', function(value) {
+            setLinkAttributes(
+                (dfx.getTag('input', subSectionCont)[0]).value,
+                value,
+                (dfx.getTag('input', subSectionCont)[2]).value
+            );
+        }, false, true);
+
+        var urlRow = inlineToolbarPlugin.createSubSectionRow('urlRow');
+        urlRow.appendChild(urlTextbox);
+
+        var subjectRow = inlineToolbarPlugin.createSubSectionRow('subjectRow');
+        subjectRow.appendChild(subjectTextbox);
+
+        var titleRow = inlineToolbarPlugin.createSubSectionRow('titleRow');
+        titleRow.appendChild(titleTextbox);
+
+        subSectionCont.appendChild(urlRow);
+        subSectionCont.appendChild(subjectRow);
+        subSectionCont.appendChild(titleRow);
+
+        // New window option.
+        var newWindowRow = inlineToolbarPlugin.createSubSectionRow();
+        dfx.setHtml(newWindowRow, 'New window');
+        subSectionCont.appendChild(newWindowRow);
+
+        return subSectionCont;
+
     },
 
     initToolbar: function()
