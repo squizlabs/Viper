@@ -298,10 +298,15 @@ ViperInlineToolbarPlugin.prototype = {
      *
      * @return {DOMElement} The sub section row element.
      */
-    createSubSectionRow: function()
+    createSubSectionRow: function(customClass)
     {
         var elem = document.createElement('div');
         dfx.addClass(elem, 'subSectionRow');
+
+        if (customClass) {
+            dfx.addClass(elem, customClass);
+        }
+
         return elem;
 
     },
