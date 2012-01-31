@@ -1,0 +1,10 @@
+.subSectionRow.anchorRow,
+.subSectionRow.includeSummaryRow {
+    display: none;
+}
+
+.internalLink .subSectionRow.anchorRow,
+.internalLink .subSectionRow.newWindowRow,
+.internalLink .subSectionRow.includeSummaryRow {
+    display: block;
+}
