@@ -6,24 +6,78 @@ function MatrixLinkPlugin(viper)
 
 MatrixLinkPlugin.prototype = {
 
-    updateInlineToolbar: function(data)
+    _isInternalLink: function(url)
     {
-        var contents = ViperLinkPlugin.prototype.updateInlineToolbar.call(this, data);
-        if (!contents) {
-            return;
-        }
+        return /^\d+[^@]*$/.test(url);
 
-        var toolbar = this.viper.ViperPluginManager.getPlugin('ViperInlineToolbarPlugin');
+    },
 
-        // Add the asset finder icon to the right side of the URL text box.
-        var findAssetBtn = toolbar.createButton('X', false, 'Pick Asset', false, 'matrixAssetPicker', function() {
-            // Show asset picker.
+    getToolbarContent: function(idPrefix)
+    {
+        // Call the parent method.
+        var contents = ViperLinkPlugin.prototype.getToolbarContent.call(this, idPrefix);
+
+        var tools = this.viper.ViperTools;
+        var main  = tools.getItem(idPrefix + ':link').element;
+
+        // Create anchor field.
+        var self   = this;
+        var anchor = tools.createTextbox(idPrefix + ':anchor', 'Anchor', '', function() {
+            self.updateLink();
         });
 
-        // Find the first textbox and add the asset finder button after it.
-        var urlLabel = dfx.getTag('label', contents)[0];
-        dfx.setStyle(urlLabel, 'float', 'left');
-        dfx.insertAfter(urlLabel, findAssetBtn);
+        var anchorRow = tools.createRow(idPrefix + ':anchorRow', 'anchorRow');
+        anchorRow.appendChild(anchor);
+
+        // Insert anchor row after URL field.
+        var urlField = tools.getItem(idPrefix + ':url').element;
+        dfx.insertAfter(urlField, anchorRow);
+
+        // The URL field needs to change the interface to internal URL interface
+        // if the value is an internal URL.
+        tools.setFieldEvent(idPrefix + ':url', 'keyup', function(e) {
+            var urlValue = this.value;
+            if (dfx.hasClass(main, 'emailLink') === false) {
+                // Not an email, check if its internal URL.
+                if (self._isInternalLink(urlValue) === true) {
+                    // Internal URL.
+                    dfx.removeClass(main, 'emailLink');
+                    dfx.addClass(main, 'internalLink');
+                } else {
+                    dfx.removeClass(main, 'internalLink');
+                }
+            }
+        });
+
+        // The include summary checkbox.
+        var includeSummary    = tools.createCheckbox(idPrefix + ':includeSummary', 'Include Summary');
+        var includeSummaryRow = tools.createRow(idPrefix + ':includeSummaryRow', 'includeSummaryRow');
+        includeSummaryRow.appendChild(includeSummary);
+
+        // Insert it before new window option.
+        var newWindowRow = tools.getItem(idPrefix + ':newWindowRow').element;
+        dfx.insertBefore(newWindowRow, includeSummaryRow);
+
+        return contents;
+    },
+
+    updateLinkAttributes: function(link, idPrefix)
+    {
+        ViperLinkPlugin.prototype.updateLinkAttributes.call(this, link, idPrefix);
+
+        var href = link.getAttribute('href');
+
+        if (this._isInternalLink(href) === true) {
+            href = './?a=' + href;
+        }
+
+        // Anchor.
+        var anchorVal = this.viper.ViperTools.getItem(idPrefix + ':anchor').getValue();
+        if (anchorVal) {
+            href += '#' + anchorVal;
+        }
+
+        link.setAttribute('href', href);
 
     }
 
