@@ -84,11 +84,15 @@ ViperCharMapPlugin.prototype = {
 
         dfx.setHtml(subContent, wrapper);
 
+        var tools = this.viper.ViperTools;
+
         var subSectionWrapper = toolbar.createSubSection(subContent, true, 'VCMP-main');
 
-        var map = toolbar.createToolsPopup('Insert Character', null, [subSectionWrapper], null, function() {});
+        var map = toolbar.createBubble('ViperCMP:bubble', 'Insert Character', subSectionWrapper);
 
-        toolbar.createButton('', false, 'Insert Character', false, 'charMap', null, null, map);
+        var toggle = tools.createButton('ViperCMP:toggle', 'CharMap', 'Insert Character', 'charMap');
+        toolbar.setBubbleButton('ViperCMP:bubble', 'ViperCMP:toggle');
+        toolbar.addButton(toggle);
 
         // Table cell click event.
         var listItems = dfx.getTag('li', subContent);

@@ -170,13 +170,13 @@
 
 // Button Vars
 
-@iconSpriteLocation: 1;
+@fieldIconSpriteLocation: 1;
 @iconWidth: 25px;
 @iconHeight: 20px;
 @iconHeightOffset: 27px;
 @bgY: 0;
 @bgY-activeOffset: 33px;
-@bgX: -(@iconSpriteLocation - 1) * @iconHeightOffset;
+@bgX: -(@fieldIconSpriteLocation - 1) * @iconHeightOffset;
 
 // Icon container defaults
 
@@ -381,7 +381,7 @@
 // Button state bundle with icon selection, declared after all the buttons so their icon variables are used instead of the defaults
 
 .icon (@iconCount) {
-    @iconSpriteLocation: @iconCount;
+    @fieldIconSpriteLocation: @iconCount;
     background-position: @bgY @bgX;
     .Viper-button:active &,
     .Viper-button.active &,
@@ -394,4 +394,173 @@
 
 .__viper_selHighlight {
     background-color: #CCC;
+}
+
+// Textbox.
+.Viper-textbox {
+    margin-bottom: 8px;
+}
+.Viper-textbox-label {
+    display: block;
+    padding: 4px 2px;
+    font-size: 12px;
+    position: relative;
+    clear: both;
+    text-align: left;
+    color: #DDD;
+    background: rgba(0,0,0,0.2);
+    border-radius: 0.4em;
+    -moz-transition-property: color, background;
+    -moz-transition-duration: 0.3s;
+    -webkit-transition-property: color, background;
+    -webkit-transition-duration: 0.3s;
+    border: 1px solid #E4E4E4;
+    background: #FFF;
+    color: #5A8BD0;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.15) inset, 0 2px 0 0 #FFF;
+}
+
+.Viper-textbox-label.active {
+    background: #205caf;
+}
+.Viper-textbox:after {
+    display: block;
+    content: "";
+    clear: both;
+}
+.Viper-textbox.disabled {
+    opacity: 0.4;
+    filter: ~"alpha(opacity = 40)";
+}
+
+.Viper-textbox-main {
+    position: relative;
+}
+.Viper-textbox.actionRevert .Viper-textbox-main,
+.Viper-textbox.actionClear .Viper-textbox-main {
+    padding-right: 24px;
+}
+
+.Viper-textbox-title {
+    position: absolute;
+    left: 0px;
+    top: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: #797979;
+    font-weight: bold;
+    line-height: 2.1em;
+    text-shadow: 0 1px 0 #FFF;
+    padding: 0 0.9em;
+    margin: 0 0 0 0.2em;
+    background-color: #e0e0e0;
+    border-radius: 0.2em;
+    height: 100%;
+    -moz-transition-property: color, background;
+    -moz-transition-duration: 0.3s;
+    -webkit-transition-property: color, background;
+    -webkit-transition-duration: 0.3s;
+}
+.Viper-textbox.actionRevert .Viper-textbox-title {
+    color: #FFF;
+    background-color: #478be8;
+    text-shadow: 0 -1px 0 rgba(0,0,0,0.2);
+}
+
+.Viper-textbox.required .Viper-textbox-title {
+    background-color: #c44e4e;
+    color: #FFF;
+    text-shadow: 0 -1px 0 rgba(0,0,0,0.2);
+}
+
+.Viper-textbox-input[type=text],
+.Viper-textbox-textArea {
+    font-family: Arial;
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    width: 100%;
+    font-size: 12px;
+    border: none;
+    padding: 0.5em 0.6em 0.4em;
+    padding-left: 0;
+    background: transparent;
+    color: #2b2b2b;
+    outline: none;
+}
+
+.Viper-textbox.required .Viper-textbox-input[type=text],
+.Viper-textbox.required .Viper-textbox-textArea {
+    padding-left: 11px;
+    overflow: hidden;
+}
+
+.Viper-textbox-input::-webkit-input-placeholder,
+.Viper-textbox-textArea::-webkit-input-placeholder {
+    color: #c44e4e;
+    font-style: italic;
+}
+.Viper-textbox-input:-moz-placeholder,
+.Viper-textbox-textArea:-moz-placeholder {
+    color: #c44e4e;
+    font-style: italic;
+}
+
+.Viper-textbox-messages {
+    padding: 4px 2px 0 2px;
+}
+
+.Viper-textbox-error {
+    display: block;
+    background-color: #c44e4e;
+    color: #FFF;
+    border-radius: 0.2em;
+    padding: 4px 6px;
+    text-shadow: 0 -1px 0 rgba(0,0,0,0.2);
+}
+.Viper-textbox-desc {
+    display: block;
+    padding: 4px 13px;
+    font-size: 11px;
+    color: #8c8c8c;
+}
+.Viper-textbox-action,
+.Viper-textbox.required .Viper-textbox-main:after {
+    display: none;
+    position: absolute;
+    cursor: pointer;
+    background: transparent url(../Images/fieldIconSprite.png) 0 0 no-repeat;
+    width: 18px;
+    height: 18px;
+    right: 2px;
+    top: 50%;
+    margin-top: -9px;
+}
+.Viper-textbox.required .Viper-textbox-main:after {
+    display: block;
+    content: "";
+    background-position: 0 -36px;
+    top: 3px;
+    margin-top: 0;
+}
+.Viper-textbox.actionRevert .Viper-textbox-action,
+.Viper-textbox.actionClear .Viper-textbox-action {
+    display: block;
+}
+.Viper-textbox.actionClear .Viper-textbox-action {
+    background-position: 0 -18px;
+}
+
+// Checkbox.
+.Viper-checkbox {
+    display: inline-block;
+    width: 100%;
+    text-align: left;
+    text-shadow: none;
+    color: #FFF;
+}
+
+.Viper-checkbox input {
+    float: right;
 }

@@ -36,24 +36,36 @@ ViperListPlugin.prototype = {
         var toolbarPlugin = this.viper.ViperPluginManager.getPlugin('ViperToolbarPlugin');
         if (toolbarPlugin) {
             var self            = this;
+            var tools           = this.viper.ViperTools;
             this._toolbarPlugin = toolbarPlugin;
-            var toolbarButtons  = {};
+            var toolbarButtons  = {
+                ul: 'ViperLinkPlugin:vtp:ul',
+                ol: 'ViperLinkPlugin:vtp:ol',
+                indent: 'ViperLinkPlugin:vtp:indent',
+                outdent: 'ViperLinkPlugin:vtp:outdent',
+            };
 
-            var btnGroup = toolbarPlugin.createButtonGroup();
-            toolbarButtons.ul = toolbarPlugin.createButton('', false, 'Make Unordered List', false, 'listUL', function() {
+            var btnGroup = tools.createButtonGroup('ViperLinkPlugin:vtp:buttons');
+            tools.createButton('ViperLinkPlugin:vtp:ul', '', 'Make Unordered List', 'listUL', function() {
                 var statuses = self._getButtonStatuses(null, true);
                 return self._makeListButtonAction(statuses.list, 'ul');
-            }, btnGroup);
-            toolbarButtons.ol = toolbarPlugin.createButton('', false, 'Make Ordered List', false, 'listOL', function() {
+            });
+            tools.createButton('ViperLinkPlugin:vtp:ol', '', 'Make Ordered List', 'listOL', function() {
                 var statuses = self._getButtonStatuses(null, true);
                 return self._makeListButtonAction(statuses.list, 'ol');
-            }, btnGroup);
-            toolbarButtons.indent = toolbarPlugin.createButton('', false, 'Indent List', false, 'listIndent', function() {
+            });
+            tools.createButton('ViperLinkPlugin:vtp:indent', '', 'Indent List', 'listIndent', function() {
                 self.tabRange();
-            }, btnGroup);
-            toolbarButtons.outdent = toolbarPlugin.createButton('', false, 'Outdent List', false, 'listOutdent', function() {
+            });
+            tools.createButton('ViperLinkPlugin:vtp:outdent', '', 'Outdent List', 'listOutdent', function() {
                 self.tabRange(null, true);
-            }, btnGroup);
+            });
+            tools.addButtonToGroup('ViperLinkPlugin:vtp:ul', 'ViperLinkPlugin:vtp:buttons');
+            tools.addButtonToGroup('ViperLinkPlugin:vtp:ol', 'ViperLinkPlugin:vtp:buttons');
+            tools.addButtonToGroup('ViperLinkPlugin:vtp:indent', 'ViperLinkPlugin:vtp:buttons');
+            tools.addButtonToGroup('ViperLinkPlugin:vtp:outdent', 'ViperLinkPlugin:vtp:buttons');
+            this._toolbarPlugin.addButton(btnGroup);
+
             this.viper.registerCallback('ViperToolbarPlugin:updateToolbar', 'ViperListPlugin', function(data) {
                 self._updateToolbar(toolbarButtons, data.range);
             });
@@ -1110,47 +1122,49 @@ ViperListPlugin.prototype = {
             return;
         }
 
+        var tools = this.viper.ViperTools;
+
         var statuses = this._getButtonStatuses(range, true);
         if (!statuses) {
             for (var btn in toolbarButtons) {
-                toolbarPlugin.disableButton(toolbarButtons[btn]);
+                tools.disableButton(toolbarButtons[btn]);
             }
 
             return;
         }
 
         if (statuses.ul === true) {
-            toolbarPlugin.enableButton(toolbarButtons.ul);
+            tools.enableButton(toolbarButtons.ul);
             if (dfx.isTag(statuses.list, 'ul') === true) {
-                toolbarPlugin.setButtonActive(toolbarButtons.ul);
+                tools.setButtonActive(toolbarButtons.ul);
             } else {
-                toolbarPlugin.setButtonInactive(toolbarButtons.ul);
+                tools.setButtonInactive(toolbarButtons.ul);
             }
         } else {
-            toolbarPlugin.disableButton(toolbarButtons.ul);
+            tools.disableButton(toolbarButtons.ul);
         }
 
         if (statuses.ol === true) {
-            toolbarPlugin.enableButton(toolbarButtons.ol);
+            tools.enableButton(toolbarButtons.ol);
             if (dfx.isTag(statuses.list, 'ol') === true) {
-                toolbarPlugin.setButtonActive(toolbarButtons.ol);
+                tools.setButtonActive(toolbarButtons.ol);
             } else {
-                toolbarPlugin.setButtonInactive(toolbarButtons.ol);
+                tools.setButtonInactive(toolbarButtons.ol);
             }
         } else {
-            toolbarPlugin.disableButton(toolbarButtons.ol);
+            tools.disableButton(toolbarButtons.ol);
         }
 
         if (statuses.increaseIndent === true) {
-            toolbarPlugin.enableButton(toolbarButtons.indent);
+            tools.enableButton(toolbarButtons.indent);
         } else {
-            toolbarPlugin.disableButton(toolbarButtons.indent);
+            tools.disableButton(toolbarButtons.indent);
         }
 
         if (statuses.decreaseIndent === true) {
-            toolbarPlugin.enableButton(toolbarButtons.outdent);
+            tools.enableButton(toolbarButtons.outdent);
         } else {
-            toolbarPlugin.disableButton(toolbarButtons.outdent);
+            tools.disableButton(toolbarButtons.outdent);
         }
 
     },
@@ -1203,34 +1217,42 @@ ViperListPlugin.prototype = {
             return;
         }
 
-        var self     = this;
         var statuses = this._getButtonStatuses(data.range);
-
         if (!statuses) {
             return;
         }
 
+        var self  = this;
+        var tools = this.viper.ViperTools;
+
+        var buttonGroup = tools.createButtonGroup('ViperListPlugin:vitp:buttons');
+        inlineToolbarPlugin.addButton(buttonGroup);
+
         if (statuses.ul === true || statuses.ol === true) {
             var list = statuses.list;
 
-            var buttonGroup = inlineToolbarPlugin.createButtonGroup();
-            inlineToolbarPlugin.createButton('', dfx.isTag(list, 'ul'), 'Make Unordered List', !statuses.ul, 'listUL', function() {
+            tools.createButton('ViperListPlugin:vitp:ul', '', 'Make Unordered List', 'listUL', function() {
                 self._makeListButtonAction(list, 'ul');
-            }, buttonGroup);
+            }, !statuses.ul, dfx.isTag(list, 'ul'));
 
-            inlineToolbarPlugin.createButton('', dfx.isTag(list, 'ol'), 'Make Ordered List', !statuses.ol, 'listOL', function() {
+            tools.createButton('ViperListPlugin:vitp:ol', '', 'Make Ordered List', 'listOL', function() {
                 self._makeListButtonAction(list, 'ol');
-            }, buttonGroup);
+            }, !statuses.ol, dfx.isTag(list, 'ol'));
 
+            tools.addButtonToGroup('ViperListPlugin:vitp:ul', 'ViperListPlugin:vitp:buttons');
+            tools.addButtonToGroup('ViperListPlugin:vitp:ol', 'ViperListPlugin:vitp:buttons');
         }
 
         if (statuses.increaseIndent === true || statuses.decreaseIndent === true) {
-            inlineToolbarPlugin.createButton('', false, 'Indent List', !statuses.increaseIndent, 'listIndent', function() {
+            tools.createButton('ViperListPlugin:vitp:indent', '', 'Indent List', 'listIndent', function() {
                 self.tabRange();
-            }, buttonGroup);
-            inlineToolbarPlugin.createButton('', false, 'Outdent List', !statuses.decreaseIndent, 'listOutdent', function() {
+            }, !statuses.increaseIndent);
+            tools.createButton('ViperListPlugin:vitp:outdent', '', 'Outdent List', 'listOutdent', function() {
                 self.tabRange(null, true);
-            }, buttonGroup);
+            }, !statuses.decreaseIndent);
+
+            tools.addButtonToGroup('ViperListPlugin:vitp:indent', 'ViperListPlugin:vitp:buttons');
+            tools.addButtonToGroup('ViperListPlugin:vitp:outdent', 'ViperListPlugin:vitp:buttons');
         }
 
     },

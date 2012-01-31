@@ -24,6 +24,7 @@
 function ViperAccessibilityPlugin(viper)
 {
     this.viper                = viper;
+    this._tools               = viper.ViperTools;
     this._issueList           = null;
     this._issueDetailsWrapper = null;
     this._resultsMiddle       = null;
@@ -37,9 +38,6 @@ function ViperAccessibilityPlugin(viper)
     this._issuesPerPage       = 5;
     this._containerWidth      = 320;
     this._subSection          = null;
-    this._prevIssueBtn        = null;
-    this._nextIssueBtn        = null;
-    this._checkContentBtn     = null;
     this._aaTools             = null;
     this._toolbar             = null;
     this._listPageCounter     = null;
@@ -111,11 +109,7 @@ ViperAccessibilityPlugin.prototype = {
 
         this._toolbar = toolbar;
         var self      = this;
-
-        // Create the sub section and set it as active as its always visible.
-        var subSectionCont = this._createSubSection();
-        var subSection     = toolbar.createSubSection(subSectionCont, false);
-        this._subSection   = subSection;
+        var tools     = this.viper.ViperTools;
 
         var toolsSection   = document.createElement('div');
         this._toolsSection = toolsSection;
@@ -125,10 +119,25 @@ ViperAccessibilityPlugin.prototype = {
         var mainPanel = document.createElement('div');
         dfx.addClass(mainPanel, 'ViperAP-tools ViperAP-listTools');
 
-        var aaTools = toolbar.createToolsPopup('Accessibility Auditor - ' + this._standard, toolsSection, [subSection]);
+        // Create the Toolbar Bubble for the plugin interface. The bubble's main content
+        // is the tools section.
+        var aaTools = toolbar.createBubble('VAP:bubble', 'Accessibility Auditor - ' + this._standard, toolsSection);
         dfx.setStyle(aaTools.element, 'width', this._containerWidth + 'px');
-        aaTools.element.id = this.viper.getId() + '-VAP';
+        aaTools.id = this.viper.getId() + '-VAP';
         this._aaTools = aaTools;
+
+        // Create the sub section.
+        var bubble       = toolbar.getBubble('VAP:bubble');
+        var subSection   = bubble.addSubSection('VAP:subSection', this._getSubSectionContent());
+        this._subSection = subSection;
+
+        // The main toolbar button to toggle the toolbar bubble on and off.
+        var vapButton = tools.createButton('VAP:toggle', '', 'Accessibility Auditor', 'accessAudit');
+        toolbar.setBubbleButton('VAP:bubble', 'VAP:toggle');
+        toolbar.addButton(vapButton);
+
+        // Add the sub section that was created earlier to the bubble.
+        //aaTools.appendChild(subSection);
 
         // Check button panel.
         // Check panel will show a check button which will start checking issues.
@@ -136,25 +145,28 @@ ViperAccessibilityPlugin.prototype = {
         dfx.addClass(checkPanel, 'ViperAP-tools ViperAP-checkTools');
         toolsSection.appendChild(checkPanel);
 
-        var checkContentBtn = toolbar.createButton('Check Content', false, 'Check Content', false, '', function() {
-            self._toolbar.disableButton(checkContentBtn);
+        var checkContentBtn = tools.createButton('VAP:checkBtn', 'Check Content', 'Check Content', null, function() {
+             tools.disableButton('VAP:checkBtn');
              self.updateResults();
-        }, null, null, checkPanel);
+        });
         checkPanel.appendChild(checkContentBtn);
-        this._checkContentBtn = checkContentBtn;
 
         // Error info, settings and rerun button.
         toolsSection.appendChild(mainPanel);
 
+        // Left side of the main panel contains info about the number of issues.
         var mainPanelLeft   = document.createElement('div');
         this._mainPanelLeft = mainPanelLeft;
         dfx.addClass(mainPanelLeft, 'ViperAP-listTools-left');
         mainPanel.appendChild(mainPanelLeft);
+
+        // Right side of the main panel contains the Settings and re-run buttons.
         var mainPanelRight = document.createElement('div');
         dfx.addClass(mainPanelRight, 'ViperAP-listTools-right');
         mainPanel.appendChild(mainPanelRight);
 
-        var settingsBtn = toolbar.createButton('', false, 'Audit Settings', false, 'accessSettings', function() {
+        // Create the settings button switcher.
+        var settingsBtn = tools.createButton('VAP:settingsBtn', 'Audit Settings', 'Settings', 'accessSettings', function() {
             var resultsCont = dfx.getClass('resultsCont', subSection)[0];
             if (dfx.getStyle(resultsCont, 'display') === 'none') {
                 dfx.setStyle(dfx.getClass('settingsCont', subSection)[0], 'display', 'none');
@@ -164,14 +176,14 @@ ViperAccessibilityPlugin.prototype = {
                 dfx.setStyle(dfx.getClass('settingsCont', subSection)[0], 'display', 'block');
             }
 
-        }, null, null, mainPanel);
+        });
         mainPanelRight.appendChild(settingsBtn);
-        var reRunBtn = toolbar.createButton('', false, 'Re-run Audit', false, 'accessRerun', function() {
-            self.updateResults();
-        }, null, null, mainPanel);
-        mainPanelRight.appendChild(reRunBtn);
 
-        toolbar.createButton('', false, 'Accessibility Auditor', false, 'accessAudit', null, null, aaTools);
+        // Create the re-run button.
+        var reRunBtn = tools.createButton('VAP:rerunBtn', '', 'Re-run Audit', 'accessRerun', function() {
+            self.updateResults();
+        });
+        mainPanelRight.appendChild(reRunBtn);
 
         // Create the detail tools.
         var detailTools = document.createElement('div');
@@ -209,16 +221,16 @@ ViperAccessibilityPlugin.prototype = {
         });
 
         // Create detail prev, next button group.
-        var prevNextGroup = toolbar.createButtonGroup();
-        var prevButton    = toolbar.createButton('', false, 'Previous Issue', false, 'prevIssue', function() {
+        var prevNextGroup = tools.createButtonGroup('VAP:issueNavButtons');
+        var prevButton    = tools.createButton('VAP:issueNavPrev', '', 'Previous Issue', 'prevIssue', function() {
             self.previousIssue();
-        }, prevNextGroup);
-        var nextButton = toolbar.createButton('', false, 'Next Issue', false, 'nextIssue', function() {
+        });
+        var nextButton = tools.createButton('VAP:issueNavNext', '', 'Next Issue', 'nextIssue', function() {
             self.nextIssue();
-        }, prevNextGroup);
+        });
         detailTools.appendChild(prevNextGroup);
-        this._prevIssueBtn = prevButton;
-        this._nextIssueBtn = nextButton;
+        tools.addButtonToGroup('VAP:issueNavPrev', 'VAP:issueNavButtons');
+        tools.addButtonToGroup('VAP:issueNavNext', 'VAP:issueNavButtons');
 
     },
 
@@ -231,8 +243,10 @@ ViperAccessibilityPlugin.prototype = {
         dfx.setStyle(dfx.getClass('loadingCont', this._subSection)[0], 'display', 'block');
 
         // Set the sub section to be visible.
-        dfx.addClass(this._subSection, 'active');
-        dfx.addClass(this._aaTools.element, 'subSectionVisible');
+        this._toolbar.getBubble('VAP:bubble').showSubSection('VAP:subSection');
+
+        //dfx.addClass(this._subSection, 'active');
+        //dfx.addClass(this._aaTools.element, 'subSectionVisible');
 
         // Run the HTMLCS checks.
         this.runChecks(function() {
@@ -293,14 +307,14 @@ ViperAccessibilityPlugin.prototype = {
         // Update the issue statuses.
         if (this._currentIssue <= 1) {
             // Disable previous button.
-            this._toolbar.disableButton(this._prevIssueBtn);
+            this._tools.disableButton('VAP:issueNavPrev');
         } else if (this._currentIssue >= this._issueCount) {
             // Disable next button.
-            this._toolbar.disableButton(this._nextIssueBtn);
+            this._tools.disableButton('VAP:issueNavNext');
         } else {
             // Enable both buttons.
-            this._toolbar.enableButton(this._nextIssueBtn);
-            this._toolbar.enableButton(this._prevIssueBtn);
+            this._tools.enableButton('VAP:issueNavPrev');
+            this._tools.enableButton('VAP:issueNavNext');
         }
 
         // Update the issues list index so that its on the page that the current
@@ -309,7 +323,7 @@ ViperAccessibilityPlugin.prototype = {
 
     },
 
-    _createSubSection: function()
+    _getSubSectionContent: function()
     {
         var main = document.createElement('div');
 
@@ -405,7 +419,7 @@ ViperAccessibilityPlugin.prototype = {
         var self       = this;
         var reCheckSec = document.createElement('div');
         dfx.addClass(reCheckSec, 'reCheckSec');
-        var reCheck = this.viper.ViperTools.createButton('Re-check Content', false, 'Re-check Content', false, '', function() {
+        var reCheck = this.viper.ViperTools.createButton('VAP:reCheckContent', 'Re-check Content', 'Re-check Content', '', function() {
             var radioBtns = document.getElementsByName('standard');
             var value     = null;
             for (var i = 0; i < radioBtns.length; i++) {

@@ -129,7 +129,9 @@ ViperAcronymPlugin.prototype = {
             return;
         }
 
+        var tools   = this.viper.ViperTools;
         var acronym = null;
+        var self    = this;
 
         var setAcronymAttributes = function(title) {
             if (!acronym) {
@@ -139,20 +141,17 @@ ViperAcronymPlugin.prototype = {
             }
         };
 
-        var self     = this;
-        var btnGroup = toolbar.createButtonGroup();
-
         // Create Acronym button and popup.
         var createAcronymSubContent = document.createElement('div');
 
         // Title text box.
-        var title = toolbar.createTextbox('', 'Acronym', function(value) {
+        var title = tools.createTextbox('ViperAcronymPlugin:title', 'Acronym', '', function(value) {
             setAcronymAttributes(value);
         });
         createAcronymSubContent.appendChild(title);
 
         var createAcronymSubSection = toolbar.createSubSection(createAcronymSubContent, true);
-        var acronymTools = toolbar.createToolsPopup('Insert Acronym', null, [createAcronymSubSection], null, function() {
+        toolbar.createBubble('ViperAcronymPlugin:bubble', 'Insert Acronym', createAcronymSubSection, function() {
             if (acronym) {
                 var range = self.viper.getViperRange();
                 range.selectNode(acronym);
@@ -160,14 +159,17 @@ ViperAcronymPlugin.prototype = {
             }
         });
 
-        var urlBtn = toolbar.createButton('', false, 'Toggle Acronym Options', false, 'acronym', null, btnGroup, acronymTools);
-
-        // Remove Acronym.
-        var removeAcronymBtn = toolbar.createButton('', false, 'Remove Acronym', false, 'acronymRemove', function() {
+        tools.createButton('ViperAcronymPlugin:toggle', 'Acro', 'Toggle Acronym Options', 'acronym');
+        tools.createButton('ViperAcronymPlugin:remove', 'RAcro', 'Remove Acronym', 'acronymRemove', function() {
             if (acronym) {
                 self.removeAcronym(acronym);
             }
-        }, btnGroup);
+        });
+        var btnGroup = tools.createButtonGroup('ViperAcronymPlugin:buttons');
+        tools.addButtonToGroup('ViperAcronymPlugin:toggle', 'ViperAcronymPlugin:buttons');
+        tools.addButtonToGroup('ViperAcronymPlugin:remove', 'ViperAcronymPlugin:buttons');
+        toolbar.addButton(btnGroup);
+        toolbar.setBubbleButton('ViperAcronymPlugin:bubble', 'ViperAcronymPlugin:toggle');
 
         // Update the buttons when the toolbar updates it self.
         this.viper.registerCallback('ViperToolbarPlugin:updateToolbar', 'ViperAcronymPlugin', function(data) {
@@ -175,29 +177,29 @@ ViperAcronymPlugin.prototype = {
             acronym      = self.getAcronymFromRange(range);
 
             if (acronym) {
-                toolbar.setButtonActive(urlBtn);
-                toolbar.enableButton(removeAcronymBtn);
-                (dfx.getTag('input', createAcronymSubContent)[0]).value = acronym.getAttribute('title');
+                tools.setButtonActive('ViperAcronymPlugin:toggle');
+                tools.enableButton('ViperAcronymPlugin:remove');
+                //(dfx.getTag('input', createAcronymSubContent)[0]).value = acronym.getAttribute('title');
             } else {
                 var startNode = data.range.getStartNode();
                 var endNode   = data.range.getEndNode();
-                toolbar.setButtonInactive(urlBtn);
+                tools.setButtonInactive('ViperAcronymPlugin:toggle');
 
                 if (range.collapsed === true
                     || startNode
                     && endNode
                     && startNode.parentNode !== endNode.parentNode
                 ) {
-                    toolbar.disableButton(urlBtn);
-                    toolbar.closePopup(acronymTools);
+                    tools.disableButton('ViperAcronymPlugin:toggle');
+                    toolbar.closeBubble('ViperAcronymPlugin:bubble');
                 } else {
-                    toolbar.enableButton(urlBtn);
+                    tools.enableButton('ViperAcronymPlugin:toggle');
                 }
 
-                toolbar.disableButton(removeAcronymBtn);
+                tools.disableButton('ViperAcronymPlugin:remove');
 
-                (dfx.getTag('input', createAcronymSubContent)[0]).value = '';
-                (dfx.getTag('input', createAcronymSubContent)[0]).value = '';
+                //(dfx.getTag('input', createAcronymSubContent)[0]).value = '';
+                //(dfx.getTag('input', createAcronymSubContent)[0]).value = '';
             }//end if
         });
 

@@ -26,7 +26,9 @@ function ViperToolbarPlugin(viper)
     this.viper    = viper;
     this._toolbar = null;
 
-    this._activePopup = null;
+    this._activeBubble  = null;
+    this._bubbles       = {};
+    this._bubbleButtons = {};
 
     this.createToolbar();
 
@@ -96,189 +98,31 @@ ViperToolbarPlugin.prototype = {
     },
 
     /**
-     * Creates a button group.
+     * Adds the specified button or button group element to the tools panel.
      *
-     * @param {string} customClass Custom class to apply to the group.
+     * @param {DOMNode} button The button or the button group element.
      *
-     * @return {DOMElement} The button group element.
+     * @return void
      */
-    createButtonGroup: function(customClass)
+    addButton: function(button)
     {
-        var group = document.createElement('div');
-        dfx.addClass(group, 'Viper-buttonGroup');
-
-        if (customClass) {
-            dfx.addClass(group, customClass);
-        }
-
-        this._toolbar.appendChild(group);
-
-        return group;
+        this._toolbar.appendChild(button);
 
     },
 
-    /**
-     * Creates a toolbar button.
-     *
-     * @param {string}     content        The content of the button.
-     * @param {string}     isActive       True if the button is active.
-     * @param {string}     titleAttr      The title attribute for the button.
-     * @param {boolean}    disabled       True if the button is disabled.
-     * @param {string}     customClass    Class to add to the button for extra styling.
-     * @param {function}   clickAction    The function to call when the button is clicked.
-     *                                    Note that this action is ignored if the
-     *                                    subSection param is specified. Clicking will
-     *                                    then toggle the sub section visibility.
-     * @param {DOMElement} groupElement   The group element that was created by createButtonGroup.
-     * @param {DOMElement} toolsPopup     The tools popup element see createToolsPopup.
-     *
-     * @return {DOMElement} The new button element.
-     */
-    createButton: function(content, isActive, titleAttr, disabled, customClass, clickAction, groupElement, toolsPopup, parentElement)
+    createBubble: function(id, title, element, customClass)
     {
-        var button = this.viper.ViperTools.createButton(content, isActive, titleAttr, disabled, customClass, clickAction, groupElement);
-        if (toolsPopup) {
-            var self = this;
-            dfx.addEvent(button, 'mousedown', function() {
-                if (dfx.hasClass(button, 'disabled') === true) {
-                    return;
-                }
+        title = title || '&nbsp;';
 
-                dfx.removeClass(dfx.getClass('selected', this._toolbar), 'selected');
-
-                var toolPopups = dfx.getClass('ViperITP forTopbar');
-                for (var i = 0; i < toolPopups.length; i++) {
-                    if (toolPopups[i] !== toolsPopup.element && toolPopups[i].parentNode) {
-                        toolPopups[i].parentNode.removeChild(toolPopups[i]);
-                    }
-                }
-
-                if (toolsPopup.element.parentNode) {
-                    self.closePopup(toolsPopup);
-                    self._activePopup = null;
-                } else {
-                    self._activePopup = toolsPopup;
-                    if (toolsPopup.init) {
-                        toolsPopup.init();
-                    }
-
-                    document.body.appendChild(toolsPopup.element);
-                    var toolsWidth = dfx.getElementWidth(toolsPopup.element);
-                    dfx.addClass(button, 'selected');
-
-                    var scrollCoords = dfx.getScrollCoords();
-                    var windowDim    = dfx.getWindowDimensions();
-                    var elemDim      = dfx.getBoundingRectangle(button);
-
-                    var left = (elemDim.x1 + ((elemDim.x2 - elemDim.x1) / 2) - (toolsWidth / 2) - scrollCoords.x);
-                    var top  = (elemDim.y2 + 8 - scrollCoords.y);
-
-                    if ((left + toolsWidth) >= windowDim.width) {
-                        left -= (toolsWidth / 2) - 40;
-                        dfx.addClass(toolsPopup.element, 'orientationLeft');
-                    } else {
-                        dfx.removeClass(toolsPopup.element, 'orientationLeft');
-                    }
-
-                    dfx.setStyle(toolsPopup.element, 'left', left + 'px');
-                    dfx.setStyle(toolsPopup.element, 'top', top + 'px');
-                }
-            });
+        if (!element) {
+            return false;
         }
 
-        if (!groupElement) {
-            if (!parentElement) {
-                this._toolbar.appendChild(button);
-            }
-        }
+        var bubble = document.createElement('div');
+        dfx.addClass(bubble, 'ViperITP themeDark visible forTopbar');
+        dfx.setHtml(bubble, '<div class="ViperITP-header">' + title + '</div>');
 
-        return button;
-    },
-
-    /**
-     * Creates a textbox.
-     *
-     * @param {string}   value      The initial value of the textbox.
-     * @param {string}   label      The label of the textbox.
-     * @param {function} action     The function to call when the textbox value is updated.
-     * @param {boolean}  required   True if this field is required.
-     * @param {boolean}  expandable If true then the textbox will expand when focused.
-     *
-     * @return {DOMNode} If label specified the label element else the textbox element.
-     */
-    createTextbox: function(value, label, action, required, expandable)
-    {
-        var textBox = document.createElement('input');
-        dfx.addClass(textBox, 'ViperITP-input');
-        textBox.type  = 'text';
-        textBox.size  = 10;
-        textBox.value = value;
-
-        var self  = this;
-
-        var t = null;
-        dfx.addEvent(textBox, 'focus', function(e) {
-            self.viper.highlightSelection();
-            dfx.addClass(labelElem, 'active');
-        });
-
-        dfx.addEvent(textBox, 'blur', function(e) {
-            dfx.removeClass(labelElem, 'active');
-            clearTimeout(t);
-        });
-
-        dfx.addEvent(textBox, 'keyup', function(e) {
-            if (e.which === 13) {
-                self.viper.focus();
-                action.call(textBox, textBox.value);
-                return;
-            }
-
-            dfx.addClass(labelElem, 'active');
-        });
-
-        if (label) {
-            var labelElem = document.createElement('label');
-            dfx.addClass(labelElem, 'ViperITP-label');
-            var span = document.createElement('span');
-            dfx.addClass(span, 'ViperITP-labelText');
-            dfx.setHtml(span, label);
-
-            document.body.appendChild(span);
-            var width = dfx.getElementWidth(span);
-            dfx.setStyle(labelElem, 'padding-left', width + 'px');
-            labelElem.appendChild(span);
-            labelElem.appendChild(textBox);
-
-            if (required === true) {
-                dfx.addClass(labelElem, 'required');
-            }
-
-            if (expandable === true) {
-                dfx.addClass(labelElem, 'expandable');
-            }
-
-            return labelElem;
-        }
-
-        return textBox;
-
-    },
-
-    /**
-     * Creates a popup for extra tools for a button.
-     *
-     * @return {DOMElement} The sub section element.
-     */
-    createToolsPopup: function(title, toolsContentElement, subContentElements, customClass, popupInitCallback)
-    {
-        var tools = document.createElement('div');
-        dfx.addClass(tools, 'ViperITP themeDark visible forTopbar');
-        if (title) {
-            dfx.setHtml(tools, '<div class="ViperITP-header">' + title + '</div>');
-        }
-
-        dfx.addEvent(tools, 'mousedown', function(e) {
+        dfx.addEvent(bubble, 'mousedown', function(e) {
             var target = dfx.getMouseEventTarget(e);
             if (dfx.isTag(target, 'input') !== true) {
                 dfx.preventDefault(e);
@@ -286,48 +130,235 @@ ViperToolbarPlugin.prototype = {
             }
         });
 
-        if (toolsContentElement) {
-            dfx.addClass(toolsContentElement, 'ViperITP-tools');
-            tools.appendChild(toolsContentElement);
-        }
+        dfx.addClass(element, 'ViperITP-tools');
+        bubble.appendChild(element);
 
         if (customClass) {
-            dfx.addClass(tools, customClass);
+            dfx.addClass(bubble, customClass);
         }
 
-        if (subContentElements && subContentElements.length > 0) {
-            var subWrapper = document.createElement('div');
-            dfx.addClass(subWrapper, 'ViperITP-subSectionWrapper');
-            tools.appendChild(subWrapper);
-            for (var i = 0; i < subContentElements.length; i++) {
-                subWrapper.appendChild(subContentElements[i]);
-                if (dfx.hasClass(subContentElements[i], 'active') === true) {
-                    dfx.addClass(tools, 'subSectionVisible');
+        this._bubbles[id] = bubble;
+        this.viper.ViperTools.addItem(id, {
+            type: 'VTPBubble',
+            element: bubble,
+            addSubSection: function(id, element) {
+                this._subSections[id] = element;
+
+                var wrapper = dfx.getClass('ViperTP-subSections', bubble);
+                if (wrapper.length > 0) {
+                    wrapper = wrapper[0];
+                } else {
+                    wrapper = document.createElement('div');
+                    dfx.addClass(wrapper, 'ViperTP-subSections');
+                    bubble.appendChild(wrapper);
                 }
-            }
-        }
 
-        var popup = {
-            init: popupInitCallback || function() {},
-            element: tools
-        }
+                dfx.setStyle(element, 'display', 'none');
+                wrapper.appendChild(element);
 
-        return popup;
+                return element;
+            },
+            showSubSection: function(id) {
+                if (this._activeSubSection) {
+                    if (this._activeSubSection !== id) {
+                        this.hideSubSection(this._activeSubSection);
+                    } else {
+                        return;
+                    }
+                }
+
+                dfx.addClass(bubble, 'subSectionVisible');
+                dfx.setStyle(this._subSections[id], 'display', 'block');
+
+                this._activeSubSection = id;
+
+            },
+            hideSubSection: function(id) {
+                dfx.removeClass(bubble, 'subSectionVisible');
+                dfx.setStyle(this._subSections[id], 'display', 'none');
+                this._activeSubSection = null;
+            },
+            _subSections: {},
+            _activeSubSection: null
+        });
+
+        return bubble;
 
     },
 
-    closePopup: function(popup)
+    getBubble: function(id)
     {
-        popup = popup || this._activePopup;
+        return this.viper.ViperTools.getItem(id);
 
-        if (!popup || !popup.element || !popup.element.parentNode) {
+    },
+
+    setBubbleButton: function(bubbleid, buttonid)
+    {
+        if (!this._bubbles[bubbleid]) {
+            // Throw exception not a valid bubble id.
+            return false;
+        }
+
+        var button = this.viper.ViperTools.getItem(buttonid).element;
+        var self   = this;
+
+        this._bubbleButtons[bubbleid] = buttonid;
+
+        dfx.removeEvent(button, 'mousedown');
+        dfx.addEvent(button, 'mousedown', function(e) {
+            self.toggleBubble(bubbleid);
+            dfx.preventDefault(e);
+        });
+
+    },
+
+    toggleBubble: function(bubbleid)
+    {
+        if (!this._activeBubble || this._activeBubble !== bubbleid) {
+            this.showBubble(bubbleid);
+        } else {
+            this.closeBubble(bubbleid);
+        }
+
+    },
+
+    closeBubble: function(bubbleid)
+    {
+        dfx.removeClass(this.viper.ViperTools.getItem(this._bubbleButtons[bubbleid]).element, 'selected');
+        var bubble = this.viper.ViperTools.getItem(bubbleid).element;
+        if (bubble.parentNode) {
+            document.body.removeChild(bubble);
+        }
+
+        this._activeBubble = null;
+
+    },
+
+    showBubble: function(bubbleid)
+    {
+        if (this._activeBubble) {
+            if (this._activeBubble === bubbleid) {
+                // Already showing.
+                return;
+            }
+
+            // Hide the current active bubble.
+            this.closeBubble(this._activeBubble);
+        }
+
+        dfx.addClass(this.viper.ViperTools.getItem(this._bubbleButtons[bubbleid]).element, 'selected');
+
+        var bubble = this.viper.ViperTools.getItem(bubbleid).element;
+        if (!bubble.parentNode) {
+            document.body.appendChild(bubble);
+        }
+
+        this.positionBubble(bubbleid);
+
+        this._activeBubble = bubbleid;
+
+    },
+
+    positionBubble: function(bubbleid)
+    {
+        bubbleid = bubbleid || this._activeBubble;
+        if (!bubbleid) {
             return;
         }
 
-        popup.element.parentNode.removeChild(popup.element);
-        dfx.removeClass(dfx.getClass('selected', this._toolbar), 'selected');
+        var bubble     = this.viper.ViperTools.getItem(bubbleid).element;
+        var button     = this.viper.ViperTools.getItem(this._bubbleButtons[bubbleid]).element;
+        var toolsWidth = dfx.getElementWidth(bubble);
+
+        var scrollCoords = dfx.getScrollCoords();
+        var windowDim    = dfx.getWindowDimensions();
+        var elemDim      = dfx.getBoundingRectangle(button);
+
+        var left = (elemDim.x1 + ((elemDim.x2 - elemDim.x1) / 2) - (toolsWidth / 2) - scrollCoords.x);
+        var top  = (elemDim.y2 + 8 - scrollCoords.y);
+
+        if ((left + toolsWidth) >= windowDim.width) {
+            left -= (toolsWidth / 2) - 40;
+            dfx.addClass(bubble, 'orientationLeft');
+        } else {
+            dfx.removeClass(bubble, 'orientationLeft');
+        }
+
+        dfx.setStyle(bubble, 'left', left + 'px');
+        dfx.setStyle(bubble, 'top', top + 'px');
 
     },
+
+
+  //  /**
+  //   * Creates a textbox.
+  //   *
+  //   * @param {string}   value      The initial value of the textbox.
+  //   * @param {string}   label      The label of the textbox.
+  //   * @param {function} action     The function to call when the textbox value is updated.
+  //   * @param {boolean}  required   True if this field is required.
+  //   * @param {boolean}  expandable If true then the textbox will expand when focused.
+  //   *
+  //   * @return {DOMNode} If label specified the label element else the textbox element.
+  //   */
+  //  createTextbox: function(value, label, action, required, expandable)
+  //  {
+  //      var textBox = document.createElement('input');
+  //      dfx.addClass(textBox, 'ViperITP-input');
+  //      textBox.type  = 'text';
+  //      textBox.size  = 10;
+  //      textBox.value = value;
+  //
+  //      var self  = this;
+  //
+  //      var t = null;
+  //      dfx.addEvent(textBox, 'focus', function(e) {
+  //          self.viper.highlightSelection();
+  //          dfx.addClass(labelElem, 'active');
+  //      });
+  //
+  //      dfx.addEvent(textBox, 'blur', function(e) {
+  //          dfx.removeClass(labelElem, 'active');
+  //          clearTimeout(t);
+  //      });
+  //
+  //      dfx.addEvent(textBox, 'keyup', function(e) {
+  //          if (e.which === 13) {
+  //              self.viper.focus();
+  //              action.call(textBox, textBox.value);
+  //              return;
+  //          }
+  //
+  //          dfx.addClass(labelElem, 'active');
+  //      });
+  //
+  //      if (label) {
+  //          var labelElem = document.createElement('label');
+  //          dfx.addClass(labelElem, 'ViperITP-label');
+  //          var span = document.createElement('span');
+  //          dfx.addClass(span, 'ViperITP-labelText');
+  //          dfx.setHtml(span, label);
+  //
+  //          document.body.appendChild(span);
+  //          var width = dfx.getElementWidth(span);
+  //          dfx.setStyle(labelElem, 'padding-left', width + 'px');
+  //          labelElem.appendChild(span);
+  //          labelElem.appendChild(textBox);
+  //
+  //          if (required === true) {
+  //              dfx.addClass(labelElem, 'required');
+  //          }
+  //
+  //          if (expandable === true) {
+  //              dfx.addClass(labelElem, 'expandable');
+  //          }
+  //
+  //          return labelElem;
+  //      }
+  //
+  //      return textBox;
+  //
+  //  },
 
     /**
      * Creates a sub section element.
@@ -356,29 +387,6 @@ ViperToolbarPlugin.prototype = {
         dfx.addClass(elem, 'subSectionRow');
         return elem;
 
-    },
-
-    disableButton: function(buttonElement)
-    {
-        dfx.addClass(buttonElement, 'disabled');
-        dfx.removeClass(buttonElement, 'active');
-    },
-
-    enableButton: function(buttonElement)
-    {
-        dfx.removeClass(buttonElement, 'disabled');
-
-    },
-
-    setButtonInactive: function(buttonElement)
-    {
-        dfx.removeClass(buttonElement, 'active');
-    },
-
-    setButtonActive: function(buttonElement)
-    {
-        dfx.addClass(buttonElement, 'active');
-        dfx.removeClass(buttonElement, 'disabled');
     },
 
     remove: function()

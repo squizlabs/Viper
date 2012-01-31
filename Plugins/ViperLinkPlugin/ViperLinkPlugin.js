@@ -30,10 +30,14 @@ ViperLinkPlugin.prototype = {
 
     init: function()
     {
-        this._initInlineToolbar();
+        this.initInlineToolbar();
+        this.initToolbar();
+        this.enableAutoLink();
 
-        this._initToolbar();
+    },
 
+    enableAutoLink: function()
+    {
         var self = this;
         this.viper.registerCallback('Viper:keyUp', 'ViperLinkPlugin', function(e) {
             // Listening for the space character.
@@ -77,8 +81,59 @@ ViperLinkPlugin.prototype = {
 
     },
 
-    rangeToLink: function(url, title)
+    isEmail: function(url)
     {
+        return dfx.validateEmail(url);
+
+    },
+
+    updateLinkAttributes: function(link, idPrefix)
+    {
+         // Get the current values.
+        var url       = this.viper.ViperTools.getItem(idPrefix + ':url').getValue();
+        var title     = this.viper.ViperTools.getItem(idPrefix + ':title').getValue();
+        var newWindow = this.viper.ViperTools.getItem(idPrefix + ':newWindow').getValue();
+
+        // Check if its email link.
+        if (this.isEmail(url) === true) {
+            url = 'mailto:' + url;
+            var subject = this.viper.ViperTools.getItem(idPrefix + ':subject').getValue();
+            if (subject) {
+                url += '?subject=' + subject;
+            }
+        }
+
+        link.setAttribute('href', url);
+
+        if (title) {
+            link.setAttribute('title', title);
+        }
+
+        if (newWindow === true) {
+            link.setAttribute('target', '_blank');
+        } else {
+            link.removeAttribute('target');
+        }
+
+    },
+
+    updateLink: function(idPrefix)
+    {
+        var range = this.viper.getViperRange();
+        var node  = range.getNodeSelection();
+
+        if (dfx.isTag(node, 'a') === false) {
+            this.rangeToLink(idPrefix);
+        } else {
+            this.updateLinkAttributes(node, idPrefix);
+        }
+
+    },
+
+    rangeToLink: function(idPrefix)
+    {
+        // Get the current values.
+        var url = this.viper.ViperTools.getItem(idPrefix + ':url').getValue();
         if (!url) {
             return;
         }
@@ -86,17 +141,13 @@ ViperLinkPlugin.prototype = {
         var range    = this.viper.getViperRange();
         var bookmark = this.viper.createBookmark(range);
 
-        var a = document.createElement('a');
-        a.setAttribute('href', url);
-
-        if (title) {
-            a.setAttribute('title', title);
-        }
-
+        var a     = document.createElement('a');
         var elems = dfx.getElementsBetween(bookmark.start, bookmark.end);
         for (var i = 0; i < elems.length; i++) {
             a.appendChild(elems[i]);
         }
+
+        this.updateLinkAttributes(a, idPrefix);
 
         dfx.insertBefore(bookmark.start, a);
 
@@ -104,7 +155,7 @@ ViperLinkPlugin.prototype = {
         range.selectNode(a);
         ViperSelection.addRange(range);
 
-        this.viper.fireSelectionChanged();
+        this.viper.fireSelectionChanged(range, true);
         this.viper.fireNodesChanged([this.viper.getViperElement()]);
 
         return a;
@@ -135,26 +186,6 @@ ViperLinkPlugin.prototype = {
 
     },
 
-    setLinkTitle: function(link, title)
-    {
-        if (!link) {
-            return;
-        }
-
-        link.setAttribute('title', title);
-
-    },
-
-    setLinkURL: function(link, url)
-    {
-        if (!link) {
-            return;
-        }
-
-        link.setAttribute('href', url);
-
-    },
-
     getLinkFromRange: function(range)
     {
         var selectedNode = range.getNodeSelection();
@@ -178,7 +209,89 @@ ViperLinkPlugin.prototype = {
 
     },
 
-    _initInlineToolbar: function()
+    getToolbarContent: function(idPrefix)
+    {
+        var self  = this;
+        var tools = this.viper.ViperTools;
+
+        var _updateLink = function() {
+            self.updateLink(idPrefix);
+        };
+
+        var attrUrl     = '';
+        var attrTitle   = '';
+        var attrSubj    = '';
+        var attrTarget  = false;
+        var isEmailLink = false;
+
+        var range = this.viper.getViperRange();
+        var link  = range.getNodeSelection();
+        if (link) {
+            attrUrl   = link.getAttribute('href') || '';
+            attrTitle = link.getAttribute('title') || '';
+
+            if (link.getAttribute('target') === '_blank') {
+                attrTarget = true;
+            }
+
+            if (attrUrl.indexOf('mailto:') === 0) {
+                isEmailLink   = true;
+                var subjIndex = attrUrl.indexOf('?subject=');
+                if (subjIndex >= 0) {
+                    attrSubj = attrUrl.substr(subjIndex + 9);
+                    attrUrl  = attrUrl.substr(0, subjIndex).replace('mailto:', '');
+                }
+            }
+        }
+
+        var url       = tools.createTextbox(idPrefix + ':url', 'URL', attrUrl, _updateLink);
+        var title     = tools.createTextbox(idPrefix + ':title', 'Title', attrTitle, _updateLink);
+        var subject   = tools.createTextbox(idPrefix + ':subject', 'Subject', attrSubj, _updateLink);
+        var newWindow = tools.createCheckbox(idPrefix + ':newWindow', 'Open a New Window', attrTarget);
+
+        var urlRow = tools.createRow(idPrefix + ':urlRow', 'urlRow');
+        urlRow.appendChild(url);
+
+        var titleRow = tools.createRow(idPrefix + ':titleRow', 'titleRow');
+        titleRow.appendChild(title);
+
+        var subjectRow = tools.createRow(idPrefix + ':subjectRow', 'subjectRow');
+        subjectRow.appendChild(subject);
+
+        var newWindowRow = tools.createRow(idPrefix + ':newWindowRow', 'newWindowRow');
+        newWindowRow.appendChild(newWindow);
+
+        var main = document.createElement('div');
+        main.appendChild(urlRow);
+        main.appendChild(titleRow);
+        main.appendChild(subjectRow);
+        main.appendChild(newWindowRow);
+
+        if (isEmailLink === true) {
+            dfx.addClass(main, 'emailLink');
+        } else {
+            dfx.addClass(main, 'externalLink');
+        }
+
+        // URL field keyup event, when the url field is changed if the url is an
+        // email address then show the email address related fields.
+        tools.setFieldEvent(idPrefix + ':url', 'keyup', function(e) {
+            var urlValue = this.value;
+            if (self.isEmail(urlValue) === true) {
+                // Show the subject field and hide the title field.
+                dfx.removeClass(main, 'externalLink');
+                dfx.addClass(main, 'emailLink');
+            } else {
+                dfx.removeClass(main, 'emailLink');
+                dfx.addClass(main, 'externalLink');
+            }
+        });
+
+        return main;
+
+    },
+
+    initInlineToolbar: function()
     {
         var inlineToolbarPlugin = this.viper.ViperPluginManager.getPlugin('ViperInlineToolbarPlugin');
         if (!inlineToolbarPlugin) {
@@ -186,177 +299,92 @@ ViperLinkPlugin.prototype = {
         }
 
         var self = this;
-        var subSectionActive = false;
         this.viper.registerCallback('ViperInlineToolbarPlugin:updateToolbar', 'ViperLinkPlugin', function(data) {
-            var range         = data.range;
-            var currentIsLink = false;
-
-            // Check if we need to show the link options.
-            if (dfx.isBlockElement(data.lineage[data.current]) === true) {
-                return;
+            if (self.showInlineToolbarIcons(data) === true) {
+                self.updateInlineToolbar(data);
             }
-
-            var startNode = data.range.getStartNode();
-            var endNode   = data.range.getEndNode();
-            if (startNode && endNode && startNode.parentNode !== endNode.parentNode) {
-                return;
-            }
-
-            if (dfx.isTag(data.lineage[data.current], 'a') === true) {
-                // If the selection is a whole A tag then by default show the
-                // link sub section.
-                subSectionActive = true;
-                currentIsLink    = true;
-            } else {
-                subSectionActive = false;
-            }
-
-            if (currentIsLink !== true
-                && (data.lineage[data.current].nodeType !== dfx.TEXT_NODE
-                || dfx.isTag(data.lineage[data.current].parentNode, 'a') === false)
-                && range.collapsed === true) {
-                return;
-            }
-
-            // Get the link from lineage.
-            var link     = null;
-            var linIndex = -1;
-            for (var i = data.current; i >= 0; i--) {
-                if (dfx.isTag(data.lineage[i], 'a') === true) {
-                    link     = data.lineage[i];
-                    linIndex = i;
-                    break;
-                }
-            }
-
-            var isLink    = false;
-            var url       = '';
-            var titleAttr = '';
-            if (link) {
-                // Get the current value from the link tag.
-                url       = link.getAttribute('href');
-                titleAttr = link.getAttribute('title') || '';
-                isLink    = true;
-            }
-
-            var group          = inlineToolbarPlugin.createButtonGroup();
-            var subSectionCont = document.createElement('div');
-            var subSection     = inlineToolbarPlugin.createSubSection(subSectionCont);
-
-            // Link button.
-            if (currentIsLink !== true && link) {
-                inlineToolbarPlugin.createButton('', isLink, 'Toggle Link Options', false, 'link', function() {
-                    // Select the whole link using the lineage.
-                    inlineToolbarPlugin.selectLineageItem(linIndex);
-                }, group);
-            } else {
-                inlineToolbarPlugin.createButton('', isLink, 'Toggle Link Options', false, 'link', null, group, subSection, subSectionActive);
-            }
-
-            if (isLink === true) {
-                // Add the remove link button.
-                inlineToolbarPlugin.createButton('', false, 'Remove Link', false, 'linkRemove', function() {
-                    self.removeLink(link);
-                }, group);
-            }
-
-            var setLinkAttributes = function(url, title) {
-                subSectionActive = true;
-                if (!link) {
-                    link = self.rangeToLink(url, title);
-                } else {
-                    self.setLinkURL(link, url);
-                    self.setLinkTitle(link, title);
-                }
-            };
-
-            // Link sub section.
-            var urlTextbox = inlineToolbarPlugin.createTextbox(null, url, 'URL', function(value) {
-                setLinkAttributes(value, (dfx.getTag('input', subSectionCont)[1]).value);
-            }, true, true);
-
-            var newWindowBtnActive = false;
-            if (link && link.getAttribute('target') === '_blank') {
-                newWindowBtnActive = true;
-            }
-
-            var newWindowBtn = inlineToolbarPlugin.createButton('', newWindowBtnActive, 'Toggle Open in New Window', false, 'linkNewWindow', function() {
-                if (link.getAttribute('target') === '_blank') {
-                    dfx.removeAttr(link, 'target');
-                    dfx.removeClass(newWindowBtn, 'active');
-                } else {
-                    link.setAttribute('target', '_blank');
-                    dfx.addClass(newWindowBtn, 'active');
-                }
-            }, group);
-
-            var titleTextbox = inlineToolbarPlugin.createTextbox(null, titleAttr, 'Title', function(value) {
-                setLinkAttributes(urlTextbox.lastChild.value, value);
-            }, false, true);
-
-            var urlRow = inlineToolbarPlugin.createSubSectionRow();
-            urlRow.appendChild(urlTextbox);
-            urlRow.appendChild(newWindowBtn);
-
-            subSectionCont.appendChild(urlRow);
-            subSectionCont.appendChild(titleTextbox);
         });
     },
 
-    _initToolbar: function()
+    updateInlineToolbar: function(data)
+    {
+        var inlineToolbarPlugin = this.viper.ViperPluginManager.getPlugin('ViperInlineToolbarPlugin');
+
+        var main = document.createElement('div');
+        inlineToolbarPlugin.makeSubSection('ViperLinkPlugin:vitp:link', main);
+
+        var insertLinkBtn = this.viper.ViperTools.createButton('ViperLinkPlugin:vitp:insertLink', '', 'Toggle Link Options', 'link');
+        inlineToolbarPlugin.addButton(insertLinkBtn);
+
+        inlineToolbarPlugin.setSubSectionButton('ViperLinkPlugin:vitp:insertLink', 'ViperLinkPlugin:vitp:link');
+
+        main.appendChild(this.getToolbarContent('ViperLinkPlugin:vitp'));
+
+
+    },
+
+    showInlineToolbarIcons: function(data)
+    {
+        var inlineToolbarPlugin = this.viper.ViperPluginManager.getPlugin('ViperInlineToolbarPlugin');
+
+        var self          = this;
+        var range         = data.range;
+        var currentIsLink = false;
+
+        // Check if we need to show the link options.
+        if (dfx.isBlockElement(data.lineage[data.current]) === true) {
+            return false;
+        }
+
+        var startNode = data.range.getStartNode();
+        var endNode   = data.range.getEndNode();
+        if (startNode && endNode && startNode.parentNode !== endNode.parentNode) {
+            return false;
+        }
+
+        if (dfx.isTag(data.lineage[data.current], 'a') === true) {
+            // If the selection is a whole A tag then by default show the
+            // link sub section.
+            currentIsLink    = true;
+        }
+
+        if (currentIsLink !== true
+            && (data.lineage[data.current].nodeType !== dfx.TEXT_NODE
+            || dfx.isTag(data.lineage[data.current].parentNode, 'a') === false)
+            && range.collapsed === true) {
+            return false;
+        }
+
+        return true;
+
+    },
+
+    initToolbar: function()
     {
         var toolbar = this.viper.ViperPluginManager.getPlugin('ViperToolbarPlugin');
         if (!toolbar) {
             return;
         }
 
-        // Link var is updated when the updateToolbar event callback is called.
-        var link = null;
-
-        var setLinkAttributes = function(url, title) {
-            if (!link) {
-                link = self.rangeToLink(url, title);
-            } else {
-                self.setLinkURL(link, url);
-                self.setLinkTitle(link, title);
-            }
-        };
-
+        // Add the Insert Link and Remove Link buttons to the toolbar.
+        var tools    = this.viper.ViperTools;
+        var btnGroup = tools.createButtonGroup('ViperLinkPlugin:vtp:btnGroup');
+        var disabled = true;
         var self     = this;
-        var btnGroup = toolbar.createButtonGroup();
 
-        // Create Link button and popup.
-        var createLinkSubContent = document.createElement('div');
+        tools.createButton('ViperLinkPlugin:vtp:insertLink', '', 'Toggle Link Options', 'link', null, disabled);
+        tools.createButton('ViperLinkPlugin:vtp:removeLink', '', 'Remove Link', 'linkRemove', function() {
+            self.removeLink();
+        }, disabled);
 
-        // URL text box.
-        var url = toolbar.createTextbox('', 'URL', function(value) {
-            setLinkAttributes(value, (dfx.getTag('input', createLinkSubContent)[1]).value);
-        });
-        createLinkSubContent.appendChild(url);
+        tools.addButtonToGroup('ViperLinkPlugin:vtp:insertLink', 'ViperLinkPlugin:vtp:btnGroup');
+        tools.addButtonToGroup('ViperLinkPlugin:vtp:removeLink', 'ViperLinkPlugin:vtp:btnGroup');
+        toolbar.addButton(btnGroup);
 
-        // Title text box.
-        var title = toolbar.createTextbox('', 'Title', function(value) {
-            setLinkAttributes((dfx.getTag('input', createLinkSubContent)[0]).value, value);
-        });
-        createLinkSubContent.appendChild(title);
-
-        var createLinkSubSection = toolbar.createSubSection(createLinkSubContent, true);
-        var urlTools = toolbar.createToolsPopup('Insert Link', null, [createLinkSubSection], null, function() {
-            if (link) {
-                var range = self.viper.getViperRange();
-                range.selectNode(link);
-                ViperSelection.addRange(range);
-            }
-        });
-
-        var urlBtn = toolbar.createButton('', false, 'Toggle Link Options', false, 'link', null, btnGroup, urlTools);
-
-        // Remove Link.
-        var removeLinkBtn = toolbar.createButton('', false, 'Remove Link', false, 'linkRemove', function() {
-            if (link) {
-                self.removeLink(link);
-            }
-        }, btnGroup);
+        var main = document.createElement('div');
+        toolbar.createBubble('ViperLinkPlugin:vtp:link', 'Insert Link', main);
+        main.appendChild(this.getToolbarContent('ViperLinkPlugin:vtp'));
+        toolbar.setBubbleButton('ViperLinkPlugin:vtp:link', 'ViperLinkPlugin:vtp:insertLink');
 
         // Update the buttons when the toolbar updates it self.
         this.viper.registerCallback('ViperToolbarPlugin:updateToolbar', 'ViperLinkPlugin', function(data) {
@@ -364,31 +392,31 @@ ViperLinkPlugin.prototype = {
             link      = self.getLinkFromRange(range);
 
             if (link) {
-                toolbar.setButtonActive(urlBtn);
-                toolbar.enableButton(removeLinkBtn);
+                tools.setButtonActive('ViperLinkPlugin:vtp:insertLink');
+                tools.enableButton('ViperLinkPlugin:vtp:removeLink');
 
-                (dfx.getTag('input', createLinkSubContent)[0]).value = link.getAttribute('href');
-                (dfx.getTag('input', createLinkSubContent)[1]).value = link.getAttribute('title');
+                //(dfx.getTag('input', createLinkSubContent)[0]).value = link.getAttribute('href');
+                //(dfx.getTag('input', createLinkSubContent)[1]).value = link.getAttribute('title');
             } else {
                 var startNode = data.range.getStartNode();
                 var endNode   = data.range.getEndNode();
-                toolbar.setButtonInactive(urlBtn);
+                tools.setButtonInactive('ViperLinkPlugin:vtp:insertLink');
 
                 if (range.collapsed === true
                     || startNode
                     && endNode
                     && startNode.parentNode !== endNode.parentNode
                 ) {
-                    toolbar.disableButton(urlBtn);
-                    toolbar.closePopup(urlTools);
+                    tools.disableButton('ViperLinkPlugin:vtp:insertLink');
+                    toolbar.closeBubble('ViperLinkPlugin:vtp:link');
                 } else {
-                    toolbar.enableButton(urlBtn);
+                    tools.enableButton('ViperLinkPlugin:vtp:insertLink');
                 }
 
-                toolbar.disableButton(removeLinkBtn);
+                tools.disableButton('ViperLinkPlugin:vtp:removeLink');
 
-                (dfx.getTag('input', createLinkSubContent)[0]).value = '';
-                (dfx.getTag('input', createLinkSubContent)[1]).value = '';
+                //(dfx.getTag('input', createLinkSubContent)[0]).value = '';
+                //(dfx.getTag('input', createLinkSubContent)[1]).value = '';
             }//end if
         });
 

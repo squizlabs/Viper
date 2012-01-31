@@ -30,6 +30,10 @@ function ViperInlineToolbarPlugin(viper)
     this._margin                 = 15;
     this._activeSubSectionButton = null;
 
+    this._subSections       = {};
+    this._subSectionButtons = {};
+    this._activeSection     = null;
+
     // Create the toolbar.
     this._createToolbar();
 
@@ -104,194 +108,284 @@ function ViperInlineToolbarPlugin(viper)
 
 ViperInlineToolbarPlugin.prototype = {
 
+
     /**
-     * Creates a button group.
+     * Adds the given element as a sub section of the toolbar.
      *
-     * @param {string} customClass Custom class to apply to the group.
-     *
-     * @return {DOMElement} The button group element.
+     * @param {string} id       The id of the new sub section.
+     * @param {DOMNode} element The DOMNode to convert to sub section.
      */
-    createButtonGroup: function(customClass)
+    makeSubSection: function(id, element)
     {
-        return this._toolsContainer.appendChild(this.viper.ViperTools.createButtonGroup(customClass));
+        if (!element) {
+            return false;
+        }
+
+        dfx.addClass(element, 'Viper-subSection');
+
+        this._subSections[id] = element;
+
+        this._subSectionContainer.appendChild(element);
+
+        this.viper.ViperTools.addItem(id, {
+            type: 'VITPSubSection',
+            element: element
+        });
+
+        return element;
 
     },
 
+
     /**
-     * Creates a toolbar button.
+     * Sets the specified button to toggle the given sub section.
      *
-     * @param {string}     content        The content of the button.
-     * @param {string}     isActive       True if the button is active.
-     * @param {string}     titleAttr      The title attribute of the button.
-     * @param {boolean}    disabled       True if the button is disabled.
-     * @param {string}     customClass    Class to add to the button for extra styling.
-     * @param {function}   clickAction    The function to call when the button is clicked.
-     * @param {DOMElement} groupElement   The group element that was created by createButtonGroup.
-     * @param {DOMElement} subSection     The sub section element see createSubSection.
-     * @param {boolean}    showSubSection If true then sub section will be visible.
-     *                                    If another button later on also has this set to true
-     *                                    then that button's sub section visible.
-     *
-     * @return {DOMElement} The new button element.
+     * @param {string} buttonid     Id of the button.
+     * @param {string} subSectionid Id of the sub section.
      */
-    createButton: function(content, isActive, titleAttr, disabled, customClass, clickAction, groupElement, subSection, showSubSection)
+    setSubSectionButton: function(buttonid, subSectionid)
     {
-        var button = null;
-        var self = this;
-        if (subSection) {
-            var originalAction = clickAction;
-            clickAction = function(subSectionState, buttonElement) {
-                self._activeSubSectionButton = null;
+        if (!this._subSections[subSectionid]) {
+            // Throw exception not a valid sub section id.
+            throw new Error('Invalid sub section id: ' + subSectionid);
+            return false;
+        }
 
-                if (subSectionState === true) {
-                    if (button) {
-                        self._activeSubSectionButton = button;
-                    }
+        var button = this.viper.ViperTools.getItem(buttonid).element;
+        var self   = this;
 
-                    dfx.addClass(self._toolbar, 'subSectionVisible');
+        this._subSectionButtons[subSectionid] = buttonid;
 
-                    // Remove selected state from other buttons in the toolbar.
-                    var mainTools = subSection.parentNode.previousSibling;
-                    dfx.removeClass(dfx.getClass('selected', mainTools), 'selected');
-                    dfx.addClass(buttonElement, 'selected');
+        dfx.removeEvent(button, 'mousedown');
+        dfx.addEvent(button, 'mousedown', function(e) {
+            // Set the subSection to visible and hide rest of the sub sections.
+            self.toggleSubSection(subSectionid);
 
-                    self._updateSubSectionArrowPos();
+            dfx.preventDefault(e);
+        });
 
-                } else {
-                    dfx.removeClass(self._toolbar, 'subSectionVisible');
-                    dfx.removeClass(button, 'selected');
+    },
+
+    toggleSubSection: function(subSectionid)
+    {
+        var subSection = this._subSections[subSectionid];
+        if (!subSection) {
+            return false;
+        }
+
+        if (this._activeSection) {
+            var prevSubSection = this._subSections[this._activeSection];
+            if (prevSubSection) {
+                dfx.removeClass(prevSubSection, 'active');
+                dfx.removeClass(this.viper.ViperTools.getItem(this._subSectionButtons[this._activeSection]).element, 'selected');
+
+                if (this._activeSection === subSectionid) {
+                    dfx.removeClass(this._toolbar, 'subSectionVisible');
+                    this._activeSection = null;
+                    return;
                 }
-
-                if (originalAction) {
-                    originalAction.call(this, subSectionState);
-                }
-            };
-
-            if (showSubSection === true) {
-                dfx.addClass(this._toolbar, 'subSectionVisible');
             }
-        } else if (clickAction) {
-            var originalAction = clickAction;
-            clickAction = function() {
-                self._activeSubSectionButton = null;
-                self._lineageClicked = false;
-                return originalAction.call(this);
-            };
         }
 
-        button = this.viper.ViperTools.createButton(content, isActive, titleAttr, disabled, customClass, clickAction, groupElement, subSection, showSubSection);
+        var subSectionButton = this.viper.ViperTools.getItem(this._subSectionButtons[subSectionid]).element;
+        // Make the button selected.
+        dfx.addClass(subSectionButton, 'selected');
 
-        if (!groupElement) {
-            this._toolsContainer.appendChild(button);
-        }
-
-        if (showSubSection === true && subSection) {
-            this._activeSubSectionButton = button;
-        }
-
-        return button;
+        dfx.addClass(subSection, 'active');
+        dfx.addClass(this._toolbar, 'subSectionVisible');
+        this._activeSection = subSectionid;
 
     },
 
     /**
-     * Creates a textbox.
+     * Adds the specified button or button group element to the tools panel.
      *
-     * @param {DOMNode}  node       Element to select.
-     * @param {string}   value      The initial value of the textbox.
-     * @param {string}   label      The label of the textbox.
-     * @param {function} action     The function to call when the textbox value is updated.
-     * @param {boolean}  required   True if this field is required.
-     * @param {boolean}  expandable If true then the textbox will expand when focused.
+     * @param {DOMNode} button The button or the button group element.
      *
-     * @return {DOMNode} If label specified the label element else the textbox element.
+     * @return void
      */
-    createTextbox: function(node, value, label, action, required, expandable)
+    addButton: function(button)
     {
-        var textBox = document.createElement('input');
-        dfx.addClass(textBox, 'ViperITP-input');
-        textBox.type  = 'text';
-        textBox.size  = 10;
-        textBox.value = value;
-
-        var self  = this;
-
-        var t = null;
-        dfx.addEvent(textBox, 'focus', function(e) {
-            self.viper.highlightSelection();
-            dfx.addClass(labelElem, 'active');
-        });
-
-        dfx.addEvent(textBox, 'blur', function(e) {
-            dfx.removeClass(labelElem, 'active');
-            clearTimeout(t);
-        });
-
-        dfx.addEvent(textBox, 'keyup', function(e) {
-            if (e.which === 13) {
-                self.viper.focus();
-                action.call(textBox, textBox.value);
-                return;
-            }
-
-            dfx.addClass(labelElem, 'active');
-
-            clearTimeout(t);
-            t = setTimeout(function() {
-                dfx.removeClass(labelElem, 'active');
-                self.viper.focus();
-                action.call(textBox, textBox.value);
-            }, 1500);
-        });
-
-        if (label) {
-            var labelElem = document.createElement('label');
-            dfx.addClass(labelElem, 'ViperITP-label');
-            var span = document.createElement('span');
-            dfx.addClass(span, 'ViperITP-labelText');
-            dfx.setHtml(span, label);
-
-            document.body.appendChild(span);
-            var width = dfx.getElementWidth(span);
-            dfx.setStyle(labelElem, 'padding-left', width + 'px');
-            labelElem.appendChild(span);
-            labelElem.appendChild(textBox);
-
-            if (required === true) {
-                dfx.addClass(labelElem, 'required');
-            }
-
-            if (expandable === true) {
-                dfx.addClass(labelElem, 'expandable');
-            }
-
-            return labelElem;
-        }
-
-        return textBox;
+        this._toolsContainer.appendChild(button);
 
     },
 
-    /**
-     * Creates a sub section element.
-     *
-     * @param {DOMElement} contentElement The content element.
-     * @param {boolean}    active         True if the subsection is active.
-     * @param {string}     customClass    Custom class to apply to the group.
-     *
-     * @return {DOMElement} The sub section element.
-     */
-    createSubSection: function(contentElement, active, customClass)
-    {
-        var subSection = this.viper.ViperTools.createSubSection(contentElement, active, customClass);
-        this._subSectionContainer.appendChild(subSection);
 
-        if (active === true) {
-            dfx.addClass(this._toolbar, 'subSectionVisible');
-        }
+ //   /**
+ //    * Creates a toolbar button.
+ //    *
+ //    * @param {string}     content        The content of the button.
+ //    * @param {string}     isActive       True if the button is active.
+ //    * @param {string}     titleAttr      The title attribute of the button.
+ //    * @param {boolean}    disabled       True if the button is disabled.
+ //    * @param {string}     customClass    Class to add to the button for extra styling.
+ //    * @param {function}   clickAction    The function to call when the button is clicked.
+ //    * @param {DOMElement} groupElement   The group element that was created by createButtonGroup.
+ //    * @param {DOMElement} subSection     The sub section element see createSubSection.
+ //    * @param {boolean}    showSubSection If true then sub section will be visible.
+ //    *                                    If another button later on also has this set to true
+ //    *                                    then that button's sub section visible.
+ //    *
+ //    * @return {DOMElement} The new button element.
+ //    */
+ //   createButton: function(id, content, isActive, titleAttr, disabled, customClass, subSection)
+ //   {
+ //       var button = null;
+ //       var self = this;
+ //       if (subSection) {
+ //           var originalAction = clickAction;
+ //           clickAction = function(subSectionState, buttonElement) {
+ //               self._activeSubSectionButton = null;
+ //
+ //               if (subSectionState === true) {
+ //                   if (button) {
+ //                       self._activeSubSectionButton = button;
+ //                   }
+ //
+ //                   dfx.addClass(self._toolbar, 'subSectionVisible');
+ //
+ //                   // Remove selected state from other buttons in the toolbar.
+ //                   var mainTools = subSection.parentNode.previousSibling;
+ //                   dfx.removeClass(dfx.getClass('selected', mainTools), 'selected');
+ //                   dfx.addClass(buttonElement, 'selected');
+ //
+ //                   self._updateSubSectionArrowPos();
+ //
+ //               } else {
+ //                   dfx.removeClass(self._toolbar, 'subSectionVisible');
+ //                   dfx.removeClass(button, 'selected');
+ //               }
+ //
+ //               if (originalAction) {
+ //                   originalAction.call(this, subSectionState);
+ //               }
+ //           };
+ //
+ //           if (showSubSection === true) {
+ //               dfx.addClass(this._toolbar, 'subSectionVisible');
+ //           }
+ //       } else if (clickAction) {
+ //           var originalAction = clickAction;
+ //           clickAction = function() {
+ //               self._activeSubSectionButton = null;
+ //               self._lineageClicked = false;
+ //               return originalAction.call(this);
+ //           };
+ //       }
+ //
+ //       button = this.viper.ViperTools.createButton(id, content, isActive, titleAttr, disabled, customClass, clickAction, groupElement, subSection, showSubSection);
+ //
+ //       if (!groupElement) {
+ //           this._toolsContainer.appendChild(button);
+ //       }
+ //
+ //       if (showSubSection === true && subSection) {
+ //           this._activeSubSectionButton = button;
+ //       }
+ //
+ //       return button;
+ //
+ //   },
 
-        return subSection;
+  //  /**
+  //   * Creates a textbox.
+  //   *
+  //   * @param {DOMNode}  node       Element to select.
+  //   * @param {string}   value      The initial value of the textbox.
+  //   * @param {string}   label      The label of the textbox.
+  //   * @param {function} action     The function to call when the textbox value is updated.
+  //   * @param {boolean}  required   True if this field is required.
+  //   * @param {boolean}  expandable If true then the textbox will expand when focused.
+  //   *
+  //   * @return {DOMNode} If label specified the label element else the textbox element.
+  //   */
+  //  createTextbox: function(node, value, label, action, required, expandable)
+  //  {
+  //      var textBox = document.createElement('input');
+  //      dfx.addClass(textBox, 'ViperITP-input');
+  //      textBox.type  = 'text';
+  //      textBox.size  = 10;
+  //      textBox.value = value;
+  //
+  //      var self  = this;
+  //
+  //      var t = null;
+  //      dfx.addEvent(textBox, 'focus', function(e) {
+  //          self.viper.highlightSelection();
+  //          dfx.addClass(labelElem, 'active');
+  //      });
+  //
+  //      dfx.addEvent(textBox, 'blur', function(e) {
+  //          dfx.removeClass(labelElem, 'active');
+  //          clearTimeout(t);
+  //      });
+  //
+  //      dfx.addEvent(textBox, 'keyup', function(e) {
+  //          if (e.which === 13) {
+  //              self.viper.focus();
+  //              action.call(textBox, textBox.value);
+  //              return;
+  //          }
+  //
+  //          dfx.addClass(labelElem, 'active');
+  //
+  //          clearTimeout(t);
+  //          t = setTimeout(function() {
+  //              dfx.removeClass(labelElem, 'active');
+  //              self.viper.focus();
+  //              action.call(textBox, textBox.value);
+  //          }, 1500);
+  //      });
+  //
+  //      if (label) {
+  //          var labelElem = document.createElement('label');
+  //          dfx.addClass(labelElem, 'ViperITP-label');
+  //          var span = document.createElement('span');
+  //          dfx.addClass(span, 'ViperITP-labelText');
+  //          dfx.setHtml(span, label);
+  //
+  //          document.body.appendChild(span);
+  //          var width = dfx.getElementWidth(span);
+  //          dfx.setStyle(labelElem, 'padding-left', width + 'px');
+  //          labelElem.appendChild(span);
+  //          labelElem.appendChild(textBox);
+  //
+  //          if (required === true) {
+  //              dfx.addClass(labelElem, 'required');
+  //          }
+  //
+  //          if (expandable === true) {
+  //              dfx.addClass(labelElem, 'expandable');
+  //          }
+  //
+  //          return labelElem;
+  //      }
+  //
+  //      return textBox;
+  //
+  //  },
 
-    },
+  //  /**
+  //   * Creates a sub section element.
+  //   *
+  //   * @param {DOMElement} contentElement The content element.
+  //   * @param {boolean}    active         True if the subsection is active.
+  //   * @param {string}     customClass    Custom class to apply to the group.
+  //   *
+  //   * @return {DOMElement} The sub section element.
+  //   */
+  //  createSubSection: function(contentElement, active, customClass)
+  //  {
+  //      var subSection = this.viper.ViperTools.createSubSection(contentElement, active, customClass);
+  //      this._subSectionContainer.appendChild(subSection);
+  //
+  //      if (active === true) {
+  //          dfx.addClass(this._toolbar, 'subSectionVisible');
+  //      }
+  //
+  //      return subSection;
+  //
+  //  },
 
     /**
      * Creates a new sub section row and returns the new DOMElement.
