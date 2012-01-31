@@ -1,8 +1,16 @@
+.subSectionRow.subjectRow,
+.subSectionRow.titleRow,
+.subSectionRow.newWindowRow {
+    display: none;
+}
+
 .emailLink .subSectionRow.subjectRow {
     display: block;
 }
 
-.subSectionRow.subjectRow,
-.emailLink .subSectionRow.titleRow {
-    display: none;
+.externalLink .subSectionRow.titleRow,
+.externalLink .subSectionRow.newWindowRow {
+    display: block;
 }
+
+

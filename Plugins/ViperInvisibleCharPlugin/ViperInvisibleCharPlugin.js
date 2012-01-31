@@ -114,19 +114,21 @@ ViperInvisibleCharPlugin.prototype = {
             return;
         }
 
-        var self = this;
+        var self  = this;
+        var tools = this.viper.ViperTools;
 
-        var btn = toolbar.createButton('SH', false, 'Toggle Hidden Characters', false, 'showHiddenChars', function() {
+        var btn = tools.createButton('ViperICP:toggle', 'SH', 'Toggle Hidden Characters', 'showHiddenChars', function() {
             if (self._showHiddenChars === false) {
                 self._showHiddenChars = true;
                 self.showHiddenChars();
-                toolbar.setButtonActive(btn);
+                tools.setButtonActive('ViperICP:toggle');
             } else {
                 self._showHiddenChars = false;
                 self.hideHiddenChars();
-                toolbar.setButtonInactive(btn);
+                tools.setButtonInactive('ViperICP:toggle');
             }
         });
+        toolbar.addButton(btn);
 
     },
 

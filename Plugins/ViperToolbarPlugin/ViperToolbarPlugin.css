@@ -33,3 +33,7 @@
     left: auto;
     right: 13px;
 }
+
+.ViperTP-subSections {
+    overflow: hidden;
+}

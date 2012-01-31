@@ -201,14 +201,14 @@ ViperImagePlugin.prototype = {
             }//end if
         };
 
-        var btnGroup = toolbar.createButtonGroup();
+        var tools    = this.viper.ViperTools;
 
         // Create Image button and popup.
         var createImageSubContent = document.createElement('div');
 
         // URL text box.
         var urlTextbox = null;
-        var url = toolbar.createTextbox('', 'URL', function(value) {
+        var url = tools.createTextbox('ViperImagePlugin:urlInput', 'URL', '', function(value) {
             setImageAttributes(value, (dfx.getTag('input', createImageSubContent)[1]).value);
         });
         createImageSubContent.appendChild(url);
@@ -229,45 +229,46 @@ ViperImagePlugin.prototype = {
         });
 
         // Alt text box.
-        var alt = toolbar.createTextbox('', 'Alt', function(value) {
+        var alt = tools.createTextbox('ViperImagePlugin:altInput', 'Alt', '', function(value) {
             setImageAttributes(urlTextbox.value, value);
         });
         createImageSubContent.appendChild(alt);
 
         var createImageSubSection = toolbar.createSubSection(createImageSubContent, true);
-        var imgTools = toolbar.createToolsPopup('Insert Image', null, [createImageSubSection], null, function() {
-        });
+        var imgTools = toolbar.createBubble('ViperImagePlugin:bubble', 'Insert Image', createImageSubSection);
 
         // Add the preview panel to the popup contents.
         createImageSubContent.appendChild(previewBox);
 
-        var urlBtn = toolbar.createButton('', false, 'Toggle Image Options', false, 'image', null, btnGroup, imgTools);
+        var toggleImagePlugin = tools.createButton('ViperImagePlugin:toggle', '', 'Toggle Image Options', 'image');
+        toolbar.addButton(toggleImagePlugin);
+        toolbar.setBubbleButton('ViperImagePlugin:bubble', 'ViperImagePlugin:toggle');
 
         // Update the buttons when the toolbar updates it self.
         this.viper.registerCallback('ViperToolbarPlugin:updateToolbar', 'ViperImagePlugin', function(data) {
             var range = data.range;
             image     = range.getNodeSelection();
             if (image && dfx.isTag(image, 'img') === true) {
-                toolbar.setButtonActive(urlBtn);
+                tools.setButtonActive('ViperImagePlugin:toggle');
 
-                (dfx.getTag('input', createImageSubContent)[0]).value = image.getAttribute('src');
-                (dfx.getTag('input', createImageSubContent)[1]).value = image.getAttribute('alt');
+               // (dfx.getTag('input', createImageSubContent)[0]).value = image.getAttribute('src');
+               // (dfx.getTag('input', createImageSubContent)[1]).value = image.getAttribute('alt');
 
                 // Update preview pane.
                 dfx.empty(previewBox);
                 setPreviewContent(image.cloneNode(true));
             } else {
                 if (image) {
-                    toolbar.disableButton(urlBtn);
+                    tools.disableButton('ViperImagePlugin:toggle');
                 } else {
-                    toolbar.enableButton(urlBtn);
+                    tools.enableButton('ViperImagePlugin:toggle');
                 }
 
-                toolbar.setButtonInactive(urlBtn);
-                toolbar.closePopup(imgTools);
+                tools.setButtonInactive('ViperImagePlugin:toggle');
+                toolbar.closeBubble('ViperImagePlugin:bubble');
 
-                (dfx.getTag('input', createImageSubContent)[0]).value = '';
-                (dfx.getTag('input', createImageSubContent)[1]).value = '';
+               // (dfx.getTag('input', createImageSubContent)[0]).value = '';
+                //(dfx.getTag('input', createImageSubContent)[1]).value = '';
 
                 // Update preview pane.
                 dfx.empty(previewBox);

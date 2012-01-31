@@ -106,6 +106,7 @@ ViperFormatPlugin.prototype = {
         }
 
         var self                = this;
+        var tools               = this.viper.ViperTools;
         var selectedNode        = data.lineage[data.current];
         var inlineToolbarPlugin = this.viper.ViperPluginManager.getPlugin('ViperInlineToolbarPlugin');
 
@@ -115,7 +116,8 @@ ViperFormatPlugin.prototype = {
             // Headings format section.
             var headingSubSectionContents = document.createElement('div');
 
-            var headingBtnGroup = inlineToolbarPlugin.createButtonGroup();
+            var headingBtnGroup = tools.createButtonGroup('VFP:vitp:hadingFormats');
+            headingSubSectionContents.appendChild(headingBtnGroup);
             for (var i = 1; i <= 6; i++) {
                 (function(headingCount) {
                     var active  = false;
@@ -128,14 +130,15 @@ ViperFormatPlugin.prototype = {
                         }
                     }
 
-                    var headingButton = inlineToolbarPlugin.createButton('H' + headingCount, active,  'Convert to Heading ' + headingCount, false, null, function() {
+                    var headingButton = tools.createButton('VFP:vitp:heading:h' + headingCount, 'H' + headingCount, 'Convert to Heading ' + headingCount, null, function() {
                         self.handleFormat(tagName);
-                    }, headingBtnGroup);
-                }) (i);
-                headingSubSectionContents.appendChild(headingBtnGroup);
-            }
+                    }, false, active);
+                    tools.addButtonToGroup('VFP:vitp:heading:h' + headingCount, 'VFP:vitp:hadingFormats');
 
-            headingsSubSection = inlineToolbarPlugin.createSubSection(headingSubSectionContents);
+                }) (i);
+            }//end for
+
+            headingsSubSection = inlineToolbarPlugin.makeSubSection('VFP:vitp:heading:subSection', headingSubSectionContents);
         }//end if
 
         var formatsSubSection = null;
@@ -162,24 +165,30 @@ ViperFormatPlugin.prototype = {
                         }
                     }
 
-                    var button = inlineToolbarPlugin.createButton(formatButtons[tagName], active,  'Convert to ' + formatButtons[tagName], false, null, function() {
+                    var button = tools.createButton('VFP:vitp:formatting:' + formatButtons[tagName], formatButtons[tagName], 'Convert to ' + formatButtons[tagName], null, function() {
                         self.handleFormat(tagName);
-                    });
+                    }, false, active);
                     formatsSubSectionContents.appendChild(button);
                 })
                 (tag);
             }
 
-            formatsSubSection = inlineToolbarPlugin.createSubSection(formatsSubSectionContents);
+            formatsSubSection = inlineToolbarPlugin.makeSubSection('VFP:vitp:formatting:subSection', formatsSubSectionContents);
         }//end if
 
-        var buttonGroup = inlineToolbarPlugin.createButtonGroup();
+        var buttonGroup = tools.createButtonGroup('VFP:vitp:formats:buttons');
+        inlineToolbarPlugin.addButton(buttonGroup);
+
         if (formatsSubSection) {
-            inlineToolbarPlugin.createButton('Aa', hasActiveFormat,  'Toggle Formats', false, 'formats', null, buttonGroup, formatsSubSection, hasActiveFormat);
+            tools.createButton('VFP:vitp:formats:toggleFormats', 'Aa', 'Toggle Formats', 'formats', null, false, hasActiveFormat);
+            tools.addButtonToGroup('VFP:vitp:formats:toggleFormats', 'VFP:vitp:formats:buttons');
+            inlineToolbarPlugin.setSubSectionButton('VFP:vitp:formats:toggleFormats', 'VFP:vitp:formatting:subSection');
         }
 
         if (headingsSubSection) {
-            inlineToolbarPlugin.createButton('Hh', hasActiveHeading,  'Toggle Headings', false, 'headings', null, buttonGroup, headingsSubSection, hasActiveHeading);
+            tools.createButton('VFP:vitp:formats:toggleHeadings', 'Hh', 'Toggle Headings', 'headings', null, false, hasActiveHeading);
+            tools.addButtonToGroup('VFP:vitp:formats:toggleHeadings', 'VFP:vitp:formats:buttons');
+            inlineToolbarPlugin.setSubSectionButton('VFP:vitp:formats:toggleHeadings', 'VFP:vitp:heading:subSection');
         }
 
         // Anchor and Class.
@@ -198,9 +207,11 @@ ViperFormatPlugin.prototype = {
                 active = true;
             }
 
-            var attrBtnGroup           = inlineToolbarPlugin.createButtonGroup();
+            var attrBtnGroup = tools.createButtonGroup('VFP:vitp:buttons');
+            inlineToolbarPlugin.addButton(attrBtnGroup);
+
             var anchorIDSubSectionCont = document.createElement('div');
-            var anchorIdSubSection     = inlineToolbarPlugin.createSubSection(anchorIDSubSectionCont);
+            var anchorIdSubSection     = inlineToolbarPlugin.makeSubSection('VFP:vitp:anchor:subSection', anchorIDSubSectionCont);
 
             var id = '';
             var anchorBtnActive = false;
@@ -211,13 +222,15 @@ ViperFormatPlugin.prototype = {
                 }
             }
 
-            inlineToolbarPlugin.createButton('', anchorBtnActive, 'Anchor name (ID)', false, 'anchorID', function(subSectionState) {
+            tools.createButton('VFP:vitp:anchor:toggle', '', 'Anchor name (ID)', 'anchorID', function(subSectionState) {
                 if (subSectionState === true) {
                     self._inlineToolbarActiveSubSection = 'anchor';
                 }
-            }, attrBtnGroup, anchorIdSubSection, active);
+            }, false, anchorBtnActive);
+            tools.addButtonToGroup('VFP:vitp:anchor:toggle', 'VFP:vitp:buttons');
+            inlineToolbarPlugin.setSubSectionButton('VFP:vitp:anchor:toggle', 'VFP:vitp:anchor:subSection');
 
-            var idTextBox = inlineToolbarPlugin.createTextbox(selectedNode, id, 'ID', function(value) {
+            var idTextBox = tools.createTextbox('VFP:vitp:anchor:input', 'ID', id, function(value) {
                 if (selectedNode.nodeType === dfx.ELEMENT_NODE) {
                     // Set the attribute of this node.
                     selectedNode.setAttribute('id', value);
@@ -284,6 +297,7 @@ ViperFormatPlugin.prototype = {
                 idTextBox.focus();
             }
 
+
             // Class.
             var active = false;
             if (this._inlineToolbarActiveSubSection === 'class') {
@@ -291,7 +305,7 @@ ViperFormatPlugin.prototype = {
             }
 
             var classSubSectionCont = document.createElement('div');
-            var classSubSection = inlineToolbarPlugin.createSubSection(classSubSectionCont);
+            var classSubSection = inlineToolbarPlugin.makeSubSection('VFP:vitp:class:subSection', classSubSectionCont);
 
             var className = '';
             var classBtnActive = false;
@@ -302,13 +316,15 @@ ViperFormatPlugin.prototype = {
                 }
             }
 
-            inlineToolbarPlugin.createButton('', classBtnActive, 'Class name', false, 'cssClass', function(subSectionState) {
+            tools.createButton('VFP:vitp:class:toggle', '', 'Class name', 'cssClass', function(subSectionState) {
                 if (subSectionState === true) {
                     self._inlineToolbarActiveSubSection = 'class';
                 }
-            }, attrBtnGroup, classSubSection, active);
+            }, false, classBtnActive);
+            tools.addButtonToGroup('VFP:vitp:class:toggle', 'VFP:vitp:buttons');
+            inlineToolbarPlugin.setSubSectionButton('VFP:vitp:class:toggle', 'VFP:vitp:class:subSection');
 
-            var classTextBox = inlineToolbarPlugin.createTextbox(selectedNode, className, 'Class', function(value) {
+            var classTextBox = tools.createTextbox('VFP:vitp:class:input', 'Class', className, function(value) {
                 if (selectedNode.nodeType === dfx.ELEMENT_NODE) {
                     // Set the attribute of this node.
                     selectedNode.setAttribute('class', value);
@@ -382,9 +398,9 @@ ViperFormatPlugin.prototype = {
 
     _createToolbarContent: function()
     {
-        var toolbar  = this.toolbarPlugin;
-        var btnGroup = toolbar.createButtonGroup();
-        var self     = this;
+        var tools   = this.viper.ViperTools;
+        var toolbar = this.toolbarPlugin;
+        var self    = this;
 
         var _updateValue = function(textBox, attr) {
             var range   = self.viper.getViperRange();
@@ -400,56 +416,64 @@ ViperFormatPlugin.prototype = {
 
         // Anchor.
         var anchorSubContent = document.createElement('div');
-        var idTextbox = toolbar.createTextbox('', 'ID', function(value) {
+        var idTextbox = tools.createTextbox('VFP:vtp:anchor:input', 'ID', '', function(value) {
             // Apply the ID to the selection.
             self._setAttributeForSelection('id', value);
         });
         anchorSubContent.appendChild(idTextbox);
 
         var anchorSubSection = toolbar.createSubSection(anchorSubContent, true);
-        var anchorTools   = toolbar.createToolsPopup('Anchor ID', null, [anchorSubSection], null, function() {
+        var anchorBubble     = toolbar.createBubble('VFP:vtp:anchor:bubble', 'Anchor ID', anchorSubSection, function() {
             _updateValue(dfx.getTag('input', idTextbox)[0], 'id');
         });
 
-        var idButton = toolbar.createButton('', false, 'Anchor ID', false, 'anchorID', null, btnGroup, anchorTools);
+        var btnGroup = tools.createButtonGroup('VFP:vtp:buttons');
+
+        tools.createButton('VFP:vtp:anchor:insertBtn', '', 'Anchor ID', 'anchorID');
+        tools.addButtonToGroup('VFP:vtp:anchor:insertBtn', 'VFP:vtp:buttons');
+        toolbar.setBubbleButton('VFP:vtp:anchor:bubble', 'VFP:vtp:anchor:insertBtn');
 
         // Class.
         var classSubContent = document.createElement('div');
-        var classTextbox = toolbar.createTextbox('', 'Class', function(value) {
+        var classTextbox = tools.createTextbox('VFP:vtp:class:input', 'Class', '', function(value) {
             self._setAttributeForSelection('class', value);
         });
         classSubContent.appendChild(classTextbox);
 
         var classSubSection = toolbar.createSubSection(classSubContent, true);
-        var classTools   = toolbar.createToolsPopup('Class', null, [classSubSection], null, function() {
+        var classBubble     = toolbar.createBubble('VFP:vtp:class:bubble', 'Class', classSubSection, function() {
             _updateValue(dfx.getTag('input', classTextbox)[0], 'class');
         });
 
-        var classButton = toolbar.createButton('', false, 'CSS Class', false, 'cssClass', null, btnGroup, classTools);
+        tools.createButton('VFP:vtp:class:insertBtn', '', 'CSS Class', 'cssClass');
+        tools.addButtonToGroup('VFP:vtp:class:insertBtn', 'VFP:vtp:buttons');
+        toolbar.setBubbleButton('VFP:vtp:class:bubble', 'VFP:vtp:class:insertBtn');
+        toolbar.addButton(btnGroup);
+
 
         this.viper.registerCallback('ViperToolbarPlugin:updateToolbar', 'ViperFormatPlugin', function(data) {
             if (data.range.collapsed === true
                 || data.range.startContainer.parentNode !== data.range.endContainer.parentNode
             ) {
-                toolbar.disableButton(idButton);
-                toolbar.disableButton(classButton);
-                toolbar.closePopup(classTools);
-                toolbar.closePopup(anchorTools);
+                tools.disableButton('VFP:vtp:anchor:insertBtn');
+                tools.disableButton('VFP:vtp:class:insertBtn');
+                toolbar.closeBubble('VFP:vtp:class:bubble');
+                toolbar.closeBubble('VFP:vtp:anchor:bubble');
             } else {
-                toolbar.enableButton(idButton);
-                toolbar.enableButton(classButton);
+                tools.enableButton('VFP:vtp:anchor:insertBtn');
+                tools.enableButton('VFP:vtp:class:insertBtn');
             }
 
             if (_updateValue(dfx.getTag('input', idTextbox)[0], 'id')) {
-                toolbar.setButtonActive(idButton);
+                tools.setButtonActive('VFP:vtp:anchor:insertBtn');
             } else {
-                toolbar.setButtonInactive(idButton);
+                tools.setButtonInactive('VFP:vtp:anchor:insertBtn');
             }
 
             if (_updateValue(dfx.getTag('input', classTextbox)[0], 'class')) {
-                toolbar.setButtonActive(classButton);
+                tools.setButtonActive('VFP:vtp:class:insertBtn');
             } else {
-                toolbar.setButtonInactive(classButton);
+                tools.setButtonInactive('VFP:vtp:class:insertBtn');
             }
         });
 

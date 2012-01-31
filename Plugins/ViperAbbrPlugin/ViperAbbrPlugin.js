@@ -133,13 +133,13 @@ ViperAbbrPlugin.prototype = {
 
         var abbr     = null;
         var self     = this;
-        var btnGroup = toolbar.createButtonGroup();
+        var tools    = this.viper.ViperTools;
 
         // Create Abbr button and popup.
         var createAbbrSubContent = document.createElement('div');
 
         // Title text box.
-        var title = toolbar.createTextbox('', 'Abbr', function(value) {
+        var title = tools.createTextbox('ViperAbbrPlugin:abbr', 'Abbr', '', function(value) {
             if (!abbr) {
                 abbr = self.rangeToAbbr(value);
             } else {
@@ -149,22 +149,22 @@ ViperAbbrPlugin.prototype = {
         createAbbrSubContent.appendChild(title);
 
         var createAbbrSubSection = toolbar.createSubSection(createAbbrSubContent, true);
-        var abbrTools = toolbar.createToolsPopup('Insert Abbr', null, [createAbbrSubSection], null, function() {
-            if (abbr) {
-                var range = self.viper.getViperRange();
-                range.selectNode(abbr);
-                ViperSelection.addRange(range);
-            }
-        });
+        var abbrTools = toolbar.createBubble('ViperAbbrPlugin:bubble', 'Insert Abbr', createAbbrSubSection);
 
-        var urlBtn = toolbar.createButton('', false, 'Toggle Abbr Options', false, 'abbr', null, btnGroup, abbrTools);
+        tools.createButton('ViperAbbrPlugin:toggle', 'Abr', 'Toggle Abbr Options', 'abbr');
+        toolbar.setBubbleButton('ViperAbbrPlugin:bubble', 'ViperAbbrPlugin:toggle');
 
         // Remove Abbr.
-        var removeAbbrBtn = toolbar.createButton('', false, 'Remove Abbr', false, 'abbrRemove', function() {
+        var removeAbbrBtn = tools.createButton('ViperAbbrPlugin:remove', 'RAbr', 'Remove Abbr', 'abbrRemove', function() {
             if (abbr) {
                 self.removeAbbr(abbr);
             }
-        }, btnGroup);
+        });
+
+        var btnGroup = tools.createButtonGroup('ViperAbbrPlugin:buttons');
+        tools.addButtonToGroup('ViperAbbrPlugin:toggle', 'ViperAbbrPlugin:buttons');
+        tools.addButtonToGroup('ViperAbbrPlugin:remove', 'ViperAbbrPlugin:buttons');
+        toolbar.addButton(btnGroup);
 
         // Update the buttons when the toolbar updates it self.
         this.viper.registerCallback('ViperToolbarPlugin:updateToolbar', 'ViperAbbrPlugin', function(data) {
@@ -172,29 +172,29 @@ ViperAbbrPlugin.prototype = {
             abbr      = self.getAbbrFromRange(range);
 
             if (abbr) {
-                toolbar.setButtonActive(urlBtn);
-                toolbar.enableButton(removeAbbrBtn);
-                (dfx.getTag('input', createAbbrSubContent)[0]).value = abbr.getAttribute('title');
+                tools.setButtonActive('ViperAbbrPlugin:toggle');
+                tools.enableButton('ViperAbbrPlugin:remove');
+                //(dfx.getTag('input', createAbbrSubContent)[0]).value = abbr.getAttribute('title');
             } else {
                 var startNode = data.range.getStartNode();
                 var endNode   = data.range.getEndNode();
-                toolbar.setButtonInactive(urlBtn);
+                tools.setButtonInactive('ViperAbbrPlugin:toggle');
 
                 if (range.collapsed === true
                     || startNode
                     && endNode
                     && startNode.parentNode !== endNode.parentNode
                 ) {
-                    toolbar.disableButton(urlBtn);
-                    toolbar.closePopup(abbrTools);
+                    tools.disableButton('ViperAbbrPlugin:toggle');
+                    toolbar.closeBubble('ViperAbbrPlugin:bubble');
                 } else {
-                    toolbar.enableButton(urlBtn);
+                    tools.enableButton('ViperAbbrPlugin:toggle');
                 }
 
-                toolbar.disableButton(removeAbbrBtn);
+                tools.disableButton('ViperAbbrPlugin:remove');
 
-                (dfx.getTag('input', createAbbrSubContent)[0]).value = '';
-                (dfx.getTag('input', createAbbrSubContent)[0]).value = '';
+                //(dfx.getTag('input', createAbbrSubContent)[0]).value = '';
+                //(dfx.getTag('input', createAbbrSubContent)[0]).value = '';
             }//end if
         });
 

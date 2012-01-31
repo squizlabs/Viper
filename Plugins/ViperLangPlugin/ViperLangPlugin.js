@@ -90,54 +90,51 @@ ViperLangPlugin.prototype = {
             return;
         }
 
-        var lang     = null;
-        var self     = this;
-        var btnGroup = toolbar.createButtonGroup();
+        var lang  = null;
+        var self  = this;
+        var tools = this.viper.ViperTools;
 
         // Create Language button and popup.
         var createLanguageSubContent = document.createElement('div');
 
         // URL text box.
-        var langTextbox = toolbar.createTextbox('', 'Language', function(value) {
+        var langTextbox = tools.createTextbox('ViperLangPlugin:lang', 'Language', '', function(value) {
             self.rangeToLang(value);
         });
         createLanguageSubContent.appendChild(langTextbox);
 
         var createLanguageSubSection = toolbar.createSubSection(createLanguageSubContent, true);
-        var langTools = toolbar.createToolsPopup('Language', null, [createLanguageSubSection], null, function() {
-            if (lang) {
-                var range = self.viper.getViperRange();
-                range.selectNode(lang);
-                ViperSelection.addRange(range);
-            }
-        });
+        toolbar.createBubble('ViperLangPlugin:bubble', 'Language', createLanguageSubSection);
 
-        var langBtn = toolbar.createButton('', false, 'Toggle Language Options', false, 'lang', null, btnGroup, langTools);
-
-        // Remove Language.
-        var removeLanguageBtn = toolbar.createButton('', false, 'Remove Language', false, 'langRemove', function() {
+        tools.createButton('ViperLangPlugin:toggle', 'Lang', 'Toggle Language Options', 'lang');
+        tools.createButton('ViperLangPlugin:remove', 'RLang', 'Remove Language', 'langRemove', function() {
             if (lang) {
                 self.removeLanguage(lang);
             }
-        }, btnGroup);
+        });
+        var btnGroup = tools.createButtonGroup('ViperLangPlugin:buttons');
+        tools.addButtonToGroup('ViperLangPlugin:toggle', 'ViperLangPlugin:buttons');
+        tools.addButtonToGroup('ViperLangPlugin:remove', 'ViperLangPlugin:buttons');
+        toolbar.addButton(btnGroup);
+        toolbar.setBubbleButton('ViperLangPlugin:bubble', 'ViperLangPlugin:toggle');
 
         // Update the buttons when the toolbar updates it self.
         this.viper.registerCallback('ViperToolbarPlugin:updateToolbar', 'ViperLangPlugin', function(data) {
             lang = self.getLangElemFromRange();
 
             if (lang) {
-                toolbar.setButtonActive(langBtn);
-                toolbar.enableButton(removeLanguageBtn);
+                tools.setButtonActive('ViperLangPlugin:toggle');
+                tools.enableButton('ViperLangPlugin:remove');
 
-                (dfx.getTag('input', createLanguageSubContent)[0]).value = lang.getAttribute('lang');
+                //(dfx.getTag('input', createLanguageSubContent)[0]).value = lang.getAttribute('lang');
             } else {
                 var startNode = data.range.getStartNode();
                 var endNode   = data.range.getEndNode();
-                toolbar.setButtonInactive(langBtn);
+                tools.setButtonInactive('ViperLangPlugin:toggle');
 
-                toolbar.disableButton(removeLanguageBtn);
+                tools.disableButton('ViperLangPlugin:remove');
 
-                (dfx.getTag('input', createLanguageSubContent)[0]).value = '';
+                //(dfx.getTag('input', createLanguageSubContent)[0]).value = '';
             }//end if
         });
 

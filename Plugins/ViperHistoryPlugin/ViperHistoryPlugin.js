@@ -41,15 +41,24 @@ ViperHistoryPlugin.prototype = {
         if (toolbarPlugin) {
             var self            = this;
             this._toolbarPlugin = toolbarPlugin;
-            var toolbarButtons  = {};
+            var tools = this.viper.ViperTools;
 
-            var btnGroup = toolbarPlugin.createButtonGroup();
-            toolbarButtons.undo = toolbarPlugin.createButton('', false, 'Undo', false, 'historyUndo', function() {
+            var toolbarButtons = {
+                undo: 'ViperHistoryPlugin:undo',
+                redo: 'ViperHistoryPlugin:redo'
+            };
+
+            var btnGroup = tools.createButtonGroup('ViperHistoryPlugin:buttons');
+            tools.createButton('ViperHistoryPlugin:undo', '', 'Undo', 'historyUndo', function() {
                 return self.handleUndo();
-            }, btnGroup);
-            toolbarButtons.redo = toolbarPlugin.createButton('', false, 'Redo', false, 'historyRedo', function() {
+            });
+            tools.createButton('ViperHistoryPlugin:redo', '', 'Redo', 'historyRedo', function() {
                 return self.handleRedo();
-            }, btnGroup);
+            });
+            tools.addButtonToGroup('ViperHistoryPlugin:undo', 'ViperHistoryPlugin:buttons');
+            tools.addButtonToGroup('ViperHistoryPlugin:redo', 'ViperHistoryPlugin:buttons');
+            toolbarPlugin.addButton(btnGroup);
+
             this.viper.registerCallback('ViperToolbarPlugin:updateToolbar', 'ViperHistoryPlugin', function(data) {
                 self._updateToolbarButtonStates(toolbarButtons);
             });
@@ -85,16 +94,17 @@ ViperHistoryPlugin.prototype = {
             return;
         }
 
+        var tools = this.viper.ViperTools;
         if (this.viper.ViperHistoryManager.getUndoCount() > 1) {
-            this._toolbarPlugin.enableButton(toolbarButtons.undo);
+            tools.enableButton(toolbarButtons.undo);
         } else {
-            this._toolbarPlugin.disableButton(toolbarButtons.undo);
+            tools.disableButton(toolbarButtons.undo);
         }
 
         if (this.viper.ViperHistoryManager.getRedoCount() > 0) {
-            this._toolbarPlugin.enableButton(toolbarButtons.redo);
+            tools.enableButton(toolbarButtons.redo);
         } else {
-            this._toolbarPlugin.disableButton(toolbarButtons.redo);
+            tools.disableButton(toolbarButtons.redo);
         }
 
     }

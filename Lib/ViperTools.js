@@ -2,6 +2,8 @@ function ViperTools(viper)
 {
     this.viper = viper;
 
+    this._items = {};
+
     var self = this;
     this.viper.registerCallback('Viper:mouseUp', 'ViperTools', function(e) {
         if (self._preventMouseUp === true) {
@@ -14,10 +16,41 @@ function ViperTools(viper)
 
 ViperTools.prototype = {
 
+    addItem: function(id, item)
+    {
+        this._items[id] = item;
+
+    },
+
+    getItem: function(id)
+    {
+        return this._items[id];
+
+    },
+
+
     /**
      * If true then the next mouse up event will not fire.
      */
     _preventMouseUp: false,
+
+    createRow: function(id, customClass)
+    {
+        var elem = document.createElement('div');
+        dfx.addClass(elem, 'subSectionRow');
+
+        if (customClass) {
+            dfx.addClass(elem, customClass);
+        }
+
+        this.addItem(id, {
+            type: 'row',
+            element: elem
+        });
+
+        return elem;
+
+    },
 
     /**
      * Creates a button group.
@@ -26,7 +59,7 @@ ViperTools.prototype = {
      *
      * @return {DOMElement} The button group element.
      */
-    createButtonGroup: function(customClass)
+    createButtonGroup: function(id, customClass)
     {
         var group = document.createElement('div');
         dfx.addClass(group, 'Viper-buttonGroup');
@@ -35,9 +68,16 @@ ViperTools.prototype = {
             dfx.addClass(group, customClass);
         }
 
+        this.addItem(id, {
+            type: 'buttonGroup',
+            element: group,
+            buttons: []
+        });
+
         return group;
 
     },
+
 
     /**
      * Creates a toolbar button.
@@ -59,7 +99,7 @@ ViperTools.prototype = {
      *
      * @return {DOMElement} The new button element.
      */
-    createButton: function(content, isActive, titleAttr, disabled, customClass, clickAction, groupElement, subSection, showSubSection)
+    createButton: function(id, content, titleAttr, customClass, clickAction, disabled, isActive)
     {
         if (!content) {
             if (customClass) {
@@ -95,25 +135,7 @@ ViperTools.prototype = {
 
         var preventMouseUp = false;
         var self           = this;
-        if (subSection) {
-            dfx.addClass(button, 'toggleSubSectionButton');
-
-            // Show/hide subsection if there is one..
-            dfx.addEvent(button, 'mousedown.Viper', function(e) {
-                self._preventMouseUp = true;
-                dfx.preventDefault(e);
-                if (dfx.hasClass(button, 'disabled') === true) {
-                    return false;
-                }
-
-                var state = self.viper.ViperTools.toggleSubSection(subSection);
-                if (clickAction) {
-                    clickAction.call(this, state, button);
-                }
-
-                return false;
-            });
-        } else if (clickAction) {
+        if (clickAction) {
             dfx.addEvent(button, 'mousedown.Viper', function(e) {
                 self._preventMouseUp = true;
                 dfx.preventDefault(e);
@@ -134,18 +156,51 @@ ViperTools.prototype = {
             dfx.addClass(button, 'active');
         }
 
-        if (subSection && showSubSection === true) {
-            if (clickAction) {
-                clickAction.call(this, this.viper.ViperTools.toggleSubSection(subSection), button);
-            }
-        }
-
-        if (groupElement) {
-            // Add this button to the group.
-            groupElement.appendChild(button);
-        }
+        this.addItem(id, {
+            type: 'button',
+            element: button
+        });
 
         return button;
+
+    },
+
+    addButtonToGroup: function(buttonid, groupid)
+    {
+        var button = this.getItem(buttonid);
+        var group  = this.getItem(groupid);
+        if (!button || !group || button.type !== 'button' || group.type !== 'buttonGroup') {
+            throw new Error('Invalid argument for ViperTools.addButtonToGroup(\'' + buttonid + '\', \'' + groupid + '\')');
+            return;
+        }
+
+        group.element.appendChild(button.element);
+        group.buttons.push(buttonid);
+
+    },
+
+    setButtonInactive: function(buttonid)
+    {
+        dfx.removeClass(this.getItem(buttonid).element, 'active');
+
+    },
+
+    setButtonActive: function(buttonid)
+    {
+        dfx.addClass(this.getItem(buttonid).element, 'active');
+        dfx.removeClass(this.getItem(buttonid).element, 'disabled');
+
+    },
+
+    enableButton: function(buttonid)
+    {
+        dfx.removeClass(this.getItem(buttonid).element, 'disabled');
+
+    },
+
+    disableButton: function(buttonid)
+    {
+        dfx.addClass(this.getItem(buttonid).element, 'disabled');
 
     },
 
@@ -159,78 +214,213 @@ ViperTools.prototype = {
      *
      * @return {DOMNode} If label specified the label element else the textbox element.
      */
-    createTextbox: function(value, label, required, expandable)
+    createTextbox: function(id, label, value, action, required, expandable, desc, events)
     {
-        var textBox = document.createElement('input');
-        dfx.addClass(textBox, 'Viper-input');
-        textBox.type  = 'text';
-        textBox.size  = 10;
-        textBox.value = value;
+        label = label || '&nbsp;';
+        value = value || '';
 
-        var self  = this;
+        var textBox = document.createElement('div');
+        dfx.addClass(textBox, 'Viper-textbox');
 
-        var t = null;
-        dfx.addEvent(textBox, 'focus', function(e) {
-            dfx.addClass(labelElem, 'active');
-        });
+        var labelEl = document.createElement('label');
+        dfx.addClass(labelEl, 'Viper-textbox-label');
+        textBox.appendChild(labelEl);
 
-        dfx.addEvent(textBox, 'blur', function(e) {
-            dfx.removeClass(labelElem, 'active');
-            clearTimeout(t);
-        });
+        var main = document.createElement('div');
+        dfx.addClass(main, 'Viper-textbox-main');
+        labelEl.appendChild(main);
 
-        if (label) {
-            var labelElem = document.createElement('label');
-            dfx.addClass(labelElem, 'Viper-label');
-            var span = document.createElement('span');
-            dfx.addClass(span, 'Viper-labelText');
-            dfx.setHtml(span, label);
+        var title = document.createElement('span');
+        dfx.addClass(title, 'Viper-textbox-title');
+        dfx.setHtml(title, label);
+        document.body.appendChild(title);
+        var width = dfx.getElementWidth(title);
+        width     += 10;
+        main.appendChild(title);
 
-            document.body.appendChild(span);
-            var width = dfx.getElementWidth(span);
-            dfx.setStyle(labelElem, 'padding-left', width + 'px');
-            labelElem.appendChild(span);
-            labelElem.appendChild(textBox);
+        var input   = document.createElement('input');
+        input.type  = 'text';
+        input.value = value;
+        dfx.addClass(input, 'Viper-textbox-input');
+        dfx.setStyle(input, 'padding-left', width + 'px');
+        main.appendChild(input);
 
-            if (required === true) {
-                dfx.addClass(labelElem, 'required');
-            }
-
-            if (expandable === true) {
-                dfx.addClass(labelElem, 'expandable');
-            }
-
-            return labelElem;
+        if (desc) {
+            // Description.
+            var desc = document.createElement('span');
+            dfx.addClass(desc, 'Viper-textbox-desc');
+            dfx.setHtml(desc, desc);
+            textBox.appendChild(desc);
         }
 
+        var self = this;
+        dfx.addEvent(input, 'focus', function() {
+            self.viper.highlightSelection();
+        });
+
+        var _addActionButton = function() {
+            var actionIcon = document.createElement('span');
+            dfx.addClass(actionIcon, 'Viper-textbox-action revert');
+            main.appendChild(actionIcon);
+            dfx.addEvent(actionIcon, 'click', function() {
+                if (dfx.hasClass(textBox, 'actionRevert') === true) {
+                    input.value = value;
+                    dfx.removeClass(textBox, 'actionRevert');
+                    dfx.addClass(textBox, 'actionClear');
+                } else if (dfx.hasClass(textBox, 'actionClear') === true) {
+                    input.value = '';
+                    dfx.removeClass(textBox, 'actionClear');
+                }
+            });
+
+            return actionIcon;
+        };
+
+        if (value !== '') {
+            var actionIcon = _addActionButton();
+            actionIcon.setAttribute('title', 'Clear this value');
+            dfx.addClass(textBox, 'actionClear');
+        }
+
+        dfx.addEvent(input, 'keyup', function(e) {
+            var actionIcon = dfx.getClass('Viper-textbox-action', main);
+            if (actionIcon.length === 0) {
+                actionIcon = _addActionButton();
+            } else {
+                actionIcon = actionIcon[0];
+            }
+
+            dfx.removeClass(textBox, 'actionClear');
+            dfx.removeClass(textBox, 'actionRevert');
+
+            if (input.value !== value && value !== '') {
+                // Show the revert icon.
+                actionIcon.setAttribute('title', 'Revert to original value');
+                dfx.addClass(textBox, 'actionRevert');
+            } else if (input.value !== '') {
+                actionIcon.setAttribute('title', 'Clear this value');
+                dfx.addClass(textBox, 'actionClear');
+            } else {
+                dfx.remove(actionIcon);
+            }
+
+            // Action.
+            if (action && e.which === 13) {
+                self.viper.focus();
+                action.call(input, input.value);
+            }
+        });
+
+        if (events) {
+            for (var eventType in events) {
+                dfx.addEvent(input, eventType, events[eventType]);
+            }
+        }
+
+        this.addItem(id, {
+            type: 'textbox',
+            element: textBox,
+            input: input,
+            getValue: function() {
+                return input.value;
+            }
+        });
+
         return textBox;
+
+    },
+
+    setFieldEvent: function(itemid, eventType, event)
+    {
+        var item = this.getItem(itemid);
+        if (!item || !item.input) {
+            return;
+        }
+
+        dfx.addEvent(item.input, eventType, event);
+
+    },
+
+    /**
+     * Sets the list of errors of the specified item.
+     *
+     * If no errors specified then all exisiting errors will be cleared.
+     *
+     * @param {string} itemid The item id.
+     * @param {array}  errors List of errors.
+     */
+    setFieldErrors: function(itemid, errors)
+    {
+        var item = this.getItem(itemid);
+        if (!item || !item.input) {
+            return;
+        }
+
+        errors = errors || [];
+
+        var errorCount = errors.length;
+
+        // TODO: How can we make this class generic or get type of item, maybe?
+        var msgsElement = dfx.getClass(item, 'Viper-textbox-messages');
+        if (msgsElement.length === 0) {
+            if (errorCount === 0) {
+                return;
+            }
+
+            msgsElement = document.createElement('div');
+            dfx.addClass(msgsElement, 'Viper-textbox-messages');
+        } else {
+            msgsElement = msgsElement[0];
+            if (errorCount === 0) {
+                dfx.remove(msgsElement);
+                return;
+            }
+
+            dfx.empty(msgsElement);
+        }
+
+        var content = '';
+        for (var i = 0; i < c; i++) {
+            content += '<span class="Viper-textbox-error">' + errors[i] + '</span>';
+        }
+
+        dfx.setHtml(msgsElement, content);
 
     },
 
     /**
      * Creates a checkbox.
      *
+     * @param {string}  id      The id of the item.
      * @param {string}  label   The label for the checkbox.
      * @param {boolean} checked True if checked by default.
      *
      * @return {DOMElement} The checkbox element.
      */
-    createCheckbox: function(label, checked)
+    createCheckbox: function(id, label, checked)
     {
         var labelElem = document.createElement('label');
-        dfx.addClass(labelElem, 'Viper-checkbox-label');
+        dfx.addClass(labelElem, 'Viper-checkbox');
 
         var checkbox  = document.createElement('input');
         checkbox.type = 'checkbox';
-        dfx.addClass(checkbox, 'Viper-checkbox');
         checkbox.checked = checked || false;
 
         var span = document.createElement('span');
-        dfx.addClass(span, 'Viper-checkbox-text');
+        dfx.addClass(span, 'Viper-checkbox-title');
         dfx.setHtml(span, label);
 
-        labelElem.appendChild(checkbox);
         labelElem.appendChild(span);
+        labelElem.appendChild(checkbox);
+
+        this.addItem(id, {
+            type: 'checkbox',
+            element: labelElem,
+            input: checkbox,
+            getValue: function() {
+                return checkbox.checked;
+            }
+        });
 
         return labelElem;
 
