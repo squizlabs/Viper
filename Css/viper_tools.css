@@ -412,6 +412,12 @@
 .Viper-button:active .buttonIcon.historyRedo, .Viper-button.active .buttonIcon.historyRedo, .Viper-button.selected .buttonIcon.historyRedo {
   background-position: -33px -1161px;
 }
+.buttonIcon.accessSettings {
+  background-position: 0 -1188px;
+}
+.Viper-button:active .buttonIcon.accessSettings, .Viper-button.active .buttonIcon.accessSettings, .Viper-button.selected .buttonIcon.accessSettings {
+  background-position: -33px -1188px;
+}
 .__viper_selHighlight {
   background-color: #CCC;
 }
