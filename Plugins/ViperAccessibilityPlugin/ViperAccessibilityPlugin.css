@@ -26,27 +26,55 @@
 }
 
 .ViperAP-listNav {
-    height: 30px;
-    line-height: 30px;
+    line-height: 2em;
     text-align: center;
     width: 320px;
+    font-size: 1.5em;
+    padding: 0.5em 0 0.6em;
 }
 
 .ViperAP-listNav-pageCounter {
+    display: inline-block;
     color: #EEE;
-    font-size: 12px;
+    font-size: 0.9em;
     font-weight: bold;
     text-shadow: none;
-    padding: 0 5px;
+    padding: 0 1em;
+    vertical-align: middle;
 }
 
-.ViperAP-listNav-prev {
-    background: url(Images/listNav_prev.png) 0 0 no-repeat;
-    padding: 7px 10px 7px 20px;
-}
+.ViperAP-listNav-prev,
 .ViperAP-listNav-next {
-    background: url(Images/listNav_next.png) 0 0 no-repeat;
-    padding: 7px 10px 7px 20px;
+    position: relative;
+    cursor: pointer;
+    display: inline-block;
+    width: 2.5em;
+    height: 2.2em;
+    background-color: #2b2b2b;
+    background-color: rgba(0,0,0,0.3);
+    border-radius: 0.3em;
+    box-shadow: 0 1px 0 rgba(255,255,255,0.3);
+}
+.ViperAP-listNav-prev:after,
+.ViperAP-listNav-next:after {
+    content: "";
+    position: absolute;
+    width: 11px;
+    height: 14px;
+    left: 50%;
+    top: 50%;
+    margin: -7px 0 0 -6px;
+    background: url(../../Images/viperToolsSprite.png) 0 -94px no-repeat;
+}
+.ViperAP-listNav-next:after {
+    background-position: 0 -108px;
+    margin-left: -5px;
+}
+.ViperAP-listNav-prev.disabled,
+.ViperAP-listNav-next.disabled {
+    opacity: 0.3;
+    filter: alpha(opacity=50);
+    cursor: default;
 }
 
 .ViperAP-issueList {
@@ -62,15 +90,12 @@
     border-bottom: 1px solid #000;
     border-top: 1px solid #4b4b4b;
     padding: 0.6em 2em 0.6em 2.2em;
-    font-size: 1.3em;
+    font-size: 1.38em;
     text-shadow: 0 -1px 0 #000;
     background-color: #2b2b2b;
-    height: 48px;
+    min-height: 4.2em;
 }
-.ViperAP-issueItem:last-child {
-    border-bottom-left-radius: 0.5em;
-    border-bottom-right-radius: 0.5em;
-}
+
 .ViperAP-issueItem:hover {
     cursor: pointer;
     background-color: #3b3b3b;
@@ -84,7 +109,7 @@
     right: 0.7em;
     top: 50%;
     margin-top: -7px;
-    background: transparent url(Images/issueImages.png) 0 -42px no-repeat;
+    background: transparent url(../../Images/viperToolsSprite.png) 0 -80px no-repeat;
 }
 .ViperAP-issueItem.complete {
     opacity: 0.4;
@@ -128,7 +153,6 @@
 }
 .ViperAP-issueTitle {
     display: block;
-    line-height: 1.5em;
     color: #FFF;
 }
 .ViperAP-issueTitle strong {
@@ -164,17 +188,17 @@
     height: 11px;
     margin-right: 0.5em;
     margin-bottom: -1px;
-    background: transparent url(Images/issueImages.png) 0 -67px no-repeat;
+    background: transparent url(Images/issueImages.png) 0 -53px no-repeat;
 }
 .ViperAP-issueNav a:after {
     content: "";
     position: absolute;
     width: 12px;
     height: 32px;
-    margin-top: -10px;
+    margin-top: -15px;
     top: 50%;
     right: 0;
-    background: transparent url(Images/issueImages.png) 0 -79px no-repeat;
+    background: transparent url(Images/issueImages.png) 0 -64px no-repeat;
 }
 .issueNav-divider {
     visibility: hidden;
@@ -201,7 +225,7 @@
     top: 0;
     width: 65px;
     height: 65px;
-    background: transparent url(Images/done.png); no-repeat;
+    background: transparent url(Images/issueImages.png) -20px -148px no-repeat;
 }
 
 .ViperAP-issuePane.issueDone .issueDoneDiv {
@@ -223,6 +247,7 @@
 .issueTitle {
     border-bottom: 1px solid #000;
     padding-bottom: 1em;
+    font-size: 1.1em;
 }
 .issueWcag {
     border-top: 1px solid #5b5b5b;
@@ -249,8 +274,8 @@
     display: inline-block;
     width: 12px;
     height: 11px;
-    margin: 0 0 -2px 0.5em;
-    background: transparent url(Images/issueImages.png) 0 -58px no-repeat;
+    margin: 0 0 0 0.5em;
+    background: transparent url(Images/issueImages.png) 0 -42px no-repeat;
 }
 .ViperAP-issueResolution {
     border-top: 1px solid #6c6c6d;
@@ -307,6 +332,7 @@
 .resultsCont.ViperAP-wrapper {
     overflow: hidden;
     width: 320px;
+    clear: both;
 }
 
 .ViperITP.subSectionVisible .ViperAP-toolsWrapper.ViperITP-tools {
@@ -336,6 +362,11 @@
     -webkit-transition: margin 0.2s ease-in;
 }
 
+.ViperAP-issueListInner {
+    background-color: #3f3e42;
+    border-bottom: 1px solid #6C6C6C;
+}
+
 .ViperAP-issuePane.instant {
     -moz-transition-duration: 0s;
     -webkit-transition-duration: 0s;
@@ -359,8 +390,16 @@
     color: #000000;
     font-size: 1.35em;
     padding-left: 0.3em;
-    line-height: 25px;
+    line-height: 2em;
     text-shadow: 0 1px 0 rgba(255, 255, 255, 0.3);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 240px;
+}
+
+.ViperAP-listTools-left strong {
+    font-size: 1.1em;
 }
 
 .ViperAP-listTools-right {
@@ -368,10 +407,11 @@
 }
 
 .ViperAP-divider {
-    border-left: 1px solid #555;
-    margin-left: 5px;
-    margin-right: 7px;
-    box-shadow: 1px 0 0 #AAA;
+    border-left: 1px solid #666666;
+    border-right: 1px solid #999999;
+    display: inline-block;
+    height: 26px;
+    margin: 0 0.7em -0.8em 0.5em;
 }
 
 .ViperAP-cont.settingsCont {
@@ -440,30 +480,30 @@
 
 /* Pointer */
 .ViperAP-pointer {
-    width: 70px;
-    height: 70px;
+    width: 44px;
+    height: 60px;
     position: absolute;
     top: 0px;
     left: 0px;
     z-index: 9999;
+    background: transparent url(Images/issueImages.png) -14px 0 no-repeat;
 }
 
 .ViperAP-pointer-hidden {
     visibility: hidden;
 }
 
-.ViperAP-pointer-down {
-    background: url(Images/pointer_down.png) no-repeat 50%;
-}
-
 .ViperAP-pointer-up {
-    background: url(Images/pointer_up.png) no-repeat 50%;
+    background-position: -14px -60px ;
 }
 
-.ViperAP-pointer-left {
-    background: url(Images/pointer_left.png) no-repeat 50%;
+.ViperAP-pointer-left,
+.ViperAP-pointer-right {
+    width: 60px;
+    height: 44px;
+    background-position: 0 -120px ;
 }
 
 .ViperAP-pointer-right {
-    background: url(Images/pointer_right.png) no-repeat 50%;
+    background-position: 0 -164px ;
 }
