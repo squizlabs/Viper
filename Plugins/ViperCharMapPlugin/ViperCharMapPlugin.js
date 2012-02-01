@@ -86,9 +86,7 @@ ViperCharMapPlugin.prototype = {
 
         var tools = this.viper.ViperTools;
 
-        var subSectionWrapper = toolbar.createSubSection(subContent, true, 'VCMP-main');
-
-        var map = toolbar.createBubble('ViperCMP:bubble', 'Insert Character', subSectionWrapper);
+        var map = toolbar.createBubble('ViperCMP:bubble', 'Insert Character', subContent, null, null, null, 'VCMP-main');
 
         var toggle = tools.createButton('ViperCMP:toggle', 'CharMap', 'Insert Character', 'charMap');
         toolbar.setBubbleButton('ViperCMP:bubble', 'ViperCMP:toggle');

@@ -113,7 +113,7 @@ ViperAccessibilityPlugin.prototype = {
 
         var toolsSection   = document.createElement('div');
         this._toolsSection = toolsSection;
-        dfx.addClass(toolsSection, 'ViperAP-toolsWrapper ViperITP-tools checkTools active');
+        dfx.addClass(toolsSection, 'ViperAP-toolsWrapper checkTools active');
 
         // Main panel showing All and rerun buttons.
         var mainPanel = document.createElement('div');
@@ -121,7 +121,7 @@ ViperAccessibilityPlugin.prototype = {
 
         // Create the Toolbar Bubble for the plugin interface. The bubble's main content
         // is the tools section.
-        var aaTools = toolbar.createBubble('VAP:bubble', 'Accessibility Auditor - ' + this._standard, toolsSection);
+        var aaTools = toolbar.createBubble('VAP:bubble', 'Accessibility Auditor - ' + this._standard, null, toolsSection);
         dfx.setStyle(aaTools.element, 'width', this._containerWidth + 'px');
         aaTools.id = this.viper.getId() + '-VAP';
         this._aaTools = aaTools;

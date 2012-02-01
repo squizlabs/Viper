@@ -90,8 +90,7 @@ ViperSearchReplacePlugin.prototype = {
         });
         searchReplaceSubContent.appendChild(replaceAllBtn);
 
-        var createLinkSubSection = toolbar.createSubSection(searchReplaceSubContent, true);
-        var searchTools = toolbar.createBubble('ViperSearchPlugin:bubble', 'Search & Replace', createLinkSubSection, function() {
+        var searchTools = toolbar.createBubble('ViperSearchPlugin:bubble', 'Search & Replace', searchReplaceSubContent, null, function() {
             if (link) {
                 var range = self.viper.getViperRange();
                 range.selectNode(link);

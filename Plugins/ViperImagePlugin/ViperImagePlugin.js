@@ -234,8 +234,7 @@ ViperImagePlugin.prototype = {
         });
         createImageSubContent.appendChild(alt);
 
-        var createImageSubSection = toolbar.createSubSection(createImageSubContent, true);
-        var imgTools = toolbar.createBubble('ViperImagePlugin:bubble', 'Insert Image', createImageSubSection);
+        var imgTools = toolbar.createBubble('ViperImagePlugin:bubble', 'Insert Image', createImageSubContent);
 
         // Add the preview panel to the popup contents.
         createImageSubContent.appendChild(previewBox);

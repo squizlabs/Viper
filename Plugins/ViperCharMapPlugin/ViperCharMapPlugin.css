@@ -41,7 +41,7 @@ table.VCMP-table tr td:nth-of-type(7) {
     border-right-width: 0 !important;
 }
 
-.ViperITP .VCMP-main.Viper-subSection {
+.ViperITP.VCMP-main .Viper-subSection {
     padding: 0;
 }
 

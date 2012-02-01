@@ -148,8 +148,7 @@ ViperAbbrPlugin.prototype = {
         });
         createAbbrSubContent.appendChild(title);
 
-        var createAbbrSubSection = toolbar.createSubSection(createAbbrSubContent, true);
-        var abbrTools = toolbar.createBubble('ViperAbbrPlugin:bubble', 'Insert Abbr', createAbbrSubSection);
+        var abbrTools = toolbar.createBubble('ViperAbbrPlugin:bubble', 'Insert Abbr', createAbbrSubContent);
 
         tools.createButton('ViperAbbrPlugin:toggle', 'Abr', 'Toggle Abbr Options', 'abbr');
         toolbar.setBubbleButton('ViperAbbrPlugin:bubble', 'ViperAbbrPlugin:toggle');
