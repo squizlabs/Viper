@@ -130,7 +130,7 @@ ViperToolbarPlugin.prototype = {
             }
         });
 
-        dfx.addClass(element, 'ViperITP-tools');
+        dfx.addClass(element, 'ViperITP-subSectionWrapper');
         bubble.appendChild(element);
 
         if (customClass) {
