@@ -113,7 +113,7 @@ ViperAccessibilityPlugin.prototype = {
 
         var toolsSection   = document.createElement('div');
         this._toolsSection = toolsSection;
-        dfx.addClass(toolsSection, 'ViperAP-toolsWrapper ViperITP-tools checkTools');
+        dfx.addClass(toolsSection, 'ViperAP-toolsWrapper ViperITP-tools checkTools active');
 
         // Main panel showing All and rerun buttons.
         var mainPanel = document.createElement('div');
@@ -125,7 +125,6 @@ ViperAccessibilityPlugin.prototype = {
         dfx.setStyle(aaTools.element, 'width', this._containerWidth + 'px');
         aaTools.id = this.viper.getId() + '-VAP';
         this._aaTools = aaTools;
-        dfx.removeClass(toolsSection, 'ViperITP-subSectionWrapper');
 
         // Create the sub section.
         var bubble       = toolbar.getBubble('VAP:bubble');
@@ -167,7 +166,7 @@ ViperAccessibilityPlugin.prototype = {
         mainPanel.appendChild(mainPanelRight);
 
         // Create the settings button switcher.
-        var settingsBtn = tools.createButton('VAP:settingsBtn', 'Audit Settings', 'Settings', 'accessSettings', function() {
+        var settingsBtn = tools.createButton('VAP:settingsBtn', '', 'Audit Settings', 'accessSettings', function() {
             var resultsCont = dfx.getClass('resultsCont', subSection)[0];
             if (dfx.getStyle(resultsCont, 'display') === 'none') {
                 dfx.setStyle(dfx.getClass('settingsCont', subSection)[0], 'display', 'none');
