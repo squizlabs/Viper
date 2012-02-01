@@ -54,14 +54,14 @@ ViperCharMapPlugin.prototype = {
         for (var i = 0; i < count; i++) {
             var category = categories[i];
 
-            list += '<li>' + category.name + '<div></div></li>';
+            list += '<li>' + category.name + '</li>';
 
             var tableClass = 'VCMP-table';
             if (i === 0) {
                 tableClass += ' visible';
             }
 
-            catTable     += '<table class="' + tableClass + '" border="1" cellspacing="2" cellpadding="2"><tbody>';
+            catTable     += '<table class="' + tableClass + '" border="0" cellspacing="0" cellpadding="0"><tbody>';
             var charCount = category.chars.length;
             for (var j = 0; j < charCount; j++) {
                 if ((j % 7) === 0) {
