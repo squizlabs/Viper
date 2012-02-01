@@ -21,14 +21,13 @@
  */
 function ViperInlineToolbarPlugin(viper)
 {
-    this.viper                   = viper;
-    this._toolbar                = null;
-    this._toolsContainer         = null;
-    this._lineage                = null;
-    this._lineageClicked         = false;
-    this._currentLineageIndex    = null;
-    this._margin                 = 15;
-    this._activeSubSectionButton = null;
+    this.viper                = viper;
+    this._toolbar             = null;
+    this._toolsContainer      = null;
+    this._lineage             = null;
+    this._lineageClicked      = false;
+    this._currentLineageIndex = null;
+    this._margin              = 15;
 
     this._subSections       = {};
     this._subSectionButtons = {};
@@ -55,7 +54,6 @@ ViperInlineToolbarPlugin.prototype = {
 
             if (self._lineageClicked !== true) {
                 // Not selection change due to a lineage click so update the range object.
-
                 // Note we can use cloneRange here but for whatever reason Firefox seems
                 // to not do the cloning bit of cloneRange...
                 self._originalRange = {
@@ -117,6 +115,8 @@ ViperInlineToolbarPlugin.prototype = {
      *
      * @param {string} id       The id of the new sub section.
      * @param {DOMNode} element The DOMNode to convert to sub section.
+     *
+     * @return {DOMNode} The element that was passed in.
      */
     makeSubSection: function(id, element)
     {
@@ -138,7 +138,6 @@ ViperInlineToolbarPlugin.prototype = {
         return element;
 
     },
-
 
     /**
      * Sets the specified button to toggle the given sub section.
@@ -169,6 +168,11 @@ ViperInlineToolbarPlugin.prototype = {
 
     },
 
+    /**
+     * Toggles the visibility of the specified sub section.
+     *
+     * @param {string} subSectionid The if of the sub section.
+     */
     toggleSubSection: function(subSectionid)
     {
         var subSection = this._subSections[subSectionid];
@@ -197,6 +201,7 @@ ViperInlineToolbarPlugin.prototype = {
         dfx.addClass(subSection, 'active');
         dfx.addClass(this._toolbar, 'subSectionVisible');
         this._activeSection = subSectionid;
+        this._updateSubSectionArrowPos();
 
     },
 
@@ -333,6 +338,11 @@ ViperInlineToolbarPlugin.prototype = {
 
     },
 
+    /**
+     * Selects the specified lineage index.
+     *
+     * @param {integer} index The lineage index to select.
+     */
     selectLineageItem: function(index)
     {
         var tags = dfx.getTag('li', this._lineage);
@@ -413,9 +423,9 @@ ViperInlineToolbarPlugin.prototype = {
 
         if (!rangeCoords) {
             if (this.viper.isBrowser('chrome') === true || this.viper.isBrowser('safari') === true) {
-                // Webkit bug workaround. https://bugs.webkit.org/show_bug.cgi?id=65324
+                // Webkit bug workaround. https://bugs.webkit.org/show_bug.cgi?id=65324.
                 var startNode = range.getStartNode();
-                if (startNode.nodeType == dfx.TEXT_NODE) {
+                if (startNode.nodeType === dfx.TEXT_NODE) {
                     if (range.startOffset < startNode.data.length) {
                         range.setEnd(startNode, (range.startOffset + 1));
                         rangeCoords = range.rangeObj.getBoundingClientRect();
@@ -434,8 +444,8 @@ ViperInlineToolbarPlugin.prototype = {
                 }
             } else {
                 return;
-            }
-        }
+            }//end if
+        }//end if
 
         var scrollCoords = dfx.getScrollCoords();
 
@@ -470,11 +480,21 @@ ViperInlineToolbarPlugin.prototype = {
 
     _updateSubSectionArrowPos: function()
     {
-        if (!this._activeSubSectionButton) {
+        if (!this._activeSection) {
             return;
         }
 
-        var buttonRect = dfx.getBoundingRectangle(this._activeSubSectionButton);
+        var button = this._subSectionButtons[this._activeSection];
+        if (!button) {
+            return;
+        }
+
+        button = this.viper.ViperTools.getItem(button).element;
+        if (!button) {
+            return;
+        }
+
+        var buttonRect = dfx.getBoundingRectangle(button);
         var toolbarPos = dfx.getBoundingRectangle(this._toolbar);
         var xPos       = (buttonRect.x1 - toolbarPos.x1 + ((buttonRect.x2 - buttonRect.x1) / 2));
         dfx.setStyle(this._subSectionContainer.firstChild, 'left', xPos + 'px');
@@ -486,10 +506,10 @@ ViperInlineToolbarPlugin.prototype = {
         var elemRect     = dfx.getBoundingRectangle(element);
         var scrollCoords = dfx.getScrollCoords();
         return {
-            left: elemRect.x1 - scrollCoords.x,
-            right: elemRect.x2 - scrollCoords.x,
-            top: elemRect.y1 - scrollCoords.y,
-            bottom: elemRect.y2 - scrollCoords.y
+            left: (elemRect.x1 - scrollCoords.x),
+            right: (elemRect.x2 - scrollCoords.x),
+            top: (elemRect.y1 - scrollCoords.y),
+            bottom: (elemRect.y2 - scrollCoords.y)
         };
 
     },
@@ -576,7 +596,7 @@ ViperInlineToolbarPlugin.prototype = {
             self.viper.fireCallbacks('ViperInlineToolbarPlugin:lineageClicked');
 
             // When clicked set the selection to the original selection.
-            self._lineageClicked     = true;
+            self._lineageClicked = true;
             self._setCurrentLineageIndex(lineage.length - 1);
 
             dfx.removeClass(linElems, 'selected');
@@ -587,10 +607,10 @@ ViperInlineToolbarPlugin.prototype = {
                 // that is not part of viper causing Viper to lose focus..
                 // Use time out to set the range back in to Viper..
                 setTimeout(function() {
-                    self.selectPreviousRange();
+                    self._selectPreviousRange();
                 }, 50);
             } else {
-                self.selectPreviousRange();
+                self._selectPreviousRange();
             }
 
             dfx.preventDefault(e);
@@ -606,7 +626,7 @@ ViperInlineToolbarPlugin.prototype = {
         var range = viper.getCurrentRange();
 
         var first = range._getFirstSelectableChild(node);
-        var last = range._getLastSelectableChild(node);
+        var last  = range._getLastSelectableChild(node);
         range.setStart(first, 0);
         range.setEnd(last, last.data.length);
 
@@ -619,7 +639,7 @@ ViperInlineToolbarPlugin.prototype = {
 
     },
 
-    selectPreviousRange: function()
+    _selectPreviousRange: function()
     {
         ViperSelection.removeAllRanges();
         var range = this.viper.getCurrentRange();
@@ -676,8 +696,7 @@ ViperInlineToolbarPlugin.prototype = {
      */
     _getSelectionLineage: function(range)
     {
-        var lineage      = [];
-
+        var lineage       = [];
         var parent        = null;
         var nodeSelection = range.getNodeSelection(range);
 
