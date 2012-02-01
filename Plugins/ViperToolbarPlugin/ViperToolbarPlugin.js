@@ -130,8 +130,12 @@ ViperToolbarPlugin.prototype = {
             }
         });
 
-        dfx.addClass(element, 'ViperITP-subSectionWrapper');
-        bubble.appendChild(element);
+        var wrapper = document.createElement('div');
+        dfx.addClass(wrapper, 'ViperITP-subSectionWrapper');
+        bubble.appendChild(wrapper);
+
+        dfx.addClass(element, 'Viper-subSection');
+        wrapper.appendChild(element);
 
         if (customClass) {
             dfx.addClass(bubble, customClass);
