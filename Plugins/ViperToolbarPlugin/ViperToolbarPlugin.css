@@ -37,3 +37,7 @@
 .ViperTP-subSections {
     overflow: hidden;
 }
+
+.ViperITP.themeDark.forTopbar .ViperITP-subSectionWrapper {
+    display: block;
+}

@@ -54,14 +54,14 @@ ViperCharMapPlugin.prototype = {
         for (var i = 0; i < count; i++) {
             var category = categories[i];
 
-            list += '<li>' + category.name + '<div></div></li>';
+            list += '<li>' + category.name + '</li>';
 
             var tableClass = 'VCMP-table';
             if (i === 0) {
                 tableClass += ' visible';
             }
 
-            catTable     += '<table class="' + tableClass + '" border="1" cellspacing="2" cellpadding="2"><tbody>';
+            catTable     += '<table class="' + tableClass + '" border="0" cellspacing="0" cellpadding="0"><tbody>';
             var charCount = category.chars.length;
             for (var j = 0; j < charCount; j++) {
                 if ((j % 7) === 0) {
@@ -86,9 +86,7 @@ ViperCharMapPlugin.prototype = {
 
         var tools = this.viper.ViperTools;
 
-        var subSectionWrapper = toolbar.createSubSection(subContent, true, 'VCMP-main');
-
-        var map = toolbar.createBubble('ViperCMP:bubble', 'Insert Character', subSectionWrapper);
+        var map = toolbar.createBubble('ViperCMP:bubble', 'Insert Character', subContent, null, null, null, 'VCMP-main');
 
         var toggle = tools.createButton('ViperCMP:toggle', 'CharMap', 'Insert Character', 'charMap');
         toolbar.setBubbleButton('ViperCMP:bubble', 'ViperCMP:toggle');

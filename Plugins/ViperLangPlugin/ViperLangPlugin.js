@@ -103,8 +103,7 @@ ViperLangPlugin.prototype = {
         });
         createLanguageSubContent.appendChild(langTextbox);
 
-        var createLanguageSubSection = toolbar.createSubSection(createLanguageSubContent, true);
-        toolbar.createBubble('ViperLangPlugin:bubble', 'Language', createLanguageSubSection);
+        toolbar.createBubble('ViperLangPlugin:bubble', 'Language', createLanguageSubContent);
 
         tools.createButton('ViperLangPlugin:toggle', 'Lang', 'Toggle Language Options', 'lang');
         tools.createButton('ViperLangPlugin:remove', 'RLang', 'Remove Language', 'langRemove', function() {

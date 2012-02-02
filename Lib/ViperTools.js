@@ -83,19 +83,14 @@ ViperTools.prototype = {
      * Creates a toolbar button.
      *
      * @param {string}     content        The content of the button.
-     * @param {string}     isActive       True if the button is active.
      * @param {string}     titleAttr      The title attribute for the button.
-     * @param {boolean}    disabled       True if the button is disabled.
      * @param {string}     customClass    Class to add to the button for extra styling.
      * @param {function}   clickAction    The function to call when the button is clicked.
      *                                    Note that this action is ignored if the
      *                                    subSection param is specified. Clicking will
      *                                    then toggle the sub section visibility.
-     * @param {DOMElement} groupElement   The group element that was created by createButtonGroup.
-     * @param {DOMElement} subSection     The sub section element see createSubSection.
-     * @param {boolean}    showSubSection If true then sub section will be visible.
-     *                                    If another button later on also has this set to true
-     *                                    then that button's sub section visible.
+     * @param {boolean}    disabled       True if the button is disabled.
+     * @param {string}     isActive       True if the button is active.
      *
      * @return {DOMElement} The new button element.
      */
@@ -458,55 +453,6 @@ ViperTools.prototype = {
         labelElem.appendChild(span);
 
         return labelElem;
-
-    },
-
-    /**
-     * Creates a sub section element.
-     *
-     * @param {DOMElement} contentElement The content element.
-     * @param {boolean}    active         True if the subsection is active.
-     * @param {string}     customClass    Custom class to apply to the group.
-     *
-     * @return {DOMElement} The sub section element.
-     */
-    createSubSection: function(contentElement, active, customClass)
-    {
-        var section = document.createElement('div');
-        dfx.addClass(section, 'Viper-subSection');
-
-        if (active === true) {
-            dfx.addClass(section, 'active');
-        }
-
-        if (customClass) {
-            dfx.addClass(section, customClass);
-        }
-
-        if (typeof contentElement === 'string') {
-            dfx.setHtml(section, contentElement);
-        } else {
-            section.appendChild(contentElement);
-        }
-
-        return section;
-
-    },
-
-    toggleSubSection: function(subSectionElement)
-    {
-        // Hide other subsections.
-        var activeSubSection = dfx.getClass('Viper-subSection active', subSectionElement.parentNode);
-        if (activeSubSection.length > 0) {
-            dfx.removeClass(activeSubSection, 'active');
-            if (activeSubSection[0] === subSectionElement) {
-                return false;
-            }
-        }
-
-        dfx.addClass(subSectionElement, 'active');
-
-        return true;
 
     },
 

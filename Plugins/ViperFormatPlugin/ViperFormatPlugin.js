@@ -422,8 +422,7 @@ ViperFormatPlugin.prototype = {
         });
         anchorSubContent.appendChild(idTextbox);
 
-        var anchorSubSection = toolbar.createSubSection(anchorSubContent, true);
-        var anchorBubble     = toolbar.createBubble('VFP:vtp:anchor:bubble', 'Anchor ID', anchorSubSection, function() {
+        var anchorBubble = toolbar.createBubble('VFP:vtp:anchor:bubble', 'Anchor ID', anchorSubContent, null, function() {
             _updateValue(dfx.getTag('input', idTextbox)[0], 'id');
         });
 
@@ -440,8 +439,7 @@ ViperFormatPlugin.prototype = {
         });
         classSubContent.appendChild(classTextbox);
 
-        var classSubSection = toolbar.createSubSection(classSubContent, true);
-        var classBubble     = toolbar.createBubble('VFP:vtp:class:bubble', 'Class', classSubSection, function() {
+        var classBubble     = toolbar.createBubble('VFP:vtp:class:bubble', 'Class', classSubContent, null, function() {
             _updateValue(dfx.getTag('input', classTextbox)[0], 'class');
         });
 

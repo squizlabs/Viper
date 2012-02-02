@@ -110,13 +110,9 @@ ViperToolbarPlugin.prototype = {
 
     },
 
-    createBubble: function(id, title, element, customClass)
+    createBubble: function(id, title, subSectionElement, toolsElement, openCallback, closeCallback, customClass)
     {
         title = title || '&nbsp;';
-
-        if (!element) {
-            return false;
-        }
 
         var bubble = document.createElement('div');
         dfx.addClass(bubble, 'ViperITP themeDark visible forTopbar');
@@ -130,30 +126,34 @@ ViperToolbarPlugin.prototype = {
             }
         });
 
-        dfx.addClass(element, 'ViperITP-tools');
-        bubble.appendChild(element);
+        if (toolsElement) {
+            var wrapper = document.createElement('div');
+            dfx.addClass(wrapper, 'ViperITP-tools');
+            bubble.appendChild(wrapper);
+            wrapper.appendChild(toolsElement);
+        }
 
         if (customClass) {
             dfx.addClass(bubble, customClass);
         }
 
         this._bubbles[id] = bubble;
-        this.viper.ViperTools.addItem(id, {
+        var bubbleObj = {
             type: 'VTPBubble',
             element: bubble,
             addSubSection: function(id, element) {
                 this._subSections[id] = element;
 
-                var wrapper = dfx.getClass('ViperTP-subSections', bubble);
+                var wrapper = dfx.getClass('ViperITP-subSectionWrapper', bubble);
                 if (wrapper.length > 0) {
                     wrapper = wrapper[0];
                 } else {
                     wrapper = document.createElement('div');
-                    dfx.addClass(wrapper, 'ViperTP-subSections');
+                    dfx.addClass(wrapper, 'ViperITP-subSectionWrapper');
                     bubble.appendChild(wrapper);
                 }
 
-                dfx.setStyle(element, 'display', 'none');
+                dfx.addClass(element, 'Viper-subSection');
                 wrapper.appendChild(element);
 
                 return element;
@@ -168,19 +168,28 @@ ViperToolbarPlugin.prototype = {
                 }
 
                 dfx.addClass(bubble, 'subSectionVisible');
-                dfx.setStyle(this._subSections[id], 'display', 'block');
+                dfx.addClass(this._subSections[id], 'active');
 
                 this._activeSubSection = id;
 
             },
             hideSubSection: function(id) {
                 dfx.removeClass(bubble, 'subSectionVisible');
-                dfx.setStyle(this._subSections[id], 'display', 'none');
+                dfx.removeClass(this._subSections[id], 'active');
                 this._activeSubSection = null;
             },
             _subSections: {},
             _activeSubSection: null
-        });
+        };
+
+        if (subSectionElement) {
+            bubbleObj.addSubSection(id + 'SubSection', subSectionElement);
+            if (!toolsElement) {
+                bubbleObj.showSubSection(id + 'SubSection');
+            }
+        }
+
+        this.viper.ViperTools.addItem(id, bubbleObj);
 
         return bubble;
 
@@ -286,106 +295,6 @@ ViperToolbarPlugin.prototype = {
 
         dfx.setStyle(bubble, 'left', left + 'px');
         dfx.setStyle(bubble, 'top', top + 'px');
-
-    },
-
-
-  //  /**
-  //   * Creates a textbox.
-  //   *
-  //   * @param {string}   value      The initial value of the textbox.
-  //   * @param {string}   label      The label of the textbox.
-  //   * @param {function} action     The function to call when the textbox value is updated.
-  //   * @param {boolean}  required   True if this field is required.
-  //   * @param {boolean}  expandable If true then the textbox will expand when focused.
-  //   *
-  //   * @return {DOMNode} If label specified the label element else the textbox element.
-  //   */
-  //  createTextbox: function(value, label, action, required, expandable)
-  //  {
-  //      var textBox = document.createElement('input');
-  //      dfx.addClass(textBox, 'ViperITP-input');
-  //      textBox.type  = 'text';
-  //      textBox.size  = 10;
-  //      textBox.value = value;
-  //
-  //      var self  = this;
-  //
-  //      var t = null;
-  //      dfx.addEvent(textBox, 'focus', function(e) {
-  //          self.viper.highlightSelection();
-  //          dfx.addClass(labelElem, 'active');
-  //      });
-  //
-  //      dfx.addEvent(textBox, 'blur', function(e) {
-  //          dfx.removeClass(labelElem, 'active');
-  //          clearTimeout(t);
-  //      });
-  //
-  //      dfx.addEvent(textBox, 'keyup', function(e) {
-  //          if (e.which === 13) {
-  //              self.viper.focus();
-  //              action.call(textBox, textBox.value);
-  //              return;
-  //          }
-  //
-  //          dfx.addClass(labelElem, 'active');
-  //      });
-  //
-  //      if (label) {
-  //          var labelElem = document.createElement('label');
-  //          dfx.addClass(labelElem, 'ViperITP-label');
-  //          var span = document.createElement('span');
-  //          dfx.addClass(span, 'ViperITP-labelText');
-  //          dfx.setHtml(span, label);
-  //
-  //          document.body.appendChild(span);
-  //          var width = dfx.getElementWidth(span);
-  //          dfx.setStyle(labelElem, 'padding-left', width + 'px');
-  //          labelElem.appendChild(span);
-  //          labelElem.appendChild(textBox);
-  //
-  //          if (required === true) {
-  //              dfx.addClass(labelElem, 'required');
-  //          }
-  //
-  //          if (expandable === true) {
-  //              dfx.addClass(labelElem, 'expandable');
-  //          }
-  //
-  //          return labelElem;
-  //      }
-  //
-  //      return textBox;
-  //
-  //  },
-
-    /**
-     * Creates a sub section element.
-     *
-     * @param {DOMElement} contentElement The content element.
-     * @param {boolean}    active         True if the subsection is active.
-     * @param {string}     customClass    Custom class to apply to the group.
-     *
-     * @return {DOMElement} The sub section element.
-     */
-    createSubSection: function(contentElement, active, customClass)
-    {
-        var subSection = this.viper.ViperTools.createSubSection(contentElement, active, customClass);
-        return subSection;
-
-    },
-
-    /**
-     * Creates a new sub section row and returns the new DOMElement.
-     *
-     * @return {DOMElement} The sub section row element.
-     */
-    createSubSectionRow: function()
-    {
-        var elem = document.createElement('div');
-        dfx.addClass(elem, 'subSectionRow');
-        return elem;
 
     },
 

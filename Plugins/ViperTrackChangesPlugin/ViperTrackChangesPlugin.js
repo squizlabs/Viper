@@ -24,7 +24,6 @@
 function ViperTrackChangesPlugin(viper)
 {
     this.viper = viper;
-    this.toolbarPlugin    = null;
     this.subToolbarPlugin = null;
     this.optionCheckboxes = {};
     this._barActive       = false;
@@ -129,9 +128,9 @@ ViperTrackChangesPlugin.prototype = {
     {
         this._barActive = this.subToolbarPlugin.toggleToolbar('TrackChanges');
         if (this._barActive === true) {
-            this.toolbarPlugin.setButtonActive('track-changes');
+            this.viper.ViperTools.setButtonActive('VTCP:toggle');
         } else {
-            this.toolbarPlugin.setButtonInactive('track-changes');
+            this.viper.ViperTools.setButtonInactive('VTCP:toggle');
         }
 
         if (ViperChangeTracker.isTracking() === false
@@ -189,23 +188,26 @@ ViperTrackChangesPlugin.prototype = {
 
     },
 
-
     _setupToolbar: function()
     {
-        var self          = this;
-        var tcEnabled     = false;
-        var toolbarPlugin = this.viper.ViperPluginManager.getPlugin('ViperToolbarPlugin');
-        var tcBtn = toolbarPlugin.createButton('TC', false, 'Toggle Track Changes', false, '', function() {
+        var self      = this;
+        var tcEnabled = false;
+        var tools     = this.viper.ViperTools;
+        var toolbar   = this.viper.ViperPluginManager.getPlugin('ViperToolbarPlugin');
+
+        var tcBtn = tools.createButton('VTCP:toggle', 'TC', 'Toggle Track Changes', '', function() {
             if (tcEnabled === true) {
                 tcEnabled = false;
-                toolbarPlugin.setButtonInactive(tcBtn);
+                tools.setButtonInactive('VTCP:toggle');
                 self.disableTracking();
             } else {
                 tcEnabled = true;
-                toolbarPlugin.setButtonActive(tcBtn);
+                tools.setButtonActive('VTCP:toggle');
                 self.enableTracking();
             }
         });
+
+        toolbar.addButton(tcBtn);
 
     }
 

@@ -21,14 +21,13 @@
  */
 function ViperInlineToolbarPlugin(viper)
 {
-    this.viper                   = viper;
-    this._toolbar                = null;
-    this._toolsContainer         = null;
-    this._lineage                = null;
-    this._lineageClicked         = false;
-    this._currentLineageIndex    = null;
-    this._margin                 = 15;
-    this._activeSubSectionButton = null;
+    this.viper                = viper;
+    this._toolbar             = null;
+    this._toolsContainer      = null;
+    this._lineage             = null;
+    this._lineageClicked      = false;
+    this._currentLineageIndex = null;
+    this._margin              = 15;
 
     this._subSections       = {};
     this._subSectionButtons = {};
@@ -37,83 +36,87 @@ function ViperInlineToolbarPlugin(viper)
     // Create the toolbar.
     this._createToolbar();
 
-    var self = this;
-
-    // Called when the selection is changed.
-    var clickedInToolbar = false;
-    this.viper.registerCallback('Viper:selectionChanged', 'ViperInlineToolbarPlugin', function(range) {
-        if (clickedInToolbar === true || self.viper.rangeInViperBounds(range) === false) {
-            clickedInToolbar = false;
-            return;
-        }
-
-        if (self._lineageClicked !== true) {
-            // Not selection change due to a lineage click so update the range object.
-
-            // Note we can use cloneRange here but for whatever reason Firefox seems
-            // to not do the cloning bit of cloneRange...
-            self._originalRange = {
-                startContainer: range.startContainer,
-                endContainer: range.endContainer,
-                startOffset: range.startOffset,
-                endOffset: range.endOffset,
-                collapsed: range.collapsed
-            }
-        }
-
-        // Update the toolbar position, contents and lineage for this new selection.
-        self.updateToolbar(range);
-    });
-
-    // Hide the toolbar when user clicks anywhere.
-    this.viper.registerCallback(['Viper:mouseDown', 'ViperHistoryManager:undo'], 'ViperInlineToolbarPlugin', function(data) {
-        clickedInToolbar = false;
-        if (data && data.target) {
-            var target = dfx.getMouseEventTarget(data);
-            if (target === self._toolbar || dfx.isChildOf(target, self._toolbar) === true) {
-                clickedInToolbar = true;
-                if (dfx.isTag(target, 'input') === true) {
-                    // Allow event to bubble so the input element can get focus etc.
-                    return true;
-                }
-
-                return false;
-            }
-        }
-
-        self.hideToolbar();
-    });
-
-    this.viper.registerCallback('Viper:elementScaled', 'ViperInlineToolbarPlugin', function(data) {
-       if (data.element !== self._toolbar) {
-           return false;
-       }
-
-       if (data.scale === 1) {
-           self._margin = 15;
-       } else {
-           self._margin = (15 - (((1 - data.scale) / 0.1) * 5));
-       }
-
-       self.updateToolbar();
-    });
-
-    dfx.addEvent(window, 'resize', function() {
-        if (dfx.hasClass(self._toolbar, 'visible') === true) {
-            self._updatePosition();
-        }
-    });
-
 }
 
 ViperInlineToolbarPlugin.prototype = {
 
+    init: function()
+    {
+        var self = this;
+
+        // Called when the selection is changed.
+        var clickedInToolbar = false;
+        this.viper.registerCallback('Viper:selectionChanged', 'ViperInlineToolbarPlugin', function(range) {
+            if (clickedInToolbar === true || self.viper.rangeInViperBounds(range) === false) {
+                clickedInToolbar = false;
+                return;
+            }
+
+            if (self._lineageClicked !== true) {
+                // Not selection change due to a lineage click so update the range object.
+                // Note we can use cloneRange here but for whatever reason Firefox seems
+                // to not do the cloning bit of cloneRange...
+                self._originalRange = {
+                    startContainer: range.startContainer,
+                    endContainer: range.endContainer,
+                    startOffset: range.startOffset,
+                    endOffset: range.endOffset,
+                    collapsed: range.collapsed
+                }
+            }
+
+            // Update the toolbar position, contents and lineage for this new selection.
+            self.updateToolbar(range);
+        });
+
+        // Hide the toolbar when user clicks anywhere.
+        this.viper.registerCallback(['Viper:mouseDown', 'ViperHistoryManager:undo'], 'ViperInlineToolbarPlugin', function(data) {
+            clickedInToolbar = false;
+            if (data && data.target) {
+                var target = dfx.getMouseEventTarget(data);
+                if (target === self._toolbar || dfx.isChildOf(target, self._toolbar) === true) {
+                    clickedInToolbar = true;
+                    if (dfx.isTag(target, 'input') === true) {
+                        // Allow event to bubble so the input element can get focus etc.
+                        return true;
+                    }
+
+                    return false;
+                }
+            }
+
+            self.hideToolbar();
+        });
+
+        this.viper.registerCallback('Viper:elementScaled', 'ViperInlineToolbarPlugin', function(data) {
+           if (data.element !== self._toolbar) {
+               return false;
+           }
+
+           if (data.scale === 1) {
+               self._margin = 15;
+           } else {
+               self._margin = (15 - (((1 - data.scale) / 0.1) * 5));
+           }
+
+           self.updateToolbar();
+        });
+
+        dfx.addEvent(window, 'resize', function() {
+            if (dfx.hasClass(self._toolbar, 'visible') === true) {
+                self._updatePosition();
+            }
+        });
+
+    },
 
     /**
      * Adds the given element as a sub section of the toolbar.
      *
      * @param {string} id       The id of the new sub section.
      * @param {DOMNode} element The DOMNode to convert to sub section.
+     *
+     * @return {DOMNode} The element that was passed in.
      */
     makeSubSection: function(id, element)
     {
@@ -135,7 +138,6 @@ ViperInlineToolbarPlugin.prototype = {
         return element;
 
     },
-
 
     /**
      * Sets the specified button to toggle the given sub section.
@@ -166,6 +168,11 @@ ViperInlineToolbarPlugin.prototype = {
 
     },
 
+    /**
+     * Toggles the visibility of the specified sub section.
+     *
+     * @param {string} subSectionid The if of the sub section.
+     */
     toggleSubSection: function(subSectionid)
     {
         var subSection = this._subSections[subSectionid];
@@ -194,6 +201,7 @@ ViperInlineToolbarPlugin.prototype = {
         dfx.addClass(subSection, 'active');
         dfx.addClass(this._toolbar, 'subSectionVisible');
         this._activeSection = subSectionid;
+        this._updateSubSectionArrowPos();
 
     },
 
@@ -210,201 +218,6 @@ ViperInlineToolbarPlugin.prototype = {
 
     },
 
-
- //   /**
- //    * Creates a toolbar button.
- //    *
- //    * @param {string}     content        The content of the button.
- //    * @param {string}     isActive       True if the button is active.
- //    * @param {string}     titleAttr      The title attribute of the button.
- //    * @param {boolean}    disabled       True if the button is disabled.
- //    * @param {string}     customClass    Class to add to the button for extra styling.
- //    * @param {function}   clickAction    The function to call when the button is clicked.
- //    * @param {DOMElement} groupElement   The group element that was created by createButtonGroup.
- //    * @param {DOMElement} subSection     The sub section element see createSubSection.
- //    * @param {boolean}    showSubSection If true then sub section will be visible.
- //    *                                    If another button later on also has this set to true
- //    *                                    then that button's sub section visible.
- //    *
- //    * @return {DOMElement} The new button element.
- //    */
- //   createButton: function(id, content, isActive, titleAttr, disabled, customClass, subSection)
- //   {
- //       var button = null;
- //       var self = this;
- //       if (subSection) {
- //           var originalAction = clickAction;
- //           clickAction = function(subSectionState, buttonElement) {
- //               self._activeSubSectionButton = null;
- //
- //               if (subSectionState === true) {
- //                   if (button) {
- //                       self._activeSubSectionButton = button;
- //                   }
- //
- //                   dfx.addClass(self._toolbar, 'subSectionVisible');
- //
- //                   // Remove selected state from other buttons in the toolbar.
- //                   var mainTools = subSection.parentNode.previousSibling;
- //                   dfx.removeClass(dfx.getClass('selected', mainTools), 'selected');
- //                   dfx.addClass(buttonElement, 'selected');
- //
- //                   self._updateSubSectionArrowPos();
- //
- //               } else {
- //                   dfx.removeClass(self._toolbar, 'subSectionVisible');
- //                   dfx.removeClass(button, 'selected');
- //               }
- //
- //               if (originalAction) {
- //                   originalAction.call(this, subSectionState);
- //               }
- //           };
- //
- //           if (showSubSection === true) {
- //               dfx.addClass(this._toolbar, 'subSectionVisible');
- //           }
- //       } else if (clickAction) {
- //           var originalAction = clickAction;
- //           clickAction = function() {
- //               self._activeSubSectionButton = null;
- //               self._lineageClicked = false;
- //               return originalAction.call(this);
- //           };
- //       }
- //
- //       button = this.viper.ViperTools.createButton(id, content, isActive, titleAttr, disabled, customClass, clickAction, groupElement, subSection, showSubSection);
- //
- //       if (!groupElement) {
- //           this._toolsContainer.appendChild(button);
- //       }
- //
- //       if (showSubSection === true && subSection) {
- //           this._activeSubSectionButton = button;
- //       }
- //
- //       return button;
- //
- //   },
-
-  //  /**
-  //   * Creates a textbox.
-  //   *
-  //   * @param {DOMNode}  node       Element to select.
-  //   * @param {string}   value      The initial value of the textbox.
-  //   * @param {string}   label      The label of the textbox.
-  //   * @param {function} action     The function to call when the textbox value is updated.
-  //   * @param {boolean}  required   True if this field is required.
-  //   * @param {boolean}  expandable If true then the textbox will expand when focused.
-  //   *
-  //   * @return {DOMNode} If label specified the label element else the textbox element.
-  //   */
-  //  createTextbox: function(node, value, label, action, required, expandable)
-  //  {
-  //      var textBox = document.createElement('input');
-  //      dfx.addClass(textBox, 'ViperITP-input');
-  //      textBox.type  = 'text';
-  //      textBox.size  = 10;
-  //      textBox.value = value;
-  //
-  //      var self  = this;
-  //
-  //      var t = null;
-  //      dfx.addEvent(textBox, 'focus', function(e) {
-  //          self.viper.highlightSelection();
-  //          dfx.addClass(labelElem, 'active');
-  //      });
-  //
-  //      dfx.addEvent(textBox, 'blur', function(e) {
-  //          dfx.removeClass(labelElem, 'active');
-  //          clearTimeout(t);
-  //      });
-  //
-  //      dfx.addEvent(textBox, 'keyup', function(e) {
-  //          if (e.which === 13) {
-  //              self.viper.focus();
-  //              action.call(textBox, textBox.value);
-  //              return;
-  //          }
-  //
-  //          dfx.addClass(labelElem, 'active');
-  //
-  //          clearTimeout(t);
-  //          t = setTimeout(function() {
-  //              dfx.removeClass(labelElem, 'active');
-  //              self.viper.focus();
-  //              action.call(textBox, textBox.value);
-  //          }, 1500);
-  //      });
-  //
-  //      if (label) {
-  //          var labelElem = document.createElement('label');
-  //          dfx.addClass(labelElem, 'ViperITP-label');
-  //          var span = document.createElement('span');
-  //          dfx.addClass(span, 'ViperITP-labelText');
-  //          dfx.setHtml(span, label);
-  //
-  //          document.body.appendChild(span);
-  //          var width = dfx.getElementWidth(span);
-  //          dfx.setStyle(labelElem, 'padding-left', width + 'px');
-  //          labelElem.appendChild(span);
-  //          labelElem.appendChild(textBox);
-  //
-  //          if (required === true) {
-  //              dfx.addClass(labelElem, 'required');
-  //          }
-  //
-  //          if (expandable === true) {
-  //              dfx.addClass(labelElem, 'expandable');
-  //          }
-  //
-  //          return labelElem;
-  //      }
-  //
-  //      return textBox;
-  //
-  //  },
-
-  //  /**
-  //   * Creates a sub section element.
-  //   *
-  //   * @param {DOMElement} contentElement The content element.
-  //   * @param {boolean}    active         True if the subsection is active.
-  //   * @param {string}     customClass    Custom class to apply to the group.
-  //   *
-  //   * @return {DOMElement} The sub section element.
-  //   */
-  //  createSubSection: function(contentElement, active, customClass)
-  //  {
-  //      var subSection = this.viper.ViperTools.createSubSection(contentElement, active, customClass);
-  //      this._subSectionContainer.appendChild(subSection);
-  //
-  //      if (active === true) {
-  //          dfx.addClass(this._toolbar, 'subSectionVisible');
-  //      }
-  //
-  //      return subSection;
-  //
-  //  },
-
-    /**
-     * Creates a new sub section row and returns the new DOMElement.
-     *
-     * @return {DOMElement} The sub section row element.
-     */
-    createSubSectionRow: function(customClass)
-    {
-        var elem = document.createElement('div');
-        dfx.addClass(elem, 'subSectionRow');
-
-        if (customClass) {
-            dfx.addClass(elem, customClass);
-        }
-
-        return elem;
-
-    },
-
     /**
      * Upudates the toolbar.
      *
@@ -414,6 +227,8 @@ ViperInlineToolbarPlugin.prototype = {
      */
     updateToolbar: function(range)
     {
+        this._activeSection = null;
+
         range = range || this.viper.getCurrentRange();
 
         dfx.removeClass(this._toolbar, 'subSectionVisible');
@@ -523,6 +338,11 @@ ViperInlineToolbarPlugin.prototype = {
 
     },
 
+    /**
+     * Selects the specified lineage index.
+     *
+     * @param {integer} index The lineage index to select.
+     */
     selectLineageItem: function(index)
     {
         var tags = dfx.getTag('li', this._lineage);
@@ -603,9 +423,9 @@ ViperInlineToolbarPlugin.prototype = {
 
         if (!rangeCoords) {
             if (this.viper.isBrowser('chrome') === true || this.viper.isBrowser('safari') === true) {
-                // Webkit bug workaround. https://bugs.webkit.org/show_bug.cgi?id=65324
+                // Webkit bug workaround. https://bugs.webkit.org/show_bug.cgi?id=65324.
                 var startNode = range.getStartNode();
-                if (startNode.nodeType == dfx.TEXT_NODE) {
+                if (startNode.nodeType === dfx.TEXT_NODE) {
                     if (range.startOffset < startNode.data.length) {
                         range.setEnd(startNode, (range.startOffset + 1));
                         rangeCoords = range.rangeObj.getBoundingClientRect();
@@ -624,8 +444,8 @@ ViperInlineToolbarPlugin.prototype = {
                 }
             } else {
                 return;
-            }
-        }
+            }//end if
+        }//end if
 
         var scrollCoords = dfx.getScrollCoords();
 
@@ -660,11 +480,21 @@ ViperInlineToolbarPlugin.prototype = {
 
     _updateSubSectionArrowPos: function()
     {
-        if (!this._activeSubSectionButton) {
+        if (!this._activeSection) {
             return;
         }
 
-        var buttonRect = dfx.getBoundingRectangle(this._activeSubSectionButton);
+        var button = this._subSectionButtons[this._activeSection];
+        if (!button) {
+            return;
+        }
+
+        button = this.viper.ViperTools.getItem(button).element;
+        if (!button) {
+            return;
+        }
+
+        var buttonRect = dfx.getBoundingRectangle(button);
         var toolbarPos = dfx.getBoundingRectangle(this._toolbar);
         var xPos       = (buttonRect.x1 - toolbarPos.x1 + ((buttonRect.x2 - buttonRect.x1) / 2));
         dfx.setStyle(this._subSectionContainer.firstChild, 'left', xPos + 'px');
@@ -676,10 +506,10 @@ ViperInlineToolbarPlugin.prototype = {
         var elemRect     = dfx.getBoundingRectangle(element);
         var scrollCoords = dfx.getScrollCoords();
         return {
-            left: elemRect.x1 - scrollCoords.x,
-            right: elemRect.x2 - scrollCoords.x,
-            top: elemRect.y1 - scrollCoords.y,
-            bottom: elemRect.y2 - scrollCoords.y
+            left: (elemRect.x1 - scrollCoords.x),
+            right: (elemRect.x2 - scrollCoords.x),
+            top: (elemRect.y1 - scrollCoords.y),
+            bottom: (elemRect.y2 - scrollCoords.y)
         };
 
     },
@@ -766,7 +596,7 @@ ViperInlineToolbarPlugin.prototype = {
             self.viper.fireCallbacks('ViperInlineToolbarPlugin:lineageClicked');
 
             // When clicked set the selection to the original selection.
-            self._lineageClicked     = true;
+            self._lineageClicked = true;
             self._setCurrentLineageIndex(lineage.length - 1);
 
             dfx.removeClass(linElems, 'selected');
@@ -777,10 +607,10 @@ ViperInlineToolbarPlugin.prototype = {
                 // that is not part of viper causing Viper to lose focus..
                 // Use time out to set the range back in to Viper..
                 setTimeout(function() {
-                    self.selectPreviousRange();
+                    self._selectPreviousRange();
                 }, 50);
             } else {
-                self.selectPreviousRange();
+                self._selectPreviousRange();
             }
 
             dfx.preventDefault(e);
@@ -796,7 +626,7 @@ ViperInlineToolbarPlugin.prototype = {
         var range = viper.getCurrentRange();
 
         var first = range._getFirstSelectableChild(node);
-        var last = range._getLastSelectableChild(node);
+        var last  = range._getLastSelectableChild(node);
         range.setStart(first, 0);
         range.setEnd(last, last.data.length);
 
@@ -809,7 +639,7 @@ ViperInlineToolbarPlugin.prototype = {
 
     },
 
-    selectPreviousRange: function()
+    _selectPreviousRange: function()
     {
         ViperSelection.removeAllRanges();
         var range = this.viper.getCurrentRange();
@@ -866,8 +696,7 @@ ViperInlineToolbarPlugin.prototype = {
      */
     _getSelectionLineage: function(range)
     {
-        var lineage      = [];
-
+        var lineage       = [];
         var parent        = null;
         var nodeSelection = range.getNodeSelection(range);
 

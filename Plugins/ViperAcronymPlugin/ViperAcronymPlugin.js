@@ -150,8 +150,7 @@ ViperAcronymPlugin.prototype = {
         });
         createAcronymSubContent.appendChild(title);
 
-        var createAcronymSubSection = toolbar.createSubSection(createAcronymSubContent, true);
-        toolbar.createBubble('ViperAcronymPlugin:bubble', 'Insert Acronym', createAcronymSubSection, function() {
+        toolbar.createBubble('ViperAcronymPlugin:bubble', 'Insert Acronym', createAcronymSubContent, null, function() {
             if (acronym) {
                 var range = self.viper.getViperRange();
                 range.selectNode(acronym);

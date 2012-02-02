@@ -1,15 +1,6 @@
 table.VCMP-table {
-    -moz-border-bottom-colors: none;
-    -moz-border-image: none;
-    -moz-border-left-colors: none;
-    -moz-border-right-colors: none;
-    -moz-border-top-colors: none;
     border-collapse: collapse;
-    border-color: #444;
-    border-spacing: 0;
-    border-style: solid none none solid;
-    border-width: 1px medium medium 1px;
-    margin: 5px;
+    border: none;
     display: none;
 }
 
@@ -18,28 +9,39 @@ table.VCMP-table.visible {
 }
 
 table.VCMP-table td {
-    -moz-border-bottom-colors: none;
-    -moz-border-image: none;
-    -moz-border-left-colors: none;
-    -moz-border-right-colors: none;
-    -moz-border-top-colors: none;
     border-collapse: collapse;
-    border-color: #444;
-    border-right: 1px solid #444;
-    border-spacing: 0;
-    border-style: none solid solid none;
-    border-width: medium 1px 1px medium;
+    border-color: #333;
+    border-style: solid;
+    border-width: 1px;
     padding: 10px;
     text-align: left;
-    vertical-align: top;
+    vertical-align: middle;
+    text-align: center;
     cursor: pointer;
     text-shadow: none;
     color: #FFF;
-    font-size: 14px;
-    width: 15px;
+    font-size: 1.6em;
+    width: 1.5em;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.1) inset;
 }
 
-.ViperITP .VCMP-main.Viper-subSection {
+table.VCMP-table tr:first-child td {
+    border-top-width: 0;
+}
+
+table.VCMP-table tr:last-child td {
+    border-bottom-width: 0;
+}
+
+table.VCMP-table tr:last-child td:last-child {
+    border-right-width: 1px;
+}
+
+table.VCMP-table tr td:nth-of-type(7) {
+    border-right-width: 0 !important;
+}
+
+.ViperITP.VCMP-main .Viper-subSection {
     padding: 0;
 }
 
@@ -53,51 +55,49 @@ table.VCMP-table td {
     margin: 0;
     padding: 0;
     color: #FFF;
-    text-shadow: none;
+    text-shadow: 0 -1px #2b2b2b;
     list-style: none;
     text-align: left;
-    font-size: 12px;
+    font-size: 1.3em;
     font-weight: bold;
-    margin-top: 5px;
-
-    border-top: 1px solid #444;
     box-shadow: 0 1px 0 #666;
 }
 
 .VCMP-list li {
-    border-bottom: 1px solid #444;
-    box-shadow: 0 1px 0 #666;
-    padding: 5px 10px;
+    border-bottom: 1px solid #333;
+    box-shadow: 0 1px 0 rgba(255,255,255,0.1) inset;
+    padding: 0.4em 20px 0.4em 10px;
     cursor: pointer;
     position: relative;
 }
 
-.VCMP-list li div {
-    background: transparent url(../ViperAccessibilityPlugin/Images/issueImages.png) no-repeat;
-    background-position: 0 -42px;
-    width: 14px;
-    height: 14px;
+.VCMP-list li:after {
+    content: "";
     position: absolute;
+    background: transparent url(../../Images/viperToolsSprite.png) 0 -80px no-repeat;
+    width: 9px;
+    height: 14px;
     right: 5px;
     top: 50%;
     margin-top: -7px;
 }
 
 .VCMP-list li.selected {
-    background-color: #2B2B2B;
+    box-shadow: none;
+    background-color: rgba(0, 0, 0, 0.15);
 }
 
 .VCMP-tablesWrapper {
-    border-left: 1px solid #444444;
     float: left;
     height: 100%;
+    background-color: rgba(0, 0, 0, 0.2);
 }
 
 .VCMP-hoverBtn {
-    margin-left: -5px;
-    margin-top: -5px;
     position: fixed;
-    font-size: 2.3em;
-    padding: 6px 10px;
     display: none;
+    font-size: 3em;
+    margin-left: -0.03em;
+    margin-top: -0.5em;
+    padding: 0.1em 0.3em 0.5em 0.3em;
 }
