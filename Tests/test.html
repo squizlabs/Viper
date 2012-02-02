@@ -47,7 +47,7 @@
         <script type="text/javascript" src="./test.js"></script>
         <script type="text/javascript">
             var viper = null;
-            dfx.addLoadEvent(function() {
+            ViperReadyCallback = function() {
                 var contentElement = dfx.getId('content');
 
                 viper = new Viper('test');
@@ -77,7 +77,7 @@
                     clearTimeout(t);
                     jsExec.value = '';
                 });
-            });
+            };
         </script>
         __TEST_JS_INCLUDE__
     </head>
