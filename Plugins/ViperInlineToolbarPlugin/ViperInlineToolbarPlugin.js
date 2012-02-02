@@ -623,7 +623,7 @@ ViperInlineToolbarPlugin.prototype = {
     {
         // Set the range.
         ViperSelection.removeAllRanges();
-        var range = viper.getCurrentRange();
+        var range = this.viper.getCurrentRange();
 
         var first = range._getFirstSelectableChild(node);
         var last  = range._getLastSelectableChild(node);

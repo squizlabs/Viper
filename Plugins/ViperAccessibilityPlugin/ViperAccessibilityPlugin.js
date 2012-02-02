@@ -36,12 +36,14 @@ function ViperAccessibilityPlugin(viper)
     this._currentList         = 1;
     this._pageCount           = 1;
     this._issuesPerPage       = 5;
-    this._containerWidth      = 320;
+    this._containerWidth      = 35;
     this._subSection          = null;
     this._aaTools             = null;
     this._toolbar             = null;
     this._listPageCounter     = null;
     this._mainPanelLeft       = null;
+    this._prevPage            = null;
+    this._nextPage            = null;
     this._htmlCSsrc           = 'https://raw.github.com/squizlabs/HTML_CodeSniffer/master/HTMLCS.js';
     this._includeNotices      = false;
     this._loadedScripts       = [];
@@ -122,7 +124,6 @@ ViperAccessibilityPlugin.prototype = {
         // Create the Toolbar Bubble for the plugin interface. The bubble's main content
         // is the tools section.
         var aaTools = toolbar.createBubble('VAP:bubble', 'Accessibility Auditor - ' + this._standard, null, toolsSection);
-        dfx.setStyle(aaTools.element, 'width', this._containerWidth + 'px');
         aaTools.id = this.viper.getId() + '-VAP';
         this._aaTools = aaTools;
 
@@ -279,9 +280,9 @@ ViperAccessibilityPlugin.prototype = {
         }
 
         this._currentIssue--;
-        margin = ((this._currentIssue - 1) * this._containerWidth * -1);
+        margin = ((this._currentIssue - 1) * 25.7 * -1);
 
-        dfx.setStyle(this._issueDetailsWrapper.firstChild, 'margin-left', margin + 'px');
+        dfx.setStyle(this._issueDetailsWrapper.firstChild, 'margin-left', margin + 'em');
         this._updateIssueNumber();
 
     },
@@ -292,10 +293,10 @@ ViperAccessibilityPlugin.prototype = {
             return;
         }
 
-        margin = (this._currentIssue * this._containerWidth * -1);
+        margin = (this._currentIssue * 25.7 * -1);
         this._currentIssue++;
 
-        dfx.setStyle(this._issueDetailsWrapper.firstChild, 'margin-left', margin + 'px');
+        dfx.setStyle(this._issueDetailsWrapper.firstChild, 'margin-left', margin + 'em');
         this._updateIssueNumber();
 
     },
@@ -452,13 +453,13 @@ ViperAccessibilityPlugin.prototype = {
 
         // Move the detail panel to the start.
         dfx.addClass(this._issueDetailsWrapper.firstChild, 'instant');
-        dfx.setStyle(this._issueDetailsWrapper.firstChild, 'margin-left', ((index - 1) * this._containerWidth * -1) + 'px');
+        dfx.setStyle(this._issueDetailsWrapper.firstChild, 'margin-left', ((index - 1) * 25.7 * -1) + 'em');
         var self = this;
         setTimeout(function() {
             dfx.removeClass(self._issueDetailsWrapper.firstChild, 'instant');
         }, 500);
 
-        dfx.setStyle(this._issueList, 'margin-left', (this._containerWidth * -1) + 'px');
+        dfx.setStyle(this._issueList, 'margin-left', (this._containerWidth * -1) + 'em');
 
         dfx.removeClass(this._resultsMiddle, 'issueList');
         dfx.addClass(this._resultsMiddle, 'issueDetails');
@@ -547,60 +548,65 @@ ViperAccessibilityPlugin.prototype = {
 
         // Set the width to the width of panel x number of pages so they are placed
         // side by side for the sliding effect.
-        dfx.setStyle(listsInner, 'width', (this._pageCount * this._containerWidth) + 'px');
+        dfx.setStyle(listsInner, 'width', (this._pageCount * this._containerWidth) + 'em');
 
         // Create the list navigation buttons.
-        if (this._pageCount > 1) {
-            var listNav = document.createElement('div');
-            dfx.addClass(listNav, 'ViperAP-listNav');
+        var listNav = document.createElement('div');
+        dfx.addClass(listNav, 'ViperAP-listNav');
 
-            var pageCounter       = document.createElement('span');
-            this._listPageCounter = pageCounter;
+        var pageCounter       = document.createElement('span');
+        this._listPageCounter = pageCounter;
 
-            // Show previous list of issues.
-            var prev = document.createElement('span');
-            dfx.addClass(prev, 'ViperAP-listNav-prev');
-            dfx.setHtml(prev, '&nbsp;');
-            listNav.appendChild(prev);
-            dfx.addEvent(prev, 'click', function() {
-                if (self._currentList === 1) {
-                    return;
-                }
+        // Show previous list of issues.
+        var prev = document.createElement('span');
+        dfx.addClass(prev, 'ViperAP-listNav-prev disabled');
+        dfx.setHtml(prev, '&nbsp;');
+        listNav.appendChild(prev);
+        this._prevPage = prev;
+        dfx.addEvent(prev, 'click', function() {
+            if (self._currentList === 1) {
+                return;
+            }
 
-                self._currentList--;
-                dfx.setStyle(firstList, 'margin-left', (-1 * self._containerWidth * (self._currentList - 1)) + 'px');
+            self._currentList--;
+            dfx.setStyle(firstList, 'margin-left', (-1 * self._containerWidth * (self._currentList - 1)) + 'em');
 
-                // Update page counter.
-                dfx.setHtml(pageCounter, 'Page ' + self._currentList + ' of ' + self._pageCount);
-            });
+            // Update page counter.
+            self.updatePageCount();
+        });
 
-            dfx.addClass(pageCounter, 'ViperAP-listNav-pageCounter');
-            dfx.setHtml(pageCounter, 'Page 1 of ' + self._pageCount);
-            listNav.appendChild(pageCounter);
+        dfx.addClass(pageCounter, 'ViperAP-listNav-pageCounter');
+        dfx.setHtml(pageCounter, 'Page 1 of ' + self._pageCount);
+        listNav.appendChild(pageCounter);
 
-            // Show next list of issues.
-            var next = document.createElement('span');
-            dfx.addClass(next, 'ViperAP-listNav-next');
-            dfx.setHtml(next, '&nbsp;');
-            listNav.appendChild(next);
-            dfx.addEvent(next, 'click', function() {
-                if (self._currentList >= self._pageCount) {
-                    return;
-                }
+        // Show next list of issues.
+        var next = document.createElement('span');
+        dfx.addClass(next, 'ViperAP-listNav-next');
+        dfx.setHtml(next, '&nbsp;');
+        listNav.appendChild(next);
+        this._nextPage = next;
 
-                self._currentList++;
-                dfx.setStyle(firstList, 'margin-left', (-1 * self._containerWidth * (self._currentList - 1)) + 'px');
+        if (this._pageCount === 1) {
+            dfx.addClass(next, 'disabled');
+        }
 
-                // Update page counter.
-                dfx.setHtml(pageCounter, 'Page ' +  self._currentList + ' of ' + self._pageCount);
-            });
+        dfx.addEvent(next, 'click', function() {
+            if (self._currentList >= self._pageCount) {
+                return;
+            }
 
-            this._issueList.appendChild(listNav);
-        }//end if
+            self._currentList++;
+            dfx.setStyle(firstList, 'margin-left', (-1 * self._containerWidth * (self._currentList - 1)) + 'em');
+
+            // Update page counter.
+            self.updatePageCount();
+        });
+
+        this._issueList.appendChild(listNav);
 
         // Update the widths of containers.
-        dfx.setStyle(this._resultsMiddle, 'width', ((c * this._containerWidth) + this._containerWidth) + 'px');
-        dfx.setStyle(this._issueDetailsWrapper, 'width', (c * this._containerWidth) + 'px');
+        dfx.setStyle(this._resultsMiddle, 'width', ((c * this._containerWidth) + this._containerWidth) + 'em');
+        dfx.setStyle(this._issueDetailsWrapper, 'width', (c * 25.7) + 0.1  + 'em');
 
         // Update the number of issues.
         this._updateNumberOfIssuesContainer();
@@ -631,7 +637,7 @@ ViperAccessibilityPlugin.prototype = {
     {
         this._currentList = index;
 
-        dfx.setStyle(this._issueList.firstChild.firstChild, 'margin-left', (-1 * this._containerWidth * (this._currentList - 1)) + 'px');
+        dfx.setStyle(this._issueList.firstChild.firstChild, 'margin-left', (-1 * this._containerWidth * (this._currentList - 1)) + 'em');
         this.updatePageCount();
 
     },
@@ -646,6 +652,19 @@ ViperAccessibilityPlugin.prototype = {
         this._pageCount = listCount;
 
         dfx.setHtml(this._listPageCounter, 'Page ' + this._currentList + ' of ' + listCount);
+
+        // Update the button statuses.
+        if (this._currentList === 1) {
+            dfx.addClass(this._prevPage, 'disabled');
+        } else {
+            dfx.removeClass(this._prevPage, 'disabled');
+        }
+
+        if (this._currentList === listCount) {
+            dfx.addClass(this._nextPage, 'disabled');
+        } else {
+            dfx.removeClass(this._nextPage, 'disabled');
+        }
 
     },
 
@@ -759,10 +778,12 @@ ViperAccessibilityPlugin.prototype = {
                 var resolutionHeader = dfx.getClass('resolutionHeader', resolutionCont)[0];
 
                 // Create resolution tools.
-                var locateBtn     = self._toolbar.createButton('', false, 'Locate Element', false, 'locate', function() {
+                var tools = self.viper.ViperTools;
+                var locateBtn     = tools.createButton('VAP:locateElem', '', 'Locate Element', 'locate', function() {
                     self.pointToElement(issue.element);
-                }, null, null, resolutionHeader);
-                var sourceViewBtn = self._toolbar.createButton('', false, 'Show in Source View', false, 'sourceView', function() {
+                });
+                resolutionHeader.appendChild(locateBtn);
+                var sourceViewBtn = tools.createButton('VAP:showInSource', '', 'Show in Source View', 'sourceView', function() {
                     var tmpText = document.createTextNode('__SCROLL_TO_HERE__');
                     dfx.insertAfter(issue.element, tmpText);
                     var sourceViewPlugin = self.viper.getPluginManager().getPlugin('ViperSourceViewPlugin');
@@ -774,10 +795,12 @@ ViperAccessibilityPlugin.prototype = {
                             sourceViewPlugin.replaceSelection('');
                         }, 500);
                     });
-                }, null, null, resolutionHeader);
-                var doneBtn = self._toolbar.createButton('Done', false, 'Mark as done', false, '', function() {
+                });
+                resolutionHeader.appendChild(sourceViewBtn);
+                var doneBtn = tools.createButton('VAP:toggleIssueDone', 'Done', 'Mark as done', '', function() {
                     self.toggleIssueCompleteState();
-                }, null, null, resolutionHeader);
+                });
+                resolutionHeader.appendChild(doneBtn);
 
                 resolutionHeader.appendChild(locateBtn);
                 resolutionHeader.appendChild(sourceViewBtn);
