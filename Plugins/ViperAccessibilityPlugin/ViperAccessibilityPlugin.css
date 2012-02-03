@@ -207,7 +207,7 @@
 /* Detail Pane */
 
 .ViperAP-issuePane {
-    padding: 0px 0 10px 0;
+    padding: 0 0 1em 0;
     margin: 0;
     overflow: auto;
     border-bottom-left-radius: 0.6em;
@@ -245,6 +245,7 @@
     padding: 1.2em 2.8em 1.2em 2.8em;
     border-top: 1px solid #4b4b4b;
     border-bottom: 1px solid #2b2b2b;
+    font-size: 1.36em;
 }
 .issueTitle {
     border-bottom: 1px solid #000;
@@ -349,7 +350,6 @@
     overflow: hidden;
     display: inline-block;
     vertical-align: top;
-    font-size: 1.36em;
 }
 
 .ViperAP-issuePane,
