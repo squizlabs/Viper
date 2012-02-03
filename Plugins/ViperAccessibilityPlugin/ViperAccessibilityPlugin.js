@@ -280,7 +280,7 @@ ViperAccessibilityPlugin.prototype = {
         }
 
         this._currentIssue--;
-        margin = ((this._currentIssue - 1) * 25.7 * -1);
+        margin = ((this._currentIssue - 1) * this._containerWidth * -1);
 
         this._setCurrentIssue(this._currentIssue);
         dfx.setStyle(this._issueDetailsWrapper.firstChild, 'margin-left', margin + 'em');
@@ -294,7 +294,7 @@ ViperAccessibilityPlugin.prototype = {
             return;
         }
 
-        margin = (this._currentIssue * 25.7 * -1);
+        margin = (this._currentIssue * this._containerWidth * -1);
         this._currentIssue++;
 
         this._setCurrentIssue(this._currentIssue);
@@ -457,7 +457,7 @@ ViperAccessibilityPlugin.prototype = {
 
         // Move the detail panel to the start.
         dfx.addClass(this._issueDetailsWrapper.firstChild, 'instant');
-        dfx.setStyle(this._issueDetailsWrapper.firstChild, 'margin-left', ((index - 1) * 25.7 * -1) + 'em');
+        dfx.setStyle(this._issueDetailsWrapper.firstChild, 'margin-left', ((index - 1) * this._containerWidth * -1) + 'em');
         var self = this;
         setTimeout(function() {
             dfx.removeClass(self._issueDetailsWrapper.firstChild, 'instant');
@@ -618,7 +618,7 @@ ViperAccessibilityPlugin.prototype = {
 
         // Update the widths of containers.
         dfx.setStyle(this._resultsMiddle, 'width', ((c * this._containerWidth) + this._containerWidth) + 'em');
-        dfx.setStyle(this._issueDetailsWrapper, 'width', (c * 25.7) + 0.1  + 'em');
+        dfx.setStyle(this._issueDetailsWrapper, 'width', (c * this._containerWidth)  + 'em');
 
         // Update the number of issues.
         this._updateNumberOfIssuesContainer();
