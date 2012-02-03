@@ -29,7 +29,7 @@ ViperImagePlugin.prototype = {
 
     init: function()
     {
-        this._initToolbar();
+        this.initToolbar();
 
         var self = this;
         this.viper.registerCallback('Viper:mouseDown', 'ViperImagePlugin', function(e) {
@@ -127,7 +127,7 @@ ViperImagePlugin.prototype = {
 
     },
 
-    _initToolbar: function()
+    initToolbar: function()
     {
         var toolbar = this.viper.ViperPluginManager.getPlugin('ViperToolbarPlugin');
         if (!toolbar) {
