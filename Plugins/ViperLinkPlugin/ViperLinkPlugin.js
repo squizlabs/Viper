@@ -123,10 +123,19 @@ ViperLinkPlugin.prototype = {
         var node  = range.getNodeSelection();
 
         if (dfx.isTag(node, 'a') === false) {
-            this.rangeToLink(idPrefix);
+            node = this.getLinkFromRange(range);
+            if (!node) {
+                return this.rangeToLink(idPrefix);
+            } else {
+                this.updateLinkAttributes(node, idPrefix);
+            }
         } else {
             this.updateLinkAttributes(node, idPrefix);
         }
+
+        range.selectNode(node);
+        ViperSelection.addRange(range);
+        this.viper.fireSelectionChanged(range);
 
     },
 
@@ -188,6 +197,8 @@ ViperLinkPlugin.prototype = {
 
     getLinkFromRange: function(range)
     {
+        range = range || this.viper.getViperRange();
+
         var selectedNode = range.getNodeSelection();
         if (selectedNode && dfx.isTag(selectedNode, 'a') === true) {
             return selectedNode;
@@ -247,7 +258,11 @@ ViperLinkPlugin.prototype = {
         var url       = tools.createTextbox(idPrefix + ':url', 'URL', attrUrl, _updateLink);
         var title     = tools.createTextbox(idPrefix + ':title', 'Title', attrTitle, _updateLink);
         var subject   = tools.createTextbox(idPrefix + ':subject', 'Subject', attrSubj, _updateLink);
-        var newWindow = tools.createCheckbox(idPrefix + ':newWindow', 'Open a New Window', attrTarget);
+        var newWindow = tools.createCheckbox(idPrefix + ':newWindow', 'Open a New Window', attrTarget, function(checked, viaSetValue) {
+            if (viaSetValue !== true) {
+                _updateLink();
+            }
+        });
 
         var urlRow = tools.createRow(idPrefix + ':urlRow', 'urlRow');
         urlRow.appendChild(url);
@@ -310,8 +325,18 @@ ViperLinkPlugin.prototype = {
     {
         var inlineToolbarPlugin = this.viper.ViperPluginManager.getPlugin('ViperInlineToolbarPlugin');
 
+        var self = this;
         var main = document.createElement('div');
-        inlineToolbarPlugin.makeSubSection('ViperLinkPlugin:vitp:link', main);
+        inlineToolbarPlugin.makeSubSection('ViperLinkPlugin:vitp:link', main, function() {
+            var range = self.viper.getViperRange();
+            var node  = self.getLinkFromRange(range);
+            if (node) {
+                range.selectNode(node);
+                ViperSelection.addRange(range);
+                self.viper.fireSelectionChanged(range);
+                inlineToolbarPlugin.toggleSubSection('ViperLinkPlugin:vitp:link', true);
+            }
+        });
 
         var insertLinkBtn = this.viper.ViperTools.createButton('ViperLinkPlugin:vitp:insertLink', '', 'Toggle Link Options', 'link');
         inlineToolbarPlugin.addButton(insertLinkBtn);
@@ -382,7 +407,15 @@ ViperLinkPlugin.prototype = {
         toolbar.addButton(btnGroup);
 
         var main = document.createElement('div');
-        toolbar.createBubble('ViperLinkPlugin:vtp:link', 'Insert Link', main);
+        toolbar.createBubble('ViperLinkPlugin:vtp:link', 'Insert Link', main, null, function() {
+            var range = self.viper.getViperRange();
+            var node  = self.getLinkFromRange(range);
+            if (node) {
+                range.selectNode(node);
+                ViperSelection.addRange(range);
+                self.viper.fireSelectionChanged(range);
+            }
+        });
         main.appendChild(this.getToolbarContent('ViperLinkPlugin:vtp'));
         toolbar.setBubbleButton('ViperLinkPlugin:vtp:link', 'ViperLinkPlugin:vtp:insertLink');
 
@@ -394,9 +427,7 @@ ViperLinkPlugin.prototype = {
             if (link) {
                 tools.setButtonActive('ViperLinkPlugin:vtp:insertLink');
                 tools.enableButton('ViperLinkPlugin:vtp:removeLink');
-
-                //(dfx.getTag('input', createLinkSubContent)[0]).value = link.getAttribute('href');
-                //(dfx.getTag('input', createLinkSubContent)[1]).value = link.getAttribute('title');
+                self.updateBubbleFields(link);
             } else {
                 var startNode = data.range.getStartNode();
                 var endNode   = data.range.getEndNode();
@@ -414,12 +445,40 @@ ViperLinkPlugin.prototype = {
                 }
 
                 tools.disableButton('ViperLinkPlugin:vtp:removeLink');
-
-                //(dfx.getTag('input', createLinkSubContent)[0]).value = '';
-                //(dfx.getTag('input', createLinkSubContent)[1]).value = '';
+                self.updateBubbleFields();
             }//end if
         });
 
+    },
+
+    updateBubbleFields: function(link)
+    {
+        var href      = '';
+        var title     = '';
+        var subject   = '';
+        var newWindow = false;
+        if (link) {
+            href  = link.getAttribute('href');
+            title = link.getAttribute('title');
+
+            if (link.getAttribute('target') === '_blank') {
+                newWindow = true;
+            }
+
+            if (href.indexOf('mailto:') === 0) {
+                var subjIndex = href.indexOf('?subject=');
+                if (subjIndex >= 0) {
+                    subject = href.substr(subjIndex + 9);
+                    href    = href.substr(0, subjIndex).replace('mailto:', '');
+                }
+            }
+        }
+
+        var tools = this.viper.ViperTools;
+        tools.getItem('ViperLinkPlugin:vtp:url').setValue(href);
+        tools.getItem('ViperLinkPlugin:vtp:title').setValue(title);
+        tools.getItem('ViperLinkPlugin:vtp:subject').setValue(subject);
+        tools.getItem('ViperLinkPlugin:vtp:newWindow').setValue(newWindow);
     }
 
 };
