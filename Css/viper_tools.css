@@ -430,6 +430,18 @@
 .Viper-button:active .buttonIcon.language, .Viper-button.active .buttonIcon.language, .Viper-button.selected .buttonIcon.language {
   background-position: -33px -1242px;
 }
+.buttonIcon.charMap {
+  background-position: 0 -1269px;
+}
+.Viper-button:active .buttonIcon.charMap, .Viper-button.active .buttonIcon.charMap, .Viper-button.selected .buttonIcon.charMap {
+  background-position: -33px -1269px;
+}
+.buttonIcon.showHiddenChars {
+  background-position: 0 -1296px;
+}
+.Viper-button:active .buttonIcon.showHiddenChars, .Viper-button.active .buttonIcon.showHiddenChars, .Viper-button.selected .buttonIcon.showHiddenChars {
+  background-position: -33px -1296px;
+}
 .__viper_selHighlight {
   background-color: #CCC;
 }
