@@ -106,34 +106,22 @@ ViperLangPlugin.prototype = {
         toolbar.createBubble('ViperLangPlugin:bubble', 'Language', createLanguageSubContent);
 
         tools.createButton('ViperLangPlugin:toggle', 'Lang', 'Toggle Language Options', 'lang');
-        tools.createButton('ViperLangPlugin:remove', 'RLang', 'Remove Language', 'langRemove', function() {
-            if (lang) {
-                self.removeLanguage(lang);
-            }
-        });
         var btnGroup = tools.createButtonGroup('ViperLangPlugin:buttons');
         tools.addButtonToGroup('ViperLangPlugin:toggle', 'ViperLangPlugin:buttons');
-        tools.addButtonToGroup('ViperLangPlugin:remove', 'ViperLangPlugin:buttons');
         toolbar.addButton(btnGroup);
         toolbar.setBubbleButton('ViperLangPlugin:bubble', 'ViperLangPlugin:toggle');
 
         // Update the buttons when the toolbar updates it self.
         this.viper.registerCallback('ViperToolbarPlugin:updateToolbar', 'ViperLangPlugin', function(data) {
             lang = self.getLangElemFromRange();
-
             if (lang) {
                 tools.setButtonActive('ViperLangPlugin:toggle');
-                tools.enableButton('ViperLangPlugin:remove');
-
-                //(dfx.getTag('input', createLanguageSubContent)[0]).value = lang.getAttribute('lang');
+                tools.getItem('ViperLangPlugin:lang').setValue(lang.getAttribute('lang'));
             } else {
                 var startNode = data.range.getStartNode();
                 var endNode   = data.range.getEndNode();
                 tools.setButtonInactive('ViperLangPlugin:toggle');
-
-                tools.disableButton('ViperLangPlugin:remove');
-
-                //(dfx.getTag('input', createLanguageSubContent)[0]).value = '';
+                tools.getItem('ViperLangPlugin:lang').setValue('');
             }//end if
         });
 

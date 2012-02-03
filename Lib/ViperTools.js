@@ -318,6 +318,9 @@ ViperTools.prototype = {
             input: input,
             getValue: function() {
                 return input.value;
+            },
+            setValue: function(value) {
+                input.value = value;
             }
         });
 
@@ -392,7 +395,7 @@ ViperTools.prototype = {
      *
      * @return {DOMElement} The checkbox element.
      */
-    createCheckbox: function(id, label, checked)
+    createCheckbox: function(id, label, checked, changeCallback)
     {
         var labelElem = document.createElement('label');
         dfx.addClass(labelElem, 'Viper-checkbox');
@@ -408,12 +411,24 @@ ViperTools.prototype = {
         labelElem.appendChild(span);
         labelElem.appendChild(checkbox);
 
+        if (changeCallback) {
+            dfx.addEvent(checkbox, 'click', function() {
+                changeCallback.call(this, checkbox.checked);
+            });
+        }
+
         this.addItem(id, {
             type: 'checkbox',
             element: labelElem,
             input: checkbox,
             getValue: function() {
                 return checkbox.checked;
+            },
+            setValue: function(checked) {
+                checkbox.checked = checked;
+                if (changeCallback) {
+                    changeCallback.call(this, checked, true);
+                }
             }
         });
 

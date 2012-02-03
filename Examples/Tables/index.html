@@ -8,18 +8,18 @@
     <script type="text/javascript" src="../../Viper-all.js"></script>
     <script type="text/javascript">
         var viper = null;
-        dfx.addLoadEvent(function() {
+        ViperReadyCallback = function() {
             viper = new Viper('test');
             var pluginSets = {
                 all: {
-                    plugins: ['ViperCoreStylesPlugin', 'ViperKeyboardEditorPlugin', 'ViperInlineToolbarPlugin', 'ViperHistoryPlugin', 'ViperListPlugin', 'ViperFormatPlugin', 'ViperToolbarPlugin', 'ViperTableEditorPlugin', 'ViperAccessibilityPlugin', 'ViperSourceViewPlugin']
+                    plugins: ['ViperCoreStylesPlugin', 'ViperKeyboardEditorPlugin', 'ViperInlineToolbarPlugin', 'ViperHistoryPlugin', 'ViperListPlugin', 'ViperFormatPlugin', 'ViperToolbarPlugin', 'ViperTableEditorPlugin', 'ViperCopyPastePlugin', 'ViperImagePlugin', 'ViperLinkPlugin', 'ViperAccessibilityPlugin', 'ViperSourceViewPlugin', 'ViperSearchReplacePlugin', 'ViperAcronymPlugin', 'ViperAbbrPlugin', 'ViperLangPlugin', 'ViperCharMapPlugin', 'ViperTrackChangesPlugin', 'ViperInvisibleCharPlugin']
                 }
             };
 
             viper.setPluginSets(pluginSets);
             viper.getPluginManager().usePluginSet('all');
             viper.setEditableElement(document.getElementById('content'));
-        });
+        };
     </script>
 </head>
 <body spellcheck="false">
