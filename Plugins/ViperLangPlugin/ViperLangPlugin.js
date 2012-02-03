@@ -105,7 +105,7 @@ ViperLangPlugin.prototype = {
 
         toolbar.createBubble('ViperLangPlugin:bubble', 'Language', createLanguageSubContent);
 
-        tools.createButton('ViperLangPlugin:toggle', 'Lang', 'Toggle Language Options', 'lang');
+        tools.createButton('ViperLangPlugin:toggle', '', 'Set Language', 'language');
         var btnGroup = tools.createButtonGroup('ViperLangPlugin:buttons');
         tools.addButtonToGroup('ViperLangPlugin:toggle', 'ViperLangPlugin:buttons');
         toolbar.addButton(btnGroup);
