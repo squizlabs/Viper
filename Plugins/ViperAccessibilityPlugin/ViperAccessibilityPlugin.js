@@ -282,6 +282,7 @@ ViperAccessibilityPlugin.prototype = {
         this._currentIssue--;
         margin = ((this._currentIssue - 1) * 25.7 * -1);
 
+        this._setCurrentIssue(this._currentIssue);
         dfx.setStyle(this._issueDetailsWrapper.firstChild, 'margin-left', margin + 'em');
         this._updateIssueNumber();
 
@@ -296,6 +297,7 @@ ViperAccessibilityPlugin.prototype = {
         margin = (this._currentIssue * 25.7 * -1);
         this._currentIssue++;
 
+        this._setCurrentIssue(this._currentIssue);
         dfx.setStyle(this._issueDetailsWrapper.firstChild, 'margin-left', margin + 'em');
         this._updateIssueNumber();
 
@@ -448,6 +450,8 @@ ViperAccessibilityPlugin.prototype = {
         // First move the details div to the correct position.
         var index = this._getIssueIndex(li);
 
+        this._setCurrentIssue(index);
+
         this._currentIssue = index;
         this._updateIssueNumber();
 
@@ -468,6 +472,14 @@ ViperAccessibilityPlugin.prototype = {
         dfx.removeClass(this._toolsSection, 'checkTools');
         dfx.removeClass(this._toolsSection, 'listTools');
         dfx.addClass(this._toolsSection, 'detailTools');
+
+    },
+
+    _setCurrentIssue: function(index)
+    {
+        var allIssues = dfx.getClass('ViperAP-issuePane', this._issueDetailsWrapper);
+        dfx.removeClass(allIssues, 'current');
+        dfx.addClass(allIssues[(index - 1)], 'current');
 
     },
 
