@@ -37,6 +37,8 @@ function ViperAccessibilityPlugin(viper)
     this._pageCount           = 1;
     this._issuesPerPage       = 5;
     this._containerWidth      = 35;
+    this._autoRunInterval     = 30000;
+    this._autoRunTimer        = null;
     this._subSection          = null;
     this._aaTools             = null;
     this._toolbar             = null;
@@ -123,7 +125,12 @@ ViperAccessibilityPlugin.prototype = {
 
         // Create the Toolbar Bubble for the plugin interface. The bubble's main content
         // is the tools section.
-        var aaTools = toolbar.createBubble('VAP:bubble', 'Accessibility Auditor - ' + this._standard, null, toolsSection);
+        var aaTools = toolbar.createBubble('VAP:bubble', 'Accessibility Auditor - ' + this._standard, null, toolsSection, function() {
+            self.stopAutoRun();
+            self.updateResults();
+        }, function() {
+            self.startAutoRun();
+        });
         aaTools.id = this.viper.getId() + '-VAP';
         this._aaTools = aaTools;
 
@@ -136,21 +143,6 @@ ViperAccessibilityPlugin.prototype = {
         var vapButton = tools.createButton('VAP:toggle', '', 'Accessibility Auditor', 'accessAudit');
         toolbar.setBubbleButton('VAP:bubble', 'VAP:toggle');
         toolbar.addButton(vapButton);
-
-        // Add the sub section that was created earlier to the bubble.
-        //aaTools.appendChild(subSection);
-
-        // Check button panel.
-        // Check panel will show a check button which will start checking issues.
-        var checkPanel = document.createElement('div');
-        dfx.addClass(checkPanel, 'ViperAP-tools ViperAP-checkTools');
-        toolsSection.appendChild(checkPanel);
-
-        var checkContentBtn = tools.createButton('VAP:checkBtn', 'Check Content', 'Check Content', null, function() {
-             tools.disableButton('VAP:checkBtn');
-             self.updateResults();
-        });
-        checkPanel.appendChild(checkContentBtn);
 
         // Error info, settings and rerun button.
         toolsSection.appendChild(mainPanel);
@@ -233,11 +225,17 @@ ViperAccessibilityPlugin.prototype = {
         tools.addButtonToGroup('VAP:issueNavPrev', 'VAP:issueNavButtons');
         tools.addButtonToGroup('VAP:issueNavNext', 'VAP:issueNavButtons');
 
+        // Run tests..
+        this.updateResults();
+        this.startAutoRun();
+
     },
 
     updateResults: function()
     {
         var self = this;
+
+        this.stopAutoRun();
 
         // Show loading sub section only.
         dfx.setStyle(dfx.getClass('ViperAP-cont', this._subSection), 'display', 'none');
@@ -261,15 +259,37 @@ ViperAccessibilityPlugin.prototype = {
             // Hide the loading container.
             dfx.setStyle(dfx.getClass('loadingCont', self._subSection)[0], 'display', 'none');
 
+            // Main toolbar buttons.
+            var toggleButton = self.viper.ViperTools.getItem('VAP:toggle').element;
+
             if (msgs.length === 0) {
                 // No messages, show no results message.
                 dfx.setStyle(dfx.getClass('noResultsCont', self._subSection)[0], 'display', 'block');
+                dfx.removeClass(toggleButton, 'issues');
+                dfx.addClass(toggleButton, 'noIssues');
             } else {
                 // There are messages so update the issue list.
                 self._updateIssues(msgs);
                 dfx.setStyle(dfx.getClass('resultsCont', self._subSection)[0], 'display', 'block');
+                dfx.removeClass(toggleButton, 'noIssues');
+                dfx.addClass(toggleButton, 'issues');
             }
         });
+
+    },
+
+    startAutoRun: function()
+    {
+        var self = this;
+        this._autoRunTimer = setInterval(function() {
+            self.updateResults();
+        }, this._autoRunInterval);
+
+    },
+
+    stopAutoRun: function()
+    {
+        clearInterval(this._autoRunTimer);
 
     },
 
@@ -399,7 +419,7 @@ ViperAccessibilityPlugin.prototype = {
         var listFilters = document.createElement('div');
         dfx.addClass(listFilters, 'listFilters');
         dfx.setHtml(listFilters, '<h1>List Filters</h1><p>Errors and Warnings are always shown and cannot be hidden. Notices will be automatically shown if there are not other issues.</p>');
-        var includeNoticesChbox = this.viper.ViperTools.createCheckbox('Always include Notices', this._includeNotices);
+        var includeNoticesChbox = this.viper.ViperTools.createCheckbox('VAP:includeNotices', 'Always include Notices', this._includeNotices);
         listFilters.appendChild(includeNoticesChbox);
         div.appendChild(listFilters);
 
@@ -434,7 +454,7 @@ ViperAccessibilityPlugin.prototype = {
 
             if (value !== null) {
                 self._standard       = value;
-                self._includeNotices = includeNoticesChbox.firstChild.checked;
+                self._includeNotices = self.viper.ViperTools.getItem('VAP:includeNotices').getValue();
                 self.updateResults();
             }
         });
