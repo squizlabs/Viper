@@ -17,11 +17,20 @@ MatrixLinkPlugin.prototype = {
         // Call the parent method.
         var contents = ViperLinkPlugin.prototype.getToolbarContent.call(this, idPrefix);
 
+        var self  = this;
         var tools = this.viper.ViperTools;
         var main  = tools.getItem(idPrefix + ':link').element;
 
+        // Insert asset picker icon next to url field.
+        // Insert anchor row after URL field.
+        var urlField    = tools.getItem(idPrefix + ':url').element;
+        var assetPicker = tools.createButton(idPrefix + ':assetPicker', '', 'Pick Asset', 'accessSettings', function() {
+            self.pickAsset();
+        });
+        dfx.setStyle(urlField, 'float', 'left');
+        dfx.insertAfter(urlField, assetPicker);
+
         // Create anchor field.
-        var self   = this;
         var anchor = tools.createTextbox(idPrefix + ':anchor', 'Anchor', '', function() {
             self.updateLink();
         });
@@ -30,8 +39,8 @@ MatrixLinkPlugin.prototype = {
         anchorRow.appendChild(anchor);
 
         // Insert anchor row after URL field.
-        var urlField = tools.getItem(idPrefix + ':url').element;
-        dfx.insertAfter(urlField, anchorRow);
+        var urlRow = tools.getItem(idPrefix + ':urlRow').element;
+        dfx.insertAfter(urlRow, anchorRow);
 
         // The URL field needs to change the interface to internal URL interface
         // if the value is an internal URL.
@@ -79,6 +88,13 @@ MatrixLinkPlugin.prototype = {
 
         link.setAttribute('href', href);
 
+    },
+
+    pickAsset: function()
+    {
+        console.error('TODO: Show an asset picker.');
+        // TODO: Show an asset picker.
+        // Once the asset picker is closed populate the url field.
     }
 
 };
