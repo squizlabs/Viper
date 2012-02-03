@@ -72,7 +72,7 @@ ViperCoreStylesPlugin.prototype = {
             tools.createButton('ViperCoreStylesPlugin:vtp:strong', 'B', 'Bold', 'bold', function() {
                 self.handleStyle('strong');
             });
-            tools.createButton('ViperCoreStylesPlugin:vtp:em', 'I', 'Icalic', 'italic', function() {
+            tools.createButton('ViperCoreStylesPlugin:vtp:em', 'I', 'Italic', 'italic', function() {
                 self.handleStyle('em');
             });
             tools.createButton('ViperCoreStylesPlugin:vtp:rmFormat', '', 'Remove Format', 'removeFormat', function() {
