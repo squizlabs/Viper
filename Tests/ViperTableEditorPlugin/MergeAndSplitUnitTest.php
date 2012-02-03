@@ -20,6 +20,7 @@ class Viper_Tests_ViperTableEditorPlugin_MergeAndSplitUnitTest extends AbstractV
 
         $this->click($this->find($this->getImg('icon_mergeSplit.png'), NULL, 0.83));
 
+        // Check that only the merge up, merge down and merge right icons are enabled
         $this->assertIconStatusesCorrect(
             FALSE,
             FALSE,
@@ -31,6 +32,16 @@ class Viper_Tests_ViperTableEditorPlugin_MergeAndSplitUnitTest extends AbstractV
 
         $this->clickInlineToolbarButton($this->getImg('icon_mergeRight.png'));
 
+         // Check that the split column, merge up, merge down and merge right icons are enabled.
+         $this->assertIconStatusesCorrect(
+            TRUE,
+            FALSE,
+            TRUE,
+            TRUE,
+            FALSE,
+            TRUE
+        );
+         
         $struct   = $this->getTableStructure();
         $expected = array(
                      array(array(), array(), array(), array(), array()),
@@ -38,7 +49,7 @@ class Viper_Tests_ViperTableEditorPlugin_MergeAndSplitUnitTest extends AbstractV
                      array(array('colspan' => 2), array(), array(), array()),
                      array(array(), array(), array(), array(), array()),
                     );
-
+         
         $this->assertTableStructure($expected, $struct);
         sleep(1);
 
@@ -114,6 +125,7 @@ class Viper_Tests_ViperTableEditorPlugin_MergeAndSplitUnitTest extends AbstractV
         $this->showTools(6, 'cell');
         $this->click($this->find($this->getImg('icon_mergeSplit.png'), NULL, 0.83));
 
+        // Check that all merge icons are enabled.
         $this->assertIconStatusesCorrect(
             FALSE,
             FALSE,
@@ -124,6 +136,17 @@ class Viper_Tests_ViperTableEditorPlugin_MergeAndSplitUnitTest extends AbstractV
         );
 
         $this->clickInlineToolbarButton($this->getImg('icon_mergeDown.png'));
+        
+         // Check that all merge icons still are enabled.
+        $this->assertIconStatusesCorrect(
+            FALSE,
+            FALSE,
+            TRUE,
+            TRUE,
+            TRUE,
+            TRUE
+        );
+        
         $expected = array(
                      array(array(), array(), array(), array(), array()),
                      array(array(), array('rowspan' => 2), array(), array(), array()),
@@ -205,6 +228,7 @@ class Viper_Tests_ViperTableEditorPlugin_MergeAndSplitUnitTest extends AbstractV
         $this->showTools(0, 'cell');
         $this->click($this->find($this->getImg('icon_mergeSplit.png'), NULL, 0.83));
 
+        // Check to see that only the merge down and merge right icons are enabled.
         $this->assertIconStatusesCorrect(
             FALSE,
             FALSE,
