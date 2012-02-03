@@ -178,7 +178,7 @@ ViperAcronymPlugin.prototype = {
             if (acronym) {
                 tools.setButtonActive('ViperAcronymPlugin:toggle');
                 tools.enableButton('ViperAcronymPlugin:remove');
-                //(dfx.getTag('input', createAcronymSubContent)[0]).value = acronym.getAttribute('title');
+                tools.getItem('ViperAcronymPlugin:title').setValue(acronym.getAttribute('title'));
             } else {
                 var startNode = data.range.getStartNode();
                 var endNode   = data.range.getEndNode();
@@ -196,9 +196,7 @@ ViperAcronymPlugin.prototype = {
                 }
 
                 tools.disableButton('ViperAcronymPlugin:remove');
-
-                //(dfx.getTag('input', createAcronymSubContent)[0]).value = '';
-                //(dfx.getTag('input', createAcronymSubContent)[0]).value = '';
+                tools.getItem('ViperAcronymPlugin:title').setValue('');
             }//end if
         });
 

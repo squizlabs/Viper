@@ -118,7 +118,7 @@ ViperInlineToolbarPlugin.prototype = {
      *
      * @return {DOMNode} The element that was passed in.
      */
-    makeSubSection: function(id, element)
+    makeSubSection: function(id, element, onOpenCallback, onCloseCallback)
     {
         if (!element) {
             return false;
@@ -132,7 +132,9 @@ ViperInlineToolbarPlugin.prototype = {
 
         this.viper.ViperTools.addItem(id, {
             type: 'VITPSubSection',
-            element: element
+            element: element,
+            _onOpenCallback: onOpenCallback,
+            _onCloseCallback: onCloseCallback
         });
 
         return element;
@@ -173,7 +175,7 @@ ViperInlineToolbarPlugin.prototype = {
      *
      * @param {string} subSectionid The if of the sub section.
      */
-    toggleSubSection: function(subSectionid)
+    toggleSubSection: function(subSectionid, ignoreCallbacks)
     {
         var subSection = this._subSections[subSectionid];
         if (!subSection) {
@@ -186,11 +188,25 @@ ViperInlineToolbarPlugin.prototype = {
                 dfx.removeClass(prevSubSection, 'active');
                 dfx.removeClass(this.viper.ViperTools.getItem(this._subSectionButtons[this._activeSection]).element, 'selected');
 
+                if (ignoreCallbacks !== true) {
+                    var closeCallback = this.viper.ViperTools.getItem(this._activeSection)._onCloseCallback;
+                    if (closeCallback) {
+                        closeCallback.call(this);
+                    }
+                }
+
                 if (this._activeSection === subSectionid) {
                     dfx.removeClass(this._toolbar, 'subSectionVisible');
                     this._activeSection = null;
                     return;
                 }
+            }
+        }
+
+        if (ignoreCallbacks !== true) {
+            var openCallback = this.viper.ViperTools.getItem(subSectionid)._onOpenCallback;
+            if (openCallback) {
+                openCallback.call(this);
             }
         }
 

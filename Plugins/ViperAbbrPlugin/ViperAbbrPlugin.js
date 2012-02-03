@@ -173,7 +173,8 @@ ViperAbbrPlugin.prototype = {
             if (abbr) {
                 tools.setButtonActive('ViperAbbrPlugin:toggle');
                 tools.enableButton('ViperAbbrPlugin:remove');
-                //(dfx.getTag('input', createAbbrSubContent)[0]).value = abbr.getAttribute('title');
+
+                tools.getItem('ViperAbbrPlugin:abbr').setValue(abbr.getAttribute('title'));
             } else {
                 var startNode = data.range.getStartNode();
                 var endNode   = data.range.getEndNode();
@@ -191,9 +192,7 @@ ViperAbbrPlugin.prototype = {
                 }
 
                 tools.disableButton('ViperAbbrPlugin:remove');
-
-                //(dfx.getTag('input', createAbbrSubContent)[0]).value = '';
-                //(dfx.getTag('input', createAbbrSubContent)[0]).value = '';
+                tools.getItem('ViperAbbrPlugin:abbr').setValue('');
             }//end if
         });
 

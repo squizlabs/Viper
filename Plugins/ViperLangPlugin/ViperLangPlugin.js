@@ -120,20 +120,16 @@ ViperLangPlugin.prototype = {
         // Update the buttons when the toolbar updates it self.
         this.viper.registerCallback('ViperToolbarPlugin:updateToolbar', 'ViperLangPlugin', function(data) {
             lang = self.getLangElemFromRange();
-
             if (lang) {
                 tools.setButtonActive('ViperLangPlugin:toggle');
                 tools.enableButton('ViperLangPlugin:remove');
-
-                //(dfx.getTag('input', createLanguageSubContent)[0]).value = lang.getAttribute('lang');
+                tools.getItem('ViperLangPlugin:lang').setValue(lang.getAttribute('lang'));
             } else {
                 var startNode = data.range.getStartNode();
                 var endNode   = data.range.getEndNode();
                 tools.setButtonInactive('ViperLangPlugin:toggle');
-
                 tools.disableButton('ViperLangPlugin:remove');
-
-                //(dfx.getTag('input', createLanguageSubContent)[0]).value = '';
+                tools.getItem('ViperLangPlugin:lang').setValue('');
             }//end if
         });
 

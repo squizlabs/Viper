@@ -179,7 +179,9 @@ ViperToolbarPlugin.prototype = {
                 this._activeSubSection = null;
             },
             _subSections: {},
-            _activeSubSection: null
+            _activeSubSection: null,
+            _openCallback: openCallback,
+            _closeCallback: closeCallback
         };
 
         if (subSectionElement) {
@@ -208,6 +210,7 @@ ViperToolbarPlugin.prototype = {
             return false;
         }
 
+        var bubble = this.getBubble(bubbleid);
         var button = this.viper.ViperTools.getItem(buttonid).element;
         var self   = this;
 
@@ -225,8 +228,10 @@ ViperToolbarPlugin.prototype = {
     {
         if (!this._activeBubble || this._activeBubble !== bubbleid) {
             this.showBubble(bubbleid);
+            return true;
         } else {
             this.closeBubble(bubbleid);
+            return false;
         }
 
     },
@@ -234,9 +239,14 @@ ViperToolbarPlugin.prototype = {
     closeBubble: function(bubbleid)
     {
         dfx.removeClass(this.viper.ViperTools.getItem(this._bubbleButtons[bubbleid]).element, 'selected');
-        var bubble = this.viper.ViperTools.getItem(bubbleid).element;
-        if (bubble.parentNode) {
-            document.body.removeChild(bubble);
+        var bubble     = this.viper.ViperTools.getItem(bubbleid);
+        var bubbleElem = bubble.element;
+        if (bubbleElem.parentNode) {
+            document.body.removeChild(bubbleElem);
+        }
+
+        if (bubble._closeCallback) {
+            bubble._closeCallback.call(this);
         }
 
         this._activeBubble = null;
@@ -257,9 +267,15 @@ ViperToolbarPlugin.prototype = {
 
         dfx.addClass(this.viper.ViperTools.getItem(this._bubbleButtons[bubbleid]).element, 'selected');
 
-        var bubble = this.viper.ViperTools.getItem(bubbleid).element;
-        if (!bubble.parentNode) {
-            document.body.appendChild(bubble);
+        var bubble     = this.viper.ViperTools.getItem(bubbleid);
+        var bubbleElem = bubble.element;
+
+        if (bubble._openCallback) {
+            bubble._openCallback.call(this);
+        }
+
+        if (!bubbleElem.parentNode) {
+            document.body.appendChild(bubbleElem);
         }
 
         this.positionBubble(bubbleid);
