@@ -29,7 +29,7 @@ ViperImagePlugin.prototype = {
 
     init: function()
     {
-        this._initToolbar();
+        this.initToolbar();
 
         var self = this;
         this.viper.registerCallback('Viper:mouseDown', 'ViperImagePlugin', function(e) {
@@ -127,7 +127,7 @@ ViperImagePlugin.prototype = {
 
     },
 
-    _initToolbar: function()
+    initToolbar: function()
     {
         var toolbar = this.viper.ViperPluginManager.getPlugin('ViperToolbarPlugin');
         if (!toolbar) {
@@ -250,8 +250,8 @@ ViperImagePlugin.prototype = {
             if (image && dfx.isTag(image, 'img') === true) {
                 tools.setButtonActive('ViperImagePlugin:toggle');
 
-               // (dfx.getTag('input', createImageSubContent)[0]).value = image.getAttribute('src');
-               // (dfx.getTag('input', createImageSubContent)[1]).value = image.getAttribute('alt');
+                tools.getItem('ViperImagePlugin:urlInput').setValue(image.getAttribute('src'));
+                tools.getItem('ViperImagePlugin:altInput').setValue(image.getAttribute('alt'));
 
                 // Update preview pane.
                 dfx.empty(previewBox);
@@ -266,11 +266,12 @@ ViperImagePlugin.prototype = {
                 tools.setButtonInactive('ViperImagePlugin:toggle');
                 toolbar.closeBubble('ViperImagePlugin:bubble');
 
-               // (dfx.getTag('input', createImageSubContent)[0]).value = '';
-                //(dfx.getTag('input', createImageSubContent)[1]).value = '';
+                tools.getItem('ViperImagePlugin:urlInput').setValue('');
+                tools.getItem('ViperImagePlugin:altInput').setValue('');
 
                 // Update preview pane.
                 dfx.empty(previewBox);
+                dfx.setStyle(previewBox, 'display', 'none');
             }//end if
         });
 
