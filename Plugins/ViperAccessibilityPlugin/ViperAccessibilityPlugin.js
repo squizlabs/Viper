@@ -130,7 +130,7 @@ ViperAccessibilityPlugin.prototype = {
             self.updateResults();
         }, function() {
             self.startAutoRun();
-        });
+        }, 'ViperAccessibilityPlugin');
         aaTools.id = this.viper.getId() + '-VAP';
         this._aaTools = aaTools;
 
