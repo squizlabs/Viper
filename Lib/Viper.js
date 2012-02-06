@@ -228,6 +228,7 @@ Viper.prototype = {
      */
     getViperPath: function()
     {
+        // TODO: This path may need to be set incase a different file name is used.
         var scripts = document.getElementsByTagName('script');
         var path    = null;
         var c       = scripts.length;
@@ -236,6 +237,10 @@ Viper.prototype = {
                 if (scripts[i].src.match(/\/Lib\/Viper\.js/)) {
                     // library, so we can extract the path and include the rest.
                     path = scripts[i].src.replace(/\/Lib\/Viper\.js/,'');
+                    break;
+                } else if (scripts[i].src.match(/\/viper-combined\.js/)) {
+                    // library, so we can extract the path and include the rest.
+                    path = scripts[i].src.replace(/\/viper-combined\.js/,'');
                     break;
                 }
             }
