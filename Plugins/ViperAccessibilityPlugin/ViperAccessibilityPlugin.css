@@ -1,3 +1,7 @@
+.ViperAccessibilityPlugin {
+    width: 35em;
+}
+
 .ViperVAP-violation {
     position: absolute;
     width: 12px;
