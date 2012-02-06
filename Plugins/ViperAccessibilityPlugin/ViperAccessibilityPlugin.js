@@ -857,7 +857,7 @@ ViperAccessibilityPlugin.prototype = {
     {
         // Load the standard's file.
         var url = this.viper.getViperPath();
-        url    += 'Plugins/ViperAccessibilityPlugin/Resolutions/';
+        url    += '/Plugins/ViperAccessibilityPlugin/Resolutions/';
 
         // First part of the issueCode must the standard name.
         var parts    = issueCode.split('.');
