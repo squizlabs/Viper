@@ -183,15 +183,30 @@ ViperSourceViewPlugin.prototype = {
             editor.setTheme("ace/theme/viper");
             var HTMLMode = require("ace/mode/html").Mode;
             editor.getSession().setMode(new HTMLMode());
-            editor.getSession().setUseWrapMode(true);
-            editor.renderer.setShowPrintMargin(false);
-            editor.setHighlightActiveLine(true);
-            editor.setShowInvisibles(true);
-            editor.setSelectionStyle('line');//line or text
-            editor.renderer.setHScrollBarAlwaysVisible(true);
-            editor.getSession().setUseSoftTabs(true);
-            self.initEditorEvents(editor);
 
+            // Use wrapping.
+            editor.getSession().setUseWrapMode(true);
+
+            // Do not show the print margin.
+            editor.renderer.setShowPrintMargin(false);
+
+            // Highlight the active line.
+            editor.setHighlightActiveLine(true);
+
+            // Show invisible characters
+            editor.setShowInvisibles(true);
+            editor.renderer.$textLayer.EOL_CHAR = String.fromCharCode(8629);
+
+            // Set the selection style to be line (other option is 'text').
+            editor.setSelectionStyle('line');
+
+            // Always show the horizontal scrollbar.
+            editor.renderer.setHScrollBarAlwaysVisible(true);
+
+            // Use spaces instead of tabs.
+            editor.getSession().setUseSoftTabs(true);
+
+            self.initEditorEvents(editor);
             callback.call(this);
         });
 
