@@ -143,6 +143,7 @@ ViperTools.prototype = {
         }//end if
 
         dfx.addEvent(button, 'mouseup.Viper', function(e) {
+            self._preventMouseUp = false;
             dfx.preventDefault(e);
             return false;
         });
