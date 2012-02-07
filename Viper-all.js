@@ -90,7 +90,7 @@ ViperReadyCallback = null;
             }, true);
 
 
-            var coreCSS = 'viper|viper_tools|viper_moz'.split('|');
+            var coreCSS = 'viper|viper_moz'.split('|');
             for (var j = 0; j < coreCSS.length; j++) {
                 var link   = document.createElement('link');
                 link.rel   = 'stylesheet';
