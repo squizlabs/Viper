@@ -61,13 +61,12 @@ ViperSourceViewPlugin.prototype = {
     {
         var self = this;
         if (!this._sourceView) {
-            if (!content) {
-                content = this.getContents();
-            }
-
-            this._originalSource = content;
-
             this._createSourceView(function() {
+                if (!content) {
+                    content = self.getContents();
+                }
+
+                self._originalSource = content;
                 self.showSourceView(content, callback);
             });
         } else {
@@ -181,11 +180,33 @@ ViperSourceViewPlugin.prototype = {
         this._includeAce(function() {
             var editor   = ace.edit(source);
             self._editor = editor;
-            editor.setTheme("ace/theme/twilight");
+            editor.setTheme("ace/theme/viper");
             var HTMLMode = require("ace/mode/html").Mode;
             editor.getSession().setMode(new HTMLMode());
-            self.initEditorEvents(editor);
 
+            // Use wrapping.
+            editor.getSession().setUseWrapMode(true);
+
+            // Do not show the print margin.
+            editor.renderer.setShowPrintMargin(false);
+
+            // Highlight the active line.
+            editor.setHighlightActiveLine(true);
+
+            // Show invisible characters
+            editor.setShowInvisibles(true);
+            editor.renderer.$textLayer.EOL_CHAR = String.fromCharCode(8629);
+
+            // Set the selection style to be line (other option is 'text').
+            editor.setSelectionStyle('line');
+
+            // Always show the horizontal scrollbar.
+            editor.renderer.setHScrollBarAlwaysVisible(true);
+
+            // Use spaces instead of tabs.
+            editor.getSession().setUseSoftTabs(true);
+
+            self.initEditorEvents(editor);
             callback.call(this);
         });
 
@@ -231,10 +252,13 @@ ViperSourceViewPlugin.prototype = {
         } else {
             var scripts  = [];
 
-            path += '/Plugins/ViperSourceViewPlugin/Ace';
-            scripts.push(path + '/src/ace.js');
-            scripts.push(path + '/src/theme-twilight.js');
-            scripts.push(path + '/src/mode-html.js');
+            var acePath =  path + '/Plugins/ViperSourceViewPlugin/Ace';
+            scripts.push(acePath + '/src/ace.js');
+            scripts.push(acePath + '/src/theme-viper.js');
+            scripts.push(acePath + '/src/mode-html.js');
+
+            // Include JSBeautifier.
+            scripts.push(path + '/Plugins/ViperSourceViewPlugin/jsbeautifier.js');
 
             this._includeScripts(scripts, callback);
         }
@@ -325,7 +349,7 @@ ViperSourceViewPlugin.prototype = {
 
     getContents: function()
     {
-        return this.viper.getHtml();
+        return StyleHTML(this.viper.getHtml());
 
     },
 

@@ -682,7 +682,7 @@ ViperCoreStylesPlugin.prototype = {
 
         this.viper.selectBookmark(bookmark);
 
-        var tags = this.styleTags.concat(['font']);
+        var tags = this.styleTags.concat(['font', 'u', 'strike']);
 
         // Start batch change for tracking..
         var changeid = ViperChangeTracker.startBatchChange('removedFormat');
