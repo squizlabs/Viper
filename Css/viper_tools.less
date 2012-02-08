@@ -414,29 +414,28 @@
 
 // Viper Text Inputs & Areas
 .Viper-textbox {
-    margin-bottom: 8px;
+    margin-bottom: 0.6em;
 }
 .Viper-textbox-label {
     display: block;
     padding: 4px 2px;
-    font-size: 12px;
     position: relative;
     clear: both;
     text-align: left;
     color: #DDD;
-    background: rgba(0,0,0,0.2);
+    background: #2b2b2b;
     border-radius: 0.4em;
     -moz-transition-property: color, background;
     -moz-transition-duration: 0.3s;
     -webkit-transition-property: color, background;
     -webkit-transition-duration: 0.3s;
-    border: 1px solid #E4E4E4;
-    background: #FFF;
+    border-top: 1px solid #000;
+    border-bottom: 1px solid #777;
     color: #5A8BD0;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.15) inset, 0 2px 0 0 #FFF;
+    box-shadow: 0 0 3px #000 inset;
 }
 
-.Viper-textbox-label.active {
+.Viper-textbox.active .Viper-textbox-label {
     background: #205caf;
 }
 .Viper-textbox:after {
@@ -464,13 +463,14 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    color: #797979;
-    font-weight: bold;
-    line-height: 2.1em;
-    text-shadow: 0 1px 0 #FFF;
+    color: #DDD;
+    text-shadow: 0 -1px 0 #000;
+    text-shadow: none;
+    line-height: 1.85em;
+    font-size: 1.2em;
     padding: 0 0.9em;
     margin: 0 0 0 0.2em;
-    background-color: #e0e0e0;
+    background-color: #404040;
     border-radius: 0.2em;
     height: 100%;
     -moz-transition-property: color, background;
@@ -478,6 +478,10 @@
     -webkit-transition-property: color, background;
     -webkit-transition-duration: 0.3s;
 }
+.Viper-textbox.active .Viper-textbox-title {
+    background-color: #366cb7;
+}
+
 .Viper-textbox.actionRevert .Viper-textbox-title {
     color: #FFF;
     background-color: #478be8;
@@ -497,13 +501,18 @@
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     width: 100%;
-    font-size: 12px;
+    font-size: 1.5em;
+    font-weight: bold;
     border: none;
-    padding: 0.5em 0.6em 0.4em;
-    padding-left: 0;
+    padding: 0.1em 0.6em 0.15em 0.6em;
     background: transparent;
-    color: #2b2b2b;
+    color: #5A8BD0;
     outline: none;
+}
+
+.Viper-textbox.active .Viper-textbox-input[type=text],
+.Viper-textbox.active .Viper-textbox-textArea {
+    color: #FFF;
 }
 
 .Viper-textbox.required .Viper-textbox-input[type=text],
@@ -524,29 +533,31 @@
 }
 
 .Viper-textbox-messages {
-    padding: 4px 2px 0 2px;
+    padding: 0.5em 0.3em 0;
+    font-size: 1.3em;
 }
 
 .Viper-textbox-error {
     display: block;
-    background-color: #c44e4e;
+    background-color: #c01c1c;
     color: #FFF;
     border-radius: 0.2em;
-    padding: 4px 6px;
-    text-shadow: 0 -1px 0 rgba(0,0,0,0.2);
+    padding: 0.4em 0.5em;
+    text-shadow: 0 -1px 0 rgba(0,0,0,0.4);
 }
 .Viper-textbox-desc {
     display: block;
-    padding: 4px 13px;
-    font-size: 11px;
-    color: #8c8c8c;
+    padding: 0.4em 1em;
+    font-size: 1.4em;
+    color: #111;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 .Viper-textbox-action,
 .Viper-textbox.required .Viper-textbox-main:after {
     display: none;
     position: absolute;
     cursor: pointer;
-    background: transparent url(../Images/fieldIconSprite.png) 0 0 no-repeat;
+    background: transparent url(../Images/viperToolsSprite.png) 0 -122px no-repeat;
     width: 18px;
     height: 18px;
     right: 2px;
@@ -556,16 +567,21 @@
 .Viper-textbox.required .Viper-textbox-main:after {
     display: block;
     content: "";
-    background-position: 0 -36px;
+    background-position: 0 -158px;
     top: 3px;
     margin-top: 0;
 }
 .Viper-textbox.actionRevert .Viper-textbox-action,
 .Viper-textbox.actionClear .Viper-textbox-action {
     display: block;
+    opacity: 0.6;
+}
+.Viper-textbox.actionRevert .Viper-textbox-action:hover,
+.Viper-textbox.actionClear .Viper-textbox-action:hover {
+    opacity: 1;
 }
 .Viper-textbox.actionClear .Viper-textbox-action {
-    background-position: 0 -18px;
+    background-position: 0 -140px;
 }
 
 // Checkbox.
@@ -579,4 +595,89 @@
 
 .Viper-checkbox input {
     float: right;
+}
+
+
+.themeDark.Viper-popup {
+    background-color: #2B2B2B;
+    border-color: #2B2B2B;
+    color: #2B2B2B;
+    text-shadow: 0 1px 0 #FFFFFF;
+    position: fixed !important;
+    z-index: 1002;
+    border: 1px solid transparent;
+    border-radius: 0.8em 0.8em 0.8em 0.8em;
+    font-family: Arial,Sans Serif;
+    font-size: 9px;
+    box-shadow: 0px 0px 10px 4px #222;
+}
+
+.themeDark .Viper-popup-header {
+    color: #AAAAAA;
+    text-shadow: 0 -1px 0 #000000;
+    text-transform: uppercase;
+
+    font-size: 1.2em;
+    padding-top: 0.5em;
+    text-align: center;
+
+    border-bottom: 1px solid transparent;
+    font-size: 1.2em;
+    line-height: 1.8em;
+    list-style: none outside none;
+    margin: 0;
+    padding: 0.1em 0 0;
+    white-space: nowrap;
+}
+
+.Viper-popup-top,
+.Viper-popup-bottom,
+.Viper-popup-content {
+    padding: 10px;
+    background: url(../Images/bgTexture-dark1.gif) repeat scroll 0 0 #54535A;
+    text-shadow: none;
+}
+
+.Viper-popup-top,
+.Viper-popup-bottom {
+    position: relative;
+}
+
+.Viper-popup-content {
+    padding-bottom: 0;
+    padding-top: 0;
+}
+
+.Viper-popup-dragIcon,
+.Viper-popup-closeIcon {
+    background-color: #000;
+    width: 16px;
+    height: 16px;
+    position: absolute;
+    left: 5px;
+    top: 2px;
+}
+
+.Viper-popup-closeIcon {
+    left: auto;
+    right: 5px;
+    top: 2px;
+}
+
+.Viper-popup-resizeIcon {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 16px;
+    height: 16px;
+    background-color: #000;
+}
+
+.Viper-popup .ui-resizable-se {
+    width: 16px;
+    height: 16px;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    background-color: #000;
 }

@@ -28,6 +28,7 @@ function ViperSourceViewPlugin(viper)
     this._resizeHandle = null;
     this._sourceView   = null;
     this._sourceCont   = null;
+    this._closeConfirm = null;
 
     this._originalSource = null;
     this._inNewWindow    = false;
@@ -57,17 +58,26 @@ ViperSourceViewPlugin.prototype = {
 
     },
 
+    isSourceChanged: function()
+    {
+        if (this._originalSource === this._editor.getSession().getValue()) {
+            return false;
+        }
+
+        return true;
+
+    },
+
     showSourceView: function(content, callback)
     {
         var self = this;
         if (!this._sourceView) {
-            if (!content) {
-                content = this.getContents();
-            }
-
-            this._originalSource = content;
-
             this._createSourceView(function() {
+                if (!content) {
+                    content = self.getContents();
+                }
+
+                self._originalSource = content;
                 self.showSourceView(content, callback);
             });
         } else {
@@ -78,7 +88,8 @@ ViperSourceViewPlugin.prototype = {
             this._originalSource = content;
 
             this._editor.getSession().setValue(content);
-            dfx.removeClass(this._sourceView, 'hidden');
+
+            this.viper.ViperTools.openPopup('VSVP:popup', 800, 600);
             this._editor.resize();
 
             if (callback) {
@@ -98,14 +109,14 @@ ViperSourceViewPlugin.prototype = {
             this._sourceView = null;
             this._editor     = null;
         } else {
-            dfx.addClass(this._sourceView, 'hidden');
+            this.viper.ViperTools.closePopup('VSVP:popup');
         }
 
     },
 
     toggleSourceView: function()
     {
-        if (!this._sourceView || dfx.hasClass(this._sourceView, 'hidden') === true) {
+        if (!this._sourceView || !this._sourceView.parentNode) {
             this.showSourceView();
         } else {
             this.hideSourceView();
@@ -139,55 +150,110 @@ ViperSourceViewPlugin.prototype = {
 
     _createSourceView: function(callback)
     {
-        var self = this;
+        var self  = this;
+        var tools = this.viper.ViperTools
 
-        var elem = document.createElement('div');
-        dfx.addClass(elem, 'ViperSourceViewPlugin hidden');
+        var content      = document.createElement('div');
+
+        // Confirm change panel.
+        var popupTop = document.createElement('div');
+        dfx.addClass(popupTop, 'VSVP-confirmPanel');
+        var discardButton = tools.createButton('VSVP:discard', 'Discard Changes', 'Discard Changes', 'VSVP-confirmButton-discard', function() {
+            self.viper.ViperTools.closePopup('VSVP:popup', 'discardChanges');
+        });
+        var applyButton   = tools.createButton('VSVP:apply', 'Apply Changes', 'Apply Changes', 'VSVP-confirmButton-apply', function() {
+            self.updatePageContents();
+            self.viper.ViperTools.closePopup('VSVP:popup', 'applyChanges');
+        });
+        dfx.setHtml(popupTop, '<div class="VSVP-confirmText">Would you like to apply your changes?</div>');
+        popupTop.appendChild(discardButton);
+        popupTop.appendChild(applyButton);
+        this._closeConfirm = popupTop;
 
         var source = document.createElement('div');
-        dfx.addClass(source, 'ViperSVP-source');
-        elem.appendChild(source);
+        dfx.addClass(source, 'VSVP-source');
+        content.appendChild(source);
         this._sourceCont = source;
 
-        var bottom = document.createElement('div');
-        dfx.addClass(bottom, 'ViperSVP-bottom');
-        elem.appendChild(bottom);
-
-        this.createSourceViewButtons(bottom, false);
-
-        this._sourceView = elem;
-        document.body.appendChild(this._sourceView);
-
-        var resizeElements = function(ui) {
-            dfx.setStyle(source, 'width', ui.size.width + 'px');
-            dfx.setStyle(source, 'height', ui.size.height - dfx.getElementHeight(bottom) + 'px');
-            self._editor.resize();
-        };
-
-        // Setup resizing.
-        dfxjQuery(elem).resizable({
-                handles: 'se',
-                resize: function(e, ui) {
-                    resizeElements(ui);
-                },
-                stop: function(e, ui) {
-                    resizeElements(ui);
-                }
+        // Add the bottom section.
+        var popupBottom = document.createElement('div');
+        dfx.addClass(popupBottom, 'VSVP-bottomPanel');
+        var newWindowButton   = tools.createButton('VSVP:newWindow', '', 'Open In new window', 'VSVP-bottomPanel-newWindow');
+        var applyButtonBottom = tools.createButton('VSVP:apply', 'Apply Changes', 'Apply Changes', 'VSVP-bottomPanel-apply', function() {
+            self.updatePageContents();
+            self.viper.ViperTools.closePopup('VSVP:popup', 'applyChanges');
         });
+        popupBottom.appendChild(newWindowButton);
+        popupBottom.appendChild(applyButtonBottom);
 
-        // Setup dragging.
-        //dfxjQuery(elem).draggable();
+        // Create the popup.
+        this._sourceView = tools.createPopup(
+            'VSVP:popup',
+            'Source Editor',
+            popupTop,
+            content,
+            popupBottom,
+            'VSVP-popup',
+            true,
+            true,
+            null,
+            function(closer) {
+                // Close callback.
+                if (closer !== 'discardChanges' && closer !== 'applyChanges') {
+                    // If there are changes prevent popup from closing.
+                    if (self.isSourceChanged() === true) {
+                        self.showCloseConfirm();
+                        return false;
+                    }
+                }
+            },
+            function() {
+                // Resize callback.
+                self._editor.resize();
+            }
+        );
 
         this._includeAce(function() {
+            // Setup the Ace editor.
             var editor   = ace.edit(source);
             self._editor = editor;
-            editor.setTheme("ace/theme/twilight");
+            editor.setTheme("ace/theme/viper");
             var HTMLMode = require("ace/mode/html").Mode;
             editor.getSession().setMode(new HTMLMode());
+
+            // Use wrapping.
+            editor.getSession().setUseWrapMode(true);
+
+            // Do not show the print margin.
+            editor.renderer.setShowPrintMargin(false);
+
+            // Highlight the active line.
+            editor.setHighlightActiveLine(true);
+
+            // Show invisible characters
+            editor.setShowInvisibles(true);
+            editor.renderer.$textLayer.EOL_CHAR = String.fromCharCode(8629);
+
+            // Set the selection style to be line (other option is 'text').
+            editor.setSelectionStyle('line');
+
+            // Always show the horizontal scrollbar.
+            editor.renderer.setHScrollBarAlwaysVisible(true);
+
+            // Use spaces instead of tabs.
+            editor.getSession().setUseSoftTabs(true);
+
+            // Init editor events.
             self.initEditorEvents(editor);
 
             callback.call(this);
         });
+
+    },
+
+    showCloseConfirm: function()
+    {
+        this.viper.ViperTools.getItem('VSVP:popup').showTop();
 
     },
 
@@ -217,7 +283,7 @@ ViperSourceViewPlugin.prototype = {
             }
 
             // Update page content.
-            self.updatePageContents();
+            //self.updatePageContents();
 
         });
 
@@ -231,10 +297,13 @@ ViperSourceViewPlugin.prototype = {
         } else {
             var scripts  = [];
 
-            path += '/Plugins/ViperSourceViewPlugin/Ace';
-            scripts.push(path + '/src/ace.js');
-            scripts.push(path + '/src/theme-twilight.js');
-            scripts.push(path + '/src/mode-html.js');
+            var acePath =  path + '/Plugins/ViperSourceViewPlugin/Ace';
+            scripts.push(acePath + '/src/ace.js');
+            scripts.push(acePath + '/src/theme-viper.js');
+            scripts.push(acePath + '/src/mode-html.js');
+
+            // Include JSBeautifier.
+            scripts.push(path + '/Plugins/ViperSourceViewPlugin/jsbeautifier.js');
 
             this._includeScripts(scripts, callback);
         }
@@ -325,7 +394,11 @@ ViperSourceViewPlugin.prototype = {
 
     getContents: function()
     {
-        return this.viper.getHtml();
+        if (window.StyleHTML) {
+            return StyleHTML(this.viper.getHtml());
+        } else {
+            return this.viper.getHtml();
+        }
 
     },
 
