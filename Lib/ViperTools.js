@@ -329,6 +329,7 @@ ViperTools.prototype = {
             type: 'textbox',
             element: textBox,
             input: input,
+            label: labelEl,
             getValue: function() {
                 return input.value;
             },
@@ -371,8 +372,7 @@ ViperTools.prototype = {
 
         var errorCount = errors.length;
 
-        // TODO: How can we make this class generic or get type of item, maybe?
-        var msgsElement = dfx.getClass(item, 'Viper-textbox-messages');
+        var msgsElement = dfx.getClass('Viper-' + item.type + '-messages', item.element);
         if (msgsElement.length === 0) {
             if (errorCount === 0) {
                 return;
@@ -380,6 +380,7 @@ ViperTools.prototype = {
 
             msgsElement = document.createElement('div');
             dfx.addClass(msgsElement, 'Viper-textbox-messages');
+            item.label.appendChild(msgsElement);
         } else {
             msgsElement = msgsElement[0];
             if (errorCount === 0) {
@@ -391,7 +392,7 @@ ViperTools.prototype = {
         }
 
         var content = '';
-        for (var i = 0; i < c; i++) {
+        for (var i = 0; i < errorCount; i++) {
             content += '<span class="Viper-textbox-error">' + errors[i] + '</span>';
         }
 
