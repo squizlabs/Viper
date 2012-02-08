@@ -149,12 +149,12 @@ ViperCharMapPlugin.prototype = {
 
     insertCharacter: function(charCode)
     {
-        var range = self.viper.getViperRange();
+        var range = this.viper.getViperRange();
         if (range.collapsed !== true) {
-            self.viper.deleteContents();
+            this.viper.deleteContents();
 
             // Get the updated range.
-            range = self.viper.getViperRange();
+            range = this.viper.getViperRange();
         }
 
         var newNode = document.createTextNode(String.fromCharCode(charCode));
@@ -186,7 +186,7 @@ ViperCharMapPlugin.prototype = {
         chars       += htmlEnt.replace(/\|/g, ';|&#') + ';';
         chars        = chars.split('|');
         var currency = chars;
-        
+
         chars     = '&#8367;|&spades;|&hearts;|&clubs;|&diams;|&larr;|&uarr;|&rarr;|&darr;|&crarr;|&Omega;|&Sigma;|&Phi;|&radic;|&trade;|&reg;|&Agrave;|&agrave;|&Ccedil;|&ccedil;|&Eacute;|&eacute;';
         chars     = chars.split('|');
         var popular = chars;
@@ -203,7 +203,7 @@ ViperCharMapPlugin.prototype = {
         chars       = '&uml;|&macr;|&acute;|&cedil;|&iexcl;|&iquest;|&middot;|&brvbar;|&laquo;|&raquo;|&para;|&sect;|&copy;|&reg;|&trade;';
         chars       = chars.split('|');
         var symbols = chars;
-        
+
         categories.push({
             name: 'Popular',
             chars: popular
