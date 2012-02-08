@@ -985,6 +985,10 @@ ViperCoreStylesPlugin.prototype = {
             var toolbarButton = tools.getItem('ViperCoreStylesPlugin:vtp:justifyToggle');
             toolbarButton.setIconClass('justifyLeft');
 
+            if (justify === 'justify') {
+                justify = 'block';
+            }
+
             var setToggleInactive = true;
             for (var i = 0; i < c; i++) {
                 if (buttons.justify[i] === justify) {
