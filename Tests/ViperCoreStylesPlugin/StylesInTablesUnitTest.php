@@ -281,46 +281,6 @@ class Viper_Tests_ViperCoreStylesPlugin_StylesInTablesUnitTest extends AbstractV
     }//end testStylingInTableMultipleStyles()
 
 
-    /**
-     * Test that styles can be applied and removed to a word in a table cell.
-     *
-     * @return void
-     */
-    public function testRemoveStylesInTable()
-    {
-        // Remove bold and italics
-        $text    = 'WoW';
-        $textLoc = $this->find($text);
-        $this->selectText($text);
-        $this->clickTopToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_removeFormat.png');
-
-        $this->assertFalse($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_bold_active.png'));
-        $this->assertFalse($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_bold_active.png'));
-        $this->assertFalse($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic_active.png'));
-        $this->assertFalse($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic_active.png'));
-
-        $this->assertEquals('WoW sapien vel aliquet', $this->getHtml('td,th', 4));
-
-        $this->click($textLoc);
-
-        // Remove heading styles
-        $this->selectText('SQUIZ LABS');
-        $this->selectInlineToolbarLineageItem(3);
-        $this->clickTopToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_removeFormat.png');
-        $this->assertEquals('Squiz LABS', $this->getHtml('td,th', 6));
-
-        $this->click($textLoc);
-
-        // Remove unordered list
-        $this->selectText('REMOVING');
-        $this->selectInlineToolbarLineageItem(3);
-        $this->clickTopToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_removeFormat.png');
-        $this->assertEquals('<p>Test removing bullet points</p><p>purus neque luctus</p><p>vel molestie arcu</p>', $this->getHtml('td,th', 5));
-
-
-    }//end testRemoveStylesInTable()
-
-
 }//end class
 
 ?>
