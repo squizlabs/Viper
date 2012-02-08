@@ -333,6 +333,10 @@ ViperToolbarPlugin.prototype = {
 
     _updateToolbar: function(range)
     {
+        if (this._activeBubble) {
+            this.closeBubble(this._activeBubble);
+        }
+
         range = range || this.viper.getCurrentRange();
 
         this.viper.fireCallbacks('ViperToolbarPlugin:updateToolbar', {range: range});
