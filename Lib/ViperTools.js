@@ -154,7 +154,21 @@ ViperTools.prototype = {
 
         this.addItem(id, {
             type: 'button',
-            element: button
+            element: button,
+            setIconClass: function(iconClass)
+            {
+                var btnIconElem = dfx.getClass('buttonIcon', button);
+                if (btnIconElem.length === 0) {
+                    btnIconElem = document.createElement('span');
+                    dfx.addClass(btnIconElem, 'buttonIcon');
+                    dfx.insertBefore(button.firstChild, btnIconElem);
+                } else {
+                    btnIconElem = btnIconElem[0];
+                    btnIconElem.className = 'buttonIcon';
+                }
+
+                dfx.addClass(btnIconElem, iconClass);
+            }
         });
 
         return button;
@@ -218,6 +232,10 @@ ViperTools.prototype = {
         var textBox = document.createElement('div');
         dfx.addClass(textBox, 'Viper-textbox');
 
+        if (required === true && !value) {
+            dfx.addClass(textBox, 'required');
+        }
+
         var labelEl = document.createElement('label');
         dfx.addClass(labelEl, 'Viper-textbox-label');
         textBox.appendChild(labelEl);
@@ -243,10 +261,10 @@ ViperTools.prototype = {
 
         if (desc) {
             // Description.
-            var desc = document.createElement('span');
-            dfx.addClass(desc, 'Viper-textbox-desc');
-            dfx.setHtml(desc, desc);
-            textBox.appendChild(desc);
+            var descEl = document.createElement('span');
+            dfx.addClass(descEl, 'Viper-textbox-desc');
+            dfx.setHtml(descEl, desc);
+            textBox.appendChild(descEl);
         }
 
         var self = this;
@@ -256,7 +274,7 @@ ViperTools.prototype = {
 
         var _addActionButton = function() {
             var actionIcon = document.createElement('span');
-            dfx.addClass(actionIcon, 'Viper-textbox-action revert');
+            dfx.addClass(actionIcon, 'Viper-textbox-action');
             main.appendChild(actionIcon);
             dfx.addEvent(actionIcon, 'click', function() {
                 if (dfx.hasClass(textBox, 'actionRevert') === true) {
@@ -266,6 +284,9 @@ ViperTools.prototype = {
                 } else if (dfx.hasClass(textBox, 'actionClear') === true) {
                     input.value = '';
                     dfx.removeClass(textBox, 'actionClear');
+                    if (required === true) {
+                        dfx.addClass(textBox, 'required');
+                    }
                 }
             });
 
@@ -293,11 +314,16 @@ ViperTools.prototype = {
                 // Show the revert icon.
                 actionIcon.setAttribute('title', 'Revert to original value');
                 dfx.addClass(textBox, 'actionRevert');
+                dfx.removeClass(textBox, 'required');
             } else if (input.value !== '') {
                 actionIcon.setAttribute('title', 'Clear this value');
                 dfx.addClass(textBox, 'actionClear');
+                dfx.removeClass(textBox, 'required');
             } else {
                 dfx.remove(actionIcon);
+                if (required === true) {
+                    dfx.addClass(textBox, 'required');
+                }
             }
 
             // Action.
@@ -317,6 +343,7 @@ ViperTools.prototype = {
             type: 'textbox',
             element: textBox,
             input: input,
+            label: labelEl,
             getValue: function() {
                 return input.value;
             },
@@ -359,8 +386,7 @@ ViperTools.prototype = {
 
         var errorCount = errors.length;
 
-        // TODO: How can we make this class generic or get type of item, maybe?
-        var msgsElement = dfx.getClass(item, 'Viper-textbox-messages');
+        var msgsElement = dfx.getClass('Viper-' + item.type + '-messages', item.element);
         if (msgsElement.length === 0) {
             if (errorCount === 0) {
                 return;
@@ -368,6 +394,7 @@ ViperTools.prototype = {
 
             msgsElement = document.createElement('div');
             dfx.addClass(msgsElement, 'Viper-textbox-messages');
+            item.label.appendChild(msgsElement);
         } else {
             msgsElement = msgsElement[0];
             if (errorCount === 0) {
@@ -379,7 +406,7 @@ ViperTools.prototype = {
         }
 
         var content = '';
-        for (var i = 0; i < c; i++) {
+        for (var i = 0; i < errorCount; i++) {
             content += '<span class="Viper-textbox-error">' + errors[i] + '</span>';
         }
 
