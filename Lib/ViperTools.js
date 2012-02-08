@@ -412,8 +412,11 @@ ViperTools.prototype = {
         labelElem.appendChild(span);
         labelElem.appendChild(checkbox);
 
+        var self = this;
+
         if (changeCallback) {
             dfx.addEvent(checkbox, 'click', function() {
+                self.viper.focus();
                 changeCallback.call(this, checkbox.checked);
             });
         }
@@ -428,6 +431,7 @@ ViperTools.prototype = {
             setValue: function(checked) {
                 checkbox.checked = checked;
                 if (changeCallback) {
+                    self.viper.focus();
                     changeCallback.call(this, checked, true);
                 }
             }
