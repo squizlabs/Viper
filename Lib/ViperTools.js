@@ -472,6 +472,153 @@ ViperTools.prototype = {
 
     },
 
+    createPopup: function(id, title, topContent, midContent, bottomContent, customClass, draggable, resizable, openCallback, closeCallback, resizeCallback)
+    {
+        title = title || '&nbsp;';
+
+        var self = this;
+
+        var main = document.createElement('div');
+        dfx.addClass(main, 'Viper-popup themeDark');
+
+        if (customClass) {
+            dfx.addClass(main, customClass);
+        }
+
+        var header = document.createElement('div');
+        dfx.addClass(header, 'Viper-popup-header');
+
+        if (draggable !== false) {
+            var dragIcon = document.createElement('div');
+            dfx.addClass(dragIcon, 'Viper-popup-dragIcon');
+            header.appendChild(dragIcon);
+
+            dfxjQuery(main).draggable({
+                handle: dragIcon
+            });
+        }
+
+        header.appendChild(document.createTextNode(title));
+
+        var closeIcon = document.createElement('div');
+        dfx.addClass(closeIcon, 'Viper-popup-closeIcon');
+        header.appendChild(closeIcon);
+        dfx.addEvent(closeIcon, 'click', function() {
+            self.closePopup(id, 'closeIcon');
+        });
+
+        main.appendChild(header);
+
+        if (topContent) {
+            dfx.addClass(topContent, 'Viper-popup-top');
+            main.appendChild(topContent);
+        }
+
+        dfx.addClass(midContent, 'Viper-popup-content');
+        main.appendChild(midContent);
+
+        if (bottomContent) {
+            dfx.addClass(bottomContent, 'Viper-popup-bottom');
+            main.appendChild(bottomContent);
+        }
+
+        if (resizable !== false) {
+            var resizeElements = function(ui) {
+                dfx.setStyle(midContent, 'width', ui.size.width + 'px');
+                dfx.setStyle(midContent, 'height', ui.size.height + 'px');
+            };
+
+            dfxjQuery(midContent).resizable({
+                handles: 'se',
+                resize: function(e, ui) {
+                    if (resizeCallback) {
+                        resizeCallback.call(this, e, ui);
+                    }
+                },
+                stop: function(e, ui) {
+                    if (resizeCallback) {
+                        resizeCallback.call(this, e, ui);
+                    }
+                }
+            });
+
+        }
+
+        this.addItem(id, {
+            type: 'popup',
+            element: main,
+            topContent: topContent,
+            midContent: midContent,
+            bottomContent: bottomContent,
+            openCallback: openCallback,
+            closeCallback: closeCallback,
+            showTop: function() {
+                dfx.blindDown(topContent);
+            },
+            hideTop: function() {
+                dfx.blindUp(topContent);
+            }
+        });
+
+        return main;
+
+    },
+
+    openPopup: function(id, width, height)
+    {
+        var popup        = this.getItem(id);
+        var contentElem  = popup.midContent;
+        var popupElement = popup.element;
+
+        if (width) {
+            dfx.setStyle(contentElem, 'width', width + 'px');
+        }
+
+        if (height) {
+            dfx.setStyle(contentElem, 'height', height + 'px');
+        }
+
+        dfx.setStyle(popupElement, 'left', '-9999px');
+        dfx.setStyle(popupElement, 'top', '-9999px');
+        dfx.setStyle(popupElement, 'visibility', 'hidden');
+        document.body.appendChild(popupElement);
+
+        // Set the pos to be the middle of the screen
+        //var windowDim  = dfx.getWindowDimensions();
+        var elementDim = dfx.getBoundingRectangle(popupElement);
+
+        dfx.setStyle(popupElement, 'margin-left', (((elementDim.x2 - elementDim.x1) / 2) * -1) + 'px');
+        dfx.setStyle(popupElement, 'margin-top', (((elementDim.y2 - elementDim.y1) / 2) * -1) + 'px');
+
+        dfx.setStyle(popupElement, 'left', '50%');
+        dfx.setStyle(popupElement, 'top', '50%');
+
+        if (popup.openCallback) {
+            if (popup.openCallback.call(this) === false) {
+                // Do not open.
+                document.body.removeChild(popupElement);
+                return;
+            }
+        }
+
+        dfx.setStyle(popupElement, 'visibility', 'visible');
+
+    },
+
+    closePopup: function(id, closer)
+    {
+        var popup = this.getItem(id);
+        if (popup.closeCallback) {
+            if (popup.closeCallback.call(this, closer) === false) {
+                // Do not close.
+                return;
+            }
+        }
+
+        document.body.removeChild(popup.element);
+
+    },
+
     scaleElement: function(element)
     {
         var zoom = (document.documentElement.clientWidth / window.innerWidth);
