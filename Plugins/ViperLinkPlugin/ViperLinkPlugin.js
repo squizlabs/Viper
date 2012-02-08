@@ -255,7 +255,7 @@ ViperLinkPlugin.prototype = {
             }
         }
 
-        var url       = tools.createTextbox(idPrefix + ':url', 'URL', attrUrl, _updateLink);
+        var url       = tools.createTextbox(idPrefix + ':url', 'URL', attrUrl, _updateLink, true);
         var title     = tools.createTextbox(idPrefix + ':title', 'Title', attrTitle, _updateLink);
         var subject   = tools.createTextbox(idPrefix + ':subject', 'Subject', attrSubj, _updateLink);
         var newWindow = tools.createCheckbox(idPrefix + ':newWindow', 'Open a New Window', attrTarget, function(checked, viaSetValue) {
@@ -453,10 +453,12 @@ ViperLinkPlugin.prototype = {
 
     updateBubbleFields: function(link)
     {
-        var href      = '';
-        var title     = '';
-        var subject   = '';
-        var newWindow = false;
+        var href        = '';
+        var title       = '';
+        var subject     = '';
+        var newWindow   = false;
+        var isEmailLink = false;
+
         if (link) {
             href  = link.getAttribute('href');
             title = link.getAttribute('title');
@@ -466,12 +468,20 @@ ViperLinkPlugin.prototype = {
             }
 
             if (href.indexOf('mailto:') === 0) {
+                isEmailLink   = true;
                 var subjIndex = href.indexOf('?subject=');
                 if (subjIndex >= 0) {
                     subject = href.substr(subjIndex + 9);
                     href    = href.substr(0, subjIndex).replace('mailto:', '');
                 }
             }
+        }
+
+        var main = this.viper.ViperTools.getItem('ViperLinkPlugin:vtp:link').element;
+        if (isEmailLink === true) {
+            dfx.addClass(main, 'emailLink');
+        } else {
+            dfx.addClass(main, 'externalLink');
         }
 
         var tools = this.viper.ViperTools;

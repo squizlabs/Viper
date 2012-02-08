@@ -154,7 +154,21 @@ ViperTools.prototype = {
 
         this.addItem(id, {
             type: 'button',
-            element: button
+            element: button,
+            setIconClass: function(iconClass)
+            {
+                var btnIconElem = dfx.getClass('buttonIcon', button);
+                if (btnIconElem.length === 0) {
+                    btnIconElem = document.createElement('span');
+                    dfx.addClass(btnIconElem, 'buttonIcon');
+                    dfx.insertBefore(button.firstChild, btnIconElem);
+                } else {
+                    btnIconElem = btnIconElem[0];
+                    btnIconElem.className = 'buttonIcon';
+                }
+
+                dfx.addClass(btnIconElem, iconClass);
+            }
         });
 
         return button;
@@ -218,6 +232,10 @@ ViperTools.prototype = {
         var textBox = document.createElement('div');
         dfx.addClass(textBox, 'Viper-textbox');
 
+        if (required === true && !value) {
+            dfx.addClass(textBox, 'required');
+        }
+
         var labelEl = document.createElement('label');
         dfx.addClass(labelEl, 'Viper-textbox-label');
         textBox.appendChild(labelEl);
@@ -243,10 +261,10 @@ ViperTools.prototype = {
 
         if (desc) {
             // Description.
-            var desc = document.createElement('span');
-            dfx.addClass(desc, 'Viper-textbox-desc');
-            dfx.setHtml(desc, desc);
-            textBox.appendChild(desc);
+            var descEl = document.createElement('span');
+            dfx.addClass(descEl, 'Viper-textbox-desc');
+            dfx.setHtml(descEl, desc);
+            textBox.appendChild(descEl);
         }
 
         var self = this;
@@ -256,7 +274,7 @@ ViperTools.prototype = {
 
         var _addActionButton = function() {
             var actionIcon = document.createElement('span');
-            dfx.addClass(actionIcon, 'Viper-textbox-action revert');
+            dfx.addClass(actionIcon, 'Viper-textbox-action');
             main.appendChild(actionIcon);
             dfx.addEvent(actionIcon, 'click', function() {
                 if (dfx.hasClass(textBox, 'actionRevert') === true) {
@@ -266,6 +284,9 @@ ViperTools.prototype = {
                 } else if (dfx.hasClass(textBox, 'actionClear') === true) {
                     input.value = '';
                     dfx.removeClass(textBox, 'actionClear');
+                    if (required === true) {
+                        dfx.addClass(textBox, 'required');
+                    }
                 }
             });
 
@@ -293,11 +314,16 @@ ViperTools.prototype = {
                 // Show the revert icon.
                 actionIcon.setAttribute('title', 'Revert to original value');
                 dfx.addClass(textBox, 'actionRevert');
+                dfx.removeClass(textBox, 'required');
             } else if (input.value !== '') {
                 actionIcon.setAttribute('title', 'Clear this value');
                 dfx.addClass(textBox, 'actionClear');
+                dfx.removeClass(textBox, 'required');
             } else {
                 dfx.remove(actionIcon);
+                if (required === true) {
+                    dfx.addClass(textBox, 'required');
+                }
             }
 
             // Action.
@@ -317,6 +343,7 @@ ViperTools.prototype = {
             type: 'textbox',
             element: textBox,
             input: input,
+            label: labelEl,
             getValue: function() {
                 return input.value;
             },
@@ -359,8 +386,7 @@ ViperTools.prototype = {
 
         var errorCount = errors.length;
 
-        // TODO: How can we make this class generic or get type of item, maybe?
-        var msgsElement = dfx.getClass(item, 'Viper-textbox-messages');
+        var msgsElement = dfx.getClass('Viper-' + item.type + '-messages', item.element);
         if (msgsElement.length === 0) {
             if (errorCount === 0) {
                 return;
@@ -368,6 +394,7 @@ ViperTools.prototype = {
 
             msgsElement = document.createElement('div');
             dfx.addClass(msgsElement, 'Viper-textbox-messages');
+            item.label.appendChild(msgsElement);
         } else {
             msgsElement = msgsElement[0];
             if (errorCount === 0) {
@@ -379,7 +406,7 @@ ViperTools.prototype = {
         }
 
         var content = '';
-        for (var i = 0; i < c; i++) {
+        for (var i = 0; i < errorCount; i++) {
             content += '<span class="Viper-textbox-error">' + errors[i] + '</span>';
         }
 
@@ -412,8 +439,11 @@ ViperTools.prototype = {
         labelElem.appendChild(span);
         labelElem.appendChild(checkbox);
 
+        var self = this;
+
         if (changeCallback) {
             dfx.addEvent(checkbox, 'click', function() {
+                self.viper.focus();
                 changeCallback.call(this, checkbox.checked);
             });
         }
@@ -428,6 +458,7 @@ ViperTools.prototype = {
             setValue: function(checked) {
                 checkbox.checked = checked;
                 if (changeCallback) {
+                    self.viper.focus();
                     changeCallback.call(this, checked, true);
                 }
             }
@@ -469,6 +500,153 @@ ViperTools.prototype = {
         labelElem.appendChild(span);
 
         return labelElem;
+
+    },
+
+    createPopup: function(id, title, topContent, midContent, bottomContent, customClass, draggable, resizable, openCallback, closeCallback, resizeCallback)
+    {
+        title = title || '&nbsp;';
+
+        var self = this;
+
+        var main = document.createElement('div');
+        dfx.addClass(main, 'Viper-popup themeDark');
+
+        if (customClass) {
+            dfx.addClass(main, customClass);
+        }
+
+        var header = document.createElement('div');
+        dfx.addClass(header, 'Viper-popup-header');
+
+        if (draggable !== false) {
+            var dragIcon = document.createElement('div');
+            dfx.addClass(dragIcon, 'Viper-popup-dragIcon');
+            header.appendChild(dragIcon);
+
+            dfxjQuery(main).draggable({
+                handle: dragIcon
+            });
+        }
+
+        header.appendChild(document.createTextNode(title));
+
+        var closeIcon = document.createElement('div');
+        dfx.addClass(closeIcon, 'Viper-popup-closeIcon');
+        header.appendChild(closeIcon);
+        dfx.addEvent(closeIcon, 'click', function() {
+            self.closePopup(id, 'closeIcon');
+        });
+
+        main.appendChild(header);
+
+        if (topContent) {
+            dfx.addClass(topContent, 'Viper-popup-top');
+            main.appendChild(topContent);
+        }
+
+        dfx.addClass(midContent, 'Viper-popup-content');
+        main.appendChild(midContent);
+
+        if (bottomContent) {
+            dfx.addClass(bottomContent, 'Viper-popup-bottom');
+            main.appendChild(bottomContent);
+        }
+
+        if (resizable !== false) {
+            var resizeElements = function(ui) {
+                dfx.setStyle(midContent, 'width', ui.size.width + 'px');
+                dfx.setStyle(midContent, 'height', ui.size.height + 'px');
+            };
+
+            dfxjQuery(midContent).resizable({
+                handles: 'se',
+                resize: function(e, ui) {
+                    if (resizeCallback) {
+                        resizeCallback.call(this, e, ui);
+                    }
+                },
+                stop: function(e, ui) {
+                    if (resizeCallback) {
+                        resizeCallback.call(this, e, ui);
+                    }
+                }
+            });
+
+        }
+
+        this.addItem(id, {
+            type: 'popup',
+            element: main,
+            topContent: topContent,
+            midContent: midContent,
+            bottomContent: bottomContent,
+            openCallback: openCallback,
+            closeCallback: closeCallback,
+            showTop: function() {
+                dfx.blindDown(topContent);
+            },
+            hideTop: function() {
+                dfx.blindUp(topContent);
+            }
+        });
+
+        return main;
+
+    },
+
+    openPopup: function(id, width, height)
+    {
+        var popup        = this.getItem(id);
+        var contentElem  = popup.midContent;
+        var popupElement = popup.element;
+
+        if (width) {
+            dfx.setStyle(contentElem, 'width', width + 'px');
+        }
+
+        if (height) {
+            dfx.setStyle(contentElem, 'height', height + 'px');
+        }
+
+        dfx.setStyle(popupElement, 'left', '-9999px');
+        dfx.setStyle(popupElement, 'top', '-9999px');
+        dfx.setStyle(popupElement, 'visibility', 'hidden');
+        document.body.appendChild(popupElement);
+
+        // Set the pos to be the middle of the screen
+        //var windowDim  = dfx.getWindowDimensions();
+        var elementDim = dfx.getBoundingRectangle(popupElement);
+
+        dfx.setStyle(popupElement, 'margin-left', (((elementDim.x2 - elementDim.x1) / 2) * -1) + 'px');
+        dfx.setStyle(popupElement, 'margin-top', (((elementDim.y2 - elementDim.y1) / 2) * -1) + 'px');
+
+        dfx.setStyle(popupElement, 'left', '50%');
+        dfx.setStyle(popupElement, 'top', '50%');
+
+        if (popup.openCallback) {
+            if (popup.openCallback.call(this) === false) {
+                // Do not open.
+                document.body.removeChild(popupElement);
+                return;
+            }
+        }
+
+        dfx.setStyle(popupElement, 'visibility', 'visible');
+
+    },
+
+    closePopup: function(id, closer)
+    {
+        var popup = this.getItem(id);
+        if (popup.closeCallback) {
+            if (popup.closeCallback.call(this, closer) === false) {
+                // Do not close.
+                return;
+            }
+        }
+
+        document.body.removeChild(popup.element);
 
     },
 
