@@ -154,7 +154,21 @@ ViperTools.prototype = {
 
         this.addItem(id, {
             type: 'button',
-            element: button
+            element: button,
+            setIconClass: function(iconClass)
+            {
+                var btnIconElem = dfx.getClass('buttonIcon', button);
+                if (btnIconElem.length === 0) {
+                    btnIconElem = document.createElement('span');
+                    dfx.addClass(btnIconElem, 'buttonIcon');
+                    dfx.insertBefore(button.firstChild, btnIconElem);
+                } else {
+                    btnIconElem = btnIconElem[0];
+                    btnIconElem.className = 'buttonIcon';
+                }
+
+                dfx.addClass(btnIconElem, iconClass);
+            }
         });
 
         return button;
