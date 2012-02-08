@@ -46,6 +46,48 @@ class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractViperUnitTe
         $this->assertHTMLMatch('<p>HEADINGS Test</p><p>Lorem xtn dolor</p><p>sit amet <strong>WoW</strong></p>');
         
     }//end testRemovingAHeadingStyle()
+ 
+    
+    /**
+     * Test applying a heading style
+     *
+     * @return void
+     */
+    public function testApplyingAHeadingStyle()
+    {
+        $dir  = dirname(__FILE__).'/Images/';
+        
+        $this->selectText('Lorem');
+        $this->selectInlineToolbarLineageItem(0);
+        
+        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_heading.png'), 'Headings icon is active in the toolbar');
+        
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_heading.png');
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_h2.png');
+        
+        $this->assertHTMLMatch('<h1>HEADINGS Test</h1><h2>Lorem xtn dolor</h2><p>sit amet <strong>WoW</strong></p>');
+        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_heading_subActive.png'), 'Headings icon is not active in the inline toolbar');
+        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_h2_active.png'), 'H2 icon is not active in the inline toolbar');
+        
+    }//end testApplyingAHeadingStyle()
+    
+    
+    /**
+     * Test that the heading icon does not appear in the inline toolbar when you select a paragraph that goes over mulitple lines.
+     *
+     * @return void
+     */
+    public function testHeadingIconDoesNotAppear()
+    {
+        $dir  = dirname(__FILE__).'/Images/';
+        
+        $this->selectText('Extra');
+        $this->selectInlineToolbarLineageItem(0);
+        
+        $this->assertFalse($this->inlineToolbarButtonExists($dir.'toolbarIcon_heading.png'), 'Heading icon appears in the toolbar');
+        
+    }//end testHeadingIconDoesNotAppear()
+    
     
 }//end class
 
