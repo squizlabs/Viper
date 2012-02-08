@@ -255,7 +255,7 @@ ViperLinkPlugin.prototype = {
             }
         }
 
-        var url       = tools.createTextbox(idPrefix + ':url', 'URL', attrUrl, _updateLink);
+        var url       = tools.createTextbox(idPrefix + ':url', 'URL', attrUrl, _updateLink, true);
         var title     = tools.createTextbox(idPrefix + ':title', 'Title', attrTitle, _updateLink);
         var subject   = tools.createTextbox(idPrefix + ':subject', 'Subject', attrSubj, _updateLink);
         var newWindow = tools.createCheckbox(idPrefix + ':newWindow', 'Open a New Window', attrTarget, function(checked, viaSetValue) {
