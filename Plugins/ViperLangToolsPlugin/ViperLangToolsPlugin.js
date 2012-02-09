@@ -352,6 +352,10 @@ ViperLangToolsPlugin.prototype = {
         bubble.addSubSection('VLTP:abbreviationSubSection', this.getAbbreviationSubSection());
         bubble.addSubSection('VLTP:langSubSection', this.getLangSubSection());
 
+        bubble.setSubSectionButton('VLTP:acronymSubSection', 'ViperLangToolsPlugin:acronymButton');
+        bubble.setSubSectionButton('VLTP:abbreviationSubSection', 'ViperLangToolsPlugin:abbrButton');
+        bubble.setSubSectionButton('VLTP:langSubSection', 'ViperLangToolsPlugin:langButton');
+
         this.viper.registerCallback('ViperToolbarPlugin:updateToolbar', 'ViperLangToolsPlugin', function(data) {
             var range     = data.range;
             var tags      = ['acronym', 'abbr', 'lang'];
