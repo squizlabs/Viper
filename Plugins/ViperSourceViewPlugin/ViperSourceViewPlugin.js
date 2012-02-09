@@ -178,7 +178,7 @@ ViperSourceViewPlugin.prototype = {
         // Add the bottom section.
         var popupBottom = document.createElement('div');
         dfx.addClass(popupBottom, 'VSVP-bottomPanel');
-        var newWindowButton   = tools.createButton('VSVP:newWindow', '', 'Open In new window', 'VSVP-bottomPanel-newWindow');
+        var newWindowButton   = tools.createButton('VSVP:newWindow', '', 'Open In new window', 'VSVP-bottomPanel-newWindow sourceNewWindow');
         var applyButtonBottom = tools.createButton('VSVP:apply', 'Apply Changes', 'Apply Changes', 'VSVP-bottomPanel-apply', function() {
             self.updatePageContents();
             self.viper.ViperTools.closePopup('VSVP:popup', 'applyChanges');

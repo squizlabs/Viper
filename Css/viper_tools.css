@@ -444,6 +444,12 @@
 .Viper-button:active .buttonIcon.showHiddenChars, .Viper-button.active .buttonIcon.showHiddenChars, .Viper-button.selected .buttonIcon.showHiddenChars {
   background-position: -33px -1296px;
 }
+.buttonIcon.sourceNewWindow {
+  background-position: 0 -702px;
+}
+.Viper-button:active .buttonIcon.sourceNewWindow, .Viper-button.active .buttonIcon.sourceNewWindow, .Viper-button.selected .buttonIcon.sourceNewWindow {
+  background-position: -33px -702px;
+}
 .__viper_selHighlight {
   background-color: #CCC;
 }
@@ -621,7 +627,17 @@
   box-shadow: 0px 0px 10px 4px #222;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.7), 0 1px 0 #555555 inset;
 }
+::-webkit-scrollbar {
+  -webkit-appearance: none;
+  width: 0.6em;
+  background-color: #000;
+}
+::-webkit-scrollbar-thumb {
+  border-radius: 0.2em;
+  background-color: rgba(255, 255, 255, 0.4);
+}
 .themeDark .Viper-popup-header {
+  position: relative;
   color: #AAAAAA;
   text-shadow: 0 -1px 0 #000000;
   text-transform: uppercase;
@@ -633,13 +649,13 @@
   line-height: 1.8em;
   list-style: none outside none;
   margin: 0;
-  padding: 0.1em 0 0;
+  padding: 0.4em 0 0;
   white-space: nowrap;
   cursor: move;
 }
 /* .Viper-popup-top, */
 .Viper-popup-bottom, .Viper-popup-content {
-  padding: 0 1em 1em;
+  padding: 0.3em 1em 1em;
   background: url(../Images/bgTexture-dark1.gif) repeat 0 0 #54535a;
   text-shadow: none;
 }
@@ -657,15 +673,16 @@
 .Viper-popup-closeIcon,
 .Viper-popup-closeIcon:after,
 .Viper-popup-dragIcon,
-.Viper-popup-resizeIcon {
+.Viper-popup-resizeIcon,
+.Viper-popup .ui-resizable-se {
   position: absolute;
   background-image: url(../Images/viperToolsSprite.png);
 }
 .Viper-popup-closeIcon {
   right: 0;
   top: 0;
-  width: 22px;
-  height: 20px;
+  width: 2.2em;
+  height: 2.2em;
   opacity: 0.5;
   cursor: pointer;
   background: none;
@@ -686,22 +703,23 @@
 .Viper-popup-dragIcon {
   width: 17px;
   height: 16px;
-  left: 5px;
-  top: 2px;
+  left: 0.5em;
+  top: 50%;
+  margin-top: -8px;
   background-position: 0 -186px;
 }
 .Viper-popup-resizeIcon {
   bottom: 0;
   right: 0;
-  width: 16px;
-  height: 16px;
-  background-color: #000;
+  width: 13px;
+  height: 13px;
+  background-position: 0 -199px;
 }
 .Viper-popup .ui-resizable-se {
-  width: 16px;
-  height: 16px;
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  background-color: #000;
+  bottom: 3px;
+  right: 3px;
+  width: 13px;
+  height: 13px;
+  background-position: 0 -202px;
+  cursor: se-resize;
 }
