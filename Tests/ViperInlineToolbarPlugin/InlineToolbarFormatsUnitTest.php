@@ -252,6 +252,28 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarFormatsUnitTest extends 
 
     }//end testSelectingH3Tag()
     
+    
+     /**
+     * Test correct lineage is shown when you change a paragraph to a Heading.
+     *
+     * @return void
+     */
+    public function testPChangesToH2InLineage()
+    {
+        $this->selectText('IPSUM');
+
+        $lineage = $this->getHtml('.ViperITP-lineage');
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem selected">Selection</li>', $lineage);
+
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_heading.png');
+        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_h2.png');
+        $lineage = $this->getHtml('.ViperITP-lineage');
+        $this->assertEquals('<li class="ViperITP-lineageItem selected">H2</li>', $lineage);
+
+    }//end testPChangesToH2InLineage()
+    
+    
 }//end class
 
 ?>
