@@ -72,7 +72,7 @@ ViperCoreStylesPlugin.prototype = {
             tools.createButton('ViperCoreStylesPlugin:vtp:strong', 'B', 'Bold', 'bold', function() {
                 self.handleStyle('strong');
             });
-            tools.createButton('ViperCoreStylesPlugin:vtp:em', 'I', 'Icalic', 'italic', function() {
+            tools.createButton('ViperCoreStylesPlugin:vtp:em', 'I', 'Italic', 'italic', function() {
                 self.handleStyle('em');
             });
             tools.createButton('ViperCoreStylesPlugin:vtp:rmFormat', '', 'Remove Format', 'removeFormat', function() {
@@ -984,6 +984,10 @@ ViperCoreStylesPlugin.prototype = {
             var c             = buttons.justify.length;
             var toolbarButton = tools.getItem('ViperCoreStylesPlugin:vtp:justifyToggle');
             toolbarButton.setIconClass('justifyLeft');
+
+            if (justify === 'justify') {
+                justify = 'block';
+            }
 
             var setToggleInactive = true;
             for (var i = 0; i < c; i++) {

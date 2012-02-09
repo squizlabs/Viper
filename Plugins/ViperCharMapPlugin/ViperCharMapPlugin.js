@@ -164,6 +164,9 @@ ViperCharMapPlugin.prototype = {
         range.collapse(true);
         ViperSelection.addRange(range);
 
+        this.viper.fireNodesChanged([this.viper.getViperElement()]);
+        this.viper.fireSelectionChanged(range);
+
     },
 
     getCharacters: function()
