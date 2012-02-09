@@ -1,3 +1,9 @@
+.ace_editor {
+    font-size: 1.4em !important;
+}
+.ace_gutter-cell {
+    font-size: 0.8em !important;
+}
 .ViperToolbarPlugin-button.sourceView {
     background-position: -690px 0;
 }
@@ -37,8 +43,10 @@
 }
 
 .VSVP-confirmText {
-    border: 1px solid #222;
-    border-radius: 5px;
+    display: inline-block;
+    font-size: 1.6em;
+    padding-right: 1em;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.5);
 }
 
 .VSVP-confirmText,
@@ -46,11 +54,13 @@
 .VSVP-confirmButton-apply,
 .VSVP-bottomPanel-apply,
 .VSVP-bottomPanel-newWindow {
-    float: left;
 }
 
 .VSVP-confirmPanel {
     display: none;
+    text-align: right;
+    background: url(../Images/bgTexture-dark1.gif) repeat 0 0 #54535A;
+    padding: 0.8em 0.8em 0;
 }
 
 .ViperSourceViewPlugin-windowTools {
