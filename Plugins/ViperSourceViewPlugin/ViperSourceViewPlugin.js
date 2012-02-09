@@ -158,7 +158,7 @@ ViperSourceViewPlugin.prototype = {
         // Confirm change panel.
         var popupTop = document.createElement('div');
         dfx.addClass(popupTop, 'VSVP-confirmPanel');
-        var discardButton = tools.createButton('VSVP:discard', 'Discard Changes', 'Discard Changes', 'VSVP-confirmButton-discard', function() {
+        var discardButton = tools.createButton('VSVP:discard', 'Discard', 'Discard Changes', 'VSVP-confirmButton-discard', function() {
             self.viper.ViperTools.closePopup('VSVP:popup', 'discardChanges');
         });
         var applyButton   = tools.createButton('VSVP:apply', 'Apply Changes', 'Apply Changes', 'VSVP-confirmButton-apply', function() {
@@ -166,8 +166,8 @@ ViperSourceViewPlugin.prototype = {
             self.viper.ViperTools.closePopup('VSVP:popup', 'applyChanges');
         });
         dfx.setHtml(popupTop, '<div class="VSVP-confirmText">Would you like to apply your changes?</div>');
-        popupTop.appendChild(discardButton);
         popupTop.appendChild(applyButton);
+        popupTop.appendChild(discardButton);
         this._closeConfirm = popupTop;
 
         var source = document.createElement('div');

@@ -306,8 +306,8 @@ Viper.prototype = {
         });
 
         dfx.addEvent(elem, 'focus.viper', function(e) {
-            self.highlightToSelection();
             self._viperRange = null;
+            self.highlightToSelection();
         });
 
         if (navigator.userAgent.match(/iPad/i) != null) {
@@ -3058,14 +3058,14 @@ Viper.prototype = {
 
         if (this.isChildOfElems(target, [this.element]) !== true) {
             // Ask plugins if its one of their element.
-            if (this.isPluginElement(target) !== true) {
+            var pluginName = this.getPluginForElement(target);
+            if (!pluginName) {
                 // TODO: Fire clicked outside.
             } else {
-                // TODO: should have getPluginForElement() which would pass the
-                // plugin name to the event below so that plugins can
-                // enable/disable themselves.
-                // TODO: Better name for this..
-                return this.fireCallbacks('Viper:pluginMouseDown');
+                return this.fireCallbacks('Viper:pluginMouseDown', {
+                    pluginName: pluginName,
+                    e: e
+                });
             }
         }
 
@@ -3333,36 +3333,15 @@ Viper.prototype = {
 
     },
 
- //   fireClickedOutside: function(clickedElement)
- //   {
- //       // Check if the clicked element is part of a plugin (e.g. ViperToolbar).
- //       if (this.isPluginElement(clickedElement) === true) {
- //           return;
- //       }
- //
- //       // If a plugin is active (e.g has a popup window open) then do not disable Viper.
- //       if (this.pluginActive() === true) {
- //           // A plugin is active.
- //           return;
- //       }
- //
- //       if (this.getSetting('disableOnBlur') !== false) {
- //           this.setEnabled(false);
- //       }
- //
- //       this.fireCallbacks('clickedOutside');
- //
- //   },
-
     pluginActive: function()
     {
         return (this.ViperPluginManager.getActivePlugin() !== null);
 
     },
 
-    isPluginElement: function(element)
+    getPluginForElement: function(element)
     {
-        return this.getPluginManager().isPluginElement(element);
+        return this.getPluginManager().getPluginForElement(element);
 
     },
 
