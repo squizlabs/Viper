@@ -78,8 +78,11 @@ ViperToolbarPlugin.prototype = {
         this._toolbar = elem;
 
         dfx.addEvent(elem, 'mousedown', function(e) {
-            dfx.preventDefault(e);
-            return false;
+            var target = dfx.getMouseEventTarget(e);
+            if (dfx.isTag(target, 'input') !== true) {
+                dfx.preventDefault(e);
+                return false;
+            }
         });
 
         if (navigator.userAgent.match(/iPad/i) !== null) {
@@ -174,6 +177,7 @@ ViperToolbarPlugin.prototype = {
 
             },
             hideSubSection: function(id) {
+                id = id || this._activeSubSection;
                 dfx.removeClass(bubble, 'subSectionVisible');
                 dfx.removeClass(this._subSections[id], 'active');
                 this._activeSubSection = null;
@@ -242,7 +246,7 @@ ViperToolbarPlugin.prototype = {
         var bubble     = this.viper.ViperTools.getItem(bubbleid);
         var bubbleElem = bubble.element;
         if (bubbleElem.parentNode) {
-            document.body.removeChild(bubbleElem);
+            this._toolbar.removeChild(bubbleElem);
         }
 
         if (bubble._closeCallback) {
@@ -275,7 +279,7 @@ ViperToolbarPlugin.prototype = {
         }
 
         if (!bubbleElem.parentNode) {
-            document.body.appendChild(bubbleElem);
+            this._toolbar.appendChild(bubbleElem);
         }
 
         this.positionBubble(bubbleid);
