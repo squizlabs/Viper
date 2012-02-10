@@ -537,7 +537,7 @@ ViperTools.prototype = {
             header.appendChild(dragIcon);
 
             dfxjQuery(main).draggable({
-                handle: dragIcon
+                handle: header
             });
         }
 
@@ -546,8 +546,56 @@ ViperTools.prototype = {
         var closeIcon = document.createElement('div');
         dfx.addClass(closeIcon, 'Viper-popup-closeIcon');
         header.appendChild(closeIcon);
-        dfx.addEvent(closeIcon, 'click', function() {
+        dfx.addEvent(closeIcon, 'mousedown', function() {
             self.closePopup(id, 'closeIcon');
+        });
+
+        var fullScreen  = false;
+
+        var originalOpenCallback = openCallback;
+        openCallback = function() {
+            fullScreen = false;
+            if (originalOpenCallback) {
+                return originalOpenCallback.call(this);
+            }
+        }
+
+        var currentSize = null;
+        dfx.addEvent(header, 'safedblclick', function() {}, function() {
+            if (fullScreen !== true) {
+                fullScreen = true;
+                var mainCoords = dfx.getElementCoords(main);
+                currentSize = {
+                    width: dfx.getElementWidth(midContent),
+                    height: dfx.getElementHeight(midContent),
+                    left: mainCoords.x,
+                    top: mainCoords.y
+                };
+                dfx.getElementDimensions(midContent);
+                var topHeight     = dfx.getElementHeight(header);
+                var bottomHeight  = dfx.getElementHeight(bottomContent);
+                var toolbarHeight = 35;
+
+                var windowDim = dfx.getWindowDimensions();
+                dfx.setStyle(main, 'left', 0);
+                dfx.setStyle(main, 'top', toolbarHeight + 'px');
+                dfx.setStyle(main, 'margin-left', 0);
+                dfx.setStyle(main, 'margin-top', 0);
+                dfx.setStyle(midContent, 'width', windowDim.width - 20 + 'px');
+                dfx.setStyle(midContent, 'height', windowDim.height - toolbarHeight - bottomHeight - topHeight - 10 + 'px');
+                if (resizeCallback) {
+                    resizeCallback.call(this);
+                }
+            } else {
+                fullScreen = false;
+                dfx.setStyle(main, 'left', currentSize.left + 'px');
+                dfx.setStyle(main, 'top', currentSize.top + 'px');
+                dfx.setStyle(midContent, 'width', currentSize.width + 'px');
+                dfx.setStyle(midContent, 'height', currentSize.height + 'px');
+                if (resizeCallback) {
+                    resizeCallback.call(this);
+                }
+            }
         });
 
         main.appendChild(header);
