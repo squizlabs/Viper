@@ -717,6 +717,8 @@ ViperDOMRange.prototype = {
             return null;
         } else if (startNode && !endNode) {
             return startNode;
+        } else if (!startNode && endNode) {
+            return endNode;
         } else if (startNode.nodeType === dfx.TEXT_NODE
             && endNode.nodeType === dfx.TEXT_NODE
             && startNode === endNode

@@ -41,3 +41,12 @@
 .ViperITP.themeDark.forTopbar .ViperITP-subSectionWrapper {
     display: block;
 }
+
+.ViperITP.forTopbar .ViperITP-subSectionWrapper .subSectionArrow {
+    display: none;
+}
+
+.ViperITP.forTopbar.subSectionVisible .ViperITP-subSectionWrapper .subSectionArrow.visible {
+    display: block;
+}
+

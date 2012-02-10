@@ -159,11 +159,14 @@ ViperImagePlugin.prototype = {
             if (loading === true) {
                 dfx.removeClass(previewBox, 'info');
                 dfx.setHtml(previewBox, 'Loading preview');
+                self.viper.ViperTools.setFieldErrors('ViperImagePlugin:urlInput', []);
             } else if (!img) {
                 // Failed to load image.
-                dfx.addClass(previewBox, 'info');
-                dfx.setHtml(previewBox, 'Failed to load image');
+                dfx.removeClass(previewBox, 'info');
+                dfx.setStyle(previewBox, 'display', 'none');
+                self.viper.ViperTools.setFieldErrors('ViperImagePlugin:urlInput', ['Failed to load image']);
             } else {
+                self.viper.ViperTools.setFieldErrors('ViperImagePlugin:urlInput', []);
                 dfx.addClass(previewBox, 'info');
 
                 var tmp = document.createElement('div');

@@ -268,12 +268,12 @@ ViperPluginManager.prototype = {
 
     },
 
-    isPluginElement: function(element)
+    getPluginForElement: function(element)
     {
         for (var i in this.plugins) {
             if (this.plugins[i].isPluginElement) {
                 if (this.plugins[i].isPluginElement(element) === true) {
-                    return true;
+                    return i;
                 }
             }
         }

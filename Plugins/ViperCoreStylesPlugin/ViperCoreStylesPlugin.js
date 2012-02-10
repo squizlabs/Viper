@@ -66,13 +66,13 @@ ViperCoreStylesPlugin.prototype = {
             // Main styles and remove format button groups.
             toolbarButtons.styles   = ['strong', 'em', 'sub', 'sup', 'del'];
             toolbarButtons.rmFormat = ['rmFormat'];
-            toolbarButtons.justify = ['left', 'center', 'right', 'justify'];
+            toolbarButtons.justify = ['left', 'center', 'right', 'block'];
             toolbarButtons.other = ['hr'];
 
             tools.createButton('ViperCoreStylesPlugin:vtp:strong', 'B', 'Bold', 'bold', function() {
                 self.handleStyle('strong');
             });
-            tools.createButton('ViperCoreStylesPlugin:vtp:em', 'I', 'Icalic', 'italic', function() {
+            tools.createButton('ViperCoreStylesPlugin:vtp:em', 'I', 'Italic', 'italic', function() {
                 self.handleStyle('em');
             });
             tools.createButton('ViperCoreStylesPlugin:vtp:rmFormat', '', 'Remove Format', 'removeFormat', function() {
@@ -101,7 +101,8 @@ ViperCoreStylesPlugin.prototype = {
             tools.addButtonToGroup('ViperCoreStylesPlugin:vtp:del', 'ViperCoreStylesPlugin:vtp:btnGroup2');
             toolbarPlugin.addButton(btnGroup2);
 
-            // Justify buttons.
+            // Justify buttons bubble.
+            var justifyBubbleContent = document.createElement('div');
             var btnGroup3 = tools.createButtonGroup('ViperCoreStylesPlugin:vtp:btnGroup3');
             tools.createButton('ViperCoreStylesPlugin:vtp:left', '', 'Left Justify', 'justifyLeft', function() {
                 self.handleJustfy('left');
@@ -112,15 +113,20 @@ ViperCoreStylesPlugin.prototype = {
             tools.createButton('ViperCoreStylesPlugin:vtp:right', '', 'Right Justify', 'justifyRight', function() {
                 self.handleJustfy('right');
             });
-            tools.createButton('ViperCoreStylesPlugin:vtp:justify', '', 'Block Justify', 'justifyBlock', function() {
+            tools.createButton('ViperCoreStylesPlugin:vtp:block', '', 'Block Justify', 'justifyBlock', function() {
                 self.handleJustfy('justify');
             });
 
             tools.addButtonToGroup('ViperCoreStylesPlugin:vtp:left', 'ViperCoreStylesPlugin:vtp:btnGroup3');
             tools.addButtonToGroup('ViperCoreStylesPlugin:vtp:center', 'ViperCoreStylesPlugin:vtp:btnGroup3');
             tools.addButtonToGroup('ViperCoreStylesPlugin:vtp:right', 'ViperCoreStylesPlugin:vtp:btnGroup3');
-            tools.addButtonToGroup('ViperCoreStylesPlugin:vtp:justify', 'ViperCoreStylesPlugin:vtp:btnGroup3');
-            toolbarPlugin.addButton(btnGroup3);
+            tools.addButtonToGroup('ViperCoreStylesPlugin:vtp:block', 'ViperCoreStylesPlugin:vtp:btnGroup3');
+            justifyBubbleContent.appendChild(btnGroup3);
+
+            toolbarPlugin.createBubble('ViperCoreStylesPlugin:justifyBubble', 'Justification', null, justifyBubbleContent);
+            var justifyBubbleToggle = tools.createButton('ViperCoreStylesPlugin:vtp:justifyToggle', '', 'Toggle Justification', 'justifyLeft');
+            toolbarPlugin.addButton(justifyBubbleToggle);
+            toolbarPlugin.setBubbleButton('ViperCoreStylesPlugin:justifyBubble', 'ViperCoreStylesPlugin:vtp:justifyToggle');
 
             var hr = tools.createButton('ViperCoreStylesPlugin:vtp:hr', 'HR', 'Horizontal Rule', '', function() {
                 self.handleHR();
@@ -974,14 +980,29 @@ ViperCoreStylesPlugin.prototype = {
         }
 
         if (states.alignment) {
-            var justify = states.alignment;
-            var c        = buttons.justify.length;
+            var justify       = states.alignment;
+            var c             = buttons.justify.length;
+            var toolbarButton = tools.getItem('ViperCoreStylesPlugin:vtp:justifyToggle');
+            toolbarButton.setIconClass('justifyLeft');
+
+            if (justify === 'justify') {
+                justify = 'block';
+            }
+
+            var setToggleInactive = true;
             for (var i = 0; i < c; i++) {
                 if (buttons.justify[i] === justify) {
                     tools.setButtonActive('ViperCoreStylesPlugin:vtp:' + buttons.justify[i]);
+                    toolbarButton.setIconClass('justify' + dfx.ucFirst(justify));
+                    tools.setButtonActive('ViperCoreStylesPlugin:vtp:justifyToggle');
+                    setToggleInactive = false;
                 } else {
                     tools.setButtonInactive('ViperCoreStylesPlugin:vtp:' + buttons.justify[i]);
                 }
+            }
+
+            if (setToggleInactive === true) {
+                tools.setButtonInactive('ViperCoreStylesPlugin:vtp:justifyToggle');
             }
         }
 
