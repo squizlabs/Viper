@@ -247,9 +247,16 @@ ViperTools.prototype = {
         var title = document.createElement('span');
         dfx.addClass(title, 'Viper-textbox-title');
         dfx.setHtml(title, label);
-        document.body.appendChild(title);
-        var width = dfx.getElementWidth(title);
-        width     += 10;
+
+        // Wrap the element in a generic class so the width calculation is correct
+        // for the font size.
+        var tmp = document.createElement('div');
+        dfx.addClass(tmp, 'ViperITP');
+        dfx.setStyle(tmp, 'display', 'block');
+        tmp.appendChild(title);
+        document.body.appendChild(tmp);
+        var width = (dfx.getElementWidth(title) + 10);
+        document.body.removeChild(tmp);
         main.appendChild(title);
 
         var input   = document.createElement('input');
