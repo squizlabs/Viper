@@ -24,9 +24,8 @@
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.7);
     -webkit-box-shadow: 0 0 15px rgba(0, 0, 0, 0.7);
 }
-.ViperTP.device-ipad {
-    font-size: 13px;
-    display: none !important;
+.ViperTP-bar.device-ipad {
+/*     font-size: 13px; */
 }
 
 .ViperITP.themeDark.forTopbar.orientationLeft:before {

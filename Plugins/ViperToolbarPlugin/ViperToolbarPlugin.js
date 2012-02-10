@@ -87,7 +87,6 @@ ViperToolbarPlugin.prototype = {
 
         if (navigator.userAgent.match(/iPad/i) !== null) {
             dfx.addClass(this._toolbar, 'device-ipad');
-            dfx.setStyle(this._toolbar, 'display', 'none');
         }
 
     },
