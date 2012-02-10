@@ -151,7 +151,8 @@ MatrixLinkPlugin.prototype = {
 
             // If the link content has %asset_summary_xx% keyword then check the summary
             // checkbox.
-            var link = this.getLinkFromRange();
+            var link       = this.getLinkFromRange();
+            var incSummary = false;
             if (link && dfx.getHtml(link).match(/%asset_summary_\d+%/)) {
                 incSummary = true;
             }
