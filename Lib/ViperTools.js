@@ -252,6 +252,11 @@ ViperTools.prototype = {
         // for the font size.
         var tmp = document.createElement('div');
         dfx.addClass(tmp, 'ViperITP');
+
+        if (navigator.userAgent.match(/iPad/i) !== null) {
+            dfx.addClass(tmp, 'device-ipad');
+        }
+
         dfx.setStyle(tmp, 'display', 'block');
         tmp.appendChild(title);
         document.body.appendChild(tmp);
