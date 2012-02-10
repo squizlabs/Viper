@@ -450,6 +450,12 @@
 .Viper-button:active .buttonIcon.sourceNewWindow, .Viper-button.active .buttonIcon.sourceNewWindow, .Viper-button.selected .buttonIcon.sourceNewWindow {
   background-position: -33px -702px;
 }
+.buttonIcon.langTools {
+  background-position: 0 -1323px;
+}
+.Viper-button:active .buttonIcon.langTools, .Viper-button.active .buttonIcon.langTools, .Viper-button.selected .buttonIcon.langTools {
+  background-position: -33px -1323px;
+}
 .__viper_selHighlight {
   background-color: #CCC;
 }
@@ -504,7 +510,7 @@
   text-shadow: none;
   line-height: 1.85em;
   font-size: 1.2em;
-  padding: 0 0.9em;
+  padding: 0 10px;
   margin: 0 0 0 0.2em;
   background-color: #404040;
   border-radius: 0.2em;
@@ -519,7 +525,7 @@
 }
 .Viper-textbox.actionRevert .Viper-textbox-title {
   color: #FFF;
-  background-color: #478be8;
+  background-color: #555;
   text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.2);
 }
 .Viper-textbox.required .Viper-textbox-title {
