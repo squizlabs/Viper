@@ -29,3 +29,4 @@ class Viper_Tests_ViperCoreStylesPlugin_RemoveFormatUnitTest extends AbstractVip
 ?>
 
 
+
