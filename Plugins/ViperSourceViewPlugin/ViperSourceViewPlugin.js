@@ -206,6 +206,9 @@ ViperSourceViewPlugin.prototype = {
                         return false;
                     }
                 }
+
+                // Hide the Confirm message.
+                self.viper.ViperTools.getItem('VSVP:popup').hideTop();
             },
             function() {
                 // Resize callback.
@@ -281,11 +284,27 @@ ViperSourceViewPlugin.prototype = {
                 self._ignoreUpdate = false;
                 return;
             }
-
-            // Update page content.
-            //self.updatePageContents();
-
         });
+
+        var popup = self.viper.ViperTools.getItem('VSVP:popup');
+        // If the ESC key is pressed close the popup.
+        editor.getKeyboardHandler().addKeyboardHandler({
+            handleKeyboard: function(data, hashId, keyString) {
+                if (keyString === 'esc') {
+                    self.viper.ViperTools.closePopup('VSVP:popup');
+                } else {
+                    popup.hideTop();
+                }
+            }
+        });
+
+        var onFocus = editor.onFocus;
+        editor.onFocus = function() {
+            onFocus.call(editor);
+            setTimeout(function() {
+                popup.hideTop();
+            }, 200);
+        }
 
     },
 
