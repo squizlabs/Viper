@@ -735,7 +735,9 @@ ViperTools.prototype = {
             }
         }
 
-        document.body.removeChild(popup.element);
+        if (popup.element.parentNode) {
+            popup.element.parentNode.removeChild(popup.element);
+        }
 
     },
 

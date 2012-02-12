@@ -178,7 +178,9 @@ ViperSourceViewPlugin.prototype = {
         // Add the bottom section.
         var popupBottom = document.createElement('div');
         dfx.addClass(popupBottom, 'VSVP-bottomPanel');
-        var newWindowButton   = tools.createButton('VSVP:newWindow', '', 'Open In new window', 'VSVP-bottomPanel-newWindow sourceNewWindow');
+        var newWindowButton   = tools.createButton('VSVP:newWindow', '', 'Open In new window', 'VSVP-bottomPanel-newWindow sourceNewWindow', function() {
+            self.openInNewWindow();
+        });
         var applyButtonBottom = tools.createButton('VSVP:apply', 'Apply Changes', 'Apply Changes', 'VSVP-bottomPanel-apply', function() {
             self.updatePageContents();
             self.viper.ViperTools.closePopup('VSVP:popup', 'applyChanges');
@@ -353,61 +355,6 @@ ViperSourceViewPlugin.prototype = {
                 self.hideSourceView();
             }
         }, 700);
-
-    },
-
-    createSourceViewButtons: function(wrapper, newWindow)
-    {
-        var self = this;
-
-        var updateBtn = document.createElement('button');
-        dfx.setHtml(updateBtn, 'Update');
-        dfx.addClass(updateBtn, 'ViperSVP-updateBtn');
-        wrapper.appendChild(updateBtn);
-        dfx.addEvent(updateBtn, 'click', function() {
-            self.updatePageContents();
-            self.hideSourceView();
-        });
-
-        var revertBtn = document.createElement('button');
-        dfx.setHtml(revertBtn, 'Revert');
-        dfx.addClass(revertBtn, 'ViperSVP-cancelBtn');
-        wrapper.appendChild(revertBtn);
-        dfx.addEvent(revertBtn, 'click', function() {
-            // Revert contents.
-            self._editor.getSession().setValue(self._originalSource);
-            self.updatePageContents(self._originalSource);
-        });
-
-        var cancelBtn = document.createElement('button');
-        dfx.setHtml(cancelBtn, 'Cancel');
-        dfx.addClass(cancelBtn, 'ViperSVP-cancelBtn');
-        wrapper.appendChild(cancelBtn);
-        dfx.addEvent(cancelBtn, 'click', function() {
-            // Revert contents.
-            self.updatePageContents(self._originalSource);
-            self.hideSourceView();
-        });
-
-        if (newWindow !== true) {
-            var newWindowBtn = document.createElement('button');
-            dfx.setHtml(newWindowBtn, 'New Window');
-            dfx.addClass(newWindowBtn, 'ViperSVP-cancelBtn');
-            wrapper.appendChild(newWindowBtn);
-            dfx.addEvent(newWindowBtn, 'click', function() {
-                self.openInNewWindow();
-            });
-        } else {
-            var backToNormalBtn = document.createElement('button');
-            dfx.setHtml(backToNormalBtn, 'Back to Normal View');
-            dfx.addClass(backToNormalBtn, 'ViperSVP-cancelBtn');
-            wrapper.appendChild(backToNormalBtn);
-            dfx.addEvent(backToNormalBtn, 'click', function() {
-                var value = self._editor.getSession().getValue();
-                self.hideSourceView();
-                self.showSourceView(value);
-            });
-        }
 
     },
 
