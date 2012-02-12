@@ -93,9 +93,6 @@
 .ace_gutter-cell {
     font-size: 0.8em !important;
 }
-.ace_scroller {
-    overflow: hidden !important;
-}
 .ace-viper .ace_gutter {
     min-width: 3.5em !important;
 }
