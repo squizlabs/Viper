@@ -560,6 +560,32 @@ ViperTools.prototype = {
             }
         }
 
+        // Close popup when ESC key is pressed.
+        this.viper.registerCallback('Viper:keyUp', 'ViperTools', function(e) {
+            if (e.which === 27 && main.parentNode) {
+                self.closePopup(id);
+            }
+        });
+
+        var showfullScreen = function() {
+            dfx.getElementDimensions(midContent);
+            var headerHeight  = dfx.getElementHeight(header);
+            var topHeight     = dfx.getElementHeight(topContent);
+            var bottomHeight  = dfx.getElementHeight(bottomContent);
+            var toolbarHeight = 35;
+
+            var windowDim = dfx.getWindowDimensions();
+            dfx.setStyle(main, 'left', 0);
+            dfx.setStyle(main, 'top', toolbarHeight + 'px');
+            dfx.setStyle(main, 'margin-left', 0);
+            dfx.setStyle(main, 'margin-top', 0);
+            dfx.setStyle(midContent, 'width', windowDim.width - 20 + 'px');
+            dfx.setStyle(midContent, 'height', windowDim.height - toolbarHeight - bottomHeight - headerHeight - topHeight - 10 + 'px');
+            if (resizeCallback) {
+                resizeCallback.call(this);
+            }
+        };
+
         var currentSize = null;
         dfx.addEvent(header, 'safedblclick', function() {}, function() {
             if (fullScreen !== true) {
@@ -571,22 +597,17 @@ ViperTools.prototype = {
                     left: mainCoords.x,
                     top: mainCoords.y
                 };
-                dfx.getElementDimensions(midContent);
-                var topHeight     = dfx.getElementHeight(header);
-                var bottomHeight  = dfx.getElementHeight(bottomContent);
-                var toolbarHeight = 35;
 
-                var windowDim = dfx.getWindowDimensions();
-                dfx.setStyle(main, 'left', 0);
-                dfx.setStyle(main, 'top', toolbarHeight + 'px');
-                dfx.setStyle(main, 'margin-left', 0);
-                dfx.setStyle(main, 'margin-top', 0);
-                dfx.setStyle(midContent, 'width', windowDim.width - 20 + 'px');
-                dfx.setStyle(midContent, 'height', windowDim.height - toolbarHeight - bottomHeight - topHeight - 10 + 'px');
-                if (resizeCallback) {
-                    resizeCallback.call(this);
-                }
+                showfullScreen();
+
+                dfx.removeEvent(window, 'resize.ViperTools-popup-' + id);
+                dfx.addEvent(window, 'resize.ViperTools-popup-' + id, function() {
+                    // Update the popup size since its in full screen.
+                    showfullScreen();
+                });
             } else {
+                dfx.removeEvent(window, 'resize.ViperTools-popup-' + id);
+
                 fullScreen = false;
                 dfx.setStyle(main, 'left', currentSize.left + 'px');
                 dfx.setStyle(main, 'top', currentSize.top + 'px');
@@ -595,7 +616,7 @@ ViperTools.prototype = {
                 if (resizeCallback) {
                     resizeCallback.call(this);
                 }
-            }
+            }//end if
         });
 
         main.appendChild(header);
@@ -644,10 +665,18 @@ ViperTools.prototype = {
             openCallback: openCallback,
             closeCallback: closeCallback,
             showTop: function() {
-                dfx.blindDown(topContent);
+                dfx.blindDown(topContent, function() {
+                    if (fullScreen === true) {
+                        showfullScreen();
+                    }
+                });
             },
             hideTop: function() {
-                dfx.blindUp(topContent);
+                dfx.blindUp(topContent, function() {
+                    if (fullScreen === true) {
+                        showfullScreen();
+                    }
+                });
             }
         });
 
