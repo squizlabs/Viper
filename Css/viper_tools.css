@@ -496,7 +496,7 @@
   position: relative;
 }
 .Viper-textbox.actionRevert .Viper-textbox-main, .Viper-textbox.actionClear .Viper-textbox-main {
-  padding-right: 24px;
+  padding-right: 22px;
 }
 .Viper-textbox-title {
   position: absolute;
@@ -542,7 +542,7 @@
   font-size: 1.5em;
   font-weight: bold;
   border: none;
-  padding: 0.1em 0.6em 0.15em 0.6em;
+  padding: 0.1em 0 0.15em;
   background: transparent;
   color: #5A8BD0;
   outline: none;
@@ -551,8 +551,7 @@
   color: #FFF;
 }
 .Viper-textbox.required .Viper-textbox-input[type=text], .Viper-textbox.required .Viper-textbox-textArea {
-  padding-left: 11px;
-  overflow: hidden;
+  color: #c44e4e;
 }
 .Viper-textbox-input::-webkit-input-placeholder, .Viper-textbox-textArea::-webkit-input-placeholder {
   color: #c44e4e;
@@ -596,8 +595,6 @@
   display: block;
   content: "";
   background-position: 0 -158px;
-  top: 3px;
-  margin-top: 0;
 }
 .Viper-textbox.actionRevert .Viper-textbox-action, .Viper-textbox.actionClear .Viper-textbox-action {
   display: block;
