@@ -10,17 +10,10 @@
         var viper = null;
         ViperReadyCallback = function() {
             viper = new Viper('test');
-            var pluginSets = {
-                all: {
-                    plugins: ['ViperCoreStylesPlugin', 'ViperKeyboardEditorPlugin', 'ViperInlineToolbarPlugin', 'ViperHistoryPlugin', 'ViperListPlugin', 'ViperFormatPlugin', 'ViperToolbarPlugin', 'ViperTableEditorPlugin', 'ViperCopyPastePlugin', 'ViperImagePlugin', 'ViperLinkPlugin', 'ViperAccessibilityPlugin', 'ViperSourceViewPlugin', 'ViperSearchReplacePlugin', 'ViperLangToolsPlugin', 'ViperCharMapPlugin', 'ViperTrackChangesPlugin', 'ViperInvisibleCharPlugin']
-                }
-            };
-
-            viper.setPluginSets(pluginSets);
-            viper.getPluginManager().usePluginSet('all');
+            viper.getPluginManager().setPlugins(['ViperCoreStylesPlugin', 'ViperKeyboardEditorPlugin', 'ViperInlineToolbarPlugin', 'ViperHistoryPlugin', 'ViperListPlugin', 'ViperFormatPlugin', 'ViperToolbarPlugin', 'ViperTableEditorPlugin', 'ViperCopyPastePlugin', 'ViperImagePlugin', 'ViperLinkPlugin', 'ViperAccessibilityPlugin', 'ViperSourceViewPlugin', 'ViperSearchReplacePlugin', 'ViperLangToolsPlugin', 'ViperCharMapPlugin', 'ViperTrackChangesPlugin', 'ViperInvisibleCharPlugin']);
             viper.setEditableElement(document.getElementById('content'));
 
-            var buttons = [['bold', 'italic', 'removeFormat'], ['subscript', 'superscript', 'strikethrough'], 'justify', 'hr', ['undo', 'redo'], ['unorderedList', 'orderedList', 'indentList', 'outdentList'], ['anchor', 'class'], 'insertTable', 'image', ['insertLink', 'removeLink'], 'insertCharacter', 'sourceEditor', 'accessibility', 'searchReplace', 'langTools', 'showHiddenChars', 'trackChanges'];
+            var buttons = [['bold', 'italic', 'subscript', 'superscript', 'strikethrough', 'removeFormat'], 'justify', 'hr', ['undo', 'redo'], ['unorderedList', 'orderedList', 'indentList', 'outdentList'], ['anchor', 'class'], 'insertTable', 'image', ['insertLink', 'removeLink'], 'insertCharacter', 'sourceEditor', 'accessibility', 'searchReplace', 'langTools', 'showHiddenChars', 'trackChanges'];
             viper.getPluginManager().setPluginSettings('ViperToolbarPlugin', {buttons: buttons});
         };
     </script>
@@ -43,9 +36,9 @@
 
 <div id="content" spellcheck="false">
     <h1>Simple Viper Example</h1>
-    
+
     <!-- comment goes here la -->
-    
+
         <p>Australian governments at all levels have <u><strong><em>endorsed</em></strong></u> WCAG 2.0, and require all government websites (federal, state and territory) to meet the new guidelines at the minimum compliance level (Single A) by the end of 2012. In addition, the Australian Government requires all federal websites to meet the medium conformance level (Double A) by the end of 2014.</p>
 
 <p>Federal government agencies must update <strong>all government</strong> websites (as specified within scope under the Website Accessibility National Transition Strategy (NTS)) to WCAG 2.0 conformance. Agencies should use the principle of progressive enhancement when building and managing websites, and test for conformance across multiple browsers and operating system configurations.</p>

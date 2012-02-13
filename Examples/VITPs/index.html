@@ -10,14 +10,7 @@
         var viper = null;
         dfx.addLoadEvent(function() {
             viper = new Viper('test');
-            var pluginSets = {
-                all: {
-                    plugins: ['ViperToolbarPlugin', 'ViperCoreStylesPlugin', 'ViperKeyboardEditorPlugin', 'ViperInlineToolbarPlugin', 'ViperHistoryPlugin', 'ViperListPlugin', 'ViperFormatPlugin', 'ViperToolbarPlugin', 'ViperTableEditorPlugin', 'ViperCopyPastePlugin']
-                }
-            };
-
-            viper.setPluginSets(pluginSets);
-            viper.getPluginManager().usePluginSet('all');
+            viper.getPluginManager().setPlugins(['ViperToolbarPlugin', 'ViperCoreStylesPlugin', 'ViperKeyboardEditorPlugin', 'ViperInlineToolbarPlugin', 'ViperHistoryPlugin', 'ViperListPlugin', 'ViperFormatPlugin', 'ViperToolbarPlugin', 'ViperTableEditorPlugin', 'ViperCopyPastePlugin']);
             viper.setEditableElement(document.getElementById('content'));
         });
     </script>
@@ -29,10 +22,10 @@
 <div class="ViperITP-subSectionWrapper">
     <div class="Viper-subSection active">
         <div>
-        
-        
+
+
         <div class="ViperAP-wrapper">
-        
+
             <ol class="ViperAP-issueList">
                 <li class="ViperAP-issueItem">
                     <span class="ViperAP-issueType error"></span>
@@ -68,8 +61,8 @@
                 </li>
             </ol>
         </div>
-        
-        
+
+
         </div>
     </div>
 </div>
@@ -89,9 +82,9 @@ Issue 3 of 16
 <div class="ViperITP-subSectionWrapper">
     <div class="Viper-subSection active">
         <div>
-        
+
         <div class="ViperAP-wrapper">
-        
+
             <div class="ViperAP-issuePane">
                 <div class="ViperAP-issueDetails">
                     <span class="ViperAP-issueType error"></span>
@@ -99,47 +92,47 @@ Issue 3 of 16
                     <div class="issueWcag">
                     <strong>WCAG References</strong><br />
                     <em>Category: </em> <a href="#">Non-text Content</a><br />
-                    
+
                     <em>Technique: </em> <a href="#">H28</a><br />
-                    
+
                     </div>
-                
+
                 </div><!-- End References -->
-                    
+
                     <div class="ViperAP-issueResolution">
-                    
+
                         <div class="resolutionHeader">
                             <strong>Resolution</strong>
                             <div class="Viper-button icon locate"><span class="buttonIcon locate"></span>&nbsp;</div><div class="Viper-button icon sourceView"><span class="buttonIcon sourceView"></span>&nbsp;</div><div title="Mark as done" class="Viper-button accessRerun">Done</div>
                         </div>
-                        
+
                         <div class="resolutionInstructions">Add an alt attribute to your img element. This should describe the purpose or content of the image.</div>
-                        
+
                         <div class="resolutionActions">
-                        
+
                         <div class="resolutionCol-left">
-                        
+
                             <div class="imagePreview"><img src="car.jpeg" alt="car" /></div>
-                        
+
                         </div>
-                        
+
                         <div class="resolutionCol-right">
-                        
+
                             <label class="ViperITP-label required" style="padding-left: 30px;"><span class="ViperITP-labelText">Alt</span><input type="text" class="ViperITP-input" size="10"></label>
-                            
-                            
+
+
                             <div class="Viper-button">Apply Changes</div>
                             </div>
 
                         </div>
-                        
-                        
+
+
                     </div>
-                
+
             </div>
         </div>
-        
-        
+
+
         </div>
     </div>
 </div>
@@ -150,7 +143,7 @@ Issue 3 of 16
 <!-- /* VITP -  Accessibility item detail */ -->
 <div class="ViperITP themeDark visible subSectionVisible forTopbar" style="left: 750px; top: 36px; width: 320px;">
     <div class="ViperITP-header">Accessibility Auditor</div>
-    
+
     <div class="ViperITP-tools issueNav">
         <div class="ViperAP-issueNav">
             <a href="#">List</a><span class="issueNav-divider"> > </span>Issue 16 of 16
@@ -161,7 +154,7 @@ Issue 3 of 16
     <div class="ViperITP-subSectionWrapper">
         <div class="Viper-subSection active">
             <div>
-            
+
                 <div class="ViperAP-wrapper">
                     <div class="ViperAP-issuePane">
                         <div class="ViperAP-issueDetails">
@@ -173,24 +166,24 @@ Issue 3 of 16
                                 <em>Technique: </em> <a href="#">T1000</a><br />
                             </div>
                         </div><!-- ViperAP-issueDetails -->
-                            
+
                         <div class="ViperAP-issueResolution">
-                        
+
                             <div class="resolutionHeader">
                                 <strong>Resolution</strong>
                                 <div class="Viper-button icon locate"><span class="buttonIcon locate"></span>&nbsp;</div><div class="Viper-button icon sourceView"><span class="buttonIcon sourceView"></span>&nbsp;</div><div title="Mark as done" class="Viper-button accessRerun">Done</div>
                             </div>
-                            
+
                             <div class="resolutionInstructions">All table data cells need to have the correct ID's to identify their corresponding table headings</div>
-                            
+
                             <div class="resolutionActions">
                                 <div class="Viper-button">Regenerate heading references</div>
                             </div>
-                            
+
                         </div><!--ViperAP-issueResolution-->
                     </div><!--ViperAP-issuePane-->
                 </div><!--ViperAP-wrapper-->
-            
+
             </div>
         </div><!--Viper-subSection active-->
     </div><!--ViperITP-subSectionWrapper-->

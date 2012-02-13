@@ -107,24 +107,6 @@ Viper.prototype = {
 
     },
 
-    setPluginSets: function(sets, callback)
-    {
-        var self = this;
-        for (var setName in sets) {
-            var set = sets[setName];
-            this.ViperPluginManager.addPluginSet(setName, set.plugins, true, function() {
-                delete sets[setName];
-                self.setPluginSets(sets, callback);
-            });
-            return;
-        }
-
-        if (callback) {
-            callback.call(this);
-        }
-
-    },
-
     getPluginManager: function()
     {
         return this.ViperPluginManager;

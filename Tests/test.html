@@ -51,14 +51,7 @@
                 var contentElement = dfx.getId('content');
 
                 viper = new Viper('test');
-                var pluginSets = {
-                    all: {
-                        plugins: ['ViperCoreStylesPlugin', 'ViperKeyboardEditorPlugin', 'ViperInlineToolbarPlugin', 'ViperHistoryPlugin', 'ViperListPlugin', 'ViperFormatPlugin', 'ViperToolbarPlugin', 'ViperTableEditorPlugin', 'ViperCopyPastePlugin', 'ViperImagePlugin', 'ViperLinkPlugin', 'ViperSearchReplacePlugin', 'ViperLangToolsPlugin', 'ViperTrackChangesPlugin']
-                    }
-                };
-
-                viper.setPluginSets(pluginSets);
-                viper.getPluginManager().usePluginSet('all');
+                viper.getPluginManager().setPlugins(['ViperCoreStylesPlugin', 'ViperKeyboardEditorPlugin', 'ViperInlineToolbarPlugin', 'ViperHistoryPlugin', 'ViperListPlugin', 'ViperFormatPlugin', 'ViperToolbarPlugin', 'ViperTableEditorPlugin', 'ViperCopyPastePlugin', 'ViperImagePlugin', 'ViperLinkPlugin', 'ViperSearchReplacePlugin', 'ViperLangToolsPlugin', 'ViperTrackChangesPlugin']);
                 viper.setEditableElement(contentElement);
 
                 var jsRes = dfx.getId('jsRes');
