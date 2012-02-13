@@ -80,11 +80,11 @@
 .themeDark .Viper-buttonGroup .Viper-button, .themeDark .Viper-buttonGroup .Viper-button.disabled:hover {
   border-left: 1px solid #898989;
 }
-.themeDark .Viper-buttonGroup .Viper-button:first-child,
-.themeDark .Viper-buttonGroup .Viper-button.active,
-.themeDark .Viper-buttonGroup .Viper-button.selected,
-.themeDark .Viper-buttonGroup .Viper-button.disabled:first-child:hover {
+.themeDark .Viper-buttonGroup .Viper-button:first-child {
   border-left: none;
+}
+.themeDark .Viper-buttonGroup .Viper-button.active, .themeDark .Viper-buttonGroup .Viper-button.selected, .themeDark .Viper-buttonGroup .Viper-button.disabled:first-child:hover {
+  border-left-color: #38373c;
 }
 /* Theme - Light Grey */
 .themeLight .Viper-button, .themeLight .Viper-button.disabled:hover {
