@@ -10,22 +10,23 @@
     }
   </style>
   <link href="ViperSourceViewPlugin.css" media="screen" rel="stylesheet" />
+  <link href="../../Css/viper_tools.css" media="screen" rel="stylesheet" />
 <script src="Ace/src/ace.js" type="text/javascript" charset="utf-8"></script>
-<script src="Ace/src/theme-twilight.js" type="text/javascript" charset="utf-8"></script>
+<script src="Ace/src/theme-viper.js" type="text/javascript" charset="utf-8"></script>
 <script src="Ace/src/mode-html.js" type="text/javascript" charset="utf-8"></script>
 </head>
-<body id="ViperSourceViewPlugin-window">
-    <pre id="editor"></pre>
-    <div id="tools" class="ViperSourceViewPlugin-windowTools"></div>
-
+<body id="ViperSourceViewPlugin-window" class="ViperSourceViewPlugin-window">
+    <div class="Viper-popup themeDark VSVP-popup">
+        <div class="VSVP-confirmPanel Viper-popup-top">
+            <div class="VSVP-confirmText">Changes you make to the source code will be reflected in your edit preview window in real time.</div>
+            <div class="Viper-button" title="Close Changes" onclick="window.close();">Close Window</div>
+        </div>
+        <div class="Viper-popup-content">
+            <pre id="editor"></pre>
+        </div>
+    </div>
     <script>
     window.onload = function() {
-        var editor = ace.edit("editor");
-        editor.setTheme("ace/theme/twilight");
-
-        var HTMLMode = require("ace/mode/html").Mode;
-        editor.getSession().setMode(new HTMLMode());
-
         // Get the Viper id from query string.
         var search  = window.location.search;
         if (!search) {
@@ -40,11 +41,12 @@
             return;
         }
 
+        var editor = ace.edit("editor");
+
+        viperSVP.applyEditorSettings(editor);
         viperSVP.initEditorEvents(editor);
         viperSVP._editor = editor;
         viperSVP.updateSourceContents();
-        viperSVP.createSourceViewButtons(document.getElementById('tools'), true);
-
     };
     </script>
 </body>

@@ -57,30 +57,22 @@
     padding: 0.8em 0.8em 0;
 }
 
-.ViperSourceViewPlugin-windowTools {
-    position: fixed;
+
+.ViperSourceViewPlugin-window .VSVP-popup {
+    top: 0;
     left: 0;
-    right: 0;
-    bottom: 0;
-    padding: 10px;
-    border: 1px solid #666;
-    box-shadow: 0 0 13px #222;
-    z-index: 150;
-    border-top-right-radius: 5px;
-    border-top-left-radius: 5px;
-    background: -webkit-gradient(linear, left top, left bottom, from(#919097), to(#727179));
-    background: -moz-linear-gradient(center top , #919097, #727179) repeat scroll 0 0 transparent;
-    border-top-color: #A2A1A8;
-    text-align: center;
+    width: 100%;
+    height: 100%;
 }
 
-#ViperSourceViewPlugin-window #editor {
-    margin: 0;
-    position: absolute;
-    top: 0;
-    bottom: 41px;
-    left: 0;
-    right: 0;
+.ViperSourceViewPlugin-window .VSVP-popup .Viper-popup-content,
+.ViperSourceViewPlugin-window .VSVP-popup #editor {
+    height: 100%;
+    position: relative;
+}
+
+.ViperSourceViewPlugin-window .VSVP-confirmPanel {
+    display: block;
 }
 
 /* Ace Editor overrides*/
