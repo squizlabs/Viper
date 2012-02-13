@@ -268,7 +268,7 @@ ViperTools.prototype = {
         input.type  = 'text';
         input.value = value;
         dfx.addClass(input, 'Viper-textbox-input');
-        dfx.setStyle(input, 'padding-left', width + 'px');
+        dfx.setStyle(main, 'padding-left', width + 'px');
         main.appendChild(input);
 
         if (desc) {
