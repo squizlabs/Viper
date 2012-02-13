@@ -140,8 +140,8 @@ ViperAccessibilityPlugin.prototype = {
         this._subSection = subSection;
 
         // The main toolbar button to toggle the toolbar bubble on and off.
-        var vapButton = tools.createButton('VAP:toggle', '', 'Accessibility Auditor', 'accessAudit');
-        toolbar.setBubbleButton('VAP:bubble', 'VAP:toggle');
+        var vapButton = tools.createButton('accessibility', '', 'Accessibility Auditor', 'accessAudit');
+        toolbar.setBubbleButton('VAP:bubble', 'accessibility');
         toolbar.addButton(vapButton);
 
         // Error info, settings and rerun button.
@@ -260,7 +260,7 @@ ViperAccessibilityPlugin.prototype = {
             dfx.setStyle(dfx.getClass('loadingCont', self._subSection)[0], 'display', 'none');
 
             // Main toolbar buttons.
-            var toggleButton = self.viper.ViperTools.getItem('VAP:toggle').element;
+            var toggleButton = self.viper.ViperTools.getItem('accessibility').element;
 
             if (msgs.length === 0) {
                 // No messages, show no results message.

@@ -39,31 +39,31 @@ ViperListPlugin.prototype = {
             var tools           = this.viper.ViperTools;
             this._toolbarPlugin = toolbarPlugin;
             var toolbarButtons  = {
-                ul: 'ViperLinkPlugin:vtp:ul',
-                ol: 'ViperLinkPlugin:vtp:ol',
-                indent: 'ViperLinkPlugin:vtp:indent',
-                outdent: 'ViperLinkPlugin:vtp:outdent',
+                ul: 'unorderedList',
+                ol: 'orderedList',
+                indent: 'indentList',
+                outdent: 'outdentList',
             };
 
             var btnGroup = tools.createButtonGroup('ViperLinkPlugin:vtp:buttons');
-            tools.createButton('ViperLinkPlugin:vtp:ul', '', 'Make Unordered List', 'listUL', function() {
+            tools.createButton('unorderedList', '', 'Make Unordered List', 'listUL', function() {
                 var statuses = self._getButtonStatuses(null, true);
                 return self._makeListButtonAction(statuses.list, 'ul');
             });
-            tools.createButton('ViperLinkPlugin:vtp:ol', '', 'Make Ordered List', 'listOL', function() {
+            tools.createButton('orderedList', '', 'Make Ordered List', 'listOL', function() {
                 var statuses = self._getButtonStatuses(null, true);
                 return self._makeListButtonAction(statuses.list, 'ol');
             });
-            tools.createButton('ViperLinkPlugin:vtp:indent', '', 'Indent List', 'listIndent', function() {
+            tools.createButton('indentList', '', 'Indent List', 'listIndent', function() {
                 self.tabRange();
             });
-            tools.createButton('ViperLinkPlugin:vtp:outdent', '', 'Outdent List', 'listOutdent', function() {
+            tools.createButton('outdentList', '', 'Outdent List', 'listOutdent', function() {
                 self.tabRange(null, true);
             });
-            tools.addButtonToGroup('ViperLinkPlugin:vtp:ul', 'ViperLinkPlugin:vtp:buttons');
-            tools.addButtonToGroup('ViperLinkPlugin:vtp:ol', 'ViperLinkPlugin:vtp:buttons');
-            tools.addButtonToGroup('ViperLinkPlugin:vtp:indent', 'ViperLinkPlugin:vtp:buttons');
-            tools.addButtonToGroup('ViperLinkPlugin:vtp:outdent', 'ViperLinkPlugin:vtp:buttons');
+            tools.addButtonToGroup('unorderedList', 'ViperLinkPlugin:vtp:buttons');
+            tools.addButtonToGroup('orderedList', 'ViperLinkPlugin:vtp:buttons');
+            tools.addButtonToGroup('indentList', 'ViperLinkPlugin:vtp:buttons');
+            tools.addButtonToGroup('outdentList', 'ViperLinkPlugin:vtp:buttons');
             this._toolbarPlugin.addButton(btnGroup);
 
             this.viper.registerCallback('ViperToolbarPlugin:updateToolbar', 'ViperListPlugin', function(data) {
@@ -1231,28 +1231,28 @@ ViperListPlugin.prototype = {
         if (statuses.ul === true || statuses.ol === true) {
             var list = statuses.list;
 
-            tools.createButton('ViperListPlugin:vitp:ul', '', 'Make Unordered List', 'listUL', function() {
+            tools.createButton('vitpUnorderedList', '', 'Make Unordered List', 'listUL', function() {
                 self._makeListButtonAction(list, 'ul');
             }, !statuses.ul, dfx.isTag(list, 'ul'));
 
-            tools.createButton('ViperListPlugin:vitp:ol', '', 'Make Ordered List', 'listOL', function() {
+            tools.createButton('vitpOrderedList', '', 'Make Ordered List', 'listOL', function() {
                 self._makeListButtonAction(list, 'ol');
             }, !statuses.ol, dfx.isTag(list, 'ol'));
 
-            tools.addButtonToGroup('ViperListPlugin:vitp:ul', 'ViperListPlugin:vitp:buttons');
-            tools.addButtonToGroup('ViperListPlugin:vitp:ol', 'ViperListPlugin:vitp:buttons');
+            tools.addButtonToGroup('vitpUnorderedList', 'ViperListPlugin:vitp:buttons');
+            tools.addButtonToGroup('vitpOrderedList', 'ViperListPlugin:vitp:buttons');
         }
 
         if (statuses.increaseIndent === true || statuses.decreaseIndent === true) {
-            tools.createButton('ViperListPlugin:vitp:indent', '', 'Indent List', 'listIndent', function() {
+            tools.createButton('vitpIndentList', '', 'Indent List', 'listIndent', function() {
                 self.tabRange();
             }, !statuses.increaseIndent);
-            tools.createButton('ViperListPlugin:vitp:outdent', '', 'Outdent List', 'listOutdent', function() {
+            tools.createButton('vitpOutdentList', '', 'Outdent List', 'listOutdent', function() {
                 self.tabRange(null, true);
             }, !statuses.decreaseIndent);
 
-            tools.addButtonToGroup('ViperListPlugin:vitp:indent', 'ViperListPlugin:vitp:buttons');
-            tools.addButtonToGroup('ViperListPlugin:vitp:outdent', 'ViperListPlugin:vitp:buttons');
+            tools.addButtonToGroup('vitpIndentList', 'ViperListPlugin:vitp:buttons');
+            tools.addButtonToGroup('vitpOutdentList', 'ViperListPlugin:vitp:buttons');
         }
 
     },

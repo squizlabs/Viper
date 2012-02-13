@@ -88,8 +88,8 @@ ViperCharMapPlugin.prototype = {
 
         var map = toolbar.createBubble('ViperCMP:bubble', 'Insert Character', subContent, null, null, null, 'VCMP-main');
 
-        var toggle = tools.createButton('ViperCMP:toggle', '', 'Insert Character', 'charMap');
-        toolbar.setBubbleButton('ViperCMP:bubble', 'ViperCMP:toggle');
+        var toggle = tools.createButton('insertCharacter', '', 'Insert Character', 'charMap');
+        toolbar.setBubbleButton('ViperCMP:bubble', 'insertCharacter');
         toolbar.addButton(toggle);
 
         // Table cell click event.

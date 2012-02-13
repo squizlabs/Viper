@@ -19,6 +19,9 @@
             viper.setPluginSets(pluginSets);
             viper.getPluginManager().usePluginSet('all');
             viper.setEditableElement(document.getElementById('content'));
+
+            var buttons = [['bold', 'italic', 'removeFormat'], ['subscript', 'superscript', 'strikethrough'], 'justify', 'hr', ['undo', 'redo'], ['unorderedList', 'orderedList', 'indentList', 'outdentList'], ['anchor', 'class'], 'insertTable', 'image', ['insertLink', 'removeLink'], 'insertCharacter', 'sourceEditor', 'accessibility', 'searchReplace', 'langTools', 'showHiddenChars', 'trackChanges'];
+            viper.getPluginManager().setPluginSettings('ViperToolbarPlugin', {buttons: buttons});
         };
     </script>
 </head>

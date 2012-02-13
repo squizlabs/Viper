@@ -428,9 +428,9 @@ ViperFormatPlugin.prototype = {
 
         var btnGroup = tools.createButtonGroup('VFP:vtp:buttons');
 
-        tools.createButton('VFP:vtp:anchor:insertBtn', '', 'Anchor ID', 'anchorID');
-        tools.addButtonToGroup('VFP:vtp:anchor:insertBtn', 'VFP:vtp:buttons');
-        toolbar.setBubbleButton('VFP:vtp:anchor:bubble', 'VFP:vtp:anchor:insertBtn');
+        tools.createButton('anchor', '', 'Anchor ID', 'anchorID');
+        tools.addButtonToGroup('anchor', 'VFP:vtp:buttons');
+        toolbar.setBubbleButton('VFP:vtp:anchor:bubble', 'anchor');
 
         // Class.
         var classSubContent = document.createElement('div');
@@ -443,9 +443,9 @@ ViperFormatPlugin.prototype = {
             _updateValue(dfx.getTag('input', classTextbox)[0], 'class');
         });
 
-        tools.createButton('VFP:vtp:class:insertBtn', '', 'CSS Class', 'cssClass');
-        tools.addButtonToGroup('VFP:vtp:class:insertBtn', 'VFP:vtp:buttons');
-        toolbar.setBubbleButton('VFP:vtp:class:bubble', 'VFP:vtp:class:insertBtn');
+        tools.createButton('class', '', 'CSS Class', 'cssClass');
+        tools.addButtonToGroup('class', 'VFP:vtp:buttons');
+        toolbar.setBubbleButton('VFP:vtp:class:bubble', 'class');
         toolbar.addButton(btnGroup);
 
 
@@ -453,25 +453,25 @@ ViperFormatPlugin.prototype = {
             if (data.range.collapsed === true
                 || data.range.startContainer.parentNode !== data.range.endContainer.parentNode
             ) {
-                tools.disableButton('VFP:vtp:anchor:insertBtn');
-                tools.disableButton('VFP:vtp:class:insertBtn');
+                tools.disableButton('anchor');
+                tools.disableButton('class');
                 toolbar.closeBubble('VFP:vtp:class:bubble');
                 toolbar.closeBubble('VFP:vtp:anchor:bubble');
             } else {
-                tools.enableButton('VFP:vtp:anchor:insertBtn');
-                tools.enableButton('VFP:vtp:class:insertBtn');
+                tools.enableButton('anchor');
+                tools.enableButton('class');
             }
 
             if (_updateValue(dfx.getTag('input', idTextbox)[0], 'id')) {
-                tools.setButtonActive('VFP:vtp:anchor:insertBtn');
+                tools.setButtonActive('anchor');
             } else {
-                tools.setButtonInactive('VFP:vtp:anchor:insertBtn');
+                tools.setButtonInactive('anchor');
             }
 
             if (_updateValue(dfx.getTag('input', classTextbox)[0], 'class')) {
-                tools.setButtonActive('VFP:vtp:class:insertBtn');
+                tools.setButtonActive('class');
             } else {
-                tools.setButtonInactive('VFP:vtp:class:insertBtn');
+                tools.setButtonInactive('class');
             }
         });
 

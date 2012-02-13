@@ -44,19 +44,19 @@ ViperHistoryPlugin.prototype = {
             var tools = this.viper.ViperTools;
 
             var toolbarButtons = {
-                undo: 'ViperHistoryPlugin:undo',
-                redo: 'ViperHistoryPlugin:redo'
+                undo: 'undo',
+                redo: 'redo'
             };
 
             var btnGroup = tools.createButtonGroup('ViperHistoryPlugin:buttons');
-            tools.createButton('ViperHistoryPlugin:undo', '', 'Undo', 'historyUndo', function() {
+            tools.createButton('undo', '', 'Undo', 'historyUndo', function() {
                 return self.handleUndo();
             });
-            tools.createButton('ViperHistoryPlugin:redo', '', 'Redo', 'historyRedo', function() {
+            tools.createButton('redo', '', 'Redo', 'historyRedo', function() {
                 return self.handleRedo();
             });
-            tools.addButtonToGroup('ViperHistoryPlugin:undo', 'ViperHistoryPlugin:buttons');
-            tools.addButtonToGroup('ViperHistoryPlugin:redo', 'ViperHistoryPlugin:buttons');
+            tools.addButtonToGroup('undo', 'ViperHistoryPlugin:buttons');
+            tools.addButtonToGroup('redo', 'ViperHistoryPlugin:buttons');
             toolbarPlugin.addButton(btnGroup);
 
             this.viper.registerCallback('ViperToolbarPlugin:updateToolbar', 'ViperHistoryPlugin', function(data) {

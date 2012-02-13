@@ -128,9 +128,9 @@ ViperTrackChangesPlugin.prototype = {
     {
         this._barActive = this.subToolbarPlugin.toggleToolbar('TrackChanges');
         if (this._barActive === true) {
-            this.viper.ViperTools.setButtonActive('VTCP:toggle');
+            this.viper.ViperTools.setButtonActive('trackChanges');
         } else {
-            this.viper.ViperTools.setButtonInactive('VTCP:toggle');
+            this.viper.ViperTools.setButtonInactive('trackChanges');
         }
 
         if (ViperChangeTracker.isTracking() === false
@@ -195,14 +195,14 @@ ViperTrackChangesPlugin.prototype = {
         var tools     = this.viper.ViperTools;
         var toolbar   = this.viper.ViperPluginManager.getPlugin('ViperToolbarPlugin');
 
-        var tcBtn = tools.createButton('VTCP:toggle', 'TC', 'Toggle Track Changes', '', function() {
+        var tcBtn = tools.createButton('trackChanges', 'TC', 'Toggle Track Changes', '', function() {
             if (tcEnabled === true) {
                 tcEnabled = false;
-                tools.setButtonInactive('VTCP:toggle');
+                tools.setButtonInactive('trackChanges');
                 self.disableTracking();
             } else {
                 tcEnabled = true;
-                tools.setButtonActive('VTCP:toggle');
+                tools.setButtonActive('trackChanges');
                 self.enableTracking();
             }
         });

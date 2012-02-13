@@ -98,9 +98,9 @@ ViperSearchReplacePlugin.prototype = {
             }
         });
 
-        var searchBtn = tools.createButton('ViperSearchPlugin:toggle', 'Search', 'Toggle Search & Replace', 'searchReplace');
+        var searchBtn = tools.createButton('searchReplace', 'Search', 'Toggle Search & Replace', 'searchReplace');
         toolbar.addButton(searchBtn);
-        toolbar.setBubbleButton('ViperSearchPlugin:bubble', 'ViperSearchPlugin:toggle');
+        toolbar.setBubbleButton('ViperSearchPlugin:bubble', 'searchReplace');
 
         // Update the buttons when the toolbar updates it self.
         this.viper.registerCallback('ViperToolbarPlugin:updateToolbar', 'ViperSearchReplacePlugin', null);

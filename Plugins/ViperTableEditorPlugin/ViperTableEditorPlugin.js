@@ -108,7 +108,7 @@ ViperTableEditorPlugin.prototype = {
 
         this.toolbarPlugin = this.viper.ViperPluginManager.getPlugin('ViperToolbarPlugin');
         if (this.toolbarPlugin) {
-            var button = this.viper.ViperTools.createButton('ViperTableEditorPlugin:insertTable', '', 'Insert Table', 'table', function() {
+            var button = this.viper.ViperTools.createButton('insertTable', '', 'Insert Table', 'table', function() {
                 self.insertTable(3, 3);
             });
             this.toolbarPlugin.addButton(button);

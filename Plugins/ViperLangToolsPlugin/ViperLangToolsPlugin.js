@@ -157,7 +157,7 @@ ViperLangToolsPlugin.prototype = {
     getTagFromRange: function(range, tagName)
     {
         var selectedNode = range.getNodeSelection();
-        if (selectedNode) {
+        if (selectedNode && selectedNode.nodeType === dfx.ELEMENT_NODE) {
             if (tagName && dfx.isTag(selectedNode, tagName) === true) {
                 return selectedNode;
             } else if (tagName === 'lang' && selectedNode.hasAttribute('lang') === true) {
@@ -326,8 +326,8 @@ ViperLangToolsPlugin.prototype = {
 
         var bubble = tools.getItem('ViperLangToolsPlugin:bubble');
 
-        var toggleBtn = tools.createButton('ViperLangToolsPlugin:toggle', '', 'Toggle Language Tools', 'langTools');
-        toolbar.setBubbleButton('ViperLangToolsPlugin:bubble', 'ViperLangToolsPlugin:toggle');
+        var toggleBtn = tools.createButton('langTools', '', 'Toggle Language Tools', 'langTools');
+        toolbar.setBubbleButton('ViperLangToolsPlugin:bubble', 'langTools');
         toolbar.addButton(toggleBtn);
 
         // Create all the buttons inside the bubble.
@@ -374,7 +374,7 @@ ViperLangToolsPlugin.prototype = {
                 var element = self.getTagFromRange(range, tags[i]);
                 if (element) {
                     // Activate the button.
-                    tools.setButtonActive('ViperLangToolsPlugin:toggle');
+                    tools.setButtonActive('langTools');
                     hasActive = true;
 
                     // Also activate the button for the sub section buttons.
@@ -395,7 +395,7 @@ ViperLangToolsPlugin.prototype = {
             }//end for
 
             if (hasActive === false) {
-                tools.setButtonInactive('ViperLangToolsPlugin:toggle');
+                tools.setButtonInactive('langTools');
             }
         });
 
