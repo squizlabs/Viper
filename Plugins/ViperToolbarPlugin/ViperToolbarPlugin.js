@@ -128,6 +128,14 @@ ViperToolbarPlugin.prototype = {
             }
         });
 
+        dfx.addEvent(elem, 'mouseup', function(e) {
+            var target = dfx.getMouseEventTarget(e);
+            if (dfx.isTag(target, 'input') !== true) {
+                dfx.preventDefault(e);
+                return false;
+            }
+        });
+
         if (navigator.userAgent.match(/iPad/i) !== null) {
             dfx.addClass(this._toolbar, 'device-ipad');
         }
