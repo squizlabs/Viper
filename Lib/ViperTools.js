@@ -279,9 +279,25 @@ ViperTools.prototype = {
             textBox.appendChild(descEl);
         }
 
-        var self = this;
+        var self    = this;
+        var timeout = null;
         dfx.addEvent(input, 'focus', function() {
+            dfx.addClass(textBox, 'active');
             self.viper.highlightSelection();
+            clearTimeout(timeout);
+        });
+
+        dfx.addEvent(input, 'blur', function() {
+            dfx.removeClass(textBox, 'active');
+            clearTimeout(timeout);
+        });
+
+        dfx.addEvent(input, 'keyup', function() {
+            dfx.addClass(textBox, 'active');
+            clearTimeout(timeout);
+            timeout = setTimeout(function() {
+                dfx.removeClass(textBox, 'active');
+            }, 1000);
         });
 
         var _addActionButton = function() {
