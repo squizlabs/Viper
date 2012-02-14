@@ -13,7 +13,7 @@
             viper.getPluginManager().setPlugins(['ViperCoreStylesPlugin', 'ViperKeyboardEditorPlugin', 'ViperInlineToolbarPlugin', 'ViperHistoryPlugin', 'ViperListPlugin', 'ViperFormatPlugin', 'ViperToolbarPlugin', 'ViperTableEditorPlugin', 'ViperCopyPastePlugin', 'ViperImagePlugin', 'ViperLinkPlugin', 'ViperAccessibilityPlugin', 'ViperSourceViewPlugin', 'ViperSearchReplacePlugin', 'ViperLangToolsPlugin', 'ViperCharMapPlugin', 'ViperTrackChangesPlugin', 'ViperInvisibleCharPlugin']);
             viper.setEditableElement(document.getElementById('content'));
 
-            var buttons = [['bold', 'italic', 'subscript', 'superscript', 'strikethrough', 'removeFormat'], 'justify', 'hr', ['undo', 'redo'], ['unorderedList', 'orderedList', 'indentList', 'outdentList'], ['anchor', 'class'], 'insertTable', 'image', ['insertLink', 'removeLink'], 'insertCharacter', 'sourceEditor', 'accessibility', 'searchReplace', 'langTools', 'showHiddenChars', 'trackChanges'];
+            var buttons = [['bold', 'italic', 'subscript', 'superscript', 'strikethrough', 'class', 'removeFormat'], ['justify', 'formats', 'headings'], 'hr', ['undo', 'redo'], ['unorderedList', 'orderedList', 'indentList', 'outdentList'], 'insertTable', 'image', ['insertLink', 'removeLink', 'anchor'], 'insertCharacter', 'sourceEditor', 'accessibility', 'searchReplace', 'langTools', 'showHiddenChars', 'trackChanges'];
             viper.getPluginManager().setPluginSettings('ViperToolbarPlugin', {buttons: buttons});
         };
     </script>
