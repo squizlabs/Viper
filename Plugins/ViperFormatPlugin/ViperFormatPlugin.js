@@ -116,7 +116,7 @@ ViperFormatPlugin.prototype = {
             // Headings format section.
             var headingSubSectionContents = document.createElement('div');
 
-            var headingBtnGroup = tools.createButtonGroup('VFP:vitp:hadingFormats');
+            var headingBtnGroup = tools.createButtonGroup('VFP:vitp:headingFormats');
             headingSubSectionContents.appendChild(headingBtnGroup);
             for (var i = 1; i <= 6; i++) {
                 (function(headingCount) {
@@ -133,7 +133,7 @@ ViperFormatPlugin.prototype = {
                     var headingButton = tools.createButton('VFP:vitp:heading:h' + headingCount, 'H' + headingCount, 'Convert to Heading ' + headingCount, null, function() {
                         self.handleFormat(tagName);
                     }, false, active);
-                    tools.addButtonToGroup('VFP:vitp:heading:h' + headingCount, 'VFP:vitp:hadingFormats');
+                    tools.addButtonToGroup('VFP:vitp:heading:h' + headingCount, 'VFP:vitp:headingFormats');
 
                 }) (i);
             }//end for
