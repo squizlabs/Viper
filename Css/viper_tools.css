@@ -47,17 +47,18 @@
   border: none;
   color: #2b2b2b;
   text-shadow: 0 1px 0 #FFF;
-  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.3), 0 1px 0 rgba(255, 255, 255, 0.9) inset;
-  background: -webkit-gradient(linear, left top, left bottom, from(#e9e9eb), to(#c9c9d0));
-  background: -moz-linear-gradient(top, #e9e9eb, #c9c9d0);
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.3), 0 1px 0 rgba(255, 255, 255, 0.8) inset;
+  background: -webkit-gradient(linear, left top, left bottom, from(#e9e9eb), to(#c2c2cb));
+  background: -moz-linear-gradient(top, #e9e9eb, #c2c2cb);
   /*     -ms-filter: "progid:DXImageTransform.Microsoft.gradient (GradientType=0, startColorstr=#e9e9eb, endColorstr=#c9c9d0)"; */
 
 }
 .themeDark .Viper-button:hover {
   background: #c9c9cd;
-  background: -webkit-gradient(linear, left top, left bottom, from(#d8d8da), to(#b8b8ca));
-  background: -moz-linear-gradient(top, #c8c8c9, #a8a8b9);
+  background: -webkit-gradient(linear, left top, left bottom, from(#d5d5d8), to(#b4b4bc));
+  background: -moz-linear-gradient(top, #d5d5d8, #b4b4bc);
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.3), 0 1px 0 rgba(255, 255, 255, 0.5) inset;
 }
 .themeDark .Viper-button:active,
 .themeDark .Viper-button.active,
