@@ -74,7 +74,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarFormatsUnitTest extends 
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem selected">DIV</li><li class="ViperITP-lineageItem">Selection</li>', $lineage);
 
-        $this->assertEquals('jumps over the lazy dog', $this->getSelectedText(), 'Div is not selected.');
+        $this->assertEquals('jumps OVER the lazy dog', $this->getSelectedText(), 'Div is not selected.');
 
         $this->selectInlineToolbarLineageItem(1);
         $this->assertEquals('lazy', $this->getSelectedText(), 'Original selection is not selected');
@@ -272,6 +272,31 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarFormatsUnitTest extends 
         $this->assertEquals('<li class="ViperITP-lineageItem selected">H2</li>', $lineage);
 
     }//end testPChangesToH2InLineage()
+
+
+    /**
+     * Test the class span tag in the toolbar.
+     *
+     * @return void
+     */
+    public function testClassSpanTag()
+    {
+        $this->selectText('OVER');
+
+        $lineage = $this->getHtml('.ViperITP-lineage');
+        $this->assertEquals('<li class="ViperITP-lineageItem">DIV</li><li class="ViperITP-lineageItem selected">SPAN</li>', $lineage);
+
+        $this->selectInlineToolbarLineageItem(0);
+        $lineage = $this->getHtml('.ViperITP-lineage');
+        $this->assertEquals('<li class="ViperITP-lineageItem selected">DIV</li><li class="ViperITP-lineageItem">SPAN</li>', $lineage);
+        
+        $this->selectInlineToolbarLineageItem(1);
+        $lineage = $this->getHtml('.ViperITP-lineage');
+        $this->assertEquals('<li class="ViperITP-lineageItem">DIV</li><li class="ViperITP-lineageItem selected">SPAN</li>', $lineage);
+        
+        $this->assertEquals('OVER', $this->getSelectedText(), 'Class span tag is not selected');
+
+    }//end testClassSpanTag()
     
     
 }//end class
