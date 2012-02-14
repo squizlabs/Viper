@@ -54,7 +54,7 @@
 .themeDark .Viper-button,
 .themeDark .Viper-button.disabled:hover {
     background-color: #dadade;
-    border: none;
+/*     border: none; */
     color: #2b2b2b;
     text-shadow: 0 1px 0 #FFF;
     box-shadow: 0 2px 2px rgba(0, 0, 0, 0.3), 0 1px 0 rgba(255, 255, 255, 0.9) inset;
@@ -99,14 +99,15 @@
     border-left: 1px solid #898989;
 }
 
-.themeDark .Viper-buttonGroup .Viper-button:first-child {
-    border-left: none;
-}
-
 .themeDark .Viper-buttonGroup .Viper-button.active,
 .themeDark .Viper-buttonGroup .Viper-button.selected,
 .themeDark .Viper-buttonGroup .Viper-button.disabled:first-child:hover {
     border-left-color: #38373c;
+}
+
+.themeDark .Viper-buttonGroup .Viper-button:first-child,
+.themeDark .Viper-buttonGroup .Viper-button:first-child.disabled:hover {
+    border-left: none;
 }
 
 /* Theme - Light Grey */
