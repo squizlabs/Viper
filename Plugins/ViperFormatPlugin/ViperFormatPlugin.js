@@ -177,7 +177,9 @@ ViperFormatPlugin.prototype = {
         }//end if
 
         var buttonGroup = tools.createButtonGroup('VFP:vitp:formats:buttons');
-        inlineToolbarPlugin.addButton(buttonGroup);
+        if (formatsSubSection || headingsSubSection) {
+            inlineToolbarPlugin.addButton(buttonGroup);
+        }
 
         if (formatsSubSection) {
             tools.createButton('VFP:vitp:formats:toggleFormats', 'Aa', 'Toggle Formats', 'formats', null, false, hasActiveFormat);
