@@ -44,8 +44,7 @@
 /* Theme - Dark Grey */
 .themeDark .Viper-button, .themeDark .Viper-button.disabled:hover {
   background-color: #dadade;
-  /*     border: none; */
-
+  border: none;
   color: #2b2b2b;
   text-shadow: 0 1px 0 #FFF;
   box-shadow: 0 2px 2px rgba(0, 0, 0, 0.3), 0 1px 0 rgba(255, 255, 255, 0.9) inset;
@@ -86,45 +85,6 @@
 }
 .themeDark .Viper-buttonGroup .Viper-button:first-child, .themeDark .Viper-buttonGroup .Viper-button:first-child.disabled:hover {
   border-left: none;
-}
-/* Theme - Light Grey */
-.themeLight .Viper-button, .themeLight .Viper-button.disabled:hover {
-  background-color: #dadade;
-  border: 1px solid #AAA;
-  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.95) inset;
-  background: -webkit-gradient(linear, left top, left bottom, from(#e9e9eb), to(#c9c9d0));
-  background: -moz-linear-gradient(top, #e9e9eb, #c9c9d0);
-}
-.themeLight .Viper-button:hover {
-  background-color: #c9c9cd;
-  background: -webkit-gradient(linear, left top, left bottom, from(#d8d8da), to(#b8b8c0));
-  background: -moz-linear-gradient(top, #d8d8da, #b8b8c0);
-}
-.themeLight .Viper-button:active,
-.themeLight .Viper-button.active,
-.themeLight .Viper-button.active:hover,
-.themeLight .Viper-button.selected,
-.themeLight .Viper-button.selected:hover {
-  color: #FFF;
-  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.5);
-  box-shadow: 0 0 0.2em 0 rgba(0, 0, 0, 0.6) inset;
-}
-.themeLight .Viper-button:active, .themeLight .Viper-button.selected, .themeLight .Viper-button.selected:hover {
-  background: #888;
-  border-color: #555;
-}
-.themeLight .Viper-button.active,
-.themeLight .Viper-button.active:hover,
-.themeLight .Viper-button.active.selected,
-.themeLight .Viper-button.active.selected:hover {
-  background: #5a8bd0;
-  border-color: #2e568d;
-}
-.themeLight .Viper-buttonGroup .Viper-button {
-  border-left-width: 0;
-}
-.themeLight .Viper-buttonGroup .Viper-button:first-child {
-  border-left-width: 1px;
 }
 /* Buttons */
 .Viper-button.bold {
@@ -648,22 +608,22 @@
   border-radius: 0.2em;
   background-color: rgba(255, 255, 255, 0.4);
 }
-.themeDark .Viper-popup-header {
+.Viper-popup-header {
   position: relative;
-  color: #AAAAAA;
-  text-shadow: 0 -1px 0 #000000;
   text-transform: uppercase;
   font-size: 1.2em;
   padding-top: 0.5em;
   text-align: center;
   border-bottom: 1px solid transparent;
-  font-size: 1.2em;
   line-height: 1.8em;
-  list-style: none outside none;
   margin: 0;
   padding: 0.4em 0 0;
   white-space: nowrap;
   cursor: move;
+}
+.themeDark .Viper-popup-header {
+  color: #AAAAAA;
+  text-shadow: 0 -1px 0 #000000;
 }
 /* .Viper-popup-top, */
 .Viper-popup-bottom, .Viper-popup-content {
