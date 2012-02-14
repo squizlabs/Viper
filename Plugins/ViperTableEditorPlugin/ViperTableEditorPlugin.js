@@ -642,7 +642,7 @@ ViperTableEditorPlugin.prototype = {
     _updateInnerContainer: function(cell, type, activeSubSection)
     {
         dfx.empty(this._toolsContainer);
-        dfx.empty(this._subSectionContainer);
+        dfx.setHtml(this._subSectionContainer, '<span class="subSectionArrow"></span>');
 
         switch (type) {
             case 'cell':
