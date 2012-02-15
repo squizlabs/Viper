@@ -2643,7 +2643,7 @@ Viper.prototype = {
         // There should be one...
         var highlights = dfx.getClass('__viper_selHighlight', this.element);
         if (highlights.length === 0) {
-            return;
+            return false;
         }
 
         var range     = this.getCurrentRange();
@@ -2656,7 +2656,7 @@ Viper.prototype = {
             dfx.removeClass(highlights[0], '__viper_selHighlight');
             range.selectNode(highlights[0]);
             ViperSelection.addRange(range);
-            return;
+            return true;
         }
 
         for (var i = 0; i < c; i++) {
@@ -2713,6 +2713,8 @@ Viper.prototype = {
         }//end for
 
         ViperSelection.addRange(range);
+
+        return true;
 
     },
 
@@ -3045,8 +3047,11 @@ Viper.prototype = {
     mouseDown: function(e)
     {
         var target = dfx.getMouseEventTarget(e);
+        var inside = true;
 
         if (this.isChildOfElems(target, [this.element]) !== true) {
+            inside = false;
+
             // Ask plugins if its one of their element.
             var pluginName = this.getPluginForElement(target);
             if (!pluginName) {
@@ -3057,8 +3062,6 @@ Viper.prototype = {
                     e: e
                 });
             }
-        } else {
-            this.highlightToSelection();
         }
 
         // TODO: Should this fire after mouseDown?
@@ -3070,7 +3073,9 @@ Viper.prototype = {
             return false;
         }
 
-        this.fireSelectionChanged();
+        if (inside !== true || this.highlightToSelection() !== true) {
+            this.fireSelectionChanged();
+        }
 
     },
 
