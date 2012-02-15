@@ -482,13 +482,9 @@
   -webkit-transition-property: color, background;
   -webkit-transition-duration: 0.3s;
 }
-.Viper-textbox.active .Viper-textbox-title {
+.Viper-textbox.active .Viper-textbox-title, .Viper-textbox.required.active .Viper-textbox-title {
   background-color: #366cb7;
-}
-.Viper-textbox.actionRevert .Viper-textbox-title {
-  color: #FFF;
-  background-color: #555;
-  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.5);
 }
 .Viper-textbox.required .Viper-textbox-title {
   background-color: #c44e4e;
@@ -509,19 +505,29 @@
   color: #5A8BD0;
   outline: none;
 }
-.Viper-textbox.active .Viper-textbox-input[type=text], .Viper-textbox.active .Viper-textbox-textArea {
+.Viper-textbox.active .Viper-textbox-input[type=text],
+.Viper-textbox.active .Viper-textbox-textArea,
+.Viper-textbox.required.active .Viper-textbox-input[type=text],
+.Viper-textbox.required.active .Viper-textbox-textArea {
   color: #FFF;
 }
 .Viper-textbox.required .Viper-textbox-input[type=text], .Viper-textbox.required .Viper-textbox-textArea {
   color: #c44e4e;
 }
-.Viper-textbox-input::-webkit-input-placeholder, .Viper-textbox-textArea::-webkit-input-placeholder {
+.Viper-textbox-input[type=text]::-webkit-input-placeholder, .Viper-textbox-textArea::-webkit-input-placeholder {
   color: #c44e4e;
   font-style: italic;
+  font-weight: normal;
 }
-.Viper-textbox-input:-moz-placeholder, .Viper-textbox-textArea:-moz-placeholder {
+.Viper-textbox-input[type=text]:-moz-placeholder, .Viper-textbox-textArea:-moz-placeholder {
   color: #c44e4e;
   font-style: italic;
+  font-weight: normal;
+}
+.input-placeholder {
+  color: #c44e4e;
+  font-style: italic;
+  font-weight: normal;
 }
 .Viper-textbox-messages {
   padding: 0.5em 0.3em 0;
@@ -557,6 +563,9 @@
   display: block;
   content: "";
   background-position: 0 -158px;
+}
+.Viper-textbox.required.active .Viper-textbox-main:after {
+  background-position: 0 -215px;
 }
 .Viper-textbox.actionRevert .Viper-textbox-action, .Viper-textbox.actionClear .Viper-textbox-action {
   display: block;

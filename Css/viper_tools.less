@@ -443,14 +443,10 @@
     -webkit-transition-property: color, background;
     -webkit-transition-duration: 0.3s;
 }
-.Viper-textbox.active .Viper-textbox-title {
+.Viper-textbox.active .Viper-textbox-title,
+.Viper-textbox.required.active .Viper-textbox-title {
     background-color: #366cb7;
-}
-
-.Viper-textbox.actionRevert .Viper-textbox-title {
-    color: #FFF;
-    background-color: #555;
-    text-shadow: 0 -1px 0 rgba(0,0,0,0.2);
+    box-shadow: 0 0 6px rgba(0,0,0,0.5);
 }
 
 .Viper-textbox.required .Viper-textbox-title {
@@ -473,27 +469,30 @@
     background: transparent;
     color: #5A8BD0;
     outline: none;
+    
+    .Viper-textbox.active &,
+    .Viper-textbox.required.active & {
+        color: #FFF;
+    }
+    
+    .Viper-textbox.required & {
+        color: #c44e4e;
+    }
+    
+    &::-webkit-input-placeholder {
+        .input-placeholder;
+    }
+    
+    &:-moz-placeholder {
+        .input-placeholder;
+    }
+    
 }
 
-.Viper-textbox.active .Viper-textbox-input[type=text],
-.Viper-textbox.active .Viper-textbox-textArea {
-    color: #FFF;
-}
-
-.Viper-textbox.required .Viper-textbox-input[type=text],
-.Viper-textbox.required .Viper-textbox-textArea {
-    color: #c44e4e;
-}
-
-.Viper-textbox-input::-webkit-input-placeholder,
-.Viper-textbox-textArea::-webkit-input-placeholder {
+.input-placeholder {
     color: #c44e4e;
     font-style: italic;
-}
-.Viper-textbox-input:-moz-placeholder,
-.Viper-textbox-textArea:-moz-placeholder {
-    color: #c44e4e;
-    font-style: italic;
+    font-weight: normal;
 }
 
 .Viper-textbox-messages {
@@ -532,6 +531,9 @@
     display: block;
     content: "";
     background-position: 0 -158px;
+}
+.Viper-textbox.required.active .Viper-textbox-main:after {
+    background-position: 0 -215px;
 }
 .Viper-textbox.actionRevert .Viper-textbox-action,
 .Viper-textbox.actionClear .Viper-textbox-action {
