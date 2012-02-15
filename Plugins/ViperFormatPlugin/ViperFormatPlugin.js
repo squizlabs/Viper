@@ -619,20 +619,21 @@ ViperFormatPlugin.prototype = {
         var selectedNode = range.getNodeSelection();
         var elemsBetween = [];
         if (selectedNode === null) {
-            var startNode = range.getStartNode();
+            var startNode   = range.getStartNode();
+            var blockParent = this.getFirstBlockParent(startNode);
             if (dfx.isChildOf(startNode, this.viper.element) === false) {
                 // TODO: Should we handle this case in createBookmark?
                 range.setStart(this.viper.element, 0);
                 range.setEnd(this.viper.element, this.viper.element.childNodes.length);
                 ViperSelection.addRange(range);
                 startNode = range.getStartNode();
+                blockParent = this.getFirstBlockParent(startNode);
             }
 
             var bookmark = this.viper.createBookmark();
 
             // Handle Collapsed range.
             if (startNode && range.collapsed === true) {
-                var blockParent = this.getFirstBlockParent(startNode);
                 var newElem = document.createElement(type);
                 this._addChangeTrackInfo(newElem);
                 this._moveChildElements(blockParent, newElem);
