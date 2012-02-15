@@ -369,6 +369,11 @@ ViperToolbarPlugin.prototype = {
 
         this._activeBubble = bubbleid;
 
+        var inputElements = dfx.getTag('input', bubbleElem);
+        if (inputElements.length > 0) {
+            inputElements[0].focus();
+        }
+
     },
 
     positionBubble: function(bubbleid)

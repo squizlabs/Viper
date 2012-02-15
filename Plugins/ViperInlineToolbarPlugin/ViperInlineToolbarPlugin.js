@@ -219,6 +219,11 @@ ViperInlineToolbarPlugin.prototype = {
         this._activeSection = subSectionid;
         this._updateSubSectionArrowPos();
 
+        var inputElements = dfx.getTag('input', subSection);
+        if (inputElements.length > 0) {
+            inputElements[0].focus();
+        }
+
     },
 
     /**
