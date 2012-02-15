@@ -357,6 +357,14 @@ ViperLangToolsPlugin.prototype = {
         bubble.setSubSectionButton('VLTP:langSubSection', 'ViperLangToolsPlugin:langButton');
 
         this.viper.registerCallback('ViperToolbarPlugin:updateToolbar', 'ViperLangToolsPlugin', function(data) {
+            if (data.range.collapsed === true) {
+                tools.disableButton('ViperLangToolsPlugin:abbrButton');
+                tools.disableButton('ViperLangToolsPlugin:acronymButton');
+            } else {
+                tools.enableButton('ViperLangToolsPlugin:abbrButton');
+                tools.enableButton('ViperLangToolsPlugin:acronymButton');
+            }
+
             var range     = data.range;
             var tags      = ['acronym', 'abbr', 'lang'];
             var c         = tags.length;
