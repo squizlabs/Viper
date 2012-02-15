@@ -271,6 +271,10 @@ ViperTools.prototype = {
         dfx.setStyle(main, 'padding-left', width + 'px');
         main.appendChild(input);
 
+        if (required === true) {
+            input.setAttribute('placeholder', 'required');
+        }
+
         if (desc) {
             // Description.
             var descEl = document.createElement('span');
