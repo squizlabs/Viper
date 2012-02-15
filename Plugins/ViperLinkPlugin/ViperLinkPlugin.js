@@ -173,7 +173,7 @@ ViperLinkPlugin.prototype = {
 
     removeLink: function(linkTag)
     {
-        if (!linkTag && linkTag.parentNode) {
+        if (!linkTag || !linkTag.parentNode) {
             return;
         }
 
@@ -416,7 +416,8 @@ ViperLinkPlugin.prototype = {
 
         tools.createButton('insertLink', '', 'Toggle Link Options', 'link', null, disabled);
         tools.createButton('removeLink', '', 'Remove Link', 'linkRemove', function() {
-            self.removeLink();
+            var link = self.getLinkFromRange();
+            self.removeLink(link);
         }, disabled);
 
         tools.addButtonToGroup('insertLink', 'ViperLinkPlugin:vtp:btnGroup');
