@@ -339,7 +339,24 @@ ViperLinkPlugin.prototype = {
         });
 
         var insertLinkBtn = this.viper.ViperTools.createButton('vitpInsertLink', '', 'Toggle Link Options', 'link');
-        inlineToolbarPlugin.addButton(insertLinkBtn);
+
+        var link = this.getLinkFromRange(data.range);
+        if (link) {
+            this.viper.ViperTools.setButtonActive('vitpInsertLink');
+
+            // Show the remove link button.
+            var removeLinkBtn = this.viper.ViperTools.createButton('vitpRemoveLink', '', 'Remove Link', 'linkRemove', function() {
+                self.removeLink(link);
+            });
+
+            var btnGroup = this.viper.ViperTools.createButtonGroup('ViperLinkPlugin:vitpButtons');
+            this.viper.ViperTools.addButtonToGroup('vitpInsertLink', 'ViperLinkPlugin:vitpButtons');
+            this.viper.ViperTools.addButtonToGroup('vitpRemoveLink', 'ViperLinkPlugin:vitpButtons');
+
+            inlineToolbarPlugin.addButton(btnGroup);
+        } else {
+            inlineToolbarPlugin.addButton(insertLinkBtn);
+        }
 
         inlineToolbarPlugin.setSubSectionButton('vitpInsertLink', 'ViperLinkPlugin:vitp:link');
 
