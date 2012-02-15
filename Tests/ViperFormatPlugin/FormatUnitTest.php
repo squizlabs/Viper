@@ -204,34 +204,6 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractViperUnitTest
 
 
     /**
-     * Test that adding class works.
-     *
-     * @return void
-     */
-    public function testAddClassAttr()
-    {
-        $dir = dirname(__FILE__).'/Images/';
-
-        $this->selectText('Lorem');
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_class.png');
-        $this->clickInlineToolbarButton($dir.'input_class.png');
-        $this->type('test');
-        $this->keyDown('Key.ENTER');
-
-        $this->assertHTMLMatch('<p><span class="test">Lorem</span> xtn dolor</p><p>sit amet <strong>WoW</strong></p>');
-
-        $this->click($this->find('Lorem'));
-        $this->selectText('Lorem');
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_class_active.png'), 'Class icon in Top Toolbar should be active.');
-        $this->assertTrue(
-            $this->inlineToolbarButtonExists($dir.'toolbarIcon_class_active.png') || $this->inlineToolbarButtonExists($dir.'toolbarIcon_class_subActive.png'),
-            'Class icon in VITP should be active.'
-        );
-
-    }//end testAddClassAttr()
-
-
-    /**
      * Test that selecting text does not show formatting icons in VITP.
      *
      * @return void
