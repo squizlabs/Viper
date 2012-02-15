@@ -252,6 +252,11 @@ ViperTools.prototype = {
         // for the font size.
         var tmp = document.createElement('div');
         dfx.addClass(tmp, 'ViperITP');
+
+        if (navigator.userAgent.match(/iPad/i) !== null) {
+            dfx.addClass(tmp, 'device-ipad');
+        }
+
         dfx.setStyle(tmp, 'display', 'block');
         tmp.appendChild(title);
         document.body.appendChild(tmp);
@@ -263,8 +268,12 @@ ViperTools.prototype = {
         input.type  = 'text';
         input.value = value;
         dfx.addClass(input, 'Viper-textbox-input');
-        dfx.setStyle(input, 'padding-left', width + 'px');
+        dfx.setStyle(main, 'padding-left', width + 'px');
         main.appendChild(input);
+
+        if (required === true) {
+            input.setAttribute('placeholder', 'required');
+        }
 
         if (desc) {
             // Description.
@@ -274,9 +283,25 @@ ViperTools.prototype = {
             textBox.appendChild(descEl);
         }
 
-        var self = this;
+        var self    = this;
+        var timeout = null;
         dfx.addEvent(input, 'focus', function() {
+            dfx.addClass(textBox, 'active');
             self.viper.highlightSelection();
+            clearTimeout(timeout);
+        });
+
+        dfx.addEvent(input, 'blur', function() {
+            dfx.removeClass(textBox, 'active');
+            clearTimeout(timeout);
+        });
+
+        dfx.addEvent(input, 'keyup', function() {
+            dfx.addClass(textBox, 'active');
+            clearTimeout(timeout);
+            timeout = setTimeout(function() {
+                dfx.removeClass(textBox, 'active');
+            }, 1000);
         });
 
         var _addActionButton = function() {
@@ -532,7 +557,7 @@ ViperTools.prototype = {
             header.appendChild(dragIcon);
 
             dfxjQuery(main).draggable({
-                handle: dragIcon
+                handle: header
             });
         }
 
@@ -541,8 +566,77 @@ ViperTools.prototype = {
         var closeIcon = document.createElement('div');
         dfx.addClass(closeIcon, 'Viper-popup-closeIcon');
         header.appendChild(closeIcon);
-        dfx.addEvent(closeIcon, 'click', function() {
+        dfx.addEvent(closeIcon, 'mousedown', function() {
             self.closePopup(id, 'closeIcon');
+        });
+
+        var fullScreen  = false;
+
+        var originalOpenCallback = openCallback;
+        openCallback = function() {
+            fullScreen = false;
+            if (originalOpenCallback) {
+                return originalOpenCallback.call(this);
+            }
+        }
+
+        // Close popup when ESC key is pressed.
+        this.viper.registerCallback('Viper:keyUp', 'ViperTools', function(e) {
+            if (e.which === 27 && main.parentNode) {
+                self.closePopup(id);
+            }
+        });
+
+        var showfullScreen = function() {
+            dfx.getElementDimensions(midContent);
+            var headerHeight  = dfx.getElementHeight(header);
+            var topHeight     = dfx.getElementHeight(topContent);
+            var bottomHeight  = dfx.getElementHeight(bottomContent);
+            var toolbarHeight = 35;
+
+            var windowDim = dfx.getWindowDimensions();
+            dfx.setStyle(main, 'left', 0);
+            dfx.setStyle(main, 'top', toolbarHeight + 'px');
+            dfx.setStyle(main, 'margin-left', 0);
+            dfx.setStyle(main, 'margin-top', 0);
+            dfx.setStyle(midContent, 'width', windowDim.width - 20 + 'px');
+            dfx.setStyle(midContent, 'height', windowDim.height - toolbarHeight - bottomHeight - headerHeight - topHeight - 10 + 'px');
+            if (resizeCallback) {
+                resizeCallback.call(this);
+            }
+        };
+
+        var currentSize = null;
+        dfx.addEvent(header, 'safedblclick', function() {}, function() {
+            if (fullScreen !== true) {
+                fullScreen = true;
+                var mainCoords = dfx.getElementCoords(main);
+                currentSize = {
+                    width: dfx.getElementWidth(midContent),
+                    height: dfx.getElementHeight(midContent),
+                    left: mainCoords.x,
+                    top: mainCoords.y
+                };
+
+                showfullScreen();
+
+                dfx.removeEvent(window, 'resize.ViperTools-popup-' + id);
+                dfx.addEvent(window, 'resize.ViperTools-popup-' + id, function() {
+                    // Update the popup size since its in full screen.
+                    showfullScreen();
+                });
+            } else {
+                dfx.removeEvent(window, 'resize.ViperTools-popup-' + id);
+
+                fullScreen = false;
+                dfx.setStyle(main, 'left', currentSize.left + 'px');
+                dfx.setStyle(main, 'top', currentSize.top + 'px');
+                dfx.setStyle(midContent, 'width', currentSize.width + 'px');
+                dfx.setStyle(midContent, 'height', currentSize.height + 'px');
+                if (resizeCallback) {
+                    resizeCallback.call(this);
+                }
+            }//end if
         });
 
         main.appendChild(header);
@@ -591,10 +685,18 @@ ViperTools.prototype = {
             openCallback: openCallback,
             closeCallback: closeCallback,
             showTop: function() {
-                dfx.blindDown(topContent);
+                dfx.blindDown(topContent, function() {
+                    if (fullScreen === true) {
+                        showfullScreen();
+                    }
+                });
             },
             hideTop: function() {
-                dfx.blindUp(topContent);
+                dfx.blindUp(topContent, function() {
+                    if (fullScreen === true) {
+                        showfullScreen();
+                    }
+                });
             }
         });
 
@@ -653,7 +755,9 @@ ViperTools.prototype = {
             }
         }
 
-        document.body.removeChild(popup.element);
+        if (popup.element.parentNode) {
+            popup.element.parentNode.removeChild(popup.element);
+        }
 
     },
 

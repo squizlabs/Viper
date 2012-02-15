@@ -42,7 +42,7 @@ ViperSourceViewPlugin.prototype = {
         var self = this;
         this.toolbarPlugin = this.viper.ViperPluginManager.getPlugin('ViperToolbarPlugin');
         if (this.toolbarPlugin) {
-            var toggle = this.viper.ViperTools.createButton('VSVP:toggle', '', 'Toggle Source View', 'sourceView', function() {
+            var toggle = this.viper.ViperTools.createButton('sourceEditor', '', 'Toggle Source View', 'sourceView', function() {
                 self.toggleSourceView();
             });
             this.toolbarPlugin.addButton(toggle);
@@ -143,7 +143,7 @@ ViperSourceViewPlugin.prototype = {
         }
 
         this._ignoreUpdate = true;
-        var value = content || this.viper.getHtml();
+        var value = content || this.getContents();
         this._editor.getSession().setValue(value);
 
     },
@@ -178,7 +178,9 @@ ViperSourceViewPlugin.prototype = {
         // Add the bottom section.
         var popupBottom = document.createElement('div');
         dfx.addClass(popupBottom, 'VSVP-bottomPanel');
-        var newWindowButton   = tools.createButton('VSVP:newWindow', '', 'Open In new window', 'VSVP-bottomPanel-newWindow sourceNewWindow');
+        var newWindowButton   = tools.createButton('VSVP:newWindow', '', 'Open In new window', 'VSVP-bottomPanel-newWindow sourceNewWindow', function() {
+            self.openInNewWindow();
+        });
         var applyButtonBottom = tools.createButton('VSVP:apply', 'Apply Changes', 'Apply Changes', 'VSVP-bottomPanel-apply', function() {
             self.updatePageContents();
             self.viper.ViperTools.closePopup('VSVP:popup', 'applyChanges');
@@ -206,6 +208,9 @@ ViperSourceViewPlugin.prototype = {
                         return false;
                     }
                 }
+
+                // Hide the Confirm message.
+                self.viper.ViperTools.getItem('VSVP:popup').hideTop();
             },
             function() {
                 // Resize callback.
@@ -217,37 +222,44 @@ ViperSourceViewPlugin.prototype = {
             // Setup the Ace editor.
             var editor   = ace.edit(source);
             self._editor = editor;
-            editor.setTheme("ace/theme/viper");
-            var HTMLMode = require("ace/mode/html").Mode;
-            editor.getSession().setMode(new HTMLMode());
 
-            // Use wrapping.
-            editor.getSession().setUseWrapMode(true);
-
-            // Do not show the print margin.
-            editor.renderer.setShowPrintMargin(false);
-
-            // Highlight the active line.
-            editor.setHighlightActiveLine(true);
-
-            // Show invisible characters
-            editor.setShowInvisibles(true);
-            editor.renderer.$textLayer.EOL_CHAR = String.fromCharCode(8629);
-
-            // Set the selection style to be line (other option is 'text').
-            editor.setSelectionStyle('line');
-
-            // Always show the horizontal scrollbar.
-            editor.renderer.setHScrollBarAlwaysVisible(true);
-
-            // Use spaces instead of tabs.
-            editor.getSession().setUseSoftTabs(true);
+            self.applyEditorSettings(editor);
 
             // Init editor events.
             self.initEditorEvents(editor);
 
             callback.call(this);
         });
+
+    },
+
+    applyEditorSettings: function(editor)
+    {
+        editor.setTheme("ace/theme/viper");
+        var HTMLMode = require("ace/mode/html").Mode;
+        editor.getSession().setMode(new HTMLMode());
+
+        // Use wrapping.
+        editor.getSession().setUseWrapMode(true);
+
+        // Do not show the print margin.
+        editor.renderer.setShowPrintMargin(false);
+
+        // Highlight the active line.
+        editor.setHighlightActiveLine(true);
+
+        // Show invisible characters
+        editor.setShowInvisibles(true);
+        editor.renderer.$textLayer.EOL_CHAR = String.fromCharCode(8629);
+
+        // Set the selection style to be line (other option is 'text').
+        editor.setSelectionStyle('line');
+
+        // Always show the horizontal scrollbar.
+        editor.renderer.setHScrollBarAlwaysVisible(true);
+
+        // Use spaces instead of tabs.
+        editor.getSession().setUseSoftTabs(true);
 
     },
 
@@ -280,12 +292,30 @@ ViperSourceViewPlugin.prototype = {
             if (self._ignoreUpdate === true) {
                 self._ignoreUpdate = false;
                 return;
+            } else if (self._inNewWindow === true) {
+                self.updatePageContents();
             }
-
-            // Update page content.
-            //self.updatePageContents();
-
         });
+
+        var popup = self.viper.ViperTools.getItem('VSVP:popup');
+        // If the ESC key is pressed close the popup.
+        editor.getKeyboardHandler().addKeyboardHandler({
+            handleKeyboard: function(data, hashId, keyString) {
+                if (keyString === 'esc') {
+                    self.viper.ViperTools.closePopup('VSVP:popup');
+                } else {
+                    popup.hideTop();
+                }
+            }
+        });
+
+        var onFocus = editor.onFocus;
+        editor.onFocus = function() {
+            onFocus.call(editor);
+            setTimeout(function() {
+                popup.hideTop();
+            }, 200);
+        }
 
     },
 
@@ -334,61 +364,6 @@ ViperSourceViewPlugin.prototype = {
                 self.hideSourceView();
             }
         }, 700);
-
-    },
-
-    createSourceViewButtons: function(wrapper, newWindow)
-    {
-        var self = this;
-
-        var updateBtn = document.createElement('button');
-        dfx.setHtml(updateBtn, 'Update');
-        dfx.addClass(updateBtn, 'ViperSVP-updateBtn');
-        wrapper.appendChild(updateBtn);
-        dfx.addEvent(updateBtn, 'click', function() {
-            self.updatePageContents();
-            self.hideSourceView();
-        });
-
-        var revertBtn = document.createElement('button');
-        dfx.setHtml(revertBtn, 'Revert');
-        dfx.addClass(revertBtn, 'ViperSVP-cancelBtn');
-        wrapper.appendChild(revertBtn);
-        dfx.addEvent(revertBtn, 'click', function() {
-            // Revert contents.
-            self._editor.getSession().setValue(self._originalSource);
-            self.updatePageContents(self._originalSource);
-        });
-
-        var cancelBtn = document.createElement('button');
-        dfx.setHtml(cancelBtn, 'Cancel');
-        dfx.addClass(cancelBtn, 'ViperSVP-cancelBtn');
-        wrapper.appendChild(cancelBtn);
-        dfx.addEvent(cancelBtn, 'click', function() {
-            // Revert contents.
-            self.updatePageContents(self._originalSource);
-            self.hideSourceView();
-        });
-
-        if (newWindow !== true) {
-            var newWindowBtn = document.createElement('button');
-            dfx.setHtml(newWindowBtn, 'New Window');
-            dfx.addClass(newWindowBtn, 'ViperSVP-cancelBtn');
-            wrapper.appendChild(newWindowBtn);
-            dfx.addEvent(newWindowBtn, 'click', function() {
-                self.openInNewWindow();
-            });
-        } else {
-            var backToNormalBtn = document.createElement('button');
-            dfx.setHtml(backToNormalBtn, 'Back to Normal View');
-            dfx.addClass(backToNormalBtn, 'ViperSVP-cancelBtn');
-            wrapper.appendChild(backToNormalBtn);
-            dfx.addEvent(backToNormalBtn, 'click', function() {
-                var value = self._editor.getSession().getValue();
-                self.hideSourceView();
-                self.showSourceView(value);
-            });
-        }
 
     },
 

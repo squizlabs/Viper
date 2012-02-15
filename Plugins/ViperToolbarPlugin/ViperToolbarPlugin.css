@@ -20,13 +20,13 @@
     border-top-color: #A2A1A8;
     border-bottom-color: #2B2B2B;
     color: #2b2b2b;
-
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.7);
     -webkit-box-shadow: 0 0 15px rgba(0, 0, 0, 0.7);
+    white-space: nowrap;
 }
-.ViperTP.device-ipad {
-    font-size: 13px;
-    display: none !important;
+
+.ViperTP-bar > * {
+    white-space: normal;
 }
 
 .ViperITP.themeDark.forTopbar.orientationLeft:before {

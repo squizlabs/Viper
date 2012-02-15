@@ -237,7 +237,7 @@ ViperLinkPlugin.prototype = {
 
         var range = this.viper.getViperRange();
         var link  = range.getNodeSelection();
-        if (link) {
+        if (link && link.nodeType === dfx.ELEMENT_NODE) {
             attrUrl   = link.getAttribute('href') || '';
             attrTitle = link.getAttribute('title') || '';
 
@@ -338,10 +338,27 @@ ViperLinkPlugin.prototype = {
             }
         });
 
-        var insertLinkBtn = this.viper.ViperTools.createButton('ViperLinkPlugin:vitp:insertLink', '', 'Toggle Link Options', 'link');
-        inlineToolbarPlugin.addButton(insertLinkBtn);
+        var insertLinkBtn = this.viper.ViperTools.createButton('vitpInsertLink', '', 'Toggle Link Options', 'link');
 
-        inlineToolbarPlugin.setSubSectionButton('ViperLinkPlugin:vitp:insertLink', 'ViperLinkPlugin:vitp:link');
+        var link = this.getLinkFromRange(data.range);
+        if (link) {
+            this.viper.ViperTools.setButtonActive('vitpInsertLink');
+
+            // Show the remove link button.
+            var removeLinkBtn = this.viper.ViperTools.createButton('vitpRemoveLink', '', 'Remove Link', 'linkRemove', function() {
+                self.removeLink(link);
+            });
+
+            var btnGroup = this.viper.ViperTools.createButtonGroup('ViperLinkPlugin:vitpButtons');
+            this.viper.ViperTools.addButtonToGroup('vitpInsertLink', 'ViperLinkPlugin:vitpButtons');
+            this.viper.ViperTools.addButtonToGroup('vitpRemoveLink', 'ViperLinkPlugin:vitpButtons');
+
+            inlineToolbarPlugin.addButton(btnGroup);
+        } else {
+            inlineToolbarPlugin.addButton(insertLinkBtn);
+        }
+
+        inlineToolbarPlugin.setSubSectionButton('vitpInsertLink', 'ViperLinkPlugin:vitp:link');
 
         main.appendChild(this.getToolbarContent('ViperLinkPlugin:vitp'));
 
@@ -397,13 +414,13 @@ ViperLinkPlugin.prototype = {
         var disabled = true;
         var self     = this;
 
-        tools.createButton('ViperLinkPlugin:vtp:insertLink', '', 'Toggle Link Options', 'link', null, disabled);
-        tools.createButton('ViperLinkPlugin:vtp:removeLink', '', 'Remove Link', 'linkRemove', function() {
+        tools.createButton('insertLink', '', 'Toggle Link Options', 'link', null, disabled);
+        tools.createButton('removeLink', '', 'Remove Link', 'linkRemove', function() {
             self.removeLink();
         }, disabled);
 
-        tools.addButtonToGroup('ViperLinkPlugin:vtp:insertLink', 'ViperLinkPlugin:vtp:btnGroup');
-        tools.addButtonToGroup('ViperLinkPlugin:vtp:removeLink', 'ViperLinkPlugin:vtp:btnGroup');
+        tools.addButtonToGroup('insertLink', 'ViperLinkPlugin:vtp:btnGroup');
+        tools.addButtonToGroup('removeLink', 'ViperLinkPlugin:vtp:btnGroup');
         toolbar.addButton(btnGroup);
 
         var main = document.createElement('div');
@@ -417,7 +434,7 @@ ViperLinkPlugin.prototype = {
             }
         });
         main.appendChild(this.getToolbarContent('ViperLinkPlugin:vtp'));
-        toolbar.setBubbleButton('ViperLinkPlugin:vtp:link', 'ViperLinkPlugin:vtp:insertLink');
+        toolbar.setBubbleButton('ViperLinkPlugin:vtp:link', 'insertLink');
 
         // Update the buttons when the toolbar updates it self.
         this.viper.registerCallback('ViperToolbarPlugin:updateToolbar', 'ViperLinkPlugin', function(data) {
@@ -425,26 +442,26 @@ ViperLinkPlugin.prototype = {
             link      = self.getLinkFromRange(range);
 
             if (link) {
-                tools.setButtonActive('ViperLinkPlugin:vtp:insertLink');
-                tools.enableButton('ViperLinkPlugin:vtp:removeLink');
+                tools.setButtonActive('insertLink');
+                tools.enableButton('removeLink');
                 self.updateBubbleFields(link);
             } else {
                 var startNode = data.range.getStartNode();
                 var endNode   = data.range.getEndNode();
-                tools.setButtonInactive('ViperLinkPlugin:vtp:insertLink');
+                tools.setButtonInactive('insertLink');
 
                 if (range.collapsed === true
                     || startNode
                     && endNode
                     && startNode.parentNode !== endNode.parentNode
                 ) {
-                    tools.disableButton('ViperLinkPlugin:vtp:insertLink');
+                    tools.disableButton('insertLink');
                     toolbar.closeBubble('ViperLinkPlugin:vtp:link');
                 } else {
-                    tools.enableButton('ViperLinkPlugin:vtp:insertLink');
+                    tools.enableButton('insertLink');
                 }
 
-                tools.disableButton('ViperLinkPlugin:vtp:removeLink');
+                tools.disableButton('removeLink');
                 self.updateBubbleFields();
             }//end if
         });

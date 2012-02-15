@@ -25,13 +25,19 @@ function ViperCoreStylesPlugin(viper)
 {
     this.viper = viper;
 
-    this.styleTags     = ['strong', 'em', 'sub', 'sup', 'del'];
-    this.buttons       = ['strong', 'emphasise', 'subscript', 'superscript', 'del'];
-    this.toolbarPlugin = null;
-    this.activeStyles  = [];
+    this.styleTags         = ['strong', 'em', 'sub', 'sup', 'del'];
+    this.toolbarPlugin     = null;
+    this._onChangeAddStyle = null;
 
-    this._caretUpdatedTimeout = null;
-    this._onChangeAddStyle    = null;
+    this._buttons = {
+        strong: 'bold',
+        em: 'italic',
+        sub: 'subscript',
+        sup: 'superscript',
+        del: 'strikethrough',
+        removeFormat: 'removeFormat',
+        hr: 'hr'
+    };
 
 }
 
@@ -65,40 +71,40 @@ ViperCoreStylesPlugin.prototype = {
 
             // Main styles and remove format button groups.
             toolbarButtons.styles   = ['strong', 'em', 'sub', 'sup', 'del'];
-            toolbarButtons.rmFormat = ['rmFormat'];
+            toolbarButtons.removeFormat = ['removeFormat'];
             toolbarButtons.justify = ['left', 'center', 'right', 'block'];
             toolbarButtons.other = ['hr'];
 
-            tools.createButton('ViperCoreStylesPlugin:vtp:strong', 'B', 'Bold', 'bold', function() {
+            tools.createButton('bold', 'B', 'Bold', 'bold', function() {
                 self.handleStyle('strong');
             });
-            tools.createButton('ViperCoreStylesPlugin:vtp:em', 'I', 'Italic', 'italic', function() {
+            tools.createButton('italic', 'I', 'Italic', 'italic', function() {
                 self.handleStyle('em');
             });
-            tools.createButton('ViperCoreStylesPlugin:vtp:rmFormat', '', 'Remove Format', 'removeFormat', function() {
+            tools.createButton('removeFormat', '', 'Remove Format', 'removeFormat', function() {
                 self.removeFormat();
             });
 
-            tools.addButtonToGroup('ViperCoreStylesPlugin:vtp:strong', 'ViperCoreStylesPlugin:vtp:stylesBtns');
-            tools.addButtonToGroup('ViperCoreStylesPlugin:vtp:em', 'ViperCoreStylesPlugin:vtp:stylesBtns');
-            tools.addButtonToGroup('ViperCoreStylesPlugin:vtp:rmFormat', 'ViperCoreStylesPlugin:vtp:stylesBtns');
+            tools.addButtonToGroup('bold', 'ViperCoreStylesPlugin:vtp:stylesBtns');
+            tools.addButtonToGroup('italic', 'ViperCoreStylesPlugin:vtp:stylesBtns');
+            tools.addButtonToGroup('removeFormat', 'ViperCoreStylesPlugin:vtp:stylesBtns');
             toolbarPlugin.addButton(btnGroup);
 
             // Extra style buttons, sub, sup and strike.
             var btnGroup2 = tools.createButtonGroup('ViperCoreStylesPlugin:vtp:btnGroup2');
-            tools.createButton('ViperCoreStylesPlugin:vtp:sub', '', 'Subscript', 'subscript', function() {
+            tools.createButton('subscript', '', 'Subscript', 'subscript', function() {
                 self.handleStyle('sub');
             });
-            tools.createButton('ViperCoreStylesPlugin:vtp:sup', '', 'Superscript', 'superscript', function() {
+            tools.createButton('superscript', '', 'Superscript', 'superscript', function() {
                 self.handleStyle('sup');
             });
-            tools.createButton('ViperCoreStylesPlugin:vtp:del', '', 'Strikethrough', 'strikethrough', function() {
+            tools.createButton('strikethrough', '', 'Strikethrough', 'strikethrough', function() {
                 self.handleStyle('del');
             });
 
-            tools.addButtonToGroup('ViperCoreStylesPlugin:vtp:sub', 'ViperCoreStylesPlugin:vtp:btnGroup2');
-            tools.addButtonToGroup('ViperCoreStylesPlugin:vtp:sup', 'ViperCoreStylesPlugin:vtp:btnGroup2');
-            tools.addButtonToGroup('ViperCoreStylesPlugin:vtp:del', 'ViperCoreStylesPlugin:vtp:btnGroup2');
+            tools.addButtonToGroup('subscript', 'ViperCoreStylesPlugin:vtp:btnGroup2');
+            tools.addButtonToGroup('superscript', 'ViperCoreStylesPlugin:vtp:btnGroup2');
+            tools.addButtonToGroup('strikethrough', 'ViperCoreStylesPlugin:vtp:btnGroup2');
             toolbarPlugin.addButton(btnGroup2);
 
             // Justify buttons bubble.
@@ -124,11 +130,11 @@ ViperCoreStylesPlugin.prototype = {
             justifyBubbleContent.appendChild(btnGroup3);
 
             toolbarPlugin.createBubble('ViperCoreStylesPlugin:justifyBubble', 'Justification', null, justifyBubbleContent);
-            var justifyBubbleToggle = tools.createButton('ViperCoreStylesPlugin:vtp:justifyToggle', '', 'Toggle Justification', 'justifyLeft');
+            var justifyBubbleToggle = tools.createButton('justify', '', 'Toggle Justification', 'justifyLeft');
             toolbarPlugin.addButton(justifyBubbleToggle);
-            toolbarPlugin.setBubbleButton('ViperCoreStylesPlugin:justifyBubble', 'ViperCoreStylesPlugin:vtp:justifyToggle');
+            toolbarPlugin.setBubbleButton('ViperCoreStylesPlugin:justifyBubble', 'justify');
 
-            var hr = tools.createButton('ViperCoreStylesPlugin:vtp:hr', 'HR', 'Horizontal Rule', '', function() {
+            var hr = tools.createButton('hr', 'HR', 'Horizontal Rule', '', function() {
                 self.handleHR();
             });
             toolbarPlugin.addButton(hr);
@@ -701,7 +707,6 @@ ViperCoreStylesPlugin.prototype = {
 
         ViperChangeTracker.endBatchChange(changeid);
 
-        this.caretUpdated();
         this.viper.fireNodesChanged('ViperCoreStylesPlugin:removeFormat');
         this.viper.fireSelectionChanged();
 
@@ -821,61 +826,6 @@ ViperCoreStylesPlugin.prototype = {
 
     },
 
-    caretUpdated: function()
-    {
-        var self = this;
-
-        // Use a timeout to prevent this method doing lots of work while the
-        // caret is being updated constantly (e.g. typing..).
-        // TODO: There might be a delay, to prevent this we may need to pass extra info
-        // from caretUpdated event, might need to send info about why it was updated.
-        // If it was updated becaue of right arrow key then update instantly etc.
-        clearTimeout(this._caretUpdatedTimeout);
-        this._caretUpdatedTimeout = setTimeout(function() {
-            var tags = self.getStyleTags();
-            var asln = self.activeStyles.length;
-            for (var i = 0; i < asln; i++) {
-                self.setStyleButtonState(self.activeStyles[i], 'inactive');
-            }
-
-            var tln = tags.length;
-            for (var i = 0; i < tln; i++) {
-                var tag   = tags[i].tagName.toLowerCase();
-                var index = self.styleTags.find(tag);
-                if (index !== -1) {
-                    self.setStyleButtonState(self.buttons[index], 'active');
-                }
-            }
-
-            // Text-alignment.
-            var range = self.viper.getCurrentRange();
-            var style = self.getAlignment(range.startContainer);
-            if (style) {
-                if (style === 'start') {
-                    style = 'left';
-                }
-
-                self.setStyleButtonState('align-' + style, 'active');
-            }
-        }, 200);
-
-    },
-
-    setStyleButtonState: function(style, state)
-    {
-        if (!this.toolbarPlugin) {
-            return;
-        }
-
-        if (state === 'active') {
-            this.toolbarPlugin.setButtonActive(style);
-            this.activeStyles.push(style);
-        } else {
-            this.toolbarPlugin.setButtonInactive(style);
-        }
-
-    },
-
     _canStyleNode: function(node)
     {
         if (dfx.isBlockElement(node) === true) {
@@ -930,15 +880,15 @@ ViperCoreStylesPlugin.prototype = {
         var tools       = this.viper.ViperTools;
         var buttonGroup = tools.createButtonGroup('ViperCoreStylesPlugin:vitp:btnGroup');
 
-        tools.createButton('ViperCoreStylesPlugin:vitp:bold', 'B', 'Bold', 'bold', function() {
+        tools.createButton('vitpBold', 'B', 'Bold', 'bold', function() {
             return self.handleStyle('strong');
         }, false, activeStates.strong);
-        tools.createButton('ViperCoreStylesPlugin:vitp:italic', 'I', 'Italic', 'italic', function() {
+        tools.createButton('vitpItalic', 'I', 'Italic', 'italic', function() {
             return self.handleStyle('em');
         }, false, activeStates.em);
 
-        tools.addButtonToGroup('ViperCoreStylesPlugin:vitp:bold', 'ViperCoreStylesPlugin:vitp:btnGroup');
-        tools.addButtonToGroup('ViperCoreStylesPlugin:vitp:italic', 'ViperCoreStylesPlugin:vitp:btnGroup');
+        tools.addButtonToGroup('vitpBold', 'ViperCoreStylesPlugin:vitp:btnGroup');
+        tools.addButtonToGroup('vitpItalic', 'ViperCoreStylesPlugin:vitp:btnGroup');
 
         inlineToolbarPlugin.addButton(buttonGroup);
 
@@ -952,7 +902,8 @@ ViperCoreStylesPlugin.prototype = {
             for (var btn in buttons) {
                 var c = buttons[btn].length;
                 for (var i = 0; i < c; i++) {
-                    tools.disableButton('ViperCoreStylesPlugin:vtp:' + buttons[btn][i]);
+                    var buttonName = this._buttons[buttons[btn][i]] || 'ViperCoreStylesPlugin:vtp:' + buttons[btn][i];
+                    tools.disableButton(buttonName);
                 }
             }
 
@@ -962,27 +913,27 @@ ViperCoreStylesPlugin.prototype = {
         var tagNames = [];
         var c        = buttons.styles.length;
         for (var i = 0; i < c; i++) {
-            tools.enableButton('ViperCoreStylesPlugin:vtp:' + buttons.styles[i]);
-            tools.setButtonInactive('ViperCoreStylesPlugin:vtp:' + buttons.styles[i]);
+            tools.enableButton(this._buttons[buttons.styles[i]]);
+            tools.setButtonInactive(this._buttons[buttons.styles[i]]);
             tagNames.push(buttons.styles[i]);
         }
 
         // Active states.
         var states = this._getActiveStates(range, tagNames);
         for (var i = 0; i < states.length; i++) {
-            tools.setButtonActive('ViperCoreStylesPlugin:vtp:' + states[i]);
+            tools.setButtonActive(this._buttons[states[i]]);
         }
 
         if (range.collapsed === false) {
-            tools.enableButton('ViperCoreStylesPlugin:vtp:rmFormat');
+            tools.enableButton('removeFormat');
         } else {
-            tools.disableButton('ViperCoreStylesPlugin:vtp:rmFormat');
+            tools.disableButton('removeFormat');
         }
 
         if (states.alignment) {
             var justify       = states.alignment;
             var c             = buttons.justify.length;
-            var toolbarButton = tools.getItem('ViperCoreStylesPlugin:vtp:justifyToggle');
+            var toolbarButton = tools.getItem('justify');
             toolbarButton.setIconClass('justifyLeft');
 
             if (justify === 'justify') {
@@ -994,7 +945,7 @@ ViperCoreStylesPlugin.prototype = {
                 if (buttons.justify[i] === justify) {
                     tools.setButtonActive('ViperCoreStylesPlugin:vtp:' + buttons.justify[i]);
                     toolbarButton.setIconClass('justify' + dfx.ucFirst(justify));
-                    tools.setButtonActive('ViperCoreStylesPlugin:vtp:justifyToggle');
+                    tools.setButtonActive('justify');
                     setToggleInactive = false;
                 } else {
                     tools.setButtonInactive('ViperCoreStylesPlugin:vtp:' + buttons.justify[i]);
@@ -1002,7 +953,7 @@ ViperCoreStylesPlugin.prototype = {
             }
 
             if (setToggleInactive === true) {
-                tools.setButtonInactive('ViperCoreStylesPlugin:vtp:justifyToggle');
+                tools.setButtonInactive('justify');
             }
         }
 

@@ -26,9 +26,10 @@ function ViperToolbarPlugin(viper)
     this.viper    = viper;
     this._toolbar = null;
 
-    this._activeBubble  = null;
-    this._bubbles       = {};
-    this._bubbleButtons = {};
+    this._activeBubble   = null;
+    this._bubbles        = {};
+    this._bubbleButtons  = {};
+    this._settingButtons = null;
 
     this.createToolbar();
 
@@ -69,6 +70,48 @@ ViperToolbarPlugin.prototype = {
             this.setParentElement(parent);
         }
 
+        if (settings.buttons) {
+            this.setButtons(settings.buttons);
+        }
+
+    },
+
+    setButtons: function(buttons)
+    {
+        this._settingButtons = buttons;
+
+        // Remove all buttons that were adding by other plugins.
+        this._toolbar.innerHTML = '';
+
+        var buttonsLen = buttons.length;
+        for (var i = 0; i < buttonsLen; i++) {
+            if (typeof buttons[i] === 'string') {
+                // Single button.
+                var button = this.viper.ViperTools.getItem(buttons[i]);
+                if (!button || button.type !== 'button') {
+                    throw new Error('Invalid button type: ' + buttons[i]);
+                }
+
+                this._toolbar.appendChild(button.element);
+            } else if (buttons[i].length) {
+                // Create button group.
+                var groupid = 'ViperToolbarPlugin:buttons:' + i;
+                var group   = this.viper.ViperTools.createButtonGroup(groupid);
+
+                var subButtonsLen = buttons[i].length;
+                for (var j = 0; j < subButtonsLen; j++) {
+                    var button = this.viper.ViperTools.getItem(buttons[i][j]);
+                    if (!button || button.type !== 'button') {
+                        throw new Error('Invalid button type: ' + buttons[i][j]);
+                    }
+
+                    this.viper.ViperTools.addButtonToGroup(buttons[i][j], groupid);
+                }
+
+                this._toolbar.appendChild(group);
+            }
+        }
+
     },
 
     createToolbar: function()
@@ -85,9 +128,16 @@ ViperToolbarPlugin.prototype = {
             }
         });
 
+        dfx.addEvent(elem, 'mouseup', function(e) {
+            var target = dfx.getMouseEventTarget(e);
+            if (dfx.isTag(target, 'input') !== true) {
+                dfx.preventDefault(e);
+                return false;
+            }
+        });
+
         if (navigator.userAgent.match(/iPad/i) !== null) {
             dfx.addClass(this._toolbar, 'device-ipad');
-            dfx.setStyle(this._toolbar, 'display', 'none');
         }
 
     },
@@ -109,7 +159,9 @@ ViperToolbarPlugin.prototype = {
      */
     addButton: function(button)
     {
-        this._toolbar.appendChild(button);
+        if (!this._settingButtons) {
+            this._toolbar.appendChild(button);
+        }
 
     },
 
@@ -316,6 +368,11 @@ ViperToolbarPlugin.prototype = {
         this.positionBubble(bubbleid);
 
         this._activeBubble = bubbleid;
+
+        var inputElements = dfx.getTag('input', bubbleElem);
+        if (inputElements.length > 0) {
+            inputElements[0].focus();
+        }
 
     },
 

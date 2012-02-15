@@ -242,16 +242,16 @@ ViperImagePlugin.prototype = {
         // Add the preview panel to the popup contents.
         createImageSubContent.appendChild(previewBox);
 
-        var toggleImagePlugin = tools.createButton('ViperImagePlugin:toggle', '', 'Toggle Image Options', 'image');
+        var toggleImagePlugin = tools.createButton('image', '', 'Toggle Image Options', 'image');
         toolbar.addButton(toggleImagePlugin);
-        toolbar.setBubbleButton('ViperImagePlugin:bubble', 'ViperImagePlugin:toggle');
+        toolbar.setBubbleButton('ViperImagePlugin:bubble', 'image');
 
         // Update the buttons when the toolbar updates it self.
         this.viper.registerCallback('ViperToolbarPlugin:updateToolbar', 'ViperImagePlugin', function(data) {
             var range = data.range;
             image     = range.getNodeSelection();
             if (image && dfx.isTag(image, 'img') === true) {
-                tools.setButtonActive('ViperImagePlugin:toggle');
+                tools.setButtonActive('image');
 
                 tools.getItem('ViperImagePlugin:urlInput').setValue(image.getAttribute('src'));
                 tools.getItem('ViperImagePlugin:altInput').setValue(image.getAttribute('alt'));
@@ -261,12 +261,12 @@ ViperImagePlugin.prototype = {
                 setPreviewContent(image.cloneNode(true));
             } else {
                 if (image) {
-                    tools.disableButton('ViperImagePlugin:toggle');
+                    tools.disableButton('image');
                 } else {
-                    tools.enableButton('ViperImagePlugin:toggle');
+                    tools.enableButton('image');
                 }
 
-                tools.setButtonInactive('ViperImagePlugin:toggle');
+                tools.setButtonInactive('image');
                 toolbar.closeBubble('ViperImagePlugin:bubble');
 
                 tools.getItem('ViperImagePlugin:urlInput').setValue('');

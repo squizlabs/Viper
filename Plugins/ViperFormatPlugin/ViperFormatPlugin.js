@@ -50,16 +50,17 @@ ViperFormatPlugin.prototype = {
 
     init: function()
     {
-        var name = 'Format';
         var self = this;
+
+        // Main toolbar.
+        this.toolbarPlugin = this.viper.ViperPluginManager.getPlugin('ViperToolbarPlugin');
+        if (this.toolbarPlugin) {
+            this._createToolbarContent();
+        }
 
         // Inline toolbar.
         this.viper.registerCallback('ViperInlineToolbarPlugin:updateToolbar', 'ViperFormatPlugin', function(data) {
             self._createInlineToolbarContent(data);
-        });
-
-        this.viper.registerCallback('ViperInlineToolbarPlugin:lineageClicked', 'ViperFormatPlugin', function(data) {
-            self._inlineToolbarActiveSubSection = null;
         });
 
         ViperChangeTracker.addChangeType('textFormatChange', 'Formatted', 'format');
@@ -67,11 +68,6 @@ ViperFormatPlugin.prototype = {
             var format = self._getFormat(node);
             return self.styleTags[format];
         });
-
-        this.toolbarPlugin   = this.viper.ViperPluginManager.getPlugin('ViperToolbarPlugin');
-        if (this.toolbarPlugin) {
-            this._createToolbarContent();
-        }
 
         ViperChangeTracker.setApproveCallback('textFormatChange', function(clone, node) {
             ViperChangeTracker.removeTrackChanges(node);
@@ -99,53 +95,202 @@ ViperFormatPlugin.prototype = {
 
     },
 
+    _getHeadingsSection: function(prefix)
+    {
+        var self   = this;
+        var tools  = this.viper.ViperTools;
+
+        // Headings format section.
+        var headingsSubSection = document.createElement('div');
+
+        var headingBtnGroup = tools.createButtonGroup(prefix + 'headingFormats');
+        headingsSubSection.appendChild(headingBtnGroup);
+
+        for (var i = 1; i <= 6; i++) {
+            (function(headingCount) {
+                tools.createButton(prefix + 'heading:h' + headingCount, 'H' + headingCount, 'Convert to Heading ' + headingCount, null, function() {
+                    self.handleFormat('h' + headingCount);
+                });
+                tools.addButtonToGroup(prefix + 'heading:h' + headingCount, prefix + 'headingFormats');
+            }) (i);
+        }//end for
+
+        return headingsSubSection;
+
+    },
+
+    _getFormatsSection: function(prefix)
+    {
+        var self   = this;
+        var tools  = this.viper.ViperTools;
+
+        var formatsSubSection = document.createElement('div');
+        var formatButtons = {
+            blockquote: 'Quote',
+            pre: 'PRE',
+            div: 'DIV',
+            p: 'P'
+        };
+
+        for (var tag in formatButtons) {
+            (function(tagName) {
+                var button = tools.createButton(prefix + 'formats:' + formatButtons[tagName], formatButtons[tagName], 'Convert to ' + formatButtons[tagName], null, function() {
+                    self.handleFormat(tagName);
+                });
+                formatsSubSection.appendChild(button);
+            })
+            (tag);
+        }
+
+        return formatsSubSection;
+
+    },
+
+    _getAnchorSection: function(prefix)
+    {
+        var self  = this;
+        var tools = this.viper.ViperTools;
+
+        var anchorSubContent = document.createElement('div');
+        var idTextbox = tools.createTextbox(prefix + 'anchor:input', 'ID', '', function(value) {
+            // Apply the ID to the selection.
+            self._setAttributeForSelection('id', value);
+        });
+        anchorSubContent.appendChild(idTextbox);
+
+        return anchorSubContent;
+
+    },
+
+    _getClassSection: function(prefix)
+    {
+        var self  = this;
+        var tools = this.viper.ViperTools;
+
+        var classSubContent = document.createElement('div');
+        var classTextbox = tools.createTextbox(prefix + 'class:input', 'Class', '', function(value) {
+            self._setAttributeForSelection('class', value);
+        });
+        classSubContent.appendChild(classTextbox);
+
+        return classSubContent;
+
+    },
+
+    _getToolbarContents: function(toolbarType)
+    {
+        var prefix = 'ViperFormatPlugin:' + toolbarType + ':';
+
+        return {
+            headings: this._getHeadingsSection(prefix),
+            formats: this._getFormatsSection(prefix),
+            anchor: this._getAnchorSection(prefix),
+            cssClass: this._getClassSection(prefix)
+        }
+
+    },
+
+    getNodeWithAttributeFromRange: function(attributeName, node)
+    {
+        if (!attributeName) {
+            return null;
+        }
+
+        var range        = this.viper.getViperRange();
+        var selectedNode = node || range.getNodeSelection();
+        if (selectedNode
+            && selectedNode.nodeType === dfx.ELEMENT_NODE
+            && selectedNode.hasAttribute(attributeName) === true
+        ) {
+            return selectedNode;
+        }
+
+        return null;
+
+    },
+
+    _getAttributeValue: function(attribute, node)
+    {
+        node = this.getNodeWithAttributeFromRange(attribute, node);
+        if (node) {
+            return node.getAttribute(attribute);
+        }
+
+        return '';
+
+    },
+
+    getTagFromRange: function(range, tagNames)
+    {
+        var c = tagNames.length;
+
+        var selectedNode = range.getNodeSelection();
+        if (selectedNode && selectedNode.nodeType === dfx.ELEMENT_NODE) {
+            for (var i = 0; i < c; i++) {
+                if (dfx.isTag(selectedNode, tagNames[i]) === true) {
+                    return selectedNode;
+                }
+            }
+        }
+
+        var viperElem = this.viper.getViperElement();
+        var common    = range.getCommonElement();
+        while (common) {
+            for (var i = 0; i < c; i++) {
+                if (dfx.isTag(common, tagNames[i]) === true) {
+                    return common;
+                }
+            }
+
+            if (common === viperElem || dfx.isBlockElement(common) === true) {
+                break;
+            }
+
+            common = common.parentNode;
+        }
+
+        return null;
+
+    },
+
     _createInlineToolbarContent: function(data)
     {
         if (!data.lineage || data.range.collapsed === true) {
             return;
         }
 
-        var self                = this;
-        var tools               = this.viper.ViperTools;
-        var selectedNode        = data.lineage[data.current];
-        var inlineToolbarPlugin = this.viper.ViperPluginManager.getPlugin('ViperInlineToolbarPlugin');
+        var self         = this;
+        var tools        = this.viper.ViperTools;
+        var selectedNode = data.lineage[data.current];
+        var toolbar      = this.viper.ViperPluginManager.getPlugin('ViperInlineToolbarPlugin');
+        var prefix       = 'ViperFormatPlugin:vitp:';
 
+        // Check heading.
         var headingsSubSection = null;
         var hasActiveHeading   = false;
+
         if (this._canShowHeadingOptions(selectedNode) === true) {
             // Headings format section.
-            var headingSubSectionContents = document.createElement('div');
+            headingsSubSection = toolbar.makeSubSection(prefix + 'heading:subSection', this._getHeadingsSection(prefix));
 
-            var headingBtnGroup = tools.createButtonGroup('VFP:vitp:hadingFormats');
-            headingSubSectionContents.appendChild(headingBtnGroup);
             for (var i = 1; i <= 6; i++) {
-                (function(headingCount) {
-                    var active  = false;
-                    var tagName = 'h' + headingCount;
-                    for (var j = 0; j < data.lineage.length; j++) {
-                        if (dfx.isTag(data.lineage[j], tagName) === true) {
-                            active           = true;
-                            hasActiveHeading = true;
-                            break;
-                        }
+                var tagName = 'h' + i;
+                for (var j = 0; j < data.lineage.length; j++) {
+                    if (dfx.isTag(data.lineage[j], tagName) === true) {
+                        tools.setButtonActive(prefix + 'heading:h' + i);
+                        hasActiveHeading = true;
+                        break;
                     }
-
-                    var headingButton = tools.createButton('VFP:vitp:heading:h' + headingCount, 'H' + headingCount, 'Convert to Heading ' + headingCount, null, function() {
-                        self.handleFormat(tagName);
-                    }, false, active);
-                    tools.addButtonToGroup('VFP:vitp:heading:h' + headingCount, 'VFP:vitp:hadingFormats');
-
-                }) (i);
+                }
             }//end for
-
-            headingsSubSection = inlineToolbarPlugin.makeSubSection('VFP:vitp:heading:subSection', headingSubSectionContents);
         }//end if
 
         var formatsSubSection = null;
         var hasActiveFormat   = false;
+
         if (this._canShowFormattingOptions(selectedNode) === true) {
             // Formats section.
-            var formatsSubSectionContents = document.createElement('div');
+            formatsSubSection = toolbar.makeSubSection(prefix + 'formats:subSection', this._getFormatsSection(prefix));
 
             var formatButtons = {
                 blockquote: 'Quote',
@@ -155,43 +300,34 @@ ViperFormatPlugin.prototype = {
             };
 
             for (var tag in formatButtons) {
-                (function(tagName) {
-                    var active = false;
-                    for (var j = data.current; j < data.lineage.length; j++) {
-                        if (dfx.isTag(data.lineage[j], tagName) === true) {
-                            active           = true;
-                            hasActiveFormat = true;
-                            break;
-                        }
+               for (var j = data.current; j < data.lineage.length; j++) {
+                    if (dfx.isTag(data.lineage[j], tag) === true) {
+                        tools.setButtonActive(prefix + 'formats:' + formatButtons[tag]);
+                        hasActiveFormat = true;
+                        break;
                     }
-
-                    var button = tools.createButton('VFP:vitp:formatting:' + formatButtons[tagName], formatButtons[tagName], 'Convert to ' + formatButtons[tagName], null, function() {
-                        self.handleFormat(tagName);
-                    }, false, active);
-                    formatsSubSectionContents.appendChild(button);
-                })
-                (tag);
+                }
             }
-
-            formatsSubSection = inlineToolbarPlugin.makeSubSection('VFP:vitp:formatting:subSection', formatsSubSectionContents);
         }//end if
 
-        var buttonGroup = tools.createButtonGroup('VFP:vitp:formats:buttons');
-        inlineToolbarPlugin.addButton(buttonGroup);
+        var buttonGroup = tools.createButtonGroup(prefix + 'formatsAndHeading:buttons');
+        if (formatsSubSection || headingsSubSection) {
+            toolbar.addButton(buttonGroup);
+        }
 
         if (formatsSubSection) {
-            tools.createButton('VFP:vitp:formats:toggleFormats', 'Aa', 'Toggle Formats', 'formats', null, false, hasActiveFormat);
-            tools.addButtonToGroup('VFP:vitp:formats:toggleFormats', 'VFP:vitp:formats:buttons');
-            inlineToolbarPlugin.setSubSectionButton('VFP:vitp:formats:toggleFormats', 'VFP:vitp:formatting:subSection');
+            tools.createButton(prefix + 'formats:toggleFormats', 'Aa', 'Toggle Formats', 'formats', null, false, hasActiveFormat);
+            tools.addButtonToGroup(prefix + 'formats:toggleFormats', prefix + 'formatsAndHeading:buttons');
+            toolbar.setSubSectionButton(prefix + 'formats:toggleFormats', prefix + 'formats:subSection');
         }
 
         if (headingsSubSection) {
-            tools.createButton('VFP:vitp:formats:toggleHeadings', 'Hh', 'Toggle Headings', 'headings', null, false, hasActiveHeading);
-            tools.addButtonToGroup('VFP:vitp:formats:toggleHeadings', 'VFP:vitp:formats:buttons');
-            inlineToolbarPlugin.setSubSectionButton('VFP:vitp:formats:toggleHeadings', 'VFP:vitp:heading:subSection');
+            tools.createButton(prefix + 'heading:toggleHeadings', 'Hh', 'Toggle Headings', 'headings', null, false, hasActiveHeading);
+            tools.addButtonToGroup(prefix + 'heading:toggleHeadings', prefix + 'formatsAndHeading:buttons');
+            toolbar.setSubSectionButton(prefix + 'heading:toggleHeadings', prefix + 'heading:subSection');
         }
 
-        // Anchor and Class.
+         // Anchor and Class.
         if (selectedNode.nodeType === dfx.ELEMENT_NODE
             || data.range.startContainer.parentNode === data.range.endContainer.parentNode
         ) {
@@ -201,277 +337,141 @@ ViperFormatPlugin.prototype = {
                 }
             }
 
-            // Anchor.
-            var active = false;
-            if (this._inlineToolbarActiveSubSection === 'anchor') {
-                active = true;
-            }
-
-            var attrBtnGroup = tools.createButtonGroup('VFP:vitp:buttons');
-            inlineToolbarPlugin.addButton(attrBtnGroup);
-
-            var anchorIDSubSectionCont = document.createElement('div');
-            var anchorIdSubSection     = inlineToolbarPlugin.makeSubSection('VFP:vitp:anchor:subSection', anchorIDSubSectionCont);
-
-            var id = '';
             var anchorBtnActive = false;
-            if (selectedNode.nodeType === dfx.ELEMENT_NODE) {
-                id = selectedNode.getAttribute('id');
-                if (id) {
-                    anchorBtnActive = true;
-                }
+            var attrId = this._getAttributeValue('id', selectedNode);
+            if (attrId) {
+                anchorBtnActive = true;
             }
 
-            tools.createButton('VFP:vitp:anchor:toggle', '', 'Anchor name (ID)', 'anchorID', function(subSectionState) {
-                if (subSectionState === true) {
-                    self._inlineToolbarActiveSubSection = 'anchor';
-                }
-            }, false, anchorBtnActive);
-            tools.addButtonToGroup('VFP:vitp:anchor:toggle', 'VFP:vitp:buttons');
-            inlineToolbarPlugin.setSubSectionButton('VFP:vitp:anchor:toggle', 'VFP:vitp:anchor:subSection');
-
-            var idTextBox = tools.createTextbox('VFP:vitp:anchor:input', 'ID', id, function(value) {
-                if (selectedNode.nodeType === dfx.ELEMENT_NODE) {
-                    // Set the attribute of this node.
-                    selectedNode.setAttribute('id', value);
-
-                    if (dfx.isBlank(dfx.trim(value)) === true && dfx.isTag(selectedNode, 'span') === true) {
-                        var remove = true;
-                        for (var i = 0; i < selectedNode.attributes.length; i++) {
-                            if (dfx.isBlank(dfx.trim(selectedNode.attributes[i].value)) === false) {
-                                remove = false;
-                            }
-                        }
-
-                        if (remove === true) {
-                            // Span tag was most likely created just for the class attribute
-                            // remove the span as its no longer needed.
-                            var selectionStart = selectedNode.firstChild;
-                            var selectionEnd   = selectedNode.lastChild;
-                            while (selectedNode.firstChild) {
-                                dfx.insertBefore(selectedNode, selectedNode.firstChild);
-                            }
-
-                            dfx.remove(selectedNode);
-                            self.viper.selectNodeToNode(selectionStart, selectionEnd);
-                            self.viper.fireCallbacks('Viper:selectionChanged', self.viper.getViperRange());
-                        }
-                    }
-
-                    self._inlineToolbarActiveSubSection = 'anchor';
-                } else {
-                    // Wrap the selection with span tag.
-                    var bookmark = self.viper.createBookmark();
-                    var span     = document.createElement('span');
-                    span.setAttribute('id', value);
-
-                    // Move the elements between start and end of bookmark to the new
-                    // span tag. Then select the new span tag and update selection.
-                    if (bookmark.start && bookmark.end) {
-                        var start = bookmark.start.nextSibling;
-                        while (start !== bookmark.end) {
-                            var elem = start;
-                            start = start.nextSibling;
-                            span.appendChild(elem);
-                        }
-
-                        dfx.insertBefore(bookmark.start, span);
-                        self.viper.removeBookmark(bookmark);
-
-                        var range = self.viper.getCurrentRange();
-                        range.selectNode(span);
-                        ViperSelection.addRange(range);
-                        self.viper.adjustRange();
-
-                        // We want to keep this textbox open so set this var.
-                        if (dfx.hasClass(anchorIdSubSection, 'active') === true) {
-                            self._inlineToolbarActiveSubSection = 'anchor';
-                        }
-
-                        self.viper.fireCallbacks('Viper:selectionChanged', range);
-                    }
-                }//end if
-            });
-            anchorIDSubSectionCont.appendChild(idTextBox);
-            if (active === true) {
-                idTextBox.focus();
+            var classBtnActive = false;
+            var attrClass      = this._getAttributeValue('class', selectedNode);
+            if (attrClass) {
+                classBtnActive = true;
             }
 
+            var buttonGroup = tools.createButtonGroup(prefix + 'anchorAndClassButtons');
+            toolbar.addButton(buttonGroup);
+
+            // Anchor.
+            tools.createButton('vitpAnchor', '', 'Anchor name (ID)', 'anchorID', null, false, anchorBtnActive);
+            tools.addButtonToGroup('vitpAnchor', prefix + 'anchorAndClassButtons');
+
+            toolbar.makeSubSection(prefix + 'anchor:subSection', this._getAnchorSection(prefix));
+            toolbar.setSubSectionButton('vitpAnchor', prefix + 'anchor:subSection');
+            tools.getItem(prefix + 'anchor:input').setValue(attrId);
 
             // Class.
-            var active = false;
-            if (this._inlineToolbarActiveSubSection === 'class') {
-                active = true;
-            }
+            tools.createButton('vitpClass', '', 'Class name', 'cssClass', null, false, classBtnActive);
+            tools.addButtonToGroup('vitpClass', prefix + 'anchorAndClassButtons');
 
-            var classSubSectionCont = document.createElement('div');
-            var classSubSection = inlineToolbarPlugin.makeSubSection('VFP:vitp:class:subSection', classSubSectionCont);
-
-            var className = '';
-            var classBtnActive = false;
-            if (selectedNode.nodeType === dfx.ELEMENT_NODE) {
-                className = selectedNode.getAttribute('class');
-                if (className) {
-                    classBtnActive = true;
-                }
-            }
-
-            tools.createButton('VFP:vitp:class:toggle', '', 'Class name', 'cssClass', function(subSectionState) {
-                if (subSectionState === true) {
-                    self._inlineToolbarActiveSubSection = 'class';
-                }
-            }, false, classBtnActive);
-            tools.addButtonToGroup('VFP:vitp:class:toggle', 'VFP:vitp:buttons');
-            inlineToolbarPlugin.setSubSectionButton('VFP:vitp:class:toggle', 'VFP:vitp:class:subSection');
-
-            var classTextBox = tools.createTextbox('VFP:vitp:class:input', 'Class', className, function(value) {
-                if (selectedNode.nodeType === dfx.ELEMENT_NODE) {
-                    // Set the attribute of this node.
-                    selectedNode.setAttribute('class', value);
-
-                    if (dfx.isBlank(dfx.trim(value)) === true && dfx.isTag(selectedNode, 'span') === true) {
-                        var remove = true;
-                        for (var i = 0; i < selectedNode.attributes.length; i++) {
-                            if (dfx.isBlank(dfx.trim(selectedNode.attributes[i].value)) === false) {
-                                remove = false;
-                            }
-                        }
-
-                        if (remove === true) {
-                            // Span tag was most likely created just for the class attribute
-                            // remove the span as its no longer needed.
-                            var selectionStart = selectedNode.firstChild;
-                            var selectionEnd   = selectedNode.lastChild;
-                            while (selectedNode.firstChild) {
-                                dfx.insertBefore(selectedNode, selectedNode.firstChild);
-                            }
-
-                            dfx.remove(selectedNode);
-                            self.viper.selectNodeToNode(selectionStart, selectionEnd);
-                            self.viper.fireCallbacks('Viper:selectionChanged', self.viper.getViperRange());
-                        }
-                    }
-
-                    self._inlineToolbarActiveSubSection = 'class';
-                } else {
-                    // Wrap the selection with span tag.
-                    var bookmark = self.viper.createBookmark();
-                    var span     = document.createElement('span');
-                    span.setAttribute('class', value);
-
-                    // Move the elements between start and end of bookmark to the new
-                    // span tag. Then select the new span tag and update selection.
-                    if (bookmark.start && bookmark.end) {
-                        var start = bookmark.start.nextSibling;
-                        while (start !== bookmark.end) {
-                            var elem = start;
-                            start = start.nextSibling;
-                            span.appendChild(elem);
-                        }
-
-                        dfx.insertBefore(bookmark.start, span);
-                        self.viper.removeBookmark(bookmark);
-
-                        var range = self.viper.getCurrentRange();
-                        range.selectNode(span);
-                        ViperSelection.addRange(range);
-                        self.viper.adjustRange();
-
-                        // We want to keep this textbox open so set this var.
-                        if (dfx.hasClass(classSubSection, 'active') === true) {
-                            self._inlineToolbarActiveSubSection = 'class';
-                        }
-
-                        self.viper.fireCallbacks('Viper:selectionChanged', range);
-                    }
-                }//end if
-            });
-            classSubSectionCont.appendChild(classTextBox);
-            if (active === true) {
-                classTextBox.focus();
-            }
+            toolbar.makeSubSection(prefix + 'class:subSection', this._getClassSection(prefix));
+            toolbar.setSubSectionButton('vitpClass', prefix + 'class:subSection');
+            tools.getItem(prefix + 'class:input').setValue(attrClass);
         }//end if
-
-        this._inlineToolbarActiveSubSection = null;
 
     },
 
     _createToolbarContent: function()
     {
+        var self    = this;
         var tools   = this.viper.ViperTools;
         var toolbar = this.toolbarPlugin;
-        var self    = this;
+        var prefix  = 'ViperFormatPlugin:vtp:';
 
-        var _updateValue = function(textBox, attr) {
-            var range   = self.viper.getViperRange();
-            var element = range.getNodeSelection();
-            var value   = '';
-            if (element && element.nodeType === dfx.ELEMENT_NODE) {
-                value = element.getAttribute(attr);
-            }
+        var content = this._getToolbarContents('vtp');
 
-            textBox.value = value;
-            return value;
+        // Toolbar buttons.
+        var buttonGroup = tools.createButtonGroup(prefix + 'formatAndHeadingButtons');
+        tools.createButton('formats', 'Aa', 'Formats', '');
+        tools.createButton('headings', 'Hh', 'Headings', '');
+        tools.addButtonToGroup('formats', prefix + 'formatAndHeadingButtons');
+        tools.addButtonToGroup('headings', prefix + 'formatAndHeadingButtons');
+        toolbar.addButton(buttonGroup);
+
+        var buttonGroup = tools.createButtonGroup(prefix + 'anchorAndClassButtons');
+        tools.createButton('anchor', '', 'Anchor ID', 'anchorID');
+        tools.createButton('class', '', 'Class', 'cssClass');
+        tools.addButtonToGroup('anchor', prefix + 'anchorAndClassButtons');
+        tools.addButtonToGroup('class', prefix + 'anchorAndClassButtons');
+        toolbar.addButton(buttonGroup);
+
+        // Create the bubbles.
+        toolbar.createBubble(prefix + 'formatsBubble', 'Formats', null, content.formats);
+        toolbar.setBubbleButton(prefix + 'formatsBubble', 'formats');
+
+        toolbar.createBubble(prefix + 'headingsBubble', 'Headings', null, content.headings);
+        toolbar.setBubbleButton(prefix + 'headingsBubble', 'headings');
+
+        toolbar.createBubble(prefix + 'anchorBubble', 'Anchor ID', content.anchor);
+        toolbar.setBubbleButton(prefix + 'anchorBubble', 'anchor');
+
+        toolbar.createBubble(prefix + 'classBubble', 'Class', content.cssClass);
+        toolbar.setBubbleButton(prefix + 'classBubble', 'class');
+
+        var headingTags   = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'];
+        var formatButtons = {
+            blockquote: 'Quote',
+            pre: 'PRE',
+            div: 'DIV',
+            p: 'P'
         };
 
-        // Anchor.
-        var anchorSubContent = document.createElement('div');
-        var idTextbox = tools.createTextbox('VFP:vtp:anchor:input', 'ID', '', function(value) {
-            // Apply the ID to the selection.
-            self._setAttributeForSelection('id', value);
-        });
-        anchorSubContent.appendChild(idTextbox);
-
-        var anchorBubble = toolbar.createBubble('VFP:vtp:anchor:bubble', 'Anchor ID', anchorSubContent, null, function() {
-            _updateValue(dfx.getTag('input', idTextbox)[0], 'id');
-        });
-
-        var btnGroup = tools.createButtonGroup('VFP:vtp:buttons');
-
-        tools.createButton('VFP:vtp:anchor:insertBtn', '', 'Anchor ID', 'anchorID');
-        tools.addButtonToGroup('VFP:vtp:anchor:insertBtn', 'VFP:vtp:buttons');
-        toolbar.setBubbleButton('VFP:vtp:anchor:bubble', 'VFP:vtp:anchor:insertBtn');
-
-        // Class.
-        var classSubContent = document.createElement('div');
-        var classTextbox = tools.createTextbox('VFP:vtp:class:input', 'Class', '', function(value) {
-            self._setAttributeForSelection('class', value);
-        });
-        classSubContent.appendChild(classTextbox);
-
-        var classBubble     = toolbar.createBubble('VFP:vtp:class:bubble', 'Class', classSubContent, null, function() {
-            _updateValue(dfx.getTag('input', classTextbox)[0], 'class');
-        });
-
-        tools.createButton('VFP:vtp:class:insertBtn', '', 'CSS Class', 'cssClass');
-        tools.addButtonToGroup('VFP:vtp:class:insertBtn', 'VFP:vtp:buttons');
-        toolbar.setBubbleButton('VFP:vtp:class:bubble', 'VFP:vtp:class:insertBtn');
-        toolbar.addButton(btnGroup);
-
-
+        // Listen for the main toolbar update and update the statuses of the buttons.
         this.viper.registerCallback('ViperToolbarPlugin:updateToolbar', 'ViperFormatPlugin', function(data) {
             if (data.range.collapsed === true
                 || data.range.startContainer.parentNode !== data.range.endContainer.parentNode
             ) {
-                tools.disableButton('VFP:vtp:anchor:insertBtn');
-                tools.disableButton('VFP:vtp:class:insertBtn');
-                toolbar.closeBubble('VFP:vtp:class:bubble');
-                toolbar.closeBubble('VFP:vtp:anchor:bubble');
+                tools.disableButton('anchor');
+                tools.disableButton('class');
+                tools.setButtonInactive('anchor');
+                tools.setButtonInactive('class');
             } else {
-                tools.enableButton('VFP:vtp:anchor:insertBtn');
-                tools.enableButton('VFP:vtp:class:insertBtn');
+                tools.enableButton('anchor');
+                tools.enableButton('class');
+
             }
 
-            if (_updateValue(dfx.getTag('input', idTextbox)[0], 'id')) {
-                tools.setButtonActive('VFP:vtp:anchor:insertBtn');
-            } else {
-                tools.setButtonInactive('VFP:vtp:anchor:insertBtn');
+            tools.enableButton('headings');
+            tools.enableButton('formats');
+            tools.setButtonInactive('headings');
+            tools.setButtonInactive('formats');
+
+            for (var i = 0; i < headingTags.length; i++) {
+                tools.setButtonInactive(prefix + 'heading:' + headingTags[i]);
             }
 
-            if (_updateValue(dfx.getTag('input', classTextbox)[0], 'class')) {
-                tools.setButtonActive('VFP:vtp:class:insertBtn');
+            var headingElement = self.getTagFromRange(data.range, headingTags);
+            if (headingElement) {
+                var tagName = dfx.getTagName(headingElement);
+                tools.setButtonActive('headings');
+                tools.setButtonActive(prefix + 'heading:' + tagName);
+            }
+
+            for (var tagName in formatButtons) {
+                tools.setButtonInactive(prefix + 'formats:' + formatButtons[tagName]);
+            }
+
+            var formatElement = self.getTagFromRange(data.range, ['p', 'div', 'pre', 'blockquote']);
+            if (formatElement) {
+                var tagName = dfx.getTagName(formatElement);
+                tools.setButtonActive('formats');
+                tools.setButtonActive(prefix + 'formats:' + formatButtons[tagName]);
+            }
+
+            var attrId = self._getAttributeValue('id');
+            tools.getItem(prefix + 'anchor:input').setValue(attrId);
+            if (attrId) {
+                tools.setButtonActive('anchor');
             } else {
-                tools.setButtonInactive('VFP:vtp:class:insertBtn');
+                tools.setButtonInactive('anchor');
+            }
+
+            var attrClass = self._getAttributeValue('class');
+            tools.getItem(prefix + 'class:input').setValue(attrClass);
+            if (attrClass) {
+                tools.setButtonActive('class');
+            } else {
+                tools.setButtonInactive('class');
             }
         });
 
@@ -615,35 +615,38 @@ ViperFormatPlugin.prototype = {
 
     handleFormat: function(type)
     {
-        var range = this.viper.getCurrentRange();
-        if (this._range) {
-            this.viper.focus();
-            range = this.viper.getCurrentRange();
-
-            // Range could be starting from a DOMText and ending on a DOMNode. Handle it.
-            if (this.viper.isChildOfElems(this._range.startContainer, [this._range.endContainer]) === true) {
-                var child = range._getFirstSelectableChild(this._range.endContainer);
-                range.setStart(child, 0);
-            }
-
-            // Set the range again.
-            range.setStart(this._range.startContainer, this._range.startOffset);
-            range.setEnd(this._range.endContainer, this._range.endOffset);
-        }
-
+        var range        = this.viper.getViperRange();
         var selectedNode = range.getNodeSelection();
         var elemsBetween = [];
         if (selectedNode === null) {
-            var startNode = range.getStartNode();
+            var startNode   = range.getStartNode();
+            var blockParent = this.getFirstBlockParent(startNode);
             if (dfx.isChildOf(startNode, this.viper.element) === false) {
                 // TODO: Should we handle this case in createBookmark?
                 range.setStart(this.viper.element, 0);
                 range.setEnd(this.viper.element, this.viper.element.childNodes.length);
+                ViperSelection.addRange(range);
+                startNode = range.getStartNode();
+                blockParent = this.getFirstBlockParent(startNode);
             }
 
-            ViperSelection.addRange(range);
+            var bookmark = this.viper.createBookmark();
 
-            var bookmark     = this.viper.createBookmark();
+            // Handle Collapsed range.
+            if (startNode && range.collapsed === true) {
+                var newElem = document.createElement(type);
+                this._addChangeTrackInfo(newElem);
+                this._moveChildElements(blockParent, newElem);
+                dfx.insertBefore(blockParent, newElem);
+                dfx.remove(blockParent);
+
+                this.viper.selectBookmark(bookmark);
+
+                this.viper.fireNodesChanged([this.viper.getViperElement()]);
+                this.viper.fireSelectionChanged(null, true);
+                return;
+            }
+
             var elemsBetween = dfx.getElementsBetween(bookmark.start, bookmark.end);
             if (range.collapsed === true) {
                 elemsBetween.unshift(bookmark.start);

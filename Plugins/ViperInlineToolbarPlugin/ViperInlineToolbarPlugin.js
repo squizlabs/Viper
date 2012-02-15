@@ -219,6 +219,11 @@ ViperInlineToolbarPlugin.prototype = {
         this._activeSection = subSectionid;
         this._updateSubSectionArrowPos();
 
+        var inputElements = dfx.getTag('input', subSection);
+        if (inputElements.length > 0) {
+            inputElements[0].focus();
+        }
+
     },
 
     /**
@@ -437,9 +442,13 @@ ViperInlineToolbarPlugin.prototype = {
             }
         }
 
-        if (!rangeCoords) {
+        if (!rangeCoords || (rangeCoords.bottom === 0 && rangeCoords.height === 0 && rangeCoords.left === 0)) {
             if (this.viper.isBrowser('chrome') === true || this.viper.isBrowser('safari') === true) {
                 // Webkit bug workaround. https://bugs.webkit.org/show_bug.cgi?id=65324.
+                // OK.. Yet another fix. With the latest Google Chrome (17.0.963.46)
+                // the !rangeCoords check started to fail because its no longer
+                // returning null for a collapsed range, instead all values are set to 0.
+
                 var startNode = range.getStartNode();
                 if (startNode.nodeType === dfx.TEXT_NODE) {
                     if (range.startOffset < startNode.data.length) {

@@ -107,24 +107,6 @@ Viper.prototype = {
 
     },
 
-    setPluginSets: function(sets, callback)
-    {
-        var self = this;
-        for (var setName in sets) {
-            var set = sets[setName];
-            this.ViperPluginManager.addPluginSet(setName, set.plugins, true, function() {
-                delete sets[setName];
-                self.setPluginSets(sets, callback);
-            });
-            return;
-        }
-
-        if (callback) {
-            callback.call(this);
-        }
-
-    },
-
     getPluginManager: function()
     {
         return this.ViperPluginManager;
@@ -306,7 +288,6 @@ Viper.prototype = {
         });
 
         dfx.addEvent(elem, 'focus.viper', function(e) {
-            self._viperRange = null;
             self.highlightToSelection();
         });
 
@@ -2657,15 +2638,17 @@ Viper.prototype = {
 
     highlightToSelection: function()
     {
+        this._viperRange = null;
+
         // There should be one...
         var highlights = dfx.getClass('__viper_selHighlight', this.element);
         if (highlights.length === 0) {
-            return;
+            return false;
         }
 
         var range     = this.getCurrentRange();
         var c         = highlights.length;
-        var startDone = false;
+        var startNode = false;
         var child     = null;
 
         if (c === 1 && dfx.hasClass(highlights[0], '__viper_cleanOnly') === true) {
@@ -2673,7 +2656,7 @@ Viper.prototype = {
             dfx.removeClass(highlights[0], '__viper_selHighlight');
             range.selectNode(highlights[0]);
             ViperSelection.addRange(range);
-            return;
+            return true;
         }
 
         for (var i = 0; i < c; i++) {
@@ -2682,9 +2665,9 @@ Viper.prototype = {
                     child = highlights[i].firstChild;
                     dfx.insertBefore(highlights[i], child);
 
-                    if (startDone === false) {
+                    if (!startNode) {
                         // Set the selection start.
-                        startDone = true;
+                        startNode = child;
                         range.setStart(child, 0);
                     }
                 }
@@ -2692,14 +2675,21 @@ Viper.prototype = {
                 dfx.remove(highlights[i]);
 
                 if (i === (c - 1)) {
-                    range.setEnd(child, child.data.length);
+                    if (child.nodeType === dfx.TEXT_NODE) {
+                        range.setEnd(child, child.data.length);
+                    } else if (startNode === child) {
+                        range.selectNode(startNode);
+                    } else {
+                        var lastSelectable = range._getLastSelectableChild(child);
+                        range.setEnd(lastSelectable, lastSelectable.data.length);
+                    }
                 }
             } else {
                 if (highlights[i].nextSibling.nodeType === dfx.TEXT_NODE) {
                     var nextSibling = highlights[i].nextSibling;
-                    if (startDone === false) {
+                    if (!startNode) {
                         range.setStart(nextSibling, 0);
-                        startDone = true;
+                        startNode = nextSibling;
                     }
 
                     dfx.remove(highlights[i]);
@@ -2723,6 +2713,8 @@ Viper.prototype = {
         }//end for
 
         ViperSelection.addRange(range);
+
+        return true;
 
     },
 
@@ -3055,8 +3047,11 @@ Viper.prototype = {
     mouseDown: function(e)
     {
         var target = dfx.getMouseEventTarget(e);
+        var inside = true;
 
         if (this.isChildOfElems(target, [this.element]) !== true) {
+            inside = false;
+
             // Ask plugins if its one of their element.
             var pluginName = this.getPluginForElement(target);
             if (!pluginName) {
@@ -3078,7 +3073,9 @@ Viper.prototype = {
             return false;
         }
 
-        this.fireSelectionChanged();
+        if (inside !== true || this.highlightToSelection() !== true) {
+            this.fireSelectionChanged();
+        }
 
     },
 

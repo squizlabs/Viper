@@ -10,19 +10,13 @@
     <script type="text/javascript" src="../../DfxJSLib/dfx.js"></script>
     <script type="text/javascript" src="../../Viper-all.js"></script>
     <script type="text/javascript">
-        dfx.addLoadEvent(function() {
+        var viper = null;
+        ViperReadyCallback = function() {
             var viper = new Viper('test');
-            var pluginSets = {
-                all: {
-                    plugins: ['ViperCoreStylesPlugin', 'ViperKeyboardEditorPlugin', 'ViperInlineToolbarPlugin', 'ViperHistoryPlugin', 'ViperListPlugin', 'ViperLinkPlugin']
-                }
-            };
-
-            viper.setPluginSets(pluginSets);
-            viper.getPluginManager().usePluginSet('all');
+            viper.getPluginManager().setPlugins(['ViperCoreStylesPlugin', 'ViperKeyboardEditorPlugin', 'ViperInlineToolbarPlugin', 'ViperHistoryPlugin', 'ViperListPlugin', 'ViperLinkPlugin']);
             viper.setEditableElement(document.getElementById('editable'));
             ViperChangeTracker.enableChangeTracking();
-        });
+        };
     </script>
 </head>
 <body>
