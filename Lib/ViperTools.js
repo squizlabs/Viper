@@ -108,6 +108,7 @@ ViperTools.prototype = {
         }
 
         var button = document.createElement('div');
+        button.setAttribute('id', this.viper.getId() + '-' + id);
 
         if (titleAttr) {
             if (disabled === true) {
