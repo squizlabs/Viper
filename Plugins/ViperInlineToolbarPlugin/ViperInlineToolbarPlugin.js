@@ -248,6 +248,7 @@ ViperInlineToolbarPlugin.prototype = {
      */
     updateToolbar: function(range)
     {
+        var activeSection   = this._activeSection;
         this._activeSection = null;
 
         range = range || this.viper.getCurrentRange();
@@ -278,6 +279,10 @@ ViperInlineToolbarPlugin.prototype = {
             return;
         }
 
+        if (activeSection) {
+            this.toggleSubSection(activeSection);
+        }
+
         this._updateLineage(lineage);
         this._updatePosition(range);
         this._updateSubSectionArrowPos();
@@ -289,6 +294,7 @@ ViperInlineToolbarPlugin.prototype = {
      */
     hideToolbar: function()
     {
+        this._activeSection = null;
         dfx.removeClass(this._toolbar, 'visible');
 
     },
