@@ -1074,7 +1074,14 @@ ViperListPlugin.prototype = {
             indent   = true;
         } else {
             var startParent = dfx.getFirstBlockParent(startNode);
-            var endParent   = dfx.getFirstBlockParent(range.getEndNode());
+            var endNode     = range.getEndNode();
+            var endParent   = null;
+
+            if (!endNode) {
+                endParent = startParent;
+            } else {
+                endParent = dfx.getFirstBlockParent(endNode);
+            }
 
             if (!startParent || !endParent) {
                 return;
