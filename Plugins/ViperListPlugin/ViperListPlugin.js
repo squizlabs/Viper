@@ -1067,11 +1067,37 @@ ViperListPlugin.prototype = {
                 return;
             }
 
-            makeList = true;
+            if (mainToolbar === true) {
+                makeList = true;
+            }
+
             indent   = true;
-        } else if ((range.collapsed === false || mainToolbar === true) && (dfx.isTag(startNode, 'p') === true || (startNode.nodeType === dfx.TEXT_NODE && (dfx.isTag(startNode.parentNode, 'p') === true || dfx.isTag(startNode.parentNode, 'td') === true)))) {
-            makeList = true;
-        }
+        } else {
+            var startParent = dfx.getFirstBlockParent(startNode);
+            var endParent   = dfx.getFirstBlockParent(range.getEndNode());
+
+            if (!startParent || !endParent) {
+                return;
+            } else if (startParent !== endParent
+                && dfx.isTag(startParent, 'p') === true
+                && dfx.isTag(endParent, 'p') === true
+            ) {
+                makeList = true;
+                var nextSibling = startParent.nextSibling;
+                while (nextSibling && nextSibling !== endParent) {
+                    if (nextSibling.nodeType === dfx.ELEMENT_NODE
+                        && dfx.isTag(nextSibling, 'p') !== true
+                    ) {
+                        makeList = false;
+                        break;
+                    }
+
+                    nextSibling = nextSibling.nextSibling;
+                }
+            } else if (mainToolbar === true && dfx.isTag(startParent, 'p') === true) {
+                makeList = true;
+            }
+        }//end if
 
         if (makeList !== true && indent !== true) {
             return;
