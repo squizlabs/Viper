@@ -220,7 +220,7 @@ ViperListPlugin.prototype = {
             tag = 'ol';
         }
 
-        var range    = this.viper.getCurrentRange().cloneRange();
+        var range    = this.viper.getViperRange().cloneRange();
         var bookmark = this.viper.createBookmark(range);
 
         if (bookmark.start.parentNode === bookmark.end.parentNode) {
