@@ -264,6 +264,15 @@ ViperToolbarPlugin.prototype = {
 
                 this._subSectionButtons[sectionid] = button;
             },
+            setSetting: function(setting, value) {
+                this._settings[setting] = value;
+            },
+            getSetting: function(setting) {
+                return this._settings[setting];
+            },
+            _settings: {
+                keepOpen: true
+            },
             _subSections: {},
             _subSectionButtons: {},
             _activeSubSection: null,
@@ -336,7 +345,9 @@ ViperToolbarPlugin.prototype = {
             bubble._closeCallback.call(this);
         }
 
-        this._activeBubble = null;
+        if (this._activeBubble === bubbleid) {
+            this._activeBubble = null;
+        }
 
     },
 
@@ -426,7 +437,10 @@ ViperToolbarPlugin.prototype = {
     _updateToolbar: function(range)
     {
         if (this._activeBubble) {
-            this.closeBubble(this._activeBubble);
+            var bubble = this.getBubble(this._activeBubble);
+            if (bubble && bubble.getSetting('keepOpen') !== true) {
+                this.closeBubble(this._activeBubble);
+            }
         }
 
         range = range || this.viper.getCurrentRange();
