@@ -297,14 +297,6 @@ ViperTools.prototype = {
             clearTimeout(timeout);
         });
 
-        dfx.addEvent(input, 'keyup', function() {
-            dfx.addClass(textBox, 'active');
-            clearTimeout(timeout);
-            timeout = setTimeout(function() {
-                dfx.removeClass(textBox, 'active');
-            }, 1000);
-        });
-
         var _addActionButton = function() {
             var actionIcon = document.createElement('span');
             dfx.addClass(actionIcon, 'Viper-textbox-action');
@@ -333,6 +325,19 @@ ViperTools.prototype = {
         }
 
         dfx.addEvent(input, 'keyup', function(e) {
+            dfx.addClass(textBox, 'active');
+            clearTimeout(timeout);
+            timeout = setTimeout(function() {
+                dfx.removeClass(textBox, 'active');
+                // Call action method.
+                if (action) {
+                    self.viper.focus();
+                    action.call(input, input.value);
+                    input.focus();
+                    dfx.removeClass(textBox, 'active');
+                }
+            }, 1000);
+
             var actionIcon = dfx.getClass('Viper-textbox-action', main);
             if (actionIcon.length === 0) {
                 actionIcon = _addActionButton();
