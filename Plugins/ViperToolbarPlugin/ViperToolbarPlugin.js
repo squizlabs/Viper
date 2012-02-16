@@ -46,6 +46,15 @@ function ViperToolbarPlugin(viper)
         self._updateToolbar();
     });
 
+    this.viper.registerCallback('Viper:mouseDown', 'ViperToolbarPlugin', function() {
+        if (self._activeBubble) {
+            var bubble = self.getBubble(self._activeBubble);
+            if (bubble && bubble.getSetting('keepOpen') !== true) {
+                self.closeBubble(self._activeBubble);
+            }
+        }
+    });
+
 }
 
 ViperToolbarPlugin.prototype = {
@@ -271,7 +280,7 @@ ViperToolbarPlugin.prototype = {
                 return this._settings[setting];
             },
             _settings: {
-                keepOpen: true
+                keepOpen: false
             },
             _subSections: {},
             _subSectionButtons: {},
@@ -385,6 +394,21 @@ ViperToolbarPlugin.prototype = {
             inputElements[0].focus();
         }
 
+        var inlineToolbarPlugin = this.viper.getPluginManager().getPlugin('ViperInlineToolbarPlugin');
+        if (inlineToolbarPlugin) {
+            inlineToolbarPlugin.hideToolbar();
+        }
+
+    },
+
+    getActiveBubble: function()
+    {
+        if (!this._activeBubble) {
+            return null;
+        }
+
+        return this.getBubble(this._activeBubble);
+
     },
 
     positionBubble: function(bubbleid)
@@ -436,13 +460,6 @@ ViperToolbarPlugin.prototype = {
 
     _updateToolbar: function(range)
     {
-        if (this._activeBubble) {
-            var bubble = this.getBubble(this._activeBubble);
-            if (bubble && bubble.getSetting('keepOpen') !== true) {
-                this.closeBubble(this._activeBubble);
-            }
-        }
-
         range = range || this.viper.getCurrentRange();
 
         this.viper.fireCallbacks('ViperToolbarPlugin:updateToolbar', {range: range});

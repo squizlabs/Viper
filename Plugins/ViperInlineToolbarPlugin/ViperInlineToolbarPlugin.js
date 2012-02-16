@@ -33,6 +33,8 @@ function ViperInlineToolbarPlugin(viper)
     this._subSectionButtons = {};
     this._activeSection     = null;
 
+    this._topToolbar = null;
+
     // Create the toolbar.
     this._createToolbar();
 
@@ -43,6 +45,8 @@ ViperInlineToolbarPlugin.prototype = {
     init: function()
     {
         var self = this;
+
+        this._topToolbar = this.viper.getPluginManager().getPlugin('ViperToolbarPlugin');
 
         // Called when the selection is changed.
         var clickedInToolbar = false;
@@ -248,6 +252,13 @@ ViperInlineToolbarPlugin.prototype = {
      */
     updateToolbar: function(range)
     {
+        if (this._topToolbar) {
+            var bubble = this._topToolbar.getActiveBubble();
+            if (bubble && bubble.getSetting('keepOpen') !== true) {
+                return;
+            }
+        }
+
         var activeSection   = this._activeSection;
         this._activeSection = null;
 
