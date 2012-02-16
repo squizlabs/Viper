@@ -518,15 +518,24 @@
   font-style: italic;
   font-weight: normal;
 }
+.Viper-textbox.active .Viper-textbox-input[type=text]::-webkit-input-placeholder, .Viper-textbox.active .Viper-textbox-textArea::-webkit-input-placeholder {
+  color: #7c9cc9;
+}
 .Viper-textbox-input[type=text]:-moz-placeholder, .Viper-textbox-textArea:-moz-placeholder {
   color: #c44e4e;
   font-style: italic;
   font-weight: normal;
 }
+.Viper-textbox.active .Viper-textbox-input[type=text]:-moz-placeholder, .Viper-textbox.active .Viper-textbox-textArea:-moz-placeholder {
+  color: #7c9cc9;
+}
 .input-placeholder {
   color: #c44e4e;
   font-style: italic;
   font-weight: normal;
+}
+.Viper-textbox.active .input-placeholder {
+  color: #7c9cc9;
 }
 .Viper-textbox-messages {
   padding: 0.5em 0.3em 0;
