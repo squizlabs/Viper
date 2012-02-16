@@ -507,8 +507,12 @@ ViperCoreStylesPlugin.prototype = {
         var node  = start;
         var next  = null;
 
-        var common = range.getCommonElement();
-        common     = this.getFirstBlockParent(common);
+        var common = range.getNodeSelection();
+        if (!common) {
+            common = range.getCommonElement();
+            common = this.getFirstBlockParent(common);
+        }
+
         if (dfx.isChildOf(common, this.viper.element) === true) {
             this.setJustfyChangeTrackInfo(common);
             this.toggleJustify(common, type);
@@ -829,7 +833,10 @@ ViperCoreStylesPlugin.prototype = {
     _canStyleNode: function(node)
     {
         if (dfx.isBlockElement(node) === true) {
-            if (dfx.isTag(node, 'li') !== true) {
+            if (dfx.isTag(node, 'li') !== true
+                && dfx.isTag(node, 'td') !== true
+                && dfx.isTag(node, 'th') !== true
+            ) {
                 return false;
             }
         }
@@ -900,6 +907,10 @@ ViperCoreStylesPlugin.prototype = {
         var tools     = this.viper.ViperTools;
         if (this._canStyleNode(startNode) !== true) {
             for (var btn in buttons) {
+                if (btn === 'justify' || btn === 'removeFormat') {
+                    continue;
+                }
+
                 var c = buttons[btn].length;
                 for (var i = 0; i < c; i++) {
                     var buttonName = this._buttons[buttons[btn][i]] || 'ViperCoreStylesPlugin:vtp:' + buttons[btn][i];
@@ -942,6 +953,8 @@ ViperCoreStylesPlugin.prototype = {
 
             var setToggleInactive = true;
             for (var i = 0; i < c; i++) {
+                tools.enableButton('ViperCoreStylesPlugin:vtp:' + buttons.justify[i]);
+
                 if (buttons.justify[i] === justify) {
                     tools.setButtonActive('ViperCoreStylesPlugin:vtp:' + buttons.justify[i]);
                     toolbarButton.setIconClass('justify' + dfx.ucFirst(justify));
