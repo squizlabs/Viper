@@ -289,8 +289,9 @@ ViperTools.prototype = {
 
         var timeoutAction = function() {
             clearTimeout(timeout);
-            timeout = setTimeout(function() {
+            timeout = setTimeout(function() {;
                 dfx.removeClass(textBox, 'active');
+
                 // Call action method.
                 if (action) {
                     self.viper.focus();
@@ -305,7 +306,6 @@ ViperTools.prototype = {
         dfx.addEvent(input, 'focus', function() {
             dfx.addClass(textBox, 'active');
             self.viper.highlightSelection();
-            clearTimeout(timeout);
 
             // Set the caret to the end of the textfield.
             input.value = input.value;
@@ -328,15 +328,15 @@ ViperTools.prototype = {
                     input.value = value;
                     dfx.removeClass(textBox, 'actionRevert');
                     dfx.addClass(textBox, 'actionClear');
-                    timeoutAction();
                 } else if (dfx.hasClass(textBox, 'actionClear') === true) {
                     input.value = '';
                     dfx.removeClass(textBox, 'actionClear');
                     if (required === true) {
                         dfx.addClass(textBox, 'required');
                     }
-                    timeoutAction();
                 }
+
+                timeoutAction();
             });
 
             return actionIcon;
@@ -401,6 +401,32 @@ ViperTools.prototype = {
             },
             setValue: function(value) {
                 input.value = value;
+
+                var actionIcon = dfx.getClass('Viper-textbox-action', main);
+                if (actionIcon.length === 0) {
+                    actionIcon = _addActionButton();
+                } else {
+                    actionIcon = actionIcon[0];
+                }
+
+                dfx.removeClass(textBox, 'actionClear');
+                dfx.removeClass(textBox, 'actionRevert');
+
+                if (input.value !== value && value !== '') {
+                    // Show the revert icon.
+                    actionIcon.setAttribute('title', 'Revert to original value');
+                    dfx.addClass(textBox, 'actionRevert');
+                    dfx.removeClass(textBox, 'required');
+                } else if (input.value !== '') {
+                    actionIcon.setAttribute('title', 'Clear this value');
+                    dfx.addClass(textBox, 'actionClear');
+                    dfx.removeClass(textBox, 'required');
+                } else {
+                    dfx.remove(actionIcon);
+                    if (required === true) {
+                        dfx.addClass(textBox, 'required');
+                    }
+                }
             }
         });
 
