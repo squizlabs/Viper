@@ -331,12 +331,6 @@ ViperFormatPlugin.prototype = {
         if (selectedNode.nodeType === dfx.ELEMENT_NODE
             || data.range.startContainer.parentNode === data.range.endContainer.parentNode
         ) {
-            for (var i = 0; i < data.lineage.length; i++) {
-                if (dfx.isTag(data.lineage[i], 'a') === true) {
-                    return;
-                }
-            }
-
             var anchorBtnActive = false;
             var attrId = this._getAttributeValue('id', selectedNode);
             if (attrId) {

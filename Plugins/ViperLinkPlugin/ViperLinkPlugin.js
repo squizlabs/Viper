@@ -177,6 +177,8 @@ ViperLinkPlugin.prototype = {
             return;
         }
 
+        var bookmark = this.viper.createBookmark();
+
         var firstChild = linkTag.firstChild;
         var lastChild  = linkTag.lastChild;
 
@@ -186,11 +188,8 @@ ViperLinkPlugin.prototype = {
 
         dfx.remove(linkTag);
 
-        var range = this.viper.getViperRange();
-        range.setStart(firstChild, 0);
-        range.setEnd(lastChild, lastChild.data.length);
-        ViperSelection.addRange(range);
-        this.viper.fireSelectionChanged(range, true);
+        this.viper.selectBookmark(bookmark);
+        this.viper.fireSelectionChanged(null, true);
         this.viper.fireNodesChanged([this.viper.getViperElement()]);
 
     },
