@@ -92,6 +92,39 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
     }//end testRemovingClassAttributeFromAParagraph()
 
 
+    /**
+     * Test the auto save.
+     *
+     * @return void
+     */
+    public function testAutosaveForClassField()
+    {
+        $dir = dirname(__FILE__).'/Images/';
+
+        $text = 'Lorem';
+
+        $this->selectText($text);
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_class.png');
+         $this->clickInlineToolbarButton($dir.'input_class.png');
+        $this->type('t');
+        sleep(3);
+        $this->type('e');
+        sleep(3);
+        $this->type('s');
+        sleep(3);
+        $this->type('t');
+        $this->keyDown('Key.ENTER');
+
+        $this->assertHTMLMatch('<p><span class="test">Lorem</span> xtn dolor</p><p class="myclass">sit amet <strong>WoW</strong></p><p>Squiz <span class="myclass">LABS</span> is orsm</p>');
+
+        $this->click($this->find($text));
+        $this->selectText($text);
+        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_class.png'), 'Class icon is still active in the Top Toolbar.');
+        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_class.png'), 'Class icon is still active in the inline toolbar.');
+
+    }//end testAutosaveForClassField()
+    
+
 }//end class
 
 ?>
