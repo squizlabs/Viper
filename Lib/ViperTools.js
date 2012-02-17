@@ -290,6 +290,12 @@ ViperTools.prototype = {
             dfx.addClass(textBox, 'active');
             self.viper.highlightSelection();
             clearTimeout(timeout);
+
+            // Set the caret to the end of the textfield.
+            input.value = input.value;
+            if (self.viper.isBrowser('firefox') === true) {
+                input.selectionStart = input.value.length;
+            }
         });
 
         dfx.addEvent(input, 'blur', function() {
@@ -332,6 +338,7 @@ ViperTools.prototype = {
                 // Call action method.
                 if (action) {
                     self.viper.focus();
+                    self.viper.fireCallbacks('ViperTools:textbox:actionTiggered', id);
                     action.call(input, input.value);
                     input.focus();
                     dfx.removeClass(textBox, 'active');

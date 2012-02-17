@@ -36,6 +36,8 @@ function ViperInlineToolbarPlugin(viper)
     this._topToolbar = null;
     this._buttons    = null;
 
+    this._autoFocusTextbox = true;
+
     // Create the toolbar.
     this._createToolbar();
 
@@ -72,6 +74,10 @@ ViperInlineToolbarPlugin.prototype = {
 
             // Update the toolbar position, contents and lineage for this new selection.
             self.updateToolbar(range);
+        });
+
+        this.viper.registerCallback('ViperTools:textbox:actionTiggered', 'ViperInlineToolbarPlugin', function() {
+            self._autoFocusTextbox = false;
         });
 
         // Hide the toolbar when user clicks anywhere.
@@ -290,6 +296,10 @@ ViperInlineToolbarPlugin.prototype = {
         var inputElements = dfx.getTag('input', subSection);
         if (inputElements.length > 0) {
             inputElements[0].focus();
+            if (this._autoFocusTextbox === false) {
+                this._autoFocusTextbox = true;
+                dfx.removeClass(inputElements[0].parentNode.parentNode.parentNode, 'active');
+            }
         }
 
     },
