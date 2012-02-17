@@ -286,6 +286,22 @@ ViperTools.prototype = {
 
         var self    = this;
         var timeout = null;
+
+        var timeoutAction = function() {
+            clearTimeout(timeout);
+            timeout = setTimeout(function() {
+                dfx.removeClass(textBox, 'active');
+                // Call action method.
+                if (action) {
+                    self.viper.focus();
+                    self.viper.fireCallbacks('ViperTools:textbox:actionTiggered', id);
+                    action.call(input, input.value);
+                    input.focus();
+                    dfx.removeClass(textBox, 'active');
+                }
+            }, 1000);
+        };
+
         dfx.addEvent(input, 'focus', function() {
             dfx.addClass(textBox, 'active');
             self.viper.highlightSelection();
@@ -312,12 +328,14 @@ ViperTools.prototype = {
                     input.value = value;
                     dfx.removeClass(textBox, 'actionRevert');
                     dfx.addClass(textBox, 'actionClear');
+                    timeoutAction();
                 } else if (dfx.hasClass(textBox, 'actionClear') === true) {
                     input.value = '';
                     dfx.removeClass(textBox, 'actionClear');
                     if (required === true) {
                         dfx.addClass(textBox, 'required');
                     }
+                    timeoutAction();
                 }
             });
 
@@ -332,18 +350,7 @@ ViperTools.prototype = {
 
         dfx.addEvent(input, 'keyup', function(e) {
             dfx.addClass(textBox, 'active');
-            clearTimeout(timeout);
-            timeout = setTimeout(function() {
-                dfx.removeClass(textBox, 'active');
-                // Call action method.
-                if (action) {
-                    self.viper.focus();
-                    self.viper.fireCallbacks('ViperTools:textbox:actionTiggered', id);
-                    action.call(input, input.value);
-                    input.focus();
-                    dfx.removeClass(textBox, 'active');
-                }
-            }, 1000);
+            timeoutAction();
 
             var actionIcon = dfx.getClass('Viper-textbox-action', main);
             if (actionIcon.length === 0) {
