@@ -559,6 +559,42 @@ Viper.prototype = {
     },
 
     /**
+     * Sets the attribute of an element.
+     *
+     * If the specified value is empty and the attribute value is empty then
+     * attribute will be removed from the element.
+     *
+     * @param {DOMNode}  element   The element to update.
+     * @param {string}   attribute The attribute name.
+     * @param {string}   value     The value of the attribute.
+     */
+    setAttribute: function(element, attribute, value)
+    {
+        if (!element || !element.setAttribute) {
+            return;
+        }
+
+        if (!value && element.hasAttribute(attribute) === true) {
+            element.removeAttribute(attribute);
+
+            if (dfx.isTag(element, 'span') === true
+                && element.attributes
+                && element.attributes.length === 0
+            ) {
+                while (element.firstChild) {
+                    dfx.insertBefore(element, element.firstChild);
+                }
+
+                dfx.remove(element);
+            }
+
+        } else {
+            element.setAttribute(attribute, value);
+        }
+
+    },
+
+    /**
      * Rturns a DOMElement if all of its contents is selected, null otherwise.
      *
      * @param {DOMRange} range The range to check.
@@ -2654,6 +2690,10 @@ Viper.prototype = {
         if (c === 1 && dfx.hasClass(highlights[0], '__viper_cleanOnly') === true) {
             dfx.removeClass(highlights[0], '__viper_cleanOnly');
             dfx.removeClass(highlights[0], '__viper_selHighlight');
+            if (!highlights[0].getAttribute('class')) {
+                highlights[0].removeAttribute('class');
+            }
+
             range.selectNode(highlights[0]);
             ViperSelection.addRange(range);
             return true;

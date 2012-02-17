@@ -486,6 +486,13 @@ ViperFormatPlugin.prototype = {
     _setAttributeForSelection: function(attr, value)
     {
         var range = this.viper.getViperRange();
+        var selectedNode = range.getNodeSelection();
+        if (selectedNode) {
+            this.viper.setAttribute(selectedNode, attr, value);
+            this.viper.fireSelectionChanged(null, true);
+            this.viper.fireNodesChanged([this.viper.getViperElement()]);
+            return;
+        }
 
         // Wrap the selection with span tag.
         var bookmark = self.viper.createBookmark();
