@@ -505,7 +505,7 @@ ViperInlineToolbarPlugin.prototype = {
      */
     _updatePosition: function(range, verticalOnly)
     {
-        range = range || this.viper.getCurrentRange();
+        range = range || this.viper.getViperRange();
 
         var rangeCoords  = null;
         var selectedNode = range.getNodeSelection(range);
@@ -542,7 +542,7 @@ ViperInlineToolbarPlugin.prototype = {
 
                 var startNode = range.getStartNode();
                 if (startNode.nodeType === dfx.TEXT_NODE) {
-                    if (range.startOffset < startNode.data.length) {
+                    if (range.startOffset <= startNode.data.length) {
                         range.setEnd(startNode, (range.startOffset + 1));
                         rangeCoords = range.rangeObj.getBoundingClientRect();
                         range.collapse(true);
