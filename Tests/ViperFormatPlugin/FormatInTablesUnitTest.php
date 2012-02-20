@@ -98,12 +98,13 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         $this->selectInlineToolbarLineageItem(3);
 
         $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_justification.png');
+        sleep(1);
         $this->clickTopToolbarButton($dir.'toolbarIcon_alignLeft.png');
 
         $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_alignLeft_active.png'), 'Left align icon is not acitve in the top toolbar');
 
         $html = $this->getHtml('tr', 1);
-        $this->assertEquals('<td style="text-align: left;">UnaU TiuT XabcX Mnu</td>        <td>WOW</td>        <td>            <ul>                <li>purus neque luctus ligula, vel molestie arcu</li>                <li>purus neque luctus</li>                <li>vel molestie arcu</li>            </ul>        </td>', $html);
+        $this->assertEquals('<td style="text-align: left;">UnaU TiuT XabcX Mnu</td><td>WOW</td><td>            <ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul>\n        </td>', $html);
 
     }//end testLeftAlignmentInATable()
 
@@ -122,7 +123,7 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         $this->selectInlineToolbarLineageItem(3);
 
         $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_justification.png');
-        usleep(500);
+        sleep(1);
         $this->clickTopToolbarButton($dir.'toolbarIcon_alignRight.png');
 
         $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_alignRight_active.png'), 'Right align icon is not acitve in the top toolbar');
@@ -147,6 +148,7 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         $this->selectInlineToolbarLineageItem(3);
 
         $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_justification.png');
+        sleep(1);
         $this->clickTopToolbarButton($dir.'toolbarIcon_alignCenter.png');
 
         $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_alignCenter_active.png'), 'Centre align icon is not acitve in the top toolbar');
@@ -171,6 +173,7 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         $this->selectInlineToolbarLineageItem(3);
 
         $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_justification.png');
+        sleep(1);
         $this->clickTopToolbarButton($dir.'toolbarIcon_alignJustify.png');
 
         $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_alignJustify_active.png'), 'Justify align icon is not acitve in the top toolbar');
