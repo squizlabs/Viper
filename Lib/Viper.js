@@ -3692,6 +3692,9 @@ Viper.prototype = {
 
         this._cleanDOM(elem, tag, true);
 
+        // Remove viper selection.
+        this.highlightToSelection();
+
         return elem;
 
     },

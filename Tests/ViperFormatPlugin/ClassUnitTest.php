@@ -115,7 +115,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->type('t');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p><span class="test">Lorem</span> xtn dolor</p><p class="myclass">sit amet <strong>WoW</strong></p><p>Squiz <span class="myclass">LABS</span> is orsm</p>');
+        $this->assertHTMLMatch('<p><span class="test">Lorem</span> xtn dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Squiz <span class="myclass">LABS</span> is orsm</p>');
 
         $this->click($this->find($text));
         $this->selectText($text);
@@ -123,7 +123,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_class.png'), 'Class icon is still active in the inline toolbar.');
 
     }//end testAutosaveForClassField()
-    
+
 
 }//end class
 
