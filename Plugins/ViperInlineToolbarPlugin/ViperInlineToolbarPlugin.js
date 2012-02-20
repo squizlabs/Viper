@@ -336,7 +336,7 @@ ViperInlineToolbarPlugin.prototype = {
         var activeSection   = this._activeSection;
         this._activeSection = null;
 
-        range = range || this.viper.getCurrentRange();
+        range = range || this.viper.getViperRange();
 
         dfx.removeClass(this._toolbar, 'subSectionVisible');
 
@@ -827,6 +827,14 @@ ViperInlineToolbarPlugin.prototype = {
             var startNode = range.getStartNode();
             if (!startNode) {
                 return lineage;
+            } else if (startNode.nodeType == dfx.TEXT_NODE
+                && startNode.data.length === 0
+                && startNode.nextSibling
+                && startNode.nextSibling.nodeType === dfx.TEXT_NODE
+            ) {
+                // The startNode is an empty textnode, most likely due to node splitting
+                // if the next node is a text node use that instead.
+                startNode = startNode.nextSibling;
             }
 
             if (startNode.nodeType !== dfx.TEXT_NODE || dfx.isBlank(startNode.data) !== true) {
