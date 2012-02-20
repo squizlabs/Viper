@@ -581,11 +581,28 @@ Viper.prototype = {
                 && element.attributes
                 && element.attributes.length === 0
             ) {
+                var range        = this.getViperRange();
+                var selectedNode = range.getNodeSelection();
+
+                var firstSelectable = null;
+                var lastSelectable  = null;
+                if (selectedNode === element) {
+                    // Select again.
+                    firstSelectable = range._getFirstSelectableChild(element);
+                    lastSelectable  = range._getLastSelectableChild(element);
+                }
+
                 while (element.firstChild) {
                     dfx.insertBefore(element, element.firstChild);
                 }
 
                 dfx.remove(element);
+
+                if (firstSelectable && lastSelectable) {
+                    range.setStart(firstSelectable, 0);
+                    range.setEnd(lastSelectable, lastSelectable.data.length);
+                    ViperSelection.addRange(range);
+                }
             }
 
         } else {
