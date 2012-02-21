@@ -78,7 +78,7 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_class_active.png'), 'Class icon in VITP should be active.');
 
         $html = $this->getHtml('tr', 1);
-        $this->assertEquals('<td class="test">UnaU TiuT XabcX Mnu</td><td>WOW</td><td>            <ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul>        </td>', $html);
+        $this->assertEquals('<td class="test">UnaU TiuT XabcX Mnu</td><td>WOW</td><td>            <ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul>\n        </td>', $html);
 
 
     }//end testClassesOnContentInACellOfATable()
@@ -129,7 +129,8 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_alignRight_active.png'), 'Right align icon is not acitve in the top toolbar');
 
         $html = $this->getHtml('tr', 1);
-        $this->assertEquals('<td style="text-align: right;">UnaU TiuT XabcX Mnu</td><td>WOW</td> <td>            <ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul>        </td>', $html);
+        $this->assertEquals('<td style="text-align: right;">UnaU TiuT XabcX Mnu</td><td>WOW</td><td>            <ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul>\n        </td>', $html);
+
 
     }//end testRightAlignmentInATable()
 
@@ -154,7 +155,7 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_alignCenter_active.png'), 'Centre align icon is not acitve in the top toolbar');
 
         $html = $this->getHtml('tr', 1);
-        $this->assertEquals('<td style="text-align: center;">UnaU TiuT XabcX Mnu</td><td>WOW</td><td>            <ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul>        </td>', $html);
+        $this->assertEquals('<td style="text-align: center;">UnaU TiuT XabcX Mnu</td><td>WOW</td><td>            <ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul>\n        </td>', $html);
 
     }//end testCentreAlignmentInATable()
 
@@ -179,7 +180,7 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_alignJustify_active.png'), 'Justify align icon is not acitve in the top toolbar');
 
         $html = $this->getHtml('tr', 1);
-        $this->assertEquals('<td style="text-align: justify;">UnaU TiuT XabcX Mnu</td><td>WOW</td><td>            <ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul>        </td>', $html);
+        $this->assertEquals('<td style="text-align: justify;">UnaU TiuT XabcX Mnu</td><td>WOW</td><td>            <ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul>\n        </td>', $html);
 
     }//end testJustifyAlignmentInATable()
 
@@ -270,12 +271,12 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         $this->selectInlineToolbarLineageItem(3);
 
         $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_formats.png');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_quote.png');
+        $this->clickTopToolbarButton($dir.'toolbarIcon_blockquote.png');
 
         $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_toggle_formats_highlighted.png'), 'Formats icon is not highlighted in the top toolbar');
 
         $html = $this->getHtml('td', 0);
-        $this->assertEquals('<quote>UnaU TiuT XabcX Mnu</quote>', $html);
+        $this->assertEquals('<blockquote>UnaU TiuT XabcX Mnu</blockquote>', $html);
 
     }//end testQuoteInATable()
 
@@ -291,16 +292,14 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
 
         $text = 'WOW';
         $this->selectText($text);
-        $this->selectInlineToolbarLineageItem(3);
 
         $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_formats.png');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_quote.png');
+        $this->clickTopToolbarButton($dir.'toolbarIcon_pre.png');
 
         $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_toggle_formats_highlighted.png'), 'Formats icon is not highlighted in the top toolbar');
 
-        $html = $this->getHtml('td', 0);
-        $this->assertEquals('<quote>WOW</quote>', $html);
-        $this->assertEquals('WOW', $this->getSelectedText(), 'Original selection is not selected');
+        $html = $this->getHtml('td', 1);
+        $this->assertEquals('<pre>WOW</pre>', $html);
 
     }//end testPreInATableWithOneWord()
 
