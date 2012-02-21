@@ -316,15 +316,15 @@ ViperFormatPlugin.prototype = {
         }
 
         if (formatsSubSection) {
-            tools.createButton(prefix + 'formats:toggleFormats', 'Aa', 'Toggle Formats', 'formats', null, false, hasActiveFormat);
-            tools.addButtonToGroup(prefix + 'formats:toggleFormats', prefix + 'formatsAndHeading:buttons');
-            toolbar.setSubSectionButton(prefix + 'formats:toggleFormats', prefix + 'formats:subSection');
+            tools.createButton('vitpFormats', 'Aa', 'Toggle Formats', 'formats', null, false, hasActiveFormat);
+            tools.addButtonToGroup('vitpFormats', prefix + 'formatsAndHeading:buttons');
+            toolbar.setSubSectionButton('vitpFormats', prefix + 'formats:subSection');
         }
 
         if (headingsSubSection) {
-            tools.createButton(prefix + 'heading:toggleHeadings', 'Hh', 'Toggle Headings', 'headings', null, false, hasActiveHeading);
-            tools.addButtonToGroup(prefix + 'heading:toggleHeadings', prefix + 'formatsAndHeading:buttons');
-            toolbar.setSubSectionButton(prefix + 'heading:toggleHeadings', prefix + 'heading:subSection');
+            tools.createButton('vitpHeadings', 'Hh', 'Toggle Headings', 'headings', null, false, hasActiveHeading);
+            tools.addButtonToGroup('vitpHeadings', prefix + 'formatsAndHeading:buttons');
+            toolbar.setSubSectionButton('vitpHeadings', prefix + 'heading:subSection');
         }
 
          // Anchor and Class.
