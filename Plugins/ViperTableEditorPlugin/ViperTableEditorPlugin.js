@@ -2162,6 +2162,8 @@ ViperTableEditorPlugin.prototype = {
      */
     insertTable: function(rows, cols)
     {
+        this.viper.ViperHistoryManager.begin();
+
         rows = rows || 2;
         cols = cols || 3;
 
@@ -2236,6 +2238,8 @@ ViperTableEditorPlugin.prototype = {
 
         this.viper.fireSelectionChanged();
         this.viper.fireNodesChanged([table]);
+
+        this.viper.ViperHistoryManager.end();
 
     },
 
