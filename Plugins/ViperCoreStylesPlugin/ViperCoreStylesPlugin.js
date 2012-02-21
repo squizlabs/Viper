@@ -75,10 +75,10 @@ ViperCoreStylesPlugin.prototype = {
             toolbarButtons.justify = ['left', 'center', 'right', 'block'];
             toolbarButtons.other = ['hr'];
 
-            tools.createButton('bold', 'B', 'Bold', 'bold', function() {
+            tools.createButton('bold', '', 'Bold', 'bold', function() {
                 self.handleStyle('strong');
             });
-            tools.createButton('italic', 'I', 'Italic', 'italic', function() {
+            tools.createButton('italic', '', 'Italic', 'italic', function() {
                 self.handleStyle('em');
             });
             tools.createButton('removeFormat', '', 'Remove Format', 'removeFormat', function() {
@@ -134,7 +134,7 @@ ViperCoreStylesPlugin.prototype = {
             toolbarPlugin.addButton(justifyBubbleToggle);
             toolbarPlugin.setBubbleButton('ViperCoreStylesPlugin:justifyBubble', 'justify');
 
-            var hr = tools.createButton('hr', 'HR', 'Horizontal Rule', '', function() {
+            var hr = tools.createButton('hr', '', 'Horizontal Rule', 'insertHr', function() {
                 self.handleHR();
             });
             toolbarPlugin.addButton(hr);
@@ -901,10 +901,10 @@ ViperCoreStylesPlugin.prototype = {
         var tools       = this.viper.ViperTools;
         var buttonGroup = tools.createButtonGroup('ViperCoreStylesPlugin:vitp:btnGroup');
 
-        tools.createButton('vitpBold', 'B', 'Bold', 'bold', function() {
+        tools.createButton('vitpBold', '', 'Bold', 'bold', function() {
             return self.handleStyle('strong');
         }, false, activeStates.strong);
-        tools.createButton('vitpItalic', 'I', 'Italic', 'italic', function() {
+        tools.createButton('vitpItalic', '', 'Italic', 'italic', function() {
             return self.handleStyle('em');
         }, false, activeStates.em);
 
