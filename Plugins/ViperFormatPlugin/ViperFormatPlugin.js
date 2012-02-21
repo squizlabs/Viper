@@ -316,27 +316,21 @@ ViperFormatPlugin.prototype = {
         }
 
         if (formatsSubSection) {
-            tools.createButton(prefix + 'formats:toggleFormats', 'Aa', 'Toggle Formats', 'formats', null, false, hasActiveFormat);
-            tools.addButtonToGroup(prefix + 'formats:toggleFormats', prefix + 'formatsAndHeading:buttons');
-            toolbar.setSubSectionButton(prefix + 'formats:toggleFormats', prefix + 'formats:subSection');
+            tools.createButton('vitpFormats', 'Aa', 'Toggle Formats', 'formats', null, false, hasActiveFormat);
+            tools.addButtonToGroup('vitpFormats', prefix + 'formatsAndHeading:buttons');
+            toolbar.setSubSectionButton('vitpFormats', prefix + 'formats:subSection');
         }
 
         if (headingsSubSection) {
-            tools.createButton(prefix + 'heading:toggleHeadings', 'Hh', 'Toggle Headings', 'headings', null, false, hasActiveHeading);
-            tools.addButtonToGroup(prefix + 'heading:toggleHeadings', prefix + 'formatsAndHeading:buttons');
-            toolbar.setSubSectionButton(prefix + 'heading:toggleHeadings', prefix + 'heading:subSection');
+            tools.createButton('vitpHeadings', 'Hh', 'Toggle Headings', 'headings', null, false, hasActiveHeading);
+            tools.addButtonToGroup('vitpHeadings', prefix + 'formatsAndHeading:buttons');
+            toolbar.setSubSectionButton('vitpHeadings', prefix + 'heading:subSection');
         }
 
          // Anchor and Class.
         if (selectedNode.nodeType === dfx.ELEMENT_NODE
             || data.range.startContainer.parentNode === data.range.endContainer.parentNode
         ) {
-            for (var i = 0; i < data.lineage.length; i++) {
-                if (dfx.isTag(data.lineage[i], 'a') === true) {
-                    return;
-                }
-            }
-
             var anchorBtnActive = false;
             var attrId = this._getAttributeValue('id', selectedNode);
             if (attrId) {
@@ -492,6 +486,13 @@ ViperFormatPlugin.prototype = {
     _setAttributeForSelection: function(attr, value)
     {
         var range = this.viper.getViperRange();
+        var selectedNode = range.getNodeSelection();
+        if (selectedNode) {
+            this.viper.setAttribute(selectedNode, attr, value);
+            this.viper.fireSelectionChanged(null, true);
+            this.viper.fireNodesChanged([this.viper.getViperElement()]);
+            return;
+        }
 
         // Wrap the selection with span tag.
         var bookmark = self.viper.createBookmark();

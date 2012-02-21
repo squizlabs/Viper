@@ -108,6 +108,7 @@ ViperTools.prototype = {
         }
 
         var button = document.createElement('div');
+        button.setAttribute('id', this.viper.getId() + '-' + id);
 
         if (titleAttr) {
             if (disabled === true) {
@@ -285,23 +286,37 @@ ViperTools.prototype = {
 
         var self    = this;
         var timeout = null;
+
+        var timeoutAction = function() {
+            clearTimeout(timeout);
+            timeout = setTimeout(function() {;
+                dfx.removeClass(textBox, 'active');
+
+                // Call action method.
+                if (action) {
+                    self.viper.focus();
+                    self.viper.fireCallbacks('ViperTools:textbox:actionTiggered', id);
+                    action.call(input, input.value);
+                    input.focus();
+                    dfx.removeClass(textBox, 'active');
+                }
+            }, 1000);
+        };
+
         dfx.addEvent(input, 'focus', function() {
             dfx.addClass(textBox, 'active');
             self.viper.highlightSelection();
-            clearTimeout(timeout);
+
+            // Set the caret to the end of the textfield.
+            input.value = input.value;
+            if (self.viper.isBrowser('firefox') === true) {
+                input.selectionStart = input.value.length;
+            }
         });
 
         dfx.addEvent(input, 'blur', function() {
             dfx.removeClass(textBox, 'active');
             clearTimeout(timeout);
-        });
-
-        dfx.addEvent(input, 'keyup', function() {
-            dfx.addClass(textBox, 'active');
-            clearTimeout(timeout);
-            timeout = setTimeout(function() {
-                dfx.removeClass(textBox, 'active');
-            }, 1000);
         });
 
         var _addActionButton = function() {
@@ -320,6 +335,8 @@ ViperTools.prototype = {
                         dfx.addClass(textBox, 'required');
                     }
                 }
+
+                timeoutAction();
             });
 
             return actionIcon;
@@ -332,6 +349,9 @@ ViperTools.prototype = {
         }
 
         dfx.addEvent(input, 'keyup', function(e) {
+            dfx.addClass(textBox, 'active');
+            timeoutAction();
+
             var actionIcon = dfx.getClass('Viper-textbox-action', main);
             if (actionIcon.length === 0) {
                 actionIcon = _addActionButton();
@@ -381,6 +401,32 @@ ViperTools.prototype = {
             },
             setValue: function(value) {
                 input.value = value;
+
+                var actionIcon = dfx.getClass('Viper-textbox-action', main);
+                if (actionIcon.length === 0) {
+                    actionIcon = _addActionButton();
+                } else {
+                    actionIcon = actionIcon[0];
+                }
+
+                dfx.removeClass(textBox, 'actionClear');
+                dfx.removeClass(textBox, 'actionRevert');
+
+                if (input.value !== value && value !== '') {
+                    // Show the revert icon.
+                    actionIcon.setAttribute('title', 'Revert to original value');
+                    dfx.addClass(textBox, 'actionRevert');
+                    dfx.removeClass(textBox, 'required');
+                } else if (input.value !== '') {
+                    actionIcon.setAttribute('title', 'Clear this value');
+                    dfx.addClass(textBox, 'actionClear');
+                    dfx.removeClass(textBox, 'required');
+                } else {
+                    dfx.remove(actionIcon);
+                    if (required === true) {
+                        dfx.addClass(textBox, 'required');
+                    }
+                }
             }
         });
 

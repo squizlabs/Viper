@@ -3,6 +3,8 @@
  */
 function gHtml(selector, index)
 {
+    viper.cleanDOM();
+
     index = index || 0;
     if (selector) {
         return dfx.getHtml(dfxjQuery(selector)[index]).replace("\n", '');

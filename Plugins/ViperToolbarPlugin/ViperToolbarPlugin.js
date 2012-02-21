@@ -46,6 +46,15 @@ function ViperToolbarPlugin(viper)
         self._updateToolbar();
     });
 
+    this.viper.registerCallback('Viper:mouseDown', 'ViperToolbarPlugin', function() {
+        if (self._activeBubble) {
+            var bubble = self.getBubble(self._activeBubble);
+            if (bubble && bubble.getSetting('keepOpen') !== true) {
+                self.closeBubble(self._activeBubble);
+            }
+        }
+    });
+
 }
 
 ViperToolbarPlugin.prototype = {
@@ -264,6 +273,15 @@ ViperToolbarPlugin.prototype = {
 
                 this._subSectionButtons[sectionid] = button;
             },
+            setSetting: function(setting, value) {
+                this._settings[setting] = value;
+            },
+            getSetting: function(setting) {
+                return this._settings[setting];
+            },
+            _settings: {
+                keepOpen: false
+            },
             _subSections: {},
             _subSectionButtons: {},
             _activeSubSection: null,
@@ -336,7 +354,9 @@ ViperToolbarPlugin.prototype = {
             bubble._closeCallback.call(this);
         }
 
-        this._activeBubble = null;
+        if (this._activeBubble === bubbleid) {
+            this._activeBubble = null;
+        }
 
     },
 
@@ -373,6 +393,21 @@ ViperToolbarPlugin.prototype = {
         if (inputElements.length > 0) {
             inputElements[0].focus();
         }
+
+        var inlineToolbarPlugin = this.viper.getPluginManager().getPlugin('ViperInlineToolbarPlugin');
+        if (inlineToolbarPlugin) {
+            inlineToolbarPlugin.hideToolbar();
+        }
+
+    },
+
+    getActiveBubble: function()
+    {
+        if (!this._activeBubble) {
+            return null;
+        }
+
+        return this.getBubble(this._activeBubble);
 
     },
 
@@ -425,10 +460,6 @@ ViperToolbarPlugin.prototype = {
 
     _updateToolbar: function(range)
     {
-        if (this._activeBubble) {
-            this.closeBubble(this._activeBubble);
-        }
-
         range = range || this.viper.getCurrentRange();
 
         this.viper.fireCallbacks('ViperToolbarPlugin:updateToolbar', {range: range});

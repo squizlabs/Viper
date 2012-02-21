@@ -796,6 +796,10 @@ ViperDOMRange.prototype = {
             startParent = startParent.parentNode;
         }
 
+        if (!startParent) {
+            return null;
+        }
+
         var endParent = endNode;
         while (endParent && endParent.parentNode !== common) {
             endParent = endParent.parentNode;

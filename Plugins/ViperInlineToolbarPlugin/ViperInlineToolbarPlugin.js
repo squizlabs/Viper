@@ -33,6 +33,11 @@ function ViperInlineToolbarPlugin(viper)
     this._subSectionButtons = {};
     this._activeSection     = null;
 
+    this._topToolbar = null;
+    this._buttons    = null;
+
+    this._autoFocusTextbox = true;
+
     // Create the toolbar.
     this._createToolbar();
 
@@ -43,6 +48,8 @@ ViperInlineToolbarPlugin.prototype = {
     init: function()
     {
         var self = this;
+
+        this._topToolbar = this.viper.getPluginManager().getPlugin('ViperToolbarPlugin');
 
         // Called when the selection is changed.
         var clickedInToolbar = false;
@@ -67,6 +74,10 @@ ViperInlineToolbarPlugin.prototype = {
 
             // Update the toolbar position, contents and lineage for this new selection.
             self.updateToolbar(range);
+        });
+
+        this.viper.registerCallback('ViperTools:textbox:actionTiggered', 'ViperInlineToolbarPlugin', function() {
+            self._autoFocusTextbox = false;
         });
 
         // Hide the toolbar when user clicks anywhere.
@@ -107,6 +118,69 @@ ViperInlineToolbarPlugin.prototype = {
                 self._updatePosition();
             }
         });
+
+    },
+
+    setSettings: function(settings)
+    {
+        if (!settings) {
+            return;
+        }
+
+        if (settings.buttons) {
+            this._buttons = settings.buttons;
+        }
+
+    },
+
+    applyButtonsSetting: function()
+    {
+        // Get all the buttons from the container.
+        var buttons = dfx.getClass('Viper-button', this._toolsContainer);
+        var c       = buttons.length;
+
+        if (c === 0) {
+            return;
+        }
+
+        // Clear the buttons container contents.
+        this._toolsContainer.innerHTML = '';
+
+        // Get the button ids and their elements.
+        var addedButtons = {};
+        for (var i = 0; i < c; i++) {
+            var button = buttons[i];
+            var id     = button.id.toLowerCase().replace(this.viper.getId() + '-vitp', '');
+            addedButtons[id] = button;
+        }
+
+        var bc = this._buttons.length;
+        for (var i = 0; i < bc; i++) {
+            var button = this._buttons[i];
+            if (typeof button === 'string') {
+                button = button.toLowerCase();
+                if (addedButtons[button]) {
+                    // Button is included in the setting, add it to the toolbar.
+                    this.addButton(addedButtons[button]);
+                }
+            } else {
+                var gc           = button.length;
+                var groupid      = null;
+                for (var j = 0; j < gc; j++) {
+                    if (addedButtons[button[j].toLowerCase()]) {
+                        if (groupid === null) {
+                            // Create the group.
+                            groupid      = 'ViperInlineToolbarPlugin:buttons:' + i;
+                            groupElement = this.viper.ViperTools.createButtonGroup(groupid);
+                            this.addButton(groupElement);
+                        }
+
+                        // Button is included in the setting, add it to group.
+                        this.viper.ViperTools.addButtonToGroup('vitp' + dfx.ucFirst(button[j]), groupid);
+                    }
+                }
+            }
+        }
 
     },
 
@@ -222,6 +296,10 @@ ViperInlineToolbarPlugin.prototype = {
         var inputElements = dfx.getTag('input', subSection);
         if (inputElements.length > 0) {
             inputElements[0].focus();
+            if (this._autoFocusTextbox === false) {
+                this._autoFocusTextbox = true;
+                dfx.removeClass(inputElements[0].parentNode.parentNode.parentNode, 'active');
+            }
         }
 
     },
@@ -248,9 +326,17 @@ ViperInlineToolbarPlugin.prototype = {
      */
     updateToolbar: function(range)
     {
+        if (this._topToolbar) {
+            var bubble = this._topToolbar.getActiveBubble();
+            if (bubble && bubble.getSetting('keepOpen') !== true) {
+                return;
+            }
+        }
+
+        var activeSection   = this._activeSection;
         this._activeSection = null;
 
-        range = range || this.viper.getCurrentRange();
+        range = range || this.viper.getViperRange();
 
         dfx.removeClass(this._toolbar, 'subSectionVisible');
 
@@ -278,6 +364,10 @@ ViperInlineToolbarPlugin.prototype = {
             return;
         }
 
+        if (activeSection) {
+            this.toggleSubSection(activeSection);
+        }
+
         this._updateLineage(lineage);
         this._updatePosition(range);
         this._updateSubSectionArrowPos();
@@ -289,6 +379,7 @@ ViperInlineToolbarPlugin.prototype = {
      */
     hideToolbar: function()
     {
+        this._activeSection = null;
         dfx.removeClass(this._toolbar, 'visible');
 
     },
@@ -414,7 +505,7 @@ ViperInlineToolbarPlugin.prototype = {
      */
     _updatePosition: function(range, verticalOnly)
     {
-        range = range || this.viper.getCurrentRange();
+        range = range || this.viper.getViperRange();
 
         var rangeCoords  = null;
         var selectedNode = range.getNodeSelection(range);
@@ -451,7 +542,7 @@ ViperInlineToolbarPlugin.prototype = {
 
                 var startNode = range.getStartNode();
                 if (startNode.nodeType === dfx.TEXT_NODE) {
-                    if (range.startOffset < startNode.data.length) {
+                    if (range.startOffset <= startNode.data.length) {
                         range.setEnd(startNode, (range.startOffset + 1));
                         rangeCoords = range.rangeObj.getBoundingClientRect();
                         range.collapse(true);
@@ -704,6 +795,10 @@ ViperInlineToolbarPlugin.prototype = {
 
         this.viper.fireCallbacks('ViperInlineToolbarPlugin:updateToolbar', data);
 
+        if (this._buttons) {
+            this.applyButtonsSetting();
+        }
+
     },
 
     _setCurrentLineageIndex: function(index)
@@ -732,6 +827,14 @@ ViperInlineToolbarPlugin.prototype = {
             var startNode = range.getStartNode();
             if (!startNode) {
                 return lineage;
+            } else if (startNode.nodeType == dfx.TEXT_NODE
+                && startNode.data.length === 0
+                && startNode.nextSibling
+                && startNode.nextSibling.nodeType === dfx.TEXT_NODE
+            ) {
+                // The startNode is an empty textnode, most likely due to node splitting
+                // if the next node is a text node use that instead.
+                startNode = startNode.nextSibling;
             }
 
             if (startNode.nodeType !== dfx.TEXT_NODE || dfx.isBlank(startNode.data) !== true) {
