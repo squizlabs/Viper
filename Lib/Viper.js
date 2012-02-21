@@ -2666,6 +2666,11 @@ Viper.prototype = {
      */
     highlightSelection: function()
     {
+        var highlights = dfx.getClass('__viper_selHighlight', this.element);
+        if (highlights.length > 0) {
+            return false;
+        }
+
         var viperRange   = this.getViperRange();
 
         var attributes = {
