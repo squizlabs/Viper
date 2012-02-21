@@ -698,6 +698,14 @@ ViperCoreStylesPlugin.prototype = {
                 if (elem.nodeType === dfx.ELEMENT_NODE && (!keywordPlugin || keywordPlugin.isKeyword(elem) !== true)) {
                     dfx.removeAttr(elem, 'style');
                     dfx.removeAttr(elem, 'class');
+
+                    if (elem.attributes.length === 0 && dfx.isTag(elem, 'span') === true) {
+                        while (elem.firstChild) {
+                            dfx.insertBefore(elem, elem.firstChild);
+                        }
+
+                        dfx.remove(elem);
+                    }
                 }
             }
         });
