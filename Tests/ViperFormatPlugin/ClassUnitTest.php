@@ -101,7 +101,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
     {
         $dir = dirname(__FILE__).'/Images/';
 
-        $text = 'Lorem';
+        $text = 'WoW';
 
         $this->selectText($text);
         $this->clickInlineToolbarButton($dir.'toolbarIcon_class.png');
@@ -115,12 +115,12 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->type('t');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p><span class="test">Lorem</span> xtn dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Squiz <span class="myclass">LABS</span> is orsm</p>');
+        $this->assertHTMLMatch('<p>Lorem xtn dolor</p><p class="test">sit amet <strong class="test">WoW</strong></p><p>Squiz <span class="myclass">LABS</span> is orsm</p>');
 
         $this->click($this->find($text));
         $this->selectText($text);
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_class.png'), 'Class icon is still active in the Top Toolbar.');
-        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_class.png'), 'Class icon is still active in the inline toolbar.');
+        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_class_active.png'), 'Class icon is not active in the Top Toolbar.');
+        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_class_active.png'), 'Class icon is not active in the inline toolbar.');
 
     }//end testAutosaveForClassField()
 
