@@ -659,15 +659,6 @@ ViperFormatPlugin.prototype = {
         var s = this.styleTags;
         s.div = 1;
 
-        if (elemsBetween.length === 1) {
-            selectedNode = elemsBetween[0];
-            if (bookmark) {
-                dfx.remove(bookmark.start);
-                dfx.remove(bookmark.end);
-                bookmark = null;
-            }
-        }
-
         var self = this;
         dfx.foreach(elemsBetween, function(i) {
             var elem    = elemsBetween[i];
