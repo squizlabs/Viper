@@ -11,7 +11,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
      *
      * @return void
      */
-    public function testAddingClassAttribute()
+    public function testAddingClassAttributeToAWord()
     {
         $dir = dirname(__FILE__).'/Images/';
 
@@ -23,14 +23,42 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->type('test');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p><span class="test">Lorem</span> xtn dolor</p><p class="myclass">sit amet <strong>WoW</strong></p><p>Squiz <span class="myclass">LABS</span> is orsm</p>');
+        $this->assertHTMLMatch('<p><span class="test">Lorem</span> xtn dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Squiz <span class="myclass">LABS</span> is orsm</p>');
 
         $this->click($this->find($text));
         $this->selectText($text);
         $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_class_active.png'), 'Class icon in Top Toolbar should be active.');
         $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_class_active.png'), 'Class icon in VITP should be active.');
 
-    }//end testAddingClassAttribute()
+    }//end testAddingClassAttributeToAWord()
+
+
+    /**
+     * Test that you can add the class attribute to a paragraph.
+     *
+     * @return void
+     */
+    public function testAddingClassAttributeToAParagraph()
+    {
+        $dir = dirname(__FILE__).'/Images/';
+
+        $text = 'Lorem';
+
+        $this->selectText($text);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_class.png');
+        $this->clickInlineToolbarButton($dir.'input_class.png');
+        $this->type('test');
+        $this->keyDown('Key.ENTER');
+
+        $this->assertHTMLMatch('<p class="test">Lorem xtn dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Squiz <span class="myclass">LABS</span> is orsm</p>');
+
+        $this->selectText($text);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_class_active.png'), 'Class icon in Top Toolbar should be active.');
+        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_class_active.png'), 'Class icon in VITP should be active.');
+
+    }//end testAddingClassAttributeToAParagraph()
 
 
     /**
