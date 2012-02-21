@@ -434,13 +434,8 @@ Viper.prototype = {
             if (hasStubElems !== true) {
                 // Insert initial P tags.
                 var range = this.getCurrentRange();
-                if (this.inlineMode !== true && dfx.getStyle(this.element, 'display') === 'block') {
-                    dfx.setHtml(this.element, '<p>&nbsp;</p>');
-                    range.setStart(this.element.firstChild.firstChild, 0);
-                } else {
-                    dfx.setHtml(this.element, '&nbsp;');
-                    range.setStart(this.element.firstChild, 0);
-                }
+                dfx.setHtml(this.element, '&nbsp;');
+                range.setStart(this.element.firstChild, 0);
 
                 range.collapse(true);
                 ViperSelection.addRange(range);

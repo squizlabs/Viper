@@ -236,13 +236,17 @@ ViperFormatPlugin.prototype = {
         var viperElem = this.viper.getViperElement();
         var common    = range.getCommonElement();
         while (common) {
+            if (common === viperElem) {
+                return null;
+            }
+
             for (var i = 0; i < c; i++) {
                 if (dfx.isTag(common, tagNames[i]) === true) {
                     return common;
                 }
             }
 
-            if (common === viperElem || dfx.isBlockElement(common) === true) {
+            if (dfx.isBlockElement(common) === true) {
                 break;
             }
 
@@ -622,6 +626,11 @@ ViperFormatPlugin.prototype = {
         if (selectedNode === null) {
             var startNode   = range.getStartNode();
             var blockParent = this.getFirstBlockParent(startNode);
+            if (!blockParent) {
+                // Top level content. Create a new element.
+                return this._handleTopLevelFormat(type, range);
+            }
+
             if (dfx.isChildOf(startNode, this.viper.element) === false) {
                 // TODO: Should we handle this case in createBookmark?
                 range.setStart(this.viper.element, 0);
@@ -711,6 +720,78 @@ ViperFormatPlugin.prototype = {
         if (bookmark) {
             this.viper.selectBookmark(bookmark);
         }
+
+        this.viper.fireNodesChanged([this.viper.getViperElement()]);
+        this.viper.fireSelectionChanged(null, true);
+
+    },
+
+    _handleTopLevelFormat: function(type, range)
+    {
+        var bookmark = this.viper.createBookmark();
+
+        // Find the block parent before and after the bookmarks.
+        var elements = [];
+
+        // Elements before..
+        var node     = bookmark.start;
+        while (node && dfx.isBlockElement(node) === false) {
+            elements.unshift(node);
+            node = node.previousSibling;
+        }
+
+        var insideSelection = dfx.getElementsBetween(bookmark.start, bookmark.end);
+        var count = insideSelection.length;
+        for (var i = 0; i < count; i++) {
+            if (dfx.isBlockElement(insideSelection[i]) === true) {
+                var group = [];
+                for (var j = 0; j < insideSelection[i].childNodes.length; j++) {
+                    group.push(insideSelection[i].childNodes[j]);
+                }
+                elements.push(group);
+            } else {
+                elements.push(insideSelection[i]);
+            }
+        }
+
+        // Elements after..
+        node = bookmark.end;
+        while (node && dfx.isBlockElement(node) === false) {
+            elements.push(node);
+            node = node.nextSibling;
+        }
+
+        if (elements.length === 0) {
+            return;
+        }
+
+        var newBlock    = document.createElement(type);
+        var prevBlock   = newBlock;
+        dfx.insertBefore(elements[0], newBlock);
+
+        var c = elements.length;
+        for (var i = 0; i < c; i++) {
+            if (elements[i] instanceof Array) {
+                newBlock = document.createElement(type);
+                for (var j = 0; j < elements[i].length; j++) {
+                    newBlock.appendChild(elements[i][j]);
+                }
+
+                dfx.insertAfter(prevBlock, newBlock);
+                prevBlock = newBlock;
+                newBlock = null;
+            } else {
+                if (!newBlock) {
+                    newBlock = document.createElement(type);
+                    dfx.insertAfter(prevBlock, newBlock);
+                    prevBlock = newBlock;
+                }
+
+                newBlock.appendChild(elements[i]);
+            }
+        }
+
+        this.viper.selectBookmark(bookmark);
 
         this.viper.fireNodesChanged([this.viper.getViperElement()]);
         this.viper.fireSelectionChanged(null, true);
