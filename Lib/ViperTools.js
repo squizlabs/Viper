@@ -505,17 +505,21 @@ ViperTools.prototype = {
     {
         var labelElem = document.createElement('label');
         dfx.addClass(labelElem, 'Viper-checkbox');
-
+        
         var checkbox  = document.createElement('input');
         checkbox.type = 'checkbox';
         checkbox.checked = checked || false;
+        
+        var checkboxIcon = document.createElement('span');
+        dfx.addClass(checkboxIcon, 'Viper-checkbox-icon');
+        checkboxIcon.appendChild(checkbox);
 
-        var span = document.createElement('span');
-        dfx.addClass(span, 'Viper-checkbox-title');
-        dfx.setHtml(span, label);
-
-        labelElem.appendChild(span);
-        labelElem.appendChild(checkbox);
+        var text = document.createElement('span');
+        dfx.addClass(text, 'Viper-checkbox-title');
+        dfx.setHtml(text, label);
+        
+        labelElem.appendChild(text);
+        labelElem.appendChild(checkboxIcon);
 
         var self = this;
 
