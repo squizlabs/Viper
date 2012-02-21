@@ -169,7 +169,29 @@ ViperTools.prototype = {
                 }
 
                 dfx.addClass(btnIconElem, iconClass);
-            }
+            },
+            setButtonShortcut: function(key)
+            {
+                var extraTitleAttr = ' (' + key + ')';
+                if (extraTitleAttr.indexOf('CTRL') >= 0) {
+                    if (navigator.platform.indexOf('Mac') >= 0) {
+                        extraTitleAttr = extraTitleAttr.replace('CTRL', 'CMD');
+                    }
+                }
+
+                button.setAttribute('title', titleAttr + extraTitleAttr);
+
+                self.viper.registerCallback('Viper:keyDown', 'ViperTools-' + id, function(e) {
+                    if (self.viper.isKey(e, key) === true) {
+                        if (dfx.hasClass(button, 'disabled') !== true) {
+                            clickAction.call(e, button);
+                        }
+
+                        return false;
+                    }
+                });
+
+            },
         });
 
         return button;
@@ -505,11 +527,11 @@ ViperTools.prototype = {
     {
         var labelElem = document.createElement('label');
         dfx.addClass(labelElem, 'Viper-checkbox');
-        
+
         var checkbox  = document.createElement('input');
         checkbox.type = 'checkbox';
         checkbox.checked = checked || false;
-        
+
         var checkboxIcon = document.createElement('span');
         dfx.addClass(checkboxIcon, 'Viper-checkbox-icon');
         checkboxIcon.appendChild(checkbox);
@@ -517,7 +539,7 @@ ViperTools.prototype = {
         var text = document.createElement('span');
         dfx.addClass(text, 'Viper-checkbox-title');
         dfx.setHtml(text, label);
-        
+
         labelElem.appendChild(text);
         labelElem.appendChild(checkboxIcon);
 

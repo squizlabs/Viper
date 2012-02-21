@@ -147,19 +147,10 @@ ViperCoreStylesPlugin.prototype = {
         var shortcuts = {
             strong: 'CTRL+B',
             em: 'CTRL+I',
-            u: 'CTRL+U'
         };
 
-        dfx.foreach(shortcuts, function(type) {
-            var keys = shortcuts[type];
-            self.viper.registerCallback('Viper:keyDown', 'ViperCoreStylesPlugin', function(e) {
-                if (self.viper.isKey(e, 'CTRL+B') === true) {
-                    return self.handleStyle('strong');
-                } else if (self.viper.isKey(e, 'CTRL+I') === true) {
-                    return self.handleStyle('em');
-                }
-            });
-        });
+        tools.getItem('bold').setButtonShortcut('CTRL+B');
+        tools.getItem('italic').setButtonShortcut('CTRL+I');
 
         this.viper.registerCallback('Viper:keyPress', 'ViperCoreStylesPlugin', function(e) {
             if (self._onChangeAddStyle && self.viper.isInputKey(e) === true) {
@@ -184,7 +175,6 @@ ViperCoreStylesPlugin.prototype = {
         var tagNames = {
             em: 'Italic',
             strong: 'Bold',
-            u: 'Underline',
             sub: 'Subscript',
             sup: 'Superscript',
             del: 'Strikethrough'
@@ -910,6 +900,8 @@ ViperCoreStylesPlugin.prototype = {
 
         tools.addButtonToGroup('vitpBold', 'ViperCoreStylesPlugin:vitp:btnGroup');
         tools.addButtonToGroup('vitpItalic', 'ViperCoreStylesPlugin:vitp:btnGroup');
+        tools.getItem('vitpBold').setButtonShortcut('CTRL+B');
+        tools.getItem('vitpItalic').setButtonShortcut('CTRL+I');
 
         inlineToolbarPlugin.addButton(buttonGroup);
 
