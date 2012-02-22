@@ -323,6 +323,10 @@ ViperToolbarPlugin.prototype = {
 
         dfx.removeEvent(button, 'mousedown');
         dfx.addEvent(button, 'mousedown', function(e) {
+            if (dfx.hasClass(button, 'disabled') === true) {
+                return;
+            }
+
             self.toggleBubble(bubbleid);
             dfx.preventDefault(e);
         });
