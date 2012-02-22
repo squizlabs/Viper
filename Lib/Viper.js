@@ -569,7 +569,7 @@ Viper.prototype = {
             return;
         }
 
-        if (!value && element.hasAttribute(attribute) === true) {
+        if (!value && dfx.hasAttribute(element, attribute) === true) {
             element.removeAttribute(attribute);
 
             if (dfx.isTag(element, 'span') === true
@@ -2742,7 +2742,7 @@ Viper.prototype = {
                     }
                 }
             } else {
-                if (highlights[i].nextSibling.nodeType === dfx.TEXT_NODE) {
+                if (highlights[i].nextSibling && highlights[i].nextSibling.nodeType === dfx.TEXT_NODE) {
                     var nextSibling = highlights[i].nextSibling;
                     if (!startNode) {
                         range.setStart(nextSibling, 0);
