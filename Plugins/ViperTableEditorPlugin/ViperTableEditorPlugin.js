@@ -51,6 +51,11 @@ ViperTableEditorPlugin.prototype = {
                 document.execCommand("enableInlineTableEditing", false, false);
                 document.execCommand("enableObjectResizing", false, false);
             }
+
+            var tables = dfx.getTag('table', self.viper.getViperElement());
+            for (var i = 0; i < tables.length; i++) {
+                self.setTableHeaders(tables[i]);
+            }
         });
 
         dfx.addEvent(window, 'resize', function() {
@@ -404,6 +409,8 @@ ViperTableEditorPlugin.prototype = {
     {
         this._tableRawCells = null;
         var table = this.getCellTable(this.activeCell);
+
+        this.setTableHeaders(table);
         this.viper.fireNodesChanged([table]);
 
     },
@@ -2245,10 +2252,12 @@ ViperTableEditorPlugin.prototype = {
 
     setTableHeaders: function(table)
     {
-        var headers = dfx.find(table, '[headers]');
-        if (headers.length > 0) {
-            console.info('Cannot set table headers; they are already set.', table);
-            return;
+        var headers      = dfx.find(table, '[headers]');
+        var headersCount = headers.length;
+        if (headersCount > 0) {
+            for (var i = 0; i < headersCount; i++) {
+                headers[i].removeAttribute('headers');
+            }
         }
 
         var tableId = table.getAttribute('id');
