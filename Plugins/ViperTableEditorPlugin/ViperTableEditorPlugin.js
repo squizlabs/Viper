@@ -180,6 +180,23 @@ ViperTableEditorPlugin.prototype = {
             });
 
             this.viper.registerCallback('Viper:selectionChanged', 'ViperTableEditorPlugin', function(range) {
+                var node = range.getStartNode();
+                if (!node) {
+                    node = range.getEndNode();
+                    if (!node) {
+                        return;
+                    }
+                }
+
+                // Do not allow table insertion inside another table.
+                var parents = dfx.getParents(node, 'table', self.viper.getViperElement());
+                if (parents.length > 0) {
+                    // Set the table icon as active.
+                    self._tools.setButtonActive('insertTable');
+                } else {
+                    self._tools.setButtonInactive('insertTable');
+                }
+
                 if (range.collapsed === false) {
                     return;
                 }
@@ -788,31 +805,35 @@ ViperTableEditorPlugin.prototype = {
     _createColProperties: function(cell)
     {
         var self = this;
-        var insBefore = this._tools.createButton('VTEP:colProps:insBefore', '', 'Insert Column Before', 'addLeft', function() {
+        this._tools.createButton('VTEP:colProps:insBefore', '', 'Insert Column Before', 'addLeft', function() {
             self._buttonClicked = true;
             self.insertColBefore(cell);
             self.updateToolbar(cell, 'col');
         });
-        this._toolsContainer.appendChild(insBefore);
-
-        var insAfter = this._tools.createButton('VTEP:colProps:insAfter', '', 'Insert Column After', 'addRight', function() {
+        this._tools.createButton('VTEP:colProps:insAfter', '', 'Insert Column After', 'addRight', function() {
             self._buttonClicked = true;
             self.insertColAfter(cell);
             self.updateToolbar(cell, 'col');
         });
-        this._toolsContainer.appendChild(insAfter);
 
-        var moveLeft = this._tools.createButton('VTEP:colProps:moveLeft', '', 'Move Left', 'mergeLeft', function() {
+        var btnGroup = this._tools.createButtonGroup('VTEP:insColButtons');
+        this._tools.addButtonToGroup('VTEP:colProps:insBefore', 'VTEP:insColButtons');
+        this._tools.addButtonToGroup('VTEP:colProps:insAfter', 'VTEP:insColButtons');
+        this._toolsContainer.appendChild(btnGroup);
+
+        this._tools.createButton('VTEP:colProps:moveLeft', '', 'Move Left', 'mergeLeft', function() {
             self._buttonClicked = true;
             self.updateToolbar(self.moveColLeft(cell), 'col');
         }, (this.canMoveColLeft(cell) === false));
-        this._toolsContainer.appendChild(moveLeft);
-
-        var moveRight = this._tools.createButton('VTEP:colProps:moveRight', '', 'Move Right', 'mergeRight', function() {
+        this._tools.createButton('VTEP:colProps:moveRight', '', 'Move Right', 'mergeRight', function() {
             self._buttonClicked = true;
             self.updateToolbar(self.moveColRight(cell), 'col');
         }, (this.canMoveColRight(cell) === false));
-        this._toolsContainer.appendChild(moveRight);
+
+        btnGroup = this._tools.createButtonGroup('VTEP:moveColButtons');
+        this._tools.addButtonToGroup('VTEP:colProps:moveLeft', 'VTEP:moveColButtons');
+        this._tools.addButtonToGroup('VTEP:colProps:moveRight', 'VTEP:moveColButtons');
+        this._toolsContainer.appendChild(btnGroup);
 
         var removeCol = this._tools.createButton('VTEP:colProps:remove', '', 'Remove Column', 'delete', function() {
             var table = self.getCellTable(cell);
@@ -836,30 +857,32 @@ ViperTableEditorPlugin.prototype = {
     _createRowProperties: function(cell)
     {
         var self = this;
-        var insBefore = this._tools.createButton('VTEP:rowProps:insBefore', '', 'Insert Row Before', 'addAbove', function() {
+        this._tools.createButton('VTEP:rowProps:insBefore', '', 'Insert Row Before', 'addAbove', function() {
             self._buttonClicked = true;
             self.insertRowBefore(cell);
             self.updateToolbar(cell, 'row');
         });
-        this._toolsContainer.appendChild(insBefore);
-
-        var insAfter = this._tools.createButton('VTEP:rowProps:insAfter', '', 'Insert Row After', 'addBelow', function() {
+        this._tools.createButton('VTEP:rowProps:insAfter', '', 'Insert Row After', 'addBelow', function() {
             self.insertRowAfter(cell);
             self.updateToolbar(cell, 'row');
         });
-        this._toolsContainer.appendChild(insAfter);
+        var btnGroup = this._tools.createButtonGroup('VTEP:insRowButtons');
+        this._tools.addButtonToGroup('VTEP:rowProps:insBefore', 'VTEP:insRowButtons');
+        this._tools.addButtonToGroup('VTEP:rowProps:insAfter', 'VTEP:insRowButtons');
+        this._toolsContainer.appendChild(btnGroup);
 
-        var moveUp = this._tools.createButton('VTEP:rowProps:moveUp', '', 'Move Up', 'mergeUp', function() {
+        this._tools.createButton('VTEP:rowProps:moveUp', '', 'Move Up', 'mergeUp', function() {
             self._buttonClicked = true;
             self.updateToolbar(self.moveRowUp(cell), 'row');
         }, (this.canMoveRowUp(cell) === false));
-        this._toolsContainer.appendChild(moveUp);
-
-        var moveDown = this._tools.createButton('VTEP:rowProps:moveDown', '', 'Move Down', 'mergeDown', function() {
+        this._tools.createButton('VTEP:rowProps:moveDown', '', 'Move Down', 'mergeDown', function() {
             self._buttonClicked = true;
             self.updateToolbar(self.moveRowDown(cell), 'row');
         }, (this.canMoveRowDown(cell) === false));
-        this._toolsContainer.appendChild(moveDown);
+        btnGroup = this._tools.createButtonGroup('VTEP:moveRowButtons');
+        this._tools.addButtonToGroup('VTEP:rowProps:moveUp', 'VTEP:moveRowButtons');
+        this._tools.addButtonToGroup('VTEP:rowProps:moveDown', 'VTEP:moveRowButtons');
+        this._toolsContainer.appendChild(btnGroup);
 
         var removeRow = this._tools.createButton('VTEP:rowProps:remove', '', 'Remove Row', 'delete', function() {
             var table = self.getCellTable(cell);
@@ -888,6 +911,21 @@ ViperTableEditorPlugin.prototype = {
             self.createTableCaption(table);
         });
         this._toolsContainer.appendChild(button);
+
+        var remove = this._tools.createButton('VTEP:tableProps:remove', '', 'Remove Table', 'delete', function() {
+            var table = self.getCellTable(cell);
+            self._buttonClicked = true;
+            self.removeTable(table);
+            self.hideToolbar();
+            self.removeHighlights();
+        });
+        this._toolsContainer.appendChild(remove);
+
+        dfx.hover(remove, function() {
+            dfx.addClass(self._highlightElement, 'delete');
+        }, function() {
+            dfx.removeClass(self._highlightElement, 'delete');
+        });
 
     },
 
@@ -2063,7 +2101,7 @@ ViperTableEditorPlugin.prototype = {
             ViperSelection.addRange(range);
             return range;
         } else {
-            this.hideCellButtons();
+            this.hideCellToolsIcon();
         }
 
     },
@@ -2159,7 +2197,7 @@ ViperTableEditorPlugin.prototype = {
 
         dfx.remove(table);
 
-        this.hideCellButtons();
+        this.hideCellToolsIcon();
 
     },
 
@@ -2202,6 +2240,21 @@ ViperTableEditorPlugin.prototype = {
      */
     insertTable: function(rows, cols)
     {
+        var range = this.viper.getViperRange();
+        var node = range.getStartNode();
+        if (!node) {
+            node = range.getEndNode();
+            if (!node) {
+                return;
+            }
+        }
+
+        // Do not allow table insertion inside another table.
+        var parents = dfx.getParents(node, 'table', this.viper.getViperElement());
+        if (parents.length > 0) {
+            return;
+        }
+
         this.viper.ViperHistoryManager.begin();
 
         rows = rows || 2;
