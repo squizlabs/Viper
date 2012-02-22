@@ -2254,6 +2254,9 @@ ViperTableEditorPlugin.prototype = {
 
         dfx.remove(table);
 
+        this.viper.fireSelectionChanged();
+        this.viper.fireNodesChanged(this.viper.getViperElement());
+
         this.hideCellToolsIcon();
 
     },
