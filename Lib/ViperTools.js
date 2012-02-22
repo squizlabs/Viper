@@ -227,13 +227,21 @@ ViperTools.prototype = {
 
     enableButton: function(buttonid)
     {
-        dfx.removeClass(this.getItem(buttonid).element, 'disabled');
+        var button = this.getItem(buttonid).element;
+        button.setAttribute('title', button.getAttribute('title').replace(' [Not available]', ''));
+        dfx.removeClass(button, 'disabled');
 
     },
 
     disableButton: function(buttonid)
     {
-        dfx.addClass(this.getItem(buttonid).element, 'disabled');
+        var button = this.getItem(buttonid).element;
+        if (dfx.hasClass(button, 'disabled') === true) {
+            return;
+        }
+
+        button.setAttribute('title', button.getAttribute('title') + ' [Not available]');
+        dfx.addClass(button, 'disabled');
 
     },
 
