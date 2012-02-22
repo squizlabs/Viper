@@ -129,6 +129,7 @@ ViperTools.prototype = {
             dfx.addClass(button, customClass);
         }
 
+        var mouseUpAction  = function() {};
         var preventMouseUp = false;
         var self           = this;
         if (clickAction) {
@@ -144,6 +145,7 @@ ViperTools.prototype = {
         }//end if
 
         dfx.addEvent(button, 'mouseup.Viper', function(e) {
+            mouseUpAction.call(this, e);
             self._preventMouseUp = false;
             dfx.preventDefault(e);
             return false;
@@ -190,8 +192,11 @@ ViperTools.prototype = {
                         return false;
                     }
                 });
-
             },
+            setMouseUpAction: function(callback)
+            {
+                mouseUpAction = callback;
+            }
         });
 
         return button;
