@@ -57,7 +57,13 @@ ViperSearchReplacePlugin.prototype = {
         content.appendChild(search);
 
         // Replace text box.
-        var replace = tools.createTextbox('ViperSearchPlugin:replaceInput', 'Replace', '');
+        var replace = tools.createTextbox('ViperSearchPlugin:replaceInput', 'Replace', '', function(value) {
+            var search = tools.getItem('ViperSearchPlugin:searchInput').getValue();
+            self.updateMatchesCount(self.getNumberOfMatches(search));
+            self.find(search, false, true);
+
+            self._updateButtonStates();
+        });
         content.appendChild(replace);
 
         // Info Box.
@@ -77,6 +83,10 @@ ViperSearchReplacePlugin.prototype = {
         content.appendChild(replaceBtnsGroup);
 
         var replaceAllBtn = tools.createButton('ViperSearchPlugin:replaceAll', 'Replace All', 'Replace All', 'replaceAll', function() {
+            if (tools.getItem('ViperSearchPlugin:replaceInput').getValue().toLowerCase() === tools.getItem('ViperSearchPlugin:searchInput').getValue().toLowerCase()) {
+                return;
+            }
+
             var replaceCount = 0;
             while (self.find(tools.getItem('ViperSearchPlugin:searchInput').getValue(), false, true) === true) {
                 self.replace(tools.getItem('ViperSearchPlugin:replaceInput').getValue());
@@ -84,10 +94,16 @@ ViperSearchReplacePlugin.prototype = {
             }
 
             self.updateMessage(replaceCount + ' instances were replaced');
-
+            self._updateButtonStates();
         }, true);
         var replaceBtn = tools.createButton('ViperSearchPlugin:replace', 'Replace', 'Replace', 'replaceText', function() {
+            if (tools.getItem('ViperSearchPlugin:replaceInput').getValue().toLowerCase() === tools.getItem('ViperSearchPlugin:searchInput').getValue().toLowerCase()) {
+                return;
+            }
+
             self.replace(tools.getItem('ViperSearchPlugin:replaceInput').getValue());
+            self.find(tools.getItem('ViperSearchPlugin:searchInput').getValue(), false);
+            self._updateButtonStates();
         }, true);
         tools.addButtonToGroup('ViperSearchPlugin:replaceAll', 'ViperSearchPlugin:replaceButtons');
         tools.addButtonToGroup('ViperSearchPlugin:replace', 'ViperSearchPlugin:replaceButtons');
@@ -116,17 +132,19 @@ ViperSearchReplacePlugin.prototype = {
         var self  = this;
         var tools = this.viper.ViperTools;
 
-        var enableReplace = false;
+        var enableReplace = true;
+        if (this._matchCount === 0) {
+            enableReplace = false;
+        }
 
         // These selection during these find calls may jump in to other containers
         // so clone the current selection so that we can select it again.
         var clone = this.viper.getCurrentRange();
 
         // Is there a next result?
-        if (self.find(tools.getItem('ViperSearchPlugin:searchInput').getValue(), false) === true) {
+        if (this._matchCount > 0 && self.find(tools.getItem('ViperSearchPlugin:searchInput').getValue(), false) === true) {
             self.find(tools.getItem('ViperSearchPlugin:searchInput').getValue(), true);
             tools.enableButton('ViperSearchPlugin:findNext');
-            enableReplace = true;
         } else {
             if (this.viper.isBrowser('firefox') === true) {
                 self.find(tools.getItem('ViperSearchPlugin:searchInput').getValue(), true);
@@ -135,10 +153,9 @@ ViperSearchReplacePlugin.prototype = {
         }
 
         // Is there a previous result?
-        if (self.find(tools.getItem('ViperSearchPlugin:searchInput').getValue(), true) === true) {
+        if (this._matchCount > 0 && self.find(tools.getItem('ViperSearchPlugin:searchInput').getValue(), true) === true) {
             self.find(tools.getItem('ViperSearchPlugin:searchInput').getValue(), false);
             tools.enableButton('ViperSearchPlugin:findPrev');
-            enableReplace = true;
         } else {
             // Set the previous button state to disabled.
             tools.disableButton('ViperSearchPlugin:findPrev');
@@ -167,14 +184,14 @@ ViperSearchReplacePlugin.prototype = {
 
     getNumberOfMatches: function(text)
     {
-        var matches = 0;
-        while (this.find(text) === true) {
-            matches++;
+        this._matchCount = 0;
+        var fromStart = true;
+        while (this.find(text, false, fromStart) === true) {
+            this._matchCount++;
+            fromStart = false;
         }
 
-        this._matchCount = matches;
-
-        return matches;
+        return this._matchCount;
 
     },
 
