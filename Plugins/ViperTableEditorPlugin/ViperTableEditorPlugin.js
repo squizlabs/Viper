@@ -43,7 +43,9 @@ ViperTableEditorPlugin.prototype = {
     init: function()
     {
         var self = this;
-        this.viper.registerCallback('Viper:editableElementChanged', 'ViperTableEditor', function() {
+        var clickedInToolbar = false;
+
+        this.viper.registerCallback('Viper:editableElementChanged', 'ViperTableEditorPlugin', function() {
             self._initTable();
 
             if (self.viper.isBrowser('firefox') === true) {
@@ -58,6 +60,25 @@ ViperTableEditorPlugin.prototype = {
             }
         });
 
+        // Hide the toolbar when user clicks anywhere.
+        this.viper.registerCallback(['Viper:mouseDown', 'ViperHistoryManager:undo'], 'ViperTableEditorPlugin', function(data) {
+            clickedInToolbar = false;
+            if (data && data.target) {
+                var target = dfx.getMouseEventTarget(data);
+                if (target === self._toolbar || dfx.isChildOf(target, self._toolbar) === true) {
+                    clickedInToolbar = true;
+                    if (dfx.isTag(target, 'input') === true) {
+                        // Allow event to bubble so the input element can get focus etc.
+                        return true;
+                    }
+
+                    return false;
+                }
+            }
+
+            self.hideToolbar();
+        });
+
         dfx.addEvent(window, 'resize', function() {
             var cell = self.getActiveCell();
             if (cell) {
@@ -66,7 +87,7 @@ ViperTableEditorPlugin.prototype = {
             }
         });
 
-        this.viper.registerCallback('Viper:keyDown', 'ViperTableEditor', function(e) {
+        this.viper.registerCallback('Viper:keyDown', 'ViperTableEditorPlugin', function(e) {
             if (e.which === 9) {
                 // Handle tab key.
                 self.removeHighlights();
@@ -121,7 +142,7 @@ ViperTableEditorPlugin.prototype = {
 
         if (this._isiPad() === false) {
             var showToolbar = false;
-            this.viper.registerCallback('Viper:mouseUp', 'ViperTableEditor', function(e) {
+            this.viper.registerCallback('Viper:mouseUp', 'ViperTableEditorPlugin', function(e) {
                 var range = self.viper.getViperRange();
                 if (range.collapsed === false) {
                     self.removeHighlights();
@@ -160,6 +181,11 @@ ViperTableEditorPlugin.prototype = {
 
             this.viper.registerCallback('Viper:selectionChanged', 'ViperTableEditorPlugin', function(range) {
                 if (range.collapsed === false) {
+                    return;
+                }
+
+                if (clickedInToolbar === true || self.viper.rangeInViperBounds(range) === false) {
+                    clickedInToolbar = false;
                     return;
                 }
 
@@ -669,6 +695,13 @@ ViperTableEditorPlugin.prototype = {
                 this._createTableProperties(cell);
             break;
         }
+
+        var callbackData = {
+            toolbar: this,
+            cell: cell,
+            type: type
+        };
+        this.viper.fireCallbacks('ViperTableEditorPlugin:updateToolbar', callbackData);
 
     },
 

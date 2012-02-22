@@ -63,6 +63,10 @@ ViperFormatPlugin.prototype = {
             self._createInlineToolbarContent(data);
         });
 
+        this.viper.registerCallback('ViperTableEditorPlugin:updateToolbar', 'ViperFormatPlugin', function(data) {
+            self._createTableEditorContent(data);
+        });
+
         ViperChangeTracker.addChangeType('textFormatChange', 'Formatted', 'format');
         ViperChangeTracker.setDescriptionCallback('textFormatChange', function(node) {
             var format = self._getFormat(node);
@@ -162,14 +166,22 @@ ViperFormatPlugin.prototype = {
 
     },
 
-    _getClassSection: function(prefix)
+    _getClassSection: function(prefix, element, callback)
     {
         var self  = this;
         var tools = this.viper.ViperTools;
 
         var classSubContent = document.createElement('div');
         var classTextbox = tools.createTextbox(prefix + 'class:input', 'Class', '', function(value) {
-            self._setAttributeForSelection('class', value);
+            if (element) {
+                self._setAttributeForElement(element, 'class', value);
+            } else {
+                self._setAttributeForSelection('class', value);
+            }
+
+            if (callback) {
+                callback.call(this, value);
+            }
         });
         classSubContent.appendChild(classTextbox);
 
@@ -475,11 +487,61 @@ ViperFormatPlugin.prototype = {
 
     },
 
+    _createTableEditorContent: function(data)
+    {
+        if (data.type === 'cell'
+            || data.type === 'row'
+            || data.type === 'table'
+        ) {
+            var prefix  = 'ViperTableEditor-Format:';
+            var element = null;
+
+            switch (data.type) {
+                case 'row':
+                    element = data.cell.parentNode;
+                break;
+
+                case 'table':
+                    element = dfx.getParents(data.cell, 'table')[0];
+                break;
+
+                case 'cell':
+                default:
+                    element = data.cell;
+                break;
+            }
+
+            // Add class button.
+            var tools          = this.viper.ViperTools;
+            var classBtnActive = false;
+            var classAttribute = '';
+
+            if (dfx.hasAttribute(element, 'class') === true) {
+                classAttribute = element.getAttribute('class');
+                classBtnActive = true;
+            }
+
+            var button = tools.createButton(prefix + 'classBtn', '', 'Class name', 'cssClass', null, false, classBtnActive);
+            data.toolbar.addButton(button);
+
+            data.toolbar.makeSubSection(prefix + 'class:subSection', this._getClassSection(prefix, element, function(value) {
+                if (value) {
+                    tools.setButtonActive(prefix + 'classBtn');
+                } else {
+                    tools.setButtonInactive(prefix + 'classBtn');
+                }
+            }));
+            data.toolbar.setSubSectionButton(prefix + 'classBtn', prefix + 'class:subSection');
+            tools.getItem(prefix + 'class:input').setValue(classAttribute);
+        }
+
+    },
+
     _setAttributeForElement: function(element, attr, value)
     {
         if (element.nodeType === dfx.ELEMENT_NODE) {
             // Set the attribute of this element.
-            element.setAttribute(attr, value);
+            this.viper.setAttribute(element, attr, value);
             return element;
         }
 
