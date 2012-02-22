@@ -96,7 +96,13 @@ ViperAccessibilityPlugin.prototype = {
             };
 
             script.src = this._htmlCSsrc;
-            document.head.appendChild(script);
+
+            if (document.head) {
+                document.head.appendChild(script);
+            } else {
+                document.getElementsByTagName('head')[0].appendChild(script);
+            }
+
             return;
         }
 

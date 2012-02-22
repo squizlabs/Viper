@@ -52,7 +52,6 @@ ViperImagePlugin.prototype = {
         }
 
         range = range || this.viper.getViperRange();
-
         var bookmark = this.viper.createBookmark();
 
         var elems = dfx.getElementsBetween(bookmark.start, bookmark.end);
@@ -260,11 +259,7 @@ ViperImagePlugin.prototype = {
                 dfx.empty(previewBox);
                 setPreviewContent(image.cloneNode(true));
             } else {
-                if (image) {
-                    tools.disableButton('image');
-                } else {
-                    tools.enableButton('image');
-                }
+                tools.enableButton('image');
 
                 tools.setButtonInactive('image');
                 toolbar.closeBubble('ViperImagePlugin:bubble');

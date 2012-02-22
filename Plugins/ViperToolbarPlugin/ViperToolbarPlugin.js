@@ -347,7 +347,7 @@ ViperToolbarPlugin.prototype = {
         var bubble     = this.viper.ViperTools.getItem(bubbleid);
         var bubbleElem = bubble.element;
         if (bubbleElem.parentNode) {
-            this._toolbar.removeChild(bubbleElem);
+            bubbleElem.parentNode.removeChild(bubbleElem);
         }
 
         if (bubble._closeCallback) {

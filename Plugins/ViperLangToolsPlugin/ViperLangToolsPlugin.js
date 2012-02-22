@@ -160,12 +160,12 @@ ViperLangToolsPlugin.prototype = {
         if (selectedNode && selectedNode.nodeType === dfx.ELEMENT_NODE) {
             if (tagName && dfx.isTag(selectedNode, tagName) === true) {
                 return selectedNode;
-            } else if (tagName === 'lang' && selectedNode.hasAttribute('lang') === true) {
+            } else if (tagName === 'lang' && dfx.hasAttribute(selectedNode, 'lang') === true) {
                 return selectedNode;
             } else if (!tagName) {
                 if (dfx.isTag(selectedNode, 'abbr') === true || dfx.isTag(selectedNode, 'acronym') === true) {
                     return selectedNode;
-                } else if (selectedNode.hasAttribute('lang') === true) {
+                } else if (dfx.hasAttribute(selectedNode, 'lang') === true) {
                     return selectedNode;
                 } else {
                     return null;
@@ -179,13 +179,13 @@ ViperLangToolsPlugin.prototype = {
             if (tagName) {
                 if (dfx.isTag(common, tagName) === true) {
                     return common;
-                } else if (tagName === 'lang' && common.hasAttribute('lang') === true) {
+                } else if (tagName === 'lang' && dfx.hasAttribute(common, 'lang') === true) {
                     return common;
                 }
             } else {
                 if (dfx.isTag(common, 'abbr') === true || dfx.isTag(common, 'acronym') === true) {
                     return common;
-                } else if (common.hasAttribute('lang') === true) {
+                } else if (dfx.hasAttribute(common, 'lang') === true) {
                     return common;
                 }
             }
@@ -241,7 +241,7 @@ ViperLangToolsPlugin.prototype = {
             this.rangeToLang(value);
         } else {
             var node = this.viper.getViperRange().getNodeSelection();
-            if (node && node.hasAttribute('lang') === true) {
+            if (node && dfx.hasAttribute(node, 'lang') === true) {
                 node.removeAttribute('lang');
                 if (!node.className && !node.id && dfx.isTag(node, 'span') === true) {
                     this.removeElement(node);

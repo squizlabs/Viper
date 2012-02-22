@@ -200,7 +200,7 @@ ViperFormatPlugin.prototype = {
         var selectedNode = node || range.getNodeSelection();
         if (selectedNode
             && selectedNode.nodeType === dfx.ELEMENT_NODE
-            && selectedNode.hasAttribute(attributeName) === true
+            && dfx.hasAttribute(selectedNode, attributeName) === true
         ) {
             return selectedNode;
         }

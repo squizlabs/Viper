@@ -571,7 +571,7 @@ ViperCoreStylesPlugin.prototype = {
         if (current === type) {
             dfx.setStyle(node, 'text-align', '');
 
-            if (node.hasAttribute('style') === true
+            if (dfx.hasAttribute(node, 'style') === true
                 && node.getAttribute('style') === ''
             ) {
                 node.removeAttribute('style');
