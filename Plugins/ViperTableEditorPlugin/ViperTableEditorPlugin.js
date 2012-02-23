@@ -870,6 +870,38 @@ ViperTableEditorPlugin.prototype = {
 
     _createColProperties: function(cell)
     {
+        var self = this;
+
+        var settingsContent = document.createElement('div');
+
+        // Create the settings sub section.
+        var settingsSubSection = this.makeSubSection('VTEP:colProps:settingsSubSection', settingsContent);
+        var settingsButton     = this._tools.createButton('VTEP:colProps:settings', '', 'Toggle Settings', 'tableSettings');
+        this._toolsContainer.appendChild(settingsButton);
+        this.setSubSectionButton('VTEP:colProps:settings', 'VTEP:colProps:settingsSubSection');
+        this.toggleSubSection('VTEP:colProps:settingsSubSection');
+        this.setSubSectionAction('VTEP:colProps:settingsSubSection', function() {
+            // Set column width.
+            var width = self._tools.getItem('VTEP:colProps:width').getValue();
+            self.setColumnWidth(cell, width);
+
+            var headingChecked = self._tools.getItem('VTEP:colProps:heading').getValue();
+            // Switch between header and normal cell.
+            if (headingChecked !== true) {
+                var newCell = self.convertToCell(cell, 'col');
+                self.updateToolbar(newCell, 'col');
+            } else {
+                var newCell = self.convertToHeader(cell, 'col');
+                self.updateToolbar(newCell, 'col');
+            }
+        }, ['VTEP:colProps:width', 'VTEP:colProps:heading']);
+
+        // Width.
+        var colWidth = this.getColumnWidth(cell);
+        var width    = this._tools.createTextbox('VTEP:colProps:width', 'Width', colWidth);
+        settingsContent.appendChild(width);
+
+        // Heading.
         var wholeColHeading = true;
         var cells   = this._getCellsExpanded();
         var cellPos = this.getCellPosition(cell);
@@ -885,18 +917,8 @@ ViperTableEditorPlugin.prototype = {
             }
         }
 
-        var self    = this;
-        var heading = this._tools.createButton('VTEP:colProps:heading', 'Heading', 'Toggle Heading', 'cellHeading', function() {
-            // Switch between header and normal cell.
-            if (wholeColHeading === true) {
-                var newCell = self.convertToCell(cell, 'col');
-                self.updateToolbar(newCell, 'col');
-            } else {
-                var newCell = self.convertToHeader(cell, 'col');
-                self.updateToolbar(newCell, 'col');
-            }
-        }, false, wholeColHeading);
-        this._toolsContainer.appendChild(heading);
+        var heading = this._tools.createCheckbox('VTEP:colProps:heading', 'Heading', wholeColHeading);
+        settingsContent.appendChild(heading);
 
         this._tools.createButton('VTEP:colProps:insBefore', '', 'Insert Column Before', 'addLeft', function() {
             self._buttonClicked = true;
@@ -1891,6 +1913,45 @@ ViperTableEditorPlugin.prototype = {
         this.tableUpdated();
 
         return elem;
+
+    },
+
+    setColumnWidth: function (cell, width)
+    {
+        if (parseInt(width) === width) {
+            width = width + 'px';
+        }
+
+        var cells   = this._getCellsExpanded();
+        var cellPos = this.getCellPosition(cell);
+
+        // Find the first cell that belongs to the same column.
+        for (var i = 0; i < cells.length; i++) {
+            var colCell    = cells[i][cellPos.col];
+            var colCellPos = this.getCellPosition(colCell);
+            if (colCellPos.col === cellPos.col) {
+                dfx.setStyle(colCell, 'width', width);
+                return;
+            }
+        }
+
+    },
+
+    getColumnWidth: function(cell)
+    {
+        var cells   = this._getCellsExpanded();
+        var cellPos = this.getCellPosition(cell);
+
+        // Find the first cell that belongs to the same column.
+        for (var i = 0; i < cells.length; i++) {
+            var colCell    = cells[i][cellPos.col];
+            var colCellPos = this.getCellPosition(colCell);
+            if (colCellPos.col === cellPos.col) {
+                return dfx.getStyle(colCell, 'width');
+            }
+        }
+
+        return '';
 
     },
 
