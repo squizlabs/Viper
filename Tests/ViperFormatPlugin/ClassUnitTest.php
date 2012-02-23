@@ -23,7 +23,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->type('test');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p><span class="test">Lorem</span> xtn dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Squiz <span class="myclass">LABS</span> is orsm</p>');
+        $this->assertHTMLMatch('<p><span class="test">Lorem</span> xtn dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Squiz <span class="myclass">LABS</span> is orsm</p><p><em>The</em> QUICK brown fox</p><p><strong>jumps</strong> OVER the lazy dog</p>');
 
         $this->click($this->find($text));
         $this->selectText($text);
@@ -51,7 +51,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->type('test');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p class="test">Lorem xtn dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Squiz <span class="myclass">LABS</span> is orsm</p>');
+        $this->assertHTMLMatch('<p class="test">Lorem xtn dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Squiz <span class="myclass">LABS</span> is orsm</p><p><em>The</em> QUICK brown fox</p><p><strong>jumps</strong> OVER the lazy dog</p>');
 
         $this->selectText($text);
         $this->selectInlineToolbarLineageItem(0);
@@ -81,7 +81,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->clickInlineToolbarButton($dir.'toolbarIcon_delete_class.png');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>Lorem xtn dolor</p><p>sit amet <strong>WoW</strong></p><p>Squiz <span class="myclass">LABS</span> is orsm</p>');
+        $this->assertHTMLMatch('<p>Lorem xtn dolor</p><p>sit amet <strong>WoW</strong></p><p>Squiz <span class="myclass">LABS</span> is orsm</p><p><em>The</em> QUICK brown fox</p><p><strong>jumps</strong> OVER the lazy dog</p>');
 
         $this->click($this->find($text));
         $this->selectText($text);
@@ -110,7 +110,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->clickInlineToolbarButton($dir.'toolbarIcon_delete_class.png');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>Lorem xtn dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Squiz LABS is orsm</p>');
+        $this->assertHTMLMatch('<p>Lorem xtn dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Squiz LABS is orsm</p><p><em>The</em> QUICK brown fox</p><p><strong>jumps</strong> OVER the lazy dog</p>');
 
         $this->click($this->find($text));
         $this->selectText($text);
@@ -145,7 +145,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->assertEquals('WoW', $this->getSelectedText(), 'Bold text is not selected.');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>Lorem xtn dolor</p><p class="test">sit amet <strong class="test">WoW</strong></p><p>Squiz <span class="myclass">LABS</span> is orsm</p>');
+        $this->assertHTMLMatch('<p>Lorem xtn dolor</p><p class="test">sit amet <strong class="test">WoW</strong></p><p>Squiz <span class="myclass">LABS</span> is orsm</p><p><em>The</em> QUICK brown fox</p><p><strong>jumps</strong> OVER the lazy dog</p>');
 
         $this->click($this->find($text));
         $this->selectText($text);
@@ -182,7 +182,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->assertEquals('Lorem xtn dolor', $this->getSelectedText(), 'Paragraph is not selected');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p class="test">Lorem xtn dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Squiz <span class="myclass">LABS</span> is orsm</p>');
+        $this->assertHTMLMatch('<p class="test">Lorem xtn dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Squiz <span class="myclass">LABS</span> is orsm</p><p><em>The</em> QUICK brown fox</p><p><strong>jumps</strong> OVER the lazy dog</p>');
 
         //$this->click($this->find($text));
         //$this->selectText($text);
@@ -190,6 +190,53 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_class_active.png'), 'Class icon is not active in the inline toolbar.');
 
     }//end testAutosaveForClassField()
+
+
+    /**
+     * Test that you can apply a class to a pargraph where the first word is bold.
+     *
+     * @return void
+     */
+    public function testAddingClassToAParagraphWithBoldFirstWord()
+    {
+        $dir = dirname(__FILE__).'/Images/';
+
+        $text = 'OVER';
+
+        $this->selectText($text);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_class.png');
+        $this->clickInlineToolbarButton($dir.'input_class.png');
+        $this->type('test');
+        $this->keyDown('Key.ENTER');
+
+        $this->assertHTMLMatch('<p>Lorem xtn dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Squiz <span class="myclass">LABS</span> is orsm</p><p><em>The</em> QUICK brown fox</p><p class="test"><strong>jumps</strong> OVER the lazy dog</p>');
+
+    }//end testAddingClassToAParagraphWithBoldFirstWord()
+
+
+    /**
+     * Test that you can apply a class to a pargraph where the first word is italic.
+     *
+     * @return void
+     */
+    public function testAddingClassToAParagraphWithItalicFirstWord()
+    {
+        $dir = dirname(__FILE__).'/Images/';
+
+        $text = 'QUICK';
+
+        $this->selectText($text);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_class.png');
+        $this->clickInlineToolbarButton($dir.'input_class.png');
+        $this->type('test');
+        $this->keyDown('Key.ENTER');
+
+        $this->assertHTMLMatch('<p>Lorem xtn dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Squiz <span class="myclass">LABS</span> is orsm</p><p strong="test"><em>The</em> QUICK brown fox</p><p><strong>jumps</strong> OVER the lazy dog</p>');
+
+    }//end testAddingClassToAParagraphWithItalicFirstWord()
+
 
 }//end class
 
