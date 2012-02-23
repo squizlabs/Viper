@@ -428,6 +428,12 @@
 .Viper-button:active .buttonIcon.accessSettings, .Viper-button.active .buttonIcon.accessSettings, .Viper-button.selected .buttonIcon.accessSettings {
   background-position: -33px -1188px;
 }
+.buttonIcon.tableSettings {
+  background-position: 0 -1188px;
+}
+.Viper-button:active .buttonIcon.tableSettings, .Viper-button.active .buttonIcon.tableSettings, .Viper-button.selected .buttonIcon.tableSettings {
+  background-position: -33px -1188px;
+}
 .buttonIcon.target {
   background-position: 0 -1215px;
 }
