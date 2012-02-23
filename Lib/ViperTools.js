@@ -319,24 +319,7 @@ ViperTools.prototype = {
             textBox.appendChild(descEl);
         }
 
-        var self    = this;
-        var timeout = null;
-
-        var timeoutAction = function() {
-            clearTimeout(timeout);
-            timeout = setTimeout(function() {;
-                dfx.removeClass(textBox, 'active');
-
-                // Call action method.
-                if (action) {
-                    self.viper.focus();
-                    self.viper.fireCallbacks('ViperTools:textbox:actionTiggered', id);
-                    action.call(input, input.value);
-                    input.focus();
-                    dfx.removeClass(textBox, 'active');
-                }
-            }, 1000);
-        };
+        var self = this;
 
         dfx.addEvent(input, 'focus', function() {
             dfx.addClass(textBox, 'active');
@@ -351,7 +334,6 @@ ViperTools.prototype = {
 
         dfx.addEvent(input, 'blur', function() {
             dfx.removeClass(textBox, 'active');
-            clearTimeout(timeout);
         });
 
         var _addActionButton = function() {
@@ -371,7 +353,7 @@ ViperTools.prototype = {
                     }
                 }
 
-                timeoutAction();
+                self.viper.fireCallbacks('ViperTools:changed:' + id);
             });
 
             return actionIcon;
@@ -385,7 +367,6 @@ ViperTools.prototype = {
 
         dfx.addEvent(input, 'keyup', function(e) {
             dfx.addClass(textBox, 'active');
-            timeoutAction();
 
             var actionIcon = dfx.getClass('Viper-textbox-action', main);
             if (actionIcon.length === 0) {
@@ -411,6 +392,10 @@ ViperTools.prototype = {
                 if (required === true) {
                     dfx.addClass(textBox, 'required');
                 }
+            }
+
+            if (input.value !== value) {
+                self.viper.fireCallbacks('ViperTools:changed:' + id);
             }
 
             // Action.
@@ -558,12 +543,15 @@ ViperTools.prototype = {
 
         var self = this;
 
-        if (changeCallback) {
-            dfx.addEvent(checkbox, 'click', function() {
-                self.viper.focus();
+        dfx.addEvent(checkbox, 'click', function() {
+            self.viper.focus();
+
+            if (changeCallback) {
                 changeCallback.call(this, checkbox.checked);
-            });
-        }
+            }
+
+            self.viper.fireCallbacks('ViperTools:changed:' + id);
+        });
 
         this.addItem(id, {
             type: 'checkbox',
