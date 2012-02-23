@@ -26,11 +26,17 @@
     margin: -1px 0 0 -1px;
 }
 
+#test-ViperTEP.topBar {
+    position: fixed;
+}
+
 /* test styles that add and remove border radius to the table button when it is the only visible button */
 #test-ViperTEP .Viper-button:first-child {
     border-top-right-radius: 0.3em;
     border-bottom-right-radius: 0.3em;
 }
+
+#test-ViperTEP.topBar .Viper-button:first-child,
 #test-ViperTEP:hover .Viper-button:first-child {
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;

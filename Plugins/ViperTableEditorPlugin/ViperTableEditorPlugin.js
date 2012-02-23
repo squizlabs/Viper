@@ -386,7 +386,6 @@ ViperTableEditorPlugin.prototype = {
         if (inTopBar !== true) {
             this._targetToolbarButton = false;
             cellCoords = dfx.getBoundingRectangle(cell);
-            dfx.setStyle(tools, 'position', 'absolute');
         } else {
             var scrollCoords = dfx.getScrollCoords();
 
@@ -395,8 +394,7 @@ ViperTableEditorPlugin.prototype = {
             dfx.setStyle(tools, 'margin-left', '-45px');
             cellCoords     = dfx.getBoundingRectangle(this._tools.getItem('insertTable').element);
             cellCoords.y2 += (5 - scrollCoords.y);
-
-            dfx.setStyle(tools, 'position', 'fixed');
+            dfx.addClass(tools, 'topBar');
         }
 
         dfx.setStyle(tools, 'top', cellCoords.y2 + 5 + 'px');
