@@ -799,10 +799,10 @@ ViperTableEditorPlugin.prototype = {
         var heading = this._tools.createButton('VTEP:cellProps:heading', 'Heading', 'Toggle Heading', 'cellHeading', function() {
             // Switch between header and normal cell.
             if (dfx.isTag(cell, 'th') === true) {
-                var newCell = self.convertToCell(cell);
+                var newCell = self.convertToCell(cell, 'cell');
                 self.updateToolbar(newCell);
             } else {
-                var newCell = self.convertToHeader(cell);
+                var newCell = self.convertToHeader(cell, 'cell');
                 self.updateToolbar(newCell);
             }
         }, false, isActive);
@@ -870,7 +870,34 @@ ViperTableEditorPlugin.prototype = {
 
     _createColProperties: function(cell)
     {
-        var self = this;
+        var wholeColHeading = true;
+        var cells   = this._getCellsExpanded();
+        var cellPos = this.getCellPosition(cell);
+
+        for (var i = 0; i < cells.length; i++) {
+            var colCell    = cells[i][cellPos.col];
+            var colCellPos = this.getCellPosition(colCell);
+            if (colCellPos.col === cellPos.col) {
+                if (dfx.isTag(colCell, 'td') === true) {
+                    wholeColHeading = false;
+                    break;
+                }
+            }
+        }
+
+        var self    = this;
+        var heading = this._tools.createButton('VTEP:colProps:heading', 'Heading', 'Toggle Heading', 'cellHeading', function() {
+            // Switch between header and normal cell.
+            if (dfx.isTag(cell, 'th') === true) {
+                var newCell = self.convertToCell(cell, 'col');
+                self.updateToolbar(newCell, 'col');
+            } else {
+                var newCell = self.convertToHeader(cell, 'col');
+                self.updateToolbar(newCell, 'col');
+            }
+        }, false, wholeColHeading);
+        this._toolsContainer.appendChild(heading);
+
         this._tools.createButton('VTEP:colProps:insBefore', '', 'Insert Column Before', 'addLeft', function() {
             self._buttonClicked = true;
             self.insertColBefore(cell);
@@ -922,7 +949,19 @@ ViperTableEditorPlugin.prototype = {
 
     _createRowProperties: function(cell)
     {
-        var self = this;
+        var self    = this;
+        var heading = this._tools.createButton('VTEP:rowProps:heading', 'Heading', 'Toggle Heading', 'cellHeading', function() {
+            // Switch between header and normal cell.
+            if (dfx.isTag(cell, 'th') === true) {
+                var newCell = self.convertToCell(cell, 'row');
+                self.updateToolbar(newCell, 'row');
+            } else {
+                var newCell = self.convertToHeader(cell, 'row');
+                self.updateToolbar(newCell, 'row');
+            }
+        }, false, (dfx.getTag('td', cell.parentNode).length === 0));
+        this._toolsContainer.appendChild(heading);
+
         this._tools.createButton('VTEP:rowProps:insBefore', '', 'Insert Row Before', 'addAbove', function() {
             self._buttonClicked = true;
             self.insertRowBefore(cell);
@@ -1709,23 +1748,72 @@ ViperTableEditorPlugin.prototype = {
 
     },
 
-    convertToHeader: function(cell)
+    /**
+     * Converts specified cell to header.
+     *
+     * @param {DOMNode} cell The table cell to convert.
+     * @param {string}  type Valid values are 'cell', 'col', 'row'. If col is specified
+     *                       then the whole column the cell belongs to will be converted.
+     *                       If the row is specifed then the whole row the cell belongs
+     *                       to will be converted. Cell is the default value.
+     *
+     * @return {DOMNode} The new header element.
+     */
+    convertToHeader: function(cell, type)
     {
         if (dfx.isTag(cell, 'td') === false) {
             return false;
         }
 
-        var elem = document.createElement('th');
-        while (cell.firstChild) {
-            elem.appendChild(cell.firstChild);
-        }
+        var elem = null;
+        type     = type || 'cell';
 
-        for (var i = 0; i < cell.attributes.length; i++) {
-            elem.setAttribute(cell.attributes[i].nodeName, cell.attributes[i].nodeValue);
-        }
+        if (type === 'cell') {
+            elem = document.createElement('th');
+            while (cell.firstChild) {
+                elem.appendChild(cell.firstChild);
+            }
 
-        dfx.insertBefore(cell, elem);
-        dfx.remove(cell);
+            for (var i = 0; i < cell.attributes.length; i++) {
+                elem.setAttribute(cell.attributes[i].nodeName, cell.attributes[i].nodeValue);
+            }
+
+            dfx.insertBefore(cell, elem);
+            dfx.remove(cell);
+        } else if (type === 'col') {
+            // Get all column cells.
+            var cells   = this._getCellsExpanded();
+            var cellPos = this.getCellPosition(cell);
+
+            for (var i = 0; i < cells.length; i++) {
+                var colCell    = cells[i][cellPos.col];
+                if (!colCell.parentNode || dfx.isTag(colCell, 'th') === true) {
+                    continue;
+                }
+
+                var colCellPos = this.getCellPosition(colCell);
+                if (colCellPos.col === cellPos.col) {
+                    var newElement = this.convertToHeader(colCell);
+                    if (cell === colCell) {
+                        elem = newElement;
+                    }
+                }
+            }
+        } else if (type === 'row') {
+            var cellPos = this.getCellPosition(cell);
+            var cells   = this._getRowCells(cell.parentNode);
+            for (var i = 0; i < cells.length; i++) {
+                var rowCell    = cells[i];
+                if (!rowCell.parentNode || dfx.isTag(rowCell, 'th') === true) {
+                    continue;
+                }
+
+                var newElement = this.convertToHeader(rowCell);
+                if (cell === rowCell) {
+                    elem = newElement;
+                }
+            }
+        }//end if
 
         this.tableUpdated();
 
@@ -1733,23 +1821,71 @@ ViperTableEditorPlugin.prototype = {
 
     },
 
-    convertToCell: function(cell)
+    /**
+     * Converts specified header cell to normal cell.
+     *
+     * @param {DOMNode} cell The table cell to convert.
+     * @param {string}  type Valid values are 'cell', 'col', 'row'. If col is specified
+     *                       then the whole column the cell belongs to will be converted.
+     *                       If the row is specifed then the whole row the cell belongs
+     *                       to will be converted. Cell is the default value.
+     *
+     * @return {DOMNode} The new cell element.
+     */
+    convertToCell: function(cell, type)
     {
         if (dfx.isTag(cell, 'th') === false) {
             return false;
         }
 
-        var elem = document.createElement('td');
-        while (cell.firstChild) {
-            elem.appendChild(cell.firstChild);
-        }
+        var elem = null;
+        type     = type || 'cell';
 
-        for (var i = 0; i < cell.attributes.length; i++) {
-            elem.setAttribute(cell.attributes[i].nodeName, cell.attributes[i].nodeValue);
-        }
+        if (type === 'cell') {
+            elem = document.createElement('td');
+            while (cell.firstChild) {
+                elem.appendChild(cell.firstChild);
+            }
 
-        dfx.insertBefore(cell, elem);
-        dfx.remove(cell);
+            for (var i = 0; i < cell.attributes.length; i++) {
+                elem.setAttribute(cell.attributes[i].nodeName, cell.attributes[i].nodeValue);
+            }
+
+            dfx.insertBefore(cell, elem);
+            dfx.remove(cell);
+        } else if (type === 'col') {
+            var cells   = this._getCellsExpanded();
+            var cellPos = this.getCellPosition(cell);
+
+            for (var i = 0; i < cells.length; i++) {
+                var colCell    = cells[i][cellPos.col];
+                if (!colCell.parentNode || dfx.isTag(colCell, 'td') === true) {
+                    continue;
+                }
+
+                var colCellPos = this.getCellPosition(colCell);
+                if (colCellPos.col === cellPos.col) {
+                    var newElement = this.convertToCell(colCell);
+                    if (cell === colCell) {
+                        elem = newElement;
+                    }
+                }
+            }
+        } else if (type === 'row') {
+            var cellPos = this.getCellPosition(cell);
+            var cells   = this._getRowCells(cell.parentNode);
+            for (var i = 0; i < cells.length; i++) {
+                var rowCell    = cells[i];
+                if (!rowCell.parentNode || dfx.isTag(rowCell, 'td') === true) {
+                    continue;
+                }
+
+                var newElement = this.convertToCell(rowCell);
+                if (cell === rowCell) {
+                    elem = newElement;
+                }
+            }
+        }//end if
 
         this.tableUpdated();
 
