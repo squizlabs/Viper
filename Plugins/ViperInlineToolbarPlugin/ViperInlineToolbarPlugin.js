@@ -198,20 +198,30 @@ ViperInlineToolbarPlugin.prototype = {
             return false;
         }
 
-        dfx.addClass(element, 'Viper-subSection');
+        var subSection = document.createElement('div');
+        var form       = document.createElement('form');
 
-        this._subSections[id] = element;
+        subSection.appendChild(form);
+        form.appendChild(element);
+        form.onsubmit = function() {
+            return false;
+        };
 
-        this._subSectionContainer.appendChild(element);
+        dfx.addClass(subSection, 'Viper-subSection');
+
+        this._subSections[id] = subSection;
+
+        this._subSectionContainer.appendChild(subSection);
 
         this.viper.ViperTools.addItem(id, {
             type: 'VITPSubSection',
-            element: element,
+            element: subSection,
+            form: form,
             _onOpenCallback: onOpenCallback,
             _onCloseCallback: onCloseCallback
         });
 
-        return element;
+        return subSection;
 
     },
 
@@ -300,6 +310,42 @@ ViperInlineToolbarPlugin.prototype = {
                 this._autoFocusTextbox = true;
                 dfx.removeClass(inputElements[0].parentNode.parentNode.parentNode, 'active');
             }
+        }
+
+    },
+
+    /**
+     *
+     *
+     * @param {string}   subSectionid The id of the sub section.
+     * @param {function} action       The function to call when the sub section action
+     *                                is triggered.
+     * @param {array}    widgetids    The id of widgets that will cause the action
+     *                                button to be activated when they are changed.
+     *
+     * @return void
+     */
+    setSubSectionAction: function(subSectionid, action, widgetids)
+    {
+        widgetids      = widgetids || [];
+        var tools      = this.viper.ViperTools;
+        var subSection = tools.getItem(subSectionid);
+        if (!subSection) {
+            return;
+        }
+
+        var button = tools.createButton(subSectionid + '-applyButton', 'Update Changes', 'Update Changes', '', action, true);
+        subSection.element.appendChild(button);
+
+        subSection.form.onsubmit = function() {
+            action.call(this);
+            return false;
+        };
+
+        for (var i = 0; i < widgetids.length; i++) {
+            this.viper.registerCallback('ViperTools:changed:' + widgetids[i], 'ViperInlineToolbarPlugin', function() {
+                tools.setButtonActive(subSectionid + '-applyButton');
+            });
         }
 
     },
