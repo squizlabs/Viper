@@ -85,6 +85,8 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
 
         $this->click($this->find($text));
         $this->selectText($text);
+        $this->selectInlineToolbarLineageItem(0);
+
         $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_class.png'), 'Class icon is still active in the Top Toolbar.');
         $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_class.png'), 'Class icon is still active in the inline toolbar.');
 
@@ -233,7 +235,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->type('test');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>Lorem xtn dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Squiz <span class="myclass">LABS</span> is orsm</p><p strong="test"><em>The</em> QUICK brown fox</p><p><strong>jumps</strong> OVER the lazy dog</p>');
+        $this->assertHTMLMatch('<p>Lorem xtn dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Squiz <span class="myclass">LABS</span> is orsm</p><p lang="test"><em>The</em> QUICK brown fox</p><p><strong>jumps</strong> OVER the lazy dog</p>');
 
     }//end testAddingClassToAParagraphWithItalicFirstWord()
 
