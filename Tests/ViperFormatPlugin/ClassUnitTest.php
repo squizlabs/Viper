@@ -121,11 +121,11 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
 
 
     /**
-     * Test the auto save.
+     * Test the auto save for a word.
      *
      * @return void
      */
-    public function testAutosaveForClassField()
+    public function testAutoSaveForClassFieldForAWord()
     {
         $dir = dirname(__FILE__).'/Images/';
 
@@ -141,6 +141,8 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->type('s');
         sleep(3);
         $this->type('t');
+        sleep(3);
+        $this->assertEquals('WoW', $this->getSelectedText(), 'Bold text is not selected.');
         $this->keyDown('Key.ENTER');
 
         $this->assertHTMLMatch('<p>Lorem xtn dolor</p><p class="test">sit amet <strong class="test">WoW</strong></p><p>Squiz <span class="myclass">LABS</span> is orsm</p>');
@@ -152,6 +154,42 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
 
     }//end testAutosaveForClassField()
 
+
+    /**
+     * Test the auto save for a paragraph.
+     *
+     * @return void
+     */
+    public function testAutoSaveForClassFieldForAParagraph()
+    {
+        $dir = dirname(__FILE__).'/Images/';
+
+        $text = 'Lorem';
+
+        $this->selectText($text);
+        $this->selectInlineToolbarLineageItem(0);
+
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_class.png');
+         $this->clickInlineToolbarButton($dir.'input_class.png');
+        $this->type('t');
+        sleep(3);
+        $this->type('e');
+        sleep(3);
+        $this->type('s');
+        sleep(3);
+        $this->type('t');
+        sleep(3);
+        $this->assertEquals('Lorem xtn dolor', $this->getSelectedText(), 'Paragraph is not selected');
+        $this->keyDown('Key.ENTER');
+
+        $this->assertHTMLMatch('<p class="test">Lorem xtn dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Squiz <span class="myclass">LABS</span> is orsm</p>');
+
+        //$this->click($this->find($text));
+        //$this->selectText($text);
+        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_class_active.png'), 'Class icon is not active in the Top Toolbar.');
+        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_class_active.png'), 'Class icon is not active in the inline toolbar.');
+
+    }//end testAutosaveForClassField()
 
 }//end class
 
