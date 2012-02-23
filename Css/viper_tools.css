@@ -6,7 +6,9 @@
   font-size: 1.6em;
   line-height: 1.7em;
   margin-left: 0.3em;
-  min-width: 1em;
+  min-width: 29px;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
   padding: 0 0.5em;
   text-align: center;
 }
@@ -24,7 +26,7 @@
 /* Button Groups */
 .Viper-buttonGroup {
   display: inline-block;
-  margin-left: 0.6em;
+  margin-left: 0.55em;
 }
 .Viper-buttonGroup:first-child {
   margin-left: 0;
@@ -51,7 +53,7 @@
   border: none;
   color: #2b2b2b;
   text-shadow: 0 1px 0 #FFF;
-  box-shadow: 0 -2px 2px -2px rgba(0, 0, 0, 0.4), 0 2px 2px -2px rgba(0, 0, 0, 0.4), 0 1px 0 rgba(255, 255, 255, 0.8) inset, 1px 0 0 rgba(255, 255, 255, 0.5) inset;
+  box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.5), 0 1px 0 rgba(255, 255, 255, 0.8) inset;
   background: -webkit-gradient(linear, left top, left bottom, from(#e9e9eb), to(#c2c2cb));
   background: -moz-linear-gradient(top, #e9e9eb, #c2c2cb);
 }
@@ -68,7 +70,7 @@
 .themeDark .Viper-button.selected:hover {
   color: #FFF;
   text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.5);
-  box-shadow: 0 2px 2px -2px #000000 inset, 0 -2px 2px -2px #000000 inset, 0 1px 0 rgba(255, 255, 255, 0.2), 1px 0px 0 rgba(0, 0, 0, 0.25) inset;
+  box-shadow: 0 2px 2px -2px #000000 inset, 0 -2px 2px -2px #000000 inset, 0 1px 0 rgba(255, 255, 255, 0.2), 1px 0px 0 rgba(0, 0, 0, 0.25) inset, -1px 0px 0 rgba(0, 0, 0, 0.25) inset;
 }
 .themeDark .Viper-button.active, .themeDark .Viper-button.active:hover {
   background: #2d73d2;
@@ -81,6 +83,13 @@
 }
 .themeDark .Viper-buttonGroup .Viper-button, .themeDark .Viper-buttonGroup .Viper-button.disabled:hover {
   border-left: 1px solid #a6a6a9;
+  box-shadow: 0 -2px 2px -2px rgba(0, 0, 0, 0.4), 0 2px 2px -2px rgba(0, 0, 0, 0.4), 0 1px 0 rgba(255, 255, 255, 0.8) inset, 1px 0 0 rgba(255, 255, 255, 0.5) inset;
+}
+.themeDark .Viper-buttonGroup .Viper-button:first-child {
+  box-shadow: 0 -2px 2px -2px rgba(0, 0, 0, 0.5), 0 2px 2px -2px rgba(0, 0, 0, 0.5), -2px 0 2px -2px rgba(0, 0, 0, 0.5), 1px 0 0 rgba(255, 255, 255, 0.5) inset, 0 1px 0 rgba(255, 255, 255, 0.8) inset;
+}
+.themeDark .Viper-buttonGroup .Viper-button:last-child {
+  box-shadow: 0 -2px 2px -2px rgba(0, 0, 0, 0.5), 0 2px 2px -2px rgba(0, 0, 0, 0.5), 2px 0 2px -2px rgba(0, 0, 0, 0.5), 1px 0 0 rgba(255, 255, 255, 0.5) inset, 0 1px 0 rgba(255, 255, 255, 0.8) inset;
 }
 .themeDark .Viper-buttonGroup .Viper-button.active {
   border-left-color: #1f4e8d;
@@ -455,6 +464,12 @@
 .Viper-button:active .buttonIcon.langTools, .Viper-button.active .buttonIcon.langTools, .Viper-button.selected .buttonIcon.langTools {
   background-position: -33px -1323px;
 }
+.buttonIcon.searchReplace {
+  background-position: 0 -1404px;
+}
+.Viper-button:active .buttonIcon.searchReplace, .Viper-button.active .buttonIcon.searchReplace, .Viper-button.selected .buttonIcon.searchReplace {
+  background-position: -33px -1404px;
+}
 .__viper_selHighlight {
   background-color: #CCC;
 }
@@ -667,6 +682,9 @@
 @media screen and (max-width: 768px) {
   .Viper-popup, .ViperITP, .ViperTP-bar {
     font-size: 13px !important;
+  }
+  .Viper-button {
+    min-width: 39px;
   }
 }
 ::-webkit-scrollbar {
