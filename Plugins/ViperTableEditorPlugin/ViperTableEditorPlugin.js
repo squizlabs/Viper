@@ -386,14 +386,21 @@ ViperTableEditorPlugin.prototype = {
         if (inTopBar !== true) {
             this._targetToolbarButton = false;
             cellCoords = dfx.getBoundingRectangle(cell);
+            dfx.setStyle(tools, 'position', 'absolute');
         } else {
+            var scrollCoords = dfx.getScrollCoords();
+
             this._targetToolbarButton = true;
+            dfx.removeClass(btns, 'hidden');
+            dfx.setStyle(tools, 'margin-left', '-45px');
             cellCoords     = dfx.getBoundingRectangle(this._tools.getItem('insertTable').element);
-            cellCoords.y2 += 5;
+            cellCoords.y2 += (5 - scrollCoords.y);
+
+            dfx.setStyle(tools, 'position', 'fixed');
         }
 
         dfx.setStyle(tools, 'top', cellCoords.y2 + 5 + 'px');
-        dfx.setStyle(tools, 'left', (cellCoords.x1 + ((cellCoords.x2 - cellCoords.x1) / 2) - (toolsWidth / 2)) + 'px');
+        dfx.setStyle(tools, 'left', Math.ceil(cellCoords.x1 + ((cellCoords.x2 - cellCoords.x1) / 2) - (toolsWidth / 2)) + 1 + 'px');
 
         if (this._isiPad() === false) {
             // On Hover of the buttons highlight the table/row/col/cell.
@@ -422,17 +429,19 @@ ViperTableEditorPlugin.prototype = {
                 self.removeHighlights();
             });
 
-            // On hover show the list of available table properties buttons.
-            dfx.hover(tools, function() {
-                self.setActiveCell(cell);
-                self.highlightActiveCell();
-                dfx.removeClass(btns, 'hidden');
-                dfx.setStyle(tools, 'margin-left', '-45px');
-            }, function() {
-                self.removeHighlights();
-                dfx.addClass(btns, 'hidden');
-                dfx.setStyle(tools, 'margin-left', '0');
-            });
+            if (this._targetToolbarButton !== true) {
+                // On hover show the list of available table properties buttons.
+                dfx.hover(tools, function() {
+                    self.setActiveCell(cell);
+                    self.highlightActiveCell();
+                    dfx.removeClass(btns, 'hidden');
+                    dfx.setStyle(tools, 'margin-left', '-45px');
+                }, function() {
+                    self.removeHighlights();
+                    dfx.addClass(btns, 'hidden');
+                    dfx.setStyle(tools, 'margin-left', '0');
+                });
+            }
         } else {
             // On iPad just show the tools.
             dfx.addEvent(tools, 'click', function() {
@@ -543,12 +552,14 @@ ViperTableEditorPlugin.prototype = {
             }
 
             top = (rangeCoords.bottom + this._margin + scrollCoords.y);
+            dfx.setStyle(this._toolbar, 'position', 'absolute');
         } else {
             var cellCoords = dfx.getBoundingRectangle(this._tools.getItem('insertTable').element);
-            top  = cellCoords.y2 + 15;
+            top  = cellCoords.y2 + 15 - scrollCoords.y;
             left = ((cellCoords.x1 + ((cellCoords.x2 - cellCoords.x1) / 2) + scrollCoords.x) - (toolbarWidth / 2));
 
             dfx.setStyle(this._toolbar, 'left', left + 'px');
+            dfx.setStyle(this._toolbar, 'position', 'fixed');
         }
 
         dfx.setStyle(this._toolbar, 'top', top + 'px');
