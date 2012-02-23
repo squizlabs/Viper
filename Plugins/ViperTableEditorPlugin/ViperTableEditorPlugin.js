@@ -888,7 +888,7 @@ ViperTableEditorPlugin.prototype = {
         var self    = this;
         var heading = this._tools.createButton('VTEP:colProps:heading', 'Heading', 'Toggle Heading', 'cellHeading', function() {
             // Switch between header and normal cell.
-            if (dfx.isTag(cell, 'th') === true) {
+            if (wholeColHeading === true) {
                 var newCell = self.convertToCell(cell, 'col');
                 self.updateToolbar(newCell, 'col');
             } else {
@@ -949,17 +949,18 @@ ViperTableEditorPlugin.prototype = {
 
     _createRowProperties: function(cell)
     {
+        var wholeRowIsHeading = (dfx.getTag('td', cell.parentNode).length === 0);
         var self    = this;
         var heading = this._tools.createButton('VTEP:rowProps:heading', 'Heading', 'Toggle Heading', 'cellHeading', function() {
             // Switch between header and normal cell.
-            if (dfx.isTag(cell, 'th') === true) {
+            if (wholeRowIsHeading === true) {
                 var newCell = self.convertToCell(cell, 'row');
                 self.updateToolbar(newCell, 'row');
             } else {
                 var newCell = self.convertToHeader(cell, 'row');
                 self.updateToolbar(newCell, 'row');
             }
-        }, false, (dfx.getTag('td', cell.parentNode).length === 0));
+        }, false, wholeRowIsHeading);
         this._toolsContainer.appendChild(heading);
 
         this._tools.createButton('VTEP:rowProps:insBefore', '', 'Insert Row Before', 'addAbove', function() {
@@ -1761,12 +1762,12 @@ ViperTableEditorPlugin.prototype = {
      */
     convertToHeader: function(cell, type)
     {
-        if (dfx.isTag(cell, 'td') === false) {
-            return false;
-        }
-
-        var elem = null;
+        var elem = cell;
         type     = type || 'cell';
+
+        if (type === 'cell' && dfx.isTag(cell, 'td') === false) {
+            return elem;
+        }
 
         if (type === 'cell') {
             elem = document.createElement('th');
@@ -1834,12 +1835,12 @@ ViperTableEditorPlugin.prototype = {
      */
     convertToCell: function(cell, type)
     {
-        if (dfx.isTag(cell, 'th') === false) {
-            return false;
-        }
-
-        var elem = null;
+        var elem = cell;
         type     = type || 'cell';
+
+        if (type === 'cell' && dfx.isTag(cell, 'th') === false) {
+            return elem;
+        }
 
         if (type === 'cell') {
             elem = document.createElement('td');
