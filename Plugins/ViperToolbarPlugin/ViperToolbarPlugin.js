@@ -131,7 +131,7 @@ ViperToolbarPlugin.prototype = {
 
         dfx.addEvent(elem, 'mousedown', function(e) {
             var target = dfx.getMouseEventTarget(e);
-            if (dfx.isTag(target, 'input') !== true) {
+            if (dfx.isTag(target, 'input') !== true && dfx.isTag(target, 'textarea') !== true) {
                 dfx.preventDefault(e);
                 return false;
             }
@@ -139,7 +139,7 @@ ViperToolbarPlugin.prototype = {
 
         dfx.addEvent(elem, 'mouseup', function(e) {
             var target = dfx.getMouseEventTarget(e);
-            if (dfx.isTag(target, 'input') !== true) {
+            if (dfx.isTag(target, 'input') !== true  && dfx.isTag(target, 'textarea') !== true) {
                 dfx.preventDefault(e);
                 return false;
             }
@@ -184,7 +184,7 @@ ViperToolbarPlugin.prototype = {
 
         dfx.addEvent(bubble, 'mousedown', function(e) {
             var target = dfx.getMouseEventTarget(e);
-            if (dfx.isTag(target, 'input') !== true) {
+            if (dfx.isTag(target, 'input') !== true  && dfx.isTag(target, 'textarea') !== true) {
                 dfx.preventDefault(e);
                 return false;
             }
@@ -393,7 +393,7 @@ ViperToolbarPlugin.prototype = {
 
         this._activeBubble = bubbleid;
 
-        var inputElements = dfx.getTag('input', bubbleElem);
+        var inputElements = dfx.getTag('input, textarea', bubbleElem);
         if (inputElements.length > 0) {
             inputElements[0].focus();
         }

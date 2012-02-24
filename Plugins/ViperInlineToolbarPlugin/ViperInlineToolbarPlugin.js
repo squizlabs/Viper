@@ -87,7 +87,9 @@ ViperInlineToolbarPlugin.prototype = {
                 var target = dfx.getMouseEventTarget(data);
                 if (target === self._toolbar || dfx.isChildOf(target, self._toolbar) === true) {
                     clickedInToolbar = true;
-                    if (dfx.isTag(target, 'input') === true) {
+                    if (dfx.isTag(target, 'input') === true
+                        || dfx.isTag(target, 'textarea') === true
+                    ) {
                         // Allow event to bubble so the input element can get focus etc.
                         return true;
                     }
@@ -303,7 +305,7 @@ ViperInlineToolbarPlugin.prototype = {
         this._activeSection = subSectionid;
         this._updateSubSectionArrowPos();
 
-        var inputElements = dfx.getTag('input', subSection);
+        var inputElements = dfx.getTag('input, textarea', subSection);
         if (inputElements.length > 0) {
             inputElements[0].focus();
             if (this._autoFocusTextbox === false) {
@@ -344,7 +346,7 @@ ViperInlineToolbarPlugin.prototype = {
 
         for (var i = 0; i < widgetids.length; i++) {
             this.viper.registerCallback('ViperTools:changed:' + widgetids[i], 'ViperInlineToolbarPlugin', function() {
-                tools.setButtonActive(subSectionid + '-applyButton');
+                tools.enableButton(subSectionid + '-applyButton');
             });
         }
 
