@@ -262,6 +262,17 @@ ViperTools.prototype = {
      */
     createTextbox: function(id, label, value, action, required, expandable, desc, events)
     {
+        return this._createTextbox(id, label, value, action, required, expandable, desc, events);
+    },
+
+    createTextarea: function(id, label, value, rows, cols, required, desc, events)
+    {
+        return this._createTextbox(id, label, value, null, required, false, desc, events, true, rows, cols);
+
+    },
+
+    _createTextbox: function(id, label, value, action, required, expandable, desc, events, isTextArea, rows, cols)
+    {
         label = label || '&nbsp;';
         value = value || '';
 
@@ -300,10 +311,21 @@ ViperTools.prototype = {
         document.body.removeChild(tmp);
         main.appendChild(title);
 
-        var input   = document.createElement('input');
-        input.type  = 'text';
+        var inputType = 'input';
+        if (isTextArea === true) {
+            inputType = 'textarea';
+        }
+
+        var input   = document.createElement(inputType);
         input.value = value;
-        dfx.addClass(input, 'Viper-textbox-input');
+
+        if (isTextArea === true) {
+            dfx.addClass(input, 'Viper-textbox-textArea');
+        } else {
+            input.type = 'text';
+            dfx.addClass(input, 'Viper-textbox-input');
+        }
+
         dfx.setStyle(main, 'padding-left', width + 'px');
         main.appendChild(input);
 
