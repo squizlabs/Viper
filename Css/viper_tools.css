@@ -482,6 +482,9 @@
 .Viper-textbox {
   margin-bottom: 0.6em;
 }
+.Viper-textbox textarea {
+  resize: none;
+}
 .Viper-textbox-label {
   display: block;
   padding: 4px 2px;

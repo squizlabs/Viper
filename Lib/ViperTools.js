@@ -260,18 +260,18 @@ ViperTools.prototype = {
      *
      * @return {DOMNode} If label specified the label element else the textbox element.
      */
-    createTextbox: function(id, label, value, action, required, expandable, desc, events)
+    createTextbox: function(id, label, value, action, required, expandable, desc, events, labelWidth)
     {
-        return this._createTextbox(id, label, value, action, required, expandable, desc, events);
+        return this._createTextbox(id, label, value, action, required, expandable, desc, events, labelWidth);
     },
 
-    createTextarea: function(id, label, value, rows, cols, required, desc, events)
+    createTextarea: function(id, label, value, required, desc, events, labelWidth, rows, cols)
     {
-        return this._createTextbox(id, label, value, null, required, false, desc, events, true, rows, cols);
+        return this._createTextbox(id, label, value, null, required, false, desc, events, labelWidth, true, rows, cols);
 
     },
 
-    _createTextbox: function(id, label, value, action, required, expandable, desc, events, isTextArea, rows, cols)
+    _createTextbox: function(id, label, value, action, required, expandable, desc, events, labelWidth, isTextArea, rows, cols)
     {
         label = label || '&nbsp;';
         value = value || '';
@@ -295,6 +295,11 @@ ViperTools.prototype = {
         dfx.addClass(title, 'Viper-textbox-title');
         dfx.setHtml(title, label);
 
+        if (labelWidth) {
+            dfx.setStyle(title, 'width', labelWidth);
+        }
+
+        var width = 0;
         // Wrap the element in a generic class so the width calculation is correct
         // for the font size.
         var tmp = document.createElement('div');
@@ -307,8 +312,9 @@ ViperTools.prototype = {
         dfx.setStyle(tmp, 'display', 'block');
         tmp.appendChild(title);
         document.body.appendChild(tmp);
-        var width = (dfx.getElementWidth(title) + 10);
+        width = (dfx.getElementWidth(title) + 10) + 'px';
         document.body.removeChild(tmp);
+
         main.appendChild(title);
 
         var inputType = 'input';
@@ -326,7 +332,7 @@ ViperTools.prototype = {
             dfx.addClass(input, 'Viper-textbox-input');
         }
 
-        dfx.setStyle(main, 'padding-left', width + 'px');
+        dfx.setStyle(main, 'padding-left', width);
         main.appendChild(input);
 
         if (required === true) {
@@ -381,7 +387,7 @@ ViperTools.prototype = {
             return actionIcon;
         };
 
-        if (value !== '') {
+        if (value !== '' && isTextArea !== true) {
             var actionIcon = _addActionButton();
             actionIcon.setAttribute('title', 'Clear this value');
             dfx.addClass(textBox, 'actionClear');
@@ -390,11 +396,13 @@ ViperTools.prototype = {
         dfx.addEvent(input, 'keyup', function(e) {
             dfx.addClass(textBox, 'active');
 
-            var actionIcon = dfx.getClass('Viper-textbox-action', main);
-            if (actionIcon.length === 0) {
-                actionIcon = _addActionButton();
-            } else {
-                actionIcon = actionIcon[0];
+            if (isTextArea !== true) {
+                var actionIcon = dfx.getClass('Viper-textbox-action', main);
+                if (actionIcon.length === 0) {
+                    actionIcon = _addActionButton();
+                } else {
+                    actionIcon = actionIcon[0];
+                }
             }
 
             dfx.removeClass(textBox, 'actionClear');
@@ -402,15 +410,24 @@ ViperTools.prototype = {
 
             if (input.value !== value && value !== '') {
                 // Show the revert icon.
-                actionIcon.setAttribute('title', 'Revert to original value');
-                dfx.addClass(textBox, 'actionRevert');
+                if (isTextArea !== true) {
+                    actionIcon.setAttribute('title', 'Revert to original value');
+                    dfx.addClass(textBox, 'actionRevert');
+                }
+
                 dfx.removeClass(textBox, 'required');
             } else if (input.value !== '') {
-                actionIcon.setAttribute('title', 'Clear this value');
-                dfx.addClass(textBox, 'actionClear');
+                if (isTextArea !== true) {
+                    actionIcon.setAttribute('title', 'Clear this value');
+                    dfx.addClass(textBox, 'actionClear');
+                }
+
                 dfx.removeClass(textBox, 'required');
             } else {
-                dfx.remove(actionIcon);
+                if (isTextArea !== true) {
+                    dfx.remove(actionIcon);
+                }
+
                 if (required === true) {
                     dfx.addClass(textBox, 'required');
                 }

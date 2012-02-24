@@ -175,7 +175,7 @@ ViperTableEditorPlugin.prototype = {
             this._tools.getItem('insertTable').setMouseUpAction(function() {
                 clearTimeout(mouseUpTimer);
                 if (insertTable === true) {
-                    self.insertTable(3, 3);
+                    self.insertTable();
                 }
             });
         }
@@ -1049,17 +1049,17 @@ ViperTableEditorPlugin.prototype = {
         this.toggleSubSection('VTEP:tableProps:settingsSubSection');
         this.setSubSectionAction('VTEP:tableProps:settingsSubSection', function() {
             self.setTableWidth(table, self._tools.getItem('VTEP:tableProps:width').getValue());
-            self.viper.setAttribute(table, 'summary', self._tools.getItem('VTEP:tableProps:width').getValue());
+            self.viper.setAttribute(table, 'summary', self._tools.getItem('VTEP:tableProps:summary').getValue());
         }, ['VTEP:tableProps:width', 'VTEP:tableProps:summary']);
 
         // Width.
         var tableWidth = this.getTableWidth(this.getCellTable(cell));
-        var width      = this._tools.createTextbox('VTEP:tableProps:width', 'Width', tableWidth);
+        var width      = this._tools.createTextbox('VTEP:tableProps:width', 'Width', tableWidth, null, false, false, '', null, '4.5em');
         settingsContent.appendChild(width);
 
         // Width.
         var summary     = table.getAttribute('summary') || '';
-        var tableSummary = this._tools.createTextarea('VTEP:tableProps:summary', 'Summary', summary);
+        var tableSummary = this._tools.createTextarea('VTEP:tableProps:summary', 'Summary', summary, false, '', null, '4.5em');
         settingsContent.appendChild(tableSummary);
 
         var button = this._tools.createButton('VTEP:tableProps:caption', 'CAPTION', 'Create Table Caption', '', function() {
@@ -1974,7 +1974,7 @@ ViperTableEditorPlugin.prototype = {
             var colCell    = cells[i][cellPos.col];
             var colCellPos = this.getCellPosition(colCell);
             if (colCellPos.col === cellPos.col) {
-                return dfx.getStyle(colCell, 'width');
+                return colCell.style.width || '';
             }
         }
 
@@ -1994,7 +1994,7 @@ ViperTableEditorPlugin.prototype = {
 
     getTableWidth: function(table)
     {
-        var width = dfx.getStyle(table, 'width');
+        var width = table.style.width || '';
         return width;
 
     },
@@ -2558,7 +2558,7 @@ ViperTableEditorPlugin.prototype = {
             useDefaultVals = true;
         }
 
-        rows = rows || 2;
+        rows = rows || 3;
         cols = cols || 3;
 
         var table = document.createElement('table');
@@ -2574,16 +2574,16 @@ ViperTableEditorPlugin.prototype = {
                 var cell = null;
                 if (useDefaultVals === true && i === 0) {
                     cell = document.createElement('th');
+                    dfx.setHtml(cell, 'Column ' + (j + 1));
                 } else {
                     cell = document.createElement('td');
+                    dfx.setHtml(cell, '&nbsp;');
                 }
 
-
-                if (i === 0) {
+                if (i === 0 && useDefaultVals !== true) {
                     dfx.setStyle(cell, 'width', '150px');
                 }
 
-                dfx.setHtml(cell, '&nbsp;');
                 tr.appendChild(cell);
 
                 if (firstCol === null) {
@@ -2613,7 +2613,7 @@ ViperTableEditorPlugin.prototype = {
         // then we don't override them.
         var width = parseInt(dfx.getComputedStyle(table, 'width'));
         if (!width) {
-            dfx.setStyle(table, 'width', '300px');
+            dfx.setStyle(table, 'width', '100%');
         }
 
         var col = dfx.getTag('td', table)[0];
@@ -2629,12 +2629,16 @@ ViperTableEditorPlugin.prototype = {
         }
 
         dfx.setStyle(table, 'display', '');
+        if (!table.getAttribute('style')) {
+            table.removeAttribute('style');
+        }
 
         if (firstCol) {
             var range = this.viper.getCurrentRange();
             range.setStart(firstCol.firstChild, 0);
             range.collapse(true);
             ViperSelection.addRange(range);
+            this.setActiveCell(firstCol);
         }
 
         this.viper.fireSelectionChanged();
