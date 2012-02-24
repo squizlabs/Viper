@@ -369,11 +369,21 @@ ViperSourceViewPlugin.prototype = {
 
     getContents: function()
     {
+        var html = this.viper.getHtml();
+        html     = this.cleanupHTML(html);
+
         if (window.StyleHTML) {
-            return StyleHTML(this.viper.getHtml());
-        } else {
-            return this.viper.getHtml();
+            html = StyleHTML(html);
         }
+
+        return html;
+
+    },
+
+    cleanupHTML: function(content)
+    {
+        content = content.replace(/<(area|base|basefont|br|hr|input|img|link|meta)((\s+\w+(\s*=\s*(?:".*?"|\'.*?\'|[^\'">\s]+))?)+)?\s*>/ig, "<$1$2 />");
+        return content;
 
     },
 
