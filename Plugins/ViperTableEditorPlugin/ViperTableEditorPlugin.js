@@ -69,7 +69,9 @@ ViperTableEditorPlugin.prototype = {
                 var target = dfx.getMouseEventTarget(data);
                 if (target === self._toolbar || dfx.isChildOf(target, self._toolbar) === true) {
                     clickedInToolbar = true;
-                    if (dfx.isTag(target, 'input') === true) {
+                    if (dfx.isTag(target, 'input') === true
+                        || dfx.isTag(target, 'textarea') === true
+                    ) {
                         // Allow event to bubble so the input element can get focus etc.
                         return true;
                     }
@@ -499,6 +501,7 @@ ViperTableEditorPlugin.prototype = {
         this._updateInnerContainer(cell, type, activeSubSection);
         this._updatePosition(cell, type);
         this.highlightActiveCell(type);
+        this._updateSubSectionArrowPos();
 
     },
 
@@ -1034,8 +1037,32 @@ ViperTableEditorPlugin.prototype = {
     _createTableProperties: function(cell)
     {
         var self   = this;
+        var table  = this.getCellTable(cell);
+
+        var settingsContent = document.createElement('div');
+
+        // Create the settings sub section.
+        var settingsSubSection = this.makeSubSection('VTEP:tableProps:settingsSubSection', settingsContent);
+        var settingsButton     = this._tools.createButton('VTEP:tableProps:settings', '', 'Toggle Settings', 'tableSettings');
+        this._toolsContainer.appendChild(settingsButton);
+        this.setSubSectionButton('VTEP:tableProps:settings', 'VTEP:tableProps:settingsSubSection');
+        this.toggleSubSection('VTEP:tableProps:settingsSubSection');
+        this.setSubSectionAction('VTEP:tableProps:settingsSubSection', function() {
+            self.setTableWidth(table, self._tools.getItem('VTEP:tableProps:width').getValue());
+            self.viper.setAttribute(table, 'summary', self._tools.getItem('VTEP:tableProps:width').getValue());
+        }, ['VTEP:tableProps:width', 'VTEP:tableProps:summary']);
+
+        // Width.
+        var tableWidth = this.getTableWidth(this.getCellTable(cell));
+        var width      = this._tools.createTextbox('VTEP:tableProps:width', 'Width', tableWidth);
+        settingsContent.appendChild(width);
+
+        // Width.
+        var summary     = table.getAttribute('summary') || '';
+        var tableSummary = this._tools.createTextarea('VTEP:tableProps:summary', 'Summary', summary);
+        settingsContent.appendChild(tableSummary);
+
         var button = this._tools.createButton('VTEP:tableProps:caption', 'CAPTION', 'Create Table Caption', '', function() {
-            var table = self.getCellTable(cell);
             self.createTableCaption(table);
         });
         this._toolsContainer.appendChild(button);
@@ -1955,6 +1982,23 @@ ViperTableEditorPlugin.prototype = {
 
     },
 
+    setTableWidth: function(table, width)
+    {
+        if (parseInt(width) === width) {
+            width = width + 'px';
+        }
+
+        dfx.setStyle(table, 'width', width);
+
+    },
+
+    getTableWidth: function(table)
+    {
+        var width = dfx.getStyle(table, 'width');
+        return width;
+
+    },
+
     /**
      * Splits specified cell vertically only if it has rowspan > 1.
      *
@@ -2509,6 +2553,11 @@ ViperTableEditorPlugin.prototype = {
     {
         this.viper.ViperHistoryManager.begin();
 
+        var useDefaultVals = false;
+        if (!rows || !cols) {
+            useDefaultVals = true;
+        }
+
         rows = rows || 2;
         cols = cols || 3;
 
@@ -2522,16 +2571,23 @@ ViperTableEditorPlugin.prototype = {
         for (var i = 0; i < rows; i++) {
             var tr = document.createElement('tr');
             for (var j = 0; j < cols; j++) {
-                var td = document.createElement('td');
-                if (i === 0) {
-                    dfx.setStyle(td, 'width', '100px');
+                var cell = null;
+                if (useDefaultVals === true && i === 0) {
+                    cell = document.createElement('th');
+                } else {
+                    cell = document.createElement('td');
                 }
 
-                dfx.setHtml(td, '&nbsp;');
-                tr.appendChild(td);
+
+                if (i === 0) {
+                    dfx.setStyle(cell, 'width', '150px');
+                }
+
+                dfx.setHtml(cell, '&nbsp;');
+                tr.appendChild(cell);
 
                 if (firstCol === null) {
-                    firstCol = td;
+                    firstCol = cell;
                 }
             }
 
