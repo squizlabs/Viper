@@ -103,7 +103,7 @@ class Viper_Tests_ViperLangToolsPlugin_LanguageUnitTest extends AbstractViperUni
         $this->clickTopToolbarButton($dir.'toolbarIcon_deleteValue_icon.png');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p lang="en">LOREM xtn dolor</p><p>sit amet <strong>WoW</strong></p><p>Squiz <span lang="en">LABS</span> is orsm</p><p><em>The</em> QUICK brown fox</p><p><strong>jumps</strong> OVER the lazy dog</p>');
+        $this->assertHTMLMatch('<p>LOREM xtn dolor</p><p>sit amet <strong>WoW</strong></p><p>Squiz <span lang="en">LABS</span> is orsm</p><p><em>The</em> QUICK brown fox</p><p><strong>jumps</strong> OVER the lazy dog</p>');
 
         $this->click($this->find($text));
         $this->selectText($text);
@@ -140,73 +140,6 @@ class Viper_Tests_ViperLangToolsPlugin_LanguageUnitTest extends AbstractViperUni
          $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_toggle_language.png'), 'Language icon is still active in the Top Toolbar.');
 
     }//end testRemovingLanguageAttributeFromAWord()
-
-
-    /**
-     * Test the auto save for a word.
-     *
-     * @return void
-     */
-    public function testAutoSaveForLanguageFieldForAWord()
-    {
-        $dir = dirname(__FILE__).'/Images/';
-
-        $text = 'WoW';
-
-        $this->selectText($text);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language.png');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_language.png');
-        $this->clickTopToolbarButton($dir.'input_language.png');
-
-        $this->type('e');
-        sleep(2);
-        $this->type('n');
-        sleep(2);
-        $this->assertEquals('WoW', $this->getSelectedText(), 'Original text is not selected.');
-        $this->keyDown('Key.ENTER');
-
-        $this->assertHTMLMatch('<p>LOREM xtn dolor</p><p lang="en">sit amet <strong lang="en">WoW</strong></p><p>Squiz <span lang="en">LABS</span> is orsm</p><p><em>The</em> QUICK brown fox</p><p><strong>jumps</strong> OVER the lazy dog</p>');
-
-        $this->click($this->find($text));
-        $this->selectText($text);
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_toggle_language_highlighted.png'), 'Language icon in Top Toolbar should be active.');
-
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language_highlighted.png');
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_toggle_language_active.png'), 'Language icon in Top Toolbar should be active.');
-
-    }//end testAutosaveForClassField()
-
-
-    /**
-     * Test the auto save for a paragraph.
-     *
-     * @return void
-     */
-    public function testAutoSaveForLanguageFieldForFirstParagraphOnPage()
-    {
-        $dir = dirname(__FILE__).'/Images/';
-
-        $text = 'LOREM';
-
-        $this->selectText($text);
-        $this->selectInlineToolbarLineageItem(0);
-
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language.png');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_language.png');
-        $this->clickTopToolbarButton($dir.'input_language.png');
-
-        $this->type('e');
-        sleep(3);
-        $this->type('n');
-        sleep(3);
-        $this->assertEquals('LOREM xtn dolor', $this->getSelectedText(), 'Paragraph is not selected');
-        $this->keyDown('Key.ENTER');
-
-        $this->assertHTMLMatch('<p lang="en">LOREM xtn dolor</p><p lang="en">sit amet <strong>WoW</strong></p><p>Squiz <span lang="en">LABS</span> is orsm</p><p><em>The</em> QUICK brown fox</p><p><strong>jumps</strong> OVER the lazy dog</p>');
-
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_toggle_language_highlighted.png'), 'Language icon in Top Toolbar should be active.');
-
-    }//end testAutoSaveForLanguageFieldForAParagraph()
 
 
     /**
