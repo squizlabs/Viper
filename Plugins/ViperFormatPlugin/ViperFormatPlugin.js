@@ -156,33 +156,20 @@ ViperFormatPlugin.prototype = {
         var tools = this.viper.ViperTools;
 
         var anchorSubContent = document.createElement('div');
-        var idTextbox = tools.createTextbox(prefix + 'anchor:input', 'ID', '', function(value) {
-            // Apply the ID to the selection.
-            self._setAttributeForSelection('id', value);
-        });
+        var idTextbox = tools.createTextbox(prefix + 'anchor:input', 'ID', '');
         anchorSubContent.appendChild(idTextbox);
 
         return anchorSubContent;
 
     },
 
-    _getClassSection: function(prefix, element, callback)
+    _getClassSection: function(prefix, element)
     {
         var self  = this;
         var tools = this.viper.ViperTools;
 
         var classSubContent = document.createElement('div');
-        var classTextbox = tools.createTextbox(prefix + 'class:input', 'Class', '', function(value) {
-            if (element) {
-                self._setAttributeForElement(element, 'class', value);
-            } else {
-                self._setAttributeForSelection('class', value);
-            }
-
-            if (callback) {
-                callback.call(this, value);
-            }
-        });
+        var classTextbox = tools.createTextbox(prefix + 'class:input', 'Class', '');
         classSubContent.appendChild(classTextbox);
 
         return classSubContent;
@@ -368,6 +355,10 @@ ViperFormatPlugin.prototype = {
 
             toolbar.makeSubSection(prefix + 'anchor:subSection', this._getAnchorSection(prefix));
             toolbar.setSubSectionButton('vitpAnchor', prefix + 'anchor:subSection');
+            toolbar.setSubSectionAction(prefix + 'anchor:subSection', function() {
+                var value = tools.getItem(prefix + 'anchor:input').getValue();
+                self._setAttributeForSelection('id', value);
+            }, [prefix + 'anchor:input']);
             tools.getItem(prefix + 'anchor:input').setValue(attrId);
 
             // Class.
@@ -376,6 +367,10 @@ ViperFormatPlugin.prototype = {
 
             toolbar.makeSubSection(prefix + 'class:subSection', this._getClassSection(prefix));
             toolbar.setSubSectionButton('vitpClass', prefix + 'class:subSection');
+            toolbar.setSubSectionAction(prefix + 'class:subSection', function() {
+                var value = tools.getItem(prefix + 'class:input').getValue();
+                self._setAttributeForSelection('class', value);
+            }, [prefix + 'class:input']);
             tools.getItem(prefix + 'class:input').setValue(attrClass);
         }//end if
 
@@ -524,13 +519,23 @@ ViperFormatPlugin.prototype = {
             var button = tools.createButton(prefix + 'classBtn', '', 'Class name', 'cssClass', null, false, classBtnActive);
             data.toolbar.addButton(button);
 
-            data.toolbar.makeSubSection(prefix + 'class:subSection', this._getClassSection(prefix, element, function(value) {
+            var self = this;
+            data.toolbar.makeSubSection(prefix + 'class:subSection', this._getClassSection(prefix));
+            data.toolbar.setSubSectionAction(prefix + 'class:subSection', function() {
+                var value = tools.getItem(prefix + 'class:input').getValue();
+                if (element) {
+                    self._setAttributeForElement(element, 'class', value);
+                } else {
+                    self._setAttributeForSelection('class', value);
+                }
+
                 if (value) {
                     tools.setButtonActive(prefix + 'classBtn');
                 } else {
                     tools.setButtonInactive(prefix + 'classBtn');
                 }
-            }));
+            }, [prefix + 'class:input']);
+
             data.toolbar.setSubSectionButton(prefix + 'classBtn', prefix + 'class:subSection');
             tools.getItem(prefix + 'class:input').setValue(classAttribute);
         }

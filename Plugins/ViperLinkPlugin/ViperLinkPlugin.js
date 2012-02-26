@@ -254,14 +254,10 @@ ViperLinkPlugin.prototype = {
             }
         }
 
-        var url       = tools.createTextbox(idPrefix + ':url', 'URL', attrUrl, _updateLink, true);
-        var title     = tools.createTextbox(idPrefix + ':title', 'Title', attrTitle, _updateLink);
-        var subject   = tools.createTextbox(idPrefix + ':subject', 'Subject', attrSubj, _updateLink);
-        var newWindow = tools.createCheckbox(idPrefix + ':newWindow', 'Open a New Window', attrTarget, function(checked, viaSetValue) {
-            if (viaSetValue !== true) {
-                _updateLink();
-            }
-        });
+        var url       = tools.createTextbox(idPrefix + ':url', 'URL', attrUrl, null, true);
+        var title     = tools.createTextbox(idPrefix + ':title', 'Title', attrTitle);
+        var subject   = tools.createTextbox(idPrefix + ':subject', 'Subject', attrSubj);
+        var newWindow = tools.createCheckbox(idPrefix + ':newWindow', 'Open a New Window', attrTarget);
 
         var urlRow = tools.createRow(idPrefix + ':urlRow', 'urlRow');
         urlRow.appendChild(url);
@@ -361,6 +357,9 @@ ViperLinkPlugin.prototype = {
 
         main.appendChild(this.getToolbarContent('ViperLinkPlugin:vitp'));
 
+        inlineToolbarPlugin.setSubSectionAction('ViperLinkPlugin:vitp:link', function() {
+            self.updateLink('ViperLinkPlugin:vitp');
+        }, ['ViperLinkPlugin:vitp:url']);
 
     },
 
