@@ -3639,7 +3639,7 @@ Viper.prototype = {
         var clone = Viper.document.createElement('div');
 
         if (typeof contents === 'string') {
-            dfx.setHtml(clone, contents);
+            clone.innerHTML = contents;
         } else if (contents) {
             clone.appendChild(contents);
         }
@@ -3654,7 +3654,7 @@ Viper.prototype = {
 
         var self = this;
         this.fireCallbacks('setHtml', {element: clone}, function() {
-            dfx.setHtml(self.element, dfx.getHtml(clone));
+            self.element.innerHTML = dfx.getHtml(clone);
             self.initEditableElement();
             if (callback) {
                 callback.call(this);

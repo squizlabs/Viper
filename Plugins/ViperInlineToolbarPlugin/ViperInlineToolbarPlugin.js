@@ -342,7 +342,11 @@ ViperInlineToolbarPlugin.prototype = {
         }
 
         var viper = this.viper;
-        subSection.form.onsubmit = function() {
+        subSection.form.onsubmit = function(e) {
+            if (e) {
+                dfx.preventDefault(e);
+            }
+
             viper.focus();
             action.call(this);
             return false;
@@ -419,13 +423,13 @@ ViperInlineToolbarPlugin.prototype = {
             return;
         }
 
-        if (activeSection) {
-            this.toggleSubSection(activeSection);
-        }
-
         this._updateLineage(lineage);
         this._updatePosition(range);
         this._updateSubSectionArrowPos();
+
+        if (activeSection) {
+            this.toggleSubSection(activeSection);
+        }
 
     },
 

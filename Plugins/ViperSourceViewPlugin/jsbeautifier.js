@@ -323,7 +323,7 @@ function StyleHTML(html_source, indent_size, indent_character, max_char, brace_s
         if (typeof temp_token !== 'string') {
           return temp_token;
         }
-        token = js_beautify(temp_token,
+        token = StyleHTML(temp_token,
                 {indent_size: this.indent_size, indent_char: this.indent_character, indent_level: this.indent_level, brace_style: this.brace_style}); //call the JS Beautifier
         return [token, 'TK_CONTENT'];
       }
