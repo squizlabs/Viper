@@ -255,9 +255,7 @@ ViperLangToolsPlugin.prototype = {
     {
         var self  = this;
         var elem  = document.createElement('div');
-        var input = this.viper.ViperTools.createTextbox('VLTP:acronymInput', 'Acronym', '', function() {
-            self.handleAcronym();
-        });
+        var input = this.viper.ViperTools.createTextbox('VLTP:acronymInput', 'Acronym');
 
         elem.appendChild(input);
 
@@ -269,9 +267,7 @@ ViperLangToolsPlugin.prototype = {
     {
         var self  = this;
         var elem  = document.createElement('div');
-        var input = this.viper.ViperTools.createTextbox('VLTP:abbrInput', 'Abbreviation', '', function() {
-            self.handleAbbreviation();
-        });
+        var input = this.viper.ViperTools.createTextbox('VLTP:abbrInput', 'Abbreviation');
 
         elem.appendChild(input);
 
@@ -283,9 +279,7 @@ ViperLangToolsPlugin.prototype = {
     {
         var self  = this;
         var elem  = document.createElement('div');
-        var input = this.viper.ViperTools.createTextbox('VLTP:langInput', 'Language', '', function() {
-            self.handleLanguage();
-        });
+        var input = this.viper.ViperTools.createTextbox('VLTP:langInput', 'Language');
 
         elem.appendChild(input);
 
@@ -355,6 +349,16 @@ ViperLangToolsPlugin.prototype = {
         bubble.setSubSectionButton('VLTP:acronymSubSection', 'ViperLangToolsPlugin:acronymButton');
         bubble.setSubSectionButton('VLTP:abbreviationSubSection', 'ViperLangToolsPlugin:abbrButton');
         bubble.setSubSectionButton('VLTP:langSubSection', 'ViperLangToolsPlugin:langButton');
+
+        bubble.setSubSectionAction('VLTP:acronymSubSection', function() {
+            self.handleAcronym();
+        }, ['VLTP:acronymInput']);
+        bubble.setSubSectionAction('VLTP:abbreviationSubSection', function() {
+            self.handleAbbreviation();
+        }, ['VLTP:abbrInput']);
+        bubble.setSubSectionAction('VLTP:langSubSection', function() {
+            self.handleLanguage();
+        }, ['VLTP:langInput']);
 
         this.viper.registerCallback('ViperToolbarPlugin:updateToolbar', 'ViperLangToolsPlugin', function(data) {
             if (data.range.collapsed === true) {

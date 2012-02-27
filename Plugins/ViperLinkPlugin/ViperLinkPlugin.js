@@ -359,7 +359,7 @@ ViperLinkPlugin.prototype = {
 
         inlineToolbarPlugin.setSubSectionAction('ViperLinkPlugin:vitp:link', function() {
             self.updateLink('ViperLinkPlugin:vitp');
-        }, ['ViperLinkPlugin:vitp:url']);
+        }, ['ViperLinkPlugin:vitp:url', 'ViperLinkPlugin:vitp:title', 'ViperLinkPlugin:vitp:newWindow', 'ViperLinkPlugin:vitp:subject']);
 
     },
 
@@ -434,6 +434,9 @@ ViperLinkPlugin.prototype = {
         });
         main.appendChild(this.getToolbarContent('ViperLinkPlugin:vtp'));
         toolbar.setBubbleButton('ViperLinkPlugin:vtp:link', 'insertLink');
+        tools.getItem('ViperLinkPlugin:vtp:link').setSubSectionAction('ViperLinkPlugin:vtp:linkSubSection', function() {
+            self.updateLink('ViperLinkPlugin:vtp');
+        }, ['ViperLinkPlugin:vtp:url', 'ViperLinkPlugin:vtp:title', 'ViperLinkPlugin:vtp:newWindow', 'ViperLinkPlugin:vtp:subject']);
 
         // Update the buttons when the toolbar updates it self.
         this.viper.registerCallback('ViperToolbarPlugin:updateToolbar', 'ViperLinkPlugin', function(data) {

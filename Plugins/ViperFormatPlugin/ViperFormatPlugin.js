@@ -409,9 +409,17 @@ ViperFormatPlugin.prototype = {
 
         toolbar.createBubble(prefix + 'anchorBubble', 'Anchor ID', content.anchor);
         toolbar.setBubbleButton(prefix + 'anchorBubble', 'anchor');
+        tools.getItem(prefix + 'anchorBubble').setSubSectionAction(prefix + 'anchorBubbleSubSection', function() {
+            var value = tools.getItem(prefix + 'anchor:input').getValue();
+            self._setAttributeForSelection('id', value);
+        }, [prefix + 'anchor:input']);
 
         toolbar.createBubble(prefix + 'classBubble', 'Class', content.cssClass);
         toolbar.setBubbleButton(prefix + 'classBubble', 'class');
+        tools.getItem(prefix + 'classBubble').setSubSectionAction(prefix + 'classBubbleSubSection', function() {
+            var value = tools.getItem(prefix + 'class:input').getValue();
+            self._setAttributeForSelection('class', value);
+        }, [prefix + 'class:input']);
 
         var headingTags   = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'];
         var formatButtons = {

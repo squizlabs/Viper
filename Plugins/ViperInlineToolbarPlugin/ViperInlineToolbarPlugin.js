@@ -310,7 +310,7 @@ ViperInlineToolbarPlugin.prototype = {
         this._activeSection = subSectionid;
         this._updateSubSectionArrowPos();
 
-        var inputElements = dfx.getTag('input, textarea', subSection);
+        var inputElements = dfx.getTag('input[type=text], textarea', subSection);
         if (inputElements.length > 0) {
             inputElements[0].focus();
             if (this._autoFocusTextbox === false) {

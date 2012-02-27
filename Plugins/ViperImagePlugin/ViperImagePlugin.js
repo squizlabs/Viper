@@ -210,9 +210,7 @@ ViperImagePlugin.prototype = {
 
         // URL text box.
         var urlTextbox = null;
-        var url = tools.createTextbox('ViperImagePlugin:urlInput', 'URL', '', function(value) {
-            setImageAttributes(value, (dfx.getTag('input', createImageSubContent)[1]).value);
-        });
+        var url = tools.createTextbox('ViperImagePlugin:urlInput', 'URL');
         createImageSubContent.appendChild(url);
         urlTextbox = (dfx.getTag('input', createImageSubContent)[0]);
 
@@ -231,12 +229,13 @@ ViperImagePlugin.prototype = {
         });
 
         // Alt text box.
-        var alt = tools.createTextbox('ViperImagePlugin:altInput', 'Alt', '', function(value) {
-            setImageAttributes(urlTextbox.value, value);
-        });
+        var alt = tools.createTextbox('ViperImagePlugin:altInput', 'Alt');
         createImageSubContent.appendChild(alt);
 
         var imgTools = toolbar.createBubble('ViperImagePlugin:bubble', 'Insert Image', createImageSubContent);
+        tools.getItem('ViperImagePlugin:bubble').setSubSectionAction('ViperImagePlugin:bubbleSubSection', function() {
+            setImageAttributes(tools.getItem('ViperImagePlugin:urlInput').getValue(), tools.getItem('ViperImagePlugin:altInput').getValue());
+        }, ['ViperImagePlugin:urlInput', 'ViperImagePlugin:altInput']);
 
         // Add the preview panel to the popup contents.
         createImageSubContent.appendChild(previewBox);
