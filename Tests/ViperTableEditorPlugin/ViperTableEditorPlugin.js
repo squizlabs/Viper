@@ -39,15 +39,6 @@ function gTS(index, incContent)
 
 }//end gTS()
 
-/**
- * Inserts a new table.
- */
-function insTable(rows, cols)
-{
-    return viper.getPluginManager().getPlugin('ViperTableEditorPlugin').insertTable(rows, cols);
-
-}//end insTable()
-
 function gTblBStatus()
 {
     var btns = {
