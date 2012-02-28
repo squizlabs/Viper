@@ -184,16 +184,17 @@ ViperTableEditorPlugin.prototype = {
             var showToolbar = false;
             this.viper.registerCallback('Viper:mouseUp', 'ViperTableEditorPlugin', function(e) {
                 var range = self.viper.getViperRange();
+                var target = dfx.getMouseEventTarget(e);
+
+                if (target === self._toolbar || dfx.isChildOf(target, self._toolbar) === true) {
+                    self._buttonClicked = false;
+                    return false;
+                }
+
                 if (range.collapsed === false) {
                     self.removeHighlights();
                     self.hideCellToolsIcon();
                     return true;
-                }
-
-                var target = dfx.getMouseEventTarget(e);
-                if (target === self._toolbar || dfx.isChildOf(target, self._toolbar) === true) {
-                    self._buttonClicked = false;
-                    return false;
                 }
 
                 var target = dfx.getMouseEventTarget(e);
@@ -878,6 +879,7 @@ ViperTableEditorPlugin.prototype = {
         var settingsContent = document.createElement('div');
 
         // Create the settings sub section.
+        var headingChanged     = false;
         var settingsSubSection = this.makeSubSection('VTEP:colProps:settingsSubSection', settingsContent);
         var settingsButton     = this._tools.createButton('VTEP:colProps:settings', '', 'Toggle Settings', 'tableSettings');
         this._toolsContainer.appendChild(settingsButton);
@@ -888,14 +890,20 @@ ViperTableEditorPlugin.prototype = {
             var width = self._tools.getItem('VTEP:colProps:width').getValue();
             self.setColumnWidth(cell, width);
 
-            var headingChecked = self._tools.getItem('VTEP:colProps:heading').getValue();
-            // Switch between header and normal cell.
-            if (headingChecked !== true) {
-                var newCell = self.convertToCell(cell, 'col');
+            if (headingChanged === true) {
+                var headingChecked = self._tools.getItem('VTEP:colProps:heading').getValue();
+
+                // Switch between header and normal cell.
+                var newCell = null;
+                if (headingChecked !== true) {
+                    newCell = self.convertToCell(cell, 'col');
+                } else {
+                    newCell = self.convertToHeader(cell, 'col');
+                }
+
                 self.updateToolbar(newCell, 'col');
             } else {
-                var newCell = self.convertToHeader(cell, 'col');
-                self.updateToolbar(newCell, 'col');
+                self.updateToolbar(self.getActiveCell(), 'col');
             }
         }, ['VTEP:colProps:width', 'VTEP:colProps:heading']);
 
@@ -920,7 +928,9 @@ ViperTableEditorPlugin.prototype = {
             }
         }
 
-        var heading = this._tools.createCheckbox('VTEP:colProps:heading', 'Heading', wholeColHeading);
+        var heading = this._tools.createCheckbox('VTEP:colProps:heading', 'Heading', wholeColHeading, function() {
+            headingChanged = true;
+        });
         settingsContent.appendChild(heading);
 
         this._tools.createButton('VTEP:colProps:insBefore', '', 'Insert Column Before', 'addLeft', function() {
@@ -1050,6 +1060,7 @@ ViperTableEditorPlugin.prototype = {
         this.setSubSectionAction('VTEP:tableProps:settingsSubSection', function() {
             self.setTableWidth(table, self._tools.getItem('VTEP:tableProps:width').getValue());
             self.viper.setAttribute(table, 'summary', self._tools.getItem('VTEP:tableProps:summary').getValue());
+            self.updateToolbar(self.getActiveCell(), 'table');
         }, ['VTEP:tableProps:width', 'VTEP:tableProps:summary']);
 
         // Width.
@@ -1062,9 +1073,14 @@ ViperTableEditorPlugin.prototype = {
         var tableSummary = this._tools.createTextarea('VTEP:tableProps:summary', 'Summary', summary, false, '', null, '4.5em');
         settingsContent.appendChild(tableSummary);
 
-        var button = this._tools.createButton('VTEP:tableProps:caption', 'CAPTION', 'Create Table Caption', '', function() {
+        var hasCaption = false;
+        if (dfx.getTag('caption', table).length > 0) {
+            hasCaption = true;
+        }
+
+        var button = this._tools.createButton('VTEP:tableProps:caption', 'Caption', 'Create Table Caption', '', function() {
             self.createTableCaption(table);
-        });
+        }, false, hasCaption);
         this._toolsContainer.appendChild(button);
 
         var remove = this._tools.createButton('VTEP:tableProps:remove', '', 'Remove Table', 'delete', function() {
