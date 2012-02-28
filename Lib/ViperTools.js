@@ -140,7 +140,7 @@ ViperTools.prototype = {
                     return false;
                 }
 
-                return clickAction.call(this, button);
+                return clickAction.call(this, e);
             });
         }//end if
 
