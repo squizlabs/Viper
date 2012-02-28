@@ -600,7 +600,7 @@ Viper.prototype = {
                 }
             }
 
-        } else {
+        } else if (value) {
             element.setAttribute(attribute, value);
         }
 
