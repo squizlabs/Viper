@@ -449,6 +449,15 @@ ViperFormatPlugin.prototype = {
             tools.setButtonInactive('headings');
             tools.setButtonInactive('formats');
 
+            // Test format change.
+            if (self.handleFormat('div', true) === true) {
+                tools.enableButton('headings');
+                tools.enableButton('formats');
+            } else {
+                tools.disableButton('headings');
+                tools.disableButton('formats');
+            }
+
             for (var i = 0; i < headingTags.length; i++) {
                 tools.setButtonInactive(prefix + 'heading:' + headingTags[i]);
             }
@@ -685,119 +694,183 @@ ViperFormatPlugin.prototype = {
 
     },
 
-    _addChangeTrackInfo: function(node)
+    /**
+     * Handles the format change.
+     *
+     * @param {string}  type     The type of the element.
+     * @param {boolean} testOnly If true then method will return true to indicate that
+     *                           the change can be made but will not alter the DOM
+     *                           structure.
+     *
+     * @return {boolean} True if the change can be made.
+     */
+    handleFormat: function(type, testOnly)
     {
-        if (ViperChangeTracker.isTracking() === true) {
-            ViperChangeTracker.addChange('textFormatChange', [node]);
+        testOnly         = testOnly || false;
+        var range        = this.viper.getCurrentRange();
+        var selectedNode = range.getNodeSelection();
+        var viperElement = this.viper.getViperElement();
+
+        if (!selectedNode) {
+            var startParent = dfx.getFirstBlockParent(range.getStartNode());
+            var endParent   = dfx.getFirstBlockParent(range.getEndNode());
+            if (startParent === endParent) {
+                selectedNode = startParent;
+            }
         }
+
+        if (selectedNode && selectedNode.nodeType !== dfx.ELEMENT_NODE) {
+            // Text node, get the first block parent.
+            selectedNode = dfx.getFirstBlockParent(selectedNode);
+        }
+
+        if (selectedNode) {
+            if (testOnly === true) {
+                return true;
+            }
+
+            if (selectedNode !== viperElement) {
+                var bookmark = this.viper.createBookmark();
+
+                this._convertSingleElement(selectedNode, type);
+
+                this.viper.selectBookmark(bookmark);
+                this.viper.fireNodesChanged([viperElement]);
+                this.viper.fireSelectionChanged(null, true);
+            } else {
+                // We cannot convert the Viper element so we need to create a new
+                // element from the textnodes that are around the current range.
+                this._handleTopLevelFormat(type, range);
+            }
+        } else {
+            var start    = range.getStartNode();
+            var end      = range.getEndNode();
+            var elements = dfx.getElementsBetween(start, end);
+            elements.unshift(start);
+            elements.push(end);
+
+            var parents = [];
+            var c       = elements.length;
+            for (var i = 0; i < c; i++) {
+                if (elements[i].nodeType === dfx.TEXT_NODE && dfx.isBlank(dfx.trim(elements[i].data)) === true) {
+                    continue;
+                } else if (dfx.isBlockElement(elements[i]) === true) {
+                    parents.push(elements[i]);
+                } else {
+                    var parent    = dfx.getFirstBlockParent(elements[i]);
+                    if (parents.inArray(parent) === false) {
+                        parents.push(parent);
+                    }
+                }
+            }
+
+            // Check if all the parents are siblings. If there is a parent element
+            // that is not a sibling see if its the only child of its parent and if
+            // that is a sibling.
+            var prevParent = null;
+            var siblings   = true;
+            var commonElem = range.getCommonElement();
+            var newParents = [];
+
+            for (var i = 0; i < parents.length; i++) {
+                var parent = parents[i];
+                if (parent.parentNode !== commonElem) {
+                    var parentParents = dfx.getParents(parent, null, commonElem);
+
+                    // Check if any of these parents are already in newParents array.
+                    var skip = false;
+                    if (newParents.length !== 0) {
+                        for (var j = 0; j < parentParents.length; j++) {
+                            if (newParents.inArray(parentParents[j]) === true) {
+                                skip = true;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (skip === true) {
+                        continue;
+                    }
+
+                    // Check if its the first child of its parent.
+                    for (var j = 0; j < parentParents.length; j++) {
+                        var parentParent = parentParents[j];
+                        for (var node = parent.previousSibling; node; node = node.previousSibling) {
+                            if (node && node.nodeType === dfx.ELEMENT_NODE || dfx.trim(node.data) !== '') {
+                                return false;
+                            }
+                        }
+
+                        parent = parentParent;
+                    }
+
+                    newParents.push(parent);
+                } else {
+                    newParents.push(parent);
+                }//end if
+            }//end for
+
+            if (newParents.length > 0) {
+                if (testOnly === true) {
+                    return true;
+                }
+
+                var removeType = false;
+
+                if (dfx.isTag(commonElem, type) === true && commonElem !== viperElement) {
+                    var lastSelectableParent = range._getLastSelectableChild(commonElem).parentNode;
+                    var lastParent = newParents[(newParents.length - 1)];
+                    while (lastSelectableParent !== commonElem) {
+                        if (lastSelectableParent === lastParent) {
+                            removeType = true;
+                            break;
+                        }
+
+                        lastSelectableParent = lastSelectableParent.parentNode;
+                    }
+                }
+
+                var bookmark = this.viper.createBookmark();
+
+                if (removeType === true) {
+                    for (var i = 0; i < newParents.length; i++) {
+                        dfx.insertBefore(commonElem, newParents[i]);
+                    }
+
+                    dfx.remove(commonElem);
+                } else {
+                    var newElem = document.createElement(type);
+                    dfx.insertBefore(newParents[0], newElem);
+                    for (var i = 0; i < newParents.length; i++) {
+                        newElem.appendChild(newParents[i]);
+                    }
+                }
+
+                this.viper.selectBookmark(bookmark);
+                this.viper.fireNodesChanged([viperElement]);
+                this.viper.fireSelectionChanged(null, true);
+            }
+        }//end if
 
     },
 
-    handleFormat: function(type)
+    _convertSingleElement: function(element, type)
     {
-        var range        = this.viper.getViperRange();
-        var selectedNode = range.getNodeSelection();
-        var elemsBetween = [];
-        if (selectedNode === null) {
-            var startNode   = range.getStartNode();
-            var blockParent = this.getFirstBlockParent(startNode);
-            if (!blockParent) {
-                // Top level content. Create a new element.
-                return this._handleTopLevelFormat(type, range);
-            }
-
-            if (dfx.isChildOf(startNode, this.viper.element) === false) {
-                // TODO: Should we handle this case in createBookmark?
-                range.setStart(this.viper.element, 0);
-                range.setEnd(this.viper.element, this.viper.element.childNodes.length);
-                ViperSelection.addRange(range);
-                startNode = range.getStartNode();
-                blockParent = this.getFirstBlockParent(startNode);
-            }
-
-            var bookmark = this.viper.createBookmark();
-
-            // Handle Collapsed range.
-            if (startNode && range.collapsed === true) {
-                var newElem = document.createElement(type);
-                this._addChangeTrackInfo(newElem);
-                this._moveChildElements(blockParent, newElem);
-                dfx.insertBefore(blockParent, newElem);
-                dfx.remove(blockParent);
-
-                this.viper.selectBookmark(bookmark);
-
-                this.viper.fireNodesChanged([this.viper.getViperElement()]);
-                this.viper.fireSelectionChanged(null, true);
-                return;
-            }
-
-            var elemsBetween = dfx.getElementsBetween(bookmark.start, bookmark.end);
-            if (range.collapsed === true) {
-                elemsBetween.unshift(bookmark.start);
+        if (dfx.isTag(element, type) === true) {
+            // This is element is already the specified type remove the element.
+            while (element.firstChild) {
+                dfx.insertBefore(element, element.firstChild);
             }
         } else {
-            elemsBetween.push(selectedNode);
+            var newElem = document.createElement(type);
+            while (element.firstChild) {
+                newElem.appendChild(element.firstChild);
+            }
+
+            dfx.insertBefore(element, newElem);
         }
 
-        var s = this.styleTags;
-        s.div = 1;
-
-        var self = this;
-        dfx.foreach(elemsBetween, function(i) {
-            var elem    = elemsBetween[i];
-            var tagName = dfx.getTagName(elem);
-            if (s[tagName]) {
-                // Convert this element to specified tag.
-                var newElem = self._createNewNode(elem, type);
-                if (selectedNode !== null && newElem) {
-                    // This is a single node selection so select the new node.
-                    range.selectNode(newElem);
-                    ViperSelection.addRange(range);
-                }
-            } else {
-                var textNodes = null;
-                if (elem.nodeType === dfx.TEXT_NODE) {
-                    textNodes = [elem];
-                } else {
-                    textNodes = dfx.getTextNodes(elem);
-                }
-
-                dfx.foreach(textNodes, function(k) {
-                    var textNode    = textNodes[k];
-                    var blockParent = self.getFirstBlockParent(textNode);
-                    if (blockParent === null) {
-                        return;
-                    }
-
-                    var t = dfx.getTagName(blockParent);
-                    if (s[t]) {
-                        // Convert this element to specified tag.
-                        self._createNewNode(blockParent, type);
-                    } else if (type !== t) {
-                        var newElem = document.createElement(type);
-                        self._addChangeTrackInfo(newElem);
-                        self._moveChildElements(blockParent, newElem);
-
-                        if (t === 'td' || t == 'th') {
-                            blockParent.appendChild(newElem);
-                        } else {
-                            dfx.insertBefore(blockParent, newElem);
-                        }
-
-                        range.selectNode(newElem);
-                        ViperSelection.addRange(range);
-                    }
-                });
-            }//end if
-        });
-
-        if (bookmark) {
-            this.viper.selectBookmark(bookmark);
-        }
-
-        this.viper.fireNodesChanged([this.viper.getViperElement()]);
-        this.viper.fireSelectionChanged(null, true);
+        dfx.remove(element);
 
     },
 
@@ -873,77 +946,6 @@ ViperFormatPlugin.prototype = {
 
     },
 
-    _createNewNode: function(node, type)
-    {
-         // We need to create a new element.
-        var newElem = document.createElement(type);
-        this._addChangeTrackInfo(newElem);
-
-        // Move the child nodes of this node to the new one.
-        this._moveChildElements(node, newElem);
-
-        // Insert new node after the current node.
-        dfx.insertAfter(node, newElem);
-
-        // Remove old node.
-        dfx.remove(node);
-
-        return newElem;
-
-    },
-
-
-    _moveChildElements: function(source, dest)
-    {
-        while (source.firstChild) {
-            dest.appendChild(source.firstChild);
-        }
-
-    },
-
-
-    getFirstBlockParent: function(elem)
-    {
-        if (dfx.isBlockElement(elem) === true) {
-            return elem;
-        }
-
-        // Get the parents of the start node.
-        var parents = dfx.getParents(elem);
-
-        var parent = null;
-        var ln     = parents.length;
-        for (var i = 0; i < ln; i++) {
-            parent = parents[i];
-            if (parent === this.viper.element) {
-                return null;
-            }
-
-            if (dfx.isBlockElement(parent) === true) {
-                return parent;
-            }
-        }
-
-    },
-
-    selectionChanged: function()
-    {
-        var range     = this.viper.getCurrentRange();
-        var startNode = range.startContainer;
-        var endNode   = range.endContainer;
-        var boldFound = false;
-        var emFound   = false;
-
-        startNode = startNode.parentNode;
-        this.toolbarPlugin.setButtonInactive('format');
-
-        var tagName = this._getFormat(startNode);
-        if (tagName !== null && tagName !== 'p') {
-            this.toolbarPlugin.setButtonActive('format');
-        }
-
-    },
-
     _getFormat: function(startNode)
     {
         while (startNode.parentNode) {
@@ -962,6 +964,14 @@ ViperFormatPlugin.prototype = {
         }
 
         return null;
+
+    },
+
+    _addChangeTrackInfo: function(node)
+    {
+        if (ViperChangeTracker.isTracking() === true) {
+            ViperChangeTracker.addChange('textFormatChange', [node]);
+        }
 
     }
 
