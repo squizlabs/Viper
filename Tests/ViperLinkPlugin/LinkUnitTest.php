@@ -223,6 +223,43 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
     }//end testClickShowInlineToolbar()
 
 
+    /**
+     * Test that the class and id tags are added to the a tag when you create a link.
+     *
+     * @return void
+     */
+    public function testClassAndIdAreAddedToLinkTag()
+    {
+        $dir = dirname(__FILE__).'/Images/';
+
+        $this->selectText('dolor');
+
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_class.png');
+        $this->type('class');
+        $this->keyDown('Key.ENTER');
+
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_anchor.png');
+        $this->type('anchor');
+        $this->keyDown('Key.ENTER');
+
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_link.png');
+        $this->type('http://www.squizlabs.com');
+        $this->keyDown('Key.ENTER');
+
+        $this->assertHTMLMatch('<p>Lorem xtn <a href="http://www.squizlabs.com" class="class" id="anchor">dolor</a></p><p>sit amet <strong>consectetur</strong></p>');
+
+        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_link_active.png'), 'Link icon should be active in the inline toolbar.');
+        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_link_active.png'), 'Link icon should be active in the top toolbar.');
+
+        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_class_active.png'), 'Class icon should be active in the inline toolbar.');
+        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_class_active.png'), 'Class icon should be active in the top toolbar.');
+
+        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_anchor_active.png'), 'Anchor icon should be active in the inline toolbar.');
+        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_anchor_active.png'), 'Anchor icon should be active in the top toolbar.');
+
+    }//end testClassAndIdAreAddedToLinkTag()
+
+
 }//end class
 
 ?>
