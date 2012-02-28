@@ -15,7 +15,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarLangToolUnitTest extends
     {
         $dir = dirname(__FILE__).'/Images/';
 
-        $text = 'IPSUM';
+        $text = 'AuuA';
         $textLoc = $this->find($text);
 
         $this->selectText($text);
@@ -54,11 +54,11 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarLangToolUnitTest extends
      *
      * @return void
      */
-    public function testLineageChangesWhenAcronymIsAppliedAndRemoved()
+    public function testLineageChangesWhenAcronymIsAppliedAndRemovedA()
     {
         $dir = dirname(__FILE__).'/Images/';
 
-        $text = 'IPSUM';
+        $text = 'AuuA';
         $textLoc = $this->find($text);
 
         $this->selectText($text);
@@ -90,7 +90,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarLangToolUnitTest extends
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem selected">Selection</li>', $lineage);
 
     }//end testLineageChangesWhenAcronymIsAppliedAndRemoved()
- 
+
 
     /**
      * Test that VITP changes when an abbreviation is added to the selected text and is then removed.
@@ -101,7 +101,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarLangToolUnitTest extends
     {
         $dir = dirname(__FILE__).'/Images/';
 
-        $text = 'IPSUM';
+        $text = 'AuuA';
         $textLoc = $this->find($text);
 
         $this->selectText($text);
@@ -133,7 +133,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarLangToolUnitTest extends
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem selected">Selection</li>', $lineage);
 
     }//end testLineageChangesWhenAbbreviationIsAppliedAndRemoved()
-    
+
 
     /**
      * Test that VITP changes when a language is added and removed to a word at the start of the paragraph.
@@ -176,7 +176,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarLangToolUnitTest extends
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem selected">Selection</li>', $lineage);
 
     }//end testLineageChangesWhenLanguageIsAppliedAndRemovedToFirstWordInParagraph()
-    
+
 
     /**
      * Test that VITP changes when abbreviation is added and removed to a word at the start of the paragraph.
@@ -219,7 +219,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarLangToolUnitTest extends
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem selected">Selection</li>', $lineage);
 
     }//end testLineageChangesWhenAbbreviationIsAppliedAndRemovedToFirstWordInParagraph()
-    
+
 
     /**
      * Test that VITP changes when acronym is added and removed to a word at the start of the paragraph.
@@ -262,7 +262,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarLangToolUnitTest extends
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem selected">Selection</li>', $lineage);
 
     }//end testLineageChangesWhenAcronymIsAppliedAndRemovedToFirstWordInParagraph()
-    
+
 
     /**
      * Test that VITP doesn't change when a language is added to the selected paragraph.
@@ -273,7 +273,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarLangToolUnitTest extends
     {
         $dir = dirname(__FILE__).'/Images/';
 
-        $text = 'IPSUM';
+        $text = 'AuuA';
         $textLoc = $this->find($text);
 
         $this->selectText($text);
@@ -321,7 +321,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarLangToolUnitTest extends
         $this->assertEquals('SubS WoW', $this->getSelectedText(), 'Span tag is not selected.');
 
     }//end testSelectingTheSpanTagInTheLineage()
-    
+
 
     /**
      * Test that when you select the ABBREVIATION tag in the lineage both words in the tag are highlighted.
@@ -347,7 +347,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarLangToolUnitTest extends
         $this->assertEquals('QUICK BROWN', $this->getSelectedText(), 'Abbreviation tag is not selected.');
 
     }//end testSelectingTheSpanTagInTheLineage()
-    
+
 
     /**
      * Test that when you select the ACRONYM tag in the lineage both words in the tag are highlighted.
@@ -373,7 +373,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarLangToolUnitTest extends
         $this->assertEquals('XXX JuMps', $this->getSelectedText(), 'Acronym tag is not selected.');
 
     }//end testSelectingTheAcronymTagInTheLineage()
-    
+
 
     /**
      * Test that VITP changes when a language is added to bold text and is then removed.
@@ -416,7 +416,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarLangToolUnitTest extends
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Bold</li><li class="ViperITP-lineageItem selected">Selection</li>', $lineage);
 
     }//end testLineageChangesWhenLanguageIsAppliedAndRemovedToBoldText()
-   
+
 
     /**
      * Test that VITP changes when an acronym is added to bold text and is then removed.
@@ -459,7 +459,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarLangToolUnitTest extends
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Bold</li><li class="ViperITP-lineageItem selected">Selection</li>', $lineage);
 
     }//end testLineageChangesWhenAcronymIsAppliedAndRemovedToBoldText()
-     
+
 
     /**
      * Test that VITP changes when an abbreviation is added to bold text and is then removed.
@@ -502,7 +502,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarLangToolUnitTest extends
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Bold</li><li class="ViperITP-lineageItem selected">Selection</li>', $lineage);
 
     }//end testLineageChangesWhenAbbreviationIsAppliedAndRemovedToBoldText()
-    
+
 
     /**
      * Test that VITP changes when a language is added to italic text and is then removed.
@@ -513,7 +513,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarLangToolUnitTest extends
     {
         $dir = dirname(__FILE__).'/Images/';
 
-        $text = 'LOREM';
+        $text = 'LoreM';
         $textLoc = $this->find($text);
         $this->selectText($text);
 
@@ -545,7 +545,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarLangToolUnitTest extends
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Italic</li<li class="ViperITP-lineageItem selected">Selection</li>', $lineage);
 
     }//end testLineageChangesWhenLanguageIsAppliedAndRemovedToItalicText()
-  
+
 
     /**
      * Test that VITP changes when an acronym is added to italic text and is then removed.
@@ -556,7 +556,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarLangToolUnitTest extends
     {
         $dir = dirname(__FILE__).'/Images/';
 
-        $text = 'LOREM';
+        $text = 'LoreM';
         $textLoc = $this->find($text);
         $this->selectText($text);
 
@@ -573,13 +573,13 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarLangToolUnitTest extends
         $this->click($textLoc);
         $this->selectText($text);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">ACRONYM</li><li class="ViperITP-lineageItem" selected>Italic</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">ACRONYM</li><li class="ViperITP-lineageItem selected">Italic</li>', $lineage);
 
         $this->click($textLoc);
         $this->selectText($text);
         $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language_active.png');
         $this->clickTopToolbarButton($dir.'toolbarIcon_acronym_active.png');
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_deleteValue_icon.png');
+        $this->clickTopToolbarButton($dir.'toolbarIcon_deleteValue_icon.png');
         $this->keyDown('Key.ENTER');
 
         $this->click($textLoc);
@@ -588,7 +588,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarLangToolUnitTest extends
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Italic</li<li class="ViperITP-lineageItem selected">Selection</li>', $lineage);
 
     }//end testLineageChangesWhenAcronymIsAppliedAndRemovedToItalicText()
-    
+
 
     /**
      * Test that VITP changes when an abbreviation is added to italic text and is then removed.
@@ -599,7 +599,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarLangToolUnitTest extends
     {
         $dir = dirname(__FILE__).'/Images/';
 
-        $text = 'LOREM';
+        $text = 'LoreM';
         $textLoc = $this->find($text);
         $this->selectText($text);
 
@@ -622,7 +622,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarLangToolUnitTest extends
         $this->selectText($text);
         $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language_active.png');
         $this->clickTopToolbarButton($dir.'toolbarIcon_abbreviation_active.png');
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_deleteValue_icon.png');
+        $this->clickTopToolbarButton($dir.'toolbarIcon_deleteValue_icon.png');
         $this->keyDown('Key.ENTER');
 
         $this->click($textLoc);
@@ -631,7 +631,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarLangToolUnitTest extends
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Italic</li<li class="ViperITP-lineageItem selected">Selection</li>', $lineage);
 
     }//end testLineageChangesWhenAbbreviationIsAppliedAndRemovedToItalicText()
-    
+
 
 }//end class
 
