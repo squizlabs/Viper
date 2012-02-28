@@ -1101,7 +1101,7 @@ ViperListPlugin.prototype = {
 
                     nextSibling = nextSibling.nextSibling;
                 }
-            } else if (mainToolbar === true && dfx.isTag(startParent, 'p') === true) {
+            } else if (mainToolbar === true && (dfx.isTag(startParent, 'p') === true || dfx.isTag(startParent, 'td') === true)) {
                 makeList = true;
             }
         }//end if
