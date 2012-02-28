@@ -69,7 +69,7 @@ ViperListPlugin.prototype = {
             this.viper.registerCallback('ViperToolbarPlugin:updateToolbar', 'ViperListPlugin', function(data) {
                 self._updateToolbar(toolbarButtons, data.range);
             });
-        }
+        }//end if
 
         // Inline toolbar.
         this.viper.registerCallback('ViperInlineToolbarPlugin:updateToolbar', 'ViperListPlugin', function(data) {
@@ -1161,6 +1161,7 @@ ViperListPlugin.prototype = {
         if (!statuses) {
             for (var btn in toolbarButtons) {
                 tools.disableButton(toolbarButtons[btn]);
+                tools.setButtonInactive(toolbarButtons[btn]);
             }
 
             return;
@@ -1175,6 +1176,7 @@ ViperListPlugin.prototype = {
             }
         } else {
             tools.disableButton(toolbarButtons.ul);
+            tools.setButtonInactive(toolbarButtons.ul);
         }
 
         if (statuses.ol === true) {
@@ -1186,6 +1188,7 @@ ViperListPlugin.prototype = {
             }
         } else {
             tools.disableButton(toolbarButtons.ol);
+            tools.setButtonInactive(toolbarButtons.ol);
         }
 
         if (statuses.increaseIndent === true) {
