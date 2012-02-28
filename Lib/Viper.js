@@ -2822,6 +2822,7 @@ Viper.prototype = {
             this._prevRange = range;
             this.fireCallbacks('Viper:selectionChanged', range);
         }
+
     },
 
     /**
@@ -3145,7 +3146,12 @@ Viper.prototype = {
 
         this.adjustRange();
 
-        this.fireSelectionChanged();
+        // This setTimeout is very strange indeed. We need to wait a bit for browser
+        // to update the selection object..
+        var self = this;
+        setTimeout(function() {
+            self.fireSelectionChanged();
+        }, 5);
 
     },
 
