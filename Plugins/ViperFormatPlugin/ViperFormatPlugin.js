@@ -758,7 +758,7 @@ ViperFormatPlugin.prototype = {
                     parents.push(elements[i]);
                 } else {
                     var parent    = dfx.getFirstBlockParent(elements[i]);
-                    if (parents.inArray(parent) === false) {
+                    if (parent && parents.inArray(parent) === false) {
                         parents.push(parent);
                     }
                 }
