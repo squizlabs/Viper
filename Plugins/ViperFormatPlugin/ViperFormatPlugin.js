@@ -712,6 +712,12 @@ ViperFormatPlugin.prototype = {
         var viperElement = this.viper.getViperElement();
 
         if (!selectedNode) {
+            var startNode = range.getStartNode();
+            var endNode   = range.getEndNode();
+            if (!startNode || !endNode) {
+                return;
+            }
+
             var startParent = dfx.getFirstBlockParent(range.getStartNode());
             var endParent   = dfx.getFirstBlockParent(range.getEndNode());
             if (startParent === endParent) {

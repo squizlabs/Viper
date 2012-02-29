@@ -77,6 +77,8 @@ ViperTableEditorPlugin.prototype = {
                     }
 
                     return false;
+                } else if (dfx.isTag(target, 'caption') === true && dfx.getNodeTextContent(target) === '') {
+                    target.innerHTML = '&nbsp;';
                 }
             }
 
@@ -1060,8 +1062,16 @@ ViperTableEditorPlugin.prototype = {
         this.setSubSectionAction('VTEP:tableProps:settingsSubSection', function() {
             self.setTableWidth(table, self._tools.getItem('VTEP:tableProps:width').getValue());
             self.viper.setAttribute(table, 'summary', self._tools.getItem('VTEP:tableProps:summary').getValue());
+
+            var captionCheckbox = self._tools.getItem('VTEP:tableProps:caption').getValue();
+            if (captionCheckbox === true) {
+                self.createCaption(table);
+            } else {
+                self.removeCaption(table);
+            }
+
             self.updateToolbar(self.getActiveCell(), 'table');
-        }, ['VTEP:tableProps:width', 'VTEP:tableProps:summary']);
+        }, ['VTEP:tableProps:width', 'VTEP:tableProps:summary', 'VTEP:tableProps:caption']);
 
         // Width.
         var tableWidth = this.getTableWidth(this.getCellTable(cell));
@@ -1073,15 +1083,9 @@ ViperTableEditorPlugin.prototype = {
         var tableSummary = this._tools.createTextarea('VTEP:tableProps:summary', 'Summary', summary, false, '', null, '4.5em');
         settingsContent.appendChild(tableSummary);
 
-        var hasCaption = false;
-        if (dfx.getTag('caption', table).length > 0) {
-            hasCaption = true;
-        }
-
-        var button = this._tools.createButton('VTEP:tableProps:caption', 'Caption', 'Create Table Caption', '', function() {
-            self.createTableCaption(table);
-        }, false, hasCaption);
-        this._toolsContainer.appendChild(button);
+        // Caption.
+        var caption = this._tools.createCheckbox('VTEP:tableProps:caption', 'Use Caption', (dfx.getTag('caption', table).length > 0));
+        settingsContent.appendChild(caption);
 
         var remove = this._tools.createButton('VTEP:tableProps:remove', '', 'Remove Table', 'delete', function() {
             var table = self.getCellTable(cell);
@@ -1112,7 +1116,7 @@ ViperTableEditorPlugin.prototype = {
 
     },
 
-    createTableCaption: function(table)
+    createCaption: function(table)
     {
         var caption  = null;
         var captions = dfx.getTag('caption', table);
@@ -1134,6 +1138,16 @@ ViperTableEditorPlugin.prototype = {
 
         this.removeHighlights();
         this.hideCellToolsIcon();
+
+    },
+
+    removeCaption: function(table)
+    {
+        var caption  = null;
+        var captions = dfx.getTag('caption', table);
+        if (captions.length > 0) {
+            dfx.remove(captions);
+        }
 
     },
 
