@@ -367,12 +367,23 @@ ViperInlineToolbarPlugin.prototype = {
      * Adds the specified button or button group element to the tools panel.
      *
      * @param {DOMNode} button The button or the button group element.
-     *
-     * @return void
+     * @param {integer} index  The index to insert to. Should be used by other plugins
+     *                         to insert buttons at specific positions.
      */
-    addButton: function(button)
+    addButton: function(button, index)
     {
-        this._toolsContainer.appendChild(button);
+        if (dfx.isset(index) === true && this._toolsContainer.childNodes.length > index) {
+            if (index < 0) {
+                index = this._toolsContainer.childNodes.length + index;
+                if (index < 0) {
+                    index = 0;
+                }
+            }
+
+            dfx.insertBefore(this._toolsContainer.childNodes[index], button);
+        } else {
+            this._toolsContainer.appendChild(button);
+        }
 
     },
 

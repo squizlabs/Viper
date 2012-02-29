@@ -505,16 +505,19 @@ ViperFormatPlugin.prototype = {
             || data.type === 'row'
             || data.type === 'table'
         ) {
-            var prefix  = 'ViperTableEditor-Format:';
-            var element = null;
+            var prefix      = 'ViperTableEditor-Format:';
+            var element     = null;
+            var buttonIndex = null;
 
             switch (data.type) {
                 case 'row':
-                    element = data.cell.parentNode;
+                    element     = data.cell.parentNode;
+                    buttonIndex = -1;
                 break;
 
                 case 'table':
-                    element = dfx.getParents(data.cell, 'table')[0];
+                    element     = dfx.getParents(data.cell, 'table')[0];
+                    buttonIndex = -1;
                 break;
 
                 case 'cell':
@@ -534,7 +537,7 @@ ViperFormatPlugin.prototype = {
             }
 
             var button = tools.createButton(prefix + 'classBtn', '', 'Class name', 'cssClass', null, false, classBtnActive);
-            data.toolbar.addButton(button);
+            data.toolbar.addButton(button, buttonIndex);
 
             var self = this;
             data.toolbar.makeSubSection(prefix + 'class:subSection', this._getClassSection(prefix));

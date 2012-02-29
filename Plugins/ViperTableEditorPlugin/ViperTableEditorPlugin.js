@@ -801,7 +801,7 @@ ViperTableEditorPlugin.prototype = {
         var headingChanged     = false;
         var settingsSubSection = this.makeSubSection('VTEP:cellProps:settingsSubSection', settingsContent);
         var settingsButton     = this._tools.createButton('VTEP:cellProps:settings', '', 'Toggle Settings', 'tableSettings');
-        this._toolsContainer.appendChild(settingsButton);
+        this.addButton(settingsButton);
         this.setSubSectionButton('VTEP:cellProps:settings', 'VTEP:cellProps:settingsSubSection');
         this.toggleSubSection('VTEP:cellProps:settingsSubSection');
         this.setSubSectionAction('VTEP:cellProps:settingsSubSection', function() {
@@ -872,7 +872,7 @@ ViperTableEditorPlugin.prototype = {
         // Create the merge/split sub section toggle button.
         var mergeSubSection = this.makeSubSection('VTEP:cellProps:mergeSplitSubSection', mergeSubWrapper);
         var mergeSplitToggle = this._tools.createButton('VTEP:cellProps:mergeSplitSubSectionToggle', '', 'Toggle Merge/Split Options', 'splitMerge');
-        this._toolsContainer.appendChild(mergeSplitToggle);
+        this.addButton(mergeSplitToggle);
         this.setSubSectionButton('VTEP:cellProps:mergeSplitSubSectionToggle', 'VTEP:cellProps:mergeSplitSubSection');
 
         if (activeSubSection === 'merge') {
@@ -891,7 +891,7 @@ ViperTableEditorPlugin.prototype = {
         var headingChanged     = false;
         var settingsSubSection = this.makeSubSection('VTEP:colProps:settingsSubSection', settingsContent);
         var settingsButton     = this._tools.createButton('VTEP:colProps:settings', '', 'Toggle Settings', 'tableSettings');
-        this._toolsContainer.appendChild(settingsButton);
+        this.addButton(settingsButton);
         this.setSubSectionButton('VTEP:colProps:settings', 'VTEP:colProps:settingsSubSection');
         this.toggleSubSection('VTEP:colProps:settingsSubSection');
         this.setSubSectionAction('VTEP:colProps:settingsSubSection', function() {
@@ -956,7 +956,7 @@ ViperTableEditorPlugin.prototype = {
         var btnGroup = this._tools.createButtonGroup('VTEP:insColButtons');
         this._tools.addButtonToGroup('VTEP:colProps:insBefore', 'VTEP:insColButtons');
         this._tools.addButtonToGroup('VTEP:colProps:insAfter', 'VTEP:insColButtons');
-        this._toolsContainer.appendChild(btnGroup);
+        this.addButton(btnGroup);
 
         this._tools.createButton('VTEP:colProps:moveLeft', '', 'Move Left', 'mergeLeft', function() {
             self._buttonClicked = true;
@@ -970,7 +970,7 @@ ViperTableEditorPlugin.prototype = {
         btnGroup = this._tools.createButtonGroup('VTEP:moveColButtons');
         this._tools.addButtonToGroup('VTEP:colProps:moveLeft', 'VTEP:moveColButtons');
         this._tools.addButtonToGroup('VTEP:colProps:moveRight', 'VTEP:moveColButtons');
-        this._toolsContainer.appendChild(btnGroup);
+        this.addButton(btnGroup);
 
         var removeCol = this._tools.createButton('VTEP:colProps:remove', '', 'Remove Column', 'delete', function() {
             var table = self.getCellTable(cell);
@@ -981,7 +981,7 @@ ViperTableEditorPlugin.prototype = {
 
             self._setCaretToStart(table);
         });
-        this._toolsContainer.appendChild(removeCol);
+        this.addButton(removeCol);
 
         dfx.hover(removeCol, function() {
             dfx.addClass(self._highlightElement, 'delete');
@@ -998,7 +998,7 @@ ViperTableEditorPlugin.prototype = {
         var headingChanged     = false;
         var settingsSubSection = this.makeSubSection('VTEP:rowProps:settingsSubSection', settingsContent);
         var settingsButton     = this._tools.createButton('VTEP:rowProps:settings', '', 'Toggle Settings', 'tableSettings');
-        this._toolsContainer.appendChild(settingsButton);
+        this.addButton(settingsButton);
         this.setSubSectionButton('VTEP:rowProps:settings', 'VTEP:rowProps:settingsSubSection');
         this.toggleSubSection('VTEP:rowProps:settingsSubSection');
         this.setSubSectionAction('VTEP:rowProps:settingsSubSection', function() {
@@ -1032,7 +1032,7 @@ ViperTableEditorPlugin.prototype = {
         var btnGroup = this._tools.createButtonGroup('VTEP:insRowButtons');
         this._tools.addButtonToGroup('VTEP:rowProps:insBefore', 'VTEP:insRowButtons');
         this._tools.addButtonToGroup('VTEP:rowProps:insAfter', 'VTEP:insRowButtons');
-        this._toolsContainer.appendChild(btnGroup);
+        this.addButton(btnGroup);
 
         this._tools.createButton('VTEP:rowProps:moveUp', '', 'Move Up', 'mergeUp', function() {
             self._buttonClicked = true;
@@ -1045,7 +1045,7 @@ ViperTableEditorPlugin.prototype = {
         btnGroup = this._tools.createButtonGroup('VTEP:moveRowButtons');
         this._tools.addButtonToGroup('VTEP:rowProps:moveUp', 'VTEP:moveRowButtons');
         this._tools.addButtonToGroup('VTEP:rowProps:moveDown', 'VTEP:moveRowButtons');
-        this._toolsContainer.appendChild(btnGroup);
+        this.addButton(btnGroup);
 
         var removeRow = this._tools.createButton('VTEP:rowProps:remove', '', 'Remove Row', 'delete', function() {
             var table = self.getCellTable(cell);
@@ -1056,7 +1056,7 @@ ViperTableEditorPlugin.prototype = {
 
             self._setCaretToStart(table);
         });
-        this._toolsContainer.appendChild(removeRow);
+        this.addButton(removeRow);
 
         dfx.hover(removeRow, function() {
             dfx.addClass(self._highlightElement, 'delete');
@@ -1076,7 +1076,7 @@ ViperTableEditorPlugin.prototype = {
         // Create the settings sub section.
         var settingsSubSection = this.makeSubSection('VTEP:tableProps:settingsSubSection', settingsContent);
         var settingsButton     = this._tools.createButton('VTEP:tableProps:settings', '', 'Toggle Settings', 'tableSettings');
-        this._toolsContainer.appendChild(settingsButton);
+        this.addButton(settingsButton);
         this.setSubSectionButton('VTEP:tableProps:settings', 'VTEP:tableProps:settingsSubSection');
         this.toggleSubSection('VTEP:tableProps:settingsSubSection');
         this.setSubSectionAction('VTEP:tableProps:settingsSubSection', function() {
@@ -1114,7 +1114,7 @@ ViperTableEditorPlugin.prototype = {
             self.hideToolbar();
             self.removeHighlights();
         });
-        this._toolsContainer.appendChild(remove);
+        this.addButton(remove);
 
         dfx.hover(remove, function() {
             dfx.addClass(self._highlightElement, 'delete');
