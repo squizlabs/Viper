@@ -332,7 +332,7 @@ ViperFormatPlugin.prototype = {
 
          // Anchor and Class.
         if (selectedNode.nodeType === dfx.ELEMENT_NODE
-            || data.range.startContainer.parentNode === data.range.endContainer.parentNode
+            || data.range.getStartNode().parentNode === data.range.getEndNode().parentNode
         ) {
             var anchorBtnActive = false;
             var attrId = this._getAttributeValue('id', selectedNode);
