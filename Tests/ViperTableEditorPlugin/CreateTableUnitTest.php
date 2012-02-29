@@ -338,6 +338,23 @@ class Viper_Tests_ViperTableEditorPlugin_CreateTableUnitTest extends AbstractVip
     }//end testCreateTableInList()
 
 
+    /**
+     * Test that creating a table after selecting a whole paragraph works.
+     *
+     * @return void
+     */
+    public function testReplaceParagraphWithTable()
+    {
+        $this->selectText('Lorem', 'dolor');
+
+        $this->clickTopToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_createTable.png');
+        sleep(1);
+
+        $this->assertHTMLMatch('<p>&nbsp;</p><table style="width: 100%;" border="1"><tbody><tr><th>Column 1</th><th>Column 2</th><th>Column 3</th></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>sit amet <strong>consectetur</strong></p>');
+
+    }//end testReplaceParagraphWithTable()
+
+
 }//end class
 
 ?>
