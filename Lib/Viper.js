@@ -2666,25 +2666,22 @@ Viper.prototype = {
             return false;
         }
 
-        var viperRange   = this.getViperRange();
+        var range       = this.getViperRange();
+        var selectedNode = range.getNodeSelection();
 
-        var attributes = {
-            cssClass: '__viper_selHighlight',
-        }
-
-        var startNode = viperRange.getStartNode();
-        if (dfx.isTag(startNode, 'span') === true) {
-            dfx.addClass(startNode, '__viper_selHighlight __viper_cleanOnly');
-        }
-
-        var range = this.getViperRange();
-        if (range.collapsed === true) {
+        if (selectedNode && selectedNode.nodeType == dfx.ELEMENT_NODE) {
+            dfx.addClass(selectedNode, '__viper_selHighlight __viper_cleanOnly');
+        } else if (range.collapsed === true) {
             var span = document.createElement('span');
             dfx.addClass(span, '__viper_selHighlight');
             dfx.setStyle(span, 'border-right', '1px solid #000');
             range.insertNode(span);
         } else {
-            this.surroundContents('span', attributes, viperRange, true);
+            var attributes = {
+                cssClass: '__viper_selHighlight',
+            }
+
+            this.surroundContents('span', attributes, range, true);
         }
 
     },
