@@ -796,23 +796,30 @@ ViperTableEditorPlugin.prototype = {
 
     _createCellProperties: function(cell, activeSubSection)
     {
-        var isActive = false;
-        if (dfx.isTag(cell, 'th') === true) {
-            isActive = true;
-        }
+        var self               = this;
+        var settingsContent    = document.createElement('div');
+        var headingChanged     = false;
+        var settingsSubSection = this.makeSubSection('VTEP:cellProps:settingsSubSection', settingsContent);
+        var settingsButton     = this._tools.createButton('VTEP:cellProps:settings', '', 'Toggle Settings', 'tableSettings');
+        this._toolsContainer.appendChild(settingsButton);
+        this.setSubSectionButton('VTEP:cellProps:settings', 'VTEP:cellProps:settingsSubSection');
+        this.toggleSubSection('VTEP:cellProps:settingsSubSection');
+        this.setSubSectionAction('VTEP:cellProps:settingsSubSection', function() {
+            if (headingChanged === true) {
+                var newCell = null;
+                if (self._tools.getItem('VTEP:cellProps:heading').getValue() === true) {
+                    newCell = self.convertToHeader(cell, 'cell');
+                } else {
+                    newCell = self.convertToCell(cell, 'cell');
+                }
 
-        var self = this;
-        var heading = this._tools.createButton('VTEP:cellProps:heading', 'Heading', 'Toggle Heading', 'cellHeading', function() {
-            // Switch between header and normal cell.
-            if (dfx.isTag(cell, 'th') === true) {
-                var newCell = self.convertToCell(cell, 'cell');
-                self.updateToolbar(newCell);
-            } else {
-                var newCell = self.convertToHeader(cell, 'cell');
-                self.updateToolbar(newCell);
+                self.updateToolbar(newCell, 'cell');
             }
-        }, false, isActive);
-        this._toolsContainer.appendChild(heading);
+        }, ['VTEP:cellProps:heading']);
+        var heading = this._tools.createCheckbox('VTEP:cellProps:heading', 'Heading', (dfx.isTag(cell, 'th') === true), function() {
+            headingChanged = true;
+        });
+        settingsContent.appendChild(heading);
 
         // Split buttons.
         this._tools.createButton('VTEP:cellProps:splitVert', '', 'Split Vertically', 'splitVert', function() {
@@ -986,19 +993,32 @@ ViperTableEditorPlugin.prototype = {
 
     _createRowProperties: function(cell)
     {
-        var wholeRowIsHeading = (dfx.getTag('td', cell.parentNode).length === 0);
-        var self    = this;
-        var heading = this._tools.createButton('VTEP:rowProps:heading', 'Heading', 'Toggle Heading', 'cellHeading', function() {
-            // Switch between header and normal cell.
-            if (wholeRowIsHeading === true) {
-                var newCell = self.convertToCell(cell, 'row');
-                self.updateToolbar(newCell, 'row');
-            } else {
-                var newCell = self.convertToHeader(cell, 'row');
+        var self               = this;
+        var settingsContent    = document.createElement('div');
+        var headingChanged     = false;
+        var settingsSubSection = this.makeSubSection('VTEP:rowProps:settingsSubSection', settingsContent);
+        var settingsButton     = this._tools.createButton('VTEP:rowProps:settings', '', 'Toggle Settings', 'tableSettings');
+        this._toolsContainer.appendChild(settingsButton);
+        this.setSubSectionButton('VTEP:rowProps:settings', 'VTEP:rowProps:settingsSubSection');
+        this.toggleSubSection('VTEP:rowProps:settingsSubSection');
+        this.setSubSectionAction('VTEP:rowProps:settingsSubSection', function() {
+            if (headingChanged === true) {
+                var newCell = null;
+                if (self._tools.getItem('VTEP:rowProps:heading').getValue() === true) {
+                    newCell = self.convertToHeader(cell, 'row');
+                } else {
+                    newCell = self.convertToCell(cell, 'row');
+                }
+
                 self.updateToolbar(newCell, 'row');
             }
-        }, false, wholeRowIsHeading);
-        this._toolsContainer.appendChild(heading);
+        }, ['VTEP:rowProps:heading']);
+
+        var wholeRowIsHeading = (dfx.getTag('td', cell.parentNode).length === 0);
+        var heading = this._tools.createCheckbox('VTEP:rowProps:heading', 'Heading', wholeRowIsHeading, function() {
+            headingChanged = true;
+        });
+        settingsContent.appendChild(heading);
 
         this._tools.createButton('VTEP:rowProps:insBefore', '', 'Insert Row Before', 'addAbove', function() {
             self._buttonClicked = true;
