@@ -570,6 +570,10 @@ ViperTools.prototype = {
         var labelElem = document.createElement('label');
         dfx.addClass(labelElem, 'Viper-checkbox');
 
+        if (checked === true) {
+            dfx.addClass(labelElem, 'active');
+        }
+
         var checkbox  = document.createElement('input');
         checkbox.type = 'checkbox';
         checkbox.checked = checked || false;
@@ -590,6 +594,12 @@ ViperTools.prototype = {
         dfx.addEvent(checkbox, 'click', function() {
             self.viper.focus();
 
+            if (checkbox.checked === true) {
+                dfx.addClass(labelElem, 'active');
+            } else {
+                dfx.removeClass(labelElem, 'active');
+            }
+
             if (changeCallback) {
                 changeCallback.call(this, checkbox.checked);
             }
@@ -606,6 +616,13 @@ ViperTools.prototype = {
             },
             setValue: function(checked) {
                 checkbox.checked = checked;
+
+                if (checked === true) {
+                    dfx.addClass(labelElem, 'active');
+                } else {
+                    dfx.removeClass(labelElem, 'active');
+                }
+
                 if (changeCallback) {
                     self.viper.focus();
                     changeCallback.call(this, checked, true);
