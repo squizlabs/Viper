@@ -298,6 +298,7 @@ ViperToolbarPlugin.prototype = {
                 }
 
                 subSection.form.onsubmit = function() {
+                    tools.disableButton(subSectionid + '-applyButton');
                     self.viper.focus();
                     action.call(this);
                     return false;
@@ -427,6 +428,15 @@ ViperToolbarPlugin.prototype = {
 
         if (!bubbleElem.parentNode) {
             this._toolbar.appendChild(bubbleElem);
+        }
+
+        // Before we show the bubble set all its sub section apply changes button
+        // statuses to disabled.
+        for (var subSectionid in bubble._subSections) {
+            var applyChangesBtn = this.viper.ViperTools.getItem(subSectionid + '-applyButton');
+            if (applyChangesBtn) {
+                this.viper.ViperTools.disableButton(subSectionid + '-applyButton');
+            }
         }
 
         this.positionBubble(bubbleid);
