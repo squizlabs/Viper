@@ -2775,6 +2775,42 @@ Viper.prototype = {
 
     },
 
+    removeHighlights: function()
+    {
+        // There should be one...
+        var highlights = dfx.getClass('__viper_selHighlight', this.element);
+        if (highlights.length === 0) {
+            return;
+        }
+
+
+        for (var i = 0; i < highlights.length; i++) {
+            var highlight = highlights[i];
+
+            if (dfx.hasClass(highlight, '__viper_cleanOnly') === true) {
+                dfx.removeClass(highlight, '__viper_cleanOnly');
+                dfx.removeClass(highlight, '__viper_selHighlight');
+                if (!highlight.getAttribute('class')) {
+                    highlight.removeAttribute('class');
+                }
+            } else {
+                while (highlight.firstChild) {
+                    child = highlight.firstChild;
+                    dfx.insertBefore(highlight, child);
+
+                    if (!startNode) {
+                        // Set the selection start.
+                        startNode = child;
+                        range.setStart(child, 0);
+                    }
+                }
+
+                dfx.remove(highlight);
+            }
+        }//end for
+
+    },
+
     hasBlockChildren: function(parent)
     {
         var c = parent.childNodes.length;
