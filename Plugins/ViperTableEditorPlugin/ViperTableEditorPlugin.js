@@ -2677,6 +2677,9 @@ ViperTableEditorPlugin.prototype = {
         };
 
         var _setRowColsHover = function(row, col) {
+
+            dfx.setHtml(dfx.getClass('sizeLabel', main)[0], 'Size (' + (parseInt(row) + 1) + ', ' + (parseInt(col) + 1) + ')');
+
             for (var i = 0; i < maxRows; i++) {
                 for (var j = 0; j < maxCols; j++) {
                     if (i <= row && j <= col) {
@@ -2688,8 +2691,9 @@ ViperTableEditorPlugin.prototype = {
             }
         };
 
-        var tdHover = null;
-        dfx.addEvent(dfx.getClass('sizePicker', main)[0], 'mousemove', function(e) {
+        var tdHover        = null;
+        var sizePickerElem = dfx.getClass('sizePicker', main)[0];
+        dfx.addEvent(sizePickerElem, 'mousemove', function(e) {
             var td = dfx.getMouseEventTarget(e);
             if (td !== tdHover && dfx.isTag(td, 'td') === true) {
                 tdHover = td;
@@ -2698,13 +2702,18 @@ ViperTableEditorPlugin.prototype = {
             }
         });
 
-        dfx.addEvent(dfx.getClass('sizePicker', main)[0], 'click', function(e) {
+        dfx.addEvent(sizePickerElem, 'click', function(e) {
             var td = dfx.getMouseEventTarget(e);
             if (td && dfx.isTag(td, 'td') === true) {
                 var rowcol = td.getAttribute('data-viper-rowcol').split(',');
                 _setRowColsActive(rowcol[0], rowcol[1]);
             }
         });
+
+        dfx.hover(sizePickerElem, function() {}, function() {
+            dfx.removeClass(dfx.getClass('hover', sizePickerElem), 'hover');
+            dfx.setHtml(dfx.getClass('sizeLabel', main)[0], 'Size (' + selectedRows + ', ' + selectedCols + ')');
+        })
 
         var headerTables       = dfx.getClass('VTEP-bubble-headersTableWrapper', main);
         for (var i = 0; i < headerTables.length; i++) {
