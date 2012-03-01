@@ -2768,13 +2768,15 @@ ViperTableEditorPlugin.prototype = {
 
                 if (isHeader) {
                     cell = document.createElement('th');
-                    dfx.setHtml(cell, 'Column ' + (j + 1));
                 } else {
                     cell = document.createElement('td');
-                    dfx.setHtml(cell, '&nbsp;');
                 }
 
-                dfx.setStyle(cell, 'width', '150px');
+                dfx.setHtml(cell, '&nbsp;');
+
+                if (i === 0) {
+                    dfx.setStyle(cell, 'width', '150px');
+                }
 
                 tr.appendChild(cell);
 
