@@ -35,6 +35,7 @@ function ViperTableEditorPlugin(viper)
     this._tableRawCells = null;
     this._currentType   = null;
     this._margin        = 15;
+    this._headerOptions = [null, [1, 0, 0, 1, 0, 0, 1, 0, 0], [1, 1, 1], [1, 1, 1, 1, 0, 0, 1, 0, 0]];
 
     this._targetToolbarButton = false;
 
@@ -140,8 +141,7 @@ ViperTableEditorPlugin.prototype = {
 
         this.toolbarPlugin = this.viper.ViperPluginManager.getPlugin('ViperToolbarPlugin');
         if (this.toolbarPlugin) {
-            var mouseUpTimer = null;
-            var insertTable  = true;
+            var insertTable = true;
 
             var button = this.viper.ViperTools.createButton('insertTable', '', 'Insert Table', 'table', function() {
                 var range = self.viper.getViperRange();
@@ -165,21 +165,13 @@ ViperTableEditorPlugin.prototype = {
                         self.showCellToolsIcon(cell, true);
                     }
                 } else {
-                    mouseUpTimer = setTimeout(function() {
-                        insertTable = false;
-                        // Show table row/col selector.
-                        console.info('TODO: SHOW SELECTOR');
-                    }, 500);
+                    self.toolbarPlugin.toggleBubble('VTEP-bubble');
                 }
             });
             this.toolbarPlugin.addButton(button);
 
-            this._tools.getItem('insertTable').setMouseUpAction(function() {
-                clearTimeout(mouseUpTimer);
-                if (insertTable === true) {
-                    self.insertTable();
-                }
-            });
+            // Create the toolbar bubble.
+            this._createToolbarEditorBubble();
         }
 
         if (this._isiPad() === false) {
@@ -2599,14 +2591,147 @@ ViperTableEditorPlugin.prototype = {
     /**
      * Inserts a table to the caret position.
      */
-    insertTable: function(rows, cols)
+    _createToolbarEditorBubble: function()
+    {
+        var main = document.createElement('div');
+
+        var maxRows            = 10;
+        var maxCols            = 10;
+        var selectedRows       = 3;
+        var selectedCols       = 4;
+        var selectedHeaderType = 2;
+
+        var content    = '';
+        var sizePicker = '<p class="VTEP-bubble-label sizeLabel">Size (' + selectedCols + ', ' + selectedRows + ')</p>';
+        sizePicker    += '<table class="VTEP-bubble-table sizePicker"><tbody>';
+        for (var i = 0; i < maxRows; i++) {
+            sizePicker += '<tr>';
+            for (var j = 0; j < maxCols; j++) {
+                var classAttr = '';
+                if (selectedRows > i && selectedCols > j) {
+                    classAttr = ' class="selected"';
+                }
+
+                sizePicker += '<td data-viper-rowcol="' + i + ', ' + j + '"' + classAttr + ' >&nbsp;</td>';
+            }
+
+            sizePicker += '</tr>';
+        }
+
+        sizePicker += '</tbody></table>';
+        content    += sizePicker;
+
+        var headerOpts      = this._headerOptions;
+        var headerOptTitles = ['None', 'Left', 'Top', 'Both'];
+        var headers = '<p class="VTEP-bubble-label headers">Headers</p><div class="VTEP-bubble-headersWrapper">';
+        for (var h = 0; h < headerOpts.length; h++) {
+            var selected = '';
+            if (h === selectedHeaderType) {
+                selected = ' selected';
+            }
+
+            headers    += '<div class="VTEP-bubble-headersTableWrapper' + selected + '">';
+            headers    += '<table class="VTEP-bubble-table headers"><tbody>';
+            var c = 0;
+            for (var i = 0; i < 3; i++) {
+                headers += '<tr>';
+                for (var j = 0; j < 3; j++) {
+                    if (headerOpts[h] && headerOpts[h][c]) {
+                        headers += '<td class="hover">&nbsp;</td>';
+                    } else {
+                        headers += '<td>&nbsp;</td>';
+                    }
+
+                    c++;
+                }
+
+                headers += '</tr>';
+            }
+
+            headers += '</tbody></table>';
+            headers += '<span class="VTEP-bubble-headerTitle">' + headerOptTitles[h] + '</span></div>';
+        }
+
+        headers += '</div>';
+        content += headers;
+
+        dfx.setHtml(main, content);
+
+        var trs = dfx.getTag('tr', dfx.getClass('sizePicker', main)[0]);
+
+        var _setRowColsActive = function(row, col) {
+            selectedRows = (parseInt(row) + 1);
+            selectedCols = (parseInt(col) + 1);
+
+            dfx.setHtml(dfx.getClass('sizeLabel', main)[0], 'Size (' + selectedRows + ', ' + selectedCols + ')');
+
+            for (var i = 0; i < maxRows; i++) {
+                for (var j = 0; j < maxCols; j++) {
+                    if (i <= row && j <= col) {
+                        dfx.addClass(trs[i].childNodes[j], 'selected');
+                    } else {
+                        dfx.removeClass(trs[i].childNodes[j], 'selected');
+                    }
+                }
+            }
+        };
+
+        var _setRowColsHover = function(row, col) {
+            for (var i = 0; i < maxRows; i++) {
+                for (var j = 0; j < maxCols; j++) {
+                    if (i <= row && j <= col) {
+                        dfx.addClass(trs[i].childNodes[j], 'hover');
+                    } else {
+                        dfx.removeClass(trs[i].childNodes[j], 'hover');
+                    }
+                }
+            }
+        };
+
+        var tdHover = null;
+        dfx.addEvent(dfx.getClass('sizePicker', main)[0], 'mousemove', function(e) {
+            var td = dfx.getMouseEventTarget(e);
+            if (td !== tdHover && dfx.isTag(td, 'td') === true) {
+                tdHover = td;
+                var rowcol = td.getAttribute('data-viper-rowcol').split(',');
+                _setRowColsHover(rowcol[0], rowcol[1]);
+            }
+        });
+
+        dfx.addEvent(dfx.getClass('sizePicker', main)[0], 'click', function(e) {
+            var td = dfx.getMouseEventTarget(e);
+            if (td && dfx.isTag(td, 'td') === true) {
+                var rowcol = td.getAttribute('data-viper-rowcol').split(',');
+                _setRowColsActive(rowcol[0], rowcol[1]);
+            }
+        });
+
+        var headerTables       = dfx.getClass('VTEP-bubble-headersTableWrapper', main);
+        for (var i = 0; i < headerTables.length; i++) {
+            (function(type) {
+                dfx.addEvent(headerTables[type], 'click', function(e) {
+                    selectedHeaderType = type;
+                    dfx.removeClass(headerTables, 'selected');
+                    dfx.addClass(headerTables[type], 'selected');
+                });
+            }) (i);
+        }
+
+        var self = this;
+        var insertTableBtn = this.viper.ViperTools.createButton('VTEP-insertTableButton', 'Insert Table', 'Insert Table', '', function() {
+            self.toolbarPlugin.closeBubble('VTEP-bubble');
+            self.insertTable(selectedRows, selectedCols, selectedHeaderType);
+        });
+        main.appendChild(insertTableBtn);
+
+        this.toolbarPlugin.createBubble('VTEP-bubble', 'Insert Table', main);
+        this.toolbarPlugin.setBubbleButton('VTEP-bubble', 'insertTable', true);
+
+    },
+
+    insertTable: function(rows, cols, headerType)
     {
         this.viper.ViperHistoryManager.begin();
-
-        var useDefaultVals = false;
-        if (!rows || !cols) {
-            useDefaultVals = true;
-        }
 
         rows = rows || 3;
         cols = cols || 3;
@@ -2615,14 +2740,24 @@ ViperTableEditorPlugin.prototype = {
         // First hide the table so we can determine if there are borders etc.
         dfx.setStyle(table, 'display', 'none');
 
-        var tbody    = document.createElement('tbody');
-        var firstCol = null;
+        var tbody      = document.createElement('tbody');
+        var firstCol   = null;
+        var headerOpts = this._headerOptions;
 
         for (var i = 0; i < rows; i++) {
             var tr = document.createElement('tr');
             for (var j = 0; j < cols; j++) {
-                var cell = null;
-                if (useDefaultVals === true && i === 0) {
+                var cell     = null;
+                var isHeader = false;
+                if (headerType === 1 && j === 0) {
+                    isHeader = true;
+                } else if (headerType === 2 && i === 0) {
+                    isHeader = true;
+                } else if (headerType === 3 && (i === 0 || j === 0)) {
+                    isHeader = true;
+                }
+
+                if (isHeader) {
                     cell = document.createElement('th');
                     dfx.setHtml(cell, 'Column ' + (j + 1));
                 } else {
@@ -2630,19 +2765,17 @@ ViperTableEditorPlugin.prototype = {
                     dfx.setHtml(cell, '&nbsp;');
                 }
 
-                if (i === 0 && useDefaultVals !== true) {
-                    dfx.setStyle(cell, 'width', '150px');
-                }
+                dfx.setStyle(cell, 'width', '150px');
 
                 tr.appendChild(cell);
 
                 if (firstCol === null) {
                     firstCol = cell;
                 }
-            }
+            }//end for
 
             tbody.appendChild(tr);
-        }
+        }//end for
 
         table.appendChild(tbody);
 
