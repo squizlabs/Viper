@@ -405,6 +405,8 @@ ViperToolbarPlugin.prototype = {
             this._activeBubble = null;
         }
 
+        this.viper.highlightToSelection();
+
     },
 
     showBubble: function(bubbleid)

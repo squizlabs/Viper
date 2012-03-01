@@ -140,6 +140,7 @@ ViperTools.prototype = {
                     return false;
                 }
 
+                self.viper.fireCallbacks('ViperTools:buttonClicked', id);
                 return clickAction.call(this, e);
             });
         }//end if
@@ -348,10 +349,13 @@ ViperTools.prototype = {
         }
 
         var self = this;
-
         dfx.addEvent(input, 'focus', function() {
             dfx.addClass(textBox, 'active');
             self.viper.highlightSelection();
+
+            self.viper.registerCallback('ViperTools:buttonClicked', 'ViperTools:textbox', function() {
+                self.viper.focus();
+            });
 
             // Set the caret to the end of the textfield.
             input.value = input.value;
@@ -361,6 +365,7 @@ ViperTools.prototype = {
         });
 
         dfx.addEvent(input, 'blur', function() {
+            self.viper.removeCallback('ViperTools:buttonClicked', 'ViperTools:textbox');
             dfx.removeClass(textBox, 'active');
         });
 
