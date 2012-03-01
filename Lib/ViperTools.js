@@ -583,16 +583,21 @@ ViperTools.prototype = {
         checkbox.type = 'checkbox';
         checkbox.checked = checked || false;
 
-        var checkboxIcon = document.createElement('span');
-        dfx.addClass(checkboxIcon, 'Viper-checkbox-icon');
-        checkboxIcon.appendChild(checkbox);
+        var checkboxSwitch = document.createElement('span');
+        dfx.addClass(checkboxSwitch, 'Viper-checkbox-switch');
+
+        var checkboxSlider = document.createElement('span');
+        dfx.addClass(checkboxSlider, 'Viper-checkbox-slider');
+
+        checkboxSwitch.appendChild(checkboxSlider);
+        checkboxSwitch.appendChild(checkbox);
 
         var text = document.createElement('span');
         dfx.addClass(text, 'Viper-checkbox-title');
         dfx.setHtml(text, label);
 
         labelElem.appendChild(text);
-        labelElem.appendChild(checkboxIcon);
+        labelElem.appendChild(checkboxSwitch);
 
         var self = this;
 
