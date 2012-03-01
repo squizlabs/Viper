@@ -687,7 +687,7 @@
     line-height: 2.5em;
 }
 
-.Viper-checkbox-icon {
+.Viper-checkbox-switch {
     font-size: 1.2em;
     position: absolute;
     overflow: hidden;
@@ -712,14 +712,11 @@
     
     .Viper-checkbox.active & {
         background-color: #205caf;
-        
-/*         background: -webkit-gradient(linear, left top, left bottom, from(#3987f2), to(#205caf)); */
-/*         background: -moz-linear-gradient(top,  #3987f2,  #205caf); */
     }
 }
-.Viper-checkbox-icon:after {
+.Viper-checkbox-slider {
     -moz-transition: left 0.2s ease;
-    -webkit-transition: left 2s ease;
+    -webkit-transition: left 0.2s ease;
     content: "";
     position: absolute;
     width: 1.3em;
@@ -742,7 +739,7 @@
 
 }
 
-.Viper-checkbox-icon:before {
+.Viper-checkbox-switch:before {
     content: "";
     display: block;
     opacity: 0;
