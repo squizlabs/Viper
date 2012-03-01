@@ -349,7 +349,7 @@ ViperToolbarPlugin.prototype = {
 
     },
 
-    setBubbleButton: function(bubbleid, buttonid)
+    setBubbleButton: function(bubbleid, buttonid, useCustomToggler)
     {
         if (!this._bubbles[bubbleid]) {
             // Throw exception not a valid bubble id.
@@ -362,15 +362,17 @@ ViperToolbarPlugin.prototype = {
 
         this._bubbleButtons[bubbleid] = buttonid;
 
-        dfx.removeEvent(button, 'mousedown');
-        dfx.addEvent(button, 'mousedown', function(e) {
-            if (dfx.hasClass(button, 'disabled') === true) {
-                return;
-            }
+        if (useCustomToggler !== true) {
+            dfx.removeEvent(button, 'mousedown');
+            dfx.addEvent(button, 'mousedown', function(e) {
+                if (dfx.hasClass(button, 'disabled') === true) {
+                    return;
+                }
 
-            self.toggleBubble(bubbleid);
-            dfx.preventDefault(e);
-        });
+                self.toggleBubble(bubbleid);
+                dfx.preventDefault(e);
+            });
+        }
 
     },
 
