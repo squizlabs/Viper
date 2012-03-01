@@ -265,6 +265,13 @@ ViperToolbarPlugin.prototype = {
                     dfx.addClass(subSectionArrow, 'visible');
                 }
 
+                var inputElements = dfx.getTag('input[type=text], textarea', this._subSections[id]);
+                if (inputElements.length > 0) {
+                    try {
+                        inputElements[0].focus();
+                    } catch(e) {}
+                }
+
                 this._activeSubSection = id;
             },
             hideSubSection: function(id) {
@@ -449,7 +456,9 @@ ViperToolbarPlugin.prototype = {
 
         var inputElements = dfx.getTag('input[type=text], textarea', bubbleElem);
         if (inputElements.length > 0) {
-            inputElements[0].focus();
+            try {
+                inputElements[0].focus();
+            } catch(e) {}
         }
 
         var inlineToolbarPlugin = this.viper.getPluginManager().getPlugin('ViperInlineToolbarPlugin');

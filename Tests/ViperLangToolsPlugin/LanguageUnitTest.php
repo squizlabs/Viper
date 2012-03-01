@@ -190,6 +190,28 @@ class Viper_Tests_ViperLangToolsPlugin_LanguageUnitTest extends AbstractViperUni
     }//end testAddingLanguageToAParagraphWithItalicFirstWord()
 
 
+    /**
+     * Test that language textbox is focused when opened.
+     *
+     * @return void
+     */
+    public function testAutoFocusLanguageTextbox()
+    {
+        $dir = dirname(__FILE__).'/Images/';
+
+        $text = 'LOREM';
+
+        $this->selectText($text);
+        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language.png');
+        $this->clickTopToolbarButton($dir.'toolbarIcon_language.png');
+        $this->type('en');
+        $this->keyDown('Key.ENTER');
+
+        $this->assertHTMLMatch('<p><span lang="en">LOREM</span> xtn dolor</p><p lang="en">sit amet <strong>WoW</strong></p><p>Squiz <span lang="en">LABS</span> is orsm</p><p><em>The</em> QUICK brown fox</p><p><strong>jumps</strong> OVER the lazy dog</p>');
+
+    }//end testAutoFocusLanguageTextbox()
+
+
 }//end class
 
 ?>
