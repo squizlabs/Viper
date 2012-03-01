@@ -7,11 +7,11 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarClassUnitTest extends Ab
 
 
     /**
-     * Test that VITP changes when a class is added to the selected text and is then removed.
+     * Test that VITP changes when a class is added to the selected text and is then removed using the inline toolbar.
      *
      * @return void
      */
-    public function testLineageChangesWhenClassIsAppliedAndRemoved()
+    public function testLineageChangesWhenClassIsAppliedAndRemovedUsingInlineToolbar()
     {
         $dir = dirname(__FILE__).'/Images/';
 
@@ -24,7 +24,6 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarClassUnitTest extends Ab
 
         $this->selectText($text);
         $this->clickInlineToolbarButton($dir.'toolbarIcon_class.png');
-        $this->clickInlineToolbarButton($dir.'input_class.png');
         $this->type('test');
         $this->keyDown('Key.ENTER');
 
@@ -44,7 +43,48 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarClassUnitTest extends Ab
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem selected">Selection</li>', $lineage);
 
-    }//end testLineageChangesWhenClassIsAppliedAndRemoved()
+    }//end testLineageChangesWhenClassIsAppliedAndRemovedUsingInlineToolbar()
+
+
+    /**
+     * Test that VITP changes when a class is added to the selected text and is then removed using the top toolbar.
+     *
+     * @return void
+     */
+    public function testLineageChangesWhenClassIsAppliedAndRemovedUsingTopToolbar()
+    {
+        $dir = dirname(__FILE__).'/Images/';
+
+        $text = 'IPSUM';
+        $textLoc = $this->find($text);
+
+        $this->selectText($text);
+        $lineage = $this->getHtml('.ViperITP-lineage');
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem selected">Selection</li>', $lineage);
+
+        $this->selectText($text);
+        $this->clickTopToolbarButton($dir.'toolbarIcon_class.png');
+        $this->type('test');
+        $this->keyDown('Key.ENTER');
+
+        $this->click($textLoc);
+        $this->selectText($text);
+        $lineage = $this->getHtml('.ViperITP-lineage');
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem selected">SPAN</li>', $lineage);
+
+        $this->click($textLoc);
+        $this->selectText($text);
+        $this->clickTopToolbarButton($dir.'toolbarIcon_class_active.png');
+        sleep(1);
+        $this->clickTopToolbarButton($dir.'toolbarIcon_delete_class.png');
+        $this->keyDown('Key.ENTER');
+
+        $this->click($textLoc);
+        $this->selectText($text);
+        $lineage = $this->getHtml('.ViperITP-lineage');
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem selected">Selection</li>', $lineage);
+
+    }//end testLineageChangesWhenClassIsAppliedAndRemovedUsingTopToolbar()
 
 
     /**
