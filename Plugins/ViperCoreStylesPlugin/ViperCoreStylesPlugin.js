@@ -523,7 +523,7 @@ ViperCoreStylesPlugin.prototype = {
             while (node = elemsBetween.shift()) {
                 if (dfx.isBlockElement(node) === true) {
                     this.setJustfyChangeTrackInfo(node);
-                    this.toggleJustify(parent, type);
+                    this.toggleJustify(node, type);
                     // Reset the parent var to crate a new P tag if there
                     // are more siblings.
                     parent = null;
@@ -533,6 +533,8 @@ ViperCoreStylesPlugin.prototype = {
                     this.setJustfyChangeTrackInfo(parent);
                     this.toggleJustify(parent, type);
                     parent = null;
+                } else if (node.nodeType == dfx.TEXT_NODE && dfx.isBlank(dfx.trim(node.data)) === true) {
+                    continue;
                 } else {
                     // This is not a block element so we need to insert
                     // this element and all of its non-block siblings to a
