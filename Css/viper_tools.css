@@ -691,8 +691,8 @@
   background-color: #205caf;
 }
 .Viper-checkbox-slider {
-  -moz-transition: left 0.2s ease;
-  -webkit-transition: left 0.2s ease;
+  -moz-transition: left 0.2s ease-out;
+  -webkit-transition: left 0.2s ease-out;
   content: "";
   position: absolute;
   width: 1.3em;
@@ -701,14 +701,13 @@
   left: 0.15em;
   top: 50%;
   margin-top: -0.65em;
-  background-color: #54525a;
   background-color: #65636b;
   box-shadow: 0 0 2px #000000, 0 1px 0 rgba(255, 255, 255, 0.3) inset;
 }
 .Viper-checkbox.active .Viper-checkbox-slider {
   left: 1.7em;
-  background-color: #e9e9eb;
-  box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.6), 0 1px 0 #ffffff inset;
+  background-color: #d9d9de;
+  box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.6), 0 1px 0 rgba(255, 255, 255, 0.3) inset;
   background: -webkit-gradient(linear, left top, left bottom, from(#e9e9eb), to(#c2c2cb));
   background: -moz-linear-gradient(top, #e9e9eb, #c2c2cb);
 }
