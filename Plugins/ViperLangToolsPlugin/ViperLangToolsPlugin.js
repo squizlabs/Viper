@@ -146,8 +146,21 @@ ViperLangToolsPlugin.prototype = {
         dfx.remove(elem);
 
         var range = this.viper.getViperRange();
-        range.setStart(firstChild, 0);
-        range.setEnd(lastChild, lastChild.data.length);
+        if (firstChild === lastChild) {
+            range.selectNode(firstChild);
+        } else {
+            range.setStart(firstChild, 0);
+
+            if (lastChild.nodeType === dfx.TEXT_NODE) {
+                range.setEnd(lastChild, lastChild.data.length);
+            } else {
+                var lastSelectable = range._getLastSelectableChild(lastChild);
+                if (lastSelectable) {
+                    range.setEnd(lastSelectable, lastSelectable.data.length);
+                }
+            }
+        }//end if
+
         ViperSelection.addRange(range);
         this.viper.fireSelectionChanged(range, true);
         this.viper.fireNodesChanged([this.viper.getViperElement()]);
@@ -201,6 +214,47 @@ ViperLangToolsPlugin.prototype = {
 
     },
 
+    /**
+     * Returns list of parent elements that have only one child.
+     *
+     * @param node    {DOMNode} The child element to get parents of.
+     * @param tagName {string}  The tag name filter.
+     *
+     * @return {array} Parent elements.
+     */
+    getSurroundingParents: function(node, tagName)
+    {
+        if (!node) {
+            return;
+        }
+
+        var parents = [];
+        var parent  = node.parentNode;
+        while (parent) {
+            var c = parent.childNodes.length;
+            for (var i = 0; i < c; i++) {
+                var child = parent.childNodes[i];
+                if (child.nodeType == dfx.ELEMENT_NODE) {
+                    if (child !== node) {
+                        return parents;
+                    }
+                } else if (dfx.isBlank(dfx.trim(child.data)) !== true) {
+                    return parents;
+                }
+            }
+
+            if (!tagName || dfx.isTag(parent, tagName) === true) {
+                parents.push(parent);
+            }
+
+            parent = parent.parentNode;
+            node   = parent;
+        }
+
+        return parents;
+
+    },
+
     handleAcronym: function()
     {
         var value = dfx.trim(this.viper.ViperTools.getItem('VLTP:acronymInput').getValue());
@@ -209,9 +263,15 @@ ViperLangToolsPlugin.prototype = {
             this.rangeToTag('acronym', value);
         } else {
             var node = this.viper.getViperRange().getNodeSelection();
-            if (node && dfx.isTag(node, 'acronym') === true) {
-                // Remove acronym.
-                this.removeElement(node);
+            if (node) {
+                if (dfx.isTag(node, 'acronym') !== true) {
+                    var parents = this.getSurroundingParents(node, 'acronym');
+                    for (var i = 0; i < parents.length; i++) {
+                        this.removeElement(parents[i]);
+                    }
+                } else {
+                    this.removeElement(node);
+                }
             }
         }
 
@@ -225,9 +285,15 @@ ViperLangToolsPlugin.prototype = {
             this.rangeToTag('abbr', value);
         } else {
             var node = this.viper.getViperRange().getNodeSelection();
-            if (node && dfx.isTag(node, 'abbr') === true) {
-                // Remove abbr.
-                this.removeElement(node);
+            if (node) {
+                if (dfx.isTag(node, 'abbr') !== true) {
+                    var parents = this.getSurroundingParents(node, 'abbr');
+                    for (var i = 0; i < parents.length; i++) {
+                        this.removeElement(parents[i]);
+                    }
+                } else {
+                    this.removeElement(node);
+                }
             }
         }
 
@@ -241,10 +307,20 @@ ViperLangToolsPlugin.prototype = {
             this.rangeToLang(value);
         } else {
             var node = this.viper.getViperRange().getNodeSelection();
-            if (node && dfx.hasAttribute(node, 'lang') === true) {
-                node.removeAttribute('lang');
-                if (!node.className && !node.id && dfx.isTag(node, 'span') === true) {
-                    this.removeElement(node);
+            if (node) {
+                if (node && dfx.hasAttribute(node, 'lang') === true) {
+                    node.removeAttribute('lang');
+                    if (!node.className && !node.id && dfx.isTag(node, 'span') === true) {
+                        this.removeElement(node);
+                    }
+                } else {
+                    var parents = this.getSurroundingParents(node);
+                    for (var i = 0; i < parents.length; i++) {
+                        parents[i].removeAttribute('lang');
+                        if (!parents[i].className && !parents[i].id && dfx.isTag(parents[i], 'span') === true) {
+                            this.removeElement(parents[i]);
+                        }
+                    }
                 }
             }
         }

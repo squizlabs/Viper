@@ -25,7 +25,6 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarLangToolUnitTest extends
         $this->selectText($text);
         $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language.png');
         $this->clickTopToolbarButton($dir.'toolbarIcon_language.png');
-        $this->clickTopToolbarButton($dir.'input_language.png');
         $this->type('en');
         $this->keyDown('Key.ENTER');
 
@@ -68,7 +67,6 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarLangToolUnitTest extends
         $this->selectText($text);
         $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language.png');
         $this->clickTopToolbarButton($dir.'toolbarIcon_acronym.png');
-        $this->clickTopToolbarButton($dir.'input_acronym.png');
         $this->type('en');
         $this->keyDown('Key.ENTER');
 
@@ -111,7 +109,6 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarLangToolUnitTest extends
         $this->selectText($text);
         $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language.png');
         $this->clickTopToolbarButton($dir.'toolbarIcon_abbreviation.png');
-        $this->clickTopToolbarButton($dir.'input_abbreviation.png');
         $this->type('en');
         $this->keyDown('Key.ENTER');
 
@@ -154,7 +151,6 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarLangToolUnitTest extends
         $this->selectText($text);
         $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language.png');
         $this->clickTopToolbarButton($dir.'toolbarIcon_language.png');
-        $this->clickTopToolbarButton($dir.'input_language.png');
         $this->type('en');
         $this->keyDown('Key.ENTER');
 
@@ -197,7 +193,6 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarLangToolUnitTest extends
         $this->selectText($text);
         $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language.png');
         $this->clickTopToolbarButton($dir.'toolbarIcon_abbreviation.png');
-        $this->clickTopToolbarButton($dir.'input_abbreviation.png');
         $this->type('en');
         $this->keyDown('Key.ENTER');
 
@@ -240,7 +235,6 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarLangToolUnitTest extends
         $this->selectText($text);
         $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language.png');
         $this->clickTopToolbarButton($dir.'toolbarIcon_acronym.png');
-        $this->clickTopToolbarButton($dir.'input_acronym.png');
         $this->type('en');
         $this->keyDown('Key.ENTER');
 
@@ -284,7 +278,6 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarLangToolUnitTest extends
 
         $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language.png');
         $this->clickTopToolbarButton($dir.'toolbarIcon_language.png');
-        $this->clickTopToolbarButton($dir.'input_language.png');
         $this->type('en');
         $this->keyDown('Key.ENTER');
 
@@ -394,14 +387,13 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarLangToolUnitTest extends
         $this->selectText($text);
         $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language.png');
         $this->clickTopToolbarButton($dir.'toolbarIcon_language.png');
-        $this->clickTopToolbarButton($dir.'input_language.png');
         $this->type('en');
         $this->keyDown('Key.ENTER');
 
         $this->click($textLoc);
         $this->selectText($text);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Bold</li><li class="ViperITP-lineageItem selected">SPAN</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem selected">Bold</li>', $lineage);
 
         $this->click($textLoc);
         $this->selectText($text);
@@ -413,7 +405,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarLangToolUnitTest extends
         $this->click($textLoc);
         $this->selectText($text);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Bold</li><li class="ViperITP-lineageItem selected">Selection</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem selected">Bold</li>', $lineage);
 
     }//end testLineageChangesWhenLanguageIsAppliedAndRemovedToBoldText()
 
@@ -437,7 +429,6 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarLangToolUnitTest extends
         $this->selectText($text);
         $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language.png');
         $this->clickTopToolbarButton($dir.'toolbarIcon_acronym.png');
-        $this->clickTopToolbarButton($dir.'input_acronym.png');
         $this->type('en');
         $this->keyDown('Key.ENTER');
 
@@ -456,7 +447,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarLangToolUnitTest extends
         $this->click($textLoc);
         $this->selectText($text);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Bold</li><li class="ViperITP-lineageItem selected">Selection</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem selected">Bold</li>', $lineage);
 
     }//end testLineageChangesWhenAcronymIsAppliedAndRemovedToBoldText()
 
@@ -480,7 +471,6 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarLangToolUnitTest extends
         $this->selectText($text);
         $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language.png');
         $this->clickTopToolbarButton($dir.'toolbarIcon_abbreviation.png');
-        $this->clickTopToolbarButton($dir.'input_abbreviation.png');
         $this->type('en');
         $this->keyDown('Key.ENTER');
 
@@ -499,7 +489,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarLangToolUnitTest extends
         $this->click($textLoc);
         $this->selectText($text);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Bold</li><li class="ViperITP-lineageItem selected">Selection</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem selected">Bold</li>', $lineage);
 
     }//end testLineageChangesWhenAbbreviationIsAppliedAndRemovedToBoldText()
 
@@ -523,7 +513,6 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarLangToolUnitTest extends
         $this->selectText($text);
         $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language.png');
         $this->clickTopToolbarButton($dir.'toolbarIcon_language.png');
-        $this->clickTopToolbarButton($dir.'input_language.png');
         $this->type('en');
         $this->keyDown('Key.ENTER');
 
@@ -542,7 +531,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarLangToolUnitTest extends
         $this->click($textLoc);
         $this->selectText($text);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Italic</li<li class="ViperITP-lineageItem selected">Selection</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem selected">Italic</li>', $lineage);
 
     }//end testLineageChangesWhenLanguageIsAppliedAndRemovedToItalicText()
 
@@ -566,7 +555,6 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarLangToolUnitTest extends
         $this->selectText($text);
         $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language.png');
         $this->clickTopToolbarButton($dir.'toolbarIcon_acronym.png');
-        $this->clickTopToolbarButton($dir.'input_acronym.png');
         $this->type('en');
         $this->keyDown('Key.ENTER');
 
@@ -585,7 +573,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarLangToolUnitTest extends
         $this->click($textLoc);
         $this->selectText($text);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Italic</li<li class="ViperITP-lineageItem selected">Selection</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem selected">Italic</li>', $lineage);
 
     }//end testLineageChangesWhenAcronymIsAppliedAndRemovedToItalicText()
 
@@ -609,7 +597,6 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarLangToolUnitTest extends
         $this->selectText($text);
         $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language.png');
         $this->clickTopToolbarButton($dir.'toolbarIcon_abbreviation.png');
-        $this->clickTopToolbarButton($dir.'input_abbreviation.png');
         $this->type('en');
         $this->keyDown('Key.ENTER');
 
@@ -628,7 +615,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarLangToolUnitTest extends
         $this->click($textLoc);
         $this->selectText($text);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Italic</li<li class="ViperITP-lineageItem selected">Selection</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem selected">Italic</li>', $lineage);
 
     }//end testLineageChangesWhenAbbreviationIsAppliedAndRemovedToItalicText()
 
