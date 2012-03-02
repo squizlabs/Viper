@@ -900,7 +900,7 @@ ViperInlineToolbarPlugin.prototype = {
             if (!startNode) {
                 return lineage;
             } else if (startNode.nodeType == dfx.TEXT_NODE
-                && startNode.data.length === 0
+                && (startNode.data.length === 0 || dfx.isBlank(dfx.trim(startNode.data)) === true)
                 && startNode.nextSibling
                 && startNode.nextSibling.nodeType === dfx.TEXT_NODE
             ) {
