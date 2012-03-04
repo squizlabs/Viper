@@ -101,7 +101,21 @@ ViperLangToolsPlugin.prototype = {
         var node    = range.getNodeSelection();
         var element = null;
 
-        if (node) {
+        if (node || range.collapsed === true) {
+            if (!node) {
+                var node = range.getStartNode();
+                if (!node) {
+                    node = range.getEndNode();
+                    if (!node) {
+                        return null;
+                    }
+                }
+
+                if (node.nodeType === dfx.TEXT_NODE) {
+                    node = node.parentNode;
+                }
+            }//end if
+
             node.setAttribute('lang', langAttribute);
             element = node;
         } else {
