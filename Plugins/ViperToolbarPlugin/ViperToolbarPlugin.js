@@ -307,7 +307,13 @@ ViperToolbarPlugin.prototype = {
                 subSection.form.onsubmit = function() {
                     tools.disableButton(subSectionid + '-applyButton');
                     self.viper.focus();
-                    action.call(this);
+
+                    try {
+                        action.call(this);
+                    } catch (e) {
+                        console.error(e.message);
+                    }
+
                     return false;
                 };
 

@@ -348,7 +348,13 @@ ViperInlineToolbarPlugin.prototype = {
             }
 
             viper.focus();
-            action.call(this);
+
+            try {
+                action.call(this);
+            } catch (e) {
+                console.error(e.message);
+            }
+
             return false;
         };
 
