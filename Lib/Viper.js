@@ -2018,14 +2018,26 @@ Viper.prototype = {
                 }
             });
 
-            if (start.firstChild && dfx.isBlank(dfx.getNodeTextContent(start)) !== true) {
-                dfx.insertBefore(startTopParent, start);
+            if (start.firstChild) {
+                if (dfx.isBlank(dfx.getNodeTextContent(start)) !== true) {
+                    dfx.insertBefore(startTopParent, start);
+                } else {
+                    while (start.firstChild) {
+                        dfx.insertBefore(startTopParent, start.firstChild);
+                    }
+                }
             }
 
             dfx.insertBefore(startTopParent, div.childNodes);
 
-            if (end.firstChild && dfx.isBlank(dfx.getNodeTextContent(end)) !== true) {
-                dfx.insertBefore(startTopParent, end);
+            if (end.firstChild ) {
+                if (dfx.isBlank(dfx.getNodeTextContent(end)) !== true) {
+                    dfx.insertBefore(startTopParent, end);
+                } else {
+                    while (end.firstChild) {
+                        dfx.insertBefore(startTopParent, end.firstChild);
+                    }
+                }
             }
 
             dfx.remove(startTopParent);
