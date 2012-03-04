@@ -744,6 +744,7 @@ ViperDOMRange.prototype = {
             && endNode.nodeType === dfx.TEXT_NODE
             && range.startOffset === 0
             && range.endOffset === endNode.data.length
+            && this._getFirstSelectableChild(common) === startNode
             && this._getLastSelectableChild(common) === endNode
         ) {
             return common;
