@@ -147,20 +147,43 @@ ViperLinkPlugin.prototype = {
             return;
         }
 
-        var range    = this.viper.getViperRange();
-        var bookmark = this.viper.createBookmark(range);
-
+        var range = this.viper.getViperRange();
+        var node  = range.getNodeSelection();
         var a     = document.createElement('a');
-        var elems = dfx.getElementsBetween(bookmark.start, bookmark.end);
-        for (var i = 0; i < elems.length; i++) {
-            a.appendChild(elems[i]);
+
+        if (node && node.nodeType === dfx.ELEMENT_NODE) {
+            while (node.firstChild) {
+                a.appendChild(node.firstChild);
+            }
+
+            this.updateLinkAttributes(a, idPrefix);
+
+            if (dfx.isTag(node, 'span') === true) {
+                // Replace the span tag with the link tag.
+                for (var i = 0; i < node.attributes.length; i++) {
+                    a.setAttribute(node.attributes[i].nodeName, node.attributes[i].nodeValue)
+                }
+
+                dfx.insertBefore(node, a);
+                dfx.remove(node);
+            } else {
+                node.appendChild(a);
+            }
+        } else {
+            var bookmark = this.viper.createBookmark(range);
+
+            var elems = dfx.getElementsBetween(bookmark.start, bookmark.end);
+            for (var i = 0; i < elems.length; i++) {
+                a.appendChild(elems[i]);
+            }
+
+            this.updateLinkAttributes(a, idPrefix);
+
+            dfx.insertBefore(bookmark.start, a);
+
+            this.viper.removeBookmark(bookmark);
         }
 
-        this.updateLinkAttributes(a, idPrefix);
-
-        dfx.insertBefore(bookmark.start, a);
-
-        this.viper.removeBookmark(bookmark);
         range.selectNode(a);
         ViperSelection.addRange(range);
 
