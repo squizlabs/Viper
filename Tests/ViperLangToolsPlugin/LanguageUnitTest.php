@@ -23,7 +23,28 @@ class Viper_Tests_ViperLangToolsPlugin_LanguageUnitTest extends AbstractViperUni
 
 
     /**
-     * Test that you can apply the language attribute to a word.
+     * Test that the Update Changes button remains inactvie.
+     *
+     * @return void
+     */
+    public function testUpdateChangesButton()
+    {
+        $dir = dirname(__FILE__).'/Images/';
+
+        $text    = 'XuT';
+        $textLoc = $this->find($text);
+
+        $this->selectText($text);
+        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language.png');
+        $this->clickTopToolbarButton($dir.'toolbarIcon_language.png');
+
+        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_updateChanges_disabled.png'), 'Update Changes button should be disabled.');
+
+    }//end testUpdateChangesButton()
+
+
+    /**
+     * Test that you can apply ThE language attribute to a word.
      *
      * @return void
      */
@@ -37,11 +58,10 @@ class Viper_Tests_ViperLangToolsPlugin_LanguageUnitTest extends AbstractViperUni
         $this->selectText($text);
         $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language.png');
         $this->clickTopToolbarButton($dir.'toolbarIcon_language.png');
-        $this->clickTopToolbarButton($dir.'input_language.png');
         $this->type('en');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>LOREM <span lang="en">XuT</span> dolor</p><p lang="en">sit amet <strong>WoW</strong></p><p>Test PARA</p><p>Squiz <span lang="en">LABS</span> is orsm</p><p><em>The</em> QUICK brown fox</p><p><strong>jumps</strong> OVER the lazy dog</p>');
+        $this->assertHTMLMatch('<p>LOREM <span lang="en">XuT</span> dolor</p><p lang="en">sit amet <strong>WoW</strong></p><p>Test PARA</p><p>Squiz <span lang="en">LABS</span> is orsm</p><p><em>ThE</em> QUICK brown fox</p><p><strong>jumps</strong> <em>OVER</em> the lazy dog</p>');
 
         $this->click($textLoc);
         $this->selectText($text);
@@ -55,14 +75,10 @@ class Viper_Tests_ViperLangToolsPlugin_LanguageUnitTest extends AbstractViperUni
         $this->selectText($text);
         $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language.png');
         $this->clickTopToolbarButton($dir.'toolbarIcon_language.png');
-        $this->clickTopToolbarButton($dir.'input_language.png');
-
-        //$this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_updateChanges_disabled.png'), 'Update Changes button should be disabled.');
-
         $this->type('def');
         $this->clickTopToolbarButton($dir.'toolbarIcon_updateChanges.png');
 
-        $this->assertHTMLMatch('<p>LOREM <span lang="en">XuT</span> <span lang="def">dolor</span></p><p>sit amet <strong>WoW</strong></p><p>Test PARA</p><p>Squiz <span lang="en">LABS</span> is orsm</p><p>The <em>QUICK</em> brown fox</p>');
+        $this->assertHTMLMatch('<p>LOREM <span lang="en">XuT</span> <span lang="def">dolor</span></p><p lang="en">sit amet <strong>WoW</strong></p><p>Test PARA</p><p>Squiz <span lang="en">LABS</span> is orsm</p><p><em>ThE</em> QUICK brown fox</p><p><strong>jumps</strong> <em>OVER</em> the lazy dog</p>');
 
         $this->click($textLoc);
         $this->selectText($text);
@@ -75,7 +91,7 @@ class Viper_Tests_ViperLangToolsPlugin_LanguageUnitTest extends AbstractViperUni
 
 
     /**
-     * Test that you can add the language to a paragraph.
+     * Test that you can add ThE language to a paragraph.
      *
      * @return void
      */
@@ -93,7 +109,7 @@ class Viper_Tests_ViperLangToolsPlugin_LanguageUnitTest extends AbstractViperUni
         $this->type('en');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p lang="en">LOREM XuT dolor</p><p lang="en">sit amet <strong>WoW</strong></p><p>Test PARA</p><p>Squiz <span lang="en">LABS</span> is orsm</p><p><em>The</em> QUICK brown fox</p><p><strong>jumps</strong> OVER the lazy dog</p>');
+        $this->assertHTMLMatch('<p lang="en">LOREM XuT dolor</p><p lang="en">sit amet <strong>WoW</strong></p><p>Test PARA</p><p>Squiz <span lang="en">LABS</span> is orsm</p><p><em>ThE</em> QUICK brown fox</p><p><strong>jumps</strong> <em>OVER</em> the lazy dog</p>');
 
         $this->selectText($text);
         $this->selectInlineToolbarLineageItem(0);
@@ -111,7 +127,7 @@ class Viper_Tests_ViperLangToolsPlugin_LanguageUnitTest extends AbstractViperUni
         $this->type('en');
         $this->clickTopToolbarButton($dir.'toolbarIcon_updateChanges.png');
 
-        $this->assertHTMLMatch('<p lang="en">LOREM XuT dolor</p><p lang="en">sit amet <strong>WoW</strong></p><p lang="en">Test PARA</p><p>Squiz <span lang="en">LABS</span> is orsm</p><p><em>The</em> QUICK brown fox</p><p><strong>jumps</strong> OVER the lazy dog</p>');
+        $this->assertHTMLMatch('<p lang="en">LOREM XuT dolor</p><p lang="en">sit amet <strong>WoW</strong></p><p lang="en">Test PARA</p><p>Squiz <span lang="en">LABS</span> is orsm</p><p><em>ThE</em> QUICK brown fox</p><p><strong>jumps</strong> <em>OVER</em> the lazy dog</p>');
 
     }//end testAddingLanguageToAParagraph()
 
@@ -136,21 +152,21 @@ class Viper_Tests_ViperLangToolsPlugin_LanguageUnitTest extends AbstractViperUni
         $this->clickTopToolbarButton($dir.'toolbarIcon_deleteValue_icon.png');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>LOREM XuT dolor</p><p>sit amet <strong>WoW</strong></p><p>Test PARA</p><p>Squiz <span lang="en">LABS</span> is orsm</p><p><em>The</em> QUICK brown fox</p><p><strong>jumps</strong> OVER the lazy dog</p>');
+        $this->assertHTMLMatch('<p>LOREM XuT dolor</p><p>sit amet <strong>WoW</strong></p><p>Test PARA</p><p>Squiz <span lang="en">LABS</span> is orsm</p><p><em>ThE</em> QUICK brown fox</p><p><strong>jumps</strong> <em>OVER</em> the lazy dog</p>');
 
         $this->click($this->find($text));
         $this->selectText($text);
         $this->selectInlineToolbarLineageItem(0);
 
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_toggle_language.png'), 'Language icon is still active in the Top Toolbar.');
+        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_toggle_language.png'), 'Language icon is still active in ThE Top Toolbar.');
 
-        // Reapply the language so that we can delete it with the Update Changes button
+        // Reapply ThE language so that we can delete it with ThE Update Changes button
         $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language.png');
         $this->clickTopToolbarButton($dir.'toolbarIcon_language.png');
         $this->clickTopToolbarButton($dir.'input_language.png');
         $this->type('en');
         $this->keyDown('Key.ENTER');
-        $this->assertHTMLMatch('<p>LOREM XuT dolor</p><p lang="en">sit amet <strong>WoW</strong></p><p>Test PARA</p><p>Squiz <span lang="en">LABS</span> is orsm</p><p><em>The</em> QUICK brown fox</p><p><strong>jumps</strong> OVER the lazy dog</p>');
+        $this->assertHTMLMatch('<p>LOREM XuT dolor</p><p lang="en">sit amet <strong>WoW</strong></p><p>Test PARA</p><p>Squiz <span lang="en">LABS</span> is orsm</p><p><em>ThE</em> QUICK brown fox</p><p><strong>jumps</strong> <em>OVER</em> the lazy dog</p>');
 
         $this->selectText($text);
         $this->selectInlineToolbarLineageItem(0);
@@ -159,7 +175,7 @@ class Viper_Tests_ViperLangToolsPlugin_LanguageUnitTest extends AbstractViperUni
         $this->clickTopToolbarButton($dir.'toolbarIcon_deleteValue_icon.png');
         $this->clickTopToolbarButton($dir.'toolbarIcon_updateChanges.png');
 
-        $this->assertHTMLMatch('<p>LOREM XuT dolor</p><p>sit amet <strong>WoW</strong></p><p>Test PARA</p><p>Squiz <span lang="en">LABS</span> is orsm</p><p><em>The</em> QUICK brown fox</p><p><strong>jumps</strong> OVER the lazy dog</p>');
+        $this->assertHTMLMatch('<p>LOREM XuT dolor</p><p>sit amet <strong>WoW</strong></p><p>Test PARA</p><p>Squiz <span lang="en">LABS</span> is orsm</p><p><em>ThE</em> QUICK brown fox</p><p><strong>jumps</strong> <em>OVER</em> the lazy dog</p>');
 
     }//end testRemovingLanguageAttributeFromAParagraph()
 
@@ -183,20 +199,20 @@ class Viper_Tests_ViperLangToolsPlugin_LanguageUnitTest extends AbstractViperUni
         $this->clickTopToolbarButton($dir.'toolbarIcon_deleteValue_icon.png');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>LOREM XuT dolor</p><p lang="en">sit amet <strong>WoW</strong></p><p>Test PARA</p><p>Squiz LABS is orsm</p><p><em>The</em> QUICK brown fox</p><p><strong>jumps</strong> OVER the lazy dog</p>');
+        $this->assertHTMLMatch('<p>LOREM XuT dolor</p><p lang="en">sit amet <strong>WoW</strong></p><p>Test PARA</p><p>Squiz LABS is orsm</p><p><em>ThE</em> QUICK brown fox</p><p><strong>jumps</strong> <em>OVER</em> the lazy dog</p>');
 
         $this->click($this->find($text));
         $this->selectText($text);
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_toggle_language.png'), 'Language icon is still active in the Top Toolbar.');
+        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_toggle_language.png'), 'Language icon is still active in ThE Top Toolbar.');
 
-        // Reapply the language so that we can delete it with the Update Changes button
+        // Reapply ThE language so that we can delete it with ThE Update Changes button
         $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language.png');
         $this->clickTopToolbarButton($dir.'toolbarIcon_language.png');
         $this->clickTopToolbarButton($dir.'input_language.png');
         $this->type('en');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>LOREM XuT dolor</p><p lang="en">sit amet <strong>WoW</strong></p><p>Test PARA</p><p>Squiz <span lang="en">LABS</span> is orsm</p><p><em>The</em> QUICK brown fox</p><p><strong>jumps</strong> OVER the lazy dog</p>');
+        $this->assertHTMLMatch('<p>LOREM XuT dolor</p><p lang="en">sit amet <strong>WoW</strong></p><p>Test PARA</p><p>Squiz <span lang="en">LABS</span> is orsm</p><p><em>ThE</em> QUICK brown fox</p><p><strong>jumps</strong> <em>OVER</em> the lazy dog</p>');
 
         $this->selectText($text);
         $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language_highlighted.png');
@@ -204,17 +220,17 @@ class Viper_Tests_ViperLangToolsPlugin_LanguageUnitTest extends AbstractViperUni
         $this->clickTopToolbarButton($dir.'toolbarIcon_deleteValue_icon.png');
         $this->clickTopToolbarButton($dir.'toolbarIcon_updateChanges.png');
 
-        $this->assertHTMLMatch('<p>LOREM XuT dolor</p><p lang="en">sit amet <strong>WoW</strong></p><p>Test PARA</p><p>Squiz LABS is orsm</p><p><em>The</em> QUICK brown fox</p><p><strong>jumps</strong> OVER the lazy dog</p>');
+        $this->assertHTMLMatch('<p>LOREM XuT dolor</p><p lang="en">sit amet <strong>WoW</strong></p><p>Test PARA</p><p>Squiz LABS is orsm</p><p><em>ThE</em> QUICK brown fox</p><p><strong>jumps</strong> <em>OVER</em> the lazy dog</p>');
 
     }//end testRemovingLanguageAttributeFromAWord()
 
 
     /**
-     * Test that you can apply a language to a pargraph where the first word is bold.
+     * Test that you can apply and remove a language to a pargraph where ThE first word is bold.
      *
      * @return void
      */
-    public function testAddingLanguageToAParagraphWithBoldFirstWord()
+    public function testAddingAndRemovingLanguageToAParagraphWithBoldFirstWord()
     {
         $dir = dirname(__FILE__).'/Images/';
 
@@ -228,17 +244,27 @@ class Viper_Tests_ViperLangToolsPlugin_LanguageUnitTest extends AbstractViperUni
         $this->type('en');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>LOREM XuT dolor</p><p lang="en">sit amet <strong>WoW</strong></p><p>Test PARA</p><p>Squiz <span lang="en">LABS</span> is orsm</p><p><em>The</em> QUICK brown fox</p><p lang="en"><strong>jumps</strong> OVER the lazy dog</p>');
+        $this->assertHTMLMatch('<p>LOREM XuT dolor</p><p lang="en">sit amet <strong>WoW</strong></p><p>Test PARA</p><p>Squiz <span lang="en">LABS</span> is orsm</p><p><em>ThE</em> QUICK brown fox</p><p lang="en"><strong>jumps</strong> <em>OVER</em> the lazy dog</p>');
 
-    }//end testAddingLanguageToAParagraphWithBoldFirstWord()
+        $this->click($this->find($text));
+        $this->selectText($text);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language_highlighted.png');
+        $this->clickTopToolbarButton($dir.'toolbarIcon_language_active.png');
+        $this->clickTopToolbarButton($dir.'toolbarIcon_deleteValue_icon.png');
+        $this->keyDown('Key.ENTER');
+
+        $this->assertHTMLMatch('<p>LOREM XuT dolor</p><p lang="en">sit amet <strong>WoW</strong></p><p>Test PARA</p><p>Squiz <span lang="en">LABS</span> is orsm</p><p><em>ThE</em> QUICK brown fox</p><p><strong>jumps</strong> <em>OVER</em> the lazy dog</p>');
+
+    }//end testAddingAndRemovingLanguageToAParagraphWithBoldFirstWord()
 
 
     /**
-     * Test that you can apply a language to a pargraph where the first word is italic.
+     * Test that you can apply and remove a language to a pargraph where ThE first word is italic.
      *
      * @return void
      */
-    public function testAddingLanguageToAParagraphWithItalicFirstWord()
+    public function testAddingAndRemovingLanguageToAParagraphWithItalicFirstWord()
     {
         $dir = dirname(__FILE__).'/Images/';
 
@@ -252,9 +278,83 @@ class Viper_Tests_ViperLangToolsPlugin_LanguageUnitTest extends AbstractViperUni
         $this->type('en');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>LOREM XuT dolor</p><p lang="en">sit amet <strong>WoW</strong></p><p>Test PARA</p><p>Squiz <span lang="en">LABS</span> is orsm</p><p lang="en"><em>The</em> QUICK brown fox</p><p><strong>jumps</strong> OVER the lazy dog</p>');
+        $this->assertHTMLMatch('<p>LOREM XuT dolor</p><p lang="en">sit amet <strong>WoW</strong></p><p>Test PARA</p><p>Squiz <span lang="en">LABS</span> is orsm</p><p lang="en"><em>ThE</em> QUICK brown fox</p><p><strong>jumps</strong> <em>OVER</em> the lazy dog</p>');
 
-    }//end testAddingLanguageToAParagraphWithItalicFirstWord()
+        $this->click($this->find($text));
+        $this->selectText($text);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language_highlighted.png');
+        $this->clickTopToolbarButton($dir.'toolbarIcon_language_active.png');
+        $this->clickTopToolbarButton($dir.'toolbarIcon_deleteValue_icon.png');
+        $this->keyDown('Key.ENTER');
+
+        $this->assertHTMLMatch('<p>LOREM XuT dolor</p><p lang="en">sit amet <strong>WoW</strong></p><p>Test PARA</p><p>Squiz <span lang="en">LABS</span> is orsm</p><p><em>ThE</em> QUICK brown fox</p><p><strong>jumps</strong> <em>OVER</em> the lazy dog</p>');
+
+    }//end testAddingAndRemovingLanguageToAParagraphWithItalicFirstWord()
+
+
+    /**
+     * Test that you can apply a language to a bold word.
+     *
+     * @return void
+     */
+    public function testAddingAndRemovingLanguageToABoldWord()
+    {
+        $dir = dirname(__FILE__).'/Images/';
+
+        $text = 'jumps';
+
+        $this->selectText($text);
+        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language.png');
+        $this->clickTopToolbarButton($dir.'toolbarIcon_language.png');
+        $this->clickTopToolbarButton($dir.'input_language.png');
+        $this->type('en');
+        $this->keyDown('Key.ENTER');
+
+        $this->assertHTMLMatch('<p>LOREM XuT dolor</p><p lang="en">sit amet <strong>WoW</strong></p><p>Test PARA</p><p>Squiz <span lang="en">LABS</span> is orsm</p><p><em>ThE</em> QUICK brown fox</p><p><strong lang="en">jumps</strong> <em>OVER</em> the lazy dog</p>');
+
+        $this->click($this->find($text));
+        $this->selectText($text);
+        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language_highlighted.png');
+        $this->clickTopToolbarButton($dir.'toolbarIcon_language_active.png');
+        $this->clickTopToolbarButton($dir.'toolbarIcon_deleteValue_icon.png');
+        $this->keyDown('Key.ENTER');
+
+        $this->assertHTMLMatch('<p>LOREM XuT dolor</p><p lang="en">sit amet <strong>WoW</strong></p><p>Test PARA</p><p>Squiz <span lang="en">LABS</span> is orsm</p><p><em>ThE</em> QUICK brown fox</p><p><strong>jumps</strong> <em>OVER</em> the lazy dog</p>');
+
+    }//end testAddingAndRemovingLanguageToABoldWord()
+
+
+    /**
+     * Test that you can apply and remove a language to an italic word.
+     *
+     * @return void
+     */
+    public function testAddingAndRemovingLanguageToItalicWord()
+    {
+        $dir = dirname(__FILE__).'/Images/';
+
+        $text = 'OVER';
+
+        $this->selectText($text);
+        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language.png');
+        $this->clickTopToolbarButton($dir.'toolbarIcon_language.png');
+        $this->clickTopToolbarButton($dir.'input_language.png');
+        $this->type('en');
+        $this->keyDown('Key.ENTER');
+
+        $this->assertHTMLMatch('<p>LOREM XuT dolor</p><p lang="en">sit amet <strong>WoW</strong></p><p>Test PARA</p><p>Squiz <span lang="en">LABS</span> is orsm</p><p><em>ThE</em> QUICK brown fox</p><p><strong>jumps</strong> <em lang="en">OVER</em> the lazy dog</p>');
+
+        $this->click($this->find($text));
+        $this->selectText($text);
+        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language_highlighted.png');
+        $this->clickTopToolbarButton($dir.'toolbarIcon_language_active.png');
+        $this->clickTopToolbarButton($dir.'toolbarIcon_deleteValue_icon.png');
+        $this->keyDown('Key.ENTER');
+
+        $this->assertHTMLMatch('<p>LOREM XuT dolor</p><p lang="en">sit amet <strong>WoW</strong></p><p>Test PARA</p><p>Squiz <span lang="en">LABS</span> is orsm</p><p><em>ThE</em> QUICK brown fox</p><p><strong>jumps</strong> <em>OVER</em> the lazy dog</p>');
+
+    }//end testAddingAndRemovingLanguageToItalicWord()
 
 
     /**
@@ -274,7 +374,8 @@ class Viper_Tests_ViperLangToolsPlugin_LanguageUnitTest extends AbstractViperUni
         $this->type('en');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p><span lang="en">LOREM</span> xtn dolor</p><p lang="en">sit amet <strong>WoW</strong></p><p>Squiz <span lang="en">LABS</span> is orsm</p><p><em>The</em> QUICK brown fox</p><p><strong>jumps</strong> OVER the lazy dog</p>');
+        $this->assertHTMLMatch('<p><span lang="en">LOREM</span> XuT dolor</p><p lang="en">sit amet <strong>WoW</strong></p><p>Test PARA</p><p>Squiz <span lang="en">LABS</span> is orsm</p><p><em>ThE</em> QUICK brown fox</p><p><strong>jumps</strong> <em>OVER</em> the lazy dog</p>');
+
 
     }//end testAutoFocusLanguageTextbox()
 

@@ -495,11 +495,11 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarLangToolUnitTest extends
 
 
     /**
-     * Test that VITP changes when a language is added to italic text and is then removed.
+     * Test that VITP doesn't changes when a language is added to italic text and is then removed.
      *
      * @return void
      */
-    public function testLineageChangesWhenLanguageIsAppliedAndRemovedToItalicText()
+    public function testLineageDoesNotChangeWhenLanguageIsAppliedAndRemovedToItalicText()
     {
         $dir = dirname(__FILE__).'/Images/';
 
@@ -519,13 +519,13 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarLangToolUnitTest extends
         $this->click($textLoc);
         $this->selectText($text);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">SPAN</li><li class="ViperITP-lineageItem selected">Italic</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem selected">Italic</li>', $lineage);
 
         $this->click($textLoc);
         $this->selectText($text);
         $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language_active.png');
         $this->clickTopToolbarButton($dir.'toolbarIcon_language_active.png');
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_deleteValue_icon.png');
+        $this->clickTopToolbarButton($dir.'toolbarIcon_deleteValue_icon.png');
         $this->keyDown('Key.ENTER');
 
         $this->click($textLoc);
@@ -533,7 +533,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarLangToolUnitTest extends
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem selected">Italic</li>', $lineage);
 
-    }//end testLineageChangesWhenLanguageIsAppliedAndRemovedToItalicText()
+    }//end testLineageDoesNotChangeWhenLanguageIsAppliedAndRemovedToItalicText()
 
 
     /**
