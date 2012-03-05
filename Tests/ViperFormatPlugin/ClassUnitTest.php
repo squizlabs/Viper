@@ -32,13 +32,31 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $text = 'dolor';
         $this->selectText($text);
         $this->clickInlineToolbarButton($dir.'toolbarIcon_class.png');
-        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_updateChanges_disabled.png'), 'Update Changes button should be disabled.');
-
         $this->type('class');
         $this->clickInlineToolbarButton($dir.'toolbarIcon_updateChanges.png');
-        $this->assertHTMLMatch('<p>Lorem<span class="test">XuT</span> <span class="test">dolor</span></p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>jumps</strong> OVER the lazy dogggg</p>');
+        $this->assertHTMLMatch('<p>Lorem <span class="test">XuT</span> <span class="class">dolor</span></p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>jumps</strong> OVER the lazy dogggg</p>');
 
     }//end testAddingClassAttributeToAWordUsingTheInlineToolbar()
+
+
+    /**
+     * Test that the class icon appears in the inline toolbar for the last word in a paragraph.
+     *
+     * @return void
+     */
+    public function testClassIconAppearsInTheInlineToolbar()
+    {
+        $dir = dirname(__FILE__).'/Images/';
+
+        $this->selectText('ORSM');
+        $this->type('Key.RIGHT');
+        $this->type('Key.ENTER');
+        $this->type('This is a new line of ConTenT');
+
+        $this->selectText('ConTenT');
+        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_class.png'), 'Class icon should appear in the inline toolbar.');
+
+    }//end testClassIconAppearsInTheInlineToolbar()
 
 
     /**
@@ -67,13 +85,35 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $text = 'dolor';
         $this->selectText($text);
         $this->clickTopToolbarButton($dir.'toolbarIcon_class.png');
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_updateChanges_disabled.png'), 'Update Changes button should be disabled.');
-
         $this->type('class');
         $this->clickTopToolbarButton($dir.'toolbarIcon_updateChanges.png');
-        $this->assertHTMLMatch('<p>Lorem<span class="test">XuT</span> <span class="test">dolor</span></p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>jumps</strong> OVER the lazy dogggg</p>');
+        $this->assertHTMLMatch('<p>Lorem <span class="test">XuT</span> <span class="class">dolor</span></p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>jumps</strong> OVER the lazy dogggg</p>');
+
 
     }//end testAddingClassAttributeToAWordUsingTheTopToolbar()
+
+
+    /**
+     * Test that the update changes button is disabled when you initially click on the class icon.
+     *
+     * @return void
+     */
+    public function testUpdateChangesButtonIsDisabledForClassIcon()
+    {
+        // Stop here as the unit testing framework doesn't recognise the disabled update changes button.
+        $this->markTestIncomplete('Need a way for the unit testing framework to recongnise the disabled update changes button');
+
+        $dir = dirname(__FILE__).'/Images/';
+
+        $this->selectText('XuT');
+        $this->clickTopToolbarButton($dir.'toolbarIcon_class.png');
+        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_updateChanges_disabled.png'), 'Update Changes button should be disabled.');
+
+        $this->selectText('dolor');
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_class.png');
+        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_updateChanges_disabled.png'), 'Update Changes button should be disabled.');
+
+    }//end testUpdateChangesButtonIsDisabledForClassIcon()
 
 
     /**
