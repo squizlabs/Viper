@@ -119,6 +119,41 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
 
 
     /**
+     * Test that the strong tags are added in the correct location when you apply, remove and re-apply bold formatting to two words in the content.
+     *
+     * @return void
+     */
+    public function testStrongTagsAppliedCorrectlyWhenReapplyingBold()
+    {
+        $dir = dirname(__FILE__).'/Images/';
+
+        $this->selectText('XuT', 'dolor');
+
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_bold.png');
+        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_bold_active.png'), 'Bold icon in the inline toolbar is not active');
+        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_bold_active.png'), 'Bold icon in the top toolbar is not active');
+
+        $this->assertHTMLMatch('<p>Lorem <strong>XuT dolor</strong></p><p>sit <em>amet</em> <strong>WoW</strong></p>');
+
+        $this->selectText('dolor');
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_bold_active.png');
+
+        $this->assertHTMLMatch('<p>Lorem <strong>XuT </strong>dolor</p><p>sit <em>amet</em> <strong>WoW</strong></p>');
+
+        $this->selectText('XuT');
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_bold_active.png');
+
+        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p>sit <em>amet</em> <strong>WoW</strong></p>');
+
+        $this->selectText('XuT', 'dolor');
+        $this->clickTopToolbarButton($dir.'toolbarIcon_bold.png');
+
+        $this->assertHTMLMatch('<p>Lorem <strong>XuT dolor</strong></p><p>sit <em>amet</em> <strong>WoW</strong></p>');
+
+    }//end testStrongTagsAppliedCorrectlyWhenReapplyingBold()
+
+
+    /**
      * Test that the shortcut command works for Bold.
      *
      * @return void
