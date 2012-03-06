@@ -91,6 +91,29 @@ class Viper_Tests_ViperLangToolsPlugin_LanguageUnitTest extends AbstractViperUni
 
 
     /**
+     * Test that you can edit a language.
+     *
+     * @return void
+     */
+    public function testEditingALanguage()
+    {
+        $dir = dirname(__FILE__).'/Images/';
+
+        $text    = 'LABS';
+        $textLoc = $this->find($text);
+
+        $this->selectText($text);
+        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language_active.png');
+        $this->clickTopToolbarButton($dir.'toolbarIcon_language_active.png');
+        $this->type('abc');
+        $this->keyDown('Key.ENTER');
+
+        $this->assertHTMLMatch('<p>LOREM XuT dolor</p><p lang="en">sit amet <strong>WoW</strong></p><p>Test PARA</p><p>Squiz <span lang="enabc">LABS</span> is orsm</p><p><em>ThE</em> QUICK brown fox</p><p><strong>jumps</strong> <em>OVER</em> the lazy dog</p>');
+
+    }//end testEditingALanguage()
+
+
+    /**
      * Test that you can add ThE language to a paragraph.
      *
      * @return void
