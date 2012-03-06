@@ -1,7 +1,10 @@
 ViperAccessibilityPlugin_WCAG2 = {
+    viper: null,
 
     getReferenceContent: function(issue, callback, vap)
     {
+        this.viper = vap.viper;
+
         var code = this._parseCode(issue.code);
 
         var content = '<strong>' + code.standard + ' References</strong><br>';
@@ -25,6 +28,8 @@ ViperAccessibilityPlugin_WCAG2 = {
 
     getResolutionContent: function(issue, callback, vap)
     {
+        this.viper = vap.viper;
+
         var code = this._parseCode(issue.code);
 
         var objName = 'ViperAccessibilityPlugin_WCAG2_Principle' + code.principle + '_Guideline' + code.guideline.replace('.', '_');
@@ -32,7 +37,7 @@ ViperAccessibilityPlugin_WCAG2 = {
         if (obj) {
             var fn = obj['res_' + code.section.replace('.', '_')];
             if (dfx.isFn(fn) === true) {
-                fn.call(obj, issue.element, code, callback, vap.viper);
+                fn.call(obj, issue.element, issue, code, callback, vap.viper);
             }
 
             return;
@@ -45,8 +50,7 @@ ViperAccessibilityPlugin_WCAG2 = {
         var scriptUrl = url + '/resolutions.js';
         var cssUrl    = url + '/resolutions.css';
 
-        vap.includeCss(cssUrl);
-
+        var self    = this;
         var objName = 'ViperAccessibilityPlugin_WCAG2_Principle' + code.principle + '_Guideline' + code.guideline.replace('.', '_');
         vap.loadObject(scriptUrl, objName, function(obj) {
             if (!obj) {
@@ -54,13 +58,37 @@ ViperAccessibilityPlugin_WCAG2 = {
                 return;
             }
 
+            if (obj.hasCss === true) {
+                vap.includeCss(cssUrl);
+            }
+
+            obj.parent = self;
+
             var fn = obj['res_' + code.section.replace('.', '_')];
             if (dfx.isFn(fn) === true) {
-                fn.call(obj, issue.element, code, callback, vap.viper);
+                fn.call(obj, issue.element, issue, code, callback, vap.viper);
             } else {
                 callback.call(this);
             }
         });
+
+    },
+
+    createActionButton: function(action, widgetids, title)
+    {
+        title = title || 'Apply Changes';
+
+        var tools    = this.viper.ViperTools;
+        var buttonid = dfx.getUniqueId();
+        var button   = tools.createButton(buttonid, title, title, '', action, true);
+
+        for (var i = 0; i < widgetids.length; i++) {
+            this.viper.registerCallback('ViperTools:changed:' + widgetids[i], 'ViperAccessibilityPlugin:wcag2', function() {
+                tools.enableButton(buttonid);
+            });
+        }
+
+        return button;
 
     },
 
@@ -103,7 +131,8 @@ ViperAccessibilityPlugin_WCAG2 = {
 
         parsed.techniques = [];
 
-        var techniques = sections[4].split(',');
+        var techniques = sections.splice(4).join('.');
+        var techniques = techniques.split(',');
         for (var i = 0; i < techniques.length; i++) {
             parsed.techniques.push(techniques[i]);
         }
