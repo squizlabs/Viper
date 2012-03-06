@@ -213,7 +213,6 @@
 .ViperAP-issuePane {
     padding: 0 0 0.6em;
     margin: 0;
-    overflow: auto;
     border-bottom-left-radius: 0.6em;
     border-bottom-right-radius: 0.6em;
     text-shadow: none;
@@ -225,20 +224,26 @@
 }
 
 .ViperAP-issuePane .issueDoneDiv {
-    display: none;
+    visibility: hidden;
+    -moz-transition: right 0.15s ease-out, top 0.15s ease-out;
+    -webkit-transition: right 0.15s ease-out, top 0.15s ease-out;
     position: absolute;
-    right: 0;
-    top: 0;
+    right: -66px;
+    top: -67px;
     width: 65px;
     height: 65px;
-    background: transparent url(Images/issueImages.png) -20px -148px no-repeat;
+    background: transparent url(Images/issueImages.png) 0 -224px no-repeat;
 }
 
 .ViperAP-issuePane.issueDone .issueDoneDiv {
-    display: block;
+    visibility: visible;
+    right: -1px;
+    top: -2px;
 }
 
-.ViperAP-issuePane.issueDone .ViperAP-issueDetails {
+.ViperAP-issuePane.issueDone .ViperAP-issueType,
+.ViperAP-issuePane.issueDone .issueTitle,
+.ViperAP-issuePane.issueDone .issueWcag {
     opacity: 0.5;
 }
 
