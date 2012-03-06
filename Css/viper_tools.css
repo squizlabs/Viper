@@ -591,6 +591,9 @@
 .Viper-textbox.active .Viper-textbox-input[type=text]:-moz-placeholder, .Viper-textbox.active .Viper-textbox-textArea:-moz-placeholder {
   color: #7c9cc9;
 }
+.Viper-textbox.disabled .Viper-textbox-input[type=text], .Viper-textbox.disabled .Viper-textbox-textArea {
+  text-decoration: line-through;
+}
 .input-placeholder {
   color: #c44e4e;
   font-style: italic;
@@ -628,6 +631,9 @@
   right: 2px;
   top: 50%;
   margin-top: -9px;
+}
+.Viper-textbox.disabled .Viper-textbox-action, .Viper-textbox.disabled .Viper-textbox.required .Viper-textbox-main:after {
+  visibility: hidden;
 }
 .Viper-textbox.required .Viper-textbox-main:after {
   display: block;

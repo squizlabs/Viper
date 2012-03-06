@@ -595,6 +595,10 @@
     &:-moz-placeholder {
         .input-placeholder;
     }
+    
+    .Viper-textbox.disabled & {
+        text-decoration: line-through;
+    }
 
 }
 
@@ -638,6 +642,10 @@
     right: 2px;
     top: 50%;
     margin-top: -9px;
+    
+    .Viper-textbox.disabled & {
+        visibility: hidden;
+    }
 }
 .Viper-textbox.required .Viper-textbox-main:after {
     display: block;
