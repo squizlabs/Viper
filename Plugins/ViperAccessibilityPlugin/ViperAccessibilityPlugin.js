@@ -38,6 +38,7 @@ function ViperAccessibilityPlugin(viper)
     this._issuesPerPage       = 5;
     this._containerWidth      = 35;
     this._autoRunInterval     = 30000;
+    this._issues              = [];
     this._autoRunTimer        = null;
     this._subSection          = null;
     this._aaTools             = null;
@@ -510,6 +511,8 @@ ViperAccessibilityPlugin.prototype = {
         dfx.removeClass(allIssues, 'current');
         dfx.addClass(allIssues[(index - 1)], 'current');
 
+        this.pointToElement(this._issues[index].element);
+
     },
 
     _getIssueIndex: function(li)
@@ -543,6 +546,7 @@ ViperAccessibilityPlugin.prototype = {
         this._warningCount = 0;
         this._noticeCount  = 0;
         this._pageCount    = 0;
+        this._issues       = [];
 
         // Create list inner wrapper.
         var listsInner = document.createElement('div');
@@ -585,6 +589,7 @@ ViperAccessibilityPlugin.prototype = {
 
             var msg = msgs[i];
             list.appendChild(this._createIssue(msg));
+            this._issues.push(msg);
         }
 
         // Set the width to the width of panel x number of pages so they are placed
