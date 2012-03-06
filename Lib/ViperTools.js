@@ -496,6 +496,16 @@ ViperTools.prototype = {
                         dfx.addClass(textBox, 'required');
                     }
                 }
+            },
+            disable: function()
+            {
+                dfx.addClass(textBox, 'disabled');
+                input.setAttribute('disabled', true);
+            },
+            enable: function()
+            {
+                dfx.removeClass(textBox, 'disabled');
+                input.removeAttribute('disabled');
             }
         });
 
