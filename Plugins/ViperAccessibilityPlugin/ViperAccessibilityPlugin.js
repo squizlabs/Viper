@@ -217,6 +217,8 @@ ViperAccessibilityPlugin.prototype = {
             dfx.addClass(toolsSection, 'listTools');
 
             // Show the list.
+            dfx.removeClass(self._resultsMiddle, 'issueDetails');
+            dfx.addClass(self._resultsMiddle, 'issueList');
             dfx.setStyle(self._issueList, 'margin-left', 0);
         });
 
