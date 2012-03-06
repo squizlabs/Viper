@@ -15,8 +15,6 @@ class Viper_Tests_ViperLangToolsPlugin_AcronymUnitTest extends AbstractViperUnit
     {
         $dir = dirname(__FILE__).'/Images/';
 
-        //$this->assertFalse($this->topToolbarButtonExists($dir.'toolbarIcon_toggle_language.png'), 'Language icon in Top Toolbar should not be active.');
-
         $text = 'XuT';
         $this->selectText($text);
         $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language.png');
@@ -35,6 +33,27 @@ class Viper_Tests_ViperLangToolsPlugin_AcronymUnitTest extends AbstractViperUnit
 
 
     /**
+     * Test that the Update Changes button remains inactvie.
+     *
+     * @return void
+     */
+    public function testUpdateChangesButton()
+    {
+        $dir = dirname(__FILE__).'/Images/';
+
+        $text    = 'XuT';
+        $textLoc = $this->find($text);
+
+        $this->selectText($text);
+        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language.png');
+        $this->clickTopToolbarButton($dir.'toolbarIcon_acronym.png');
+
+        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_updateChanges_disabled.png'), 'Update Changes button should be disabled.');
+
+    }//end testUpdateChangesButton()
+
+
+    /**
      * Test that you can apply the acronym attribute to a word.
      *
      * @return void
@@ -48,7 +67,6 @@ class Viper_Tests_ViperLangToolsPlugin_AcronymUnitTest extends AbstractViperUnit
         $this->selectText($text);
         $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language.png');
         $this->clickTopToolbarButton($dir.'toolbarIcon_acronym.png');
-        $this->clickTopToolbarButton($dir.'input_acronym.png');
         $this->type('abc');
         $this->keyDown('Key.ENTER');
 
@@ -66,11 +84,6 @@ class Viper_Tests_ViperLangToolsPlugin_AcronymUnitTest extends AbstractViperUnit
         $this->selectText($text);
         $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language.png');
         $this->clickTopToolbarButton($dir.'toolbarIcon_acronym.png');
-        $this->clickTopToolbarButton($dir.'input_acronym.png');
-
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_updateChanges_disabled.png'), 'Update Changes button should be disabled.');
-
-        $this->clickTopToolbarButton($dir.'input_acronym.png');
         $this->type('def');
         $this->clickTopToolbarButton($dir.'toolbarIcon_updateChanges.png');
 
@@ -115,7 +128,6 @@ class Viper_Tests_ViperLangToolsPlugin_AcronymUnitTest extends AbstractViperUnit
         // Reapply the abbreviation so we can delete it by using the update changes icon
         $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language.png');
         $this->clickTopToolbarButton($dir.'toolbarIcon_acronym.png');
-        $this->clickTopToolbarButton($dir.'input_acronym.png');
         $this->type('abc');
         $this->keyDown('Key.ENTER');
 
@@ -150,7 +162,6 @@ class Viper_Tests_ViperLangToolsPlugin_AcronymUnitTest extends AbstractViperUnit
 
         $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language_highlighted.png');
         $this->clickTopToolbarButton($dir.'toolbarIcon_acronym_active.png');
-        $this->clickTopToolbarButton($dir.'input_acronym.png');
         $this->type('def');
         $this->keyDown('Key.ENTER');
 
@@ -160,7 +171,6 @@ class Viper_Tests_ViperLangToolsPlugin_AcronymUnitTest extends AbstractViperUnit
         $this->selectText($text);
         $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language_highlighted.png');
         $this->clickTopToolbarButton($dir.'toolbarIcon_acronym_active.png');
-        $this->clickTopToolbarButton($dir.'input_acronym.png');
         $this->type('ghi');
         $this->clickTopToolbarButton($dir.'toolbarIcon_updateChanges.png');
 
@@ -183,7 +193,6 @@ class Viper_Tests_ViperLangToolsPlugin_AcronymUnitTest extends AbstractViperUnit
         $this->selectText($text);
         $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language.png');
         $this->clickTopToolbarButton($dir.'toolbarIcon_acronym.png');
-        $this->clickTopToolbarButton($dir.'input_acronym.png');
         $this->type('abc');
         $this->keyDown('Key.ENTER');
 
@@ -206,7 +215,6 @@ class Viper_Tests_ViperLangToolsPlugin_AcronymUnitTest extends AbstractViperUnit
         $this->selectText($text);
         $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language.png');
         $this->clickTopToolbarButton($dir.'toolbarIcon_acronym.png');
-        $this->clickTopToolbarButton($dir.'input_acronym.png');
         $this->type('abc');
         $this->keyDown('Key.ENTER');
 
