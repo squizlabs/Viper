@@ -267,6 +267,68 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarClassUnitTest extends Ab
     }//end testLineageChangesWhenClassIsAppliedAndRemovedToItalicText()
 
 
+    /**
+     * Test that span is shown in lineage when a class to one word out of two words that are bold.
+     *
+     * @return void
+     */
+    public function testLineageWhenAddingClassToAOneBoldWord()
+    {
+        $dir = dirname(__FILE__).'/Images/';
+
+        $this->selectText('LONG', 'PARA');
+        $lineage = $this->getHtml('.ViperITP-lineage');
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem selected">Bold</li>', $lineage);
+
+        $this->selectText('PARA');
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_class.png');
+        $this->type('test');
+        $this->keyDown('Key.ENTER');
+
+        $lineage = $this->getHtml('.ViperITP-lineage');
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Bold</li><li class="ViperITP-lineageItem selected">SPAN</li>', $lineage);
+
+        $this->click($this->find('LONG'));
+        $this->selectText('PARA');
+
+        $lineage = $this->getHtml('.ViperITP-lineage');
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Bold</li><li class="ViperITP-lineageItem selected">SPAN</li>', $lineage);
+
+    }//end testLineageWhenAddingClassToAOneBoldWord()
+
+
+    /**
+     * Test that span is shown in lineage when a class to one word out of two words that are italics.
+     *
+     * @return void
+     */
+    public function testLineageWhenAddingClassToAOneItalicWord()
+    {
+        $dir = dirname(__FILE__).'/Images/';
+
+        $this->selectText('LONG', 'PARA');
+        $this->keyDown('Key.CMD + b');
+        $this->keyDown('Key.CMD + i');
+        $lineage = $this->getHtml('.ViperITP-lineage');
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem selected">Italic</li>', $lineage);
+
+        $this->selectText('PARA');
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_class.png');
+        $this->type('test');
+        $this->keyDown('Key.ENTER');
+
+        $lineage = $this->getHtml('.ViperITP-lineage');
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Italic</li><li class="ViperITP-lineageItem selected">SPAN</li>', $lineage);
+
+        $this->click($this->find('LONG'));
+        $this->selectText('PARA');
+
+        $lineage = $this->getHtml('.ViperITP-lineage');
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Italic</li><li class="ViperITP-lineageItem selected">SPAN</li>', $lineage);
+
+    }//end testLineageWhenAddingClassToAOneItalicWord()
+
+
 }//end class
 
 ?>
