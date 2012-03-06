@@ -603,6 +603,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
 
     }//end testAddingClassToAParagraphWithBoldFirstWord()
 
+
     /**
      * Test that you can apply a class to italac word.
      *
@@ -624,6 +625,52 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>jumps</strong> <em class="test">OVER</em> the lazy dogggg</p>');
 
     }//end testAddingClassToAItalicWord()
+
+
+    /**
+     * Test applying a class to one word out of two words that are bold.
+     *
+     * @return void
+     */
+    public function testAddingClassToAOneBoldWord()
+    {
+        $dir = dirname(__FILE__).'/Images/';
+
+        $this->selectText('jumps', 'OVER');
+        $this->keyDown('Key.CMD + b');
+        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>jumps OVER </strong>the lazy dogggg</p>');
+
+        $this->selectText('OVER');
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_class.png');
+        $this->type('test');
+        $this->keyDown('Key.ENTER');
+
+        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>jumps <span class="test">OVER</span> </strong>the lazy dogggg</p>');
+
+    }//end testAddingClassToAOneBoldWord()
+
+
+    /**
+     * Test applying a class to one word out of two words that are italics.
+     *
+     * @return void
+     */
+    public function testAddingClassToAOneItalicWord()
+    {
+        $dir = dirname(__FILE__).'/Images/';
+
+        $this->selectText('QUICK', 'brown');
+        $this->keyDown('Key.CMD + i');
+        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> <em>QUICK brown</em> foxxx</p><p><strong>jumps</strong> OVER the lazy dogggg</p>');
+
+        $this->selectText('QUICK');
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_class.png');
+        $this->type('test');
+        $this->keyDown('Key.ENTER');
+
+        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> <em><span class="test">QUICK</span> brown</em> foxxx</p><p><strong>jumps</strong> OVER the lazy dogggg</p>');
+
+    }//end testAddingClassToAOneItalicWord()
 
 
 }//end class

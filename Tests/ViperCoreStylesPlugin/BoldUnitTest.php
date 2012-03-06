@@ -358,6 +358,26 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
     }//end testIconIsRemovedFromInlineToolbar()
 
 
+    /**
+     * Test applying a bold to two words where one word is italics.
+     *
+     * @return void
+     */
+    public function testAddingBoldToTwoWordsWhereOneIsItalics()
+    {
+        $dir = dirname(__FILE__).'/Images/';
+
+        $this->selectText('XuT');
+        $this->keyDown('Key.CMD + i');
+        $this->assertHTMLMatch('<p>Lorem <em>XuT</em> dolor</p><p>sit <em>amet</em> <strong>WoW</strong></p>');
+
+        $this->selectText('XuT', 'dolor');
+        $this->keyDown('Key.CMD + b');
+
+        $this->assertHTMLMatch('<p>Lorem <strong><em>XuT</em> dolor</strong></p><p>sit <em>amet</em> <strong>WoW</strong></p>');
+
+    }//end testAddingBoldToTwoWordsWhereOneIsItalics()
+
 }//end class
 
 ?>
