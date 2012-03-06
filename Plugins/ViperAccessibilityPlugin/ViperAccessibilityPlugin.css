@@ -21,15 +21,6 @@
     border-radius: 0 0 9px 9px;
 }
 
-.ViperAP-issueListWrapper {
-    border-top: 1px solid #2b2b2b;
-    margin: 0;
-    vertical-align: top;
-    overflow: hidden;
-    display: inline-block;
-    width: 35em;
-}
-
 .ViperAP-listNav {
     line-height: 2em;
     text-align: center;
@@ -221,6 +212,10 @@
     width: 35em;
     display: inline-block;
     vertical-align: top;
+    max-height: 15em;
+}
+.ViperAP-issuePane.current {
+    max-height: inherit;
 }
 
 .ViperAP-issuePane .issueDoneDiv {
@@ -323,17 +318,7 @@
     text-align: center;
     padding: 0.2em;
 }
-.resolutionCol-left {
-/*     float: left; */
-}
-.resolutionCol-right {
-/*     display: inline-block; */
-/*     width: 60%; */
-/*     padding-left: 1em; */
-}
-.ViperAP-issueResolution .Viper-textbox {
-/*     margin-bottom: 1em; */
-}
+
 .ViperAP-issueResolution .imagePreview {
     float: left;
     width: 100px;
@@ -349,6 +334,7 @@
 
 .ViperAP-middle {
     position: relative;
+    overflow: hidden;
 }
 
 .resultsCont.ViperAP-wrapper {
@@ -361,8 +347,18 @@
     padding-bottom: 0.6em;
 }
 
-.ViperAP-middle {
+.ViperAP-issueListWrapper {
+    display: inline-block;
+    border-top: 1px solid #2b2b2b;
+    margin: 0;
+    vertical-align: top;
     overflow: hidden;
+    width: 35em;
+    max-height: 15em;
+}
+
+.issueList .ViperAP-issueListWrapper {
+    max-height: inherit;
 }
 
 .ViperAP-issueDetailsWrapper {
