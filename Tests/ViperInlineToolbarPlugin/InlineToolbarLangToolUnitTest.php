@@ -141,7 +141,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarLangToolUnitTest extends
     {
         $dir = dirname(__FILE__).'/Images/';
 
-        $text = 'LabS';
+        $text = 'LaBs';
         $textLoc = $this->find($text);
 
         $this->selectText($text);
@@ -183,7 +183,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarLangToolUnitTest extends
     {
         $dir = dirname(__FILE__).'/Images/';
 
-        $text = 'LabS';
+        $text = 'LaBs';
         $textLoc = $this->find($text);
 
         $this->selectText($text);
@@ -225,7 +225,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarLangToolUnitTest extends
     {
         $dir = dirname(__FILE__).'/Images/';
 
-        $text = 'LabS';
+        $text = 'LaBs';
         $textLoc = $this->find($text);
 
         $this->selectText($text);
