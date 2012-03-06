@@ -369,16 +369,19 @@ ViperTools.prototype = {
             dfx.removeClass(textBox, 'active');
         });
 
+        var changed = false;
         var _addActionButton = function() {
             var actionIcon = document.createElement('span');
             dfx.addClass(actionIcon, 'Viper-textbox-action');
             main.appendChild(actionIcon);
             dfx.addEvent(actionIcon, 'click', function() {
                 if (dfx.hasClass(textBox, 'actionRevert') === true) {
+                    changed     = false;
                     input.value = value;
                     dfx.removeClass(textBox, 'actionRevert');
                     dfx.addClass(textBox, 'actionClear');
                 } else if (dfx.hasClass(textBox, 'actionClear') === true) {
+                    changed     = true;
                     input.value = '';
                     dfx.removeClass(textBox, 'actionClear');
                     if (required === true) {
@@ -438,7 +441,8 @@ ViperTools.prototype = {
                 }
             }
 
-            if (input.value !== value) {
+            if (input.value !== value || changed === true) {
+                changed = true;
                 self.viper.fireCallbacks('ViperTools:changed:' + id);
             }
 
