@@ -33,6 +33,27 @@ class Viper_Tests_ViperLangToolsPlugin_AbbreviationUnitTest extends AbstractVipe
 
 
     /**
+     * Test that the Update Changes button remains inactvie.
+     *
+     * @return void
+     */
+    public function testUpdateChangesButton()
+    {
+        $dir = dirname(__FILE__).'/Images/';
+
+        $text    = 'XuT';
+        $textLoc = $this->find($text);
+
+        $this->selectText($text);
+        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language.png');
+        $this->clickTopToolbarButton($dir.'toolbarIcon_abbreviation.png');
+
+        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_updateChanges_disabled.png'), 'Update Changes button should be disabled.');
+
+    }//end testUpdateChangesButton()
+
+
+    /**
      * Test that you can apply the abbreviation attribute to a word.
      *
      * @return void
@@ -46,7 +67,6 @@ class Viper_Tests_ViperLangToolsPlugin_AbbreviationUnitTest extends AbstractVipe
         $this->selectText($text);
         $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language.png');
         $this->clickTopToolbarButton($dir.'toolbarIcon_abbreviation.png');
-        $this->clickTopToolbarButton($dir.'input_abbreviation.png');
         $this->type('abc');
         $this->keyDown('Key.ENTER');
 
@@ -64,11 +84,6 @@ class Viper_Tests_ViperLangToolsPlugin_AbbreviationUnitTest extends AbstractVipe
         $this->selectText($text);
         $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language.png');
         $this->clickTopToolbarButton($dir.'toolbarIcon_abbreviation.png');
-        $this->clickTopToolbarButton($dir.'input_abbreviation.png');
-
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_updateChanges_disabled.png'), 'Update Changes button should be disabled.');
-
-        $this->clickTopToolbarButton($dir.'input_abbreviation.png');
         $this->type('def');
         $this->clickTopToolbarButton($dir.'toolbarIcon_updateChanges.png');
 
@@ -148,7 +163,6 @@ class Viper_Tests_ViperLangToolsPlugin_AbbreviationUnitTest extends AbstractVipe
 
         $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language_highlighted.png');
         $this->clickTopToolbarButton($dir.'toolbarIcon_abbreviation_active.png');
-        $this->clickTopToolbarButton($dir.'input_abbreviation.png');
         $this->type('def');
         $this->keyDown('Key.ENTER');
 
@@ -158,7 +172,6 @@ class Viper_Tests_ViperLangToolsPlugin_AbbreviationUnitTest extends AbstractVipe
         $this->selectText($text);
         $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language_highlighted.png');
         $this->clickTopToolbarButton($dir.'toolbarIcon_abbreviation_active.png');
-        $this->clickTopToolbarButton($dir.'input_abbreviation.png');
         $this->type('ghi');
         $this->clickTopToolbarButton($dir.'toolbarIcon_updateChanges.png');
 
@@ -181,7 +194,6 @@ class Viper_Tests_ViperLangToolsPlugin_AbbreviationUnitTest extends AbstractVipe
         $this->selectText($text);
         $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language.png');
         $this->clickTopToolbarButton($dir.'toolbarIcon_abbreviation.png');
-        $this->clickTopToolbarButton($dir.'input_abbreviation.png');
         $this->type('abc');
         $this->keyDown('Key.ENTER');
 
@@ -204,7 +216,6 @@ class Viper_Tests_ViperLangToolsPlugin_AbbreviationUnitTest extends AbstractVipe
         $this->selectText($text);
         $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language.png');
         $this->clickTopToolbarButton($dir.'toolbarIcon_abbreviation.png');
-        $this->clickTopToolbarButton($dir.'input_abbreviation.png');
         $this->type('abc');
         $this->keyDown('Key.ENTER');
 
