@@ -74,21 +74,39 @@ ViperAccessibilityPlugin_WCAG2 = {
 
     },
 
-    createActionButton: function(action, widgetids, title)
+    createActionButton: function(action, widgetids, title, enabled)
     {
-        title = title || 'Apply Changes';
+        title   = title || 'Apply Changes';
 
+        var disabled = !enabled;
         var tools    = this.viper.ViperTools;
         var buttonid = dfx.getUniqueId();
-        var button   = tools.createButton(buttonid, title, title, '', action, true);
+        var button   = tools.createButton(buttonid, title, title, '', action, disabled);
 
-        for (var i = 0; i < widgetids.length; i++) {
-            this.viper.registerCallback('ViperTools:changed:' + widgetids[i], 'ViperAccessibilityPlugin:wcag2', function() {
-                tools.enableButton(buttonid);
-            });
+        if (widgetids) {
+            for (var i = 0; i < widgetids.length; i++) {
+                if (!widgetids[i]) {
+                    continue;
+                }
+
+                this.viper.registerCallback('ViperTools:changed:' + widgetids[i], 'ViperAccessibilityPlugin:wcag2', function() {
+                    tools.enableButton(buttonid);
+                });
+            }
         }
 
         return button;
+
+    },
+
+    getContent: function(instructionsContent, actionsContent)
+    {
+        instructionsContent = instructionsContent || '';
+        actionsContent      = actionsContent || '';
+
+        var content = '<div class="resolutionInstructions">' + instructionsContent + '</div>';
+        content    += '<div class="resolutionActions"><div class="editing">' + actionsContent + '</div></div>';
+        return content;
 
     },
 
