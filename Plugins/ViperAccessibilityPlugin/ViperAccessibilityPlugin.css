@@ -481,13 +481,13 @@
 
 /* Pointer */
 .ViperAP-pointer {
-    width: 44px;
-    height: 60px;
+    width: 50px;
+    height: 62px;
     position: absolute;
     top: 0px;
     left: 0px;
     z-index: 9999;
-    background: transparent url(Images/issueImages.png) -14px 0 no-repeat;
+    background: transparent url(Images/issueImages.png) -14px -62px no-repeat;
 }
 
 .ViperAP-pointer-hidden {
@@ -495,16 +495,16 @@
 }
 
 .ViperAP-pointer-up {
-    background-position: -14px -60px ;
+    background-position: -14px 0;
 }
 
 .ViperAP-pointer-left,
 .ViperAP-pointer-right {
-    width: 60px;
-    height: 44px;
-    background-position: 0 -120px ;
+    width: 62px;
+    height: 50px;
+    background-position: 0 -124px;
 }
 
 .ViperAP-pointer-right {
-    background-position: 0 -164px ;
+    background-position: 0 -174px;
 }
