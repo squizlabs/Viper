@@ -583,6 +583,49 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
     }//end testAddingClassToAParagraphWithItalicFirstWord()
 
 
+    /**
+     * Test that you can apply a class to bold word.
+     *
+     * @return void
+     */
+    public function testAddingClassToABoldWord()
+    {
+        $dir = dirname(__FILE__).'/Images/';
+
+        $text = 'jumps';
+
+        $this->selectText($text);
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_class.png');
+        $this->type('test');
+        $this->keyDown('Key.ENTER');
+
+        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong class="test">jumps</strong> OVER the lazy dogggg</p>');
+
+    }//end testAddingClassToAParagraphWithBoldFirstWord()
+
+    /**
+     * Test that you can apply a class to italac word.
+     *
+     * @return void
+     */
+    public function testAddingClassToAItalicWord()
+    {
+        $dir = dirname(__FILE__).'/Images/';
+
+        $text = 'OVER';
+
+        $this->selectText($text);
+        $this->keyDown('Key.CMD + i');
+
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_class.png');
+        $this->type('test');
+        $this->keyDown('Key.ENTER');
+
+        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>jumps</strong> <em class="test">OVER</em> the lazy dogggg</p>');
+
+    }//end testAddingClassToAItalicWord()
+
+
 }//end class
 
 ?>
