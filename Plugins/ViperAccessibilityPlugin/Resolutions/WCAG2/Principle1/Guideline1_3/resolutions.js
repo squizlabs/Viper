@@ -66,7 +66,7 @@ ViperAccessibilityPlugin_WCAG2_Principle1_Guideline1_3 = {
                     editPanel.appendChild(this.parent.createActionButton(action, [captionid, summaryid], null, null, function() {
                         var captionVal = viper.ViperTools.getItem(captionid).getValue();
                         var summaryVal = viper.ViperTools.getItem(summaryid).getValue();
-                        if (captionVal === summaryVal) {
+                        if (dfx.trim(captionVal) === dfx.trim(summaryVal)) {
                             return false;
                         }
                     }));
@@ -142,7 +142,7 @@ ViperAccessibilityPlugin_WCAG2_Principle1_Guideline1_3 = {
                 };
 
                 editPanel.appendChild(this.parent.createActionButton(action, [summaryid, checkboxid], null, null, function() {
-                    var summaryVal = viper.ViperTools.getItem(summaryid).getValue();
+                    var summaryVal = dfx.trim(viper.ViperTools.getItem(summaryid).getValue());
                     if (!summaryVal && viper.ViperTools.getItem(checkboxid).getValue() !== false) {
                         return false;
                     }
@@ -250,7 +250,7 @@ ViperAccessibilityPlugin_WCAG2_Principle1_Guideline1_3 = {
 
     _getTableSummary: function(table)
     {
-        return element.getAttribute('summary') || '';
+        return dfx.trim(table.getAttribute('summary') || '');
 
     },
 
@@ -259,7 +259,7 @@ ViperAccessibilityPlugin_WCAG2_Principle1_Guideline1_3 = {
         if (!summary) {
             table.removeAttribute('summary');
         } else {
-            table.setAttribute('summary', summary);
+            table.setAttribute('summary', dfx.trim(summary));
         }
 
     }

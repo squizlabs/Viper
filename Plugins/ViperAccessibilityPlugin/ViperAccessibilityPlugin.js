@@ -789,10 +789,10 @@ ViperAccessibilityPlugin.prototype = {
         dfx.addClass(main, 'ViperAP-issuePane');
         this._issueDetailsWrapper.appendChild(main);
 
+        var issueType = this._getIssueType(issue);
+
         var self = this;
         this._loadStandard(issue.code, function(standardObj) {
-            var issueType = this._getIssueType(issue);
-
             standardObj.getReferenceContent(issue, function(refContent) {
                 var references = document.createElement('div');
                 dfx.addClass(references, 'ViperAP-issueDetails');
@@ -837,13 +837,10 @@ ViperAccessibilityPlugin.prototype = {
                 });
             });
             resolutionHeader.appendChild(sourceViewBtn);
-            var doneBtn = tools.createButton('VAP:toggleIssueDone', 'Done', 'Mark as done', '', function() {
-                self.toggleIssueCompleteState();
-            });
-            resolutionHeader.appendChild(doneBtn);
 
-            resolutionHeader.appendChild(locateBtn);
-            resolutionHeader.appendChild(sourceViewBtn);
+            var doneBtn = tools.createButton('VAP:toggleIssueDone', 'Ignore', '', '', function() {
+                self.toggleIssueCompleteState();
+            }, issueType === 'error');
             resolutionHeader.appendChild(doneBtn);
 
             standardObj.getResolutionContent(issue, function(resContent) {
