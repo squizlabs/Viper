@@ -74,7 +74,7 @@ ViperAccessibilityPlugin_WCAG2 = {
 
     },
 
-    createActionButton: function(action, widgetids, title, enabled)
+    createActionButton: function(action, widgetids, title, enabled, updateCallback)
     {
         title   = title || 'Apply Changes';
 
@@ -89,9 +89,17 @@ ViperAccessibilityPlugin_WCAG2 = {
                     continue;
                 }
 
-                this.viper.registerCallback('ViperTools:changed:' + widgetids[i], 'ViperAccessibilityPlugin:wcag2', function() {
-                    tools.enableButton(buttonid);
-                });
+                (function(widgetid) {
+                    this.viper.registerCallback('ViperTools:changed:' + widgetid, 'ViperAccessibilityPlugin:wcag2', function() {
+                        if (updateCallback && updateCallback.call(this, widgetid) === false) {
+                            // Disable button.
+                            tools.disableButton(buttonid);
+                            return;
+                        }
+
+                        tools.enableButton(buttonid);
+                    });
+                }) (widgetids[i]);
             }
         }
 
