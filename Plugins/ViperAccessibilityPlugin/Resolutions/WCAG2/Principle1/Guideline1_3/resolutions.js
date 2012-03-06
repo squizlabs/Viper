@@ -52,7 +52,7 @@ ViperAccessibilityPlugin_WCAG2_Principle1_Guideline1_3 = {
                     editPanel.appendChild(caption);
 
                     var summaryid = dfx.getUniqueId();
-                    var summary   = viper.ViperTools.createTextarea(summaryid, 'Summary', element.getAttribute('summary'));
+                    var summary   = viper.ViperTools.createTextarea(summaryid, 'Summary', this._getTableSummary(element));
                     editPanel.appendChild(summary);
 
                     action = function() {
@@ -71,6 +71,82 @@ ViperAccessibilityPlugin_WCAG2_Principle1_Guideline1_3 = {
                         }
                     }));
                 }
+            break;
+
+            case 'H39.3.NoCaption':
+                dfx.setHtml(dfx.getClass('resolutionInstructions', div)[0], '<p>Enter a caption for the table.</p>');
+
+                var editPanel = dfx.getClass('editing', div)[0];
+
+                var captionid  =  null;
+                var checkboxid = dfx.getUniqueId();
+                var checkbox   = viper.ViperTools.createCheckbox(checkboxid, 'Use caption', false, function(checked) {
+                    if (checked === true) {
+                        viper.ViperTools.getItem(captionid).enable();
+                    } else {
+                        viper.ViperTools.getItem(captionid).disable();
+                    }
+                });
+                editPanel.appendChild(checkbox);
+
+                captionid   = dfx.getUniqueId();
+                var caption = viper.ViperTools.createTextarea(captionid, 'Caption', this._getTableCaption(element));
+                viper.ViperTools.getItem(captionid).disable();
+                editPanel.appendChild(caption);
+
+                action = function() {
+                    var captionVal = '';
+                    if (viper.ViperTools.getItem(checkboxid).getValue() === true) {
+                        captionVal = viper.ViperTools.getItem(captionid).getValue();
+                    }
+
+                    self._setTableCaption(element, captionVal);
+                };
+
+                editPanel.appendChild(this.parent.createActionButton(action, [captionid, checkboxid], null, null, function() {
+                    var captionVal = viper.ViperTools.getItem(captionid).getValue();
+                    if (!captionVal && viper.ViperTools.getItem(checkboxid).getValue() !== false) {
+                        return false;
+                    }
+                }));
+            break;
+
+            case 'H73.3.NoSummary':
+                dfx.setHtml(dfx.getClass('resolutionInstructions', div)[0], '<p>Enter a summary for the table.</p>');
+
+                var editPanel = dfx.getClass('editing', div)[0];
+
+                var summaryid  =  null;
+                var checkboxid = dfx.getUniqueId();
+                var checkbox   = viper.ViperTools.createCheckbox(checkboxid, 'Use summary', false, function(checked) {
+                    if (checked === true) {
+                        viper.ViperTools.getItem(summaryid).enable();
+                    } else {
+                        viper.ViperTools.getItem(summaryid).disable();
+                    }
+                });
+                editPanel.appendChild(checkbox);
+
+                summaryid   = dfx.getUniqueId();
+                var summary = viper.ViperTools.createTextarea(summaryid, 'Summary', this._getTableSummary(element));
+                viper.ViperTools.getItem(summaryid).disable();
+                editPanel.appendChild(summary);
+
+                action = function() {
+                    var summaryVal = '';
+                    if (viper.ViperTools.getItem(checkboxid).getValue() === true) {
+                        summaryVal = viper.ViperTools.getItem(summaryid).getValue();
+                    }
+
+                    self._setTableSummary(element, summaryVal);
+                };
+
+                editPanel.appendChild(this.parent.createActionButton(action, [summaryid, checkboxid], null, null, function() {
+                    var summaryVal = viper.ViperTools.getItem(summaryid).getValue();
+                    if (!summaryVal && viper.ViperTools.getItem(checkboxid).getValue() !== false) {
+                        return false;
+                    }
+                }));
             break;
 
             default:
@@ -169,6 +245,12 @@ ViperAccessibilityPlugin_WCAG2_Principle1_Guideline1_3 = {
             dfx.setHtml(captionTag, caption);
             dfx.insertBefore(table.firstChild, captionTag);
         }
+
+    },
+
+    _getTableSummary: function(table)
+    {
+        return element.getAttribute('summary') || '';
 
     },
 

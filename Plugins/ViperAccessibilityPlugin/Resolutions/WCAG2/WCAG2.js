@@ -81,7 +81,10 @@ ViperAccessibilityPlugin_WCAG2 = {
         var disabled = !enabled;
         var tools    = this.viper.ViperTools;
         var buttonid = dfx.getUniqueId();
-        var button   = tools.createButton(buttonid, title, title, '', action, disabled);
+        var button   = tools.createButton(buttonid, title, title, '', function() {
+            tools.disableButton(buttonid);
+            return action.call(this);
+        }, disabled);
 
         if (widgetids) {
             for (var i = 0; i < widgetids.length; i++) {
