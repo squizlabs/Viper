@@ -808,43 +808,43 @@ ViperAccessibilityPlugin.prototype = {
                 main.appendChild(references);
             }, self);
 
+            var resolutionCont = document.createElement('div');
+            dfx.addClass(resolutionCont, 'ViperAP-issueResolution');
+            dfx.setHtml(resolutionCont, '<div class="resolutionHeader"><strong>Resolution</strong></div>');
+            main.appendChild(resolutionCont);
+
+            var resolutionHeader = dfx.getClass('resolutionHeader', resolutionCont)[0];
+
+            // Create resolution tools.
+            var tools = self.viper.ViperTools;
+            var locateBtn     = tools.createButton('VAP:locateElem', '', 'Locate Element', 'locate', function() {
+                self.pointToElement(issue.element);
+            });
+            resolutionHeader.appendChild(locateBtn);
+            var sourceViewBtn = tools.createButton('VAP:showInSource', '', 'Show in Source View', 'sourceView', function() {
+                var tmpText = document.createTextNode('__SCROLL_TO_HERE__');
+                dfx.insertAfter(issue.element, tmpText);
+                var sourceViewPlugin = self.viper.getPluginManager().getPlugin('ViperSourceViewPlugin');
+                var contents = sourceViewPlugin.getContents();
+                dfx.remove(tmpText);
+                sourceViewPlugin.showSourceView(contents, function() {
+                    sourceViewPlugin.scrollToText('__SCROLL_TO_HERE__');
+                    setTimeout(function() {
+                        sourceViewPlugin.replaceSelection('');
+                    }, 500);
+                });
+            });
+            resolutionHeader.appendChild(sourceViewBtn);
+            var doneBtn = tools.createButton('VAP:toggleIssueDone', 'Done', 'Mark as done', '', function() {
+                self.toggleIssueCompleteState();
+            });
+            resolutionHeader.appendChild(doneBtn);
+
+            resolutionHeader.appendChild(locateBtn);
+            resolutionHeader.appendChild(sourceViewBtn);
+            resolutionHeader.appendChild(doneBtn);
+
             standardObj.getResolutionContent(issue, function(resContent) {
-                var resolutionCont = document.createElement('div');
-                dfx.addClass(resolutionCont, 'ViperAP-issueResolution');
-                dfx.setHtml(resolutionCont, '<div class="resolutionHeader"><strong>Resolution</strong></div>');
-                main.appendChild(resolutionCont);
-
-                var resolutionHeader = dfx.getClass('resolutionHeader', resolutionCont)[0];
-
-                // Create resolution tools.
-                var tools = self.viper.ViperTools;
-                var locateBtn     = tools.createButton('VAP:locateElem', '', 'Locate Element', 'locate', function() {
-                    self.pointToElement(issue.element);
-                });
-                resolutionHeader.appendChild(locateBtn);
-                var sourceViewBtn = tools.createButton('VAP:showInSource', '', 'Show in Source View', 'sourceView', function() {
-                    var tmpText = document.createTextNode('__SCROLL_TO_HERE__');
-                    dfx.insertAfter(issue.element, tmpText);
-                    var sourceViewPlugin = self.viper.getPluginManager().getPlugin('ViperSourceViewPlugin');
-                    var contents = sourceViewPlugin.getContents();
-                    dfx.remove(tmpText);
-                    sourceViewPlugin.showSourceView(contents, function() {
-                        sourceViewPlugin.scrollToText('__SCROLL_TO_HERE__');
-                        setTimeout(function() {
-                            sourceViewPlugin.replaceSelection('');
-                        }, 500);
-                    });
-                });
-                resolutionHeader.appendChild(sourceViewBtn);
-                var doneBtn = tools.createButton('VAP:toggleIssueDone', 'Done', 'Mark as done', '', function() {
-                    self.toggleIssueCompleteState();
-                });
-                resolutionHeader.appendChild(doneBtn);
-
-                resolutionHeader.appendChild(locateBtn);
-                resolutionHeader.appendChild(sourceViewBtn);
-                resolutionHeader.appendChild(doneBtn);
-
                 if (resContent) {
                     resolutionCont.appendChild(resContent);
                 }
@@ -855,7 +855,7 @@ ViperAccessibilityPlugin.prototype = {
 
     pointToElement: function(element)
     {
-        this.pointer.container = this._aaTools.element;
+        this.pointer.container = this._aaTools;
         this.pointer.pointTo(null, null, element);
 
     },
