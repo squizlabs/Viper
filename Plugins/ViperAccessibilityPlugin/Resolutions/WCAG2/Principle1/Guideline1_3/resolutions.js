@@ -28,7 +28,6 @@ ViperAccessibilityPlugin_WCAG2_Principle1_Guideline1_3 = {
                 }
 
                 dfx.setHtml(dfx.getClass('resolutionInstructions', div)[0], content);
-
                 var editPanel = dfx.getClass('editing', div)[0];
 
                 action = function() {
@@ -40,6 +39,38 @@ ViperAccessibilityPlugin_WCAG2_Principle1_Guideline1_3 = {
                 };
 
                 editPanel.appendChild(this.parent.createActionButton(action, null, btnTitle, true));
+            break;
+
+            case 'H39':
+                if (code.techniques[1] === 'H73.4') {
+                    dfx.setHtml(dfx.getClass('resolutionInstructions', div)[0], '<p>Update either the Table\'s Caption or Summary so they are not identical text</p>');
+
+                    var editPanel = dfx.getClass('editing', div)[0];
+
+                    var captionid = dfx.getUniqueId();
+                    var caption   = viper.ViperTools.createTextarea(captionid, 'Caption', this._getTableCaption(element));
+                    editPanel.appendChild(caption);
+
+                    var summaryid = dfx.getUniqueId();
+                    var summary   = viper.ViperTools.createTextarea(summaryid, 'Summary', element.getAttribute('summary'));
+                    editPanel.appendChild(summary);
+
+                    action = function() {
+                        var captionVal = viper.ViperTools.getItem(captionid).getValue();
+                        var summaryVal = viper.ViperTools.getItem(summaryid).getValue();
+
+                        self._setTableCaption(element, captionVal);
+                        self._setTableSummary(element, summaryVal);
+                    };
+
+                    editPanel.appendChild(this.parent.createActionButton(action, [captionid, summaryid], null, null, function() {
+                        var captionVal = viper.ViperTools.getItem(captionid).getValue();
+                        var summaryVal = viper.ViperTools.getItem(summaryid).getValue();
+                        if (captionVal === summaryVal) {
+                            return false;
+                        }
+                    }));
+                }
             break;
 
             default:
@@ -66,7 +97,7 @@ ViperAccessibilityPlugin_WCAG2_Principle1_Guideline1_3 = {
                 if (!li.firstChild) {
                     // First child of this list item, remove any numbers at the start
                     // of the its content.
-                    child.data = child.data.replace(/^(\d+)[ .\/\-\:]+/, '');
+                    child.data = dfx.ltrim(child.data).replace(/^(\d+)[ .\/\-\:]+/, '');
                 }
 
                 li.appendChild(child);
@@ -95,7 +126,7 @@ ViperAccessibilityPlugin_WCAG2_Principle1_Guideline1_3 = {
                 if (!li.firstChild) {
                     // First child of this list item, remove any numbers at the start
                     // of the its content.
-                    child.data = dfx.trim(child.data).replace(/^([\*\-+\#~>]+)/, '');
+                    child.data = dfx.ltrim(child.data).replace(/^([\*\-+\#~>]+)/, '');
                 }
 
                 li.appendChild(child);
@@ -106,6 +137,48 @@ ViperAccessibilityPlugin_WCAG2_Principle1_Guideline1_3 = {
 
         dfx.insertBefore(element, list);
         dfx.remove(element);
+
+    },
+
+    _getTableCaption: function(table)
+    {
+        var caption  = '';
+        var captions = dfx.getTag('caption', table);
+        if (captions.length > 0) {
+            caption = dfx.getNodeTextContent(captions[0]);
+        }
+
+        return caption;
+
+    },
+
+    _setTableCaption: function(table, caption)
+    {
+        if (!caption) {
+            var captionTags = dfx.getTag('caption', table);
+            if (captionTags.length > 0) {
+                dfx.remove(captionTags);
+            }
+        } else {
+            var captionTags = dfx.getTag('caption', table);
+            if (captionTags.length > 0) {
+                dfx.remove(captionTags);
+            }
+
+            var captionTag = document.createElement('caption');
+            dfx.setHtml(captionTag, caption);
+            dfx.insertBefore(table.firstChild, captionTag);
+        }
+
+    },
+
+    _setTableSummary: function(table, summary)
+    {
+        if (!summary) {
+            table.removeAttribute('summary');
+        } else {
+            table.setAttribute('summary', summary);
+        }
 
     }
 
