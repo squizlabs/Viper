@@ -1,5 +1,5 @@
 ViperAccessibilityPlugin_WCAG2_Principle1_Guideline1_1 = {
-    hasCss: true,
+    hasCss: false,
     id: 'ViperAccessibilityPlugin_WCAG2_Principle1_Guideline1_1',
     parent: null,
 
@@ -23,11 +23,26 @@ ViperAccessibilityPlugin_WCAG2_Principle1_Guideline1_1 = {
                 var altid = dfx.getUniqueId();
                 var alt   = viper.ViperTools.createTextbox(altid, 'Alt', element.getAttribute('alt'));
                 editPanel.appendChild(alt);
+
+                var checkboxid = dfx.getUniqueId();
+                var checkbox   = viper.ViperTools.createCheckbox(checkboxid, 'Image is presentational', false, function(checked) {
+                    if (checked === true) {
+                        viper.ViperTools.getItem(altid).disable();
+                    } else {
+                        viper.ViperTools.getItem(altid).enable();
+                    }
+                });
+                editPanel.appendChild(checkbox);
+
                 action = function() {
-                    element.setAttribute('alt', viper.ViperTools.getItem(altid).getValue());
+                    if (viper.ViperTools.getItem(checkboxid).getValue() !== true) {
+                        element.setAttribute('alt', viper.ViperTools.getItem(altid).getValue());
+                    } else {
+                        element.removeAttribute('alt');
+                    }
                 };
 
-                editPanel.appendChild(this.parent.createActionButton(action, [altid]));
+                editPanel.appendChild(this.parent.createActionButton(action, [checkboxid, altid]));
             break;
 
             case 'H67.1':
@@ -118,11 +133,7 @@ ViperAccessibilityPlugin_WCAG2_Principle1_Guideline1_1 = {
 
     _getImageResContent: function(element, msg)
     {
-        var content = '<div class="resolutionInstructions">';
-        content    += '<div class="imagePreview "><img class="thumb" src="' + element.getAttribute('src') + '"></div>';
-        content    += '<p>' + msg + '</p>';
-        content    += '</div><div class="resolutionActions"><div class="editing"></div></div>';
-
+        var content = this.parent.getContent('<div class="imagePreview "><img class="thumb" src="' + element.getAttribute('src') + '"></div><p>' + msg + '</p>');
         return content;
 
     }
