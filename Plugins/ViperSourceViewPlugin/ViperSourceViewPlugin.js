@@ -83,6 +83,8 @@ ViperSourceViewPlugin.prototype = {
         } else {
             if (!content) {
                 content = this.getContents();
+            } else {
+                content = StyleHTML(content);
             }
 
             this._originalSource = content;
