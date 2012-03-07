@@ -39,6 +39,7 @@ function ViperAccessibilityPlugin(viper)
     this._containerWidth      = 35;
     this._autoRunInterval     = 30000;
     this._issues              = [];
+    this._dismissedIssues     = {};
     this._autoRunTimer        = null;
     this._subSection          = null;
     this._aaTools             = null;
@@ -511,7 +512,7 @@ ViperAccessibilityPlugin.prototype = {
         dfx.removeClass(allIssues, 'current');
         dfx.addClass(allIssues[(index - 1)], 'current');
 
-        this.pointToElement(this._issues[index].element);
+        this.pointToElement(this._issues[(index - 1)].element);
 
     },
 
@@ -714,27 +715,40 @@ ViperAccessibilityPlugin.prototype = {
 
     },
 
-    /**
-     * Marks current issue as done.
-     */
-    toggleIssueCompleteState: function()
+    dismissIssue: function(issueNum)
     {
-        var issueElement = this.getIssueElement(this._currentIssue);
-        dfx.toggleClass(issueElement, 'issueDone');
+        issueNum  = issueNum || (this._currentIssue - 1);
+        var issue = this._issues[issueNum];
 
-        var listItem = dfx.getClass('ViperAP-issueItem')[(this._currentIssue - 1)];
-        dfx.toggleClass(listItem, 'issueDone');
-
-        if (dfx.hasClass(issueElement, 'issueDone') === true) {
-            var self = this;
-            setTimeout(function() {
-                if (self._currentIssue > self._issueCount) {
-                    self.previousIssue();
-                } else {
-                    self.nextIssue();
-                }
-            }, 500);
+        if (!this._dismissedIssues[issue.code]) {
+            this._dismissedIssues[issue.code] = [];
         }
+
+        if (this._dismissedIssues[issue.code].inArray(issue.element) !== true) {
+            this._dismissedIssues[issue.code].push(issue.element);
+
+            var issueElement = this.getIssueElement(issueNum + 1);
+            dfx.addClass(issueElement, 'issueDone');
+
+            var listItem = dfx.getClass('ViperAP-issueItem')[issueNum];
+            dfx.addClass(listItem, 'issueDone');
+        }
+
+        var self = this;
+        setTimeout(function() {
+            if (issueNum > self._issueCount) {
+                self.previousIssue();
+            } else {
+                self.nextIssue();
+            }
+        }, 1000);
+
+    },
+
+    fixIssue: function(issueNum)
+    {
+        issueNum  = issueNum || (this._currentIssue - 1);
+        var issue = this._issues[issueNum];
 
     },
 
@@ -817,7 +831,10 @@ ViperAccessibilityPlugin.prototype = {
 
             var resolutionCont = document.createElement('div');
             dfx.addClass(resolutionCont, 'ViperAP-issueResolution');
-            dfx.setHtml(resolutionCont, '<div class="resolutionHeader"><strong>Resolution</strong></div>');
+
+            var resHtml = '<div class="resolutionHeader"><strong>Resolution</strong></div>';
+
+            dfx.setHtml(resolutionCont, resHtml);
             main.appendChild(resolutionCont);
 
             var resolutionHeader = dfx.getClass('resolutionHeader', resolutionCont)[0];
@@ -843,13 +860,12 @@ ViperAccessibilityPlugin.prototype = {
             });
             resolutionHeader.appendChild(sourceViewBtn);
 
-            var doneBtn = tools.createButton('VAP:toggleIssueDone', 'Ignore', '', '', function() {
-                self.toggleIssueCompleteState();
-            }, issueType === 'error');
-            resolutionHeader.appendChild(doneBtn);
+            var refreshIssueBtn = tools.createButton('VAP:toggleIssueDone', '', 'Refresh Issue', 'accessRerun', function() {
+            });
+            resolutionHeader.appendChild(refreshIssueBtn);
 
             standardObj.getResolutionContent(issue, function(resContent) {
-                if (resContent) {
+                if (resContent && resContent.firstChild) {
                     resolutionCont.appendChild(resContent);
                 }
             }, self);

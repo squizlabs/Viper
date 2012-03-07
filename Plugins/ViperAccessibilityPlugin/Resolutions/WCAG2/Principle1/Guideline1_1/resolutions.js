@@ -3,11 +3,8 @@ ViperAccessibilityPlugin_WCAG2_Principle1_Guideline1_1 = {
     id: 'ViperAccessibilityPlugin_WCAG2_Principle1_Guideline1_1',
     parent: null,
 
-    res_1_1_1: function(element, issue, code, callback, viper)
+    res_1_1_1: function(contentElement, element, issue, code, callback, viper)
     {
-        var div = document.createElement('div');
-        dfx.addClass(div, 'ViperAP-WCAG2_Principle1_Guideline1_1_1');
-
         var editPanel = null;
         var action    = null;
         var self      = this;
@@ -15,10 +12,9 @@ ViperAccessibilityPlugin_WCAG2_Principle1_Guideline1_1 = {
 
         switch(technique) {
             case 'H37':
-                var content = this._getImageResContent(element, 'Enter a short text description of the image, or define the image as purely presentational');
-                dfx.setHtml(div, content);
+                this._getImageResContent(contentElement, element, 'Enter a short text description of the image, or define the image as purely presentational');
 
-                editPanel = dfx.getClass('editing', div)[0];
+                editPanel = this.parent.getResolutionActionsContainer(contentElement);
 
                 var altid = dfx.getUniqueId();
                 var alt   = viper.ViperTools.createTextbox(altid, 'Alt', element.getAttribute('alt'));
@@ -42,15 +38,14 @@ ViperAccessibilityPlugin_WCAG2_Principle1_Guideline1_1 = {
                     }
                 };
 
-                editPanel.appendChild(this.parent.createActionButton(action, [checkboxid, altid]));
+                this.parent.addActionButton(action, contentElement, [checkboxid, altid]);
             break;
 
             case 'H67.1':
             case 'H67.2':
-                var content = this._getImageResContent(element, 'Ensure this image is purely presentational, if not, enter appropriate Alt and Title text');
-                dfx.setHtml(div, content);
+                this._getImageResContent(contentElement, element, 'Ensure this image is purely presentational, if not, enter appropriate Alt and Title text');
 
-                editPanel = dfx.getClass('editing', div)[0];
+                editPanel = this.parent.getResolutionActionsContainer(contentElement);
 
                 var altid      = null;
                 var titleid    = null;
@@ -92,7 +87,7 @@ ViperAccessibilityPlugin_WCAG2_Principle1_Guideline1_1 = {
                     }
                 };
 
-                editPanel.appendChild(this.parent.createActionButton(action, [checkboxid, titleid, altid]));
+                this.parent.addActionButton(action, contentElement, [checkboxid, titleid, altid]);
             break;
 
             case 'H2.EG3':
@@ -107,10 +102,9 @@ ViperAccessibilityPlugin_WCAG2_Principle1_Guideline1_1 = {
                     msg = 'Ensure the image\'s Alt text describes the purpose or content of the image.';
                 }
 
-                var content = this._getImageResContent(element, msg);
-                dfx.setHtml(div, content);
+                this._getImageResContent(contentElement, element, msg);
 
-                editPanel = dfx.getClass('editing', div)[0];
+                editPanel = this.parent.getResolutionActionsContainer(contentElement);
 
                 var altid = dfx.getUniqueId();
                 var alt   = viper.ViperTools.createTextbox(altid, 'Alt', element.getAttribute('alt'));
@@ -119,7 +113,7 @@ ViperAccessibilityPlugin_WCAG2_Principle1_Guideline1_1 = {
                     element.setAttribute('alt', viper.ViperTools.getItem(altid).getValue());
                 };
 
-                editPanel.appendChild(this.parent.createActionButton(action, [altid]));
+                this.parent.addActionButton(action, contentElement, [altid]);
             break;
 
             default:
@@ -127,14 +121,13 @@ ViperAccessibilityPlugin_WCAG2_Principle1_Guideline1_1 = {
             break;
         }//end switch
 
-        callback.call(this, div);
+        callback.call(this, contentElement);
 
     },
 
-    _getImageResContent: function(element, msg)
+    _getImageResContent: function(contentElement, element, msg)
     {
-        var content = this.parent.getContent('<div class="imagePreview "><img class="thumb" src="' + element.getAttribute('src') + '"></div><p>' + msg + '</p>');
-        return content;
+        this.parent.setResolutionInstruction(contentElement, '<div class="imagePreview "><img class="thumb" src="' + element.getAttribute('src') + '"></div><p>' + msg + '</p>');
 
     }
 

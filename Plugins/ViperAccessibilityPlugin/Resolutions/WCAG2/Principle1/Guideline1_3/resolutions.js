@@ -3,12 +3,8 @@ ViperAccessibilityPlugin_WCAG2_Principle1_Guideline1_3 = {
     id: 'ViperAccessibilityPlugin_WCAG2_Principle1_Guideline1_3',
     parent: null,
 
-    res_1_3_1: function(element, issue, code, callback, viper)
+    res_1_3_1: function(contentElement, element, issue, code, callback, viper)
     {
-        var div = document.createElement('div');
-        dfx.setHtml(div, this.parent.getContent());
-        dfx.addClass(div, 'ViperAP-WCAG2_Principle1_Guideline1_3_1');
-
         var editPanel = null;
         var action    = null;
         var self      = this;
@@ -27,8 +23,9 @@ ViperAccessibilityPlugin_WCAG2_Principle1_Guideline1_3 = {
                     btnTitle = 'Convert to Ordered List';
                 }
 
-                dfx.setHtml(dfx.getClass('resolutionInstructions', div)[0], content);
-                var editPanel = dfx.getClass('editing', div)[0];
+                this.parent.setResolutionInstruction(contentElement, content);
+
+                var editPanel = this.parent.getResolutionActionsContainer(contentElement);
 
                 action = function() {
                     if (technique === 'H48.1') {
@@ -38,14 +35,14 @@ ViperAccessibilityPlugin_WCAG2_Principle1_Guideline1_3 = {
                     }
                 };
 
-                editPanel.appendChild(this.parent.createActionButton(action, null, btnTitle, true));
+                this.parent.addActionButton(action, contentElement, null, btnTitle, true);
             break;
 
             case 'H39':
                 if (code.techniques[1] === 'H73.4') {
-                    dfx.setHtml(dfx.getClass('resolutionInstructions', div)[0], '<p>Update either the Table\'s Caption or Summary so they are not identical text</p>');
+                    this.parent.setResolutionInstruction(contentElement, '<p>Update either the Table\'s Caption or Summary so they are not identical text</p>');
 
-                    var editPanel = dfx.getClass('editing', div)[0];
+                    var editPanel = this.parent.getResolutionActionsContainer(contentElement);
 
                     var captionid = dfx.getUniqueId();
                     var caption   = viper.ViperTools.createTextarea(captionid, 'Caption', this._getTableCaption(element));
@@ -63,20 +60,20 @@ ViperAccessibilityPlugin_WCAG2_Principle1_Guideline1_3 = {
                         self._setTableSummary(element, summaryVal);
                     };
 
-                    editPanel.appendChild(this.parent.createActionButton(action, [captionid, summaryid], null, null, function() {
+                    this.parent.addActionButton(action, contentElement, [captionid, summaryid], null, null, function() {
                         var captionVal = viper.ViperTools.getItem(captionid).getValue();
                         var summaryVal = viper.ViperTools.getItem(summaryid).getValue();
                         if (dfx.trim(captionVal) === dfx.trim(summaryVal)) {
                             return false;
                         }
-                    }));
+                    });
                 }
             break;
 
             case 'H39.3.NoCaption':
-                dfx.setHtml(dfx.getClass('resolutionInstructions', div)[0], '<p>Enter a caption for the table.</p>');
+                this.parent.setResolutionInstruction(contentElement, '<p>Enter a caption for the table.</p>');
 
-                var editPanel = dfx.getClass('editing', div)[0];
+                var editPanel = this.parent.getResolutionActionsContainer(contentElement);
 
                 var captionid  =  null;
                 var checkboxid = dfx.getUniqueId();
@@ -103,18 +100,18 @@ ViperAccessibilityPlugin_WCAG2_Principle1_Guideline1_3 = {
                     self._setTableCaption(element, captionVal);
                 };
 
-                editPanel.appendChild(this.parent.createActionButton(action, [captionid, checkboxid], null, null, function() {
+                this.parent.addActionButton(action, contentElement, [captionid, checkboxid], null, null, function() {
                     var captionVal = viper.ViperTools.getItem(captionid).getValue();
                     if (!captionVal && viper.ViperTools.getItem(checkboxid).getValue() !== false) {
                         return false;
                     }
-                }));
+                });
             break;
 
             case 'H73.3.NoSummary':
-                dfx.setHtml(dfx.getClass('resolutionInstructions', div)[0], '<p>Enter a summary for the table.</p>');
+                this.parent.setResolutionInstruction(contentElement, '<p>Enter a summary for the table.</p>');
 
-                var editPanel = dfx.getClass('editing', div)[0];
+                var editPanel = this.parent.getResolutionActionsContainer(contentElement);
 
                 var summaryid  =  null;
                 var checkboxid = dfx.getUniqueId();
@@ -141,12 +138,12 @@ ViperAccessibilityPlugin_WCAG2_Principle1_Guideline1_3 = {
                     self._setTableSummary(element, summaryVal);
                 };
 
-                editPanel.appendChild(this.parent.createActionButton(action, [summaryid, checkboxid], null, null, function() {
+                this.parent.addActionButton(action, contentElement, [summaryid, checkboxid], null, null, function() {
                     var summaryVal = dfx.trim(viper.ViperTools.getItem(summaryid).getValue());
                     if (!summaryVal && viper.ViperTools.getItem(checkboxid).getValue() !== false) {
                         return false;
                     }
-                }));
+                });
             break;
 
             default:
@@ -154,7 +151,7 @@ ViperAccessibilityPlugin_WCAG2_Principle1_Guideline1_3 = {
             break;
         }//end switch
 
-        callback.call(this, div);
+        callback.call(this, contentElement);
 
     },
 

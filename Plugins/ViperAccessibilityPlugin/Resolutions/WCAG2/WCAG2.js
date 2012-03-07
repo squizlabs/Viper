@@ -1,8 +1,11 @@
 ViperAccessibilityPlugin_WCAG2 = {
     viper: null,
+    vap: null,
+    _contentElement: null,
 
     getReferenceContent: function(issue, callback, vap)
     {
+        this.vap   = vap;
         this.viper = vap.viper;
 
         var code = this._parseCode(issue.code);
@@ -37,7 +40,7 @@ ViperAccessibilityPlugin_WCAG2 = {
         if (obj) {
             var fn = obj['res_' + code.section.replace('.', '_')];
             if (dfx.isFn(fn) === true) {
-                fn.call(obj, issue.element, issue, code, callback, vap.viper);
+                fn.call(obj, this._getContent(issue, objName), issue.element, issue, code, callback, vap.viper);
             }
 
             return;
@@ -50,8 +53,7 @@ ViperAccessibilityPlugin_WCAG2 = {
         var scriptUrl = url + '/resolutions.js';
         var cssUrl    = url + '/resolutions.css';
 
-        var self    = this;
-        var objName = 'ViperAccessibilityPlugin_WCAG2_Principle' + code.principle + '_Guideline' + code.guideline.replace('.', '_');
+        var self = this;
         vap.loadObject(scriptUrl, objName, function(obj) {
             if (!obj) {
                 callback.call(this);
@@ -66,7 +68,7 @@ ViperAccessibilityPlugin_WCAG2 = {
 
             var fn = obj['res_' + code.section.replace('.', '_')];
             if (dfx.isFn(fn) === true) {
-                fn.call(obj, issue.element, issue, code, callback, vap.viper);
+                fn.call(obj, self._getContent(issue, objName), issue.element, issue, code, callback, vap.viper);
             } else {
                 callback.call(this);
             }
@@ -74,7 +76,7 @@ ViperAccessibilityPlugin_WCAG2 = {
 
     },
 
-    createActionButton: function(action, widgetids, title, enabled, updateCallback)
+    addActionButton: function(action, resolutionContainer, widgetids, title, enabled, updateCallback)
     {
         title   = title || 'Apply Changes';
 
@@ -97,6 +99,7 @@ ViperAccessibilityPlugin_WCAG2 = {
                         if (updateCallback && updateCallback.call(this, widgetid) === false) {
                             // Disable button.
                             tools.disableButton(buttonid);
+                            self.vap.fixIssue();
                             return;
                         }
 
@@ -106,18 +109,73 @@ ViperAccessibilityPlugin_WCAG2 = {
             }
         }
 
-        return button;
+        var actionButtons = dfx.getClass('actionButtons', resolutionContainer)[0];
+        if (actionButtons.firstChild) {
+            dfx.insertBefore(actionButtons.firstChild, button);
+        } else {
+            actionButtons.appendChild(button);
+        }
+
+
+        return buttonid;
 
     },
 
-    getContent: function(instructionsContent, actionsContent)
+    _getContent: function(issue, objName)
     {
-        instructionsContent = instructionsContent || '';
-        actionsContent      = actionsContent || '';
+        var div = document.createElement('div');
+        dfx.addClass(div, objName);
 
-        var content = '<div class="resolutionInstructions">' + instructionsContent + '</div>';
-        content    += '<div class="resolutionActions"><div class="editing">' + actionsContent + '</div></div>';
-        return content;
+        var content = '<div class="resolutionInstructions">';
+
+        switch (issue.type) {
+            case HTMLCS.ERROR:
+                content += '<p>Please resolive this issue manually and then click the refresh button to confirm that the issue is resolved.</p>';
+            break;
+
+            case HTMLCS.WARNING:
+            case HTMLCS.NOTICE:
+                content += '<p>Either fix this issue manualy and then click the refresh button to confirm that the issue is resolved or if no changes are required click the "Dismiss" button.<p>';
+            break;
+        }
+
+        content += '</div>';
+        content += '<div class="resolutionActions"><div class="editing"></div><div class="actionButtons"></div></div>';
+        dfx.setHtml(div, content);
+
+        if (issue.type !== HTMLCS.ERROR) {
+            var actionButtons = dfx.getClass('actionButtons', div)[0];
+
+            var self = this;
+            var dismissButton = this.viper.ViperTools.createButton(dfx.getUniqueId(), 'Dismiss', 'Dismiss Issue', '', function() {
+                self.vap.dismissIssue();
+            });
+
+            actionButtons.appendChild(dismissButton);
+        }
+
+        return div;
+
+    },
+
+    setResolutionInstruction: function(resolutionContainer, content)
+    {
+        var instructionCont = dfx.getClass('resolutionInstructions', resolutionContainer)[0];
+
+        if (typeof content === 'string') {
+            dfx.setHtml(instructionCont, content);
+        } else {
+            dfx.empty(instructionCont);
+            instructionCont.appendChild(content);
+        }
+
+    },
+
+    getResolutionActionsContainer: function(resolutionContainer)
+    {
+        var instructionCont = dfx.getClass('editing', resolutionContainer)[0];
+        dfx.empty(instructionCont);
+        return instructionCont;
 
     },
 
