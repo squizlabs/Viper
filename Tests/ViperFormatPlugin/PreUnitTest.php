@@ -227,7 +227,7 @@ class Viper_Tests_ViperFormatPlugin_PreUnitTest extends AbstractViperUnitTest
         $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_formats_highlighted.png');
         $this->clickTopToolbarButton($dir.'toolbarIcon_pre_active.png');
 
-        $this->assertHTMLMatch('<pre>Lorem xtn dolor</pre><pre>sit amet <strong>WoW</strong></pre><p>THIS is a paragraph to change to a PrE</p>');
+        $this->assertHTMLMatch('<pre>Lorem xtn dolor</pre><pre>sit amet <strong>WoW</strong></pre>THIS is a paragraph to change to a PrE');
 
     }//end testApplyingAndRemovingPre()
 
