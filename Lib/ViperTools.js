@@ -350,7 +350,7 @@ ViperTools.prototype = {
 
         var self = this;
         dfx.addEvent(input, 'focus', function() {
-            dfx.addClass(textBox, 'active');
+            dfx.addClass(textBox, 'focused');
             self.viper.highlightSelection();
 
             self.viper.registerCallback('ViperTools:buttonClicked', 'ViperTools:textbox', function() {
@@ -402,7 +402,7 @@ ViperTools.prototype = {
         }
 
         dfx.addEvent(input, 'keyup', function(e) {
-            dfx.addClass(textBox, 'active');
+            dfx.addClass(textBox, 'focused');
 
             if (isTextArea !== true) {
                 var actionIcon = dfx.getClass('Viper-textbox-action', main);
