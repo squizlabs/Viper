@@ -287,12 +287,25 @@ ViperAccessibilityPlugin.prototype = {
 
     },
 
-    refreshIssues: function()
+    refreshIssue: function()
     {
+        var currentIssue = this._issues[(this._currentIssue - 1)];
+
         var self = this;
         this.runChecks(function() {
-            var msgs = HTMLCS.getMessages();
+            var msgs  = HTMLCS.getMessages();
+            var found = false;
+            for (var i in msgs) {
+                if (msgs[i].code === currentIssue.code && msgs[i].element === currentIssue.element) {
+                    found = true;
+                    break;
+                }
+            }
 
+            if (found === false) {
+                // Mark issue as done.
+                self.fixIssue();
+            }
         });
 
     },
@@ -886,7 +899,7 @@ ViperAccessibilityPlugin.prototype = {
             resolutionHeader.appendChild(sourceViewBtn);
 
             var refreshIssueBtn = tools.createButton('VAP:toggleIssueDone', '', 'Refresh Issue', 'accessRerun', function() {
-                self.refreshIssues();
+                self.refreshIssue();
             });
             resolutionHeader.appendChild(refreshIssueBtn);
 
