@@ -593,6 +593,7 @@
 }
 .Viper-textbox.disabled .Viper-textbox-input[type=text], .Viper-textbox.disabled .Viper-textbox-textArea {
   text-decoration: line-through;
+  color: #CCC;
 }
 .input-placeholder {
   color: #c44e4e;
