@@ -597,8 +597,10 @@ ViperAccessibilityPlugin.prototype = {
         this._issueCount = c;
 
         // Create multiple issue lists for pagination.
+        var dismissedIssues = [];
+        var addedIssueCount = 0;
         for (var i = 0; i < c; i++) {
-            if ((i % this._issuesPerPage) === 0) {
+            if ((addedIssueCount % this._issuesPerPage) === 0) {
                 list = document.createElement('ol');
                 dfx.addClass(list, 'ViperAP-issueList');
                 listsInner.appendChild(list);
@@ -610,12 +612,32 @@ ViperAccessibilityPlugin.prototype = {
             }
 
             var msg = msgs[i];
+            if (this._dismissedIssues[msg.code] && this._dismissedIssues[msg.code].inArray(msg.element) === true) {
+                dismissedIssues.push(msg);
+            } else {
+                list.appendChild(this._createIssue(msg));
+                this._issues.push(msg);
+                addedIssueCount++;
+            }
+        }
+
+        for (var i = 0; i < dismissedIssues.length; i++) {
+            if ((addedIssueCount % this._issuesPerPage) === 0) {
+                list = document.createElement('ol');
+                dfx.addClass(list, 'ViperAP-issueList');
+                listsInner.appendChild(list);
+                this._pageCount++;
+
+                if (this._pageCount === 1) {
+                    firstList = list;
+                }
+            }
+
+            var msg = dismissedIssues[i];
             list.appendChild(this._createIssue(msg));
             this._issues.push(msg);
-
-            if (this._dismissedIssues[msg.code] && this._dismissedIssues[msg.code].inArray(msg.element) === true) {
-                this._markAsDone(i);
-            }
+            this._markAsDone((this._issues.length - 1));
+            addedIssueCount++;
         }
 
         // Set the width to the width of panel x number of pages so they are placed
