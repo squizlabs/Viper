@@ -39,6 +39,7 @@ function ViperAccessibilityPlugin(viper)
     this._containerWidth      = 35;
     this._autoRunInterval     = 30000;
     this._issues              = [];
+    this._fixedIssues         = [];
     this._dismissedIssues     = {};
     this._autoRunTimer        = null;
     this._subSection          = null;
@@ -255,9 +256,6 @@ ViperAccessibilityPlugin.prototype = {
         // Set the sub section to be visible.
         this._toolbar.getBubble('VAP:bubble').showSubSection('VAP:subSection');
 
-        //dfx.addClass(this._subSection, 'active');
-        //dfx.addClass(this._aaTools.element, 'subSectionVisible');
-
         // Run the HTMLCS checks.
         this.runChecks(function() {
             // Hide loading sub section and show the main panel and results panel.
@@ -285,6 +283,16 @@ ViperAccessibilityPlugin.prototype = {
                 dfx.removeClass(toggleButton, 'noIssues');
                 dfx.addClass(toggleButton, 'issues');
             }
+        });
+
+    },
+
+    refreshIssues: function()
+    {
+        var self = this;
+        this.runChecks(function() {
+            var msgs = HTMLCS.getMessages();
+
         });
 
     },
@@ -591,6 +599,10 @@ ViperAccessibilityPlugin.prototype = {
             var msg = msgs[i];
             list.appendChild(this._createIssue(msg));
             this._issues.push(msg);
+
+            if (this._dismissedIssues[msg.code] && this._dismissedIssues[msg.code].inArray(msg.element) === true) {
+                this._markAsDone(i);
+            }
         }
 
         // Set the width to the width of panel x number of pages so they are placed
@@ -726,12 +738,7 @@ ViperAccessibilityPlugin.prototype = {
 
         if (this._dismissedIssues[issue.code].inArray(issue.element) !== true) {
             this._dismissedIssues[issue.code].push(issue.element);
-
-            var issueElement = this.getIssueElement(issueNum + 1);
-            dfx.addClass(issueElement, 'issueDone');
-
-            var listItem = dfx.getClass('ViperAP-issueItem')[issueNum];
-            dfx.addClass(listItem, 'issueDone');
+            this._markAsDone(issueNum);
         }
 
         var self = this;
@@ -749,6 +756,24 @@ ViperAccessibilityPlugin.prototype = {
     {
         issueNum  = issueNum || (this._currentIssue - 1);
         var issue = this._issues[issueNum];
+
+        var issueElement = this.getIssueElement(issueNum + 1);
+        dfx.addClass(issueElement, 'issueDone');
+
+        var listItem = dfx.getClass('ViperAP-issueItem')[issueNum];
+        dfx.addClass(listItem, 'issueDone');
+
+    },
+
+    _markAsDone: function(issueNum)
+    {
+        issueNum  = issueNum || (this._currentIssue - 1);
+
+        var issueElement = this.getIssueElement(issueNum + 1);
+        dfx.addClass(issueElement, 'issueDone');
+
+        var listItem = dfx.getClass('ViperAP-issueItem')[issueNum];
+        dfx.addClass(listItem, 'issueDone');
 
     },
 
@@ -861,6 +886,7 @@ ViperAccessibilityPlugin.prototype = {
             resolutionHeader.appendChild(sourceViewBtn);
 
             var refreshIssueBtn = tools.createButton('VAP:toggleIssueDone', '', 'Refresh Issue', 'accessRerun', function() {
+                self.refreshIssues();
             });
             resolutionHeader.appendChild(refreshIssueBtn);
 
