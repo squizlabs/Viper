@@ -182,7 +182,7 @@ class Viper_Tests_ViperFormatPlugin_QuoteUnitTest extends AbstractViperUnitTest
         $this->selectInlineToolbarLineageItem(1);
         $this->assertFalse($this->inlineToolbarButtonExists($dir.'toolbarIcon_toggle_formats_highlighted.png'), 'Toogle formats icon is still active in the inline toolbar');
 
-    }//end testQuoteIcon()
+    }//end testQuoteIconIsActiveWhenSelectingQuoteTag()
 
 
     /**
