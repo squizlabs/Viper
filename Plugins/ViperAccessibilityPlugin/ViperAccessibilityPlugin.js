@@ -600,21 +600,21 @@ ViperAccessibilityPlugin.prototype = {
         var dismissedIssues = [];
         var addedIssueCount = 0;
         for (var i = 0; i < c; i++) {
-            if ((addedIssueCount % this._issuesPerPage) === 0) {
-                list = document.createElement('ol');
-                dfx.addClass(list, 'ViperAP-issueList');
-                listsInner.appendChild(list);
-                this._pageCount++;
-
-                if (this._pageCount === 1) {
-                    firstList = list;
-                }
-            }
-
             var msg = msgs[i];
             if (this._dismissedIssues[msg.code] && this._dismissedIssues[msg.code].inArray(msg.element) === true) {
                 dismissedIssues.push(msg);
             } else {
+                if ((addedIssueCount % this._issuesPerPage) === 0) {
+                    list = document.createElement('ol');
+                    dfx.addClass(list, 'ViperAP-issueList');
+                    listsInner.appendChild(list);
+                    this._pageCount++;
+
+                    if (this._pageCount === 1) {
+                        firstList = list;
+                    }
+                }
+
                 list.appendChild(this._createIssue(msg));
                 this._issues.push(msg);
                 addedIssueCount++;
