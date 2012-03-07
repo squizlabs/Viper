@@ -291,7 +291,15 @@ ViperAccessibilityPlugin.prototype = {
     {
         var currentIssue = this._issues[(this._currentIssue - 1)];
 
-        var self = this;
+        var issueElem = this.getIssueElement(this._currentIssue);
+        dfx.addClass(issueElem, 'rechecking');
+
+        // Add the re-checking issue overlay.
+        var issueRecheckElem = dfx.getClass('ViperAP-issueRecheck', issueElem)[0];
+        dfx.setHtml(issueRecheckElem, '<div class="issueChecking">Re-checking issue …</div>');
+
+        var self     = this;
+        var issueNum = this._currentIssue;
         this.runChecks(function() {
             var msgs  = HTMLCS.getMessages();
             var found = false;
@@ -303,8 +311,22 @@ ViperAccessibilityPlugin.prototype = {
             }
 
             if (found === false) {
+                dfx.setHtml(issueRecheckElem, '');
+                dfx.removeClass(issueElem, 'rechecking');
+
                 // Mark issue as done.
-                self.fixIssue();
+                self.fixIssue(null, true);
+            } else {
+                dfx.empty(issueRecheckElem);
+                var issueRemains = document.createElement('div');
+                dfx.addClass(issueRemains, 'issueRemains');
+                dfx.setHtml(issueRemains, '<span class="recheckMessage">This issue has not been resolved</span>');
+                issueRemains.appendChild(self.viper.ViperTools.createButton('VAP-issues:notResolvedBtn:' + issueNum, 'OK', '', '', function() {
+                    //dfx.remove(issueRecheckElem);
+                    dfx.setHtml(issueRecheckElem, '');
+                    dfx.removeClass(issueElem, 'rechecking');
+                }));
+                issueRecheckElem.appendChild(issueRemains);
             }
         });
 
@@ -783,11 +805,11 @@ ViperAccessibilityPlugin.prototype = {
             } else {
                 self.nextIssue();
             }
-        }, 1000);
+        }, 800);
 
     },
 
-    fixIssue: function(issueNum)
+    fixIssue: function(issueNum, goNext)
     {
         issueNum  = issueNum || (this._currentIssue - 1);
         var issue = this._issues[issueNum];
@@ -797,6 +819,17 @@ ViperAccessibilityPlugin.prototype = {
 
         var listItem = dfx.getClass('ViperAP-issueItem')[issueNum];
         dfx.addClass(listItem, 'issueDone');
+
+        if (goNext === true) {
+            var self = this;
+            setTimeout(function() {
+                if (issueNum > self._issueCount) {
+                    self.previousIssue();
+                } else {
+                    self.nextIssue();
+                }
+            }, 800);
+        }
 
     },
 
@@ -883,8 +916,12 @@ ViperAccessibilityPlugin.prototype = {
                 references.appendChild(refContent);
 
                 var issueDoneDiv = document.createElement('div');
-                dfx.addClass(issueDoneDiv, 'issueDoneDiv');
+                dfx.addClass(issueDoneDiv, 'issueDoneCont');
                 references.appendChild(issueDoneDiv);
+
+                var issueRecheck = document.createElement('div');
+                dfx.addClass(issueRecheck, 'ViperAP-issueRecheck');
+                references.appendChild(issueRecheck);
 
                 main.appendChild(references);
             }, self);

@@ -231,7 +231,7 @@
     max-height: inherit;
 }
 
-.ViperAP-issuePane .issueDoneDiv {
+.ViperAP-issuePane .issueDoneCont {
     visibility: hidden;
     -moz-transition: right 0.15s ease-out, top 0.15s ease-out;
     -webkit-transition: right 0.15s ease-out, top 0.15s ease-out;
@@ -243,7 +243,7 @@
     background: transparent url(Images/issueImages.png) 0 -224px no-repeat;
 }
 
-.ViperAP-issuePane.issueDone .issueDoneDiv {
+.ViperAP-issuePane.issueDone .issueDoneCont {
     visibility: visible;
     right: -1px;
     top: -1px;
