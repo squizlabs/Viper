@@ -101,10 +101,19 @@
     position: absolute;
     width: 9px;
     height: 14px;
-    right: 0.7em;
+    right: 0.4em;
     top: 50%;
     margin-top: -7px;
     background: transparent url(../../Images/viperToolsSprite.png) 0 -80px no-repeat;
+}
+
+.ViperAP-issueItem.issueDone:after {
+    width: 19px;
+    height: 19px;
+    right: 0.7em;
+    top: 50%;
+    margin-top: -9px;
+    background: transparent url(Images/issueImages.png) 0 -289px no-repeat;
 }
 .ViperAP-issueItem.complete {
     opacity: 0.4;
@@ -117,6 +126,10 @@
     width: 1.6em;
     height: 100%;
     border-top: 1px solid #FFF;
+}
+.ViperAP-issueItem.issueDone .ViperAP-issueTitle,
+.ViperAP-issueItem.issueDone .ViperAP-issueType {
+    opacity: 0.4;
 }
 .ViperAP-issueType.error {
     background-color: #952424;
@@ -233,13 +246,19 @@
 .ViperAP-issuePane.issueDone .issueDoneDiv {
     visibility: visible;
     right: -1px;
-    top: -2px;
+    top: -1px;
 }
 
 .ViperAP-issuePane.issueDone .ViperAP-issueType,
 .ViperAP-issuePane.issueDone .issueTitle,
 .ViperAP-issuePane.issueDone .issueWcag {
     opacity: 0.5;
+}
+
+.ViperAP-issuePane.rechecking .ViperAP-issueType,
+.ViperAP-issuePane.rechecking .issueTitle,
+.ViperAP-issuePane.rechecking .issueWcag {
+    opacity: 0.1;
 }
 
 .ViperAP-issueDetails {
@@ -284,17 +303,71 @@
     margin: 0 0 0 0.5em;
     background: transparent url(Images/issueImages.png) 0 -42px no-repeat;
 }
+
+.ViperAP-issueRecheck {
+    position: absolute;
+    top: -1px;
+    left: 0;
+    width: 100%;
+    height: 102%;
+    text-align: center;
+    font-size: 1.26em;
+}
+.ViperAP-issueRecheck .issueChecking {
+    background: transparent url(Images/recheck-spinner.gif) 50% 0 no-repeat;
+    padding: 45px 1em 1em;
+    margin-top: 16%;
+}
+.ViperAP-issueRecheck .issueRemains {
+    position: relative;
+    padding: 40px 2em 2em;
+    margin-top: 12%;
+}
+.ViperAP-issueRecheck .issueRemains:before {
+    content: "";
+    display: block;
+    position: absolute;
+    width: 38px;
+    height: 32px;
+    left: 50%;
+    margin-left: -16px;
+    top: 0;
+    background: transparent url(Images/issueImages.png) -19px -289px no-repeat;
+}
+.ViperAP-issueRecheck .recheckMessage {
+    display: block;
+    clear: both;
+    margin-bottom: 1.3em;
+}
+.ViperAP-issueRecheck .Viper-button {
+    font-weight: bold;
+    font-size: 0.9em;
+    padding: 0 3em;
+}
+
 .ViperAP-issueResolution {
+    position: relative;
     border-top: 1px solid #6c6c6d;
     padding: 0.5em 0.8em 0 0.8em;
     font-size: 1em;
+}
+.ViperAP-issuePane.rechecking .ViperAP-issueResolution {
+    opacity: 0.4;
+}
+.ViperAP-issuePane.rechecking .ViperAP-issueResolution:after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
 }
 .ViperAP-issueResolution .resolutionHeader {
     margin-right: -0.3em;
     text-align: right;
 }
 .ViperAP-issueResolution .resolutionHeader strong {
-    font-size: 1.5em;
+    font-size: 1.49em;
     color: #9b99a5;
     text-shadow: 0 -1px 0 rgba(0,0,0,0.6);
     display: inline-block;
@@ -305,7 +378,7 @@
 .ViperAP-issueResolution .resolutionInstructions {
     padding: 0 0.2em;
     color: #EEE;
-    font-size: 1.5em;
+    font-size: 1.49em;
     text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.8);
 }
 .ViperAP-issueResolution .resolutionInstructions p {
@@ -321,10 +394,11 @@
 
 .ViperAP-issueResolution .imagePreview {
     float: left;
-    width: 100px;
+    width: 90px;
     margin: 0 0.9em 0.6em 0;
     border: 1px solid #8F8F8F;
     box-shadow: 0 1px 3px #2b2b2b;
+    line-height: 0;
 }
 .ViperAP-issueResolution .imagePreview img {
     width: 100%;
