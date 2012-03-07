@@ -29,18 +29,17 @@ ViperAccessibilityPlugin_WCAG2 = {
 
     },
 
-    getResolutionContent: function(issue, callback, vap)
+    getResolutionContent: function(issue, contentElement, vap)
     {
         this.viper = vap.viper;
 
-        var code = this._parseCode(issue.code);
-
+        var code    = this._parseCode(issue.code);
         var objName = 'ViperAccessibilityPlugin_WCAG2_Principle' + code.principle + '_Guideline' + code.guideline.replace('.', '_');
         var obj     = window[objName];
         if (obj) {
             var fn = obj['res_' + code.section.replace('.', '_')];
             if (dfx.isFn(fn) === true) {
-                fn.call(obj, this._getContent(issue, objName), issue.element, issue, code, callback, vap.viper);
+                fn.call(obj, contentElement, issue.element, issue, code, vap.viper);
             }
 
             return;
@@ -56,7 +55,6 @@ ViperAccessibilityPlugin_WCAG2 = {
         var self = this;
         vap.loadObject(scriptUrl, objName, function(obj) {
             if (!obj) {
-                callback.call(this);
                 return;
             }
 
@@ -68,9 +66,7 @@ ViperAccessibilityPlugin_WCAG2 = {
 
             var fn = obj['res_' + code.section.replace('.', '_')];
             if (dfx.isFn(fn) === true) {
-                fn.call(obj, self._getContent(issue, objName), issue.element, issue, code, callback, vap.viper);
-            } else {
-                callback.call(this);
+                fn.call(obj, contentElement, issue.element, issue, code, vap.viper);
             }
         });
 
@@ -121,8 +117,13 @@ ViperAccessibilityPlugin_WCAG2 = {
 
     },
 
-    _getContent: function(issue, objName)
+    getDefaultContent: function(issue, objName)
     {
+        if (!objName) {
+            var code = this._parseCode(issue.code);
+            objName  = 'ViperAccessibilityPlugin_WCAG2_Principle' + code.principle + '_Guideline' + code.guideline.replace('.', '_');
+        }
+
         var div = document.createElement('div');
         dfx.addClass(div, objName);
 

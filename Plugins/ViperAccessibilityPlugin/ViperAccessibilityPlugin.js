@@ -864,11 +864,9 @@ ViperAccessibilityPlugin.prototype = {
             });
             resolutionHeader.appendChild(refreshIssueBtn);
 
-            standardObj.getResolutionContent(issue, function(resContent) {
-                if (resContent && resContent.firstChild) {
-                    resolutionCont.appendChild(resContent);
-                }
-            }, self);
+            var defaultContent = standardObj.getDefaultContent(issue);
+            resolutionCont.appendChild(defaultContent);
+            standardObj.getResolutionContent(issue, defaultContent, self);
         });
 
     },

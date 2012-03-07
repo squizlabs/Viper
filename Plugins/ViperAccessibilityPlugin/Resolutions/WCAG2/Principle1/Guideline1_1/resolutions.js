@@ -3,7 +3,7 @@ ViperAccessibilityPlugin_WCAG2_Principle1_Guideline1_1 = {
     id: 'ViperAccessibilityPlugin_WCAG2_Principle1_Guideline1_1',
     parent: null,
 
-    res_1_1_1: function(contentElement, element, issue, code, callback, viper)
+    res_1_1_1: function(contentElement, element, issue, code, viper)
     {
         var editPanel = null;
         var action    = null;
@@ -120,8 +120,6 @@ ViperAccessibilityPlugin_WCAG2_Principle1_Guideline1_1 = {
                 // No interface.
             break;
         }//end switch
-
-        callback.call(this, contentElement);
 
     },
 
