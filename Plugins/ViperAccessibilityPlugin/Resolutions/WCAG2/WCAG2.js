@@ -137,7 +137,7 @@ ViperAccessibilityPlugin_WCAG2 = {
 
             case HTMLCS.WARNING:
             case HTMLCS.NOTICE:
-                content += '<p>Either fix this issue manualy and then click the refresh button to confirm that the issue is resolved or if no changes are required click the "Dismiss" button.<p>';
+                content += '<p>Either fix this issue manualy and then click the refresh button to confirm that the issue is resolved or if no changes are required click the "Dismiss" button.</p>';
             break;
         }
 
