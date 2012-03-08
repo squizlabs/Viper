@@ -358,6 +358,14 @@
 .ViperAP-issuePane.rechecking .ViperAP-issueResolution {
     opacity: 0.4;
 }
+
+.ViperAP-issueResolution,
+.ViperAP-issueType,
+.issueTitle,
+.issueWcag {
+    -moz-transition: opacity 0.3s ease-in;
+}
+
 .ViperAP-issuePane.rechecking .ViperAP-issueResolution:after {
     content: "";
     position: absolute;
