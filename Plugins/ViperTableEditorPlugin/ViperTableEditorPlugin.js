@@ -1860,6 +1860,7 @@ ViperTableEditorPlugin.prototype = {
             return elem;
         }
 
+        var activeCell = this.getActiveCell();
         if (type === 'cell') {
             elem = document.createElement('th');
             while (cell.firstChild) {
@@ -1868,6 +1869,10 @@ ViperTableEditorPlugin.prototype = {
 
             for (var i = 0; i < cell.attributes.length; i++) {
                 elem.setAttribute(cell.attributes[i].nodeName, cell.attributes[i].nodeValue);
+            }
+
+            if (cell === activeCell) {
+                this.setActiveCell(elem);
             }
 
             dfx.insertBefore(cell, elem);
@@ -1933,6 +1938,7 @@ ViperTableEditorPlugin.prototype = {
             return elem;
         }
 
+        var activeCell = this.getActiveCell();
         if (type === 'cell') {
             elem = document.createElement('td');
             while (cell.firstChild) {
@@ -1941,6 +1947,10 @@ ViperTableEditorPlugin.prototype = {
 
             for (var i = 0; i < cell.attributes.length; i++) {
                 elem.setAttribute(cell.attributes[i].nodeName, cell.attributes[i].nodeValue);
+            }
+
+            if (cell === activeCell) {
+                this.setActiveCell(elem);
             }
 
             dfx.insertBefore(cell, elem);
@@ -2773,10 +2783,6 @@ ViperTableEditorPlugin.prototype = {
                 }
 
                 dfx.setHtml(cell, '&nbsp;');
-
-                if (i === 0) {
-                    dfx.setStyle(cell, 'width', '150px');
-                }
 
                 tr.appendChild(cell);
 
