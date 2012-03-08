@@ -486,10 +486,17 @@
 // Viper Text Inputs & Areas
 .Viper-textbox {
     margin-bottom: 0.6em;
+     -moz-transition: opacity 0.2s ease-in;
+    -webkit-transition: opacity 0.2s ease-in;
     & .Viper-textbox-textArea {
         resize: none;
     }
+    &.disabled {
+        opacity: 0.4;
+        filter: ~"alpha(opacity = 40)";
+    }
 }
+
 .Viper-textbox-label {
     display: block;
     padding: 4px 2px;

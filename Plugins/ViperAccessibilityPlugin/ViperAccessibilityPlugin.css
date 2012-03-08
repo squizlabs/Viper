@@ -341,7 +341,7 @@
 .ViperAP-issueRecheck .recheckMessage {
     display: block;
     clear: both;
-    margin-bottom: 1.3em;
+    margin-bottom: 5%;
 }
 .ViperAP-issueRecheck .Viper-button {
     font-weight: bold;
@@ -571,6 +571,11 @@
     border-radius: 3px 3px 3px 3px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.8), 0 0 3px rgba(255, 255, 255, 0.5) inset;
     margin: -1px 0 0 -1px;
+}
+
+.ViperAccessibilityPlugin .Viper-button {
+    -moz-transition: opacity 0.2s ease-in;
+    -webkit-transition: opacity 0.2s ease-in;
 }
 
 /* Pointer */
