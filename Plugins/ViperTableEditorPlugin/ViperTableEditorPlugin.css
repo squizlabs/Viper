@@ -26,12 +26,84 @@
     margin: -1px 0 0 -1px;
 }
 
+#test-ViperTEP.topBar {
+    position: fixed;
+}
+
 /* test styles that add and remove border radius to the table button when it is the only visible button */
 #test-ViperTEP .Viper-button:first-child {
     border-top-right-radius: 0.3em;
     border-bottom-right-radius: 0.3em;
 }
+
+#test-ViperTEP.topBar .Viper-button:first-child,
 #test-ViperTEP:hover .Viper-button:first-child {
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
+}
+
+.VTEP-bubble-label,
+.VTEP-bubble-headerTitle {
+    text-shadow: none;
+    color: #EEE;
+    font-size: 1.2em;
+    margin: 5px 0;
+}
+
+.VTEP-bubble-label {
+    text-align: left;
+}
+
+table.VTEP-bubble-table {
+    border: medium none;
+    border-collapse: collapse;
+}
+
+table.VTEP-bubble-table td {
+    border-collapse: collapse;
+    border-color: #333333;
+    border-style: solid;
+    border-width: 1px;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.1) inset;
+    color: #FFFFFF;
+    cursor: pointer;
+    font-size: 1.6em;
+    padding: 0;
+    text-align: center;
+    text-shadow: none;
+    vertical-align: middle;
+    width: 1.3em;
+}
+
+table.VTEP-bubble-table td.selected,
+table.VTEP-bubble-table td.selected.hover {
+    background-color: #4C7CDF;
+}
+
+table.VTEP-bubble-table td.hover {
+    background-color: #616069;
+}
+
+.VTEP-bubble-headersWrapper {
+    overflow: hidden;
+    margin-bottom: 15px;
+}
+
+.VTEP-bubble-headersTableWrapper {
+    float: left;
+    margin-right: 10px;
+}
+
+.VTEP-bubble-table.headers td {
+    font-size: 1em;
+    width: 1.3em;
+}
+
+.VTEP-bubble-headersTableWrapper.selected td.hover {
+    background-color: #4C7CDF;
+}
+
+.VTEP-bubble-headersTableWrapper.selected span {
+    font-weight: bold;
+    color: #FFF;
 }

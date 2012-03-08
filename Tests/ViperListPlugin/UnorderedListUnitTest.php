@@ -723,6 +723,29 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperLis
     }//end testConvertSubListType()
 
 
+    /**
+     * Test a list can be created inside a table cell.
+     *
+     * @return void
+     */
+    public function testListIconsAvailableInTableCell()
+    {
+        $this->selectText('XabcX');
+        $this->execJS('insTable(3, 3)');
+
+        $cellRect = $this->getBoundingRectangle('td', 0);
+        $region   = $this->getRegionOnPage($cellRect);
+
+        // Click inside the cell.
+        $this->click($region);
+
+        $this->clickTopToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_unorderedList.png');
+
+        $this->assertEquals('<ul><li>&nbsp;</li></ul>', $this->getHtml('td', 0));
+
+    }//end testListIconsAvailableInTableCell()
+
+
 }//end class
 
 ?>

@@ -129,6 +129,7 @@ ViperTools.prototype = {
             dfx.addClass(button, customClass);
         }
 
+        var mouseUpAction  = function() {};
         var preventMouseUp = false;
         var self           = this;
         if (clickAction) {
@@ -139,11 +140,13 @@ ViperTools.prototype = {
                     return false;
                 }
 
-                return clickAction.call(this, button);
+                self.viper.fireCallbacks('ViperTools:buttonClicked', id);
+                return clickAction.call(this, e);
             });
         }//end if
 
         dfx.addEvent(button, 'mouseup.Viper', function(e) {
+            mouseUpAction.call(this, e);
             self._preventMouseUp = false;
             dfx.preventDefault(e);
             return false;
@@ -169,6 +172,31 @@ ViperTools.prototype = {
                 }
 
                 dfx.addClass(btnIconElem, iconClass);
+            },
+            setButtonShortcut: function(key)
+            {
+                var extraTitleAttr = ' (' + key + ')';
+                if (extraTitleAttr.indexOf('CTRL') >= 0) {
+                    if (navigator.platform.indexOf('Mac') >= 0) {
+                        extraTitleAttr = extraTitleAttr.replace('CTRL', 'CMD');
+                    }
+                }
+
+                button.setAttribute('title', titleAttr + extraTitleAttr);
+
+                self.viper.registerCallback('Viper:keyDown', 'ViperTools-' + id, function(e) {
+                    if (self.viper.isKey(e, key) === true) {
+                        if (dfx.hasClass(button, 'disabled') !== true) {
+                            clickAction.call(e, button);
+                        }
+
+                        return false;
+                    }
+                });
+            },
+            setMouseUpAction: function(callback)
+            {
+                mouseUpAction = callback;
             }
         });
 
@@ -205,13 +233,21 @@ ViperTools.prototype = {
 
     enableButton: function(buttonid)
     {
-        dfx.removeClass(this.getItem(buttonid).element, 'disabled');
+        var button = this.getItem(buttonid).element;
+        button.setAttribute('title', button.getAttribute('title').replace(' [Not available]', ''));
+        dfx.removeClass(button, 'disabled');
 
     },
 
     disableButton: function(buttonid)
     {
-        dfx.addClass(this.getItem(buttonid).element, 'disabled');
+        var button = this.getItem(buttonid).element;
+        if (dfx.hasClass(button, 'disabled') === true) {
+            return;
+        }
+
+        button.setAttribute('title', button.getAttribute('title') + ' [Not available]');
+        dfx.addClass(button, 'disabled');
 
     },
 
@@ -225,7 +261,18 @@ ViperTools.prototype = {
      *
      * @return {DOMNode} If label specified the label element else the textbox element.
      */
-    createTextbox: function(id, label, value, action, required, expandable, desc, events)
+    createTextbox: function(id, label, value, action, required, expandable, desc, events, labelWidth)
+    {
+        return this._createTextbox(id, label, value, action, required, expandable, desc, events, labelWidth);
+    },
+
+    createTextarea: function(id, label, value, required, desc, events, labelWidth, rows, cols)
+    {
+        return this._createTextbox(id, label, value, null, required, false, desc, events, labelWidth, true, rows, cols);
+
+    },
+
+    _createTextbox: function(id, label, value, action, required, expandable, desc, events, labelWidth, isTextArea, rows, cols)
     {
         label = label || '&nbsp;';
         value = value || '';
@@ -249,6 +296,11 @@ ViperTools.prototype = {
         dfx.addClass(title, 'Viper-textbox-title');
         dfx.setHtml(title, label);
 
+        if (labelWidth) {
+            dfx.setStyle(title, 'width', labelWidth);
+        }
+
+        var width = 0;
         // Wrap the element in a generic class so the width calculation is correct
         // for the font size.
         var tmp = document.createElement('div');
@@ -261,15 +313,27 @@ ViperTools.prototype = {
         dfx.setStyle(tmp, 'display', 'block');
         tmp.appendChild(title);
         document.body.appendChild(tmp);
-        var width = (dfx.getElementWidth(title) + 10);
+        width = (dfx.getElementWidth(title) + 10) + 'px';
         document.body.removeChild(tmp);
+
         main.appendChild(title);
 
-        var input   = document.createElement('input');
-        input.type  = 'text';
+        var inputType = 'input';
+        if (isTextArea === true) {
+            inputType = 'textarea';
+        }
+
+        var input   = document.createElement(inputType);
         input.value = value;
-        dfx.addClass(input, 'Viper-textbox-input');
-        dfx.setStyle(main, 'padding-left', width + 'px');
+
+        if (isTextArea === true) {
+            dfx.addClass(input, 'Viper-textbox-textArea');
+        } else {
+            input.type = 'text';
+            dfx.addClass(input, 'Viper-textbox-input');
+        }
+
+        dfx.setStyle(main, 'padding-left', width);
         main.appendChild(input);
 
         if (required === true) {
@@ -284,28 +348,14 @@ ViperTools.prototype = {
             textBox.appendChild(descEl);
         }
 
-        var self    = this;
-        var timeout = null;
-
-        var timeoutAction = function() {
-            clearTimeout(timeout);
-            timeout = setTimeout(function() {;
-                dfx.removeClass(textBox, 'active');
-
-                // Call action method.
-                if (action) {
-                    self.viper.focus();
-                    self.viper.fireCallbacks('ViperTools:textbox:actionTiggered', id);
-                    action.call(input, input.value);
-                    input.focus();
-                    dfx.removeClass(textBox, 'active');
-                }
-            }, 1000);
-        };
-
+        var self = this;
         dfx.addEvent(input, 'focus', function() {
-            dfx.addClass(textBox, 'active');
+            dfx.addClass(textBox, 'focused');
             self.viper.highlightSelection();
+
+            self.viper.registerCallback('ViperTools:buttonClicked', 'ViperTools:textbox', function() {
+                self.viper.focus();
+            });
 
             // Set the caret to the end of the textfield.
             input.value = input.value;
@@ -315,20 +365,23 @@ ViperTools.prototype = {
         });
 
         dfx.addEvent(input, 'blur', function() {
+            self.viper.removeCallback('ViperTools:buttonClicked', 'ViperTools:textbox');
             dfx.removeClass(textBox, 'active');
-            clearTimeout(timeout);
         });
 
+        var changed = false;
         var _addActionButton = function() {
             var actionIcon = document.createElement('span');
             dfx.addClass(actionIcon, 'Viper-textbox-action');
             main.appendChild(actionIcon);
             dfx.addEvent(actionIcon, 'click', function() {
                 if (dfx.hasClass(textBox, 'actionRevert') === true) {
+                    changed     = false;
                     input.value = value;
                     dfx.removeClass(textBox, 'actionRevert');
                     dfx.addClass(textBox, 'actionClear');
                 } else if (dfx.hasClass(textBox, 'actionClear') === true) {
+                    changed     = true;
                     input.value = '';
                     dfx.removeClass(textBox, 'actionClear');
                     if (required === true) {
@@ -336,27 +389,28 @@ ViperTools.prototype = {
                     }
                 }
 
-                timeoutAction();
+                self.viper.fireCallbacks('ViperTools:changed:' + id);
             });
 
             return actionIcon;
         };
 
-        if (value !== '') {
+        if (value !== '' && isTextArea !== true) {
             var actionIcon = _addActionButton();
             actionIcon.setAttribute('title', 'Clear this value');
             dfx.addClass(textBox, 'actionClear');
         }
 
         dfx.addEvent(input, 'keyup', function(e) {
-            dfx.addClass(textBox, 'active');
-            timeoutAction();
+            dfx.addClass(textBox, 'focused');
 
-            var actionIcon = dfx.getClass('Viper-textbox-action', main);
-            if (actionIcon.length === 0) {
-                actionIcon = _addActionButton();
-            } else {
-                actionIcon = actionIcon[0];
+            if (isTextArea !== true) {
+                var actionIcon = dfx.getClass('Viper-textbox-action', main);
+                if (actionIcon.length === 0) {
+                    actionIcon = _addActionButton();
+                } else {
+                    actionIcon = actionIcon[0];
+                }
             }
 
             dfx.removeClass(textBox, 'actionClear');
@@ -364,24 +418,43 @@ ViperTools.prototype = {
 
             if (input.value !== value && value !== '') {
                 // Show the revert icon.
-                actionIcon.setAttribute('title', 'Revert to original value');
-                dfx.addClass(textBox, 'actionRevert');
+                if (isTextArea !== true) {
+                    actionIcon.setAttribute('title', 'Revert to original value');
+                    dfx.addClass(textBox, 'actionRevert');
+                }
+
                 dfx.removeClass(textBox, 'required');
             } else if (input.value !== '') {
-                actionIcon.setAttribute('title', 'Clear this value');
-                dfx.addClass(textBox, 'actionClear');
+                if (isTextArea !== true) {
+                    actionIcon.setAttribute('title', 'Clear this value');
+                    dfx.addClass(textBox, 'actionClear');
+                }
+
                 dfx.removeClass(textBox, 'required');
             } else {
-                dfx.remove(actionIcon);
+                if (isTextArea !== true) {
+                    dfx.remove(actionIcon);
+                }
+
                 if (required === true) {
                     dfx.addClass(textBox, 'required');
                 }
+            }
+
+            if (input.value !== value || changed === true) {
+                changed = true;
+                self.viper.fireCallbacks('ViperTools:changed:' + id);
             }
 
             // Action.
             if (action && e.which === 13) {
                 self.viper.focus();
                 action.call(input, input.value);
+            } else if (!action && e.which === 13 && (self.viper.isBrowser('chrome') || self.viper.isBrowser('safari'))) {
+                var forms = dfx.getParents(main, 'form', self.viper.getViperElement());
+                if (forms.length > 0 && dfx.getTag('input', forms[0]).length > 2) {
+                    return forms[0].onsubmit();
+                }
             }
         });
 
@@ -427,6 +500,16 @@ ViperTools.prototype = {
                         dfx.addClass(textBox, 'required');
                     }
                 }
+            },
+            disable: function()
+            {
+                dfx.addClass(textBox, 'disabled');
+                input.setAttribute('disabled', true);
+            },
+            enable: function()
+            {
+                dfx.removeClass(textBox, 'disabled');
+                input.removeAttribute('disabled');
             }
         });
 
@@ -506,25 +589,47 @@ ViperTools.prototype = {
         var labelElem = document.createElement('label');
         dfx.addClass(labelElem, 'Viper-checkbox');
 
+        if (checked === true) {
+            dfx.addClass(labelElem, 'active');
+        }
+
         var checkbox  = document.createElement('input');
         checkbox.type = 'checkbox';
         checkbox.checked = checked || false;
 
-        var span = document.createElement('span');
-        dfx.addClass(span, 'Viper-checkbox-title');
-        dfx.setHtml(span, label);
+        var checkboxSwitch = document.createElement('span');
+        dfx.addClass(checkboxSwitch, 'Viper-checkbox-switch');
 
-        labelElem.appendChild(span);
-        labelElem.appendChild(checkbox);
+        var checkboxSlider = document.createElement('span');
+        dfx.addClass(checkboxSlider, 'Viper-checkbox-slider');
+
+        checkboxSwitch.appendChild(checkboxSlider);
+        checkboxSwitch.appendChild(checkbox);
+
+        var text = document.createElement('span');
+        dfx.addClass(text, 'Viper-checkbox-title');
+        dfx.setHtml(text, label);
+
+        labelElem.appendChild(text);
+        labelElem.appendChild(checkboxSwitch);
 
         var self = this;
 
-        if (changeCallback) {
-            dfx.addEvent(checkbox, 'click', function() {
-                self.viper.focus();
+        dfx.addEvent(checkbox, 'click', function() {
+            self.viper.focus();
+
+            if (checkbox.checked === true) {
+                dfx.addClass(labelElem, 'active');
+            } else {
+                dfx.removeClass(labelElem, 'active');
+            }
+
+            if (changeCallback) {
                 changeCallback.call(this, checkbox.checked);
-            });
-        }
+            }
+
+            self.viper.fireCallbacks('ViperTools:changed:' + id);
+        });
 
         this.addItem(id, {
             type: 'checkbox',
@@ -535,6 +640,13 @@ ViperTools.prototype = {
             },
             setValue: function(checked) {
                 checkbox.checked = checked;
+
+                if (checked === true) {
+                    dfx.addClass(labelElem, 'active');
+                } else {
+                    dfx.removeClass(labelElem, 'active');
+                }
+
                 if (changeCallback) {
                     self.viper.focus();
                     changeCallback.call(this, checked, true);

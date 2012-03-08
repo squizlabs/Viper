@@ -91,6 +91,77 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
 
 
     /**
+     * Test that the space remains between two words when you remove bold formating from one word and then the other word.
+     *
+     * @return void
+     */
+    public function testSpaceRemainsInContentAfterRemovingFormat()
+    {
+        $this->selectText('XuT', 'dolor');
+
+        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_bold.png');
+        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_bold_active.png'), 'Bold icon in the inline toolbar is not active');
+        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_bold_active.png'), 'Bold icon in the top toolbar is not active');
+
+        $this->assertHTMLMatch('<p>Lorem <strong>XuT dolor</strong></p><p>sit <em>amet</em> <strong>WoW</strong></p>');
+
+        $this->selectText('dolor');
+        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_bold_active.png');
+
+        $this->assertHTMLMatch('<p>Lorem <strong>XuT </strong>dolor</p><p>sit <em>amet</em> <strong>WoW</strong></p>');
+
+        $this->selectText('XuT');
+        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_bold_active.png');
+
+        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p>sit <em>amet</em> <strong>WoW</strong></p>');
+
+    }//end testSpaceRemainsInContentAfterRemovingFormat()
+
+
+    /**
+     * Test that the strong tags are added in the correct location when you apply, remove and re-apply bold formatting to two words in the content.
+     *
+     * @return void
+     */
+    public function testStrongTagsAppliedCorrectlyWhenReapplyingBold()
+    {
+        $dir = dirname(__FILE__).'/Images/';
+
+        $this->selectText('XuT', 'dolor');
+
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_bold.png');
+        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_bold_active.png'), 'Bold icon in the inline toolbar is not active');
+        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_anchor.png'), 'Anchor icon does not exist in the inline toolbar');
+        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_class.png'), 'Clas icon does not exist in the inline toolbar');
+        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_link.png'), 'Link icon does not exist in the inline toolbar');
+
+        $this->assertHTMLMatch('<p>Lorem <strong>XuT dolor</strong></p><p>sit <em>amet</em> <strong>WoW</strong></p>');
+
+        $this->selectText('dolor');
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_bold_active.png');
+
+        $this->assertHTMLMatch('<p>Lorem <strong>XuT </strong>dolor</p><p>sit <em>amet</em> <strong>WoW</strong></p>');
+
+        $this->selectText('XuT');
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_bold_active.png');
+
+        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p>sit <em>amet</em> <strong>WoW</strong></p>');
+
+        $this->selectText('XuT', 'dolor');
+        $this->clickTopToolbarButton($dir.'toolbarIcon_bold.png');
+
+        $this->assertHTMLMatch('<p>Lorem <strong>XuT dolor</strong></p><p>sit <em>amet</em> <strong>WoW</strong></p>');
+
+        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_bold_active.png'), 'Bold icon in the inline toolbar is not active');
+        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_anchor.png'), 'Anchor icon does not exist in the inline toolbar');
+        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_class.png'), 'Clas icon does not exist in the inline toolbar');
+        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_link.png'), 'Link icon does not exist in the inline toolbar');
+
+
+    }//end testStrongTagsAppliedCorrectlyWhenReapplyingBold()
+
+
+    /**
      * Test that the shortcut command works for Bold.
      *
      * @return void
@@ -114,6 +185,36 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
         $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p>sit <em>amet</em> <strong>WoW</strong></p>');
 
     }//end testShortcutCommand()
+
+
+    /**
+     * Test that the Bold icon in the top toolbar works.
+     *
+     * @return void
+     */
+    public function testBoldIconInTopToolbar()
+    {
+        $dir  = dirname(__FILE__).'/Images/';
+        $text = 'Lorem';
+
+        $this->selectText($text);
+        $this->clickTopToolbarButton($dir.'toolbarIcon_bold.png');
+
+        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_bold_active.png'), 'Bold icon in the inline toolbar is not active');
+        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_bold_active.png'), 'Bold icon in the top toolbar is not active');
+
+        $this->assertHTMLMatch('<p><strong>Lorem</strong> XuT dolor</p><p>sit <em>amet</em> <strong>WoW</strong></p>');
+
+        $this->click($this->find($text));
+        $this->selectText($text);
+        $this->clickTopToolbarButton($dir.'toolbarIcon_bold_active.png');
+
+        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_bold.png'), 'Bold icon in the inline toolbar is still active');
+        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_bold.png'), 'Bold icon in the top toolbar is still active');
+
+        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p>sit <em>amet</em> <strong>WoW</strong></p>');
+
+    }//end testBoldIconInTopToolbar()
 
 
     /**
@@ -256,6 +357,26 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
 
     }//end testIconIsRemovedFromInlineToolbar()
 
+
+    /**
+     * Test applying a bold to two words where one word is italics.
+     *
+     * @return void
+     */
+    public function testAddingBoldToTwoWordsWhereOneIsItalics()
+    {
+        $dir = dirname(__FILE__).'/Images/';
+
+        $this->selectText('XuT');
+        $this->keyDown('Key.CMD + i');
+        $this->assertHTMLMatch('<p>Lorem <em>XuT</em> dolor</p><p>sit <em>amet</em> <strong>WoW</strong></p>');
+
+        $this->selectText('XuT', 'dolor');
+        $this->keyDown('Key.CMD + b');
+
+        $this->assertHTMLMatch('<p>Lorem <strong><em>XuT</em> dolor</strong></p><p>sit <em>amet</em> <strong>WoW</strong></p>');
+
+    }//end testAddingBoldToTwoWordsWhereOneIsItalics()
 
 }//end class
 

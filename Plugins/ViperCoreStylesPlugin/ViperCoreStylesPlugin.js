@@ -75,10 +75,10 @@ ViperCoreStylesPlugin.prototype = {
             toolbarButtons.justify = ['left', 'center', 'right', 'block'];
             toolbarButtons.other = ['hr'];
 
-            tools.createButton('bold', 'B', 'Bold', 'bold', function() {
+            tools.createButton('bold', '', 'Bold', 'bold', function() {
                 self.handleStyle('strong');
             });
-            tools.createButton('italic', 'I', 'Italic', 'italic', function() {
+            tools.createButton('italic', '', 'Italic', 'italic', function() {
                 self.handleStyle('em');
             });
             tools.createButton('removeFormat', '', 'Remove Format', 'removeFormat', function() {
@@ -134,7 +134,7 @@ ViperCoreStylesPlugin.prototype = {
             toolbarPlugin.addButton(justifyBubbleToggle);
             toolbarPlugin.setBubbleButton('ViperCoreStylesPlugin:justifyBubble', 'justify');
 
-            var hr = tools.createButton('hr', 'HR', 'Horizontal Rule', '', function() {
+            var hr = tools.createButton('hr', '', 'Horizontal Rule', 'insertHr', function() {
                 self.handleHR();
             });
             toolbarPlugin.addButton(hr);
@@ -147,19 +147,10 @@ ViperCoreStylesPlugin.prototype = {
         var shortcuts = {
             strong: 'CTRL+B',
             em: 'CTRL+I',
-            u: 'CTRL+U'
         };
 
-        dfx.foreach(shortcuts, function(type) {
-            var keys = shortcuts[type];
-            self.viper.registerCallback('Viper:keyDown', 'ViperCoreStylesPlugin', function(e) {
-                if (self.viper.isKey(e, 'CTRL+B') === true) {
-                    return self.handleStyle('strong');
-                } else if (self.viper.isKey(e, 'CTRL+I') === true) {
-                    return self.handleStyle('em');
-                }
-            });
-        });
+        tools.getItem('bold').setButtonShortcut('CTRL+B');
+        tools.getItem('italic').setButtonShortcut('CTRL+I');
 
         this.viper.registerCallback('Viper:keyPress', 'ViperCoreStylesPlugin', function(e) {
             if (self._onChangeAddStyle && self.viper.isInputKey(e) === true) {
@@ -184,7 +175,6 @@ ViperCoreStylesPlugin.prototype = {
         var tagNames = {
             em: 'Italic',
             strong: 'Bold',
-            u: 'Underline',
             sub: 'Subscript',
             sup: 'Superscript',
             del: 'Strikethrough'
@@ -533,7 +523,7 @@ ViperCoreStylesPlugin.prototype = {
             while (node = elemsBetween.shift()) {
                 if (dfx.isBlockElement(node) === true) {
                     this.setJustfyChangeTrackInfo(node);
-                    this.toggleJustify(parent, type);
+                    this.toggleJustify(node, type);
                     // Reset the parent var to crate a new P tag if there
                     // are more siblings.
                     parent = null;
@@ -543,6 +533,8 @@ ViperCoreStylesPlugin.prototype = {
                     this.setJustfyChangeTrackInfo(parent);
                     this.toggleJustify(parent, type);
                     parent = null;
+                } else if (node.nodeType == dfx.TEXT_NODE && dfx.isBlank(dfx.trim(node.data)) === true) {
+                    continue;
                 } else {
                     // This is not a block element so we need to insert
                     // this element and all of its non-block siblings to a
@@ -581,7 +573,7 @@ ViperCoreStylesPlugin.prototype = {
         if (current === type) {
             dfx.setStyle(node, 'text-align', '');
 
-            if (node.hasAttribute('style') === true
+            if (dfx.hasAttribute(node, 'style') === true
                 && node.getAttribute('style') === ''
             ) {
                 node.removeAttribute('style');
@@ -901,15 +893,17 @@ ViperCoreStylesPlugin.prototype = {
         var tools       = this.viper.ViperTools;
         var buttonGroup = tools.createButtonGroup('ViperCoreStylesPlugin:vitp:btnGroup');
 
-        tools.createButton('vitpBold', 'B', 'Bold', 'bold', function() {
+        tools.createButton('vitpBold', '', 'Bold', 'bold', function() {
             return self.handleStyle('strong');
         }, false, activeStates.strong);
-        tools.createButton('vitpItalic', 'I', 'Italic', 'italic', function() {
+        tools.createButton('vitpItalic', '', 'Italic', 'italic', function() {
             return self.handleStyle('em');
         }, false, activeStates.em);
 
         tools.addButtonToGroup('vitpBold', 'ViperCoreStylesPlugin:vitp:btnGroup');
         tools.addButtonToGroup('vitpItalic', 'ViperCoreStylesPlugin:vitp:btnGroup');
+        tools.getItem('vitpBold').setButtonShortcut('CTRL+B');
+        tools.getItem('vitpItalic').setButtonShortcut('CTRL+I');
 
         inlineToolbarPlugin.addButton(buttonGroup);
 

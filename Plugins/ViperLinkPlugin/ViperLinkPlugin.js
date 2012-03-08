@@ -147,20 +147,43 @@ ViperLinkPlugin.prototype = {
             return;
         }
 
-        var range    = this.viper.getViperRange();
-        var bookmark = this.viper.createBookmark(range);
-
+        var range = this.viper.getViperRange();
+        var node  = range.getNodeSelection();
         var a     = document.createElement('a');
-        var elems = dfx.getElementsBetween(bookmark.start, bookmark.end);
-        for (var i = 0; i < elems.length; i++) {
-            a.appendChild(elems[i]);
+
+        if (node && node.nodeType === dfx.ELEMENT_NODE) {
+            while (node.firstChild) {
+                a.appendChild(node.firstChild);
+            }
+
+            this.updateLinkAttributes(a, idPrefix);
+
+            if (dfx.isTag(node, 'span') === true) {
+                // Replace the span tag with the link tag.
+                for (var i = 0; i < node.attributes.length; i++) {
+                    a.setAttribute(node.attributes[i].nodeName, node.attributes[i].nodeValue)
+                }
+
+                dfx.insertBefore(node, a);
+                dfx.remove(node);
+            } else {
+                node.appendChild(a);
+            }
+        } else {
+            var bookmark = this.viper.createBookmark(range);
+
+            var elems = dfx.getElementsBetween(bookmark.start, bookmark.end);
+            for (var i = 0; i < elems.length; i++) {
+                a.appendChild(elems[i]);
+            }
+
+            this.updateLinkAttributes(a, idPrefix);
+
+            dfx.insertBefore(bookmark.start, a);
+
+            this.viper.removeBookmark(bookmark);
         }
 
-        this.updateLinkAttributes(a, idPrefix);
-
-        dfx.insertBefore(bookmark.start, a);
-
-        this.viper.removeBookmark(bookmark);
         range.selectNode(a);
         ViperSelection.addRange(range);
 
@@ -254,14 +277,10 @@ ViperLinkPlugin.prototype = {
             }
         }
 
-        var url       = tools.createTextbox(idPrefix + ':url', 'URL', attrUrl, _updateLink, true);
-        var title     = tools.createTextbox(idPrefix + ':title', 'Title', attrTitle, _updateLink);
-        var subject   = tools.createTextbox(idPrefix + ':subject', 'Subject', attrSubj, _updateLink);
-        var newWindow = tools.createCheckbox(idPrefix + ':newWindow', 'Open a New Window', attrTarget, function(checked, viaSetValue) {
-            if (viaSetValue !== true) {
-                _updateLink();
-            }
-        });
+        var url       = tools.createTextbox(idPrefix + ':url', 'URL', attrUrl, null, true);
+        var title     = tools.createTextbox(idPrefix + ':title', 'Title', attrTitle);
+        var subject   = tools.createTextbox(idPrefix + ':subject', 'Subject', attrSubj);
+        var newWindow = tools.createCheckbox(idPrefix + ':newWindow', 'Open a New Window', attrTarget);
 
         var urlRow = tools.createRow(idPrefix + ':urlRow', 'urlRow');
         urlRow.appendChild(url);
@@ -361,6 +380,9 @@ ViperLinkPlugin.prototype = {
 
         main.appendChild(this.getToolbarContent('ViperLinkPlugin:vitp'));
 
+        inlineToolbarPlugin.setSubSectionAction('ViperLinkPlugin:vitp:link', function() {
+            self.updateLink('ViperLinkPlugin:vitp');
+        }, ['ViperLinkPlugin:vitp:url', 'ViperLinkPlugin:vitp:title', 'ViperLinkPlugin:vitp:newWindow', 'ViperLinkPlugin:vitp:subject']);
 
     },
 
@@ -435,6 +457,9 @@ ViperLinkPlugin.prototype = {
         });
         main.appendChild(this.getToolbarContent('ViperLinkPlugin:vtp'));
         toolbar.setBubbleButton('ViperLinkPlugin:vtp:link', 'insertLink');
+        tools.getItem('ViperLinkPlugin:vtp:link').setSubSectionAction('ViperLinkPlugin:vtp:linkSubSection', function() {
+            self.updateLink('ViperLinkPlugin:vtp');
+        }, ['ViperLinkPlugin:vtp:url', 'ViperLinkPlugin:vtp:title', 'ViperLinkPlugin:vtp:newWindow', 'ViperLinkPlugin:vtp:subject']);
 
         // Update the buttons when the toolbar updates it self.
         this.viper.registerCallback('ViperToolbarPlugin:updateToolbar', 'ViperLinkPlugin', function(data) {

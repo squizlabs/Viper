@@ -57,7 +57,6 @@
     padding: 0.8em 0.8em 0;
 }
 
-
 .ViperSourceViewPlugin-window .VSVP-popup {
     top: 0;
     left: 0;
@@ -77,11 +76,13 @@
 
 /* Ace Editor overrides*/
 .ace_editor {
-    font-size: 1.45em !important;
-    font-family: 'Lucida Grande', Monaco, 'Times' !important;
+    font-size: 1.3em !important;
     border-radius: 0.25em;
     border: 1px solid #2b2b2b;
     border-bottom-color: rgba(255,255,255,0.25);
+}
+.ace_scroller {
+    overflow-x: hidden !important;
 }
 .ace_gutter-cell {
     font-size: 0.8em !important;
@@ -148,9 +149,9 @@
     border: 1px solid rgba(221, 240, 255, 0.20);
 }
 .ace-viper .ace_invisible {
-    color: #c3a352;
-    color: #977d3f;
     color: #666;
+    font-size: 1.1em;
+    font-weight: bold;
 }
 .ace-viper .ace_keyword {
     color: #CDA869;
@@ -197,7 +198,6 @@
 }
 .ace-viper .ace_meta.ace_tag {
      color: #c188cc;
-/*     font-weight: bold; */
 }
 .ace-viper .ace_entity.ace_attribute-name {
     color: #dc9c57;

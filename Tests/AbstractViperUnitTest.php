@@ -668,7 +668,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      */
     protected function getTopToolbar()
     {
-        if (self::$_topToolbar === NULL) {
+        if (self::$_topToolbar !== NULL) {
             return self::$_topToolbar;
         }
 
@@ -688,7 +688,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         $w = $this->getW(self::$_window);
 
         // Height is about 50px.
-        $h = 50;
+        $h = 180;
 
         // Create the region object.
         $region = $this->createRegion($x, $y, $w, $h);

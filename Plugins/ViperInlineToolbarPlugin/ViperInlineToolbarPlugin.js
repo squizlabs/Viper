@@ -87,7 +87,9 @@ ViperInlineToolbarPlugin.prototype = {
                 var target = dfx.getMouseEventTarget(data);
                 if (target === self._toolbar || dfx.isChildOf(target, self._toolbar) === true) {
                     clickedInToolbar = true;
-                    if (dfx.isTag(target, 'input') === true) {
+                    if (dfx.isTag(target, 'input') === true
+                        || dfx.isTag(target, 'textarea') === true
+                    ) {
                         // Allow event to bubble so the input element can get focus etc.
                         return true;
                     }
@@ -198,20 +200,35 @@ ViperInlineToolbarPlugin.prototype = {
             return false;
         }
 
-        dfx.addClass(element, 'Viper-subSection');
+        var subSection = document.createElement('div');
+        var form       = document.createElement('form');
 
-        this._subSections[id] = element;
+        subSection.appendChild(form);
+        form.appendChild(element);
+        form.onsubmit = function() {
+            return false;
+        };
 
-        this._subSectionContainer.appendChild(element);
+        var submitBtn = document.createElement('input');
+        submitBtn.type = 'submit';
+        dfx.setStyle(submitBtn, 'display', 'none');
+        form.appendChild(submitBtn);
+
+        dfx.addClass(subSection, 'Viper-subSection');
+
+        this._subSections[id] = subSection;
+
+        this._subSectionContainer.appendChild(subSection);
 
         this.viper.ViperTools.addItem(id, {
             type: 'VITPSubSection',
-            element: element,
+            element: subSection,
+            form: form,
             _onOpenCallback: onOpenCallback,
             _onCloseCallback: onCloseCallback
         });
 
-        return element;
+        return subSection;
 
     },
 
@@ -293,7 +310,7 @@ ViperInlineToolbarPlugin.prototype = {
         this._activeSection = subSectionid;
         this._updateSubSectionArrowPos();
 
-        var inputElements = dfx.getTag('input', subSection);
+        var inputElements = dfx.getTag('input[type=text], textarea', subSection);
         if (inputElements.length > 0) {
             inputElements[0].focus();
             if (this._autoFocusTextbox === false) {
@@ -305,15 +322,74 @@ ViperInlineToolbarPlugin.prototype = {
     },
 
     /**
-     * Adds the specified button or button group element to the tools panel.
      *
-     * @param {DOMNode} button The button or the button group element.
+     *
+     * @param {string}   subSectionid The id of the sub section.
+     * @param {function} action       The function to call when the sub section action
+     *                                is triggered.
+     * @param {array}    widgetids    The id of widgets that will cause the action
+     *                                button to be activated when they are changed.
      *
      * @return void
      */
-    addButton: function(button)
+    setSubSectionAction: function(subSectionid, action, widgetids)
     {
-        this._toolsContainer.appendChild(button);
+        widgetids      = widgetids || [];
+        var tools      = this.viper.ViperTools;
+        var subSection = tools.getItem(subSectionid);
+        if (!subSection) {
+            return;
+        }
+
+        var viper = this.viper;
+        subSection.form.onsubmit = function(e) {
+            if (e) {
+                dfx.preventDefault(e);
+            }
+
+            viper.focus();
+
+            try {
+                action.call(this);
+            } catch (e) {
+                console.error(e.message);
+            }
+
+            return false;
+        };
+
+        var button = tools.createButton(subSectionid + '-applyButton', 'Update Changes', 'Update Changes', '', subSection.form.onsubmit, true);
+        subSection.element.appendChild(button);
+
+        for (var i = 0; i < widgetids.length; i++) {
+            this.viper.registerCallback('ViperTools:changed:' + widgetids[i], 'ViperInlineToolbarPlugin', function() {
+                tools.enableButton(subSectionid + '-applyButton');
+            });
+        }
+
+    },
+
+    /**
+     * Adds the specified button or button group element to the tools panel.
+     *
+     * @param {DOMNode} button The button or the button group element.
+     * @param {integer} index  The index to insert to. Should be used by other plugins
+     *                         to insert buttons at specific positions.
+     */
+    addButton: function(button, index)
+    {
+        if (dfx.isset(index) === true && this._toolsContainer.childNodes.length > index) {
+            if (index < 0) {
+                index = this._toolsContainer.childNodes.length + index;
+                if (index < 0) {
+                    index = 0;
+                }
+            }
+
+            dfx.insertBefore(this._toolsContainer.childNodes[index], button);
+        } else {
+            this._toolsContainer.appendChild(button);
+        }
 
     },
 
@@ -364,13 +440,13 @@ ViperInlineToolbarPlugin.prototype = {
             return;
         }
 
-        if (activeSection) {
-            this.toggleSubSection(activeSection);
-        }
-
         this._updateLineage(lineage);
         this._updatePosition(range);
         this._updateSubSectionArrowPos();
+
+        if (activeSection) {
+            this.toggleSubSection(activeSection);
+        }
 
     },
 
@@ -737,9 +813,11 @@ ViperInlineToolbarPlugin.prototype = {
 
     _selectNode: function(node)
     {
+        this.viper.focus();
+
         // Set the range.
         ViperSelection.removeAllRanges();
-        var range = this.viper.getCurrentRange();
+        var range = this.viper.getViperRange();
 
         var first = range._getFirstSelectableChild(node);
         var last  = range._getLastSelectableChild(node);
@@ -828,7 +906,7 @@ ViperInlineToolbarPlugin.prototype = {
             if (!startNode) {
                 return lineage;
             } else if (startNode.nodeType == dfx.TEXT_NODE
-                && startNode.data.length === 0
+                && (startNode.data.length === 0 || dfx.isBlank(dfx.trim(startNode.data)) === true)
                 && startNode.nextSibling
                 && startNode.nextSibling.nodeType === dfx.TEXT_NODE
             ) {

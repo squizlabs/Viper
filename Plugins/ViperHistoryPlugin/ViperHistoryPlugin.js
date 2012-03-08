@@ -23,14 +23,6 @@
 function ViperHistoryPlugin(viper)
 {
     this.viper = viper;
-    var self   = this;
-    this.viper.registerCallback('Viper:keyDown', 'ViperHistoryPlugin', function(e) {
-        if (viper.isKey(e, 'CTRL+Z') === true) {
-            return self.handleUndo();
-        } else if (viper.isKey(e, 'CTRL+SHIFT+Z') === true) {
-            return self.handleRedo();
-        }
-    });
 
 }
 
@@ -58,6 +50,9 @@ ViperHistoryPlugin.prototype = {
             tools.addButtonToGroup('undo', 'ViperHistoryPlugin:buttons');
             tools.addButtonToGroup('redo', 'ViperHistoryPlugin:buttons');
             toolbarPlugin.addButton(btnGroup);
+
+            tools.getItem('undo').setButtonShortcut('CTRL+Z');
+            tools.getItem('redo').setButtonShortcut('CTRL+SHIFT+Z');
 
             this.viper.registerCallback('ViperToolbarPlugin:updateToolbar', 'ViperHistoryPlugin', function(data) {
                 self._updateToolbarButtonStates(toolbarButtons);

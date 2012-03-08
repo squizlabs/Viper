@@ -1,0 +1,172 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>Viper - No Styles Example</title>
+    <script type="text/javascript" src="../../DfxJSLib/dfx.js"></script>
+    <script type="text/javascript" src="../../Viper-all.js"></script>
+    <script type="text/javascript">
+        var viper = null;
+        ViperReadyCallback = function() {
+            viper = new Viper('test');
+            viper.getPluginManager().setPlugins(['ViperCoreStylesPlugin', 'ViperKeyboardEditorPlugin', 'ViperInlineToolbarPlugin', 'ViperHistoryPlugin', 'ViperListPlugin', 'ViperFormatPlugin', 'ViperToolbarPlugin', 'ViperTableEditorPlugin', 'ViperCopyPastePlugin', 'ViperImagePlugin', 'ViperLinkPlugin', 'ViperAccessibilityPlugin', 'ViperSourceViewPlugin', 'ViperSearchReplacePlugin', 'ViperLangToolsPlugin', 'ViperCharMapPlugin', 'ViperTrackChangesPlugin']);
+            viper.setEditableElement(document.getElementById('content'));
+
+            var buttons = [['bold', 'italic', 'subscript', 'superscript', 'strikethrough', 'class'], 'removeFormat', ['justify', 'formats', 'headings'], ['undo', 'redo'], ['unorderedList', 'orderedList', 'indentList', 'outdentList'], 'insertTable', 'image', 'hr', ['insertLink', 'removeLink', 'anchor'], 'insertCharacter', 'searchReplace', 'langTools', 'accessibility', 'sourceEditor'];
+            viper.getPluginManager().setPluginSettings('ViperToolbarPlugin', {buttons: buttons});
+            viper.getPluginManager().setPluginSettings('ViperInlineToolbarPlugin', {buttons: buttons});
+        };
+    </script>
+</head>
+<body spellcheck="false">
+
+<div id="pageWidth">
+<div id="contentHolder">
+<div id="contentInner">
+<div id="contentPadder">
+
+<div id="lineage">
+    <strong class="screen_hide">Current lineage:</strong>
+    <ol id="lineageList">
+        <li class="lineage-home"><a title="Central Home" href="#"><span class="screen_hide">Home</span></a></li>
+        <li class="lineage-item"><a href="#">Articles</a></li>
+        <li class="lineage-item"><a href="#">Viper Example</a></li>
+    </ol>
+</div>
+
+<div id="content" spellcheck="false">
+    <h1>Simple Viper Example</h1>
+
+    <!-- comment goes here la -->
+
+        <p>&#10003 Australian governments at all levels have <u><strong><em>endorsed</em></strong></u> WCAG 2.0, and require all government websites (federal, state and territory) to meet the new guidelines at the minimum compliance level (Single A) by the end of 2012. In addition, the Australian Government requires all federal websites to meet the medium conformance level (Double A) by the end of 2014.</p>
+
+<p>Federal government agencies must update <strong>all government</strong> websites (as specified within scope under the Website Accessibility National Transition Strategy (NTS)) to WCAG 2.0 conformance. Agencies should use the principle of progressive enhancement when building and managing websites, and test for conformance across multiple browsers and operating system configurations.</p>
+
+<p>Agencies are advised to consider the varied needs of their users and plan for accessibility from the outset. Where accessibility problems are known, agencies should put in place implementation plans to address the problem, then endeavour to minimise future risk by using standards-based web technologies and best practice content management processes.</p>
+
+<p>Further information at <a href="http://webguide.gov.au/accessibility-usability/accessibility/%20">http://webguide.gov.au/accessibility-usability/accessibility/</a> and <a href="http://www.w3.org/TR/WCAG20/">http://www.w3.org/TR/WCAG20/</a>.</p>
+
+<div><h2>Accessibility Audit</h2></div>
+
+<p>The WCAG 2.0 guidelines are very technical by nature and can look daunting, so how do you know if your website really conforms to the guidelines? Well, Squiz has developed an Accessibility Audit package that will clearly identify all issues preventing your website from meeting the relevant A or AA standard. The Accessibility Audit package includes:</p>
+
+<ul>
+<li>Audit of Homepage and 6 Section Landing pages</li>
+<li>4 additional templates</li>
+<li>Audit of 20 additional pages for content</li>
+<li>Accessibility audit report</li>
+<li>Recommendations and action plan</li>
+<li>Squiz Matrix content accessibility guide</li>
+</ul>
+
+<h3>Accessibility Audit format</h3>
+
+<ul>
+<li>Validate HTML/CSS and review code of selected pages to A or AA standard</li>
+<li>Review colour contrast of selected pages</li>
+<li>Review content of selected pages for accessibility issues</li>
+<li>Compile error report with examples</li>
+<li>Propose recommendations to meet required Accessibility standard</li>
+</ul>
+
+<table border="1">
+    <caption><strong>Table 1:</strong> This table has no cell attr, but a border of 1</caption>
+    <thead>
+    <tr>
+        <th>Col1 Header</th>
+        <th>Col2 Header</th>
+        <th>Col3 Header</th>
+    </tr>
+    </thead>
+    <tfoot>
+    <tr>
+        <td colspan="3">Note: this is the table footer</td>
+    </tr>
+    </tfoot>
+    <tbody>
+    <tr>
+        <td>nec porta ante</td>
+        <td>sapien vel aliquet</td>
+        <td>
+            <ul>
+                <li>purus neque luctus ligula, vel molestie arcu</li>
+                <li>purus neque luctus</li>
+                <li>vel molestie arcu</li>
+            </ul>
+        </td>
+    </tr>
+    <tr>
+        <td>nec porta ante</td>
+        <td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td>
+    </tr>
+    <tr>
+        <td>nec <strong>porta</strong> ante</td>
+        <td>sapien vel aliquet</td>
+        <td id="x" rowspan="2">purus neque luctus ligula, vel molestie arcu</td>
+    </tr>
+    <tr>
+        <td colspan="2">sapien vel aliquet</td>
+    </tr>
+    </tbody>
+</table>
+
+<p>The results of the audit will be delivered in an easy to understand format with a clear action plan for bringing your website up to standard.</p>
+
+<p>Should your requirements differ from the services offered in the Accessibility Audit package, Squiz is most happy to customise the audit to suit your needs.</p>
+
+<h2>One-day Training Course</h2>
+
+<p><em>Accessibility Techniques for Editors</em> : a new course focusing on the methods used to achieve accessible content.</p>
+
+<p>Book the MATR102 course online today.</p>
+
+<table border="1" cellpadding="2" cellspacing="3">
+    <caption><strong>Table 2:</strong> The table caption text goes here la</caption>
+    <thead>
+    <tr>
+        <th>Col1 Header</th>
+        <th>Col2 Header</th>
+        <th>Col3 Header</th>
+    </tr>
+    </thead>
+    <tfoot>
+    <tr>
+        <td colspan="3">Note: this is the table footer</td>
+    </tr>
+    </tfoot>
+    <tbody>
+    <tr>
+        <td>nec porta ante</td>
+        <td>sapien vel aliquet</td>
+        <td>
+            <ul>
+                <li>purus neque luctus ligula, vel molestie arcu</li>
+                <li>purus neque luctus</li>
+                <li>vel molestie arcu</li>
+            </ul>
+        </td>
+    </tr>
+    <tr>
+        <td>nec porta ante</td>
+        <td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td>
+    </tr>
+    <tr>
+        <td>nec <strong>porta</strong> ante</td>
+        <td>sapien vel aliquet</td>
+        <td id="x" rowspan="2">purus neque luctus ligula, vel molestie arcu</td>
+    </tr>
+    <tr>
+        <td colspan="2">sapien vel aliquet</td>
+    </tr>
+    </tbody>
+</table>
+
+
+    </div><!-- #content -->
+    </div>
+    </div>
+    </div>
+    </div><!-- #pageWidth -->
+</body>
+</html>

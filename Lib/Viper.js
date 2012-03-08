@@ -434,13 +434,8 @@ Viper.prototype = {
             if (hasStubElems !== true) {
                 // Insert initial P tags.
                 var range = this.getCurrentRange();
-                if (this.inlineMode !== true && dfx.getStyle(this.element, 'display') === 'block') {
-                    dfx.setHtml(this.element, '<p>&nbsp;</p>');
-                    range.setStart(this.element.firstChild.firstChild, 0);
-                } else {
-                    dfx.setHtml(this.element, '&nbsp;');
-                    range.setStart(this.element.firstChild, 0);
-                }
+                dfx.setHtml(this.element, '&nbsp;');
+                range.setStart(this.element.firstChild, 0);
 
                 range.collapse(true);
                 ViperSelection.addRange(range);
@@ -574,7 +569,7 @@ Viper.prototype = {
             return;
         }
 
-        if (!value && element.hasAttribute(attribute) === true) {
+        if (!value && dfx.hasAttribute(element, attribute) === true) {
             element.removeAttribute(attribute);
 
             if (dfx.isTag(element, 'span') === true
@@ -605,7 +600,7 @@ Viper.prototype = {
                 }
             }
 
-        } else {
+        } else if (value) {
             element.setAttribute(attribute, value);
         }
 
@@ -2023,14 +2018,26 @@ Viper.prototype = {
                 }
             });
 
-            if (start.firstChild && dfx.isBlank(dfx.getNodeTextContent(start)) !== true) {
-                dfx.insertBefore(startTopParent, start);
+            if (start.firstChild) {
+                if (dfx.isBlank(dfx.getNodeTextContent(start)) !== true) {
+                    dfx.insertBefore(startTopParent, start);
+                } else {
+                    while (start.firstChild) {
+                        dfx.insertBefore(startTopParent, start.firstChild);
+                    }
+                }
             }
 
             dfx.insertBefore(startTopParent, div.childNodes);
 
-            if (end.firstChild && dfx.isBlank(dfx.getNodeTextContent(end)) !== true) {
-                dfx.insertBefore(startTopParent, end);
+            if (end.firstChild ) {
+                if (dfx.isBlank(dfx.getNodeTextContent(end)) !== true) {
+                    dfx.insertBefore(startTopParent, end);
+                } else {
+                    while (end.firstChild) {
+                        dfx.insertBefore(startTopParent, end.firstChild);
+                    }
+                }
             }
 
             dfx.remove(startTopParent);
@@ -2666,25 +2673,27 @@ Viper.prototype = {
      */
     highlightSelection: function()
     {
-        var viperRange   = this.getViperRange();
-
-        var attributes = {
-            cssClass: '__viper_selHighlight',
+        var highlights = dfx.getClass('__viper_selHighlight', this.element);
+        if (highlights.length > 0) {
+            return false;
         }
 
-        var startNode = viperRange.getStartNode();
-        if (dfx.isTag(startNode, 'span') === true) {
-            dfx.addClass(startNode, '__viper_selHighlight __viper_cleanOnly');
-        }
+        var range       = this.getViperRange();
+        var selectedNode = range.getNodeSelection();
 
-        var range = this.getViperRange();
-        if (range.collapsed === true) {
+        if (selectedNode && selectedNode.nodeType == dfx.ELEMENT_NODE) {
+            dfx.addClass(selectedNode, '__viper_selHighlight __viper_cleanOnly');
+        } else if (range.collapsed === true) {
             var span = document.createElement('span');
             dfx.addClass(span, '__viper_selHighlight');
             dfx.setStyle(span, 'border-right', '1px solid #000');
             range.insertNode(span);
         } else {
-            this.surroundContents('span', attributes, viperRange, true);
+            var attributes = {
+                cssClass: '__viper_selHighlight',
+            }
+
+            this.surroundContents('span', attributes, range, true);
         }
 
     },
@@ -2742,7 +2751,7 @@ Viper.prototype = {
                     }
                 }
             } else {
-                if (highlights[i].nextSibling.nodeType === dfx.TEXT_NODE) {
+                if (highlights[i].nextSibling && highlights[i].nextSibling.nodeType === dfx.TEXT_NODE) {
                     var nextSibling = highlights[i].nextSibling;
                     if (!startNode) {
                         range.setStart(nextSibling, 0);
@@ -2772,6 +2781,42 @@ Viper.prototype = {
         ViperSelection.addRange(range);
 
         return true;
+
+    },
+
+    removeHighlights: function()
+    {
+        // There should be one...
+        var highlights = dfx.getClass('__viper_selHighlight', this.element);
+        if (highlights.length === 0) {
+            return;
+        }
+
+
+        for (var i = 0; i < highlights.length; i++) {
+            var highlight = highlights[i];
+
+            if (dfx.hasClass(highlight, '__viper_cleanOnly') === true) {
+                dfx.removeClass(highlight, '__viper_cleanOnly');
+                dfx.removeClass(highlight, '__viper_selHighlight');
+                if (!highlight.getAttribute('class')) {
+                    highlight.removeAttribute('class');
+                }
+            } else {
+                while (highlight.firstChild) {
+                    child = highlight.firstChild;
+                    dfx.insertBefore(highlight, child);
+
+                    if (!startNode) {
+                        // Set the selection start.
+                        startNode = child;
+                        range.setStart(child, 0);
+                    }
+                }
+
+                dfx.remove(highlight);
+            }
+        }//end for
 
     },
 
@@ -2822,6 +2867,7 @@ Viper.prototype = {
             this._prevRange = range;
             this.fireCallbacks('Viper:selectionChanged', range);
         }
+
     },
 
     /**
@@ -3145,7 +3191,12 @@ Viper.prototype = {
 
         this.adjustRange();
 
-        this.fireSelectionChanged();
+        // This setTimeout is very strange indeed. We need to wait a bit for browser
+        // to update the selection object..
+        var self = this;
+        setTimeout(function() {
+            self.fireSelectionChanged();
+        }, 5);
 
     },
 
@@ -3639,7 +3690,7 @@ Viper.prototype = {
         var clone = Viper.document.createElement('div');
 
         if (typeof contents === 'string') {
-            dfx.setHtml(clone, contents);
+            clone.innerHTML = contents;
         } else if (contents) {
             clone.appendChild(contents);
         }
@@ -3654,7 +3705,7 @@ Viper.prototype = {
 
         var self = this;
         this.fireCallbacks('setHtml', {element: clone}, function() {
-            dfx.setHtml(self.element, dfx.getHtml(clone));
+            self.element.innerHTML = dfx.getHtml(clone);
             self.initEditableElement();
             if (callback) {
                 callback.call(this);

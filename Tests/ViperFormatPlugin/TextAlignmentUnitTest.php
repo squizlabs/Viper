@@ -252,7 +252,7 @@ class Viper_Tests_ViperFormatPlugin_TextAlignmentUnitTest extends AbstractViperU
         $this->clickTopToolbarButton($dir.'toolbarIcon_alignJustify_active.png');
         $this->clickTopToolbarButton($dir.'toolbarIcon_alignJustify_active.png');
 
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_toggle_justification.png'), 'Block justify active icon still appears in the top toolbar');
+        $this->assertFalse($this->topToolbarButtonExists($dir.'toolbarIcon_toggle_justification.png'), 'Block justify active icon still appears in the top toolbar');
 
         $this->assertHTMLMatch('<p>LOREM xtn dolor</p><p style="text-align: left;">sit amet WoW</p><p style="text-align: center;">RsR TpT</p><p style="text-align: right;">QvQ KyK</p><p>MrM GaG</p>');
 

@@ -1,7 +1,13 @@
 ViperAccessibilityPlugin_WCAG2 = {
+    viper: null,
+    vap: null,
+    _contentElement: null,
 
     getReferenceContent: function(issue, callback, vap)
     {
+        this.vap   = vap;
+        this.viper = vap.viper;
+
         var code = this._parseCode(issue.code);
 
         var content = '<strong>' + code.standard + ' References</strong><br>';
@@ -23,16 +29,17 @@ ViperAccessibilityPlugin_WCAG2 = {
 
     },
 
-    getResolutionContent: function(issue, callback, vap)
+    getResolutionContent: function(issue, contentElement, vap)
     {
-        var code = this._parseCode(issue.code);
+        this.viper = vap.viper;
 
+        var code    = this._parseCode(issue.code);
         var objName = 'ViperAccessibilityPlugin_WCAG2_Principle' + code.principle + '_Guideline' + code.guideline.replace('.', '_');
         var obj     = window[objName];
         if (obj) {
             var fn = obj['res_' + code.section.replace('.', '_')];
             if (dfx.isFn(fn) === true) {
-                fn.call(obj, issue.element, code, callback, vap.viper);
+                fn.call(obj, contentElement, issue.element, issue, code, vap.viper);
             }
 
             return;
@@ -45,22 +52,132 @@ ViperAccessibilityPlugin_WCAG2 = {
         var scriptUrl = url + '/resolutions.js';
         var cssUrl    = url + '/resolutions.css';
 
-        vap.includeCss(cssUrl);
-
-        var objName = 'ViperAccessibilityPlugin_WCAG2_Principle' + code.principle + '_Guideline' + code.guideline.replace('.', '_');
+        var self = this;
         vap.loadObject(scriptUrl, objName, function(obj) {
             if (!obj) {
-                callback.call(this);
                 return;
             }
 
+            if (obj.hasCss === true) {
+                vap.includeCss(cssUrl);
+            }
+
+            obj.parent = self;
+
             var fn = obj['res_' + code.section.replace('.', '_')];
             if (dfx.isFn(fn) === true) {
-                fn.call(obj, issue.element, code, callback, vap.viper);
-            } else {
-                callback.call(this);
+                fn.call(obj, contentElement, issue.element, issue, code, vap.viper);
             }
         });
+
+    },
+
+    addActionButton: function(action, resolutionContainer, widgetids, title, enabled, updateCallback)
+    {
+        title   = title || 'Apply Changes';
+
+        var disabled = !enabled;
+        var tools    = this.viper.ViperTools;
+        var self     = this;
+        var buttonid = dfx.getUniqueId();
+        var button   = tools.createButton(buttonid, title, title, '', function() {
+            tools.disableButton(buttonid);
+            self.vap.fixIssue();
+            return action.call(this);
+        }, disabled);
+
+        if (widgetids) {
+            for (var i = 0; i < widgetids.length; i++) {
+                if (!widgetids[i]) {
+                    continue;
+                }
+
+                (function(widgetid) {
+                    this.viper.registerCallback('ViperTools:changed:' + widgetid, 'ViperAccessibilityPlugin:wcag2', function() {
+                        if (updateCallback && updateCallback.call(this, widgetid) === false) {
+                            // Disable button.
+                            tools.disableButton(buttonid);
+                            return;
+                        }
+
+                        tools.enableButton(buttonid);
+                    });
+                }) (widgetids[i]);
+            }
+        }
+
+        var actionButtons = dfx.getClass('actionButtons', resolutionContainer)[0];
+        if (actionButtons.firstChild) {
+            dfx.insertBefore(actionButtons.firstChild, button);
+        } else {
+            actionButtons.appendChild(button);
+        }
+
+
+        return buttonid;
+
+    },
+
+    getDefaultContent: function(issue, objName)
+    {
+        if (!objName) {
+            var code = this._parseCode(issue.code);
+            objName  = 'ViperAccessibilityPlugin_WCAG2_Principle' + code.principle + '_Guideline' + code.guideline.replace('.', '_');
+        }
+
+        var div = document.createElement('div');
+        dfx.addClass(div, objName);
+
+        var content = '<div class="resolutionInstructions">';
+
+        switch (issue.type) {
+            case HTMLCS.ERROR:
+                content += '<p>Please resolive this issue manually and then click the refresh button to confirm that the issue is resolved.</p>';
+            break;
+
+            case HTMLCS.WARNING:
+            case HTMLCS.NOTICE:
+                content += '<p>Either fix this issue manualy and then click the refresh button to confirm that the issue is resolved or if no changes are required click the "Dismiss" button.</p>';
+            break;
+        }
+
+        content += '</div>';
+        content += '<div class="resolutionActions"><div class="editing"></div><div class="actionButtons"></div></div>';
+        dfx.setHtml(div, content);
+
+        if (issue.type !== HTMLCS.ERROR) {
+            var actionButtons = dfx.getClass('actionButtons', div)[0];
+
+            var self = this;
+            var dismissButton = this.viper.ViperTools.createButton(dfx.getUniqueId(), 'Dismiss', 'Dismiss Issue', '', function() {
+                self.vap.dismissIssue();
+            });
+
+            actionButtons.appendChild(dismissButton);
+        }
+
+        return div;
+
+    },
+
+    setResolutionInstruction: function(resolutionContainer, content)
+    {
+        var instructionCont = dfx.getClass('resolutionInstructions', resolutionContainer)[0];
+
+        if (typeof content === 'string') {
+            dfx.setHtml(instructionCont, content);
+        } else {
+            dfx.empty(instructionCont);
+            instructionCont.appendChild(content);
+        }
+
+    },
+
+    getResolutionActionsContainer: function(resolutionContainer)
+    {
+        var instructionCont = dfx.getClass('editing', resolutionContainer)[0];
+        dfx.empty(instructionCont);
+        return instructionCont;
 
     },
 
@@ -103,7 +220,8 @@ ViperAccessibilityPlugin_WCAG2 = {
 
         parsed.techniques = [];
 
-        var techniques = sections[4].split(',');
+        var techniques = sections.splice(4).join('.');
+        var techniques = techniques.split(',');
         for (var i = 0; i < techniques.length; i++) {
             parsed.techniques.push(techniques[i]);
         }

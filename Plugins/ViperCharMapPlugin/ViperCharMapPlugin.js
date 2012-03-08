@@ -190,10 +190,6 @@ ViperCharMapPlugin.prototype = {
         chars        = chars.split('|');
         var currency = chars;
 
-        chars     = '&#8367;|&spades;|&hearts;|&clubs;|&diams;|&larr;|&uarr;|&rarr;|&darr;|&crarr;|&Omega;|&Sigma;|&Phi;|&radic;|&trade;|&reg;|&Agrave;|&agrave;|&Ccedil;|&ccedil;|&Eacute;|&eacute;';
-        chars     = chars.split('|');
-        var popular = chars;
-
         chars     = '&Agrave;|&agrave;|&Aacute;|&aacute;|&Acirc;|&acirc;|&Atilde;|&atilde;|&Auml;|&auml;|&Aring;|&aring;|&#256;|&#257;|&AElig;|&aelig;|&Ccedil;|&ccedil;|&ETH;|&eth;|&Egrave;|&egrave;|&Eacute;|&eacute;|&Ecirc;|&ecirc;|&Euml;|&euml;|&#274;|&#275;|&Igrave;|&igrave;|&Iacute;|&iacute;';
         chars    += '|&Icirc;|&icirc;|&Iuml;|&iuml;|&#298;|&#299;|&micro;|&Ntilde;|&ntilde;|&Ograve;|&ograve;|&Oacute;|&oacute;|&Ocirc;|&ocirc;|&Otilde;|&otilde;|&Ouml;|&ouml;|&#332;|&#333;|&Oslash;|&oslash;|&OElig;|&oelig;|&Scaron;|&scaron;|&szlig;|&THORN;|&thorn;|&Ugrave;|&ugrave;|&Uacute;|&uacute;|&Ucirc;|&ucirc;|&Uuml;|&uuml;|&#362;|&#363;|&Yacute;|&yacute;|&yuml;|&Yuml;';
         chars     = chars.split('|');
@@ -206,11 +202,6 @@ ViperCharMapPlugin.prototype = {
         chars       = '&uml;|&macr;|&acute;|&cedil;|&iexcl;|&iquest;|&middot;|&brvbar;|&laquo;|&raquo;|&para;|&sect;|&copy;|&reg;|&trade;';
         chars       = chars.split('|');
         var symbols = chars;
-
-        categories.push({
-            name: 'Popular',
-            chars: popular
-        });
 
         categories.push({
             name: 'Symbols',

@@ -70,3 +70,12 @@ function gTagCounts(tagNames)
     return tagCounts;
 
 }
+
+/**
+ * Inserts a new table.
+ */
+function insTable(rows, cols)
+{
+    return viper.getPluginManager().getPlugin('ViperTableEditorPlugin').insertTable(rows, cols);
+
+}//end insTable()

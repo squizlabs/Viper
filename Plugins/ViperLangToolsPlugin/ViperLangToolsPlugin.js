@@ -101,7 +101,21 @@ ViperLangToolsPlugin.prototype = {
         var node    = range.getNodeSelection();
         var element = null;
 
-        if (node) {
+        if (node || range.collapsed === true) {
+            if (!node) {
+                var node = range.getStartNode();
+                if (!node) {
+                    node = range.getEndNode();
+                    if (!node) {
+                        return null;
+                    }
+                }
+
+                if (node.nodeType === dfx.TEXT_NODE) {
+                    node = node.parentNode;
+                }
+            }//end if
+
             node.setAttribute('lang', langAttribute);
             element = node;
         } else {
@@ -146,8 +160,21 @@ ViperLangToolsPlugin.prototype = {
         dfx.remove(elem);
 
         var range = this.viper.getViperRange();
-        range.setStart(firstChild, 0);
-        range.setEnd(lastChild, lastChild.data.length);
+        if (firstChild === lastChild) {
+            range.selectNode(firstChild);
+        } else {
+            range.setStart(firstChild, 0);
+
+            if (lastChild.nodeType === dfx.TEXT_NODE) {
+                range.setEnd(lastChild, lastChild.data.length);
+            } else {
+                var lastSelectable = range._getLastSelectableChild(lastChild);
+                if (lastSelectable) {
+                    range.setEnd(lastSelectable, lastSelectable.data.length);
+                }
+            }
+        }//end if
+
         ViperSelection.addRange(range);
         this.viper.fireSelectionChanged(range, true);
         this.viper.fireNodesChanged([this.viper.getViperElement()]);
@@ -160,12 +187,12 @@ ViperLangToolsPlugin.prototype = {
         if (selectedNode && selectedNode.nodeType === dfx.ELEMENT_NODE) {
             if (tagName && dfx.isTag(selectedNode, tagName) === true) {
                 return selectedNode;
-            } else if (tagName === 'lang' && selectedNode.hasAttribute('lang') === true) {
+            } else if (tagName === 'lang' && dfx.hasAttribute(selectedNode, 'lang') === true) {
                 return selectedNode;
             } else if (!tagName) {
                 if (dfx.isTag(selectedNode, 'abbr') === true || dfx.isTag(selectedNode, 'acronym') === true) {
                     return selectedNode;
-                } else if (selectedNode.hasAttribute('lang') === true) {
+                } else if (dfx.hasAttribute(selectedNode, 'lang') === true) {
                     return selectedNode;
                 } else {
                     return null;
@@ -179,13 +206,13 @@ ViperLangToolsPlugin.prototype = {
             if (tagName) {
                 if (dfx.isTag(common, tagName) === true) {
                     return common;
-                } else if (tagName === 'lang' && common.hasAttribute('lang') === true) {
+                } else if (tagName === 'lang' && dfx.hasAttribute(common, 'lang') === true) {
                     return common;
                 }
             } else {
                 if (dfx.isTag(common, 'abbr') === true || dfx.isTag(common, 'acronym') === true) {
                     return common;
-                } else if (common.hasAttribute('lang') === true) {
+                } else if (dfx.hasAttribute(common, 'lang') === true) {
                     return common;
                 }
             }
@@ -201,6 +228,47 @@ ViperLangToolsPlugin.prototype = {
 
     },
 
+    /**
+     * Returns list of parent elements that have only one child.
+     *
+     * @param node    {DOMNode} The child element to get parents of.
+     * @param tagName {string}  The tag name filter.
+     *
+     * @return {array} Parent elements.
+     */
+    getSurroundingParents: function(node, tagName)
+    {
+        if (!node) {
+            return;
+        }
+
+        var parents = [];
+        var parent  = node.parentNode;
+        while (parent) {
+            var c = parent.childNodes.length;
+            for (var i = 0; i < c; i++) {
+                var child = parent.childNodes[i];
+                if (child.nodeType == dfx.ELEMENT_NODE) {
+                    if (child !== node) {
+                        return parents;
+                    }
+                } else if (dfx.isBlank(dfx.trim(child.data)) !== true) {
+                    return parents;
+                }
+            }
+
+            if (!tagName || dfx.isTag(parent, tagName) === true) {
+                parents.push(parent);
+            }
+
+            parent = parent.parentNode;
+            node   = parent;
+        }
+
+        return parents;
+
+    },
+
     handleAcronym: function()
     {
         var value = dfx.trim(this.viper.ViperTools.getItem('VLTP:acronymInput').getValue());
@@ -209,9 +277,15 @@ ViperLangToolsPlugin.prototype = {
             this.rangeToTag('acronym', value);
         } else {
             var node = this.viper.getViperRange().getNodeSelection();
-            if (node && dfx.isTag(node, 'acronym') === true) {
-                // Remove acronym.
-                this.removeElement(node);
+            if (node) {
+                if (dfx.isTag(node, 'acronym') !== true) {
+                    var parents = this.getSurroundingParents(node, 'acronym');
+                    for (var i = 0; i < parents.length; i++) {
+                        this.removeElement(parents[i]);
+                    }
+                } else {
+                    this.removeElement(node);
+                }
             }
         }
 
@@ -225,9 +299,15 @@ ViperLangToolsPlugin.prototype = {
             this.rangeToTag('abbr', value);
         } else {
             var node = this.viper.getViperRange().getNodeSelection();
-            if (node && dfx.isTag(node, 'abbr') === true) {
-                // Remove abbr.
-                this.removeElement(node);
+            if (node) {
+                if (dfx.isTag(node, 'abbr') !== true) {
+                    var parents = this.getSurroundingParents(node, 'abbr');
+                    for (var i = 0; i < parents.length; i++) {
+                        this.removeElement(parents[i]);
+                    }
+                } else {
+                    this.removeElement(node);
+                }
             }
         }
 
@@ -241,10 +321,20 @@ ViperLangToolsPlugin.prototype = {
             this.rangeToLang(value);
         } else {
             var node = this.viper.getViperRange().getNodeSelection();
-            if (node && node.hasAttribute('lang') === true) {
-                node.removeAttribute('lang');
-                if (!node.className && !node.id && dfx.isTag(node, 'span') === true) {
-                    this.removeElement(node);
+            if (node) {
+                if (node && dfx.hasAttribute(node, 'lang') === true) {
+                    node.removeAttribute('lang');
+                    if (!node.className && !node.id && dfx.isTag(node, 'span') === true) {
+                        this.removeElement(node);
+                    }
+                } else {
+                    var parents = this.getSurroundingParents(node);
+                    for (var i = 0; i < parents.length; i++) {
+                        parents[i].removeAttribute('lang');
+                        if (!parents[i].className && !parents[i].id && dfx.isTag(parents[i], 'span') === true) {
+                            this.removeElement(parents[i]);
+                        }
+                    }
                 }
             }
         }
@@ -255,9 +345,7 @@ ViperLangToolsPlugin.prototype = {
     {
         var self  = this;
         var elem  = document.createElement('div');
-        var input = this.viper.ViperTools.createTextbox('VLTP:acronymInput', 'Acronym', '', function() {
-            self.handleAcronym();
-        });
+        var input = this.viper.ViperTools.createTextbox('VLTP:acronymInput', 'Acronym');
 
         elem.appendChild(input);
 
@@ -269,9 +357,7 @@ ViperLangToolsPlugin.prototype = {
     {
         var self  = this;
         var elem  = document.createElement('div');
-        var input = this.viper.ViperTools.createTextbox('VLTP:abbrInput', 'Abbreviation', '', function() {
-            self.handleAbbreviation();
-        });
+        var input = this.viper.ViperTools.createTextbox('VLTP:abbrInput', 'Abbreviation');
 
         elem.appendChild(input);
 
@@ -283,9 +369,7 @@ ViperLangToolsPlugin.prototype = {
     {
         var self  = this;
         var elem  = document.createElement('div');
-        var input = this.viper.ViperTools.createTextbox('VLTP:langInput', 'Language', '', function() {
-            self.handleLanguage();
-        });
+        var input = this.viper.ViperTools.createTextbox('VLTP:langInput', 'Language');
 
         elem.appendChild(input);
 
@@ -356,13 +440,29 @@ ViperLangToolsPlugin.prototype = {
         bubble.setSubSectionButton('VLTP:abbreviationSubSection', 'ViperLangToolsPlugin:abbrButton');
         bubble.setSubSectionButton('VLTP:langSubSection', 'ViperLangToolsPlugin:langButton');
 
+        bubble.setSubSectionAction('VLTP:acronymSubSection', function() {
+            self.handleAcronym();
+        }, ['VLTP:acronymInput']);
+        bubble.setSubSectionAction('VLTP:abbreviationSubSection', function() {
+            self.handleAbbreviation();
+        }, ['VLTP:abbrInput']);
+        bubble.setSubSectionAction('VLTP:langSubSection', function() {
+            self.handleLanguage();
+        }, ['VLTP:langInput']);
+
         this.viper.registerCallback('ViperToolbarPlugin:updateToolbar', 'ViperLangToolsPlugin', function(data) {
             if (data.range.collapsed === true) {
                 tools.disableButton('ViperLangToolsPlugin:abbrButton');
                 tools.disableButton('ViperLangToolsPlugin:acronymButton');
             } else {
-                tools.enableButton('ViperLangToolsPlugin:abbrButton');
-                tools.enableButton('ViperLangToolsPlugin:acronymButton');
+                var node = self.viper.getViperRange().getNodeSelection();
+                if (node && dfx.isBlockElement(node) === true) {
+                    tools.disableButton('ViperLangToolsPlugin:abbrButton');
+                    tools.disableButton('ViperLangToolsPlugin:acronymButton');
+                } else {
+                    tools.enableButton('ViperLangToolsPlugin:abbrButton');
+                    tools.enableButton('ViperLangToolsPlugin:acronymButton');
+                }
             }
 
             var range     = data.range;

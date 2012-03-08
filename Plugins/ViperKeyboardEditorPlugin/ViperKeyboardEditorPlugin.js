@@ -181,6 +181,12 @@ ViperKeyboardEditorPlugin.prototype = {
     {
         range = range || this.viper.getViperRange();
 
+        var selectedNode = range.getNodeSelection();
+        if (selectedNode && selectedNode.nodeType === dfx.ELEMENT_NODE) {
+            selectedNode.innerHTML = '&nbsp;';
+            return selectedNode;
+        }
+
         // If the range is not collapsed then remove the contents of the selection.
         if (range.collapsed !== true) {
             this.viper.deleteContents();
