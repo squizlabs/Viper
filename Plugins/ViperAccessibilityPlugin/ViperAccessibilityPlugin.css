@@ -308,10 +308,14 @@
     position: absolute;
     top: -1px;
     left: 0;
-    width: 100%;
-    height: 102%;
+    width: 0;
+    height: 0;
     text-align: center;
     font-size: 1.26em;
+}
+.reChecking .ViperAP-issueRecheck {
+    width: 100%;
+    height: 100%;
 }
 .ViperAP-issueRecheck .issueChecking {
     background: transparent url(Images/recheck-spinner.gif) 50% 0 no-repeat;
@@ -389,7 +393,7 @@
 }
 .ViperAP-issueResolution .resolutionActions {
     text-align: center;
-    padding: 0.2em;
+    padding: 0 0 0.2em;
 }
 
 .ViperAP-issueResolution .imagePreview {
@@ -439,6 +443,11 @@
     overflow: hidden;
     display: inline-block;
     vertical-align: top;
+    scroll
+}
+
+.issueList .ViperAP-issueDetailsWrapper {
+    display: none;
 }
 
 .ViperAP-issuePane,
