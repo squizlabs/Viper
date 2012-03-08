@@ -364,6 +364,7 @@
 .issueTitle,
 .issueWcag {
     -moz-transition: opacity 0.3s ease-in;
+    -webkit-transition: opacity 0.3s ease-in;
 }
 
 .ViperAP-issuePane.rechecking .ViperAP-issueResolution:after {
