@@ -47,62 +47,102 @@
     text-shadow: none;
     color: #EEE;
     font-size: 1.2em;
-    margin: 5px 0;
+    margin: 0 0 0.5em;
+    text-shadow: 0 -1px 0 #2B2B2B;
 }
 
 .VTEP-bubble-label {
-    text-align: left;
+    text-align: center;
 }
 
-table.VTEP-bubble-table {
+.VTEP-bubble-table {
     border: medium none;
     border-collapse: collapse;
+    margin-bottom: 0.7em;
 }
 
-table.VTEP-bubble-table td {
+.VTEP-bubble-table td {
     border-collapse: collapse;
-    border-color: #333333;
+    border-color: #333;
     border-style: solid;
     border-width: 1px;
     box-shadow: 0 1px 0 rgba(255, 255, 255, 0.1) inset;
-    color: #FFFFFF;
+    color: #FFF;
     cursor: pointer;
-    font-size: 1.6em;
+    line-height: 0;
     padding: 0;
     text-align: center;
     text-shadow: none;
     vertical-align: middle;
-    width: 1.3em;
+    width: 2.2em;
+    height: 2.2em;
+    -moz-transition: background 0.07s ease-in;
+    -webkit-transition: background 0.07s ease-in;
 }
 
-table.VTEP-bubble-table td.selected,
-table.VTEP-bubble-table td.selected.hover {
+.VTEP-bubble-table td.selected,
+.VTEP-bubble-table td.selected.hover {
     background-color: #4C7CDF;
 }
 
-table.VTEP-bubble-table td.hover {
+.VTEP-bubble-table td.hover {
     background-color: #616069;
 }
 
+.VTEP-bubble-table td.selected:after,
+.VTEP-bubble-table td.hover:after {
+    content: " ";
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    background-color: #FFF;
+    border-radius: 6px;
+    opacity: 0.3;
+}
+.VTEP-bubble-table td.hover:after {
+    opacity: 0.2;
+}
+.VTEP-bubble-table td.hover.selected:after,
+.VTEP-bubble-headersTableWrapper.selected td.hover:after {
+    opacity: 0.7;
+}
+
 .VTEP-bubble-headersWrapper {
-    overflow: hidden;
     margin-bottom: 15px;
 }
 
 .VTEP-bubble-headersTableWrapper {
-    float: left;
-    margin-right: 10px;
+    display: inline-block;
+    margin-left: 1em;
+}
+.VTEP-bubble-headersTableWrapper:first-child {
+    margin-left: 0;
+}
+
+.VTEP-bubble-table.headers {
+    margin-bottom: 0.6em;
 }
 
 .VTEP-bubble-table.headers td {
     font-size: 1em;
-    width: 1.3em;
+    width: 1.4em;
+    height: 1.4em;
+    text-align: center;
+    vertical-align: middle;
+    -moz-transition: background 0.1s ease-in;
+    -webkit-transition: background 0.1s ease-in;
+}
+.VTEP-bubble-table.headers td:after {
+    opacity: 0.3;
 }
 
 .VTEP-bubble-headersTableWrapper.selected td.hover {
     background-color: #4C7CDF;
 }
 
+.VTEP-bubble-headersTableWrapper.selected table {
+    box-shadow: 0 0 2px 2px #4C7CDF;
+}
 .VTEP-bubble-headersTableWrapper.selected span {
     font-weight: bold;
     color: #FFF;
