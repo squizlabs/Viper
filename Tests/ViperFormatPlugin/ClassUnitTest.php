@@ -673,6 +673,53 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
     }//end testAddingClassToAOneItalicWord()
 
 
+    /**
+     * Test that selection is maintained when opening and closing the class icon for a word.
+     *
+     * @return void
+     */
+    public function testSelectionIsMaintainedForWordWhenOpeningAndClosingClassFields()
+    {
+        $dir = dirname(__FILE__).'/Images/';
+
+        $this->selectText('XuT');
+
+        $this->clickTopToolbarButton($dir.'toolbarIcon_class.png');
+        $this->assertEquals('XuT', $this->getSelectedText(), 'Selected text is not highlighted.');
+
+        $this->clickTopToolbarButton($dir.'toolbarIcon_class_subActive.png');
+        $this->assertEquals('XuT', $this->getSelectedText(), 'Selected text is not highlighted.');
+
+        $this->clickTopToolbarButton($dir.'toolbarIcon_class.png');
+        $this->assertEquals('XuT', $this->getSelectedText(), 'Selected text is not highlighted.');
+
+    }//end testSelectionIsMaintainedForWordWhenOpeningAndClosingClassFields()
+
+
+    /**
+     * Test that selection is maintained when opening and closing the class icon for a paragraph.
+     *
+     * @return void
+     */
+    public function testSelectionIsMaintainedForParaWhenOpeningAndClosingClassFields()
+    {
+        $dir = dirname(__FILE__).'/Images/';
+
+        $this->selectText('XuT');
+        $this->selectInlineToolbarLineageItem(0);
+
+        $this->clickTopToolbarButton($dir.'toolbarIcon_class.png');
+        $this->assertEquals('Lorem XuT dolor', $this->getSelectedText(), 'Selected text is not highlighted.');
+
+        $this->clickTopToolbarButton($dir.'toolbarIcon_class_subActive.png');
+        $this->assertEquals('Lorem XuT dolor\n', $this->getSelectedText(), 'Selected text is not highlighted.');
+
+        $this->clickTopToolbarButton($dir.'toolbarIcon_class.png');
+        $this->assertEquals('Lorem XuT dolor', $this->getSelectedText(), 'Selected text is not highlighted.');
+
+    }//end testSelectionIsMaintainedForParaWhenOpeningAndClosingClassFields()
+
+
 }//end class
 
 ?>
