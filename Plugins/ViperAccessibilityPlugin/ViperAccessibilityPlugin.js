@@ -235,7 +235,7 @@ ViperAccessibilityPlugin.prototype = {
 
     },
 
-    showIssueList: function()
+    showIssueList: function(instant)
     {
         // Show the list tools.
         dfx.removeClass(this._toolsSection, 'checkTools');
@@ -245,7 +245,14 @@ ViperAccessibilityPlugin.prototype = {
         // Show the list.
         dfx.removeClass(this._resultsMiddle, 'issueDetails');
         dfx.addClass(this._resultsMiddle, 'issueList');
+
+        if (instant === true) {
+            dfx.addClass(this._issueList, 'instant');
+        }
+
         dfx.setStyle(this._issueList, 'margin-left', 0);
+        dfx.removeClass(this._issueList, 'instant');
+
     },
 
     updateResults: function(checkOnly)
@@ -281,7 +288,7 @@ ViperAccessibilityPlugin.prototype = {
             }
 
             // Hide loading sub section and show the main panel and results panel.
-            self.showIssueList();
+            self.showIssueList(true);
 
             // Hide the loading container.
             dfx.setStyle(dfx.getClass('loadingCont', self._subSection)[0], 'display', 'none');
@@ -313,8 +320,12 @@ ViperAccessibilityPlugin.prototype = {
         dfx.addClass(issueElem, 'rechecking');
 
         // Add the re-checking issue overlay.
-        var issueRecheckElem = dfx.getClass('ViperAP-issueRecheck', issueElem)[0];
-        dfx.setHtml(issueRecheckElem, '<div class="issueChecking">Re-checking issue …</div>');
+        var issueDetails = dfx.getClass('ViperAP-issueDetails', issueElem)[0];
+        var issueRecheck = document.createElement('div');
+        dfx.addClass(issueRecheck, 'ViperAP-issueRecheck');
+        issueDetails.appendChild(issueRecheck);
+
+        dfx.setHtml(issueRecheck, '<div class="issueChecking">Re-checking issue …</div>');
 
         var self     = this;
         var issueNum = this._currentIssue;
@@ -329,22 +340,21 @@ ViperAccessibilityPlugin.prototype = {
             }
 
             if (found === false) {
-                dfx.setHtml(issueRecheckElem, '');
+                dfx.setHtml(issueRecheck, '');
                 dfx.removeClass(issueElem, 'rechecking');
 
                 // Mark issue as done.
                 self.fixIssue(null, true);
             } else {
-                dfx.empty(issueRecheckElem);
+                dfx.empty(issueRecheck);
                 var issueRemains = document.createElement('div');
                 dfx.addClass(issueRemains, 'issueRemains');
                 dfx.setHtml(issueRemains, '<span class="recheckMessage">This issue has not been resolved</span>');
                 issueRemains.appendChild(self.viper.ViperTools.createButton('VAP-issues:notResolvedBtn:' + issueNum, 'OK', '', '', function() {
-                    //dfx.remove(issueRecheckElem);
-                    dfx.setHtml(issueRecheckElem, '');
+                    dfx.setHtml(issueRecheck, '');
                     dfx.removeClass(issueElem, 'rechecking');
                 }));
-                issueRecheckElem.appendChild(issueRemains);
+                issueRecheck.appendChild(issueRemains);
             }
         });
 
@@ -936,10 +946,6 @@ ViperAccessibilityPlugin.prototype = {
                 var issueDoneDiv = document.createElement('div');
                 dfx.addClass(issueDoneDiv, 'issueDoneCont');
                 references.appendChild(issueDoneDiv);
-
-                var issueRecheck = document.createElement('div');
-                dfx.addClass(issueRecheck, 'ViperAP-issueRecheck');
-                references.appendChild(issueRecheck);
 
                 main.appendChild(references);
             }, self);

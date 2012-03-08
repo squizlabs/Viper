@@ -453,6 +453,7 @@
     border-bottom: 1px solid #6C6C6C;
 }
 
+.ViperAP-issueListWrapper.instant,
 .ViperAP-issuePane.instant {
     -moz-transition-duration: 0s;
     -webkit-transition-duration: 0s;
