@@ -214,15 +214,7 @@ ViperAccessibilityPlugin.prototype = {
 
         // List Link event.
         dfx.addEvent(listLink, 'mousedown', function() {
-            // Show the list tools.
-            dfx.removeClass(toolsSection, 'checkTools');
-            dfx.removeClass(toolsSection, 'detailTools');
-            dfx.addClass(toolsSection, 'listTools');
-
-            // Show the list.
-            dfx.removeClass(self._resultsMiddle, 'issueDetails');
-            dfx.addClass(self._resultsMiddle, 'issueList');
-            dfx.setStyle(self._issueList, 'margin-left', 0);
+           self.showIssueList();
         });
 
         // Create detail prev, next button group.
@@ -238,32 +230,58 @@ ViperAccessibilityPlugin.prototype = {
         tools.addButtonToGroup('VAP:issueNavNext', 'VAP:issueNavButtons');
 
         // Run tests..
-        this.updateResults();
+        this.updateResults(true);
         this.startAutoRun();
 
     },
 
-    updateResults: function()
+    showIssueList: function()
+    {
+        // Show the list tools.
+        dfx.removeClass(this._toolsSection, 'checkTools');
+        dfx.removeClass(this._toolsSection, 'detailTools');
+        dfx.addClass(this._toolsSection, 'listTools');
+
+        // Show the list.
+        dfx.removeClass(this._resultsMiddle, 'issueDetails');
+        dfx.addClass(this._resultsMiddle, 'issueList');
+        dfx.setStyle(this._issueList, 'margin-left', 0);
+    },
+
+    updateResults: function(checkOnly)
     {
         var self = this;
 
         this.stopAutoRun();
 
-        // Show loading sub section only.
-        dfx.setStyle(dfx.getClass('ViperAP-cont', this._subSection), 'display', 'none');
-        dfx.setStyle(dfx.getClass('loadingCont', this._subSection)[0], 'display', 'block');
+        if (checkOnly !== true) {
+            // Show loading sub section only.
+            dfx.setStyle(dfx.getClass('ViperAP-cont', this._subSection), 'display', 'none');
+            dfx.setStyle(dfx.getClass('loadingCont', this._subSection)[0], 'display', 'block');
 
-        // Set the sub section to be visible.
-        this._toolbar.getBubble('VAP:bubble').showSubSection('VAP:subSection');
+            // Set the sub section to be visible.
+            this._toolbar.getBubble('VAP:bubble').showSubSection('VAP:subSection');
+        }
 
         // Run the HTMLCS checks.
         this.runChecks(function() {
-            // Hide loading sub section and show the main panel and results panel.
-            dfx.removeClass(self._toolsSection, 'checkTools');
-            dfx.addClass(self._toolsSection, 'listTools');
-
             // Get the messages from HTMLCS.
             var msgs = HTMLCS.getMessages();
+
+            if (checkOnly === true) {
+                if (msgs.length === 0) {
+                    dfx.removeClass(toggleButton, 'issues');
+                    dfx.addClass(toggleButton, 'noIssues');
+                } else {
+                    dfx.removeClass(toggleButton, 'noIssues');
+                    dfx.addClass(toggleButton, 'issues');
+                }
+
+                return;
+            }
+
+            // Hide loading sub section and show the main panel and results panel.
+            self.showIssueList();
 
             // Hide the loading container.
             dfx.setStyle(dfx.getClass('loadingCont', self._subSection)[0], 'display', 'none');
@@ -336,7 +354,7 @@ ViperAccessibilityPlugin.prototype = {
     {
         var self = this;
         this._autoRunTimer = setInterval(function() {
-            self.updateResults();
+            self.updateResults(true);
         }, this._autoRunInterval);
 
     },
