@@ -10,59 +10,32 @@ ViperAccessibilityPlugin_WCAG2_Principle1_Guideline1_1 = {
         var self      = this;
         var technique = code.techniques[0];
 
-        switch(technique) {
+        switch (technique) {
             case 'H37':
-                this._getImageResContent(contentElement, element, 'Enter a short text description of the image, or define the image as purely presentational');
-
-                editPanel = this.parent.getResolutionActionsContainer(contentElement);
-
-                var altid = dfx.getUniqueId();
-                var alt   = viper.ViperTools.createTextbox(altid, 'Alt', element.getAttribute('alt'));
-                editPanel.appendChild(alt);
-
-                var checkboxid = dfx.getUniqueId();
-                var checkbox   = viper.ViperTools.createCheckbox(checkboxid, 'Image is presentational', false, function(checked) {
-                    if (checked === true) {
-                        viper.ViperTools.getItem(altid).disable();
-                    } else {
-                        viper.ViperTools.getItem(altid).enable();
-                    }
-                });
-                editPanel.appendChild(checkbox);
-
-                action = function() {
-                    if (viper.ViperTools.getItem(checkboxid).getValue() !== true) {
-                        element.setAttribute('alt', viper.ViperTools.getItem(altid).getValue());
-                    } else {
-                        element.removeAttribute('alt');
-                    }
-                };
-
-                this.parent.addActionButton(action, contentElement, [checkboxid, altid]);
-            break;
-
             case 'H67.1':
             case 'H67.2':
-                this._getImageResContent(contentElement, element, 'Ensure this image is purely presentational, if not, enter appropriate Alt and Title text');
+                if (technique === 'H37') {
+                    this._getImageResContent(contentElement, element, 'Enter a short text description of the image, or define the image as purely presentational');
+                } else {
+                    this._getImageResContent(contentElement, element, 'Ensure this image is purely presentational, if not, enter appropriate Alt and Title text');
+                }
 
                 editPanel = this.parent.getResolutionActionsContainer(contentElement);
 
                 var altid      = null;
                 var titleid    = null;
                 var checkboxid = null;
-                if (technique === 'H67.2') {
-                    checkboxid   = dfx.getUniqueId();
-                    var checkbox = viper.ViperTools.createCheckbox(checkboxid, 'Image is presentational', true, function(checked) {
-                        if (checked === true) {
-                            viper.ViperTools.getItem(altid).disable();
-                            viper.ViperTools.getItem(titleid).disable();
-                        } else {
-                            viper.ViperTools.getItem(altid).enable();
-                            viper.ViperTools.getItem(titleid).enable();
-                        }
-                    });
-                    editPanel.appendChild(checkbox);
-                }
+                checkboxid   = dfx.getUniqueId();
+                var checkbox = viper.ViperTools.createCheckbox(checkboxid, 'Image is presentational', (technique === 'H67.2'), function(checked) {
+                    if (checked === true) {
+                        viper.ViperTools.getItem(altid).disable();
+                        viper.ViperTools.getItem(titleid).disable();
+                    } else {
+                        viper.ViperTools.getItem(altid).enable();
+                        viper.ViperTools.getItem(titleid).enable();
+                    }
+                });
+                editPanel.appendChild(checkbox);
 
                 altid   = dfx.getUniqueId();
                 var alt = viper.ViperTools.createTextbox(altid, 'Alt', element.getAttribute('alt'));
@@ -78,11 +51,11 @@ ViperAccessibilityPlugin_WCAG2_Principle1_Guideline1_1 = {
                 }
 
                 action = function() {
-                    if (technique === 'H67.1' || viper.ViperTools.getItem(checkboxid).getValue() !== true) {
+                    if (viper.ViperTools.getItem(checkboxid).getValue() !== true) {
                         element.setAttribute('alt', viper.ViperTools.getItem(altid).getValue());
                         element.setAttribute('title', viper.ViperTools.getItem(titleid).getValue());
                     } else {
-                        element.removeAttribute('alt');
+                        element.setAttribute('alt', '');
                         element.removeAttribute('title');
                     }
                 };
