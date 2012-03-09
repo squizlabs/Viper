@@ -46,7 +46,7 @@ ViperAccessibilityPlugin_WCAG2 = {
         }
 
         var url  = vap.viper.getViperPath();
-        url     += 'Plugins/ViperAccessibilityPlugin/Resolutions/WCAG2/';
+        url     += '/Plugins/ViperAccessibilityPlugin/Resolutions/WCAG2/';
         url     += 'Principle' + code.principle + '/Guideline' + code.guideline.replace('.', '_');
 
         var scriptUrl = url + '/resolutions.js';
