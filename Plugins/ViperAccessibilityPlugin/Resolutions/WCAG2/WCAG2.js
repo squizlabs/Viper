@@ -46,7 +46,7 @@ ViperAccessibilityPlugin_WCAG2 = {
         }
 
         var url  = vap.viper.getViperPath();
-        url     += 'Plugins/ViperAccessibilityPlugin/Resolutions/WCAG2/';
+        url     += '/Plugins/ViperAccessibilityPlugin/Resolutions/WCAG2/';
         url     += 'Principle' + code.principle + '/Guideline' + code.guideline.replace('.', '_');
 
         var scriptUrl = url + '/resolutions.js';
@@ -93,7 +93,7 @@ ViperAccessibilityPlugin_WCAG2 = {
                 }
 
                 (function(widgetid) {
-                    this.viper.registerCallback('ViperTools:changed:' + widgetid, 'ViperAccessibilityPlugin:wcag2', function() {
+                    self.viper.registerCallback('ViperTools:changed:' + widgetid, 'ViperAccessibilityPlugin:wcag2', function() {
                         if (updateCallback && updateCallback.call(this, widgetid) === false) {
                             // Disable button.
                             tools.disableButton(buttonid);
