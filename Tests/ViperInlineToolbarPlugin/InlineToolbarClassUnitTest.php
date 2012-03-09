@@ -15,7 +15,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarClassUnitTest extends Ab
     {
         $dir = dirname(__FILE__).'/Images/';
 
-        $text = 'IPSUM';
+        $text = 'XuT';
         $textLoc = $this->find($text);
 
         $this->selectText($text);
@@ -55,7 +55,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarClassUnitTest extends Ab
     {
         $dir = dirname(__FILE__).'/Images/';
 
-        $text = 'IPSUM';
+        $text = 'XuT';
         $textLoc = $this->find($text);
 
         $this->selectText($text);
@@ -96,7 +96,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarClassUnitTest extends Ab
     {
         $dir = dirname(__FILE__).'/Images/';
 
-        $text = 'LABS';
+        $text = 'LabS';
         $textLoc = $this->find($text);
 
         $this->selectText($text);
@@ -136,7 +136,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarClassUnitTest extends Ab
     {
         $dir = dirname(__FILE__).'/Images/';
 
-        $text = 'IPSUM';
+        $text = 'XuT';
         $textLoc = $this->find($text);
 
         $this->selectText($text);

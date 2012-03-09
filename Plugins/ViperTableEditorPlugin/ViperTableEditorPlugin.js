@@ -521,7 +521,7 @@ ViperTableEditorPlugin.prototype = {
     },
 
     /**
-     * Upudates the position of the inline toolbar.
+     * Updates the position of the inline toolbar.
      */
     _updatePosition: function(cell, verticalOnly)
     {
@@ -1860,6 +1860,7 @@ ViperTableEditorPlugin.prototype = {
             return elem;
         }
 
+        var activeCell = this.getActiveCell();
         if (type === 'cell') {
             elem = document.createElement('th');
             while (cell.firstChild) {
@@ -1868,6 +1869,10 @@ ViperTableEditorPlugin.prototype = {
 
             for (var i = 0; i < cell.attributes.length; i++) {
                 elem.setAttribute(cell.attributes[i].nodeName, cell.attributes[i].nodeValue);
+            }
+
+            if (cell === activeCell) {
+                this.setActiveCell(elem);
             }
 
             dfx.insertBefore(cell, elem);
@@ -1933,6 +1938,7 @@ ViperTableEditorPlugin.prototype = {
             return elem;
         }
 
+        var activeCell = this.getActiveCell();
         if (type === 'cell') {
             elem = document.createElement('td');
             while (cell.firstChild) {
@@ -1941,6 +1947,10 @@ ViperTableEditorPlugin.prototype = {
 
             for (var i = 0; i < cell.attributes.length; i++) {
                 elem.setAttribute(cell.attributes[i].nodeName, cell.attributes[i].nodeValue);
+            }
+
+            if (cell === activeCell) {
+                this.setActiveCell(elem);
             }
 
             dfx.insertBefore(cell, elem);
@@ -2602,7 +2612,7 @@ ViperTableEditorPlugin.prototype = {
         var selectedHeaderType = 2;
 
         var content    = '';
-        var sizePicker = '<p class="VTEP-bubble-label sizeLabel">Size (' + selectedCols + ', ' + selectedRows + ')</p>';
+        var sizePicker = '<p class="VTEP-bubble-label sizeLabel">Size (' + selectedCols + ' x ' + selectedRows + ')</p>';
         sizePicker    += '<table class="VTEP-bubble-table sizePicker"><tbody>';
         for (var i = 0; i < maxRows; i++) {
             sizePicker += '<tr>';
@@ -2612,7 +2622,7 @@ ViperTableEditorPlugin.prototype = {
                     classAttr = ' class="selected"';
                 }
 
-                sizePicker += '<td data-viper-rowcol="' + i + ', ' + j + '"' + classAttr + ' >&nbsp;</td>';
+                sizePicker += '<td data-viper-rowcol="' + i + ', ' + j + '"' + classAttr + ' ></td>';
             }
 
             sizePicker += '</tr>';
@@ -2637,9 +2647,9 @@ ViperTableEditorPlugin.prototype = {
                 headers += '<tr>';
                 for (var j = 0; j < 3; j++) {
                     if (headerOpts[h] && headerOpts[h][c]) {
-                        headers += '<td class="hover">&nbsp;</td>';
+                        headers += '<td class="hover"></td>';
                     } else {
-                        headers += '<td>&nbsp;</td>';
+                        headers += '<td></td>';
                     }
 
                     c++;
@@ -2663,7 +2673,7 @@ ViperTableEditorPlugin.prototype = {
             selectedRows = (parseInt(row) + 1);
             selectedCols = (parseInt(col) + 1);
 
-            dfx.setHtml(dfx.getClass('sizeLabel', main)[0], 'Size (' + selectedRows + ', ' + selectedCols + ')');
+            dfx.setHtml(dfx.getClass('sizeLabel', main)[0], 'Size (' + selectedRows + ' x ' + selectedCols + ')');
 
             for (var i = 0; i < maxRows; i++) {
                 for (var j = 0; j < maxCols; j++) {
@@ -2678,7 +2688,7 @@ ViperTableEditorPlugin.prototype = {
 
         var _setRowColsHover = function(row, col) {
 
-            dfx.setHtml(dfx.getClass('sizeLabel', main)[0], 'Size (' + (parseInt(row) + 1) + ', ' + (parseInt(col) + 1) + ')');
+            dfx.setHtml(dfx.getClass('sizeLabel', main)[0], 'Size (' + (parseInt(row) + 1) + ' x ' + (parseInt(col) + 1) + ')');
 
             for (var i = 0; i < maxRows; i++) {
                 for (var j = 0; j < maxCols; j++) {
@@ -2712,7 +2722,7 @@ ViperTableEditorPlugin.prototype = {
 
         dfx.hover(sizePickerElem, function() {}, function() {
             dfx.removeClass(dfx.getClass('hover', sizePickerElem), 'hover');
-            dfx.setHtml(dfx.getClass('sizeLabel', main)[0], 'Size (' + selectedRows + ', ' + selectedCols + ')');
+            dfx.setHtml(dfx.getClass('sizeLabel', main)[0], 'Size (' + selectedRows + ' x ' + selectedCols + ')');
         })
 
         var headerTables       = dfx.getClass('VTEP-bubble-headersTableWrapper', main);
@@ -2773,10 +2783,6 @@ ViperTableEditorPlugin.prototype = {
                 }
 
                 dfx.setHtml(cell, '&nbsp;');
-
-                if (i === 0) {
-                    dfx.setStyle(cell, 'width', '150px');
-                }
 
                 tr.appendChild(cell);
 
