@@ -93,7 +93,7 @@ ViperAccessibilityPlugin_WCAG2 = {
                 }
 
                 (function(widgetid) {
-                    this.viper.registerCallback('ViperTools:changed:' + widgetid, 'ViperAccessibilityPlugin:wcag2', function() {
+                    self.viper.registerCallback('ViperTools:changed:' + widgetid, 'ViperAccessibilityPlugin:wcag2', function() {
                         if (updateCallback && updateCallback.call(this, widgetid) === false) {
                             // Disable button.
                             tools.disableButton(buttonid);
