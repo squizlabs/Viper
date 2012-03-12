@@ -7,11 +7,11 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
 
 
     /**
-     * Test that a link can be created for a selected text.
+     * Test that a link can be created for a selected text using the inline toolbar.
      *
      * @return void
      */
-    public function testCreateLinkPlainText()
+    public function testCreateLinkPlainTextUsingInlineToolbar()
     {
         $this->selectText('Lorem');
 
@@ -24,9 +24,81 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->type('http://www.squizlabs.com');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com">Lorem</a> xtn dolor</p><p>sit amet <strong>consectetur</strong></p>');
+        $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com">Lorem</a> IPSUM dolor</p><p>sit amet <strong>consectetur</strong></p>');
+        
+        $this->selectText('dolor');
+        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_link.png');
+        $urlBox = $this->find(dirname(__FILE__).'/Images/toolbarInput_url.png', $this->getInlineToolbar());
+        $this->click($urlBox);
+        $this->type('http://www.squizlabs.com');
+        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_updateChanges.png');
 
-    }//end testCreateLinkPlainText()
+        $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com">Lorem</a> IPSUM <a href="http://www.squizlabs.com">dolor</a></p><p>sit amet <strong>consectetur</strong></p>');
+
+    }//end testCreateLinkPlainTextUsingInlineToolbar()
+    
+
+    /**
+     * Test that the link icon appears in the inline toolbar after applying and deleting a link twice.
+     *
+     * @return void
+     */
+    public function testLinkIconAppearsInInlineToolbarAfterDeletingLinkTwice()
+    {
+        $this->selectText('Lorem', 'IPSUM');
+
+        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_link.png');
+        $urlBox = $this->find(dirname(__FILE__).'/Images/toolbarInput_url.png', $this->getInlineToolbar());
+        $this->click($urlBox);
+        $this->type('http://www.squizlabs.com');
+        $this->keyDown('Key.ENTER');
+
+        $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com">Lorem IPSUM</a> dolor</p><p>sit amet <strong>consectetur</strong></p>');
+        
+        $this->click($this->find('IPSUM'));
+        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_removeLink.png');
+        
+        $this->assertHTMLMatch('<p>Lorem IPSUM dolor</p><p>sit amet <strong>consectetur</strong></p>');
+        
+        $this->selectText('Lorem', 'IPSUM');
+        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_link.png');
+        $urlBox = $this->find(dirname(__FILE__).'/Images/toolbarInput_url.png', $this->getInlineToolbar());
+        $this->click($urlBox);
+        $this->type('http://www.squizlabs.com');
+        $this->keyDown('Key.ENTER');
+
+        $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com">Lorem IPSUM</a> dolor</p><p>sit amet <strong>consectetur</strong></p>');
+        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_removeLink.png');
+        
+        $this->assertHTMLMatch('<p>Lorem IPSUM dolor</p><p>sit amet <strong>consectetur</strong></p>');
+        
+        $this->selectText('Lorem', 'IPSUM');
+        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_link_.png'), 'Toolbar button icon is not correct');
+
+    }//end testLinkIconAppearsInInlineToolbarAfterDeletingLink()
+    
+
+    /**
+     * Test that a link can be created for a selected text using the top toolbar.
+     *
+     * @return void
+     */
+    public function testCreateLinkUsingTopToolbar()
+    {
+        $this->selectText('Lorem');
+
+        $this->clickTopToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_link.png');
+        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_link_subActive.png'), 'Toolbar button icon is not correct');
+
+        $urlBox = $this->find(dirname(__FILE__).'/Images/toolbarInput_url.png', $this->getTopToolbar());
+        $this->click($urlBox);
+
+        $this->type('http://www.squizlabs.com');
+        $this->keyDown('Key.ENTER');
+
+        $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com">Lorem</a> IPSUM dolor</p><p>sit amet <strong>consectetur</strong></p>');
+        
+    }//end testCreateLinkUsingTopToolbar()
 
 
     /**
@@ -50,8 +122,8 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->keyDown('Key.ENTER');
 
         $this->assertHTMLMatch(
-            '<p><a href="http://www.squizlabs.com" title="Squiz Labs">Lorem</a> xtn dolor</p><p>sit amet <strong>consectetur</strong></p>',
-            '<p><a title="Squiz Labs" href="http://www.squizlabs.com">Lorem</a> xtn dolor</p><p>sit amet <strong>consectetur</strong></p>'
+            '<p><a href="http://www.squizlabs.com" title="Squiz Labs">Lorem</a> IPSUM dolor</p><p>sit amet <strong>consectetur</strong></p>',
+            '<p><a title="Squiz Labs" href="http://www.squizlabs.com">Lorem</a> IPSUM dolor</p><p>sit amet <strong>consectetur</strong></p>'
         );
 
     }//end testCreateLinkPlainTextWithTitle()
@@ -64,7 +136,7 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
      */
     public function testSelectLinkTag()
     {
-        $this->selectText('Lorem');
+        $this->selectText('IPSUM');
 
         $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_link.png');
 
@@ -77,12 +149,12 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->keyDown('Key.ENTER');
 
         $this->assertHTMLMatch(
-            '<p><a href="http://www.squizlabs.com" title="Squiz Labs">Lorem</a> xtn dolor</p><p>sit amet <strong>consectetur</strong></p>',
-            '<p><a title="Squiz Labs" href="http://www.squizlabs.com">Lorem</a> xtn dolor</p><p>sit amet <strong>consectetur</strong></p>'
+            '<p>Lorem <a href="http://www.squizlabs.com" title="Squiz Labs">IPSUM</a< dolor</p><p>sit amet <strong>consectetur</strong></p>',
+            '<p>Lorem <a title="Squiz Labs" href="http://www.squizlabs.com">IPSUM</a> dolor</p><p>sit amet <strong>consectetur</strong></p>'
         );
 
-        $this->selectText('Lorem');
-        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_link_subActive.png'), 'Toolbar button icon is not correct');
+        $this->selectText('IPSUM');
+        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_link_active.png'), 'Toolbar button icon is not correct');
 
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem selected">Link</li>', $lineage);
@@ -98,7 +170,7 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
     public function testSelectPartialLink()
     {
         $text = $this->find('Lorem');
-        $this->selectText('Lorem');
+        $this->selectText($text);
 
         $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_link.png');
         $urlBox = $this->find(dirname(__FILE__).'/Images/toolbarInput_url.png', $this->getInlineToolbar());
@@ -114,7 +186,7 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_removeLink.png'), 'Remove link icon should be available.');
 
         $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_removeLink.png');
-        $this->assertHTMLMatch('<p>Lorem xtn dolor</p><p>sit amet <strong>consectetur</strong></p>');
+        $this->assertHTMLMatch('<p>Lorem IPSUM dolor</p><p>sit amet <strong>consectetur</strong></p>');
 
     }//end testSelectPartialLink()
 
@@ -139,8 +211,8 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->keyDown('Key.ENTER');
 
         $this->assertHTMLMatch(
-            '<p>Lorem xtn dolor</p><p>sit amet <strong><a href="http://www.squizlabs.com" title="Squiz Labs">consectetur</a></strong></p>',
-            '<p>Lorem xtn dolor</p><p>sit amet <strong><a title="Squiz Labs" href="http://www.squizlabs.com">consectetur</a></strong></p>'
+            '<p>Lorem IPSUM dolor</p><p>sit amet <strong><a href="http://www.squizlabs.com" title="Squiz Labs">consectetur</a></strong></p>',
+            '<p>Lorem IPSUM dolor</p><p>sit amet <strong><a title="Squiz Labs" href="http://www.squizlabs.com">consectetur</a></strong></p>'
         );
 
     }//end testSelectNodeThenCreateLink()
@@ -189,10 +261,49 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->assertFalse($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_removeLink.png'), 'Remove link icon should not be available.');
         $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_link.png'), 'Link icon should be available.');
 
-        $this->assertHTMLMatch('<p>Lorem xtn dolor</p><p>sit amet <strong>consectetur</strong></p>');
+        $this->assertHTMLMatch('<p>Lorem IPSUM dolor</p><p>sit amet <strong>consectetur</strong></p>');
 
     }//end testRemoveLink()
 
+
+    /**
+     * Test that a link is removed when you use the x button in the URL field
+     *
+     * @return void
+     */
+    public function testRemoveLinkUsingLinkIcon()
+    {
+        $text = $this->find('Lorem');
+        $this->selectText('Lorem');
+
+        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_link.png');
+
+        $urlBox = $this->find(dirname(__FILE__).'/Images/toolbarInput_url.png', $this->getInlineToolbar());
+        $this->click($urlBox);
+
+        $this->type('http://www.squizlabs.com');
+        $this->keyDown('Key.ENTER');
+
+        $this->click($text);
+        $this->selectText('Lorem');
+        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_removeLink.png'), 'Remove link icon should be available.');
+        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_removeLink.png'), 'Remove link icon should be available in top toolbar.');
+
+        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_link_active.png');
+        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_delete_link.png');
+        $this->keyDown('Key.ENTER');
+
+        $this->assertHTMLMatch('<p>Lorem IPSUM dolor</p><p>sit amet <strong>consectetur</strong></p>');
+        
+        $this->click($text);
+        $this->selectText('Lorem');
+        $this->assertFalse($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_removeLink.png'), 'Remove link icon should not be available.');
+        $this->assertFalse($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_removeLink.png'), 'Remove link icon should not be available in top toolbar.');
+        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_link.png'), 'Link icon should be available.');
+        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_link.png'), 'Link icon should be available in top toolbar.');
+
+    }//end testRemoveLinkUsingLinkIcon()
+    
 
     /**
      * Test that clicking inside a link tag will show the inline toolbar and select the whole link.
@@ -246,7 +357,9 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->type('http://www.squizlabs.com');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>Lorem xtn <a href="http://www.squizlabs.com" class="class" id="anchor">dolor</a></p><p>sit amet <strong>consectetur</strong></p>');
+        $this->assertHTMLMatch(
+            '<p>Lorem IPSUM <a href="http://www.squizlabs.com" class="class" id="anchor">dolor</a></p><p>sit amet <strong>consectetur</strong></p>', 
+            '<p>Lorem IPSUM <a id="anchor" class="class" href="http://www.squizlabs.com">dolor</a></p><p>sit amet <strong>consectetur</strong></p>');
 
         $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_link_active.png'), 'Link icon should be active in the inline toolbar.');
         $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_link_active.png'), 'Link icon should be active in the top toolbar.');
@@ -284,13 +397,16 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->type('http://www.squizlabs.com');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>Lorem xtn <a href="http://www.squizlabs.com" class="class" id="anchor">dolor</a></p><p>sit amet <strong>consectetur</strong></p>');
+        $this->assertHTMLMatch(
+            '<p>Lorem IPSUM <a href="http://www.squizlabs.com" class="class" id="anchor">dolor</a></p><p>sit amet <strong>consectetur</strong></p>', 
+            '<p>Lorem IPSUM <a id="anchor" class="class" href="http://www.squizlabs.com">dolor</a></p><p>sit amet <strong>consectetur</strong></p>');
 
         $this->click($this->find($text));
         $this->selectText($text);
         $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_removeLink.png');
 
-        $this->assertHTMLMatch('<p>Lorem xtn <span class="class" id="anchor">dolor</span></p><p>sit amet <strong>consectetur</strong></p>');
+        $this->assertHTMLMatch(
+            '<p>Lorem IPSUM <span class="class" id="anchor">dolor</span></p><p>sit amet <strong>consectetur</strong></p>');
 
         $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_anchor_active.png'), 'Anchor icon should be active in the inline toolbar.');
         $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_anchor_active.png'), 'Anchor icon should be active in the top toolbar.');
@@ -329,7 +445,9 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->type('http://www.squizlabs.com');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>Lorem xtn <a href="http://www.squizlabs.com" class="class" id="anchor">dolor</a></p><p>sit amet <strong>consectetur</strong></p>');
+        $this->assertHTMLMatch(
+            '<p>Lorem IPSUM <a href="http://www.squizlabs.com" class="class" id="anchor">dolor</a></p><p>sit amet <strong>consectetur</strong></p>', 
+            '<p>Lorem IPSUM <a id="anchor" class="class" href="http://www.squizlabs.com">dolor</a></p><p>sit amet <strong>consectetur</strong></p>');
 
         $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_link_active.png'), 'Link icon should be active in the inline toolbar.');
         $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_link_active.png'), 'Link icon should be active in the top toolbar.');
