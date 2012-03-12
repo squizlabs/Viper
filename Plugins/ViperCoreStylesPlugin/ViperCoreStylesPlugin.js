@@ -146,7 +146,7 @@ ViperCoreStylesPlugin.prototype = {
 
         var shortcuts = {
             strong: 'CTRL+B',
-            em: 'CTRL+I',
+            em: 'CTRL+I'
         };
 
         tools.getItem('bold').setButtonShortcut('CTRL+B');
@@ -154,8 +154,8 @@ ViperCoreStylesPlugin.prototype = {
 
         this.viper.registerCallback('Viper:keyPress', 'ViperCoreStylesPlugin', function(e) {
             if (self._onChangeAddStyle && self.viper.isInputKey(e) === true) {
-                var char = String.fromCharCode(e.which);
-                return self.viper.insertTextAtCaret(char);
+                var character = String.fromCharCode(e.which);
+                return self.viper.insertTextAtCaret(character);
             }
         });
 

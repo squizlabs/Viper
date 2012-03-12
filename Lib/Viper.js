@@ -2690,8 +2690,8 @@ Viper.prototype = {
             range.insertNode(span);
         } else {
             var attributes = {
-                cssClass: '__viper_selHighlight',
-            }
+                cssClass: '__viper_selHighlight'
+            };
 
             this.surroundContents('span', attributes, range, true);
         }

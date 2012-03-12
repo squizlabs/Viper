@@ -42,7 +42,7 @@ ViperListPlugin.prototype = {
                 ul: 'unorderedList',
                 ol: 'orderedList',
                 indent: 'indentList',
-                outdent: 'outdentList',
+                outdent: 'outdentList'
             };
 
             var btnGroup = tools.createButtonGroup('ViperLinkPlugin:vtp:buttons');
