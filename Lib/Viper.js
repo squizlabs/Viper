@@ -2690,8 +2690,8 @@ Viper.prototype = {
             range.insertNode(span);
         } else {
             var attributes = {
-                cssClass: '__viper_selHighlight',
-            }
+                cssClass: '__viper_selHighlight'
+            };
 
             this.surroundContents('span', attributes, range, true);
         }
@@ -3158,7 +3158,7 @@ Viper.prototype = {
             // Ask plugins if its one of their element.
             var pluginName = this.getPluginForElement(target);
             if (!pluginName) {
-                // TODO: Fire clicked outside.
+                return this.fireCallbacks('Viper:clickedOutside', e);
             } else {
                 return this.fireCallbacks('Viper:pluginMouseDown', {
                     pluginName: pluginName,
@@ -3167,7 +3167,7 @@ Viper.prototype = {
             }
         }
 
-        // TODO: Should this fire after mouseDown?
+        this.fireCallbacks('Viper:clickedInside', e);
         this.fireCaretUpdated();
 
         // Mouse down in active element.

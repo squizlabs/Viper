@@ -643,6 +643,7 @@ ViperFormatPlugin.prototype = {
                 case 'li':
                 case 'ul':
                 case 'ol':
+                case 'img':
                     return false;
                 break;
 
@@ -684,6 +685,7 @@ ViperFormatPlugin.prototype = {
                 case 'td':
                 case 'th':
                 case 'tbody':
+                case 'img':
                     return false;
                 break;
 
@@ -728,7 +730,12 @@ ViperFormatPlugin.prototype = {
             }
         }
 
-        if (selectedNode && selectedNode.nodeType !== dfx.ELEMENT_NODE) {
+        if (selectedNode
+            && (selectedNode.nodeType !== dfx.ELEMENT_NODE
+            || dfx.isBlockElement(selectedNode) === false
+            || dfx.isStubElement(selectedNode) === true
+            )
+        ) {
             // Text node, get the first block parent.
             selectedNode = dfx.getFirstBlockParent(selectedNode);
         }
@@ -900,7 +907,7 @@ ViperFormatPlugin.prototype = {
         var insideSelection = dfx.getElementsBetween(bookmark.start, bookmark.end);
         var count = insideSelection.length;
         for (var i = 0; i < count; i++) {
-            if (dfx.isBlockElement(insideSelection[i]) === true) {
+            if (dfx.isBlockElement(insideSelection[i]) === true && dfx.isStubElement(insideSelection[i]) === false) {
                 var group = [];
                 for (var j = 0; j < insideSelection[i].childNodes.length; j++) {
                     group.push(insideSelection[i].childNodes[j]);
