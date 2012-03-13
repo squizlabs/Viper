@@ -23,10 +23,9 @@ MatrixImagePlugin.prototype = {
         // Insert asset picker icon next to url field.
         // Insert anchor row after URL field.
         var urlField    = tools.getItem('ViperImagePlugin:urlInput').element;
-        var assetPicker = tools.createButton('MatrixImagePlugin:assetPicker', '', 'Pick Asset', 'accessSettings', function() {
+        var assetPicker = tools.createButton('MatrixImagePlugin:assetPicker', '', 'Pick Asset', 'ees-target', function() {
             self.pickAsset();
         });
-        dfx.setStyle(urlField, 'float', 'left');
         dfx.insertAfter(urlField, assetPicker);
 
         return contents;

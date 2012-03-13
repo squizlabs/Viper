@@ -1,0 +1,52 @@
+// Button Vars
+
+@fieldIconSpriteLocation: 1;
+@iconWidth: 25px;
+@iconHeight: 20px;
+@iconHeightOffset: 27px;
+@bgY: 0;
+@bgY-activeOffset: 33px;
+@bgX: -(@fieldIconSpriteLocation - 1) * @iconHeightOffset;
+
+.buttonIcon {
+
+// Icon definitions
+
+    // EES Link
+    &.ees-link {
+        .icon (26);
+    }
+
+    // EES Image
+    &.ees-image {
+        .icon (29);
+    }
+
+    // EES Link Target
+    &.ees-target {
+        .icon (46);
+    }
+
+} // End .buttonIcon
+
+// Button state bundle with icon selection, declared after all the buttons so their icon variables are used instead of the defaults
+
+.icon (@iconCount) {
+    @fieldIconSpriteLocation: @iconCount;
+    background-position: @bgY @bgX;
+    .Viper-button:active &,
+    .Viper-button.active &,
+    .Viper-button.selected & {
+        background-position: -@bgY-activeOffset @bgX;
+    }
+}
+
+.Viper-button.ees-target {
+    position: absolute;
+    right: 0;
+    top: 0;
+    line-height: 2.1em;
+}
+.subSectionRow.urlRow {
+    padding-right: 3.8em;
+}

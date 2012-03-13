@@ -26,10 +26,9 @@ MatrixLinkPlugin.prototype = {
         // Insert asset picker icon next to url field.
         // Insert anchor row after URL field.
         var urlField    = tools.getItem(idPrefix + ':url').element;
-        var assetPicker = tools.createButton(idPrefix + ':assetPicker', '', 'Pick Asset', 'accessSettings', function() {
+        var assetPicker = tools.createButton(idPrefix + ':assetPicker', '', 'Pick Asset', 'ees-target', function() {
             self.pickAsset();
         });
-        dfx.setStyle(urlField, 'float', 'left');
         dfx.insertAfter(urlField, assetPicker);
 
         // Url value may need to be updated if the link is internal.
