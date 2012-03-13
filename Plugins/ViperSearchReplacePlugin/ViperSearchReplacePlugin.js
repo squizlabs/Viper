@@ -49,9 +49,12 @@ ViperSearchReplacePlugin.prototype = {
 
         // Search text box.
         var search = tools.createTextbox('ViperSearchPlugin:searchInput', 'Search', '', function(value) {
-            self.getNumberOfMatches(value);
-            self.find(value, false, true);
-            self._updateButtonStates();
+            var found = self.find(value);
+            if (found !== true) {
+                self._matchCount = 0;
+            }
+
+            self._updateButtonStates(found);
         });
         tools.setFieldEvent('ViperSearchPlugin:searchInput', 'keyup', function() {
             if (tools.getItem('ViperSearchPlugin:searchInput').getValue()) {
@@ -73,12 +76,10 @@ ViperSearchReplacePlugin.prototype = {
         content.appendChild(replace);
 
         var replaceAllBtn = tools.createButton('ViperSearchPlugin:replaceAll', 'Replace All', 'Replace All', 'replaceAll', function() {
-            if (tools.getItem('ViperSearchPlugin:replaceInput').getValue().toLowerCase() === tools.getItem('ViperSearchPlugin:searchInput').getValue().toLowerCase()) {
-                return;
-            }
-
             var replaceCount = 0;
-            while (self.find(tools.getItem('ViperSearchPlugin:searchInput').getValue(), false, true) === true) {
+            var fromStart    = true;
+            while (self.find(tools.getItem('ViperSearchPlugin:searchInput').getValue(), false, fromStart) === true) {
+                fromStart = false;
                 self.replace(tools.getItem('ViperSearchPlugin:replaceInput').getValue());
                 replaceCount++;
             }
@@ -87,10 +88,6 @@ ViperSearchReplacePlugin.prototype = {
             self._updateButtonStates();
         }, true);
         var replaceBtn = tools.createButton('ViperSearchPlugin:replace', 'Replace', 'Replace', 'replaceText', function() {
-            if (tools.getItem('ViperSearchPlugin:replaceInput').getValue().toLowerCase() === tools.getItem('ViperSearchPlugin:searchInput').getValue().toLowerCase()) {
-                return;
-            }
-
             self.replace(tools.getItem('ViperSearchPlugin:replaceInput').getValue());
             self._updateButtonStates();
         }, true);
@@ -99,9 +96,16 @@ ViperSearchReplacePlugin.prototype = {
 
         var findNext = tools.createButton('ViperSearchPlugin:findNext', 'Find Next', 'Find Next', '', function() {
             // Find again.
-            var found = self.find(tools.getItem('ViperSearchPlugin:searchInput').getValue(), false);
+            var found = self.find(tools.getItem('ViperSearchPlugin:searchInput').getValue());
             if (found !== true) {
-                self._matchCount = 0;
+                // Try from top.
+                self.getNumberOfMatches(tools.getItem('ViperSearchPlugin:searchInput').getValue());
+                if (self._matchCount > 0) {
+                    found = self.find(tools.getItem('ViperSearchPlugin:searchInput').getValue(), false, true);
+                    if (found !== true) {
+                        self._matchCount = 0;
+                    }
+                }
             }
 
             self._updateButtonStates(found);
