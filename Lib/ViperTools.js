@@ -616,8 +616,6 @@ ViperTools.prototype = {
         var self = this;
 
         dfx.addEvent(checkbox, 'click', function() {
-            self.viper.focus();
-
             if (checkbox.checked === true) {
                 dfx.addClass(labelElem, 'active');
             } else {

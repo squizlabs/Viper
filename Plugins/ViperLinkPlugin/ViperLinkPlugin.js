@@ -247,10 +247,6 @@ ViperLinkPlugin.prototype = {
         var self  = this;
         var tools = this.viper.ViperTools;
 
-        var _updateLink = function() {
-            self.updateLink(idPrefix);
-        };
-
         var attrUrl     = '';
         var attrTitle   = '';
         var attrSubj    = '';

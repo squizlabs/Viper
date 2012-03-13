@@ -941,6 +941,16 @@ ViperInlineToolbarPlugin.prototype = {
 
         return lineage;
 
+    },
+
+    isPluginElement: function(element)
+    {
+        if (element !== this._toolbar && dfx.isChildOf(element, this._toolbar) === false) {
+            return false;
+        }
+
+        return true;
+
     }
 
 };
