@@ -117,14 +117,7 @@ var ViperSelection = {
     {
         this._selection = ViperSelection._getSelection();
 
-        if (this._selection.addRange) {
-            // Moz/Safari.
-            if (this._selection.rangeCount > 0) {
-                this._selection.removeAllRanges();
-            }
-
-            this._selection.addRange(range.rangeObj);
-        } else if (range.rangeObj.select) {
+        if (range.rangeObj.select) {
             // IE.
             try {
                 range.rangeObj.select();
@@ -133,6 +126,13 @@ var ViperSelection = {
                 // This happens when range is not selectable, e.g. element is hidden.
                 // Still happens in IE8.. sigh..
             }
+        } else if (this._selection.addRange) {
+            // Moz/Safari.
+            if (this._selection.rangeCount > 0) {
+                this._selection.removeAllRanges();
+            }
+
+            this._selection.addRange(range.rangeObj);
         }
 
     },
