@@ -1061,7 +1061,7 @@ ViperAccessibilityPlugin.prototype = {
 
     loadObject: function(src, objName, callback)
     {
-        if (this._loadedScripts.find(src) >= 0) {
+        if (window[objName] || this._loadedScripts.find(src) >= 0) {
             callback.call(this, window[objName]);
             return;
         }
@@ -1094,11 +1094,6 @@ ViperAccessibilityPlugin.prototype = {
      * @param {function} callback The function to call once the script is loaded.
      */
     includeScript: function(src, callback) {
-        //if (this._loadedScripts.find(src) >= 0) {
-        //    callback.call(this);
-        //    return;
-        //}
-
         var script    = document.createElement('script');
         script.onload = function() {
             script.onload = null;

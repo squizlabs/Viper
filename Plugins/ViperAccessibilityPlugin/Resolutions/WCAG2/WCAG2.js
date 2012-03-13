@@ -39,6 +39,7 @@ ViperAccessibilityPlugin_WCAG2 = {
         if (obj) {
             var fn = obj['res_' + code.section.replace('.', '_')];
             if (dfx.isFn(fn) === true) {
+                obj.parent = this;
                 fn.call(obj, contentElement, issue.element, issue, code, vap.viper);
             }
 
