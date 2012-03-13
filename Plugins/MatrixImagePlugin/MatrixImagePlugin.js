@@ -20,13 +20,18 @@ MatrixImagePlugin.prototype = {
         var self  = this;
         var tools = this.viper.ViperTools;
 
+        var urlRow = tools.createRow('MatrixImagePlugin:urlRow', 'urlRow');
+
         // Insert asset picker icon next to url field.
         // Insert anchor row after URL field.
         var urlField    = tools.getItem('ViperImagePlugin:urlInput').element;
         var assetPicker = tools.createButton('MatrixImagePlugin:assetPicker', '', 'Pick Asset', 'ees-target', function() {
             self.pickAsset();
         });
-        dfx.insertAfter(urlField, assetPicker);
+
+        dfx.insertAfter(urlField, urlRow);
+        urlRow.appendChild(urlField);
+        urlRow.appendChild(assetPicker);
 
         return contents;
 
