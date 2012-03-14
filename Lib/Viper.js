@@ -418,8 +418,9 @@ Viper.prototype = {
             return;
         }
 
-        var tmp = Viper.document.createElement('div');
-        dfx.setHtml(tmp, this.getContents());
+        var tmp     = Viper.document.createElement('div');
+        var content = this.getContents();
+        dfx.setHtml(tmp, content);
         if (dfx.trim(dfx.getNodeTextContent(tmp)).length === 0 || dfx.getHtml(tmp) === '&nbsp;') {
             // Check for stub elements.
             var tags         = dfx.getTag('*', tmp);
@@ -440,7 +441,11 @@ Viper.prototype = {
                 range.collapse(true);
                 ViperSelection.addRange(range);
             }
-        }//end if
+        } else {
+            content = content.replace(/<(p|div)((\s+\w+(\s*=\s*(?:".*?"|\'.*?\'|[^\'">\s]+))?)+)?\s*>\s+/ig, "<$1$2>");
+            content = content.replace(/\s+<\/(p|div)((\s+\w+(\s*=\s*(?:".*?"|\'.*?\'|[^\'">\s]+))?)+)?\s*>/ig, "</$1$2>");
+            dfx.setHtml(this.element, content);
+        }
 
     },
 

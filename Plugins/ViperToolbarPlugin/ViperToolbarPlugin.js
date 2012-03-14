@@ -512,9 +512,9 @@ ViperToolbarPlugin.prototype = {
         var scrollCoords = dfx.getScrollCoords();
         var windowDim    = dfx.getWindowDimensions();
         var elemDim      = dfx.getBoundingRectangle(button);
+        var toolbarDim   = dfx.getBoundingRectangle(this._toolbar);
 
-        var left = (elemDim.x1 + ((elemDim.x2 - elemDim.x1) / 2) - (toolsWidth / 2) - scrollCoords.x);
-        var top  = (elemDim.y2 + 8 - scrollCoords.y);
+        var left = ((elemDim.x1 + ((elemDim.x2 - elemDim.x1) / 2) - (toolsWidth / 2) - scrollCoords.x) - toolbarDim.x1);
 
         if ((left + toolsWidth) >= windowDim.width) {
             left -= ((toolsWidth / 2) - 40);

@@ -23,7 +23,7 @@
 
 function ViperTableEditorPlugin(viper)
 {
-    ViperInlineToolbarPlugin.call(this, viper);
+    dfx.inherits('ViperTableEditorPlugin', 'ViperInlineToolbarPlugin');
 
     this.viper             = viper;
     this._tools            = viper.ViperTools;
@@ -3472,5 +3472,3 @@ ViperTableEditorPlugin.prototype = {
     }
 
 };
-
-dfx.inherits('ViperTableEditorPlugin', 'ViperInlineToolbarPlugin', true);
