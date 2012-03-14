@@ -203,7 +203,7 @@ MatrixLinkPlugin.prototype = {
         var assetFinderOverlay = dfx.getId('ees_assetFinderOverlay');
         if (element !== this._toolbar
             && dfx.isChildOf(element, this._toolbar) === false
-            && dfx.isChildOf(element, assetFinderOverlay.get(0)) === false
+            && dfx.isChildOf(element, assetFinderOverlay) === false
         ) {
             return false;
         }
