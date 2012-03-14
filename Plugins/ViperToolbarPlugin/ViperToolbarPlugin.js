@@ -33,17 +33,29 @@ function ViperToolbarPlugin(viper)
 
     this.createToolbar();
 
-    var self = this;
+    var self           = this;
+    var clickedOutside = false;
     this.viper.registerCallback('Viper:selectionChanged', 'ViperToolbarPlugin', function(range) {
-        if (self.viper.rangeInViperBounds(range) === false) {
+        if (clickedOutside === true || self.viper.rangeInViperBounds(range) === false) {
             return;
         }
 
         self._updateToolbar(range);
     });
 
+    this.viper.registerCallback('Viper:clickedOutside', 'ViperToolbarPlugin', function(range) {
+        clickedOutside = true;
+
+        // Disable all buttons.
+        self.disableButtons();
+    });
+
+    this.viper.registerCallback('Viper:clickedInside', 'ViperToolbarPlugin', function(range) {
+        clickedOutside = false;
+    });
+
     this.viper.registerCallback('Viper:editableElementChanged', 'ViperToolbarPlugin', function() {
-        self._updateToolbar();
+        self.disableButtons();
     });
 
     this.viper.registerCallback('Viper:mouseDown', 'ViperToolbarPlugin', function() {
@@ -514,6 +526,24 @@ ViperToolbarPlugin.prototype = {
         dfx.setStyle(bubble, 'left', left + 'px');
         dfx.setStyle(bubble, 'top', top + 'px');
         dfx.setStyle(bubble, 'width', (toolsWidth - 2) + 'px');
+
+    },
+
+    disableButtons: function()
+    {
+        // Close active bubble.
+        if (this._activeBubble) {
+            this.closeBubble(this._activeBubble);
+        }
+
+        // Get all buttons in the toolbar and disable them.
+        var buttons = dfx.getClass('Viper-button', this._toolbar);
+        var c       = buttons.length;
+        var viperid = this.viper.getId();
+        for (var i = 0; i < c; i++) {
+            var buttonid = buttons[i].id.replace(viperid + '-', '');
+            this.viper.ViperTools.disableButton(buttonid);
+        }
 
     },
 

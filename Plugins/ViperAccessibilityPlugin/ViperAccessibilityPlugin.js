@@ -124,6 +124,10 @@ ViperAccessibilityPlugin.prototype = {
         var self      = this;
         var tools     = this.viper.ViperTools;
 
+        this.viper.registerCallback('ViperToolbarPlugin:updateToolbar', 'ViperAccessibilityPlugin', function(data) {
+            self.viper.ViperTools.enableButton('accessibility');
+        });
+
         var toolsSection   = document.createElement('div');
         this._toolsSection = toolsSection;
         dfx.addClass(toolsSection, 'ViperAP-toolsWrapper checkTools active');

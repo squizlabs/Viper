@@ -41,6 +41,10 @@ ViperCharMapPlugin.prototype = {
             return;
         }
 
+        this.viper.registerCallback('ViperToolbarPlugin:updateToolbar', 'ViperCharMapPlugin', function(data) {
+            self.viper.ViperTools.enableButton('insertCharacter');
+        });
+
         var self = this;
 
         var subContent = document.createElement('div');

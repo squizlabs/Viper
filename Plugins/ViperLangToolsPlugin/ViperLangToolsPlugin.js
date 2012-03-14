@@ -451,6 +451,8 @@ ViperLangToolsPlugin.prototype = {
         }, ['VLTP:langInput']);
 
         this.viper.registerCallback('ViperToolbarPlugin:updateToolbar', 'ViperLangToolsPlugin', function(data) {
+            tools.enableButton('langTools');
+
             if (data.range.collapsed === true) {
                 tools.disableButton('ViperLangToolsPlugin:abbrButton');
                 tools.disableButton('ViperLangToolsPlugin:acronymButton');
