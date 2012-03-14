@@ -24,6 +24,7 @@
 function ViperTableEditorPlugin(viper)
 {
     dfx.inherits('ViperTableEditorPlugin', 'ViperInlineToolbarPlugin');
+    ViperInlineToolbarPlugin.call(this, viper);
 
     this.viper             = viper;
     this._tools            = viper.ViperTools;
