@@ -41,11 +41,22 @@ ViperReadyCallback = null;
 
         var _loadScript = function(path, scriptName, callback, scriptNameAsPath) {
             var script = document.createElement('script');
-            script.onreadystatechange = function() {
-                if (/^(loaded|complete)$/.test(this.readyState) === true) {
-                    callback.call(window);
+
+            if (navigator.appName == 'Microsoft Internet Explorer') {
+                var rv = -1;
+                var re = new RegExp("MSIE ([0-9]{1,}[\.0-9]{0,})");
+                if (re.exec(navigator.userAgent) != null) {
+                    rv = parseFloat(RegExp.$1);
                 }
-            };
+
+                if (rv <= 8.0) {
+                    script.onreadystatechange = function() {
+                        if (/^(loaded|complete)$/.test(this.readyState) === true) {
+                            callback.call(window);
+                        }
+                    };
+                }
+            }//end if
 
             script.onload = function() {
                 callback.call(window);

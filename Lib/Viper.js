@@ -3152,7 +3152,7 @@ Viper.prototype = {
         var target = dfx.getMouseEventTarget(e);
         var inside = true;
 
-        if (this.isChildOfElems(target, [this.element]) !== true) {
+        if (this.element !== target && this.isChildOfElems(target, [this.element]) !== true) {
             inside = false;
 
             // Ask plugins if its one of their element.

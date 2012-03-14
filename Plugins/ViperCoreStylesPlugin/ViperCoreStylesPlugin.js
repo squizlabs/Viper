@@ -949,6 +949,7 @@ ViperCoreStylesPlugin.prototype = {
             tools.disableButton('removeFormat');
         }
 
+        tools.enableButton('justify');
         if (states.alignment) {
             var justify       = states.alignment;
             var c             = buttons.justify.length;
@@ -976,7 +977,9 @@ ViperCoreStylesPlugin.prototype = {
             if (setToggleInactive === true) {
                 tools.setButtonInactive('justify');
             }
-        }
+        }//end if
+
+        tools.enableButton('hr');
 
     },
 

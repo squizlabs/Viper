@@ -143,6 +143,10 @@ ViperTableEditorPlugin.prototype = {
         if (this.toolbarPlugin) {
             var insertTable = true;
 
+            this.viper.registerCallback('ViperToolbarPlugin:updateToolbar', 'ViperTableEditorPlugin', function(data) {
+                self.viper.ViperTools.enableButton('insertTable');
+            });
+
             var button = this.viper.ViperTools.createButton('insertTable', '', 'Insert Table', 'table', function() {
                 var range = self.viper.getViperRange();
                 var node  = range.getStartNode();

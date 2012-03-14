@@ -44,75 +44,75 @@ ViperSearchReplacePlugin.prototype = {
         var self  = this;
         var tools = this.viper.ViperTools;
 
+        this.viper.registerCallback('ViperToolbarPlugin:updateToolbar', 'ViperSearchReplacePlugin', function(data) {
+            self.viper.ViperTools.enableButton('searchReplace');
+        });
+
         // Create Search and replace button and popup.
         var content = document.createElement('div');
 
         // Search text box.
         var search = tools.createTextbox('ViperSearchPlugin:searchInput', 'Search', '', function(value) {
-            self.updateMatchesCount(self.getNumberOfMatches(value));
-            self.find(value, false, true);
+            var found = self.find(value);
+            if (found !== true) {
+                self._matchCount = 0;
+            }
 
-            self._updateButtonStates();
+            self._updateButtonStates(found);
+        });
+        tools.setFieldEvent('ViperSearchPlugin:searchInput', 'keyup', function() {
+            if (tools.getItem('ViperSearchPlugin:searchInput').getValue()) {
+                tools.enableButton('ViperSearchPlugin:findNext');
+            } else {
+                tools.disableButton('ViperSearchPlugin:findNext');
+            }
         });
         content.appendChild(search);
 
         // Replace text box.
         var replace = tools.createTextbox('ViperSearchPlugin:replaceInput', 'Replace', '', function(value) {
             var search = tools.getItem('ViperSearchPlugin:searchInput').getValue();
-            self.updateMatchesCount(self.getNumberOfMatches(search));
+            self.getNumberOfMatches(search);
             self.find(search, false, true);
 
             self._updateButtonStates();
         });
         content.appendChild(replace);
 
-        // Info Box.
-        this._infoBox = document.createElement('div');
-        dfx.setStyle(this._infoBox, 'display', 'none');
-        dfx.addClass(this._infoBox, 'ViperITP-msgBox ViperSearchPlugin-info info');
-        content.appendChild(this._infoBox);
-
-        // Buttons.
-        var findPrev = tools.createButton('ViperSearchPlugin:findPrev', '', 'Find Previous', 'prevIssue', function() {
-            self.find(tools.getItem('ViperSearchPlugin:searchInput').getValue(), true);
-            self._updateButtonStates();
-        }, true);
-        content.appendChild(findPrev);
-
-        var replaceBtnsGroup = tools.createButtonGroup('ViperSearchPlugin:replaceButtons');
-        content.appendChild(replaceBtnsGroup);
-
         var replaceAllBtn = tools.createButton('ViperSearchPlugin:replaceAll', 'Replace All', 'Replace All', 'replaceAll', function() {
-            if (tools.getItem('ViperSearchPlugin:replaceInput').getValue().toLowerCase() === tools.getItem('ViperSearchPlugin:searchInput').getValue().toLowerCase()) {
-                return;
-            }
-
             var replaceCount = 0;
-            while (self.find(tools.getItem('ViperSearchPlugin:searchInput').getValue(), false, true) === true) {
+            var fromStart    = true;
+            while (self.find(tools.getItem('ViperSearchPlugin:searchInput').getValue(), false, fromStart) === true) {
+                fromStart = false;
                 self.replace(tools.getItem('ViperSearchPlugin:replaceInput').getValue());
                 replaceCount++;
             }
 
-            self.updateMessage(replaceCount + ' instances were replaced');
+            self._matchCount = 0;
             self._updateButtonStates();
         }, true);
         var replaceBtn = tools.createButton('ViperSearchPlugin:replace', 'Replace', 'Replace', 'replaceText', function() {
-            if (tools.getItem('ViperSearchPlugin:replaceInput').getValue().toLowerCase() === tools.getItem('ViperSearchPlugin:searchInput').getValue().toLowerCase()) {
-                return;
-            }
-
             self.replace(tools.getItem('ViperSearchPlugin:replaceInput').getValue());
-            self.find(tools.getItem('ViperSearchPlugin:searchInput').getValue(), false);
             self._updateButtonStates();
         }, true);
-        tools.addButtonToGroup('ViperSearchPlugin:replaceAll', 'ViperSearchPlugin:replaceButtons');
-        tools.addButtonToGroup('ViperSearchPlugin:replace', 'ViperSearchPlugin:replaceButtons');
+        content.appendChild(replaceAllBtn);
+        content.appendChild(replaceBtn);
 
-        var findNext = tools.createButton('ViperSearchPlugin:findNext', '', 'Find Next', 'nextIssue', function() {
+        var findNext = tools.createButton('ViperSearchPlugin:findNext', 'Find Next', 'Find Next', '', function() {
             // Find again.
-            self.find(tools.getItem('ViperSearchPlugin:searchInput').getValue(), false);
-            self._updateButtonStates();
+            var found = self.find(tools.getItem('ViperSearchPlugin:searchInput').getValue());
+            if (found !== true) {
+                // Try from top.
+                self.getNumberOfMatches(tools.getItem('ViperSearchPlugin:searchInput').getValue());
+                if (self._matchCount > 0) {
+                    found = self.find(tools.getItem('ViperSearchPlugin:searchInput').getValue(), false, true);
+                    if (found !== true) {
+                        self._matchCount = 0;
+                    }
+                }
+            }
 
+            self._updateButtonStates(found);
         }, true);
         content.appendChild(findNext);
 
@@ -127,40 +127,19 @@ ViperSearchReplacePlugin.prototype = {
 
     },
 
-    _updateButtonStates: function()
+    _updateButtonStates: function(hasResult)
     {
         var self  = this;
         var tools = this.viper.ViperTools;
 
         var enableReplace = true;
-        if (this._matchCount === 0) {
+        if (hasResult !== true && this._matchCount === 0) {
             enableReplace = false;
         }
 
         // These selection during these find calls may jump in to other containers
         // so clone the current selection so that we can select it again.
         var clone = this.viper.getCurrentRange();
-
-        // Is there a next result?
-        if (this._matchCount > 0 && self.find(tools.getItem('ViperSearchPlugin:searchInput').getValue(), false) === true) {
-            self.find(tools.getItem('ViperSearchPlugin:searchInput').getValue(), true);
-            tools.enableButton('ViperSearchPlugin:findNext');
-        } else {
-            if (this.viper.isBrowser('firefox') === true) {
-                self.find(tools.getItem('ViperSearchPlugin:searchInput').getValue(), true);
-            }
-            tools.disableButton('ViperSearchPlugin:findNext');
-        }
-
-        // Is there a previous result?
-        if (this._matchCount > 0 && self.find(tools.getItem('ViperSearchPlugin:searchInput').getValue(), true) === true) {
-            self.find(tools.getItem('ViperSearchPlugin:searchInput').getValue(), false);
-            tools.enableButton('ViperSearchPlugin:findPrev');
-        } else {
-            // Set the previous button state to disabled.
-            tools.disableButton('ViperSearchPlugin:findPrev');
-        }
-
         if (enableReplace === true) {
             tools.enableButton('ViperSearchPlugin:replace');
             tools.enableButton('ViperSearchPlugin:replaceAll');
@@ -257,36 +236,6 @@ ViperSearchReplacePlugin.prototype = {
         ViperSelection.addRange(range);
 
         this._matchCount--;
-        this.updateMatchesCount(this._matchCount);
-
-    },
-
-    updateMatchesCount: function(count)
-    {
-        if (dfx.getStyle(this._infoBox, 'display') === 'none') {
-            dfx.blindDown(this._infoBox);
-        }
-
-        var content = '';
-        if (count <= 0) {
-            content = 'No matches found';
-
-            dfx.removeClass(this._infoBox, 'matchesFound');
-            dfx.addClass(this._infoBox, 'noMatches');
-        } else {
-            content = count + ' instances found';
-
-            dfx.removeClass(this._infoBox, 'noMatches');
-            dfx.addClass(this._infoBox, 'matchesFound');
-        }
-
-        this.updateMessage(content);
-
-    },
-
-    updateMessage: function(msg)
-    {
-        dfx.setHtml(this._infoBox, msg);
 
     }
 

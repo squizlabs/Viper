@@ -46,6 +46,10 @@ ViperSourceViewPlugin.prototype = {
                 self.toggleSourceView();
             });
             this.toolbarPlugin.addButton(toggle);
+
+            this.viper.registerCallback('ViperToolbarPlugin:updateToolbar', 'ViperSourceViewPlugin', function(data) {
+                self.viper.ViperTools.enableButton('sourceEditor');
+            });
         }
 
         var updateTimer = null;

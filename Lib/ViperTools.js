@@ -472,8 +472,8 @@ ViperTools.prototype = {
             getValue: function() {
                 return input.value;
             },
-            setValue: function(value) {
-                input.value = value;
+            setValue: function(newValue, isInitialValue) {
+                input.value = newValue;
 
                 var actionIcon = dfx.getClass('Viper-textbox-action', main);
                 if (actionIcon.length === 0) {
@@ -499,6 +499,10 @@ ViperTools.prototype = {
                     if (required === true) {
                         dfx.addClass(textBox, 'required');
                     }
+                }
+
+                if (isInitialValue === false) {
+                    self.viper.fireCallbacks('ViperTools:changed:' + id);
                 }
             },
             disable: function()
@@ -616,8 +620,6 @@ ViperTools.prototype = {
         var self = this;
 
         dfx.addEvent(checkbox, 'click', function() {
-            self.viper.focus();
-
             if (checkbox.checked === true) {
                 dfx.addClass(labelElem, 'active');
             } else {
