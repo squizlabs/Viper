@@ -7,7 +7,7 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperLis
 
 
     /**
-     * Test that unordered list is added and removed when toolbar icon is clicked.
+     * Test that unordered list is added and removed for the paragraph when you only selected one word.
      *
      * @return void
      */
@@ -15,22 +15,20 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperLis
     {
         $this->selectText('VmumV');
 
-        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_unorderedList.png');
-
+        $this->clickTopToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_unorderedList.png');
         $this->assertIconStatusesCorrect('active', TRUE, FALSE, TRUE);
+        $this->assertHTMLMatch('<ul><li>XabcX uuuuuu. VmumV</li></ul><p>cPOc ccccc dddd. TicT</p><p>ajhsd sjsjwi hhhh:</p><ul><li>aaa bbbbb ccccc</li><li>4 oNo templates</li><li>Audit XuT content</li><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ul><h2>SoD</h2>');
 
         $this->selectText('VmumV');
-
-        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_unorderedList_active.png');
+        $this->clickTopToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_unorderedList_active.png');
         sleep(1);
-
         $this->assertIconStatusesCorrect(TRUE, TRUE, NULL, NULL);
 
     }//end testListCreationFromTextSelection()
 
 
     /**
-     * Test that unordered list is added and removed when toolbar icon is clicked.
+     * Test that unordered list is added and removed when select a paragraph.
      *
      * @return void
      */
@@ -38,10 +36,11 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperLis
     {
         $this->selectText('XabcX', 'VmumV');
 
-        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_unorderedList.png');
+        $this->clickTopToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_unorderedList.png');
         $this->assertIconStatusesCorrect('active', TRUE, FALSE, TRUE);
+        $this->assertHTMLMatch('<ul><li>XabcX uuuuuu. VmumV</li></ul><p>cPOc ccccc dddd. TicT</p><p>ajhsd sjsjwi hhhh:</p><ul><li>aaa bbbbb ccccc</li><li>4 oNo templates</li><li>Audit XuT content</li><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ul><h2>SoD</h2>');
 
-        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_unorderedList_active.png');
+        $this->clickTopToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_unorderedList_active.png');
         $this->assertIconStatusesCorrect(TRUE, TRUE, NULL, NULL);
 
     }//end testListCreationFromParaSelection()
@@ -56,15 +55,19 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperLis
     {
         $this->selectText('VmumV');
 
-        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_unorderedList.png');
+        $this->clickTopToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_unorderedList.png');
+        $this->assertHTMLMatch('<ul><li>XabcX uuuuuu. VmumV</li></ul><p>cPOc ccccc dddd. TicT</p><p>ajhsd sjsjwi hhhh:</p><ul><li>aaa bbbbb ccccc</li><li>4 oNo templates</li><li>Audit XuT content</li><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ul><h2>SoD</h2>');
+
+        $this->selectText('VmumV');
         $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_outdent.png');
         $this->assertIconStatusesCorrect(TRUE, TRUE, NULL, NULL);
+        $this->assertHTMLMatch('<p>XabcX uuuuuu. VmumV</p><p>cPOc ccccc dddd. TicT</p><p>ajhsd sjsjwi hhhh:</p><ul><li>aaa bbbbb ccccc</li><li>4 oNo templates</li><li>Audit XuT content</li><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ul><h2>SoD</h2>');
 
     }//end testOutdentTextSelection()
 
 
     /**
-     * Test that outdent works for text selection using shortcut.
+     * Test that outdent works for the first item in the list using the keyboard shortcut.
      *
      * @return void
      */
@@ -72,18 +75,13 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperLis
     {
         $this->selectText('XabcX', 'TicT');
 
-        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_unorderedList.png');
+        $this->clickTopToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_unorderedList.png');
         sleep(1);
+        $this->assertHTMLMatch('<ul><li>XabcX uuuuuu. VmumV</li><li>cPOc ccccc dddd. TicT</li></ul><p>ajhsd sjsjwi hhhh:</p><ul><li>aaa bbbbb ccccc</li><li>4 oNo templates</li><li>Audit XuT content</li><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ul><h2>SoD</h2>');
 
         $this->selectText('VmumV');
-
         $this->keyDown('Key.SHIFT + Key.TAB');
-
-        $this->assertHasHTML(
-            '<p>XabcX uuuuuu. VmumV</p><ul><li>cPOc ccccc dddd. TicT</li></ul><p>ZnnZ aaaa bbbb. YepeY</p>',
-            0,
-            'Outdent of first item in the list should convert it to P tag.'
-        );
+        $this->assertHTMLMatch('<p>XabcX uuuuuu. VmumV</p><ul><li>cPOc ccccc dddd. TicT</li></ul><p>ajhsd sjsjwi hhhh:</p><ul><li>aaa bbbbb ccccc</li><li>4 oNo templates</li><li>Audit XuT content</li><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ul><h2>SoD</h2>');
 
     }//end testOutdentFirstItemSelectionShortcut()
 
@@ -97,57 +95,77 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperLis
     {
         $this->selectText('XabcX', 'TicT');
 
-        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_unorderedList.png');
+        $this->clickTopToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_unorderedList.png');
         sleep(1);
+        $this->assertHTMLMatch('<ul><li>XabcX uuuuuu. VmumV</li><li>cPOc ccccc dddd. TicT</li></ul><p>ajhsd sjsjwi hhhh:</p><ul><li>aaa bbbbb ccccc</li><li>4 oNo templates</li><li>Audit XuT content</li><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ul><h2>SoD</h2>');
 
         $this->selectText('TicT');
-
         $this->keyDown('Key.SHIFT + Key.TAB');
-
-        $this->assertHasHTML(
-            '<ul><li>XabcX uuuuuu. VmumV</li></ul><p>cPOc ccccc dddd. TicT</p><p>ZnnZ aaaa bbbb. YepeY</p>',
-            0,
-            'Outdent of first item in the list should convert it to P tag.'
-        );
+        $this->assertHTMLMatch('<ul><li>XabcX uuuuuu. VmumV</li></ul><p>cPOc ccccc dddd. TicT</p><p>ajhsd sjsjwi hhhh:</p><ul><li>aaa bbbbb ccccc</li><li>4 oNo templates</li><li>Audit XuT content</li><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ul><h2>SoD</h2>');
 
     }//end testOutdentLastItemSelectionShortcut()
 
 
     /**
-     * Test that outdent works for text selection using shortcut.
+     * Test that outdent works for the third list item and then its added back to the list when you click the unordered list icon.
      *
      * @return void
      */
-    public function testIndentFirstItemSelectionShortcut()
+    public function testOutdentThirdListItemAndAddBackToList()
+    {
+        $dir = dirname(__FILE__).'/Images/';
+
+        $textLoc = $this->find('XuT');
+        $this->click($textLoc);
+
+        $this->clickTopToolbarButton($dir.'toolbarIcon_outdent.png');
+        sleep(1);
+        $this->selectText('XuT');
+        $this->assertIconStatusesCorrect(TRUE, TRUE, NULL, NULL);
+
+        $this->assertHTMLMatch('<p>XabcX uuuuuu. VmumV</p><p>cPOc ccccc dddd. TicT</p><p>ajhsd sjsjwi hhhh:</p><ul><li>aaa bbbbb ccccc</li><li>4 oNo templates</li></ul><p>Audit XuT content</p><ul><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ul><h2>SoD</h2>');
+
+        $this->click($textLoc);
+        sleep(1);
+        $this->clickTopToolbarButton($dir.'toolbarIcon_unorderedList.png');
+        $this->assertIconStatusesCorrect('active', TRUE, TRUE, TRUE);
+        $this->assertHTMLMatch('<p>XabcX uuuuuu. VmumV</p><p>cPOc ccccc dddd. TicT</p><p>ajhsd sjsjwi hhhh:</p><ul><li>aaa bbbbb ccccc</li><li>4 oNo templates</li><li>Audit XuT content</li><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ul><h2>SoD</h2>');
+
+    }//end testOutdentThirdListItemAndAddBackToList()
+
+
+    /**
+     * Test that you cannot indent the first item in the list.
+     *
+     * @return void
+     */
+    public function testCannotIndentFirstItemInList()
     {
         $this->selectText('XabcX', 'TicT');
 
         $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_unorderedList.png');
         sleep(1);
+        $this->selectText('VmumV');
+        $this->assertIconStatusesCorrect('active', TRUE, FALSE, TRUE);
 
         $this->selectText('VmumV');
-
         // Make sure multiple tabs dont cause issues.
         $this->keyDown('Key.TAB');
         $this->keyDown('Key.TAB');
         $this->keyDown('Key.TAB');
         $this->keyDown('Key.TAB');
 
-        $this->assertHasHTML(
-            '<ul><li>XabcX uuuuuu. VmumV</li><li>cPOc ccccc dddd. TicT</li></ul><p>ZnnZ aaaa bbbb. YepeY</p>',
-            0,
-            'Indent of first item should do nothing.'
-        );
+        $this->assertHTMLMatch('<ul><li>XabcX uuuuuu. VmumV</li><li>cPOc ccccc dddd. TicT</li></ul><p>ajhsd sjsjwi hhhh:</p><ul><li>aaa bbbbb ccccc</li><li>4 oNo templates</li><li>Audit XuT content</li><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ul><h2>SoD</h2>');
 
-    }//end testIndentFirstItemSelectionShortcut()
+    }//end testCannotIndentFirstItemInList()
 
 
     /**
-     * Test that outdent works for text selection using shortcut.
+     * Test that indent works for last item in the list using the shortcut.
      *
      * @return void
      */
-    public function testIndentLastItemSelectionShortcut()
+    public function testIndentLastItemInTheListUsingShortcut()
     {
         $this->selectText('XabcX', 'TicT');
 
@@ -155,16 +173,38 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperLis
         sleep(1);
 
         $this->selectText('TicT');
+        $this->assertIconStatusesCorrect('active', TRUE, TRUE, TRUE);
 
+        $this->selectText('TicT');
         $this->keyDown('Key.TAB');
 
-        $this->assertHasHTML(
-            '<ul><li>XabcX uuuuuu. VmumV<ul><li>cPOc ccccc dddd. TicT</li></ul></li></ul><p>ZnnZ aaaa bbbb. YepeY</p>',
-            0,
-            'Indent of last item should indent the last item.'
-        );
+        $this->assertHTMLMatch('<ul><li>XabcX uuuuuu. VmumV<ul><li>cPOc ccccc dddd. TicT</li></ul></li></ul><p>ajhsd sjsjwi hhhh:</p><ul><li>aaa bbbbb ccccc</li><li>4 oNo templates</li><li>Audit XuT content</li><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ul><h2>SoD</h2>');
 
-    }//end testIndentLastItemSelectionShortcut()
+
+    }//end testIndentLastItemInTheListUsingShortcut()
+
+
+    /**
+     * Test that indent works for last item in the list using the shortcut.
+     *
+     * @return void
+     */
+    public function testIndentLastItemInTheListUsingIndentIcon()
+    {
+        $this->selectText('XabcX', 'TicT');
+
+        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_unorderedList.png');
+        sleep(1);
+
+        $this->selectText('TicT');
+        $this->assertIconStatusesCorrect('active', TRUE, TRUE, TRUE);
+
+        $this->selectText('TicT');
+        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_indent.png');
+
+        $this->assertHTMLMatch('<ul><li>XabcX uuuuuu. VmumV<ul><li>cPOc ccccc dddd. TicT</li></ul></li></ul><p>ajhsd sjsjwi hhhh:</p><ul><li>aaa bbbbb ccccc</li><li>4 oNo templates</li><li>Audit XuT content</li><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ul><h2>SoD</h2>');
+
+    }//end testIndentLastItemInTheListUsingIndentIcon()
 
 
     /**
@@ -178,17 +218,13 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperLis
 
         $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_unorderedList.png');
         sleep(1);
+        $this->assertHTMLMatch('<ul><li>XabcX uuuuuu. VmumV</li><li>cPOc ccccc dddd. TicT</li></ul><p>ajhsd sjsjwi hhhh:</p><ul><li>aaa bbbbb ccccc</li><li>4 oNo templates</li><li>Audit XuT content</li><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ul><h2>SoD</h2>');
 
         $this->selectText('TicT');
 
         $this->keyDown('Key.TAB');
         $this->keyDown('Key.SHIFT + Key.TAB');
-
-        $this->assertHasHTML(
-            '<ul><li>XabcX uuuuuu. VmumV</li><li>cPOc ccccc dddd. TicT</li></ul><p>ZnnZ aaaa bbbb. YepeY</p>',
-            0,
-            'Outdent of 2nd level list item should work.'
-        );
+        $this->assertHTMLMatch('<ul><li>XabcX uuuuuu. VmumV</li><li>cPOc ccccc dddd. TicT</li></ul><p>ajhsd sjsjwi hhhh:</p><ul><li>aaa bbbbb ccccc</li><li>4 oNo templates</li><li>Audit XuT content</li><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ul><h2>SoD</h2>');
 
     }//end testIndentOutdentLastItemSelectionShortcut()
 
@@ -256,7 +292,7 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperLis
                      array(
                       'ul'      => array(
                                     array('content' => '4 <strong>oNo templates</strong>'),
-                                    array('content' => '<strong>Audit for content</strong>'),
+                                    array('content' => '<strong>Audit XuT content</strong>'),
                                     array('content' => '<strong>Accessibility audit report</strong>'),
                                     array('content' => '<strong>Recommendations action</strong> plan'),
                                    ),
@@ -281,7 +317,7 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperLis
                                     array('content' => '<strong>Accessibility audit report</strong>'),
                                     array('content' => '<strong>Recommendations action</strong> plan'),
                                    ),
-                      'content' => 'Audit for content',
+                      'content' => 'Audit XuT content',
                      ),
                      array('content' => 'Squiz Matrix guide'),
                     );
@@ -289,6 +325,41 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperLis
         $this->assertListEqual($expected, TRUE);
 
     }//end testIndentSelectionKeptStyleApplied()
+
+
+    /**
+     * Test that when you click the unordered list icon for one item in the list, that item is removed
+     *
+     * @return void
+     */
+    public function testRemoveOneListItemWhenClickUnorderedListIcon()
+    {
+        $this->selectText('XuT');
+
+        $this->clickTopToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_unorderedList_active.png');
+        $this->assertIconStatusesCorrect(TRUE, TRUE, FALSE, FALSE);
+        $this->assertHTMLMatch('<p>XabcX uuuuuu. VmumV</p><p>cPOc ccccc dddd. TicT</p><p>ajhsd sjsjwi hhhh:</p><ul><li>aaa bbbbb ccccc</li><li>4 oNo templates</li></ul><p>Audit XuT content</p><ul><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ul><h2>SoD</h2>');
+
+    }//end testRemoveOneListItemWhenClickUnorderedListIcon()
+
+
+    /**
+     * Test that you can use the unordered list icon to remove an item and then add it back to the list.
+     *
+     * @return void
+     */
+    public function testRemoveAndAddListItemUsingUnorderedListIcon()
+    {
+        $this->selectText('XuT');
+
+        $this->clickTopToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_unorderedList_active.png');
+        $this->assertHTMLMatch('<p>XabcX uuuuuu. VmumV</p><p>cPOc ccccc dddd. TicT</p><p>ajhsd sjsjwi hhhh:</p><ul><li>aaa bbbbb ccccc</li><li>4 oNo templates</li></ul><p>Audit XuT content</p><ul><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ul><h2>SoD</h2>');
+
+        $this->selectText('XuT');
+        $this->clickTopToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_unorderedList.png');
+        $this->assertHTMLMatch('<p>XabcX uuuuuu. VmumV</p><p>cPOc ccccc dddd. TicT</p><p>ajhsd sjsjwi hhhh:</p><ul><li>aaa bbbbb ccccc</li><li>4 oNo templates</li><li>Audit XuT content</li><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ul><h2>SoD</h2>');
+
+    }//end testRemoveOneListItemWhenClickUnorderedListIcon()
 
 
     /**
@@ -374,28 +445,37 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperLis
 
 
     /**
-     * Test keyboard navigation.
+     * Test that the list is turned into separate paragraphs when you select all items and press the outdent icon.
      *
      * @return void
      */
-    public function testListToPara()
+    public function testListToParaUsingOutdentIcon()
     {
         $this->selectText('oNo');
         $this->selectInlineToolbarLineageItem(0);
 
         sleep(1);
         $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_outdent.png');
+        $this->assertHTMLMatch('<p>XabcX uuuuuu. VmumV</p><p>cPOc ccccc dddd. TicT</p><p>ajhsd sjsjwi hhhh:</p><p>aaa bbbbb ccccc</p><p>4 oNo templates</p><p>Audit XuT content</p><p>Accessibility audit report</p><p>Recommendations action plan</p><p>Squiz Matrix guide</p><h2>SoD</h2>');
 
-        $actTagCounts = $this->execJS('gTagCounts("p,ul,ol")');
-        $expected     = array(
-                         'p'  => 11,
-                         'ul' => 0,
-                         'ol' => 0,
-                        );
+    }//end testListToParaUsingOutdentIcon()
 
-        $this->assertEquals($expected, $actTagCounts, 'Content tag counts did not match');
 
-    }//end testListToPara()
+    /**
+     * Test that the list is turned into separate paragraphs when you select all items and press the unordered list icon.
+     *
+     * @return void
+     */
+    public function testListToParaUsingUnorderedListIcon()
+    {
+        $this->selectText('oNo');
+        $this->selectInlineToolbarLineageItem(0);
+
+        sleep(1);
+        $this->clickTopToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_unorderedList_active.png');
+        $this->assertHTMLMatch('<p>XabcX uuuuuu. VmumV</p><p>cPOc ccccc dddd. TicT</p><p>ajhsd sjsjwi hhhh:</p><p>aaa bbbbb ccccc</p><p>4 oNo templates</p><p>Audit XuT content</p><p>Accessibility audit report</p><p>Recommendations action plan</p><p>Squiz Matrix guide</p><h2>SoD</h2>');
+
+    }//end testListToParaUsingOutdentIcon()
 
 
     /**
@@ -403,11 +483,11 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperLis
      *
      * @return void
      */
-    public function testNewItemCreation()
+    public function testNewItemCreationForUnorderedLists()
     {
         $this->selectText('oNo');
-        $this->keyDown('Key.RIGHT + Key.RIGHT');
-        $this->keyDown('Key.CMD + Key.RIGHT');
+        $this->selectInlineToolbarLineageItem(1);
+        $this->keyDown('Key.RIGHT');
         $this->keyDown('Key.ENTER');
         $this->type('Test');
         $this->keyDown('Key.ENTER');
@@ -439,7 +519,7 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperLis
                       'content' => 'Test',
                      ),
                      array('content' => 'Test 5'),
-                     array('content' => 'Audit for content'),
+                     array('content' => 'Audit XuT content'),
                      array('content' => 'Accessibility audit report'),
                      array('content' => 'Recommendations action plan'),
                      array('content' => 'Squiz Matrix guide'),
@@ -469,7 +549,7 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperLis
 
         $expected = array(
                      array('content' => 'aaa bbbbb ccccc'),
-                     array('content' => 'Audit for content'),
+                     array('content' => 'Audit XuT content'),
                      array('content' => 'Accessibility audit report'),
                      array('content' => 'Recommendations action plan'),
                      array('content' => 'Squiz Matrix guide'),
@@ -501,7 +581,7 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperLis
 
         $expected = array(
                      array('content' => 'aaa bbbbb ccccc'),
-                     array('content' => 'Audit for content'),
+                     array('content' => 'Audit XuT content'),
                      array('content' => 'Accessibility audit report'),
                      array('content' => 'Recommendations action plan'),
                      array('content' => 'Squiz Matrix guide'),
@@ -525,7 +605,7 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperLis
         $this->keyDown('Key.TAB');
 
         sleep(1);
-        $this->selectText('oNo');
+        $this->selectText('XuT');
 
         $this->selectInlineToolbarLineageItem(3);
         sleep(1);
@@ -537,18 +617,7 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperLis
         $this->keyDown('Key.BACKSPACE');
         sleep(1);
 
-        $expected = array(
-                     array(
-                      'ul'      => array(
-                                    array('content' => 'Audit for content'),
-                                   ),
-                      'content' => 'aaa bbbbb ccccc',
-                     ),
-                     array('content' => 'Accessibility audit report'),
-                     array('content' => 'Recommendations action plan'),
-                     array('content' => 'Squiz Matrix guide'),
-                    );
-        $this->assertListEqual($expected, TRUE);
+        $this->assertHTMLMatch('<p>XabcX uuuuuu. VmumV</p><p>cPOc ccccc dddd. TicT</p><p>ajhsd sjsjwi hhhh:</p><ul><li>aaa bbbbb ccccc<ul><li>4 oNo templates</li></ul></li><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ul><h2>SoD</h2>');
 
     }//end testRemoveSubListItemFromList()
 
@@ -571,14 +640,7 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperLis
         $this->keyDown('Key.BACKSPACE');
 
         sleep(1);
-        $actTagCounts = $this->execJS('gTagCounts("p,ul,ol")');
-        $expected     = array(
-                         'p'  => 5,
-                         'ul' => 0,
-                         'ol' => 0,
-                        );
-
-        $this->assertEquals($expected, $actTagCounts, 'Content tag counts did not match');
+        $this->assertHTMLMatch('<p>XabcX uuuuuu. VmumV</p><p>cPOc ccccc dddd. TicT</p><p>ajhsd sjsjwi hhhh:</p><h2>SoD</h2>');
 
     }//end testRemoveWholeList()
 
@@ -588,24 +650,17 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperLis
      *
      * @return void
      */
-    public function testConvertListType()
+    public function testConvertListTypeFromUnOrderedToOrderedList()
     {
         $this->selectText('oNo');
         $this->selectInlineToolbarLineageItem(0);
 
         sleep(1);
-        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_orderedList.png');
+        $this->clickTopToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_orderedList.png');
 
-        $actTagCounts = $this->execJS('gTagCounts("p,ul,ol")');
-        $expected     = array(
-                         'p'  => 5,
-                         'ul' => 0,
-                         'ol' => 1,
-                        );
+        $this->assertHTMLMatch('<p>XabcX uuuuuu. VmumV</p><p>cPOc ccccc dddd. TicT</p><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa bbbbb ccccc</li><li>4 oNo templates</li><li>Audit XuT content</li><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ol><h2>SoD</h2>');
 
-        $this->assertEquals($expected, $actTagCounts, 'Content tag counts did not match');
-
-    }//end testConvertListType()
+    }//end testConvertListTypeFromUnOrderedToOrderedList()
 
 
     /**
@@ -613,21 +668,15 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperLis
      *
      * @return void
      */
-    public function testConvertListTypeWithItemSelection()
+    public function testConvertListFromUnorderedToOrderedWithItemSelection()
     {
-        $this->selectText('Matrix');
-        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_unorderedList.png');
+        $this->selectText('XuT');
+        $this->clickTopToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_orderedList.png');
 
-        $actTagCounts = $this->execJS('gTagCounts("p,ul,ol")');
-        $expected     = array(
-                         'p'  => 5,
-                         'ul' => 0,
-                         'ol' => 1,
-                        );
+        $this->assertHTMLMatch('<p>XabcX uuuuuu. VmumV</p><p>cPOc ccccc dddd. TicT</p><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa bbbbb ccccc</li><li>4 oNo templates</li><li>Audit XuT content</li><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ol><h2>SoD</h2>');
 
-        $this->assertEquals($expected, $actTagCounts, 'Content tag counts did not match');
 
-    }//end testConvertListTypeWithItemSelection()
+    }//end testConvertListFromUnorderedToOrderedWithItemSelection()
 
 
     /**
@@ -635,7 +684,7 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperLis
      *
      * @return void
      */
-    public function testConvertListTypeWithSubList()
+    public function testConvertListFromUnorderedToOrderedWithSubList()
     {
         $this->selectText('oNo');
         $this->keyDown('Key.RIGHT');
@@ -644,15 +693,15 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperLis
         $this->keyDown('Key.TAB');
 
         sleep(1);
-        $this->selectText('oNo');
+        $this->selectText('XuT');
         $this->selectInlineToolbarLineageItem(0);
-        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_orderedList.png');
+        $this->clickTopToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_orderedList.png');
 
         $expected = array(
                      array(
                       'ul'      => array(
                                     array('content' => '4 oNo templates'),
-                                    array('content' => 'Audit for content'),
+                                    array('content' => 'Audit XuT content'),
                                    ),
                       'content' => 'aaa bbbbb ccccc',
                      ),
@@ -664,16 +713,10 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperLis
         $this->assertListEqual($expected, TRUE);
 
         sleep(1);
-        $actTagCounts = $this->execJS('gTagCounts("p,ul,ol")');
-        $expected     = array(
-                         'p'  => 5,
-                         'ul' => 1,
-                         'ol' => 1,
-                        );
+        $this->assertHTMLMatch('<p>XabcX uuuuuu. VmumV</p><p>cPOc ccccc dddd. TicT</p><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa bbbbb ccccc<ul><li>4 oNo templates</li><li>Audit XuT content</li></ul></li><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ol><h2>SoD</h2>');
 
-        $this->assertEquals($expected, $actTagCounts, 'Content tag counts did not match');
 
-    }//end testConvertListTypeWithSubList()
+    }//end testConvertListFromUnorderedToOrderedWithSubList()
 
 
     /**
@@ -683,42 +726,20 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperLis
      */
     public function testConvertSubListType()
     {
-        $this->selectText('Matrix');
+        $this->selectText('XuT');
         $this->keyDown('Key.RIGHT');
         $this->keyDown('Key.TAB');
         $this->keyDown('Key.UP');
         $this->keyDown('Key.TAB');
 
-        $this->selectText('Matrix');
+        $this->selectText('XuT');
         $this->selectInlineToolbarLineageItem(2);
 
         sleep(1);
-        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_orderedList.png');
-
-        $expected = array(
-                     array('content' => 'aaa bbbbb ccccc'),
-                     array('content' => '4 oNo templates'),
-                     array('content' => 'Audit for content'),
-                     array(
-                      'ol'      => array(
-                                    array('content' => 'Recommendations action plan'),
-                                    array('content' => 'Squiz Matrix guide'),
-                                   ),
-                      'content' => 'Accessibility audit report',
-                     ),
-                    );
-
-        $this->assertListEqual($expected, TRUE);
+        $this->clickTopToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_orderedList.png');
 
         sleep(1);
-        $actTagCounts = $this->execJS('gTagCounts("p,ul,ol")');
-        $expected     = array(
-                         'p'  => 5,
-                         'ul' => 1,
-                         'ol' => 1,
-                        );
-
-        $this->assertEquals($expected, $actTagCounts, 'Content tag counts did not match');
+        $this->assertHTMLMatch('<p>XabcX uuuuuu. VmumV</p><p>cPOc ccccc dddd. TicT</p><p>ajhsd sjsjwi hhhh:</p><ul><li>aaa bbbbb ccccc<ol><li>4 oNo templates</li><li>Audit XuT content</li></ol></li><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ul><h2>SoD</h2>');
 
     }//end testConvertSubListType()
 
