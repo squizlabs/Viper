@@ -27,7 +27,7 @@ MatrixLinkPlugin.prototype = {
         // Insert anchor row after URL field.
         var urlField    = tools.getItem(idPrefix + ':url').element;
         var assetPicker = tools.createButton(idPrefix + ':assetPicker', '', 'Pick Asset', 'ees-target', function() {
-            self.pickAsset();
+            self.pickAsset(idPrefix);
         });
         dfx.insertAfter(urlField, assetPicker);
 
@@ -56,7 +56,7 @@ MatrixLinkPlugin.prototype = {
             }
 
             tools.getItem(idPrefix + ':url').setValue(urlValue);
-        }
+        }//end if
 
         // Create anchor field.
         var anchor = tools.createTextbox(idPrefix + ':anchor', 'Anchor', anchorValue, function() {
@@ -87,7 +87,7 @@ MatrixLinkPlugin.prototype = {
         });
 
         // The include summary checkbox.
-        var includeSummary    = tools.createCheckbox(idPrefix + ':includeSummary', 'Include Summary', incSummary, function() {
+        var includeSummary = tools.createCheckbox(idPrefix + ':includeSummary', 'Include Summary', incSummary, function() {
             self.updateLink(idPrefix);
         });
         var includeSummaryRow = tools.createRow(idPrefix + ':includeSummaryRow', 'includeSummaryRow');
@@ -98,6 +98,7 @@ MatrixLinkPlugin.prototype = {
         dfx.insertBefore(newWindowRow, includeSummaryRow);
 
         return contents;
+
     },
 
     updateLinkAttributes: function(link, idPrefix)
@@ -169,15 +170,46 @@ MatrixLinkPlugin.prototype = {
             tools.getItem('ViperLinkPlugin:vtp:includeSummary').setValue(incSummary);
         } else {
             dfx.removeClass(main, 'internalLink');
-        }
+        }//end if
 
     },
 
-    pickAsset: function()
+    /**
+     * Pick an asset from the asset finder
+     * @param {string} idPrefix         The prefix assigned to the plugin
+     */
+    pickAsset: function(idPrefix)
     {
-        console.error('TODO: Show an asset picker.');
-        // TODO: Show an asset picker.
-        // Once the asset picker is closed populate the url field.
+        var tools    = this.viper.ViperTools;
+        var urlField = tools.getItem(idPrefix + ':url').element;
+        EasyEditAssetManager.getCurrentAsset(function(asset){
+            EasyEditAssetFinder.init({
+                focusAssetId: asset.id,
+                callback: function(selectedAsset){
+                    tools.getItem(idPrefix + ':url').setValue(selectedAsset.id, false);
+                }
+            });
+        });
+
+    },
+
+    /**
+     * Check to see if the element clicked is a part of the plugin. Here we need to
+     * let Viper know that anything in the asset finder launched is a part of the plugin
+     * @param {object} element      The clicked element
+     */
+    isPluginElement: function(element)
+    {
+        var assetFinderOverlay = dfx.getId('ees_assetFinderOverlay');
+        if (element !== this._toolbar
+            && dfx.isChildOf(element, this._toolbar) === false
+            && dfx.isChildOf(element, assetFinderOverlay.get(0)) === false
+        ) {
+            return false;
+        }
+
+        return true;
+
     }
 
 };

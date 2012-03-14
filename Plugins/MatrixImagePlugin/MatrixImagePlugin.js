@@ -37,11 +37,42 @@ MatrixImagePlugin.prototype = {
 
     },
 
+    /**
+     * Pick an asset from the asset finder
+     * @param {string} idPrefix         The prefix assigned to the plugin
+     */
     pickAsset: function()
     {
-        console.error('TODO: Show an asset picker.');
-        // TODO: Show an asset picker.
-        // Once the asset picker is closed populate the url field.
+        var tools    = this.viper.ViperTools;
+        var urlField = tools.getItem('ViperImagePlugin:urlInput');
+        EasyEditAssetManager.getCurrentAsset(function(asset){
+            EasyEditAssetFinder.init({
+                focusAssetId: asset.id,
+                callback: function(selectedAsset){
+                    urlField.setValue('./?a=' + selectedAsset.id,false);
+                }
+            });
+        });
+
+    },
+
+    /**
+     * Check to see if the element clicked is a part of the plugin. Here we need to
+     * let Viper know that anything in the asset finder launched is a part of the plugin
+     * @param {object} element      The clicked element
+     */
+    isPluginElement: function(element)
+    {
+        var assetFinderOverlay = dfx.getId('ees_assetFinderOverlay');
+        if (element !== this._toolbar
+            && dfx.isChildOf(element, this._toolbar) === false
+            && dfx.isChildOf(element, assetFinderOverlay.get(0)) === false
+        ) {
+            return false;
+        }
+
+        return true;
+
     }
 
 };
