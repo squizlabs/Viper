@@ -5,18 +5,18 @@
     <title>Viper - Simple Example</title>
     <link rel="stylesheet" media="screen" href="main.css">
     <link rel="stylesheet" media="screen" href="../../Css/viper_tools.ees.css">
-    <script type="text/javascript" src="../../DfxJSLib/dfx.js"></script>
-    <script type="text/javascript" src="../../Viper-matrix.js"></script>
+    <link rel="stylesheet" media="screen" href="../../build/viper.css" />
+    <script type="text/javascript" src="../../build/viper.js"></script>
     <script type="text/javascript">
         var viper = null;
-        ViperReadyCallback = function() {
+        dfx.addLoadEvent(function() {
             viper = new Viper('matrixViper');
             viper.getPluginManager().setPlugins(['ViperCoreStylesPlugin', 'ViperKeyboardEditorPlugin', 'ViperInlineToolbarPlugin', 'ViperHistoryPlugin', 'ViperListPlugin', 'ViperFormatPlugin', 'ViperToolbarPlugin', 'ViperTableEditorPlugin', 'ViperCopyPastePlugin', 'MatrixImagePlugin', 'MatrixLinkPlugin', 'ViperAccessibilityPlugin', 'ViperSourceViewPlugin', 'ViperSearchReplacePlugin', 'ViperLangToolsPlugin', 'ViperCharMapPlugin']);
             viper.setEditableElement(document.getElementById('content'));
 
             var buttons = [['bold', 'italic', 'subscript', 'superscript', 'strikethrough', 'class'], 'removeFormat', ['justify', 'formats', 'headings'], ['undo', 'redo'], ['unorderedList', 'orderedList', 'indentList', 'outdentList'], 'insertTable', 'image', 'hr', ['insertLink', 'removeLink', 'anchor'], 'insertCharacter', 'searchReplace', 'langTools', 'accessibility', 'sourceEditor'];
             viper.getPluginManager().setPluginSettings('ViperToolbarPlugin', {buttons: buttons});
-        };
+        });
     </script>
 </head>
 <body spellcheck="false">
