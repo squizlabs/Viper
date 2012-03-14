@@ -1,5 +1,6 @@
 function MatrixLinkPlugin(viper)
 {
+    dfx.inherits('MatrixLinkPlugin', 'ViperLinkPlugin');
     ViperLinkPlugin.call(this, viper);
 
 }
@@ -213,5 +214,3 @@ MatrixLinkPlugin.prototype = {
     }
 
 };
-
-dfx.inherits('MatrixLinkPlugin', 'ViperLinkPlugin', true);

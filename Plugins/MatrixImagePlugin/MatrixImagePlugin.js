@@ -1,5 +1,6 @@
 function MatrixImagePlugin(viper)
 {
+    dfx.inherits('MatrixImagePlugin', 'ViperImagePlugin');
     ViperImagePlugin.call(this, viper);
 
 }
@@ -76,5 +77,3 @@ MatrixImagePlugin.prototype = {
     }
 
 };
-
-dfx.inherits('MatrixImagePlugin', 'ViperImagePlugin', true);
