@@ -825,7 +825,7 @@ ViperInlineToolbarPlugin.prototype = {
         range.setEnd(last, last.data.length);
 
         ViperSelection.addRange(range);
-        viper.fireSelectionChanged(range, true);
+        this.viper.fireSelectionChanged(range, true);
 
         // Update the position of the toolbar vertically only.
         this._updatePosition(range, true);
@@ -840,7 +840,7 @@ ViperInlineToolbarPlugin.prototype = {
         range.setStart(this._originalRange.startContainer, this._originalRange.startOffset);
         range.setEnd(this._originalRange.endContainer, this._originalRange.endOffset);
         ViperSelection.addRange(range);
-        viper.fireSelectionChanged(range);
+        this.viper.fireSelectionChanged(range);
         this._updatePosition(range, true);
         this._updateSubSectionArrowPos();
 

@@ -19,7 +19,7 @@
 
 .ViperITP.forTopbar {
     z-index: 1002;
-    position: fixed;
+    position: absolute;
 }
 
 .ViperITP:before {
