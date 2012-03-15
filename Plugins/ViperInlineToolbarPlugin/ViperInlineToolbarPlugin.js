@@ -146,7 +146,13 @@ ViperInlineToolbarPlugin.prototype = {
         }
 
         // Clear the buttons container contents.
-        this._toolsContainer.innerHTML = '';
+        if (this.viper.isBrowser('msie') === true) {
+            while(this._toolsContainer.firstChild) {
+                this._toolsContainer.removeChild(this._toolsContainer.firstChild);
+            }
+        } else {
+            this._toolsContainer.innerHTML = '';
+        }
 
         // Get the button ids and their elements.
         var addedButtons = {};

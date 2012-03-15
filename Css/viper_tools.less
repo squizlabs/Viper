@@ -21,7 +21,7 @@
         filter: ~"alpha(opacity = 50)";
         cursor: default;
     }
-    &.hidden {
+    &.viper-hidden {
         display: none;
     }
 }
@@ -603,7 +603,7 @@
     &:-moz-placeholder {
         .input-placeholder;
     }
-    
+
     .Viper-textbox.disabled & {
         text-decoration: line-through;
         color: #CCC;
@@ -651,7 +651,7 @@
     right: 2px;
     top: 50%;
     margin-top: -9px;
-    
+
     .Viper-textbox.disabled & {
         visibility: hidden;
     }
@@ -725,11 +725,11 @@
             0 1px 0 rgba(255, 255, 255, 0.2),
             1px 0px 0 rgba(0, 0, 0, 0.3) inset,
             -1px 0px 0 rgba(0, 0, 0, 0.3) inset;
-    
+
     .Viper-checkbox.active & {
         background-color: #205caf;
     }
-    
+
 }
 .Viper-checkbox-slider {
     -moz-transition: left 0.2s ease-out;
@@ -744,7 +744,7 @@
     margin-top: -0.65em;
     background-color: #65636b;
     box-shadow: 0 0 2px #000000, 0 1px 0 rgba(255,255,255,0.3) inset;
-    
+
     .Viper-checkbox.active & {
         left: 1.7em;
         background-color: #d9d9de;
@@ -768,11 +768,11 @@
     margin-top: -3px;
     -moz-transition: 0.2s opacity ease-in;
     -webkit-transition: 0.2s opacity ease-in;
-    
+
     .Viper-checkbox.active & {
         opacity: 1;
     }
-    
+
 }
 
 .Viper-checkbox input {

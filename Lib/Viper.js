@@ -442,9 +442,10 @@ Viper.prototype = {
                 ViperSelection.addRange(range);
             }
         } else {
-            content = content.replace(/<(p|div)((\s+\w+(\s*=\s*(?:".*?"|\'.*?\'|[^\'">\s]+))?)+)?\s*>\s+/ig, "<$1$2>");
-            content = content.replace(/\s+<\/(p|div)((\s+\w+(\s*=\s*(?:".*?"|\'.*?\'|[^\'">\s]+))?)+)?\s*>/ig, "</$1$2>");
-            dfx.setHtml(this.element, content);
+            var cleanedContent = this.cleanHTML(content);
+            if (cleanedContent !== content) {
+                dfx.setHtml(this.element, cleanedContent);
+            }
         }
 
     },
@@ -3728,6 +3729,14 @@ Viper.prototype = {
     setAllowCleanDOM: function(allow)
     {
         this._canCleanDom = allow;
+
+    },
+
+    cleanHTML: function(content)
+    {
+        content = content.replace(/<(p|div)((\s+\w+(\s*=\s*(?:".*?"|\'.*?\'|[^\'">\s]+))?)+)?\s*>\s+/ig, "<$1$2>");
+        content = content.replace(/\s+<\/(p|div)((\s+\w+(\s*=\s*(?:".*?"|\'.*?\'|[^\'">\s]+))?)+)?\s*>/ig, "</$1$2>");
+        return content;
 
     },
 
