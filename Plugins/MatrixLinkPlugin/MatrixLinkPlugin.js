@@ -73,8 +73,8 @@ MatrixLinkPlugin.prototype = {
 
         // The URL field needs to change the interface to internal URL interface
         // if the value is an internal URL.
-        tools.setFieldEvent(idPrefix + ':url', 'keyup', function(e) {
-            var urlValue = this.value;
+        this.viper.registerCallback('ViperTools:changed:' + idPrefix + ':url', 'MatrixLinkPlugin', function() {
+            var urlValue = self.viper.ViperTools.getItem(idPrefix + ':url').getValue();
             if (dfx.hasClass(main, 'emailLink') === false) {
                 // Not an email, check if its internal URL.
                 if (self._isInternalLink(urlValue) === true) {
@@ -88,9 +88,7 @@ MatrixLinkPlugin.prototype = {
         });
 
         // The include summary checkbox.
-        var includeSummary = tools.createCheckbox(idPrefix + ':includeSummary', 'Include Summary', incSummary, function() {
-            self.updateLink(idPrefix);
-        });
+        var includeSummary = tools.createCheckbox(idPrefix + ':includeSummary', 'Include Summary', incSummary);
         var includeSummaryRow = tools.createRow(idPrefix + ':includeSummaryRow', 'includeSummaryRow');
         includeSummaryRow.appendChild(includeSummary);
 
@@ -98,7 +96,21 @@ MatrixLinkPlugin.prototype = {
         var newWindowRow = tools.getItem(idPrefix + ':newWindowRow').element;
         dfx.insertBefore(newWindowRow, includeSummaryRow);
 
+        tools.getItem('ViperLinkPlugin:vtp:link').addSubSectionActionWidgets('ViperLinkPlugin:vtp:linkSubSection', ['ViperLinkPlugin:vtp:anchor', 'ViperLinkPlugin:vtp:includeSummary']);
+
         return contents;
+
+    },
+
+    updateInlineToolbar: function(data)
+    {
+        ViperLinkPlugin.prototype.updateInlineToolbar.call(this, data);
+
+        var inlineToolbarPlugin = this.viper.ViperPluginManager.getPlugin('ViperInlineToolbarPlugin');
+        inlineToolbarPlugin.addSubSectionActionWidgets(
+            'ViperLinkPlugin:vitp:link',
+            ['ViperLinkPlugin:vitp:anchor', 'ViperLinkPlugin:vitp:includeSummary']
+        );
 
     },
 
