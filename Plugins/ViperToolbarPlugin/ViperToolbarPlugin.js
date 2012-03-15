@@ -176,7 +176,14 @@ ViperToolbarPlugin.prototype = {
         dfx.setStyle(this._toolbar, 'top', '0px');
         parent.appendChild(this._toolbar);
 
+        this.positionUpdated();
+
+    },
+
+    positionUpdated: function()
+    {
         this.positionBubble();
+        this.viper.fireCallbacks('ViperToolbarPlugin:positionUpdated');
 
     },
 
