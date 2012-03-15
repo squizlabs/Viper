@@ -330,9 +330,14 @@ ViperFormatPlugin.prototype = {
             toolbar.setSubSectionButton('vitpHeadings', prefix + 'heading:subSection');
         }
 
+        var startNode = data.range.getStartNode();
+        var endNode   = data.range.getEndNode();
+        if (!endNode) {
+            endNode = startNode;
+        }
          // Anchor and Class.
         if (selectedNode.nodeType === dfx.ELEMENT_NODE
-            || data.range.getStartNode().parentNode === data.range.getEndNode().parentNode
+            || startNode.parentNode === endNode.parentNode
         ) {
             var anchorBtnActive = false;
             var attrId = this._getAttributeValue('id', selectedNode);
