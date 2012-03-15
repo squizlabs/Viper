@@ -7,7 +7,7 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractViperListP
 
 
     /**
-     * Test that unordered list is added and removed when toolbar icon is clicked.
+     * Test that ordered list is added and removed when toolbar icon is clicked.
      *
      * @return void
      */
@@ -15,15 +15,13 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractViperListP
     {
         $this->selectText('VmumV');
 
-        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_orderedList.png');
-
+        $this->clickTopToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_orderedList.png');
         $this->assertIconStatusesCorrect(TRUE, 'active', FALSE, TRUE);
+        $this->assertHTMLMatch('<ol><li>XabcX uuuuuu. VmumV</li></ol><p>cPOc ccccc dddd. TicT</p><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa bbbbb ccccc</li><li>4 oNo templates</li><li>Audit XuT content</li><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ol><h2>SoD</h2>');
 
         $this->selectText('VmumV');
-
-        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_orderedList_active.png');
+        $this->clickTopToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_unorderedList_active.png');
         sleep(1);
-
         $this->assertIconStatusesCorrect(TRUE, TRUE, NULL, NULL);
 
     }//end testListCreationFromTextSelection()
@@ -38,10 +36,11 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractViperListP
     {
         $this->selectText('XabcX', 'VmumV');
 
-        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_orderedList.png');
+        $this->clickTopToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_orderedList.png');
         $this->assertIconStatusesCorrect(TRUE, 'active', FALSE, TRUE);
+        $this->assertHTMLMatch('<ol><li>XabcX uuuuuu. VmumV</li></ol><p>cPOc ccccc dddd. TicT</p><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa bbbbb ccccc</li><li>4 oNo templates</li><li>Audit XuT content</li><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ol><h2>SoD</h2>');
 
-        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_orderedList_active.png');
+        $this->clickTopToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_orderedList_active.png');
         $this->assertIconStatusesCorrect(TRUE, TRUE, NULL, NULL);
 
     }//end testListCreationFromParaSelection()
@@ -56,9 +55,13 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractViperListP
     {
         $this->selectText('VmumV');
 
-        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_orderedList.png');
+        $this->clickTopToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_orderedList.png');
+        $this->assertHTMLMatch('<ol><li>XabcX uuuuuu. VmumV</li></ol><p>cPOc ccccc dddd. TicT</p><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa bbbbb ccccc</li><li>4 oNo templates</li><li>Audit XuT content</li><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ol><h2>SoD</h2>');
+
+        $this->selectText('VmumV');
         $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_outdent.png');
         $this->assertIconStatusesCorrect(TRUE, TRUE, NULL, NULL);
+        $this->assertHTMLMatch('<p>XabcX uuuuuu. VmumV</p><p>cPOc ccccc dddd. TicT</p><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa bbbbb ccccc</li><li>4 oNo templates</li><li>Audit XuT content</li><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ol><h2>SoD</h2>');
 
     }//end testOutdentTextSelection()
 
@@ -72,18 +75,13 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractViperListP
     {
         $this->selectText('XabcX', 'TicT');
 
-        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_orderedList.png');
+        $this->clickTopToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_orderedList.png');
         sleep(1);
+        $this->assertHTMLMatch('<ol><li>XabcX uuuuuu. VmumV</li><li>cPOc ccccc dddd. TicT</li></ol><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa bbbbb ccccc</li><li>4 oNo templates</li><li>Audit XuT content</li><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ol><h2>SoD</h2>');
 
         $this->selectText('VmumV');
-
         $this->keyDown('Key.SHIFT + Key.TAB');
-
-        $this->assertHasHTML(
-            '<p>XabcX uuuuuu. VmumV</p><ol><li>cPOc ccccc dddd. TicT</li></ol><p>ZnnZ aaaa bbbb. YepeY</p>',
-            0,
-            'Outdent of first item in the list should convert it to P tag.'
-        );
+        $this->assertHTMLMatch('<p>XabcX uuuuuu. VmumV</p><ol><li>cPOc ccccc dddd. TicT</li></ol><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa bbbbb ccccc</li><li>4 oNo templates</li><li>Audit XuT content</li><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ol><h2>SoD</h2>');
 
     }//end testOutdentFirstItemSelectionShortcut()
 
@@ -99,18 +97,42 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractViperListP
 
         $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_orderedList.png');
         sleep(1);
+        $this->assertHTMLMatch('<ol><li>XabcX uuuuuu. VmumV</li><li>cPOc ccccc dddd. TicT</li></ol><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa bbbbb ccccc</li><li>4 oNo templates</li><li>Audit XuT content</li><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ol><h2>SoD</h2>');
 
         $this->selectText('TicT');
-
         $this->keyDown('Key.SHIFT + Key.TAB');
 
-        $this->assertHasHTML(
-            '<ol><li>XabcX uuuuuu. VmumV</li></ol><p>cPOc ccccc dddd. TicT</p><p>ZnnZ aaaa bbbb. YepeY</p>',
-            0,
-            'Outdent of first item in the list should convert it to P tag.'
-        );
+        $this->assertHTMLMatch('<ol><li>XabcX uuuuuu. VmumV</li></ol><p>cPOc ccccc dddd. TicT</p><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa bbbbb ccccc</li><li>4 oNo templates</li><li>Audit XuT content</li><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ol><h2>SoD</h2>');
 
     }//end testOutdentLastItemSelectionShortcut()
+
+
+    /**
+     * Test that outdent works for the third list item and then its added back to the list when you click the ordered list icon.
+     *
+     * @return void
+     */
+    public function testOutdentThirdListItemAndAddBackToList()
+    {
+        $dir = dirname(__FILE__).'/Images/';
+
+        $textLoc = $this->find('XuT');
+        $this->click($textLoc);
+
+        $this->clickTopToolbarButton($dir.'toolbarIcon_outdent.png');
+        sleep(1);
+        $this->selectText('XuT');
+        $this->assertIconStatusesCorrect(TRUE, TRUE, NULL, NULL);
+
+        $this->assertHTMLMatch('<p>XabcX uuuuuu. VmumV</p><p>cPOc ccccc dddd. TicT</p><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa bbbbb ccccc</li><li>4 oNo templates</li></ol><p>Audit XuT content</p><ol><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ol><h2>SoD</h2>');
+
+        $this->click($textLoc);
+        sleep(1);
+        $this->clickTopToolbarButton($dir.'toolbarIcon_orderedList.png');
+        $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
+        $this->assertHTMLMatch('<p>XabcX uuuuuu. VmumV</p><p>cPOc ccccc dddd. TicT</p><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa bbbbb ccccc</li><li>4 oNo templates</li><li>Audit XuT content</li><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ol><h2>SoD</h2>');
+
+    }//end testOutdentThirdListItemAndAddBackToList()
 
 
     /**
@@ -122,7 +144,7 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractViperListP
     {
         $this->selectText('XabcX', 'TicT');
 
-        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_orderedList.png');
+        $this->clickTopToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_orderedList.png');
         sleep(1);
 
         $this->selectText('VmumV');
@@ -133,21 +155,17 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractViperListP
         $this->keyDown('Key.TAB');
         $this->keyDown('Key.TAB');
 
-        $this->assertHasHTML(
-            '<ol><li>XabcX uuuuuu. VmumV</li><li>cPOc ccccc dddd. TicT</li></ol><p>ZnnZ aaaa bbbb. YepeY</p>',
-            0,
-            'Indent of first item should do nothing.'
-        );
+        $this->assertHTMLMatch('<ol><li>XabcX uuuuuu. VmumV</li><li>cPOc ccccc dddd. TicT</li></ol><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa bbbbb ccccc</li><li>4 oNo templates</li><li>Audit XuT content</li><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ol><h2>SoD</h2>');
 
     }//end testIndentFirstItemSelectionShortcut()
 
 
     /**
-     * Test that outdent works for text selection using shortcut.
+     * Test that indent works for last item in the list using the shortcut.
      *
      * @return void
      */
-    public function testIndentLastItemSelectionShortcut()
+    public function testIndentLastItemInTheListUsingShortcut()
     {
         $this->selectText('XabcX', 'TicT');
 
@@ -155,16 +173,38 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractViperListP
         sleep(1);
 
         $this->selectText('TicT');
+        $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
 
+        $this->selectText('TicT');
         $this->keyDown('Key.TAB');
 
-        $this->assertHasHTML(
-            '<ol><li>XabcX uuuuuu. VmumV<ol><li>cPOc ccccc dddd. TicT</li></ol></li></ol><p>ZnnZ aaaa bbbb. YepeY</p>',
-            0,
-            'Indent of last item should indent the last item.'
-        );
+        $this->assertHTMLMatch('<ol><li>XabcX uuuuuu. VmumV<ol><li>cPOc ccccc dddd. TicT</li></ol></li></ol><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa bbbbb ccccc</li><li>4 oNo templates</li><li>Audit XuT content</li><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ol><h2>SoD</h2>');
 
-    }//end testIndentLastItemSelectionShortcut()
+
+    }//end testIndentLastItemInTheListUsingShortcut()
+
+
+    /**
+     * Test that indent works for last item in the list using the indent icon.
+     *
+     * @return void
+     */
+    public function testIndentLastItemInTheListUsingIndentIcon()
+    {
+        $this->selectText('XabcX', 'TicT');
+
+        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_orderedList.png');
+        sleep(1);
+
+        $this->selectText('TicT');
+        $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
+
+        $this->selectText('TicT');
+        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_indent.png');
+
+        $this->assertHTMLMatch('<ol><li>XabcX uuuuuu. VmumV<ol><li>cPOc ccccc dddd. TicT</li></ol></li></ol><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa bbbbb ccccc</li><li>4 oNo templates</li><li>Audit XuT content</li><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ol><h2>SoD</h2>');
+
+    }//end testIndentLastItemInTheListUsingIndentIcon()
 
 
     /**
@@ -178,17 +218,13 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractViperListP
 
         $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_orderedList.png');
         sleep(1);
+        $this->assertHTMLMatch('<ol><li>XabcX uuuuuu. VmumV</li><li>cPOc ccccc dddd. TicT</li></ol><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa bbbbb ccccc</li><li>4 oNo templates</li><li>Audit XuT content</li><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ol><h2>SoD</h2>');
 
         $this->selectText('TicT');
 
         $this->keyDown('Key.TAB');
         $this->keyDown('Key.SHIFT + Key.TAB');
-
-        $this->assertHasHTML(
-            '<ol><li>XabcX uuuuuu. VmumV</li><li>cPOc ccccc dddd. TicT</li></ol><p>ZnnZ aaaa bbbb. YepeY</p>',
-            0,
-            'Outdent of 2nd level list item should work.'
-        );
+        $this->assertHTMLMatch('<ol><li>XabcX uuuuuu. VmumV</li><li>cPOc ccccc dddd. TicT</li></ol><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa bbbbb ccccc</li><li>4 oNo templates</li><li>Audit XuT content</li><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ol><h2>SoD</h2>');
 
     }//end testIndentOutdentLastItemSelectionShortcut()
 
@@ -200,15 +236,11 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractViperListP
      */
     public function testIndentOutdentItems()
     {
-        $rect1 = $this->getBoundingRectangle('li', 1);
-        sleep(1);
-        $rect2 = $this->getBoundingRectangle('li', 4);
-
-        $this->dragDrop($this->getRegionOnPage($rect1), $this->getRegionOnPage($rect2));
+        $this->selectText('oNo', 'action');
         $this->keyDown('Key.TAB');
 
-        $rect3 = $this->getBoundingRectangle('li', 2);
-        $this->dragDrop($this->getRegionOnPage($rect3), $this->getRegionOnPage($rect3));
+        sleep(1);
+        $this->selectText('content');
         $this->keyDown('Key.TAB');
 
         $expected = array(
@@ -261,7 +293,7 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractViperListP
                      array(
                       'ol'      => array(
                                     array('content' => '4 <strong>oNo templates</strong>'),
-                                    array('content' => '<strong>Audit for content</strong>'),
+                                    array('content' => '<strong>Audit XuT content</strong>'),
                                     array('content' => '<strong>Accessibility audit report</strong>'),
                                     array('content' => '<strong>Recommendations action</strong> plan'),
                                    ),
@@ -286,7 +318,7 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractViperListP
                                     array('content' => '<strong>Accessibility audit report</strong>'),
                                     array('content' => '<strong>Recommendations action</strong> plan'),
                                    ),
-                      'content' => 'Audit for content',
+                      'content' => 'Audit XuT content',
                      ),
                      array('content' => 'Squiz Matrix guide'),
                     );
@@ -294,6 +326,41 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractViperListP
         $this->assertListEqual($expected, TRUE);
 
     }//end testIndentSelectionKeptStyleApplied()
+
+
+    /**
+     * Test that when you click the ordered list icon for one item in the list, that item is removed
+     *
+     * @return void
+     */
+    public function testRemoveOneListItemWhenClickOrderedListIcon()
+    {
+        $this->selectText('XuT');
+
+        $this->clickTopToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_unorderedList_active.png');
+        $this->assertIconStatusesCorrect(TRUE, TRUE, FALSE, FALSE);
+        $this->assertHTMLMatch('<p>XabcX uuuuuu. VmumV</p><p>cPOc ccccc dddd. TicT</p><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa bbbbb ccccc</li><li>4 oNo templates</li></ol><p>Audit XuT content</p><ol><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ol><h2>SoD</h2>');
+
+    }//end testRemoveOneListItemWhenClickUnorderedListIcon()
+
+
+    /**
+     * Test that you can use the ordered list icon to remove an item and then add it back to the list.
+     *
+     * @return void
+     */
+    public function testRemoveAndAddListItemUsingOrderedListIcon()
+    {
+        $this->selectText('XuT');
+
+        $this->clickTopToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_unorderedList_active.png');
+        $this->assertHTMLMatch('<p>XabcX uuuuuu. VmumV</p><p>cPOc ccccc dddd. TicT</p><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa bbbbb ccccc</li><li>4 oNo templates</li></ul><p>Audit XuT content</p><ul><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ol><h2>SoD</h2>');
+
+        $this->selectText('XuT');
+        $this->clickTopToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_unorderedList.png');
+        $this->assertHTMLMatch('<p>XabcX uuuuuu. VmumV</p><p>cPOc ccccc dddd. TicT</p><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa bbbbb ccccc</li><li>4 oNo templates</li><li>Audit XuT content</li><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ol><h2>SoD</h2>');
+
+    }//end testRemoveOneListItemWhenClickUnorderedListIcon()
 
 
     /**
@@ -379,28 +446,37 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractViperListP
 
 
     /**
-     * Test keyboard navigation.
+     * Test that the list is turned into separate paragraphs when you select all items and press the outdent icon.
      *
      * @return void
      */
-    public function testListToPara()
+    public function testListToParaUsingOutdentIcon()
     {
         $this->selectText('oNo');
         $this->selectInlineToolbarLineageItem(0);
 
         sleep(1);
         $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_outdent.png');
+        $this->assertHTMLMatch('<p>XabcX uuuuuu. VmumV</p><p>cPOc ccccc dddd. TicT</p><p>ajhsd sjsjwi hhhh:</p><p>aaa bbbbb ccccc</p><p>4 oNo templates</p><p>Audit XuT content</p><p>Accessibility audit report</p><p>Recommendations action plan</p><p>Squiz Matrix guide</p><h2>SoD</h2>');
 
-        $actTagCounts = $this->execJS('gTagCounts("p,ul,ol")');
-        $expected     = array(
-                         'p'  => 11,
-                         'ol' => 0,
-                         'ul' => 0,
-                        );
+    }//end testListToParaUsingOutdentIcon()
 
-        $this->assertEquals($expected, $actTagCounts, 'Content tag counts did not match');
 
-    }//end testListToPara()
+    /**
+     * Test that the list is turned into separate paragraphs when you select all items and press the ordered list icon.
+     *
+     * @return void
+     */
+    public function testListToParaUsingOrderedListIcon()
+    {
+        $this->selectText('oNo');
+        $this->selectInlineToolbarLineageItem(0);
+
+        sleep(1);
+        $this->clickTopToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_unorderedList_active.png');
+        $this->assertHTMLMatch('<p>XabcX uuuuuu. VmumV</p><p>cPOc ccccc dddd. TicT</p><p>ajhsd sjsjwi hhhh:</p><p>aaa bbbbb ccccc</p><p>4 oNo templates</p><p>Audit XuT content</p><p>Accessibility audit report</p><p>Recommendations action plan</p><p>Squiz Matrix guide</p><h2>SoD</h2>');
+
+    }//end testListToParaUsingOrderedListIcon()
 
 
     /**
@@ -411,8 +487,8 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractViperListP
     public function testNewItemCreation()
     {
         $this->selectText('oNo');
-        $this->keyDown('Key.RIGHT + Key.RIGHT');
-        $this->keyDown('Key.CMD + Key.RIGHT');
+        $this->selectInlineToolbarLineageItem(1);
+        $this->keyDown('Key.RIGHT');
         $this->keyDown('Key.ENTER');
         $this->type('Test');
         $this->keyDown('Key.ENTER');
@@ -444,7 +520,7 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractViperListP
                       'content' => 'Test',
                      ),
                      array('content' => 'Test 5'),
-                     array('content' => 'Audit for content'),
+                     array('content' => 'Audit XuT content'),
                      array('content' => 'Accessibility audit report'),
                      array('content' => 'Recommendations action plan'),
                      array('content' => 'Squiz Matrix guide'),
@@ -474,7 +550,7 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractViperListP
 
         $expected = array(
                      array('content' => 'aaa bbbbb ccccc'),
-                     array('content' => 'Audit for content'),
+                     array('content' => 'Audit XuT content'),
                      array('content' => 'Accessibility audit report'),
                      array('content' => 'Recommendations action plan'),
                      array('content' => 'Squiz Matrix guide'),
@@ -506,7 +582,7 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractViperListP
 
         $expected = array(
                      array('content' => 'aaa bbbbb ccccc'),
-                     array('content' => 'Audit for content'),
+                     array('content' => 'Audit XuT content'),
                      array('content' => 'Accessibility audit report'),
                      array('content' => 'Recommendations action plan'),
                      array('content' => 'Squiz Matrix guide'),
@@ -525,10 +601,11 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractViperListP
     {
         $this->selectText('oNo');
         $this->keyDown('Key.TAB');
+        $this->keyDown('Key.RIGHT');
         $this->keyDown('Key.DOWN');
         $this->keyDown('Key.TAB');
 
-        $this->selectText('oNo');
+        $this->selectText('XuT');
 
         $this->selectInlineToolbarLineageItem(3);
         sleep(1);
@@ -539,20 +616,40 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractViperListP
         // Remove the item element.
         $this->keyDown('Key.BACKSPACE');
 
-        $expected = array(
-                     array(
-                      'ol'      => array(
-                                    array('content' => 'Audit for content'),
-                                   ),
-                      'content' => 'aaa bbbbb ccccc',
-                     ),
-                     array('content' => 'Accessibility audit report'),
-                     array('content' => 'Recommendations action plan'),
-                     array('content' => 'Squiz Matrix guide'),
-                    );
-        $this->assertListEqual($expected, TRUE);
+        $this->assertHTMLMatch('<p>XabcX uuuuuu. VmumV</p><p>cPOc ccccc dddd. TicT</p><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa bbbbb ccccc<ol><li>4 oNo templates</li></ol></li><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ol><h2>SoD</h2>');
 
     }//end testRemoveSubListItemFromList()
+
+
+    /**
+     * Test that a sub list with single item is removed from the main list.
+     *
+     * @return void
+     */
+    public function testRemoveSubListItemFromList2()
+    {
+        $this->selectText('oNo');
+        $this->keyDown('Key.TAB');
+        $this->keyDown('Key.RIGHT');
+        $this->keyDown('Key.DOWN');
+        $this->keyDown('Key.TAB');
+
+        sleep(1);
+        $this->selectText('XuT');
+
+        $this->selectInlineToolbarLineageItem(3);
+        sleep(1);
+
+        // Remove whole item contents.
+        $this->keyDown('Key.BACKSPACE');
+
+        // Remove the item element.
+        $this->keyDown('Key.BACKSPACE');
+        sleep(1);
+
+        $this->assertHTMLMatch('<p>XabcX uuuuuu. VmumV</p><p>cPOc ccccc dddd. TicT</p><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa bbbbb ccccc<ol><li>4 oNo templates</li></ol></li><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ol><h2>SoD</h2>');
+
+    }//end testRemoveSubListItemFromList2()
 
 
     /**
@@ -573,14 +670,7 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractViperListP
         // Remove the whole list.
         $this->keyDown('Key.BACKSPACE');
 
-        $actTagCounts = $this->execJS('gTagCounts("p,ul,ol")');
-        $expected     = array(
-                         'p'  => 5,
-                         'ol' => 0,
-                         'ul' => 0,
-                        );
-
-        $this->assertEquals($expected, $actTagCounts, 'Content tag counts did not match');
+       $this->assertHTMLMatch('<p>XabcX uuuuuu. VmumV</p><p>cPOc ccccc dddd. TicT</p><p>ajhsd sjsjwi hhhh:</p><h2>SoD</h2>');
 
     }//end testRemoveWholeList()
 
@@ -590,22 +680,15 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractViperListP
      *
      * @return void
      */
-    public function testConvertListType()
+    public function testConvertListTypeA()
     {
-        $this->selectText('oNo');
+        $this->selectText('XuT');
         $this->selectInlineToolbarLineageItem(0);
 
         sleep(1);
-        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_unorderedList.png');
+        $this->clickTopToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_unorderedList.png');
 
-        $actTagCounts = $this->execJS('gTagCounts("p,ul,ol")');
-        $expected     = array(
-                         'p'  => 5,
-                         'ul' => 1,
-                         'ol' => 0,
-                        );
-
-        $this->assertEquals($expected, $actTagCounts, 'Content tag counts did not match');
+        $this->assertHTMLMatch('<p>XabcX uuuuuu. VmumV</p><p>cPOc ccccc dddd. TicT</p><p>ajhsd sjsjwi hhhh:</p><ul><li>aaa bbbbb ccccc</li><li>4 oNo templates</li><li>Audit XuT content</li><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ul><h2>SoD</h2>');
 
     }//end testConvertListType()
 
@@ -617,17 +700,10 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractViperListP
      */
     public function testConvertListTypeWithItemSelection()
     {
-        $this->selectText('Matrix');
-        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_unorderedList.png');
+        $this->selectText('XuT');
+        $this->clickTopToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_unorderedList.png');
 
-        $actTagCounts = $this->execJS('gTagCounts("p,ul,ol")');
-        $expected     = array(
-                         'p'  => 5,
-                         'ul' => 1,
-                         'ol' => 0,
-                        );
-
-        $this->assertEquals($expected, $actTagCounts, 'Content tag counts did not match');
+        $this->assertHTMLMatch('<p>XabcX uuuuuu. VmumV</p><p>cPOc ccccc dddd. TicT</p><p>ajhsd sjsjwi hhhh:</p><ul><li>aaa bbbbb ccccc</li><li>4 oNo templates</li><li>Audit XuT content</li><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ul><h2>SoD</h2>');
 
     }//end testConvertListTypeWithItemSelection()
 
@@ -646,36 +722,13 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractViperListP
         $this->keyDown('Key.TAB');
 
         sleep(1);
-        $this->selectText('oNo');
+        $this->selectText('XuT');
         $this->selectInlineToolbarLineageItem(0);
-        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_unorderedList.png');
+        $this->clickTopToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_unorderedList.png');
 
-        $expected = array(
-                     array(
-                      'ol'      => array(
-                                    array('content' => '4 oNo templates'),
-                                    array('content' => 'Audit for content'),
-                                   ),
-                      'content' => 'aaa bbbbb ccccc',
-                     ),
-                     array('content' => 'Accessibility audit report'),
-                     array('content' => 'Recommendations action plan'),
-                     array('content' => 'Squiz Matrix guide'),
-                    );
+        $this->assertHTMLMatch('<p>XabcX uuuuuu. VmumV</p><p>cPOc ccccc dddd. TicT</p><p>ajhsd sjsjwi hhhh:</p><ul><li>aaa bbbbb ccccc<ol><li>4 oNo templates</li><li>Audit XuT content</li></ol></li><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ul><h2>SoD</h2>');
 
-        $this->assertListEqual($expected, TRUE);
-
-        sleep(1);
-        $actTagCounts = $this->execJS('gTagCounts("p,ul,ol")');
-        $expected     = array(
-                         'p'  => 5,
-                         'ul' => 1,
-                         'ol' => 1,
-                        );
-
-        $this->assertEquals($expected, $actTagCounts, 'Content tag counts did not match');
-
-    }//end testConvertListTypeWithSubList()
+    }//end testConvertListTypeWithSubList2()
 
 
     /**
@@ -685,42 +738,19 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractViperListP
      */
     public function testConvertSubListType()
     {
-        $this->selectText('Matrix');
+        $this->selectText('XuT');
         $this->keyDown('Key.RIGHT');
         $this->keyDown('Key.TAB');
         $this->keyDown('Key.UP');
         $this->keyDown('Key.TAB');
 
-        $this->selectText('Matrix');
+        $this->selectText('XuT');
         $this->selectInlineToolbarLineageItem(2);
 
         sleep(1);
-        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_unorderedList.png');
+        $this->clickTopToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_unorderedList.png');
 
-        $expected = array(
-                     array('content' => 'aaa bbbbb ccccc'),
-                     array('content' => '4 oNo templates'),
-                     array('content' => 'Audit for content'),
-                     array(
-                      'ul'      => array(
-                                    array('content' => 'Recommendations action plan'),
-                                    array('content' => 'Squiz Matrix guide'),
-                                   ),
-                      'content' => 'Accessibility audit report',
-                     ),
-                    );
-
-        $this->assertListEqual($expected, TRUE);
-
-        sleep(1);
-        $actTagCounts = $this->execJS('gTagCounts("p,ul,ol")');
-        $expected     = array(
-                         'p'  => 5,
-                         'ul' => 1,
-                         'ol' => 1,
-                        );
-
-        $this->assertEquals($expected, $actTagCounts, 'Content tag counts did not match');
+        $this->assertHTMLMatch('<p>XabcX uuuuuu. VmumV</p><p>cPOc ccccc dddd. TicT</p><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa bbbbb ccccc<ul><li>4 oNo templates</li><li>Audit XuT content</li></ul></li><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ol><h2>SoD</h2>');
 
     }//end testConvertSubListType()
 
