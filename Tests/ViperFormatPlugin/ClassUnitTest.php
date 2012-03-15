@@ -329,12 +329,14 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_class_active.png'), 'Class icon in VITP should be active.');
 
         $this->click($this->find($text));
+
+        // Need to add the sleep so that the test passes in Firefox otherwise it doesn't click AbC
+        sleep(1);
+
         $text = 'AbC';
         $this->selectText($text);
         $this->selectInlineToolbarLineageItem(0);
         $this->clickTopToolbarButton($dir.'toolbarIcon_class.png');
-        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_updateChanges_disabled.png'), 'Update Changes button should be disabled.');
-
         $this->type('class');
         $this->clickTopToolbarButton($dir.'toolbarIcon_updateChanges.png');
         $this->assertHTMLMatch('<p class="test">Lorem XuT dolor</p><p class="test">sit amet <strong>WoW</strong></p><p class="class">Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>jumps</strong> OVER the lazy dogggg</p>');
