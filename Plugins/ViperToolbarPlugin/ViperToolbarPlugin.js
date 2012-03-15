@@ -102,7 +102,13 @@ ViperToolbarPlugin.prototype = {
         this._settingButtons = buttons;
 
         // Remove all buttons that were adding by other plugins.
-        this._toolbar.innerHTML = '';
+        if (this.viper.isBrowser('msie') === true) {
+            while(this._toolbar.firstChild) {
+                this._toolbar.removeChild(this._toolbar.firstChild);
+            }
+        } else {
+            this._toolbar.innerHTML = '';
+        }
 
         var buttonsLen = buttons.length;
         for (var i = 0; i < buttonsLen; i++) {
