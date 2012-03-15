@@ -49,17 +49,17 @@ ViperListPlugin.prototype = {
             tools.createButton('unorderedList', '', 'Make Unordered List', 'listUL', function() {
                 var statuses = self._getButtonStatuses(null, true);
                 return self._makeListButtonAction(statuses.list, 'ul');
-            });
+            }, true);
             tools.createButton('orderedList', '', 'Make Ordered List', 'listOL', function() {
                 var statuses = self._getButtonStatuses(null, true);
                 return self._makeListButtonAction(statuses.list, 'ol');
-            });
+            }, true);
             tools.createButton('indentList', '', 'Indent List', 'listIndent', function() {
                 self.tabRange();
-            });
+            }, true);
             tools.createButton('outdentList', '', 'Outdent List', 'listOutdent', function() {
                 self.tabRange(null, true);
-            });
+            }, true);
             tools.addButtonToGroup('unorderedList', 'ViperLinkPlugin:vtp:buttons');
             tools.addButtonToGroup('orderedList', 'ViperLinkPlugin:vtp:buttons');
             tools.addButtonToGroup('indentList', 'ViperLinkPlugin:vtp:buttons');

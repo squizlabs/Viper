@@ -144,7 +144,7 @@ ViperTableEditorPlugin.prototype = {
         if (this.toolbarPlugin) {
             var insertTable = true;
 
-            this.viper.registerCallback('ViperToolbarPlugin:updateToolbar', 'ViperTableEditorPlugin', function(data) {
+            this.viper.registerCallback('ViperToolbarPlugin:enabled', 'ViperTableEditorPlugin', function(data) {
                 self.viper.ViperTools.enableButton('insertTable');
             });
 
@@ -172,7 +172,7 @@ ViperTableEditorPlugin.prototype = {
                 } else {
                     self.toolbarPlugin.toggleBubble('VTEP-bubble');
                 }
-            });
+            }, true);
             this.toolbarPlugin.addButton(button);
 
             // Create the toolbar bubble.

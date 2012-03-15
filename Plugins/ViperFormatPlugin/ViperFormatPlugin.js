@@ -392,15 +392,15 @@ ViperFormatPlugin.prototype = {
 
         // Toolbar buttons.
         var buttonGroup = tools.createButtonGroup(prefix + 'formatAndHeadingButtons');
-        tools.createButton('formats', 'Aa', 'Formats', '');
-        tools.createButton('headings', 'Hh', 'Headings', '');
+        tools.createButton('formats', 'Aa', 'Formats', '', null, true);
+        tools.createButton('headings', 'Hh', 'Headings', '', null, true);
         tools.addButtonToGroup('formats', prefix + 'formatAndHeadingButtons');
         tools.addButtonToGroup('headings', prefix + 'formatAndHeadingButtons');
         toolbar.addButton(buttonGroup);
 
         var buttonGroup = tools.createButtonGroup(prefix + 'anchorAndClassButtons');
-        tools.createButton('anchor', '', 'Anchor ID', 'anchorID');
-        tools.createButton('class', '', 'Class', 'cssClass');
+        tools.createButton('anchor', '', 'Anchor ID', 'anchorID', null, true);
+        tools.createButton('class', '', 'Class', 'cssClass', null, true);
         tools.addButtonToGroup('anchor', prefix + 'anchorAndClassButtons');
         tools.addButtonToGroup('class', prefix + 'anchorAndClassButtons');
         toolbar.addButton(buttonGroup);

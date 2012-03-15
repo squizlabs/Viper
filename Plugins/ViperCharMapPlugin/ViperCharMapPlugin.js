@@ -41,7 +41,7 @@ ViperCharMapPlugin.prototype = {
             return;
         }
 
-        this.viper.registerCallback('ViperToolbarPlugin:updateToolbar', 'ViperCharMapPlugin', function(data) {
+        this.viper.registerCallback('ViperToolbarPlugin:enabled', 'ViperCharMapPlugin', function(data) {
             self.viper.ViperTools.enableButton('insertCharacter');
         });
 
@@ -92,7 +92,7 @@ ViperCharMapPlugin.prototype = {
 
         var map = toolbar.createBubble('ViperCMP:bubble', 'Insert Character', subContent, null, null, null, 'VCMP-main');
 
-        var toggle = tools.createButton('insertCharacter', '', 'Insert Character', 'charMap');
+        var toggle = tools.createButton('insertCharacter', '', 'Insert Character', 'charMap', null, true);
         toolbar.setBubbleButton('ViperCMP:bubble', 'insertCharacter');
         toolbar.addButton(toggle);
 

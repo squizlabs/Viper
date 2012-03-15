@@ -240,7 +240,7 @@ ViperImagePlugin.prototype = {
         // Add the preview panel to the popup contents.
         createImageSubContent.appendChild(previewBox);
 
-        var toggleImagePlugin = tools.createButton('image', '', 'Toggle Image Options', 'image');
+        var toggleImagePlugin = tools.createButton('image', '', 'Toggle Image Options', 'image', null, true);
         toolbar.addButton(toggleImagePlugin);
         toolbar.setBubbleButton('ViperImagePlugin:bubble', 'image');
 
