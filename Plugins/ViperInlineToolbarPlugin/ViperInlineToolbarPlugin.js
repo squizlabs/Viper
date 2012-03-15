@@ -53,6 +53,10 @@ ViperInlineToolbarPlugin.prototype = {
 
         // Called when the selection is changed.
         var clickedInToolbar = false;
+        this.viper.registerCallback('Viper:clickedOutside', 'ViperInlineToolbarPlugin', function(range) {
+            self.hideToolbar();
+        });
+
         this.viper.registerCallback('Viper:selectionChanged', 'ViperInlineToolbarPlugin', function(range) {
             if (clickedInToolbar === true || self.viper.rangeInViperBounds(range) === false) {
                 clickedInToolbar = false;
