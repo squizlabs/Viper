@@ -3734,8 +3734,8 @@ Viper.prototype = {
 
     cleanHTML: function(content)
     {
-        content = content.replace(/<(p|div)((\s+\w+(\s*=\s*(?:".*?"|\'.*?\'|[^\'">\s]+))?)+)?\s*>\s+/ig, "<$1$2>");
-        content = content.replace(/\s+<\/(p|div)((\s+\w+(\s*=\s*(?:".*?"|\'.*?\'|[^\'">\s]+))?)+)?\s*>/ig, "</$1$2>");
+        content = content.replace(/<(p|div)((\s+\w+(\s*=\s*(?:".*?"|\'.*?\'|[^\'">\s]+))?)+)?\s*>\s*/ig, "<$1$2>");
+        content = content.replace(/\s*<\/(p|div)((\s+\w+(\s*=\s*(?:".*?"|\'.*?\'|[^\'">\s]+))?)+)?\s*>/ig, "</$1$2>");
         return content;
 
     },
