@@ -886,9 +886,24 @@ ViperTools.prototype = {
         // Set the pos to be the middle of the screen
         //var windowDim  = dfx.getWindowDimensions();
         var elementDim = dfx.getBoundingRectangle(popupElement);
+        var window     = dfx.getWindowDimensions();
+
+        var toolbarHieght = 36;
+
+        var marginTop = (((elementDim.y2 - elementDim.y1) / 2) * -1);
+
+        // If the popup is off the top of the screen then move it back down.
+        var offScreenTop = (window.height / 2) + marginTop
+        if (offScreenTop < toolbarHieght) {
+            marginTop -= offScreenTop - toolbarHieght;
+        }
+
+        if ((elementDim.y2 - elementDim.y1) > (window.height - toolbarHieght)) {
+            dfx.setStyle(contentElem, 'height', (height - (elementDim.y2 - elementDim.y1 - window.height) - toolbarHieght) + 'px');
+        }
 
         dfx.setStyle(popupElement, 'margin-left', (((elementDim.x2 - elementDim.x1) / 2) * -1) + 'px');
-        dfx.setStyle(popupElement, 'margin-top', (((elementDim.y2 - elementDim.y1) / 2) * -1) + 'px');
+        dfx.setStyle(popupElement, 'margin-top', marginTop + 'px');
 
         dfx.setStyle(popupElement, 'left', '50%');
         dfx.setStyle(popupElement, 'top', '50%');

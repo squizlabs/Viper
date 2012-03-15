@@ -185,7 +185,7 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperLis
 
 
     /**
-     * Test that indent works for last item in the list using the shortcut.
+     * Test that indent works for last item in the list using the indent icon.
      *
      * @return void
      */

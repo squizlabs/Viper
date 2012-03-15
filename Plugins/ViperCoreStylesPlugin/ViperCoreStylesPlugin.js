@@ -77,13 +77,13 @@ ViperCoreStylesPlugin.prototype = {
 
             tools.createButton('bold', '', 'Bold', 'bold', function() {
                 self.handleStyle('strong');
-            });
+            }, true);
             tools.createButton('italic', '', 'Italic', 'italic', function() {
                 self.handleStyle('em');
-            });
+            }, true);
             tools.createButton('removeFormat', '', 'Remove Format', 'removeFormat', function() {
                 self.removeFormat();
-            });
+            }, true);
 
             tools.addButtonToGroup('bold', 'ViperCoreStylesPlugin:vtp:stylesBtns');
             tools.addButtonToGroup('italic', 'ViperCoreStylesPlugin:vtp:stylesBtns');
@@ -94,13 +94,13 @@ ViperCoreStylesPlugin.prototype = {
             var btnGroup2 = tools.createButtonGroup('ViperCoreStylesPlugin:vtp:btnGroup2');
             tools.createButton('subscript', '', 'Subscript', 'subscript', function() {
                 self.handleStyle('sub');
-            });
+            }, true);
             tools.createButton('superscript', '', 'Superscript', 'superscript', function() {
                 self.handleStyle('sup');
-            });
+            }, true);
             tools.createButton('strikethrough', '', 'Strikethrough', 'strikethrough', function() {
                 self.handleStyle('del');
-            });
+            }, true);
 
             tools.addButtonToGroup('subscript', 'ViperCoreStylesPlugin:vtp:btnGroup2');
             tools.addButtonToGroup('superscript', 'ViperCoreStylesPlugin:vtp:btnGroup2');
@@ -130,13 +130,13 @@ ViperCoreStylesPlugin.prototype = {
             justifyBubbleContent.appendChild(btnGroup3);
 
             toolbarPlugin.createBubble('ViperCoreStylesPlugin:justifyBubble', 'Justification', null, justifyBubbleContent);
-            var justifyBubbleToggle = tools.createButton('justify', '', 'Toggle Justification', 'justifyLeft');
+            var justifyBubbleToggle = tools.createButton('justify', '', 'Toggle Justification', 'justifyLeft', null, true);
             toolbarPlugin.addButton(justifyBubbleToggle);
             toolbarPlugin.setBubbleButton('ViperCoreStylesPlugin:justifyBubble', 'justify');
 
             var hr = tools.createButton('hr', '', 'Horizontal Rule', 'insertHr', function() {
                 self.handleHR();
-            });
+            }, true);
             toolbarPlugin.addButton(hr);
 
             this.viper.registerCallback('ViperToolbarPlugin:updateToolbar', 'ViperCoreStylesPlugin', function(data) {

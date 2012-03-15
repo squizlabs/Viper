@@ -44,7 +44,7 @@ ViperSearchReplacePlugin.prototype = {
         var self  = this;
         var tools = this.viper.ViperTools;
 
-        this.viper.registerCallback('ViperToolbarPlugin:updateToolbar', 'ViperSearchReplacePlugin', function(data) {
+        this.viper.registerCallback('ViperToolbarPlugin:enabled', 'ViperSearchReplacePlugin', function(data) {
             self.viper.ViperTools.enableButton('searchReplace');
         });
 
@@ -118,7 +118,7 @@ ViperSearchReplacePlugin.prototype = {
 
         // Create the bubble.
         var searchTools = toolbar.createBubble('ViperSearchPlugin:bubble', 'Search & Replace', content);
-        var searchBtn   = tools.createButton('searchReplace', '', 'Search & Replace', 'searchReplace');
+        var searchBtn   = tools.createButton('searchReplace', '', 'Search & Replace', 'searchReplace', null, true);
         toolbar.addButton(searchBtn);
         toolbar.setBubbleButton('ViperSearchPlugin:bubble', 'searchReplace');
 

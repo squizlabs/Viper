@@ -30,14 +30,19 @@ function ViperToolbarPlugin(viper)
     this._bubbles        = {};
     this._bubbleButtons  = {};
     this._settingButtons = null;
+    this._enabled        = false;
 
     this.createToolbar();
 
     var self           = this;
-    var clickedOutside = false;
+    var clickedOutside = true;
     this.viper.registerCallback('Viper:selectionChanged', 'ViperToolbarPlugin', function(range) {
         if (clickedOutside === true || self.viper.rangeInViperBounds(range) === false) {
             return;
+        }
+
+        if (self._enabled !== true) {
+            self.enable();
         }
 
         self._updateToolbar(range);
@@ -47,15 +52,11 @@ function ViperToolbarPlugin(viper)
         clickedOutside = true;
 
         // Disable all buttons.
-        self.disableButtons();
+        self.disable();
     });
 
     this.viper.registerCallback('Viper:clickedInside', 'ViperToolbarPlugin', function(range) {
         clickedOutside = false;
-    });
-
-    this.viper.registerCallback('Viper:editableElementChanged', 'ViperToolbarPlugin', function() {
-        self.disableButtons();
     });
 
     this.viper.registerCallback('Viper:mouseDown', 'ViperToolbarPlugin', function() {
@@ -175,7 +176,14 @@ ViperToolbarPlugin.prototype = {
         dfx.setStyle(this._toolbar, 'top', '0px');
         parent.appendChild(this._toolbar);
 
+        this.positionUpdated();
+
+    },
+
+    positionUpdated: function()
+    {
         this.positionBubble();
+        this.viper.fireCallbacks('ViperToolbarPlugin:positionUpdated');
 
     },
 
@@ -535,8 +543,10 @@ ViperToolbarPlugin.prototype = {
 
     },
 
-    disableButtons: function()
+    disable: function()
     {
+        this._enabled = false;
+
         // Close active bubble.
         if (this._activeBubble) {
             this.closeBubble(this._activeBubble);
@@ -550,6 +560,15 @@ ViperToolbarPlugin.prototype = {
             var buttonid = buttons[i].id.replace(viperid + '-', '');
             this.viper.ViperTools.disableButton(buttonid);
         }
+
+        this.viper.fireCallbacks('ViperToolbarPlugin:disabled');
+
+    },
+
+    enable: function()
+    {
+        this._enabled = true;
+        this.viper.fireCallbacks('ViperToolbarPlugin:enabled');
 
     },
 

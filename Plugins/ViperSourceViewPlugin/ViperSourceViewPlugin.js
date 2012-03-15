@@ -44,10 +44,10 @@ ViperSourceViewPlugin.prototype = {
         if (this.toolbarPlugin) {
             var toggle = this.viper.ViperTools.createButton('sourceEditor', '', 'Toggle Source View', 'sourceView', function() {
                 self.toggleSourceView();
-            });
+            }, true);
             this.toolbarPlugin.addButton(toggle);
 
-            this.viper.registerCallback('ViperToolbarPlugin:updateToolbar', 'ViperSourceViewPlugin', function(data) {
+            this.viper.registerCallback('ViperToolbarPlugin:enabled', 'ViperSourceViewPlugin', function(data) {
                 self.viper.ViperTools.enableButton('sourceEditor');
             });
         }
@@ -390,6 +390,16 @@ ViperSourceViewPlugin.prototype = {
     {
         content = content.replace(/<(area|base|basefont|br|hr|input|img|link|meta)((\s+\w+(\s*=\s*(?:".*?"|\'.*?\'|[^\'">\s]+))?)+)?\s*>/ig, "<$1$2 />");
         return content;
+
+    },
+
+    isPluginElement: function(element)
+    {
+        if (element !== this._sourceView && dfx.isChildOf(element, this._sourceView) === false) {
+            return false;
+        }
+
+        return true;
 
     },
 

@@ -124,7 +124,7 @@ ViperAccessibilityPlugin.prototype = {
         var self      = this;
         var tools     = this.viper.ViperTools;
 
-        this.viper.registerCallback('ViperToolbarPlugin:updateToolbar', 'ViperAccessibilityPlugin', function(data) {
+        this.viper.registerCallback('ViperToolbarPlugin:enabled', 'ViperAccessibilityPlugin', function(data) {
             self.viper.ViperTools.enableButton('accessibility');
         });
 
@@ -154,7 +154,7 @@ ViperAccessibilityPlugin.prototype = {
         bubble.setSetting('keepOpen', true);
 
         // The main toolbar button to toggle the toolbar bubble on and off.
-        var vapButton = tools.createButton('accessibility', '', 'Accessibility Auditor', 'accessAudit');
+        var vapButton = tools.createButton('accessibility', '', 'Accessibility Auditor', 'accessAudit', null, true);
         toolbar.setBubbleButton('VAP:bubble', 'accessibility');
         toolbar.addButton(vapButton);
 

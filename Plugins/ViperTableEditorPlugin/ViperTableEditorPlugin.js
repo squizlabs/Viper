@@ -144,7 +144,16 @@ ViperTableEditorPlugin.prototype = {
         if (this.toolbarPlugin) {
             var insertTable = true;
 
-            this.viper.registerCallback('ViperToolbarPlugin:updateToolbar', 'ViperTableEditorPlugin', function(data) {
+            this.viper.registerCallback('ViperToolbarPlugin:positionUpdated', 'ViperTableEditorPlugin', function(data) {
+                if (self._targetToolbarButton === true) {
+                    var activeCell = self.getActiveCell();
+                    if (activeCell) {
+                        self.showCellToolsIcon(activeCell, true);
+                    }
+                }
+            });
+
+            this.viper.registerCallback('ViperToolbarPlugin:enabled', 'ViperTableEditorPlugin', function(data) {
                 self.viper.ViperTools.enableButton('insertTable');
             });
 
@@ -172,7 +181,7 @@ ViperTableEditorPlugin.prototype = {
                 } else {
                     self.toolbarPlugin.toggleBubble('VTEP-bubble');
                 }
-            });
+            }, true);
             this.toolbarPlugin.addButton(button);
 
             // Create the toolbar bubble.
@@ -395,7 +404,13 @@ ViperTableEditorPlugin.prototype = {
             dfx.removeClass(btns, 'viper-hidden');
             dfx.setStyle(tools, 'margin-left', '-45px');
             cellCoords     = dfx.getBoundingRectangle(this._tools.getItem('insertTable').element);
-            cellCoords.y2 += (5 - scrollCoords.y);
+
+            if (dfx.getStyle(this._tools.getItem('insertTable').element.parentNode, 'position') === 'fixed') {
+                cellCoords.y2 += (5 - scrollCoords.y);
+            } else {
+                dfx.setStyle(tools, 'position', 'absolute');
+            }
+
             dfx.addClass(tools, 'topBar');
         }
 
