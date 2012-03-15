@@ -348,6 +348,12 @@ ViperToolbarPlugin.prototype = {
                 var button = tools.createButton(subSectionid + '-applyButton', 'Update Changes', 'Update Changes', '', subSection.form.onsubmit, true);
                 subSection.form.appendChild(button);
 
+                this.addSubSectionActionWidgets(subSectionid, widgetids);
+
+            },
+            addSubSectionActionWidgets: function(subSectionid, widgetids)
+            {
+                var tools = self.viper.ViperTools;
                 for (var i = 0; i < widgetids.length; i++) {
                     self.viper.registerCallback('ViperTools:changed:' + widgetids[i], 'ViperToolbarPlugin', function() {
                         tools.enableButton(subSectionid + '-applyButton');
