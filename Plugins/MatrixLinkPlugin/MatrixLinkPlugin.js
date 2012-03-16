@@ -135,7 +135,7 @@ MatrixLinkPlugin.prototype = {
         link.setAttribute('href', href);
 
         // Remove summary keyword.
-        dfx.setHtml(link, dfx.getHtml(link).replace(/%asset_summary_\d+%/, ''));
+        dfx.setHtml(link, dfx.getHtml(link).replace(/[ ]*%asset_summary_\d+%/, ''));
 
         // Content of the link may need to change due to the summary keyword.
         var includeSummary = this.viper.ViperTools.getItem(idPrefix + ':includeSummary').getValue();
