@@ -90,7 +90,7 @@ MatrixImagePlugin.prototype = {
             EasyEditAssetFinder.init({
                 focusAssetId: asset.id,
                 callback: function(selectedAsset){
-                    urlField.setValue('./?a=' + selectedAsset.id,false);
+                    urlField.setValue(selectedAsset.id, false);
                 }
             });
         });
