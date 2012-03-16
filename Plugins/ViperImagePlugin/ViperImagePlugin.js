@@ -144,7 +144,7 @@ ViperImagePlugin.prototype = {
         dfx.addClass(previewBox, 'ViperITP-msgBox');
         dfx.setHtml(previewBox, 'Loading preview');
         dfx.setStyle(previewBox, 'display', 'none');
-        self._previewBox = previewBox;
+        this._previewBox = previewBox;
 
         var setImageAttributes = function(url, alt) {
             if (!image || dfx.isTag(image, 'img') === false) {
@@ -211,12 +211,11 @@ ViperImagePlugin.prototype = {
 
                 // Update preview pane.
                 dfx.empty(previewBox);
-                self.setPreviewContent(image.cloneNode(true));
+                self.updateImagePreview(image.getAttribute('src'));
             } else {
                 tools.enableButton('image');
 
                 tools.setButtonInactive('image');
-                toolbar.closeBubble('ViperImagePlugin:bubble');
 
                 tools.getItem('ViperImagePlugin:urlInput').setValue('');
                 tools.getItem('ViperImagePlugin:altInput').setValue('');
@@ -259,14 +258,14 @@ ViperImagePlugin.prototype = {
         if (loading === true) {
             dfx.removeClass(previewBox, 'info');
             dfx.setHtml(previewBox, 'Loading preview');
-            self.viper.ViperTools.setFieldErrors('ViperImagePlugin:urlInput', []);
+            this.viper.ViperTools.setFieldErrors('ViperImagePlugin:urlInput', []);
         } else if (!img) {
             // Failed to load image.
             dfx.removeClass(previewBox, 'info');
             dfx.setStyle(previewBox, 'display', 'none');
-            self.viper.ViperTools.setFieldErrors('ViperImagePlugin:urlInput', ['Failed to load image']);
+            this.viper.ViperTools.setFieldErrors('ViperImagePlugin:urlInput', ['Failed to load image']);
         } else {
-            self.viper.ViperTools.setFieldErrors('ViperImagePlugin:urlInput', []);
+            this.viper.ViperTools.setFieldErrors('ViperImagePlugin:urlInput', []);
             dfx.addClass(previewBox, 'info');
 
             var tmp = document.createElement('div');
