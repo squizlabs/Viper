@@ -182,6 +182,8 @@ MatrixLinkPlugin.prototype = {
             tools.getItem('ViperLinkPlugin:vtp:url').setValue(urlValue);
             tools.getItem('ViperLinkPlugin:vtp:includeSummary').setValue(incSummary);
         } else {
+            tools.getItem('ViperLinkPlugin:vtp:anchor').setValue('');
+            tools.getItem('ViperLinkPlugin:vtp:includeSummary').setValue(false);
             dfx.removeClass(main, 'internalLink');
         }//end if
 
