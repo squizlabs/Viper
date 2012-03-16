@@ -3331,10 +3331,13 @@ Viper.prototype = {
 
     fireNodesChanged: function(nodes)
     {
+        if (!nodes) {
+            nodes = [this.element];
+        }
+
         this.fireCallbacks('Viper:nodesChanged', nodes);
 
         // Update the markers.
-        // TODO: Should be a callback?
         ViperChangeTracker.updatePositionMarkers(true);
 
         if (nodes.length === 1 && nodes[0] && nodes[0].nodeType === dfx.TEXT_NODE) {

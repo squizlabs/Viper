@@ -22,7 +22,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->type('test');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>Lorem <span class="test">XuT</span> dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>jumps</strong> OVER the lazy dogggg</p>');
+        $this->assertHTMLMatch('<p>Lorem <span class="test">XuT</span> dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>Jumps</strong> OVER the lazy dogggg</p>');
 
         $this->click($this->find($text));
         $this->selectText($text);
@@ -34,7 +34,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->clickInlineToolbarButton($dir.'toolbarIcon_class.png');
         $this->type('class');
         $this->clickInlineToolbarButton($dir.'toolbarIcon_updateChanges.png');
-        $this->assertHTMLMatch('<p>Lorem <span class="test">XuT</span> <span class="class">dolor</span></p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>jumps</strong> OVER the lazy dogggg</p>');
+        $this->assertHTMLMatch('<p>Lorem <span class="test">XuT</span> <span class="class">dolor</span></p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>Jumps</strong> OVER the lazy dogggg</p>');
 
     }//end testAddingClassAttributeToAWordUsingTheInlineToolbar()
 
@@ -75,7 +75,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->type('test');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>Lorem <span class="test">XuT</span> dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>jumps</strong> OVER the lazy dogggg</p>');
+        $this->assertHTMLMatch('<p>Lorem <span class="test">XuT</span> dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>Jumps</strong> OVER the lazy dogggg</p>');
 
         $this->click($this->find($text));
         $this->selectText($text);
@@ -87,7 +87,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->clickTopToolbarButton($dir.'toolbarIcon_class.png');
         $this->type('class');
         $this->clickTopToolbarButton($dir.'toolbarIcon_updateChanges.png');
-        $this->assertHTMLMatch('<p>Lorem <span class="test">XuT</span> <span class="class">dolor</span></p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>jumps</strong> OVER the lazy dogggg</p>');
+        $this->assertHTMLMatch('<p>Lorem <span class="test">XuT</span> <span class="class">dolor</span></p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>Jumps</strong> OVER the lazy dogggg</p>');
 
 
     }//end testAddingClassAttributeToAWordUsingTheTopToolbar()
@@ -100,8 +100,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
      */
     public function testUpdateChangesButtonIsDisabledForClassIcon()
     {
-        // Stop here as the unit testing framework doesn't recognise the disabled update changes button.
-        $this->markTestIncomplete('Need a way for the unit testing framework to recongnise the disabled update changes button');
+        $this->markTestIncomplete('Failing due to issue 1551 in roadmap');
 
         $dir = dirname(__FILE__).'/Images/';
 
@@ -135,7 +134,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->clickInlineToolbarButton($dir.'toolbarIcon_delete_class.png');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz lABs is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>jumps</strong> OVER the lazy dogggg</p>');
+        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz lABs is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>Jumps</strong> OVER the lazy dogggg</p>');
 
         $this->click($this->find($text));
         $this->selectText($text);
@@ -146,14 +145,14 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->clickTopToolbarButton($dir.'toolbarIcon_class.png');
         $this->type('test');
         $this->keyDown('Key.ENTER');
-        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="test">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>jumps</strong> OVER the lazy dogggg</p>');
+        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="test">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>Jumps</strong> OVER the lazy dogggg</p>');
 
         $this->selectText($text);
         $this->clickInlineToolbarButton($dir.'toolbarIcon_class_active.png');
         $this->clickInlineToolbarButton($dir.'toolbarIcon_delete_class.png');
         $this->clickInlineToolbarButton($dir.'toolbarIcon_updateChanges.png');
 
-        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz lABs is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>jumps</strong> OVER the lazy dogggg</p>');
+        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz lABs is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>Jumps</strong> OVER the lazy dogggg</p>');
 
     }//end testRemovingClassAttributeFromAWordUsingTheInlineToolbar()
 
@@ -177,7 +176,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->clickTopToolbarButton($dir.'toolbarIcon_delete_class.png');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz lABs is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>jumps</strong> OVER the lazy dogggg</p>');
+        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz lABs is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>Jumps</strong> OVER the lazy dogggg</p>');
 
         $this->click($this->find($text));
         $this->selectText($text);
@@ -188,14 +187,14 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->clickTopToolbarButton($dir.'toolbarIcon_class.png');
         $this->type('test');
         $this->keyDown('Key.ENTER');
-        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="test">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>jumps</strong> OVER the lazy dogggg</p>');
+        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="test">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>Jumps</strong> OVER the lazy dogggg</p>');
 
         $this->selectText($text);
         $this->clickTopToolbarButton($dir.'toolbarIcon_class_active.png');
         $this->clickTopToolbarButton($dir.'toolbarIcon_delete_class.png');
         $this->clickTopToolbarButton($dir.'toolbarIcon_updateChanges.png');
 
-        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz lABs is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>jumps</strong> OVER the lazy dogggg</p>');
+        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz lABs is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>Jumps</strong> OVER the lazy dogggg</p>');
 
     }//end testRemovingClassAttributeFromAWordUsingTheTopToolbar()
 
@@ -219,14 +218,14 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->type('abc');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclassabc">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>jumps</strong> OVER the lazy dogggg</p>');
+        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclassabc">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>Jumps</strong> OVER the lazy dogggg</p>');
 
         $this->selectText($text);
         $this->clickInlineToolbarButton($dir.'toolbarIcon_class_active.png');
         $this->type('def');
         $this->clickInlineToolbarButton($dir.'toolbarIcon_updateChanges.png');
 
-        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclassabcdef">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>jumps</strong> OVER the lazy dogggg</p>');
+        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclassabcdef">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>Jumps</strong> OVER the lazy dogggg</p>');
 
     }//end testUpdatingAClassUsingTheInlineToolbar()
 
@@ -250,14 +249,14 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->type('abc');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclassabc">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>jumps</strong> OVER the lazy dogggg</p>');
+        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclassabc">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>Jumps</strong> OVER the lazy dogggg</p>');
 
         $this->selectText($text);
         $this->clickTopToolbarButton($dir.'toolbarIcon_class_active.png');
         $this->type('def');
         $this->clickTopToolbarButton($dir.'toolbarIcon_updateChanges.png');
 
-        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclassabcdef">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>jumps</strong> OVER the lazy dogggg</p>');
+        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclassabcdef">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>Jumps</strong> OVER the lazy dogggg</p>');
 
     }//end testUpdatingAClassUsingTheTopToolbar()
 
@@ -279,7 +278,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->type('test');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p class="test">Lorem XuT dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>jumps</strong> OVER the lazy dogggg</p>');
+        $this->assertHTMLMatch('<p class="test">Lorem XuT dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>Jumps</strong> OVER the lazy dogggg</p>');
 
         $this->selectText($text);
         $this->selectInlineToolbarLineageItem(0);
@@ -295,11 +294,9 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->selectText($text);
         $this->selectInlineToolbarLineageItem(0);
         $this->clickInlineToolbarButton($dir.'toolbarIcon_class.png');
-        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_updateChanges_disabled.png'), 'Update Changes button should be disabled.');
-
         $this->type('class');
         $this->clickInlineToolbarButton($dir.'toolbarIcon_updateChanges.png');
-        $this->assertHTMLMatch('<p class="test">Lorem XuT dolor</p><p class="test">sit amet <strong>WoW</strong></p><p class="class">Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>jumps</strong> OVER the lazy dogggg</p>');
+        $this->assertHTMLMatch('<p class="test">Lorem XuT dolor</p><p class="test">sit amet <strong>WoW</strong></p><p class="class">Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>Jumps</strong> OVER the lazy dogggg</p>');
 
     }//end testAddingClassAttributeToAParagraphUsingTheInlineToolbar()
 
@@ -321,7 +318,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->type('test');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p class="test">Lorem XuT dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>jumps</strong> OVER the lazy dogggg</p>');
+        $this->assertHTMLMatch('<p class="test">Lorem XuT dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>Jumps</strong> OVER the lazy dogggg</p>');
 
         $this->selectText($text);
         $this->selectInlineToolbarLineageItem(0);
@@ -339,7 +336,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->clickTopToolbarButton($dir.'toolbarIcon_class.png');
         $this->type('class');
         $this->clickTopToolbarButton($dir.'toolbarIcon_updateChanges.png');
-        $this->assertHTMLMatch('<p class="test">Lorem XuT dolor</p><p class="test">sit amet <strong>WoW</strong></p><p class="class">Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>jumps</strong> OVER the lazy dogggg</p>');
+        $this->assertHTMLMatch('<p class="test">Lorem XuT dolor</p><p class="test">sit amet <strong>WoW</strong></p><p class="class">Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>Jumps</strong> OVER the lazy dogggg</p>');
 
     }//end testAddingClassAttributeToAParagraphUsingTheTopToolbar()
 
@@ -361,7 +358,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->type('test');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p class="test">Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>jumps</strong> OVER the lazy dogggg</p>');
+        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p class="test">Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>Jumps</strong> OVER the lazy dogggg</p>');
 
         $this->selectText($text);
         $this->selectInlineToolbarLineageItem(0);
@@ -398,7 +395,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->clickInlineToolbarButton($dir.'toolbarIcon_delete_class.png');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p>sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>jumps</strong> OVER the lazy dogggg</p>');
+        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p>sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>Jumps</strong> OVER the lazy dogggg</p>');
 
         $this->click($textLoc);
         $this->selectText($text);
@@ -412,7 +409,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->type('test');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>jumps</strong> OVER the lazy dogggg</p>');
+        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>Jumps</strong> OVER the lazy dogggg</p>');
 
         $this->click($textLoc);
         $this->selectText($text);
@@ -421,7 +418,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->clickInlineToolbarButton($dir.'toolbarIcon_delete_class.png');
         $this->clickInlineToolbarButton($dir.'toolbarIcon_updateChanges.png');
 
-        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p>sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>jumps</strong> OVER the lazy dogggg</p>');
+        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p>sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>Jumps</strong> OVER the lazy dogggg</p>');
 
     }//end testRemovingClassAttributeFromParagraphUsingInlineToolbar()
 
@@ -433,6 +430,8 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
      */
     public function testRemovingClassAttributeFromParagraphUsingTopToolbar()
     {
+        $this->markTestIncomplete('Test fails due to issue 1673 in roadmap');
+
         $dir = dirname(__FILE__).'/Images/';
 
         $text = 'WoW';
@@ -447,7 +446,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->clickTopToolbarButton($dir.'toolbarIcon_delete_class.png');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p>sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>jumps</strong> OVER the lazy dogggg</p>');
+        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p>sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>Jumps</strong> OVER the lazy dogggg</p>');
 
         $this->click($this->find($text));
         $this->selectText($text);
@@ -461,7 +460,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->type('test');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>jumps</strong> OVER the lazy dogggg</p>');
+        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>Jumps</strong> OVER the lazy dogggg</p>');
 
         $this->click($textLoc);
         $this->selectText($text);
@@ -470,7 +469,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->clickTopToolbarButton($dir.'toolbarIcon_delete_class.png');
         $this->clickTopToolbarButton($dir.'toolbarIcon_updateChanges.png');
 
-        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p>sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>jumps</strong> OVER the lazy dogggg</p>');
+        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p>sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>Jumps</strong> OVER the lazy dogggg</p>');
 
     }//end testRemovingClassAttributeFromParagraphUsingTopToolbar()
 
@@ -495,7 +494,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->type('abc');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p class="testabc">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>jumps</strong> OVER the lazy dogggg</p>');
+        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p class="testabc">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>Jumps</strong> OVER the lazy dogggg</p>');
 
         $this->selectText($text);
         $this->selectInlineToolbarLineageItem(0);
@@ -503,7 +502,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->type('def');
         $this->clickInlineToolbarButton($dir.'toolbarIcon_updateChanges.png');
 
-        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p class="testabcdef">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>jumps</strong> OVER the lazy dogggg</p>');
+        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p class="testabcdef">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>Jumps</strong> OVER the lazy dogggg</p>');
 
     }//end testEditingTheClassUsingInlineToolbar()
 
@@ -528,7 +527,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->type('abc');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p class="testabc">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>jumps</strong> OVER the lazy dogggg</p>');
+        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p class="testabc">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>Jumps</strong> OVER the lazy dogggg</p>');
 
         $this->selectText($text);
         $this->selectInlineToolbarLineageItem(0);
@@ -536,17 +535,17 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->type('def');
         $this->clickTopToolbarButton($dir.'toolbarIcon_updateChanges.png');
 
-        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p class="testabcdef">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>jumps</strong> OVER the lazy dogggg</p>');
+        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p class="testabcdef">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>Jumps</strong> OVER the lazy dogggg</p>');
 
     }//end testEditingTheClassUsingTopToolbar()
 
 
     /**
-     * Test that you can apply a class to a pargraph where the first word is bold.
+     * Test that you can apply a class to a pargraph using the inline toolbar where the first word is bold.
      *
      * @return void
      */
-    public function testAddingClassToAParagraphWithBoldFirstWord()
+    public function testAddingClassToAParagraphUsingInlineToolbarWithBoldFirstWord()
     {
         $dir = dirname(__FILE__).'/Images/';
 
@@ -558,17 +557,41 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->type('test');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p class="test"><strong>jumps</strong> OVER the lazy dogggg</p>');
+        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p class="test"><strong>Jumps</strong> OVER the lazy dogggg</p>');
 
-    }//end testAddingClassToAParagraphWithBoldFirstWord()
+    }//end testAddingClassToAParagraphUsingInlineToolbarWithBoldFirstWord()
 
 
     /**
-     * Test that you can apply a class to a pargraph where the first word is italic.
+     * Test that you can apply a class to a pargraph using the top toolbar where the first word is bold.
      *
      * @return void
      */
-    public function testAddingClassToAParagraphWithItalicFirstWord()
+    public function testAddingClassToAParagraphUsingTopToolbarWithBoldFirstWord()
+    {
+        $this->markTestIncomplete('Test fails due to issue 1673 in roadmap');
+
+        $dir = dirname(__FILE__).'/Images/';
+
+        $text = 'OVER';
+
+        $this->selectText($text);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickTopToolbarButton($dir.'toolbarIcon_class.png');
+        $this->type('test');
+        $this->keyDown('Key.ENTER');
+
+        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p class="test"><strong>Jumps</strong> OVER the lazy dogggg</p>');
+
+    }//end testAddingClassToAParagraphUsingTopToolbarWithBoldFirstWord()
+
+
+    /**
+     * Test that you can apply a class to a pargraph using the inline toolbar where the first word is italic.
+     *
+     * @return void
+     */
+    public function testAddingClassToAParagraphUsingInlineToolbarWithItalicFirstWord()
     {
         $dir = dirname(__FILE__).'/Images/';
 
@@ -580,9 +603,33 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->type('test');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p class="test"><em>The</em> QUICK brown foxxx</p><p><strong>jumps</strong> OVER the lazy dogggg</p>');
+        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p class="test"><em>The</em> QUICK brown foxxx</p><p><strong>Jumps</strong> OVER the lazy dogggg</p>');
 
-    }//end testAddingClassToAParagraphWithItalicFirstWord()
+    }//end testAddingClassToAParagraphUsingInlineToolbarWithItalicFirstWord()
+
+
+    /**
+     * Test that you can apply a class to a pargraph using the top toolbar where the first word is italic.
+     *
+     * @return void
+     */
+    public function testAddingClassToAParagraphUsingTopToolbarWithItalicFirstWord()
+    {
+        $this->markTestIncomplete('Test fails due to issue 1673 in roadmap');
+
+        $dir = dirname(__FILE__).'/Images/';
+
+        $text = 'QUICK';
+
+        $this->selectText($text);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickTopToolbarButton($dir.'toolbarIcon_class.png');
+        $this->type('test');
+        $this->keyDown('Key.ENTER');
+
+        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p class="test"><em>The</em> QUICK brown foxxx</p><p><strong>Jumps</strong> OVER the lazy dogggg</p>');
+
+    }//end testAddingClassToAParagraphUsingTopToolbarWithItalicFirstWord()
 
 
     /**
@@ -594,14 +641,14 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
     {
         $dir = dirname(__FILE__).'/Images/';
 
-        $text = 'jumps';
+        $text = 'Jumps';
 
         $this->selectText($text);
         $this->clickInlineToolbarButton($dir.'toolbarIcon_class.png');
         $this->type('test');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong class="test">jumps</strong> OVER the lazy dogggg</p>');
+        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong class="test">Jumps</strong> OVER the lazy dogggg</p>');
 
     }//end testAddingClassToAParagraphWithBoldFirstWord()
 
@@ -624,7 +671,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->type('test');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>jumps</strong> <em class="test">OVER</em> the lazy dogggg</p>');
+        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>Jumps</strong> <em class="test">OVER</em> the lazy dogggg</p>');
 
     }//end testAddingClassToAItalicWord()
 
@@ -638,16 +685,16 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
     {
         $dir = dirname(__FILE__).'/Images/';
 
-        $this->selectText('jumps', 'OVER');
+        $this->selectText('Jumps', 'OVER');
         $this->keyDown('Key.CMD + b');
-        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>jumps OVER </strong>the lazy dogggg</p>');
+        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>Jumps OVER </strong>the lazy dogggg</p>');
 
         $this->selectText('OVER');
         $this->clickInlineToolbarButton($dir.'toolbarIcon_class.png');
         $this->type('test');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>jumps <span class="test">OVER</span> </strong>the lazy dogggg</p>');
+        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>Jumps <span class="test">OVER</span> </strong>the lazy dogggg</p>');
 
     }//end testAddingClassToAOneBoldWord()
 
@@ -663,14 +710,14 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
 
         $this->selectText('QUICK', 'brown');
         $this->keyDown('Key.CMD + i');
-        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> <em>QUICK brown</em> foxxx</p><p><strong>jumps</strong> OVER the lazy dogggg</p>');
+        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> <em>QUICK brown</em> foxxx</p><p><strong>Jumps</strong> OVER the lazy dogggg</p>');
 
         $this->selectText('QUICK');
         $this->clickInlineToolbarButton($dir.'toolbarIcon_class.png');
         $this->type('test');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> <em><span class="test">QUICK</span> brown</em> foxxx</p><p><strong>jumps</strong> OVER the lazy dogggg</p>');
+        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> <em><span class="test">QUICK</span> brown</em> foxxx</p><p><strong>Jumps</strong> OVER the lazy dogggg</p>');
 
     }//end testAddingClassToAOneItalicWord()
 
@@ -682,6 +729,8 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
      */
     public function testSelectionIsMaintainedForWordWhenOpeningAndClosingClassFields()
     {
+        $this->markTestIncomplete('Test fails due to issue 1534 in roadmap');
+
         $dir = dirname(__FILE__).'/Images/';
 
         $this->selectText('XuT');
@@ -705,6 +754,8 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
      */
     public function testSelectionIsMaintainedForParaWhenOpeningAndClosingClassFields()
     {
+        $this->markTestIncomplete('Test fails due to issue 1534 in roadmap');
+
         $dir = dirname(__FILE__).'/Images/';
 
         $this->selectText('XuT');

@@ -84,6 +84,7 @@ ViperAccessibilityPlugin_WCAG2 = {
         var button   = tools.createButton(buttonid, title, title, '', function() {
             tools.disableButton(buttonid);
             self.vap.fixIssue();
+            self.viper.fireNodesChanged();
             return action.call(this);
         }, disabled);
 

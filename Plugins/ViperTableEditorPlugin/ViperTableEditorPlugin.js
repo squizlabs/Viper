@@ -407,6 +407,7 @@ ViperTableEditorPlugin.prototype = {
 
             if (dfx.getStyle(this._tools.getItem('insertTable').element.parentNode, 'position') === 'fixed') {
                 cellCoords.y2 += (5 - scrollCoords.y);
+                dfx.setStyle(tools, 'position', 'fixed');
             } else {
                 dfx.setStyle(tools, 'position', 'absolute');
             }

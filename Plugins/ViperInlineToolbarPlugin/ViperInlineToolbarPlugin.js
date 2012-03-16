@@ -371,6 +371,13 @@ ViperInlineToolbarPlugin.prototype = {
         var button = tools.createButton(subSectionid + '-applyButton', 'Update Changes', 'Update Changes', '', subSection.form.onsubmit, true);
         subSection.element.appendChild(button);
 
+        this.addSubSectionActionWidgets(subSectionid, widgetids);
+
+    },
+
+    addSubSectionActionWidgets: function(subSectionid, widgetids)
+    {
+        var tools = this.viper.ViperTools;
         for (var i = 0; i < widgetids.length; i++) {
             this.viper.registerCallback('ViperTools:changed:' + widgetids[i], 'ViperInlineToolbarPlugin', function() {
                 tools.enableButton(subSectionid + '-applyButton');
