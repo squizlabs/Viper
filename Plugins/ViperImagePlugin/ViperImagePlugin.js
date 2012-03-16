@@ -183,18 +183,18 @@ ViperImagePlugin.prototype = {
                 var height = dfx.getElementHeight(img);
                 dfx.remove(tmp);
 
-                var maxWidth  = 300;
-                var maxHeight = 300;
+                var maxWidth  = 185;
+                var maxHeight = 185;
                 if (height > maxHeight && width > maxWidth) {
                     if (height > width) {
-                        img.setAttribute('height', '300px');
+                        img.setAttribute('height', maxHeight + 'px');
                     } else {
-                        img.setAttribute('width', '300px');
+                        img.setAttribute('width', maxWidth + 'px');
                     }
                 } else if (width > maxWidth) {
-                    img.setAttribute('width', '300px');
+                    img.setAttribute('width', maxWidth + 'px');
                 } else if (height > maxHeight) {
-                    img.setAttribute('height', '300px');
+                    img.setAttribute('height', maxHeight + 'px');
                 }
 
                 dfx.empty(previewBox);
