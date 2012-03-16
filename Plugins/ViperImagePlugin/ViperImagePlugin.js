@@ -23,6 +23,8 @@ function ViperImagePlugin(viper)
 {
     this.viper = viper;
 
+    this._previewBox = null;
+
 }
 
 ViperImagePlugin.prototype = {
@@ -142,65 +144,15 @@ ViperImagePlugin.prototype = {
         dfx.addClass(previewBox, 'ViperITP-msgBox');
         dfx.setHtml(previewBox, 'Loading preview');
         dfx.setStyle(previewBox, 'display', 'none');
+        self._previewBox = previewBox;
 
         var setImageAttributes = function(url, alt) {
             if (!image || dfx.isTag(image, 'img') === false) {
-                image = self.rangeToImage(self.viper.getViperRange(), url, alt);
+                image = self.rangeToImage(self.viper.getViperRange(), self.getImageUrl(url), alt);
             } else {
-                self.setImageURL(image, url);
+                self.setImageURL(image, self.getImageUrl(url));
                 self.setImageAlt(image, alt);
             }
-        };
-
-        var setPreviewContent = function(img, loading) {
-            dfx.setStyle(previewBox, 'display', 'block');
-
-            if (loading === true) {
-                dfx.removeClass(previewBox, 'info');
-                dfx.setHtml(previewBox, 'Loading preview');
-                self.viper.ViperTools.setFieldErrors('ViperImagePlugin:urlInput', []);
-            } else if (!img) {
-                // Failed to load image.
-                dfx.removeClass(previewBox, 'info');
-                dfx.setStyle(previewBox, 'display', 'none');
-                self.viper.ViperTools.setFieldErrors('ViperImagePlugin:urlInput', ['Failed to load image']);
-            } else {
-                self.viper.ViperTools.setFieldErrors('ViperImagePlugin:urlInput', []);
-                dfx.addClass(previewBox, 'info');
-
-                var tmp = document.createElement('div');
-                dfx.setStyle(tmp, 'visibility', 'hidden');
-                dfx.setStyle(tmp, 'left', '-9999px');
-                dfx.setStyle(tmp, 'top', '-9999px');
-                dfx.setStyle(tmp, 'position', 'absolute');
-                tmp.appendChild(img);
-                document.body.appendChild(tmp);
-
-                dfx.setStyle(img, 'width', '');
-                dfx.setStyle(img, 'height', '');
-
-                var width  = dfx.getElementWidth(img);
-                var height = dfx.getElementHeight(img);
-                dfx.remove(tmp);
-
-                var maxWidth  = 185;
-                var maxHeight = 185;
-                if (height > maxHeight && width > maxWidth) {
-                    if (height > width) {
-                        img.setAttribute('height', maxHeight + 'px');
-                    } else {
-                        img.setAttribute('width', maxWidth + 'px');
-                    }
-                } else if (width > maxWidth) {
-                    img.setAttribute('width', maxWidth + 'px');
-                } else if (height > maxHeight) {
-                    img.setAttribute('height', maxHeight + 'px');
-                }
-
-                dfx.empty(previewBox);
-                dfx.setHtml(previewBox, width + 'px x ' + height + 'px<br/>');
-                previewBox.appendChild(img);
-            }//end if
         };
 
         var tools    = this.viper.ViperTools;
@@ -215,17 +167,20 @@ ViperImagePlugin.prototype = {
         urlTextbox = (dfx.getTag('input', createImageSubContent)[0]);
 
         // Test URL.
-        dfx.addEvent(urlTextbox, 'blur', function() {
-            if (dfx.isBlank(dfx.trim(urlTextbox.value)) === true) {
-                return;
+        var inputTimeout = null;
+        this.viper.registerCallback('ViperTools:changed:ViperImagePlugin:urlInput', 'ViperLinkPlugin', function() {
+            clearTimeout(inputTimeout);
+
+            var url = dfx.trim(tools.getItem('ViperImagePlugin:urlInput').getValue());
+            if (!url) {
+                 dfx.setStyle(previewBox, 'display', 'none');
+                 tools.setFieldErrors('ViperImagePlugin:urlInput', []);
+            } else {
+                // After a time period update the image preview.
+                inputTimeout = setTimeout(function() {
+                    self.updateImagePreview(url);
+                }, 1000);
             }
-
-            // Show loading box.
-            setPreviewContent(false, true);
-
-            dfx.getImage(urlTextbox.value, function(img) {
-                setPreviewContent(img);
-            });
         });
 
         // Alt text box.
@@ -251,12 +206,12 @@ ViperImagePlugin.prototype = {
             if (image && dfx.isTag(image, 'img') === true) {
                 tools.setButtonActive('image');
 
-                tools.getItem('ViperImagePlugin:urlInput').setValue(image.getAttribute('src'));
+                self.setUrlFieldValue(image.getAttribute('src'));
                 tools.getItem('ViperImagePlugin:altInput').setValue(image.getAttribute('alt'));
 
                 // Update preview pane.
                 dfx.empty(previewBox);
-                setPreviewContent(image.cloneNode(true));
+                self.setPreviewContent(image.cloneNode(true));
             } else {
                 tools.enableButton('image');
 
@@ -271,6 +226,82 @@ ViperImagePlugin.prototype = {
                 dfx.setStyle(previewBox, 'display', 'none');
             }//end if
         });
+
+    },
+
+    setUrlFieldValue: function(url)
+    {
+        this.viper.ViperTools.getItem('ViperImagePlugin:urlInput').setValue(url);
+
+    },
+
+    getImageUrl: function(url)
+    {
+        return url;
+
+    },
+
+    updateImagePreview: function(url)
+    {
+        this.setPreviewContent(false, true);
+        var self = this;
+        dfx.getImage(url, function(img) {
+            self.setPreviewContent(img);
+        });
+
+    },
+
+    setPreviewContent: function(img, loading)
+    {
+        var previewBox = this._previewBox;
+        dfx.setStyle(previewBox, 'display', 'block');
+
+        if (loading === true) {
+            dfx.removeClass(previewBox, 'info');
+            dfx.setHtml(previewBox, 'Loading preview');
+            self.viper.ViperTools.setFieldErrors('ViperImagePlugin:urlInput', []);
+        } else if (!img) {
+            // Failed to load image.
+            dfx.removeClass(previewBox, 'info');
+            dfx.setStyle(previewBox, 'display', 'none');
+            self.viper.ViperTools.setFieldErrors('ViperImagePlugin:urlInput', ['Failed to load image']);
+        } else {
+            self.viper.ViperTools.setFieldErrors('ViperImagePlugin:urlInput', []);
+            dfx.addClass(previewBox, 'info');
+
+            var tmp = document.createElement('div');
+            dfx.setStyle(tmp, 'visibility', 'hidden');
+            dfx.setStyle(tmp, 'left', '-9999px');
+            dfx.setStyle(tmp, 'top', '-9999px');
+            dfx.setStyle(tmp, 'position', 'absolute');
+            tmp.appendChild(img);
+            document.body.appendChild(tmp);
+
+            dfx.setStyle(img, 'width', '');
+            dfx.setStyle(img, 'height', '');
+
+            var width  = dfx.getElementWidth(img);
+            var height = dfx.getElementHeight(img);
+            dfx.remove(tmp);
+
+            var maxWidth  = 185;
+            var maxHeight = 185;
+            if (height > maxHeight && width > maxWidth) {
+                if (height > width) {
+                    img.setAttribute('height', maxHeight + 'px');
+                } else {
+                    img.setAttribute('width', maxWidth + 'px');
+                }
+            } else if (width > maxWidth) {
+                img.setAttribute('width', maxWidth + 'px');
+            } else if (height > maxHeight) {
+                img.setAttribute('height', maxHeight + 'px');
+            }
+
+            dfx.empty(previewBox);
+            dfx.setHtml(previewBox, width + 'px x ' + height + 'px<br/>');
+            previewBox.appendChild(img);
+        }//end if
 
     }
 
