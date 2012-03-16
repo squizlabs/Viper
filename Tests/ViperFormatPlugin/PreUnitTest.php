@@ -128,12 +128,16 @@ class Viper_Tests_ViperFormatPlugin_PreUnitTest extends AbstractViperUnitTest
     {
         $dir = dirname(__FILE__).'/Images/';
 
-        $this->selectText('Lorem');
+        $text    = 'Lorem';
+        $textLoc = $this->find($text);
+
+        $this->selectText($text);
         $this->keyDown('Key.CMD + b');
 
         $this->assertHTMLMatch('<pre><strong>Lorem</strong> xtn dolor</pre><pre>sit amet <strong>WoW</strong></pre><p>THIS is a paragraph to change to a PrE</p>');
 
-        $this->selectText('Lorem');
+        $this->click($textLoc);
+        $this->selectText($text);
         $this->keyDown('Key.CMD + b');
 
         $this->assertHTMLMatch('<pre>Lorem xtn dolor</pre><pre>sit amet <strong>WoW</strong></pre><p>THIS is a paragraph to change to a PrE</p>');

@@ -18,6 +18,8 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractViperUnitTest
         $this->keyDown('Key.LEFT');
 
         $dir = dirname(__FILE__).'/Images/';
+        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_justification.png');
+        sleep(1);
         $this->clickTopToolbarButton($dir.'toolbarIcon_alignCenter.png');
         $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_alignCenter_active.png'));
         $this->assertHTMLMatch('<p>Lorem xtn dolor</p><p style="text-align: center;">sit amet <strong>WoW</strong></p>');
@@ -54,41 +56,46 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractViperUnitTest
      */
     public function testBlockFormats()
     {
-        $this->execJS('viper.focus()');
+
+        $dir = dirname(__FILE__).'/Images/';
+
+        $text = 'Lorem';
+
+        $this->selectText($text);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_toggle_formats_highlighted.png');
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_pre.png');
         sleep(1);
+        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_pre_active.png'), 'Toolbar icon not found: toolbarIcon_pre_active.png');
+        $this->assertHTMLMatch('<pre>Lorem xtn dolor</pre><p>sit amet <strong>WoW</strong></p>');
 
-        $dir     = dirname(__FILE__).'/Images/';
-        $buttons = array(
-                    'p',
-                    'pre',
-                    'blockquote',
-                    'div',
-                   );
+        $this->click($this->find($text));
+        $this->selectText($text);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_toggle_formats_highlighted.png');
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_blockquote.png');
+        sleep(1);
+        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_blockquote_active.png'), 'Toolbar icon not found: toolbarIcon_blockquote_active.png');
+        $this->assertHTMLMatch('<blockquote>Lorem xtn dolor</blockquote><p>sit amet <strong>WoW</strong></p>');
 
-        $count = count($buttons);
-        for ($i = 0; $i < $count; $i++) {
-            $tag = $buttons[$i];
-            for ($k = 0; $k < 15; $k++) {
-                $this->keyDown('Key.SHIFT + Key.RIGHT');
-            }
+        $this->click($this->find($text));
+        $this->selectText($text);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_toggle_formats_highlighted.png');
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_div.png');
+        sleep(1);
+        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_div_active.png'), 'Toolbar icon not found: toolbarIcon_div_active.png');
+        $this->assertHTMLMatch('<div>Lorem xtn dolor</div><p>sit amet <strong>WoW</strong></p>');
 
-            sleep(1);
+        $this->click($this->find($text));
+        $this->selectText($text);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_toggle_formats_highlighted.png');
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_p.png');
+        sleep(1);
+        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_p_active.png'), 'Toolbar icon not found: toolbarIcon_p_active.png');
+        $this->assertHTMLMatch('<p>Lorem xtn dolor</p><p>sit amet <strong>WoW</strong></p>');
 
-            if ($tag !== 'p') {
-                $this->clickInlineToolbarButton($dir.'toolbarIcon_'.$tag.'.png');
-            }
-
-            $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_'.$tag.'_active.png'), 'Toolbar icon not found: toolbarIcon_'.$tag.'_active.png');
-            $this->assertHTMLMatch('<'.$tag.'>Lorem xtn dolor</'.$tag.'><p>sit amet <strong>WoW</strong></p>');
-
-            for ($j = 0; $j < $count; $j++) {
-                if ($j === $i) {
-                    continue;
-                }
-
-                $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_'.$buttons[$j].'.png'));
-            }
-        }//end for
 
     }//end testBlockFormats()
 
@@ -124,6 +131,7 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractViperUnitTest
 
             if ($i === 0) {
                 $this->clickInlineToolbarButton($dir.'toolbarIcon_heading.png');
+                sleep(1);
             }
 
             $this->clickInlineToolbarButton($dir.'toolbarIcon_'.$tag.'.png');

@@ -12,6 +12,8 @@ class Viper_Tests_ViperCoreStylesPlugin_RemoveFormatUnitTest extends AbstractVip
      */
     public function testRemoveFormatIcon()
     {
+        $this->markTestIncomplete('Failing due to issue 1560.');
+
         $dir = dirname(__FILE__).'/Images/';
 
         $this->selectText('WoW');

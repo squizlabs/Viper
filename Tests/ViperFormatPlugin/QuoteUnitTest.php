@@ -129,11 +129,15 @@ class Viper_Tests_ViperFormatPlugin_QuoteUnitTest extends AbstractViperUnitTest
     {
         $dir = dirname(__FILE__).'/Images/';
 
-        $this->selectText('Lorem');
+        $text    = 'Lorem';
+        $textLoc = $this->find($text);
+
+        $this->selectText($text);
         $this->keyDown('Key.CMD + b');
 
         $this->assertHTMLMatch('<blockquote><strong>Lorem</strong> xtn dolor</blockquote><blockquote>sit amet <strong>WoW</strong></blockquote><p>THIS is a paragraph to change to a quote</p>');
 
+        $this->click($textLoc);
         $this->selectText('Lorem');
         $this->keyDown('Key.CMD + b');
 
