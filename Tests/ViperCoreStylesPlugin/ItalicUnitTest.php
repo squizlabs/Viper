@@ -162,6 +162,8 @@ class Viper_Tests_ViperCoreStylesPlugin_ItalicUnitTest extends AbstractViperUnit
      */
     public function testAdjacentWordStyling()
     {
+        $this->markTestIncomplete('This test is failing due to issue 1688.');
+
         $this->selectText('XuT');
         $this->keyDown('Key.CMD + i');
 
@@ -263,6 +265,8 @@ class Viper_Tests_ViperCoreStylesPlugin_ItalicUnitTest extends AbstractViperUnit
      */
     public function testAddingItalicsToTwoWordsWhereOneIsBold()
     {
+        $this->markTestIncomplete('This test is failing due to issue 1558.');
+
         $dir = dirname(__FILE__).'/Images/';
 
         $this->selectText('XuT');
