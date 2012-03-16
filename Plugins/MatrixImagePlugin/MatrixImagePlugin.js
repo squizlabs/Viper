@@ -38,6 +38,46 @@ MatrixImagePlugin.prototype = {
 
     },
 
+    updateImagePreview: function(url)
+    {
+        if (url.match(/^\.\/\?a=/)) {
+            url = url.replace(/^\.\/\?a=/, '');
+        }
+
+        if (this._isInternalLink(url) === true) {
+            var currentUrl = dfx.baseUrl(window.location.href);
+            currentUrl     = currentUrl.replace('/_edit', '');
+            currentUrl += '?a=' + url;
+
+            url = currentUrl;
+        }
+
+        this.setPreviewContent(false, true);
+        var self = this;
+        dfx.getImage(url, function(img) {
+            self.setPreviewContent(img);
+        });
+    },
+
+    setUrlFieldValue: function(url)
+    {
+        url = url.replace(/^\.\/\?a=/, '');
+        ViperImagePlugin.prototype.setUrlFieldValue.call(this, url);
+
+    },
+
+    getImageUrl: function(url)
+    {
+        url = ViperImagePlugin.prototype.getImageUrl.call(this, url);
+
+        if (this._isInternalLink(url) === true) {
+            url = './?a=' + url;
+        }
+
+        return url;
+
+    },
+
     /**
      * Pick an asset from the asset finder
      * @param {string} idPrefix         The prefix assigned to the plugin
