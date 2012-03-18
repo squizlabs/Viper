@@ -37,6 +37,7 @@ function ViperInlineToolbarPlugin(viper)
     this._buttons    = null;
 
     this._autoFocusTextbox = true;
+    this._keepOpenTagList  = [];
 
     // Create the toolbar.
     this._createToolbar();
@@ -99,6 +100,8 @@ ViperInlineToolbarPlugin.prototype = {
                     }
 
                     return false;
+                } else if (self._keepOpenTagList.inArray(dfx.getTagName(target)) === true) {
+                    return;
                 }
             }
 
@@ -474,6 +477,12 @@ ViperInlineToolbarPlugin.prototype = {
     {
         this._activeSection = null;
         dfx.removeClass(this._toolbar, 'visible');
+
+    },
+
+    addKeepOpenTag: function(tagName)
+    {
+        this._keepOpenTagList.push(tagName);
 
     },
 

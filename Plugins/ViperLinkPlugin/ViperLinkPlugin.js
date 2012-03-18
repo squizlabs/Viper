@@ -327,6 +327,8 @@ ViperLinkPlugin.prototype = {
             return;
         }
 
+        inlineToolbarPlugin.addKeepOpenTag('a');
+
         var self = this;
         this.viper.registerCallback('ViperInlineToolbarPlugin:updateToolbar', 'ViperLinkPlugin', function(data) {
             if (self.showInlineToolbarIcons(data) === true) {
