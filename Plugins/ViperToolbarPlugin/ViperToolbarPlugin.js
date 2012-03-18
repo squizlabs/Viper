@@ -355,9 +355,16 @@ ViperToolbarPlugin.prototype = {
             {
                 var tools = self.viper.ViperTools;
                 for (var i = 0; i < widgetids.length; i++) {
-                    self.viper.registerCallback('ViperTools:changed:' + widgetids[i], 'ViperToolbarPlugin', function() {
-                        tools.enableButton(subSectionid + '-applyButton');
-                    });
+                    (function(widgetid) {
+                        self.viper.registerCallback('ViperTools:changed:' + widgetid, 'ViperToolbarPlugin', function() {
+                            var widget = tools.getItem(widgetid);
+                            if (widget.required !== true || dfx.trim(widget.getValue()) !== '') {
+                                tools.enableButton(subSectionid + '-applyButton');
+                            } else if (widget.required === true) {
+                                tools.disableButton(subSectionid + '-applyButton');
+                            }
+                        });
+                    }) (widgetids[i]);
                 }
 
             },

@@ -469,6 +469,7 @@ ViperTools.prototype = {
             element: textBox,
             input: input,
             label: labelEl,
+            required: required,
             getValue: function() {
                 return input.value;
             },
