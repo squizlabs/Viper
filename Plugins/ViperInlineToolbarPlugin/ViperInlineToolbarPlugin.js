@@ -302,6 +302,8 @@ ViperInlineToolbarPlugin.prototype = {
                 if (this._activeSection === subSectionid) {
                     dfx.removeClass(this._toolbar, 'subSectionVisible');
                     this._activeSection = null;
+
+                    dfx.removeEvent(document, 'keydown.ViperInlineToolbarPlugin');
                     return;
                 }
             }
@@ -331,6 +333,14 @@ ViperInlineToolbarPlugin.prototype = {
                 dfx.removeClass(inputElements[0].parentNode.parentNode.parentNode, 'active');
             }
         }
+
+        var subSectionForm = this.viper.ViperTools.getItem(subSectionid).form;
+        dfx.removeEvent(document, 'keydown.ViperInlineToolbarPlugin');
+        dfx.addEvent(document, 'keydown.ViperInlineToolbarPlugin', function(e) {
+            if (subSectionForm && e.which === 13) {
+                return subSectionForm.onsubmit();
+            }
+        });
 
     },
 
@@ -475,6 +485,8 @@ ViperInlineToolbarPlugin.prototype = {
      */
     hideToolbar: function()
     {
+        dfx.removeEvent(document, 'keydown.ViperInlineToolbarPlugin');
+
         this._activeSection = null;
         dfx.removeClass(this._toolbar, 'visible');
 
