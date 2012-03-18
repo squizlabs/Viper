@@ -162,7 +162,7 @@ ViperImagePlugin.prototype = {
 
         // URL text box.
         var urlTextbox = null;
-        var url = tools.createTextbox('ViperImagePlugin:urlInput', 'URL');
+        var url = tools.createTextbox('ViperImagePlugin:urlInput', 'URL', '', null, true);
         createImageSubContent.appendChild(url);
         urlTextbox = (dfx.getTag('input', createImageSubContent)[0]);
 
