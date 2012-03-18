@@ -217,6 +217,32 @@ ViperLinkPlugin.prototype = {
 
     },
 
+    removeLinks: function()
+    {
+        var range    = this.viper.getViperRange();
+        var bookmark = this.viper.createBookmark();
+
+        var elems = dfx.getElementsBetween(bookmark.start, bookmark.end);
+
+        dfx.walk(bookmark.start, function(elem) {
+            if (elem.nodeType === dfx.ELEMENT_NODE && dfx.isTag(elem, 'a') === true) {
+                var nextSibling = elem.firstChild;
+                while (elem.lastChild) {
+                    dfx.insertAfter(elem, elem.lastChild);
+                }
+
+                dfx.remove(elem);
+
+                return nextSibling;
+            }
+        }, bookmark.end);
+
+        this.viper.selectBookmark(bookmark);
+        this.viper.fireSelectionChanged(null, true);
+        this.viper.fireNodesChanged([this.viper.getViperElement()]);
+
+    },
+
     getLinkFromRange: function(range)
     {
         range = range || this.viper.getViperRange();
@@ -239,6 +265,23 @@ ViperLinkPlugin.prototype = {
         }
 
         return null;
+
+    },
+
+    selectionHasLinks: function(range)
+    {
+        range = range || this.viper.getViperRange();
+
+        if (range.collapsed === true) {
+            return false;
+        }
+
+        var contents = range.getHTMLContents();
+        if (contents.indexOf('<a') >= 0) {
+            return true;
+        }
+
+        return false;
 
     },
 
@@ -331,18 +374,32 @@ ViperLinkPlugin.prototype = {
 
         var self = this;
         this.viper.registerCallback('ViperInlineToolbarPlugin:updateToolbar', 'ViperLinkPlugin', function(data) {
-            if (self.showInlineToolbarIcons(data) === true) {
+            var selectionHasLinks = self.selectionHasLinks(data.range);
+            if (selectionHasLinks !== true && self.showInlineToolbarIcons(data) === true) {
                 self.updateInlineToolbar(data);
+            } else if (selectionHasLinks === true) {
+                self.updateInlineToolbar(data, true);
             }
         });
     },
 
-    updateInlineToolbar: function(data)
+    updateInlineToolbar: function(data, removeLinkOnly)
     {
         var inlineToolbarPlugin = this.viper.ViperPluginManager.getPlugin('ViperInlineToolbarPlugin');
-
         var self = this;
+
+        if (removeLinkOnly === true) {
+            var removeLinkBtn = this.viper.ViperTools.createButton('vitpRemoveLink', '', 'Remove Link', 'linkRemove', function() {
+                self.removeLinks();
+            });
+
+            inlineToolbarPlugin.addButton(removeLinkBtn);
+
+            return;
+        }
+
         var main = document.createElement('div');
+
         inlineToolbarPlugin.makeSubSection('ViperLinkPlugin:vitp:link', main, function() {
             var range = self.viper.getViperRange();
             var node  = self.getLinkFromRange(range);
@@ -357,12 +414,18 @@ ViperLinkPlugin.prototype = {
         var insertLinkBtn = this.viper.ViperTools.createButton('vitpInsertLink', '', 'Toggle Link Options', 'link');
 
         var link = this.getLinkFromRange(data.range);
-        if (link) {
-            this.viper.ViperTools.setButtonActive('vitpInsertLink');
+        if (link || this.selectionHasLinks(data.drange) === true) {
+            if (link) {
+                this.viper.ViperTools.setButtonActive('vitpInsertLink');
+            }
 
             // Show the remove link button.
             var removeLinkBtn = this.viper.ViperTools.createButton('vitpRemoveLink', '', 'Remove Link', 'linkRemove', function() {
-                self.removeLink(link);
+                if (!link) {
+                    self.removeLinks();
+                } else {
+                    self.removeLink(link);
+                }
             });
 
             var btnGroup = this.viper.ViperTools.createButtonGroup('ViperLinkPlugin:vitpButtons');
@@ -435,8 +498,12 @@ ViperLinkPlugin.prototype = {
 
         tools.createButton('insertLink', '', 'Toggle Link Options', 'link', null, disabled);
         tools.createButton('removeLink', '', 'Remove Link', 'linkRemove', function() {
-            var link = self.getLinkFromRange();
-            self.removeLink(link);
+            if (self.selectionHasLinks() === true) {
+                self.removeLinks();
+            } else {
+                var link = self.getLinkFromRange();
+                self.removeLink(link);
+            }
         }, disabled);
 
         tools.addButtonToGroup('insertLink', 'ViperLinkPlugin:vtp:btnGroup');
@@ -462,7 +529,14 @@ ViperLinkPlugin.prototype = {
         // Update the buttons when the toolbar updates it self.
         this.viper.registerCallback('ViperToolbarPlugin:updateToolbar', 'ViperLinkPlugin', function(data) {
             var range = data.range;
-            link      = self.getLinkFromRange(range);
+            var selectionHasLinks = self.selectionHasLinks(range);
+            if (selectionHasLinks === true) {
+                tools.disableButton('insertLink');
+                tools.enableButton('removeLink');
+                return;
+            }
+
+            link = self.getLinkFromRange(range);
 
             if (link) {
                 tools.setButtonActive('insertLink');
