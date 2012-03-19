@@ -29,9 +29,10 @@ function ViperInlineToolbarPlugin(viper)
     this._currentLineageIndex = null;
     this._margin              = 15;
 
-    this._subSections       = {};
-    this._subSectionButtons = {};
-    this._activeSection     = null;
+    this._subSections             = {};
+    this._subSectionButtons       = {};
+    this._subSectionActionWidgets = {};
+    this._activeSection           = null;
 
     this._topToolbar = null;
     this._buttons    = null;
@@ -390,14 +391,31 @@ ViperInlineToolbarPlugin.prototype = {
 
     addSubSectionActionWidgets: function(subSectionid, widgetids)
     {
-        var tools = self.viper.ViperTools;
+        if (!this._subSectionActionWidgets[subSectionid]) {
+            this._subSectionActionWidgets[subSectionid] = [];
+        }
+
+        var self  = this;
+        var tools = this.viper.ViperTools;
         for (var i = 0; i < widgetids.length; i++) {
+            this._subSectionActionWidgets[subSectionid].push(widgetids[i]);
+
             (function(widgetid) {
                 self.viper.registerCallback('ViperTools:changed:' + widgetid, 'ViperToolbarPlugin', function() {
-                    var widget = tools.getItem(widgetid);
-                    if (widget.required !== true || dfx.trim(widget.getValue()) !== '') {
+                    var subSectionWidgets = self._subSectionActionWidgets[subSectionid];
+                    var c = subSectionWidgets.length;
+                    var enable = true;
+                    for (var j = 0; j < c; j++) {
+                        var widget = tools.getItem(subSectionWidgets[j]);
+                        if (widget.required === true && dfx.trim(widget.getValue()) === '') {
+                            enable = false;
+                            break;
+                        }
+                    }
+
+                    if (enable === true) {
                         tools.enableButton(subSectionid + '-applyButton');
-                    } else if (widget.required === true) {
+                    } else {
                         tools.disableButton(subSectionid + '-applyButton');
                     }
                 });

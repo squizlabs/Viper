@@ -353,14 +353,30 @@ ViperToolbarPlugin.prototype = {
             },
             addSubSectionActionWidgets: function(subSectionid, widgetids)
             {
-                var tools = self.viper.ViperTools;
+                if (!this._subSectionActionWidgets[subSectionid]) {
+                    this._subSectionActionWidgets[subSectionid] = [];
+                }
+
+                var subsec = this;
+                var tools  = self.viper.ViperTools;
                 for (var i = 0; i < widgetids.length; i++) {
+                    this._subSectionActionWidgets[subSectionid].push(widgetids[i]);
                     (function(widgetid) {
                         self.viper.registerCallback('ViperTools:changed:' + widgetid, 'ViperToolbarPlugin', function() {
-                            var widget = tools.getItem(widgetid);
-                            if (widget.required !== true || dfx.trim(widget.getValue()) !== '') {
+                            var subSectionWidgets = subsec._subSectionActionWidgets[subSectionid];
+                            var c = subSectionWidgets.length;
+                            var enable = true;
+                            for (var j = 0; j < c; j++) {
+                                var widget = tools.getItem(subSectionWidgets[j]);
+                                if (widget.required === true && dfx.trim(widget.getValue()) === '') {
+                                    enable = false;
+                                    break;
+                                }
+                            }
+
+                            if (enable === true) {
                                 tools.enableButton(subSectionid + '-applyButton');
-                            } else if (widget.required === true) {
+                            } else {
                                 tools.disableButton(subSectionid + '-applyButton');
                             }
                         });
@@ -381,7 +397,8 @@ ViperToolbarPlugin.prototype = {
             _subSectionButtons: {},
             _activeSubSection: null,
             _openCallback: openCallback,
-            _closeCallback: closeCallback
+            _closeCallback: closeCallback,
+            _subSectionActionWidgets: {}
         };
 
         if (subSectionElement) {
