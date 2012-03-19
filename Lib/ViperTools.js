@@ -469,6 +469,7 @@ ViperTools.prototype = {
             element: textBox,
             input: input,
             label: labelEl,
+            required: required,
             getValue: function() {
                 return input.value;
             },
@@ -514,6 +515,18 @@ ViperTools.prototype = {
             {
                 dfx.removeClass(textBox, 'disabled');
                 input.removeAttribute('disabled');
+            },
+            setRequired: function(required)
+            {
+                if (required === true) {
+                    input.setAttribute('placeholder', 'required');
+                    dfx.addClass(textBox, 'required');
+                } else {
+                    dfx.removeClass(textBox, 'required');
+                    input.removeAttribute('placeholder');
+                }
+
+                this.required = required;
             }
         });
 

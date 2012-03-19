@@ -29,14 +29,16 @@ function ViperInlineToolbarPlugin(viper)
     this._currentLineageIndex = null;
     this._margin              = 15;
 
-    this._subSections       = {};
-    this._subSectionButtons = {};
-    this._activeSection     = null;
+    this._subSections             = {};
+    this._subSectionButtons       = {};
+    this._subSectionActionWidgets = {};
+    this._activeSection           = null;
 
     this._topToolbar = null;
     this._buttons    = null;
 
     this._autoFocusTextbox = true;
+    this._keepOpenTagList  = [];
 
     // Create the toolbar.
     this._createToolbar();
@@ -99,6 +101,8 @@ ViperInlineToolbarPlugin.prototype = {
                     }
 
                     return false;
+                } else if (self._keepOpenTagList.inArray(dfx.getTagName(target)) === true) {
+                    return;
                 }
             }
 
@@ -299,6 +303,8 @@ ViperInlineToolbarPlugin.prototype = {
                 if (this._activeSection === subSectionid) {
                     dfx.removeClass(this._toolbar, 'subSectionVisible');
                     this._activeSection = null;
+
+                    dfx.removeEvent(document, 'keydown.ViperInlineToolbarPlugin');
                     return;
                 }
             }
@@ -328,6 +334,14 @@ ViperInlineToolbarPlugin.prototype = {
                 dfx.removeClass(inputElements[0].parentNode.parentNode.parentNode, 'active');
             }
         }
+
+        var subSectionForm = this.viper.ViperTools.getItem(subSectionid).form;
+        dfx.removeEvent(document, 'keydown.ViperInlineToolbarPlugin');
+        dfx.addEvent(document, 'keydown.ViperInlineToolbarPlugin', function(e) {
+            if (subSectionForm && e.which === 13 && e.target === document.body) {
+                return subSectionForm.onsubmit();
+            }
+        });
 
     },
 
@@ -377,11 +391,35 @@ ViperInlineToolbarPlugin.prototype = {
 
     addSubSectionActionWidgets: function(subSectionid, widgetids)
     {
+        if (!this._subSectionActionWidgets[subSectionid]) {
+            this._subSectionActionWidgets[subSectionid] = [];
+        }
+
+        var self  = this;
         var tools = this.viper.ViperTools;
         for (var i = 0; i < widgetids.length; i++) {
-            this.viper.registerCallback('ViperTools:changed:' + widgetids[i], 'ViperInlineToolbarPlugin', function() {
-                tools.enableButton(subSectionid + '-applyButton');
-            });
+            this._subSectionActionWidgets[subSectionid].push(widgetids[i]);
+
+            (function(widgetid) {
+                self.viper.registerCallback('ViperTools:changed:' + widgetid, 'ViperToolbarPlugin', function() {
+                    var subSectionWidgets = self._subSectionActionWidgets[subSectionid];
+                    var c = subSectionWidgets.length;
+                    var enable = true;
+                    for (var j = 0; j < c; j++) {
+                        var widget = tools.getItem(subSectionWidgets[j]);
+                        if (widget.required === true && dfx.trim(widget.getValue()) === '') {
+                            enable = false;
+                            break;
+                        }
+                    }
+
+                    if (enable === true) {
+                        tools.enableButton(subSectionid + '-applyButton');
+                    } else {
+                        tools.disableButton(subSectionid + '-applyButton');
+                    }
+                });
+            }) (widgetids[i]);
         }
 
     },
@@ -472,8 +510,16 @@ ViperInlineToolbarPlugin.prototype = {
      */
     hideToolbar: function()
     {
+        dfx.removeEvent(document, 'keydown.ViperInlineToolbarPlugin');
+
         this._activeSection = null;
         dfx.removeClass(this._toolbar, 'visible');
+
+    },
+
+    addKeepOpenTag: function(tagName)
+    {
+        this._keepOpenTagList.push(tagName);
 
     },
 

@@ -19,10 +19,10 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarFormatsUnitTest extends 
 
         $this->selectInlineToolbarLineageItem(0);
 
+        $this->assertEquals('Lorem IPSUM dolor', $this->getSelectedText(), 'Paragraph is not selected.');
+
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem selected">P</li><li class="ViperITP-lineageItem">Selection</li>', $lineage);
-
-        $this->assertEquals('Lorem IPSUM dolor', $this->getSelectedText(), 'Paragraph is not selected.');
 
         $this->selectInlineToolbarLineageItem(1);
         $this->assertEquals('IPSUM', $this->getSelectedText(), 'Original selection is not selected');
@@ -45,10 +45,10 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarFormatsUnitTest extends 
 
         $this->selectInlineToolbarLineageItem(0);
 
+        $this->assertEquals('the quick brown fox', $this->getSelectedText(), 'Blockquote is not selected.');
+
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem selected">Quote</li><li class="ViperITP-lineageItem">Selection</li>', $lineage);
-
-        $this->assertEquals('the quick brown fox', $this->getSelectedText(), 'Blockquote is not selected.');
 
         $this->selectInlineToolbarLineageItem(1);
         $this->assertEquals('quick', $this->getSelectedText(), 'Original selection is not selected');
@@ -71,10 +71,10 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarFormatsUnitTest extends 
 
         $this->selectInlineToolbarLineageItem(0);
 
+        $this->assertEquals('jumps OVER the lazy dog', $this->getSelectedText(), 'Div is not selected.');
+
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem selected">DIV</li><li class="ViperITP-lineageItem">Selection</li>', $lineage);
-
-        $this->assertEquals('jumps OVER the lazy dog', $this->getSelectedText(), 'Div is not selected.');
 
         $this->selectInlineToolbarLineageItem(1);
         $this->assertEquals('lazy', $this->getSelectedText(), 'Original selection is not selected');
@@ -97,10 +97,10 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarFormatsUnitTest extends 
 
         $this->selectInlineToolbarLineageItem(0);
 
+        $this->assertEquals('Squiz LABS is 0rsm', $this->getSelectedText(), 'Pre is not selected.');
+
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem selected">PRE</li><li class="ViperITP-lineageItem">Selection</li>', $lineage);
-
-        $this->assertEquals('Squiz LABS is 0rsm', $this->getSelectedText(), 'Pre is not selected.');
 
         $this->selectInlineToolbarLineageItem(1);
         $this->assertEquals('LABS', $this->getSelectedText(), 'Original selection is not selected');
@@ -124,8 +124,11 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarFormatsUnitTest extends 
         $this->selectInlineToolbarLineageItem(0);
         $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_toggle_formats_sub.png');
         $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_blockquote.png');
+
+        $this->selectText('IPSUM');
+        $this->selectInlineToolbarLineageItem(0);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem selected">Quote</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem selected">Quote</li><li class="ViperITP-lineageItem">Selection</li>', $lineage);
 
     }//end testPChangesToQuoteInLineage()
 
@@ -145,8 +148,11 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarFormatsUnitTest extends 
         $this->selectInlineToolbarLineageItem(0);
         $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_toggle_formats_sub.png');
         $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_div.png');
+
+        $this->selectText('IPSUM');
+        $this->selectInlineToolbarLineageItem(0);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem selected">DIV</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem selected">DIV</li><li class="ViperITP-lineageItem">Selection</li>', $lineage);
 
     }//end testPChangesToDivInLineage()
 
@@ -166,8 +172,11 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarFormatsUnitTest extends 
         $this->selectInlineToolbarLineageItem(0);
         $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_toggle_formats_sub.png');
         $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_pre.png');
+
+        $this->selectText('IPSUM');
+        $this->selectInlineToolbarLineageItem(0);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem selected">PRE</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem selected">PRE</li><li class="ViperITP-lineageItem">Selection</li>', $lineage);
 
     }//end testPChangesToPreInLineage()
 
@@ -185,16 +194,20 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarFormatsUnitTest extends 
         $this->assertEquals('<li class="ViperITP-lineageItem">H1</li><li class="ViperITP-lineageItem selected">Selection</li>', $lineage);
 
         $this->selectInlineToolbarLineageItem(0);
+
+        $this->assertEquals('Inline Toolbar Unit Test', $this->getSelectedText(), 'The H1 tag is not selected');
+
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem selected">H1</li><li class="ViperITP-lineageItem">Selection</li>', $lineage);
-        
-        $this->assertEquals('Inline Toolbar Unit Test', $this->getSelectedText(), 'The H1 tag is not selected');
-        
+
         $this->selectInlineToolbarLineageItem(1);
+
+        $this->assertEquals('Unit', $this->getSelectedText(), 'Original text is not selected');
+
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">H1</li><li class="ViperITP-lineageItem selected">Selection</li>', $lineage);
-        
-        $this->assertEquals('Unit', $this->getSelectedText(), 'Original text is not selected');
+
+
 
     }//end testSelectingH1Tag()
 
@@ -212,19 +225,21 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarFormatsUnitTest extends 
         $this->assertEquals('<li class="ViperITP-lineageItem">H2</li><li class="ViperITP-lineageItem selected">Selection</li>', $lineage);
 
         $this->selectInlineToolbarLineageItem(0);
+
+        $this->assertEquals('Heading Two', $this->getSelectedText(), 'The H2 tag is not selected');
+
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem selected">H2</li><li class="ViperITP-lineageItem">Selection</li>', $lineage);
-        
-        $this->assertEquals('Heading Two', $this->getSelectedText(), 'The H2 tag is not selected');
-        
+
         $this->selectInlineToolbarLineageItem(1);
-        $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">H2</li><li class="ViperITP-lineageItem selected">Selection</li>', $lineage);
-        
+
         $this->assertEquals('Two', $this->getSelectedText(), 'Original text is not selected');
 
+        $lineage = $this->getHtml('.ViperITP-lineage');
+        $this->assertEquals('<li class="ViperITP-lineageItem">H2</li><li class="ViperITP-lineageItem selected">Selection</li>', $lineage);
+
     }//end testSelectingH2Tag()
-    
+
 
     /**
      * Test selecting the H3 tag in the toolbar.
@@ -239,20 +254,21 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarFormatsUnitTest extends 
         $this->assertEquals('<li class="ViperITP-lineageItem">H3</li><li class="ViperITP-lineageItem selected">Selection</li>', $lineage);
 
         $this->selectInlineToolbarLineageItem(0);
+        $this->assertEquals('Heading Three', $this->getSelectedText(), 'The H3 tag is not selected');
+
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem selected">H3</li><li class="ViperITP-lineageItem">Selection</li>', $lineage);
-        
-        $this->assertEquals('Heading Three', $this->getSelectedText(), 'The H3 tag is not selected');
-        
+
         $this->selectInlineToolbarLineageItem(1);
-        $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">H3</li><li class="ViperITP-lineageItem selected">Selection</li>', $lineage);
-        
+
         $this->assertEquals('Three', $this->getSelectedText(), 'Original text is not selected');
 
+        $lineage = $this->getHtml('.ViperITP-lineage');
+        $this->assertEquals('<li class="ViperITP-lineageItem">H3</li><li class="ViperITP-lineageItem selected">Selection</li>', $lineage);
+
     }//end testSelectingH3Tag()
-    
-    
+
+
      /**
      * Test correct lineage is shown when you change a paragraph to a Heading.
      *
@@ -268,8 +284,11 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarFormatsUnitTest extends 
         $this->selectInlineToolbarLineageItem(0);
         $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_heading.png');
         $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_h2.png');
+
+        $this->selectText('IPSUM');
+        $this->selectInlineToolbarLineageItem(0);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem selected">H2</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem selected">H2</li><li class="ViperITP-lineageItem">Selection</li>', $lineage);
 
     }//end testPChangesToH2InLineage()
 
@@ -289,16 +308,15 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarFormatsUnitTest extends 
         $this->selectInlineToolbarLineageItem(0);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem selected">DIV</li><li class="ViperITP-lineageItem">SPAN</li>', $lineage);
-        
+
         $this->selectInlineToolbarLineageItem(1);
+        $this->assertEquals('OVER', $this->getSelectedText(), 'Class span tag is not selected');
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">DIV</li><li class="ViperITP-lineageItem selected">SPAN</li>', $lineage);
-        
-        $this->assertEquals('OVER', $this->getSelectedText(), 'Class span tag is not selected');
 
     }//end testClassSpanTag()
-    
-    
+
+
 }//end class
 
 ?>
