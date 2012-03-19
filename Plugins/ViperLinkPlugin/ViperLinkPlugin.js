@@ -152,22 +152,27 @@ ViperLinkPlugin.prototype = {
         var a     = document.createElement('a');
 
         if (node && node.nodeType === dfx.ELEMENT_NODE) {
-            while (node.firstChild) {
-                a.appendChild(node.firstChild);
-            }
-
             this.updateLinkAttributes(a, idPrefix);
 
-            if (dfx.isTag(node, 'span') === true) {
-                // Replace the span tag with the link tag.
-                for (var i = 0; i < node.attributes.length; i++) {
-                    a.setAttribute(node.attributes[i].nodeName, node.attributes[i].nodeValue)
+            if (dfx.isStubElement(node) === true) {
+                dfx.insertBefore(node, a);
+                a.appendChild(node);
+            } else {
+                while (node.firstChild) {
+                    a.appendChild(node.firstChild);
                 }
 
-                dfx.insertBefore(node, a);
-                dfx.remove(node);
-            } else {
-                node.appendChild(a);
+                if (dfx.isTag(node, 'span') === true) {
+                    // Replace the span tag with the link tag.
+                    for (var i = 0; i < node.attributes.length; i++) {
+                        a.setAttribute(node.attributes[i].nodeName, node.attributes[i].nodeValue)
+                    }
+
+                    dfx.insertBefore(node, a);
+                    dfx.remove(node);
+                } else {
+                    node.appendChild(a);
+                }
             }
         } else {
             var bookmark = this.viper.createBookmark(range);
@@ -304,20 +309,31 @@ ViperLinkPlugin.prototype = {
 
         var range = this.viper.getViperRange();
         var link  = range.getNodeSelection();
-        if (link && link.nodeType === dfx.ELEMENT_NODE) {
-            attrUrl   = link.getAttribute('href') || '';
-            attrTitle = link.getAttribute('title') || '';
 
-            if (link.getAttribute('target') === '_blank') {
-                attrTarget = true;
+
+        if (link && link.nodeType === dfx.ELEMENT_NODE) {
+            if (dfx.isTag(link, 'a') !== true) {
+                var parents = dfx.getSurroundingParents(link, 'a');
+                if (parents.length > 0) {
+                    link = parents[0];
+                }
             }
 
-            if (attrUrl.indexOf('mailto:') === 0) {
-                isEmailLink   = true;
-                var subjIndex = attrUrl.indexOf('?subject=');
-                if (subjIndex >= 0) {
-                    attrSubj = attrUrl.substr(subjIndex + 9);
-                    attrUrl  = attrUrl.substr(0, subjIndex).replace('mailto:', '');
+            if (dfx.isTag(link, 'a') === true) {
+                attrUrl   = link.getAttribute('href') || '';
+                attrTitle = link.getAttribute('title') || '';
+
+                if (link.getAttribute('target') === '_blank') {
+                    attrTarget = true;
+                }
+
+                if (attrUrl.indexOf('mailto:') === 0) {
+                    isEmailLink   = true;
+                    var subjIndex = attrUrl.indexOf('?subject=');
+                    if (subjIndex >= 0) {
+                        attrSubj = attrUrl.substr(subjIndex + 9);
+                        attrUrl  = attrUrl.substr(0, subjIndex).replace('mailto:', '');
+                    }
                 }
             }
         }
@@ -462,7 +478,7 @@ ViperLinkPlugin.prototype = {
         var currentIsLink = false;
 
         // Check if we need to show the link options.
-        if (dfx.isBlockElement(data.lineage[data.current]) === true) {
+        if (dfx.isTag(data.lineage[data.current], 'img') !== true && dfx.isBlockElement(data.lineage[data.current]) === true) {
             return false;
         }
 
