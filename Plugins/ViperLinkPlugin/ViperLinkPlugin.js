@@ -276,6 +276,12 @@ ViperLinkPlugin.prototype = {
             return false;
         }
 
+        var nodeSelection = range.getNodeSelection();
+        if (nodeSelection && dfx.isTag(nodeSelection, 'a') === true) {
+            // Let the getLinkFromRange handle this.
+            return false;
+        }
+
         var contents = range.getHTMLContents();
         if (contents.indexOf('<a') >= 0) {
             return true;
