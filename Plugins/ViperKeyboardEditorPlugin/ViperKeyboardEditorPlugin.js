@@ -195,6 +195,20 @@ ViperKeyboardEditorPlugin.prototype = {
         if (range.startContainer.nodeType === dfx.TEXT_NODE) {
             // Find the first parent block element.
             var parent = range.startContainer.parentNode;
+            if (parent === this.viper.getViperElement()) {
+                // Check if there are any block elements before this node.
+                if (range.startContainer.previousSibling
+                    && range.startContainer.previousSibling.nodeType !== dfx.TEXT_NODE
+                ) {
+                    return range.startContainer.previousSibling;
+                } else {
+                    // Cretae a new paragraph and insert it at range position.
+                    var para = document.createElement('p');
+                    dfx.setHtml(para, '&nbsp;');
+                    dfx.insertAfter(range.startContainer, para);
+                    return para;
+                }
+            }
 
             var blockQuote = dfx.getParents(range.startContainer, 'blockquote', this.viper.element);
 
