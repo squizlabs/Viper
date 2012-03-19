@@ -3304,7 +3304,12 @@ Viper.prototype = {
     {
         if (this.element) {
             try {
+                var scrollCoords = dfx.getScrollCoords();
                 this.element.focus();
+
+                // IE and Webkit fix.
+                Viper.window.scrollTo(scrollCoords.x, scrollCoords.y);
+
                 this.fireCaretUpdated();
             } catch (e) {
                 // Catch the IE error: Can't move focus to control because its invisible.
