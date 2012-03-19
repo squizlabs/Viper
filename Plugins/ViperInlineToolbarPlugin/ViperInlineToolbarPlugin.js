@@ -337,7 +337,7 @@ ViperInlineToolbarPlugin.prototype = {
         var subSectionForm = this.viper.ViperTools.getItem(subSectionid).form;
         dfx.removeEvent(document, 'keydown.ViperInlineToolbarPlugin');
         dfx.addEvent(document, 'keydown.ViperInlineToolbarPlugin', function(e) {
-            if (subSectionForm && e.which === 13) {
+            if (subSectionForm && e.which === 13 && e.target === document.body) {
                 return subSectionForm.onsubmit();
             }
         });
