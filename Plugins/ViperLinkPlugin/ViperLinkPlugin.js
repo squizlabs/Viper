@@ -309,20 +309,31 @@ ViperLinkPlugin.prototype = {
 
         var range = this.viper.getViperRange();
         var link  = range.getNodeSelection();
-        if (link && link.nodeType === dfx.ELEMENT_NODE && dfx.isTag(link, 'a') === true) {
-            attrUrl   = link.getAttribute('href') || '';
-            attrTitle = link.getAttribute('title') || '';
 
-            if (link.getAttribute('target') === '_blank') {
-                attrTarget = true;
+
+        if (link && link.nodeType === dfx.ELEMENT_NODE) {
+            if (dfx.isTag(link, 'a') !== true) {
+                var parents = dfx.getSurroundingParents(link, 'a');
+                if (parents.length > 0) {
+                    link = parents[0];
+                }
             }
 
-            if (attrUrl.indexOf('mailto:') === 0) {
-                isEmailLink   = true;
-                var subjIndex = attrUrl.indexOf('?subject=');
-                if (subjIndex >= 0) {
-                    attrSubj = attrUrl.substr(subjIndex + 9);
-                    attrUrl  = attrUrl.substr(0, subjIndex).replace('mailto:', '');
+            if (dfx.isTag(link, 'a') === true) {
+                attrUrl   = link.getAttribute('href') || '';
+                attrTitle = link.getAttribute('title') || '';
+
+                if (link.getAttribute('target') === '_blank') {
+                    attrTarget = true;
+                }
+
+                if (attrUrl.indexOf('mailto:') === 0) {
+                    isEmailLink   = true;
+                    var subjIndex = attrUrl.indexOf('?subject=');
+                    if (subjIndex >= 0) {
+                        attrSubj = attrUrl.substr(subjIndex + 9);
+                        attrUrl  = attrUrl.substr(0, subjIndex).replace('mailto:', '');
+                    }
                 }
             }
         }
