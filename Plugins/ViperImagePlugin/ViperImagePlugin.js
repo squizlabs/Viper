@@ -47,7 +47,7 @@ ViperImagePlugin.prototype = {
 
     },
 
-    rangeToImage: function(range, url, alt)
+    rangeToImage: function(range, url, alt, title)
     {
         if (!range || !url) {
             return;
@@ -64,8 +64,12 @@ ViperImagePlugin.prototype = {
         var img = document.createElement('img');
         img.setAttribute('src', url);
 
-        if (alt) {
+        if (alt !== null) {
             img.setAttribute('alt', alt);
+        }
+
+        if (title !== null && dfx.trim(title).length !== 0) {
+            img.setAttribute('title', title);
         }
 
         dfx.insertBefore(bookmark.start, img);
@@ -146,9 +150,19 @@ ViperImagePlugin.prototype = {
         dfx.setStyle(previewBox, 'display', 'none');
         this._previewBox = previewBox;
 
-        var setImageAttributes = function(url, alt) {
+        var setImageAttributes = function() {
+            var url   = tools.getItem('ViperImagePlugin:urlInput').getValue();
+            var alt   = tools.getItem('ViperImagePlugin:altInput').getValue();
+            var title = tools.getItem('ViperImagePlugin:titleInput').getValue();
+            var pres  = tools.getItem('ViperImagePlugin:isPresentational').getValue();
+
+            if (pres === true) {
+                title = null;
+                alt   = '';
+            }
+
             if (!image || dfx.isTag(image, 'img') === false) {
-                image = self.rangeToImage(self.viper.getViperRange(), self.getImageUrl(url), alt);
+                image = self.rangeToImage(self.viper.getViperRange(), self.getImageUrl(url), alt, title);
             } else {
                 self.setImageURL(image, self.getImageUrl(url));
                 self.setImageAlt(image, alt);
@@ -183,14 +197,32 @@ ViperImagePlugin.prototype = {
             }
         });
 
+        // Presentational checkbox.
+        var presentational = tools.createCheckbox('ViperImagePlugin:isPresentational', 'Image is presentational', false, function(presVal) {
+            if (presVal === true) {
+                tools.getItem('ViperImagePlugin:altInput').disable();
+                tools.getItem('ViperImagePlugin:titleInput').disable();
+                tools.getItem('ViperImagePlugin:altInput').setRequired(false);
+            } else {
+                tools.getItem('ViperImagePlugin:altInput').setRequired(true);
+                tools.getItem('ViperImagePlugin:altInput').enable();
+                tools.getItem('ViperImagePlugin:titleInput').enable();
+            }
+        });
+        createImageSubContent.appendChild(presentational);
+
         // Alt text box.
-        var alt = tools.createTextbox('ViperImagePlugin:altInput', 'Alt');
+        var alt = tools.createTextbox('ViperImagePlugin:altInput', 'Alt', '', null, true);
         createImageSubContent.appendChild(alt);
+
+        // Title text box.
+        var title = tools.createTextbox('ViperImagePlugin:titleInput', 'Title');
+        createImageSubContent.appendChild(title);
 
         var imgTools = toolbar.createBubble('ViperImagePlugin:bubble', 'Insert Image', createImageSubContent);
         tools.getItem('ViperImagePlugin:bubble').setSubSectionAction('ViperImagePlugin:bubbleSubSection', function() {
-            setImageAttributes(tools.getItem('ViperImagePlugin:urlInput').getValue(), tools.getItem('ViperImagePlugin:altInput').getValue());
-        }, ['ViperImagePlugin:urlInput', 'ViperImagePlugin:altInput']);
+            setImageAttributes();
+        }, ['ViperImagePlugin:urlInput', 'ViperImagePlugin:altInput', 'ViperImagePlugin:titleInput', 'ViperImagePlugin:isPresentational']);
 
         // Add the preview panel to the popup contents.
         createImageSubContent.appendChild(previewBox);
@@ -203,11 +235,16 @@ ViperImagePlugin.prototype = {
         this.viper.registerCallback('ViperToolbarPlugin:updateToolbar', 'ViperImagePlugin', function(data) {
             var range = data.range;
             image     = range.getNodeSelection();
+
             if (image && dfx.isTag(image, 'img') === true) {
                 tools.setButtonActive('image');
 
                 self.setUrlFieldValue(image.getAttribute('src'));
                 tools.getItem('ViperImagePlugin:altInput').setValue(image.getAttribute('alt'));
+
+                if (!image.getAttribute('alt')) {
+                    tools.getItem('ViperImagePlugin:isPresentational').setValue(true);
+                }
 
                 // Update preview pane.
                 dfx.empty(previewBox);
@@ -217,8 +254,10 @@ ViperImagePlugin.prototype = {
 
                 tools.setButtonInactive('image');
 
+                tools.getItem('ViperImagePlugin:isPresentational').setValue(false);
                 tools.getItem('ViperImagePlugin:urlInput').setValue('');
                 tools.getItem('ViperImagePlugin:altInput').setValue('');
+                tools.setFieldErrors('ViperImagePlugin:urlInput', []);
 
                 // Update preview pane.
                 dfx.empty(previewBox);
