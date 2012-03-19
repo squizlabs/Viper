@@ -94,7 +94,7 @@ ViperReadyCallback = null;
             var plugins    = 'ViperCopyPastePlugin|ViperToolbarPlugin|ViperInlineToolbarPlugin|ViperCoreStylesPlugin|ViperFormatPlugin|ViperKeyboardEditorPlugin|ViperListPlugin|ViperHistoryPlugin|ViperTableEditorPlugin|ViperTrackChangesPlugin|ViperLinkPlugin|ViperAccessibilityPlugin|ViperSourceViewPlugin|ViperImagePlugin|ViperSearchReplacePlugin|ViperLangToolsPlugin|ViperCharMapPlugin';
             plugins        = plugins.split('|');
 
-            _loadScripts(path + 'Plugins/', plugins, function() {
+            _loadScripts(path + 'Plugins/', plugins.concat([]), function() {
                 if (ViperReadyCallback) {
                     ViperReadyCallback.call(window);
                 }
