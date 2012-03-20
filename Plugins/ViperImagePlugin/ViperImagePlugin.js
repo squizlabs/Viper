@@ -236,6 +236,7 @@ ViperImagePlugin.prototype = {
                 tools.getItem('ViperImagePlugin:isPresentational').setValue(false);
                 tools.getItem('ViperImagePlugin:urlInput').setValue('');
                 tools.getItem('ViperImagePlugin:altInput').setValue('');
+                tools.getItem('ViperImagePlugin:titleInput').setValue('');
                 tools.setFieldErrors('ViperImagePlugin:urlInput', []);
 
                 // Update preview pane.
