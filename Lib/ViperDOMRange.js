@@ -783,14 +783,14 @@ ViperDOMRange.prototype = {
             return null;
         }
 
+        var nextSibling = startParent.nextSibling;
+        if (!nextSibling && startParent.nodeType !== dfx.TEXT_NODE) {
+            return startNode.parentNode;
+        }
+
         var endParent = endNode;
         while (endParent && endParent.parentNode !== common) {
             endParent = endParent.parentNode;
-        }
-
-        var nextSibling = startParent.nextSibling;
-        if (!nextSibling) {
-            return startNode.parentNode;
         }
 
         while (nextSibling
