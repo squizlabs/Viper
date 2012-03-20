@@ -38,11 +38,10 @@ ViperCoreStylesPlugin.prototype = {
             ctrlName = 'CMD';
         }
 
+        var tools = this.viper.ViperTools;
         var toolbarPlugin  = this.viper.ViperPluginManager.getPlugin('ViperToolbarPlugin');
         this.toolbarPlugin = toolbarPlugin;
         if (toolbarPlugin) {
-            var tools = this.viper.ViperTools;
-
             var toolbarButtons = {};
             var btnGroup = tools.createButtonGroup('ViperCoreStylesPlugin:vtp:stylesBtns');
 
@@ -119,15 +118,15 @@ ViperCoreStylesPlugin.prototype = {
             this.viper.registerCallback('ViperToolbarPlugin:updateToolbar', 'ViperCoreStylesPlugin', function(data) {
                 self._updateToolbarButtonStates(toolbarButtons, data.range);
             });
+
+            var shortcuts = {
+                strong: 'CTRL+B',
+                em: 'CTRL+I'
+            };
+
+            tools.getItem('bold').setButtonShortcut('CTRL+B');
+            tools.getItem('italic').setButtonShortcut('CTRL+I');
         }//end if
-
-        var shortcuts = {
-            strong: 'CTRL+B',
-            em: 'CTRL+I'
-        };
-
-        tools.getItem('bold').setButtonShortcut('CTRL+B');
-        tools.getItem('italic').setButtonShortcut('CTRL+I');
 
         this.viper.registerCallback('Viper:keyPress', 'ViperCoreStylesPlugin', function(e) {
             if (self._onChangeAddStyle && self.viper.isInputKey(e) === true) {

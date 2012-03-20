@@ -22,7 +22,7 @@ ViperListPlugin.prototype = {
                 outdent: 'outdentList'
             };
 
-            var btnGroup = tools.createButtonGroup('ViperLinkPlugin:vtp:buttons');
+            var btnGroup = tools.createButtonGroup('ViperListPlugin:vtp:buttons');
             tools.createButton('unorderedList', '', 'Make Unordered List', 'listUL', function() {
                 var statuses = self._getButtonStatuses(null, true);
                 return self._makeListButtonAction(statuses.list, 'ul');
@@ -37,10 +37,10 @@ ViperListPlugin.prototype = {
             tools.createButton('outdentList', '', 'Outdent List', 'listOutdent', function() {
                 self.tabRange(null, true);
             }, true);
-            tools.addButtonToGroup('unorderedList', 'ViperLinkPlugin:vtp:buttons');
-            tools.addButtonToGroup('orderedList', 'ViperLinkPlugin:vtp:buttons');
-            tools.addButtonToGroup('indentList', 'ViperLinkPlugin:vtp:buttons');
-            tools.addButtonToGroup('outdentList', 'ViperLinkPlugin:vtp:buttons');
+            tools.addButtonToGroup('unorderedList', 'ViperListPlugin:vtp:buttons');
+            tools.addButtonToGroup('orderedList', 'ViperListPlugin:vtp:buttons');
+            tools.addButtonToGroup('indentList', 'ViperListPlugin:vtp:buttons');
+            tools.addButtonToGroup('outdentList', 'ViperListPlugin:vtp:buttons');
             this._toolbarPlugin.addButton(btnGroup);
 
             this.viper.registerCallback('ViperToolbarPlugin:updateToolbar', 'ViperListPlugin', function(data) {
@@ -1705,6 +1705,16 @@ ViperListPlugin.prototype = {
         }
 
         return true;
+
+    },
+
+    remove: function()
+    {
+        // Remove the toolbar buttons.
+        dfx.remove(this.viper.ViperTools.getItem('unorderedList').element);
+        dfx.remove(this.viper.ViperTools.getItem('orderedList').element);
+        dfx.remove(this.viper.ViperTools.getItem('indentList').element);
+        dfx.remove(this.viper.ViperTools.getItem('outdentList').element);
 
     },
 
