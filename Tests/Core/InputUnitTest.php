@@ -24,7 +24,7 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
 
         $expected  = '`1234567890-=qwertyuiop[]asdfghjkl;zxcvbnm,.';
         $expected .= 'QWERTYUIOPASDFGHJKLZXCVBNM';
-        $expected .= '~!@#$%^&amp;*()_+{}|:"&lt;&gt;?   . ';
+        $expected .= '~!@#$%^&amp;*()_+{}|:"&lt;&gt;? &nbsp; .&nbsp;';
 
         $this->assertHTMLMatch('<p>'.$expected.'</p><p>EIB MOZ</p>');
 
@@ -80,12 +80,8 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
         $this->keyDown('Key.LEFT');
         $this->keyDown('Key.UP');
         $this->type('U');
-        $this->keyDown('Key.CMD + Key.RIGHT');
-        $this->type('X');
-        $this->keyDown('Key.CMD + Key.LEFT');
-        $this->type('X');
 
-        $this->assertHTMLMatch('<p>XTUesting LinRputX</p><p>EIB MODZ</p>');
+        $this->assertHTMLMatch('<p>TUesting LinRput</p><p>EIB MODZ</p>');
 
     }//end testKeyboradNavigation()
 
@@ -110,7 +106,7 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
             $this->keyDown('Key.BACKSPACE');
         }
 
-        $this->assertHTMLMatch('<p><br></p><p>EIB MOZ</p>');
+        $this->assertHTMLMatch('<p>EIB MOZ</p>');
 
     }//end testBackspace()
 
@@ -155,6 +151,7 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
         $this->keyDown('Key.SHIFT + Key.RIGHT');
         $this->keyDown('Key.SHIFT + Key.RIGHT');
         $this->type('p');
+        sleep(1);
         $text = $this->selectText('MOZ');
         $this->keyDown('Key.SHIFT + Key.LEFT');
         $this->keyDown('Key.SHIFT + Key.LEFT');
@@ -192,6 +189,7 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
         $this->selectText('Lorem');
         $this->keyDown('Key.CMD + a');
 
+        sleep(1);
         $this->type('abc');
         $this->assertHTMLMatch('<p>abc</p>');
 

@@ -1,26 +1,3 @@
-/**
- * JS Class for the Viper Format Plugin.
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License, version 2, as
- * published by the Free Software Foundation.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program as the file license.txt. If not, see
- * <http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt>
- *
- * @package    CMS
- * @subpackage Editing
- * @author     Squiz Pty Ltd <products@squiz.net>
- * @copyright  2010 Squiz Pty Ltd (ACN 084 670 600)
- * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt GPLv2
- */
-
 function ViperFormatPlugin(viper)
 {
     this.viper = viper;
@@ -591,7 +568,7 @@ ViperFormatPlugin.prototype = {
         }
 
         // Wrap the selection with span tag.
-        var bookmark = self.viper.createBookmark();
+        var bookmark = this.viper.createBookmark();
 
         // Move the elements between start and end of bookmark to the new
         // span tag. Then select the new span tag and update selection.
@@ -602,7 +579,7 @@ ViperFormatPlugin.prototype = {
                 && bookmark.start.nextSibling === bookmark.end.previousSibling
             ) {
                 span = bookmark.start.nextSibling;
-                self.viper.removeBookmarks();
+                this.viper.removeBookmarks();
                 this._setAttributeForElement(span, attr, value);
             } else {
                 var span     = document.createElement('span');
@@ -616,14 +593,14 @@ ViperFormatPlugin.prototype = {
                 }
 
                 dfx.insertBefore(bookmark.start, span);
-                self.viper.removeBookmark(bookmark);
+                this.viper.removeBookmark(bookmark);
             }//end if
 
             range.selectNode(span);
             ViperSelection.addRange(range);
-            self.viper.adjustRange();
+            this.viper.adjustRange();
 
-            self.viper.fireCallbacks('Viper:selectionChanged', range);
+            this.viper.fireCallbacks('Viper:selectionChanged', range);
 
             return span;
         }

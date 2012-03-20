@@ -1,26 +1,3 @@
-/**
- * JS Class for the Viper Core Styles Plugin.
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License, version 2, as
- * published by the Free Software Foundation.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program as the file license.txt. If not, see
- * <http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt>
- *
- * @package    CMS
- * @subpackage Editing
- * @author     Squiz Pty Ltd <products@squiz.net>
- * @copyright  2010 Squiz Pty Ltd (ACN 084 670 600)
- * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt GPLv2
- */
-
 function ViperCoreStylesPlugin(viper)
 {
     this.viper = viper;
@@ -61,11 +38,10 @@ ViperCoreStylesPlugin.prototype = {
             ctrlName = 'CMD';
         }
 
+        var tools = this.viper.ViperTools;
         var toolbarPlugin  = this.viper.ViperPluginManager.getPlugin('ViperToolbarPlugin');
         this.toolbarPlugin = toolbarPlugin;
         if (toolbarPlugin) {
-            var tools = this.viper.ViperTools;
-
             var toolbarButtons = {};
             var btnGroup = tools.createButtonGroup('ViperCoreStylesPlugin:vtp:stylesBtns');
 
@@ -142,15 +118,15 @@ ViperCoreStylesPlugin.prototype = {
             this.viper.registerCallback('ViperToolbarPlugin:updateToolbar', 'ViperCoreStylesPlugin', function(data) {
                 self._updateToolbarButtonStates(toolbarButtons, data.range);
             });
+
+            var shortcuts = {
+                strong: 'CTRL+B',
+                em: 'CTRL+I'
+            };
+
+            tools.getItem('bold').setButtonShortcut('CTRL+B');
+            tools.getItem('italic').setButtonShortcut('CTRL+I');
         }//end if
-
-        var shortcuts = {
-            strong: 'CTRL+B',
-            em: 'CTRL+I'
-        };
-
-        tools.getItem('bold').setButtonShortcut('CTRL+B');
-        tools.getItem('italic').setButtonShortcut('CTRL+I');
 
         this.viper.registerCallback('Viper:keyPress', 'ViperCoreStylesPlugin', function(e) {
             if (self._onChangeAddStyle && self.viper.isInputKey(e) === true) {

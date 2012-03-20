@@ -1,26 +1,3 @@
-/**
- * JS Class for the Viper List Plugin.
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License, version 2, as
- * published by the Free Software Foundation.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program as the file license.txt. If not, see
- * <http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt>
- *
- * @package    CMS
- * @subpackage Editing
- * @author     Squiz Pty Ltd <products@squiz.net>
- * @copyright  2010 Squiz Pty Ltd (ACN 084 670 600)
- * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt GPLv2
- */
-
 function ViperListPlugin(viper)
 {
     this.viper = viper;
@@ -45,7 +22,7 @@ ViperListPlugin.prototype = {
                 outdent: 'outdentList'
             };
 
-            var btnGroup = tools.createButtonGroup('ViperLinkPlugin:vtp:buttons');
+            var btnGroup = tools.createButtonGroup('ViperListPlugin:vtp:buttons');
             tools.createButton('unorderedList', '', 'Make Unordered List', 'listUL', function() {
                 var statuses = self._getButtonStatuses(null, true);
                 return self._makeListButtonAction(statuses.list, 'ul');
@@ -60,10 +37,10 @@ ViperListPlugin.prototype = {
             tools.createButton('outdentList', '', 'Outdent List', 'listOutdent', function() {
                 self.tabRange(null, true);
             }, true);
-            tools.addButtonToGroup('unorderedList', 'ViperLinkPlugin:vtp:buttons');
-            tools.addButtonToGroup('orderedList', 'ViperLinkPlugin:vtp:buttons');
-            tools.addButtonToGroup('indentList', 'ViperLinkPlugin:vtp:buttons');
-            tools.addButtonToGroup('outdentList', 'ViperLinkPlugin:vtp:buttons');
+            tools.addButtonToGroup('unorderedList', 'ViperListPlugin:vtp:buttons');
+            tools.addButtonToGroup('orderedList', 'ViperListPlugin:vtp:buttons');
+            tools.addButtonToGroup('indentList', 'ViperListPlugin:vtp:buttons');
+            tools.addButtonToGroup('outdentList', 'ViperListPlugin:vtp:buttons');
             this._toolbarPlugin.addButton(btnGroup);
 
             this.viper.registerCallback('ViperToolbarPlugin:updateToolbar', 'ViperListPlugin', function(data) {
@@ -1728,6 +1705,16 @@ ViperListPlugin.prototype = {
         }
 
         return true;
+
+    },
+
+    remove: function()
+    {
+        // Remove the toolbar buttons.
+        dfx.remove(this.viper.ViperTools.getItem('unorderedList').element);
+        dfx.remove(this.viper.ViperTools.getItem('orderedList').element);
+        dfx.remove(this.viper.ViperTools.getItem('indentList').element);
+        dfx.remove(this.viper.ViperTools.getItem('outdentList').element);
 
     },
 

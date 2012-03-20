@@ -1,26 +1,3 @@
-/**
- * JS Class for the Viper Plugin Manager.
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License, version 2, as
- * published by the Free Software Foundation.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program as the file license.txt. If not, see
- * <http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt>
- *
- * @package    CMS
- * @subpackage Editing
- * @author     Squiz Pty Ltd <products@squiz.net>
- * @copyright  2010 Squiz Pty Ltd (ACN 084 670 600)
- * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt GPLv2
- */
-
 function ViperPluginManager(viper)
 {
     this.viper              = viper;
@@ -127,19 +104,46 @@ ViperPluginManager.prototype = {
     /**
      * Removes specified plugin.
      *
-     * @param {string} plugin Name of the plugin.
+     * @param {string} pluginName Name of the plugin.
      *
      * @return void
      */
-    removePlugin: function(plugin)
+    removePlugin: function(pluginName)
     {
-        if (this.plugins[plugin]) {
-            // Call the remove fn of the plugin incase it needs to do cleanup.
-            this.plugins[plugin].remove();
+        if (this.plugins[pluginName]) {
 
-            // Remove the keyPress listeners for this plugin.
-            this.removeKeyPressListener(this.plugins[plugin]);
-            this.fireCallbacks('pluginRemoved', plugin);
+            // Call the remove fn of the plugin incase it needs to do cleanup.
+            if (dfx.isFn(this.plugins[pluginName].remove) === true) {
+                this.plugins[pluginName].remove();
+            }
+
+            // Remove registered callbacks.
+            this.viper.removeCallback(null, pluginName);
+
+            this.viper.fireCallbacks('ViperPluginManager:pluginRemoved', pluginName);
+
+            delete this.plugins[pluginName];
+        }
+
+    },
+
+    /**
+     * Removes the specified plugins or all plugins if nothing specified.
+     *
+     * @param {array} pluginNames Array of plugin names. If not specified then all
+     *                            plugins will be removed.
+     */
+    removePlugins: function(pluginNames)
+    {
+        if (!pluginNames) {
+            for (var pluginName in this.plugins) {
+                this.removePlugin(pluginName);
+            }
+        } else {
+            var c = pluginNames.length;
+            for (var i = 0; i < c; i++) {
+                this.removePlugin(pluginNames[i]);
+            }
         }
 
     },

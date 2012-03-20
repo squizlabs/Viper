@@ -28,11 +28,11 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
 
 
     /**
-     * Test that copying/pasting a styled text works.
+     * Test that copying/pasting bold text works.
      *
      * @return void
      */
-    public function testStyledTextCopyPaste()
+    public function testBoldTextCopyPaste()
     {
         $this->selectText('Lorem');
         $this->keyDown('Key.CMD + b');
@@ -43,11 +43,35 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
         $this->type('B');
         $this->keyDown('Key.CMD + v');
         $this->type('C');
+        sleep(2);
 
-        $this->assertHTMLMatch('<p><strong>LoremA<strong>LoremB<strong>LoremC</strong></strong></strong></p>');
+        $this->assertHTMLMatch('<p><strong>LoremA</strong><strong>LoremB</strong><strong>LoremC</strong>&nbsp;</p>');
 
-    }//end testStyledTextCopyPaste()
+    }//end testBoldTextCopyPaste()
+    
+    
+   /**
+     * Test that copying/pasting italic text works.
+     *
+     * @return void
+     */
+    public function testItalicTextCopyPaste()
+    {
+        $this->selectText('Lorem');
+        $this->keyDown('Key.CMD + i');
+        $this->keyDown('Key.CMD + c');
+        $this->keyDown('Key.CMD + v');
+        $this->type('A');
+        $this->keyDown('Key.CMD + v');
+        $this->type('B');
+        $this->keyDown('Key.CMD + v');
+        $this->type('C');
+        sleep(2);
 
+        $this->assertHTMLMatch('<p><em>LoremA</em><em>LoremB</em><em>LoremC</em>&nbsp;</p>');
+
+    }//end testItalicTextCopyPaste()
+    
 
     /**
      * Test that copying/pasting from the SpecialCharactersDoc works correctly.
@@ -73,7 +97,9 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
 
         // Copy text.
         $this->keyDown('Key.CMD + a');
+        sleep(1);
         $this->keyDown('Key.CMD + c');
+        sleep(1);
         $this->keyDown('Key.CMD + w');
         $this->keyDown('Key.CMD + q');
         sleep(5);
