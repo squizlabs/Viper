@@ -612,6 +612,22 @@ ViperInlineToolbarPlugin.prototype = {
             dfx.addClass(this._toolbar, 'device-ipad');
         }
 
+        dfx.addEvent(main, 'mousedown', function(e) {
+            var target = dfx.getMouseEventTarget(e);
+            if (dfx.isTag(target, 'input') !== true && dfx.isTag(target, 'textarea') !== true) {
+                dfx.preventDefault(e);
+                return false;
+            }
+        });
+
+        dfx.addEvent(main, 'mouseup', function(e) {
+            var target = dfx.getMouseEventTarget(e);
+            if (dfx.isTag(target, 'input') !== true  && dfx.isTag(target, 'textarea') !== true) {
+                dfx.preventDefault(e);
+                return false;
+            }
+        });
+
         document.body.appendChild(this._toolbar);
 
     },
