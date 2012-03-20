@@ -472,13 +472,15 @@ class Viper_Tests_ViperFormatPlugin_TextAlignmentUnitTest extends AbstractViperU
     {
         $dir = dirname(__FILE__).'/Images/';
 
-        $this->selectText('WoW', 'LOREM');
+        $this->selectText('WoW', 'XuT');
 
         $this->clickTopToolbarButton($dir.'toolbarIcon_alignLeft_active.png');
         sleep(1);
         $this->clickTopToolbarButton($dir.'toolbarIcon_alignRight.png');
 
-        $this->assertHTMLMatch('<p style="text-align: right;">sit amet WoW</p><p style="text-align: right;">RsR TpT</p><p style="text-align: right;">QvQ KyK</p><p style="text-align: right;">MrM GaG</p><p>LOREM XuT dolor</p><p style="text-align: right;">test <strong>BOLD</strong> text</p><p>test ITALICS text.</p>');
+        $this->assertHTMLMatch(
+            '<p style="text-align: right;">sit amet WoW</p><p style="text-align: right;">RsR TpT</p><p style="text-align: right;">QvQ KyK</p><p style="text-align: right;">MrM GaG</p><p>LOREM XuT dolor</p><p style="text-align: right;">test <strong>BOLD</strong> text</p><p>test ITALICS text.</p>',
+            '<p style="text-align: right; ">sit amet WoW</p><p style="text-align: right; ">RsR TpT</p><p style="text-align: right; ">QvQ KyK</p><p style="text-align: right; ">MrM GaG</p><p style="text-align: right;">LOREM XuT dolor</p><p>test <strong>BOLD</strong> text</p><p>test ITALICS text.</p>');
 
         $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_alignRight_active.png'), 'Acitve right justify icon does not appear in the top toolbar');
 
@@ -500,9 +502,9 @@ class Viper_Tests_ViperFormatPlugin_TextAlignmentUnitTest extends AbstractViperU
         sleep(1);
         $this->clickTopToolbarButton($dir.'toolbarIcon_alignCenter.png');
 
-        $this->assertHTMLMatch('<p style="text-align: left;">sit amet WoW</p><p style="text-align: center;">RsR TpT</p><p style="text-align: right;">QvQ KyK</p><p style="text-align: justify;">MrM GaG</p><p style="text-align: center;">LOREM XuT dolor</p><p style="text-align: center;">test <strong>BOLD</strong> text</p><p style="text-align: center;">test ITALICS text.</p>');
-
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_alignRight_active.png'), 'Acitve right justify icon does not appear in the top toolbar');
+        $this->assertHTMLMatch(
+            '<p style="text-align: left;">sit amet WoW</p><p style="text-align: center;">RsR TpT</p><p style="text-align: right;">QvQ KyK</p><p style="text-align: justify;">MrM GaG</p><p style="text-align: center;">LOREM XuT dolor</p><p style="text-align: center;">test <strong>BOLD</strong> text</p><p style="text-align: center;">test ITALICS text.</p>',
+            '<p style="text-align: left;">sit amet WoW</p><p style="text-align: center;">RsR TpT</p><p style="text-align: right;">QvQ KyK</p><p style="text-align: justify;">MrM GaG</p><p style="text-align: center; ">LOREM XuT dolor</p><p style="text-align: center; ">test <strong>BOLD</strong> text</p><p style="text-align: center;">test ITALICS text.</p>');
 
     }//end testJustificationMultipleParagraphsWithNoAlignmentsApplied()
 
