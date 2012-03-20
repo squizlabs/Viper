@@ -358,6 +358,8 @@ ViperInlineToolbarPlugin.prototype = {
                 console.error(e.message);
             }
 
+            viper.ViperTools.disableButton(subSectionid + '-applyButton');
+
             return false;
         };
 
