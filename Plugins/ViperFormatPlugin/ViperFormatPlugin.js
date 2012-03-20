@@ -568,7 +568,7 @@ ViperFormatPlugin.prototype = {
         }
 
         // Wrap the selection with span tag.
-        var bookmark = self.viper.createBookmark();
+        var bookmark = this.viper.createBookmark();
 
         // Move the elements between start and end of bookmark to the new
         // span tag. Then select the new span tag and update selection.
@@ -579,7 +579,7 @@ ViperFormatPlugin.prototype = {
                 && bookmark.start.nextSibling === bookmark.end.previousSibling
             ) {
                 span = bookmark.start.nextSibling;
-                self.viper.removeBookmarks();
+                this.viper.removeBookmarks();
                 this._setAttributeForElement(span, attr, value);
             } else {
                 var span     = document.createElement('span');
@@ -593,14 +593,14 @@ ViperFormatPlugin.prototype = {
                 }
 
                 dfx.insertBefore(bookmark.start, span);
-                self.viper.removeBookmark(bookmark);
+                this.viper.removeBookmark(bookmark);
             }//end if
 
             range.selectNode(span);
             ViperSelection.addRange(range);
-            self.viper.adjustRange();
+            this.viper.adjustRange();
 
-            self.viper.fireCallbacks('Viper:selectionChanged', range);
+            this.viper.fireCallbacks('Viper:selectionChanged', range);
 
             return span;
         }
