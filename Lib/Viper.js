@@ -3697,6 +3697,7 @@ Viper.prototype = {
         this.fireCallbacks('setHtml', {element: clone}, function() {
             self.element.innerHTML = dfx.getHtml(clone);
             self.initEditableElement();
+            self.fireNodesChanged();
             if (callback) {
                 callback.call(this);
             }
