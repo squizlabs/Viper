@@ -171,6 +171,10 @@ ViperTableEditorPlugin.prototype = {
                 var range = self.viper.getViperRange();
                 var target = dfx.getMouseEventTarget(e);
 
+                if (!target) {
+                    return;
+                }
+
                 if (target === self._toolbar || dfx.isChildOf(target, self._toolbar) === true) {
                     self._buttonClicked = false;
                     return false;
@@ -182,8 +186,7 @@ ViperTableEditorPlugin.prototype = {
                     return true;
                 }
 
-                var target = dfx.getMouseEventTarget(e);
-                if (!target) {
+                if (self.viper.isOutOfBounds(target) === true) {
                     return;
                 }
 
@@ -212,6 +215,10 @@ ViperTableEditorPlugin.prototype = {
                     if (!node) {
                         return;
                     }
+                }
+
+                if (self.viper.isOutOfBounds(node) === true) {
+                    return;
                 }
 
                 // Do not allow table insertion inside another table.
