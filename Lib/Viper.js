@@ -3142,10 +3142,14 @@ Viper.prototype = {
             if (!pluginName) {
                 return this.fireCallbacks('Viper:clickedOutside', e);
             } else {
-                return this.fireCallbacks('Viper:pluginMouseDown', {
+                var retVal = this.fireCallbacks('Viper:pluginMouseDown', {
                     pluginName: pluginName,
                     e: e
                 });
+
+                if (retVal === false) {
+                    return false;
+                }
             }
         }
 
