@@ -606,6 +606,18 @@ ViperCoreStylesPlugin.prototype = {
         var keyboardEditorPlugin = this.viper.ViperPluginManager.getPlugin('ViperKeyboardEditorPlugin');
         var prev = keyboardEditorPlugin.splitAtRange(true);
         dfx.insertAfter(prev, hr);
+
+        if (!hr.nextSibling) {
+            var p = document.createElement('p');
+            dfx.setHtml(p, '&nbsp;');
+            dfx.insertAfter(hr, p);
+        }
+
+        var range = this.viper.getViperRange();
+        range.setStart(range._getFirstSelectableChild(hr.nextSibling), 0);
+        range.collapse(true);
+        ViperSelection.addRange(range);
+
         this.viper.fireNodesChanged('ViperCoreStylesPlugin:hr');
         this.viper.fireSelectionChanged(null, true);
 
