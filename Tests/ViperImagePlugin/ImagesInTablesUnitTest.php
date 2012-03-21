@@ -50,7 +50,7 @@ class Viper_Tests_ViperImagePlugin_ImagesInTablesUnitTest extends AbstractViperU
         $this->type('Alt tag');
         $this->keyDown('Key.ENTER');
 
-        $this->assertEquals('UnaU LAbS<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Alt tag" /> FoX Mnu', $this->getHtml('td,th', 3));
+        $this->assertEquals('UnaU LAbS<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Alt tag" /> FoX Mnu', $this->getHtml('td', 0));
 
         $this->clickElement('img', 1);
         $this->keyDown('Key.DELETE');
