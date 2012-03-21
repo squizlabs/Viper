@@ -29,8 +29,9 @@ ViperImagePlugin.prototype = {
             if (e.which === 8 || e.which === 46) {
                 var selectedNode = range.getNodeSelection();
                 if (selectedNode) {
-                    self.removeImage(selectedNode);
-                    return false;
+                    if (self.removeImage(selectedNode) === true) {
+                        return false;
+                    }
                 }
             }
         });
@@ -108,7 +109,10 @@ ViperImagePlugin.prototype = {
             range.setStart(node, start);
             range.collapse(true);
             ViperSelection.addRange(range);
+            return true;
         }
+
+        return false;
     },
 
     setImageAlt: function(image, alt)
