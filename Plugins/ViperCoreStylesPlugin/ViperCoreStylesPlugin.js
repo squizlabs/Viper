@@ -496,18 +496,24 @@ ViperCoreStylesPlugin.prototype = {
                 elemsBetween.push(end);
             }
 
+            var toggleAlignment = true;
+            var parentElements  = [];
             while (node = elemsBetween.shift()) {
                 if (dfx.isBlockElement(node) === true) {
-                    this.setJustfyChangeTrackInfo(node);
-                    this.toggleJustify(node, type);
-                    // Reset the parent var to crate a new P tag if there
-                    // are more siblings.
+                    if (dfx.getStyle(node, 'text-align') !== type) {
+                        toggleAlignment = false;
+                    }
+
+                    parentElements.push(node);
                     parent = null;
                 } else if (parent === null && (parent = this.getFirstBlockParent(node))) {
                     // If we havent found a good parent and the node's parent is a block
                     // element then set the style of that parent.
-                    this.setJustfyChangeTrackInfo(parent);
-                    this.toggleJustify(parent, type);
+                    if (dfx.getStyle(parent, 'text-align') !== type) {
+                        toggleAlignment = false;
+                    }
+
+                    parentElements.push(parent);
                     parent = null;
                 } else if (node.nodeType == dfx.TEXT_NODE && dfx.isBlank(dfx.trim(node.data)) === true) {
                     continue;
@@ -517,21 +523,29 @@ ViperCoreStylesPlugin.prototype = {
                     // new P element.
                     if (parent === null) {
                         parent = Viper.document.createElement('p');
-                        this.setJustfyChangeTrackInfo(parent);
-                        this.toggleJustify(parent, type);
 
                         // Insert the new P tag before this node.
                         dfx.insertBefore(node, parent);
                     }
 
+                    if (dfx.getStyle(parent, 'text-align') !== type) {
+                        toggleAlignment = false;
+                    }
+
                     // Add the node to the new P elem.
                     parent.appendChild(node);
+
+                    parentElements.push(parent);
                 }//end if
 
                 if (node === end) {
                     break;
                 }
             }//end while
+
+            for (var i = 0; i < parentElements.length; i++) {
+                this.toggleJustify(parentElements[i], type, !toggleAlignment);
+            }
 
             if (bookmark !== null) {
                 this.viper.selectBookmark(bookmark);
@@ -543,10 +557,10 @@ ViperCoreStylesPlugin.prototype = {
 
     },
 
-    toggleJustify: function(node, type)
+    toggleJustify: function(node, type, force)
     {
         var current = dfx.getStyle(node, 'text-align');
-        if (current === type) {
+        if (force !== true && current === type) {
             dfx.setStyle(node, 'text-align', '');
 
             if (dfx.hasAttribute(node, 'style') === true
@@ -628,6 +642,12 @@ ViperCoreStylesPlugin.prototype = {
         if (parent !== null) {
             return dfx.getStyle(parent, 'text-align');
         }
+
+    },
+
+    setAlignment: function(element, type)
+    {
+        dfx.setStyle(element, 'text-align', type);
 
     },
 
@@ -926,6 +946,10 @@ ViperCoreStylesPlugin.prototype = {
         }
 
         tools.enableButton('justify');
+        if (!states.alignment) {
+            states.alignment = 'start';
+        }
+
         if (states.alignment) {
             var justify       = states.alignment;
             var c             = buttons.justify.length;
