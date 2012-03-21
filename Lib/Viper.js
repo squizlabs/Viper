@@ -2904,6 +2904,10 @@ Viper.prototype = {
                 eKeys.push('delete');
             break;
 
+            case dfx.DOM_VK_BACKSPACE:
+                eKeys.push('backspace');
+            break;
+
             default:
                 var code = e.which;
 
@@ -3716,8 +3720,9 @@ Viper.prototype = {
 
     cleanHTML: function(content)
     {
-        content = content.replace(/<(p|div)((\s+\w+(\s*=\s*(?:".*?"|\'.*?\'|[^\'">\s]+))?)+)?\s*>\s*/ig, "<$1$2>");
-        content = content.replace(/\s*<\/(p|div)((\s+\w+(\s*=\s*(?:".*?"|\'.*?\'|[^\'">\s]+))?)+)?\s*>/ig, "</$1$2>");
+        content = content.replace(/<(p|div|h1|h2|h3|h4|h5|h6|li)((\s+\w+(\s*=\s*(?:".*?"|\'.*?\'|[^\'">\s]+))?)+)?\s*>\s*/ig, "<$1$2>");
+        content = content.replace(/\s*<\/(p|div|h1|h2|h3|h4|h5|h6|li)((\s+\w+(\s*=\s*(?:".*?"|\'.*?\'|[^\'">\s]+))?)+)?\s*>/ig, "</$1$2>");
+
         return content;
 
     },
