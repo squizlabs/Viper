@@ -3819,6 +3819,8 @@ Viper.prototype = {
                 break;
 
                 case 'td':
+                case 'th':
+                case 'caption':
                     // Nothing to see here PHPCS.
                 break;
 
