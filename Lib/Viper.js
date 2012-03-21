@@ -2938,7 +2938,7 @@ Viper.prototype = {
 
     isInputKey: function(e)
     {
-         if (e.which !== 0
+         if ((e.which !== 0 || e.keyCode === 46)
             && e.ctrlKey !== true
             && e.altKey !== true
             && e.shiftKey !== true
