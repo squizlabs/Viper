@@ -438,6 +438,14 @@ ViperToolbarPlugin.prototype = {
 
     closeBubble: function(bubbleid)
     {
+        this._closeBubble(bubbleid);
+
+        this.viper.highlightToSelection();
+
+    },
+
+    _closeBubble: function(bubbleid)
+    {
         dfx.removeClass(this.viper.ViperTools.getItem(this._bubbleButtons[bubbleid]).element, 'selected');
         var bubble     = this.viper.ViperTools.getItem(bubbleid);
         var bubbleElem = bubble.element;
@@ -453,8 +461,6 @@ ViperToolbarPlugin.prototype = {
             this._activeBubble = null;
         }
 
-        this.viper.highlightToSelection();
-
     },
 
     showBubble: function(bubbleid)
@@ -466,7 +472,7 @@ ViperToolbarPlugin.prototype = {
             }
 
             // Hide the current active bubble.
-            this.closeBubble(this._activeBubble);
+            this._closeBubble(this._activeBubble);
         }
 
         dfx.addClass(this.viper.ViperTools.getItem(this._bubbleButtons[bubbleid]).element, 'selected');
