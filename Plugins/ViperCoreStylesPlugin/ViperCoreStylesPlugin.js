@@ -156,6 +156,56 @@ ViperCoreStylesPlugin.prototype = {
             del: 'Strikethrough'
         };
 
+        // Inline toolbar.
+        this.viper.registerCallback('ViperInlineToolbarPlugin:updateToolbar', 'ViperCoreStylesPlugin', function(data) {
+            self._createInlineToolbarContent(data);
+        });
+
+        this.viper.registerCallback('Viper:mouseDown', 'ViperCoreStylesPlugin', function(e) {
+            var target = dfx.getMouseEventTarget(e);
+            if (target && dfx.isTag(target, 'hr') !== true) {
+                return;
+            }
+
+            // Set the range after the HR element, if there is no element after
+            // HR create a new P tag.
+            var blockSibling = target.nextSibling;
+            while (blockSibling) {
+                if (dfx.isBlockElement(blockSibling) === true) {
+                    break;
+                } else if (blockSibling.nodeType === dfx.TEXT_NODE && dfx.trim(blockSibling.data) !== '') {
+                    blockSibling = null;
+                    break;
+                }
+
+                blockSibling = blockSibling.nextSibling;
+            }
+
+            if (!blockSibling) {
+                blockSibling = document.createElement('p');
+                dfx.setHtml(blockSibling, '&nbsp;');
+                dfx.insertAfter(target, blockSibling);
+            } else if (dfx.getHtml(blockSibling) === '') {
+                dfx.setHtml(blockSibling, '&nbsp;');
+            }
+
+            var range      = self.viper.getViperRange();
+            var selectable = range._getFirstSelectableChild(blockSibling);
+            if (!selectable) {
+                selectable = document.createTextNode(' ');
+                if (blockSibling.firstChild) {
+                    dfx.insertBefore(blockSibling.firstChild, selectable);
+                } else {
+                    blockSibling.appendChild(selectable);
+                }
+            }
+
+            range.setStart(selectable, 0);
+            range.collapse(true);
+            ViperSelection.addRange(range);
+            return false;
+        });
+
         this.viper.registerCallback('ViperChangeTracker:modeChange', 'ViperCoreStylesPlugin', function(mode) {
             // First get format change tags.
             var nodes    = ViperChangeTracker.getCTNodes('formatChange');
@@ -603,18 +653,48 @@ ViperCoreStylesPlugin.prototype = {
     {
         var hr = document.createElement('hr');
 
+        var range = this.viper.getViperRange();
+        if (range.collapsed !== true) {
+            range.deleteContents();
+            range = this.viper.getViperRange();
+        }
+
         var keyboardEditorPlugin = this.viper.ViperPluginManager.getPlugin('ViperKeyboardEditorPlugin');
-        var prev = keyboardEditorPlugin.splitAtRange(true);
+        var prev = keyboardEditorPlugin.splitAtRange(true, null);
+        var nextSibling = prev.nextSibling;
+
         dfx.insertAfter(prev, hr);
 
-        if (!hr.nextSibling) {
+        if (!nextSibling || dfx.isBlockElement(nextSibling) === false) {
             var p = document.createElement('p');
             dfx.setHtml(p, '&nbsp;');
             dfx.insertAfter(hr, p);
-        }
+            nextSibling = p;
+        } else {
+            if (dfx.trim(dfx.getNodeTextContent(nextSibling)) === '') {
+                dfx.setHtml(nextSibling, '&nbsp;');
+
+                var nextEmptyElem = nextSibling.nextSibling;
+                while (nextEmptyElem) {
+                    if (dfx.isBlockElement(nextEmptyElem) === true) {
+                        var html = dfx.getHtml(nextEmptyElem);
+                        if (html === '' || html === '<br>' || html === '&nbsp;') {
+                            // This is an empty block element that is after the next sibling.. remove it..
+                            nextEmptyElem.parentNode.removeChild(nextEmptyElem);
+                        }
+
+                        break;
+                    } else if (nextEmptyElem.nodeType === dfx.TEXT_NODE && dfx.trim(nextEmptyElem.data) !== '') {
+                        break;
+                    }
+
+                    nextEmptyElem = nextEmptyElem.nextSibling;
+                }
+            }
+        }//end if
 
         var range = this.viper.getViperRange();
-        range.setStart(range._getFirstSelectableChild(hr.nextSibling), 0);
+        range.setStart(range._getFirstSelectableChild(nextSibling), 0);
         range.collapse(true);
         ViperSelection.addRange(range);
 
