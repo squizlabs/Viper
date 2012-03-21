@@ -39,16 +39,32 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
     {
         $dir     = dirname(__FILE__).'/Images/';
 
+        $text = 'PORTA';
+        $this->selectText($text);
+
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_class.png');
+        $this->type('abc');
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_updateChanges.png');
+
+        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_class_active.png'), 'Class icon in Top Toolbar should be active.');
+        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_class_active.png'), 'Class icon in VITP should be active.');
+        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_updateChanges_disabled.png'), 'Update Changes button should not be active.');
+
+        $html = $this->getHtml('td', 3);
+        $this->assertEquals('nec <span class="abc">PORTA</span> ante', $html);
+
+        $this->click($this->find('WoW'));
+
         $text = 'XabcX';
         $this->selectText($text);
 
         $this->clickInlineToolbarButton($dir.'toolbarIcon_class.png');
-        $this->clickInlineToolbarButton($dir.'input_class.png');
         $this->type('test');
         $this->keyDown('Key.ENTER');
 
         $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_class_active.png'), 'Class icon in Top Toolbar should be active.');
         $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_class_active.png'), 'Class icon in VITP should be active.');
+        $this->assertFalse($this->inlineToolbarButtonExists($dir.'toolbarIcon_updateChanges.png'), 'Update Changes button should not be active.');
 
         $html = $this->getHtml('td', 0);
         $this->assertEquals('UnaU TiuT <span class="test">XabcX</span> Mnu', $html);
