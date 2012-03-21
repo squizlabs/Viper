@@ -34,8 +34,6 @@ class Viper_Tests_ViperFormatPlugin_TextAlignmentUnitTest extends AbstractViperU
      */
     public function testApplyingLeftJustifyWithBoldWord()
     {
-        $this->markTestIncomplete('Failing due to issue 1678.');
-
         $dir = dirname(__FILE__).'/Images/';
 
         $this->selectText('BOLD');
@@ -43,7 +41,7 @@ class Viper_Tests_ViperFormatPlugin_TextAlignmentUnitTest extends AbstractViperU
         sleep(1);
         $this->clickTopToolbarButton($dir.'toolbarIcon_alignLeft.png');
 
-        $this->assertHTMLMatch('<p style="text-align: left;">sit amet WoW</p><p style="text-align: center;">RsR TpT</p><p style="text-align: right;">QvQ KyK</p><p style="text-align: justify;">MrM GaG</p><p>LOREM XuT dolor</p><p style="text-align: left;">test <strong>BOLD</strong> text</p><p>test <em>ITALICS</em> text.</p>');
+        $this->assertHTMLMatch('<p style="text-align: left;">sit amet WoW</p><p style="text-align: center;">RsR TpT</p><p style="text-align: right;">QvQ KyK</p><p style="text-align: justify;">MrM GaG</p><p>LOREM XuT dolor</p><p style="text-align: left;">test <strong>BOLD</strong> text</p><p>test ITALICS text.</p>');
 
         $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_alignLeft_active.png'), 'Active left justify icon does not appear in the top toolbar');
 
@@ -57,8 +55,6 @@ class Viper_Tests_ViperFormatPlugin_TextAlignmentUnitTest extends AbstractViperU
      */
     public function testApplyingLeftJustifyWithItalicWord()
     {
-        $this->markTestIncomplete('Failing due to issue 1678.');
-
         $dir = dirname(__FILE__).'/Images/';
 
         $this->selectText('ITALICS');
@@ -487,7 +483,7 @@ class Viper_Tests_ViperFormatPlugin_TextAlignmentUnitTest extends AbstractViperU
         $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_alignRight_active.png'), 'Acitve right justify icon does not appear in the top toolbar');
 
     }//end testJustificationMultipleParagraphsWithAlignmentsApplied()
-    
+
 
     /**
      * Test applying justification to mulitple paragraphs where alignment has not been applied.
@@ -509,7 +505,7 @@ class Viper_Tests_ViperFormatPlugin_TextAlignmentUnitTest extends AbstractViperU
         $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_alignRight_active.png'), 'Acitve right justify icon does not appear in the top toolbar');
 
     }//end testJustificationMultipleParagraphsWithNoAlignmentsApplied()
-    
+
 
 }//end class
 

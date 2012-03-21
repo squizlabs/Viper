@@ -479,7 +479,7 @@ ViperCoreStylesPlugin.prototype = {
             common = this.getFirstBlockParent(common);
         }
 
-        if (dfx.isChildOf(common, this.viper.element) === true) {
+        if (dfx.isBlockElement(common) === true && dfx.isChildOf(common, this.viper.element) === true) {
             this.setJustfyChangeTrackInfo(common);
             this.toggleJustify(common, type);
         } else {
