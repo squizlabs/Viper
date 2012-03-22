@@ -3,13 +3,12 @@
  */
 function gHtml(selector, index)
 {
-    viper.cleanDOM();
-
     index = index || 0;
     if (selector) {
-        return dfx.getHtml(dfxjQuery(selector)[index]).replace("\n", '');
+        var html = dfx.getHtml(dfxjQuery(selector)[index]).replace("\n", '');
+        return viper.getHtml(html);
     } else {
-        return dfx.getHtml(dfx.getId('content')).replace("\n", '');
+        return viper.getHtml();
     }
 
 }
