@@ -3008,7 +3008,7 @@ Viper.prototype = {
 
         if (e.ctrlKey === false
             && e.altKey === false
-            && e.shiftKey === false
+            && (e.shiftKey === false || e.which !== 16)
             && e.metaKey === false
         ) {
             // Nothing special about this key let the browser handle it unless
