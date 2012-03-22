@@ -730,11 +730,15 @@ ViperDOMRange.prototype = {
                 if (range.startOffset !== startNode.data.length) {
                     return null;
                 } else {
-                    // Range is at the end of a text node, if there is no next sibling
-                    // then find the next selectable node and change the startNode to that.
+                    // Range is at the end of a text node, find the first selectable
+                    // node in the next siblong and change the startNode to that.
                     if (startNode.nextSibling) {
-                        return null;
+                        startNode = this._getFirstSelectableChild(startNode.nextSibling);
+                        if (!startNode) {
+                            return null;
+                        }
                     } else {
+                        // There is no sibling move range by 1 char.
                         this.moveStart(ViperDOMRange.CHARACTER_UNIT, 1);
                         startNode = range.getStartNode();
                     }
