@@ -14,7 +14,7 @@ class Viper_Tests_ViperCoreStylesPlugin_SubscriptUnitTest extends AbstractViperU
     public function testStartOfParaSubscript()
     {
         $dir = dirname(__FILE__).'/Images/';
-        
+
         $this->selectText('Lorem');
 
         $this->clickTopToolbarButton($dir.'toolbarIcon_sub.png');
@@ -33,7 +33,7 @@ class Viper_Tests_ViperCoreStylesPlugin_SubscriptUnitTest extends AbstractViperU
     public function testMidOfParaSubscript()
     {
         $dir = dirname(__FILE__).'/Images/';
-        
+
         $this->selectText('XuT');
 
         $this->clickTopToolbarButton($dir.'toolbarIcon_sub.png');
@@ -52,7 +52,7 @@ class Viper_Tests_ViperCoreStylesPlugin_SubscriptUnitTest extends AbstractViperU
     public function testEndOfParaSubscript()
     {
         $dir = dirname(__FILE__).'/Images/';
-        
+
         $this->selectText('dolor');
 
         $this->clickTopToolbarButton($dir.'toolbarIcon_sub.png');
@@ -71,7 +71,10 @@ class Viper_Tests_ViperCoreStylesPlugin_SubscriptUnitTest extends AbstractViperU
     public function testRemovingFormatFromPartOfTheContent()
     {
         $dir = dirname(__FILE__).'/Images/';
-        
+
+        $dolor = $this->find('dolor');
+        $xut   = $this->find('xut');
+
         $this->selectText('XuT', 'dolor');
 
         $this->clickTopToolbarButton($dir.'toolbarIcon_sub.png');
@@ -79,17 +82,17 @@ class Viper_Tests_ViperCoreStylesPlugin_SubscriptUnitTest extends AbstractViperU
 
         $this->assertHTMLMatch('<p>Lorem <sub>XuT dolor</sub></p><p>sit <em>amet</em> <strong>WoW</strong></p>');
 
-        // Stop here as we need a way to select text that has a strikethrough.
-        $this->markTestIncomplete('Need a way to select text that has is sub script.');
-          
-        $this->selectText('dolor');
+        $this->doubleClick($dolor);
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_sub.png');
+        $this->clickTopToolbarButton($dir.'toolbarIcon_sub_acitve.png');
         $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_sub.png'), 'Subscript icon in the top toolbar is still active');
 
         $this->assertHTMLMatch('<p>Lorem <sub>XuT </sub>dolor</p><p>sit <em>amet</em> <strong>WoW</strong></p>');
 
-        $this->selectText('XuT');
+        // Stop here as we need a way to select text that has a strikethrough.
+        $this->markTestIncomplete('Need a way to select text that has is sub script.');
+
+        $this->doubleClick($xut);
         $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_sub_active.png'), 'Subscript icon in the top toolbar is not active');
 
     }//end testRemovingFormatFromPartOfTheContent()
@@ -103,7 +106,7 @@ class Viper_Tests_ViperCoreStylesPlugin_SubscriptUnitTest extends AbstractViperU
     public function testAdjacentWordStyling()
     {
         $dir = dirname(__FILE__).'/Images/';
-        
+
         $this->selectText('XuT');
         $this->clickTopToolbarButton($dir.'toolbarIcon_sub.png');
 
@@ -126,7 +129,7 @@ class Viper_Tests_ViperCoreStylesPlugin_SubscriptUnitTest extends AbstractViperU
     public function testSpaceSeparatedAdjacentWordStyling()
     {
         $dir = dirname(__FILE__).'/Images/';
-        
+
         $this->selectText('XuT');
          $this->clickTopToolbarButton($dir.'toolbarIcon_sub.png');
 
@@ -149,21 +152,21 @@ class Viper_Tests_ViperCoreStylesPlugin_SubscriptUnitTest extends AbstractViperU
     public function testRemoveFormating()
     {
         $dir = dirname(__FILE__).'/Images/';
-        
+
         $text    = 'WoW';
         $textLoc = $this->find($text);
         $this->selectText($text);
-        
+
         $this->clickTopToolbarButton($dir.'toolbarIcon_sub.png');
         $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_sub_active.png'), 'Subscript icon in the top toolbar is not active');
         $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p>sit <em>amet</em> <strong><sub>WoW</sub></strong></p>');
-        
+
         $this->click($textLoc);
         $this->selectText($text);
-        
+
          $this->clickTopToolbarButton($dir.'toolbarIcon_sub_active.png');
         $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_sub.png'), 'Subscript icon is still active in the top toolbar is not active');
-        
+
         $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p>sit <em>amet</em> <strong>WoW</strong></p>');
 
     }//end testRemoveFormating()
@@ -177,14 +180,14 @@ class Viper_Tests_ViperCoreStylesPlugin_SubscriptUnitTest extends AbstractViperU
     public function testIconsIsActive()
     {
         $dir = dirname(__FILE__).'/Images/';
-        
+
         $text    = 'WoW';
         $textLoc = $this->find($text);
         $this->selectText($text);
-        
+
         $this->clickTopToolbarButton($dir.'toolbarIcon_sub.png');
         $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_sub_active.png'), 'Subscript icon in the top toolbar is not active');
-        
+
         $this->click($textLoc);
         $this->selectText($text);
         $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_sub_active.png'), 'Subscript icon in the top toolbar is not active');
