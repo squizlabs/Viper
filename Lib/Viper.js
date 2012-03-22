@@ -1782,6 +1782,11 @@ Viper.prototype = {
                         callback.call(this, elem);
                     }
                 }
+            } else if (parent.previousSibling
+                && dfx.isTag(parent.previousSibling, tag) === true
+                && !dfx.attr(parent.previousSibling, 'viperbookmark')
+            ) {
+                parent.previousSibling.appendChild(parent);
             }//end if
         } else if (dfx.isStubElement(parent) === false) {
             if (dfx.isBlockElement(parent) === false && this.hasBlockChildren(parent) === false) {
