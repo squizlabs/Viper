@@ -114,6 +114,7 @@ ViperLinkPlugin.prototype = {
         range.selectNode(node);
         ViperSelection.addRange(range);
         this.viper.fireSelectionChanged(range, true);
+        this.viper.fireNodesChanged([node]);
 
     },
 
