@@ -969,7 +969,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      */
     protected function getSelectedText()
     {
-        return $this->execJS('viper.getViperRange().toString()');
+        return $this->execJS('gText()');
 
     }//end getSelectedText()
 
@@ -989,7 +989,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
 
     }//end getBoundingRectangle()
 
-    
+
      /**
      * Clicks an element in the content.
      *
@@ -1002,7 +1002,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
 
        // Click the element.
        $this->click($region);
-    
+
     }//end clickElement()
 
 }//end class
