@@ -6,6 +6,7 @@ function ViperInlineToolbarPlugin(viper)
     this._lineage             = null;
     this._lineageClicked      = false;
     this._currentLineageIndex = null;
+    this._lineageItemSelected = false;
     this._margin              = 15;
 
     this._subSections             = {};
@@ -445,6 +446,8 @@ ViperInlineToolbarPlugin.prototype = {
             }
         }
 
+        this._lineageItemSelected = false;
+
         var activeSection   = this._activeSection;
         this._activeSection = null;
 
@@ -875,9 +878,24 @@ ViperInlineToolbarPlugin.prototype = {
     {
         this.viper.focus();
 
+        var range = this.viper.getCurrentRange();
+
+        if (this._lineageItemSelected === false) {
+            // Update original selection. We update it here incase the selectionHighlight
+            // method changed the DOM structure (e.g. normalised textnodes), when
+            // Viper is focused update the 'selection' range.
+            this._originalRange = {
+                startContainer: range.startContainer,
+                endContainer: range.endContainer,
+                startOffset: range.startOffset,
+                endOffset: range.endOffset,
+                collapsed: range.collapsed
+            };
+        }
+
         // Set the range.
         ViperSelection.removeAllRanges();
-        var range = this.viper.getViperRange();
+        range = this.viper.getViperRange();
 
         var first = range._getFirstSelectableChild(node);
         var last  = range._getLastSelectableChild(node);
@@ -891,12 +909,17 @@ ViperInlineToolbarPlugin.prototype = {
         this._updatePosition(range, true);
         this._updateSubSectionArrowPos();
 
+        this._lineageItemSelected = true;
+
     },
 
     _selectPreviousRange: function()
     {
+        this.viper.focus();
+
         ViperSelection.removeAllRanges();
         var range = this.viper.getCurrentRange();
+
         range.setStart(this._originalRange.startContainer, this._originalRange.startOffset);
         range.setEnd(this._originalRange.endContainer, this._originalRange.endOffset);
         ViperSelection.addRange(range);

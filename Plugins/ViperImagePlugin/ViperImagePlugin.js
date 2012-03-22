@@ -24,6 +24,18 @@ ViperImagePlugin.prototype = {
             }
         });
 
+        this.viper.registerCallback('Viper:keyDown', 'ViperImagePlugin', function(e) {
+            var range = self.viper.getViperRange();
+            if (e.which === 8 || e.which === 46) {
+                var selectedNode = range.getNodeSelection();
+                if (selectedNode) {
+                    if (self.removeImage(selectedNode) === true) {
+                        return false;
+                    }
+                }
+            }
+        });
+
     },
 
     rangeToImage: function(range, url, alt, title)
@@ -33,6 +45,15 @@ ViperImagePlugin.prototype = {
         }
 
         range = range || this.viper.getViperRange();
+        var selectedNode = range.getNodeSelection();
+
+        if (dfx.isBlockElement(selectedNode) === true) {
+            dfx.setHtml(selectedNode, '&nbsp');
+            range.setStart(selectedNode.firstChild, 0);
+            range.collapse(true);
+            ViperSelection.addRange(range);
+        }
+
         var bookmark = this.viper.createBookmark();
 
         var elems = dfx.getElementsBetween(bookmark.start, bookmark.end);
@@ -82,13 +103,16 @@ ViperImagePlugin.prototype = {
                 dfx.insertAfter(image, node);
             }
 
-            dfx.remove(image);
+            image.parentNode.removeChild(image);
 
             var range = this.viper.getViperRange();
             range.setStart(node, start);
             range.collapse(true);
             ViperSelection.addRange(range);
+            return true;
         }
+
+        return false;
     },
 
     setImageAlt: function(image, alt)
@@ -145,6 +169,8 @@ ViperImagePlugin.prototype = {
             } else {
                 self.setImageURL(image, self.getImageUrl(url));
                 self.setImageAlt(image, alt);
+
+                this.viper.fireNodesChanged([image]);
             }
         };
 

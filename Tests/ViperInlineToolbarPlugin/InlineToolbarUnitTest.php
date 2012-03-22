@@ -346,7 +346,36 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarUnitTest extends Abstrac
 
     }//end testClickOnToolbarNotHideToolbar()
 
-    
+
+    /**
+     * Test that correct selection is made when a sub toolbar is open.
+     *
+     * @return void
+     */
+    public function testTextSelectionWhenSubToolbarIsOpen()
+    {
+        $dir = dirname(__FILE__).'/Images/';
+
+        $this->selectText('IPSUM');
+
+        $lineage = $this->getHtml('.ViperITP-lineage');
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem selected">Selection</li>', $lineage);
+
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_class.png');
+        $this->selectInlineToolbarLineageItem(0);
+        $this->assertEquals('Lorem IPSUM dolor', $this->getSelectedText(), 'P tag is selected');
+        $lineage = $this->getHtml('.ViperITP-lineage');
+        $this->assertEquals('<li class="ViperITP-lineageItem selected">P</li><li class="ViperITP-lineageItem">Selection</li>', $lineage);
+
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_class.png');
+        $this->selectInlineToolbarLineageItem(1);
+        $this->assertEquals('Lorem IPSUM dolor', $this->getSelectedText(), 'P tag is selected');
+        $lineage = $this->getHtml('.ViperITP-lineage');
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem selected">Selection</li>', $lineage);
+
+    }//end testTextSelectionWhenSubToolbarIsOpen()
+
+
 }//end class
 
 ?>

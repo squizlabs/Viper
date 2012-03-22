@@ -156,6 +156,56 @@ ViperCoreStylesPlugin.prototype = {
             del: 'Strikethrough'
         };
 
+        // Inline toolbar.
+        this.viper.registerCallback('ViperInlineToolbarPlugin:updateToolbar', 'ViperCoreStylesPlugin', function(data) {
+            self._createInlineToolbarContent(data);
+        });
+
+        this.viper.registerCallback('Viper:mouseDown', 'ViperCoreStylesPlugin', function(e) {
+            var target = dfx.getMouseEventTarget(e);
+            if (target && dfx.isTag(target, 'hr') !== true) {
+                return;
+            }
+
+            // Set the range after the HR element, if there is no element after
+            // HR create a new P tag.
+            var blockSibling = target.nextSibling;
+            while (blockSibling) {
+                if (dfx.isBlockElement(blockSibling) === true) {
+                    break;
+                } else if (blockSibling.nodeType === dfx.TEXT_NODE && dfx.trim(blockSibling.data) !== '') {
+                    blockSibling = null;
+                    break;
+                }
+
+                blockSibling = blockSibling.nextSibling;
+            }
+
+            if (!blockSibling) {
+                blockSibling = document.createElement('p');
+                dfx.setHtml(blockSibling, '&nbsp;');
+                dfx.insertAfter(target, blockSibling);
+            } else if (dfx.getHtml(blockSibling) === '') {
+                dfx.setHtml(blockSibling, '&nbsp;');
+            }
+
+            var range      = self.viper.getViperRange();
+            var selectable = range._getFirstSelectableChild(blockSibling);
+            if (!selectable) {
+                selectable = document.createTextNode(' ');
+                if (blockSibling.firstChild) {
+                    dfx.insertBefore(blockSibling.firstChild, selectable);
+                } else {
+                    blockSibling.appendChild(selectable);
+                }
+            }
+
+            range.setStart(selectable, 0);
+            range.collapse(true);
+            ViperSelection.addRange(range);
+            return false;
+        });
+
         this.viper.registerCallback('ViperChangeTracker:modeChange', 'ViperCoreStylesPlugin', function(mode) {
             // First get format change tags.
             var nodes    = ViperChangeTracker.getCTNodes('formatChange');
@@ -479,7 +529,7 @@ ViperCoreStylesPlugin.prototype = {
             common = this.getFirstBlockParent(common);
         }
 
-        if (dfx.isChildOf(common, this.viper.element) === true) {
+        if (dfx.isBlockElement(common) === true && dfx.isChildOf(common, this.viper.element) === true) {
             this.setJustfyChangeTrackInfo(common);
             this.toggleJustify(common, type);
         } else {
@@ -496,18 +546,24 @@ ViperCoreStylesPlugin.prototype = {
                 elemsBetween.push(end);
             }
 
+            var toggleAlignment = true;
+            var parentElements  = [];
             while (node = elemsBetween.shift()) {
                 if (dfx.isBlockElement(node) === true) {
-                    this.setJustfyChangeTrackInfo(node);
-                    this.toggleJustify(node, type);
-                    // Reset the parent var to crate a new P tag if there
-                    // are more siblings.
+                    if (dfx.getStyle(node, 'text-align') !== type) {
+                        toggleAlignment = false;
+                    }
+
+                    parentElements.push(node);
                     parent = null;
                 } else if (parent === null && (parent = this.getFirstBlockParent(node))) {
                     // If we havent found a good parent and the node's parent is a block
                     // element then set the style of that parent.
-                    this.setJustfyChangeTrackInfo(parent);
-                    this.toggleJustify(parent, type);
+                    if (dfx.getStyle(parent, 'text-align') !== type) {
+                        toggleAlignment = false;
+                    }
+
+                    parentElements.push(parent);
                     parent = null;
                 } else if (node.nodeType == dfx.TEXT_NODE && dfx.isBlank(dfx.trim(node.data)) === true) {
                     continue;
@@ -517,21 +573,29 @@ ViperCoreStylesPlugin.prototype = {
                     // new P element.
                     if (parent === null) {
                         parent = Viper.document.createElement('p');
-                        this.setJustfyChangeTrackInfo(parent);
-                        this.toggleJustify(parent, type);
 
                         // Insert the new P tag before this node.
                         dfx.insertBefore(node, parent);
                     }
 
+                    if (dfx.getStyle(parent, 'text-align') !== type) {
+                        toggleAlignment = false;
+                    }
+
                     // Add the node to the new P elem.
                     parent.appendChild(node);
+
+                    parentElements.push(parent);
                 }//end if
 
                 if (node === end) {
                     break;
                 }
             }//end while
+
+            for (var i = 0; i < parentElements.length; i++) {
+                this.toggleJustify(parentElements[i], type, !toggleAlignment);
+            }
 
             if (bookmark !== null) {
                 this.viper.selectBookmark(bookmark);
@@ -543,10 +607,10 @@ ViperCoreStylesPlugin.prototype = {
 
     },
 
-    toggleJustify: function(node, type)
+    toggleJustify: function(node, type, force)
     {
         var current = dfx.getStyle(node, 'text-align');
-        if (current === type) {
+        if (force !== true && current === type) {
             dfx.setStyle(node, 'text-align', '');
 
             if (dfx.hasAttribute(node, 'style') === true
@@ -589,9 +653,51 @@ ViperCoreStylesPlugin.prototype = {
     {
         var hr = document.createElement('hr');
 
+        var range = this.viper.getViperRange();
+        if (range.collapsed !== true) {
+            range.deleteContents();
+            range = this.viper.getViperRange();
+        }
+
         var keyboardEditorPlugin = this.viper.ViperPluginManager.getPlugin('ViperKeyboardEditorPlugin');
-        var prev = keyboardEditorPlugin.splitAtRange(true);
+        var prev = keyboardEditorPlugin.splitAtRange(true, null);
+        var nextSibling = prev.nextSibling;
+
         dfx.insertAfter(prev, hr);
+
+        if (!nextSibling || dfx.isBlockElement(nextSibling) === false) {
+            var p = document.createElement('p');
+            dfx.setHtml(p, '&nbsp;');
+            dfx.insertAfter(hr, p);
+            nextSibling = p;
+        } else {
+            if (dfx.trim(dfx.getNodeTextContent(nextSibling)) === '') {
+                dfx.setHtml(nextSibling, '&nbsp;');
+
+                var nextEmptyElem = nextSibling.nextSibling;
+                while (nextEmptyElem) {
+                    if (dfx.isBlockElement(nextEmptyElem) === true) {
+                        var html = dfx.getHtml(nextEmptyElem);
+                        if (html === '' || html === '<br>' || html === '&nbsp;') {
+                            // This is an empty block element that is after the next sibling.. remove it..
+                            nextEmptyElem.parentNode.removeChild(nextEmptyElem);
+                        }
+
+                        break;
+                    } else if (nextEmptyElem.nodeType === dfx.TEXT_NODE && dfx.trim(nextEmptyElem.data) !== '') {
+                        break;
+                    }
+
+                    nextEmptyElem = nextEmptyElem.nextSibling;
+                }
+            }
+        }//end if
+
+        var range = this.viper.getViperRange();
+        range.setStart(range._getFirstSelectableChild(nextSibling), 0);
+        range.collapse(true);
+        ViperSelection.addRange(range);
+
         this.viper.fireNodesChanged('ViperCoreStylesPlugin:hr');
         this.viper.fireSelectionChanged(null, true);
 
@@ -628,6 +734,12 @@ ViperCoreStylesPlugin.prototype = {
         if (parent !== null) {
             return dfx.getStyle(parent, 'text-align');
         }
+
+    },
+
+    setAlignment: function(element, type)
+    {
+        dfx.setStyle(element, 'text-align', type);
 
     },
 
@@ -926,6 +1038,10 @@ ViperCoreStylesPlugin.prototype = {
         }
 
         tools.enableButton('justify');
+        if (!states.alignment) {
+            states.alignment = 'start';
+        }
+
         if (states.alignment) {
             var justify       = states.alignment;
             var c             = buttons.justify.length;

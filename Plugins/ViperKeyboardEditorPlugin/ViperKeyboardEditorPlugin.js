@@ -11,8 +11,14 @@ function ViperKeyboardEditorPlugin(viper)
             return self.handleEnter();
         } else if (viper.isKey(e, 'SHIFT+ENTER') === true) {
             return self.handleSoftEnter(e);
+        } else if (viper.isKey(e, 'DELETE') === true || viper.isKey(e, 'BACKSPACE') === true) {
+            return self.handleDelete(e);
         }
     });
+
+    // When enter key is pressed at the end of these tags, the plugin will handle the
+    // enter event instead of the browser.
+    this._tagList = ('div|h1|h2|h3|h4|h5|h6').split('|');
 
 }
 
@@ -134,7 +140,24 @@ ViperKeyboardEditorPlugin.prototype = {
         }
 
         if (ViperChangeTracker.isTracking() !== true) {
-            // Track changes is not turned on.. Let the browser do everything.
+            var range = this.viper.getViperRange();
+            if (range.collapsed === true
+                && range.endContainer.nodeType === dfx.TEXT_NODE
+                && range.endOffset === range.endContainer.data.length
+            ) {
+                var firstBlock = dfx.getFirstBlockParent(range.endContainer);
+                if (firstBlock && this._tagList.inArray(dfx.getTagName(firstBlock)) === true) {
+                    var p = document.createElement('p');
+                    dfx.setHtml(p, '<br />');
+                    dfx.insertAfter(firstBlock, p);
+                    range.selectNode(p.firstChild);
+                    range.collapse(true);
+                    ViperSelection.addRange(range);
+                    return false;
+                }
+            }//end if
+
+            // Let the browser handle everything else.
             return true;
         }
 
@@ -153,6 +176,32 @@ ViperKeyboardEditorPlugin.prototype = {
 
     },
 
+    handleDelete: function(e)
+    {
+        var range = this.viper.getViperRange();
+
+        if (range.startOffset !== 0) {
+            return;
+        }
+
+        var viperElement    = this.viper.getViperElement();
+        var firstSelectable = range._getFirstSelectableChild(viperElement);
+
+        if (firstSelectable === range.startContainer || viperElement === range.startContainer) {
+            var lastSelectable  = range._getLastSelectableChild(viperElement);
+            if (range.endContainer === viperElement
+                || (range.endContainer === lastSelectable && range.endOffset === lastSelectable.data.length)
+            ) {
+                // The whole Viper element is selected, remove all of its content
+                // and then initialise the Viper element.
+                dfx.setHtml(viperElement, '');
+                this.viper.initEditableElement();
+                return false;
+            }
+        }
+
+    },
+
     splitAtRange: function(returnFirstBlock, range)
     {
         range = range || this.viper.getViperRange();
@@ -166,6 +215,7 @@ ViperKeyboardEditorPlugin.prototype = {
         // If the range is not collapsed then remove the contents of the selection.
         if (range.collapsed !== true) {
             this.viper.deleteContents();
+            range = this.viper.getViperRange();
         }
 
         if (range.startContainer.nodeType === dfx.TEXT_NODE) {

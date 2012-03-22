@@ -723,6 +723,11 @@ ViperFormatPlugin.prototype = {
         }
 
         if (selectedNode) {
+            var ignoreTags = ['li'];
+            if (ignoreTags.inArray(dfx.getTagName(selectedNode)) === true) {
+                return false;
+            }
+
             if (testOnly === true) {
                 return true;
             }
