@@ -169,6 +169,8 @@ ViperImagePlugin.prototype = {
             } else {
                 self.setImageURL(image, self.getImageUrl(url));
                 self.setImageAlt(image, alt);
+
+                this.viper.fireNodesChanged([image]);
             }
         };
 
