@@ -3580,6 +3580,7 @@ Viper.prototype = {
         this.fireCallbacks('getHtml', {element: clone});
         var html = dfx.getHtml(clone);
         html     = this._fixHtml(html);
+        html     = this.cleanHTML(html);
 
         return html;
 
@@ -3727,6 +3728,7 @@ Viper.prototype = {
     {
         content = content.replace(/<(p|div|h1|h2|h3|h4|h5|h6|li)((\s+\w+(\s*=\s*(?:".*?"|\'.*?\'|[^\'">\s]+))?)+)?\s*>\s*/ig, "<$1$2>");
         content = content.replace(/\s*<\/(p|div|h1|h2|h3|h4|h5|h6|li)((\s+\w+(\s*=\s*(?:".*?"|\'.*?\'|[^\'">\s]+))?)+)?\s*>/ig, "</$1$2>");
+        content = content.replace(/<(area|base|basefont|br|hr|input|img|link|meta)((\s+\w+(\s*=\s*(?:".*?"|\'.*?\'|[^\'">\s]+))?)+)?\s*>/ig, "<$1$2 />");
 
         return content;
 
