@@ -15,9 +15,9 @@ ViperAccessibilityPlugin_WCAG2_Principle1_Guideline1_1 = {
             case 'H67.1':
             case 'H67.2':
                 if (technique === 'H37') {
-                    this._getImageResContent(contentElement, element, 'Enter a short text description of the image, or define the image as purely presentational');
+                    this._getImageResContent(contentElement, element, 'Enter a short text description of the image, or define the image as purely presentational.');
                 } else {
-                    this._getImageResContent(contentElement, element, 'Ensure this image is purely presentational, if not, enter appropriate Alt and Title text');
+                    this._getImageResContent(contentElement, element, 'Ensure this image is purely presentational. If not, enter appropriate alt and title text.');
                 }
 
                 editPanel = this.parent.getResolutionActionsContainer(contentElement);
@@ -67,12 +67,12 @@ ViperAccessibilityPlugin_WCAG2_Principle1_Guideline1_1 = {
             case 'H30.2':
             case 'G94.Image':
                 var msg = '';
-                if (technique === 'H2') {
-                    msg = 'Update the image\'s alt text to something other than the nearby link "' + element.getAttribute('alt') + '"';
-                } else if (technique === 'H30') {
-                    msg = 'Make sure the image\'s alt text describes the purpose of the link its being used for.';
+                if (technique === 'H2.EG3') {
+                    msg = 'Update the image\'s alt text to something other than the nearby link "' + element.getAttribute('alt') + '".';
+                } else if (technique === 'H30.2') {
+                    msg = 'Make sure the image\'s alt text describes the purpose of the link it\'s being used for.';
                 } else if (technique === 'G94') {
-                    msg = 'Ensure the image\'s Alt text describes the purpose or content of the image.';
+                    msg = 'Ensure the image\'s alt text describes the purpose or content of the image.';
                 }
 
                 this._getImageResContent(contentElement, element, msg);

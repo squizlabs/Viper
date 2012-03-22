@@ -16,10 +16,10 @@ ViperAccessibilityPlugin_WCAG2_Principle1_Guideline1_3 = {
                 var content  = '';
                 var btnTitle = '';
                 if (technique === 'H48.1') {
-                    content  = '<p>This section of content resembles a content list, if this is intentional it should be converted to the proper list format</p>';
+                    content  = '<p>This section of content resembles a content list. If this is intentional, it should be converted to the proper list format.</p>';
                     btnTitle = 'Convert to Unordered List';
                 } else {
-                    content  = '<p>This section of content resembles a numbered list, if this is intentional it should be converted to the proper list format</p>';
+                    content  = '<p>This section of content resembles a numbered list. If this is intentional it should be converted to the proper list format.</p>';
                     btnTitle = 'Convert to Ordered List';
                 }
 
@@ -40,7 +40,7 @@ ViperAccessibilityPlugin_WCAG2_Principle1_Guideline1_3 = {
 
             case 'H39':
                 if (code.techniques[1] === 'H73.4') {
-                    this.parent.setResolutionInstruction(contentElement, '<p>Update either the Table\'s Caption or Summary so they are not identical text</p>');
+                    this.parent.setResolutionInstruction(contentElement, '<p>Update either the table\'s caption or summary so they are not identical.</p>');
 
                     var editPanel = this.parent.getResolutionActionsContainer(contentElement);
 

@@ -134,12 +134,12 @@ ViperAccessibilityPlugin_WCAG2 = {
 
         switch (issue.type) {
             case HTMLCS.ERROR:
-                content += '<p>Please resolive this issue manually and then click the refresh button to confirm that the issue is resolved.</p>';
+                content += '<p>Please resolve this issue manually and then click the refresh button to confirm that the issue is resolved.</p>';
             break;
 
             case HTMLCS.WARNING:
             case HTMLCS.NOTICE:
-                content += '<p>Either fix this issue manualy and then click the refresh button to confirm that the issue is resolved or if no changes are required click the "Dismiss" button.</p>';
+                content += '<p>Either fix this issue manually and then click the refresh button to confirm that the issue is resolved or, if no changes are required, click the "Dismiss" button.</p>';
             break;
         }
 
