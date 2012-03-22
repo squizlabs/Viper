@@ -318,7 +318,7 @@ Viper.prototype = {
             var range = this.getCurrentRange();
             this.setRange(range._getFirstSelectableChild(this.element), 0);
             this.enabled = true;
-            this.fireCallbacks('viperEnabled');
+            this.fireCallbacks('Viper:enabled');
             this.element.setAttribute('contentEditable', true);
             dfx.setStyle(this.element, 'outline', 'none');
         } else if (enabled === false && this.enabled === true) {
@@ -334,7 +334,7 @@ Viper.prototype = {
             dfx.setStyle(this.element, 'outline', 'invert');
             this._removeEvents();
             this.enabled = false;
-            this.fireCallbacks('viperDisabled');
+            this.fireCallbacks('Viper:disabled');
             ViperChangeTracker.disableChangeTracking();
             ViperChangeTracker.cleanUp();
         }//end if
