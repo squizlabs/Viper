@@ -915,8 +915,11 @@ ViperInlineToolbarPlugin.prototype = {
 
     _selectPreviousRange: function()
     {
+        this.viper.focus();
+
         ViperSelection.removeAllRanges();
         var range = this.viper.getCurrentRange();
+
         range.setStart(this._originalRange.startContainer, this._originalRange.startOffset);
         range.setEnd(this._originalRange.endContainer, this._originalRange.endOffset);
         ViperSelection.addRange(range);
