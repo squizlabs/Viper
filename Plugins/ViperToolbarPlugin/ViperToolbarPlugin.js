@@ -440,6 +440,7 @@ ViperToolbarPlugin.prototype = {
     {
         this._closeBubble(bubbleid);
 
+        this.viper.focus();
         this.viper.highlightToSelection();
 
     },
