@@ -866,7 +866,7 @@ ViperCoreStylesPlugin.prototype = {
     handleStyle: function(style)
     {
         // Determine if we need to apply or remove the styles.
-        var range = this.viper.getCurrentRange();
+        var range = this.viper.getViperRange();
 
         if (range.collapsed === true) {
             // Range is collapsed. We need to listen for next insertion.
@@ -874,8 +874,17 @@ ViperCoreStylesPlugin.prototype = {
             return false;
         }
 
-        var startNode = range.getStartNode();
-        var endNode   = range.getEndNode();
+        var selectedNode = range.getNodeSelection();
+        var startNode    = null;
+        var endNode      = null;
+
+        if (!selectedNode) {
+            var startNode = range.getStartNode();
+            var endNode   = range.getEndNode();
+        } else {
+            startNode = selectedNode;
+        }
+
         if (!endNode) {
             endNode = startNode;
         }
@@ -999,7 +1008,12 @@ ViperCoreStylesPlugin.prototype = {
 
     _updateToolbarButtonStates: function(buttons, range)
     {
-        var startNode = range.getStartNode();
+
+        var startNode = range.getNodeSelection();
+        if (!startNode) {
+            startNode = range.getStartNode();
+        }
+
         var tools     = this.viper.ViperTools;
         if (this._canStyleNode(startNode) !== true) {
             for (var btn in buttons) {
@@ -1078,8 +1092,17 @@ ViperCoreStylesPlugin.prototype = {
     _getActiveStates: function(range, tagNames)
     {
         var activeStates = [];
-        var startNode    = range.getStartNode();
-        var endNode      = range.getEndNode();
+        var selectedNode = range.getNodeSelection();
+        var startNode    = null;
+        var endNode      = null;
+
+        if (!selectedNode) {
+            startNode = range.getStartNode();
+            endNode   = range.getEndNode();
+        } else {
+            startNode = selectedNode;
+        }
+
         if (!endNode) {
             endNode = startNode;
         }
