@@ -37,6 +37,10 @@ ViperSourceViewPlugin.prototype = {
             }, 250);
         });
 
+        this.viper.registerCallback(['Viper:editableElementChanged', 'Viper:disabled'], 'ViperSourceViewPlugin', function(nodes) {
+            self.hideSourceView();
+        });
+
     },
 
     isSourceChanged: function()
@@ -91,7 +95,7 @@ ViperSourceViewPlugin.prototype = {
             dfx.remove(this._sourceView);
             this._sourceView = null;
             this._editor     = null;
-        } else {
+        } else if (this._sourceView) {
             this.viper.ViperTools.closePopup('VSVP:popup');
         }
 
