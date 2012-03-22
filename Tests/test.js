@@ -14,6 +14,22 @@ function gHtml(selector, index)
 
 }
 
+function gText()
+{
+    var selection    = '';
+    var selHighlights = dfx.getClass('__viper_selHighlight');
+    if (selHighlights.length > 0) {
+        for (var i = 0; i < selHighlights.length; i++) {
+            selection += dfx.getNodeTextContent(selHighlights[i]);
+        }
+    } else {
+        selection = viper.getViperRange().toString();
+    }
+
+    return selection;
+
+}
+
 /**
  * Executes the JS string set as the value of jsExec textarea.
  */

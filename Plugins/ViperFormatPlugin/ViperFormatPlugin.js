@@ -413,8 +413,11 @@ ViperFormatPlugin.prototype = {
 
         // Listen for the main toolbar update and update the statuses of the buttons.
         this.viper.registerCallback('ViperToolbarPlugin:updateToolbar', 'ViperFormatPlugin', function(data) {
-            if (data.range.collapsed === true
-                || data.range.startContainer.parentNode !== data.range.endContainer.parentNode
+            var nodeSelection = data.range.getNodeSelection();
+            var startNode = data.range.getStartNode();
+            var endNode   = data.range.getEndNode();
+            if ((!nodeSelection || nodeSelection.nodeType !== dfx.ELEMENT_NODE)
+                && (data.range.collapsed === true || startNode.parentNode !== endNode.parentNode)
             ) {
                 tools.disableButton('anchor');
                 tools.disableButton('class');
@@ -423,7 +426,6 @@ ViperFormatPlugin.prototype = {
             } else {
                 tools.enableButton('anchor');
                 tools.enableButton('class');
-
             }
 
             tools.enableButton('headings');

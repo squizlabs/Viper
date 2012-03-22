@@ -124,6 +124,7 @@ ViperToolbarPlugin.prototype = {
         var elem = document.createElement('div');
         dfx.addClass(elem, 'ViperTP-bar themeDark Viper-scalable');
         this._toolbar = elem;
+        dfx.addClass(this._toolbar, 'viper-inactive');
 
         dfx.addEvent(elem, 'mousedown', function(e) {
             var target = dfx.getMouseEventTarget(e);
@@ -440,6 +441,7 @@ ViperToolbarPlugin.prototype = {
     {
         this._closeBubble(bubbleid);
 
+        this.viper.focus();
         this.viper.highlightToSelection();
 
     },
@@ -560,6 +562,9 @@ ViperToolbarPlugin.prototype = {
     {
         this._enabled = false;
 
+        dfx.removeClass(this._toolbar, 'viper-active');
+        dfx.addClass(this._toolbar, 'viper-inactive');
+
         // Close active bubble.
         if (this._activeBubble) {
             this.closeBubble(this._activeBubble);
@@ -581,6 +586,9 @@ ViperToolbarPlugin.prototype = {
     enable: function()
     {
         this._enabled = true;
+        dfx.removeClass(this._toolbar, 'viper-inactive');
+        dfx.addClass(this._toolbar, 'viper-active');
+
         this.viper.fireCallbacks('ViperToolbarPlugin:enabled');
 
     },

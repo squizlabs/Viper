@@ -336,9 +336,8 @@ ViperSourceViewPlugin.prototype = {
         var viperid = 'Viper-' + this.viper.getId() + '-ViperSVP';
         window[viperid] = this;
 
-        var path = this.viper.getViperPath();
-        path    += '/Plugins/ViperSourceViewPlugin/AceEditor.html' + '?viperid=' + viperid;
-        var childWindow   = window.open(path, "Viper Source View", "width=850,height=800,0,status=0,scrollbars=1");
+        var childWindow = window.open('about:blank', "Viper Source View", "width=850,height=800,0,status=0,scrollbars=0");
+        childWindow.document.write(this._getFrameContent(viperid));
         this._childWindow = childWindow;
         this._inNewWindow = true;
 
@@ -351,6 +350,64 @@ ViperSourceViewPlugin.prototype = {
                 self.hideSourceView();
             }
         }, 700);
+
+    },
+
+    _getFrameContent: function(viperid)
+    {
+        var path    = this.viper.getViperPath();
+        var content = '';
+
+        content += '<!DOCTYPE html><html lang="en"><head>';
+        content += '<meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">';
+        content += '<title>Viper Source View</title>';
+        content += '<style type="text/css" media="screen">body {overflow: hidden;}</style>';
+
+        if (!path) {
+            var viperPath = this.getViperURL();
+            content += '<link href="' + viperPath + 'viper.css" media="screen" rel="stylesheet" />';
+            content += '<script src="' + viperPath + 'viper.js" type="text/javascript" charset="utf-8"></script></head>';
+        } else {
+            content += '<link href="' + path + '/Css/viper_tools.css" media="screen" rel="stylesheet" />';
+            content += '<link href="' + path + '/Plugins/ViperSourceViewPlugin/ViperSourceViewPlugin.css" media="screen" rel="stylesheet" />';
+            content += '<script src="' + path + '/Plugins/ViperSourceViewPlugin/Ace/src/ace.js" type="text/javascript" charset="utf-8"></script>';
+            content += '<script src="' + path + '/Plugins/ViperSourceViewPlugin/Ace/src/theme-viper.js" type="text/javascript" charset="utf-8"></script>';
+            content += '<script src="' + path + '/Plugins/ViperSourceViewPlugin/Ace/src/mode-html.js" type="text/javascript" charset="utf-8"></script>';
+        }
+
+        content += '<body id="ViperSourceViewPlugin-window" class="ViperSourceViewPlugin-window">';
+        content += '<div class="Viper-popup themeDark VSVP-popup">';
+        content += '<div class="VSVP-confirmPanel Viper-popup-top">';
+        content += '<div class="VSVP-confirmText">Changes you make to the source code will be reflected in your edit preview window in real time.</div>';
+        content += '<div class="Viper-button" title="Close Changes" onclick="window.close();">Close Window</div></div>';
+        content += '<div class="Viper-popup-content"><pre id="editor"></pre></div></div>';
+        content += '<script>';
+        content += 'var viperid = "' + viperid + '";';
+        content += 'var viperSVP = window.opener[viperid];';
+        content += 'var editor = ace.edit("editor");';
+        content += 'viperSVP.applyEditorSettings(editor);';
+        content += 'viperSVP.initEditorEvents(editor);';
+        content += 'viperSVP._editor = editor;';
+        content += 'viperSVP.updateSourceContents();</script></body></html>';
+
+        return content;
+
+    },
+
+    getViperURL: function()
+    {
+        var scripts = document.getElementsByTagName('script');
+        var path    = null;
+        var c       = scripts.length;
+        for (var i = 0; i < c; i++) {
+            if (scripts[i].src) {
+                if (scripts[i].src.match(/\/viper\.js/)) {
+                    return scripts[i].src.replace('/viper.js', '/');
+                }
+            }
+        }
+
+        return null;
 
     },
 
