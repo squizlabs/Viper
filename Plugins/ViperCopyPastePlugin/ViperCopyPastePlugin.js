@@ -387,7 +387,13 @@ ViperCopyPastePlugin.prototype = {
             range.collapse(true);
 
             var prevBlock = keyboardEditor.splitAtRange(true, range);
-            prevBlock     = prevBlock.nextSibling;
+            if (dfx.trim(dfx.getNodeTextContent(prevBlock)) !== '') {
+                prevBlock     = prevBlock.nextSibling;
+            }
+
+            if (prevBlock.nextSibling && dfx.trim(dfx.getNodeTextContent(prevBlock.nextSibling)) === '') {
+                dfx.remove(prevBlock.nextSibling);
+            }
 
             var changeid  = ViperChangeTracker.startBatchChange('textAdded');
             var prevChild = null;
