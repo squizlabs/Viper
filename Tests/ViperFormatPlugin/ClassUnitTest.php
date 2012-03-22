@@ -430,8 +430,6 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
      */
     public function testRemovingClassAttributeFromParagraphUsingTopToolbar()
     {
-        $this->markTestIncomplete('Test fails due to issue 1673 in roadmap');
-
         $dir = dirname(__FILE__).'/Images/';
 
         $text = 'WoW';
@@ -569,8 +567,6 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
      */
     public function testAddingClassToAParagraphUsingTopToolbarWithBoldFirstWord()
     {
-        $this->markTestIncomplete('Test fails due to issue 1673 in roadmap');
-
         $dir = dirname(__FILE__).'/Images/';
 
         $text = 'OVER';
@@ -615,8 +611,6 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
      */
     public function testAddingClassToAParagraphUsingTopToolbarWithItalicFirstWord()
     {
-        $this->markTestIncomplete('Test fails due to issue 1673 in roadmap');
-
         $dir = dirname(__FILE__).'/Images/';
 
         $text = 'QUICK';
