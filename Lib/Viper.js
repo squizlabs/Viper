@@ -3016,6 +3016,11 @@ Viper.prototype = {
             if (this.isSpecialKey(e) === false) {
                 if (this.isBrowser('firefox') === true) {
                     this._firefoxKeyDown();
+                } else if ((this.isKey(e, 'backspace') === true || this.isKey(e, 'delete') === true)
+                    && (this.isBrowser('chrome') === true || this.isBrowser('safari') === true)
+                ) {
+                    // Webkit does not fire keypress event for delete and backspace keys..
+                    this.fireNodesChanged();
                 }//end if
 
                 return true;
