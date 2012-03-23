@@ -700,6 +700,7 @@ ViperDOMRange.prototype = {
             && range.endOffset === endNode.data.length
             && range.collapsed === false
             && endNode.nextSibling
+            && (!dfx.isTag(endNode.nextSibling, 'br') || endNode.nextSibling.nextSibling)
         ) {
             return null;
         } else if (startNode.nodeType === dfx.TEXT_NODE

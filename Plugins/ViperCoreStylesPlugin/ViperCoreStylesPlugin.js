@@ -1008,7 +1008,6 @@ ViperCoreStylesPlugin.prototype = {
 
     _updateToolbarButtonStates: function(buttons, range)
     {
-
         var startNode = range.getNodeSelection();
         if (!startNode) {
             startNode = range.getStartNode();
