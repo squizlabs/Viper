@@ -59,11 +59,43 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperLis
         $this->assertHTMLMatch('<ul><li>XabcX uuuuuu. VmumV</li></ul><p>cPOc ccccc dddd. TicT</p><p>ajhsd sjsjwi hhhh:</p><ul><li>aaa bbbbb ccccc</li><li>4 oNo templates</li><li>Audit XuT content</li><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ul><h2>SoD</h2>');
 
         $this->selectText('VmumV');
+        $this->assertIconStatusesCorrect('active', TRUE, FALSE, TRUE);
         $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_outdent.png');
         $this->assertIconStatusesCorrect(TRUE, TRUE, NULL, NULL);
         $this->assertHTMLMatch('<p>XabcX uuuuuu. VmumV</p><p>cPOc ccccc dddd. TicT</p><p>ajhsd sjsjwi hhhh:</p><ul><li>aaa bbbbb ccccc</li><li>4 oNo templates</li><li>Audit XuT content</li><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ul><h2>SoD</h2>');
 
     }//end testOutdentTextSelection()
+
+
+    /**
+     * Test that outdent icon in enabled when selecting different text in a list item.
+     *
+     * @return void
+     */
+    public function testOutdentIconIsEnabled()
+    {
+        $this->selectText('XabcX', 'TicT');
+        $this->clickTopToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_unorderedList.png');
+
+        // Outdent icon is enabled when you click inside a list item.
+        $this->click($this->find('VmumV'));
+        $this->assertIconStatusesCorrect('active', TRUE, FALSE, TRUE);
+
+        // Outdent icon is enabled when you select a word in a list item.
+        $this->selectText('VmumV');
+        $this->assertIconStatusesCorrect('active', TRUE, FALSE, TRUE);
+
+        // Outdent icon is enabled when you select a list item.
+        $this->selectText('XabcX');
+        $this->selectInlineToolbarLineageItem(1);
+        $this->assertIconStatusesCorrect('active', TRUE, FALSE, TRUE);
+
+        // Outdent icon is enabled when you select the list.
+        $this->selectText('XabcX');
+        $this->selectInlineToolbarLineageItem(0);
+        $this->assertIconStatusesCorrect('active', TRUE, FALSE, TRUE);
+
+    }//end testOutdentIconIsEnabled()
 
 
     /**
