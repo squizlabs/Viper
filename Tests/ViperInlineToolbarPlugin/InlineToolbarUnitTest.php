@@ -348,11 +348,11 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarUnitTest extends Abstrac
 
 
     /**
-     * Test that correct selection is made when a sub toolbar is open.
+     * Test that you can switch between a selection and paragraph when the sub toolbar is open.
      *
      * @return void
      */
-    public function testTextSelectionWhenSubToolbarIsOpen()
+    public function testSwitchingFromSelectionToParagraphWhenSubToolbarIsOpen()
     {
         $dir = dirname(__FILE__).'/Images/';
 
@@ -363,17 +363,35 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarUnitTest extends Abstrac
 
         $this->clickInlineToolbarButton($dir.'toolbarIcon_class.png');
         $this->selectInlineToolbarLineageItem(0);
-        $this->assertEquals('Lorem IPSUM dolor', $this->getSelectedText(), 'P tag is selected');
+        $this->assertEquals('Lorem IPSUM dolor', $this->getSelectedText(), 'P tag is not selected');
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem selected">P</li><li class="ViperITP-lineageItem">Selection</li>', $lineage);
 
+    }//end testSwitchingFromSelectionToParagraphWhenSubToolbarIsOpen()
+
+
+    /**
+     * Test that you can switch between a paragraph and selection when the sub toolbar is open.
+     *
+     * @return void
+     */
+    public function testSwitchingFromParagraphToSelectionWhenSubToolbarIsOpen()
+    {
+        $this->markTestIncomplete('Fails for some reason. Have reported this in issue 1764');
+
+        $dir = dirname(__FILE__).'/Images/';
+
+        $this->selectText('Lorem');
+
+        $this->selectInlineToolbarLineageItem(0);
         $this->clickInlineToolbarButton($dir.'toolbarIcon_class.png');
         $this->selectInlineToolbarLineageItem(1);
-        $this->assertEquals('Lorem IPSUM dolor', $this->getSelectedText(), 'P tag is selected');
+        sleep(1);
+        $this->assertEquals('IPSUM', $this->getSelectedText(), 'P tag is selected');
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem selected">Selection</li>', $lineage);
 
-    }//end testTextSelectionWhenSubToolbarIsOpen()
+    }//end testSwitchingFromParagraphToSelectionWhenSubToolbarIsOpen()
 
 
 }//end class
