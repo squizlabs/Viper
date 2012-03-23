@@ -99,6 +99,26 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractViperListP
 
 
     /**
+     * Test that you can select a few items in the list and use the keyboard shortcuts to outdent and indent the items.
+     *
+     * @return void
+     */
+    public function testOutdentAndIndentListItemsUsingKeyboardShortcuts()
+    {
+        $this->selectText('bbbbb', 'XuT');
+        $this->keyDown('Key.SHIFT + Key.TAB');
+
+        $this->assertHTMLMatch('<p>XabcX uuuuuu. VmumV</p><p>cPOc ccccc dddd. TicT</p><p>ajhsd sjsjwi hhhh:</p><p>aaa bbbbb ccccc</p><p>4 oNo templates</p><p>Audit XuT content</p><ol><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ol><h2>SoD</h2>');
+
+        $this->selectText('bbbbb', 'XuT');
+        $this->keyDown('Key.TAB');
+
+        $this->assertHTMLMatch('<p>XabcX uuuuuu. VmumV</p><p>cPOc ccccc dddd. TicT</p><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa bbbbb ccccc</li><li>4 oNo templates</li><li>Audit XuT content</li><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ol><h2>SoD</h2>');
+
+    }//end testOutdentAndIndentListItemsUsingKeyboardShortcuts()
+
+
+    /**
      * Test that outdent works for text selection using shortcut.
      *
      * @return void
