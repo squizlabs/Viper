@@ -1674,11 +1674,11 @@ Viper.prototype = {
             var endContainer   = null;
             startContainer     = bookmark.start.previousSibling;
             endContainer       = bookmark.end.nextSibling;
-            if (!endContainer) {debugger;
+            if (!endContainer) {
                 // If the bookmark.end is at the end of another tag move it outside.
                 var bookmarkEnd = bookmark.end.parentNode;
                 while (bookmarkEnd) {
-                    if (startContainer.parentNode === bookmarkEnd.parentNode) {
+                    if (bookmark.start.parentNode === bookmarkEnd.parentNode) {
                         dfx.insertAfter(bookmarkEnd, bookmark.end);
                         break;
                     } else if (bookmarkEnd.nextSibling || bookmarkEnd === this.getViperElement()) {
@@ -1694,8 +1694,20 @@ Viper.prototype = {
             }
 
             if (!startContainer) {
-                // TODO: When the bookmark is moved to its own class
-                // need to handle these type of cases (e.g. use getAdjNode() etc.).
+                // If the bookmark.end is at the end of another tag move it outside.
+                var bookmarkStart = bookmark.start.parentNode;
+                while (bookmarkStart) {
+                    if (bookmark.end.parentNode === bookmarkStart.parentNode) {
+                        dfx.insertBefore(bookmarkStart, bookmark.start);
+                        break;
+                    } else if (bookmarkStart.previousSibling || bookmarkStart === this.getViperElement()) {
+                        // Not the last node in this parent so we cannot move it.
+                        break;
+                    }
+
+                    bookmarkStart = bookmarkStart.parentNode;
+                }
+
                 startContainer = Viper.document.createTextNode('');
                 dfx.insertBefore(bookmark.start, startContainer);
             }

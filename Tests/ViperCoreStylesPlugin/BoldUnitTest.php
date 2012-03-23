@@ -365,8 +365,6 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
      */
     public function testAddingBoldToTwoWordsWhereOneIsItalics()
     {
-        $this->markTestIncomplete('This test is failing due to issue 1558.');
-
         $dir = dirname(__FILE__).'/Images/';
 
         $this->selectText('XuT');
