@@ -66,7 +66,7 @@ class Viper_Tests_ViperFormatPlugin_ParagraphUnitTest extends AbstractViperUnitT
         $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_p_active.png'), 'P icon is not active');
 
     }//end testApplingThePStyleUsingTopToolbar()
-    
+
 
     /**
      * Tests that applying styles to whole paragraph and selecting the P in lineage shows paragraph tools.
@@ -167,7 +167,33 @@ class Viper_Tests_ViperFormatPlugin_ParagraphUnitTest extends AbstractViperUnitT
         $this->assertHTMLMatch('<p>Lorem xtn dolor</p><p>sit amet <strong>WoW</strong></p>THIS is a paragraph to change to a p');
 
     }//end testApplyingAndRemovingP()
-    
+
+
+    /**
+     * Test the the block quote is added around two selected paragraphs.
+     *
+     * @return void
+     */
+    public function testApplingQuoteToMultipleParagraphs()
+    {
+        $dir = dirname(__FILE__).'/Images/';
+
+        $this->selectText('Lorem', 'WoW');
+        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_formats.png');
+        $this->clickTopToolbarButton($dir.'toolbarIcon_blockquote.png');
+
+        $this->assertHTMLMatch('<blockquote><p>Lorem xtn dolor</p><p>sit amet <strong>WoW</strong></p></blockquote><div>THIS is a paragraph to change to a p</div>');
+
+        $this->selectText('WoW');
+        $this->selectInlineToolbarLineageItem(1);
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_toggle_formats_highlighted.png');
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_div.png');
+
+        $this->assertHTMLMatch('<blockquote><p>Lorem xtn dolor</p><div>sit amet <strong>WoW</strong></div></blockquote><div>THIS is a paragraph to change to a p</div>');
+
+    }//end testApplingQuoteToMultipleParagraphs()
+
+
 }//end class
 
 ?>
