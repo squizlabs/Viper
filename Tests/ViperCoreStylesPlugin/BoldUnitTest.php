@@ -125,8 +125,6 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
      */
     public function testStrongTagsAppliedCorrectlyWhenReapplyingBold()
     {
-        $this->markTestIncomplete('This test is failing due to issue 1548.');
-
         $dir = dirname(__FILE__).'/Images/';
 
         $this->selectText('XuT', 'dolor');
