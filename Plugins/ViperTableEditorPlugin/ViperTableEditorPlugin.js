@@ -1396,6 +1396,11 @@ ViperTableEditorPlugin.prototype = {
             dfx.remove(mergeCells[i]);
         }
 
+        var table = this.getCellTable(cell);
+        if (dfx.getTag('tr', table).length === 1) {
+            this.setColspan(cell, 1);
+        }
+
         this.tableUpdated();
 
         return cell;
@@ -1415,6 +1420,11 @@ ViperTableEditorPlugin.prototype = {
         for (var i = 0; i < mergeCells.length; i++) {
             this._moveCellContent(mergeCells[i], cell);
             dfx.remove(mergeCells[i]);
+        }
+
+        var table = this.getCellTable(cell);
+        if (dfx.getTag('tr', table).length === 1) {
+            this.setColspan(cell, 1);
         }
 
         this.tableUpdated();
@@ -1472,6 +1482,11 @@ ViperTableEditorPlugin.prototype = {
 
             dfx.remove(parent);
         }//end if
+
+        var table = this.getCellTable(cell);
+        if (dfx.getTag('tr', table).length === 1) {
+            this.setColspan(cell, 1);
+        }
 
         this.tableUpdated();
 
@@ -1538,6 +1553,11 @@ ViperTableEditorPlugin.prototype = {
                 var newRowspan = (this.getRowspan(rowCells[i]) - 1);
                 this.setRowspan(rowCells[i], newRowspan);
             }
+        }
+
+        var table = this.getCellTable(firstCell);
+        if (dfx.getTag('tr', table).length === 1) {
+            this.setColspan(firstCell, 1);
         }
 
         this.tableUpdated();
