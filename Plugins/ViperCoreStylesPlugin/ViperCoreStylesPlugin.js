@@ -933,8 +933,12 @@ ViperCoreStylesPlugin.prototype = {
 
     },
 
-    _canStyleNode: function(node)
+    _canStyleNode: function(node, topBar)
     {
+        if (topBar === true) {
+            return true;
+        }
+
         if (dfx.isBlockElement(node) === true) {
             if (dfx.isTag(node, 'li') !== true
                 && dfx.isTag(node, 'td') !== true
@@ -1014,7 +1018,7 @@ ViperCoreStylesPlugin.prototype = {
         }
 
         var tools     = this.viper.ViperTools;
-        if (this._canStyleNode(startNode) !== true) {
+        if (this._canStyleNode(startNode, true) !== true) {
             for (var btn in buttons) {
                 if (btn === 'justify' || btn === 'removeFormat') {
                     continue;
