@@ -7,6 +7,27 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractViperListP
 
 
     /**
+     * Test that unordered list is added and removed for the paragraph when you click inside a word.
+     *
+     * @return void
+     */
+    public function testListCreationFromClickingInText()
+    {
+        $this->click($this->find('VmumV'));
+
+        $this->clickTopToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_orderedList.png');
+        $this->assertIconStatusesCorrect(TRUE, 'active', FALSE, TRUE);
+        $this->assertHTMLMatch('<ol><li>XabcX uuuuuu. VmumV</li></ol><p>cPOc ccccc dddd. TicT</p><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa bbbbb ccccc</li><li>4 oNo templates</li><li>Audit XuT content</li><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ol><h2>SoD</h2>');
+
+        $this->click($this->find('VmumV'));
+        $this->clickTopToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_orderedList_active.png');
+        sleep(1);
+        $this->assertIconStatusesCorrect(TRUE, TRUE, NULL, NULL);
+
+    }//end testListCreationFromClickingInText()
+
+
+    /**
      * Test that ordered list is added and removed when toolbar icon is clicked.
      *
      * @return void

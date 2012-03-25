@@ -7,6 +7,27 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperLis
 
 
     /**
+     * Test that unordered list is added and removed for the paragraph when you click inside a word.
+     *
+     * @return void
+     */
+    public function testListCreationFromClickingInText()
+    {
+        $this->click($this->find('VmumV'));
+
+        $this->clickTopToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_unorderedList.png');
+        $this->assertIconStatusesCorrect('active', TRUE, FALSE, TRUE);
+        $this->assertHTMLMatch('<ul><li>XabcX uuuuuu. VmumV</li></ul><p>cPOc ccccc dddd. TicT</p><p>ajhsd sjsjwi hhhh:</p><ul><li>aaa bbbbb ccccc</li><li>4 oNo templates</li><li>Audit XuT content</li><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ul><h2>SoD</h2>');
+
+        $this->click($this->find('VmumV'));
+        $this->clickTopToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_unorderedList_active.png');
+        sleep(1);
+        $this->assertIconStatusesCorrect(TRUE, TRUE, NULL, NULL);
+
+    }//end testListCreationFromClickingInText()
+
+
+    /**
      * Test that unordered list is added and removed for the paragraph when you only selected one word.
      *
      * @return void
