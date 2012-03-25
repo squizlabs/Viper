@@ -2689,7 +2689,11 @@ Viper.prototype = {
             return false;
         }
 
-        var range       = this.getViperRange();
+        var range = this.getViperRange();
+        if (this.rangeInViperBounds(range) === false) {
+            return false;
+        }
+
         var selectedNode = range.getNodeSelection();
 
         if (selectedNode && selectedNode.nodeType == dfx.ELEMENT_NODE) {
@@ -2709,12 +2713,14 @@ Viper.prototype = {
 
     },
 
-    highlightToSelection: function()
+    highlightToSelection: function(element)
     {
         this._viperRange = null;
 
+        element = element || this.element;
+
         // There should be one...
-        var highlights = dfx.getClass('__viper_selHighlight', this.element);
+        var highlights = dfx.getClass('__viper_selHighlight', element);
         if (highlights.length === 0) {
             return false;
         }
@@ -3691,14 +3697,8 @@ Viper.prototype = {
             dfx.remove(bookmarks);
         }
 
-        // Viper needs to remove the caret.
-        var caret = dfx.getClass('viper_caret', elem);
-        if (caret) {
-            dfx.remove(caret);
-        }
-
-        caret = dfx.getId('caret');
-        dfx.remove(caret);
+        // Remove viper selection.
+        this.highlightToSelection(elem);
 
     },
 
@@ -3790,9 +3790,6 @@ Viper.prototype = {
         }
 
         this._cleanDOM(elem, tag, true);
-
-        // Remove viper selection.
-        this.highlightToSelection();
 
         return elem;
 
