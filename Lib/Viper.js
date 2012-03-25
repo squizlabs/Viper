@@ -3305,6 +3305,17 @@ Viper.prototype = {
                 range.setStart(firstSelectable, 0);
                 ViperSelection.addRange(range);
             }
+        } else if (endNode.nodeType === dfx.ELEMENT_NODE && dfx.isTag(endNode, 'br') === true) {
+            // Firefox adds br tags at the end of new paragraphs sometimes selecting
+            // text from somewhere in paragraph to the end of paragraph causes
+            // selection issues.
+            if (endNode.previousSibling) {
+                var child = range._getLastSelectableChild(endNode.previousSibling);
+                if (child) {
+                    range.setEnd(child, child.data.length);
+                    ViperSelection.addRange(range);
+                }
+            }
         }//end if
 
         return range;
