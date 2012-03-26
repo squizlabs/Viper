@@ -868,6 +868,8 @@ ViperFormatPlugin.prototype = {
             }
         }//end if
 
+        this.viper.fireCallbacks('ViperFormatPlugin:formatChanged', type);
+
     },
 
     _convertSingleElement: function(element, type)

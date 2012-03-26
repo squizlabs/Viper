@@ -27,6 +27,12 @@ ViperKeyboardEditorPlugin.prototype = {
     {
         var self = this;
 
+        this.viper.registerCallback('ViperFormatPlugin:formatChanged', 'ViperKeyboardEditorPlugin', function(type) {
+            if (type === 'pre') {
+                self.cleanPreTags();
+            }
+        });
+
         // Note: Should be a format change since it will be used in the whole
         // container.
         ViperChangeTracker.addChangeType('splitContainer', 'Insert', 'format');
@@ -155,6 +161,35 @@ ViperKeyboardEditorPlugin.prototype = {
                     ViperSelection.addRange(range);
                     return false;
                 }
+            }//end if
+
+            var startNode   = range.getStartNode();
+            var blockParent = dfx.getFirstBlockParent(startNode);
+            if (startNode && dfx.isTag(blockParent, 'pre') === true) {
+                if (startNode.parentNode === blockParent
+                    && startNode.nodeType === dfx.TEXT_NODE
+                    && dfx.trim(startNode.data) === ''
+                ) {
+                    if (startNode.nextSibling
+                        && !startNode.nextSibling.nextSibling
+                        && startNode.nextSibling.nodeType === dfx.TEXT_NODE
+                        && dfx.trim(startNode.nextSibling.data) === ''
+                    ) {
+                        dfx.remove(startNode.nextSibling);
+                    }
+
+                    dfx.remove(startNode);
+                    var p = document.createElement('p');
+                    dfx.setHtml(p, '<br />');
+                    dfx.insertAfter(blockParent, p);
+                    range.selectNode(p.firstChild);
+                    range.collapse(true);
+                    ViperSelection.addRange(range);
+                } else {
+                    this.insertTextAtRange(range, "\n");
+                }
+
+                return false;
             }//end if
 
             // Let the browser handle everything else.
@@ -440,12 +475,8 @@ ViperKeyboardEditorPlugin.prototype = {
         if (e) {
             var range     = this.viper.getCurrentRange();
             var startNode = range.getStartNode();
-            if (startNode && dfx.isTag(startNode.parentNode, 'pre') === true) {
-                // Break out from PRE tag.
-                var p = Viper.document.createElement('p');
-                dfx.setHtml(p, '&nbsp;');
-                this.viper.insertAfter(startNode.parentNode, p);
-                this.viper.setCaretAtStart(p);
+            if (startNode && dfx.isTag(dfx.getFirstBlockParent(startNode), 'pre') === true) {
+                this.insertTextAtRange(range, "\n");
                 return false;
             }
         }
@@ -485,6 +516,10 @@ ViperKeyboardEditorPlugin.prototype = {
             }
         }
 
+        if (newNode.data.length === 0) {
+            newNode.data = ' ';
+        }
+
         range.setStart(newNode, 0);
         range.collapse(true);
         ViperSelection.addRange(range);
@@ -508,6 +543,38 @@ ViperKeyboardEditorPlugin.prototype = {
             if (ctNode) {
                 ViperChangeTracker.addChange('textAdded', [ctNode]);
             }
+        }
+
+    },
+
+    cleanPreTags: function()
+    {
+        var preTags = dfx.getTag('pre', this.viper.getViperElement());
+        var c       = preTags.length;
+
+        for (var i = 0; i < c; i++) {
+            this.cleanPreTag(preTags[i]);
+        }
+
+    },
+
+    cleanPreTag: function(pre)
+    {
+        if (!pre) {
+            return;
+        }
+
+        var elems = dfx.getTag('p,div', pre);
+        var c     = elems.length;
+
+        for (var i = 0; i < c; i++) {
+            var elem = elems[i];
+            while (elem.firstChild) {
+                dfx.insertBefore(elem, elem.firstChild);
+            }
+
+            dfx.insertBefore(elem, document.createTextNode("\n\n"));
+            dfx.remove(elem);
         }
 
     }
