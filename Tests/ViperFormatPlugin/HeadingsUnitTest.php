@@ -100,8 +100,8 @@ class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractViperUnitTe
         $dir  = dirname(__FILE__).'/Images/';
 
         $this->selectText('Test');
-        $this->type('Key.RIGHT');
-        $this->type('Key.ENTER');
+        $this->keyDown('Key.RIGHT');
+        $this->keyDown('Key.ENTER');
         $this->type('New line of content');
 
         $this->assertHTMLMatch('<h1>HEADINGS Test</h1><p>New line of content</p><p>Lorem xtn dolor</p><p>sit amet <strong>WoW</strong></p><p>Extra long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar.</p>');
@@ -110,8 +110,8 @@ class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractViperUnitTe
         $this->selectInlineToolbarLineageItem(0);
         $this->clickInlineToolbarButton($dir.'toolbarIcon_heading.png');
         $this->clickInlineToolbarButton($dir.'toolbarIcon_h6.png');
-        $this->type('Key.RIGHT');
-        $this->type('Key.ENTER');
+        $this->keyDown('Key.RIGHT');
+        $this->keyDown('Key.ENTER');
         $this->type('Another new line of content');
 
         $this->assertHTMLMatch('<h1>HEADINGS Test</h1><p>New line of content</p><p>Lorem xtn dolor</p><h6>sit amet <strong>WoW</strong></h6><p>Another new line of content</p><p>Extra long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar.</p>');

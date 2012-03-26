@@ -237,6 +237,33 @@ class Viper_Tests_ViperFormatPlugin_QuoteUnitTest extends AbstractViperUnitTest
     }//end testApplyingAndRemovingQuote()
 
 
+    /**
+     * Test creating new content in blockquote tags.
+     *
+     * @return void
+     */
+    public function testCreatingNewContentWithABlockquoteTag()
+    {
+        $dir = dirname(__FILE__).'/Images/';
+
+        $this->selectText('THIS');
+        $this->selectInlineToolbarLineageItem(0);
+        $this->keyDown('Key.RIGHT');
+        $this->keyDown('Key.ENTER');
+        $this->type('New content');
+        $this->keyDown('Key.SHIFT + Key.LEFT');
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_toggle_formats_highlighted.png');
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_blockquote.png');
+        $this->keyDown('Key.RIGHT');
+        $this->type(' on the page');
+        $this->keyDown('Key.ENTER');
+        $this->type('More new content');
+
+        $this->assertHTMLMatch('<blockquote>Lorem xtn dolor</blockquote><blockquote>sit amet <strong>WoW</strong></blockquote><p>THIS is a paragraph to change to a quote</p><blockquote>New content on the page</blockquote><p>More new content</p>');
+
+    }//end testCreatingNewContentWithABlockquoteTag()
+
 }//end class
 
 ?>
