@@ -160,10 +160,8 @@ class Viper_Tests_ViperCoreStylesPlugin_ItalicUnitTest extends AbstractViperUnit
      *
      * @return void
      */
-    public function testAdjacentWordStyling()
+    public function testAdjacentAWordStyling()
     {
-        $this->markTestIncomplete('This test is failing due to issue 1688.');
-
         $this->selectText('XuT');
         $this->keyDown('Key.CMD + i');
 
