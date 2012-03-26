@@ -748,35 +748,41 @@ ViperCoreStylesPlugin.prototype = {
         var range = this.viper.getCurrentRange().cloneRange();
         range     = this.viper.adjustRange(range);
 
-        var keywordPlugin = this.viper.ViperPluginManager.getPlugin('ViperKeywordPlugin');
+        var nodeSelection = range.getNodeSelection();
+        var startNode     = null;
+        var endNode       = null;
+        var bookmark      = null;
 
-        var startNode = range.getStartNode();
-        if (dfx.isChildOf(startNode, this.viper.element) === false) {
-            range.setStart(this.viper.element, 0);
-        }
+        if (!nodeSelection) {
+            var startNode = range.getStartNode();
+            if (dfx.isChildOf(startNode, this.viper.element) === false) {
+                range.setStart(this.viper.element, 0);
+            }
 
-        var endNode = range.getEndNode();
-        if (dfx.isChildOf(endNode, this.viper.element) === false) {
-            range.setEnd(this.viper.element, this.viper.element.childNodes.length);
-        }
+            var endNode = range.getEndNode();
+            if (dfx.isChildOf(endNode, this.viper.element) === false) {
+                range.setEnd(this.viper.element, this.viper.element.childNodes.length);
+            }
 
-        ViperSelection.addRange(range);
+            ViperSelection.addRange(range);
+            bookmark = this.viper.createBookmark();
 
-        var bookmark = this.viper.createBookmark();
-
-        // Get the parent block element of the bookmark so its styles are removed as well.
-        startNode = dfx.getFirstBlockParent(bookmark.start);
-        if (dfx.isChildOf(startNode, this.viper.element) === false) {
-            startNode = bookmark.start;
+            // Get the parent block element of the bookmark so its styles are removed as well.
+            startNode = dfx.getFirstBlockParent(bookmark.start);
+            if (dfx.isChildOf(startNode, this.viper.element) === false) {
+                startNode = bookmark.start;
+            }
+        } else {
+            startNode = nodeSelection;
         }
 
         dfx.walk(startNode, function(elem) {
-            if (elem === bookmark.end) {
+            if (bookmark && elem === bookmark.end) {
                 return false;
             }
 
-            if (elem !== bookmark.start) {
-                if (elem.nodeType === dfx.ELEMENT_NODE && (!keywordPlugin || keywordPlugin.isKeyword(elem) !== true)) {
+            if (!bookmark || elem !== bookmark.start) {
+                if (elem.nodeType === dfx.ELEMENT_NODE) {
                     dfx.removeAttr(elem, 'style');
                     dfx.removeAttr(elem, 'class');
 
@@ -789,9 +795,15 @@ ViperCoreStylesPlugin.prototype = {
                     }
                 }
             }
+
+            if (nodeSelection && elem === nodeSelection.lastChild) {
+                return false;
+            }
         });
 
-        this.viper.selectBookmark(bookmark);
+        if (bookmark) {
+            this.viper.selectBookmark(bookmark);
+        }
 
         var tags = this.styleTags.concat(['font', 'u', 'strike']);
 
@@ -806,7 +818,7 @@ ViperCoreStylesPlugin.prototype = {
 
         ViperChangeTracker.endBatchChange(changeid);
 
-        this.viper.fireNodesChanged('ViperCoreStylesPlugin:removeFormat');
+        this.viper.fireNodesChanged();
         this.viper.fireSelectionChanged();
 
     },
