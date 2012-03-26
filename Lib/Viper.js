@@ -1860,7 +1860,7 @@ Viper.prototype = {
                 }
 
                 for (var i = 0; i < c; i++) {
-                    this._wrapElement(children[i], tag, callback);
+                    this._wrapElement(children[i], tag, callback, attributes);
                 }
             }//end if
         }//end if
