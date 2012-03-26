@@ -519,6 +519,32 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
     }//end testClassAndIdAreAddedToLinkTagAfterReselect()
 
 
+
+    /**
+     * Test that the selection is maintained when you click on the link icon.
+     *
+     * @return void
+     */
+    public function testSelectionIsMaintainedWhenYouClickOnLinkIcon()
+    {
+        $dir = dirname(__FILE__).'/Images/';
+
+        $text = 'dolor';
+
+        $this->selectText($text);
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_link.png');
+        $this->assertEquals($text, $this->getSelectedText(), 'Original selection is still not selected.');
+
+        $this->click($this->find($text));
+
+        $this->selectText($text);
+        $this->clickTopToolbarButton($dir.'toolbarIcon_link.png');
+        $this->assertEquals($text, $this->getSelectedText(), 'Original selection is still not selected.');
+
+
+    }//end testSelectionIsMaintainedWhenYouClickOnLineIcon()
+
+
 }//end class
 
 ?>
