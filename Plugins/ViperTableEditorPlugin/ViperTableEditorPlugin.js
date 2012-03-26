@@ -221,13 +221,19 @@ ViperTableEditorPlugin.prototype = {
                     return;
                 }
 
-                // Do not allow table insertion inside another table.
-                var parents = dfx.getParents(node, 'table', self.viper.getViperElement());
-                if (parents.length > 0) {
-                    // Set the table icon as active.
-                    self._tools.setButtonActive('insertTable');
-                } else {
+                if (self.toolbarPlugin.isDisabled() === true) {
                     self._tools.setButtonInactive('insertTable');
+                } else {
+                    // Do not allow table insertion inside another table.
+                    var parents = dfx.getParents(node, 'table', self.viper.getViperElement());
+                    if (parents.length > 0 && self._tools) {
+                        // Set the table icon as active.
+                        if (self.toolbarPlugin.isDisabled() === false) {
+                            self._tools.setButtonActive('insertTable');
+                        }
+                    } else {
+                        self._tools.setButtonInactive('insertTable');
+                    }
                 }
 
                 if (range.collapsed === false) {

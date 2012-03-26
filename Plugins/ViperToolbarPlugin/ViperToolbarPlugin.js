@@ -599,6 +599,12 @@ ViperToolbarPlugin.prototype = {
 
     },
 
+    isDisabled: function()
+    {
+        return !this._enabled;
+
+    },
+
     remove: function()
     {
         dfx.remove(this._toolbar);
