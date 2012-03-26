@@ -437,7 +437,8 @@ ViperFormatPlugin.prototype = {
 
             // Test format change.
             if ((nodeSelection && ignoredTags.inArray(dfx.getTagName(nodeSelection)) === false)
-                || (!nodeSelection && self.handleFormat('div', true) === true)
+                || ((!nodeSelection && dfx.getTagName(dfx.getFirstBlockParent(startNode)) !== 'li')
+                && (!nodeSelection && self.handleFormat('div', true) === true))
             ) {
                 tools.enableButton('headings');
                 tools.enableButton('formats');
