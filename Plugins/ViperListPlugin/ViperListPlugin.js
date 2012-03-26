@@ -1399,7 +1399,7 @@ ViperListPlugin.prototype = {
             // First child might be null but we may have listItems to process.
             while (elements[0].firstChild || listLen > 0) {
                 var child = elements[0].firstChild;
-                if (child && dfx.isTag(child, 'br') === false) {
+                if (child) {
                     listItems.push(child);
                 } else if (listItems.length > 0) {
                     var listItem = this._createListItem(listItems.shift());
