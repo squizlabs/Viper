@@ -246,6 +246,7 @@ ViperImagePlugin.prototype = {
 
                 self.setUrlFieldValue(image.getAttribute('src'));
                 tools.getItem('ViperImagePlugin:altInput').setValue(image.getAttribute('alt'));
+                tools.getItem('ViperImagePlugin:titleInput').setValue(image.getAttribute('title'));
 
                 if (!image.getAttribute('alt')) {
                     tools.getItem('ViperImagePlugin:isPresentational').setValue(true);
