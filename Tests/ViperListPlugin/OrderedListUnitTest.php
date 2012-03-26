@@ -851,6 +851,31 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractViperListP
     }//end testListIconsAvailableInTableCell()
 
 
+    /**
+     * Test that the heading icon is not available for a list.
+     *
+     * @return void
+     */
+    public function testHeadingIconNotAvailableForList()
+    {
+        $dir = dirname(dirname(__FILE__)).'/ViperFormatPlugin/Images/';
+
+        $this->click($this->find('oNo'));
+        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_heading_disabled.png'), 'Heading icon should not appear in the top toolbar.');
+
+        $this->selectText('oNo');
+        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_heading_disabled.png'), 'Heading icon should not appear in the top toolbar.');
+
+        $this->selectInlineToolbarLineageItem(1);
+        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_heading_disabled.png'), 'Heading icon should not appear in the top toolbar.');
+
+        $this->selectInlineToolbarLineageItem(0);
+        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_heading_disabled.png'), 'Heading icon should not appear in the top toolbar.');
+
+    }//end testHeadingIconNotAvailableForList()
+
+
+
 }//end class
 
 ?>
