@@ -235,12 +235,12 @@ Viper.prototype = {
                 return self.mouseUp(e);
             });
         } else {
-            dfx.addEvent(this._document, 'mouseup.viper', function(e) {
+            dfx.addEvent(this._document.body, 'mouseup.viper', function(e) {
                 return self.mouseUp(e);
             });
         }
 
-        dfx.addEvent(this._document, 'mousedown.viper', function(e) {
+        dfx.addEvent(this._document.body, 'mousedown.viper', function(e) {
             return self.mouseDown(e);
         });
 
@@ -3697,8 +3697,10 @@ Viper.prototype = {
             dfx.remove(bookmarks);
         }
 
-        // Remove viper selection.
-        this.highlightToSelection(elem);
+        try {
+            // Remove viper selection.
+            this.highlightToSelection(elem);
+        } catch (e) {}
 
     },
 
