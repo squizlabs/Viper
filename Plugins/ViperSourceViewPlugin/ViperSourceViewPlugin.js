@@ -10,7 +10,8 @@ function ViperSourceViewPlugin(viper)
     this._originalSource = null;
     this._inNewWindow    = false;
 
-    this._ignoreUpdate = false;
+    this._ignoreUpdate       = false;
+    this._ignoreSourceUpdate = false;
 }
 
 ViperSourceViewPlugin.prototype = {
@@ -32,6 +33,11 @@ ViperSourceViewPlugin.prototype = {
         var updateTimer = null;
         this.viper.registerCallback('Viper:nodesChanged', 'ViperSourceViewPlugin', function(nodes) {
             clearTimeout(updateTimer);
+            if (self._ignoreSourceUpdate === true) {
+                self._ignoreSourceUpdate = false;
+                return;
+            }
+
             updateTimer = setTimeout(function() {
                 self.updateSourceContents();
             }, 250);
@@ -280,6 +286,7 @@ ViperSourceViewPlugin.prototype = {
                 self._ignoreUpdate = false;
                 return;
             } else if (self._inNewWindow === true) {
+                self._ignoreSourceUpdate = true;
                 self.updatePageContents();
             }
         });
