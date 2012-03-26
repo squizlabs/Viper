@@ -3188,10 +3188,13 @@ Viper.prototype = {
             // Ask plugins if its one of their element.
             var pluginName = this.getPluginForElement(target);
             if (!pluginName) {
+                this.setEnabled(false);
                 return this.fireCallbacks('Viper:clickedOutside', e);
             } else {
                 return true;
             }
+        } else if (this.enabled === false) {
+            this.setEnabled(true);
         }
 
         this.fireCallbacks('Viper:clickedInside', e);

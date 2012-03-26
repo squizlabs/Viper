@@ -446,6 +446,10 @@ ViperInlineToolbarPlugin.prototype = {
             }
         }
 
+        if (this.viper.isEnabled() === false) {
+            return;
+        }
+
         this._lineageItemSelected = false;
 
         var activeSection   = this._activeSection;

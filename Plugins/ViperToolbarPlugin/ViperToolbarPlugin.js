@@ -623,6 +623,10 @@ ViperToolbarPlugin.prototype = {
 
     _updateToolbar: function(range)
     {
+        if (this.viper.isEnabled() === false) {
+            return;
+        }
+
         range = range || this.viper.getCurrentRange();
 
         this.viper.fireCallbacks('ViperToolbarPlugin:updateToolbar', {range: range});
