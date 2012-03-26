@@ -577,6 +577,15 @@ ViperKeyboardEditorPlugin.prototype = {
             dfx.remove(elem);
         }
 
+        var elems = dfx.getTag('br', pre);
+        var c     = elems.length;
+
+        for (var i = 0; i < c; i++) {
+            var elem = elems[i];
+            dfx.insertBefore(elem, document.createTextNode("\n"));
+            dfx.remove(elem);
+        }
+
     }
 
 };
