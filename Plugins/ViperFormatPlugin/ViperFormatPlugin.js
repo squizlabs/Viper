@@ -418,6 +418,7 @@ ViperFormatPlugin.prototype = {
             var nodeSelection = data.range.getNodeSelection();
             var startNode = data.range.getStartNode();
             var endNode   = data.range.getEndNode();
+
             if ((!nodeSelection || nodeSelection.nodeType !== dfx.ELEMENT_NODE)
                 && (data.range.collapsed === true || startNode.parentNode !== endNode.parentNode)
             ) {

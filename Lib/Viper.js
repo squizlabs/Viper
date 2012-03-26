@@ -2873,7 +2873,11 @@ Viper.prototype = {
 
     fireSelectionChanged: function(range, forceUpdate)
     {
-        range = range || this.getCurrentRange();
+        if (!range) {
+            range = this.getCurrentRange();
+            range = this.adjustRange(range);
+        }
+
         if (!this._prevRange
             || forceUpdate === true
             || this._prevRange.startContainer !== range.startContainer
@@ -3200,7 +3204,7 @@ Viper.prototype = {
         }
 
         if (inside !== true || this.highlightToSelection() !== true) {
-            this.fireSelectionChanged();
+            this.fireSelectionChanged(this.adjustRange());
         }
 
     },
@@ -3212,13 +3216,13 @@ Viper.prototype = {
             return false;
         }
 
-        this.adjustRange();
+        range = this.adjustRange();
 
         // This setTimeout is very strange indeed. We need to wait a bit for browser
         // to update the selection object..
         var self = this;
         setTimeout(function() {
-            self.fireSelectionChanged();
+            self.fireSelectionChanged(range);
         }, 5);
 
     },
@@ -3245,7 +3249,9 @@ Viper.prototype = {
             var lastSelectable = range._getLastSelectableChild(range.startContainer);
             if (lastSelectable) {
                 endNode = lastSelectable;
+                range.endContainer = endNode;
                 range.endOffset = endNode.data.length;
+                ViperSelection.addRange(range);
             }
         }
 
@@ -3339,6 +3345,8 @@ Viper.prototype = {
                 Viper.window.scrollTo(scrollCoords.x, scrollCoords.y);
 
                 this.fireCaretUpdated();
+
+                this.fireCallbacks('Viper:focused');
             } catch (e) {
                 // Catch the IE error: Can't move focus to control because its invisible.
             }

@@ -36,6 +36,10 @@ function ViperToolbarPlugin(viper)
         clickedOutside = false;
     });
 
+    this.viper.registerCallback('Viper:focused', 'ViperToolbarPlugin', function(range) {
+        self.enable();
+    });
+
     this.viper.registerCallback('Viper:mouseDown', 'ViperToolbarPlugin', function() {
         if (self._activeBubble) {
             var bubble = self.getBubble(self._activeBubble);
