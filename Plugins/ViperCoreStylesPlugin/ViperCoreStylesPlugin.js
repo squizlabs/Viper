@@ -746,6 +746,7 @@ ViperCoreStylesPlugin.prototype = {
     removeFormat: function()
     {
         var range = this.viper.getCurrentRange().cloneRange();
+        range     = this.viper.adjustRange(range);
 
         var keywordPlugin = this.viper.ViperPluginManager.getPlugin('ViperKeywordPlugin');
 
