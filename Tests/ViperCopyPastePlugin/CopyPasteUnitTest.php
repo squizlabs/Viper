@@ -48,8 +48,8 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
         $this->assertHTMLMatch('<p><strong>LoremA</strong><strong>LoremB</strong><strong>LoremC</strong>&nbsp;</p>');
 
     }//end testBoldTextCopyPaste()
-    
-    
+
+
    /**
      * Test that copying/pasting italic text works.
      *
@@ -71,7 +71,7 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
         $this->assertHTMLMatch('<p><em>LoremA</em><em>LoremB</em><em>LoremC</em>&nbsp;</p>');
 
     }//end testItalicTextCopyPaste()
-    
+
 
     /**
      * Test that copying/pasting from the SpecialCharactersDoc works correctly.
@@ -111,7 +111,7 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
 
         sleep(5);
 
-        $this->assertHTMLMatch('<p>&nbsp;</p><p>~! @ # $ % ^ &amp; * ( ) _ + ` 1 2 3 4 5 6 7 8 9 0 - = { } | : Ó &lt; &gt; ? [ ]\\ ; Õ , . / q w e r t y u I o p Q W E R T Y U I O P a s d f g h j k l A S D F GH J K L z x c v b n m Z X C V B N M</p><p>&nbsp;</p>');
+        $this->assertHTMLMatch('<p>~ ! @ # $ % ^ &amp; * ( ) _ + ` 1 2 3 4 5 6 7 8 9 0 - = { } | : &#8221; &lt; &gt; ? [ ] \ ; &#8217; , . / q w e r t y u I o p Q W E R T Y U I O P a s d f g h j k l A S D F G H J K L z x c v b n m Z X C V B N M</p><p>&nbsp;</p>');
 
     }//end testSpecialCharactersDocCopyPaste()
 
