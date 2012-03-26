@@ -207,8 +207,9 @@ ViperSearchReplacePlugin.prototype = {
     {
         this.viper.focus();
 
-        this.viper.deleteContents();
         var range = this.viper.getCurrentRange();
+        range.deleteContents();
+
         var newNode = document.createTextNode(replacement);
         range.insertNode(newNode);
         range.selectNode(newNode);
