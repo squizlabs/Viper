@@ -235,12 +235,12 @@ Viper.prototype = {
                 return self.mouseUp(e);
             });
         } else {
-            dfx.addEvent(this._document, 'mouseup.viper', function(e) {
+            dfx.addEvent(this._document.body, 'mouseup.viper', function(e) {
                 return self.mouseUp(e);
             });
         }
 
-        dfx.addEvent(this._document, 'mousedown.viper', function(e) {
+        dfx.addEvent(this._document.body, 'mousedown.viper', function(e) {
             return self.mouseDown(e);
         });
 
@@ -1675,15 +1675,39 @@ Viper.prototype = {
             startContainer     = bookmark.start.previousSibling;
             endContainer       = bookmark.end.nextSibling;
             if (!endContainer) {
-                // TODO: When the bookmark is moved to its own class
-                // need to handle these type of cases (e.g. use getAdjNode() etc.).
+                // If the bookmark.end is at the end of another tag move it outside.
+                var bookmarkEnd = bookmark.end.parentNode;
+                while (bookmarkEnd) {
+                    if (bookmark.start.parentNode === bookmarkEnd.parentNode) {
+                        dfx.insertAfter(bookmarkEnd, bookmark.end);
+                        break;
+                    } else if (bookmarkEnd.nextSibling || bookmarkEnd === this.getViperElement()) {
+                        // Not the last node in this parent so we cannot move it.
+                        break;
+                    }
+
+                    bookmarkEnd = bookmarkEnd.parentNode;
+                }
+
                 endContainer = Viper.document.createTextNode('');
                 dfx.insertAfter(bookmark.end, endContainer);
             }
 
             if (!startContainer) {
-                // TODO: When the bookmark is moved to its own class
-                // need to handle these type of cases (e.g. use getAdjNode() etc.).
+                // If the bookmark.end is at the end of another tag move it outside.
+                var bookmarkStart = bookmark.start.parentNode;
+                while (bookmarkStart) {
+                    if (bookmark.end.parentNode === bookmarkStart.parentNode) {
+                        dfx.insertBefore(bookmarkStart, bookmark.start);
+                        break;
+                    } else if (bookmarkStart.previousSibling || bookmarkStart === this.getViperElement()) {
+                        // Not the last node in this parent so we cannot move it.
+                        break;
+                    }
+
+                    bookmarkStart = bookmarkStart.parentNode;
+                }
+
                 startContainer = Viper.document.createTextNode('');
                 dfx.insertBefore(bookmark.start, startContainer);
             }
@@ -1782,6 +1806,11 @@ Viper.prototype = {
                         callback.call(this, elem);
                     }
                 }
+            } else if (parent.previousSibling
+                && dfx.isTag(parent.previousSibling, tag) === true
+                && !dfx.attr(parent.previousSibling, 'viperbookmark')
+            ) {
+                parent.previousSibling.appendChild(parent);
             }//end if
         } else if (dfx.isStubElement(parent) === false) {
             if (dfx.isBlockElement(parent) === false && this.hasBlockChildren(parent) === false) {
@@ -1831,7 +1860,7 @@ Viper.prototype = {
                 }
 
                 for (var i = 0; i < c; i++) {
-                    this._wrapElement(children[i], tag, callback);
+                    this._wrapElement(children[i], tag, callback, attributes);
                 }
             }//end if
         }//end if
@@ -2660,7 +2689,11 @@ Viper.prototype = {
             return false;
         }
 
-        var range       = this.getViperRange();
+        var range = this.getViperRange();
+        if (this.rangeInViperBounds(range) === false) {
+            return false;
+        }
+
         var selectedNode = range.getNodeSelection();
 
         if (selectedNode && selectedNode.nodeType == dfx.ELEMENT_NODE) {
@@ -2680,12 +2713,14 @@ Viper.prototype = {
 
     },
 
-    highlightToSelection: function()
+    highlightToSelection: function(element)
     {
         this._viperRange = null;
 
+        element = element || this.element;
+
         // There should be one...
-        var highlights = dfx.getClass('__viper_selHighlight', this.element);
+        var highlights = dfx.getClass('__viper_selHighlight', element);
         if (highlights.length === 0) {
             return false;
         }
@@ -3276,6 +3311,17 @@ Viper.prototype = {
                 range.setStart(firstSelectable, 0);
                 ViperSelection.addRange(range);
             }
+        } else if (endNode.nodeType === dfx.ELEMENT_NODE && dfx.isTag(endNode, 'br') === true) {
+            // Firefox adds br tags at the end of new paragraphs sometimes selecting
+            // text from somewhere in paragraph to the end of paragraph causes
+            // selection issues.
+            if (endNode.previousSibling) {
+                var child = range._getLastSelectableChild(endNode.previousSibling);
+                if (child) {
+                    range.setEnd(child, child.data.length);
+                    ViperSelection.addRange(range);
+                }
+            }
         }//end if
 
         return range;
@@ -3580,6 +3626,7 @@ Viper.prototype = {
         this.fireCallbacks('getHtml', {element: clone});
         var html = dfx.getHtml(clone);
         html     = this._fixHtml(html);
+        html     = this.cleanHTML(html);
 
         return html;
 
@@ -3650,14 +3697,10 @@ Viper.prototype = {
             dfx.remove(bookmarks);
         }
 
-        // Viper needs to remove the caret.
-        var caret = dfx.getClass('viper_caret', elem);
-        if (caret) {
-            dfx.remove(caret);
-        }
-
-        caret = dfx.getId('caret');
-        dfx.remove(caret);
+        try {
+            // Remove viper selection.
+            this.highlightToSelection(elem);
+        } catch (e) {}
 
     },
 
@@ -3727,6 +3770,7 @@ Viper.prototype = {
     {
         content = content.replace(/<(p|div|h1|h2|h3|h4|h5|h6|li)((\s+\w+(\s*=\s*(?:".*?"|\'.*?\'|[^\'">\s]+))?)+)?\s*>\s*/ig, "<$1$2>");
         content = content.replace(/\s*<\/(p|div|h1|h2|h3|h4|h5|h6|li)((\s+\w+(\s*=\s*(?:".*?"|\'.*?\'|[^\'">\s]+))?)+)?\s*>/ig, "</$1$2>");
+        content = content.replace(/<(area|base|basefont|br|hr|input|img|link|meta)((\s+\w+(\s*=\s*(?:".*?"|\'.*?\'|[^\'">\s]+))?)+)?\s*>/ig, "<$1$2 />");
 
         return content;
 
@@ -3748,9 +3792,6 @@ Viper.prototype = {
         }
 
         this._cleanDOM(elem, tag, true);
-
-        // Remove viper selection.
-        this.highlightToSelection();
 
         return elem;
 

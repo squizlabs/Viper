@@ -23,9 +23,7 @@ class Viper_Tests_ViperCoreStylesPlugin_HorizontalRuleUnitTest extends AbstractV
         $this->type('Key.BACKSPACE');
         $this->type('This is a new line of ConTenT');
 
-        $this->assertHTMLMatch(
-            '<h1>First Heading</h1><p>Lorem XuT dolor sit <em>amet</em> <strong>WoW</strong></p><hr /><p>This is a new line of ConTenT</p><h2>Second Heading</h2><p>This is another paragraph</p><ul><li>Test removing bullet points</li><li>purus <u>neque</u> luctus</li><li>vel molestie arcu</li></ul>',
-            '<h1>First Heading</h1><p>Lorem XuT dolor sit <em>amet</em> <strong>WoW</strong></p><hr><p>This is a new line of ConTenT</p><h2>Second Heading</h2><p>This is another paragraph</p><ul><li>Test removing bullet points</li><li>purus <u>neque</u> luctus</li><li>vel molestie arcu</li></ul>');
+        $this->assertHTMLMatch('<h1>First HEADING</h1><p>Lorem XuT dolor sit <em>amet</em> <strong>WoW</strong></p><hr /><p>This is a new line of ConTenT</p><h2>Second heading</h2><p>This is another paragraph</p><ul><li>Test removing bullet points</li><li>purus oNo luctus</li><li>vel molestie arcu</li></ul>');
 
     }//end testAddingHorizontalRuleAtEndOfParagraph()
 
@@ -46,9 +44,7 @@ class Viper_Tests_ViperCoreStylesPlugin_HorizontalRuleUnitTest extends AbstractV
 
         $this->type('New ConTenT');
 
-        $this->assertHTMLMatch(
-            '<h1>First Heading</h1><p>Lorem XuT</p><hr /><p>New ConTenTdolor sit <em>amet</em> <strong>WoW</strong></p><h2>Second Heading</h2><p>This is another paragraph</p><ul><li>Test removing bullet points</li><li>purus <u>neque</u> luctus</li><li>vel molestie arcu</li></ul>',
-            '<h1>First Heading</h1><p>Lorem XuT</p><hr><p>New ConTenTdolor sit <em>amet</em> <strong>WoW</strong></p><h2>Second Heading</h2><p>This is another paragraph</p><ul><li>Test removing bullet points</li><li>purus <u>neque</u> luctus</li><li>vel molestie arcu</li></ul>');
+        $this->assertHTMLMatch('<h1>First HEADING</h1><p>Lorem XuT</p><hr /><p>New ConTenTdolor sit <em>amet</em> <strong>WoW</strong></p><h2>Second heading</h2><p>This is another paragraph</p><ul><li>Test removing bullet points</li><li>purus oNo luctus</li><li>vel molestie arcu</li></ul>');
 
     }//end testAddingHorizontalRuleInMiddleOfParagraph()
 
@@ -69,12 +65,66 @@ class Viper_Tests_ViperCoreStylesPlugin_HorizontalRuleUnitTest extends AbstractV
 
         $this->type('New ConTenT');
 
-        $this->assertHTMLMatch(
-            '<h1>First Heading</h1><hr /><p>New ConTenTLorem XuT dolor sit <em>amet</em> <strong>WoW</strong></p><h2>Second Heading</h2><p>This is another paragraph</p><ul><li>Test removing bullet points</li><li>purus <u>neque</u> luctus</li><li>vel molestie arcu</li></ul>',
-            '<h1>First Heading</h1><hr><p>New ConTenTLorem XuT dolor sit <em>amet</em> <strong>WoW</strong></p><h2>Second Heading</h2><p>This is another paragraph</p><ul><li>Test removing bullet points</li><li>purus <u>neque</u> luctus</li><li>vel molestie arcu</li></ul>');
+        $this->assertHTMLMatch('<h1>First HEADING</h1><hr /><p>New ConTenTLorem XuT dolor sit <em>amet</em> <strong>WoW</strong></p><h2>Second heading</h2><p>This is another paragraph</p><ul><li>Test removing bullet points</li><li>purus oNo luctus</li><li>vel molestie arcu</li></ul>');
 
     }//end testAddingHorizontalRuleAtStartOfParagraph()
 
+
+    /**
+     * Test that you can add a horizontal rule after a heading.
+     *
+     * @return void
+     */
+    public function testAddingAndDeletingHorizontalRuleAfterHeading()
+    {
+        $dir = dirname(__FILE__).'/Images/';
+
+        $this->selectText('HEADING');
+        $this->type('Key.RIGHT');
+
+        $this->clickTopToolbarButton($dir.'toolbarIcon_horizontalRule.png');
+
+        $this->type('Key.RIGHT');
+        $this->type('Key.BACKSPACE');
+        $this->type('New ConTenT');
+
+        $this->assertHTMLMatch('<h1>First HEADING</h1><hr /><p>New ConTenT</p><p>Lorem XuT dolor sit <em>amet</em> <strong>WoW</strong></p><h2>Second heading</h2><p>This is another paragraph</p><ul><li>Test removing bullet points</li><li>purus oNo luctus</li><li>vel molestie arcu</li></ul>');
+
+        $this->selectText('New');
+        $this->type('Key.LEFT');
+        $this->type('Key.BACKSPACE');
+
+        $this->assertHTMLMatch('<h1>First HEADING</h1><p>New ConTenT</p><p>Lorem XuT dolor sit <em>amet</em> <strong>WoW</strong></p><h2>Second heading</h2><p>This is another paragraph</p><ul><li>Test removing bullet points</li><li>purus oNo luctus</li><li>vel molestie arcu</li></ul>');
+
+    }//end testAddingAndDeletingHorizontalRuleAfterHeading()
+
+
+    /**
+     * Test that you can add a horizontal rule in a list.
+     *
+     * @return void
+     */
+    public function testAddingAndRemovingHorizontalRuleInAList()
+    {
+        $dir = dirname(__FILE__).'/Images/';
+
+        $this->selectText('oNo');
+        $this->type('Key.RIGHT');
+
+        $this->clickTopToolbarButton($dir.'toolbarIcon_horizontalRule.png');
+
+        $this->type('New ConTenT');
+
+        $this->assertHTMLMatch('<h1>First HEADING</h1><p>Lorem XuT dolor sit <em>amet</em> <strong>WoW</strong></p><h2>Second heading</h2><p>This is another paragraph</p><ul><li>Test removing bullet points</li><li>purus oNo</li><hr /><li>New ConTenTluctus</li><li>vel molestie arcu</li></ul>');
+
+        $this->selectText('oNo');
+        $this->type('Key.RIGHT');
+        $this->type('Key.RIGHT');
+        $this->type('Key.BACKSPACE');
+
+        $this->assertHTMLMatch('<h1>First HEADING</h1><p>Lorem XuT dolor sit <em>amet</em> <strong>WoW</strong></p><h2>Second heading</h2><p>This is another paragraph</p><ul><li>Test removing bullet points</li><li>purus oNo</li><li>New ConTenTluctus</li><li>vel molestie arcu</li></ul>');
+
+    }//end testAddingAndRemovingHorizontalRuleInAList()
 
 }//end class
 

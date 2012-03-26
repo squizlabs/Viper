@@ -439,7 +439,7 @@ ViperListPlugin.prototype = {
             this.viper.adjustRange();
             if (updated === true) {
                 this.viper.fireNodesChanged([range.getCommonElement()]);
-                this.viper.fireSelectionChanged();
+                this.viper.fireSelectionChanged(null, true);
             }
         }
 
@@ -843,7 +843,12 @@ ViperListPlugin.prototype = {
                 li.appendChild(p.firstChild);
             }
 
-            listItems.push(li);
+            if (atEnd !== true) {
+                listItems.unshift(li);
+            } else {
+                listItems.push(li);
+            }
+
             dfx.remove(p);
         }
 

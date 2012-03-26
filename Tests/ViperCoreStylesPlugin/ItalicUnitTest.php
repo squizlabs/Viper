@@ -57,6 +57,12 @@ class Viper_Tests_ViperCoreStylesPlugin_ItalicUnitTest extends AbstractViperUnit
 
         $this->assertHTMLMatch('<p>Lorem XuT <em>dolor</em></p><p>sit <em>amet</em> <strong>WoW</strong></p>');
 
+        $this->click($this->find('XuT'));
+
+        $this->selectText('dolor');
+        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic_active.png'), 'Italic icon in the inline toolbar is not active');
+        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic_active.png'), 'Italic icon in the top toolbar is not active');
+
     }//end testEndOfParaItalic()
 
 
@@ -160,10 +166,8 @@ class Viper_Tests_ViperCoreStylesPlugin_ItalicUnitTest extends AbstractViperUnit
      *
      * @return void
      */
-    public function testAdjacentWordStyling()
+    public function testAdjacentAWordStyling()
     {
-        $this->markTestIncomplete('This test is failing due to issue 1688.');
-
         $this->selectText('XuT');
         $this->keyDown('Key.CMD + i');
 
@@ -265,8 +269,6 @@ class Viper_Tests_ViperCoreStylesPlugin_ItalicUnitTest extends AbstractViperUnit
      */
     public function testAddingItalicsToTwoWordsWhereOneIsBold()
     {
-        $this->markTestIncomplete('This test is failing due to issue 1558.');
-
         $dir = dirname(__FILE__).'/Images/';
 
         $this->selectText('XuT');

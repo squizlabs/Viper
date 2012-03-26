@@ -411,6 +411,8 @@ ViperFormatPlugin.prototype = {
             p: 'P'
         };
 
+        var ignoredTags = ('td|tr|table|tbody|caption|ul|ol|li').split('|');
+
         // Listen for the main toolbar update and update the statuses of the buttons.
         this.viper.registerCallback('ViperToolbarPlugin:updateToolbar', 'ViperFormatPlugin', function(data) {
             var nodeSelection = data.range.getNodeSelection();
@@ -434,7 +436,10 @@ ViperFormatPlugin.prototype = {
             tools.setButtonInactive('formats');
 
             // Test format change.
-            if (self.handleFormat('div', true) === true) {
+            if ((nodeSelection && ignoredTags.inArray(dfx.getTagName(nodeSelection)) === false)
+                || ((!nodeSelection && dfx.getTagName(dfx.getFirstBlockParent(startNode)) !== 'li')
+                && (!nodeSelection && self.handleFormat('div', true) === true))
+            ) {
                 tools.enableButton('headings');
                 tools.enableButton('formats');
             } else {
@@ -628,6 +633,11 @@ ViperFormatPlugin.prototype = {
                 case 'ul':
                 case 'ol':
                 case 'img':
+                case 'th':
+                case 'tr':
+                case 'td':
+                case 'table':
+                case 'caption':
                     return false;
                 break;
 
@@ -669,6 +679,7 @@ ViperFormatPlugin.prototype = {
                 case 'td':
                 case 'th':
                 case 'tbody':
+                case 'caption':
                 case 'img':
                     return false;
                 break;
@@ -856,6 +867,8 @@ ViperFormatPlugin.prototype = {
                 this.viper.fireSelectionChanged(null, true);
             }
         }//end if
+
+        this.viper.fireCallbacks('ViperFormatPlugin:formatChanged', type);
 
     },
 

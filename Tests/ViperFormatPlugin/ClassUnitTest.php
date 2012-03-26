@@ -34,6 +34,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->clickInlineToolbarButton($dir.'toolbarIcon_class.png');
         $this->type('class');
         $this->clickInlineToolbarButton($dir.'toolbarIcon_updateChanges.png');
+        //$this->click($this->find($text));
         $this->assertHTMLMatch('<p>Lorem <span class="test">XuT</span> <span class="class">dolor</span></p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>Jumps</strong> OVER the lazy dogggg</p>');
 
     }//end testAddingClassAttributeToAWordUsingTheInlineToolbar()
@@ -100,7 +101,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
      */
     public function testUpdateChangesButtonIsDisabledForClassIcon()
     {
-        $this->markTestIncomplete('Failing due to issue 1551 in roadmap');
+        //$this->markTestIncomplete('Failing due to issue 1551 in roadmap');
 
         $dir = dirname(__FILE__).'/Images/';
 
@@ -723,8 +724,6 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
      */
     public function testSelectionIsMaintainedForWordWhenOpeningAndClosingClassFields()
     {
-        $this->markTestIncomplete('Test fails due to issue 1534 in roadmap');
-
         $dir = dirname(__FILE__).'/Images/';
 
         $this->selectText('XuT');
@@ -748,8 +747,6 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
      */
     public function testSelectionIsMaintainedForParaWhenOpeningAndClosingClassFields()
     {
-        $this->markTestIncomplete('Test fails due to issue 1534 in roadmap');
-
         $dir = dirname(__FILE__).'/Images/';
 
         $this->selectText('XuT');
