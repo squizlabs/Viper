@@ -57,6 +57,12 @@ class Viper_Tests_ViperCoreStylesPlugin_ItalicUnitTest extends AbstractViperUnit
 
         $this->assertHTMLMatch('<p>Lorem XuT <em>dolor</em></p><p>sit <em>amet</em> <strong>WoW</strong></p>');
 
+        $this->click($this->find('XuT'));
+
+        $this->selectText('dolor');
+        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic_active.png'), 'Italic icon in the inline toolbar is not active');
+        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic_active.png'), 'Italic icon in the top toolbar is not active');
+
     }//end testEndOfParaItalic()
 
 

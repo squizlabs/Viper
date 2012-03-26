@@ -57,6 +57,12 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
 
         $this->assertHTMLMatch('<p>Lorem XuT <strong>dolor</strong></p><p>sit <em>amet</em> <strong>WoW</strong></p>');
 
+        $this->click($this->find('XuT'));
+
+        $this->selectText('dolor');
+        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_bold_active.png'), 'Bold icon in the inline toolbar is not active');
+        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_bold_active.png'), 'Bold icon in the top toolbar is not active');
+
     }//end testEndOfParaBold()
 
 
