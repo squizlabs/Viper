@@ -3345,6 +3345,8 @@ Viper.prototype = {
                 Viper.window.scrollTo(scrollCoords.x, scrollCoords.y);
 
                 this.fireCaretUpdated();
+
+                this.fireCallbacks('Viper:focused');
             } catch (e) {
                 // Catch the IE error: Can't move focus to control because its invisible.
             }
