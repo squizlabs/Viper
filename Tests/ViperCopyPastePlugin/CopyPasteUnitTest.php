@@ -45,7 +45,7 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
         $this->type('C');
         sleep(2);
 
-        $this->assertHTMLMatch('<p><strong>LoremA</strong><strong>LoremB</strong><strong>LoremC</strong>&nbsp;</p>');
+        $this->assertHTMLMatch('<p><strong>LoremALoremBLoremC</strong>&nbsp;</p>');
 
     }//end testBoldTextCopyPaste()
 
@@ -68,7 +68,7 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
         $this->type('C');
         sleep(2);
 
-        $this->assertHTMLMatch('<p><em>LoremA</em><em>LoremB</em><em>LoremC</em>&nbsp;</p>');
+        $this->assertHTMLMatch('<p><em>LoremALoremBLoremC</em>&nbsp;</p>');
 
     }//end testItalicTextCopyPaste()
 
