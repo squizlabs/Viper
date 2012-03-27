@@ -282,11 +282,10 @@ ViperHistoryManager.prototype = {
     {
         this.batchCount--;
         if (this.batchCount === 0 && this.batchTask !== null) {
-            if (this.batchTask !== true) {
-                this.undoHistory.push(this.batch);
-            }
-
             this.batchTask = null;
+            if (this.batchTask !== true) {
+                this.add();
+            }
         }
 
     },
