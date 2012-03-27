@@ -690,6 +690,8 @@ ViperCoreStylesPlugin.prototype = {
 
                     nextEmptyElem = nextEmptyElem.nextSibling;
                 }
+            } else if (range.startOffset === 0 && dfx.trim(dfx.getNodeTextContent(prev)) === '') {
+                dfx.remove(prev);
             }
         }//end if
 
