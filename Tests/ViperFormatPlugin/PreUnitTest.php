@@ -236,6 +236,37 @@ class Viper_Tests_ViperFormatPlugin_PreUnitTest extends AbstractViperUnitTest
     }//end testApplyingAndRemovingPre()
 
 
+    /**
+     * Test creating new content in pre tags.
+     *
+     * @return void
+     */
+    public function testCreatingNewContentWithAPreTag()
+    {
+        $dir = dirname(__FILE__).'/Images/';
+
+        $this->selectText('THIS');
+        $this->selectInlineToolbarLineageItem(0);
+        $this->keyDown('Key.RIGHT');
+        $this->keyDown('Key.ENTER');
+        $this->type('New content');
+        $this->keyDown('Key.SHIFT + Key.LEFT');
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_toggle_formats_highlighted.png');
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_pre.png');
+        $this->keyDown('Key.RIGHT');
+        $this->type(' on the page');
+        $this->keyDown('Key.ENTER');
+        $this->type('More new content');
+        $this->keyDown('Key.ENTER');
+        $this->keyDown('Key.ENTER');
+        $this->type('This should be a paragraph');
+
+        $this->assertHTMLMatch('<pre>Lorem xtn dolor</pre><pre>sit amet <strong>WoW</strong></pre><p>THIS is a paragraph to change to a PrE</p><pre>New content on the pageMore new content</pre><p>This should be a paragraph</p>');
+
+    }//end testCreatingNewContentWithAPreTag()
+
+
 }//end class
 
 ?>

@@ -236,6 +236,34 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractViperUnitTest
     }//end testApplyingAndRemovingQuote()
 
 
+    /**
+     * Test creating new content in div's.
+     *
+     * @return void
+     */
+    public function testCreatingNewContentWithADivTag()
+    {
+        $dir = dirname(__FILE__).'/Images/';
+
+        $this->selectText('THIS');
+        $this->selectInlineToolbarLineageItem(0);
+        $this->keyDown('Key.RIGHT');
+        $this->keyDown('Key.ENTER');
+        $this->type('New content');
+        $this->keyDown('Key.SHIFT + Key.LEFT');
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_formats_highlighted.png');
+        $this->clickTopToolbarButton($dir.'toolbarIcon_div.png');
+        $this->keyDown('Key.RIGHT');
+        $this->type(' on the page');
+        $this->keyDown('Key.ENTER');
+        $this->type('More new content');
+
+        $this->assertHTMLMatch('<div>Lorem xtn dolor</div><p>spacer for the tests</p><div>sit amet <strong>WoW</strong></div><p>THIS is a paragraph to change to a div</p><div>New content on the page</div><p>More new content</p>');
+
+    }//end testCreatingNewContentWithADivTag()
+
+
 }//end class
 
 ?>

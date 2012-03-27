@@ -194,6 +194,31 @@ class Viper_Tests_ViperFormatPlugin_ParagraphUnitTest extends AbstractViperUnitT
     }//end testApplingQuoteToMultipleParagraphs()
 
 
+    /**
+     * Test creating new content in p tags.
+     *
+     * @return void
+     */
+    public function testCreatingNewContentWithAPTag()
+    {
+        $dir = dirname(__FILE__).'/Images/';
+
+        $this->selectText('THIS');
+        $this->selectInlineToolbarLineageItem(0);
+        $this->keyDown('Key.RIGHT');
+        $this->keyDown('Key.ENTER');
+        $this->type('New content');
+        $this->keyDown('Key.SHIFT + Key.LEFT');
+        $this->selectInlineToolbarLineageItem(0);
+        $this->keyDown('Key.RIGHT');
+        $this->type(' on the page');
+        $this->keyDown('Key.ENTER');
+        $this->type('More new content');
+
+        $this->assertHTMLMatch('<p>Lorem xtn dolor</p><p>sit amet <strong>WoW</strong></p><div>THIS is a paragraph to change to a p</div><p>New content on the page</p><p>More new content</p>');
+
+    }//end testCreatingNewContentWithAPTag()
+
 }//end class
 
 ?>

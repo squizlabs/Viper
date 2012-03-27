@@ -278,7 +278,9 @@ ViperToolbarPlugin.prototype = {
                 var inputElements = dfx.getTag('input[type=text], textarea', this._subSections[id]);
                 if (inputElements.length > 0) {
                     try {
-                        inputElements[0].focus();
+                        setTimeout(function() {
+                            inputElements[0].focus();
+                        }, 10);
                     } catch(e) {}
                 }
 
@@ -597,6 +599,12 @@ ViperToolbarPlugin.prototype = {
 
     },
 
+    isDisabled: function()
+    {
+        return !this._enabled;
+
+    },
+
     remove: function()
     {
         dfx.remove(this._toolbar);
@@ -615,6 +623,10 @@ ViperToolbarPlugin.prototype = {
 
     _updateToolbar: function(range)
     {
+        if (this.viper.isEnabled() === false) {
+            return;
+        }
+
         range = range || this.viper.getCurrentRange();
 
         this.viper.fireCallbacks('ViperToolbarPlugin:updateToolbar', {range: range});

@@ -75,7 +75,7 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->keyDown('Key.ENTER');
 
         $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com">Lorem IPSUM</a> dolor</p><p>sit amet <strong>WoW</strong></p>');
-        
+
         $this->click($this->find('dolor'));
         $this->click($this->find('IPSUM'));
         $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_removeLink.png');
@@ -89,7 +89,7 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->keyDown('Key.SHIFT + Key.RIGHT');
         $this->keyDown('Key.SHIFT + Key.RIGHT');
         $this->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_link_.png'), 'Toolbar button icon is not correct');
+        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_link.png'), 'Toolbar button icon is not correct');
 
     }//end testLinkIconAppearsInInlineToolbarAfterDeletingLink()
 
@@ -517,6 +517,32 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_anchor_active.png'), 'Anchor icon should be active in the top toolbar.');
 
     }//end testClassAndIdAreAddedToLinkTagAfterReselect()
+
+
+
+    /**
+     * Test that the selection is maintained when you click on the link icon.
+     *
+     * @return void
+     */
+    public function testSelectionIsMaintainedWhenYouClickOnLinkIcon()
+    {
+        $dir = dirname(__FILE__).'/Images/';
+
+        $text = 'dolor';
+
+        $this->selectText($text);
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_link.png');
+        $this->assertEquals($text, $this->getSelectedText(), 'Original selection is still not selected.');
+
+        $this->click($this->find($text));
+
+        $this->selectText($text);
+        $this->clickTopToolbarButton($dir.'toolbarIcon_link.png');
+        $this->assertEquals($text, $this->getSelectedText(), 'Original selection is still not selected.');
+
+
+    }//end testSelectionIsMaintainedWhenYouClickOnLineIcon()
 
 
 }//end class

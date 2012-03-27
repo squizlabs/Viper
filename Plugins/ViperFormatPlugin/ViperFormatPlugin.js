@@ -436,6 +436,14 @@ ViperFormatPlugin.prototype = {
             tools.setButtonInactive('headings');
             tools.setButtonInactive('formats');
 
+            if (!startNode
+                && !endNode
+                && data.range.startContainer === data.range.endContainer
+                && dfx.isTag(data.range.startContainer, 'br') === true
+            ) {
+                startNode = data.range.startContainer;
+            }
+
             // Test format change.
             if ((nodeSelection && ignoredTags.inArray(dfx.getTagName(nodeSelection)) === false)
                 || ((!nodeSelection && dfx.getTagName(dfx.getFirstBlockParent(startNode)) !== 'li')
