@@ -886,7 +886,7 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractViperListP
         $this->clickTopToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_orderedList_active.png');
         $this->assertHTMLMatch('<p>XabcX uuuuuu. VmumV</p><p>cPOc ccccc dddd. TicT</p><p>ajhsd sjsjwi hhhh:</p><p>aaa bbbbb ccccc</p><p>4 oNo templates</p><p>Audit XuT content</p><p>Accessibility audit report</p><p>Recommendations action plan</p><p>Squiz Matrix guide</p><h2>SoD</h2>');
 
-        $this->clickTopToolbarButton(dirname(dirname(__FILE__)).'/Core/Images/undorIcon_active.png');
+        $this->clickTopToolbarButton(dirname(dirname(__FILE__)).'/Core/Images/undoIcon_active.png');
         $this->assertHTMLMatch('<p>XabcX uuuuuu. VmumV</p><p>cPOc ccccc dddd. TicT</p><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa bbbbb ccccc</li><li>4 oNo templates</li><li>Audit XuT content</li><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ol><h2>SoD</h2>');
 
     }//end testHeadingIconNotAvailableForList()
