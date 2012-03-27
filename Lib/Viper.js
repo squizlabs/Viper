@@ -3323,7 +3323,7 @@ Viper.prototype = {
                 range.setStart(firstSelectable, 0);
                 ViperSelection.addRange(range);
             }
-        } else if (endNode.nodeType === dfx.ELEMENT_NODE && dfx.isTag(endNode, 'br') === true) {
+        } else if (endNode && endNode.nodeType === dfx.ELEMENT_NODE && dfx.isTag(endNode, 'br') === true) {
             // Firefox adds br tags at the end of new paragraphs sometimes selecting
             // text from somewhere in paragraph to the end of paragraph causes
             // selection issues.
