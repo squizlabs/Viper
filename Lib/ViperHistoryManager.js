@@ -140,6 +140,7 @@ ViperHistoryManager.prototype = {
         this.viper.setRawHTML(task.content);
 
         this._selectTaskRange(task);
+        this.viper.highlightToSelection();
 
         // Fire nodesChanged event.
         this._ignoreAdd = true;
@@ -169,6 +170,8 @@ ViperHistoryManager.prototype = {
         this.viper.setRawHTML(task.content);
 
         this._selectTaskRange(task);
+
+        this.viper.highlightToSelection();
 
         // Fire nodesChanged event.
         this._ignoreAdd = true;
