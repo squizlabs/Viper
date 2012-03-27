@@ -764,7 +764,10 @@ Viper.prototype = {
         // inserting the new text.
         if (range.collapsed !== true) {
             this.deleteContents();
-            this.initEditableElement();
+
+            if (dfx.trim(dfx.getHtml(this.element)) === '') {
+                this.initEditableElement();
+            }
 
             // Update the range var.
             range = this.getCurrentRange();
