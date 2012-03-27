@@ -232,7 +232,11 @@ ViperTableEditorPlugin.prototype = {
                             self._tools.setButtonActive('insertTable');
                         }
                     } else {
-                        self._tools.setButtonInactive('insertTable');
+                        if (dfx.getParents(node, 'li', self.viper.getViperElement()).length > 0) {
+                            self._tools.disableButton('insertTable');
+                        } else {
+                            self._tools.setButtonInactive('insertTable');
+                        }
                     }
                 }
 
