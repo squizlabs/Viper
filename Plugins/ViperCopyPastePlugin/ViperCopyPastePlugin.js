@@ -334,10 +334,8 @@ ViperCopyPastePlugin.prototype = {
 
     _handleFormattedPasteValue: function(stripTags)
     {
-        if (stripTags === true) {
-            dfxjQuery(this.pasteElement).find('[style]').removeAttr('style');
-            dfxjQuery(this.pasteElement).find('[class]').removeAttr('class');
-        }
+        dfxjQuery(this.pasteElement).find('[class]').removeAttr('class');
+        dfxjQuery(this.pasteElement).find('[style]').removeAttr('style');
 
         this._removeEditableAttrs(this.pasteElement);
 
