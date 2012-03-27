@@ -793,7 +793,6 @@ ViperCopyPastePlugin.prototype = {
                     // Start a new list.
                     ul        = document.createElement(listType);
                     indentLvl = {};
-                    //dfx.attr(ul, '_viperlistst', 'list-style-type:' + listStyle);
 
                     indentLvl[marginLeft] = ul;
                     dfx.insertBefore(pEl, ul);
@@ -848,6 +847,42 @@ ViperCopyPastePlugin.prototype = {
                     }
 
                     prevSibling = prevSibling.previousSibling;
+                }
+            }
+        }
+
+        // Make sure each list item is inside a list element.
+        var listItems = dfx.getTag('li', div);
+        var c         = listItems.length;
+        for (var i = 0; i < c; i++) {
+            var li = listItems[i];
+            if (!li.parentNode || (dfx.isTag(li.parentNode, 'ul') !== true  && dfx.isTag(li.parentNode, 'ol') !== true)) {
+                // This list item is not inside a list element.
+                // If there is a list before this item join to it, if not create a
+                // new list.
+
+                var list = null;
+                var sibling = li.previousSibling;
+                while (sibling) {
+                    if (sibling.nodeType === dfx.TEXT_NODE && dfx.trim(sibling.data) !== '') {
+                        break;
+                    } else if (dfx.isTag(sibling, 'ol') === true || dfx.isTag(sibling, 'ul') === true) {
+                        list = sibling;
+                        break;
+                    } else if (sibling.nodeType === dfx.ELEMENT_NODE) {
+                        break;
+                    }
+
+                    sibling = sibling.previousSibling;
+
+                }
+
+                if (list) {
+                    list.appendChild(li);
+                } else {
+                    list = document.createElement('ul');
+                    dfx.insertBefore(li, list);
+                    list.appendChild(li);
                 }
             }
         }
