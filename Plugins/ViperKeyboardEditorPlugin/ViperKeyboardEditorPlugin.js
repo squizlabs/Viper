@@ -18,7 +18,7 @@ function ViperKeyboardEditorPlugin(viper)
 
     // When enter key is pressed at the end of these tags, the plugin will handle the
     // enter event instead of the browser.
-    this._tagList = ('p|div|h1|h2|h3|h4|h5|h6').split('|');
+    this._tagList = ('p|div|h1|h2|h3|h4|h5|h6|blockquote').split('|');
 
 }
 
