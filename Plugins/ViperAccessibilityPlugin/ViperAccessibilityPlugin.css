@@ -1,5 +1,10 @@
-.ViperAccessibilityPlugin {
-    width: 35em;
+.ViperAccessibilityPlugin,
+.ViperAP-issueList,
+.ViperAP-issuePane,
+.resultsCont.ViperAP-wrapper,
+.ViperAP-issueListWrapper,
+.ViperAP-cont.settingsCont {
+    width: 300px;
 }
 
 .ViperVAP-violation {
@@ -20,6 +25,151 @@
     text-align: left;
     border-radius: 0 0 9px 9px;
 }
+
+/* Summary Pane */
+
+.ViperAP-standardsWrapper {
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    border: 1px solid #393939;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2) inset, 0 1px 0 rgba(255, 255, 255, 0.1);
+    border-radius: 0.4em;
+    margin: 0 0 1em;
+    font-size: 1.3em;
+    color: #FFF;
+    text-shadow: 0 -1px rgba(0,0,0,0.3);
+    text-align: left;
+    padding: 0.7em 0.7em 0.8em;
+}
+.ViperAP-standardsSelect {
+    float: right;
+}
+.Viper-issueTile {
+    display: inline-block;
+    width: 31%;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    margin-left: 0.5em;
+    
+}
+.Viper-issueTile:first-child {
+    margin-left: 0;
+}
+.Viper-issueTile .issueTile-text {
+    display: block;
+    position: relative;
+    color: #FFF;
+    text-shadow: 0 -1px rgba(0,0,0,0.3);
+    font-size: 1.7em;
+    line-height: 1.5em;
+    padding: 0.9em 0 1.8em;
+    
+    border: 1px solid #393939;
+    border-bottom: none;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset;
+    border-radius: 0.3em 0.3em 0 0;
+}
+.Viper-issueTile.issueType-error .issueTile-text {
+    background-color: #8b2222;
+}
+.Viper-issueTile.issueType-warning .issueTile-text {
+    background-color: #b3913a;
+}
+.Viper-issueTile.issueType-notice .issueTile-text {
+    background-color: #66656b;
+}
+.ViperAP-summaryWrapper.processing .Viper-issueTile .issueTile-text:before {
+    content: "";
+    display: block;
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    left: 50%;
+    top: 0.5em;
+    margin-left: -15px;
+    background: transparent url(Images/summaryLoader-error.gif) 50% 50% no-repeat;
+}
+.ViperAP-summaryWrapper.processing .Viper-issueTile.issueType-warning .issueTile-text:before {
+    background-image: url(Images/summaryLoader-warning.gif);
+}
+.ViperAP-summaryWrapper.processing .Viper-issueTile.issueType-notice .issueTile-text:before {
+    background-image: url(Images/summaryLoader-notice.gif);
+}
+.Viper-issueTile .issueTile-text strong {
+    font-size: 1.7em;
+    display: block;
+}
+.ViperAP-summaryWrapper.processing .issueTile-text strong {
+    visibility: hidden;
+}
+.Viper-issueTile .Viper-checkbox {
+    margin: 0;
+    border-radius: 0  0 0.4em 0.4em;
+    min-height: 2.7em;
+}
+.Viper-issueTile .Viper-checkbox .Viper-checkbox-switch {
+    right: 50%;
+    margin-right: -1.6em;
+}
+.Viper-issueTile .Viper-checkbox:after {
+    content: "";
+    display: block;
+    clear: both;
+}
+.Viper-issueTile .issueTile-text:after {
+    background: url("Images/issueImages.png") no-repeat scroll 0 0 transparent;
+    content: "";
+    height: 14px;
+    left: 50%;
+    margin: -7px 0 0 -7px;
+    position: absolute;
+    bottom: 0.6em;
+    width: 14px;
+}
+.Viper-issueTile.issueType-warning .issueTile-text:after {
+    background-position: 0 -14px;
+}
+.Viper-issueTile.issueType-notice .issueTile-text:after {
+    background-position: 0 -28px;
+}
+
+.Viper-issueTile-help {
+    display: block;
+    clear: both;
+    color: #AAA;
+    text-shadow: 0 -1px rgba(0,0,0,0.3);
+    font-size: 1.3em;
+    padding: 1em 0;
+}
+.ViperAP-viewReport {
+    background-color: #3A3940;
+    border: 1px solid #2B2B2B;
+    border-radius: 0.3em 0.3em 0.3em 0.3em;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset, 0 1px 0 rgba(255, 255, 255, 0.15), 0 -1.4em 0.9em rgba(0, 0, 0, 0.4) inset;
+    color: #FFFFFF;
+    cursor: pointer;
+    font-size: 1.9em;
+    line-height: 3em;
+    position: relative;
+}
+.ViperAP-summaryWrapper.processing .ViperAP-viewReport {
+    opacity: 0.4;
+}
+.ViperAP-viewReport:hover {
+    background-color: #2b2b2b;
+}
+.ViperAP-viewReport:after {
+    background: url("../../Images/viperToolsSprite.png") no-repeat scroll 0 -80px transparent;
+    content: "";
+    height: 14px;
+    margin-top: -7px;
+    position: absolute;
+    right: 1em;
+    top: 50%;
+    width: 9px;
+}
+
+/* List Nav */
 
 .ViperAP-listNav {
     line-height: 2em;
@@ -72,11 +222,12 @@
     cursor: default;
 }
 
+/* Issue List/Report */
+
 .ViperAP-issueList {
     list-style: none;
     margin: 0;
     display: inline-block;
-    width: 35em;
     vertical-align: top;
 }
 
@@ -222,7 +373,6 @@
     text-shadow: none;
     border-top: 1px solid #2b2b2b;
     position: relative;
-    width: 35em;
     display: inline-block;
     vertical-align: top;
     max-height: 15em;
@@ -426,7 +576,6 @@
 
 .resultsCont.ViperAP-wrapper {
     overflow: hidden;
-    width: 35em;
     clear: both;
 }
 
@@ -440,10 +589,8 @@
     margin: 0;
     vertical-align: top;
     overflow: hidden;
-    width: 35em;
     max-height: 15em;
 }
-
 .issueList .ViperAP-issueListWrapper {
     max-height: inherit;
 }
@@ -452,7 +599,6 @@
     overflow: hidden;
     display: inline-block;
     vertical-align: top;
-    scroll
 }
 
 .issueList .ViperAP-issueDetailsWrapper {
@@ -522,7 +668,6 @@
     background-color: #2B2B2B;
     color: #EEE;
     text-shadow: none;
-    width: 35em;
 }
 
 .ViperAP-cont.settingsCont .listFilters,
