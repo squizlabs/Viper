@@ -212,14 +212,14 @@ ViperLinkPlugin.prototype = {
         var lastChild  = linkTag.lastChild;
 
         while (linkTag.firstChild) {
-            this.viper.insertBefore(linkTag, linkTag.firstChild);
+            dfx.insertBefore(linkTag, linkTag.firstChild);
         }
 
         dfx.remove(linkTag);
 
         this.viper.selectBookmark(bookmark);
         this.viper.fireSelectionChanged(null, true);
-        this.viper.fireNodesChanged([this.viper.getViperElement()]);
+        this.viper.fireNodesChanged();
 
     },
 
