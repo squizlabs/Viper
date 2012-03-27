@@ -151,6 +151,7 @@
     font-size: 1.9em;
     line-height: 3em;
     position: relative;
+    text-shadow: 0 -1px 0 #000000;
 }
 .ViperAP-summaryWrapper.processing .ViperAP-viewReport {
     opacity: 0.4;
