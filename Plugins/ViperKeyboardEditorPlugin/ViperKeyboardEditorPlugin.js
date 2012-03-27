@@ -146,16 +146,31 @@ ViperKeyboardEditorPlugin.prototype = {
         }
 
         if (ViperChangeTracker.isTracking() !== true) {
-            var range = this.viper.getViperRange();
+            var range   = this.viper.getViperRange();
+            var endNode = range.getEndNode();
             if (range.collapsed === true
-                && range.endContainer.nodeType === dfx.TEXT_NODE
-                && range.endOffset === range.endContainer.data.length
+                && ((endNode.nodeType === dfx.TEXT_NODE && range.endOffset === range.endContainer.data.length)
+                || endNode.nodeType === dfx.ELEMENT_NODE && dfx.isTag(endNode, 'br') && !endNode.nextSibling)
             ) {
-                var firstBlock = dfx.getFirstBlockParent(range.endContainer);
+                var firstBlock = dfx.getFirstBlockParent(endNode);
                 if (firstBlock && this._tagList.inArray(dfx.getTagName(firstBlock)) === true) {
                     var p = document.createElement('p');
                     dfx.setHtml(p, '<br />');
-                    dfx.insertAfter(firstBlock, p);
+
+                    // If the firstBlock is a P tag and it's parent is not the
+                    // Viper editable element and its the last child then move this
+                    // new P tag after its parent element.
+                    if (dfx.isTag(firstBlock, 'p') === true
+                        && firstBlock.parentNode !== this.viper.getViperElement()
+                        && !firstBlock.nextSibling
+                        && dfx.trim(dfx.getNodeTextContent(firstBlock)) === ''
+                    ) {
+                        dfx.insertAfter(firstBlock.parentNode, p);
+                        dfx.remove(firstBlock);
+                    } else {
+                        dfx.insertAfter(firstBlock, p);
+                    }
+
                     range.selectNode(p.firstChild);
                     range.collapse(true);
                     ViperSelection.addRange(range);
