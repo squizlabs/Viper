@@ -1817,7 +1817,7 @@ Viper.prototype = {
             }//end if
         } else if (dfx.isStubElement(parent) === false) {
             if (dfx.isBlockElement(parent) === false && this.hasBlockChildren(parent) === false) {
-                if (parent.tagName.toLowerCase() !== tag) {
+                if (dfx.isTag(parent, tag) !== true) {
                     // Does not have any block elements, so we can
                     // wrap the content inside the specified tag.
                     if (parent.previousSibling
