@@ -1242,6 +1242,7 @@ ViperListPlugin.prototype = {
             var pTags    = self.listToParagraphs(list);
             this.viper.selectBookmark(bookmark);
             self.viper.fireSelectionChanged(null, true);
+            self.viper.fireNodesChanged([self.viper.getViperElement()]);
         }
 
     },
