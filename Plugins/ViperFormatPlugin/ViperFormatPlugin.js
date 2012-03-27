@@ -439,7 +439,6 @@ ViperFormatPlugin.prototype = {
             if (!startNode
                 && !endNode
                 && data.range.startContainer === data.range.endContainer
-                && dfx.isTag(data.range.startContainer, 'br') === true
             ) {
                 startNode = data.range.startContainer;
             }
