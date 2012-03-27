@@ -107,10 +107,10 @@ ViperFormatPlugin.prototype = {
 
         var formatsSubSection = document.createElement('div');
         var formatButtons = {
-            blockquote: 'Quote',
-            pre: 'PRE',
+            p: 'P',
             div: 'DIV',
-            p: 'P'
+            blockquote: 'Quote',
+            pre: 'PRE'
         };
 
         for (var tag in formatButtons) {
@@ -273,10 +273,10 @@ ViperFormatPlugin.prototype = {
             formatsSubSection = toolbar.makeSubSection(prefix + 'formats:subSection', this._getFormatsSection(prefix));
 
             var formatButtons = {
-                blockquote: 'Quote',
-                pre: 'PRE',
+                p: 'P',
                 div: 'DIV',
-                p: 'P'
+                blockquote: 'Quote',
+                pre: 'PRE'
             };
 
             for (var tag in formatButtons) {
@@ -296,13 +296,13 @@ ViperFormatPlugin.prototype = {
         }
 
         if (formatsSubSection) {
-            tools.createButton('vitpFormats', 'Aa', 'Toggle Formats', 'formats', null, false, hasActiveFormat);
+            tools.createButton('vitpFormats', '', 'Toggle Formats', 'formats', null, false, hasActiveFormat);
             tools.addButtonToGroup('vitpFormats', prefix + 'formatsAndHeading:buttons');
             toolbar.setSubSectionButton('vitpFormats', prefix + 'formats:subSection');
         }
 
         if (headingsSubSection) {
-            tools.createButton('vitpHeadings', 'Hh', 'Toggle Headings', 'headings', null, false, hasActiveHeading);
+            tools.createButton('vitpHeadings', '', 'Toggle Headings', 'headings', null, false, hasActiveHeading);
             tools.addButtonToGroup('vitpHeadings', prefix + 'formatsAndHeading:buttons');
             toolbar.setSubSectionButton('vitpHeadings', prefix + 'heading:subSection');
         }
@@ -369,8 +369,8 @@ ViperFormatPlugin.prototype = {
 
         // Toolbar buttons.
         var buttonGroup = tools.createButtonGroup(prefix + 'formatAndHeadingButtons');
-        tools.createButton('formats', 'Aa', 'Formats', '', null, true);
-        tools.createButton('headings', 'Hh', 'Headings', '', null, true);
+        tools.createButton('formats', '', 'Formats', 'formats', null, true);
+        tools.createButton('headings', '', 'Headings', 'headings', null, true);
         tools.addButtonToGroup('formats', prefix + 'formatAndHeadingButtons');
         tools.addButtonToGroup('headings', prefix + 'formatAndHeadingButtons');
         toolbar.addButton(buttonGroup);
@@ -405,10 +405,10 @@ ViperFormatPlugin.prototype = {
 
         var headingTags   = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'];
         var formatButtons = {
-            blockquote: 'Quote',
-            pre: 'PRE',
+            p: 'P',
             div: 'DIV',
-            p: 'P'
+            blockquote: 'Quote',
+            pre: 'PRE'
         };
 
         var ignoredTags = ('td|tr|table|tbody|caption|ul|ol|li').split('|');
