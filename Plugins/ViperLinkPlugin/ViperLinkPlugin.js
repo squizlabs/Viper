@@ -137,8 +137,20 @@ ViperLinkPlugin.prototype = {
                 dfx.insertBefore(node, a);
                 a.appendChild(node);
             } else {
+                var prevNode = null;
                 while (node.firstChild) {
-                    a.appendChild(node.firstChild);
+                    var firstChild = node.firstChild;
+                    if (prevNode
+                        && prevNode.nodeType === dfx.TEXT_NODE
+                        && firstChild.nodeType === dfx.TEXT_NODE
+                    ) {
+                        prevNode.data += firstChild.data;
+                        dfx.remove(firstChild);
+                    } else {
+                        a.appendChild(firstChild);
+                    }
+
+                    prevNode = firstChild;
                 }
 
                 if (dfx.isTag(node, 'span') === true) {
@@ -155,10 +167,20 @@ ViperLinkPlugin.prototype = {
             }
         } else {
             var bookmark = this.viper.createBookmark(range);
-
-            var elems = dfx.getElementsBetween(bookmark.start, bookmark.end);
+            var elems    = dfx.getElementsBetween(bookmark.start, bookmark.end);
+            var prevNode = null;
             for (var i = 0; i < elems.length; i++) {
-                a.appendChild(elems[i]);
+                if (prevNode
+                    && prevNode.nodeType === dfx.TEXT_NODE
+                    && elems[i].nodeType === dfx.TEXT_NODE
+                ) {
+                    prevNode.data += elems[i].data;
+                    dfx.remove(elems[i]);
+                } else {
+                    a.appendChild(elems[i]);
+                }
+
+                prevNode = elems[i];
             }
 
             this.updateLinkAttributes(a, idPrefix);
