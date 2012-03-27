@@ -126,6 +126,29 @@ class Viper_Tests_ViperCoreStylesPlugin_HorizontalRuleUnitTest extends AbstractV
 
     }//end testAddingAndRemovingHorizontalRuleInAList()
 
+
+    /**
+     * Test adding a horizontal rule after formatted text.
+     *
+     * @return void
+     */
+    public function testAddingHorizontalRuleAfterFormattedText()
+    {
+        $dir = dirname(__FILE__).'/Images/';
+
+        $this->selectText('XuT');
+        $this->clickTopToolbarButton($dir.'toolbarIcon_sub.png');
+
+        $this->selectText('WoW');
+        $this->clickTopToolbarButton($dir.'toolbarIcon_strike.png');
+        $this->keyDown('Key.RIGHT');
+        $this->keyDown('Key.ENTER');
+        $this->clickTopToolbarButton($dir.'toolbarIcon_horizontalRule.png');
+
+        $this->assertHTMLMatch('<h1>First HEADING</h1><p>Lorem <sub>XuT</sub> dolor sit <em>amet</em> <strong><del>WoW</del></strong></p><p>&nbsp;</p><hr /><p>&nbsp;</p><h2>Second heading</h2><p>This is another paragraph</p><ul><li>Test removing bullet points</li><li>purus oNo luctus</li><li>vel molestie arcu</li></ul>');
+
+    }//end testAddingHorizontalRuleAfterFormattedText()
+
 }//end class
 
 
