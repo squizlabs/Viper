@@ -68,7 +68,7 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
         $this->type('C');
         sleep(2);
 
-        $this->assertHTMLMatch('<p><em>LoremALoremBLoremC</em>&nbsp;</p>');
+        $this->assertHTMLMatch('<p><em>LoremALoremBLoremC</em></p>');
 
     }//end testItalicTextCopyPaste()
 
