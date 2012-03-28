@@ -1,16 +1,19 @@
 .ui-resizable-handle {
     position: absolute;
-    width: 16px;
-    height: 16px;
-    background-color: blue;
+    width: 25px;
+    height: 25px;
+    background: transparent url(Images/resizers.png) 0 0 no-repeat;
 }
 
 .ui-resizable-se {
-    bottom: 0;
-    right: 0;
+    bottom: -10px;
+    right: -10px;
+    cursor: se-resize;
 }
 
 .ui-resizable-sw {
-    bottom: 0;
-    left: 0;
+    background-position: -25px 0;
+    bottom: -10px;
+    left: -10px;
+    cursor: sw-resize;
 }

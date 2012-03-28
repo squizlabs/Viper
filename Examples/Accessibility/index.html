@@ -10,8 +10,12 @@
         var viper = null;
         ViperReadyCallback = function() {
             viper = new Viper('test');
-            viper.getPluginManager().setPlugins(['ViperCoreStylesPlugin', 'ViperKeyboardEditorPlugin', 'ViperInlineToolbarPlugin', 'ViperHistoryPlugin', 'ViperListPlugin', 'ViperFormatPlugin', 'ViperToolbarPlugin', 'ViperTableEditorPlugin', 'ViperCopyPastePlugin', 'ViperImagePlugin', 'ViperLinkPlugin', 'ViperSourceViewPlugin',  'ViperCharMapPlugin', 'ViperAccessibilityPlugin']);
+            viper.getPluginManager().setPlugins(['ViperCoreStylesPlugin', 'ViperKeyboardEditorPlugin', 'ViperInlineToolbarPlugin', 'ViperHistoryPlugin', 'ViperListPlugin', 'ViperFormatPlugin', 'ViperToolbarPlugin', 'ViperTableEditorPlugin', 'ViperCopyPastePlugin', 'ViperImagePlugin', 'ViperLinkPlugin', 'ViperAccessibilityPlugin', 'ViperSourceViewPlugin', 'ViperSearchReplacePlugin', 'ViperLangToolsPlugin', 'ViperCharMapPlugin', 'ViperTrackChangesPlugin']);
             viper.setEditableElement(document.getElementById('content'));
+
+            var buttons = [['bold', 'italic', 'subscript', 'superscript', 'strikethrough', 'class'], 'removeFormat', ['justify', 'formats', 'headings'], ['undo', 'redo'], ['unorderedList', 'orderedList', 'indentList', 'outdentList'], 'insertTable', 'image', 'hr', ['insertLink', 'removeLink', 'anchor'], 'insertCharacter', 'searchReplace', 'langTools', 'accessibility', 'sourceEditor'];
+            viper.getPluginManager().setPluginSettings('ViperToolbarPlugin', {buttons: buttons});
+            viper.getPluginManager().setPluginSettings('ViperInlineToolbarPlugin', {buttons: buttons});
         };
     </script>
 </head>
@@ -35,7 +39,7 @@
     <h1>Simple Viper Example</h1>
         <p>Australian governments at all levels have <u><strong><em>endorsed</em></strong></u> WCAG 2.0, and require all government websites (federal, state and territory) to meet the new guidelines at the minimum compliance level (Single A) by the end of 2012. In addition, the Australian Government requires all federal websites to meet the medium conformance level (Double A) by the end of 2014.</p>
 <p><img src="./Images/testImage.png" alt="" title="Spacer image" /></p>
-<p><img src="./Images/testImage.png" alt="Two persons at a computer, running the HTML_CodeSniffer test page and smiling cheesily." /></p>
+<p><img class="no-border" src="./Images/testImage.png" alt="Two persons at a computer, running the HTML_CodeSniffer test page and smiling cheesily." /></p>
 <p>Federal government <img src="./Images/testImage.png" /> agencies must update <strong>all government</strong> websites (as specified within scope under the Website Accessibility National Transition Strategy (NTS)) to WCAG 2.0 conformance. Agencies should use the principle of progressive enhancement when building and managing websites, and test for conformance across multiple browsers and operating system configurations.</p>
 
 <p>Agencies <img src="./Images/testImage.png" title="Test" />are advised<img src="./Images/testImage.png" alt="" title="" /> <img src="./Images/testImage.png" title="Test" /> to consider the varied needs of their users and plan for accessibility from the outset. Where accessibility problems are known, agencies should put in place implementation plans to address the problem, then endeavour to minimise future risk by using standards-based web technologies and best practice content management processes.</p>
