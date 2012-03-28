@@ -364,16 +364,16 @@ ViperTableEditorPlugin.prototype = {
         // Whent he mouse is moved over the table icon, rest of the buttons become
         // visible where user can pick the tools they want to use.
         var buttonGroup = this.viper.ViperTools.createButtonGroup('VTEP:cellTools:buttons', 'ViperITP-tools');
-        var tableBtn    = this._tools.createButton('VTEP:cellTools:table', '', '', 'table', function() {
+        var tableBtn    = this._tools.createButton('VTEP:cellTools:table', '', 'Show Table tools', 'table', function() {
             showTools('table');
         });
-        var rowBtn = this._tools.createButton('VTEP:cellTools:row', '', '', 'tableRow viper-hidden', function() {
+        var rowBtn = this._tools.createButton('VTEP:cellTools:row', '', 'Show Row tools', 'tableRow viper-hidden', function() {
             showTools('row');
         });
-        var colBtn = this._tools.createButton('VTEP:cellTools:col', '', '', 'tableCol viper-hidden', function() {
+        var colBtn = this._tools.createButton('VTEP:cellTools:col', '', 'Show Column tools', 'tableCol viper-hidden', function() {
             showTools('col');
         });
-        var cellBtn = this._tools.createButton('VTEP:cellTools:cell', '', '', 'tableCell viper-hidden', function() {
+        var cellBtn = this._tools.createButton('VTEP:cellTools:cell', '', 'Show Cell tools', 'tableCell viper-hidden', function() {
             showTools('cell');
         });
         this._tools.addButtonToGroup('VTEP:cellTools:table', 'VTEP:cellTools:buttons');
