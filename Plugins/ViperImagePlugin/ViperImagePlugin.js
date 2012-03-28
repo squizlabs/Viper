@@ -324,7 +324,7 @@ ViperImagePlugin.prototype = {
             dfx.setStyle(tmp, 'top', '-9999px');
             dfx.setStyle(tmp, 'position', 'absolute');
             tmp.appendChild(img);
-            document.body.appendChild(tmp);
+            this.viper.addElement(tmp);
 
             dfx.setStyle(img, 'width', '');
             dfx.setStyle(img, 'height', '');

@@ -635,7 +635,7 @@ ViperInlineToolbarPlugin.prototype = {
             }
         });
 
-        document.body.appendChild(this._toolbar);
+        this.viper.addElement(this._toolbar);
 
     },
 

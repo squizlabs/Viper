@@ -17,8 +17,9 @@ function Viper(id, options, callback)
         changeTracking: false
     };
 
-    this._subElementActive = false;
-    this._mainElem         = null;
+    this._viperElementHolder = null;
+    this._subElementActive   = false;
+    this._mainElem           = null;
 
     // This var is used to store the range of Viper before it loses focus. Any plugins
     // that steal focus from Viper element can use getPreviousRange.
@@ -118,6 +119,32 @@ Viper.prototype = {
         ViperChangeTracker.addChangeType('textAdded', 'Inserted', 'insert');
         ViperChangeTracker.addChangeType('merged', 'Merged', 'remove');
 
+    },
+
+    destroy: function()
+    {
+        this.fireCallbacks('Viper:destroy');
+        this.setEnabled(false);
+
+        if (this._viperElementHolder) {
+            dfx.remove(this._viperElementHolder);
+        }
+
+    },
+
+    addElement: function(element)
+    {
+        if (!element) {
+            return;
+        }
+
+        if (!this._viperElementHolder) {
+            var holder = document.createElement('div');
+            Viper.document.body.appendChild(holder);
+            this._viperElementHolder = holder;
+        }
+
+        this._viperElementHolder.appendChild(element);
     },
 
     /**

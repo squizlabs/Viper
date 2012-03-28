@@ -135,7 +135,7 @@ ViperCopyPastePlugin.prototype = {
 
         // Delete the contents of the range.
         this.viper.deleteContents();
-        document.body.appendChild(textInput);
+        this.viper.addElement(textInput);
 
         // Set the focus to textbox.
         textInput.focus();
@@ -178,7 +178,7 @@ ViperCopyPastePlugin.prototype = {
         dfx.setStyle(div, 'position', 'fixed');
         dfx.setStyle(div, 'top', '90px');
         dfx.setStyle(div, 'left', '50px');
-        document.body.appendChild(div);
+        this.viper.addElement(div);
 
         dfx.setHtml(div, contents);
 
@@ -258,7 +258,7 @@ ViperCopyPastePlugin.prototype = {
         dfx.setStyle(textInput, 'height', '0px');
         dfx.setStyle(textInput, 'border', '0px');
 
-        document.body.appendChild(textInput);
+        this.viper.addElement(textInput);
         textInput.focus();
 
         var self          = this;
@@ -304,7 +304,7 @@ ViperCopyPastePlugin.prototype = {
         var div = document.createElement('div');
         div.setAttribute('id', 'ViperPasteDiv');
         div.setAttribute('contentEditable', true);
-        document.body.appendChild(div);
+        this.viper.addElement(div);
 
         return div;
 
