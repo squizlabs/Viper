@@ -2,7 +2,9 @@ function ViperImagePlugin(viper)
 {
     this.viper = viper;
 
-    this._previewBox = null;
+    this._previewBox       = null;
+    this._resizeImage      = null;
+    this._resizeWidgetElem = null;
 
 }
 
@@ -20,7 +22,11 @@ ViperImagePlugin.prototype = {
                 range.selectNode(target);
                 ViperSelection.addRange(range);
                 dfx.preventDefault(e);
+                self.hideImageResizeHandles();
+                self.showImageResizeHandles(target);
                 return false;
+            } else {
+                return self.hideImageResizeHandles(target);
             }
         });
 
@@ -347,6 +353,76 @@ ViperImagePlugin.prototype = {
             dfx.setHtml(previewBox, width + 'px x ' + height + 'px<br/>');
             previewBox.appendChild(img);
         }//end if
+
+    },
+
+    showImageResizeHandles: function(image)
+    {
+        if (!image || !image.parentNode) {
+            return;
+        }
+
+        var self = this;
+        dfxjQuery(image).resizable({
+            handles: 'se,sw',
+            stop: function() {
+                self._fixImageResize();
+            },
+            resize: function() {
+                self._fixImageResize();
+            }
+        });
+
+        this._resizeImage = image;
+
+        var imageFloat = dfx.getStyle(image, 'float');
+
+        this._resizeWidgetElem = dfxjQuery(image).resizable('widget').get(0);
+        dfx.setStyle(this._resizeWidgetElem, 'position', 'relative');
+        dfx.setStyle(this._resizeWidgetElem, 'display', 'inline-block');
+        dfx.setStyle(this._resizeWidgetElem, 'float', imageFloat);
+        dfx.setStyle(this._resizeWidgetElem, 'width', 'auto');
+        dfx.setStyle(this._resizeWidgetElem, 'height', 'auto');
+
+    },
+
+    hideImageResizeHandles: function(elem)
+    {
+        if (!this._resizeImage) {
+            return;
+        }
+
+        if (elem && elem.nodeType === dfx.ELEMENT_NODE) {
+            if (this._resizeWidgetElem === elem || dfx.isChildOf(elem, this._resizeWidgetElem)) {
+                return false;
+            }
+        }
+
+        var width  = dfx.getStyle(this._resizeImage, 'width');
+        var height = dfx.getStyle(this._resizeImage, 'height');
+
+        dfxjQuery(this._resizeImage).resizable('destroy');
+
+        // Fix jQuery fails.
+        dfx.setStyle(this._resizeImage, 'width', width);
+        dfx.setStyle(this._resizeImage, 'height', height);
+        this._fixImageResize();
+        this._resizeImage = null;
+
+    },
+
+    _fixImageResize: function()
+    {
+        dfx.setStyle(this._resizeImage, 'display', '');
+        dfx.setStyle(this._resizeImage, 'left', '');
+        dfx.setStyle(this._resizeImage, 'top', '');
+        dfx.setStyle(this._resizeImage, 'resize', '');
+        dfx.setStyle(this._resizeImage, 'position', '');
+
+        if (this._resizeWidgetElem) {
+            dfx.setStyle(this._resizeWidgetElem, 'left', '');
+            dfx.setStyle(this._resizeWidgetElem, 'top', '');
+        }
 
     }
 
