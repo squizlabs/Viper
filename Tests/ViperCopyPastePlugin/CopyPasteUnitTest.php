@@ -74,6 +74,61 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
 
 
     /**
+     * Test that you can copy and paste in a PRE tag.
+     *
+     * @return void
+     */
+    public function testCopyAndPasteInPreTag()
+    {
+        $dir = dirname(__FILE__).'/Images/';
+
+        $this->selectText('Lorem');
+        $this->clickInlineToolbarButton(dirname(dirname(__FILE__)).'/ViperFormatPlugin/Images/toolbarIcon_toggle_formats_highlighted.png');
+        $this->clickInlineToolbarButton(dirname(dirname(__FILE__)).'/ViperFormatPlugin/Images/toolbarIcon_pre.png');
+
+        $this->keyDown('Key.RIGHT');
+        $this->type(' this is more content');
+        $this->keyDown('Key.ENTER');
+        $this->type('WoW to test PRE');
+
+        $this->assertHTMLMatch('<pre>Lorem this is more contentWoW to test PRE</pre>');
+
+        // Open Word doc, copy its contents.
+        $retval = NULL;
+
+        system('open '.escapeshellarg(dirname(__FILE__).'/CopyPasteDoc.docx'), $retval);
+
+        if ($retval === 1) {
+            $this->markTestSkipped('MS Word is not available');
+            return;
+        } else {
+            sleep(2);
+        }
+
+        // Switch to MS Word.
+        $this->switchApp('Microsoft Word');
+
+        // Copy text.
+        $this->keyDown('Key.CMD + a');
+        sleep(1);
+        $this->keyDown('Key.CMD + c');
+        sleep(1);
+        $this->keyDown('Key.CMD + w');
+        $this->keyDown('Key.CMD + q');
+        sleep(5);
+
+        $this->switchApp($this->getBrowserName());
+        $this->selectText('WoW', 'PRE');
+        $this->keyDown('Key.CMD + v');
+
+        sleep(5);
+
+        $this->assertHTMLMatch('<pre>Lorem this is more contentLorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus ornare ipsum nec felis lacinia a feugiat lectus pellentesque. Praesent in sapien sapien.</pre>');
+
+    }//end testCopyAndPasteInPreTag()
+
+
+    /**
      * Test that copying/pasting from the SpecialCharactersDoc works correctly.
      *
      * @return void
