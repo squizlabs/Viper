@@ -382,6 +382,7 @@ ViperImagePlugin.prototype = {
         dfx.setStyle(this._resizeWidgetElem, 'float', imageFloat);
         dfx.setStyle(this._resizeWidgetElem, 'width', 'auto');
         dfx.setStyle(this._resizeWidgetElem, 'height', 'auto');
+        dfx.setStyle(this._resizeWidgetElem, 'overflow', '');
 
     },
 
@@ -421,6 +422,7 @@ ViperImagePlugin.prototype = {
         if (this._resizeWidgetElem) {
             dfx.setStyle(this._resizeWidgetElem, 'left', '');
             dfx.setStyle(this._resizeWidgetElem, 'top', '');
+            dfx.setStyle(this._resizeWidgetElem, 'overflow', '');
         }
 
     }
