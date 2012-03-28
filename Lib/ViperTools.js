@@ -312,9 +312,9 @@ ViperTools.prototype = {
 
         dfx.setStyle(tmp, 'display', 'block');
         tmp.appendChild(title);
-        document.body.appendChild(tmp);
+        this.viper.addElement(tmp);
         width = (dfx.getElementWidth(title) + 10) + 'px';
-        document.body.removeChild(tmp);
+        tmp.parentNode.removeChild(tmp);
 
         main.appendChild(title);
 
@@ -894,7 +894,7 @@ ViperTools.prototype = {
         dfx.setStyle(popupElement, 'left', '-9999px');
         dfx.setStyle(popupElement, 'top', '-9999px');
         dfx.setStyle(popupElement, 'visibility', 'hidden');
-        document.body.appendChild(popupElement);
+        this.viper.addElement(popupElement);
 
         // Set the pos to be the middle of the screen
         //var windowDim  = dfx.getWindowDimensions();
@@ -924,7 +924,7 @@ ViperTools.prototype = {
         if (popup.openCallback) {
             if (popup.openCallback.call(this) === false) {
                 // Do not open.
-                document.body.removeChild(popupElement);
+                popupElement.parentNode.removeChild(popupElement);
                 return;
             }
         }

@@ -48,8 +48,6 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->selectText('Lorem', 'IPSUM');
 
         $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_link.png');
-        $urlBox = $this->find(dirname(__FILE__).'/Images/toolbarInput_url.png', $this->getInlineToolbar());
-        $this->click($urlBox);
         $this->type('http://www.squizlabs.com');
         $this->keyDown('Key.ENTER');
 
@@ -69,8 +67,6 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->keyDown('Key.SHIFT + Key.RIGHT');
         $this->keyDown('Key.SHIFT + Key.RIGHT');
         $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_link.png');
-        $urlBox = $this->find(dirname(__FILE__).'/Images/toolbarInput_url.png', $this->getInlineToolbar());
-        $this->click($urlBox);
         $this->type('http://www.squizlabs.com');
         $this->keyDown('Key.ENTER');
 
@@ -298,11 +294,11 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
 
 
     /**
-     * Test that a link can be removed.
+     * Test that a link can be removed when you select the text.
      *
      * @return void
      */
-    public function testRemoveLink()
+    public function testRemoveLinkWhenSelectingText()
     {
         $text = $this->find('IPSUM');
         $this->selectText('Lorem');
@@ -327,18 +323,47 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
 
         $this->assertHTMLMatch('<p>Lorem IPSUM dolor</p><p>sit amet <strong>WoW</strong></p>');
 
-    }//end testRemoveLink()
+    }//end testRemoveLinkWhenSelectingText()
 
 
     /**
-     * Test that a link is removed when you use the x button in the URL field
+     * Test that a link can be removed when you click inside the link.
      *
      * @return void
      */
-    public function testRemoveLinkUsingLinkIcon()
+    public function testRemoveLinkWhenClickingInLink()
     {
-        $this->markTestIncomplete('Fails due to issue 1613.');
+        $text = $this->find('IPSUM');
+        $this->selectText('Lorem');
 
+        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_link.png');
+
+        $urlBox = $this->find(dirname(__FILE__).'/Images/toolbarInput_url.png', $this->getInlineToolbar());
+        $this->click($urlBox);
+
+        $this->type('http://www.squizlabs.com');
+        $this->keyDown('Key.TAB');
+        $this->type('Squiz Labs');
+        $this->keyDown('Key.ENTER');
+
+        $this->click($text);
+        $this->click('Lorem');
+        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_removeLink.png');
+
+        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_link.png'), 'Link icon should be available.');
+
+        $this->assertHTMLMatch('<p>Lorem IPSUM dolor</p><p>sit amet <strong>WoW</strong></p>');
+
+    }//end testRemoveLinkWhenSelectingText()
+
+
+    /**
+     * Test that a URL can be cleared from the link field by clicking the x icon
+     *
+     * @return void
+     */
+    public function testClearingTheURLField()
+    {
         $dir  = dirname(__FILE__).'/Images/';
         $text = $this->find('IPSUM');
         $this->selectText('Lorem');
@@ -349,6 +374,8 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->type('http://www.squizlabs.com');
         $this->keyDown('Key.ENTER');
 
+        $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com">Lorem</a> IPSUM dolor</p><p>sit amet <strong>WoW</strong></p>');
+
         $this->click($text);
         $this->selectText('Lorem');
         $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_removeLink.png'), 'Remove link icon should be available.');
@@ -356,18 +383,12 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
 
         $this->clickInlineToolbarButton($dir.'toolbarIcon_link_active.png');
         $this->clickInlineToolbarButton($dir.'toolbarIcon_delete_link.png');
+        $this->type('http://www.google.com');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>Lorem IPSUM dolor</p><p>sit amet <strong>WoW</strong></p>');
+        $this->assertHTMLMatch('<p><a href="http://www.google.com">Lorem</a> IPSUM dolor</p><p>sit amet <strong>WoW</strong></p>');
 
-        $this->click($text);
-        $this->selectText('Lorem');
-        $this->assertFalse($this->inlineToolbarButtonExists($dir.'toolbarIcon_removeLink.png'), 'Remove link icon should not be available.');
-        $this->assertFalse($this->topToolbarButtonExists($dir.'toolbarIcon_removeLink.png'), 'Remove link icon should not be available in top toolbar.');
-        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_link.png'), 'Link icon should be available.');
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_link.png'), 'Link icon should be available in top toolbar.');
-
-    }//end testRemoveLinkUsingLinkIcon()
+    }//end testClearingTheURLField()
 
 
     /**
@@ -519,7 +540,6 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
     }//end testClassAndIdAreAddedToLinkTagAfterReselect()
 
 
-
     /**
      * Test that the selection is maintained when you click on the link icon.
      *
@@ -543,6 +563,43 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
 
 
     }//end testSelectionIsMaintainedWhenYouClickOnLineIcon()
+
+
+    /**
+     * Test that clicking undo puts a link back correctly after you remove it.
+     *
+     * @return void
+     */
+    public function testClickingUndoPutLinkBackCorrectlyAfterItHasBeenRemoved()
+    {
+        $dir = dirname(__FILE__).'/Images/';
+
+        $textLoc = $this->find('dolor');
+        $this->selectText('Lorem');
+
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_link.png');
+        $this->type('http://www.squizlabs.com');
+        $this->keyDown('Key.ENTER');
+
+        $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com">Lorem</a> IPSUM dolor</p><p>sit amet <strong>WoW</strong></p>');
+
+        $this->click($textLoc);
+        $this->selectText('Lorem');
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_removelink.png');
+        $this->click($textLoc);
+        sleep(1);
+        $this->clickTopToolbarButton(dirname(dirname(__FILE__)).'/Core/Images/undoIcon_active.png');
+        $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com">Lorem</a> IPSUM dolor</p><p>sit amet <strong>WoW</strong></p>');
+
+        $this->click($textLoc);
+        $this->click($this->find('Lorem'));
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_removelink.png');
+        $this->click($textLoc);
+        sleep(1);
+        $this->clickTopToolbarButton(dirname(dirname(__FILE__)).'/Core/Images/undoIcon_active.png');
+        $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com">Lorem</a> IPSUM dolor</p><p>sit amet <strong>WoW</strong></p>');
+
+    }//end testClickingUndoPutLinkBackCorrectlyAfterItHasBeenRemoved()
 
 
 }//end class

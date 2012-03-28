@@ -7,7 +7,7 @@
     line-height: 1.8em;
     margin-left: 0.3em;
     min-width: 29px;
-    min-width: 17px\9; /* the only browser hack in the entire app, just for IE8 \o/ */
+/*     min-width: 17px\9; /* the only browser hack in the entire app, just for IE8 \o/ */
     box-sizing: border-box;
     -moz-box-sizing: border-box;
     padding: 0 0.5em;
@@ -23,6 +23,9 @@
     }
     &.viper-hidden {
         display: none;
+    }
+    &.headings {
+        min-width: 30px;
     }
 }
 
@@ -203,18 +206,6 @@
 }
 
 /* Buttons */
-
-// Text button tweaks
-
-.Viper-button.bold {
-    font-weight: bold;
-}
-.Viper-button.italic {
-    font-style: italic;
-}
-.Viper-button.underline {
-    text-decoration: underline;
-}
 
 // Button Vars
 
@@ -463,6 +454,14 @@
     &.searchReplace {
         .icon (53);
     }
+    // Formats Containers
+    &.formats {
+        .icon (54);
+    }
+    // Headings
+    &.headings {
+        .icon (55);
+    }
 
 } // End .buttonIcon
 
@@ -694,6 +693,10 @@
     padding: 0 0.8em;
     font-size: 1.2em;
     cursor: pointer;
+    
+    &.disabled {
+        opacity: 0.4;
+    }
 }
 
 .Viper-checkbox-title {

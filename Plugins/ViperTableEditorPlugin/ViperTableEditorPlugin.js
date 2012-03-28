@@ -232,7 +232,11 @@ ViperTableEditorPlugin.prototype = {
                             self._tools.setButtonActive('insertTable');
                         }
                     } else {
-                        self._tools.setButtonInactive('insertTable');
+                        if (dfx.getParents(node, 'li', self.viper.getViperElement()).length > 0) {
+                            self._tools.disableButton('insertTable');
+                        } else {
+                            self._tools.setButtonInactive('insertTable');
+                        }
                     }
                 }
 
@@ -455,7 +459,7 @@ ViperTableEditorPlugin.prototype = {
             });
         }//end if
 
-        document.body.appendChild(tools);
+        this.viper.addElement(tools);
 
     },
 
@@ -755,7 +759,7 @@ ViperTableEditorPlugin.prototype = {
         dfx.setStyle(hElem, 'top', coords.y1 + 'px');
         dfx.setStyle(hElem, 'left', coords.x1 + 'px');
 
-        document.body.appendChild(hElem);
+        this.viper.addElement(hElem);
         this._highlightElement = hElem;
 
         dfx.addEvent(hElem, 'mousedown', function() {

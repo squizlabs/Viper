@@ -690,6 +690,8 @@ ViperCoreStylesPlugin.prototype = {
 
                     nextEmptyElem = nextEmptyElem.nextSibling;
                 }
+            } else if (range.startOffset === 0 && dfx.trim(dfx.getNodeTextContent(prev)) === '') {
+                dfx.remove(prev);
             }
         }//end if
 
@@ -1124,19 +1126,29 @@ ViperCoreStylesPlugin.prototype = {
         }
 
         if (startNode && endNode) {
-            // Justify.
-            var parent = startNode;
-            if (dfx.isBlockElement(startNode) !== true) {
-                parent = dfx.getFirstBlockParent(startNode);
-            }
+            // Justify state.
+            activeStates.alignment = null;
 
-            if (endNode === parent
-                || parent === dfx.getFirstBlockParent(endNode)
-            ) {
-                var alignment = dfx.getStyle(parent, 'text-align');
-                if (alignment) {
-                    activeStates.alignment = alignment;
+            var startParent = dfx.getFirstBlockParent(startNode);
+            if (startNode !== endNode) {
+                var endParent = dfx.getFirstBlockParent(endNode);
+                var elems     = dfx.getElementsBetween(startParent, endParent);
+                elems.unshift(startParent);
+                elems.push(endParent);
+                var c         = elems.length;
+                for (var i = 0; i < c; i++) {
+                    if (elems[i].nodeType === dfx.ELEMENT_NODE && dfx.isBlockElement(elems[i]) === true) {
+                        var alignment = dfx.getStyle(elems[i], 'text-align');
+                        if (activeStates.alignment !== null && alignment !== activeStates.alignment) {
+                            activeStates.alignment = null;
+                            break;
+                        } else {
+                            activeStates.alignment = alignment;
+                        }
+                    }
                 }
+            } else {
+                activeStates.alignment = dfx.getStyle(startParent, 'text-align');
             }
 
             if (startNode === endNode

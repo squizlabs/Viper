@@ -17,8 +17,9 @@ function Viper(id, options, callback)
         changeTracking: false
     };
 
-    this._subElementActive = false;
-    this._mainElem         = null;
+    this._viperElementHolder = null;
+    this._subElementActive   = false;
+    this._mainElem           = null;
 
     // This var is used to store the range of Viper before it loses focus. Any plugins
     // that steal focus from Viper element can use getPreviousRange.
@@ -118,6 +119,32 @@ Viper.prototype = {
         ViperChangeTracker.addChangeType('textAdded', 'Inserted', 'insert');
         ViperChangeTracker.addChangeType('merged', 'Merged', 'remove');
 
+    },
+
+    destroy: function()
+    {
+        this.fireCallbacks('Viper:destroy');
+        this.setEnabled(false);
+
+        if (this._viperElementHolder) {
+            dfx.remove(this._viperElementHolder);
+        }
+
+    },
+
+    addElement: function(element)
+    {
+        if (!element) {
+            return;
+        }
+
+        if (!this._viperElementHolder) {
+            var holder = document.createElement('div');
+            Viper.document.body.appendChild(holder);
+            this._viperElementHolder = holder;
+        }
+
+        this._viperElementHolder.appendChild(element);
     },
 
     /**
@@ -764,7 +791,10 @@ Viper.prototype = {
         // inserting the new text.
         if (range.collapsed !== true) {
             this.deleteContents();
-            this.initEditableElement();
+
+            if (dfx.trim(dfx.getHtml(this.element)) === '') {
+                this.initEditableElement();
+            }
 
             // Update the range var.
             range = this.getCurrentRange();
@@ -1814,7 +1844,7 @@ Viper.prototype = {
             }//end if
         } else if (dfx.isStubElement(parent) === false) {
             if (dfx.isBlockElement(parent) === false && this.hasBlockChildren(parent) === false) {
-                if (parent.tagName.toLowerCase() !== tag) {
+                if (dfx.isTag(parent, tag) !== true) {
                     // Does not have any block elements, so we can
                     // wrap the content inside the specified tag.
                     if (parent.previousSibling
@@ -3320,7 +3350,7 @@ Viper.prototype = {
                 range.setStart(firstSelectable, 0);
                 ViperSelection.addRange(range);
             }
-        } else if (endNode.nodeType === dfx.ELEMENT_NODE && dfx.isTag(endNode, 'br') === true) {
+        } else if (endNode && endNode.nodeType === dfx.ELEMENT_NODE && dfx.isTag(endNode, 'br') === true) {
             // Firefox adds br tags at the end of new paragraphs sometimes selecting
             // text from somewhere in paragraph to the end of paragraph causes
             // selection issues.

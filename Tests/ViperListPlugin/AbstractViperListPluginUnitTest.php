@@ -33,7 +33,7 @@ abstract class AbstractViperListPluginUnitTest extends AbstractViperUnitTest
     {
         $size = array(
                  'w' => 1300,
-                 'h' => 1100,
+                 'h' => 900,
                 );
 
         return $size;
@@ -99,13 +99,14 @@ abstract class AbstractViperListPluginUnitTest extends AbstractViperUnitTest
     public function testListIconsOnSelection()
     {
         $this->selectText('XabcX', 'VmumV');
-        $this->assertIconStatusesCorrect(TRUE, TRUE, NULL, NULL);
+        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
 
         $this->selectText('XabcX', 'TicT');
-        $this->assertIconStatusesCorrect(TRUE, TRUE, NULL, NULL);
+        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
 
         $this->selectText('VmumV');
-        $this->assertIconStatusesCorrect(TRUE, TRUE, NULL, NULL);
+        sleep(1);
+        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
 
     }//end testListIconsOnSelection()
 

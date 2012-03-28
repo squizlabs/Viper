@@ -433,10 +433,15 @@ ViperLangToolsPlugin.prototype = {
             tools.enableButton('langTools');
 
             if (data.range.collapsed === true) {
+                tools.disableButton('langTools');
+                tools.disableButton('ViperLangToolsPlugin:langButton');
                 tools.disableButton('ViperLangToolsPlugin:abbrButton');
                 tools.disableButton('ViperLangToolsPlugin:acronymButton');
             } else {
                 var node = self.viper.getViperRange().getNodeSelection();
+                tools.enableButton('ViperLangToolsPlugin:langButton');
+                tools.enableButton('langTools');
+
                 if (node && dfx.isBlockElement(node) === true) {
                     tools.disableButton('ViperLangToolsPlugin:abbrButton');
                     tools.disableButton('ViperLangToolsPlugin:acronymButton');

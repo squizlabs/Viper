@@ -32,7 +32,11 @@ ViperListPlugin.prototype = {
                 return self._makeListButtonAction(statuses.list, 'ol');
             }, true);
             tools.createButton('indentList', '', 'Indent List', 'listIndent', function() {
-                self.tabRange();
+                if (self.tabRange(null, false, true) === false) {
+                    self.convertRangeToList();
+                } else {
+                    self.tabRange();
+                }
             }, true);
             tools.createButton('outdentList', '', 'Outdent List', 'listOutdent', function() {
                 self.tabRange(null, true);
@@ -759,6 +763,8 @@ ViperListPlugin.prototype = {
 
     convertRangeToList: function(range, testOnly)
     {
+        range = range = this.viper.getViperRange();
+
         var startNode = range.getStartNode();
         var endNode   = range.getEndNode();
         var bookmark  = null;
@@ -885,6 +891,7 @@ ViperListPlugin.prototype = {
         // Select bookmark.
         this.viper.selectBookmark(bookmark);
 
+        this.viper.fireSelectionChanged(null, true);
         this.viper.fireNodesChanged(this.viper.getViperElement());
 
         return true;
@@ -1040,9 +1047,12 @@ ViperListPlugin.prototype = {
         var canMakeOL = false;
         var list      = null;
 
+
         if (!startNode) {
             return;
         }
+
+        var startParent = null;
 
         if (startNode && this._isListElement(startNode) === true) {
             if (range.collapsed === true && mainToolbar !== true) {
@@ -1055,9 +1065,9 @@ ViperListPlugin.prototype = {
 
             indent   = true;
         } else {
-            var startParent = dfx.getFirstBlockParent(startNode);
-            var endNode     = range.getEndNode();
-            var endParent   = null;
+            startParent   = dfx.getFirstBlockParent(startNode);
+            var endNode   = range.getEndNode();
+            var endParent = null;
 
             if (!endNode) {
                 endParent = startParent;
@@ -1113,9 +1123,17 @@ ViperListPlugin.prototype = {
 
         var increaseIndent = false;
         var decreaseIndent = false;
+
         if (indent === true) {
             increaseIndent = this.canIncreaseIndent(range);
-            decreaseIndent = this.canDecreaseIndent(range);
+
+            if (indent === true) {
+                decreaseIndent = this.canDecreaseIndent(range);
+            }
+        }
+
+        if (mainToolbar === true && startParent && dfx.isTag(startParent, 'p') === true) {
+            increaseIndent = true;
         }
 
         var statuses = {
@@ -1224,6 +1242,7 @@ ViperListPlugin.prototype = {
             var pTags    = self.listToParagraphs(list);
             this.viper.selectBookmark(bookmark);
             self.viper.fireSelectionChanged(null, true);
+            self.viper.fireNodesChanged([self.viper.getViperElement()]);
         }
 
     },

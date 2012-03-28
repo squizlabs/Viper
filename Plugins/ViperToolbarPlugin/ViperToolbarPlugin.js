@@ -54,7 +54,7 @@ function ViperToolbarPlugin(viper)
 ViperToolbarPlugin.prototype = {
     init: function()
     {
-        Viper.document.body.appendChild(this._toolbar);
+        this.viper.addElement(this._toolbar);
 
     },
 
