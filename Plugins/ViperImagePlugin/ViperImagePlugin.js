@@ -24,6 +24,7 @@ ViperImagePlugin.prototype = {
                 self._updateToolbar(target);
                 return false;
             } else {
+                self._updateToolbar();
                 return self.hideImageResizeHandles(target);
             }
         });
