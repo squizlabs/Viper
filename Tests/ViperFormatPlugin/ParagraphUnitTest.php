@@ -15,14 +15,14 @@ class Viper_Tests_ViperFormatPlugin_ParagraphUnitTest extends AbstractViperUnitT
     {
         $dir = dirname(__FILE__).'/Images/';
 
-        $text = 'THIS';
+        $text = 'XuT';
 
         $this->selectText($text);
         $this->selectInlineToolbarLineageItem(0);
         $this->clickInlineToolbarButton($dir.'toolbarIcon_toggle_formats_highlighted.png');
         $this->clickInlineToolbarButton($dir.'toolbarIcon_p.png');
 
-        $this->assertHTMLMatch('<p>Lorem xtn dolor</p><p>sit amet <strong>WoW</strong></p><p>THIS is a paragraph to change to a p</p>');
+        $this->assertHTMLMatch('<p>Lorem xtn dolor</p><p>sit amet <strong>WoW</strong></p><p>XuT paragraph to change to a p</p>');
 
         $this->click($this->find($text));
         $this->selectText($text);
@@ -46,14 +46,14 @@ class Viper_Tests_ViperFormatPlugin_ParagraphUnitTest extends AbstractViperUnitT
     {
         $dir = dirname(__FILE__).'/Images/';
 
-        $text = 'THIS';
+        $text = 'XuT';
 
         $this->selectText($text);
         $this->selectInlineToolbarLineageItem(0);
         $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_formats_highlighted.png');
         $this->clickTopToolbarButton($dir.'toolbarIcon_p.png');
 
-        $this->assertHTMLMatch('<p>Lorem xtn dolor</p><p>sit amet <strong>WoW</strong></p><p>THIS is a paragraph to change to a p</p>');
+        $this->assertHTMLMatch('<p>Lorem xtn dolor</p><p>sit amet <strong>WoW</strong></p><p>XuT paragraph to change to a p</p>');
 
         $this->click($this->find($text));
         $this->selectText($text);
@@ -130,13 +130,13 @@ class Viper_Tests_ViperFormatPlugin_ParagraphUnitTest extends AbstractViperUnitT
     {
         $dir = dirname(__FILE__).'/Images/';
 
-        $this->selectText('THIS');
+        $this->selectText('XuT');
         $this->assertFalse($this->inlineToolbarButtonExists($dir.'toolbarIcon_toggle_formats_highlighted.png'), 'Toogle formats icon should not appear in the inline toolbar');
 
         $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_formats_highlighted.png');
         $this->clickTopToolbarButton($dir.'toolbarIcon_p.png');
 
-        $this->assertHTMLMatch('<p>Lorem xtn dolor</p><p>sit amet <strong>WoW</strong></p><p>THIS is a paragraph to change to a p</p>');
+        $this->assertHTMLMatch('<p>Lorem xtn dolor</p><p>sit amet <strong>WoW</strong></p><p>XuT paragraph to change to a p</p>');
 
     }//end testDivAppliedToParagraphOnPartialSelection()
 
@@ -150,21 +150,21 @@ class Viper_Tests_ViperFormatPlugin_ParagraphUnitTest extends AbstractViperUnitT
     {
         $dir = dirname(__FILE__).'/Images/';
 
-        $this->selectText('THIS');
+        $this->selectText('XuT');
         $this->selectInlineToolbarLineageItem(0);
 
         $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_formats_highlighted.png');
         $this->clickTopToolbarButton($dir.'toolbarIcon_p.png');
 
-        $this->assertHTMLMatch('<p>Lorem xtn dolor</p><p>sit amet <strong>WoW</strong></p><p>THIS is a paragraph to change to a p</p>');
+        $this->assertHTMLMatch('<p>Lorem xtn dolor</p><p>sit amet <strong>WoW</strong></p><p>XuT paragraph to change to a p</p>');
 
-        $this->selectText('THIS');
+        $this->selectText('XuT');
         $this->selectInlineToolbarLineageItem(0);
 
         $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_formats_highlighted.png');
         $this->clickTopToolbarButton($dir.'toolbarIcon_p_active.png');
 
-        $this->assertHTMLMatch('<p>Lorem xtn dolor</p><p>sit amet <strong>WoW</strong></p>THIS is a paragraph to change to a p');
+        $this->assertHTMLMatch('<p>Lorem xtn dolor</p><p>sit amet <strong>WoW</strong></p>XuT paragraph to change to a p');
 
     }//end testApplyingAndRemovingP()
 
@@ -182,14 +182,14 @@ class Viper_Tests_ViperFormatPlugin_ParagraphUnitTest extends AbstractViperUnitT
         $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_formats.png');
         $this->clickTopToolbarButton($dir.'toolbarIcon_blockquote.png');
 
-        $this->assertHTMLMatch('<blockquote><p>Lorem xtn dolor</p><p>sit amet <strong>WoW</strong></p></blockquote><div>THIS is a paragraph to change to a p</div>');
+        $this->assertHTMLMatch('<blockquote><p>Lorem xtn dolor</p><p>sit amet <strong>WoW</strong></p></blockquote><div>XuT paragraph to change to a p</div>');
 
         $this->selectText('WoW');
         $this->selectInlineToolbarLineageItem(1);
         $this->clickInlineToolbarButton($dir.'toolbarIcon_toggle_formats_highlighted.png');
         $this->clickInlineToolbarButton($dir.'toolbarIcon_div.png');
 
-        $this->assertHTMLMatch('<blockquote><p>Lorem xtn dolor</p><div>sit amet <strong>WoW</strong></div></blockquote><div>THIS is a paragraph to change to a p</div>');
+        $this->assertHTMLMatch('<blockquote><p>Lorem xtn dolor</p><div>sit amet <strong>WoW</strong></div></blockquote><div>XuT paragraph to change to a p</div>');
 
     }//end testApplingQuoteToMultipleParagraphs()
 
@@ -203,7 +203,7 @@ class Viper_Tests_ViperFormatPlugin_ParagraphUnitTest extends AbstractViperUnitT
     {
         $dir = dirname(__FILE__).'/Images/';
 
-        $this->selectText('THIS');
+        $this->selectText('XuT');
         $this->selectInlineToolbarLineageItem(0);
         $this->keyDown('Key.RIGHT');
         $this->keyDown('Key.ENTER');
@@ -215,9 +215,94 @@ class Viper_Tests_ViperFormatPlugin_ParagraphUnitTest extends AbstractViperUnitT
         $this->keyDown('Key.ENTER');
         $this->type('More new content');
 
-        $this->assertHTMLMatch('<p>Lorem xtn dolor</p><p>sit amet <strong>WoW</strong></p><div>THIS is a paragraph to change to a p</div><p>New content on the page</p><p>More new content</p>');
+        $this->assertHTMLMatch('<p>Lorem xtn dolor</p><p>sit amet <strong>WoW</strong></p><div>XuT paragraph to change to a p</div><p>New content on the page</p><p>More new content</p>');
 
     }//end testCreatingNewContentWithAPTag()
+
+
+    /**
+     * Tests changing a paragraph to a div and then back again.
+     *
+     * @return void
+     */
+    public function testChangingAParagraphToADiv()
+    {
+        $dir = dirname(__FILE__).'/Images/';
+
+        $this->selectText('Lorem', 'dolor');
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_toggle_formats_highlighted.png');
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_div.png');
+
+        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_div_Active.png'), 'Div icon is not active in the inline toolbar');
+
+        $this->assertHTMLMatch('<div>Lorem xtn dolor</div><p>sit amet <strong>WoW</strong></p><div>XuT paragraph to change to a p</div>');
+
+        $this->selectText('Lorem', 'dolor');
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_toggle_formats_highlighted.png');
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_p.png');
+
+        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_p_active.png'), 'P icon is not active in the inline toolbar');
+
+        $this->assertHTMLMatch('<p>Lorem xtn dolor</p><p>sit amet <strong>WoW</strong></p><div>XuT paragraph to change to a p</div>');
+
+    }//end testChangingAParagraphToADiv()
+
+
+     /**
+     * Tests changing a paragraph to a PRE and then back again.
+     *
+     * @return void
+     */
+    public function testChangingAParagraphToAPre()
+    {
+        $dir = dirname(__FILE__).'/Images/';
+
+        $this->selectText('Lorem', 'dolor');
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_toggle_formats_highlighted.png');
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_pre.png');
+
+        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_pre_Active.png'), 'Pre icon is not active in the inline toolbar');
+
+        $this->assertHTMLMatch('<pre>Lorem xtn dolor</pre><p>sit amet <strong>WoW</strong></p><div>XuT paragraph to change to a p</div>');
+
+        $this->selectText('Lorem', 'dolor');
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_toggle_formats_highlighted.png');
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_p.png');
+
+        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_p_active.png'), 'P icon is not active in the inline toolbar');
+
+        $this->assertHTMLMatch('<p>Lorem xtn dolor</p><p>sit amet <strong>WoW</strong></p><div>XuT paragraph to change to a p</div>');
+
+    }//end testChangingAParagraphToAPre()
+
+
+     /**
+     * Tests changing a paragraph to a Quote and then back again.
+     *
+     * @return void
+     */
+    public function testChangingAParagraphToAQuote()
+    {
+        $dir = dirname(__FILE__).'/Images/';
+
+        $this->selectText('Lorem', 'dolor');
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_toggle_formats_highlighted.png');
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_blockquote.png');
+
+        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_blockquote_active.png'), 'Quote icon is not active in the inline toolbar');
+
+        $this->assertHTMLMatch('<blockquote>Lorem xtn dolor</blockquote><p>sit amet <strong>WoW</strong></p><div>XuT paragraph to change to a p</div>');
+
+        $this->selectText('Lorem', 'dolor');
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_toggle_formats_highlighted.png');
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_p.png');
+
+        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_p_active.png'), 'P icon is not active in the inline toolbar');
+
+        $this->assertHTMLMatch('<p>Lorem xtn dolor</p><p>sit amet <strong>WoW</strong></p><div>XuT paragraph to change to a p</div>');
+
+    }//end testChangingAParagraphToAQuote()
+
 
 }//end class
 

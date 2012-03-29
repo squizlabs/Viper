@@ -7,27 +7,6 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractViperUnitTest
 
 
     /**
-     * Test that only block level elements are aligned.
-     *
-     * @return void
-     */
-    public function testAlignmentInNoneBlockTag()
-    {
-        $this->selectText('WoW');
-        $this->keyDown('Key.RIGHT');
-        $this->keyDown('Key.LEFT');
-
-        $dir = dirname(__FILE__).'/Images/';
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_justification.png');
-        sleep(1);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_alignCenter.png');
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_alignCenter_active.png'));
-        $this->assertHTMLMatch('<p>Lorem xtn dolor</p><p style="text-align: center;">sit amet <strong>WoW</strong></p>');
-
-    }//end testAlignmentInNoneBlockTag()
-
-
-    /**
      * Test that selecting text does not show formatting icons in VITP.
      *
      * @return void
@@ -67,7 +46,7 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractViperUnitTest
         $this->clickInlineToolbarButton($dir.'toolbarIcon_pre.png');
         sleep(1);
         $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_pre_active.png'), 'Toolbar icon not found: toolbarIcon_pre_active.png');
-        $this->assertHTMLMatch('<pre>Lorem xtn dolor</pre><p>sit amet <strong>WoW</strong></p>');
+        $this->assertHTMLMatch('<h1>Heading One</h1><pre>Lorem xtn dolor</pre><p>sit amet <strong>WoW</strong></p>');
 
         $this->click($this->find($text));
         $this->selectText($text);
@@ -76,7 +55,7 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractViperUnitTest
         $this->clickInlineToolbarButton($dir.'toolbarIcon_blockquote.png');
         sleep(1);
         $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_blockquote_active.png'), 'Toolbar icon not found: toolbarIcon_blockquote_active.png');
-        $this->assertHTMLMatch('<blockquote>Lorem xtn dolor</blockquote><p>sit amet <strong>WoW</strong></p>');
+        $this->assertHTMLMatch('<h1>Heading One</h1><blockquote>Lorem xtn dolor</blockquote><p>sit amet <strong>WoW</strong></p>');
 
         $this->click($this->find($text));
         $this->selectText($text);
@@ -85,7 +64,7 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractViperUnitTest
         $this->clickInlineToolbarButton($dir.'toolbarIcon_div.png');
         sleep(1);
         $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_div_active.png'), 'Toolbar icon not found: toolbarIcon_div_active.png');
-        $this->assertHTMLMatch('<div>Lorem xtn dolor</div><p>sit amet <strong>WoW</strong></p>');
+        $this->assertHTMLMatch('<h1>Heading One</h1><div>Lorem xtn dolor</div><p>sit amet <strong>WoW</strong></p>');
 
         $this->click($this->find($text));
         $this->selectText($text);
@@ -94,89 +73,10 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractViperUnitTest
         $this->clickInlineToolbarButton($dir.'toolbarIcon_p.png');
         sleep(1);
         $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_p_active.png'), 'Toolbar icon not found: toolbarIcon_p_active.png');
-        $this->assertHTMLMatch('<p>Lorem xtn dolor</p><p>sit amet <strong>WoW</strong></p>');
+        $this->assertHTMLMatch('<h1>Heading One</h1><p>Lorem xtn dolor</p><p>sit amet <strong>WoW</strong></p>');
 
 
     }//end testBlockFormats()
-
-
-    /**
-     * Test that heading formats work.
-     *
-     * @return void
-     */
-    public function testHeading()
-    {
-        $this->execJS('viper.focus()');
-        sleep(1);
-
-        $dir     = dirname(__FILE__).'/Images/';
-        $buttons = array(
-                    'h1',
-                    'h2',
-                    'h3',
-                    'h4',
-                    'h5',
-                    'h6',
-                   );
-
-        $count = count($buttons);
-        for ($i = 0; $i < $count; $i++) {
-            $tag = $buttons[$i];
-            for ($k = 0; $k < 15; $k++) {
-                $this->keyDown('Key.SHIFT + Key.RIGHT');
-            }
-
-            sleep(1);
-
-            if ($i === 0) {
-                $this->clickInlineToolbarButton($dir.'toolbarIcon_heading.png');
-                sleep(1);
-            }
-
-            $this->clickInlineToolbarButton($dir.'toolbarIcon_'.$tag.'.png');
-
-            $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_'.$tag.'_active.png'), 'Toolbar icon not found: toolbarIcon_'.$tag.'_active.png');
-            $this->assertHTMLMatch('<'.$tag.'>Lorem xtn dolor</'.$tag.'><p>sit amet <strong>WoW</strong></p>');
-
-            for ($j = 0; $j < $count; $j++) {
-                if ($j === $i) {
-                    continue;
-                }
-
-                $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_'.$buttons[$j].'.png'));
-            }
-        }//end for
-
-    }//end testHeading()
-
-
-    /**
-     * Test that creating anchor works.
-     *
-     * @return void
-     */
-    public function testCreateAnchor()
-    {
-        $dir = dirname(__FILE__).'/Images/';
-        $this->selectText('Lorem');
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_anchor.png');
-        $this->clickInlineToolbarButton($dir.'input_anchor.png');
-        $this->type('test');
-        $this->keyDown('Key.ENTER');
-
-        $this->assertHTMLMatch('<p><span id="test">Lorem</span> xtn dolor</p><p>sit amet <strong>WoW</strong></p>');
-
-        $this->click($this->find('dolor'));
-        sleep(1);
-        $this->selectText('Lorem');
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_anchor_active.png'), 'Anchor icon in Top Toolbar should be active.');
-        $this->assertTrue(
-            $this->inlineToolbarButtonExists($dir.'toolbarIcon_anchor_active.png') || $this->inlineToolbarButtonExists($dir.'toolbarIcon_anchor_subActive.png'),
-            'Anchor icon in VITP should be active'
-        );
-
-    }//end testCreateAnchor()
 
 
     /**
@@ -198,87 +98,106 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractViperUnitTest
 
 
     /**
-     * Tests changing a paragraph to a div and then back again.
+     * Test that you can create a new P section inside a DIV and outside the DIV section.
      *
      * @return void
      */
-    public function testChangingAParagraphToADiv()
+    public function testCreatingNewPBeforeAndAfterDivSection()
     {
         $dir = dirname(__FILE__).'/Images/';
 
-        $this->selectText('Lorem', 'dolor');
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_toggle_formats_highlighted.png');
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_div.png');
+        $this->selectText('Lorem', 'WoW');
+        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_formats.png');
+        $this->clickTopToolbarButton($dir.'toolbarIcon_div.png');
+        $this->assertHTMLMatch('<h1>Heading One</h1><div><p>Lorem xtn dolor</p><p>sit amet <strong>WoW</strong></p></div>');
 
-        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_div_Active.png'), 'Div icon is not active in the inline toolbar');
+        $this->selectText('WoW');
+        $this->keyDown('Key.RIGHT');
+        $this->keyDown('Key.ENTER');
+        $this->type('test new line XuT');
+        $this->assertHTMLMatch('<h1>Heading One</h1><div><p>Lorem xtn dolor</p><p>sit amet <strong>WoW</strong></p><p>test new line XuT</p></div>');
 
-        $this->assertHTMLMatch('<div>Lorem xtn dolor</div><p>sit amet <strong>WoW</strong></p>');
+        $this->selectText('XuT');
+        $this->keyDown('Key.RIGHT');
+        $this->keyDown('Key.ENTER');
+        $this->keyDown('Key.ENTER');
+        $this->type('test new paragraph');
+        $this->assertHTMLMatch('<h1>Heading One</h1><div><p>Lorem xtn dolor</p><p>sit amet <strong>WoW</strong></p><p>test new line XuT</p></div><p>test new paragraph</p>');
 
-        $this->selectText('Lorem', 'dolor');
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_toggle_formats_highlighted.png');
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_p.png');
-
-        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_p_active.png'), 'P icon is not active in the inline toolbar');
-
-        $this->assertHTMLMatch('<p>Lorem xtn dolor</p><p>sit amet <strong>WoW</strong></p>');
-
-    }//end testChangingAParagraphToADiv()
+    }//end testCreatingNewPBeforeAndAfterDivSection()
 
 
-     /**
-     * Tests changing a paragraph to a PRE and then back again.
+    /**
+     * Test that multiple P and DIV tags together in the content.
      *
      * @return void
      */
-    public function testChangingAParagraphToAPre()
+    public function testUsingMultiplePAndDivTagsInContent()
     {
         $dir = dirname(__FILE__).'/Images/';
 
-        $this->selectText('Lorem', 'dolor');
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_toggle_formats_highlighted.png');
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_pre.png');
+        $this->selectText('Lorem', 'WoW');
+        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_formats.png');
+        $this->clickTopToolbarButton($dir.'toolbarIcon_div.png');
+        $this->assertHTMLMatch('<h1>Heading One</h1><div><p>Lorem xtn dolor</p><p>sit amet <strong>WoW</strong></p></div>');
 
-        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_pre_Active.png'), 'Pre icon is not active in the inline toolbar');
+        $this->selectText('WoW');
+        $this->keyDown('Key.RIGHT');
+        $this->keyDown('Key.ENTER');
+        $this->keyDown('Key.ENTER');
+        $this->type('TEST new div section');
+        $this->keyDown('Key.ENTER');
+        $this->type('with two paragraphs XuT');
+        $this->selectText('TEST', 'XuT');
+        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_formats.png');
+        $this->clickTopToolbarButton($dir.'toolbarIcon_div.png');
 
-        $this->assertHTMLMatch('<pre>Lorem xtn dolor</pre><p>sit amet <strong>WoW</strong></p>');
+        $this->assertHTMLMatch('<h1>Heading One</h1><div><p>Lorem xtn dolor</p><p>sit amet <strong>WoW</strong></p></div><div><p>TEST new div section</p><p>with two paragraphs XuT</p></div>');
 
-        $this->selectText('Lorem', 'dolor');
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_toggle_formats_highlighted.png');
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_p.png');
+        $this->selectText('Lorem', 'XuT');
+        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_formats.png');
+        $this->clickTopToolbarButton($dir.'toolbarIcon_div.png');
+        $this->assertHTMLMatch('<h1>Heading One</h1><div><div><p>Lorem xtn dolor</p><p>sit amet <strong>WoW</strong></p></div><div><p>TEST new div section</p><p>with two paragraphs XuT</p></div></div>');
 
-        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_p_active.png'), 'P icon is not active in the inline toolbar');
+        $this->selectText('WoW');
+        $this->keyDown('Key.RIGHT');
+        $this->keyDown('Key.ENTER');
+        $this->keyDown('Key.ENTER');
+        $this->type('new paragraph in parent div');
+        $this->keyDown('Key.ENTER');
+        $this->keyDown('Key.ENTER');
+        $this->type('new paragraph in parent div');
+        $this->assertHTMLMatch('<h1>Heading One</h1><div><div><p>Lorem xtn dolor</p><p>sit amet <strong>WoW</strong></p></div><p>new paragraph in parent div</p><p>new paragraph in parent div</p><div><p>TEST new div section</p><p>with two paragraphs XuT</p></div></div>');
 
-        $this->assertHTMLMatch('<p>Lorem xtn dolor</p><p>sit amet <strong>WoW</strong></p>');
+        $this->selectText('WoW');
+        $this->keyDown('Key.RIGHT');
+        $this->keyDown('Key.ENTER');
+        $this->type('new paragraph in child div');
+        $this->assertHTMLMatch('<h1>Heading One</h1><div><div><p>Lorem xtn dolor</p><p>sit amet <strong>WoW</strong></p><p>new paragraph in child div</p></div><p>new paragraph in parent div</p><p>new paragraph in parent div</p><div><p>TEST new div section</p><p>with two paragraphs XuT</p></div></div>');
 
-    }//end testChangingAParagraphToAPre()
+        $this->selectText('XuT');
+        $this->keyDown('Key.RIGHT');
+        $this->keyDown('Key.ENTER');
+        $this->keyDown('Key.ENTER');
+        $this->keyDown('Key.ENTER');
+        $this->type('new paragraph outside parent div');
+        $this->assertHTMLMatch('<h1>Heading One</h1><div><div><p>Lorem xtn dolor</p><p>sit amet <strong>WoW</strong></p><p>new paragraph in child div</p></div><p>new paragraph in parent div</p><p>new paragraph in parent div</p><div><p>TEST new div section</p><p>with two paragraphs XuT</p></div></div><p>new paragraph outside parent div</p>');
+
+        $this->selectText('XuT');
+        $this->keyDown('Key.RIGHT');
+        $this->keyDown('Key.ENTER');
+        $this->keyDown('Key.ENTER');
+        $this->type('new paragraph inside parent div');
+        $this->assertHTMLMatch('<h1>Heading One</h1><div><div><p>Lorem xtn dolor</p><p>sit amet <strong>WoW</strong></p><p>new paragraph in child div</p></div><p>new paragraph in parent div</p><p>new paragraph in parent div</p><div><p>TEST new div section</p><p>with two paragraphs XuT</p></div><p>new paragraph inside parent div</p></div><p>new paragraph outside parent div</p>');
+
+        $this->selectText('XuT');
+        $this->keyDown('Key.RIGHT');
+        $this->keyDown('Key.ENTER');
+        $this->type('new paragraph inside child div');
+        $this->assertHTMLMatch('<h1>Heading One</h1><div><div><p>Lorem xtn dolor</p><p>sit amet <strong>WoW</strong></p><p>new paragraph in child div</p></div><p>new paragraph in parent div</p><p>new paragraph in parent div</p><div><p>TEST new div section</p><p>with two paragraphs XuT</p><p>new paragraph inside child div</p></div><p>new paragraph inside parent div</p></div><p>new paragraph outside parent div</p>');
 
 
-     /**
-     * Tests changing a paragraph to a Quote and then back again.
-     *
-     * @return void
-     */
-    public function testChangingAParagraphToAQuote()
-    {
-        $dir = dirname(__FILE__).'/Images/';
-
-        $this->selectText('Lorem', 'dolor');
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_toggle_formats_highlighted.png');
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_blockquote.png');
-
-        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_blockquote_active.png'), 'Quote icon is not active in the inline toolbar');
-
-        $this->assertHTMLMatch('<blockquote>Lorem xtn dolor</blockquote><p>sit amet <strong>WoW</strong></p>');
-
-        $this->selectText('Lorem', 'dolor');
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_toggle_formats_highlighted.png');
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_p.png');
-
-        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_p_active.png'), 'P icon is not active in the inline toolbar');
-
-        $this->assertHTMLMatch('<p>Lorem xtn dolor</p><p>sit amet <strong>WoW</strong></p>');
-
-    }//end testChangingAParagraphToAQuote()
+    }//end testUsingMultiplePAndDivTagsInContent()
 
 
 }//end class
