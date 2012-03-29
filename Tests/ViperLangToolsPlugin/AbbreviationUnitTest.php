@@ -128,7 +128,6 @@ class Viper_Tests_ViperLangToolsPlugin_AbbreviationUnitTest extends AbstractVipe
         // Reapply the abbreviation so we can delete it by using the update changes icon
         $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language.png');
         $this->clickTopToolbarButton($dir.'toolbarIcon_abbreviation.png');
-        $this->clickTopToolbarButton($dir.'input_abbreviation.png');
         $this->type('abc');
         $this->keyDown('Key.ENTER');
 

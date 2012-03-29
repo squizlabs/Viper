@@ -15,9 +15,11 @@ class Viper_Tests_ViperLangToolsPlugin_LanguageUnitTest extends AbstractViperUni
     {
         $dir = dirname(__FILE__).'/Images/';
 
-        $this->assertFalse($this->topToolbarButtonExists($dir.'toolbarIcon_toggle_language.png'), 'Language icon in Top Toolbar should not be active.');
-        $this->assertFalse($this->topToolbarButtonExists($dir.'toolbarIcon_toggle_language_active.png'), 'Language icon in Top Toolbar should not be active.');
-        $this->assertFalse($this->topToolbarButtonExists($dir.'toolbarIcon_toggle_language_highlighted.png'), 'Language icon in Top Toolbar should not be active.');
+        $this->click($this->find('LOREM'));
+        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_toggle_language_disabled.png'), 'Language icon in Top Toolbar should not be active.');
+
+        $this->selectText('LOREM');
+        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_toggle_language.png'), 'Language icon in Top Toolbar should be active.');
 
     }//end testLanguageIconIsDisabled()
 
@@ -128,7 +130,6 @@ class Viper_Tests_ViperLangToolsPlugin_LanguageUnitTest extends AbstractViperUni
         $this->selectInlineToolbarLineageItem(0);
         $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language.png');
         $this->clickTopToolbarButton($dir.'toolbarIcon_language.png');
-        $this->clickTopToolbarButton($dir.'input_language.png');
         $this->type('en');
         $this->keyDown('Key.ENTER');
 
@@ -146,7 +147,6 @@ class Viper_Tests_ViperLangToolsPlugin_LanguageUnitTest extends AbstractViperUni
         $this->selectInlineToolbarLineageItem(0);
         $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language.png');
         $this->clickTopToolbarButton($dir.'toolbarIcon_language.png');
-        $this->clickTopToolbarButton($dir.'input_language.png');
         $this->type('en');
         $this->clickTopToolbarButton($dir.'toolbarIcon_updateChanges.png');
 
@@ -186,7 +186,6 @@ class Viper_Tests_ViperLangToolsPlugin_LanguageUnitTest extends AbstractViperUni
         // Reapply ThE language so that we can delete it with ThE Update Changes button
         $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language.png');
         $this->clickTopToolbarButton($dir.'toolbarIcon_language.png');
-        $this->clickTopToolbarButton($dir.'input_language.png');
         $this->type('en');
         $this->keyDown('Key.ENTER');
         $this->assertHTMLMatch('<p>LOREM XuT dolor</p><p lang="en">sit amet <strong>WoW</strong></p><p>Test PARA</p><p>Squiz <span lang="en">LABS</span> is orsm</p><p><em>ThE</em> QUICK brown fox</p><p><strong>jumps</strong> <em>OVER</em> the lazy dog</p>');
@@ -231,7 +230,6 @@ class Viper_Tests_ViperLangToolsPlugin_LanguageUnitTest extends AbstractViperUni
         // Reapply ThE language so that we can delete it with ThE Update Changes button
         $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language.png');
         $this->clickTopToolbarButton($dir.'toolbarIcon_language.png');
-        $this->clickTopToolbarButton($dir.'input_language.png');
         $this->type('en');
         $this->keyDown('Key.ENTER');
 
@@ -263,7 +261,6 @@ class Viper_Tests_ViperLangToolsPlugin_LanguageUnitTest extends AbstractViperUni
         $this->selectInlineToolbarLineageItem(0);
         $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language.png');
         $this->clickTopToolbarButton($dir.'toolbarIcon_language.png');
-        $this->clickTopToolbarButton($dir.'input_language.png');
         $this->type('en');
         $this->keyDown('Key.ENTER');
 
@@ -297,7 +294,6 @@ class Viper_Tests_ViperLangToolsPlugin_LanguageUnitTest extends AbstractViperUni
         $this->selectInlineToolbarLineageItem(0);
         $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language.png');
         $this->clickTopToolbarButton($dir.'toolbarIcon_language.png');
-        $this->clickTopToolbarButton($dir.'input_language.png');
         $this->type('en');
         $this->keyDown('Key.ENTER');
 
@@ -330,7 +326,6 @@ class Viper_Tests_ViperLangToolsPlugin_LanguageUnitTest extends AbstractViperUni
         $this->selectText($text);
         $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language.png');
         $this->clickTopToolbarButton($dir.'toolbarIcon_language.png');
-        $this->clickTopToolbarButton($dir.'input_language.png');
         $this->type('en');
         $this->keyDown('Key.ENTER');
 
@@ -362,7 +357,6 @@ class Viper_Tests_ViperLangToolsPlugin_LanguageUnitTest extends AbstractViperUni
         $this->selectText($text);
         $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language.png');
         $this->clickTopToolbarButton($dir.'toolbarIcon_language.png');
-        $this->clickTopToolbarButton($dir.'input_language.png');
         $this->type('en');
         $this->keyDown('Key.ENTER');
 
