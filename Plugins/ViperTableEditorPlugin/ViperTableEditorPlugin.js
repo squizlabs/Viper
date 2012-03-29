@@ -2833,7 +2833,7 @@ ViperTableEditorPlugin.prototype = {
 
         // Insert table to the bookmarks position.
         var keyboardEditorPlugin = this.viper.ViperPluginManager.getPlugin('ViperKeyboardEditorPlugin');
-        var prevNode = keyboardEditorPlugin.splitAtRange(true, range);
+        var prevNode = keyboardEditorPlugin.splitAtRange(true);
         if (dfx.isTag(prevNode, 'li') === true) {
             prevNode.appendChild(table);
             if (dfx.isBlank(dfx.getNodeTextContent(prevNode.nextSibling)) === true) {

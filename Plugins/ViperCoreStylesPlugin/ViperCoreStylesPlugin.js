@@ -52,10 +52,10 @@ ViperCoreStylesPlugin.prototype = {
             toolbarButtons.other = ['hr'];
 
             tools.createButton('bold', '', 'Bold', 'bold', function() {
-                self.handleStyle('strong');
+                return self.handleStyle('strong');
             }, true);
             tools.createButton('italic', '', 'Italic', 'italic', function() {
-                self.handleStyle('em');
+                return self.handleStyle('em');
             }, true);
             tools.createButton('removeFormat', '', 'Remove Format', 'removeFormat', function() {
                 self.removeFormat();
@@ -516,7 +516,7 @@ ViperCoreStylesPlugin.prototype = {
 
     handleJustfy: function(type)
     {
-        var range = this.viper.getCurrentRange();
+        var range = this.viper.getViperRange();
 
         var start = range.startContainer;
         var end   = range.endContainer;
@@ -604,6 +604,7 @@ ViperCoreStylesPlugin.prototype = {
 
         this.viper.fireNodesChanged('ViperCoreStylesPlugin:justify');
         this.viper.fireSelectionChanged(null, true);
+        this.viper.focus();
 
     },
 
@@ -747,7 +748,7 @@ ViperCoreStylesPlugin.prototype = {
 
     removeFormat: function()
     {
-        var range = this.viper.getCurrentRange().cloneRange();
+        var range = this.viper.getViperRange().cloneRange();
         range     = this.viper.adjustRange(range);
 
         var nodeSelection = range.getNodeSelection();
@@ -934,7 +935,7 @@ ViperCoreStylesPlugin.prototype = {
 
     getStyleTags: function()
     {
-        var range = this.viper.getCurrentRange();
+        var range = this.viper.getViperRange();
         var tags  = dfx.getParents(range.startContainer, this.styleTags.join(','));
         return tags;
 

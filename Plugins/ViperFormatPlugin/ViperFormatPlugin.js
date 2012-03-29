@@ -715,7 +715,7 @@ ViperFormatPlugin.prototype = {
     handleFormat: function(type, testOnly)
     {
         testOnly         = testOnly || false;
-        var range        = this.viper.getCurrentRange();
+        var range        = this.viper.getViperRange();
         var selectedNode = range.getNodeSelection();
         var viperElement = this.viper.getViperElement();
 
