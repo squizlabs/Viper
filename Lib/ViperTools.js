@@ -663,7 +663,6 @@ ViperTools.prototype = {
                 }
 
                 if (changeCallback) {
-                    self.viper.focus();
                     changeCallback.call(this, checked, true);
                 }
             }
