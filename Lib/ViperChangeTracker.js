@@ -1476,6 +1476,10 @@ var ViperChangeTracker = {
      */
     removeTrackChanges: function(node, nodeOnly)
     {
+        if (ViperChangeTracker.isTracking() !== true) {
+            return;
+        }
+
         var elems = [];
         if (nodeOnly !== true) {
             elems = dfx.getClass(this._nodeClassName, node);
