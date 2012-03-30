@@ -192,6 +192,27 @@ class Viper_Tests_ViperCoreStylesPlugin_StrikethroughUnitTest extends AbstractVi
     }//end testIconsIsActive()
 
 
+    /**
+     * Test that you can undo strikethrough after you have applied it.
+     *
+     * @return void
+     */
+    public function testUndoStrikethrough()
+    {
+        $dir = dirname(__FILE__).'/Images/';
+
+        $this->selectText('XuT');
+
+        $this->clickTopToolbarButton($dir.'toolbarIcon_strike.png');
+        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_strike_active.png'), 'Subscript icon in the top toolbar is not active');
+
+        $this->assertHTMLMatch('<p>Lorem <del>XuT</del> dolor</p><p>sit <em>amet</em> <strong>WoW</strong></p>');
+
+        $this->clickTopToolbarButton(dirname(dirname(__FILE__)).'/Core/Images/undoIcon_active.png');
+        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p>sit <em>amet</em> <strong>WoW</strong></p>');
+
+    }//end testUndoStrikethrough()
+
 }//end class
 
 ?>
