@@ -57,7 +57,11 @@ ViperAccessibilityPlugin.prototype = {
         }
 
         if (settings.standards) {
-            this._standards = standards;
+            this._standards = settings.standards;
+        }
+
+        if (settings.standard) {
+            this._standard = settings.standard;
         }
 
     },
