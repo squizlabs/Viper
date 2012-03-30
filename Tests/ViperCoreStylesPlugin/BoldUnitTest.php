@@ -137,9 +137,9 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
 
         $this->clickInlineToolbarButton($dir.'toolbarIcon_bold.png');
         $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_bold_active.png'), 'Bold icon in the inline toolbar is not active');
-        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_anchor.png'), 'Anchor icon does not exist in the inline toolbar');
-        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_class.png'), 'Clas icon does not exist in the inline toolbar');
-        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_link.png'), 'Link icon does not exist in the inline toolbar');
+        $this->assertTrue($this->inlineToolbarButtonExists(dirname(dirname(__FILE__)).'/ViperFormatPlugin/Images/toolbarIcon_anchor.png'), 'Anchor icon does not exist in the inline toolbar');
+        $this->assertTrue($this->inlineToolbarButtonExists(dirname(dirname(__FILE__)).'/ViperFormatPlugin/Images/toolbarIcon_class.png'), 'Clas icon does not exist in the inline toolbar');
+        $this->assertTrue($this->inlineToolbarButtonExists(dirname(dirname(__FILE__)).'/ViperLinkPlugin/Images/toolbarIcon_link.png'), 'Link icon does not exist in the inline toolbar');
 
         $this->assertHTMLMatch('<p>Lorem <strong>XuT dolor</strong></p><p>sit <em>amet</em> <strong>WoW</strong></p>');
 
@@ -153,15 +153,17 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
 
         $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p>sit <em>amet</em> <strong>WoW</strong></p>');
 
+        $this->click($this->find('Lorem'));
+        sleep(1);
         $this->selectText('XuT', 'dolor');
         $this->clickTopToolbarButton($dir.'toolbarIcon_bold.png');
 
         $this->assertHTMLMatch('<p>Lorem <strong>XuT dolor</strong></p><p>sit <em>amet</em> <strong>WoW</strong></p>');
 
         $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_bold_active.png'), 'Bold icon in the inline toolbar is not active');
-        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_anchor.png'), 'Anchor icon does not exist in the inline toolbar');
-        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_class.png'), 'Clas icon does not exist in the inline toolbar');
-        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_link.png'), 'Link icon does not exist in the inline toolbar');
+        $this->assertTrue($this->inlineToolbarButtonExists(dirname(dirname(__FILE__)).'/ViperFormatPlugin/Images/toolbarIcon_anchor.png'), 'Anchor icon does not exist in the inline toolbar');
+        $this->assertTrue($this->inlineToolbarButtonExists(dirname(dirname(__FILE__)).'/ViperFormatPlugin/Images/toolbarIcon_class.png'), 'Clas icon does not exist in the inline toolbar');
+        $this->assertTrue($this->inlineToolbarButtonExists(dirname(dirname(__FILE__)).'/ViperLinkPlugin/Images/toolbarIcon_link.png'), 'Link icon does not exist in the inline toolbar');
 
 
     }//end testStrongTagsAppliedCorrectlyWhenReapplyingBold()
