@@ -3055,6 +3055,8 @@ Viper.prototype = {
             return;
         }
 
+        this._viperRange = null;
+
         if (e.which === dfx.DOM_VK_DELETE
             && ViperChangeTracker.isTracking() === true
             && this.isBrowser('firefox') === false

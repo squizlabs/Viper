@@ -153,9 +153,22 @@ ViperKeyboardEditorPlugin.prototype = {
                 || endNode.nodeType === dfx.ELEMENT_NODE && dfx.isTag(endNode, 'br') && !endNode.nextSibling)
             ) {
                 var firstBlock = dfx.getFirstBlockParent(endNode);
-                if (firstBlock && this._tagList.inArray(dfx.getTagName(firstBlock)) === true) {
-                    var p = document.createElement('p');
-                    dfx.setHtml(p, '<br />');
+                if (firstBlock
+                    && (this._tagList.inArray(dfx.getTagName(firstBlock)) === true
+                    || (this.viper.isBrowser('msie') === true && dfx.isTag(firstBlock, 'li') === true))
+                ) {
+                    var content = '<br />';
+                    var tagName = 'p';
+                    if (this.viper.isBrowser('msie') === true) {
+                        if (dfx.isTag(firstBlock, 'li') === true) {
+                            tagName = 'li';
+                        }
+
+                        content = '<br/ > ';
+                    }
+
+                    var p = document.createElement(tagName);
+                    dfx.setHtml(p, content);
 
                     // If the firstBlock is a P tag and it's parent is not the
                     // Viper editable element and its the last child then move this
@@ -171,9 +184,19 @@ ViperKeyboardEditorPlugin.prototype = {
                         dfx.insertAfter(firstBlock, p);
                     }
 
-                    range.selectNode(p.firstChild);
+                    if (p.firstChild.nodeType === dfx.TEXT_NODE) {
+                        range.setStart(p.firstChild, 0);
+                    } else {
+                        range.selectNode(p.firstChild);
+                    }
+
                     range.collapse(true);
                     ViperSelection.addRange(range);
+
+                    if (this.viper.isBrowser('msie') === true) {
+                        setTimeout(function() {dfx.setHtml(p, '&nbsp;')}, 10);
+                    }
+
                     return false;
                 }
             }//end if
