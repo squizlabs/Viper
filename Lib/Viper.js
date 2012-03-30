@@ -2853,17 +2853,13 @@ Viper.prototype = {
                 while (highlight.firstChild) {
                     child = highlight.firstChild;
                     dfx.insertBefore(highlight, child);
-
-                    if (!startNode) {
-                        // Set the selection start.
-                        startNode = child;
-                        range.setStart(child, 0);
-                    }
                 }
 
                 dfx.remove(highlight);
             }
         }//end for
+
+        return true
 
     },
 
@@ -3236,7 +3232,7 @@ Viper.prototype = {
             return false;
         }
 
-        if (inside !== true || this.highlightToSelection() !== true) {
+        if (inside !== true || this.removeHighlights() !== true) {
             this.fireSelectionChanged(this.adjustRange());
         }
 
