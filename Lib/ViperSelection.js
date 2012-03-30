@@ -1,7 +1,9 @@
 var ViperSelection = {
-    _lastRange: null,
     _lastTextRange: null,
     _selection: null,
+
+
+    _viper: null,
 
     /**
      * Returns the selection object for the current browser.
@@ -77,10 +79,8 @@ var ViperSelection = {
                 rangeObj = Viper.document.body.createTextRange();
             }
 
-            var range       = new ViperIERange(rangeObj);
-            this._lastRange = range;
-
-            return this._lastRange;
+            var range = new ViperIERange(rangeObj);
+            return range;
         }//end if
 
     },
@@ -111,6 +111,8 @@ var ViperSelection = {
 
             this._selection.addRange(range.rangeObj);
         }
+
+        this._viper._viperRange = range;
 
     },
 

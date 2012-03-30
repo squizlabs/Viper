@@ -118,6 +118,7 @@ Viper.prototype = {
         ViperChangeTracker.addChangeType('textRemoved', 'Deleted', 'remove');
         ViperChangeTracker.addChangeType('textAdded', 'Inserted', 'insert');
         ViperChangeTracker.addChangeType('merged', 'Merged', 'remove');
+        ViperSelection._viper = this;
 
     },
 
@@ -287,7 +288,9 @@ Viper.prototype = {
         });
 
         dfx.addEvent(elem, 'blur.viper', function(e) {
-            self._viperRange = self._currentRange;
+            if (!self._viperRange) {
+                self._viperRange = self._currentRange;
+            }
         });
 
         dfx.addEvent(elem, 'focus.viper', function(e) {
@@ -2745,8 +2748,6 @@ Viper.prototype = {
 
     highlightToSelection: function(element)
     {
-        this._viperRange = null;
-
         element = element || this.element;
 
         // There should be one...
@@ -2838,7 +2839,6 @@ Viper.prototype = {
         if (highlights.length === 0) {
             return;
         }
-
 
         for (var i = 0; i < highlights.length; i++) {
             var highlight = highlights[i];
@@ -3239,6 +3239,8 @@ Viper.prototype = {
         if (inside !== true || this.highlightToSelection() !== true) {
             this.fireSelectionChanged(this.adjustRange());
         }
+
+        this._viperRange = null;
 
     },
 

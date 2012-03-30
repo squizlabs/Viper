@@ -320,11 +320,14 @@ ViperToolbarPlugin.prototype = {
                     tools.disableButton(subSectionid + '-applyButton');
                     self.viper.focus();
 
-                    try {
-                        action.call(this);
-                    } catch (e) {
-                        console.error(e.message);
-                    }
+                    // IE needs this timeout so focus works <3..
+                    setTimeout(function() {
+                        try {
+                            action.call(this);
+                        } catch (e) {
+                            console.error(e.message);
+                        }
+                    }, 10);
 
                     return false;
                 };
