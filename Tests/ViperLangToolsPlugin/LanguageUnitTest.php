@@ -397,6 +397,32 @@ class Viper_Tests_ViperLangToolsPlugin_LanguageUnitTest extends AbstractViperUni
     }//end testAutoFocusLanguageTextbox()
 
 
+    /**
+     * Test that selection is maintained when switching between language and class.
+     *
+     * @return void
+     */
+    public function testSelectionIsMaintainedWhenSwitchingFromLanguageToClass()
+    {
+        $dir = dirname(__FILE__).'/Images/';
+
+        $this->selectText('XuT');
+        $this->selectInlineToolbarLineageItem(0);
+
+        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language.png');
+        $this->clickTopToolbarButton($dir.'toolbarIcon_language.png');
+        $this->assertEquals('LOREM XuT dolor', $this->getSelectedText(), 'Selected text is not highlighted.');
+
+        $this->clickTopToolbarButton(dirname(dirname(__FILE__)).'/ViperFormatPlugin/Images/toolbarIcon_class.png');
+        $this->assertEquals('LOREM XuT dolor', $this->getSelectedText(), 'Selected text is not highlighted.');
+
+        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language.png');
+        $this->assertEquals('LOREM XuT dolor', $this->getSelectedText(), 'Selected text is not highlighted.');
+
+    }//end testSelectionIsMaintainedWhenSwitchingFromLanguageToClass()
+
+
+
 }//end class
 
 ?>

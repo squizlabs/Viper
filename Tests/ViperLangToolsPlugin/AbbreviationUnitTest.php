@@ -223,6 +223,30 @@ class Viper_Tests_ViperLangToolsPlugin_AbbreviationUnitTest extends AbstractVipe
     }//end testAddingAbbreviationToAItalicWord()
 
 
+    /**
+     * Test that selection is maintained when switching between abbreviation and class.
+     *
+     * @return void
+     */
+    public function testSelectionIsMaintainedWhenSwitchingFromAbbreviationToClass()
+    {
+        $dir = dirname(__FILE__).'/Images/';
+
+        $this->selectText('XuT');
+
+        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language.png');
+        $this->clickTopToolbarButton($dir.'toolbarIcon_abbreviation.png');
+        $this->assertEquals('XuT', $this->getSelectedText(), 'Selected text is not highlighted.');
+
+        $this->clickTopToolbarButton(dirname(dirname(__FILE__)).'/ViperFormatPlugin/Images/toolbarIcon_class.png');
+        $this->assertEquals('XuT', $this->getSelectedText(), 'Selected text is not highlighted.');
+
+        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language.png');
+        $this->assertEquals('XuT', $this->getSelectedText(), 'Selected text is not highlighted.');
+
+    }//end testSelectionIsMaintainedWhenSwitchingFromAbbreviationToClass()
+
+
 }//end class
 
 ?>
