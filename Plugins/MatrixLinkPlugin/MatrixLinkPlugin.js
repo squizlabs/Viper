@@ -199,7 +199,7 @@ MatrixLinkPlugin.prototype = {
         var urlField    = tools.getItem(idPrefix + ':url').element;
         EasyEditAssetManager.getCurrentAsset(function(asset){
                 
-            var initialValue = urlField.getValue(),
+            var initialValue = tools.getItem(idPrefix + ':url').getValue(),
                 focusId = asset.id;
             if (/^[0-9]+$/.test(initialValue)) {     
                 focusId = initialValue;
