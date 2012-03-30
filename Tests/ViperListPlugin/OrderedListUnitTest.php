@@ -376,7 +376,7 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractViperListP
         $this->keyDown('Key.CMD + b');
 
         $this->assertHTMLMatch('<p>XabcX uuuuuu. VmumV</p><p>cPOc ccccc dddd. TicT</p><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa bbbbb ccccc</li><li>4 oNo templates</li><li>Audit XuT content<ol><li><strong>Accessibility audit report</strong></li><li><strong>Recommendations action</strong> plan</li></ol></li><li>Squiz Matrix guide</li></ol><h2>SoD</h2>');
-        
+
     }//end testIndentSelectionKeptStyleApplied()
 
 
@@ -429,7 +429,7 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractViperListP
         $this->keyDown('Key.BACKSPACE');
 
         $this->assertHTMLMatch('<p>XabcX uuuuuu. VmumV</p><p>cPOc ccccc dddd. TicT</p><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa bbbbb ccccc<ol><li>Accessibility audit report</li><li>Recommendations action plan</li></ol></li><li>Squiz Matrix guide</li></ol><h2>SoD</h2>');
-        
+
     }//end testRemoveListItems()
 
 
@@ -543,7 +543,7 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractViperListP
         $this->type('Test 5');
 
         $this->assertHTMLMatch('<p>XabcX uuuuuu. VmumV</p><p>cPOc ccccc dddd. TicT</p><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa bbbbb ccccc</li><li>4 oNo templates</li><li>Test<ol><li>Test 2</li><li>Test 3<ol><li>Test 4</li></ol></li></ol></li><li>Test 5</li><li>Audit XuT content</li><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ol><h2>SoD</h2>');
-        
+
     }//end testNewItemCreation()
 
 
@@ -783,30 +783,6 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractViperListP
 
 
     /**
-     * Test that the heading icon is not available for a list.
-     *
-     * @return void
-     */
-    public function testHeadingIconNotAvailableForList()
-    {
-        $dir = dirname(dirname(__FILE__)).'/ViperFormatPlugin/Images/';
-
-        $this->click($this->find('oNo'));
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_heading_disabled.png'), 'Heading icon should not appear in the top toolbar.');
-
-        $this->selectText('oNo');
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_heading_disabled.png'), 'Heading icon should not appear in the top toolbar.');
-
-        $this->selectInlineToolbarLineageItem(1);
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_heading_disabled.png'), 'Heading icon should not appear in the top toolbar.');
-
-        $this->selectInlineToolbarLineageItem(0);
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_heading_disabled.png'), 'Heading icon should not appear in the top toolbar.');
-
-    }//end testHeadingIconNotAvailableForList()
-
-
-    /**
      * Test that after you remove all items from the list, the undo icon is active and that when you click it the list is replaced.
      *
      * @return void
@@ -822,6 +798,46 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractViperListP
 
     }//end testHeadingIconNotAvailableForList()
 
+
+    /**
+     * Test copy and paste for part of a list.
+     *
+     * @return void
+     */
+    public function testCopyAndPastePartOfList()
+    {
+        $this->selectText('oNo', 'XuT');
+        $this->keyDown('Key.CMD + c');
+
+        $this->selectText('SoD');
+        $this->keyDown('Key.RIGHT');
+        $this->keyDown('Key.ENTER');
+        $this->keyDown('Key.CMD + v');
+
+        $this->assertHTMLMatch('<p>XabcX uuuuuu. VmumV</p><p>cPOc ccccc dddd. TicT</p><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa bbbbb ccccc</li><li>4 oNo templates</li><li>Audit XuT content</li><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ol><h2>SoD</h2><ol><li>oNo templates</li><li>Audit XuT</li></ol><p></p>');
+
+    }//end testCopyAndPastePartOfList()
+
+
+    /**
+     * Test copy and paste a list.
+     *
+     * @return void
+     */
+    public function testCopyAndPasteForAList()
+    {
+        $this->selectText('oNo');
+        $this->selectInlineToolbarLineageItem(0);
+        $this->keyDown('Key.CMD + c');
+
+        $this->selectText('TicT');
+        $this->keyDown('Key.RIGHT');
+        $this->keyDown('Key.ENTER');
+        $this->keyDown('Key.CMD + v');
+
+        $this->assertHTMLMatch('<p>XabcX uuuuuu. VmumV</p><p>cPOc ccccc dddd. TicT</p><ol><li>aaa bbbbb ccccc</li><li>4&nbsp;oNo&nbsp;templates</li><li>Audit XuT content</li><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ol><p>&nbsp;</p><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa bbbbb ccccc</li><li>4 oNo templates</li><li>Audit XuT content</li><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ol><h2>SoD</h2>');
+
+    }//end testCopyAndPasteForAList()
 
 
 }//end class

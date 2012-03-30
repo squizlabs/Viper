@@ -283,6 +283,21 @@ class Viper_Tests_ViperCoreStylesPlugin_ItalicUnitTest extends AbstractViperUnit
     }//end testAddingItalicsToTwoWordsWhereOneIsBold()
 
 
+    /**
+     * Test applying italics to two words where one is bold and one is italics.
+     *
+     * @return void
+     */
+    public function testAddingItalicsToTwoWordsWhereOneIsBoldAndOneItalics()
+    {
+        $dir = dirname(__FILE__).'/Images/';
+
+        $this->selectText('amet', 'WoW');
+        $this->keyDown('Key.CMD + i');
+        $this->assertHTMLMatch('<p>Lorem <strong>XuT</strong> dolor</p><p>sit <em>amet <strong>WoW</strong></em></p>');
+
+    }//end testAddingItalicsToTwoWordsWhereOneIsBoldAndOneItalics()
+
 }//end class
 
 ?>

@@ -3834,6 +3834,12 @@ Viper.prototype = {
 
         this._cleanDOM(elem, tag, true);
 
+        var range = this.getViperRange();
+        var lastElem = range._getLastSelectableChild(elem);
+        if (lastElem && lastElem.nodeType === dfx.TEXT_NODE) {
+            lastElem.data = dfx.rtrim(lastElem.data.replace(/(&nbsp;)*$/, ''));
+        }
+
         return elem;
 
     },
@@ -3916,6 +3922,25 @@ Viper.prototype = {
                     // Nothing to see here PHPCS.
                 break;
 
+                case 'strong':
+                case 'em':
+                    if (dfx.isTag(node.parentNode, tagName) === true) {
+                        // Same as parent tag, move child nodes out and remove this
+                        // node.
+                        while (node.firstChild) {
+                            dfx.insertBefore(node, node.firstChild);
+                        }
+
+                        dfx.remove(node);
+                        break;
+                    } else if (node.previousSibling && dfx.isTag(node.previousSibling, tagName) === true) {
+                        while (node.firstChild) {
+                            node.previousSibling.appendChild(node.firstChild);
+                        }
+
+                        dfx.remove(node);
+                        break;
+                    }
                 default:
                     if (dfx.isStubElement(node) === false && !node.firstChild) {
                         // Any span with no content and class _my4_keyword is a keyword replacing with nothing.

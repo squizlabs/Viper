@@ -445,10 +445,14 @@ ViperToolbarPlugin.prototype = {
 
     closeBubble: function(bubbleid)
     {
-        this._closeBubble(bubbleid);
+        if (!this._activeBubble) {
+            return;
+        }
 
-        this.viper.focus();
-        this.viper.highlightToSelection();
+        if (this._closeBubble(bubbleid) !== false) {
+            this.viper.focus();
+            this.viper.highlightToSelection();
+        }
 
     },
 
@@ -457,8 +461,10 @@ ViperToolbarPlugin.prototype = {
         dfx.removeClass(this.viper.ViperTools.getItem(this._bubbleButtons[bubbleid]).element, 'selected');
         var bubble     = this.viper.ViperTools.getItem(bubbleid);
         var bubbleElem = bubble.element;
-        if (bubbleElem.parentNode) {
+        if (bubbleElem.parentNode && bubbleElem.parentNode.nodeType !== dfx.DOCUMENT_FRAGMENT_NODE) {
             bubbleElem.parentNode.removeChild(bubbleElem);
+        } else {
+            return false;
         }
 
         if (bubble._closeCallback) {
@@ -492,7 +498,7 @@ ViperToolbarPlugin.prototype = {
             bubble._openCallback.call(this);
         }
 
-        if (!bubbleElem.parentNode) {
+        if (!bubbleElem.parentNode || bubbleElem.parentNode.nodeType === dfx.DOCUMENT_FRAGMENT_NODE) {
             this._toolbar.appendChild(bubbleElem);
         }
 

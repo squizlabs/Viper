@@ -347,7 +347,9 @@ ViperCopyPastePlugin.prototype = {
             html = dfx.stripTags(html, this.allowedTags.split('|'));
         }
 
-        html = dfx.trim(html);
+        if (html) {
+            html = dfx.trim(html);
+        }
 
         if (!html) {
             this._updateSelection();
@@ -441,6 +443,10 @@ ViperCopyPastePlugin.prototype = {
     _cleanWordPaste: function(content)
     {
         // Meta and link tags.
+        if (!content) {
+            return content;
+        }
+
         content = dfx.trim(content);
         content = content.replace(/<(meta|link)[^>]+>/gi, "");
 

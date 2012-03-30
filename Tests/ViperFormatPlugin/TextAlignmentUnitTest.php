@@ -7,6 +7,27 @@ class Viper_Tests_ViperFormatPlugin_TextAlignmentUnitTest extends AbstractViperU
 
 
     /**
+     * Test that only block level elements are aligned.
+     *
+     * @return void
+     */
+    public function testAlignmentInNoneBlockTag()
+    {
+        $this->selectText('XuT');
+        $this->keyDown('Key.RIGHT');
+        $this->keyDown('Key.LEFT');
+
+        $dir = dirname(__FILE__).'/Images/';
+        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_justification.png');
+        sleep(1);
+        $this->clickTopToolbarButton($dir.'toolbarIcon_alignCenter.png');
+        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_alignCenter_active.png'));
+        $this->assertHTMLMatch('<p style="text-align: left;">sit amet WoW</p><p style="text-align: center;">RsR TpT</p><p style="text-align: right;">QvQ KyK</p><p style="text-align: justify;">MrM GaG</p><p style="text-align: center;">LOREM XuT dolor</p><p>test <strong>BOLD</strong> text</p><p>test ITALICS text.</p>');
+
+    }//end testAlignmentInNoneBlockTag()
+
+
+    /**
      * Test that you can apply left justification to a paragraph.
      *
      * @return void

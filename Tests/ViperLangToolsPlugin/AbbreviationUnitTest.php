@@ -128,7 +128,6 @@ class Viper_Tests_ViperLangToolsPlugin_AbbreviationUnitTest extends AbstractVipe
         // Reapply the abbreviation so we can delete it by using the update changes icon
         $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language.png');
         $this->clickTopToolbarButton($dir.'toolbarIcon_abbreviation.png');
-        $this->clickTopToolbarButton($dir.'input_abbreviation.png');
         $this->type('abc');
         $this->keyDown('Key.ENTER');
 
@@ -222,6 +221,30 @@ class Viper_Tests_ViperLangToolsPlugin_AbbreviationUnitTest extends AbstractVipe
         $this->assertHTMLMatch('<p>LOREM XuT dolor</p><p>sit amet <strong>WoW</strong></p><p>Squiz <abbr title="abc">LABS</abbr> is orsm</p><p>The <abbr title="abc"><em>QUICK</em></abbr> brown fox</p>');
 
     }//end testAddingAbbreviationToAItalicWord()
+
+
+    /**
+     * Test that selection is maintained when switching between abbreviation and class.
+     *
+     * @return void
+     */
+    public function testSelectionIsMaintainedWhenSwitchingFromAbbreviationToClass()
+    {
+        $dir = dirname(__FILE__).'/Images/';
+
+        $this->selectText('XuT');
+
+        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language.png');
+        $this->clickTopToolbarButton($dir.'toolbarIcon_abbreviation.png');
+        $this->assertEquals('XuT', $this->getSelectedText(), 'Selected text is not highlighted.');
+
+        $this->clickTopToolbarButton(dirname(dirname(__FILE__)).'/ViperFormatPlugin/Images/toolbarIcon_class.png');
+        $this->assertEquals('XuT', $this->getSelectedText(), 'Selected text is not highlighted.');
+
+        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language.png');
+        $this->assertEquals('XuT', $this->getSelectedText(), 'Selected text is not highlighted.');
+
+    }//end testSelectionIsMaintainedWhenSwitchingFromAbbreviationToClass()
 
 
 }//end class

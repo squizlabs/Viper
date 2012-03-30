@@ -166,7 +166,7 @@ ViperLinkPlugin.prototype = {
                 }
             }
         } else {
-            var bookmark = this.viper.createBookmark(range);
+            var bookmark = this.viper.createBookmark();
             var elems    = dfx.getElementsBetween(bookmark.start, bookmark.end);
             var prevNode = null;
             for (var i = 0; i < elems.length; i++) {

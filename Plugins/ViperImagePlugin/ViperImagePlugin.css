@@ -1,7 +1,7 @@
 .ui-resizable-handle {
     position: absolute;
-    width: 25px;
-    height: 25px;
+    width: 19px;
+    height: 19px;
     background: transparent url(Images/resizers.png) 0 0 no-repeat;
 }
 
@@ -12,7 +12,7 @@
 }
 
 .ui-resizable-sw {
-    background-position: -25px 0;
+    background-position: -19px 0;
     bottom: -10px;
     left: -10px;
     cursor: sw-resize;
