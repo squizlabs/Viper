@@ -84,13 +84,24 @@ MatrixImagePlugin.prototype = {
      */
     pickAsset: function()
     {
-        var tools    = this.viper.ViperTools;
-        var urlField = tools.getItem('ViperImagePlugin:urlInput');
+        var tools       = this.viper.ViperTools;
+        var urlField    = tools.getItem('ViperImagePlugin:urlInput');
         EasyEditAssetManager.getCurrentAsset(function(asset){
+                
+            var initialValue = urlField.getValue(),
+                focusId = asset.id;
+            if (/^[0-9]+$/.test(initialValue)) {     
+                focusId = initialValue;
+            }// End if
+                
             EasyEditAssetFinder.init({
-                focusAssetId: asset.id,
+                focusAssetId: focusId,
                 callback: function(selectedAsset){
-                    urlField.setValue(selectedAsset.id, false);
+                    if (selectedAsset.attribute('type_code') === 'image') {
+                        urlField.setValue('./?a=' + selectedAsset.id,false);
+                    } else {
+                        alert(EasyEditLocalise.translate('You have selected a %1 asset. Only image assets can be selected.',selectedAsset.attribute('type_code')));
+                    }// End if
                 }
             });
         });

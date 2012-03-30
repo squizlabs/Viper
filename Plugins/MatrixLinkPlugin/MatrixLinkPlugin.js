@@ -195,13 +195,20 @@ MatrixLinkPlugin.prototype = {
      */
     pickAsset: function(idPrefix)
     {
-        var tools    = this.viper.ViperTools;
-        var urlField = tools.getItem(idPrefix + ':url').element;
+        var tools       = this.viper.ViperTools;
+        var urlField    = tools.getItem(idPrefix + ':url').element;
         EasyEditAssetManager.getCurrentAsset(function(asset){
+                
+            var initialValue = urlField.getValue(),
+                focusId = asset.id;
+            if (/^[0-9]+$/.test(initialValue)) {     
+                focusId = initialValue;
+            }// End if
+                
             EasyEditAssetFinder.init({
-                focusAssetId: asset.id,
+                focusAssetId: focusId,
                 callback: function(selectedAsset){
-                    tools.getItem(idPrefix + ':url').setValue(selectedAsset.id, false);
+                    tools.getItem(idPrefix + ':url').setValue(selectedAsset.id,false);
                 }
             });
         });
