@@ -63,6 +63,10 @@ ViperListPlugin.prototype = {
                 var range     = self.viper.getViperRange();
                 var startNode = range.getStartNode();
                 if (!startNode) {
+                    startNode = range.startContainer;
+                }
+
+                if (!startNode) {
                     return;
                 }
 
@@ -442,6 +446,17 @@ ViperListPlugin.prototype = {
             this.viper.selectBookmark(bookmark);
             this.viper.adjustRange();
             if (updated === true) {
+                if (this.viper.isBrowser('msie') === true) {
+                    if (outdent === false) {
+                        range.moveStart("character", -1);
+                    } else {
+                        range.moveStart("character", 1);
+                    }
+
+                    range.collapse(true);
+                    ViperSelection.addRange(range);
+                }
+
                 this.viper.fireNodesChanged([range.getCommonElement()]);
                 this.viper.fireSelectionChanged(null, true);
             }

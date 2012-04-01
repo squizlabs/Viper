@@ -149,24 +149,17 @@ ViperKeyboardEditorPlugin.prototype = {
             var range   = this.viper.getViperRange();
             var endNode = range.getEndNode();
             if (range.collapsed === true
+                && this.viper.isBrowser('msie') === false
                 && ((endNode.nodeType === dfx.TEXT_NODE && range.endOffset === range.endContainer.data.length)
                 || endNode.nodeType === dfx.ELEMENT_NODE && dfx.isTag(endNode, 'br') && !endNode.nextSibling)
             ) {
                 var firstBlock = dfx.getFirstBlockParent(endNode);
                 if (firstBlock
-                    && (this._tagList.inArray(dfx.getTagName(firstBlock)) === true
-                    || (this.viper.isBrowser('msie') === true && dfx.isTag(firstBlock, 'li') === true))
+                    && (this._tagList.inArray(dfx.getTagName(firstBlock)) === true)
+             //       || (this.viper.isBrowser('msie') === true && dfx.isTag(firstBlock, 'li') === true))
                 ) {
                     var content = '<br />';
                     var tagName = 'p';
-                    if (this.viper.isBrowser('msie') === true) {
-                        if (dfx.isTag(firstBlock, 'li') === true) {
-                            tagName = 'li';
-                        }
-
-                        content = '<br/ > ';
-                    }
-
                     var p = document.createElement(tagName);
                     dfx.setHtml(p, content);
 
@@ -193,16 +186,21 @@ ViperKeyboardEditorPlugin.prototype = {
                     range.collapse(true);
                     ViperSelection.addRange(range);
 
-                    if (this.viper.isBrowser('msie') === true) {
-                        setTimeout(function() {dfx.setHtml(p, '&nbsp;')}, 10);
-                    }
-
                     return false;
                 }
             }//end if
 
             var startNode   = range.getStartNode();
-            var blockParent = dfx.getFirstBlockParent(startNode);
+            var blockParent = null;
+            if (!startNode) {
+                startNode = range.startContainer;
+                if (dfx.isBlockElement(startNode) === true) {
+                    blockParent = startNode;
+                }
+            } else {
+                blockParent = dfx.getFirstBlockParent(startNode);
+            }
+
             if (startNode && dfx.isTag(blockParent, 'pre') === true) {
                 if (startNode.parentNode === blockParent
                     && startNode.nodeType === dfx.TEXT_NODE

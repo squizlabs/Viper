@@ -3269,7 +3269,7 @@ Viper.prototype = {
      */
     adjustRange: function(range)
     {
-        range = range || this.getCurrentRange();
+        range = range || this.getViperRange();
         if (range.collapsed !== false) {
             return range;
         }

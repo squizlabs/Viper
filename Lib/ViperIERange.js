@@ -579,6 +579,23 @@ ViperIERange.prototype = {
 
     },
 
+    getStartNode: function()
+    {
+        if (!this.startContainer) {
+            return null;
+        }
+
+        if (this.startContainer.nodeType === dfx.ELEMENT_NODE) {
+            var node = this.startContainer.childNodes[this.startOffset];
+            if (node) {
+                return node;
+            }
+        }
+
+        return this.startContainer;
+
+    },
+
     /**
      * Sets the collapsed property on the range. This method should be called
      * when any modifications are made to the range.
