@@ -3042,6 +3042,15 @@ Viper.prototype = {
 
     },
 
+
+    /**
+     * Keeps track of range status during keydown and keyup event.
+     *
+     * This var prevents keyUp event firing selectionChanged for each key up event.
+     * Its for performance reasons only.
+     */
+    _keyDownRangeCollapsed: true,
+
     /**
      * Handle the keyDown event.
      *
@@ -3056,6 +3065,11 @@ Viper.prototype = {
         }
 
         this._viperRange = null;
+
+        if (this._keyDownRangeCollapsed === true) {
+            var range = this.getCurrentRange();
+            this._keyDownRangeCollapsed = range.collapsed;
+        }
 
         if (e.which === dfx.DOM_VK_DELETE
             && ViperChangeTracker.isTracking() === true
@@ -3201,7 +3215,15 @@ Viper.prototype = {
             }
         }
 
-        this.fireSelectionChanged();
+        if (this._keyDownRangeCollapsed === false
+            || e.which === 8
+            || e.which === 46
+            || (e.which >= 37 && e.which <= 40)
+        ) {
+            this.fireSelectionChanged();
+        }
+
+        this._keyDownRangeCollapsed = true;
 
     },
 

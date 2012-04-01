@@ -636,9 +636,21 @@ ViperToolbarPlugin.prototype = {
             return;
         }
 
+        if (this.viper.isBrowser('msie') === true) {
+            // IE fix.. When a toolbar button is clicked IE moves the selection to that
+            // button unless the button no longer exists... So we remove the toolbar
+            // here to prevent selection changing......
+            var parent = this._toolbar.parentNode;
+            parent.removeChild(this._toolbar);
+        }
+
         range = range || this.viper.getCurrentRange();
 
         this.viper.fireCallbacks('ViperToolbarPlugin:updateToolbar', {range: range});
+
+        if (this.viper.isBrowser('msie') === true) {
+            parent.appendChild(this._toolbar);
+        }
 
     }
 
