@@ -351,6 +351,11 @@ ViperInlineToolbarPlugin.prototype = {
                 dfx.preventDefault(e);
             }
 
+            var button = tools.getItem(subSectionid + '-applyButton');
+            if (button.isEnabled() === false) {
+                return false;
+            }
+
             viper.focus();
 
             try {

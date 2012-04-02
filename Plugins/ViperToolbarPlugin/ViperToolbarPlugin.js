@@ -317,6 +317,11 @@ ViperToolbarPlugin.prototype = {
                 }
 
                 subSection.form.onsubmit = function() {
+                    var button = tools.getItem(subSectionid + '-applyButton');
+                    if (button.isEnabled() === false) {
+                        return false;
+                    }
+
                     tools.disableButton(subSectionid + '-applyButton');
                     self.viper.focus();
 

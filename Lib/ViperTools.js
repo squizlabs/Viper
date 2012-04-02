@@ -197,6 +197,10 @@ ViperTools.prototype = {
             setMouseUpAction: function(callback)
             {
                 mouseUpAction = callback;
+            },
+            isEnabled: function()
+            {
+                return !dfx.hasClass(button, 'disabled');
             }
         });
 
