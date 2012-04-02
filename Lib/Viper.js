@@ -132,6 +132,11 @@ Viper.prototype = {
 
     },
 
+    /**
+     * Adds a Viper related element to Viper elements holder.
+     *
+     * Plugins should use this method to add their elements to DOM.
+     */
     addElement: function(element)
     {
         if (!element) {
@@ -142,6 +147,15 @@ Viper.prototype = {
             var holder = document.createElement('div');
             Viper.document.body.appendChild(holder);
             this._viperElementHolder = holder;
+
+            // Add browser type.
+            var browser = this.getBrowserType();
+            var version = this.getBrowserVersion();
+
+            if (browser && version) {
+                dfx.addClass(this._viperElementHolder, 'Viper-browser-' + browser);
+                dfx.addClass(this._viperElementHolder, 'Viper-browserVer-' + browser + version);
+            }
         }
 
         this._viperElementHolder.appendChild(element);
@@ -188,6 +202,45 @@ Viper.prototype = {
         }
 
         return this._browserType;
+
+    },
+
+    getBrowserVersion: function()
+    {
+        var browsers = ['MSIE', 'Chrome', 'Safari', 'Firefox'];
+        var c        = browsers.length;
+        var uAgent   = navigator.userAgent;
+
+        var browserName = null;
+        for (var i = 0; i < c; i++) {
+            var nameIndex = uAgent.indexOf(browsers[i]);
+            if (nameIndex >= 0) {
+                browserName = browsers[i];
+                break;
+            }
+        }
+
+        if (!browserName) {
+            return null;
+        }
+
+        if (browserName === 'Safari') {
+            browserName = 'Version';
+        }
+
+        var re = null;
+        if (browserName === 'MSIE') {
+            re = new RegExp('MSIE (\\d+)');
+        } else {
+            re = new RegExp(browserName + '/(\\d+)');
+        }
+
+        var matches = re.exec(uAgent);
+        if (!matches) {
+            return null;
+        }
+
+        return parseInt(matches[1]);
 
     },
 
