@@ -48,6 +48,10 @@ ViperImagePlugin.prototype = {
             }
         });
 
+        this.viper.registerCallback('ViperHistoryManager:beforeUndo', 'ViperImagePlugin', function() {
+            self.hideImageResizeHandles();
+        });
+
     },
 
     rangeToImage: function(range, url, alt, title)
@@ -377,7 +381,9 @@ ViperImagePlugin.prototype = {
             aspectRatio: true,
             stop: function() {
                 self._fixImageResize();
+                self.hideImageResizeHandles(image);
                 self.viper.fireNodesChanged();
+                self.showImageResizeHandles(image);
             },
             resize: function(e) {
                 self._fixImageResize();

@@ -114,6 +114,8 @@ ViperHistoryManager.prototype = {
             return;
         }
 
+        this.viper.fireCallbacks('ViperHistoryManager:beforeUndo');
+
         // Get the current state of the content and add it to redo list.
         var range        = this.viper.getCurrentRange();
 
