@@ -1134,7 +1134,13 @@ ViperCoreStylesPlugin.prototype = {
             // Justify state.
             activeStates.alignment = null;
 
-            var startParent = dfx.getFirstBlockParent(startNode);
+            var startParent = null;
+            if (!selectedNode || dfx.isBlockElement(selectedNode) === false) {
+                startParent = dfx.getFirstBlockParent(startNode);
+            } else {
+                startParent = selectedNode;
+            }
+
             if (startNode !== endNode) {
                 var endParent = dfx.getFirstBlockParent(endNode);
                 var elems     = dfx.getElementsBetween(startParent, endParent);
