@@ -922,10 +922,14 @@ ViperCoreStylesPlugin.prototype = {
             return false;
         }
 
+        this.viper.ViperHistoryManager.begin();
+
         // Apply the new tag.
         this.applyTag(style);
 
         this.viper.fireNodesChanged([commonParent]);
+        this.viper.ViperHistoryManager.end();
+
         this.viper.fireSelectionChanged(this.viper.adjustRange(), true);
 
         // Prevent event bubbling etc.
