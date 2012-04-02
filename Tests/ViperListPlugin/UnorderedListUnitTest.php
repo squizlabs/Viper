@@ -759,7 +759,7 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperLis
 
     }//end testListIconsAvailableInTableCell()*/
 
-    
+
     /**
      * Test that after you remove all items from the list, the undo icon is active and that when you click it the list is replaced.
      *
@@ -775,6 +775,47 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperLis
         $this->assertHTMLMatch('<p>XabcX uuuuuu. VmumV</p><p>cPOc ccccc dddd. TicT</p><p>ajhsd sjsjwi hhhh:</p><ul><li>aaa bbbbb ccccc</li><li>4 oNo templates</li><li>Audit XuT content</li><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ul><h2>SoD</h2>');
 
     }//end testHeadingIconNotAvailableForList()
+
+
+    /**
+     * Test copy and paste for part of a list.
+     *
+     * @return void
+     */
+    public function testCopyAndPastePartOfList()
+    {
+        $this->selectText('oNo', 'XuT');
+        $this->keyDown('Key.CMD + c');
+
+        $this->selectText('SoD');
+        $this->keyDown('Key.RIGHT');
+        $this->keyDown('Key.ENTER');
+        $this->keyDown('Key.CMD + v');
+
+        $this->assertHTMLMatch('<p>XabcX uuuuuu. VmumV</p><p>cPOc ccccc dddd. TicT</p><p>ajhsd sjsjwi hhhh:</p><ul><li>aaa bbbbb ccccc</li><li>4 oNo templates</li><li>Audit XuT content</li><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ul><h2>SoD</h2><ul><li>oNo templates</li><li>Audit XuT</li></ul><p></p>');
+
+    }//end testCopyAndPastePartOfList()
+
+
+    /**
+     * Test copy and paste a list.
+     *
+     * @return void
+     */
+    public function testCopyAndPasteForAList()
+    {
+        $this->selectText('oNo');
+        $this->selectInlineToolbarLineageItem(0);
+        $this->keyDown('Key.CMD + c');
+
+        $this->selectText('TicT');
+        $this->keyDown('Key.RIGHT');
+        $this->keyDown('Key.ENTER');
+        $this->keyDown('Key.CMD + v');
+
+        $this->assertHTMLMatch('<p>XabcX uuuuuu. VmumV</p><p>cPOc ccccc dddd. TicT</p><ul><li>aaa bbbbb ccccc</li><li>4&nbsp;oNo&nbsp;templates</li><li>Audit XuT content</li><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ul><p>&nbsp;</p><p>ajhsd sjsjwi hhhh:</p><ul><li>aaa bbbbb ccccc</li><li>4 oNo templates</li><li>Audit XuT content</li><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ul><h2>SoD</h2>');
+
+    }//end testCopyAndPasteForAList()
 
 
 }//end class

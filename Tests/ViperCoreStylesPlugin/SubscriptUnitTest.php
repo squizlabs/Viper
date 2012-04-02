@@ -195,6 +195,29 @@ class Viper_Tests_ViperCoreStylesPlugin_SubscriptUnitTest extends AbstractViperU
     }//end testIconsIsActive()
 
 
+    /**
+     * Test that you can undo subscript after you have applied it.
+     *
+     * @return void
+     */
+    public function testUndoSubscript()
+    {
+        $dir = dirname(__FILE__).'/Images/';
+
+        $this->selectText('XuT');
+
+        $this->clickTopToolbarButton($dir.'toolbarIcon_sub.png');
+        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_sub_active.png'), 'Subscript icon in the top toolbar is not active');
+
+        $this->assertHTMLMatch('<p>Lorem <sub>XuT</sub> dolor</p><p>sit <em>amet</em> <strong>WoW</strong></p>');
+
+        $this->clickTopToolbarButton(dirname(dirname(__FILE__)).'/Core/Images/undoIcon_active.png');
+        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p>sit <em>amet</em> <strong>WoW</strong></p>');
+
+    }//end testUndoSubscript()
+
+
+
 }//end class
 
 ?>

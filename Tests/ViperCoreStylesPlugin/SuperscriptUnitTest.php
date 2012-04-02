@@ -172,7 +172,7 @@ class Viper_Tests_ViperCoreStylesPlugin_SuperscriptUnitTest extends AbstractVipe
 
 
     /**
-     * Test that the subscript icon is active when you select a word that has superscript applied.
+     * Test that the superscript icon is active when you select a word that has superscript applied.
      *
      * @return void
      */
@@ -193,6 +193,27 @@ class Viper_Tests_ViperCoreStylesPlugin_SuperscriptUnitTest extends AbstractVipe
 
     }//end testIconsIsActive()
 
+
+    /**
+     * Test that you can undo superscript after you have applied it.
+     *
+     * @return void
+     */
+    public function testUndoSuperscript()
+    {
+        $dir = dirname(__FILE__).'/Images/';
+
+        $this->selectText('XuT');
+
+        $this->clickTopToolbarButton($dir.'toolbarIcon_sup.png');
+        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_sup_active.png'), 'Subscript icon in the top toolbar is not active');
+
+        $this->assertHTMLMatch('<p>Lorem <sup>XuT</sup> dolor</p><p>sit <em>amet</em> <strong>WoW</strong></p>');
+
+        $this->clickTopToolbarButton(dirname(dirname(__FILE__)).'/Core/Images/undoIcon_active.png');
+        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p>sit <em>amet</em> <strong>WoW</strong></p>');
+
+    }//end testUndoSuperscript()
 
 }//end class
 
