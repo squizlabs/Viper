@@ -156,6 +156,16 @@ ViperImagePlugin.prototype = {
 
     },
 
+    setImageTitle: function(image, title)
+    {
+        if (!image) {
+            return;
+        }
+
+        image.setAttribute('title', title);
+
+    },
+
     initToolbar: function()
     {
         var toolbar = this.viper.ViperPluginManager.getPlugin('ViperToolbarPlugin');
@@ -190,6 +200,7 @@ ViperImagePlugin.prototype = {
             } else {
                 self.setImageURL(self._resizeImage, self.getImageUrl(url));
                 self.setImageAlt(self._resizeImage, alt);
+                self.setImageTitle(self._resizeImage, title);
 
                 self.viper.fireNodesChanged([self._resizeImage]);
             }
