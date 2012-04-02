@@ -632,19 +632,40 @@ ViperTools.prototype = {
 
         var self = this;
 
-        dfx.addEvent(checkbox, 'click', function() {
-            if (checkbox.checked === true) {
-                dfx.addClass(labelElem, 'active');
-            } else {
-                dfx.removeClass(labelElem, 'active');
-            }
+        if (this.viper.isBrowser('msie') === true) {
+            // IE does not trigger the click event for input when the label
+            // element is clicked, so add the click event to label element and change
+            // the checkbox state.
+            dfx.addEvent(labelElem, 'click', function() {
+                checkbox.checked = !checkbox.checked;
 
-            if (changeCallback) {
-                changeCallback.call(this, checkbox.checked);
-            }
+                if (checkbox.checked === true) {
+                    dfx.addClass(labelElem, 'active');
+                } else {
+                    dfx.removeClass(labelElem, 'active');
+                }
 
-            self.viper.fireCallbacks('ViperTools:changed:' + id);
-        });
+                if (changeCallback) {
+                    changeCallback.call(this, checkbox.checked);
+                }
+
+                self.viper.fireCallbacks('ViperTools:changed:' + id);
+            });
+        } else {
+            dfx.addEvent(checkbox, 'click', function() {
+                if (checkbox.checked === true) {
+                    dfx.addClass(labelElem, 'active');
+                } else {
+                    dfx.removeClass(labelElem, 'active');
+                }
+
+                if (changeCallback) {
+                    changeCallback.call(this, checkbox.checked);
+                }
+
+                self.viper.fireCallbacks('ViperTools:changed:' + id);
+            });
+        }
 
         this.addItem(id, {
             type: 'checkbox',
