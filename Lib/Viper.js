@@ -294,6 +294,10 @@ Viper.prototype = {
         });
 
         dfx.addEvent(elem, 'focus.viper', function(e) {
+            if (self.fireCallbacks('Viper:viperElementFocused') === false) {
+                return;
+            }
+
             self.highlightToSelection();
         });
 
