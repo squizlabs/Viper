@@ -22,6 +22,7 @@ ViperImagePlugin.prototype = {
                 self.hideImageResizeHandles();
                 self.showImageResizeHandles(target);
                 self._updateToolbar(target);
+                ViperSelection.removeAllRanges();
                 return false;
             } else {
                 self._updateToolbar();
@@ -30,8 +31,14 @@ ViperImagePlugin.prototype = {
         });
 
         this.viper.registerCallback('Viper:keyDown', 'ViperImagePlugin', function(e) {
-            var range = self.viper.getViperRange();
             if (e.which === 8 || e.which === 46) {
+                if (self._resizeImage) {
+                    if (self.removeImage(self._resizeImage) === true) {
+                        return false;
+                    }
+                }
+
+                var range        = self.viper.getViperRange();
                 var selectedNode = range.getNodeSelection();
                 if (selectedNode) {
                     if (self.removeImage(selectedNode) === true) {
@@ -83,6 +90,7 @@ ViperImagePlugin.prototype = {
 
         range.selectNode(img);
         ViperSelection.addRange(range);
+        ViperSelection.removeAllRanges();
 
         this.viper.fireSelectionChanged();
         this.viper.fireNodesChanged([this.viper.getViperElement()]);
@@ -94,6 +102,8 @@ ViperImagePlugin.prototype = {
     removeImage: function(image)
     {
         if (image && dfx.isTag(image, 'img') === true) {
+            this.hideImageResizeHandles();
+
             // If there are text nodes around then move the range to one of them,
             // else create a new text node and move the range to it.
             var node  = null;
@@ -367,6 +377,7 @@ ViperImagePlugin.prototype = {
             aspectRatio: true,
             stop: function() {
                 self._fixImageResize();
+                self.viper.fireNodesChanged();
             },
             resize: function(e) {
                 self._fixImageResize();
@@ -403,6 +414,10 @@ ViperImagePlugin.prototype = {
         var height = dfx.getStyle(this._resizeImage, 'height');
 
         dfxjQuery(this._resizeImage).resizable('destroy');
+
+        if (!this._resizeImage.className) {
+            this._resizeImage.removeAttribute('class');
+        }
 
         // Fix jQuery fails.
         dfx.setStyle(this._resizeImage, 'width', width);
