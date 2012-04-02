@@ -116,11 +116,20 @@ ViperHistoryManager.prototype = {
 
         // Get the current state of the content and add it to redo list.
         var range        = this.viper.getCurrentRange();
+
+        var startPath = null;
+        var endPath   = null;
+
+        try {
+            startPath = XPath.getPath(range.startContainer);
+            endPath   = XPath.getPath(range.endContainer);
+        } catch(e) {}
+
         var currentState = {
             content: this.viper.getRawHTML(),
             range: {
-                startContainer: XPath.getPath(range.startContainer),
-                endContainer: XPath.getPath(range.endContainer),
+                startContainer: startPath,
+                endContainer: endPath,
                 startOffset: range.startOffset,
                 endOffset: range.endOffset,
                 collapsed: range.collapsed
