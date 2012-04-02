@@ -441,7 +441,7 @@ ViperTools.prototype = {
                 }
             }
 
-            if ((e.which !== 13 && isTextArea !== true) && (input.value !== value || changed === true)) {
+            if ((e.which !== 13 || isTextArea === true) && (input.value !== value || changed === true)) {
                 changed = true;
                 self.viper.fireCallbacks('ViperTools:changed:' + id);
             }
