@@ -382,45 +382,8 @@ ViperIERange.prototype = {
      */
     deleteContents: function()
     {
-        if (this.startContainer.nodeType === dfx.TEXT_NODE) {
-            // OPTION 2.
-            // If the start container is text, then we want to keep the text
-            // before the selection.
-            var nodeValue = this.startContainer.nodeValue;
-            var before    = nodeValue.substr(0, this.startOffset);
-
-            if (this.startContainer === this.endContainer) {
-                // If the selection is localised in one text node then we want
-                // to keep the text before and after the selection.
-                var after = this.startContainer.nodeValue.substr(this.endOffset, this.startContainer.nodeValue.length);
-                // Keep our text before and after the selection.
-                this.startContainer.data = before + after;
-                // We're done.
-                this.setStart(this.startContainer, this.startOffset);
-                this.collapse(true);
-                return;
-            } else {
-                this.startContainer.nodeValue = before;
-                this.setStart(this.startContainer, this.startOffset);
-                this.collapse(true);
-                this._setCommonAncestorContainer();
-                return;
-            }
-        } else if (this.startContainer.nodeType === dfx.ELEMENT_NODE) {
-            var node = this.getNextContainer(this.startContainer);
-            dfx.remove(this.startContainer);
-            // If they are the same container, we're finished.
-            if (this.startContainer === this.endContainer) {
-                this.setStart(node, 0);
-                this.collapse(true);
-                return;
-            }
-        }//end if
-
-        this.rangeObj.text = '';
-        this.collapse(true);
-        this._setCommonAncestorContainer();
-        this.rangeObj.select();
+        this.rangeObj.execCommand('Delete');
+        this._initContainerInfo();
 
     },
 
