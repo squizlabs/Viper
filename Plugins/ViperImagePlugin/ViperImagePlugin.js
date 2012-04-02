@@ -60,6 +60,8 @@ ViperImagePlugin.prototype = {
             return;
         }
 
+        this._resizeImage = null;
+
         range = range || this.viper.getViperRange();
         var selectedNode = range.getNodeSelection();
 
@@ -161,9 +163,7 @@ ViperImagePlugin.prototype = {
             return;
         }
 
-        // Image var is updated when the updateToolbar event callback is called.
-        var image = null;
-        var self  = this;
+        var self = this;
 
         // Preview box to display image info and preview.
         var previewBox = document.createElement('div');
@@ -185,13 +185,13 @@ ViperImagePlugin.prototype = {
                 alt   = '';
             }
 
-            if (!image || dfx.isTag(image, 'img') === false) {
-                image = self.rangeToImage(self.viper.getViperRange(), self.getImageUrl(url), alt, title);
+            if (!self._resizeImage || dfx.isTag(self._resizeImage, 'img') === false) {
+                self.rangeToImage(self.viper.getViperRange(), self.getImageUrl(url), alt, title);
             } else {
-                self.setImageURL(image, self.getImageUrl(url));
-                self.setImageAlt(image, alt);
+                self.setImageURL(self._resizeImage, self.getImageUrl(url));
+                self.setImageAlt(self._resizeImage, alt);
 
-                self.viper.fireNodesChanged([image]);
+                self.viper.fireNodesChanged([self._resizeImage]);
             }
         };
 
