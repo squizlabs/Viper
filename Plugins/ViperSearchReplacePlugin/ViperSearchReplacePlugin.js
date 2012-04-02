@@ -77,7 +77,6 @@ ViperSearchReplacePlugin.prototype = {
                 fromStart = false;
                 self.replace(tools.getItem('ViperSearchPlugin:replaceInput').getValue());
                 replaceCount++;
-                if (replaceCount === 10)break;
             }
 
             self._matchCount = 0;
