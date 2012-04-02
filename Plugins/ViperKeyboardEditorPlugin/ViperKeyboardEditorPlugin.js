@@ -246,6 +246,13 @@ ViperKeyboardEditorPlugin.prototype = {
                 // and then initialise the Viper element.
                 dfx.setHtml(viperElement, '');
                 this.viper.initEditableElement();
+
+                if (this.viper.isBrowser('chrome') === true || this.viper.isBrowser('safari') === true) {
+                    // Chrome and Safari needs to fire nodes changed here as they do
+                    // not fire keypress.
+                    this.viper.fireNodesChanged();
+                }
+
                 return false;
             }
         }
