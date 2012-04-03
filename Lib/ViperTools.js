@@ -524,7 +524,10 @@ ViperTools.prototype = {
             {
                 if (required === true) {
                     input.setAttribute('placeholder', 'required');
-                    dfx.addClass(textBox, 'required');
+
+                    if (dfx.trim(input.value) === '') {
+                        dfx.addClass(textBox, 'required');
+                    }
                 } else {
                     dfx.removeClass(textBox, 'required');
                     input.removeAttribute('placeholder');
