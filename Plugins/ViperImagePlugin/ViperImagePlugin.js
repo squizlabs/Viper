@@ -5,6 +5,7 @@ function ViperImagePlugin(viper)
     this._previewBox       = null;
     this._resizeImage      = null;
     this._resizeWidgetElem = null;
+    this._imageStyleAttr   = null;
 
 }
 
@@ -386,6 +387,10 @@ ViperImagePlugin.prototype = {
             return;
         }
 
+        if (this._resizeImage !== image) {
+            this._imageStyleAttr = image.getAttribute('style');
+        }
+
         var self = this;
         dfxjQuery(image).resizable({
             handles: 'se,sw',
@@ -435,6 +440,8 @@ ViperImagePlugin.prototype = {
         if (!this._resizeImage.className) {
             this._resizeImage.removeAttribute('class');
         }
+
+        this._resizeImage.setAttribute('style', this._imageStyleAttr);
 
         // Fix jQuery fails.
         dfx.setStyle(this._resizeImage, 'width', width);
