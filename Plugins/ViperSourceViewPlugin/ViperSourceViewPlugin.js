@@ -2,6 +2,7 @@ function ViperSourceViewPlugin(viper)
 {
     this.viper         = viper;
     this._editor       = null;
+    this._textEditor   = null;
     this._resizeHandle = null;
     this._sourceView   = null;
     this._sourceCont   = null;
@@ -51,7 +52,14 @@ ViperSourceViewPlugin.prototype = {
 
     isSourceChanged: function()
     {
-        if (this._originalSource === this._editor.getSession().getValue()) {
+        var value = null;
+        if (this._editor) {
+            value = this._editor.getSession().getValue();
+        } else if (this._textEditor) {
+            value = this._textEditor.value;
+        }
+
+        if (this._originalSource === value) {
             return false;
         }
 
@@ -80,10 +88,14 @@ ViperSourceViewPlugin.prototype = {
 
             this._originalSource = content;
 
-            this._editor.getSession().setValue(content);
-
-            this.viper.ViperTools.openPopup('VSVP:popup', 800, 600);
-            this._editor.resize();
+            if (this._editor) {
+                this._editor.getSession().setValue(content);
+                this.viper.ViperTools.openPopup('VSVP:popup', 800, 600);
+                this._editor.resize();
+            } else {
+                this._textEditor.value = content;
+                this.viper.ViperTools.openPopup('VSVP:popup', 800, 600);
+            }
 
             if (callback) {
                 callback.call(this);
@@ -109,7 +121,7 @@ ViperSourceViewPlugin.prototype = {
 
     toggleSourceView: function()
     {
-        if (!this._sourceView || !this._sourceView.parentNode) {
+        if (!this._sourceView || (!this._sourceView.parentNode || this._sourceView.nodeType !== dfx.DOCUMENT_FRAGMENT_NODE)) {
             this.showSourceView();
         } else {
             this.hideSourceView();
@@ -119,7 +131,14 @@ ViperSourceViewPlugin.prototype = {
 
     updatePageContents: function(content)
     {
-        var value = content || this._editor.getSession().getValue();
+        var value = content;
+        if (!value) {
+            if (this._editor) {
+                value = this._editor.getSession().getValue();
+            } else if (this._textEditor) {
+                value = this._textEditor.value;
+            }
+        }
 
         if (this._originalSource === value) {
             return;
@@ -137,7 +156,12 @@ ViperSourceViewPlugin.prototype = {
 
         this._ignoreUpdate = true;
         var value = content || this.getContents();
-        this._editor.getSession().setValue(value);
+
+        if (this._editor) {
+            this._editor.getSession().setValue(value);
+        } else if (this._textEditor) {
+            this._textEditor.value = value;
+        }
 
     },
 
@@ -171,14 +195,18 @@ ViperSourceViewPlugin.prototype = {
         // Add the bottom section.
         var popupBottom = document.createElement('div');
         dfx.addClass(popupBottom, 'VSVP-bottomPanel');
-        var newWindowButton   = tools.createButton('VSVP:newWindow', '', 'Open In new window', 'VSVP-bottomPanel-newWindow sourceNewWindow', function() {
-            self.openInNewWindow();
-        });
+
+        if (this.viper.isBrowser('msie') === false) {
+            var newWindowButton   = tools.createButton('VSVP:newWindow', '', 'Open In new window', 'VSVP-bottomPanel-newWindow sourceNewWindow', function() {
+                self.openInNewWindow();
+            });
+            popupBottom.appendChild(newWindowButton);
+        }
+
         var applyButtonBottom = tools.createButton('VSVP:apply', 'Apply Changes', 'Apply Changes', 'VSVP-bottomPanel-apply', function() {
             self.updatePageContents();
             self.viper.ViperTools.closePopup('VSVP:popup', 'applyChanges');
         });
-        popupBottom.appendChild(newWindowButton);
         popupBottom.appendChild(applyButtonBottom);
 
         // Create the popup.
@@ -206,23 +234,34 @@ ViperSourceViewPlugin.prototype = {
                 self.viper.ViperTools.getItem('VSVP:popup').hideTop();
             },
             function() {
-                // Resize callback.
-                self._editor.resize();
+                if (self._editor) {
+                    // Resize callback.
+                    self._editor.resize();
+                }
             }
         );
 
-        this._includeAce(function() {
-            // Setup the Ace editor.
-            var editor   = ace.edit(source);
-            self._editor = editor;
+        if (this.viper.isBrowser('msie') === true) {
+            this._includeStyleHTML(function() {
+                var editor = document.createElement('textarea');
+                self._textEditor = editor;
+                self._sourceCont.appendChild(editor);
+                callback.call(self);
+            });
+        } else {
+            this._includeAce(function() {
+                // Setup the Ace editor.
+                var editor   = ace.edit(source);
+                self._editor = editor;
 
-            self.applyEditorSettings(editor);
+                self.applyEditorSettings(editor);
 
-            // Init editor events.
-            self.initEditorEvents(editor);
+                // Init editor events.
+                self.initEditorEvents(editor);
 
-            callback.call(this);
-        });
+                callback.call(self);
+            });
+        }
 
     },
 
@@ -330,6 +369,17 @@ ViperSourceViewPlugin.prototype = {
             scripts.push(path + '/Plugins/ViperSourceViewPlugin/jsbeautifier.js');
 
             this._includeScripts(scripts, callback);
+        }
+
+    },
+
+    _includeStyleHTML: function(callback)
+    {
+        var path = this.viper.getViperPath();
+        if (!path) {
+            callback.call(this);
+        } else {
+            this._includeScripts([path + '/Plugins/ViperSourceViewPlugin/jsbeautifier.js'], callback);
         }
 
     },
