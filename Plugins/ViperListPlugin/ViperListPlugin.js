@@ -1062,7 +1062,6 @@ ViperListPlugin.prototype = {
         var canMakeOL = false;
         var list      = null;
 
-
         if (!startNode) {
             return;
         }
@@ -1253,8 +1252,15 @@ ViperListPlugin.prototype = {
             self.viper.fireNodesChanged([self.viper.getViperElement()]);
         } else {
             var bookmark = this.viper.createBookmark();
-            var range    = self.viper.getCurrentRange();
-            var pTags    = self.listToParagraphs(list);
+            if (bookmark.start.nextSibling && dfx.isTag(bookmark.start.nextSibling, 'li') === true) {
+                dfx.insertBefore(bookmark.start.nextSibling.firstChild, bookmark.start);
+            }
+
+            if (bookmark.end.previousSibling && dfx.isTag(bookmark.end.previousSibling, 'li') === true) {
+                bookmark.end.previousSibling.appendChild(bookmark.end);
+            }
+
+            var pTags = self.listToParagraphs(list);
             this.viper.selectBookmark(bookmark);
             self.viper.fireSelectionChanged(null, true);
             self.viper.fireNodesChanged([self.viper.getViperElement()]);
