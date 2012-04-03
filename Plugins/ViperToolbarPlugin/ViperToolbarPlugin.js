@@ -428,6 +428,25 @@ ViperToolbarPlugin.prototype = {
         if (useCustomToggler !== true) {
             dfx.removeEvent(button, 'mousedown');
             dfx.addEvent(button, 'mousedown', function(e) {
+                if (self.viper.isBrowser('msie') === true) {
+                    // This block of code prevents IE moving user selection to the.
+                    // button element when clicked. When the button element is removed
+                    // and added back to DOM selection is not moved. Seriously, IE?
+                    if (button.previousSibling) {
+                        var sibling = button.previousSibling;
+                        button.parentNode.removeChild(button);
+                        dfx.insertAfter(sibling, button);
+                    } else if (button.nextSibling) {
+                        var sibling = button.nextSibling;
+                        button.parentNode.removeChild(button);
+                        dfx.insertAfter(sibling, button);
+                    } else {
+                        var parent = button.parentNode;
+                        button.parentNode.removeChild(button);
+                        parent.appendChild(button);
+                    }
+                }//end if
+
                 if (dfx.hasClass(button, 'disabled') === true) {
                     return;
                 }
