@@ -81,10 +81,12 @@ ViperSearchReplacePlugin.prototype = {
 
             self._matchCount = 0;
             self._updateButtonStates();
+            self.viper.fireNodesChanged();
         }, true);
         var replaceBtn = tools.createButton('ViperSearchPlugin:replace', 'Replace', 'Replace', 'replaceText', function() {
             self.replace(tools.getItem('ViperSearchPlugin:replaceInput').getValue());
             self._updateButtonStates();
+            self.viper.fireNodesChanged();
         }, true);
         content.appendChild(replaceAllBtn);
         content.appendChild(replaceBtn);

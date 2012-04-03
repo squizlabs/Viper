@@ -5,6 +5,7 @@ function ViperImagePlugin(viper)
     this._previewBox       = null;
     this._resizeImage      = null;
     this._resizeWidgetElem = null;
+    this._imageStyleAttr   = null;
 
 }
 
@@ -22,6 +23,7 @@ ViperImagePlugin.prototype = {
                 self.hideImageResizeHandles();
                 self.showImageResizeHandles(target);
                 self._updateToolbar(target);
+                ViperSelection.removeAllRanges();
                 return false;
             } else {
                 self._updateToolbar();
@@ -30,8 +32,14 @@ ViperImagePlugin.prototype = {
         });
 
         this.viper.registerCallback('Viper:keyDown', 'ViperImagePlugin', function(e) {
-            var range = self.viper.getViperRange();
             if (e.which === 8 || e.which === 46) {
+                if (self._resizeImage) {
+                    if (self.removeImage(self._resizeImage) === true) {
+                        return false;
+                    }
+                }
+
+                var range        = self.viper.getViperRange();
                 var selectedNode = range.getNodeSelection();
                 if (selectedNode) {
                     if (self.removeImage(selectedNode) === true) {
@@ -41,6 +49,10 @@ ViperImagePlugin.prototype = {
             }
         });
 
+        this.viper.registerCallback('ViperHistoryManager:beforeUndo', 'ViperImagePlugin', function() {
+            self.hideImageResizeHandles();
+        });
+
     },
 
     rangeToImage: function(range, url, alt, title)
@@ -48,6 +60,8 @@ ViperImagePlugin.prototype = {
         if (!range || !url) {
             return;
         }
+
+        this._resizeImage = null;
 
         range = range || this.viper.getViperRange();
         var selectedNode = range.getNodeSelection();
@@ -83,6 +97,7 @@ ViperImagePlugin.prototype = {
 
         range.selectNode(img);
         ViperSelection.addRange(range);
+        ViperSelection.removeAllRanges();
 
         this.viper.fireSelectionChanged();
         this.viper.fireNodesChanged([this.viper.getViperElement()]);
@@ -94,6 +109,8 @@ ViperImagePlugin.prototype = {
     removeImage: function(image)
     {
         if (image && dfx.isTag(image, 'img') === true) {
+            this.hideImageResizeHandles();
+
             // If there are text nodes around then move the range to one of them,
             // else create a new text node and move the range to it.
             var node  = null;
@@ -140,6 +157,16 @@ ViperImagePlugin.prototype = {
 
     },
 
+    setImageTitle: function(image, title)
+    {
+        if (!image) {
+            return;
+        }
+
+        image.setAttribute('title', title);
+
+    },
+
     initToolbar: function()
     {
         var toolbar = this.viper.ViperPluginManager.getPlugin('ViperToolbarPlugin');
@@ -147,9 +174,7 @@ ViperImagePlugin.prototype = {
             return;
         }
 
-        // Image var is updated when the updateToolbar event callback is called.
-        var image = null;
-        var self  = this;
+        var self = this;
 
         // Preview box to display image info and preview.
         var previewBox = document.createElement('div');
@@ -171,13 +196,14 @@ ViperImagePlugin.prototype = {
                 alt   = '';
             }
 
-            if (!image || dfx.isTag(image, 'img') === false) {
-                image = self.rangeToImage(self.viper.getViperRange(), self.getImageUrl(url), alt, title);
+            if (!self._resizeImage || dfx.isTag(self._resizeImage, 'img') === false) {
+                self.rangeToImage(self.viper.getViperRange(), self.getImageUrl(url), alt, title);
             } else {
-                self.setImageURL(image, self.getImageUrl(url));
-                self.setImageAlt(image, alt);
+                self.setImageURL(self._resizeImage, self.getImageUrl(url));
+                self.setImageAlt(self._resizeImage, alt);
+                self.setImageTitle(self._resizeImage, title);
 
-                self.viper.fireNodesChanged([image]);
+                self.viper.fireNodesChanged([self._resizeImage]);
             }
         };
 
@@ -361,12 +387,19 @@ ViperImagePlugin.prototype = {
             return;
         }
 
+        if (this._resizeImage !== image) {
+            this._imageStyleAttr = image.getAttribute('style');
+        }
+
         var self = this;
         dfxjQuery(image).resizable({
             handles: 'se,sw',
             aspectRatio: true,
             stop: function() {
                 self._fixImageResize();
+                self.hideImageResizeHandles(image);
+                self.viper.fireNodesChanged();
+                self.showImageResizeHandles(image);
             },
             resize: function(e) {
                 self._fixImageResize();
@@ -403,6 +436,12 @@ ViperImagePlugin.prototype = {
         var height = dfx.getStyle(this._resizeImage, 'height');
 
         dfxjQuery(this._resizeImage).resizable('destroy');
+
+        if (!this._resizeImage.className) {
+            this._resizeImage.removeAttribute('class');
+        }
+
+        this._resizeImage.setAttribute('style', this._imageStyleAttr);
 
         // Fix jQuery fails.
         dfx.setStyle(this._resizeImage, 'width', width);

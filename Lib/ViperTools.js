@@ -197,6 +197,10 @@ ViperTools.prototype = {
             setMouseUpAction: function(callback)
             {
                 mouseUpAction = callback;
+            },
+            isEnabled: function()
+            {
+                return !dfx.hasClass(button, 'disabled');
             }
         });
 
@@ -520,7 +524,10 @@ ViperTools.prototype = {
             {
                 if (required === true) {
                     input.setAttribute('placeholder', 'required');
-                    dfx.addClass(textBox, 'required');
+
+                    if (dfx.trim(input.value) === '') {
+                        dfx.addClass(textBox, 'required');
+                    }
                 } else {
                     dfx.removeClass(textBox, 'required');
                     input.removeAttribute('placeholder');

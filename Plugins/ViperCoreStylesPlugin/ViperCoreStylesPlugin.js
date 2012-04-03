@@ -922,10 +922,14 @@ ViperCoreStylesPlugin.prototype = {
             return false;
         }
 
+        this.viper.ViperHistoryManager.begin();
+
         // Apply the new tag.
         this.applyTag(style);
 
         this.viper.fireNodesChanged([commonParent]);
+        this.viper.ViperHistoryManager.end();
+
         this.viper.fireSelectionChanged(this.viper.adjustRange(), true);
 
         // Prevent event bubbling etc.
@@ -1130,7 +1134,13 @@ ViperCoreStylesPlugin.prototype = {
             // Justify state.
             activeStates.alignment = null;
 
-            var startParent = dfx.getFirstBlockParent(startNode);
+            var startParent = null;
+            if (!selectedNode || dfx.isBlockElement(selectedNode) === false) {
+                startParent = dfx.getFirstBlockParent(startNode);
+            } else {
+                startParent = selectedNode;
+            }
+
             if (startNode !== endNode) {
                 var endParent = dfx.getFirstBlockParent(endNode);
                 var elems     = dfx.getElementsBetween(startParent, endParent);
