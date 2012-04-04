@@ -131,6 +131,11 @@ ViperImagePlugin.prototype = {
             range.setStart(node, start);
             range.collapse(true);
             ViperSelection.addRange(range);
+
+            if (this.viper.isBrowser('chrome') === true || this.viper.isBrowser('safari') === true) {
+                this.viper.fireNodesChanged();
+            }
+
             return true;
         }
 
