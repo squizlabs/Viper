@@ -180,7 +180,7 @@ ViperTableEditorPlugin.prototype = {
                     return false;
                 }
 
-                if (range.collapsed === false) {
+                if (range.collapsed === false || dfx.isTag(target, 'a') === true) {
                     self.removeHighlights();
                     self.hideCellToolsIcon();
                     return true;
