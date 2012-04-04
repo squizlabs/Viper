@@ -326,13 +326,21 @@ ViperToolbarPlugin.prototype = {
                     self.viper.focus();
 
                     // IE needs this timeout so focus works <3..
-                    setTimeout(function() {
+                    if (self.viper.isBrowser('msie') === false) {
                         try {
                             action.call(this);
                         } catch (e) {
                             console.error(e.message);
                         }
-                    }, 10);
+                    } else {
+                        setTimeout(function() {
+                            try {
+                                action.call(this);
+                            } catch (e) {
+                                console.error(e.message);
+                            }
+                        }, 10);
+                    }
 
                     return false;
                 };
