@@ -3,6 +3,7 @@ function ViperTools(viper)
     this.viper = viper;
 
     this._items = {};
+    this._preventMouseUp = false;
 
     var self = this;
     this.viper.registerCallback('Viper:mouseUp', 'ViperTools', function(e) {
@@ -27,12 +28,6 @@ ViperTools.prototype = {
         return this._items[id];
 
     },
-
-
-    /**
-     * If true then the next mouse up event will not fire.
-     */
-    _preventMouseUp: false,
 
     createRow: function(id, customClass)
     {
@@ -139,6 +134,11 @@ ViperTools.prototype = {
                 if (dfx.hasClass(button, 'disabled') === true) {
                     return false;
                 }
+
+                setTimeout(function() {
+                    // Incase button is moved/removed during the click action.
+                    self._preventMouseUp = false;
+                }, 200);
 
                 self.viper.fireCallbacks('ViperTools:buttonClicked', id);
                 return clickAction.call(this, e);
