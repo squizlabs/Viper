@@ -554,6 +554,7 @@ ViperLinkPlugin.prototype = {
         // Update the buttons when the toolbar updates it self.
         this.viper.registerCallback('ViperToolbarPlugin:updateToolbar', 'ViperLinkPlugin', function(data) {
             var range = data.range;
+
             var selectionHasLinks = self.selectionHasLinks(range);
             if (selectionHasLinks === true) {
                 tools.disableButton('insertLink');
@@ -568,8 +569,18 @@ ViperLinkPlugin.prototype = {
                 tools.enableButton('removeLink');
                 self.updateBubbleFields(link);
             } else {
-                var startNode = data.range.getStartNode();
-                var endNode   = data.range.getEndNode();
+                var nodeSelection = data.range.getNodeSelection();
+                var startNode     = null;
+                var endNode       = null;
+
+                if (nodeSelection) {
+                    startNode = nodeSelection;
+                    endNode   = nodeSelection;
+                } else {
+                    startNode = data.range.getStartNode();
+                    endNode   = data.range.getEndNode();
+                }
+
                 tools.setButtonInactive('insertLink');
 
                 if (range.collapsed === true

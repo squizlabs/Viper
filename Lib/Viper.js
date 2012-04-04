@@ -2049,9 +2049,10 @@ Viper.prototype = {
 
     removeStyle: function(style)
     {
-        var range        = this.getCurrentRange();
-        var startNode    = range.getStartNode();
-        var endNode      = range.getEndNode();
+        var range     = this.getCurrentRange();
+        range         = this.adjustRange(range);
+        var startNode = range.getStartNode();
+        var endNode   = range.getEndNode();
         if (!endNode) {
             endNode = startNode;
         }

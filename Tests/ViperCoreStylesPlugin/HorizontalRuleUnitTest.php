@@ -29,6 +29,35 @@ class Viper_Tests_ViperCoreStylesPlugin_HorizontalRuleUnitTest extends AbstractV
 
 
     /**
+     * Test that you can add and delete a horizontal rule at the end of a paragraph.
+     *
+     * @return void
+     */
+    public function testAddingAndDeletingAHorizontalRuleAtEndOfParagraph()
+    {
+        $dir = dirname(__FILE__).'/Images/';
+
+        $this->selectText('WoW');
+        $this->type('Key.RIGHT');
+
+        $this->clickTopToolbarButton($dir.'toolbarIcon_horizontalRule.png');
+
+        $this->type('Key.RIGHT');
+        $this->type('Key.BACKSPACE');
+        $this->type('THIS is a new line of ConTenT');
+
+        $this->assertHTMLMatch('<h1>First HEADING</h1><p>Lorem XuT dolor sit <em>amet</em> <strong>WoW</strong></p><hr /><p>THIS is a new line of ConTenT</p><h2>Second heading</h2><p>This is another paragraph</p><ul><li>Test removing bullet points</li><li>purus oNo luctus</li><li>vel molestie arcu</li></ul>');
+
+        $this->selectText('THIS');
+        $this->type('Key.LEFT');
+        $this->type('Key.BACKSPACE');
+
+        $this->assertHTMLMatch('<h1>First HEADING</h1><p>Lorem XuT dolor sit <em>amet</em> <strong>WoW</strong></p><p>THIS is a new line of ConTenT</p><h2>Second heading</h2><p>This is another paragraph</p><ul><li>Test removing bullet points</li><li>purus oNo luctus</li><li>vel molestie arcu</li></ul>');
+
+    }//end testAddingAndDeletingAHorizontalRuleAtEndOfParagraph()
+
+
+    /**
      * Test that you can add a horizontal rule at the middle of a paragraph.
      *
      * @return void
@@ -66,6 +95,32 @@ class Viper_Tests_ViperCoreStylesPlugin_HorizontalRuleUnitTest extends AbstractV
         $this->type('New ConTenT');
 
         $this->assertHTMLMatch('<h1>First HEADING</h1><hr /><p>New ConTenTLorem XuT dolor sit <em>amet</em> <strong>WoW</strong></p><h2>Second heading</h2><p>This is another paragraph</p><ul><li>Test removing bullet points</li><li>purus oNo luctus</li><li>vel molestie arcu</li></ul>');
+
+    }//end testAddingHorizontalRuleAtStartOfParagraph()
+
+
+    /**
+     * Test that you can add a horizontal rule at the start of a paragraph that has no inner tags.
+     *
+     * @return void
+     */
+    public function testAddingHorizontalRuleAtStartOfParagraphWithNoInnerTags()
+    {
+        $dir = dirname(__FILE__).'/Images/';
+
+        $this->selectText('Lorem');
+        $this->selectInlineToolbarLineageItem(0);
+        $this->keyDown('Key.CMD + b');
+        $this->keyDown('Key.CMD + b');
+        $this->keyDown('Key.CMD + i');
+        $this->keyDown('Key.CMD + i');
+        $this->type('Key.LEFT');
+
+        $this->clickTopToolbarButton($dir.'toolbarIcon_horizontalRule.png');
+
+        $this->type('New ConTenT');
+
+        $this->assertHTMLMatch('<h1>First HEADING</h1><hr /><p>New ConTenTLorem XuT dolor sit amet WoW</p><h2>Second heading</h2><p>This is another paragraph</p><ul><li>Test removing bullet points</li><li>purus oNo luctus</li><li>vel molestie arcu</li></ul>');
 
     }//end testAddingHorizontalRuleAtStartOfParagraph()
 
