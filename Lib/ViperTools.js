@@ -454,7 +454,7 @@ ViperTools.prototype = {
             if (action && e.which === 13) {
                 self.viper.focus();
                 action.call(input, input.value);
-            } else if (!action && e.which === 13 && (self.viper.isBrowser('chrome') || self.viper.isBrowser('safari'))) {
+            } else if (!action && e.which === 13 && isTextArea !== true && (self.viper.isBrowser('chrome') || self.viper.isBrowser('safari'))) {
                 var forms = dfx.getParents(main, 'form', self.viper.getViperElement());
                 if (forms.length > 0 && dfx.getTag('input', forms[0]).length > 2) {
                     return forms[0].onsubmit();
