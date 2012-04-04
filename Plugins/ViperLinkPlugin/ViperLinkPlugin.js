@@ -622,9 +622,9 @@ ViperLinkPlugin.prototype = {
         }
 
         var tools = this.viper.ViperTools;
-        tools.getItem('ViperLinkPlugin:vtp:url').setValue(href);
-        tools.getItem('ViperLinkPlugin:vtp:title').setValue(title);
-        tools.getItem('ViperLinkPlugin:vtp:subject').setValue(subject);
+        tools.getItem('ViperLinkPlugin:vtp:url').setValue(href || '');
+        tools.getItem('ViperLinkPlugin:vtp:title').setValue(title || '');
+        tools.getItem('ViperLinkPlugin:vtp:subject').setValue(subject || '');
         tools.getItem('ViperLinkPlugin:vtp:newWindow').setValue(newWindow);
     }
 
