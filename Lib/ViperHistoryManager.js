@@ -157,6 +157,7 @@ ViperHistoryManager.prototype = {
         this._ignoreAdd = true;
         this.viper.fireNodesChanged([this.viper.getViperElement()]);
         this.viper.fireCallbacks('ViperHistoryManager:undo');
+        this.viper.fireSelectionChanged();
         this._ignoreAdd  = false;
         this._lastAction = null;
 
@@ -188,6 +189,7 @@ ViperHistoryManager.prototype = {
         this._ignoreAdd = true;
         this.viper.fireNodesChanged([this.viper.getViperElement()]);
         this.viper.fireCallbacks('ViperHistoryManager:redo');
+        this.viper.fireSelectionChanged();
         this._ignoreAdd  = false;
         this._lastAction = null;
 
