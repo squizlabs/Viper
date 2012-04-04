@@ -167,6 +167,25 @@ ViperCoreStylesPlugin.prototype = {
                 return;
             }
 
+            if (self.viper.isBrowser('msie') === true) {
+                // This block of code prevents IE moving user selection to the.
+                // button element when clicked. When the button element is removed
+                // and added back to DOM selection is not moved. Seriously, IE?
+                if (target.previousSibling) {
+                    var sibling = target.previousSibling;
+                    target.parentNode.removeChild(target);
+                    dfx.insertAfter(sibling, target);
+                } else if (target.nextSibling) {
+                    var sibling = target.nextSibling;
+                    target.parentNode.removeChild(target);
+                    dfx.insertAfter(sibling, target);
+                } else {
+                    var parent = target.parentNode;
+                    target.parentNode.removeChild(target);
+                    parent.appendChild(target);
+                }
+            }//end if
+
             // Set the range after the HR element, if there is no element after
             // HR create a new P tag.
             var blockSibling = target.nextSibling;
@@ -654,6 +673,8 @@ ViperCoreStylesPlugin.prototype = {
     {
         var hr = document.createElement('hr');
 
+        this.viper.ViperHistoryManager.begin();
+
         var range = this.viper.getViperRange();
         if (range.collapsed !== true) {
             range.deleteContents();
@@ -702,6 +723,8 @@ ViperCoreStylesPlugin.prototype = {
         ViperSelection.addRange(range);
 
         this.viper.fireNodesChanged('ViperCoreStylesPlugin:hr');
+        this.viper.ViperHistoryManager.end();
+
         this.viper.fireSelectionChanged(null, true);
 
     },

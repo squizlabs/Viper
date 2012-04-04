@@ -276,6 +276,14 @@ ViperKeyboardEditorPlugin.prototype = {
 
                 return false;
             }
+        } else if (this.viper.isBrowser('msie') === true) {
+            // Remove HR elements in IE..
+            var rangeClone = range.cloneRange();
+            rangeClone.moveStart('character', -2);
+            if (dfx.trim(rangeClone.getHTMLContents()) === '<HR>') {
+                range.moveStart('character', -2);
+                range.deleteContents();
+            }
         }
 
     },
