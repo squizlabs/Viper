@@ -85,6 +85,8 @@ ViperLinkPlugin.prototype = {
 
         if (title) {
             link.setAttribute('title', title);
+        } else {
+            link.removeAttribute('title');
         }
 
         if (newWindow === true) {

@@ -3500,6 +3500,16 @@ ViperTableEditorPlugin.prototype = {
             toCell.appendChild(fromCell.firstChild);
         }
 
+    },
+
+    isPluginElement: function(element)
+    {
+        if (element === this._highlightElement) {
+            return true;
+        }
+
+        return false;
+
     }
 
 };

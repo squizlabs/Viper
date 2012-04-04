@@ -213,6 +213,8 @@ class Viper_Tests_ViperCoreStylesPlugin_SuperscriptUnitTest extends AbstractVipe
         $this->clickTopToolbarButton(dirname(dirname(__FILE__)).'/Core/Images/undoIcon_active.png');
         $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p>sit <em>amet</em> <strong>WoW</strong></p>');
 
+        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_sup.png'), 'Superscript icon in the top toolbar should not be active');
+
     }//end testUndoSuperscript()
 
 }//end class
