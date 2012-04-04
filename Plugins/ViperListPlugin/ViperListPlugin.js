@@ -1047,7 +1047,6 @@ ViperListPlugin.prototype = {
         var canMakeOL = false;
         var list      = null;
 
-
         if (!startNode) {
             return;
         }
@@ -1065,8 +1064,19 @@ ViperListPlugin.prototype = {
 
             indent   = true;
         } else {
-            startParent   = dfx.getFirstBlockParent(startNode);
-            var endNode   = range.getEndNode();
+            var endNode       = range.getEndNode();
+            var nodeSelection = range.getNodeSelection();
+            if (nodeSelection) {
+                startNode = nodeSelection;
+                endNode   = null;
+            }
+
+            if (dfx.isBlockElement(startNode) === false) {
+                startParent   = dfx.getFirstBlockParent(startNode);
+            } else {
+                startParent = startNode;
+            }
+
             var endParent = null;
 
             if (!endNode) {
