@@ -7,11 +7,16 @@
     line-height: 1.8em;
     margin-left: 0.3em;
     min-width: 29px;
-/*     min-width: 17px\9; /* the only browser hack in the entire app, just for IE8 \o/ */
     box-sizing: border-box;
     -moz-box-sizing: border-box;
     padding: 0 0.5em;
     text-align: center;
+    
+    .Viper-browserVer-msie8 &,
+    .Viper-browserVer-msie9 & {
+        min-width: 17px;
+        box-sizing: content-box;
+    }
 
     &:first-child {
         margin-left: 0;
@@ -26,6 +31,11 @@
     }
     &.headings {
         min-width: 30px;
+        
+        .Viper-browserVer-msie8 &,
+        .Viper-browserVer-msie9 & {
+            min-width: 18px;
+        }
     }
 }
 
@@ -50,7 +60,7 @@
     &:first-child {
         border-top-left-radius: 0.3em;
         border-bottom-left-radius: 0.3em;
-        border-left: none !important;
+        border-left: none;
     }
     &:last-child {
         border-top-right-radius: 0.3em;
@@ -59,6 +69,8 @@
 }
 
 /* Theme - Dark Grey */
+
+@ie9-grad-sub: inset 0px -1em 1.5em -0.6em rgba(0,0,0,0.1);
 
 .themeDark .Viper-button,
 .themeDark .Viper-button.disabled:hover {
@@ -71,6 +83,18 @@
         0 1px 0 rgba(255, 255, 255, 0.8) inset;
     background: -webkit-gradient(linear, left top, left bottom, from(#e9e9eb), to(#c2c2cb));
     background: -moz-linear-gradient(top,  #e9e9eb,  #c2c2cb);
+
+    .Viper-browserVer-msie8 & {
+        border: 1px solid #666;
+        border-color: #777 #666 #555 #666;
+    }
+    .Viper-browserVer-msie9 & {
+        background-color: #e9e9eb;
+        box-shadow:
+            0 0 2px 0 rgba(0, 0, 0, 0.5),
+            0 1px 0 rgba(255, 255, 255, 0.8) inset,
+            @ie9-grad-sub;
+    }
 }
 
 .themeDark .Viper-button:hover {
@@ -109,6 +133,12 @@
     border-color: #555;
 }
 
+.themeDark .Viper-buttonGroup {
+    .Viper-browserVer-msie8 & {
+        border-right: 1px solid #666;
+    }
+}
+
 .themeDark .Viper-buttonGroup .Viper-button,
 .themeDark .Viper-buttonGroup .Viper-button.disabled:hover {
     border-left: 1px solid #a6a6a9;
@@ -117,15 +147,45 @@
         0 2px 2px -2px rgba(0, 0, 0, 0.4),
         0 1px 0 rgba(255, 255, 255, 0.8) inset,
         1px 0 0 rgba(255,255,255,0.3) inset;
+    
+    .Viper-browserVer-msie9 & {
+        box-shadow:
+            0 -2px 2px -2px rgba(0, 0, 0, 0.4),
+            0 2px 2px -2px rgba(0, 0, 0, 0.4),
+            0 1px 0 rgba(255, 255, 255, 0.8) inset,
+            1px 0 0 rgba(255,255,255,0.3) inset,
+            @ie9-grad-sub;
+    }
+        
+    .Viper-browserVer-msie8 & {
+        border-color: #777 #dadade #555 #a6a6a9;
+        border-right: none;
+    }
 }
 
 .themeDark .Viper-buttonGroup .Viper-button:first-child {
+    border-left-width: 0;
     box-shadow:
         0 -2px 2px -2px rgba(0, 0, 0, 0.5),
         0 2px 2px -2px rgba(0, 0, 0, 0.5),
         -2px 0 2px -2px rgba(0,0,0,0.5),
         1px 0 0 rgba(255,255,255,0.3) inset,
         0 1px 0 rgba(255, 255, 255, 0.8) inset;
+        
+    .Viper-browserVer-msie8 & {
+        border-left-width: 1px;
+        border-left-color: #666;
+    }
+    
+    .Viper-browserVer-msie9 & {
+        box-shadow:
+            0 -2px 2px -2px rgba(0, 0, 0, 0.5),
+            0 2px 2px -2px rgba(0, 0, 0, 0.5),
+            -2px 0 2px -2px rgba(0,0,0,0.5),
+            1px 0 0 rgba(255,255,255,0.3) inset,
+            0 1px 0 rgba(255, 255, 255, 0.8) inset,
+            @ie9-grad-sub;
+    }
 }
 
 .themeDark .Viper-buttonGroup .Viper-button:last-child {
@@ -135,6 +195,20 @@
         2px 0 2px -2px rgba(0,0,0,0.5),
         1px 0 0 rgba(255,255,255,0.3) inset,
         0 1px 0 rgba(255, 255, 255, 0.8) inset;
+    
+    .Viper-browserVer-msie8 & {
+        border-right: 1px solid #666;
+    }
+    
+    .Viper-browserVer-msie9 & {
+        box-shadow:
+            0 -2px 2px -2px rgba(0, 0, 0, 0.5),
+            0 2px 2px -2px rgba(0, 0, 0, 0.5),
+            2px 0 2px -2px rgba(0,0,0,0.5),
+            1px 0 0 rgba(255,255,255,0.3) inset,
+            0 1px 0 rgba(255, 255, 255, 0.8) inset,
+            @ie9-grad-sub;
+    }
 }
 
 .themeDark .Viper-buttonGroup .Viper-button.active {
@@ -227,6 +301,13 @@
     top: 50%;
     margin: -(@iconHeight / 2) 0 0 -(@iconWidth / 2);
     background-image: url(../Images/buttonIcons.png);
+    
+    .disabled & {
+    
+        .Viper-browserVer-msie8 & {
+            filter: ~"alpha(opacity = 50)";
+        }
+    }
 
 // Icon definitions
 
