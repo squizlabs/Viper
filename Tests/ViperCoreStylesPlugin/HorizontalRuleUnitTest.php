@@ -71,6 +71,32 @@ class Viper_Tests_ViperCoreStylesPlugin_HorizontalRuleUnitTest extends AbstractV
 
 
     /**
+     * Test that you can add a horizontal rule at the start of a paragraph that has no inner tags.
+     *
+     * @return void
+     */
+    public function testAddingHorizontalRuleAtStartOfParagraphWithNoInnerTags()
+    {
+        $dir = dirname(__FILE__).'/Images/';
+
+        $this->selectText('Lorem');
+        $this->selectInlineToolbarLineageItem(0);
+        $this->keyDown('Key.CMD + b');
+        $this->keyDown('Key.CMD + b');
+        $this->keyDown('Key.CMD + i');
+        $this->keyDown('Key.CMD + i');
+        $this->type('Key.LEFT');
+
+        $this->clickTopToolbarButton($dir.'toolbarIcon_horizontalRule.png');
+
+        $this->type('New ConTenT');
+
+        $this->assertHTMLMatch('<h1>First HEADING</h1><hr /><p>New ConTenTLorem XuT dolor sit amet WoW</p><h2>Second heading</h2><p>This is another paragraph</p><ul><li>Test removing bullet points</li><li>purus oNo luctus</li><li>vel molestie arcu</li></ul>');
+
+    }//end testAddingHorizontalRuleAtStartOfParagraph()
+
+
+    /**
      * Test that you can add a horizontal rule after a heading.
      *
      * @return void
