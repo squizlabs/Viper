@@ -359,14 +359,22 @@ ViperInlineToolbarPlugin.prototype = {
 
             viper.focus();
 
-            // IE needs this timeout so focus works <3..
-            setTimeout(function() {
+            if (viper.isBrowser('msie') === false) {
                 try {
                     action.call(this);
                 } catch (e) {
                     console.error('Sub Section Action threw exception:' + e.message);
                 }
-            }, 10);
+            } else {
+                // IE needs this timeout so focus works <3..
+                setTimeout(function() {
+                    try {
+                        action.call(this);
+                    } catch (e) {
+                        console.error('Sub Section Action threw exception:' + e.message);
+                    }
+                }, 10);
+            }
 
             viper.ViperTools.disableButton(subSectionid + '-applyButton');
 
