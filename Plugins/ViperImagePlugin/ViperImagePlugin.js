@@ -35,6 +35,7 @@ ViperImagePlugin.prototype = {
             if (e.which === 8 || e.which === 46) {
                 if (self._resizeImage) {
                     if (self.removeImage(self._resizeImage) === true) {
+                        self._updateToolbar();
                         return false;
                     }
                 }
@@ -43,6 +44,7 @@ ViperImagePlugin.prototype = {
                 var selectedNode = range.getNodeSelection();
                 if (selectedNode) {
                     if (self.removeImage(selectedNode) === true) {
+                        self._updateToolbar();
                         return false;
                     }
                 }
