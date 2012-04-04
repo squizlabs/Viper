@@ -101,6 +101,67 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperUnitTest
 
 
     /**
+     * Test switching presentational.
+     *
+     * @return void
+     */
+    public function testSwitchingPresentational()
+    {
+        $dir = dirname(__FILE__).'/Images/';
+
+        $this->selectText('dolor');
+        $this->type('Key.RIGHT');
+
+        $this->clickTopToolbarButton($dir.'toolbarIcon_image.png');
+        $this->type('http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg');
+        $this->keyDown('Key.TAB');
+        $this->type('Alt tag');
+        $this->clickTopToolbarButton($dir.'toobarIcon_image_presentational.png');
+        sleep(1);
+        $this->clickTopToolbarButton($dir.'toolbarIcon_image_presentational_active.png');
+        $this->keyDown('Key.ENTER');
+        $this->clickTopToolbarButton($dir.'toolbarIcon_subImage_active.png');
+
+        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>LOREM XuT dolor<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Alt tag" /></p><p>sit amet <strong>WoW</strong></p><p>Squiz LABS is ORSM</p>');
+
+    }//end testSwitchingPresentational()
+
+
+   /**
+     * Test inserting an image with the alt and title and then switching to presentational.
+     *
+     * @return void
+     */
+    public function testInsertingWithAltAndTitleTagThenSwitchingToPresentational()
+    {
+        $dir = dirname(__FILE__).'/Images/';
+
+        $this->selectText('dolor');
+        $this->type('Key.RIGHT');
+
+        $this->clickTopToolbarButton($dir.'toolbarIcon_image.png');
+        $this->type('http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg');
+        $this->keyDown('Key.TAB');
+        $this->type('Alt tag');
+        $this->keyDown('Key.TAB');
+        $this->type('Title tag');
+        $this->keyDown('Key.ENTER');
+
+        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>LOREM XuT dolor<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Alt tag" title="Title tag" /></p><p>sit amet <strong>WoW</strong></p><p>Squiz LABS is ORSM</p>');
+
+        $this->clickElement('img', 1);
+        $this->clickTopToolbarButton($dir.'toolbarIcon_image_highlighted.png');
+        $this->clickTopToolbarButton($dir.'toobarIcon_image_presentational.png');
+        $this->keyDown('Key.ENTER');
+        $this->clickTopToolbarButton($dir.'toolbarIcon_subImage_active.png');
+        $this->click($this->find('ORSM'));
+
+        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>LOREM XuT dolor<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="" /></p><p>sit amet <strong>WoW</strong></p><p>Squiz LABS is ORSM</p>');
+
+    }//end testInsertingWithAltAndTitleTagThenSwitchingToPresentational()
+
+
+    /**
      * Test inserting an image with the alt and title.
      *
      * @return void
