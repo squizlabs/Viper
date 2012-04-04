@@ -6,6 +6,7 @@ function ViperImagePlugin(viper)
     this._resizeImage      = null;
     this._resizeWidgetElem = null;
     this._imageStyleAttr   = null;
+    this._resized          = false;
 
 }
 
@@ -19,11 +20,31 @@ ViperImagePlugin.prototype = {
         this.viper.registerCallback('Viper:mouseDown', 'ViperImagePlugin', function(e) {
             var target = dfx.getMouseEventTarget(e);
             if (dfx.isTag(target, 'img') === true) {
-                dfx.preventDefault(e);
-                self.hideImageResizeHandles();
-                self.showImageResizeHandles(target);
-                self._updateToolbar(target);
-                ViperSelection.removeAllRanges();
+                if (self.viper.isBrowser('msie') !== true) {
+                    dfx.preventDefault(e);
+                    self.hideImageResizeHandles();
+                    self.showImageResizeHandles(target);
+                    self._updateToolbar(target);
+                    ViperSelection.removeAllRanges();
+                } else {
+                    self._updateToolbar(target);
+                    self.viper.registerCallback('Viper:mouseUp', 'ViperImagePlugin:ie', function(e) {
+                        if (dfx.hasAttribute(target, 'width') === true) {
+                            var width  = dfx.getStyle(target, 'width');
+                            var height = dfx.getStyle(target, 'height');
+                            target.setAttribute('width', width);
+                            target.setAttribute('height', height);
+
+                            // Remove width and height styles.
+                            dfx.setStyle(target, 'width', '');
+                            dfx.setStyle(target, 'height', '');
+                        }
+
+                        self.viper.removeCallback('Viper:mouseUp', 'ViperImagePlugin:ie');
+                        return false;
+                    });
+                }
+
                 return false;
             } else {
                 self._updateToolbar();
@@ -277,8 +298,8 @@ ViperImagePlugin.prototype = {
             tools.setButtonActive('image');
 
             this.setUrlFieldValue(image.getAttribute('src'));
-            tools.getItem('ViperImagePlugin:altInput').setValue(image.getAttribute('alt'));
-            tools.getItem('ViperImagePlugin:titleInput').setValue(image.getAttribute('title'));
+            tools.getItem('ViperImagePlugin:altInput').setValue(image.getAttribute('alt') || '');
+            tools.getItem('ViperImagePlugin:titleInput').setValue(image.getAttribute('title') || '');
 
             if (!image.getAttribute('alt')) {
                 tools.getItem('ViperImagePlugin:isPresentational').setValue(true);
@@ -383,15 +404,16 @@ ViperImagePlugin.prototype = {
 
     showImageResizeHandles: function(image)
     {
-        if (!image || !image.parentNode) {
+        if (!image || !image.parentNode || this.viper.isBrowser('msie') === true) {
             return;
         }
 
         if (this._resizeImage !== image) {
             this._imageStyleAttr = image.getAttribute('style');
+            this._resized = false;
         }
 
-        var self = this;
+        var self      = this;
         dfxjQuery(image).resizable({
             handles: 'se,sw',
             aspectRatio: true,
@@ -402,6 +424,7 @@ ViperImagePlugin.prototype = {
                 self.showImageResizeHandles(image);
             },
             resize: function(e) {
+                self._resized = true;
                 self._fixImageResize();
             }
         });
@@ -422,7 +445,7 @@ ViperImagePlugin.prototype = {
 
     hideImageResizeHandles: function(elem)
     {
-        if (!this._resizeImage) {
+        if (!this._resizeImage || this.viper.isBrowser('msie') === true) {
             return;
         }
 
@@ -443,9 +466,19 @@ ViperImagePlugin.prototype = {
 
         this._resizeImage.setAttribute('style', this._imageStyleAttr);
 
-        // Fix jQuery fails.
-        dfx.setStyle(this._resizeImage, 'width', width);
-        dfx.setStyle(this._resizeImage, 'height', height);
+        if (this._resized === true) {
+            this._resizeImage.setAttribute('width', width);
+            this._resizeImage.setAttribute('height', height);
+
+            // Remove width and height styles.
+            dfx.setStyle(this._resizeImage, 'width', '');
+            dfx.setStyle(this._resizeImage, 'height', '');
+        }
+
+        if (!this._resizeImage.getAttribute('style')) {
+            this._resizeImage.removeAttribute('style');
+        }
+
         this._fixImageResize();
         this._resizeImage = null;
 
