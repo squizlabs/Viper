@@ -19,10 +19,6 @@
     white-space: nowrap;
 }
 
-.Viper-browserVer-msie8 .ViperTP-bar {
-    -ms-filter: "progid:DXImageTransform.Microsoft.gradient (GradientType=0, startColorstr=#919097, endColorstr=#727179)";
-}
-
 .ViperTP-bar > * {
     white-space: normal;
 }
