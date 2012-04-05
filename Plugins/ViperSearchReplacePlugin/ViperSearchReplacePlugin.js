@@ -186,7 +186,7 @@ ViperSearchReplacePlugin.prototype = {
             viperRange.setStart(viperRange._getFirstSelectableChild(element), 0);
             viperRange.collapse(true);
         } else {
-            viperRange = this.viper.getViperRange();
+            viperRange = this.viper.getCurrentRange();
         }
 
         if (this.viper.isBrowser('msie') === true) {
