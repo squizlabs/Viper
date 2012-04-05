@@ -482,7 +482,7 @@ ViperImagePlugin.prototype = {
             dfx.setStyle(this._resizeImage, 'height', '');
         }
 
-        if (!this._resizeImage.getAttribute('style')) {
+        if (!this._resizeImage.getAttribute('style') || this._resizeImage.getAttribute('style') === 'null') {
             this._resizeImage.removeAttribute('style');
         }
 
