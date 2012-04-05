@@ -1,1 +1,1076 @@
-.ViperITP form,.ViperITP ul,.ViperITP ol{padding:0;margin:0}.Viper-button{position:relative;border-radius:.25em;cursor:pointer;display:inline-block;font-size:1.5em;line-height:1.8em;margin-left:.3em;min-width:29px;box-sizing:border-box;-moz-box-sizing:border-box;padding:0 .5em;text-align:center}.Viper-browserVer-msie8 .Viper-button,.Viper-browserVer-msie9 .Viper-button{min-width:17px;box-sizing:content-box}.Viper-button:first-child{margin-left:0}.Viper-button.disabled{opacity:.3;filter:alpha(opacity = 50);cursor:default}.Viper-button.viper-hidden{display:none}.Viper-button.headings{min-width:30px}.Viper-browserVer-msie8 .Viper-button.headings,.Viper-browserVer-msie9 .Viper-button.headings{min-width:18px}.Viper-buttonGroup{display:inline-block;margin-left:.55em;white-space:nowrap}.Viper-buttonGroup:first-child{margin-left:0}.Viper-buttonGroup .Viper-button{border-radius:.1em;margin:0}.Viper-buttonGroup .Viper-button.active,.Viper-buttonGroup .Viper-button.selected{border-radius:0}.Viper-buttonGroup .Viper-button:first-child{border-top-left-radius:.3em;border-bottom-left-radius:.3em;border-left:none}.Viper-buttonGroup .Viper-button:last-child{border-top-right-radius:.3em;border-bottom-right-radius:.3em}.themeDark .Viper-button,.themeDark .Viper-button.disabled:hover{background-color:#dadade;border:0;color:#2b2b2b;text-shadow:0 1px 0 #FFF;box-shadow:0 0 2px 0 rgba(0,0,0,0.5),0 1px 0 rgba(255,255,255,0.8) inset;background:-webkit-gradient(linear,left top,left bottom,from(#e9e9eb),to(#c2c2cb));background:-moz-linear-gradient(top,#e9e9eb,#c2c2cb)}.Viper-browserVer-msie8 .themeDark .Viper-button,.Viper-browserVer-msie8 .themeDark .Viper-button.disabled:hover{border:1px solid #666;border-color:#777 #666 #555 #666}.Viper-browserVer-msie9 .themeDark .Viper-button,.Viper-browserVer-msie9 .themeDark .Viper-button.disabled:hover{background-color:#e9e9eb;box-shadow:0 0 2px 0 rgba(0,0,0,0.5),0 1px 0 rgba(255,255,255,0.8) inset,inset 0 -1em 1.5em -0.6em rgba(0,0,0,0.2)}.themeDark .Viper-button:hover{background:#c9c9cd;background:-webkit-gradient(linear,left top,left bottom,from(#d5d5d8),to(#b4b4bc));background:-moz-linear-gradient(top,#d5d5d8,#b4b4bc);text-shadow:0 1px 0 rgba(255,255,255,0.5)}.themeDark .Viper-button:active,.themeDark .Viper-button.active,.themeDark .Viper-button.active:hover,.themeDark .Viper-button.selected,.themeDark .Viper-button.selected:hover{color:#FFF;text-shadow:0 -1px 0 rgba(0,0,0,0.5);box-shadow:0 2px 2px -2px #000 inset,0 -2px 2px -2px #000 inset,0 1px 0 rgba(255,255,255,0.2),1px 0 0 rgba(0,0,0,0.25) inset,-1px 0 0 rgba(0,0,0,0.25) inset}.themeDark .Viper-button.active,.themeDark .Viper-button.active:hover{background:#2d73d2;background:-webkit-gradient(linear,left top,left bottom,from(#3987f2),to(#205caf));background:-moz-linear-gradient(top,#3987f2,#205caf)}.themeDark .Viper-button:active,.themeDark .Viper-button.selected,.themeDark .Viper-button.selected:hover{background:#54535a;border-color:#555}.Viper-browserVer-msie8 .themeDark .Viper-buttonGroup{border-right:1px solid #666}.themeDark .Viper-buttonGroup .Viper-button,.themeDark .Viper-buttonGroup .Viper-button.disabled:hover{border-left:1px solid #a6a6a9;box-shadow:0 -2px 2px -2px rgba(0,0,0,0.4),0 2px 2px -2px rgba(0,0,0,0.4),0 1px 0 rgba(255,255,255,0.8) inset,1px 0 0 rgba(255,255,255,0.3) inset}.Viper-browserVer-msie9 .themeDark .Viper-buttonGroup .Viper-button,.Viper-browserVer-msie9 .themeDark .Viper-buttonGroup .Viper-button.disabled:hover{box-shadow:0 -2px 2px -2px rgba(0,0,0,0.4),0 2px 2px -2px rgba(0,0,0,0.4),0 1px 0 rgba(255,255,255,0.8) inset,1px 0 0 rgba(255,255,255,0.3) inset,inset 0 -1em 1.5em -0.6em rgba(0,0,0,0.2)}.Viper-browserVer-msie8 .themeDark .Viper-buttonGroup .Viper-button,.Viper-browserVer-msie8 .themeDark .Viper-buttonGroup .Viper-button.disabled:hover{border-color:#777 #dadade #555 #a6a6a9;border-right:0}.themeDark .Viper-buttonGroup .Viper-button:first-child{border-left-width:0;box-shadow:0 -2px 2px -2px rgba(0,0,0,0.5),0 2px 2px -2px rgba(0,0,0,0.5),-2px 0 2px -2px rgba(0,0,0,0.5),1px 0 0 rgba(255,255,255,0.3) inset,0 1px 0 rgba(255,255,255,0.8) inset}.Viper-browserVer-msie8 .themeDark .Viper-buttonGroup .Viper-button:first-child{border-left-width:1px;border-left-color:#666}.Viper-browserVer-msie9 .themeDark .Viper-buttonGroup .Viper-button:first-child{box-shadow:0 -2px 2px -2px rgba(0,0,0,0.5),0 2px 2px -2px rgba(0,0,0,0.5),-2px 0 2px -2px rgba(0,0,0,0.5),1px 0 0 rgba(255,255,255,0.3) inset,0 1px 0 rgba(255,255,255,0.8) inset,inset 0 -1em 1.5em -0.6em rgba(0,0,0,0.2)}.themeDark .Viper-buttonGroup .Viper-button:last-child{box-shadow:0 -2px 2px -2px rgba(0,0,0,0.5),0 2px 2px -2px rgba(0,0,0,0.5),2px 0 2px -2px rgba(0,0,0,0.5),1px 0 0 rgba(255,255,255,0.3) inset,0 1px 0 rgba(255,255,255,0.8) inset}.Viper-browserVer-msie8 .themeDark .Viper-buttonGroup .Viper-button:last-child{border-right:1px solid #666}.Viper-browserVer-msie9 .themeDark .Viper-buttonGroup .Viper-button:last-child{box-shadow:0 -2px 2px -2px rgba(0,0,0,0.5),0 2px 2px -2px rgba(0,0,0,0.5),2px 0 2px -2px rgba(0,0,0,0.5),1px 0 0 rgba(255,255,255,0.3) inset,0 1px 0 rgba(255,255,255,0.8) inset,inset 0 -1em 1.5em -0.6em rgba(0,0,0,0.2)}.themeDark .Viper-buttonGroup .Viper-button.active{border-left-color:#1f4e8d;box-shadow:0 2px 2px -2px #000 inset,0 -2px 2px -2px #000 inset,1px 0 0 0 rgba(255,255,255,0.15) inset,0 1px 0 rgba(255,255,255,0.2)}.themeDark .Viper-buttonGroup .Viper-button.selected{border-left-color:#555;box-shadow:0 2px 2px -2px #000 inset,0 -2px 2px -2px #000 inset,1px 0 0 0 rgba(255,255,255,0) inset,0 1px 0 rgba(255,255,255,0.2)}.themeDark .Viper-buttonGroup .Viper-button.selected+.Viper-button,.themeDark .Viper-buttonGroup .Viper-button.active+.Viper-button,.themeDark .Viper-buttonGroup .Viper-button.active+.Viper-button.disabled:hover{border-left-color:#1f4e8d}.themeDark .Viper-buttonGroup .Viper-button.selected+.Viper-button.selected,.themeDark .Viper-buttonGroup .Viper-button.active+.Viper-button.selected{border-left-color:#333}.themeDark .Viper-buttonGroup .Viper-button.selected+.Viper-button.selected,.themeDark .Viper-buttonGroup .Viper-button.active+.Viper-button.selected{box-shadow:0 2px 2px -2px #000 inset,0 -2px 2px -2px #000 inset,0 1px 0 rgba(255,255,255,0.2)!important}.themeDark .Viper-buttonGroup .Viper-button.selected+.Viper-button.active,.themeDark .Viper-buttonGroup .Viper-button.active+.Viper-button.active,.themeDark .Viper-buttonGroup .Viper-button.active+.Viper-button.active.disabled:hover{box-shadow:0 2px 2px -2px #000 inset,0 -2px 2px -2px #000 inset,1px 0 0 0 rgba(255,255,255,0.15) inset,0 1px 0 rgba(255,255,255,0.2)}.themeDark .Viper-buttonGroup .Viper-button:first-child.active{box-shadow:0 2px 2px -2px #000 inset,0 -2px 2px -2px #000 inset,1px 0 0 0 rgba(0,0,0,0.25) inset,0 1px 0 rgba(255,255,255,0.2)}.themeDark .Viper-buttonGroup .Viper-button.active:last-child,.themeDark .Viper-buttonGroup .Viper-button.active:last-child.disabled:hover,.themeDark .Viper-buttonGroup .Viper-button.selected+.Viper-button.active:last-child,.themeDark .Viper-buttonGroup .Viper-button.active+.Viper-button.active:last-child,.themeDark .Viper-buttonGroup .Viper-button.active+.Viper-button.active.disabled:last-child:hover{box-shadow:0 2px 2px -2px #000 inset,0 -2px 2px -2px #000 inset,-1px 0 0 rgba(0,0,0,0.25) inset,1px 0 0 rgba(255,255,255,0.15) inset,0 1px 0 rgba(255,255,255,0.2)}.buttonIcon{position:absolute;width:25px;height:20px;left:50%;top:50%;margin:-10px 0 0 -12.5px;background-image:url(../Images/buttonIcons.png)}.Viper-browserVer-msie8 .disabled .buttonIcon{filter:alpha(opacity = 50)}.buttonIcon.bold{background-position:0 -1350px}.Viper-button:active .buttonIcon.bold,.Viper-button.active .buttonIcon.bold,.Viper-button.selected .buttonIcon.bold{background-position:-33px -1350px}.buttonIcon.italic{background-position:0 -1377px}.Viper-button:active .buttonIcon.italic,.Viper-button.active .buttonIcon.italic,.Viper-button.selected .buttonIcon.italic{background-position:-33px -1377px}.buttonIcon.mergeUp{background-position:0 0}.Viper-button:active .buttonIcon.mergeUp,.Viper-button.active .buttonIcon.mergeUp,.Viper-button.selected .buttonIcon.mergeUp{background-position:-33px 0}.buttonIcon.mergeDown{background-position:0 -27px}.Viper-button:active .buttonIcon.mergeDown,.Viper-button.active .buttonIcon.mergeDown,.Viper-button.selected .buttonIcon.mergeDown{background-position:-33px -27px}.buttonIcon.delete{background-position:0 -54px}.Viper-button:active .buttonIcon.delete,.Viper-button.active .buttonIcon.delete,.Viper-button.selected .buttonIcon.delete{background-position:-33px -54px}.buttonIcon.addAbove{background-position:0 -81px}.Viper-button:active .buttonIcon.addAbove,.Viper-button.active .buttonIcon.addAbove,.Viper-button.selected .buttonIcon.addAbove{background-position:-33px -81px}.buttonIcon.addBelow{background-position:0 -108px}.Viper-button:active .buttonIcon.addBelow,.Viper-button.active .buttonIcon.addBelow,.Viper-button.selected .buttonIcon.addBelow{background-position:-33px -108px}.buttonIcon.mergeLeft{background-position:0 -135px}.Viper-button:active .buttonIcon.mergeLeft,.Viper-button.active .buttonIcon.mergeLeft,.Viper-button.selected .buttonIcon.mergeLeft{background-position:-33px -135px}.buttonIcon.mergeRight{background-position:0 -162px}.Viper-button:active .buttonIcon.mergeRight,.Viper-button.active .buttonIcon.mergeRight,.Viper-button.selected .buttonIcon.mergeRight{background-position:-33px -162px}.buttonIcon.splitHoriz{background-position:0 -189px}.Viper-button:active .buttonIcon.splitHoriz,.Viper-button.active .buttonIcon.splitHoriz,.Viper-button.selected .buttonIcon.splitHoriz{background-position:-33px -189px}.buttonIcon.splitVert{background-position:0 -216px}.Viper-button:active .buttonIcon.splitVert,.Viper-button.active .buttonIcon.splitVert,.Viper-button.selected .buttonIcon.splitVert{background-position:-33px -216px}.buttonIcon.move{background-position:0 -243px}.Viper-button:active .buttonIcon.move,.Viper-button.active .buttonIcon.move,.Viper-button.selected .buttonIcon.move{background-position:-33px -243px}.buttonIcon.addLeft{background-position:0 -270px}.Viper-button:active .buttonIcon.addLeft,.Viper-button.active .buttonIcon.addLeft,.Viper-button.selected .buttonIcon.addLeft{background-position:-33px -270px}.buttonIcon.addRight{background-position:0 -297px}.Viper-button:active .buttonIcon.addRight,.Viper-button.active .buttonIcon.addRight,.Viper-button.selected .buttonIcon.addRight{background-position:-33px -297px}.buttonIcon.splitMerge{background-position:0 -324px}.Viper-button:active .buttonIcon.splitMerge,.Viper-button.active .buttonIcon.splitMerge,.Viper-button.selected .buttonIcon.splitMerge{background-position:-33px -324px}.buttonIcon.headingCheck{background-position:0 -351px}.Viper-button:active .buttonIcon.headingCheck,.Viper-button.active .buttonIcon.headingCheck,.Viper-button.selected .buttonIcon.headingCheck{background-position:-33px -351px}.buttonIcon.accessAudit{background-position:0 -351px}.Viper-button:active .buttonIcon.accessAudit,.Viper-button.active .buttonIcon.accessAudit,.Viper-button.selected .buttonIcon.accessAudit{background-position:-33px -351px}.buttonIcon.headerAbbr{background-position:0 -378px}.Viper-button:active .buttonIcon.headerAbbr,.Viper-button.active .buttonIcon.headerAbbr,.Viper-button.selected .buttonIcon.headerAbbr{background-position:-33px -378px}.buttonIcon.cssClass{background-position:0 -405px}.Viper-button:active .buttonIcon.cssClass,.Viper-button.active .buttonIcon.cssClass,.Viper-button.selected .buttonIcon.cssClass{background-position:-33px -405px}.buttonIcon.anchorID{background-position:0 -432px}.Viper-button:active .buttonIcon.anchorID,.Viper-button.active .buttonIcon.anchorID,.Viper-button.selected .buttonIcon.anchorID{background-position:-33px -432px}.buttonIcon.table{background-position:0 -459px}.Viper-button:active .buttonIcon.table,.Viper-button.active .buttonIcon.table,.Viper-button.selected .buttonIcon.table{background-position:-33px -459px}.buttonIcon.tableRow{background-position:0 -486px}.Viper-button:active .buttonIcon.tableRow,.Viper-button.active .buttonIcon.tableRow,.Viper-button.selected .buttonIcon.tableRow{background-position:-33px -486px}.buttonIcon.tableCol{background-position:0 -513px}.Viper-button:active .buttonIcon.tableCol,.Viper-button.active .buttonIcon.tableCol,.Viper-button.selected .buttonIcon.tableCol{background-position:-33px -513px}.buttonIcon.tableCell{background-position:0 -540px}.Viper-button:active .buttonIcon.tableCell,.Viper-button.active .buttonIcon.tableCell,.Viper-button.selected .buttonIcon.tableCell{background-position:-33px -540px}.buttonIcon.listUL{background-position:0 -567px}.Viper-button:active .buttonIcon.listUL,.Viper-button.active .buttonIcon.listUL,.Viper-button.selected .buttonIcon.listUL{background-position:-33px -567px}.buttonIcon.listOL{background-position:0 -594px}.Viper-button:active .buttonIcon.listOL,.Viper-button.active .buttonIcon.listOL,.Viper-button.selected .buttonIcon.listOL{background-position:-33px -594px}.buttonIcon.listIndent{background-position:0 -621px}.Viper-button:active .buttonIcon.listIndent,.Viper-button.active .buttonIcon.listIndent,.Viper-button.selected .buttonIcon.listIndent{background-position:-33px -621px}.buttonIcon.listOutdent{background-position:0 -648px}.Viper-button:active .buttonIcon.listOutdent,.Viper-button.active .buttonIcon.listOutdent,.Viper-button.selected .buttonIcon.listOutdent{background-position:-33px -648px}.buttonIcon.link{background-position:0 -675px}.Viper-button:active .buttonIcon.link,.Viper-button.active .buttonIcon.link,.Viper-button.selected .buttonIcon.link{background-position:-33px -675px}.buttonIcon.linkNewWindow{background-position:0 -702px}.Viper-button:active .buttonIcon.linkNewWindow,.Viper-button.active .buttonIcon.linkNewWindow,.Viper-button.selected .buttonIcon.linkNewWindow{background-position:-33px -702px}.buttonIcon.linkRemove{background-position:0 -729px}.Viper-button:active .buttonIcon.linkRemove,.Viper-button.active .buttonIcon.linkRemove,.Viper-button.selected .buttonIcon.linkRemove{background-position:-33px -729px}.buttonIcon.image{background-position:0 -756px}.Viper-button:active .buttonIcon.image,.Viper-button.active .buttonIcon.image,.Viper-button.selected .buttonIcon.image{background-position:-33px -756px}.buttonIcon.accessRerun{background-position:0 -783px}.Viper-button:active .buttonIcon.accessRerun,.Viper-button.active .buttonIcon.accessRerun,.Viper-button.selected .buttonIcon.accessRerun{background-position:-33px -783px}.buttonIcon.locate{background-position:0 -810px}.Viper-button:active .buttonIcon.locate,.Viper-button.active .buttonIcon.locate,.Viper-button.selected .buttonIcon.locate{background-position:-33px -810px}.buttonIcon.sourceView{background-position:0 -837px}.Viper-button:active .buttonIcon.sourceView,.Viper-button.active .buttonIcon.sourceView,.Viper-button.selected .buttonIcon.sourceView{background-position:-33px -837px}.buttonIcon.nextIssue{background-position:0 -864px}.Viper-button:active .buttonIcon.nextIssue,.Viper-button.active .buttonIcon.nextIssue,.Viper-button.selected .buttonIcon.nextIssue{background-position:-33px -864px}.buttonIcon.prevIssue{background-position:0 -891px}.Viper-button:active .buttonIcon.prevIssue,.Viper-button.active .buttonIcon.prevIssue,.Viper-button.selected .buttonIcon.prevIssue{background-position:-33px -891px}.buttonIcon.justifyLeft{background-position:0 -918px}.Viper-button:active .buttonIcon.justifyLeft,.Viper-button.active .buttonIcon.justifyLeft,.Viper-button.selected .buttonIcon.justifyLeft{background-position:-33px -918px}.buttonIcon.justifyRight{background-position:0 -945px}.Viper-button:active .buttonIcon.justifyRight,.Viper-button.active .buttonIcon.justifyRight,.Viper-button.selected .buttonIcon.justifyRight{background-position:-33px -945px}.buttonIcon.justifyCenter{background-position:0 -972px}.Viper-button:active .buttonIcon.justifyCenter,.Viper-button.active .buttonIcon.justifyCenter,.Viper-button.selected .buttonIcon.justifyCenter{background-position:-33px -972px}.buttonIcon.justifyBlock{background-position:0 -999px}.Viper-button:active .buttonIcon.justifyBlock,.Viper-button.active .buttonIcon.justifyBlock,.Viper-button.selected .buttonIcon.justifyBlock{background-position:-33px -999px}.buttonIcon.subscript{background-position:0 -1026px}.Viper-button:active .buttonIcon.subscript,.Viper-button.active .buttonIcon.subscript,.Viper-button.selected .buttonIcon.subscript{background-position:-33px -1026px}.buttonIcon.superscript{background-position:0 -1053px}.Viper-button:active .buttonIcon.superscript,.Viper-button.active .buttonIcon.superscript,.Viper-button.selected .buttonIcon.superscript{background-position:-33px -1053px}.buttonIcon.strikethrough{background-position:0 -1080px}.Viper-button:active .buttonIcon.strikethrough,.Viper-button.active .buttonIcon.strikethrough,.Viper-button.selected .buttonIcon.strikethrough{background-position:-33px -1080px}.buttonIcon.removeFormat{background-position:0 -1107px}.Viper-button:active .buttonIcon.removeFormat,.Viper-button.active .buttonIcon.removeFormat,.Viper-button.selected .buttonIcon.removeFormat{background-position:-33px -1107px}.buttonIcon.historyUndo{background-position:0 -1134px}.Viper-button:active .buttonIcon.historyUndo,.Viper-button.active .buttonIcon.historyUndo,.Viper-button.selected .buttonIcon.historyUndo{background-position:-33px -1134px}.buttonIcon.historyRedo{background-position:0 -1161px}.Viper-button:active .buttonIcon.historyRedo,.Viper-button.active .buttonIcon.historyRedo,.Viper-button.selected .buttonIcon.historyRedo{background-position:-33px -1161px}.buttonIcon.accessSettings{background-position:0 -1188px}.Viper-button:active .buttonIcon.accessSettings,.Viper-button.active .buttonIcon.accessSettings,.Viper-button.selected .buttonIcon.accessSettings{background-position:-33px -1188px}.buttonIcon.tableSettings{background-position:0 -1188px}.Viper-button:active .buttonIcon.tableSettings,.Viper-button.active .buttonIcon.tableSettings,.Viper-button.selected .buttonIcon.tableSettings{background-position:-33px -1188px}.buttonIcon.target{background-position:0 -1215px}.Viper-button:active .buttonIcon.target,.Viper-button.active .buttonIcon.target,.Viper-button.selected .buttonIcon.target{background-position:-33px -1215px}.buttonIcon.insertHr{background-position:0 -1242px}.Viper-button:active .buttonIcon.insertHr,.Viper-button.active .buttonIcon.insertHr,.Viper-button.selected .buttonIcon.insertHr{background-position:-33px -1242px}.buttonIcon.charMap{background-position:0 -1269px}.Viper-button:active .buttonIcon.charMap,.Viper-button.active .buttonIcon.charMap,.Viper-button.selected .buttonIcon.charMap{background-position:-33px -1269px}.buttonIcon.showHiddenChars{background-position:0 -1296px}.Viper-button:active .buttonIcon.showHiddenChars,.Viper-button.active .buttonIcon.showHiddenChars,.Viper-button.selected .buttonIcon.showHiddenChars{background-position:-33px -1296px}.buttonIcon.sourceNewWindow{background-position:0 -702px}.Viper-button:active .buttonIcon.sourceNewWindow,.Viper-button.active .buttonIcon.sourceNewWindow,.Viper-button.selected .buttonIcon.sourceNewWindow{background-position:-33px -702px}.buttonIcon.langTools{background-position:0 -1323px}.Viper-button:active .buttonIcon.langTools,.Viper-button.active .buttonIcon.langTools,.Viper-button.selected .buttonIcon.langTools{background-position:-33px -1323px}.buttonIcon.searchReplace{background-position:0 -1404px}.Viper-button:active .buttonIcon.searchReplace,.Viper-button.active .buttonIcon.searchReplace,.Viper-button.selected .buttonIcon.searchReplace{background-position:-33px -1404px}.buttonIcon.formats{background-position:0 -1431px}.Viper-button:active .buttonIcon.formats,.Viper-button.active .buttonIcon.formats,.Viper-button.selected .buttonIcon.formats{background-position:-33px -1431px}.buttonIcon.headings{background-position:0 -1458px}.Viper-button:active .buttonIcon.headings,.Viper-button.active .buttonIcon.headings,.Viper-button.selected .buttonIcon.headings{background-position:-33px -1458px}.__viper_selHighlight{background-color:#CCC!important}.Viper-textbox{margin-bottom:.6em;-moz-transition:opacity .2s ease-in;-webkit-transition:opacity .2s ease-in}.Viper-textbox .Viper-textbox-textArea{resize:none}.Viper-textbox.disabled{opacity:.4;filter:alpha(opacity = 40)}.Viper-textbox-label{display:block;padding:4px 2px;position:relative;clear:both;text-align:left;color:#DDD;background:#2b2b2b;border-radius:.4em;-moz-transition-property:color,background;-moz-transition-duration:.3s;-webkit-transition-property:color,background;-webkit-transition-duration:.3s;border-top:1px solid #000;border-bottom:1px solid #777;color:#5a8bd0;box-shadow:0 0 3px #000 inset}.Viper-textbox.active .Viper-textbox-label{background:#205caf}.Viper-textbox:after{display:block;content:"";clear:both}.Viper-textbox.disabled{opacity:.4;filter:alpha(opacity = 40)}.Viper-textbox-main{position:relative}.Viper-textbox.actionRevert .Viper-textbox-main,.Viper-textbox.actionClear .Viper-textbox-main{padding-right:22px}.Viper-textbox-title{position:absolute;left:0;top:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#DDD;text-shadow:0 -1px 0 #000;text-shadow:none;line-height:1.85em;font-size:1.2em;padding:0 10px;margin:0 0 0 .2em;background-color:#404040;border-radius:.2em;height:100%;-moz-transition-property:color,background;-moz-transition-duration:.3s;-webkit-transition-property:color,background;-webkit-transition-duration:.3s}.Viper-textbox.active .Viper-textbox-title,.Viper-textbox.required.active .Viper-textbox-title{background-color:#366cb7;box-shadow:0 0 6px rgba(0,0,0,0.5)}.Viper-textbox.required .Viper-textbox-title{background-color:#c44e4e;color:#FFF;text-shadow:0 -1px 0 rgba(0,0,0,0.2)}.Viper-textbox-input[type=text],.Viper-textbox-textArea{font-family:Arial;box-sizing:border-box;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;width:100%;font-size:1.49em;font-weight:bold;border:0;padding:.1em 0 .15em;background:transparent;color:#5a8bd0;outline:0}.Viper-textbox.active .Viper-textbox-input[type=text],.Viper-textbox.active .Viper-textbox-textArea,.Viper-textbox.required.active .Viper-textbox-input[type=text],.Viper-textbox.required.active .Viper-textbox-textArea{color:#FFF}.Viper-textbox.required .Viper-textbox-input[type=text],.Viper-textbox.required .Viper-textbox-textArea{color:#c44e4e}.Viper-textbox-input[type=text]::-webkit-input-placeholder,.Viper-textbox-textArea::-webkit-input-placeholder{color:#c44e4e;font-style:italic;font-weight:normal}.Viper-textbox.active .Viper-textbox-input[type=text]::-webkit-input-placeholder,.Viper-textbox.active .Viper-textbox-textArea::-webkit-input-placeholder{color:#7c9cc9}.Viper-textbox-input[type=text]:-moz-placeholder,.Viper-textbox-textArea:-moz-placeholder{color:#c44e4e;font-style:italic;font-weight:normal}.Viper-textbox.active .Viper-textbox-input[type=text]:-moz-placeholder,.Viper-textbox.active .Viper-textbox-textArea:-moz-placeholder{color:#7c9cc9}.Viper-textbox.disabled .Viper-textbox-input[type=text],.Viper-textbox.disabled .Viper-textbox-textArea{text-decoration:line-through;color:#CCC}.input-placeholder{color:#c44e4e;font-style:italic;font-weight:normal}.Viper-textbox.active .input-placeholder{color:#7c9cc9}.Viper-textbox-messages{padding:.5em .3em 0;font-size:1.3em}.Viper-textbox-error{display:block;background-color:#c01c1c;color:#FFF;border-radius:.2em;padding:.4em .5em;text-shadow:0 -1px 0 rgba(0,0,0,0.4)}.Viper-textbox-desc{display:block;padding:.4em 1em;font-size:1.4em;color:#111;text-shadow:0 1px 0 rgba(255,255,255,0.2)}.Viper-textbox-action,.Viper-textbox.required .Viper-textbox-main:after{display:none;position:absolute;cursor:pointer;background:transparent url(../Images/viperToolsSprite.png) 0 -122px no-repeat;width:18px;height:18px;right:2px;top:50%;margin-top:-9px}.Viper-textbox.disabled .Viper-textbox-action,.Viper-textbox.disabled .Viper-textbox.required .Viper-textbox-main:after{visibility:hidden}.Viper-textbox.required .Viper-textbox-main:after{display:block;content:"";background-position:0 -158px}.Viper-textbox.required.active .Viper-textbox-main:after{background-position:0 -215px}.Viper-textbox.actionRevert .Viper-textbox-action,.Viper-textbox.actionClear .Viper-textbox-action{display:block;opacity:.6}.Viper-textbox.actionRevert .Viper-textbox-action:hover,.Viper-textbox.actionClear .Viper-textbox-action:hover{opacity:1}.Viper-textbox.actionClear .Viper-textbox-action{background-position:0 -140px}.Viper-checkbox{display:block;position:relative;clear:both;margin-bottom:.6em;text-align:left;text-shadow:none;color:#FFF;background-color:rgba(255,255,255,0.06);border:1px solid #393939;border-radius:.4em .4em .4em .4em;box-shadow:0 1px 0 rgba(255,255,255,0.2) inset,0 1px 0 rgba(255,255,255,0.1);padding:0 .8em;font-size:1.2em;cursor:pointer}.Viper-checkbox.disabled{opacity:.4}.Viper-checkbox-title{text-shadow:0 -1px 0 rgba(0,0,0,0.4);color:#ddd;white-space:nowrap;font-size:1.1em;line-height:2.5em}.Viper-checkbox-switch{font-size:1.2em;position:absolute;overflow:hidden;right:.6em;width:3.2em;height:1.6em;top:50%;margin-top:-0.8em;cursor:pointer;background-color:#2b2b2b;border-radius:.8em;box-shadow:0 0 1px 1px rgba(0,0,0,0.6) inset,0 1px 0 rgba(255,255,255,0.2);-moz-transition:background-color .2s ease;-webkit-transition:background-color .2s ease;box-shadow:0 2px 2px -1px rgba(0,0,0,0.8) inset,0 -2px 2px -2px #000 inset,0 1px 0 rgba(255,255,255,0.2),1px 0 0 rgba(0,0,0,0.3) inset,-1px 0 0 rgba(0,0,0,0.3) inset}.Viper-checkbox.active .Viper-checkbox-switch{background-color:#205caf}.Viper-checkbox-slider{-moz-transition:left .2s ease-out;-webkit-transition:left .2s ease-out;content:"";position:absolute;width:1.3em;height:1.3em;border-radius:.65em;left:.15em;top:50%;margin-top:-0.65em;background-color:#65636b;box-shadow:0 0 2px #000,0 1px 0 rgba(255,255,255,0.3) inset}.Viper-checkbox.active .Viper-checkbox-slider{left:1.7em;background-color:#d9d9de;box-shadow:0 0 2px 1px rgba(0,0,0,0.6),0 1px 0 rgba(255,255,255,0.3) inset;background:-webkit-gradient(linear,left top,left bottom,from(#e9e9eb),to(#c2c2cb));background:-moz-linear-gradient(top,#e9e9eb,#c2c2cb)}.Viper-checkbox-switch:before{content:"";display:block;opacity:0;position:absolute;width:10px;height:7px;background:transparent url(../Images/viperToolsSprite.png) 0 -233px no-repeat;left:.5em;top:51%;margin-top:-3px;-moz-transition:.2s opacity ease-in;-webkit-transition:.2s opacity ease-in}.Viper-checkbox.active .Viper-checkbox-switch:before{opacity:1}.Viper-checkbox input{visibility:hidden}.Viper-popup{font-family:Arial,Sans Serif;font-size:9px;position:fixed!important;z-index:1000;border:1px solid transparent;border-radius:.8em .8em .8em .8em;box-shadow:0 0 10px 4px #222;box-shadow:0 0 15px rgba(0,0,0,0.7),0 1px 0 #555 inset}.themeDark.Viper-popup{background-color:#2b2b2b;border-color:#2b2b2b;color:#FFF;text-shadow:0 1px 0 #fff;border:1px solid transparent}@media screen and (max-width:768px){.Viper-popup,.ViperITP,.ViperTP-bar{font-size:13px!important}.Viper-button{min-width:39px}}::-webkit-scrollbar{-webkit-appearance:none;width:.6em;background-color:#000}::-webkit-scrollbar-thumb{border-radius:.2em;background-color:rgba(255,255,255,0.4)}.Viper-popup-header{position:relative;text-transform:uppercase;font-size:1.2em;padding-top:.5em;text-align:center;border-bottom:1px solid transparent;line-height:1.8em;margin:0;padding:.4em 0 0;white-space:nowrap;cursor:move}.themeDark .Viper-popup-header{color:#aaa;text-shadow:0 -1px 0 #000}.Viper-popup-bottom,.Viper-popup-content{padding:.3em 1em 1em;background:url(../Images/bgTexture-dark1.gif) repeat 0 0 #54535a;text-shadow:none}.Viper-popup-bottom{position:relative;border-bottom-left-radius:.8em;border-bottom-right-radius:.8em;text-align:center}.Viper-popup-content{padding:.7em;min-width:52em}.Viper-popup-closeIcon,.Viper-popup-closeIcon:after,.Viper-popup-dragIcon,.Viper-popup-resizeIcon,.Viper-popup .ui-resizable-se{position:absolute;background-image:url(../Images/viperToolsSprite.png)}.Viper-popup-closeIcon{right:0;top:0;width:2.2em;height:2.2em;opacity:.5;cursor:pointer;background:0}.Viper-popup-closeIcon:hover{opacity:1}.Viper-popup-closeIcon:after{content:"";display:block;left:50%;top:50%;width:11px;height:10px;background-position:0 -176px;margin:-5px 0 0 -5px}.Viper-popup-dragIcon{width:17px;height:16px;left:.5em;top:50%;margin-top:-8px;background-position:0 -186px}.Viper-popup-resizeIcon{bottom:0;right:0;width:13px;height:13px;background-position:0 -199px}.Viper-popup .ui-resizable-se{bottom:3px;right:3px;width:13px;height:13px;background-position:0 -202px;cursor:se-resize}
+.ViperITP form,
+.ViperITP ul,
+.ViperITP ol {
+  padding: 0;
+  margin: 0;
+}
+.Viper-button {
+  position: relative;
+  border-radius: 0.25em;
+  cursor: pointer;
+  display: inline-block;
+  font-size: 1.5em;
+  line-height: 1.8em;
+  margin-left: 0.3em;
+  min-width: 29px;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  padding: 0 0.5em;
+  text-align: center;
+}
+.Viper-browserVer-msie8 .Viper-button,
+.Viper-browserVer-msie9 .Viper-button {
+  min-width: 17px;
+  box-sizing: content-box;
+}
+.Viper-button:first-child {
+  margin-left: 0;
+}
+.Viper-button.disabled {
+  opacity: 0.3;
+  filter: alpha(opacity = 50);
+  cursor: default;
+}
+.Viper-button.viper-hidden {
+  display: none;
+}
+.Viper-button.headings {
+  min-width: 30px;
+}
+.Viper-browserVer-msie8 .Viper-button.headings,
+.Viper-browserVer-msie9 .Viper-button.headings {
+  min-width: 18px;
+}
+/* Button Groups */
+.Viper-buttonGroup {
+  display: inline-block;
+  margin-left: 0.55em;
+  white-space: nowrap;
+}
+.Viper-buttonGroup:first-child {
+  margin-left: 0;
+}
+.Viper-buttonGroup .Viper-button {
+  border-radius: 0.1em;
+  margin: 0;
+}
+.Viper-buttonGroup .Viper-button.active,
+.Viper-buttonGroup .Viper-button.selected {
+  border-radius: 0;
+}
+.Viper-buttonGroup .Viper-button:first-child {
+  border-top-left-radius: 0.3em;
+  border-bottom-left-radius: 0.3em;
+  border-left: none;
+}
+.Viper-buttonGroup .Viper-button:last-child {
+  border-top-right-radius: 0.3em;
+  border-bottom-right-radius: 0.3em;
+}
+/* Theme - Dark Grey */
+/* IE9 substituted button gradient variable, re-used throughout */
+.themeDark .Viper-button,
+.themeDark .Viper-button.disabled:hover {
+  background-color: #dadade;
+  border: none;
+  color: #2b2b2b;
+  text-shadow: 0 1px 0 #FFF;
+  box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.5), 0 1px 0 rgba(255, 255, 255, 0.8) inset;
+  background: -webkit-gradient(linear, left top, left bottom, from(#e9e9eb), to(#c2c2cb));
+  background: -moz-linear-gradient(top, #e9e9eb, #c2c2cb);
+}
+.Viper-browserVer-msie8 .themeDark .Viper-button,
+.Viper-browserVer-msie8 .themeDark .Viper-button.disabled:hover {
+  border: 1px solid #666;
+  border-color: #777 #666 #555 #666;
+}
+.Viper-browserVer-msie9 .themeDark .Viper-button,
+.Viper-browserVer-msie9 .themeDark .Viper-button.disabled:hover {
+  background-color: #e9e9eb;
+  box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.5), 0 1px 0 rgba(255, 255, 255, 0.8) inset, inset 0px -1em 1.5em -0.6em rgba(0, 0, 0, 0.2);
+}
+.themeDark .Viper-button:hover {
+  background: #c9c9cd;
+  background: -webkit-gradient(linear, left top, left bottom, from(#d5d5d8), to(#b4b4bc));
+  background: -moz-linear-gradient(top, #d5d5d8, #b4b4bc);
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+.themeDark .Viper-button:active,
+.themeDark .Viper-button.active,
+.themeDark .Viper-button.active:hover,
+.themeDark .Viper-button.selected,
+.themeDark .Viper-button.selected:hover {
+  color: #FFF;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.5);
+  box-shadow: 0 2px 2px -2px #000000 inset, 0 -2px 2px -2px #000000 inset, 0 1px 0 rgba(255, 255, 255, 0.2), 1px 0px 0 rgba(0, 0, 0, 0.25) inset, -1px 0px 0 rgba(0, 0, 0, 0.25) inset;
+}
+.themeDark .Viper-button.active,
+.themeDark .Viper-button.active:hover {
+  background: #2d73d2;
+  background: -webkit-gradient(linear, left top, left bottom, from(#3987f2), to(#205caf));
+  background: -moz-linear-gradient(top, #3987f2, #205caf);
+}
+.themeDark .Viper-button:active,
+.themeDark .Viper-button.selected,
+.themeDark .Viper-button.selected:hover {
+  background: #54535A;
+  border-color: #555;
+}
+.Viper-browserVer-msie8 .themeDark .Viper-buttonGroup {
+  border-right: 1px solid #666;
+}
+.themeDark .Viper-buttonGroup .Viper-button,
+.themeDark .Viper-buttonGroup .Viper-button.disabled:hover {
+  border-left: 1px solid #a6a6a9;
+  box-shadow: 0 -2px 2px -2px rgba(0, 0, 0, 0.4), 0 2px 2px -2px rgba(0, 0, 0, 0.4), 0 1px 0 rgba(255, 255, 255, 0.8) inset, 1px 0 0 rgba(255, 255, 255, 0.3) inset;
+}
+.Viper-browserVer-msie9 .themeDark .Viper-buttonGroup .Viper-button,
+.Viper-browserVer-msie9 .themeDark .Viper-buttonGroup .Viper-button.disabled:hover {
+  box-shadow: 0 -2px 2px -2px rgba(0, 0, 0, 0.4), 0 2px 2px -2px rgba(0, 0, 0, 0.4), 0 1px 0 rgba(255, 255, 255, 0.8) inset, 1px 0 0 rgba(255, 255, 255, 0.3) inset, inset 0px -1em 1.5em -0.6em rgba(0, 0, 0, 0.2);
+}
+.Viper-browserVer-msie8 .themeDark .Viper-buttonGroup .Viper-button,
+.Viper-browserVer-msie8 .themeDark .Viper-buttonGroup .Viper-button.disabled:hover {
+  border-color: #777 #dadade #555 #a6a6a9;
+  border-right: none;
+}
+.themeDark .Viper-buttonGroup .Viper-button:first-child {
+  border-left-width: 0;
+  box-shadow: 0 -2px 2px -2px rgba(0, 0, 0, 0.5), 0 2px 2px -2px rgba(0, 0, 0, 0.5), -2px 0 2px -2px rgba(0, 0, 0, 0.5), 1px 0 0 rgba(255, 255, 255, 0.3) inset, 0 1px 0 rgba(255, 255, 255, 0.8) inset;
+}
+.Viper-browserVer-msie8 .themeDark .Viper-buttonGroup .Viper-button:first-child {
+  border-left-width: 1px;
+  border-left-color: #666;
+}
+.Viper-browserVer-msie9 .themeDark .Viper-buttonGroup .Viper-button:first-child {
+  box-shadow: 0 -2px 2px -2px rgba(0, 0, 0, 0.5), 0 2px 2px -2px rgba(0, 0, 0, 0.5), -2px 0 2px -2px rgba(0, 0, 0, 0.5), 1px 0 0 rgba(255, 255, 255, 0.3) inset, 0 1px 0 rgba(255, 255, 255, 0.8) inset, inset 0px -1em 1.5em -0.6em rgba(0, 0, 0, 0.2);
+}
+.themeDark .Viper-buttonGroup .Viper-button:last-child {
+  box-shadow: 0 -2px 2px -2px rgba(0, 0, 0, 0.5), 0 2px 2px -2px rgba(0, 0, 0, 0.5), 2px 0 2px -2px rgba(0, 0, 0, 0.5), 1px 0 0 rgba(255, 255, 255, 0.3) inset, 0 1px 0 rgba(255, 255, 255, 0.8) inset;
+}
+.Viper-browserVer-msie8 .themeDark .Viper-buttonGroup .Viper-button:last-child {
+  border-right: 1px solid #666;
+}
+.Viper-browserVer-msie9 .themeDark .Viper-buttonGroup .Viper-button:last-child {
+  box-shadow: 0 -2px 2px -2px rgba(0, 0, 0, 0.5), 0 2px 2px -2px rgba(0, 0, 0, 0.5), 2px 0 2px -2px rgba(0, 0, 0, 0.5), 1px 0 0 rgba(255, 255, 255, 0.3) inset, 0 1px 0 rgba(255, 255, 255, 0.8) inset, inset 0px -1em 1.5em -0.6em rgba(0, 0, 0, 0.2);
+}
+.themeDark .Viper-buttonGroup .Viper-button.active {
+  border-left-color: #1f4e8d;
+  box-shadow: 0 2px 2px -2px #000000 inset, 0 -2px 2px -2px #000000 inset, 1px 0 0 0 rgba(255, 255, 255, 0.15) inset, 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+.themeDark .Viper-buttonGroup .Viper-button.selected {
+  border-left-color: #555;
+  box-shadow: 0 2px 2px -2px #000000 inset, 0 -2px 2px -2px #000000 inset, 1px 0 0 0 rgba(255, 255, 255, 0) inset, 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+.themeDark .Viper-buttonGroup .Viper-button.selected + .Viper-button,
+.themeDark .Viper-buttonGroup .Viper-button.active + .Viper-button,
+.themeDark .Viper-buttonGroup .Viper-button.active + .Viper-button.disabled:hover {
+  border-left-color: #1f4e8d;
+}
+.themeDark .Viper-buttonGroup .Viper-button.selected + .Viper-button.selected,
+.themeDark .Viper-buttonGroup .Viper-button.active + .Viper-button.selected {
+  border-left-color: #333;
+}
+.themeDark .Viper-buttonGroup .Viper-button.selected + .Viper-button.selected,
+.themeDark .Viper-buttonGroup .Viper-button.active + .Viper-button.selected {
+  box-shadow: 0 2px 2px -2px #000000 inset, 0 -2px 2px -2px #000000 inset, 0 1px 0 rgba(255, 255, 255, 0.2) !important;
+}
+.themeDark .Viper-buttonGroup .Viper-button.selected + .Viper-button.active,
+.themeDark .Viper-buttonGroup .Viper-button.active + .Viper-button.active,
+.themeDark .Viper-buttonGroup .Viper-button.active + .Viper-button.active.disabled:hover {
+  box-shadow: 0 2px 2px -2px #000000 inset, 0 -2px 2px -2px #000000 inset, 1px 0 0 0 rgba(255, 255, 255, 0.15) inset, 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+.themeDark .Viper-buttonGroup .Viper-button:first-child.active {
+  box-shadow: 0 2px 2px -2px #000000 inset, 0 -2px 2px -2px #000000 inset, 1px 0 0 0 rgba(0, 0, 0, 0.25) inset, 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+.themeDark .Viper-buttonGroup .Viper-button.active:last-child,
+.themeDark .Viper-buttonGroup .Viper-button.active:last-child.disabled:hover,
+.themeDark .Viper-buttonGroup .Viper-button.selected + .Viper-button.active:last-child,
+.themeDark .Viper-buttonGroup .Viper-button.active + .Viper-button.active:last-child,
+.themeDark .Viper-buttonGroup .Viper-button.active + .Viper-button.active.disabled:last-child:hover {
+  box-shadow: 0 2px 2px -2px #000000 inset, 0 -2px 2px -2px #000000 inset, -1px 0px 0 rgba(0, 0, 0, 0.25) inset, 1px 0 0 rgba(255, 255, 255, 0.15) inset, 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+/* Buttons */
+.buttonIcon {
+  position: absolute;
+  width: 25px;
+  height: 20px;
+  left: 50%;
+  top: 50%;
+  margin: -10px 0 0 -12.5px;
+  background-image: url(../Images/buttonIcons.png);
+}
+.Viper-browserVer-msie8 .disabled .buttonIcon {
+  filter: alpha(opacity = 50);
+}
+.buttonIcon.bold {
+  background-position: 0 -1350px;
+}
+.Viper-button:active .buttonIcon.bold,
+.Viper-button.active .buttonIcon.bold,
+.Viper-button.selected .buttonIcon.bold {
+  background-position: -33px -1350px;
+}
+.buttonIcon.italic {
+  background-position: 0 -1377px;
+}
+.Viper-button:active .buttonIcon.italic,
+.Viper-button.active .buttonIcon.italic,
+.Viper-button.selected .buttonIcon.italic {
+  background-position: -33px -1377px;
+}
+.buttonIcon.mergeUp {
+  background-position: 0 0px;
+}
+.Viper-button:active .buttonIcon.mergeUp,
+.Viper-button.active .buttonIcon.mergeUp,
+.Viper-button.selected .buttonIcon.mergeUp {
+  background-position: -33px 0px;
+}
+.buttonIcon.mergeDown {
+  background-position: 0 -27px;
+}
+.Viper-button:active .buttonIcon.mergeDown,
+.Viper-button.active .buttonIcon.mergeDown,
+.Viper-button.selected .buttonIcon.mergeDown {
+  background-position: -33px -27px;
+}
+.buttonIcon.delete {
+  background-position: 0 -54px;
+}
+.Viper-button:active .buttonIcon.delete,
+.Viper-button.active .buttonIcon.delete,
+.Viper-button.selected .buttonIcon.delete {
+  background-position: -33px -54px;
+}
+.buttonIcon.addAbove {
+  background-position: 0 -81px;
+}
+.Viper-button:active .buttonIcon.addAbove,
+.Viper-button.active .buttonIcon.addAbove,
+.Viper-button.selected .buttonIcon.addAbove {
+  background-position: -33px -81px;
+}
+.buttonIcon.addBelow {
+  background-position: 0 -108px;
+}
+.Viper-button:active .buttonIcon.addBelow,
+.Viper-button.active .buttonIcon.addBelow,
+.Viper-button.selected .buttonIcon.addBelow {
+  background-position: -33px -108px;
+}
+.buttonIcon.mergeLeft {
+  background-position: 0 -135px;
+}
+.Viper-button:active .buttonIcon.mergeLeft,
+.Viper-button.active .buttonIcon.mergeLeft,
+.Viper-button.selected .buttonIcon.mergeLeft {
+  background-position: -33px -135px;
+}
+.buttonIcon.mergeRight {
+  background-position: 0 -162px;
+}
+.Viper-button:active .buttonIcon.mergeRight,
+.Viper-button.active .buttonIcon.mergeRight,
+.Viper-button.selected .buttonIcon.mergeRight {
+  background-position: -33px -162px;
+}
+.buttonIcon.splitHoriz {
+  background-position: 0 -189px;
+}
+.Viper-button:active .buttonIcon.splitHoriz,
+.Viper-button.active .buttonIcon.splitHoriz,
+.Viper-button.selected .buttonIcon.splitHoriz {
+  background-position: -33px -189px;
+}
+.buttonIcon.splitVert {
+  background-position: 0 -216px;
+}
+.Viper-button:active .buttonIcon.splitVert,
+.Viper-button.active .buttonIcon.splitVert,
+.Viper-button.selected .buttonIcon.splitVert {
+  background-position: -33px -216px;
+}
+.buttonIcon.move {
+  background-position: 0 -243px;
+}
+.Viper-button:active .buttonIcon.move,
+.Viper-button.active .buttonIcon.move,
+.Viper-button.selected .buttonIcon.move {
+  background-position: -33px -243px;
+}
+.buttonIcon.addLeft {
+  background-position: 0 -270px;
+}
+.Viper-button:active .buttonIcon.addLeft,
+.Viper-button.active .buttonIcon.addLeft,
+.Viper-button.selected .buttonIcon.addLeft {
+  background-position: -33px -270px;
+}
+.buttonIcon.addRight {
+  background-position: 0 -297px;
+}
+.Viper-button:active .buttonIcon.addRight,
+.Viper-button.active .buttonIcon.addRight,
+.Viper-button.selected .buttonIcon.addRight {
+  background-position: -33px -297px;
+}
+.buttonIcon.splitMerge {
+  background-position: 0 -324px;
+}
+.Viper-button:active .buttonIcon.splitMerge,
+.Viper-button.active .buttonIcon.splitMerge,
+.Viper-button.selected .buttonIcon.splitMerge {
+  background-position: -33px -324px;
+}
+.buttonIcon.headingCheck {
+  background-position: 0 -351px;
+}
+.Viper-button:active .buttonIcon.headingCheck,
+.Viper-button.active .buttonIcon.headingCheck,
+.Viper-button.selected .buttonIcon.headingCheck {
+  background-position: -33px -351px;
+}
+.buttonIcon.accessAudit {
+  background-position: 0 -351px;
+}
+.Viper-button:active .buttonIcon.accessAudit,
+.Viper-button.active .buttonIcon.accessAudit,
+.Viper-button.selected .buttonIcon.accessAudit {
+  background-position: -33px -351px;
+}
+.buttonIcon.headerAbbr {
+  background-position: 0 -378px;
+}
+.Viper-button:active .buttonIcon.headerAbbr,
+.Viper-button.active .buttonIcon.headerAbbr,
+.Viper-button.selected .buttonIcon.headerAbbr {
+  background-position: -33px -378px;
+}
+.buttonIcon.cssClass {
+  background-position: 0 -405px;
+}
+.Viper-button:active .buttonIcon.cssClass,
+.Viper-button.active .buttonIcon.cssClass,
+.Viper-button.selected .buttonIcon.cssClass {
+  background-position: -33px -405px;
+}
+.buttonIcon.anchorID {
+  background-position: 0 -432px;
+}
+.Viper-button:active .buttonIcon.anchorID,
+.Viper-button.active .buttonIcon.anchorID,
+.Viper-button.selected .buttonIcon.anchorID {
+  background-position: -33px -432px;
+}
+.buttonIcon.table {
+  background-position: 0 -459px;
+}
+.Viper-button:active .buttonIcon.table,
+.Viper-button.active .buttonIcon.table,
+.Viper-button.selected .buttonIcon.table {
+  background-position: -33px -459px;
+}
+.buttonIcon.tableRow {
+  background-position: 0 -486px;
+}
+.Viper-button:active .buttonIcon.tableRow,
+.Viper-button.active .buttonIcon.tableRow,
+.Viper-button.selected .buttonIcon.tableRow {
+  background-position: -33px -486px;
+}
+.buttonIcon.tableCol {
+  background-position: 0 -513px;
+}
+.Viper-button:active .buttonIcon.tableCol,
+.Viper-button.active .buttonIcon.tableCol,
+.Viper-button.selected .buttonIcon.tableCol {
+  background-position: -33px -513px;
+}
+.buttonIcon.tableCell {
+  background-position: 0 -540px;
+}
+.Viper-button:active .buttonIcon.tableCell,
+.Viper-button.active .buttonIcon.tableCell,
+.Viper-button.selected .buttonIcon.tableCell {
+  background-position: -33px -540px;
+}
+.buttonIcon.listUL {
+  background-position: 0 -567px;
+}
+.Viper-button:active .buttonIcon.listUL,
+.Viper-button.active .buttonIcon.listUL,
+.Viper-button.selected .buttonIcon.listUL {
+  background-position: -33px -567px;
+}
+.buttonIcon.listOL {
+  background-position: 0 -594px;
+}
+.Viper-button:active .buttonIcon.listOL,
+.Viper-button.active .buttonIcon.listOL,
+.Viper-button.selected .buttonIcon.listOL {
+  background-position: -33px -594px;
+}
+.buttonIcon.listIndent {
+  background-position: 0 -621px;
+}
+.Viper-button:active .buttonIcon.listIndent,
+.Viper-button.active .buttonIcon.listIndent,
+.Viper-button.selected .buttonIcon.listIndent {
+  background-position: -33px -621px;
+}
+.buttonIcon.listOutdent {
+  background-position: 0 -648px;
+}
+.Viper-button:active .buttonIcon.listOutdent,
+.Viper-button.active .buttonIcon.listOutdent,
+.Viper-button.selected .buttonIcon.listOutdent {
+  background-position: -33px -648px;
+}
+.buttonIcon.link {
+  background-position: 0 -675px;
+}
+.Viper-button:active .buttonIcon.link,
+.Viper-button.active .buttonIcon.link,
+.Viper-button.selected .buttonIcon.link {
+  background-position: -33px -675px;
+}
+.buttonIcon.linkNewWindow {
+  background-position: 0 -702px;
+}
+.Viper-button:active .buttonIcon.linkNewWindow,
+.Viper-button.active .buttonIcon.linkNewWindow,
+.Viper-button.selected .buttonIcon.linkNewWindow {
+  background-position: -33px -702px;
+}
+.buttonIcon.linkRemove {
+  background-position: 0 -729px;
+}
+.Viper-button:active .buttonIcon.linkRemove,
+.Viper-button.active .buttonIcon.linkRemove,
+.Viper-button.selected .buttonIcon.linkRemove {
+  background-position: -33px -729px;
+}
+.buttonIcon.image {
+  background-position: 0 -756px;
+}
+.Viper-button:active .buttonIcon.image,
+.Viper-button.active .buttonIcon.image,
+.Viper-button.selected .buttonIcon.image {
+  background-position: -33px -756px;
+}
+.buttonIcon.accessRerun {
+  background-position: 0 -783px;
+}
+.Viper-button:active .buttonIcon.accessRerun,
+.Viper-button.active .buttonIcon.accessRerun,
+.Viper-button.selected .buttonIcon.accessRerun {
+  background-position: -33px -783px;
+}
+.buttonIcon.locate {
+  background-position: 0 -810px;
+}
+.Viper-button:active .buttonIcon.locate,
+.Viper-button.active .buttonIcon.locate,
+.Viper-button.selected .buttonIcon.locate {
+  background-position: -33px -810px;
+}
+.buttonIcon.sourceView {
+  background-position: 0 -837px;
+}
+.Viper-button:active .buttonIcon.sourceView,
+.Viper-button.active .buttonIcon.sourceView,
+.Viper-button.selected .buttonIcon.sourceView {
+  background-position: -33px -837px;
+}
+.buttonIcon.nextIssue {
+  background-position: 0 -864px;
+}
+.Viper-button:active .buttonIcon.nextIssue,
+.Viper-button.active .buttonIcon.nextIssue,
+.Viper-button.selected .buttonIcon.nextIssue {
+  background-position: -33px -864px;
+}
+.buttonIcon.prevIssue {
+  background-position: 0 -891px;
+}
+.Viper-button:active .buttonIcon.prevIssue,
+.Viper-button.active .buttonIcon.prevIssue,
+.Viper-button.selected .buttonIcon.prevIssue {
+  background-position: -33px -891px;
+}
+.buttonIcon.justifyLeft {
+  background-position: 0 -918px;
+}
+.Viper-button:active .buttonIcon.justifyLeft,
+.Viper-button.active .buttonIcon.justifyLeft,
+.Viper-button.selected .buttonIcon.justifyLeft {
+  background-position: -33px -918px;
+}
+.buttonIcon.justifyRight {
+  background-position: 0 -945px;
+}
+.Viper-button:active .buttonIcon.justifyRight,
+.Viper-button.active .buttonIcon.justifyRight,
+.Viper-button.selected .buttonIcon.justifyRight {
+  background-position: -33px -945px;
+}
+.buttonIcon.justifyCenter {
+  background-position: 0 -972px;
+}
+.Viper-button:active .buttonIcon.justifyCenter,
+.Viper-button.active .buttonIcon.justifyCenter,
+.Viper-button.selected .buttonIcon.justifyCenter {
+  background-position: -33px -972px;
+}
+.buttonIcon.justifyBlock {
+  background-position: 0 -999px;
+}
+.Viper-button:active .buttonIcon.justifyBlock,
+.Viper-button.active .buttonIcon.justifyBlock,
+.Viper-button.selected .buttonIcon.justifyBlock {
+  background-position: -33px -999px;
+}
+.buttonIcon.subscript {
+  background-position: 0 -1026px;
+}
+.Viper-button:active .buttonIcon.subscript,
+.Viper-button.active .buttonIcon.subscript,
+.Viper-button.selected .buttonIcon.subscript {
+  background-position: -33px -1026px;
+}
+.buttonIcon.superscript {
+  background-position: 0 -1053px;
+}
+.Viper-button:active .buttonIcon.superscript,
+.Viper-button.active .buttonIcon.superscript,
+.Viper-button.selected .buttonIcon.superscript {
+  background-position: -33px -1053px;
+}
+.buttonIcon.strikethrough {
+  background-position: 0 -1080px;
+}
+.Viper-button:active .buttonIcon.strikethrough,
+.Viper-button.active .buttonIcon.strikethrough,
+.Viper-button.selected .buttonIcon.strikethrough {
+  background-position: -33px -1080px;
+}
+.buttonIcon.removeFormat {
+  background-position: 0 -1107px;
+}
+.Viper-button:active .buttonIcon.removeFormat,
+.Viper-button.active .buttonIcon.removeFormat,
+.Viper-button.selected .buttonIcon.removeFormat {
+  background-position: -33px -1107px;
+}
+.buttonIcon.historyUndo {
+  background-position: 0 -1134px;
+}
+.Viper-button:active .buttonIcon.historyUndo,
+.Viper-button.active .buttonIcon.historyUndo,
+.Viper-button.selected .buttonIcon.historyUndo {
+  background-position: -33px -1134px;
+}
+.buttonIcon.historyRedo {
+  background-position: 0 -1161px;
+}
+.Viper-button:active .buttonIcon.historyRedo,
+.Viper-button.active .buttonIcon.historyRedo,
+.Viper-button.selected .buttonIcon.historyRedo {
+  background-position: -33px -1161px;
+}
+.buttonIcon.accessSettings {
+  background-position: 0 -1188px;
+}
+.Viper-button:active .buttonIcon.accessSettings,
+.Viper-button.active .buttonIcon.accessSettings,
+.Viper-button.selected .buttonIcon.accessSettings {
+  background-position: -33px -1188px;
+}
+.buttonIcon.tableSettings {
+  background-position: 0 -1188px;
+}
+.Viper-button:active .buttonIcon.tableSettings,
+.Viper-button.active .buttonIcon.tableSettings,
+.Viper-button.selected .buttonIcon.tableSettings {
+  background-position: -33px -1188px;
+}
+.buttonIcon.target {
+  background-position: 0 -1215px;
+}
+.Viper-button:active .buttonIcon.target,
+.Viper-button.active .buttonIcon.target,
+.Viper-button.selected .buttonIcon.target {
+  background-position: -33px -1215px;
+}
+.buttonIcon.insertHr {
+  background-position: 0 -1242px;
+}
+.Viper-button:active .buttonIcon.insertHr,
+.Viper-button.active .buttonIcon.insertHr,
+.Viper-button.selected .buttonIcon.insertHr {
+  background-position: -33px -1242px;
+}
+.buttonIcon.charMap {
+  background-position: 0 -1269px;
+}
+.Viper-button:active .buttonIcon.charMap,
+.Viper-button.active .buttonIcon.charMap,
+.Viper-button.selected .buttonIcon.charMap {
+  background-position: -33px -1269px;
+}
+.buttonIcon.showHiddenChars {
+  background-position: 0 -1296px;
+}
+.Viper-button:active .buttonIcon.showHiddenChars,
+.Viper-button.active .buttonIcon.showHiddenChars,
+.Viper-button.selected .buttonIcon.showHiddenChars {
+  background-position: -33px -1296px;
+}
+.buttonIcon.sourceNewWindow {
+  background-position: 0 -702px;
+}
+.Viper-button:active .buttonIcon.sourceNewWindow,
+.Viper-button.active .buttonIcon.sourceNewWindow,
+.Viper-button.selected .buttonIcon.sourceNewWindow {
+  background-position: -33px -702px;
+}
+.buttonIcon.langTools {
+  background-position: 0 -1323px;
+}
+.Viper-button:active .buttonIcon.langTools,
+.Viper-button.active .buttonIcon.langTools,
+.Viper-button.selected .buttonIcon.langTools {
+  background-position: -33px -1323px;
+}
+.buttonIcon.searchReplace {
+  background-position: 0 -1404px;
+}
+.Viper-button:active .buttonIcon.searchReplace,
+.Viper-button.active .buttonIcon.searchReplace,
+.Viper-button.selected .buttonIcon.searchReplace {
+  background-position: -33px -1404px;
+}
+.buttonIcon.formats {
+  background-position: 0 -1431px;
+}
+.Viper-button:active .buttonIcon.formats,
+.Viper-button.active .buttonIcon.formats,
+.Viper-button.selected .buttonIcon.formats {
+  background-position: -33px -1431px;
+}
+.buttonIcon.headings {
+  background-position: 0 -1458px;
+}
+.Viper-button:active .buttonIcon.headings,
+.Viper-button.active .buttonIcon.headings,
+.Viper-button.selected .buttonIcon.headings {
+  background-position: -33px -1458px;
+}
+.__viper_selHighlight {
+  background-color: #CCC !important;
+}
+.Viper-textbox {
+  margin-bottom: 0.6em;
+  -moz-transition: opacity 0.2s ease-in;
+  -webkit-transition: opacity 0.2s ease-in;
+}
+.Viper-textbox .Viper-textbox-textArea {
+  resize: none;
+}
+.Viper-textbox.disabled {
+  opacity: 0.4;
+  filter: alpha(opacity = 40);
+}
+.Viper-textbox-label {
+  display: block;
+  padding: 4px 2px;
+  position: relative;
+  clear: both;
+  text-align: left;
+  color: #DDD;
+  background: #2b2b2b;
+  border-radius: 0.4em;
+  -moz-transition-property: color, background;
+  -moz-transition-duration: 0.3s;
+  -webkit-transition-property: color, background;
+  -webkit-transition-duration: 0.3s;
+  border-top: 1px solid #000;
+  border-bottom: 1px solid #777;
+  color: #5A8BD0;
+  box-shadow: 0 0 3px #000 inset;
+}
+.Viper-textbox.active .Viper-textbox-label {
+  background: #205caf;
+}
+.Viper-textbox:after {
+  display: block;
+  content: "";
+  clear: both;
+}
+.Viper-textbox.disabled {
+  opacity: 0.4;
+  filter: alpha(opacity = 40);
+}
+.Viper-textbox-main {
+  position: relative;
+}
+.Viper-textbox.actionRevert .Viper-textbox-main,
+.Viper-textbox.actionClear .Viper-textbox-main {
+  padding-right: 22px;
+}
+.Viper-textbox-title {
+  position: absolute;
+  left: 0px;
+  top: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #DDD;
+  text-shadow: 0 -1px 0 #000000;
+  text-shadow: none;
+  line-height: 1.85em;
+  font-size: 1.2em;
+  padding: 0 10px;
+  margin: 0 0 0 0.2em;
+  background-color: #404040;
+  border-radius: 0.2em;
+  height: 100%;
+  -moz-transition-property: color, background;
+  -moz-transition-duration: 0.3s;
+  -webkit-transition-property: color, background;
+  -webkit-transition-duration: 0.3s;
+}
+.Viper-textbox.active .Viper-textbox-title,
+.Viper-textbox.required.active .Viper-textbox-title {
+  background-color: #366cb7;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.5);
+}
+.Viper-textbox.required .Viper-textbox-title {
+  background-color: #c44e4e;
+  color: #FFF;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.2);
+}
+.Viper-textbox-input[type=text],
+.Viper-textbox-textArea {
+  font-family: Arial;
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  width: 100%;
+  font-size: 1.49em;
+  font-weight: bold;
+  border: none;
+  padding: 0.1em 0 0.15em;
+  background: transparent;
+  color: #5A8BD0;
+  outline: none;
+}
+.Viper-textbox.active .Viper-textbox-input[type=text],
+.Viper-textbox.active .Viper-textbox-textArea,
+.Viper-textbox.required.active .Viper-textbox-input[type=text],
+.Viper-textbox.required.active .Viper-textbox-textArea {
+  color: #FFF;
+}
+.Viper-textbox.required .Viper-textbox-input[type=text],
+.Viper-textbox.required .Viper-textbox-textArea {
+  color: #c44e4e;
+}
+.Viper-textbox-input[type=text]::-webkit-input-placeholder,
+.Viper-textbox-textArea::-webkit-input-placeholder {
+  color: #c44e4e;
+  font-style: italic;
+  font-weight: normal;
+}
+.Viper-textbox.active .Viper-textbox-input[type=text]::-webkit-input-placeholder,
+.Viper-textbox.active .Viper-textbox-textArea::-webkit-input-placeholder {
+  color: #7c9cc9;
+}
+.Viper-textbox-input[type=text]:-moz-placeholder,
+.Viper-textbox-textArea:-moz-placeholder {
+  color: #c44e4e;
+  font-style: italic;
+  font-weight: normal;
+}
+.Viper-textbox.active .Viper-textbox-input[type=text]:-moz-placeholder,
+.Viper-textbox.active .Viper-textbox-textArea:-moz-placeholder {
+  color: #7c9cc9;
+}
+.Viper-textbox.disabled .Viper-textbox-input[type=text],
+.Viper-textbox.disabled .Viper-textbox-textArea {
+  text-decoration: line-through;
+  color: #CCC;
+}
+.input-placeholder {
+  color: #c44e4e;
+  font-style: italic;
+  font-weight: normal;
+}
+.Viper-textbox.active .input-placeholder {
+  color: #7c9cc9;
+}
+.Viper-textbox-messages {
+  padding: 0.5em 0.3em 0;
+  font-size: 1.3em;
+}
+.Viper-textbox-error {
+  display: block;
+  background-color: #c01c1c;
+  color: #FFF;
+  border-radius: 0.2em;
+  padding: 0.4em 0.5em;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.4);
+}
+.Viper-textbox-desc {
+  display: block;
+  padding: 0.4em 1em;
+  font-size: 1.4em;
+  color: #111;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+.Viper-textbox-action,
+.Viper-textbox.required .Viper-textbox-main:after {
+  display: none;
+  position: absolute;
+  cursor: pointer;
+  background: transparent url(../Images/viperToolsSprite.png) 0 -122px no-repeat;
+  width: 18px;
+  height: 18px;
+  right: 2px;
+  top: 50%;
+  margin-top: -9px;
+}
+.Viper-textbox.disabled .Viper-textbox-action,
+.Viper-textbox.disabled .Viper-textbox.required .Viper-textbox-main:after {
+  visibility: hidden;
+}
+.Viper-textbox.required .Viper-textbox-main:after {
+  display: block;
+  content: "";
+  background-position: 0 -158px;
+}
+.Viper-textbox.required.active .Viper-textbox-main:after {
+  background-position: 0 -215px;
+}
+.Viper-textbox.actionRevert .Viper-textbox-action,
+.Viper-textbox.actionClear .Viper-textbox-action {
+  display: block;
+  opacity: 0.6;
+}
+.Viper-textbox.actionRevert .Viper-textbox-action:hover,
+.Viper-textbox.actionClear .Viper-textbox-action:hover {
+  opacity: 1;
+}
+.Viper-textbox.actionClear .Viper-textbox-action {
+  background-position: 0 -140px;
+}
+.Viper-checkbox {
+  display: block;
+  position: relative;
+  clear: both;
+  margin-bottom: 0.6em;
+  text-align: left;
+  text-shadow: none;
+  color: #FFF;
+  background-color: rgba(255, 255, 255, 0.06);
+  border: 1px solid #393939;
+  border-radius: 0.4em 0.4em 0.4em 0.4em;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset, 0 1px 0 rgba(255, 255, 255, 0.1);
+  padding: 0 0.8em;
+  font-size: 1.2em;
+  cursor: pointer;
+}
+.Viper-checkbox.disabled {
+  opacity: 0.4;
+}
+.Viper-checkbox-title {
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.4);
+  color: #ddd;
+  white-space: nowrap;
+  font-size: 1.1em;
+  line-height: 2.5em;
+}
+.Viper-checkbox-switch {
+  font-size: 1.2em;
+  position: absolute;
+  overflow: hidden;
+  right: 0.6em;
+  width: 3.2em;
+  height: 1.6em;
+  top: 50%;
+  margin-top: -0.8em;
+  cursor: pointer;
+  background-color: #2b2b2b;
+  border-radius: 0.8em;
+  box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.6) inset, 0 1px 0 rgba(255, 255, 255, 0.2);
+  -moz-transition: background-color 0.2s ease;
+  -webkit-transition: background-color 0.2s ease;
+  box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.8) inset, 0 -2px 2px -2px #000000 inset, 0 1px 0 rgba(255, 255, 255, 0.2), 1px 0px 0 rgba(0, 0, 0, 0.3) inset, -1px 0px 0 rgba(0, 0, 0, 0.3) inset;
+}
+.Viper-checkbox.active .Viper-checkbox-switch {
+  background-color: #205caf;
+}
+.Viper-checkbox-slider {
+  -moz-transition: left 0.2s ease-out;
+  -webkit-transition: left 0.2s ease-out;
+  content: "";
+  position: absolute;
+  width: 1.3em;
+  height: 1.3em;
+  border-radius: 0.65em;
+  left: 0.15em;
+  top: 50%;
+  margin-top: -0.65em;
+  background-color: #65636b;
+  box-shadow: 0 0 2px #000000, 0 1px 0 rgba(255, 255, 255, 0.3) inset;
+}
+.Viper-checkbox.active .Viper-checkbox-slider {
+  left: 1.7em;
+  background-color: #d9d9de;
+  box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.6), 0 1px 0 rgba(255, 255, 255, 0.3) inset;
+  background: -webkit-gradient(linear, left top, left bottom, from(#e9e9eb), to(#c2c2cb));
+  background: -moz-linear-gradient(top, #e9e9eb, #c2c2cb);
+}
+.Viper-checkbox-switch:before {
+  content: "";
+  display: block;
+  opacity: 0;
+  position: absolute;
+  width: 10px;
+  height: 7px;
+  background: transparent url(../Images/viperToolsSprite.png) 0 -233px no-repeat;
+  left: 0.5em;
+  top: 51%;
+  margin-top: -3px;
+  -moz-transition: 0.2s opacity ease-in;
+  -webkit-transition: 0.2s opacity ease-in;
+}
+.Viper-checkbox.active .Viper-checkbox-switch:before {
+  opacity: 1;
+}
+.Viper-checkbox input {
+  visibility: hidden;
+}
+.Viper-popup {
+  font-family: Arial,Sans Serif;
+  font-size: 9px;
+  position: fixed !important;
+  z-index: 1000;
+  border: 1px solid transparent;
+  border-radius: 0.8em 0.8em 0.8em 0.8em;
+  box-shadow: 0px 0px 10px 4px #222;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.7), 0 1px 0 #555555 inset;
+}
+.themeDark.Viper-popup {
+  background-color: #2B2B2B;
+  border-color: #2B2B2B;
+  color: #FFF;
+  text-shadow: 0 1px 0 #FFFFFF;
+  border: 1px solid transparent;
+}
+@media screen and (max-width: 768px) {
+  .Viper-popup,
+  .ViperITP,
+  .ViperTP-bar {
+    font-size: 13px !important;
+  }
+  .Viper-button {
+    min-width: 39px;
+  }
+}
+::-webkit-scrollbar {
+  -webkit-appearance: none;
+  width: 0.6em;
+  background-color: #000;
+}
+::-webkit-scrollbar-thumb {
+  border-radius: 0.2em;
+  background-color: rgba(255, 255, 255, 0.4);
+}
+.Viper-popup-header {
+  position: relative;
+  text-transform: uppercase;
+  font-size: 1.2em;
+  padding-top: 0.5em;
+  text-align: center;
+  border-bottom: 1px solid transparent;
+  line-height: 1.8em;
+  margin: 0;
+  padding: 0.4em 0 0;
+  white-space: nowrap;
+  cursor: move;
+}
+.themeDark .Viper-popup-header {
+  color: #AAAAAA;
+  text-shadow: 0 -1px 0 #000000;
+}
+/* .Viper-popup-top, */
+.Viper-popup-bottom,
+.Viper-popup-content {
+  padding: 0.3em 1em 1em;
+  background: url(../Images/bgTexture-dark1.gif) repeat 0 0 #54535a;
+  text-shadow: none;
+}
+/* .Viper-popup-top, */
+.Viper-popup-bottom {
+  position: relative;
+  border-bottom-left-radius: 0.8em;
+  border-bottom-right-radius: 0.8em;
+  text-align: center;
+}
+.Viper-popup-content {
+  padding: 0.7em;
+  min-width: 52em;
+}
+.Viper-popup-closeIcon,
+.Viper-popup-closeIcon:after,
+.Viper-popup-dragIcon,
+.Viper-popup-resizeIcon,
+.Viper-popup .ui-resizable-se {
+  position: absolute;
+  background-image: url(../Images/viperToolsSprite.png);
+}
+.Viper-popup-closeIcon {
+  right: 0;
+  top: 0;
+  width: 2.2em;
+  height: 2.2em;
+  opacity: 0.5;
+  cursor: pointer;
+  background: none;
+}
+.Viper-popup-closeIcon:hover {
+  opacity: 1;
+}
+.Viper-popup-closeIcon:after {
+  content: "";
+  display: block;
+  left: 50%;
+  top: 50%;
+  width: 11px;
+  height: 10px;
+  background-position: 0 -176px;
+  margin: -5px 0 0 -5px;
+}
+.Viper-popup-dragIcon {
+  width: 17px;
+  height: 16px;
+  left: 0.5em;
+  top: 50%;
+  margin-top: -8px;
+  background-position: 0 -186px;
+}
+.Viper-popup-resizeIcon {
+  bottom: 0;
+  right: 0;
+  width: 13px;
+  height: 13px;
+  background-position: 0 -199px;
+}
+.Viper-popup .ui-resizable-se {
+  bottom: 3px;
+  right: 3px;
+  width: 13px;
+  height: 13px;
+  background-position: 0 -202px;
+  cursor: se-resize;
+}
