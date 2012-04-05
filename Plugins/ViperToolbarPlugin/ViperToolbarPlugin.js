@@ -605,7 +605,7 @@ ViperToolbarPlugin.prototype = {
         if (this.viper.isBrowser('msie') === true) {
             dfx.setStyle(bubble, 'width', toolsWidth + 'px');
         } else {
-            dfx.setStyle(bubble, 'width', (toolsWidth - 2) + 'px');
+            dfx.setStyle(bubble, 'width', (toolsWidth - 0) + 'px');
         }
 
     },

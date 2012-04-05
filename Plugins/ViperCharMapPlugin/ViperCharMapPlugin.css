@@ -47,10 +47,13 @@ table.VCMP-table tr td:nth-of-type(7) {
 
 .VCMP-wrapper {
     overflow: hidden;
+    white-space: nowrap;
 }
 
 .VCMP-list {
-    float: left;
+    display: inline-block;
+    vertical-align: top;
+    white-space: normal;
     width: 9.98em;
     margin: 0;
     padding: 0;
@@ -88,10 +91,15 @@ table.VCMP-table tr td:nth-of-type(7) {
 }
 
 .VCMP-tablesWrapper {
-    float: left;
+    display: inline-block;
+    vertical-align: top;
     height: 100%;
     min-height: 16em;
     background-color: rgba(0, 0, 0, 0.2);
+}
+
+.Viper-browserVer-msie8 .VCMP-tablesWrapper {
+    background-color: #444449;
 }
 
 .VCMP-hoverBtn {
@@ -101,4 +109,9 @@ table.VCMP-table tr td:nth-of-type(7) {
     margin-left: -0.03em;
     margin-top: -0.5em;
     padding: 0.1em 0.3em 0.5em 0.3em;
+    min-width: 42px;
+}
+
+.Viper-browser-msie .VCMP-hoverBtn {
+    min-width: 27px;
 }
