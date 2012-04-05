@@ -35,10 +35,15 @@ ViperTableEditorPlugin.prototype = {
                 document.execCommand("enableObjectResizing", false, false);
             }
 
-            var tables = dfx.getTag('table', self.viper.getViperElement());
-            for (var i = 0; i < tables.length; i++) {
-                self.setTableHeaders(tables[i]);
-            }
+            var interval = setInterval(function() {
+                if (window['HTMLCS']) {
+                    clearInterval(interval);
+                    var tables = dfx.getTag('table', self.viper.getViperElement());
+                    for (var i = 0; i < tables.length; i++) {
+                        self.setTableHeaders(tables[i]);
+                    }
+                }
+            }, 300);
         });
 
         // Hide the toolbar when user clicks anywhere.
@@ -2881,6 +2886,8 @@ ViperTableEditorPlugin.prototype = {
 
         this.viper.ViperHistoryManager.end();
 
+        return table;
+
     },
 
     setTableHeaders: function(table)
@@ -3152,6 +3159,16 @@ ViperTableEditorPlugin.prototype = {
 
             rowCount++;
         }//end for
+
+        // Get HTMLCS to give us the correct headers just incase...
+        if (window['HTMLCS']) {
+            var headers = HTMLCS.util.getCellHeaders(table);
+            var c       = headers.length;
+            for (var i = 0; i < c; i++) {
+                var header = headers[i];
+                header.cell.setAttribute('headers', header.headers);
+            }
+        }
 
     },
 
