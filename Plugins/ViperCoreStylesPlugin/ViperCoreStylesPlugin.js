@@ -178,7 +178,7 @@ ViperCoreStylesPlugin.prototype = {
                 } else if (target.nextSibling) {
                     var sibling = target.nextSibling;
                     target.parentNode.removeChild(target);
-                    dfx.insertAfter(sibling, target);
+                    dfx.insertBefore(sibling, target);
                 } else {
                     var parent = target.parentNode;
                     target.parentNode.removeChild(target);

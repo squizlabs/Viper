@@ -447,7 +447,7 @@ ViperToolbarPlugin.prototype = {
                     } else if (button.nextSibling) {
                         var sibling = button.nextSibling;
                         button.parentNode.removeChild(button);
-                        dfx.insertAfter(sibling, button);
+                        dfx.insertBefore(sibling, button);
                     } else {
                         var parent = button.parentNode;
                         button.parentNode.removeChild(button);
