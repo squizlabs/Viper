@@ -89,8 +89,35 @@ function gTagCounts(tagNames)
 /**
  * Inserts a new table.
  */
-function insTable(rows, cols)
+function insTable(rows, cols, id)
 {
-    return viper.getPluginManager().getPlugin('ViperTableEditorPlugin').insertTable(rows, cols);
+    var table = viper.getPluginManager().getPlugin('ViperTableEditorPlugin').insertTable(rows, cols);
+
+    if (id) {
+        table.setAttribute('id', id);
+    }
+
+    return table;
 
 }//end insTable()
+
+function rmTableHeaders(tblIndex, removeid)
+{
+    var table = dfx.getTag('table')[tblIndex];
+    if (!table) {
+        return;
+    }
+
+    if (removeid === true) {
+        table.removeAttribute('id');
+    }
+
+    var headers      = dfx.find(table, '[headers]');
+    var headersCount = headers.length;
+    if (headersCount > 0) {
+        for (var i = 0; i < headersCount; i++) {
+            headers[i].removeAttribute('headers');
+        }
+    }
+
+}

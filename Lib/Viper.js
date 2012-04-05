@@ -118,6 +118,7 @@ Viper.prototype = {
         ViperChangeTracker.addChangeType('textRemoved', 'Deleted', 'remove');
         ViperChangeTracker.addChangeType('textAdded', 'Inserted', 'insert');
         ViperChangeTracker.addChangeType('merged', 'Merged', 'remove');
+        ViperSelection._viper = this;
 
     },
 
@@ -132,6 +133,11 @@ Viper.prototype = {
 
     },
 
+    /**
+     * Adds a Viper related element to Viper elements holder.
+     *
+     * Plugins should use this method to add their elements to DOM.
+     */
     addElement: function(element)
     {
         if (!element) {
@@ -142,6 +148,15 @@ Viper.prototype = {
             var holder = document.createElement('div');
             Viper.document.body.appendChild(holder);
             this._viperElementHolder = holder;
+
+            // Add browser type.
+            var browser = this.getBrowserType();
+            var version = this.getBrowserVersion();
+
+            if (browser && version) {
+                dfx.addClass(this._viperElementHolder, 'Viper-browser-' + browser);
+                dfx.addClass(this._viperElementHolder, 'Viper-browserVer-' + browser + version);
+            }
         }
 
         this._viperElementHolder.appendChild(element);
@@ -188,6 +203,45 @@ Viper.prototype = {
         }
 
         return this._browserType;
+
+    },
+
+    getBrowserVersion: function()
+    {
+        var browsers = ['MSIE', 'Chrome', 'Safari', 'Firefox'];
+        var c        = browsers.length;
+        var uAgent   = navigator.userAgent;
+
+        var browserName = null;
+        for (var i = 0; i < c; i++) {
+            var nameIndex = uAgent.indexOf(browsers[i]);
+            if (nameIndex >= 0) {
+                browserName = browsers[i];
+                break;
+            }
+        }
+
+        if (!browserName) {
+            return null;
+        }
+
+        if (browserName === 'Safari') {
+            browserName = 'Version';
+        }
+
+        var re = null;
+        if (browserName === 'MSIE') {
+            re = new RegExp('MSIE (\\d+)');
+        } else {
+            re = new RegExp(browserName + '/(\\d+)');
+        }
+
+        var matches = re.exec(uAgent);
+        if (!matches) {
+            return null;
+        }
+
+        return parseInt(matches[1]);
 
     },
 
@@ -287,10 +341,16 @@ Viper.prototype = {
         });
 
         dfx.addEvent(elem, 'blur.viper', function(e) {
-            self._viperRange = self._currentRange;
+            if (!self._viperRange) {
+                self._viperRange = self._currentRange;
+            }
         });
 
         dfx.addEvent(elem, 'focus.viper', function(e) {
+            if (self.fireCallbacks('Viper:viperElementFocused') === false) {
+                return;
+            }
+
             self.highlightToSelection();
         });
 
@@ -1989,9 +2049,10 @@ Viper.prototype = {
 
     removeStyle: function(style)
     {
-        var range        = this.getCurrentRange();
-        var startNode    = range.getStartNode();
-        var endNode      = range.getEndNode();
+        var range     = this.getCurrentRange();
+        range         = this.adjustRange(range);
+        var startNode = range.getStartNode();
+        var endNode   = range.getEndNode();
         if (!endNode) {
             endNode = startNode;
         }
@@ -2745,8 +2806,6 @@ Viper.prototype = {
 
     highlightToSelection: function(element)
     {
-        this._viperRange = null;
-
         element = element || this.element;
 
         // There should be one...
@@ -2839,7 +2898,6 @@ Viper.prototype = {
             return;
         }
 
-
         for (var i = 0; i < highlights.length; i++) {
             var highlight = highlights[i];
 
@@ -2853,17 +2911,13 @@ Viper.prototype = {
                 while (highlight.firstChild) {
                     child = highlight.firstChild;
                     dfx.insertBefore(highlight, child);
-
-                    if (!startNode) {
-                        // Set the selection start.
-                        startNode = child;
-                        range.setStart(child, 0);
-                    }
                 }
 
                 dfx.remove(highlight);
             }
         }//end for
+
+        return true
 
     },
 
@@ -3046,6 +3100,15 @@ Viper.prototype = {
 
     },
 
+
+    /**
+     * Keeps track of range status during keydown and keyup event.
+     *
+     * This var prevents keyUp event firing selectionChanged for each key up event.
+     * Its for performance reasons only.
+     */
+    _keyDownRangeCollapsed: true,
+
     /**
      * Handle the keyDown event.
      *
@@ -3057,6 +3120,13 @@ Viper.prototype = {
     {
         if (this.pluginActive() === true && this.ViperPluginManager.allowTextInput !== true) {
             return;
+        }
+
+        this._viperRange = null;
+
+        if (this._keyDownRangeCollapsed === true) {
+            var range = this.getCurrentRange();
+            this._keyDownRangeCollapsed = range.collapsed;
         }
 
         if (e.which === dfx.DOM_VK_DELETE
@@ -3203,7 +3273,15 @@ Viper.prototype = {
             }
         }
 
-        this.fireSelectionChanged();
+        if (this._keyDownRangeCollapsed === false
+            || e.which === 8
+            || e.which === 46
+            || (e.which >= 37 && e.which <= 40)
+        ) {
+            this.fireSelectionChanged();
+        }
+
+        this._keyDownRangeCollapsed = true;
 
     },
 
@@ -3236,9 +3314,11 @@ Viper.prototype = {
             return false;
         }
 
-        if (inside !== true || this.highlightToSelection() !== true) {
+        if (inside !== true || this.removeHighlights() !== true) {
             this.fireSelectionChanged(this.adjustRange());
         }
+
+        this._viperRange = null;
 
     },
 
@@ -3269,7 +3349,7 @@ Viper.prototype = {
      */
     adjustRange: function(range)
     {
-        range = range || this.getCurrentRange();
+        range = range || this.getViperRange();
         if (range.collapsed !== false) {
             return range;
         }
@@ -3812,6 +3892,20 @@ Viper.prototype = {
         content = content.replace(/<(p|div|h1|h2|h3|h4|h5|h6|li)((\s+\w+(\s*=\s*(?:".*?"|\'.*?\'|[^\'">\s]+))?)+)?\s*>\s*/ig, "<$1$2>");
         content = content.replace(/\s*<\/(p|div|h1|h2|h3|h4|h5|h6|li)((\s+\w+(\s*=\s*(?:".*?"|\'.*?\'|[^\'">\s]+))?)+)?\s*>/ig, "</$1$2>");
         content = content.replace(/<(area|base|basefont|br|hr|input|img|link|meta)((\s+\w+(\s*=\s*(?:".*?"|\'.*?\'|[^\'">\s]+))?)+)?\s*>/ig, "<$1$2 />");
+        content = content.replace(/<\/?\s*([A-Z\d]+)/g, function(str) {
+            return str.toLowerCase();
+        });
+
+        // Add quotes around attributes (IE....).
+        if (this.isBrowser('msie') === true) {
+            content = content.replace(/<\w+(?:(?:\s+\w+(?:\s*=\s*(?:"(?:[^"]+)?"|\'(?:[^\']+)?\'))?)+)?(?:\s+\w+(?:\s*=\s*(?:[^\'">\s]+))?)+(?:(?:\s+\w+(?:\s*=\s*(?:"(?:[^"]+)?"|\'(?:[^\']+)?\'|[^\'">\s]+))?)+)?\s*\/?>/ig, function(match) {
+                match = match.replace(/(\w+\s*=\s*)([^\'">\s]+)/gi, function(attr, attrName, value) {
+                    return attrName + '"' + value + '"';
+                });
+
+                return match;
+            });
+        }
 
         return content;
 

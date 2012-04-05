@@ -411,7 +411,7 @@ ViperFormatPlugin.prototype = {
             pre: 'PRE'
         };
 
-        var ignoredTags = ('td|tr|table|tbody|caption|ul|ol|li').split('|');
+        var ignoredTags = ('tr|table|tbody|caption|ul|ol|li').split('|');
 
         // Listen for the main toolbar update and update the statuses of the buttons.
         this.viper.registerCallback('ViperToolbarPlugin:updateToolbar', 'ViperFormatPlugin', function(data) {
@@ -756,7 +756,20 @@ ViperFormatPlugin.prototype = {
             if (selectedNode !== viperElement) {
                 var bookmark = this.viper.createBookmark();
 
-                this._convertSingleElement(selectedNode, type);
+                if (dfx.isTag(selectedNode, 'td') === true
+                    || dfx.isTag(selectedNode, 'th') === true
+                    || dfx.isTag(selectedNode, 'caption') === true
+                ) {
+                    // Do not convert the TD tag.
+                    var newElem = document.createElement(type);
+                    while (selectedNode.firstChild) {
+                        newElem.appendChild(selectedNode.firstChild);
+                    }
+
+                    selectedNode.appendChild(newElem);
+                } else {
+                    this._convertSingleElement(selectedNode, type);
+                }
 
                 this.viper.selectBookmark(bookmark);
                 this.viper.fireNodesChanged([viperElement]);

@@ -416,6 +416,7 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_link.png');
         $this->type('http://www.squizlabs.com');
         $this->keyDown('Key.ENTER');
+        $this->click($this->find('IPSUM'));
 
         sleep(1);
         $this->click($text);

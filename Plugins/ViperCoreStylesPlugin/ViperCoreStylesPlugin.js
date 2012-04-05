@@ -167,6 +167,25 @@ ViperCoreStylesPlugin.prototype = {
                 return;
             }
 
+            if (self.viper.isBrowser('msie') === true) {
+                // This block of code prevents IE moving user selection to the.
+                // button element when clicked. When the button element is removed
+                // and added back to DOM selection is not moved. Seriously, IE?
+                if (target.previousSibling) {
+                    var sibling = target.previousSibling;
+                    target.parentNode.removeChild(target);
+                    dfx.insertAfter(sibling, target);
+                } else if (target.nextSibling) {
+                    var sibling = target.nextSibling;
+                    target.parentNode.removeChild(target);
+                    dfx.insertBefore(sibling, target);
+                } else {
+                    var parent = target.parentNode;
+                    target.parentNode.removeChild(target);
+                    parent.appendChild(target);
+                }
+            }//end if
+
             // Set the range after the HR element, if there is no element after
             // HR create a new P tag.
             var blockSibling = target.nextSibling;
@@ -654,6 +673,8 @@ ViperCoreStylesPlugin.prototype = {
     {
         var hr = document.createElement('hr');
 
+        this.viper.ViperHistoryManager.begin();
+
         var range = this.viper.getViperRange();
         if (range.collapsed !== true) {
             range.deleteContents();
@@ -702,6 +723,8 @@ ViperCoreStylesPlugin.prototype = {
         ViperSelection.addRange(range);
 
         this.viper.fireNodesChanged('ViperCoreStylesPlugin:hr');
+        this.viper.ViperHistoryManager.end();
+
         this.viper.fireSelectionChanged(null, true);
 
     },
@@ -922,10 +945,14 @@ ViperCoreStylesPlugin.prototype = {
             return false;
         }
 
+        this.viper.ViperHistoryManager.begin();
+
         // Apply the new tag.
         this.applyTag(style);
 
         this.viper.fireNodesChanged([commonParent]);
+        this.viper.ViperHistoryManager.end();
+
         this.viper.fireSelectionChanged(this.viper.adjustRange(), true);
 
         // Prevent event bubbling etc.
@@ -1130,7 +1157,13 @@ ViperCoreStylesPlugin.prototype = {
             // Justify state.
             activeStates.alignment = null;
 
-            var startParent = dfx.getFirstBlockParent(startNode);
+            var startParent = null;
+            if (!selectedNode || dfx.isBlockElement(selectedNode) === false) {
+                startParent = dfx.getFirstBlockParent(startNode);
+            } else {
+                startParent = selectedNode;
+            }
+
             if (startNode !== endNode) {
                 var endParent = dfx.getFirstBlockParent(endNode);
                 var elems     = dfx.getElementsBetween(startParent, endParent);

@@ -7,6 +7,7 @@ function ViperInlineToolbarPlugin(viper)
     this._lineageClicked      = false;
     this._currentLineageIndex = null;
     this._lineageItemSelected = false;
+    this._updateOriginalSel   = false;
     this._margin              = 15;
 
     this._subSections             = {};
@@ -351,12 +352,28 @@ ViperInlineToolbarPlugin.prototype = {
                 dfx.preventDefault(e);
             }
 
+            var button = tools.getItem(subSectionid + '-applyButton');
+            if (button.isEnabled() === false) {
+                return false;
+            }
+
             viper.focus();
 
-            try {
-                action.call(this);
-            } catch (e) {
-                console.error(e.message);
+            if (viper.isBrowser('msie') === false) {
+                try {
+                    action.call(this);
+                } catch (e) {
+                    console.error('Sub Section Action threw exception:' + e.message);
+                }
+            } else {
+                // IE needs this timeout so focus works <3..
+                setTimeout(function() {
+                    try {
+                        action.call(this);
+                    } catch (e) {
+                        console.error('Sub Section Action threw exception:' + e.message);
+                    }
+                }, 10);
             }
 
             viper.ViperTools.disableButton(subSectionid + '-applyButton');
@@ -402,7 +419,7 @@ ViperInlineToolbarPlugin.prototype = {
                     }
                 });
             }) (widgetids[i]);
-        }
+        }//end for
 
     },
 
@@ -856,6 +873,8 @@ ViperInlineToolbarPlugin.prototype = {
 
             // When clicked set the selection to the original selection.
             self._lineageClicked = true;
+
+            var prevIndex = self._currentLineageIndex;
             self._setCurrentLineageIndex(lineage.length - 1);
 
             dfx.removeClass(linElems, 'selected');
@@ -866,10 +885,10 @@ ViperInlineToolbarPlugin.prototype = {
                 // that is not part of viper causing Viper to lose focus..
                 // Use time out to set the range back in to Viper..
                 setTimeout(function() {
-                    self._selectPreviousRange();
+                    self._selectPreviousRange(lineage, prevIndex);
                 }, 50);
             } else {
-                self._selectPreviousRange();
+                self._selectPreviousRange(lineage, prevIndex);
             }
 
             dfx.preventDefault(e);
@@ -882,19 +901,13 @@ ViperInlineToolbarPlugin.prototype = {
     {
         this.viper.focus();
 
-        var range = this.viper.getCurrentRange();
+        var range = this.viper.getViperRange();
 
-        if (this._lineageItemSelected === false) {
+        if (this._lineageItemSelected === false || this._updateOriginalSel === true) {
             // Update original selection. We update it here incase the selectionHighlight
             // method changed the DOM structure (e.g. normalised textnodes), when
             // Viper is focused update the 'selection' range.
-            this._originalRange = {
-                startContainer: range.startContainer,
-                endContainer: range.endContainer,
-                startOffset: range.startOffset,
-                endOffset: range.endOffset,
-                collapsed: range.collapsed
-            };
+            this._updateOriginalSelection(range);
         }
 
         // Set the range.
@@ -917,19 +930,21 @@ ViperInlineToolbarPlugin.prototype = {
 
     },
 
-    _selectPreviousRange: function()
+    _selectPreviousRange: function(lineage, prevIndex)
     {
         this.viper.focus();
 
         ViperSelection.removeAllRanges();
-        var range = this.viper.getCurrentRange();
+        var range = this.viper.getViperRange();
 
         range.setStart(this._originalRange.startContainer, this._originalRange.startOffset);
         range.setEnd(this._originalRange.endContainer, this._originalRange.endOffset);
         ViperSelection.addRange(range);
-        this.viper.fireSelectionChanged(range);
+        this.viper.fireSelectionChanged(range, true);
         this._updatePosition(range, true);
         this._updateSubSectionArrowPos();
+        this._updateOriginalSelection(range);
+        this._updateOriginalSel = true;
 
     },
 
@@ -969,6 +984,18 @@ ViperInlineToolbarPlugin.prototype = {
     _setCurrentLineageIndex: function(index)
     {
         this._currentLineageIndex = index;
+
+    },
+
+    _updateOriginalSelection: function(range)
+    {
+        this._originalRange = {
+            startContainer: range.startContainer,
+            endContainer: range.endContainer,
+            startOffset: range.startOffset,
+            endOffset: range.endOffset,
+            collapsed: range.collapsed
+        };
 
     },
 

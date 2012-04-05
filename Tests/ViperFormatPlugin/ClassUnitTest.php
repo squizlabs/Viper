@@ -756,7 +756,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->assertEquals('Lorem XuT dolor', $this->getSelectedText(), 'Selected text is not highlighted.');
 
         $this->clickTopToolbarButton($dir.'toolbarIcon_class_subActive.png');
-        $this->assertEquals('Lorem XuT dolor\n', $this->getSelectedText(), 'Selected text is not highlighted.');
+        $this->assertEquals('Lorem XuT dolor', $this->getSelectedText(), 'Selected text is not highlighted.');
 
         $this->clickTopToolbarButton($dir.'toolbarIcon_class.png');
         $this->assertEquals('Lorem XuT dolor', $this->getSelectedText(), 'Selected text is not highlighted.');

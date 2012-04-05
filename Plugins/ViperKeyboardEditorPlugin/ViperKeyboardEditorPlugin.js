@@ -149,13 +149,19 @@ ViperKeyboardEditorPlugin.prototype = {
             var range   = this.viper.getViperRange();
             var endNode = range.getEndNode();
             if (range.collapsed === true
+                && this.viper.isBrowser('msie') === false
                 && ((endNode.nodeType === dfx.TEXT_NODE && range.endOffset === range.endContainer.data.length)
                 || endNode.nodeType === dfx.ELEMENT_NODE && dfx.isTag(endNode, 'br') && !endNode.nextSibling)
             ) {
                 var firstBlock = dfx.getFirstBlockParent(endNode);
-                if (firstBlock && this._tagList.inArray(dfx.getTagName(firstBlock)) === true) {
-                    var p = document.createElement('p');
-                    dfx.setHtml(p, '<br />');
+                if (firstBlock
+                    && (this._tagList.inArray(dfx.getTagName(firstBlock)) === true)
+             //       || (this.viper.isBrowser('msie') === true && dfx.isTag(firstBlock, 'li') === true))
+                ) {
+                    var content = '<br />';
+                    var tagName = 'p';
+                    var p = document.createElement(tagName);
+                    dfx.setHtml(p, content);
 
                     // If the firstBlock is a P tag and it's parent is not the
                     // Viper editable element and its the last child then move this
@@ -171,15 +177,30 @@ ViperKeyboardEditorPlugin.prototype = {
                         dfx.insertAfter(firstBlock, p);
                     }
 
-                    range.selectNode(p.firstChild);
+                    if (p.firstChild.nodeType === dfx.TEXT_NODE) {
+                        range.setStart(p.firstChild, 0);
+                    } else {
+                        range.selectNode(p.firstChild);
+                    }
+
                     range.collapse(true);
                     ViperSelection.addRange(range);
+
                     return false;
                 }
             }//end if
 
             var startNode   = range.getStartNode();
-            var blockParent = dfx.getFirstBlockParent(startNode);
+            var blockParent = null;
+            if (!startNode) {
+                startNode = range.startContainer;
+                if (dfx.isBlockElement(startNode) === true) {
+                    blockParent = startNode;
+                }
+            } else {
+                blockParent = dfx.getFirstBlockParent(startNode);
+            }
+
             if (startNode && dfx.isTag(blockParent, 'pre') === true) {
                 if (startNode.parentNode === blockParent
                     && startNode.nodeType === dfx.TEXT_NODE
@@ -246,7 +267,22 @@ ViperKeyboardEditorPlugin.prototype = {
                 // and then initialise the Viper element.
                 dfx.setHtml(viperElement, '');
                 this.viper.initEditableElement();
+
+                if (this.viper.isBrowser('chrome') === true || this.viper.isBrowser('safari') === true) {
+                    // Chrome and Safari needs to fire nodes changed here as they do
+                    // not fire keypress.
+                    this.viper.fireNodesChanged();
+                }
+
                 return false;
+            }
+        } else if (this.viper.isBrowser('msie') === true) {
+            // Remove HR elements in IE..
+            var rangeClone = range.cloneRange();
+            rangeClone.moveStart('character', -2);
+            if (dfx.trim(rangeClone.getHTMLContents()) === '<HR>') {
+                range.moveStart('character', -2);
+                range.deleteContents();
             }
         }
 

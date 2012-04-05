@@ -143,6 +143,11 @@ ViperCharMapPlugin.prototype = {
 
         range.insertNode(newNode);
         range.setStart(newNode, 1);
+
+        if (this.viper.isBrowser('msie') === true) {
+            range.moveStart('character', 1);
+        }
+
         range.collapse(true);
         ViperSelection.addRange(range);
 

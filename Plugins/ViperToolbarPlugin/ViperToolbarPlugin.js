@@ -317,13 +317,29 @@ ViperToolbarPlugin.prototype = {
                 }
 
                 subSection.form.onsubmit = function() {
+                    var button = tools.getItem(subSectionid + '-applyButton');
+                    if (button.isEnabled() === false) {
+                        return false;
+                    }
+
                     tools.disableButton(subSectionid + '-applyButton');
                     self.viper.focus();
 
-                    try {
-                        action.call(this);
-                    } catch (e) {
-                        console.error(e.message);
+                    // IE needs this timeout so focus works <3..
+                    if (self.viper.isBrowser('msie') === false) {
+                        try {
+                            action.call(this);
+                        } catch (e) {
+                            console.error(e.message);
+                        }
+                    } else {
+                        setTimeout(function() {
+                            try {
+                                action.call(this);
+                            } catch (e) {
+                                console.error(e.message);
+                            }
+                        }, 10);
                     }
 
                     return false;
@@ -420,6 +436,25 @@ ViperToolbarPlugin.prototype = {
         if (useCustomToggler !== true) {
             dfx.removeEvent(button, 'mousedown');
             dfx.addEvent(button, 'mousedown', function(e) {
+                if (self.viper.isBrowser('msie') === true) {
+                    // This block of code prevents IE moving user selection to the.
+                    // button element when clicked. When the button element is removed
+                    // and added back to DOM selection is not moved. Seriously, IE?
+                    if (button.previousSibling) {
+                        var sibling = button.previousSibling;
+                        button.parentNode.removeChild(button);
+                        dfx.insertAfter(sibling, button);
+                    } else if (button.nextSibling) {
+                        var sibling = button.nextSibling;
+                        button.parentNode.removeChild(button);
+                        dfx.insertBefore(sibling, button);
+                    } else {
+                        var parent = button.parentNode;
+                        button.parentNode.removeChild(button);
+                        parent.appendChild(button);
+                    }
+                }//end if
+
                 if (dfx.hasClass(button, 'disabled') === true) {
                     return;
                 }
@@ -633,9 +668,21 @@ ViperToolbarPlugin.prototype = {
             return;
         }
 
+        if (this.viper.isBrowser('msie') === true) {
+            // IE fix.. When a toolbar button is clicked IE moves the selection to that
+            // button unless the button no longer exists... So we remove the toolbar
+            // here to prevent selection changing......
+            var parent = this._toolbar.parentNode;
+            parent.removeChild(this._toolbar);
+        }
+
         range = range || this.viper.getCurrentRange();
 
         this.viper.fireCallbacks('ViperToolbarPlugin:updateToolbar', {range: range});
+
+        if (this.viper.isBrowser('msie') === true) {
+            parent.appendChild(this._toolbar);
+        }
 
     }
 

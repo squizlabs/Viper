@@ -74,6 +74,26 @@
     display: block;
 }
 
+.VSVP-source textarea {
+    height: 100%;
+    width: 100%;
+    border-color: #2B2B2B #2B2B2B rgba(255, 255, 255, 0.25);
+    border-radius: 0.25em 0.25em 0.25em 0.25em;
+    border-style: solid;
+    border-width: 1px;
+    resize: none;
+
+    background: none repeat scroll 0 0 #2B2B2B;
+    border-bottom: 1px solid #777777;
+    border-radius: 0.4em 0.4em 0.4em 0.4em;
+    border-top: 1px solid #000000;
+    box-shadow: 0 0 3px #000000 inset;
+    color: #CCC;
+    font-family: Arial;
+    font-size: 1.49em;
+    padding: 4px 2px;
+}
+
 /* Ace Editor overrides*/
 .ace_editor {
     font-size: 1.3em !important;

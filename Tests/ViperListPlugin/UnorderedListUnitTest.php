@@ -30,6 +30,30 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperLis
 
 
     /**
+     * Test that you can create a list whne entering text.
+     *
+     * @return void
+     */
+    public function testCreatingAList()
+    {
+        $dir = dirname(__FILE__).'/Images/';
+        $this->selectText('VmumV');
+        $this->keyDown('Key.RIGHT');
+        $this->keyDown('Key.ENTER');
+
+        $this->type('Test list:');
+        $this->keyDown('Key.ENTER');
+        $this->keyDown('Key.TAB');
+        $this->type('Item 1');
+        $this->keyDown('Key.ENTER');
+        $this->type('Item 2');
+
+        $this->assertHTMLMatch('<p>XabcX uuuuuu. VmumV</p><p>Test list:</p><ul><li>Item 1</li><li>Item 2</li></ul><p>cPOc ccccc dddd. TicT</p><p>ajhsd sjsjwi hhhh:</p><ul><li>aaa bbbbb ccccc</li><li>4 oNo templates</li><li>Audit XuT content</li><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ul><h2>SoD</h2>');
+
+    }//end testCreatingAList()
+
+
+    /**
      * Test that unordered list is added and removed for the paragraph when you only selected one word.
      *
      * @return void

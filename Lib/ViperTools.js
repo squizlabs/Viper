@@ -3,6 +3,7 @@ function ViperTools(viper)
     this.viper = viper;
 
     this._items = {};
+    this._preventMouseUp = false;
 
     var self = this;
     this.viper.registerCallback('Viper:mouseUp', 'ViperTools', function(e) {
@@ -27,12 +28,6 @@ ViperTools.prototype = {
         return this._items[id];
 
     },
-
-
-    /**
-     * If true then the next mouse up event will not fire.
-     */
-    _preventMouseUp: false,
 
     createRow: function(id, customClass)
     {
@@ -140,6 +135,11 @@ ViperTools.prototype = {
                     return false;
                 }
 
+                setTimeout(function() {
+                    // Incase button is moved/removed during the click action.
+                    self._preventMouseUp = false;
+                }, 200);
+
                 self.viper.fireCallbacks('ViperTools:buttonClicked', id);
                 return clickAction.call(this, e);
             });
@@ -197,6 +197,10 @@ ViperTools.prototype = {
             setMouseUpAction: function(callback)
             {
                 mouseUpAction = callback;
+            },
+            isEnabled: function()
+            {
+                return !dfx.hasClass(button, 'disabled');
             }
         });
 
@@ -441,7 +445,7 @@ ViperTools.prototype = {
                 }
             }
 
-            if ((e.which !== 13 && isTextArea !== true) && (input.value !== value || changed === true)) {
+            if ((e.which !== 13 || isTextArea === true) && (input.value !== value || changed === true)) {
                 changed = true;
                 self.viper.fireCallbacks('ViperTools:changed:' + id);
             }
@@ -450,7 +454,7 @@ ViperTools.prototype = {
             if (action && e.which === 13) {
                 self.viper.focus();
                 action.call(input, input.value);
-            } else if (!action && e.which === 13 && (self.viper.isBrowser('chrome') || self.viper.isBrowser('safari'))) {
+            } else if (!action && e.which === 13 && isTextArea !== true && (self.viper.isBrowser('chrome') || self.viper.isBrowser('safari'))) {
                 var forms = dfx.getParents(main, 'form', self.viper.getViperElement());
                 if (forms.length > 0 && dfx.getTag('input', forms[0]).length > 2) {
                     return forms[0].onsubmit();
@@ -520,7 +524,10 @@ ViperTools.prototype = {
             {
                 if (required === true) {
                     input.setAttribute('placeholder', 'required');
-                    dfx.addClass(textBox, 'required');
+
+                    if (dfx.trim(input.value) === '') {
+                        dfx.addClass(textBox, 'required');
+                    }
                 } else {
                     dfx.removeClass(textBox, 'required');
                     input.removeAttribute('placeholder');
@@ -632,19 +639,40 @@ ViperTools.prototype = {
 
         var self = this;
 
-        dfx.addEvent(checkbox, 'click', function() {
-            if (checkbox.checked === true) {
-                dfx.addClass(labelElem, 'active');
-            } else {
-                dfx.removeClass(labelElem, 'active');
-            }
+        if (this.viper.isBrowser('msie') === true) {
+            // IE does not trigger the click event for input when the label
+            // element is clicked, so add the click event to label element and change
+            // the checkbox state.
+            dfx.addEvent(labelElem, 'click', function() {
+                checkbox.checked = !checkbox.checked;
 
-            if (changeCallback) {
-                changeCallback.call(this, checkbox.checked);
-            }
+                if (checkbox.checked === true) {
+                    dfx.addClass(labelElem, 'active');
+                } else {
+                    dfx.removeClass(labelElem, 'active');
+                }
 
-            self.viper.fireCallbacks('ViperTools:changed:' + id);
-        });
+                if (changeCallback) {
+                    changeCallback.call(this, checkbox.checked);
+                }
+
+                self.viper.fireCallbacks('ViperTools:changed:' + id);
+            });
+        } else {
+            dfx.addEvent(checkbox, 'click', function() {
+                if (checkbox.checked === true) {
+                    dfx.addClass(labelElem, 'active');
+                } else {
+                    dfx.removeClass(labelElem, 'active');
+                }
+
+                if (changeCallback) {
+                    changeCallback.call(this, checkbox.checked);
+                }
+
+                self.viper.fireCallbacks('ViperTools:changed:' + id);
+            });
+        }
 
         this.addItem(id, {
             type: 'checkbox',

@@ -63,6 +63,10 @@ ViperListPlugin.prototype = {
                 var range     = self.viper.getViperRange();
                 var startNode = range.getStartNode();
                 if (!startNode) {
+                    startNode = range.startContainer;
+                }
+
+                if (!startNode) {
                     return;
                 }
 
@@ -442,6 +446,17 @@ ViperListPlugin.prototype = {
             this.viper.selectBookmark(bookmark);
             this.viper.adjustRange();
             if (updated === true) {
+                if (this.viper.isBrowser('msie') === true) {
+                    if (outdent === false) {
+                        range.moveStart("character", -1);
+                    } else {
+                        range.moveStart("character", 1);
+                    }
+
+                    range.collapse(true);
+                    ViperSelection.addRange(range);
+                }
+
                 this.viper.fireNodesChanged([range.getCommonElement()]);
                 this.viper.fireSelectionChanged(null, true);
             }
@@ -1047,7 +1062,6 @@ ViperListPlugin.prototype = {
         var canMakeOL = false;
         var list      = null;
 
-
         if (!startNode) {
             return;
         }
@@ -1065,8 +1079,19 @@ ViperListPlugin.prototype = {
 
             indent   = true;
         } else {
-            startParent   = dfx.getFirstBlockParent(startNode);
-            var endNode   = range.getEndNode();
+            var endNode       = range.getEndNode();
+            var nodeSelection = range.getNodeSelection();
+            if (nodeSelection) {
+                startNode = nodeSelection;
+                endNode   = null;
+            }
+
+            if (dfx.isBlockElement(startNode) === false) {
+                startParent   = dfx.getFirstBlockParent(startNode);
+            } else {
+                startParent = startNode;
+            }
+
             var endParent = null;
 
             if (!endNode) {
@@ -1238,8 +1263,15 @@ ViperListPlugin.prototype = {
             self.viper.fireNodesChanged([self.viper.getViperElement()]);
         } else {
             var bookmark = this.viper.createBookmark();
-            var range    = self.viper.getCurrentRange();
-            var pTags    = self.listToParagraphs(list);
+            if (bookmark.start.nextSibling && dfx.isTag(bookmark.start.nextSibling, 'li') === true) {
+                dfx.insertBefore(bookmark.start.nextSibling.firstChild, bookmark.start);
+            }
+
+            if (bookmark.end.previousSibling && dfx.isTag(bookmark.end.previousSibling, 'li') === true) {
+                bookmark.end.previousSibling.appendChild(bookmark.end);
+            }
+
+            var pTags = self.listToParagraphs(list);
             this.viper.selectBookmark(bookmark);
             self.viper.fireSelectionChanged(null, true);
             self.viper.fireNodesChanged([self.viper.getViperElement()]);
