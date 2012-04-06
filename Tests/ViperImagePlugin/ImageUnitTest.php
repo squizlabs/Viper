@@ -407,6 +407,7 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperUnitTest
         $this->type('http://cms.squizsuite.net/__images/homepage-images/editing.png');
         $this->keyDown('Key.ENTER');
         $this->clickTopToolbarButton($dir.'toolbarIcon_subImage_active.png');
+        $this->click($this->find('LOREM'));
 
         $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>LOREM XuT dolor</p><p><img src="http://cms.squizsuite.net/__images/homepage-images/editing.png" alt="" />&nbsp;</p><p>sit amet <strong>WoW</strong></p><p>Squiz LABS is ORSM</p>');
 
