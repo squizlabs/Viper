@@ -358,6 +358,64 @@ class Viper_Tests_ViperCoreStylesPlugin_StylesInTablesUnitTest extends AbstractV
     }//end testStylingInTableMultipleStyles()
 
 
+    /**
+     * Test applying bold formatting to the caption.
+     *
+     * @return void
+     */
+    public function testBoldFormattingToCaption()
+    {
+        $text    = 'caption';
+        $textLoc = $this->find($text);
+        $this->selectText($text);
+        $this->selectInlineToolbarLineageItem(1);
+
+        $this->clickTopToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_bold.png');
+        $this->execJS('rmTableHeaders(0,true)');
+        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2: The table caption text goes here la</strong></caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU TiuT XabcX Mnu</td><td>WOW</td><td>            <ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul>        </td></tr><tr><td>nec PORTA ante</td><td id="x" colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr><tr><td>nec <strong>porta</strong> ante</td><td>sapien vel aliquet</td><td rowspan="2">purus neque luctus ligula, vel molestie arcu</td></tr><tr><td colspan="2">sapien vel aliquet</td></tr></tbody></table>');
+
+        $this->click($this->find('blah'));
+        $this->selectText('Table');
+        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_bold_active.png'));
+        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_bold_active.png'));
+
+        $this->selectInlineToolbarLineageItem(2);
+        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_bold_active.png');
+        $this->execJS('rmTableHeaders(0,true)');
+        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption>Table 1.2: The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU TiuT XabcX Mnu</td><td>WOW</td><td>            <ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul>        </td></tr><tr><td>nec PORTA ante</td><td id="x" colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr><tr><td>nec <strong>porta</strong> ante</td><td>sapien vel aliquet</td><td rowspan="2">purus neque luctus ligula, vel molestie arcu</td></tr><tr><td colspan="2">sapien vel aliquet</td></tr></tbody></table>');
+
+    }//end testBoldFormattingToCaption()
+
+    
+    /**
+     * Test applying italics formatting to the caption.
+     *
+     * @return void
+     */
+    public function testItalicFormattingToCaption()
+    {
+        $text    = 'caption';
+        $textLoc = $this->find($text);
+        $this->selectText($text);
+        $this->selectInlineToolbarLineageItem(1);
+
+        $this->clickTopToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_italic.png');
+        $this->execJS('rmTableHeaders(0,true)');
+        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><em><strong>Table 1.2:</strong> The table caption text goes here la</em></caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU TiuT XabcX Mnu</td><td>WOW</td><td>            <ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul>        </td></tr><tr><td>nec PORTA ante</td><td id="x" colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr><tr><td>nec <strong>porta</strong> ante</td><td>sapien vel aliquet</td><td rowspan="2">purus neque luctus ligula, vel molestie arcu</td></tr><tr><td colspan="2">sapien vel aliquet</td></tr></tbody></table>');
+
+        $this->click($this->find('blah'));
+        $this->selectText('Table');
+        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic_active.png'));
+        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic_active.png'));
+
+        $this->selectInlineToolbarLineageItem(2);
+        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_italic_active.png');
+        $this->execJS('rmTableHeaders(0,true)');
+        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU TiuT XabcX Mnu</td><td>WOW</td><td>            <ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul>        </td></tr><tr><td>nec PORTA ante</td><td id="x" colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr><tr><td>nec <strong>porta</strong> ante</td><td>sapien vel aliquet</td><td rowspan="2">purus neque luctus ligula, vel molestie arcu</td></tr><tr><td colspan="2">sapien vel aliquet</td></tr></tbody></table>');
+
+    }//end testItalicFormattingToCaption()
+    
+
 }//end class
 
 ?>
