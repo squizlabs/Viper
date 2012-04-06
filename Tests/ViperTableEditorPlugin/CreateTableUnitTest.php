@@ -49,15 +49,13 @@ class Viper_Tests_ViperTableEditorPlugin_CreateTableUnitTest extends AbstractVip
      */
     public function testCreateTableStructure2()
     {
-        $this->insertTable(2, 3);
-        sleep(1);
+        $this->insertTable();
+        sleep(2);
 
         $this->showTools(0, 'col');
         $this->clickInlineToolbarButton($this->getImg('icon_insertColAfter.png'));
-        $this->clickInlineToolbarButton($this->getImg('icon_insertColAfter.png'));
 
         $this->showTools(0, 'row');
-        $this->clickInlineToolbarButton($this->getImg('icon_insertRowAfter.png'));
         $this->clickInlineToolbarButton($this->getImg('icon_insertRowAfter.png'));
         usleep(300);
 
@@ -242,6 +240,7 @@ class Viper_Tests_ViperTableEditorPlugin_CreateTableUnitTest extends AbstractVip
         );
         sleep(1);
 
+        $this->click($this->find('IPSUM'));
         $struct   = $this->getTableStructure(0, TRUE);
         $expected = array(
                      array(
@@ -253,7 +252,7 @@ class Viper_Tests_ViperTableEditorPlugin_CreateTableUnitTest extends AbstractVip
                       ),
                       array(
                        'rowspan' => '2',
-                       'content' => 'All Genders&nbsp;',
+                       'content' => 'All Genders&nbsp;&nbsp;',
                        'heading' => TRUE,
                       ),
                       array(
@@ -264,7 +263,7 @@ class Viper_Tests_ViperTableEditorPlugin_CreateTableUnitTest extends AbstractVip
                      ),
                      array(
                       array(
-                       'content' => '&nbsp;Males',
+                       'content' => 'Males&nbsp;',
                        'heading' => TRUE,
                       ),
                       array(
@@ -279,7 +278,7 @@ class Viper_Tests_ViperTableEditorPlugin_CreateTableUnitTest extends AbstractVip
                        'heading' => TRUE,
                       ),
                       array(
-                       'content' => 'North',
+                       'content' => 'North&nbsp;',
                        'heading' => TRUE,
                       ),
                       array('content' => '3&nbsp;'),
@@ -303,25 +302,20 @@ class Viper_Tests_ViperTableEditorPlugin_CreateTableUnitTest extends AbstractVip
 
 
     /**
-     * Tests that its possible to create a table in a list.
+     * Tests that you cannot create tables in a list
      *
      * @return void
      */
     public function testCreateTableInList()
     {
+        $dir = dirname(__FILE__).'/Images/';
+        
         $this->selectText('consectetur');
         $this->keyDown('Key.RIGHT');
         $this->keyDown('Key.TAB');
 
-        $this->execJS('insTable(1, 1)');
-        sleep(1);
-
-        // TODO: Note, Google Chrome seems to add white space at the end of the style attribute..
-        $this->assertHTMLMatch(
-            '<p>Lorem IPSUM dolor</p><ul><li>sit amet <strong>consectetur</strong><table style="width: 300px;" border="1"><tbody><tr><td style="width: 100px;">&nbsp;</td></tr></tbody></table></li></ul>',
-            '<p>Lorem IPSUM dolor</p><ul><li>sit amet <strong>consectetur</strong><table style="width: 300px; " border="1"><tbody><tr><td style="width: 100px;">&nbsp;</td></tr></tbody></table></li></ul>'
-        );
-
+        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_createTable_disabled.png'), 'Create table icon should be disabled in the toolbar');
+        
     }//end testCreateTableInList()
 
 
@@ -332,15 +326,40 @@ class Viper_Tests_ViperTableEditorPlugin_CreateTableUnitTest extends AbstractVip
      */
     public function testReplaceParagraphWithTable()
     {
+        $dir = dirname(__FILE__).'/Images/';
+        
         $this->selectText('Lorem', 'dolor');
 
         $this->clickTopToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_createTable.png');
+        $insertTable = $this->find($dir.'toolbarIcon_insertTable.png');
+        $this->click($insertTable);
         sleep(1);
-
-        $this->assertHTMLMatch('<p>&nbsp;</p><table style="width: 100%;" border="1"><tbody><tr><th>Column 1</th><th>Column 2</th><th>Column 3</th></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>sit amet <strong>consectetur</strong></p>');
+        $this->execJS('rmTableHeaders(0,true)');
+        $this->assertHTMLMatch('<p>&nbsp;</p><table style="width: 100%;" border="1"><tbody><tr><th>&nbsp;</th><th>&nbsp;</th><th>&nbsp;</th><th>&nbsp;</th></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>sit amet <strong>consectetur</strong></p>');
 
     }//end testReplaceParagraphWithTable()
 
+
+    /**
+     * Test that creating a table after selecting a word works.
+     *
+     * @return void
+     */
+    public function testReplaceWordWithTable()
+    {
+        $dir = dirname(__FILE__).'/Images/';
+        
+        $this->selectText('IPSUM');
+
+        $this->clickTopToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_createTable.png');
+        $insertTable = $this->find($dir.'toolbarIcon_insertTable.png');
+        $this->click($insertTable);
+        sleep(1);
+        $this->execJS('rmTableHeaders(0,true)');
+        $this->assertHTMLMatch('<p>Lorem</p><table style="width: 100%;" border="1"><tbody><tr><th>&nbsp;</th><th>&nbsp;</th><th>&nbsp;</th><th>&nbsp;</th></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table>/p>dolor</p><p>sit amet <strong>consectetur</strong></p>');
+
+    }//end testReplaceWordWithTable()
+    
 
 }//end class
 
