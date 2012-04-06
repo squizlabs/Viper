@@ -13,8 +13,8 @@ class Viper_Tests_ViperTableEditorPlugin_CreateTableUnitTest extends AbstractVip
      */
     public function testCreateTableStructure()
     {
-        $this->insertTable(2, 3);
-        sleep(1);
+        $this->insertTable();
+        sleep(2);
 
         $this->clickCell(0);
         usleep(300);
@@ -33,24 +33,11 @@ class Viper_Tests_ViperTableEditorPlugin_CreateTableUnitTest extends AbstractVip
 
         $this->showTools(0, 'cell');
         $this->clickMergeSplitIcon('icon_mergeRight.png');
-
-        $struct   = $this->getTableStructure(0, TRUE);
-        $expected = array(
-                     array(
-                      array(
-                       'colspan' => 2,
-                       'content' => '&nbsp;OneTwo&nbsp;',
-                      ),
-                      array('content' => 'Three&nbsp;'),
-                     ),
-                     array(
-                      array('content' => 'Four&nbsp;'),
-                      array('content' => 'Five&nbsp;'),
-                      array('content' => 'Six&nbsp;'),
-                     ),
-                    );
-
-        $this->assertTableStructure($expected, $struct);
+        $this->click($this->find('IPSUM'));
+        
+        $this->execJS('rmTableHeaders(0,true)');
+        $this->assertHTMLMatch('<p>Lorem IPSUM</p><table style="width: 100%; " border="1"><tbody><tr><th colspan="2">
+        &nbsp;OneTwo&nbsp; </th><th>Three&nbsp; </th><th>Four&nbsp; </th></tr><tr><td>Five&nbsp; </td><td>Six&nbsp; </td><td>&nbsp; </td><td>&nbsp; </td></tr><tr><td>&nbsp; </td><td>&nbsp; </td><td>&nbsp; </td><td>&nbsp; </td></tr></tbody></table><p>dolor</p><p>sit amet <strong>consectetur</strong></p>');
 
     }//end testCreateTableStructure()
 

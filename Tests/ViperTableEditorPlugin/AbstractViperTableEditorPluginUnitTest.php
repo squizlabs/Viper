@@ -13,10 +13,16 @@ abstract class AbstractViperTableEditorPluginUnitTest extends AbstractViperUnitT
      *
      * @return void
      */
-    protected function insertTable($rows=3, $cols=3)
+    protected function insertTable()
     {
+        $dir = dirname(__FILE__).'/Images/';
+        
         $this->selectText('IPSUM');
-        $this->execJS('insTable('.$rows.','.$cols.')');
+        $this->keyDown('Key.RIGHT');
+        $this->clickTopToolbarButton($dir.'toolbarIcon_createTable.png');
+        
+        $insertTable = $this->find($dir.'toolbarIcon_insertTable.png');
+        $this->click($insertTable);
 
     }//end insertTable()
 
