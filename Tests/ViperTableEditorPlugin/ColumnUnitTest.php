@@ -7,7 +7,7 @@ class Viper_Tests_ViperTableEditorPlugin_ColumnUnitTest extends AbstractViperTab
 
 
     /**
-     * Test that creating a new table works.
+     * Test that correct column icons appear in the inline toolbar.
      *
      * @return void
      */
@@ -20,55 +20,161 @@ class Viper_Tests_ViperTableEditorPlugin_ColumnUnitTest extends AbstractViperTab
     }//end testColumnToolIconsCorrect()
 
 
-      /**
-     * Test adding a new table and then adding new columns.
+    /**
+     * Test adding a new table without headers and then adding new columns.
      *
      * @return void
      */
-    public function testAddingAndDeletingColumnsInANewTable()
+    public function testAddingAndDeletingColumnsInANewTableWithoutHeaders()
     {
+        $textLoc = $this->find('IPSUM');
+        
+        $this->insertTableWithNoHeaders();
+
+        $this->showTools(2, 'col');
+
+        //Add a new column after the first column of the table
+        $this->click($this->find($this->getImg('icon_insertColAfter.png'), NULL, 0.83));
+        $this->click($textLoc);
+
+        $this->execJS('rmTableHeaders(0,true)');
+        $this->execJS('rmTableHeaders(1,true)');
+        $this->assertHTMLMatch('<p>Lorem IPSUM</p><table style="width: 100%;" border="1"><tbody><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>dolor</p><p>sit amet <strong>consectetur</strong></p><table style="width: 300px;" border="1" cellspacing="2" cellpadding="2"><tbody><tr><td style="width: 100px;" colspan="2">&nbsp;Survey&nbsp;</td><td rowspan="2">All Genders</td><td style="width: 100px;" colspan="2">By Gender&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>Male</td><td>Females</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td></td></tr></tbody></table>');
+        
+        //Add a new column before the first column of the table
+        $this->showTools(2, 'col');
+        $this->click($this->find($this->getImg('icon_insertColBefore.png'), NULL, 0.83));
+
+        $this->execJS('rmTableHeaders(0,true)');
+        $this->assertHTMLMatch('<p>Lorem IPSUM</p><table style="width: 100%;" border="1"><tbody><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>dolor</p><p>sit amet <strong>consectetur</strong></p><table style="width: 300px;" border="1" cellspacing="2" cellpadding="2"><tbody><tr><td style="width: 100px;" colspan="2">&nbsp;Survey&nbsp;</td><td rowspan="2">All Genders</td><td style="width: 100px;" colspan="2">By Gender&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>Male</td><td>Females</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td></td></tr></tbody></table>');
+
+        //Delete the column
+        $this->showTools(2, 'col');
+        $this->click($this->find($this->getImg('icon_trash.png'), NULL, 0.83));
+
+        $this->execJS('rmTableHeaders(0,true)');
+        $this->assertHTMLMatch('<p>Lorem IPSUM</p><table style="width: 100%;" border="1"><tbody><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>dolor</p><p>sit amet <strong>consectetur</strong></p><table style="width: 300px;" border="1" cellspacing="2" cellpadding="2"><tbody><tr><td style="width: 100px;" colspan="2">&nbsp;Survey&nbsp;</td><td rowspan="2">All Genders</td><td style="width: 100px;" colspan="2">By Gender&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>Male</td><td>Females</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td></td></tr></tbody></table>');
+        
+        
+    }//end testAddingAndDeletingColumnsInANewTableWithoutHeaders()
+    
+
+    /**
+     * Test adding a new table with left headers and then adding new columns.
+     *
+     * @return void
+     */
+    public function testAddingAndDeletingColumnsInANewTableWithLeftHeaders()
+    {
+        $textLoc = $this->find('IPSUM');
+        
+        $this->insertTableWithLeftHeaders();
+
+        $this->showTools(1, 'col');
+
+        //Add a new column after a column in the table
+        $this->click($this->find($this->getImg('icon_insertColBefore.png'), NULL, 0.83));
+        
+        $this->click($textLoc);
+
+        $this->execJS('rmTableHeaders(0,true)');
+        $this->execJS('rmTableHeaders(1,true)');
+        $this->assertHTMLMatch('<p>Lorem IPSUM</p><table style="width: 100%;" border="1"><tbody><tr><th>&nbsp;</th><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><th>&nbsp;</th><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><th>&nbsp;</th><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>dolor</p><p>sit amet <strong>consectetur</strong></p><table style="width: 300px;" border="1" cellspacing="2" cellpadding="2"><tbody><tr><td style="width: 100px;" colspan="2">&nbsp;Survey&nbsp;</td><td rowspan="2">All Genders</td><td style="width: 100px;" colspan="2">By Gender&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>Male</td><td>Females</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td></td></tr></tbody></table>');
+        
+        //Add a new column before the first column of the table
+        $this->showTools(0, 'col');
+        $this->click($this->find($this->getImg('icon_insertColAfter.png'), NULL, 0.83));
+
+        $this->execJS('rmTableHeaders(0,true)');
+        $this->assertHTMLMatch('<p>Lorem IPSUM</p><table style="width: 100%;" border="1"><tbody><tr><th>&nbsp;</th><th>&nbsp;</th><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><th>&nbsp;</th><th>&nbsp;</th><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><th>&nbsp;</th><th>&nbsp;</th><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>dolor</p><p>sit amet <strong>consectetur</strong></p><table style="width: 300px;" border="1" cellspacing="2" cellpadding="2"><tbody><tr><td style="width: 100px;" colspan="2">&nbsp;Survey&nbsp;</td><td rowspan="2">All Genders</td><td style="width: 100px;" colspan="2">By Gender&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>Male</td><td>Females</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td></td></tr></tbody></table>');
+
+        //Delete the column
+        $this->showTools(1, 'col');
+        $this->click($this->find($this->getImg('icon_trash.png'), NULL, 0.83));
+
+        $this->execJS('rmTableHeaders(0,true)');
+        $this->assertHTMLMatch('<p>Lorem IPSUM</p><table style="width: 100%;" border="1"><tbody><tr><th>&nbsp;</th><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><th>&nbsp;</th><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><th>&nbsp;</th><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>dolor</p><p>sit amet <strong>consectetur</strong></p><table style="width: 300px;" border="1" cellspacing="2" cellpadding="2"><tbody><tr><td style="width: 100px;" colspan="2">&nbsp;Survey&nbsp;</td><td rowspan="2">All Genders</td><td style="width: 100px;" colspan="2">By Gender&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>Male</td><td>Females</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td></td></tr></tbody></table>');
+        
+        
+    }//end testAddingAndDeletingColumnsInANewTableWithLeftHeaders()
+    
+
+    /**
+     * Test adding a new table with top headers and then adding new columns.
+     *
+     * @return void
+     */
+    public function testAddingAndDeletingColumnsInANewTableWithTopHeaders()
+    {
+        $textLoc = $this->find('IPSUM');
+        
         $this->insertTable();
 
         $this->showTools(2, 'col');
 
         //Add a new column after the first column of the table
         $this->click($this->find($this->getImg('icon_insertColAfter.png'), NULL, 0.83));
+        $this->click($textLoc);
 
-        $struct   = $this->getTableStructure();
-        $expected = array(
-                     array(array(), array(), array(), array()),
-                     array(array(), array(), array(), array()),
-                     array(array(), array(), array(), array()),
-                    );
-
-        $this->assertTableStructure($expected, $struct);
-
+        $this->execJS('rmTableHeaders(0,true)');
+        $this->execJS('rmTableHeaders(1,true)');
+        $this->assertHTMLMatch('<p>Lorem IPSUM</p><table style="width: 100%;" border="1"><tbody><tr><th>&nbsp;</th><th>&nbsp;</th><th>&nbsp;</th><th>&nbsp;</th><th>&nbsp;</th></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>dolor</p><p>sit amet <strong>consectetur</strong></p><table style="width: 300px;" border="1" cellspacing="2" cellpadding="2"><tbody><tr><td style="width: 100px;" colspan="2">&nbsp;Survey&nbsp;</td><td rowspan="2">All Genders</td><td style="width: 100px;" colspan="2">By Gender&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>Male</td><td>Females</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td></td></tr></tbody></table>');
+        
         //Add a new column before the first column of the table
+        $this->showTools(0, 'col');
         $this->click($this->find($this->getImg('icon_insertColBefore.png'), NULL, 0.83));
 
-        $struct   = $this->getTableStructure();
-        $expected = array(
-                     array(array(), array(), array(), array(), array()),
-                     array(array(), array(), array(), array(), array()),
-                     array(array(), array(), array(), array(), array()),
-                    );
-
-        $this->assertTableStructure($expected, $struct);
+        $this->execJS('rmTableHeaders(0,true)');
+        $this->assertHTMLMatch('<p>Lorem IPSUM</p><table style="width: 100%;" border="1"><tbody><tr><th>&nbsp;</th><th>&nbsp;</th><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><th>&nbsp;</th><th>&nbsp;</th><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><th>&nbsp;</th><th>&nbsp;</th><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>dolor</p><p>sit amet <strong>consectetur</strong></p><table style="width: 300px;" border="1" cellspacing="2" cellpadding="2"><tbody><tr><td style="width: 100px;" colspan="2">&nbsp;Survey&nbsp;</td><td rowspan="2">All Genders</td><td style="width: 100px;" colspan="2">By Gender&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>Male</td><td>Females</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td></td></tr></tbody></table>');
 
         //Delete the column
+        $this->showTools(1, 'col');
         $this->click($this->find($this->getImg('icon_trash.png'), NULL, 0.83));
 
-        $struct   = $this->getTableStructure();
-        $expected = array(
-                     array(array(), array(), array(), array()),
-                     array(array(), array(), array(), array()),
-                     array(array(), array(), array(), array()),
-                    );
+        $this->execJS('rmTableHeaders(0,true)');
+        $this->assertHTMLMatch('<p>Lorem IPSUM</p><table style="width: 100%;" border="1"><tbody><tr><th>&nbsp;</th><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><th>&nbsp;</th><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><th>&nbsp;</th><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>dolor</p><p>sit amet <strong>consectetur</strong></p><table style="width: 300px;" border="1" cellspacing="2" cellpadding="2"><tbody><tr><td style="width: 100px;" colspan="2">&nbsp;Survey&nbsp;</td><td rowspan="2">All Genders</td><td style="width: 100px;" colspan="2">By Gender&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>Male</td><td>Females</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td></td></tr></tbody></table>');
+        
+    }//end testAddingAndDeletingColumnsInANewTableWithTopHeaders()
+        
 
-        $this->assertTableStructure($expected, $struct);
+    /**
+     * Test adding a new table with both headers and then adding new columns.
+     *
+     * @return void
+     */
+    public function testAddingAndDeletingColumnsInANewTableWithBothHeaders()
+    {
+        $textLoc = $this->find('IPSUM');
+        
+        $this->insertTableWithBothHeaders();
 
-    }//end testAddingAndDeletingColumnsInANewTable()
+        $this->showTools(1, 'col');
 
+        //Add a new column after a column in the table
+        $this->click($this->find($this->getImg('icon_insertColBefore.png'), NULL, 0.83));
+        
+        $this->click($textLoc);
+
+        $this->execJS('rmTableHeaders(0,true)');
+        $this->execJS('rmTableHeaders(1,true)');
+        $this->assertHTMLMatch('<p>Lorem IPSUM</p><table style="width: 100%;" border="1"><tbody><tr><th>&nbsp;</th><th>&nbsp;</th><th>&nbsp;</th><th>&nbsp;</th><th>&nbsp;</th></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>dolor</p><p>sit amet <strong>consectetur</strong></p><table style="width: 300px;" border="1" cellspacing="2" cellpadding="2"><tbody><tr><td style="width: 100px;" colspan="2">&nbsp;Survey&nbsp;</td><td rowspan="2">All Genders</td><td style="width: 100px;" colspan="2">By Gender&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>Male</td><td>Females</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td></td></tr></tbody></table>');
+        
+        //Add a new column before the first column of the table
+        $this->showTools(0, 'col');
+        $this->click($this->find($this->getImg('icon_insertColAfter.png'), NULL, 0.83));
+
+        $this->execJS('rmTableHeaders(0,true)');
+        $this->assertHTMLMatch('<p>Lorem IPSUM</p><table style="width: 100%;" border="1"><tbody><tr><th>&nbsp;</th><th>&nbsp;</th><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><th>&nbsp;</th><th>&nbsp;</th><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><th>&nbsp;</th><th>&nbsp;</th><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>dolor</p><p>sit amet <strong>consectetur</strong></p><table style="width: 300px;" border="1" cellspacing="2" cellpadding="2"><tbody><tr><td style="width: 100px;" colspan="2">&nbsp;Survey&nbsp;</td><td rowspan="2">All Genders</td><td style="width: 100px;" colspan="2">By Gender&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>Male</td><td>Females</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td></td></tr></tbody></table>');
+
+        //Delete the column
+        $this->showTools(1, 'col');
+        $this->click($this->find($this->getImg('icon_trash.png'), NULL, 0.83));
+
+        $this->execJS('rmTableHeaders(0,true)');
+        $this->assertHTMLMatch('<p>Lorem IPSUM</p><table style="width: 100%;" border="1"><tbody><tr><th>&nbsp;</th><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><th>&nbsp;</th><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><th>&nbsp;</th><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>dolor</p><p>sit amet <strong>consectetur</strong></p><table style="width: 300px;" border="1" cellspacing="2" cellpadding="2"><tbody><tr><td style="width: 100px;" colspan="2">&nbsp;Survey&nbsp;</td><td rowspan="2">All Genders</td><td style="width: 100px;" colspan="2">By Gender&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>Male</td><td>Females</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td></td></tr></tbody></table>');
+        
+    }//end testAddingAndDeletingColumnsInANewTableWithBothHeaders()
+    
     
     /**
      * Test that the 'By Genders' colspan changes to three when you add a new column and goes back to two when you delete a new column.
@@ -81,52 +187,17 @@ class Viper_Tests_ViperTableEditorPlugin_ColumnUnitTest extends AbstractViperTab
 
         $this->click($this->find($this->getImg('icon_insertColAfter.png'), NULL, 0.83));
         $this->click($this->find($this->getImg('icon_insertColBefore.png'), NULL, 0.83));
+        
+        $this->click($this->find('IPSUM'));
 
-        $struct   = $this->getTableStructure();
-        $expected = array(
-                     array(
-                      array('colspan' => 2),
-                      array('rowspan' => 2),
-                      array(),
-                      array('colspan' => 3),
-                     ),
-                     array(
-                      array(),
-                      array(),
-                      array(),
-                      array('content' => 'Male'),
-                      array(),
-                      array('content' => 'Female'),
-                     ),
-                     array(array(), array(), array(), array(), array(), array(), array()),
-                     array(array(), array(), array(), array(), array(), array(), array()),
-                    );
-
-        $this->assertTableStructure($expected, $struct);
-
+        $this->execJS('rmTableHeaders(0,true)');
+        $this->assertHTMLMatch('<p>Lorem IPSUM dolor</p><p>sit amet <strong>consectetur</strong></p><table style="width: 300px;" border="1" cellspacing="2" cellpadding="2"><tbody><tr><td style="width: 100px;" colspan="2">&nbsp;Survey&nbsp;</td><td rowspan="2">All Genders</td><td>&nbsp;</td><td style="width: 100px;" colspan="3">By Gender&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Male</td><td>&nbsp;</td><td>Females</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td></td></tr></tbody></table>');
+        
+        $this->showTools(8, 'col');
         $this->click($this->find($this->getImg('icon_trash.png'), NULL, 0.83));
-
-        $struct   = $this->getTableStructure();
-        $expected = array(
-                     array(
-                      array('colspan' => 2),
-                      array('rowspan' => 2),
-                      array(),
-                      array('colspan' => 2),
-                     ),
-                     array(
-                      array(),
-                      array(),
-                      array(),
-                      array(),
-                      array('content' => 'Female'),
-                     ),
-                     array(array(), array(), array(), array(), array(), array()),
-                     array(array(), array(), array(), array(), array(), array()),
-                    );
-
-        $this->assertTableStructure($expected, $struct);
-
+        $this->execJS('rmTableHeaders(0,true)');
+        $this->assertHTMLMatch('<p>Lorem IPSUM dolor</p><p>sit amet <strong>consectetur</strong></p><table style="width: 300px;" border="1" cellspacing="2" cellpadding="2"><tbody><tr><td style="width: 100px;" colspan="2">&nbsp;Survey&nbsp;</td><td rowspan="2">All Genders</td><td>&nbsp;</td><td style="width: 100px;" colspan="2">By Gender&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Male</td><td>Females</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td></td></tr></tbody></table>');
+        
     }//end testColspanChangesWhenNewColumnAdded()
     
 
@@ -140,30 +211,17 @@ class Viper_Tests_ViperTableEditorPlugin_ColumnUnitTest extends AbstractViperTab
         $this->showTools(6, 'col');
 
         $this->click($this->find($this->getImg('icon_trash.png'), NULL, 0.83));
-
-        $struct   = $this->getTableStructure(0, TRUE);
-        $expected = array(
-                     array(
-                      array('colspan' => 2, 'content' => ' Survey '),
-                      array('rowspan' => 2, 'content' => 'All Genders'),
-                      array('content' => 'By Gender '),
-                     ),
-                     array(
-                      array(),
-                      array(),
-                      array('content' => 'Male'),
-                     ),
-                     array(array(), array(), array(), array()),
-                     array(array(), array(), array(), array()),
-                    );
-
-        $this->assertTableStructure($expected, $struct);
+        $this->click($this->find('IPSUM'));
+         
+        $this->execJS('rmTableHeaders(0,true)');
+        $this->assertHTMLMatch('<p>Lorem IPSUM dolor</p><p>sit amet <strong>consectetur</strong></p><table style="width: 300px;" border="1" cellspacing="2" cellpadding="2"><tbody><tr><td style="width: 100px;" colspan="2">&nbsp;Survey&nbsp;</td><td rowspan="2">All Genders</td><td style="width: 100px;">By Gender&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>Male</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td></td></tr></tbody></table>');
+        
 
     }//end testColspanChangesWhenYouDeleteTheLastColumn()
       
 
     /**
-     * Test that the 'By Gender' colspan changes when you the first column of the merged cell.
+     * Test that the 'By Gender' colspan changes when you delete the first column of the merged cell.
      *
      * @return void
      */
@@ -172,145 +230,15 @@ class Viper_Tests_ViperTableEditorPlugin_ColumnUnitTest extends AbstractViperTab
         $this->showTools(5, 'col');
 
         $this->click($this->find($this->getImg('icon_trash.png'), NULL, 0.83));
-
-        $struct   = $this->getTableStructure(0, TRUE);
-        $expected = array(
-                     array(
-                      array('colspan' => 2, 'content' => ' Survey '),
-                      array('rowspan' => 2, 'content' => 'All Genders'),
-                      array('content' => 'By Gender '),
-                     ),
-                     array(
-                      array(),
-                      array(),
-                      array('content' => 'Females'),
-                     ),
-                     array(array(), array(), array(), array()),
-                     array(array(), array(), array(), array()),
-                    );
-
-        $this->assertTableStructure($expected, $struct);
+        $this->click($this->find('IPSUM'));
+        
+        $this->execJS('rmTableHeaders(0,true)');
+        $this->assertHTMLMatch('<p>Lorem IPSUM dolor</p><p>sit amet <strong>consectetur</strong></p><table style="width: 300px;" border="1" cellspacing="2" cellpadding="2"><tbody><tr><td style="width: 100px;" colspan="2">&nbsp;Survey&nbsp;</td><td rowspan="2">All Genders</td><td style="width: 100px;">By Gender&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>Females</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td></td></tr></tbody></table>');
+        
 
     }//end testColspanChangesWhenYouDeleteTheFirstColumnOfMergedCell()
     
     
-    /**
-     * Test that inserting columns work.
-     *
-     * @return void
-     */
-    public function testColInsert()
-    {
-        $this->showTools(2, 'col');
-
-        $this->click($this->find($this->getImg('icon_insertColBefore.png'), NULL, 0.83));
-        $this->click($this->find($this->getImg('icon_insertColAfter.png'), NULL, 0.83));
-
-        $struct   = $this->getTableStructure();
-        $expected = array(
-                     array(
-                      array('colspan' => 2),
-                      array('rowspan' => 2),
-                      array(),
-                      array('colspan' => 2),
-                      array(),
-                     ),
-                     array(array(), array(), array(), array(), array(), array()),
-                     array(array(), array(), array(), array(), array(), array(), array()),
-                     array(array(), array(), array(), array(), array(), array(), array()),
-                    );
-
-        $this->assertTableStructure($expected, $struct);
-
-    }//end testColInsert()
-
-
-    /**
-     * Test that inserting columns work.
-     *
-     * @return void
-     */
-    public function testColInsert2()
-    {
-        $this->showTools(5, 'col');
-
-        $this->click($this->find($this->getImg('icon_insertColBefore.png'), NULL, 0.83));
-        $this->click($this->find($this->getImg('icon_insertColAfter.png'), NULL, 0.83));
-
-        $struct   = $this->getTableStructure();
-        $expected = array(
-                     array(
-                      array('colspan' => 2),
-                      array('rowspan' => 2),
-                      array(),
-                      array('colspan' => 3),
-                     ),
-                     array(array(), array(), array(), array(), array(), array()),
-                     array(array(), array(), array(), array(), array(), array(), array()),
-                     array(array(), array(), array(), array(), array(), array(), array()),
-                    );
-
-        $this->assertTableStructure($expected, $struct);
-
-    }//end testColInsert2()
-
-
-    /**
-     * Test that removing columns work.
-     *
-     * @return void
-     */
-    public function testColRemove()
-    {
-        $this->showTools(6, 'col');
-
-        $this->click($this->find($this->getImg('icon_trash.png'), NULL, 0.83));
-
-        $struct   = $this->getTableStructure();
-        $expected = array(
-                     array(
-                      array('colspan' => 2),
-                      array('rowspan' => 2),
-                      array(),
-                     ),
-                     array(array(), array(), array()),
-                     array(array(), array(), array(), array()),
-                     array(array(), array(), array(), array()),
-                    );
-
-        $this->assertTableStructure($expected, $struct);
-
-    }//end testColRemove()
-
-
-    /**
-     * Test that removing columns work.
-     *
-     * @return void
-     */
-    public function testColRemove2()
-    {
-        $this->showTools(5, 'col');
-
-        $this->click($this->find($this->getImg('icon_trash.png'), NULL, 0.83));
-
-        $struct   = $this->getTableStructure();
-        $expected = array(
-                     array(
-                      array('colspan' => 2),
-                      array('rowspan' => 2),
-                      array(),
-                     ),
-                     array(array(), array(), array()),
-                     array(array(), array(), array(), array()),
-                     array(array(), array(), array(), array()),
-                    );
-
-        $this->assertTableStructure($expected, $struct);
-
-    }//end testColRemove2()
-
-
 }//end class
 
 ?>

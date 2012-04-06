@@ -4,7 +4,55 @@ require_once 'AbstractViperTableEditorPluginUnitTest.php';
 
 class Viper_Tests_ViperTableEditorPlugin_CreateTableUnitTest extends AbstractViperTableEditorPluginUnitTest
 {
+    
+    
+   /**
+     * Test that creating a table without headers.
+     *
+     * @return void
+     */
+    public function testCreateTableWithoutHeaders()
+    {
+        $this->insertTableWithNoHeaders();
+        sleep(2);
 
+        $this->execJS('rmTableHeaders(0,true)');
+        $this->assertHTMLMatch('<p>Lorem IPSUM</p><table style="width: 100%;" border="1"><tbody><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>dolor</p><p>sit amet <strong>consectetur</strong></p>');
+
+    }//end testCreateTableWithoutHeaders()
+       
+    
+   /**
+     * Test that creating a table with left headers.
+     *
+     * @return void
+     */
+    public function testCreateTableWithLeftHeaders()
+    {
+        $this->insertTableWithLeftHeaders();
+        sleep(2);
+
+        $this->execJS('rmTableHeaders(0,true)');
+        $this->assertHTMLMatch('<p>Lorem IPSUM</p><table style="width: 100%;" border="1"><tbody><tr><th>&nbsp;</th><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><th>&nbsp;</th><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><th>&nbsp;</th><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>dolor</p><p>sit amet <strong>consectetur</strong></p>');
+
+    }//end testCreateTableWithLeftHeaders()
+       
+    
+   /**
+     * Test that creating a table with both headers.
+     *
+     * @return void
+     */
+    public function testCreateTableWithBothHeaders()
+    {
+        $this->insertTableWithBothHeaders();
+        sleep(2);
+
+        $this->execJS('rmTableHeaders(0,true)');
+        $this->assertHTMLMatch('<p>Lorem IPSUM</p><table style="width: 100%;" border="1"><tbody><tr><th>&nbsp;</th><th>&nbsp;</th><th>&nbsp;</th><th>&nbsp;</th></tr><tr><th>&nbsp;</th><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><th>&nbsp;</th><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>dolor</p><p>sit amet <strong>consectetur</strong></p>');
+
+    }//end insertTableWithBothHeaders()
+    
 
     /**
      * Test that creating a table works.
