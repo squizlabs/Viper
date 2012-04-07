@@ -2807,6 +2807,21 @@ ViperTableEditorPlugin.prototype = {
         // First hide the table so we can determine if there are borders etc.
         dfx.setStyle(table, 'display', 'none');
 
+        // Create a table id.
+        var tableId = null;
+
+        if (!tableId) {
+            while (!tableId) {
+                tableId   = 'table' + dfx.getUniqueId().substr(-5, 5);
+                var tElem = dfx.getId(tableId);
+                if (tElem) {
+                    tableId = null;
+                }
+            }
+
+            table.setAttribute('id', tableId);
+        }
+
         var tbody      = document.createElement('tbody');
         var firstCol   = null;
         var headerOpts = this._headerOptions;
@@ -2892,6 +2907,8 @@ ViperTableEditorPlugin.prototype = {
         this.viper.fireSelectionChanged();
         this.viper.fireNodesChanged([table]);
 
+        this.setTableHeaders(table);
+
         this.viper.ViperHistoryManager.end();
 
         return table;
@@ -2916,14 +2933,14 @@ ViperTableEditorPlugin.prototype = {
 
         if (!tableId) {
             while (!tableId) {
-                tableId   = dfx.getUniqueId().substr(-5, 5);
+                tableId   = 'table' + dfx.getUniqueId().substr(-5, 5);
                 var tElem = dfx.getId(tableId);
                 if (tElem) {
                     tableId = null;
                 }
             }
 
-            table.setAttribute('id', tableId);
+            table.setAttribute('id', 'table' + tableId);
         }
 
         var cellHeadings  = [];
