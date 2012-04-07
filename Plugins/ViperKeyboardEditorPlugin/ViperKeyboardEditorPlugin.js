@@ -301,6 +301,7 @@ ViperKeyboardEditorPlugin.prototype = {
         // If the range is not collapsed then remove the contents of the selection.
         if (range.collapsed !== true) {
             this.viper.deleteContents();
+            ViperSelection.addRange(this.viper.getCurrentRange());
             range = this.viper.getViperRange();
         }
 
