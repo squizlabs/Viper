@@ -8,6 +8,7 @@ function ViperTableEditorPlugin(viper)
     this.toolbarPlugin     = null;
     this.activeCell        = null;
     this._highlightElement = null;
+    this._cellTools        = null;
 
     this._buttonClicked = false;
     this._tableRawCells = null;
@@ -158,7 +159,11 @@ ViperTableEditorPlugin.prototype = {
                     // Show cell tools.
                     var cell = self._getCellElement(node);
                     if (cell) {
-                        self.showCellToolsIcon(cell, true);
+                        if (self._cellTools && dfx.hasClass(self._cellTools, 'topBar') === true) {
+                            self.hideCellToolsIcon();
+                        } else {
+                            self.showCellToolsIcon(cell, true);
+                        }
                     }
                 } else {
                     self.toolbarPlugin.toggleBubble('VTEP-bubble');
@@ -364,6 +369,7 @@ ViperTableEditorPlugin.prototype = {
         tools    = document.createElement('div');
         tools.id = toolsid;
         dfx.addClass(tools, 'ViperITP themeDark compact visible');
+        this._cellTools = tools;
 
         // Table, row, col and cell buttons. Initially only the table icon is visible
         // Whent he mouse is moved over the table icon, rest of the buttons become
@@ -476,6 +482,8 @@ ViperTableEditorPlugin.prototype = {
         if (tools) {
             dfx.remove(tools);
         }
+
+        this._cellTools = null;
 
     },
 
