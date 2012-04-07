@@ -365,7 +365,7 @@ class Viper_Tests_ViperTableEditorPlugin_CreateTableUnitTest extends AbstractVip
         $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_createTable_disabled.png'), 'Create table icon should be disabled in the toolbar');
         
         $this->click($this->find('IPSUM'));
-        $this->assertFalse($this->topToolbarButtonExists($dir.'toolbarIcon_createTable_disabled.png'), 'Create table icon should be enabled in the toolbar');
+        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_createTable.png'), 'Create table icon should be enabled in the toolbar');
         
     }//end testCreateTableInList()
 
