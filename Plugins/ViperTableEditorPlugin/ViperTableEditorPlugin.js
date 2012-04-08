@@ -3131,8 +3131,9 @@ ViperTableEditorPlugin.prototype = {
                         }
                     }
 
-                    // TODO: Dont do this if it has headers attribute.
-                    if (dfx.isBlank(dfx.getHtml(cell)) === false) {
+                    if (dfx.isBlank(dfx.getHtml(cell)) === false
+                        && cellHeadings[rowCount][cellCount]
+                    ) {
                         var headers = cellHeadings[rowCount][cellCount].id;
                         for (var i = 1; i < cellCount; i++) {
                             // Skip column headers. We only want to use our own column header.
