@@ -55,7 +55,7 @@ class Viper_Tests_ViperTableEditorPlugin_CreateTableUnitTest extends AbstractVip
     
 
     /**
-     * Test that creating a table works.
+     * Test that creating a table works using the default header layout.
      *
      * @return void
      */
@@ -84,8 +84,7 @@ class Viper_Tests_ViperTableEditorPlugin_CreateTableUnitTest extends AbstractVip
         $this->click($this->find('IPSUM'));
         
         $this->execJS('rmTableHeaders(0,true)');
-        $this->assertHTMLMatch('<p>Lorem IPSUM</p><table style="width: 100%; " border="1"><tbody><tr><th colspan="2">
-        &nbsp;OneTwo&nbsp; </th><th>Three&nbsp; </th><th>Four&nbsp; </th></tr><tr><td>Five&nbsp; </td><td>Six&nbsp; </td><td>&nbsp; </td><td>&nbsp; </td></tr><tr><td>&nbsp; </td><td>&nbsp; </td><td>&nbsp; </td><td>&nbsp; </td></tr></tbody></table><p>dolor</p><p>sit amet <strong>consectetur</strong></p>');
+        $this->assertHTMLMatch('<p>Lorem IPSUM</p><table style="width: 100%;" border="1"><tbody><tr><th colspan="2">&nbsp;OneTwo&nbsp;</th><th>Three&nbsp;</th><th>Four&nbsp;</th></tr><tr><td>Five&nbsp;</td><td>Six&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>dolor</p><p>sit amet <strong>consectetur</strong></p>');
 
     }//end testCreateTableStructure()
 
@@ -407,7 +406,7 @@ class Viper_Tests_ViperTableEditorPlugin_CreateTableUnitTest extends AbstractVip
         $this->click($insertTable);
         sleep(1);
         $this->execJS('rmTableHeaders(0,true)');
-        $this->assertHTMLMatch('<p>Lorem</p><table style="width: 100%;" border="1"><tbody><tr><th>&nbsp;</th><th>&nbsp;</th><th>&nbsp;</th><th>&nbsp;</th></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table>/p>dolor</p><p>sit amet <strong>consectetur</strong></p>');
+        $this->assertHTMLMatch('<p>Lorem</p><table style="width: 100%;" border="1"><tbody><tr><th>&nbsp;</th><th>&nbsp;</th><th>&nbsp;</th><th>&nbsp;</th></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>dolor</p><p>sit amet <strong>consectetur</strong></p>');
 
     }//end testReplaceWordWithTable()
     
