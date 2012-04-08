@@ -507,7 +507,6 @@ ViperImagePlugin.prototype = {
 
     _fixImageResize: function()
     {
-        dfx.setStyle(this._resizeImage, 'display', '');
         dfx.setStyle(this._resizeImage, 'left', '');
         dfx.setStyle(this._resizeImage, 'top', '');
         dfx.setStyle(this._resizeImage, 'resize', '');
