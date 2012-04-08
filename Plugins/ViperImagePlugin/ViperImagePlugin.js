@@ -45,6 +45,12 @@ ViperImagePlugin.prototype = {
                     });
                 }
 
+                // Enable toolbar if its not already due to event cancelation.
+                var toolbar = self.viper.ViperPluginManager.getPlugin('ViperToolbarPlugin');
+                if (toolbar && toolbar.isDisabled() === true) {
+                    toolbar.enable();
+                }
+
                 return false;
             } else {
                 self._updateToolbar();
@@ -74,6 +80,14 @@ ViperImagePlugin.prototype = {
 
         this.viper.registerCallback('ViperHistoryManager:beforeUndo', 'ViperImagePlugin', function() {
             self.hideImageResizeHandles();
+        });
+
+        this.viper.registerCallback('ViperCoreStylesPlugin:beforeImageUpdate', 'ViperImagePlugin', function(image) {
+            self.hideImageResizeHandles();
+        });
+
+        this.viper.registerCallback('ViperCoreStylesPlugin:afterImageUpdate', 'ViperImagePlugin', function(image) {
+            self.showImageResizeHandles(image);
         });
 
     },

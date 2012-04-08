@@ -642,6 +642,7 @@ ViperToolbarPlugin.prototype = {
         dfx.addClass(this._toolbar, 'viper-active');
 
         this.viper.fireCallbacks('ViperToolbarPlugin:enabled');
+        this._updateToolbar();
 
     },
 

@@ -87,16 +87,16 @@ ViperCoreStylesPlugin.prototype = {
             var justifyBubbleContent = document.createElement('div');
             var btnGroup3 = tools.createButtonGroup('ViperCoreStylesPlugin:vtp:btnGroup3');
             tools.createButton('ViperCoreStylesPlugin:vtp:left', '', 'Left Justify', 'justifyLeft', function() {
-                self.handleJustfy('left');
+                self.handleJustify('left');
             });
             tools.createButton('ViperCoreStylesPlugin:vtp:center', '', 'Center Justify', 'justifyCenter', function() {
-                self.handleJustfy('center');
+                self.handleJustify('center');
             });
             tools.createButton('ViperCoreStylesPlugin:vtp:right', '', 'Right Justify', 'justifyRight', function() {
-                self.handleJustfy('right');
+                self.handleJustify('right');
             });
             tools.createButton('ViperCoreStylesPlugin:vtp:block', '', 'Block Justify', 'justifyBlock', function() {
-                self.handleJustfy('justify');
+                self.handleJustify('justify');
             });
 
             tools.addButtonToGroup('ViperCoreStylesPlugin:vtp:left', 'ViperCoreStylesPlugin:vtp:btnGroup3');
@@ -162,8 +162,15 @@ ViperCoreStylesPlugin.prototype = {
         });
 
         this.viper.registerCallback('Viper:mouseDown', 'ViperCoreStylesPlugin', function(e) {
+            self._selectedImage = null;
             var target = dfx.getMouseEventTarget(e);
             if (target && dfx.isTag(target, 'hr') !== true) {
+                if (dfx.isTag(target, 'img') === true) {
+                    self.viper.ViperTools.disableButton('ViperCoreStylesPlugin:vtp:block');
+                    self._selectedImage = target;
+                    self._updateToolbarButtonStates();
+                }
+
                 return;
             }
 
@@ -533,8 +540,13 @@ ViperCoreStylesPlugin.prototype = {
 
     },
 
-    handleJustfy: function(type)
+    handleJustify: function(type)
     {
+        if (this._selectedImage) {
+            this._handleImageJustify(this._selectedImage, type);
+            return;
+        }
+
         var range = this.viper.getViperRange();
 
         var start = range.startContainer;
@@ -549,7 +561,7 @@ ViperCoreStylesPlugin.prototype = {
         }
 
         if (dfx.isBlockElement(common) === true && dfx.isChildOf(common, this.viper.element) === true) {
-            this.setJustfyChangeTrackInfo(common);
+            this.setJustifyChangeTrackInfo(common);
             this.toggleJustify(common, type);
         } else {
             var parent       = null;
@@ -621,7 +633,7 @@ ViperCoreStylesPlugin.prototype = {
             }
         }//end if
 
-        this.viper.fireNodesChanged('ViperCoreStylesPlugin:justify');
+        this.viper.fireNodesChanged();
         this.viper.fireSelectionChanged(null, true);
         this.viper.focus();
 
@@ -644,11 +656,82 @@ ViperCoreStylesPlugin.prototype = {
 
     },
 
+    _handleImageJustify: function(image, type)
+    {
+        if (!image || type === 'block') {
+            return;
+        }
+
+        this.viper.fireCallbacks('ViperCoreStylesPlugin:beforeImageUpdate', image);
+
+        switch (type) {
+            case 'left':
+                dfx.setStyle(image, 'float', 'left');
+                dfx.setStyle(image, 'margin', '1em 0');
+            break;
+
+            case 'right':
+                dfx.setStyle(image, 'float', 'right');
+                dfx.setStyle(image, 'margin', '1em 0');
+            break;
+
+            case 'center':
+                dfx.setStyle(image, 'margin', '1em auto');
+                dfx.setStyle(image, 'float', '');
+                dfx.setStyle(image, 'display', 'block');
+            break;
+
+            default:
+            break;
+        }//end switch
+
+        // Reset button status.
+        var types = ['left', 'center', 'right', 'block'];
+        var c     = types.length;
+        this.viper.ViperTools.getItem('justify').setIconClass('justifyLeft');
+        this.viper.ViperTools.setButtonInactive('justify');
+        for (var i = 0; i < c; i++) {
+            this.viper.ViperTools.setButtonInactive('ViperCoreStylesPlugin:vtp:' + types[i]);
+        }
+
+        this.viper.ViperTools.disableButton('ViperCoreStylesPlugin:vtp:block');
+
+        this.viper.ViperTools.setButtonActive('ViperCoreStylesPlugin:vtp:' + type);
+        this.viper.ViperTools.getItem('justify').setIconClass('justify' + dfx.ucFirst(type));
+        this.viper.ViperTools.setButtonActive('justify');
+
+        this.viper.fireNodesChanged();
+        this.viper.fireSelectionChanged(null, true);
+
+        this.viper.fireCallbacks('ViperCoreStylesPlugin:afterImageUpdate', image);
+
+    },
+
+    _getImageJustify: function(image)
+    {
+        if (!image) {
+            return null;
+        }
+
+        var type  = '';
+        var float = dfx.getStyle(image, 'float');
+        if (float === 'left') {
+            type = 'left';
+        } else if (float === 'right') {
+            type = 'right';
+        } else if (dfx.getStyle(image, 'display') === 'block') {
+            type = 'center';
+        }
+
+        return type;
+
+    },
+
     /**
      * Make sure this method is called before changing the style of the node
      * so that old alignment can be retrieved.
      */
-    setJustfyChangeTrackInfo: function(node)
+    setJustifyChangeTrackInfo: function(node)
     {
         if (node && ViperChangeTracker.isTrackingNode(node) === false) {
             // Get current style.
@@ -979,6 +1062,10 @@ ViperCoreStylesPlugin.prototype = {
     _canStyleNode: function(node, topBar)
     {
         if (topBar === true) {
+            if (this._selectedImage) {
+                return false;
+            }
+
             return true;
         }
 
@@ -986,6 +1073,7 @@ ViperCoreStylesPlugin.prototype = {
             if (dfx.isTag(node, 'li') !== true
                 && dfx.isTag(node, 'td') !== true
                 && dfx.isTag(node, 'th') !== true
+                && dfx.isTag(node, 'img') !== true
             ) {
                 return false;
             }
@@ -1055,6 +1143,8 @@ ViperCoreStylesPlugin.prototype = {
 
     _updateToolbarButtonStates: function(buttons, range)
     {
+        range = range || this.viper.getViperRange();
+
         var startNode = range.getNodeSelection();
         if (!startNode) {
             startNode = range.getStartNode();
@@ -1071,6 +1161,17 @@ ViperCoreStylesPlugin.prototype = {
                 for (var i = 0; i < c; i++) {
                     var buttonName = this._buttons[buttons[btn][i]] || 'ViperCoreStylesPlugin:vtp:' + buttons[btn][i];
                     tools.disableButton(buttonName);
+                }
+            }
+
+            if (this._selectedImage) {
+                // Enable justify icon for selected image.
+                var type = this._getImageJustify(this._selectedImage);
+                tools.enableButton('justify');
+                if (type) {
+                    tools.setButtonActive('ViperCoreStylesPlugin:vtp:' + type);
+                    tools.getItem('justify').setIconClass('justify' + dfx.ucFirst(type));
+                    tools.setButtonActive('justify');
                 }
             }
 
