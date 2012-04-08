@@ -228,24 +228,38 @@ ViperLinkPlugin.prototype = {
     removeLinks: function()
     {
         var range    = this.viper.getViperRange();
-        var bookmark = this.viper.createBookmark();
-
-        var elems = dfx.getElementsBetween(bookmark.start, bookmark.end);
-
-        dfx.walk(bookmark.start, function(elem) {
-            if (elem.nodeType === dfx.ELEMENT_NODE && dfx.isTag(elem, 'a') === true) {
-                var nextSibling = elem.firstChild;
+        var nodeSelection = range.getNodeSelection();
+        if (nodeSelection) {
+            var links = dfx.getTag('a', nodeSelection);
+            var c     = links.length;
+            for (var i = 0; i < c; i++) {
+                var elem = links[i];
                 while (elem.lastChild) {
                     dfx.insertAfter(elem, elem.lastChild);
                 }
 
                 dfx.remove(elem);
-
-                return nextSibling;
             }
-        }, bookmark.end);
+        } else {
+            var bookmark = this.viper.createBookmark();
+            var elems = dfx.getElementsBetween(bookmark.start, bookmark.end);
 
-        this.viper.selectBookmark(bookmark);
+            dfx.walk(bookmark.start, function(elem) {
+                if (elem.nodeType === dfx.ELEMENT_NODE && dfx.isTag(elem, 'a') === true) {
+                    var nextSibling = elem.firstChild;
+                    while (elem.lastChild) {
+                        dfx.insertAfter(elem, elem.lastChild);
+                    }
+
+                    dfx.remove(elem);
+
+                    return nextSibling;
+                }
+            }, bookmark.end);
+
+            this.viper.selectBookmark(bookmark);
+        }//end if
+
         this.viper.fireSelectionChanged(null, true);
         this.viper.fireNodesChanged([this.viper.getViperElement()]);
 
