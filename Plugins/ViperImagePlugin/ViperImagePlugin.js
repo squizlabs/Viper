@@ -203,9 +203,11 @@ ViperImagePlugin.prototype = {
     {
         if (!image) {
             return;
+        } else if (title === null) {
+            image.removeAttribute('title');
+        } else {
+            image.setAttribute('title', title);
         }
-
-        image.setAttribute('title', title);
 
     },
 
@@ -236,6 +238,8 @@ ViperImagePlugin.prototype = {
             if (pres === true) {
                 title = null;
                 alt   = '';
+            } else if (title === '') {
+                title = null;
             }
 
             if (!self._resizeImage || dfx.isTag(self._resizeImage, 'img') === false) {
