@@ -112,6 +112,11 @@ function rmTableHeaders(tblIndex, removeid)
         table.removeAttribute('id');
     }
 
+    var cells = dfx.getTag('td,th');
+    for (var i = 0; i < cells.length; i++) {
+        cells[i].removeAttribute('id');
+    }
+
     var headers      = dfx.find(table, '[headers]');
     var headersCount = headers.length;
     if (headersCount > 0) {
