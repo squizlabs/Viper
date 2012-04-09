@@ -2797,7 +2797,7 @@ ViperTableEditorPlugin.prototype = {
 
     },
 
-    insertTable: function(rows, cols, headerType)
+    insertTable: function(rows, cols, headerType, tableid)
     {
         this.viper.ViperHistoryManager.begin();
 
@@ -2809,19 +2809,17 @@ ViperTableEditorPlugin.prototype = {
         dfx.setStyle(table, 'display', 'none');
 
         // Create a table id.
-        var tableId = null;
-
-        if (!tableId) {
-            while (!tableId) {
-                tableId   = 'table' + dfx.getUniqueId().substr(-5, 5);
-                var tElem = dfx.getId(tableId);
+        if (!tableid) {
+            while (!tableid) {
+                tableid   = 'table' + dfx.getUniqueId().substr(-5, 5);
+                var tElem = dfx.getId(tableid);
                 if (tElem) {
-                    tableId = null;
+                    tableid = null;
                 }
             }
-
-            table.setAttribute('id', tableId);
         }
+
+        table.setAttribute('id', tableid);
 
         var tbody      = document.createElement('tbody');
         var firstCol   = null;
@@ -2928,6 +2926,11 @@ ViperTableEditorPlugin.prototype = {
             for (var i = 0; i < headersCount; i++) {
                 headers[i].removeAttribute('headers');
             }
+        }
+
+        var thElements = dfx.getTag('th', table);
+        if (thElements.length === 0) {
+            return;
         }
 
         var tableId = table.getAttribute('id');

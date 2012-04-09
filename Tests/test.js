@@ -91,11 +91,7 @@ function gTagCounts(tagNames)
  */
 function insTable(rows, cols, header, id)
 {
-    var table = viper.getPluginManager().getPlugin('ViperTableEditorPlugin').insertTable(rows, cols, header);
-
-    if (id) {
-        table.setAttribute('id', id);
-    }
+    var table = viper.getPluginManager().getPlugin('ViperTableEditorPlugin').insertTable(rows, cols, header, id);
 
     return table;
 
