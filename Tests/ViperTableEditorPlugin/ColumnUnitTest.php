@@ -7,14 +7,20 @@ class Viper_Tests_ViperTableEditorPlugin_ColumnUnitTest extends AbstractViperTab
 
 
     /**
-     * Test that correct column icons appear in the inline toolbar.
+     * Test that correct column icons appear in the toolbar.
      *
      * @return void
      */
     public function testColumnToolIconsCorrect()
     {
         $this->showTools(0, 'col');
-
+        $this->assertTrue($this->exists($this->getImg('col_tools.png')));
+        
+        $this->clickTopToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_createTable_active.png');
+        $columnIcon = $this->find($this->getImg('icon_tools_col.png'));
+        $this->click($columnIcon);
+        sleep(1);
+        
         $this->assertTrue($this->exists($this->getImg('col_tools.png')));
 
     }//end testColumnToolIconsCorrect()
