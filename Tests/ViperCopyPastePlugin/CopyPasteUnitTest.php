@@ -86,12 +86,11 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
         $this->clickInlineToolbarButton(dirname(dirname(__FILE__)).'/ViperFormatPlugin/Images/toolbarIcon_toggle_formats_highlighted.png');
         $this->clickInlineToolbarButton(dirname(dirname(__FILE__)).'/ViperFormatPlugin/Images/toolbarIcon_pre.png');
 
-        $this->keyDown('Key.RIGHT');
-        $this->type(' this is more content');
+        $this->type('Lorum this is more content');
         $this->keyDown('Key.ENTER');
-        $this->type('WoW to test PRE');
+        $this->type('WoW to test XuT');
 
-        $this->assertHTMLMatch('<pre>Lorem this is more contentWoW to test PRE</pre>');
+        $this->assertHTMLMatch('<pre>Lorum this is more contentWoW to test XuT</pre>');
 
         // Open Word doc, copy its contents.
         $retval = NULL;
@@ -118,12 +117,12 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
         sleep(5);
 
         $this->switchApp($this->getBrowserName());
-        $this->selectText('WoW', 'PRE');
+        $this->selectText('WoW', 'XuT');
         $this->keyDown('Key.CMD + v');
 
         sleep(5);
 
-        $this->assertHTMLMatch('<pre>Lorem this is more contentLorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus ornare ipsum nec felis lacinia a feugiat lectus pellentesque. Praesent in sapien sapien.</pre>');
+        $this->assertHTMLMatch('<pre>Lorum this is more content<p>Loremipsum dolor sit amet, consectetur adipiscing elit. Phasellus ornare ipsum necfelis lacinia a feugiat lectus pellentesque. Praesent in sapien sapien.</p> </pre>');
 
     }//end testCopyAndPasteInPreTag()
 

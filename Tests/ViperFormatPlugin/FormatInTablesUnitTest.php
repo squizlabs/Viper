@@ -355,6 +355,34 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
 
     }//end testPreInATableWithOneWord()
 
+    
+    /**
+     * Test copy and pasting the caption.
+     *
+     * @return void
+     */
+    public function testHeadingAndFormatsIsDisabled()
+    {
+        $dir = dirname(__FILE__).'/Images/';
+        
+        $text      = 'caption';
+        $textLoc = $this->find($text);
+        
+        $this->click($textLoc);
+        $this->assertFalse($this->exists($dir.'toolbarIcon_heading.png'));
+        $this->assertFalse($this->exists($dir.'toolbarIcon_toggle_formats.png'));
+        
+        $this->selectText($text);
+        $this->assertFalse($this->exists($dir.'toolbarIcon_heading.png'));
+        $this->assertFalse($this->exists($dir.'toolbarIcon_toggle_formats.png'));
+        
+        $this->selectInlineToolbarLineageItem(1);
+        $this->assertFalse($this->exists($dir.'toolbarIcon_heading.png'));
+        $this->assertFalse($this->exists($dir.'toolbarIcon_toggle_formats.png'));
+
+    }//end testHeadingAndFormatsIsDisabled()
+    
+    
 }//end class
 
 ?>
