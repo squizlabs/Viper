@@ -7,6 +7,40 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperUnitTest
 
 
     /**
+     * Resize specified image to given width.
+     *
+     * Returns the rectangle of the image after resize.
+     *
+     * @param integer $imageIndex The image index on the page.
+     * @param integer $width      The new width of the image.
+     *
+     * @return array
+     */
+    public function resizeImage($imageIndex, $size)
+    {
+        $dir      = dirname(__FILE__).'/Images/';
+        $selector = 'img';
+
+        $imageRect   = $this->getBoundingRectangle($selector, $imageIndex);
+        $rightHandle = $this->find($dir.'resize_bottom_right.png');
+
+        $width  = ($imageRect['x2'] - $imageRect['x1']);
+        $height = ($imageRect['y2'] - $imageRect['y1']);
+        $ratio  = ($width / $height);
+        $newX   = $this->getX($rightHandle);
+        $newY   = ($this->getY($rightHandle) - ceil(($width - $size) / $ratio));
+
+        $loc = $this->createLocation($newX, $newY);
+
+        $this->dragDrop($rightHandle, $loc);
+
+        $imageRect = $this->getBoundingRectangle($selector, $imageIndex);
+        return $imageRect;
+
+    }//end resizeImage()
+
+
+    /**
      * Test that the image icon is available in different circumstances.
      *
      * @return void
@@ -656,6 +690,29 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperUnitTest
 
     }//end testInsertingAnImageDeletingThenClickingUndo()
 
+
+    public function testImageResizeHandles()
+    {
+        $dir = dirname(__FILE__).'/Images/';
+
+        $this->selectText('dolor');
+        $this->type('Key.RIGHT');
+
+        $this->clickTopToolbarButton($dir.'toolbarIcon_image.png');
+        $this->type('http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg');
+        $this->keyDown('Key.TAB');
+        $this->type('Alt tag');
+        $this->keyDown('Key.TAB');
+        $this->type('Title tag');
+        $this->keyDown('Key.ENTER');
+        $this->clickElement('img', 1);
+
+        $this->assertTrue($this->exists($dir.'resize_bottom_left.png'));
+        $this->assertTrue($this->exists($dir.'resize_bottom_right.png'));
+
+        $this->resizeImage(1, 300);
+
+    }//end testImageResizeHandles()
 
 
 }//end class
