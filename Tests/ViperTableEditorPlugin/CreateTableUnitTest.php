@@ -4,6 +4,44 @@ require_once 'AbstractViperTableEditorPluginUnitTest.php';
 
 class Viper_Tests_ViperTableEditorPlugin_CreateTableUnitTest extends AbstractViperTableEditorPluginUnitTest
 {
+
+
+    /**
+     * Test that ids are added to the table when you create a table.
+     *
+     * @return void
+     */
+    public function testHeaderTagsWhenCreatingTable()
+    {
+        $this->selectText('dolor');
+        $this->keyDown('Key.RIGHT');
+        $this->keyDown('Key.ENTER');
+        
+        $this->execJS('insTable(3,4, 1, "test")');
+        sleep(2);
+        
+        $this->assertHTMLMatch('<p>Lorem IPSUM dolor</p><p>&nbsp;</p><table id="test" style="width: 100%;" border="1"><tbody><tr><th id="testr1c1">&nbsp;</th><td headers="testr1c1">&nbsp;</td><td headers="testr1c1">&nbsp;</td><td headers="testr1c1">&nbsp;</td></tr><tr><th id="testr2c1">&nbsp;</th><td headers="testr2c1">&nbsp;</td><td headers="testr2c1">&nbsp;</td><td headers="testr2c1">&nbsp;</td></tr><tr><th id="testr3c1">&nbsp;</th><td headers="testr3c1">&nbsp;</td><td headers="testr3c1">&nbsp;</td><td headers="testr3c1">&nbsp;</td></tr></tbody></table><p>sit amet <strong>consectetur</strong></p>');
+        
+    }//end testHeaderTagsWhenCreatingTable()
+    
+
+    /**
+     * Test that header and id tags are not added to the table when you have no th cells.
+     *
+     * @return void
+     */
+    public function testHeaderTagsNotAddedWhenNoThCells()
+    {
+        $this->selectText('dolor');
+        $this->keyDown('Key.RIGHT');
+        $this->keyDown('Key.ENTER');
+        
+        $this->execJS('insTable(3,4, 0, "test")');
+        sleep(2);
+        
+        $this->assertHTMLMatch('<p>Lorem IPSUM dolor</p><p>&nbsp;</p><table style="width: 100%;" id="test" border="1"><tbody><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>sit amet <strong>consectetur</strong></p>');
+        
+    }//end testHeaderTagsNotAddedWhenNoThCells()
     
     
    /**
