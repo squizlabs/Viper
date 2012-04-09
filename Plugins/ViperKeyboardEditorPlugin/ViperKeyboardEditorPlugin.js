@@ -300,9 +300,16 @@ ViperKeyboardEditorPlugin.prototype = {
 
         // If the range is not collapsed then remove the contents of the selection.
         if (range.collapsed !== true) {
-            this.viper.deleteContents();
-            ViperSelection.addRange(this.viper.getCurrentRange());
-            range = this.viper.getViperRange();
+            if (this.viper.isBrowser('chrome') === true
+                || this.viper.isBrowser('safari') === true
+            ) {
+                range.deleteContents();
+                ViperSelection.addRange(range);
+            } else {
+                this.viper.deleteContents();
+                ViperSelection.addRange(this.viper.getCurrentRange());
+                range = this.viper.getViperRange();
+            }
         }
 
         if (range.startContainer.nodeType === dfx.TEXT_NODE) {
