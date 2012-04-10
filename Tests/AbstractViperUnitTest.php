@@ -89,6 +89,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         $paths     = explode('_', $className);
         array_shift($paths);
         array_shift($paths);
+        $paths[] = $this->getName();
 
         // Find the HTML file for this test.
         $testFileContent = '';
