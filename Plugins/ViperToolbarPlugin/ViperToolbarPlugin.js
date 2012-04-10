@@ -601,12 +601,7 @@ ViperToolbarPlugin.prototype = {
 
         dfx.setStyle(bubble, 'left', left + 'px');
         dfx.setStyle(bubble, 'top', '35px');
-
-        if (this.viper.isBrowser('msie') === true) {
-            dfx.setStyle(bubble, 'width', toolsWidth + 'px');
-        } else {
-            dfx.setStyle(bubble, 'width', (toolsWidth - 0) + 'px');
-        }
+        dfx.setStyle(bubble, 'width', toolsWidth + 'px');
 
     },
 
