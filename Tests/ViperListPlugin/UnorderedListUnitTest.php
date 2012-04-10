@@ -225,13 +225,10 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperLis
 
         $this->clickTopToolbarButton($dir.'toolbarIcon_outdent.png');
         sleep(1);
-        $this->selectText('XuT');
         $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
 
         $this->assertHTMLMatch('<p>XabcX uuuuuu. VmumV</p><p>cPOc ccccc dddd. TicT</p><p>ajhsd sjsjwi hhhh:</p><ul><li>aaa bbbbb ccccc</li><li>4 oNo templates</li></ul><p>Audit XuT content</p><ul><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ul><h2>SoD</h2>');
 
-        $this->click($textLoc);
-        sleep(1);
         $this->clickTopToolbarButton($dir.'toolbarIcon_indent.png');
         $this->assertIconStatusesCorrect('active', TRUE, TRUE, TRUE);
         $this->assertHTMLMatch('<p>XabcX uuuuuu. VmumV</p><p>cPOc ccccc dddd. TicT</p><p>ajhsd sjsjwi hhhh:</p><ul><li>aaa bbbbb ccccc</li><li>4 oNo templates</li><li>Audit XuT content</li><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ul><h2>SoD</h2>');
@@ -840,6 +837,82 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperLis
         $this->assertHTMLMatch('<p>XabcX uuuuuu. VmumV</p><p>cPOc ccccc dddd. TicT</p><ul><li>aaa bbbbb ccccc</li><li>4&nbsp;oNo&nbsp;templates</li><li>Audit XuT content</li><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ul><p>&nbsp;</p><p>ajhsd sjsjwi hhhh:</p><ul><li>aaa bbbbb ccccc</li><li>4 oNo templates</li><li>Audit XuT content</li><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ul><h2>SoD</h2>');
 
     }//end testCopyAndPasteForAList()
+
+
+    /**
+     * Test that a paragraph is created after a list and before a div.
+     *
+     * @return void
+     */
+    public function testCreatingParagraphAfterListBeforeADiv()
+    {
+        $this->selectText('WoW');
+        $this->keyDown('Key.RIGHT');
+        $this->keyDown('Key.ENTER');
+        $this->keyDown('Key.ENTER');
+        $this->type('New paragraph');
+
+        sleep(1);
+        $this->assertHTMLMatch('<p>ajhsd sjsjwi hhhh:</p><ul><li>Recommendations action plan</li><li>Squiz Matrix guide WoW</li></ul><p>New paragraph</p><div>Test div</div');
+
+    }//end testCreatingParagraphAfterListBeforeADiv()
+
+
+    /**
+     * Test that a paragraph is created after a list and before a Pre.
+     *
+     * @return void
+     */
+    public function testCreatingParagraphAfterListBeforeAPre()
+    {
+        $this->selectText('WoW');
+        $this->keyDown('Key.RIGHT');
+        $this->keyDown('Key.ENTER');
+        $this->keyDown('Key.ENTER');
+        $this->type('New paragraph');
+
+        sleep(1);
+        $this->assertHTMLMatch('<p>ajhsd sjsjwi hhhh:</p><ul><li>Recommendations action plan</li><li>Squiz Matrix guide WoW</li></ul><p>New paragraph</p><pre>Test pre</pre>');
+
+    }//end testCreatingParagraphAfterListBeforeAPre()
+
+
+    /**
+     * Test that a paragraph is created after a list and before a quote.
+     *
+     * @return void
+     */
+    public function testCreatingParagraphAfterListBeforeAQuote()
+    {
+        $this->selectText('WoW');
+        $this->keyDown('Key.RIGHT');
+        $this->keyDown('Key.ENTER');
+        $this->keyDown('Key.ENTER');
+        $this->type('New paragraph');
+
+        sleep(1);
+        $this->assertHTMLMatch('<p>ajhsd sjsjwi hhhh:</p><ul><li>Recommendations action plan</li><li>Squiz Matrix guide WoW</li></ul><p>New paragraph</p><blockquote>Test div</blockquote>');
+
+    }//end testCreatingParagraphAfterListBeforeAQuote()
+
+
+    /**
+     * Test that a paragraph is created after a list and before a paragraph.
+     *
+     * @return void
+     */
+    public function testCreatingParagraphAfterListBeforeAParagraph()
+    {
+        $this->selectText('WoW');
+        $this->keyDown('Key.RIGHT');
+        $this->keyDown('Key.ENTER');
+        $this->keyDown('Key.ENTER');
+        $this->type('New paragraph');
+
+        sleep(1);
+        $this->assertHTMLMatch('<p>ajhsd sjsjwi hhhh:</p><ul><li>Recommendations action plan</li><li>Squiz Matrix guide WoW</li></ul><p>New paragraph</p><p>Test para</p>');
+
+    }//end testCreatingParagraphAfterListBeforeAParagraph()
 
 
 }//end class
