@@ -31,6 +31,7 @@ ViperAccessibilityPlugin_WCAG2 = {
 
     getResolutionContent: function(issue, contentElement, vap)
     {
+        this.vap   = vap;
         this.viper = vap.viper;
 
         var code    = this._parseCode(issue.code);
