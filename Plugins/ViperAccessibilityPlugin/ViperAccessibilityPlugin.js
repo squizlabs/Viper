@@ -67,6 +67,7 @@ ViperAccessibilityPlugin.prototype = {
             return;
         }//end if
 
+        dfx.setHtml(this._htmlcsWrapper, '');
         HTMLCSAuditor.run(this._standard, this.viper.getViperElement(), {
             noHeader: true,
             parentElement: self._htmlcsWrapper,
