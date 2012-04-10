@@ -714,10 +714,10 @@ ViperCoreStylesPlugin.prototype = {
         }
 
         var type  = '';
-        var float = dfx.getStyle(image, 'float');
-        if (float === 'left') {
+        var imgFloat = dfx.getStyle(image, 'float');
+        if (imgFloat === 'left') {
             type = 'left';
-        } else if (float === 'right') {
+        } else if (imgFloat === 'right') {
             type = 'right';
         } else if (dfx.getStyle(image, 'display') === 'block') {
             type = 'center';
