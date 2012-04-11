@@ -143,7 +143,14 @@
 }
 
 .ViperAccessibilityPlugin #HTMLCS-wrapper .ViperAP-issueResolution {
-    font-size: 1em;
+    font-size: 0.7em;
+}
+
+.ViperAccessibilityPlugin #HTMLCS-wrapper .ViperAP-issueResolution .resolutionInstructions p {
+    margin: 0.5em 0 1em;
+    overflow: hidden;
+    padding: 0;
+    position: relative;
 }
 
 .ViperAccessibilityPlugin #HTMLCS-wrapper .ViperAP-issueResolution .resolutionHeader {
