@@ -100,7 +100,7 @@ ViperSourceViewPlugin.prototype = {
             if (callback) {
                 callback.call(this);
             }
-        }
+        }//end if
 
     },
 
@@ -162,6 +162,20 @@ ViperSourceViewPlugin.prototype = {
         } else if (this._textEditor) {
             this._textEditor.value = value;
         }
+
+    },
+
+    updateOriginalSourceValue: function(content)
+    {
+        if (!content) {
+            if (this._editor) {
+                content = this._editor.getSession().getValue();
+            } else if (this._textEditor) {
+                content = this._textEditor.value;
+            }
+        }
+
+        this._originalSource = content;
 
     },
 

@@ -111,6 +111,7 @@ ViperAccessibilityPlugin.prototype = {
                     sourceViewPlugin.scrollToText('__SCROLL_TO_HERE__');
                     setTimeout(function() {
                         sourceViewPlugin.replaceSelection('');
+                        sourceViewPlugin.updateOriginalSourceValue();
                     }, 500);
                 });
             });
