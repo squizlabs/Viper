@@ -776,8 +776,10 @@ ViperTableEditorPlugin.prototype = {
         this.viper.addElement(hElem);
         this._highlightElement = hElem;
 
-        dfx.addEvent(hElem, 'mousedown', function() {
+        dfx.addEvent(hElem, 'mousedown', function(e) {
+            dfx.preventDefault(e);
             dfx.remove(hElem);
+            return false;
         });
 
     },
