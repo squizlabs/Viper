@@ -121,7 +121,7 @@ ViperAccessibilityPlugin_WCAG2 = {
 
     },
 
-    getDefaultContent: function(issue, objName)
+    getDefaultContent: function(issueid, issue, objName)
     {
         if (!objName) {
             var code = this._parseCode(issue.code);
@@ -153,7 +153,7 @@ ViperAccessibilityPlugin_WCAG2 = {
 
             var self = this;
             var dismissButton = this.viper.ViperTools.createButton(dfx.getUniqueId(), 'Dismiss', 'Dismiss Issue', '', function() {
-                self.vap.dismissIssue();
+                self.vap.dismissIssue(issueid);
             });
 
             actionButtons.appendChild(dismissButton);

@@ -20,7 +20,7 @@ function ViperAccessibilityPlugin(viper)
     };
 
     this._htmlcsWrapper = document.createElement('div');
-    this._htmlCSsrc     = '';
+    this._htmlCSsrc     = '../../../HTML_CodeSniffer/';
 
 }
 
@@ -127,7 +127,7 @@ ViperAccessibilityPlugin.prototype = {
             });
             resolutionHeader.appendChild(refreshIssueBtn);
 
-            var defaultContent = standardObj.getDefaultContent(issue);
+            var defaultContent = standardObj.getDefaultContent(id, issue);
             resolutionCont.appendChild(defaultContent);
             standardObj.getResolutionContent(issue, defaultContent, self);
         });
@@ -334,43 +334,25 @@ ViperAccessibilityPlugin.prototype = {
 
     },
 
-    dismissIssue: function(issueNum)
+    dismissIssue: function(issueid)
     {
-        issueNum  = issueNum || (this._currentIssue - 1);
-        var issue = this._issues[issueNum];
-
-        if (!this._dismissedIssues[issue.code]) {
-            this._dismissedIssues[issue.code] = [];
-        }
-
-        if (this._dismissedIssues[issue.code].inArray(issue.element) !== true) {
-            this._dismissedIssues[issue.code].push(issue.element);
-            this._markAsDone(issueNum);
-        }
+        this._markAsDone(issueid);
 
         var self = this;
         setTimeout(function() {
-            if (issueNum > self._issueCount) {
-                self.previousIssue();
-            } else {
-                self.nextIssue();
-            }
+            self.nextIssue();
         }, 800);
 
     },
 
     fixIssue: function(issueNum, goNext)
     {
-        var issueElement = this.getIssueElement(issueNum, 'details');
-        dfx.addClass(issueElement, 'issueDone');
-
-        var listItem = this.getIssueElement(issueNum, 'listItem');
-        dfx.addClass(listItem, 'issueDone');
+        this._markAsDone(issueNum);
 
         if (goNext === true) {
             var self = this;
             setTimeout(function() {
-                dfx.trigger(dfx.getId('HTMLCS-button-next-issue'), 'click');
+                self.nextIssue();
             }, 800);
         }
 
@@ -378,13 +360,17 @@ ViperAccessibilityPlugin.prototype = {
 
     _markAsDone: function(issueNum)
     {
-        issueNum  = issueNum || (this._currentIssue - 1);
-
-        var issueElement = this.getIssueElement(issueNum + 1);
+        var issueElement = this.getIssueElement(issueNum, 'details');
         dfx.addClass(issueElement, 'issueDone');
 
-        var listItem = dfx.getClass('ViperAP-issueItem')[issueNum];
+        var listItem = this.getIssueElement(issueNum, 'listItem');
         dfx.addClass(listItem, 'issueDone');
+
+    },
+
+    nextIssue: function()
+    {
+        dfx.trigger(dfx.getId('HTMLCS-button-next-issue'), 'click');
 
     },
 
