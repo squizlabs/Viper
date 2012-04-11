@@ -1759,11 +1759,12 @@ Viper.prototype = {
                 }, attributes);
             }//end if
         } else {
+            var nodeSelection    = range.getNodeSelection();
             var startBlockParent = dfx.getFirstBlockParent(startContainer);
             var endBlockParent   = dfx.getFirstBlockParent(endContainer);
             var bookmark         = this.createBookmark();
 
-            if (startBlockParent === endBlockParent) {
+            if (startBlockParent === endBlockParent && !nodeSelection) {
                 // Same block parent, create only one tag that wraps the whole
                 // selection.
                 if (!bookmark.start.previousSibling) {
