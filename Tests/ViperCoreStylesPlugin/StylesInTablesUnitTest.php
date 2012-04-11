@@ -292,20 +292,14 @@ class Viper_Tests_ViperCoreStylesPlugin_StylesInTablesUnitTest extends AbstractV
      */
     public function testItalicForWholeCell()
     {
-        $text    = 'FoX';
-        $textLoc = $this->find($text);
-        $this->selectText($text);
-
+        $this->selectText('FoX');
         $this->selectInlineToolbarLineageItem(3);
+        sleep(1);
 
         $this->clickTopToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_italic.png');
         $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic_active.png'));
         $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic_active.png'));
         $this->assertEquals('<em>UnaU LAbS FoX Mnu</em>', $this->getHtml('td,th', 3));
-
-        $this->click($textLoc);
-        $this->selectText($text);
-        $this->selectInlineToolbarLineageItem(3);
 
         $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic_active.png'));
         $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic_active.png'));

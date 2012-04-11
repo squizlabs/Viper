@@ -398,7 +398,7 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
 
         $this->selectText('amet', 'WoW');
         $this->keyDown('Key.CMD + b');
-        $this->assertHTMLMatch('<p>Lorem <strong>XuT</strong> dolor</p><p>sit <strong><em>amet</em> WoW</strong></p>');
+        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p>sit <strong><em>amet</em> WoW</strong></p>');
 
     }//end testAddingBoldToTwoWordsWhereOneIsBoldAndOneItalics()
 

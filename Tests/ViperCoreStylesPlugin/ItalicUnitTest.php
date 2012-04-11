@@ -294,7 +294,7 @@ class Viper_Tests_ViperCoreStylesPlugin_ItalicUnitTest extends AbstractViperUnit
 
         $this->selectText('amet', 'WoW');
         $this->keyDown('Key.CMD + i');
-        $this->assertHTMLMatch('<p>Lorem <strong>XuT</strong> dolor</p><p>sit <em>amet <strong>WoW</strong></em></p>');
+        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p>sit <em>amet <strong>WoW</strong></em></p>');
 
     }//end testAddingItalicsToTwoWordsWhereOneIsBoldAndOneItalics()
 
