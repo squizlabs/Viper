@@ -141,25 +141,39 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
 
 
     /**
-     * Test that holding down SHIFT does select text.
+     * Test that holding down Shift + Right does select text.
      *
      * @return void
      */
-    public function testKeyboardSelection()
+    public function testRightKeyboardSelection()
     {
         $text = $this->selectText('Lorem');
         $this->keyDown('Key.SHIFT + Key.RIGHT');
         $this->keyDown('Key.SHIFT + Key.RIGHT');
+        $this->keyDown('Key.DELETE');
         $this->type('p');
-        sleep(1);
-        $text = $this->selectText('MOZ');
-        $this->keyDown('Key.SHIFT + Key.LEFT');
-        $this->keyDown('Key.SHIFT + Key.LEFT');
-        $this->keyDown('Key.SHIFT + Key.LEFT');
-        $this->type('p');
-        $this->assertHTMLMatch('<p>pp</p>');
+        $this->assertHTMLMatch('<p>pIB MOZ</p>');
 
-    }//end testKeyboardSelection()
+    }//end testRightKeyboardSelection()
+
+
+    /**
+     * Test that holding down Shift + Left does select text.
+     *
+     * @return void
+     */
+    public function testLeftKeyboardSelection()
+    {
+        $text = $this->selectText('Lorem');
+        $this->keyDown('Key.SHIFT + Key.RIGHT');
+        $this->keyDown('Key.SHIFT + Key.LEFT');
+        $this->keyDown('Key.SHIFT + Key.LEFT');
+        $this->keyDown('Key.SHIFT + Key.LEFT');
+        $this->keyDown('Key.DELETE');
+        $this->type('p');
+        $this->assertHTMLMatch('<p>pem</p><p>EIB MOZ</p>');
+
+    }//end testRightKeyboardSelection()
 
 
     /**
