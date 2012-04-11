@@ -61,11 +61,11 @@ class Viper_Tests_ViperImagePlugin_ImagesInTablesUnitTest extends AbstractViperU
 
 
     /**
-     * Test inserting and deleting an image in a table using the image icon.
+     * Test inserting and then changing the URL for an image.
      *
      * @return void
      */
-    public function testInsertingAndDeletingAnImageUsingImageIcon()
+    public function testInsertingAndEditingTheUrlForAnImage()
     {
         $dir = dirname(__FILE__).'/Images/';
 
@@ -74,6 +74,8 @@ class Viper_Tests_ViperImagePlugin_ImagesInTablesUnitTest extends AbstractViperU
 
         $this->clickTopToolbarButton($dir.'toolbarIcon_image.png');
         $this->type('http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg');
+        $this->clickTopToolbarButton($dir.'toobarIcon_image_presentational.png');
+        sleep(1);
         $this->keyDown('Key.ENTER');
 
         $this->assertEquals('UnaU LAbS<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="" /> FoX Mnu', $this->getHtml('td,th', 3));
@@ -81,11 +83,14 @@ class Viper_Tests_ViperImagePlugin_ImagesInTablesUnitTest extends AbstractViperU
         $this->clickElement('img', 1);
         $this->clickTopToolbarButton($dir.'toolbarIcon_image_highlighted.png');
         $this->clickTopToolbarButton($dir.'toolbarIcon_deleteValue_icon.png');
+        $this->type('http://cms.squizsuite.net/__images/homepage-images/editing.png');
         $this->keyDown('Key.ENTER');
+        $this->clickTopToolbarButton($dir.'toolbarIcon_subImage_active.png');
+        $this->click($this->find('LAbS'));
 
-        $this->assertEquals('UnaU LAbS FoX Mnu', $this->getHtml('td,th', 3));
+        $this->assertEquals('UnaU LAbS<img src="http://cms.squizsuite.net/__images/homepage-images/editing.png" alt="" /> FoX Mnu', $this->getHtml('td,th', 3));
 
-    }//end testInsertingAndDeletingAnImageUsingImageIcon()
+    }//end testInsertingAndEditingTheUrlForAnImage()
 
 
     /**
@@ -174,6 +179,7 @@ class Viper_Tests_ViperImagePlugin_ImagesInTablesUnitTest extends AbstractViperU
         $this->keyDown('Key.TAB');
         $this->type('Abcd');
         $this->keyDown('Key.ENTER');
+        $this->click($this->find('blah'));
 
         $this->assertEquals('<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Abcd" />', $this->getHtml('td,th', 3));
 
