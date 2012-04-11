@@ -1,13 +1,6 @@
 function ViperAccessibilityPlugin(viper)
 {
     this.viper                = viper;
-    this._tools               = viper.ViperTools;
-    this._issueList           = null;
-    this._autoRunInterval     = 30000;
-    this._issues              = [];
-    this._dismissedIssues     = {};
-    this._autoRunTimer        = null;
-    this._subSection          = null;
     this._toolbar             = null;
     this._loadedScripts       = [];
     this._loadCallbacks       = {};
@@ -191,7 +184,6 @@ ViperAccessibilityPlugin.prototype = {
         // Create the sub section.
         var bubble       = toolbar.getBubble('VAP:bubble');
         var subSection   = bubble.addSubSection('VAP:subSection', this._htmlcsWrapper);
-        this._subSection = subSection;
         bubble.setSetting('keepOpen', true);
         toolbar.getBubble('VAP:bubble').showSubSection('VAP:subSection');
 
@@ -199,83 +191,6 @@ ViperAccessibilityPlugin.prototype = {
         var vapButton = tools.createButton('accessibility', '', 'Accessibility Auditor', 'accessAudit', null, true);
         toolbar.setBubbleButton('VAP:bubble', 'accessibility');
         toolbar.addButton(vapButton);
-
-    },
-
-    showIssueList: function(instant)
-    {
-        // Show the list tools.
-        dfx.removeClass(this._toolsSection, 'checkTools');
-        dfx.removeClass(this._toolsSection, 'detailTools');
-        dfx.addClass(this._toolsSection, 'listTools');
-
-        // Show the list.
-        dfx.removeClass(this._resultsMiddle, 'issueDetails');
-        dfx.addClass(this._resultsMiddle, 'issueList');
-
-        if (instant === true) {
-            dfx.addClass(this._issueList, 'instant');
-        }
-
-        dfx.setStyle(this._issueList, 'margin-left', 0);
-        dfx.removeClass(this._issueList, 'instant');
-
-    },
-
-    updateResults: function(checkOnly)
-    {
-        var self = this;
-
-        this.stopAutoRun();
-
-        if (checkOnly !== true) {
-            // Show loading sub section only.
-            dfx.setStyle(dfx.getClass('ViperAP-cont', this._subSection), 'display', 'none');
-            dfx.setStyle(dfx.getClass('loadingCont', this._subSection)[0], 'display', 'block');
-
-            // Set the sub section to be visible.
-            this._toolbar.getBubble('VAP:bubble').showSubSection('VAP:subSection');
-        }
-
-        // Run the HTMLCS checks.
-        this.runChecks(function() {
-            // Get the messages from HTMLCS.
-            var msgs = HTMLCS.getMessages();
-
-            if (checkOnly === true) {
-                if (msgs.length === 0) {
-                    dfx.removeClass(toggleButton, 'issues');
-                    dfx.addClass(toggleButton, 'noIssues');
-                } else {
-                    dfx.removeClass(toggleButton, 'noIssues');
-                    dfx.addClass(toggleButton, 'issues');
-                }
-
-                return;
-            }
-
-            // Hide loading sub section and show the main panel and results panel.
-            self.showIssueList(true);
-
-            // Hide the loading container.
-            dfx.setStyle(dfx.getClass('loadingCont', self._subSection)[0], 'display', 'none');
-
-            // Main toolbar buttons.
-            var toggleButton = self.viper.ViperTools.getItem('accessibility').element;
-
-            if (msgs.length === 0) {
-                // No messages, show no results message.
-                dfx.setStyle(dfx.getClass('noResultsCont', self._subSection)[0], 'display', 'block');
-                dfx.removeClass(toggleButton, 'issues');
-                dfx.addClass(toggleButton, 'noIssues');
-            } else {
-                // There are messages so update the issue list.
-                self._updateIssues(msgs);
-                dfx.setStyle(dfx.getClass('resultsCont', self._subSection)[0], 'display', 'block');
-                dfx.removeClass(toggleButton, 'noIssues');
-                dfx.addClass(toggleButton, 'issues');
-            }
-        });
 
     },
 
@@ -319,21 +234,6 @@ ViperAccessibilityPlugin.prototype = {
                 issueRecheck.appendChild(issueRemains);
             }
         });
-
-    },
-
-    startAutoRun: function()
-    {
-        var self = this;
-        this._autoRunTimer = setInterval(function() {
-            self.updateResults(true);
-        }, this._autoRunInterval);
-
-    },
-
-    stopAutoRun: function()
-    {
-        clearInterval(this._autoRunTimer);
 
     },
 
