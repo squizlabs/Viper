@@ -132,7 +132,10 @@ ViperToolbarPlugin.prototype = {
 
         dfx.addEvent(elem, 'mousedown', function(e) {
             var target = dfx.getMouseEventTarget(e);
-            if (dfx.isTag(target, 'input') !== true && dfx.isTag(target, 'textarea') !== true) {
+            if (dfx.isTag(target, 'input') !== true
+                && dfx.isTag(target, 'textarea') !== true
+                && dfx.isTag(target, 'select') !== true
+            ) {
                 dfx.preventDefault(e);
                 return false;
             }
@@ -140,7 +143,10 @@ ViperToolbarPlugin.prototype = {
 
         dfx.addEvent(elem, 'mouseup', function(e) {
             var target = dfx.getMouseEventTarget(e);
-            if (dfx.isTag(target, 'input') !== true  && dfx.isTag(target, 'textarea') !== true) {
+            if (dfx.isTag(target, 'input') !== true
+                && dfx.isTag(target, 'textarea') !== true
+                && dfx.isTag(target, 'select') !== true
+            ) {
                 dfx.preventDefault(e);
                 return false;
             }
@@ -194,7 +200,10 @@ ViperToolbarPlugin.prototype = {
 
         dfx.addEvent(bubble, 'mousedown', function(e) {
             var target = dfx.getMouseEventTarget(e);
-            if (dfx.isTag(target, 'input') !== true  && dfx.isTag(target, 'textarea') !== true) {
+            if (dfx.isTag(target, 'input') !== true
+                && dfx.isTag(target, 'textarea') !== true
+                && dfx.isTag(target, 'select') !== true
+            ) {
                 dfx.preventDefault(e);
                 return false;
             }
