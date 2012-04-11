@@ -96,6 +96,7 @@ MatrixImagePlugin.prototype = {
                 
             EasyEditAssetFinder.init({
                 focusAssetId: focusId,
+                types: ['image','thumbnail'],
                 callback: function(selectedAsset){
                     if (selectedAsset.attribute('type_code') === 'image') {
                         urlField.setValue('./?a=' + selectedAsset.id,false);
