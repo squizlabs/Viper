@@ -1,17 +1,11 @@
 function ViperAccessibilityPlugin(viper)
 {
-    this.viper                = viper;
-    this._toolbar             = null;
-    this._loadedScripts       = [];
-    this._loadCallbacks       = {};
-    this._includedCSS         = [];
-    this._standard            = 'WCAG2AAA';
-    this._standards           = {
-        WCAG2AAA: 'WCAG 2.0 AAA',
-        WCAG2AA: 'WCAG 2.0 AA',
-        WCAG2A: 'WCAG 2.0 A'
-    };
-
+    this.viper          = viper;
+    this._toolbar       = null;
+    this._loadedScripts = [];
+    this._loadCallbacks = {};
+    this._includedCSS   = [];
+    this._standard      = 'WCAG2AAA';
     this._htmlcsWrapper = document.createElement('div');
 
     var url = this.viper.getViperPath();
@@ -32,10 +26,6 @@ ViperAccessibilityPlugin.prototype = {
     {
         if (!settings) {
             return;
-        }
-
-        if (settings.standards) {
-            this._standards = settings.standards;
         }
 
         if (settings.standard) {
@@ -175,7 +165,7 @@ ViperAccessibilityPlugin.prototype = {
 
         // Create the Toolbar Bubble for the plugin interface. The bubble's main content
         // is the tools section.
-        var aaTools = toolbar.createBubble('VAP:bubble', 'Accessibility Auditor - ' + this._standard, null, null, function() {
+        var aaTools = toolbar.createBubble('VAP:bubble', 'Accessibility Auditor', null, null, function() {
             self.getIssues();
         }, function() {
         }, 'ViperAccessibilityPlugin');
