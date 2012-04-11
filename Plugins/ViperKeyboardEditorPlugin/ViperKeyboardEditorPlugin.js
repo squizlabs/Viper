@@ -154,40 +154,71 @@ ViperKeyboardEditorPlugin.prototype = {
                 || endNode.nodeType === dfx.ELEMENT_NODE && dfx.isTag(endNode, 'br') && !endNode.nextSibling)
             ) {
                 var firstBlock = dfx.getFirstBlockParent(endNode);
-                if (firstBlock
-                    && (this._tagList.inArray(dfx.getTagName(firstBlock)) === true)
-             //       || (this.viper.isBrowser('msie') === true && dfx.isTag(firstBlock, 'li') === true))
-                ) {
-                    var content = '<br />';
-                    var tagName = 'p';
-                    var p = document.createElement(tagName);
-                    dfx.setHtml(p, content);
 
-                    // If the firstBlock is a P tag and it's parent is not the
-                    // Viper editable element and its the last child then move this
-                    // new P tag after its parent element.
-                    if (dfx.isTag(firstBlock, 'p') === true
-                        && firstBlock.parentNode !== this.viper.getViperElement()
-                        && !firstBlock.nextSibling
+                if (firstBlock) {
+                    var firstBlockTagName = dfx.getTagName(firstBlock);
+                    var handleEnter = false;
+                    if (this._tagList.inArray(firstBlockTagName) === true) {
+                        handleEnter = true;
+                    } else if (firstBlockTagName === 'li'
+                        && (this.viper.isBrowser('chrome') === true || this.viper.isBrowser('safari') === true)
                         && dfx.trim(dfx.getNodeTextContent(firstBlock)) === ''
                     ) {
-                        dfx.insertAfter(firstBlock.parentNode, p);
-                        dfx.remove(firstBlock);
-                    } else {
-                        dfx.insertAfter(firstBlock, p);
+                        handleEnter = true;
+                        removeFirstBlock = true;
                     }
 
-                    if (p.firstChild.nodeType === dfx.TEXT_NODE) {
-                        range.setStart(p.firstChild, 0);
-                    } else {
-                        range.selectNode(p.firstChild);
-                    }
+                    if (handleEnter === true) {
+                        var content = '<br />';
+                        var tagName = 'p';
+                        var p = document.createElement(tagName);
+                        dfx.setHtml(p, content);
 
-                    range.collapse(true);
-                    ViperSelection.addRange(range);
+                        // If the firstBlock is a P tag and it's parent is not the
+                        // Viper editable element and its the last child then move this
+                        // new P tag after its parent element.
+                        if (dfx.isTag(firstBlock, 'p') === true
+                            && firstBlock.parentNode !== this.viper.getViperElement()
+                            && !firstBlock.nextSibling
+                            && dfx.trim(dfx.getNodeTextContent(firstBlock)) === ''
+                        ) {
+                            dfx.insertAfter(firstBlock.parentNode, p);
+                            removeFirstBlock = true;console.info(1);
+                        } else {
+                            if (firstBlockTagName === 'li') {
+                                // Need to move rest of the list items to a new
+                                // list.
+                                var newList = document.createElement(dfx.getTagName(firstBlock.parentNode));
+                                while (firstBlock.nextSibling) {
+                                    newList.appendChild(firstBlock.nextSibling);
+                                }
 
-                    return false;
-                }
+                                if (dfx.getTag('li', newList).length > 0) {
+                                    dfx.insertAfter(firstBlock.parentNode, newList);
+                                }
+
+                                dfx.insertAfter(firstBlock.parentNode, p);
+                            } else {
+                                dfx.insertAfter(firstBlock, p);
+                            }
+                        }
+
+                        if (removeFirstBlock === true) {
+                            dfx.remove(firstBlock);
+                        }
+
+                        if (p.firstChild.nodeType === dfx.TEXT_NODE) {
+                            range.setStart(p.firstChild, 0);
+                        } else {
+                            range.selectNode(p.firstChild);
+                        }
+
+                        range.collapse(true);
+                        ViperSelection.addRange(range);
+
+                        return false;
+                    }//end if
+                }//end if
             }//end if
 
             var startNode   = range.getStartNode();

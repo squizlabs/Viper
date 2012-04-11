@@ -875,7 +875,7 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractViperListP
         $this->type('New paragraph');
 
         sleep(1);
-        $this->assertHTMLMatch('<p>ajhsd sjsjwi hhhh:</p><ol><li>Recommendations action plan</li><li>Squiz Matrix guide WoW</li></ol><p>New paragraph</p><div>Test div</div');
+        $this->assertHTMLMatch('<p>ajhsd sjsjwi hhhh:</p><ol><li>Recommendations action plan</li><li>Squiz Matrix guide WoW</li></ol><p>New paragraph</p><div>Test div</div>');
 
     }//end testCreatingParagraphAfterListBeforeADiv()
 
@@ -913,7 +913,7 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractViperListP
         $this->type('New paragraph');
 
         sleep(1);
-        $this->assertHTMLMatch('<p>ajhsd sjsjwi hhhh:</p><ol><li>Recommendations action plan</li><li>Squiz Matrix guide WoW</li></ol><p>New paragraph</p><blockquote>Test div</blockquote>');
+        $this->assertHTMLMatch('<p>ajhsd sjsjwi hhhh:</p><ol><li>Recommendations action plan</li><li>Squiz Matrix guide WoW</li></ol><p>New paragraph</p><blockquote>Test blockquote</blockquote>');
 
     }//end testCreatingParagraphAfterListBeforeAQuote()
 
