@@ -20,7 +20,10 @@ function ViperAccessibilityPlugin(viper)
     };
 
     this._htmlcsWrapper = document.createElement('div');
-    this._htmlCSsrc     = '../../../HTML_CodeSniffer/';
+
+    var url = this.viper.getViperPath();
+    url    += '/Plugins/ViperAccessibilityPlugin/HTML_CodeSniffer/';
+    this._htmlCSsrc = url;
 
 }
 
