@@ -1,12 +1,13 @@
 function ViperAccessibilityPlugin(viper)
 {
-    this.viper          = viper;
-    this._toolbar       = null;
-    this._loadedScripts = [];
-    this._loadCallbacks = {};
-    this._includedCSS   = [];
-    this._standard      = 'WCAG2AAA';
-    this._htmlcsWrapper = document.createElement('div');
+    this.viper            = viper;
+    this._toolbar         = null;
+    this._loadedScripts   = [];
+    this._loadCallbacks   = {};
+    this._includedCSS     = [];
+    this._standard        = 'WCAG2AAA';
+    this._dismissedIssues = {};
+    this._htmlcsWrapper   = document.createElement('div');
 
     var url = this.viper.getViperPath();
     url    += '/Plugins/ViperAccessibilityPlugin/HTML_CodeSniffer/';
@@ -59,6 +60,13 @@ ViperAccessibilityPlugin.prototype = {
             parentElement: self._htmlcsWrapper,
             customIssueSource: function(id, issue, standard, resolutionElem, detailsElem) {
                 self._createIssueDetail(id, issue, resolutionElem, detailsElem);
+            },
+            listUpdateCallback: function(issues) {
+                // Re mark the issues that were dismissed as done.
+                self._remarkDismissedIssues(issues);
+            },
+            runCallback: function(issues) {
+                return self._moveDismissedIssuesToEnd(issues);
             }
         });
 
@@ -231,6 +239,13 @@ ViperAccessibilityPlugin.prototype = {
     {
         this._markAsDone(issueid);
 
+        var issue = HTMLCSAuditor.getIssue(issueid);
+        if (!this._dismissedIssues[issue.code]) {
+            this._dismissedIssues[issue.code] = [];
+        }
+
+        this._dismissedIssues[issue.code].push(issue.element);
+
         var self = this;
         setTimeout(function() {
             self.nextIssue();
@@ -258,6 +273,49 @@ ViperAccessibilityPlugin.prototype = {
 
         var listItem = this.getIssueElement(issueNum, 'listItem');
         dfx.addClass(listItem, 'issueDone');
+
+    },
+
+    _moveDismissedIssuesToEnd: function(issues)
+    {
+        if (dfx.isEmpty(this._dismissedIssues) === true) {
+            return issues;
+        }
+
+        var c = issues.length;
+        for (var i = 0; i < c; i++) {
+            var issue = issues[i];
+            if (!this._dismissedIssues[issue.code]) {
+                continue;
+            }
+
+            if (this._dismissedIssues[issue.code].inArray(issue.element) === true) {
+                // Move the issue to the end of the list.
+                issues = issues.concat(issues.splice(i, 1));
+            }
+        }
+
+        return issues;
+
+    },
+
+    _remarkDismissedIssues: function(issues)
+    {
+        if (dfx.isEmpty(this._dismissedIssues) === true) {
+            return;
+        }
+
+        var c = issues.length;
+        for (var i = 0; i < c; i++) {
+            var issue = issues[i];
+            if (!this._dismissedIssues[issue.code]) {
+                continue;
+            }
+
+            if (this._dismissedIssues[issue.code].inArray(issue.element) === true) {
+                this._markAsDone(i);
+            }
+        }
 
     },
 
