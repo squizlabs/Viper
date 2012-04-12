@@ -9,18 +9,8 @@
     <script type="text/javascript">
         var viper = null;
         ViperReadyCallback = function() {
-            viper = new Viper('test');
+            viper = new Viper('test', null, null, dfx.getClass('editable'));
             viper.getPluginManager().setPlugins(['ViperCoreStylesPlugin', 'ViperKeyboardEditorPlugin', 'ViperInlineToolbarPlugin', 'ViperHistoryPlugin', 'ViperListPlugin', 'ViperFormatPlugin', 'ViperToolbarPlugin', 'ViperTableEditorPlugin', 'ViperCopyPastePlugin', 'ViperImagePlugin', 'ViperLinkPlugin', 'ViperAccessibilityPlugin', 'ViperSourceViewPlugin', 'ViperSearchReplacePlugin', 'ViperLangToolsPlugin', 'ViperCharMapPlugin', 'ViperTrackChangesPlugin']);
-
-            var editables = dfx.getClass('editable');
-            for (var i = 0; i < editables.length; i++) {
-                (function(editableElement) {
-                    dfx.addEvent(editableElement, 'mousedown', function() {
-                        viper.setEditableElement(editableElement);
-                    });
-                })
-                (editables[i]);
-            }
         };
     </script>
 </head>
@@ -43,7 +33,7 @@
 <div id="content" spellcheck="false">
     <h1>Simple Viper Example</h1>
     <div class="editable">
-        <p>Australian governments at all levels have <u><strong><em>endorsed</em></strong></u> WCAG 2.0, and require all government websites (federal, state and territory) to meet the new guidelines at the minimum compliance level (Single A) by the end of 2012. In addition, the Australian Government requires all federal websites to meet the medium conformance level (Double A) by the end of 2014.</p>
+        <p>Australian governments at all levels have <u><strong><em>endorsed</em></strong></u> WCAG 2.0, and require all g<img src="" />overnment websites (federal, state and territory) to meet the new guidelines at the minimum compliance level (Single A) by the end of 2012. In addition, the Australian Government requires all federal websites to meet the medium conformance level (Double A) by the end of 2014.</p>
 
 <p>Federal government agencies must update <strong>all government</strong> websites (as specified within scope under the Website Accessibility National Transition Strategy (NTS)) to WCAG 2.0 conformance. Agencies should use the principle of progressive enhancement when building and managing websites, and test for conformance across multiple browsers and operating system configurations.</p>
 
