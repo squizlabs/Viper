@@ -184,7 +184,7 @@ ViperKeyboardEditorPlugin.prototype = {
                             && dfx.trim(dfx.getNodeTextContent(firstBlock)) === ''
                         ) {
                             dfx.insertAfter(firstBlock.parentNode, p);
-                            removeFirstBlock = true;console.info(1);
+                            removeFirstBlock = true;
                         } else {
                             if (firstBlockTagName === 'li') {
                                 // Need to move rest of the list items to a new
