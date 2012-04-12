@@ -157,7 +157,8 @@ ViperKeyboardEditorPlugin.prototype = {
 
                 if (firstBlock) {
                     var firstBlockTagName = dfx.getTagName(firstBlock);
-                    var handleEnter = false;
+                    var handleEnter       = false;
+                    var removeFirstBlock  = false;
                     if (this._tagList.inArray(firstBlockTagName) === true) {
                         handleEnter = true;
                     } else if (firstBlockTagName === 'li'
