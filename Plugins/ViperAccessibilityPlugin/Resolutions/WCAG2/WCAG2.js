@@ -121,8 +121,11 @@ ViperAccessibilityPlugin_WCAG2 = {
 
     },
 
-    getDefaultContent: function(issueid, issue, objName)
+    getDefaultContent: function(issueid, issue, objName, vap)
     {
+        this.vap   = vap;
+        this.viper = vap.viper;
+
         if (!objName) {
             var code = this._parseCode(issue.code);
             objName  = 'ViperAccessibilityPlugin_WCAG2_Principle' + code.principle + '_Guideline' + code.guideline.replace('.', '_');

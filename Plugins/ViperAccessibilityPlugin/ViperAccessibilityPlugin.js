@@ -122,7 +122,7 @@ ViperAccessibilityPlugin.prototype = {
             });
             resolutionHeader.appendChild(refreshIssueBtn);
 
-            var defaultContent = standardObj.getDefaultContent(id, issue);
+            var defaultContent = standardObj.getDefaultContent(id, issue, null, self);
             resolutionCont.appendChild(defaultContent);
             standardObj.getResolutionContent(issue, defaultContent, self);
         });
