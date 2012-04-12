@@ -3902,6 +3902,7 @@ Viper.prototype = {
 
         if (typeof contents === 'string') {
             clone.innerHTML = contents;
+            dfx.remove(dfx.getTag('script', clone));
         } else if (contents) {
             clone.appendChild(contents);
         }
