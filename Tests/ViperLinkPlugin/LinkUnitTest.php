@@ -640,17 +640,19 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_removeLink.png'), 'Remove link icon should appear in the inline toolbar.');
 
         $this->clickInlineToolbarButton($dir.'toolbarIcon_removeLink.png');
+        $this->assertEquals('Lorem IPSUM dolor', $this->getSelectedText(), 'Paragraph is not selected.');
+        $this->click($this->find('IPSUM'));
         $this->assertHTMLMatch('<p>Lorem IPSUM dolor</p><p>sit amet <strong>WoW</strong></p>');
 
         // Undo so we can use the remove link in the top toolbar
-        $this->clickTopToolbarButton(dirname(dirname(__FILE__)).'/Core/Images/undoIcon_active.png');
-        $this->assertHTMLMatch('<p>Lorem IPSUM <a href="http://www.google.com">dolor</a></p><p>sit amet <strong>WoW</strong></p>');
         $this->clickTopToolbarButton(dirname(dirname(__FILE__)).'/Core/Images/undoIcon_active.png');
         $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com">Lorem</a> IPSUM <a href="http://www.google.com">dolor</a></p><p>sit amet <strong>WoW</strong></p>');
 
         $this->selectText('Lorem');
         $this->selectInlineToolbarLineageItem(0);
         $this->clickTopToolbarButton($dir.'toolbarIcon_removeLink.png');
+        $this->assertEquals('Lorem IPSUM dolor', $this->getSelectedText(), 'Paragraph is not selected.');
+        $this->click($this->find('IPSUM'));
         $this->assertHTMLMatch('<p>Lorem IPSUM dolor</p><p>sit amet <strong>WoW</strong></p>');
 
     }//end testCreateLinkPlainTextUsingInlineToolbar()

@@ -15,16 +15,36 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
     {
         $dir     = dirname(__FILE__).'/Images/';
 
-        $text = 'XabcX';
+        $text = 'XuT';
+        $textLoc = $this->find('WoW');
+
+        $this->click($this->find($text));
+        $this->clickTopToolbarButton($dir.'toolbarIcon_heading.png');
+        $this->clickTopToolbarButton($dir.'toolbarIcon_h3.png');
+        $this->clickTopToolbarButton($dir.'toolbarIcon_heading_subHighlighted.png');
+        $this->execJS('rmTableHeaders(0,true)');
+        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td><h3>aa XuT kk</h3></td><td>WOW</td><td>            <ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li></ul>        </td></tr><tr><td>nec PORTA ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+
+        $this->click($textLoc);
+        $this->selectText($text);
+        $this->clickTopToolbarButton($dir.'toolbarIcon_heading_subHighlighted.png');
+        $this->clickTopToolbarButton($dir.'toolbarIcon_h2.png');
+        $this->execJS('rmTableHeaders(0,true)');
+        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td><h2>aa XuT kk</h2></td><td>WOW</td><td>            <ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li></ul>        </td></tr><tr><td>nec PORTA ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+
+        $this->click($textLoc);
         $this->selectText($text);
         $this->selectInlineToolbarLineageItem(3);
+        $this->clickTopToolbarButton($dir.'toolbarIcon_heading_subHighlighted.png');
+        $this->clickTopToolbarButton($dir.'toolbarIcon_h1.png');
+        $this->execJS('rmTableHeaders(0,true)');
+        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td><h1>aa XuT kk</h1></td><td>WOW</td><td>            <ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li></ul>        </td></tr><tr><td>nec PORTA ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_heading.png');
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_h3.png');
-        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_heading_subHighlighted.png'), 'The toggle headings icon is not highlighted');
-
-        $html = $this->getHtml('td', 0);
-        $this->assertEquals('<h3>UnaU TiuT XabcX Mnu</h3>', $html);
+        $this->click($this->find($text));
+        $this->clickTopToolbarButton($dir.'toolbarIcon_heading_subHighlighted.png');
+        $this->clickTopToolbarButton($dir.'toolbarIcon_h1_active.png');
+        $this->execJS('rmTableHeaders(0,true)');
+        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>aa XuT kk</td><td>WOW</td><td>            <ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li></ul>        </td></tr><tr><td>nec PORTA ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
 
     }//end testHeadingStylesInTableMouseSelect()
@@ -50,13 +70,11 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_class_active.png'), 'Class icon in VITP should be active.');
         $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_updateChanges_disabled.png'), 'Update Changes button should not be active.');
 
-        $html = $this->getHtml('td', 3);
-        $this->assertEquals('nec <span class="abc">PORTA</span> ante', $html);
+        $this->execJS('rmTableHeaders(0,true)');
+        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>aa XuT kk</td><td>WOW</td><td>            <ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li></ul>        </td></tr><tr><td>nec <span class="abc">PORTA</span> ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         $this->click($this->find('WoW'));
-
-        $text = 'XabcX';
-        $this->selectText($text);
+        $this->selectText('XuT');
 
         $this->clickInlineToolbarButton($dir.'toolbarIcon_class.png');
         $this->type('test');
@@ -64,10 +82,10 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
 
         $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_class_active.png'), 'Class icon in Top Toolbar should be active.');
         $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_class_active.png'), 'Class icon in VITP should be active.');
-        $this->assertFalse($this->inlineToolbarButtonExists($dir.'toolbarIcon_updateChanges.png'), 'Update Changes button should not be active.');
+        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_updateChanges_disabled.png'), 'Update Changes button should not be active.');
 
-        $html = $this->getHtml('td', 0);
-        $this->assertEquals('UnaU TiuT <span class="test">XabcX</span> Mnu', $html);
+        $this->execJS('rmTableHeaders(0,true)');
+        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>aa <span class="test">XuT</span> kk</td><td>WOW</td><td>            <ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li></ul>        </td></tr><tr><td>nec <span class="abc">PORTA</span> ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
     }//end testClassesOnWordInTable()
 
@@ -81,21 +99,17 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
     {
         $dir     = dirname(__FILE__).'/Images/';
 
-        $text = 'XabcX';
-        $this->selectText($text);
+        $this->selectText('XuT');
         $this->selectInlineToolbarLineageItem(3);
 
         $this->clickInlineToolbarButton($dir.'toolbarIcon_class.png');
-        $this->clickInlineToolbarButton($dir.'input_class.png');
         $this->type('test');
         $this->keyDown('Key.ENTER');
 
         $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_class_active.png'), 'Class icon in Top Toolbar should be active.');
-        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_class_active.png'), 'Class icon in VITP should be active.');
 
-        $html = $this->getHtml('tr', 1);
-        $this->assertEquals('<td class="test">UnaU TiuT XabcX Mnu</td><td>WOW</td><td>            <ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul>\n        </td>', $html);
-
+        $this->execJS('rmTableHeaders(0,true)');
+        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td class="test">aa XuT kk</td><td>WOW</td><td>            <ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li></ul>        </td></tr><tr><td>nec PORTA ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
     }//end testClassesOnContentInACellOfATable()
 
@@ -109,7 +123,7 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
     {
         $dir     = dirname(__FILE__).'/Images/';
 
-        $text = 'XabcX';
+        $text = 'XuT';
         $this->selectText($text);
         $this->selectInlineToolbarLineageItem(3);
 
@@ -119,8 +133,8 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
 
         $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_alignLeft_active.png'), 'Left align icon is not acitve in the top toolbar');
 
-        $html = $this->getHtml('tr', 1);
-        $this->assertEquals('<td style="text-align: left;">UnaU TiuT XabcX Mnu</td><td>WOW</td><td>            <ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul>\n        </td>', $html);
+        $this->execJS('rmTableHeaders(0,true)');
+        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td style="text-align: left;">aa XuT kk</td><td>WOW</td><td>            <ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li></ul>        </td></tr><tr><td>nec PORTA ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
     }//end testLeftAlignmentInATable()
 
@@ -134,7 +148,7 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
     {
         $dir     = dirname(__FILE__).'/Images/';
 
-        $text = 'XabcX';
+        $text = 'XuT';
         $this->selectText($text);
         $this->selectInlineToolbarLineageItem(3);
 
@@ -144,8 +158,8 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
 
         $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_alignRight_active.png'), 'Right align icon is not acitve in the top toolbar');
 
-        $html = $this->getHtml('tr', 1);
-        $this->assertEquals('<td style="text-align: right;">UnaU TiuT XabcX Mnu</td><td>WOW</td><td>            <ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul>\n        </td>', $html);
+        $this->execJS('rmTableHeaders(0,true)');
+        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td style="text-align: right;">aa XuT kk</td><td>WOW</td><td>            <ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li></ul>        </td></tr><tr><td>nec PORTA ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
 
     }//end testRightAlignmentInATable()
@@ -160,7 +174,7 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
     {
         $dir     = dirname(__FILE__).'/Images/';
 
-        $text = 'XabcX';
+        $text = 'XuT';
         $this->selectText($text);
         $this->selectInlineToolbarLineageItem(3);
 
@@ -170,8 +184,9 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
 
         $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_alignCenter_active.png'), 'Centre align icon is not acitve in the top toolbar');
 
-        $html = $this->getHtml('tr', 1);
-        $this->assertEquals('<td style="text-align: center;">UnaU TiuT XabcX Mnu</td><td>WOW</td><td>            <ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul>\n        </td>', $html);
+        $this->execJS('rmTableHeaders(0,true)');
+        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td style="text-align: center;">aa XuT kk</td><td>WOW</td><td>            <ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li></ul>        </td></tr><tr><td>nec PORTA ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+
 
     }//end testCentreAlignmentInATable()
 
@@ -185,7 +200,7 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
     {
         $dir     = dirname(__FILE__).'/Images/';
 
-        $text = 'XabcX';
+        $text = 'XuT';
         $this->selectText($text);
         $this->selectInlineToolbarLineageItem(3);
 
@@ -195,8 +210,8 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
 
         $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_alignJustify_active.png'), 'Justify align icon is not acitve in the top toolbar');
 
-        $html = $this->getHtml('tr', 1);
-        $this->assertEquals('<td style="text-align: justify;">UnaU TiuT XabcX Mnu</td><td>WOW</td><td>            <ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul>\n        </td>', $html);
+        $this->execJS('rmTableHeaders(0,true)');
+        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td style="text-align: justify;">aa XuT kk</td><td>WOW</td><td>            <ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li></ul>        </td></tr><tr><td>nec PORTA ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
     }//end testJustifyAlignmentInATable()
 
@@ -210,17 +225,22 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
     {
         $dir     = dirname(__FILE__).'/Images/';
 
-        $text = 'XabcX';
+        $text = 'XuT';
         $this->selectText($text);
         $this->selectInlineToolbarLineageItem(3);
 
         $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_formats.png');
         $this->clickTopToolbarButton($dir.'toolbarIcon_p.png');
 
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_toggle_formats_highlighted.png'), 'Formats icon is not highlighted in the top toolbar');
+        $this->execJS('rmTableHeaders(0,true)');
+        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td><p>aa XuT kk</p></td><td>WOW</td><td>            <ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li></ul>        </td></tr><tr><td>nec PORTA ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
-        $html = $this->getHtml('td', 0);
-        $this->assertEquals('<p>UnaU TiuT XabcX Mnu</p>', $html);
+        $this->selectText($text);
+        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_formats_highlighted.png');
+        $this->clickTopToolbarButton($dir.'toolbarIcon_p_active.png');
+
+        $this->execJS('rmTableHeaders(0,true)');
+        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>aa XuT kk</td><td>WOW</td><td>            <ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li></ul>        </td></tr><tr><td>nec PORTA ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
     }//end testPInATable()
 
@@ -234,17 +254,20 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
     {
         $dir     = dirname(__FILE__).'/Images/';
 
-        $text = 'XabcX';
+        $text = 'XuT';
         $this->selectText($text);
         $this->selectInlineToolbarLineageItem(3);
 
         $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_formats.png');
         $this->clickTopToolbarButton($dir.'toolbarIcon_pre.png');
+        $this->execJS('rmTableHeaders(0,true)');
+        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td><pre>aa XuT kk</pre></td><td>WOW</td><td>            <ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li></ul>        </td></tr><tr><td>nec PORTA ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_toggle_formats_highlighted.png'), 'Formats icon is not highlighted in the top toolbar');
-
-        $html = $this->getHtml('td', 0);
-        $this->assertEquals('<pre>UnaU TiuT XabcX Mnu</pre>', $html);
+        $this->selectText($text);
+        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_formats_highlighted.png');
+        $this->clickTopToolbarButton($dir.'toolbarIcon_pre_active.png');
+        $this->execJS('rmTableHeaders(0,true)');
+        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>aa XuT kk</td><td>WOW</td><td>            <ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li></ul>        </td></tr><tr><td>nec PORTA ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
     }//end testPreInATable()
 
@@ -258,17 +281,20 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
     {
         $dir     = dirname(__FILE__).'/Images/';
 
-        $text = 'XabcX';
+        $text = 'XuT';
         $this->selectText($text);
         $this->selectInlineToolbarLineageItem(3);
 
         $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_formats.png');
         $this->clickTopToolbarButton($dir.'toolbarIcon_div.png');
+        $this->execJS('rmTableHeaders(0,true)');
+        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td><div>aa XuT kk</div></td><td>WOW</td><td>            <ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li></ul>        </td></tr><tr><td>nec PORTA ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_toggle_formats_highlighted.png'), 'Formats icon is not highlighted in the top toolbar');
-
-        $html = $this->getHtml('td', 0);
-        $this->assertEquals('<div>UnaU TiuT XabcX Mnu</div>', $html);
+        $this->selectText($text);
+        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_formats_highlighted.png');
+        $this->clickTopToolbarButton($dir.'toolbarIcon_div_active.png');
+        $this->execJS('rmTableHeaders(0,true)');
+        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>aa XuT kk</td><td>WOW</td><td>            <ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li></ul>        </td></tr><tr><td>nec PORTA ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
     }//end testDivInATable()
 
@@ -280,19 +306,23 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
      */
     public function testQuoteInATable()
     {
-        $dir     = dirname(__FILE__).'/Images/';
+        $dir = dirname(__FILE__).'/Images/';
 
-        $text = 'XabcX';
+        $text = 'XuT';
         $this->selectText($text);
         $this->selectInlineToolbarLineageItem(3);
 
         $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_formats.png');
         $this->clickTopToolbarButton($dir.'toolbarIcon_blockquote.png');
 
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_toggle_formats_highlighted.png'), 'Formats icon is not highlighted in the top toolbar');
+        $this->execJS('rmTableHeaders(0,true)');
+        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td><blockquote>aa XuT kk</blockquote></td><td>WOW</td><td>            <ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li></ul>        </td></tr><tr><td>nec PORTA ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
-        $html = $this->getHtml('td', 0);
-        $this->assertEquals('<blockquote>UnaU TiuT XabcX Mnu</blockquote>', $html);
+        $this->selectText($text);
+        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_formats_highlighted.png');
+        $this->clickTopToolbarButton($dir.'toolbarIcon_blockquote_active.png');
+        $this->execJS('rmTableHeaders(0,true)');
+        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>aa XuT kk</td><td>WOW</td><td>            <ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li></ul>        </td></tr><tr><td>nec PORTA ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
     }//end testQuoteInATable()
 
@@ -311,13 +341,44 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
 
         $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_formats.png');
         $this->clickTopToolbarButton($dir.'toolbarIcon_pre.png');
+        $this->execJS('rmTableHeaders(0,true)');
+        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>aa XuT kk</td><td><pre>WOW</pre></td><td>            <ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li></ul>        </td></tr><tr><td>nec PORTA ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_toggle_formats_highlighted.png'), 'Formats icon is not highlighted in the top toolbar');
-
-        $html = $this->getHtml('td', 1);
-        $this->assertEquals('<pre>WOW</pre>', $html);
+        $this->selectText($text);
+        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_formats_highlighted.png');
+        $this->clickTopToolbarButton($dir.'toolbarIcon_pre_active.png');
+        $this->execJS('rmTableHeaders(0,true)');
+        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>aa XuT kk</td><td>WOW</td><td>            <ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li></ul>        </td></tr><tr><td>nec PORTA ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
     }//end testPreInATableWithOneWord()
+
+
+    /**
+     * Test heading and format is disabled in a table caption.
+     *
+     * @return void
+     */
+    public function testHeadingAndFormatsIsDisabledInCaption()
+    {
+        $dir = dirname(__FILE__).'/Images/';
+
+        $text      = 'caption';
+        $textLoc = $this->find($text);
+
+        $this->click($textLoc);
+        $this->assertFalse($this->exists($dir.'toolbarIcon_heading.png'));
+        $this->assertFalse($this->exists($dir.'toolbarIcon_toggle_formats.png'));
+
+        $this->selectText($text);
+        $this->assertFalse($this->exists($dir.'toolbarIcon_heading.png'));
+        $this->assertFalse($this->exists($dir.'toolbarIcon_toggle_formats.png'));
+
+        $this->selectInlineToolbarLineageItem(1);
+        $this->assertFalse($this->exists($dir.'toolbarIcon_heading.png'));
+        $this->assertFalse($this->exists($dir.'toolbarIcon_toggle_formats.png'));
+
+    }//end testHeadingAndFormatsIsDisabled()
+
 
 }//end class
 

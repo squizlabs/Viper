@@ -89,13 +89,9 @@ function gTagCounts(tagNames)
 /**
  * Inserts a new table.
  */
-function insTable(rows, cols, id)
+function insTable(rows, cols, header, id)
 {
-    var table = viper.getPluginManager().getPlugin('ViperTableEditorPlugin').insertTable(rows, cols);
-
-    if (id) {
-        table.setAttribute('id', id);
-    }
+    var table = viper.getPluginManager().getPlugin('ViperTableEditorPlugin').insertTable(rows, cols, header, id);
 
     return table;
 
@@ -110,6 +106,11 @@ function rmTableHeaders(tblIndex, removeid)
 
     if (removeid === true) {
         table.removeAttribute('id');
+    }
+
+    var cells = dfx.getTag('td,th');
+    for (var i = 0; i < cells.length; i++) {
+        cells[i].removeAttribute('id');
     }
 
     var headers      = dfx.find(table, '[headers]');

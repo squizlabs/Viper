@@ -9,17 +9,89 @@ abstract class AbstractViperTableEditorPluginUnitTest extends AbstractViperUnitT
 {
 
     /**
-     * Creates a blank 3x3 table.
+     * Creates a blank table with the default (top) headers.
      *
      * @return void
      */
-    protected function insertTable($rows=3, $cols=3)
+    protected function insertTable()
     {
+        $dir = dirname(__FILE__).'/Images/';
+        
         $this->selectText('IPSUM');
-        $this->execJS('insTable('.$rows.','.$cols.')');
+        $this->keyDown('Key.RIGHT');
+        $this->clickTopToolbarButton($dir.'toolbarIcon_createTable.png');
+        
+        $insertTable = $this->find($dir.'toolbarIcon_insertTable.png');
+        $this->click($insertTable);
 
     }//end insertTable()
+    
+    
+    /**
+     * Creates a blank table with no headers.
+     *
+     * @return void
+     */
+    protected function insertTableWithNoHeaders()
+    {
+        $dir = dirname(__FILE__).'/Images/';
+        
+        $this->selectText('IPSUM');
+        $this->keyDown('Key.RIGHT');
+        $this->clickTopToolbarButton($dir.'toolbarIcon_createTable.png');
+        
+        $noHeaders = $this->find($dir.'toolbarIcon_noHeaders.png');
+        $this->click($noHeaders);
+        
+        $insertTable = $this->find($dir.'toolbarIcon_insertTable.png');
+        $this->click($insertTable);
 
+    }//end insertTableWithNoHeaders()
+   
+    
+    /**
+     * Creates a blank table with left headers.
+     *
+     * @return void
+     */
+    protected function insertTableWithLeftHeaders()
+    {
+        $dir = dirname(__FILE__).'/Images/';
+        
+        $this->selectText('IPSUM');
+        $this->keyDown('Key.RIGHT');
+        $this->clickTopToolbarButton($dir.'toolbarIcon_createTable.png');
+        
+        $leftHeaders = $this->find($dir.'toolbarIcon_leftHeader.png');
+        $this->click($leftHeaders);
+        
+        $insertTable = $this->find($dir.'toolbarIcon_insertTable.png');
+        $this->click($insertTable);
+
+    }//end insertTableWithLeftHeaders()
+
+    
+    /**
+     * Creates a blank table with both headers.
+     *
+     * @return void
+     */
+    protected function insertTableWithBothHeaders()
+    {
+        $dir = dirname(__FILE__).'/Images/';
+        
+        $this->selectText('IPSUM');
+        $this->keyDown('Key.RIGHT');
+        $this->clickTopToolbarButton($dir.'toolbarIcon_createTable.png');
+        
+        $bothHeaders = $this->find($dir.'toolbarIcon_bothHeaders.png');
+        $this->click($bothHeaders);
+        
+        $insertTable = $this->find($dir.'toolbarIcon_insertTable.png');
+        $this->click($insertTable);
+
+    }//end insertTableWithBothHeaders()
+    
 
     /**
      * Returns the full path of the specified image file name.

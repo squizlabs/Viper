@@ -1,3 +1,6 @@
 [submodule "DfxJSLib"]
 	path = DfxJSLib
 	url = git@github.com:squizlabs/DfxJSLib.git
+[submodule "Plugins/ViperAccessibilityPlugin/HTML_CodeSniffer"]
+	path = Plugins/ViperAccessibilityPlugin/HTML_CodeSniffer
+	url = git@github.com:squizlabs/HTML_CodeSniffer.git

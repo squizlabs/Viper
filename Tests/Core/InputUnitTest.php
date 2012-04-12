@@ -141,25 +141,39 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
 
 
     /**
-     * Test that holding down SHIFT does select text.
+     * Test that holding down Shift + Right does select text.
      *
      * @return void
      */
-    public function testKeyboardSelection()
+    public function testRightKeyboardSelection()
     {
         $text = $this->selectText('Lorem');
         $this->keyDown('Key.SHIFT + Key.RIGHT');
         $this->keyDown('Key.SHIFT + Key.RIGHT');
+        $this->keyDown('Key.DELETE');
         $this->type('p');
-        sleep(1);
-        $text = $this->selectText('MOZ');
-        $this->keyDown('Key.SHIFT + Key.LEFT');
-        $this->keyDown('Key.SHIFT + Key.LEFT');
-        $this->keyDown('Key.SHIFT + Key.LEFT');
-        $this->type('p');
-        $this->assertHTMLMatch('<p>pp</p>');
+        $this->assertHTMLMatch('<p>pIB MOZ</p>');
 
-    }//end testKeyboardSelection()
+    }//end testRightKeyboardSelection()
+
+
+    /**
+     * Test that holding down Shift + Left does select text.
+     *
+     * @return void
+     */
+    public function testLeftKeyboardSelection()
+    {
+        $text = $this->selectText('Lorem');
+        $this->keyDown('Key.SHIFT + Key.RIGHT');
+        $this->keyDown('Key.SHIFT + Key.LEFT');
+        $this->keyDown('Key.SHIFT + Key.LEFT');
+        $this->keyDown('Key.SHIFT + Key.LEFT');
+        $this->keyDown('Key.DELETE');
+        $this->type('p');
+        $this->assertHTMLMatch('<p>pem</p><p>EIB MOZ</p>');
+
+    }//end testRightKeyboardSelection()
 
 
     /**
@@ -179,7 +193,7 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
     }//end testSelectAllAndRemove()
 
 
-        /**
+    /**
      * Test that selecting the whole content is possible with short cut.
      *
      * @return void
@@ -195,6 +209,76 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
 
     }//end testSelectAllAndReplace()
 
+
+    /**
+     * Test that you can delete all content and then undo the changes.
+     *
+     * @return void
+     */
+    public function testDeleteAllClickUndoAndClickRedo()
+    {
+        $dir = dirname(__FILE__).'/Images/';
+
+        $this->selectText('Lorem');
+        $this->keyDown('Key.CMD + a');
+        $this->keyDown('Key.DELETE');
+        sleep(1);
+        $this->assertHTMLMatch('<p></p>');
+        $this->assertTrue($this->topToolbarButtonExists($dir.'undoIcon_active.png'), 'Undo icon should be active');
+        $this->assertTrue($this->topToolbarButtonExists($dir.'redoIcon.png'), 'Redo icon should be disabled');
+
+        $this->clickTopToolbarButton(dirname(__FILE__).'/Images/undoIcon_active.png');
+        $this->assertHTMLMatch('<p>Lorem</p><p>EIB MOZ</p>');
+        $this->assertTrue($this->topToolbarButtonExists($dir.'undoIcon.png'), 'Undo icon should be disabled');
+        $this->assertTrue($this->topToolbarButtonExists($dir.'redoIcon_active.png'), 'Redo icon should be active');
+
+        $this->clickTopToolbarButton(dirname(__FILE__).'/Images/redoIcon_active.png');
+        $this->assertHTMLMatch('<p></p>');
+         $this->assertTrue($this->topToolbarButtonExists($dir.'undoIcon_active.png'), 'Undo icon should be active');
+        $this->assertTrue($this->topToolbarButtonExists($dir.'redoIcon.png'), 'Redo icon should be disabled');
+
+        $this->clickTopToolbarButton(dirname(__FILE__).'/Images/undoIcon_active.png');
+        $this->assertHTMLMatch('<p>Lorem</p><p>EIB MOZ</p>');
+        $this->assertTrue($this->topToolbarButtonExists($dir.'undoIcon.png'), 'Undo icon should be disabled');
+        $this->assertTrue($this->topToolbarButtonExists($dir.'redoIcon_active.png'), 'Redo icon should be active');
+
+    }//end testDeleteAllClickUndoAndClickRedo()
+
+
+    /**
+     * Test that you can delete all content and then undo the changes using the keyboard shortcuts.
+     *
+     * @return void
+     */
+    public function testDeleteAllClickUndoAndClickRedoUsingShortcuts()
+    {
+        $dir = dirname(__FILE__).'/Images/';
+
+        $this->selectText('Lorem');
+        $this->keyDown('Key.CMD + a');
+        $this->keyDown('Key.DELETE');
+        sleep(1);
+        $this->assertHTMLMatch('<p></p>');
+        $this->assertTrue($this->topToolbarButtonExists($dir.'undoIcon_active.png'), 'Undo icon should be active');
+        $this->assertTrue($this->topToolbarButtonExists($dir.'redoIcon.png'), 'Redo icon should be disabled');
+
+        $this->keyDown('Key.CMD + z');
+        $this->assertHTMLMatch('<p>Lorem</p><p>EIB MOZ</p>');
+        $this->assertTrue($this->topToolbarButtonExists($dir.'undoIcon.png'), 'Undo icon should be disabled');
+        $this->assertTrue($this->topToolbarButtonExists($dir.'redoIcon_active.png'), 'Redo icon should be active');
+
+        $this->keyDown('Key.CMD + Key.SHIFT + z');
+        $this->assertHTMLMatch('<p></p>');
+        $this->assertTrue($this->topToolbarButtonExists($dir.'undoIcon_active.png'), 'Undo icon should be active');
+        $this->assertTrue($this->topToolbarButtonExists($dir.'redoIcon.png'), 'Redo icon should be disabled');
+
+        $this->keyDown('Key.CMD + z');
+        $this->assertHTMLMatch('<p>Lorem</p><p>EIB MOZ</p>');
+        $this->assertTrue($this->topToolbarButtonExists($dir.'undoIcon.png'), 'Undo icon should be disabled');
+        $this->assertTrue($this->topToolbarButtonExists($dir.'redoIcon_active.png'), 'Redo icon should be active');
+
+
+    }//end testDeleteAllClickUndoAndClickRedo()
 
 }//end class
 

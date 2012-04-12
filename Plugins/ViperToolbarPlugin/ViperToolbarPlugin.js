@@ -132,7 +132,10 @@ ViperToolbarPlugin.prototype = {
 
         dfx.addEvent(elem, 'mousedown', function(e) {
             var target = dfx.getMouseEventTarget(e);
-            if (dfx.isTag(target, 'input') !== true && dfx.isTag(target, 'textarea') !== true) {
+            if (dfx.isTag(target, 'input') !== true
+                && dfx.isTag(target, 'textarea') !== true
+                && dfx.isTag(target, 'select') !== true
+            ) {
                 dfx.preventDefault(e);
                 return false;
             }
@@ -140,7 +143,10 @@ ViperToolbarPlugin.prototype = {
 
         dfx.addEvent(elem, 'mouseup', function(e) {
             var target = dfx.getMouseEventTarget(e);
-            if (dfx.isTag(target, 'input') !== true  && dfx.isTag(target, 'textarea') !== true) {
+            if (dfx.isTag(target, 'input') !== true
+                && dfx.isTag(target, 'textarea') !== true
+                && dfx.isTag(target, 'select') !== true
+            ) {
                 dfx.preventDefault(e);
                 return false;
             }
@@ -194,7 +200,10 @@ ViperToolbarPlugin.prototype = {
 
         dfx.addEvent(bubble, 'mousedown', function(e) {
             var target = dfx.getMouseEventTarget(e);
-            if (dfx.isTag(target, 'input') !== true  && dfx.isTag(target, 'textarea') !== true) {
+            if (dfx.isTag(target, 'input') !== true
+                && dfx.isTag(target, 'textarea') !== true
+                && dfx.isTag(target, 'select') !== true
+            ) {
                 dfx.preventDefault(e);
                 return false;
             }
@@ -601,7 +610,7 @@ ViperToolbarPlugin.prototype = {
 
         dfx.setStyle(bubble, 'left', left + 'px');
         dfx.setStyle(bubble, 'top', '35px');
-        dfx.setStyle(bubble, 'width', (toolsWidth - 2) + 'px');
+        dfx.setStyle(bubble, 'width', toolsWidth + 'px');
 
     },
 
@@ -637,6 +646,7 @@ ViperToolbarPlugin.prototype = {
         dfx.addClass(this._toolbar, 'viper-active');
 
         this.viper.fireCallbacks('ViperToolbarPlugin:enabled');
+        this._updateToolbar();
 
     },
 

@@ -309,6 +309,10 @@ ViperMozRange.prototype = {
         var startContainer = this.startContainer;
         var startOffset    = this.startOffset;
 
+        if (!startContainer) {
+            startContainer = this.rangeObj.startContainer;
+        }
+
         this.rangeObj.deleteContents();
 
         // Because we rely on normalisation when we get call getRangeCoords()

@@ -1,461 +1,56 @@
-.ViperAccessibilityPlugin,
-.ViperAP-issueList,
-.ViperAP-issuePane,
-.resultsCont.ViperAP-wrapper,
-.ViperAP-issueListWrapper,
-.ViperAP-cont.settingsCont {
+.ViperAccessibilityPlugin {
     width: 300px;
 }
 
-.ViperVAP-violation {
-    position: absolute;
-    width: 12px;
-    height: 12px;
-    background-color: #F00;
-    border: 1px solid #777;
-    z-index: 40;
-    margin-left: -14px;
-    margin-top: -15px;
+.ViperAccessibilityPlugin.ViperITP .Viper-subSection {
+    padding: 0;
 }
 
-.ViperAP-wrapper {
+.ViperAccessibilityPlugin #HTMLCS-wrapper {
     position: relative;
-    z-index: 1;
-    margin: -0.6em;
-    text-align: left;
-    border-radius: 0 0 9px 9px;
-}
-
-/* Summary Pane */
-
-.ViperAP-standardsWrapper {
-    box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    border: 1px solid #393939;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2) inset, 0 1px 0 rgba(255, 255, 255, 0.1);
-    border-radius: 0.4em;
-    margin: 0 0 1em;
-    font-size: 1.3em;
-    color: #FFF;
-    text-shadow: 0 -1px rgba(0,0,0,0.3);
-    text-align: left;
-    padding: 0.7em 0.7em 0.8em;
-}
-.ViperAP-standardsSelect {
-    float: right;
-}
-.Viper-issueTile {
-    display: inline-block;
-    width: 31%;
-    box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    margin-left: 0.5em;
-    
-}
-.Viper-issueTile:first-child {
-    margin-left: 0;
-}
-.Viper-issueTile .issueTile-text {
-    display: block;
-    position: relative;
-    color: #FFF;
-    text-shadow: 0 -1px rgba(0,0,0,0.3);
-    font-size: 1.7em;
-    line-height: 1.5em;
-    padding: 0.9em 0 1.8em;
-    
-    border: 1px solid #393939;
-    border-bottom: none;
-    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset;
-    border-radius: 0.3em 0.3em 0 0;
-}
-.Viper-issueTile.issueType-error .issueTile-text {
-    background-color: #8b2222;
-}
-.Viper-issueTile.issueType-warning .issueTile-text {
-    background-color: #b3913a;
-}
-.Viper-issueTile.issueType-notice .issueTile-text {
-    background-color: #66656b;
-}
-.ViperAP-summaryWrapper.processing .Viper-issueTile .issueTile-text:before {
-    content: "";
-    display: block;
-    position: absolute;
-    width: 30px;
-    height: 30px;
-    left: 50%;
-    top: 0.5em;
-    margin-left: -15px;
-    background: transparent url(Images/summaryLoader-error.gif) 50% 50% no-repeat;
-}
-.ViperAP-summaryWrapper.processing .Viper-issueTile.issueType-warning .issueTile-text:before {
-    background-image: url(Images/summaryLoader-warning.gif);
-}
-.ViperAP-summaryWrapper.processing .Viper-issueTile.issueType-notice .issueTile-text:before {
-    background-image: url(Images/summaryLoader-notice.gif);
-}
-.Viper-issueTile .issueTile-text strong {
-    font-size: 1.7em;
-    display: block;
-}
-.ViperAP-summaryWrapper.processing .issueTile-text strong {
-    visibility: hidden;
-}
-.Viper-issueTile .Viper-checkbox {
-    margin: 0;
-    border-radius: 0  0 0.4em 0.4em;
-    min-height: 2.7em;
-}
-.Viper-issueTile .Viper-checkbox .Viper-checkbox-switch {
-    right: 50%;
-    margin-right: -1.6em;
-}
-.Viper-issueTile .Viper-checkbox:after {
-    content: "";
-    display: block;
-    clear: both;
-}
-.Viper-issueTile .issueTile-text:after {
-    background: url("Images/issueImages.png") no-repeat scroll 0 0 transparent;
-    content: "";
-    height: 14px;
-    left: 50%;
-    margin: -7px 0 0 -7px;
-    position: absolute;
-    bottom: 0.6em;
-    width: 14px;
-}
-.Viper-issueTile.issueType-warning .issueTile-text:after {
-    background-position: 0 -14px;
-}
-.Viper-issueTile.issueType-notice .issueTile-text:after {
-    background-position: 0 -28px;
-}
-
-.Viper-issueTile-help {
-    display: block;
-    clear: both;
-    color: #AAA;
-    text-shadow: 0 -1px rgba(0,0,0,0.3);
-    font-size: 1.3em;
-    padding: 1em 0;
-}
-.ViperAP-viewReport {
-    background-color: #3A3940;
-    border: 1px solid #2B2B2B;
-    border-radius: 0.3em 0.3em 0.3em 0.3em;
-    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset, 0 1px 0 rgba(255, 255, 255, 0.15), 0 -1.4em 0.9em rgba(0, 0, 0, 0.4) inset;
-    color: #FFFFFF;
-    cursor: pointer;
-    font-size: 1.9em;
-    line-height: 3em;
-    position: relative;
-    text-shadow: 0 -1px 0 #000000;
-}
-.ViperAP-summaryWrapper.processing .ViperAP-viewReport {
-    opacity: 0.4;
-}
-.ViperAP-viewReport:hover {
-    background-color: #2b2b2b;
-}
-.ViperAP-viewReport:after {
-    background: url("../../Images/viperToolsSprite.png") no-repeat scroll 0 -80px transparent;
-    content: "";
-    height: 14px;
-    margin-top: -7px;
-    position: absolute;
-    right: 1em;
-    top: 50%;
-    width: 9px;
-}
-
-/* List Nav */
-
-.ViperAP-listNav {
-    line-height: 2em;
-    text-align: center;
-    font-size: 1.5em;
-    padding: 0.5em 0 0.6em;
-}
-
-.ViperAP-listNav-pageCounter {
-    display: inline-block;
-    color: #EEE;
-    font-size: 0.9em;
-    font-weight: bold;
-    text-shadow: none;
-    padding: 0 1em;
-    vertical-align: middle;
-}
-
-.ViperAP-listNav-prev,
-.ViperAP-listNav-next {
-    position: relative;
-    cursor: pointer;
-    display: inline-block;
-    width: 2.5em;
-    height: 2.2em;
-    background-color: #2b2b2b;
-    background-color: rgba(0,0,0,0.3);
-    border-radius: 0.3em;
-    box-shadow: 0 1px 0 rgba(255,255,255,0.3);
-}
-.ViperAP-listNav-prev:after,
-.ViperAP-listNav-next:after {
-    content: "";
-    position: absolute;
-    width: 11px;
-    height: 14px;
-    left: 50%;
-    top: 50%;
-    margin: -7px 0 0 -6px;
-    background: url(../../Images/viperToolsSprite.png) 0 -94px no-repeat;
-}
-.ViperAP-listNav-next:after {
-    background-position: 0 -108px;
-    margin-left: -5px;
-}
-.ViperAP-listNav-prev.disabled,
-.ViperAP-listNav-next.disabled {
-    opacity: 0.3;
-    filter: alpha(opacity=50);
-    cursor: default;
-}
-
-/* Issue List/Report */
-
-.ViperAP-issueList {
-    list-style: none;
-    margin: 0;
-    display: inline-block;
-    vertical-align: top;
-}
-
-.ViperAP-issueItem {
-    position: relative;
-    border-bottom: 1px solid #000;
-    border-top: 1px solid #4b4b4b;
-    padding: 0.6em 2em 0.6em 2.2em;
-    font-size: 1.38em;
-    text-shadow: 0 -1px 0 #000;
-    background-color: #2b2b2b;
-    min-height: 4.2em;
-}
-
-.ViperAP-issueItem:hover {
-    cursor: pointer;
-    background-color: #3b3b3b;
-    border-top-color: #5b5b5c;
-}
-.ViperAP-issueItem:after {
-    content: "";
-    position: absolute;
-    width: 9px;
-    height: 14px;
-    right: 0.4em;
-    top: 50%;
-    margin-top: -7px;
-    background: transparent url(../../Images/viperToolsSprite.png) 0 -80px no-repeat;
-}
-
-.ViperAP-issueItem.issueDone:after {
-    width: 19px;
-    height: 19px;
-    right: 0.7em;
-    top: 50%;
-    margin-top: -9px;
-    background: transparent url(Images/issueImages.png) 0 -289px no-repeat;
-}
-.ViperAP-issueItem.complete {
-    opacity: 0.4;
-}
-
-.ViperAP-issueType {
-    position: absolute;
-    left: 0;
-    top: -1px;
-    width: 1.6em;
-    height: 100%;
-    border-top: 1px solid #FFF;
-}
-.ViperAP-issueItem.issueDone .ViperAP-issueTitle,
-.ViperAP-issueItem.issueDone .ViperAP-issueType {
-    opacity: 0.4;
-}
-.ViperAP-issueType.error {
-    background-color: #952424;
-    border-top-color: #c76161;
-}
-.ViperAP-issueType.warning {
-    background-color: #c5a00c;
-    border-top-color: #f2d560;
-}
-.ViperAP-issueType.manual {
-    background-color: #6c6b72;
-    border-top-color: #828188;
-}
-.ViperAP-issueType:before {
-    content: "";
-    position: absolute;
-    width: 14px;
-    height: 14px;
-    left: 50%;
-    top: 50%;
-    margin: -7px 0 0 -7px;
-    background: transparent url(Images/issueImages.png) 0 0 no-repeat;
-}
-.ViperAP-issueType.warning:before {
-    background-position: 0 -14px;
-}
-.ViperAP-issueType.manual:before {
-    background-position: 0 -28px;
-}
-.ViperAP-issueTitle {
-    display: block;
-    color: #FFF;
-}
-.ViperAP-issueTitle strong {
-    color: #9b99a5;
-    padding-right: 0.2em;
-}
-
-/* Issue Nav/Lineage */
-.ViperAP-tools.issueNav {
-    text-align: right;
-}
-
-.ViperAP-issueNav {
-    float: left;
-    padding-left: 0.3em;
-    font-size: 1.35em;
-    font-weight: bold;
-    color: #000;
-    text-shadow: 0 1px 0 rgba(255,255,255,0.3);
-}
-.ViperAP-issueNav a,
-.ViperAP-issueNav a:visited {
-    position: relative;
-    display: inline-block;
-    text-decoration: none;
-    color: #000;
-    padding: 0.45em 20px 0.25em 0;
-}
-.ViperAP-issueNav a:before {
-    content: "";
-    display: inline-block;
-    width: 10px;
-    height: 11px;
-    margin-right: 0.5em;
-    margin-bottom: -1px;
-    background: transparent url(Images/issueImages.png) 0 -53px no-repeat;
-}
-.ViperAP-issueNav a:after {
-    content: "";
-    position: absolute;
-    width: 12px;
-    height: 32px;
-    margin-top: -15px;
-    top: 50%;
+    background-color: transparent;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
     right: 0;
-    background: transparent url(Images/issueImages.png) 0 -64px no-repeat;
-}
-.issueNav-divider {
-    visibility: hidden;
+    top: 0;
 }
 
-/* Detail Pane */
-
-.ViperAP-issuePane {
-    padding: 0 0 0.6em;
-    margin: 0;
-    border-bottom-left-radius: 0.6em;
-    border-bottom-right-radius: 0.6em;
-    text-shadow: none;
-    border-top: 1px solid #2b2b2b;
-    position: relative;
-    display: inline-block;
-    vertical-align: top;
-    max-height: 15em;
-}
-.ViperAP-issuePane.current {
-    max-height: inherit;
-}
-
-.ViperAP-issuePane .issueDoneCont {
-    visibility: hidden;
-    -moz-transition: right 0.15s ease-out, top 0.15s ease-out;
-    -webkit-transition: right 0.15s ease-out, top 0.15s ease-out;
+.ViperAccessibilityPlugin #HTMLCS-wrapper .HTMLCS-issue-details .issueDoneCont {
+    -moz-transition: right 0.15s ease-out 0s, top 0.15s ease-out 0s;
+    background: url("Images/issueImages.png") no-repeat scroll 0 -224px transparent;
+    height: 65px;
     position: absolute;
     right: -66px;
     top: -67px;
+    visibility: hidden;
     width: 65px;
-    height: 65px;
-    background: transparent url(Images/issueImages.png) 0 -224px no-repeat;
 }
 
-.ViperAP-issuePane.issueDone .issueDoneCont {
-    visibility: visible;
+.ViperAccessibilityPlugin #HTMLCS-wrapper .HTMLCS-issue-details.issueDone .issueDoneCont {
     right: -1px;
     top: -1px;
+    visibility: visible;
 }
 
-.ViperAP-issuePane.issueDone .ViperAP-issueType,
-.ViperAP-issuePane.issueDone .issueTitle,
-.ViperAP-issuePane.issueDone .issueWcag {
+.ViperAccessibilityPlugin #HTMLCS-wrapper .HTMLCS-issue-details.issueDone .HTMLCS-issue-type,
+.ViperAccessibilityPlugin #HTMLCS-wrapper .HTMLCS-issue-details.issueDone .HTMLCS-issue-title,
+.ViperAccessibilityPlugin #HTMLCS-wrapper .HTMLCS-issue-details.issueDone .HTMLCS-issue-wcag-ref {
     opacity: 0.5;
 }
 
-.ViperAP-issuePane.rechecking .ViperAP-issueType,
-.ViperAP-issuePane.rechecking .issueTitle,
-.ViperAP-issuePane.rechecking .issueWcag {
+.ViperAccessibilityPlugin #HTMLCS-wrapper .HTMLCS-issue-details.rechecking .HTMLCS-issue-type,
+.ViperAccessibilityPlugin #HTMLCS-wrapper .HTMLCS-issue-details.rechecking .HTMLCS-issue-title,
+.ViperAccessibilityPlugin #HTMLCS-wrapper .HTMLCS-issue-details.rechecking .HTMLCS-issue-wcag-ref {
     opacity: 0.1;
 }
 
-.ViperAP-issueDetails {
-    position: relative;
-    color: #FFF;
-    background-color: #2b2b2b;
-    padding: 1.2em 2.8em 1.2em 2.8em;
-    border-top: 1px solid #4b4b4b;
-    border-bottom: 1px solid #2b2b2b;
-    font-size: 1.36em;
-}
-.issueTitle {
-    border-bottom: 1px solid #000;
-    padding-bottom: 1em;
-    font-size: 1.1em;
-}
-.issueWcag {
-    border-top: 1px solid #5b5b5b;
-    padding-top: 1em;
-}
-.issueWcag em {
-    display: inline-block;
-    margin-top: 0.5em;
-    color: #8f8f94;
-    font-style: normal;
-    font-weight: bold;
-    min-width: 5.5em;
-}
-.issueWcag a,
-.issueWcag a:visited {
-    display: inline-block;
-    color: #dbdbe1;
-    font-style: normal;
-    text-decoration: none;
-    border-bottom: 1px solid #87878e;
-}
-.issueWcag a:after {
-    content: "";
-    display: inline-block;
-    width: 12px;
-    height: 11px;
-    margin: 0 0 0 0.5em;
-    background: transparent url(Images/issueImages.png) 0 -42px no-repeat;
+.ViperAccessibilityPlugin #HTMLCS-wrapper .HTMLCS-issue-details.rechecking .ViperAP-issueRecheck {
+    height: 100%;
+    width: 100%;
 }
 
-.ViperAP-issueRecheck {
+.ViperAccessibilityPlugin #HTMLCS-wrapper .ViperAP-issueRecheck {
     position: absolute;
     top: -1px;
     left: 0;
@@ -464,21 +59,21 @@
     text-align: center;
     font-size: 1.26em;
 }
-.rechecking .ViperAP-issueRecheck {
+.ViperAccessibilityPlugin #HTMLCS-wrapper .rechecking .ViperAP-issueRecheck {
     width: 100%;
     height: 100%;
 }
-.ViperAP-issueRecheck .issueChecking {
+.ViperAccessibilityPlugin #HTMLCS-wrapper .ViperAP-issueRecheck .issueChecking {
     background: transparent url(Images/recheck-spinner.gif) 50% 0 no-repeat;
     padding: 45px 1em 1em;
     margin-top: 16%;
 }
-.ViperAP-issueRecheck .issueRemains {
+.ViperAccessibilityPlugin #HTMLCS-wrapper .ViperAP-issueRecheck .issueRemains {
     position: relative;
     padding: 40px 2em 2em;
     margin-top: 12%;
 }
-.ViperAP-issueRecheck .issueRemains:before {
+.ViperAccessibilityPlugin #HTMLCS-wrapper .ViperAP-issueRecheck .issueRemains:before {
     content: "";
     display: block;
     position: absolute;
@@ -489,267 +84,244 @@
     top: 0;
     background: transparent url(Images/issueImages.png) -19px -289px no-repeat;
 }
-.ViperAP-issueRecheck .recheckMessage {
+.ViperAccessibilityPlugin #HTMLCS-wrapper .ViperAP-issueRecheck .recheckMessage {
     display: block;
     clear: both;
     margin-bottom: 5%;
 }
-.ViperAP-issueRecheck .Viper-button {
+.ViperAccessibilityPlugin #HTMLCS-wrapper .ViperAP-issueRecheck .Viper-button {
     font-weight: bold;
     font-size: 0.9em;
     padding: 0 3em;
 }
 
-.ViperAP-issueResolution {
-    position: relative;
-    border-top: 1px solid #6c6c6d;
-    padding: 0.5em 0.8em 0 0.8em;
-    font-size: 1em;
-}
-.ViperAP-issuePane.rechecking .ViperAP-issueResolution {
+.ViperAccessibilityPlugin #HTMLCS-wrapper .HTMLCS-issue-list .issueDone .ViperAP-issueTitle,
+.ViperAccessibilityPlugin #HTMLCS-wrapper .HTMLCS-issue-list .issueDone .ViperAP-issueType {
     opacity: 0.4;
 }
 
-.ViperAP-issueResolution,
-.ViperAP-issueType,
-.issueTitle,
-.issueWcag {
-    -moz-transition: opacity 0.3s ease-in;
-    -webkit-transition: opacity 0.3s ease-in;
+.ViperAccessibilityPlugin #HTMLCS-wrapper .HTMLCS-issue-list .issueDone:after {
+    background: url("Images/issueImages.png") no-repeat scroll 0 -289px transparent;
+    height: 19px;
+    margin-top: -9px;
+    right: 0.7em;
+    top: 50%;
+    width: 19px;
 }
 
-.ViperAP-issuePane.rechecking .ViperAP-issueResolution:after {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+/* Re apply Viper styles */
+.ViperAccessibilityPlugin #HTMLCS-wrapper .Viper-button {
+    -moz-box-sizing: border-box;
+    border-radius: 0.25em 0.25em 0.25em 0.25em;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 1.5em;
+    line-height: 1.8em;
+    margin-left: 0.3em;
+    min-width: 29px;
+    padding: 0 0.5em;
+    position: relative;
+    text-align: center;
 }
-.ViperAP-issueResolution .resolutionHeader {
+
+.ViperAccessibilityPlugin #HTMLCS-wrapper  .buttonIcon.locate {
+    background-position: 0 -810px;
+}
+
+.ViperAccessibilityPlugin #HTMLCS-wrapper .buttonIcon {
+    background-image: url("../../Images/buttonIcons.png");
+    height: 20px;
+    left: 50%;
+    margin: -10px 0 0 -12.5px;
+    position: absolute;
+    top: 50%;
+    width: 25px;
+}
+
+.ViperAccessibilityPlugin #HTMLCS-wrapper .ViperAP-issuePane {
+    text-shadow: none;
+}
+
+.ViperAccessibilityPlugin #HTMLCS-wrapper .ViperAP-issueResolution {
+    font-size: 0.7em;
+}
+
+.ViperAccessibilityPlugin #HTMLCS-wrapper .ViperAP-issueResolution .resolutionInstructions p {
+    margin: 0.5em 0 1em;
+    overflow: hidden;
+    padding: 0;
+    position: relative;
+}
+
+.ViperAccessibilityPlugin #HTMLCS-wrapper .ViperAP-issueResolution .resolutionHeader {
     margin-right: -0.3em;
     text-align: right;
 }
-.ViperAP-issueResolution .resolutionHeader strong {
-    font-size: 1.49em;
-    color: #9b99a5;
-    text-shadow: 0 -1px 0 rgba(0,0,0,0.6);
+
+.ViperAccessibilityPlugin #HTMLCS-wrapper .ViperAP-issueResolution .resolutionHeader strong {
+    color: #9B99A5;
     display: inline-block;
     float: left;
+    font-size: 1.49em;
     line-height: 1.8em;
     padding-left: 0.2em;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.6);
 }
-.ViperAP-issueResolution .resolutionInstructions {
-    padding: 0 0.2em;
-    color: #EEE;
+
+.ViperAccessibilityPlugin #HTMLCS-wrapper .Viper-checkbox {
+    background-color: rgba(255, 255, 255, 0.06);
+    border: 1px solid #393939;
+    border-radius: 0.4em 0.4em 0.4em 0.4em;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset, 0 1px 0 rgba(255, 255, 255, 0.1);
+    clear: both;
+    color: #FFFFFF;
+    cursor: pointer;
+    display: block;
+    font-size: 1.2em;
+    margin-bottom: 0.6em;
+    padding: 0 0.8em;
+    position: relative;
+    text-align: left;
+    text-shadow: none;
+}
+
+.ViperAccessibilityPlugin #HTMLCS-wrapper .Viper-checkbox-title {
+    color: #DDDDDD;
+    font-size: 1.1em;
+    line-height: 2.5em;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.4);
+    white-space: nowrap;
+}
+
+.ViperAccessibilityPlugin #HTMLCS-wrapper .Viper-checkbox-switch {
+    -moz-transition: background-color 0.2s ease 0s;
+    background-color: #2B2B2B;
+    border-radius: 0.8em 0.8em 0.8em 0.8em;
+    box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.8) inset, 0 -2px 2px -2px #000000 inset, 0 1px 0 rgba(255, 255, 255, 0.2), 1px 0 0 rgba(0, 0, 0, 0.3) inset, -1px 0 0 rgba(0, 0, 0, 0.3) inset;
+    cursor: pointer;
+    font-size: 1.2em;
+    height: 1.6em;
+    margin-top: -0.8em;
+    overflow: hidden;
+    position: absolute;
+    right: 0.6em;
+    top: 50%;
+    width: 3.2em;
+}
+
+.ViperAccessibilityPlugin #HTMLCS-wrapper .Viper-checkbox-slider {
+    -moz-transition: left 0.2s ease-out 0s;
+    background-color: #65636B;
+    border-radius: 0.65em 0.65em 0.65em 0.65em;
+    box-shadow: 0 0 2px #000000, 0 1px 0 rgba(255, 255, 255, 0.3) inset;
+    content: "";
+    height: 1.3em;
+    left: 0.15em;
+    margin-top: -0.65em;
+    position: absolute;
+    top: 50%;
+    width: 1.3em;
+}
+
+.ViperAccessibilityPlugin #HTMLCS-wrapper .Viper-checkbox input {
+    visibility: hidden;
+}
+
+.ViperAccessibilityPlugin #HTMLCS-wrapper .Viper-checkbox.active .Viper-checkbox-switch {
+    background-color: #205CAF;
+}
+
+.ViperAccessibilityPlugin #HTMLCS-wrapper .Viper-checkbox.active .Viper-checkbox-slider {
+    background: -moz-linear-gradient(center top , #E9E9EB, #C2C2CB) repeat scroll 0 0 transparent;
+    box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.6), 0 1px 0 rgba(255, 255, 255, 0.3) inset;
+    left: 1.7em;
+}
+
+.ViperAccessibilityPlugin #HTMLCS-wrapper .Viper-textbox-title {
+    -moz-transition-duration: 0.3s;
+    -moz-transition-property: color, background;
+    background-color: #404040;
+    border-radius: 0.2em 0.2em 0.2em 0.2em;
+    color: #DDDDDD;
+    font-size: 1.2em;
+    height: 100%;
+    left: 0;
+    line-height: 1.85em;
+    margin: 0 0 0 0.2em;
+    overflow: hidden;
+    padding: 0 10px;
+    position: absolute;
+    text-overflow: ellipsis;
+    text-shadow: none;
+    top: 0;
+    white-space: nowrap;
+}
+
+.ViperAccessibilityPlugin #HTMLCS-wrapper .Viper-textbox-input[type="text"],
+.ViperAccessibilityPlugin #HTMLCS-wrapper .Viper-textbox-textArea {
+    -moz-box-sizing: border-box;
+    background: none repeat scroll 0 0 transparent;
+    border: medium none;
+    color: #5A8BD0;
+    font-family: Arial;
     font-size: 1.49em;
+    font-weight: bold;
+    outline: medium none;
+    padding: 0.1em 0 0.15em;
+    width: 100%;
+}
+
+.ViperAccessibilityPlugin #HTMLCS-wrapper .Viper-textbox {
+    -moz-transition: opacity 0.2s ease-in 0s;
+    margin-bottom: 0.6em;
+}
+
+.ViperAccessibilityPlugin #HTMLCS-wrapper .Viper-textbox-main {
+    position: relative;
+}
+
+.ViperAccessibilityPlugin #HTMLCS-wrapper .Viper-textbox-label {
+    -moz-transition-duration: 0.3s;
+    -moz-transition-property: color, background;
+    background: none repeat scroll 0 0 #2B2B2B;
+    border-bottom: 1px solid #777777;
+    border-radius: 0.4em 0.4em 0.4em 0.4em;
+    border-top: 1px solid #000000;
+    box-shadow: 0 0 3px #000000 inset;
+    clear: both;
+    color: #5A8BD0;
+    display: block;
+    padding: 4px 2px;
+    position: relative;
+    text-align: left;
+}
+
+.ViperAccessibilityPlugin #HTMLCS-wrapper .ViperAP-issueResolution .resolutionInstructions {
+    color: #EEEEEE;
+    font-size: 1.49em;
+    padding: 0 0.2em;
     text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.8);
 }
-.ViperAP-issueResolution .resolutionInstructions p {
-    position: relative;
-    overflow: hidden;
-    padding: 0;
-    margin: 0.5em 0 1em;
+
+.ViperAccessibilityPlugin #HTMLCS-wrapper .ViperAP-issueResolution .imagePreview {
+    border: 1px solid #8F8F8F;
+    box-shadow: 0 1px 3px #2B2B2B;
+    float: left;
+    line-height: 0;
+    margin: 0 0.9em 0.6em 0;
+    width: 90px;
 }
-.ViperAP-issueResolution .resolutionActions {
+
+.ViperAccessibilityPlugin #HTMLCS-wrapper .ViperAP-issueResolution .imagePreview img {
+    width: 100%;
+}
+
+.ViperAccessibilityPlugin #HTMLCS-wrapper .ViperAP-issueResolution .resolutionActions {
     text-align: center;
     padding: 0 0 0.2em;
 }
 
-.ViperAP-issueResolution .imagePreview {
-    float: left;
-    width: 90px;
-    margin: 0 0.9em 0.6em 0;
-    border: 1px solid #8F8F8F;
-    box-shadow: 0 1px 3px #2b2b2b;
-    line-height: 0;
-}
-.ViperAP-issueResolution .imagePreview img {
-    width: 100%;
-}
-
-/* Popup styles */
-
-.ViperAP-middle {
-    position: relative;
-    overflow: hidden;
-}
-
-.resultsCont.ViperAP-wrapper {
-    overflow: hidden;
-    clear: both;
-}
-
-.ViperITP.subSectionVisible .ViperAP-toolsWrapper.ViperITP-tools {
-    padding-bottom: 0.6em;
-}
-
-.ViperAP-issueListWrapper {
-    display: inline-block;
-    border-top: 1px solid #2b2b2b;
-    margin: 0;
-    vertical-align: top;
-    overflow: hidden;
-    max-height: 15em;
-}
-.issueList .ViperAP-issueListWrapper {
-    max-height: inherit;
-}
-
-.ViperAP-issueDetailsWrapper {
-    overflow: hidden;
-    display: inline-block;
-    vertical-align: top;
-}
-
-.issueList .ViperAP-issueDetailsWrapper {
-    display: none;
-}
-
-.ViperAP-issuePane,
-.ViperAP-issueList,
-.ViperAP-issueListWrapper {
-    -moz-transition: margin 0.2s ease-in;
-    -webkit-transition: margin 0.2s ease-in;
-}
-
-.ViperAP-issueListInner {
-    background-color: #3f3e42;
-    border-bottom: 1px solid #6C6C6C;
-}
-
-.ViperAP-issueListWrapper.instant,
-.ViperAP-issuePane.instant {
-    -moz-transition-duration: 0s;
-    -webkit-transition-duration: 0s;
-}
-
-/* Tools section */
-
-.ViperAP-toolsWrapper .ViperAP-tools {
-    display: none;
-}
-
-.ViperAP-toolsWrapper.checkTools .ViperAP-checkTools,
-.ViperAP-toolsWrapper.listTools .ViperAP-listTools,
-.ViperAP-toolsWrapper.detailTools .ViperAP-detailTools {
-    display: block;
-}
-
-.ViperAP-listTools-left {
-    float: left;
-    color: #000000;
-    font-size: 1.35em;
-    padding-left: 0.3em;
-    line-height: 2em;
-    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.3);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 240px;
-}
-
-.ViperAP-listTools-left strong {
-    font-size: 1.1em;
-}
-
-.ViperAP-listTools-right {
-    text-align: right;
-}
-
-.ViperAP-divider {
-    border-left: 1px solid #666666;
-    border-right: 1px solid #999999;
-    display: inline-block;
-    height: 26px;
-    margin: 0 0.7em -0.8em 0.5em;
-}
-
-.ViperAP-cont.settingsCont {
-    background-color: #2B2B2B;
-    color: #EEE;
-    text-shadow: none;
-}
-
-.ViperAP-cont.settingsCont .listFilters,
-.ViperAP-cont.settingsCont .accessStandard,
-.ViperAP-cont.settingsCont .reCheckSec {
-    padding: 10px;
-    border-bottom: 1px solid #000;
-}
-
-.ViperAP-cont.settingsCont .reCheckSec {
-    color: #222;
-    text-align: center;
-}
-
-.ViperAP-cont.settingsCont h1 {
-    font-size: 16px;
-    font-weight: normal;
-    color: #FFF;
-}
-
-.ViperAP-cont.settingsCont p {
-    color: #666;
-    font-size: 12px;
-}
-
-.Viper-checkbox-text {
-    font-size: 12px;
-    padding-left: 10px;
-}
-
-.Viper-radiobtn-label {
-    display: block;
-    margin: 5px 0;
-}
-
-.Viper-radio-text {
-    padding-left: 10px;
-    font-size: 12px;
-}
-
-.ViperAP-highlight {
-    position: absolute;
-    z-index: 200;
-    background-color: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(0, 0, 0, 0.5);
-    border-radius: 3px 3px 3px 3px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.8), 0 0 3px rgba(255, 255, 255, 0.5) inset;
-    margin: -1px 0 0 -1px;
-}
-
-.ViperAccessibilityPlugin .Viper-button {
-    -moz-transition: opacity 0.2s ease-in;
-    -webkit-transition: opacity 0.2s ease-in;
-}
-
-/* Pointer */
-.ViperAP-pointer {
-    width: 50px;
-    height: 62px;
-    position: absolute;
-    top: 0px;
-    left: 0px;
-    z-index: 9999;
-    background: transparent url(Images/issueImages.png) -14px -62px no-repeat;
-}
-
-.ViperAP-pointer-hidden {
-    visibility: hidden;
-}
-
-.ViperAP-pointer-up {
-    background-position: -14px 0;
-}
-
-.ViperAP-pointer-left,
-.ViperAP-pointer-right {
-    width: 62px;
-    height: 50px;
-    background-position: 0 -124px;
-}
-
-.ViperAP-pointer-right {
-    background-position: 0 -174px;
+.ViperAccessibilityPlugin #HTMLCS-wrapper li.issueDone .HTMLCS-issue-title,
+.ViperAccessibilityPlugin #HTMLCS-wrapper li.issueDone .HTMLCS-issue-type {
+    opacity: 0.4;
 }

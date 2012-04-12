@@ -37,7 +37,44 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
 
     }//end assertHighlightPos()
 
+    
+    /**
+     * Test that you can open and close the table tools using the top toolbar.
+     *
+     * @return void
+     */
+    public function testUsingTableIconInTopToolbar()
+    {
+        $dir = dirname(__FILE__).'/Images/';
+        
+        $this->insertTable();
+        
+        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_createTable_active.png'), 'Create table should be active');
+        
+        $this->clickTopToolbarButton($dir.'toolbarIcon_createTable_active.png');
+        
+        // Check to make sure the table editing tools appear.
+        $this->find($this->getImg('icon_tableEditingTools.png'));
+        
+        $this->clickTopToolbarButton($dir.'toolbarIcon_createTable_active.png');
+        
+        // Check to make sure the table editing tools don't appear.
+        $imageNotFound = false;
+        try 
+        { 
+            $this->find($this->getImg('icon_tableEditingTools.png')); 
+        } 
+        catch(Exception $e) 
+        { 
+            // Expecting the exception because the icons should not be there 
+            $imageNotFound = true;
+        }
+        
+        $this->assertTrue($imageNotFound, 'The table icons should no longer appear on the screen');
+        
+    }//end testUsingTableIconInTopToolbar()
 
+    
     /**
      * Test that clicking in a cell shows the table editing icon.
      *

@@ -1759,7 +1759,58 @@ Viper.prototype = {
                 }, attributes);
             }//end if
         } else {
-            var bookmark       = this.createBookmark();
+            var nodeSelection    = range.getNodeSelection();
+            var startBlockParent = dfx.getFirstBlockParent(startContainer);
+            var endBlockParent   = dfx.getFirstBlockParent(endContainer);
+            var bookmark         = this.createBookmark();
+
+            if (startBlockParent === endBlockParent && !nodeSelection) {
+                // Same block parent, create only one tag that wraps the whole
+                // selection.
+                if (!bookmark.start.previousSibling) {
+                    // Move bookmark outside of its parent.
+                    dfx.insertBefore(bookmark.start.parentNode, bookmark.start);
+                }
+
+                if (!bookmark.end.nextSibling) {
+                    // Move bookmark outside of its parent.
+                    dfx.insertAfter(bookmark.end.parentNode, bookmark.end);
+                }
+
+                var elements = dfx.getElementsBetween(bookmark.start, bookmark.end);
+                if (elements.length > 0) {
+                    var newElement = document.createElement(otag);
+                    dfx.insertBefore(bookmark.start, newElement);
+                    newElement.appendChild(bookmark.start);
+
+                    var c = elements.length;
+                    for (var i = 0; i < c; i++) {
+                        newElement.appendChild(elements[i]);
+                    }
+
+                    // If there are any nested tags of same type then remove them.
+                    var sameTags = dfx.getTag(otag, newElement);
+                    for (var i = 0; i < sameTags.length; i++) {
+                        while (sameTags[i].firstChild) {
+                            dfx.insertBefore(sameTags[i], sameTags[i].firstChild);
+                        }
+
+                        dfx.remove(sameTags[i]);
+                    }
+
+                    newElement.appendChild(bookmark.end);
+                }//end if
+
+                if (keepSelection !== true) {
+                    this.selectBookmark(bookmark);
+                } else {
+                    dfx.remove(bookmark.start);
+                    dfx.remove(bookmark.end);
+                }
+
+                return;
+            }//end if
+
             var startContainer = null;
             var endContainer   = null;
             startContainer     = bookmark.start.previousSibling;

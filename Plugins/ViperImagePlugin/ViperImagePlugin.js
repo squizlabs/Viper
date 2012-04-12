@@ -45,6 +45,12 @@ ViperImagePlugin.prototype = {
                     });
                 }
 
+                // Enable toolbar if its not already due to event cancelation.
+                var toolbar = self.viper.ViperPluginManager.getPlugin('ViperToolbarPlugin');
+                if (toolbar && toolbar.isDisabled() === true) {
+                    toolbar.enable();
+                }
+
                 return false;
             } else {
                 self._updateToolbar();
@@ -74,6 +80,14 @@ ViperImagePlugin.prototype = {
 
         this.viper.registerCallback('ViperHistoryManager:beforeUndo', 'ViperImagePlugin', function() {
             self.hideImageResizeHandles();
+        });
+
+        this.viper.registerCallback('ViperCoreStylesPlugin:beforeImageUpdate', 'ViperImagePlugin', function(image) {
+            self.hideImageResizeHandles();
+        });
+
+        this.viper.registerCallback('ViperCoreStylesPlugin:afterImageUpdate', 'ViperImagePlugin', function(image) {
+            self.showImageResizeHandles(image);
         });
 
     },
@@ -189,9 +203,11 @@ ViperImagePlugin.prototype = {
     {
         if (!image) {
             return;
+        } else if (title === null) {
+            image.removeAttribute('title');
+        } else {
+            image.setAttribute('title', title);
         }
-
-        image.setAttribute('title', title);
 
     },
 
@@ -222,6 +238,8 @@ ViperImagePlugin.prototype = {
             if (pres === true) {
                 title = null;
                 alt   = '';
+            } else if (title === '') {
+                title = null;
             }
 
             if (!self._resizeImage || dfx.isTag(self._resizeImage, 'img') === false) {
@@ -482,7 +500,7 @@ ViperImagePlugin.prototype = {
             dfx.setStyle(this._resizeImage, 'height', '');
         }
 
-        if (!this._resizeImage.getAttribute('style')) {
+        if (!this._resizeImage.getAttribute('style') || this._resizeImage.getAttribute('style') === 'null') {
             this._resizeImage.removeAttribute('style');
         }
 
@@ -493,7 +511,6 @@ ViperImagePlugin.prototype = {
 
     _fixImageResize: function()
     {
-        dfx.setStyle(this._resizeImage, 'display', '');
         dfx.setStyle(this._resizeImage, 'left', '');
         dfx.setStyle(this._resizeImage, 'top', '');
         dfx.setStyle(this._resizeImage, 'resize', '');

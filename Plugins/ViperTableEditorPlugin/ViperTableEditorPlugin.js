@@ -8,6 +8,7 @@ function ViperTableEditorPlugin(viper)
     this.toolbarPlugin     = null;
     this.activeCell        = null;
     this._highlightElement = null;
+    this._cellTools        = null;
 
     this._buttonClicked = false;
     this._tableRawCells = null;
@@ -158,7 +159,11 @@ ViperTableEditorPlugin.prototype = {
                     // Show cell tools.
                     var cell = self._getCellElement(node);
                     if (cell) {
-                        self.showCellToolsIcon(cell, true);
+                        if (self._cellTools && dfx.hasClass(self._cellTools, 'topBar') === true) {
+                            self.hideCellToolsIcon();
+                        } else {
+                            self.showCellToolsIcon(cell, true);
+                        }
                     }
                 } else {
                     self.toolbarPlugin.toggleBubble('VTEP-bubble');
@@ -240,6 +245,7 @@ ViperTableEditorPlugin.prototype = {
                         if (dfx.getParents(node, 'li', self.viper.getViperElement()).length > 0) {
                             self._tools.disableButton('insertTable');
                         } else {
+                            self._tools.enableButton('insertTable');
                             self._tools.setButtonInactive('insertTable');
                         }
                     }
@@ -364,6 +370,7 @@ ViperTableEditorPlugin.prototype = {
         tools    = document.createElement('div');
         tools.id = toolsid;
         dfx.addClass(tools, 'ViperITP themeDark compact visible');
+        this._cellTools = tools;
 
         // Table, row, col and cell buttons. Initially only the table icon is visible
         // Whent he mouse is moved over the table icon, rest of the buttons become
@@ -476,6 +483,8 @@ ViperTableEditorPlugin.prototype = {
         if (tools) {
             dfx.remove(tools);
         }
+
+        this._cellTools = null;
 
     },
 
@@ -767,8 +776,10 @@ ViperTableEditorPlugin.prototype = {
         this.viper.addElement(hElem);
         this._highlightElement = hElem;
 
-        dfx.addEvent(hElem, 'mousedown', function() {
+        dfx.addEvent(hElem, 'mousedown', function(e) {
+            dfx.preventDefault(e);
             dfx.remove(hElem);
+            return false;
         });
 
     },
@@ -2788,7 +2799,7 @@ ViperTableEditorPlugin.prototype = {
 
     },
 
-    insertTable: function(rows, cols, headerType)
+    insertTable: function(rows, cols, headerType, tableid)
     {
         this.viper.ViperHistoryManager.begin();
 
@@ -2798,6 +2809,19 @@ ViperTableEditorPlugin.prototype = {
         var table = document.createElement('table');
         // First hide the table so we can determine if there are borders etc.
         dfx.setStyle(table, 'display', 'none');
+
+        // Create a table id.
+        if (!tableid) {
+            while (!tableid) {
+                tableid   = 'table' + dfx.getUniqueId().substr(-5, 5);
+                var tElem = dfx.getId(tableid);
+                if (tElem) {
+                    tableid = null;
+                }
+            }
+        }
+
+        table.setAttribute('id', tableid);
 
         var tbody      = document.createElement('tbody');
         var firstCol   = null;
@@ -2884,6 +2908,8 @@ ViperTableEditorPlugin.prototype = {
         this.viper.fireSelectionChanged();
         this.viper.fireNodesChanged([table]);
 
+        this.setTableHeaders(table);
+
         this.viper.ViperHistoryManager.end();
 
         return table;
@@ -2904,18 +2930,23 @@ ViperTableEditorPlugin.prototype = {
             }
         }
 
+        var thElements = dfx.getTag('th', table);
+        if (thElements.length === 0) {
+            return;
+        }
+
         var tableId = table.getAttribute('id');
 
         if (!tableId) {
             while (!tableId) {
-                tableId   = dfx.getUniqueId().substr(-5, 5);
+                tableId   = 'table' + dfx.getUniqueId().substr(-5, 5);
                 var tElem = dfx.getId(tableId);
                 if (tElem) {
                     tableId = null;
                 }
             }
 
-            table.setAttribute('id', tableId);
+            table.setAttribute('id', 'table' + tableId);
         }
 
         var cellHeadings  = [];
@@ -3105,8 +3136,9 @@ ViperTableEditorPlugin.prototype = {
                         }
                     }
 
-                    // TODO: Dont do this if it has headers attribute.
-                    if (dfx.isBlank(dfx.getHtml(cell)) === false) {
+                    if (dfx.isBlank(dfx.getHtml(cell)) === false
+                        && cellHeadings[rowCount][cellCount]
+                    ) {
                         var headers = cellHeadings[rowCount][cellCount].id;
                         for (var i = 1; i < cellCount; i++) {
                             // Skip column headers. We only want to use our own column header.

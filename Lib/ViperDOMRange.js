@@ -732,6 +732,7 @@ ViperDOMRange.prototype = {
         }
 
         // We may need to adjust the "startNode" depending on its offset.
+        var startMoved = null;
         if (startNode.nodeType === dfx.TEXT_NODE) {
             if (range.startOffset !== 0) {
                 if (range.startOffset !== startNode.data.length) {
@@ -745,6 +746,11 @@ ViperDOMRange.prototype = {
                             return null;
                         }
                     } else {
+                        startMoved = {
+                            startContainer: this.startContainer,
+                            startOffset: this.startOffset
+                        };
+
                         // There is no sibling move range by 1 char.
                         this.moveStart(ViperDOMRange.CHARACTER_UNIT, 1);
                         startNode = range.getStartNode();
@@ -762,6 +768,10 @@ ViperDOMRange.prototype = {
             if (startNode.previousSibling.nodeType !== dfx.TEXT_NODE
                 || startNode.previousSibling.data.length !== 0
             ) {
+                if (startMoved) {
+                    this.setStart(startMoved.startContainer, startMoved.startOffset);
+                }
+
                 return null;
             }
         }
