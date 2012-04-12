@@ -283,6 +283,9 @@ ViperAccessibilityPlugin.prototype = {
             return issues;
         }
 
+        // Copy issues..
+        var toMoveIndexes = [];
+        var toMoveElements = []
         var c = issues.length;
         for (var i = 0; i < c; i++) {
             var issue = issues[i];
@@ -291,9 +294,17 @@ ViperAccessibilityPlugin.prototype = {
             }
 
             if (this._dismissedIssues[issue.code].inArray(issue.element) === true) {
-                // Move the issue to the end of the list.
-                issues = issues.concat(issues.splice(i, 1));
+                toMoveIndexes.push(i);
+                toMoveElements.push(issue);
             }
+        }
+
+        toMoveIndexes  = toMoveIndexes.reverse();
+        toMoveElements = toMoveElements.reverse();
+
+        for (var i = 0; i < toMoveIndexes.length; i++) {
+            issues.splice(toMoveIndexes[i], 1);
+            issues.push(toMoveElements[i]);
         }
 
         return issues;
