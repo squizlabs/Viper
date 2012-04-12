@@ -116,7 +116,6 @@ ViperAccessibilityPlugin_WCAG2 = {
             actionButtons.appendChild(button);
         }
 
-
         return buttonid;
 
     },
@@ -155,7 +154,9 @@ ViperAccessibilityPlugin_WCAG2 = {
             var actionButtons = dfx.getClass('actionButtons', div)[0];
 
             var self = this;
-            var dismissButton = this.viper.ViperTools.createButton(dfx.getUniqueId(), 'Dismiss', 'Dismiss Issue', '', function() {
+            var buttonid = dfx.getUniqueId();
+            var dismissButton = this.viper.ViperTools.createButton(buttonid, 'Dismiss', 'Dismiss Issue', '', function() {
+                self.viper.ViperTools.disableButton(buttonid);
                 self.vap.dismissIssue(issueid);
             });
 
