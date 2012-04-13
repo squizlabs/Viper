@@ -1798,12 +1798,16 @@ Viper.prototype = {
             if (startBlockParent === endBlockParent && !nodeSelection) {
                 // Same block parent, create only one tag that wraps the whole
                 // selection.
-                if (!bookmark.start.previousSibling) {
+                if (!bookmark.start.previousSibling
+                    && bookmark.start.parentNode !== startBlockParent
+                ) {
                     // Move bookmark outside of its parent.
                     dfx.insertBefore(bookmark.start.parentNode, bookmark.start);
                 }
 
-                if (!bookmark.end.nextSibling) {
+                if (!bookmark.end.nextSibling
+                    && bookmark.end.parentNode !== endBlockParent
+                ) {
                     // Move bookmark outside of its parent.
                     dfx.insertAfter(bookmark.end.parentNode, bookmark.end);
                 }
@@ -1812,7 +1816,6 @@ Viper.prototype = {
                 if (elements.length > 0) {
                     var newElement = document.createElement(otag);
                     dfx.insertBefore(bookmark.start, newElement);
-                    newElement.appendChild(bookmark.start);
 
                     var c = elements.length;
                     for (var i = 0; i < c; i++) {
@@ -1829,7 +1832,10 @@ Viper.prototype = {
                         dfx.remove(sameTags[i]);
                     }
 
+                    dfx.insertBefore(newElement.firstChild, bookmark.start);
                     newElement.appendChild(bookmark.end);
+
+                    this._setWrapperElemAttributes(newElement, attributes);
                 }//end if
 
                 if (keepSelection !== true) {
