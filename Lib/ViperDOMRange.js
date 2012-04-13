@@ -729,6 +729,12 @@ ViperDOMRange.prototype = {
             && range.endOffset === 0
         ) {
             return range.startContainer;
+        } else if (startNode.nodeType === dfx.ELEMENT_NODE
+            && endNode.nodeType === dfx.TEXT_NODE
+            && range.endOffset === endNode.data.length
+            && this._getLastSelectableChild(startNode) === endNode
+        ) {
+            return startNode;
         }
 
         // We may need to adjust the "startNode" depending on its offset.
