@@ -529,10 +529,10 @@ ViperTableEditorPlugin.prototype = {
 
     },
 
-    tableUpdated: function()
+    tableUpdated: function(table)
     {
         this._tableRawCells = null;
-        var table = this.getCellTable(this.activeCell);
+        table = table || this.getCellTable(this.activeCell);
 
         this.setTableHeaders(table);
         this.viper.fireNodesChanged([table]);
@@ -2349,7 +2349,7 @@ ViperTableEditorPlugin.prototype = {
             dfx.remove(table);
         }
 
-        this.tableUpdated();
+        this.tableUpdated(table);
 
     },
 
@@ -2469,7 +2469,7 @@ ViperTableEditorPlugin.prototype = {
             dfx.remove(table);
         }
 
-        this.tableUpdated();
+        this.tableUpdated(table);
 
     },
 
