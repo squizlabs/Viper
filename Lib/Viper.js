@@ -529,8 +529,8 @@ Viper.prototype = {
             if (hasStubElems !== true) {
                 // Insert initial P tags.
                 var range = this.getCurrentRange();
-                dfx.setHtml(this.element, '<p>&nbsp;</p>');
-                range.setStart(this.element.firstChild, 0);
+                dfx.setHtml(elem, '<p>&nbsp;</p>');
+                range.setStart(elem.firstChild, 0);
 
                 range.collapse(true);
                 ViperSelection.addRange(range);
@@ -538,7 +538,7 @@ Viper.prototype = {
         } else {
             var cleanedContent = this.cleanHTML(content);
             if (cleanedContent !== content) {
-                dfx.setHtml(this.element, cleanedContent);
+                dfx.setHtml(elem, cleanedContent);
             }
         }
 
