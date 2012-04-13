@@ -256,6 +256,10 @@ ViperAccessibilityPlugin.prototype = {
 
     fixIssue: function(issueNum, goNext)
     {
+        if (!issueNum && issueNum !== 00) {
+            issueNum = this.getCurrentIssueNumber();
+        }
+
         this._markAsDone(issueNum);
 
         if (goNext === true) {
@@ -349,6 +353,14 @@ ViperAccessibilityPlugin.prototype = {
         }
 
         return issueElement;
+
+    },
+
+    getCurrentIssueNumber: function()
+    {
+        var currentIssueElem = dfx.getClass('HTMLCS-current', this._htmlcsWrapper)[0];
+        var id = Number(currentIssueElem.id.split('-').pop());
+        return id;
 
     },
 

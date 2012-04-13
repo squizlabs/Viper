@@ -1,4 +1,4 @@
-function Viper(id, options, callback)
+function Viper(id, options, callback, editables)
 {
     this.id           = id;
     this._document    = document;
@@ -20,6 +20,7 @@ function Viper(id, options, callback)
     this._viperElementHolder = null;
     this._subElementActive   = false;
     this._mainElem           = null;
+    this._registeredElements = [];
 
     // This var is used to store the range of Viper before it loses focus. Any plugins
     // that steal focus from Viper element can use getPreviousRange.
@@ -33,6 +34,17 @@ function Viper(id, options, callback)
     }
 
     this.init();
+
+    if (editables && editables.length > 0) {
+        this.registerEditableElements(editables);
+        for (var i = 0; i < editables.length; i++) {
+            (function(editableElement) {
+                dfx.addEvent(editableElement, 'mousedown', function(e) {
+                    self.setEditableElement(editableElement);
+                });
+            }) (editables[i]);
+        }
+    }
 
     if (options) {
         var self = this;
@@ -459,7 +471,11 @@ Viper.prototype = {
 
         this.setEnabled(false);
         this.element = elem;
-        this.initEditableElement();
+
+        if (this._registeredElements.inArray(elem) === false) {
+            this.registerEditableElement(elem);
+        }
+
         this.setEnabled(true);
         this.ViperHistoryManager.setActiveElement(elem);
         this.inlineMode = false;
@@ -474,15 +490,30 @@ Viper.prototype = {
 
     },
 
-    initEditableElement: function()
+    registerEditableElements: function(elements)
     {
-        var elem = this.element;
+        for (var i = 0; i < elements.length; i++) {
+            this.registerEditableElement(elements[i]);
+        }
+
+    },
+
+    registerEditableElement: function(element)
+    {
+        this.initEditableElement(element);
+        this._registeredElements.push(element);
+
+    },
+
+    initEditableElement: function(elem)
+    {
+        var elem = elem || this.element;
         if (!elem) {
             return;
         }
 
         var tmp     = Viper.document.createElement('div');
-        var content = this.getContents();
+        var content = this.getContents(elem);
         dfx.setHtml(tmp, content);
         if (dfx.trim(dfx.getNodeTextContent(tmp)).length === 0 || dfx.getHtml(tmp) === '&nbsp;') {
             // Check for stub elements.
@@ -3902,6 +3933,7 @@ Viper.prototype = {
 
         if (typeof contents === 'string') {
             clone.innerHTML = contents;
+            dfx.remove(dfx.getTag('script', clone));
         } else if (contents) {
             clone.appendChild(contents);
         }

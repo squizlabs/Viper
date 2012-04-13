@@ -157,7 +157,8 @@ ViperKeyboardEditorPlugin.prototype = {
 
                 if (firstBlock) {
                     var firstBlockTagName = dfx.getTagName(firstBlock);
-                    var handleEnter = false;
+                    var handleEnter       = false;
+                    var removeFirstBlock  = false;
                     if (this._tagList.inArray(firstBlockTagName) === true) {
                         handleEnter = true;
                     } else if (firstBlockTagName === 'li'
@@ -183,7 +184,7 @@ ViperKeyboardEditorPlugin.prototype = {
                             && dfx.trim(dfx.getNodeTextContent(firstBlock)) === ''
                         ) {
                             dfx.insertAfter(firstBlock.parentNode, p);
-                            removeFirstBlock = true;console.info(1);
+                            removeFirstBlock = true;
                         } else {
                             if (firstBlockTagName === 'li') {
                                 // Need to move rest of the list items to a new
