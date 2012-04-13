@@ -65,30 +65,6 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
 
 
     /**
-     * Test that you can merge all columns and rows into one.
-     *
-     * @return void
-     */
-    public function testMergingAllColumnsAndRows()
-    {
-        $dir = dirname(__FILE__).'/Images/';
-
-        $this->insertTable();
-        $this->showTools(0, 'cell');
-        $this->click($this->find($this->getImg('icon_mergeSplit.png'), NULL, 0.83));
-        $this->clickInlineToolbarButton($this->getImg('icon_mergeRight.png'));
-        $this->clickInlineToolbarButton($this->getImg('icon_mergeRight.png'));
-        $this->clickInlineToolbarButton($this->getImg('icon_mergeRight.png'));
-        $this->clickInlineToolbarButton($this->getImg('icon_mergeDown.png'));
-        $this->clickInlineToolbarButton($this->getImg('icon_mergeDown.png'));
-
-        $this->execJS('rmTableHeaders(0,true)');
-        $this->assertHTMLMatch('<p>Lorem IPSUM</p><table style="width: 100%;" border="1"><tbody><tr><th colspan="4" rowspan="3">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th></tr></tbody></table><p>dolor</p>');
-
-    }//end testUsingTableIconInTopToolbar()
-
-
-    /**
      * Test that clicking in a cell shows the table editing icon.
      *
      * @return void

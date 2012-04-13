@@ -7,13 +7,77 @@ class Viper_Tests_ViperTableEditorPlugin_MergeAndSplitUnitTest extends AbstractV
 
 
     /**
+     * Test that table ids are correct after merging and splitting cells.
+     *
+     * @return void
+     */
+    public function testTableIdWhenMergingAndSplitingCells()
+    {
+        $textLoc = $this->find('IPSUM');
+
+        $this->selectText('dolor');
+        $this->keyDown('Key.RIGHT');
+        $this->keyDown('Key.ENTER');
+
+        $this->execJS('insTable(3, 6, 3, "test")');
+        sleep(2);
+        $this->click($textLoc);
+
+        $this->assertHTMLMatch('<p>Lorem IPSUM dolor</p><p>&nbsp;</p><table style="width: 100%;" id="test" border="1"><tbody><tr><th id="testr1c1">&nbsp;</th><th id="testr1c2">&nbsp;</th><th id="testr1c3">&nbsp;</th><th id="testr1c4">&nbsp;</th><th id="testr1c5">&nbsp;</th><th id="testr1c6">&nbsp;</th></tr><tr><th id="testr2c1">&nbsp;</th><td headers="testr1c2 testr2c1">&nbsp;</td><td headers="testr1c3 testr2c1">&nbsp;</td><td headers="testr1c4 testr2c1">&nbsp;</td><td headers="testr1c5 testr2c1">&nbsp;</td><td headers="testr1c6 testr2c1">&nbsp;</td></tr><tr><th id="testr3c1">&nbsp;</th><td headers="testr1c2 testr3c1">&nbsp;</td><td headers="testr1c3 testr3c1">&nbsp;</td><td headers="testr1c4 testr3c1">&nbsp;</td><td headers="testr1c5 testr3c1">&nbsp;</td><td headers="testr1c6 testr3c1">&nbsp;</td></tr></tbody></table><p>sit amet <strong>consectetur</strong></p>');
+
+        $this->showTools(8, 'cell');
+        $this->click($this->find($this->getImg('icon_mergeSplit.png'), NULL, 0.83));
+        $this->clickInlineToolbarButton($this->getImg('icon_mergeRight.png'));
+        $this->clickInlineToolbarButton($this->getImg('icon_mergeRight.png'));
+        $this->clickInlineToolbarButton($this->getImg('icon_mergeRight.png'));
+
+        $this->assertHTMLMatch('<p>Lorem IPSUM dolor</p><p>&nbsp;</p><table style="width: 100%;" id="test" border="1"><tbody><tr><th id="testr1c1">&nbsp;</th><th id="testr1c2">&nbsp;</th><th id="testr1c3">&nbsp;</th><th id="testr1c4">&nbsp;</th><th id="testr1c5">&nbsp;</th><th id="testr1c6">&nbsp;</th></tr><tr><th id="testr2c1">&nbsp;</th><td headers="testr1c2 testr2c1">&nbsp;</td><td colspan="4" headers="testr1c3 testr1c4 testr1c5 testr1c6 testr2c1">&nbsp;&nbsp;&nbsp;&nbsp;</td></tr><tr><th id="testr3c1">&nbsp;</th><td headers="testr1c2 testr3c1">&nbsp;</td><td headers="testr1c3 testr3c1">&nbsp;</td><td headers="testr1c4 testr3c1">&nbsp;</td><td headers="testr1c5 testr3c1">&nbsp;</td><td headers="testr1c6 testr3c1">&nbsp;</td></tr></tbody></table><p>sit amet <strong>consectetur</strong></p>');
+
+        $this->click($this->find($this->getImg('icon_splitVert.png'), NULL, 0.83));
+        $this->assertHTMLMatch('<p>Lorem IPSUM dolor</p><p>&nbsp;</p><table style="width: 100%;" id="test" border="1"><tbody><tr><th id="testr1c1">&nbsp;</th><th id="testr1c2">&nbsp;</th><th id="testr1c3">&nbsp;</th><th id="testr1c4">&nbsp;</th><th id="testr1c5">&nbsp;</th><th id="testr1c6">&nbsp;</th></tr><tr><th id="testr2c1">&nbsp;</th><td headers="testr1c2 testr2c1">&nbsp;</td><td colspan="3" headers="testr1c3 testr1c4 testr1c5 testr2c1">&nbsp;&nbsp;&nbsp;&nbsp;</td><td headers="testr1c6 testr2c1">&nbsp;</td></tr><tr><th id="testr3c1">&nbsp;</th><td headers="testr1c2 testr3c1">&nbsp;</td><td headers="testr1c3 testr3c1">&nbsp;</td><td headers="testr1c4 testr3c1">&nbsp;</td><td headers="testr1c5 testr3c1">&nbsp;</td><td headers="testr1c6 testr3c1">&nbsp;</td></tr></tbody></table><p>sit amet <strong>consectetur</strong></p>');
+
+        $this->showTools(4, 'col');
+        $this->click($this->find($this->getImg('icon_trash.png'), NULL, 0.83));
+        $this->assertHTMLMatch('<p>Lorem IPSUM dolor</p><p>&nbsp;</p><table style="width: 100%; " id="test" border="1"><tbody><tr><th id="testr1c1">&nbsp;</th><th id="testr1c2">&nbsp;</th><th id="testr1c3">&nbsp;</th><th id="testr1c4">&nbsp;</th><th id="testr1c6">&nbsp;</th></tr><tr><th id="testr2c1">&nbsp;</th><td headers="testr1c2 testr2c1">&nbsp;</td><td colspan="2" headers="testr1c3 testr1c4 testr2c1">&nbsp;&nbsp;&nbsp;&nbsp;</td><td headers="testr1c6 testr2c1">&nbsp;</td></tr><tr><th id="testr3c1">&nbsp;</th><td headers="testr1c2 testr3c1">&nbsp;</td><td headers="testr1c3 testr3c1">&nbsp;</td><td headers="testr1c4 testr3c1">&nbsp;</td><td headers="testr1c6 testr3c1">&nbsp;</td></tr></tbody></table><p>sit amet <strong>consectetur</strong></p>');
+
+    }//end testTableIdWhenMergingAndSplitingCells()
+
+
+    /**
+     * Test that you can merge all columns and rows into one.
+     *
+     * @return void
+     */
+    public function testMergingAllColumnsAndRows()
+    {
+        $dir = dirname(__FILE__).'/Images/';
+
+        $this->insertTable();
+        $this->showTools(0, 'cell');
+        $this->click($this->find($this->getImg('icon_mergeSplit.png'), NULL, 0.83));
+        $this->clickInlineToolbarButton($this->getImg('icon_mergeRight.png'));
+        $this->clickInlineToolbarButton($this->getImg('icon_mergeRight.png'));
+        $this->clickInlineToolbarButton($this->getImg('icon_mergeRight.png'));
+        $this->clickInlineToolbarButton($this->getImg('icon_mergeDown.png'));
+        $this->clickInlineToolbarButton($this->getImg('icon_mergeDown.png'));
+
+        $this->execJS('rmTableHeaders(0,true)');
+        $this->assertHTMLMatch('<p>Lorem IPSUM</p><table style="width: 100%;" border="1"><tbody><tr><th colspan="4" rowspan="3">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th></tr></tbody></table><p>dolor</p>');
+
+    }//end testUsingTableIconInTopToolbar()
+
+
+    /**
      * Test that merging and splitting cells work.
      *
      * @return void
      */
-    public function testMergeSplit()
+    public function testMergeSplitA()
     {
-        $this->insertTable(4, 5);
+        $this->selectText('dolor');
+        $this->keyDown('Key.RIGHT');
+        $this->keyDown('Key.ENTER');
+        $this->execJS('insTable(4, 5, 0, "test")');
         sleep(1);
 
         $this->showTools(10, 'cell');
@@ -41,73 +105,35 @@ class Viper_Tests_ViperTableEditorPlugin_MergeAndSplitUnitTest extends AbstractV
             FALSE,
             TRUE
         );
-         
-        $struct   = $this->getTableStructure();
-        $expected = array(
-                     array(array(), array(), array(), array(), array()),
-                     array(array(), array(), array(), array(), array()),
-                     array(array('colspan' => 2), array(), array(), array()),
-                     array(array(), array(), array(), array(), array()),
-                    );
-         
-        $this->assertTableStructure($expected, $struct);
-        sleep(1);
+
+        $this->assertHTMLMatch('<p>Lorem IPSUM dolor</p><p>&nbsp;</p><table style="width: 100%;" id="test" border="1"><tbody><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td colspan="2">&nbsp;&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>sit amet <strong>consectetur</strong></p>');
 
         $this->showTools(5, 'col');
         $this->clickInlineToolbarButton($this->getImg('icon_insertColAfter.png'));
 
-        $struct = $this->getTableStructure();
-
-        $expectedAfter = array(
-                          array(array(), array(), array(), array(), array(), array()),
-                          array(array(), array(), array(), array(), array(), array()),
-                          array(array('colspan' => 3), array(), array(), array()),
-                          array(array(), array(), array(), array(), array(), array()),
-                         );
-
-        $this->assertTableStructure($expectedAfter, $struct);
-        sleep(1);
+        $this->assertHTMLMatch('<p>Lorem IPSUM dolor</p><p>&nbsp;</p><table style="width: 100%;" id="test" border="1"><tbody><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td colspan="3">&nbsp;&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>sit amet <strong>consectetur</strong></p>');
 
         $this->showTools(7, 'col');
         $this->clickInlineToolbarButton($this->getImg('icon_trash.png'));
 
-        $struct = $this->getTableStructure();
-        $this->assertTableStructure($expected, $struct);
-        sleep(1);
+        $this->assertHTMLMatch('<p>Lorem IPSUM dolor</p><p>&nbsp;</p><table style="width: 100%;" id="test" border="1"><tbody><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td colspan="2">&nbsp;&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>sit amet <strong>consectetur</strong></p>');
 
         $this->showTools(14, 'col');
         $this->clickInlineToolbarButton($this->getImg('icon_insertColAfter.png'));
 
-        $struct = $this->getTableStructure();
-        $this->assertTableStructure($expectedAfter, $struct);
-        sleep(1);
+        $this->assertHTMLMatch('<p>Lorem IPSUM dolor</p><p>&nbsp;</p><table style="width: 100%;" id="test" border="1"><tbody><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td colspan="3">&nbsp;&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>sit amet <strong>consectetur</strong></p>');
 
         $this->showTools(12, 'cell');
         $this->click($this->find($this->getImg('icon_mergeSplit.png'), NULL, 0.83));
         $this->clickInlineToolbarButton($this->getImg('icon_splitVert.png'));
 
-        $expected = array(
-                     array(array(), array(), array(), array(), array(), array()),
-                     array(array(), array(), array(), array(), array(), array()),
-                     array(array('colspan' => 2), array(), array(), array(), array()),
-                     array(array(), array(), array(), array(), array(), array()),
-                    );
-        $struct = $this->getTableStructure();
-        $this->assertTableStructure($expected, $struct);
-        sleep(1);
+        $this->assertHTMLMatch('<p>Lorem IPSUM dolor</p><p>&nbsp;</p><table style="width: 100%;" id="test" border="1"><tbody><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td colspan="2">&nbsp;&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>sit amet <strong>consectetur</strong></p>');
 
         $this->showTools(12, 'cell');
         $this->click($this->find($this->getImg('icon_mergeSplit.png'), NULL, 0.83));
         $this->clickInlineToolbarButton($this->getImg('icon_splitVert.png'));
 
-        $expected = array(
-                     array(array(), array(), array(), array(), array(), array()),
-                     array(array(), array(), array(), array(), array(), array()),
-                     array(array(), array(), array(), array(), array(), array()),
-                     array(array(), array(), array(), array(), array(), array()),
-                    );
-        $struct = $this->getTableStructure();
-        $this->assertTableStructure($expected, $struct);
+        $this->assertHTMLMatch('<p>Lorem IPSUM dolor</p><p>&nbsp;</p><table style="width: 100%;" id="test" border="1"><tbody><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>sit amet <strong>consectetur</strong></p>');
 
     }//end testMergeSplit()
 
@@ -119,7 +145,10 @@ class Viper_Tests_ViperTableEditorPlugin_MergeAndSplitUnitTest extends AbstractV
      */
     public function testMergeSplit2()
     {
-        $this->insertTable(4, 5);
+        $this->selectText('dolor');
+        $this->keyDown('Key.RIGHT');
+        $this->keyDown('Key.ENTER');
+        $this->execJS('insTable(4, 5, 2, "test")');
         sleep(1);
 
         $this->showTools(6, 'cell');
@@ -136,7 +165,7 @@ class Viper_Tests_ViperTableEditorPlugin_MergeAndSplitUnitTest extends AbstractV
         );
 
         $this->clickInlineToolbarButton($this->getImg('icon_mergeDown.png'));
-        
+
          // Check that all merge icons still are enabled.
         $this->assertIconStatusesCorrect(
             FALSE,
@@ -146,7 +175,7 @@ class Viper_Tests_ViperTableEditorPlugin_MergeAndSplitUnitTest extends AbstractV
             TRUE,
             TRUE
         );
-        
+
         $expected = array(
                      array(array(), array(), array(), array(), array()),
                      array(array(), array('rowspan' => 2), array(), array(), array()),
@@ -222,7 +251,10 @@ class Viper_Tests_ViperTableEditorPlugin_MergeAndSplitUnitTest extends AbstractV
      */
     public function testMergeSplit3()
     {
-        $this->insertTable(2, 3);
+        $this->selectText('dolor');
+        $this->keyDown('Key.RIGHT');
+        $this->keyDown('Key.ENTER');
+        $this->execJS('insTable(2, 3, 2, "test")');
         sleep(1);
 
         $this->showTools(0, 'cell');
@@ -382,7 +414,10 @@ class Viper_Tests_ViperTableEditorPlugin_MergeAndSplitUnitTest extends AbstractV
      */
     public function testMergeSplit4()
     {
-        $this->insertTable(2, 3);
+        $this->selectText('dolor');
+        $this->keyDown('Key.RIGHT');
+        $this->keyDown('Key.ENTER');
+        $this->execJS('insTable(2, 3, 2, "test")');
         sleep(1);
 
         $this->showTools(0, 'cell');
