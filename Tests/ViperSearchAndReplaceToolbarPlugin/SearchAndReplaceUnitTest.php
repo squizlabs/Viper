@@ -20,13 +20,18 @@ class Viper_Tests_ViperSearchAndReplaceToolbarPlugin_SearchAndReplaceUnitTest ex
         $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_searchAndReplace.png'), 'Toolbar button icon is not correct');
 
         $this->clickTopToolbarButton($dir.'toolbarIcon_searchAndReplace.png');
-        $this->type('search');
+        $this->type('federal');
         $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_findNext.png'), 'Find Next icon should be not be disabled');
         $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_replace_disabled.png'), 'Replace icon should be disabled');
         $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_replaceAll_disabled.png'), 'Replace all icon should be disabled');
 
         $this->keyDown('Key.TAB');
         $this->type('replace');
+        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_findNext.png'), 'Find Next icon should be not be disabled');
+        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_replace_disabled.png'), 'Replace icon should be not be disabled');
+        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_replaceAll_disabled.png'), 'Replace all icon should not be disabled');
+
+        $this->clickTopToolbarButton($dir.'toolbarIcon_findNext.png');
         $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_findNext.png'), 'Find Next icon should be not be disabled');
         $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_replace.png'), 'Replace icon should be not be disabled');
         $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_replaceAll.png'), 'Replace all icon should not be disabled');
