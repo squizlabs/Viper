@@ -75,7 +75,7 @@ ViperAccessibilityPlugin.prototype = {
     _createIssueDetail: function(id, issue, resolutionElem, detailsElem)
     {
         var issueDoneElem = document.createElement('div');
-        dfx.addClass(issueDoneElem, 'issueDoneCont');
+        dfx.addClass(issueDoneElem, 'Viper-issueDoneCont');
         detailsElem.appendChild(issueDoneElem);
 
         var main = resolutionElem;
@@ -88,20 +88,20 @@ ViperAccessibilityPlugin.prototype = {
             var resolutionCont = document.createElement('div');
             dfx.addClass(resolutionCont, 'ViperAP-issueResolution');
 
-            var resHtml = '<div class="resolutionHeader"><strong>Resolution</strong></div>';
+            var resHtml = '<div class="Viper-resolutionHeader"><strong>Resolution</strong></div>';
 
             dfx.setHtml(resolutionCont, resHtml);
             main.appendChild(resolutionCont);
 
-            var resolutionHeader = dfx.getClass('resolutionHeader', resolutionCont)[0];
+            var resolutionHeader = dfx.getClass('Viper-resolutionHeader', resolutionCont)[0];
 
             // Create resolution tools.
             var tools = self.viper.ViperTools;
-            var locateBtn     = tools.createButton('VAP:locateElem', '', 'Locate Element', 'locate', function() {
+            var locateBtn     = tools.createButton('VAP:locateElem', '', 'Locate Element', 'Viper-locate', function() {
                 HTMLCSAuditor.pointToElement(issue.element);
             });
             resolutionHeader.appendChild(locateBtn);
-            var sourceViewBtn = tools.createButton('VAP:showInSource', '', 'Show in Source View', 'sourceView', function() {
+            var sourceViewBtn = tools.createButton('VAP:showInSource', '', 'Show in Source View', 'Viper-sourceView', function() {
                 var tmpText = document.createTextNode('__SCROLL_TO_HERE__');
                 dfx.insertAfter(issue.element, tmpText);
                 var sourceViewPlugin = self.viper.getPluginManager().getPlugin('ViperSourceViewPlugin');
@@ -117,7 +117,7 @@ ViperAccessibilityPlugin.prototype = {
             });
             resolutionHeader.appendChild(sourceViewBtn);
 
-            var refreshIssueBtn = tools.createButton('VAP:toggleIssueDone', '', 'Refresh Issue', 'accessRerun', function() {
+            var refreshIssueBtn = tools.createButton('VAP:toggleIssueDone', '', 'Refresh Issue', 'Viper-accessRerun', function() {
                 self.refreshIssue(id, issue, detailsElem, detailsElem);
             });
             resolutionHeader.appendChild(refreshIssueBtn);
@@ -187,7 +187,7 @@ ViperAccessibilityPlugin.prototype = {
         toolbar.getBubble('VAP:bubble').showSubSection('VAP:subSection');
 
         // The main toolbar button to toggle the toolbar bubble on and off.
-        var vapButton = tools.createButton('accessibility', '', 'Accessibility Auditor', 'accessAudit', null, true);
+        var vapButton = tools.createButton('accessibility', '', 'Accessibility Auditor', 'Viper-accessAudit', null, true);
         toolbar.setBubbleButton('VAP:bubble', 'accessibility');
         toolbar.addButton(vapButton);
 
@@ -195,14 +195,14 @@ ViperAccessibilityPlugin.prototype = {
 
     refreshIssue: function(issueNum, issue, issueElem, issueDetails)
     {
-        dfx.addClass(issueElem, 'rechecking');
+        dfx.addClass(issueElem, 'Viper-rechecking');
 
         // Add the re-checking issue overlay.
         var issueRecheck = document.createElement('div');
         dfx.addClass(issueRecheck, 'ViperAP-issueRecheck');
         issueDetails.appendChild(issueRecheck);
 
-        dfx.setHtml(issueRecheck, '<div class="issueChecking">Re-checking issue …</div>');
+        dfx.setHtml(issueRecheck, '<div class="Viper-issueChecking">Re-checking issue …</div>');
 
         var self     = this;
         this.runChecks(function() {
@@ -217,18 +217,18 @@ ViperAccessibilityPlugin.prototype = {
 
             if (found === false) {
                 dfx.setHtml(issueRecheck, '');
-                dfx.removeClass(issueElem, 'rechecking');
+                dfx.removeClass(issueElem, 'Viper-rechecking');
 
                 // Mark issue as done.
                 self.fixIssue(issueNum, true);
             } else {
                 dfx.empty(issueRecheck);
                 var issueRemains = document.createElement('div');
-                dfx.addClass(issueRemains, 'issueRemains');
-                dfx.setHtml(issueRemains, '<span class="recheckMessage">This issue has not been resolved</span>');
+                dfx.addClass(issueRemains, 'Viper-issueRemains');
+                dfx.setHtml(issueRemains, '<span class="Viper-recheckMessage">This issue has not been resolved</span>');
                 issueRemains.appendChild(self.viper.ViperTools.createButton('VAP-issues:notResolvedBtn', 'OK', '', '', function() {
                     dfx.setHtml(issueRecheck, '');
-                    dfx.removeClass(issueElem, 'rechecking');
+                    dfx.removeClass(issueElem, 'Viper-rechecking');
                 }));
                 issueRecheck.appendChild(issueRemains);
             }
@@ -274,10 +274,10 @@ ViperAccessibilityPlugin.prototype = {
     _markAsDone: function(issueNum)
     {
         var issueElement = this.getIssueElement(issueNum, 'details');
-        dfx.addClass(issueElement, 'issueDone');
+        dfx.addClass(issueElement, 'Viper-issueDone');
 
         var listItem = this.getIssueElement(issueNum, 'listItem');
-        dfx.addClass(listItem, 'issueDone');
+        dfx.addClass(listItem, 'Viper-issueDone');
 
     },
 

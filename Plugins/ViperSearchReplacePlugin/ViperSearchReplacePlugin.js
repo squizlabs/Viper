@@ -70,7 +70,7 @@ ViperSearchReplacePlugin.prototype = {
         });
         content.appendChild(replace);
 
-        var replaceAllBtn = tools.createButton('ViperSearchPlugin:replaceAll', 'Replace All', 'Replace All', 'replaceAll', function() {
+        var replaceAllBtn = tools.createButton('ViperSearchPlugin:replaceAll', 'Replace All', 'Replace All', 'Viper-replaceAll', function() {
             var replaceCount = 0;
             var fromStart    = true;
             while (self.find(tools.getItem('ViperSearchPlugin:searchInput').getValue(), false, fromStart) === true) {
@@ -83,7 +83,7 @@ ViperSearchReplacePlugin.prototype = {
             self._updateButtonStates();
             self.viper.fireNodesChanged();
         }, true);
-        var replaceBtn = tools.createButton('ViperSearchPlugin:replace', 'Replace', 'Replace', 'replaceText', function() {
+        var replaceBtn = tools.createButton('ViperSearchPlugin:replace', 'Replace', 'Replace', 'Viper-replaceText', function() {
             self.replace(tools.getItem('ViperSearchPlugin:replaceInput').getValue());
             self._updateButtonStates();
             self.viper.fireNodesChanged();
@@ -112,7 +112,7 @@ ViperSearchReplacePlugin.prototype = {
 
         // Create the bubble.
         var searchTools = toolbar.createBubble('ViperSearchPlugin:bubble', 'Search & Replace', content);
-        var searchBtn   = tools.createButton('searchReplace', '', 'Search & Replace', 'searchReplace', null, true);
+        var searchBtn   = tools.createButton('searchReplace', '', 'Search & Replace', 'Viper-searchReplace', null, true);
         toolbar.addButton(searchBtn);
         toolbar.setBubbleButton('ViperSearchPlugin:bubble', 'searchReplace');
 

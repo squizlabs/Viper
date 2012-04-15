@@ -95,7 +95,7 @@ ViperInvisibleCharPlugin.prototype = {
         var self  = this;
         var tools = this.viper.ViperTools;
 
-        var btn = tools.createButton('showHiddenChars', '', 'Toggle Hidden Characters', 'showHiddenChars', function() {
+        var btn = tools.createButton('showHiddenChars', '', 'Toggle Hidden Characters', 'Viper-showHiddenChars', function() {
             if (self._showHiddenChars === false) {
                 self._showHiddenChars = true;
                 self.showHiddenChars();

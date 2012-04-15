@@ -126,7 +126,7 @@ ViperToolbarPlugin.prototype = {
     createToolbar: function()
     {
         var elem = document.createElement('div');
-        dfx.addClass(elem, 'ViperTP-bar themeDark Viper-scalable');
+        dfx.addClass(elem, 'ViperTP-bar Viper-themeDark Viper-scalable');
         this._toolbar = elem;
         dfx.addClass(this._toolbar, 'viper-inactive');
 
@@ -195,7 +195,7 @@ ViperToolbarPlugin.prototype = {
         title = title || '&nbsp;';
 
         var bubble = document.createElement('div');
-        dfx.addClass(bubble, 'ViperITP themeDark visible forTopbar');
+        dfx.addClass(bubble, 'ViperITP Viper-themeDark Viper-visible Viper-forTopbar');
         dfx.setHtml(bubble, '<div class="ViperITP-header">' + title + '</div>');
 
         dfx.addEvent(bubble, 'mousedown', function(e) {
@@ -232,7 +232,7 @@ ViperToolbarPlugin.prototype = {
                     wrapper = wrapper[0];
                 } else {
                     wrapper = document.createElement('div');
-                    dfx.setHtml(wrapper, '<span class="subSectionArrow"></span>');
+                    dfx.setHtml(wrapper, '<span class="Viper-subSectionArrow"></span>');
                     dfx.addClass(wrapper, 'ViperITP-subSectionWrapper');
                     bubble.appendChild(wrapper);
                 }
@@ -269,19 +269,19 @@ ViperToolbarPlugin.prototype = {
                     }
                 }
 
-                dfx.addClass(bubble, 'subSectionVisible');
-                dfx.addClass(this._subSections[id], 'active');
+                dfx.addClass(bubble, 'Viper-subSectionVisible');
+                dfx.addClass(this._subSections[id], 'Viper-active');
 
                 if (this._subSectionButtons[id]) {
                     var button = this._subSectionButtons[id].element;
-                    dfx.addClass(button, 'selected');
+                    dfx.addClass(button, 'Viper-selected');
 
                     // Update the position of the sub section arrow.
-                    var subSectionArrow = dfx.getClass('subSectionArrow', bubble)[0];
+                    var subSectionArrow = dfx.getClass('Viper-subSectionArrow', bubble)[0];
                     var pos             = dfx.getBoundingRectangle(button);
                     var bubblePos       = dfx.getBoundingRectangle(bubble);
                     dfx.setStyle(subSectionArrow, 'left', (pos.x1 - bubblePos.x1) + ((pos.x2 - pos.x1) / 2) + 'px');
-                    dfx.addClass(subSectionArrow, 'visible');
+                    dfx.addClass(subSectionArrow, 'Viper-visible');
                 }
 
                 var inputElements = dfx.getTag('input[type=text], textarea', this._subSections[id]);
@@ -297,12 +297,12 @@ ViperToolbarPlugin.prototype = {
             },
             hideSubSection: function(id) {
                 id = id || this._activeSubSection;
-                dfx.removeClass(bubble, 'subSectionVisible');
-                dfx.removeClass(this._subSections[id], 'active');
+                dfx.removeClass(bubble, 'Viper-subSectionVisible');
+                dfx.removeClass(this._subSections[id], 'Viper-active');
                 this._activeSubSection = null;
 
                 if (this._subSectionButtons[id]) {
-                    dfx.removeClass(this._subSectionButtons[id].element, 'selected');
+                    dfx.removeClass(this._subSectionButtons[id].element, 'Viper-selected');
                 }
             },
             setSubSectionButton: function(sectionid, buttonid) {
@@ -464,7 +464,7 @@ ViperToolbarPlugin.prototype = {
                     }
                 }//end if
 
-                if (dfx.hasClass(button, 'disabled') === true) {
+                if (dfx.hasClass(button, 'Viper-disabled') === true) {
                     return;
                 }
 
@@ -502,7 +502,7 @@ ViperToolbarPlugin.prototype = {
 
     _closeBubble: function(bubbleid)
     {
-        dfx.removeClass(this.viper.ViperTools.getItem(this._bubbleButtons[bubbleid]).element, 'selected');
+        dfx.removeClass(this.viper.ViperTools.getItem(this._bubbleButtons[bubbleid]).element, 'Viper-selected');
         var bubble     = this.viper.ViperTools.getItem(bubbleid);
         var bubbleElem = bubble.element;
         if (bubbleElem.parentNode && bubbleElem.parentNode.nodeType !== dfx.DOCUMENT_FRAGMENT_NODE) {
@@ -533,7 +533,7 @@ ViperToolbarPlugin.prototype = {
             this._closeBubble(this._activeBubble);
         }
 
-        dfx.addClass(this.viper.ViperTools.getItem(this._bubbleButtons[bubbleid]).element, 'selected');
+        dfx.addClass(this.viper.ViperTools.getItem(this._bubbleButtons[bubbleid]).element, 'Viper-selected');
 
         var bubble     = this.viper.ViperTools.getItem(bubbleid);
         var bubbleElem = bubble.element;
@@ -603,9 +603,9 @@ ViperToolbarPlugin.prototype = {
 
         if ((left + toolsWidth) >= windowDim.width) {
             left -= ((toolsWidth / 2) - 40);
-            dfx.addClass(bubble, 'orientationLeft');
+            dfx.addClass(bubble, 'Viper-orientationLeft');
         } else {
-            dfx.removeClass(bubble, 'orientationLeft');
+            dfx.removeClass(bubble, 'Viper-orientationLeft');
         }
 
         dfx.setStyle(bubble, 'left', left + 'px');

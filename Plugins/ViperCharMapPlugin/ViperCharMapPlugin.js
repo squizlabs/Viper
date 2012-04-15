@@ -40,7 +40,7 @@ ViperCharMapPlugin.prototype = {
 
             var tableClass = 'VCMP-table';
             if (i === 0) {
-                tableClass += ' visible';
+                tableClass += ' Viper-visible';
             }
 
             catTable     += '<table class="' + tableClass + '" border="0" cellspacing="0" cellpadding="0"><tbody>';
@@ -70,7 +70,7 @@ ViperCharMapPlugin.prototype = {
 
         var map = toolbar.createBubble('ViperCMP:bubble', 'Insert Character', subContent, null, null, null, 'VCMP-main');
 
-        var toggle = tools.createButton('insertCharacter', '', 'Insert Character', 'charMap', null, true);
+        var toggle = tools.createButton('insertCharacter', '', 'Insert Character', 'Viper-charMap', null, true);
         toolbar.setBubbleButton('ViperCMP:bubble', 'insertCharacter');
         toolbar.addButton(toggle);
 
@@ -79,7 +79,7 @@ ViperCharMapPlugin.prototype = {
         var tables    = dfx.getTag('table', subContent);
 
         // Select the initial item.
-        dfx.addClass(listItems[0], 'selected');
+        dfx.addClass(listItems[0], 'Viper-selected');
 
         dfx.addEvent(listItems, 'click', function(e) {
             var target = dfx.getMouseEventTarget(e);
@@ -87,8 +87,8 @@ ViperCharMapPlugin.prototype = {
                 target = target.parentNode;
             }
 
-            dfx.removeClass(listItems, 'selected');
-            dfx.addClass(target, 'selected');
+            dfx.removeClass(listItems, 'Viper-selected');
+            dfx.addClass(target, 'Viper-selected');
 
             var index = 0;
             while (target.previousSibling) {
@@ -100,8 +100,8 @@ ViperCharMapPlugin.prototype = {
             }
 
             // Show the table at this index.
-            dfx.removeClass(tables, 'visible');
-            dfx.addClass(tables[index], 'visible');
+            dfx.removeClass(tables, 'Viper-visible');
+            dfx.addClass(tables[index], 'Viper-visible');
         });
 
         var btn = document.createElement('div');

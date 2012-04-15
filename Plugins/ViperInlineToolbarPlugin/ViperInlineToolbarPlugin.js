@@ -105,7 +105,7 @@ ViperInlineToolbarPlugin.prototype = {
         });
 
         dfx.addEvent(window, 'resize', function() {
-            if (dfx.hasClass(self._toolbar, 'visible') === true) {
+            if (dfx.hasClass(self._toolbar, 'Viper-visible') === true) {
                 self._updatePosition();
             }
         });
@@ -271,8 +271,8 @@ ViperInlineToolbarPlugin.prototype = {
         if (this._activeSection) {
             var prevSubSection = this._subSections[this._activeSection];
             if (prevSubSection) {
-                dfx.removeClass(prevSubSection, 'active');
-                dfx.removeClass(this.viper.ViperTools.getItem(this._subSectionButtons[this._activeSection]).element, 'selected');
+                dfx.removeClass(prevSubSection, 'Viper-active');
+                dfx.removeClass(this.viper.ViperTools.getItem(this._subSectionButtons[this._activeSection]).element, 'Viper-selected');
 
                 if (ignoreCallbacks !== true) {
                     var closeCallback = this.viper.ViperTools.getItem(this._activeSection)._onCloseCallback;
@@ -282,7 +282,7 @@ ViperInlineToolbarPlugin.prototype = {
                 }
 
                 if (this._activeSection === subSectionid) {
-                    dfx.removeClass(this._toolbar, 'subSectionVisible');
+                    dfx.removeClass(this._toolbar, 'Viper-subSectionVisible');
                     this._activeSection = null;
 
                     dfx.removeEvent(document, 'keydown.ViperInlineToolbarPlugin');
@@ -300,10 +300,10 @@ ViperInlineToolbarPlugin.prototype = {
 
         var subSectionButton = this.viper.ViperTools.getItem(this._subSectionButtons[subSectionid]).element;
         // Make the button selected.
-        dfx.addClass(subSectionButton, 'selected');
+        dfx.addClass(subSectionButton, 'Viper-selected');
 
-        dfx.addClass(subSection, 'active');
-        dfx.addClass(this._toolbar, 'subSectionVisible');
+        dfx.addClass(subSection, 'Viper-active');
+        dfx.addClass(this._toolbar, 'Viper-subSectionVisible');
         this._activeSection = subSectionid;
         this._updateSubSectionArrowPos();
 
@@ -312,7 +312,7 @@ ViperInlineToolbarPlugin.prototype = {
             inputElements[0].focus();
             if (this._autoFocusTextbox === false) {
                 this._autoFocusTextbox = true;
-                dfx.removeClass(inputElements[0].parentNode.parentNode.parentNode, 'active');
+                dfx.removeClass(inputElements[0].parentNode.parentNode.parentNode, 'Viper-active');
             }
         }
 
@@ -474,7 +474,7 @@ ViperInlineToolbarPlugin.prototype = {
 
         range = range || this.viper.getViperRange();
 
-        dfx.removeClass(this._toolbar, 'subSectionVisible');
+        dfx.removeClass(this._toolbar, 'Viper-subSectionVisible');
 
         if (this._lineageClicked !== true) {
             this._setCurrentLineageIndex(null);
@@ -485,9 +485,9 @@ ViperInlineToolbarPlugin.prototype = {
             return;
         }
 
-        dfx.addClass(this._toolbar, 'calcWidth');
+        dfx.addClass(this._toolbar, 'Viper-calcWidth');
         this._updateInnerContainer(range, lineage);
-        dfx.removeClass(this._toolbar, 'calcWidth');
+        dfx.removeClass(this._toolbar, 'Viper-calcWidth');
 
         if (!dfx.getHtml(this._toolsContainer)) {
             this.hideToolbar();
@@ -518,7 +518,7 @@ ViperInlineToolbarPlugin.prototype = {
         dfx.removeEvent(document, 'keydown.ViperInlineToolbarPlugin');
 
         this._activeSection = null;
-        dfx.removeClass(this._toolbar, 'visible');
+        dfx.removeClass(this._toolbar, 'Viper-visible');
 
     },
 
@@ -627,7 +627,7 @@ ViperInlineToolbarPlugin.prototype = {
         this._subSectionContainer = document.createElement('div');
         this._toolbar.appendChild(this._subSectionContainer);
 
-        dfx.addClass(this._toolbar, 'ViperITP themeDark Viper-scalable');
+        dfx.addClass(this._toolbar, 'ViperITP Viper-themeDark Viper-scalable');
         dfx.addClass(this._lineage, 'ViperITP-lineage');
         dfx.addClass(this._toolsContainer, 'ViperITP-tools');
         dfx.addClass(this._subSectionContainer, 'ViperITP-subSectionWrapper');
@@ -725,23 +725,23 @@ ViperInlineToolbarPlugin.prototype = {
 
         var scrollCoords = dfx.getScrollCoords();
 
-        dfx.addClass(this._toolbar, 'calcWidth');
+        dfx.addClass(this._toolbar, 'Viper-calcWidth');
         dfx.setStyle(this._toolbar, 'width', 'auto');
         var toolbarWidth = dfx.getElementWidth(this._toolbar);
-        dfx.removeClass(this._toolbar, 'calcWidth');
+        dfx.removeClass(this._toolbar, 'Viper-calcWidth');
         dfx.setStyle(this._toolbar, 'width', toolbarWidth + 'px');
 
         var windowDim = dfx.getWindowDimensions();
 
         if (verticalOnly !== true) {
             var left = ((rangeCoords.left + ((rangeCoords.right - rangeCoords.left) / 2) + scrollCoords.x) - (toolbarWidth / 2));
-            dfx.removeClass(this._toolbar, 'orientationLeft orientationRight');
+            dfx.removeClass(this._toolbar, 'Viper-orientationLeft Viper-orientationRight');
             if (left < 0) {
                 left += (toolbarWidth / 2);
-                dfx.addClass(this._toolbar, 'orientationLeft');
+                dfx.addClass(this._toolbar, 'Viper-orientationLeft');
             } else if (left + toolbarWidth > windowDim.width) {
                 left -= (toolbarWidth / 2);
-                dfx.addClass(this._toolbar, 'orientationRight');
+                dfx.addClass(this._toolbar, 'Viper-orientationRight');
             }
 
             dfx.setStyle(this._toolbar, 'left', left + 'px');
@@ -750,7 +750,7 @@ ViperInlineToolbarPlugin.prototype = {
         var top = (rangeCoords.bottom + this._margin + scrollCoords.y);
 
         dfx.setStyle(this._toolbar, 'top', top + 'px');
-        dfx.addClass(this._toolbar, 'visible');
+        dfx.addClass(this._toolbar, 'Viper-visible');
 
     },
 
@@ -816,7 +816,7 @@ ViperInlineToolbarPlugin.prototype = {
             dfx.addClass(parent, 'ViperITP-lineageItem');
 
             if (i === (c - 1)) {
-                dfx.addClass(parent, 'selected');
+                dfx.addClass(parent, 'Viper-selected');
             }
 
             dfx.setHtml(parent, this.getReadableTagName(tagName));
@@ -833,8 +833,8 @@ ViperInlineToolbarPlugin.prototype = {
                     self._lineageClicked = true;
                     self._setCurrentLineageIndex(index);
 
-                    dfx.removeClass(linElems, 'selected');
-                    dfx.addClass(clickElem, 'selected');
+                    dfx.removeClass(linElems, 'Viper-selected');
+                    dfx.addClass(clickElem, 'Viper-selected');
 
                     if (self.viper.isBrowser('msie') === true) {
                         // IE changes the range when the mouse is released on an element
@@ -863,7 +863,7 @@ ViperInlineToolbarPlugin.prototype = {
 
         // Add the original user selection to the lineage.
         var parent = document.createElement('li');
-        dfx.addClass(parent, 'ViperITP-lineageItem selected');
+        dfx.addClass(parent, 'ViperITP-lineageItem Viper-selected');
         dfx.setHtml(parent, 'Selection');
         linElems.push(parent);
         this._lineage.appendChild(parent);
@@ -877,8 +877,8 @@ ViperInlineToolbarPlugin.prototype = {
             var prevIndex = self._currentLineageIndex;
             self._setCurrentLineageIndex(lineage.length - 1);
 
-            dfx.removeClass(linElems, 'selected');
-            dfx.addClass(parent, 'selected');
+            dfx.removeClass(linElems, 'Viper-selected');
+            dfx.addClass(parent, 'Viper-selected');
 
             if (self.viper.isBrowser('msie') === true) {
                 // IE changes the range when the mouse is released on an element

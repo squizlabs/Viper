@@ -23,7 +23,7 @@
     white-space: normal;
 }
 
-.ViperITP.themeDark.forTopbar.orientationLeft:before {
+.ViperITP.Viper-themeDark.Viper-forTopbar.Viper-orientationLeft:before {
     left: auto;
     right: 13px;
 }
@@ -32,15 +32,15 @@
     overflow: hidden;
 }
 
-.ViperITP.themeDark.forTopbar .ViperITP-subSectionWrapper {
+.ViperITP.Viper-themeDark.Viper-forTopbar .ViperITP-subSectionWrapper {
     display: block;
 }
 
-.ViperITP.forTopbar .ViperITP-subSectionWrapper .subSectionArrow {
+.ViperITP.Viper-forTopbar .ViperITP-subSectionWrapper .Viper-subSectionArrow {
     display: none;
 }
 
-.ViperITP.forTopbar.subSectionVisible .ViperITP-subSectionWrapper .subSectionArrow.visible {
+.ViperITP.Viper-forTopbar.Viper-subSectionVisible .ViperITP-subSectionWrapper .Viper-subSectionArrow.Viper-visible {
     display: block;
 }
 

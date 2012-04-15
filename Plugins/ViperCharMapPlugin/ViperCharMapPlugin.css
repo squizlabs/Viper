@@ -4,7 +4,7 @@ table.VCMP-table {
     display: none;
 }
 
-table.VCMP-table.visible {
+table.VCMP-table.Viper-visible {
     display: block;
 }
 
@@ -85,7 +85,7 @@ table.VCMP-table tr td:nth-of-type(7) {
     margin-top: -7px;
 }
 
-.VCMP-list li.selected {
+.VCMP-list li.Viper-selected {
     box-shadow: none;
     background-color: rgba(0, 0, 0, 0.15);
 }

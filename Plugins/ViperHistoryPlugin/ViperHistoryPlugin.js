@@ -19,10 +19,10 @@ ViperHistoryPlugin.prototype = {
             };
 
             var btnGroup = tools.createButtonGroup('ViperHistoryPlugin:buttons');
-            tools.createButton('undo', '', 'Undo', 'historyUndo', function() {
+            tools.createButton('undo', '', 'Undo', 'Viper-historyUndo', function() {
                 return self.handleUndo();
             });
-            tools.createButton('redo', '', 'Redo', 'historyRedo', function() {
+            tools.createButton('redo', '', 'Redo', 'Viper-historyRedo', function() {
                 return self.handleRedo();
             });
             tools.addButtonToGroup('undo', 'ViperHistoryPlugin:buttons');

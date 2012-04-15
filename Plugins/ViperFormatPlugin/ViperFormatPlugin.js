@@ -89,7 +89,7 @@ ViperFormatPlugin.prototype = {
 
         for (var i = 1; i <= 6; i++) {
             (function(headingCount) {
-                tools.createButton(prefix + 'heading:h' + headingCount, 'H' + headingCount, 'Convert to Heading ' + headingCount, null, function() {
+                tools.createButton(prefix + 'heading:h' + headingCount, 'Viper-H' + headingCount, 'Convert to Heading ' + headingCount, null, function() {
                     self.handleFormat('h' + headingCount);
                 });
                 tools.addButtonToGroup(prefix + 'heading:h' + headingCount, prefix + 'headingFormats');
@@ -296,13 +296,13 @@ ViperFormatPlugin.prototype = {
         }
 
         if (formatsSubSection) {
-            tools.createButton('vitpFormats', '', 'Toggle Formats', 'formats', null, false, hasActiveFormat);
+            tools.createButton('vitpFormats', '', 'Toggle Formats', 'Viper-formats', null, false, hasActiveFormat);
             tools.addButtonToGroup('vitpFormats', prefix + 'formatsAndHeading:buttons');
             toolbar.setSubSectionButton('vitpFormats', prefix + 'formats:subSection');
         }
 
         if (headingsSubSection) {
-            tools.createButton('vitpHeadings', '', 'Toggle Headings', 'headings', null, false, hasActiveHeading);
+            tools.createButton('vitpHeadings', '', 'Toggle Headings', 'Viper-headings', null, false, hasActiveHeading);
             tools.addButtonToGroup('vitpHeadings', prefix + 'formatsAndHeading:buttons');
             toolbar.setSubSectionButton('vitpHeadings', prefix + 'heading:subSection');
         }
@@ -332,7 +332,7 @@ ViperFormatPlugin.prototype = {
             toolbar.addButton(buttonGroup);
 
             // Anchor.
-            tools.createButton('vitpAnchor', '', 'Anchor name (ID)', 'anchorID', null, false, anchorBtnActive);
+            tools.createButton('vitpAnchor', '', 'Anchor name (ID)', 'Viper-anchorID', null, false, anchorBtnActive);
             tools.addButtonToGroup('vitpAnchor', prefix + 'anchorAndClassButtons');
 
             toolbar.makeSubSection(prefix + 'anchor:subSection', this._getAnchorSection(prefix));
@@ -344,7 +344,7 @@ ViperFormatPlugin.prototype = {
             tools.getItem(prefix + 'anchor:input').setValue(attrId);
 
             // Class.
-            tools.createButton('vitpClass', '', 'Class name', 'cssClass', null, false, classBtnActive);
+            tools.createButton('vitpClass', '', 'Class name', 'Viper-cssClass', null, false, classBtnActive);
             tools.addButtonToGroup('vitpClass', prefix + 'anchorAndClassButtons');
 
             toolbar.makeSubSection(prefix + 'class:subSection', this._getClassSection(prefix));
@@ -369,15 +369,15 @@ ViperFormatPlugin.prototype = {
 
         // Toolbar buttons.
         var buttonGroup = tools.createButtonGroup(prefix + 'formatAndHeadingButtons');
-        tools.createButton('formats', '', 'Formats', 'formats', null, true);
-        tools.createButton('headings', '', 'Headings', 'headings', null, true);
+        tools.createButton('formats', '', 'Formats', 'Viper-formats', null, true);
+        tools.createButton('headings', '', 'Headings', 'Viper-headings', null, true);
         tools.addButtonToGroup('formats', prefix + 'formatAndHeadingButtons');
         tools.addButtonToGroup('headings', prefix + 'formatAndHeadingButtons');
         toolbar.addButton(buttonGroup);
 
         var buttonGroup = tools.createButtonGroup(prefix + 'anchorAndClassButtons');
-        tools.createButton('anchor', '', 'Anchor ID', 'anchorID', null, true);
-        tools.createButton('class', '', 'Class', 'cssClass', null, true);
+        tools.createButton('anchor', '', 'Anchor ID', 'Viper-anchorID', null, true);
+        tools.createButton('class', '', 'Class', 'Viper-cssClass', null, true);
         tools.addButtonToGroup('anchor', prefix + 'anchorAndClassButtons');
         tools.addButtonToGroup('class', prefix + 'anchorAndClassButtons');
         toolbar.addButton(buttonGroup);
@@ -533,7 +533,7 @@ ViperFormatPlugin.prototype = {
                 classBtnActive = true;
             }
 
-            var button = tools.createButton(prefix + 'classBtn', '', 'Class name', 'cssClass', null, false, classBtnActive);
+            var button = tools.createButton(prefix + 'classBtn', '', 'Class name', 'Viper-cssClass', null, false, classBtnActive);
             data.toolbar.addButton(button, buttonIndex);
 
             var self = this;

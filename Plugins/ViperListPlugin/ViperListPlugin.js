@@ -23,22 +23,22 @@ ViperListPlugin.prototype = {
             };
 
             var btnGroup = tools.createButtonGroup('ViperListPlugin:vtp:buttons');
-            tools.createButton('unorderedList', '', 'Make Unordered List', 'listUL', function() {
+            tools.createButton('unorderedList', '', 'Make Unordered List', 'Viper-listUL', function() {
                 var statuses = self._getButtonStatuses(null, true);
                 return self._makeListButtonAction(statuses.list, 'ul');
             }, true);
-            tools.createButton('orderedList', '', 'Make Ordered List', 'listOL', function() {
+            tools.createButton('orderedList', '', 'Make Ordered List', 'Viper-listOL', function() {
                 var statuses = self._getButtonStatuses(null, true);
                 return self._makeListButtonAction(statuses.list, 'ol');
             }, true);
-            tools.createButton('indentList', '', 'Indent List', 'listIndent', function() {
+            tools.createButton('indentList', '', 'Indent List', 'Viper-listIndent', function() {
                 if (self.tabRange(null, false, true) === false) {
                     self.convertRangeToList();
                 } else {
                     self.tabRange();
                 }
             }, true);
-            tools.createButton('outdentList', '', 'Outdent List', 'listOutdent', function() {
+            tools.createButton('outdentList', '', 'Outdent List', 'Viper-listOutdent', function() {
                 self.tabRange(null, true);
             }, true);
             tools.addButtonToGroup('unorderedList', 'ViperListPlugin:vtp:buttons');
@@ -1300,11 +1300,11 @@ ViperListPlugin.prototype = {
         if (statuses.ul === true || statuses.ol === true) {
             var list = statuses.list;
 
-            tools.createButton('vitpUnorderedList', '', 'Make Unordered List', 'listUL', function() {
+            tools.createButton('vitpUnorderedList', '', 'Make Unordered List', 'Viper-listUL', function() {
                 self._makeListButtonAction(list, 'ul');
             }, !statuses.ul, dfx.isTag(list, 'ul'));
 
-            tools.createButton('vitpOrderedList', '', 'Make Ordered List', 'listOL', function() {
+            tools.createButton('vitpOrderedList', '', 'Make Ordered List', 'Viper-listOL', function() {
                 self._makeListButtonAction(list, 'ol');
             }, !statuses.ol, dfx.isTag(list, 'ol'));
 
@@ -1313,10 +1313,10 @@ ViperListPlugin.prototype = {
         }
 
         if (statuses.increaseIndent === true || statuses.decreaseIndent === true) {
-            tools.createButton('vitpIndentList', '', 'Indent List', 'listIndent', function() {
+            tools.createButton('vitpIndentList', '', 'Indent List', 'Viper-listIndent', function() {
                 self.tabRange();
             }, !statuses.increaseIndent);
-            tools.createButton('vitpOutdentList', '', 'Outdent List', 'listOutdent', function() {
+            tools.createButton('vitpOutdentList', '', 'Outdent List', 'Viper-listOutdent', function() {
                 self.tabRange(null, true);
             }, !statuses.decreaseIndent);
 

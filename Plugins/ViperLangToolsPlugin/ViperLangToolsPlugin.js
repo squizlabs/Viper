@@ -389,7 +389,7 @@ ViperLangToolsPlugin.prototype = {
 
         var bubble = tools.getItem('ViperLangToolsPlugin:bubble');
 
-        var toggleBtn = tools.createButton('langTools', '', 'Toggle Language Tools', 'langTools', null, true);
+        var toggleBtn = tools.createButton('langTools', '', 'Toggle Language Tools', 'Viper-langTools', null, true);
         toolbar.setBubbleButton('ViperLangToolsPlugin:bubble', 'langTools');
         toolbar.addButton(toggleBtn);
 

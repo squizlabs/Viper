@@ -21,7 +21,7 @@ ViperSourceViewPlugin.prototype = {
         var self = this;
         this.toolbarPlugin = this.viper.ViperPluginManager.getPlugin('ViperToolbarPlugin');
         if (this.toolbarPlugin) {
-            var toggle = this.viper.ViperTools.createButton('sourceEditor', '', 'Toggle Source View', 'sourceView', function() {
+            var toggle = this.viper.ViperTools.createButton('sourceEditor', '', 'Toggle Source View', 'Viper-sourceView', function() {
                 self.toggleSourceView();
             }, true);
             this.toolbarPlugin.addButton(toggle);
@@ -211,7 +211,7 @@ ViperSourceViewPlugin.prototype = {
         dfx.addClass(popupBottom, 'VSVP-bottomPanel');
 
         if (this.viper.isBrowser('msie') === false) {
-            var newWindowButton   = tools.createButton('VSVP:newWindow', '', 'Open In new window', 'VSVP-bottomPanel-newWindow sourceNewWindow', function() {
+            var newWindowButton   = tools.createButton('VSVP:newWindow', '', 'Open In new window', 'VSVP-bottomPanel-newWindow Viper-sourceNewWindow', function() {
                 self.openInNewWindow();
             });
             popupBottom.appendChild(newWindowButton);
@@ -447,7 +447,7 @@ ViperSourceViewPlugin.prototype = {
         }
 
         content += '<body id="ViperSourceViewPlugin-window" class="ViperSourceViewPlugin-window">';
-        content += '<div class="Viper-popup themeDark VSVP-popup">';
+        content += '<div class="Viper-popup Viper-themeDark VSVP-popup">';
         content += '<div class="VSVP-confirmPanel Viper-popup-top">';
         content += '<div class="VSVP-confirmText">Changes you make to the source code will be reflected in your edit preview window in real time.</div>';
         content += '<div class="Viper-button" title="Close Changes" onclick="window.close();">Close Window</div></div>';

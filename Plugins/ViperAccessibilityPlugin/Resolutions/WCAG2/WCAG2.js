@@ -23,7 +23,7 @@ ViperAccessibilityPlugin_WCAG2 = {
 
         var element = document.createElement('div');
         dfx.setHtml(element, content);
-        dfx.addClass(element, 'issueWcag');
+        dfx.addClass(element, 'Viper-issueWcag');
 
         callback.call(this, element);
 
@@ -109,7 +109,7 @@ ViperAccessibilityPlugin_WCAG2 = {
             }
         }
 
-        var actionButtons = dfx.getClass('actionButtons', resolutionContainer)[0];
+        var actionButtons = dfx.getClass('Viper-actionButtons', resolutionContainer)[0];
         if (actionButtons.firstChild) {
             dfx.insertBefore(actionButtons.firstChild, button);
         } else {
@@ -133,7 +133,7 @@ ViperAccessibilityPlugin_WCAG2 = {
         var div = document.createElement('div');
         dfx.addClass(div, objName);
 
-        var content = '<div class="resolutionInstructions">';
+        var content = '<div class="Viper-resolutionInstructions">';
 
         switch (issue.type) {
             case HTMLCS.ERROR:
@@ -147,11 +147,11 @@ ViperAccessibilityPlugin_WCAG2 = {
         }
 
         content += '</div>';
-        content += '<div class="resolutionActions"><div class="editing"></div><div class="actionButtons"></div></div>';
+        content += '<div class="Viper-resolutionActions"><div class="Viper-editing"></div><div class="Viper-actionButtons"></div></div>';
         dfx.setHtml(div, content);
 
         if (issue.type !== HTMLCS.ERROR) {
-            var actionButtons = dfx.getClass('actionButtons', div)[0];
+            var actionButtons = dfx.getClass('Viper-actionButtons', div)[0];
 
             var self = this;
             var buttonid = dfx.getUniqueId();
@@ -169,7 +169,7 @@ ViperAccessibilityPlugin_WCAG2 = {
 
     setResolutionInstruction: function(resolutionContainer, content)
     {
-        var instructionCont = dfx.getClass('resolutionInstructions', resolutionContainer)[0];
+        var instructionCont = dfx.getClass('Viper-resolutionInstructions', resolutionContainer)[0];
 
         if (typeof content === 'string') {
             dfx.setHtml(instructionCont, content);
@@ -182,7 +182,7 @@ ViperAccessibilityPlugin_WCAG2 = {
 
     getResolutionActionsContainer: function(resolutionContainer)
     {
-        var instructionCont = dfx.getClass('editing', resolutionContainer)[0];
+        var instructionCont = dfx.getClass('Viper-editing', resolutionContainer)[0];
         dfx.empty(instructionCont);
         return instructionCont;
 

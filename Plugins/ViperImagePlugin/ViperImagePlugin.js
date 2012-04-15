@@ -309,7 +309,7 @@ ViperImagePlugin.prototype = {
         // Add the preview panel to the popup contents.
         createImageSubContent.appendChild(previewBox);
 
-        var toggleImagePlugin = tools.createButton('image', '', 'Toggle Image Options', 'image', null, true);
+        var toggleImagePlugin = tools.createButton('image', '', 'Toggle Image Options', 'Viper-image', null, true);
         toolbar.addButton(toggleImagePlugin);
         toolbar.setBubbleButton('ViperImagePlugin:bubble', 'image');
 
@@ -379,17 +379,17 @@ ViperImagePlugin.prototype = {
         dfx.setStyle(previewBox, 'display', 'block');
 
         if (loading === true) {
-            dfx.removeClass(previewBox, 'info');
+            dfx.removeClass(previewBox, 'Viper-info');
             dfx.setHtml(previewBox, 'Loading preview');
             this.viper.ViperTools.setFieldErrors('ViperImagePlugin:urlInput', []);
         } else if (!img) {
             // Failed to load image.
-            dfx.removeClass(previewBox, 'info');
+            dfx.removeClass(previewBox, 'Viper-info');
             dfx.setStyle(previewBox, 'display', 'none');
             this.viper.ViperTools.setFieldErrors('ViperImagePlugin:urlInput', ['Failed to load image']);
         } else {
             this.viper.ViperTools.setFieldErrors('ViperImagePlugin:urlInput', []);
-            dfx.addClass(previewBox, 'info');
+            dfx.addClass(previewBox, 'Viper-info');
 
             var tmp = document.createElement('div');
             dfx.setStyle(tmp, 'visibility', 'hidden');

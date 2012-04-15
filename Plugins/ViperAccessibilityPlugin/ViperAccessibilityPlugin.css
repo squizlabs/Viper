@@ -16,7 +16,7 @@
     top: 0;
 }
 
-.ViperAccessibilityPlugin #HTMLCS-wrapper .HTMLCS-issue-details .issueDoneCont {
+.ViperAccessibilityPlugin #HTMLCS-wrapper .HTMLCS-issue-details .Viper-issueDoneCont {
     -moz-transition: right 0.15s ease-out 0s, top 0.15s ease-out 0s;
     background: url("Images/issueImages.png") no-repeat scroll 0 -224px transparent;
     height: 65px;
@@ -27,25 +27,25 @@
     width: 65px;
 }
 
-.ViperAccessibilityPlugin #HTMLCS-wrapper .HTMLCS-issue-details.issueDone .issueDoneCont {
+.ViperAccessibilityPlugin #HTMLCS-wrapper .HTMLCS-issue-details.Viper-issueDone .Viper-issueDoneCont {
     right: -1px;
     top: -1px;
     visibility: visible;
 }
 
-.ViperAccessibilityPlugin #HTMLCS-wrapper .HTMLCS-issue-details.issueDone .HTMLCS-issue-type,
-.ViperAccessibilityPlugin #HTMLCS-wrapper .HTMLCS-issue-details.issueDone .HTMLCS-issue-title,
-.ViperAccessibilityPlugin #HTMLCS-wrapper .HTMLCS-issue-details.issueDone .HTMLCS-issue-wcag-ref {
+.ViperAccessibilityPlugin #HTMLCS-wrapper .HTMLCS-issue-details.Viper-issueDone .HTMLCS-issue-type,
+.ViperAccessibilityPlugin #HTMLCS-wrapper .HTMLCS-issue-details.Viper-issueDone .HTMLCS-issue-title,
+.ViperAccessibilityPlugin #HTMLCS-wrapper .HTMLCS-issue-details.Viper-issueDone .HTMLCS-issue-wcag-ref {
     opacity: 0.5;
 }
 
-.ViperAccessibilityPlugin #HTMLCS-wrapper .HTMLCS-issue-details.rechecking .HTMLCS-issue-type,
-.ViperAccessibilityPlugin #HTMLCS-wrapper .HTMLCS-issue-details.rechecking .HTMLCS-issue-title,
-.ViperAccessibilityPlugin #HTMLCS-wrapper .HTMLCS-issue-details.rechecking .HTMLCS-issue-wcag-ref {
+.ViperAccessibilityPlugin #HTMLCS-wrapper .HTMLCS-issue-details.Viper-rechecking .HTMLCS-issue-type,
+.ViperAccessibilityPlugin #HTMLCS-wrapper .HTMLCS-issue-details.Viper-rechecking .HTMLCS-issue-title,
+.ViperAccessibilityPlugin #HTMLCS-wrapper .HTMLCS-issue-details.Viper-rechecking .HTMLCS-issue-wcag-ref {
     opacity: 0.1;
 }
 
-.ViperAccessibilityPlugin #HTMLCS-wrapper .HTMLCS-issue-details.rechecking .ViperAP-issueRecheck {
+.ViperAccessibilityPlugin #HTMLCS-wrapper .HTMLCS-issue-details.Viper-rechecking .ViperAP-issueRecheck {
     height: 100%;
     width: 100%;
 }
@@ -59,21 +59,21 @@
     text-align: center;
     font-size: 1.26em;
 }
-.ViperAccessibilityPlugin #HTMLCS-wrapper .rechecking .ViperAP-issueRecheck {
+.ViperAccessibilityPlugin #HTMLCS-wrapper .Viper-rechecking .ViperAP-issueRecheck {
     width: 100%;
     height: 100%;
 }
-.ViperAccessibilityPlugin #HTMLCS-wrapper .ViperAP-issueRecheck .issueChecking {
+.ViperAccessibilityPlugin #HTMLCS-wrapper .ViperAP-issueRecheck .Viper-issueChecking {
     background: transparent url(Images/recheck-spinner.gif) 50% 0 no-repeat;
     padding: 45px 1em 1em;
     margin-top: 16%;
 }
-.ViperAccessibilityPlugin #HTMLCS-wrapper .ViperAP-issueRecheck .issueRemains {
+.ViperAccessibilityPlugin #HTMLCS-wrapper .ViperAP-issueRecheck .Viper-issueRemains {
     position: relative;
     padding: 40px 2em 2em;
     margin-top: 12%;
 }
-.ViperAccessibilityPlugin #HTMLCS-wrapper .ViperAP-issueRecheck .issueRemains:before {
+.ViperAccessibilityPlugin #HTMLCS-wrapper .ViperAP-issueRecheck .Viper-issueRemains:before {
     content: "";
     display: block;
     position: absolute;
@@ -84,7 +84,7 @@
     top: 0;
     background: transparent url(Images/issueImages.png) -19px -289px no-repeat;
 }
-.ViperAccessibilityPlugin #HTMLCS-wrapper .ViperAP-issueRecheck .recheckMessage {
+.ViperAccessibilityPlugin #HTMLCS-wrapper .ViperAP-issueRecheck .Viper-recheckMessage {
     display: block;
     clear: both;
     margin-bottom: 5%;
@@ -95,12 +95,12 @@
     padding: 0 3em;
 }
 
-.ViperAccessibilityPlugin #HTMLCS-wrapper .HTMLCS-issue-list .issueDone .ViperAP-issueTitle,
-.ViperAccessibilityPlugin #HTMLCS-wrapper .HTMLCS-issue-list .issueDone .ViperAP-issueType {
+.ViperAccessibilityPlugin #HTMLCS-wrapper .HTMLCS-issue-list .Viper-issueDone .ViperAP-issueTitle,
+.ViperAccessibilityPlugin #HTMLCS-wrapper .HTMLCS-issue-list .Viper-issueDone .ViperAP-issueType {
     opacity: 0.4;
 }
 
-.ViperAccessibilityPlugin #HTMLCS-wrapper .HTMLCS-issue-list .issueDone:after {
+.ViperAccessibilityPlugin #HTMLCS-wrapper .HTMLCS-issue-list .Viper-issueDone:after {
     background: url("Images/issueImages.png") no-repeat scroll 0 -289px transparent;
     height: 19px;
     margin-top: -9px;
@@ -124,11 +124,11 @@
     text-align: center;
 }
 
-.ViperAccessibilityPlugin #HTMLCS-wrapper  .buttonIcon.locate {
+.ViperAccessibilityPlugin #HTMLCS-wrapper .Viper-buttonIcon.Viper-locate {
     background-position: 0 -810px;
 }
 
-.ViperAccessibilityPlugin #HTMLCS-wrapper .buttonIcon {
+.ViperAccessibilityPlugin #HTMLCS-wrapper .Viper-buttonIcon {
     background-image: url("../../Images/buttonIcons.png");
     height: 20px;
     left: 50%;
@@ -146,19 +146,19 @@
     font-size: 0.7em;
 }
 
-.ViperAccessibilityPlugin #HTMLCS-wrapper .ViperAP-issueResolution .resolutionInstructions p {
+.ViperAccessibilityPlugin #HTMLCS-wrapper .ViperAP-issueResolution .Viper-resolutionInstructions p {
     margin: 0.5em 0 1em;
     overflow: hidden;
     padding: 0;
     position: relative;
 }
 
-.ViperAccessibilityPlugin #HTMLCS-wrapper .ViperAP-issueResolution .resolutionHeader {
+.ViperAccessibilityPlugin #HTMLCS-wrapper .ViperAP-issueResolution .Viper-resolutionHeader {
     margin-right: -0.3em;
     text-align: right;
 }
 
-.ViperAccessibilityPlugin #HTMLCS-wrapper .ViperAP-issueResolution .resolutionHeader strong {
+.ViperAccessibilityPlugin #HTMLCS-wrapper .ViperAP-issueResolution .Viper-resolutionHeader strong {
     color: #9B99A5;
     display: inline-block;
     float: left;
@@ -227,11 +227,11 @@
     visibility: hidden;
 }
 
-.ViperAccessibilityPlugin #HTMLCS-wrapper .Viper-checkbox.active .Viper-checkbox-switch {
+.ViperAccessibilityPlugin #HTMLCS-wrapper .Viper-checkbox.Viper-active .Viper-checkbox-switch {
     background-color: #205CAF;
 }
 
-.ViperAccessibilityPlugin #HTMLCS-wrapper .Viper-checkbox.active .Viper-checkbox-slider {
+.ViperAccessibilityPlugin #HTMLCS-wrapper .Viper-checkbox.Viper-active .Viper-checkbox-slider {
     background: -moz-linear-gradient(center top , #E9E9EB, #C2C2CB) repeat scroll 0 0 transparent;
     box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.6), 0 1px 0 rgba(255, 255, 255, 0.3) inset;
     left: 1.7em;
@@ -296,14 +296,14 @@
     text-align: left;
 }
 
-.ViperAccessibilityPlugin #HTMLCS-wrapper .ViperAP-issueResolution .resolutionInstructions {
+.ViperAccessibilityPlugin #HTMLCS-wrapper .ViperAP-issueResolution .Viper-resolutionInstructions {
     color: #EEEEEE;
     font-size: 1.49em;
     padding: 0 0.2em;
     text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.8);
 }
 
-.ViperAccessibilityPlugin #HTMLCS-wrapper .ViperAP-issueResolution .imagePreview {
+.ViperAccessibilityPlugin #HTMLCS-wrapper .ViperAP-issueResolution .Viper-imagePreview {
     border: 1px solid #8F8F8F;
     box-shadow: 0 1px 3px #2B2B2B;
     float: left;
@@ -312,16 +312,16 @@
     width: 90px;
 }
 
-.ViperAccessibilityPlugin #HTMLCS-wrapper .ViperAP-issueResolution .imagePreview img {
+.ViperAccessibilityPlugin #HTMLCS-wrapper .ViperAP-issueResolution .Viper-imagePreview img {
     width: 100%;
 }
 
-.ViperAccessibilityPlugin #HTMLCS-wrapper .ViperAP-issueResolution .resolutionActions {
+.ViperAccessibilityPlugin #HTMLCS-wrapper .ViperAP-issueResolution .Viper-resolutionActions {
     text-align: center;
     padding: 0 0 0.2em;
 }
 
-.ViperAccessibilityPlugin #HTMLCS-wrapper li.issueDone .HTMLCS-issue-title,
-.ViperAccessibilityPlugin #HTMLCS-wrapper li.issueDone .HTMLCS-issue-type {
+.ViperAccessibilityPlugin #HTMLCS-wrapper li.Viper-issueDone .HTMLCS-issue-title,
+.ViperAccessibilityPlugin #HTMLCS-wrapper li.Viper-issueDone .HTMLCS-issue-type {
     opacity: 0.4;
 }
