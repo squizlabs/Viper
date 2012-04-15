@@ -379,13 +379,13 @@ ViperTableEditorPlugin.prototype = {
         var tableBtn    = this._tools.createButton('VTEP:cellTools:table', '', 'Show Table tools', 'Viper-table', function() {
             showTools('table');
         });
-        var rowBtn = this._tools.createButton('VTEP:cellTools:row', '', 'Show Row tools', 'Viper-tableRow viper-hidden', function() {
+        var rowBtn = this._tools.createButton('VTEP:cellTools:row', '', 'Show Row tools', 'Viper-tableRow Viper-hidden', function() {
             showTools('row');
         });
-        var colBtn = this._tools.createButton('VTEP:cellTools:col', '', 'Show Column tools', 'Viper-tableCol viper-hidden', function() {
+        var colBtn = this._tools.createButton('VTEP:cellTools:col', '', 'Show Column tools', 'Viper-tableCol Viper-hidden', function() {
             showTools('col');
         });
-        var cellBtn = this._tools.createButton('VTEP:cellTools:cell', '', 'Show Cell tools', 'Viper-tableCell viper-hidden', function() {
+        var cellBtn = this._tools.createButton('VTEP:cellTools:cell', '', 'Show Cell tools', 'Viper-tableCell Viper-hidden', function() {
             showTools('cell');
         });
         this._tools.addButtonToGroup('VTEP:cellTools:table', 'VTEP:cellTools:buttons');
@@ -407,7 +407,7 @@ ViperTableEditorPlugin.prototype = {
             var scrollCoords = dfx.getScrollCoords();
 
             this._targetToolbarButton = true;
-            dfx.removeClass(btns, 'viper-hidden');
+            dfx.removeClass(btns, 'Viper-hidden');
             dfx.setStyle(tools, 'margin-left', '-45px');
             cellCoords     = dfx.getBoundingRectangle(this._tools.getItem('insertTable').element);
 
@@ -456,11 +456,11 @@ ViperTableEditorPlugin.prototype = {
                 dfx.hover(tools, function() {
                     self.setActiveCell(cell);
                     self.highlightActiveCell();
-                    dfx.removeClass(btns, 'viper-hidden');
+                    dfx.removeClass(btns, 'Viper-hidden');
                     dfx.setStyle(tools, 'margin-left', '-45px');
                 }, function() {
                     self.removeHighlights();
-                    dfx.addClass(btns, 'viper-hidden');
+                    dfx.addClass(btns, 'Viper-hidden');
                     dfx.setStyle(tools, 'margin-left', '0');
                 });
             }

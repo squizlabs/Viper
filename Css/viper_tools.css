@@ -28,7 +28,7 @@
   filter: alpha(opacity = 50);
   cursor: default;
 }
-.Viper-button.Viper-viper-hidden {
+.Viper-button.Viper-hidden {
   display: none;
 }
 .Viper-button.Viper-headings {
