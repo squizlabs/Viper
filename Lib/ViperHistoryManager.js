@@ -55,8 +55,8 @@ ViperHistoryManager.prototype = {
             var task  = {
                 content: this.viper.getRawHTML(),
                 range: {
-                    startContainer: XPath.getPath(range.startContainer),
-                    endContainer: XPath.getPath(range.endContainer),
+                    startContainer: dfx.getPath(range.startContainer),
+                    endContainer: dfx.getPath(range.endContainer),
                     startOffset: range.startOffset,
                     endOffset: range.endOffset,
                     collapsed: range.collapsed
@@ -123,8 +123,8 @@ ViperHistoryManager.prototype = {
         var endPath   = null;
 
         try {
-            startPath = XPath.getPath(range.startContainer);
-            endPath   = XPath.getPath(range.endContainer);
+            startPath = dfx.getPath(range.startContainer);
+            endPath   = dfx.getPath(range.endContainer);
         } catch(e) {}
 
         var currentState = {
@@ -241,8 +241,8 @@ ViperHistoryManager.prototype = {
 
         // Select.
         try {
-            var startContainer = XPath.getNode(task.range.startContainer);
-            var endContainer   = XPath.getNode(task.range.endContainer);
+            var startContainer = dfx.getNode(task.range.startContainer);
+            var endContainer   = dfx.getNode(task.range.endContainer);
             var range = this.viper.getCurrentRange();
             range.setStart(startContainer, task.range.startOffset);
             range.setEnd(endContainer, task.range.endOffset);
