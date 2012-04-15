@@ -89,7 +89,7 @@ ViperFormatPlugin.prototype = {
 
         for (var i = 1; i <= 6; i++) {
             (function(headingCount) {
-                tools.createButton(prefix + 'heading:h' + headingCount, 'Viper-H' + headingCount, 'Convert to Heading ' + headingCount, null, function() {
+                tools.createButton(prefix + 'heading:h' + headingCount, 'H' + headingCount, 'Convert to Heading ' + headingCount, null, function() {
                     self.handleFormat('h' + headingCount);
                 });
                 tools.addButtonToGroup(prefix + 'heading:h' + headingCount, prefix + 'headingFormats');
