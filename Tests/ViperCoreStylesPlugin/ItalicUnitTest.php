@@ -369,7 +369,7 @@ class Viper_Tests_ViperCoreStylesPlugin_ItalicUnitTest extends AbstractViperUnit
         $this->click($this->find('XuT'));
         $this->keyDown('Key.CMD + a');
         $this->clickTopToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_italic.png');
-        //$this->assertHTMLMatch('<p><em>Lorem XuT dolor</em></p><p><em>sit amet WoW</em></p>');
+        $this->assertHTMLMatch('<p><em>Lorem XuT dolor</em></p><p><em>sit amet WoW</em></p>');
 
         $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic_active.png'), 'Italic icon should be active');
         $this->assertFalse($this->topToolbarButtonExists(dirname(dirname(__FILE__)).'/ViperFormatPlugin/Images/toolbarIcon_class_active.png'), 'Class icon should not be active');
