@@ -373,16 +373,16 @@ ViperLinkPlugin.prototype = {
         var subject   = tools.createTextbox(idPrefix + ':subject', 'Subject', attrSubj);
         var newWindow = tools.createCheckbox(idPrefix + ':newWindow', 'Open a New Window', attrTarget);
 
-        var urlRow = tools.createRow(idPrefix + ':urlRow', 'urlRow');
+        var urlRow = tools.createRow(idPrefix + ':urlRow', 'Viper-urlRow');
         urlRow.appendChild(url);
 
-        var titleRow = tools.createRow(idPrefix + ':titleRow', 'titleRow');
+        var titleRow = tools.createRow(idPrefix + ':titleRow', 'Viper-titleRow');
         titleRow.appendChild(title);
 
-        var subjectRow = tools.createRow(idPrefix + ':subjectRow', 'subjectRow');
+        var subjectRow = tools.createRow(idPrefix + ':subjectRow', 'Viper-subjectRow');
         subjectRow.appendChild(subject);
 
-        var newWindowRow = tools.createRow(idPrefix + ':newWindowRow', 'newWindowRow');
+        var newWindowRow = tools.createRow(idPrefix + ':newWindowRow', 'Viper-newWindowRow');
         newWindowRow.appendChild(newWindow);
 
         var main = document.createElement('div');
