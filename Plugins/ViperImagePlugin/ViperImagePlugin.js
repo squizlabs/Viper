@@ -1,3 +1,16 @@
+/**
+ * +--------------------------------------------------------------------+
+ * | This Squiz Viper file is Copyright (c) Squiz Australia Pty Ltd     |
+ * | ABN 53 131 581 247                                                 |
+ * +--------------------------------------------------------------------+
+ * | IMPORTANT: Your use of this Software is subject to the terms of    |
+ * | the Licence provided in the file licence.txt. If you cannot find   |
+ * | this file please contact Squiz (www.squiz.com.au) so we may        |
+ * | provide you a copy.                                                |
+ * +--------------------------------------------------------------------+
+ *
+ */
+
 function ViperImagePlugin(viper)
 {
     this.viper = viper;
@@ -7,6 +20,7 @@ function ViperImagePlugin(viper)
     this._resizeWidgetElem = null;
     this._imageStyleAttr   = null;
     this._resized          = false;
+    this._ieImageResize    = null;
 
 }
 
@@ -19,6 +33,8 @@ ViperImagePlugin.prototype = {
         var self = this;
         this.viper.registerCallback('Viper:mouseDown', 'ViperImagePlugin', function(e) {
             var target = dfx.getMouseEventTarget(e);
+            self._ieImageResize = null;
+
             if (dfx.isTag(target, 'img') === true) {
                 if (self.viper.isBrowser('msie') !== true) {
                     dfx.preventDefault(e);
@@ -27,6 +43,7 @@ ViperImagePlugin.prototype = {
                     self._updateToolbar(target);
                     ViperSelection.removeAllRanges();
                 } else {
+                    self._ieImageResize = target;
                     self._updateToolbar(target);
                     self.viper.registerCallback('Viper:mouseUp', 'ViperImagePlugin:ie', function(e) {
                         if (dfx.hasAttribute(target, 'width') === true) {
@@ -67,12 +84,19 @@ ViperImagePlugin.prototype = {
                     }
                 }
 
-                var range        = self.viper.getViperRange();
-                var selectedNode = range.getNodeSelection();
-                if (selectedNode) {
-                    if (self.removeImage(selectedNode) === true) {
-                        self._updateToolbar();
-                        return false;
+                if (self._ieImageResize) {
+                    dfx.remove(self._ieImageResize);
+                    self._ieImageResize = null;
+                    self.viper.fireNodesChanged();
+                    return false;
+                } else {
+                    var range        = self.viper.getViperRange();
+                    var selectedNode = range.getNodeSelection();
+                    if (selectedNode) {
+                        if (self.removeImage(selectedNode) === true) {
+                            self._updateToolbar();
+                            return false;
+                        }
                     }
                 }
             }
@@ -88,6 +112,17 @@ ViperImagePlugin.prototype = {
 
         this.viper.registerCallback('ViperCoreStylesPlugin:afterImageUpdate', 'ViperImagePlugin', function(image) {
             self.showImageResizeHandles(image);
+        });
+
+        this.viper.registerCallback('Viper:getHtml', 'ViperImagePlugin', function(data) {
+            var tags = dfx.getClass('ui-resizable', data.element);
+            for (var i = 0; i < tags.length; i++) {
+                var parent = tags[i].parentNode;
+                dfx.removeClass(tags[i], 'ui-resizable');
+                dfx.insertBefore(parent, tags[i]);
+                self._hideImageResizeHandles(tags[i]);
+                dfx.remove(parent);
+            }
         });
 
     },
@@ -309,7 +344,7 @@ ViperImagePlugin.prototype = {
         // Add the preview panel to the popup contents.
         createImageSubContent.appendChild(previewBox);
 
-        var toggleImagePlugin = tools.createButton('image', '', 'Toggle Image Options', 'image', null, true);
+        var toggleImagePlugin = tools.createButton('image', '', 'Toggle Image Options', 'Viper-image', null, true);
         toolbar.addButton(toggleImagePlugin);
         toolbar.setBubbleButton('ViperImagePlugin:bubble', 'image');
 
@@ -379,17 +414,17 @@ ViperImagePlugin.prototype = {
         dfx.setStyle(previewBox, 'display', 'block');
 
         if (loading === true) {
-            dfx.removeClass(previewBox, 'info');
+            dfx.removeClass(previewBox, 'Viper-info');
             dfx.setHtml(previewBox, 'Loading preview');
             this.viper.ViperTools.setFieldErrors('ViperImagePlugin:urlInput', []);
         } else if (!img) {
             // Failed to load image.
-            dfx.removeClass(previewBox, 'info');
+            dfx.removeClass(previewBox, 'Viper-info');
             dfx.setStyle(previewBox, 'display', 'none');
             this.viper.ViperTools.setFieldErrors('ViperImagePlugin:urlInput', ['Failed to load image']);
         } else {
             this.viper.ViperTools.setFieldErrors('ViperImagePlugin:urlInput', []);
-            dfx.addClass(previewBox, 'info');
+            dfx.addClass(previewBox, 'Viper-info');
 
             var tmp = document.createElement('div');
             dfx.setStyle(tmp, 'visibility', 'hidden');
@@ -480,46 +515,68 @@ ViperImagePlugin.prototype = {
             }
         }
 
-        var width  = dfx.getStyle(this._resizeImage, 'width');
-        var height = dfx.getStyle(this._resizeImage, 'height');
-
-        dfxjQuery(this._resizeImage).resizable('destroy');
-
-        if (!this._resizeImage.className) {
-            this._resizeImage.removeAttribute('class');
-        }
-
-        this._resizeImage.setAttribute('style', this._imageStyleAttr);
-
-        if (this._resized === true) {
-            this._resizeImage.setAttribute('width', width);
-            this._resizeImage.setAttribute('height', height);
-
-            // Remove width and height styles.
-            dfx.setStyle(this._resizeImage, 'width', '');
-            dfx.setStyle(this._resizeImage, 'height', '');
-        }
-
-        if (!this._resizeImage.getAttribute('style') || this._resizeImage.getAttribute('style') === 'null') {
-            this._resizeImage.removeAttribute('style');
-        }
-
-        this._fixImageResize();
+        this._hideImageResizeHandles();
         this._resizeImage = null;
 
     },
 
-    _fixImageResize: function()
+    _hideImageResizeHandles: function(image)
     {
-        dfx.setStyle(this._resizeImage, 'left', '');
-        dfx.setStyle(this._resizeImage, 'top', '');
-        dfx.setStyle(this._resizeImage, 'resize', '');
-        dfx.setStyle(this._resizeImage, 'position', '');
+        var imgArg = image;
 
-        if (this._resizeWidgetElem) {
-            dfx.setStyle(this._resizeWidgetElem, 'left', '');
-            dfx.setStyle(this._resizeWidgetElem, 'top', '');
-            dfx.setStyle(this._resizeWidgetElem, 'overflow', '');
+        image = image || this._resizeImage;
+        var width  = dfx.getStyle(image, 'width');
+        var height = dfx.getStyle(image, 'height');
+
+        if (!imgArg) {
+            dfxjQuery(image).resizable('destroy');
+        }
+
+        if (!image.className) {
+            image.removeAttribute('class');
+        }
+
+        image.setAttribute('style', this._imageStyleAttr);
+
+        if (this._resized === true) {
+            image.setAttribute('width', width);
+            image.setAttribute('height', height);
+
+            // Remove width and height styles.
+            dfx.setStyle(image, 'width', '');
+            dfx.setStyle(image, 'height', '');
+        }
+
+        if (!image.getAttribute('style') || image.getAttribute('style') === 'null') {
+            image.removeAttribute('style');
+        }
+
+        if (imgArg) {
+            this._fixImageResize(image);
+        } else {
+            this._fixImageResize();
+        }
+
+    },
+
+    _fixImageResize: function(image)
+    {
+        if (image) {
+            dfx.setStyle(image, 'left', '');
+            dfx.setStyle(image, 'top', '');
+            dfx.setStyle(image, 'resize', '');
+            dfx.setStyle(image, 'position', '');
+        } else {
+            dfx.setStyle(this._resizeImage, 'left', '');
+            dfx.setStyle(this._resizeImage, 'top', '');
+            dfx.setStyle(this._resizeImage, 'resize', '');
+            dfx.setStyle(this._resizeImage, 'position', '');
+
+            if (this._resizeWidgetElem) {
+                dfx.setStyle(this._resizeWidgetElem, 'left', '');
+                dfx.setStyle(this._resizeWidgetElem, 'top', '');
+                dfx.setStyle(this._resizeWidgetElem, 'overflow', '');
+            }
         }
 
     }

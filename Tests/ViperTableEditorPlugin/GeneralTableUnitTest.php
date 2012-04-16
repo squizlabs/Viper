@@ -59,42 +59,7 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
         $this->clickTopToolbarButton($dir.'toolbarIcon_createTable_active.png');
 
         // Check to make sure the table editing tools don't appear.
-        $imageNotFound = false;
-        try
-        {
-            $this->find($this->getImg('icon_tableEditingTools.png'));
-        }
-        catch(Exception $e)
-        {
-            // Expecting the exception because the icons should not be there
-            $imageNotFound = true;
-        }
-
-        $this->assertTrue($imageNotFound, 'The table icons should no longer appear on the screen');
-
-    }//end testUsingTableIconInTopToolbar()
-
-
-    /**
-     * Test that you can merge all columns and rows into one.
-     *
-     * @return void
-     */
-    public function testMergingAllColumnsAndRows()
-    {
-        $dir = dirname(__FILE__).'/Images/';
-
-        $this->insertTable();
-        $this->showTools(0, 'cell');
-        $this->click($this->find($this->getImg('icon_mergeSplit.png'), NULL, 0.83));
-        $this->clickInlineToolbarButton($this->getImg('icon_mergeRight.png'));
-        $this->clickInlineToolbarButton($this->getImg('icon_mergeRight.png'));
-        $this->clickInlineToolbarButton($this->getImg('icon_mergeRight.png'));
-        $this->clickInlineToolbarButton($this->getImg('icon_mergeDown.png'));
-        $this->clickInlineToolbarButton($this->getImg('icon_mergeDown.png'));
-
-        $this->execJS('rmTableHeaders(0,true)');
-        $this->assertHTMLMatch('<p>Lorem IPSUM</p><table style="width: 100%;" border="1"><tbody><tr><th colspan="4" rowspan="3">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th></tr></tbody></table><p>dolor</p>');
+        $this->checkIconNotOnScreen($this->getImg('icon_tableEditingTools.png'));
 
     }//end testUsingTableIconInTopToolbar()
 

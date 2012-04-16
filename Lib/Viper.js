@@ -1,3 +1,16 @@
+/**
+ * +--------------------------------------------------------------------+
+ * | This Squiz Viper file is Copyright (c) Squiz Australia Pty Ltd     |
+ * | ABN 53 131 581 247                                                 |
+ * +--------------------------------------------------------------------+
+ * | IMPORTANT: Your use of this Software is subject to the terms of    |
+ * | the Licence provided in the file licence.txt. If you cannot find   |
+ * | this file please contact Squiz (www.squiz.com.au) so we may        |
+ * | provide you a copy.                                                |
+ * +--------------------------------------------------------------------+
+ *
+ */
+
 function Viper(id, options, callback, editables)
 {
     this.id           = id;
@@ -529,8 +542,8 @@ Viper.prototype = {
             if (hasStubElems !== true) {
                 // Insert initial P tags.
                 var range = this.getCurrentRange();
-                dfx.setHtml(this.element, '<p>&nbsp;</p>');
-                range.setStart(this.element.firstChild, 0);
+                dfx.setHtml(elem, '<p>&nbsp;</p>');
+                range.setStart(elem.firstChild, 0);
 
                 range.collapse(true);
                 ViperSelection.addRange(range);
@@ -538,7 +551,7 @@ Viper.prototype = {
         } else {
             var cleanedContent = this.cleanHTML(content);
             if (cleanedContent !== content) {
-                dfx.setHtml(this.element, cleanedContent);
+                dfx.setHtml(elem, cleanedContent);
             }
         }
 
@@ -1798,12 +1811,16 @@ Viper.prototype = {
             if (startBlockParent === endBlockParent && !nodeSelection) {
                 // Same block parent, create only one tag that wraps the whole
                 // selection.
-                if (!bookmark.start.previousSibling) {
+                if (!bookmark.start.previousSibling
+                    && bookmark.start.parentNode !== startBlockParent
+                ) {
                     // Move bookmark outside of its parent.
                     dfx.insertBefore(bookmark.start.parentNode, bookmark.start);
                 }
 
-                if (!bookmark.end.nextSibling) {
+                if (!bookmark.end.nextSibling
+                    && bookmark.end.parentNode !== endBlockParent
+                ) {
                     // Move bookmark outside of its parent.
                     dfx.insertAfter(bookmark.end.parentNode, bookmark.end);
                 }
@@ -1812,7 +1829,6 @@ Viper.prototype = {
                 if (elements.length > 0) {
                     var newElement = document.createElement(otag);
                     dfx.insertBefore(bookmark.start, newElement);
-                    newElement.appendChild(bookmark.start);
 
                     var c = elements.length;
                     for (var i = 0; i < c; i++) {
@@ -1829,7 +1845,10 @@ Viper.prototype = {
                         dfx.remove(sameTags[i]);
                     }
 
+                    dfx.insertBefore(newElement.firstChild, bookmark.start);
                     newElement.appendChild(bookmark.end);
+
+                    this._setWrapperElemAttributes(newElement, attributes);
                 }//end if
 
                 if (keepSelection !== true) {
@@ -3826,7 +3845,7 @@ Viper.prototype = {
         // e.g. Keyword plugin?
         // Plugins can hookin to this method to modify the HTML
         // before Viper returns its HTML contents.
-        this.fireCallbacks('getHtml', {element: clone});
+        this.fireCallbacks('Viper:getHtml', {element: clone});
         var html = dfx.getHtml(clone);
         html     = this._fixHtml(html);
         html     = this.cleanHTML(html);

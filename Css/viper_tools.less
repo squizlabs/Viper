@@ -30,15 +30,15 @@
     &:first-child {
         margin-left: 0;
     }
-    &.disabled {
+    &.Viper-disabled {
         opacity: 0.3;
         filter: ~"alpha(opacity = 50)";
         cursor: default;
     }
-    &.viper-hidden {
+    &.Viper-hidden {
         display: none;
     }
-    &.headings {
+    &.Viper-headings {
         min-width: 30px;
 
         .Viper-browserVer-msie8 &,
@@ -63,8 +63,8 @@
 .Viper-buttonGroup .Viper-button {
     border-radius: 0.1em;
     margin: 0;
-    &.active,
-    &.selected {
+    &.Viper-active,
+    &.Viper-selected {
         border-radius: 0;
     }
     &:first-child {
@@ -82,8 +82,8 @@
 
 @ie9-grad-sub: inset 0px -1em 1.5em -0.6em rgba(0,0,0,0.2); /* IE9 substituted button gradient variable, re-used throughout */
 
-.themeDark .Viper-button,
-.themeDark .Viper-button.disabled:hover {
+.Viper-themeDark .Viper-button,
+.Viper-themeDark .Viper-button.Viper-disabled:hover {
     background-color: #dadade;
     border: none;
     color: #2b2b2b;
@@ -107,18 +107,18 @@
     }
 }
 
-.themeDark .Viper-button:hover {
+.Viper-themeDark .Viper-button:hover {
     background: #c9c9cd;
     background: -webkit-gradient(linear, left top, left bottom, from(#d5d5d8), to(#b4b4bc));
     background: -moz-linear-gradient(top,  #d5d5d8,  #b4b4bc);
     text-shadow: 0 1px 0 rgba(255,255,255,0.5);
 }
 
-.themeDark .Viper-button:active,
-.themeDark .Viper-button.active,
-.themeDark .Viper-button.active:hover,
-.themeDark .Viper-button.selected,
-.themeDark .Viper-button.selected:hover {
+.Viper-themeDark .Viper-button:active,
+.Viper-themeDark .Viper-button.Viper-active,
+.Viper-themeDark .Viper-button.Viper-active:hover,
+.Viper-themeDark .Viper-button.Viper-selected,
+.Viper-themeDark .Viper-button.Viper-selected:hover {
     color: #FFF;
     text-shadow: 0 -1px 0 rgba(0,0,0,0.5);
     box-shadow:
@@ -129,28 +129,28 @@
         -1px 0px 0 rgba(0, 0, 0, 0.25) inset;
 }
 
-.themeDark .Viper-button.active,
-.themeDark .Viper-button.active:hover {
+.Viper-themeDark .Viper-button.Viper-active,
+.Viper-themeDark .Viper-button.Viper-active:hover {
     background: #2d73d2;
     background: -webkit-gradient(linear, left top, left bottom, from(#3987f2), to(#205caf));
     background: -moz-linear-gradient(top,  #3987f2,  #205caf);
 }
 
-.themeDark .Viper-button:active,
-.themeDark .Viper-button.selected,
-.themeDark .Viper-button.selected:hover {
+.Viper-themeDark .Viper-button:active,
+.Viper-themeDark .Viper-button.Viper-selected,
+.Viper-themeDark .Viper-button.Viper-selected:hover {
     background: #54535A;
     border-color: #555;
 }
 
-.themeDark .Viper-buttonGroup {
+.Viper-themeDark .Viper-buttonGroup {
     .Viper-browserVer-msie8 & {
         border-right: 1px solid #666;
     }
 }
 
-.themeDark .Viper-buttonGroup .Viper-button,
-.themeDark .Viper-buttonGroup .Viper-button.disabled:hover {
+.Viper-themeDark .Viper-buttonGroup .Viper-button,
+.Viper-themeDark .Viper-buttonGroup .Viper-button.Viper-disabled:hover {
     border-left: 1px solid #a6a6a9;
     box-shadow:
         0 -2px 2px -2px rgba(0, 0, 0, 0.4),
@@ -173,7 +173,7 @@
     }
 }
 
-.themeDark .Viper-buttonGroup .Viper-button:first-child {
+.Viper-themeDark .Viper-buttonGroup .Viper-button:first-child {
     border-left-width: 0;
     box-shadow:
         0 -2px 2px -2px rgba(0, 0, 0, 0.5),
@@ -198,7 +198,7 @@
     }
 }
 
-.themeDark .Viper-buttonGroup .Viper-button:last-child {
+.Viper-themeDark .Viper-buttonGroup .Viper-button:last-child {
     box-shadow:
         0 -2px 2px -2px rgba(0, 0, 0, 0.5),
         0 2px 2px -2px rgba(0, 0, 0, 0.5),
@@ -221,7 +221,7 @@
     }
 }
 
-.themeDark .Viper-buttonGroup .Viper-button.active {
+.Viper-themeDark .Viper-buttonGroup .Viper-button.Viper-active {
     border-left-color: #1f4e8d;
     box-shadow:
         0 2px 2px -2px rgba(0, 0, 0, 1) inset,
@@ -230,7 +230,7 @@
         0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
-.themeDark .Viper-buttonGroup .Viper-button.selected {
+.Viper-themeDark .Viper-buttonGroup .Viper-button.Viper-selected {
     border-left-color: #555;
     box-shadow:
         0 2px 2px -2px rgba(0, 0, 0, 1) inset,
@@ -239,28 +239,28 @@
         0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
-.themeDark .Viper-buttonGroup .Viper-button.selected + .Viper-button,
-.themeDark .Viper-buttonGroup .Viper-button.active + .Viper-button,
-.themeDark .Viper-buttonGroup .Viper-button.active + .Viper-button.disabled:hover {
+.Viper-themeDark .Viper-buttonGroup .Viper-button.Viper-selected + .Viper-button,
+.Viper-themeDark .Viper-buttonGroup .Viper-button.Viper-active + .Viper-button,
+.Viper-themeDark .Viper-buttonGroup .Viper-button.Viper-active + .Viper-button.Viper-disabled:hover {
     border-left-color: #1f4e8d;
 }
 
-.themeDark .Viper-buttonGroup .Viper-button.selected + .Viper-button.selected,
-.themeDark .Viper-buttonGroup .Viper-button.active + .Viper-button.selected {
+.Viper-themeDark .Viper-buttonGroup .Viper-button.Viper-selected + .Viper-button.Viper-selected,
+.Viper-themeDark .Viper-buttonGroup .Viper-button.Viper-active + .Viper-button.Viper-selected {
     border-left-color: #333;
 }
 
-.themeDark .Viper-buttonGroup .Viper-button.selected + .Viper-button.selected,
-.themeDark .Viper-buttonGroup .Viper-button.active + .Viper-button.selected {
+.Viper-themeDark .Viper-buttonGroup .Viper-button.Viper-selected + .Viper-button.Viper-selected,
+.Viper-themeDark .Viper-buttonGroup .Viper-button.Viper-active + .Viper-button.Viper-selected {
     box-shadow:
         0 2px 2px -2px rgba(0, 0, 0, 1) inset,
         0 -2px 2px -2px rgba(0, 0, 0, 1) inset,
         0 1px 0 rgba(255, 255, 255, 0.2) !important;
 }
 
-.themeDark .Viper-buttonGroup .Viper-button.selected + .Viper-button.active,
-.themeDark .Viper-buttonGroup .Viper-button.active + .Viper-button.active,
-.themeDark .Viper-buttonGroup .Viper-button.active + .Viper-button.active.disabled:hover {
+.Viper-themeDark .Viper-buttonGroup .Viper-button.Viper-selected + .Viper-button.Viper-active,
+.Viper-themeDark .Viper-buttonGroup .Viper-button.Viper-active + .Viper-button.Viper-active,
+.Viper-themeDark .Viper-buttonGroup .Viper-button.Viper-active + .Viper-button.Viper-active.Viper-disabled:hover {
     box-shadow:
         0 2px 2px -2px rgba(0, 0, 0, 1) inset,
         0 -2px 2px -2px rgba(0, 0, 0, 1) inset,
@@ -268,7 +268,7 @@
         0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
-.themeDark .Viper-buttonGroup .Viper-button:first-child.active {
+.Viper-themeDark .Viper-buttonGroup .Viper-button:first-child.active {
     box-shadow:
         0 2px 2px -2px rgba(0, 0, 0, 1) inset,
         0 -2px 2px -2px rgba(0, 0, 0, 1) inset,
@@ -276,11 +276,11 @@
         0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
-.themeDark .Viper-buttonGroup .Viper-button.active:last-child,
-.themeDark .Viper-buttonGroup .Viper-button.active:last-child.disabled:hover,
-.themeDark .Viper-buttonGroup .Viper-button.selected + .Viper-button.active:last-child,
-.themeDark .Viper-buttonGroup .Viper-button.active + .Viper-button.active:last-child,
-.themeDark .Viper-buttonGroup .Viper-button.active + .Viper-button.active.disabled:last-child:hover {
+.Viper-themeDark .Viper-buttonGroup .Viper-button.Viper-active:last-child,
+.Viper-themeDark .Viper-buttonGroup .Viper-button.Viper-active:last-child.Viper-disabled:hover,
+.Viper-themeDark .Viper-buttonGroup .Viper-button.Viper-selected + .Viper-button.Viper-active:last-child,
+.Viper-themeDark .Viper-buttonGroup .Viper-button.Viper-active + .Viper-button.Viper-active:last-child,
+.Viper-themeDark .Viper-buttonGroup .Viper-button.Viper-active + .Viper-button.Viper-active.Viper-disabled:last-child:hover {
     box-shadow:
         0 2px 2px -2px rgba(0, 0, 0, 1) inset,
         0 -2px 2px -2px rgba(0, 0, 0, 1) inset,
@@ -303,7 +303,7 @@
 
 // Icon container defaults
 
-.buttonIcon {
+.Viper-buttonIcon {
     position: absolute;
     width: @iconWidth;
     height: @iconHeight;
@@ -312,7 +312,7 @@
     margin: -(@iconHeight / 2) 0 0 -(@iconWidth / 2);
     background-image: url(../Images/buttonIcons.png);
 
-    .disabled & {
+    .Viper-disabled & {
 
         .Viper-browserVer-msie8 & {
             filter: ~"alpha(opacity = 50)";
@@ -322,235 +322,235 @@
 // Icon definitions
 
     // Bold
-    &.bold {
+    &.Viper-bold {
         .icon (51);
     }
     // Italic
-    &.italic {
+    &.Viper-italic {
         .icon (52);
     }
     // Merge Up
-    &.mergeUp {
+    &.Viper-mergeUp {
         .icon (1);
     }
     // Merge Down
-    &.mergeDown {
+    &.Viper-mergeDown {
         .icon (2);
     }
     // Delete
-    &.delete {
+    &.Viper-delete {
         .icon (3);
     }
     // Add Above
-    &.addAbove {
+    &.Viper-addAbove {
         .icon (4);
     }
     // Add Below
-    &.addBelow {
+    &.Viper-addBelow {
         .icon (5);
     }
     // Merge Left
-    &.mergeLeft {
+    &.Viper-mergeLeft {
         .icon (6);
     }
     // Merge Right
-    &.mergeRight {
+    &.Viper-mergeRight {
         .icon (7);
     }
     // Split Horiz
-    &.splitHoriz {
+    &.Viper-splitHoriz {
         .icon (8);
     }
     // Split Vert
-    &.splitVert {
+    &.Viper-splitVert {
         .icon (9);
     }
     // Move
-    &.move {
+    &.Viper-move {
         .icon (10);
     }
     // Add Left
-    &.addLeft {
+    &.Viper-addLeft {
         .icon (11);
     }
     // Add Right
-    &.addRight {
+    &.Viper-addRight {
         .icon (12);
     }
     // Split & Merge
-    &.splitMerge {
+    &.Viper-splitMerge {
         .icon (13);
     }
     // TD Heading Checker
-    &.headingCheck {
+    &.Viper-headingCheck {
         .icon (14);
     }
     // Accessibility Auditor
-    &.accessAudit {
+    &.Viper-accessAudit {
         .icon (14);
     }
     // TH Abbreviation
-    &.headerAbbr {
+    &.Viper-headerAbbr {
         .icon (15);
     }
     // CSS Class
-    &.cssClass {
+    &.Viper-cssClass {
         .icon (16);
     }
     // Anchor / ID
-    &.anchorID {
+    &.Viper-anchorID {
         .icon (17);
     }
     // Table
-    &.table {
+    &.Viper-table {
         .icon (18);
     }
     // Table Row
-    &.tableRow {
+    &.Viper-tableRow {
         .icon (19);
     }
     // Table Col
-    &.tableCol {
+    &.Viper-tableCol {
         .icon (20);
     }
     // Table Cell
-    &.tableCell {
+    &.Viper-tableCell {
         .icon (21);
     }
     // List - Unordered
-    &.listUL {
+    &.Viper-listUL {
         .icon (22);
     }
     // List - Ordered
-    &.listOL {
+    &.Viper-listOL {
         .icon (23);
     }
     // List indent
-    &.listIndent {
+    &.Viper-listIndent {
         .icon (24);
     }
     // List outdent
-    &.listOutdent {
+    &.Viper-listOutdent {
         .icon (25);
     }
     // Link
-    &.link {
+    &.Viper-link {
         .icon (26);
     }
     // Link in new window
-    &.linkNewWindow {
+    &.Viper-linkNewWindow {
         .icon (27);
     }
     // Remove Link
-    &.linkRemove {
+    &.Viper-linkRemove {
         .icon (28);
     }
     // Image
-    &.image {
+    &.Viper-image {
         .icon (29);
     }
     // Rerun Accessibility Auditor
-    &.accessRerun {
+    &.Viper-accessRerun {
         .icon (30);
     }
     // Locate on page
-    &.locate {
+    &.Viper-locate {
         .icon (31);
     }
     // Source View
-    &.sourceView {
+    &.Viper-sourceView {
         .icon (32);
     }
     // Next Issue
-    &.nextIssue {
+    &.Viper-nextIssue {
         .icon (33);
     }
     // Prev Issue
-    &.prevIssue {
+    &.Viper-prevIssue {
         .icon (34);
     }
     // Justify Left
-    &.justifyLeft {
+    &.Viper-justifyLeft {
         .icon (35);
     }
     // Justify Right
-    &.justifyRight {
+    &.Viper-justifyRight {
         .icon (36);
     }
     // Justify Center
-    &.justifyCenter {
+    &.Viper-justifyCenter {
         .icon (37);
     }
     // Justify Block
-    &.justifyBlock {
+    &.Viper-justifyBlock {
         .icon (38);
     }
     // Subscript
-    &.subscript {
+    &.Viper-subscript {
         .icon (39);
     }
     // Superscript
-    &.superscript {
+    &.Viper-superscript {
         .icon (40);
     }
     // Strikethrough
-    &.strikethrough {
+    &.Viper-strikethrough {
         .icon (41);
     }
     // Remove Formatting
-    &.removeFormat {
+    &.Viper-removeFormat {
         .icon (42);
     }
     // History Undo
-    &.historyUndo {
+    &.Viper-historyUndo {
         .icon (43);
     }
     // History Redo
-    &.historyRedo {
+    &.Viper-historyRedo {
         .icon (44);
     }
     // Accessibility Settings
-    &.accessSettings {
+    &.Viper-accessSettings {
         .icon (45);
     }
     // Table Settings
-    &.tableSettings {
+    &.Viper-tableSettings {
         .icon (45);
     }
     // Target
-    &.target {
+    &.Viper-target {
         .icon (46);
     }
     // Horizontal Rule
-    &.insertHr {
+    &.Viper-insertHr {
         .icon (47);
     }
     // Character Map
-    &.charMap {
+    &.Viper-charMap {
         .icon (48);
     }
     // Hidden Characters
-    &.showHiddenChars {
+    &.Viper-showHiddenChars {
         .icon (49);
     }
     // Source Editor in new window
-    &.sourceNewWindow {
+    &.Viper-sourceNewWindow {
         .icon (27);
     }
     // Language Tools
-    &.langTools {
+    &.Viper-langTools {
         .icon (50);
     }
     // Search & Replace
-    &.searchReplace {
+    &.Viper-searchReplace {
         .icon (53);
     }
     // Formats Containers
-    &.formats {
+    &.Viper-formats {
         .icon (54);
     }
     // Headings
-    &.headings {
+    &.Viper-headings {
         .icon (55);
     }
 
@@ -562,8 +562,8 @@
     @fieldIconSpriteLocation: @iconCount;
     background-position: @bgY @bgX;
     .Viper-button:active &,
-    .Viper-button.active &,
-    .Viper-button.selected & {
+    .Viper-button.Viper-active &,
+    .Viper-button.Viper-selected & {
         background-position: -@bgY-activeOffset @bgX;
     }
 }
@@ -582,7 +582,7 @@
     & .Viper-textbox-textArea {
         resize: none;
     }
-    &.disabled {
+    &.Viper-disabled {
         opacity: 0.4;
         filter: ~"alpha(opacity = 40)";
     }
@@ -607,7 +607,7 @@
     box-shadow: 0 0 3px #000 inset;
 }
 
-.Viper-textbox.active .Viper-textbox-label {
+.Viper-textbox.Viper-active .Viper-textbox-label {
     background: #205caf;
 }
 .Viper-textbox:after {
@@ -615,7 +615,7 @@
     content: "";
     clear: both;
 }
-.Viper-textbox.disabled {
+.Viper-textbox.Viper-disabled {
     opacity: 0.4;
     filter: ~"alpha(opacity = 40)";
 }
@@ -623,8 +623,8 @@
 .Viper-textbox-main {
     position: relative;
 }
-.Viper-textbox.actionRevert .Viper-textbox-main,
-.Viper-textbox.actionClear .Viper-textbox-main {
+.Viper-textbox.Viper-actionRevert .Viper-textbox-main,
+.Viper-textbox.Viper-actionClear .Viper-textbox-main {
     padding-right: 22px;
 }
 
@@ -650,13 +650,13 @@
     -webkit-transition-property: color, background;
     -webkit-transition-duration: 0.3s;
 }
-.Viper-textbox.active .Viper-textbox-title,
-.Viper-textbox.required.active .Viper-textbox-title {
+.Viper-textbox.Viper-active .Viper-textbox-title,
+.Viper-textbox.Viper-required.Viper-active .Viper-textbox-title {
     background-color: #366cb7;
     box-shadow: 0 0 6px rgba(0,0,0,0.5);
 }
 
-.Viper-textbox.required .Viper-textbox-title {
+.Viper-textbox.Viper-required .Viper-textbox-title {
     background-color: #c44e4e;
     color: #FFF;
     text-shadow: 0 -1px 0 rgba(0,0,0,0.2);
@@ -677,12 +677,12 @@
     color: #5A8BD0;
     outline: none;
 
-    .Viper-textbox.active &,
-    .Viper-textbox.required.active & {
+    .Viper-textbox.Viper-active &,
+    .Viper-textbox.Viper-required.Viper-active & {
         color: #FFF;
     }
 
-    .Viper-textbox.required & {
+    .Viper-textbox.Viper-required & {
         color: #c44e4e;
     }
 
@@ -694,7 +694,7 @@
         .input-placeholder;
     }
 
-    .Viper-textbox.disabled & {
+    .Viper-textbox.Viper-disabled & {
         text-decoration: line-through;
         color: #CCC;
     }
@@ -705,7 +705,7 @@
     color: #c44e4e;
     font-style: italic;
     font-weight: normal;
-    .Viper-textbox.active & {
+    .Viper-textbox.Viper-active & {
         color: #7c9cc9;
     }
 }
@@ -731,7 +731,7 @@
     text-shadow: 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 .Viper-textbox-action,
-.Viper-textbox.required .Viper-textbox-main:after {
+.Viper-textbox.Viper-required .Viper-textbox-main:after {
     display: none;
     position: absolute;
     cursor: pointer;
@@ -742,28 +742,28 @@
     top: 50%;
     margin-top: -9px;
 
-    .Viper-textbox.disabled & {
+    .Viper-textbox.Viper-disabled & {
         visibility: hidden;
     }
 }
-.Viper-textbox.required .Viper-textbox-main:after {
+.Viper-textbox.Viper-required .Viper-textbox-main:after {
     display: block;
     content: "";
     background-position: 0 -158px;
 }
-.Viper-textbox.required.active .Viper-textbox-main:after {
+.Viper-textbox.Viper-required.Viper-active .Viper-textbox-main:after {
     background-position: 0 -215px;
 }
-.Viper-textbox.actionRevert .Viper-textbox-action,
-.Viper-textbox.actionClear .Viper-textbox-action {
+.Viper-textbox.Viper-actionRevert .Viper-textbox-action,
+.Viper-textbox.Viper-actionClear .Viper-textbox-action {
     display: block;
     opacity: 0.6;
 }
-.Viper-textbox.actionRevert .Viper-textbox-action:hover,
-.Viper-textbox.actionClear .Viper-textbox-action:hover {
+.Viper-textbox.Viper-actionRevert .Viper-textbox-action:hover,
+.Viper-textbox.Viper-actionClear .Viper-textbox-action:hover {
     opacity: 1;
 }
-.Viper-textbox.actionClear .Viper-textbox-action {
+.Viper-textbox.Viper-actionClear .Viper-textbox-action {
     background-position: 0 -140px;
 }
 
@@ -785,7 +785,7 @@
     font-size: 1.2em;
     cursor: pointer;
 
-    &.disabled {
+    &.Viper-disabled {
         opacity: 0.4;
     }
 }
@@ -820,7 +820,7 @@
             1px 0px 0 rgba(0, 0, 0, 0.3) inset,
             -1px 0px 0 rgba(0, 0, 0, 0.3) inset;
 
-    .Viper-checkbox.active & {
+    .Viper-checkbox.Viper-active & {
         background-color: #205caf;
     }
 
@@ -839,7 +839,7 @@
     background-color: #65636b;
     box-shadow: 0 0 2px #000000, 0 1px 0 rgba(255,255,255,0.3) inset;
 
-    .Viper-checkbox.active & {
+    .Viper-checkbox.Viper-active & {
         left: 1.7em;
         background-color: #d9d9de;
         box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.6), 0 1px 0 rgba(255,255,255,0.3) inset;
@@ -863,7 +863,7 @@
     -moz-transition: 0.2s opacity ease-in;
     -webkit-transition: 0.2s opacity ease-in;
 
-    .Viper-checkbox.active & {
+    .Viper-checkbox.Viper-active & {
         opacity: 1;
     }
 
@@ -886,7 +886,7 @@
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.7), 0 1px 0 #555555 inset;
 }
 
-.themeDark.Viper-popup {
+.Viper-themeDark.Viper-popup {
     background-color: #2B2B2B;
     border-color: #2B2B2B;
     color: #FFF;
@@ -928,7 +928,7 @@
     white-space: nowrap;
     cursor: move;
 }
-.themeDark .Viper-popup-header {
+.Viper-themeDark .Viper-popup-header {
     color: #AAAAAA;
     text-shadow: 0 -1px 0 #000000;
 }

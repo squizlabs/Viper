@@ -1,3 +1,16 @@
+/**
+ * +--------------------------------------------------------------------+
+ * | This Squiz Viper file is Copyright (c) Squiz Australia Pty Ltd     |
+ * | ABN 53 131 581 247                                                 |
+ * +--------------------------------------------------------------------+
+ * | IMPORTANT: Your use of this Software is subject to the terms of    |
+ * | the Licence provided in the file licence.txt. If you cannot find   |
+ * | this file please contact Squiz (www.squiz.com.au) so we may        |
+ * | provide you a copy.                                                |
+ * +--------------------------------------------------------------------+
+ *
+ */
+
 function ViperLinkPlugin(viper)
 {
     this.viper = viper;
@@ -379,9 +392,9 @@ ViperLinkPlugin.prototype = {
         main.appendChild(newWindowRow);
 
         if (isEmailLink === true) {
-            dfx.addClass(main, 'emailLink');
+            dfx.addClass(main, 'Viper-emailLink');
         } else {
-            dfx.addClass(main, 'externalLink');
+            dfx.addClass(main, 'Viper-externalLink');
         }
 
         // URL field keyup event, when the url field is changed if the url is an
@@ -390,11 +403,11 @@ ViperLinkPlugin.prototype = {
             var urlValue = this.value;
             if (self.isEmail(urlValue) === true) {
                 // Show the subject field and hide the title field.
-                dfx.removeClass(main, 'externalLink');
-                dfx.addClass(main, 'emailLink');
+                dfx.removeClass(main, 'Viper-externalLink');
+                dfx.addClass(main, 'Viper-emailLink');
             } else {
-                dfx.removeClass(main, 'emailLink');
-                dfx.addClass(main, 'externalLink');
+                dfx.removeClass(main, 'Viper-emailLink');
+                dfx.addClass(main, 'Viper-externalLink');
             }
         });
 
@@ -428,7 +441,7 @@ ViperLinkPlugin.prototype = {
         var self = this;
 
         if (removeLinkOnly === true) {
-            var removeLinkBtn = this.viper.ViperTools.createButton('vitpRemoveLink', '', 'Remove Link', 'linkRemove', function() {
+            var removeLinkBtn = this.viper.ViperTools.createButton('vitpRemoveLink', '', 'Remove Link', 'Viper-linkRemove', function() {
                 self.removeLinks();
             });
 
@@ -450,7 +463,7 @@ ViperLinkPlugin.prototype = {
             }
         });
 
-        var insertLinkBtn = this.viper.ViperTools.createButton('vitpInsertLink', '', 'Toggle Link Options', 'link');
+        var insertLinkBtn = this.viper.ViperTools.createButton('vitpInsertLink', '', 'Toggle Link Options', 'Viper-link');
 
         var link = this.getLinkFromRange(data.range);
         if (link || this.selectionHasLinks(data.drange) === true) {
@@ -459,7 +472,7 @@ ViperLinkPlugin.prototype = {
             }
 
             // Show the remove link button.
-            var removeLinkBtn = this.viper.ViperTools.createButton('vitpRemoveLink', '', 'Remove Link', 'linkRemove', function() {
+            var removeLinkBtn = this.viper.ViperTools.createButton('vitpRemoveLink', '', 'Remove Link', 'Viper-linkRemove', function() {
                 if (!link) {
                     self.removeLinks();
                 } else {
@@ -535,8 +548,8 @@ ViperLinkPlugin.prototype = {
         var disabled = true;
         var self     = this;
 
-        tools.createButton('insertLink', '', 'Toggle Link Options', 'link', null, disabled);
-        tools.createButton('removeLink', '', 'Remove Link', 'linkRemove', function() {
+        tools.createButton('insertLink', '', 'Toggle Link Options', 'Viper-link', null, disabled);
+        tools.createButton('removeLink', '', 'Remove Link', 'Viper-linkRemove', function() {
             if (self.selectionHasLinks() === true) {
                 self.removeLinks();
             } else {
@@ -643,9 +656,9 @@ ViperLinkPlugin.prototype = {
 
         var main = this.viper.ViperTools.getItem('ViperLinkPlugin:vtp:link').element;
         if (isEmailLink === true) {
-            dfx.addClass(main, 'emailLink');
+            dfx.addClass(main, 'Viper-emailLink');
         } else {
-            dfx.addClass(main, 'externalLink');
+            dfx.addClass(main, 'Viper-externalLink');
         }
 
         var tools = this.viper.ViperTools;

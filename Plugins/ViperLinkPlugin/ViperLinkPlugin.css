@@ -1,15 +1,15 @@
-.subSectionRow.subjectRow,
-.subSectionRow.titleRow,
-.subSectionRow.newWindowRow {
+.Viper-subSectionRow.Viper-subjectRow,
+.Viper-subSectionRow.Viper-titleRow,
+.Viper-subSectionRow.Viper-newWindowRow {
     display: none;
 }
 
-.emailLink .subSectionRow.subjectRow {
+.Viper-emailLink .Viper-subSectionRow.Viper-subjectRow {
     display: block;
 }
 
-.externalLink .subSectionRow.titleRow,
-.externalLink .subSectionRow.newWindowRow {
+.Viper-externalLink .Viper-subSectionRow.Viper-titleRow,
+.Viper-externalLink .Viper-subSectionRow.Viper-newWindowRow {
     display: block;
 }
 

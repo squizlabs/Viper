@@ -1,3 +1,16 @@
+/**
+ * +--------------------------------------------------------------------+
+ * | This Squiz Viper file is Copyright (c) Squiz Australia Pty Ltd     |
+ * | ABN 53 131 581 247                                                 |
+ * +--------------------------------------------------------------------+
+ * | IMPORTANT: Your use of this Software is subject to the terms of    |
+ * | the Licence provided in the file licence.txt. If you cannot find   |
+ * | this file please contact Squiz (www.squiz.com.au) so we may        |
+ * | provide you a copy.                                                |
+ * +--------------------------------------------------------------------+
+ *
+ */
+
 function ViperKeyboardEditorPlugin(viper)
 {
     this.viper = viper;
@@ -300,8 +313,11 @@ ViperKeyboardEditorPlugin.prototype = {
                 dfx.setHtml(viperElement, '');
                 this.viper.initEditableElement();
 
-                if (this.viper.isBrowser('chrome') === true || this.viper.isBrowser('safari') === true) {
-                    // Chrome and Safari needs to fire nodes changed here as they do
+                if (this.viper.isBrowser('chrome') === true
+                    || this.viper.isBrowser('safari') === true
+                    || this.viper.isBrowser('msie') === true
+                ) {
+                    // Chrome, Safari and IE needs to fire nodes changed here as they do
                     // not fire keypress.
                     this.viper.fireNodesChanged();
                 }

@@ -110,7 +110,8 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->selectText('dolor');
         $this->clickTopToolbarButton($dir.'toolbarIcon_link.png');
         $this->type('http://www.squizlabs.com');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_updateChanges.png');
+        $updateChangesButton = $this->find($dir.'toolbarIcon_updateChanges.png');
+        $this->click($updateChangesButton);
 
         $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com">Lorem</a> IPSUM <a href="http://www.squizlabs.com">dolor</a></p><p>sit amet <strong>WoW</strong></p>');
 
@@ -213,10 +214,11 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->type('Squiz Labs');
         $this->clickTopToolbarButton($dir.'toolbarIcon_openInNewWindow.png');
         sleep(1);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_updateChanges.png');
+        $updateChangesButton = $this->find($dir.'toolbarIcon_updateChanges.png');
+        $this->click($updateChangesButton);
 
         $this->assertHTMLMatch(
-            '<p><a href="http://www.squizlabs.com" title="Squiz Labs" target="_blank">Lorem</a> IPSUM a href="http://www.squizlabs.com" title="Squiz Labs" target="_blank">dolor</a></p><p>sit amet <strong>WoW</strong></p>',
+            '<p><a href="http://www.squizlabs.com" title="Squiz Labs" target="_blank">Lorem</a> IPSUM <a href="http://www.squizlabs.com" title="Squiz Labs" target="_blank">dolor</a></p><p>sit amet <strong>WoW</strong></p>',
             '<p><a target="_blank" title="Squiz Labs" href="http://www.squizlabs.com">Lorem</a> IPSUM <a target="_blank" title="Squiz Labs" href="http://www.squizlabs.com">dolor</a></p><p>sit amet <strong>WoW</strong></p>'
         );
 
@@ -259,12 +261,13 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
      */
     public function testSelectPartialLink()
     {
-        $this->selectText('ISPSUM');
+        $this->selectText('IPSUM');
 
         $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_link.png');
         $this->type('http://www.squizlabs.com');
         $this->keyDown('Key.ENTER');
 
+        $this->click($this->find('Lorem'));
         $this->click($this->find('IPSUM'));
         $this->keyDown('Key.SHIFT + Key.RIGHT');
 
@@ -371,11 +374,11 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
 
 
     /**
-     * Test that a URL can be cleared from the link field by clicking the x icon
+     * Test that a URL can be edited using the inline toolbar
      *
      * @return void
      */
-    public function testClearingTheURLField()
+    public function testEditingTheURLFieldUsingTheInlineToolbar()
     {
         $dir  = dirname(__FILE__).'/Images/';
 
@@ -396,11 +399,162 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->clickInlineToolbarButton($dir.'toolbarIcon_link_active.png');
         $this->clickInlineToolbarButton($dir.'toolbarIcon_delete_link.png');
         $this->type('http://www.google.com');
-        $this->keyDown('Key.ENTER');
+        $updateChangesButton = $this->find($dir.'toolbarIcon_updateChanges.png');
+        $this->click($updateChangesButton);
 
         $this->assertHTMLMatch('<p><a href="http://www.google.com">Lorem</a> IPSUM dolor</p><p>sit amet <strong>WoW</strong></p>');
 
-    }//end testClearingTheURLField()
+    }//end testEditingTheURLFieldUsingTheInlineToolbar()
+
+
+    /**
+     * Test that you cannot delete a link using the x button in the toolbar
+     *
+     * @return void
+     */
+    public function testTryingToDeleteLinkUsingLinkIcon()
+    {
+        $dir  = dirname(__FILE__).'/Images/';
+
+        $text = $this->find('IPSUM');
+        $this->selectText('Lorem');
+
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_link.png');
+        $this->type('http://www.squizlabs.com');
+        $this->keyDown('Key.ENTER');
+
+        $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com">Lorem</a> IPSUM dolor</p><p>sit amet <strong>WoW</strong></p>');
+
+        $this->click($text);
+        $this->selectText('Lorem');
+        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_removeLink.png'), 'Remove link icon should be available.');
+        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_removeLink.png'), 'Remove link icon should be available in top toolbar.');
+
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_link_active.png');
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_delete_link.png');
+        $this->keyDown('Key.ENTER');
+
+        $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com">Lorem</a> IPSUM dolor</p><p>sit amet <strong>WoW</strong></p>');
+
+    }//end testTryingToDeleteLinkUsingLinkIcon()
+
+
+    /**
+     * Test that a URL can be edited using the top toolbar
+     *
+     * @return void
+     */
+    public function testEditingTheURLFieldUsingTheTopToolbar()
+    {
+        $dir  = dirname(__FILE__).'/Images/';
+
+        $text = $this->find('IPSUM');
+        $this->selectText('Lorem');
+
+        $this->clickTopToolbarButton($dir.'toolbarIcon_link.png');
+        $this->type('http://www.squizlabs.com');
+        $this->keyDown('Key.ENTER');
+
+        $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com">Lorem</a> IPSUM dolor</p><p>sit amet <strong>WoW</strong></p>');
+
+        $this->click($text);
+        $this->selectText('Lorem');
+
+        $this->clickTopToolbarButton($dir.'toolbarIcon_link_active.png');
+        $this->clickTopToolbarButton($dir.'toolbarIcon_delete_link.png');
+        $this->type('http://www.google.com');
+        $updateChangesButton = $this->find($dir.'toolbarIcon_updateChanges.png');
+        $this->click($updateChangesButton);
+
+        $this->assertHTMLMatch('<p><a href="http://www.google.com">Lorem</a> IPSUM dolor</p><p>sit amet <strong>WoW</strong></p>');
+
+    }//end testEditingTheURLFieldUsingTheTopToolbar()
+
+
+    /**
+     * Test that you can add and edit a title using the inline toolbar
+     *
+     * @return void
+     */
+    public function testAddingAndEditingTheTitleUsingInlineToolbar()
+    {
+        $dir  = dirname(__FILE__).'/Images/';
+
+        $text = $this->find('IPSUM');
+        $this->selectText('Lorem');
+
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_link.png');
+        $this->type('http://www.squizlabs.com');
+        $this->keyDown('Key.ENTER');
+
+        $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com">Lorem</a> IPSUM dolor</p><p>sit amet <strong>WoW</strong></p>');
+
+        $this->click($text);
+        $this->selectText('Lorem');
+        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_removeLink.png'), 'Remove link icon should be available.');
+        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_removeLink.png'), 'Remove link icon should be available in top toolbar.');
+
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_link_active.png');
+        $titleField = $this->find($dir.'input_title.png', $this->getInlineToolbar());
+        $this->click($titleField);
+        $this->type('title');
+        $this->keyDown('Key.ENTER');
+
+        $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com" title="title">Lorem</a> IPSUM dolor</p><p>sit amet <strong>WoW</strong></p>');
+
+        $this->click($text);
+        $this->selectText('Lorem');
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_link_active.png');
+        $this->click($titleField);
+        $this->type('abc');
+        $updateChangesButton = $this->find($dir.'toolbarIcon_updateChanges.png');
+        $this->click($updateChangesButton);
+
+        $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com" title="titleabc">Lorem</a> IPSUM dolor</p><p>sit amet <strong>WoW</strong></p>');
+
+    }//end testAddingAndEditingTheTitleUsingInlineToolbar()
+
+
+    /**
+     * Test that you can add and edit a title using the top toolbar
+     *
+     * @return void
+     */
+    public function testAddingAndEditingTheTitleUsingTopToolbar()
+    {
+        $dir  = dirname(__FILE__).'/Images/';
+
+        $text = $this->find('IPSUM');
+        $this->selectText('Lorem');
+
+        $this->clickTopToolbarButton($dir.'toolbarIcon_link.png');
+        $this->type('http://www.squizlabs.com');
+        $this->keyDown('Key.ENTER');
+
+        $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com">Lorem</a> IPSUM dolor</p><p>sit amet <strong>WoW</strong></p>');
+
+        $this->click($text);
+        $this->selectText('Lorem');
+
+        $this->clickTopToolbarButton($dir.'toolbarIcon_link_active.png');
+        $titleField = $this->find($dir.'input_title.png');
+        $this->click($titleField);
+        $this->type('title');
+        $this->keyDown('Key.ENTER');
+
+        $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com" title="title">Lorem</a> IPSUM dolor</p><p>sit amet <strong>WoW</strong></p>');
+
+        $this->click($text);
+        $this->selectText('Lorem');
+        $this->clickTopToolbarButton($dir.'toolbarIcon_link_active.png');
+        $this->click($titleField);
+        $this->type('abc');
+        $updateChangesButton = $this->find($dir.'toolbarIcon_updateChanges.png');
+        $this->click($updateChangesButton);
+
+        $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com" title="titleabc">Lorem</a> IPSUM dolor</p><p>sit amet <strong>WoW</strong></p>');
+
+    }//end testAddingAndEditingTheTitleUsingTopToolbar()
 
 
     /**
@@ -620,8 +774,12 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
     {
         $dir = dirname(__FILE__).'/Images/';
 
+        // Check that remove link is disabled for a paragraph without links
         $this->selectText('Lorem');
+        $this->selectInlineToolbarLineageItem(0);
+        $this->assertFalse($this->inlineToolbarButtonExists($dir.'toolbarIcon_removeLink.png'), 'Remove link icon should not appear in the inline toolbar.');
 
+        $this->selectText('Lorem');
         $this->clickInlineToolbarButton($dir.'toolbarIcon_link.png');
         $this->type('http://www.squizlabs.com');
         $this->keyDown('Key.ENTER');

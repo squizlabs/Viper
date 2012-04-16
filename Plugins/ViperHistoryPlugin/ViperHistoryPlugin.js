@@ -1,3 +1,16 @@
+/**
+ * +--------------------------------------------------------------------+
+ * | This Squiz Viper file is Copyright (c) Squiz Australia Pty Ltd     |
+ * | ABN 53 131 581 247                                                 |
+ * +--------------------------------------------------------------------+
+ * | IMPORTANT: Your use of this Software is subject to the terms of    |
+ * | the Licence provided in the file licence.txt. If you cannot find   |
+ * | this file please contact Squiz (www.squiz.com.au) so we may        |
+ * | provide you a copy.                                                |
+ * +--------------------------------------------------------------------+
+ *
+ */
+
 function ViperHistoryPlugin(viper)
 {
     this.viper = viper;
@@ -19,10 +32,10 @@ ViperHistoryPlugin.prototype = {
             };
 
             var btnGroup = tools.createButtonGroup('ViperHistoryPlugin:buttons');
-            tools.createButton('undo', '', 'Undo', 'historyUndo', function() {
+            tools.createButton('undo', '', 'Undo', 'Viper-historyUndo', function() {
                 return self.handleUndo();
             });
-            tools.createButton('redo', '', 'Redo', 'historyRedo', function() {
+            tools.createButton('redo', '', 'Redo', 'Viper-historyRedo', function() {
                 return self.handleRedo();
             });
             tools.addButtonToGroup('undo', 'ViperHistoryPlugin:buttons');

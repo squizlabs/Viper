@@ -1,3 +1,16 @@
+/**
+ * +--------------------------------------------------------------------+
+ * | This Squiz Viper file is Copyright (c) Squiz Australia Pty Ltd     |
+ * | ABN 53 131 581 247                                                 |
+ * +--------------------------------------------------------------------+
+ * | IMPORTANT: Your use of this Software is subject to the terms of    |
+ * | the Licence provided in the file licence.txt. If you cannot find   |
+ * | this file please contact Squiz (www.squiz.com.au) so we may        |
+ * | provide you a copy.                                                |
+ * +--------------------------------------------------------------------+
+ *
+ */
+
 function ViperInvisibleCharPlugin(viper)
 {
     this.viper = viper;
@@ -95,7 +108,7 @@ ViperInvisibleCharPlugin.prototype = {
         var self  = this;
         var tools = this.viper.ViperTools;
 
-        var btn = tools.createButton('showHiddenChars', '', 'Toggle Hidden Characters', 'showHiddenChars', function() {
+        var btn = tools.createButton('showHiddenChars', '', 'Toggle Hidden Characters', 'Viper-showHiddenChars', function() {
             if (self._showHiddenChars === false) {
                 self._showHiddenChars = true;
                 self.showHiddenChars();

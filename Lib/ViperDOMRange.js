@@ -1,3 +1,16 @@
+/**
+ * +--------------------------------------------------------------------+
+ * | This Squiz Viper file is Copyright (c) Squiz Australia Pty Ltd     |
+ * | ABN 53 131 581 247                                                 |
+ * +--------------------------------------------------------------------+
+ * | IMPORTANT: Your use of this Software is subject to the terms of    |
+ * | the Licence provided in the file licence.txt. If you cannot find   |
+ * | this file please contact Squiz (www.squiz.com.au) so we may        |
+ * | provide you a copy.                                                |
+ * +--------------------------------------------------------------------+
+ *
+ */
+
 function ViperDOMRange(rangeObj)
 {
     this.rangeObj = rangeObj;
@@ -729,6 +742,12 @@ ViperDOMRange.prototype = {
             && range.endOffset === 0
         ) {
             return range.startContainer;
+        } else if (startNode.nodeType === dfx.ELEMENT_NODE
+            && endNode.nodeType === dfx.TEXT_NODE
+            && range.endOffset === endNode.data.length
+            && this._getLastSelectableChild(startNode) === endNode
+        ) {
+            return startNode;
         }
 
         // We may need to adjust the "startNode" depending on its offset.

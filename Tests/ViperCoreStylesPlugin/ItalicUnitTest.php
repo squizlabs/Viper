@@ -298,6 +298,95 @@ class Viper_Tests_ViperCoreStylesPlugin_ItalicUnitTest extends AbstractViperUnit
 
     }//end testAddingItalicsToTwoWordsWhereOneIsBoldAndOneItalics()
 
+
+    /**
+     * Test applying italics to two paragraphs where there is a HTML comment in the source code.
+     *
+     * @return void
+     */
+    public function testApplyingAndRemovingItalicsToTwoParagraphsWhereHtmlCommentsInSource()
+    {
+        $dir = dirname(__FILE__).'/Images/';
+
+        $this->selectText('XuT');
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickTopToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_italic.png');
+        $this->assertHTMLMatch('<p><em>Lorem XuT dolor</em><!-- hello world! --></p><p>sit amet WoW</p><p>Another p</p>');
+
+        $this->click($this->find('XuT'));
+        $this->click($this->find('XuT'));
+
+        $this->selectText('WoW');
+        $this->selectInlineToolbarLineageItem(0);
+        $this->keyDown('Key.CMD + i');
+        $this->assertHTMLMatch('<p><em>Lorem XuT dolor</em><!-- hello world! --></p><p><em>sit amet WoW</em></p><p>Another p</p>');
+
+        $this->selectText('Lorem', 'WoW');
+        $this->keyDown('Key.CMD + i');
+        $this->assertHTMLMatch('<p>Lorem XuT dolor<!-- hello world! --></p><p>sit amet WoW</p><p>Another p</p>');
+
+    }//end testApplyingAndRemovingItalicsToTwoParagraphsWhereHtmlCommentsInSource()
+
+
+    /**
+     * Test applying and removing italics to two paragraphs.
+     *
+     * @return void
+     */
+    public function testApplyingAndRemovingItalicsToTwoParagraphs()
+    {
+        $dir = dirname(__FILE__).'/Images/';
+
+        $this->selectText('XuT');
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickTopToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_italic.png');
+        $this->assertHTMLMatch('<p><em>Lorem XuT dolor</em></p><p>sit amet WoW</p><p>Another p</p>');
+
+        $this->click($this->find('XuT'));
+        $this->click($this->find('XuT'));
+
+        $this->selectText('WoW');
+        $this->selectInlineToolbarLineageItem(0);
+        $this->keyDown('Key.CMD + i');
+        $this->assertHTMLMatch('<p><em>Lorem XuT dolor</em></p><p><em>sit amet WoW</em></p><p>Another p</p>');
+
+        $this->selectText('Lorem', 'WoW');
+        $this->keyDown('Key.CMD + i');
+        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p>sit amet WoW</p><p>Another p</p>');
+
+    }//end testApplyingAndRemovingItalicsToTwoParagraphs()
+
+
+    /**
+     * Test applying and removing italics to all content. Also checks that class and anchor does not become active when it applies the bold
+     *
+     * @return void
+     */
+    public function testApplyingAndRemovingItalicToAllContent()
+    {
+        $dir = dirname(__FILE__).'/Images/';
+
+        $this->click($this->find('XuT'));
+        $this->keyDown('Key.CMD + a');
+        $this->clickTopToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_italic.png');
+        $this->assertHTMLMatch('<p><em>Lorem XuT dolor</em></p><p><em>sit amet WoW</em></p>');
+
+        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic_active.png'), 'Italic icon should be active');
+        $this->assertFalse($this->topToolbarButtonExists(dirname(dirname(__FILE__)).'/ViperFormatPlugin/Images/toolbarIcon_class_active.png'), 'Class icon should not be active');
+        $this->assertTrue($this->topToolbarButtonExists(dirname(dirname(__FILE__)).'/ViperFormatPlugin/Images/toolbarIcon_anchor_active.png'), 'Anchor icon should not be active');
+
+        $this->click($this->find('XuT'));
+        $this->keyDown('Key.CMD + a');
+        $this->clickTopToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_italic_active.png');
+        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p>sit <em>amet</em> WoW</p>');
+
+        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'Images/toolbarIcon_italic.png'), 'Italic icon should not be active');
+        $this->assertFalse($this->topToolbarButtonExists(dirname(dirname(__FILE__)).'/ViperFormatPlugin/Images/toolbarIcon_class_active.png'), 'Class icon should not be active');
+        $this->assertTrue($this->topToolbarButtonExists(dirname(dirname(__FILE__)).'/ViperFormatPlugin/Images/toolbarIcon_anchor_active.png'), 'Anchor icon should not be active');
+
+    }//end testApplyingAndRemovingItalicToAllContent()
+
+
 }//end class
 
 ?>
