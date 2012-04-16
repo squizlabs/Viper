@@ -3845,7 +3845,7 @@ Viper.prototype = {
         // e.g. Keyword plugin?
         // Plugins can hookin to this method to modify the HTML
         // before Viper returns its HTML contents.
-        this.fireCallbacks('getHtml', {element: clone});
+        this.fireCallbacks('Viper:getHtml', {element: clone});
         var html = dfx.getHtml(clone);
         html     = this._fixHtml(html);
         html     = this.cleanHTML(html);

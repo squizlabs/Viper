@@ -103,6 +103,17 @@ ViperImagePlugin.prototype = {
             self.showImageResizeHandles(image);
         });
 
+        this.viper.registerCallback('Viper:getHtml', 'ViperImagePlugin', function(data) {
+            var tags = dfx.getClass('ui-resizable', data.element);
+            for (var i = 0; i < tags.length; i++) {
+                var parent = tags[i].parentNode;
+                dfx.removeClass(tags[i], 'ui-resizable');
+                dfx.insertBefore(parent, tags[i]);
+                self._hideImageResizeHandles(tags[i]);
+                dfx.remove(parent);
+            }
+        });
+
     },
 
     rangeToImage: function(range, url, alt, title)
@@ -493,46 +504,68 @@ ViperImagePlugin.prototype = {
             }
         }
 
-        var width  = dfx.getStyle(this._resizeImage, 'width');
-        var height = dfx.getStyle(this._resizeImage, 'height');
-
-        dfxjQuery(this._resizeImage).resizable('destroy');
-
-        if (!this._resizeImage.className) {
-            this._resizeImage.removeAttribute('class');
-        }
-
-        this._resizeImage.setAttribute('style', this._imageStyleAttr);
-
-        if (this._resized === true) {
-            this._resizeImage.setAttribute('width', width);
-            this._resizeImage.setAttribute('height', height);
-
-            // Remove width and height styles.
-            dfx.setStyle(this._resizeImage, 'width', '');
-            dfx.setStyle(this._resizeImage, 'height', '');
-        }
-
-        if (!this._resizeImage.getAttribute('style') || this._resizeImage.getAttribute('style') === 'null') {
-            this._resizeImage.removeAttribute('style');
-        }
-
-        this._fixImageResize();
+        this._hideImageResizeHandles();
         this._resizeImage = null;
 
     },
 
-    _fixImageResize: function()
+    _hideImageResizeHandles: function(image)
     {
-        dfx.setStyle(this._resizeImage, 'left', '');
-        dfx.setStyle(this._resizeImage, 'top', '');
-        dfx.setStyle(this._resizeImage, 'resize', '');
-        dfx.setStyle(this._resizeImage, 'position', '');
+        var imgArg = image;
 
-        if (this._resizeWidgetElem) {
-            dfx.setStyle(this._resizeWidgetElem, 'left', '');
-            dfx.setStyle(this._resizeWidgetElem, 'top', '');
-            dfx.setStyle(this._resizeWidgetElem, 'overflow', '');
+        image = image || this._resizeImage;
+        var width  = dfx.getStyle(image, 'width');
+        var height = dfx.getStyle(image, 'height');
+
+        if (!imgArg) {
+            dfxjQuery(image).resizable('destroy');
+        }
+
+        if (!image.className) {
+            image.removeAttribute('class');
+        }
+
+        image.setAttribute('style', this._imageStyleAttr);
+
+        if (this._resized === true) {
+            image.setAttribute('width', width);
+            image.setAttribute('height', height);
+
+            // Remove width and height styles.
+            dfx.setStyle(image, 'width', '');
+            dfx.setStyle(image, 'height', '');
+        }
+
+        if (!image.getAttribute('style') || image.getAttribute('style') === 'null') {
+            image.removeAttribute('style');
+        }
+
+        if (imgArg) {
+            this._fixImageResize(image);
+        } else {
+            this._fixImageResize();
+        }
+
+    },
+
+    _fixImageResize: function(image)
+    {
+        if (image) {
+            dfx.setStyle(image, 'left', '');
+            dfx.setStyle(image, 'top', '');
+            dfx.setStyle(image, 'resize', '');
+            dfx.setStyle(image, 'position', '');
+        } else {
+            dfx.setStyle(this._resizeImage, 'left', '');
+            dfx.setStyle(this._resizeImage, 'top', '');
+            dfx.setStyle(this._resizeImage, 'resize', '');
+            dfx.setStyle(this._resizeImage, 'position', '');
+
+            if (this._resizeWidgetElem) {
+                dfx.setStyle(this._resizeWidgetElem, 'left', '');
+                dfx.setStyle(this._resizeWidgetElem, 'top', '');
+                dfx.setStyle(this._resizeWidgetElem, 'overflow', '');
+            }
         }
 
     }
