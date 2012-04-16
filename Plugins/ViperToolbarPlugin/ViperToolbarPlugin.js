@@ -62,6 +62,10 @@ function ViperToolbarPlugin(viper)
         }
     });
 
+    this.viper.registerCallback('Viper:destroy', 'ViperToolbarPlugin', function(range) {
+        self.remove();
+    });
+
 }
 
 ViperToolbarPlugin.prototype = {
@@ -142,6 +146,7 @@ ViperToolbarPlugin.prototype = {
         dfx.addClass(elem, 'ViperTP-bar Viper-themeDark Viper-scalable');
         this._toolbar = elem;
         dfx.addClass(this._toolbar, 'viper-inactive');
+        dfx.addClass(this._toolbar, this.viper.getElementHolder().className);
 
         dfx.addEvent(elem, 'mousedown', function(e) {
             var target = dfx.getMouseEventTarget(e);

@@ -187,6 +187,12 @@ Viper.prototype = {
         this._viperElementHolder.appendChild(element);
     },
 
+    getElementHolder: function()
+    {
+        return this._viperElementHolder;
+
+    },
+
     /**
      * Set Viper mode.
      *
