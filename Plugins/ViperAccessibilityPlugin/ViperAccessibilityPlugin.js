@@ -463,12 +463,22 @@ ViperAccessibilityPlugin.prototype = {
             callback.call(this);
         };
 
-        script.onreadystatechange = function() {
-            if (/^(complete|loaded)$/.test(this.readyState) === true) {
-                script.onreadystatechange = null;
-                script.onload();
+        if (navigator.appName == 'Microsoft Internet Explorer') {
+            var rv = -1;
+            var re = new RegExp("MSIE ([0-9]{1,}[\.0-9]{0,})");
+            if (re.exec(navigator.userAgent) != null) {
+                rv = parseFloat(RegExp.$1);
             }
-        }
+
+            if (rv <= 8.0) {
+                script.onreadystatechange = function() {
+                    if (/^(complete|loaded)$/.test(this.readyState) === true) {
+                        script.onreadystatechange = null;
+                        script.onload();
+                    }
+                }
+            }
+        }//end if
 
         script.src = src;
 

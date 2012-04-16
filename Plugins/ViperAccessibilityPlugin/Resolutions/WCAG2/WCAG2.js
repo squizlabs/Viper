@@ -227,7 +227,7 @@ ViperAccessibilityPlugin_WCAG2 = {
 
         parsed.techniques = [];
 
-        var techniques = sections.splice(4).join('.');
+        var techniques = sections.splice(4, (sections.length - 1)).join('.');
         var techniques = techniques.split(',');
         for (var i = 0; i < techniques.length; i++) {
             parsed.techniques.push(techniques[i]);
