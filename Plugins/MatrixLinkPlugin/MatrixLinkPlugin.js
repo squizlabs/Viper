@@ -27,7 +27,7 @@ MatrixLinkPlugin.prototype = {
         // Insert asset picker icon next to url field.
         // Insert anchor row after URL field.
         var urlField    = tools.getItem(idPrefix + ':url').element;
-        var assetPicker = tools.createButton(idPrefix + ':assetPicker', '', 'Pick Asset', 'ees-target', function() {
+        var assetPicker = tools.createButton(idPrefix + ':assetPicker', '', 'Pick Asset', 'Viper-ees-target', function() {
             self.pickAsset(idPrefix);
         });
         dfx.insertAfter(urlField, assetPicker);
@@ -39,8 +39,8 @@ MatrixLinkPlugin.prototype = {
             urlValue = urlValue.replace('./?a=', '');
 
             // Internal URL.
-            dfx.removeClass(main, 'emailLink');
-            dfx.addClass(main, 'internalLink');
+            dfx.removeClass(main, 'Viper-emailLink');
+            dfx.addClass(main, 'Viper-internalLink');
 
             // If the link content has %asset_summary_xx% keyword then check the summary
             // checkbox.
@@ -64,7 +64,7 @@ MatrixLinkPlugin.prototype = {
             self.updateLink(idPrefix);
         });
 
-        var anchorRow = tools.createRow(idPrefix + ':anchorRow', 'anchorRow');
+        var anchorRow = tools.createRow(idPrefix + ':anchorRow', 'Viper-anchorRow');
         anchorRow.appendChild(anchor);
 
         // Insert anchor row after URL field.
@@ -75,21 +75,21 @@ MatrixLinkPlugin.prototype = {
         // if the value is an internal URL.
         this.viper.registerCallback('ViperTools:changed:' + idPrefix + ':url', 'MatrixLinkPlugin', function() {
             var urlValue = self.viper.ViperTools.getItem(idPrefix + ':url').getValue();
-            if (dfx.hasClass(main, 'emailLink') === false) {
+            if (dfx.hasClass(main, 'Viper-emailLink') === false) {
                 // Not an email, check if its internal URL.
                 if (self._isInternalLink(urlValue) === true) {
                     // Internal URL.
-                    dfx.removeClass(main, 'emailLink');
-                    dfx.addClass(main, 'internalLink');
+                    dfx.removeClass(main, 'Viper-emailLink');
+                    dfx.addClass(main, 'Viper-internalLink');
                 } else {
-                    dfx.removeClass(main, 'internalLink');
+                    dfx.removeClass(main, 'Viper-internalLink');
                 }
             }
         });
 
         // The include summary checkbox.
         var includeSummary = tools.createCheckbox(idPrefix + ':includeSummary', 'Include Summary', incSummary);
-        var includeSummaryRow = tools.createRow(idPrefix + ':includeSummaryRow', 'includeSummaryRow');
+        var includeSummaryRow = tools.createRow(idPrefix + ':includeSummaryRow', 'Viper-includeSummaryRow');
         includeSummaryRow.appendChild(includeSummary);
 
         // Insert it before new window option.
@@ -159,8 +159,8 @@ MatrixLinkPlugin.prototype = {
             urlValue = urlValue.replace('./?a=', '');
 
             // Internal URL.
-            dfx.removeClass(main, 'emailLink');
-            dfx.addClass(main, 'internalLink');
+            dfx.removeClass(main, 'Viper-emailLink');
+            dfx.addClass(main, 'Viper-internalLink');
 
             // If the link content has %asset_summary_xx% keyword then check the summary
             // checkbox.
@@ -184,7 +184,7 @@ MatrixLinkPlugin.prototype = {
         } else {
             tools.getItem('ViperLinkPlugin:vtp:anchor').setValue('');
             tools.getItem('ViperLinkPlugin:vtp:includeSummary').setValue(false);
-            dfx.removeClass(main, 'internalLink');
+            dfx.removeClass(main, 'Viper-internalLink');
         }//end if
 
     },
@@ -198,13 +198,13 @@ MatrixLinkPlugin.prototype = {
         var tools       = this.viper.ViperTools;
         var urlField    = tools.getItem(idPrefix + ':url').element;
         EasyEditAssetManager.getCurrentAsset(function(asset){
-                
+
             var initialValue = tools.getItem(idPrefix + ':url').getValue(),
                 focusId = asset.id;
-            if (/^[0-9]+$/.test(initialValue)) {     
+            if (/^[0-9]+$/.test(initialValue)) {
                 focusId = initialValue;
             }// End if
-                
+
             EasyEditAssetFinder.init({
                 focusAssetId: focusId,
                 callback: function(selectedAsset){

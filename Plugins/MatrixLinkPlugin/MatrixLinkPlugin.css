@@ -1,10 +1,10 @@
-.subSectionRow.anchorRow,
-.subSectionRow.includeSummaryRow {
+.Viper-subSectionRow.Viper-anchorRow,
+.Viper-subSectionRow.Viper-includeSummaryRow {
     display: none;
 }
 
-.internalLink .subSectionRow.anchorRow,
-.internalLink .subSectionRow.newWindowRow,
-.internalLink .subSectionRow.includeSummaryRow {
+.Viper-internalLink .Viper-subSectionRow.Viper-anchorRow,
+.Viper-internalLink .Viper-subSectionRow.Viper-newWindowRow,
+.Viper-internalLink .Viper-subSectionRow.Viper-includeSummaryRow {
     display: block;
 }

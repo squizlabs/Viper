@@ -1,27 +1,27 @@
-.buttonIcon.ees-link {
+.Viper-buttonIcon.Viper-ees-link {
   background-position: 0 -675px;
 }
-.Viper-button:active .buttonIcon.ees-link, .Viper-button.active .buttonIcon.ees-link, .Viper-button.selected .buttonIcon.ees-link {
+.Viper-button:active .Viper-buttonIcon.Viper-ees-link, .Viper-button.Viper-active .Viper-buttonIcon.Viper-ees-link, .Viper-button.Viper-selected .Viper-buttonIcon.Viper-ees-link {
   background-position: -33px -675px;
 }
-.buttonIcon.ees-image {
+.Viper-buttonIcon.Viper-ees-image {
   background-position: 0 -756px;
 }
-.Viper-button:active .buttonIcon.ees-image, .Viper-button.active .buttonIcon.ees-image, .Viper-button.selected .buttonIcon.ees-image {
+.Viper-button:active .Viper-buttonIcon.Viper-ees-image, .Viper-button.Viper-active .Viper-buttonIcon.Viper-ees-image, .Viper-button.Viper-selected .Viper-buttonIcon.Viper-ees-image {
   background-position: -33px -756px;
 }
-.buttonIcon.ees-target {
+.Viper-buttonIcon.Viper-ees-target {
   background-position: 0 -1215px;
 }
-.Viper-button:active .buttonIcon.ees-target, .Viper-button.active .buttonIcon.ees-target, .Viper-button.selected .buttonIcon.ees-target {
+.Viper-button:active .Viper-buttonIcon.Viper-ees-target, .Viper-button.Viper-active .Viper-buttonIcon.Viper-ees-target, .Viper-button.Viper-selected .Viper-buttonIcon.Viper-ees-target {
   background-position: -33px -1215px;
 }
-.Viper-button.ees-target {
+.Viper-button.Viper-ees-target {
   position: absolute;
   right: 0;
   top: 0;
   line-height: 2.1em;
 }
-.subSectionRow.urlRow {
+.Viper-subSectionRow.Viper-urlRow {
   padding-right: 3.8em;
 }

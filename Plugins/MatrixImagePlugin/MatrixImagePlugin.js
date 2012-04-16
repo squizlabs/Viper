@@ -21,12 +21,12 @@ MatrixImagePlugin.prototype = {
         var self  = this;
         var tools = this.viper.ViperTools;
 
-        var urlRow = tools.createRow('MatrixImagePlugin:urlRow', 'urlRow');
+        var urlRow = tools.createRow('MatrixImagePlugin:urlRow', 'Viper-urlRow');
 
         // Insert asset picker icon next to url field.
         // Insert anchor row after URL field.
         var urlField    = tools.getItem('ViperImagePlugin:urlInput').element;
-        var assetPicker = tools.createButton('MatrixImagePlugin:assetPicker', '', 'Pick Asset', 'ees-target', function() {
+        var assetPicker = tools.createButton('MatrixImagePlugin:assetPicker', '', 'Pick Asset', 'Viper-ees-target', function() {
             self.pickAsset();
         });
 
@@ -87,13 +87,13 @@ MatrixImagePlugin.prototype = {
         var tools       = this.viper.ViperTools;
         var urlField    = tools.getItem('ViperImagePlugin:urlInput');
         EasyEditAssetManager.getCurrentAsset(function(asset){
-                
+
             var initialValue = urlField.getValue(),
                 focusId = asset.id;
-            if (/^[0-9]+$/.test(initialValue)) {     
+            if (/^[0-9]+$/.test(initialValue)) {
                 focusId = initialValue;
             }// End if
-                
+
             EasyEditAssetFinder.init({
                 focusAssetId: focusId,
                 types: ['image','thumbnail'],

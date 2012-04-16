@@ -1,24 +1,16 @@
 /**
- * JS code to include all Viper JS files.
+ * +--------------------------------------------------------------------+
+ * | This Squiz Viper file is Copyright (c) Squiz Australia Pty Ltd     |
+ * | ABN 53 131 581 247                                                 |
+ * +--------------------------------------------------------------------+
+ * | IMPORTANT: Your use of this Software is subject to the terms of    |
+ * | the Licence provided in the file licence.txt. If you cannot find   |
+ * | this file please contact Squiz (www.squiz.com.au) so we may        |
+ * | provide you a copy.                                                |
+ * +--------------------------------------------------------------------+
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License, version 2, as
- * published by the Free Software Foundation.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program as the file license.txt. If not, see
- * <http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt>
- *
- * @package    Viper
- * @author     Squiz Pty Ltd <products@squiz.net>
- * @copyright  2010 Squiz Pty Ltd (ACN 084 670 600)
- * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt GPLv2
  */
+
 ViperReadyCallback = null;
 (function() {
     dfxLoadedCallback = function() {
@@ -76,7 +68,7 @@ ViperReadyCallback = null;
         };
 
         // Viper core files.
-        var jsFiles = 'Viper.js|ViperChangeTracker.js|ViperTools.js|ViperDOMRange.js|ViperIERange.js|ViperMozRange.js|ViperSelection.js|ViperPluginManager.js|ViperHistoryManager.js|XPath.js';
+        var jsFiles = 'Viper.js|ViperChangeTracker.js|ViperTools.js|ViperDOMRange.js|ViperIERange.js|ViperMozRange.js|ViperSelection.js|ViperPluginManager.js|ViperHistoryManager.js|';
         jsFiles     = jsFiles.split('|');
 
         _loadScripts(path + '/Lib/', jsFiles, function() {
