@@ -20,6 +20,7 @@ function ViperImagePlugin(viper)
     this._resizeWidgetElem = null;
     this._imageStyleAttr   = null;
     this._resized          = false;
+    this._ieImageResize    = null;
 
 }
 
@@ -32,6 +33,8 @@ ViperImagePlugin.prototype = {
         var self = this;
         this.viper.registerCallback('Viper:mouseDown', 'ViperImagePlugin', function(e) {
             var target = dfx.getMouseEventTarget(e);
+            self._ieImageResize = null;
+
             if (dfx.isTag(target, 'img') === true) {
                 if (self.viper.isBrowser('msie') !== true) {
                     dfx.preventDefault(e);
@@ -40,6 +43,7 @@ ViperImagePlugin.prototype = {
                     self._updateToolbar(target);
                     ViperSelection.removeAllRanges();
                 } else {
+                    self._ieImageResize = target;
                     self._updateToolbar(target);
                     self.viper.registerCallback('Viper:mouseUp', 'ViperImagePlugin:ie', function(e) {
                         if (dfx.hasAttribute(target, 'width') === true) {
@@ -80,12 +84,19 @@ ViperImagePlugin.prototype = {
                     }
                 }
 
-                var range        = self.viper.getViperRange();
-                var selectedNode = range.getNodeSelection();
-                if (selectedNode) {
-                    if (self.removeImage(selectedNode) === true) {
-                        self._updateToolbar();
-                        return false;
+                if (self._ieImageResize) {
+                    dfx.remove(self._ieImageResize);
+                    self._ieImageResize = null;
+                    self.viper.fireNodesChanged();
+                    return false;
+                } else {
+                    var range        = self.viper.getViperRange();
+                    var selectedNode = range.getNodeSelection();
+                    if (selectedNode) {
+                        if (self.removeImage(selectedNode) === true) {
+                            self._updateToolbar();
+                            return false;
+                        }
                     }
                 }
             }
