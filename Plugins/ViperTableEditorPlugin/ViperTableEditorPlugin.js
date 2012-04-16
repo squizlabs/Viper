@@ -3003,6 +3003,10 @@ ViperTableEditorPlugin.prototype = {
                     var cellid = cell.getAttribute('id');
                     if (!cellid) {
                         cellid = tableId + 'r' + rowCount + 'c' + cellCount;
+                        var existingElem = dfx.getId(cellid);
+                        if (existingElem) {
+                            existingElem.removeAttribute('id');
+                        }
                     }
 
                     if (rowspan > 1) {

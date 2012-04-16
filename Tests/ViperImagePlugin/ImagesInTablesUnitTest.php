@@ -98,11 +98,8 @@ class Viper_Tests_ViperImagePlugin_ImagesInTablesUnitTest extends AbstractViperU
      *
      * @return void
      */
-    public function testInsertingAndDeletingAnImageUsingTheUpdateChangesButton()
+    public function testInsertingAndEditingAnImageUsingTheUpdateChangesButton()
     {
-        // Stop here as we need a way to click the update changes button.
-        $this->markTestIncomplete('Need a way to click update changes button.');
-
         $dir = dirname(__FILE__).'/Images/';
 
         $this->selectText('LAbS');
@@ -112,18 +109,22 @@ class Viper_Tests_ViperImagePlugin_ImagesInTablesUnitTest extends AbstractViperU
         $this->type('http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg');
         $this->keyDown('Key.TAB');
         $this->type('Alt tag');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_updateChanges.png');
+        sleep(1);
+        $updateChanges = $this->find($dir.'toolbarIcon_updateChanges.png');
+        $this->click($updateChanges);
 
         $this->assertEquals('UnaU LAbS<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Alt tag" /> FoX Mnu', $this->getHtml('td,th', 3));
 
         $this->clickElement('img', 1);
         $this->clickTopToolbarButton($dir.'toolbarIcon_image_highlighted.png');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_deleteValue_icon.png');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_updateChanges.png');
 
-        $this->assertEquals('UnaU LAbS FoX Mnu', $this->getHtml('td,th', 3));
+        $this->clickTopToolbarButton($dir.'toobarIcon_image_presentational.png');
+        $this->click($updateChanges);
+        $this->clickTopToolbarButton($dir.'toolbarIcon_subImage_active.png');
 
-    }//end testInsertingAndDeletingAnImageUsingTheUpdateChangesButton()
+        $this->assertEquals('UnaU LAbS<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="" /> FoX Mnu', $this->getHtml('td,th', 3));
+
+    }//end testInsertingAndEditingAnImageUsingTheUpdateChangesButton()
 
 
     /**
