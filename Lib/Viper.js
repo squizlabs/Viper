@@ -428,7 +428,11 @@ Viper.prototype = {
         if (enabled === true && this.enabled === false) {
             this._addEvents();
             var range = this.getCurrentRange();
-            this.setRange(range._getFirstSelectableChild(this.element), 0);
+            var editableChild = range._getFirstSelectableChild(this.element);
+            if (editableChild) {
+                this.setRange(editableChild, 0);
+            }
+
             this.enabled = true;
             this.fireCallbacks('Viper:enabled');
             this.element.setAttribute('contentEditable', true);
