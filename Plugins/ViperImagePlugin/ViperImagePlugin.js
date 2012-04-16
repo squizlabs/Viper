@@ -441,6 +441,9 @@ ViperImagePlugin.prototype = {
             var height = dfx.getElementHeight(img);
             dfx.remove(tmp);
 
+            img.removeAttribute('height');
+            img.removeAttribute('width');
+
             var maxWidth  = 185;
             var maxHeight = 185;
             if (height > maxHeight && width > maxWidth) {
