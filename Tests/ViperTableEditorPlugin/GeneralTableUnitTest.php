@@ -59,7 +59,18 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
         $this->clickTopToolbarButton($dir.'toolbarIcon_createTable_active.png');
 
         // Check to make sure the table editing tools don't appear.
-        $this->checkIconNotOnScreen($this->getImg('icon_tableEditingTools.png'));
+        $imageNotFound = false;
+        try
+        {
+            $this->find($this->getImg('icon_tableEditingTools.png'));
+        }
+        catch(Exception $e)
+        {
+            // Expecting the exception because the icons should not be there
+            $imageNotFound = true;
+        }
+
+        $this->assertTrue($imageNotFound, 'The table icons should no longer appear on the screen');
 
     }//end testUsingTableIconInTopToolbar()
 
