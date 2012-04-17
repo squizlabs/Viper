@@ -940,8 +940,16 @@ ViperCoreStylesPlugin.prototype = {
 
         ViperChangeTracker.endBatchChange(changeid);
 
-        this.viper.fireNodesChanged();
-        this.viper.fireSelectionChanged();
+        if (this.viper.isBrowser('msie') === true && nodeSelection && !bookmark) {
+            setTimeout(function() {
+                ViperSelection.addRange(range);
+                self.viper.fireNodesChanged();
+                self.viper.fireSelectionChanged();
+            }, 10);
+        } else {
+            this.viper.fireNodesChanged();
+            this.viper.fireSelectionChanged();
+        }
 
     },
 
