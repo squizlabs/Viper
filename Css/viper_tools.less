@@ -1,12 +1,3 @@
-.ViperITP {
-    & form,
-    & ul,
-    & ol {
-        padding: 0;
-        margin: 0;
-    }
-}
-
 .Viper-button {
     position: relative;
     border-radius: 0.25em;
@@ -61,7 +52,7 @@
 }
 
 .Viper-buttonGroup .Viper-button {
-    border-radius: 0.1em;
+    border-radius: 0;
     margin: 0;
     &.Viper-active,
     &.Viper-selected {
@@ -80,37 +71,52 @@
 
 /* Theme - Dark Grey */
 
-@ie9-grad-sub: inset 0px -1em 1.5em -0.6em rgba(0,0,0,0.2); /* IE9 substituted button gradient variable, re-used throughout */
+/* button declaration vars */
+
+@buttonBg-default: #d5d5d8;
+@buttonBg-active: #3784ee;
+@buttonBg-selected: #54535A;
+
+@buttonShadow-default-around: 0 0 2px 0 rgba(0, 0, 0, 0.5);
+@buttonShadow-default-topHighlight: 0 1px 0 rgba(255, 255, 255, 0.8) inset;
+@buttonShadow-default-gradient: 0 -1em 0.6em -0.5em #b4b4bc inset;
+@buttonShadow-defaultHover-gradient: 0px -1em 2.5em -0.6em rgba(0,0,0,0.45) inset;
+
+@buttonShadow-group-top: 0 -2px 2px -2px rgba(0, 0, 0, 0.4);
+@buttonShadow-group-bottom: 0 2px 2px -2px rgba(0, 0, 0, 0.4);
+@buttonShadow-group-leftHighlight: 1px 0 0 rgba(255,255,255,0.3) inset;
+@buttonShadow-groupFirst-left: -2px 0 2px -2px rgba(0,0,0,0.5);
+@buttonShadow-groupLast-right: 2px 0 2px -2px rgba(0,0,0,0.5);
+
+@buttonShadow-active-topInner: 0 2px 1px -1px rgba(0, 0, 0, 0.5) inset;
+@buttonShadow-active-bottomHighlight: 0 1px 0 rgba(255, 255, 255, 0.2);
+@buttonShadow-active-bottomInner: 0 -1px 1px -1px #000 inset;
+@buttonShadow-active-leftInner: 1px 0px 0 rgba(0, 0, 0, 0.25) inset;
+@buttonShadow-active-rightInner: -1px 0px 0 rgba(0, 0, 0, 0.25) inset;
+@buttonShadow-active-gradient: 0 -1.4em 0.9em -0.7em #205CAF inset;
+@buttonShadow-active-leftHighlight: 1px 0 0 0 rgba(255,255,255,0.2) inset;
+
+@buttonShadow-selected-gradient: 0 1.5em 0.6em -1.3em rgba(0, 0, 0, 0.5) inset;
 
 .Viper-themeDark .Viper-button,
 .Viper-themeDark .Viper-button.Viper-disabled:hover {
-    background-color: #dadade;
+    background-color: @buttonBg-default;
     border: none;
     color: #2b2b2b;
     text-shadow: 0 1px 0 #FFF;
     box-shadow:
-        0 0 2px 0 rgba(0, 0, 0, 0.5),
-        0 1px 0 rgba(255, 255, 255, 0.8) inset;
-    background: -webkit-gradient(linear, left top, left bottom, from(#e9e9eb), to(#c2c2cb));
-    background: -moz-linear-gradient(top,  #e9e9eb,  #c2c2cb);
+        @buttonShadow-default-around,
+        @buttonShadow-default-topHighlight,
+        @buttonShadow-default-gradient;
 
     .Viper-browserVer-msie8 & {
         border: 1px solid #666;
         border-color: #777 #666 #555 #666;
     }
-    .Viper-browserVer-msie9 & {
-        background-color: #e9e9eb;
-        box-shadow:
-            0 0 2px 0 rgba(0, 0, 0, 0.5),
-            0 1px 0 rgba(255, 255, 255, 0.8) inset,
-            @ie9-grad-sub;
-    }
 }
 
 .Viper-themeDark .Viper-button:hover {
-    background: #c9c9cd;
-    background: -webkit-gradient(linear, left top, left bottom, from(#d5d5d8), to(#b4b4bc));
-    background: -moz-linear-gradient(top,  #d5d5d8,  #b4b4bc);
+    background-color: (@buttonBg-default - 12%);
     text-shadow: 0 1px 0 rgba(255,255,255,0.5);
 }
 
@@ -119,28 +125,29 @@
 .Viper-themeDark .Viper-button.Viper-active:hover,
 .Viper-themeDark .Viper-button.Viper-selected,
 .Viper-themeDark .Viper-button.Viper-selected:hover {
+    background-color: @buttonBg-active;
     color: #FFF;
     text-shadow: 0 -1px 0 rgba(0,0,0,0.5);
     box-shadow:
-        0 2px 2px -2px rgba(0, 0, 0, 1) inset,
-        0 -2px 2px -2px rgba(0, 0, 0, 1) inset,
-        0 1px 0 rgba(255, 255, 255, 0.2),
-        1px 0px 0 rgba(0, 0, 0, 0.25) inset,
-        -1px 0px 0 rgba(0, 0, 0, 0.25) inset;
+        @buttonShadow-active-topInner,
+        @buttonShadow-active-bottomHighlight,
+        @buttonShadow-active-bottomInner,
+        @buttonShadow-active-leftInner,
+        @buttonShadow-active-rightInner,
+        @buttonShadow-active-gradient;
 }
 
-.Viper-themeDark .Viper-button.Viper-active,
-.Viper-themeDark .Viper-button.Viper-active:hover {
-    background: #2d73d2;
-    background: -webkit-gradient(linear, left top, left bottom, from(#3987f2), to(#205caf));
-    background: -moz-linear-gradient(top,  #3987f2,  #205caf);
-}
-
-.Viper-themeDark .Viper-button:active,
 .Viper-themeDark .Viper-button.Viper-selected,
 .Viper-themeDark .Viper-button.Viper-selected:hover {
-    background: #54535A;
+    background: @buttonBg-selected;
     border-color: #555;
+    box-shadow:
+        @buttonShadow-active-topInner,
+        @buttonShadow-active-bottomHighlight,
+        @buttonShadow-active-bottomInner,
+        @buttonShadow-active-leftInner,
+        @buttonShadow-active-rightInner,
+        @buttonShadow-selected-gradient;
 }
 
 .Viper-themeDark .Viper-buttonGroup {
@@ -153,19 +160,11 @@
 .Viper-themeDark .Viper-buttonGroup .Viper-button.Viper-disabled:hover {
     border-left: 1px solid #a6a6a9;
     box-shadow:
-        0 -2px 2px -2px rgba(0, 0, 0, 0.4),
-        0 2px 2px -2px rgba(0, 0, 0, 0.4),
-        0 1px 0 rgba(255, 255, 255, 0.8) inset,
-        1px 0 0 rgba(255,255,255,0.3) inset;
-
-    .Viper-browserVer-msie9 & {
-        box-shadow:
-            0 -2px 2px -2px rgba(0, 0, 0, 0.4),
-            0 2px 2px -2px rgba(0, 0, 0, 0.4),
-            0 1px 0 rgba(255, 255, 255, 0.8) inset,
-            1px 0 0 rgba(255,255,255,0.3) inset,
-            @ie9-grad-sub;
-    }
+        @buttonShadow-default-topHighlight,
+        @buttonShadow-group-leftHighlight,
+        @buttonShadow-default-gradient,
+        @buttonShadow-group-top,
+        @buttonShadow-group-bottom;
 
     .Viper-browserVer-msie8 & {
         border-color: #777 #dadade #555 #a6a6a9;
@@ -173,120 +172,145 @@
     }
 }
 
-.Viper-themeDark .Viper-buttonGroup .Viper-button:first-child {
+.Viper-themeDark .Viper-buttonGroup .Viper-button:first-child,
+.Viper-themeDark .Viper-buttonGroup .Viper-button.Viper-disabled:first-child {
     border-left-width: 0;
     box-shadow:
-        0 -2px 2px -2px rgba(0, 0, 0, 0.5),
-        0 2px 2px -2px rgba(0, 0, 0, 0.5),
-        -2px 0 2px -2px rgba(0,0,0,0.5),
-        1px 0 0 rgba(255,255,255,0.3) inset,
-        0 1px 0 rgba(255, 255, 255, 0.8) inset;
+        @buttonShadow-default-topHighlight,
+        @buttonShadow-default-gradient,
+        @buttonShadow-group-top,
+        @buttonShadow-group-bottom,
+        @buttonShadow-group-leftHighlight,
+        @buttonShadow-groupFirst-left;
 
     .Viper-browserVer-msie8 & {
         border-left-width: 1px;
         border-left-color: #666;
     }
 
-    .Viper-browserVer-msie9 & {
-        box-shadow:
-            0 -2px 2px -2px rgba(0, 0, 0, 0.5),
-            0 2px 2px -2px rgba(0, 0, 0, 0.5),
-            -2px 0 2px -2px rgba(0,0,0,0.5),
-            1px 0 0 rgba(255,255,255,0.3) inset,
-            0 1px 0 rgba(255, 255, 255, 0.8) inset,
-            @ie9-grad-sub;
-    }
 }
 
 .Viper-themeDark .Viper-buttonGroup .Viper-button:last-child {
     box-shadow:
-        0 -2px 2px -2px rgba(0, 0, 0, 0.5),
-        0 2px 2px -2px rgba(0, 0, 0, 0.5),
-        2px 0 2px -2px rgba(0,0,0,0.5),
-        1px 0 0 rgba(255,255,255,0.3) inset,
-        0 1px 0 rgba(255, 255, 255, 0.8) inset;
+        @buttonShadow-group-leftHighlight,
+        @buttonShadow-default-topHighlight,
+        @buttonShadow-group-top,
+        @buttonShadow-group-bottom,
+        @buttonShadow-groupLast-right,
+        @buttonShadow-default-gradient;
 
     .Viper-browserVer-msie8 & {
         border-right: 1px solid #666;
-    }
-
-    .Viper-browserVer-msie9 & {
-        box-shadow:
-            0 -2px 2px -2px rgba(0, 0, 0, 0.5),
-            0 2px 2px -2px rgba(0, 0, 0, 0.5),
-            2px 0 2px -2px rgba(0,0,0,0.5),
-            1px 0 0 rgba(255,255,255,0.3) inset,
-            0 1px 0 rgba(255, 255, 255, 0.8) inset,
-            @ie9-grad-sub;
     }
 }
 
 .Viper-themeDark .Viper-buttonGroup .Viper-button.Viper-active {
     border-left-color: #1f4e8d;
     box-shadow:
-        0 2px 2px -2px rgba(0, 0, 0, 1) inset,
-        0 -2px 2px -2px rgba(0, 0, 0, 1) inset,
-        1px 0 0 0 rgba(255,255,255, 0.15) inset,
-        0 1px 0 rgba(255, 255, 255, 0.2);
+        @buttonShadow-active-topInner,
+        @buttonShadow-active-bottomHighlight,
+        @buttonShadow-active-bottomInner,
+        @buttonShadow-active-leftHighlight,
+        @buttonShadow-active-gradient;
 }
 
-.Viper-themeDark .Viper-buttonGroup .Viper-button.Viper-selected {
+.Viper-themeDark .Viper-buttonGroup .Viper-button + .Viper-button.Viper-active {
+    box-shadow:
+        @buttonShadow-active-topInner,
+        @buttonShadow-active-bottomHighlight,
+        @buttonShadow-active-bottomInner,
+        @buttonShadow-active-gradient;
+}
+
+.Viper-themeDark .Viper-buttonGroup .Viper-button:first-child.Viper-active {
+    box-shadow:
+        @buttonShadow-active-topInner,
+        @buttonShadow-active-bottomHighlight,
+        @buttonShadow-active-bottomInner,
+        @buttonShadow-active-leftInner,
+        @buttonShadow-active-gradient;
+}
+
+.Viper-themeDark .Viper-buttonGroup .Viper-button.Viper-selected,
+.Viper-themeDark .Viper-buttonGroup .Viper-button + .Viper-button.Viper-selected {
+    border-left-color: #222225;
+    box-shadow:
+        @buttonShadow-active-topInner,
+        @buttonShadow-active-bottomHighlight,
+        @buttonShadow-active-bottomInner,
+        @buttonShadow-selected-gradient;
+}
+
+.Viper-themeDark .Viper-buttonGroup .Viper-button.Viper-selected:first-child {
     border-left-color: #555;
     box-shadow:
-        0 2px 2px -2px rgba(0, 0, 0, 1) inset,
-        0 -2px 2px -2px rgba(0, 0, 0, 1) inset,
-        1px 0 0 0 rgba(255,255,255, 0) inset,
-        0 1px 0 rgba(255, 255, 255, 0.2);
+        @buttonShadow-active-topInner,
+        @buttonShadow-active-bottomHighlight,
+        @buttonShadow-active-bottomInner,
+        @buttonShadow-active-leftInner,
+        @buttonShadow-selected-gradient;
 }
 
-.Viper-themeDark .Viper-buttonGroup .Viper-button.Viper-selected + .Viper-button,
 .Viper-themeDark .Viper-buttonGroup .Viper-button.Viper-active + .Viper-button,
 .Viper-themeDark .Viper-buttonGroup .Viper-button.Viper-active + .Viper-button.Viper-disabled:hover {
     border-left-color: #1f4e8d;
 }
 
-.Viper-themeDark .Viper-buttonGroup .Viper-button.Viper-selected + .Viper-button.Viper-selected,
-.Viper-themeDark .Viper-buttonGroup .Viper-button.Viper-active + .Viper-button.Viper-selected {
-    border-left-color: #333;
-}
-
-.Viper-themeDark .Viper-buttonGroup .Viper-button.Viper-selected + .Viper-button.Viper-selected,
-.Viper-themeDark .Viper-buttonGroup .Viper-button.Viper-active + .Viper-button.Viper-selected {
-    box-shadow:
-        0 2px 2px -2px rgba(0, 0, 0, 1) inset,
-        0 -2px 2px -2px rgba(0, 0, 0, 1) inset,
-        0 1px 0 rgba(255, 255, 255, 0.2) !important;
+.Viper-themeDark .Viper-buttonGroup .Viper-button.Viper-selected + .Viper-button {
+    border-left-color: #222225;
 }
 
 .Viper-themeDark .Viper-buttonGroup .Viper-button.Viper-selected + .Viper-button.Viper-active,
 .Viper-themeDark .Viper-buttonGroup .Viper-button.Viper-active + .Viper-button.Viper-active,
 .Viper-themeDark .Viper-buttonGroup .Viper-button.Viper-active + .Viper-button.Viper-active.Viper-disabled:hover {
     box-shadow:
-        0 2px 2px -2px rgba(0, 0, 0, 1) inset,
-        0 -2px 2px -2px rgba(0, 0, 0, 1) inset,
-        1px 0 0 0 rgba(255,255,255, 0.15) inset,
-        0 1px 0 rgba(255, 255, 255, 0.2);
+        @buttonShadow-active-topInner,
+        @buttonShadow-active-bottomHighlight,
+        @buttonShadow-active-bottomInner,
+        @buttonShadow-active-leftHighlight,
+        @buttonShadow-active-gradient;
 }
 
-.Viper-themeDark .Viper-buttonGroup .Viper-button:first-child.active {
+.Viper-themeDark .Viper-buttonGroup .Viper-button.Viper-active + .Viper-button.Viper-selected {
+    border-left-color: #333;
     box-shadow:
-        0 2px 2px -2px rgba(0, 0, 0, 1) inset,
-        0 -2px 2px -2px rgba(0, 0, 0, 1) inset,
-        1px 0 0 0 rgba(0,0,0, 0.25) inset,
-        0 1px 0 rgba(255, 255, 255, 0.2);
+        @buttonShadow-active-topInner,
+        @buttonShadow-active-bottomHighlight,
+        @buttonShadow-active-bottomInner,
+        @buttonShadow-selected-gradient;
 }
 
 .Viper-themeDark .Viper-buttonGroup .Viper-button.Viper-active:last-child,
-.Viper-themeDark .Viper-buttonGroup .Viper-button.Viper-active:last-child.Viper-disabled:hover,
-.Viper-themeDark .Viper-buttonGroup .Viper-button.Viper-selected + .Viper-button.Viper-active:last-child,
-.Viper-themeDark .Viper-buttonGroup .Viper-button.Viper-active + .Viper-button.Viper-active:last-child,
-.Viper-themeDark .Viper-buttonGroup .Viper-button.Viper-active + .Viper-button.Viper-active.Viper-disabled:last-child:hover {
+.Viper-themeDark .Viper-buttonGroup .Viper-button.Viper-active:last-child.Viper-disabled:hover {
     box-shadow:
-        0 2px 2px -2px rgba(0, 0, 0, 1) inset,
-        0 -2px 2px -2px rgba(0, 0, 0, 1) inset,
-        -1px 0px 0 rgba(0, 0, 0, 0.25) inset,
-        1px 0 0 rgba(255,255,255,0.15) inset,
-        0 1px 0 rgba(255, 255, 255, 0.2);
+        @buttonShadow-active-topInner,
+        @buttonShadow-active-bottomHighlight,
+        @buttonShadow-active-bottomInner,
+        @buttonShadow-active-rightInner,
+        @buttonShadow-active-gradient;
+}
+
+.Viper-themeDark .Viper-buttonGroup .Viper-button.Viper-active + .Viper-button.Viper-active:last-child,
+.Viper-themeDark .Viper-buttonGroup .Viper-button.Viper-active + .Viper-button.Viper-active.Viper-disabled:last-child:hover,
+.Viper-themeDark .Viper-buttonGroup .Viper-button.Viper-selected + .Viper-button.Viper-active:last-child {
+    box-shadow:
+        @buttonShadow-active-topInner,
+        @buttonShadow-active-bottomHighlight,
+        @buttonShadow-active-bottomInner,
+        @buttonShadow-active-leftHighlight,
+        @buttonShadow-active-rightInner,
+        @buttonShadow-active-gradient;
+}
+
+.Viper-themeDark .Viper-buttonGroup .Viper-button.Viper-selected:last-child,
+.Viper-themeDark .Viper-buttonGroup .Viper-button.Viper-active.Viper-selected:last-child,
+.Viper-themeDark .Viper-buttonGroup .Viper-button.Viper-active.Viper-selected.Viper-disabled:last-child {
+    box-shadow:
+        @buttonShadow-active-topInner,
+        @buttonShadow-active-bottomHighlight,
+        @buttonShadow-active-bottomInner,
+        @buttonShadow-active-rightInner,
+        @buttonShadow-selected-gradient;
 }
 
 /* Buttons */
