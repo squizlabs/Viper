@@ -277,14 +277,19 @@ ViperImagePlugin.prototype = {
                 title = null;
             }
 
-            if (!self._resizeImage || dfx.isTag(self._resizeImage, 'img') === false) {
+            var image = self._resizeImage;
+            if (self.viper.isBrowser('msie') === true) {
+                image = self._ieImageResize;
+            }
+
+            if (!image || dfx.isTag(image, 'img') === false) {
                 self.rangeToImage(self.viper.getViperRange(), self.getImageUrl(url), alt, title);
             } else {
-                self.setImageURL(self._resizeImage, self.getImageUrl(url));
-                self.setImageAlt(self._resizeImage, alt);
-                self.setImageTitle(self._resizeImage, title);
+                self.setImageURL(image, self.getImageUrl(url));
+                self.setImageAlt(image, alt);
+                self.setImageTitle(image, title);
 
-                self.viper.fireNodesChanged([self._resizeImage]);
+                self.viper.fireNodesChanged([image]);
             }
         };
 
