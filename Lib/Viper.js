@@ -2569,6 +2569,7 @@ Viper.prototype = {
         dfx.remove([bookmark.start, bookmark.end]);
 
         if (endPos === null) {
+            range.setStart(startPos, startOffset);
             range.setEnd(startPos, startOffset);
             range.collapse(false);
         } else {
@@ -2665,9 +2666,7 @@ Viper.prototype = {
             // Make sure start and end are in correct position.
             if (startBookmark.previousSibling === endBookmark) {
                 // Reverse..
-                var tmp       = startBookmark;
-                startBookmark = endBookmark;
-                endBookmark   = tmp;
+                dfx.insertBefore(endBookmark, startBookmark);
             }
         } catch (e) {
             // NS_ERROR_UNEXPECTED: I believe this is a Firefox bug.
