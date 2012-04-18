@@ -163,7 +163,14 @@ ViperKeyboardEditorPlugin.prototype = {
             var endNode   = range.getEndNode();
             var startNode = range.getStartNode();
             if (!endNode) {
-                endNode = startNode;
+                if (startNode) {
+                    endNode = startNode;
+                } else if (range.startContainer.nodeType === dfx.ELEMENT_NODE
+                    && !range.startContainer.childNodes[range.startOffset]
+                    && range.startContainer.childNodes[(range.startOffset - 1)]
+                ) {
+                    endNode = range.startContainer.childNodes[(range.startOffset - 1)];
+                }
             }
 
             if (range.collapsed === true
