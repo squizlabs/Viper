@@ -284,7 +284,7 @@ Software is licenced, not sold.
     (a) any express provision of this Agreement is limited to the amount paid by You
     in Licence Fees.
     (b) any implied condition or warranty where the exclusion of which would
-    contravene any statute or cause this clause 13 to be void, is limited, at the
+    contravene any statute or cause this clause 12 to be void, is limited, at the
     option of Squiz, to one or more of the following:
         i. the replacement of the Software or Documentation
         ii. repair of such Software or Documentation
