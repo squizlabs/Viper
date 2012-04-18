@@ -510,6 +510,7 @@ ViperImagePlugin.prototype = {
         dfx.setStyle(this._resizeWidgetElem, 'width', 'auto');
         dfx.setStyle(this._resizeWidgetElem, 'height', 'auto');
         dfx.setStyle(this._resizeWidgetElem, 'overflow', '');
+        dfx.setStyle(this._resizeWidgetElem, 'margin', '');
 
     },
 
@@ -586,6 +587,7 @@ ViperImagePlugin.prototype = {
                 dfx.setStyle(this._resizeWidgetElem, 'left', '');
                 dfx.setStyle(this._resizeWidgetElem, 'top', '');
                 dfx.setStyle(this._resizeWidgetElem, 'overflow', '');
+                dfx.setStyle(this._resizeWidgetElem, 'margin', '');
             }
         }
 
