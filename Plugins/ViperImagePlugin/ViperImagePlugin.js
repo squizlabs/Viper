@@ -46,6 +46,7 @@ ViperImagePlugin.prototype = {
                     self._ieImageResize = target;
                     self._updateToolbar(target);
                     self.viper.registerCallback('Viper:mouseUp', 'ViperImagePlugin:ie', function(e) {
+                        // Image reiszied.
                         if (dfx.hasAttribute(target, 'width') === true) {
                             var width  = dfx.getStyle(target, 'width');
                             var height = dfx.getStyle(target, 'height');
@@ -57,6 +58,7 @@ ViperImagePlugin.prototype = {
                             dfx.setStyle(target, 'height', '');
                         }
 
+                        self.viper.fireNodesChanged();
                         self.viper.removeCallback('Viper:mouseUp', 'ViperImagePlugin:ie');
                         return false;
                     });
