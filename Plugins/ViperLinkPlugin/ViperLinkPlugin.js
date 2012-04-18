@@ -263,6 +263,7 @@ ViperLinkPlugin.prototype = {
             }
 
             range.selectNode(nodeSelection);
+            ViperSelection.addRange(range);
             this.viper.fireSelectionChanged(range, true);
         } else {
             var bookmark = this.viper.createBookmark();
