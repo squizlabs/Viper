@@ -15,12 +15,10 @@ function ViperImagePlugin(viper)
 {
     this.viper = viper;
 
-    this._previewBox       = null;
-    this._resizeImage      = null;
-    this._resizeWidgetElem = null;
-    this._imageStyleAttr   = null;
-    this._resized          = false;
-    this._ieImageResize    = null;
+    this._previewBox    = null;
+    this._resizeImage   = null;
+    this._ieImageResize = null;
+    this._resizeHandles = null;
 
 }
 
@@ -474,121 +472,85 @@ ViperImagePlugin.prototype = {
 
     showImageResizeHandles: function(image)
     {
-        if (!image || !image.parentNode || this.viper.isBrowser('msie') === true) {
-            return;
-        }
+        var seHandle = document.createElement('div');
+        dfx.addClass(seHandle, 'Viper-image-handle Viper-image-handle-se');
 
-        if (this._resizeImage !== image) {
-            this._imageStyleAttr = image.getAttribute('style');
-            this._resized = false;
-        }
+        var swHandle = document.createElement('div');
+        dfx.addClass(swHandle, 'Viper-image-handle Viper-image-handle-sw');
 
-        var self      = this;
-        dfxjQuery(image).resizable({
-            handles: 'se,sw',
-            aspectRatio: true,
-            stop: function() {
-                self._fixImageResize();
-                self.hideImageResizeHandles(image);
-                self.viper.fireNodesChanged();
-                self.showImageResizeHandles(image);
-            },
-            resize: function(e) {
-                self._resized = true;
-                self._fixImageResize();
-            }
-        });
+        var rect = dfx.getBoundingRectangle(image);
 
-        this._resizeImage = image;
+        // Set the position of handles.
+        dfx.setStyle(swHandle, 'left', rect.x1 + 'px');
+        dfx.setStyle(swHandle, 'top', (rect.y2 - 19) + 'px');
 
-        var imageFloat = dfx.getStyle(image, 'float');
+        dfx.setStyle(seHandle, 'left', (rect.x2 - 19) + 'px');
+        dfx.setStyle(seHandle, 'top', (rect.y2 - 19) + 'px');
 
-        this._resizeWidgetElem = dfxjQuery(image).resizable('widget').get(0);
-        dfx.setStyle(this._resizeWidgetElem, 'position', 'relative');
-        dfx.setStyle(this._resizeWidgetElem, 'display', 'inline-block');
-        dfx.setStyle(this._resizeWidgetElem, 'float', imageFloat);
-        dfx.setStyle(this._resizeWidgetElem, 'width', 'auto');
-        dfx.setStyle(this._resizeWidgetElem, 'height', 'auto');
-        dfx.setStyle(this._resizeWidgetElem, 'overflow', '');
-        dfx.setStyle(this._resizeWidgetElem, 'margin', '');
+        this.viper.addElement(seHandle);
+        this.viper.addElement(swHandle);
+
+        this._resizeHandles = [];
+        this._resizeHandles.push(seHandle);
+        this._resizeHandles.push(swHandle);
+
+        var self = this;
+
+        var _addMouseEvents = function(handle, rev) {
+            dfx.addEvent(handle, 'mousedown', function(e) {
+                var width   = image.clientWidth;
+                var prevPos = e.clientX;
+                var resized = false;
+
+                dfx.addEvent(document, 'mousemove.ViperImageResize', function(e) {
+                    var diff = e.clientX - prevPos;
+                    prevPos  = e.clientX;
+                    resized  = true;
+
+                    if (rev !== true) {
+                        width += diff;
+                    } else {
+                        width -= diff;
+                    }
+
+                    image.setAttribute('width', width);
+
+                    var rect = dfx.getBoundingRectangle(image);
+                    dfx.setStyle(seHandle, 'left', (rect.x2 - 19) + 'px');
+                    dfx.setStyle(seHandle, 'top', (rect.y2 - 19) + 'px');
+
+                    dfx.setStyle(swHandle, 'left', rect.x1 + 'px');
+                    dfx.setStyle(swHandle, 'top', (rect.y2 - 19) + 'px');
+
+                    dfx.preventDefault(e);
+                    return false;
+                });
+
+                // Remove mousemove event.
+                dfx.addEvent(document, 'mouseup.ViperImageResize', function(e) {
+                    dfx.removeEvent(document, 'mousemove.ViperImageResize');
+                    dfx.removeEvent(document, 'mouseup.ViperImageResize');
+
+                    if (resized === true) {
+                        self.viper.fireNodesChanged();
+                    }
+                });
+
+                dfx.preventDefault(e);
+                return false;
+            });
+        };
+
+        _addMouseEvents(seHandle);
+        _addMouseEvents(swHandle, true);
 
     },
 
     hideImageResizeHandles: function(elem)
     {
-        if (!this._resizeImage || this.viper.isBrowser('msie') === true) {
-            return;
-        }
-
-        if (elem && elem.nodeType === dfx.ELEMENT_NODE) {
-            if (this._resizeWidgetElem === elem || dfx.isChildOf(elem, this._resizeWidgetElem)) {
-                return false;
-            }
-        }
-
-        this._hideImageResizeHandles();
-        this._resizeImage = null;
-
-    },
-
-    _hideImageResizeHandles: function(image)
-    {
-        var imgArg = image;
-
-        image = image || this._resizeImage;
-        var width  = dfx.getStyle(image, 'width');
-        var height = dfx.getStyle(image, 'height');
-
-        if (!imgArg) {
-            dfxjQuery(image).resizable('destroy');
-        }
-
-        if (!image.className) {
-            image.removeAttribute('class');
-        }
-
-        image.setAttribute('style', this._imageStyleAttr);
-
-        if (this._resized === true) {
-            image.setAttribute('width', width);
-            image.setAttribute('height', height);
-
-            // Remove width and height styles.
-            dfx.setStyle(image, 'width', '');
-            dfx.setStyle(image, 'height', '');
-        }
-
-        if (!image.getAttribute('style') || image.getAttribute('style') === 'null') {
-            image.removeAttribute('style');
-        }
-
-        if (imgArg) {
-            this._fixImageResize(image);
-        } else {
-            this._fixImageResize();
-        }
-
-    },
-
-    _fixImageResize: function(image)
-    {
-        if (image) {
-            dfx.setStyle(image, 'left', '');
-            dfx.setStyle(image, 'top', '');
-            dfx.setStyle(image, 'resize', '');
-            dfx.setStyle(image, 'position', '');
-        } else {
-            dfx.setStyle(this._resizeImage, 'left', '');
-            dfx.setStyle(this._resizeImage, 'top', '');
-            dfx.setStyle(this._resizeImage, 'resize', '');
-            dfx.setStyle(this._resizeImage, 'position', '');
-
-            if (this._resizeWidgetElem) {
-                dfx.setStyle(this._resizeWidgetElem, 'left', '');
-                dfx.setStyle(this._resizeWidgetElem, 'top', '');
-                dfx.setStyle(this._resizeWidgetElem, 'overflow', '');
-                dfx.setStyle(this._resizeWidgetElem, 'margin', '');
-            }
+        if (this._resizeHandles) {
+            dfx.remove(this._resizeHandles);
+            this._resizeHandles = null;
         }
 
     }

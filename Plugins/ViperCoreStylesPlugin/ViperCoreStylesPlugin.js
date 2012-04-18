@@ -685,7 +685,7 @@ ViperCoreStylesPlugin.prototype = {
 
             case 'right':
                 dfx.setStyle(image, 'float', 'right');
-                dfx.setStyle(image, 'margin', '1em 0 1em');
+                dfx.setStyle(image, 'margin', '1em 0 1em 1em');
             break;
 
             case 'center':
