@@ -65,11 +65,11 @@
 /* button declaration vars */
 .Viper-themeDark .Viper-button,
 .Viper-themeDark .Viper-button.Viper-disabled:hover {
-  background-color: #d5d5d8;
+  background-color: #e9e9eb;
   border: none;
   color: #2b2b2b;
   text-shadow: 0 1px 0 #FFF;
-  box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.5), 0 1px 0 rgba(255, 255, 255, 0.8) inset, 0 -1em 0.6em -0.5em #b4b4bc inset;
+  box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.5), 0 1px 0 rgba(255, 255, 255, 0.8) inset, 0 -1.7em 1.4em -1em rgba(0, 0, 0, 0.25) inset;
 }
 .Viper-browserVer-msie8 .Viper-themeDark .Viper-button,
 .Viper-browserVer-msie8 .Viper-themeDark .Viper-button.Viper-disabled:hover {
@@ -77,7 +77,7 @@
   border-color: #777 #666 #555 #666;
 }
 .Viper-themeDark .Viper-button:hover {
-  background-color: #c9c9cc;
+  background-color: #dddddf;
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
 }
 .Viper-themeDark .Viper-button:active,
@@ -102,7 +102,7 @@
 .Viper-themeDark .Viper-buttonGroup .Viper-button,
 .Viper-themeDark .Viper-buttonGroup .Viper-button.Viper-disabled:hover {
   border-left: 1px solid #a6a6a9;
-  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.8) inset, 1px 0 0 rgba(255, 255, 255, 0.3) inset, 0 -1em 0.6em -0.5em #b4b4bc inset, 0 -2px 2px -2px rgba(0, 0, 0, 0.4), 0 2px 2px -2px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.8) inset, 1px 0 0 rgba(255, 255, 255, 0.3) inset, 0 -1.7em 1.4em -1em rgba(0, 0, 0, 0.25) inset, 0 -2px 2px -2px rgba(0, 0, 0, 0.4), 0 2px 2px -2px rgba(0, 0, 0, 0.4);
 }
 .Viper-browserVer-msie8 .Viper-themeDark .Viper-buttonGroup .Viper-button,
 .Viper-browserVer-msie8 .Viper-themeDark .Viper-buttonGroup .Viper-button.Viper-disabled:hover {
@@ -112,7 +112,7 @@
 .Viper-themeDark .Viper-buttonGroup .Viper-button:first-child,
 .Viper-themeDark .Viper-buttonGroup .Viper-button.Viper-disabled:first-child {
   border-left-width: 0;
-  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.8) inset, 0 -1em 0.6em -0.5em #b4b4bc inset, 0 -2px 2px -2px rgba(0, 0, 0, 0.4), 0 2px 2px -2px rgba(0, 0, 0, 0.4), 1px 0 0 rgba(255, 255, 255, 0.3) inset, -2px 0 2px -2px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.8) inset, 0 -1.7em 1.4em -1em rgba(0, 0, 0, 0.25) inset, 0 -2px 2px -2px rgba(0, 0, 0, 0.4), 0 2px 2px -2px rgba(0, 0, 0, 0.4), 1px 0 0 rgba(255, 255, 255, 0.3) inset, -2px 0 2px -2px rgba(0, 0, 0, 0.5);
 }
 .Viper-browserVer-msie8 .Viper-themeDark .Viper-buttonGroup .Viper-button:first-child,
 .Viper-browserVer-msie8 .Viper-themeDark .Viper-buttonGroup .Viper-button.Viper-disabled:first-child {
@@ -120,7 +120,7 @@
   border-left-color: #666;
 }
 .Viper-themeDark .Viper-buttonGroup .Viper-button:last-child {
-  box-shadow: 1px 0 0 rgba(255, 255, 255, 0.3) inset, 0 1px 0 rgba(255, 255, 255, 0.8) inset, 0 -2px 2px -2px rgba(0, 0, 0, 0.4), 0 2px 2px -2px rgba(0, 0, 0, 0.4), 2px 0 2px -2px rgba(0, 0, 0, 0.5), 0 -1em 0.6em -0.5em #b4b4bc inset;
+  box-shadow: 1px 0 0 rgba(255, 255, 255, 0.3) inset, 0 1px 0 rgba(255, 255, 255, 0.8) inset, 0 -2px 2px -2px rgba(0, 0, 0, 0.4), 0 2px 2px -2px rgba(0, 0, 0, 0.4), 2px 0 2px -2px rgba(0, 0, 0, 0.5), 0 -1.7em 1.4em -1em rgba(0, 0, 0, 0.25) inset;
 }
 .Viper-browserVer-msie8 .Viper-themeDark .Viper-buttonGroup .Viper-button:last-child {
   border-right: 1px solid #666;
@@ -172,7 +172,7 @@
 .Viper-themeDark .Viper-buttonGroup .Viper-button.Viper-selected:last-child,
 .Viper-themeDark .Viper-buttonGroup .Viper-button.Viper-active.Viper-selected:last-child,
 .Viper-themeDark .Viper-buttonGroup .Viper-button.Viper-active.Viper-selected.Viper-disabled:last-child {
-  box-shadow: 0 2px 1px -1px rgba(0, 0, 0, 0.5) inset, 0 1px 0 rgba(255, 255, 255, 0.2), 0 -1px 1px -1px #000000 inset, -1px 0px 0 rgba(0, 0, 0, 0.25) inset, 0 1.5em 0.6em -1.3em rgba(0, 0, 0, 0.5) inset;
+  box-shadow: 0 2px 1px -1px rgba(0, 0, 0, 0.5) inset, 0 1px 0 rgba(255, 255, 255, 0.2), 0 -1px 1px -1px #000000 inset, -1px 0px 0 rgba(0, 0, 0, 0.25) inset, 0 1.5em 0.6em -1.3em rgba(0, 0, 0, 0.5) inset !important;
 }
 /* Buttons */
 .Viper-buttonIcon {
@@ -225,6 +225,9 @@
 .Viper-button:active .Viper-buttonIcon.Viper-delete,
 .Viper-button.Viper-active .Viper-buttonIcon.Viper-delete,
 .Viper-button.Viper-selected .Viper-buttonIcon.Viper-delete {
+  background-position: -33px -54px;
+}
+.Viper-delete:hover .Viper-buttonIcon.Viper-delete {
   background-position: -33px -54px;
 }
 .Viper-buttonIcon.Viper-addAbove {
@@ -653,6 +656,9 @@
 }
 .__viper_selHighlight {
   background-color: #CCC !important;
+}
+.Viper-deleteOverlay {
+  background: transparent url(../Images/deleteOverlay.png) 0 0 repeat;
 }
 .Viper-textbox {
   margin-bottom: 0.6em;

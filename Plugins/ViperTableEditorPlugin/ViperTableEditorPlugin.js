@@ -1020,9 +1020,9 @@ ViperTableEditorPlugin.prototype = {
         this.addButton(removeCol);
 
         dfx.hover(removeCol, function() {
-            dfx.addClass(self._highlightElement, 'Viper-delete');
+            dfx.addClass(self._highlightElement, 'Viper-deleteOverlay');
         }, function() {
-            dfx.removeClass(self._highlightElement, 'Viper-delete');
+            dfx.removeClass(self._highlightElement, 'Viper-deleteOverlay');
         });
 
     },
@@ -1095,9 +1095,9 @@ ViperTableEditorPlugin.prototype = {
         this.addButton(removeRow);
 
         dfx.hover(removeRow, function() {
-            dfx.addClass(self._highlightElement, 'Viper-delete');
+            dfx.addClass(self._highlightElement, 'Viper-deleteOverlay');
         }, function() {
-            dfx.removeClass(self._highlightElement, 'Viper-delete');
+            dfx.removeClass(self._highlightElement, 'Viper-deleteOverlay');
         });
 
     },
@@ -1153,9 +1153,9 @@ ViperTableEditorPlugin.prototype = {
         this.addButton(remove);
 
         dfx.hover(remove, function() {
-            dfx.addClass(self._highlightElement, 'Viper-delete');
+            dfx.addClass(self._highlightElement, 'Viper-deleteOverlay');
         }, function() {
-            dfx.removeClass(self._highlightElement, 'Viper-delete');
+            dfx.removeClass(self._highlightElement, 'Viper-deleteOverlay');
         });
 
     },

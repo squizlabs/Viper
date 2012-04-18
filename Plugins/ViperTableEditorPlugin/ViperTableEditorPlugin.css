@@ -13,13 +13,15 @@
 }
 
 .Viper-tableHighlight {
-/*     background: url(tableHighlight.png); */
-/*     background-repeat: repeat; */
     border: 1px solid rgba(0,0,0,0.5);
     border-radius: 3px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.8), 0 0 3px rgba(255, 255, 255, 0.5) inset;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.8), 0 0 3px rgba(255, 255, 255, 0.5) inset;
     background-color: rgba(255, 255, 255, 0.1);
     margin: -1px 0 0 -1px;
+}
+.Viper-tableHighlight.Viper-deleteOverlay {
+    border-color: #bb1616;
+    box-shadow: 0 0 5px #a21212, 0 0 3px rgba(255, 255, 255, 0.5) inset;
 }
 
 .ViperTEP.Viper-topBar {
@@ -27,15 +29,17 @@
 }
 
 /* test styles that add and remove border radius to the table button when it is the only visible button */
-.ViperTEP .Viper-button:first-child {
+.Viper-button.Viper-table:first-child {
     border-top-right-radius: 0.3em;
     border-bottom-right-radius: 0.3em;
+    margin-right: 1px;
 }
 
-.ViperTEP.Viper-topBar .Viper-button:first-child,
-.ViperTEP:hover .Viper-button:first-child {
+.Viper-topBar .Viper-button.Viper-table:first-child,
+.ViperITP:hover .Viper-button.Viper-table:first-child {
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
+    margin-right: 0;
 }
 
 .VTEP-bubble-label,

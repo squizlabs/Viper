@@ -73,14 +73,13 @@
 
 /* button declaration vars */
 
-@buttonBg-default: #d5d5d8;
+@buttonBg-default: #E9E9EB;
 @buttonBg-active: #3784ee;
 @buttonBg-selected: #54535A;
 
 @buttonShadow-default-around: 0 0 2px 0 rgba(0, 0, 0, 0.5);
 @buttonShadow-default-topHighlight: 0 1px 0 rgba(255, 255, 255, 0.8) inset;
-@buttonShadow-default-gradient: 0 -1em 0.6em -0.5em #b4b4bc inset;
-@buttonShadow-defaultHover-gradient: 0px -1em 2.5em -0.6em rgba(0,0,0,0.45) inset;
+@buttonShadow-default-gradient: 0 -1.7em 1.4em -1em rgba(0, 0, 0, 0.25) inset;
 
 @buttonShadow-group-top: 0 -2px 2px -2px rgba(0, 0, 0, 0.4);
 @buttonShadow-group-bottom: 0 2px 2px -2px rgba(0, 0, 0, 0.4);
@@ -310,7 +309,7 @@
         @buttonShadow-active-bottomHighlight,
         @buttonShadow-active-bottomInner,
         @buttonShadow-active-rightInner,
-        @buttonShadow-selected-gradient;
+        @buttonShadow-selected-gradient !important;
 }
 
 /* Buttons */
@@ -364,7 +363,12 @@
     // Delete
     &.Viper-delete {
         .icon (3);
+        // Special case for generic delete button to change its icon on hover
+        .Viper-delete:hover & {
+        .iconHoverSwap (3);
+        }
     }
+    
     // Add Above
     &.Viper-addAbove {
         .icon (4);
@@ -591,11 +595,22 @@
         background-position: -@bgY-activeOffset @bgX;
     }
 }
+.iconHoverSwap (@iconCount) {
+    @fieldIconSpriteLocation: @iconCount;
+    background-position: -@bgY-activeOffset @bgX;
+}
+
 
 // Viper Selections
 
 .__viper_selHighlight {
     background-color: #CCC !important;
+}
+
+// Viper Delete
+
+.Viper-deleteOverlay {
+    background: transparent url(../Images/deleteOverlay.png) 0 0 repeat;
 }
 
 // Viper Text Inputs & Areas
