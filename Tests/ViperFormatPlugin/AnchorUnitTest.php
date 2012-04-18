@@ -11,7 +11,7 @@ class Viper_Tests_ViperFormatPlugin_AnchorUnitTest extends AbstractViperUnitTest
      *
      * @return void
      */
-    public function testCreateAnchor()
+    public function testCreateAnchorUsingTheInlineToolbar()
     {
         $dir = dirname(__FILE__).'/Images/';
 
@@ -21,19 +21,72 @@ class Viper_Tests_ViperFormatPlugin_AnchorUnitTest extends AbstractViperUnitTest
         $this->type('test');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p><span id="test">Lorem</span> XuT dolor</p><p id="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span id="myclass">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>jumps</strong> OVER the lazy dogggg</p>');
+        $this->assertHTMLMatch('<p><span id="test">Lorem</span> XuT dolor</p><p id="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span id="myclass">lABs</span> is ORSM</p>');
 
         $this->click($this->find('dolor'));
         sleep(1);
         $this->selectText('Lorem');
         $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_anchor_active.png'), 'Anchor icon in Top Toolbar should be active.');
-        $this->assertTrue(
-            $this->inlineToolbarButtonExists($dir.'toolbarIcon_anchor_active.png') || $this->inlineToolbarButtonExists($dir.'toolbarIcon_anchor_subActive.png'),
-            'Anchor icon in VITP should be active'
-        );
+        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_anchor_active.png'), 'Anchor icon in the inline toolbar should be active');
+        
+        $this->selectText('ORSM');
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_anchor.png');
+        $this->clickInlineToolbarButton($dir.'input_anchor.png');
+        $this->type('test');
+        $updateChanges = $this->find($dir.'toolbarIcon_updateChanges.png');
+        $this->click($updateChanges);
 
-    }//end testCreateAnchor()
+        $this->assertHTMLMatch('<p><span id="test">Lorem</span> XuT dolor</p><p id="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span id="myclass">lABs</span> is <span id="test">ORSM</span></p>');
 
+        $this->click($this->find('dolor'));
+        sleep(1);
+        $this->selectText('ORSM');
+        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_anchor_active.png'), 'Anchor icon in Top Toolbar should be active.');
+        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_anchor_active.png'), 'Anchor icon in the inline toolbar should be active');
+
+    }//end testCreateAnchorUsingTheInlineToolbar()
+
+
+    /**
+     * Test that creating anchor works.
+     *
+     * @return void
+     */
+    public function testCreateAnchorUsingTheTopToolbar()
+    {
+        $dir = dirname(__FILE__).'/Images/';
+
+        $this->selectText('Lorem');
+        $this->clickTopToolbarButton($dir.'toolbarIcon_anchor.png');
+        $this->clickTopToolbarButton($dir.'input_anchor.png');
+        $this->type('test');
+        $this->keyDown('Key.ENTER');
+
+        $this->assertHTMLMatch('<p><span id="test">Lorem</span> XuT dolor</p><p id="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span id="myclass">lABs</span> is ORSM</p>');
+
+        $this->click($this->find('dolor'));
+        sleep(1);
+        $this->selectText('Lorem');
+        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_anchor_active.png'), 'Anchor icon in Top Toolbar should be active.');
+        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_anchor_active.png'), 'Anchor icon in the inline toolbar should be active');
+        
+        $this->selectText('ORSM');
+        $this->clickTopToolbarButton($dir.'toolbarIcon_anchor.png');
+        $this->clickTopToolbarButton($dir.'input_anchor.png');
+        $this->type('test');
+        $updateChanges = $this->find($dir.'toolbarIcon_updateChanges.png');
+        $this->click($updateChanges);
+
+        $this->assertHTMLMatch('<p><span id="test">Lorem</span> XuT dolor</p><p id="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span id="myclass">lABs</span> is <span id="test">ORSM</span></p>');
+
+        $this->click($this->find('dolor'));
+        sleep(1);
+        $this->selectText('ORSM');
+        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_anchor_active.png'), 'Anchor icon in Top Toolbar should be active.');
+        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_anchor_active.png'), 'Anchor icon in the inline toolbar should be active');
+
+    }//end testCreateAnchorUsingTheTopToolbar()
+    
 
     /**
      * Test that the anchor icon appears in the inline toolbar for the last word in a paragraph.
@@ -47,13 +100,103 @@ class Viper_Tests_ViperFormatPlugin_AnchorUnitTest extends AbstractViperUnitTest
         $this->selectText('ORSM');
         $this->type('Key.RIGHT');
         $this->type('Key.ENTER');
-        $this->type('This is a new line of ConTenT');
+        $this->type('This is a new line of CONTENT');
 
-        $this->selectText('ConTenT');
+        $this->keyDown('Key.SHIFT + Key.LEFT');
+        $this->keyDown('Key.SHIFT + Key.LEFT');
+        $this->keyDown('Key.SHIFT + Key.LEFT');
+        $this->keyDown('Key.SHIFT + Key.LEFT');
+        $this->keyDown('Key.SHIFT + Key.LEFT');
+        $this->keyDown('Key.SHIFT + Key.LEFT');
+        $this->keyDown('Key.SHIFT + Key.LEFT');
+        
         $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_anchor.png'), 'Anchor icon should appear in the inline toolbar.');
 
     }//end testAnchorIconAppearsInTheInlineToolbar()
 
+    
+    /**
+     * Test selecting anchors.
+     *
+     * @return void
+     */
+    public function testSelectingAnchors()
+    {
+        $dir = dirname(__FILE__).'/Images/';
+
+        $this->selectText('WoW');
+        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_anchor.png'), 'Anchor icon should appear in the inline toolbar.');
+        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_anchor.png'), 'Anchor icon should be available in the top toolbar');
+        
+        $this->selectInlineToolbarLineageItem(0);
+        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_anchor_active.png'), 'Active anchor icon should appear in the inline toolbar.');
+        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_anchor_active.png'), 'Active anchor icon should be available in the top toolbar');
+        
+        $this->click($this->find('XuT'));
+        
+        $this->selectText('lABs');
+        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_anchor_active.png'), 'Active anchor icon should appear in the inline toolbar.');
+        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_anchor_active.png'), 'Active anchor icon should be available in the top toolbar');
+
+    }//end testSelectingAnchors()
+    
+    
+    /**
+     * Test deleting anchors using the inline toolbar.
+     *
+     * @return void
+     */
+    public function testDeletingAnchorsUsingTheInlineToolbar()
+    {
+        $dir = dirname(__FILE__).'/Images/';
+
+        $this->selectText('WoW');
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_anchor_active.png');
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_delete_icon.png');
+        $this->keyDown('Key.ENTER');
+        
+        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p>sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span id="myclass">lABs</span> is ORSM</p>');
+        
+        $this->selectText('lABs');
+        sleep(1);
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_anchor_active.png');
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_delete_icon.png');
+        $updateChanges = $this->find($dir.'toolbarIcon_updateChanges.png');
+        $this->click($updateChanges);
+        
+        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p>sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz lABs is ORSM</p>');
+
+    }//end testDeletingAnchorsUsingTheInlineToolbar()
+    
+    
+    /**
+     * Test deleting anchors using the top toolbar.
+     *
+     * @return void
+     */
+    public function testDeletingAnchorsUsingTheTopToolbar()
+    {
+        $dir = dirname(__FILE__).'/Images/';
+
+        $this->selectText('WoW');
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickTopToolbarButton($dir.'toolbarIcon_anchor_active.png');
+        $this->clickTopToolbarButton($dir.'toolbarIcon_delete_icon.png');
+        $this->keyDown('Key.ENTER');
+        
+        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p>sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span id="myclass">lABs</span> is ORSM</p>');
+        
+        $this->selectText('lABs');
+        $this->clickTopToolbarButton($dir.'toolbarIcon_anchor_active.png');
+        $this->clickTopToolbarButton($dir.'toolbarIcon_delete_icon.png');
+        $updateChanges = $this->find($dir.'toolbarIcon_updateChanges.png');
+        $this->click($updateChanges);
+        
+        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p>sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz lABs is ORSM</p>');
+
+    }//end testDeletingAnchorsUsingTheInlineToolbar()
+    
 
 }//end class
 
