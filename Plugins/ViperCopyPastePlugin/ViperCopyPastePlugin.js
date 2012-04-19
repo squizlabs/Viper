@@ -93,8 +93,12 @@ ViperCopyPastePlugin.prototype = {
                 dfx.preventDefault(e);
                 return false;
             };
+
         }//end if
 
+        elem.oncut = function(e) {
+            self.viper.fireNodesChanged();
+        };
     },
 
     _canPaste: function()
@@ -110,7 +114,11 @@ ViperCopyPastePlugin.prototype = {
     keyDown: function (e)
     {
         if (this._isMSIE === true ||this._isFirefox === true) {
-            return this._fakePaste(e);
+            if (e.metaKey === true || e.ctrlKey === true) {
+                if (e.keyCode === 86) {
+                    return this._fakePaste(e);
+                }
+            }
         }
 
         return true;
@@ -158,7 +166,7 @@ ViperCopyPastePlugin.prototype = {
 
         // Select the bookmark and update caret position.
         this.viper.selectBookmark(bookmark);
-        this.viper.fireNodesChanged('ViperCopyPastePlugin:cut');
+        this.viper.fireNodesChanged();
 
         // Important: Bubble up so that browser can cut the contents of the selection.
         return false;
@@ -211,7 +219,7 @@ ViperCopyPastePlugin.prototype = {
             dfx.remove(div);
         }, 100);
 
-        this.viper.fireNodesChanged('ViperCopyPastePlugin:cut');
+        this.viper.fireNodesChanged();
 
         return false;
 
@@ -235,10 +243,6 @@ ViperCopyPastePlugin.prototype = {
 
     _fakePaste: function(e)
     {
-        if ((e.metaKey !== true && e.ctrlKey !== true) || e.keyCode !== 86) {
-            return true;
-        }
-
         this._beforePaste();
         switch (this.pasteType) {
             case 'formatted':
@@ -278,7 +282,7 @@ ViperCopyPastePlugin.prototype = {
         textInput.onpaste = function() {
             setTimeout(function() {
                 self._handleRawPasteValue(textInput.value);
-                self.viper.fireNodesChanged('ViperCopyPastePlugin:paste');
+                self.viper.fireNodesChanged();
             }, 100);
         };
 
@@ -453,7 +457,7 @@ ViperCopyPastePlugin.prototype = {
         this._updateSelection();
         this.viper.cleanDOM();
 
-        this.viper.fireNodesChanged('ViperCopyPastePlugin:paste');
+        this.viper.fireNodesChanged();
 
     },
 
