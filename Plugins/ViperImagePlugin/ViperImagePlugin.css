@@ -8,9 +8,13 @@
 
 .Viper-image-handle-se {
     cursor: se-resize;
+    margin-left: -10px;
+    margin-top: -10px;
 }
 
 .Viper-image-handle-sw {
     background-position: -19px 0;
     cursor: sw-resize;
+    margin-left: -10px;
+    margin-top: -10px;
 }

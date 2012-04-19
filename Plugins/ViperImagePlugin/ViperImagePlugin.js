@@ -482,10 +482,10 @@ ViperImagePlugin.prototype = {
 
         // Set the position of handles.
         dfx.setStyle(swHandle, 'left', rect.x1 + 'px');
-        dfx.setStyle(swHandle, 'top', (rect.y2 - 19) + 'px');
+        dfx.setStyle(swHandle, 'top', (rect.y2) + 'px');
 
-        dfx.setStyle(seHandle, 'left', (rect.x2 - 19) + 'px');
-        dfx.setStyle(seHandle, 'top', (rect.y2 - 19) + 'px');
+        dfx.setStyle(seHandle, 'left', (rect.x2) + 'px');
+        dfx.setStyle(seHandle, 'top', (rect.y2) + 'px');
 
         this.viper.addElement(seHandle);
         this.viper.addElement(swHandle);
@@ -498,29 +498,47 @@ ViperImagePlugin.prototype = {
 
         var _addMouseEvents = function(handle, rev) {
             dfx.addEvent(handle, 'mousedown', function(e) {
-                var width   = image.clientWidth;
-                var prevPos = e.clientX;
-                var resized = false;
+                var width    = image.clientWidth;
+                var height   = image.clientHeight;
+                var prevPosX = e.clientX;
+                var prevPosY = e.clientY;
+                var resized  = false;
+                var both     = e.shiftKey;
+                var ratio    = (height / width);
+
+                image.setAttribute('width', width);
+                image.setAttribute('height', height);
+                dfx.setStyle(image, 'width', '');
+                dfx.setStyle(image, 'height', '');
 
                 dfx.addEvent(document, 'mousemove.ViperImageResize', function(e) {
-                    var diff = e.clientX - prevPos;
-                    prevPos  = e.clientX;
-                    resized  = true;
+                    var wDiff = (e.clientX - prevPosX);
+                    var hDiff = (e.clientY - prevPosY);
+                    prevPosX  = e.clientX;
+                    prevPosY  = e.clientY;
+                    resized   = true;
 
                     if (rev !== true) {
-                        width += diff;
+                        width += wDiff;
                     } else {
-                        width -= diff;
+                        width -= wDiff;
                     }
 
                     image.setAttribute('width', width);
 
+                    if (both === true) {
+                        height += hDiff;
+                        image.setAttribute('height', height);
+                    } else {
+                        image.setAttribute('height', (width * ratio));
+                    }
+
                     var rect = dfx.getBoundingRectangle(image);
-                    dfx.setStyle(seHandle, 'left', (rect.x2 - 19) + 'px');
-                    dfx.setStyle(seHandle, 'top', (rect.y2 - 19) + 'px');
+                    dfx.setStyle(seHandle, 'left', (rect.x2) + 'px');
+                    dfx.setStyle(seHandle, 'top', (rect.y2) + 'px');
 
                     dfx.setStyle(swHandle, 'left', rect.x1 + 'px');
-                    dfx.setStyle(swHandle, 'top', (rect.y2 - 19) + 'px');
+                    dfx.setStyle(swHandle, 'top', (rect.y2) + 'px');
 
                     dfx.preventDefault(e);
                     return false;
