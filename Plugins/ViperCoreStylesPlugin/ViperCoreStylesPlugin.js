@@ -675,6 +675,11 @@ ViperCoreStylesPlugin.prototype = {
             return;
         }
 
+        var currentType = this._getImageJustify(image);
+        if (currentType === type) {
+            type = null;
+        }
+
         this.viper.fireCallbacks('ViperCoreStylesPlugin:beforeImageUpdate', image);
 
         switch (type) {
@@ -695,6 +700,9 @@ ViperCoreStylesPlugin.prototype = {
             break;
 
             default:
+                dfx.setStyle(image, 'margin', '');
+                dfx.setStyle(image, 'float', '');
+                dfx.setStyle(image, 'display', '');
             break;
         }//end switch
 
@@ -709,8 +717,13 @@ ViperCoreStylesPlugin.prototype = {
 
         this.viper.ViperTools.disableButton('ViperCoreStylesPlugin:vtp:block');
 
-        this.viper.ViperTools.setButtonActive('ViperCoreStylesPlugin:vtp:' + type);
-        this.viper.ViperTools.getItem('justify').setIconClass('Viper-justify' + dfx.ucFirst(type));
+        if (type !== null) {
+            this.viper.ViperTools.setButtonActive('ViperCoreStylesPlugin:vtp:' + type);
+            this.viper.ViperTools.getItem('justify').setIconClass('Viper-justify' + dfx.ucFirst(type));
+        } else {
+            this.viper.ViperTools.getItem('justify').setIconClass('Viper-justifyLeft');
+        }
+
         this.viper.ViperTools.setButtonActive('justify');
 
         this.viper.fireNodesChanged();
@@ -1189,6 +1202,15 @@ ViperCoreStylesPlugin.prototype = {
                 // Enable justify icon for selected image.
                 var type = this._getImageJustify(this._selectedImage);
                 tools.enableButton('justify');
+
+                var types = ['left', 'center', 'right', 'block'];
+                var c     = types.length;
+                this.viper.ViperTools.getItem('justify').setIconClass('Viper-justifyLeft');
+                this.viper.ViperTools.setButtonInactive('justify');
+                for (var i = 0; i < c; i++) {
+                    this.viper.ViperTools.setButtonInactive('ViperCoreStylesPlugin:vtp:' + types[i]);
+                }
+
                 if (type) {
                     tools.setButtonActive('ViperCoreStylesPlugin:vtp:' + type);
                     tools.getItem('justify').setIconClass('Viper-justify' + dfx.ucFirst(type));
