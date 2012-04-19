@@ -538,7 +538,9 @@ Viper.prototype = {
         var tmp     = Viper.document.createElement('div');
         var content = this.getContents(elem);
         dfx.setHtml(tmp, content);
-        if (dfx.trim(dfx.getNodeTextContent(tmp)).length === 0 || dfx.getHtml(tmp) === '&nbsp;') {
+        if ((dfx.trim(dfx.getNodeTextContent(tmp)).length === 0 || dfx.getHtml(tmp) === '&nbsp;')
+            && dfx.getTag('*', tmp).length === 0
+        ) {
             // Check for stub elements.
             var tags         = dfx.getTag('*', tmp);
             var hasStubElems = false;
@@ -562,6 +564,31 @@ Viper.prototype = {
             var cleanedContent = this.cleanHTML(content);
             if (cleanedContent !== content) {
                 dfx.setHtml(elem, cleanedContent);
+            }
+
+            for (var i = 0; i < elem.childNodes.length; i++) {
+                var child = elem.childNodes[i];
+                if ((dfx.isBlockElement(child) === true && dfx.isStubElement(child) === false)
+                    || child.nodeType === dfx.TEXT_NODE && dfx.trim(child.data) === ''
+                    || (child.nodeType !== dfx.ELEMENT_NODE && child.nodeType !== dfx.TEXT_NODE)
+                ) {
+                    continue;
+                }
+
+                var p = null;
+                if (child.previousSibling && dfx.isTag(child.previousSibling, 'p') === true) {
+                    p = child.previousSibling;
+                } else {
+                    p = document.createElement('p');
+                    dfx.insertBefore(child, p);
+                }
+
+                if (child.nodeType === dfx.TEXT_NODE) {
+                    child.data = dfx.trim(child.data);
+                }
+
+                p.appendChild(child);
+
             }
         }
 
