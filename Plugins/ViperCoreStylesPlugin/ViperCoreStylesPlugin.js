@@ -675,17 +675,22 @@ ViperCoreStylesPlugin.prototype = {
             return;
         }
 
+        var currentType = this._getImageJustify(image);
+        if (currentType === type) {
+            type = null;
+        }
+
         this.viper.fireCallbacks('ViperCoreStylesPlugin:beforeImageUpdate', image);
 
         switch (type) {
             case 'left':
                 dfx.setStyle(image, 'float', 'left');
-                dfx.setStyle(image, 'margin', '1em 0');
+                dfx.setStyle(image, 'margin', '1em 1em 1em 0');
             break;
 
             case 'right':
                 dfx.setStyle(image, 'float', 'right');
-                dfx.setStyle(image, 'margin', '1em 0');
+                dfx.setStyle(image, 'margin', '1em 0 1em 1em');
             break;
 
             case 'center':
@@ -695,6 +700,9 @@ ViperCoreStylesPlugin.prototype = {
             break;
 
             default:
+                dfx.setStyle(image, 'margin', '');
+                dfx.setStyle(image, 'float', '');
+                dfx.setStyle(image, 'display', '');
             break;
         }//end switch
 
@@ -709,8 +717,13 @@ ViperCoreStylesPlugin.prototype = {
 
         this.viper.ViperTools.disableButton('ViperCoreStylesPlugin:vtp:block');
 
-        this.viper.ViperTools.setButtonActive('ViperCoreStylesPlugin:vtp:' + type);
-        this.viper.ViperTools.getItem('justify').setIconClass('Viper-justify' + dfx.ucFirst(type));
+        if (type !== null) {
+            this.viper.ViperTools.setButtonActive('ViperCoreStylesPlugin:vtp:' + type);
+            this.viper.ViperTools.getItem('justify').setIconClass('Viper-justify' + dfx.ucFirst(type));
+        } else {
+            this.viper.ViperTools.getItem('justify').setIconClass('Viper-justifyLeft');
+        }
+
         this.viper.ViperTools.setButtonActive('justify');
 
         this.viper.fireNodesChanged();
@@ -940,8 +953,16 @@ ViperCoreStylesPlugin.prototype = {
 
         ViperChangeTracker.endBatchChange(changeid);
 
-        this.viper.fireNodesChanged();
-        this.viper.fireSelectionChanged();
+        if (this.viper.isBrowser('msie') === true && nodeSelection && !bookmark) {
+            setTimeout(function() {
+                ViperSelection.addRange(range);
+                self.viper.fireNodesChanged();
+                self.viper.fireSelectionChanged();
+            }, 10);
+        } else {
+            this.viper.fireNodesChanged();
+            this.viper.fireSelectionChanged();
+        }
 
     },
 
@@ -1181,6 +1202,15 @@ ViperCoreStylesPlugin.prototype = {
                 // Enable justify icon for selected image.
                 var type = this._getImageJustify(this._selectedImage);
                 tools.enableButton('justify');
+
+                var types = ['left', 'center', 'right', 'block'];
+                var c     = types.length;
+                this.viper.ViperTools.getItem('justify').setIconClass('Viper-justifyLeft');
+                this.viper.ViperTools.setButtonInactive('justify');
+                for (var i = 0; i < c; i++) {
+                    this.viper.ViperTools.setButtonInactive('ViperCoreStylesPlugin:vtp:' + types[i]);
+                }
+
                 if (type) {
                     tools.setButtonActive('ViperCoreStylesPlugin:vtp:' + type);
                     tools.getItem('justify').setIconClass('Viper-justify' + dfx.ucFirst(type));

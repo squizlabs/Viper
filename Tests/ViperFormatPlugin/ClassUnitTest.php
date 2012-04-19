@@ -132,7 +132,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_class_active.png'), 'Class icon in VITP should be active.');
 
         $this->clickInlineToolbarButton($dir.'toolbarIcon_class_active.png');
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_delete_class.png');
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_delete_icon.png');
         $this->keyDown('Key.ENTER');
 
         $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz lABs is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>Jumps</strong> OVER the lazy dogggg</p>');
@@ -150,7 +150,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
 
         $this->selectText($text);
         $this->clickInlineToolbarButton($dir.'toolbarIcon_class_active.png');
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_delete_class.png');
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_delete_icon.png');
         $this->clickInlineToolbarButton($dir.'toolbarIcon_updateChanges.png');
 
         $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz lABs is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>Jumps</strong> OVER the lazy dogggg</p>');
@@ -174,7 +174,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_class_active.png'), 'Class icon in VITP should be active.');
 
         $this->clickTopToolbarButton($dir.'toolbarIcon_class_active.png');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_delete_class.png');
+        $this->clickTopToolbarButton($dir.'toolbarIcon_delete_icon.png');
         $this->keyDown('Key.ENTER');
 
         $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz lABs is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>Jumps</strong> OVER the lazy dogggg</p>');
@@ -192,7 +192,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
 
         $this->selectText($text);
         $this->clickTopToolbarButton($dir.'toolbarIcon_class_active.png');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_delete_class.png');
+        $this->clickTopToolbarButton($dir.'toolbarIcon_delete_icon.png');
         $this->clickTopToolbarButton($dir.'toolbarIcon_updateChanges.png');
 
         $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz lABs is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>Jumps</strong> OVER the lazy dogggg</p>');
@@ -393,7 +393,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_class_active.png'), 'Class icon in VITP should be active.');
 
         $this->clickInlineToolbarButton($dir.'toolbarIcon_class_active.png');
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_delete_class.png');
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_delete_icon.png');
         $this->keyDown('Key.ENTER');
 
         $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p>sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>Jumps</strong> OVER the lazy dogggg</p>');
@@ -416,7 +416,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->selectText($text);
         $this->selectInlineToolbarLineageItem(0);
         $this->clickInlineToolbarButton($dir.'toolbarIcon_class_active.png');
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_delete_class.png');
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_delete_icon.png');
         $this->clickInlineToolbarButton($dir.'toolbarIcon_updateChanges.png');
 
         $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p>sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>Jumps</strong> OVER the lazy dogggg</p>');
@@ -442,7 +442,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_class_active.png'), 'Class icon in VITP should be active.');
 
         $this->clickTopToolbarButton($dir.'toolbarIcon_class_active.png');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_delete_class.png');
+        $this->clickTopToolbarButton($dir.'toolbarIcon_delete_icon.png');
         $this->keyDown('Key.ENTER');
 
         $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p>sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>Jumps</strong> OVER the lazy dogggg</p>');
@@ -465,7 +465,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->selectText($text);
         $this->selectInlineToolbarLineageItem(0);
         $this->clickTopToolbarButton($dir.'toolbarIcon_class_active.png');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_delete_class.png');
+        $this->clickTopToolbarButton($dir.'toolbarIcon_delete_icon.png');
         $this->clickTopToolbarButton($dir.'toolbarIcon_updateChanges.png');
 
         $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p>sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>Jumps</strong> OVER the lazy dogggg</p>');

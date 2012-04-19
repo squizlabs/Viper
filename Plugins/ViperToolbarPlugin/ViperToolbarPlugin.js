@@ -417,6 +417,9 @@ ViperToolbarPlugin.prototype = {
             getSetting: function(setting) {
                 return this._settings[setting];
             },
+            setTitle: function(title) {
+                dfx.setHtml(dfx.getClass('ViperITP-header', bubble)[0], title);
+            },
             _settings: {
                 keepOpen: false
             },

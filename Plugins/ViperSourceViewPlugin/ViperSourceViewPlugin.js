@@ -99,14 +99,14 @@ ViperSourceViewPlugin.prototype = {
                 content = StyleHTML(content);
             }
 
-            this._originalSource = content;
-
             if (this._editor) {
+                this._originalSource = content;
                 this._editor.getSession().setValue(content);
                 this.viper.ViperTools.openPopup('VSVP:popup', 800, 600);
                 this._editor.resize();
             } else {
                 this._textEditor.value = content;
+                this._originalSource   = this._textEditor.value;
                 this.viper.ViperTools.openPopup('VSVP:popup', 800, 600);
             }
 

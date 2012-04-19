@@ -456,22 +456,26 @@ ViperListPlugin.prototype = {
         }
 
         if (testOnly !== true) {
-            this.viper.selectBookmark(bookmark);
-            this.viper.adjustRange();
-            if (updated === true) {
-                if (this.viper.isBrowser('msie') === true) {
-                    if (outdent === false) {
-                        range.moveStart("character", -1);
-                    } else {
-                        range.moveStart("character", 1);
+            var self = this;
+            if (this.viper.isBrowser('msie') === true) {
+                setTimeout(function() {
+                    // Yet another tiemout for IE.
+                    self.viper.selectBookmark(bookmark);
+                    self.viper.adjustRange();
+
+                    if (updated === true) {
+                        self.viper.fireNodesChanged([range.getCommonElement()]);
+                        self.viper.fireSelectionChanged(null, true);
                     }
+                }, 10);
+            } else {
+                this.viper.selectBookmark(bookmark);
+                this.viper.adjustRange();
 
-                    range.collapse(true);
-                    ViperSelection.addRange(range);
+                if (updated === true) {
+                    this.viper.fireNodesChanged([range.getCommonElement()]);
+                    this.viper.fireSelectionChanged(null, true);
                 }
-
-                this.viper.fireNodesChanged([range.getCommonElement()]);
-                this.viper.fireSelectionChanged(null, true);
             }
         }
 
@@ -917,10 +921,19 @@ ViperListPlugin.prototype = {
         }
 
         // Select bookmark.
-        this.viper.selectBookmark(bookmark);
+        if (this.viper.isBrowser('msie') === true) {
+            var self = this;
+            setTimeout(function() {
+                self.viper.selectBookmark(bookmark);
+                self.viper.fireSelectionChanged(null, true);
+                self.viper.fireNodesChanged();
+            }, 10);
+        } else {
+            this.viper.selectBookmark(bookmark);
 
-        this.viper.fireSelectionChanged(null, true);
-        this.viper.fireNodesChanged(this.viper.getViperElement());
+            this.viper.fireSelectionChanged(null, true);
+            this.viper.fireNodesChanged(this.viper.getViperElement());
+        }
 
         return true;
 

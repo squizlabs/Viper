@@ -62,7 +62,7 @@ class Viper_Tests_ViperTableEditorPlugin_MergeAndSplitUnitTest extends AbstractV
         $this->clickInlineToolbarButton($this->getImg('icon_mergeDown.png'));
 
         $this->execJS('rmTableHeaders(0,true)');
-        $this->assertHTMLMatch('<p>Lorem IPSUM</p><table style="width: 100%;" border="1"><tbody><tr><th colspan="4" rowspan="3">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th></tr></tbody></table><p>dolor</p>');
+        $this->assertHTMLMatch('<p>Lorem IPSUM</p><table style="width: 100%;" border="1"><tbody><tr><th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th></tr></tbody></table><p>dolor</p><p>sit amet <strong>consectetur</strong></p>');
 
     }//end testUsingTableIconInTopToolbar()
 

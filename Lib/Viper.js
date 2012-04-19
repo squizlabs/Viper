@@ -538,7 +538,9 @@ Viper.prototype = {
         var tmp     = Viper.document.createElement('div');
         var content = this.getContents(elem);
         dfx.setHtml(tmp, content);
-        if (dfx.trim(dfx.getNodeTextContent(tmp)).length === 0 || dfx.getHtml(tmp) === '&nbsp;') {
+        if ((dfx.trim(dfx.getNodeTextContent(tmp)).length === 0 || dfx.getHtml(tmp) === '&nbsp;')
+            && dfx.getTag('*', tmp).length === 0
+        ) {
             // Check for stub elements.
             var tags         = dfx.getTag('*', tmp);
             var hasStubElems = false;
@@ -562,6 +564,31 @@ Viper.prototype = {
             var cleanedContent = this.cleanHTML(content);
             if (cleanedContent !== content) {
                 dfx.setHtml(elem, cleanedContent);
+            }
+
+            for (var i = 0; i < elem.childNodes.length; i++) {
+                var child = elem.childNodes[i];
+                if ((dfx.isBlockElement(child) === true && dfx.isStubElement(child) === false)
+                    || child.nodeType === dfx.TEXT_NODE && dfx.trim(child.data) === ''
+                    || (child.nodeType !== dfx.ELEMENT_NODE && child.nodeType !== dfx.TEXT_NODE)
+                ) {
+                    continue;
+                }
+
+                var p = null;
+                if (child.previousSibling && dfx.isTag(child.previousSibling, 'p') === true) {
+                    p = child.previousSibling;
+                } else {
+                    p = document.createElement('p');
+                    dfx.insertBefore(child, p);
+                }
+
+                if (child.nodeType === dfx.TEXT_NODE) {
+                    child.data = dfx.trim(child.data);
+                }
+
+                p.appendChild(child);
+
             }
         }
 
@@ -1815,8 +1842,12 @@ Viper.prototype = {
         } else {
             var nodeSelection    = range.getNodeSelection();
             var startBlockParent = dfx.getFirstBlockParent(startContainer);
-            var endBlockParent   = dfx.getFirstBlockParent(endContainer);
-            var bookmark         = this.createBookmark();
+            if (!endContainer) {
+                endContainer = startContainer;
+            }
+
+            var endBlockParent = dfx.getFirstBlockParent(endContainer);
+            var bookmark       = this.createBookmark();
 
             if (startBlockParent === endBlockParent && !nodeSelection) {
                 // Same block parent, create only one tag that wraps the whole
@@ -2569,6 +2600,7 @@ Viper.prototype = {
         dfx.remove([bookmark.start, bookmark.end]);
 
         if (endPos === null) {
+            range.setStart(startPos, startOffset);
             range.setEnd(startPos, startOffset);
             range.collapse(false);
         } else {
@@ -2665,9 +2697,7 @@ Viper.prototype = {
             // Make sure start and end are in correct position.
             if (startBookmark.previousSibling === endBookmark) {
                 // Reverse..
-                var tmp       = startBookmark;
-                startBookmark = endBookmark;
-                endBookmark   = tmp;
+                dfx.insertBefore(endBookmark, startBookmark);
             }
         } catch (e) {
             // NS_ERROR_UNEXPECTED: I believe this is a Firefox bug.

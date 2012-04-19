@@ -247,12 +247,24 @@ ViperLinkPlugin.prototype = {
             var c     = links.length;
             for (var i = 0; i < c; i++) {
                 var elem = links[i];
-                while (elem.lastChild) {
-                    dfx.insertAfter(elem, elem.lastChild);
+                while (elem.firstChild) {
+                    if (elem.firstChild.nodeType == dfx.TEXT_NODE
+                        && elem.previousSibling
+                        && elem.previousSibling.nodeType === dfx.TEXT_NODE
+                    ) {
+                        elem.previousSibling.data += elem.firstChild.data;
+                        dfx.remove(elem.firstChild);
+                    } else {
+                        dfx.insertBefore(elem, elem.firstChild);
+                    }
                 }
 
                 dfx.remove(elem);
             }
+
+            range.selectNode(nodeSelection);
+            ViperSelection.addRange(range);
+            this.viper.fireSelectionChanged(range, true);
         } else {
             var bookmark = this.viper.createBookmark();
             var elems = dfx.getElementsBetween(bookmark.start, bookmark.end);
@@ -271,9 +283,9 @@ ViperLinkPlugin.prototype = {
             }, bookmark.end);
 
             this.viper.selectBookmark(bookmark);
+            this.viper.fireSelectionChanged(null, true);
         }//end if
 
-        this.viper.fireSelectionChanged(null, true);
         this.viper.fireNodesChanged([this.viper.getViperElement()]);
 
     },

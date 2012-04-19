@@ -15,12 +15,10 @@ function ViperImagePlugin(viper)
 {
     this.viper = viper;
 
-    this._previewBox       = null;
-    this._resizeImage      = null;
-    this._resizeWidgetElem = null;
-    this._imageStyleAttr   = null;
-    this._resized          = false;
-    this._ieImageResize    = null;
+    this._previewBox    = null;
+    this._resizeImage   = null;
+    this._ieImageResize = null;
+    this._resizeHandles = null;
 
 }
 
@@ -46,6 +44,7 @@ ViperImagePlugin.prototype = {
                     self._ieImageResize = target;
                     self._updateToolbar(target);
                     self.viper.registerCallback('Viper:mouseUp', 'ViperImagePlugin:ie', function(e) {
+                        // Image reiszied.
                         if (dfx.hasAttribute(target, 'width') === true) {
                             var width  = dfx.getStyle(target, 'width');
                             var height = dfx.getStyle(target, 'height');
@@ -57,6 +56,7 @@ ViperImagePlugin.prototype = {
                             dfx.setStyle(target, 'height', '');
                         }
 
+                        self.viper.fireNodesChanged();
                         self.viper.removeCallback('Viper:mouseUp', 'ViperImagePlugin:ie');
                         return false;
                     });
@@ -277,14 +277,19 @@ ViperImagePlugin.prototype = {
                 title = null;
             }
 
-            if (!self._resizeImage || dfx.isTag(self._resizeImage, 'img') === false) {
+            var image = self._resizeImage;
+            if (self.viper.isBrowser('msie') === true) {
+                image = self._ieImageResize;
+            }
+
+            if (!image || dfx.isTag(image, 'img') === false) {
                 self.rangeToImage(self.viper.getViperRange(), self.getImageUrl(url), alt, title);
             } else {
-                self.setImageURL(self._resizeImage, self.getImageUrl(url));
-                self.setImageAlt(self._resizeImage, alt);
-                self.setImageTitle(self._resizeImage, title);
+                self.setImageURL(image, self.getImageUrl(url));
+                self.setImageAlt(image, alt);
+                self.setImageTitle(image, title);
 
-                self.viper.fireNodesChanged([self._resizeImage]);
+                self.viper.fireNodesChanged([image]);
             }
         };
 
@@ -441,6 +446,9 @@ ViperImagePlugin.prototype = {
             var height = dfx.getElementHeight(img);
             dfx.remove(tmp);
 
+            img.removeAttribute('height');
+            img.removeAttribute('width');
+
             var maxWidth  = 185;
             var maxHeight = 185;
             if (height > maxHeight && width > maxWidth) {
@@ -464,119 +472,103 @@ ViperImagePlugin.prototype = {
 
     showImageResizeHandles: function(image)
     {
-        if (!image || !image.parentNode || this.viper.isBrowser('msie') === true) {
-            return;
-        }
+        var seHandle = document.createElement('div');
+        dfx.addClass(seHandle, 'Viper-image-handle Viper-image-handle-se');
 
-        if (this._resizeImage !== image) {
-            this._imageStyleAttr = image.getAttribute('style');
-            this._resized = false;
-        }
+        var swHandle = document.createElement('div');
+        dfx.addClass(swHandle, 'Viper-image-handle Viper-image-handle-sw');
 
-        var self      = this;
-        dfxjQuery(image).resizable({
-            handles: 'se,sw',
-            aspectRatio: true,
-            stop: function() {
-                self._fixImageResize();
-                self.hideImageResizeHandles(image);
-                self.viper.fireNodesChanged();
-                self.showImageResizeHandles(image);
-            },
-            resize: function(e) {
-                self._resized = true;
-                self._fixImageResize();
-            }
-        });
+        var rect = dfx.getBoundingRectangle(image);
 
-        this._resizeImage = image;
+        // Set the position of handles.
+        dfx.setStyle(swHandle, 'left', rect.x1 + 'px');
+        dfx.setStyle(swHandle, 'top', (rect.y2) + 'px');
 
-        var imageFloat = dfx.getStyle(image, 'float');
+        dfx.setStyle(seHandle, 'left', (rect.x2) + 'px');
+        dfx.setStyle(seHandle, 'top', (rect.y2) + 'px');
 
-        this._resizeWidgetElem = dfxjQuery(image).resizable('widget').get(0);
-        dfx.setStyle(this._resizeWidgetElem, 'position', 'relative');
-        dfx.setStyle(this._resizeWidgetElem, 'display', 'inline-block');
-        dfx.setStyle(this._resizeWidgetElem, 'float', imageFloat);
-        dfx.setStyle(this._resizeWidgetElem, 'width', 'auto');
-        dfx.setStyle(this._resizeWidgetElem, 'height', 'auto');
-        dfx.setStyle(this._resizeWidgetElem, 'overflow', '');
+        this.viper.addElement(seHandle);
+        this.viper.addElement(swHandle);
+
+        this._resizeHandles = [];
+        this._resizeHandles.push(seHandle);
+        this._resizeHandles.push(swHandle);
+
+        var self = this;
+
+        var _addMouseEvents = function(handle, rev) {
+            dfx.addEvent(handle, 'mousedown', function(e) {
+                var width    = image.clientWidth;
+                var height   = image.clientHeight;
+                var prevPosX = e.clientX;
+                var prevPosY = e.clientY;
+                var resized  = false;
+                var both     = e.shiftKey;
+                var ratio    = (height / width);
+
+                image.setAttribute('width', width);
+                image.setAttribute('height', height);
+                dfx.setStyle(image, 'width', '');
+                dfx.setStyle(image, 'height', '');
+
+                dfx.addEvent(document, 'mousemove.ViperImageResize', function(e) {
+                    var wDiff = (e.clientX - prevPosX);
+                    var hDiff = (e.clientY - prevPosY);
+                    prevPosX  = e.clientX;
+                    prevPosY  = e.clientY;
+                    resized   = true;
+
+                    if (rev !== true) {
+                        width += wDiff;
+                    } else {
+                        width -= wDiff;
+                    }
+
+                    image.setAttribute('width', width);
+
+                    if (both === true) {
+                        height += hDiff;
+                        image.setAttribute('height', height);
+                    } else {
+                        image.setAttribute('height', (width * ratio));
+                    }
+
+                    var rect = dfx.getBoundingRectangle(image);
+                    dfx.setStyle(seHandle, 'left', (rect.x2) + 'px');
+                    dfx.setStyle(seHandle, 'top', (rect.y2) + 'px');
+
+                    dfx.setStyle(swHandle, 'left', rect.x1 + 'px');
+                    dfx.setStyle(swHandle, 'top', (rect.y2) + 'px');
+
+                    dfx.preventDefault(e);
+                    return false;
+                });
+
+                // Remove mousemove event.
+                dfx.addEvent(document, 'mouseup.ViperImageResize', function(e) {
+                    dfx.removeEvent(document, 'mousemove.ViperImageResize');
+                    dfx.removeEvent(document, 'mouseup.ViperImageResize');
+
+                    if (resized === true) {
+                        self.viper.fireNodesChanged();
+                    }
+                });
+
+                dfx.preventDefault(e);
+                return false;
+            });
+        };
+
+        _addMouseEvents(seHandle);
+        _addMouseEvents(swHandle, true);
 
     },
 
     hideImageResizeHandles: function(elem)
     {
-        if (!this._resizeImage || this.viper.isBrowser('msie') === true) {
-            return;
-        }
-
-        if (elem && elem.nodeType === dfx.ELEMENT_NODE) {
-            if (this._resizeWidgetElem === elem || dfx.isChildOf(elem, this._resizeWidgetElem)) {
-                return false;
-            }
-        }
-
-        this._hideImageResizeHandles();
-        this._resizeImage = null;
-
-    },
-
-    _hideImageResizeHandles: function(image)
-    {
-        var imgArg = image;
-
-        image = image || this._resizeImage;
-        var width  = dfx.getStyle(image, 'width');
-        var height = dfx.getStyle(image, 'height');
-
-        if (!imgArg) {
-            dfxjQuery(image).resizable('destroy');
-        }
-
-        if (!image.className) {
-            image.removeAttribute('class');
-        }
-
-        image.setAttribute('style', this._imageStyleAttr);
-
-        if (this._resized === true) {
-            image.setAttribute('width', width);
-            image.setAttribute('height', height);
-
-            // Remove width and height styles.
-            dfx.setStyle(image, 'width', '');
-            dfx.setStyle(image, 'height', '');
-        }
-
-        if (!image.getAttribute('style') || image.getAttribute('style') === 'null') {
-            image.removeAttribute('style');
-        }
-
-        if (imgArg) {
-            this._fixImageResize(image);
-        } else {
-            this._fixImageResize();
-        }
-
-    },
-
-    _fixImageResize: function(image)
-    {
-        if (image) {
-            dfx.setStyle(image, 'left', '');
-            dfx.setStyle(image, 'top', '');
-            dfx.setStyle(image, 'resize', '');
-            dfx.setStyle(image, 'position', '');
-        } else {
-            dfx.setStyle(this._resizeImage, 'left', '');
-            dfx.setStyle(this._resizeImage, 'top', '');
-            dfx.setStyle(this._resizeImage, 'resize', '');
-            dfx.setStyle(this._resizeImage, 'position', '');
-
-            if (this._resizeWidgetElem) {
-                dfx.setStyle(this._resizeWidgetElem, 'left', '');
-                dfx.setStyle(this._resizeWidgetElem, 'top', '');
-                dfx.setStyle(this._resizeWidgetElem, 'overflow', '');
-            }
+        if (this._resizeHandles) {
+            dfx.remove(this._resizeHandles);
+            this._resizeHandles = null;
         }
 
     }

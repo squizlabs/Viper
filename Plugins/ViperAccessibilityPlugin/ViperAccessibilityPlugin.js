@@ -79,6 +79,7 @@ ViperAccessibilityPlugin.prototype = {
                 self._remarkDismissedIssues(issues);
             },
             runCallback: function(issues) {
+                self._updateStandard();
                 return self._moveDismissedIssuesToEnd(issues);
             }
         });
@@ -187,7 +188,7 @@ ViperAccessibilityPlugin.prototype = {
 
         // Create the Toolbar Bubble for the plugin interface. The bubble's main content
         // is the tools section.
-        var aaTools = toolbar.createBubble('VAP:bubble', 'Accessibility Auditor', null, null, function() {
+        var aaTools = toolbar.createBubble('VAP:bubble', 'Accessibility Auditor - ' + this._standard, null, null, function() {
             self.getIssues();
         }, function() {
         }, 'ViperAccessibilityPlugin');
@@ -282,6 +283,14 @@ ViperAccessibilityPlugin.prototype = {
             }, 800);
         }
 
+    },
+
+    _updateStandard: function()
+    {
+        // Updates the standard info from HTMLCSAuditor.
+        this._standard = HTMLCSAuditor.getCurrentStandard();
+
+        this.viper.ViperTools.getItem('VAP:bubble').setTitle('Accessibility Auditor - ' + this._standard);
     },
 
     _markAsDone: function(issueNum)

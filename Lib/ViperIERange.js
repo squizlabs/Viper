@@ -395,8 +395,21 @@ ViperIERange.prototype = {
      */
     deleteContents: function()
     {
-        this.rangeObj.execCommand('Delete');
-        this._initContainerInfo();
+        if (this.startContainer === this.endContainer
+            && this.startContainer.nodeType === dfx.TEXT_NODE
+        ) {
+            // Do not use execCommand in this case. Because if the node is at the end
+            // of a paragraph then the execCommand will join the next paragraph to
+            // the current one..
+            var before = this.startContainer.data.substring(0, this.startOffset);
+            var after  = this.startContainer.data.substring(this.endOffset);
+            this.startContainer.data = before + after;
+            this.setStart(this.startContainer, this.startOffset);
+            this.collapse(true);
+        } else {
+            this.rangeObj.execCommand('Delete');
+            this._initContainerInfo();
+        }
 
     },
 
