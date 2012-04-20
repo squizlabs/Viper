@@ -654,6 +654,38 @@
 .Viper-button.Viper-selected .Viper-buttonIcon.Viper-headings {
   background-position: -33px -1458px;
 }
+.Viper-buttonIcon.Viper-formats-p {
+  background-position: 0 -1512px;
+}
+.Viper-button:active .Viper-buttonIcon.Viper-formats-p,
+.Viper-button.Viper-active .Viper-buttonIcon.Viper-formats-p,
+.Viper-button.Viper-selected .Viper-buttonIcon.Viper-formats-p {
+  background-position: -33px -1512px;
+}
+.Viper-buttonIcon.Viper-formats-quote {
+  background-position: 0 -1539px;
+}
+.Viper-button:active .Viper-buttonIcon.Viper-formats-quote,
+.Viper-button.Viper-active .Viper-buttonIcon.Viper-formats-quote,
+.Viper-button.Viper-selected .Viper-buttonIcon.Viper-formats-quote {
+  background-position: -33px -1539px;
+}
+.Viper-buttonIcon.Viper-formats-div {
+  background-position: 0 -1485px;
+}
+.Viper-button:active .Viper-buttonIcon.Viper-formats-div,
+.Viper-button.Viper-active .Viper-buttonIcon.Viper-formats-div,
+.Viper-button.Viper-selected .Viper-buttonIcon.Viper-formats-div {
+  background-position: -33px -1485px;
+}
+.Viper-buttonIcon.Viper-formats-pre {
+  background-position: 0 -1566px;
+}
+.Viper-button:active .Viper-buttonIcon.Viper-formats-pre,
+.Viper-button.Viper-active .Viper-buttonIcon.Viper-formats-pre,
+.Viper-button.Viper-selected .Viper-buttonIcon.Viper-formats-pre {
+  background-position: -33px -1566px;
+}
 .__viper_selHighlight {
   background-color: #CCC !important;
 }
