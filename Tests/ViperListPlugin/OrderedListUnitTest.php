@@ -329,6 +329,36 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractViperListP
 
 
     /**
+     * Test that you can indent and outdent mulitple items multiple time.
+     *
+     * @return void
+     */
+    public function testOutdentAndIndentListItemsMultipleTimes()
+    {
+        $this->selectText('bbbbb', 'XuT');
+        $this->keyDown('Key.SHIFT + Key.TAB');
+
+        $this->assertHTMLMatch('<ol><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ol><p>aaa bbbbb ccccc</p><p>4 oNo templates</p><p>Audit XuT content</p>');
+
+        $this->selectText('bbbbb', 'XuT');
+        $this->keyDown('Key.TAB');
+
+        $this->assertHTMLMatch('<ol><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li><li>aaa bbbbb ccccc</li><li>4 oNo templates</li><li>Audit XuT content</li></ol>');
+
+        $this->selectText('bbbbb', 'XuT');
+        $this->keyDown('Key.SHIFT + Key.TAB');
+
+        $this->assertHTMLMatch('<ol><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ol><p>aaa bbbbb ccccc</p><p>4 oNo templates</p><p>Audit XuT content</p>');
+
+        $this->selectText('bbbbb', 'XuT');
+        $this->keyDown('Key.TAB');
+
+        $this->assertHTMLMatch('<ol><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li><li>aaa bbbbb ccccc</li><li>4 oNo templates</li><li>Audit XuT content</li></ol>');
+
+    }//end testOutdentAndIndentListItemsMultipleTimes()
+
+
+    /**
      * Test indent/outdent.
      *
      * @return void
