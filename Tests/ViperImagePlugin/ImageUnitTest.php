@@ -334,6 +334,29 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperUnitTest
 
 
     /**
+     * Test trying to insert an image with the incorrect URL.
+     *
+     * @return void
+     */
+    public function testInsertingImageWithIncorrectURL()
+    {
+        $dir = dirname(__FILE__).'/Images/';
+
+        $this->selectText('dolor');
+        $this->type('Key.RIGHT');
+
+        $this->clickTopToolbarButton($dir.'toolbarIcon_image.png');
+        $this->type('http://cms.squizsuite.net/homepage-images/hero-shot.jpg');
+        $this->clickTopToolbarButton($dir.'toobarIcon_image_presentational.png');
+        $this->keyDown('Key.ENTER');
+        $this->assertTrue($this->exists($dir.'fail_to_load_message.png'));
+
+        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>LOREM XuT dolor<img src="http://cms.squizsuite.net/homepage-images/hero-shot.jpg" alt="" /></p><p>sit amet <strong>WoW</strong></p><p>Squiz LABS is ORSM</p>');
+
+    }//end testInsertingImageWithIncorrectURL()
+    
+
+    /**
      * Test replacing content with an image.
      *
      * @return void
