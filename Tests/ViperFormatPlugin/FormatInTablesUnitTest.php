@@ -336,19 +336,16 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
     {
         $dir     = dirname(__FILE__).'/Images/';
 
-        $text = 'WOW';
-        $this->selectText($text);
+        $this->click($this->find('WoW'));
 
         $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_formats.png');
         $this->clickTopToolbarButton($dir.'toolbarIcon_pre.png');
         $this->execJS('rmTableHeaders(0,true)');
-        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>aa XuT kk</td><td><pre>WOW</pre></td><td>            <ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li></ul>        </td></tr><tr><td>nec PORTA ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><tbody><tr><th>Col1 Header</th><th>Col2 Header</th></tr><tr><td>XuT is in a table</td><td><pre>WoW</pre></td></tr></tbody></table>');
 
-        $this->selectText($text);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_formats_highlighted.png');
         $this->clickTopToolbarButton($dir.'toolbarIcon_pre_active.png');
         $this->execJS('rmTableHeaders(0,true)');
-        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>aa XuT kk</td><td>WOW</td><td>            <ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li></ul>        </td></tr><tr><td>nec PORTA ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><tbody><tr><th>Col1 Header</th><th>Col2 Header</th></tr><tr><td>XuT is in a table</td><td>WoW</td></tr></tbody></table>');
 
     }//end testPreInATableWithOneWord()
 
