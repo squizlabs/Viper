@@ -69,6 +69,7 @@ ViperInlineToolbarPlugin.prototype = {
 
         if (settings.buttons) {
             this._buttons = settings.buttons;
+            this._toolbarWidget.orderButtons(this._buttons);
         }
 
     },
@@ -163,64 +164,6 @@ ViperInlineToolbarPlugin.prototype = {
         };
 
         this.viper.fireCallbacks('ViperInlineToolbarPlugin:updateToolbar', data);
-
-    },
-
-
-    applyButtonsSetting: function()
-    {
-        // Get all the buttons from the container.
-        var buttons = dfx.getClass('Viper-button', this._toolsContainer);
-        var c       = buttons.length;
-
-        if (c === 0) {
-            return;
-        }
-
-        // Clear the buttons container contents.
-        if (this.viper.isBrowser('msie') === true) {
-            while(this._toolsContainer.firstChild) {
-                this._toolsContainer.removeChild(this._toolsContainer.firstChild);
-            }
-        } else {
-            this._toolsContainer.innerHTML = '';
-        }
-
-        // Get the button ids and their elements.
-        var addedButtons = {};
-        for (var i = 0; i < c; i++) {
-            var button = buttons[i];
-            var id     = button.id.toLowerCase().replace(this.viper.getId() + '-vitp', '');
-            addedButtons[id] = button;
-        }
-
-        var bc = this._buttons.length;
-        for (var i = 0; i < bc; i++) {
-            var button = this._buttons[i];
-            if (typeof button === 'string') {
-                button = button.toLowerCase();
-                if (addedButtons[button]) {
-                    // Button is included in the setting, add it to the toolbar.
-                    this.addButton(addedButtons[button]);
-                }
-            } else {
-                var gc           = button.length;
-                var groupid      = null;
-                for (var j = 0; j < gc; j++) {
-                    if (addedButtons[button[j].toLowerCase()]) {
-                        if (groupid === null) {
-                            // Create the group.
-                            groupid      = 'ViperInlineToolbarPlugin:buttons:' + i;
-                            groupElement = this.viper.ViperTools.createButtonGroup(groupid);
-                            this.addButton(groupElement);
-                        }
-
-                        // Button is included in the setting, add it to group.
-                        this.viper.ViperTools.addButtonToGroup('vitp' + dfx.ucFirst(button[j]), groupid);
-                    }
-                }
-            }
-        }
 
     },
 

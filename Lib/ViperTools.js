@@ -1424,6 +1424,61 @@ ViperTools.prototype = {
                 }//end for
 
             },
+            orderButtons: function(buttonOrder) {
+                // Get all the buttons from the container.
+                var buttons = dfx.getClass('Viper-button', toolsContainer);
+                var c       = buttons.length;
+
+                if (c === 0) {
+                    return;
+                }
+
+                // Clear the buttons container contents.
+                if (self.viper.isBrowser('msie') === true) {
+                    while(toolsContainer.firstChild) {
+                        toolsContainer.removeChild(toolsContainer.firstChild);
+                    }
+                } else {
+                    toolsContainer.innerHTML = '';
+                }
+
+                // Get the button ids and their elements.
+                var addedButtons = {};
+                for (var i = 0; i < c; i++) {
+                    var button = buttons[i];
+                    var id     = button.id.toLowerCase().replace(self.viper.getId() + '-vitp', '');
+                    addedButtons[id] = button;
+                }
+
+                var bc = buttonOrder.length;
+                for (var i = 0; i < bc; i++) {
+                    var button = buttonOrder[i];
+                    if (typeof button === 'string') {
+                        button = button.toLowerCase();
+                        if (addedButtons[button]) {
+                            // Button is included in the setting, add it to the toolbar.
+                            this.addButton(addedButtons[button]);
+                        }
+                    } else {
+                        var gc           = button.length;
+                        var groupid      = null;
+                        for (var j = 0; j < gc; j++) {
+                            if (addedButtons[button[j].toLowerCase()]) {
+                                if (groupid === null) {
+                                    // Create the group.
+                                    groupid      = 'ViperInlineToolbarPlugin:buttons:' + i;
+                                    groupElement = self.createButtonGroup(groupid);
+                                    this.addButton(groupElement);
+                                }
+
+                                // Button is included in the setting, add it to group.
+                                self.addButtonToGroup('vitp' + dfx.ucFirst(button[j]), groupid);
+                            }
+                        }
+                    }
+                }
+
+            },
             _subSections: {},
             _activeSection: null,
             _subSectionButtons: {},
