@@ -1034,3 +1034,7 @@
   background-position: 0 -202px;
   cursor: se-resize;
 }
+.Viper-button.ViperITP-button-hidden,
+.Viper-buttonGroup ViperITP-button-hidden {
+  display: none;
+}

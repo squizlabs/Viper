@@ -170,25 +170,36 @@ Viper.prototype = {
         }
 
         if (!this._viperElementHolder) {
-            var holder = document.createElement('div');
-            Viper.document.body.appendChild(holder);
-            this._viperElementHolder = holder;
-
-            // Add browser type.
-            var browser = this.getBrowserType();
-            var version = this.getBrowserVersion();
-
-            if (browser && version) {
-                dfx.addClass(this._viperElementHolder, 'Viper-browser-' + browser);
-                dfx.addClass(this._viperElementHolder, 'Viper-browserVer-' + browser + version);
-            }
+            this._viperElementHolder = this._createElementHolder();
         }
 
         this._viperElementHolder.appendChild(element);
     },
 
+    _createElementHolder: function()
+    {
+        var holder = document.createElement('div');
+        Viper.document.body.appendChild(holder);
+
+        // Add browser type.
+        var browser = this.getBrowserType();
+        var version = this.getBrowserVersion();
+
+        if (browser && version) {
+            dfx.addClass(this._viperElementHolder, 'Viper-browser-' + browser);
+            dfx.addClass(this._viperElementHolder, 'Viper-browserVer-' + browser + version);
+        }
+
+        return holder;
+
+    },
+
     getElementHolder: function()
     {
+        if (!this._viperElementHolder) {
+            this._viperElementHolder = this._createElementHolder();
+        }
+
         return this._viperElementHolder;
 
     },
@@ -3436,7 +3447,7 @@ Viper.prototype = {
 
             // Ask plugins if its one of their element.
             var pluginName = this.getPluginForElement(target);
-            if (!pluginName) {
+            if (!pluginName && this.isChildOfElems(target, [this._viperElementHolder]) !== true) {
                 this.setEnabled(false);
                 return this.fireCallbacks('Viper:clickedOutside', e);
             } else {

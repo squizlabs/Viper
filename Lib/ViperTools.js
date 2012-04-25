@@ -1008,6 +1008,560 @@ ViperTools.prototype = {
 
     },
 
+    createInlineToolbar: function(id, compact, elementTypes, updateCallback)
+    {
+        var self    = this;
+        var margin  = 15;
+        var toolbar = document.createElement('div');
+
+        var toolsContainer = document.createElement('div');
+        toolbar.appendChild(toolsContainer);
+
+        var subSectionContainer = document.createElement('div');
+        dfx.setHtml(subSectionContainer, '<span class="Viper-subSectionArrow"></span>');
+        toolbar.appendChild(subSectionContainer);
+
+        dfx.addClass(toolbar, 'ViperITP Viper-themeDark Viper-scalable');
+        dfx.addClass(toolsContainer, 'ViperITP-tools');
+        dfx.addClass(subSectionContainer, 'ViperITP-subSectionWrapper');
+
+        if (navigator.userAgent.match(/iPad/i) !== null) {
+            dfx.addClass(toolbar, 'device-ipad');
+        }
+
+        if (compact === true) {
+            dfx.addClass(toolbar, 'Viper-compact');
+        }
+
+        dfx.addEvent(toolbar, 'mousedown', function(e) {
+            var target = dfx.getMouseEventTarget(e);
+            if (dfx.isTag(target, 'input') !== true && dfx.isTag(target, 'textarea') !== true) {
+                dfx.preventDefault(e);
+                return false;
+            }
+        });
+
+        dfx.addEvent(toolbar, 'mouseup', function(e) {
+                dfx.preventDefault(e);
+                return false;
+        });
+
+        this.viper.registerCallback('Viper:selectionChanged', id, function(range) {
+            if (self.viper.rangeInViperBounds(range) === false) {
+                return;
+            }
+
+            if (range.collapsed === true) {
+                return;
+            }
+
+            // Update the toolbar position, contents and lineage for this new selection.
+            self.getItem(id).update(range);
+        });
+
+        this.viper.registerCallback('Viper:clickedOutside', id, function(range) {
+            self.getItem(id).hide();
+        });
+
+        this.viper.registerCallback(['Viper:mouseDown', 'ViperHistoryManager:undo'], id, function(data) {
+            if (data && data.target) {
+                var target = dfx.getMouseEventTarget(data);
+                if (target === self._toolbar || dfx.isChildOf(target, self._toolbar) === true) {
+                    if (dfx.isTag(target, 'input') === true
+                        || dfx.isTag(target, 'textarea') === true
+                    ) {
+                        // Allow event to bubble so the input element can get focus etc.
+                        return true;
+                    }
+
+                    return false;
+                }
+            }
+
+            self.getItem(id).hide();
+        });
+
+        var tools = this;
+        this.addItem(id, {
+            type: 'toolbar',
+            element: toolbar,
+            addButton: function(button, index) {
+                if (dfx.isset(index) === true && toolsContainer.childNodes.length > index) {
+                    if (index < 0) {
+                        index = toolsContainer.childNodes.length + index;
+                        if (index < 0) {
+                            index = 0;
+                        }
+                    }
+
+                    dfx.insertBefore(toolsContainer.childNodes[index], button);
+                } else {
+                    toolsContainer.appendChild(button);
+                }
+
+            },
+            showButton: function(buttonid) {
+                if (tools.getItem(buttonid).type !== 'button') {
+                    throw new Error('Invalid button for showButton(): ' + buttonid);
+                }
+
+                this._buttonShown = true;
+                dfx.removeClass(tools.getItem(buttonid).element, 'ViperITP-button-hidden');
+            },
+            showButtonGroup: function(groupid, buttonids) {
+                if (buttonids && buttonids.length === 0) {
+                    return;
+                }
+
+                this._buttonShown = true;
+                var group = tools.getItem(groupid);
+                dfx.removeClass(group.element, 'ViperITP-button-hidden');
+
+                for (var i = 0; i < group.buttons.length; i++) {
+                    this.showButton(group.buttons[i]);
+                    if (buttonids && buttonids.inArray(group.buttons[i]) !== true) {
+                        tools.disableButton(group.buttons[i]);
+                    } else {
+                        tools.enableButton(group.buttons[i]);
+                    }
+                }
+
+            },
+            update: function(range) {
+                if (!updateCallback || self.viper.isEnabled() === false) {
+                    return;
+                }
+
+                var selectedNode = null;
+                range = range || this.viper.getViperRange();
+                if (elementTypes && elementTypes.length > 0) {
+                    selectedNode = range.getNodeSelection();
+                    if (selectedNode) {
+                        if (elementTypes.inArray(dfx.getTagName(selectedNode)) !== true) {
+                            return;
+                        }
+                    } else {
+                        return;
+                    }
+                }
+
+                var activeSection   = this._activeSection;
+                this.closeActiveSubsection(true);
+
+                this._buttonShown = false;
+                this.resetButtons();
+
+                updateCallback.call(this, range, selectedNode);
+
+                if (this._buttonShown === true) {
+                    this.updatePosition(range);
+                }
+
+                if (activeSection) {
+                    this.toggleSubSection(activeSection);
+                }
+
+            },
+
+            resetButtons: function() {
+                dfx.removeClass(toolbar, 'Viper-subSectionVisible');
+                dfx.addClass(dfx.getClass('Viper-buttonGroup', toolsContainer), 'ViperITP-button-hidden');
+
+                var buttons = dfx.getClass('Viper-button', toolsContainer);
+                dfx.addClass(buttons, 'ViperITP-button-hidden');
+                dfx.removeClass(buttons, 'Viper-selected');
+                dfx.removeClass(buttons, 'Viper-active');
+            },
+
+            hide: function() {
+                this._activeSection = null;
+                dfx.removeClass(toolbar, 'Viper-visible');
+            },
+
+            /**
+             * Adds the given element as a sub section of the toolbar.
+             *
+             * @param {string} id       The id of the new sub section.
+             * @param {DOMNode} element The DOMNode to convert to sub section.
+             *
+             * @return {DOMNode} The element that was passed in.
+             */
+            makeSubSection: function(id, element, onOpenCallback, onCloseCallback) {
+                if (!element) {
+                    return false;
+                }
+
+                var subSection = document.createElement('div');
+                var form       = document.createElement('form');
+
+                subSection.appendChild(form);
+                form.appendChild(element);
+                form.onsubmit = function() {
+                    return false;
+                };
+
+                var submitBtn = document.createElement('input');
+                submitBtn.type = 'submit';
+                dfx.setStyle(submitBtn, 'display', 'none');
+                form.appendChild(submitBtn);
+
+                dfx.addClass(subSection, 'Viper-subSection');
+
+                this._subSections[id] = subSection;
+
+                subSectionContainer.appendChild(subSection);
+
+                tools.addItem(id, {
+                    type: 'VITPSubSection',
+                    element: subSection,
+                    form: form,
+                    _onOpenCallback: onOpenCallback,
+                    _onCloseCallback: onCloseCallback
+                });
+
+                return subSection;
+
+            },
+
+            /**
+             * Sets the specified button to toggle the given sub section.
+             *
+             * @param {string} buttonid     Id of the button.
+             * @param {string} subSectionid Id of the sub section.
+             */
+            setSubSectionButton: function(buttonid, subSectionid) {
+                if (!this._subSections[subSectionid]) {
+                    // Throw exception not a valid sub section id.
+                    throw new Error('Invalid sub section id: ' + subSectionid);
+                    return false;
+                }
+
+                var button = tools.getItem(buttonid).element;
+                var self   = this;
+
+                this._subSectionButtons[subSectionid] = buttonid;
+
+                dfx.removeEvent(button, 'mousedown');
+                dfx.addEvent(button, 'mousedown', function(e) {
+                    // Set the subSection to visible and hide rest of the sub sections.
+                    self.toggleSubSection(subSectionid);
+
+                    dfx.preventDefault(e);
+                });
+
+            },
+
+            /**
+             * Toggles the visibility of the specified sub section.
+             *
+             * @param {string} subSectionid The if of the sub section.
+             */
+            toggleSubSection: function(subSectionid, ignoreCallbacks)
+            {
+                var subSection = this._subSections[subSectionid];
+                if (!subSection) {
+                    return false;
+                }
+
+                if (this._activeSection) {
+                    var activeSubSection = this._activeSection;
+                    this.closeActiveSubsection(ignoreCallbacks);
+                    if (subSectionid === activeSubSection) {
+                        return;
+                    }
+                }
+
+                // Make sure all Viper-active has been removed from all sub sections
+                // at this point.
+                dfx.removeClass(dfx.getClass('Viper-subSection Viper-active', subSectionContainer), 'Viper-active');
+
+                if (ignoreCallbacks !== true) {
+                    var openCallback = tools.getItem(subSectionid)._onOpenCallback;
+                    if (openCallback) {
+                        openCallback.call(this);
+                    }
+                }
+
+                var subSectionButton = tools.getItem(this._subSectionButtons[subSectionid]).element;
+                // Make the button selected.
+                dfx.addClass(subSectionButton, 'Viper-selected');
+
+                dfx.addClass(subSection, 'Viper-active');
+                dfx.addClass(toolbar, 'Viper-subSectionVisible');
+                this._activeSection = subSectionid;
+                this._updateSubSectionArrowPos();
+
+                var inputElements = dfx.getTag('input[type=text], textarea', subSection);
+                if (inputElements.length > 0) {
+                    inputElements[0].focus();
+                    dfx.removeClass(inputElements[0].parentNode.parentNode.parentNode, 'Viper-active');
+                }
+
+                var subSectionForm = tools.getItem(subSectionid).form;
+                dfx.removeEvent(document, 'keydown.' + id);
+                dfx.addEvent(document, 'keydown.' + id, function(e) {
+                    if (subSectionForm && e.which === 13) {
+                        return subSectionForm.onsubmit();
+                    }
+                });
+
+            },
+
+            closeActiveSubsection: function(ignoreCallbacks)
+            {
+                if (this._activeSection) {
+                    var prevSubSection = this._subSections[this._activeSection];
+                    if (prevSubSection) {
+                        dfx.removeClass(prevSubSection, 'Viper-active');
+                        dfx.removeClass(tools.getItem(this._subSectionButtons[this._activeSection]).element, 'Viper-selected');
+
+                        if (ignoreCallbacks !== true) {
+                            var closeCallback = tools.getItem(this._activeSection)._onCloseCallback;
+                            if (closeCallback) {
+                                closeCallback.call(this);
+                            }
+                        }
+
+                        dfx.removeClass(toolbar, 'Viper-subSectionVisible');
+                        this._activeSection = null;
+
+                        dfx.removeEvent(document, 'keydown.' + id);
+                        return;
+                    }
+                }
+            },
+
+            /**
+             *
+             *
+             * @param {string}   subSectionid The id of the sub section.
+             * @param {function} action       The function to call when the sub section action
+             *                                is triggered.
+             * @param {array}    widgetids    The id of widgets that will cause the action
+             *                                button to be activated when they are changed.
+             *
+             * @return void
+             */
+            setSubSectionAction: function(subSectionid, action, widgetids)
+            {
+                widgetids      = widgetids || [];
+                var subSection = tools.getItem(subSectionid);
+                if (!subSection) {
+                    return;
+                }
+
+                subSection.form.onsubmit = function(e) {
+                    if (e) {
+                        dfx.preventDefault(e);
+                    }
+
+                    var button = tools.getItem(subSectionid + '-applyButton');
+                    if (button.isEnabled() === false) {
+                        return false;
+                    }
+
+                    tools.viper.focus();
+
+                    if (tools.viper.isBrowser('msie') === false) {
+                        try {
+                            action.call(this);
+                        } catch (e) {
+                            console.error('Sub Section Action threw exception:' + e.message);
+                        }
+                    } else {
+                        // IE needs this timeout so focus works <3..
+                        setTimeout(function() {
+                            try {
+                                action.call(this);
+                            } catch (e) {
+                                console.error('Sub Section Action threw exception:' + e.message);
+                            }
+                        }, 10);
+                    }
+
+                    tools.disableButton(subSectionid + '-applyButton');
+
+                    return false;
+                };
+
+                var button = tools.createButton(subSectionid + '-applyButton', 'Update Changes', 'Update Changes', '', subSection.form.onsubmit, true);
+                subSection.element.appendChild(button);
+
+                this.addSubSectionActionWidgets(subSectionid, widgetids);
+
+            },
+
+            addSubSectionActionWidgets: function(subSectionid, widgetids)
+            {
+                if (!this._subSectionActionWidgets[subSectionid]) {
+                    this._subSectionActionWidgets[subSectionid] = [];
+                }
+
+                var self  = this;
+                for (var i = 0; i < widgetids.length; i++) {
+                    this._subSectionActionWidgets[subSectionid].push(widgetids[i]);
+
+                    (function(widgetid) {
+                        tools.viper.registerCallback('ViperTools:changed:' + widgetid, 'ViperToolbarPlugin', function() {
+                            var subSectionWidgets = self._subSectionActionWidgets[subSectionid];
+                            var c = subSectionWidgets.length;
+                            var enable = true;
+                            for (var j = 0; j < c; j++) {
+                                var widget = tools.getItem(subSectionWidgets[j]);
+                                if (widget.required === true && dfx.trim(widget.getValue()) === '') {
+                                    enable = false;
+                                    break;
+                                }
+                            }
+
+                            if (enable === true) {
+                                tools.enableButton(subSectionid + '-applyButton');
+                            } else {
+                                tools.disableButton(subSectionid + '-applyButton');
+                            }
+                        });
+                    }) (widgetids[i]);
+                }//end for
+
+            },
+            _subSections: {},
+            _activeSection: null,
+            _subSectionButtons: {},
+            _subSectionActionWidgets: {},
+            _buttonShown: false,
+            _verticalPosUpdateOnly: false,
+            updatePosition: function(range) {
+                range = range || tools.viper.getViperRange();
+
+                var rangeCoords  = null;
+                var selectedNode = range.getNodeSelection(range);
+                if (selectedNode !== null) {
+                    rangeCoords = this.getElementCoords(selectedNode);
+                } else {
+                    rangeCoords = range.rangeObj.getBoundingClientRect();
+                }
+
+                if (!rangeCoords || (rangeCoords.left === 0 && rangeCoords.top === 0 && tools.viper.isBrowser('firefox') === true)) {
+                    var startNode = range.getStartNode();
+                    var endNode   = range.getEndNode();
+                    if (!startNode || !endNode) {
+                        return;
+                    }
+
+                    if (startNode.nodeType === dfx.TEXT_NODE
+                        && startNode.data.indexOf("\n") === 0
+                        && endNode.nodeType === dfx.TEXT_NODE
+                        && range.endOffset === endNode.data.length
+                    ) {
+                        range.setStart(endNode, endNode.data.length);
+                        range.collapse(true);
+                        rangeCoords = range.rangeObj.getBoundingClientRect();
+                    }
+                }
+
+                if (!rangeCoords || (rangeCoords.bottom === 0 && rangeCoords.height === 0 && rangeCoords.left === 0)) {
+                    if (tools.viper.isBrowser('chrome') === true || tools.viper.isBrowser('safari') === true) {
+                        // Webkit bug workaround. https://bugs.webkit.org/show_bug.cgi?id=65324.
+                        // OK.. Yet another fix. With the latest Google Chrome (17.0.963.46)
+                        // the !rangeCoords check started to fail because its no longer
+                        // returning null for a collapsed range, instead all values are set to 0.
+
+                        var startNode = range.getStartNode();
+                        if (startNode.nodeType === dfx.TEXT_NODE) {
+                            if (range.startOffset <= startNode.data.length) {
+                                range.setEnd(startNode, (range.startOffset + 1));
+                                rangeCoords = range.rangeObj.getBoundingClientRect();
+                                range.collapse(true);
+                                if (rangeCoords) {
+                                    rangeCoords.right = rangeCoords.left;
+                                }
+                            } else if (range.startOffset > 0) {
+                                range.setStart(startNode, (range.startOffset - 1));
+                                rangeCoords = range.rangeObj.getBoundingClientRect();
+                                range.collapse(false);
+                                if (rangeCoords) {
+                                    rangeCoords.right = rangeCoords.left;
+                                }
+                            }
+                        }
+                    } else {
+                        return;
+                    }//end if
+                }//end if
+
+                var scrollCoords = dfx.getScrollCoords();
+
+                dfx.addClass(toolbar, 'Viper-calcWidth');
+                dfx.setStyle(toolbar, 'width', 'auto');
+                var toolbarWidth = dfx.getElementWidth(toolbar);
+                dfx.removeClass(toolbar, 'Viper-calcWidth');
+                dfx.setStyle(toolbar, 'width', toolbarWidth + 'px');
+
+                var windowDim = dfx.getWindowDimensions();
+
+                if (this._verticalPosUpdateOnly !== true) {
+                    var left = ((rangeCoords.left + ((rangeCoords.right - rangeCoords.left) / 2) + scrollCoords.x) - (toolbarWidth / 2));
+                    dfx.removeClass(toolbar, 'Viper-orientationLeft Viper-orientationRight');
+                    if (left < 0) {
+                        left += (toolbarWidth / 2);
+                        dfx.addClass(toolbar, 'Viper-orientationLeft');
+                    } else if (left + toolbarWidth > windowDim.width) {
+                        left -= (toolbarWidth / 2);
+                        dfx.addClass(toolbar, 'Viper-orientationRight');
+                    }
+
+                    dfx.setStyle(toolbar, 'left', left + 'px');
+                }
+
+                var top = (rangeCoords.bottom + margin + scrollCoords.y);
+
+                dfx.setStyle(toolbar, 'top', top + 'px');
+                dfx.addClass(toolbar, 'Viper-visible');
+
+            },
+            setVerticalUpdateOnly: function(verticalOnly) {
+                this._verticalPosUpdateOnly = verticalOnly;
+            },
+            _updateSubSectionArrowPos: function() {
+                if (!this._activeSection) {
+                    return;
+                }
+
+                var button = this._subSectionButtons[this._activeSection];
+                if (!button) {
+                    return;
+                }
+
+                button = tools.getItem(button).element;
+                if (!button) {
+                    return;
+                }
+
+                var buttonRect = dfx.getBoundingRectangle(button);
+                var toolbarPos = dfx.getBoundingRectangle(toolbar);
+                var xPos       = (buttonRect.x1 - toolbarPos.x1 + ((buttonRect.x2 - buttonRect.x1) / 2));
+                dfx.setStyle(subSectionContainer.firstChild, 'left', xPos + 'px');
+
+            },
+            getElementCoords: function(element) {
+                var elemRect     = dfx.getBoundingRectangle(element);
+                var scrollCoords = dfx.getScrollCoords();
+                return {
+                    left: (elemRect.x1 - scrollCoords.x),
+                    right: (elemRect.x2 - scrollCoords.x),
+                    top: (elemRect.y1 - scrollCoords.y),
+                    bottom: (elemRect.y2 - scrollCoords.y)
+                };
+
+            }
+        });
+
+        this.viper.addElement(toolbar);
+
+        return toolbar;
+
+    },
+
     scaleElement: function(element)
     {
         var zoom = (document.documentElement.clientWidth / window.innerWidth);

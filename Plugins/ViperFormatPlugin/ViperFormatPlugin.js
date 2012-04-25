@@ -34,6 +34,8 @@ function ViperFormatPlugin(viper)
 
     this._inlineToolbarActiveSubSection = null;
 
+    this.initInlineToolbar();
+
 }
 
 ViperFormatPlugin.prototype = {
@@ -47,11 +49,6 @@ ViperFormatPlugin.prototype = {
         if (this.toolbarPlugin) {
             this._createToolbarContent();
         }
-
-        // Inline toolbar.
-        this.viper.registerCallback('ViperInlineToolbarPlugin:updateToolbar', 'ViperFormatPlugin', function(data) {
-            self._createInlineToolbarContent(data);
-        });
 
         this.viper.registerCallback('ViperTableEditorPlugin:updateToolbar', 'ViperFormatPlugin', function(data) {
             self._createTableEditorContent(data);
@@ -246,44 +243,99 @@ ViperFormatPlugin.prototype = {
 
     },
 
-    _createInlineToolbarContent: function(data)
+    initInlineToolbar: function()
+    {
+        var self = this;
+        this.viper.registerCallback('ViperInlineToolbarPlugin:initToolbar', 'ViperFormatPlugin', function(toolbar) {
+            self.createInlineToolbar(toolbar);
+        });
+        this.viper.registerCallback('ViperInlineToolbarPlugin:updateToolbar', 'ViperFormatPlugin', function(data) {
+            self.updateInlineToolbar(data);
+        });
+
+    },
+
+    createInlineToolbar: function(toolbar)
+    {
+        var tools  = this.viper.ViperTools;
+        var prefix = 'ViperFormatPlugin:vitp:';
+        var self   = this;
+
+        // Headings format section.
+        var headingsSubSection = toolbar.makeSubSection(prefix + 'heading:subSection', this._getHeadingsSection(prefix));
+
+        // Formats section.
+        var formatsSubSection = toolbar.makeSubSection(prefix + 'formats:subSection', this._getFormatsSection(prefix));
+
+        var buttonGroup = tools.createButtonGroup(prefix + 'formatsAndHeading:buttons');
+        toolbar.addButton(buttonGroup);
+
+        tools.createButton('vitpFormats', '', 'Toggle Formats', 'Viper-formats');
+        tools.addButtonToGroup('vitpFormats', prefix + 'formatsAndHeading:buttons');
+        toolbar.setSubSectionButton('vitpFormats', prefix + 'formats:subSection');
+
+        tools.createButton('vitpHeadings', '', 'Toggle Headings', 'Viper-headings');
+        tools.addButtonToGroup('vitpHeadings', prefix + 'formatsAndHeading:buttons');
+        toolbar.setSubSectionButton('vitpHeadings', prefix + 'heading:subSection');
+
+        var buttonGroup = tools.createButtonGroup(prefix + 'anchorAndClassButtons');
+        toolbar.addButton(buttonGroup);
+
+        // Anchor.
+        tools.createButton('vitpAnchor', '', 'Anchor name (ID)', 'Viper-anchorID');
+        tools.addButtonToGroup('vitpAnchor', prefix + 'anchorAndClassButtons');
+
+        toolbar.makeSubSection(prefix + 'anchor:subSection', this._getAnchorSection(prefix));
+        toolbar.setSubSectionButton('vitpAnchor', prefix + 'anchor:subSection');
+        toolbar.setSubSectionAction(prefix + 'anchor:subSection', function() {
+            var value = tools.getItem(prefix + 'anchor:input').getValue();
+            self._setAttributeForSelection('id', value);
+        }, [prefix + 'anchor:input']);
+
+        // Class.
+        tools.createButton('vitpClass', '', 'Class name', 'Viper-cssClass');
+        tools.addButtonToGroup('vitpClass', prefix + 'anchorAndClassButtons');
+
+        toolbar.makeSubSection(prefix + 'class:subSection', this._getClassSection(prefix));
+        toolbar.setSubSectionButton('vitpClass', prefix + 'class:subSection');
+        toolbar.setSubSectionAction(prefix + 'class:subSection', function() {
+            var value = tools.getItem(prefix + 'class:input').getValue();
+            self._setAttributeForSelection('class', value);
+        }, [prefix + 'class:input']);
+
+    },
+
+    updateInlineToolbar: function(data, removeLinkOnly)
     {
         if (!data.lineage || data.range.collapsed === true) {
             return;
         }
 
-        var self         = this;
-        var tools        = this.viper.ViperTools;
-        var selectedNode = data.lineage[data.current];
-        var toolbar      = this.viper.ViperPluginManager.getPlugin('ViperInlineToolbarPlugin');
-        var prefix       = 'ViperFormatPlugin:vitp:';
+        var tools           = this.viper.ViperTools;
+        var prefix          = 'ViperFormatPlugin:vitp:';
+        var selectedNode    = data.lineage[data.current];
+        var buttonsToEnable = [];
 
-        // Check heading.
-        var headingsSubSection = null;
-        var hasActiveHeading   = false;
-
+        // Heading section.
         if (this._canShowHeadingOptions(selectedNode) === true) {
-            // Headings format section.
-            headingsSubSection = toolbar.makeSubSection(prefix + 'heading:subSection', this._getHeadingsSection(prefix));
+            buttonsToEnable.push('vitpHeadings');
 
             for (var i = 1; i <= 6; i++) {
                 var tagName = 'h' + i;
                 for (var j = 0; j < data.lineage.length; j++) {
                     if (dfx.isTag(data.lineage[j], tagName) === true) {
                         tools.setButtonActive(prefix + 'heading:h' + i);
-                        hasActiveHeading = true;
-                        break;
+                        tools.setButtonActive('vitpHeadings');
+                    } else {
+                        tools.setButtonInactive(prefix + 'heading:h' + i);
                     }
                 }
-            }//end for
+            }
         }//end if
 
-        var formatsSubSection = null;
-        var hasActiveFormat   = false;
-
+        // Formats section.
         if (this._canShowFormattingOptions(selectedNode) === true) {
-            // Formats section.
-            formatsSubSection = toolbar.makeSubSection(prefix + 'formats:subSection', this._getFormatsSection(prefix));
+            buttonsToEnable.push('vitpFormats');
 
             var formatButtons = {
                 p: 'P',
@@ -296,32 +348,19 @@ ViperFormatPlugin.prototype = {
                for (var j = data.current; j < data.lineage.length; j++) {
                     if (dfx.isTag(data.lineage[j], tag) === true) {
                         tools.setButtonActive(prefix + 'formats:' + formatButtons[tag]);
-                        hasActiveFormat = true;
-                        break;
+                        tools.setButtonActive('vitpFormats');
+                    } else {
+                        tools.setButtonInactive(prefix + 'formats:' + formatButtons[tag]);
                     }
                 }
             }
         }//end if
 
-        var buttonGroup = tools.createButtonGroup(prefix + 'formatsAndHeading:buttons');
-        if (formatsSubSection || headingsSubSection) {
-            toolbar.addButton(buttonGroup);
-        }
+        data.toolbar.showButtonGroup(prefix + 'formatsAndHeading:buttons', buttonsToEnable);
 
-        if (formatsSubSection) {
-            tools.createButton('vitpFormats', '', 'Toggle Formats', 'Viper-formats', null, false, hasActiveFormat);
-            tools.addButtonToGroup('vitpFormats', prefix + 'formatsAndHeading:buttons');
-            toolbar.setSubSectionButton('vitpFormats', prefix + 'formats:subSection');
-        }
-
-        if (headingsSubSection) {
-            tools.createButton('vitpHeadings', '', 'Toggle Headings', 'Viper-headings', null, false, hasActiveHeading);
-            tools.addButtonToGroup('vitpHeadings', prefix + 'formatsAndHeading:buttons');
-            toolbar.setSubSectionButton('vitpHeadings', prefix + 'heading:subSection');
-        }
-
-        var startNode = data.range.getStartNode();
-        var endNode   = data.range.getEndNode();
+        buttonsToEnable = [];
+        var startNode   = data.range.getStartNode();
+        var endNode     = data.range.getEndNode();
         if (!endNode) {
             endNode = startNode;
         }
@@ -329,45 +368,35 @@ ViperFormatPlugin.prototype = {
         if (selectedNode.nodeType === dfx.ELEMENT_NODE
             || startNode.parentNode === endNode.parentNode
         ) {
-            var anchorBtnActive = false;
             var attrId = this._getAttributeValue('id', selectedNode);
             if (attrId) {
-                anchorBtnActive = true;
+                tools.setButtonActive('vitpAnchor');
             }
 
-            var classBtnActive = false;
-            var attrClass      = this._getAttributeValue('class', selectedNode);
+            var attrClass = this._getAttributeValue('class', selectedNode);
             if (attrClass) {
-                classBtnActive = true;
+                tools.setButtonActive('vitpClass');
             }
 
-            var buttonGroup = tools.createButtonGroup(prefix + 'anchorAndClassButtons');
-            toolbar.addButton(buttonGroup);
-
-            // Anchor.
-            tools.createButton('vitpAnchor', '', 'Anchor name (ID)', 'Viper-anchorID', null, false, anchorBtnActive);
-            tools.addButtonToGroup('vitpAnchor', prefix + 'anchorAndClassButtons');
-
-            toolbar.makeSubSection(prefix + 'anchor:subSection', this._getAnchorSection(prefix));
-            toolbar.setSubSectionButton('vitpAnchor', prefix + 'anchor:subSection');
-            toolbar.setSubSectionAction(prefix + 'anchor:subSection', function() {
-                var value = tools.getItem(prefix + 'anchor:input').getValue();
-                self._setAttributeForSelection('id', value);
-            }, [prefix + 'anchor:input']);
             tools.getItem(prefix + 'anchor:input').setValue(attrId);
-
-            // Class.
-            tools.createButton('vitpClass', '', 'Class name', 'Viper-cssClass', null, false, classBtnActive);
-            tools.addButtonToGroup('vitpClass', prefix + 'anchorAndClassButtons');
-
-            toolbar.makeSubSection(prefix + 'class:subSection', this._getClassSection(prefix));
-            toolbar.setSubSectionButton('vitpClass', prefix + 'class:subSection');
-            toolbar.setSubSectionAction(prefix + 'class:subSection', function() {
-                var value = tools.getItem(prefix + 'class:input').getValue();
-                self._setAttributeForSelection('class', value);
-            }, [prefix + 'class:input']);
             tools.getItem(prefix + 'class:input').setValue(attrClass);
+
+            data.toolbar.showButtonGroup(prefix + 'anchorAndClassButtons');
+
         }//end if
+
+    },
+
+
+    __createInlineToolbarContent: function(data)
+    {
+
+        var self         = this;
+        var tools        = this.viper.ViperTools;
+        var selectedNode = data.lineage[data.current];
+        var toolbar      = this.viper.ViperPluginManager.getPlugin('ViperInlineToolbarPlugin');
+        var prefix       = 'ViperFormatPlugin:vitp:';
+
 
     },
 

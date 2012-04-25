@@ -27,6 +27,7 @@ ViperImagePlugin.prototype = {
     init: function()
     {
         this.initToolbar();
+        this._initImageToolbar();
 
         var self = this;
         this.viper.registerCallback('Viper:mouseDown', 'ViperImagePlugin', function(e) {
@@ -388,6 +389,32 @@ ViperImagePlugin.prototype = {
             dfx.empty(this._previewBox);
             dfx.setStyle(this._previewBox, 'display', 'none');
         }//end if
+
+    },
+
+    _initImageToolbar: function()
+    {
+        var tools   = this.viper.ViperTools;
+        var toolbar = null;
+
+        tools.createInlineToolbar('ViperImageToolbar', true, ['img'], function(range, element) {
+            if (element) {
+                toolbar.showButton(idPrefx + '-btnGroup');
+            }
+        });
+
+        var idPrefx = 'ViperImageToolbar';
+        toolbar     = tools.getItem(idPrefx);
+
+        var buttonGroup = tools.createButtonGroup(idPrefx + '-btnGroup');
+        var imageButton = tools.createButton(idPrefx + '-image', '', 'Toggle Image Options', 'Viper-image', null);
+        var moveButton  = tools.createButton(idPrefx + '-move', '', 'Move Image', 'Viper-move', null);
+
+        buttonGroup.appendChild(imageButton);
+        buttonGroup.appendChild(moveButton);
+
+        toolbar.addButton(buttonGroup);
+
 
     },
 
