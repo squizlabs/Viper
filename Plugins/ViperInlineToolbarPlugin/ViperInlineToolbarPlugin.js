@@ -140,6 +140,12 @@ ViperInlineToolbarPlugin.prototype = {
         this._updateLineage(lineage);
     },
 
+    hideToolbar: function()
+    {
+        this._toolbarWidget.hide();
+
+    },
+
     /**
      * Fires the updateToolbar event so that other plugins can modify the contents of the toolbar.
      *
