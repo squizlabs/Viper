@@ -1175,7 +1175,8 @@ ViperCoreStylesPlugin.prototype = {
             }
         }
 
-        data.toolbar.showButtonGroup('ViperCoreStylesPlugin:vitp:btnGroup');
+        data.toolbar.showButton('vitpBold');
+        data.toolbar.showButton('vitpItalic');
 
     },
 

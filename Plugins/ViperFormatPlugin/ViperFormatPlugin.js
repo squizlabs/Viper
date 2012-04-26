@@ -314,11 +314,10 @@ ViperFormatPlugin.prototype = {
         var tools           = this.viper.ViperTools;
         var prefix          = 'ViperFormatPlugin:vitp:';
         var selectedNode    = data.lineage[data.current];
-        var buttonsToEnable = [];
 
         // Heading section.
         if (this._canShowHeadingOptions(selectedNode) === true) {
-            buttonsToEnable.push('vitpHeadings');
+            data.toolbar.showButton('vitpHeadings');
 
             for (var i = 1; i <= 6; i++) {
                 var tagName = 'h' + i;
@@ -335,7 +334,7 @@ ViperFormatPlugin.prototype = {
 
         // Formats section.
         if (this._canShowFormattingOptions(selectedNode) === true) {
-            buttonsToEnable.push('vitpFormats');
+            data.toolbar.showButton('vitpFormats');
 
             var formatButtons = {
                 p: 'P',
@@ -355,8 +354,6 @@ ViperFormatPlugin.prototype = {
                 }
             }
         }//end if
-
-        data.toolbar.showButtonGroup(prefix + 'formatsAndHeading:buttons', buttonsToEnable);
 
         buttonsToEnable = [];
         var startNode   = data.range.getStartNode();
@@ -381,8 +378,8 @@ ViperFormatPlugin.prototype = {
             tools.getItem(prefix + 'anchor:input').setValue(attrId);
             tools.getItem(prefix + 'class:input').setValue(attrClass);
 
-            data.toolbar.showButtonGroup(prefix + 'anchorAndClassButtons');
-
+            data.toolbar.showButton('vitpAnchor');
+            data.toolbar.showButton('vitpClass');
         }//end if
 
     },

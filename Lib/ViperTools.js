@@ -1082,6 +1082,7 @@ ViperTools.prototype = {
         });
 
         var tools = this;
+        var buttonElements = null;
         this.addItem(id, {
             type: 'toolbar',
             element: toolbar,
@@ -1100,32 +1101,22 @@ ViperTools.prototype = {
                 }
 
             },
-            showButton: function(buttonid) {
+            showButton: function(buttonid, disabled) {
                 if (tools.getItem(buttonid).type !== 'button') {
                     throw new Error('Invalid button for showButton(): ' + buttonid);
                 }
 
                 this._buttonShown = true;
-                dfx.removeClass(tools.getItem(buttonid).element, 'ViperITP-button-hidden');
-            },
-            showButtonGroup: function(groupid, buttonids) {
-                if (buttonids && buttonids.length === 0) {
-                    return;
+
+                var button = self.getItem(buttonid);
+                dfx.removeClass(button.element, 'ViperITP-button-hidden');
+                dfx.removeClass(button.element.parentNode, 'ViperITP-button-hidden');
+
+                if (disabled === true) {
+                    self.disableButton(buttonid);
+                } else {
+                    self.enableButton(buttonid);
                 }
-
-                this._buttonShown = true;
-                var group = tools.getItem(groupid);
-                dfx.removeClass(group.element, 'ViperITP-button-hidden');
-
-                for (var i = 0; i < group.buttons.length; i++) {
-                    this.showButton(group.buttons[i]);
-                    if (buttonids && buttonids.inArray(group.buttons[i]) !== true) {
-                        tools.disableButton(group.buttons[i]);
-                    } else {
-                        tools.enableButton(group.buttons[i]);
-                    }
-                }
-
             },
             update: function(range) {
                 if (!updateCallback || self.viper.isEnabled() === false) {
@@ -1151,7 +1142,35 @@ ViperTools.prototype = {
                 this._buttonShown = false;
                 this.resetButtons();
 
+                if (buttonElements === null) {
+                    // Store the original button structure in to buttonElements
+                    // so that we can re construct it here in the next update call.
+                    // This must be done as the updateCallback may remove buttons
+                    // from the toolbar using showButton, showButtonGroup methods.
+                    buttonElements = [];
+                    for (var node = toolsContainer.firstChild; node; node = node.nextSibling) {
+                        buttonElements.push(node);
+                    }
+                } else {
+                    if (self.viper.isBrowser('msie') === true) {
+                        while(toolsContainer.firstChild) {
+                            toolsContainer.removeChild(toolsContainer.firstChild);
+                        }
+                    } else {
+                        toolsContainer.innerHTML = '';
+                    }
+
+                    for (var i = 0; i < buttonElements.length; i++) {
+                        toolsContainer.appendChild(buttonElements[i]);
+                    }
+                }
+
                 updateCallback.call(this, range, selectedNode);
+
+                var buttonsToRemove = dfx.getClass('ViperITP-button-hidden', toolsContainer);
+                for (var i = 0; i < buttonsToRemove.length; i++) {
+                    buttonsToRemove[i].parentNode.removeChild(buttonsToRemove[i]);
+                }
 
                 if (this._buttonShown === true) {
                     this.updatePosition(range);

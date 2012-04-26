@@ -177,24 +177,15 @@ ViperListPlugin.prototype = {
 
         var tools = this.viper.ViperTools;
 
-        var buttonsToEnable = [];
-        if (statuses.ul === true) {
-            buttonsToEnable.push('vitpUnorderedList');
+        if (statuses.ul === true || statuses.ol === true) {
+            data.toolbar.showButton('vitpUnorderedList', !statuses.ul);
+            data.toolbar.showButton('vitpOrderedList', !statuses.ol);
         }
 
-        if (statuses.ol === true) {
-            buttonsToEnable.push('vitpOrderedList');
+        if (statuses.increaseIndent === true || statuses.decreaseIndent === true) {
+            data.toolbar.showButton('vitpIndentList', !statuses.increaseIndent);
+            data.toolbar.showButton('vitpOutdentList', !statuses.decreaseIndent);
         }
-
-        if (statuses.increaseIndent === true) {
-            buttonsToEnable.push('vitpIndentList');
-        }
-
-        if (statuses.decreaseIndent === true) {
-            buttonsToEnable.push('vitpOutdentList');
-        }
-
-        data.toolbar.showButtonGroup('ViperListPlugin:vitp:buttons', buttonsToEnable);
 
     },
 

@@ -655,8 +655,10 @@ ViperTableEditorPlugin.prototype = {
     _showColProperties: function(cell)
     {
         this._toolbarWidget.showButton('VTEP:colProps:settings');
-        this._toolbarWidget.showButtonGroup('VTEP:insColButtons');
-        this._toolbarWidget.showButtonGroup('VTEP:moveColButtons');
+        this._toolbarWidget.showButton('VTEP:colProps:insBefore');
+        this._toolbarWidget.showButton('VTEP:colProps:insAfter');
+        this._toolbarWidget.showButton('VTEP:colProps:moveLeft');
+        this._toolbarWidget.showButton('VTEP:colProps:moveRight');
         this._toolbarWidget.showButton('VTEP:colProps:remove');
 
         var colWidth = this.getColumnWidth(cell);
@@ -701,8 +703,8 @@ ViperTableEditorPlugin.prototype = {
     _showRowProperties: function(cell)
     {
         this._toolbarWidget.showButton('VTEP:rowProps:settings');
-        this._toolbarWidget.showButtonGroup('VTEP:insRowButtons');
-        this._toolbarWidget.showButtonGroup('VTEP:moveRowButtons');
+        this._toolbarWidget.showButton('VTEP:rowProps:insBefore');
+        this._toolbarWidget.showButton('VTEP:rowProps:insAfter');
         this._toolbarWidget.showButton('VTEP:rowProps:remove');
 
         this._tools.getItem('VTEP:rowProps:heading').setValue(dfx.getTag('td', cell.parentNode).length === 0);

@@ -486,9 +486,10 @@ ViperLinkPlugin.prototype = {
                 this.viper.ViperTools.setButtonActive('vitpInsertLink');
             }
 
-            data.toolbar.showButtonGroup('ViperLinkPlugin:vitpButtons');
+            data.toolbar.showButton('vitpInsertLink');
+            data.toolbar.showButton('vitpRemoveLink');
         } else {
-            data.toolbar.showButtonGroup('ViperLinkPlugin:vitpButtons', ['vitpInsertLink']);
+            data.toolbar.showButton('vitpInsertLink');
         }
 
     },
