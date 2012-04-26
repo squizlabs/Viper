@@ -1149,7 +1149,16 @@ ViperTools.prototype = {
                     // from the toolbar using showButton, showButtonGroup methods.
                     buttonElements = [];
                     for (var node = toolsContainer.firstChild; node; node = node.nextSibling) {
-                        buttonElements.push(node);
+                        if (dfx.hasClass(node, 'Viper-buttonGroup') === true) {
+                            var groupButtons = [node];
+                            for (var button = node.firstChild; button; button = button.nextSibling) {
+                                groupButtons.push(button);
+                            }
+
+                            buttonElements.push(groupButtons);
+                        } else if (dfx.hasClass('Viper-button') === true) {
+                          buttonElements.push(node);
+                        }
                     }
                 } else {
                     if (self.viper.isBrowser('msie') === true) {
@@ -1161,7 +1170,15 @@ ViperTools.prototype = {
                     }
 
                     for (var i = 0; i < buttonElements.length; i++) {
-                        toolsContainer.appendChild(buttonElements[i]);
+                        if (buttonElements[i].length) {
+                            for (var j = 1; j < buttonElements[i].length; j++) {
+                                buttonElements[i][0].appendChild(buttonElements[i][j]);
+                            }
+
+                            toolsContainer.appendChild(buttonElements[i][0]);
+                        } else {
+                            toolsContainer.appendChild(buttonElements[i]);
+                        }
                     }
                 }
 
