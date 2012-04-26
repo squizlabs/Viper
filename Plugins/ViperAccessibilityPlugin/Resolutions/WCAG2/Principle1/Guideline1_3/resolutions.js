@@ -3,7 +3,7 @@ ViperAccessibilityPlugin_WCAG2_Principle1_Guideline1_3 = {
     id: 'ViperAccessibilityPlugin_WCAG2_Principle1_Guideline1_3',
     parent: null,
 
-    res_1_3_1: function(contentElement, element, issue, code, viper)
+    res_1_3_1: function(contentElement, element, issue, code, viper, issueid)
     {
         var editPanel = null;
         var action    = null;
@@ -144,6 +144,231 @@ ViperAccessibilityPlugin_WCAG2_Principle1_Guideline1_3 = {
                         return false;
                     }
                 });
+            break;
+
+            case 'H49.B':
+                this.parent.setResolutionInstruction(contentElement, '<p>Convert the B tag to the more appropriate STRONG tag.</p>');
+                var action = function() {
+                    var newTag = document.createElement('strong');
+                    element.parentNode.replaceChild(newTag, element);
+                    while (element.firstChild) {
+                        newTag.appendChild(element.firstChild);
+                    }
+                };
+                this.parent.addActionButton(action, contentElement, null, 'Convert to STRONG tag', true);
+            break;
+
+            case 'H49.I':
+                this.parent.setResolutionInstruction(contentElement, '<p>Convert the I tag to the more appropriate EM tag.</p>');
+                var action = function() {
+                    var newTag = document.createElement('em');
+                    element.parentNode.replaceChild(newTag, element);
+                    while (element.firstChild) {
+                        newTag.appendChild(element.firstChild);
+                    }
+                };
+                this.parent.addActionButton(action, contentElement, null, 'Convert to EM tag', true);
+            break;
+
+            case 'H49.U':
+                this.parent.setResolutionInstruction(contentElement, '<p>The U tag should be removed to reduce confusion with links.</p>');
+                var action = function() {
+                    while (element.firstChild) {
+                        dfx.insertBefore(element, element.firstChild);
+                    }
+
+                    dfx.remove(element);
+                };
+                this.parent.addActionButton(action, contentElement, null, 'Remove U tag', true);
+            break;
+
+            case 'H49.S':
+                this.parent.setResolutionInstruction(contentElement, '<p>The S tag needs to be replaced with a DEL tag.</p>');
+                var action = function() {
+                    var newTag = document.createElement('del');
+                    element.parentNode.replaceChild(newTag, element);
+                    while (element.firstChild) {
+                        newTag.appendChild(element.firstChild);
+                    }
+                };
+                this.parent.addActionButton(action, contentElement, null, 'Convert to DEL tag', true);
+            break;
+
+            case 'H49.Strike':
+                this.parent.setResolutionInstruction(contentElement, '<p>The Strike tag needs to be replaced with a DEL tag.</p>');
+                var action = function() {
+                    var newTag = document.createElement('del');
+                    element.parentNode.replaceChild(newTag, element);
+                    while (element.firstChild) {
+                        newTag.appendChild(element.firstChild);
+                    }
+                };
+                this.parent.addActionButton(action, contentElement, null, 'Convert to DEL tag', true);
+            break;
+
+            case 'H49.Tt':
+                this.parent.setResolutionInstruction(contentElement, '<p>The TT tag needs to be replaced with a CODE tag.</p>');
+                var action = function() {
+                    var newTag = document.createElement('code');
+                    element.parentNode.replaceChild(newTag, element);
+                    while (element.firstChild) {
+                        newTag.appendChild(element.firstChild);
+                    }
+                };
+                this.parent.addActionButton(action, contentElement, null, 'Convert to CODE tag', true);
+            break;
+
+            case 'H49.Big':
+                this.parent.setResolutionInstruction(contentElement, '<p>The BIG tag needs to be removed.</p>');
+                var action = function() {
+                    while (element.firstChild) {
+                        dfx.insertBefore(element, element.firstChild);
+                    }
+
+                    dfx.remove(element);
+                };
+                this.parent.addActionButton(action, contentElement, null, 'Remove BIG tag', true);
+            break;
+
+            case 'H49.Small':
+                this.parent.setResolutionInstruction(contentElement, '<p>The SMALL tag needs to be removed.</p>');
+                var action = function() {
+                    while (element.firstChild) {
+                        dfx.insertBefore(element, element.firstChild);
+                    }
+
+                    dfx.remove(element);
+                };
+                this.parent.addActionButton(action, contentElement, null, 'Remove SMALL tag', true);
+            break;
+
+            case 'H49.Center':
+                this.parent.setResolutionInstruction(contentElement, '<p>The CENTER tag needs to be converted to a CSS based alignment method.</p>');
+                var action = function() {
+                    var parent = null;
+                    while (element.firstChild) {
+                        if (dfx.isBlockElement(element.firstChild) === true) {
+                            parent = element.firstChild;
+                            dfx.insertBefore(element, parent);
+                            dfx.setStyle(parent, 'text-align', 'center');
+                        } else if (!parent) {
+                            parent = document.createElement('p');
+                            dfx.insertBefore(element, parent);
+                            dfx.setStyle(parent, 'text-align', 'center');
+                            parent.appendChild(element.firstChild);
+                        } else {
+                            parent.appendChild(element.firstChild);
+                        }
+                    }
+
+                    dfx.remove(element);
+                };
+                this.parent.addActionButton(action, contentElement, null, 'Convert to CSS alignment', true);
+            break;
+
+            case 'H49.Font':
+                this.parent.setResolutionInstruction(contentElement, '<p>The FONT tag needs to be removed. Consider using a CSS class on the containing element to achieve variations in fonts/colours/sizes etc.</p>');
+                var action = function() {
+                    while (element.firstChild) {
+                        dfx.insertBefore(element, element.firstChild);
+                    }
+
+                    dfx.remove(element);
+                };
+                this.parent.addActionButton(action, contentElement, null, 'Remove FONT tag', true);
+            break;
+
+            case 'H49.AlignAttr':
+                this.parent.setResolutionInstruction(contentElement, '<p>The ALIGN attribute needs to be converted to a CSS based alignment method.</p>');
+                var action = function() {
+                    var align = element.getAttribute('align');
+                    switch (align) {
+                        case 'left':
+                            dfx.setStyle(element, 'float', 'left');
+                            dfx.setStyle(element, 'margin', '1em 1em 1em 0');
+                            dfx.setStyle(element, 'display', '');
+                        break;
+
+                        case 'right':
+                            dfx.setStyle(element, 'float', 'right');
+                            dfx.setStyle(element, 'margin', '1em 0 1em 1em');
+                            dfx.setStyle(element, 'display', '');
+                        break;
+
+                        case 'middle':
+                            dfx.setStyle(element, 'margin', '1em auto');
+                            dfx.setStyle(element, 'float', '');
+                            dfx.setStyle(element, 'display', 'block');
+                        break;
+
+                        default:
+                            dfx.setStyle(element, 'margin', '');
+                            dfx.setStyle(element, 'float', '');
+                            dfx.setStyle(element, 'display', '');
+                        break;
+                    }//end switch
+
+                    element.removeAttribute('align');
+                };
+                this.parent.addActionButton(action, contentElement, null, 'Convert to CSS alignment', true);
+            break;
+
+            case 'H42':
+                this.parent.setResolutionInstruction(contentElement, '<p>If a paragraph\'s content consists solely of bold or italic text to simulate a heading it should be converted to the appropriate heading level.</p>');
+                var updateResolution = function() {
+                    // Insert a specific text before the element so that we can find
+                    // it in HTML string.
+                    var textNode = document.createTextNode('__VAP_ELEM_POS__');
+                    dfx.insertBefore(element, textNode);
+
+                    // Get Viper's current content from start to the __VAP_ELEM_POS__.
+                    var viperElemContent = viper.getHtml();
+                    viperElemContent = viperElemContent.substring(0, viperElemContent.indexOf('__VAP_ELEM_POS__'));
+
+                    // Remove the text node we just created.
+                    dfx.remove(textNode);
+
+                    // Find the last heading level.
+                    var headings = viperElemContent.match(/.*<h(\d)/i);
+                    if (headings) {
+                        var lastHeading = parseInt(headings[1]);
+
+                        self.parent.removeActionButtons(contentElement);
+                        var actionButtonids = [];
+
+                        for (var i = lastHeading; i <= (lastHeading + 1); i++) {
+                            (function(headingLevel) {
+                                var action = function() {
+                                    for (var j = 0; j < actionButtonids.length; j++) {
+                                        viper.ViperTools.disableButton(actionButtonids[j]);
+                                    }
+
+                                    var newTag = document.createElement('h' + headingLevel);
+                                    element.parentNode.replaceChild(newTag, element);
+                                    while (element.firstChild) {
+                                        newTag.appendChild(element.firstChild);
+                                    }
+
+                                    var tags = dfx.getTag('strong,em', newTag);
+                                    for (var j = 0; j < tags.length; j++) {
+                                        while (tags[j].firstChild) {
+                                            dfx.insertBefore(tags[j], tags[j].firstChild);
+                                        }
+
+                                        dfx.remove(tags[j]);
+                                    }
+                                };
+
+                                actionButtonids.push(self.parent.addActionButton(action, contentElement, null, 'Convert to H' + headingLevel, true));
+                            }) (i);
+                        }
+                    }
+                };
+
+                viper.registerCallback('ViperAccessibilityPlugin:showResolution:' + issueid, 'ViperAccessibilityPlugin:resolution', function() {
+                    updateResolution();
+                });
+
             break;
 
             default:
