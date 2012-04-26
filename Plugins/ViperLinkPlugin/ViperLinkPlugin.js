@@ -434,7 +434,12 @@ ViperLinkPlugin.prototype = {
             self.createInlineToolbar(toolbar);
         });
         this.viper.registerCallback('ViperInlineToolbarPlugin:updateToolbar', 'ViperLinkPlugin', function(data) {
-            self.updateInlineToolbar(data);
+            var selectionHasLinks = self.selectionHasLinks(data.range);
+            if (selectionHasLinks !== true && self.showInlineToolbarIcons(data) === true) {
+                self.updateInlineToolbar(data);
+            } else if (selectionHasLinks === true) {
+                self.updateInlineToolbar(data, true);
+            }
         });
 
     },
@@ -480,6 +485,11 @@ ViperLinkPlugin.prototype = {
 
     updateInlineToolbar: function(data, removeLinkOnly)
     {
+        if (removeLinkOnly === true) {
+            data.toolbar.showButton('vitpRemoveLink');
+            return;
+        }
+
         var link = this.getLinkFromRange(data.range);
         if (link || this.selectionHasLinks(data.range) === true) {
             if (link) {
