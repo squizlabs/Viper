@@ -147,11 +147,13 @@ ViperListPlugin.prototype = {
         toolbar.addButton(buttonGroup);
 
         tools.createButton('vitpUnorderedList', '', 'Make Unordered List', 'Viper-listUL', function() {
-            self._makeListButtonAction(list, 'ul');
+            var statuses = self._getButtonStatuses();
+            self._makeListButtonAction(statuses.list, 'ul');
         });
 
         tools.createButton('vitpOrderedList', '', 'Make Ordered List', 'Viper-listOL', function() {
-            self._makeListButtonAction(list, 'ol');
+            var statuses = self._getButtonStatuses();
+            self._makeListButtonAction(statuses.list, 'ol');
         });
 
         tools.addButtonToGroup('vitpUnorderedList', 'ViperListPlugin:vitp:buttons');
