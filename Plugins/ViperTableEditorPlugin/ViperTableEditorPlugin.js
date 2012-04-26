@@ -1207,7 +1207,6 @@ ViperTableEditorPlugin.prototype = {
         var settingsButton     = this._tools.createButton('VTEP:rowProps:settings', '', 'Toggle Settings', 'Viper-tableSettings');
         this._toolbarWidget.addButton(settingsButton);
         this._toolbarWidget.setSubSectionButton('VTEP:rowProps:settings', 'VTEP:rowProps:settingsSubSection');
-        this._toolbarWidget.toggleSubSection('VTEP:rowProps:settingsSubSection');
         this._toolbarWidget.setSubSectionAction('VTEP:rowProps:settingsSubSection', function() {
             if (headingChanged === true) {
                 var cell    = self.getActiveCell();
@@ -1289,7 +1288,6 @@ ViperTableEditorPlugin.prototype = {
         var settingsButton     = this._tools.createButton('VTEP:tableProps:settings', '', 'Toggle Settings', 'Viper-tableSettings');
         this._toolbarWidget.addButton(settingsButton);
         this._toolbarWidget.setSubSectionButton('VTEP:tableProps:settings', 'VTEP:tableProps:settingsSubSection');
-        this._toolbarWidget.toggleSubSection('VTEP:tableProps:settingsSubSection');
         this._toolbarWidget.setSubSectionAction('VTEP:tableProps:settingsSubSection', function() {
             var table = self.getCellTable(self.getActiveCell());
             self.setTableWidth(table, self._tools.getItem('VTEP:tableProps:width').getValue());
