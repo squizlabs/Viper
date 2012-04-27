@@ -1066,7 +1066,7 @@ ViperTools.prototype = {
         this.viper.registerCallback(['Viper:mouseDown', 'ViperHistoryManager:undo'], id, function(data) {
             if (data && data.target) {
                 var target = dfx.getMouseEventTarget(data);
-                if (target === self._toolbar || dfx.isChildOf(target, self._toolbar) === true) {
+                if (target === toolbar || dfx.isChildOf(target, toolbar) === true) {
                     if (dfx.isTag(target, 'input') === true
                         || dfx.isTag(target, 'textarea') === true
                     ) {
@@ -1075,6 +1075,11 @@ ViperTools.prototype = {
                     }
 
                     return false;
+                } else if (elementTypes
+                    && elementTypes.inArray(dfx.getTagName(target)) === true
+                ) {
+                    self.getItem(id).update(null, target);
+                    return;
                 }
             }
 
@@ -1118,21 +1123,24 @@ ViperTools.prototype = {
                     self.enableButton(buttonid);
                 }
             },
-            update: function(range) {
+            update: function(range, element) {
                 if (!updateCallback || self.viper.isEnabled() === false) {
                     return;
                 }
 
-                var selectedNode = null;
-                range = range || this.viper.getViperRange();
-                if (elementTypes && elementTypes.length > 0) {
-                    selectedNode = range.getNodeSelection();
-                    if (selectedNode) {
-                        if (elementTypes.inArray(dfx.getTagName(selectedNode)) !== true) {
+                var selectedNode = element || null;
+
+                if (!selectedNode) {
+                    range = range || this.viper.getViperRange();
+                    if (elementTypes && elementTypes.length > 0) {
+                        selectedNode = range.getNodeSelection();
+                        if (selectedNode) {
+                            if (elementTypes.inArray(dfx.getTagName(selectedNode)) !== true) {
+                                return;
+                            }
+                        } else {
                             return;
                         }
-                    } else {
-                        return;
                     }
                 }
 
@@ -1190,7 +1198,7 @@ ViperTools.prototype = {
                 }
 
                 if (this._buttonShown === true) {
-                    this.updatePosition(range);
+                    this.updatePosition(range, selectedNode);
                 }
 
                 if (activeSection) {
@@ -1521,11 +1529,11 @@ ViperTools.prototype = {
             _subSectionActionWidgets: {},
             _buttonShown: false,
             _verticalPosUpdateOnly: false,
-            updatePosition: function(range) {
+            updatePosition: function(range, selectedNode) {
                 range = range || tools.viper.getViperRange();
 
                 var rangeCoords  = null;
-                var selectedNode = range.getNodeSelection(range);
+                var selectedNode = selectedNode || range.getNodeSelection(range);
                 if (selectedNode !== null) {
                     rangeCoords = this.getElementCoords(selectedNode);
                 } else {
@@ -1650,6 +1658,74 @@ ViperTools.prototype = {
         this.viper.addElement(toolbar);
 
         return toolbar;
+
+    },
+
+    createToolTip: function(id, content, element)
+    {
+        var self    = this;
+        var tooltip = document.createElement('div');
+        dfx.addClass(tooltip, 'Viper-tooltip');
+        dfx.setHtml(tooltip, content);
+
+        var visible = false;
+        var mouseX  = 0;
+        var mouseY  = 0;
+
+        if (element && element !== 'mouse') {
+            // Show tooltip on hover.
+            var timer = null;
+            dfx.hover(element, function() {
+                timer = setTimeout(function() {
+                    self.getItem(id).show(element);
+                }, 500);
+            }, function() {
+                clearTimeout(timer);
+                self.getItem(id).hide();
+            });
+        } else if (element === 'mouse') {
+            dfx.addEvent(document, 'mousemove', function(e) {
+                mouseX = e.pageX;
+                mouseY = e.pageY;
+
+                if (visible !== true) {
+                    return;
+                }
+
+                dfx.setStyle(tooltip, 'left', mouseX + 'px');
+                dfx.setStyle(tooltip, 'top', mouseY + 'px');
+            });
+        }
+
+
+        this.addItem(id, {
+            type: 'tooltip',
+            element: tooltip,
+            show: function(elem) {
+                if (elem && elem.nodeType) {
+                    // Show tooltip on this element.
+                    var rect = dfx.getBoundingRectangle(elem);
+
+                    dfx.setStyle(tooltip, 'left', rect.x2 + 'px');
+                    dfx.setStyle(tooltip, 'top', rect.y2 + 'px');
+
+                    self.viper.addElement(tooltip);
+                    visible = true;
+                } else if (elem === 'mouse' || element === 'mouse') {
+                    // Follow the mouse pointer.
+                    dfx.setStyle(tooltip, 'left', mouseX + 'px');
+                    dfx.setStyle(tooltip, 'top', mouseY + 'px');
+                    self.viper.addElement(tooltip);
+                    visible = true;
+                }
+            },
+            hide: function() {
+                visible = false;
+                tooltip.parentNode.removeChild(tooltip);
+            }
+        });
+
+        return tooltip;
 
     },
 

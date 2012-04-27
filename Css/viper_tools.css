@@ -1038,3 +1038,19 @@
 .Viper-buttonGroup ViperITP-button-hidden {
   display: none;
 }
+/* Viper Tooltip */
+.Viper-tooltip {
+  position: absolute;
+  max-width: 200px;
+  opacity: 0.85;
+  background-color: #222;
+  padding: 10px;
+  border: 1px solid #000;
+  border-radius: 0.4em;
+  z-index: 1000;
+  color: #FFF;
+  font-family: arial;
+  font-weight: bold;
+  -moz-user-select: none;
+  margin: 5px 0;
+}
