@@ -66,15 +66,17 @@ abstract class AbstractViperListPluginUnitTest extends AbstractViperUnitTest
 
         $statuses = $this->execJS('gListBStatus()');
 
-        foreach ($statuses['vitp'] as $btn => $status) {
-            if ($status !== NULL && $$btn === NULL) {
-                $this->fail('Expected '.$btn.' button to be not visible in inline toolbar.');
-            } else if ($status === 'active' && $$btn !== 'active') {
-                $this->fail('Expected '.$btn.' button to be active in inline toolbar.');
-            } else if ($status === TRUE && $$btn === FALSE) {
-                $this->fail('Expected '.$btn.' button to be disabled in inline toolbar.');
-            } else if ($status === FALSE && $$btn === TRUE) {
-                $this->fail('Expected '.$btn.' button to be enabled in inline toolbar.');
+        if ($statuses['vitp'] !== FALSE) {
+            foreach ($statuses['vitp'] as $btn => $status) {
+                if ($status !== NULL && $$btn === NULL) {
+                    $this->fail('Expected '.$btn.' button to be not visible in inline toolbar.');
+                } else if ($status === 'active' && $$btn !== 'active') {
+                    $this->fail('Expected '.$btn.' button to be active in inline toolbar.');
+                } else if ($status === TRUE && $$btn === FALSE) {
+                    $this->fail('Expected '.$btn.' button to be disabled in inline toolbar.');
+                } else if ($status === FALSE && $$btn === TRUE) {
+                    $this->fail('Expected '.$btn.' button to be enabled in inline toolbar.');
+                }
             }
         }
 

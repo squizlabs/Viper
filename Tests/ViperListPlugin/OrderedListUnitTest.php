@@ -811,29 +811,6 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractViperListP
 
 
     /**
-     * Test a list can be created inside a table cell.
-     *
-     * @return void
-     */
- /*   public function testListIconsAvailableInTableCell()
-    {
-        $this->selectText('XabcX');
-        $this->execJS('insTable(3, 3)');
-
-        $cellRect = $this->getBoundingRectangle('td', 0);
-        $region   = $this->getRegionOnPage($cellRect);
-
-        // Click inside the cell.
-        $this->click($region);
-
-        $this->clickTopToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_orderedList.png');
-
-        $this->assertEquals('<ol><li>&nbsp;</li></ol>', $this->getHtml('td', 0));
-
-    }//end testListIconsAvailableInTableCell()*/
-
-
-    /**
      * Test that after you remove all items from the list, the undo icon is active and that when you click it the list is replaced.
      *
      * @return void

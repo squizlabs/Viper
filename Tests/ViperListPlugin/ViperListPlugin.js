@@ -64,9 +64,9 @@ function gListBStatus()
     };
 
     for (var btn in btns.topToolbar) {
-        var elem = dfx.getClass('Viper-button ' + btn, dfx.getClass('ViperTP-bar')[0])[0];
-        if (elem && dfx.hasClass(elem, 'disabled') === false) {
-            if (dfx.hasClass(elem, 'active') === true) {
+        var elem = dfx.getClass('Viper-button Viper-' + btn, dfx.getClass('ViperTP-bar')[0])[0];
+        if (dfx.hasClass(elem, 'Viper-disabled') === false) {
+            if (dfx.hasClass(elem, 'Viper-active') === true) {
                 btns.vitp[btn] = 'active';
             } else {
                 btns.topToolbar[btn] = true;
@@ -74,17 +74,21 @@ function gListBStatus()
         }
     }
 
-    for (var btn in btns.vitp) {
-        var elem = dfx.getClass('Viper-button ' + btn, dfx.getClass('ViperITP')[0])[0];
-        if (elem) {
-            if (dfx.hasClass(elem, 'disabled') === false) {
-                if (dfx.hasClass(elem, 'active') === true) {
-                    btns.vitp[btn] = 'active';
+    if (dfx.hasClass(dfx.getClass('ViperITP')[0], 'Viper-visible') !== true) {
+        btns.vitp = false;
+    } else {
+        for (var btn in btns.vitp) {
+            var elem = dfx.getClass('Viper-button Viper-' + btn, dfx.getClass('ViperITP')[0])[0];
+            if (elem) {
+                if (dfx.hasClass(elem, 'Viper-disabled') === false) {
+                    if (dfx.hasClass(elem, 'Viper-active') === true) {
+                        btns.vitp[btn] = 'active';
+                    } else {
+                        btns.vitp[btn] = true;
+                    }
                 } else {
-                    btns.vitp[btn] = true;
+                    btns.vitp[btn] = false;
                 }
-            } else {
-                btns.vitp[btn] = false;
             }
         }
     }
