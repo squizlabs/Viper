@@ -186,8 +186,8 @@ Viper.prototype = {
         var version = this.getBrowserVersion();
 
         if (browser && version) {
-            dfx.addClass(this._viperElementHolder, 'Viper-browser-' + browser);
-            dfx.addClass(this._viperElementHolder, 'Viper-browserVer-' + browser + version);
+            dfx.addClass(holder, 'Viper-browser-' + browser);
+            dfx.addClass(holder, 'Viper-browserVer-' + browser + version);
         }
 
         return holder;
