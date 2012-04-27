@@ -1721,7 +1721,9 @@ ViperTools.prototype = {
             },
             hide: function() {
                 visible = false;
-                tooltip.parentNode.removeChild(tooltip);
+                if (tooltip.parentNode) {
+                    tooltip.parentNode.removeChild(tooltip);
+                }
             }
         });
 

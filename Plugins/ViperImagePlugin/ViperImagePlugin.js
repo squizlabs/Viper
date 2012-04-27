@@ -35,31 +35,32 @@ ViperImagePlugin.prototype = {
             self._ieImageResize = null;
 
             if (dfx.isTag(target, 'img') === true) {
-                if (self.viper.isBrowser('msie') !== true) {
-                    dfx.preventDefault(e);
-                    self.hideImageResizeHandles();
-                    self.showImageResizeHandles(target);
-                    self._updateToolbar(target);
-                    ViperSelection.removeAllRanges();
-                } else {
+                dfx.preventDefault(e);
+                self.hideImageResizeHandles();
+                self.showImageResizeHandles(target);
+                self._cancelMove();
+                self._updateToolbar(target);
+                self.viper.fireSelectionChanged();
+                ViperSelection.removeAllRanges();
+
+                if (self.viper.isBrowser('msie') === true && dfx.isTag(target, 'img') === true) {
                     self._ieImageResize = target;
-                    self._updateToolbar(target);
                     self.viper.registerCallback('Viper:mouseUp', 'ViperImagePlugin:ie', function(e) {
-                        // Image reiszied.
-                        if (dfx.hasAttribute(target, 'width') === true) {
-                            var width  = dfx.getStyle(target, 'width');
-                            var height = dfx.getStyle(target, 'height');
-                            target.setAttribute('width', width);
-                            target.setAttribute('height', height);
+                       ViperSelection.removeAllRanges();
+                       var range = self.viper.getCurrentRange();
+                       if (!target.nextSibling || target.nextSibling.nodeType !== dfx.TEXT_NODE) {
+                           var textNode = document.createTextNode('');
+                           dfx.insertAfter(target, textNode);
+                       }
 
-                            // Remove width and height styles.
-                            dfx.setStyle(target, 'width', '');
-                            dfx.setStyle(target, 'height', '');
-                        }
+                       range.setStart(target.nextSibling, 0);
+                       range.collapse(true);
+                       ViperSelection.addRange(range);
 
-                        self.viper.fireNodesChanged();
-                        self.viper.removeCallback('Viper:mouseUp', 'ViperImagePlugin:ie');
-                        return false;
+                       dfx.preventDefault(e);
+                       self.viper.removeCallback('Viper:mouseUp', 'ViperImagePlugin:ie');
+                       ViperSelection.removeAllRanges();
+                       return false;
                     });
                 }
 
@@ -81,6 +82,7 @@ ViperImagePlugin.prototype = {
                 if (self._resizeImage) {
                     if (self.removeImage(self._resizeImage) === true) {
                         self._updateToolbar();
+                        self.viper.ViperTools.getItem('ViperImageToolbar').hide();
                         return false;
                     }
                 }
@@ -126,6 +128,19 @@ ViperImagePlugin.prototype = {
             }
         });
 
+        this.viper.registerCallback('Viper:clickedOutside', 'ViperImagePlugin', function(range) {
+            self.hideImageResizeHandles();
+        });
+
+    },
+
+    moveImage: function(image, range)
+    {
+        if (!range || !image) {
+            return;
+        }
+
+        return this._rangeToImage(range, image);
     },
 
     rangeToImage: function(range, url, alt, title)
@@ -134,6 +149,12 @@ ViperImagePlugin.prototype = {
             return;
         }
 
+        return this._rangeToImage(range, null, url, alt, title);
+
+    },
+
+    _rangeToImage: function(range, img, url, alt, title)
+    {
         this._resizeImage = null;
 
         range = range || this.viper.getViperRange();
@@ -153,23 +174,25 @@ ViperImagePlugin.prototype = {
             dfx.remove(elems[i]);
         }
 
-        var img = document.createElement('img');
-        img.setAttribute('src', url);
+        if (!img) {
+            img = document.createElement('img');
+            img.setAttribute('src', url);
 
-        if (alt !== null) {
-            img.setAttribute('alt', alt);
-        }
+            if (alt !== null) {
+                img.setAttribute('alt', alt);
+            }
 
-        if (title !== null && dfx.trim(title).length !== 0) {
-            img.setAttribute('title', title);
+            if (title !== null && dfx.trim(title).length !== 0) {
+                img.setAttribute('title', title);
+            }
         }
 
         dfx.insertBefore(bookmark.start, img);
 
         this.viper.removeBookmark(bookmark);
 
-        range.selectNode(img);
-        ViperSelection.addRange(range);
+        //range.selectNode(img);
+        //ViperSelection.addRange(range);
         ViperSelection.removeAllRanges();
 
         this.viper.fireSelectionChanged();
@@ -394,12 +417,20 @@ ViperImagePlugin.prototype = {
 
     _initImageToolbar: function()
     {
+        var self    = this;
         var tools   = this.viper.ViperTools;
         var toolbar = null;
+        var moveButton = null;
+        var image      = null;
+
+        // Create a tooltip that will be shown when the image move icon is clicked.
+        tools.createToolTip('ViperImageToolbar-tooltip', 'The selected image will be moved to the next location you click. To cancel press the move icon again or ESC', 'mouse');
 
         tools.createInlineToolbar('ViperImageToolbar', true, ['img'], function(range, element) {
             if (element) {
-                toolbar.showButton(idPrefx + '-btnGroup');
+                image = element;
+                toolbar.showButton(idPrefx + '-image');
+                toolbar.showButton(idPrefx + '-move');
             }
         });
 
@@ -408,13 +439,66 @@ ViperImagePlugin.prototype = {
 
         var buttonGroup = tools.createButtonGroup(idPrefx + '-btnGroup');
         var imageButton = tools.createButton(idPrefx + '-image', '', 'Toggle Image Options', 'Viper-image', null);
-        var moveButton  = tools.createButton(idPrefx + '-move', '', 'Move Image', 'Viper-move', null);
+        moveButton  = tools.createButton(idPrefx + '-move', '', 'Move Image', 'Viper-move', function() {
+            if (dfx.hasClass(moveButton, 'Viper-selected') === true) {
+                self._cancelMove();
+                return;
+            }
+
+            dfx.addClass(moveButton, 'Viper-selected');
+
+            // Show the tooltip under the mouse pointer.
+            tools.getItem('ViperImageToolbar-tooltip').show();
+
+            // When mouse is clicked in content move the image to that selection range.
+            self.viper.registerCallback('Viper:mouseUp', 'ViperImagePlugin:move', function(e) {
+                var imageElement = image;
+                self._cancelMove();
+
+                var clickTarget = dfx.getMouseEventTarget(e);
+                if (clickTarget) {
+                    if (dfx.isTag(clickTarget, 'img') === true
+                        || self.viper.isOutOfBounds(clickTarget) === true
+                    ) {
+                        return;
+                    }
+                }
+
+                var range = self.viper.getViperRange();
+                if (self.viper.rangeInViperBounds(range) === false) {
+                    return;
+                }
+
+                self.moveImage(imageElement, range);
+
+                // Show the image resize handles and the toolbar.
+                self.showImageResizeHandles(imageElement);
+                toolbar.update(null, imageElement);
+            });
+
+            // If ESC key is pressed cancel the image move.
+            dfx.addEvent(document, 'keydown.ViperImagePlugin:move', function(e) {
+                if (e.which === 27) {
+                    self._cancelMove();
+                }
+            });
+        });
 
         buttonGroup.appendChild(imageButton);
         buttonGroup.appendChild(moveButton);
 
         toolbar.addButton(buttonGroup);
 
+    },
+
+    _cancelMove: function()
+    {
+        // Cancel method that is called when image is moved or move event is canceled.
+        // It will remove callback methods, change toolbar button statuses etc.
+        this.viper.ViperTools.getItem('ViperImageToolbar-tooltip').hide();
+        this.viper.removeCallback('Viper:mouseUp', 'ViperImagePlugin:move');
+        dfx.removeEvent(document, 'keydown.ViperImagePlugin:move');
+        dfx.removeClass(this.viper.ViperTools.getItem('ViperImageToolbar-move').element, 'Viper-selected');
 
     },
 
@@ -521,6 +605,8 @@ ViperImagePlugin.prototype = {
         this._resizeHandles.push(seHandle);
         this._resizeHandles.push(swHandle);
 
+        this._resizeImage = image;
+
         var self = this;
 
         var _addMouseEvents = function(handle, rev) {
@@ -537,6 +623,8 @@ ViperImagePlugin.prototype = {
                 image.setAttribute('height', height);
                 dfx.setStyle(image, 'width', '');
                 dfx.setStyle(image, 'height', '');
+
+                self.viper.ViperTools.getItem('ViperImageToolbar').hide();
 
                 dfx.addEvent(document, 'mousemove.ViperImageResize', function(e) {
                     var wDiff = (e.clientX - prevPosX);
@@ -579,6 +667,9 @@ ViperImagePlugin.prototype = {
                     if (resized === true) {
                         self.viper.fireNodesChanged();
                     }
+
+                    // Show the image toolbar.
+                    self.viper.ViperTools.getItem('ViperImageToolbar').update(null, image);
                 });
 
                 dfx.preventDefault(e);
