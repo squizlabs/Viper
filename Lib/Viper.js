@@ -174,6 +174,7 @@ Viper.prototype = {
         }
 
         this._viperElementHolder.appendChild(element);
+
     },
 
     _createElementHolder: function()
