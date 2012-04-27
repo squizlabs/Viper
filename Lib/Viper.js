@@ -3859,6 +3859,7 @@ Viper.prototype = {
             if (namespace) {
                 if (this.callbacks[type].namespaces[namespace]) {
                     this.callbacks[type].namespaces[namespace] = [];
+                    delete this.callbacks[type].namespaces[namespace];
                 }
             } else {
                 // Remove all.
