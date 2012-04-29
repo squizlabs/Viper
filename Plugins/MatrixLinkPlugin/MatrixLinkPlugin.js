@@ -107,7 +107,7 @@ MatrixLinkPlugin.prototype = {
         ViperLinkPlugin.prototype.updateInlineToolbar.call(this, data);
 
         var inlineToolbarPlugin = this.viper.ViperPluginManager.getPlugin('ViperInlineToolbarPlugin');
-        inlineToolbarPlugin.addSubSectionActionWidgets(
+        inlineToolbarPlugin.getToolbar().addSubSectionActionWidgets(
             'ViperLinkPlugin:vitp:link',
             ['ViperLinkPlugin:vitp:anchor', 'ViperLinkPlugin:vitp:includeSummary']
         );
@@ -184,6 +184,50 @@ MatrixLinkPlugin.prototype = {
         } else {
             tools.getItem('ViperLinkPlugin:vtp:anchor').setValue('');
             tools.getItem('ViperLinkPlugin:vtp:includeSummary').setValue(false);
+            dfx.removeClass(main, 'Viper-internalLink');
+        }//end if
+
+    },
+
+    updateInlineToolbarFields: function(link)
+    {
+        ViperLinkPlugin.prototype.updateInlineToolbarFields.call(this, link);
+
+        var tools = this.viper.ViperTools;
+        var main  = tools.getItem('ViperLinkPlugin:vitp:link').element;
+
+        // Url value may need to be updated if the link is internal.
+        var urlValue = tools.getItem('ViperLinkPlugin:vitp:url').getValue();
+        if (urlValue.indexOf('./?a=') === 0) {
+            // Remove the ./?a= prefix.
+            urlValue = urlValue.replace('./?a=', '');
+
+            // Internal URL.
+            dfx.removeClass(main, 'Viper-emailLink');
+            dfx.addClass(main, 'Viper-internalLink');
+
+            // If the link content has %asset_summary_xx% keyword then check the summary
+            // checkbox.
+            var link       = this.getLinkFromRange();
+            var incSummary = false;
+            if (link && dfx.getHtml(link).match(/%asset_summary_\d+%/)) {
+                incSummary = true;
+            }
+
+            // Anchor value.
+            var anchorValue = '';
+            var anchorIndex = urlValue.indexOf('#');
+            if (anchorIndex >= 0) {
+                anchorValue = urlValue.substr((anchorIndex + 1));
+                urlValue    = urlValue.substr(0, anchorIndex);
+            }
+
+            tools.getItem('ViperLinkPlugin:vitp:anchor').setValue(anchorValue);
+            tools.getItem('ViperLinkPlugin:vitp:url').setValue(urlValue);
+            tools.getItem('ViperLinkPlugin:vitp:includeSummary').setValue(incSummary);
+        } else {
+            tools.getItem('ViperLinkPlugin:vitp:anchor').setValue('');
+            tools.getItem('ViperLinkPlugin:vitp:includeSummary').setValue(false);
             dfx.removeClass(main, 'Viper-internalLink');
         }//end if
 

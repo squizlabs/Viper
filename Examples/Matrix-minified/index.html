@@ -4,21 +4,19 @@
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <title>Viper - Simple Example</title>
     <link rel="stylesheet" media="screen" href="main.css">
-    <script type="text/javascript" src="../../DfxJSLib/dfx.js"></script>
-    <script type="text/javascript" src="../../Viper-matrix.js"></script>
+    <link rel="stylesheet" media="screen" href="../../Css/viper_tools.ees.css">
+    <link rel="stylesheet" media="screen" href="../../build/viper.css" />
+    <script type="text/javascript" src="../../build/viper.js"></script>
     <script type="text/javascript">
         var viper = null;
-        ViperReadyCallback = function() {
-            viper = new Viper('test');
+        dfx.addLoadEvent(function() {
+            viper = new Viper('matrixViper');
             viper.getPluginManager().setPlugins(['ViperCoreStylesPlugin', 'ViperKeyboardEditorPlugin', 'ViperInlineToolbarPlugin', 'ViperHistoryPlugin', 'ViperListPlugin', 'ViperFormatPlugin', 'ViperToolbarPlugin', 'ViperTableEditorPlugin', 'ViperCopyPastePlugin', 'MatrixImagePlugin', 'MatrixLinkPlugin', 'ViperAccessibilityPlugin', 'ViperSourceViewPlugin', 'ViperSearchReplacePlugin', 'ViperLangToolsPlugin', 'ViperCharMapPlugin']);
             viper.setEditableElement(document.getElementById('content'));
 
             var buttons = [['bold', 'italic', 'subscript', 'superscript', 'strikethrough', 'class'], 'removeFormat', ['justify', 'formats', 'headings'], ['undo', 'redo'], ['unorderedList', 'orderedList', 'indentList', 'outdentList'], 'insertTable', 'image', 'hr', ['insertLink', 'removeLink', 'anchor'], 'insertCharacter', 'searchReplace', 'langTools', 'accessibility', 'sourceEditor'];
             viper.getPluginManager().setPluginSettings('ViperToolbarPlugin', {buttons: buttons});
-
-            var inlineToolbarButtons = [['bold', 'italic', 'class'], ['unorderedList', 'orderedList', 'indentList', 'outdentList'], ['insertLink', 'removeLink', 'anchor'], ['image', 'imageMove']];
-            viper.getPluginManager().setPluginSettings('ViperInlineToolbarPlugin', {buttons: inlineToolbarButtons});
-        };
+        });
     </script>
 </head>
 <body spellcheck="false">
@@ -39,16 +37,9 @@
 
 <div id="content" spellcheck="false">
     <h1>Simple Viper Example</h1>
+        <p>Australian governments at all levels have <u><strong><em>endorsed</em></strong></u> WCAG 2.0, and require all government websites (federal, state and territory) to meet the new guidelines at the minimum compliance level (Single A) by the end of 2012. In addition, the Australian Government requires all federal websites to meet the medium conformance level (Double A) by the end of 2014.</p>
 
-    <!-- comment goes here la -->
-
-        <p>    Australian governments at all levels have <u><strong><em>endorsed</em></strong></u> WCAG 2.0, and require all government websites (federal, state and territory) to meet the new guidelines at the minimum compliance level (Single A) by the end of 2012. In addition, the Australian Government requires all federal websites to meet the medium conformance level (Double A) by the end of 2014.    </p>
-
-<p>
-
-Federal government agencies must update <strong>all government</strong> websites (as specified within scope under the Website Accessibility National Transition Strategy (NTS)) to WCAG 2.0 conformance. Agencies should use the principle of progressive enhancement when building and managing websites, and test for conformance across multiple browsers and operating system configurations.
-
-</p>
+<p>Federal government agencies must update <strong>all government</strong> websites (as specified within scope under the Website Accessibility National Transition Strategy (NTS)) to WCAG 2.0 conformance. Agencies should use the principle of progressive enhancement when building and managing websites, and test for conformance across multiple browsers and operating system configurations.</p>
 
 <p>Agencies are advised to consider the varied needs of their users and plan for accessibility from the outset. Where accessibility problems are known, agencies should put in place implementation plans to address the problem, then endeavour to minimise future risk by using standards-based web technologies and best practice content management processes.</p>
 

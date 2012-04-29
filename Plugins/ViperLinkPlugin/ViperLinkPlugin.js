@@ -15,6 +15,7 @@ function ViperLinkPlugin(viper)
 {
     this.viper = viper;
 
+    this.initToolbar();
     this.initInlineToolbar();
 }
 
@@ -22,7 +23,6 @@ ViperLinkPlugin.prototype = {
 
     init: function()
     {
-        this.initToolbar();
         this.enableAutoLink();
 
     },
@@ -494,12 +494,16 @@ ViperLinkPlugin.prototype = {
         if (link || this.selectionHasLinks(data.range) === true) {
             if (link) {
                 this.viper.ViperTools.setButtonActive('vitpInsertLink');
+                this.updateInlineToolbarFields(link);
+            } else {
+                this.updateInlineToolbarFields();
             }
 
             data.toolbar.showButton('vitpInsertLink');
             data.toolbar.showButton('vitpRemoveLink');
         } else {
             data.toolbar.showButton('vitpInsertLink');
+            this.updateInlineToolbarFields(link);
         }
 
     },
@@ -671,6 +675,47 @@ ViperLinkPlugin.prototype = {
         tools.getItem('ViperLinkPlugin:vtp:title').setValue(title || '');
         tools.getItem('ViperLinkPlugin:vtp:subject').setValue(subject || '');
         tools.getItem('ViperLinkPlugin:vtp:newWindow').setValue(newWindow);
+    },
+
+    updateInlineToolbarFields: function(link)
+    {
+        var href        = '';
+        var title       = '';
+        var subject     = '';
+        var newWindow   = false;
+        var isEmailLink = false;
+
+        if (link) {
+            href  = link.getAttribute('href');
+            title = link.getAttribute('title');
+
+            if (link.getAttribute('target') === '_blank') {
+                newWindow = true;
+            }
+
+            if (href.indexOf('mailto:') === 0) {
+                isEmailLink   = true;
+                var subjIndex = href.indexOf('?subject=');
+                if (subjIndex >= 0) {
+                    subject = href.substr(subjIndex + 9);
+                    href    = href.substr(0, subjIndex).replace('mailto:', '');
+                }
+            }
+        }
+
+        var main = this.viper.ViperTools.getItem('ViperLinkPlugin:vitp:link').element;
+        if (isEmailLink === true) {
+            dfx.addClass(main, 'Viper-emailLink');
+        } else {
+            dfx.addClass(main, 'Viper-externalLink');
+        }
+
+        var tools = this.viper.ViperTools;
+        tools.getItem('ViperLinkPlugin:vitp:url').setValue(href || '');
+        tools.getItem('ViperLinkPlugin:vitp:title').setValue(title || '');
+        tools.getItem('ViperLinkPlugin:vitp:subject').setValue(subject || '');
+        tools.getItem('ViperLinkPlugin:vitp:newWindow').setValue(newWindow);
+
     }
 
 };

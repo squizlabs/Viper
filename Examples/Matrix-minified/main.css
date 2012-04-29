@@ -376,6 +376,53 @@ a img {border: none;}
 #content .colour-green {
     color: #4ea725;
 }
+#content .next-prev {
+    overflow: hidden;
+    clear: both;
+    height: 27px;
+    margin: 2em -29px -17px -33px;
+    padding: 12px 187px 11px 187px;
+    background: transparent url(http://manuals.matrix.squizsuite.net/__designs/matrix-library/bg-page-bottom.png) 50% 0 no-repeat;
+}
+#content .next-prev a {
+    display: block;
+    overflow: hidden;
+    float: left;
+    width: 159px;
+    height: 27px;
+    line-height: 29px;
+    color: #6F6F6F;
+    font-family: Times;
+    font-size: 14px;
+    text-align: center;
+    text-decoration: none;
+    background-image: url(http://manuals.matrix.squizsuite.net/__designs/matrix-library/button-next-prev.png);
+    background-repeat: no-repeat;
+    background-position: 100% 0;
+}
+#content .next-prev a:hover {
+    background-position: 100% -27px;
+    color: #000;
+}
+#content .next-prev.last a {
+    background-position: 100% -108px;
+}
+#content .next-prev.last a:hover {
+    background-position: 100% -135px;
+}
+#content .next-prev a:first-child {
+    background-position: 0 -54px;
+}
+#content .next-prev a:first-child:hover {
+    background-position: 0 -81px;
+}
+#content .next-prev.first a:first-child {
+    margin-left: 68px;
+    background-position: 100% 0;
+}
+#content .next-prev.first a:first-child:hover {
+    background-position: 100% -27px;
+}
 #content pre,
 #content > code {
     display: block;
@@ -463,6 +510,36 @@ background-color: #f9f8b1;
 #content ul.clear li {
     clear: both;
 }
+#content ul.two-col li {
+    float: left;
+    width: 40%;
+    margin: 0;
+    background-image: url(http://manuals.matrix.squizsuite.net/__designs/matrix-library/bullet-cols.png);
+}
+#content ul.three-col li {
+    float: left;
+    width: 27%;
+    margin: 0;
+    padding: 0.3em 0.3em 0.3em 25px;
+    background-image: url(http://manuals.matrix.squizsuite.net/__designs/matrix-library/bullet-cols.png);
+}
+#content ul.four-col li,
+#content ul.screens li {
+    float: left;
+    width: 25%;
+    margin: 0;
+    background-image: url(http://manuals.matrix.squizsuite.net/__designs/matrix-library/bullet-cols.png);
+}
+#content ul.four-col li {
+    width: 18%;
+}
+#content ul.screens li {
+    background: transparent url(http://manuals.matrix.squizsuite.net/__designs/matrix-library/bullet-screens.gif) 0 0.3em no-repeat;
+}
+#content ul.no-bull li {
+    background: none;
+    padding-left: 0;
+}
 
 /* content blocks */
 #content .intro {
@@ -486,6 +563,7 @@ background-color: #f9f8b1;
 #content .caption {
     display: block;
     padding: 0 0 13px;
+    background: transparent url(http://manuals.matrix.squizsuite.net/__designs/matrix-library/content-break.png) 50% 100% no-repeat;
     font-family: Times;
     text-align: center;
     color: #4c3d0f;
@@ -498,7 +576,23 @@ background-color: #f9f8b1;
 #content .caption img {
     margin-bottom: 5px;
 }
-
+#content .bookmarks {
+    color: #a3a384;
+    margin: 30px 0 35px 0;
+    background: transparent url(http://manuals.matrix.squizsuite.net/__designs/matrix-library/bookmark-top.png) 0 15px no-repeat;
+}
+#content .bookmarks p {
+    text-align: center;
+    font-family: Times;
+    font-style: italic;
+}
+#content .bookmarks ol {
+    background: transparent url(http://manuals.matrix.squizsuite.net/__designs/matrix-library/bookmark-bottom.png) 50% 100% no-repeat;
+    padding: 20px 0 35px 52px;
+    column-count: 2;
+    -moz-column-count: 2;
+    -webkit-column-count: 2;
+}
 #content .bookmarks li {
     position: inherit;
     margin: 0.4em 0 0.5em 25px;
@@ -568,6 +662,93 @@ background-color: #f9f8b1;
     padding: 0.3em;
     font-size: 0.9em;
     background-color: #f4f1e5;
+}
+
+#content .tip {
+    clear: both;
+    background: #f0f8f9 url(http://manuals.matrix.squizsuite.net/__designs/matrix-library/icon-tip.png) 20px 50% no-repeat;
+    padding: 1.5em 2em 1.7em 83px;
+    color: #2c6ba6;
+    border: 1px solid #d0e3e9;
+    border-radius: 6px;
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    margin: 1em 0 2em 0;
+}
+#content .tip:before {
+    content: "Tip: ";
+    color: #000;
+    font-weight: bold;
+}
+#content .notes {
+    clear: both;
+    background: #fdfbe4 url(images/notes-bg.png) 18px 18px no-repeat;
+    padding: 1.5em 2em 1.7em 83px;
+    color: #8f5226;
+    border: 1px solid #ebe29a;
+    border-radius: 6px;
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    margin: 1em 0 2em 0;
+}
+#content .notes:before {
+    content: "Note: ";
+    color: #000;
+    font-weight: bold;
+}
+#content .complete {
+    background: #eaf6e6 url(http://manuals.matrix.squizsuite.net/__designs/matrix-library/icon_finish.png) 10px 50% no-repeat;
+    padding: 1.2em 10px 1em 60px;
+    color: #486f35;
+    border: 1px solid #cfe3ce;
+    border-radius: 7px;
+}
+.moviePlayer {
+    background: #000 url(http://www.squizlabs.com/__designs/labs-inside/movie-preloader.gif) 50% 50% no-repeat;
+    border: 1px solid #CCC;
+}
+.moviePlayer .moviePlayer {
+    border: none;
+}
+
+/* Search Result Lists
+*******************************************************/
+#content .result.featureResult {
+    clear: both;
+    background-color: #f0f8f9;
+    padding: 1em;
+    margin-bottom: 1em;
+    color: #2c6ba6;
+    border: 1px solid #d0e3e9;
+}
+#content #searchResults {
+    list-style: none;
+}
+#content #searchResults li.result {
+    background: none;
+    padding-left: 0;
+    margin-bottom: 1.7em;
+}
+#content .searchResult-title {
+    font-weight: bold;
+    font-size: 1.2em;
+}
+#content .featureResult .searchResult-title a {
+    color: #2C6BA6 !important;
+}
+#content .searchrResult-summary b {
+    background-color: #fcfcd2;
+}
+#content .searchResult-link {
+    color: #79a578;
+}
+#content .searchResult-link .searchResult-filesize {
+    color: #ADADAD;
+}
+#content .searchResults-pages {
+    text-align: center;
+    font-size: 1.1em;
+    color: #ADADAD;
 }
 
 /* Footer
