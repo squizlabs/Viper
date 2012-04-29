@@ -40,7 +40,10 @@ ViperImagePlugin.prototype = {
                 self.showImageResizeHandles(target);
                 self._cancelMove();
                 self._updateToolbars(target);
-                self.viper.fireSelectionChanged();
+
+                var range = self.viper.getViperRange();
+                range.selectNode(target);
+                self.viper.fireSelectionChanged(range, true);
                 ViperSelection.removeAllRanges();
 
                 if (self.viper.isBrowser('msie') === true && dfx.isTag(target, 'img') === true) {
@@ -130,6 +133,14 @@ ViperImagePlugin.prototype = {
 
         this.viper.registerCallback('Viper:clickedOutside', 'ViperImagePlugin', function(range) {
             self.hideImageResizeHandles();
+        });
+
+        this.viper.registerCallback('ViperToolbarPlugin:updateToolbar', 'ViperImagePlugin', function(data) {
+            var nodeSelection = data.range.getNodeSelection();
+            if (nodeSelection && dfx.isTag(nodeSelection, 'img') === true) {
+                self._resizeImage = nodeSelection;
+                self._updateToolbars(nodeSelection);
+            }
         });
 
     },

@@ -1133,14 +1133,7 @@ ViperTools.prototype = {
                 if (!selectedNode) {
                     range = range || this.viper.getViperRange();
                     if (elementTypes && elementTypes.length > 0) {
-                        selectedNode = range.getNodeSelection();
-                        if (selectedNode) {
-                            if (elementTypes.inArray(dfx.getTagName(selectedNode)) !== true) {
-                                return;
-                            }
-                        } else {
-                            return;
-                        }
+                        return;
                     }
                 }
 
