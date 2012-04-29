@@ -45,8 +45,9 @@ ViperImagePlugin.prototype = {
 
                 var range = self.viper.getViperRange();
                 range.selectNode(target);
+                ViperSelection.addRange(range);
                 self.viper.fireSelectionChanged(range, true);
-                ViperSelection.removeAllRanges();
+                //ViperSelection.removeAllRanges();
 
                 if (self.viper.isBrowser('msie') === true && dfx.isTag(target, 'img') === true) {
                     self._ieImageResize = target;
@@ -510,6 +511,10 @@ ViperImagePlugin.prototype = {
                 }
 
                 self.moveImage(imageElement, range);
+
+                range.selectNode(imageElement);
+                ViperSelection.addRange(range);
+                ViperSelection.removeAllRanges();
 
                 // Show the image resize handles and the toolbar.
                 self.showImageResizeHandles(imageElement);

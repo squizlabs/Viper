@@ -1145,6 +1145,8 @@ ViperCoreStylesPlugin.prototype = {
 
         if (this._canStyleNode(data.lineage[data.current]) !== true) {
             return;
+        } else if (dfx.isTag(data.lineage[data.current], 'img') === true) {
+            return;
         }
 
         this.viper.ViperTools.setButtonInactive('vitpBold');
