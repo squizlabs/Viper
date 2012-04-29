@@ -543,6 +543,7 @@ ViperImagePlugin.prototype = {
             data.toolbar.showButton('vitpImage');
             data.toolbar.showButton('vitpImageMove');
             this.showImageResizeHandles(nodeSelection);
+            this._updateToolbars(nodeSelection);
         }
 
     },
