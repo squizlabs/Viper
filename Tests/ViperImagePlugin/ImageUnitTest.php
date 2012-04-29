@@ -5,7 +5,7 @@ require_once 'AbstractViperUnitTest.php';
 class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperUnitTest
 {
 
-    
+
      /**
      * Resize specified image to given width.
      *
@@ -332,6 +332,29 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperUnitTest
 
     }//end testInsertingAnImageInMiddleOfParagraph()
 
+
+    /**
+     * Test trying to insert an image with the incorrect URL.
+     *
+     * @return void
+     */
+    public function testInsertingImageWithIncorrectURL()
+    {
+        $dir = dirname(__FILE__).'/Images/';
+
+        $this->selectText('dolor');
+        $this->type('Key.RIGHT');
+
+        $this->clickTopToolbarButton($dir.'toolbarIcon_image.png');
+        $this->type('http://cms.squizsuite.net/homepage-images/hero-shot.jpg');
+        $this->clickTopToolbarButton($dir.'toobarIcon_image_presentational.png');
+        $this->keyDown('Key.ENTER');
+        $this->assertTrue($this->exists($dir.'fail_to_load_message.png'));
+
+        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>LOREM XuT dolor<img src="http://cms.squizsuite.net/homepage-images/hero-shot.jpg" alt="" /></p><p>sit amet <strong>WoW</strong></p><p>Squiz LABS is ORSM</p>');
+
+    }//end testInsertingImageWithIncorrectURL()
+    
 
     /**
      * Test replacing content with an image.
@@ -689,8 +712,8 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperUnitTest
         $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>LOREM XuT dolor<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Alt tag" title="Title tag" /></p><p>sit amet <strong>WoW</strong></p><p>Squiz LABS is ORSM<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Alt tag" /></p>');
 
     }//end testInsertingAnImageDeletingThenClickingUndo()
-    
-    
+
+
     /**
      * Test loading a new page with an image and starting a new paragraph after it.
      *
@@ -707,15 +730,15 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperUnitTest
         $this->keyDown('Key.ENTER');
         $this->type('New paragraph');
         $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>LOREM XuT</p><img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Alt tag" /><p>New paragraph</p><p>Squiz LABS is ORSM</p>');
-        
+
     }//end testStartingNewParagraphAfterImage()
-    
-    
+
+
     /**
      * Test image resize handles exist.
      *
      * @return void
-     */ 
+     */
     public function testImageResizeHandles()
     {
         $dir = dirname(__FILE__).'/Images/';
@@ -736,7 +759,7 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperUnitTest
         $this->assertTrue($this->exists($dir.'resize_bottom_right.png'));
 
     }//end testImageResizeHandles()
-    
+
 
     /**
      * Test resizing an image.
@@ -757,14 +780,14 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperUnitTest
         $this->clickTopToolbarButton($dir.'toolbarIcon_subImage_active.png');
 
         $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>LOREM XuT dolor<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="" /></p><p>sit amet <strong>WoW</strong></p><p>Squiz LABS is ORSM</p>');
-        
+
         $this->clickElement('img', 1);
         $this->resizeImage(1, 300);
-        
+
          $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>LOREM XuT dolor<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="" width="286px" height="130px" /></p><p>sit amet <strong>WoW</strong></p><p>Squiz LABS is ORSM</p>');
 
     }//end testResizingAnImage()
-       
+
 
     /**
      * Test resizing an image and then editing it.
@@ -786,12 +809,12 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperUnitTest
         $this->clickTopToolbarButton($dir.'toolbarIcon_subImage_active.png');
 
         $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>LOREM XuT dolor<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Alt tag" /></p><p>sit amet <strong>WoW</strong></p><p>Squiz LABS is ORSM</p>');
-        
+
         $this->clickElement('img', 1);
         $this->resizeImage(1, 300);
-        
+
          $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>LOREM XuT dolor<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Alt tag" width="286px" height="130px" /></p><p>sit amet <strong>WoW</strong></p><p>Squiz LABS is ORSM</p>');
-         
+
         $this->clickElement('img', 1);
         $this->clickTopToolbarButton($dir.'toolbarIcon_subImage_active.png');
         $this->keyDown('Key.TAB');
@@ -802,6 +825,37 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperUnitTest
         $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>LOREM XuT dolor<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Alt tag" width="286px" height="130px" title="Title tag" /></p><p>sit amet <strong>WoW</strong></p><p>Squiz LABS is ORSM</p>');
 
     }//end testResizingAnImageAndEditingIt()
+
+
+    /**
+     * Test resizing an image and then clicking undo.
+     *
+     * @return void
+     */
+    public function testResizingAnImageAndClickingUndo()
+    {
+        $dir = dirname(__FILE__).'/Images/';
+
+        $this->selectText('dolor');
+        $this->type('Key.RIGHT');
+
+        $this->clickTopToolbarButton($dir.'toolbarIcon_image.png');
+        $this->type('http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg');
+        $this->clickTopToolbarButton($dir.'toobarIcon_image_presentational.png');
+        $this->keyDown('Key.ENTER');
+        $this->clickTopToolbarButton($dir.'toolbarIcon_subImage_active.png');
+
+        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>LOREM XuT dolor<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="" /></p><p>sit amet <strong>WoW</strong></p><p>Squiz LABS is ORSM</p>');
+
+        $this->clickElement('img', 1);
+        $this->resizeImage(1, 300);
+
+         $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>LOREM XuT dolor<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="" width="286px" height="130px" /></p><p>sit amet <strong>WoW</strong></p><p>Squiz LABS is ORSM</p>');
+
+         $this->clickTopToolbarButton(dirname(dirname(__FILE__)).'/Core/Images/undoIcon_active.png');
+         $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>LOREM XuT dolor<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="" /></p><p>sit amet <strong>WoW</strong></p><p>Squiz LABS is ORSM</p>');
+
+    }//end testResizingAnImage()
 
 
 }//end class

@@ -15,13 +15,13 @@ function ViperLinkPlugin(viper)
 {
     this.viper = viper;
 
+    this.initInlineToolbar();
 }
 
 ViperLinkPlugin.prototype = {
 
     init: function()
     {
-        this.initInlineToolbar();
         this.initToolbar();
         this.enableAutoLink();
 
@@ -429,14 +429,10 @@ ViperLinkPlugin.prototype = {
 
     initInlineToolbar: function()
     {
-        var inlineToolbarPlugin = this.viper.ViperPluginManager.getPlugin('ViperInlineToolbarPlugin');
-        if (!inlineToolbarPlugin) {
-            return;
-        }
-
-        inlineToolbarPlugin.addKeepOpenTag('a');
-
         var self = this;
+        this.viper.registerCallback('ViperInlineToolbarPlugin:initToolbar', 'ViperLinkPlugin', function(toolbar) {
+            self.createInlineToolbar(toolbar);
+        });
         this.viper.registerCallback('ViperInlineToolbarPlugin:updateToolbar', 'ViperLinkPlugin', function(data) {
             var selectionHasLinks = self.selectionHasLinks(data.range);
             if (selectionHasLinks !== true && self.showInlineToolbarIcons(data) === true) {
@@ -445,69 +441,66 @@ ViperLinkPlugin.prototype = {
                 self.updateInlineToolbar(data, true);
             }
         });
+
     },
 
-    updateInlineToolbar: function(data, removeLinkOnly)
+    createInlineToolbar: function(toolbar)
     {
-        var inlineToolbarPlugin = this.viper.ViperPluginManager.getPlugin('ViperInlineToolbarPlugin');
         var self = this;
-
-        if (removeLinkOnly === true) {
-            var removeLinkBtn = this.viper.ViperTools.createButton('vitpRemoveLink', '', 'Remove Link', 'Viper-linkRemove', function() {
-                self.removeLinks();
-            });
-
-            inlineToolbarPlugin.addButton(removeLinkBtn);
-
-            return;
-        }
-
         var main = document.createElement('div');
 
-        inlineToolbarPlugin.makeSubSection('ViperLinkPlugin:vitp:link', main, function() {
+        toolbar.makeSubSection('ViperLinkPlugin:vitp:link', main, function() {
             var range = self.viper.getViperRange();
             var node  = self.getLinkFromRange(range);
             if (node) {
                 range.selectNode(node);
                 ViperSelection.addRange(range);
                 self.viper.fireSelectionChanged(range);
-                inlineToolbarPlugin.toggleSubSection('ViperLinkPlugin:vitp:link', true);
             }
         });
 
         var insertLinkBtn = this.viper.ViperTools.createButton('vitpInsertLink', '', 'Toggle Link Options', 'Viper-link');
+        var removeLinkBtn = this.viper.ViperTools.createButton('vitpRemoveLink', '', 'Remove Link', 'Viper-linkRemove', function() {
+            if (!link) {
+                self.removeLinks();
+            } else {
+                self.removeLink(link);
+            }
+        });
+
+        var btnGroup = this.viper.ViperTools.createButtonGroup('ViperLinkPlugin:vitpButtons');
+        this.viper.ViperTools.addButtonToGroup('vitpInsertLink', 'ViperLinkPlugin:vitpButtons');
+        this.viper.ViperTools.addButtonToGroup('vitpRemoveLink', 'ViperLinkPlugin:vitpButtons');
+        toolbar.addButton(btnGroup);
+
+        toolbar.setSubSectionButton('vitpInsertLink', 'ViperLinkPlugin:vitp:link');
+
+        main.appendChild(this.getToolbarContent('ViperLinkPlugin:vitp'));
+
+        toolbar.setSubSectionAction('ViperLinkPlugin:vitp:link', function() {
+            self.updateLink('ViperLinkPlugin:vitp');
+        }, ['ViperLinkPlugin:vitp:url', 'ViperLinkPlugin:vitp:title', 'ViperLinkPlugin:vitp:newWindow', 'ViperLinkPlugin:vitp:subject']);
+
+    },
+
+    updateInlineToolbar: function(data, removeLinkOnly)
+    {
+        if (removeLinkOnly === true) {
+            data.toolbar.showButton('vitpRemoveLink');
+            return;
+        }
 
         var link = this.getLinkFromRange(data.range);
-        if (link || this.selectionHasLinks(data.drange) === true) {
+        if (link || this.selectionHasLinks(data.range) === true) {
             if (link) {
                 this.viper.ViperTools.setButtonActive('vitpInsertLink');
             }
 
-            // Show the remove link button.
-            var removeLinkBtn = this.viper.ViperTools.createButton('vitpRemoveLink', '', 'Remove Link', 'Viper-linkRemove', function() {
-                if (!link) {
-                    self.removeLinks();
-                } else {
-                    self.removeLink(link);
-                }
-            });
-
-            var btnGroup = this.viper.ViperTools.createButtonGroup('ViperLinkPlugin:vitpButtons');
-            this.viper.ViperTools.addButtonToGroup('vitpInsertLink', 'ViperLinkPlugin:vitpButtons');
-            this.viper.ViperTools.addButtonToGroup('vitpRemoveLink', 'ViperLinkPlugin:vitpButtons');
-
-            inlineToolbarPlugin.addButton(btnGroup);
+            data.toolbar.showButton('vitpInsertLink');
+            data.toolbar.showButton('vitpRemoveLink');
         } else {
-            inlineToolbarPlugin.addButton(insertLinkBtn);
+            data.toolbar.showButton('vitpInsertLink');
         }
-
-        inlineToolbarPlugin.setSubSectionButton('vitpInsertLink', 'ViperLinkPlugin:vitp:link');
-
-        main.appendChild(this.getToolbarContent('ViperLinkPlugin:vitp'));
-
-        inlineToolbarPlugin.setSubSectionAction('ViperLinkPlugin:vitp:link', function() {
-            self.updateLink('ViperLinkPlugin:vitp');
-        }, ['ViperLinkPlugin:vitp:url', 'ViperLinkPlugin:vitp:title', 'ViperLinkPlugin:vitp:newWindow', 'ViperLinkPlugin:vitp:subject']);
 
     },
 

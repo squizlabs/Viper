@@ -77,15 +77,15 @@
 @buttonBg-active: #3784ee;
 @buttonBg-selected: #54535A;
 
-@buttonShadow-default-around: 0 0 2px 0 rgba(0, 0, 0, 0.5);
+@buttonShadow-default-around: 0 0 2px 0 rgba(0, 0, 0, 0.55);
 @buttonShadow-default-topHighlight: 0 1px 0 rgba(255, 255, 255, 0.8) inset;
-@buttonShadow-default-gradient: 0 -1.7em 1.4em -1em rgba(0, 0, 0, 0.25) inset;
+@buttonShadow-default-gradient: 0 -1.6em 1.6em -1em rgba(0, 0, 0, 0.25) inset;
 
-@buttonShadow-group-top: 0 -2px 2px -2px rgba(0, 0, 0, 0.4);
-@buttonShadow-group-bottom: 0 2px 2px -2px rgba(0, 0, 0, 0.4);
+@buttonShadow-group-top: 0 -2px 2px -2px rgba(0, 0, 0, 0.45);
+@buttonShadow-group-bottom: 0 2px 2px -2px rgba(0, 0, 0, 0.45);
 @buttonShadow-group-leftHighlight: 1px 0 0 rgba(255,255,255,0.3) inset;
-@buttonShadow-groupFirst-left: -2px 0 2px -2px rgba(0,0,0,0.5);
-@buttonShadow-groupLast-right: 2px 0 2px -2px rgba(0,0,0,0.5);
+@buttonShadow-groupFirst-left: -2px 0 2px -2px rgba(0,0,0,0.45);
+@buttonShadow-groupLast-right: 2px 0 2px -2px rgba(0,0,0,0.45);
 
 @buttonShadow-active-topInner: 0 2px 1px -1px rgba(0, 0, 0, 0.5) inset;
 @buttonShadow-active-bottomHighlight: 0 1px 0 rgba(255, 255, 255, 0.2);
@@ -119,7 +119,6 @@
     text-shadow: 0 1px 0 rgba(255,255,255,0.5);
 }
 
-.Viper-themeDark .Viper-button:active,
 .Viper-themeDark .Viper-button.Viper-active,
 .Viper-themeDark .Viper-button.Viper-active:hover,
 .Viper-themeDark .Viper-button.Viper-selected,
@@ -368,7 +367,7 @@
         .iconHoverSwap (3);
         }
     }
-    
+
     // Add Above
     &.Viper-addAbove {
         .icon (4);
@@ -581,6 +580,22 @@
     &.Viper-headings {
         .icon (55);
     }
+    // Format - P Tag
+    &.Viper-formats-p {
+        .icon (57);
+    }
+    // Format - Blockquote Tag
+    &.Viper-formats-quote {
+        .icon (58);
+    }
+    // Format - DIV Tag
+    &.Viper-formats-div {
+        .icon (56);
+    }
+    // Format - PRE Tag
+    &.Viper-formats-pre {
+        .icon (59);
+    }
 
 } // End .buttonIcon
 
@@ -589,7 +604,6 @@
 .icon (@iconCount) {
     @fieldIconSpriteLocation: @iconCount;
     background-position: @bgY @bgX;
-    .Viper-button:active &,
     .Viper-button.Viper-active &,
     .Viper-button.Viper-selected & {
         background-position: -@bgY-activeOffset @bgX;
@@ -1049,4 +1063,26 @@
     height: 13px;
     background-position: 0 -202px;
     cursor: se-resize;
+}
+
+.Viper-button.ViperITP-button-hidden,
+.Viper-buttonGroup ViperITP-button-hidden {
+    display: none;
+}
+
+/* Viper Tooltip */
+.Viper-tooltip {
+    position: absolute;
+    max-width: 200px;
+    opacity: 0.85;
+    background-color: #222;
+    padding: 10px;
+    border: 1px solid #000;
+    border-radius: 0.4em;
+    z-index: 1000;
+    color: #FFF;
+    font-family: arial;
+    font-weight: bold;
+    -moz-user-select: none;
+    margin: 5px 0;
 }

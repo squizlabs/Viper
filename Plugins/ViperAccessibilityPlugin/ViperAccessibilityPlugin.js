@@ -79,8 +79,12 @@ ViperAccessibilityPlugin.prototype = {
                 self._remarkDismissedIssues(issues);
             },
             runCallback: function(issues) {
+                self.viper.removeCallback(null, 'ViperAccessibilityPlugin:resolution');
                 self._updateStandard();
                 return self._moveDismissedIssuesToEnd(issues);
+            },
+            showIssueCallback: function(issueid) {
+                self.viper.fireCallbacks('ViperAccessibilityPlugin:showResolution:' + issueid);
             }
         });
 
@@ -138,7 +142,7 @@ ViperAccessibilityPlugin.prototype = {
 
             var defaultContent = standardObj.getDefaultContent(id, issue, null, self);
             resolutionCont.appendChild(defaultContent);
-            standardObj.getResolutionContent(issue, defaultContent, self);
+            standardObj.getResolutionContent(issue, defaultContent, self, id);
         });
 
     },

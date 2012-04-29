@@ -29,7 +29,7 @@ ViperAccessibilityPlugin_WCAG2 = {
 
     },
 
-    getResolutionContent: function(issue, contentElement, vap)
+    getResolutionContent: function(issue, contentElement, vap, issueid)
     {
         this.vap   = vap;
         this.viper = vap.viper;
@@ -41,7 +41,7 @@ ViperAccessibilityPlugin_WCAG2 = {
             var fn = obj['res_' + code.section.replace('.', '_')];
             if (dfx.isFn(fn) === true) {
                 obj.parent = this;
-                fn.call(obj, contentElement, issue.element, issue, code, vap.viper);
+                fn.call(obj, contentElement, issue.element, issue, code, vap.viper, issueid);
             }
 
             return;
@@ -68,7 +68,7 @@ ViperAccessibilityPlugin_WCAG2 = {
 
             var fn = obj['res_' + code.section.replace('.', '_')];
             if (dfx.isFn(fn) === true) {
-                fn.call(obj, contentElement, issue.element, issue, code, vap.viper);
+                fn.call(obj, contentElement, issue.element, issue, code, vap.viper, issueid);
             }
         });
 
@@ -82,8 +82,14 @@ ViperAccessibilityPlugin_WCAG2 = {
         var tools    = this.viper.ViperTools;
         var self     = this;
         var buttonid = dfx.getUniqueId();
-        var button   = tools.createButton(buttonid, title, title, '', function() {
+        var button   = tools.createButton(buttonid, title, title, 'Viper-VAP-actionBtn', function() {
             tools.disableButton(buttonid);
+
+            var dismissBtn = dfx.getClass('Viper-VAP-dismissBtn', resolutionContainer);
+            if (dismissBtn.length === 1) {
+                tools.disableButton(dismissBtn[0].id.replace(self.viper.getId() + '-', ''));
+            }
+
             self.vap.fixIssue();
             self.viper.fireNodesChanged();
             return action.call(this);
@@ -111,12 +117,24 @@ ViperAccessibilityPlugin_WCAG2 = {
 
         var actionButtons = dfx.getClass('Viper-actionButtons', resolutionContainer)[0];
         if (actionButtons.firstChild) {
-            dfx.insertBefore(actionButtons.firstChild, button);
+            var otherActionButtons = dfx.getClass('Viper-VAP-actionBtn', actionButtons);
+            if (otherActionButtons && otherActionButtons.length > 0) {
+                dfx.insertAfter(otherActionButtons[otherActionButtons.length - 1], button);
+            } else {
+                dfx.insertBefore(actionButtons.firstChild, button);
+            }
         } else {
             actionButtons.appendChild(button);
         }
 
         return buttonid;
+
+    },
+
+    removeActionButtons: function(resolutionContainer)
+    {
+        var actionButtons = dfx.getClass('Viper-VAP-actionBtn', resolutionContainer);
+        dfx.remove(actionButtons);
 
     },
 
@@ -155,7 +173,7 @@ ViperAccessibilityPlugin_WCAG2 = {
 
             var self = this;
             var buttonid = dfx.getUniqueId();
-            var dismissButton = this.viper.ViperTools.createButton(buttonid, 'Dismiss', 'Dismiss Issue', '', function() {
+            var dismissButton = this.viper.ViperTools.createButton(buttonid, 'Dismiss', 'Dismiss Issue', 'Viper-VAP-dismissBtn', function() {
                 self.viper.ViperTools.disableButton(buttonid);
                 self.vap.dismissIssue(issueid);
             });

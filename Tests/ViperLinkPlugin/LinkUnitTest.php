@@ -799,7 +799,7 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
 
         $this->clickInlineToolbarButton($dir.'toolbarIcon_removeLink.png');
         $this->assertEquals('Lorem IPSUM dolor', $this->getSelectedText(), 'Paragraph is not selected.');
-        $this->click($this->find('IPSUM'));
+        //$this->click($this->find('IPSUM'));
         $this->assertHTMLMatch('<p>Lorem IPSUM dolor</p><p>sit amet <strong>WoW</strong></p>');
 
         // Undo so we can use the remove link in the top toolbar

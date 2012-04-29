@@ -24,7 +24,7 @@ class Viper_Tests_ViperFormatPlugin_QuoteUnitTest extends AbstractViperUnitTest
 
         $this->assertHTMLMatch('<blockquote>Lorem xtn dolor</blockquote><blockquote>sit amet <strong>WoW</strong></blockquote><blockquote>THIS is a paragraph to change to a quote</blockquote>');
 
-        $this->click($this->find($text));
+        $this->click($this->find('WoW'));
         $this->selectText($text);
         $this->selectInlineToolbarLineageItem(0);
 
@@ -55,7 +55,7 @@ class Viper_Tests_ViperFormatPlugin_QuoteUnitTest extends AbstractViperUnitTest
 
         $this->assertHTMLMatch('<blockquote>Lorem xtn dolor</blockquote><blockquote>sit amet <strong>WoW</strong></blockquote><blockquote>THIS is a paragraph to change to a quote</blockquote>');
 
-        $this->click($this->find($text));
+        $this->click($this->find('WoW'));
         $this->selectText($text);
         $this->selectInlineToolbarLineageItem(0);
 
@@ -111,6 +111,7 @@ class Viper_Tests_ViperFormatPlugin_QuoteUnitTest extends AbstractViperUnitTest
         $this->clickInlineToolbarButton($dir.'toolbarIcon_toggle_formats_highlighted.png');
         $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_blockquote_active.png'), 'Quote icon is not active');
 
+        $this->click($this->find('quote'));
         $this->selectText('sit');
         $this->selectInlineToolbarLineageItem(0);
         $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_toggle_formats_highlighted.png'), 'Toogle formats icon is not selected');
@@ -226,6 +227,7 @@ class Viper_Tests_ViperFormatPlugin_QuoteUnitTest extends AbstractViperUnitTest
 
         $this->assertHTMLMatch('<blockquote>Lorem xtn dolor</blockquote><blockquote>sit amet <strong>WoW</strong></blockquote><blockquote>THIS is a paragraph to change to a quote</blockquote>');
 
+        $this->click($this->find('WoW'));
         $this->selectText('THIS');
         $this->selectInlineToolbarLineageItem(0);
 

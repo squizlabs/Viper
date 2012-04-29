@@ -14,28 +14,19 @@
 function ViperInlineToolbarPlugin(viper)
 {
     this.viper                = viper;
-    this._toolbar             = null;
-    this._toolsContainer      = null;
     this._lineage             = null;
     this._lineageClicked      = false;
     this._currentLineageIndex = null;
     this._lineageItemSelected = false;
-    this._updateOriginalSel   = false;
     this._margin              = 15;
+    this._toolbarWidget       = null;
 
     this._subSections             = {};
     this._subSectionButtons       = {};
     this._subSectionActionWidgets = {};
-    this._activeSection           = null;
 
     this._topToolbar = null;
     this._buttons    = null;
-
-    this._autoFocusTextbox = true;
-    this._keepOpenTagList  = [];
-
-    // Create the toolbar.
-    this._createToolbar();
 
 }
 
@@ -46,64 +37,9 @@ ViperInlineToolbarPlugin.prototype = {
         var self = this;
 
         this._topToolbar = this.viper.getPluginManager().getPlugin('ViperToolbarPlugin');
+        this._initToolbar();
 
-        // Called when the selection is changed.
-        var clickedInToolbar = false;
-        this.viper.registerCallback('Viper:clickedOutside', 'ViperInlineToolbarPlugin', function(range) {
-            self.hideToolbar();
-        });
-
-        this.viper.registerCallback('Viper:selectionChanged', 'ViperInlineToolbarPlugin', function(range) {
-            if (clickedInToolbar === true || self.viper.rangeInViperBounds(range) === false) {
-                clickedInToolbar = false;
-                return;
-            }
-
-            if (self._lineageClicked !== true) {
-                // Not selection change due to a lineage click so update the range object.
-                // Note we can use cloneRange here but for whatever reason Firefox seems
-                // to not do the cloning bit of cloneRange...
-                self._originalRange = {
-                    startContainer: range.startContainer,
-                    endContainer: range.endContainer,
-                    startOffset: range.startOffset,
-                    endOffset: range.endOffset,
-                    collapsed: range.collapsed
-                }
-            }
-
-            // Update the toolbar position, contents and lineage for this new selection.
-            self.updateToolbar(range);
-        });
-
-        this.viper.registerCallback('ViperTools:textbox:actionTiggered', 'ViperInlineToolbarPlugin', function() {
-            self._autoFocusTextbox = false;
-        });
-
-        // Hide the toolbar when user clicks anywhere.
-        this.viper.registerCallback(['Viper:mouseDown', 'ViperHistoryManager:undo'], 'ViperInlineToolbarPlugin', function(data) {
-            clickedInToolbar = false;
-            if (data && data.target) {
-                var target = dfx.getMouseEventTarget(data);
-                if (target === self._toolbar || dfx.isChildOf(target, self._toolbar) === true) {
-                    clickedInToolbar = true;
-                    if (dfx.isTag(target, 'input') === true
-                        || dfx.isTag(target, 'textarea') === true
-                    ) {
-                        // Allow event to bubble so the input element can get focus etc.
-                        return true;
-                    }
-
-                    return false;
-                } else if (self._keepOpenTagList.inArray(dfx.getTagName(target)) === true) {
-                    return;
-                }
-            }
-
-            self.hideToolbar();
-        });
-
-        this.viper.registerCallback('Viper:elementScaled', 'ViperInlineToolbarPlugin', function(data) {
+        /*this.viper.registerCallback('Viper:elementScaled', 'ViperInlineToolbarPlugin', function(data) {
            if (data.element !== self._toolbar) {
                return false;
            }
@@ -121,7 +57,7 @@ ViperInlineToolbarPlugin.prototype = {
             if (dfx.hasClass(self._toolbar, 'Viper-visible') === true) {
                 self._updatePosition();
             }
-        });
+        });*/
 
     },
 
@@ -133,330 +69,30 @@ ViperInlineToolbarPlugin.prototype = {
 
         if (settings.buttons) {
             this._buttons = settings.buttons;
+            this._toolbarWidget.orderButtons(this._buttons);
         }
 
     },
 
-    applyButtonsSetting: function()
+    _initToolbar: function()
     {
-        // Get all the buttons from the container.
-        var buttons = dfx.getClass('Viper-button', this._toolsContainer);
-        var c       = buttons.length;
-
-        if (c === 0) {
-            return;
-        }
-
-        // Clear the buttons container contents.
-        if (this.viper.isBrowser('msie') === true) {
-            while(this._toolsContainer.firstChild) {
-                this._toolsContainer.removeChild(this._toolsContainer.firstChild);
-            }
-        } else {
-            this._toolsContainer.innerHTML = '';
-        }
-
-        // Get the button ids and their elements.
-        var addedButtons = {};
-        for (var i = 0; i < c; i++) {
-            var button = buttons[i];
-            var id     = button.id.toLowerCase().replace(this.viper.getId() + '-vitp', '');
-            addedButtons[id] = button;
-        }
-
-        var bc = this._buttons.length;
-        for (var i = 0; i < bc; i++) {
-            var button = this._buttons[i];
-            if (typeof button === 'string') {
-                button = button.toLowerCase();
-                if (addedButtons[button]) {
-                    // Button is included in the setting, add it to the toolbar.
-                    this.addButton(addedButtons[button]);
-                }
-            } else {
-                var gc           = button.length;
-                var groupid      = null;
-                for (var j = 0; j < gc; j++) {
-                    if (addedButtons[button[j].toLowerCase()]) {
-                        if (groupid === null) {
-                            // Create the group.
-                            groupid      = 'ViperInlineToolbarPlugin:buttons:' + i;
-                            groupElement = this.viper.ViperTools.createButtonGroup(groupid);
-                            this.addButton(groupElement);
-                        }
-
-                        // Button is included in the setting, add it to group.
-                        this.viper.ViperTools.addButtonToGroup('vitp' + dfx.ucFirst(button[j]), groupid);
-                    }
-                }
-            }
-        }
-
-    },
-
-    /**
-     * Adds the given element as a sub section of the toolbar.
-     *
-     * @param {string} id       The id of the new sub section.
-     * @param {DOMNode} element The DOMNode to convert to sub section.
-     *
-     * @return {DOMNode} The element that was passed in.
-     */
-    makeSubSection: function(id, element, onOpenCallback, onCloseCallback)
-    {
-        if (!element) {
-            return false;
-        }
-
-        var subSection = document.createElement('div');
-        var form       = document.createElement('form');
-
-        subSection.appendChild(form);
-        form.appendChild(element);
-        form.onsubmit = function() {
-            return false;
-        };
-
-        var submitBtn = document.createElement('input');
-        submitBtn.type = 'submit';
-        dfx.setStyle(submitBtn, 'display', 'none');
-        form.appendChild(submitBtn);
-
-        dfx.addClass(subSection, 'Viper-subSection');
-
-        this._subSections[id] = subSection;
-
-        this._subSectionContainer.appendChild(subSection);
-
-        this.viper.ViperTools.addItem(id, {
-            type: 'VITPSubSection',
-            element: subSection,
-            form: form,
-            _onOpenCallback: onOpenCallback,
-            _onCloseCallback: onCloseCallback
+        var tools       = this.viper.ViperTools;
+        var toolbarid   = 'ViperInlineToolbar';
+        var self        = this;
+        var toolbarElem = tools.createInlineToolbar(toolbarid, false, null, function(range, nodeSelection) {
+            self.updateToolbar(range, nodeSelection);
         });
 
-        return subSection;
+        this._toolbarWidget = tools.getItem(toolbarid);
 
-    },
+        // Add lineage container to the toolbar.
+        var lineage = document.createElement('ul');
+        dfx.addClass(lineage, 'ViperITP-lineage');
+        dfx.insertBefore(toolbarElem.firstChild, lineage);
+        this._lineage = lineage;
 
-    /**
-     * Sets the specified button to toggle the given sub section.
-     *
-     * @param {string} buttonid     Id of the button.
-     * @param {string} subSectionid Id of the sub section.
-     */
-    setSubSectionButton: function(buttonid, subSectionid)
-    {
-        if (!this._subSections[subSectionid]) {
-            // Throw exception not a valid sub section id.
-            throw new Error('Invalid sub section id: ' + subSectionid);
-            return false;
-        }
-
-        var button = this.viper.ViperTools.getItem(buttonid).element;
-        var self   = this;
-
-        this._subSectionButtons[subSectionid] = buttonid;
-
-        dfx.removeEvent(button, 'mousedown');
-        dfx.addEvent(button, 'mousedown', function(e) {
-            // Set the subSection to visible and hide rest of the sub sections.
-            self.toggleSubSection(subSectionid);
-
-            dfx.preventDefault(e);
-        });
-
-    },
-
-    /**
-     * Toggles the visibility of the specified sub section.
-     *
-     * @param {string} subSectionid The if of the sub section.
-     */
-    toggleSubSection: function(subSectionid, ignoreCallbacks)
-    {
-        var subSection = this._subSections[subSectionid];
-        if (!subSection) {
-            return false;
-        }
-
-        if (this._activeSection) {
-            var prevSubSection = this._subSections[this._activeSection];
-            if (prevSubSection) {
-                dfx.removeClass(prevSubSection, 'Viper-active');
-                dfx.removeClass(this.viper.ViperTools.getItem(this._subSectionButtons[this._activeSection]).element, 'Viper-selected');
-
-                if (ignoreCallbacks !== true) {
-                    var closeCallback = this.viper.ViperTools.getItem(this._activeSection)._onCloseCallback;
-                    if (closeCallback) {
-                        closeCallback.call(this);
-                    }
-                }
-
-                if (this._activeSection === subSectionid) {
-                    dfx.removeClass(this._toolbar, 'Viper-subSectionVisible');
-                    this._activeSection = null;
-
-                    dfx.removeEvent(document, 'keydown.ViperInlineToolbarPlugin');
-                    return;
-                }
-            }
-        }
-
-        if (ignoreCallbacks !== true) {
-            var openCallback = this.viper.ViperTools.getItem(subSectionid)._onOpenCallback;
-            if (openCallback) {
-                openCallback.call(this);
-            }
-        }
-
-        var subSectionButton = this.viper.ViperTools.getItem(this._subSectionButtons[subSectionid]).element;
-        // Make the button selected.
-        dfx.addClass(subSectionButton, 'Viper-selected');
-
-        dfx.addClass(subSection, 'Viper-active');
-        dfx.addClass(this._toolbar, 'Viper-subSectionVisible');
-        this._activeSection = subSectionid;
-        this._updateSubSectionArrowPos();
-
-        var inputElements = dfx.getTag('input[type=text], textarea', subSection);
-        if (inputElements.length > 0) {
-            inputElements[0].focus();
-            if (this._autoFocusTextbox === false) {
-                this._autoFocusTextbox = true;
-                dfx.removeClass(inputElements[0].parentNode.parentNode.parentNode, 'Viper-active');
-            }
-        }
-
-        var subSectionForm = this.viper.ViperTools.getItem(subSectionid).form;
-        dfx.removeEvent(document, 'keydown.ViperInlineToolbarPlugin');
-        dfx.addEvent(document, 'keydown.ViperInlineToolbarPlugin', function(e) {
-            if (subSectionForm && e.which === 13 && e.target === document.body) {
-                return subSectionForm.onsubmit();
-            }
-        });
-
-    },
-
-    /**
-     *
-     *
-     * @param {string}   subSectionid The id of the sub section.
-     * @param {function} action       The function to call when the sub section action
-     *                                is triggered.
-     * @param {array}    widgetids    The id of widgets that will cause the action
-     *                                button to be activated when they are changed.
-     *
-     * @return void
-     */
-    setSubSectionAction: function(subSectionid, action, widgetids)
-    {
-        widgetids      = widgetids || [];
-        var tools      = this.viper.ViperTools;
-        var subSection = tools.getItem(subSectionid);
-        if (!subSection) {
-            return;
-        }
-
-        var viper = this.viper;
-        subSection.form.onsubmit = function(e) {
-            if (e) {
-                dfx.preventDefault(e);
-            }
-
-            var button = tools.getItem(subSectionid + '-applyButton');
-            if (button.isEnabled() === false) {
-                return false;
-            }
-
-            viper.focus();
-
-            if (viper.isBrowser('msie') === false) {
-                try {
-                    action.call(this);
-                } catch (e) {
-                    console.error('Sub Section Action threw exception:' + e.message);
-                }
-            } else {
-                // IE needs this timeout so focus works <3..
-                setTimeout(function() {
-                    try {
-                        action.call(this);
-                    } catch (e) {
-                        console.error('Sub Section Action threw exception:' + e.message);
-                    }
-                }, 10);
-            }
-
-            viper.ViperTools.disableButton(subSectionid + '-applyButton');
-
-            return false;
-        };
-
-        var button = tools.createButton(subSectionid + '-applyButton', 'Update Changes', 'Update Changes', '', subSection.form.onsubmit, true);
-        subSection.element.appendChild(button);
-
-        this.addSubSectionActionWidgets(subSectionid, widgetids);
-
-    },
-
-    addSubSectionActionWidgets: function(subSectionid, widgetids)
-    {
-        if (!this._subSectionActionWidgets[subSectionid]) {
-            this._subSectionActionWidgets[subSectionid] = [];
-        }
-
-        var self  = this;
-        var tools = this.viper.ViperTools;
-        for (var i = 0; i < widgetids.length; i++) {
-            this._subSectionActionWidgets[subSectionid].push(widgetids[i]);
-
-            (function(widgetid) {
-                self.viper.registerCallback('ViperTools:changed:' + widgetid, 'ViperToolbarPlugin', function() {
-                    var subSectionWidgets = self._subSectionActionWidgets[subSectionid];
-                    var c = subSectionWidgets.length;
-                    var enable = true;
-                    for (var j = 0; j < c; j++) {
-                        var widget = tools.getItem(subSectionWidgets[j]);
-                        if (widget.required === true && dfx.trim(widget.getValue()) === '') {
-                            enable = false;
-                            break;
-                        }
-                    }
-
-                    if (enable === true) {
-                        tools.enableButton(subSectionid + '-applyButton');
-                    } else {
-                        tools.disableButton(subSectionid + '-applyButton');
-                    }
-                });
-            }) (widgetids[i]);
-        }//end for
-
-    },
-
-    /**
-     * Adds the specified button or button group element to the tools panel.
-     *
-     * @param {DOMNode} button The button or the button group element.
-     * @param {integer} index  The index to insert to. Should be used by other plugins
-     *                         to insert buttons at specific positions.
-     */
-    addButton: function(button, index)
-    {
-        if (dfx.isset(index) === true && this._toolsContainer.childNodes.length > index) {
-            if (index < 0) {
-                index = this._toolsContainer.childNodes.length + index;
-                if (index < 0) {
-                    index = 0;
-                }
-            }
-
-            dfx.insertBefore(this._toolsContainer.childNodes[index], button);
-        } else {
-            this._toolsContainer.appendChild(button);
-        }
+        var toolbar = tools.getItem(toolbarid);
+        this.viper.fireCallbacks('ViperInlineToolbarPlugin:initToolbar', toolbar);
 
     },
 
@@ -467,77 +103,74 @@ ViperInlineToolbarPlugin.prototype = {
      *
      * @param {DOMRange} range The DOMRange object.
      */
-    updateToolbar: function(range)
+    updateToolbar: function(range, nodeSelection)
     {
+        if (this._lineageClicked !== true) {
+            // Not selection change due to a lineage click so update the range object.
+            // Note we can use cloneRange here but for whatever reason Firefox seems
+            // to not do the cloning bit of cloneRange...
+            this._updateOriginalSelection(range, nodeSelection);
+        }
+
         if (this._topToolbar) {
             var bubble = this._topToolbar.getActiveBubble();
             if (bubble && bubble.getSetting('keepOpen') !== true) {
-                return;
+                return false;
             }
         }
 
-        if (this.viper.isEnabled() === false) {
-            return;
-        }
-
         this._lineageItemSelected = false;
-
-        var activeSection   = this._activeSection;
-        this._activeSection = null;
-
-        range = range || this.viper.getViperRange();
-
-        dfx.removeClass(this._toolbar, 'Viper-subSectionVisible');
 
         if (this._lineageClicked !== true) {
             this._setCurrentLineageIndex(null);
         }
 
-        var lineage = this._getSelectionLineage(range);
+        var lineage = this._getSelectionLineage(range, nodeSelection);
         if (!lineage || lineage.length === 0) {
-            return;
+            return false;
         }
 
-        dfx.addClass(this._toolbar, 'Viper-calcWidth');
-        this._updateInnerContainer(range, lineage);
-        dfx.removeClass(this._toolbar, 'Viper-calcWidth');
-
-        if (!dfx.getHtml(this._toolsContainer)) {
-            this.hideToolbar();
-            this._lineageClicked = false;
-            return;
-        }
+        this._updateInnerContainer(range, lineage, nodeSelection);
 
         if (this._lineageClicked === true) {
             this._lineageClicked = false;
-            return;
+            return false;
         }
 
         this._updateLineage(lineage);
-        this._updatePosition(range);
-        this._updateSubSectionArrowPos();
+    },
 
-        if (activeSection) {
-            this.toggleSubSection(activeSection);
-        }
+    hideToolbar: function()
+    {
+        this._toolbarWidget.hide();
 
     },
 
     /**
-     * Hides the inline toolbar.
+     * Fires the updateToolbar event so that other plugins can modify the contents of the toolbar.
+     *
+     * @param {DOMRange} range   The DOMRange object.
+     * @param {array}    lineage The lineage array.
      */
-    hideToolbar: function()
+    _updateInnerContainer: function(range, lineage, nodeSelection)
     {
-        dfx.removeEvent(document, 'keydown.ViperInlineToolbarPlugin');
+        if (!lineage || lineage.length === 0) {
+            return;
+        }
 
-        this._activeSection = null;
-        dfx.removeClass(this._toolbar, 'Viper-visible');
+        if (this._currentLineageIndex === null || this._currentLineageIndex > lineage.length) {
+            this._setCurrentLineageIndex(lineage.length - 1);
+        }
 
-    },
+        var data = {
+            range: range,
+            lineage: lineage,
+            current: this._currentLineageIndex,
+            toolbar: this._toolbarWidget,
+            nodeSelection: nodeSelection
+        };
 
-    addKeepOpenTag: function(tagName)
-    {
-        this._keepOpenTagList.push(tagName);
+        this.viper.fireCallbacks('ViperInlineToolbarPlugin:updateToolbar', data);
 
     },
 
@@ -598,6 +231,10 @@ ViperInlineToolbarPlugin.prototype = {
                 tagName = 'Quote';
             break;
 
+            case 'img':
+                tagName = 'Image';
+            break;
+
             default:
                 tagName = tagName.toUpperCase();
             break;
@@ -618,188 +255,6 @@ ViperInlineToolbarPlugin.prototype = {
         if (tags[index]) {
             dfx.trigger(tags[index], 'mousedown');
         }
-
-    },
-
-    /**
-     * Creates the inline toolbar.
-     *
-     * The toolbar is added to the BODY element.
-     */
-    _createToolbar: function()
-    {
-        var main      = document.createElement('div');
-        this._toolbar = main;
-
-        this._lineage = document.createElement('ul');
-        this._toolbar.appendChild(this._lineage);
-
-        this._toolsContainer = document.createElement('div');
-        this._toolbar.appendChild(this._toolsContainer);
-
-        this._subSectionContainer = document.createElement('div');
-        this._toolbar.appendChild(this._subSectionContainer);
-
-        dfx.addClass(this._toolbar, 'ViperITP Viper-themeDark Viper-scalable');
-        dfx.addClass(this._lineage, 'ViperITP-lineage');
-        dfx.addClass(this._toolsContainer, 'ViperITP-tools');
-        dfx.addClass(this._subSectionContainer, 'ViperITP-subSectionWrapper');
-
-        if (navigator.userAgent.match(/iPad/i) !== null) {
-            dfx.addClass(this._toolbar, 'device-ipad');
-        }
-
-        dfx.addEvent(main, 'mousedown', function(e) {
-            var target = dfx.getMouseEventTarget(e);
-            if (dfx.isTag(target, 'input') !== true && dfx.isTag(target, 'textarea') !== true) {
-                dfx.preventDefault(e);
-                return false;
-            }
-        });
-
-        dfx.addEvent(main, 'mouseup', function(e) {
-            var target = dfx.getMouseEventTarget(e);
-            if (dfx.isTag(target, 'input') !== true  && dfx.isTag(target, 'textarea') !== true) {
-                dfx.preventDefault(e);
-                return false;
-            }
-        });
-
-        this.viper.addElement(this._toolbar);
-
-    },
-
-    /**
-     * Upudates the position of the inline toolbar.
-     *
-     * @param {DOMRange} range        The DOMRange object.
-     * @param {boolean}  verticalOnly If true then only the vertical position will be
-     *                                updated.
-     */
-    _updatePosition: function(range, verticalOnly)
-    {
-        range = range || this.viper.getViperRange();
-
-        var rangeCoords  = null;
-        var selectedNode = range.getNodeSelection(range);
-        if (selectedNode !== null) {
-            rangeCoords = this._getElementCoords(selectedNode);
-        } else {
-            rangeCoords = range.rangeObj.getBoundingClientRect();
-        }
-
-        if (!rangeCoords || (rangeCoords.left === 0 && rangeCoords.top === 0 && this.viper.isBrowser('firefox') === true)) {
-            var startNode = range.getStartNode();
-            var endNode   = range.getEndNode();
-            if (!startNode || !endNode) {
-                return;
-            }
-
-            if (startNode.nodeType === dfx.TEXT_NODE
-                && startNode.data.indexOf("\n") === 0
-                && endNode.nodeType === dfx.TEXT_NODE
-                && range.endOffset === endNode.data.length
-            ) {
-                range.setStart(endNode, endNode.data.length);
-                range.collapse(true);
-                rangeCoords = range.rangeObj.getBoundingClientRect();
-            }
-        }
-
-        if (!rangeCoords || (rangeCoords.bottom === 0 && rangeCoords.height === 0 && rangeCoords.left === 0)) {
-            if (this.viper.isBrowser('chrome') === true || this.viper.isBrowser('safari') === true) {
-                // Webkit bug workaround. https://bugs.webkit.org/show_bug.cgi?id=65324.
-                // OK.. Yet another fix. With the latest Google Chrome (17.0.963.46)
-                // the !rangeCoords check started to fail because its no longer
-                // returning null for a collapsed range, instead all values are set to 0.
-
-                var startNode = range.getStartNode();
-                if (startNode.nodeType === dfx.TEXT_NODE) {
-                    if (range.startOffset <= startNode.data.length) {
-                        range.setEnd(startNode, (range.startOffset + 1));
-                        rangeCoords = range.rangeObj.getBoundingClientRect();
-                        range.collapse(true);
-                        if (rangeCoords) {
-                            rangeCoords.right = rangeCoords.left;
-                        }
-                    } else if (range.startOffset > 0) {
-                        range.setStart(startNode, (range.startOffset - 1));
-                        rangeCoords = range.rangeObj.getBoundingClientRect();
-                        range.collapse(false);
-                        if (rangeCoords) {
-                            rangeCoords.right = rangeCoords.left;
-                        }
-                    }
-                }
-            } else {
-                return;
-            }//end if
-        }//end if
-
-        var scrollCoords = dfx.getScrollCoords();
-
-        dfx.addClass(this._toolbar, 'Viper-calcWidth');
-        dfx.setStyle(this._toolbar, 'width', 'auto');
-        var toolbarWidth = dfx.getElementWidth(this._toolbar);
-        dfx.removeClass(this._toolbar, 'Viper-calcWidth');
-        dfx.setStyle(this._toolbar, 'width', toolbarWidth + 'px');
-
-        var windowDim = dfx.getWindowDimensions();
-
-        if (verticalOnly !== true) {
-            var left = ((rangeCoords.left + ((rangeCoords.right - rangeCoords.left) / 2) + scrollCoords.x) - (toolbarWidth / 2));
-            dfx.removeClass(this._toolbar, 'Viper-orientationLeft Viper-orientationRight');
-            if (left < 0) {
-                left += (toolbarWidth / 2);
-                dfx.addClass(this._toolbar, 'Viper-orientationLeft');
-            } else if (left + toolbarWidth > windowDim.width) {
-                left -= (toolbarWidth / 2);
-                dfx.addClass(this._toolbar, 'Viper-orientationRight');
-            }
-
-            dfx.setStyle(this._toolbar, 'left', left + 'px');
-        }
-
-        var top = (rangeCoords.bottom + this._margin + scrollCoords.y);
-
-        dfx.setStyle(this._toolbar, 'top', top + 'px');
-        dfx.addClass(this._toolbar, 'Viper-visible');
-
-    },
-
-    _updateSubSectionArrowPos: function()
-    {
-        if (!this._activeSection) {
-            return;
-        }
-
-        var button = this._subSectionButtons[this._activeSection];
-        if (!button) {
-            return;
-        }
-
-        button = this.viper.ViperTools.getItem(button).element;
-        if (!button) {
-            return;
-        }
-
-        var buttonRect = dfx.getBoundingRectangle(button);
-        var toolbarPos = dfx.getBoundingRectangle(this._toolbar);
-        var xPos       = (buttonRect.x1 - toolbarPos.x1 + ((buttonRect.x2 - buttonRect.x1) / 2));
-        dfx.setStyle(this._subSectionContainer.firstChild, 'left', xPos + 'px');
-
-    },
-
-    _getElementCoords: function(element)
-    {
-        var elemRect     = dfx.getBoundingRectangle(element);
-        var scrollCoords = dfx.getScrollCoords();
-        return {
-            left: (elemRect.x1 - scrollCoords.x),
-            right: (elemRect.x2 - scrollCoords.x),
-            top: (elemRect.y1 - scrollCoords.y),
-            bottom: (elemRect.y2 - scrollCoords.y)
-        };
 
     },
 
@@ -916,7 +371,7 @@ ViperInlineToolbarPlugin.prototype = {
 
         var range = this.viper.getViperRange();
 
-        if (this._lineageItemSelected === false || this._updateOriginalSel === true) {
+        if (this._lineageItemSelected === false) {
             // Update original selection. We update it here incase the selectionHighlight
             // method changed the DOM structure (e.g. normalised textnodes), when
             // Viper is focused update the 'selection' range.
@@ -929,16 +384,19 @@ ViperInlineToolbarPlugin.prototype = {
 
         var first = range._getFirstSelectableChild(node);
         var last  = range._getLastSelectableChild(node);
-        range.setStart(first, 0);
-        range.setEnd(last, last.data.length);
+        if (!first || !last) {
+            range.selectNode(node);
+        } else {
+            range.setStart(first, 0);
+            range.setEnd(last, last.data.length);
+        }
 
         ViperSelection.addRange(range);
+
+        this._toolbarWidget.closeActiveSubsection(true);
+        this._toolbarWidget.setVerticalUpdateOnly(true);
         this.viper.fireSelectionChanged(range, true);
-
-        // Update the position of the toolbar vertically only.
-        this._updatePosition(range, true);
-        this._updateSubSectionArrowPos();
-
+        this._toolbarWidget.setVerticalUpdateOnly(false);
         this._lineageItemSelected = true;
 
     },
@@ -950,47 +408,21 @@ ViperInlineToolbarPlugin.prototype = {
         ViperSelection.removeAllRanges();
         var range = this.viper.getViperRange();
 
-        range.setStart(this._originalRange.startContainer, this._originalRange.startOffset);
-        range.setEnd(this._originalRange.endContainer, this._originalRange.endOffset);
+        if (this._originalRange.nodeType) {
+            range.selectNode(this._originalRange);
+        } else {
+            range.setStart(this._originalRange.startContainer, this._originalRange.startOffset);
+            range.setEnd(this._originalRange.endContainer, this._originalRange.endOffset);
+        }
+
         ViperSelection.addRange(range);
+
+
+        this._toolbarWidget.closeActiveSubsection(true);
+        this._toolbarWidget.setVerticalUpdateOnly(true);
         this.viper.fireSelectionChanged(range, true);
-        this._updatePosition(range, true);
-        this._updateSubSectionArrowPos();
+        this._toolbarWidget.setVerticalUpdateOnly(false);
         this._updateOriginalSelection(range);
-        this._updateOriginalSel = true;
-
-    },
-
-    /**
-     * Fires the updateToolbar event so that other plugins can modify the contents of the toolbar.
-     *
-     * @param {DOMRange} range   The DOMRange object.
-     * @param {array}    lineage The lineage array.
-     */
-    _updateInnerContainer: function(range, lineage)
-    {
-        if (!lineage || lineage.length === 0) {
-            return;
-        }
-
-        dfx.empty(this._toolsContainer);
-        dfx.setHtml(this._subSectionContainer, '<span class="subSectionArrow"></span>');
-
-        if (this._currentLineageIndex === null || this._currentLineageIndex > lineage.length) {
-            this._setCurrentLineageIndex(lineage.length - 1);
-        }
-
-        var data = {
-            range: range,
-            lineage: lineage,
-            current: this._currentLineageIndex
-        };
-
-        this.viper.fireCallbacks('ViperInlineToolbarPlugin:updateToolbar', data);
-
-        if (this._buttons) {
-            this.applyButtonsSetting();
-        }
 
     },
 
@@ -1000,8 +432,13 @@ ViperInlineToolbarPlugin.prototype = {
 
     },
 
-    _updateOriginalSelection: function(range)
+    _updateOriginalSelection: function(range, nodeSelection)
     {
+        if (nodeSelection) {
+            this._originalRange = nodeSelection;
+            return;
+        }
+
         this._originalRange = {
             startContainer: range.startContainer,
             endContainer: range.endContainer,
@@ -1019,11 +456,11 @@ ViperInlineToolbarPlugin.prototype = {
      *
      * @return {array} Array of DOMElements.
      */
-    _getSelectionLineage: function(range)
+    _getSelectionLineage: function(range, nodeSelection)
     {
         var lineage       = [];
         var parent        = null;
-        var nodeSelection = range.getNodeSelection(range);
+        var nodeSelection = nodeSelection || range.getNodeSelection(range);
 
         if (nodeSelection) {
             parent = nodeSelection;
@@ -1067,16 +504,6 @@ ViperInlineToolbarPlugin.prototype = {
         lineage = lineage.reverse();
 
         return lineage;
-
-    },
-
-    isPluginElement: function(element)
-    {
-        if (element !== this._toolbar && dfx.isChildOf(element, this._toolbar) === false) {
-            return false;
-        }
-
-        return true;
 
     }
 

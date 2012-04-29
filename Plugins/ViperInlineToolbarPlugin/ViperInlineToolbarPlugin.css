@@ -252,7 +252,7 @@
     background: #54535A url(../../Images/bgTexture-dark1.gif) 0 0 repeat;
 }
 
-.Viper-themeDark.ViperITP .ViperITP-subSectionWrapper .subSectionArrow {
+.Viper-themeDark.ViperITP .ViperITP-subSectionWrapper .Viper-subSectionArrow {
     border-bottom-color: #54535A;
 }
 

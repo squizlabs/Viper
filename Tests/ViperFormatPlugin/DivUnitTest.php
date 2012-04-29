@@ -24,7 +24,7 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractViperUnitTest
 
         $this->assertHTMLMatch('<div>Lorem xtn dolor</div><p>spacer for the tests</p><div>sit amet <strong>WoW</strong></div><div>THIS is a paragraph to change to a div</div>');
 
-        $this->click($this->find($text));
+        $this->click($this->find('WoW'));
         $this->selectText($text);
         $this->selectInlineToolbarLineageItem(0);
 
@@ -55,7 +55,7 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractViperUnitTest
 
         $this->assertHTMLMatch('<div>Lorem xtn dolor</div><p>spacer for the tests</p><div>sit amet <strong>WoW</strong></div><div>THIS is a paragraph to change to a div</div>');
 
-        $this->click($this->find($text));
+        $this->click($this->find('WoW'));
         $this->selectText($text);
         $this->selectInlineToolbarLineageItem(0);
 
@@ -225,7 +225,8 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractViperUnitTest
 
         $this->assertHTMLMatch('<div>Lorem xtn dolor</div><p>spacer for the tests</p><div>sit amet <strong>WoW</strong></div><div>THIS is a paragraph to change to a div</div>');
 
-        $this->selectText('THIS');
+        $this->click($this->find('WoW'));
+        $this->selectText('THIS' );
         $this->selectInlineToolbarLineageItem(0);
 
         $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_formats_highlighted.png');

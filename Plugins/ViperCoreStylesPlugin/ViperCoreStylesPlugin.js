@@ -157,8 +157,11 @@ ViperCoreStylesPlugin.prototype = {
         });
 
         // Inline toolbar.
+        this.viper.registerCallback('ViperInlineToolbarPlugin:initToolbar', 'ViperCoreStylesPlugin', function(toolbar) {
+            self._createInlineToolbarContent(toolbar);
+        });
         this.viper.registerCallback('ViperInlineToolbarPlugin:updateToolbar', 'ViperCoreStylesPlugin', function(data) {
-            self._createInlineToolbarContent(data);
+            self._updateInlineToolbar(data);
         });
 
         var tagNames = {
@@ -168,11 +171,6 @@ ViperCoreStylesPlugin.prototype = {
             sup: 'Superscript',
             del: 'Strikethrough'
         };
-
-        // Inline toolbar.
-        this.viper.registerCallback('ViperInlineToolbarPlugin:updateToolbar', 'ViperCoreStylesPlugin', function(data) {
-            self._createInlineToolbarContent(data);
-        });
 
         this.viper.registerCallback('Viper:mouseDown', 'ViperCoreStylesPlugin', function(e) {
             self._selectedImage = null;
@@ -1117,17 +1115,42 @@ ViperCoreStylesPlugin.prototype = {
 
     },
 
-    _createInlineToolbarContent: function(data)
+    _createInlineToolbarContent: function(toolbar)
     {
-        var inlineToolbarPlugin = this.viper.ViperPluginManager.getPlugin('ViperInlineToolbarPlugin');
+        var self        = this;
+        var tools       = this.viper.ViperTools;
+        var buttonGroup = tools.createButtonGroup('ViperCoreStylesPlugin:vitp:btnGroup');
 
+        tools.createButton('vitpBold', '', 'Bold', 'Viper-bold', function() {
+            return self.handleStyle('strong');
+        });
+        tools.createButton('vitpItalic', '', 'Italic', 'Viper-italic', function() {
+            return self.handleStyle('em');
+        });
+
+        tools.addButtonToGroup('vitpBold', 'ViperCoreStylesPlugin:vitp:btnGroup');
+        tools.addButtonToGroup('vitpItalic', 'ViperCoreStylesPlugin:vitp:btnGroup');
+        tools.getItem('vitpBold').setButtonShortcut('CTRL+B');
+        tools.getItem('vitpItalic').setButtonShortcut('CTRL+I');
+
+        toolbar.addButton(buttonGroup);
+
+    },
+
+    _updateInlineToolbar: function(data)
+    {
         if (data.range.collapsed === true) {
             return;
         }
 
         if (this._canStyleNode(data.lineage[data.current]) !== true) {
             return;
+        } else if (dfx.isTag(data.lineage[data.current], 'img') === true) {
+            return;
         }
+
+        this.viper.ViperTools.setButtonInactive('vitpBold');
+        this.viper.ViperTools.setButtonInactive('vitpItalic');
 
         var activeStates = {};
         for (var i = 0; i < data.lineage.length; i++) {
@@ -1135,9 +1158,9 @@ ViperCoreStylesPlugin.prototype = {
                 // Dont want to show style buttons for links.
                 return;
             } else if (dfx.isTag(data.lineage[i], 'strong') === true) {
-                activeStates.strong = true;
+                this.viper.ViperTools.setButtonActive('vitpBold');
             } else if (dfx.isTag(data.lineage[i], 'em') === true) {
-                activeStates.em = true;
+                this.viper.ViperTools.setButtonActive('vitpItalic');
             }
         }
 
@@ -1148,30 +1171,14 @@ ViperCoreStylesPlugin.prototype = {
         for (var i = 0; i < states.length; i++) {
             var tagName = states[i];
             if (tagName === 'strong') {
-                activeStates.strong = true;
+                this.viper.ViperTools.setButtonActive('vitpBold');
             } else if (tagName === 'em') {
-                activeStates.em = true;
+                this.viper.ViperTools.setButtonActive('vitpItalic');
             }
         }
 
-        // Add the inline toolbar buttons.
-        var self        = this;
-        var tools       = this.viper.ViperTools;
-        var buttonGroup = tools.createButtonGroup('ViperCoreStylesPlugin:vitp:btnGroup');
-
-        tools.createButton('vitpBold', '', 'Bold', 'Viper-bold', function() {
-            return self.handleStyle('strong');
-        }, false, activeStates.strong);
-        tools.createButton('vitpItalic', '', 'Italic', 'Viper-italic', function() {
-            return self.handleStyle('em');
-        }, false, activeStates.em);
-
-        tools.addButtonToGroup('vitpBold', 'ViperCoreStylesPlugin:vitp:btnGroup');
-        tools.addButtonToGroup('vitpItalic', 'ViperCoreStylesPlugin:vitp:btnGroup');
-        tools.getItem('vitpBold').setButtonShortcut('CTRL+B');
-        tools.getItem('vitpItalic').setButtonShortcut('CTRL+I');
-
-        inlineToolbarPlugin.addButton(buttonGroup);
+        data.toolbar.showButton('vitpBold');
+        data.toolbar.showButton('vitpItalic');
 
     },
 

@@ -329,6 +329,36 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractViperListP
 
 
     /**
+     * Test that you can indent and outdent mulitple items multiple time.
+     *
+     * @return void
+     */
+    public function testOutdentAndIndentListItemsMultipleTimes()
+    {
+        $this->selectText('bbbbb', 'XuT');
+        $this->keyDown('Key.SHIFT + Key.TAB');
+
+        $this->assertHTMLMatch('<ol><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ol><p>aaa bbbbb ccccc</p><p>4 oNo templates</p><p>Audit XuT content</p>');
+
+        $this->selectText('bbbbb', 'XuT');
+        $this->keyDown('Key.TAB');
+
+        $this->assertHTMLMatch('<ol><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li><li>aaa bbbbb ccccc</li><li>4 oNo templates</li><li>Audit XuT content</li></ol>');
+
+        $this->selectText('bbbbb', 'XuT');
+        $this->keyDown('Key.SHIFT + Key.TAB');
+
+        $this->assertHTMLMatch('<ol><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ol><p>aaa bbbbb ccccc</p><p>4 oNo templates</p><p>Audit XuT content</p>');
+
+        $this->selectText('bbbbb', 'XuT');
+        $this->keyDown('Key.TAB');
+
+        $this->assertHTMLMatch('<ol><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li><li>aaa bbbbb ccccc</li><li>4 oNo templates</li><li>Audit XuT content</li></ol>');
+
+    }//end testOutdentAndIndentListItemsMultipleTimes()
+
+
+    /**
      * Test indent/outdent.
      *
      * @return void
@@ -778,29 +808,6 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractViperListP
         $this->assertHTMLMatch('<p>XabcX uuuuuu. VmumV</p><p>cPOc ccccc dddd. TicT</p><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa bbbbb ccccc<ul><li>4 oNo templates</li><li>Audit XuT content</li></ul></li><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ol><h2>SoD</h2>');
 
     }//end testConvertSubListType()
-
-
-    /**
-     * Test a list can be created inside a table cell.
-     *
-     * @return void
-     */
- /*   public function testListIconsAvailableInTableCell()
-    {
-        $this->selectText('XabcX');
-        $this->execJS('insTable(3, 3)');
-
-        $cellRect = $this->getBoundingRectangle('td', 0);
-        $region   = $this->getRegionOnPage($cellRect);
-
-        // Click inside the cell.
-        $this->click($region);
-
-        $this->clickTopToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_orderedList.png');
-
-        $this->assertEquals('<ol><li>&nbsp;</li></ol>', $this->getHtml('td', 0));
-
-    }//end testListIconsAvailableInTableCell()*/
 
 
     /**
