@@ -79,8 +79,8 @@ ViperInlineToolbarPlugin.prototype = {
         var tools       = this.viper.ViperTools;
         var toolbarid   = 'ViperInlineToolbar';
         var self        = this;
-        var toolbarElem = tools.createInlineToolbar(toolbarid, false, null, function(range) {
-            self.updateToolbar(range);
+        var toolbarElem = tools.createInlineToolbar(toolbarid, false, null, function(range, nodeSelection) {
+            self.updateToolbar(range, nodeSelection);
         });
 
         this._toolbarWidget = tools.getItem(toolbarid);
@@ -103,13 +103,13 @@ ViperInlineToolbarPlugin.prototype = {
      *
      * @param {DOMRange} range The DOMRange object.
      */
-    updateToolbar: function(range)
+    updateToolbar: function(range, nodeSelection)
     {
         if (this._lineageClicked !== true) {
             // Not selection change due to a lineage click so update the range object.
             // Note we can use cloneRange here but for whatever reason Firefox seems
             // to not do the cloning bit of cloneRange...
-            this._updateOriginalSelection(range);
+            this._updateOriginalSelection(range, nodeSelection);
         }
 
         if (this._topToolbar) {
@@ -125,12 +125,12 @@ ViperInlineToolbarPlugin.prototype = {
             this._setCurrentLineageIndex(null);
         }
 
-        var lineage = this._getSelectionLineage(range);
+        var lineage = this._getSelectionLineage(range, nodeSelection);
         if (!lineage || lineage.length === 0) {
             return false;
         }
 
-        this._updateInnerContainer(range, lineage);
+        this._updateInnerContainer(range, lineage, nodeSelection);
 
         if (this._lineageClicked === true) {
             this._lineageClicked = false;
@@ -152,7 +152,7 @@ ViperInlineToolbarPlugin.prototype = {
      * @param {DOMRange} range   The DOMRange object.
      * @param {array}    lineage The lineage array.
      */
-    _updateInnerContainer: function(range, lineage)
+    _updateInnerContainer: function(range, lineage, nodeSelection)
     {
         if (!lineage || lineage.length === 0) {
             return;
@@ -166,7 +166,8 @@ ViperInlineToolbarPlugin.prototype = {
             range: range,
             lineage: lineage,
             current: this._currentLineageIndex,
-            toolbar: this._toolbarWidget
+            toolbar: this._toolbarWidget,
+            nodeSelection: nodeSelection
         };
 
         this.viper.fireCallbacks('ViperInlineToolbarPlugin:updateToolbar', data);
@@ -228,6 +229,10 @@ ViperInlineToolbarPlugin.prototype = {
 
             case 'blockquote':
                 tagName = 'Quote';
+            break;
+
+            case 'img':
+                tagName = 'Image';
             break;
 
             default:
@@ -379,8 +384,12 @@ ViperInlineToolbarPlugin.prototype = {
 
         var first = range._getFirstSelectableChild(node);
         var last  = range._getLastSelectableChild(node);
-        range.setStart(first, 0);
-        range.setEnd(last, last.data.length);
+        if (!first || !last) {
+            range.selectNode(node);
+        } else {
+            range.setStart(first, 0);
+            range.setEnd(last, last.data.length);
+        }
 
         ViperSelection.addRange(range);
 
@@ -399,8 +408,13 @@ ViperInlineToolbarPlugin.prototype = {
         ViperSelection.removeAllRanges();
         var range = this.viper.getViperRange();
 
-        range.setStart(this._originalRange.startContainer, this._originalRange.startOffset);
-        range.setEnd(this._originalRange.endContainer, this._originalRange.endOffset);
+        if (this._originalRange.nodeType) {
+            range.selectNode(this._originalRange);
+        } else {
+            range.setStart(this._originalRange.startContainer, this._originalRange.startOffset);
+            range.setEnd(this._originalRange.endContainer, this._originalRange.endOffset);
+        }
+
         ViperSelection.addRange(range);
 
 
@@ -418,8 +432,13 @@ ViperInlineToolbarPlugin.prototype = {
 
     },
 
-    _updateOriginalSelection: function(range)
+    _updateOriginalSelection: function(range, nodeSelection)
     {
+        if (nodeSelection) {
+            this._originalRange = nodeSelection;
+            return;
+        }
+
         this._originalRange = {
             startContainer: range.startContainer,
             endContainer: range.endContainer,
@@ -437,11 +456,11 @@ ViperInlineToolbarPlugin.prototype = {
      *
      * @return {array} Array of DOMElements.
      */
-    _getSelectionLineage: function(range)
+    _getSelectionLineage: function(range, nodeSelection)
     {
         var lineage       = [];
         var parent        = null;
-        var nodeSelection = range.getNodeSelection(range);
+        var nodeSelection = nodeSelection || range.getNodeSelection(range);
 
         if (nodeSelection) {
             parent = nodeSelection;

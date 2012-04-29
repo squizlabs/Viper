@@ -1129,9 +1129,9 @@ ViperTools.prototype = {
                 }
 
                 var selectedNode = element || null;
+                range = range || self.viper.getViperRange();
 
                 if (!selectedNode) {
-                    range = range || this.viper.getViperRange();
                     if (elementTypes && elementTypes.length > 0) {
                         return;
                     }
