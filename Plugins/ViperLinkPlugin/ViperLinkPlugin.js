@@ -449,6 +449,8 @@ ViperLinkPlugin.prototype = {
         var self = this;
         var main = document.createElement('div');
 
+        toolbar.addKeepOpenTag('a');
+
         toolbar.makeSubSection('ViperLinkPlugin:vitp:link', main, function() {
             var range = self.viper.getViperRange();
             var node  = self.getLinkFromRange(range);

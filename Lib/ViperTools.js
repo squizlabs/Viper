@@ -1046,12 +1046,13 @@ ViperTools.prototype = {
                 return false;
         });
 
+        var _update = false;
         this.viper.registerCallback('Viper:selectionChanged', id, function(range) {
             if (self.viper.rangeInViperBounds(range) === false) {
                 return;
             }
 
-            if (range.collapsed === true) {
+            if (range.collapsed === true && _update !== true) {
                 return;
             }
 
@@ -1064,6 +1065,7 @@ ViperTools.prototype = {
         });
 
         this.viper.registerCallback(['Viper:mouseDown', 'ViperHistoryManager:undo'], id, function(data) {
+            _update = false;
             if (data && data.target) {
                 var target = dfx.getMouseEventTarget(data);
                 if (target === toolbar || dfx.isChildOf(target, toolbar) === true) {
@@ -1079,6 +1081,9 @@ ViperTools.prototype = {
                     && elementTypes.inArray(dfx.getTagName(target)) === true
                 ) {
                     self.getItem(id).update(null, target);
+                    return;
+                } else if (self.getItem(id)._keepOpenTagList.inArray(dfx.getTagName(target)) === true) {
+                    _update = true;
                     return;
                 }
             }
@@ -1461,6 +1466,12 @@ ViperTools.prototype = {
                 }//end for
 
             },
+
+            addKeepOpenTag: function(tagName) {
+                this._keepOpenTagList.push(tagName);
+
+            },
+
             orderButtons: function(buttonOrder) {
                 // Get all the buttons from the container.
                 var buttons = dfx.getClass('Viper-button', toolsContainer);
@@ -1522,6 +1533,7 @@ ViperTools.prototype = {
             _subSectionActionWidgets: {},
             _buttonShown: false,
             _verticalPosUpdateOnly: false,
+            _keepOpenTagList: [],
             updatePosition: function(range, selectedNode) {
                 range = range || tools.viper.getViperRange();
 
