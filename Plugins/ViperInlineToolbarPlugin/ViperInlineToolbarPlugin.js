@@ -74,6 +74,12 @@ ViperInlineToolbarPlugin.prototype = {
 
     },
 
+    getToolbar: function()
+    {
+        return this._toolbarWidget;
+
+    },
+
     _initToolbar: function()
     {
         var tools       = this.viper.ViperTools;
