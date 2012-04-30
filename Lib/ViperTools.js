@@ -1048,13 +1048,12 @@ ViperTools.prototype = {
 
         var _update = false;
         this.viper.registerCallback('Viper:selectionChanged', id, function(range) {
-            self.getItem(id).hide();
-
             if (self.viper.rangeInViperBounds(range) === false) {
                 return;
             }
 
             if (range.collapsed === true && _update !== true) {
+                self.getItem(id).hide();
                 return;
             }
 
