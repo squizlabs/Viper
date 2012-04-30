@@ -574,6 +574,8 @@ ViperTableEditorPlugin.prototype = {
         this.highlightActiveCell(type);
         this._toolbarWidget._updateSubSectionArrowPos();
 
+        this._toolbarWidget.focusSubSection();
+
     },
 
     _updateInnerContainer: function(cell, type, activeSubSection)
