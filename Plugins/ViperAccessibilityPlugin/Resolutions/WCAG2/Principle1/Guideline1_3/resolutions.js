@@ -71,13 +71,20 @@ ViperAccessibilityPlugin_WCAG2_Principle1_Guideline1_3 = {
             break;
 
             case 'H39.3.NoCaption':
+            case 'H39.3.Check':
                 this.parent.setResolutionInstruction(contentElement, '<p>Enter a caption for the table.</p>');
 
                 var editPanel = this.parent.getResolutionActionsContainer(contentElement);
 
                 var captionid  =  null;
                 var checkboxid = dfx.getUniqueId();
-                var checkbox   = viper.ViperTools.createCheckbox(checkboxid, 'Use caption', false, function(checked) {
+                var useCaption = false;
+
+                if (technique === 'H39.3.Check') {
+                    useCaption = true;
+                }
+
+                var checkbox   = viper.ViperTools.createCheckbox(checkboxid, 'Use caption', useCaption, function(checked) {
                     if (checked === true) {
                         viper.ViperTools.getItem(captionid).enable();
                     } else {
@@ -86,9 +93,15 @@ ViperAccessibilityPlugin_WCAG2_Principle1_Guideline1_3 = {
                 });
                 editPanel.appendChild(checkbox);
 
-                captionid   = dfx.getUniqueId();
-                var caption = viper.ViperTools.createTextarea(captionid, 'Caption', this._getTableCaption(element));
-                viper.ViperTools.getItem(captionid).disable();
+                captionid = dfx.getUniqueId();
+                var tableCaption = this._getTableCaption(element);
+
+                var caption = viper.ViperTools.createTextarea(captionid, 'Caption', tableCaption);
+
+                if (!tableCaption && useCaption === false) {
+                    viper.ViperTools.getItem(captionid).disable();
+                }
+
                 editPanel.appendChild(caption);
 
                 action = function() {
@@ -109,13 +122,20 @@ ViperAccessibilityPlugin_WCAG2_Principle1_Guideline1_3 = {
             break;
 
             case 'H73.3.NoSummary':
+            case 'H73.3.Check':
                 this.parent.setResolutionInstruction(contentElement, '<p>Enter a summary for the table.</p>');
 
                 var editPanel = this.parent.getResolutionActionsContainer(contentElement);
 
                 var summaryid  =  null;
                 var checkboxid = dfx.getUniqueId();
-                var checkbox   = viper.ViperTools.createCheckbox(checkboxid, 'Use summary', false, function(checked) {
+                var useSummary = false;
+
+                if (technique === 'H73.3.Check') {
+                    useSummary = true;
+                }
+
+                var checkbox   = viper.ViperTools.createCheckbox(checkboxid, 'Use summary', useSummary, function(checked) {
                     if (checked === true) {
                         viper.ViperTools.getItem(summaryid).enable();
                     } else {
@@ -125,8 +145,13 @@ ViperAccessibilityPlugin_WCAG2_Principle1_Guideline1_3 = {
                 editPanel.appendChild(checkbox);
 
                 summaryid   = dfx.getUniqueId();
-                var summary = viper.ViperTools.createTextarea(summaryid, 'Summary', this._getTableSummary(element));
-                viper.ViperTools.getItem(summaryid).disable();
+                var tableSummary = this._getTableSummary(element);
+                var summary = viper.ViperTools.createTextarea(summaryid, 'Summary', tableSummary);
+
+                if (!tableSummary && useSummary === false) {
+                    viper.ViperTools.getItem(summaryid).disable();
+                }
+
                 editPanel.appendChild(summary);
 
                 action = function() {
@@ -374,6 +399,7 @@ ViperAccessibilityPlugin_WCAG2_Principle1_Guideline1_3 = {
             default:
                 // No interface.
             break;
+
         }//end switch
 
     },
