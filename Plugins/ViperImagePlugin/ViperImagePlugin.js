@@ -47,7 +47,7 @@ ViperImagePlugin.prototype = {
                 range.selectNode(target);
                 ViperSelection.addRange(range);
                 self.viper.fireSelectionChanged(range, true);
-                //ViperSelection.removeAllRanges();
+                ViperSelection.removeAllRanges();
 
                 if (self.viper.isBrowser('msie') === true && dfx.isTag(target, 'img') === true) {
                     self._ieImageResize = target;
@@ -549,6 +549,7 @@ ViperImagePlugin.prototype = {
             data.toolbar.showButton('vitpImageMove');
             this.showImageResizeHandles(nodeSelection);
             this._updateToolbars(nodeSelection);
+            ViperSelection.removeAllRanges();
         }
 
     },
