@@ -470,6 +470,16 @@ ViperListPlugin.prototype = {
         var startNode = range.getStartNode();
         var endNode   = range.getEndNode();
 
+        if (!startNode && !endNode && range.startContainer) {
+            startNode = range.startContainer;
+            if (testOnly !== true && dfx.isTag(startNode, 'br') === true) {
+                var textNode = document.createTextNode('');
+                dfx.insertBefore(startNode, textNode);
+                range.setStart(textNode, 0);
+                range.collapse(true);
+            }
+        }
+
         if (!endNode && startNode.nodeType === dfx.ELEMENT_NODE) {
             endNode = startNode;
         }
