@@ -13,10 +13,10 @@ MatrixImagePlugin.prototype = {
 
     },
 
-    initToolbar: function()
+    initTopToolbar: function()
     {
         // Call the parent method.
-        var contents = ViperImagePlugin.prototype.initToolbar.call(this);
+        var contents = ViperImagePlugin.prototype.initTopToolbar.call(this);
 
         var self  = this;
         var tools = this.viper.ViperTools;
