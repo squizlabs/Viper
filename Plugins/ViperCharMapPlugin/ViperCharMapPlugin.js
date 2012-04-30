@@ -32,6 +32,18 @@ ViperCharMapPlugin.prototype = {
             return;
         }
 
+        this.viper.registerCallback('ViperToolbarPlugin:updateToolbar', 'ViperCharMapPlugin', function(data) {
+            if (data.range) {
+                var nodeSelection = data.range.getNodeSelection();
+                if (nodeSelection && dfx.isStubElement(nodeSelection) === true) {
+                    self.viper.ViperTools.disableButton('insertCharacter');
+                    return;
+                }
+            }
+
+            self.viper.ViperTools.enableButton('insertCharacter');
+        });
+
         this.viper.registerCallback('ViperToolbarPlugin:enabled', 'ViperCharMapPlugin', function(data) {
             self.viper.ViperTools.enableButton('insertCharacter');
         });
