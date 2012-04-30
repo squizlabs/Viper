@@ -361,7 +361,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarUnitTest extends Abstrac
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Selection</li>', $lineage);
 
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_class.png');
+        $this->clickInlineToolbarButton(dirname(dirname(__FILE__)).'/ViperFormatPlugin/Images/toolbarIcon_class.png');
         $this->selectInlineToolbarLineageItem(0);
         $this->assertEquals('Lorem IPSUM dolor', $this->getSelectedText(), 'P tag is not selected');
         $lineage = $this->getHtml('.ViperITP-lineage');

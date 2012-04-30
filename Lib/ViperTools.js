@@ -1218,6 +1218,7 @@ ViperTools.prototype = {
             },
 
             hide: function() {
+                this.closeActiveSubsection(true);
                 this._activeSection = null;
                 dfx.removeClass(toolbar, 'Viper-visible');
             },

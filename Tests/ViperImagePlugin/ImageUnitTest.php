@@ -354,7 +354,7 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperUnitTest
         $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>LOREM XuT dolor<img src="http://cms.squizsuite.net/homepage-images/hero-shot.jpg" alt="" /></p><p>sit amet <strong>WoW</strong></p><p>Squiz LABS is ORSM</p>');
 
     }//end testInsertingImageWithIncorrectURL()
-    
+
 
     /**
      * Test replacing content with an image.
@@ -729,9 +729,32 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperUnitTest
         $this->keyDown('Key.RIGHT');
         $this->keyDown('Key.ENTER');
         $this->type('New paragraph');
-        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>LOREM XuT</p><img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Alt tag" /><p>New paragraph</p><p>Squiz LABS is ORSM</p>');
+        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>LOREM XuT</p><p><img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Alt tag" /></p><p>New paragraph</p><p>LABS is ORSM</p>');
 
     }//end testStartingNewParagraphAfterImage()
+
+
+    /**
+     * Test format icon is disabled when you select an image.
+     *
+     * @return void
+     */
+    public function testFormatIconIsDisabled()
+    {
+        $dir = dirname(__FILE__).'/Images/';
+
+        $this->selectText('dolor');
+        $this->type('Key.RIGHT');
+
+        $this->clickTopToolbarButton($dir.'toolbarIcon_image.png');
+        $this->type('http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg');
+        $this->clickTopToolbarButton($dir.'toobarIcon_image_presentational.png');
+        $this->keyDown('Key.ENTER');
+
+        $this->clickElement('img', 1);
+        $this->assertTrue($this->topToolbarButtonExists(dirname(dirname(__FILE__)).'/ViperFormatPlugin/Images/toolbarIcon_toggle_formats_disabled.png'), 'Formats icon should be active.');
+
+    }//end testFormatIconIsDisabled()
 
 
     /**
