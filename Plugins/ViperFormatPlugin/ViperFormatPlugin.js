@@ -621,7 +621,7 @@ ViperFormatPlugin.prototype = {
         if (selectedNode) {
             this.viper.setAttribute(selectedNode, attr, value);
             this.viper.fireSelectionChanged(null, true);
-            this.viper.fireNodesChanged([this.viper.getViperElement()]);
+            this.viper.fireNodesChanged();
             return;
         }
 
@@ -658,7 +658,8 @@ ViperFormatPlugin.prototype = {
             ViperSelection.addRange(range);
             this.viper.adjustRange();
 
-            this.viper.fireCallbacks('Viper:selectionChanged', range);
+            this.viper.fireSelectionChanged(range, true);
+            this.viper.fireNodesChanged();
 
             return span;
         }
