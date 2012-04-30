@@ -40,7 +40,20 @@ class Viper_Tests_ViperLangToolsPlugin_LanguageUnitTest extends AbstractViperUni
         $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language.png');
         $this->clickTopToolbarButton($dir.'toolbarIcon_language.png');
 
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_updateChanges_disabled.png'), 'Update Changes button should be disabled.');
+        // Check to make sure the update changes button is disabled.
+        $imageFound = false;
+        try
+        {
+            $this->find($dir.'toolbarIcon_updateChanges_disabled.png');
+            $imageFound = true;
+        }
+        catch(Exception $e)
+        {
+            // Expecting the exception because the button should be disabled
+            $imageFound = false;
+        }
+
+        $this->assertTrue($imageFound, 'The update changes button should be disabled');
 
     }//end testUpdateChangesButton()
 

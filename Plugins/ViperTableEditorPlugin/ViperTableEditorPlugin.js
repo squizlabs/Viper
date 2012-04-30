@@ -256,8 +256,14 @@ ViperTableEditorPlugin.prototype = {
                         if (dfx.getParents(node, 'li', self.viper.getViperElement()).length > 0) {
                             self._tools.disableButton('insertTable');
                         } else {
-                            self._tools.enableButton('insertTable');
-                            self._tools.setButtonInactive('insertTable');
+                            var nodeSelection = range.getNodeSelection();
+                            if (!nodeSelection || dfx.isStubElement(nodeSelection) === false) {
+                                self._tools.enableButton('insertTable');
+                                self._tools.setButtonInactive('insertTable');
+                            } else {
+                                self._tools.disableButton('insertTable');
+                                self._tools.setButtonInactive('insertTable');
+                            }
                         }
                     }
                 }

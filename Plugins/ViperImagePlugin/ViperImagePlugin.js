@@ -47,7 +47,7 @@ ViperImagePlugin.prototype = {
                 range.selectNode(target);
                 ViperSelection.addRange(range);
                 self.viper.fireSelectionChanged(range, true);
-                //ViperSelection.removeAllRanges();
+                ViperSelection.removeAllRanges();
 
                 if (self.viper.isBrowser('msie') === true && dfx.isTag(target, 'img') === true) {
                     self._ieImageResize = target;
@@ -88,6 +88,7 @@ ViperImagePlugin.prototype = {
                 if (self._resizeImage) {
                     if (self.removeImage(self._resizeImage) === true) {
                         self._updateToolbars();
+                        self._inlineToolbar.hide();
                         return false;
                     }
                 }
@@ -547,8 +548,12 @@ ViperImagePlugin.prototype = {
             self._resizeImage = nodeSelection;
             data.toolbar.showButton('vitpImage');
             data.toolbar.showButton('vitpImageMove');
+
+            this.viper.ViperTools.setButtonActive('vitpImage');
+
             this.showImageResizeHandles(nodeSelection);
             this._updateToolbars(nodeSelection);
+            ViperSelection.removeAllRanges();
         }
 
     },

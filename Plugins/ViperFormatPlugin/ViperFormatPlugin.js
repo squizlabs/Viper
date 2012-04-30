@@ -450,7 +450,7 @@ ViperFormatPlugin.prototype = {
             pre: 'PRE'
         };
 
-        var ignoredTags = ('tr|table|tbody|caption|ul|ol|li').split('|');
+        var ignoredTags = ('tr|table|tbody|caption|ul|ol|li|img').split('|');
 
         // Listen for the main toolbar update and update the statuses of the buttons.
         this.viper.registerCallback('ViperToolbarPlugin:updateToolbar', 'ViperFormatPlugin', function(data) {
@@ -485,16 +485,17 @@ ViperFormatPlugin.prototype = {
                 startNode = data.range.startContainer;
             }
 
-            // Test format change.
+            tools.disableButton('headings');
+            tools.disableButton('formats');
+
             if ((nodeSelection && ignoredTags.inArray(dfx.getTagName(nodeSelection)) === false)
                 || ((!nodeSelection && dfx.getTagName(dfx.getFirstBlockParent(startNode)) !== 'li')
                 && (!nodeSelection && self.handleFormat('div', true) === true))
             ) {
-                tools.enableButton('headings');
-                tools.enableButton('formats');
-            } else {
-                tools.disableButton('headings');
-                tools.disableButton('formats');
+                if (!nodeSelection || dfx.isTag(nodeSelection, 'img') === false) {
+                    tools.enableButton('headings');
+                    tools.enableButton('formats');
+                }
             }
 
             for (var i = 0; i < headingTags.length; i++) {
@@ -513,7 +514,7 @@ ViperFormatPlugin.prototype = {
             }
 
             var formatElement = self.getTagFromRange(data.range, ['p', 'div', 'pre', 'blockquote']);
-            if (formatElement) {
+            if (formatElement && (!nodeSelection || dfx.isTag(nodeSelection, 'img') === false)) {
                 var tagName = dfx.getTagName(formatElement);
                 tools.setButtonActive('formats');
                 tools.setButtonActive(prefix + 'formats:' + formatButtons[tagName]);
