@@ -764,50 +764,6 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
     }//end testSelectionIsMaintainedForParaWhenOpeningAndClosingClassFields()
 
 
-    /**
-     * Test that you can add the class to a word and then click back in the class field.
-     *
-     * @return void
-     */
-    public function testAddClassAndClickingInFieldToEditValue()
-    {
-        $dir = dirname(__FILE__).'/Images/';
-
-        $text = 'XuT';
-
-        $this->selectText($text);
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_class.png');
-        $this->type('test');
-        $this->keyDown('Key.ENTER');
-
-        $this->assertHTMLMatch('<p>Lorem <span class="test">XuT</span> dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>Jumps</strong> OVER the lazy dogggg</p>');
-
-        $inputField = $this->find($dir.'input_class_with_value.png');
-        $this->click($inputField);
-        $this->type('abc');
-        $this->keyDown('Key.ENTER');
-
-        $this->assertHTMLMatch('<p>Lorem <span class="testabc">XuT</span> dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>Jumps</strong> OVER the lazy dogggg</p>');
-
-        $text = 'dolor';
-
-        $this->selectText($text);
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_class.png');
-        $this->type('test');
-        $this->keyDown('Key.ENTER');
-
-        $this->assertHTMLMatch('<p>Lorem <span class="test">XuT</span> <span class="test">dolor</span></p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>Jumps</strong> OVER the lazy dogggg</p>');
-
-        $inputField = $this->find($dir.'input_class_with_value.png');
-        $this->click($inputField);
-        $this->type('abc');
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_updateChanges.png');
-
-        $this->assertHTMLMatch('<p>Lorem <span class="testabc">XuT</span> <span class="testabc">dolor</span></p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>Jumps</strong> OVER the lazy dogggg</p>');
-
-    }//end testAddClassAndClickingInFieldToEditValue()
-
-
 }//end class
 
 ?>

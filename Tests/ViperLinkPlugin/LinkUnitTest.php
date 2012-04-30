@@ -21,7 +21,6 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
 
         $this->type('http://www.squizlabs.com');
         $this->keyDown('Key.ENTER');
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_link_subActive.png');
 
         $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com">Lorem</a> IPSUM dolor</p><p>sit amet <strong>WoW</strong></p>');
 
@@ -49,7 +48,6 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->clickInlineToolbarButton($dir.'toolbarIcon_link.png');
         $this->type('http://www.squizlabs.com');
         $this->keyDown('Key.ENTER');
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_link_subActive.png');
 
         $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com">Lorem IPSUM</a> dolor</p><p>sit amet <strong>WoW</strong></p>');
 
@@ -136,7 +134,6 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->keyDown('Key.TAB');
         $this->type('Squiz Labs');
         $this->keyDown('Key.ENTER');
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_link_subActive.png');
 
         $this->assertHTMLMatch(
             '<p><a href="http://www.squizlabs.com" title="Squiz Labs">Lorem</a> IPSUM dolor</p><p>sit amet <strong>WoW</strong></p>',
@@ -164,7 +161,6 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->clickInlineToolbarButton($dir.'toolbarIcon_openInNewWindow.png');
         sleep(1);
         $this->keyDown('Key.ENTER');
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_link_subActive.png');
 
         $this->assertHTMLMatch(
             '<p><a href="http://www.squizlabs.com" title="Squiz Labs" target="_blank">Lorem</a> IPSUM dolor</p><p>sit amet <strong>WoW</strong></p>',
@@ -247,7 +243,6 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->keyDown('Key.TAB');
         $this->type('Squiz Labs');
         $this->keyDown('Key.ENTER');
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_link_subActive.png');
 
         $this->assertHTMLMatch(
             '<p>Lorem <a href="http://www.squizlabs.com" title="Squiz Labs">IPSUM</a> dolor</p><p>sit amet <strong>WoW</strong></p>',
@@ -306,7 +301,6 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->keyDown('Key.TAB');
         $this->type('Squiz Labs');
         $this->keyDown('Key.ENTER');
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_link_subActive.png');
 
         $this->assertHTMLMatch(
             '<p>Lorem IPSUM dolor</p><p>sit amet <strong><a href="http://www.squizlabs.com" title="Squiz Labs">WoW</a></strong></p>',
@@ -401,7 +395,6 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->clickInlineToolbarButton($dir.'toolbarIcon_link.png');
         $this->type('http://www.squizlabs.com');
         $this->keyDown('Key.ENTER');
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_link_subActive.png');
 
         $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com">Lorem</a> IPSUM dolor</p><p>sit amet <strong>WoW</strong></p>');
 
@@ -415,7 +408,6 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->type('http://www.google.com');
         $updateChangesButton = $this->find($dir.'toolbarIcon_updateChanges.png');
         $this->click($updateChangesButton);
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_link_subActive.png');
 
         $this->assertHTMLMatch('<p><a href="http://www.google.com">Lorem</a> IPSUM dolor</p><p>sit amet <strong>WoW</strong></p>');
 
@@ -437,7 +429,6 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->clickInlineToolbarButton($dir.'toolbarIcon_link.png');
         $this->type('http://www.squizlabs.com');
         $this->keyDown('Key.ENTER');
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_link_subActive.png');
 
         $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com">Lorem</a> IPSUM dolor</p><p>sit amet <strong>WoW</strong></p>');
 
@@ -449,7 +440,6 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->clickInlineToolbarButton($dir.'toolbarIcon_link_active.png');
         $this->clickInlineToolbarButton($dir.'toolbarIcon_delete_link.png');
         $this->keyDown('Key.ENTER');
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_link_subActive.png');
 
         $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com">Lorem</a> IPSUM dolor</p><p>sit amet <strong>WoW</strong></p>');
 
@@ -503,7 +493,6 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->clickInlineToolbarButton($dir.'toolbarIcon_link.png');
         $this->type('http://www.squizlabs.com');
         $this->keyDown('Key.ENTER');
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_link_subActive.png');
 
         $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com">Lorem</a> IPSUM dolor</p><p>sit amet <strong>WoW</strong></p>');
 
@@ -517,7 +506,6 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->click($titleField);
         $this->type('title');
         $this->keyDown('Key.ENTER');
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_link_subActive.png');
 
         $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com" title="title">Lorem</a> IPSUM dolor</p><p>sit amet <strong>WoW</strong></p>');
 
@@ -528,7 +516,6 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->type('abc');
         $updateChangesButton = $this->find($dir.'toolbarIcon_updateChanges.png');
         $this->click($updateChangesButton);
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_link_subActive.png');
 
         $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com" title="titleabc">Lorem</a> IPSUM dolor</p><p>sit amet <strong>WoW</strong></p>');
 
@@ -625,7 +612,6 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->clickInlineToolbarButton($dir.'toolbarIcon_link.png');
         $this->type('http://www.squizlabs.com');
         $this->keyDown('Key.ENTER');
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_link_subActive.png');
 
         $this->assertHTMLMatch(
             '<p>Lorem IPSUM <a href="http://www.squizlabs.com" class="class" id="anchor">dolor</a></p><p>sit amet <strong>WoW</strong></p>',
@@ -666,7 +652,6 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->clickInlineToolbarButton($dir.'toolbarIcon_link.png');
         $this->type('http://www.squizlabs.com');
         $this->keyDown('Key.ENTER');
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_link_subActive.png');
 
         $this->assertHTMLMatch(
             '<p>Lorem IPSUM <a href="http://www.squizlabs.com" class="class" id="anchor">dolor</a></p><p>sit amet <strong>WoW</strong></p>',
@@ -708,7 +693,6 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->clickInlineToolbarButton($dir.'toolbarIcon_link.png');
         $this->type('http://www.squizlabs.com');
         $this->keyDown('Key.ENTER');
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_link_subActive.png');
 
         $this->assertHTMLMatch(
             '<p>Lorem IPSUM <a href="http://www.squizlabs.com" class="class" id="anchor">dolor</a></p><p>sit amet <strong>WoW</strong></p>',
@@ -766,7 +750,6 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->clickInlineToolbarButton($dir.'toolbarIcon_link.png');
         $this->type('http://www.squizlabs.com');
         $this->keyDown('Key.ENTER');
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_link_subActive.png');
 
         $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com">Lorem</a> IPSUM dolor</p><p>sit amet <strong>WoW</strong></p>');
 
