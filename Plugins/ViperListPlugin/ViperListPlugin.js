@@ -1154,6 +1154,7 @@ ViperListPlugin.prototype = {
     {
         range         = range || this.viper.getViperRange();
         var startNode = range.getStartNode();
+        var endNode   = range.getEndNode();
         var makeList  = false;
         var indent    = false;
         var canMakeUL = false;
@@ -1166,7 +1167,8 @@ ViperListPlugin.prototype = {
 
         var startParent = null;
 
-        if (startNode && this._isListElement(startNode) === true) {
+        var listElement = this._getListElement(startNode);
+        if (listElement && listElement === this._getListElement(endNode)) {
             if (range.collapsed === true && mainToolbar !== true) {
                 return;
             }
@@ -1177,7 +1179,6 @@ ViperListPlugin.prototype = {
 
             indent   = true;
         } else {
-            var endNode       = range.getEndNode();
             var nodeSelection = range.getNodeSelection();
             if (nodeSelection) {
                 startNode = nodeSelection;
