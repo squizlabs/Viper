@@ -426,7 +426,9 @@ ViperAccessibilityPlugin_WCAG2_Principle1_Guideline1_3 = {
             }
         }
 
-        list.appendChild(li);
+        if (li.firstChild) {
+            list.appendChild(li);
+        }
 
         dfx.insertBefore(element, list);
         dfx.remove(element);
@@ -455,7 +457,9 @@ ViperAccessibilityPlugin_WCAG2_Principle1_Guideline1_3 = {
             }
         }
 
-        list.appendChild(li);
+        if (li.firstChild) {
+            list.appendChild(li);
+        }
 
         dfx.insertBefore(element, list);
         dfx.remove(element);
