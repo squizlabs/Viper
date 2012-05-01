@@ -632,13 +632,13 @@ ViperTableEditorPlugin.prototype = {
 
         this._tools.getItem('VTEP:cellProps:heading').setValue(dfx.isTag(cell, 'th'));
 
-        if (this.getColspan(cell) <= 1) {
+        if (this.getRowspan(cell) <= 1) {
             this._tools.disableButton('VTEP:cellProps:splitHoriz');
         } else {
             this._tools.enableButton('VTEP:cellProps:splitHoriz');
         }
 
-        if (this.getRowspan(cell) <= 1) {
+        if (this.getColspan(cell) <= 1) {
             this._tools.disableButton('VTEP:cellProps:splitVert');
         } else {
             this._tools.enableButton('VTEP:cellProps:splitVert');
