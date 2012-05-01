@@ -522,8 +522,9 @@ ViperTableEditorPlugin.prototype = {
         var toolbarid   = 'ViperTableEditor-toolbar';
         var self        = this;
         var toolbarElem = tools.createInlineToolbar(toolbarid);
+        var toolbar     = tools.getItem(toolbarid);
 
-        this._toolbarWidget = tools.getItem(toolbarid);
+        this._toolbarWidget = toolbar;
 
         // Add lineage container to the toolbar.
         var lineage = document.createElement('ul');
@@ -549,6 +550,12 @@ ViperTableEditorPlugin.prototype = {
     hideToolbar: function()
     {
         this._toolbarWidget.hide();
+
+    },
+
+    getCurrentViewType: function()
+    {
+        return this._type;
 
     },
 
