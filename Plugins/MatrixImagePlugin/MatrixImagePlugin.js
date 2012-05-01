@@ -85,7 +85,8 @@ MatrixImagePlugin.prototype = {
     pickAsset: function()
     {
         var tools       = this.viper.ViperTools;
-        var urlField    = tools.getItem('ViperImagePlugin:urlInput');
+        var urlField    = tools.getItem('ViperImagePlugin:urlInput'),
+            altField    = tools.getItem('ViperImagePlugin:altInput');
         EasyEditAssetManager.getCurrentAsset(function(asset){
 
             var initialValue = urlField.getValue(),
@@ -100,6 +101,7 @@ MatrixImagePlugin.prototype = {
                 callback: function(selectedAsset){
                     if (selectedAsset.attribute('type_code') === 'image') {
                         urlField.setValue('./?a=' + selectedAsset.id,false);
+                        urlField.setValue(selectedAsset.attribute('alt'),false);
                     } else {
                         alert(EasyEditLocalise.translate('You have selected a %1 asset. Only image assets can be selected.',selectedAsset.attribute('type_code')));
                     }// End if
