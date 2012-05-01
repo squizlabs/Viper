@@ -1668,6 +1668,20 @@ ViperTableEditorPlugin.prototype = {
             this.setColspan(cell, 1);
         }
 
+        var cells = dfx.getTag('td,th', table);
+        if (cells.length === 1) {
+            this.setColspan(cells[0], 1);
+            this.setRowspan(cells[0], 1);
+
+            // Remove empty rows.
+            var rows = dfx.getTag('tr', table);
+            for (var i = 0; i < rows.length; i++) {
+                if (dfx.getTag('td,th', rows[i]).length === 0) {
+                    dfx.remove(rows[i]);
+                }
+            }
+        }
+
         this.tableUpdated();
 
         return cell;
