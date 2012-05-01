@@ -497,8 +497,11 @@ ViperFormatPlugin.prototype = {
                 && (!nodeSelection && self.handleFormat('div', true) === true))
             ) {
                 if (!nodeSelection || dfx.isTag(nodeSelection, 'img') === false) {
-                    tools.enableButton('headings');
-                    tools.enableButton('formats');
+                    var parents = dfx.getParents(startNode, 'caption', self.viper.getViperElement());
+                    if (parents.length === 0) {
+                        tools.enableButton('headings');
+                        tools.enableButton('formats');
+                    }
                 }
             }
 
