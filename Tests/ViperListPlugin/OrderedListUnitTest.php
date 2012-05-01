@@ -1,8 +1,8 @@
 <?php
 
-require_once 'AbstractViperListPluginUnitTest.php';
+require_once 'AbstractGeneralListUnitTest.php';
 
-class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractViperListPluginUnitTest
+class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractGeneralListUnitTest
 {
 
 
