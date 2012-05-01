@@ -684,11 +684,13 @@ ViperCoreStylesPlugin.prototype = {
             case 'left':
                 dfx.setStyle(image, 'float', 'left');
                 dfx.setStyle(image, 'margin', '1em 1em 1em 0');
+                dfx.setStyle(image, 'display', '');
             break;
 
             case 'right':
                 dfx.setStyle(image, 'float', 'right');
                 dfx.setStyle(image, 'margin', '1em 0 1em 1em');
+                dfx.setStyle(image, 'display', '');
             break;
 
             case 'center':
@@ -703,6 +705,10 @@ ViperCoreStylesPlugin.prototype = {
                 dfx.setStyle(image, 'display', '');
             break;
         }//end switch
+
+        if (image.getAttribute('style') === '') {
+            image.removeAttribute('style');
+        }
 
         // Reset button status.
         var types = ['left', 'center', 'right', 'block'];
