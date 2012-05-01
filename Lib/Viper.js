@@ -3401,7 +3401,38 @@ Viper.prototype = {
         if (this.isInputKey(e) === true) {
             this.fireCallbacks('Viper:charInsert', String.fromCharCode(e.which));
 
+            var resetContent = false;
             var range = this.getCurrentRange();
+            if (range.startOffset === 0
+                && range.endContainer === this.element
+                && range.endOffset === (this.element.childNodes.length - 1)
+                && range.startContainer === range._getFirstSelectableChild(this.element)
+            ) {
+                resetContent = true;
+            } else if (this.isBrowser('msie') === true
+                && range.endContainer === this.element
+                && range.endOffset === 0
+                && range.startOffset === 0
+                && range.startContainer === range._getFirstSelectableChild(this.element)
+            ) {
+                resetContent = true;
+            } else if (range.startOffset === 0
+                && range.endContainer === range._getLastSelectableChild(this.element)
+                && range.endOffset === range.endContainer.data.length
+                && range.startContainer === range._getFirstSelectableChild(this.element)
+            ) {
+                resetContent = true;
+            }
+
+            if (resetContent === true) {
+                // The whole content is selected and a char is being
+                // typed. Remove the whole content of the editable element.
+                dfx.setHtml(this.element, '<p>&nbsp;</p>');
+                range.setStart(range._getFirstSelectableChild(this.element), 0);
+                range.collapse(true);
+                ViperSelection.addRange(range);
+            }
+
             this.fireNodesChanged([range.getStartNode()]);
             return true;
         }
