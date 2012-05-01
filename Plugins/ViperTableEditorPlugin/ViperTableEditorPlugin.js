@@ -590,6 +590,7 @@ ViperTableEditorPlugin.prototype = {
         this._toolbarWidget._updateSubSectionArrowPos();
 
         this._toolbarWidget.focusSubSection();
+        this.viper.removeHighlights();
 
     },
 
@@ -728,6 +729,8 @@ ViperTableEditorPlugin.prototype = {
         this._toolbarWidget.showButton('VTEP:rowProps:settings');
         this._toolbarWidget.showButton('VTEP:rowProps:insBefore');
         this._toolbarWidget.showButton('VTEP:rowProps:insAfter');
+        this._toolbarWidget.showButton('VTEP:rowProps:moveUp');
+        this._toolbarWidget.showButton('VTEP:rowProps:moveDown');
         this._toolbarWidget.showButton('VTEP:rowProps:remove');
 
         this._tools.getItem('VTEP:rowProps:heading').setValue(dfx.getTag('td', cell.parentNode).length === 0);
