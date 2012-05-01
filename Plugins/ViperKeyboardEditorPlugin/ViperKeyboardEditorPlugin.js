@@ -245,6 +245,10 @@ ViperKeyboardEditorPlugin.prototype = {
                             dfx.remove(p.lastChild);
                         }
 
+                        if (this.viper.isBrowser('firefox') == false) {
+                            this.viper.fireNodesChanged();
+                        }
+
                         return false;
                     }//end if
                 }//end if
