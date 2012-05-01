@@ -1335,11 +1335,7 @@ ViperTools.prototype = {
                 this._activeSection = subSectionid;
                 this._updateSubSectionArrowPos();
 
-                var inputElements = dfx.getTag('input[type=text], textarea', subSection);
-                if (inputElements.length > 0) {
-                    inputElements[0].focus();
-                    dfx.removeClass(inputElements[0].parentNode.parentNode.parentNode, 'Viper-active');
-                }
+                this.focusSubSection();
 
                 var subSectionForm = tools.getItem(subSectionid).form;
                 dfx.removeEvent(document, 'keydown.' + id);
@@ -1348,6 +1344,19 @@ ViperTools.prototype = {
                         return subSectionForm.onsubmit();
                     }
                 });
+
+            },
+
+            focusSubSection: function()
+            {
+                try {
+                    var subSection    = this._subSections[this._activeSection];
+                    var inputElements = dfx.getTag('input[type=text], textarea', subSection);
+                    if (inputElements.length > 0) {
+                        inputElements[0].focus();
+                        dfx.removeClass(inputElements[0].parentNode.parentNode.parentNode, 'Viper-active');
+                    }
+                } catch (e) {}
 
             },
 

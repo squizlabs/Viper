@@ -385,7 +385,7 @@ ViperImagePlugin.prototype = {
         }
 
         if (!image || dfx.isTag(image, 'img') === false) {
-            this.rangeToImage(this.viper.getViperRange(), this.getImageUrl(url), alt, title);
+            image = this.rangeToImage(this.viper.getViperRange(), this.getImageUrl(url), alt, title);
         } else {
             this.setImageURL(image, this.getImageUrl(url));
             this.setImageAlt(image, alt);
@@ -395,6 +395,7 @@ ViperImagePlugin.prototype = {
         }
 
         this._updateToolbars(image);
+        this.showImageResizeHandles(image);
 
     },
 

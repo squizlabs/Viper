@@ -54,8 +54,12 @@ ViperHistoryManager.prototype = {
             if (!child) {
                 range = null;
             } else {
-                range.setStart(child, 0);
-                range.collapse(true);
+                try {
+                    range.setStart(child, 0);
+                    range.collapse(true);
+                } catch (e) {
+                    range = null;
+                }
             }
         }
 

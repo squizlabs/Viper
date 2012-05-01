@@ -644,9 +644,9 @@ ViperCoreStylesPlugin.prototype = {
             }
         }//end if
 
-        this.viper.fireNodesChanged();
-        this.viper.fireSelectionChanged(null, true);
         this.viper.focus();
+        this.viper.fireSelectionChanged(null, true);
+        this.viper.fireNodesChanged();
 
     },
 

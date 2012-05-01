@@ -60,6 +60,7 @@ ViperTableEditorPlugin.prototype = {
 
         // Hide the toolbar when user clicks anywhere.
         this.viper.registerCallback(['Viper:mouseDown', 'ViperHistoryManager:undo'], 'ViperTableEditorPlugin', function(data) {
+            self.setActiveCell(null);
             clickedInToolbar = false;
             if (data && data.target) {
                 var target = dfx.getMouseEventTarget(data);
@@ -574,6 +575,8 @@ ViperTableEditorPlugin.prototype = {
         this.highlightActiveCell(type);
         this._toolbarWidget._updateSubSectionArrowPos();
 
+        this._toolbarWidget.focusSubSection();
+
     },
 
     _updateInnerContainer: function(cell, type, activeSubSection)
@@ -923,6 +926,10 @@ ViperTableEditorPlugin.prototype = {
         var activeCell = this.getActiveCell();
         var element    = null;
         var coords     = null;
+
+        if (!activeCell) {
+            return;
+        }
 
         switch (parentType) {
             case 'cell':
@@ -2698,9 +2705,13 @@ ViperTableEditorPlugin.prototype = {
                 child = cell.firstChild;
             }
 
-            range.setStart(child, 0);
-            range.collapse(true);
+            range.setEnd(child, 0);
+            range.collapse(false);
             ViperSelection.addRange(range);
+
+            this.setActiveCell(cell);
+            this.showCellToolsIcon(cell);
+
             return range;
         } else {
             this.hideCellToolsIcon();
