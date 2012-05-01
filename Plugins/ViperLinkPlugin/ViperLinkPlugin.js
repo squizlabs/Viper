@@ -330,7 +330,7 @@ ViperLinkPlugin.prototype = {
         }
 
         var contents = range.getHTMLContents();
-        if (contents.toLowerCase().indexOf('<a') >= 0) {
+        if (contents.toLowerCase().indexOf('<a ') >= 0) {
             return true;
         }
 
