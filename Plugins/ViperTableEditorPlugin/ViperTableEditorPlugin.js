@@ -533,9 +533,16 @@ ViperTableEditorPlugin.prototype = {
 
         // Add the table buttons.
         this._createCellProperties();
+        this.viper.fireCallbacks('ViperTableEditorPlugin:initToolbar', {toolbar: toolbar, type: 'cell'});
+
         this._createColProperties();
+        this.viper.fireCallbacks('ViperTableEditorPlugin:initToolbar', {toolbar: toolbar, type: 'col'});
+
         this._createRowProperties();
+        this.viper.fireCallbacks('ViperTableEditorPlugin:initToolbar', {toolbar: toolbar, type: 'row'});
+
         this._createTableProperties();
+        this.viper.fireCallbacks('ViperTableEditorPlugin:initToolbar', {toolbar: toolbar, type: 'table'});
 
     },
 
