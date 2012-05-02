@@ -50,8 +50,12 @@ ViperFormatPlugin.prototype = {
             this._createToolbarContent();
         }
 
+        this.viper.registerCallback('ViperTableEditorPlugin:initToolbar', 'ViperFormatPlugin', function(data) {
+            self._createTableEditorContent(data.toolbar, data.type);
+        });
+
         this.viper.registerCallback('ViperTableEditorPlugin:updateToolbar', 'ViperFormatPlugin', function(data) {
-            self._createTableEditorContent(data);
+            self._updateTableEditorContent(data);
         });
 
         ViperChangeTracker.addChangeType('textFormatChange', 'Formatted', 'format');
@@ -493,8 +497,11 @@ ViperFormatPlugin.prototype = {
                 && (!nodeSelection && self.handleFormat('div', true) === true))
             ) {
                 if (!nodeSelection || dfx.isTag(nodeSelection, 'img') === false) {
-                    tools.enableButton('headings');
-                    tools.enableButton('formats');
+                    var parents = dfx.getParents(startNode, 'caption', self.viper.getViperElement());
+                    if (parents.length === 0) {
+                        tools.enableButton('headings');
+                        tools.enableButton('formats');
+                    }
                 }
             }
 
@@ -539,50 +546,97 @@ ViperFormatPlugin.prototype = {
 
     },
 
-    _createTableEditorContent: function(data)
+    _updateTableEditorContent: function(data)
     {
         if (data.type === 'cell'
             || data.type === 'row'
             || data.type === 'table'
         ) {
-            var prefix      = 'ViperTableEditor-Format:';
-            var element     = null;
-            var buttonIndex = null;
+            var prefix  = 'ViperTableEditor-Format-'+ data.type + ':';
+            var element = data.cell;
 
             switch (data.type) {
                 case 'row':
-                    element     = data.cell.parentNode;
-                    buttonIndex = -1;
+                    element = element.parentNode;
                 break;
 
                 case 'table':
-                    element     = dfx.getParents(data.cell, 'table')[0];
-                    buttonIndex = -1;
+                    element = dfx.getParents(element, 'table')[0];
                 break;
 
-                case 'cell':
                 default:
-                    element = data.cell;
+                    // Nothing.
                 break;
             }
 
             // Add class button.
-            var tools          = this.viper.ViperTools;
             var classBtnActive = false;
             var classAttribute = '';
 
             if (dfx.hasAttribute(element, 'class') === true) {
                 classAttribute = element.getAttribute('class');
-                classBtnActive = true;
+                this.viper.ViperTools.setButtonActive(prefix + 'classBtn-' + data.type);
+            } else {
+                this.viper.ViperTools.setButtonInactive(prefix + 'classBtn-' + data.type);
             }
 
-            var button = tools.createButton(prefix + 'classBtn', '', 'Class name', 'Viper-cssClass', null, false, classBtnActive);
-            data.toolbar.addButton(button, buttonIndex);
+            this.viper.ViperTools.getItem(prefix + 'class:input').setValue(classAttribute);
+
+            data.toolbar.showButton(prefix + 'classBtn-' + data.type);
+        }
+
+    },
+
+    _createTableEditorContent: function(toolbar, type)
+    {
+        if (type === 'cell'
+            || type === 'row'
+            || type === 'table'
+        ) {
+            var prefix      = 'ViperTableEditor-Format-' + type + ':';
+            var element     = null;
+            var buttonIndex = null;
+
+            switch (type) {
+                case 'row':
+                    buttonIndex = -1;
+                break;
+
+                case 'table':
+                    buttonIndex = -1;
+                break;
+
+                default:
+                    buttonIndex = null;
+                break;
+            }
+
+            // Add class button.
+            var tools = this.viper.ViperTools;
+
+            var button = tools.createButton(prefix + 'classBtn-' + type, '', 'Class name', 'Viper-cssClass', null, false, false);
+            toolbar.addButton(button, buttonIndex);
 
             var self = this;
-            data.toolbar.makeSubSection(prefix + 'class:subSection', this._getClassSection(prefix));
-            data.toolbar.setSubSectionAction(prefix + 'class:subSection', function() {
-                var value = tools.getItem(prefix + 'class:input').getValue();
+            var tableEditorPlugin = this.viper.ViperPluginManager.getPlugin('ViperTableEditorPlugin');
+            toolbar.makeSubSection(prefix + 'class:subSection-' + type, this._getClassSection(prefix));
+            toolbar.setSubSectionAction(prefix + 'class:subSection-' + type, function() {
+                var element  = tableEditorPlugin.getActiveCell();
+                switch (type) {
+                    case 'row':
+                        element = element.parentNode;
+                    break;
+
+                    case 'table':
+                        element = dfx.getParents(element, 'table')[0];
+                    break;
+
+                    default:
+                        // Nothing.
+                    break;
+                }
+
+                var value   = tools.getItem(prefix + 'class:input').getValue();
                 if (element) {
                     self._setAttributeForElement(element, 'class', value);
                 } else {
@@ -590,15 +644,16 @@ ViperFormatPlugin.prototype = {
                 }
 
                 if (value) {
-                    tools.setButtonActive(prefix + 'classBtn');
+                    tools.setButtonActive(prefix + 'classBtn-' + type);
                 } else {
-                    tools.setButtonInactive(prefix + 'classBtn');
+                    tools.setButtonInactive(prefix + 'classBtn-' + type);
                 }
+
+                self.viper.fireNodesChanged();
             }, [prefix + 'class:input']);
 
-            data.toolbar.setSubSectionButton(prefix + 'classBtn', prefix + 'class:subSection');
-            tools.getItem(prefix + 'class:input').setValue(classAttribute);
-        }
+            toolbar.setSubSectionButton(prefix + 'classBtn-' + type, prefix + 'class:subSection-' + type);
+        }//end if
 
     },
 
@@ -758,10 +813,11 @@ ViperFormatPlugin.prototype = {
      */
     handleFormat: function(type, testOnly)
     {
-        testOnly         = testOnly || false;
-        var range        = this.viper.getViperRange();
-        var selectedNode = range.getNodeSelection();
-        var viperElement = this.viper.getViperElement();
+        testOnly          = testOnly || false;
+        var range         = this.viper.getViperRange();
+        var selectedNode  = range.getNodeSelection();
+        var nodeSelection = selectedNode;
+        var viperElement  = this.viper.getViperElement();
 
         if (!selectedNode) {
             var startNode = range.getStartNode();
@@ -811,13 +867,19 @@ ViperFormatPlugin.prototype = {
                     }
 
                     selectedNode.appendChild(newElem);
+                    this.viper.selectBookmark(bookmark);
                 } else {
-                    this._convertSingleElement(selectedNode, type);
+                    var newElem = this._convertSingleElement(selectedNode, type);
+
+                    this.viper.selectBookmark(bookmark);
+                    if (nodeSelection && newElem) {
+                        range.selectNode(newElem);
+                        ViperSelection.addRange(range);
+                    }
                 }
 
-                this.viper.selectBookmark(bookmark);
-                this.viper.fireNodesChanged([viperElement]);
                 this.viper.fireSelectionChanged(null, true);
+                this.viper.fireNodesChanged();
             } else {
                 // We cannot convert the Viper element so we need to create a new
                 // element from the textnodes that are around the current range.
@@ -944,16 +1006,72 @@ ViperFormatPlugin.prototype = {
             while (element.firstChild) {
                 dfx.insertBefore(element, element.firstChild);
             }
+
+            if (type === 'pre') {
+                this._convertNewLineToBr(element);
+            }
+
+            dfx.remove(element);
         } else {
             var newElem = document.createElement(type);
             while (element.firstChild) {
                 newElem.appendChild(element.firstChild);
             }
 
+            if (type === 'pre') {
+                this._convertBrToNewLine(newElem);
+            } else if (dfx.isTag(element, 'pre') === true) {
+                this._convertNewLineToBr(newElem);
+            }
+
             dfx.insertBefore(element, newElem);
+            dfx.remove(element);
+
+            return newElem;
         }
 
-        dfx.remove(element);
+        return null;
+
+    },
+
+    _convertBrToNewLine: function(element)
+    {
+        var brTags = dfx.getTag('br', element);
+        for (var i = 0; i < brTags.length; i++) {
+            var node = document.createTextNode("\n");
+            dfx.insertBefore(brTags[i], node);
+            dfx.remove(brTags[i]);
+        }
+
+    },
+
+    _convertNewLineToBr: function(element)
+    {
+        if (element.nodeType === dfx.TEXT_NODE) {
+            var nlIndex = -1;
+
+            do {
+                nlIndex = element.data.lastIndexOf("\n");
+                if (nlIndex >= 0) {
+                    var newNode = element.splitText(nlIndex);
+                    var br      = document.createElement('br');
+                    dfx.insertBefore(newNode, br);
+
+                    if (newNode.data.length === 1) {
+                        dfx.remove(newNode);
+                    } else {
+                        newNode.data = newNode.data.substring(1, newNode.data.length);
+                    }
+                }
+            } while (nlIndex >= 0);
+        } else {
+            var textNodes = dfx.getTextNodes(element);
+            var c         = textNodes.length;
+            for (var i = 0; i < c; i++) {
+                var textNode = textNodes[i];
+                this._convertNewLineToBr(textNode);
+            }
+        }
 
     },
 

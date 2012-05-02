@@ -416,6 +416,11 @@ ViperCopyPastePlugin.prototype = {
                 dfx.remove(prevBlock.nextSibling);
             }
 
+            var convertBrTags = false;
+            if (dfx.getParents(prevBlock, 'pre', this.viper.getViperElement()).length > 0) {
+                convertBrTags = true;
+            }
+
             var changeid  = ViperChangeTracker.startBatchChange('textAdded');
             var prevChild = null;
             while (fragment.firstChild) {
@@ -428,6 +433,15 @@ ViperCopyPastePlugin.prototype = {
                 if (dfx.isBlockElement(fragment.firstChild) === true) {
                     ctNode = fragment.firstChild;
                     ViperChangeTracker.addChange('textAdd', [ctNode]);
+
+                    if (convertBrTags === true) {
+                        var brTags = dfx.getTag('br', ctNode);
+                        for (var i = 0; i < brTags.length; i++) {
+                            var textNode = document.createTextNode("\n");
+                            dfx.insertBefore(brTags[i], textNode);
+                            dfx.remove(brTags[i]);
+                        }
+                    }
                 } else {
                     ctNode = ViperChangeTracker.createCTNode('ins', 'textAdd', fragment.firstChild);
                     ViperChangeTracker.addNodeToChange(changeid, ctNode);
@@ -438,6 +452,11 @@ ViperCopyPastePlugin.prototype = {
 
             ViperChangeTracker.endBatchChange(changeid);
         } else {
+            var convertBrTags = false;
+            if (dfx.getParents(this._tmpNode, 'pre', this.viper.getViperElement()).length > 0) {
+                convertBrTags = true;
+            }
+
             var changeid = ViperChangeTracker.startBatchChange('textAdded');
             var ctNode   = null;
             while (fragment.firstChild) {
@@ -446,7 +465,14 @@ ViperCopyPastePlugin.prototype = {
                     break;
                 }
 
-                ctNode = ViperChangeTracker.createCTNode('ins', 'textAdd', fragment.firstChild);
+                var child = fragment.firstChild;
+                if (convertBrTags === true && dfx.isTag(child, 'br') === true) {
+                    // Convert this BR tag to a new line character.
+                    child = document.createTextNode("\n");
+                    dfx.remove(fragment.firstChild);
+                }
+
+                ctNode = ViperChangeTracker.createCTNode('ins', 'textAdd', child);
                 ViperChangeTracker.addNodeToChange(changeid, ctNode);
                 dfx.insertBefore(this._tmpNode, ctNode);
             }

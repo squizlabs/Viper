@@ -522,8 +522,9 @@ ViperTableEditorPlugin.prototype = {
         var toolbarid   = 'ViperTableEditor-toolbar';
         var self        = this;
         var toolbarElem = tools.createInlineToolbar(toolbarid);
+        var toolbar     = tools.getItem(toolbarid);
 
-        this._toolbarWidget = tools.getItem(toolbarid);
+        this._toolbarWidget = toolbar;
 
         // Add lineage container to the toolbar.
         var lineage = document.createElement('ul');
@@ -533,15 +534,28 @@ ViperTableEditorPlugin.prototype = {
 
         // Add the table buttons.
         this._createCellProperties();
+        this.viper.fireCallbacks('ViperTableEditorPlugin:initToolbar', {toolbar: toolbar, type: 'cell'});
+
         this._createColProperties();
+        this.viper.fireCallbacks('ViperTableEditorPlugin:initToolbar', {toolbar: toolbar, type: 'col'});
+
         this._createRowProperties();
+        this.viper.fireCallbacks('ViperTableEditorPlugin:initToolbar', {toolbar: toolbar, type: 'row'});
+
         this._createTableProperties();
+        this.viper.fireCallbacks('ViperTableEditorPlugin:initToolbar', {toolbar: toolbar, type: 'table'});
 
     },
 
     hideToolbar: function()
     {
         this._toolbarWidget.hide();
+
+    },
+
+    getCurrentViewType: function()
+    {
+        return this._type;
 
     },
 
@@ -576,6 +590,7 @@ ViperTableEditorPlugin.prototype = {
         this._toolbarWidget._updateSubSectionArrowPos();
 
         this._toolbarWidget.focusSubSection();
+        this.viper.removeHighlights();
 
     },
 
@@ -617,13 +632,13 @@ ViperTableEditorPlugin.prototype = {
 
         this._tools.getItem('VTEP:cellProps:heading').setValue(dfx.isTag(cell, 'th'));
 
-        if (this.getColspan(cell) <= 1) {
+        if (this.getRowspan(cell) <= 1) {
             this._tools.disableButton('VTEP:cellProps:splitHoriz');
         } else {
             this._tools.enableButton('VTEP:cellProps:splitHoriz');
         }
 
-        if (this.getRowspan(cell) <= 1) {
+        if (this.getColspan(cell) <= 1) {
             this._tools.disableButton('VTEP:cellProps:splitVert');
         } else {
             this._tools.enableButton('VTEP:cellProps:splitVert');
@@ -714,6 +729,8 @@ ViperTableEditorPlugin.prototype = {
         this._toolbarWidget.showButton('VTEP:rowProps:settings');
         this._toolbarWidget.showButton('VTEP:rowProps:insBefore');
         this._toolbarWidget.showButton('VTEP:rowProps:insAfter');
+        this._toolbarWidget.showButton('VTEP:rowProps:moveUp');
+        this._toolbarWidget.showButton('VTEP:rowProps:moveDown');
         this._toolbarWidget.showButton('VTEP:rowProps:remove');
 
         this._tools.getItem('VTEP:rowProps:heading').setValue(dfx.getTag('td', cell.parentNode).length === 0);
@@ -1651,6 +1668,20 @@ ViperTableEditorPlugin.prototype = {
             this.setColspan(cell, 1);
         }
 
+        var cells = dfx.getTag('td,th', table);
+        if (cells.length === 1) {
+            this.setColspan(cells[0], 1);
+            this.setRowspan(cells[0], 1);
+
+            // Remove empty rows.
+            var rows = dfx.getTag('tr', table);
+            for (var i = 0; i < rows.length; i++) {
+                if (dfx.getTag('td,th', rows[i]).length === 0) {
+                    dfx.remove(rows[i]);
+                }
+            }
+        }
+
         this.tableUpdated();
 
         return cell;
@@ -2290,6 +2321,8 @@ ViperTableEditorPlugin.prototype = {
         }
 
         dfx.setStyle(table, 'width', width);
+
+        this.tableUpdated(table);
 
     },
 

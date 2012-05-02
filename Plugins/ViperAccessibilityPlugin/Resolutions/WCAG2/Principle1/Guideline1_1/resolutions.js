@@ -98,7 +98,7 @@ ViperAccessibilityPlugin_WCAG2_Principle1_Guideline1_1 = {
 
     _getImageResContent: function(contentElement, element, msg)
     {
-        this.parent.setResolutionInstruction(contentElement, '<div class="imagePreview "><img class="thumb" src="' + element.getAttribute('src') + '"></div><p>' + msg + '</p>');
+        this.parent.setResolutionInstruction(contentElement, '<div class="Viper-imagePreview "><img class="Viper-thumb" src="' + element.getAttribute('src') + '"></div><p>' + msg + '</p>');
 
     }
 

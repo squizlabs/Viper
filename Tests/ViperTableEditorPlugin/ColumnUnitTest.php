@@ -18,6 +18,7 @@ class Viper_Tests_ViperTableEditorPlugin_ColumnUnitTest extends AbstractViperTab
         $this->showTools(0, 'col');
         $this->assertTrue($this->exists($this->getImg('col_tools.png')));
 
+        $this->clickCell(1);
         $this->clickTopToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_createTable_active.png');
         $columnIcon = $this->find($this->getImg('icon_tools_col.png'));
         $this->click($columnIcon);
@@ -28,6 +29,37 @@ class Viper_Tests_ViperTableEditorPlugin_ColumnUnitTest extends AbstractViperTab
     }//end testColumnToolIconsCorrect()
 
 
+    /**
+     * Test changing the width of columns.
+     *
+     * @return void
+     */
+    public function testChangingColumnWidth()
+    {
+        $this->insertTable();
+
+        // Change the width of the first column and click Update Changes
+        $this->showTools(0, 'col');
+        $widthField = $this->find($this->getImg('input_width.png'));
+        $this->click($widthField);
+        $this->type('50');
+        $updateChanges = $this->find($this->getImg('icon_updateChanges.png'));
+        $this->click($updateChanges);
+        $this->execJS('rmTableHeaders(0,true)');
+        $this->assertHTMLMatch('<p>Lorem IPSUM</p><table style="width: 100%; " border="1"><tbody><tr><td style="width: 50px;">&nbsp;</td><th>&nbsp;</th><th>&nbsp;</th><th>&nbsp;</th></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>dolor</p>');
+
+        // Change the width of the last column and press enter
+        $this->showTools(3, 'col');
+        $widthField = $this->find($this->getImg('input_width.png'));
+        $this->click($widthField);
+        $this->type('100');
+        $this->keyDown('Key.ENTER');
+        $this->execJS('rmTableHeaders(0,true)');
+        $this->assertHTMLMatch('<p>Lorem IPSUM</p><table style="width: 100%; " border="1"><tbody><tr><td style="width: 50px; ">&nbsp;</td><th>&nbsp;</th><th>&nbsp;</th><td style="width: 100px;">&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>dolor</p>');
+
+    }//end testChangingColumnWidth()
+    
+    
     /**
      * Test adding a new table without headers and then changing the settings of columns.
      *
@@ -79,32 +111,16 @@ class Viper_Tests_ViperTableEditorPlugin_ColumnUnitTest extends AbstractViperTab
         $this->execJS('rmTableHeaders(0,true)');
         $this->assertHTMLMatch('<p>Lorem IPSUM</p><table style="width: 100%;" border="1"><tbody><tr><td>&nbsp;One</td><td>Three&nbsp;</td><td>&nbsp;</td><td>Two&nbsp;</td><td>Four&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>dolor</p>');
 
-        // Change the width of the first column and click Update Changes
-        $this->showTools(0, 'col');
-        $widthField = $this->find($this->getImg('input_width.png'));
-        $this->click($widthField);
-        $this->type('50');
-        $updateChanges = $this->find($this->getImg('icon_updateChanges.png'));
-        $this->click($updateChanges);
-        $this->execJS('rmTableHeaders(0,true)');
-        $this->assertHTMLMatch('<p>Lorem IPSUM</p><table style="width: 100%;" border="1"><tbody><tr><td style="width: 50px; ">&nbsp;One</td><td>Three&nbsp;</td><td>&nbsp;</td><td>Two&nbsp;</td><td>Four&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>dolor</p>');
-
-        // Change the width of the last column and press enter
-        $this->showTools(4, 'col');
-        $widthField = $this->find($this->getImg('input_width.png'));
-        $this->click($widthField);
-        $this->type('100');
-        $this->keyDown('Key.ENTER');
-        $this->execJS('rmTableHeaders(0,true)');
-        $this->assertHTMLMatch('<p>Lorem IPSUM</p><table style="width: 100%;" border="1"><tbody><tr><td style="width: 50px; ">&nbsp;One</td><td>Three&nbsp;</td><td>&nbsp;</td><td>Two&nbsp;</td><td style="width: 100px; ">Four&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>dolor</p>');
-
         // Change the first colum to be a header column
         $this->showTools(0, 'col');
         $isHeadingField = $this->find($this->getImg('icon_isHeading.png'));
         $this->click($isHeadingField);
+        sleep(1);
+        $updateChanges = $this->find($this->getImg('icon_updateChanges.png'));
+        $this->click($updateChanges);
         $this->click($updateChanges);
         $this->execJS('rmTableHeaders(0,true)');
-        $this->assertHTMLMatch('<p>Lorem IPSUM</p><table style="width: 100%;" border="1"><tbody><tr><th style="width: 50px; ">&nbsp;One</th><td>Three&nbsp;</td><td>&nbsp;</td><td>Two&nbsp;</td><td style="width: 100px; ">Four&nbsp;</td></tr><tr><th>&nbsp;</th><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><th>&nbsp;</th><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>dolor</p>');
+        $this->assertHTMLMatch('<p>Lorem IPSUM</p><table style="width: 100%;" border="1"><tbody><tr><th>&nbsp;One</th><td>Three&nbsp;</td><td>&nbsp;</td><td>Two&nbsp;</td><td>Four&nbsp;</td></tr><tr><th>&nbsp;</th><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><th>&nbsp;</th><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>dolor</p>');
 
 
     }//end testColumnsInANewTableWithoutHeaders()
@@ -115,7 +131,7 @@ class Viper_Tests_ViperTableEditorPlugin_ColumnUnitTest extends AbstractViperTab
      *
      * @return void
      */
-    public function testAddingAndDeletingColumnsInANewTableWithLeftHeaders()
+    public function testColumnsInANewTableWithLeftHeaders()
     {
         $textLoc = $this->find('IPSUM');
         $this->insertTableWithLeftHeaders();
@@ -152,50 +168,36 @@ class Viper_Tests_ViperTableEditorPlugin_ColumnUnitTest extends AbstractViperTab
         $this->showTools(2, 'col');
         $this->click($this->find($this->getImg('icon_moveColLeft.png'), NULL, 0.83));
         $this->execJS('rmTableHeaders(0,true)');
-        $this->assertHTMLMatch('<p>Lorem IPSUM</p><table style="width: 100%; " border="1"><tbody><tr><td>&nbsp;</td><th>one&nbsp;</th><td>two&nbsp;</td><td>three&nbsp;</td><td>four&nbsp;</td></tr><tr><td>&nbsp;</td><th>&nbsp;</th><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><th>&nbsp;</th><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>dolor</p>');
+        $this->assertHTMLMatch('<p>Lorem IPSUM</p><table style="width: 100%;" border="1"><tbody><tr><th>&nbsp;One</th><td>Two&nbsp;</td><td>&nbsp;</td><td>Three&nbsp;</td><td>Four&nbsp;</td></tr><tr><th>&nbsp;</th><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><th>&nbsp;</th><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>dolor</p>');
 
         // Move the second column right
         $this->showTools(2, 'col');
         $this->click($this->find($this->getImg('icon_moveColRight.png'), NULL, 0.83));
         $this->execJS('rmTableHeaders(0,true)');
-        $this->assertHTMLMatch('<p>Lorem IPSUM</p><table style="width: 100%; " border="1"><tbody><tr><td>&nbsp;</td><td>two&nbsp;</td><th>one&nbsp;</th><td>three&nbsp;</td><td>four&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><th>&nbsp;</th><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><th>&nbsp;</th><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>dolor</p>');
+        $this->assertHTMLMatch('<p>Lorem IPSUM</p><table style="width: 100%;" border="1"><tbody><tr><th>&nbsp;One</th><td>Two&nbsp;</td><td>Three&nbsp;</td><td>&nbsp;</td><td>Four&nbsp;</td></tr><tr><th>&nbsp;</th><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><th>&nbsp;</th><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>dolor</p>');
 
-        // Change the width of the first column and click Update Changes
+        // Change the first colum not to be a header column
         $this->showTools(0, 'col');
-        $widthField = $this->find($this->getImg('input_width.png'));
-        $this->click($widthField);
-        $this->type('50');
+        $isHeadingField = $this->find($this->getImg('icon_isHeading_active.png'));
+        $this->click($isHeadingField);
+        sleep(1);
         $updateChanges = $this->find($this->getImg('icon_updateChanges.png'));
         $this->click($updateChanges);
         $this->execJS('rmTableHeaders(0,true)');
-        $this->assertHTMLMatch('<p>Lorem IPSUM</p><table style="width: 100%; " border="1"><tbody><tr><td style="width: 50px; ">&nbsp;</td><td>two&nbsp;</td><th>one&nbsp;</th><td>three&nbsp;</td><td>four&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><th>&nbsp;</th><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><th>&nbsp;</th><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>dolor</p>');
-
-        // Change the width of the third column and press enter
-        $this->showTools(2, 'col');
-        $widthField = $this->find($this->getImg('input_width.png'));
-        $this->click($widthField);
-        $this->type('100');
-        $this->keyDown('Key.ENTER');
-        $this->execJS('rmTableHeaders(0,true)');
-        $this->assertHTMLMatch('<p>Lorem IPSUM</p><table style="width: 100%; " border="1"><tbody><tr><td style="width: 50px; ">&nbsp;</td><td>two&nbsp;</td><th style="width: 100px; ">one&nbsp;</th><td>three&nbsp;</td><td>four&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><th>&nbsp;</th><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><th>&nbsp;</th><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>dolor</p>');
-
-        // Change the first colum to be a header column
-        $this->showTools(0, 'col');
-        $isHeadingField = $this->find($this->getImg('icon_isHeading.png'));
-        $this->click($isHeadingField);
-        $this->click($updateChanges);
-        $this->execJS('rmTableHeaders(0,true)');
-        $this->assertHTMLMatch('<p>Lorem IPSUM</p><table style="width: 100%; " border="1"><tbody><tr><th style="width: 50px; ">&nbsp;</th><td>two&nbsp;</td><th style="width: 100px; ">one&nbsp;</th><td>three&nbsp;</td><td>four&nbsp;</td></tr><tr><th>&nbsp;</th><td>&nbsp;</td><th>&nbsp;</th><td>&nbsp;</td><td>&nbsp;</td></tr><tr><th>&nbsp;</th><td>&nbsp;</td><th>&nbsp;</th><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>dolor</p>');
+        $this->assertHTMLMatch('<p>Lorem IPSUM</p><table style="width: 100%;" border="1"><tbody><tr><td>&nbsp;One</td><td>Two&nbsp;</td><td>Three&nbsp;</td><td>&nbsp;</td><td>Four&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>dolor</p>');
 
         // Change the third colum not to be a header column
         $this->showTools(2, 'col');
+        $isHeadingField = $this->find($this->getImg('icon_isHeading.png'));
         $this->click($isHeadingField);
+        sleep(1);
+        $updateChanges = $this->find($this->getImg('icon_updateChanges.png'));
         $this->click($updateChanges);
         $this->execJS('rmTableHeaders(0,true)');
-        $this->assertHTMLMatch('<p>Lorem IPSUM</p><table style="width: 100%; " border="1"><tbody><tr><th style="width: 50px; ">&nbsp;</th><td>two&nbsp;</td><td style="width: 100px; ">one&nbsp;</td><td>three&nbsp;</td><td>four&nbsp;</td></tr><tr><th>&nbsp;</th><td>&nbsp;</td><tr>&nbsp;</tr><td>&nbsp;</td><td>&nbsp;</td></tr><tr><th>&nbsp;</th><td>&nbsp;</td><tr>&nbsp;</tr><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>dolor</p>');
+        $this->assertHTMLMatch('<p>Lorem IPSUM</p><table style="width: 100%;" border="1"><tbody><tr><td>&nbsp;One</td><td>Two&nbsp;</td><th>Three&nbsp;</th><td>&nbsp;</td><td>Four&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><th>&nbsp;</th><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><th>&nbsp;</th><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>dolor</p>');
 
 
-    }//end testAddingAndDeletingColumnsInANewTableWithLeftHeaders()
+    }//end testColumnsInANewTableWithLeftHeaders()
 
 
     /**
@@ -249,39 +251,25 @@ class Viper_Tests_ViperTableEditorPlugin_ColumnUnitTest extends AbstractViperTab
         $this->execJS('rmTableHeaders(0,true)');
         $this->assertHTMLMatch('<p>Lorem IPSUM</p><table style="width: 100%;" border="1"><tbody><tr><th>&nbsp;One</th><th>Two&nbsp;</th><th>Three&nbsp;</th><th>&nbsp;</th><th>Four&nbsp;</th></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>dolor</p>');
 
-        // Change the width of the first column and click Update Changes
-        $this->showTools(0, 'col');
-        $widthField = $this->find($this->getImg('input_width.png'));
-        $this->click($widthField);
-        $this->type('50');
-        $updateChanges = $this->find($this->getImg('icon_updateChanges.png'));
-        $this->click($updateChanges);
-        $this->execJS('rmTableHeaders(0,true)');
-        $this->assertHTMLMatch('<p>Lorem IPSUM</p><table style="width: 100%; " border="1"><tbody><tr><td style="width: 50px; ">&nbsp;</td><td>two&nbsp;</td><th>one&nbsp;</th><td>three&nbsp;</td><td>four&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><th>&nbsp;</th><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><th>&nbsp;</th><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>dolor</p>');
-
-        // Change the width of the third column and press enter
-        $this->showTools(2, 'col');
-        $widthField = $this->find($this->getImg('input_width.png'));
-        $this->click($widthField);
-        $this->type('100');
-        $this->keyDown('Key.ENTER');
-        $this->execJS('rmTableHeaders(0,true)');
-        $this->assertHTMLMatch('<p>Lorem IPSUM</p><table style="width: 100%; " border="1"><tbody><tr><td style="width: 50px; ">&nbsp;</td><td>two&nbsp;</td><th style="width: 100px; ">one&nbsp;</th><td>three&nbsp;</td><td>four&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><th>&nbsp;</th><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><th>&nbsp;</th><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>dolor</p>');
-
         // Change the first colum to be a header column
         $this->showTools(0, 'col');
         $isHeadingField = $this->find($this->getImg('icon_isHeading.png'));
         $this->click($isHeadingField);
+        sleep(1);
+        $updateChanges = $this->find($this->getImg('icon_updateChanges.png'));
         $this->click($updateChanges);
         $this->execJS('rmTableHeaders(0,true)');
-        $this->assertHTMLMatch('<p>Lorem IPSUM</p><table style="width: 100%; " border="1"><tbody><tr><th style="width: 50px; ">&nbsp;</th><td>two&nbsp;</td><th style="width: 100px; ">one&nbsp;</th><td>three&nbsp;</td><td>four&nbsp;</td></tr><tr><th>&nbsp;</th><td>&nbsp;</td><th>&nbsp;</th><td>&nbsp;</td><td>&nbsp;</td></tr><tr><th>&nbsp;</th><td>&nbsp;</td><th>&nbsp;</th><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>dolor</p>');
+        $this->assertHTMLMatch('<p>Lorem IPSUM</p><table style="width: 100%;" border="1"><tbody><tr><th>&nbsp;One</th><th>Two&nbsp;</th><th>Three&nbsp;</th><th>&nbsp;</th><th>Four&nbsp;</th></tr><tr><th>&nbsp;</th><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><th>&nbsp;</th><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>dolor</p>');
 
         // Change the third colum not to be a header column
         $this->showTools(2, 'col');
+        $isHeadingField = $this->find($this->getImg('icon_isHeading.png'));
         $this->click($isHeadingField);
+        sleep(1);
+        $updateChanges = $this->find($this->getImg('icon_updateChanges.png'));
         $this->click($updateChanges);
         $this->execJS('rmTableHeaders(0,true)');
-        $this->assertHTMLMatch('<p>Lorem IPSUM</p><table style="width: 100%; " border="1"><tbody><tr><th style="width: 50px; ">&nbsp;</th><td>two&nbsp;</td><td style="width: 100px; ">one&nbsp;</td><td>three&nbsp;</td><td>four&nbsp;</td></tr><tr><th>&nbsp;</th><td>&nbsp;</td><tr>&nbsp;</tr><td>&nbsp;</td><td>&nbsp;</td></tr><tr><th>&nbsp;</th><td>&nbsp;</td><tr>&nbsp;</tr><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>dolor</p>');
+        $this->assertHTMLMatch('<p>Lorem IPSUM</p><table style="width: 100%;" border="1"><tbody><tr><th>&nbsp;One</th><th>Two&nbsp;</th><th>Three&nbsp;</th><th>&nbsp;</th><th>Four&nbsp;</th></tr><tr><th>&nbsp;</th><td>&nbsp;</td><th>&nbsp;</th><td>&nbsp;</td><td>&nbsp;</td></tr><tr><th>&nbsp;</th><td>&nbsp;</td><th>&nbsp;</th><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>dolor</p>');
 
     }//end testAddingAndDeletingColumnsInANewTableWithTopHeaders()
 
@@ -329,47 +317,33 @@ class Viper_Tests_ViperTableEditorPlugin_ColumnUnitTest extends AbstractViperTab
         $this->showTools(2, 'col');
         $this->click($this->find($this->getImg('icon_moveColLeft.png'), NULL, 0.83));
         $this->execJS('rmTableHeaders(0,true)');
-        $this->assertHTMLMatch('<p>Lorem IPSUM</p><table style="width: 100%;" border="1"><tbody><tr><th>&nbsp;One</th><th>Two&nbsp;</th><th>&nbsp;</th><th>Three&nbsp;</th><th>Four&nbsp;</th></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>dolor</p>');
+        $this->assertHTMLMatch('<p>Lorem IPSUM</p><table style="width: 100%;" border="1"><tbody><tr><th>&nbsp;One</th><th>Two&nbsp;</th><th>&nbsp;</th><th>Three&nbsp;</th><th>Four&nbsp;</th></tr><tr><th>&nbsp;</th><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><th>&nbsp;</th><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>dolor</p>');
 
         // Move the second column right
         $this->showTools(2, 'col');
         $this->click($this->find($this->getImg('icon_moveColRight.png'), NULL, 0.83));
         $this->execJS('rmTableHeaders(0,true)');
-        $this->assertHTMLMatch('<p>Lorem IPSUM</p><table style="width: 100%;" border="1"><tbody><tr><th>&nbsp;One</th><th>Two&nbsp;</th><th>Three&nbsp;</th><th>&nbsp;</th><th>Four&nbsp;</th></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>dolor</p>');
+        $this->assertHTMLMatch('<p>Lorem IPSUM</p><table style="width: 100%;" border="1"><tbody><tr><th>&nbsp;One</th><th>Two&nbsp;</th><th>Three&nbsp;</th><th>&nbsp;</th><th>Four&nbsp;</th></tr><tr><th>&nbsp;</th><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><th>&nbsp;</th><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>dolor</p>');
 
-        // Change the width of the first column and click Update Changes
-        $this->showTools(0, 'col');
-        $widthField = $this->find($this->getImg('input_width.png'));
-        $this->click($widthField);
-        $this->type('50');
-        $updateChanges = $this->find($this->getImg('icon_updateChanges.png'));
-        $this->click($updateChanges);
-        $this->execJS('rmTableHeaders(0,true)');
-        $this->assertHTMLMatch('<p>Lorem IPSUM</p><table style="width: 100%; " border="1"><tbody><tr><td style="width: 50px; ">&nbsp;</td><td>two&nbsp;</td><th>one&nbsp;</th><td>three&nbsp;</td><td>four&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><th>&nbsp;</th><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><th>&nbsp;</th><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>dolor</p>');
-
-        // Change the width of the third column and press enter
-        $this->showTools(2, 'col');
-        $widthField = $this->find($this->getImg('input_width.png'));
-        $this->click($widthField);
-        $this->type('100');
-        $this->keyDown('Key.ENTER');
-        $this->execJS('rmTableHeaders(0,true)');
-        $this->assertHTMLMatch('<p>Lorem IPSUM</p><table style="width: 100%; " border="1"><tbody><tr><td style="width: 50px; ">&nbsp;</td><td>two&nbsp;</td><th style="width: 100px; ">one&nbsp;</th><td>three&nbsp;</td><td>four&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><th>&nbsp;</th><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><th>&nbsp;</th><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>dolor</p>');
-
-        // Change the thirda colum to be a header column
+        // Change the third colum to be a header column
         $this->showTools(2, 'col');
         $isHeadingField = $this->find($this->getImg('icon_isHeading.png'));
         $this->click($isHeadingField);
+        sleep(1);
+        $updateChanges = $this->find($this->getImg('icon_updateChanges.png'));
         $this->click($updateChanges);
         $this->execJS('rmTableHeaders(0,true)');
-        $this->assertHTMLMatch('<p>Lorem IPSUM</p><table style="width: 100%; " border="1"><tbody><tr><th style="width: 50px; ">&nbsp;</th><td>two&nbsp;</td><th style="width: 100px; ">one&nbsp;</th><td>three&nbsp;</td><td>four&nbsp;</td></tr><tr><th>&nbsp;</th><td>&nbsp;</td><th>&nbsp;</th><td>&nbsp;</td><td>&nbsp;</td></tr><tr><th>&nbsp;</th><td>&nbsp;</td><th>&nbsp;</th><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>dolor</p>');
+        $this->assertHTMLMatch('<p>Lorem IPSUM</p><table style="width: 100%;" border="1"><tbody><tr><th>&nbsp;One</th><th>Two&nbsp;</th><th>Three&nbsp;</th><th>&nbsp;</th><th>Four&nbsp;</th></tr><tr><th>&nbsp;</th><td>&nbsp;</td><th>&nbsp;</th><td>&nbsp;</td><td>&nbsp;</td></tr><tr><th>&nbsp;</th><td>&nbsp;</td><th>&nbsp;</th><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>dolor</p>');
 
         // Change the first colum not to be a header column
         $this->showTools(0, 'col');
+        $isHeadingField = $this->find($this->getImg('icon_isHeading_active.png'));
         $this->click($isHeadingField);
+        sleep(1);
+        $updateChanges = $this->find($this->getImg('icon_updateChanges.png'));
         $this->click($updateChanges);
         $this->execJS('rmTableHeaders(0,true)');
-        $this->assertHTMLMatch('<p>Lorem IPSUM</p><table style="width: 100%; " border="1"><tbody><tr><th style="width: 50px; ">&nbsp;</th><td>two&nbsp;</td><td style="width: 100px; ">one&nbsp;</td><td>three&nbsp;</td><td>four&nbsp;</td></tr><tr><th>&nbsp;</th><td>&nbsp;</td><tr>&nbsp;</tr><td>&nbsp;</td><td>&nbsp;</td></tr><tr><th>&nbsp;</th><td>&nbsp;</td><tr>&nbsp;</tr><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>dolor</p>');
+        $this->assertHTMLMatch('<p>Lorem IPSUM</p><table style="width: 100%;" border="1"><tbody><tr><td>&nbsp;One</td><th>Two&nbsp;</th><th>Three&nbsp;</th><th>&nbsp;</th><th>Four&nbsp;</th></tr><tr><td>&nbsp;</td><td>&nbsp;</td><th>&nbsp;</th><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><th>&nbsp;</th><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>dolor</p>');
 
 
     }//end testAddingAndDeletingColumnsInANewTableWithBothHeaders()

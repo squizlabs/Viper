@@ -2947,6 +2947,13 @@ Viper.prototype = {
             dfx.addClass(span, '__viper_selHighlight');
             dfx.setStyle(span, 'border-right', '1px solid #000');
             range.insertNode(span);
+            var parentNode = span.parentNode;
+            if (parentNode) {
+                var tagName = dfx.getTagName(parentNode);
+                if (['table', 'tbody', 'tr'].inArray(tagName) === true) {
+                    dfx.remove(span);
+                }
+            }
         } else {
             var attributes = {
                 cssClass: '__viper_selHighlight'
@@ -3542,7 +3549,7 @@ Viper.prototype = {
         var startNode = range.getStartNode();
         var endNode   = range.getEndNode();
 
-        if (!endNode && range.startContainer.nodeType === dfx.ELEMENT_NODE) {
+        if (!endNode && range.startContainer && range.startContainer.nodeType === dfx.ELEMENT_NODE) {
             var lastSelectable = range._getLastSelectableChild(range.startContainer);
             if (lastSelectable) {
                 endNode = lastSelectable;

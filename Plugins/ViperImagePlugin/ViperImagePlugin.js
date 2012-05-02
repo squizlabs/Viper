@@ -323,12 +323,12 @@ ViperImagePlugin.prototype = {
 
         // Test URL.
         var inputTimeout = null;
-        this.viper.registerCallback('ViperTools:changed:' + prefix + ':urlInput', 'ViperLinkPlugin', function() {
+        this.viper.registerCallback('ViperTools:changed:' + prefix + ':urlInput', 'ViperImagePlugin', function() {
             clearTimeout(inputTimeout);
 
             var url = dfx.trim(tools.getItem('ViperImagePlugin:urlInput').getValue());
             if (!url) {
-                 dfx.setStyle(previewBox, 'display', 'none');
+                 dfx.setStyle(self._previewBox, 'display', 'none');
                  tools.setFieldErrors(prefix + ':urlInput', []);
             } else {
                 // After a time period update the image preview.
@@ -652,6 +652,8 @@ ViperImagePlugin.prototype = {
 
     showImageResizeHandles: function(image)
     {
+        this.hideImageResizeHandles();
+
         var seHandle = document.createElement('div');
         dfx.addClass(seHandle, 'Viper-image-handle Viper-image-handle-se');
 

@@ -841,7 +841,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         $this->keyDown($this->_getAccessKeys('j'));
         $this->type($js);
         $this->keyDown('Key.TAB');
-        $this->keyDown('Key.ENTER');
+        $this->keyDown('Key.SPACE');
         sleep(1);
         $this->keyDown($this->_getAccessKeys('r'));
         usleep(500);

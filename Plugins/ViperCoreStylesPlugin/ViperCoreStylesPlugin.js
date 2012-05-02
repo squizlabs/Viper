@@ -684,11 +684,13 @@ ViperCoreStylesPlugin.prototype = {
             case 'left':
                 dfx.setStyle(image, 'float', 'left');
                 dfx.setStyle(image, 'margin', '1em 1em 1em 0');
+                dfx.setStyle(image, 'display', '');
             break;
 
             case 'right':
                 dfx.setStyle(image, 'float', 'right');
                 dfx.setStyle(image, 'margin', '1em 0 1em 1em');
+                dfx.setStyle(image, 'display', '');
             break;
 
             case 'center':
@@ -703,6 +705,10 @@ ViperCoreStylesPlugin.prototype = {
                 dfx.setStyle(image, 'display', '');
             break;
         }//end switch
+
+        if (image.getAttribute('style') === '') {
+            image.removeAttribute('style');
+        }
 
         // Reset button status.
         var types = ['left', 'center', 'right', 'block'];
@@ -886,6 +892,11 @@ ViperCoreStylesPlugin.prototype = {
         var endNode       = null;
         var bookmark      = null;
 
+        if (nodeSelection) {
+            var sParents  = dfx.getSurroundingParents(nodeSelection);
+            nodeSelection = sParents[0];
+        }
+
         if (!nodeSelection) {
             var startNode = range.getStartNode();
             if (dfx.isChildOf(startNode, this.viper.element) === false) {
@@ -952,14 +963,30 @@ ViperCoreStylesPlugin.prototype = {
         ViperChangeTracker.endBatchChange(changeid);
 
         if (this.viper.isBrowser('msie') === true && nodeSelection && !bookmark) {
+            var self = this;
             setTimeout(function() {
                 ViperSelection.addRange(range);
                 self.viper.fireNodesChanged();
                 self.viper.fireSelectionChanged();
             }, 10);
         } else {
+            if (nodeSelection) {
+                range.selectNode(nodeSelection);
+                ViperSelection.addRange(range);
+            }
+
+            this.viper.fireSelectionChanged(null, true);
             this.viper.fireNodesChanged();
-            this.viper.fireSelectionChanged();
+
+            if (nodeSelection
+                && dfx.isTag(nodeSelection, 'table') === true
+                && (this.viper.isBrowser('chrome') === true || this.viper.isBrowser('safari') === true)
+            ) {
+                // Webkit seems to fail to return the correct position for table
+                // range. Update position for specific table element and not range.
+                var inlineToolbar = this.viper.ViperPluginManager.getPlugin('ViperInlineToolbarPlugin');
+                inlineToolbar.getToolbar().updatePosition(null, nodeSelection);
+            }
         }
 
     },
