@@ -2947,6 +2947,13 @@ Viper.prototype = {
             dfx.addClass(span, '__viper_selHighlight');
             dfx.setStyle(span, 'border-right', '1px solid #000');
             range.insertNode(span);
+            var parentNode = span.parentNode;
+            if (parentNode) {
+                var tagName = dfx.getTagName(parentNode);
+                if (['table', 'tbody', 'tr'].inArray(tagName) === true) {
+                    dfx.remove(span);
+                }
+            }
         } else {
             var attributes = {
                 cssClass: '__viper_selHighlight'
