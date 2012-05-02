@@ -553,7 +553,7 @@ ViperCopyPastePlugin.prototype = {
 
         content = this._removeWordTags(content);
 
-        content = this._convertDelNInsTags(content);
+        content = this._convertTags(content);
 
         return content;
 
@@ -575,14 +575,12 @@ ViperCopyPastePlugin.prototype = {
 
     },
 
-    _convertDelNInsTags: function(content)
+    _convertTags: function(content)
     {
         var tmp = document.createElement('div');
         dfx.setHtml(tmp, content);
 
-        var delTags = dfx.getTag('del', tmp);
-        dfx.remove(delTags);
-
+        // Remove the INS tags.
         var insTags = dfx.getTag('ins', tmp);
         var ins     = null;
         while (ins = insTags.shift()) {
@@ -591,6 +589,31 @@ ViperCopyPastePlugin.prototype = {
             }
 
             dfx.remove(ins);
+        }
+
+        // Remove the CENTER tags.
+        var centerTags = dfx.getTag('center', tmp);
+        var center     = null;
+        while (center = centerTags.shift()) {
+            var parent    = null;
+            var childTags = dfx.getTag('*', center);
+            if (childTags.length === 0) {
+                parent = document.createElement('p');
+            }
+
+            while (center.firstChild) {
+                if (parent) {
+                    parent.appendChild(center.firstChild);
+                } else {
+                    dfx.insertBefore(center, center.firstChild);
+                }
+            }
+
+            if (parent) {
+                dfx.insertBefore(center, parent);
+            }
+
+            dfx.remove(center);
         }
 
         content = dfx.getHtml(tmp);
@@ -1002,6 +1025,10 @@ ViperCopyPastePlugin.prototype = {
         content = content.replace(/<\/b(\s+|>)/gi, "</strong$1");
         content = content.replace(/<i(\s+|>)/gi, "<em$1");
         content = content.replace(/<\/i(\s+|>)/gi, "</em$1");
+        content = content.replace(/<s(\s+|>)/gi, "<del$1");
+        content = content.replace(/<\/s(\s+|>)/gi, "</del$1");
+        content = content.replace(/<strike(\s+|>)/gi, "<del$1");
+        content = content.replace(/<\/strike(\s+|>)/gi, "</del$1");
         return content;
 
     },
