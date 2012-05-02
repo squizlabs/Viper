@@ -648,6 +648,8 @@ ViperFormatPlugin.prototype = {
                 } else {
                     tools.setButtonInactive(prefix + 'classBtn-' + type);
                 }
+
+                self.viper.fireNodesChanged();
             }, [prefix + 'class:input']);
 
             toolbar.setSubSectionButton(prefix + 'classBtn-' + type, prefix + 'class:subSection-' + type);

@@ -2322,6 +2322,8 @@ ViperTableEditorPlugin.prototype = {
 
         dfx.setStyle(table, 'width', width);
 
+        this.tableUpdated(table);
+
     },
 
     getTableWidth: function(table)
