@@ -638,6 +638,34 @@ ViperCopyPastePlugin.prototype = {
             }
         }
 
+        // Remove retarded P tags in between list elements...
+        var lists = dfx.getTag('ol,ul', tmp);
+        for (var i = 0; i < lists.length; i++) {
+            var node = lists[i].firstChild;
+            while (node) {
+                if (dfx.isTag(node, 'li') === false) {
+                    // Not a list item, remove it..
+                    var removeNode = node;
+                    node = node.nextSibling;
+                    dfx.remove(removeNode);
+                } else {
+                    node = node.nextSibling;
+                }
+            }
+        }
+
+        // Remove any font tag with multiple children.
+        var tags = dfx.find(tmp, 'font');
+        for (var i = 0; i < tags.length; i++) {
+            if (dfx.getTag('*', tags[i]).length > 1) {
+                while (tags[i].firstChild) {
+                    dfx.insertBefore(tags[i], tags[i].firstChild);
+                }
+
+                dfx.remove(tags[i]);
+            }
+        }
+
         // Convert [strong + em ] + font + p tags to heading tags.
         var tags = dfx.find(tmp, 'font > p');
         var c    = tags.length;
