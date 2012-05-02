@@ -811,10 +811,11 @@ ViperFormatPlugin.prototype = {
      */
     handleFormat: function(type, testOnly)
     {
-        testOnly         = testOnly || false;
-        var range        = this.viper.getViperRange();
-        var selectedNode = range.getNodeSelection();
-        var viperElement = this.viper.getViperElement();
+        testOnly          = testOnly || false;
+        var range         = this.viper.getViperRange();
+        var selectedNode  = range.getNodeSelection();
+        var nodeSelection = selectedNode;
+        var viperElement  = this.viper.getViperElement();
 
         if (!selectedNode) {
             var startNode = range.getStartNode();
@@ -864,13 +865,19 @@ ViperFormatPlugin.prototype = {
                     }
 
                     selectedNode.appendChild(newElem);
+                    this.viper.selectBookmark(bookmark);
                 } else {
-                    this._convertSingleElement(selectedNode, type);
+                    var newElem = this._convertSingleElement(selectedNode, type);
+
+                    this.viper.selectBookmark(bookmark);
+                    if (nodeSelection && newElem) {
+                        range.selectNode(newElem);
+                        ViperSelection.addRange(range);
+                    }
                 }
 
-                this.viper.selectBookmark(bookmark);
-                this.viper.fireNodesChanged([viperElement]);
                 this.viper.fireSelectionChanged(null, true);
+                this.viper.fireNodesChanged();
             } else {
                 // We cannot convert the Viper element so we need to create a new
                 // element from the textnodes that are around the current range.
@@ -997,16 +1004,72 @@ ViperFormatPlugin.prototype = {
             while (element.firstChild) {
                 dfx.insertBefore(element, element.firstChild);
             }
+
+            if (type === 'pre') {
+                this._convertNewLineToBr(element);
+            }
+
+            dfx.remove(element);
         } else {
             var newElem = document.createElement(type);
             while (element.firstChild) {
                 newElem.appendChild(element.firstChild);
             }
 
+            if (type === 'pre') {
+                this._convertBrToNewLine(newElem);
+            } else if (dfx.isTag(element, 'pre') === true) {
+                this._convertNewLineToBr(newElem);
+            }
+
             dfx.insertBefore(element, newElem);
+            dfx.remove(element);
+
+            return newElem;
         }
 
-        dfx.remove(element);
+        return null;
+
+    },
+
+    _convertBrToNewLine: function(element)
+    {
+        var brTags = dfx.getTag('br', element);
+        for (var i = 0; i < brTags.length; i++) {
+            var node = document.createTextNode("\n");
+            dfx.insertBefore(brTags[i], node);
+            dfx.remove(brTags[i]);
+        }
+
+    },
+
+    _convertNewLineToBr: function(element)
+    {
+        if (element.nodeType === dfx.TEXT_NODE) {
+            var nlIndex = -1;
+
+            do {
+                nlIndex = element.data.lastIndexOf("\n");
+                if (nlIndex >= 0) {
+                    var newNode = element.splitText(nlIndex);
+                    var br      = document.createElement('br');
+                    dfx.insertBefore(newNode, br);
+
+                    if (newNode.data.length === 1) {
+                        dfx.remove(newNode);
+                    } else {
+                        newNode.data = newNode.data.substring(1, newNode.data.length);
+                    }
+                }
+            } while (nlIndex >= 0);
+        } else {
+            var textNodes = dfx.getTextNodes(element);
+            var c         = textNodes.length;
+            for (var i = 0; i < c; i++) {
+                var textNode = textNodes[i];
+                this._convertNewLineToBr(textNode);
+            }
+        }
 
     },
 
