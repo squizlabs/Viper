@@ -892,6 +892,11 @@ ViperCoreStylesPlugin.prototype = {
         var endNode       = null;
         var bookmark      = null;
 
+        if (nodeSelection) {
+            var sParents  = dfx.getSurroundingParents(nodeSelection);
+            nodeSelection = sParents[0];
+        }
+
         if (!nodeSelection) {
             var startNode = range.getStartNode();
             if (dfx.isChildOf(startNode, this.viper.element) === false) {
@@ -964,8 +969,23 @@ ViperCoreStylesPlugin.prototype = {
                 self.viper.fireSelectionChanged();
             }, 10);
         } else {
+            if (nodeSelection) {
+                range.selectNode(nodeSelection);
+                ViperSelection.addRange(range);
+            }
+
+            this.viper.fireSelectionChanged(null, true);
             this.viper.fireNodesChanged();
-            this.viper.fireSelectionChanged();
+
+            if (nodeSelection
+                && dfx.isTag(nodeSelection, 'table') === true
+                && (this.viper.isBrowser('chrome') === true || this.viper.isBrowser('safari') === true)
+            ) {
+                // Webkit seems to fail to return the correct position for table
+                // range. Update position for specific table element and not range.
+                var inlineToolbar = this.viper.ViperPluginManager.getPlugin('ViperInlineToolbarPlugin');
+                inlineToolbar.getToolbar().updatePosition(null, nodeSelection);
+            }
         }
 
     },
