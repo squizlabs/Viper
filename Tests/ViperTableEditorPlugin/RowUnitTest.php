@@ -53,8 +53,7 @@ class Viper_Tests_ViperTableEditorPlugin_RowUnitTest extends AbstractViperTableE
         // Apply a class to the third row and press enter
         $this->showTools(9, 'row');
         sleep(1);
-        $classField = $this->find(dirname(dirname(__FILE__)).'/ViperFormatPlugin/Images/toolbarIcon_class.png');
-        $this->click($classField);
+        $classField = $this->clickInlineToolbarButton(dirname(dirname(__FILE__)).'/ViperFormatPlugin/Images/toolbarIcon_class.png');
         $this->type('abc');
         $this->keyDown('Key.ENTER');
         $this->execJS('rmTableHeaders(0,true)');
@@ -164,7 +163,7 @@ class Viper_Tests_ViperTableEditorPlugin_RowUnitTest extends AbstractViperTableE
     {
         $textLoc = $this->find('IPSUM');
         $this->insertTableWithLeftHeaders();
-        
+
         $this->clickCell(8);
         usleep(300);
         $this->type('Three');
@@ -214,7 +213,7 @@ class Viper_Tests_ViperTableEditorPlugin_RowUnitTest extends AbstractViperTableE
         $this->execJS('rmTableHeaders(0,true)');
         $this->assertHTMLMatch('<p>Lorem IPSUM</p><table style="width: 100%;" border="1"><tbody><tr class="test"><th>One</th><th></th><th></th><th></th></tr><tr><td>Two</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr class="abc"><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>Three</td><td>&nbsp;</td><td>&nbsp;</td><td></td></tr></tbody></table><p>dolor</p>');
 
-        
+
     }//end testRowsInANewTableWithLeftHeaders()
 
     /**
