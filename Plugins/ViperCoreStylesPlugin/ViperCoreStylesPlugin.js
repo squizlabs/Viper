@@ -963,6 +963,7 @@ ViperCoreStylesPlugin.prototype = {
         ViperChangeTracker.endBatchChange(changeid);
 
         if (this.viper.isBrowser('msie') === true && nodeSelection && !bookmark) {
+            var self = this;
             setTimeout(function() {
                 ViperSelection.addRange(range);
                 self.viper.fireNodesChanged();
