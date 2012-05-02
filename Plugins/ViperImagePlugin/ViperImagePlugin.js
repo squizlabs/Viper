@@ -652,6 +652,8 @@ ViperImagePlugin.prototype = {
 
     showImageResizeHandles: function(image)
     {
+        this.hideImageResizeHandles();
+
         var seHandle = document.createElement('div');
         dfx.addClass(seHandle, 'Viper-image-handle Viper-image-handle-se');
 
