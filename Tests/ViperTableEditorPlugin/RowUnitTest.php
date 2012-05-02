@@ -51,18 +51,19 @@ class Viper_Tests_ViperTableEditorPlugin_RowUnitTest extends AbstractViperTableE
         $this->assertHTMLMatch('<p>Lorem IPSUM</p><table style="width: 100%;" border="1"><tbody><tr class="test"><th>&nbsp;</th><th>&nbsp;</th><th>&nbsp;</th><th>&nbsp;</th></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>dolor</p>');
 
         // Apply a class to the third row and press enter
-        $this->showTools(2, 'row');
+        $this->showTools(9, 'row');
+        sleep(1);
         $classField = $this->find(dirname(dirname(__FILE__)).'/ViperFormatPlugin/Images/toolbarIcon_class.png');
         $this->click($classField);
-        $this->type('test');
+        $this->type('abc');
         $this->keyDown('Key.ENTER');
         $this->execJS('rmTableHeaders(0,true)');
-        $this->assertHTMLMatch('<p>Lorem IPSUM</p><table style="width: 100%;" border="1"><tbody><tr class="test"><th>&nbsp;</th><th>&nbsp;</th><th>&nbsp;</th><th>&nbsp;</th></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr class="abc"><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td></td></tr></tbody></table><p>dolor</p>');
+        $this->assertHTMLMatch('<p>Lorem IPSUM</p><table style="width: 100%;" border="1"><tbody><tr class="test"><th>&nbsp;</th><th>&nbsp;</th><th>&nbsp;</th><th>&nbsp;</th></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr class="abc"><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>dolor</p>');
 
         // Remove the class from the first row and click Update Changes
         $this->showTools(0, 'row');
-
-        $classField = $this->find(dirname(dirname(__FILE__)).'/ViperFormatPlugin/Images/toolbarIcon_class.png');
+        sleep(1);
+        $classField = $this->find(dirname(dirname(__FILE__)).'/ViperFormatPlugin/Images/toolbarIcon_class_active.png');
         $this->click($classField);
 
         $deleteIcon = $this->find(dirname(dirname(__FILE__)).'/ViperFormatPlugin/Images/toolbarIcon_delete_icon.png');
@@ -72,12 +73,12 @@ class Viper_Tests_ViperTableEditorPlugin_RowUnitTest extends AbstractViperTableE
         $this->click($updateChanges);
 
         $this->execJS('rmTableHeaders(0,true)');
-        $this->assertHTMLMatch('<p>Lorem IPSUM</p><table style="width: 100%;" border="1"><tbody><tr><th>&nbsp;</th><th>&nbsp;</th><th>&nbsp;</th><th>&nbsp;</th></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr class="abc"><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td></td></tr></tbody></table><p>dolor</p>');
+        $this->assertHTMLMatch('<p>Lorem IPSUM</p><table style="width: 100%;" border="1"><tbody><tr><th>&nbsp;</th><th>&nbsp;</th><th>&nbsp;</th><th>&nbsp;</th></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr class="abc"><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>dolor</p>');
 
         // Remove the class from the third row and press enter
-        $this->showTools(2, 'row');
-
-        $classField = $this->find(dirname(dirname(__FILE__)).'/ViperFormatPlugin/Images/toolbarIcon_class.png');
+        $this->showTools(9, 'row');
+        sleep(1);
+        $classField = $this->find(dirname(dirname(__FILE__)).'/ViperFormatPlugin/Images/toolbarIcon_class_active.png');
         $this->click($classField);
 
         $deleteIcon = $this->find(dirname(dirname(__FILE__)).'/ViperFormatPlugin/Images/toolbarIcon_delete_icon.png');
@@ -85,7 +86,7 @@ class Viper_Tests_ViperTableEditorPlugin_RowUnitTest extends AbstractViperTableE
 
         $this->keyDown('Key.ENTER');
         $this->execJS('rmTableHeaders(0,true)');
-        $this->assertHTMLMatch('<p>Lorem IPSUM</p><table style="width: 100%;" border="1"><tbody><tr><th>&nbsp;</th><th>&nbsp;</th><th>&nbsp;</th><th>&nbsp;</th></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td></td></tr></tbody></table><p>dolor</p>');
+        $this->assertHTMLMatch('<p>Lorem IPSUM</p><table style="width: 100%;" border="1"><tbody><tr><th>&nbsp;</th><th>&nbsp;</th><th>&nbsp;</th><th>&nbsp;</th></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>dolor</p>');
 
     }//end testAddingClassToRow()
 
@@ -124,20 +125,21 @@ class Viper_Tests_ViperTableEditorPlugin_RowUnitTest extends AbstractViperTableE
         $this->assertHTMLMatch('<p>Lorem IPSUM</p><table style="width: 100%;" border="1"><tbody><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;One</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;Two</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;Three</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>dolor</p>');
 
         // Delete the third row
-        $this->showTools(8, 'row');
+        $this->clickCell(0);
+        $this->showTools(10, 'row');
         $this->click($this->find($this->getImg('icon_trash.png'), NULL, 0.83));
 
         $this->execJS('rmTableHeaders(0,true)');
-        $this->assertHTMLMatch('<p>Lorem IPSUM</p><table style="width: 100%;" border="1"><tbody><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>One</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>Two</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>Three</td><td>&nbsp;</td><td>&nbsp;</td><td></td></tr></tbody></table><p>dolor</p>');
+        $this->assertHTMLMatch('<p>Lorem IPSUM</p><table style="width: 100%;" border="1"><tbody><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;One</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;Two</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;Three</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>dolor</p>');
 
         // Move the second row up
-        $this->showTools(1, 'row');
+        $this->showTools(4, 'row');
         $this->click($this->find($this->getImg('icon_moveRowUp.png'), NULL, 0.83));
         $this->execJS('rmTableHeaders(0,true)');
         $this->assertHTMLMatch('<p>Lorem IPSUM</p><table style="width: 100%;" border="1"><tbody><tr><td>One</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>Two</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>Three</td><td>&nbsp;</td><td>&nbsp;</td><td></td></tr></tbody></table><p>dolor</p>');
 
         // Move the second row down
-        $this->showTools(2, 'row');
+        $this->showTools(6, 'row');
         $this->click($this->find($this->getImg('icon_moveColRight.png'), NULL, 0.83));
         $this->execJS('rmTableHeaders(0,true)');
         $this->assertHTMLMatch('<p>Lorem IPSUM</p><table style="width: 100%;" border="1"><tbody><tr><td>One</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>Two</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>Three</td><td>&nbsp;</td><td>&nbsp;</td><td></td></tr></tbody></table><p>dolor</p>');
@@ -152,6 +154,68 @@ class Viper_Tests_ViperTableEditorPlugin_RowUnitTest extends AbstractViperTableE
 
     }//end testRowsInANewTableWithoutHeaders()
 
+
+    /**
+     * Test adding a new table with left headers and then adding new rows.
+     *
+     * @return void
+     */
+    public function testRowsInANewTableWithLeftHeaders()
+    {
+        $textLoc = $this->find('IPSUM');
+        $this->insertTableWithLeftHeaders();
+        
+        $this->clickCell(8);
+        usleep(300);
+        $this->type('Three');
+        $this->clickCell(4);
+        usleep(300);
+        $this->type('Two');
+        $this->clickCell(0);
+        usleep(300);
+        $this->type('One');
+
+        $this->showTools(0, 'row');
+
+        // Add a new row after the first row of the table
+        $this->click($this->find($this->getImg('icon_insertRowAfter.png'), NULL, 0.83));
+        sleep(1);
+
+        // Add a new row before the first row of the table
+        $this->click($this->find($this->getImg('icon_insertRowBefore.png'), NULL, 0.83));
+
+        $this->execJS('rmTableHeaders(0,true)');
+        $this->assertHTMLMatch('<p>Lorem IPSUM</p><table style="width: 100%;" border="1"><tbody><tr><th>&nbsp;</th><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><th>One&nbsp;</th><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><th>&nbsp;</th><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><th>Two&nbsp;</th><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><th>&nbsp;Three</th><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>dolor</p>');
+
+        // Delete the third row
+        $this->clickCell(0);
+        $this->showTools(10, 'row');
+        $this->click($this->find($this->getImg('icon_trash.png'), NULL, 0.83));
+        $this->execJS('rmTableHeaders(0,true)');
+        $this->assertHTMLMatch('<p>Lorem IPSUM</p><table style="width: 100%;" border="1"><tbody><tr><th>&nbsp;</th><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><th>One&nbsp;</th><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><th>Two&nbsp;</th><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><th>&nbsp;Three</th><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>dolor</p>');
+
+        // Move the second row up
+        $this->showTools(4, 'row');
+        $this->click($this->find($this->getImg('icon_moveRowUp.png'), NULL, 0.83));
+        $this->execJS('rmTableHeaders(0,true)');
+        $this->assertHTMLMatch('<p>Lorem IPSUM</p><table style="width: 100%;" border="1"><tbody><tr><th>One</th><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><th>&nbsp;</th><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><th>Two&nbsp;</th><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><th>&nbsp;Three</th><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>dolor</p>');
+
+        // Move the second row down
+        $this->showTools(6, 'row');
+        $this->click($this->find($this->getImg('icon_moveColRight.png'), NULL, 0.83));
+        $this->execJS('rmTableHeaders(0,true)');
+        $this->assertHTMLMatch('<p>Lorem IPSUM</p><table style="width: 100%;" border="1"><tbody><tr><th>One</th><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><th>Two&nbsp;</th><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><th>&nbsp;</th><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><th>&nbsp;Three</th><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>dolor</p>');
+
+        // Change the first row to be a header column
+        $this->showTools(0, 'row');
+        $isHeadingField = $this->find($this->getImg('icon_isHeading.png'));
+        $this->click($isHeadingField);
+        $this->click($updateChanges);
+        $this->execJS('rmTableHeaders(0,true)');
+        $this->assertHTMLMatch('<p>Lorem IPSUM</p><table style="width: 100%;" border="1"><tbody><tr class="test"><th>One</th><th></th><th></th><th></th></tr><tr><td>Two</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr class="abc"><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>Three</td><td>&nbsp;</td><td>&nbsp;</td><td></td></tr></tbody></table><p>dolor</p>');
+
+        
+    }//end testRowsInANewTableWithLeftHeaders()
 
     /**
      * Test that the 'All Genders' rowspan changes to three when you add a new row and goes back to two when you delete a new row.
