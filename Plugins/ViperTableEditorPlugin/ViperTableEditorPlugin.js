@@ -2322,6 +2322,10 @@ ViperTableEditorPlugin.prototype = {
 
         dfx.setStyle(table, 'width', width);
 
+        if (table.getAttribute('style') === '') {
+            table.removeAttribute('style');
+        }
+
         this.tableUpdated(table);
 
     },
