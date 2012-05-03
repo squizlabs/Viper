@@ -101,7 +101,7 @@ MatrixImagePlugin.prototype = {
                 callback: function(selectedAsset){
                     if (selectedAsset.attribute('type_code') === 'image') {
                         urlField.setValue('./?a=' + selectedAsset.id,false);
-                        urlField.setValue(selectedAsset.attribute('alt'),false);
+                        altField.setValue(selectedAsset.attribute('alt'),false);
                     } else {
                         alert(EasyEditLocalise.translate('You have selected a %1 asset. Only image assets can be selected.',selectedAsset.attribute('type_code')));
                     }// End if
