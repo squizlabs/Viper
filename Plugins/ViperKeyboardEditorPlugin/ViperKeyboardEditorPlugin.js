@@ -195,6 +195,10 @@ ViperKeyboardEditorPlugin.prototype = {
 
                     if (handleEnter === true) {
                         var content = '<br />';
+                        if (this.viper.isBrowser('msie') === true) {
+                            content = '&nbsp;';
+                        }
+
                         var tagName = 'p';
                         var p = document.createElement(tagName);
                         dfx.setHtml(p, content);
@@ -233,6 +237,7 @@ ViperKeyboardEditorPlugin.prototype = {
                         }
 
                         if (p.firstChild.nodeType === dfx.TEXT_NODE) {
+                            range.setEnd(p.firstChild, 0);
                             range.setStart(p.firstChild, 0);
                         } else {
                             range.selectNode(p.firstChild);
@@ -240,10 +245,6 @@ ViperKeyboardEditorPlugin.prototype = {
 
                         range.collapse(true);
                         ViperSelection.addRange(range);
-
-                        if (this.viper.isBrowser('msie') === true) {
-                            dfx.remove(p.lastChild);
-                        }
 
                         if (this.viper.isBrowser('firefox') == false) {
                             this.viper.fireNodesChanged();

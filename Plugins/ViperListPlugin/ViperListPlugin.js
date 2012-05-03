@@ -89,10 +89,14 @@ ViperListPlugin.prototype = {
 
                     dfx.preventDefault(e);
                     return false;
-                } else if ((dfx.isTag(startNode, 'p') === true || ((startNode.nodeType === dfx.TEXT_NODE || dfx.isStubElement(startNode) === true) && dfx.isTag(dfx.getFirstBlockParent(startNode), 'p') === true))) {
-                    self.convertRangeToList(range);
-                    dfx.preventDefault(e);
-                    return false;
+                } else if (dfx.isTag(startNode, 'p') === true
+                    || ((startNode.nodeType === dfx.TEXT_NODE || dfx.isStubElement(startNode) === true) && dfx.isTag(dfx.getFirstBlockParent(startNode), 'p') === true)
+                ) {
+                    if (dfx.getParents(startNode, 'td,th').length === 0) {
+                        self.convertRangeToList(range);
+                        dfx.preventDefault(e);
+                        return false;
+                    }
                 }
             }
 
@@ -683,15 +687,24 @@ ViperListPlugin.prototype = {
                     return true;
                 }
 
-                // Conver to P tags.
-                for (var i = 0; i < listItems.length; i++) {
-                    var li = listItems[i];
-                    var p  = document.createElement('p');
+                if (listItems.length === 1
+                    && (dfx.isTag(list.parentNode, 'td') === true || dfx.isTag(list.parentNode, 'th') === true)
+                ) {
+                    var li = listItems[0];
                     while (li.firstChild) {
-                        p.appendChild(li.firstChild);
+                        dfx.insertBefore(list, li.firstChild);
                     }
+                } else {
+                    // Conver to P tags.
+                    for (var i = 0; i < listItems.length; i++) {
+                        var li = listItems[i];
+                        var p  = document.createElement('p');
+                        while (li.firstChild) {
+                            p.appendChild(li.firstChild);
+                        }
 
-                    dfx.insertBefore(list, p);
+                        dfx.insertBefore(list, p);
+                    }
                 }
 
                 dfx.remove(list);
@@ -1053,6 +1066,21 @@ ViperListPlugin.prototype = {
             pTags.push(p);
         }
 
+        if (pTags.length === 1
+            && (dfx.isTag(pTags[0].parentNode, 'td') === true || dfx.isTag(pTags[0].parentNode, 'th') === true)
+        ) {
+            var cellElement = pTags[0].parentNode;
+
+            // Remove the new new P tag so that the only content in the TD,TH is P's child nodes.
+            var p = pTags[0];
+            while (p.firstChild) {
+                dfx.insertBefore(p, p.firstChild);
+            }
+
+            dfx.remove(p);
+            pTags = [cellElement];
+        }
+
         dfx.remove(list);
 
         return pTags;
@@ -1256,7 +1284,11 @@ ViperListPlugin.prototype = {
             }
         }
 
-        if (mainToolbar === true && startParent && dfx.isTag(startParent, 'p') === true) {
+        if (mainToolbar === true
+            && startParent
+            && dfx.isTag(startParent, 'p') === true
+            && dfx.getParents(startParent, 'td,th').length === 0
+        ) {
             increaseIndent = true;
         }
 

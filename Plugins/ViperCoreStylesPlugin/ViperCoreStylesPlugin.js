@@ -1309,7 +1309,12 @@ ViperCoreStylesPlugin.prototype = {
             }
         }//end if
 
-        tools.enableButton('hr');
+        var parents = dfx.getParents(startNode, 'td,th,li,caption,img', this.viper.getViperElement());
+        if (parents.length === 0) {
+            tools.enableButton('hr');
+        } else {
+            tools.disableButton('hr');
+        }
 
     },
 
