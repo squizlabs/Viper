@@ -47,15 +47,15 @@ ViperTableEditorPlugin.prototype = {
                 document.execCommand("enableObjectResizing", false, false);
             }
 
-            var interval = setInterval(function() {
-                if (window['HTMLCS']) {
-                    clearInterval(interval);
+            var vap = self.viper.ViperPluginManager.getPlugin('ViperAccessibilityPlugin');
+            if (vap) {
+                vap.loadHTMLCS(function() {
                     var tables = dfx.getTag('table', self.viper.getViperElement());
                     for (var i = 0; i < tables.length; i++) {
                         self.setTableHeaders(tables[i]);
                     }
-                }
-            }, 300);
+                });
+            }
         });
 
         // Hide the toolbar when user clicks anywhere.
@@ -3415,7 +3415,10 @@ ViperTableEditorPlugin.prototype = {
 
                         headerids = this.arrayUnique(headerids);
                         headerids = this.arrayIntersect(headerids, usedHeaderids);
-                        cell.setAttribute('headers', headerids.join(' '));
+                        var headersAttr = headerids.join(' ');
+                        if (headersAttr) {
+                            cell.setAttribute('headers', headersAttr);
+                        }
                     }//end if
 
                     for (var i = 0; i < rowspan; i++) {
