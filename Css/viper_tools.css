@@ -186,6 +186,12 @@
 .Viper-browserVer-msie8 .Viper-disabled .Viper-buttonIcon {
   filter: alpha(opacity = 50);
 }
+.Viper-browserVer-msie8 .Viper-disabled .Viper-buttonIcon {
+  background-color: #c1c1c3;
+}
+.Viper-browserVer-msie8 .Viper-disabled.Viper-active .Viper-buttonIcon {
+  background-color: #3c89f3;
+}
 .Viper-buttonIcon.Viper-bold {
   background-position: 0 -1350px;
 }
@@ -659,6 +665,9 @@
   color: #5A8BD0;
   box-shadow: 0 0 3px #000 inset;
 }
+.Viper-disabled .Viper-textbox-label {
+  filter: alpha(opacity = 40);
+}
 .Viper-textbox.Viper-active .Viper-textbox-label {
   background: #205caf;
 }
@@ -666,10 +675,6 @@
   display: block;
   content: "";
   clear: both;
-}
-.Viper-textbox.Viper-disabled {
-  opacity: 0.4;
-  filter: alpha(opacity = 40);
 }
 .Viper-textbox-main {
   position: relative;
@@ -699,6 +704,9 @@
   -moz-transition-duration: 0.3s;
   -webkit-transition-property: color, background;
   -webkit-transition-duration: 0.3s;
+}
+.Viper-disabled .Viper-textbox-title {
+  filter: alpha(opacity = 40);
 }
 .Viper-textbox.Viper-active .Viper-textbox-title,
 .Viper-textbox.Viper-required.Viper-active .Viper-textbox-title {
@@ -759,6 +767,10 @@
 .Viper-textbox.Viper-disabled .Viper-textbox-textArea {
   text-decoration: line-through;
   color: #CCC;
+}
+.Viper-disabled .Viper-textbox-input[type=text],
+.Viper-disabled .Viper-textbox-textArea {
+  filter: alpha(opacity = 40);
 }
 .input-placeholder {
   color: #c44e4e;

@@ -340,6 +340,13 @@
             filter: ~"alpha(opacity = 50)";
         }
     }
+    
+    .Viper-browserVer-msie8 .Viper-disabled & {
+            background-color: (@buttonBg-default - 40%);
+    }
+    .Viper-browserVer-msie8  .Viper-disabled.Viper-active & {
+            background-color: (@buttonBg-active + 5%);
+    }
 
 // Icon definitions
 
@@ -630,7 +637,7 @@
 // Viper Text Inputs & Areas
 .Viper-textbox {
     margin-bottom: 0.6em;
-     -moz-transition: opacity 0.2s ease-in;
+    -moz-transition: opacity 0.2s ease-in;
     -webkit-transition: opacity 0.2s ease-in;
     & .Viper-textbox-textArea {
         resize: none;
@@ -658,6 +665,10 @@
     border-bottom: 1px solid #777;
     color: #5A8BD0;
     box-shadow: 0 0 3px #000 inset;
+    
+    .Viper-disabled & {
+        filter: ~"alpha(opacity = 40)";
+    }
 }
 
 .Viper-textbox.Viper-active .Viper-textbox-label {
@@ -667,10 +678,6 @@
     display: block;
     content: "";
     clear: both;
-}
-.Viper-textbox.Viper-disabled {
-    opacity: 0.4;
-    filter: ~"alpha(opacity = 40)";
 }
 
 .Viper-textbox-main {
@@ -702,6 +709,10 @@
     -moz-transition-duration: 0.3s;
     -webkit-transition-property: color, background;
     -webkit-transition-duration: 0.3s;
+    
+    .Viper-disabled & {
+        filter: ~"alpha(opacity = 40)";
+    }
 }
 .Viper-textbox.Viper-active .Viper-textbox-title,
 .Viper-textbox.Viper-required.Viper-active .Viper-textbox-title {
@@ -750,6 +761,10 @@
     .Viper-textbox.Viper-disabled & {
         text-decoration: line-through;
         color: #CCC;
+    }
+    
+    .Viper-disabled & {
+        filter: ~"alpha(opacity = 40)";
     }
 
 }
