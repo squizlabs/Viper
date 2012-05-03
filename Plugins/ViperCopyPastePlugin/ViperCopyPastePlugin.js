@@ -79,13 +79,32 @@ ViperCopyPastePlugin.prototype = {
                     return;
                 }
 
+                var dataType = null;
+                if (e.clipboardData.types) {
+                    if (e.clipboardData.types.inArray('text/html') === true) {
+                        dataType = 'text/html';
+                    } else if (e.clipboardData.types.inArray('text/plain') === true) {
+                        dataType = 'text/plain';
+                    }
+                }
+
                 self._beforePaste();
                 if (self.pasteType === 'formatted' || self.pasteType === 'formattedClean') {
+                    if (dataType === null) {
+                        dataType = 'text/html';
+                    }
+
                     self.pasteElement = self._createPasteDiv();
-                    dfx.setHtml(self.pasteElement, e.clipboardData.getData('text/html'));
+                    dfx.setHtml(self.pasteElement, e.clipboardData.getData(dataType));
                     self._handleFormattedPasteValue((self.pasteType === 'formattedClean'));
                 } else {
-                    self._handleRawPasteValue(e.clipboardData.getData('text'));
+                    if (dataType === null) {
+                        dataType = 'text';
+                    } else {
+                        dataType = 'text/plain';
+                    }
+
+                    self._handleRawPasteValue(e.clipboardData.getData(dataType));
                 }
 
                 self._afterPaste();
