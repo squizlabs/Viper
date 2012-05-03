@@ -2927,7 +2927,7 @@ ViperTableEditorPlugin.prototype = {
         for (var h = 0; h < headerOpts.length; h++) {
             var selected = '';
             if (h === selectedHeaderType) {
-                selected = ' selected';
+                selected = ' Viper-selected';
             }
 
             headers    += '<div class="VTEP-bubble-headersTableWrapper' + selected + '">';
