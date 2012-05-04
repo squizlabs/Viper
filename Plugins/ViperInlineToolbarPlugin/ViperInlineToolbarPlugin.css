@@ -323,7 +323,7 @@
 }
 
 .ViperITP-msgBox {
-    margin-top: 0.4em;
+    margin: 0.4em 0 0.6em;
     border-radius: 0.4em;
     border: 1px solid #747379;
     color: #cacad1;
@@ -334,6 +334,11 @@
     text-align: left;
     background: #646468 url(../../Images/msg-spinner.gif) 3px 0.25em no-repeat;
 }
+
+.ViperITP-msgBox img {
+    margin: 1em 0 0;
+}
+
 .ViperITP-msgBox.Viper-info {
     text-align: center;
     padding: 1em;

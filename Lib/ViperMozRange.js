@@ -363,10 +363,25 @@ ViperMozRange.prototype = {
 
     },
 
-
     createDocumentFragment: function(str)
     {
-        return this.rangeObj.createContextualFragment(str);
+        var fragment = null;
+        if (!this.rangeObj.createContextualFragment) {
+            var fragment  = document.createDocumentFragment();
+            var div       = document.createElement('div');
+            div.innerHTML = str;
+
+            // Add the children of the div to fragment.
+            var c = div.childNodes.length;
+            for (var i = 0; i < c; i++) {
+                var child = div.childNodes[i].cloneNode(true);
+                fragment.appendChild(child);
+            }
+        } else {
+            fragment = this.rangeObj.createContextualFragment(str);
+        }
+
+        return fragment;
 
     },
 

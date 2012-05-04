@@ -688,9 +688,28 @@ ViperDOMRange.prototype = {
 
     },
 
+    _nodeSel: {},
+
     getNodeSelection: function(range)
     {
         range = range || this;
+
+        if (this._nodeSel
+            && this._nodeSel.startContainer === range.startContainer
+            && this._nodeSel.endContainer === range.endContainer
+            && this._nodeSel.startOffset === range.startOffset
+            && this._nodeSel.endOffset === range.endOffset
+            && this._nodeSel.collapsed === range.collapsed
+        ) {
+            return this._nodeSel.node;
+        }
+
+        this._nodeSel.startContainer = range.startContainer;
+        this._nodeSel.endContainer   = range.endContainer;
+        this._nodeSel.startOffset    = range.startOffset;
+        this._nodeSel.endOffset      = range.endOffset;
+        this._nodeSel.collapsed      = range.collapsed;
+        this._nodeSel.node           = null;
 
         // Webkit seems to get the range incorrectly when range is set on a node.
         // For example: <p>text</p><p>text</p> if the range.selectNode is called for
@@ -701,10 +720,13 @@ ViperDOMRange.prototype = {
         var common    = range.getCommonElement();
 
         if (!startNode && !endNode) {
+            this._nodeSel.node = null;
             return null;
         } else if (startNode && !endNode) {
+            this._nodeSel.node = startNode;
             return startNode;
         } else if (!startNode && endNode) {
+            this._nodeSel.node = endNode;
             return endNode;
         } else if (startNode.nodeType === dfx.TEXT_NODE
             && endNode.nodeType === dfx.TEXT_NODE
@@ -715,6 +737,7 @@ ViperDOMRange.prototype = {
             && endNode.nextSibling
             && (!dfx.isTag(endNode.nextSibling, 'br') || endNode.nextSibling.nextSibling)
         ) {
+            this._nodeSel.node = null;
             return null;
         } else if (startNode.nodeType === dfx.TEXT_NODE
             && endNode.nodeType === dfx.TEXT_NODE
@@ -722,11 +745,13 @@ ViperDOMRange.prototype = {
             && range.startOffset === startNode.data.length
             && range.collapsed === true
         ) {
+            this._nodeSel.node = null;
             return null;
         } else if (startNode.nodeType === dfx.ELEMENT_NODE
             && range.endContainer.nodeType === dfx.ELEMENT_NODE
             && startNode.nextSibling === endNode
         ) {
+            this._nodeSel.node = startNode;
             return startNode;
         } else if (startNode.nodeType === dfx.TEXT_NODE
             && endNode.nodeType === dfx.TEXT_NODE
@@ -735,18 +760,21 @@ ViperDOMRange.prototype = {
             && this._getFirstSelectableChild(common) === startNode
             && this._getLastSelectableChild(common) === endNode
         ) {
+            this._nodeSel.node = common;
             return common;
         } else if (range.startContainer === range.endContainer
             && range.startContainer.nodeType === dfx.ELEMENT_NODE
             && range.startOffset === 0
             && range.endOffset === 0
         ) {
+            this._nodeSel.node = range.startContainer;
             return range.startContainer;
         } else if (startNode.nodeType === dfx.ELEMENT_NODE
             && endNode.nodeType === dfx.TEXT_NODE
             && range.endOffset === endNode.data.length
             && this._getLastSelectableChild(startNode) === endNode
         ) {
+            this._nodeSel.node = startNode;
             return startNode;
         }
 
@@ -755,6 +783,7 @@ ViperDOMRange.prototype = {
         if (startNode.nodeType === dfx.TEXT_NODE) {
             if (range.startOffset !== 0) {
                 if (range.startOffset !== startNode.data.length) {
+                    this._nodeSel.node = null;
                     return null;
                 } else {
                     // Range is at the end of a text node, find the first selectable
@@ -762,6 +791,7 @@ ViperDOMRange.prototype = {
                     if (startNode.nextSibling) {
                         startNode = this._getFirstSelectableChild(startNode.nextSibling);
                         if (!startNode) {
+                            this._nodeSel.node = null;
                             return null;
                         }
                     } else {
@@ -780,6 +810,7 @@ ViperDOMRange.prototype = {
             && endNode.nodeType === dfx.ELEMENT_NODE
             && common === startNode
         ) {
+            this._nodeSel.node = startNode;
             return startNode;
         }
 
@@ -791,6 +822,7 @@ ViperDOMRange.prototype = {
                     this.setStart(startMoved.startContainer, startMoved.startOffset);
                 }
 
+                this._nodeSel.node = null;
                 return null;
             }
         }
@@ -802,14 +834,17 @@ ViperDOMRange.prototype = {
                     && (startNode.parentNode === endNode.parentNode
                     || this._getLastSelectableChild(startNode.parentNode) === endNode)
                 ) {
+                    this._nodeSel.node = startNode.parentNode;
                     return startNode.parentNode;
                 } else {
+                    this._nodeSel.node = null;
                     return null;
                 }
             }
         } else if (!endNode.nextSibling && dfx.isTag(endNode, 'br') === true) {
             // Handle Firefox _moz_dirty at the end of an element.
             if (this._getLastSelectableChild(startNode.parentNode) === endNode.previousSibling) {
+                this._nodeSel.node = startNode.parentNode;
                 return startNode.parentNode;
             }
         }
@@ -820,11 +855,13 @@ ViperDOMRange.prototype = {
         }
 
         if (!startParent) {
+            this._nodeSel.node = null;
             return null;
         }
 
         var nextSibling = startParent.nextSibling;
         if (!nextSibling && startParent.nodeType !== dfx.TEXT_NODE) {
+            this._nodeSel.node = startNode.parentNode;
             return startNode.parentNode;
         }
 
@@ -841,9 +878,11 @@ ViperDOMRange.prototype = {
         }
 
         if (nextSibling === endParent) {
+            this._nodeSel.node = startParent;
             return startParent;
         }
 
+        this._nodeSel.node = null;
         return null;
 
     }

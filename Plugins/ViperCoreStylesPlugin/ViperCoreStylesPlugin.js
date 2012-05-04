@@ -894,7 +894,13 @@ ViperCoreStylesPlugin.prototype = {
 
         if (nodeSelection) {
             var sParents  = dfx.getSurroundingParents(nodeSelection);
-            nodeSelection = sParents[0];
+            if (sParents.length > 0 && sParents[0] !== this.viper.getViperElement()) {
+                nodeSelection = sParents[0];
+            }
+        }
+
+        if (nodeSelection && nodeSelection === this.viper.getViperElement()) {
+            nodeSelection = null;
         }
 
         if (!nodeSelection) {
@@ -920,6 +926,11 @@ ViperCoreStylesPlugin.prototype = {
             startNode = nodeSelection;
         }
 
+        var stopElem = null
+        if (nodeSelection) {
+            stopElem = range._getLastSelectableChild(nodeSelection);
+        }
+
         dfx.walk(startNode, function(elem) {
             if (bookmark && elem === bookmark.end) {
                 return false;
@@ -940,7 +951,7 @@ ViperCoreStylesPlugin.prototype = {
                 }
             }
 
-            if (nodeSelection && elem === nodeSelection.lastChild) {
+            if (nodeSelection && elem === stopElem) {
                 return false;
             }
         });

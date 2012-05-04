@@ -58,8 +58,8 @@ class Viper_Tests_ViperTableEditorPlugin_ColumnUnitTest extends AbstractViperTab
         $this->assertHTMLMatch('<p>Lorem IPSUM</p><table style="width: 100%; " border="1"><tbody><tr><td style="width: 50px; ">&nbsp;</td><th>&nbsp;</th><th>&nbsp;</th><td style="width: 100px;">&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>dolor</p>');
 
     }//end testChangingColumnWidth()
-    
-    
+
+
     /**
      * Test adding a new table without headers and then changing the settings of columns.
      *
@@ -205,7 +205,7 @@ class Viper_Tests_ViperTableEditorPlugin_ColumnUnitTest extends AbstractViperTab
      *
      * @return void
      */
-    public function testAddingAndDeletingColumnsInANewTableWithTopHeaders()
+    public function testColumnsInANewTableWithTopHeaders()
     {
 
         $textLoc = $this->find('IPSUM');
@@ -271,7 +271,7 @@ class Viper_Tests_ViperTableEditorPlugin_ColumnUnitTest extends AbstractViperTab
         $this->execJS('rmTableHeaders(0,true)');
         $this->assertHTMLMatch('<p>Lorem IPSUM</p><table style="width: 100%;" border="1"><tbody><tr><th>&nbsp;One</th><th>Two&nbsp;</th><th>Three&nbsp;</th><th>&nbsp;</th><th>Four&nbsp;</th></tr><tr><th>&nbsp;</th><td>&nbsp;</td><th>&nbsp;</th><td>&nbsp;</td><td>&nbsp;</td></tr><tr><th>&nbsp;</th><td>&nbsp;</td><th>&nbsp;</th><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>dolor</p>');
 
-    }//end testAddingAndDeletingColumnsInANewTableWithTopHeaders()
+    }//end testColumnsInANewTableWithTopHeaders()
 
 
     /**
@@ -279,7 +279,7 @@ class Viper_Tests_ViperTableEditorPlugin_ColumnUnitTest extends AbstractViperTab
      *
      * @return void
      */
-    public function testAddingAndDeletingColumnsInANewTableWithBothHeaders()
+    public function testColumnsInANewTableWithBothHeaders()
     {
 
         $textLoc = $this->find('IPSUM');
@@ -346,7 +346,7 @@ class Viper_Tests_ViperTableEditorPlugin_ColumnUnitTest extends AbstractViperTab
         $this->assertHTMLMatch('<p>Lorem IPSUM</p><table style="width: 100%;" border="1"><tbody><tr><td>&nbsp;One</td><th>Two&nbsp;</th><th>Three&nbsp;</th><th>&nbsp;</th><th>Four&nbsp;</th></tr><tr><td>&nbsp;</td><td>&nbsp;</td><th>&nbsp;</th><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><th>&nbsp;</th><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>dolor</p>');
 
 
-    }//end testAddingAndDeletingColumnsInANewTableWithBothHeaders()
+    }//end testColumnsInANewTableWithBothHeaders()
 
 
     /**
@@ -410,6 +410,34 @@ class Viper_Tests_ViperTableEditorPlugin_ColumnUnitTest extends AbstractViperTab
 
 
     }//end testColspanChangesWhenYouDeleteTheFirstColumnOfMergedCell()
+
+
+    /**
+     * Test the move icons for a column.
+     *
+     * @return void
+     */
+    public function testMoveIconsInTheColumnToolbar()
+    {
+        $this->insertTable();
+        $this->showTools(0, 'col');
+
+        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/icon_moveColRight.png'), 'Move column right should be active');
+        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/icon_moveColLeft_disabled.png'), 'Move column left should not be active');
+
+        $this->showTools(3, 'col');
+        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/icon_moveColRight_disabled.png'), 'Move column right should not be active');
+        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/icon_moveColLeft.png'), 'Move column left should be active');
+
+        $this->showTools(2, 'col');
+        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/icon_moveColRight.png'), 'Move column right should be active');
+        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/icon_moveColLeft.png'), 'Move column left should be active');
+
+        $this->showTools(1, 'col');
+        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/icon_moveColRight.png'), 'Move column right should be active');
+        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/icon_moveColLeft.png'), 'Move column left should be active');
+
+    }//end testMoveIconsInTheColumnToolbar()
 
 
 }//end class

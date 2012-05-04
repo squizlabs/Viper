@@ -90,6 +90,16 @@ ViperAccessibilityPlugin.prototype = {
 
     },
 
+    loadHTMLCS: function(callback)
+    {
+        if (window.HTMLCS) {
+            callback.call(this);
+        } else {
+            this.includeScript(this._htmlCSsrc + '/HTMLCS.js', callback);
+        }
+
+    },
+
     _createIssueDetail: function(id, issue, resolutionElem, detailsElem)
     {
         var issueDoneElem = document.createElement('div');

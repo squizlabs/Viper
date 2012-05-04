@@ -79,7 +79,7 @@
 
 @buttonShadow-default-around: 0 0 2px 0 rgba(0, 0, 0, 0.55);
 @buttonShadow-default-topHighlight: 0 1px 0 rgba(255, 255, 255, 0.8) inset;
-@buttonShadow-default-gradient: 0 -1.6em 1.6em -1em rgba(0, 0, 0, 0.25) inset;
+@buttonShadow-default-gradient: 0 -1.8em 1.6em -1em rgba(0, 0, 0, 0.20) inset;
 
 @buttonShadow-group-top: 0 -2px 2px -2px rgba(0, 0, 0, 0.45);
 @buttonShadow-group-bottom: 0 2px 2px -2px rgba(0, 0, 0, 0.45);
@@ -92,7 +92,7 @@
 @buttonShadow-active-bottomInner: 0 -1px 1px -1px #000 inset;
 @buttonShadow-active-leftInner: 1px 0px 0 rgba(0, 0, 0, 0.25) inset;
 @buttonShadow-active-rightInner: -1px 0px 0 rgba(0, 0, 0, 0.25) inset;
-@buttonShadow-active-gradient: 0 -1.4em 0.9em -0.7em #205CAF inset;
+@buttonShadow-active-gradient: 0 -1.6em 1.1em -1em #205CAF inset;
 @buttonShadow-active-leftHighlight: 1px 0 0 0 rgba(255,255,255,0.2) inset;
 
 @buttonShadow-selected-gradient: 0 1.5em 0.6em -1.3em rgba(0, 0, 0, 0.5) inset;
@@ -339,6 +339,13 @@
         .Viper-browserVer-msie8 & {
             filter: ~"alpha(opacity = 50)";
         }
+    }
+    
+    .Viper-browserVer-msie8 .Viper-disabled & {
+            background-color: (@buttonBg-default - 40%);
+    }
+    .Viper-browserVer-msie8  .Viper-disabled.Viper-active & {
+            background-color: (@buttonBg-active + 5%);
     }
 
 // Icon definitions
@@ -630,7 +637,7 @@
 // Viper Text Inputs & Areas
 .Viper-textbox {
     margin-bottom: 0.6em;
-     -moz-transition: opacity 0.2s ease-in;
+    -moz-transition: opacity 0.2s ease-in;
     -webkit-transition: opacity 0.2s ease-in;
     & .Viper-textbox-textArea {
         resize: none;
@@ -658,6 +665,10 @@
     border-bottom: 1px solid #777;
     color: #5A8BD0;
     box-shadow: 0 0 3px #000 inset;
+    
+    .Viper-disabled & {
+        filter: ~"alpha(opacity = 40)";
+    }
 }
 
 .Viper-textbox.Viper-active .Viper-textbox-label {
@@ -667,10 +678,6 @@
     display: block;
     content: "";
     clear: both;
-}
-.Viper-textbox.Viper-disabled {
-    opacity: 0.4;
-    filter: ~"alpha(opacity = 40)";
 }
 
 .Viper-textbox-main {
@@ -702,6 +709,10 @@
     -moz-transition-duration: 0.3s;
     -webkit-transition-property: color, background;
     -webkit-transition-duration: 0.3s;
+    
+    .Viper-disabled & {
+        filter: ~"alpha(opacity = 40)";
+    }
 }
 .Viper-textbox.Viper-active .Viper-textbox-title,
 .Viper-textbox.Viper-required.Viper-active .Viper-textbox-title {
@@ -750,6 +761,10 @@
     .Viper-textbox.Viper-disabled & {
         text-decoration: line-through;
         color: #CCC;
+    }
+    
+    .Viper-disabled & {
+        filter: ~"alpha(opacity = 40)";
     }
 
 }

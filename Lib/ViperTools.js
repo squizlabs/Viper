@@ -1319,6 +1319,12 @@ ViperTools.prototype = {
                 // at this point.
                 dfx.removeClass(dfx.getClass('Viper-subSection Viper-active', subSectionContainer), 'Viper-active');
 
+                var subSectionButton = tools.getItem(this._subSectionButtons[subSectionid]).element;
+                if (dfx.hasClass(subSectionButton, 'ViperITP-button-hidden') === true) {
+                    this._activeSection = null;
+                    return;
+                }
+
                 if (ignoreCallbacks !== true) {
                     var openCallback = tools.getItem(subSectionid)._onOpenCallback;
                     if (openCallback) {
@@ -1326,7 +1332,6 @@ ViperTools.prototype = {
                     }
                 }
 
-                var subSectionButton = tools.getItem(this._subSectionButtons[subSectionid]).element;
                 // Make the button selected.
                 dfx.addClass(subSectionButton, 'Viper-selected');
 
