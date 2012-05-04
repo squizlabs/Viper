@@ -335,18 +335,23 @@ ViperFormatPlugin.prototype = {
                     }
                 }
             }
+        } else {
+            tools.setButtonInactive('vitpHeadings');
+            for (var i = 1; i <= 6; i++) {
+                tools.setButtonInactive(prefix + 'heading:h' + i);
+            }
         }//end if
 
         // Formats section.
+        var formatButtons = {
+            p: 'P',
+            div: 'DIV',
+            blockquote: 'Quote',
+            pre: 'PRE'
+        };
+
         if (this._canShowFormattingOptions(selectedNode) === true) {
             data.toolbar.showButton('vitpFormats');
-
-            var formatButtons = {
-                p: 'P',
-                div: 'DIV',
-                blockquote: 'Quote',
-                pre: 'PRE'
-            };
 
             for (var tag in formatButtons) {
                for (var j = data.current; j < data.lineage.length; j++) {
@@ -357,6 +362,11 @@ ViperFormatPlugin.prototype = {
                         tools.setButtonInactive(prefix + 'formats:' + formatButtons[tag]);
                     }
                 }
+            }
+        } else {
+            tools.setButtonInactive('vitpFormats');
+            for (var tag in formatButtons) {
+                tools.setButtonInactive(prefix + 'formats:' + formatButtons[tag]);
             }
         }//end if
 
@@ -1003,9 +1013,19 @@ ViperFormatPlugin.prototype = {
     _convertSingleElement: function(element, type)
     {
         if (dfx.isTag(element, type) === true) {
-            // This is element is already the specified type remove the element.
-            while (element.firstChild) {
-                dfx.insertBefore(element, element.firstChild);
+            if (type.indexOf('h') === 0) {
+                // Heading to P tag.
+                var p = document.createElement('p');
+                while (element.firstChild) {
+                    p.appendChild(element.firstChild);
+                }
+
+                dfx.insertBefore(element, p);
+            } else {
+                // This is element is already the specified type remove the element.
+                while (element.firstChild) {
+                    dfx.insertBefore(element, element.firstChild);
+                }
             }
 
             if (type === 'pre') {
