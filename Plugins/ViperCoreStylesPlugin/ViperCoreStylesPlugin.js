@@ -894,7 +894,13 @@ ViperCoreStylesPlugin.prototype = {
 
         if (nodeSelection) {
             var sParents  = dfx.getSurroundingParents(nodeSelection);
-            nodeSelection = sParents[0];
+            if (sParents.length > 0 && sParents[0] !== this.viper.getViperElement()) {
+                nodeSelection = sParents[0];
+            }
+        }
+
+        if (nodeSelection && nodeSelection === this.viper.getViperElement()) {
+            nodeSelection = null;
         }
 
         if (!nodeSelection) {
