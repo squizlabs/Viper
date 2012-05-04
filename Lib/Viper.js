@@ -3324,6 +3324,13 @@ Viper.prototype = {
 
                 return true;
             }//end if
+        } else if (e.which === 65 && (e.metaKey === true || e.ctrlKey === true)) {
+            // CMD/CTRL + A needs to fire selection changed.
+            var self = this;
+            setTimeout(function() {
+                self.fireSelectionChanged();
+            }, 50);
+            return true;
         }//end if
 
     },
