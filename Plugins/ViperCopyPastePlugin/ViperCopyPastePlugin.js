@@ -25,6 +25,7 @@ function ViperCopyPastePlugin(viper)
     this._tmpNode      = null;
     this._isFirefox    = viper.isBrowser('firefox');
     this._isMSIE       = viper.isBrowser('msie');
+    this._isSafari     = viper.isBrowser('safari');
 
 }
 
@@ -73,7 +74,7 @@ ViperCopyPastePlugin.prototype = {
         }
 
         var self = this;
-        if (this._isMSIE !== true && this._isFirefox !== true) {
+        if (this._isMSIE !== true && this._isFirefox !== true && this._isSafari !== true) {
             elem.onpaste = function(e) {
                 if (!e.clipboardData || self._canPaste() === false) {
                     return;
@@ -132,7 +133,7 @@ ViperCopyPastePlugin.prototype = {
 
     keyDown: function (e)
     {
-        if (this._isMSIE === true ||this._isFirefox === true) {
+        if (this._isMSIE === true ||this._isFirefox === true || this._isSafari === true) {
             if (e.metaKey === true || e.ctrlKey === true) {
                 if (e.keyCode === 86) {
                     return this._fakePaste(e);
@@ -354,7 +355,10 @@ ViperCopyPastePlugin.prototype = {
             dfx.empty(this.pasteElement);
         }
 
-        this.pasteElement.focus();
+        if (this._isSafari === true) {
+            this.pasteElement.innerHTML = '&nbsp;';
+            this.pasteElement.focus();
+        }
 
         var self = this;
         this.pasteElement.onpaste = function(e) {
