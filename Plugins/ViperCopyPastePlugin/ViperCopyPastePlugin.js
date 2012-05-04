@@ -370,14 +370,12 @@ ViperCopyPastePlugin.prototype = {
 
     _handleFormattedPasteValue: function(stripTags)
     {
-        dfxjQuery(this.pasteElement).find('[class]').removeAttr('class');
-        dfxjQuery(this.pasteElement).find('[style]').removeAttr('style');
-
         this._removeEditableAttrs(this.pasteElement);
 
         // Clean paste from word document.
         var html = dfx.getHtml(this.pasteElement);
         html     = this._cleanWordPaste(html);
+        html     = this._removeAttributes(html);
 
         if (stripTags === true) {
             html = dfx.stripTags(html, this.allowedTags.split('|'));
@@ -637,6 +635,19 @@ ViperCopyPastePlugin.prototype = {
 
         content = dfx.getHtml(tmp);
 
+        return content;
+
+    },
+
+    _removeAttributes: function(content)
+    {
+        var tmp = document.createElement('div');
+        dfx.setHtml(tmp, content);
+
+        dfxjQuery(tmp).find('[class]').removeAttr('class');
+        dfxjQuery(tmp).find('[style]').removeAttr('style');
+
+        content = dfx.getHtml(tmp);
         return content;
 
     },
