@@ -190,6 +190,7 @@ ViperFormatPlugin.prototype = {
         var selectedNode = node || range.getNodeSelection();
         if (selectedNode
             && selectedNode.nodeType === dfx.ELEMENT_NODE
+            && selectedNode !== this.viper.getViperElement()
             && dfx.hasAttribute(selectedNode, attributeName) === true
         ) {
             return selectedNode;
@@ -465,7 +466,7 @@ ViperFormatPlugin.prototype = {
                 endNode = startNode;
             }
 
-            if ((!nodeSelection || nodeSelection.nodeType !== dfx.ELEMENT_NODE)
+            if ((!nodeSelection || nodeSelection.nodeType !== dfx.ELEMENT_NODE || nodeSelection === self.viper.getViperElement())
                 && (data.range.collapsed === true || startNode.parentNode !== endNode.parentNode)
             ) {
                 tools.disableButton('anchor');
