@@ -363,16 +363,16 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         $textLoc = $this->find($text);
 
         $this->click($textLoc);
-        $this->assertFalse($this->exists($dir.'toolbarIcon_heading.png'));
-        $this->assertFalse($this->exists($dir.'toolbarIcon_toggle_formats.png'));
+        $this->assertTrue($this->exists($dir.'toolbarIcon_heading_disabled.png'));
+        $this->assertTrue($this->exists($dir.'toolbarIcon_toggle_formats_disabled.png'));
 
         $this->selectText($text);
-        $this->assertFalse($this->exists($dir.'toolbarIcon_heading.png'));
-        $this->assertFalse($this->exists($dir.'toolbarIcon_toggle_formats.png'));
+        $this->assertTrue($this->exists($dir.'toolbarIcon_heading_disabled.png'));
+        $this->assertTrue($this->exists($dir.'toolbarIcon_toggle_formats_disabled.png'));
 
         $this->selectInlineToolbarLineageItem(1);
-        $this->assertFalse($this->exists($dir.'toolbarIcon_heading.png'));
-        $this->assertFalse($this->exists($dir.'toolbarIcon_toggle_formats.png'));
+        $this->assertTrue($this->exists($dir.'toolbarIcon_heading_disabled.png'));
+        $this->assertTrue($this->exists($dir.'toolbarIcon_toggle_formats_disabled.png'));
 
     }//end testHeadingAndFormatsIsDisabled()
 
