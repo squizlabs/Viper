@@ -926,6 +926,11 @@ ViperCoreStylesPlugin.prototype = {
             startNode = nodeSelection;
         }
 
+        var stopElem = null
+        if (nodeSelection) {
+            stopElem = range._getLastSelectableChild(nodeSelection);
+        }
+
         dfx.walk(startNode, function(elem) {
             if (bookmark && elem === bookmark.end) {
                 return false;
@@ -946,7 +951,7 @@ ViperCoreStylesPlugin.prototype = {
                 }
             }
 
-            if (nodeSelection && elem === nodeSelection.lastChild) {
+            if (nodeSelection && elem === stopElem) {
                 return false;
             }
         });
