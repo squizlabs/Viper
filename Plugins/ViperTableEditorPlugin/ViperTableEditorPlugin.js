@@ -3188,18 +3188,9 @@ ViperTableEditorPlugin.prototype = {
             table.setAttribute('id', 'table' + tableId);
         }
 
-        var cellHeadings  = [];
-        var usedHeaderids = [];
-        var rowCount      = 1
-        var headings = {
-            col: [],
-            row: []
-        };
-
         var tableRows = dfx.getTag('tr', table);
         for (var k = 0; k < tableRows.length; k++) {
-            var cellCount = 1;
-            var row       = tableRows[k];
+            var row = tableRows[k];
 
             for (var j = 0; j < row.childNodes.length; j++) {
                 var cell = row.childNodes[j];
@@ -3209,236 +3200,25 @@ ViperTableEditorPlugin.prototype = {
                     continue;
                 }
 
-                // Find the real cell number, taking rowspans into account.
-                while (dfx.isset(cellHeadings[rowCount]) === true
-                    && dfx.isset(cellHeadings[rowCount][cellCount]) === true
-                ) {
-                    cellCount++;
-                }
-
-                // Determine colspan and rowspan for the cell. If nothing is set,
-                // assume a value of 1. These come out as string values but we turn them
-                // into integers for easier comparison and addition.
-                var colspan = this.getColspan(cell);
-                var rowspan = this.getRowspan(cell);
-
-                if (dfx.isTag(cell, 'th') === true && dfx.isBlank(dfx.getHtml(cell)) === false) {
+                if (dfx.isTag(cell, 'th') === true) {
                     // This is a table header, so figure out an ID-based representation
                     // of the cell content. We'll use this later as a basis for the ID attribute
                     // although it may be prefixed with the ID of another header to make it unique.
                     var cellid = cell.getAttribute('id');
                     if (!cellid) {
-                        cellid = tableId + 'r' + rowCount + 'c' + cellCount;
+                        cellid = tableId + 'r' + (k + 1) + 'c' + (j + 1);
                         var existingElem = dfx.getId(cellid);
                         if (existingElem) {
                             existingElem.removeAttribute('id');
                         }
                     }
 
-                    if (rowspan > 1) {
-                        if (dfx.isset(headings.row[rowCount]) === true
-                            && headings.row[rowCount].rowspan <= rowspan
-                        ) {
-                            // This heading is replacing a heading set higher up
-                            // so we need to remove the higher heading from the IDs so
-                            // we can replace it with our own later on.
-                            var oldidLen = headings.row[rowCount].id.length;
-                            for (var i = 1; i < rowspan; i++) {
-                                var oldid = headings.row[(rowCount + i)].id;
-                                oldid     = oldid.substr(0, ((oldidLen + 1) * -1));
-                                headings.row[(rowCount + i)].id = dfx.trim(oldid);
-                            }
-
-                            headings.row[rowCount].id = '';
-                        }//end if
-
-                        for (var i = 0; i < rowspan; i++) {
-                            if (dfx.isset(headings.row[(rowCount + i)]) === false) {
-                                headings.row[(rowCount + i)] = {
-                                    id: '',
-                                    rowspan: rowspan
-                                };
-                            } else if (headings.row[(rowCount + i)].id !== '') {
-                                headings.row[(rowCount + i)].id += '-';
-                            }
-
-                            headings.row[(rowCount + i)].id     += cellid;
-                            headings.row[(rowCount + i)].rowspan = rowspan;
-
-                            if (dfx.isset(cellHeadings[(rowCount + i)]) === false) {
-                                cellHeadings[(rowCount + i)] = [];
-                            }
-
-                            cellHeadings[(rowCount + i)][cellCount] = {
-                                id: headings.row[(rowCount + i)].id,
-                                row: (rowCount + i)
-                            };
-                        }//end for
-
-                        cellid = headings.row[rowCount].id;
-                    } else {
-                        if (dfx.isset(headings.row[rowCount]) === true
-                            && dfx.isset(headings.row[rowCount].id) === true
-                        ) {
-                            cellid = headings.row[rowCount].id + '-' + cellid;
-                        }
-                    }//end if
-
-                    if (colspan > 1) {
-                        if (dfx.isset(headings.col[cellCount]) === true
-                            && headings.col[cellCount].colspan <= colspan
-                        ) {
-                            // This heading is replacing a heading set higher up
-                            // so we need to remove the higher heading from the IDs so
-                            // we can replace it with our own later on.
-                            var oldidLen = headings.col[cellCount].id.length;
-                            for (var i = 1; i < colspan; i++) {
-                                var oldid = headings.col[(cellCount + i)].id
-                                var newid = oldid.substr(0, ((oldidLen + 1) * -1));
-                                headings.col[(cellCount + i)].id = dfx.trim(newid);
-
-                                var oldHeading = cellHeadings[(rowCount - 1)][(cellCount + i)].id;
-                                var newHeading = oldHeading.replace(oldid, '');
-                                cellHeadings[(rowCount - 1)][(cellCount + i)].id = newHeading;
-                            }
-
-                            headings.col[cellCount].id = '';
-                        }//end if
-
-                        for (var i = 0; i < colspan; i++) {
-                            if (dfx.isset(headings.col[(cellCount + i)]) === false) {
-                                headings.col[(cellCount + i)] = {
-                                    id: '',
-                                    colspan: colspan
-                                };
-                            } else if (headings.col[(cellCount + i)].id !== '') {
-                                headings.col[(cellCount + i)].id += '-';
-                            }
-
-                            headings.col[(cellCount + i)].id     += cellid;
-                            headings.col[(cellCount + i)].colspan = colspan;
-
-                            if (dfx.isset(cellHeadings[rowCount]) === false) {
-                                cellHeadings[rowCount] = [];
-                            }
-
-                            cellHeadings[rowCount][(cellCount + i)] = {
-                                id: headings.col[(cellCount + i)].id,
-                                row: rowCount
-                            };
-
-                            if (dfx.isset(cellHeadings[(rowCount - 1)]) === true
-                                && dfx.isset(cellHeadings[(rowCount - 1)][(cellCount + i)]) === true
-                            ) {
-                                cellHeadings[rowCount][(cellCount + i)].id = cellHeadings[(rowCount - 1)][(cellCount + i)].id + ' ' + cellHeadings[rowCount][(cellCount + i)].id;
-                            }
-                        }//end for
-
-                        cellid = headings.col[cellCount].id;
-                    } else {
-                        if (dfx.isset(headings.col[cellCount]) === true
-                            && dfx.isset(headings.col[cellCount].id) === true
-                        ) {
-                            cellid = headings.col[cellCount].id + '-' + cellid;
-                        }
-
-                        if (dfx.isset(cellHeadings[rowCount]) === false) {
-                            cellHeadings[rowCount] = [];
-                        }
-
-                        if (dfx.isset(cellHeadings[rowCount][cellCount]) === false) {
-                            cellHeadings[rowCount][cellCount] = {
-                                id: cellid,
-                                row: rowCount
-                            };
-                        }
-                    }//end if
-
                     cell.setAttribute('id', cellid);
-                    usedHeaderids.push(cellid);
-                } else {
-                    // Copy the headings down from the column above.
-                    if (rowCount > 1) {
-                        for (var i = 0; i < colspan; i++) {
-                            if (dfx.isset(cellHeadings[rowCount]) === false) {
-                                cellHeadings[rowCount] = [];
-                            }
-
-                            cellHeadings[rowCount][(cellCount + i)] = cellHeadings[(rowCount - 1)][(cellCount + i)];
-                        }
-                    } else {
-                        for (var i = 0; i < colspan; i++) {
-                            if (dfx.isset(cellHeadings[rowCount]) === false) {
-                                cellHeadings[rowCount] = [];
-                            }
-
-                            cellHeadings[rowCount][(cellCount + i)] = {
-                                id: '#td',
-                                row: rowCount
-                            };
-                        }
-                    }
-
-                    if (dfx.isBlank(dfx.getHtml(cell)) === false
-                        && cellHeadings[rowCount][cellCount]
-                    ) {
-                        var headers = cellHeadings[rowCount][cellCount].id;
-                        for (var i = 1; i < cellCount; i++) {
-                            // Skip column headers. We only want to use our own column header.
-                            if (cellHeadings[rowCount][i].row !== rowCount) {
-                                continue;
-                            }
-
-                            headers += ' ' + cellHeadings[rowCount][i].id;
-                        }
-
-                        var headerids = [];
-
-                        headers        = headers.split(' ');
-                        var headersLen = headers.length;
-                        for (var i = 0; i < headersLen; i++) {
-                            var header     = headers[i];
-                            var subHeaders = header.split('-');
-                            var numHeaders = subHeaders.length;
-                            var lastHeader = '';
-                            for (var m = 0; m < numHeaders; m++) {
-                                var subHeader = subHeaders.shift();
-                                if (lastHeader === '') {
-                                    lastHeader = subHeader;
-                                } else {
-                                    lastHeader += '-' + subHeader;
-                                }
-
-                                headerids.push(lastHeader);
-                            }
-                        }
-
-                        headerids = this.arrayUnique(headerids);
-                        headerids = this.arrayIntersect(headerids, usedHeaderids);
-                        var headersAttr = headerids.join(' ');
-                        if (headersAttr) {
-                            cell.setAttribute('headers', headersAttr);
-                        }
-                    }//end if
-
-                    for (var i = 0; i < rowspan; i++) {
-                        for (var m = 0; m < colspan; m++) {
-                            if (dfx.isset(cellHeadings[(rowCount + i)]) === false) {
-                                cellHeadings[(rowCount + i)] = [];
-                            }
-
-                            cellHeadings[(rowCount + i)][(cellCount + m)] = cellHeadings[rowCount][(cellCount + m)];
-                        }
-                    }
-                }//end if
-
-                cellCount += colspan;
+                }
             }//end for
-
-            rowCount++;
         }//end for
 
-        // Get HTMLCS to give us the correct headers just incase...
+        // Get HTMLCS to give us the correct table headers...
         if (window['HTMLCS']) {
             var headers = HTMLCS.util.getCellHeaders(table);
             var c       = headers.length;
