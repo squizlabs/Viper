@@ -63,19 +63,26 @@ Software is licenced, not sold.
         (j) Related Bodies Corporate has the same meaning as in the Corporations Act
         2001 (Cth).
 
-        (k) Software means the Squiz Viper software, including the Client Side
+        (k) Service Level Agreement means a contractual agreement of the same name
+        between You and Squiz.
+
+        (l) Software means the Squiz Viper software, including the Client Side
         Executable Software, without limitation all files comprising the Squiz Viper
         program on which it functions as per the Documentation, including updates as
         may be issued from time to time.
 
-        (l) Squiz Authorised Representative means a party with written authorisation
+        (m) Squiz Authorised Representative means a party with written authorisation
         by Squiz to market and sell the Software.
 
-        (m) Third Party means any party other than You or Squiz and includes
+        (n) Third Party means any party other than You or Squiz and includes
         (i) Related Bodies Corporate, and (ii) parties having a different ABN to
         You (if applicable).
 
-        (n) You means one of either (i) the individual, (ii) an entity or
+        (o) Valid Service Level Agreement means a Service Level Agreement that is
+        active and enforceable, paid up and of a level that is stipulated by Squiz in
+        the Documentation to include the right to purchase Squiz Viper.
+
+        (p) You means one of either (i) the individual, (ii) an entity or
         (iii) similar, but does not include Related Bodies Corporate, who has
         purchased the Software from Squiz or a Squiz Authorised Representative and
         has installed the Software into their system in accordance with the terms of
@@ -104,8 +111,9 @@ Software is licenced, not sold.
         in the manner and for the purposes described in the Documentation;
         (b) the right to install one Instance of the Software;
         (c) the right to download from the server referred in (b) above unlimited
-        copies of the Client Side Executable Software to a Squiz supported browser
-        for the direct benefit of Your employees, agents and subcontractors;
+        copies of the Client Side Executable Software to a Squiz Supported Browser
+        (as defined in the Documentation) for the direct benefit of Your employees,
+        agents and subcontractors;
         (d) the right to make a reasonable number of backup copies of the Software,
         provided Your backup copies are not installed or used for other than archival
         purposes.
@@ -139,11 +147,13 @@ Software is licenced, not sold.
     4.2 You must not have received the Software from a party other than Squiz or a
     Squiz Authorised Representative.
 
-    4.3 You must immediately notify Squiz if You become aware of any breach of this
+    4.3 You must have and continue to have a Valid Service Level Agreement.
+
+    4.4 You must immediately notify Squiz if You become aware of any breach of this
     agreement and must give Squiz all necessary assistance in connection with any
     proceedings Squiz may institute relating to such breach.
 
-    4.4 This clause will survive the termination of this Agreement.
+    4.5 This clause will survive the termination of this Agreement.
 
 5. Charges
 
@@ -206,7 +216,8 @@ Software is licenced, not sold.
     9.1 This Agreement and the Licence granted herein shall terminate upon the
     happening of any of the following events:
         (a) You fail to comply with any of the terms and conditions of this
-        Agreement,including the non-payment of Charges described in Clause 5;
+        Agreement, including the non-payment of Charges described in Clause 5 and the
+        non-continuance of a Service Level Agreement described in Clause 4.3;
         (b) You have received the Software from a party other than Squiz or a Squiz
         Authorised Representative;
         (c) Squiz provides You with another licence, and You agree to be bound by its
@@ -220,6 +231,9 @@ Software is licenced, not sold.
     Software and the Documentation. Alternatively, You must destroy such Software,
     copies, revisions, enhancements and upgrades and must certify in writing to Squiz
     that they have been destroyed.
+
+    9.3 On termination, any amounts paid by You to Squiz are non-refundable in their
+    entirety.
 
 10. Warranty
 
@@ -292,45 +306,45 @@ Software is licenced, not sold.
 13. General Terms
 
     13.1 Governing law
-        This Agreement shall be governed by, and construed in accordance with the
-        laws of New South Wales, Australia. The parties agree to submit to the
-        jurisdiction of the courts and tribunals of the State of New South Wales,
-        Australia.
+         This Agreement shall be governed by, and construed in accordance with the
+         laws of New South Wales, Australia. The parties agree to submit to the
+         jurisdiction of the courts and tribunals of the State of New South Wales,
+         Australia.
 
     13.2 Entire agreement
-        This Agreement constitutes the entire agreement between the parties and
-        supersedes all prior representations, agreements, statements and
-        understandings, whether verbal or in writing.
+         This Agreement constitutes the entire agreement between the parties and
+         supersedes all prior representations, agreements, statements and
+         understandings, whether verbal or in writing.
 
     13.3 No reliance on other matters
-        Each of the parties acknowledges that in agreeing to enter into this
-        Agreement it has not relied on any representation, warranty or other
-        assurance except those set out in this Agreement.
+         Each of the parties acknowledges that in agreeing to enter into this
+         Agreement it has not relied on any representation, warranty or other
+         assurance except those set out in this Agreement.
 
     13.4 New Versions of the Agreement
-        Notwithstanding clause 13.5 below, Squiz reserves the right to modify this
-        Agreement at any time by providing such revised Agreement to You. Your
-        continued use of the Software shall constitute Your acceptance to be bound by
-        the terms and conditions of the revised Agreement.
+         Notwithstanding clause 13.5 below, Squiz reserves the right to modify this
+         Agreement at any time by providing such revised Agreement to You. Your
+         continued use of the Software shall constitute Your acceptance to be bound
+         by the terms and conditions of the revised Agreement.
 
     13.5 Amendment of Agreement
-        No amendment to or modification of this Agreement shall be binding unless in
-        writing and signed by both parties.
+         No amendment to or modification of this Agreement shall be binding unless in
+         writing and signed by both parties.
 
     13.6 Assignment
-        You must not assign, whether in whole or part, the benefit of this agreement
-        or any rights or obligations hereunder, without the prior written consent of
-        Squiz.
+         You must not assign, whether in whole or part, the benefit of this agreement
+         or any rights or obligations hereunder, without the prior written consent of
+         Squiz.
 
     13.7 Severability
-        If any provision of this Agreement shall be held by a court of competent
-        jurisdiction to be contrary to law; that provision will be enforced to the
-        maximum extent permissible and the remaining provisions of this Agreement
-        will remain in full force and effect.
+         If any provision of this Agreement shall be held by a court of competent
+         jurisdiction to be contrary to law; that provision will be enforced to the
+         maximum extent permissible and the remaining provisions of this Agreement
+         will remain in full force and effect.
 
     13.8 Waiver
-        A waiver by either party in respect of a breach of a provision of this
-        Agreement by the other party shall not be deemed to be a waiver in respect of
-        any other breach and the failure of either party to enforce at any time a
-        provision of this Agreement shall in no way be interpreted as a waiver of
-        such provision.
+         A waiver by either party in respect of a breach of a provision of this
+         Agreement by the other party shall not be deemed to be a waiver in respect
+         of any other breach and the failure of either party to enforce at any time a
+         provision of this Agreement shall in no way be interpreted as a waiver of
+         such provision.
