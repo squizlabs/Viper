@@ -3517,6 +3517,7 @@ ViperTableEditorPlugin.prototype = {
 
     getPreviousRow: function(row)
     {
+        var sourceRow = row;
         while (row = row.previousSibling) {
             if (row.nodeType === dfx.ELEMENT_NODE) {
                 var tagName = row.tagName.toLowerCase();
@@ -3526,16 +3527,31 @@ ViperTableEditorPlugin.prototype = {
             }
         }
 
+        if (dfx.isTag(sourceRow.parentNode, 'tbody') === true) {
+            var rows = dfx.getTag('tr', dfx.getTag('thead', this.getRowTable(sourceRow)));
+            if (rows.length > 0) {
+                return rows[(rows.length - 1)];
+            }
+        }
+
     },
 
     getNextRow: function(row, goPrev)
     {
+        var sourceRow = row;
         while (row = row.nextSibling) {
             if (row.nodeType === dfx.ELEMENT_NODE) {
                 var tagName = row.tagName.toLowerCase();
                 if (tagName === 'tr') {
                     return row;
                 }
+            }
+        }
+
+        if (dfx.isTag(sourceRow.parentNode, 'thead') === true) {
+            var rows = dfx.getTag('tr', dfx.getTag('tbody', this.getRowTable(sourceRow)));
+            if (rows.length > 0) {
+                return rows[0];
             }
         }
 
