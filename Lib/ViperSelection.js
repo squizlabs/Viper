@@ -25,12 +25,12 @@ var ViperSelection = {
      */
     _getSelection: function()
     {
-        if (Viper.window.getSelection) {
+        if (Viper.document.selection) {
+            return Viper.document.selection;
+        } else if (Viper.window.getSelection) {
             return Viper.window.getSelection();
         } else if (Viper.document.getSelection) {
             return Viper.document.getSelection();
-        } else if (Viper.document.selection) {
-            return Viper.document.selection;
         } else {
             return null;
         }
@@ -107,7 +107,7 @@ var ViperSelection = {
     {
         this._selection = ViperSelection._getSelection();
 
-        if (range.rangeObj.select) {
+        if (this._viper.isBrowser('msie') === true) {
             // IE.
             try {
                 range.rangeObj.select();
