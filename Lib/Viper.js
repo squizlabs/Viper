@@ -2602,7 +2602,8 @@ Viper.prototype = {
             }
 
             if (bookmark.end.previousSibling) {
-                endPos = dfx.getLastChild(bookmark.end.previousSibling);
+                endPos    = dfx.getLastChild(bookmark.end.previousSibling);
+                endOffset = endPos.data.length;
             } else {
                 endPos    = dfx.getFirstChild(bookmark.end.nextSibling);
                 endOffset = 0;
@@ -2616,12 +2617,36 @@ Viper.prototype = {
             range.setEnd(startPos, startOffset);
             range.collapse(false);
         } else {
-            range.setStart(startPos, startOffset);
-            if (endOffset === null) {
-                endOffset = (endPos.length || 0);
+            if (endPos.nextSibling && endPos.nextSibling.nodeType === dfx.TEXT_NODE) {
+                endPos.data += endPos.nextSibling.data;
+                dfx.remove(endPos.nextSibling);
             }
 
+            if (endPos.previousSibling && endPos.previousSibling.nodeType === dfx.TEXT_NODE) {
+                endOffset += endPos.previousSibling.data.length;
+                endPos.previousSibling.data += endPos.data;
+                var tmp = endPos;
+                endPos = endPos.previousSibling;
+                dfx.remove(tmp);
+            }
+
+
+            if (startPos.nextSibling && startPos.nextSibling.nodeType === dfx.TEXT_NODE) {
+                startPos.data += startPos.nextSibling.data;
+                dfx.remove(startPos.nextSibling);
+            }
+
+            if (startPos.previousSibling && startPos.previousSibling.nodeType === dfx.TEXT_NODE) {
+                startOffset += startPos.previousSibling.data.length;
+                startPos.previousSibling.data += startPos.data;
+                var tmp = startPos;
+                startPos = startPos.previousSibling;
+                dfx.remove(tmp);
+            }
+
+            ViperSelection.removeAllRanges();
             range.setEnd(endPos, endOffset);
+            range.setStart(startPos, startOffset);
         }
 
         try {
