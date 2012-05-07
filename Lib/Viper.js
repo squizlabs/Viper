@@ -2602,7 +2602,8 @@ Viper.prototype = {
             }
 
             if (bookmark.end.previousSibling) {
-                endPos = dfx.getLastChild(bookmark.end.previousSibling);
+                endPos    = dfx.getLastChild(bookmark.end.previousSibling);
+                endOffset = endPos.data.length;
             } else {
                 endPos    = dfx.getFirstChild(bookmark.end.nextSibling);
                 endOffset = 0;
@@ -2616,12 +2617,46 @@ Viper.prototype = {
             range.setEnd(startPos, startOffset);
             range.collapse(false);
         } else {
-            range.setStart(startPos, startOffset);
-            if (endOffset === null) {
-                endOffset = (endPos.length || 0);
+            var length = 0;
+            if (startPos === endPos) {
+                length = startPos.data.length;
             }
 
+            if (endPos.nextSibling && endPos.nextSibling.nodeType === dfx.TEXT_NODE) {
+                endPos.data += endPos.nextSibling.data;
+                dfx.remove(endPos.nextSibling);
+            }
+
+            if (endPos.previousSibling
+                && endPos.previousSibling.nodeType === dfx.TEXT_NODE
+                && endPos !== startPos
+            ) {
+                endOffset += endPos.previousSibling.data.length;
+                endPos.data = endPos.previousSibling.data + endPos.data;
+                dfx.remove(endPos.previousSibling);
+            }
+
+            if (startPos.nextSibling && startPos.nextSibling.nodeType === dfx.TEXT_NODE) {
+                startPos.data += startPos.nextSibling.data;
+                dfx.remove(startPos.nextSibling);
+            }
+
+            if (startPos.previousSibling
+                && startPos.previousSibling.nodeType === dfx.TEXT_NODE
+            ) {
+                startOffset += startPos.previousSibling.data.length;
+                startPos.data = startPos.previousSibling.data + startPos.data;
+
+                if (endPos === startPos) {
+                    endOffset = (startOffset + length);
+                }
+
+                dfx.remove(startPos.previousSibling);
+            }
+
+            ViperSelection.removeAllRanges();
             range.setEnd(endPos, endOffset);
+            range.setStart(startPos, startOffset);
         }
 
         try {

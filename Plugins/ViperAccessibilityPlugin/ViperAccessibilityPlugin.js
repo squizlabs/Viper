@@ -70,6 +70,7 @@ ViperAccessibilityPlugin.prototype = {
         dfx.setHtml(this._htmlcsWrapper, '');
         HTMLCSAuditor.run(this._standard, this.viper.getViperElement(), {
             noHeader: true,
+            includeCss: false,
             parentElement: self._htmlcsWrapper,
             customIssueSource: function(id, issue, standard, resolutionElem, detailsElem) {
                 self._createIssueDetail(id, issue, resolutionElem, detailsElem);

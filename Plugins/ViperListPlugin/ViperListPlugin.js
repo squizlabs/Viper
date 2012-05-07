@@ -79,6 +79,19 @@ ViperListPlugin.prototype = {
                     return;
                 }
 
+                if (startNode.nodeType === dfx.TEXT_NODE
+                    && startNode.data.length === range.startOffset
+                    && self.viper.isBrowser('msie') === true
+                ) {
+                    // IE sometimes fails with range, if multiple list elements are
+                    // selected and range starts from the beginning of a list item
+                    // then IE thinks that the range is starting from previous element
+                    // which could be a list item causing isListElement() to return
+                    // true.. Here, we move range by 1 char right to fix it.
+                    range.moveStart(ViperDOMRange.CHARACTER_UNIT, 1);
+                    startNode = range.getStartNode();
+                }
+
                 if (self._isListElement(startNode) === true) {
                     if (self.tabRange(range, e.shiftKey, true) === true) {
                         self.tabRange(range, e.shiftKey);
@@ -481,6 +494,17 @@ ViperListPlugin.prototype = {
                 dfx.insertBefore(startNode, textNode);
                 range.setStart(textNode, 0);
                 range.collapse(true);
+            }
+        }
+
+        if (startNode === range.startContainer
+            && startNode.nodeType === dfx.TEXT_NODE
+            && startNode.data.length === range.startOffset
+        ) {
+            var nextLI = this.getNextItem(this._getListItem(startNode));
+            startNode = range._getFirstSelectableChild(nextLI);
+            if (!startNode) {
+                startNode = nextLI;
             }
         }
 
