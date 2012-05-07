@@ -38,6 +38,10 @@ function ViperToolbarPlugin(viper)
         self._updateToolbar(range);
     });
 
+    this.viper.registerCallback('Viper:editableElementChanged', 'ViperToolbarPlugin', function(range) {
+            self._updateToolbar();
+    });
+
     this.viper.registerCallback('Viper:clickedOutside', 'ViperToolbarPlugin', function(range) {
         clickedOutside = true;
 
