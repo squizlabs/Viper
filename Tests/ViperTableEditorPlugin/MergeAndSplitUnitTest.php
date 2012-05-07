@@ -7,11 +7,11 @@ class Viper_Tests_ViperTableEditorPlugin_MergeAndSplitUnitTest extends AbstractV
 
 
     /**
-     * Test that table ids are correct after merging and splitting cells.
+     * Test that table ids are correct after merging, splitting and deleting cells.
      *
      * @return void
      */
-    public function testTableIdWhenMergingAndSplitingCells()
+    public function testTableIdWhenMergingSplitingAndDeletingCellsInASingleRow()
     {
         $textLoc = $this->find('IPSUM');
 
@@ -38,9 +38,82 @@ class Viper_Tests_ViperTableEditorPlugin_MergeAndSplitUnitTest extends AbstractV
 
         $this->showTools(4, 'col');
         $this->click($this->find($this->getImg('icon_trash.png'), NULL, 0.83));
-        $this->assertHTMLMatch('<p>Lorem IPSUM dolor</p><p>&nbsp;</p><table style="width: 100%; " id="test" border="1"><tbody><tr><th id="testr1c1">&nbsp;</th><th id="testr1c2">&nbsp;</th><th id="testr1c3">&nbsp;</th><th id="testr1c4">&nbsp;</th><th id="testr1c6">&nbsp;</th></tr><tr><th id="testr2c1">&nbsp;</th><td headers="testr1c2 testr2c1">&nbsp;</td><td colspan="2" headers="testr1c3 testr1c4 testr2c1">&nbsp;&nbsp;&nbsp;&nbsp;</td><td headers="testr1c6 testr2c1">&nbsp;</td></tr><tr><th id="testr3c1">&nbsp;</th><td headers="testr1c2 testr3c1">&nbsp;</td><td headers="testr1c3 testr3c1">&nbsp;</td><td headers="testr1c4 testr3c1">&nbsp;</td><td headers="testr1c6 testr3c1">&nbsp;</td></tr></tbody></table><p>sit amet <strong>consectetur</strong></p>');
+        $this->assertHTMLMatch('<p>Lorem IPSUM dolor</p><p>&nbsp;</p><table style="width: 100%;" id="test" border="1"><tbody><tr><th id="testr1c1">&nbsp;</th><th id="testr1c2">&nbsp;</th><th id="testr1c3">&nbsp;</th><th id="testr1c4">&nbsp;</th><th id="testr1c6">&nbsp;</th></tr><tr><th id="testr2c1">&nbsp;</th><td headers="testr1c2 testr2c1">&nbsp;</td><td colspan="2" headers="testr1c3 testr1c4 testr2c1">&nbsp;&nbsp;&nbsp;&nbsp;</td><td headers="testr1c6 testr2c1">&nbsp;</td></tr><tr><th id="testr3c1">&nbsp;</th><td headers="testr1c2 testr3c1">&nbsp;</td><td headers="testr1c3 testr3c1">&nbsp;</td><td headers="testr1c4 testr3c1">&nbsp;</td><td headers="testr1c6 testr3c1">&nbsp;</td></tr></tbody></table><p>sit amet <strong>consectetur</strong></p>');
 
-    }//end testTableIdWhenMergingAndSplitingCells()
+
+    }//end testTableIdWhenMergingSplitingAndDeletingCellsInASingleRow()
+
+
+    /**
+     * Test that table ids are correct after merging and splitting cells across multiple rows.
+     *
+     * @return void
+     */
+    public function testTableIdWhenMergingCellsThenSplittingVertThenHorz()
+    {
+        $textLoc = $this->find('IPSUM');
+
+        $this->selectText('dolor');
+        $this->keyDown('Key.RIGHT');
+        $this->keyDown('Key.ENTER');
+
+        $this->execJS('insTable(3, 4, 2, "test")');
+        sleep(2);
+        $this->click($textLoc);
+
+        $this->assertHTMLMatch('<p>Lorem IPSUM dolor</p><p>&nbsp;</p><table style="width: 100%;" id="test" border="1"><tbody><tr><th id="testr1c1">&nbsp;</th><th id="testr1c2">&nbsp;</th><th id="testr1c3">&nbsp;</th><th id="testr1c4">&nbsp;</th></tr><tr><td headers="testr1c1">&nbsp;</td><td headers="testr1c2">&nbsp;</td><td headers="testr1c3">&nbsp;</td><td headers="testr1c4">&nbsp;</td></tr><tr><td headers="testr1c1">&nbsp;</td><td headers="testr1c2">&nbsp;</td><td headers="testr1c3">&nbsp;</td><td headers="testr1c4">&nbsp;</td></tr></tbody></table><p>sit amet <strong>consectetur</strong></p>');
+
+        $this->showTools(1, 'cell');
+        $this->click($this->find($this->getImg('icon_mergeSplit.png'), NULL, 0.83));
+        $this->clickInlineToolbarButton($this->getImg('icon_mergeRight.png'));
+        $this->clickInlineToolbarButton($this->getImg('icon_mergeDown.png'));
+        $this->clickInlineToolbarButton($this->getImg('icon_mergeDown.png'));
+        exit();
+        $this->assertHTMLMatch('<p>Lorem IPSUM dolor</p><p>&nbsp;</p><table style="width: 100%; " id="test" border="1"><tbody><tr><th id="testr1c1">&nbsp;</th><th id="testr1c2" colspan="2" rowspan="3">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th><th id="testr1c4">&nbsp;</th></tr><tr><td headers="testr1c1">&nbsp;</td><td headers="testr1c4">&nbsp;</td></tr><tr><td headers="testr1c1">&nbsp;</td><td headers="testr1c4">&nbsp;</td></tr></tbody></table><p>sit amet <strong>consectetur</strong></p>');
+
+        $this->click($this->find($this->getImg('icon_splitVert.png'), NULL, 0.83));
+        $this->click($this->find($this->getImg('icon_splitHoriz.png'), NULL, 0.83));
+        $this->click($this->find($this->getImg('icon_splitHoriz.png'), NULL, 0.83));
+        $this->assertHTMLMatch('<p>Lorem IPSUM dolor</p><p>&nbsp;</p><table style="width: 100%;" id="test" border="1"><tbody><tr><th id="testr1c1">&nbsp;</th><th id="testr1c2" colspan="2" rowspan="3">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th><th id="testr1c4">&nbsp;</th></tr><tr><td headers="testr1c1">&nbsp;</td><td headers="testr1c2 testr1c4">&nbsp;</td></tr><tr><td headers="testr1c1">&nbsp;</td><td headers="testr1c2 testr1c4">&nbsp;</td></tr></tbody></table><p>sit amet <strong>consectetur</strong></p>');
+
+
+    }//end testTableIdWhenMergingCellsThenSplittingVertThenHorz()
+
+
+    /**
+     * Test that table ids are correct after merging and splitting cells across multiple rows.
+     *
+     * @return void
+     */
+    public function testTableIdWhenMergingCellsThenSplittingHorzThenVert()
+    {
+        $textLoc = $this->find('IPSUM');
+
+        $this->selectText('dolor');
+        $this->keyDown('Key.RIGHT');
+        $this->keyDown('Key.ENTER');
+
+        $this->execJS('insTable(3, 4, 2, "test")');
+        sleep(2);
+        $this->click($textLoc);
+
+        $this->assertHTMLMatch('<p>Lorem IPSUM dolor</p><p>&nbsp;</p><table style="width: 100%;" id="test" border="1"><tbody><tr><th id="testr1c1">&nbsp;</th><th id="testr1c2">&nbsp;</th><th id="testr1c3">&nbsp;</th><th id="testr1c4">&nbsp;</th></tr><tr><td headers="testr1c1">&nbsp;</td><td headers="testr1c2">&nbsp;</td><td headers="testr1c3">&nbsp;</td><td headers="testr1c4">&nbsp;</td></tr><tr><td headers="testr1c1">&nbsp;</td><td headers="testr1c2">&nbsp;</td><td headers="testr1c3">&nbsp;</td><td headers="testr1c4">&nbsp;</td></tr></tbody></table><p>sit amet <strong>consectetur</strong></p>');
+
+        $this->showTools(1, 'cell');
+        $this->click($this->find($this->getImg('icon_mergeSplit.png'), NULL, 0.83));
+        $this->clickInlineToolbarButton($this->getImg('icon_mergeRight.png'));
+        $this->clickInlineToolbarButton($this->getImg('icon_mergeDown.png'));
+        $this->clickInlineToolbarButton($this->getImg('icon_mergeDown.png'));
+        $this->assertHTMLMatch('<p>Lorem IPSUM dolor</p><p>&nbsp;</p><table style="width: 100%;" id="test" border="1"><tbody><tr><th id="testr1c1">&nbsp;</th><th id="testr1c2" colspan="2" rowspan="3">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th><th id="testr1c4">&nbsp;</th></tr><tr><td headers="testr1c1">&nbsp;</td><td headers="testr1c4">&nbsp;</td></tr><tr><td headers="testr1c1">&nbsp;</td><td headers="testr1c4">&nbsp;</td></tr></tbody></table><p>sit amet <strong>consectetur</strong></p>');
+
+        $this->click($this->find($this->getImg('icon_splitHoriz.png'), NULL, 0.83));
+        $this->click($this->find($this->getImg('icon_splitHoriz.png'), NULL, 0.83));
+        $this->click($this->find($this->getImg('icon_splitVert.png'), NULL, 0.83));
+
+        $this->assertHTMLMatch('<p>Lorem IPSUM dolor</p><p>&nbsp;</p><table style="width: 100%;" id="test" border="1"><tbody><tr><th id="testr1c1">&nbsp;</th><th id="testr1c2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th><th id="testr1c3">&nbsp;</th><th id="testr1c4">&nbsp;</th></tr><tr><td headers="testr1c1">&nbsp;</td><th colspan="2" id="testr2c2">&nbsp;</th><td headers="testr1c4">&nbsp;</td></tr><tr><td headers="testr1c1">&nbsp;</td><th colspan="2" id="testr3c2">&nbsp;</th><td headers="testr1c4">&nbsp;</td></tr></tbody></table><p>sit amet <strong>consectetur</strong></p>');
+
+
+    }//end testTableIdWhenMergingAndSplitingCellsAcrossMultipleRowsAndColumns()
 
 
     /**
