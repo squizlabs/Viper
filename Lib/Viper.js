@@ -4093,6 +4093,8 @@ Viper.prototype = {
             clone.appendChild(contents);
         }
 
+        this._viperRange = null;
+
         var range          = this.getCurrentRange();
         var lastSelectable = range._getLastSelectableChild(clone);
         if (lastSelectable && lastSelectable.nodeType === dfx.TEXT_NODE) {
