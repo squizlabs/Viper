@@ -1222,6 +1222,10 @@ ViperTools.prototype = {
                 dfx.removeClass(toolbar, 'Viper-visible');
             },
 
+            isVisible: function() {
+                return dfx.hasClass(toolbar, 'Viper-visible');
+            },
+
             /**
              * Adds the given element as a sub section of the toolbar.
              *
@@ -1418,7 +1422,9 @@ ViperTools.prototype = {
                         return false;
                     }
 
-                    tools.viper.focus();
+                    if (!e) {
+                        tools.viper.focus();
+                    }
 
                     if (tools.viper.isBrowser('msie') === false) {
                         try {
@@ -1434,7 +1440,7 @@ ViperTools.prototype = {
                             } catch (e) {
                                 console.error('Sub Section Action threw exception:' + e.message);
                             }
-                        }, 10);
+                        }, 2);
                     }
 
                     tools.disableButton(subSectionid + '-applyButton');
@@ -1634,6 +1640,11 @@ ViperTools.prototype = {
                 }
 
                 var top = (rangeCoords.bottom + margin + scrollCoords.y);
+
+                if (top === 0) {
+                    this.hide();
+                    return;
+                }
 
                 dfx.setStyle(toolbar, 'top', top + 'px');
                 dfx.addClass(toolbar, 'Viper-visible');

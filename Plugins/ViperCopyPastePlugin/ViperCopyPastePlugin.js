@@ -133,7 +133,7 @@ ViperCopyPastePlugin.prototype = {
 
     keyDown: function (e)
     {
-        if (this._isMSIE === true ||this._isFirefox === true || this._isSafari === true) {
+        if (this._isMSIE === true || this._isFirefox === true || this._isSafari === true) {
             if (e.metaKey === true || e.ctrlKey === true) {
                 if (e.keyCode === 86) {
                     return this._fakePaste(e);
@@ -360,6 +360,8 @@ ViperCopyPastePlugin.prototype = {
             this.pasteElement.innerHTML = '&nbsp;';
             this.pasteElement.focus();
             Viper.window.scrollTo(scrollCoords.x, scrollCoords.y);
+        } else {
+            this.pasteElement.focus();
         }
 
         var self = this;

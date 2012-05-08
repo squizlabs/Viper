@@ -3687,6 +3687,9 @@ Viper.prototype = {
                 var scrollCoords = dfx.getScrollCoords();
                 this.element.focus();
 
+                var range = this.getViperRange();
+                ViperSelection.addRange(range);
+
                 // IE and Webkit fix.
                 Viper.window.scrollTo(scrollCoords.x, scrollCoords.y);
 
@@ -4089,6 +4092,8 @@ Viper.prototype = {
         } else if (contents) {
             clone.appendChild(contents);
         }
+
+        this._viperRange = null;
 
         var range          = this.getCurrentRange();
         var lastSelectable = range._getLastSelectableChild(clone);

@@ -38,14 +38,31 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
      */
     public function testTextTypeReplaceSelection()
     {
-        $text = $this->selectText('Lorem');
-
+        $this->selectText('Lorem');
+        
         $this->type('Testing input');
 
         $this->assertHTMLMatch('<p>Testing input</p><p>EIB MOZ</p>');
 
     }//end testTextTypeReplaceSelection()
 
+
+    /**
+     * Test enter a new paragraph.
+     *
+     * @return void
+     */
+    public function testCreatingANewParagraph()
+    {
+        $this->selectText('Lorem');
+        $this->keyDown('Key.RIGHT');
+        $this->keyDown('Key.ENTER');
+        $this->type('Testing input');
+
+        $this->assertHTMLMatch('<p>Lorem</p><p>Testing input</p>');
+
+    }//end testCreatingANewParagraph()
+    
 
     /**
      * Test that using UP, DOWN, RIGHT, and LEFT arrows move caret correctly.

@@ -821,6 +821,28 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->assertHTMLMatch('<p>Lorem IPSUM dolor</p><p>sit amet <strong>WoW</strong></p>');
 
     }//end testCreateLinkPlainTextUsingInlineToolbar()
+    
+    
+    /**
+     * Test link icon appears in the inline toolbar for acronym and abbreviation.
+     *
+     * @return void
+     */
+    public function testLinkIconForAcronymAndAbbreviation()
+    {
+        $dir = dirname(__FILE__).'/Images/';
+
+        $this->selectText('IPSUM');
+        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_link.png'), 'Link icon should appear in the inline toolbar.');
+        $this->assertFalse($this->inlineToolbarButtonExists($dir.'toolbarIcon_removeLink.png'), 'Remove link icon should not appear in the inline toolbar.');
+        $this->click($this->find('Lorem'));
+
+        $this->selectText('WoW');
+        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_link.png'), 'Link icon should appear in the inline toolbar.');
+        $this->assertFalse($this->inlineToolbarButtonExists($dir.'toolbarIcon_removeLink.png'), 'Remove link icon should not appear in the inline toolbar.');
+
+    }//end testLinkIconForAcronymAndAbbreviation()
+    
 
 }//end class
 

@@ -83,8 +83,11 @@ ViperTableEditorPlugin.prototype = {
         });
 
         dfx.addEvent(window, 'resize', function() {
+            self.hideCellToolsIcon();
+            self.removeHighlights();
+
             var cell = self.getActiveCell();
-            if (cell) {
+            if (cell && self._toolbarWidget.isVisible() === true) {
                 self._updatePosition(cell);
                 self.highlightActiveCell(self._currentType);
             }
@@ -133,6 +136,11 @@ ViperTableEditorPlugin.prototype = {
                     }
                 }
             }//end if
+        });
+
+        this.viper.registerCallback('Viper:clickedOutside', 'ViperTableEditorPlugin', function(data) {
+            self.hideCellToolsIcon();
+            self.removeHighlights();
         });
 
         this.toolbarPlugin = this.viper.ViperPluginManager.getPlugin('ViperToolbarPlugin');
@@ -495,6 +503,10 @@ ViperTableEditorPlugin.prototype = {
 
     hideCellToolsIcon: function()
     {
+        if (!this._cellTools) {
+            return;
+        }
+
         var toolsid = this.viper.getId() + '-ViperTEP';
         var tools   = dfx.getId(toolsid);
 
@@ -932,7 +944,7 @@ ViperTableEditorPlugin.prototype = {
 
     removeHighlights: function()
     {
-        dfx.remove(dfx.getClass('ViperITP-highlight'));
+        dfx.remove(this._highlightElement);
 
     },
 
