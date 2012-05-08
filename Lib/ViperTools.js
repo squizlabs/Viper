@@ -1637,6 +1637,11 @@ ViperTools.prototype = {
 
                 var top = (rangeCoords.bottom + margin + scrollCoords.y);
 
+                if (top === 0) {
+                    this.hide();
+                    return;
+                }
+
                 dfx.setStyle(toolbar, 'top', top + 'px');
                 dfx.addClass(toolbar, 'Viper-visible');
 
