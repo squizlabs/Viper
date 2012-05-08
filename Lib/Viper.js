@@ -4139,7 +4139,7 @@ Viper.prototype = {
         // Add quotes around attributes (IE....).
         if (this.isBrowser('msie') === true) {
             content = content.replace(/<\w+(?:(?:\s+\w+(?:\s*=\s*(?:"(?:[^"]+)?"|\'(?:[^\']+)?\'))?)+)?(?:\s+\w+(?:\s*=\s*(?:[^\'">\s]+))?)+(?:(?:\s+\w+(?:\s*=\s*(?:"(?:[^"]+)?"|\'(?:[^\']+)?\'|[^\'">\s]+))?)+)?\s*\/?>/ig, function(match) {
-                match = match.replace(/(\w+\s*=\s*)([^\'">\s]+)/gi, function(attr, attrName, value) {
+                match = match.replace(/(\s+\w+\s*=\s*)([^\'">\s]+)/gi, function(attr, attrName, value) {
                     return attrName + '"' + value + '"';
                 });
 
