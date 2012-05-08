@@ -45,6 +45,9 @@ ViperAccessibilityPlugin_WCAG2 = {
             }
 
             return;
+        } else if (Viper.build === true) {
+            // If Viper build is being used then do not include any resolution files.
+            return;
         }
 
         var url  = vap.viper.getViperPath();
