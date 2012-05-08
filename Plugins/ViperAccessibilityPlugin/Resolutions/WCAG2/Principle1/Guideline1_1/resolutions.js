@@ -15,9 +15,9 @@ ViperAccessibilityPlugin_WCAG2_Principle1_Guideline1_1 = {
             case 'H67.1':
             case 'H67.2':
                 if (technique === 'H37') {
-                    this._getImageResContent(contentElement, element, 'Enter a short text description of the image, or define the image as purely presentational.');
+                    this._getImageResContent(contentElement, element, 'Enter a short text description of the image, or define the image as purely decorative.');
                 } else {
-                    this._getImageResContent(contentElement, element, 'Ensure this image is purely presentational. If not, enter appropriate alt and title text.');
+                    this._getImageResContent(contentElement, element, 'Ensure this image is purely decorative. If not, enter appropriate alt and title text.');
                 }
 
                 editPanel = this.parent.getResolutionActionsContainer(contentElement);
@@ -26,7 +26,7 @@ ViperAccessibilityPlugin_WCAG2_Principle1_Guideline1_1 = {
                 var titleid    = null;
                 var checkboxid = null;
                 checkboxid   = dfx.getUniqueId();
-                var checkbox = viper.ViperTools.createCheckbox(checkboxid, 'Image is presentational', (technique === 'H67.2'), function(checked) {
+                var checkbox = viper.ViperTools.createCheckbox(checkboxid, 'Image is decorative', (technique === 'H67.2'), function(checked) {
                     if (checked === true) {
                         viper.ViperTools.getItem(altid).disable();
                         viper.ViperTools.getItem(titleid).disable();
