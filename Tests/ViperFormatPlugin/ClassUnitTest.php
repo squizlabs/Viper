@@ -764,6 +764,32 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
     }//end testSelectionIsMaintainedForParaWhenOpeningAndClosingClassFields()
 
 
+    /**
+     * Test that class info is not added to the source code when you remove italics formatting.
+     *
+     * @return void
+     */
+    public function testApplyingBoldAndItalicsClickingClassRemovingBold()
+    {
+        $dir = dirname(__FILE__).'/Images/';
+
+        $this->selectText('XuT');
+
+        $this->clickInlineToolbarButton(dirname(dirname(__FILE__)).'/ViperCoreStylesPlugin/Images/toolbarIcon_bold.png');
+        $this->clickInlineToolbarButton(dirname(dirname(__FILE__)).'/ViperCoreStylesPlugin/Images/toolbarIcon_italic.png');
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_class.png');
+        $this->clickInlineToolbarButton(dirname(dirname(__FILE__)).'/ViperCoreStylesPlugin/Images/toolbarIcon_italic_active.png');
+
+        $viperBookmarkElements = $this->execJS('dfx.getClass("viperBookmark").length');
+        $this->assertEquals(0, $viperBookmarkElements, 'There should be no viper bookmark elements');
+
+        $this->assertHTMLMatch('<p>Lorem <strong>XuT</strong> dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>Jumps</strong> OVER the lazy dogggg</p>');
+
+        $this->assertTrue($this->inlineToolbarButtonExists(dirname(dirname(__FILE__)).'/ViperCoreStylesPlugin/Images/toolbarIcon_italic.png'), 'Italics icon in VITP should not be active.');
+
+    }//end testApplyingBoldAndItalicsClickingClassRemovingBold()
+
+
 }//end class
 
 ?>
