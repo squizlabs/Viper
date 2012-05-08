@@ -3687,6 +3687,9 @@ Viper.prototype = {
                 var scrollCoords = dfx.getScrollCoords();
                 this.element.focus();
 
+                var range = this.getViperRange();
+                ViperSelection.addRange(range);
+
                 // IE and Webkit fix.
                 Viper.window.scrollTo(scrollCoords.x, scrollCoords.y);
 

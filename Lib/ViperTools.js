@@ -1418,7 +1418,9 @@ ViperTools.prototype = {
                         return false;
                     }
 
-                    tools.viper.focus();
+                    if (!e) {
+                        tools.viper.focus();
+                    }
 
                     if (tools.viper.isBrowser('msie') === false) {
                         try {
@@ -1434,7 +1436,7 @@ ViperTools.prototype = {
                             } catch (e) {
                                 console.error('Sub Section Action threw exception:' + e.message);
                             }
-                        }, 10);
+                        }, 2);
                     }
 
                     tools.disableButton(subSectionid + '-applyButton');
