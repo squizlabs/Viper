@@ -171,6 +171,49 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
 
 
     /**
+     * Test that copying/pasting from the ListsTestDoc works correctly.
+     *
+     * @return void
+     */
+    public function testListTestDocCopyPaste()
+    {
+        // Open Word doc, copy its contents.
+        $retval = NULL;
+
+        system('open '.escapeshellarg(dirname(__FILE__).'/ListsTestDoc.docx'), $retval);
+
+        if ($retval === 1) {
+            $this->markTestSkipped('MS Word is not available');
+            return;
+        } else {
+            sleep(2);
+        }
+
+        // Switch to MS Word.
+        $this->switchApp('Microsoft Word');
+
+        // Copy text.
+        $this->keyDown('Key.CMD + a');
+        sleep(1);
+        $this->keyDown('Key.CMD + c');
+        sleep(1);
+        $this->keyDown('Key.CMD + w');
+        $this->keyDown('Key.CMD + q');
+        sleep(5);
+
+        $this->switchApp($this->getBrowserName());
+        $this->selectText('Lorem');
+
+        $this->keyDown('Key.CMD + v');
+
+        sleep(5);
+
+        $this->assertHTMLMatch('<p>My complex numbered lists</p><ol><li>Asdadsads<ul><li>Dsfsdfsfd</li><li>Sdfsdfsfd<ul><li>Sfd</li><li>Sfdsfd</li><li>Dsfsdf</li><li>sdfsdf</li></ul></li><li>Sdfsdfsfd</li><li>sdfsdfsfd</li></ul></li><li>Asdadsasd</li><li>Sfdsfds&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</li><li>Asdasdasd</li><li>Asdasdasd</li></ol><p>My complex bulleted lists</p><ul><li>Sadsadasda</li><li>Sdfdsf</li><li>Sdfsdfsdf<ul><li>Sdfsfdsdf</li><li>sdfsdfsdf</li><li>Sdfsdfsfd</li><li>sdfsfdsdf</li></ul></li><li>Asdasdsad</li></ul><p></p>');
+
+    }//end testListTestDocCopyPaste()
+
+
+    /**
      * Test that copying/pasting from the ViperTestDoc works correctly.
      *
      * @return void
