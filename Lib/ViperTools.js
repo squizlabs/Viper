@@ -1222,6 +1222,10 @@ ViperTools.prototype = {
                 dfx.removeClass(toolbar, 'Viper-visible');
             },
 
+            isVisible: function() {
+                return dfx.hasClass(toolbar, 'Viper-visible');
+            },
+
             /**
              * Adds the given element as a sub section of the toolbar.
              *
