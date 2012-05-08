@@ -700,6 +700,8 @@ ViperDOMRange.prototype = {
             && this._nodeSel.startOffset === range.startOffset
             && this._nodeSel.endOffset === range.endOffset
             && this._nodeSel.collapsed === range.collapsed
+            && this._nodeSel.startNode === range.getStartNode()
+            && this._nodeSel.endNode === range.getEndNode()
         ) {
             return this._nodeSel.node;
         }
@@ -709,6 +711,8 @@ ViperDOMRange.prototype = {
         this._nodeSel.startOffset    = range.startOffset;
         this._nodeSel.endOffset      = range.endOffset;
         this._nodeSel.collapsed      = range.collapsed;
+        this._nodeSel.startNode      = range.getStartNode();
+        this._nodeSel.endNode        = range.getEndNode();
         this._nodeSel.node           = null;
 
         // Webkit seems to get the range incorrectly when range is set on a node.
