@@ -1,8 +1,8 @@
 #ViperPasteDiv {
-    width: 0;
-    height: 0;
+    width: 1px;
+    height: 1px;
     overflow: hidden;
     position: fixed;
-    left: -100px;
-    top: -100px;
+    left: 0px;
+    top: 0px;
 }
