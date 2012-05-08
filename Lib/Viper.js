@@ -2345,7 +2345,6 @@ Viper.prototype = {
             // Remove everything from firstChild to bookmark (inclusive).
             var firstChild   = dfx.getFirstChild(endTopParent);
             var elemsBetween = dfx.getElementsBetween(firstChild, bookmark.end);
-            elemsBetween.push(bookmark.end);
             elemsBetween.push(firstChild);
             dfx.remove(elemsBetween);
 
