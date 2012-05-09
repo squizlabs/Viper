@@ -608,11 +608,11 @@
 .Viper-button.Viper-selected .Viper-buttonIcon.Viper-formats-p {
   background-position: -33px -1512px;
 }
-.Viper-buttonIcon.Viper-formats-quote {
+.Viper-buttonIcon.Viper-formats-blockquote {
   background-position: 0 -1539px;
 }
-.Viper-button.Viper-active .Viper-buttonIcon.Viper-formats-quote,
-.Viper-button.Viper-selected .Viper-buttonIcon.Viper-formats-quote {
+.Viper-button.Viper-active .Viper-buttonIcon.Viper-formats-blockquote,
+.Viper-button.Viper-selected .Viper-buttonIcon.Viper-formats-blockquote {
   background-position: -33px -1539px;
 }
 .Viper-buttonIcon.Viper-formats-div {
