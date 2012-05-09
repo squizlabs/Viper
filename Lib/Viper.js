@@ -3162,6 +3162,7 @@ Viper.prototype = {
             || this._prevRange.endContainer !== range.endContainer
             || this._prevRange.startOffset !== range.startOffset
             || this._prevRange.endOffset !== range.endOffset
+            || this._prevRange.collapsed !== range.collapsed
         ) {
             this._prevRange = range;
             this.fireCallbacks('Viper:selectionChanged', range);
@@ -3561,12 +3562,11 @@ Viper.prototype = {
             return false;
         }
 
-        range = this.adjustRange();
-
         // This setTimeout is very strange indeed. We need to wait a bit for browser
         // to update the selection object..
         var self = this;
         setTimeout(function() {
+            var range = self.adjustRange();
             self.fireSelectionChanged(range);
         }, 5);
 
