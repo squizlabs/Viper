@@ -331,16 +331,30 @@ ViperSourceViewPlugin.prototype = {
     scrollToText: function(text)
     {
         var self = this;
-        this._editor.find(text);
-        setTimeout(function() {
-            var anchor = self._editor.getSelection().getSelectionAnchor();
-            self._editor.navigateTo(anchor.row, anchor.column);
-        }, 500);
+
+        if (this._editor) {
+            this._editor.find(text);
+            setTimeout(function() {
+                var anchor = self._editor.getSelection().getSelectionAnchor();
+                self._editor.navigateTo(anchor.row, anchor.column);
+            }, 500);
+        } else {
+            var range = this._textEditor.createTextRange();
+            if (range.findText(text) === true) {
+                range.select();
+                range.scrollIntoView();
+            }
+        }
     },
 
     replaceSelection: function(replacement)
     {
-        this._editor.replace(replacement);
+        if (this._editor) {
+            this._editor.replace(replacement);
+        } else {
+            var selection = document.selection;
+            selection.clear();
+        }
 
     },
 

@@ -80,6 +80,44 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractViperUnitTest
 
 
     /**
+     * Test that you can switch between block formats (blockquote, P, DIV, PRE) using the top toolbar.
+     *
+     * @return void
+     */
+    public function testSwitchingBetweenFormatsUsingTheTopToolbar()
+    {
+
+        $dir = dirname(__FILE__).'/Images/';
+
+        $text = 'Lorem';
+
+        $this->selectText($text);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_formats_highlighted.png');
+        $this->clickTopToolbarButton($dir.'toolbarIcon_pre.png');
+        sleep(1);
+        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_pre_active.png'), 'Toolbar icon not found: toolbarIcon_pre_active.png');
+        $this->assertHTMLMatch('<h1>Heading One</h1><pre>Lorem xtn dolor</pre><p>sit amet <strong>WoW</strong></p>');
+
+        $this->clickTopToolbarButton($dir.'toolbarIcon_blockquote.png');
+        sleep(1);
+        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_blockquote_active.png'), 'Toolbar icon not found: toolbarIcon_blockquote_active.png');
+        $this->assertHTMLMatch('<h1>Heading One</h1><blockquote>Lorem xtn dolor</blockquote><p>sit amet <strong>WoW</strong></p>');
+
+        $this->clickTopToolbarButton($dir.'toolbarIcon_div.png');
+        sleep(1);
+        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_div_active.png'), 'Toolbar icon not found: toolbarIcon_div_active.png');
+        $this->assertHTMLMatch('<h1>Heading One</h1><div>Lorem xtn dolor</div><p>sit amet <strong>WoW</strong></p>');
+
+        $this->clickTopToolbarButton($dir.'toolbarIcon_p.png');
+        sleep(1);
+        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_p_active.png'), 'Toolbar icon not found: toolbarIcon_p_active.png');
+        $this->assertHTMLMatch('<h1>Heading One</h1><p>Lorem xtn dolor</p><p>sit amet <strong>WoW</strong></p>');
+
+    }//end testSwitchingBetweenFormatsUsingTheTopToolbar()
+
+
+    /**
      * Test that selecting text does not show formatting icons in VITP.
      *
      * @return void

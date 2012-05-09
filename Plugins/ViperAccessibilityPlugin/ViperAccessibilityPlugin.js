@@ -137,11 +137,18 @@ ViperAccessibilityPlugin.prototype = {
                 var contents = sourceViewPlugin.getContents();
                 dfx.remove(tmpText);
                 sourceViewPlugin.showSourceView(contents, function() {
-                    sourceViewPlugin.scrollToText('__SCROLL_TO_HERE__');
-                    setTimeout(function() {
+
+                    if (self.viper.isBrowser('msie') === true) {
+                        sourceViewPlugin.scrollToText('__SCROLL_TO_HERE__');
                         sourceViewPlugin.replaceSelection('');
                         sourceViewPlugin.updateOriginalSourceValue();
-                    }, 500);
+                    } else {
+                        sourceViewPlugin.scrollToText('__SCROLL_TO_HERE__');
+                        setTimeout(function() {
+                            sourceViewPlugin.replaceSelection('');
+                            sourceViewPlugin.updateOriginalSourceValue();
+                        }, 500);
+                    }
                 });
             });
             resolutionHeader.appendChild(sourceViewBtn);

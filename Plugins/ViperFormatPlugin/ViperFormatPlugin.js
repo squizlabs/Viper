@@ -351,6 +351,7 @@ ViperFormatPlugin.prototype = {
         };
 
         if (this._canShowFormattingOptions(selectedNode) === true) {
+            tools.getItem('vitpFormats').setIconClass('Viper-formats');
             data.toolbar.showButton('vitpFormats');
 
             for (var tag in formatButtons) {
@@ -358,6 +359,7 @@ ViperFormatPlugin.prototype = {
                     if (dfx.isTag(data.lineage[j], tag) === true) {
                         tools.setButtonActive(prefix + 'formats:' + formatButtons[tag]);
                         tools.setButtonActive('vitpFormats');
+                        tools.getItem('vitpFormats').setIconClass('Viper-formats-' + tag);
                     } else {
                         tools.setButtonInactive(prefix + 'formats:' + formatButtons[tag]);
                     }
@@ -531,11 +533,13 @@ ViperFormatPlugin.prototype = {
                 tools.setButtonInactive(prefix + 'formats:' + formatButtons[tagName]);
             }
 
+            tools.getItem('formats').setIconClass('Viper-formats');
             var formatElement = self.getTagFromRange(data.range, ['p', 'div', 'pre', 'blockquote']);
             if (formatElement && (!nodeSelection || dfx.isTag(nodeSelection, 'img') === false)) {
                 var tagName = dfx.getTagName(formatElement);
                 tools.setButtonActive('formats');
                 tools.setButtonActive(prefix + 'formats:' + formatButtons[tagName]);
+                tools.getItem('formats').setIconClass('Viper-formats-' + tagName);
             }
 
             var attrId = self._getAttributeValue('id');

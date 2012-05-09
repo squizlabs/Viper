@@ -1097,10 +1097,12 @@ ViperCopyPastePlugin.prototype = {
 
     _updateSelection: function()
     {
-        var range = this.viper.getCurrentRange();
-        range.setStart(this._tmpNode, 0);
-        range.collapse(true);
-        ViperSelection.addRange(range);
+        try {
+            var range = this.viper.getCurrentRange();
+            range.setStart(this._tmpNode, 0);
+            range.collapse(true);
+            ViperSelection.addRange(range);
+        } catch (e) {}
 
         // Remove tmp nodes.
         dfx.remove(this.pasteElement);

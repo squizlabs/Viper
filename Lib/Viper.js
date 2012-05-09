@@ -943,7 +943,7 @@ Viper.prototype = {
         // If we have any nodes highlighted, then we want to delete them before
         // inserting the new text.
         if (range.collapsed !== true) {
-            this.deleteContents();
+            range.deleteContents();
 
             if (dfx.trim(dfx.getHtml(this.element)) === '') {
                 this.initEditableElement();
@@ -2345,7 +2345,6 @@ Viper.prototype = {
             // Remove everything from firstChild to bookmark (inclusive).
             var firstChild   = dfx.getFirstChild(endTopParent);
             var elemsBetween = dfx.getElementsBetween(firstChild, bookmark.end);
-            elemsBetween.push(bookmark.end);
             elemsBetween.push(firstChild);
             dfx.remove(elemsBetween);
 
@@ -3163,6 +3162,7 @@ Viper.prototype = {
             || this._prevRange.endContainer !== range.endContainer
             || this._prevRange.startOffset !== range.startOffset
             || this._prevRange.endOffset !== range.endOffset
+            || this._prevRange.collapsed !== range.collapsed
         ) {
             this._prevRange = range;
             this.fireCallbacks('Viper:selectionChanged', range);
@@ -3562,12 +3562,11 @@ Viper.prototype = {
             return false;
         }
 
-        range = this.adjustRange();
-
         // This setTimeout is very strange indeed. We need to wait a bit for browser
         // to update the selection object..
         var self = this;
         setTimeout(function() {
+            var range = self.adjustRange();
             self.fireSelectionChanged(range);
         }, 5);
 
@@ -4139,7 +4138,7 @@ Viper.prototype = {
         // Add quotes around attributes (IE....).
         if (this.isBrowser('msie') === true) {
             content = content.replace(/<\w+(?:(?:\s+\w+(?:\s*=\s*(?:"(?:[^"]+)?"|\'(?:[^\']+)?\'))?)+)?(?:\s+\w+(?:\s*=\s*(?:[^\'">\s]+))?)+(?:(?:\s+\w+(?:\s*=\s*(?:"(?:[^"]+)?"|\'(?:[^\']+)?\'|[^\'">\s]+))?)+)?\s*\/?>/ig, function(match) {
-                match = match.replace(/(\w+\s*=\s*)([^\'">\s]+)/gi, function(attr, attrName, value) {
+                match = match.replace(/(\s+\w+\s*=\s*)([^\'">\s]+)/gi, function(attr, attrName, value) {
                     return attrName + '"' + value + '"';
                 });
 

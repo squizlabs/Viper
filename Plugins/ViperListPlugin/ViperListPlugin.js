@@ -80,6 +80,7 @@ ViperListPlugin.prototype = {
                 }
 
                 if (startNode.nodeType === dfx.TEXT_NODE
+                    && range.collapsed === false
                     && startNode.data.length === range.startOffset
                     && self.viper.isBrowser('msie') === true
                 ) {
@@ -484,6 +485,7 @@ ViperListPlugin.prototype = {
     tabRange: function(range, outdent, testOnly)
     {
         range         = range || this.viper.getViperRange();
+
         var startNode = range.getStartNode();
         var endNode   = range.getEndNode();
 
@@ -494,17 +496,6 @@ ViperListPlugin.prototype = {
                 dfx.insertBefore(startNode, textNode);
                 range.setStart(textNode, 0);
                 range.collapse(true);
-            }
-        }
-
-        if (startNode === range.startContainer
-            && startNode.nodeType === dfx.TEXT_NODE
-            && startNode.data.length === range.startOffset
-        ) {
-            var nextLI = this.getNextItem(this._getListItem(startNode));
-            startNode = range._getFirstSelectableChild(nextLI);
-            if (!startNode) {
-                startNode = nextLI;
             }
         }
 
@@ -560,14 +551,43 @@ ViperListPlugin.prototype = {
             if (this.viper.isBrowser('msie') === true) {
                 setTimeout(function() {
                     // Yet another tiemout for IE.
+                    var bookmarkParent  = bookmark.start.parentNode;
+
                     self.viper.selectBookmark(bookmark);
                     self.viper.adjustRange();
+
+                    var range    = self.viper.getCurrentRange();
+                    var nextItem = self.getNextItem(range.startContainer.parentNode);
+                    if (range.startOffset === range.startContainer.data.length
+                        && range.collapsed === true
+                        && range.startContainer.parentNode !== bookmarkParent
+                        && (!nextItem || nextItem === bookmarkParent)
+                    ) {
+                        if (bookmarkParent.firstChild.data === '') {
+                            bookmarkParent.firstChild.data = ' ';
+                            range.moveStart(ViperDOMRange.CHARACTER_UNIT, 1);
+                            range.collapse(true);
+                            ViperSelection.addRange(range);
+                        }
+                    }
+
+                    range = self.viper.getCurrentRange();
+                    if (range.startOffset === range.startContainer.data.length
+                        && range.collapsed === true
+                        && range.startContainer.parentNode !== bookmarkParent
+                        && (!nextItem || nextItem === bookmarkParent)
+                    ) {
+                        range.moveEnd(ViperDOMRange.CHARACTER_UNIT, 1);
+                        range.moveEnd(ViperDOMRange.CHARACTER_UNIT, -1);
+                        range.collapse(false);
+                        ViperSelection.addRange(range);
+                    }
 
                     if (updated === true) {
                         self.viper.fireNodesChanged([range.getCommonElement()]);
                         self.viper.fireSelectionChanged(null, true);
                     }
-                }, 10);
+                }, 5);
             } else {
                 this.viper.selectBookmark(bookmark);
                 this.viper.adjustRange();
