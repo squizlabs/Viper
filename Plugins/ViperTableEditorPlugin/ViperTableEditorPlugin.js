@@ -2246,6 +2246,16 @@ ViperTableEditorPlugin.prototype = {
             }
 
             dfx.insertBefore(cell, elem);
+
+            var tableid = this.getCellTable(elem).id;
+            var cellid  = elem.id;
+            if (cellid && cellid.indexOf(tableid) === 0) {
+                cellid = cellid.replace(tableid, '');
+                if (cellid.match(/r\d+c\d+/)) {
+                    elem.removeAttribute('id');
+                }
+            }
+
             dfx.remove(cell);
         } else if (type === 'col') {
             var cells   = this._getCellsExpanded();
@@ -3197,7 +3207,7 @@ ViperTableEditorPlugin.prototype = {
                 }
             }
 
-            table.setAttribute('id', 'table' + tableId);
+            table.setAttribute('id', tableId);
         }
 
         var tableRows = dfx.getTag('tr', table);
