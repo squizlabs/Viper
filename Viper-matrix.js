@@ -33,11 +33,22 @@ ViperReadyCallback = null;
 
         var _loadScript = function(path, scriptName, callback, scriptNameAsPath) {
             var script = document.createElement('script');
-            script.onreadystatechange = function() {
-                if (/^(loaded|complete)$/.test(this.readyState) === true) {
-                    callback.call(window);
+
+            if (navigator.appName == 'Microsoft Internet Explorer') {
+                var rv = -1;
+                var re = new RegExp("MSIE ([0-9]{1,}[\.0-9]{0,})");
+                if (re.exec(navigator.userAgent) != null) {
+                    rv = parseFloat(RegExp.$1);
                 }
-            };
+
+                if (rv <= 8.0) {
+                    script.onreadystatechange = function() {
+                        if (/^(loaded|complete)$/.test(this.readyState) === true) {
+                            callback.call(window);
+                        }
+                    };
+                }
+            }//end if
 
             script.onload = function() {
                 callback.call(window);
@@ -75,7 +86,7 @@ ViperReadyCallback = null;
             var plugins    = 'ViperCopyPastePlugin|ViperToolbarPlugin|ViperInlineToolbarPlugin|ViperCoreStylesPlugin|ViperFormatPlugin|ViperKeyboardEditorPlugin|ViperListPlugin|ViperHistoryPlugin|ViperTableEditorPlugin|ViperTrackChangesPlugin|ViperLinkPlugin|MatrixLinkPlugin|ViperAccessibilityPlugin|ViperSourceViewPlugin|ViperImagePlugin|MatrixImagePlugin|ViperSearchReplacePlugin|ViperLangToolsPlugin|ViperCharMapPlugin|MatrixLinkPlugin';
             plugins        = plugins.split('|');
 
-            _loadScripts(path + 'Plugins/', plugins, function() {
+            _loadScripts(path + 'Plugins/', plugins.concat([]), function() {
                 if (ViperReadyCallback) {
                     ViperReadyCallback.call(window);
                 }
