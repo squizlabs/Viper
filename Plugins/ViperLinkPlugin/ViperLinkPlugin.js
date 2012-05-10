@@ -354,50 +354,12 @@ ViperLinkPlugin.prototype = {
 
     getToolbarContent: function(idPrefix)
     {
-        var self  = this;
-        var tools = this.viper.ViperTools;
-
-        var attrUrl     = '';
-        var attrTitle   = '';
-        var attrSubj    = '';
-        var attrTarget  = false;
-        var isEmailLink = false;
-
-        var range = this.viper.getViperRange();
-        var link  = range.getNodeSelection();
-
-
-        if (link && link.nodeType === dfx.ELEMENT_NODE) {
-            if (dfx.isTag(link, 'a') !== true) {
-                var parents = dfx.getSurroundingParents(link, 'a');
-                if (parents.length > 0) {
-                    link = parents[0];
-                }
-            }
-
-            if (dfx.isTag(link, 'a') === true) {
-                attrUrl   = link.getAttribute('href') || '';
-                attrTitle = link.getAttribute('title') || '';
-
-                if (link.getAttribute('target') === '_blank') {
-                    attrTarget = true;
-                }
-
-                if (attrUrl.indexOf('mailto:') === 0) {
-                    isEmailLink   = true;
-                    var subjIndex = attrUrl.indexOf('?subject=');
-                    if (subjIndex >= 0) {
-                        attrSubj = attrUrl.substr(subjIndex + 9);
-                        attrUrl  = attrUrl.substr(0, subjIndex).replace('mailto:', '');
-                    }
-                }
-            }
-        }
-
-        var url       = tools.createTextbox(idPrefix + ':url', 'URL', attrUrl, null, true);
-        var title     = tools.createTextbox(idPrefix + ':title', 'Title', attrTitle);
-        var subject   = tools.createTextbox(idPrefix + ':subject', 'Subject', attrSubj);
-        var newWindow = tools.createCheckbox(idPrefix + ':newWindow', 'Open a New Window', attrTarget);
+        var self      = this;
+        var tools     = this.viper.ViperTools;
+        var url       = tools.createTextbox(idPrefix + ':url', 'URL', '', null, true);
+        var title     = tools.createTextbox(idPrefix + ':title', 'Title', '');
+        var subject   = tools.createTextbox(idPrefix + ':subject', 'Subject', '');
+        var newWindow = tools.createCheckbox(idPrefix + ':newWindow', 'Open a New Window');
 
         var urlRow = tools.createRow(idPrefix + ':urlRow', 'Viper-urlRow');
         urlRow.appendChild(url);
@@ -417,11 +379,7 @@ ViperLinkPlugin.prototype = {
         main.appendChild(subjectRow);
         main.appendChild(newWindowRow);
 
-        if (isEmailLink === true) {
-            dfx.addClass(main, 'Viper-emailLink');
-        } else {
-            dfx.addClass(main, 'Viper-externalLink');
-        }
+        dfx.addClass(main, 'Viper-externalLink');
 
         // URL field keyup event, when the url field is changed if the url is an
         // email address then show the email address related fields.
