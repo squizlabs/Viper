@@ -181,8 +181,9 @@ ViperLinkPlugin.prototype = {
                     prevNode = firstChild;
                 }
 
-                if (dfx.isTag(node, 'span') === true) {
-                    // Replace the span tag with the link tag.
+                if (dfx.isTag(node, 'span') === true && this.viper.isViperHighlightElement(node) === false) {
+                    // Replace the span tag with the link tag, make sure its not the
+                    // Viper highlight element, if it is dont copy its attributes.
                     for (var i = 0; i < node.attributes.length; i++) {
                         a.setAttribute(node.attributes[i].nodeName, node.attributes[i].nodeValue)
                     }
