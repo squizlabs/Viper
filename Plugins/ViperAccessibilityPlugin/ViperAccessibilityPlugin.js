@@ -34,6 +34,10 @@ ViperAccessibilityPlugin.prototype = {
         var self = this;
         this._createToolbarItems();
 
+        this.viper.registerCallback('Viper:clickedOutside', 'ViperAccessibilityPlugin', function() {
+            dfx.remove(dfx.getClass('HTMLCS-pointer'));
+        });
+
     },
 
     setSettings: function(settings)
