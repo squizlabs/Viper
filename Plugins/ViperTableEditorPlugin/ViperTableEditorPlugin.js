@@ -243,7 +243,11 @@ ViperTableEditorPlugin.prototype = {
                 if (!node) {
                     node = range.getEndNode();
                     if (!node) {
-                        return;
+                        if (range.startContainer && dfx.isStubElement(range.startContainer) === true) {
+                            node = range.startContainer;
+                        } else {
+                            return;
+                        }
                     }
                 }
 

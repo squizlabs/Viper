@@ -246,7 +246,8 @@ ViperKeyboardEditorPlugin.prototype = {
                         range.collapse(true);
                         ViperSelection.addRange(range);
 
-                        if (this.viper.isBrowser('firefox') == false) {
+                        if (this.viper.isBrowser('firefox') === false) {
+                            this.viper.fireSelectionChanged();
                             this.viper.fireNodesChanged();
                         }
 
@@ -292,6 +293,16 @@ ViperKeyboardEditorPlugin.prototype = {
 
                 return false;
             }//end if
+
+            setTimeout(function() {
+                // Fire selection changed here for enter events after a delay so that
+                // range object is pointing to the new location. For example,
+                // if enter was pressed at the end of a list and a new paragraph is
+                // started by browser then getting range without delay would still
+                // point to the empty list item. With delay it will be in the new
+                // paragraph tag.
+                self.viper.fireSelectionChanged();
+            }, 5);
 
             // Let the browser handle everything else.
             return true;
