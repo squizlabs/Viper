@@ -136,6 +136,13 @@ ViperInlineToolbarPlugin.prototype = {
             return false;
         }
 
+        if (this.viper.isBrowser('firefox') === true
+            && dfx.isTag(lineage[(lineage.length - 1)], 'br') === true
+        ) {
+            this.hideToolbar();
+            return false;
+        }
+
         this._updateInnerContainer(range, lineage, nodeSelection);
 
         if (this._lineageClicked === true) {
