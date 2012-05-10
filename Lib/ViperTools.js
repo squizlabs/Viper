@@ -1201,6 +1201,8 @@ ViperTools.prototype = {
 
                 if (this._buttonShown === true) {
                     this.updatePosition(range, selectedNode);
+                } else {
+                    this.hide();
                 }
 
                 if (activeSection) {
