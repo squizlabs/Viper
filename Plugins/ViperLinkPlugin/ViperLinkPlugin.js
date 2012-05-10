@@ -145,6 +145,19 @@ ViperLinkPlugin.prototype = {
         var node  = range.getNodeSelection();
         var a     = document.createElement('a');
 
+        if (!node && this.viper.isBrowser('msie') === true) {
+            // IE fix for Img selections.
+            var prevSibling = range.startContainer.previousSibling;
+            if (prevSibling
+                && dfx.isTag(prevSibling, 'img') === true
+                && range.startOffset === 0
+                && range.endOffset === 0
+                && range.startContainer === range.endContainer
+            ) {
+                node = prevSibling;
+            }
+        }
+
         if (node && node.nodeType === dfx.ELEMENT_NODE) {
             this.updateLinkAttributes(a, idPrefix);
 
