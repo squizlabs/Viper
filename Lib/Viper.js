@@ -567,9 +567,9 @@ Viper.prototype = {
                 // Insert initial P tags.
                 var range = this.getCurrentRange();
                 dfx.setHtml(elem, '<p>&nbsp;</p>');
-                range.setStart(elem.firstChild, 0);
+                range.setEnd(elem.firstChild, 0);
 
-                range.collapse(true);
+                range.collapse(false);
                 ViperSelection.addRange(range);
             }
         } else {
