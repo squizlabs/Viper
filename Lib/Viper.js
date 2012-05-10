@@ -3128,6 +3128,18 @@ Viper.prototype = {
 
     },
 
+    isViperHighlightElement: function(element)
+    {
+        if (dfx.isTag(element, 'span') === true
+            && dfx.hasClass(element, '__viper_selHighlight') === true
+        ) {
+            return true;
+        }
+
+        return false;
+
+    },
+
     hasBlockChildren: function(parent)
     {
         var c = parent.childNodes.length;
