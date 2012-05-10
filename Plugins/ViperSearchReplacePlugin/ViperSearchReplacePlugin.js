@@ -236,8 +236,6 @@ ViperSearchReplacePlugin.prototype = {
                 ViperSelection.addRange(rangeClone);
                 return true;
             }
-
-            this.viper.focus();
         }//end if
 
         return true;
@@ -246,8 +244,6 @@ ViperSearchReplacePlugin.prototype = {
 
     replace: function(replacement)
     {
-        this.viper.focus();
-
         var range = this.viper.getCurrentRange();
         range.deleteContents();
 
