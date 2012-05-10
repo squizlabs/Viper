@@ -689,6 +689,9 @@ ViperTools.prototype = {
                 }
 
                 self.viper.fireCallbacks('ViperTools:changed:' + id);
+                self.viper.focus();
+                checkbox.focus();
+                self.viper.highlightSelection();
             });
         } else {
             dfx.addEvent(checkbox, 'click', function() {
