@@ -159,8 +159,6 @@ ViperLinkPlugin.prototype = {
         }
 
         if (node && node.nodeType === dfx.ELEMENT_NODE) {
-            this.updateLinkAttributes(a, idPrefix);
-
             if (dfx.isStubElement(node) === true) {
                 dfx.insertBefore(node, a);
                 a.appendChild(node);
@@ -194,6 +192,8 @@ ViperLinkPlugin.prototype = {
                     node.appendChild(a);
                 }
             }
+
+            this.updateLinkAttributes(a, idPrefix);
         } else {
             var bookmark = this.viper.createBookmark();
             var elems    = dfx.getElementsBetween(bookmark.start, bookmark.end);
