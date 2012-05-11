@@ -435,6 +435,8 @@ ViperLinkPlugin.prototype = {
 
         var insertLinkBtn = this.viper.ViperTools.createButton('vitpInsertLink', '', 'Toggle Link Options', 'Viper-link');
         var removeLinkBtn = this.viper.ViperTools.createButton('vitpRemoveLink', '', 'Remove Link', 'Viper-linkRemove', function() {
+            var range = self.viper.getViperRange();
+            var link  = self.getLinkFromRange(range);
             if (!link) {
                 self.removeLinks();
             } else {
@@ -572,7 +574,7 @@ ViperLinkPlugin.prototype = {
                 return;
             }
 
-            link = self.getLinkFromRange(range);
+            var link = self.getLinkFromRange(range);
 
             if (link) {
                 tools.setButtonActive('insertLink');
