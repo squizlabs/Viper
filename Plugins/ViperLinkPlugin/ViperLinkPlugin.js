@@ -379,19 +379,20 @@ ViperLinkPlugin.prototype = {
         main.appendChild(subjectRow);
         main.appendChild(newWindowRow);
 
-        dfx.addClass(main, 'Viper-externalLink');
+        var subSectionElem = this.viper.ViperTools.getItem(idPrefix + ':link').element;
+        dfx.addClass(subSectionElem, 'Viper-externalLink');
 
-        // URL field keyup event, when the url field is changed if the url is an
+        // URL field changed event, when the url field is changed if the url is an
         // email address then show the email address related fields.
-        tools.setFieldEvent(idPrefix + ':url', 'keyup', function(e) {
-            var urlValue = this.value;
+        this.viper.registerCallback('ViperTools:changed:' + idPrefix + ':url', 'ViperLinkPlugin', function() {
+            var urlValue = tools.getItem(idPrefix + ':url').getValue();
             if (self.isEmail(urlValue) === true) {
                 // Show the subject field and hide the title field.
-                dfx.removeClass(main, 'Viper-externalLink');
-                dfx.addClass(main, 'Viper-emailLink');
+                dfx.removeClass(subSectionElem, 'Viper-externalLink');
+                dfx.addClass(subSectionElem, 'Viper-emailLink');
             } else {
-                dfx.removeClass(main, 'Viper-emailLink');
-                dfx.addClass(main, 'Viper-externalLink');
+                dfx.removeClass(subSectionElem, 'Viper-emailLink');
+                dfx.addClass(subSectionElem, 'Viper-externalLink');
             }
         });
 
@@ -642,8 +643,10 @@ ViperLinkPlugin.prototype = {
         var main = this.viper.ViperTools.getItem('ViperLinkPlugin:vtp:link').element;
         if (isEmailLink === true) {
             dfx.addClass(main, 'Viper-emailLink');
+            dfx.removeClass(main, 'Viper-externalLink');
         } else {
             dfx.addClass(main, 'Viper-externalLink');
+            dfx.removeClass(main, 'Viper-emailLink');
         }
 
         var tools = this.viper.ViperTools;
@@ -682,8 +685,10 @@ ViperLinkPlugin.prototype = {
         var main = this.viper.ViperTools.getItem('ViperLinkPlugin:vitp:link').element;
         if (isEmailLink === true) {
             dfx.addClass(main, 'Viper-emailLink');
+            dfx.removeClass(main, 'Viper-externalLink');
         } else {
             dfx.addClass(main, 'Viper-externalLink');
+            dfx.removeClass(main, 'Viper-emailLink');
         }
 
         var tools = this.viper.ViperTools;
