@@ -3587,6 +3587,12 @@ Viper.prototype = {
             return false;
         }
 
+        var target     = dfx.getMouseEventTarget(e);
+        var pluginName = this.getPluginForElement(target);
+        if (pluginName || this.isChildOfElems(target, [this._viperElementHolder]) === true) {
+            return;
+        }
+
         // This setTimeout is very strange indeed. We need to wait a bit for browser
         // to update the selection object..
         var self = this;
