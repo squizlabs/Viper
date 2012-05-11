@@ -13,6 +13,7 @@
 
 function ViperMozRange(rangeObj)
 {
+    dfx.inherits('ViperMozRange', 'ViperDOMRange');
     ViperDOMRange.call(this, rangeObj);
 
     this.startContainer          = rangeObj.startContainer;
@@ -1044,5 +1045,3 @@ ViperMozRange.prototype = {
 
     }
 };
-
-dfx.noInclusionInherits('ViperMozRange', 'ViperDOMRange', true);

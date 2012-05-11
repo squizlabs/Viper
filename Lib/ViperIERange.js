@@ -13,6 +13,7 @@
 
 function ViperIERange(rangeObj)
 {
+    dfx.inherits('ViperIERange', 'ViperDOMRange');
     ViperDOMRange.call(this, rangeObj);
 
     this._initContainerInfo();
@@ -1102,5 +1103,3 @@ ViperIERange.prototype = {
     }
 
 };
-
-dfx.noInclusionInherits('ViperIERange', 'ViperDOMRange', true);
