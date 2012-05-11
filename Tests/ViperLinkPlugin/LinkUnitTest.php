@@ -381,6 +381,68 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
 
 
     /**
+     * Test that the remove link icon in the inline toolbar removes all links in a paragraph.
+     *
+     * @return void
+     */
+    public function testRemoveLinkInInlineToolbarForLinksInParagraph()
+    {
+        $this->selectText('WoW');
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_removeLink.png');
+        $this->assertFalse($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_removeLink.png'), 'Remove link icon should not be available.');
+        $this->assertHTMLMatch('<p>WoW IPSUM dolor</p><p>sit amet test</p>');
+
+        $this->clickTopToolbarButton(dirname(dirname(__FILE__)).'/Core/Images/undoIcon_active.png');
+
+        $this->selectText('dolor');
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_removeLink.png');
+        $this->assertFalse($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_removeLink.png'), 'Remove link icon should not be available.');
+        $this->assertHTMLMatch('<p>WoW IPSUM dolor</p><p>sit amet test</p>');
+
+        $this->clickTopToolbarButton(dirname(dirname(__FILE__)).'/Core/Images/undoIcon_active.png');
+
+        $this->selectText('IPSUM');
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_removeLink.png');
+        $this->assertFalse($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_removeLink.png'), 'Remove link icon should not be available.');
+        $this->assertHTMLMatch('<p>WoW IPSUM dolor</p><p>sit amet test</p>');
+
+
+    }//end testRemoveLinkInInlineToolbarForLinksInParagraph()
+
+
+    /**
+     * Test that the remove link icon in the top toolbar removes all links in a paragraph.
+     *
+     * @return void
+     */
+    public function testRemoveLinkInTopToolbarForLinksInParagraph()
+    {
+        $this->selectText('WoW');
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickTopToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_removeLink.png');
+        $this->assertHTMLMatch('<p>WoW IPSUM dolor</p><p>sit amet test</p>');
+
+        $this->clickTopToolbarButton(dirname(dirname(__FILE__)).'/Core/Images/undoIcon_active.png');
+
+        $this->selectText('dolor');
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickTopToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_removeLink.png');
+        $this->assertHTMLMatch('<p>WoW IPSUM dolor</p><p>sit amet test</p>');
+
+        $this->clickTopToolbarButton(dirname(dirname(__FILE__)).'/Core/Images/undoIcon_active.png');
+
+        $this->selectText('IPSUM');
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickTopToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_removeLink.png');
+        $this->assertHTMLMatch('<p>WoW IPSUM dolor</p><p>sit amet test</p>');
+
+    }//end testRemoveLinkInTopToolbarForLinksInParagraph()
+
+
+    /**
      * Test that a URL can be edited using the inline toolbar
      *
      * @return void
@@ -821,8 +883,8 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->assertHTMLMatch('<p>Lorem IPSUM dolor</p><p>sit amet <strong>WoW</strong></p>');
 
     }//end testCreateLinkPlainTextUsingInlineToolbar()
-    
-    
+
+
     /**
      * Test link icon appears in the inline toolbar for acronym and abbreviation.
      *
@@ -842,7 +904,7 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->assertFalse($this->inlineToolbarButtonExists($dir.'toolbarIcon_removeLink.png'), 'Remove link icon should not appear in the inline toolbar.');
 
     }//end testLinkIconForAcronymAndAbbreviation()
-    
+
 
 }//end class
 
