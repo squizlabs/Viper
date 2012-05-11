@@ -87,7 +87,7 @@ ViperLinkPlugin.prototype = {
 
         // Check if its email link.
         if (this.isEmail(url) === true) {
-            url = 'mailto:' + url;
+            url = 'mailto:' + url.replace('mailto:', '');
             var subject = this.viper.ViperTools.getItem(idPrefix + ':subject').getValue();
             if (subject) {
                 url += '?subject=' + subject;
