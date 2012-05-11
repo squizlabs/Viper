@@ -158,6 +158,8 @@ ViperKeyboardEditorPlugin.prototype = {
             return this.handleSoftEnter();
         }
 
+        var self = this;
+
         if (ViperChangeTracker.isTracking() !== true) {
             var range     = this.viper.getViperRange();
             var endNode   = range.getEndNode();
