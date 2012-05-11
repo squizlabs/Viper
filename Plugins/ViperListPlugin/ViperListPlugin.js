@@ -1234,7 +1234,15 @@ ViperListPlugin.prototype = {
         var list      = null;
 
         if (!startNode) {
-            return;
+            if (!range.startContainer
+                || range.startContainer !== range.endContainer
+                || dfx.isStubElement(range.startContainer) !== true
+            ) {
+                return;
+            } else {
+                startNode = range.startContainer;
+                endNode   = startNode;
+            }
         }
 
         var startParent = null;
