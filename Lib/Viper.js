@@ -2726,6 +2726,26 @@ Viper.prototype = {
         var startOffset    = range.startOffset;
         var endOffset      = range.endOffset;
 
+        if (range.startContainer
+            && range.startContainer === range.endContainer
+            && dfx.isTag(range.startContainer, 'br') === true
+        ) {
+            var prevSibling = range.startContainer.previousSibling;
+            var nextSibling = range.startContainer.nextSibling;
+            if (prevSibling && prevSibling.nodeType === dfx.TEXT_NODE) {
+                range.setStart(prevSibling, prevSibling.data.length);
+            } else if (nextSibling && nextSibling.nodeType === dfx.TEXT_NODE) {
+                range.setStart(nextSibling, 0);
+            } else {
+                var tmpNode = document.createTextNode('');
+                dfx.insertBefore(range.startContainer, tmpNode);
+                range.setStart(tmpNode, 0);
+            }
+
+            range.collapse(true);
+            ViperSelection.addRange(range);
+        }
+
         // Collapse to the end of range.
         range.collapse(false);
 
