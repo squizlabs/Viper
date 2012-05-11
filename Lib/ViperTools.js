@@ -1095,6 +1095,14 @@ ViperTools.prototype = {
                 } else if (self.getItem(id)._keepOpenTagList.inArray(dfx.getTagName(target)) === true) {
                     _update = true;
                     return;
+                } else {
+                    var parents = dfx.getSurroundingParents(target);
+                    for (var i = 0; i < parents.length; i++) {
+                        if (self.getItem(id)._keepOpenTagList.inArray(dfx.getTagName(parents[i])) === true) {
+                            _update = true;
+                            return;
+                        }
+                    }
                 }
             }
 
