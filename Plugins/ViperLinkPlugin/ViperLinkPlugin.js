@@ -87,7 +87,7 @@ ViperLinkPlugin.prototype = {
 
         // Check if its email link.
         if (this.isEmail(url) === true) {
-            url = 'mailto:' + url;
+            url = 'mailto:' + url.replace('mailto:', '');
             var subject = this.viper.ViperTools.getItem(idPrefix + ':subject').getValue();
             if (subject) {
                 url += '?subject=' + subject;
@@ -379,19 +379,20 @@ ViperLinkPlugin.prototype = {
         main.appendChild(subjectRow);
         main.appendChild(newWindowRow);
 
-        dfx.addClass(main, 'Viper-externalLink');
+        var subSectionElem = this.viper.ViperTools.getItem(idPrefix + ':link').element;
+        dfx.addClass(subSectionElem, 'Viper-externalLink');
 
-        // URL field keyup event, when the url field is changed if the url is an
+        // URL field changed event, when the url field is changed if the url is an
         // email address then show the email address related fields.
-        tools.setFieldEvent(idPrefix + ':url', 'keyup', function(e) {
-            var urlValue = this.value;
+        this.viper.registerCallback('ViperTools:changed:' + idPrefix + ':url', 'ViperLinkPlugin', function() {
+            var urlValue = tools.getItem(idPrefix + ':url').getValue();
             if (self.isEmail(urlValue) === true) {
                 // Show the subject field and hide the title field.
-                dfx.removeClass(main, 'Viper-externalLink');
-                dfx.addClass(main, 'Viper-emailLink');
+                dfx.removeClass(subSectionElem, 'Viper-externalLink');
+                dfx.addClass(subSectionElem, 'Viper-emailLink');
             } else {
-                dfx.removeClass(main, 'Viper-emailLink');
-                dfx.addClass(main, 'Viper-externalLink');
+                dfx.removeClass(subSectionElem, 'Viper-emailLink');
+                dfx.addClass(subSectionElem, 'Viper-externalLink');
             }
         });
 
@@ -435,6 +436,8 @@ ViperLinkPlugin.prototype = {
 
         var insertLinkBtn = this.viper.ViperTools.createButton('vitpInsertLink', '', 'Toggle Link Options', 'Viper-link');
         var removeLinkBtn = this.viper.ViperTools.createButton('vitpRemoveLink', '', 'Remove Link', 'Viper-linkRemove', function() {
+            var range = self.viper.getViperRange();
+            var link  = self.getLinkFromRange(range);
             if (!link) {
                 self.removeLinks();
             } else {
@@ -510,7 +513,15 @@ ViperLinkPlugin.prototype = {
         if (currentIsLink !== true
             && (data.lineage[data.current].nodeType !== dfx.TEXT_NODE
             || dfx.isTag(data.lineage[data.current].parentNode, 'a') === false)
-            && range.collapsed === true) {
+            && range.collapsed === true
+        ) {
+            if (range.collapsed === true && data.lineage[data.current].nodeType === dfx.TEXT_NODE) {
+                var parents = dfx.getSurroundingParents(data.lineage[data.current].parentNode, 'a');
+                if (parents.length > 0) {
+                    return true;
+                }
+            }
+
             return false;
         }
 
@@ -572,7 +583,7 @@ ViperLinkPlugin.prototype = {
                 return;
             }
 
-            link = self.getLinkFromRange(range);
+            var link = self.getLinkFromRange(range);
 
             if (link) {
                 tools.setButtonActive('insertLink');
@@ -640,8 +651,10 @@ ViperLinkPlugin.prototype = {
         var main = this.viper.ViperTools.getItem('ViperLinkPlugin:vtp:link').element;
         if (isEmailLink === true) {
             dfx.addClass(main, 'Viper-emailLink');
+            dfx.removeClass(main, 'Viper-externalLink');
         } else {
             dfx.addClass(main, 'Viper-externalLink');
+            dfx.removeClass(main, 'Viper-emailLink');
         }
 
         var tools = this.viper.ViperTools;
@@ -680,8 +693,10 @@ ViperLinkPlugin.prototype = {
         var main = this.viper.ViperTools.getItem('ViperLinkPlugin:vitp:link').element;
         if (isEmailLink === true) {
             dfx.addClass(main, 'Viper-emailLink');
+            dfx.removeClass(main, 'Viper-externalLink');
         } else {
             dfx.addClass(main, 'Viper-externalLink');
+            dfx.removeClass(main, 'Viper-emailLink');
         }
 
         var tools = this.viper.ViperTools;
