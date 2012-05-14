@@ -268,7 +268,7 @@ ViperSourceViewPlugin.prototype = {
             }
         );
 
-        if (this.viper.isBrowser('msie') === true && this.viper.getBrowserVersion() < 9) {
+        if (this.viper.isBrowser('msie') === true) {
             this._includeStyleHTML(function() {
                 var editor = document.createElement('textarea');
                 self._textEditor = editor;
