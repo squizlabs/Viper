@@ -1331,7 +1331,7 @@ ViperCoreStylesPlugin.prototype = {
         }
 
         if (enableHr === true) {
-            var parents = dfx.getParents(startNode, 'td,th,li,caption,img', this.viper.getViperElement());
+            var parents = dfx.getParents(startNode, hrIgnoreTags, this.viper.getViperElement());
             if (parents.length > 0) {
                 enableHr = false;
             }
