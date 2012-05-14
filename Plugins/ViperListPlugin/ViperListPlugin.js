@@ -1245,6 +1245,10 @@ ViperListPlugin.prototype = {
             }
         }
 
+        if (!endNode) {
+            endNode = startNode;
+        }
+
         var startParent = null;
 
         var listElement = this._getListElement(startNode);

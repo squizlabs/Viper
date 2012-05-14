@@ -86,8 +86,8 @@ ViperLinkPlugin.prototype = {
         var newWindow = this.viper.ViperTools.getItem(idPrefix + ':newWindow').getValue();
 
         // Check if its email link.
-        if (this.isEmail(url) === true) {
-            url = 'mailto:' + url.replace('mailto:', '');
+        if (this.isEmail(url.replace(/\s*mailto:\s*/i, '')) === true) {
+            url = 'mailto:' + url.replace(/\s*mailto:\s*/i, '');
             var subject = this.viper.ViperTools.getItem(idPrefix + ':subject').getValue();
             if (subject) {
                 url += '?subject=' + subject;
@@ -309,12 +309,28 @@ ViperLinkPlugin.prototype = {
         range = range || this.viper.getViperRange();
 
         var selectedNode = range.getNodeSelection();
+        var common       = range.getCommonElement();
+        if (!selectedNode && this.viper.isBrowser('msie') === true) {
+            if (range.startContainer === range.endContainer
+                && range.startOffset === 0
+                && range.endOffset === 0
+                && range.startContainer.nodeType === dfx.TEXT_NODE
+                && range.startContainer.previousSibling
+                && dfx.isTag(range.startContainer.previousSibling, 'img') === true
+            ) {
+                startNode = range.startContainer.previousSibling;
+                common    = startNode.parentNode;
+                range.selectNode(startNode);
+                ViperSelection.addRange(range);
+            }
+        }
+
         if (selectedNode && dfx.isTag(selectedNode, 'a') === true) {
             return selectedNode;
         }
 
         var viperElem = this.viper.getViperElement();
-        var common    = range.getCommonElement();
+
         while (common) {
             if (dfx.isTag(common, 'a') === true) {
                 return common;
@@ -386,7 +402,7 @@ ViperLinkPlugin.prototype = {
         // email address then show the email address related fields.
         this.viper.registerCallback('ViperTools:changed:' + idPrefix + ':url', 'ViperLinkPlugin', function() {
             var urlValue = tools.getItem(idPrefix + ':url').getValue();
-            if (self.isEmail(urlValue) === true) {
+            if (urlValue.indexOf('mailto:') === 0 || self.isEmail(urlValue) === true) {
                 // Show the subject field and hide the title field.
                 dfx.removeClass(subSectionElem, 'Viper-externalLink');
                 dfx.addClass(subSectionElem, 'Viper-emailLink');
@@ -643,8 +659,10 @@ ViperLinkPlugin.prototype = {
                 var subjIndex = href.indexOf('?subject=');
                 if (subjIndex >= 0) {
                     subject = href.substr(subjIndex + 9);
-                    href    = href.substr(0, subjIndex).replace('mailto:', '');
+                    href    = href.substr(0, subjIndex);
                 }
+
+                href = href.replace(/\s*mailto:\s*/i, '');
             }
         }
 
@@ -685,8 +703,10 @@ ViperLinkPlugin.prototype = {
                 var subjIndex = href.indexOf('?subject=');
                 if (subjIndex >= 0) {
                     subject = href.substr(subjIndex + 9);
-                    href    = href.substr(0, subjIndex).replace('mailto:', '');
+                    href    = href.substr(0, subjIndex);
                 }
+
+                href = href.replace(/\s*mailto:\s*/i, '');
             }
         }
 
