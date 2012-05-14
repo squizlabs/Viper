@@ -42,11 +42,14 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractGeneralL
         $this->keyDown('Key.ENTER');
 
         $this->keyDown('Key.TAB');
+        $this->assertIconStatusesCorrect('active', TRUE, NULL, TRUE);
         sleep(1);
         $this->keyDown('Key.SHIFT + Key.TAB');
+        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
         sleep(1);
         $this->keyDown('Key.TAB');
         $this->type('Item 1');
+        $this->assertIconStatusesCorrect('active', TRUE, NULL, TRUE);
 
         $this->assertHTMLMatch('<p>XabcX uuuuuu. VmumV</p><ul><li>Item 1</li></ul><p>cPOc ccccc dddd. TicT</p><p>ajhsd sjsjwi hhhh:</p><ul><li>aaa bbbbb ccccc</li><li>4 oNo templates</li><li>Audit XuT content</li><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ul><h2>SoD</h2>');
 
@@ -69,12 +72,48 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractGeneralL
         $this->keyDown('Key.ENTER');
         $this->keyDown('Key.TAB');
         $this->type('Item 1');
+        $this->assertIconStatusesCorrect('active', TRUE, NULL, TRUE);
+        sleep(1);
         $this->keyDown('Key.ENTER');
         $this->type('Item 2');
+        $this->assertIconStatusesCorrect('active', TRUE, TRUE, TRUE);
 
         $this->assertHTMLMatch('<p>XabcX uuuuuu. VmumV</p><p>Test list:</p><ul><li>Item 1</li><li>Item 2</li></ul><p>cPOc ccccc dddd. TicT</p><p>ajhsd sjsjwi hhhh:</p><ul><li>aaa bbbbb ccccc</li><li>4 oNo templates</li><li>Audit XuT content</li><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ul><h2>SoD</h2>');
 
     }//end testCreatingAList()
+
+
+    /**
+     * Test that you can create a list whne entering text.
+     *
+     * @return void
+     */
+    public function testCreatingAListWithASubList()
+    {
+        $dir = dirname(__FILE__).'/Images/';
+        $this->selectText('VmumV');
+        $this->keyDown('Key.RIGHT');
+        $this->keyDown('Key.ENTER');
+
+        $this->type('Test list:');
+        $this->keyDown('Key.ENTER');
+        $this->keyDown('Key.TAB');
+        $this->type('Item 1');
+        $this->assertIconStatusesCorrect('active', TRUE, NULL, TRUE);
+        sleep(1);
+        $this->keyDown('Key.ENTER');
+        $this->keyDown('Key.TAB');
+        $this->type('Item 2');
+        $this->assertIconStatusesCorrect('active', TRUE, NULL, TRUE);
+        sleep(1);
+        $this->keyDown('Key.ENTER');
+        $this->keyDown('Key.SHIFT + Key.TAB');
+        $this->type('Item 3');
+        $this->assertIconStatusesCorrect('active', TRUE, TRUE, TRUE);
+
+        $this->assertHTMLMatch('<p>XabcX uuuuuu. VmumV</p><p>Test list:</p><ul><li>Item 1<ul><li>Item 2</li></ul></li><li>Item 3</li></ul><p>cPOc ccccc dddd. TicT</p><p>ajhsd sjsjwi hhhh:</p><ul><li>aaa bbbbb ccccc</li><li>4 oNo templates</li><li>Audit XuT content</li><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ul><h2>SoD</h2>');
+
+    }//end testCreatingAListWithASubList()
 
 
     /**

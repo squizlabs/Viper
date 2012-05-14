@@ -23,8 +23,8 @@ class Viper_Tests_ViperListPlugin_UnorderedListInTableUnitTest extends AbstractV
         $this->assertIconStatusesCorrect('active', TRUE, FALSE, TRUE);
 
         $this->clickTopToolbarButton($dir.'toolbarIcon_unorderedList_active.png');
-        $this->assertEquals('<p>UnaU LAbS FoX Mnu</p>', $this->getHtml('td', 0));
-        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE);
+        $this->assertEquals('UnaU LAbS FoX Mnu', $this->getHtml('td', 0));
+        $this->assertIconStatusesCorrect(TRUE, TRUE, FALSE, FALSE);
 
     }//end testCreatingAListInACell()
 
@@ -224,14 +224,14 @@ class Viper_Tests_ViperListPlugin_UnorderedListInTableUnitTest extends AbstractV
         $this->assertIconStatusesCorrect('active', TRUE, FALSE, TRUE);
         $this->selectInlineToolbarLineageItem(2);
         $this->assertIconStatusesCorrect(FALSE, FALSE, FALSE, FALSE);
-        
+
         $this->selectText('WoW');
         $this->assertIconStatusesCorrect('active', TRUE, FALSE, TRUE);
         $this->selectInlineToolbarLineageItem(2);
         $this->assertIconStatusesCorrect(FALSE, FALSE, FALSE, FALSE);
 
     }//end testSelectingAllContentInARow()
-    
+
 
 }//end class
 

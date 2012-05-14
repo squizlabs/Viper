@@ -23,8 +23,8 @@ class Viper_Tests_ViperListPlugin_OrderedListInTableUnitTest extends AbstractVip
         $this->assertIconStatusesCorrect(TRUE, 'active', FALSE, TRUE);
 
         $this->clickTopToolbarButton($dir.'toolbarIcon_orderedList_active.png');
-        $this->assertEquals('<p>UnaU LAbS FoX Mnu</p>', $this->getHtml('td', 0));
-        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE);
+        $this->assertEquals('UnaU LAbS FoX Mnu', $this->getHtml('td', 0));
+        $this->assertIconStatusesCorrect(TRUE, TRUE, FALSE, FALSE);
 
     }//end testCreatingAListInACell()
 
