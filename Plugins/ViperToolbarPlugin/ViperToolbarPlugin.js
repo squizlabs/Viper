@@ -113,6 +113,10 @@ ViperToolbarPlugin.prototype = {
             this._toolbar.innerHTML = '';
         }
 
+        var logo = document.createElement('div');
+        dfx.addClass(logo, 'Viper-logo');
+        this._toolbar.appendChild(logo);
+
         var buttonsLen = buttons.length;
         for (var i = 0; i < buttonsLen; i++) {
             if (typeof buttons[i] === 'string') {
@@ -147,6 +151,11 @@ ViperToolbarPlugin.prototype = {
     createToolbar: function()
     {
         var elem = document.createElement('div');
+
+        var logo = document.createElement('div');
+        dfx.addClass(logo, 'Viper-logo');
+        elem.appendChild(logo);
+
         dfx.addClass(elem, 'ViperTP-bar Viper-themeDark Viper-scalable');
         this._toolbar = elem;
         dfx.addClass(this._toolbar, 'viper-inactive');
