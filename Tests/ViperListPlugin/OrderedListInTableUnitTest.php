@@ -211,6 +211,28 @@ class Viper_Tests_ViperListPlugin_OrderedListInTableUnitTest extends AbstractVip
     }//end testRemovingListUsingOutdentIconInInlineToolbar()
 
 
+    /**
+     * Test list icon not available when you select all content in a row.
+     *
+     * @return void
+     */
+    public function testSelectingAllContentInARow()
+    {
+        $dir = dirname(__FILE__).'/Images/';
+
+        $this->selectText('XuT');
+        $this->assertIconStatusesCorrect(TRUE, 'active', FALSE, TRUE);
+        $this->selectInlineToolbarLineageItem(2);
+        $this->assertIconStatusesCorrect(FALSE, FALSE, FALSE, FALSE);
+
+        $this->selectText('WoW');
+        $this->assertIconStatusesCorrect(TRUE, 'active', FALSE, TRUE);
+        $this->selectInlineToolbarLineageItem(2);
+        $this->assertIconStatusesCorrect(FALSE, FALSE, FALSE, FALSE);
+
+    }//end testSelectingAllContentInARow()
+
+
 }//end class
 
 ?>

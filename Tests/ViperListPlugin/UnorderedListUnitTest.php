@@ -30,6 +30,30 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractGeneralL
 
 
     /**
+     * Test the list shortcuts.
+     *
+     * @return void
+     */
+    public function testListShortcuts()
+    {
+        $dir = dirname(__FILE__).'/Images/';
+        $this->selectText('VmumV');
+        $this->keyDown('Key.RIGHT');
+        $this->keyDown('Key.ENTER');
+
+        $this->keyDown('Key.TAB');
+        sleep(1);
+        $this->keyDown('Key.SHIFT + Key.TAB');
+        sleep(1);
+        $this->keyDown('Key.TAB');
+        $this->type('Item 1');
+
+        $this->assertHTMLMatch('<p>XabcX uuuuuu. VmumV</p><ul><li>Item 1</li></ul><p>cPOc ccccc dddd. TicT</p><p>ajhsd sjsjwi hhhh:</p><ul><li>aaa bbbbb ccccc</li><li>4 oNo templates</li><li>Audit XuT content</li><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ul><h2>SoD</h2>');
+
+    }//end testListShortcuts()
+
+
+    /**
      * Test that you can create a list whne entering text.
      *
      * @return void
