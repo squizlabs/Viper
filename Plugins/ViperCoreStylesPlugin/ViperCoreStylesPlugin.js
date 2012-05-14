@@ -1229,6 +1229,10 @@ ViperCoreStylesPlugin.prototype = {
             startNode = range.getStartNode();
         }
 
+        if (!startNode) {
+            startNode = range.startContainer;
+        }
+
         var tools     = this.viper.ViperTools;
         if (this._canStyleNode(startNode, true) !== true) {
             for (var btn in buttons) {
@@ -1320,8 +1324,20 @@ ViperCoreStylesPlugin.prototype = {
             }
         }//end if
 
-        var parents = dfx.getParents(startNode, 'td,th,li,caption,img', this.viper.getViperElement());
-        if (parents.length === 0) {
+        var enableHr     = true;
+        var hrIgnoreTags = 'td,th,li,caption,img';
+        if (hrIgnoreTags.split(',').inArray(dfx.getTagName(startNode)) === true) {
+            enableHr = false;
+        }
+
+        if (enableHr === true) {
+            var parents = dfx.getParents(startNode, 'td,th,li,caption,img', this.viper.getViperElement());
+            if (parents.length > 0) {
+                enableHr = false;
+            }
+        }
+
+        if (enableHr === true) {
             tools.enableButton('hr');
         } else {
             tools.disableButton('hr');
