@@ -3583,6 +3583,8 @@ Viper.prototype = {
             this.setEnabled(true);
         }
 
+        this.removeHighlights();
+
         this.fireCallbacks('Viper:clickedInside', e);
         this.fireCaretUpdated();
 
