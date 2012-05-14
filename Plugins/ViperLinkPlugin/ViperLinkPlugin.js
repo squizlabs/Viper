@@ -309,12 +309,28 @@ ViperLinkPlugin.prototype = {
         range = range || this.viper.getViperRange();
 
         var selectedNode = range.getNodeSelection();
+        var common       = range.getCommonElement();
+        if (!selectedNode && this.viper.isBrowser('msie') === true) {
+            if (range.startContainer === range.endContainer
+                && range.startOffset === 0
+                && range.endOffset === 0
+                && range.startContainer.nodeType === dfx.TEXT_NODE
+                && range.startContainer.previousSibling
+                && dfx.isTag(range.startContainer.previousSibling, 'img') === true
+            ) {
+                startNode = range.startContainer.previousSibling;
+                common    = startNode.parentNode;
+                range.selectNode(startNode);
+                ViperSelection.addRange(range);
+            }
+        }
+
         if (selectedNode && dfx.isTag(selectedNode, 'a') === true) {
             return selectedNode;
         }
 
         var viperElem = this.viper.getViperElement();
-        var common    = range.getCommonElement();
+
         while (common) {
             if (dfx.isTag(common, 'a') === true) {
                 return common;
