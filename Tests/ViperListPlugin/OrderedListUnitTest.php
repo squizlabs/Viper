@@ -22,12 +22,48 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractGeneralLis
         $this->keyDown('Key.ENTER');
         $this->clickTopToolbarButton($dir.'toolbarIcon_orderedList.png');
         $this->type('Item 1');
+        $this->assertIconStatusesCorrect(TRUE, 'active', NULL, TRUE);
+        sleep(1);
         $this->keyDown('Key.ENTER');
         $this->type('Item 2');
+        $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
 
         $this->assertHTMLMatch('<p>XabcX uuuuuu. VmumV</p><p>Test list:</p><ol><li>Item 1</li><li>Item 2</li></ol><p>cPOc ccccc dddd. TicT</p><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa bbbbb ccccc</li><li>4 oNo templates</li><li>Audit XuT content</li><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ol><h2>SoD</h2>');
 
     }//end testCreatingAList()
+
+
+    /**
+     * Test that you can create a list whne entering text.
+     *
+     * @return void
+     */
+    public function testCreatingAListWithASubList()
+    {
+        $dir = dirname(__FILE__).'/Images/';
+        $this->selectText('VmumV');
+        $this->keyDown('Key.RIGHT');
+        $this->keyDown('Key.ENTER');
+
+        $this->type('Test list:');
+        $this->keyDown('Key.ENTER');
+        $this->clickTopToolbarButton($dir.'toolbarIcon_orderedList.png');
+        $this->type('Item 1');
+        $this->assertIconStatusesCorrect(TRUE, 'active', NULL, TRUE);
+        sleep(1);
+        $this->keyDown('Key.ENTER');
+        $this->keyDown('Key.TAB');
+        $this->type('Item 2');
+        $this->assertIconStatusesCorrect(TRUE, 'active', NULL, TRUE);
+        sleep(1);
+        $this->keyDown('Key.ENTER');
+        $this->keyDown('Key.SHIFT + Key.TAB');
+        $this->type('Item 3');
+        $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
+
+        $this->assertHTMLMatch('<p>XabcX uuuuuu. VmumV</p><p>Test list:</p><ol><li>Item 1<ol><li>Item 2</li></ol></li><li>Item 3</li></ol><p>cPOc ccccc dddd. TicT</p><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa bbbbb ccccc</li><li>4 oNo templates</li><li>Audit XuT content</li><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ol><h2>SoD</h2>');
+
+    }//end testCreatingAListWithASubList()
 
 
     /**

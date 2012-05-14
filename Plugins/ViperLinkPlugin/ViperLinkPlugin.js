@@ -402,7 +402,7 @@ ViperLinkPlugin.prototype = {
         // email address then show the email address related fields.
         this.viper.registerCallback('ViperTools:changed:' + idPrefix + ':url', 'ViperLinkPlugin', function() {
             var urlValue = tools.getItem(idPrefix + ':url').getValue();
-            if (urlValue.indexOf('mailto:') === 0 || self.isEmail(urlValue) === true) {
+            if (urlValue.toLowerCase().indexOf('mailto:') === 0 || self.isEmail(urlValue) === true) {
                 // Show the subject field and hide the title field.
                 dfx.removeClass(subSectionElem, 'Viper-externalLink');
                 dfx.addClass(subSectionElem, 'Viper-emailLink');

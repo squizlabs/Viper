@@ -60,7 +60,13 @@ ViperAccessibilityPlugin_WCAG2_Principle1_Guideline1_1 = {
                     }
                 };
 
-                this.parent.addActionButton(action, contentElement, [checkboxid, titleid, altid]);
+                this.parent.addActionButton(action, contentElement, [checkboxid, titleid, altid], null, null, function() {
+                    if (viper.ViperTools.getItem(checkboxid).getValue() !== true
+                        && viper.ViperTools.getItem(altid).getValue() === ''
+                    ) {
+                        return false;
+                    }
+                });
             break;
 
             case 'H2.EG3':

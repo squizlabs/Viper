@@ -1022,6 +1022,7 @@ ViperTools.prototype = {
         var self    = this;
         var margin  = 15;
         var toolbar = document.createElement('div');
+        var viper   = this.viper;
 
         var toolsContainer = document.createElement('div');
         toolbar.appendChild(toolsContainer);
@@ -1310,6 +1311,25 @@ ViperTools.prototype = {
 
                 dfx.removeEvent(button, 'mousedown');
                 dfx.addEvent(button, 'mousedown', function(e) {
+                    if (viper.isBrowser('msie') === true) {
+                        // This block of code prevents IE moving user selection to the.
+                        // button element when clicked. When the button element is removed
+                        // and added back to DOM selection is not moved. Seriously, IE?
+                        if (button.previousSibling) {
+                            var sibling = button.previousSibling;
+                            button.parentNode.removeChild(button);
+                            dfx.insertAfter(sibling, button);
+                        } else if (button.nextSibling) {
+                            var sibling = button.nextSibling;
+                            button.parentNode.removeChild(button);
+                            dfx.insertBefore(sibling, button);
+                        } else {
+                            var parent = button.parentNode;
+                            button.parentNode.removeChild(button);
+                            parent.appendChild(button);
+                        }
+                    }//end if
+
                     // Set the subSection to visible and hide rest of the sub sections.
                     self.toggleSubSection(subSectionid);
 

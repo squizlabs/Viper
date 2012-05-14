@@ -44,3 +44,12 @@
     display: block;
 }
 
+.ViperTP-bar .Viper-logo {
+    background: transparent url(../../Images/viperLogo.png) no-repeat;
+    width: 23px;
+    height: 20px;
+    position: absolute;
+    left: 7px;
+    top: 50%;
+    margin-top: -10px;
+}

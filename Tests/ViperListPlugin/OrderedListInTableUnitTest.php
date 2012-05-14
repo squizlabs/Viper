@@ -23,8 +23,8 @@ class Viper_Tests_ViperListPlugin_OrderedListInTableUnitTest extends AbstractVip
         $this->assertIconStatusesCorrect(TRUE, 'active', FALSE, TRUE);
 
         $this->clickTopToolbarButton($dir.'toolbarIcon_orderedList_active.png');
-        $this->assertEquals('<p>UnaU LAbS FoX Mnu</p>', $this->getHtml('td', 0));
-        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE);
+        $this->assertEquals('UnaU LAbS FoX Mnu', $this->getHtml('td', 0));
+        $this->assertIconStatusesCorrect(TRUE, TRUE, FALSE, FALSE);
 
     }//end testCreatingAListInACell()
 
@@ -209,6 +209,28 @@ class Viper_Tests_ViperListPlugin_OrderedListInTableUnitTest extends AbstractVip
         $this->assertEquals('            <ol><li>Item 1</li><li>Item 2 XuT</li></ol>', $this->getHtml('td', 2));
 
     }//end testRemovingListUsingOutdentIconInInlineToolbar()
+
+
+    /**
+     * Test list icon not available when you select all content in a row.
+     *
+     * @return void
+     */
+    public function testSelectingAllContentInARow()
+    {
+        $dir = dirname(__FILE__).'/Images/';
+
+        $this->selectText('XuT');
+        $this->assertIconStatusesCorrect(TRUE, 'active', FALSE, TRUE);
+        $this->selectInlineToolbarLineageItem(2);
+        $this->assertIconStatusesCorrect(FALSE, FALSE, FALSE, FALSE);
+
+        $this->selectText('WoW');
+        $this->assertIconStatusesCorrect(TRUE, 'active', FALSE, TRUE);
+        $this->selectInlineToolbarLineageItem(2);
+        $this->assertIconStatusesCorrect(FALSE, FALSE, FALSE, FALSE);
+
+    }//end testSelectingAllContentInARow()
 
 
 }//end class
