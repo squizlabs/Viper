@@ -114,6 +114,7 @@ ViperToolbarPlugin.prototype = {
         }
 
         var logo = document.createElement('div');
+        logo.setAttribute('title', 'Viper by Squiz');
         dfx.addClass(logo, 'Viper-logo');
         this._toolbar.appendChild(logo);
 
@@ -153,6 +154,7 @@ ViperToolbarPlugin.prototype = {
         var elem = document.createElement('div');
 
         var logo = document.createElement('div');
+        logo.setAttribute('title', 'Viper by Squiz');
         dfx.addClass(logo, 'Viper-logo');
         elem.appendChild(logo);
 
