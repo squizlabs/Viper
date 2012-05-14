@@ -653,6 +653,56 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
 
 
     /**
+     * Test that clicking inside a link tag that has bold format will show the inline toolbar.
+     *
+     * @return void
+     */
+    public function testClickBoldLinkShowsInlineToolbar()
+    {
+        $text = $this->find('Lorem');
+        $this->selectText('Lorem');
+
+        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_link.png');
+        $this->type('http://www.squizlabs.com');
+        $this->keyDown('Key.ENTER');
+        $this->clickTopToolbarButton(dirname(dirname(__FILE__)).'/ViperCoreStylesPlugin/Images/toolbarIcon_bold.png');
+        $this->click($this->find('IPSUM'));
+
+        sleep(1);
+        $this->click($text);
+
+        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_removeLink.png'), 'Remove link icon should be available.');
+        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_link_active.png'), 'Link icon should be available.');
+
+    }//end testClickBoldLinkShowsInlineToolbar()
+
+
+    /**
+     * Test that clicking inside a link tag that has italic format will show the inline toolbar.
+     *
+     * @return void
+     */
+    public function testClickItalicLinkShowsInlineToolbar()
+    {
+        $text = $this->find('Lorem');
+        $this->selectText('Lorem');
+
+        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_link.png');
+        $this->type('http://www.squizlabs.com');
+        $this->keyDown('Key.ENTER');
+        $this->clickTopToolbarButton(dirname(dirname(__FILE__)).'/ViperCoreStylesPlugin/Images/toolbarIcon_italic.png');
+        $this->click($this->find('IPSUM'));
+
+        sleep(1);
+        $this->click($text);
+
+        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_removeLink.png'), 'Remove link icon should be available.');
+        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_link_active.png'), 'Link icon should be available.');
+
+    }//end testClickItalicLinkShowsInlineToolbar()
+
+
+    /**
      * Test that the class and id tags are added to the a tag when you create a link.
      *
      * @return void
