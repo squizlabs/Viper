@@ -81,7 +81,7 @@ abstract class AbstractGeneralListUnitTest extends AbstractViperListPluginUnitTe
 
         $this->keyDown('Key.ENTER');
         $this->type('New parra');
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_toggle_formats.png'), 'Formats icon should appear in the top toolbar.');
+        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_formats_p.png'), 'Formats icon should appear in the top toolbar.');
 
     }//end testFormatsIconNotAvailableForList()
 
