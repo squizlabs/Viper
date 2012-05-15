@@ -739,11 +739,13 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
 
         self::$_window = $this->callFunc('window', array($windowNum), $app, TRUE);
 
-        // Adjust the brwoser window region so that its only the area of the actual page.
-        $pageLoc = $this->getPageTopLeft();
-        $this->setH(self::$_window, $this->getH(self::$_window) - ($pageLoc['y'] - $this->getY(self::$_window)));
-        $this->setX(self::$_window, $pageLoc['x']);
-        $this->setY(self::$_window, $pageLoc['y']);
+        if (self::$_testRun === TRUE) {
+            // Adjust the brwoser window region so that its only the area of the actual page.
+            $pageLoc = $this->getPageTopLeft();
+            $this->setH(self::$_window, $this->getH(self::$_window) - ($pageLoc['y'] - $this->getY(self::$_window)));
+            $this->setX(self::$_window, $pageLoc['x']);
+            $this->setY(self::$_window, $pageLoc['y']);
+        }
 
         $this->setDefaultRegion(self::$_window);
 

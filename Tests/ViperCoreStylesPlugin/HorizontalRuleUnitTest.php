@@ -12,12 +12,10 @@ class Viper_Tests_ViperCoreStylesPlugin_HorizontalRuleUnitTest extends AbstractV
      */
     public function testAddingHorizontalRuleAtEndOfParagraph()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $this->selectText('WoW');
         $this->type('Key.RIGHT');
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_horizontalRule.png');
+        $this->clickTopToolbarButton('insertHr');
 
         $this->type('Key.RIGHT');
         $this->type('Key.BACKSPACE');
@@ -35,12 +33,10 @@ class Viper_Tests_ViperCoreStylesPlugin_HorizontalRuleUnitTest extends AbstractV
      */
     public function testAddingAndDeletingAHorizontalRuleAtEndOfParagraph()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $this->selectText('WoW');
         $this->type('Key.RIGHT');
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_horizontalRule.png');
+        $this->clickTopToolbarButton('insertHr');
 
         $this->type('Key.RIGHT');
         $this->type('Key.BACKSPACE');
@@ -64,12 +60,10 @@ class Viper_Tests_ViperCoreStylesPlugin_HorizontalRuleUnitTest extends AbstractV
      */
     public function testAddingHorizontalRuleInMiddleOfParagraph()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $this->selectText('XuT');
         $this->type('Key.RIGHT');
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_horizontalRule.png');
+        $this->clickTopToolbarButton('insertHr');
 
         $this->type('New ConTenT');
 
@@ -85,12 +79,10 @@ class Viper_Tests_ViperCoreStylesPlugin_HorizontalRuleUnitTest extends AbstractV
      */
     public function testAddingHorizontalRuleAtStartOfParagraph()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $this->selectText('Lorem');
         $this->type('Key.LEFT');
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_horizontalRule.png');
+        $this->clickTopToolbarButton('insertHr');
 
         $this->type('New ConTenT');
 
@@ -106,8 +98,6 @@ class Viper_Tests_ViperCoreStylesPlugin_HorizontalRuleUnitTest extends AbstractV
      */
     public function testAddingHorizontalRuleAtStartOfParagraphWithNoInnerTags()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $this->selectText('Lorem');
         $this->selectInlineToolbarLineageItem(0);
         $this->keyDown('Key.CMD + b');
@@ -116,7 +106,7 @@ class Viper_Tests_ViperCoreStylesPlugin_HorizontalRuleUnitTest extends AbstractV
         $this->keyDown('Key.CMD + i');
         $this->type('Key.LEFT');
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_horizontalRule.png');
+        $this->clickTopToolbarButton('insertHr');
 
         $this->type('New ConTenT');
 
@@ -132,12 +122,10 @@ class Viper_Tests_ViperCoreStylesPlugin_HorizontalRuleUnitTest extends AbstractV
      */
     public function testAddingAndDeletingHorizontalRuleAfterHeading()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $this->selectText('HEADING');
         $this->type('Key.RIGHT');
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_horizontalRule.png');
+        $this->clickTopToolbarButton('insertHr');
 
         $this->type('Key.RIGHT');
         $this->type('Key.BACKSPACE');
@@ -161,12 +149,10 @@ class Viper_Tests_ViperCoreStylesPlugin_HorizontalRuleUnitTest extends AbstractV
      */
     public function testAddingAndRemovingHorizontalRuleInAList()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $this->selectText('oNo');
         $this->type('Key.RIGHT');
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_horizontalRule.png');
+        $this->clickTopToolbarButton('insertHr');
 
         $this->type('New ConTenT');
 
@@ -189,16 +175,14 @@ class Viper_Tests_ViperCoreStylesPlugin_HorizontalRuleUnitTest extends AbstractV
      */
     public function testAddingHorizontalRuleAfterFormattedText()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $this->selectText('XuT');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_sub.png');
+        $this->clickTopToolbarButton('subscript');
 
         $this->selectText('WoW');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_strike.png');
+        $this->clickTopToolbarButton('strikethrough');
         $this->keyDown('Key.RIGHT');
         $this->keyDown('Key.ENTER');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_horizontalRule.png');
+        $this->clickTopToolbarButton('insertHr');
 
         $this->assertHTMLMatch('<h1>First HEADING</h1><p>Lorem <sub>XuT</sub> dolor sit <em>amet</em> <strong><del>WoW</del></strong></p><p>&nbsp;</p><hr /><p>&nbsp;</p><h2>Second heading</h2><p>This is another paragraph</p><ul><li>Test removing bullet points</li><li>purus oNo luctus</li><li>vel molestie arcu</li></ul>');
 
