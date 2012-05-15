@@ -332,23 +332,36 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
      */
     public function testRemoveLinkWhenSelectingText()
     {
+        $dir = dirname(__FILE__).'/Images/';
+
         $text = $this->find('IPSUM');
         $this->selectText('Lorem');
 
-        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_link.png');
+        // Normal link
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_link.png');
         $this->type('http://www.squizlabs.com');
         $this->keyDown('Key.TAB');
         $this->type('Squiz Labs');
         $this->keyDown('Key.ENTER');
-
         $this->click($text);
         $this->selectText('Lorem');
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_removeLink.png');
+        $this->assertFalse($this->inlineToolbarButtonExists($dir.'toolbarIcon_removeLink.png'), 'Remove link icon should not be available.');
+        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_link.png'), 'Link icon should be available.');
+        $this->assertHTMLMatch('<p>Lorem IPSUM dolor</p><p>sit amet <strong>WoW</strong></p>');
 
-        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_removeLink.png');
-
-        $this->assertFalse($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_removeLink.png'), 'Remove link icon should not be available.');
-        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_link.png'), 'Link icon should be available.');
-
+        // Mail to link
+        $this->selectText('Lorem');
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_link.png');
+        $this->type('labs@squiz.com.au');
+        $this->keyDown('Key.TAB');
+        $this->type('Subject');
+        $this->keyDown('Key.ENTER');
+        $this->click($text);
+        $this->selectText('Lorem');
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_removeLink.png');
+        $this->assertFalse($this->inlineToolbarButtonExists($dir.'toolbarIcon_removeLink.png'), 'Remove link icon should not be available.');
+        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_link.png'), 'Link icon should be available.');
         $this->assertHTMLMatch('<p>Lorem IPSUM dolor</p><p>sit amet <strong>WoW</strong></p>');
 
     }//end testRemoveLinkWhenSelectingText()
@@ -361,23 +374,35 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
      */
     public function testRemoveLinkWhenClickingInLink()
     {
-        $this->selectText('IPSUM');
+        $dir = dirname(__FILE__).'/Images/';
 
-        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_link.png');
+        // Normal link
+        $this->selectText('IPSUM');
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_link.png');
         $this->type('http://www.squizlabs.com');
         $this->keyDown('Key.TAB');
         $this->type('Squiz Labs');
         $this->keyDown('Key.ENTER');
-
         $this->click($this->find('Lorem'));
         $this->click('IPSUM');
-        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_removeLink.png');
-
-        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_link.png'), 'Link icon should be available.');
-
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_removeLink.png');
+        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_link.png'), 'Link icon should be available.');
         $this->assertHTMLMatch('<p>Lorem IPSUM dolor</p><p>sit amet <strong>WoW</strong></p>');
 
-    }//end testRemoveLinkWhenSelectingText()
+        // Mail to link
+        $this->selectText('Lorem');
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_link.png');
+        $this->type('labs@squiz.com.au');
+        $this->keyDown('Key.TAB');
+        $this->type('Subject');
+        $this->keyDown('Key.ENTER');
+        $this->click($this->find('dolor'));
+        $this->click('Lorem');
+        $this->clickInlineToolbarButton($dir.'/toolbarIcon_removeLink.png');
+        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_link.png'), 'Link icon should be available.');
+        $this->assertHTMLMatch('<p>Lorem IPSUM dolor</p><p>sit amet <strong>WoW</strong></p>');
+
+    }//end testRemoveLinkWhenClickingInLink()
 
 
     /**
@@ -954,6 +979,299 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->assertFalse($this->inlineToolbarButtonExists($dir.'toolbarIcon_removeLink.png'), 'Remove link icon should not appear in the inline toolbar.');
 
     }//end testLinkIconForAcronymAndAbbreviation()
+
+
+    /**
+     * Test creating a mail to link without a subject using the inline toolbar.
+     *
+     * @return void
+     */
+    public function testCreatingAMailToLinkUsingTheInlineToolbar()
+    {
+        $dir = dirname(__FILE__).'/Images/';
+        $this->selectText('Lorem');
+
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_link.png');
+        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_link_subActive.png'), 'Toolbar button icon is not correct');
+
+        $this->type('labs@squiz.com.au');
+        $this->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p><a href="mailto:labs@squiz.com.au">Lorem</a> IPSUM dolor</p><p>sit amet <strong>WoW</strong></p>');
+
+        $this->selectText('dolor');
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_link.png');
+        $this->type('mailto: labs@squiz.com.au');
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_updateChanges.png');
+        $this->assertHTMLMatch('<p><a href="mailto:labs@squiz.com.au">Lorem</a> IPSUM <a href="mailto:labs@squiz.com.au">dolor</a></p><p>sit amet <strong>WoW</strong></p>');
+
+        $this->click($this->find('IPSUM'));
+
+        $this->selectText('WoW');
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_link.png');
+        $this->type('MAILTO: labs@squiz.com.au');
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_updateChanges.png');
+        $this->assertHTMLMatch('<p><a href="mailto:labs@squiz.com.au">Lorem</a> IPSUM <a href="mailto:labs@squiz.com.au">dolor</a></p><p>sit amet <strong><a href="mailto:labs@squiz.com.au">WoW</a></strong></p>');
+
+    }//end testCreatingAMailToLinkUsingTheInlineToolbar()
+
+
+    /**
+     * Test creating a mail to link with a subject using the inline toolbar.
+     *
+     * @return void
+     */
+    public function testCreatingAMailToLinkWithSubjectUsingTheInlineToolbar()
+    {
+        $dir = dirname(__FILE__).'/Images/';
+        $this->selectText('Lorem');
+
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_link.png');
+        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_link_subActive.png'), 'Toolbar button icon is not correct');
+
+        $this->type('labs@squiz.com.au');
+        $this->keyDown('Key.TAB');
+        $this->type('Subject');
+        $this->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p><a href="mailto:labs@squiz.com.au?subject=Subject">Lorem</a> IPSUM dolor</p><p>sit amet <strong>WoW</strong></p>');
+
+        $this->selectText('dolor');
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_link.png');
+        $this->type('mailto: labs@squiz.com.au');
+        $this->keyDown('Key.TAB');
+        $this->type('Subject');
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_updateChanges.png');
+        $this->assertHTMLMatch('<p><a href="mailto:labs@squiz.com.au?subject=Subject">Lorem</a> IPSUM <a href="mailto:labs@squiz.com.au?subject=Subject">dolor</a></p><p>sit amet <strong>WoW</strong></p>');
+
+        $this->click($this->find('IPSUM'));
+
+        $this->selectText('WoW');
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_link.png');
+        $this->type('MAILTO: labs@squiz.com.au');
+        $this->keyDown('Key.TAB');
+        $this->type('Subject');
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_updateChanges.png');
+        $this->assertHTMLMatch('<p><a href="mailto:labs@squiz.com.au?subject=Subject">Lorem</a> IPSUM <a href="mailto:labs@squiz.com.au?subject=Subject">dolor</a></p><p>sit amet <strong><a href="mailto:labs@squiz.com.au?subject=Subject">WoW</a></strong></p>');
+
+    }//end testCreatingAMailToLinkWithSubjectUsingTheInlineToolbar()
+
+
+    /**
+     * Test entering a mailto link, pressing enter and then adding a subject.
+     *
+     * @return void
+     */
+    public function testEnteringMailToLinkPressEnterThenEnterSubject()
+    {
+        $dir = dirname(__FILE__).'/Images/';
+
+        $this->selectText('Lorem');
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_link.png');
+        $this->type('labs@squiz.com.au');
+        $this->keyDown('Key.ENTER');
+        $this->keyDown('Key.TAB');
+        $this->type('Subject');
+        $this->keyDown('Key.ENTER');
+
+        $this->assertHTMLMatch('<p><a href="mailto:labs@squiz.com.au?subject=Subject">Lorem</a> IPSUM dolor</p><p>sit amet <strong>WoW</strong></p>');
+
+        $this->selectText('dolor');
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_link.png');
+        $this->type('labs@squiz.com.au');
+        $this->keyDown('Key.ENTER');
+        $this->keyDown('Key.TAB');
+        $this->type('Test');
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_updateChanges.png');
+
+        $this->assertHTMLMatch('<p><a href="mailto:labs@squiz.com.au?subject=Subject">Lorem</a> IPSUM <a href="mailto:labs@squiz.com.au?subject=Test">dolor</a></p><p>sit amet <strong>WoW</strong></p>');
+
+    }//end testEnteringMailToLinkPressEnterThenEnterSubject()
+
+
+    /**
+     * Test creating a mail to link without a subject using the top toolbar.
+     *
+     * @return void
+     */
+    public function testCreatingAMailToLinkUsingTheTopToolbar()
+    {
+        $dir = dirname(__FILE__).'/Images/';
+        $this->selectText('Lorem');
+
+        $this->clickTopToolbarButton($dir.'toolbarIcon_link.png');
+        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_link_subActive.png'), 'Toolbar button icon is not correct');
+
+        $this->type('labs@squiz.com.au');
+        $this->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p><a href="mailto:labs@squiz.com.au">Lorem</a> IPSUM dolor</p><p>sit amet <strong>WoW</strong></p>');
+
+        $this->clickTopToolbarButton($dir.'toolbarIcon_link_subActive.png');
+
+        $this->selectText('dolor');
+        $this->clickTopToolbarButton($dir.'toolbarIcon_link.png');
+        $this->type('mailto: labs@squiz.com.au');
+        $this->clickTopToolbarButton($dir.'toolbarIcon_updateChanges.png');
+        $this->assertHTMLMatch('<p><a href="mailto:labs@squiz.com.au">Lorem</a> IPSUM <a href="mailto:labs@squiz.com.au">dolor</a></p><p>sit amet <strong>WoW</strong></p>');
+
+        $this->clickTopToolbarButton($dir.'toolbarIcon_link_subActive.png');
+
+        $this->selectText('WoW');
+        $this->clickTopToolbarButton($dir.'toolbarIcon_link.png');
+        $this->type('MAILTO: labs@squiz.com.au');
+        $this->clickTopToolbarButton($dir.'toolbarIcon_updateChanges.png');
+        $this->assertHTMLMatch('<p><a href="mailto:labs@squiz.com.au">Lorem</a> IPSUM <a href="mailto:labs@squiz.com.au">dolor</a></p><p>sit amet <strong><a href="mailto:labs@squiz.com.au">WoW</a></strong></p>');
+
+    }//end testCreatingAMailToLinkUsingTheTopToolbar()
+
+
+    /**
+     * Test creating a mail to link with a subject using the top toolbar.
+     *
+     * @return void
+     */
+    public function testCreatingAMailToLinkWithSubjectUsingTheTopToolbar()
+    {
+        $dir = dirname(__FILE__).'/Images/';
+        $this->selectText('Lorem');
+
+        $this->clickTopToolbarButton($dir.'toolbarIcon_link.png');
+        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_link_subActive.png'), 'Toolbar button icon is not correct');
+
+        $this->type('labs@squiz.com.au');
+        $this->keyDown('Key.TAB');
+        $this->type('Subject');
+        $this->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p><a href="mailto:labs@squiz.com.au?subject=Subject">Lorem</a> IPSUM dolor</p><p>sit amet <strong>WoW</strong></p>');
+
+        $this->clickTopToolbarButton($dir.'toolbarIcon_link_subActive.png');
+
+        $this->selectText('dolor');
+        $this->clickTopToolbarButton($dir.'toolbarIcon_link.png');
+        $this->type('mailto: labs@squiz.com.au');
+        $this->keyDown('Key.TAB');
+        $this->type('Subject');
+        $this->clickTopToolbarButton($dir.'toolbarIcon_updateChanges.png');
+        $this->assertHTMLMatch('<p><a href="mailto:labs@squiz.com.au?subject=Subject">Lorem</a> IPSUM <a href="mailto:labs@squiz.com.au?subject=Subject">dolor</a></p><p>sit amet <strong>WoW</strong></p>');
+
+        $this->clickTopToolbarButton($dir.'toolbarIcon_link_subActive.png');
+
+        $this->selectText('WoW');
+        $this->clickTopToolbarButton($dir.'toolbarIcon_link.png');
+        $this->type('MAILTO: labs@squiz.com.au');
+        $this->keyDown('Key.TAB');
+        $this->type('Subject');
+        $this->clickTopToolbarButton($dir.'toolbarIcon_updateChanges.png');
+        $this->assertHTMLMatch('<p><a href="mailto:labs@squiz.com.au?subject=Subject">Lorem</a> IPSUM <a href="mailto:labs@squiz.com.au?subject=Subject">dolor</a></p><p>sit amet <strong><a href="mailto:labs@squiz.com.au?subject=Subject">WoW</a></strong></p>');
+
+    }//end testCreatingAMailToLinkWithSubjectUsingTheTopToolbar()
+
+
+    /**
+     * Test that the subject field only appears when you are creating a mailto link.
+     *
+     * @return void
+     */
+    public function testSubjectOnlyAppearsWhenCreatingAMailToLink()
+    {
+        $dir = dirname(__FILE__).'/Images/';
+
+        $this->selectText('Lorem');
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_link.png');
+        $this->type('labs@squiz.com.au');
+        $this->keyDown('Key.ENTER');
+        $this->keyDown('Key.TAB');
+        $this->type('Subject');
+        $this->keyDown('Key.ENTER');
+
+        $this->assertHTMLMatch('<p><a href="mailto:labs@squiz.com.au?subject=Subject">Lorem</a> IPSUM dolor</p><p>sit amet <strong>WoW</strong></p>');
+
+        $this->selectText('dolor');
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_link.png');
+        $this->assertTrue($this->exists($dir.'input_link_fields.png'));
+
+        $this->click($this->find('IPSUM'));
+
+        $this->selectText('WoW');
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_link.png');
+        $this->assertTrue($this->exists($dir.'input_link_fields.png'));
+
+    }//end testSubjectOnlyAppearsWhenCreatingAMailToLink()
+
+
+    /**
+     * Test copying and pasting a mailto link.
+     *
+     * @return void
+     */
+    public function testCopyAndPasteMailtoLink()
+    {
+        $dir = dirname(__FILE__).'/Images/';
+
+        $this->click($this->find('labs'));
+        $this->keyDown('Key.CMD + a');
+        $this->keyDown('Key.CMD + c');
+        $this->clickTopToolbarButton($dir.'toolbarIcon_link.png');
+        $this->keyDown('Key.CMD + v');
+        $this->keyDown('Key.TAB');
+        $this->type('Subject');
+        $this->keyDown('Key.ENTER');
+
+        $this->assertHTMLMatch('<p><a href="mailto:labs@squiz.com.au?subject=Subject">labs@squiz.com.au</a></p>');
+
+    }//end testCopyAndPasteMailtoLink()
+
+
+    /**
+     * Test inserting and removing a link for an image using the inline toolbar.
+     *
+     * @return void
+     */
+    public function testLinkingAnImageUsingInlineToolbar()
+    {
+        $dir = dirname(__FILE__).'/Images/';
+
+        $this->clickElement('img', 1);
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_link.png');
+        $this->type('www.squizlabs.com');
+        $this->keyDown('Key.TAB');
+        $this->type('Squiz Labs');
+        $this->keyDown('Key.ENTER');
+
+        $this->assertHTMLMatch('<p>LOREM XuT</p><p><a href="www.squizlabs.com" title="Squiz Labs"><img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Alt tag" /></a></p><p>LABS is ORSM</p>');
+
+        $this->click($this->find('LOREM'));
+
+        $this->clickElement('img', 1);
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_removelink.png');
+        $this->assertHTMLMatch('<p>LOREM XuT</p><p><img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Alt tag" /></p><p>LABS is ORSM</p>');
+
+    }//end testLinkingAnImageUsingInlineToolbar()
+
+
+    /**
+     * Test inserting and removing a link for an image using the top toolbar.
+     *
+     * @return void
+     */
+    public function testLinkingAnImageUsingTopToolbar()
+    {
+        $dir = dirname(__FILE__).'/Images/';
+
+        $this->clickElement('img', 1);
+        $this->clickTopToolbarButton($dir.'toolbarIcon_link.png');
+        $this->type('www.squizlabs.com');
+        $this->keyDown('Key.TAB');
+        $this->type('Squiz Labs');
+        $this->keyDown('Key.ENTER');
+
+        $this->assertHTMLMatch('<p>LOREM XuT</p><p><a href="www.squizlabs.com" title="Squiz Labs"><img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Alt tag" /></a></p><p>LABS is ORSM</p>');
+
+        $this->click($this->find('LOREM'));
+
+        $this->clickElement('img', 1);
+        $this->clickTopToolbarButton($dir.'toolbarIcon_removelink.png');
+        $this->assertHTMLMatch('<p>LOREM XuT</p><p><img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Alt tag" /></p><p>LABS is ORSM</p>');
+
+    }//end testLinkingAnImageUsingTopToolbar()
 
 
 }//end class
