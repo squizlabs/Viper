@@ -72,7 +72,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      *
      * @var float
      */
-    private static $_similarity = NULL;
+    private static $_similarity = 0.95;
 
     /**
      * The top left position of the browser page relative to the screen 0,0.
@@ -175,6 +175,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
 
         // Change browser and then change the URL.
         if (self::$_testRun === TRUE) {
+            $this->setAutoWaitTimeout(1);
             $this->resizeWindow();
             $this->setDefaultRegion(self::$_window);
 
@@ -194,8 +195,14 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
                 }
             }
 
+            $this->setAutoWaitTimeout(1);
             $this->goToURL($dest);
             self::$_testRun = TRUE;
+
+            $pageLoc = $this->getPageTopLeft();
+            $this->setH(self::$_window, $this->getH(self::$_window) - ($pageLoc['y'] - $this->getY(self::$_window)));
+            $this->setX(self::$_window, $pageLoc['x']);
+            $this->setY(self::$_window, $pageLoc['y']);
         }//end if
 
     }//end setUp()
@@ -511,7 +518,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         // Update the self::$_window object.
         $this->selectBrowser($this->getBrowserName());
 
-        $size = $this->getBrowserWindowSize();
+        $this->getBrowserWindowSize();
 
     }//end resizeWindow()
 
