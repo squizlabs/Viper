@@ -296,7 +296,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         $cssContents = file_get_contents($baseDir.'/../Css/viper_tools.css');
 
         $matches = array();
-        preg_match_all('#.Viper-buttonIcon.Viper-(\w+)#', $cssContents, $matches);
+        preg_match_all('#.Viper-buttonIcon.Viper-([\w-_]+)#', $cssContents, $matches);
 
         $buttonNames = array_values(array_unique($matches[1]));
 
