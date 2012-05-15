@@ -74,6 +74,13 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      */
     private static $_similarity = NULL;
 
+    /**
+     * The top left position of the browser page relative to the screen 0,0.
+     *
+     * @var array
+     */
+    private static $_pageTopLeft = NULL;
+
 
     /**
      * Returns the path of a test file.
@@ -177,10 +184,8 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
             $this->selectBrowser(self::$_browser);
             $this->resizeWindow();
 
-            $similarity = getenv('VIPER_TEST_SIMILARITY');
-            if (is_numeric($similarity) === TRUE) {
-                self::$_similarity = (float) $similarity;
-            } else {
+            $calibrate = getenv('VIPER_TEST_CALIBRATE');
+            if ($calibrate === 'TRUE' || file_exists($this->getBrowserImagePath()) === FALSE) {
                 try {
                     $this->_calibrate();
                 } catch (Exception $e) {
@@ -194,6 +199,56 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         }//end if
 
     }//end setUp()
+
+
+    /**
+     * Returns the path of a specific browser image directory.
+     *
+     * @param string $browserid ID of the browser, e.g. googlechrome.
+     *
+     * @return string
+     */
+    protected function getBrowserImagePath($browserid=NULL)
+    {
+        if ($browserid === NULL) {
+            $browserid = $this->getBrowserid();
+        }
+
+        $path = dirname(__FILE__).'/tmp/Images/'.$browserid;
+
+        return $path;
+
+    }//end getBrowserImagePath()
+
+
+    /**
+     * Returns the path to the button image created in calibration process.
+     *
+     * @param string $buttonName The name of the button.
+     * @param string $state      The name of the button state (active, selected).
+     *
+     * @return string
+     * @throws Exception If the button icon does not exist.
+     */
+    protected function getButtonIconPath($buttonName, $state=NULL)
+    {
+        // Calibrate image recognition.
+        $imgPath  = dirname(__FILE__).'/tmp/Images/'.$this->getBrowserid();
+        $imgPath .= '/'.$buttonName;
+
+        if ($state !== NULL) {
+            $imgPath .= '_'.$state;
+        }
+
+        $imgPath .= '.png';
+
+        if (file_exists($imgPath) === FALSE) {
+            throw new Exception('Button icon not found: '.$imgPath);
+        }
+
+        return $imgPath;
+
+    }//end getButtonIconPath()
 
 
     /**
@@ -211,106 +266,98 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
 
 
     /**
-     * Cleans up after all tests are completed.
+     * Calibrates the testing to work with the current browser.
+     *
+     * This method will create images of each button image and place it in a temp
+     * directory.
      *
      * @return void
      * @throws Exception If it fails to calibrate.
      */
     private function _calibrate()
     {
-        // Calibrate image recognition.
-        $baseDir = dirname(__FILE__);
-        $dest    = $baseDir.'/calibrate.html';
-        self::goToURL($dest);
-
-        $this->selectText('TpT');
-        sleep(1);
         $this->setAutoWaitTimeout(0.5);
 
-        $similarity = NULL;
-        for ($i = 0.99; $i >= 0; $i -= 0.01) {
-            try {
-                $f = $this->find($baseDir.'/Core/Images/vitpPattern.png', NULL, $i);
-            } catch (Exception $e) {
-                continue;
-            }
+        // Calibrate image recognition.
+        $baseDir = dirname(__FILE__);
+        $imgPath = $baseDir.'/tmp/Images/'.$this->getBrowserid();
 
-            $similarity = $i;
-            break;
+        if (file_exists($imgPath) === FALSE) {
+            mkdir($imgPath, 0755, TRUE);
         }
 
-        for ($i = $similarity; $i >= 0; $i -= 0.01) {
-            try {
-                $f = $this->find($baseDir.'/Core/Images/calibrate2.png', NULL, $i);
-            } catch (Exception $e) {
-                continue;
-            }
+        $cssContents = file_get_contents($baseDir.'/../Css/viper_tools.css');
 
-            try {
-                $f = $this->find($baseDir.'/Core/Images/calibrate1.png', NULL, $i);
-            } catch (Exception $e) {
-                $similarity = $i;
-                break;
-            }
+        $matches = array();
+        preg_match_all('#.Viper-buttonIcon.Viper-(\w+)#', $cssContents, $matches);
 
-            throw new Exception('Failed to calibrate.');
+        $buttonNames = array_values(array_unique($matches[1]));
+
+        // Create the temp calibration file.
+        $tmpFile = $baseDir.'/tmp-calibrate.html';
+
+        $statuses = array(
+                     ''          => ' Viper-dummyClass',
+                     '_selected' => ' Viper-selected',
+                     '_active'   => ' Viper-active',
+                    );
+
+        $buttonHTML = '';
+
+        $buttonCount = count($buttonNames);
+        foreach ($statuses as $status => $className) {
+            for ($i = 0; $i < $buttonCount; $i++) {
+                if (($i % 20) === 0) {
+                    if ($buttonHTML !== '') {
+                        $buttonHTML .= '</div>';
+                    }
+
+                    $buttonHTML .= '<div class="ViperTP-bar Viper-themeDark" style="position:relative">';
+                }
+
+                $buttonHTML .= '<div id="'.$buttonNames[$i].$status.'" class="Viper-button Viper-'.$buttonNames[$i].$className.'">';
+                $buttonHTML .= '<span class="Viper-buttonIcon Viper-'.$buttonNames[$i].'"></span>&nbsp;</div>';
+            }
         }
 
-        $this->keyDown('Key.DOWN');
-        sleep(2);
+        $buttonHTML .= '</div>';
 
-        for ($i = $similarity; $i >= 0; $i -= 0.01) {
-            try {
-                $f = $this->find($baseDir.'/Core/Images/calibrate2.png', NULL, $i);
-            } catch (Exception $e) {
-                continue;
+        $calibrateHtml = file_get_contents($baseDir.'/calibrate.html');
+        $calibrateHtml = str_replace('__TEST_CONTENT__', $buttonHTML, $calibrateHtml);
+
+        file_put_contents($tmpFile, $calibrateHtml);
+
+        $dest = $baseDir.'/tmp-calibrate.html';
+        self::goToURL($dest);
+
+        // Inline toolbar pattern.
+        $this->selectText('PyP');
+
+        usleep(500);
+        $vitp      = $this->execJS('getVITP()');
+        $vitp['x'] = $this->getPageXRelativeToScreen($vitp['x']);
+        $vitp['y'] = $this->getPageYRelativeToScreen($vitp['y']);
+
+        $region    = $this->createRegion(($vitp['x'] - 12), ($vitp['y'] - 10), 27, 14);
+        $vitpImage = $this->capture($region);
+        copy($vitpImage, $imgPath.'/vitp_arrow.png');
+
+        $this->execJS('viper.destroy()');
+
+        foreach ($statuses as $status => $className) {
+            $btnRects = $this->execJS('getCoords("'.$className.'")');
+            foreach ($btnRects as $buttonName => $rect) {
+                $region    = $this->getRegionOnPage($rect);
+                $imagePath = $this->capture($region);
+                copy($imagePath, $imgPath.'/'.$buttonName.'.png');
             }
-
-            try {
-                $f = $this->find($baseDir.'/Core/Images/calibrate1.png', NULL, $i);
-            } catch (Exception $e) {
-                $similarity = $i;
-                break;
-            }
-
-            throw new Exception('Failed to calibrate.');
         }
 
-        $this->keyDown('Key.UP');
-        $this->keyDown('Key.UP');
-        sleep(1);
-
-        for ($i = $similarity; $i >= 0; $i -= 0.01) {
-            try {
-                $f = $this->find($baseDir.'/Core/Images/calibrate1.png', NULL, $i);
-            } catch (Exception $e) {
-                continue;
-            }
-
-            try {
-                $f = $this->find($baseDir.'/Core/Images/calibrate2.png', NULL, $i);
-            } catch (Exception $e) {
-                $similarity = $i;
-                break;
-            }
-
-            throw new Exception('Failed to calibrate.');
+        // Find each of the icons, if any fails it will throw an exception.
+        foreach ($buttonNames as $buttonName) {
+            $testImage = $imgPath.'/'.$buttonName.'.png';
+            $this->find($testImage);
         }
-
-        $this->find($baseDir.'/Core/Images/calibrate1.png', NULL, $similarity);
-        $this->keyDown('Key.DOWN');
-        sleep(2);
-        $this->find($baseDir.'/Core/Images/calibrate2.png', NULL, $similarity);
-        $this->find($baseDir.'/Core/Images/topToolbarPattern.png', NULL, $similarity);
-
-        $this->setAutoWaitTimeout(2);
-
-        $this->keyDown('Key.UP');
-
-        $this->selectText('TpT');
-        $this->find($baseDir.'/Core/Images/vitpPattern.png', NULL, $similarity);
-
-        self::$_similarity = $similarity;
 
     }//end _calibrate()
 
@@ -341,6 +388,21 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         return self::$_browser;
 
     }//end getBrowserName()
+
+
+    /**
+     * Returns the ID of the current browser.
+     *
+     * @return string
+     */
+    protected function getBrowserid()
+    {
+        $id = self::$_browser;
+        $id = strtolower($id);
+        $id = str_replace(' ', '', $id);
+        return $id;
+
+    }//end getBrowserid()
 
 
     /**
@@ -461,12 +523,18 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      */
     protected function getPageTopLeft()
     {
+        if (self::$_pageTopLeft !== NULL) {
+            return self::$_pageTopLeft;
+        }
+
         $targetIcon = $this->find(dirname(__FILE__).'/Core/Images/window-target.png');
         $topLeft    = $this->getTopLeft($targetIcon);
         $loc        = array(
                        'x' => $this->getX($topLeft),
                        'y' => $this->getY($topLeft),
                       );
+
+        self::$_pageTopLeft = $loc;
 
         return $loc;
 
@@ -493,6 +561,40 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         return $region;
 
     }//end getRegionOnPage()
+
+
+    /**
+     * Returns the given page X location relative to the screen.
+     *
+     * @param integer $x The x location relative to the page.
+     *
+     * @return integer
+     */
+    protected function getPageXRelativeToScreen($x)
+    {
+        $pageLoc = $this->getPageTopLeft();
+
+        $x = ($pageLoc['x'] + $x);
+        return $x;
+
+    }//end getPageXRelativeToScreen()
+
+
+    /**
+     * Returns the given page X location relative to the screen.
+     *
+     * @param integer $y The x location relative to the page.
+     *
+     * @return integer
+     */
+    protected function getPageYRelativeToScreen($y)
+    {
+        $pageLoc = $this->getPageTopLeft();
+
+        $y = ($pageLoc['y'] + $y);
+        return $y;
+
+    }//end getPageYRelativeToScreen()
 
 
     /**
@@ -637,6 +739,12 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
 
         self::$_window = $this->callFunc('window', array($windowNum), $app, TRUE);
 
+        // Adjust the brwoser window region so that its only the area of the actual page.
+        $pageLoc = $this->getPageTopLeft();
+        $this->setH(self::$_window, $this->getH(self::$_window) - ($pageLoc['y'] - $this->getY(self::$_window)));
+        $this->setX(self::$_window, $pageLoc['x']);
+        $this->setY(self::$_window, $pageLoc['y']);
+
         $this->setDefaultRegion(self::$_window);
 
     }//end selectBrowser()
@@ -649,10 +757,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      */
     protected function getInlineToolbar()
     {
-        $toolbarPattern = $this->createPattern(dirname(__FILE__).'/Core/Images/vitpPattern.png');
-        $toolbarPattern = $this->similar($toolbarPattern, self::$_similarity);
-
-        $match = $this->find($toolbarPattern, self::$_window);
+        $match = $this->find($this->getBrowserImagePath().'/vitp_arrow.png', self::$_window, 0.85);
         $this->setX($match, ($this->getX($match) - 200));
         $this->setW($match, ($this->getW($match) + 400));
         $this->setH($match, ($this->getH($match) + 200));
@@ -704,13 +809,18 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
     /**
      * Returns TRUE if the specified button icon exists in the Inline Toolbar.
      *
-     * @param string $buttonIcon Path to the image file.
+     * @param string $buttonIcon The name of the button.
+     * @param string $state      The name of the button state (active, selected).
      *
      * @return boolean
      */
-    protected function inlineToolbarButtonExists($buttonIcon)
+    protected function inlineToolbarButtonExists($buttonIcon, $state=NULL)
     {
         $toolbar = $this->getInlineToolbar();
+
+        if (is_file($buttonIcon) === FALSE) {
+            $buttonIcon = $this->getButtonIconPath($buttonIcon, $state);
+        }
 
         $pattern = $this->createPattern($buttonIcon);
         $pattern = $this->similar($pattern, self::$_similarity);
@@ -723,13 +833,18 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
     /**
      * Returns TRUE if the specified button icon exists in the Toolbar.
      *
-     * @param string $buttonIcon Path to the image file.
+     * @param string $buttonIcon The name of the button.
+     * @param string $state      The name of the button state (active, selected).
      *
      * @return boolean
      */
-    protected function topToolbarButtonExists($buttonIcon)
+    protected function topToolbarButtonExists($buttonIcon, $state=NULL)
     {
         $toolbar = $this->getTopToolbar();
+
+        if (is_file($buttonIcon) === FALSE) {
+            $buttonIcon = $this->getButtonIconPath($buttonIcon, $state);
+        }
 
         $pattern = $this->createPattern($buttonIcon);
         $pattern = $this->similar($pattern, self::$_similarity);
@@ -742,12 +857,22 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
     /**
      * Clicks the specified button icon in the Inline Toolbar.
      *
-     * @param string $buttonIcon Path to the image file.
+     * @param string $buttonIcon The name of the button.
+     * @param string $state      The name of the button state (active, selected).
      *
      * @return void
+     * @throws Exception If the specified icon file not found.
      */
-    protected function clickTopToolbarButton($buttonIcon)
+    protected function clickTopToolbarButton($buttonIcon, $state=NULL)
     {
+        if (is_file($buttonIcon) === FALSE) {
+            $buttonIcon = $this->getButtonIconPath($buttonIcon, $state);
+        }
+
+        if (file_exists($buttonIcon) === FALSE) {
+            throw new Exception('File not found: '.$buttonIcon);
+        }
+
         $toolbar = $this->getTopToolbar();
         $match   = $this->find($buttonIcon, $toolbar);
         $this->click($match);
@@ -758,13 +883,18 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
     /**
      * Clicks the specified button icon in the Inline Toolbar.
      *
-     * @param string $buttonIcon Path to the image file.
+     * @param string $buttonIcon The name of the button.
+     * @param string $state      The name of the button state (active, selected).
      *
      * @return void
      * @throws Exception If the specified icon file not found.
      */
-    protected function clickInlineToolbarButton($buttonIcon)
+    protected function clickInlineToolbarButton($buttonIcon, $state=NULL)
     {
+        if (is_file($buttonIcon) === FALSE) {
+            $buttonIcon = $this->getButtonIconPath($buttonIcon, $state);
+        }
+
         if (file_exists($buttonIcon) === FALSE) {
             throw new Exception('File not found: '.$buttonIcon);
         }
@@ -846,6 +976,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         $this->keyDown($this->_getAccessKeys('r'));
         usleep(500);
         $this->keyDown('Key.CMD + a');
+        sleep(1);
         $this->keyDown('Key.CMD + c');
 
         $text = $this->getClipboard();
@@ -991,20 +1122,24 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
     }//end getBoundingRectangle()
 
 
-     /**
+    /**
      * Clicks an element in the content.
      *
-     * @return string
+     * @param string  $selector The jQuery selector to use for finding the element.
+     * @param integer $index    The element index of the resulting array.
+     *
+     * @return void
      */
     protected function clickElement($selector, $index)
     {
-       $elemRect = $this->getBoundingRectangle($selector, $index);
-       $region     = $this->getRegionOnPage($elemRect);
+        $elemRect = $this->getBoundingRectangle($selector, $index);
+        $region   = $this->getRegionOnPage($elemRect);
 
-       // Click the element.
-       $this->click($region);
+        // Click the element.
+        $this->click($region);
 
     }//end clickElement()
+
 
 }//end class
 

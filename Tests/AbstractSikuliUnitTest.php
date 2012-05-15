@@ -427,8 +427,12 @@ abstract class AbstractSikuliUnitTest extends PHPUnit_Framework_TestCase
      *
      * @return string
      */
-    protected function similar($patternObj, $similarity)
+    protected function similar($patternObj, $similarity=0.7)
     {
+        if ($similarity === NULL) {
+            $similarity = 0.7;
+        }
+
         $var = $this->callFunc('similar', array($similarity), $patternObj, TRUE);
         return $var;
 
@@ -646,6 +650,24 @@ abstract class AbstractSikuliUnitTest extends PHPUnit_Framework_TestCase
         return $loc;
 
     }//end setLocation()
+
+
+    /**
+     * Captures the given region and returns the created image path.
+     *
+     * @param string $obj The region object.
+     *
+     * @return string
+     */
+    protected function capture($obj)
+    {
+        $imagePath = $this->callFunc('capture', array($obj));
+        $imagePath = str_replace('u\'', '', $imagePath);
+        $imagePath = trim($imagePath, '\'');
+
+        return $imagePath;
+
+    }//end capture()
 
 
     /*

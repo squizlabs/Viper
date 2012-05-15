@@ -19,23 +19,59 @@
         }
         </style>
         <script type="text/javascript" src="../DfxJSLib/dfx.js"></script>
-        <script type="text/javascript" src="../Viper-all.js"></script>
         <script type="text/javascript" src="./test.js"></script>
-        <script type="text/javascript">
+        <script type="text/javascript" src="../Viper-all.js"></script>
+        <script>
+            function getCoords(className)
+            {
+                var coords  = {};
+                var buttons = dfx.getClass(dfx.trim(className), dfx.getId('__buttons'));
+                for (var i = 0; i < buttons.length; i++) {
+                    var dim  = dfx.getBoundingRectangle(buttons[i]);
+                    coords[buttons[i].id] = {
+                        x1: parseInt(dim.x1 + 3),
+                        y1: parseInt(dim.y1 + 3),
+                        x2: parseInt(dim.x2 - 1),
+                        y2: parseInt(dim.y2 - 1)
+                    };
+                }
+
+                return coords;
+
+            }
+
+            function getVITP()
+            {
+                var elem   = dfx.getClass('ViperITP Viper-themeDark Viper-scalable Viper-visible');
+                var coords = dfx.getElementCoords(elem);
+                var width  = parseInt(dfx.getStyle(elem, 'width').replace('px', ''));
+                var vitp = {
+                    x: parseInt(coords.x + (width / 2)),
+                    y: parseInt(coords.y)
+                };
+
+                return vitp;
+
+            }
+
             var viper = null;
-            dfx.addLoadEvent(function() {
+            ViperReadyCallback = function() {
+                var contentElement = dfx.getId('content');
                 viper = new Viper('test');
-                viper.getPluginManager().setPlugins(['ViperCoreStylesPlugin', 'ViperKeyboardEditorPlugin', 'ViperInlineToolbarPlugin', 'ViperHistoryPlugin', 'ViperListPlugin', 'ViperFormatPlugin', 'ViperToolbarPlugin', 'ViperTableEditorPlugin', 'ViperCopyPastePlugin', 'ViperImagePlugin', 'ViperLinkPlugin', 'ViperSearchReplacePlugin', 'ViperLangToolsPlugin', 'ViperTrackChangesPlugin']);
-                viper.setEditableElement(dfx.getId('content'));
-                viper.focus();
-            });
+                viper.getPluginManager().setPlugins(['ViperCoreStylesPlugin', 'ViperKeyboardEditorPlugin', 'ViperInlineToolbarPlugin', 'ViperHistoryPlugin', 'ViperListPlugin', 'ViperFormatPlugin', 'ViperToolbarPlugin', 'ViperTableEditorPlugin', 'ViperCopyPastePlugin', 'ViperImagePlugin', 'ViperLinkPlugin', 'ViperAccessibilityPlugin', 'ViperSourceViewPlugin', 'ViperSearchReplacePlugin', 'ViperLangToolsPlugin', 'ViperCharMapPlugin', 'ViperTrackChangesPlugin']);
+                viper.setEditableElement(contentElement);
+            };
         </script>
     </head>
     <body spellcheck="false">
         <img id="windowTarget" src="./Core/Images/window-target.png"/>
-        <div id="content">
-            <p>WoW</p>
-            <p><strong>TpT</strong></p>
+        <div id="__buttons">__TEST_CONTENT__</div>
+        <br /><br /><div id="content">PyP</div>
+        <br /><br />
+        <div id="menu">
+            <textarea id="jsExec" accesskey="J"></textarea>
+            <button onclick="execJS()">Exec</button>
+            <textarea id="jsRes" accesskey="R"></textarea>
         </div>
     </body>
 </html>

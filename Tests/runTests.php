@@ -1,6 +1,6 @@
 <?php
 
-    $opts = getopt('s::b::u::t::c::');
+$opts = getopt('s::b::u::t::ci');
 
     $browsers = array(
                  'Firefox',
@@ -9,14 +9,14 @@
                  'Internet Explorer',
                 );
 
-    if (isset($opts['s']) === TRUE) {
+    /*if (isset($opts['s']) === TRUE) {
         putenv('SIKULI_HOME='.$opts['s']);
     } else {
         $sikuliHome = getenv('SIKULI_HOME');
         if ($sikuliHome === FALSE) {
             throw new Exception('SIKULI_HOME is not set');
         }
-    }
+    }*/
 
     // Browsers.
     if (isset($opts['b']) === TRUE) {
@@ -34,7 +34,7 @@
     }
 
     if (isset($opts['c']) === TRUE) {
-         putenv('VIPER_TEST_SIMILARITY='.$opts['c']);
+         putenv('VIPER_TEST_CALIBRATE=TRUE');
     }
 
     foreach ($browsers as $browser) {

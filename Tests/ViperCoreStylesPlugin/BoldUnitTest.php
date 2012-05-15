@@ -15,9 +15,9 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
     {
         $this->selectText('Lorem');
 
-        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_bold.png');
-        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_bold_active.png'), 'Bold icon in the inline toolbar is not active');
-        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_bold_active.png'), 'Bold icon in the top toolbar is not active');
+        $this->clickInlineToolbarButton('bold');
+        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar is not active');
+        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar is not active');
 
         $this->assertHTMLMatch('<p><strong>Lorem</strong> XuT dolor</p><p>sit <em>amet</em> <strong>WoW</strong></p>');
 
@@ -33,9 +33,9 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
     {
         $this->selectText('XuT');
 
-        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_bold.png');
-        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_bold_active.png'), 'Bold icon in the inline toolbar is not active');
-        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_bold_active.png'), 'Bold icon in the top toolbar is not active');
+        $this->clickInlineToolbarButton('bold');
+        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar is not active');
+        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar is not active');
 
         $this->assertHTMLMatch('<p>Lorem <strong>XuT</strong> dolor</p><p>sit <em>amet</em> <strong>WoW</strong></p>');
 
@@ -51,17 +51,17 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
     {
         $this->selectText('dolor');
 
-        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_bold.png');
-        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_bold_active.png'), 'Bold icon in the inline toolbar is not active');
-        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_bold_active.png'), 'Bold icon in the top toolbar is not active');
+        $this->clickInlineToolbarButton('bold');
+        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar is not active');
+        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar is not active');
 
         $this->assertHTMLMatch('<p>Lorem XuT <strong>dolor</strong></p><p>sit <em>amet</em> <strong>WoW</strong></p>');
 
         $this->click($this->find('XuT'));
 
         $this->selectText('dolor');
-        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_bold_active.png'), 'Bold icon in the inline toolbar is not active');
-        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_bold_active.png'), 'Bold icon in the top toolbar is not active');
+        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar is not active');
+        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar is not active');
 
     }//end testEndOfParaBold()
 
@@ -75,23 +75,23 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
     {
         $this->selectText('XuT', 'dolor');
 
-        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_bold.png');
-        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_bold_active.png'), 'Bold icon in the inline toolbar is not active');
-        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_bold_active.png'), 'Bold icon in the top toolbar is not active');
+        $this->clickInlineToolbarButton('bold');
+        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar is not active');
+        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar is not active');
 
         $this->assertHTMLMatch('<p>Lorem <strong>XuT dolor</strong></p><p>sit <em>amet</em> <strong>WoW</strong></p>');
 
         $this->selectText('dolor');
 
-        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_bold_active.png');
-        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_bold.png'), 'Bold icon in the inline toolbar is still active');
-        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_bold.png'), 'Bold icon in the top toolbar is still active');
+        $this->clickInlineToolbarButton('bold', 'active');
+        $this->assertTrue($this->inlineToolbarButtonExists('bold'), 'Bold icon in the inline toolbar is still active');
+        $this->assertTrue($this->topToolbarButtonExists('bold'), 'Bold icon in the top toolbar is still active');
 
         $this->assertHTMLMatch('<p>Lorem <strong>XuT </strong>dolor</p><p>sit <em>amet</em> <strong>WoW</strong></p>');
 
         $this->selectText('XuT');
-        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_bold_active.png'), 'Bold icon in the inline toolbar is not active');
-        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_bold_active.png'), 'Bold icon in the top toolbar is not active');
+        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar is not active');
+        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar is not active');
 
     }//end testRemovingFormatFromPartOfTheContent()
 
@@ -105,19 +105,19 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
     {
         $this->selectText('XuT', 'dolor');
 
-        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_bold.png');
-        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_bold_active.png'), 'Bold icon in the inline toolbar is not active');
-        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_bold_active.png'), 'Bold icon in the top toolbar is not active');
+        $this->clickInlineToolbarButton('bold');
+        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar is not active');
+        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar is not active');
 
         $this->assertHTMLMatch('<p>Lorem <strong>XuT dolor</strong></p><p>sit <em>amet</em> <strong>WoW</strong></p>');
 
         $this->selectText('dolor');
-        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_bold_active.png');
+        $this->clickInlineToolbarButton('bold', 'active');
 
         $this->assertHTMLMatch('<p>Lorem <strong>XuT </strong>dolor</p><p>sit <em>amet</em> <strong>WoW</strong></p>');
 
         $this->selectText('XuT');
-        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_bold_active.png');
+        $this->clickInlineToolbarButton('bold', 'active');
 
         $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p>sit <em>amet</em> <strong>WoW</strong></p>');
 
@@ -131,39 +131,37 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
      */
     public function testStrongTagsAppliedCorrectlyWhenReapplyingBold()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $this->selectText('XuT', 'dolor');
 
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_bold.png');
-        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_bold_active.png'), 'Bold icon in the inline toolbar is not active');
-        $this->assertTrue($this->inlineToolbarButtonExists(dirname(dirname(__FILE__)).'/ViperFormatPlugin/Images/toolbarIcon_anchor.png'), 'Anchor icon does not exist in the inline toolbar');
-        $this->assertTrue($this->inlineToolbarButtonExists(dirname(dirname(__FILE__)).'/ViperFormatPlugin/Images/toolbarIcon_class.png'), 'Clas icon does not exist in the inline toolbar');
-        $this->assertTrue($this->inlineToolbarButtonExists(dirname(dirname(__FILE__)).'/ViperLinkPlugin/Images/toolbarIcon_link.png'), 'Link icon does not exist in the inline toolbar');
+        $this->clickInlineToolbarButton('bold');
+        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar is not active');
+        $this->assertTrue($this->inlineToolbarButtonExists('anchor'), 'Anchor icon does not exist in the inline toolbar');
+        $this->assertTrue($this->inlineToolbarButtonExists('class'), 'Clas icon does not exist in the inline toolbar');
+        $this->assertTrue($this->inlineToolbarButtonExists('link'), 'Link icon does not exist in the inline toolbar');
 
         $this->assertHTMLMatch('<p>Lorem <strong>XuT dolor</strong></p><p>sit <em>amet</em> <strong>WoW</strong></p>');
 
         $this->selectText('dolor');
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_bold_active.png');
+        $this->clickInlineToolbarButton('bold', 'active');
 
         $this->assertHTMLMatch('<p>Lorem <strong>XuT </strong>dolor</p><p>sit <em>amet</em> <strong>WoW</strong></p>');
 
         $this->selectText('XuT');
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_bold_active.png');
+        $this->clickInlineToolbarButton('bold', 'active');
 
         $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p>sit <em>amet</em> <strong>WoW</strong></p>');
 
         $this->click($this->find('Lorem'));
         sleep(1);
         $this->selectText('XuT', 'dolor');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_bold.png');
+        $this->clickTopToolbarButton('bold');
 
         $this->assertHTMLMatch('<p>Lorem <strong>XuT dolor</strong></p><p>sit <em>amet</em> <strong>WoW</strong></p>');
 
-        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_bold_active.png'), 'Bold icon in the inline toolbar is not active');
-        $this->assertTrue($this->inlineToolbarButtonExists(dirname(dirname(__FILE__)).'/ViperFormatPlugin/Images/toolbarIcon_anchor.png'), 'Anchor icon does not exist in the inline toolbar');
-        $this->assertTrue($this->inlineToolbarButtonExists(dirname(dirname(__FILE__)).'/ViperFormatPlugin/Images/toolbarIcon_class.png'), 'Clas icon does not exist in the inline toolbar');
-        $this->assertTrue($this->inlineToolbarButtonExists(dirname(dirname(__FILE__)).'/ViperLinkPlugin/Images/toolbarIcon_link.png'), 'Link icon does not exist in the inline toolbar');
+        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar is not active');
+        $this->assertTrue($this->inlineToolbarButtonExists('anchor'), 'Anchor icon does not exist in the inline toolbar');
+        $this->assertTrue($this->inlineToolbarButtonExists('class'), 'Clas icon does not exist in the inline toolbar');
+        $this->assertTrue($this->inlineToolbarButtonExists('link'), 'Link icon does not exist in the inline toolbar');
 
 
     }//end testStrongTagsAppliedCorrectlyWhenReapplyingBold()
@@ -179,16 +177,16 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
         $this->selectText('Lorem');
         $this->keyDown('Key.CMD + b');
 
-        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_bold_active.png'), 'Bold icon in the inline toolbar is not active');
-        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_bold_active.png'), 'Bold icon in the top toolbar is not active');
+        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar is not active');
+        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar is not active');
 
         $this->assertHTMLMatch('<p><strong>Lorem</strong> XuT dolor</p><p>sit <em>amet</em> <strong>WoW</strong></p>');
 
         $this->selectText('Lorem');
         $this->keyDown('Key.CMD + b');
 
-        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_bold.png'), 'Bold icon in the inline toolbar is still active');
-        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_bold.png'), 'Bold icon in the top toolbar is still active');
+        $this->assertTrue($this->inlineToolbarButtonExists('bold'), 'Bold icon in the inline toolbar is still active');
+        $this->assertTrue($this->topToolbarButtonExists('bold'), 'Bold icon in the top toolbar is still active');
 
         $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p>sit <em>amet</em> <strong>WoW</strong></p>');
 
@@ -202,23 +200,22 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
      */
     public function testBoldIconInTopToolbar()
     {
-        $dir  = dirname(__FILE__).'/Images/';
         $text = 'Lorem';
 
         $this->selectText($text);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_bold.png');
+        $this->clickTopToolbarButton('bold');
 
-        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_bold_active.png'), 'Bold icon in the inline toolbar is not active');
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_bold_active.png'), 'Bold icon in the top toolbar is not active');
+        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar is not active');
+        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar is not active');
 
         $this->assertHTMLMatch('<p><strong>Lorem</strong> XuT dolor</p><p>sit <em>amet</em> <strong>WoW</strong></p>');
 
         $this->click($this->find($text));
         $this->selectText($text);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_bold_active.png');
+        $this->clickTopToolbarButton('bold', 'active');
 
-        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_bold.png'), 'Bold icon in the inline toolbar is still active');
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_bold.png'), 'Bold icon in the top toolbar is still active');
+        $this->assertTrue($this->inlineToolbarButtonExists('bold'), 'Bold icon in the inline toolbar is still active');
+        $this->assertTrue($this->topToolbarButtonExists('bold'), 'Bold icon in the top toolbar is still active');
 
         $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p>sit <em>amet</em> <strong>WoW</strong></p>');
 
@@ -237,29 +234,29 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
         $this->dragDrop($this->getTopLeft($start), $this->getTopRight($end));
 
         // Inline Toolbar icon should not be displayed.
-        $this->assertFalse($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_bold.png'), 'Bold icon appears in the inline toolbar');
-        $this->assertFalse($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_bold_active.png'), 'Bold icon appears in the inline toolbar and is active');
+        $this->assertFalse($this->inlineToolbarButtonExists('bold'), 'Bold icon appears in the inline toolbar');
+        $this->assertFalse($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon appears in the inline toolbar and is active');
 
         // Click the Top Toolbar icon to make whole paragraph bold.
-        $this->clickTopToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_bold.png');
+        $this->clickTopToolbarButton('bold');
 
         $this->assertHTMLMatch('<p><strong>Lorem XuT dolor</strong></p><p>sit <em>amet</em> <strong>WoW</strong></p>');
-        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_bold_active.png'), 'Bold icon is not active in the top toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon is not active in the top toolbar');
 
         // Inline Toolbar icon is now displayed
-        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_bold_active.png'), 'Active bold icon does not appear in the inline toolbar');
+        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Active bold icon does not appear in the inline toolbar');
 
         //Remove bold formating
         $this->selectText('XuT');
         $this->selectInlineToolbarLineageItem(1);
-        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_bold_active.png');
+        $this->clickInlineToolbarButton('bold', 'active');
 
         $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p>sit <em>amet</em> <strong>WoW</strong></p>');
-        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_bold.png'), 'Bold icon is still active in the top toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('bold'), 'Bold icon is still active in the top toolbar');
 
         // Inline Toolbar icon should not be displayed.
-        $this->assertFalse($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_bold.png'), 'Bold icon still appears in the inline toolbar');
-        $this->assertFalse($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_bold_active.png'), 'Active bold icon still appear in the inline toolbar');
+        $this->assertFalse($this->inlineToolbarButtonExists('bold'), 'Bold icon still appears in the inline toolbar');
+        $this->assertFalse($this->inlineToolbarButtonExists('bold', 'active'), 'Active bold icon still appear in the inline toolbar');
 
     }//end testAddAndRemoveBoldToAParagraph()
 
@@ -315,9 +312,9 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
     {
         $this->selectText('WoW');
 
-        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_bold_active.png');
-        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_bold.png'), 'Bold icon is still active in the inline toolbar');
-        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_bold.png'), 'Bold icon is still active in the top toolbar');
+        $this->clickInlineToolbarButton('bold', 'active');
+        $this->assertTrue($this->inlineToolbarButtonExists('bold'), 'Bold icon is still active in the inline toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('bold'), 'Bold icon is still active in the top toolbar');
 
         $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p>sit <em>amet</em> WoW</p>');
 
@@ -333,8 +330,8 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
     {
         $this->selectText('WoW');
 
-        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_bold_active.png'), 'Bold icon is not active in the inline toolbar');
-        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_bold_active.png'), 'Bold icon is not active in the top toolbar');
+        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon is not active in the inline toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon is not active in the top toolbar');
 
     }//end testIconsAreActive()
 
@@ -349,19 +346,19 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
         $this->selectText('Lorem');
 
         // Inline Toolbar icon should be displayed.
-        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_bold.png'), 'Bold icon does not exist in the inline toolbar');
+        $this->assertTrue($this->inlineToolbarButtonExists('bold'), 'Bold icon does not exist in the inline toolbar');
 
         // Click the P tag.
         $this->selectInlineToolbarLineageItem(0);
 
         // Inline Toolbar icon should not be displayed.
-        $this->assertFalse($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_bold.png'), 'Bold icon still appears in the inline toolbar');
+        $this->assertFalse($this->inlineToolbarButtonExists('bold'), 'Bold icon still appears in the inline toolbar');
 
         // Click the Selection tag.
         $this->selectInlineToolbarLineageItem(1);
 
         // Inline Toolbar icon should be displayed.
-        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_bold.png'), 'Bold icon does appear in the inline toolbar');
+        $this->assertTrue($this->inlineToolbarButtonExists('bold'), 'Bold icon does appear in the inline toolbar');
 
     }//end testIconIsRemovedFromInlineToolbar()
 
@@ -373,8 +370,6 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
      */
     public function testAddingBoldToTwoWordsWhereOneIsItalics()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $this->selectText('XuT');
         $this->keyDown('Key.CMD + i');
         $this->assertHTMLMatch('<p>Lorem <em>XuT</em> dolor</p><p>sit <em>amet</em> <strong>WoW</strong></p>');
@@ -394,8 +389,6 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
      */
     public function testAddingBoldToTwoWordsWhereOneIsBoldAndOneItalics()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $this->selectText('amet', 'WoW');
         $this->keyDown('Key.CMD + b');
         $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p>sit <strong><em>amet</em> WoW</strong></p>');
@@ -410,11 +403,9 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
      */
     public function testApplyingAndRemovingBoldToTwoParagraphsWhereHtmlCommentsInSource()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $this->selectText('XuT');
         $this->selectInlineToolbarLineageItem(0);
-        $this->clickTopToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_bold.png');
+        $this->clickTopToolbarButton('bold');
         $this->assertHTMLMatch('<p><strong>Lorem XuT dolor</strong><!-- hello world! --></p><p>sit amet WoW</p><p>Another p</p>');
 
         $this->click($this->find('XuT'));
@@ -439,11 +430,9 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
      */
     public function testApplyingAndRemovingBoldToTwoParagraphs()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $this->selectText('XuT');
         $this->selectInlineToolbarLineageItem(0);
-        $this->clickTopToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_bold.png');
+        $this->clickTopToolbarButton('bold');
         $this->assertHTMLMatch('<p><strong>Lorem XuT dolor</strong></p><p>sit amet WoW</p><p>Another p</p>');
 
         $this->click($this->find('XuT'));
@@ -468,25 +457,23 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
      */
     public function testApplyingAndRemovingBoldToAllContent()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $this->click($this->find('XuT'));
         $this->keyDown('Key.CMD + a');
-        $this->clickTopToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_bold.png');
+        $this->clickTopToolbarButton('bold');
         $this->assertHTMLMatch('<p><strong>Lorem XuT dolor</strong></p><p><strong>sit <em>amet</em> WoW</strong></p>');
 
-        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_bold_active.png'), 'Bold icon should be active');
-        $this->assertFalse($this->topToolbarButtonExists(dirname(dirname(__FILE__)).'/ViperFormatPlugin/Images/toolbarIcon_class_active.png'), 'Class icon should not be active');
-        $this->assertTrue($this->topToolbarButtonExists(dirname(dirname(__FILE__)).'/ViperFormatPlugin/Images/toolbarIcon_anchor_active.png'), 'Anchor icon should not be active');
+        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon should be active');
+        $this->assertFalse($this->topToolbarButtonExists('class', 'active'), 'Class icon should not be active');
+        $this->assertTrue($this->topToolbarButtonExists('anchor', 'active'), 'Anchor icon should not be active');
 
         $this->click($this->find('XuT'));
         $this->keyDown('Key.CMD + a');
-        $this->clickTopToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_bold_active.png');
+        $this->clickTopToolbarButton('bold', 'active');
         $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p>sit <em>amet</em> WoW</p>');
 
-        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'Images/toolbarIcon_bold.png'), 'Bold icon should not be active');
-        $this->assertFalse($this->topToolbarButtonExists(dirname(dirname(__FILE__)).'/ViperFormatPlugin/Images/toolbarIcon_class_active.png'), 'Class icon should not be active');
-        $this->assertTrue($this->topToolbarButtonExists(dirname(dirname(__FILE__)).'/ViperFormatPlugin/Images/toolbarIcon_anchor_active.png'), 'Anchor icon should not be active');
+        $this->assertTrue($this->topToolbarButtonExists('bold'), 'Bold icon should not be active');
+        $this->assertFalse($this->topToolbarButtonExists('class', 'active'), 'Class icon should not be active');
+        $this->assertTrue($this->topToolbarButtonExists('anchor', 'active'), 'Anchor icon should not be active');
 
     }//end testApplyingAndRemovingBoldToAllContent()
 
