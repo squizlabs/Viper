@@ -52,11 +52,7 @@ class Viper_Tests_ViperListPlugin_OrderedListInTableUnitTest extends AbstractVip
 
         $this->clickTopToolbarButton($dir.'toolbarIcon_outdent.png');
         $this->assertEquals('            <ol><li>Item 1</li></ol><p>Item 2 XuT</p>', $this->getHtml('td', 2));
-        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE);
-
-        $this->clickTopToolbarButton($dir.'toolbarIcon_indent.png');
-        $this->assertEquals('            <ol><li>Item 1</li><li>Item 2 XuT</li></ol>', $this->getHtml('td', 2));
-        $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
+        $this->assertIconStatusesCorrect(TRUE, TRUE, FALSE, FALSE);
 
     }//end testIndentingAndOutdentingAListItemUsingTopToolbar()
 
@@ -84,11 +80,7 @@ class Viper_Tests_ViperListPlugin_OrderedListInTableUnitTest extends AbstractVip
 
         $this->clickInlineToolbarButton($dir.'toolbarIcon_outdent.png');
         $this->assertEquals('            <ol><li>Item 1</li></ol><p>Item 2 XuT</p>', $this->getHtml('td', 2));
-        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE);
-
-        $this->clickTopToolbarButton($dir.'toolbarIcon_indent.png');
-        $this->assertEquals('            <ol><li>Item 1</li><li>Item 2 XuT</li></ol>', $this->getHtml('td', 2));
-        $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
+        $this->assertIconStatusesCorrect(TRUE, TRUE, FALSE, FALSE);
 
     }//end testIndentingAndOutdentingAListItemUsingInlineToolbar()
 
@@ -116,13 +108,13 @@ class Viper_Tests_ViperListPlugin_OrderedListInTableUnitTest extends AbstractVip
         $this->click($this->find('XuT'));
         $this->keyDown('Key.SHIFT + Key.TAB');
         $this->assertEquals('            <ol><li>Item 1</li></ol><p>Item 2 XuT</p>', $this->getHtml('td', 2));
-        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE);
+        $this->assertIconStatusesCorrect(TRUE, TRUE, FALSE, FALSE);
 
         $this->click($this->find('WoW'));
         $this->click($this->find('XuT'));
         $this->keyDown('Key.TAB');
-        $this->assertEquals('            <ol><li>Item 1</li><li>Item 2 XuT</li></ol>', $this->getHtml('td', 2));
-        $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
+        $this->assertEquals('            <ol><li>Item 1</li></ol><p>Item 2 XuT</p>', $this->getHtml('td', 2));
+        $this->assertIconStatusesCorrect(TRUE, TRUE, FALSE, FALSE);
 
     }//end testIndentingAndOutdentingAListItemUsingShortcuts()
 
@@ -142,7 +134,7 @@ class Viper_Tests_ViperListPlugin_OrderedListInTableUnitTest extends AbstractVip
         $this->clickTopToolbarButton($dir.'toolbarIcon_orderedList_active.png');
 
         $this->assertEquals('            <p>Item 1</p><p>Item 2 XuT</p>', $this->getHtml('td', 2));
-        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE);
+        $this->assertIconStatusesCorrect(TRUE, TRUE, FALSE, FALSE);
 
     }//end testRemovingListUsingOrderedListIcon()
 
