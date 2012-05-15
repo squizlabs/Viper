@@ -76,6 +76,30 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
 
 
     /**
+     * Test that the HR icon is not available for a caption and table.
+     *
+     * @return void
+     */
+    public function testHRIconNotAvailableForCaptionAndTable()
+    {
+        $dir = dirname(dirname(__FILE__)).'/ViperCoreStylesPlugin/Images/';
+
+        $this->click($this->find('caption'));
+        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_horizontalRule_disabled.png'), 'HR icon should not appear in the top toolbar.');
+
+        $this->keyDown('Key.SHIFT + Key.RIGHT');
+        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_horizontalRule_disabled.png'), 'HR icon should be active in the top toolbar.');
+
+        $this->selectInlineToolbarLineageItem(1);
+        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_horizontalRule_disabled.png'), 'HR icon should not appear in the top toolbar.');
+
+        $this->click($this->find('porta'));
+        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_horizontalRule_disabled.png'), 'HR icon should not appear in the top toolbar.');
+
+    }//end testHRIconNotAvailableForCaptionAndTable()
+
+
+    /**
      * Test that clicking in a cell shows the table editing icon.
      *
      * @return void
