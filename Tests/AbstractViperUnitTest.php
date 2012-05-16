@@ -366,6 +366,9 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
             $this->find($testImage);
         }
 
+        // Remove the temp calibrate file.
+        unlink($tmpFile);
+
     }//end _calibrate()
 
 
