@@ -17,14 +17,13 @@ class Viper_Tests_ViperCoreStylesPlugin_StylesUnitTest extends AbstractViperUnit
         $this->keyDown('Key.CMD + b');
         $this->keyDown('Key.CMD + i');
 
-        $dir = dirname(__FILE__).'/Images/';
-        $this->clickTopToolbarButton($dir.'toolbarIcon_sub.png');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_sup.png');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_strike.png');
+        $this->clickTopToolbarButton('subscript');
+        $this->clickTopToolbarButton('superscript');
+        $this->clickTopToolbarButton('strikethrough');
 
         // Remove strike and sub.
-        $this->clickTopToolbarButton($dir.'toolbarIcon_strike_active.png');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_sub_active.png');
+        $this->clickTopToolbarButton('strikethrough', 'active');
+        $this->clickTopToolbarButton('subscript', 'active');
 
         $this->assertHTMLMatch('<p><strong><em><sup>Lorem</sup></em></strong> XuT dolor</p><p>sit <em>amet</em> <strong>WoW</strong></p>');
 
@@ -63,16 +62,6 @@ class Viper_Tests_ViperCoreStylesPlugin_StylesUnitTest extends AbstractViperUnit
         $this->keyDown('Key.SHIFT + Key.RIGHT');
         $this->keyDown('Key.CMD + i');
 
-        $this->keyDown('Key.RIGHT');
-        $this->keyDown('Key.LEFT');
-        $this->keyDown('Key.LEFT');
-        $this->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->keyDown('Key.SHIFT + Key.RIGHT');
-
         $this->assertHTMLMatch('<p><strong>Lor<em>em</em></strong><em> XuT</em> dolor</p><p>sit <em>amet</em> <strong>WoW</strong></p>');
 
     }//end testStyleTags()
@@ -92,8 +81,7 @@ class Viper_Tests_ViperCoreStylesPlugin_StylesUnitTest extends AbstractViperUnit
         $this->assertHTMLMatch('<p><strong><em>Lorem</em></strong> XuT dolor</p><p>sit <em>amet</em> <strong>WoW</strong></p>');
 
         $this->selectText('Lorem');
-        $dir = dirname(__FILE__).'/Images/';
-        $this->clickTopToolbarButton($dir.'toolbarIcon_removeFormat.png');
+        $this->clickTopToolbarButton('removeFormat');
 
         $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p>sit <em>amet</em> <strong>WoW</strong></p>');
 
@@ -163,12 +151,12 @@ class Viper_Tests_ViperCoreStylesPlugin_StylesUnitTest extends AbstractViperUnit
         $this->selectInlineToolbarLineageItem(0);
 
         // Make sure bold icon is not shown in the toolbar.
-        $this->assertFalse($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_bold_active.png'), 'Active bold icon is still shown in the inline toolbar');
-        $this->assertFalse($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_bold.png'), 'Bold icon is still shown in the inline toolbar');
+        $this->assertFalse($this->inlineToolbarButtonExists('bold', 'active'), 'Active bold icon is still shown in the inline toolbar');
+        $this->assertFalse($this->inlineToolbarButtonExists('bold'), 'Bold icon is still shown in the inline toolbar');
 
         // Make sure italic icon is not shown in the toolbar.
-        $this->assertFalse($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic_active.png'), 'Active italic icon is still shown in the inline toolbar');
-        $this->assertFalse($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic.png'), 'Italic icon is still shown in the inline toolbar');
+        $this->assertFalse($this->inlineToolbarButtonExists('italic', 'active'), 'Active italic icon is still shown in the inline toolbar');
+        $this->assertFalse($this->inlineToolbarButtonExists('italic'), 'Italic icon is still shown in the inline toolbar');
 
     }//end testSelectParaAfterStyling()
 
@@ -180,19 +168,17 @@ class Viper_Tests_ViperCoreStylesPlugin_StylesUnitTest extends AbstractViperUnit
      */
     public function testBoldAndItalic()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $this->selectText('Lorem');
 
         //Add bold and italics
         $this->keyDown('Key.CMD + b');
         $this->keyDown('Key.CMD + i');
 
-        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_bold_active.png'), 'Bold icon is not active in the inline toolbar');
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_bold_active.png'), 'Bold icon is not active in the top toolbar');
+        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon is not active in the inline toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon is not active in the top toolbar');
 
-        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_italic_active.png'), 'Italic icon is not active in the inline toolbar');
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_italic_active.png'), 'Italic icon is not active in the top toolbar');
+        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon is not active in the inline toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon is not active in the top toolbar');
 
         $this->assertHTMLMatch('<p><strong><em>Lorem</em></strong> XuT dolor</p><p>sit <em>amet</em> <strong>WoW</strong></p>');
 
@@ -200,14 +186,14 @@ class Viper_Tests_ViperCoreStylesPlugin_StylesUnitTest extends AbstractViperUnit
         $this->selectText('Lorem');
         $this->keyDown('Key.CMD + i');
 
-        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_italic.png'), 'Italic icon is still active in the inline toolbar');
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_italic.png'), 'Italic icon is still active in the top toolbar');
+        $this->assertTrue($this->inlineToolbarButtonExists('italic'), 'Italic icon is still active in the inline toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('italic'), 'Italic icon is still active in the top toolbar');
 
         //Remove bold
         $this->keyDown('Key.CMD + b');
 
-        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_bold.png'), 'Bold icon is still active in the inline toolbar');
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_bold.png'), 'Bold icon is still active in the top toolbar');
+        $this->assertTrue($this->inlineToolbarButtonExists('bold'), 'Bold icon is still active in the inline toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('bold'), 'Bold icon is still active in the top toolbar');
 
     }//end testBoldAndItalic()
 
@@ -222,14 +208,16 @@ class Viper_Tests_ViperCoreStylesPlugin_StylesUnitTest extends AbstractViperUnit
         $dir = dirname(__FILE__).'/Images/';
 
         $this->selectText('Lorem', 'dolor');
-        $this->assertFalse($this->inlineToolbarButtonExists($dir.'toolbarIcon_italic.png'), 'Italic icon appears in the inline toolbar');
-        $this->assertFalse($this->topToolbarButtonExists($dir.'toolbarIcon_italic_active.png'), 'Active Italic icon appears in the inline toolbar');
-        $this->assertFalse($this->inlineToolbarButtonExists($dir.'toolbarIcon_bold.png'), 'Bold icon appears in the inline toolbar');
-        $this->assertFalse($this->inlineToolbarButtonExists($dir.'toolbarIcon_bold_active.png'), 'Active Bold icon appears in the inline toolbar');
+        $this->assertFalse($this->inlineToolbarButtonExists('italic'), 'Italic icon appears in the inline toolbar');
+        $this->assertFalse($this->topToolbarButtonExists('italic', 'active'), 'Active Italic icon appears in the inline toolbar');
+        $this->assertFalse($this->inlineToolbarButtonExists('bold'), 'Bold icon appears in the inline toolbar');
+        $this->assertFalse($this->inlineToolbarButtonExists('bold', 'active'), 'Active Bold icon appears in the inline toolbar');
 
         $this->selectText('sit', 'WoW');
-        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_italic_active.png'), 'Active Italic icon does not appear in the inline toolbar');
-        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_bold_active.png'), 'Active Bold icon does not appear in the inline toolbar');
+         $this->assertFalse($this->inlineToolbarButtonExists('italic'), 'Italic icon appears in the inline toolbar');
+        $this->assertFalse($this->topToolbarButtonExists('italic', 'active'), 'Active Italic icon appears in the inline toolbar');
+        $this->assertFalse($this->inlineToolbarButtonExists('bold'), 'Bold icon appears in the inline toolbar');
+        $this->assertFalse($this->inlineToolbarButtonExists('bold', 'active'), 'Active Bold icon appears in the inline toolbar');
 
     }//end testSelectingTextInAParagraph()
 
