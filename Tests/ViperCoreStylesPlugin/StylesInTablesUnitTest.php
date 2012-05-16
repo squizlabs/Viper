@@ -16,15 +16,15 @@ class Viper_Tests_ViperCoreStylesPlugin_StylesInTablesUnitTest extends AbstractV
         $text = 'LAbS';
         $this->selectText($text);
 
-        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_bold.png');
-        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_bold_active.png'));
-        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_bold_active.png'));
+        $this->clickInlineToolbarButton('bold');
+        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'));
+        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'));
         $this->assertEquals('UnaU <strong>LAbS</strong> FoX Mnu', $this->getHtml('td,th', 3));
 
         $this->selectText($text);
-        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_bold_active.png');
-        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_bold.png'));
-        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_bold.png'));
+        $this->clickInlineToolbarButton('bold', 'active');
+        $this->assertTrue($this->inlineToolbarButtonExists('bold'));
+        $this->assertTrue($this->topToolbarButtonExists('bold'));
 
         $this->assertEquals('UnaU LAbS FoX Mnu', $this->getHtml('td,th', 3));
 
@@ -41,15 +41,15 @@ class Viper_Tests_ViperCoreStylesPlugin_StylesInTablesUnitTest extends AbstractV
         $text = 'LAbS';
         $this->selectText($text);
 
-        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_italic.png');
-        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic_active.png'));
-        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic_active.png'));
+        $this->clickInlineToolbarButton('italic');
+        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'));
+        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'));
         $this->assertEquals('UnaU <em>LAbS</em> FoX Mnu', $this->getHtml('td,th', 3));
 
         $this->selectText($text);
-        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_italic_active.png');
-        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic.png'));
-        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic.png'));
+        $this->clickInlineToolbarButton('italic', 'active');
+        $this->assertTrue($this->inlineToolbarButtonExists('italic'));
+        $this->assertTrue($this->topToolbarButtonExists('italic'));
 
         $this->assertEquals('UnaU LAbS FoX Mnu', $this->getHtml('td,th', 3));
 
@@ -66,16 +66,12 @@ class Viper_Tests_ViperCoreStylesPlugin_StylesInTablesUnitTest extends AbstractV
         $text = 'LAbS';
         $this->selectText($text);
 
-        $this->clickTopToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_strike.png');
-        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_strike_active.png'));
+        $this->clickTopToolbarButton('strikethrough');
+        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'));
         $this->assertEquals('UnaU <del>LAbS</del> FoX Mnu', $this->getHtml('td,th', 3));
 
-        // Stop here as we need a way to select text that has a strikethrough.
-        $this->markTestIncomplete('Need a way to select text that has a strikethrough.');
-
-        $this->selectText($text);
-        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_strike_active.png');
-        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_strike.png'));
+        $this->clickTopToolbarButton('strikethrough', 'active');
+        $this->assertTrue($this->topToolbarButtonExists('strikethrough'));
 
         $this->assertEquals('UnaU LAbS FoX Mnu', $this->getHtml('td,th', 3));
 
@@ -92,16 +88,12 @@ class Viper_Tests_ViperCoreStylesPlugin_StylesInTablesUnitTest extends AbstractV
         $text = 'LAbS';
         $this->selectText($text);
 
-        $this->clickTopToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_sub.png');
-        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_sub_active.png'));
+        $this->clickTopToolbarButton('subscript');
+        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'));
         $this->assertEquals('UnaU <sub>LAbS</sub> FoX Mnu', $this->getHtml('td,th', 3));
 
-        // Stop here as we need a way to select subscript text.
-        $this->markTestIncomplete('Need a way to select subscript text.');
-
-        $this->selectText($text);
-        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_sub_active.png');
-        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_sub.png'));
+        $this->clickTopToolbarButton('subscript', 'active');
+        $this->assertTrue($this->topToolbarButtonExists('subscript'));
 
         $this->assertEquals('UnaU LAbS FoX Mnu', $this->getHtml('td,th', 3));
 
@@ -118,16 +110,12 @@ class Viper_Tests_ViperCoreStylesPlugin_StylesInTablesUnitTest extends AbstractV
         $text = 'LAbS';
         $this->selectText($text);
 
-        $this->clickTopToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_sup.png');
-        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_sup_active.png'));
+        $this->clickTopToolbarButton('superscript');
+        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'));
         $this->assertEquals('UnaU <sup>LAbS</sup> FoX Mnu', $this->getHtml('td,th', 3));
 
-        // Stop here as we need a way to select super script text.
-        $this->markTestIncomplete('Need a way to select super script text.');
-
-        $this->selectText($text);
-        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_sup_active.png');
-        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_sup.png'));
+        $this->clickTopToolbarButton('superscript', 'active');
+        $this->assertTrue($this->topToolbarButtonExists('superscript'));
 
         $this->assertEquals('UnaU LAbS FoX Mnu', $this->getHtml('td,th', 3));
 
@@ -145,14 +133,14 @@ class Viper_Tests_ViperCoreStylesPlugin_StylesInTablesUnitTest extends AbstractV
         $this->selectText($text);
 
         $this->keyDown('Key.CMD + b');
-        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_bold_active.png'));
-        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_bold_active.png'));
+        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'));
+        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'));
         $this->assertEquals('UnaU <strong>LAbS</strong> FoX Mnu', $this->getHtml('td,th', 3));
 
         $this->selectText($text);
         $this->keyDown('Key.CMD + b');
-        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_bold.png'));
-        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_bold.png'));
+        $this->assertTrue($this->inlineToolbarButtonExists('bold'));
+        $this->assertTrue($this->topToolbarButtonExists('bold'));
 
         $this->assertEquals('UnaU LAbS FoX Mnu', $this->getHtml('td,th', 3));
 
@@ -170,14 +158,14 @@ class Viper_Tests_ViperCoreStylesPlugin_StylesInTablesUnitTest extends AbstractV
         $this->selectText($text);
 
         $this->keyDown('Key.CMD + i');
-        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic_active.png'));
-        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic_active.png'));
+        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'));
+        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'));
         $this->assertEquals('UnaU <em>LAbS</em> FoX Mnu', $this->getHtml('td,th', 3));
 
         $this->selectText($text);
         $this->keyDown('Key.CMD + i');
-        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic.png'));
-        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic.png'));
+        $this->assertTrue($this->inlineToolbarButtonExists('italic'));
+        $this->assertTrue($this->topToolbarButtonExists('italic'));
 
         $this->assertEquals('UnaU LAbS FoX Mnu', $this->getHtml('td,th', 3));
 
@@ -194,27 +182,27 @@ class Viper_Tests_ViperCoreStylesPlugin_StylesInTablesUnitTest extends AbstractV
         $this->selectText('LAbS', 'FoX');
 
         $this->keyDown('Key.CMD + b');
-        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_bold_active.png'));
-        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_bold_active.png'));
+        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'));
+        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'));
         $this->assertEquals('UnaU <strong>LAbS FoX</strong> Mnu', $this->getHtml('td,th', 3));
 
         $this->click($this->find('LAbS'));
         $this->selectText('FoX');
         $this->selectInlineToolbarLineageItem(4);
-        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_bold_active.png'));
-        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_bold_active.png'));
+        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'));
+        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'));
 
         $this->click($this->find('FoX'));
         $this->selectText('LAbS');
         $this->selectInlineToolbarLineageItem(4);
-        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_bold_active.png'));
-        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_bold_active.png'));
+        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'));
+        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'));
 
         $this->click($this->find('FoX'));
         $this->selectText('LAbS');
-        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_bold_active.png');
-        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_bold.png'));
-        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_bold.png'));
+        $this->clickInlineToolbarButton('bold', 'active');
+        $this->assertTrue($this->inlineToolbarButtonExists('bold'));
+        $this->assertTrue($this->topToolbarButtonExists('bold'));
         $this->assertEquals('UnaU LAbS<strong> FoX</strong> Mnu', $this->getHtml('td,th', 3));
 
     }//end testBoldInTableMultiWord()
@@ -230,27 +218,27 @@ class Viper_Tests_ViperCoreStylesPlugin_StylesInTablesUnitTest extends AbstractV
         $this->selectText('LAbS', 'FoX');
 
         $this->keyDown('Key.CMD + i');
-        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic_active.png'));
-        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic_active.png'));
+        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'));
+        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'));
         $this->assertEquals('UnaU <em>LAbS FoX</em> Mnu', $this->getHtml('td,th', 3));
 
         $this->click($this->find('LAbS'));
         $this->selectText('FoX');
         $this->selectInlineToolbarLineageItem(4);
-        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic_active.png'));
-        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic_active.png'));
+        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'));
+        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'));
 
         $this->click($this->find('FoX'));
         $this->selectText('LAbS');
         $this->selectInlineToolbarLineageItem(4);
-        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic_active.png'));
-        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic_active.png'));
+        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'));
+        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'));
 
         $this->click($this->find('FoX'));
         $this->selectText('LAbS');
-        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_italic_active.png');
-        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic.png'));
-        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic.png'));
+        $this->clickInlineToolbarButton('italic', 'active');
+        $this->assertTrue($this->inlineToolbarButtonExists('italic'));
+        $this->assertTrue($this->topToolbarButtonExists('italic'));
         $this->assertEquals('UnaU LAbS<em> FoX</em> Mnu', $this->getHtml('td,th', 3));
 
     }//end testItalicInTableMultiWord()
@@ -267,19 +255,19 @@ class Viper_Tests_ViperCoreStylesPlugin_StylesInTablesUnitTest extends AbstractV
         $this->selectInlineToolbarLineageItem(3);
         sleep(1);
 
-        $this->clickTopToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_bold.png');
-        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_bold_active.png'));
-        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_bold_active.png'));
+        $this->clickTopToolbarButton('bold');
+        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'));
+        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'));
         $this->assertEquals('<strong>UnaU LAbS FoX Mnu</strong>', $this->getHtml('td,th', 3));
 
         $this->selectText('LAbS');
         $this->selectInlineToolbarLineageItem(3);
 
-        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_bold_active.png'));
-        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_bold_active.png'));
+        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'));
+        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'));
         $this->keyDown('Key.CMD + b');
-        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_bold.png'));
-        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_bold.png'));
+        $this->assertTrue($this->inlineToolbarButtonExists('bold'));
+        $this->assertTrue($this->topToolbarButtonExists('bold'));
         $this->assertEquals('UnaU LAbS FoX Mnu', $this->getHtml('td,th', 3));
 
     }//end testBoldForWholeCell()
@@ -296,16 +284,16 @@ class Viper_Tests_ViperCoreStylesPlugin_StylesInTablesUnitTest extends AbstractV
         $this->selectInlineToolbarLineageItem(3);
         sleep(1);
 
-        $this->clickTopToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_italic.png');
-        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic_active.png'));
-        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic_active.png'));
+        $this->clickTopToolbarButton('italic');
+        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'));
+        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'));
         $this->assertEquals('<em>UnaU LAbS FoX Mnu</em>', $this->getHtml('td,th', 3));
 
-        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic_active.png'));
-        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic_active.png'));
+        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'));
+        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'));
         $this->keyDown('Key.CMD + i');
-        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic.png'));
-        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic.png'));
+        $this->assertTrue($this->inlineToolbarButtonExists('italic'));
+        $this->assertTrue($this->topToolbarButtonExists('italic'));
         $this->assertEquals('UnaU LAbS FoX Mnu', $this->getHtml('td,th', 3));
 
     }//end testItalicForWholeCell()
@@ -322,29 +310,29 @@ class Viper_Tests_ViperCoreStylesPlugin_StylesInTablesUnitTest extends AbstractV
         $textLoc = $this->find($text);
         $this->selectText($text);
 
-        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_bold.png');
-        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_italic.png');
+        $this->clickInlineToolbarButton('bold');
+        $this->clickInlineToolbarButton('italic');
         $this->mouseMove($this->createLocation(0, 0));
-        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_bold_active.png'));
-        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_bold_active.png'));
-        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic_active.png'));
-        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic_active.png'));
+        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'));
+        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'));
+        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'));
+        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'));
 
         $this->click($textLoc);
         $this->dragDrop($this->getTopLeft($textLoc), $this->getBottomRight($textLoc));
-        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_bold_active.png'));
-        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_bold_active.png'));
-        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic_active.png'));
-        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic_active.png'));
+        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'));
+        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'));
+        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'));
+        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'));
 
         $this->doubleClick($textLoc);
-        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_bold_active.png'));
-        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_bold_active.png'));
-        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic_active.png'));
-        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic_active.png'));
+        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'));
+        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'));
+        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'));
+        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'));
 
-        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_bold_active.png');
-        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_italic_active.png');
+        $this->clickInlineToolbarButton('bold', 'active');
+        $this->clickInlineToolbarButton('italic', 'active');
         $this->assertEquals('UnaU LAbS FoX Mnu', $this->getHtml('td,th', 3));
 
     }//end testStylingInTableMultipleStyles()
@@ -362,17 +350,17 @@ class Viper_Tests_ViperCoreStylesPlugin_StylesInTablesUnitTest extends AbstractV
         $this->selectText($text);
         $this->selectInlineToolbarLineageItem(1);
 
-        $this->clickTopToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_bold.png');
+        $this->clickTopToolbarButton('bold');
         $this->execJS('rmTableHeaders(0,true)');
         $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2: XuT The table caption text goes here la</strong></caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU LAbS FoX Mnu</td><td><strong><em>WoW</em></strong> sapien vel aliquet</td><td>            <ul><li>vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul>        </td></tr><tr><td><h3>blah</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr><tr><td>nec <strong>porta</strong> ante</td><td>sapien vel aliquet</td><td rowspan="2">purus neque luctus ligula, vel molestie arcu</td></tr><tr><td colspan="2">sapien vel aliquet</td></tr></tbody></table>');
 
         $this->click($this->find('blah'));
         $this->selectText('XuT');
-        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_bold_active.png'));
-        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_bold_active.png'));
+        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'));
+        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'));
 
         $this->selectInlineToolbarLineageItem(2);
-        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_bold_active.png');
+        $this->clickInlineToolbarButton('bold', 'active');
         $this->execJS('rmTableHeaders(0,true)');
         $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption>Table 1.2: XuT The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU LAbS FoX Mnu</td><td><strong><em>WoW</em></strong> sapien vel aliquet</td><td>            <ul><li>vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul>        </td></tr><tr><td><h3>blah</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr><tr><td>nec <strong>porta</strong> ante</td><td>sapien vel aliquet</td><td rowspan="2">purus neque luctus ligula, vel molestie arcu</td></tr><tr><td colspan="2">sapien vel aliquet</td></tr></tbody></table>');
 
@@ -389,19 +377,19 @@ class Viper_Tests_ViperCoreStylesPlugin_StylesInTablesUnitTest extends AbstractV
         $this->selectText('caption');
         $this->selectInlineToolbarLineageItem(1);
 
-        $this->clickTopToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_bold.png');
-        $this->clickTopToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_italic.png');
+        $this->clickTopToolbarButton('bold');
+        $this->clickTopToolbarButton('italic');
         $this->execJS('rmTableHeaders(0,true)');
-        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><em><strong>Table 1.2: XuT The table caption text goes here la</strong></em></caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU LAbS FoX Mnu</td><td><strong><em>WoW</em></strong> sapien vel aliquet</td><td>            <ul><li>vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul>        </td></tr><tr><td><h3>blah</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr><tr><td>nec <strong>porta</strong> ante</td><td>sapien vel aliquet</td><td rowspan="2">purus neque luctus ligula, vel molestie arcu</td></tr><tr><td colspan="2">sapien vel aliquet</td></tr></tbody></table>');
+        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong><em>Table 1.2: XuT The table caption text goes here la</em></strong></caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU LAbS FoX Mnu</td><td><strong><em>WoW</em></strong> sapien vel aliquet</td><td>            <ul><li>vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul>        </td></tr><tr><td><h3>blah</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr><tr><td>nec <strong>porta</strong> ante</td><td>sapien vel aliquet</td><td rowspan="2">purus neque luctus ligula, vel molestie arcu</td></tr><tr><td colspan="2">sapien vel aliquet</td></tr></tbody></table>');
 
         $textLoc = $this->find('blah');
-        $this->assertTrue($this->topToolbarButtonExists(dirname(dirname(__FILE__)).'/Core/Images/undoIcon_active.png'));
-        $this->clickTopToolbarButton(dirname(dirname(__FILE__)).'/Core/Images/undoIcon_active.png');
+        $this->assertTrue($this->topToolbarButtonExists('historyUndo'));
+        $this->clickTopToolbarButton('historyUndo');
         $this->execJS('rmTableHeaders(0,true)');
         $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2: XuT The table caption text goes here la</strong></caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU LAbS FoX Mnu</td><td><strong><em>WoW</em></strong> sapien vel aliquet</td><td>            <ul><li>vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul>        </td></tr><tr><td><h3>blah</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr><tr><td>nec <strong>porta</strong> ante</td><td>sapien vel aliquet</td><td rowspan="2">purus neque luctus ligula, vel molestie arcu</td></tr><tr><td colspan="2">sapien vel aliquet</td></tr></tbody></table>');
 
-        $this->assertTrue($this->topToolbarButtonExists(dirname(dirname(__FILE__)).'/Core/Images/undoIcon_active.png'));
-        $this->clickTopToolbarButton(dirname(dirname(__FILE__)).'/Core/Images/undoIcon_active.png');
+        $this->assertTrue($this->topToolbarButtonExists('historyUndo'));
+        $this->clickTopToolbarButton('historyUndo');
         $this->execJS('rmTableHeaders(0,true)');
         $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> XuT The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU LAbS FoX Mnu</td><td><strong><em>WoW</em></strong> sapien vel aliquet</td><td>            <ul><li>vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul>        </td></tr><tr><td><h3>blah</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr><tr><td>nec <strong>porta</strong> ante</td><td>sapien vel aliquet</td><td rowspan="2">purus neque luctus ligula, vel molestie arcu</td></tr><tr><td colspan="2">sapien vel aliquet</td></tr></tbody></table>');
 
@@ -420,17 +408,17 @@ class Viper_Tests_ViperCoreStylesPlugin_StylesInTablesUnitTest extends AbstractV
         $this->selectText($text);
         $this->selectInlineToolbarLineageItem(1);
 
-        $this->clickTopToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_italic.png');
+        $this->clickTopToolbarButton('italic');
         $this->execJS('rmTableHeaders(0,true)');
         $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><em><strong>Table 1.2:</strong> XuT The table caption text goes here la</em></caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU LAbS FoX Mnu</td><td><strong><em>WoW</em></strong> sapien vel aliquet</td><td>            <ul><li>vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul>        </td></tr><tr><td><h3>blah</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr><tr><td>nec <strong>porta</strong> ante</td><td>sapien vel aliquet</td><td rowspan="2">purus neque luctus ligula, vel molestie arcu</td></tr><tr><td colspan="2">sapien vel aliquet</td></tr></tbody></table>');
 
         $this->click($this->find('blah'));
         $this->selectText('Table');
-        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic_active.png'));
-        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic_active.png'));
+        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'));
+        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'));
 
         $this->selectInlineToolbarLineageItem(2);
-        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_italic_active.png');
+        $this->clickInlineToolbarButton('italic', 'active');
         $this->execJS('rmTableHeaders(0,true)');
         $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> XuT The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU LAbS FoX Mnu</td><td><strong><em>WoW</em></strong> sapien vel aliquet</td><td>            <ul><li>vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul>        </td></tr><tr><td><h3>blah</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr><tr><td>nec <strong>porta</strong> ante</td><td>sapien vel aliquet</td><td rowspan="2">purus neque luctus ligula, vel molestie arcu</td></tr><tr><td colspan="2">sapien vel aliquet</td></tr></tbody></table>');
 
