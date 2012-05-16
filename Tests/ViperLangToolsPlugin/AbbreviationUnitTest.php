@@ -13,21 +13,19 @@ class Viper_Tests_ViperLangToolsPlugin_AbbreviationUnitTest extends AbstractVipe
      */
     public function testAbbreviationIconIsDisabled()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $text = 'LOREM';
         $this->selectText($text);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language.png');
+        $this->clickTopToolbarButton('langTools');
 
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_abbreviation.png'), 'Abbreviation icon in Top Toolbar should be active.');
+        $this->assertTrue($this->topToolbarButtonExists('Abbreviation', NULL, TRUE), 'Abbreviation icon in Top Toolbar should be active.');
 
         $this->click($this->find($text));
         $this->selectText($text);
         $this->selectInlineToolbarLineageItem(0);
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_toggle_language.png'), 'Language icon in Top Toolbar should not be active.');
+        $this->assertTrue($this->topToolbarButtonExists('langTools'), 'Language icon in Top Toolbar should not be active.');
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language.png');
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_abbreviation_disabled.png'), 'Abbreviation icon in Top Toolbar should not be active.');
+        $this->clickTopToolbarButton('langTools');
+        $this->assertTrue($this->topToolbarButtonExists('Abbreviation', 'disabled', TRUE), 'Abbreviation icon in Top Toolbar should not be active.');
 
     }//end testAbbreviationIconIsDisabled()
 
@@ -39,29 +37,16 @@ class Viper_Tests_ViperLangToolsPlugin_AbbreviationUnitTest extends AbstractVipe
      */
     public function testUpdateChangesButton()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $text    = 'XuT';
         $textLoc = $this->find($text);
 
         $this->selectText($text);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language.png');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_abbreviation.png');
+        $this->clickTopToolbarButton('langTools');
+        $this->clickTopToolbarButton('Abbreviation', NULL, TRUE);
 
         // Check to make sure the update changes button is disabled.
-        $imageFound = false;
-        try
-        {
-            $this->find($dir.'toolbarIcon_updateChanges_disabled.png');
-            $imageFound = true;
-        }
-        catch(Exception $e)
-        {
-            // Expecting the exception because the button should be disabled
-            $imageFound = false;
-        }
 
-        $this->assertTrue($imageFound, 'The update changes button should be disabled');
+        $this->assertTrue($this->topToolbarButtonExists('Update Changes', 'disabled', TRUE), 'The update changes button should be disabled.');
 
     }//end testUpdateChangesButton()
 
@@ -73,13 +58,14 @@ class Viper_Tests_ViperLangToolsPlugin_AbbreviationUnitTest extends AbstractVipe
      */
     public function testAddingAbbreviationToAWord()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $text = 'XuT';
 
         $this->selectText($text);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language.png');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_abbreviation.png');
+        $this->clickTopToolbarButton('langTools');
+        $this->clickTopToolbarButton('Abbreviation', NULL, TRUE);
+
+        $this->clickField('Abbreviation');
+
         $this->type('abc');
         $this->keyDown('Key.ENTER');
 
@@ -87,27 +73,27 @@ class Viper_Tests_ViperLangToolsPlugin_AbbreviationUnitTest extends AbstractVipe
 
         $this->click($this->find($text));
         $this->selectText($text);
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_toggle_language_highlighted.png'), 'Language icon in Top Toolbar should be active.');
+        $this->assertTrue($this->topToolbarButtonExists('langTools', 'active'), 'Language icon in Top Toolbar should be active.');
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language_highlighted.png');
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_abbreviation_active.png'), 'Abbreviation icon in Top Toolbar should be active.');
+        $this->clickTopToolbarButton('langTools', 'active');
+        $this->assertTrue($this->topToolbarButtonExists('Abbreviation', 'active', TRUE), 'Abbreviation icon in Top Toolbar should be active.');
 
         $text = 'dolor';
 
         $this->selectText($text);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language.png');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_abbreviation.png');
+        $this->clickTopToolbarButton('langTools');
+        $this->clickTopToolbarButton('Abbreviation', NULL, TRUE);
         $this->type('def');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_updateChanges.png');
+        $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
 
         $this->assertHTMLMatch('<p>LOREM <abbr title="abc">XuT</abbr> <abbr title="def">dolor</abbr></p><p>sit amet <strong>WoW</strong></p><p>Squiz <abbr title="abc">LABS</abbr> is orsm</p><p>The <em>QUICK</em> brown fox</p>');
 
         $this->click($this->find($text));
         $this->selectText($text);
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_toggle_language_highlighted.png'), 'Language icon in Top Toolbar should be active.');
+        $this->assertTrue($this->topToolbarButtonExists('langTools', 'active'), 'Language icon in Top Toolbar should be active.');
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language_highlighted.png');
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_abbreviation_active.png'), 'Abbreviation icon in Top Toolbar should be active.');
+        $this->clickTopToolbarButton('langTools', 'active');
+        $this->assertTrue($this->topToolbarButtonExists('Abbreviation', 'active', TRUE), 'Abbreviation icon in Top Toolbar should be active.');
 
     }//end testAddingAbbreviationToAWord()
 
@@ -119,28 +105,26 @@ class Viper_Tests_ViperLangToolsPlugin_AbbreviationUnitTest extends AbstractVipe
      */
     public function testRemovingAbbreviationAttributeFromAWord()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $text    = 'LABS';
         $textLoc = $this->find($text);
 
         $this->selectText($text);
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_toggle_language_active.png'), 'Class icon in Top Toolbar should be active.');
+        $this->assertTrue($this->topToolbarButtonExists('langTools', 'active'), 'Class icon in Top Toolbar should be active.');
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language_highlighted.png');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_abbreviation_active.png');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_deleteValue_icon.png');
+        $this->clickTopToolbarButton('langTools', 'active');
+        $this->clickTopToolbarButton('Abbreviation', 'active', TRUE);
+        $this->clearFieldValue('Abbreviation');
         $this->keyDown('Key.ENTER');
 
         $this->assertHTMLMatch('<p>LOREM XuT dolor</p><p>sit amet <strong>WoW</strong></p><p>Squiz LABS is orsm</p><p>The <em>QUICK</em> brown fox</p>');
 
         $this->click($textLoc);
         $this->selectText($text);
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_toggle_language.png'), 'Language icon is still active in the Top Toolbar.');
+        $this->assertTrue($this->topToolbarButtonExists('langTools'), 'Language icon is still active in the Top Toolbar.');
 
         // Reapply the abbreviation so we can delete it by using the update changes icon
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language.png');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_abbreviation.png');
+        $this->clickTopToolbarButton('langTools');
+        $this->clickTopToolbarButton('Abbreviation', NULL, TRUE);
         $this->type('abc');
         $this->keyDown('Key.ENTER');
 
@@ -148,10 +132,10 @@ class Viper_Tests_ViperLangToolsPlugin_AbbreviationUnitTest extends AbstractVipe
 
         $this->click($textLoc);
         $this->selectText($text);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language_highlighted.png');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_abbreviation_active.png');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_deleteValue_icon.png');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_updateChanges.png');
+        $this->clickTopToolbarButton('langTools', 'active');
+        $this->clickTopToolbarButton('Abbreviation', 'active', TRUE);
+        $this->clearFieldValue('Abbreviation');
+        $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
 
         $this->assertHTMLMatch('<p>LOREM XuT dolor</p><p>sit amet <strong>WoW</strong></p><p>Squiz LABS is orsm</p><p>The <em>QUICK</em> brown fox</p>');
 
@@ -165,16 +149,14 @@ class Viper_Tests_ViperLangToolsPlugin_AbbreviationUnitTest extends AbstractVipe
      */
     public function testEditingAbbreviation()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $text    = 'LABS';
         $textLoc = $this->find($text);
 
         $this->selectText($text);
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_toggle_language_active.png'), 'Class icon in Top Toolbar should be active.');
+        $this->assertTrue($this->topToolbarButtonExists('langTools', 'active'), 'Class icon in Top Toolbar should be active.');
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language_highlighted.png');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_abbreviation_active.png');
+        $this->clickTopToolbarButton('langTools', 'active');
+        $this->clickTopToolbarButton('Abbreviation', 'active', TRUE);
         $this->type('def');
         $this->keyDown('Key.ENTER');
 
@@ -182,10 +164,10 @@ class Viper_Tests_ViperLangToolsPlugin_AbbreviationUnitTest extends AbstractVipe
 
         $this->click($textLoc);
         $this->selectText($text);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language_highlighted.png');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_abbreviation_active.png');
+        $this->clickTopToolbarButton('langTools', 'active');
+        $this->clickTopToolbarButton('Abbreviation', 'active', TRUE);
         $this->type('ghi');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_updateChanges.png');
+        $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
 
         $this->assertHTMLMatch('<p>LOREM XuT dolor</p><p>sit amet <strong>WoW</strong></p><p>Squiz <abbr title="abcdefghi">LABS</abbr> is orsm</p><p>The <em>QUICK</em> brown fox</p>');
 
@@ -199,13 +181,11 @@ class Viper_Tests_ViperLangToolsPlugin_AbbreviationUnitTest extends AbstractVipe
      */
     public function testAddingAbbreviationToABoldWord()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $text = 'WoW';
 
         $this->selectText($text);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language.png');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_abbreviation.png');
+        $this->clickTopToolbarButton('langTools');
+        $this->clickTopToolbarButton('Abbreviation', NULL, TRUE);
         $this->type('abc');
         $this->keyDown('Key.ENTER');
 
@@ -221,13 +201,11 @@ class Viper_Tests_ViperLangToolsPlugin_AbbreviationUnitTest extends AbstractVipe
      */
     public function testAddingAbbreviationToAItalicWord()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $text = 'QUICK';
 
         $this->selectText($text);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language.png');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_abbreviation.png');
+        $this->clickTopToolbarButton('langTools');
+        $this->clickTopToolbarButton('Abbreviation', NULL, TRUE);
         $this->type('abc');
         $this->keyDown('Key.ENTER');
 
@@ -243,18 +221,16 @@ class Viper_Tests_ViperLangToolsPlugin_AbbreviationUnitTest extends AbstractVipe
      */
     public function testSelectionIsMaintainedWhenSwitchingFromAbbreviationToClass()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $this->selectText('XuT');
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language.png');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_abbreviation.png');
+        $this->clickTopToolbarButton('langTools');
+        $this->clickTopToolbarButton('Abbreviation', NULL, TRUE);
         $this->assertEquals('XuT', $this->getSelectedText(), 'Selected text is not highlighted.');
 
-        $this->clickTopToolbarButton(dirname(dirname(__FILE__)).'/ViperFormatPlugin/Images/toolbarIcon_class.png');
+        $this->clickTopToolbarButton('cssClass');
         $this->assertEquals('XuT', $this->getSelectedText(), 'Selected text is not highlighted.');
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language.png');
+        $this->clickTopToolbarButton('langTools');
         $this->assertEquals('XuT', $this->getSelectedText(), 'Selected text is not highlighted.');
 
     }//end testSelectionIsMaintainedWhenSwitchingFromAbbreviationToClass()
