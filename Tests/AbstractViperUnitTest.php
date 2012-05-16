@@ -307,24 +307,23 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
                      ''          => ' Viper-dummyClass',
                      '_selected' => ' Viper-selected',
                      '_active'   => ' Viper-active',
+                     '_disabled' => ' Viper-disabled'
                     );
 
         $buttonHTML = '';
 
         $buttonCount = count($buttonNames);
-        foreach ($statuses as $status => $className) {
-            for ($i = 0; $i < $buttonCount; $i++) {
-                if (($i % 20) === 0) {
-                    if ($buttonHTML !== '') {
-                        $buttonHTML .= '</div>';
-                    }
-
-                    $buttonHTML .= '<div class="ViperTP-bar Viper-themeDark" style="position:relative">';
+        for ($i = 0; $i < $buttonCount; $i++) {
+            if (($i % 20) === 0) {
+                if ($buttonHTML !== '') {
+                    $buttonHTML .= '</div>';
                 }
 
-                $buttonHTML .= '<div id="'.$buttonNames[$i].$status.'" class="Viper-button Viper-'.$buttonNames[$i].$className.'">';
-                $buttonHTML .= '<span class="Viper-buttonIcon Viper-'.$buttonNames[$i].'"></span>&nbsp;</div>';
+                $buttonHTML .= '<div class="ViperTP-bar Viper-themeDark" style="position:relative">';
             }
+
+            $buttonHTML .= '<div id="'.$buttonNames[$i].'" class="Viper-button Viper-'.$buttonNames[$i].'">';
+            $buttonHTML .= '<span class="Viper-buttonIcon Viper-'.$buttonNames[$i].'"></span>&nbsp;</div>';
         }
 
         $buttonHTML .= '</div>';
@@ -352,7 +351,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         $this->execJS('viper.destroy()');
 
         foreach ($statuses as $status => $className) {
-            $btnRects = $this->execJS('getCoords("'.$className.'")');
+            $btnRects = $this->execJS('getCoords("'.$status.'", "'.$className.'")');
             foreach ($btnRects as $buttonName => $rect) {
                 $region    = $this->getRegionOnPage($rect);
                 $imagePath = $this->capture($region);
@@ -821,19 +820,31 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
     /**
      * Returns TRUE if the specified button icon exists in the Inline Toolbar.
      *
-     * @param string $buttonIcon The name of the button.
-     * @param string $state      The name of the button state (active, selected).
+     * @param string  $buttonIcon The name of the button.
+     * @param string  $state      The name of the button state (active, selected).
+     * @param boolean $isText     If TRUE then the button is a text button (i.e. no icon).
      *
      * @return boolean
      */
-    protected function inlineToolbarButtonExists($buttonIcon, $state=NULL)
+    protected function inlineToolbarButtonExists($buttonIcon, $state=NULL, $isText=FALSE)
     {
-        $toolbar = $this->getInlineToolbar();
+        if ($isText === TRUE) {
+            if ($state !== NULL) {
+                $rect = $this->execJS('gITPBtn("'.$buttonIcon.'", "'.$state.'")');
+            } else {
+                $rect = $this->execJS('gITPBtn("'.$buttonIcon.'")');
+            }
 
-        if (is_file($buttonIcon) === FALSE) {
+            if (is_array($rect) === FALSE) {
+                return false;
+            }
+
+            return true;
+        } else if (is_file($buttonIcon) === FALSE) {
             $buttonIcon = $this->getButtonIconPath($buttonIcon, $state);
         }
 
+        $toolbar = $this->getInlineToolbar();
         $pattern = $this->createPattern($buttonIcon);
         $pattern = $this->similar($pattern, self::$_similarity);
 
@@ -845,19 +856,31 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
     /**
      * Returns TRUE if the specified button icon exists in the Toolbar.
      *
-     * @param string $buttonIcon The name of the button.
-     * @param string $state      The name of the button state (active, selected).
+     * @param string  $buttonIcon The name of the button.
+     * @param string  $state      The name of the button state (active, selected).
+     * @param boolean $isText     If TRUE then the button is a text button (i.e. no icon).
      *
      * @return boolean
      */
-    protected function topToolbarButtonExists($buttonIcon, $state=NULL)
+    protected function topToolbarButtonExists($buttonIcon, $state=NULL, $isText=FALSE)
     {
-        $toolbar = $this->getTopToolbar();
+        if ($isText === TRUE) {
+            if ($state !== NULL) {
+                $rect = $this->execJS('gTPBtn("'.$buttonIcon.'", "'.$state.'")');
+            } else {
+                $rect = $this->execJS('gTPBtn("'.$buttonIcon.'")');
+            }
 
-        if (is_file($buttonIcon) === FALSE) {
+            if (is_array($rect) === FALSE) {
+                return false;
+            }
+
+            return true;
+        } else if (is_file($buttonIcon) === FALSE) {
             $buttonIcon = $this->getButtonIconPath($buttonIcon, $state);
         }
 
+        $toolbar = $this->getTopToolbar();
         $pattern = $this->createPattern($buttonIcon);
         $pattern = $this->similar($pattern, self::$_similarity);
 
@@ -869,15 +892,29 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
     /**
      * Clicks the specified button icon in the Inline Toolbar.
      *
-     * @param string $buttonIcon The name of the button.
-     * @param string $state      The name of the button state (active, selected).
+     * @param string  $buttonIcon The name of the button.
+     * @param string  $state      The name of the button state (active, selected).
+     * @param boolean $isText     If TRUE then the button is a text button (i.e. no icon).
      *
      * @return void
      * @throws Exception If the specified icon file not found.
      */
-    protected function clickTopToolbarButton($buttonIcon, $state=NULL)
+    protected function clickTopToolbarButton($buttonIcon, $state=NULL, $isText=FALSE)
     {
-        if (is_file($buttonIcon) === FALSE) {
+        if ($isText === TRUE) {
+            if ($state !== NULL) {
+                $rect = $this->execJS('gTPBtn("'.$buttonIcon.'", "'.$state.'")');
+            } else {
+                $rect = $this->execJS('gTPBtn("'.$buttonIcon.'")');
+            }
+
+            if (is_array($rect) === FALSE) {
+                throw new Exception('Could not find button with text: '.$buttonIcon);
+            }
+
+            $this->click($this->getRegionOnPage($rect));
+            return;
+        } else if (is_file($buttonIcon) === FALSE) {
             $buttonIcon = $this->getButtonIconPath($buttonIcon, $state);
         }
 
@@ -895,15 +932,29 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
     /**
      * Clicks the specified button icon in the Inline Toolbar.
      *
-     * @param string $buttonIcon The name of the button.
-     * @param string $state      The name of the button state (active, selected).
+     * @param string  $buttonIcon The name of the button.
+     * @param string  $state      The name of the button state (active, selected).
+     * @param boolean $isText     If TRUE then the button is a text button (i.e. no icon).
      *
      * @return void
      * @throws Exception If the specified icon file not found.
      */
-    protected function clickInlineToolbarButton($buttonIcon, $state=NULL)
+    protected function clickInlineToolbarButton($buttonIcon, $state=NULL, $isText=FALSE)
     {
-        if (is_file($buttonIcon) === FALSE) {
+        if ($isText === TRUE) {
+            if ($state !== NULL) {
+                $rect = $this->execJS('gITPBtn("'.$buttonIcon.'", "'.$state.'")');
+            } else {
+                $rect = $this->execJS('gITPBtn("'.$buttonIcon.'")');
+            }
+
+            if (is_array($rect) === FALSE) {
+                throw new Exception('Could not find button with text: '.$buttonIcon);
+            }
+
+            $this->click($this->getRegionOnPage($rect));
+            return;
+        } else if (is_file($buttonIcon) === FALSE) {
             $buttonIcon = $this->getButtonIconPath($buttonIcon, $state);
         }
 
@@ -1049,6 +1100,52 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         $this->dragDrop($startLeft, $endRight);
 
     }//end selectText()
+
+
+    /**
+     * Clicks the field with specified label.
+     *
+     * @param string $label The label of the field.
+     *
+     * @return void
+     */
+    protected function clickField($label)
+    {
+        $rect = $this->execJS('gField("'.$label.'")');
+        $this->click($this->getRegionOnPage($rect));
+
+    }//end clickField()
+
+
+    /**
+     * Clicks the clear field value action for specified field.
+     *
+     * @param string $label The label of the field.
+     *
+     * @return void
+     */
+    protected function clearFieldValue($label)
+    {
+        $rect       = $this->execJS('gField("'.$label.'")');
+        $rect['x1'] = ($rect['x2'] - 12);
+
+        $this->click($this->getRegionOnPage($rect));
+
+    }//end clearFieldValue()
+
+
+    /**
+     * Clicks the revert field value action for specified field.
+     *
+     * @param string $label The label of the field.
+     *
+     * @return void
+     */
+    protected function revertFieldValue($label)
+    {
+        $this->clearFieldValue($label);
+
+    }//end revertFieldValue()
 
 
     /**
