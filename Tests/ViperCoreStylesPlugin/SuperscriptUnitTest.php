@@ -13,12 +13,10 @@ class Viper_Tests_ViperCoreStylesPlugin_SuperscriptUnitTest extends AbstractVipe
      */
     public function testStartOfParaSuperscript()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $this->selectText('Lorem');
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_sup.png');
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_sup_active.png'), 'Superscript icon in the top toolbar is not active');
+        $this->clickTopToolbarButton('superscript');
+        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar is not active');
 
         $this->assertHTMLMatch('<p><sup>Lorem</sup> XuT dolor</p><p>sit <em>amet</em> <strong>WoW</strong></p>');
 
@@ -32,12 +30,11 @@ class Viper_Tests_ViperCoreStylesPlugin_SuperscriptUnitTest extends AbstractVipe
      */
     public function testMidOfParaSuperscript()
     {
-        $dir = dirname(__FILE__).'/Images/';
 
         $this->selectText('XuT');
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_sup.png');
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_sup_active.png'), 'Superscript icon in the top toolbar is not active');
+        $this->clickTopToolbarButton('superscript');
+        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar is not active');
 
         $this->assertHTMLMatch('<p>Lorem <sup>XuT</sup> dolor</p><p>sit <em>amet</em> <strong>WoW</strong></p>');
 
@@ -51,12 +48,10 @@ class Viper_Tests_ViperCoreStylesPlugin_SuperscriptUnitTest extends AbstractVipe
      */
     public function testEndOfParaSuperscript()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $this->selectText('dolor');
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_sup.png');
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_sup_active.png'), 'Superscript icon in the top toolbar is not active');
+        $this->clickTopToolbarButton('superscript');
+        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar is not active');
 
         $this->assertHTMLMatch('<p>Lorem XuT <sup>dolor</sup></p><p>sit <em>amet</em> <strong>WoW</strong></p>');
 
@@ -70,29 +65,23 @@ class Viper_Tests_ViperCoreStylesPlugin_SuperscriptUnitTest extends AbstractVipe
      */
     public function testRemovingFormatFromPartOfTheContent()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $dolor = $this->find('dolor');
-        $xut   = $this->find('xut');
-
         $this->selectText('XuT', 'dolor');
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_sup.png');
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_sup_active.png'), 'Superscript icon in the top toolbar is not active');
+        $this->clickTopToolbarButton('superscript');
+        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar is not active');
 
         $this->assertHTMLMatch('<p>Lorem <sup>XuT dolor</sup></p><p>sit <em>amet</em> <strong>WoW</strong></p>');
 
         $this->doubleClick($dolor);
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_sup_active.png');
-        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_sup.png'), 'Superscript icon in the top toolbar is still active');
+        $this->clickTopToolbarButton('superscript', 'active');
+        $this->assertTrue($this->topToolbarButtonExists('superscript'), 'Superscript icon in the top toolbar is still active');
 
         $this->assertHTMLMatch('<p>Lorem <sup>XuT </sup>dolor</p><p>sit <em>amet</em> <strong>WoW</strong></p>');
 
-        $this->markTestIncomplete('Need a way to select text that has is superscript.');
-
-        $this->doubleClick($xut);
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_sup_active.png'), 'Superscript icon in the top toolbar is not active');
+        $this->selectText('XuT');
+        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar is not active');
 
     }//end testRemovingFormatFromPartOfTheContent()
 
@@ -104,16 +93,14 @@ class Viper_Tests_ViperCoreStylesPlugin_SuperscriptUnitTest extends AbstractVipe
      */
     public function testAdjacentWordStyling()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $this->selectText('XuT');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_sup.png');
+        $this->clickTopToolbarButton('superscript');
 
         $this->selectText('Lorem', 'XuT');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_sup.png');
+        $this->clickTopToolbarButton('superscript');
 
         $this->selectText('XuT', 'dolor');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_sup.png');
+        $this->clickTopToolbarButton('superscript');
 
         $this->assertHTMLMatch('<p><sup>Lorem XuT dolor</sup></p><p>sit <em>amet</em> <strong>WoW</strong></p>');
 
@@ -127,16 +114,14 @@ class Viper_Tests_ViperCoreStylesPlugin_SuperscriptUnitTest extends AbstractVipe
      */
     public function testSpaceSeparatedAdjacentWordStyling()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $this->selectText('XuT');
-         $this->clickTopToolbarButton($dir.'toolbarIcon_sup.png');
+         $this->clickTopToolbarButton('superscript');
 
         $this->selectText('Lorem');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_sup.png');
+        $this->clickTopToolbarButton('superscript');
 
         $this->selectText('dolor');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_sup.png');
+        $this->clickTopToolbarButton('superscript');
 
         $this->assertHTMLMatch('<p><sup>Lorem</sup> <sup>XuT</sup> <sup>dolor</sup></p><p>sit <em>amet</em> <strong>WoW</strong></p>');
 
@@ -150,21 +135,19 @@ class Viper_Tests_ViperCoreStylesPlugin_SuperscriptUnitTest extends AbstractVipe
      */
     public function testRemoveFormating()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $text    = 'WoW';
         $textLoc = $this->find($text);
         $this->selectText($text);
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_sup.png');
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_sup_active.png'), 'Superscript icon in the top toolbar is not active');
+        $this->clickTopToolbarButton('superscript');
+        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar is not active');
         $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p>sit <em>amet</em> <strong><sup>WoW</sup></strong></p>');
 
         $this->click($textLoc);
         $this->selectText($text);
 
-         $this->clickTopToolbarButton($dir.'toolbarIcon_sup_active.png');
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_sup.png'), 'Superscript icon is still active in the top toolbar is not active');
+         $this->clickTopToolbarButton('superscript', 'active');
+        $this->assertTrue($this->topToolbarButtonExists('superscript'), 'Superscript icon is still active in the top toolbar is not active');
 
         $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p>sit <em>amet</em> <strong>WoW</strong></p>');
 
@@ -178,18 +161,16 @@ class Viper_Tests_ViperCoreStylesPlugin_SuperscriptUnitTest extends AbstractVipe
      */
     public function testIconsIsActive()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $text    = 'WoW';
         $textLoc = $this->find($text);
         $this->selectText($text);
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_sup.png');
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_sup_active.png'), 'Superscript icon in the top toolbar is not active');
+        $this->clickTopToolbarButton('superscript');
+        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar is not active');
 
         $this->click($textLoc);
         $this->selectText($text);
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_sup_active.png'), 'Superscript icon in the top toolbar is not active');
+        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar is not active');
 
     }//end testIconsIsActive()
 
@@ -201,19 +182,17 @@ class Viper_Tests_ViperCoreStylesPlugin_SuperscriptUnitTest extends AbstractVipe
      */
     public function testUndoSuperscript()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $this->selectText('XuT');
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_sup.png');
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_sup_active.png'), 'Subscript icon in the top toolbar is not active');
+        $this->clickTopToolbarButton('superscript');
+        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Subscript icon in the top toolbar is not active');
 
         $this->assertHTMLMatch('<p>Lorem <sup>XuT</sup> dolor</p><p>sit <em>amet</em> <strong>WoW</strong></p>');
 
-        $this->clickTopToolbarButton(dirname(dirname(__FILE__)).'/Core/Images/undoIcon_active.png');
+        $this->clickTopToolbarButton('historyUndo');
         $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p>sit <em>amet</em> <strong>WoW</strong></p>');
 
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_sup.png'), 'Superscript icon in the top toolbar should not be active');
+        $this->assertTrue($this->topToolbarButtonExists('superscript'), 'Superscript icon in the top toolbar should not be active');
 
     }//end testUndoSuperscript()
 
