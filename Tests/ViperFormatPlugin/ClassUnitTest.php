@@ -18,7 +18,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $text = 'XuT';
 
         $this->selectText($text);
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_class.png');
+        $this->clickInlineToolbarButton('cssClass');
         $this->type('test');
         $this->keyDown('Key.ENTER');
 
@@ -26,15 +26,14 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
 
         $this->click($this->find($text));
         $this->selectText($text);
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_class_active.png'), 'Class icon in Top Toolbar should be active.');
-        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_class_active.png'), 'Class icon in VITP should be active.');
+        $this->assertTrue($this->topToolbarButtonExists('cssClass', 'active'), 'Class icon in Top Toolbar should be active.');
+        $this->assertTrue($this->inlineToolbarButtonExists('cssClass', 'active'), 'Class icon in VITP should be active.');
 
         $text = 'dolor';
         $this->selectText($text);
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_class.png');
+        $this->clickInlineToolbarButton('cssClass');
         $this->type('class');
         $this->clickInlineToolbarButton($dir.'toolbarIcon_updateChanges.png');
-        //$this->click($this->find($text));
         $this->assertHTMLMatch('<p>Lorem <span class="test">XuT</span> <span class="class">dolor</span></p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>Jumps</strong> OVER the lazy dogggg</p>');
 
     }//end testAddingClassAttributeToAWordUsingTheInlineToolbar()
@@ -47,15 +46,13 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
      */
     public function testClassIconAppearsInTheInlineToolbar()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $this->selectText('ORSM');
         $this->type('Key.RIGHT');
         $this->type('Key.ENTER');
         $this->type('This is a new line of ConTenT');
 
         $this->selectText('ConTenT');
-        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_class.png'), 'Class icon should appear in the inline toolbar.');
+        $this->assertTrue($this->inlineToolbarButtonExists('cssClass'), 'Class icon should appear in the inline toolbar.');
 
     }//end testClassIconAppearsInTheInlineToolbar()
 
@@ -72,7 +69,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $text = 'XuT';
 
         $this->selectText($text);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_class.png');
+        $this->clickTopToolbarButton('cssClass');
         $this->type('test');
         $this->keyDown('Key.ENTER');
 
@@ -80,12 +77,12 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
 
         $this->click($this->find($text));
         $this->selectText($text);
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_class_active.png'), 'Class icon in Top Toolbar should be active.');
-        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_class_active.png'), 'Class icon in VITP should be active.');
+        $this->assertTrue($this->topToolbarButtonExists('cssClass', 'active'), 'Class icon in Top Toolbar should be active.');
+        $this->assertTrue($this->inlineToolbarButtonExists('cssClass', 'active'), 'Class icon in VITP should be active.');
 
         $text = 'dolor';
         $this->selectText($text);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_class.png');
+        $this->clickTopToolbarButton('cssClass');
         $this->type('class');
         $this->clickTopToolbarButton($dir.'toolbarIcon_updateChanges.png');
         $this->assertHTMLMatch('<p>Lorem <span class="test">XuT</span> <span class="class">dolor</span></p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>Jumps</strong> OVER the lazy dogggg</p>');
@@ -101,8 +98,6 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
      */
     public function testUpdateChangesButtonIsDisabledForClassIcon()
     {
-        //$this->markTestIncomplete('Failing due to issue 1551 in roadmap');
-
         $dir = dirname(__FILE__).'/Images/';
 
         $this->selectText('XuT');
@@ -128,10 +123,10 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $text = 'lABs';
 
         $this->selectText($text);
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_class_active.png'), 'Class icon in Top Toolbar should be active.');
-        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_class_active.png'), 'Class icon in VITP should be active.');
+        $this->assertTrue($this->topToolbarButtonExists('cssClass', 'active'), 'Class icon in Top Toolbar should be active.');
+        $this->assertTrue($this->inlineToolbarButtonExists('cssClass', 'active'), 'Class icon in VITP should be active.');
 
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_class_active.png');
+        $this->clickInlineToolbarButton('cssClass', 'active');
         $this->clickInlineToolbarButton($dir.'toolbarIcon_delete_icon.png');
         $this->keyDown('Key.ENTER');
 
@@ -139,17 +134,17 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
 
         $this->click($this->find($text));
         $this->selectText($text);
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_class.png'), 'Class icon is still active in the Top Toolbar.');
-        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_class.png'), 'Class icon is still active in the inline toolbar.');
+        $this->assertTrue($this->topToolbarButtonExists('cssClass'), 'Class icon is still active in the Top Toolbar.');
+        $this->assertTrue($this->inlineToolbarButtonExists('cssClass'), 'Class icon is still active in the inline toolbar.');
 
         // Reapply the class so that we can delete it with the Update Changes button
-        $this->clickTopToolbarButton($dir.'toolbarIcon_class.png');
+        $this->clickTopToolbarButton('cssClass');
         $this->type('test');
         $this->keyDown('Key.ENTER');
         $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="test">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>Jumps</strong> OVER the lazy dogggg</p>');
 
         $this->selectText($text);
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_class_active.png');
+        $this->clickInlineToolbarButton('cssClass', 'active');
         $this->clickInlineToolbarButton($dir.'toolbarIcon_delete_icon.png');
         $this->clickInlineToolbarButton($dir.'toolbarIcon_updateChanges.png');
 
@@ -170,8 +165,8 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $text = 'lABs';
 
         $this->selectText($text);
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_class_active.png'), 'Class icon in Top Toolbar should be active.');
-        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_class_active.png'), 'Class icon in VITP should be active.');
+        $this->assertTrue($this->topToolbarButtonExists('cssClass', 'active'), 'Class icon in Top Toolbar should be active.');
+        $this->assertTrue($this->inlineToolbarButtonExists('cssClass', 'active'), 'Class icon in VITP should be active.');
 
         $this->clickTopToolbarButton($dir.'toolbarIcon_class_active.png');
         $this->clickTopToolbarButton($dir.'toolbarIcon_delete_icon.png');
@@ -181,17 +176,17 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
 
         $this->click($this->find($text));
         $this->selectText($text);
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_class.png'), 'Class icon is still active in the Top Toolbar.');
-        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_class.png'), 'Class icon is still active in the inline toolbar.');
+        $this->assertTrue($this->topToolbarButtonExists('cssClass'), 'Class icon is still active in the Top Toolbar.');
+        $this->assertTrue($this->inlineToolbarButtonExists('cssClass'), 'Class icon is still active in the inline toolbar.');
 
         // Reapply the class so that we can delete it with the Update Changes button
-        $this->clickTopToolbarButton($dir.'toolbarIcon_class.png');
+        $this->clickTopToolbarButton('cssClass');
         $this->type('test');
         $this->keyDown('Key.ENTER');
         $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="test">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>Jumps</strong> OVER the lazy dogggg</p>');
 
         $this->selectText($text);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_class_active.png');
+        $this->clickTopToolbarButton('cssClass', 'active');
         $this->clickTopToolbarButton($dir.'toolbarIcon_delete_icon.png');
         $this->clickTopToolbarButton($dir.'toolbarIcon_updateChanges.png');
 
@@ -212,17 +207,17 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $text = 'lABs';
 
         $this->selectText($text);
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_class_active.png'), 'Class icon in Top Toolbar should be active.');
-        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_class_active.png'), 'Class icon in VITP should be active.');
+        $this->assertTrue($this->topToolbarButtonExists('cssClass', 'active'), 'Class icon in Top Toolbar should be active.');
+        $this->assertTrue($this->inlineToolbarButtonExists('cssClass', 'active'), 'Class icon in VITP should be active.');
 
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_class_active.png');
+        $this->clickInlineToolbarButton('cssClass', 'active');
         $this->type('abc');
         $this->keyDown('Key.ENTER');
 
         $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclassabc">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>Jumps</strong> OVER the lazy dogggg</p>');
 
         $this->selectText($text);
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_class_active.png');
+        $this->clickInlineToolbarButton('cssClass', 'active');
         $this->type('def');
         $this->clickInlineToolbarButton($dir.'toolbarIcon_updateChanges.png');
 
@@ -243,17 +238,17 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $text = 'lABs';
 
         $this->selectText($text);
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_class_active.png'), 'Class icon in Top Toolbar should be active.');
-        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_class_active.png'), 'Class icon in VITP should be active.');
+        $this->assertTrue($this->topToolbarButtonExists('cssClass', 'active'), 'Class icon in Top Toolbar should be active.');
+        $this->assertTrue($this->inlineToolbarButtonExists('cssClass', 'active'), 'Class icon in VITP should be active.');
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_class_active.png');
+        $this->clickTopToolbarButton('cssClass', 'active');
         $this->type('abc');
         $this->keyDown('Key.ENTER');
 
         $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclassabc">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>Jumps</strong> OVER the lazy dogggg</p>');
 
         $this->selectText($text);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_class_active.png');
+        $this->clickTopToolbarButton('cssClass', 'active');
         $this->type('def');
         $this->clickTopToolbarButton($dir.'toolbarIcon_updateChanges.png');
 
@@ -275,7 +270,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
 
         $this->selectText($text);
         $this->selectInlineToolbarLineageItem(0);
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_class.png');
+        $this->clickInlineToolbarButton('cssClass');
         $this->type('test');
         $this->keyDown('Key.ENTER');
 
@@ -283,8 +278,8 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
 
         $this->selectText($text);
         $this->selectInlineToolbarLineageItem(0);
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_class_active.png'), 'Class icon in Top Toolbar should be active.');
-        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_class_active.png'), 'Class icon in VITP should be active.');
+        $this->assertTrue($this->topToolbarButtonExists('cssClass', 'active'), 'Class icon in Top Toolbar should be active.');
+        $this->assertTrue($this->inlineToolbarButtonExists('cssClass', 'active'), 'Class icon in VITP should be active.');
 
         $this->click($this->find($text));
 
@@ -294,7 +289,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $text = 'AbC';
         $this->selectText($text);
         $this->selectInlineToolbarLineageItem(0);
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_class.png');
+        $this->clickInlineToolbarButton('cssClass');
         $this->type('class');
         $this->clickInlineToolbarButton($dir.'toolbarIcon_updateChanges.png');
         $this->assertHTMLMatch('<p class="test">Lorem XuT dolor</p><p class="test">sit amet <strong>WoW</strong></p><p class="class">Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>Jumps</strong> OVER the lazy dogggg</p>');
@@ -315,7 +310,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
 
         $this->selectText($text);
         $this->selectInlineToolbarLineageItem(0);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_class.png');
+        $this->clickTopToolbarButton('cssClass');
         $this->type('test');
         $this->keyDown('Key.ENTER');
 
@@ -323,8 +318,8 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
 
         $this->selectText($text);
         $this->selectInlineToolbarLineageItem(0);
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_class_active.png'), 'Class icon in Top Toolbar should be active.');
-        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_class_active.png'), 'Class icon in VITP should be active.');
+        $this->assertTrue($this->topToolbarButtonExists('cssClass', 'active'), 'Class icon in Top Toolbar should be active.');
+        $this->assertTrue($this->inlineToolbarButtonExists('cssClass', 'active'), 'Class icon in VITP should be active.');
 
         $this->click($this->find($text));
 
@@ -334,7 +329,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $text = 'AbC';
         $this->selectText($text);
         $this->selectInlineToolbarLineageItem(0);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_class.png');
+        $this->clickTopToolbarButton('cssClass');
         $this->type('class');
         $this->clickTopToolbarButton($dir.'toolbarIcon_updateChanges.png');
         $this->assertHTMLMatch('<p class="test">Lorem XuT dolor</p><p class="test">sit amet <strong>WoW</strong></p><p class="class">Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>Jumps</strong> OVER the lazy dogggg</p>');
@@ -349,13 +344,11 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
      */
     public function testAddingClassToParagraphWithClassAppliedToWord()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $text = 'ORSM';
 
         $this->selectText($text);
         $this->selectInlineToolbarLineageItem(0);
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_class.png');
+        $this->clickInlineToolbarButton('cssClass');
         $this->type('test');
         $this->keyDown('Key.ENTER');
 
@@ -363,14 +356,14 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
 
         $this->selectText($text);
         $this->selectInlineToolbarLineageItem(0);
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_class_active.png'), 'Class icon in Top Toolbar should be active.');
-        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_class_active.png'), 'Class icon in VITP should be active.');
+        $this->assertTrue($this->topToolbarButtonExists('cssClass', 'active'), 'Class icon in Top Toolbar should be active.');
+        $this->assertTrue($this->inlineToolbarButtonExists('cssClass', 'active'), 'Class icon in VITP should be active.');
 
         $this->click($this->find($text));
         $text = 'lABs';
         $this->selectText($text);
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_class_active.png'), 'Class icon in Top Toolbar should be active.');
-        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_class_active.png'), 'Class icon in VITP should be active.');
+        $this->assertTrue($this->topToolbarButtonExists('cssClass', 'active'), 'Class icon in Top Toolbar should be active.');
+        $this->assertTrue($this->inlineToolbarButtonExists('cssClass', 'active'), 'Class icon in VITP should be active.');
 
     }//end testAddingClassAttributeToAParagraphUsingTheInlineToolbar()
 
@@ -389,10 +382,10 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
 
         $this->selectText($text);
         $this->selectInlineToolbarLineageItem(0);
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_class_active.png'), 'Class icon in Top Toolbar should be active.');
-        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_class_active.png'), 'Class icon in VITP should be active.');
+        $this->assertTrue($this->topToolbarButtonExists('cssClass'), 'Class icon in Top Toolbar should be active.');
+        $this->assertTrue($this->inlineToolbarButtonExists('cssClass', 'active'), 'Class icon in VITP should be active.');
 
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_class_active.png');
+        $this->clickInlineToolbarButton('cssClass', 'active');
         $this->clickInlineToolbarButton($dir.'toolbarIcon_delete_icon.png');
         $this->keyDown('Key.ENTER');
 
@@ -402,8 +395,8 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->selectText($text);
         $this->selectInlineToolbarLineageItem(0);
 
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_class.png'), 'Class icon is still active in the Top Toolbar.');
-        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_class.png'), 'Class icon is still active in the inline toolbar.');
+        $this->assertTrue($this->topToolbarButtonExists('cssClass'), 'Class icon is still active in the Top Toolbar.');
+        $this->assertTrue($this->inlineToolbarButtonExists('cssClass'), 'Class icon is still active in the inline toolbar.');
 
         //Reapply the class so that we can delete again using the Update Changes button
         $this->clickInlineToolbarButton($dir.'toolbarIcon_class.png');
@@ -415,7 +408,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->click($textLoc);
         $this->selectText($text);
         $this->selectInlineToolbarLineageItem(0);
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_class_active.png');
+        $this->clickInlineToolbarButton('cssClass', 'active');
         $this->clickInlineToolbarButton($dir.'toolbarIcon_delete_icon.png');
         $this->clickInlineToolbarButton($dir.'toolbarIcon_updateChanges.png');
 
@@ -438,10 +431,10 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
 
         $this->selectText($text);
         $this->selectInlineToolbarLineageItem(0);
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_class_active.png'), 'Class icon in Top Toolbar should be active.');
-        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_class_active.png'), 'Class icon in VITP should be active.');
+        $this->assertTrue($this->topToolbarButtonExists('cssClass', 'active'), 'Class icon in Top Toolbar should be active.');
+        $this->assertTrue($this->inlineToolbarButtonExists('cssClass', 'active'), 'Class icon in VITP should be active.');
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_class_active.png');
+        $this->clickTopToolbarButton('cssClass', 'active');
         $this->clickTopToolbarButton($dir.'toolbarIcon_delete_icon.png');
         $this->keyDown('Key.ENTER');
 
@@ -451,8 +444,8 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->selectText($text);
         $this->selectInlineToolbarLineageItem(0);
 
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_class.png'), 'Class icon is still active in the Top Toolbar.');
-        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_class.png'), 'Class icon is still active in the inline toolbar.');
+        $this->assertTrue($this->topToolbarButtonExists('cssClass'), 'Class icon is still active in the Top Toolbar.');
+        $this->assertTrue($this->inlineToolbarButtonExists('cssClass'), 'Class icon is still active in the inline toolbar.');
 
         //Reapply the class so that we can delete again using the Update Changes button
         $this->clickTopToolbarButton($dir.'toolbarIcon_class.png');
@@ -464,7 +457,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->click($textLoc);
         $this->selectText($text);
         $this->selectInlineToolbarLineageItem(0);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_class_active.png');
+        $this->clickTopToolbarButton('cssClass', 'active');
         $this->clickTopToolbarButton($dir.'toolbarIcon_delete_icon.png');
         $this->clickTopToolbarButton($dir.'toolbarIcon_updateChanges.png');
 
@@ -486,10 +479,10 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
 
         $this->selectText($text);
         $this->selectInlineToolbarLineageItem(0);
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_class_active.png'), 'Class icon in Top Toolbar should be active.');
-        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_class_active.png'), 'Class icon in VITP should be active.');
+        $this->assertTrue($this->topToolbarButtonExists('cssClass', 'active'), 'Class icon in Top Toolbar should be active.');
+        $this->assertTrue($this->inlineToolbarButtonExists('cssClass', 'active'), 'Class icon in VITP should be active.');
 
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_class_active.png');
+        $this->clickInlineToolbarButton('cssClass', 'active');
         $this->type('abc');
         $this->keyDown('Key.ENTER');
 
@@ -497,7 +490,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
 
         $this->selectText($text);
         $this->selectInlineToolbarLineageItem(0);
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_class_active.png');
+        $this->clickInlineToolbarButton('cssClass', 'active');
         $this->type('def');
         $this->clickInlineToolbarButton($dir.'toolbarIcon_updateChanges.png');
 
@@ -519,10 +512,10 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
 
         $this->selectText($text);
         $this->selectInlineToolbarLineageItem(0);
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_class_active.png'), 'Class icon in Top Toolbar should be active.');
-        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_class_active.png'), 'Class icon in VITP should be active.');
+        $this->assertTrue($this->topToolbarButtonExists('cssClass', 'active'), 'Class icon in Top Toolbar should be active.');
+        $this->assertTrue($this->inlineToolbarButtonExists('cssClass', 'active'), 'Class icon in VITP should be active.');
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_class_active.png');
+        $this->clickTopToolbarButton('cssClass', 'active');
         $this->type('abc');
         $this->keyDown('Key.ENTER');
 
@@ -530,7 +523,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
 
         $this->selectText($text);
         $this->selectInlineToolbarLineageItem(0);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_class.png');
+        $this->clickTopToolbarButton('cssClass');
         $this->type('def');
         $this->clickTopToolbarButton($dir.'toolbarIcon_updateChanges.png');
 
@@ -546,13 +539,11 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
      */
     public function testAddingClassToAParagraphUsingInlineToolbarWithBoldFirstWord()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $text = 'OVER';
 
         $this->selectText($text);
         $this->selectInlineToolbarLineageItem(0);
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_class.png');
+        $this->clickInlineToolbarButton('cssClass');
         $this->type('test');
         $this->keyDown('Key.ENTER');
 
@@ -568,13 +559,11 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
      */
     public function testAddingClassToAParagraphUsingTopToolbarWithBoldFirstWord()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $text = 'OVER';
 
         $this->selectText($text);
         $this->selectInlineToolbarLineageItem(0);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_class.png');
+        $this->clickTopToolbarButton('cssClass');
         $this->type('test');
         $this->keyDown('Key.ENTER');
 
@@ -590,13 +579,11 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
      */
     public function testAddingClassToAParagraphUsingInlineToolbarWithItalicFirstWord()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $text = 'QUICK';
 
         $this->selectText($text);
         $this->selectInlineToolbarLineageItem(0);
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_class.png');
+        $this->clickInlineToolbarButton('cssClass');
         $this->type('test');
         $this->keyDown('Key.ENTER');
 
@@ -612,13 +599,11 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
      */
     public function testAddingClassToAParagraphUsingTopToolbarWithItalicFirstWord()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $text = 'QUICK';
 
         $this->selectText($text);
         $this->selectInlineToolbarLineageItem(0);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_class.png');
+        $this->clickTopToolbarButton('cssClass');
         $this->type('test');
         $this->keyDown('Key.ENTER');
 
@@ -634,12 +619,10 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
      */
     public function testAddingClassToABoldWord()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $text = 'Jumps';
 
         $this->selectText($text);
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_class.png');
+        $this->clickInlineToolbarButton('cssClass');
         $this->type('test');
         $this->keyDown('Key.ENTER');
 
@@ -655,14 +638,12 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
      */
     public function testAddingClassToAItalicWord()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $text = 'OVER';
 
         $this->selectText($text);
         $this->keyDown('Key.CMD + i');
 
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_class.png');
+        $this->clickInlineToolbarButton('cssClass');
         $this->type('test');
         $this->keyDown('Key.ENTER');
 
@@ -678,14 +659,12 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
      */
     public function testAddingClassToAOneBoldWord()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $this->selectText('Jumps', 'OVER');
         $this->keyDown('Key.CMD + b');
         $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>Jumps OVER </strong>the lazy dogggg</p>');
 
         $this->selectText('OVER');
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_class.png');
+        $this->clickInlineToolbarButton('cssClass');
         $this->type('test');
         $this->keyDown('Key.ENTER');
 
@@ -701,14 +680,12 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
      */
     public function testAddingClassToAOneItalicWord()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $this->selectText('QUICK', 'brown');
         $this->keyDown('Key.CMD + i');
         $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> <em>QUICK brown</em> foxxx</p><p><strong>Jumps</strong> OVER the lazy dogggg</p>');
 
         $this->selectText('QUICK');
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_class.png');
+        $this->clickInlineToolbarButton('cssClass');
         $this->type('test');
         $this->keyDown('Key.ENTER');
 
@@ -728,13 +705,13 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
 
         $this->selectText('XuT');
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_class.png');
+        $this->clickTopToolbarButton('cssClass');
         $this->assertEquals('XuT', $this->getSelectedText(), 'Selected text is not highlighted.');
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_class_subActive.png');
+        $this->clickTopToolbarButton('cssClass', 'selected');
         $this->assertEquals('XuT', $this->getSelectedText(), 'Selected text is not highlighted.');
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_class.png');
+        $this->clickTopToolbarButton('cssClass');
         $this->assertEquals('XuT', $this->getSelectedText(), 'Selected text is not highlighted.');
 
     }//end testSelectionIsMaintainedForWordWhenOpeningAndClosingClassFields()
@@ -747,18 +724,16 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
      */
     public function testSelectionIsMaintainedForParaWhenOpeningAndClosingClassFields()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $this->selectText('XuT');
         $this->selectInlineToolbarLineageItem(0);
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_class.png');
+        $this->clickTopToolbarButton('cssClass');
         $this->assertEquals('Lorem XuT dolor', $this->getSelectedText(), 'Selected text is not highlighted.');
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_class_subActive.png');
+        $this->clickTopToolbarButton('cssClass', 'selected');
         $this->assertEquals('Lorem XuT dolor', $this->getSelectedText(), 'Selected text is not highlighted.');
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_class.png');
+        $this->clickTopToolbarButton('cssClass');
         $this->assertEquals('Lorem XuT dolor', $this->getSelectedText(), 'Selected text is not highlighted.');
 
     }//end testSelectionIsMaintainedForParaWhenOpeningAndClosingClassFields()
@@ -771,21 +746,19 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
      */
     public function testApplyingBoldAndItalicsClickingClassRemovingBold()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $this->selectText('XuT');
 
-        $this->clickInlineToolbarButton(dirname(dirname(__FILE__)).'/ViperCoreStylesPlugin/Images/toolbarIcon_bold.png');
-        $this->clickInlineToolbarButton(dirname(dirname(__FILE__)).'/ViperCoreStylesPlugin/Images/toolbarIcon_italic.png');
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_class.png');
-        $this->clickInlineToolbarButton(dirname(dirname(__FILE__)).'/ViperCoreStylesPlugin/Images/toolbarIcon_italic_active.png');
+        $this->clickInlineToolbarButton('bold');
+        $this->clickInlineToolbarButton('italic');
+        $this->clickInlineToolbarButton('cssClass');
+        $this->clickInlineToolbarButton('italic', 'active');
 
         $viperBookmarkElements = $this->execJS('dfx.getClass("viperBookmark").length');
         $this->assertEquals(0, $viperBookmarkElements, 'There should be no viper bookmark elements');
 
         $this->assertHTMLMatch('<p>Lorem <strong>XuT</strong> dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>Jumps</strong> OVER the lazy dogggg</p>');
 
-        $this->assertTrue($this->inlineToolbarButtonExists(dirname(dirname(__FILE__)).'/ViperCoreStylesPlugin/Images/toolbarIcon_italic.png'), 'Italics icon in VITP should not be active.');
+        $this->assertTrue($this->inlineToolbarButtonExists('italic'), 'Italics icon in VITP should not be active.');
 
     }//end testApplyingBoldAndItalicsClickingClassRemovingBold()
 
