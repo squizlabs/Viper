@@ -353,9 +353,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         foreach ($statuses as $status => $className) {
             $btnRects = $this->execJS('getCoords("'.$status.'", "'.$className.'")');
             foreach ($btnRects as $buttonName => $rect) {
-                $region    = $this->getRegionOnPage($rect);
-                $imagePath = $this->capture($region);
-                copy($imagePath, $imgPath.'/'.$buttonName.'.png');
+                $this->_createButtonImageFromRectangle($buttonName, $rect);
             }
         }
 
@@ -828,27 +826,10 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      */
     protected function inlineToolbarButtonExists($buttonIcon, $state=NULL, $isText=FALSE)
     {
-        if ($isText === TRUE) {
-            if ($state !== NULL) {
-                $rect = $this->execJS('gITPBtn("'.$buttonIcon.'", "'.$state.'")');
-            } else {
-                $rect = $this->execJS('gITPBtn("'.$buttonIcon.'")');
-            }
-
-            if (is_array($rect) === FALSE) {
-                return false;
-            }
-
-            return true;
-        } else if (is_file($buttonIcon) === FALSE) {
-            $buttonIcon = $this->getButtonIconPath($buttonIcon, $state);
-        }
-
+        $button  = $this->_getButton($buttonIcon, $state, $isText);
         $toolbar = $this->getInlineToolbar();
-        $pattern = $this->createPattern($buttonIcon);
-        $pattern = $this->similar($pattern, self::$_similarity);
 
-        return $this->exists($pattern, $toolbar);
+        return $this->exists($button, $toolbar);
 
     }//end inlineToolbarButtonExists()
 
@@ -864,27 +845,10 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      */
     protected function topToolbarButtonExists($buttonIcon, $state=NULL, $isText=FALSE)
     {
-        if ($isText === TRUE) {
-            if ($state !== NULL) {
-                $rect = $this->execJS('gTPBtn("'.$buttonIcon.'", "'.$state.'")');
-            } else {
-                $rect = $this->execJS('gTPBtn("'.$buttonIcon.'")');
-            }
-
-            if (is_array($rect) === FALSE) {
-                return false;
-            }
-
-            return true;
-        } else if (is_file($buttonIcon) === FALSE) {
-            $buttonIcon = $this->getButtonIconPath($buttonIcon, $state);
-        }
-
+        $button  = $this->_getButton($buttonIcon, $state, $isText);
         $toolbar = $this->getTopToolbar();
-        $pattern = $this->createPattern($buttonIcon);
-        $pattern = $this->similar($pattern, self::$_similarity);
 
-        return $this->exists($pattern, $toolbar);
+        return $this->exists($button, $toolbar);
 
     }//end topToolbarButtonExists()
 
@@ -901,30 +865,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      */
     protected function clickTopToolbarButton($buttonIcon, $state=NULL, $isText=FALSE)
     {
-        if ($isText === TRUE) {
-            if ($state !== NULL) {
-                $rect = $this->execJS('gTPBtn("'.$buttonIcon.'", "'.$state.'")');
-            } else {
-                $rect = $this->execJS('gTPBtn("'.$buttonIcon.'")');
-            }
-
-            if (is_array($rect) === FALSE) {
-                throw new Exception('Could not find button with text: '.$buttonIcon);
-            }
-
-            $this->click($this->getRegionOnPage($rect));
-            return;
-        } else if (is_file($buttonIcon) === FALSE) {
-            $buttonIcon = $this->getButtonIconPath($buttonIcon, $state);
-        }
-
-        if (file_exists($buttonIcon) === FALSE) {
-            throw new Exception('File not found: '.$buttonIcon);
-        }
-
-        $toolbar = $this->getTopToolbar();
-        $match   = $this->find($buttonIcon, $toolbar);
-        $this->click($match);
+        $this->_clickButton($buttonIcon, $state, $isText, 'topToolbar');
 
     }//end clickTopToolbarButton()
 
@@ -941,19 +882,63 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      */
     protected function clickInlineToolbarButton($buttonIcon, $state=NULL, $isText=FALSE)
     {
+        $this->_clickButton($buttonIcon, $state, $isText, 'inlineToolbar');
+
+    }//end clickInlineToolbarButton()
+
+
+    private function _clickButton($buttonIcon, $state=NULL, $isText=FALSE, $location=NULL)
+    {
+        $buttonObj = $this->_getButton($buttonIcon, $state, $isText, $location);
+
+        $region = NULL;
+        if ($location === 'topToolbar') {
+            $region = $this->getTopToolbar();
+        } else if ($location === 'inlineToolbar') {
+            $region = $this->getInlineToolbar();
+        }
+
+        $match   = $this->find($buttonObj, $region);
+        $this->click($match);
+
+    }//end _clickButton()
+
+
+    /**
+     * Returns the button object.
+     *
+     * @param string $button
+     *
+     *
+     * @return void
+     */
+    private function _getButton($buttonIcon, $state=NULL, $isText=FALSE, $location=NULL)
+    {
         if ($isText === TRUE) {
-            if ($state !== NULL) {
-                $rect = $this->execJS('gITPBtn("'.$buttonIcon.'", "'.$state.'")');
-            } else {
-                $rect = $this->execJS('gITPBtn("'.$buttonIcon.'")');
-            }
+            $buttonIconId = preg_replace('#\W#', '_', $buttonIcon);
+            try {
+                $buttonIcon   = $this->getButtonIconPath($buttonIconId, $state);
+            } catch (Exception $e) {
+                $jsFn = 'gBtn';
 
-            if (is_array($rect) === FALSE) {
-                throw new Exception('Could not find button with text: '.$buttonIcon);
-            }
+                if ($location === 'topToolbar') {
+                    $jsFn = 'gTPBtn';
+                } else if ($location === 'inlineToolbar') {
+                    $jsFn = 'gITPBtn';
+                }
 
-            $this->click($this->getRegionOnPage($rect));
-            return;
+                if ($state !== NULL) {
+                    $rect = $this->execJS($jsFn.'("'.$buttonIcon.'", "'.$state.'")');
+                } else {
+                    $rect = $this->execJS($jsFn.'("'.$buttonIcon.'")');
+                }
+
+                if (is_array($rect) === FALSE) {
+                    throw new Exception('Could not find button with text: '.$buttonIcon);
+                }
+
+                $buttonIcon = $this->_createButtonImageFromRectangle($buttonIcon, $rect, $state);
+            }//end try
         } else if (is_file($buttonIcon) === FALSE) {
             $buttonIcon = $this->getButtonIconPath($buttonIcon, $state);
         }
@@ -962,11 +947,36 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
             throw new Exception('File not found: '.$buttonIcon);
         }
 
-        $toolbar = $this->getInlineToolbar();
-        $match   = $this->find($buttonIcon, $toolbar);
-        $this->click($match);
+        return $buttonIcon;
 
-    }//end clickInlineToolbarButton()
+    }//end _getButton()
+
+
+    /**
+     * Creates the Viper button image for testing using a given page location.
+     *
+     * @param string $button The name of the button.
+     * @param array  $rect   The x1, x2, y1, y2 points of the button on the page.
+     * @param string $state  The state of the button.
+     *
+     * @return string
+     */
+    private function _createButtonImageFromRectangle($button, $rect, $state=NULL)
+    {
+        $button      = preg_replace('#[^a-zA-Z0-9_-]#', '_', $button);
+        $buttonImage = $this->capture($this->getRegionOnPage($rect));
+        $filePath    = $this->getBrowserImagePath().'/'.$button;
+
+        if ($state !== NULL) {
+            $filePath .= '_'.$state;
+        }
+
+        $filePath .= '.png';
+        copy($buttonImage, $filePath);
+
+        return $filePath;
+
+    }//end _createButtonImageFromRectangle()
 
 
     /**
