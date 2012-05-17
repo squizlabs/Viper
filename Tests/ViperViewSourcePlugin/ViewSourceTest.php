@@ -69,7 +69,7 @@ class Viper_Tests_ViperViewSourcePlugin_ViewSourceTest extends AbstractViperView
         $this->selectText('XuT');
         $this->keyDown('Key.CMD + i');
         $this->click($this->find('IPSUM'));
-        $this->assertHTMLMatch('<p>Lorem IPSUM dolor</p><p>sit amet <strong>WoW</strong></p><p>Another p XuT</p>');
+        $this->assertHTMLMatch('<p>Lorem IPSUM dolor</p><p><strong>WoW</strong>sit amet</p><p>Another p XuT</p>');
 
     }//end testEditingAfterClosingSourceEditor()
 
@@ -95,6 +95,31 @@ class Viper_Tests_ViperViewSourcePlugin_ViewSourceTest extends AbstractViperView
         $this->assertHTMLMatch('<p></p>');
 
     }//end testEditingTheSourceCode()
+
+
+   /**
+     * Test that you can still edit the content once you deleted some the source code.
+     *
+     * @return void
+     */
+/*    public function testEditingContentAfterDeletingSourceCode()
+    {
+        $dir = dirname(__FILE__).'/Images/';
+
+        $this->selectText('WoW', 'Another');
+        $this->clickTopToolbarButton($dir.'toolbarIcon_viewSource.png');
+        sleep(2);
+        $this->selectText('<p><strong>');
+        $this->keyDown('Key.DELETE');
+
+
+        $applyChangesIcon = $this->find($dir.'icon_applyChanges.png');
+        $this->click($applyChangesIcon);
+
+        $this->assertHTMLMatch('<p></p>');
+*/
+
+    }//end testEditingContentAfterDeletingSourceCode()
 
 
 }//end class
