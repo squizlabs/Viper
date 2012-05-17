@@ -45,7 +45,6 @@ class Viper_Tests_ViperLangToolsPlugin_AbbreviationUnitTest extends AbstractVipe
         $this->clickTopToolbarButton('Abbreviation', NULL, TRUE);
 
         // Check to make sure the update changes button is disabled.
-
         $this->assertTrue($this->topToolbarButtonExists('Update Changes', 'disabled', TRUE), 'The update changes button should be disabled.');
 
     }//end testUpdateChangesButton()
