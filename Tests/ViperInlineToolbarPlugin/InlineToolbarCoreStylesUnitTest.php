@@ -17,8 +17,6 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarCoreStylesUnitTest exten
         $textLoc = $this->find($text);
         $this->selectText($text);
 
-        $this->selectText($text);
-
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Selection</li>', $lineage);
 
@@ -48,8 +46,6 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarCoreStylesUnitTest exten
     {
         $text    = 'IPSUM';
         $textLoc = $this->find($text);
-        $this->selectText($text);
-
         $this->selectText($text);
 
         $lineage = $this->getHtml('.ViperITP-lineage');
@@ -88,14 +84,14 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarCoreStylesUnitTest exten
 
         $this->click($textLoc);
         $this->selectText($text);
-        $this->clickTopToolbarButton(dirname(dirname(__FILE__)).'/ViperCoreStylesPlugin/Images/toolbarIcon_sub.png');
+        $this->clickTopToolbarButton('subscript');
 
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">SUB</li>', $lineage);
 
         $this->click($textLoc);
         $this->selectText($text);
-        $this->clickTopToolbarButton(dirname(dirname(__FILE__)).'/ViperCoreStylesPlugin/Images/toolbarIcon_sub_active.png');
+        $this->clickTopToolbarButton('subscript', 'active');
 
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Selection</li>', $lineage);
@@ -119,14 +115,14 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarCoreStylesUnitTest exten
 
         $this->click($textLoc);
         $this->selectText($text);
-        $this->clickTopToolbarButton(dirname(dirname(__FILE__)).'/ViperCoreStylesPlugin/Images/toolbarIcon_sup.png');
+        $this->clickTopToolbarButton('superscript');
 
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">SUP</li>', $lineage);
 
         $this->click($textLoc);
         $this->selectText($text);
-        $this->clickTopToolbarButton(dirname(dirname(__FILE__)).'/ViperCoreStylesPlugin/Images/toolbarIcon_sup_active.png');
+        $this->clickTopToolbarButton('superscript', 'active');
 
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Selection</li>', $lineage);
@@ -148,20 +144,11 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarCoreStylesUnitTest exten
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Selection</li>', $lineage);
 
-        $this->click($textLoc);
-        $this->selectText($text);
-        $this->clickTopToolbarButton(dirname(dirname(__FILE__)).'/ViperCoreStylesPlugin/Images/toolbarIcon_strike.png');
-
+        $this->clickTopToolbarButton('strikethrough');
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">DEL</li>', $lineage);
 
-        // Stop here as we need a way to select strikethrough text.
-        $this->markTestIncomplete('Need a way to select text that has a strikethrough.');
-
-        $this->click($textLoc);
-        $this->selectText($text);
-        $this->clickTopToolbarButton(dirname(dirname(__FILE__)).'/ViperCoreStylesPlugin/Images/toolbarIcon_strike_active.png');
-
+        $this->clickTopToolbarButton('strikethrough', 'active');
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Selection</li>', $lineage);
 
@@ -238,9 +225,6 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarCoreStylesUnitTest exten
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">SUB</li><li class="ViperITP-lineageItem">Selection</li>', $lineage);
 
-        // Stop here as we need a way to select subscript text.
-        $this->markTestIncomplete('Need a way to select text that has a subscript.');
-
         $this->selectText('RRR');
         $this->selectInlineToolbarLineageItem(1);
         $this->assertEquals('SUB RRR', $this->getSelectedText(), 'Subscript text is not selected.');
@@ -281,10 +265,16 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarCoreStylesUnitTest exten
      */
     public function testSelectingTheStrikethroughTagInTheLineage()
     {
-        // Stop here as we need a way to select strikethrough text.
-        $this->markTestIncomplete('Need a way to select text that has a strikethrough.');
-
-        $this->selectText('CROSSED');
+        $this->selectText('ORSM');
+        $this->keyDown('Key.RIGHT');
+        $this->keyDown('Key.RIGHT');
+        $this->keyDown('Key.SHIFT + Key.RIGHT');
+        $this->keyDown('Key.SHIFT + Key.RIGHT');
+        $this->keyDown('Key.SHIFT + Key.RIGHT');
+        $this->keyDown('Key.SHIFT + Key.RIGHT');
+        $this->keyDown('Key.SHIFT + Key.RIGHT');
+        $this->keyDown('Key.SHIFT + Key.RIGHT');
+        $this->keyDown('Key.SHIFT + Key.RIGHT');
 
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">DEL</li><li class="ViperITP-lineageItem Viper-selected">Selection</li>', $lineage);
@@ -295,10 +285,6 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarCoreStylesUnitTest exten
 
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">DEL</li><li class="ViperITP-lineageItem">Selection</li>', $lineage);
-
-        $this->selectText('out');
-        $this->selectInlineToolbarLineageItem(1);
-        $this->assertEquals('CROSSED out', $this->getSelectedText(), 'strike through text is not selected.');
 
     }//end testSelectingTheStrikethroughTagInTheLineage()
 
