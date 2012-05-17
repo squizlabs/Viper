@@ -12,12 +12,10 @@ class Viper_Tests_ViperCoreStylesPlugin_RemoveFormatUnitTest extends AbstractVip
      */
     public function testRemoveFormatIcon()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $this->selectText('WoW');
         $this->selectInlineToolbarLineageItem(0);
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_removeFormat.png');
+        $this->clickTopToolbarButton('removeFormat');
         sleep(1);
 
         $this->execJS('rmTableHeaders(0,true)');
@@ -34,12 +32,10 @@ class Viper_Tests_ViperCoreStylesPlugin_RemoveFormatUnitTest extends AbstractVip
      */
     public function testRemoveAlignmentForAList()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $this->selectText('oNo');
         $this->selectInlineToolbarLineageItem(0);
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_removeFormat.png');
+        $this->clickTopToolbarButton('removeFormat');
 
         $this->assertHTMLMatch('<p>This is a list</p><ul><li>Test removing bullet points</li><li>purus oNo luctus</li><li>vel molestie arcu</li></ul>');
 
@@ -53,12 +49,10 @@ class Viper_Tests_ViperCoreStylesPlugin_RemoveFormatUnitTest extends AbstractVip
      */
     public function testSelectionMaintainedWhenClickingRemoveFormat()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $this->selectText('XuT');
         $this->selectInlineToolbarLineageItem(0);
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_removeFormat.png');
+        $this->clickTopToolbarButton('removeFormat');
 
         $this->assertHTMLMatch('<p>Lorem XuT dolor sit amet WoW</p>');
         $this->assertEquals('Lorem XuT dolor sit amet WoW', $this->getSelectedText(), 'Original selection is not selected');
@@ -73,12 +67,10 @@ class Viper_Tests_ViperCoreStylesPlugin_RemoveFormatUnitTest extends AbstractVip
      */
     public function testRemoveFormatForAParagraph()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $this->selectText('Federal');
         $this->selectInlineToolbarLineageItem(0);
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_removeFormat.png');
+        $this->clickTopToolbarButton('removeFormat');
 
         $this->assertHTMLMatch('<p>Federal government agencies must update all government websites (as specified within scope under the Website Accessibility National Transition Strategy (NTS)) to WCAG 2.0 conformance. Agencies should use the principle of progressive enhancement when building and managing websites, and test for conformance across multiple browsers and operating system configurations.</p>');
 
