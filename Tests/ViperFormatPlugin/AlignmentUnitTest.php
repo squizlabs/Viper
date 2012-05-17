@@ -17,11 +17,10 @@ class Viper_Tests_ViperFormatPlugin_AlignmentUnitTest extends AbstractViperUnitT
         $this->keyDown('Key.RIGHT');
         $this->keyDown('Key.LEFT');
 
-        $dir = dirname(__FILE__).'/Images/';
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_justification.png');
+        $this->clickTopToolbarButton('justifyLeft');
         sleep(1);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_alignCenter.png');
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_alignCenter_active.png'));
+        $this->clickTopToolbarButton('justifyCenter');
+        $this->assertTrue($this->topToolbarButtonExists('justifyCenter', 'active'));
         $this->assertHTMLMatch('<p style="text-align: left;">sit amet WoW</p><p style="text-align: center;">RsR TpT</p><p style="text-align: right;">QvQ KyK</p><p style="text-align: justify;">MrM GaG</p><p style="text-align: center;">LOREM XuT dolor</p><p>test <strong>BOLD</strong> text</p><p>test ITALICS text.</p>');
 
     }//end testAlignmentInNoneBlockTag()
@@ -34,16 +33,14 @@ class Viper_Tests_ViperFormatPlugin_AlignmentUnitTest extends AbstractViperUnitT
      */
     public function testApplyingLeftJustify()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $this->selectText('LOREM', 'dolor');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_justification.png');
+        $this->clickTopToolbarButton('justifyLeft');
         sleep(1);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_alignLeft.png');
+        $this->clickTopToolbarButton('justifyLeft');
 
         $this->assertHTMLMatch('<p style="text-align: left;">sit amet WoW</p><p style="text-align: center;">RsR TpT</p><p style="text-align: right;">QvQ KyK</p><p style="text-align: justify;">MrM GaG</p><p style="text-align: left;">LOREM XuT dolor</p><p>test <strong>BOLD</strong> text</p><p>test ITALICS text.</p>');
 
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_alignLeft_active.png'), 'Active left justify icon does not appear in the top toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('justifyLeft', 'active'), 'Active left justify icon does not appear in the top toolbar');
 
     }//end testApplyingLeftJustify()
 
@@ -55,16 +52,14 @@ class Viper_Tests_ViperFormatPlugin_AlignmentUnitTest extends AbstractViperUnitT
      */
     public function testApplyingLeftJustifyWithBoldWord()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $this->selectText('BOLD');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_justification.png');
+        $this->clickTopToolbarButton('justifyLeft');
         sleep(1);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_alignLeft.png');
+        $this->clickTopToolbarButton('justifyLeft');
 
         $this->assertHTMLMatch('<p style="text-align: left;">sit amet WoW</p><p style="text-align: center;">RsR TpT</p><p style="text-align: right;">QvQ KyK</p><p style="text-align: justify;">MrM GaG</p><p>LOREM XuT dolor</p><p style="text-align: left;">test <strong>BOLD</strong> text</p><p>test ITALICS text.</p>');
 
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_alignLeft_active.png'), 'Active left justify icon does not appear in the top toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('justifyLeft', 'active'), 'Active left justify icon does not appear in the top toolbar');
 
     }//end testApplyingLeftJustifyWithBoldWord()
 
@@ -76,17 +71,15 @@ class Viper_Tests_ViperFormatPlugin_AlignmentUnitTest extends AbstractViperUnitT
      */
     public function testApplyingLeftJustifyWithItalicWord()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $this->selectText('ITALICS');
         $this->keyDown('Key.CMD + i');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_justification.png');
+        $this->clickTopToolbarButton('justifyLeft');
         sleep(1);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_alignLeft.png');
+        $this->clickTopToolbarButton('justifyLeft');
 
         $this->assertHTMLMatch('<p style="text-align: left;">sit amet WoW</p><p style="text-align: center;">RsR TpT</p><p style="text-align: right;">QvQ KyK</p><p style="text-align: justify;">MrM GaG</p><p>LOREM XuT dolor</p><p>test <strong>BOLD</strong> text</p><p style="text-align: left;">test <em>ITALICS</em> text.</p>');
 
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_alignLeft_active.png'), 'Active left justify icon does not appear in the top toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('justifyLeft', 'active'), 'Active left justify icon does not appear in the top toolbar');
 
     }//end testApplyingLeftJustifyWithItalicWord()
 
@@ -98,11 +91,9 @@ class Viper_Tests_ViperFormatPlugin_AlignmentUnitTest extends AbstractViperUnitT
      */
     public function testSelectingParagraphWithLeftJustification()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $this->selectText('sit', 'WoW');
 
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_alignLeft_active.png'), 'Left justify icon is not active in the top toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('justifyLeft', 'active'), 'Left justify icon is not active in the top toolbar');
 
     }//end testSelectingParagraphWithLeftJustification()
 
@@ -114,13 +105,11 @@ class Viper_Tests_ViperFormatPlugin_AlignmentUnitTest extends AbstractViperUnitT
      */
     public function testRemovingLeftJustification()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $this->selectText('sit', 'WoW');
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_alignLeft_active.png');
+        $this->clickTopToolbarButton('justifyLeft', 'active');
         sleep(1);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_alignLeft_active.png');
+        $this->clickTopToolbarButton('justifyLeft', 'active');
 
         $this->assertHTMLMatch('<p>sit amet WoW</p><p style="text-align: center;">RsR TpT</p><p style="text-align: right;">QvQ KyK</p><p style="text-align: justify;">MrM GaG</p><p>LOREM XuT dolor</p><p>test <strong>BOLD</strong> text</p><p>test ITALICS text.</p>');
 
@@ -134,16 +123,14 @@ class Viper_Tests_ViperFormatPlugin_AlignmentUnitTest extends AbstractViperUnitT
      */
     public function testApplyingRightJustify()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $this->selectText('LOREM', 'dolor');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_justification.png');
+        $this->clickTopToolbarButton('justifyLeft');
         sleep(1);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_alignRight.png');
+        $this->clickTopToolbarButton('justifyRight');
 
         $this->assertHTMLMatch('<p style="text-align: left;">sit amet WoW</p><p style="text-align: center;">RsR TpT</p><p style="text-align: right;">QvQ KyK</p><p style="text-align: justify;">MrM GaG</p><p style="text-align: right;">LOREM XuT dolor</p><p>test <strong>BOLD</strong> text</p><p>test ITALICS text.</p>');
 
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_alignRight_active.png'), 'Right justify active icon does not appear in the top toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('justifyRight', 'active'), 'Right justify active icon does not appear in the top toolbar');
 
     }//end testApplyingRightJustify()
 
@@ -155,16 +142,14 @@ class Viper_Tests_ViperFormatPlugin_AlignmentUnitTest extends AbstractViperUnitT
      */
     public function testApplyingRightJustifyWithBoldWord()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $this->selectText('BOLD');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_justification.png');
+        $this->clickTopToolbarButton('justifyLeft');
         sleep(1);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_alignRight.png');
+        $this->clickTopToolbarButton('justifyRight');
 
         $this->assertHTMLMatch('<p style="text-align: left;">sit amet WoW</p><p style="text-align: center;">RsR TpT</p><p style="text-align: right;">QvQ KyK</p><p style="text-align: justify;">MrM GaG</p><p>LOREM XuT dolor</p><p style="text-align: right;">test <strong>BOLD</strong> text</p><p>test ITALICS text.</p>');
 
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_alignRight_active.png'), 'Active right justify icon does not appear in the top toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('justifyRight', 'active'), 'Active right justify icon does not appear in the top toolbar');
 
     }//end testApplyingRightJustifyWithBoldWord()
 
@@ -176,18 +161,15 @@ class Viper_Tests_ViperFormatPlugin_AlignmentUnitTest extends AbstractViperUnitT
      */
     public function testApplyingRightJustifyWithItalicWord()
     {
-
-        $dir = dirname(__FILE__).'/Images/';
-
         $this->selectText('ITALICS');
         $this->keyDown('Key.CMD + i');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_justification.png');
+        $this->clickTopToolbarButton('justifyLeft');
         sleep(1);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_alignRight.png');
+        $this->clickTopToolbarButton('justifyRight');
 
         $this->assertHTMLMatch('<p style="text-align: left;">sit amet WoW</p><p style="text-align: center;">RsR TpT</p><p style="text-align: right;">QvQ KyK</p><p style="text-align: justify;">MrM GaG</p><p>LOREM XuT dolor</p><p>test <strong>BOLD</strong> text</p><p style="text-align: right;">test <em>ITALICS</em> text.</p>');
 
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_alignRight_active.png'), 'Active right justify icon does not appear in the top toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('justifyRight', 'active'), 'Active right justify icon does not appear in the top toolbar');
 
     }//end testApplyingRightJustifyWithItalicWord()
 
@@ -199,11 +181,9 @@ class Viper_Tests_ViperFormatPlugin_AlignmentUnitTest extends AbstractViperUnitT
      */
     public function testSelectingParagraphWithRightJustification()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $this->selectText('QvQ', 'Kyk');
 
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_alignRight_active.png'), 'Right justify active icon does not appear in the top toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('justifyRight', 'active'), 'Right justify active icon does not appear in the top toolbar');
 
     }//end testSelectingParagraphWithRightJustification()
 
@@ -215,13 +195,11 @@ class Viper_Tests_ViperFormatPlugin_AlignmentUnitTest extends AbstractViperUnitT
      */
     public function testRemovingRightJustification()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $this->selectText('QvQ', 'Kyk');
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_alignRight_active.png');
+        $this->clickTopToolbarButton('justifyRight', 'active');
         sleep(1);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_alignRight_active.png');
+        $this->clickTopToolbarButton('justifyRight', 'active');
 
         $this->assertHTMLMatch('<p style="text-align: left;">sit amet WoW</p><p style="text-align: center;">RsR TpT</p><p>QvQ KyK</p><p style="text-align: justify;">MrM GaG</p><p>LOREM XuT dolor</p><p>test <strong>BOLD</strong> text</p><p>test ITALICS text.</p>');
 
@@ -235,16 +213,14 @@ class Viper_Tests_ViperFormatPlugin_AlignmentUnitTest extends AbstractViperUnitT
      */
     public function testApplyingCentreJustify()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $this->selectText('LOREM', 'dolor');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_justification.png');
+        $this->clickTopToolbarButton('justifyLeft');
         sleep(1);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_alignCenter.png');
+        $this->clickTopToolbarButton('justifyCenter');
 
         $this->assertHTMLMatch('<p style="text-align: left;">sit amet WoW</p><p style="text-align: center;">RsR TpT</p><p style="text-align: right;">QvQ KyK</p><p style="text-align: justify;">MrM GaG</p><p style="text-align: center;">LOREM XuT dolor</p><p>test <strong>BOLD</strong> text</p><p>test ITALICS text.</p>');
 
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_alignCenter_active.png'), 'Centre justify active icon does not appear in the top toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('justifyCenter', 'active'), 'Centre justify active icon does not appear in the top toolbar');
 
     }//end testApplyingCentreJustify()
 
@@ -256,17 +232,14 @@ class Viper_Tests_ViperFormatPlugin_AlignmentUnitTest extends AbstractViperUnitT
      */
     public function testApplyingCentreJustifyWithBoldWord()
     {
-
-        $dir = dirname(__FILE__).'/Images/';
-
         $this->selectText('BOLD');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_justification.png');
+        $this->clickTopToolbarButton('justifyLeft');
         sleep(1);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_alignCenter.png');
+        $this->clickTopToolbarButton('justifyCenter');
 
         $this->assertHTMLMatch('<p style="text-align: left;">sit amet WoW</p><p style="text-align: center;">RsR TpT</p><p style="text-align: right;">QvQ KyK</p><p style="text-align: justify;">MrM GaG</p><p>LOREM XuT dolor</p><p style="text-align: center;">test <strong>BOLD</strong> text</p><p>test ITALICS text.</p>');
 
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_alignCenter_active.png'), 'Active right justify icon does not appear in the top toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('justifyCenter', 'active'), 'Active right justify icon does not appear in the top toolbar');
 
     }//end testApplyingCenterJustifyWithBoldWord()
 
@@ -278,18 +251,15 @@ class Viper_Tests_ViperFormatPlugin_AlignmentUnitTest extends AbstractViperUnitT
      */
     public function testApplyingCenterJustifyWithItalicWord()
     {
-
-        $dir = dirname(__FILE__).'/Images/';
-
         $this->selectText('ITALICS');
         $this->keyDown('Key.CMD + i');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_justification.png');
+        $this->clickTopToolbarButton('justifyLeft');
         sleep(1);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_alignCenter.png');
+        $this->clickTopToolbarButton('justifyCenter');
 
         $this->assertHTMLMatch('<p style="text-align: left;">sit amet WoW</p><p style="text-align: center;">RsR TpT</p><p style="text-align: right;">QvQ KyK</p><p style="text-align: justify;">MrM GaG</p><p>LOREM XuT dolor</p><p>test <strong>BOLD</strong> text</p><p style="text-align: center;">test <em>ITALICS</em> text.</p>');
 
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_alignCenter_active.png'), 'Active center justify icon does not appear in the top toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('justifyCenter', 'active'), 'Active center justify icon does not appear in the top toolbar');
 
     }//end testApplyingCenterJustifyWithItalicWord()
 
@@ -301,11 +271,10 @@ class Viper_Tests_ViperFormatPlugin_AlignmentUnitTest extends AbstractViperUnitT
      */
     public function testSelectingParagraphWithCentreJustification()
     {
-        $dir = dirname(__FILE__).'/Images/';
+        $this->selectText('RsR');
+        $this->selectInlineToolbarLineageItem(0);
 
-        $this->selectText('RsR', 'TpT');
-
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_alignCenter_active.png'), 'Centre justify active icon does not appear int he top toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('justifyCenter', 'active'), 'Centre justify active icon does not appear int he top toolbar');
 
     }//end testSelectingParagraphWithCentreJustification()
 
@@ -317,13 +286,11 @@ class Viper_Tests_ViperFormatPlugin_AlignmentUnitTest extends AbstractViperUnitT
      */
     public function testRemovingCentreJustification()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $this->selectText('RsR');
         $this->selectInlineToolbarLineageItem(0);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_alignCenter_active.png');
+        $this->clickTopToolbarButton('justifyCenter', 'active');
         sleep(1);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_alignCenter_active.png');
+        $this->clickTopToolbarButton('justifyCenter', 'active');
 
         $this->assertHTMLMatch('<p style="text-align: left;">sit amet WoW</p><p>RsR TpT</p><p style="text-align: right;">QvQ KyK</p><p style="text-align: justify;">MrM GaG</p><p>LOREM XuT dolor</p><p>test <strong>BOLD</strong> text</p><p>test ITALICS text.</p>');
 
@@ -337,17 +304,15 @@ class Viper_Tests_ViperFormatPlugin_AlignmentUnitTest extends AbstractViperUnitT
      */
     public function testApplyingBlockJustify()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $this->selectText('LOREM', 'dolor');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_justification.png');
+        $this->clickTopToolbarButton('justifyLeft');
         sleep(1);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_alignJustify.png');
+        $this->clickTopToolbarButton('justifyBlock');
 
         $this->assertHTMLMatch('<p style="text-align: left;">sit amet WoW</p><p style="text-align: center;">RsR TpT</p><p style="text-align: right;">QvQ KyK</p><p style="text-align: justify;">MrM GaG</p><p style="text-align: justify;">LOREM XuT dolor</p><p>test <strong>BOLD</strong> text</p><p>test ITALICS text.</p>');
 
 
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_alignJustify_active.png'), 'Toogle justification icon is not selected');
+        $this->assertTrue($this->topToolbarButtonExists('justifyBlock', 'active'), 'Toogle justification icon is not selected');
 
     }//end testApplyingBlockJustify()
 
@@ -359,17 +324,14 @@ class Viper_Tests_ViperFormatPlugin_AlignmentUnitTest extends AbstractViperUnitT
      */
     public function testApplyingBlockJustifyWithBoldWord()
     {
-
-        $dir = dirname(__FILE__).'/Images/';
-
         $this->selectText('BOLD');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_justification.png');
+        $this->clickTopToolbarButton('justifyLeft');
         sleep(1);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_alignJustify.png');
+        $this->clickTopToolbarButton('justifyBlock');
 
         $this->assertHTMLMatch('<p style="text-align: left;">sit amet WoW</p><p style="text-align: center;">RsR TpT</p><p style="text-align: right;">QvQ KyK</p><p style="text-align: justify;">MrM GaG</p><p>LOREM XuT dolor</p><p style="text-align: justify;">test <strong>BOLD</strong> text</p><p>test ITALICS text.</p>');
 
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_alignJustify_active.png'), 'Active right justify icon does not appear in the top toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('justifyBlock', 'active'), 'Active right justify icon does not appear in the top toolbar');
 
     }//end testApplyingBlockJustifyWithBoldWord()
 
@@ -381,18 +343,15 @@ class Viper_Tests_ViperFormatPlugin_AlignmentUnitTest extends AbstractViperUnitT
      */
     public function testApplyingBlockJustifyWithItalicWord()
     {
-
-        $dir = dirname(__FILE__).'/Images/';
-
         $this->selectText('ITALICS');
         $this->keyDown('Key.CMD + i');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_justification.png');
+        $this->clickTopToolbarButton('justifyLeft');
         sleep(1);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_alignJustify.png');
+        $this->clickTopToolbarButton('justifyBlock');
 
         $this->assertHTMLMatch('<p style="text-align: left;">sit amet WoW</p><p style="text-align: center;">RsR TpT</p><p style="text-align: right;">QvQ KyK</p><p style="text-align: justify;">MrM GaG</p><p>LOREM XuT dolor</p><p>test <strong>BOLD</strong> text</p><p style="text-align: justify;">test <em>ITALICS</em> text.</p>');
 
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_alignJustify_active.png'), 'Active center justify icon does not appear in the top toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('justifyBlock', 'active'), 'Active center justify icon does not appear in the top toolbar');
 
     }//end testApplyingBlockJustifyWithItalicWord()
 
@@ -404,11 +363,9 @@ class Viper_Tests_ViperFormatPlugin_AlignmentUnitTest extends AbstractViperUnitT
      */
     public function testSelectingParagraphWithBlockJustification()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $this->selectText('MrM', 'GaG');
 
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_alignJustify_active.png'), 'Block justify active icon does not appear in the toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('justifyBlock', 'active'), 'Block justify active icon does not appear in the toolbar');
 
     }//end testSelectingParagraphWithBlockJustification()
 
@@ -420,13 +377,11 @@ class Viper_Tests_ViperFormatPlugin_AlignmentUnitTest extends AbstractViperUnitT
      */
     public function testRemovingBlockJustification()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $this->selectText('MrM', 'GaG');
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_alignJustify_active.png');
+        $this->clickTopToolbarButton('justifyBlock', 'active');
         sleep(1);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_alignJustify_active.png');
+        $this->clickTopToolbarButton('justifyBlock', 'active');
 
         $this->assertHTMLMatch('<p style="text-align: left;">sit amet WoW</p><p style="text-align: center;">RsR TpT</p><p style="text-align: right;">QvQ KyK</p><p>MrM GaG</p><p>LOREM XuT dolor</p><p>test <strong>BOLD</strong> text</p><p>test ITALICS text.</p>');
 
@@ -440,17 +395,15 @@ class Viper_Tests_ViperFormatPlugin_AlignmentUnitTest extends AbstractViperUnitT
      */
     public function testJustificationWhenSelectingAWord()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $this->selectText('LOREM');
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_justification.png');
+        $this->clickTopToolbarButton('justifyLeft');
         sleep(1);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_alignLeft.png');
+        $this->clickTopToolbarButton('justifyLeft');
 
         $this->assertHTMLMatch('<p style="text-align: left;">sit amet WoW</p><p style="text-align: center;">RsR TpT</p><p style="text-align: right;">QvQ KyK</p><p style="text-align: justify;">MrM GaG</p><p style="text-align: left;">LOREM XuT dolor</p><p>test <strong>BOLD</strong> text</p><p>test ITALICS text.</p>');
 
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_alignLeft_active.png'), 'Acitve left justify icon does not appear in the top toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('justifyLeft', 'active'), 'Acitve left justify icon does not appear in the top toolbar');
 
     }//end testJustificationWhenSelectingAWord()
 
@@ -462,17 +415,15 @@ class Viper_Tests_ViperFormatPlugin_AlignmentUnitTest extends AbstractViperUnitT
      */
     public function testJustificationWhenClickingInAWord()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $this->click($this->find('dolor'));
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_justification.png');
+        $this->clickTopToolbarButton('justifyLeft');
         sleep(1);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_alignRight.png');
+        $this->clickTopToolbarButton('justifyRight');
 
         $this->assertHTMLMatch('<p style="text-align: left;">sit amet WoW</p><p style="text-align: center;">RsR TpT</p><p style="text-align: right;">QvQ KyK</p><p style="text-align: justify;">MrM GaG</p><p style="text-align: right;">LOREM XuT dolor</p><p>test <strong>BOLD</strong> text</p><p>test ITALICS text.</p>');
 
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_alignRight_active.png'), 'Acitve right justify icon does not appear in the top toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('justifyRight', 'active'), 'Acitve right justify icon does not appear in the top toolbar');
 
     }//end testJustificationWhenClickingInAWord()
 
@@ -484,13 +435,11 @@ class Viper_Tests_ViperFormatPlugin_AlignmentUnitTest extends AbstractViperUnitT
      */
     public function testJustificationMultipleParagraphsWithAlignmentsApplied()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $this->selectText('WoW', 'XuT');
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_alignLeft_active.png');
+        $this->clickTopToolbarButton('justifyLeft', 'active');
         sleep(1);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_alignRight.png');
+        $this->clickTopToolbarButton('justifyRight');
 
         $this->assertHTMLMatch(
             '<p style="text-align: right;">sit amet WoW</p><p style="text-align: right;">RsR TpT</p><p style="text-align: right;">QvQ KyK</p><p style="text-align: right;">MrM GaG</p><p>LOREM XuT dolor</p><p style="text-align: right;">test <strong>BOLD</strong> text</p><p>test ITALICS text.</p>',
@@ -501,7 +450,7 @@ class Viper_Tests_ViperFormatPlugin_AlignmentUnitTest extends AbstractViperUnitT
         $this->selectText('WoW', 'XuT');
 
         sleep(1);
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_alignRight_active.png'), 'Acitve right justify icon does not appear in the top toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('justifyRight', 'active'), 'Acitve right justify icon does not appear in the top toolbar');
 
     }//end testJustificationMultipleParagraphsWithAlignmentsApplied()
 
@@ -513,13 +462,11 @@ class Viper_Tests_ViperFormatPlugin_AlignmentUnitTest extends AbstractViperUnitT
      */
     public function testJustificationMultipleParagraphsWithNoAlignmentsApplied()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $this->selectText('XuT', 'ITALICS');
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_justification.png');
+        $this->clickTopToolbarButton('justifyLeft');
         sleep(1);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_alignCenter.png');
+        $this->clickTopToolbarButton('justifyCenter');
 
         $this->assertHTMLMatch(
             '<p style="text-align: left;">sit amet WoW</p><p style="text-align: center;">RsR TpT</p><p style="text-align: right;">QvQ KyK</p><p style="text-align: justify;">MrM GaG</p><p style="text-align: center;">LOREM XuT dolor</p><p style="text-align: center;">test <strong>BOLD</strong> text</p><p style="text-align: center;">test ITALICS text.</p>',
@@ -535,31 +482,32 @@ class Viper_Tests_ViperFormatPlugin_AlignmentUnitTest extends AbstractViperUnitT
      */
     public function testAligningAnImage()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $this->clickElement('img', 1);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_justification.png');
+        $this->clickTopToolbarButton('justifyLeft');
         sleep(1);
-        $this->assertTrue($this->exists($dir.'toolbarIcon_alignment_for_image.png'));
-        
-        $this->clickTopToolbarButton($dir.'toolbarIcon_alignLeft.png');
-        $this->assertHTMLMatch('<p>Australian governments at all levels have <strong><em>endorsed</em></strong> WCAG 2.0, and require all government websites (federal, state and territory) to meet the new guidelines at the minimum compliance level (Single A) by the end of 2012.</p><p><img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="" width="354" height="160.5854748603352" style="float: left; margin-top: 1em; margin-right: 1em; margin-bottom: 1em; margin-left: 0px;" />Federal government agencies must update <strong>all government</strong> websites (as specified within scope under the Website Accessibility National Transition Strategy (NTS)) to WCAG 2.0 conformance.</p>');
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_alignLeft_active.png'), 'Active left justify icon does not appear in the top toolbar');
-        
-        $this->clickTopToolbarButton($dir.'toolbarIcon_alignCenter.png');
-        $this->assertHTMLMatch('<p>Australian governments at all levels have <strong><em>endorsed</em></strong> WCAG 2.0, and require all government websites (federal, state and territory) to meet the new guidelines at the minimum compliance level (Single A) by the end of 2012.</p><p><img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="" width="354" height="160.5854748603352" style="margin-top: 1em; margin-right: auto; margin-bottom: 1em; margin-left: auto; display: block;" />Federal government agencies must update <strong>all government</strong> websites (as specified within scope under the Website Accessibility National Transition Strategy (NTS)) to WCAG 2.0 conformance.</p>');
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_alignCenter_active.png'), 'Active center justify icon does not appear in the top toolbar');
-        
-        $this->clickTopToolbarButton($dir.'toolbarIcon_alignRight.png');
-        $this->assertHTMLMatch('<p>Australian governments at all levels have <strong><em>endorsed</em></strong> WCAG 2.0, and require all government websites (federal, state and territory) to meet the new guidelines at the minimum compliance level (Single A) by the end of 2012.</p><p><img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="" width="354" height="160.5854748603352" style="float: right; margin-top: 1em; margin-right: 0px; margin-bottom: 1em; margin-left: 1em;" />Federal government agencies must update <strong>all government</strong> websites (as specified within scope under the Website Accessibility National Transition Strategy (NTS)) to WCAG 2.0 conformance.</p>');
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_alignRight_active.png'), 'Active right justify icon does not appear in the top toolbar');
-        
-        $this->clickTopToolbarButton($dir.'toolbarIcon_alignRight_active.png');
+        $this->assertTrue($this->topToolbarButtonExists('justifyLeft'), 'Left justify icon does not appear in the top toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('justifyRight'), 'Right justify icon does not appear in the top toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('justifyCenter'), 'Center justify icon does not appear in the top toolbar');
+       // $this->assertFalse($this->topToolbarButtonExists('justifyBlock'), 'Block justify icon appears in the top toolbar');
+
+        $this->clickTopToolbarButton('justifyLeft');
+        $this->assertHTMLMatch('<p>Australian governments at all levels have <strong><em>endorsed</em></strong> WCAG 2.0, and require all government websites (federal, state and territory) to meet the new guidelines at the minimum compliance level (Single A) by the end of 2012.</p><p><img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="" width="354" height="160.5854748603352" style="float: left; margin: 1em 1em 1em 0px;" />Federal government agencies must update <strong>all government</strong> websites (as specified within scope under the Website Accessibility National Transition Strategy (NTS)) to WCAG 2.0 conformance.</p>');
+        $this->assertTrue($this->topToolbarButtonExists('justifyLeft', 'active'), 'Active left justify icon does not appear in the top toolbar');
+
+        $this->clickTopToolbarButton('justifyCenter');
+        $this->assertHTMLMatch('<p>Australian governments at all levels have <strong><em>endorsed</em></strong> WCAG 2.0, and require all government websites (federal, state and territory) to meet the new guidelines at the minimum compliance level (Single A) by the end of 2012.</p><p><img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="" width="354" height="160.5854748603352" style="margin: 1em auto; display: block;" />Federal government agencies must update <strong>all government</strong> websites (as specified within scope under the Website Accessibility National Transition Strategy (NTS)) to WCAG 2.0 conformance.</p>');
+        $this->assertTrue($this->topToolbarButtonExists('justifyCenter', 'active'), 'Active center justify icon does not appear in the top toolbar');
+
+        $this->clickTopToolbarButton('justifyRight');
+        $this->assertHTMLMatch('<p>Australian governments at all levels have <strong><em>endorsed</em></strong> WCAG 2.0, and require all government websites (federal, state and territory) to meet the new guidelines at the minimum compliance level (Single A) by the end of 2012.</p><p><img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="" width="354" height="160.5854748603352" style="float: right; margin: 1em 0px 1em 1em;" />Federal government agencies must update <strong>all government</strong> websites (as specified within scope under the Website Accessibility National Transition Strategy (NTS)) to WCAG 2.0 conformance.</p>');
+        $this->assertTrue($this->topToolbarButtonExists('justifyRight', 'active'), 'Active right justify icon does not appear in the top toolbar');
+
+        $this->clickTopToolbarButton('justifyRight', 'active');
         $this->assertHTMLMatch('<p>Australian governments at all levels have <strong><em>endorsed</em></strong> WCAG 2.0, and require all government websites (federal, state and territory) to meet the new guidelines at the minimum compliance level (Single A) by the end of 2012.</p><p><img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="" width="354" height="160.5854748603352" />Federal government agencies must update <strong>all government</strong> websites (as specified within scope under the Website Accessibility National Transition Strategy (NTS)) to WCAG 2.0 conformance.</p>');
 
     }//end testAligningAnImage()
-    
-    
+
+
 }//end class
 
 ?>
