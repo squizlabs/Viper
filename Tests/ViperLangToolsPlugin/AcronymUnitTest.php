@@ -105,10 +105,13 @@ class Viper_Tests_ViperLangToolsPlugin_AcronymUnitTest extends AbstractViperUnit
         $textLoc = $this->find($text);
 
         $this->selectText($text);
-        $this->assertTrue($this->topToolbarButtonExists('langTools', 'active'), 'Class icon in Top Toolbar should be active.');
+        $this->assertTrue($this->topToolbarButtonExists('langTools', 'active'), 'Language icon in Top Toolbar should be active.');
 
         $this->clickTopToolbarButton('langTools', 'active');
         $this->clickTopToolbarButton('Acronym', 'active', TRUE);
+
+        //$this->clickField('Acronym');
+
         $this->clearFieldValue('Acronym');
         $this->keyDown('Key.ENTER');
 

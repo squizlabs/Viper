@@ -97,7 +97,7 @@ function gBtn(text, state, selectorPrefix)
 
 function gField(label)
 {
-    var selector = '.Viper-forTopbar .Viper-subSection.Viper-active label';
+    var selector = '.Viper-forTopbar .Viper-subSection.Viper-active label span';
     selector    += ':contains(' + label + ')';
 
     var field = dfxjQuery.find(selector)[0];

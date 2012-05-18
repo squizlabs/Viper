@@ -1,7 +1,6 @@
 <?php
 require_once 'AbstractSikuliUnitTest.php';
 
-
 /**
  * An abstract class that all Viper unit tests must extend.
  */
@@ -200,7 +199,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
             self::$_testRun = TRUE;
 
             $pageLoc = $this->getPageTopLeft();
-            $this->setH(self::$_window, $this->getH(self::$_window) - ($pageLoc['y'] - $this->getY(self::$_window)));
+            $this->setH(self::$_window, ($this->getH(self::$_window) - ($pageLoc['y'] - $this->getY(self::$_window))));
             $this->setX(self::$_window, $pageLoc['x']);
             $this->setY(self::$_window, $pageLoc['y']);
         }//end if
@@ -307,7 +306,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
                      ''          => ' Viper-dummyClass',
                      '_selected' => ' Viper-selected',
                      '_active'   => ' Viper-active',
-                     '_disabled' => ' Viper-disabled'
+                     '_disabled' => ' Viper-disabled',
                     );
 
         $buttonHTML = '';
@@ -336,7 +335,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         $dest = $baseDir.'/tmp-calibrate.html';
         self::goToURL($dest);
 
-        // Inline toolbar pattern.
+        // Create image for the inline toolbar pattern (the arrow on top).
         $this->selectText('PyP');
 
         usleep(500);
@@ -348,7 +347,17 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         $vitpImage = $this->capture($region);
         copy($vitpImage, $imgPath.'/vitp_arrow.png');
 
+        // Remove all Viper elements.
         $this->execJS('viper.destroy()');
+
+        // Create image for the text field actions.
+        $textFieldActionRevertRegion = $this->getRegionOnPage($this->execJS('dfx.getBoundingRectangle(dfx.getId("textboxActionRevert"))'));
+        $textFieldActionRevertImage  = $this->capture($textFieldActionRevertRegion);
+        copy($textFieldActionRevertImage, $imgPath.'/textField_action_revert.png');
+
+        $textFieldActionClearRegion = $this->getRegionOnPage($this->execJS('dfx.getBoundingRectangle(dfx.getId("textboxActionClear"))'));
+        $textFieldActionClearImage  = $this->capture($textFieldActionClearRegion);
+        copy($textFieldActionClearImage, $imgPath.'/textField_action_clear.png');
 
         foreach ($statuses as $status => $className) {
             $btnRects = $this->execJS('getCoords("'.$status.'", "'.$className.'")');
@@ -749,7 +758,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         if (self::$_testRun === TRUE) {
             // Adjust the brwoser window region so that its only the area of the actual page.
             $pageLoc = $this->getPageTopLeft();
-            $this->setH(self::$_window, $this->getH(self::$_window) - ($pageLoc['y'] - $this->getY(self::$_window)));
+            $this->setH(self::$_window, ($this->getH(self::$_window) - ($pageLoc['y'] - $this->getY(self::$_window))));
             $this->setX(self::$_window, $pageLoc['x']);
             $this->setY(self::$_window, $pageLoc['y']);
         }
@@ -887,6 +896,16 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
     }//end clickInlineToolbarButton()
 
 
+    /**
+     * Clicks the specified  button on the page.
+     *
+     * @param string  $buttonIcon The name of the button.
+     * @param string  $state      The name of the button state (active, selected).
+     * @param boolean $isText     If TRUE then the button is a text button (i.e. no icon).
+     * @param string  $location   The location of the button (topToolbar, inlineToolbar, etc.).
+     *
+     * @return void
+     */
     private function _clickButton($buttonIcon, $state=NULL, $isText=FALSE, $location=NULL)
     {
         $buttonObj = $this->_getButton($buttonIcon, $state, $isText, $location);
@@ -898,8 +917,12 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
             $region = $this->getInlineToolbar();
         }
 
-        $match   = $this->find($buttonObj, $region);
+        $match = $this->find($buttonObj, $region);
         $this->click($match);
+
+        // Move the mouse pointer away from the button so that its tooltip does not
+        // cause issues.
+        $this->mouseMove($this->createLocation($this->getX($match), $this->getY($match)));
 
     }//end _clickButton()
 
@@ -907,17 +930,20 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
     /**
      * Returns the button object.
      *
-     * @param string $button
+     * @param string  $buttonIcon The name of the button.
+     * @param string  $state      The name of the button state (active, selected).
+     * @param boolean $isText     If TRUE then the button is a text button (i.e. no icon).
+     * @param string  $location   The location of the button (topToolbar, inlineToolbar, etc.).
      *
-     *
-     * @return void
+     * @return string
+     * @throws Exception If the button image cannot be found.
      */
     private function _getButton($buttonIcon, $state=NULL, $isText=FALSE, $location=NULL)
     {
         if ($isText === TRUE) {
             $buttonIconId = preg_replace('#\W#', '_', $buttonIcon);
             try {
-                $buttonIcon   = $this->getButtonIconPath($buttonIconId, $state);
+                $buttonIcon = $this->getButtonIconPath($buttonIconId, $state);
             } catch (Exception $e) {
                 $jsFn = 'gBtn';
 
@@ -941,7 +967,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
             }//end try
         } else if (is_file($buttonIcon) === FALSE) {
             $buttonIcon = $this->getButtonIconPath($buttonIcon, $state);
-        }
+        }//end if
 
         if (file_exists($buttonIcon) === FALSE) {
             throw new Exception('File not found: '.$buttonIcon);
@@ -961,7 +987,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      *
      * @return string
      */
-    private function _createButtonImageFromRectangle($button, $rect, $state=NULL)
+    private function _createButtonImageFromRectangle($button, array $rect, $state=NULL)
     {
         $button      = preg_replace('#[^a-zA-Z0-9_-]#', '_', $button);
         $buttonImage = $this->capture($this->getRegionOnPage($rect));
@@ -1121,8 +1147,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      */
     protected function clickField($label)
     {
-        $rect = $this->execJS('gField("'.$label.'")');
-        $this->click($this->getRegionOnPage($rect));
+        $this->click($this->_getLabel($label));
 
     }//end clickField()
 
@@ -1136,10 +1161,17 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      */
     protected function clearFieldValue($label)
     {
-        $rect       = $this->execJS('gField("'.$label.'")');
-        $rect['x1'] = ($rect['x2'] - 12);
+        $fieldLabel   = $this->find($this->_getLabel($label));
+        $fieldRegion  = $this->extendRight($fieldLabel, 400);
+        $actionImage  = $this->getBrowserImagePath().'/textField_action_clear.png';
+        $actionButton = $this->find($actionImage, $fieldRegion);
 
-        $this->click($this->getRegionOnPage($rect));
+        $this->click($actionButton);
+
+        //$rect       = $this->execJS('gField("'.$label.'")');
+        //$rect['x1'] = ($rect['x2'] - 12);
+
+        //$this->click($this->getRegionOnPage($rect));
 
     }//end clearFieldValue()
 
@@ -1153,9 +1185,36 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      */
     protected function revertFieldValue($label)
     {
-        $this->clearFieldValue($label);
+        $fieldLabel   = $this->find($this->_getLabel($label));
+        $fieldRegion  = $this->extendRight($fieldLabel, 400);
+        $actionImage  = $this->getBrowserImagePath().'/textField_action_revert.png';
+        $actionButton = $this->find($actionImage, $fieldRegion);
 
     }//end revertFieldValue()
+
+
+    /**
+     * Returns the label image for the specified label element.
+     *
+     * @param string $label The label of a field.
+     *
+     * @return string
+     */
+    private function _getLabel($label)
+    {
+        $labelImg  = preg_replace('#\W#', '_', $label);
+        $imagePath = $this->getBrowserImagePath().'/label_'.$labelImg.'.png';
+
+        if (file_exists($imagePath) === FALSE) {
+            $rect    = $this->execJS('gField("'.$label.'")');
+            $region  = $this->getRegionOnPage($rect);
+            $tmpPath = $this->capture($region);
+            copy($tmpPath, $imagePath);
+        }
+
+        return $imagePath;
+
+    }//end _getLabel()
 
 
     /**

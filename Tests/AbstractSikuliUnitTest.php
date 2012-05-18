@@ -636,6 +636,21 @@ abstract class AbstractSikuliUnitTest extends PHPUnit_Framework_TestCase
 
 
     /**
+     * Extends the given region to the right.
+     *
+     * @param string  $obj   The region object.
+     * @param integer $range Number of pixels to extend by.
+     *
+     * @return Region
+     */
+    protected function extendRight($obj, $range=NULL)
+    {
+        return $this->callFunc('right', array($range), $obj, TRUE);
+
+    }//end extendRight()
+
+
+    /**
      * Sets the location of a Location object.
      *
      * @param string  $locObj The Location object var name.
@@ -668,6 +683,21 @@ abstract class AbstractSikuliUnitTest extends PHPUnit_Framework_TestCase
         return $imagePath;
 
     }//end capture()
+
+
+    /**
+     * Sets a Sikuli setting.
+     *
+     * @param string $setting Name of the setting.
+     * @param string $value   Value of the setting.
+     *
+     * @return void
+     */
+    protected function setSetting($setting, $value)
+    {
+        $this->sendCmd('Settings.'.$setting.' = '.$value);
+
+    }//end setSetting()
 
 
     /*

@@ -117,10 +117,10 @@ class Viper_Tests_ViperViewSourcePlugin_ViewSourceTest extends AbstractViperView
         $this->click($applyChangesIcon);
 
         $this->assertHTMLMatch('<p></p>');
-*/
+
 
     }//end testEditingContentAfterDeletingSourceCode()
-
+*/
 
 }//end class
 
