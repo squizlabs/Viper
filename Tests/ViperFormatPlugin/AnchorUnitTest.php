@@ -13,8 +13,6 @@ class Viper_Tests_ViperFormatPlugin_AnchorUnitTest extends AbstractViperUnitTest
      */
     public function testCreateAnchorUsingTheInlineToolbar()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $this->selectText('Lorem');
         $this->clickInlineToolbarButton('anchorID');
         $this->type('test');
@@ -31,7 +29,7 @@ class Viper_Tests_ViperFormatPlugin_AnchorUnitTest extends AbstractViperUnitTest
         $this->selectText('ORSM');
         $this->clickInlineToolbarButton('anchorID');
         $this->type('test');
-        $updateChanges = $this->find($dir.'toolbarIcon_updateChanges.png');
+        $updateChanges = $this->find('Update Changes', NULL, TRUE);
         $this->click($updateChanges);
 
         $this->assertHTMLMatch('<p><span id="test">Lorem</span> XuT dolor</p><p id="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span id="myclass">lABs</span> is <span id="test">ORSM</span></p>');
@@ -52,8 +50,6 @@ class Viper_Tests_ViperFormatPlugin_AnchorUnitTest extends AbstractViperUnitTest
      */
     public function testCreateAnchorUsingTheTopToolbar()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $this->selectText('Lorem');
         $this->clickTopToolbarButton('anchorID');
         $this->type('test');
@@ -70,7 +66,7 @@ class Viper_Tests_ViperFormatPlugin_AnchorUnitTest extends AbstractViperUnitTest
         $this->selectText('ORSM');
         $this->clickTopToolbarButton('anchorID');
         $this->type('test');
-        $updateChanges = $this->find($dir.'toolbarIcon_updateChanges.png');
+        $updateChanges = $this->find('Update Changes', NULL, TRUE);
         $this->click($updateChanges);
 
         $this->assertHTMLMatch('<p><span id="test">Lorem</span> XuT dolor</p><p id="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span id="myclass">lABs</span> is <span id="test">ORSM</span></p>');
@@ -140,12 +136,10 @@ class Viper_Tests_ViperFormatPlugin_AnchorUnitTest extends AbstractViperUnitTest
      */
     public function testDeletingAnchorsUsingTheInlineToolbar()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $this->selectText('WoW');
         $this->selectInlineToolbarLineageItem(0);
         $this->clickInlineToolbarButton('anchorID', 'active');
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_delete_icon.png');
+        $this->clearFieldValue('ID');
         $this->keyDown('Key.ENTER');
 
         $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p>sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span id="myclass">lABs</span> is ORSM</p>');
@@ -153,8 +147,8 @@ class Viper_Tests_ViperFormatPlugin_AnchorUnitTest extends AbstractViperUnitTest
         $this->selectText('lABs');
         sleep(1);
         $this->clickInlineToolbarButton('anchorID', 'active');
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_delete_icon.png');
-        $updateChanges = $this->find($dir.'toolbarIcon_updateChanges.png');
+        $this->clearFieldValue('ID');
+        $updateChanges = $this->find('Update Changes', NULL, TRUE);
         $this->click($updateChanges);
 
         $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p>sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz lABs is ORSM</p>');
@@ -169,20 +163,18 @@ class Viper_Tests_ViperFormatPlugin_AnchorUnitTest extends AbstractViperUnitTest
      */
     public function testDeletingAnchorsUsingTheTopToolbar()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $this->selectText('WoW');
         $this->selectInlineToolbarLineageItem(0);
         $this->clickTopToolbarButton('anchorID', 'active');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_delete_icon.png');
+        $this->clearFieldValue('ID');
         $this->keyDown('Key.ENTER');
 
         $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p>sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span id="myclass">lABs</span> is ORSM</p>');
 
         $this->selectText('lABs');
         $this->clickTopToolbarButton('anchorID', 'active');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_delete_icon.png');
-        $updateChanges = $this->find($dir.'toolbarIcon_updateChanges.png');
+        $this->clearFieldValue('ID');
+        $updateChanges = $this->find('Update Changes', NULL, TRUE);
         $this->click($updateChanges);
 
         $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p>sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz lABs is ORSM</p>');
