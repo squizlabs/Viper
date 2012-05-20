@@ -13,13 +13,11 @@ class Viper_Tests_ViperLangToolsPlugin_LanguageUnitTest extends AbstractViperUni
      */
     public function testLanguageIconIsDisabled()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $this->click($this->find('LOREM'));
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_toggle_language_disabled.png'), 'Language icon in Top Toolbar should not be active.');
+        $this->assertTrue($this->topToolbarButtonExists('langTools', 'disabled'), 'Language icon in Top Toolbar should not be active.');
 
         $this->selectText('LOREM');
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_toggle_language.png'), 'Language icon in Top Toolbar should be active.');
+        $this->assertTrue($this->topToolbarButtonExists('langTools'), 'Language icon in Top Toolbar should be active.');
 
     }//end testLanguageIconIsDisabled()
 
@@ -31,29 +29,15 @@ class Viper_Tests_ViperLangToolsPlugin_LanguageUnitTest extends AbstractViperUni
      */
     public function testUpdateChangesButton()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $text    = 'XuT';
         $textLoc = $this->find($text);
 
         $this->selectText($text);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language.png');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_language.png');
+        $this->clickTopToolbarButton('langTools');
+        $this->clickTopToolbarButton('Language', NULL, TRUE);
 
         // Check to make sure the update changes button is disabled.
-        $imageFound = false;
-        try
-        {
-            $this->find($dir.'toolbarIcon_updateChanges_disabled.png');
-            $imageFound = true;
-        }
-        catch(Exception $e)
-        {
-            // Expecting the exception because the button should be disabled
-            $imageFound = false;
-        }
-
-        $this->assertTrue($imageFound, 'The update changes button should be disabled');
+        $this->assertTrue($this->topToolbarButtonExists('Update Changes', 'disabled', TRUE), 'The update changes button should be disabled.');
 
     }//end testUpdateChangesButton()
 
@@ -65,14 +49,12 @@ class Viper_Tests_ViperLangToolsPlugin_LanguageUnitTest extends AbstractViperUni
      */
     public function testAddingLanguageToAWord()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $text    = 'XuT';
         $textLoc = $this->find($text);
 
         $this->selectText($text);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language.png');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_language.png');
+        $this->clickTopToolbarButton('langTools');
+        $this->clickTopToolbarButton('Language', NULL, TRUE);
         $this->type('en');
         $this->keyDown('Key.ENTER');
 
@@ -80,27 +62,27 @@ class Viper_Tests_ViperLangToolsPlugin_LanguageUnitTest extends AbstractViperUni
 
         $this->click($textLoc);
         $this->selectText($text);
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_toggle_language_highlighted.png'), 'Language icon in Top Toolbar should be active.');
+        $this->assertTrue($this->topToolbarButtonExists('langTools', 'active'), 'Language icon in Top Toolbar should be active.');
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language_highlighted.png');
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_toggle_language_active.png'), 'Language icon in Top Toolbar should be active.');
+        $this->clickTopToolbarButton('langTools', 'active');
+        $this->assertTrue($this->topToolbarButtonExists('langTools', 'active'), 'Language icon in Top Toolbar should be active.');
 
         $text = 'dolor';
 
         $this->selectText($text);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language.png');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_language.png');
+        $this->clickTopToolbarButton('langTools');
+        $this->clickTopToolbarButton('Language', NULL, TRUE);
         $this->type('def');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_updateChanges.png');
+        $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
 
         $this->assertHTMLMatch('<p>LOREM <span lang="en">XuT</span> <span lang="def">dolor</span></p><p lang="en">sit amet <strong>WoW</strong></p><p>Test PARA</p><p>Squiz <span lang="en">LABS</span> is orsm</p><p><em>ThE</em> QUICK brown fox</p><p><strong>jumps</strong> <em>OVER</em> the lazy dog</p>');
 
         $this->click($textLoc);
         $this->selectText($text);
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_toggle_language_highlighted.png'), 'Language icon in Top Toolbar should be active.');
+        $this->assertTrue($this->topToolbarButtonExists('langTools', 'active'), 'Language icon in Top Toolbar should be active.');
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language_highlighted.png');
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_language_active.png'), 'Language icon in Top Toolbar should be active.');
+        $this->clickTopToolbarButton('langTools', 'active');
+        $this->assertTrue($this->topToolbarButtonExists('Language', 'active', TRUE), 'Language icon in Top Toolbar should be active.');
 
     }//end testAddingLanguageToAWord()
 
@@ -112,14 +94,12 @@ class Viper_Tests_ViperLangToolsPlugin_LanguageUnitTest extends AbstractViperUni
      */
     public function testEditingALanguage()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $text    = 'LABS';
         $textLoc = $this->find($text);
 
         $this->selectText($text);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language_active.png');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_language_active.png');
+        $this->clickTopToolbarButton('langTools', 'active');
+        $this->clickTopToolbarButton('Language', 'active', TRUE);
         $this->type('abc');
         $this->keyDown('Key.ENTER');
 
@@ -135,14 +115,12 @@ class Viper_Tests_ViperLangToolsPlugin_LanguageUnitTest extends AbstractViperUni
      */
     public function testAddingLanguageToAParagraph()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $text = 'XuT';
 
         $this->selectText($text);
         $this->selectInlineToolbarLineageItem(0);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language.png');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_language.png');
+        $this->clickTopToolbarButton('langTools');
+        $this->clickTopToolbarButton('Language', NULL, TRUE);
         $this->type('en');
         $this->keyDown('Key.ENTER');
 
@@ -150,18 +128,18 @@ class Viper_Tests_ViperLangToolsPlugin_LanguageUnitTest extends AbstractViperUni
 
         $this->selectText($text);
         $this->selectInlineToolbarLineageItem(0);
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_toggle_language_highlighted.png'), 'Language icon in Top Toolbar should be active.');
+        $this->assertTrue($this->topToolbarButtonExists('langTools', 'active'), 'Language icon in Top Toolbar should be active.');
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language_highlighted.png');
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_toggle_language_active.png'), 'Language icon in Top Toolbar should be active.');
+        $this->clickTopToolbarButton('langTools', 'active');
+        $this->assertTrue($this->topToolbarButtonExists('langTools', 'active'), 'Language icon in Top Toolbar should be active.');
 
         $text = 'PARA';
         $this->selectText($text);
         $this->selectInlineToolbarLineageItem(0);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language.png');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_language.png');
+        $this->clickTopToolbarButton('langTools');
+        $this->clickTopToolbarButton('Language', NULL, TRUE);
         $this->type('en');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_updateChanges.png');
+        $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
 
         $this->assertHTMLMatch('<p lang="en">LOREM XuT dolor</p><p lang="en">sit amet <strong>WoW</strong></p><p lang="en">Test PARA</p><p>Squiz <span lang="en">LABS</span> is orsm</p><p><em>ThE</em> QUICK brown fox</p><p><strong>jumps</strong> <em>OVER</em> the lazy dog</p>');
 
@@ -175,17 +153,15 @@ class Viper_Tests_ViperLangToolsPlugin_LanguageUnitTest extends AbstractViperUni
      */
     public function testRemovingLanguageAttributeFromAParagraph()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $text = 'WoW';
 
         $this->selectText($text);
         $this->selectInlineToolbarLineageItem(0);
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_toggle_language_highlighted.png'), 'Language icon in Top Toolbar should be active.');
+        $this->assertTrue($this->topToolbarButtonExists('langTools', 'active'), 'Language icon in Top Toolbar should be active.');
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language_highlighted.png');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_language_active.png');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_deleteValue_icon.png');
+        $this->clickTopToolbarButton('langTools', 'active');
+        $this->clickTopToolbarButton('Language', 'active', TRUE);
+        $this->clearFieldValue('Language');
         $this->keyDown('Key.ENTER');
 
         $this->assertHTMLMatch('<p>LOREM XuT dolor</p><p>sit amet <strong>WoW</strong></p><p>Test PARA</p><p>Squiz <span lang="en">LABS</span> is orsm</p><p><em>ThE</em> QUICK brown fox</p><p><strong>jumps</strong> <em>OVER</em> the lazy dog</p>');
@@ -194,21 +170,21 @@ class Viper_Tests_ViperLangToolsPlugin_LanguageUnitTest extends AbstractViperUni
         $this->selectText($text);
         $this->selectInlineToolbarLineageItem(0);
 
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_toggle_language.png'), 'Language icon is still active in ThE Top Toolbar.');
+        $this->assertTrue($this->topToolbarButtonExists('langTools'), 'Language icon is still active in ThE Top Toolbar.');
 
         // Reapply ThE language so that we can delete it with ThE Update Changes button
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language.png');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_language.png');
+        $this->clickTopToolbarButton('langTools');
+        $this->clickTopToolbarButton('Language', NULL, TRUE);
         $this->type('en');
         $this->keyDown('Key.ENTER');
         $this->assertHTMLMatch('<p>LOREM XuT dolor</p><p lang="en">sit amet <strong>WoW</strong></p><p>Test PARA</p><p>Squiz <span lang="en">LABS</span> is orsm</p><p><em>ThE</em> QUICK brown fox</p><p><strong>jumps</strong> <em>OVER</em> the lazy dog</p>');
 
         $this->selectText($text);
         $this->selectInlineToolbarLineageItem(0);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language_highlighted.png');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_language_active.png');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_deleteValue_icon.png');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_updateChanges.png');
+        $this->clickTopToolbarButton('langTools', 'active');
+        $this->clickTopToolbarButton('Language', 'active', TRUE);
+        $this->clearFieldValue('Language');
+        $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
 
         $this->assertHTMLMatch('<p>LOREM XuT dolor</p><p>sit amet <strong>WoW</strong></p><p>Test PARA</p><p>Squiz <span lang="en">LABS</span> is orsm</p><p><em>ThE</em> QUICK brown fox</p><p><strong>jumps</strong> <em>OVER</em> the lazy dog</p>');
 
@@ -222,37 +198,35 @@ class Viper_Tests_ViperLangToolsPlugin_LanguageUnitTest extends AbstractViperUni
      */
     public function testRemovingLanguageAttributeFromAWord()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $text = 'LABS';
+        $labs = $this->find($text);
 
         $this->selectText($text);
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_toggle_language_active.png'), 'Class icon in Top Toolbar should be active.');
+        $this->assertTrue($this->topToolbarButtonExists('langTools', 'active'), 'Class icon in Top Toolbar should be active.');
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language_highlighted.png');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_language_active.png');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_deleteValue_icon.png');
+        $this->clickTopToolbarButton('langTools', 'active');
+        $this->clickTopToolbarButton('Language', 'active', TRUE);
+        $this->clearFieldValue('Language');
         $this->keyDown('Key.ENTER');
 
         $this->assertHTMLMatch('<p>LOREM XuT dolor</p><p lang="en">sit amet <strong>WoW</strong></p><p>Test PARA</p><p>Squiz LABS is orsm</p><p><em>ThE</em> QUICK brown fox</p><p><strong>jumps</strong> <em>OVER</em> the lazy dog</p>');
 
-        $this->click($this->find($text));
-        $this->selectText($text);
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_toggle_language.png'), 'Language icon is still active in ThE Top Toolbar.');
+        $this->doubleClick($labs);
+        $this->assertTrue($this->topToolbarButtonExists('langTools'), 'Language icon is still active in ThE Top Toolbar.');
 
         // Reapply ThE language so that we can delete it with ThE Update Changes button
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language.png');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_language.png');
+        $this->clickTopToolbarButton('langTools');
+        $this->clickTopToolbarButton('Language', NULL, TRUE);
         $this->type('en');
         $this->keyDown('Key.ENTER');
 
         $this->assertHTMLMatch('<p>LOREM XuT dolor</p><p lang="en">sit amet <strong>WoW</strong></p><p>Test PARA</p><p>Squiz <span lang="en">LABS</span> is orsm</p><p><em>ThE</em> QUICK brown fox</p><p><strong>jumps</strong> <em>OVER</em> the lazy dog</p>');
 
-        $this->selectText($text);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language_highlighted.png');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_language_active.png');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_deleteValue_icon.png');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_updateChanges.png');
+        $this->doubleClick($labs);
+        $this->clickTopToolbarButton('langTools', 'active');
+        $this->clickTopToolbarButton('Language', 'active', TRUE);
+        $this->clearFieldValue('Language');
+        $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
 
         $this->assertHTMLMatch('<p>LOREM XuT dolor</p><p lang="en">sit amet <strong>WoW</strong></p><p>Test PARA</p><p>Squiz LABS is orsm</p><p><em>ThE</em> QUICK brown fox</p><p><strong>jumps</strong> <em>OVER</em> the lazy dog</p>');
 
@@ -266,14 +240,12 @@ class Viper_Tests_ViperLangToolsPlugin_LanguageUnitTest extends AbstractViperUni
      */
     public function testAddingAndRemovingLanguageToAParagraphWithBoldFirstWord()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $text = 'OVER';
 
         $this->selectText($text);
         $this->selectInlineToolbarLineageItem(0);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language.png');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_language.png');
+        $this->clickTopToolbarButton('langTools');
+        $this->clickTopToolbarButton('Language', NULL, TRUE);
         $this->type('en');
         $this->keyDown('Key.ENTER');
 
@@ -282,9 +254,9 @@ class Viper_Tests_ViperLangToolsPlugin_LanguageUnitTest extends AbstractViperUni
         $this->click($this->find($text));
         $this->selectText($text);
         $this->selectInlineToolbarLineageItem(0);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language_highlighted.png');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_language_active.png');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_deleteValue_icon.png');
+        $this->clickTopToolbarButton('langTools', 'active');
+        $this->clickTopToolbarButton('Language', 'active', TRUE);
+        $this->clearFieldValue('Language');
         $this->keyDown('Key.ENTER');
 
         $this->assertHTMLMatch('<p>LOREM XuT dolor</p><p lang="en">sit amet <strong>WoW</strong></p><p>Test PARA</p><p>Squiz <span lang="en">LABS</span> is orsm</p><p><em>ThE</em> QUICK brown fox</p><p><strong>jumps</strong> <em>OVER</em> the lazy dog</p>');
@@ -299,14 +271,12 @@ class Viper_Tests_ViperLangToolsPlugin_LanguageUnitTest extends AbstractViperUni
      */
     public function testAddingAndRemovingLanguageToAParagraphWithItalicFirstWord()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $text = 'QUICK';
 
         $this->selectText($text);
         $this->selectInlineToolbarLineageItem(0);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language.png');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_language.png');
+        $this->clickTopToolbarButton('langTools');
+        $this->clickTopToolbarButton('Language', NULL, TRUE);
         $this->type('en');
         $this->keyDown('Key.ENTER');
 
@@ -315,9 +285,9 @@ class Viper_Tests_ViperLangToolsPlugin_LanguageUnitTest extends AbstractViperUni
         $this->click($this->find($text));
         $this->selectText($text);
         $this->selectInlineToolbarLineageItem(0);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language_highlighted.png');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_language_active.png');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_deleteValue_icon.png');
+        $this->clickTopToolbarButton('langTools', 'active');
+        $this->clickTopToolbarButton('Language', 'active', TRUE);
+        $this->clearFieldValue('Language');
         $this->keyDown('Key.ENTER');
 
         $this->assertHTMLMatch('<p>LOREM XuT dolor</p><p lang="en">sit amet <strong>WoW</strong></p><p>Test PARA</p><p>Squiz <span lang="en">LABS</span> is orsm</p><p><em>ThE</em> QUICK brown fox</p><p><strong>jumps</strong> <em>OVER</em> the lazy dog</p>');
@@ -332,23 +302,22 @@ class Viper_Tests_ViperLangToolsPlugin_LanguageUnitTest extends AbstractViperUni
      */
     public function testAddingAndRemovingLanguageToABoldWord()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
-        $text = 'jumps';
+        $text    = 'jumps';
+        $textLoc = $this->find($text);
 
         $this->selectText($text);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language.png');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_language.png');
+        $this->clickTopToolbarButton('langTools');
+        $this->clickTopToolbarButton('Language', NULL, TRUE);
         $this->type('en');
         $this->keyDown('Key.ENTER');
 
         $this->assertHTMLMatch('<p>LOREM XuT dolor</p><p lang="en">sit amet <strong>WoW</strong></p><p>Test PARA</p><p>Squiz <span lang="en">LABS</span> is orsm</p><p><em>ThE</em> QUICK brown fox</p><p><strong lang="en">jumps</strong> <em>OVER</em> the lazy dog</p>');
 
-        $this->click($this->find($text));
+        $this->click($textLoc);
         $this->selectText($text);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language_highlighted.png');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_language_active.png');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_deleteValue_icon.png');
+        $this->clickTopToolbarButton('langTools', 'active');
+        $this->clickTopToolbarButton('Language', 'active', TRUE);
+        $this->clearFieldValue('Language');
         $this->keyDown('Key.ENTER');
 
         $this->assertHTMLMatch('<p>LOREM XuT dolor</p><p lang="en">sit amet <strong>WoW</strong></p><p>Test PARA</p><p>Squiz <span lang="en">LABS</span> is orsm</p><p><em>ThE</em> QUICK brown fox</p><p><strong>jumps</strong> <em>OVER</em> the lazy dog</p>');
@@ -363,13 +332,11 @@ class Viper_Tests_ViperLangToolsPlugin_LanguageUnitTest extends AbstractViperUni
      */
     public function testAddingAndRemovingLanguageToItalicWord()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $text = 'OVER';
 
         $this->selectText($text);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language.png');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_language.png');
+        $this->clickTopToolbarButton('langTools');
+        $this->clickTopToolbarButton('Language', NULL, TRUE);
         $this->type('en');
         $this->keyDown('Key.ENTER');
 
@@ -377,9 +344,9 @@ class Viper_Tests_ViperLangToolsPlugin_LanguageUnitTest extends AbstractViperUni
 
         $this->click($this->find($text));
         $this->selectText($text);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language_highlighted.png');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_language_active.png');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_deleteValue_icon.png');
+        $this->clickTopToolbarButton('langTools', 'active');
+        $this->clickTopToolbarButton('Language', 'active', TRUE);
+        $this->clearFieldValue('Language');
         $this->keyDown('Key.ENTER');
 
         $this->assertHTMLMatch('<p>LOREM XuT dolor</p><p lang="en">sit amet <strong>WoW</strong></p><p>Test PARA</p><p>Squiz <span lang="en">LABS</span> is orsm</p><p><em>ThE</em> QUICK brown fox</p><p><strong>jumps</strong> <em>OVER</em> the lazy dog</p>');
@@ -394,13 +361,11 @@ class Viper_Tests_ViperLangToolsPlugin_LanguageUnitTest extends AbstractViperUni
      */
     public function testAutoFocusLanguageTextbox()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $text = 'LOREM';
 
         $this->selectText($text);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language.png');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_language.png');
+        $this->clickTopToolbarButton('langTools');
+        $this->clickTopToolbarButton('Language', NULL, TRUE);
         $this->type('en');
         $this->keyDown('Key.ENTER');
 
@@ -417,19 +382,17 @@ class Viper_Tests_ViperLangToolsPlugin_LanguageUnitTest extends AbstractViperUni
      */
     public function testSelectionIsMaintainedWhenSwitchingFromLanguageToClass()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $this->selectText('XuT');
         $this->selectInlineToolbarLineageItem(0);
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language.png');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_language.png');
+        $this->clickTopToolbarButton('langTools');
+        $this->clickTopToolbarButton('Language', NULL, TRUE);
         $this->assertEquals('LOREM XuT dolor', $this->getSelectedText(), 'Selected text is not highlighted.');
 
-        $this->clickTopToolbarButton(dirname(dirname(__FILE__)).'/ViperFormatPlugin/Images/toolbarIcon_class.png');
+        $this->clickTopToolbarButton('cssClass');
         $this->assertEquals('LOREM XuT dolor', $this->getSelectedText(), 'Selected text is not highlighted.');
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language.png');
+        $this->clickTopToolbarButton('langTools');
         $this->assertEquals('LOREM XuT dolor', $this->getSelectedText(), 'Selected text is not highlighted.');
 
     }//end testSelectionIsMaintainedWhenSwitchingFromLanguageToClass()

@@ -110,8 +110,6 @@ class Viper_Tests_ViperLangToolsPlugin_AcronymUnitTest extends AbstractViperUnit
         $this->clickTopToolbarButton('langTools', 'active');
         $this->clickTopToolbarButton('Acronym', 'active', TRUE);
 
-        //$this->clickField('Acronym');
-
         $this->clearFieldValue('Acronym');
         $this->keyDown('Key.ENTER');
 
