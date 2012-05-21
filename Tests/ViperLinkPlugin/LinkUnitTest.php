@@ -687,17 +687,17 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $text = $this->find('Lorem');
         $this->selectText('Lorem');
 
-        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_link.png');
+        $this->clickInlineToolbarButton('link');
         $this->type('http://www.squizlabs.com');
         $this->keyDown('Key.ENTER');
-        $this->clickTopToolbarButton(dirname(dirname(__FILE__)).'/ViperCoreStylesPlugin/Images/toolbarIcon_bold.png');
+        $this->clickTopToolbarButton('bold');
         $this->click($this->find('IPSUM'));
 
         sleep(1);
         $this->click($text);
 
-        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_removeLink.png'), 'Remove link icon should be available.');
-        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_link_active.png'), 'Link icon should be available.');
+        $this->assertTrue($this->inlineToolbarButtonExists('linkRemove'), 'Remove link icon should be available.');
+        $this->assertTrue($this->inlineToolbarButtonExists('link', 'active'), 'Link icon should be available.');
 
     }//end testClickBoldLinkShowsInlineToolbar()
 
@@ -712,10 +712,10 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $text = $this->find('Lorem');
         $this->selectText('Lorem');
 
-        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_link.png');
+        $this->clickInlineToolbarButton('link');
         $this->type('http://www.squizlabs.com');
         $this->keyDown('Key.ENTER');
-        $this->clickTopToolbarButton(dirname(dirname(__FILE__)).'/ViperCoreStylesPlugin/Images/toolbarIcon_italic.png');
+        $this->clickTopToolbarButton('italic');
         $this->click($this->find('IPSUM'));
 
         sleep(1);

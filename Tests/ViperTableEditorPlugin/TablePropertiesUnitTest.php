@@ -92,7 +92,7 @@ class Viper_Tests_ViperTableEditorPlugin_TablePropertiesUnitTest extends Abstrac
         $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_createTable_active.png'), 'Table icon should be active in the top toolbar');
         $this->assertTrue($this->topToolbarButtonExists(dirname(dirname(__FILE__)).'/ViperListPlugin/Images/toolbarIcon_orderedList.png'), 'Ordered list should be available in the top toolbar');
         $this->assertTrue($this->topToolbarButtonExists(dirname(dirname(__FILE__)).'/ViperListPlugin/Images/toolbarIcon_unorderedList_active.png'), 'Unordered list should be active in the top toolbar');
-        $this->assertTrue($this->topToolbarButtonExists(dirname(dirname(__FILE__)).'/ViperCoreStylesPlugin/Images/toolbarIcon_bold.png'), 'Bold icon should be available in the top toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('bold'), 'Bold icon should be available in the top toolbar');
 
     }//end testTopToolbarIconAfterAddingSummary()
 

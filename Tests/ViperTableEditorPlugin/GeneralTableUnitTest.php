@@ -85,16 +85,16 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
         $dir = dirname(dirname(__FILE__)).'/ViperCoreStylesPlugin/Images/';
 
         $this->click($this->find('caption'));
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_horizontalRule_disabled.png'), 'HR icon should not appear in the top toolbar.');
+        $this->assertTrue($this->topToolbarButtonExists('insertHr', 'disabled'), 'HR icon should not appear in the top toolbar.');
 
         $this->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_horizontalRule_disabled.png'), 'HR icon should be active in the top toolbar.');
+        $this->assertTrue($this->topToolbarButtonExists('insertHr', 'disabled'), 'HR icon should be active in the top toolbar.');
 
         $this->selectInlineToolbarLineageItem(1);
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_horizontalRule_disabled.png'), 'HR icon should not appear in the top toolbar.');
+        $this->assertTrue($this->topToolbarButtonExists('insertHr', 'disabled'), 'HR icon should not appear in the top toolbar.');
 
         $this->click($this->find('porta'));
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_horizontalRule_disabled.png'), 'HR icon should not appear in the top toolbar.');
+        $this->assertTrue($this->topToolbarButtonExists('insertHr', 'disabled'), 'HR icon should not appear in the top toolbar.');
 
     }//end testHRIconNotAvailableForCaptionAndTable()
 
