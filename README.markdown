@@ -15,20 +15,34 @@ The following resolution interfaces are provided by Squiz Viper:
 ### [Standard].Principle1.Guideline1_1.1_1_1.H37
 **Error:** Img element missing an alt attribute. Use the alt attribute to specify a short text alternative.  
 **Solution:** Enter a short text description of the image, or define the image as purely decorative.  
-**Example:** ```<img src="" />```
+**Example:** 
+```html
+<img src="" />
+```
 
 ### [Standard].Principle1.Guideline1_1.1_1_1.H67.1
 **Error:** Img element with empty alt text must have absent or empty title attribute.  
 **Solution:** Ensure this image is purely decorative. If not, enter appropriate alt and title text.  
-**Example:** ```<img src="" alt="" title="Link title" />```
+**Example:**
+```html
+<img src="" alt="" title="Link title text" />
+```
 
 ### [Standard].Principle1.Guideline1_1.1_1_1.H67.2
 **Warning:** Img element is marked so that it is ignored by Assistive Technology.  
-**Solution:** Ensure this image is purely decorative. If not, enter appropriate alt and title text.
+**Solution:** Ensure this image is purely decorative. If not, enter appropriate alt and title text.  
+**Example:**
+```html
+<img src="" alt="" />
+```
 
 ### [Standard].Principle1.Guideline1_1.1_1_1.G94.Image
 **Notice:** Ensure that the img element's alt text serves the same purpose and presents the same information as the image.  
-**Solution:** Ensure the image's alt text describes the purpose or content of the image.
+**Solution:** Ensure the image's alt text describes the purpose or content of the image.  
+**Example:**
+```html
+<img src="" alt="Link alt text" />
+```
 
 ### [Standard].Principle1.Guideline1_1.1_1_1.H2.EG3
 **Error:** Img element inside a link must not use alt text that duplicates the content of a text link beside it.  
@@ -48,47 +62,91 @@ The following resolution interfaces are provided by Squiz Viper:
 
 ### [Standard].Principle1.Guideline1_3.1_3_1.H49.b
 **Error:** Semantic markup should be used to mark emphasised or special text so that it can be programmatically determined.  
-**Solution:** Convert the B tag to the more appropriate STRONG tag.
+**Solution:** Convert the B tag to the more appropriate STRONG tag.  
+**Example:**
+```html
+<b>My text</b>
+```
 
 ### [Standard].Principle1.Guideline1_3.1_3_1.H49.i
 **Error:** Semantic markup should be used to mark emphasised or special text so that it can be programmatically determined.  
-**Solution:** Convert the I tag to the more appropriate EM tag.
+**Solution:** Convert the I tag to the more appropriate EM tag.  
+**Example:**
+```html
+<i>My text</i>
+```
 
 ### [Standard].Principle1.Guideline1_3.1_3_1.H49.u
 **Error:** Semantic markup should be used to mark emphasised or special text so that it can be programmatically determined.  
-**Solution:** The U tag should be removed to reduce confusion with links.
+**Solution:** The U tag should be removed to reduce confusion with links.  
+**Example:**
+```html
+<u>My text</u>
+```
 
 ### [Standard].Principle1.Guideline1_3.1_3_1.H49.s
 **Error:** Semantic markup should be used to mark emphasised or special text so that it can be programmatically determined.  
-**Solution:** The S tag needs to be replaced with a DEL tag.
+**Solution:** The S tag needs to be replaced with a DEL tag.  
+**Example:**
+```html
+<s>My text</s>
+```
 
 ### [Standard].Principle1.Guideline1_3.1_3_1.H49.strike
 **Error:** Semantic markup should be used to mark emphasised or special text so that it can be programmatically determined.  
-**Solution:** The Strike tag needs to be replaced with a DEL tag.
+**Solution:** The Strike tag needs to be replaced with a DEL tag.  
+**Example:**
+```html
+<strike>My text</strike>
+```
 
 ### [Standard].Principle1.Guideline1_3.1_3_1.H49.tt
 **Error:** Semantic markup should be used to mark emphasised or special text so that it can be programmatically determined.  
-**Solution:** The TT tag needs to be replaced with a CODE tag.
+**Solution:** The TT tag needs to be replaced with a CODE tag.  
+**Example:**
+```html
+<tt>My text</tt>
+```
 
 ### [Standard].Principle1.Guideline1_3.1_3_1.H49.big
 **Error:** Semantic markup should be used to mark emphasised or special text so that it can be programmatically determined.  
-**Solution:** The BIG tag needs to be removed.
+**Solution:** The BIG tag needs to be removed.  
+**Example:**
+```html
+<big>My text</big>
+```
 
 ### [Standard].Principle1.Guideline1_3.1_3_1.H49.small
 **Error:** Semantic markup should be used to mark emphasised or special text so that it can be programmatically determined.  
-**Solution:** The SMALL tag needs to be removed.
+**Solution:** The SMALL tag needs to be removed.  
+**Example:**
+```html
+<small>My text</small>
+```
 
 ### [Standard].Principle1.Guideline1_3.1_3_1.H49.center
 **Error:** Semantic markup should be used to mark emphasised or special text so that it can be programmatically determined.  
-**Solution:** The CENTER tag needs to be converted to a CSS based alignment method.
+**Solution:** The CENTER tag needs to be converted to a CSS based alignment method.  
+**Example:**
+```html
+<center>My text</center>
+```
 
 ### [Standard].Principle1.Guideline1_3.1_3_1.H49.font
 **Error:** Semantic markup should be used to mark emphasised or special text so that it can be programmatically determined.  
-**Solution:** The FONT tag needs to be removed. Consider using a CSS class on the containing element to achieve variations in fonts/colours/sizes etc.
+**Solution:** The FONT tag needs to be removed. Consider using a CSS class on the containing element to achieve variations in fonts/colours/sizes etc.  
+**Example:**
+```html
+<font size="2">My text</font>
+```
 
 ### [Standard].Principle1.Guideline1_3.1_3_1.H49.AlignAttr
 **Error:** Semantic markup should be used to mark emphasised or special text so that it can be programmatically determined.  
-**Solution:** The ALIGN attribute needs to be converted to a CSS based alignment method.
+**Solution:** The ALIGN attribute needs to be converted to a CSS based alignment method.  
+**Example:**
+```html
+<p align="right">My text</p>
+```
 
 ### [Standard].Principle1.Guideline1_3.1_3_1.H42
 **Warning:** Heading markup should be used if this content is intended as a heading.  
@@ -112,15 +170,27 @@ The following resolution interfaces are provided by Squiz Viper:
 
 ### [Standard].Principle2.Guideline2_4.2_4_1.H64.1
 **Error:** Iframe element requires a non-empty title attribute that identifies the frame.  
-**Solution:** Enter an appropriate title for the iframe to describe it's purpose.
+**Solution:** Enter an appropriate title for the iframe to describe it's purpose.  
+**Example:**
+```html
+<iframe src="" />
+```
 
 ### [Standard].Principle2.Guideline2_4.2_4_1.H64.2
 **Notice:** Check that the title attribute of this element contains text that identifies the frame.  
-**Solution:** Enter an appropriate title for the iframe to describe it's purpose.
+**Solution:** Enter an appropriate title for the iframe to describe it's purpose.  
+**Example:**
+```html
+<iframe src="" title="Frame title text" />
+```
 
 ### [Standard].Principle4.Guideline4_1.4_1_1.F77
 **Error:** Duplicate id attribute value "[Element ID]" found on the web page.  
-**Solution:** Update the ID to be unique.
+**Solution:** Update the ID to be unique.  
+**Example:**
+```html
+<p id="myid">Para 1</p><p id="myid">Para 2</p>
+```
 
 Resolution Interfaces TODO
 --------------------------
