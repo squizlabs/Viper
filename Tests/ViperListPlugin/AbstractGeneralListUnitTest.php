@@ -29,27 +29,25 @@ abstract class AbstractGeneralListUnitTest extends AbstractViperListPluginUnitTe
      */
     public function testHeadingIconNotAvailableForList()
     {
-        $dir = dirname(dirname(__FILE__)).'/ViperFormatPlugin/Images/';
-
         $this->click($this->find('oNo'));
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_heading_disabled.png'), 'Heading icon should not appear in the top toolbar.');
+        $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'), 'Heading icon should not appear in the top toolbar.');
 
         $this->selectText('oNo');
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_heading_disabled.png'), 'Heading icon should not appear in the top toolbar.');
+        $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'), 'Heading icon should not appear in the top toolbar.');
 
         $this->selectInlineToolbarLineageItem(1);
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_heading_disabled.png'), 'Heading icon should not appear in the top toolbar.');
+        $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'), 'Heading icon should not appear in the top toolbar.');
 
         $this->selectInlineToolbarLineageItem(0);
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_heading_disabled.png'), 'Heading icon should not appear in the top toolbar.');
+        $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'), 'Heading icon should not appear in the top toolbar.');
 
         $this->keyDown('Key.RIGHT');
         $this->keyDown('Key.ENTER');
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_heading_disabled.png'), 'Heading icon should not appear in the top toolbar.');
+        $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'), 'Heading icon should not appear in the top toolbar.');
 
         $this->keyDown('Key.ENTER');
         $this->type('New parra');
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_heading.png'), 'Heading icon should appear in the top toolbar.');
+        $this->assertTrue($this->topToolbarButtonExists('headings'), 'Heading icon should appear in the top toolbar.');
 
     }//end testHeadingIconNotAvailableForList()
 
@@ -61,27 +59,25 @@ abstract class AbstractGeneralListUnitTest extends AbstractViperListPluginUnitTe
      */
     public function testFormatsIconNotAvailableForList()
     {
-        $dir = dirname(dirname(__FILE__)).'/ViperFormatPlugin/Images/';
-
         $this->click($this->find('oNo'));
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_toggle_formats_disabled.png'), 'Formats icon should not appear in the top toolbar.');
+        $this->assertTrue($this->topToolbarButtonExists('formats', 'disabled'), 'Formats icon should not appear in the top toolbar.');
 
         $this->selectText('oNo');
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_toggle_formats_disabled.png'), 'Formats icon should not appear in the top toolbar.');
+        $this->assertTrue($this->topToolbarButtonExists('formats', 'disabled'), 'Formats icon should not appear in the top toolbar.');
 
         $this->selectInlineToolbarLineageItem(1);
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_toggle_formats_disabled.png'), 'Formats icon should not appear in the top toolbar.');
+        $this->assertTrue($this->topToolbarButtonExists('formats', 'disabled'), 'Formats icon should not appear in the top toolbar.');
 
         $this->selectInlineToolbarLineageItem(0);
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_toggle_formats_disabled.png'), 'Formats icon should not appear in the top toolbar.');
+        $this->assertTrue($this->topToolbarButtonExists('formats', 'disabled'), 'Formats icon should not appear in the top toolbar.');
 
         $this->keyDown('Key.RIGHT');
         $this->keyDown('Key.ENTER');
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_toggle_formats_disabled.png'), 'Formats icon should not appear in the top toolbar.');
+        $this->assertTrue($this->topToolbarButtonExists('formats', 'disabled'), 'Formats icon should not appear in the top toolbar.');
 
         $this->keyDown('Key.ENTER');
         $this->type('New parra');
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_formats_p.png'), 'Formats icon should appear in the top toolbar.');
+        $this->assertTrue($this->topToolbarButtonExists('formats-p', 'active'), 'Formats icon should appear in the top toolbar.');
 
     }//end testFormatsIconNotAvailableForList()
 
@@ -93,33 +89,31 @@ abstract class AbstractGeneralListUnitTest extends AbstractViperListPluginUnitTe
      */
     public function testTableIconNotAvailableForList()
     {
-        $dir = dirname(dirname(__FILE__)).'/ViperTableEditorPlugin/Images/';
-
         $this->click($this->find('oNo'));
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_createTable_disabled.png'), 'Table icon should not appear in the top toolbar.');
+        $this->assertTrue($this->topToolbarButtonExists('table', 'disabled'), 'Table icon should not appear in the top toolbar.');
 
         $this->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_createTable.png'), 'Table icon should be active in the top toolbar.');
+        $this->assertTrue($this->topToolbarButtonExists('table'), 'Table icon should be active in the top toolbar.');
 
         $this->keyDown('Key.TAB');
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_createTable_disabled.png'), 'Table icon should not active in the top toolbar.');
+        $this->assertTrue($this->topToolbarButtonExists('table', 'disabled'), 'Table icon should not active in the top toolbar.');
 
         $this->selectText('oNo');
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_createTable_disabled.png'), 'Table icon should not appear in the top toolbar.');
+        $this->assertTrue($this->topToolbarButtonExists('table', 'disabled'), 'Table icon should not appear in the top toolbar.');
 
         $this->selectInlineToolbarLineageItem(1);
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_createTable_disabled.png'), 'Table icon should not appear in the top toolbar.');
+        $this->assertTrue($this->topToolbarButtonExists('table', 'disabled'), 'Table icon should not appear in the top toolbar.');
 
         $this->selectInlineToolbarLineageItem(0);
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_createTable_disabled.png'), 'Table icon should not appear in the top toolbar.');
+        $this->assertTrue($this->topToolbarButtonExists('table', 'disabled'), 'Table icon should not appear in the top toolbar.');
 
         $this->keyDown('Key.RIGHT');
         $this->keyDown('Key.ENTER');
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_createTable_disabled.png'), 'Table icon should not appear in the top toolbar.');
+        $this->assertTrue($this->topToolbarButtonExists('table', 'disabled'), 'Table icon should not appear in the top toolbar.');
 
         $this->keyDown('Key.ENTER');
         $this->type('New parra');
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_createTable.png'), 'Table icon should appear in the top toolbar.');
+        $this->assertTrue($this->topToolbarButtonExists('table'), 'Table icon should appear in the top toolbar.');
 
     }//end testTableIconNotAvailableForList()
 
@@ -131,8 +125,6 @@ abstract class AbstractGeneralListUnitTest extends AbstractViperListPluginUnitTe
      */
     public function testHRIconNotAvailableForList()
     {
-        $dir = dirname(dirname(__FILE__)).'/ViperCoreStylesPlugin/Images/';
-
         $this->click($this->find('oNo'));
         $this->assertTrue($this->topToolbarButtonExists('insertHr', 'disabled'), 'HR icon should not appear in the top toolbar.');
 

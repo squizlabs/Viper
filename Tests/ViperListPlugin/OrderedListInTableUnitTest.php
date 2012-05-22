@@ -13,16 +13,14 @@ class Viper_Tests_ViperListPlugin_OrderedListInTableUnitTest extends AbstractVip
      */
     public function testCreatingAListInACell()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $this->selectText('LAbS');
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_orderedList.png');
+        $this->clickTopToolbarButton('listOL');
 
         $this->assertEquals('<ol><li>UnaU LAbS FoX Mnu</li></ol>', $this->getHtml('td', 0));
         $this->assertIconStatusesCorrect(TRUE, 'active', FALSE, TRUE);
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_orderedList_active.png');
+        $this->clickTopToolbarButton('listOL', 'active');
         $this->assertEquals('UnaU LAbS FoX Mnu', $this->getHtml('td', 0));
         $this->assertIconStatusesCorrect(TRUE, TRUE, FALSE, FALSE);
 
@@ -36,21 +34,19 @@ class Viper_Tests_ViperListPlugin_OrderedListInTableUnitTest extends AbstractVip
      */
     public function testIndentingAndOutdentingAListItemUsingTopToolbar()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $this->click($this->find('XuT'));
         $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_indent.png');
+        $this->clickTopToolbarButton('listIndent');
 
         $this->assertEquals('            <ol><li>Item 1<ol><li>Item 2 XuT</li></ol></li></ol>', $this->getHtml('td', 2));
         $this->assertIconStatusesCorrect(TRUE, 'active', FALSE, TRUE);
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_outdent.png');
+        $this->clickTopToolbarButton('listOutdent');
         $this->assertEquals('            <ol><li>Item 1</li><li>Item 2 XuT</li></ol>', $this->getHtml('td', 2));
         $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_outdent.png');
+        $this->clickTopToolbarButton('listOutdent');
         $this->assertEquals('            <ol><li>Item 1</li></ol><p>Item 2 XuT</p>', $this->getHtml('td', 2));
         $this->assertIconStatusesCorrect(TRUE, TRUE, FALSE, FALSE);
 
@@ -64,21 +60,19 @@ class Viper_Tests_ViperListPlugin_OrderedListInTableUnitTest extends AbstractVip
      */
     public function testIndentingAndOutdentingAListItemUsingInlineToolbar()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $this->selectText('XuT');
         $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
 
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_indent.png');
+        $this->clickInlineToolbarButton('listIndent');
 
         $this->assertEquals('            <ol><li>Item 1<ol><li>Item 2 XuT</li></ol></li></ol>', $this->getHtml('td', 2));
         $this->assertIconStatusesCorrect(TRUE, 'active', FALSE, TRUE);
 
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_outdent.png');
+        $this->clickInlineToolbarButton('listOutdent');
         $this->assertEquals('            <ol><li>Item 1</li><li>Item 2 XuT</li></ol>', $this->getHtml('td', 2));
         $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
 
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_outdent.png');
+        $this->clickInlineToolbarButton('listOutdent');
         $this->assertEquals('            <ol><li>Item 1</li></ol><p>Item 2 XuT</p>', $this->getHtml('td', 2));
         $this->assertIconStatusesCorrect(TRUE, TRUE, FALSE, FALSE);
 
@@ -126,12 +120,10 @@ class Viper_Tests_ViperListPlugin_OrderedListInTableUnitTest extends AbstractVip
      */
     public function testRemovingListUsingOrderedListIcon()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $this->click($this->find('XuT'));
         $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_orderedList_active.png');
+        $this->clickTopToolbarButton('listOL', 'active');
 
         $this->assertEquals('            <p>Item 1</p><p>Item 2 XuT</p>', $this->getHtml('td', 2));
         $this->assertIconStatusesCorrect(TRUE, TRUE, FALSE, FALSE);
@@ -146,12 +138,10 @@ class Viper_Tests_ViperListPlugin_OrderedListInTableUnitTest extends AbstractVip
      */
     public function testRemovingListUsingOutdentIconInTopToolbar()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $this->selectText('XuT');
         $this->selectInlineToolbarLineageItem(4);
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_outdent.png');
+        $this->clickTopToolbarButton('listOutdent');
 
         $this->assertEquals('            <p>Item 1</p><p>Item 2 XuT</p>', $this->getHtml('td', 2));
         $this->assertIconStatusesCorrect(TRUE, TRUE, FALSE, FALSE);
@@ -166,12 +156,10 @@ class Viper_Tests_ViperListPlugin_OrderedListInTableUnitTest extends AbstractVip
      */
     public function testRemovingListUsingOutdentIconInInlineToolbar()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $this->selectText('XuT');
         $this->selectInlineToolbarLineageItem(4);
 
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_outdent.png');
+        $this->clickInlineToolbarButton('listOutdent');
 
         $this->assertEquals('            <p>Item 1</p><p>Item 2 XuT</p>', $this->getHtml('td', 2));
         $this->assertIconStatusesCorrect(TRUE, TRUE, FALSE, FALSE);
@@ -186,17 +174,15 @@ class Viper_Tests_ViperListPlugin_OrderedListInTableUnitTest extends AbstractVip
      */
     public function testRemovingListAndClickingUndo()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $this->selectText('XuT');
         $this->selectInlineToolbarLineageItem(4);
 
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_outdent.png');
+        $this->clickInlineToolbarButton('listOutdent');
 
         $this->assertEquals('            <p>Item 1</p><p>Item 2 XuT</p>', $this->getHtml('td', 2));
         $this->assertIconStatusesCorrect(TRUE, TRUE, FALSE, FALSE);
 
-        $this->clickTopToolbarButton(dirname(dirname(__FILE__)).'/Core/Images/undoIcon_active.png');
+        $this->clickTopToolbarButton('historyUndo');
 
         $this->assertEquals('            <ol><li>Item 1</li><li>Item 2 XuT</li></ol>', $this->getHtml('td', 2));
 
