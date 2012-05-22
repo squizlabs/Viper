@@ -10,7 +10,11 @@ The following resolution interfaces are provided by Squiz Viper:
 
 ### [Standard].Principle1.Guideline1_1.1_1_1.H30.2
 **Error:** Img element is the only content of the link, but is missing alt text. The alt text should describe the purpose of the link.  
-**Solution:** Make sure the image's alt text describes the purpose of the link it's being used for.
+**Solution:** Make sure the image's alt text describes the purpose of the link it's being used for.  
+**Example:** 
+```html
+<a href=""><img src="" /></a>
+```
 
 ### [Standard].Principle1.Guideline1_1.1_1_1.H37
 **Error:** Img element missing an alt attribute. Use the alt attribute to specify a short text alternative.  
@@ -50,15 +54,35 @@ The following resolution interfaces are provided by Squiz Viper:
 
 ### [Standard].Principle1.Guideline1_3.1_3_1.H39,H73.4
 **Error:** If both a summary attribute and a caption element are present for this data table, the summary should not duplicate the caption  
-**Solution:** Update either the table's caption or summary so they are not identical.
+**Solution:** Update either the table's caption or summary so they are not identical.  
+**Example:**
+```html
+<table summary="Information about the table">
+  <caption>Information about the table</caption>
+  <thead>
+    <tr><th>Heading</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Content</td></tr>
+  </tbody>
+</table>
+```
 
 ### [Standard].Principle1.Guideline1_3.1_3_1.H48.1
 **Warning:** Content appears to have the visual appearance of a bulleted list. It may be appropriate to mark this content up using a ul element.  
-**Solution:** This section of content resembles a content list. If this is intentional, it should be converted to the proper list format.
+**Solution:** This section of content resembles a content list. If this is intentional, it should be converted to the proper list format.  
+**Example:**
+```html
+<p>* First item<br />* Second item</p>
+```
 
 ### [Standard].Principle1.Guideline1_3.1_3_1.H48.2
 **Warning:** Content appears to have the visual appearance of a numbered list. It may be appropriate to mark this content up using an ol element.  
-**Solution:** This section of content resembles a numbered list. If this is intentional it should be converted to the proper list format.
+**Solution:** This section of content resembles a numbered list. If this is intentional it should be converted to the proper list format.  
+**Example:**
+```html
+<p>1. First item<br />2. Second item</p>
+```
 
 ### [Standard].Principle1.Guideline1_3.1_3_1.H49.b
 **Error:** Semantic markup should be used to mark emphasised or special text so that it can be programmatically determined.  
@@ -150,23 +174,74 @@ The following resolution interfaces are provided by Squiz Viper:
 
 ### [Standard].Principle1.Guideline1_3.1_3_1.H42
 **Warning:** Heading markup should be used if this content is intended as a heading.  
-**Solution:** If a paragraph's content consists solely of bold or italic text to simulate a heading it should be converted to the appropriate heading level.
+**Solution:** If a paragraph's content consists solely of bold or italic text to simulate a heading it should be converted to the appropriate heading level.  
+**Example:**
+```html
+<p><strong>My heading text</strong></p>
+```
 
 ### [Standard].Principle1.Guideline1_3.1_3_1.H73.3.NoSummary
 **Warning:** Consider using the summary attribute of the table element to give an overview of this data table.  
-**Solution:** Enter a summary for the table.
+**Solution:** Enter a summary for the table.  
+**Example:**
+```html
+<table>
+  <caption>Table caption</caption>
+  <thead>
+    <tr><th>Heading</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Content</td></tr>
+  </tbody>
+</table>
+```
 
 ### [Standard].Principle1.Guideline1_3.1_3_1.H73.3.Check
 **Notice:** Check that the summary attribute describes the table's organization or explains how to use the table.  
-**Solution:** Enter a summary for the table.
+**Solution:** Enter a summary for the table.  
+**Example:**
+```html
+<table summary="Table summary">
+  <caption>Table caption</caption>
+  <thead>
+    <tr><th>Heading</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Content</td></tr>
+  </tbody>
+</table>
+```
 
 ### [Standard].Principle1.Guideline1_3.1_3_1.H39.3.NoCaption
 **Warning:** Consider using a caption element to the table element to identify this data table.  
-**Solution:** Enter a caption for the table.
+**Solution:** Enter a caption for the table.  
+**Example:**
+```html
+<table summary="Table summary">
+  <thead>
+    <tr><th>Heading</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Content</td></tr>
+  </tbody>
+</table>
+```
 
 ### [Standard].Principle1.Guideline1_3.1_3_1.H39.3.Check
 **Notice:** Check that the caption element accurately describes this table.  
-**Solution:** Enter a caption for the table.
+**Solution:** Enter a caption for the table.  
+**Example:**
+```html
+<table summary="Table summary">
+  <caption>Table caption</caption>
+  <thead>
+    <tr><th>Heading</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Content</td></tr>
+  </tbody>
+</table>
+```
 
 ### [Standard].Principle2.Guideline2_4.2_4_1.H64.1
 **Error:** Iframe element requires a non-empty title attribute that identifies the frame.  
