@@ -50,7 +50,11 @@ The following resolution interfaces are provided by Squiz Viper:
 
 ### [Standard].Principle1.Guideline1_1.1_1_1.H2.EG3
 **Error:** Img element inside a link must not use alt text that duplicates the content of a text link beside it.  
-**Solution:** Update the image's alt text to something other than the nearby link "[Link text]".
+**Solution:** Update the image's alt text to something other than the nearby link "[Link text]".  
+**Example:**
+```html
+<a href=""><img src="" alt="My link text"> My link text</a>
+```
 
 ### [Standard].Principle1.Guideline1_3.1_3_1.H39,H73.4
 **Error:** If both a summary attribute and a caption element are present for this data table, the summary should not duplicate the caption  
