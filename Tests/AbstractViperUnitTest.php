@@ -80,6 +80,13 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      */
     private static $_pageTopLeft = NULL;
 
+    /**
+     * Set to TRUE when the browser is selected and focused.
+     *
+     * @var boolean
+     */
+    private static $_browserSelected = FALSE;
+
 
     /**
      * Returns the path of a test file.
@@ -414,6 +421,14 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
     protected function getBrowserid()
     {
         $id = self::$_browser;
+        if ($this->getOS() === 'windows'
+            && strpos($id, '.exe') !== FALSE
+        ) {
+            $id = explode('\\', $id);
+            $id = array_pop($id);
+            $id = str_replace('.exe', '', $id);
+        }
+
         $id = strtolower($id);
         $id = str_replace(' ', '', $id);
         return $id;
@@ -517,6 +532,14 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         $window = $this->getBrowserWindow();
 
         $bottomRight = $this->getBottomRight($window);
+
+        if ($this->getOS() === 'windows') {
+            $bottomRight = $this->createLocation(
+                ($this->getX($bottomRight) - 5),
+                ($this->getY($bottomRight) - 5)
+            );
+        }
+
         $newLocation = $this->createLocation(
             ($this->getX($window) + $w),
             ($this->getY($window) + $h)
@@ -741,19 +764,25 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
             $browser = '/Applications/Firefox.app';
         }
 
-        $app       = $this->switchApp($browser);
-        $windowNum = 0;
-        switch ($browser) {
-            case 'Google Chrome':
-                $windowNum = 1;
-            break;
-
-            default:
+        if (self::$_browserSelected === FALSE) {
+            $app = $this->switchApp($browser);
+            if ($this->getOS() !== 'windows') {
                 $windowNum = 0;
-            break;
-        }
+                switch ($browser) {
+                    case 'Google Chrome':
+                        $windowNum = 1;
+                    break;
 
-        self::$_window = $this->callFunc('window', array($windowNum), $app, TRUE);
+                    default:
+                        $windowNum = 0;
+                    break;
+                }
+
+                self::$_window = $this->callFunc('window', array($windowNum), $app, TRUE);
+            } else {
+                self::$_window = $app;
+            }
+        }
 
         if (self::$_testRun === TRUE) {
             // Adjust the brwoser window region so that its only the area of the actual page.
@@ -764,6 +793,8 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         }
 
         $this->setDefaultRegion(self::$_window);
+
+        self::$_browserSelected = TRUE;
 
     }//end selectBrowser()
 

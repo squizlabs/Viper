@@ -70,6 +70,27 @@ abstract class AbstractSikuliUnitTest extends PHPUnit_Framework_TestCase
      */
     private $_defaultRegion = NULL;
 
+    /**
+     * If TRUE then debugging output will be printed.
+     *
+     * @var boolean
+     */
+    private static $_debugging = FALSE;
+
+    /**
+     * Size of the sikuli.out file.
+     *
+     * @var integer
+     */
+    private static $_fileSize = NULL;
+
+    /**
+     * Last index that was returned from sikuli output.
+     *
+     * @var integer
+     */
+    private $_lastIndex = 0;
+
 
     /**
      * Setup test.
@@ -739,8 +760,14 @@ abstract class AbstractSikuliUnitTest extends PHPUnit_Framework_TestCase
      */
     protected function switchApp($name)
     {
-        $app = $this->callFunc('App', array($name), NULL, TRUE);
-        return $this->callFunc('focus', array(), $app, TRUE);
+        if ($this->getOS() === 'windows') {
+            $app = $this->callFunc('switchApp', array($name), NULL, TRUE);
+            sleep(2);
+            return $this->callFunc('App.focusedWindow', array(), NULL, TRUE);
+        } else {
+            $app = $this->callFunc('App', array($name), NULL, TRUE);
+            return $this->callFunc('focus', array(), $app, TRUE);
+        }
 
     }//end switchApp()
 
@@ -846,9 +873,12 @@ abstract class AbstractSikuliUnitTest extends PHPUnit_Framework_TestCase
 
         $command .= ')';
 
-        $this->sendCmd($command);
+        $output = $this->sendCmd($command);
 
-        $output = $this->_getStreamOutput();
+        if ($this->getOS() !== 'windows') {
+            $output = $this->_getStreamOutput();
+        }
+
         if ($assignToVar === FALSE) {
             return $output;
         }
@@ -863,16 +893,19 @@ abstract class AbstractSikuliUnitTest extends PHPUnit_Framework_TestCase
      *
      * @param string $command The command to execute.
      *
-     * @return void
+     * @return string
      */
     protected function sendCmd($command)
     {
-        // DEBUG.
-        // echo $command."\n";ob_flush();
+        $this->_debug('>>> '.$command);
 
         // This will allow _getStreamOutput method to stop waiting for more data.
         $command .= ";print '>>>';\n";
         fwrite(self::$_sikuliInput, $command);
+
+        if ($this->getOS() === 'windows') {
+            return $this->_getStreamOutput();
+        }
 
     }//end sendCmd()
 
@@ -889,38 +922,60 @@ abstract class AbstractSikuliUnitTest extends PHPUnit_Framework_TestCase
             return;
         }
 
-        $cmd = '/usr/bin/java -jar '.$this->_sikuliPath.'/Contents/Resources/Java/sikuli-script.jar -i';
-        $descriptorspec = array(
-                           0 => array(
-                                 'pipe',
-                                 'r',
-                                ),
-                           1 => array(
-                                 'pipe',
-                                 'w',
-                                ),
-                           2 => array(
-                                 'pipe',
-                                 'w',
-                                ),
-                          );
+        if ($this->getOS() === 'windows') {
+            $cmd     = 'start "Viper" /B "C:\Program Files\Java\jre7\bin\java.exe" -jar "C:\Program Files\Sikuli X\sikuli-script.jar" -i';
+            $process = popen($cmd, 'w');
+            if (is_resource($process) === FALSE) {
+                throw new Exception('Failed to connect to Sikuli');
+            }
 
-        $pipes   = array();
-        $process = proc_open($cmd, $descriptorspec, $pipes);
-        if (is_resource($process) === FALSE) {
-            throw new Exception('Failed to connect to Sikuli');
-        }
+            $sikuliOutputFile = dirname(__FILE__).'/sikuli.out';
+            file_put_contents($sikuliOutputFile, '');
+            $sikuliOut = fopen($sikuliOutputFile, 'r');
 
-        self::$_sikuliHandle = $process;
-        self::$_sikuliInput  = $pipes[0];
-        self::$_sikuliOutput = $pipes[1];
-        self::$_sikuliError  = $pipes[2];
+            self::$_fileSize = filesize($sikuliOutputFile);
 
-        // Dont block reads.
-        stream_set_blocking(self::$_sikuliOutput, 0);
-        stream_set_blocking(self::$_sikuliError, 0);
+            self::$_sikuliHandle = $process;
+            self::$_sikuliInput  = $process;
+            self::$_sikuliOutput = $sikuliOut;
 
-        $this->_getStreamOutput();
+            // Redirect Sikuli output to a file.
+            $this->sendCmd('sys.stdout = open("'.$sikuliOutputFile.'", "w", 1)');
+        } else {
+            $cmd = '/usr/bin/java -jar '.$this->_sikuliPath.'/Contents/Resources/Java/sikuli-script.jar -i';
+            $descriptorspec = array(
+                               0 => array(
+                                     'pipe',
+                                     'r',
+                                    ),
+                               1 => array(
+                                     'pipe',
+                                     'w',
+                                    ),
+                               2 => array(
+                                     'pipe',
+                                     'w',
+                                    ),
+                              );
+
+            $pipes   = array();
+            $process = proc_open($cmd, $descriptorspec, $pipes);
+
+            if (is_resource($process) === FALSE) {
+                throw new Exception('Failed to connect to Sikuli');
+            }
+
+            self::$_sikuliHandle = $process;
+            self::$_sikuliInput  = $pipes[0];
+            self::$_sikuliOutput = $pipes[1];
+            self::$_sikuliError  = $pipes[2];
+
+            // Dont block reads.
+            stream_set_blocking(self::$_sikuliOutput, 0);
+            stream_set_blocking(self::$_sikuliError, 0);
+
+            $this->_getStreamOutput();
+        }//end if
 
         self::$_connected = TRUE;
 
@@ -964,7 +1019,7 @@ abstract class AbstractSikuliUnitTest extends PHPUnit_Framework_TestCase
                     self::$_os = 'linux';
                 break;
 
-                case 'windows':
+                case 'windows nt':
                     self::$_os = 'windows';
                 break;
 
@@ -980,6 +1035,54 @@ abstract class AbstractSikuliUnitTest extends PHPUnit_Framework_TestCase
 
 
     /**
+     * Returns the output from interactive Sikuli Jython session (Windows only).
+     *
+     * This method is used to get the output from Sikuli due to a PHP bug with
+     * streams on Windows OS.
+     *
+     * @return string
+     * @throws Exception If Sikuli server does not respond in time.
+     */
+    private function _getStreamOutputWindows()
+    {
+        $startTime = microtime(TRUE);
+        $timeout   = 10;
+        $filePath  = dirname(__FILE__).'/sikuli.out';
+
+        while (TRUE) {
+            clearstatcache();
+            $fileSize = filesize($filePath);
+
+            if ($fileSize !== self::$_fileSize) {
+                $startTime       = microtime(TRUE);
+                self::$_fileSize = $fileSize;
+
+                $contents = file_get_contents($filePath);
+                $contents = explode("\n", $contents);
+                $contents = $contents[$this->_lastIndex];
+
+                if (trim($contents) !== '>>>') {
+                    // When there is data there will be two lines printed, first line
+                    // is the actual Sikuli output and the 2nd line is our >>>.
+                    $this->_lastIndex++;
+                }
+
+                $contents = trim(str_replace('>>>', '', $contents));
+                $this->_lastIndex++;
+                return $contents;
+            }
+
+            if ((microtime(TRUE) - $startTime) > $timeout) {
+                throw new Exception('Sikuli server did not respond');
+            }
+
+            usleep(50000);
+        }//end while
+
+    }//end _getStreamOutputWindows()
+
+
+    /**
      * Returns the output from interactive Sikuli Jython session.
      *
      * @return string
@@ -987,6 +1090,10 @@ abstract class AbstractSikuliUnitTest extends PHPUnit_Framework_TestCase
      */
     private function _getStreamOutput()
     {
+        if ($this->getOS() === 'windows') {
+            return $this->_getStreamOutputWindows();
+        }
+
         $isError    = FALSE;
         $timeout    = 10;
         $content    = array();
@@ -1059,9 +1166,28 @@ abstract class AbstractSikuliUnitTest extends PHPUnit_Framework_TestCase
             throw new Exception($content);
         }
 
+        $this->_debug($content);
+
         return $content;
 
     }//end _getStreamOutput()
+
+
+    /**
+     * Prints debug output if debugging is enabled.
+     *
+     * @param string $content The content to print.
+     *
+     * @return void
+     */
+    private function _debug($content)
+    {
+        if (self::$_debugging === TRUE) {
+            echo trim($content)."\n";
+            ob_flush();
+        }
+
+    }//end _debug()
 
 
 }//end class
