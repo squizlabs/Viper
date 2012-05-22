@@ -15,24 +15,23 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractViperUnitTest
     {
         $dir = dirname(__FILE__).'/Images/';
 
-        $text = 'THIS';
-
-        $this->selectText($text);
+        $this->selectText('THIS');
         $this->selectInlineToolbarLineageItem(0);
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_toggle_formats_highlighted.png');
+        $this->clickInlineToolbarButton('formats-p', 'active');
         $this->clickInlineToolbarButton($dir.'toolbarIcon_div.png');
 
         $this->assertHTMLMatch('<div>Lorem xtn dolor</div><p>spacer for the tests</p><div>sit amet <strong>WoW</strong></div><div>THIS is a paragraph to change to a div</div>');
 
         $this->click($this->find('WoW'));
-        $this->selectText($text);
+        $this->selectText('div');
         $this->selectInlineToolbarLineageItem(0);
 
-        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_toggle_formats_highlighted.png'), 'Toogle formats icon is not selected');
+        $this->assertTrue($this->inlineToolbarButtonExists('formats-div', 'active'), 'Toogle formats icon is not selected');
 
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_toggle_formats_highlighted.png');
+        $this->clickInlineToolbarButton('formats-div', 'active');
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_div_active.png');
 
-        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_div_active.png'), 'Div icon is not active');
+        $this->assertTrue($this->inlineToolbarButtonExists('formats-div'), 'Div icon is not active');
 
     }//end testApplingTheDivStyleUsingInlineToolbar()
 
@@ -46,24 +45,23 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractViperUnitTest
     {
         $dir = dirname(__FILE__).'/Images/';
 
-        $text = 'THIS';
-
-        $this->selectText($text);
+        $this->selectText('THIS');
         $this->selectInlineToolbarLineageItem(0);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_formats_highlighted.png');
+        $this->clickTopToolbarButton('formats-p', 'active');
         $this->clickTopToolbarButton($dir.'toolbarIcon_div.png');
 
         $this->assertHTMLMatch('<div>Lorem xtn dolor</div><p>spacer for the tests</p><div>sit amet <strong>WoW</strong></div><div>THIS is a paragraph to change to a div</div>');
 
         $this->click($this->find('WoW'));
-        $this->selectText($text);
+        $this->selectText('div');
         $this->selectInlineToolbarLineageItem(0);
 
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_toggle_formats_highlighted.png'), 'Toogle formats icon is not selected');
+        $this->assertTrue($this->topToolbarButtonExists('formats-div', 'active'), 'Toogle formats icon is not selected');
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_formats_highlighted.png');
+        $this->clickTopToolbarButton('formats-div', 'active');
+        $this->clickTopToolbarButton($dir.'toolbarIcon_div_active.png');
 
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_div_active.png'), 'Quote icon is not active');
+        $this->assertTrue($this->topToolbarButtonExists('formats-div'), 'Div icon is not active');
 
     }//end testApplingTheDivStyleUsingTopToolbar()
 
@@ -81,18 +79,20 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractViperUnitTest
         $this->selectInlineToolbarLineageItem(0);
 
         $this->keyDown('Key.CMD + b');
+        sleep(1);
         $this->keyDown('Key.CMD + i');
+        sleep(1);
 
         $this->selectInlineToolbarLineageItem(0);
 
         // Make sure the correct icons are being shown in the inline toolbar.
-        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_toggle_formats_highlighted.png'), 'Toogle formats icon is not selected');
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_toggle_formats_highlighted.png');
+        $this->assertTrue($this->inlineToolbarButtonExists('formats-div', 'active'), 'Toogle formats icon is not selected');
+        $this->clickInlineToolbarButton('formats-div', 'active');
         $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_div_active.png'), 'Div icon is not active');
 
         // Make sure the correct icons are being shown in the top toolbar.
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_toggle_formats_highlighted.png'), 'Toogle formats icon is not selected');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_formats_highlighted.png');
+        $this->assertTrue($this->topToolbarButtonExists('formats-div', 'active'), 'Toogle formats icon is not selected');
+        $this->clickTopToolbarButton('formats-div', 'active');
         $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_div_active.png'), 'Div icon is not active');
 
     }//end testSelectDivAfterStylingShowsCorrectIcons()
@@ -109,15 +109,15 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractViperUnitTest
 
         $this->selectText('Lorem');
         $this->selectInlineToolbarLineageItem(0);
-        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_toggle_formats_highlighted.png'), 'Toogle formats icon is not selected');
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_toggle_formats_highlighted.png');
+        $this->assertTrue($this->inlineToolbarButtonExists('formats-div', 'active'), 'Toogle formats icon is not selected');
+        $this->clickInlineToolbarButton('formats-div', 'active');
         $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_div_active.png'), 'Div icon is not active');
 
         $this->click($this->find('Lorem'));
         $this->selectText('sit');
         $this->selectInlineToolbarLineageItem(0);
-        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_toggle_formats_highlighted.png'), 'Toogle formats icon is not selected');
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_toggle_formats_highlighted.png');
+        $this->assertTrue($this->inlineToolbarButtonExists('formats-div', 'active'), 'Toogle formats icon is not selected');
+        $this->clickInlineToolbarButton('formats-div', 'active');
         $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_div_active.png'), 'Div icon is not active');
 
     }//end testSelectingDivWithFormattedTextShowsCorrectIcons()
@@ -130,8 +130,6 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractViperUnitTest
      */
     public function testUsingBoldInDiv()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $this->selectText('Lorem');
         $this->keyDown('Key.CMD + b');
 
@@ -152,8 +150,6 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractViperUnitTest
      */
     public function testUsingItalicInDiv()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $this->selectText('Lorem');
         $this->keyDown('Key.CMD + i');
 
@@ -178,12 +174,12 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractViperUnitTest
 
         $this->selectText('Lorem');
         $this->selectInlineToolbarLineageItem(0);
-        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_toggle_formats_highlighted.png'), 'Toogle formats icon is not selected');
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_toggle_formats_highlighted.png');
+        $this->assertTrue($this->inlineToolbarButtonExists('formats-div', 'active'), 'Toogle formats icon is not selected');
+        $this->clickInlineToolbarButton('formats-div', 'active');
         $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_div_active.png'), 'Div icon is not active');
 
         $this->selectInlineToolbarLineageItem(1);
-        $this->assertFalse($this->inlineToolbarButtonExists($dir.'toolbarIcon_toggle_formats_highlighted.png'), 'Toogle formats icon is still active in the inline toolbar');
+        $this->assertFalse($this->inlineToolbarButtonExists('formats-div', 'active'), 'Toogle formats icon is still active in the inline toolbar');
 
     }//end testDivIconIsActiveWhenSelectingDivTag()
 
@@ -198,9 +194,9 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractViperUnitTest
         $dir = dirname(__FILE__).'/Images/';
 
         $this->selectText('THIS');
-        $this->assertFalse($this->inlineToolbarButtonExists($dir.'toolbarIcon_toggle_formats_highlighted.png'), 'Toogle formats icon should not appear in the inline toolbar');
+        $this->assertFalse($this->inlineToolbarButtonExists('formats-p', 'active'), 'Toogle formats icon should not appear in the inline toolbar');
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_formats_highlighted.png');
+        $this->clickTopToolbarButton('formats-p', 'active');
         $this->clickTopToolbarButton($dir.'toolbarIcon_div.png');
 
         $this->assertHTMLMatch('<div>Lorem xtn dolor</div><p>spacer for the tests</p><div>sit amet <strong>WoW</strong></div><div>THIS is a paragraph to change to a div</div>');
@@ -220,21 +216,23 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractViperUnitTest
         $this->selectText('THIS');
         $this->selectInlineToolbarLineageItem(0);
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_formats_highlighted.png');
+        $this->clickTopToolbarButton('formats-p', 'active');
         $this->clickTopToolbarButton($dir.'toolbarIcon_div.png');
 
         $this->assertHTMLMatch('<div>Lorem xtn dolor</div><p>spacer for the tests</p><div>sit amet <strong>WoW</strong></div><div>THIS is a paragraph to change to a div</div>');
 
         $this->click($this->find('WoW'));
-        $this->selectText('THIS' );
+        $this->selectText('div' );
         $this->selectInlineToolbarLineageItem(0);
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_formats_highlighted.png');
+        $this->clickTopToolbarButton('formats-div', 'active');
         $this->clickTopToolbarButton($dir.'toolbarIcon_div_active.png');
 
         $this->assertHTMLMatch('<div>Lorem xtn dolor</div><p>spacer for the tests</p><div>sit amet <strong>WoW</strong></div>THIS is a paragraph to change to a div');
 
-    }//end testApplyingAndRemovingQuote()
+        $this->assertFalse($this->topToolbarButtonExists($dir.'toolbarIcon_div_active.png'));
+
+    }//end testApplyingAndRemovingDiv()
 
 
     /**
@@ -253,7 +251,7 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractViperUnitTest
         $this->type('New content');
         $this->keyDown('Key.SHIFT + Key.LEFT');
         $this->selectInlineToolbarLineageItem(0);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_formats_highlighted.png');
+        $this->clickTopToolbarButton('formats-p', 'active');
         $this->clickTopToolbarButton($dir.'toolbarIcon_div.png');
         $this->keyDown('Key.RIGHT');
         $this->type(' on the page');
