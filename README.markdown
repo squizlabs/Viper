@@ -290,3 +290,6 @@ The following resolution interfaces are still be completed:
 
 ### [Standard].Principle1.Guideline1_3.1_3_1.H43.MissingHeaderIds
 **Error:** Not all th elements in this table contain an id attribute, so that they may be referenced by td elements' headers attributes.
+
+### [Standard].Principle3.Guideline3_1.3_1_2.H58.1.Lang
+**Error:** The language specified in the lang attribute of this element does not appear to be well-formed.
