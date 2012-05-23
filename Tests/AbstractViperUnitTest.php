@@ -71,7 +71,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      *
      * @var float
      */
-    private static $_similarity = 0.95;
+    private static $_similarity = 0.85;
 
     /**
      * The top left position of the browser page relative to the screen 0,0.
@@ -187,11 +187,13 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
             $this->setDefaultRegion(self::$_window);
 
             // URL is already changed to the test runner, so just reload.
+            $this->setSetting('MinSimilarity', self::$_similarity);
             $this->reloadPage();
         } else {
             $this->selectBrowser(self::$_browser);
             $this->resizeWindow();
 
+            $this->setSetting('MinSimilarity', self::$_similarity);
             $calibrate = getenv('VIPER_TEST_CALIBRATE');
             if ($calibrate === 'TRUE' || file_exists($this->getBrowserImagePath()) === FALSE) {
                 try {
@@ -494,9 +496,10 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         self::goToURL($dest);
 
         // Create image for the inline toolbar pattern (the arrow on top).
+        sleep(2);
         $this->selectText('PyP');
 
-        usleep(500);
+        sleep(1);
         $vitp      = $this->execJS('getVITP()');
         $vitp['x'] = $this->getPageXRelativeToScreen($vitp['x']);
         $vitp['y'] = $this->getPageYRelativeToScreen($vitp['y']);
@@ -524,10 +527,34 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
             }
         }
 
+        $this->execJS('showAllBtns()');
+
+        // Remove dupe icons.
+        $dupeIcons = array('tableSettings');
+        foreach ($dupeIcons as $dupeIcon) {
+            $btnIndex = array_search($dupeIcon, $buttonNames);
+            if ($btnIndex !== FALSE) {
+                unset($buttonNames[$btnIndex]);
+            }
+        }
+
         // Find each of the icons, if any fails it will throw an exception.
-        foreach ($buttonNames as $buttonName) {
-            $testImage = $imgPath.'/'.$buttonName.'.png';
-            $this->find($testImage);
+        $regions = array();
+        foreach ($statuses as $status => $className) {
+            foreach ($buttonNames as $buttonName) {
+                if ($status !== '') {
+                    $buttonName .= $status;
+                }
+
+                $testImage = $imgPath.'/'.$buttonName.'.png';
+                $region    = $this->find($testImage);
+                $loc       = $this->getX($region).'-'.$this->getY($region);
+                if (isset($regions[$loc]) === TRUE) {
+                    throw new Exception('Image match conflict between '.$regions[$loc].' and '.$buttonName);
+                }
+
+                $regions[$loc] = $buttonName;
+            }
         }
 
         // Remove the temp calibrate file.

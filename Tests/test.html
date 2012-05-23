@@ -1,6 +1,9 @@
 <html>
     <head>
         <title>Running: __TEST_TITLE__</title>
+        <script type="text/javascript" src="../DfxJSLib/dfx.js"></script>
+        <script type="text/javascript" src="../Viper-all.js"></script>
+        <script type="text/javascript" src="./test.js"></script>
         <style>
             body {
                 margin: 50px;
@@ -60,10 +63,11 @@
             em strong {
                 color: brown;
             }
+
+            .Viper-button.Viper-disabled .Viper-buttonIcon {
+                margin-top: -14px;
+            }
         </style>
-        <script type="text/javascript" src="../DfxJSLib/dfx.js"></script>
-        <script type="text/javascript" src="../Viper-all.js"></script>
-        <script type="text/javascript" src="./test.js"></script>
         <script type="text/javascript">
             var viper = null;
             ViperReadyCallback = function() {

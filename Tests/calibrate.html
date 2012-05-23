@@ -1,26 +1,30 @@
 <html>
     <head>
-     <style>
-        body {
-            margin: 50px;
-            background-color: #EEE;
-            font-size: 20px;
-        }
-
-        #content {
-            text-align: center;
-        }
-
-        #windowTarget {
-            position: fixed;
-            left: 0;
-            top: 0;
-            z-index: 999999;
-        }
-        </style>
         <script type="text/javascript" src="../DfxJSLib/dfx.js"></script>
         <script type="text/javascript" src="./test.js"></script>
         <script type="text/javascript" src="../Viper-all.js"></script>
+        <style>
+            body {
+                margin: 50px;
+                background-color: #EEE;
+                font-size: 20px;
+            }
+
+            #content {
+                text-align: center;
+            }
+
+            #windowTarget {
+                position: fixed;
+                left: 0;
+                top: 0;
+                z-index: 999999;
+            }
+
+            .Viper-button.Viper-disabled .Viper-buttonIcon {
+                margin-top: -14px;
+            }
+        </style>
         <script>
             function getCoords(status, className)
             {
@@ -38,6 +42,28 @@
                 }
 
                 return coords;
+
+            }
+
+            function showAllBtns()
+            {
+                var classNames = ['Viper-dummyClass', 'Viper-selected', 'Viper-active', 'Viper-disabled'];
+                var buttonsContainer = dfx.getId('__buttons');
+
+                dfx.remove(buttonsContainer);
+                dfx.remove(dfx.getId('content'));
+                dfx.remove(dfx.getId('__textFields'));
+
+                for (var i = 0; i < classNames.length; i++) {
+                    var className = classNames[i];
+                    var clone     = buttonsContainer.cloneNode(true);
+                    var buttons = dfx.getClass('Viper-button', clone);
+                    for (var j = 0; j < buttons.length; j++) {
+                        buttons[j].className = 'Viper-button ' + className;
+                    }
+
+                    dfx.insertBefore(menu, clone);
+                }
 
             }
 
@@ -67,9 +93,10 @@
     <body spellcheck="false">
         <img id="windowTarget" src="./Core/Images/window-target.png"/>
         <div id="__buttons">__TEST_CONTENT__</div>
+        <div id="__allButtons"></div>
         <br /><div id="content">PyP</div>
         <br />
-        <div style="font-size: 9px; width: 200px;">
+        <div id="__textFields" style="font-size: 9px; width: 200px;">
             <div class="Viper-textbox Viper-focused Viper-actionClear">
                 <label class="Viper-textbox-label">
                     <div class="Viper-textbox-main" style="padding-left: 73px;">

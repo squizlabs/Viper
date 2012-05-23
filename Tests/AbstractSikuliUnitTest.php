@@ -717,6 +717,7 @@ abstract class AbstractSikuliUnitTest extends PHPUnit_Framework_TestCase
     protected function setSetting($setting, $value)
     {
         $this->sendCmd('Settings.'.$setting.' = '.$value);
+        $this->_getStreamOutput();
 
     }//end setSetting()
 
