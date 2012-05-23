@@ -2,45 +2,64 @@
     <head>
         <title>Running: __TEST_TITLE__</title>
         <style>
-        body {
-            margin: 50px;
-            background-color: #EEE;
-            font-size: 20px;
-        }
+            body {
+                margin: 50px;
+                background-color: #EEE;
+                font-size: 20px;
+            }
 
-        #content {
-            width: 800px;
-            height: 600px;
-            margin: auto;
-            margin-top: 90px;
-        }
+            #content {
+                width: 800px;
+                height: 600px;
+                margin: auto;
+                margin-top: 90px;
+            }
 
-        #menu {
-            position: fixed;
-            right: 100px;
-            width: 100px;
-            top: 50px;
-        }
+            #menu {
+                position: fixed;
+                right: 100px;
+                width: 100px;
+                top: 50px;
+            }
 
-        #testTitle {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background-color: #666;
-            color: #EEE;
-            font-size: 18px;
-            text-align: center;
-            font-weight: bold;
-            padding: 5px 0;
-        }
+            #testTitle {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                background-color: #666;
+                color: #EEE;
+                font-size: 18px;
+                text-align: center;
+                font-weight: bold;
+                padding: 5px 0;
+            }
 
-        #windowTarget {
-            position: fixed;
-            left: 0;
-            top: 0;
-            z-index: 999999;
-        }
+            #windowTarget {
+                position: fixed;
+                left: 0;
+                top: 0;
+                z-index: 999999;
+            }
+
+            * {
+                font-style: normal;
+                font-weight: normal;
+                text-decoration: none;
+            }
+
+            em {
+                color: green;
+            }
+
+            strong {
+                color: red;
+            }
+
+            strong em,
+            em strong {
+                color: brown;
+            }
         </style>
         <script type="text/javascript" src="../DfxJSLib/dfx.js"></script>
         <script type="text/javascript" src="../Viper-all.js"></script>

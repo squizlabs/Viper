@@ -154,6 +154,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         $testFileContent = '';
         if ($htmlFilePath !== NULL) {
             $testFileContent = trim(file_get_contents($htmlFilePath));
+            $testFileContent = $this->_replaceKeywords($testFileContent);
         }
 
         // Get the test JS file.
@@ -289,6 +290,156 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      */
     private function _calibrate()
     {
+        $this->_calibrateText();
+        $this->_calibrateImage();
+
+    }//end _calibrate()
+
+
+    /**
+     * Creates special text used by Viper.
+     *
+     * Creates the screenshots of the text
+     *
+     * @return void
+     * @throws Exception If it fails to calibrate.
+     */
+    private function _calibrateText()
+    {
+        $this->setAutoWaitTimeout(0.5);
+        $baseDir = dirname(__FILE__);
+
+        // Calibrate image recognition.
+        $baseDir = dirname(__FILE__);
+        $imgPath = $baseDir.'/tmp/Images/'.$this->getBrowserid();
+
+        $dest = $baseDir.'/calibrate-text.html';
+        self::goToURL($dest);
+
+        $texts = $this->execJS('getCoords('.json_encode($this->_getKeywordsList()).')');
+        $count = count($texts);
+
+        $i = 1;
+        $coords = array();
+        foreach ($texts as $id => $textRect) {
+            $region = $this->getRegionOnPage($textRect);
+
+            $coordsText = $this->getX($region).'-'.$this->getY($region);
+
+            if (isset($coords[$coordsText]) === TRUE) {
+                throw new Exception('Text match conflict between '.$coords[$coordsText].' and '.$id);
+            }
+
+            $coords[$coordsText] = $id;
+
+            $textImage = $this->capture($region);
+            copy($textImage, $this->_getKeywordImage($i));
+            $i++;
+        }
+
+        $tests = 5;
+        for ($j = 1; $j <= $tests; $j++) {
+            // Change the contents of the test page.
+            $this->execJS('changeContent('.$j.')');
+
+            // Test that captured images can be found on the page.
+            for ($i = 1; $i <= $count; $i++) {
+                $this->find($this->_getKeywordImage($i));
+            }
+        }
+
+    }//end _calibrateText()
+
+
+    /**
+     * Returns list of available keywords that can be used in tests.
+     *
+     * @return array
+     */
+    private function _getKeywordsList()
+    {
+        $keywords = array(
+                     'XAX',
+                     'XBX',
+                     'XCX',
+                     'XDX',
+                     'XEX',
+                     'XFX',
+                     'XGX',
+                     'XHX',
+                     'XIX',
+                     'XJX',
+                     'XKX',
+                     'XLX',
+                     'XMX',
+                    );
+        return $keywords;
+
+    }//end _getKeywordsList()
+
+
+    /**
+     * Returns the keyword string for the specifed keyword index.
+     *
+     * @param integer $index The index of the keyword.
+     *
+     * @return string
+     */
+    private function _getKeyword($index)
+    {
+        $keywords = $this->getKeywordsList();
+        $keyword  = $keywords[$index];
+
+        return $keyword;
+
+    }//end _getKeyword()
+
+
+    /**
+     * Returns the image path of the specified keyword.
+     *
+     * @param integer $index The index of the keyword.
+     *
+     * @return string
+     */
+    private function _getKeywordImage($index)
+    {
+        $baseDir  = dirname(__FILE__);
+        $imgPath  = $baseDir.'/tmp/Images/'.$this->getBrowserid();
+        $imgPath .= '/text-'.$index.'.png';
+
+        return $imgPath;
+
+    }//end _getKeywordImage()
+
+
+    /**
+     * Replaces the keywords in given content.
+     *
+     * @param string $content The content to search.
+     *
+     * @return string
+     */
+    private function _replaceKeywords($content)
+    {
+        $keywords = $this->_getKeywordsList();
+        foreach ($keywords as $index => $keyword) {
+            $content = str_replace('%'.($index + 1).'%', $keyword, $content);
+        }
+
+        return $content;
+
+    }//end _replaceKeywords()
+
+
+    /**
+     * Creates button images that are used in Viper for the current browser.
+     *
+     * @return void
+     * @throws Exception If it fails to calibrate.
+     */
+    private function _calibrateImage()
+    {
         $this->setAutoWaitTimeout(0.5);
 
         // Calibrate image recognition.
@@ -382,7 +533,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         // Remove the temp calibrate file.
         unlink($tmpFile);
 
-    }//end _calibrate()
+    }//end _calibrateImage()
 
 
     /**
@@ -683,6 +834,12 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      */
     protected function assertHTMLMatch($html, $alternateHtml=NULL)
     {
+        $html = $this->_replaceKeywords($html);
+
+        if ($alternateHtml !== NULL) {
+            $alternateHtml = $this->_replaceKeywords($alternateHtml);
+        }
+
         $pageHtml = str_replace('\n', '', $this->getHtml());
         $html     = str_replace("\n", '', $html);
 
@@ -1170,6 +1327,67 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
 
 
     /**
+     * Selects the specified keyword.
+     *
+     * If the $endKeyword is also specified then everything in between $startKeyword
+     *  and $endKeyword will be selected.
+     *
+     * @param integer $startKeyword The keyword to select.
+     * @param integer $endKeyword   The keyword where the selection will end.
+     *
+     * @return void
+     */
+    protected function selectKeyword($startKeyword, $endKeyword=NULL)
+    {
+        $startKeywordImage = $this->_getKeywordImage($startKeyword);
+
+        if ($endKeyword === NULL) {
+            $this->doubleClick($this->find($startKeywordImage));
+            return;
+        }
+
+        $endKeywordImage = $this->_getKeywordImage($endKeyword);
+
+        $start = $this->find($startKeywordImage);
+        $end   = $this->find($endKeywordImage);
+
+        $this->click($start);
+
+        $startLeft = $this->getTopLeft($start);
+        $endRight  = $this->getBottomRight($end);
+
+        $this->setLocation(
+            $startLeft,
+            ($this->getX($startLeft) + 2),
+            $this->getY($startLeft)
+        );
+
+        $this->setLocation(
+            $endRight,
+            ($this->getX($endRight) + 2),
+            $this->getY($endRight)
+        );
+
+        $this->dragDrop($startLeft, $endRight);
+
+    }//end selectKeyword()
+
+
+    /**
+     * Returns the region for the specified keyword.
+     *
+     * @param integer The keyword to find.
+     *
+     * @return object
+     */
+    protected function findKeyword($keyword)
+    {
+        return $this->find($this->_getKeywordImage($keyword));
+
+    }//end findKeyword()
+
+
+    /**
      * Clicks the field with specified label.
      *
      * @param string $label The label of the field.
@@ -1198,11 +1416,6 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         $actionButton = $this->find($actionImage, $fieldRegion);
 
         $this->click($actionButton);
-
-        //$rect       = $this->execJS('gField("'.$label.'")');
-        //$rect['x1'] = ($rect['x2'] - 12);
-
-        //$this->click($this->getRegionOnPage($rect));
 
     }//end clearFieldValue()
 
