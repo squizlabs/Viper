@@ -373,16 +373,6 @@
 }
 
 /* Temp new styles for tweaking Link in new window button layout */
-
-.ViperITP-label.Viper-linkNewWindow {
-    margin-right: 3.6em;
-}
-
-.Viper-button.Viper-linkNewWindow {
-    position: absolute;
-    right: 0;
-    top: 0;
-}
 .ViperITP-label.Viper-expandable {
     -moz-transition-property: margin-left, margin-right;
     -moz-transition-duration: 0.2s;
