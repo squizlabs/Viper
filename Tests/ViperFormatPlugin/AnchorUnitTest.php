@@ -182,6 +182,29 @@ class Viper_Tests_ViperFormatPlugin_AnchorUnitTest extends AbstractViperUnitTest
     }//end testDeletingAnchorsUsingTheInlineToolbar()
 
 
+    /**
+     * Test applying an anchor to an image.
+     *
+     * @return void
+     */
+    public function testApplyingAnAnchorToAnImage()
+    {
+        $this->clickElement('img', 1);
+        $this->clickInlineToolbarButton('anchorID');
+        $this->type('test');
+        $this->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>LOREM XuT</p><p><img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="" width="369" height="167" id="test" /></p><p>LABS is ORSM</p>');
+
+        $this->assertTrue($this->inlineToolbarButtonExists('anchorID', 'active'), 'Anchor icon in VITP should not be active.');
+
+        $this->clickTopToolbarButton('anchorID', 'active');
+        $this->type('abc');
+        $this->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>LOREM XuT</p><p><img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="" width="369" height="167" id="testabc" /></p><p>LABS is ORSM</p>');
+
+    }//end testApplyingAnAnchorToAnImage()
+
+
 }//end class
 
 ?>

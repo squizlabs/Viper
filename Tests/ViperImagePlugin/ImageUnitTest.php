@@ -486,7 +486,7 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperUnitTest
     {
         $dir = dirname(__FILE__).'/Images/';
 
-         $this->selectText('dolor');
+        $this->selectText('dolor');
         $this->type('Key.RIGHT');
         $this->keyDown('Key.ENTER');
         $this->clickTopToolbarButton($dir.'toolbarIcon_image.png');
@@ -873,12 +873,83 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperUnitTest
         $this->clickElement('img', 1);
         $this->resizeImage(1, 300);
 
-         $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>LOREM XuT dolor<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="" width="286px" height="130px" /></p><p>sit amet <strong>WoW</strong></p><p>Squiz LABS is ORSM</p>');
+        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>LOREM XuT dolor<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="" width="286px" height="130px" /></p><p>sit amet <strong>WoW</strong></p><p>Squiz LABS is ORSM</p>');
 
-         $this->clickTopToolbarButton(dirname(dirname(__FILE__)).'/Core/Images/undoIcon_active.png');
-         $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>LOREM XuT dolor<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="" /></p><p>sit amet <strong>WoW</strong></p><p>Squiz LABS is ORSM</p>');
+        $this->clickTopToolbarButton(dirname(dirname(__FILE__)).'/Core/Images/undoIcon_active.png');
+        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>LOREM XuT dolor<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="" /></p><p>sit amet <strong>WoW</strong></p><p>Squiz LABS is ORSM</p>');
 
     }//end testResizingAnImage()
+
+
+    /**
+     * Test that the image icon appears in the inline toolbar after you insert an image.
+     *
+     * @return void
+     */
+    public function testImageIconInInlineToolbar()
+    {
+        $dir = dirname(__FILE__).'/Images/';
+
+        // First insert the image
+        $this->selectText('dolor');
+        $this->type('Key.RIGHT');
+
+        $this->clickTopToolbarButton('image');
+        $this->type('http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg');
+        $this->clickTopToolbarButton($dir.'toobarIcon_image_presentational.png');
+        $this->keyDown('Key.ENTER');
+
+        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>LOREM XuT dolor<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="" /></p><p>sit amet <strong>WoW</strong></p><p>Squiz LABS is ORSM</p>');
+
+        $this->clickElement('img', 1);
+        $this->assertTrue($this->inlineToolbarButtonExists('image', 'active'), 'Image icon should be active.');
+        $this->assertTrue($this->inlineToolbarButtonExists('move'), 'Move icon should appear in the inline toolbar.');
+
+    }//end testImageIconInInlineToolbar()
+
+
+    /**
+     * Test editing an image using the inline toolbar.
+     *
+     * @return void
+     */
+    public function testEditingTheImageUsingInlineToolbar()
+    {
+        $dir = dirname(__FILE__).'/Images/';
+
+        $this->clickElement('img', 1);
+        $this->clickInlineToolbarButton('image', 'active');
+        $this->clickInlineToolbarButton($dir.'toolbarIcon_image_presentational_active.png');
+        $altBox = $this->find($dir.'input_alt.png', $this->getInlineToolbar());
+        $this->click($altBox);
+        $this->type('Alt text');
+        $this->clickInlineToolbarButton('Update Changes', NULL, TRUE);
+
+        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>LOREM XuT</p><img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Alt text" width="369" height="167"/><p>LABS is ORSM</p>');
+
+    }//end testEditingTheImageUsingInlineToolbar()
+
+
+    /**
+     * Test moving an image.
+     *
+     * @return void
+     */
+    public function testMovingAnImage()
+    {
+        $this->clickElement('img', 1);
+        $this->clickInlineToolbarButton('move');
+        $this->click($this->find('XuT'));
+
+        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>LOREM X<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="" width="369" height="167" />uT</p><p>LABS is ORSM</p>');
+
+        $this->assertTrue($this->inlineToolbarButtonExists('image', 'active'), 'Image icon should be active.');
+
+        // Undo the move
+        $this->clickTopToolbarButton('historyUndo');
+        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>LOREM XuT</p><p><img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="" width="369" height="167" /></p><p>LABS is ORSM</p>');
+
+    }//end testMovingAnImage()
 
 
 }//end class
