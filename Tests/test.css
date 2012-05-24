@@ -61,3 +61,18 @@ em strong {
 .Viper-button.Viper-disabled .Viper-buttonIcon {
     margin-top: -14px;
 }
+
+#__allBtns {
+    top: 20px;
+    left: 20px;
+    position: fixed;
+}
+
+#__textFields {
+    position: fixed;
+    top: 400px;
+}
+
+#content.__calibrate-image {
+    height: 100px;
+}

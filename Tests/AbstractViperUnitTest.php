@@ -534,7 +534,10 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         $this->execJS('showAllBtns()');
 
         // Remove dupe icons.
-        $dupeIcons = array('tableSettings');
+        $dupeIcons = array(
+                      'tableSettings',
+                      'sourceNewWindow',
+                     );
         foreach ($dupeIcons as $dupeIcon) {
             $btnIndex = array_search($dupeIcon, $buttonNames);
             if ($btnIndex !== FALSE) {

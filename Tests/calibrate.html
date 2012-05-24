@@ -33,16 +33,22 @@
                 dfx.remove(dfx.getId('content'));
                 dfx.remove(dfx.getId('__textFields'));
 
+                var allBtns = document.createElement('div');
+                allBtns.id  = '__allBtns';
+
                 for (var i = 0; i < classNames.length; i++) {
                     var className = classNames[i];
                     var clone     = buttonsContainer.cloneNode(true);
+                    clone.removeAttribute('id');
                     var buttons = dfx.getClass('Viper-button', clone);
                     for (var j = 0; j < buttons.length; j++) {
                         buttons[j].className = 'Viper-button ' + className;
                     }
 
-                    dfx.insertBefore(menu, clone);
+                    allBtns.appendChild(clone);
                 }
+
+                dfx.insertBefore(menu, allBtns);
 
             }
 
@@ -73,7 +79,7 @@
         <img id="windowTarget" src="./Core/Images/window-target.png"/>
         <div id="__buttons">__TEST_CONTENT__</div>
         <div id="__allButtons"></div>
-        <br /><div id="content">PyP</div>
+        <br /><div id="content" class="__calibrate-image">PyP</div>
         <br />
         <div id="__textFields" style="font-size: 9px; width: 200px;">
             <div class="Viper-textbox Viper-focused Viper-actionClear">
