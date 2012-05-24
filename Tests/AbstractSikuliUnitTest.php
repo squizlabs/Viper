@@ -172,6 +172,18 @@ abstract class AbstractSikuliUnitTest extends PHPUnit_Framework_TestCase
 
 
     /**
+     * Returns the location of the mouse pointer.
+     *
+     * @return string
+     */
+    protected function getMouseLocation()
+    {
+        return $this->callFunc('getMouseLocation', array(), 'Env', TRUE);
+
+    }//end getMouseLocation()
+
+
+    /**
      * Clicks the specified location.
      *
      * @param string $psmrl     A Pattern, String, Match, Region or Location.
@@ -228,6 +240,27 @@ abstract class AbstractSikuliUnitTest extends PHPUnit_Framework_TestCase
         $this->callFunc('mouseMove', array($psmrl));
 
     }//end mouseMove()
+
+
+    /**
+     * Move the mouse pointer by given X and Y offsets.
+     *
+     * @param integer $offsetX The X offset.
+     * @param integer $offsetY The Y offset.
+     *
+     * @return void
+     */
+    protected function mouseMoveOffset($offsetX, $offsetY)
+    {
+        $mouseLocation = $this->getMouseLocation();
+        $this->setLocation(
+            $mouseLocation,
+            $this->getX($mouseLocation) + $offsetX,
+            $this->getY($mouseLocation) + $offsetY
+        );
+        $this->mouseMove($mouseLocation);
+
+    }//end mouseMoveOffset()
 
 
     /**

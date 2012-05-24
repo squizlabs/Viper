@@ -1430,7 +1430,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      */
     protected function clickField($label)
     {
-        $this->click($this->_getLabel($label));
+        $this->click($this->find($this->_getLabel($label), NULL, 0.7));
 
     }//end clickField()
 
