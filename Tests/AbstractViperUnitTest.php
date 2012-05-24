@@ -315,6 +315,10 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         $baseDir = dirname(__FILE__);
         $imgPath = $baseDir.'/tmp/Images/'.$this->getBrowserid();
 
+        if (file_exists($imgPath) === FALSE) {
+            mkdir($imgPath, 0755, TRUE);
+        }
+
         $dest = $baseDir.'/calibrate-text.html';
         self::goToURL($dest);
 
