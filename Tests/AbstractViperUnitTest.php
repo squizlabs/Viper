@@ -325,7 +325,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         $texts = $this->execJS('getCoords('.json_encode($this->_getKeywordsList()).')');
         $count = count($texts);
 
-        $i = 1;
+        $i      = 1;
         $coords = array();
         foreach ($texts as $id => $textRect) {
             $region = $this->getRegionOnPage($textRect);
@@ -1410,7 +1410,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
     /**
      * Returns the region for the specified keyword.
      *
-     * @param integer The keyword to find.
+     * @param integer $keyword The keyword to find.
      *
      * @return object
      */
