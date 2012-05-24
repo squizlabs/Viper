@@ -12,16 +12,16 @@ class Viper_Tests_ViperCoreStylesPlugin_HorizontalRuleUnitTest extends AbstractV
      */
     public function testAddingHorizontalRuleAtEndOfParagraph()
     {
-        $this->selectText('WoW');
-        $this->type('Key.RIGHT');
+        $this->selectKeyword(4);
+        $this->keyDown('Key.RIGHT');
 
         $this->clickTopToolbarButton('insertHr');
 
-        $this->type('Key.RIGHT');
-        $this->type('Key.BACKSPACE');
+        $this->keyDown('Key.RIGHT');
+        $this->keyDown('Key.BACKSPACE');
         $this->type('This is a new line of ConTenT');
 
-        $this->assertHTMLMatch('<h1>First HEADING</h1><p>Lorem XuT dolor sit <em>amet</em> <strong>WoW</strong></p><hr /><p>This is a new line of ConTenT</p><h2>Second heading</h2><p>This is another paragraph</p><ul><li>Test removing bullet points</li><li>purus oNo luctus</li><li>vel molestie arcu</li></ul>');
+        $this->assertHTMLMatch('<h1>First %1%</h1><p>%2% %3% dolor sit <em>amet</em> <strong>%4%</strong></p><hr /><p>This is a new line of ConTenT</p><h2>Second heading</h2><p>This is another paragraph</p><ul><li>Test removing bullet points</li><li>purus %5% luctus</li><li>vel molestie arcu</li></ul>');
 
     }//end testAddingHorizontalRuleAtEndOfParagraph()
 
@@ -33,22 +33,22 @@ class Viper_Tests_ViperCoreStylesPlugin_HorizontalRuleUnitTest extends AbstractV
      */
     public function testAddingAndDeletingAHorizontalRuleAtEndOfParagraph()
     {
-        $this->selectText('WoW');
-        $this->type('Key.RIGHT');
+        $this->selectKeyword(4);
+        $this->keyDown('Key.RIGHT');
 
         $this->clickTopToolbarButton('insertHr');
 
-        $this->type('Key.RIGHT');
-        $this->type('Key.BACKSPACE');
-        $this->type('THIS is a new line of ConTenT');
+        $this->keyDown('Key.RIGHT');
+        $this->keyDown('Key.BACKSPACE');
+        $this->type('%6% new line of content');
 
-        $this->assertHTMLMatch('<h1>First HEADING</h1><p>Lorem XuT dolor sit <em>amet</em> <strong>WoW</strong></p><hr /><p>THIS is a new line of ConTenT</p><h2>Second heading</h2><p>This is another paragraph</p><ul><li>Test removing bullet points</li><li>purus oNo luctus</li><li>vel molestie arcu</li></ul>');
+        $this->assertHTMLMatch('<h1>First %1%</h1><p>%2% %3% dolor sit <em>amet</em> <strong>%4%</strong></p><hr /><p>%6% new line of content</p><h2>Second heading</h2><p>This is another paragraph</p><ul><li>Test removing bullet points</li><li>purus %5% luctus</li><li>vel molestie arcu</li></ul>');
 
-        $this->selectText('THIS');
-        $this->type('Key.LEFT');
-        $this->type('Key.BACKSPACE');
+        $this->selectKeyword(6);
+        $this->keyDown('Key.LEFT');
+        $this->keyDown('Key.BACKSPACE');
 
-        $this->assertHTMLMatch('<h1>First HEADING</h1><p>Lorem XuT dolor sit <em>amet</em> <strong>WoW</strong></p><p>THIS is a new line of ConTenT</p><h2>Second heading</h2><p>This is another paragraph</p><ul><li>Test removing bullet points</li><li>purus oNo luctus</li><li>vel molestie arcu</li></ul>');
+        $this->assertHTMLMatch('<h1>First %1%</h1><p>%2% %3% dolor sit <em>amet</em> <strong>%4%</strong></p><p>%6% new line of content</p><h2>Second heading</h2><p>This is another paragraph</p><ul><li>Test removing bullet points</li><li>purus %5% luctus</li><li>vel molestie arcu</li></ul>');
 
     }//end testAddingAndDeletingAHorizontalRuleAtEndOfParagraph()
 
@@ -60,14 +60,14 @@ class Viper_Tests_ViperCoreStylesPlugin_HorizontalRuleUnitTest extends AbstractV
      */
     public function testAddingHorizontalRuleInMiddleOfParagraph()
     {
-        $this->selectText('XuT');
+        $this->selectKeyword(3);
         $this->type('Key.RIGHT');
 
         $this->clickTopToolbarButton('insertHr');
 
         $this->type('New ConTenT');
 
-        $this->assertHTMLMatch('<h1>First HEADING</h1><p>Lorem XuT</p><hr /><p>New ConTenTdolor sit <em>amet</em> <strong>WoW</strong></p><h2>Second heading</h2><p>This is another paragraph</p><ul><li>Test removing bullet points</li><li>purus oNo luctus</li><li>vel molestie arcu</li></ul>');
+        $this->assertHTMLMatch('<h1>First %1%</h1><p>%2% %3%</p><hr /><p>New ConTenTdolor sit <em>amet</em> <strong>%4%</strong></p><h2>Second heading</h2><p>This is another paragraph</p><ul><li>Test removing bullet points</li><li>purus %5% luctus</li><li>vel molestie arcu</li></ul>');
 
     }//end testAddingHorizontalRuleInMiddleOfParagraph()
 
@@ -79,14 +79,14 @@ class Viper_Tests_ViperCoreStylesPlugin_HorizontalRuleUnitTest extends AbstractV
      */
     public function testAddingHorizontalRuleAtStartOfParagraph()
     {
-        $this->selectText('Lorem');
-        $this->type('Key.LEFT');
+        $this->selectKeyword(2);
+        $this->keyDown('Key.LEFT');
 
         $this->clickTopToolbarButton('insertHr');
 
         $this->type('New ConTenT');
 
-        $this->assertHTMLMatch('<h1>First HEADING</h1><hr /><p>New ConTenTLorem XuT dolor sit <em>amet</em> <strong>WoW</strong></p><h2>Second heading</h2><p>This is another paragraph</p><ul><li>Test removing bullet points</li><li>purus oNo luctus</li><li>vel molestie arcu</li></ul>');
+        $this->assertHTMLMatch('<h1>First %1%</h1><hr /><p>New ConTenT%2% %3% dolor sit <em>amet</em> <strong>%4%</strong></p><h2>Second heading</h2><p>This is another paragraph</p><ul><li>Test removing bullet points</li><li>purus %5% luctus</li><li>vel molestie arcu</li></ul>');
 
     }//end testAddingHorizontalRuleAtStartOfParagraph()
 
@@ -98,13 +98,13 @@ class Viper_Tests_ViperCoreStylesPlugin_HorizontalRuleUnitTest extends AbstractV
      */
     public function testAddingHorizontalRuleAtStartOfParagraphWithNoInnerTags()
     {
-        $this->selectText('Lorem');
+        $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(0);
         $this->keyDown('Key.CMD + b');
         $this->keyDown('Key.CMD + b');
         $this->keyDown('Key.CMD + i');
         $this->keyDown('Key.CMD + i');
-        $this->type('Key.LEFT');
+        $this->keyDown('Key.LEFT');
 
         $this->clickTopToolbarButton('insertHr');
 
