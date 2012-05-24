@@ -71,7 +71,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      *
      * @var float
      */
-    private static $_similarity = 0.95;
+    private static $_similarity = 0.85;
 
     /**
      * The top left position of the browser page relative to the screen 0,0.
@@ -1388,7 +1388,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         $this->click($start);
 
         $startLeft = $this->getTopLeft($start);
-        $endRight  = $this->getBottomRight($end);
+        $endRight  = $this->getTopRight($end);
 
         $this->setLocation(
             $startLeft,
@@ -1493,6 +1493,23 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         return $imagePath;
 
     }//end _getLabel()
+
+
+    /**
+     * Type the text at the current focused input field or at a click point specified by PSMRL.
+     *
+     * @param string $text      The text to type.
+     * @param string $modifiers Key modifiers.
+     * @param string $psmrl     PSMRL variable.
+     *
+     * @return integer
+     */
+    protected function type($text, $modifiers=NULL, $psmrl=NULL)
+    {
+        $text = $this->_replaceKeywords($text);
+        return parent::type($text, $modifiers, $psmrl);
+
+    }//end type()
 
 
     /**
