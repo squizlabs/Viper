@@ -71,7 +71,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      *
      * @var float
      */
-    private static $_similarity = 0.85;
+    private static $_similarity = 0.95;
 
     /**
      * The top left position of the browser page relative to the screen 0,0.
