@@ -62,6 +62,10 @@ em strong {
     margin-top: -14px;
 }
 
+.Viper-button.Viper-active .Viper-buttonIcon {
+    margin-top: -8px;
+}
+
 #__allBtns {
     top: 20px;
     left: 20px;
