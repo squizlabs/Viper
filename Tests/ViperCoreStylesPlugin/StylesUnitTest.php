@@ -12,7 +12,7 @@ class Viper_Tests_ViperCoreStylesPlugin_StylesUnitTest extends AbstractViperUnit
      */
     public function testAllStyles()
     {
-        $this->selectText('Lorem');
+        $this->selectKeyword(1);
 
         $this->keyDown('Key.CMD + b');
         $this->keyDown('Key.CMD + i');
@@ -25,17 +25,17 @@ class Viper_Tests_ViperCoreStylesPlugin_StylesUnitTest extends AbstractViperUnit
         $this->clickTopToolbarButton('strikethrough', 'active');
         $this->clickTopToolbarButton('subscript', 'active');
 
-        $this->assertHTMLMatch('<p><strong><em><sup>Lorem</sup></em></strong> XuT dolor</p><p>sit <em>amet</em> <strong>WoW</strong></p>');
+        $this->assertHTMLMatch('<p><strong><em><sup>%1%</sup></em></strong> %2% %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
         //Remove italics
-        $this->selectText('Lorem');
+        $this->selectKeyword(1);
         $this->keyDown('Key.CMD + i');
-        $this->assertHTMLMatch('<p><strong><sup>Lorem</sup></strong> XuT dolor</p><p>sit <em>amet</em> <strong>WoW</strong></p>');
+        $this->assertHTMLMatch('<p><strong><sup>%1%</sup></strong> %2% %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
         //Remove bold
-        $this->selectText('Lorem');
+        $this->selectKeyword(1);
         $this->keyDown('Key.CMD + b');
-        $this->assertHTMLMatch('<p><sup>Lorem</sup> XuT dolor</p><p>sit <em>amet</em> <strong>WoW</strong></p>');
+        $this->assertHTMLMatch('<p><sup>%1%</sup> %2% %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
     }//end testAllStyles()
 
@@ -47,22 +47,13 @@ class Viper_Tests_ViperCoreStylesPlugin_StylesUnitTest extends AbstractViperUnit
      */
     public function testStyleTags()
     {
-        $this->selectText('Lorem');
-
+        $this->selectKeyword(1);
         $this->keyDown('Key.CMD + b');
 
-        $this->keyDown('Key.RIGHT');
-        $this->keyDown('Key.LEFT');
-        $this->keyDown('Key.LEFT');
-        $this->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->keyDown('Key.SHIFT + Key.RIGHT');
+        $this->selectKeyword(1, 2);
         $this->keyDown('Key.CMD + i');
 
-        $this->assertHTMLMatch('<p><strong>Lor<em>em</em></strong><em> XuT</em> dolor</p><p>sit <em>amet</em> <strong>WoW</strong></p>');
+        $this->assertHTMLMatch('<p><em><strong>%1%</strong> %2%</em> %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
     }//end testStyleTags()
 
@@ -74,16 +65,16 @@ class Viper_Tests_ViperCoreStylesPlugin_StylesUnitTest extends AbstractViperUnit
      */
     public function testRemoveFormat()
     {
-        $this->selectText('Lorem');
+        $this->selectKeyword(1);
 
         $this->keyDown('Key.CMD + b');
         $this->keyDown('Key.CMD + i');
-        $this->assertHTMLMatch('<p><strong><em>Lorem</em></strong> XuT dolor</p><p>sit <em>amet</em> <strong>WoW</strong></p>');
+        $this->assertHTMLMatch('<p><strong><em>%1%</em></strong> %2% %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
-        $this->selectText('Lorem');
+        $this->selectKeyword(1);
         $this->clickTopToolbarButton('removeFormat');
 
-        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p>sit <em>amet</em> <strong>WoW</strong></p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
     }//end testRemoveFormat()
 
@@ -95,10 +86,10 @@ class Viper_Tests_ViperCoreStylesPlugin_StylesUnitTest extends AbstractViperUnit
      */
     public function testMultiParaApplyStyle()
     {
-        $this->selectText('Lorem', 'amet');
+        $this->selectKeyword(1, 4);
         $this->keyDown('Key.CMD + b');
 
-        $this->assertHTMLMatch('<p><strong>Lorem XuT dolor</strong></p><p><strong>sit </strong><em><strong>amet</strong></em> <strong>WoW</strong></p>');
+        $this->assertHTMLMatch('<p><strong>%1% %2% %3%</strong></p><p><strong>sit <em>%4%</em></strong> <strong>%5%</strong></p>');
 
     }//end testMultiParaApplyStyle()
 
@@ -110,11 +101,11 @@ class Viper_Tests_ViperCoreStylesPlugin_StylesUnitTest extends AbstractViperUnit
      */
     public function testMultiParaRemoveStyle()
     {
-        $this->selectText('Lorem', 'amet');
+        $this->selectKeyword(1, 4);
         $this->keyDown('Key.CMD + b');
         $this->keyDown('Key.CMD + b');
 
-        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p>sit <em>amet</em> <strong>WoW</strong></p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
     }//end testMultiParaRemoveStyle()
 
@@ -126,13 +117,13 @@ class Viper_Tests_ViperCoreStylesPlugin_StylesUnitTest extends AbstractViperUnit
      */
     public function testMultiParaRemoveStyles()
     {
-        $this->selectText('Lorem', 'amet');
+        $this->selectKeyword(1, 4);
         $this->keyDown('Key.CMD + b');
         $this->keyDown('Key.CMD + i');
         $this->keyDown('Key.CMD + i');
         $this->keyDown('Key.CMD + b');
 
-        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p>sit amet <strong>WoW</strong></p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit %4% <strong>%5%</strong></p>');
 
     }//end testMultiParaRemoveStyles()
 
@@ -144,7 +135,7 @@ class Viper_Tests_ViperCoreStylesPlugin_StylesUnitTest extends AbstractViperUnit
      */
     public function testSelectParaAfterStyling()
     {
-        $this->selectText('Lorem', 'dolor');
+        $this->selectKeyword(1, 3);
         $this->keyDown('Key.CMD + b');
         $this->keyDown('Key.CMD + i');
 
@@ -168,7 +159,7 @@ class Viper_Tests_ViperCoreStylesPlugin_StylesUnitTest extends AbstractViperUnit
      */
     public function testBoldAndItalic()
     {
-        $this->selectText('Lorem');
+        $this->selectKeyword(1);
 
         //Add bold and italics
         $this->keyDown('Key.CMD + b');
@@ -183,7 +174,7 @@ class Viper_Tests_ViperCoreStylesPlugin_StylesUnitTest extends AbstractViperUnit
         $this->assertHTMLMatch('<p><strong><em>Lorem</em></strong> XuT dolor</p><p>sit <em>amet</em> <strong>WoW</strong></p>');
 
         //Remove italics
-        $this->selectText('Lorem');
+        $this->selectKeyword(1);
         $this->keyDown('Key.CMD + i');
 
         $this->assertTrue($this->inlineToolbarButtonExists('italic'), 'Italic icon is still active in the inline toolbar');
@@ -205,16 +196,15 @@ class Viper_Tests_ViperCoreStylesPlugin_StylesUnitTest extends AbstractViperUnit
      */
     public function testSelectingTextInAParagraph()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
-        $this->selectText('Lorem', 'dolor');
+        $this->selectKeyword(1, 4);
         $this->assertFalse($this->inlineToolbarButtonExists('italic'), 'Italic icon appears in the inline toolbar');
         $this->assertFalse($this->topToolbarButtonExists('italic', 'active'), 'Active Italic icon appears in the inline toolbar');
         $this->assertFalse($this->inlineToolbarButtonExists('bold'), 'Bold icon appears in the inline toolbar');
         $this->assertFalse($this->inlineToolbarButtonExists('bold', 'active'), 'Active Bold icon appears in the inline toolbar');
 
-        $this->selectText('sit', 'WoW');
-         $this->assertFalse($this->inlineToolbarButtonExists('italic'), 'Italic icon appears in the inline toolbar');
+        $this->selectKeyword(5);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->assertFalse($this->inlineToolbarButtonExists('italic'), 'Italic icon appears in the inline toolbar');
         $this->assertFalse($this->topToolbarButtonExists('italic', 'active'), 'Active Italic icon appears in the inline toolbar');
         $this->assertFalse($this->inlineToolbarButtonExists('bold'), 'Bold icon appears in the inline toolbar');
         $this->assertFalse($this->inlineToolbarButtonExists('bold', 'active'), 'Active Bold icon appears in the inline toolbar');
