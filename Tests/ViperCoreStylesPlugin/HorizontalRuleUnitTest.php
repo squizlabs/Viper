@@ -65,9 +65,9 @@ class Viper_Tests_ViperCoreStylesPlugin_HorizontalRuleUnitTest extends AbstractV
 
         $this->clickTopToolbarButton('insertHr');
 
-        $this->type('New ConTenT');
+        $this->type('New Content');
 
-        $this->assertHTMLMatch('<h1>First %1%</h1><p>%2% %3%</p><hr /><p>New ConTenTdolor sit <em>amet</em> <strong>%4%</strong></p><h2>Second heading</h2><p>This is another paragraph</p><ul><li>Test removing bullet points</li><li>purus %5% luctus</li><li>vel molestie arcu</li></ul>');
+        $this->assertHTMLMatch('<h1>First %1%</h1><p>%2% %3%</p><hr /><p>New Contentdolor sit <em>amet</em> <strong>%4%</strong></p><h2>Second heading</h2><p>This is another paragraph</p><ul><li>Test removing bullet points</li><li>purus %5% luctus</li><li>vel molestie arcu</li></ul>');
 
     }//end testAddingHorizontalRuleInMiddleOfParagraph()
 
@@ -84,33 +84,9 @@ class Viper_Tests_ViperCoreStylesPlugin_HorizontalRuleUnitTest extends AbstractV
 
         $this->clickTopToolbarButton('insertHr');
 
-        $this->type('New ConTenT');
+        $this->type('New Content');
 
-        $this->assertHTMLMatch('<h1>First %1%</h1><hr /><p>New ConTenT%2% %3% dolor sit <em>amet</em> <strong>%4%</strong></p><h2>Second heading</h2><p>This is another paragraph</p><ul><li>Test removing bullet points</li><li>purus %5% luctus</li><li>vel molestie arcu</li></ul>');
-
-    }//end testAddingHorizontalRuleAtStartOfParagraph()
-
-
-    /**
-     * Test that you can add a horizontal rule at the start of a paragraph that has no inner tags.
-     *
-     * @return void
-     */
-    public function testAddingHorizontalRuleAtStartOfParagraphWithNoInnerTags()
-    {
-        $this->selectKeyword(2);
-        $this->selectInlineToolbarLineageItem(0);
-        $this->keyDown('Key.CMD + b');
-        $this->keyDown('Key.CMD + b');
-        $this->keyDown('Key.CMD + i');
-        $this->keyDown('Key.CMD + i');
-        $this->keyDown('Key.LEFT');
-
-        $this->clickTopToolbarButton('insertHr');
-
-        $this->type('New ConTenT');
-
-        $this->assertHTMLMatch('<h1>First HEADING</h1><hr /><p>New ConTenTLorem XuT dolor sit amet WoW</p><h2>Second heading</h2><p>This is another paragraph</p><ul><li>Test removing bullet points</li><li>purus oNo luctus</li><li>vel molestie arcu</li></ul>');
+        $this->assertHTMLMatch('<h1>First %1%</h1><hr /><p>New Content%2% %3% dolor sit <em>amet</em> <strong>%4%</strong></p><h2>Second heading</h2><p>This is another paragraph</p><ul><li>Test removing bullet points</li><li>purus %5% luctus</li><li>vel molestie arcu</li></ul>');
 
     }//end testAddingHorizontalRuleAtStartOfParagraph()
 
@@ -122,50 +98,24 @@ class Viper_Tests_ViperCoreStylesPlugin_HorizontalRuleUnitTest extends AbstractV
      */
     public function testAddingAndDeletingHorizontalRuleAfterHeading()
     {
-        $this->selectText('HEADING');
-        $this->type('Key.RIGHT');
+        $this->selectKeyword(1);
+        $this->keyDown('Key.RIGHT');
 
         $this->clickTopToolbarButton('insertHr');
 
-        $this->type('Key.RIGHT');
-        $this->type('Key.BACKSPACE');
-        $this->type('New ConTenT');
+        $this->keyDown('Key.RIGHT');
+        $this->keyDown('Key.BACKSPACE');
+        $this->type('%6% Content');
 
-        $this->assertHTMLMatch('<h1>First HEADING</h1><hr /><p>New ConTenT</p><p>Lorem XuT dolor sit <em>amet</em> <strong>WoW</strong></p><h2>Second heading</h2><p>This is another paragraph</p><ul><li>Test removing bullet points</li><li>purus oNo luctus</li><li>vel molestie arcu</li></ul>');
+        $this->assertHTMLMatch('<h1>First %1%</h1><hr /><p>%6% Content</p><p>%2% %3% dolor sit <em>amet</em> <strong>%4%</strong></p><h2>Second heading</h2><p>This is another paragraph</p><ul><li>Test removing bullet points</li><li>purus %5% luctus</li><li>vel molestie arcu</li></ul>');
 
-        $this->selectText('New');
-        $this->type('Key.LEFT');
-        $this->type('Key.BACKSPACE');
+        $this->selectKeyword(6);
+        $this->keyDown('Key.LEFT');
+        $this->keyDown('Key.BACKSPACE');
 
-        $this->assertHTMLMatch('<h1>First HEADING</h1><p>New ConTenT</p><p>Lorem XuT dolor sit <em>amet</em> <strong>WoW</strong></p><h2>Second heading</h2><p>This is another paragraph</p><ul><li>Test removing bullet points</li><li>purus oNo luctus</li><li>vel molestie arcu</li></ul>');
+        $this->assertHTMLMatch('<h1>First %1%</h1><p>%6% Content</p><p>%2% %3% dolor sit <em>amet</em> <strong>%4%</strong></p><h2>Second heading</h2><p>This is another paragraph</p><ul><li>Test removing bullet points</li><li>purus %5% luctus</li><li>vel molestie arcu</li></ul>');
 
     }//end testAddingAndDeletingHorizontalRuleAfterHeading()
-
-
-    /**
-     * Test that you can add a horizontal rule in a list.
-     *
-     * @return void
-     */
-    public function testAddingAndRemovingHorizontalRuleInAList()
-    {
-        $this->selectText('oNo');
-        $this->type('Key.RIGHT');
-
-        $this->clickTopToolbarButton('insertHr');
-
-        $this->type('New ConTenT');
-
-        $this->assertHTMLMatch('<h1>First HEADING</h1><p>Lorem XuT dolor sit <em>amet</em> <strong>WoW</strong></p><h2>Second heading</h2><p>This is another paragraph</p><ul><li>Test removing bullet points</li><li>purus oNo</li><hr /><li>New ConTenTluctus</li><li>vel molestie arcu</li></ul>');
-
-        $this->selectText('oNo');
-        $this->type('Key.RIGHT');
-        $this->type('Key.RIGHT');
-        $this->type('Key.BACKSPACE');
-
-        $this->assertHTMLMatch('<h1>First HEADING</h1><p>Lorem XuT dolor sit <em>amet</em> <strong>WoW</strong></p><h2>Second heading</h2><p>This is another paragraph</p><ul><li>Test removing bullet points</li><li>purus oNo</li><li>New ConTenTluctus</li><li>vel molestie arcu</li></ul>');
-
-    }//end testAddingAndRemovingHorizontalRuleInAList()
 
 
     /**
@@ -175,16 +125,16 @@ class Viper_Tests_ViperCoreStylesPlugin_HorizontalRuleUnitTest extends AbstractV
      */
     public function testAddingHorizontalRuleAfterFormattedText()
     {
-        $this->selectText('XuT');
+        $this->selectKeyword(3);
         $this->clickTopToolbarButton('subscript');
 
-        $this->selectText('WoW');
+        $this->selectKeyword(4);
         $this->clickTopToolbarButton('strikethrough');
         $this->keyDown('Key.RIGHT');
         $this->keyDown('Key.ENTER');
         $this->clickTopToolbarButton('insertHr');
 
-        $this->assertHTMLMatch('<h1>First HEADING</h1><p>Lorem <sub>XuT</sub> dolor sit <em>amet</em> <strong><del>WoW</del></strong></p><p>&nbsp;</p><hr /><p>&nbsp;</p><h2>Second heading</h2><p>This is another paragraph</p><ul><li>Test removing bullet points</li><li>purus oNo luctus</li><li>vel molestie arcu</li></ul>');
+        $this->assertHTMLMatch('<h1>First %1%</h1><p>%2% <sub>%3%</sub> dolor sit <em>amet</em> <strong><del>%4%</del></strong></p><p>&nbsp;</p><hr /><p>&nbsp;</p><h2>Second heading</h2><p>This is another paragraph</p><ul><li>Test removing bullet points</li><li>purus %5% luctus</li><li>vel molestie arcu</li></ul>');
 
     }//end testAddingHorizontalRuleAfterFormattedText()
 
