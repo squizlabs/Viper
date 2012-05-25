@@ -858,36 +858,72 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
     /**
      * Assert that given HTML string matches the test page's HTML.
      *
-     * @param string $html          The HTML string to compare.
-     * @param string $alternateHtml An alternate HTML incase the first argument does
-     *                              not match. This can be used to provide a similar
-     *                              HTML for different browsers
-     *                              (e.g. order of attributes in different browsers).
+     * @param string $html The HTML string to compare.
      *
      * @return void
      */
-    protected function assertHTMLMatch($html, $alternateHtml=NULL)
+    protected function assertHTMLMatch($html)
     {
         $html = $this->replaceKeywords($html);
-
-        if ($alternateHtml !== NULL) {
-            $alternateHtml = $this->replaceKeywords($alternateHtml);
-        }
 
         $pageHtml = str_replace('\n', '', $this->getHtml());
         $html     = str_replace("\n", '', $html);
 
         if ($html !== $pageHtml) {
-            if ($alternateHtml === NULL) {
-                $this->assertEquals($html, $pageHtml);
-            } else {
-                $this->assertEquals($alternateHtml, $pageHtml);
-            }
-        } else {
-            $this->assertEquals($html, $pageHtml);
+            $pageHtml = $this->_orderTagAttributes($pageHtml);
+            $html     = $this->_orderTagAttributes($html);
         }
 
+        $this->assertEquals($html, $pageHtml);
+
     }//end assertHTMLMatch()
+
+
+    /**
+     * Rebuilds a HTML string with tag attributes in alphabetical order.
+     *
+     * @param string $html The HTML string to rebuild.
+     *
+     * @return string
+     */
+    private function _orderTagAttributes($html)
+    {
+        $attrRegex = '(?:(?:\s+\w+(?:\s*=\s*(?:"(?:[^"]+)?"))?)+)?(?:(?:\s+\w+(?:\s*=\s*(?:"(?:[^"]+)?"))?)+)?\s*\/?';
+        $matches   = preg_split(
+            '/(<\w+'.$attrRegex.'>)/i',
+            $html,
+            -1,
+            (PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY)
+        );
+
+        $newHtml = '';
+        foreach ($matches as $match) {
+            if ($match[0] === '<') {
+                // This is a tag.
+                $tagMatches = array();
+                $tagRegex   = '/(<\w+)'.$attrRegex.'>/i';
+                preg_match($tagRegex, $match, $tagMatches);
+                if ($tagMatches[1].'>' !== $match) {
+                    // This tag has attributes, which need to be ordered
+                    // alphabetically.
+                    $attrs = array();
+                    preg_match_all('/\s+(\w+)\s*=\s*(?:"(?:[^"]+)?")/i', $match, $attrs);
+                    asort($attrs[1]);
+                    $match = $tagMatches[1];
+                    foreach ($attrs[1] as $attrIndex => $attrName) {
+                        $match .= $attrs[0][$attrIndex];
+                    }
+
+                    $match .= '>';
+                }
+            }//end if
+
+            $newHtml .= $match;
+        }//end foreach
+
+        return $newHtml;
+
+    }//end _orderTagAttributes()
 
 
     /**
