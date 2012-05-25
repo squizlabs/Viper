@@ -12,14 +12,14 @@ class Viper_Tests_ViperCoreStylesPlugin_RemoveFormatUnitTest extends AbstractVip
      */
     public function testRemoveFormatIcon()
     {
-        $this->selectText('WoW');
+        $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
 
         $this->clickTopToolbarButton('removeFormat');
         sleep(1);
 
         $this->execJS('rmTableHeaders(0,true)');
-        $this->assertHTMLMatch('<div><h1>First Heading</h1><p>Lorem XuT dolor sit amet WoW</p><h2>Second Heading</h2><p>This is SOME information for <a href="http://www.google.com" title="Google">testing</a></p><ul><li>Test removing bullet points</li><li>purus oNo luctus</li><li>vel molestie arcu</li></ul><div>&nbsp;</div><hr /><p>This is a sub script. This is a super script</p><table border="1" cellpadding="2" cellspacing="3"><caption>Table 1.2: The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU TiuT XabcX Mnu</td><td>WoW sapien vel aliquet</td><td>            <ul><li>vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul>        </td></tr><tr><td><h3>Squiz Labs</h3></td><td colspan="2">purus neque luctus <a href="http://www.google.com">ligula</a>, vel molestie arcu</td></tr><tr><td>nec porta ante</td><td>sapien vel aliquet</td><td rowspan="2">purus neque luctus ligula, vel molestie arcu</td></tr><tr><td colspan="2">sapien vel aliquet</td></tr></tbody></table></div>');
+        $this->assertHTMLMatch('<div><h1>First Heading</h1><p>Lorem XuT dolor sit amet %1%</p><h2>Second Heading</h2><p>This is SOME information for <a href="http://www.google.com" title="Google">testing</a></p><ul><li>Test removing bullet points</li><li>purus oNo luctus</li><li>vel molestie arcu</li></ul><div>&nbsp;</div><hr /><p>This is a sub script. This is a super script</p><table border="1" cellpadding="2" cellspacing="3"><caption>Table 1.2: The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU TiuT XabcX Mnu</td><td>WoW sapien vel aliquet</td><td>            <ul><li>vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul>        </td></tr><tr><td><h3>Squiz Labs</h3></td><td colspan="2">purus neque luctus <a href="http://www.google.com">ligula</a>, vel molestie arcu</td></tr><tr><td>nec porta ante</td><td>sapien vel aliquet</td><td rowspan="2">purus neque luctus ligula, vel molestie arcu</td></tr><tr><td colspan="2">sapien vel aliquet</td></tr></tbody></table></div>');
 
 
     }//end testRemoveFormatIcon()
@@ -32,12 +32,12 @@ class Viper_Tests_ViperCoreStylesPlugin_RemoveFormatUnitTest extends AbstractVip
      */
     public function testRemoveAlignmentForAList()
     {
-        $this->selectText('oNo');
+        $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
 
         $this->clickTopToolbarButton('removeFormat');
 
-        $this->assertHTMLMatch('<p>This is a list</p><ul><li>Test removing bullet points</li><li>purus oNo luctus</li><li>vel molestie arcu</li></ul>');
+        $this->assertHTMLMatch('<p>This is a list</p><ul><li>Test removing bullet points</li><li>purus %1% luctus</li><li>vel molestie arcu</li></ul>');
 
     }//end testRemoveAlignmentForAList()
 
@@ -49,13 +49,13 @@ class Viper_Tests_ViperCoreStylesPlugin_RemoveFormatUnitTest extends AbstractVip
      */
     public function testSelectionMaintainedWhenClickingRemoveFormat()
     {
-        $this->selectText('XuT');
+        $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
 
         $this->clickTopToolbarButton('removeFormat');
 
-        $this->assertHTMLMatch('<p>Lorem XuT dolor sit amet WoW</p>');
-        $this->assertEquals('Lorem XuT dolor sit amet WoW', $this->getSelectedText(), 'Original selection is not selected');
+        $this->assertHTMLMatch('<p>Lorem %1% dolor sit amet WoW</p>');
+        $this->assertEquals($this->replaceKeywords('Lorem %1% dolor sit amet WoW'), $this->getSelectedText(), 'Original selection is not selected');
 
     }//end testSelectionMaintainedWhenClickingRemoveFormat()
 
@@ -67,12 +67,12 @@ class Viper_Tests_ViperCoreStylesPlugin_RemoveFormatUnitTest extends AbstractVip
      */
     public function testRemoveFormatForAParagraph()
     {
-        $this->selectText('Federal');
+        $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
 
         $this->clickTopToolbarButton('removeFormat');
 
-        $this->assertHTMLMatch('<p>Federal government agencies must update all government websites (as specified within scope under the Website Accessibility National Transition Strategy (NTS)) to WCAG 2.0 conformance. Agencies should use the principle of progressive enhancement when building and managing websites, and test for conformance across multiple browsers and operating system configurations.</p>');
+        $this->assertHTMLMatch('<p>%1% government agencies must update all government websites (as specified within scope under the Website Accessibility National Transition Strategy (NTS)) to WCAG 2.0 conformance. Agencies should use the principle of progressive enhancement when building and managing websites, and test for conformance across multiple browsers and operating system configurations.</p>');
 
     }//end testRemoveFormatForAParagraph()
 
