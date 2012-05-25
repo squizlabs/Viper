@@ -13,12 +13,12 @@ class Viper_Tests_ViperCoreStylesPlugin_SuperscriptUnitTest extends AbstractVipe
      */
     public function testStartOfParaSuperscript()
     {
-        $this->selectText('Lorem');
+        $this->selectKeyword(1);
 
         $this->clickTopToolbarButton('superscript');
         $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar is not active');
 
-        $this->assertHTMLMatch('<p><sup>Lorem</sup> XuT dolor</p><p>sit <em>amet</em> <strong>WoW</strong></p>');
+        $this->assertHTMLMatch('<p><sup>%1%</sup> %2% %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
     }//end testStartOfParaSuperscript()
 
@@ -31,12 +31,12 @@ class Viper_Tests_ViperCoreStylesPlugin_SuperscriptUnitTest extends AbstractVipe
     public function testMidOfParaSuperscript()
     {
 
-        $this->selectText('XuT');
+        $this->selectKeyword(2);
 
         $this->clickTopToolbarButton('superscript');
         $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar is not active');
 
-        $this->assertHTMLMatch('<p>Lorem <sup>XuT</sup> dolor</p><p>sit <em>amet</em> <strong>WoW</strong></p>');
+        $this->assertHTMLMatch('<p>%1% <sup>%2%</sup> %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
     }//end testMidOfParaSuperscript()
 
@@ -48,12 +48,12 @@ class Viper_Tests_ViperCoreStylesPlugin_SuperscriptUnitTest extends AbstractVipe
      */
     public function testEndOfParaSuperscript()
     {
-        $this->selectText('dolor');
+        $this->selectKeyword(3);
 
         $this->clickTopToolbarButton('superscript');
         $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar is not active');
 
-        $this->assertHTMLMatch('<p>Lorem XuT <sup>dolor</sup></p><p>sit <em>amet</em> <strong>WoW</strong></p>');
+        $this->assertHTMLMatch('<p>%1% %2% <sup>%3%</sup></p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
     }//end testEndOfParaSuperscript()
 
@@ -65,22 +65,21 @@ class Viper_Tests_ViperCoreStylesPlugin_SuperscriptUnitTest extends AbstractVipe
      */
     public function testRemovingFormatFromPartOfTheContent()
     {
-        $dolor = $this->find('dolor');
-        $this->selectText('XuT', 'dolor');
+        $this->selectKeyword(2, 3);
 
         $this->clickTopToolbarButton('superscript');
         $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar is not active');
 
-        $this->assertHTMLMatch('<p>Lorem <sup>XuT dolor</sup></p><p>sit <em>amet</em> <strong>WoW</strong></p>');
+        $this->assertHTMLMatch('<p>%1% <sup>%2% %3%</sup></p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
-        $this->doubleClick($dolor);
+        $this->selectKeyword(3);
 
         $this->clickTopToolbarButton('superscript', 'active');
         $this->assertTrue($this->topToolbarButtonExists('superscript'), 'Superscript icon in the top toolbar is still active');
 
-        $this->assertHTMLMatch('<p>Lorem <sup>XuT </sup>dolor</p><p>sit <em>amet</em> <strong>WoW</strong></p>');
+        $this->assertHTMLMatch('<p>%1% <sup>%2%</sup> %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
-        $this->selectText('XuT');
+        $this->selectKeyword(2);
         $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar is not active');
 
     }//end testRemovingFormatFromPartOfTheContent()
@@ -93,16 +92,16 @@ class Viper_Tests_ViperCoreStylesPlugin_SuperscriptUnitTest extends AbstractVipe
      */
     public function testAdjacentWordStyling()
     {
-        $this->selectText('XuT');
+        $this->selectKeyword(2);
         $this->clickTopToolbarButton('superscript');
 
-        $this->selectText('Lorem', 'XuT');
+        $this->selectKeyword(1, 2);
         $this->clickTopToolbarButton('superscript');
 
-        $this->selectText('XuT', 'dolor');
+        $this->selectKeyword(2, 3);
         $this->clickTopToolbarButton('superscript');
 
-        $this->assertHTMLMatch('<p><sup>Lorem XuT dolor</sup></p><p>sit <em>amet</em> <strong>WoW</strong></p>');
+        $this->assertHTMLMatch('<p><sup>%1% %2% %3%</sup></p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
     }//end testAdjacentWordStyling()
 
@@ -114,16 +113,16 @@ class Viper_Tests_ViperCoreStylesPlugin_SuperscriptUnitTest extends AbstractVipe
      */
     public function testSpaceSeparatedAdjacentWordStyling()
     {
-        $this->selectText('XuT');
+        $this->selectKeyword(2);
          $this->clickTopToolbarButton('superscript');
 
-        $this->selectText('Lorem');
+        $this->selectKeyword(1);
         $this->clickTopToolbarButton('superscript');
 
-        $this->selectText('dolor');
+        $this->selectKeyword(3);
         $this->clickTopToolbarButton('superscript');
 
-        $this->assertHTMLMatch('<p><sup>Lorem</sup> <sup>XuT</sup> <sup>dolor</sup></p><p>sit <em>amet</em> <strong>WoW</strong></p>');
+        $this->assertHTMLMatch('<p><sup>%1%</sup> <sup>%2%</sup> <sup>%3%</sup></p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
     }//end testSpaceSeparatedAdjacentWordStyling()
 
@@ -135,21 +134,18 @@ class Viper_Tests_ViperCoreStylesPlugin_SuperscriptUnitTest extends AbstractVipe
      */
     public function testRemoveFormating()
     {
-        $text    = 'WoW';
-        $textLoc = $this->find($text);
-        $this->selectText($text);
+        $this->selectKeyword(5);
 
         $this->clickTopToolbarButton('superscript');
         $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar is not active');
-        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p>sit <em>amet</em> <strong><sup>WoW</sup></strong></p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit <em>%4%</em> <strong><sup>%5%</sup></strong></p>');
 
-        $this->click($textLoc);
-        $this->selectText($text);
+        $this->selectKeyword(5);
 
-         $this->clickTopToolbarButton('superscript', 'active');
+        $this->clickTopToolbarButton('superscript', 'active');
         $this->assertTrue($this->topToolbarButtonExists('superscript'), 'Superscript icon is still active in the top toolbar is not active');
 
-        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p>sit <em>amet</em> <strong>WoW</strong></p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
     }//end testRemoveFormating()
 
@@ -161,15 +157,12 @@ class Viper_Tests_ViperCoreStylesPlugin_SuperscriptUnitTest extends AbstractVipe
      */
     public function testIconsIsActive()
     {
-        $text    = 'WoW';
-        $textLoc = $this->find($text);
-        $this->selectText($text);
+        $this->selectKeyword(5);
 
         $this->clickTopToolbarButton('superscript');
         $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar is not active');
 
-        $this->click($textLoc);
-        $this->selectText($text);
+        $this->selectKeyword(5);
         $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar is not active');
 
     }//end testIconsIsActive()
@@ -182,15 +175,15 @@ class Viper_Tests_ViperCoreStylesPlugin_SuperscriptUnitTest extends AbstractVipe
      */
     public function testUndoSuperscript()
     {
-        $this->selectText('XuT');
+        $this->selectKeyword(2);
 
         $this->clickTopToolbarButton('superscript');
         $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Subscript icon in the top toolbar is not active');
 
-        $this->assertHTMLMatch('<p>Lorem <sup>XuT</sup> dolor</p><p>sit <em>amet</em> <strong>WoW</strong></p>');
+        $this->assertHTMLMatch('<p>%1% <sup>%2%</sup> %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
         $this->clickTopToolbarButton('historyUndo');
-        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p>sit <em>amet</em> <strong>WoW</strong></p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
         $this->assertTrue($this->topToolbarButtonExists('superscript'), 'Superscript icon in the top toolbar should not be active');
 

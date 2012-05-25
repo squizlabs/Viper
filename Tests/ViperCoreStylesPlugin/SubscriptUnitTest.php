@@ -13,12 +13,12 @@ class Viper_Tests_ViperCoreStylesPlugin_SubscriptUnitTest extends AbstractViperU
      */
     public function testStartOfParaSubscript()
     {
-        $this->selectText('Lorem');
+        $this->selectKeyword(1);
 
         $this->clickTopToolbarButton('subscript');
         $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar is not active');
 
-        $this->assertHTMLMatch('<p><sub>Lorem</sub> XuT dolor</p><p>sit <em>amet</em> <strong>WoW</strong></p>');
+        $this->assertHTMLMatch('<p><sub>%1%</sub> %2% %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
     }//end testStartOfParaSubscript()
 
@@ -30,12 +30,12 @@ class Viper_Tests_ViperCoreStylesPlugin_SubscriptUnitTest extends AbstractViperU
      */
     public function testMidOfParaSubscript()
     {
-        $this->selectText('XuT');
+        $this->selectKeyword(2);
 
         $this->clickTopToolbarButton('subscript');
         $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar is not active');
 
-        $this->assertHTMLMatch('<p>Lorem <sub>XuT</sub> dolor</p><p>sit <em>amet</em> <strong>WoW</strong></p>');
+        $this->assertHTMLMatch('<p>%1% <sub>%2%</sub> %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
     }//end testMidOfParaSubscript()
 
@@ -47,12 +47,12 @@ class Viper_Tests_ViperCoreStylesPlugin_SubscriptUnitTest extends AbstractViperU
      */
     public function testEndOfParaSubscript()
     {
-        $this->selectText('dolor');
+        $this->selectKeyword(3);
 
         $this->clickTopToolbarButton('subscript');
         $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar is not active');
 
-        $this->assertHTMLMatch('<p>Lorem XuT <sub>dolor</sub></p><p>sit <em>amet</em> <strong>WoW</strong></p>');
+        $this->assertHTMLMatch('<p>%1% %2% <sub>%3%</sub></p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
     }//end testEndOfParaSubscript()
 
@@ -62,26 +62,23 @@ class Viper_Tests_ViperCoreStylesPlugin_SubscriptUnitTest extends AbstractViperU
      *
      * @return void
      */
-    public function testRemovingFormatFromPartOfTheContentA()
+    public function testRemovingFormatFromPartOfTheContent()
     {
-        $dolor = $this->find('dolor');
-        $xut   = $this->find('xut');
-
-        $this->selectText('XuT', 'dolor');
+        $this->selectKeyword(2, 3);
 
         $this->clickTopToolbarButton('subscript');
         $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar is not active');
 
-        $this->assertHTMLMatch('<p>Lorem <sub>XuT dolor</sub></p><p>sit <em>amet</em> <strong>WoW</strong></p>');
+        $this->assertHTMLMatch('<p>%1% <sub>%2% %3%</sub></p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
-        $this->doubleClick($dolor);
+        $this->selectKeyword(3);
 
         $this->clickTopToolbarButton('subscript', 'active');
         $this->assertTrue($this->topToolbarButtonExists('subscript'), 'Subscript icon in the top toolbar is still active');
 
-        $this->assertHTMLMatch('<p>Lorem <sub>XuT </sub>dolor</p><p>sit <em>amet</em> <strong>WoW</strong></p>');
+        $this->assertHTMLMatch('<p>%1% <sub>%2% </sub>%3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
-        $this->selectText('XuT');
+        $this->selectKeyword(2);
         $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar is not active');
 
     }//end testRemovingFormatFromPartOfTheContent()
@@ -94,20 +91,16 @@ class Viper_Tests_ViperCoreStylesPlugin_SubscriptUnitTest extends AbstractViperU
      */
     public function testAdjacentWordStyling()
     {
-        $this->selectText('XuT');
+        $this->selectKeyword(2);
         $this->clickTopToolbarButton('subscript');
 
-        $this->selectText('Lorem');
-        $this->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->keyDown('Key.SHIFT + Key.RIGHT');
+        $this->selectKeyword(1, 2);
         $this->clickTopToolbarButton('subscript');
 
-        $this->selectText('XuT', 'dolor');
+        $this->selectKeyword(2, 3);
         $this->clickTopToolbarButton('subscript');
 
-        $this->assertHTMLMatch('<p><sub>Lorem XuT dolor</sub></p><p>sit <em>amet</em> <strong>WoW</strong></p>');
+        $this->assertHTMLMatch('<p><sub>%1% %2% %3%</sub></p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
     }//end testAdjacentWordStyling()
 
@@ -119,16 +112,16 @@ class Viper_Tests_ViperCoreStylesPlugin_SubscriptUnitTest extends AbstractViperU
      */
     public function testSpaceSeparatedAdjacentWordStyling()
     {
-        $this->selectText('XuT');
+        $this->selectKeyword(2);
         $this->clickTopToolbarButton('subscript');
 
-        $this->selectText('Lorem');
+        $this->selectKeyword(1);
         $this->clickTopToolbarButton('subscript');
 
-        $this->selectText('dolor');
+        $this->selectKeyword(3);
         $this->clickTopToolbarButton('subscript');
 
-        $this->assertHTMLMatch('<p><sub>Lorem</sub> <sub>XuT</sub> <sub>dolor</sub></p><p>sit <em>amet</em> <strong>WoW</strong></p>');
+        $this->assertHTMLMatch('<p><sub>%1%</sub> <sub>%2%</sub> <sub>%3%</sub></p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
     }//end testSpaceSeparatedAdjacentWordStyling()
 
@@ -140,21 +133,18 @@ class Viper_Tests_ViperCoreStylesPlugin_SubscriptUnitTest extends AbstractViperU
      */
     public function testRemoveFormating()
     {
-        $text    = 'WoW';
-        $textLoc = $this->find($text);
-        $this->selectText($text);
+        $this->selectKeyword(5);
 
         $this->clickTopToolbarButton('subscript');
         $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar is not active');
-        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p>sit <em>amet</em> <strong><sub>WoW</sub></strong></p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit <em>%4%</em> <strong><sub>%5%</sub></strong></p>');
 
-        $this->click($textLoc);
-        $this->selectText($text);
+        $this->selectKeyword(5);
 
-         $this->clickTopToolbarButton('subscript', 'active');
+        $this->clickTopToolbarButton('subscript', 'active');
         $this->assertTrue($this->topToolbarButtonExists('subscript'), 'Subscript icon is still active in the top toolbar is not active');
 
-        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p>sit <em>amet</em> <strong>WoW</strong></p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
     }//end testRemoveFormating()
 
@@ -166,15 +156,12 @@ class Viper_Tests_ViperCoreStylesPlugin_SubscriptUnitTest extends AbstractViperU
      */
     public function testIconsIsActive()
     {
-        $text    = 'WoW';
-        $textLoc = $this->find($text);
-        $this->selectText($text);
+        $this->selectKeyword(5);
 
         $this->clickTopToolbarButton('subscript');
         $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar is not active');
 
-        $this->click($textLoc);
-        $this->selectText($text);
+        $this->selectKeyword(5);
         $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar is not active');
 
     }//end testIconsIsActive()
@@ -187,15 +174,15 @@ class Viper_Tests_ViperCoreStylesPlugin_SubscriptUnitTest extends AbstractViperU
      */
     public function testUndoSubscript()
     {
-        $this->selectText('XuT');
+        $this->selectKeyword(2);
 
         $this->clickTopToolbarButton('subscript');
         $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar is not active');
 
-        $this->assertHTMLMatch('<p>Lorem <sub>XuT</sub> dolor</p><p>sit <em>amet</em> <strong>WoW</strong></p>');
+        $this->assertHTMLMatch('<p>%1% <sub>%2%</sub> %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
         $this->clickTopToolbarButton('historyUndo');
-        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p>sit <em>amet</em> <strong>WoW</strong></p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
         $this->assertTrue($this->topToolbarButtonExists('subscript'), 'Subscript icon in the top toolbar should not be active');
 
