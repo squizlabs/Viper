@@ -4190,6 +4190,37 @@ Viper.prototype = {
 
         // Add quotes around attributes (IE....).
         if (this.isBrowser('msie') === true) {
+            // This requires some explanation because I'm sick of having to try and
+            // figure out what I did in this regex each time we change it.
+            // <\w+(?:(?:\s+\w+(?:\s*=\s*(?:"(?:[^"]+)?"|\'(?:[^\']+)?\'))?)+)?
+            // <[tagname](
+            //            (
+            //             spaces[attrname](
+            //                              spacemaybe[=]spacemaybe(
+            //                                                      "(...maybe)" OR
+            //                                                      '(...maybe)'
+            //                                                     )
+            //                             maybe)
+            //            ) * many
+            //           maybe)
+            // (?:\s+\w+(?:\s*=\s*(?:[^\'">\s]+))?)+
+            //           (
+            //            spaces[attrname](
+            //                             spacemaybe[=]spacemaybe(noquotes/spaces/end...)
+            //                            maybe)
+            //           ) * many
+            // (?:(?:\s+\w+(?:\s*=\s*(?:"(?:[^"]+)?"|\'(?:[^\']+)?\'|[^\'">\s]+))?)+)?\s*\/?>
+            //           (
+            //            (spaces[attrname](
+            //                              spacemaybe[=]spacemaybe(
+            //                                                      "(...maybe)" OR
+            //                                                      '(...maybe)' OR
+            //                                                      noquotes/spaces/end...
+            //                                                     )
+            //                             maybe)
+            //            ) * many
+            //           maybe)
+            //           spacesmaybe/>
             content = content.replace(/<\w+(?:(?:\s+\w+(?:\s*=\s*(?:"(?:[^"]+)?"|\'(?:[^\']+)?\'))?)+)?(?:\s+\w+(?:\s*=\s*(?:[^\'">\s]+))?)+(?:(?:\s+\w+(?:\s*=\s*(?:"(?:[^"]+)?"|\'(?:[^\']+)?\'|[^\'">\s]+))?)+)?\s*\/?>/ig, function(match) {
                 match = match.replace(/(\s+\w+\s*=\s*)([^\'">\s]+)/gi, function(attr, attrName, value) {
                     return attrName + '"' + value + '"';
