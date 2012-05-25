@@ -154,7 +154,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         $testFileContent = '';
         if ($htmlFilePath !== NULL) {
             $testFileContent = trim(file_get_contents($htmlFilePath));
-            $testFileContent = $this->_replaceKeywords($testFileContent);
+            $testFileContent = $this->replaceKeywords($testFileContent);
         }
 
         // Get the test JS file.
@@ -426,7 +426,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      *
      * @return string
      */
-    private function _replaceKeywords($content)
+    protected function replaceKeywords($content)
     {
         $keywords = $this->_getKeywordsList();
         foreach ($keywords as $index => $keyword) {
@@ -435,7 +435,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
 
         return $content;
 
-    }//end _replaceKeywords()
+    }//end replaceKeywords()
 
 
     /**
@@ -868,10 +868,10 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      */
     protected function assertHTMLMatch($html, $alternateHtml=NULL)
     {
-        $html = $this->_replaceKeywords($html);
+        $html = $this->replaceKeywords($html);
 
         if ($alternateHtml !== NULL) {
-            $alternateHtml = $this->_replaceKeywords($alternateHtml);
+            $alternateHtml = $this->replaceKeywords($alternateHtml);
         }
 
         $pageHtml = str_replace('\n', '', $this->getHtml());
@@ -1444,7 +1444,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      */
     protected function clearFieldValue($label)
     {
-        $fieldLabel   = $this->find($this->_getLabel($label));
+        $fieldLabel   = $this->find($this->_getLabel($label), NULL, 0.7);
         $fieldRegion  = $this->extendRight($fieldLabel, 400);
         $actionImage  = $this->getBrowserImagePath().'/textField_action_clear.png';
         $actionButton = $this->find($actionImage, $fieldRegion);
@@ -1463,7 +1463,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      */
     protected function revertFieldValue($label)
     {
-        $fieldLabel   = $this->find($this->_getLabel($label));
+        $fieldLabel   = $this->find($this->_getLabel($label), NULL, 0.7);
         $fieldRegion  = $this->extendRight($fieldLabel, 400);
         $actionImage  = $this->getBrowserImagePath().'/textField_action_revert.png';
         $actionButton = $this->find($actionImage, $fieldRegion);
@@ -1506,7 +1506,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      */
     protected function type($text, $modifiers=NULL, $psmrl=NULL)
     {
-        $text = $this->_replaceKeywords($text);
+        $text = $this->replaceKeywords($text);
         return parent::type($text, $modifiers, $psmrl);
 
     }//end type()
