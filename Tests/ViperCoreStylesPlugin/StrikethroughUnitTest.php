@@ -13,12 +13,12 @@ class Viper_Tests_ViperCoreStylesPlugin_StrikethroughUnitTest extends AbstractVi
      */
     public function testStartOfParaStrikethrough()
     {
-        $this->selectText('Lorem');
+        $this->selectKeyword(1);
 
         $this->clickTopToolbarButton('strikethrough');
         $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar is not active');
 
-        $this->assertHTMLMatch('<p><del>Lorem</del> XuT dolor</p><p>sit <em>amet</em> <strong>WoW</strong></p>');
+        $this->assertHTMLMatch('<p><del>%1%</del> %2% %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
     }//end testStartOfParaStrikethrough()
 
@@ -30,12 +30,12 @@ class Viper_Tests_ViperCoreStylesPlugin_StrikethroughUnitTest extends AbstractVi
      */
     public function testMidOfParaStrikethrough()
     {
-        $this->selectText('XuT');
+        $this->selectKeyword(2);
 
         $this->clickTopToolbarButton('strikethrough');
         $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar is not active');
 
-        $this->assertHTMLMatch('<p>Lorem <del>XuT</del> dolor</p><p>sit <em>amet</em> <strong>WoW</strong></p>');
+        $this->assertHTMLMatch('<p>%1% <del>%2%</del> %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
     }//end testMidOfParaStrikethrough()
 
@@ -47,12 +47,12 @@ class Viper_Tests_ViperCoreStylesPlugin_StrikethroughUnitTest extends AbstractVi
      */
     public function testEndOfParaStrikethrough()
     {
-        $this->selectText('dolor');
+        $this->selectKeyword(3);
 
         $this->clickTopToolbarButton('strikethrough');
         $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar is not active');
 
-        $this->assertHTMLMatch('<p>Lorem XuT <del>dolor</del></p><p>sit <em>amet</em> <strong>WoW</strong></p>');
+        $this->assertHTMLMatch('<p>%1% %2% <del>%3%</del></p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
     }//end testEndOfParaStrikethrough()
 
@@ -64,24 +64,21 @@ class Viper_Tests_ViperCoreStylesPlugin_StrikethroughUnitTest extends AbstractVi
      */
     public function testRemovingFormatFromPartOfTheContent()
     {
-        $dolor = $this->find('dolor');
-        $xut   = $this->find('XUT');
-
-        $this->selectText('XuT', 'dolor');
+        $this->selectKeyword(2, 3);
 
         $this->clickTopToolbarButton('strikethrough');
         $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar is not active');
 
-        $this->assertHTMLMatch('<p>Lorem <del>XuT dolor</del></p><p>sit <em>amet</em> <strong>WoW</strong></p>');
+        $this->assertHTMLMatch('<p>%1% <del>%2% %3%</del></p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
-        $this->doubleClick($dolor);
+        $this->selectKeyword(3);
 
         $this->clickTopToolbarButton('strikethrough', 'active');
         $this->assertTrue($this->topToolbarButtonExists('strikethrough'), 'Strikethrough icon in the top toolbar is still active');
 
-        $this->assertHTMLMatch('<p>Lorem <del>XuT </del>dolor</p><p>sit <em>amet</em> <strong>WoW</strong></p>');
+        $this->assertHTMLMatch('<p>%1% <del>%2% </del>%3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
-        $this->doubleClick($xut);
+        $this->selectKeyword(2);
         $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar is not active');
 
     }//end testRemovingFormatFromPartOfTheContent()
@@ -94,20 +91,16 @@ class Viper_Tests_ViperCoreStylesPlugin_StrikethroughUnitTest extends AbstractVi
      */
     public function testAdjacentWordStyling()
     {
-        $this->selectText('XuT');
+        $this->selectKeyword(2);
         $this->clickTopToolbarButton('strikethrough');
 
-        $this->selectText('Lorem', 'XuT');
+        $this->selectKeyword(1, 2);
         $this->clickTopToolbarButton('strikethrough');
 
-        $this->selectText('dolor');
-        $this->keyDown('Key.SHIFT + Key.LEFT');
-        $this->keyDown('Key.SHIFT + Key.LEFT');
-        $this->keyDown('Key.SHIFT + Key.LEFT');
-        $this->keyDown('Key.SHIFT + Key.LEFT');
+        $this->selectKeyword(2, 3);
         $this->clickTopToolbarButton('strikethrough');
 
-        $this->assertHTMLMatch('<p><del>Lorem XuT dolor</del></p><p>sit <em>amet</em> <strong>WoW</strong></p>');
+        $this->assertHTMLMatch('<p><del>%1% %2% %3%</del></p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
     }//end testAdjacentWordStyling()
 
@@ -119,16 +112,16 @@ class Viper_Tests_ViperCoreStylesPlugin_StrikethroughUnitTest extends AbstractVi
      */
     public function testSpaceSeparatedAdjacentWordStyling()
     {
-        $this->selectText('XuT');
+        $this->selectKeyword(2);
          $this->clickTopToolbarButton('strikethrough');
 
-        $this->selectText('Lorem');
+        $this->selectKeyword(1);
         $this->clickTopToolbarButton('strikethrough');
 
-        $this->selectText('dolor');
+        $this->selectKeyword(3);
         $this->clickTopToolbarButton('strikethrough');
 
-        $this->assertHTMLMatch('<p><del>Lorem</del> <del>XuT</del> <del>dolor</del></p><p>sit <em>amet</em> <strong>WoW</strong></p>');
+        $this->assertHTMLMatch('<p><del>%1%</del> <del>%2%</del> <del>%3%</del></p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
     }//end testSpaceSeparatedAdjacentWordStyling()
 
@@ -140,21 +133,18 @@ class Viper_Tests_ViperCoreStylesPlugin_StrikethroughUnitTest extends AbstractVi
      */
     public function testRemoveFormating()
     {
-        $text    = 'WoW';
-        $textLoc = $this->find($text);
-        $this->selectText($text);
+        $this->selectKeyword(5);
 
         $this->clickTopToolbarButton('strikethrough');
         $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar is not active');
-        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p>sit <em>amet</em> <strong><del>WoW</del></strong></p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit <em>%4%</em> <strong><del>%5%</del></strong></p>');
 
-        $this->click($textLoc);
-        $this->selectText($text);
+        $this->selectKeyword(5);
 
-         $this->clickTopToolbarButton('strikethrough', 'active');
+        $this->clickTopToolbarButton('strikethrough', 'active');
         $this->assertTrue($this->topToolbarButtonExists('strikethrough'), 'Strikethrough icon is still active in the top toolbar is not active');
 
-        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p>sit <em>amet</em> <strong>WoW</strong></p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
     }//end testRemoveFormating()
 
@@ -166,18 +156,12 @@ class Viper_Tests_ViperCoreStylesPlugin_StrikethroughUnitTest extends AbstractVi
      */
     public function testIconsIsActive()
     {
-        $this->selectText('XuT');
+        $this->selectKeyword(2);
 
         $this->clickTopToolbarButton('strikethrough');
         $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar is not active');
 
-        $this->selectText('Lorem');
-        $this->keyDown('Key.RIGHT');
-        $this->keyDown('Key.RIGHT');
-        $this->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->keyDown('Key.SHIFT + Key.RIGHT');
-        sleep(1);
+        $this->selectKeyword(2);
         $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar is not active');
 
     }//end testIconsIsActive()
@@ -190,15 +174,15 @@ class Viper_Tests_ViperCoreStylesPlugin_StrikethroughUnitTest extends AbstractVi
      */
     public function testUndoStrikethrough()
     {
-        $this->selectText('XuT');
+        $this->selectKeyword(2);
 
         $this->clickTopToolbarButton('strikethrough');
         $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Subscript icon in the top toolbar is not active');
 
-        $this->assertHTMLMatch('<p>Lorem <del>XuT</del> dolor</p><p>sit <em>amet</em> <strong>WoW</strong></p>');
+        $this->assertHTMLMatch('<p>%1% <del>%2%</del> %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
         $this->clickTopToolbarButton('historyUndo');
-        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p>sit <em>amet</em> <strong>WoW</strong></p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
         $this->assertTrue($this->topToolbarButtonExists('strikethrough'), 'Strikethrough icon in the top toolbar should not be active');
 
