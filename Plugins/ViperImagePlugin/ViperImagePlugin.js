@@ -522,6 +522,8 @@ ViperImagePlugin.prototype = {
                 self.showImageResizeHandles(imageElement);
                 toolbar.update(null, imageElement);
                 self._updateToolbars(imageElement);
+
+                return false;
             });
 
             // If ESC key is pressed cancel the image move.
