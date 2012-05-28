@@ -369,7 +369,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
                      'XBX',
                      'XCX',
                      'XDX',
-                     'XEX',
+                     'XTX',
                      'XFX',
                      'XGX',
                      'XHX',
@@ -391,9 +391,24 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      *
      * @return string
      */
+    protected function getKeyword($index)
+    {
+        $keyword = $this->_getKeyword($index - 1);
+        return $keyword;
+
+    }//end getKeyword()
+
+
+    /**
+     * Returns the keyword string for the specifed keyword index.
+     *
+     * @param integer $index The index of the keyword.
+     *
+     * @return string
+     */
     private function _getKeyword($index)
     {
-        $keywords = $this->getKeywordsList();
+        $keywords = $this->_getKeywordsList();
         $keyword  = $keywords[$index];
 
         return $keyword;
@@ -903,6 +918,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
                 $tagMatches = array();
                 $tagRegex   = '/(<\w+)'.$attrRegex.'>/i';
                 preg_match($tagRegex, $match, $tagMatches);
+                print_r($tagMatches);ob_flush();
                 if ($tagMatches[1].'>' !== $match) {
                     // This tag has attributes, which need to be ordered
                     // alphabetically.
@@ -1054,26 +1070,12 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
             return self::$_topToolbar;
         }
 
-        // Find the toolbar pattern.
-        $toolbarPattern = $this->createPattern(dirname(__FILE__).'/Core/Images/topToolbarPattern.png');
-        $toolbarPattern = $this->similar($toolbarPattern, self::$_similarity);
-        $match          = $this->find($toolbarPattern, self::$_window);
-
-        // Create a new region.
-        // X is the start of the browser window.
-        $x = $this->getX($this->getTopLeft(self::$_window));
-
-        // Y is a few pixels above the found pattern.
-        $y = ($this->getY($match) - 22);
-
-        // Width is the width of the browser window.
-        $w = $this->getW(self::$_window);
-
-        // Height is about 50px.
-        $h = 180;
-
-        // Create the region object.
-        $region = $this->createRegion($x, $y, $w, $h);
+        $region = $this->createRegion(
+            $this->getPageXRelativeToScreen(0),
+            $this->getPageYRelativeToScreen(0),
+            $this->getW(self::$_window),
+            150
+        );
 
         self::$_topToolbar = $region;
 
@@ -1175,7 +1177,20 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
             $region = $this->getInlineToolbar();
         }
 
-        $match = $this->find($buttonObj, $region);
+        $match = NULL;
+        if ($isText === TRUE) {
+            // Its harder for Sikuli to match a text button so use lower similarity.
+            try {
+                $match = $this->find($buttonObj, $region, 0.7);
+            } catch (Exception $e) {
+                // Try to find it again without the image.
+                $rect  = $this->_getTextButtonRectangle($buttonIcon, $state, $location);
+                $match = $this->getRegionOnPage($rect);
+            }
+        } else {
+            $match = $this->find($buttonObj, $region);
+        }
+
         $this->click($match);
 
         // Move the mouse pointer away from the button so that its tooltip does not
@@ -1203,24 +1218,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
             try {
                 $buttonIcon = $this->getButtonIconPath($buttonIconId, $state);
             } catch (Exception $e) {
-                $jsFn = 'gBtn';
-
-                if ($location === 'topToolbar') {
-                    $jsFn = 'gTPBtn';
-                } else if ($location === 'inlineToolbar') {
-                    $jsFn = 'gITPBtn';
-                }
-
-                if ($state !== NULL) {
-                    $rect = $this->execJS($jsFn.'("'.$buttonIcon.'", "'.$state.'")');
-                } else {
-                    $rect = $this->execJS($jsFn.'("'.$buttonIcon.'")');
-                }
-
-                if (is_array($rect) === FALSE) {
-                    throw new Exception('Could not find button with text: '.$buttonIcon);
-                }
-
+                $rect       = $this->_getTextButtonRectangle($buttonIcon, $state, $location);
                 $buttonIcon = $this->_createButtonImageFromRectangle($buttonIcon, $rect, $state);
             }//end try
         } else if (is_file($buttonIcon) === FALSE) {
@@ -1234,6 +1232,42 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         return $buttonIcon;
 
     }//end _getButton()
+
+
+    /**
+     * Returns the ractangle for the specified text button.
+     *
+     * @param string  $buttonIcon The name of the button.
+     * @param string  $state      The name of the button state (active, selected).
+     * @param string  $location   The location of the button (topToolbar, inlineToolbar, etc.).
+     *
+     * @return string
+     * @throws Exception If the button image cannot be found.
+     */
+    private function _getTextButtonRectangle($button, $state=NULL, $location=NULL)
+    {
+        $jsFn = 'gBtn';
+
+        if ($location === 'topToolbar') {
+            $jsFn = 'gTPBtn';
+        } else if ($location === 'inlineToolbar') {
+            $jsFn = 'gITPBtn';
+        }
+
+        $rect = NULL;
+        if ($state !== NULL) {
+            $rect = $this->execJS($jsFn.'("'.$button.'", "'.$state.'")');
+        } else {
+            $rect = $this->execJS($jsFn.'("'.$button.'")');
+        }
+
+        if (is_array($rect) === FALSE) {
+            throw new Exception('Could not find button with text: '.$button);
+        }
+
+        return $rect;
+
+    }//end _getTextButtonRectangle()
 
 
     /**
@@ -1455,6 +1489,26 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         return $this->find($this->_getKeywordImage($keyword));
 
     }//end findKeyword()
+
+
+    /**
+     * Returns TRUE of the specified field exists.
+     *
+     * @param string $label The label of the field.
+     *
+     * @return boolean
+     */
+    protected function fieldExists($label)
+    {
+        try {
+            $this->find($this->_getLabel($label), NULL, 0.7);
+        } catch (Exception $e) {
+            return FALSE;
+        }
+
+        return TRUE;
+
+    }//end fieldExists()
 
 
     /**
