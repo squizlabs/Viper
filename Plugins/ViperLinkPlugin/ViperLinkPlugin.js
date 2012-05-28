@@ -514,8 +514,18 @@ ViperLinkPlugin.prototype = {
             return false;
         }
 
-        var startNode = data.range.getStartNode();
-        var endNode   = data.range.getEndNode();
+        var startNode     = null;
+        var endNode       = null;
+        var nodeSelection = range.getNodeSelection();
+
+        if (nodeSelection) {
+            startNode = nodeSelection;
+            endNode   = startNode;
+        } else {
+            startNode = data.range.getStartNode();
+            endNode   = data.range.getEndNode();
+        }
+
         if (startNode && endNode && startNode.parentNode !== endNode.parentNode) {
             return false;
         }
