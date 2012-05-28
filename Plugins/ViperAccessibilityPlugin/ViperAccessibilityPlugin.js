@@ -38,6 +38,10 @@ ViperAccessibilityPlugin.prototype = {
             dfx.remove(dfx.getClass('HTMLCS-pointer'));
         });
 
+        this.viper.registerCallback('ViperToolbarPlugin:updateToolbar', 'ViperCharMapPlugin', function(data) {
+            self.viper.ViperTools.enableButton('accessibility');
+        });
+
     },
 
     setSettings: function(settings)
