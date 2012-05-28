@@ -2648,6 +2648,11 @@ Viper.prototype = {
                 }
 
                 if (startPos.nextSibling && startPos.nextSibling.nodeType === dfx.TEXT_NODE) {
+                    if (startPos.nextSibling === endPos) {
+                        endOffset += startPos.data.length;
+                        endPos     = startPos;
+                    }
+
                     startPos.data += startPos.nextSibling.data;
                     dfx.remove(startPos.nextSibling);
                 }
