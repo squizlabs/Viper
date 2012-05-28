@@ -3007,6 +3007,11 @@ Viper.prototype = {
 
         var selectedNode = range.getNodeSelection();
 
+        if (selectedNode && selectedNode === this.element) {
+            // Viper Element cannot be selected.
+            selectedNode = null;
+        }
+
         if (selectedNode && selectedNode.nodeType == dfx.ELEMENT_NODE) {
             dfx.addClass(selectedNode, '__viper_selHighlight __viper_cleanOnly');
         } else if (range.collapsed === true) {
