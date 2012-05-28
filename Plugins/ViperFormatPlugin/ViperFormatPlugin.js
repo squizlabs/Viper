@@ -355,13 +355,15 @@ ViperFormatPlugin.prototype = {
             data.toolbar.showButton('vitpFormats');
 
             for (var tag in formatButtons) {
+                tools.setButtonInactive(prefix + 'formats:' + formatButtons[tag]);
+            }
+
+            for (var tag in formatButtons) {
                for (var j = data.current; j < data.lineage.length; j++) {
                     if (dfx.isTag(data.lineage[j], tag) === true) {
                         tools.setButtonActive(prefix + 'formats:' + formatButtons[tag]);
                         tools.setButtonActive('vitpFormats');
                         tools.getItem('vitpFormats').setIconClass('Viper-formats-' + tag);
-                    } else {
-                        tools.setButtonInactive(prefix + 'formats:' + formatButtons[tag]);
                     }
                 }
             }
