@@ -898,8 +898,8 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
 
         $newHtml = '';
         foreach ($matches as $match) {
-            if ($match[0] === '<') {
-                // This is a tag.
+            if ($match[0] === '<' && $match[1] !== '/') {
+                // This is an open tag.
                 $tagMatches = array();
                 $tagRegex   = '/(<\w+)'.$attrRegex.'>/i';
                 preg_match($tagRegex, $match, $tagMatches);
