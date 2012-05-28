@@ -793,33 +793,13 @@ ViperCopyPastePlugin.prototype = {
         }//end for
 
         // Remove font tags.
-        var moreFontTags = true;
-        while (moreFontTags === true) {
-            var tags = dfx.getTag('font', tmp);
-            if (tags.length === 0) {
-                moreFontTags = false;
-                break;
-            }
-
-            var c    = tags.length;
-            for (var i = 0; i < c; i++) {
-                // Find first none font parent and move the content up.
-                var parent = tags[i];
-                while (parent.parentNode) {
-                    if (dfx.isTag(parent.parentNode, 'font') !== true) {
-                        break;
-                    }
-
-                    parent = parent.parentNode;
-                }
-
-                while (tags[i].firstChild) {
-                    dfx.insertBefore(parent, tags[i].firstChild);
-                }
-
-                dfx.remove(tags[i]);
-            }
-        }
+        // Must use regex here as IE8 has a bug with empty nodes and multiple parents
+        // for DOM elemnts it seems like font tag is a major issue:
+        // https://roadmap.squiz.net/viper/2288.
+        content = dfx.getHtml(tmp);
+        content = content.replace(/<(font)((\s+\w+(\s*=\s*(?:".*?"|\'.*?\'|[^\'">\s]+))?)+)?\s*>\s*/ig, '');
+        content = content.replace(/\s*<\/(font)((\s+\w+(\s*=\s*(?:".*?"|\'.*?\'|[^\'">\s]+))?)+)?\s*>/ig, '');
+        dfx.setHtml(tmp, content);
 
         // Remove empty tags.
         var tags = dfx.getTag('*', tmp);
