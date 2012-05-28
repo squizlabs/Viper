@@ -918,7 +918,6 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
                 $tagMatches = array();
                 $tagRegex   = '/(<\w+)'.$attrRegex.'>/i';
                 preg_match($tagRegex, $match, $tagMatches);
-                print_r($tagMatches);ob_flush();
                 if ($tagMatches[1].'>' !== $match) {
                     // This tag has attributes, which need to be ordered
                     // alphabetically.
