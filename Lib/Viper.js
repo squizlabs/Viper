@@ -1883,6 +1883,20 @@ Viper.prototype = {
                 && !nodeSelection
                 && (!attributes || attributes.cssClass !== '__viper_selHighlight')
             ) {
+                if (!bookmark.start.previousSibling
+                    && bookmark.start.parentNode !== startBlockParent
+                ) {
+                    // Move bookmark outside of its parent.
+                    dfx.insertBefore(bookmark.start.parentNode, bookmark.start);
+                }
+
+                if (!bookmark.end.nextSibling
+                    && bookmark.end.parentNode !== endBlockParent
+                ) {
+                    // Move bookmark outside of its parent.
+                    dfx.insertAfter(bookmark.end.parentNode, bookmark.end);
+                }
+
                 var elements = dfx.getElementsBetween(bookmark.start, bookmark.end);
                 dfx.remove(elements);
 
@@ -1910,17 +1924,29 @@ Viper.prototype = {
                 dfx.insertAfter(bookmark.start, newElement);
 
                 while (rangeContents.firstChild) {
-                    newElement.appendChild(rangeContents.firstChild);
-               }
+                     newElement.appendChild(rangeContents.firstChild);
+                }
 
-               if (keepSelection !== true) {
-                   this.selectBookmark(bookmark);
-               } else {
-                   dfx.remove(bookmark.start);
-                   dfx.remove(bookmark.end);
-               }
-               return newElement;
-            }
+                // Remove same nested tags.
+                var nestedTags = dfx.getTag(otag, newElement);
+                var nestedTagsCount = nestedTags.length;
+                for (var i = 0; i < nestedTagsCount; i++) {
+                    while (nestedTags[i].firstChild) {
+                        dfx.insertBefore(nestedTags[i], nestedTags[i].firstChild);
+                    }
+
+                    dfx.remove(nestedTags[i]);
+                }
+
+                if (keepSelection !== true) {
+                    this.selectBookmark(bookmark);
+                } else {
+                    dfx.remove(bookmark.start);
+                    dfx.remove(bookmark.end);
+                }
+
+                return newElement;
+            }//end if
 
             var startContainer = null;
             var endContainer   = null;
@@ -2700,7 +2726,12 @@ Viper.prototype = {
      */
     getBookmark: function(parent, type)
     {
-        var elem = dfx.getClass('viperBookmark_' + type, parent)[0];
+        var bookmarks = dfx.getClass('viperBookmark_' + type, parent);
+        var elem      = bookmarks.shift();
+
+        // Remove rest of the bookmarks if there are any..
+        dfx.remove(bookmarks);
+
         return elem;
 
     },
