@@ -1852,7 +1852,24 @@ Viper.prototype = {
                 }, attributes);
             }//end if
         } else {
-            var nodeSelection    = range.getNodeSelection();
+            var nodeSelection = range.getNodeSelection();
+
+            if (nodeSelection && dfx.isBlockElement(nodeSelection) === false) {
+                var newElement = document.createElement(otag);
+                this._setWrapperElemAttributes(newElement, attributes);
+
+                while (nodeSelection.firstChild) {
+                    newElement.appendChild(nodeSelection.firstChild);
+                }
+
+                nodeSelection.appendChild(newElement);
+
+                range.selectNode(newElement);
+                ViperSelection.addRange(range);
+
+                return newElement;
+            }
+
             var startBlockParent = dfx.getFirstBlockParent(startContainer);
             if (!endContainer) {
                 endContainer = startContainer;
@@ -2620,45 +2637,46 @@ Viper.prototype = {
                 ViperSelection.removeAllRanges();
                 range.selectNode(endPos);
             } else {
-                if (startPos === endPos) {
-                    length = startPos.data.length;
+                // Normalise text nodes and select bookmark.
+                while (startPos.previousSibling && startPos.previousSibling.nodeType === dfx.TEXT_NODE) {
+                    startOffset += startPos.previousSibling.data.length;
+
+                    if (endPos === startPos) {
+                        endOffset += startPos.previousSibling.data.length;
+                    }
+
+                    startPos.data = startPos.previousSibling.data + startPos.data;
+                    dfx.remove(startPos.previousSibling);
                 }
 
-                if (endPos.nextSibling && endPos.nextSibling.nodeType === dfx.TEXT_NODE) {
+                while (endPos.nextSibling && endPos.nextSibling.nodeType === dfx.TEXT_NODE) {
                     endPos.data += endPos.nextSibling.data;
                     dfx.remove(endPos.nextSibling);
                 }
 
-                if (endPos.previousSibling
-                    && endPos.previousSibling.nodeType === dfx.TEXT_NODE
-                    && endPos !== startPos
-                ) {
-                    endOffset += endPos.previousSibling.data.length;
-                    endPos.data = endPos.previousSibling.data + endPos.data;
-                    dfx.remove(endPos.previousSibling);
-                }
+                if (endPos.previousSibling === startPos) {
+                    endOffset     += startPos.data.length;
+                    startPos.data += endPos.data;
+                    dfx.remove(endPos);
+                    endPos = startPos;
+                } else {
+                    while (endPos.previousSibling && endPos.previousSibling.nodeType === dfx.TEXT_NODE) {
+                        endPos.data = endPos.previousSibling.data + endPos.data;
+                        endOffset  += endPos.previousSibling.data.length;
 
-                if (startPos.nextSibling && startPos.nextSibling.nodeType === dfx.TEXT_NODE) {
-                    if (startPos.nextSibling === endPos) {
-                        endOffset += startPos.data.length;
-                        endPos     = startPos;
+                        if (endPos.previousSibling === startPos) {
+                            startPos = endPos;
+                        }
+
+                        dfx.remove(endPos.previousSibling);
                     }
 
-                    startPos.data += startPos.nextSibling.data;
-                    dfx.remove(startPos.nextSibling);
-                }
-
-                if (startPos.previousSibling
-                    && startPos.previousSibling.nodeType === dfx.TEXT_NODE
-                ) {
-                    startOffset += startPos.previousSibling.data.length;
-                    startPos.data = startPos.previousSibling.data + startPos.data;
-
-                    if (endPos === startPos) {
-                        endOffset = (startOffset + length);
+                    if (endPos !== startPos) {
+                        while (startPos.nextSibling && startPos.nextSibling.nodeType === dfx.TEXT_NODE) {
+                            startPos.data += startPos.nextSibling.data;
+                            dfx.remove(startPos.nextSibling);
+                        }
                     }
-
-                    dfx.remove(startPos.previousSibling);
                 }
 
                 ViperSelection.removeAllRanges();
