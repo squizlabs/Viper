@@ -1858,61 +1858,52 @@ Viper.prototype = {
                 endContainer = startContainer;
             }
 
+            var rangeContents  = range.getHTMLContentsObj();
             var endBlockParent = dfx.getFirstBlockParent(endContainer);
             var bookmark       = this.createBookmark();
 
-            if (startBlockParent === endBlockParent && !nodeSelection) {
-                // Same block parent, create only one tag that wraps the whole
-                // selection.
-                if (!bookmark.start.previousSibling
-                    && bookmark.start.parentNode !== startBlockParent
-                ) {
-                    // Move bookmark outside of its parent.
-                    dfx.insertBefore(bookmark.start.parentNode, bookmark.start);
-                }
-
-                if (!bookmark.end.nextSibling
-                    && bookmark.end.parentNode !== endBlockParent
-                ) {
-                    // Move bookmark outside of its parent.
-                    dfx.insertAfter(bookmark.end.parentNode, bookmark.end);
-                }
-
+            if (startBlockParent === endBlockParent
+                && !nodeSelection
+                && (!attributes || attributes.cssClass !== '__viper_selHighlight')
+            ) {
                 var elements = dfx.getElementsBetween(bookmark.start, bookmark.end);
-                if (elements.length > 0) {
-                    var newElement = document.createElement(otag);
-                    dfx.insertBefore(bookmark.start, newElement);
+                dfx.remove(elements);
 
-                    var c = elements.length;
-                    for (var i = 0; i < c; i++) {
-                        newElement.appendChild(elements[i]);
+                if (!bookmark.start.nextSibling) {
+                    var parent = bookmark.start.parentNode;
+                    while (!parent.nextSibling) {
+                        parent = parent.parentNode;
                     }
 
-                    // If there are any nested tags of same type then remove them.
-                    var sameTags = dfx.getTag(otag, newElement);
-                    for (var i = 0; i < sameTags.length; i++) {
-                        while (sameTags[i].firstChild) {
-                            dfx.insertBefore(sameTags[i], sameTags[i].firstChild);
-                        }
-
-                        dfx.remove(sameTags[i]);
-                    }
-
-                    dfx.insertBefore(newElement.firstChild, bookmark.start);
-                    newElement.appendChild(bookmark.end);
-
-                    this._setWrapperElemAttributes(newElement, attributes);
-                }//end if
-
-                if (keepSelection !== true) {
-                    this.selectBookmark(bookmark);
-                } else {
-                    dfx.remove(bookmark.start);
-                    dfx.remove(bookmark.end);
+                    dfx.insertAfter(parent, bookmark.start);
                 }
 
-                return;
-            }//end if
+                if (!bookmark.end.previousSibling) {
+                    var parent = bookmark.end.parentNode;
+                    while (!parent.previousSibling) {
+                        parent = parent.parentNode;
+                    }
+
+                    dfx.insertBefore(parent, bookmark.end);
+                }
+
+                var newElement = document.createElement(otag);
+                this._setWrapperElemAttributes(newElement, attributes);
+
+                dfx.insertAfter(bookmark.start, newElement);
+
+                while (rangeContents.firstChild) {
+                    newElement.appendChild(rangeContents.firstChild);
+               }
+
+               if (keepSelection !== true) {
+                   this.selectBookmark(bookmark);
+               } else {
+                   dfx.remove(bookmark.start);
+                   dfx.remove(bookmark.end);
+               }
+               return newElement;
+            }
 
             var startContainer = null;
             var endContainer   = null;
@@ -3035,6 +3026,9 @@ Viper.prototype = {
             var attributes = {
                 cssClass: '__viper_selHighlight'
             };
+
+            var span = document.createElement('span');
+            span.setAttribute('class', '__viper_selHighlight');
 
             this.surroundContents('span', attributes, range, true);
         }
