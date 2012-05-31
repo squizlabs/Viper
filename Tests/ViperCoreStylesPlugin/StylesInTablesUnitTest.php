@@ -13,20 +13,21 @@ class Viper_Tests_ViperCoreStylesPlugin_StylesInTablesUnitTest extends AbstractV
      */
     public function testBoldInTableMouseSelect()
     {
-        $text = 'LAbS';
-        $this->selectText($text);
+        $this->selectKeyword(3);
 
         $this->clickInlineToolbarButton('bold');
         $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'));
         $this->assertTrue($this->topToolbarButtonExists('bold', 'active'));
-        $this->assertEquals('UnaU <strong>LAbS</strong> FoX Mnu', $this->getHtml('td,th', 3));
 
-        $this->selectText($text);
+        $this->execJS('rmTableHeaders(0,true)');
+        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> %1% The table %2% text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU <strong>%3%</strong> %4% Mnu</td><td><strong><em>WoW</em></strong> sapien vel aliquet</td><td>            <ul><li>vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul>        </td></tr><tr><td><h3>%5%</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr><tr><td>nec <strong>porta</strong> ante</td><td>sapien vel aliquet</td><td rowspan="2">purus neque luctus ligula, vel molestie arcu</td></tr><tr><td colspan="2">sapien vel aliquet</td></tr></tbody></table>');
+
         $this->clickInlineToolbarButton('bold', 'active');
         $this->assertTrue($this->inlineToolbarButtonExists('bold'));
         $this->assertTrue($this->topToolbarButtonExists('bold'));
 
-        $this->assertEquals('UnaU LAbS FoX Mnu', $this->getHtml('td,th', 3));
+        $this->execJS('rmTableHeaders(0,true)');
+        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> %1% The table %2% text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU %3% %4% Mnu</td><td><strong><em>WoW</em></strong> sapien vel aliquet</td><td>            <ul><li>vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul>        </td></tr><tr><td><h3>%5%</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr><tr><td>nec <strong>porta</strong> ante</td><td>sapien vel aliquet</td><td rowspan="2">purus neque luctus ligula, vel molestie arcu</td></tr><tr><td colspan="2">sapien vel aliquet</td></tr></tbody></table>');
 
     }//end testBoldInTableMouseSelect()
 
@@ -38,20 +39,21 @@ class Viper_Tests_ViperCoreStylesPlugin_StylesInTablesUnitTest extends AbstractV
      */
     public function testItalicInTableMouseSelect()
     {
-        $text = 'LAbS';
-        $this->selectText($text);
+        $this->selectKeyword(3);
 
         $this->clickInlineToolbarButton('italic');
         $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'));
         $this->assertTrue($this->topToolbarButtonExists('italic', 'active'));
-        $this->assertEquals('UnaU <em>LAbS</em> FoX Mnu', $this->getHtml('td,th', 3));
 
-        $this->selectText($text);
+        $this->execJS('rmTableHeaders(0,true)');
+        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> %1% The table %2% text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU <em>%3%</em> %4% Mnu</td><td><strong><em>WoW</em></strong> sapien vel aliquet</td><td>            <ul><li>vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul>        </td></tr><tr><td><h3>%5%</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr><tr><td>nec <strong>porta</strong> ante</td><td>sapien vel aliquet</td><td rowspan="2">purus neque luctus ligula, vel molestie arcu</td></tr><tr><td colspan="2">sapien vel aliquet</td></tr></tbody></table>');
+
         $this->clickInlineToolbarButton('italic', 'active');
         $this->assertTrue($this->inlineToolbarButtonExists('italic'));
         $this->assertTrue($this->topToolbarButtonExists('italic'));
 
-        $this->assertEquals('UnaU LAbS FoX Mnu', $this->getHtml('td,th', 3));
+        $this->execJS('rmTableHeaders(0,true)');
+        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> %1% The table %2% text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU %3% %4% Mnu</td><td><strong><em>WoW</em></strong> sapien vel aliquet</td><td>            <ul><li>vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul>        </td></tr><tr><td><h3>%5%</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr><tr><td>nec <strong>porta</strong> ante</td><td>sapien vel aliquet</td><td rowspan="2">purus neque luctus ligula, vel molestie arcu</td></tr><tr><td colspan="2">sapien vel aliquet</td></tr></tbody></table>');
 
     }//end testItalicInTableMouseSelect()
 
@@ -63,17 +65,20 @@ class Viper_Tests_ViperCoreStylesPlugin_StylesInTablesUnitTest extends AbstractV
      */
     public function testStrikethroughInTableMouseSelect()
     {
-        $text = 'LAbS';
-        $this->selectText($text);
+
+        $this->selectKeyword(3);
 
         $this->clickTopToolbarButton('strikethrough');
         $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'));
-        $this->assertEquals('UnaU <del>LAbS</del> FoX Mnu', $this->getHtml('td,th', 3));
+
+        $this->execJS('rmTableHeaders(0,true)');
+        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> %1% The table %2% text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU <del>%3%</del> %4% Mnu</td><td><strong><em>WoW</em></strong> sapien vel aliquet</td><td>            <ul><li>vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul>        </td></tr><tr><td><h3>%5%</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr><tr><td>nec <strong>porta</strong> ante</td><td>sapien vel aliquet</td><td rowspan="2">purus neque luctus ligula, vel molestie arcu</td></tr><tr><td colspan="2">sapien vel aliquet</td></tr></tbody></table>');
 
         $this->clickTopToolbarButton('strikethrough', 'active');
         $this->assertTrue($this->topToolbarButtonExists('strikethrough'));
 
-        $this->assertEquals('UnaU LAbS FoX Mnu', $this->getHtml('td,th', 3));
+        $this->execJS('rmTableHeaders(0,true)');
+        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> %1% The table %2% text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU %3% %4% Mnu</td><td><strong><em>WoW</em></strong> sapien vel aliquet</td><td>            <ul><li>vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul>        </td></tr><tr><td><h3>%5%</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr><tr><td>nec <strong>porta</strong> ante</td><td>sapien vel aliquet</td><td rowspan="2">purus neque luctus ligula, vel molestie arcu</td></tr><tr><td colspan="2">sapien vel aliquet</td></tr></tbody></table>');
 
     }//end testStrikethroughInTableMouseSelect()
 
@@ -85,17 +90,20 @@ class Viper_Tests_ViperCoreStylesPlugin_StylesInTablesUnitTest extends AbstractV
      */
     public function testSubScriptInTableMouseSelect()
     {
-        $text = 'LAbS';
-        $this->selectText($text);
+
+        $this->selectKeyword(3);
 
         $this->clickTopToolbarButton('subscript');
         $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'));
-        $this->assertEquals('UnaU <sub>LAbS</sub> FoX Mnu', $this->getHtml('td,th', 3));
+
+        $this->execJS('rmTableHeaders(0,true)');
+        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> %1% The table %2% text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU <sub>%3%</sub> %4% Mnu</td><td><strong><em>WoW</em></strong> sapien vel aliquet</td><td>            <ul><li>vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul>        </td></tr><tr><td><h3>%5%</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr><tr><td>nec <strong>porta</strong> ante</td><td>sapien vel aliquet</td><td rowspan="2">purus neque luctus ligula, vel molestie arcu</td></tr><tr><td colspan="2">sapien vel aliquet</td></tr></tbody></table>');
 
         $this->clickTopToolbarButton('subscript', 'active');
         $this->assertTrue($this->topToolbarButtonExists('subscript'));
 
-        $this->assertEquals('UnaU LAbS FoX Mnu', $this->getHtml('td,th', 3));
+        $this->execJS('rmTableHeaders(0,true)');
+        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> %1% The table %2% text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU %3% %4% Mnu</td><td><strong><em>WoW</em></strong> sapien vel aliquet</td><td>            <ul><li>vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul>        </td></tr><tr><td><h3>%5%</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr><tr><td>nec <strong>porta</strong> ante</td><td>sapien vel aliquet</td><td rowspan="2">purus neque luctus ligula, vel molestie arcu</td></tr><tr><td colspan="2">sapien vel aliquet</td></tr></tbody></table>');
 
     }//end testSubScriptInTableMouseSelect()
 
@@ -107,17 +115,20 @@ class Viper_Tests_ViperCoreStylesPlugin_StylesInTablesUnitTest extends AbstractV
      */
     public function testSuperScriptInTableMouseSelect()
     {
-        $text = 'LAbS';
-        $this->selectText($text);
+
+        $this->selectKeyword(3);
 
         $this->clickTopToolbarButton('superscript');
         $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'));
-        $this->assertEquals('UnaU <sup>LAbS</sup> FoX Mnu', $this->getHtml('td,th', 3));
+
+        $this->execJS('rmTableHeaders(0,true)');
+        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> %1% The table %2% text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU <sup>%3%</sup> %4% Mnu</td><td><strong><em>WoW</em></strong> sapien vel aliquet</td><td>            <ul><li>vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul>        </td></tr><tr><td><h3>%5%</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr><tr><td>nec <strong>porta</strong> ante</td><td>sapien vel aliquet</td><td rowspan="2">purus neque luctus ligula, vel molestie arcu</td></tr><tr><td colspan="2">sapien vel aliquet</td></tr></tbody></table>');
 
         $this->clickTopToolbarButton('superscript', 'active');
         $this->assertTrue($this->topToolbarButtonExists('superscript'));
 
-        $this->assertEquals('UnaU LAbS FoX Mnu', $this->getHtml('td,th', 3));
+        $this->execJS('rmTableHeaders(0,true)');
+        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> %1% The table %2% text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU %3% %4% Mnu</td><td><strong><em>WoW</em></strong> sapien vel aliquet</td><td>            <ul><li>vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul>        </td></tr><tr><td><h3>%5%</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr><tr><td>nec <strong>porta</strong> ante</td><td>sapien vel aliquet</td><td rowspan="2">purus neque luctus ligula, vel molestie arcu</td></tr><tr><td colspan="2">sapien vel aliquet</td></tr></tbody></table>');
 
     }//end testSuperScriptInTableMouseSelect()
 
@@ -129,20 +140,22 @@ class Viper_Tests_ViperCoreStylesPlugin_StylesInTablesUnitTest extends AbstractV
      */
     public function testBoldInTableShortcut()
     {
-        $text = 'LAbS';
-        $this->selectText($text);
+        $this->selectKeyword(3);
 
         $this->keyDown('Key.CMD + b');
         $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'));
         $this->assertTrue($this->topToolbarButtonExists('bold', 'active'));
-        $this->assertEquals('UnaU <strong>LAbS</strong> FoX Mnu', $this->getHtml('td,th', 3));
 
-        $this->selectText($text);
+        $this->execJS('rmTableHeaders(0,true)');
+        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> %1% The table %2% text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU <strong>%3%</strong> %4% Mnu</td><td><strong><em>WoW</em></strong> sapien vel aliquet</td><td>            <ul><li>vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul>        </td></tr><tr><td><h3>%5%</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr><tr><td>nec <strong>porta</strong> ante</td><td>sapien vel aliquet</td><td rowspan="2">purus neque luctus ligula, vel molestie arcu</td></tr><tr><td colspan="2">sapien vel aliquet</td></tr></tbody></table>');
+
+        $this->selectKeyword(3);
         $this->keyDown('Key.CMD + b');
         $this->assertTrue($this->inlineToolbarButtonExists('bold'));
         $this->assertTrue($this->topToolbarButtonExists('bold'));
 
-        $this->assertEquals('UnaU LAbS FoX Mnu', $this->getHtml('td,th', 3));
+        $this->execJS('rmTableHeaders(0,true)');
+        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> %1% The table %2% text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU %3% %4% Mnu</td><td><strong><em>WoW</em></strong> sapien vel aliquet</td><td>            <ul><li>vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul>        </td></tr><tr><td><h3>%5%</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr><tr><td>nec <strong>porta</strong> ante</td><td>sapien vel aliquet</td><td rowspan="2">purus neque luctus ligula, vel molestie arcu</td></tr><tr><td colspan="2">sapien vel aliquet</td></tr></tbody></table>');
 
     }//end testBoldInTableShortcut()
 
@@ -154,20 +167,22 @@ class Viper_Tests_ViperCoreStylesPlugin_StylesInTablesUnitTest extends AbstractV
      */
     public function testItalicsInTableShortcut()
     {
-        $text = 'LAbS';
-        $this->selectText($text);
+        $this->selectKeyword(3);
 
         $this->keyDown('Key.CMD + i');
         $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'));
         $this->assertTrue($this->topToolbarButtonExists('italic', 'active'));
-        $this->assertEquals('UnaU <em>LAbS</em> FoX Mnu', $this->getHtml('td,th', 3));
 
-        $this->selectText($text);
+        $this->execJS('rmTableHeaders(0,true)');
+        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> %1% The table %2% text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU <em>%3%</em> %4% Mnu</td><td><strong><em>WoW</em></strong> sapien vel aliquet</td><td>            <ul><li>vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul>        </td></tr><tr><td><h3>%5%</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr><tr><td>nec <strong>porta</strong> ante</td><td>sapien vel aliquet</td><td rowspan="2">purus neque luctus ligula, vel molestie arcu</td></tr><tr><td colspan="2">sapien vel aliquet</td></tr></tbody></table>');
+
+        $this->selectKeyword(3);
         $this->keyDown('Key.CMD + i');
         $this->assertTrue($this->inlineToolbarButtonExists('italic'));
         $this->assertTrue($this->topToolbarButtonExists('italic'));
 
-        $this->assertEquals('UnaU LAbS FoX Mnu', $this->getHtml('td,th', 3));
+        $this->execJS('rmTableHeaders(0,true)');
+        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> %1% The table %2% text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU %3% %4% Mnu</td><td><strong><em>WoW</em></strong> sapien vel aliquet</td><td>            <ul><li>vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul>        </td></tr><tr><td><h3>%5%</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr><tr><td>nec <strong>porta</strong> ante</td><td>sapien vel aliquet</td><td rowspan="2">purus neque luctus ligula, vel molestie arcu</td></tr><tr><td colspan="2">sapien vel aliquet</td></tr></tbody></table>');
 
     }//end testItalicsInTableShortcut()
 
@@ -179,31 +194,35 @@ class Viper_Tests_ViperCoreStylesPlugin_StylesInTablesUnitTest extends AbstractV
      */
     public function testBoldInTableMultiWord()
     {
-        $this->selectText('LAbS', 'FoX');
+        $this->selectKeyword(3, 4);
 
         $this->keyDown('Key.CMD + b');
         $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'));
         $this->assertTrue($this->topToolbarButtonExists('bold', 'active'));
-        $this->assertEquals('UnaU <strong>LAbS FoX</strong> Mnu', $this->getHtml('td,th', 3));
 
-        $this->click($this->find('LAbS'));
-        $this->selectText('FoX');
+        $this->execJS('rmTableHeaders(0,true)');
+        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> %1% The table %2% text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU <strong>%3% %4%</strong> Mnu</td><td><strong><em>WoW</em></strong> sapien vel aliquet</td><td>            <ul><li>vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul>        </td></tr><tr><td><h3>%5%</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr><tr><td>nec <strong>porta</strong> ante</td><td>sapien vel aliquet</td><td rowspan="2">purus neque luctus ligula, vel molestie arcu</td></tr><tr><td colspan="2">sapien vel aliquet</td></tr></tbody></table>');
+
+        $this->click($this->findKeyword(3));
+        $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(4);
         $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'));
         $this->assertTrue($this->topToolbarButtonExists('bold', 'active'));
 
-        $this->click($this->find('FoX'));
-        $this->selectText('LAbS');
+        $this->click($this->findKeyword(4));
+        $this->selectKeyword(3);
         $this->selectInlineToolbarLineageItem(4);
         $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'));
         $this->assertTrue($this->topToolbarButtonExists('bold', 'active'));
 
-        $this->click($this->find('FoX'));
-        $this->selectText('LAbS');
+        $this->click($this->findKeyword(4));
+        $this->selectKeyword(3);
         $this->clickInlineToolbarButton('bold', 'active');
         $this->assertTrue($this->inlineToolbarButtonExists('bold'));
         $this->assertTrue($this->topToolbarButtonExists('bold'));
-        $this->assertEquals('UnaU LAbS<strong> FoX</strong> Mnu', $this->getHtml('td,th', 3));
+
+        $this->execJS('rmTableHeaders(0,true)');
+        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> %1% The table %2% text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU %3%<strong> %4%</strong> Mnu</td><td><strong><em>WoW</em></strong> sapien vel aliquet</td><td>            <ul><li>vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul>        </td></tr><tr><td><h3>%5%</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr><tr><td>nec <strong>porta</strong> ante</td><td>sapien vel aliquet</td><td rowspan="2">purus neque luctus ligula, vel molestie arcu</td></tr><tr><td colspan="2">sapien vel aliquet</td></tr></tbody></table>');
 
     }//end testBoldInTableMultiWord()
 
@@ -215,31 +234,33 @@ class Viper_Tests_ViperCoreStylesPlugin_StylesInTablesUnitTest extends AbstractV
      */
     public function testItalicInTableMultiWord()
     {
-        $this->selectText('LAbS', 'FoX');
+        $this->selectKeyword(3, 4);
 
         $this->keyDown('Key.CMD + i');
         $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'));
         $this->assertTrue($this->topToolbarButtonExists('italic', 'active'));
-        $this->assertEquals('UnaU <em>LAbS FoX</em> Mnu', $this->getHtml('td,th', 3));
+        $this->execJS('rmTableHeaders(0,true)');
+        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> %1% The table %2% text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU <em>%3% %4%</em> Mnu</td><td><strong><em>WoW</em></strong> sapien vel aliquet</td><td>            <ul><li>vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul>        </td></tr><tr><td><h3>%5%</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr><tr><td>nec <strong>porta</strong> ante</td><td>sapien vel aliquet</td><td rowspan="2">purus neque luctus ligula, vel molestie arcu</td></tr><tr><td colspan="2">sapien vel aliquet</td></tr></tbody></table>');
 
-        $this->click($this->find('LAbS'));
-        $this->selectText('FoX');
+        $this->click($this->findKeyword(3));
+        $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(4);
         $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'));
         $this->assertTrue($this->topToolbarButtonExists('italic', 'active'));
 
-        $this->click($this->find('FoX'));
-        $this->selectText('LAbS');
+        $this->click($this->findKeyword(4));
+        $this->selectKeyword(3);
         $this->selectInlineToolbarLineageItem(4);
         $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'));
         $this->assertTrue($this->topToolbarButtonExists('italic', 'active'));
 
-        $this->click($this->find('FoX'));
-        $this->selectText('LAbS');
+        $this->click($this->findKeyword(4));
+        $this->selectKeyword(3);
         $this->clickInlineToolbarButton('italic', 'active');
         $this->assertTrue($this->inlineToolbarButtonExists('italic'));
         $this->assertTrue($this->topToolbarButtonExists('italic'));
-        $this->assertEquals('UnaU LAbS<em> FoX</em> Mnu', $this->getHtml('td,th', 3));
+        $this->execJS('rmTableHeaders(0,true)');
+        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> %1% The table %2% text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU %3%<em> %4%</em> Mnu</td><td><strong><em>WoW</em></strong> sapien vel aliquet</td><td>            <ul><li>vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul>        </td></tr><tr><td><h3>%5%</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr><tr><td>nec <strong>porta</strong> ante</td><td>sapien vel aliquet</td><td rowspan="2">purus neque luctus ligula, vel molestie arcu</td></tr><tr><td colspan="2">sapien vel aliquet</td></tr></tbody></table>');
 
     }//end testItalicInTableMultiWord()
 
@@ -251,16 +272,18 @@ class Viper_Tests_ViperCoreStylesPlugin_StylesInTablesUnitTest extends AbstractV
      */
     public function testBoldForWholeCell()
     {
-        $this->selectText('FoX');
+        $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(3);
         sleep(1);
 
         $this->clickTopToolbarButton('bold');
         $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'));
         $this->assertTrue($this->topToolbarButtonExists('bold', 'active'));
-        $this->assertEquals('<strong>UnaU LAbS FoX Mnu</strong>', $this->getHtml('td,th', 3));
 
-        $this->selectText('LAbS');
+        $this->execJS('rmTableHeaders(0,true)');
+        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> %1% The table %2% text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td><strong>UnaU %3% %4% Mnu</strong></td><td><strong><em>WoW</em></strong> sapien vel aliquet</td><td>            <ul><li>vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul>        </td></tr><tr><td><h3>%5%</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr><tr><td>nec <strong>porta</strong> ante</td><td>sapien vel aliquet</td><td rowspan="2">purus neque luctus ligula, vel molestie arcu</td></tr><tr><td colspan="2">sapien vel aliquet</td></tr></tbody></table>');
+
+        $this->selectKeyword(3);
         $this->selectInlineToolbarLineageItem(3);
 
         $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'));
@@ -268,7 +291,8 @@ class Viper_Tests_ViperCoreStylesPlugin_StylesInTablesUnitTest extends AbstractV
         $this->keyDown('Key.CMD + b');
         $this->assertTrue($this->inlineToolbarButtonExists('bold'));
         $this->assertTrue($this->topToolbarButtonExists('bold'));
-        $this->assertEquals('UnaU LAbS FoX Mnu', $this->getHtml('td,th', 3));
+        $this->execJS('rmTableHeaders(0,true)');
+        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> %1% The table %2% text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU %3% %4% Mnu</td><td><strong><em>WoW</em></strong> sapien vel aliquet</td><td>            <ul><li>vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul>        </td></tr><tr><td><h3>%5%</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr><tr><td>nec <strong>porta</strong> ante</td><td>sapien vel aliquet</td><td rowspan="2">purus neque luctus ligula, vel molestie arcu</td></tr><tr><td colspan="2">sapien vel aliquet</td></tr></tbody></table>');
 
     }//end testBoldForWholeCell()
 
@@ -280,21 +304,26 @@ class Viper_Tests_ViperCoreStylesPlugin_StylesInTablesUnitTest extends AbstractV
      */
     public function testItalicForWholeCell()
     {
-        $this->selectText('FoX');
+        $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(3);
         sleep(1);
 
         $this->clickTopToolbarButton('italic');
         $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'));
         $this->assertTrue($this->topToolbarButtonExists('italic', 'active'));
-        $this->assertEquals('<em>UnaU LAbS FoX Mnu</em>', $this->getHtml('td,th', 3));
+        $this->execJS('rmTableHeaders(0,true)');
+        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> %1% The table %2% text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td><em>UnaU %3% %4% Mnu</em></td><td><strong><em>WoW</em></strong> sapien vel aliquet</td><td>            <ul><li>vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul>        </td></tr><tr><td><h3>%5%</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr><tr><td>nec <strong>porta</strong> ante</td><td>sapien vel aliquet</td><td rowspan="2">purus neque luctus ligula, vel molestie arcu</td></tr><tr><td colspan="2">sapien vel aliquet</td></tr></tbody></table>');
+
+        $this->selectKeyword(3);
+        $this->selectInlineToolbarLineageItem(3);
 
         $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'));
         $this->assertTrue($this->topToolbarButtonExists('italic', 'active'));
         $this->keyDown('Key.CMD + i');
         $this->assertTrue($this->inlineToolbarButtonExists('italic'));
         $this->assertTrue($this->topToolbarButtonExists('italic'));
-        $this->assertEquals('UnaU LAbS FoX Mnu', $this->getHtml('td,th', 3));
+        $this->execJS('rmTableHeaders(0,true)');
+        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> %1% The table %2% text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU %3% %4% Mnu</td><td><strong><em>WoW</em></strong> sapien vel aliquet</td><td>            <ul><li>vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul>        </td></tr><tr><td><h3>%5%</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr><tr><td>nec <strong>porta</strong> ante</td><td>sapien vel aliquet</td><td rowspan="2">purus neque luctus ligula, vel molestie arcu</td></tr><tr><td colspan="2">sapien vel aliquet</td></tr></tbody></table>');
 
     }//end testItalicForWholeCell()
 
@@ -306,9 +335,7 @@ class Viper_Tests_ViperCoreStylesPlugin_StylesInTablesUnitTest extends AbstractV
      */
     public function testStylingInTableMultipleStyles()
     {
-        $text    = 'FoX';
-        $textLoc = $this->find($text);
-        $this->selectText($text);
+        $this->selectKeyword(4);
 
         $this->clickInlineToolbarButton('bold');
         $this->clickInlineToolbarButton('italic');
@@ -318,14 +345,8 @@ class Viper_Tests_ViperCoreStylesPlugin_StylesInTablesUnitTest extends AbstractV
         $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'));
         $this->assertTrue($this->topToolbarButtonExists('italic', 'active'));
 
-        $this->click($textLoc);
-        $this->dragDrop($this->getTopLeft($textLoc), $this->getBottomRight($textLoc));
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'));
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'));
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'));
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'));
-
-        $this->doubleClick($textLoc);
+        $this->click($this->findKeyword(3));
+        $this->selectKeyword(4);
         $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'));
         $this->assertTrue($this->topToolbarButtonExists('bold', 'active'));
         $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'));
@@ -333,7 +354,8 @@ class Viper_Tests_ViperCoreStylesPlugin_StylesInTablesUnitTest extends AbstractV
 
         $this->clickInlineToolbarButton('bold', 'active');
         $this->clickInlineToolbarButton('italic', 'active');
-        $this->assertEquals('UnaU LAbS FoX Mnu', $this->getHtml('td,th', 3));
+        $this->execJS('rmTableHeaders(0,true)');
+        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> %1% The table %2% text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU %3% %4% Mnu</td><td><strong><em>WoW</em></strong> sapien vel aliquet</td><td>            <ul><li>vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul>        </td></tr><tr><td><h3>%5%</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr><tr><td>nec <strong>porta</strong> ante</td><td>sapien vel aliquet</td><td rowspan="2">purus neque luctus ligula, vel molestie arcu</td></tr><tr><td colspan="2">sapien vel aliquet</td></tr></tbody></table>');
 
     }//end testStylingInTableMultipleStyles()
 
@@ -345,24 +367,22 @@ class Viper_Tests_ViperCoreStylesPlugin_StylesInTablesUnitTest extends AbstractV
      */
     public function testBoldFormattingToCaption()
     {
-        $text    = 'caption';
-        $textLoc = $this->find($text);
-        $this->selectText($text);
+        $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(1);
-
         $this->clickTopToolbarButton('bold');
-        $this->execJS('rmTableHeaders(0,true)');
-        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2: XuT The table caption text goes here la</strong></caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU LAbS FoX Mnu</td><td><strong><em>WoW</em></strong> sapien vel aliquet</td><td>            <ul><li>vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul>        </td></tr><tr><td><h3>blah</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr><tr><td>nec <strong>porta</strong> ante</td><td>sapien vel aliquet</td><td rowspan="2">purus neque luctus ligula, vel molestie arcu</td></tr><tr><td colspan="2">sapien vel aliquet</td></tr></tbody></table>');
 
-        $this->click($this->find('blah'));
-        $this->selectText('XuT');
+        $this->execJS('rmTableHeaders(0,true)');
+        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2: %1% The table %2% text goes here la</strong></caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU %3% %4% Mnu</td><td><strong><em>WoW</em></strong> sapien vel aliquet</td><td>            <ul><li>vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul>        </td></tr><tr><td><h3>%5%</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr><tr><td>nec <strong>porta</strong> ante</td><td>sapien vel aliquet</td><td rowspan="2">purus neque luctus ligula, vel molestie arcu</td></tr><tr><td colspan="2">sapien vel aliquet</td></tr></tbody></table>');
+
+        $this->click($this->findKeyword(5));
+        $this->selectKeyword(1);
         $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'));
         $this->assertTrue($this->topToolbarButtonExists('bold', 'active'));
 
         $this->selectInlineToolbarLineageItem(2);
         $this->clickInlineToolbarButton('bold', 'active');
         $this->execJS('rmTableHeaders(0,true)');
-        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption>Table 1.2: XuT The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU LAbS FoX Mnu</td><td><strong><em>WoW</em></strong> sapien vel aliquet</td><td>            <ul><li>vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul>        </td></tr><tr><td><h3>blah</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr><tr><td>nec <strong>porta</strong> ante</td><td>sapien vel aliquet</td><td rowspan="2">purus neque luctus ligula, vel molestie arcu</td></tr><tr><td colspan="2">sapien vel aliquet</td></tr></tbody></table>');
+        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption>Table 1.2: %1% The table %2% text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU %3% %4% Mnu</td><td><strong><em>WoW</em></strong> sapien vel aliquet</td><td>            <ul><li>vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul>        </td></tr><tr><td><h3>%5%</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr><tr><td>nec <strong>porta</strong> ante</td><td>sapien vel aliquet</td><td rowspan="2">purus neque luctus ligula, vel molestie arcu</td></tr><tr><td colspan="2">sapien vel aliquet</td></tr></tbody></table>');
 
     }//end testBoldFormattingToCaption()
 
@@ -374,24 +394,24 @@ class Viper_Tests_ViperCoreStylesPlugin_StylesInTablesUnitTest extends AbstractV
      */
     public function testUndoAfterFormatingCaption()
     {
-        $this->selectText('caption');
+        $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(1);
-
         $this->clickTopToolbarButton('bold');
         $this->clickTopToolbarButton('italic');
-        $this->execJS('rmTableHeaders(0,true)');
-        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong><em>Table 1.2: XuT The table caption text goes here la</em></strong></caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU LAbS FoX Mnu</td><td><strong><em>WoW</em></strong> sapien vel aliquet</td><td>            <ul><li>vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul>        </td></tr><tr><td><h3>blah</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr><tr><td>nec <strong>porta</strong> ante</td><td>sapien vel aliquet</td><td rowspan="2">purus neque luctus ligula, vel molestie arcu</td></tr><tr><td colspan="2">sapien vel aliquet</td></tr></tbody></table>');
 
-        $textLoc = $this->find('blah');
+        $this->execJS('rmTableHeaders(0,true)');
+        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong><em>Table 1.2: %1% The table %2% text goes here la</em></strong></caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU %3% %4% Mnu</td><td><strong><em>WoW</em></strong> sapien vel aliquet</td><td>            <ul><li>vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul>        </td></tr><tr><td><h3>%5%</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr><tr><td>nec <strong>porta</strong> ante</td><td>sapien vel aliquet</td><td rowspan="2">purus neque luctus ligula, vel molestie arcu</td></tr><tr><td colspan="2">sapien vel aliquet</td></tr></tbody></table>');
+
+        $this->click($this->findKeyword(5));
         $this->assertTrue($this->topToolbarButtonExists('historyUndo'));
         $this->clickTopToolbarButton('historyUndo');
         $this->execJS('rmTableHeaders(0,true)');
-        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2: XuT The table caption text goes here la</strong></caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU LAbS FoX Mnu</td><td><strong><em>WoW</em></strong> sapien vel aliquet</td><td>            <ul><li>vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul>        </td></tr><tr><td><h3>blah</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr><tr><td>nec <strong>porta</strong> ante</td><td>sapien vel aliquet</td><td rowspan="2">purus neque luctus ligula, vel molestie arcu</td></tr><tr><td colspan="2">sapien vel aliquet</td></tr></tbody></table>');
+        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2: %1% The table %2% text goes here la</strong></caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU %3% %4% Mnu</td><td><strong><em>WoW</em></strong> sapien vel aliquet</td><td>            <ul><li>vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul>        </td></tr><tr><td><h3>%5%</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr><tr><td>nec <strong>porta</strong> ante</td><td>sapien vel aliquet</td><td rowspan="2">purus neque luctus ligula, vel molestie arcu</td></tr><tr><td colspan="2">sapien vel aliquet</td></tr></tbody></table>');
 
         $this->assertTrue($this->topToolbarButtonExists('historyUndo'));
         $this->clickTopToolbarButton('historyUndo');
         $this->execJS('rmTableHeaders(0,true)');
-        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> XuT The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU LAbS FoX Mnu</td><td><strong><em>WoW</em></strong> sapien vel aliquet</td><td>            <ul><li>vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul>        </td></tr><tr><td><h3>blah</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr><tr><td>nec <strong>porta</strong> ante</td><td>sapien vel aliquet</td><td rowspan="2">purus neque luctus ligula, vel molestie arcu</td></tr><tr><td colspan="2">sapien vel aliquet</td></tr></tbody></table>');
+        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> %1% The table %2% text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU %3% %4% Mnu</td><td><strong><em>WoW</em></strong> sapien vel aliquet</td><td>            <ul><li>vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul>        </td></tr><tr><td><h3>%5%</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr><tr><td>nec <strong>porta</strong> ante</td><td>sapien vel aliquet</td><td rowspan="2">purus neque luctus ligula, vel molestie arcu</td></tr><tr><td colspan="2">sapien vel aliquet</td></tr></tbody></table>');
 
     }//end testUndoAfterFormatingCaption()
 
@@ -403,24 +423,22 @@ class Viper_Tests_ViperCoreStylesPlugin_StylesInTablesUnitTest extends AbstractV
      */
     public function testItalicFormattingToCaption()
     {
-        $text    = 'caption';
-        $textLoc = $this->find($text);
-        $this->selectText($text);
+        $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(1);
-
         $this->clickTopToolbarButton('italic');
-        $this->execJS('rmTableHeaders(0,true)');
-        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><em><strong>Table 1.2:</strong> XuT The table caption text goes here la</em></caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU LAbS FoX Mnu</td><td><strong><em>WoW</em></strong> sapien vel aliquet</td><td>            <ul><li>vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul>        </td></tr><tr><td><h3>blah</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr><tr><td>nec <strong>porta</strong> ante</td><td>sapien vel aliquet</td><td rowspan="2">purus neque luctus ligula, vel molestie arcu</td></tr><tr><td colspan="2">sapien vel aliquet</td></tr></tbody></table>');
 
-        $this->click($this->find('blah'));
-        $this->selectText('Table');
+        $this->execJS('rmTableHeaders(0,true)');
+        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><em><strong>Table 1.2:</strong> %1% The table %2% text goes here la</em></caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU %3% %4% Mnu</td><td><strong><em>WoW</em></strong> sapien vel aliquet</td><td>            <ul><li>vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul>        </td></tr><tr><td><h3>%5%</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr><tr><td>nec <strong>porta</strong> ante</td><td>sapien vel aliquet</td><td rowspan="2">purus neque luctus ligula, vel molestie arcu</td></tr><tr><td colspan="2">sapien vel aliquet</td></tr></tbody></table>');
+
+        $this->click($this->findKeyword(5));
+        $this->selectKeyword(1);
         $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'));
         $this->assertTrue($this->topToolbarButtonExists('italic', 'active'));
 
         $this->selectInlineToolbarLineageItem(2);
         $this->clickInlineToolbarButton('italic', 'active');
         $this->execJS('rmTableHeaders(0,true)');
-        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> XuT The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU LAbS FoX Mnu</td><td><strong><em>WoW</em></strong> sapien vel aliquet</td><td>            <ul><li>vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul>        </td></tr><tr><td><h3>blah</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr><tr><td>nec <strong>porta</strong> ante</td><td>sapien vel aliquet</td><td rowspan="2">purus neque luctus ligula, vel molestie arcu</td></tr><tr><td colspan="2">sapien vel aliquet</td></tr></tbody></table>');
+        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> %1% The table %2% text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU %3% %4% Mnu</td><td><strong><em>WoW</em></strong> sapien vel aliquet</td><td>            <ul><li>vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul>        </td></tr><tr><td><h3>%5%</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr><tr><td>nec <strong>porta</strong> ante</td><td>sapien vel aliquet</td><td rowspan="2">purus neque luctus ligula, vel molestie arcu</td></tr><tr><td colspan="2">sapien vel aliquet</td></tr></tbody></table>');
 
     }//end testItalicFormattingToCaption()
 
