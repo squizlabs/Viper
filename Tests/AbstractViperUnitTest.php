@@ -87,6 +87,29 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      */
     private static $_browserSelected = FALSE;
 
+    /**
+     * The selenium session object.
+     *
+     * @var object
+     */
+    private static $_selenium = NULL;
+
+    /**
+     * If TRUE then Selenium session is being used.
+     *
+     * @var boolean
+     */
+    private static $_useSelenium = FALSE;
+
+    /**
+     * The Selenium PID.
+     *
+     * This is used to kill the Selenium process at the end of testing.
+     *
+     * @var integer
+     */
+    private static $_seleniumpid = NULL;
+
 
     /**
      * Returns the path of a test file.
@@ -145,6 +168,10 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
             }
 
             self::$_browser = $browser;
+
+            if (getenv('VIPER_TEST_USE_SELENIUM') === 'TRUE') {
+                self::$_useSelenium = TRUE;
+            }
         }//end if
 
         $baseDir = dirname(__FILE__);
@@ -598,6 +625,13 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
             unlink($path);
         }
 
+        if (self::$_selenium !== NULL) {
+            if (self::$_seleniumpid !== NULL) {
+                exec('kill -KILL '.self::$_seleniumpid);
+                self::$_seleniumpid = NULL;
+            }
+        }
+
     }//end tearDownAfterClass()
 
 
@@ -1002,11 +1036,43 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      */
     protected function selectBrowser($browser)
     {
-        if ($browser === 'Firefox') {
-            $browser = '/Applications/Firefox.app';
-        }
+        if (self::$_useSelenium === TRUE) {
+            if (self::$_selenium === NULL) {
+                $seleniumPath = dirname(__FILE__).'/Selenium';
 
-        if (self::$_browserSelected === FALSE) {
+                include_once $seleniumPath.'/selenium_webdriver/__init__.php';
+
+                $seleniumCmd = 'java -jar '.$seleniumPath.'/selenium-server-standalone-2.21.0.jar';
+
+                $browser = strtolower($browser);
+                if ($browser === 'google chrome') {
+                    $browser      = 'chrome';
+                    $seleniumCmd .= ' -Dwebdriver.chrome.driver='.$seleniumPath.'/chromedriver';
+                }
+
+                $seleniumCmd .= ' > /dev/null & echo $!';
+
+                self::$_seleniumpid = shell_exec($seleniumCmd);
+                sleep(10);
+
+                $webDriver       = new WebDriver();
+                $session         = $webDriver->session($browser);
+                self::$_selenium = $session;
+                sleep(2);
+
+                if ($browser === 'chrome') {
+                    // Focus Chrome window (TODO: Find another way).
+                    $this->keyDown('Key.SHIFT + Key.CMD + Key.TAB');
+                }
+
+                self::$_browserSelected = TRUE;
+                return;
+            }//end if
+        } else if (self::$_browserSelected === FALSE) {
+            if ($browser === 'Firefox') {
+                $browser = '/Applications/Firefox.app';
+            }
+
             $app = $this->switchApp($browser);
             if ($this->getOS() !== 'windows') {
                 $windowNum = 0;
@@ -1023,8 +1089,10 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
                 self::$_window = $this->callFunc('window', array($windowNum), $app, TRUE);
             } else {
                 self::$_window = $app;
-            }
-        }
+            }//end if
+        }//end if
+
+        self::$_window = $this->callFunc('App.focusedWindow', array(), NULL, TRUE);
 
         if (self::$_testRun === TRUE) {
             // Adjust the brwoser window region so that its only the area of the actual page.
@@ -1187,7 +1255,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
                 $match = $this->getRegionOnPage($rect);
             }
         } else {
-            $match = $this->find($buttonObj, $region);
+            $match = $this->find($buttonObj, $region, 0.9);
         }
 
         $this->click($match);
@@ -1236,9 +1304,9 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
     /**
      * Returns the ractangle for the specified text button.
      *
-     * @param string  $buttonIcon The name of the button.
-     * @param string  $state      The name of the button state (active, selected).
-     * @param string  $location   The location of the button (topToolbar, inlineToolbar, etc.).
+     * @param string $button   The name of the button.
+     * @param string $state    The name of the button state (active, selected).
+     * @param string $location The location of the button (topToolbar, inlineToolbar, etc.).
      *
      * @return string
      * @throws Exception If the button image cannot be found.
@@ -1358,6 +1426,20 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      */
     protected function execJS($js)
     {
+        if (self::$_useSelenium === TRUE) {
+            usleep(100000);
+            $result = self::$_selenium->execute(
+                array(
+                 'script' => 'return dfx.jsonEncode(window.'.$js.');',
+                 'args'   => array(),
+                )
+            );
+
+            $result = json_decode($result, TRUE);
+
+            return $result;
+        }//end if
+
         $this->keyDown($this->_getAccessKeys('j'));
         $this->type($js);
         $this->keyDown('Key.TAB');

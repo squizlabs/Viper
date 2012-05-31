@@ -1,6 +1,6 @@
 <?php
 
-$opts = getopt('s::b::u::t::ci');
+$opts = getopt('s::b::u::t::ci', array('selenium'));
 
     $browsers = array(
                  'Firefox',
@@ -35,6 +35,10 @@ $opts = getopt('s::b::u::t::ci');
 
     if (isset($opts['c']) === TRUE) {
          putenv('VIPER_TEST_CALIBRATE=TRUE');
+    }
+
+    if (array_key_exists('selenium', $opts) === TRUE) {
+        putenv('VIPER_TEST_USE_SELENIUM=TRUE');
     }
 
     foreach ($browsers as $browser) {
