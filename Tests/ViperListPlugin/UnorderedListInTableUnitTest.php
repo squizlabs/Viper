@@ -13,16 +13,14 @@ class Viper_Tests_ViperListPlugin_UnorderedListInTableUnitTest extends AbstractV
      */
     public function testCreatingAListInACell()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $this->selectText('LAbS');
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_unorderedList.png');
+        $this->clickTopToolbarButton('listUL');
 
         $this->assertEquals('<ul><li>UnaU LAbS FoX Mnu</li></ul>', $this->getHtml('td', 0));
         $this->assertIconStatusesCorrect('active', TRUE, FALSE, TRUE);
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_unorderedList_active.png');
+        $this->clickTopToolbarButton('listUL', 'active');
         $this->assertEquals('UnaU LAbS FoX Mnu', $this->getHtml('td', 0));
         $this->assertIconStatusesCorrect(TRUE, TRUE, FALSE, FALSE);
 
@@ -36,27 +34,21 @@ class Viper_Tests_ViperListPlugin_UnorderedListInTableUnitTest extends AbstractV
      */
     public function testIndentingAndOutdentingAListItemUsingTopToolbar()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $this->click($this->find('XuT'));
         $this->assertIconStatusesCorrect('active', TRUE, TRUE, TRUE);
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_indent.png');
+        $this->clickTopToolbarButton('listIndent');
 
         $this->assertEquals('            <ul><li>Item 1<ul><li>Item 2 XuT</li></ul></li></ul>', $this->getHtml('td', 2));
         $this->assertIconStatusesCorrect('active', TRUE, FALSE, TRUE);
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_outdent.png');
+        $this->clickTopToolbarButton('listOutdent');
         $this->assertEquals('            <ul><li>Item 1</li><li>Item 2 XuT</li></ul>', $this->getHtml('td', 2));
         $this->assertIconStatusesCorrect('active', TRUE, TRUE, TRUE);
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_outdent.png');
+        $this->clickTopToolbarButton('listOutdent');
         $this->assertEquals('            <ul><li>Item 1</li></ul><p>Item 2 XuT</p>', $this->getHtml('td', 2));
-        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE);
-
-        $this->clickTopToolbarButton($dir.'toolbarIcon_indent.png');
-        $this->assertEquals('            <ul><li>Item 1</li><li>Item 2 XuT</li></ul>', $this->getHtml('td', 2));
-        $this->assertIconStatusesCorrect('active', TRUE, TRUE, TRUE);
+        $this->assertIconStatusesCorrect(TRUE, TRUE, FALSE, FALSE);
 
     }//end testIndentingAndOutdentingAListItemUsingTopToolbar()
 
@@ -68,27 +60,21 @@ class Viper_Tests_ViperListPlugin_UnorderedListInTableUnitTest extends AbstractV
      */
     public function testIndentingAndOutdentingAListItemUsingInlineToolbar()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $this->selectText('XuT');
         $this->assertIconStatusesCorrect('active', TRUE, TRUE, TRUE);
 
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_indent.png');
+        $this->clickInlineToolbarButton('listIndent');
 
         $this->assertEquals('            <ul><li>Item 1<ul><li>Item 2 XuT</li></ul></li></ul>', $this->getHtml('td', 2));
         $this->assertIconStatusesCorrect('active', TRUE, FALSE, TRUE);
 
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_outdent.png');
+        $this->clickInlineToolbarButton('listOutdent');
         $this->assertEquals('            <ul><li>Item 1</li><li>Item 2 XuT</li></ul>', $this->getHtml('td', 2));
         $this->assertIconStatusesCorrect('active', TRUE, TRUE, TRUE);
 
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_outdent.png');
+        $this->clickInlineToolbarButton('listOutdent');
         $this->assertEquals('            <ul><li>Item 1</li></ul><p>Item 2 XuT</p>', $this->getHtml('td', 2));
-        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE);
-
-        $this->clickTopToolbarButton($dir.'toolbarIcon_indent.png');
-        $this->assertEquals('            <ul><li>Item 1</li><li>Item 2 XuT</li></ul>', $this->getHtml('td', 2));
-        $this->assertIconStatusesCorrect('active', TRUE, TRUE, TRUE);
+        $this->assertIconStatusesCorrect(TRUE, TRUE, FALSE, FALSE);
 
     }//end testIndentingAndOutdentingAListItemUsingInlineToolbar()
 
@@ -116,13 +102,13 @@ class Viper_Tests_ViperListPlugin_UnorderedListInTableUnitTest extends AbstractV
         $this->click($this->find('XuT'));
         $this->keyDown('Key.SHIFT + Key.TAB');
         $this->assertEquals('            <ul><li>Item 1</li></ul><p>Item 2 XuT</p>', $this->getHtml('td', 2));
-        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE);
+        $this->assertIconStatusesCorrect(TRUE, TRUE, FALSE, FALSE);
 
         $this->click($this->find('WoW'));
         $this->click($this->find('XuT'));
         $this->keyDown('Key.TAB');
-        $this->assertEquals('            <ul><li>Item 1</li><li>Item 2 XuT</li></ul>', $this->getHtml('td', 2));
-        $this->assertIconStatusesCorrect('active', TRUE, TRUE, TRUE);
+        $this->assertEquals('            <ul><li>Item 1</li></ul><p>Item 2 XuT</p>', $this->getHtml('td', 2));
+        $this->assertIconStatusesCorrect(TRUE, TRUE, FALSE, FALSE);
 
     }//end testIndentingAndOutdentingAListItemUsingShortcuts()
 
@@ -134,15 +120,13 @@ class Viper_Tests_ViperListPlugin_UnorderedListInTableUnitTest extends AbstractV
      */
     public function testRemovingListUsingUnorderedListIcon()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $this->click($this->find('XuT'));
         $this->assertIconStatusesCorrect('active', TRUE, TRUE, TRUE);
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_unorderedList_active.png');
+        $this->clickTopToolbarButton('listUL', 'active');
 
         $this->assertEquals('            <p>Item 1</p><p>Item 2 XuT</p>', $this->getHtml('td', 2));
-        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE);
+        $this->assertIconStatusesCorrect(TRUE, TRUE, FALSE, FALSE);
 
     }//end testRemovingListUsingUnorderedListIcon()
 
@@ -154,12 +138,10 @@ class Viper_Tests_ViperListPlugin_UnorderedListInTableUnitTest extends AbstractV
      */
     public function testRemovingListUsingOutdentIconInTopToolbar()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $this->selectText('XuT');
         $this->selectInlineToolbarLineageItem(4);
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_outdent.png');
+        $this->clickTopToolbarButton('listOutdent');
 
         $this->assertEquals('            <p>Item 1</p><p>Item 2 XuT</p>', $this->getHtml('td', 2));
         $this->assertIconStatusesCorrect(TRUE, TRUE, FALSE, FALSE);
@@ -174,12 +156,10 @@ class Viper_Tests_ViperListPlugin_UnorderedListInTableUnitTest extends AbstractV
      */
     public function testRemovingListUsingOutdentIconInInlineToolbar()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $this->selectText('XuT');
         $this->selectInlineToolbarLineageItem(4);
 
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_outdent.png');
+        $this->clickInlineToolbarButton('listOutdent');
 
         $this->assertEquals('            <p>Item 1</p><p>Item 2 XuT</p>', $this->getHtml('td', 2));
         $this->assertIconStatusesCorrect(TRUE, TRUE, FALSE, FALSE);
@@ -194,17 +174,15 @@ class Viper_Tests_ViperListPlugin_UnorderedListInTableUnitTest extends AbstractV
      */
     public function testRemovingListAndClickingUndo()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $this->selectText('XuT');
         $this->selectInlineToolbarLineageItem(4);
 
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_outdent.png');
+        $this->clickInlineToolbarButton('listOutdent');
 
         $this->assertEquals('            <p>Item 1</p><p>Item 2 XuT</p>', $this->getHtml('td', 2));
         $this->assertIconStatusesCorrect(TRUE, TRUE, FALSE, FALSE);
 
-        $this->clickTopToolbarButton(dirname(dirname(__FILE__)).'/Core/Images/undoIcon_active.png');
+        $this->clickTopToolbarButton('historyUndo');
 
         $this->assertEquals('            <ul><li>Item 1</li><li>Item 2 XuT</li></ul>', $this->getHtml('td', 2));
 
@@ -218,8 +196,6 @@ class Viper_Tests_ViperListPlugin_UnorderedListInTableUnitTest extends AbstractV
      */
     public function testSelectingAllContentInARow()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $this->selectText('XuT');
         $this->assertIconStatusesCorrect('active', TRUE, FALSE, TRUE);
         $this->selectInlineToolbarLineageItem(2);

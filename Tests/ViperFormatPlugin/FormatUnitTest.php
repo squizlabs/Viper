@@ -126,11 +126,17 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractViperUnitTest
     {
         $this->selectText('amet', 'WoW');
 
-        $dir = dirname(__FILE__).'/Images/';
-        $this->assertFalse($this->inlineToolbarButtonExists($dir.'toolbarIcon_heading.png'), 'VITP Heading icon should not be available for text selection');
-        $this->assertFalse($this->inlineToolbarButtonExists($dir.'toolbarIcon_div.png'), 'VITP format icons should not be available for text selection');
-        $this->assertFalse($this->inlineToolbarButtonExists($dir.'toolbarIcon_class.png'), 'Class icon in VITP should not be active.');
-        $this->assertFalse($this->inlineToolbarButtonExists($dir.'toolbarIcon_anchor.png'), 'Anchor icon in VITP should not be active.');
+        // Check that headings, formats, class and anchor don't appear in inline toolbar
+        $this->assertFalse($this->inlineToolbarButtonExists('headings'), 'VITP Heading icon should not be available for text selection');
+        $this->assertFalse($this->inlineToolbarButtonExists('formats-p', 'active'), 'VITP format icons should not be available for text selection');
+        $this->assertFalse($this->inlineToolbarButtonExists('cssClass'), 'Class icon in VITP should not be active.');
+        $this->assertFalse($this->inlineToolbarButtonExists('anchorID'), 'Anchor icon in VITP should not be active.');
+
+        // Check that headings, formats, class and anchor are availble in the top toolbar
+        $this->assertTrue($this->topToolbarButtonExists('headings'), 'Heading icon should appear in the top toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('formats-p', 'active'), 'Active P icon should appear in the top toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('cssClass'), 'Class icon should appear in the top toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('anchorID'), 'Anchor icon should appear in the top toolbar');
 
     }//end testMultiParentNoOpts()
 

@@ -1852,18 +1852,37 @@ Viper.prototype = {
                 }, attributes);
             }//end if
         } else {
-            var nodeSelection    = range.getNodeSelection();
+            var nodeSelection = range.getNodeSelection();
+
+            if (nodeSelection && dfx.isBlockElement(nodeSelection) === false) {
+                var newElement = document.createElement(otag);
+                this._setWrapperElemAttributes(newElement, attributes);
+
+                while (nodeSelection.firstChild) {
+                    newElement.appendChild(nodeSelection.firstChild);
+                }
+
+                nodeSelection.appendChild(newElement);
+
+                range.selectNode(newElement);
+                ViperSelection.addRange(range);
+
+                return newElement;
+            }
+
             var startBlockParent = dfx.getFirstBlockParent(startContainer);
             if (!endContainer) {
                 endContainer = startContainer;
             }
 
+            var rangeContents  = range.getHTMLContentsObj();
             var endBlockParent = dfx.getFirstBlockParent(endContainer);
             var bookmark       = this.createBookmark();
 
-            if (startBlockParent === endBlockParent && !nodeSelection) {
-                // Same block parent, create only one tag that wraps the whole
-                // selection.
+            if (startBlockParent === endBlockParent
+                && !nodeSelection
+                && (!attributes || attributes.cssClass !== '__viper_selHighlight')
+            ) {
                 if (!bookmark.start.previousSibling
                     && bookmark.start.parentNode !== startBlockParent
                 ) {
@@ -1879,30 +1898,45 @@ Viper.prototype = {
                 }
 
                 var elements = dfx.getElementsBetween(bookmark.start, bookmark.end);
-                if (elements.length > 0) {
-                    var newElement = document.createElement(otag);
-                    dfx.insertBefore(bookmark.start, newElement);
+                dfx.remove(elements);
 
-                    var c = elements.length;
-                    for (var i = 0; i < c; i++) {
-                        newElement.appendChild(elements[i]);
+                if (!bookmark.start.nextSibling) {
+                    var parent = bookmark.start.parentNode;
+                    while (!parent.nextSibling) {
+                        parent = parent.parentNode;
                     }
 
-                    // If there are any nested tags of same type then remove them.
-                    var sameTags = dfx.getTag(otag, newElement);
-                    for (var i = 0; i < sameTags.length; i++) {
-                        while (sameTags[i].firstChild) {
-                            dfx.insertBefore(sameTags[i], sameTags[i].firstChild);
-                        }
+                    dfx.insertAfter(parent, bookmark.start);
+                }
 
-                        dfx.remove(sameTags[i]);
+                if (!bookmark.end.previousSibling) {
+                    var parent = bookmark.end.parentNode;
+                    while (!parent.previousSibling) {
+                        parent = parent.parentNode;
                     }
 
-                    dfx.insertBefore(newElement.firstChild, bookmark.start);
-                    newElement.appendChild(bookmark.end);
+                    dfx.insertBefore(parent, bookmark.end);
+                }
 
-                    this._setWrapperElemAttributes(newElement, attributes);
-                }//end if
+                var newElement = document.createElement(otag);
+                this._setWrapperElemAttributes(newElement, attributes);
+
+                dfx.insertAfter(bookmark.start, newElement);
+
+                while (rangeContents.firstChild) {
+                     newElement.appendChild(rangeContents.firstChild);
+                }
+
+                // Remove same nested tags.
+                var nestedTags = dfx.getTag(otag, newElement);
+                var nestedTagsCount = nestedTags.length;
+                for (var i = 0; i < nestedTagsCount; i++) {
+                    while (nestedTags[i].firstChild) {
+                        dfx.insertBefore(nestedTags[i], nestedTags[i].firstChild);
+                    }
+
+                    dfx.remove(nestedTags[i]);
+                }
 
                 if (keepSelection !== true) {
                     this.selectBookmark(bookmark);
@@ -1911,7 +1945,7 @@ Viper.prototype = {
                     dfx.remove(bookmark.end);
                 }
 
-                return;
+                return newElement;
             }//end if
 
             var startContainer = null;
@@ -2629,40 +2663,46 @@ Viper.prototype = {
                 ViperSelection.removeAllRanges();
                 range.selectNode(endPos);
             } else {
-                if (startPos === endPos) {
-                    length = startPos.data.length;
+                // Normalise text nodes and select bookmark.
+                while (startPos.previousSibling && startPos.previousSibling.nodeType === dfx.TEXT_NODE) {
+                    startOffset += startPos.previousSibling.data.length;
+
+                    if (endPos === startPos) {
+                        endOffset += startPos.previousSibling.data.length;
+                    }
+
+                    startPos.data = startPos.previousSibling.data + startPos.data;
+                    dfx.remove(startPos.previousSibling);
                 }
 
-                if (endPos.nextSibling && endPos.nextSibling.nodeType === dfx.TEXT_NODE) {
+                while (endPos.nextSibling && endPos.nextSibling.nodeType === dfx.TEXT_NODE) {
                     endPos.data += endPos.nextSibling.data;
                     dfx.remove(endPos.nextSibling);
                 }
 
-                if (endPos.previousSibling
-                    && endPos.previousSibling.nodeType === dfx.TEXT_NODE
-                    && endPos !== startPos
-                ) {
-                    endOffset += endPos.previousSibling.data.length;
-                    endPos.data = endPos.previousSibling.data + endPos.data;
-                    dfx.remove(endPos.previousSibling);
-                }
+                if (endPos.previousSibling === startPos) {
+                    endOffset     += startPos.data.length;
+                    startPos.data += endPos.data;
+                    dfx.remove(endPos);
+                    endPos = startPos;
+                } else {
+                    while (endPos.previousSibling && endPos.previousSibling.nodeType === dfx.TEXT_NODE) {
+                        endPos.data = endPos.previousSibling.data + endPos.data;
+                        endOffset  += endPos.previousSibling.data.length;
 
-                if (startPos.nextSibling && startPos.nextSibling.nodeType === dfx.TEXT_NODE) {
-                    startPos.data += startPos.nextSibling.data;
-                    dfx.remove(startPos.nextSibling);
-                }
+                        if (endPos.previousSibling === startPos) {
+                            startPos = endPos;
+                        }
 
-                if (startPos.previousSibling
-                    && startPos.previousSibling.nodeType === dfx.TEXT_NODE
-                ) {
-                    startOffset += startPos.previousSibling.data.length;
-                    startPos.data = startPos.previousSibling.data + startPos.data;
-
-                    if (endPos === startPos) {
-                        endOffset = (startOffset + length);
+                        dfx.remove(endPos.previousSibling);
                     }
 
-                    dfx.remove(startPos.previousSibling);
+                    if (endPos !== startPos) {
+                        while (startPos.nextSibling && startPos.nextSibling.nodeType === dfx.TEXT_NODE) {
+                            startPos.data += startPos.nextSibling.data;
+                            dfx.remove(startPos.nextSibling);
+                        }
+                    }
                 }
 
                 ViperSelection.removeAllRanges();
@@ -2686,7 +2726,12 @@ Viper.prototype = {
      */
     getBookmark: function(parent, type)
     {
-        var elem = dfx.getClass('viperBookmark_' + type, parent)[0];
+        var bookmarks = dfx.getClass('viperBookmark_' + type, parent);
+        var elem      = bookmarks.shift();
+
+        // Remove rest of the bookmarks if there are any..
+        dfx.remove(bookmarks);
+
         return elem;
 
     },
@@ -3007,6 +3052,11 @@ Viper.prototype = {
 
         var selectedNode = range.getNodeSelection();
 
+        if (selectedNode && selectedNode === this.element) {
+            // Viper Element cannot be selected.
+            selectedNode = null;
+        }
+
         if (selectedNode && selectedNode.nodeType == dfx.ELEMENT_NODE) {
             dfx.addClass(selectedNode, '__viper_selHighlight __viper_cleanOnly');
         } else if (range.collapsed === true) {
@@ -3025,6 +3075,9 @@ Viper.prototype = {
             var attributes = {
                 cssClass: '__viper_selHighlight'
             };
+
+            var span = document.createElement('span');
+            span.setAttribute('class', '__viper_selHighlight');
 
             this.surroundContents('span', attributes, range, true);
         }
@@ -4190,6 +4243,37 @@ Viper.prototype = {
 
         // Add quotes around attributes (IE....).
         if (this.isBrowser('msie') === true) {
+            // This requires some explanation because I'm sick of having to try and
+            // figure out what I did in this regex each time we change it.
+            // <\w+(?:(?:\s+\w+(?:\s*=\s*(?:"(?:[^"]+)?"|\'(?:[^\']+)?\'))?)+)?
+            // <[tagname](
+            //            (
+            //             spaces[attrname](
+            //                              spacemaybe[=]spacemaybe(
+            //                                                      "(...maybe)" OR
+            //                                                      '(...maybe)'
+            //                                                     )
+            //                             maybe)
+            //            ) * many
+            //           maybe)
+            // (?:\s+\w+(?:\s*=\s*(?:[^\'">\s]+))?)+
+            //           (
+            //            spaces[attrname](
+            //                             spacemaybe[=]spacemaybe(noquotes/spaces/end...)
+            //                            maybe)
+            //           ) * many
+            // (?:(?:\s+\w+(?:\s*=\s*(?:"(?:[^"]+)?"|\'(?:[^\']+)?\'|[^\'">\s]+))?)+)?\s*\/?>
+            //           (
+            //            (spaces[attrname](
+            //                              spacemaybe[=]spacemaybe(
+            //                                                      "(...maybe)" OR
+            //                                                      '(...maybe)' OR
+            //                                                      noquotes/spaces/end...
+            //                                                     )
+            //                             maybe)
+            //            ) * many
+            //           maybe)
+            //           spacesmaybe/>
             content = content.replace(/<\w+(?:(?:\s+\w+(?:\s*=\s*(?:"(?:[^"]+)?"|\'(?:[^\']+)?\'))?)+)?(?:\s+\w+(?:\s*=\s*(?:[^\'">\s]+))?)+(?:(?:\s+\w+(?:\s*=\s*(?:"(?:[^"]+)?"|\'(?:[^\']+)?\'|[^\'">\s]+))?)+)?\s*\/?>/ig, function(match) {
                 match = match.replace(/(\s+\w+\s*=\s*)([^\'">\s]+)/gi, function(attr, attrName, value) {
                     return attrName + '"' + value + '"';

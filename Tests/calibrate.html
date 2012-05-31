@@ -1,41 +1,110 @@
 <html>
     <head>
-     <style>
-        body {
-            margin: 50px;
-            background-color: #EEE;
-            font-size: 20px;
-        }
-
-        #content {
-            text-align: center;
-        }
-
-        #windowTarget {
-            position: fixed;
-            left: 0;
-            top: 0;
-            z-index: 999999;
-        }
-        </style>
         <script type="text/javascript" src="../DfxJSLib/dfx.js"></script>
-        <script type="text/javascript" src="../Viper-all.js"></script>
         <script type="text/javascript" src="./test.js"></script>
-        <script type="text/javascript">
+        <script type="text/javascript" src="../Viper-all.js"></script>
+        <link rel="stylesheet" media="screen" href="./test.css" />
+        <script>
+            function getCoords(status, className)
+            {
+                var coords  = {};
+                var buttons = dfx.getClass('Viper-button', dfx.getId('__buttons'));
+                for (var i = 0; i < buttons.length; i++) {
+                    buttons[i].className = 'Viper-button ' + className;
+                    var dim  = dfx.getBoundingRectangle(buttons[i]);
+                    coords[buttons[i].id + status] = {
+                        x1: parseInt(dim.x1 + 3),
+                        y1: parseInt(dim.y1 + 3),
+                        x2: parseInt(dim.x2 - 1),
+                        y2: parseInt(dim.y2 - 1)
+                    };
+                }
+
+                return coords;
+
+            }
+
+            function showAllBtns()
+            {
+                var classNames = ['Viper-dummyClass', 'Viper-selected', 'Viper-active', 'Viper-disabled'];
+                var buttonsContainer = dfx.getId('__buttons');
+
+                dfx.remove(buttonsContainer);
+                dfx.remove(dfx.getId('content'));
+                dfx.remove(dfx.getId('__textFields'));
+
+                var allBtns = document.createElement('div');
+                allBtns.id  = '__allBtns';
+
+                for (var i = 0; i < classNames.length; i++) {
+                    var className = classNames[i];
+                    var clone     = buttonsContainer.cloneNode(true);
+                    clone.removeAttribute('id');
+                    var buttons = dfx.getClass('Viper-button', clone);
+                    for (var j = 0; j < buttons.length; j++) {
+                        buttons[j].className = 'Viper-button ' + className;
+                    }
+
+                    allBtns.appendChild(clone);
+                }
+
+                dfx.insertBefore(menu, allBtns);
+
+            }
+
+            function getVITP()
+            {
+                var elem   = dfx.getClass('ViperITP Viper-themeDark Viper-scalable Viper-visible');
+                var coords = dfx.getElementCoords(elem);
+                var width  = parseInt(dfx.getStyle(elem, 'width').replace('px', ''));
+                var vitp = {
+                    x: parseInt(coords.x + (width / 2)),
+                    y: parseInt(coords.y)
+                };
+
+                return vitp;
+
+            }
+
             var viper = null;
-            dfx.addLoadEvent(function() {
+            ViperReadyCallback = function() {
+                var contentElement = dfx.getId('content');
                 viper = new Viper('test');
-                viper.getPluginManager().setPlugins(['ViperCoreStylesPlugin', 'ViperKeyboardEditorPlugin', 'ViperInlineToolbarPlugin', 'ViperHistoryPlugin', 'ViperListPlugin', 'ViperFormatPlugin', 'ViperToolbarPlugin', 'ViperTableEditorPlugin', 'ViperCopyPastePlugin', 'ViperImagePlugin', 'ViperLinkPlugin', 'ViperSearchReplacePlugin', 'ViperLangToolsPlugin', 'ViperTrackChangesPlugin']);
-                viper.setEditableElement(dfx.getId('content'));
-                viper.focus();
-            });
+                viper.getPluginManager().setPlugins(['ViperCoreStylesPlugin', 'ViperKeyboardEditorPlugin', 'ViperInlineToolbarPlugin', 'ViperHistoryPlugin', 'ViperListPlugin', 'ViperFormatPlugin', 'ViperToolbarPlugin', 'ViperTableEditorPlugin', 'ViperCopyPastePlugin', 'ViperImagePlugin', 'ViperLinkPlugin', 'ViperAccessibilityPlugin', 'ViperSourceViewPlugin', 'ViperSearchReplacePlugin', 'ViperLangToolsPlugin', 'ViperCharMapPlugin', 'ViperTrackChangesPlugin']);
+                viper.setEditableElement(contentElement);
+            };
         </script>
     </head>
     <body spellcheck="false">
         <img id="windowTarget" src="./Core/Images/window-target.png"/>
-        <div id="content">
-            <p>WoW</p>
-            <p><strong>TpT</strong></p>
+        <div id="__buttons">__TEST_CONTENT__</div>
+        <div id="__allButtons"></div>
+        <br /><div id="content" class="__calibrate-image">PyP</div>
+        <br />
+        <div id="__textFields" style="font-size: 9px; width: 200px;">
+            <div class="Viper-textbox Viper-focused Viper-actionClear">
+                <label class="Viper-textbox-label">
+                    <div class="Viper-textbox-main" style="padding-left: 73px;">
+                        <span class="Viper-textbox-title">Textbox</span>
+                        <input type="text" class="Viper-textbox-input" />
+                        <span id="textboxActionClear" class="Viper-textbox-action"></span>
+                    </div>
+                </label>
+            </div>
+            <div class="Viper-textbox Viper-focused Viper-actionRevert">
+                <label class="Viper-textbox-label">
+                    <div class="Viper-textbox-main" style="padding-left: 73px;">
+                        <span class="Viper-textbox-title">Textbox</span>
+                        <input type="text" class="Viper-textbox-input" />
+                        <span id="textboxActionRevert" class="Viper-textbox-action"></span>
+                    </div>
+                </label>
+            </div>
+        </div>
+        <div id="menu">
+            <textarea id="jsExec" accesskey="J"></textarea>
+            <button onclick="execJS()">Exec</button>
+            <textarea id="jsRes" accesskey="R"></textarea>
         </div>
     </body>
 </html>

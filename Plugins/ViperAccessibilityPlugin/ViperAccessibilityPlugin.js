@@ -38,6 +38,10 @@ ViperAccessibilityPlugin.prototype = {
             dfx.remove(dfx.getClass('HTMLCS-pointer'));
         });
 
+        this.viper.registerCallback('ViperToolbarPlugin:updateToolbar', 'ViperCharMapPlugin', function(data) {
+            self.viper.ViperTools.enableButton('accessibility');
+        });
+
     },
 
     setSettings: function(settings)
@@ -72,6 +76,7 @@ ViperAccessibilityPlugin.prototype = {
         }//end if
 
         dfx.setHtml(this._htmlcsWrapper, '');
+        HTMLCSAuditor.pointerContainer = this._toolbar.getBubble('VAP:bubble').element;
         HTMLCSAuditor.run(this._standard, this.viper.getViperElement(), {
             noHeader: true,
             includeCss: false,

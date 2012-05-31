@@ -13,13 +13,13 @@ class Viper_Tests_ViperCoreStylesPlugin_ItalicUnitTest extends AbstractViperUnit
      */
     public function testStartOfParaItalic()
     {
-        $this->selectText('Lorem');
+        $this->selectKeyword(1);
 
-        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_italic.png');
-        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic_active.png'), 'Italic icon in the inline toolbar is not active');
-        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic_active.png'), 'Italic icon in the top toolbar is not active');
+        $this->clickInlineToolbarButton('italic');
+        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar is not active');
+        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar is not active');
 
-        $this->assertHTMLMatch('<p><em>Lorem</em> XuT dolor</p><p>sit <em>amet</em> <strong>WoW</strong></p>');
+        $this->assertHTMLMatch('<p><em>%1%</em> %2% %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
     }//end testStartOfParaItalic()
 
@@ -31,13 +31,13 @@ class Viper_Tests_ViperCoreStylesPlugin_ItalicUnitTest extends AbstractViperUnit
      */
     public function testMidOfParaItalic()
     {
-        $this->selectText('XuT');
+        $this->selectKeyword(2);
 
-        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_italic.png');
-        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic_active.png'), 'Italic icon in the inline toolbar is not active');
-        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic_active.png'), 'Italic icon in the top toolbar is not active');
+        $this->clickInlineToolbarButton('italic');
+        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar is not active');
+        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar is not active');
 
-        $this->assertHTMLMatch('<p>Lorem <em>XuT</em> dolor</p><p>sit <em>amet</em> <strong>WoW</strong></p>');
+        $this->assertHTMLMatch('<p>%1% <em>%2%</em> %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
     }//end testMidOfParaItalic()
 
@@ -49,19 +49,19 @@ class Viper_Tests_ViperCoreStylesPlugin_ItalicUnitTest extends AbstractViperUnit
      */
     public function testEndOfParaItalic()
     {
-        $this->selectText('dolor');
+        $this->selectKeyword(3);
 
-        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_italic.png');
-        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic_active.png'), 'Italic icon in the inline toolbar is not active');
-        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic_active.png'), 'Italic icon in the top toolbar is not active');
+        $this->clickInlineToolbarButton('italic');
+        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar is not active');
+        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar is not active');
 
-        $this->assertHTMLMatch('<p>Lorem XuT <em>dolor</em></p><p>sit <em>amet</em> <strong>WoW</strong></p>');
+        $this->assertHTMLMatch('<p>%1% %2% <em>%3%</em></p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
-        $this->click($this->find('XuT'));
+        $this->click($this->findKeyword(2));
 
-        $this->selectText('dolor');
-        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic_active.png'), 'Italic icon in the inline toolbar is not active');
-        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic_active.png'), 'Italic icon in the top toolbar is not active');
+        $this->selectKeyword(3);
+        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar is not active');
+        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar is not active');
 
     }//end testEndOfParaItalic()
 
@@ -73,25 +73,25 @@ class Viper_Tests_ViperCoreStylesPlugin_ItalicUnitTest extends AbstractViperUnit
      */
     public function testRemovingItalicsFromPartOfTheFormattedContent()
     {
-        $this->selectText('XuT', 'dolor');
+        $this->selectKeyword(2, 3);
 
-        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_italic.png');
-        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic_active.png'), 'Italic icon in the inline toolbar is not active');
-        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic_active.png'), 'Italic icon in the top toolbar is not active');
+        $this->clickInlineToolbarButton('italic');
+        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar is not active');
+        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar is not active');
 
-        $this->assertHTMLMatch('<p>Lorem <em>XuT dolor</em></p><p>sit <em>amet</em> <strong>WoW</strong></p>');
+        $this->assertHTMLMatch('<p>%1% <em>%2% %3%</em></p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
-        $this->selectText('dolor');
+        $this->selectKeyword(3);
 
-        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_italic_active.png');
-        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic.png'), 'Italic icon in the inline toolbar is still active');
-        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic.png'), 'Italic icon in the top toolbar is still active');
+        $this->clickInlineToolbarButton('italic', 'active');
+        $this->assertTrue($this->inlineToolbarButtonExists('italic'), 'Italic icon in the inline toolbar is still active');
+        $this->assertTrue($this->topToolbarButtonExists('italic'), 'Italic icon in the top toolbar is still active');
 
-        $this->assertHTMLMatch('<p>Lorem <em>XuT </em>dolor</p><p>sit <em>amet</em> <strong>WoW</strong></p>');
+        $this->assertHTMLMatch('<p>%1% <em>%2% </em>%3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
-        $this->selectText('XuT');
-        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic_active.png'), 'Italic icon in the inline toolbar is not active');
-        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic_active.png'), 'Italic icon in the top toolbar is not active');
+        $this->selectKeyword(2);
+        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar is not active');
+        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar is not active');
 
     }//end testRemovingItalicsFromPartOfTheFormattedContent()
 
@@ -103,21 +103,21 @@ class Viper_Tests_ViperCoreStylesPlugin_ItalicUnitTest extends AbstractViperUnit
      */
     public function testShortcutCommandForItalics()
     {
-        $this->selectText('Lorem');
+        $this->selectKeyword(1);
         $this->keyDown('Key.CMD + i');
 
-        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic_active.png'), 'Italic icon in the inline toolbar is not active');
-        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic_active.png'), 'Italic icon in the top toolbar is not active');
+        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar is not active');
+        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar is not active');
 
-        $this->assertHTMLMatch('<p><em>Lorem</em> XuT dolor</p><p>sit <em>amet</em> <strong>WoW</strong></p>');
+        $this->assertHTMLMatch('<p><em>%1%</em> %2% %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
-        $this->selectText('Lorem');
+        $this->selectKeyword(1);
         $this->keyDown('Key.CMD + i');
 
-        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic.png'), 'Italic icon in the inline toolbar is still active');
-        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic.png'), 'Italic icon in the top toolbar is still active');
+        $this->assertTrue($this->inlineToolbarButtonExists('italic'), 'Italic icon in the inline toolbar is still active');
+        $this->assertTrue($this->topToolbarButtonExists('italic'), 'Italic icon in the top toolbar is still active');
 
-        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p>sit <em>amet</em> <strong>WoW</strong></p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
     }//end testShortcutCommandForItalics()
 
@@ -129,34 +129,34 @@ class Viper_Tests_ViperCoreStylesPlugin_ItalicUnitTest extends AbstractViperUnit
      */
     public function testAddingAndRemovingFormattingToAParagraph()
     {
-        $start = $this->find('Lorem');
-        $end   = $this->find('dolor');
+        $start = $this->findKeyword(1);
+        $end   = $this->findKeyword(3);
         $this->dragDrop($this->getTopLeft($start), $this->getTopRight($end));
 
         // Inline Toolbar icon should not be displayed.
-        $this->assertFalse($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic.png'), 'Italic icon appears in the inline toolbar');
-        $this->assertFalse($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic_active.png'), 'Active italic icon appears in the inline toolbar');
+        $this->assertFalse($this->inlineToolbarButtonExists('italic'), 'Italic icon appears in the inline toolbar');
+        $this->assertFalse($this->inlineToolbarButtonExists('italic', 'active'), 'Active italic icon appears in the inline toolbar');
 
         // Click the Top Toolbar icon to make whole paragraph italics.
-        $this->clickTopToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_italic.png');
+        $this->clickTopToolbarButton('italic');
 
-        $this->assertHTMLMatch('<p><em>Lorem XuT dolor</em></p><p>sit <em>amet</em> <strong>WoW</strong></p>');
-        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic_active.png'), 'Italic icon is not active in the top toolbar');
+        $this->assertHTMLMatch('<p><em>%1% %2% %3%</em></p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
+        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon is not active in the top toolbar');
 
         // Inline Toolbar icon is now displayed
-        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic_active.png'), 'Active italic icon does not appear in the inline toolbar');
+        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Active italic icon does not appear in the inline toolbar');
 
-        //Remove bold formating
-        $this->selectText('XuT');
+        //Remove italic formating
+         $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(1);
-        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_italic_active.png');
+        $this->clickInlineToolbarButton('italic', 'active');
 
-        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p>sit <em>amet</em> <strong>WoW</strong></p>');
-        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic.png'), 'Italic icon is still active in the top toolbar');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
+        $this->assertTrue($this->topToolbarButtonExists('italic'), 'Italic icon is still active in the top toolbar');
 
         // Inline Toolbar icon should not be displayed.
-        $this->assertFalse($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic.png'), 'Italic icon appears in the inline toolbar');
-        $this->assertFalse($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic_active.png'), 'Active italic icon appears in the inline toolbar');
+        $this->assertFalse($this->inlineToolbarButtonExists('italic'), 'Italic icon appears in the inline toolbar');
+        $this->assertFalse($this->inlineToolbarButtonExists('italic', 'active'), 'Active italic icon appears in the inline toolbar');
 
     }//end testAddingAndRemovingFormattingToAParagraph()
 
@@ -168,16 +168,16 @@ class Viper_Tests_ViperCoreStylesPlugin_ItalicUnitTest extends AbstractViperUnit
      */
     public function testAdjacentAWordStyling()
     {
-        $this->selectText('XuT');
+        $this->selectKeyword(2);
         $this->keyDown('Key.CMD + i');
 
-        $this->selectText('Lorem', 'XuT');
+        $this->selectKeyword(1, 2);
         $this->keyDown('Key.CMD + i');
 
-        $this->selectText('XuT', 'dolor');
+        $this->selectKeyword(2, 3);
         $this->keyDown('Key.CMD + i');
 
-        $this->assertHTMLMatch('<p><em>Lorem XuT dolor</em></p><p>sit <em>amet</em> <strong>WoW</strong></p>');
+        $this->assertHTMLMatch('<p><em>%1% %2% %3%</em></p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
     }//end testAdjacentWordStyling()
 
@@ -189,16 +189,16 @@ class Viper_Tests_ViperCoreStylesPlugin_ItalicUnitTest extends AbstractViperUnit
      */
     public function testSpaceSeparatedAdjacentWordStyling()
     {
-        $this->selectText('XuT');
+        $this->selectKeyword(2);
         $this->keyDown('Key.CMD + i');
 
-        $this->selectText('Lorem');
+        $this->selectKeyword(1);
         $this->keyDown('Key.CMD + i');
 
-        $this->selectText('dolor');
+        $this->selectKeyword(3);
         $this->keyDown('Key.CMD + i');
 
-        $this->assertHTMLMatch('<p><em>Lorem</em> <em>XuT</em> <em>dolor</em></p><p>sit <em>amet</em> <strong>WoW</strong></p>');
+        $this->assertHTMLMatch('<p><em>%1%</em> <em>%2%</em> <em>%3%</em></p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
     }//end testSpaceSeparatedAdjacentWordStyling()
 
@@ -210,12 +210,12 @@ class Viper_Tests_ViperCoreStylesPlugin_ItalicUnitTest extends AbstractViperUnit
      */
     public function testRemoveFormating()
     {
-        $this->selectText('amet');
-        $this->clickInlineToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_italic_active.png');
+        $this->selectKeyword(4);
+        $this->clickInlineToolbarButton('italic', 'active');
 
-        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p>sit amet <strong>WoW</strong></p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit %4% <strong>%5%</strong></p>');
 
-        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic.png'), 'Italic icon is still active in the inline toolbar');
+        $this->assertTrue($this->inlineToolbarButtonExists('italic'), 'Italic icon is still active in the inline toolbar');
 
     }//end testRemoveFormating()
 
@@ -227,10 +227,10 @@ class Viper_Tests_ViperCoreStylesPlugin_ItalicUnitTest extends AbstractViperUnit
      */
     public function testIconsAreActive()
     {
-        $this->selectText('amet');
+        $this->selectKeyword(4);
 
-        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic_active.png'), 'Active italic icon does not appear in the inline toolbar');
-        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic_active.png'), 'Italic icon is not active in the top toolbar');
+        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Active italic icon does not appear in the inline toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon is not active in the top toolbar');
 
     }//end testIconsAreActive()
 
@@ -242,22 +242,22 @@ class Viper_Tests_ViperCoreStylesPlugin_ItalicUnitTest extends AbstractViperUnit
      */
     public function testIconIsRemovedFromInlineToolbar()
     {
-        $this->selectText('Lorem');
+        $this->selectKeyword(1);
 
         // Inline Toolbar icon should be displayed.
-        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic.png'), 'Italic icon does not appear in the inline toolbar');
+        $this->assertTrue($this->inlineToolbarButtonExists('italic'), 'Italic icon does not appear in the inline toolbar');
 
         // Click the P tag.
         $this->selectInlineToolbarLineageItem(0);
 
         // Inline Toolbar icon should not be displayed.
-        $this->assertFalse($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic.png'), 'Italic icon still appears in the inline toolbar');
+        $this->assertFalse($this->inlineToolbarButtonExists('italic'), 'Italic icon still appears in the inline toolbar');
 
         // Click the Selection tag.
         $this->selectInlineToolbarLineageItem(1);
 
         // Inline Toolbar icon should be displayed.
-        $this->assertTrue($this->inlineToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic.png'), 'Italic icon is not displayed in the inline toolbar');
+        $this->assertTrue($this->inlineToolbarButtonExists('italic'), 'Italic icon is not displayed in the inline toolbar');
 
     }//end testIconIsRemovedFromInlineToolbar()
 
@@ -269,16 +269,14 @@ class Viper_Tests_ViperCoreStylesPlugin_ItalicUnitTest extends AbstractViperUnit
      */
     public function testAddingItalicsToTwoWordsWhereOneIsBold()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
-        $this->selectText('XuT');
+        $this->selectKeyword(2);
         $this->keyDown('Key.CMD + b');
-        $this->assertHTMLMatch('<p>Lorem <strong>XuT</strong> dolor</p><p>sit <em>amet</em> <strong>WoW</strong></p>');
+        $this->assertHTMLMatch('<p>%1% <strong>%2%</strong> %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
-        $this->selectText('XuT', 'dolor');
+        $this->selectKeyword(2, 3);
         $this->keyDown('Key.CMD + i');
 
-        $this->assertHTMLMatch('<p>Lorem <em><strong>XuT</strong> dolor</em></p><p>sit <em>amet</em> <strong>WoW</strong></p>');
+        $this->assertHTMLMatch('<p>%1% <em><strong>%2%</strong> %3%</em></p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
     }//end testAddingItalicsToTwoWordsWhereOneIsBold()
 
@@ -290,11 +288,9 @@ class Viper_Tests_ViperCoreStylesPlugin_ItalicUnitTest extends AbstractViperUnit
      */
     public function testAddingItalicsToTwoWordsWhereOneIsBoldAndOneItalics()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
-        $this->selectText('amet', 'WoW');
+        $this->selectKeyword(4, 5);
         $this->keyDown('Key.CMD + i');
-        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p>sit <em>amet <strong>WoW</strong></em></p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit <em>%4% <strong>%5%</strong></em></p>');
 
     }//end testAddingItalicsToTwoWordsWhereOneIsBoldAndOneItalics()
 
@@ -306,24 +302,22 @@ class Viper_Tests_ViperCoreStylesPlugin_ItalicUnitTest extends AbstractViperUnit
      */
     public function testApplyingAndRemovingItalicsToTwoParagraphsWhereHtmlCommentsInSource()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
-        $this->selectText('XuT');
+        $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(0);
-        $this->clickTopToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_italic.png');
-        $this->assertHTMLMatch('<p><em>Lorem XuT dolor</em><!-- hello world! --></p><p>sit amet WoW</p><p>Another p</p>');
+        $this->clickTopToolbarButton('italic');
+        $this->assertHTMLMatch('<p><em>%1% %2% %3%</em><!-- hello world! --></p><p>sit %4% %5%</p><p>Another p</p>');
 
-        $this->click($this->find('XuT'));
-        $this->click($this->find('XuT'));
+        $this->click($this->findKeyword(2));
+        $this->click($this->findKeyword(2));
 
-        $this->selectText('WoW');
+        $this->selectKeyword(5);
         $this->selectInlineToolbarLineageItem(0);
         $this->keyDown('Key.CMD + i');
-        $this->assertHTMLMatch('<p><em>Lorem XuT dolor</em><!-- hello world! --></p><p><em>sit amet WoW</em></p><p>Another p</p>');
+        $this->assertHTMLMatch('<p><em>%1% %2% %3%</em><!-- hello world! --></p><p><em>sit %4% %5%</em></p><p>Another p</p>');
 
-        $this->selectText('Lorem', 'WoW');
+        $this->selectKeyword(1, 5);
         $this->keyDown('Key.CMD + i');
-        $this->assertHTMLMatch('<p>Lorem XuT dolor<!-- hello world! --></p><p>sit amet WoW</p><p>Another p</p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%<!-- hello world! --></p><p>sit %4% %5%</p><p>Another p</p>');
 
     }//end testApplyingAndRemovingItalicsToTwoParagraphsWhereHtmlCommentsInSource()
 
@@ -335,24 +329,22 @@ class Viper_Tests_ViperCoreStylesPlugin_ItalicUnitTest extends AbstractViperUnit
      */
     public function testApplyingAndRemovingItalicsToTwoParagraphs()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
-        $this->selectText('XuT');
+        $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(0);
-        $this->clickTopToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_italic.png');
-        $this->assertHTMLMatch('<p><em>Lorem XuT dolor</em></p><p>sit amet WoW</p><p>Another p</p>');
+        $this->clickTopToolbarButton('italic');
+        $this->assertHTMLMatch('<p><em>%1% %2% %3%</em></p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
-        $this->click($this->find('XuT'));
-        $this->click($this->find('XuT'));
+        $this->click($this->findKeyword(2));
+        $this->click($this->findKeyword(2));
 
-        $this->selectText('WoW');
+        $this->selectKeyword(5);
         $this->selectInlineToolbarLineageItem(0);
         $this->keyDown('Key.CMD + i');
-        $this->assertHTMLMatch('<p><em>Lorem XuT dolor</em></p><p><em>sit amet WoW</em></p><p>Another p</p>');
+        $this->assertHTMLMatch('<p><em>%1% %2% %3%</em></p><p><em>sit %4% <strong>%5%</strong></em></p>');
 
-        $this->selectText('Lorem', 'WoW');
+        $this->selectKeyword(1, 5);
         $this->keyDown('Key.CMD + i');
-        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p>sit amet WoW</p><p>Another p</p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit %4% <strong>%5%</strong></p>');
 
     }//end testApplyingAndRemovingItalicsToTwoParagraphs()
 
@@ -364,25 +356,23 @@ class Viper_Tests_ViperCoreStylesPlugin_ItalicUnitTest extends AbstractViperUnit
      */
     public function testApplyingAndRemovingItalicToAllContent()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
-        $this->click($this->find('XuT'));
+        $this->click($this->findKeyword(2));
         $this->keyDown('Key.CMD + a');
-        $this->clickTopToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_italic.png');
-        $this->assertHTMLMatch('<p><em>Lorem XuT dolor</em></p><p><em>sit amet WoW</em></p>');
+        $this->clickTopToolbarButton('italic');
+        $this->assertHTMLMatch('<p><em>%1% %2% %3%</em></p><p><em>sit %4% <strong>%5%</strong></em></p>');
 
-        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_italic_active.png'), 'Italic icon should be active');
-        $this->assertFalse($this->topToolbarButtonExists(dirname(dirname(__FILE__)).'/ViperFormatPlugin/Images/toolbarIcon_class_active.png'), 'Class icon should not be active');
-        $this->assertTrue($this->topToolbarButtonExists(dirname(dirname(__FILE__)).'/ViperFormatPlugin/Images/toolbarIcon_anchor_active.png'), 'Anchor icon should not be active');
+        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon should be active');
+        $this->assertFalse($this->topToolbarButtonExists('cssClass', 'active'), 'Class icon should not be active');
+        $this->assertTrue($this->topToolbarButtonExists('anchorID', 'active'), 'Anchor icon should not be active');
 
-        $this->click($this->find('XuT'));
+        $this->click($this->findKeyword(2));
         $this->keyDown('Key.CMD + a');
-        $this->clickTopToolbarButton(dirname(__FILE__).'/Images/toolbarIcon_italic_active.png');
-        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p>sit <em>amet</em> WoW</p>');
+        $this->clickTopToolbarButton('italic', 'active');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit %4% <strong>%5%</strong></p>');
 
-        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'Images/toolbarIcon_italic.png'), 'Italic icon should not be active');
-        $this->assertFalse($this->topToolbarButtonExists(dirname(dirname(__FILE__)).'/ViperFormatPlugin/Images/toolbarIcon_class_active.png'), 'Class icon should not be active');
-        $this->assertTrue($this->topToolbarButtonExists(dirname(dirname(__FILE__)).'/ViperFormatPlugin/Images/toolbarIcon_anchor_active.png'), 'Anchor icon should not be active');
+        $this->assertTrue($this->topToolbarButtonExists('italic'), 'Italic icon should not be active');
+        $this->assertFalse($this->topToolbarButtonExists('cssClass', 'active'), 'Class icon should not be active');
+        $this->assertTrue($this->topToolbarButtonExists('anchorID', 'active'), 'Anchor icon should not be active');
 
     }//end testApplyingAndRemovingItalicToAllContent()
 

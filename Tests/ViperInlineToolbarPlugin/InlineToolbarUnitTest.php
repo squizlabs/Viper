@@ -354,14 +354,12 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarUnitTest extends Abstrac
      */
     public function testSwitchingFromSelectionToParagraphWhenSubToolbarIsOpen()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $this->selectText('IPSUM');
 
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Selection</li>', $lineage);
 
-        $this->clickInlineToolbarButton(dirname(dirname(__FILE__)).'/ViperFormatPlugin/Images/toolbarIcon_class.png');
+        $this->clickInlineToolbarButton('cssClass');
         $this->selectInlineToolbarLineageItem(0);
         $this->assertEquals('Lorem IPSUM dolor', $this->getSelectedText(), 'P tag is not selected');
         $lineage = $this->getHtml('.ViperITP-lineage');
@@ -377,14 +375,10 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarUnitTest extends Abstrac
      */
     public function testSwitchingFromParagraphToSelectionWhenSubToolbarIsOpen()
     {
-        $this->markTestIncomplete('Fails for some reason. Have reported this in issue 1764');
-
-        $dir = dirname(__FILE__).'/Images/';
-
         $this->selectText('Lorem');
 
         $this->selectInlineToolbarLineageItem(0);
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_class.png');
+        $this->clickInlineToolbarButton('cssClass');
         $this->selectInlineToolbarLineageItem(1);
         sleep(1);
         $this->assertEquals('IPSUM', $this->getSelectedText(), 'P tag is selected');

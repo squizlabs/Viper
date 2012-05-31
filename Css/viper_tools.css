@@ -300,13 +300,6 @@
 .Viper-button.Viper-selected .Viper-buttonIcon.Viper-splitMerge {
   background-position: -33px -324px;
 }
-.Viper-buttonIcon.Viper-headingCheck {
-  background-position: 0 -351px;
-}
-.Viper-button.Viper-active .Viper-buttonIcon.Viper-headingCheck,
-.Viper-button.Viper-selected .Viper-buttonIcon.Viper-headingCheck {
-  background-position: -33px -351px;
-}
 .Viper-buttonIcon.Viper-accessAudit {
   background-position: 0 -351px;
 }

@@ -869,12 +869,7 @@ ViperTableEditorPlugin.prototype = {
             dfx.preventDefault(e);
             return false;
         });
-        dfx.hover(table, function() {
-            self.highlightActiveCell('table');
-        }, function() {
-            self.removeHighlights();
-            self.highlightActiveCell(self._currentType);
-        });
+
         if (type === 'table') {
             dfx.addClass(table, 'Viper-selected');
         }
@@ -892,12 +887,7 @@ ViperTableEditorPlugin.prototype = {
             dfx.preventDefault(e);
             return false;
         });
-        dfx.hover(row, function() {
-            self.highlightActiveCell('row');
-        }, function() {
-            self.removeHighlights();
-            self.highlightActiveCell(self._currentType);
-        });
+
         if (type === 'row') {
             dfx.addClass(row, 'Viper-selected');
         }
@@ -913,12 +903,7 @@ ViperTableEditorPlugin.prototype = {
             dfx.preventDefault(e);
             return false;
         });
-        dfx.hover(col, function() {
-            self.highlightActiveCell('col');
-        }, function() {
-            self.removeHighlights();
-            self.highlightActiveCell(self._currentType);
-        });
+
         if (type === 'col') {
             dfx.addClass(col, 'Viper-selected');
         }
@@ -934,15 +919,42 @@ ViperTableEditorPlugin.prototype = {
             dfx.preventDefault(e);
             return false;
         });
-        dfx.hover(cell, function() {
-            self.highlightActiveCell('cell');
-        }, function() {
-            self.removeHighlights();
-            self.highlightActiveCell(self._currentType);
-        });
         if (!type || type === 'cell') {
             dfx.addClass(cell, 'Viper-selected');
         }
+
+        setTimeout(function() {
+            // Add the hover events after a few ms of showing the toolbar so that
+            // if the pointer is on top of the lineage item it does not change the
+            // highlighted cell.
+            dfx.hover(table, function() {
+                self.highlightActiveCell('table');
+            }, function() {
+                self.removeHighlights();
+                self.highlightActiveCell(self._currentType);
+            });
+
+            dfx.hover(row, function() {
+                self.highlightActiveCell('row');
+            }, function() {
+                self.removeHighlights();
+                self.highlightActiveCell(self._currentType);
+            });
+
+            dfx.hover(col, function() {
+                self.highlightActiveCell('col');
+            }, function() {
+                self.removeHighlights();
+                self.highlightActiveCell(self._currentType);
+            });
+
+            dfx.hover(cell, function() {
+                self.highlightActiveCell('cell');
+            }, function() {
+                self.removeHighlights();
+                self.highlightActiveCell(self._currentType);
+            });
+        }, 100);
 
     },
 

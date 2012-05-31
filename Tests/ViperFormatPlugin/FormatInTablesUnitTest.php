@@ -121,17 +121,15 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
      */
     public function testLeftAlignmentInATable()
     {
-        $dir     = dirname(__FILE__).'/Images/';
-
         $text = 'XuT';
         $this->selectText($text);
         $this->selectInlineToolbarLineageItem(3);
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_justification.png');
+        $this->clickTopToolbarButton('justifyLeft');
         sleep(1);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_alignLeft.png');
+        $this->clickTopToolbarButton('justifyLeft');
 
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_alignLeft_active.png'), 'Left align icon is not acitve in the top toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('justifyLeft', 'active'), 'Left align icon is not acitve in the top toolbar');
 
         $this->execJS('rmTableHeaders(0,true)');
         $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td style="text-align: left;">aa XuT kk</td><td>WOW</td><td>            <ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li></ul>        </td></tr><tr><td>nec PORTA ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
@@ -146,17 +144,15 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
      */
     public function testRightAlignmentInATable()
     {
-        $dir     = dirname(__FILE__).'/Images/';
-
         $text = 'XuT';
         $this->selectText($text);
         $this->selectInlineToolbarLineageItem(3);
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_justification.png');
+        $this->clickTopToolbarButton('justifyLeft');
         sleep(1);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_alignRight.png');
+        $this->clickTopToolbarButton('justifyRight');
 
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_alignRight_active.png'), 'Right align icon is not acitve in the top toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('justifyRight', 'active'), 'Right align icon is not acitve in the top toolbar');
 
         $this->execJS('rmTableHeaders(0,true)');
         $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td style="text-align: right;">aa XuT kk</td><td>WOW</td><td>            <ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li></ul>        </td></tr><tr><td>nec PORTA ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
@@ -172,17 +168,15 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
      */
     public function testCentreAlignmentInATable()
     {
-        $dir     = dirname(__FILE__).'/Images/';
-
         $text = 'XuT';
         $this->selectText($text);
         $this->selectInlineToolbarLineageItem(3);
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_justification.png');
+        $this->clickTopToolbarButton('justifyLeft');
         sleep(1);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_alignCenter.png');
+        $this->clickTopToolbarButton('justifyCenter');
 
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_alignCenter_active.png'), 'Centre align icon is not acitve in the top toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('justifyCenter', 'active'), 'Centre align icon is not acitve in the top toolbar');
 
         $this->execJS('rmTableHeaders(0,true)');
         $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td style="text-align: center;">aa XuT kk</td><td>WOW</td><td>            <ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li></ul>        </td></tr><tr><td>nec PORTA ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
@@ -198,17 +192,15 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
      */
     public function testJustifyAlignmentInATable()
     {
-        $dir     = dirname(__FILE__).'/Images/';
-
         $text = 'XuT';
         $this->selectText($text);
         $this->selectInlineToolbarLineageItem(3);
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_justification.png');
+        $this->clickTopToolbarButton('justifyLeft');
         sleep(1);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_alignJustify.png');
+        $this->clickTopToolbarButton('justifyBlock');
 
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_alignJustify_active.png'), 'Justify align icon is not acitve in the top toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('justifyBlock', 'active'), 'Justify align icon is not acitve in the top toolbar');
 
         $this->execJS('rmTableHeaders(0,true)');
         $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td style="text-align: justify;">aa XuT kk</td><td>WOW</td><td>            <ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li></ul>        </td></tr><tr><td>nec PORTA ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');

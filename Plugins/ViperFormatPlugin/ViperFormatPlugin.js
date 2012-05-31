@@ -355,13 +355,15 @@ ViperFormatPlugin.prototype = {
             data.toolbar.showButton('vitpFormats');
 
             for (var tag in formatButtons) {
+                tools.setButtonInactive(prefix + 'formats:' + formatButtons[tag]);
+            }
+
+            for (var tag in formatButtons) {
                for (var j = data.current; j < data.lineage.length; j++) {
                     if (dfx.isTag(data.lineage[j], tag) === true) {
                         tools.setButtonActive(prefix + 'formats:' + formatButtons[tag]);
                         tools.setButtonActive('vitpFormats');
                         tools.getItem('vitpFormats').setIconClass('Viper-formats-' + tag);
-                    } else {
-                        tools.setButtonInactive(prefix + 'formats:' + formatButtons[tag]);
                     }
                 }
             }
@@ -380,7 +382,7 @@ ViperFormatPlugin.prototype = {
         }
          // Anchor and Class.
         if (selectedNode.nodeType === dfx.ELEMENT_NODE
-            || startNode.parentNode === endNode.parentNode
+            || dfx.getFirstBlockParent(startNode) === dfx.getFirstBlockParent(endNode)
         ) {
             var attrId = this._getAttributeValue('id', selectedNode);
             if (attrId) {
@@ -479,7 +481,7 @@ ViperFormatPlugin.prototype = {
             }
 
             if ((!nodeSelection || nodeSelection.nodeType !== dfx.ELEMENT_NODE || nodeSelection === self.viper.getViperElement())
-                && (data.range.collapsed === true || startNode.parentNode !== endNode.parentNode)
+                && (data.range.collapsed === true || dfx.getFirstBlockParent(startNode) !== dfx.getFirstBlockParent(endNode))
             ) {
                 tools.disableButton('anchor');
                 tools.disableButton('class');
@@ -710,17 +712,9 @@ ViperFormatPlugin.prototype = {
                 this.viper.removeBookmarks();
                 this._setAttributeForElement(span, attr, value);
             } else {
-                var span     = document.createElement('span');
-                span.setAttribute(attr, value);
-
-                var start = bookmark.start.nextSibling;
-                while (start !== bookmark.end) {
-                    var elem = start;
-                    start = start.nextSibling;
-                    span.appendChild(elem);
-                }
-
-                dfx.insertBefore(bookmark.start, span);
+                var attributes = {attributes: {}};
+                attributes.attributes[attr] = value;
+                span = this.viper.surroundContents('span', attributes, range);
                 this.viper.removeBookmark(bookmark);
             }//end if
 

@@ -453,6 +453,42 @@ class Viper_Tests_ViperTableEditorPlugin_RowUnitTest extends AbstractViperTableE
     }//end testMoveIconsInTheRowToolbar()
 
 
+    /**
+     * Test that header ids are removed from the table when you remove a header row.
+     *
+     * @return void
+     */
+    public function testHeaderIdsRemovedWhenYouRemoveHeaderRow()
+    {
+        $this->selectText('dolor');
+        $this->keyDown('Key.RIGHT');
+        $this->keyDown('Key.ENTER');
+
+        $this->execJS('insTable(3,4, 2, "test")');
+        sleep(2);
+
+        $this->assertHTMLMatch('<p>Lorem IPSUM dolor</p><p>&nbsp;</p><table style="width: 100%;" id="test" border="1"><tbody><tr><th id="testr1c1">&nbsp;</th><th id="testr1c2">&nbsp;</th><th id="testr1c3">&nbsp;</th><th id="testr1c4">&nbsp;</th></tr><tr><td headers="testr1c1">&nbsp;</td><td headers="testr1c2">&nbsp;</td><td headers="testr1c3">&nbsp;</td><td headers="testr1c4">&nbsp;</td></tr><tr><td headers="testr1c1">&nbsp;</td><td headers="testr1c2">&nbsp;</td><td headers="testr1c3">&nbsp;</td><td headers="testr1c4"></td></tr></tbody></table>');
+
+        $this->showTools(0, 'row');
+        $isHeadingField = $this->find($this->getImg('icon_isHeading_active.png'));
+        $this->click($isHeadingField);
+        sleep(1);
+        $updateChanges = $this->find($this->getImg('icon_updateChanges.png'));
+        $this->click($updateChanges);
+
+        $this->assertHTMLMatch('<p>Lorem IPSUM dolor</p><p>&nbsp;</p><table style="width: 100%;" id="test" border="1"><tbody><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td></td></tr></tbody></table>');
+
+        $isHeadingField = $this->find($this->getImg('icon_isHeading.png'));
+        $this->click($isHeadingField);
+        sleep(1);
+        $updateChanges = $this->find($this->getImg('icon_updateChanges.png'));
+        $this->click($updateChanges);
+
+        $this->assertHTMLMatch('<p>Lorem IPSUM dolor</p><p>&nbsp;</p><table style="width: 100%;" id="test" border="1"><tbody><tr><th id="testr1c1">&nbsp;</th><th id="testr1c2">&nbsp;</th><th id="testr1c3">&nbsp;</th><th id="testr1c4">&nbsp;</th></tr><tr><td headers="testr1c1">&nbsp;</td><td headers="testr1c2">&nbsp;</td><td headers="testr1c3">&nbsp;</td><td headers="testr1c4">&nbsp;</td></tr><tr><td headers="testr1c1">&nbsp;</td><td headers="testr1c2">&nbsp;</td><td headers="testr1c3">&nbsp;</td><td headers="testr1c4"></td></tr></tbody></table>');
+
+    }//end testHeaderIdsRemovedWhenYouRemoveHeaderRow()
+
+
 }//end class
 
 ?>

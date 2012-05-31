@@ -1,50 +1,10 @@
 <html>
     <head>
         <title>Running: __TEST_TITLE__</title>
-        <style>
-        body {
-            margin: 50px;
-            background-color: #EEE;
-            font-size: 20px;
-        }
-
-        #content {
-            width: 800px;
-            height: 600px;
-            margin: auto;
-            margin-top: 90px;
-        }
-
-        #menu {
-            position: fixed;
-            right: 100px;
-            width: 100px;
-            top: 50px;
-        }
-
-        #testTitle {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background-color: #666;
-            color: #EEE;
-            font-size: 18px;
-            text-align: center;
-            font-weight: bold;
-            padding: 5px 0;
-        }
-
-        #windowTarget {
-            position: fixed;
-            left: 0;
-            top: 0;
-            z-index: 999999;
-        }
-        </style>
         <script type="text/javascript" src="../DfxJSLib/dfx.js"></script>
         <script type="text/javascript" src="../Viper-all.js"></script>
         <script type="text/javascript" src="./test.js"></script>
+        <link rel="stylesheet" media="screen" href="./test.css" />
         <script type="text/javascript">
             var viper = null;
             ViperReadyCallback = function() {
@@ -53,6 +13,8 @@
                 viper = new Viper('test');
                 viper.getPluginManager().setPlugins(['ViperCoreStylesPlugin', 'ViperKeyboardEditorPlugin', 'ViperInlineToolbarPlugin', 'ViperHistoryPlugin', 'ViperListPlugin', 'ViperFormatPlugin', 'ViperToolbarPlugin', 'ViperTableEditorPlugin', 'ViperCopyPastePlugin', 'ViperImagePlugin', 'ViperLinkPlugin', 'ViperAccessibilityPlugin', 'ViperSourceViewPlugin', 'ViperSearchReplacePlugin', 'ViperLangToolsPlugin', 'ViperCharMapPlugin', 'ViperTrackChangesPlugin']);
                 viper.setEditableElement(contentElement);
+
+                dfx.attr(dfxjQuery.find('.Viper-button[title]'), 'title', '');
 
                 var jsRes = dfx.getId('jsRes');
                 jsRes.value = '';

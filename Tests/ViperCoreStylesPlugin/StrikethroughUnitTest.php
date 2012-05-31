@@ -13,14 +13,12 @@ class Viper_Tests_ViperCoreStylesPlugin_StrikethroughUnitTest extends AbstractVi
      */
     public function testStartOfParaStrikethrough()
     {
-        $dir = dirname(__FILE__).'/Images/';
+        $this->selectKeyword(1);
 
-        $this->selectText('Lorem');
+        $this->clickTopToolbarButton('strikethrough');
+        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar is not active');
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_strike.png');
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_strike_active.png'), 'Strikethrough icon in the top toolbar is not active');
-
-        $this->assertHTMLMatch('<p><del>Lorem</del> XuT dolor</p><p>sit <em>amet</em> <strong>WoW</strong></p>');
+        $this->assertHTMLMatch('<p><del>%1%</del> %2% %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
     }//end testStartOfParaStrikethrough()
 
@@ -32,14 +30,12 @@ class Viper_Tests_ViperCoreStylesPlugin_StrikethroughUnitTest extends AbstractVi
      */
     public function testMidOfParaStrikethrough()
     {
-        $dir = dirname(__FILE__).'/Images/';
+        $this->selectKeyword(2);
 
-        $this->selectText('XuT');
+        $this->clickTopToolbarButton('strikethrough');
+        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar is not active');
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_strike.png');
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_strike_active.png'), 'Strikethrough icon in the top toolbar is not active');
-
-        $this->assertHTMLMatch('<p>Lorem <del>XuT</del> dolor</p><p>sit <em>amet</em> <strong>WoW</strong></p>');
+        $this->assertHTMLMatch('<p>%1% <del>%2%</del> %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
     }//end testMidOfParaStrikethrough()
 
@@ -51,14 +47,12 @@ class Viper_Tests_ViperCoreStylesPlugin_StrikethroughUnitTest extends AbstractVi
      */
     public function testEndOfParaStrikethrough()
     {
-        $dir = dirname(__FILE__).'/Images/';
+        $this->selectKeyword(3);
 
-        $this->selectText('dolor');
+        $this->clickTopToolbarButton('strikethrough');
+        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar is not active');
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_strike.png');
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_strike_active.png'), 'Strikethrough icon in the top toolbar is not active');
-
-        $this->assertHTMLMatch('<p>Lorem XuT <del>dolor</del></p><p>sit <em>amet</em> <strong>WoW</strong></p>');
+        $this->assertHTMLMatch('<p>%1% %2% <del>%3%</del></p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
     }//end testEndOfParaStrikethrough()
 
@@ -70,27 +64,22 @@ class Viper_Tests_ViperCoreStylesPlugin_StrikethroughUnitTest extends AbstractVi
      */
     public function testRemovingFormatFromPartOfTheContent()
     {
-        $dir = dirname(__FILE__).'/Images/';
+        $this->selectKeyword(2, 3);
 
-        $dolor = $this->find('dolor');
-        $xut   = $this->find('XUT');
+        $this->clickTopToolbarButton('strikethrough');
+        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar is not active');
 
-        $this->selectText('XuT', 'dolor');
+        $this->assertHTMLMatch('<p>%1% <del>%2% %3%</del></p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_strike.png');
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_strike_active.png'), 'Strikethrough icon in the top toolbar is not active');
+        $this->selectKeyword(3);
 
-        $this->assertHTMLMatch('<p>Lorem <del>XuT dolor</del></p><p>sit <em>amet</em> <strong>WoW</strong></p>');
+        $this->clickTopToolbarButton('strikethrough', 'active');
+        $this->assertTrue($this->topToolbarButtonExists('strikethrough'), 'Strikethrough icon in the top toolbar is still active');
 
-        $this->doubleClick($dolor);
+        $this->assertHTMLMatch('<p>%1% <del>%2% </del>%3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_strike_active.png');
-        $this->assertTrue($this->topToolbarButtonExists(dirname(__FILE__).'/Images/toolbarIcon_strike.png'), 'Strikethrough icon in the top toolbar is still active');
-
-        $this->assertHTMLMatch('<p>Lorem <del>XuT </del>dolor</p><p>sit <em>amet</em> <strong>WoW</strong></p>');
-
-        $this->doubleClick($xut);
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_strike_active.png'), 'Strikethrough icon in the top toolbar is not active');
+        $this->selectKeyword(2);
+        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar is not active');
 
     }//end testRemovingFormatFromPartOfTheContent()
 
@@ -102,18 +91,16 @@ class Viper_Tests_ViperCoreStylesPlugin_StrikethroughUnitTest extends AbstractVi
      */
     public function testAdjacentWordStyling()
     {
-        $dir = dirname(__FILE__).'/Images/';
+        $this->selectKeyword(2);
+        $this->clickTopToolbarButton('strikethrough');
 
-        $this->selectText('XuT');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_strike.png');
+        $this->selectKeyword(1, 2);
+        $this->clickTopToolbarButton('strikethrough');
 
-        $this->selectText('Lorem', 'XuT');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_strike.png');
+        $this->selectKeyword(2, 3);
+        $this->clickTopToolbarButton('strikethrough');
 
-        $this->selectText('XuT', 'dolor');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_strike.png');
-
-        $this->assertHTMLMatch('<p><del>Lorem XuT dolor</del></p><p>sit <em>amet</em> <strong>WoW</strong></p>');
+        $this->assertHTMLMatch('<p><del>%1% %2% %3%</del></p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
     }//end testAdjacentWordStyling()
 
@@ -125,18 +112,16 @@ class Viper_Tests_ViperCoreStylesPlugin_StrikethroughUnitTest extends AbstractVi
      */
     public function testSpaceSeparatedAdjacentWordStyling()
     {
-        $dir = dirname(__FILE__).'/Images/';
+        $this->selectKeyword(2);
+         $this->clickTopToolbarButton('strikethrough');
 
-        $this->selectText('XuT');
-         $this->clickTopToolbarButton($dir.'toolbarIcon_strike.png');
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('strikethrough');
 
-        $this->selectText('Lorem');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_strike.png');
+        $this->selectKeyword(3);
+        $this->clickTopToolbarButton('strikethrough');
 
-        $this->selectText('dolor');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_strike.png');
-
-        $this->assertHTMLMatch('<p><del>Lorem</del> <del>XuT</del> <del>dolor</del></p><p>sit <em>amet</em> <strong>WoW</strong></p>');
+        $this->assertHTMLMatch('<p><del>%1%</del> <del>%2%</del> <del>%3%</del></p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
     }//end testSpaceSeparatedAdjacentWordStyling()
 
@@ -148,23 +133,18 @@ class Viper_Tests_ViperCoreStylesPlugin_StrikethroughUnitTest extends AbstractVi
      */
     public function testRemoveFormating()
     {
-        $dir = dirname(__FILE__).'/Images/';
+        $this->selectKeyword(5);
 
-        $text    = 'WoW';
-        $textLoc = $this->find($text);
-        $this->selectText($text);
+        $this->clickTopToolbarButton('strikethrough');
+        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar is not active');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit <em>%4%</em> <strong><del>%5%</del></strong></p>');
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_strike.png');
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_strike_active.png'), 'Strikethrough icon in the top toolbar is not active');
-        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p>sit <em>amet</em> <strong><del>WoW</del></strong></p>');
+        $this->selectKeyword(5);
 
-        $this->click($textLoc);
-        $this->selectText($text);
+        $this->clickTopToolbarButton('strikethrough', 'active');
+        $this->assertTrue($this->topToolbarButtonExists('strikethrough'), 'Strikethrough icon is still active in the top toolbar is not active');
 
-         $this->clickTopToolbarButton($dir.'toolbarIcon_strike_active.png');
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_strike.png'), 'Strikethrough icon is still active in the top toolbar is not active');
-
-        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p>sit <em>amet</em> <strong>WoW</strong></p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
     }//end testRemoveFormating()
 
@@ -176,18 +156,13 @@ class Viper_Tests_ViperCoreStylesPlugin_StrikethroughUnitTest extends AbstractVi
      */
     public function testIconsIsActive()
     {
-        $dir = dirname(__FILE__).'/Images/';
+        $this->selectKeyword(2);
 
-        $text    = 'WoW';
-        $textLoc = $this->find($text);
-        $this->selectText($text);
+        $this->clickTopToolbarButton('strikethrough');
+        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar is not active');
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_strike.png');
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_strike_active.png'), 'Strikethrough icon in the top toolbar is not active');
-
-        $this->click($textLoc);
-        $this->selectText($text);
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_strike_active.png'), 'Strikethrough icon in the top toolbar is not active');
+        $this->selectKeyword(2);
+        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar is not active');
 
     }//end testIconsIsActive()
 
@@ -199,19 +174,17 @@ class Viper_Tests_ViperCoreStylesPlugin_StrikethroughUnitTest extends AbstractVi
      */
     public function testUndoStrikethrough()
     {
-        $dir = dirname(__FILE__).'/Images/';
+        $this->selectKeyword(2);
 
-        $this->selectText('XuT');
+        $this->clickTopToolbarButton('strikethrough');
+        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Subscript icon in the top toolbar is not active');
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_strike.png');
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_strike_active.png'), 'Subscript icon in the top toolbar is not active');
+        $this->assertHTMLMatch('<p>%1% <del>%2%</del> %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
-        $this->assertHTMLMatch('<p>Lorem <del>XuT</del> dolor</p><p>sit <em>amet</em> <strong>WoW</strong></p>');
+        $this->clickTopToolbarButton('historyUndo');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
-        $this->clickTopToolbarButton(dirname(dirname(__FILE__)).'/Core/Images/undoIcon_active.png');
-        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p>sit <em>amet</em> <strong>WoW</strong></p>');
-
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_strike.png'), 'Strikethrough icon in the top toolbar should not be active');
+        $this->assertTrue($this->topToolbarButtonExists('strikethrough'), 'Strikethrough icon in the top toolbar should not be active');
 
     }//end testUndoStrikethrough()
 

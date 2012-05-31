@@ -195,28 +195,8 @@ ViperLinkPlugin.prototype = {
 
             this.updateLinkAttributes(a, idPrefix);
         } else {
-            var bookmark = this.viper.createBookmark();
-            var elems    = dfx.getElementsBetween(bookmark.start, bookmark.end);
-            var prevNode = null;
-            for (var i = 0; i < elems.length; i++) {
-                if (prevNode
-                    && prevNode.nodeType === dfx.TEXT_NODE
-                    && elems[i].nodeType === dfx.TEXT_NODE
-                ) {
-                    prevNode.data += elems[i].data;
-                    dfx.remove(elems[i]);
-                } else {
-                    a.appendChild(elems[i]);
-                }
-
-                prevNode = elems[i];
-            }
-
+            a = this.viper.surroundContents('a', null, range);
             this.updateLinkAttributes(a, idPrefix);
-
-            dfx.insertBefore(bookmark.start, a);
-
-            this.viper.removeBookmark(bookmark);
         }
 
         range.selectNode(a);
@@ -514,9 +494,22 @@ ViperLinkPlugin.prototype = {
             return false;
         }
 
-        var startNode = data.range.getStartNode();
-        var endNode   = data.range.getEndNode();
-        if (startNode && endNode && startNode.parentNode !== endNode.parentNode) {
+        var startNode     = null;
+        var endNode       = null;
+        var nodeSelection = range.getNodeSelection();
+
+        if (nodeSelection) {
+            startNode = nodeSelection;
+            endNode   = startNode;
+        } else {
+            startNode = data.range.getStartNode();
+            endNode   = data.range.getEndNode();
+        }
+
+        if (startNode
+            && endNode
+            && dfx.getFirstBlockParent(startNode) !== dfx.getFirstBlockParent(endNode)
+        ) {
             return false;
         }
 
@@ -623,7 +616,7 @@ ViperLinkPlugin.prototype = {
                 if (range.collapsed === true
                     || startNode
                     && endNode
-                    && startNode.parentNode !== endNode.parentNode
+                    && dfx.getFirstBlockParent(startNode) !== dfx.getFirstBlockParent(endNode)
                 ) {
                     tools.disableButton('insertLink');
                     toolbar.closeBubble('ViperLinkPlugin:vtp:link');

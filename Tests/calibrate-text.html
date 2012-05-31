@@ -1,0 +1,135 @@
+<html>
+    <head>
+        <link rel="stylesheet" media="screen" href="./test.css" />
+        <script type="text/javascript" src="../DfxJSLib/dfx.js"></script>
+        <script type="text/javascript" src="./test.js"></script>
+        <script>
+            function getCoords(keywords)
+            {
+                var content = '';
+                for (var i = 0; i < keywords.length; i++) {
+                    content += '<span>' + keywords[i] + '</span><br />';
+                }
+
+                dfx.setHtml(dfx.getId('spans'), content);
+
+                var coords = {};
+                var spans  = dfx.getTag('span');
+                for (var i = 0; i < spans.length; i++) {
+                    coords[dfx.getHtml(spans[i])] = dfx.getBoundingRectangle(spans[i]);
+                }
+
+                return coords;
+
+            }
+
+            var spans = null;
+            function changeContent(step)
+            {
+                var content = '';
+
+                if (!spans) {
+                    spans = dfx.getTag('span');
+                    dfx.remove(dfx.getId('spans'));
+                }
+
+                if (!step || step === 1) {
+                    var content = '';
+                    for (var i = 0; i < spans.length; i++) {
+                        content += dfx.getHtml(spans[i]) + ' ';
+                    }
+                } else if (step > 1) {
+                    var randText = 'UANBZXU@Nsday2783rpaadNMBZXJalknc:POAMN:+#)(=uzJBMNC&#HAJ!)(*&TUSFYHSJb9qyr9qwidiqwyrqwriyjzxcKAJKWRGHFIUGVBZNLfbclsebcrL:ZCMMXCUW';
+                    for (var i = 0; i < spans.length; i++) {
+                        var rand = Math.floor((Math.random() * 4) + 1);
+
+                        if (step === 2) {
+                            content += '<strong>';
+                        } else if (step === 3) {
+                            content += '<em>';
+                        } else if (step === 4) {
+                            content += '<strong><em>';
+                        } else if (step === 5) {
+                            switch (rand) {
+                                case 1:
+                                    content += '<strong>';
+                                break;
+
+                                case 2:
+                                    content += '<em>';
+                                break;
+
+                                case 3:
+                                    content += '<em><strong>';
+                                break;
+
+                                default:
+                                break;
+                            }
+                        }
+
+                        content += dfx.getHtml(spans[i]);
+
+                        if (step === 2) {
+                            content += '</strong>';
+                        } else if (step === 3) {
+                            content += '</em>';
+                        } else if (step === 4) {
+                            content += '</em></strong>';
+                        } else if (step === 5) {
+                            switch (rand) {
+                                case 1:
+                                    content += '</strong>';
+                                break;
+
+                                case 2:
+                                    content += '</em>';
+                                break;
+
+                                case 3:
+                                    content += '</em></strong>';
+                                break;
+
+                                default:
+                                break;
+                            }
+                        }//end if
+
+                        var startIndex = Math.floor((Math.random() * (randText.length - 7)) + 1);
+                        var endIndex   = 2 + Math.floor((Math.random() * 4) + 1);
+
+                        var extraText = ' ' + randText.substr(startIndex, endIndex);
+
+                        console.info(extraText);
+                        content += extraText + ' ';
+                    }
+                }
+
+                dfx.setHtml(dfx.getId('testContent'), content);
+            }
+        </script>
+    </head>
+    <body spellcheck="false">
+        <img id="windowTarget" src="./Core/Images/window-target.png"/>
+        <div id="spans">
+            <!--<span>{TnT}</span><br />
+            <span>{XnX}</span><br />
+            <span>{OpO}</span><br />
+            <span>{%5%}</span><br />
+            <span>{oNo}</span><br />
+            <span>{KoZ}</span><br />
+            <span>{TpY}</span><br />
+            <span>{DkD}</span><br />
+            <span>{MyO}</span><br />
+            <span>{UjZ}</span><br />
+            <span>{AxP}</span><br />-->
+        </div>
+        <div id="testContent" style="width: 300px;"></div>
+        <br />
+        <div id="menu">
+            <textarea id="jsExec" accesskey="J"></textarea>
+            <button onclick="execJS()">Exec</button>
+            <textarea id="jsRes" accesskey="R"></textarea>
+        </div>
+    </body>
+</html>
