@@ -15,8 +15,8 @@ class Viper_Tests_ViperViewSourcePlugin_ViewSourceTest extends AbstractViperView
     {
         $dir = dirname(__FILE__).'/Images/';
 
-        $this->click($this->find('WoW'));
-        $this->clickTopToolbarButton($dir.'toolbarIcon_viewSource.png');
+        $this->click($this->findKeyword(2));
+        $this->clickTopToolbarButton('sourceView');
 
         // Check to make sure the source editor appears.
         $sourceEditorFound = true;
@@ -60,16 +60,16 @@ class Viper_Tests_ViperViewSourcePlugin_ViewSourceTest extends AbstractViperView
     {
         $dir = dirname(__FILE__).'/Images/';
 
-        $this->click($this->find('WoW'));
-        $this->clickTopToolbarButton($dir.'toolbarIcon_viewSource.png');
+        $this->click($this->findKeyword(1));
+        $this->clickTopToolbarButton('sourceView');
 
         $closeSourceIcon = $this->find($dir.'icon_close_source.png');
         $this->click($closeSourceIcon);
 
-        $this->selectText('XuT');
+        $this->selectKeyword(1);
         $this->keyDown('Key.CMD + i');
-        $this->click($this->find('IPSUM'));
-        $this->assertHTMLMatch('<p>Lorem IPSUM dolor</p><p><strong>WoW</strong>sit amet</p><p>Another p XuT</p>');
+        $this->click($this->findKeyword(3));
+        $this->assertHTMLMatch('<p>Lorem <em>%1%</em> dolor</p><p><strong>%2%</strong> sit amet</p><p>%3% p <em>XuT</em></p>');
 
     }//end testEditingAfterClosingSourceEditor()
 
@@ -83,8 +83,8 @@ class Viper_Tests_ViperViewSourcePlugin_ViewSourceTest extends AbstractViperView
     {
         $dir = dirname(__FILE__).'/Images/';
 
-        $this->click($this->find('WoW'));
-        $this->clickTopToolbarButton($dir.'toolbarIcon_viewSource.png');
+        $this->click($this->findKeyword(2));
+        $this->clickTopToolbarButton('sourceView');
         sleep(2);
         $this->keyDown('Key.CMD + a');
         $this->keyDown('Key.DELETE');
@@ -102,25 +102,36 @@ class Viper_Tests_ViperViewSourcePlugin_ViewSourceTest extends AbstractViperView
      *
      * @return void
      */
-/*    public function testEditingContentAfterDeletingSourceCode()
+    public function testEditingContentAfterDeletingSourceCode()
     {
         $dir = dirname(__FILE__).'/Images/';
 
-        $this->selectText('WoW', 'Another');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_viewSource.png');
+        $this->selectKeyword(2, 3);
+        $this->clickTopToolbarButton('sourceView');
         sleep(2);
-        $this->selectText('<p><strong>');
+        $this->keyDown('Key.DOWN');
+        $this->keyDown('Key.DOWN');
+        $this->keyDown('Key.DOWN');
+        $this->keyDown('Key.DOWN');
+        $this->keyDown('Key.SHIFT + Key.DOWN');
+        $this->keyDown('Key.SHIFT + Key.DOWN');
+        $this->keyDown('Key.SHIFT + Key.DOWN');
+        $this->keyDown('Key.SHIFT + Key.DOWN');
+        $this->keyDown('Key.SHIFT + Key.DOWN');
+        $this->keyDown('Key.SHIFT + Key.DOWN');
         $this->keyDown('Key.DELETE');
 
 
         $applyChangesIcon = $this->find($dir.'icon_applyChanges.png');
         $this->click($applyChangesIcon);
 
-        $this->assertHTMLMatch('<p></p>');
+        $this->assertHTMLMatch('<p>Lorem %1% dolor</p>');
 
+        $this->selectKeyword(1);
+        $this->assertEquals($this->replaceKeywords('%1%'), $this->getSelectedText(), 'Keyword is not selected');
 
     }//end testEditingContentAfterDeletingSourceCode()
-*/
+
 
 }//end class
 
