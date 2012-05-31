@@ -11,9 +11,9 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractGeneralLis
      *
      * @return void
      */
-    public function testCreatingAList()
+    public function testCreatingAList2()
     {
-        $this->selectText('VmumV');
+        $this->selectKeyword(3);
         $this->keyDown('Key.RIGHT');
         $this->keyDown('Key.ENTER');
 
@@ -27,7 +27,7 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractGeneralLis
         $this->type('Item 2');
         $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
 
-        $this->assertHTMLMatch('<p>XabcX uuuuuu. VmumV</p><p>Test list:</p><ol><li>Item 1</li><li>Item 2</li></ol><p>cPOc ccccc dddd. TicT</p><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa bbbbb ccccc</li><li>4 oNo templates</li><li>Audit XuT content</li><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ol><h2>SoD</h2>');
+        $this->assertHTMLMatch('<p>%4% uuuuuu. %3%</p><p>Test list:</p><ol><li>Item 1</li><li>Item 2</li></ol><p>cPOc ccccc dddd. %5%</p><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa %6% ccccc</li><li>%10% %2% templates</li><li>Audit %7% %9%</li><li>Accessibility audit report</li><li>Recommendations %8% plan</li><li>Squiz Matrix guide</li></ol><h2>%1%</h2>');
 
     }//end testCreatingAList()
 
@@ -39,7 +39,7 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractGeneralLis
      */
     public function testCreatingAListWithASubList()
     {
-        $this->selectText('VmumV');
+        $this->selectKeyword(3);
         $this->keyDown('Key.RIGHT');
         $this->keyDown('Key.ENTER');
 
@@ -59,7 +59,7 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractGeneralLis
         $this->type('Item 3');
         $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
 
-        $this->assertHTMLMatch('<p>XabcX uuuuuu. VmumV</p><p>Test list:</p><ol><li>Item 1<ol><li>Item 2</li></ol></li><li>Item 3</li></ol><p>cPOc ccccc dddd. TicT</p><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa bbbbb ccccc</li><li>4 oNo templates</li><li>Audit XuT content</li><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ol><h2>SoD</h2>');
+        $this->assertHTMLMatch('<p>%4% uuuuuu. %3%</p><p>Test list:</p><ol><li>Item 1<ol><li>Item 2</li></ol></li><li>Item 3</li></ol><p>cPOc ccccc dddd. %5%</p><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa %6% ccccc</li><li>%10% %2% templates</li><li>Audit %7% %9%</li><li>Accessibility audit report</li><li>Recommendations %8% plan</li><li>Squiz Matrix guide</li></ol><h2>%1%</h2>');
 
     }//end testCreatingAListWithASubList()
 
@@ -71,13 +71,13 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractGeneralLis
      */
     public function testListCreationFromClickingInText()
     {
-        $this->click($this->find('VmumV'));
+        $this->click($this->findKeyword(3));
 
         $this->clickTopToolbarButton('listOL');
         $this->assertIconStatusesCorrect(TRUE, 'active', FALSE, TRUE);
-        $this->assertHTMLMatch('<ol><li>XabcX uuuuuu. VmumV</li></ol><p>cPOc ccccc dddd. TicT</p><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa bbbbb ccccc</li><li>4 oNo templates</li><li>Audit XuT content</li><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ol><h2>SoD</h2>');
+        $this->assertHTMLMatch('<ol><li>%4% uuuuuu. %3%</li></ol><p>cPOc ccccc dddd. %5%</p><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa %6% ccccc</li><li>%10% %2% templates</li><li>Audit %7% %9%</li><li>Accessibility audit report</li><li>Recommendations %8% plan</li><li>Squiz Matrix guide</li></ol><h2>%1%</h2>');
 
-        $this->click($this->find('VmumV'));
+        $this->click($this->findKeyword(3));
         $this->clickTopToolbarButton('listOL', 'active');
         sleep(1);
         $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
@@ -92,13 +92,13 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractGeneralLis
      */
     public function testListCreationFromTextSelection()
     {
-        $this->selectText('VmumV');
+        $this->selectKeyword(3);
 
         $this->clickTopToolbarButton('listOL');
         $this->assertIconStatusesCorrect(TRUE, 'active', FALSE, TRUE);
-        $this->assertHTMLMatch('<ol><li>XabcX uuuuuu. VmumV</li></ol><p>cPOc ccccc dddd. TicT</p><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa bbbbb ccccc</li><li>4 oNo templates</li><li>Audit XuT content</li><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ol><h2>SoD</h2>');
+        $this->assertHTMLMatch('<ol><li>%4% uuuuuu. %3%</li></ol><p>cPOc ccccc dddd. %5%</p><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa %6% ccccc</li><li>%10% %2% templates</li><li>Audit %7% %9%</li><li>Accessibility audit report</li><li>Recommendations %8% plan</li><li>Squiz Matrix guide</li></ol><h2>%1%</h2>');
 
-        $this->selectText('VmumV');
+        $this->selectKeyword(3);
         $this->clickTopToolbarButton('listOL', 'active');
         sleep(1);
         $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
@@ -113,11 +113,11 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractGeneralLis
      */
     public function testListCreationFromParaSelection()
     {
-        $this->selectText('XabcX', 'VmumV');
+        $this->selectKeyword(4, 3);
 
         $this->clickTopToolbarButton('listOL');
         $this->assertIconStatusesCorrect(TRUE, 'active', FALSE, TRUE);
-        $this->assertHTMLMatch('<ol><li>XabcX uuuuuu. VmumV</li></ol><p>cPOc ccccc dddd. TicT</p><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa bbbbb ccccc</li><li>4 oNo templates</li><li>Audit XuT content</li><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ol><h2>SoD</h2>');
+        $this->assertHTMLMatch('<ol><li>%4% uuuuuu. %3%</li></ol><p>cPOc ccccc dddd. %5%</p><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa %6% ccccc</li><li>%10% %2% templates</li><li>Audit %7% %9%</li><li>Accessibility audit report</li><li>Recommendations %8% plan</li><li>Squiz Matrix guide</li></ol><h2>%1%</h2>');
 
         $this->clickTopToolbarButton('listOL', 'active');
         $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
@@ -132,17 +132,17 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractGeneralLis
      */
     public function testOutdentTextSelection()
     {
-        $this->selectText('VmumV');
+        $this->selectKeyword(3);
 
         $this->clickTopToolbarButton('listOL');
-        $this->assertHTMLMatch('<ol><li>XabcX uuuuuu. VmumV</li></ol><p>cPOc ccccc dddd. TicT</p><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa bbbbb ccccc</li><li>4 oNo templates</li><li>Audit XuT content</li><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ol><h2>SoD</h2>');
+        $this->assertHTMLMatch('<ol><li>%4% uuuuuu. %3%</li></ol><p>cPOc ccccc dddd. %5%</p><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa %6% ccccc</li><li>%10% %2% templates</li><li>Audit %7% %9%</li><li>Accessibility audit report</li><li>Recommendations %8% plan</li><li>Squiz Matrix guide</li></ol><h2>%1%</h2>');
 
-        $this->selectText('VmumV');
+        $this->selectKeyword(3);
         $this->assertIconStatusesCorrect(TRUE, 'active', FALSE, TRUE);
-        $this->clickInlineToolbarButton('listOL');
+        $this->clickInlineToolbarButton('listOutdent');
 
         $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
-        $this->assertHTMLMatch('<p>XabcX uuuuuu. VmumV</p><p>cPOc ccccc dddd. TicT</p><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa bbbbb ccccc</li><li>4 oNo templates</li><li>Audit XuT content</li><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ol><h2>SoD</h2>');
+        $this->assertHTMLMatch('<p>%4% uuuuuu. %3%</p><p>cPOc ccccc dddd. %5%</p><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa %6% ccccc</li><li>%10% %2% templates</li><li>Audit %7% %9%</li><li>Accessibility audit report</li><li>Recommendations %8% plan</li><li>Squiz Matrix guide</li></ol><h2>%1%</h2>');
 
     }//end testOutdentTextSelection()
 
@@ -154,24 +154,24 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractGeneralLis
      */
     public function testOutdentIconIsEnabled()
     {
-        $this->selectText('XabcX', 'TicT');
+        $this->selectKeyword(4, 5);
         $this->clickTopToolbarButton('listOL');
 
         // Outdent icon is enabled when you click inside a list item.
-        $this->click($this->find('VmumV'));
+        $this->click($this->findKeyword(3));
         $this->assertIconStatusesCorrect(TRUE, 'active', FALSE, TRUE);
 
         // Outdent icon is enabled when you select a word in a list item.
-        $this->selectText('VmumV');
+        $this->selectKeyword(3);
         $this->assertIconStatusesCorrect(TRUE, 'active', FALSE, TRUE);
 
         // Outdent icon is enabled when you select a list item.
-        $this->selectText('XabcX');
+        $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(1);
         $this->assertIconStatusesCorrect(TRUE, 'active', FALSE, TRUE);
 
         // Outdent icon is enabled when you select the list.
-        $this->selectText('XabcX');
+        $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(0);
         $this->assertIconStatusesCorrect(TRUE, 'active', FALSE, TRUE);
 
@@ -185,15 +185,15 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractGeneralLis
      */
     public function testOutdentAndIndentListItemsUsingKeyboardShortcuts()
     {
-        $this->selectText('bbbbb', 'XuT');
+        $this->selectKeyword(6, 7);
         $this->keyDown('Key.SHIFT + Key.TAB');
 
-        $this->assertHTMLMatch('<p>XabcX uuuuuu. VmumV</p><p>cPOc ccccc dddd. TicT</p><p>ajhsd sjsjwi hhhh:</p><p>aaa bbbbb ccccc</p><p>4 oNo templates</p><p>Audit XuT content</p><ol><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ol><h2>SoD</h2>');
+        $this->assertHTMLMatch('<p>%4% uuuuuu. %3%</p><p>cPOc ccccc dddd. %5%</p><p>ajhsd sjsjwi hhhh:</p><p>aaa %6% ccccc</p><p>%10% %2% templates</p><p>Audit %7% %9%</p><ol><li>Accessibility audit report</li><li>Recommendations %8% plan</li><li>Squiz Matrix guide</li></ol><h2>%1%</h2>');
 
-        $this->selectText('bbbbb', 'XuT');
+        $this->selectKeyword(6, 7);
         $this->keyDown('Key.TAB');
 
-        $this->assertHTMLMatch('<p>XabcX uuuuuu. VmumV</p><p>cPOc ccccc dddd. TicT</p><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa bbbbb ccccc</li><li>4 oNo templates</li><li>Audit XuT content</li><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ol><h2>SoD</h2>');
+        $this->assertHTMLMatch('<p>%4% uuuuuu. %3%</p><p>cPOc ccccc dddd. %5%</p><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa %6% ccccc</li><li>%10% %2% templates</li><li>Audit %7% %9%</li><li>Accessibility audit report</li><li>Recommendations %8% plan</li><li>Squiz Matrix guide</li></ol><h2>%1%</h2>');
 
     }//end testOutdentAndIndentListItemsUsingKeyboardShortcuts()
 
@@ -205,15 +205,15 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractGeneralLis
      */
     public function testOutdentFirstItemSelectionShortcut()
     {
-        $this->selectText('XabcX', 'TicT');
+        $this->selectKeyword(4, 5);
 
         $this->clickTopToolbarButton('listOL');
         sleep(1);
-        $this->assertHTMLMatch('<ol><li>XabcX uuuuuu. VmumV</li><li>cPOc ccccc dddd. TicT</li></ol><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa bbbbb ccccc</li><li>4 oNo templates</li><li>Audit XuT content</li><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ol><h2>SoD</h2>');
+        $this->assertHTMLMatch('<ol><li>%4% uuuuuu. %3%</li><li>cPOc ccccc dddd. %5%</li></ol><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa %6% ccccc</li><li>%10% %2% templates</li><li>Audit %7% %9%</li><li>Accessibility audit report</li><li>Recommendations %8% plan</li><li>Squiz Matrix guide</li></ol><h2>%1%</h2>');
 
-        $this->selectText('VmumV');
+        $this->selectKeyword(3);
         $this->keyDown('Key.SHIFT + Key.TAB');
-        $this->assertHTMLMatch('<p>XabcX uuuuuu. VmumV</p><ol><li>cPOc ccccc dddd. TicT</li></ol><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa bbbbb ccccc</li><li>4 oNo templates</li><li>Audit XuT content</li><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ol><h2>SoD</h2>');
+        $this->assertHTMLMatch('<p>%4% uuuuuu. %3%</p><ol><li>cPOc ccccc dddd. %5%</li></ol><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa %6% ccccc</li><li>%10% %2% templates</li><li>Audit %7% %9%</li><li>Accessibility audit report</li><li>Recommendations %8% plan</li><li>Squiz Matrix guide</li></ol><h2>%1%</h2>');
 
     }//end testOutdentFirstItemSelectionShortcut()
 
@@ -223,18 +223,18 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractGeneralLis
      *
      * @return void
      */
-    public function testOutdentLastItemSelectionShortcut()
+    public function testOutdentLastItemSelectionShortcut2()
     {
-        $this->selectText('XabcX', 'TicT');
+        $this->selectKeyword(4, 5);
 
         $this->clickInlineToolbarButton('listOL');
         sleep(1);
-        $this->assertHTMLMatch('<ol><li>XabcX uuuuuu. VmumV</li><li>cPOc ccccc dddd. TicT</li></ol><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa bbbbb ccccc</li><li>4 oNo templates</li><li>Audit XuT content</li><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ol><h2>SoD</h2>');
+        $this->assertHTMLMatch('<ol><li>%4% uuuuuu. %3%</li><li>cPOc ccccc dddd. %5%</li></ol><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa %6% ccccc</li><li>%10% %2% templates</li><li>Audit %7% %9%</li><li>Accessibility audit report</li><li>Recommendations %8% plan</li><li>Squiz Matrix guide</li></ol><h2>%1%</h2>');
 
-        $this->selectText('TicT');
+        $this->selectKeyword(5);
         $this->keyDown('Key.SHIFT + Key.TAB');
 
-        $this->assertHTMLMatch('<ol><li>XabcX uuuuuu. VmumV</li></ol><p>cPOc ccccc dddd. TicT</p><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa bbbbb ccccc</li><li>4 oNo templates</li><li>Audit XuT content</li><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ol><h2>SoD</h2>');
+        $this->assertHTMLMatch('<ol><li>%4% uuuuuu. %3%</li></ol><p>cPOc ccccc dddd. %5%</p><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa %6% ccccc</li><li>%10% %2% templates</li><li>Audit %7% %9%</li><li>Accessibility audit report</li><li>Recommendations %8% plan</li><li>Squiz Matrix guide</li></ol><h2>%1%</h2>');
 
     }//end testOutdentLastItemSelectionShortcut()
 
@@ -246,18 +246,18 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractGeneralLis
      */
     public function testOutdentThirdListItemAndAddBackToList()
     {
-        $textLoc = $this->find('XuT');
+        $textLoc = $this->findKeyword(7);
         $this->click($textLoc);
 
         $this->clickTopToolbarButton('listOutdent');
         sleep(1);
         $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
 
-        $this->assertHTMLMatch('<p>XabcX uuuuuu. VmumV</p><p>cPOc ccccc dddd. TicT</p><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa bbbbb ccccc</li><li>4 oNo templates</li></ol><p>Audit XuT content</p><ol><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ol><h2>SoD</h2>');
+        $this->assertHTMLMatch('<p>%4% uuuuuu. %3%</p><p>cPOc ccccc dddd. %5%</p><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa %6% ccccc</li><li>%10% %2% templates</li></ol><p>Audit %7% %9%</p><ol><li>Accessibility audit report</li><li>Recommendations %8% plan</li><li>Squiz Matrix guide</li></ol><h2>%1%</h2>');
 
         $this->clickTopToolbarButton('listIndent');
         $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
-        $this->assertHTMLMatch('<p>XabcX uuuuuu. VmumV</p><p>cPOc ccccc dddd. TicT</p><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa bbbbb ccccc</li><li>4 oNo templates</li><li>Audit XuT content</li><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ol><h2>SoD</h2>');
+        $this->assertHTMLMatch('<p>%4% uuuuuu. %3%</p><p>cPOc ccccc dddd. %5%</p><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa %6% ccccc</li><li>%10% %2% templates</li><li>Audit %7% %9%</li><li>Accessibility audit report</li><li>Recommendations %8% plan</li><li>Squiz Matrix guide</li></ol><h2>%1%</h2>');
 
     }//end testOutdentThirdListItemAndAddBackToList()
 
@@ -269,12 +269,12 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractGeneralLis
      */
     public function testIndentFirstItemSelectionShortcut()
     {
-        $this->selectText('XabcX', 'TicT');
+        $this->selectKeyword(4, 5);
 
         $this->clickTopToolbarButton('listOL');
         sleep(1);
 
-        $this->selectText('VmumV');
+        $this->selectKeyword(3);
 
         // Make sure multiple tabs dont cause issues.
         $this->keyDown('Key.TAB');
@@ -282,7 +282,7 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractGeneralLis
         $this->keyDown('Key.TAB');
         $this->keyDown('Key.TAB');
 
-        $this->assertHTMLMatch('<ol><li>XabcX uuuuuu. VmumV</li><li>cPOc ccccc dddd. TicT</li></ol><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa bbbbb ccccc</li><li>4 oNo templates</li><li>Audit XuT content</li><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ol><h2>SoD</h2>');
+        $this->assertHTMLMatch('<ol><li>%4% uuuuuu. %3%</li><li>cPOc ccccc dddd. %5%</li></ol><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa %6% ccccc</li><li>%10% %2% templates</li><li>Audit %7% %9%</li><li>Accessibility audit report</li><li>Recommendations %8% plan</li><li>Squiz Matrix guide</li></ol><h2>%1%</h2>');
 
     }//end testIndentFirstItemSelectionShortcut()
 
@@ -294,18 +294,18 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractGeneralLis
      */
     public function testIndentLastItemInTheListUsingShortcut()
     {
-        $this->selectText('XabcX', 'TicT');
+        $this->selectKeyword(4, 5);
 
         $this->clickInlineToolbarButton('listOL');
         sleep(1);
 
-        $this->selectText('TicT');
+        $this->selectKeyword(5);
         $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
 
         sleep(1);
         $this->keyDown('Key.TAB');
 
-        $this->assertHTMLMatch('<ol><li>XabcX uuuuuu. VmumV<ol><li>cPOc ccccc dddd. TicT</li></ol></li></ol><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa bbbbb ccccc</li><li>4 oNo templates</li><li>Audit XuT content</li><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ol><h2>SoD</h2>');
+        $this->assertHTMLMatch('<ol><li>%4% uuuuuu. %3%<ol><li>cPOc ccccc dddd. %5%</li></ol></li></ol><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa %6% ccccc</li><li>%10% %2% templates</li><li>Audit %7% %9%</li><li>Accessibility audit report</li><li>Recommendations %8% plan</li><li>Squiz Matrix guide</li></ol><h2>%1%</h2>');
 
 
     }//end testIndentLastItemInTheListUsingShortcut()
@@ -318,16 +318,16 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractGeneralLis
      */
     public function testIndentLastItemInTheListUsingIndentIcon()
     {
-        $this->selectText('XabcX', 'TicT');
+        $this->selectKeyword(4, 5);
 
         $this->clickInlineToolbarButton('listOL');
         sleep(1);
 
-        $this->selectText('TicT');
+        $this->selectKeyword(5);
         $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
         $this->clickInlineToolbarButton('listIndent');
 
-        $this->assertHTMLMatch('<ol><li>XabcX uuuuuu. VmumV<ol><li>cPOc ccccc dddd. TicT</li></ol></li></ol><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa bbbbb ccccc</li><li>4 oNo templates</li><li>Audit XuT content</li><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ol><h2>SoD</h2>');
+        $this->assertHTMLMatch('<ol><li>%4% uuuuuu. %3%<ol><li>cPOc ccccc dddd. %5%</li></ol></li></ol><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa %6% ccccc</li><li>%10% %2% templates</li><li>Audit %7% %9%</li><li>Accessibility audit report</li><li>Recommendations %8% plan</li><li>Squiz Matrix guide</li></ol><h2>%1%</h2>');
 
     }//end testIndentLastItemInTheListUsingIndentIcon()
 
@@ -339,17 +339,17 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractGeneralLis
      */
     public function testIndentOutdentLastItemSelectionShortcut()
     {
-        $this->selectText('XabcX', 'TicT');
+        $this->selectKeyword(4, 5);
 
         $this->clickInlineToolbarButton('listOL');
         sleep(1);
-        $this->assertHTMLMatch('<ol><li>XabcX uuuuuu. VmumV</li><li>cPOc ccccc dddd. TicT</li></ol><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa bbbbb ccccc</li><li>4 oNo templates</li><li>Audit XuT content</li><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ol><h2>SoD</h2>');
+        $this->assertHTMLMatch('<ol><li>%4% uuuuuu. %3%</li><li>cPOc ccccc dddd. %5%</li></ol><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa %6% ccccc</li><li>%10% %2% templates</li><li>Audit %7% %9%</li><li>Accessibility audit report</li><li>Recommendations %8% plan</li><li>Squiz Matrix guide</li></ol><h2>%1%</h2>');
 
-        $this->selectText('TicT');
+        $this->selectKeyword(5);
 
         $this->keyDown('Key.TAB');
         $this->keyDown('Key.SHIFT + Key.TAB');
-        $this->assertHTMLMatch('<ol><li>XabcX uuuuuu. VmumV</li><li>cPOc ccccc dddd. TicT</li></ol><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa bbbbb ccccc</li><li>4 oNo templates</li><li>Audit XuT content</li><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ol><h2>SoD</h2>');
+        $this->assertHTMLMatch('<ol><li>%4% uuuuuu. %3%</li><li>cPOc ccccc dddd. %5%</li></ol><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa %6% ccccc</li><li>%10% %2% templates</li><li>Audit %7% %9%</li><li>Accessibility audit report</li><li>Recommendations %8% plan</li><li>Squiz Matrix guide</li></ol><h2>%1%</h2>');
 
     }//end testIndentOutdentLastItemSelectionShortcut()
 
@@ -361,25 +361,25 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractGeneralLis
      */
     public function testOutdentAndIndentListItemsMultipleTimes()
     {
-        $this->selectText('bbbbb', 'XuT');
+        $this->selectKeyword(1, 2);
         $this->keyDown('Key.SHIFT + Key.TAB');
 
-        $this->assertHTMLMatch('<ol><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ol><p>aaa bbbbb ccccc</p><p>4 oNo templates</p><p>Audit XuT content</p>');
+        $this->assertHTMLMatch('<ol><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ol><p>aaa %1% ccccc</p><p>4 oNo templates</p><p>Audit %2% content</p>');
 
-        $this->selectText('bbbbb', 'XuT');
+        $this->selectKeyword(1, 2);
         $this->keyDown('Key.TAB');
 
-        $this->assertHTMLMatch('<ol><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li><li>aaa bbbbb ccccc</li><li>4 oNo templates</li><li>Audit XuT content</li></ol>');
+        $this->assertHTMLMatch('<ol><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li><li>aaa %1% ccccc</li><li>4 oNo templates</li><li>Audit %2% content</li></ol>');
 
-        $this->selectText('bbbbb', 'XuT');
+        $this->selectKeyword(1, 2);
         $this->keyDown('Key.SHIFT + Key.TAB');
 
-        $this->assertHTMLMatch('<ol><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ol><p>aaa bbbbb ccccc</p><p>4 oNo templates</p><p>Audit XuT content</p>');
+        $this->assertHTMLMatch('<ol><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ol><p>aaa %1% ccccc</p><p>4 oNo templates</p><p>Audit %2% content</p>');
 
-        $this->selectText('bbbbb', 'XuT');
+        $this->selectKeyword(1, 2);
         $this->keyDown('Key.TAB');
 
-        $this->assertHTMLMatch('<ol><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li><li>aaa bbbbb ccccc</li><li>4 oNo templates</li><li>Audit XuT content</li></ol>');
+        $this->assertHTMLMatch('<ol><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li><li>aaa %1% ccccc</li><li>4 oNo templates</li><li>Audit %2% content</li></ol>');
 
     }//end testOutdentAndIndentListItemsMultipleTimes()
 
@@ -391,11 +391,11 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractGeneralLis
      */
     public function testIndentOutdentItems()
     {
-        $this->selectText('oNo', 'action');
+        $this->selectKeyword(2, 8);
         $this->keyDown('Key.TAB');
 
         sleep(1);
-        $this->selectText('content');
+        $this->selectKeyword(9);
         $this->keyDown('Key.TAB');
 
         $expected = array(
@@ -440,19 +440,19 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractGeneralLis
      */
     public function testIndentSelectionKeptStyleApplied()
     {
-        $this->selectText('oNo', 'action');
+        $this->selectKeyword(2, 8);
         $this->keyDown('Key.TAB');
         $this->keyDown('Key.CMD + b');
 
-        $this->assertHTMLMatch('<p>XabcX uuuuuu. VmumV</p><p>cPOc ccccc dddd. TicT</p><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa bbbbb ccccc<ol><li>4 <strong>oNo templates</strong></li><li><strong>Audit XuT content</strong></li><li><strong>Accessibility audit report</strong></li><li><strong>Recommendations action</strong> plan</li></ol></li><li>Squiz Matrix guide</li></ol><h2>SoD</h2>');
+        $this->assertHTMLMatch('<p>%4% uuuuuu. %3%</p><p>cPOc ccccc dddd. %5%</p><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa %6% ccccc<ol><li>%10% <strong>%2% templates</strong></li><li><strong>Audit %7% %9%</strong></li><li><strong>Accessibility audit report</strong></li><li><strong>Recommendations %8%</strong> plan</li></ol></li><li>Squiz Matrix guide</li></ol><h2>%1%</h2>');
 
         sleep(1);
 
-        $this->selectText('oNo', 'content');
+        $this->selectKeyword(2, 9);
         $this->keyDown('Key.SHIFT + Key.TAB');
         $this->keyDown('Key.CMD + b');
 
-        $this->assertHTMLMatch('<p>XabcX uuuuuu. VmumV</p><p>cPOc ccccc dddd. TicT</p><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa bbbbb ccccc</li><li>4 oNo templates</li><li>Audit XuT content<ol><li><strong>Accessibility audit report</strong></li><li><strong>Recommendations action</strong> plan</li></ol></li><li>Squiz Matrix guide</li></ol><h2>SoD</h2>');
+        $this->assertHTMLMatch('<p>%4% uuuuuu. %3%</p><p>cPOc ccccc dddd. %5%</p><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa %6% ccccc</li><li>%10% %2% templates</li><li>Audit %7% %9%<ol><li><strong>Accessibility audit report</strong></li><li><strong>Recommendations %8%</strong> plan</li></ol></li><li>Squiz Matrix guide</li></ol><h2>%1%</h2>');
 
     }//end testIndentSelectionKeptStyleApplied()
 
@@ -464,11 +464,11 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractGeneralLis
      */
     public function testRemoveOneListItemWhenClickOrderedListIcon()
     {
-        $this->selectText('XuT');
+        $this->selectKeyword(7);
 
         $this->clickTopToolbarButton('listOL', 'active');
         $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE);
-        $this->assertHTMLMatch('<p>XabcX uuuuuu. VmumV</p><p>cPOc ccccc dddd. TicT</p><p>ajhsd sjsjwi hhhh:</p><p>aaa bbbbb ccccc</p><p>4 oNo templates</p><p>Audit XuT content</p><p>Accessibility audit report</p><p>Recommendations action plan</p><p>Squiz Matrix guide</p><h2>SoD</h2>');
+        $this->assertHTMLMatch('<p>%4% uuuuuu. %3%</p><p>cPOc ccccc dddd. %5%</p><p>ajhsd sjsjwi hhhh:</p><p>aaa %6% ccccc</p><p>%10% %2% templates</p><p>Audit %7% %9%</p><p>Accessibility audit report</p><p>Recommendations %8% plan</p><p>Squiz Matrix guide</p><h2>%1%</h2>');
 
     }//end testRemoveOneListItemWhenClickUnorderedListIcon()
 
@@ -480,14 +480,14 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractGeneralLis
      */
     public function testRemoveAndCreatingNewListItemUsingOrderedListIcon()
     {
-        $this->selectText('XuT');
+        $this->selectKeyword(7);
 
         $this->clickTopToolbarButton('listOL', 'active');
-        $this->assertHTMLMatch('<p>XabcX uuuuuu. VmumV</p><p>cPOc ccccc dddd. TicT</p><p>ajhsd sjsjwi hhhh:</p><p>aaa bbbbb ccccc</p><p>4 oNo templates</p><p>Audit XuT content</p><p>Accessibility audit report</p><p>Recommendations action plan</p><p>Squiz Matrix guide</p><h2>SoD</h2>');
+        $this->assertHTMLMatch('<p>%4% uuuuuu. %3%</p><p>cPOc ccccc dddd. %5%</p><p>ajhsd sjsjwi hhhh:</p><p>aaa %6% ccccc</p><p>%10% %2% templates</p><p>Audit %7% %9%</p><p>Accessibility audit report</p><p>Recommendations %8% plan</p><p>Squiz Matrix guide</p><h2>%1%</h2>');
 
-        $this->selectText('XuT');
+        $this->selectKeyword(7);
         $this->clickTopToolbarButton('listOL');
-        $this->assertHTMLMatch('<p>XabcX uuuuuu. VmumV</p><p>cPOc ccccc dddd. TicT</p><p>ajhsd sjsjwi hhhh:</p><p>aaa bbbbb ccccc</p><p>4 oNo templates</p><ol><li>Audit XuT content</li></ol><p>Accessibility audit report</p><p>Recommendations action plan</p><p>Squiz Matrix guide</p><h2>SoD</h2>');
+        $this->assertHTMLMatch('<p>%4% uuuuuu. %3%</p><p>cPOc ccccc dddd. %5%</p><p>ajhsd sjsjwi hhhh:</p><p>aaa %6% ccccc</p><p>%10% %2% templates</p><ol><li>Audit %7% %9%</li></ol><p>Accessibility audit report</p><p>Recommendations %8% plan</p><p>Squiz Matrix guide</p><h2>%1%</h2>');
 
     }//end testRemoveOneListItemWhenClickUnorderedListIcon()
 
@@ -499,13 +499,14 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractGeneralLis
      */
     public function testRemoveListItems()
     {
-        $this->selectText('oNo', 'action');
+        $this->selectKeyword(2, 8);
         $this->keyDown('Key.TAB');
 
-        $this->selectText('oNo', 'content');
+        sleep(1);
+        $this->selectKeyword(10, 9);
         $this->keyDown('Key.BACKSPACE');
 
-        $this->assertHTMLMatch('<p>XabcX uuuuuu. VmumV</p><p>cPOc ccccc dddd. TicT</p><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa bbbbb ccccc<ol><li>Accessibility audit report</li><li>Recommendations action plan</li></ol></li><li>Squiz Matrix guide</li></ol><h2>SoD</h2>');
+        $this->assertHTMLMatch('<p>%4% uuuuuu. %3%</p><p>cPOc ccccc dddd. %5%</p><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa %6% ccccc<ol><li>Accessibility audit report</li><li>Recommendations %8% plan</li></ol></li><li>Squiz Matrix guide</li></ol><h2>%1%</h2>');
 
     }//end testRemoveListItems()
 
@@ -517,7 +518,7 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractGeneralLis
      */
     public function testListKeyboardNav()
     {
-        $this->selectText('oNo');
+        $this->selectKeyword(2);
 
         $this->keyDown('Key.RIGHT');
         $this->keyDown('Key.TAB');
@@ -567,12 +568,12 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractGeneralLis
      */
     public function testListToParaUsingOutdentIcon()
     {
-        $this->selectText('oNo');
+        $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(0);
 
         sleep(1);
         $this->clickInlineToolbarButton('listOutdent');
-        $this->assertHTMLMatch('<p>XabcX uuuuuu. VmumV</p><p>cPOc ccccc dddd. TicT</p><p>ajhsd sjsjwi hhhh:</p><p>aaa bbbbb ccccc</p><p>4 oNo templates</p><p>Audit XuT content</p><p>Accessibility audit report</p><p>Recommendations action plan</p><p>Squiz Matrix guide</p><h2>SoD</h2>');
+        $this->assertHTMLMatch('<p>%4% uuuuuu. %3%</p><p>cPOc ccccc dddd. %5%</p><p>ajhsd sjsjwi hhhh:</p><p>aaa %6% ccccc</p><p>%10% %2% templates</p><p>Audit %7% %9%</p><p>Accessibility audit report</p><p>Recommendations %8% plan</p><p>Squiz Matrix guide</p><h2>%1%</h2>');
 
     }//end testListToParaUsingOutdentIcon()
 
@@ -584,12 +585,12 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractGeneralLis
      */
     public function testListToParaUsingOrderedListIcon()
     {
-        $this->selectText('oNo');
+        $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(0);
 
         sleep(1);
         $this->clickTopToolbarButton('listOL', 'active');
-        $this->assertHTMLMatch('<p>XabcX uuuuuu. VmumV</p><p>cPOc ccccc dddd. TicT</p><p>ajhsd sjsjwi hhhh:</p><p>aaa bbbbb ccccc</p><p>4 oNo templates</p><p>Audit XuT content</p><p>Accessibility audit report</p><p>Recommendations action plan</p><p>Squiz Matrix guide</p><h2>SoD</h2>');
+        $this->assertHTMLMatch('<p>%4% uuuuuu. %3%</p><p>cPOc ccccc dddd. %5%</p><p>ajhsd sjsjwi hhhh:</p><p>aaa %6% ccccc</p><p>%10% %2% templates</p><p>Audit %7% %9%</p><p>Accessibility audit report</p><p>Recommendations %8% plan</p><p>Squiz Matrix guide</p><h2>%1%</h2>');
 
     }//end testListToParaUsingOrderedListIcon()
 
@@ -601,7 +602,7 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractGeneralLis
      */
     public function testNewItemCreation()
     {
-        $this->selectText('oNo');
+        $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(1);
         $this->keyDown('Key.RIGHT');
         $this->keyDown('Key.ENTER');
@@ -619,7 +620,7 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractGeneralLis
         $this->keyDown('Key.SHIFT + Key.TAB');
         $this->type('Test 5');
 
-        $this->assertHTMLMatch('<p>XabcX uuuuuu. VmumV</p><p>cPOc ccccc dddd. TicT</p><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa bbbbb ccccc</li><li>4 oNo templates</li><li>Test<ol><li>Test 2</li><li>Test 3<ol><li>Test 4</li></ol></li></ol></li><li>Test 5</li><li>Audit XuT content</li><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ol><h2>SoD</h2>');
+        $this->assertHTMLMatch('<p>%4% uuuuuu. %3%</p><p>cPOc ccccc dddd. %5%</p><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa %6% ccccc</li><li>%10% %2% templates</li><li>Test<ol><li>Test 2</li><li>Test 3<ol><li>Test 4</li></ol></li></ol></li><li>Test 5</li><li>Audit %7% %9%</li><li>Accessibility audit report</li><li>Recommendations %8% plan</li><li>Squiz Matrix guide</li></ol><h2>%1%</h2>');
 
     }//end testNewItemCreation()
 
@@ -631,18 +632,18 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractGeneralLis
      */
     public function testRemoveItemFromList()
     {
-        $this->selectText('oNo');
+        $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(1);
         sleep(1);
 
-        // Remove whole item contents.
+        // Remove whole item %9%s.
         $this->keyDown('Key.BACKSPACE');
 
         // Remove the item element.
         $this->keyDown('Key.BACKSPACE');
         sleep(1);
 
-        $this->assertHTMLMatch('<p>XabcX uuuuuu. VmumV</p><p>cPOc ccccc dddd. TicT</p><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa bbbbb ccccc</li><li>Audit XuT content</li><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ol><h2>SoD</h2>');
+        $this->assertHTMLMatch('<p>%4% uuuuuu. %3%</p><p>cPOc ccccc dddd. %5%</p><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa %6% ccccc</li><li>Audit %7% %9%</li><li>Accessibility audit report</li><li>Recommendations %8% plan</li><li>Squiz Matrix guide</li></ol><h2>%1%</h2>');
 
     }//end testRemoveItemFromList()
 
@@ -654,21 +655,21 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractGeneralLis
      */
     public function testRemoveSubListFromList()
     {
-        $this->selectText('oNo');
+        $this->selectKeyword(2);
         $this->keyDown('Key.TAB');
         sleep(1);
-        $this->assertHTMLMatch('<p>XabcX uuuuuu. VmumV</p><p>cPOc ccccc dddd. TicT</p><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa bbbbb ccccc<ol><li>4 oNo templates</li></ol></li><li>Audit XuT content</li><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ol><h2>SoD</h2>');
+        $this->assertHTMLMatch('<p>%4% uuuuuu. %3%</p><p>cPOc ccccc dddd. %5%</p><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa %6% ccccc<ol><li>%10% %2% templates</li></ol></li><li>Audit %7% %9%</li><li>Accessibility audit report</li><li>Recommendations %8% plan</li><li>Squiz Matrix guide</li></ol><h2>%1%</h2>');
 
         $this->selectInlineToolbarLineageItem(3);
         sleep(1);
 
-        // Remove whole item contents.
+        // Remove whole item %9%s.
         $this->keyDown('Key.BACKSPACE');
 
         // Remove the item element.
         $this->keyDown('Key.BACKSPACE');
 
-        $this->assertHTMLMatch('<p>XabcX uuuuuu. VmumV</p><p>cPOc ccccc dddd. TicT</p><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa bbbbb ccccc</li><li>Audit XuT content</li><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ol><h2>SoD</h2>');
+        $this->assertHTMLMatch('<p>%4% uuuuuu. %3%</p><p>cPOc ccccc dddd. %5%</p><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa %6% ccccc</li><li>Audit %7% %9%</li><li>Accessibility audit report</li><li>Recommendations %8% plan</li><li>Squiz Matrix guide</li></ol><h2>%1%</h2>');
 
     }//end testRemoveSubListFromList()
 
@@ -680,24 +681,24 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractGeneralLis
      */
     public function testRemoveSubListItemFromList()
     {
-        $this->selectText('oNo');
+        $this->selectKeyword(2);
         $this->keyDown('Key.TAB');
         $this->keyDown('Key.RIGHT');
         $this->keyDown('Key.DOWN');
         $this->keyDown('Key.TAB');
 
-        $this->selectText('XuT');
+        $this->selectKeyword(7);
 
         $this->selectInlineToolbarLineageItem(3);
         sleep(1);
 
-        // Remove whole item contents.
+        // Remove whole item %9%s.
         $this->keyDown('Key.BACKSPACE');
 
         // Remove the item element.
         $this->keyDown('Key.BACKSPACE');
 
-        $this->assertHTMLMatch('<p>XabcX uuuuuu. VmumV</p><p>cPOc ccccc dddd. TicT</p><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa bbbbb ccccc<ol><li>4 oNo templates</li></ol></li><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ol><h2>SoD</h2>');
+        $this->assertHTMLMatch('<p>%4% uuuuuu. %3%</p><p>cPOc ccccc dddd. %5%</p><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa %6% ccccc<ol><li>%10% %2% templates</li></ol></li><li>Accessibility audit report</li><li>Recommendations %8% plan</li><li>Squiz Matrix guide</li></ol><h2>%1%</h2>');
 
     }//end testRemoveSubListItemFromList()
 
@@ -709,26 +710,26 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractGeneralLis
      */
     public function testRemoveSubListItemFromList2()
     {
-        $this->selectText('oNo');
+        $this->selectKeyword(2);
         $this->keyDown('Key.TAB');
         $this->keyDown('Key.RIGHT');
         $this->keyDown('Key.DOWN');
         $this->keyDown('Key.TAB');
 
         sleep(1);
-        $this->selectText('XuT');
+        $this->selectKeyword(7);
 
         $this->selectInlineToolbarLineageItem(3);
         sleep(1);
 
-        // Remove whole item contents.
+        // Remove whole item %9%s.
         $this->keyDown('Key.BACKSPACE');
 
         // Remove the item element.
         $this->keyDown('Key.BACKSPACE');
         sleep(1);
 
-        $this->assertHTMLMatch('<p>XabcX uuuuuu. VmumV</p><p>cPOc ccccc dddd. TicT</p><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa bbbbb ccccc<ol><li>4 oNo templates</li></ol></li><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ol><h2>SoD</h2>');
+        $this->assertHTMLMatch('<p>%4% uuuuuu. %3%</p><p>cPOc ccccc dddd. %5%</p><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa %6% ccccc<ol><li>%10% %2% templates</li></ol></li><li>Accessibility audit report</li><li>Recommendations %8% plan</li><li>Squiz Matrix guide</li></ol><h2>%1%</h2>');
 
     }//end testRemoveSubListItemFromList2()
 
@@ -740,7 +741,7 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractGeneralLis
      */
     public function testRemoveWholeList()
     {
-        $this->selectText('oNo');
+        $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(0);
 
         sleep(1);
@@ -751,7 +752,7 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractGeneralLis
         // Remove the whole list.
         $this->keyDown('Key.BACKSPACE');
 
-       $this->assertHTMLMatch('<p>XabcX uuuuuu. VmumV</p><p>cPOc ccccc dddd. TicT</p><p>ajhsd sjsjwi hhhh:</p><h2>SoD</h2>');
+       $this->assertHTMLMatch('<p>%4% uuuuuu. %3%</p><p>cPOc ccccc dddd. %5%</p><p>ajhsd sjsjwi hhhh:</p><h2>%1%</h2>');
 
     }//end testRemoveWholeList()
 
@@ -763,13 +764,13 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractGeneralLis
      */
     public function testConvertListTypeA()
     {
-        $this->selectText('XuT');
+        $this->selectKeyword(7);
         $this->selectInlineToolbarLineageItem(0);
 
         sleep(1);
         $this->clickTopToolbarButton('listUL');
 
-        $this->assertHTMLMatch('<p>XabcX uuuuuu. VmumV</p><p>cPOc ccccc dddd. TicT</p><p>ajhsd sjsjwi hhhh:</p><ul><li>aaa bbbbb ccccc</li><li>4 oNo templates</li><li>Audit XuT content</li><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ul><h2>SoD</h2>');
+        $this->assertHTMLMatch('<p>%4% uuuuuu. %3%</p><p>cPOc ccccc dddd. %5%</p><p>ajhsd sjsjwi hhhh:</p><ul><li>aaa %6% ccccc</li><li>%10% %2% templates</li><li>Audit %7% %9%</li><li>Accessibility audit report</li><li>Recommendations %8% plan</li><li>Squiz Matrix guide</li></ul><h2>%1%</h2>');
 
     }//end testConvertListType()
 
@@ -781,10 +782,10 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractGeneralLis
      */
     public function testConvertListTypeWithItemSelection()
     {
-        $this->selectText('XuT');
+        $this->selectKeyword(7);
         $this->clickTopToolbarButton('listUL');
 
-        $this->assertHTMLMatch('<p>XabcX uuuuuu. VmumV</p><p>cPOc ccccc dddd. TicT</p><p>ajhsd sjsjwi hhhh:</p><ul><li>aaa bbbbb ccccc</li><li>4 oNo templates</li><li>Audit XuT content</li><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ul><h2>SoD</h2>');
+        $this->assertHTMLMatch('<p>%4% uuuuuu. %3%</p><p>cPOc ccccc dddd. %5%</p><p>ajhsd sjsjwi hhhh:</p><ul><li>aaa %6% ccccc</li><li>%10% %2% templates</li><li>Audit %7% %9%</li><li>Accessibility audit report</li><li>Recommendations %8% plan</li><li>Squiz Matrix guide</li></ul><h2>%1%</h2>');
 
     }//end testConvertListTypeWithItemSelection()
 
@@ -796,18 +797,18 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractGeneralLis
      */
     public function testConvertListTypeWithSubList2()
     {
-        $this->selectText('oNo');
+        $this->selectKeyword(2);
         $this->keyDown('Key.RIGHT');
         $this->keyDown('Key.TAB');
         $this->keyDown('Key.DOWN');
         $this->keyDown('Key.TAB');
 
         sleep(1);
-        $this->selectText('XuT');
+        $this->selectKeyword(7);
         $this->selectInlineToolbarLineageItem(0);
         $this->clickTopToolbarButton('listUL');
 
-        $this->assertHTMLMatch('<p>XabcX uuuuuu. VmumV</p><p>cPOc ccccc dddd. TicT</p><p>ajhsd sjsjwi hhhh:</p><ul><li>aaa bbbbb ccccc<ol><li>4 oNo templates</li><li>Audit XuT content</li></ol></li><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ul><h2>SoD</h2>');
+        $this->assertHTMLMatch('<p>%4% uuuuuu. %3%</p><p>cPOc ccccc dddd. %5%</p><p>ajhsd sjsjwi hhhh:</p><ul><li>aaa %6% ccccc<ol><li>%10% %2% templates</li><li>Audit %7% %9%</li></ol></li><li>Accessibility audit report</li><li>Recommendations %8% plan</li><li>Squiz Matrix guide</li></ul><h2>%1%</h2>');
 
     }//end testConvertListTypeWithSubList2()
 
@@ -819,19 +820,19 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractGeneralLis
      */
     public function testConvertSubListType()
     {
-        $this->selectText('XuT');
+        $this->selectKeyword(7);
         $this->keyDown('Key.RIGHT');
         $this->keyDown('Key.TAB');
         $this->keyDown('Key.UP');
         $this->keyDown('Key.TAB');
 
-        $this->selectText('XuT');
+        $this->selectKeyword(7);
         $this->selectInlineToolbarLineageItem(2);
 
         sleep(1);
         $this->clickTopToolbarButton('listUL');
 
-        $this->assertHTMLMatch('<p>XabcX uuuuuu. VmumV</p><p>cPOc ccccc dddd. TicT</p><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa bbbbb ccccc<ul><li>4 oNo templates</li><li>Audit XuT content</li></ul></li><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ol><h2>SoD</h2>');
+        $this->assertHTMLMatch('<p>%4% uuuuuu. %3%</p><p>cPOc ccccc dddd. %5%</p><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa %6% ccccc<ul><li>%10% %2% templates</li><li>Audit %7% %9%</li></ul></li><li>Accessibility audit report</li><li>Recommendations %8% plan</li><li>Squiz Matrix guide</li></ol><h2>%1%</h2>');
 
     }//end testConvertSubListType()
 
@@ -843,12 +844,12 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractGeneralLis
      */
     public function testClickUndoAfterRemovingList()
     {
-        $this->click($this->find('oNo'));
+        $this->click($this->findKeyword(2));
         $this->clickTopToolbarButton('listOL', 'active');
-        $this->assertHTMLMatch('<p>XabcX uuuuuu. VmumV</p><p>cPOc ccccc dddd. TicT</p><p>ajhsd sjsjwi hhhh:</p><p>aaa bbbbb ccccc</p><p>4 oNo templates</p><p>Audit XuT content</p><p>Accessibility audit report</p><p>Recommendations action plan</p><p>Squiz Matrix guide</p><h2>SoD</h2>');
+        $this->assertHTMLMatch('<p>%4% uuuuuu. %3%</p><p>cPOc ccccc dddd. %5%</p><p>ajhsd sjsjwi hhhh:</p><p>aaa %6% ccccc</p><p>%10% %2% templates</p><p>Audit %7% %9%</p><p>Accessibility audit report</p><p>Recommendations %8% plan</p><p>Squiz Matrix guide</p><h2>%1%</h2>');
 
         $this->clickTopToolbarButton('historyUndo');
-        $this->assertHTMLMatch('<p>XabcX uuuuuu. VmumV</p><p>cPOc ccccc dddd. TicT</p><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa bbbbb ccccc</li><li>4 oNo templates</li><li>Audit XuT content</li><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ol><h2>SoD</h2>');
+        $this->assertHTMLMatch('<p>%4% uuuuuu. %3%</p><p>cPOc ccccc dddd. %5%</p><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa %6% ccccc</li><li>%10% %2% templates</li><li>Audit %7% %9%</li><li>Accessibility audit report</li><li>Recommendations %8% plan</li><li>Squiz Matrix guide</li></ol><h2>%1%</h2>');
 
     }//end testHeadingIconNotAvailableForList()
 
@@ -860,15 +861,17 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractGeneralLis
      */
     public function testCopyAndPastePartOfList()
     {
-        $this->selectText('oNo', 'XuT');
+        $this->selectKeyword(10, 7);
         $this->keyDown('Key.CMD + c');
 
-        $this->selectText('SoD');
+        $this->selectKeyword(1);
         $this->keyDown('Key.RIGHT');
         $this->keyDown('Key.ENTER');
         $this->keyDown('Key.CMD + v');
 
-        $this->assertHTMLMatch('<p>XabcX uuuuuu. VmumV</p><p>cPOc ccccc dddd. TicT</p><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa bbbbb ccccc</li><li>4 oNo templates</li><li>Audit XuT content</li><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ol><h2>SoD</h2><ol><li>oNo templates</li><li>Audit XuT</li></ol><p></p>');
+        sleep(1);
+
+        $this->assertHTMLMatch('<p>XDX uuuuuu. XCX</p><p>cPOc ccccc dddd. XTX</p><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa XFX ccccc</li><li>XJX XBX templates</li><li>Audit XGX XIX</li><li>Accessibility audit report</li><li>Recommendations XHX plan</li><li>Squiz Matrix guide</li></ol><h2>XAX</h2><ol><li>XJX XBX templates</li><li>Audit XGX</li></ol>');
 
     }//end testCopyAndPastePartOfList()
 
@@ -878,18 +881,20 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractGeneralLis
      *
      * @return void
      */
-    public function testCopyAndPasteForAList()
+    public function testCopyAndPasteForAList2()
     {
-        $this->selectText('oNo');
+        $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(0);
         $this->keyDown('Key.CMD + c');
 
-        $this->selectText('TicT');
+        $this->selectKeyword(5);
         $this->keyDown('Key.RIGHT');
         $this->keyDown('Key.ENTER');
         $this->keyDown('Key.CMD + v');
 
-        $this->assertHTMLMatch('<p>XabcX uuuuuu. VmumV</p><p>cPOc ccccc dddd. TicT</p><ol><li>aaa bbbbb ccccc</li><li>4&nbsp;oNo&nbsp;templates</li><li>Audit XuT content</li><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ol><p>&nbsp;</p><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa bbbbb ccccc</li><li>4 oNo templates</li><li>Audit XuT content</li><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ol><h2>SoD</h2>');
+        sleep(1);
+
+        $this->assertHTMLMatch('<p>%4% uuuuuu. %3%</p><p>cPOc ccccc dddd. %5%</p><ol><li>aaa %6% ccccc</li><li>%10%&nbsp;%2%&nbsp;templates</li><li>Audit %7% %9%</li><li>Accessibility audit report</li><li>Recommendations %8% plan</li><li>Squiz Matrix guide</li></ol><p>&nbsp;</p><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa %6% ccccc</li><li>%10% %2% templates</li><li>Audit %7% %9%</li><li>Accessibility audit report</li><li>Recommendations %8% plan</li><li>Squiz Matrix guide</li></ol><h2>%1%</h2>');
 
     }//end testCopyAndPasteForAList()
 
@@ -901,14 +906,14 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractGeneralLis
      */
     public function testCreatingParagraphAfterListBeforeADiv()
     {
-        $this->selectText('WoW');
+        $this->selectKeyword(1);
         $this->keyDown('Key.RIGHT');
         $this->keyDown('Key.ENTER');
         $this->keyDown('Key.ENTER');
         $this->type('New paragraph');
 
         sleep(1);
-        $this->assertHTMLMatch('<p>ajhsd sjsjwi hhhh:</p><ol><li>Recommendations action plan</li><li>Squiz Matrix guide WoW</li></ol><p>New paragraph</p><div>Test div</div>');
+        $this->assertHTMLMatch('<p>ajhsd sjsjwi hhhh:</p><ol><li>Recommendations action plan</li><li>Squiz Matrix guide %1%</li></ol><p>New paragraph</p><div>Test div</div>');
 
     }//end testCreatingParagraphAfterListBeforeADiv()
 
@@ -920,14 +925,14 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractGeneralLis
      */
     public function testCreatingParagraphAfterListBeforeAPre()
     {
-        $this->selectText('WoW');
+        $this->selectKeyword(1);
         $this->keyDown('Key.RIGHT');
         $this->keyDown('Key.ENTER');
         $this->keyDown('Key.ENTER');
         $this->type('New paragraph');
 
         sleep(1);
-        $this->assertHTMLMatch('<p>ajhsd sjsjwi hhhh:</p><ol><li>Recommendations action plan</li><li>Squiz Matrix guide WoW</li></ol><p>New paragraph</p><pre>Test pre</pre>');
+        $this->assertHTMLMatch('<p>ajhsd sjsjwi hhhh:</p><ol><li>Recommendations action plan</li><li>Squiz Matrix guide %1%</li></ol><p>New paragraph</p><pre>Test pre</pre>');
 
     }//end testCreatingParagraphAfterListBeforeAPre()
 
@@ -939,14 +944,14 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractGeneralLis
      */
     public function testCreatingParagraphAfterListBeforeAQuote()
     {
-        $this->selectText('WoW');
+        $this->selectKeyword(1);
         $this->keyDown('Key.RIGHT');
         $this->keyDown('Key.ENTER');
         $this->keyDown('Key.ENTER');
         $this->type('New paragraph');
 
         sleep(1);
-        $this->assertHTMLMatch('<p>ajhsd sjsjwi hhhh:</p><ol><li>Recommendations action plan</li><li>Squiz Matrix guide WoW</li></ol><p>New paragraph</p><blockquote>Test blockquote</blockquote>');
+        $this->assertHTMLMatch('<p>ajhsd sjsjwi hhhh:</p><ol><li>Recommendations action plan</li><li>Squiz Matrix guide %1%</li></ol><p>New paragraph</p><blockquote>Test blockquote</blockquote>');
 
     }//end testCreatingParagraphAfterListBeforeAQuote()
 
@@ -958,14 +963,14 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractGeneralLis
      */
     public function testCreatingParagraphAfterListBeforeAParagraph()
     {
-        $this->selectText('WoW');
+        $this->selectKeyword(1);
         $this->keyDown('Key.RIGHT');
         $this->keyDown('Key.ENTER');
         $this->keyDown('Key.ENTER');
         $this->type('New paragraph');
 
         sleep(1);
-        $this->assertHTMLMatch('<p>ajhsd sjsjwi hhhh:</p><ol><li>Recommendations action plan</li><li>Squiz Matrix guide WoW</li></ol><p>New paragraph</p><p>Test para</p>');
+        $this->assertHTMLMatch('<p>ajhsd sjsjwi hhhh:</p><ol><li>Recommendations action plan</li><li>Squiz Matrix guide %1%</li></ol><p>New paragraph</p><p>Test para</p>');
 
     }//end testCreatingParagraphAfterListBeforeAParagraph()
 
