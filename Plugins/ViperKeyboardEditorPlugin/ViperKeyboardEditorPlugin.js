@@ -365,6 +365,22 @@ ViperKeyboardEditorPlugin.prototype = {
                 range.moveStart('character', -2);
                 range.deleteContents();
             }
+        } else if (range.startOffset === 0
+            && range.collapsed === true
+            && range.startContainer.nodeType === dfx.TEXT_NODE
+            && this.viper.isBrowser('firefox') === true
+        ) {
+            var firstBlock = dfx.getFirstBlockParent(range.startContainer);
+            if (firstBlock
+                && range._getFirstSelectableChild(firstBlock) === range.startContainer
+                && firstBlock.previousSibling
+                && dfx.isStubElement(firstBlock.previousSibling) === true
+            ) {
+                // Firefox does not handle deletion at the start of a block element
+                // very well when the previous sibling is a stub element (e.g. HR).
+                dfx.remove(firstBlock.previousSibling);
+                return false;
+            }
         }
 
     },
