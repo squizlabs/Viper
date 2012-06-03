@@ -1833,6 +1833,8 @@ Viper.prototype = {
                     range.setEnd(node.firstChild, node.firstChild.length);
                     ViperSelection.addRange(range);
                 }
+
+                return node;
             } else {
                 var self     = this;
                 var changeid = null;
