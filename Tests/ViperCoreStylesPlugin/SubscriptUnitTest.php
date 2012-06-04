@@ -71,14 +71,28 @@ class Viper_Tests_ViperCoreStylesPlugin_SubscriptUnitTest extends AbstractViperU
 
         $this->assertHTMLMatch('<p>%1% <sub>%2% %3%</sub></p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
-        $this->selectKeyword(3);
+        $this->selectKeyword(1);
+        $this->keyDown('Key.RIGHT');
+        $this->keyDown('Key.RIGHT');
+        $this->keyDown('Key.RIGHT');
+        $this->keyDown('Key.RIGHT');
+        $this->keyDown('Key.RIGHT');
+        $this->keyDown('Key.RIGHT');
+        $this->keyDown('Key.SHIFT + Key.RIGHT');
+        $this->keyDown('Key.SHIFT + Key.RIGHT');
+        $this->keyDown('Key.SHIFT + Key.RIGHT');
 
         $this->clickTopToolbarButton('subscript', 'active');
         $this->assertTrue($this->topToolbarButtonExists('subscript'), 'Subscript icon in the top toolbar is still active');
 
         $this->assertHTMLMatch('<p>%1% <sub>%2% </sub>%3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
-        $this->selectKeyword(2);
+        $this->selectKeyword(1);
+        $this->keyDown('Key.RIGHT');
+        $this->keyDown('Key.RIGHT');
+        $this->keyDown('Key.SHIFT + Key.RIGHT');
+        $this->keyDown('Key.SHIFT + Key.RIGHT');
+        $this->keyDown('Key.SHIFT + Key.RIGHT');
         $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar is not active');
 
     }//end testRemovingFormatFromPartOfTheContent()
@@ -94,10 +108,17 @@ class Viper_Tests_ViperCoreStylesPlugin_SubscriptUnitTest extends AbstractViperU
         $this->selectKeyword(2);
         $this->clickTopToolbarButton('subscript');
 
-        $this->selectKeyword(1, 2);
+        $this->keyDown('Key.SHIFT + Key.RIGHT');
+        $this->keyDown('Key.SHIFT + Key.RIGHT');
+        $this->keyDown('Key.SHIFT + Key.RIGHT');
+        $this->keyDown('Key.SHIFT + Key.RIGHT');
         $this->clickTopToolbarButton('subscript');
 
-        $this->selectKeyword(2, 3);
+        $this->selectKeyword(1);
+        $this->keyDown('Key.SHIFT + Key.RIGHT');
+        $this->keyDown('Key.SHIFT + Key.RIGHT');
+        $this->keyDown('Key.SHIFT + Key.RIGHT');
+        $this->keyDown('Key.SHIFT + Key.RIGHT');
         $this->clickTopToolbarButton('subscript');
 
         $this->assertHTMLMatch('<p><sub>%1% %2% %3%</sub></p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
@@ -139,8 +160,6 @@ class Viper_Tests_ViperCoreStylesPlugin_SubscriptUnitTest extends AbstractViperU
         $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar is not active');
         $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit <em>%4%</em> <strong><sub>%5%</sub></strong></p>');
 
-        $this->selectKeyword(5);
-
         $this->clickTopToolbarButton('subscript', 'active');
         $this->assertTrue($this->topToolbarButtonExists('subscript'), 'Subscript icon is still active in the top toolbar is not active');
 
@@ -161,7 +180,12 @@ class Viper_Tests_ViperCoreStylesPlugin_SubscriptUnitTest extends AbstractViperU
         $this->clickTopToolbarButton('subscript');
         $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar is not active');
 
-        $this->selectKeyword(5);
+        $this->selectKeyword(4);
+        $this->keyDown('Key.RIGHT');
+        $this->keyDown('Key.RIGHT');
+        $this->keyDown('Key.SHIFT + Key.RIGHT');
+        $this->keyDown('Key.SHIFT + Key.RIGHT');
+        $this->keyDown('Key.SHIFT + Key.RIGHT');
         $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar is not active');
 
     }//end testIconsIsActive()

@@ -72,14 +72,28 @@ class Viper_Tests_ViperCoreStylesPlugin_SuperscriptUnitTest extends AbstractVipe
 
         $this->assertHTMLMatch('<p>%1% <sup>%2% %3%</sup></p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
-        $this->selectKeyword(3);
+        $this->selectKeyword(1);
+        $this->keyDown('Key.RIGHT');
+        $this->keyDown('Key.RIGHT');
+        $this->keyDown('Key.RIGHT');
+        $this->keyDown('Key.RIGHT');
+        $this->keyDown('Key.RIGHT');
+        $this->keyDown('Key.RIGHT');
+        $this->keyDown('Key.SHIFT + Key.RIGHT');
+        $this->keyDown('Key.SHIFT + Key.RIGHT');
+        $this->keyDown('Key.SHIFT + Key.RIGHT');
 
         $this->clickTopToolbarButton('superscript', 'active');
         $this->assertTrue($this->topToolbarButtonExists('superscript'), 'Superscript icon in the top toolbar is still active');
 
-        $this->assertHTMLMatch('<p>%1% <sup>%2%</sup> %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
+        $this->assertHTMLMatch('<p>%1% <sup>%2% </sup>%3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
-        $this->selectKeyword(2);
+        $this->selectKeyword(1);
+        $this->keyDown('Key.RIGHT');
+        $this->keyDown('Key.RIGHT');
+        $this->keyDown('Key.SHIFT + Key.RIGHT');
+        $this->keyDown('Key.SHIFT + Key.RIGHT');
+        $this->keyDown('Key.SHIFT + Key.RIGHT');
         $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar is not active');
 
     }//end testRemovingFormatFromPartOfTheContent()
@@ -95,10 +109,17 @@ class Viper_Tests_ViperCoreStylesPlugin_SuperscriptUnitTest extends AbstractVipe
         $this->selectKeyword(2);
         $this->clickTopToolbarButton('superscript');
 
-        $this->selectKeyword(1, 2);
+        $this->keyDown('Key.SHIFT + Key.RIGHT');
+        $this->keyDown('Key.SHIFT + Key.RIGHT');
+        $this->keyDown('Key.SHIFT + Key.RIGHT');
+        $this->keyDown('Key.SHIFT + Key.RIGHT');
         $this->clickTopToolbarButton('superscript');
 
-        $this->selectKeyword(2, 3);
+        $this->selectKeyword(1);
+        $this->keyDown('Key.SHIFT + Key.RIGHT');
+        $this->keyDown('Key.SHIFT + Key.RIGHT');
+        $this->keyDown('Key.SHIFT + Key.RIGHT');
+        $this->keyDown('Key.SHIFT + Key.RIGHT');
         $this->clickTopToolbarButton('superscript');
 
         $this->assertHTMLMatch('<p><sup>%1% %2% %3%</sup></p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
@@ -140,8 +161,6 @@ class Viper_Tests_ViperCoreStylesPlugin_SuperscriptUnitTest extends AbstractVipe
         $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar is not active');
         $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit <em>%4%</em> <strong><sup>%5%</sup></strong></p>');
 
-        $this->selectKeyword(5);
-
         $this->clickTopToolbarButton('superscript', 'active');
         $this->assertTrue($this->topToolbarButtonExists('superscript'), 'Superscript icon is still active in the top toolbar is not active');
 
@@ -162,7 +181,12 @@ class Viper_Tests_ViperCoreStylesPlugin_SuperscriptUnitTest extends AbstractVipe
         $this->clickTopToolbarButton('superscript');
         $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar is not active');
 
-        $this->selectKeyword(5);
+        $this->selectKeyword(4);
+        $this->keyDown('Key.RIGHT');
+        $this->keyDown('Key.RIGHT');
+        $this->keyDown('Key.SHIFT + Key.RIGHT');
+        $this->keyDown('Key.SHIFT + Key.RIGHT');
+        $this->keyDown('Key.SHIFT + Key.RIGHT');
         $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar is not active');
 
     }//end testIconsIsActive()

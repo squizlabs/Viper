@@ -308,9 +308,9 @@ class Viper_Tests_ViperCoreStylesPlugin_ItalicUnitTest extends AbstractViperUnit
         $this->assertHTMLMatch('<p><em>%1% %2% %3%</em><!-- hello world! --></p><p>sit %4% %5%</p><p>Another p</p>');
 
         $this->click($this->findKeyword(2));
-        $this->click($this->findKeyword(2));
 
         $this->selectKeyword(5);
+        sleep(1);
         $this->selectInlineToolbarLineageItem(0);
         $this->keyDown('Key.CMD + i');
         $this->assertHTMLMatch('<p><em>%1% %2% %3%</em><!-- hello world! --></p><p><em>sit %4% %5%</em></p><p>Another p</p>');
@@ -332,19 +332,19 @@ class Viper_Tests_ViperCoreStylesPlugin_ItalicUnitTest extends AbstractViperUnit
         $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(0);
         $this->clickTopToolbarButton('italic');
-        $this->assertHTMLMatch('<p><em>%1% %2% %3%</em></p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
+        $this->assertHTMLMatch('<p><em>%1% %2% %3%</em></p><p>sit %4% %5%</p><p>Another p</p>');
 
-        $this->click($this->findKeyword(2));
         $this->click($this->findKeyword(2));
 
         $this->selectKeyword(5);
+        sleep(1);
         $this->selectInlineToolbarLineageItem(0);
         $this->keyDown('Key.CMD + i');
-        $this->assertHTMLMatch('<p><em>%1% %2% %3%</em></p><p><em>sit %4% <strong>%5%</strong></em></p>');
+        $this->assertHTMLMatch('<p><em>%1% %2% %3%</em></p><p><em>sit %4% %5%</em></p><p>Another p</p>');
 
         $this->selectKeyword(1, 5);
         $this->keyDown('Key.CMD + i');
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit %4% <strong>%5%</strong></p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit %4% %5%</p><p>Another p</p>');
 
     }//end testApplyingAndRemovingItalicsToTwoParagraphs()
 
@@ -363,7 +363,7 @@ class Viper_Tests_ViperCoreStylesPlugin_ItalicUnitTest extends AbstractViperUnit
 
         $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon should be active');
         $this->assertFalse($this->topToolbarButtonExists('cssClass', 'active'), 'Class icon should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('anchorID', 'active'), 'Anchor icon should not be active');
+        $this->assertFalse($this->topToolbarButtonExists('anchorID', 'active'), 'Anchor icon should not be active');
 
         $this->click($this->findKeyword(2));
         $this->keyDown('Key.CMD + a');
@@ -372,7 +372,7 @@ class Viper_Tests_ViperCoreStylesPlugin_ItalicUnitTest extends AbstractViperUnit
 
         $this->assertTrue($this->topToolbarButtonExists('italic'), 'Italic icon should not be active');
         $this->assertFalse($this->topToolbarButtonExists('cssClass', 'active'), 'Class icon should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('anchorID', 'active'), 'Anchor icon should not be active');
+        $this->assertFalse($this->topToolbarButtonExists('anchorID', 'active'), 'Anchor icon should not be active');
 
     }//end testApplyingAndRemovingItalicToAllContent()
 
