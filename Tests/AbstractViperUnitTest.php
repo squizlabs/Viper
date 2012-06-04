@@ -1152,6 +1152,26 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
 
 
     /**
+     * Returns the region of the active bubble.
+     *
+     * @return string
+     * @throws Exception If there are no active bubbles.
+     */
+    protected function getActiveBubble()
+    {
+        $rect   = $this->execJS('gActBubble()');
+
+        if (is_array($rect) === TRUE) {
+            $region = $this->getRegionOnPage($rect);
+            return $region;
+        }
+
+        throw new Exception('There is no active bubble');
+
+    }//end getActiveBubble()
+
+
+    /**
      * Returns TRUE if the specified button icon exists in the Inline Toolbar.
      *
      * @param string  $buttonIcon The name of the button.
@@ -1224,12 +1244,30 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
 
 
     /**
-     * Clicks the specified  button on the page.
+     * Returns TRUE if the specified button exists on the page.
      *
      * @param string  $buttonIcon The name of the button.
      * @param string  $state      The name of the button state (active, selected).
      * @param boolean $isText     If TRUE then the button is a text button (i.e. no icon).
-     * @param string  $location   The location of the button (topToolbar, inlineToolbar, etc.).
+     * @param string  $region     The region to look in to.
+     *
+     * @return boolean
+     */
+    protected function buttonExists($buttonIcon, $state=NULL, $isText=FALSE, $region=NULL)
+    {
+        $button = $this->_getButton($buttonIcon, $state, $isText);
+        return $this->exists($button, $region);
+
+    }//end buttonExists()
+
+
+    /**
+     * Clicks the specified button on the page.
+     *
+     * @param string  $buttonIcon The name of the button.
+     * @param string  $state      The name of the button state (active, selected).
+     * @param boolean $isText     If TRUE then the button is a text button (i.e. no icon).
+     * @param string  $location   The location of the button (topToolbar, inlineToolbar, or a region).
      *
      * @return void
      */
@@ -1242,6 +1280,8 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
             $region = $this->getTopToolbar();
         } else if ($location === 'inlineToolbar') {
             $region = $this->getInlineToolbar();
+        } else {
+            $region = $location;
         }
 
         $match = NULL;
@@ -1265,6 +1305,22 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         $this->mouseMove($this->createLocation($this->getX($match), $this->getY($match)));
 
     }//end _clickButton()
+
+
+    /**
+     * Clicks the specified button on the page.
+     *
+     * @param string  $buttonIcon The name of the button.
+     * @param string  $state      The name of the button state (active, selected).
+     * @param boolean $isText     If TRUE then the button is a text button (i.e. no icon).
+     *
+     * @return void
+     */
+    protected function clickButton($buttonIcon, $state=NULL, $isText=FALSE, $region=NULL)
+    {
+        return $this->_clickButton($buttonIcon, $state, $isText, $region);
+
+    }//end clickButton()
 
 
     /**
@@ -1348,20 +1404,65 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      */
     private function _createButtonImageFromRectangle($button, array $rect, $state=NULL)
     {
-        $button      = preg_replace('#[^a-zA-Z0-9_-]#', '_', $button);
-        $buttonImage = $this->capture($this->getRegionOnPage($rect));
-        $filePath    = $this->getBrowserImagePath().'/'.$button;
+        return $this->createImageFromRectangle($button, $rect, $state);
 
-        if ($state !== NULL) {
-            $filePath .= '_'.$state;
+    }//end _createButtonImageFromRectangle()
+
+
+    /**
+     * Creats image for the current browser for the given region on the page.
+     *
+     * This new image can then be used in find operations.
+     *
+     * @param string $imageName The name of the image.
+     * @param array  $rect      The x1, x2, y1, y2 points of the button on the page.
+     * @param string $postFix   The string to append to the end of the file name.
+     *
+     * @return string
+     */
+    protected function createImageFromRectangle($imageName, array $rect, $postFix=NULL)
+    {
+        $imageName = preg_replace('#[^a-zA-Z0-9_-]#', '_', $imageName);
+        $image     = $this->capture($this->getRegionOnPage($rect));
+        $filePath  = $this->getBrowserImagePath().'/'.$imageName;
+
+        if ($postFix !== NULL) {
+            $filePath .= '_'.$postFix;
         }
 
         $filePath .= '.png';
-        copy($buttonImage, $filePath);
+        copy($image, $filePath);
 
         return $filePath;
 
-    }//end _createButtonImageFromRectangle()
+    }//end createImageFromRectange()
+
+
+    /**
+     * Finds the specified image on the screen.
+     *
+     * Selector must be given so that the first time the image is found using the
+     * selector and the next time using the Sikuli image matching.
+     *
+     * @param string  $imageName Name of the image.
+     * @param string  $selector  The jQuery selector to use for finding the element.
+     * @param integer $index     The element index of the resulting array.
+     *
+     * @return string
+     */
+    protected function findImage($imageName, $selector, $index=0)
+    {
+        $filePath = $this->getBrowserImagePath().'/'.$imageName.'.png';
+
+        if (file_exists($filePath) === TRUE) {
+            return $this->find($filePath);
+        } else {
+            $elemRect = $this->getBoundingRectangle($selector, $index);
+            $this->createImageFromRectangle($imageName, $elemRect);
+            return $this->findImage($imageName, $selector, $index);
+        }
+
+    }//end findImage
 
 
     /**
