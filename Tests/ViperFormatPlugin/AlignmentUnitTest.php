@@ -484,19 +484,19 @@ class Viper_Tests_ViperFormatPlugin_AlignmentUnitTest extends AbstractViperUnitT
         $this->assertTrue($this->topToolbarButtonExists('justifyBlock', 'disabled'), 'Block justify icon appears in the top toolbar');
 
         $this->clickTopToolbarButton('justifyLeft');
-        $this->assertHTMLMatch('<p>Australian governments at all levels have <strong><em>endorsed</em></strong> WCAG 2.0, and require all government websites (federal, state and territory) to meet the new guidelines at the minimum compliance level (Single A) by the end of 2012.</p><p><img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="" width="354" height="160.5854748603352" style="float: left; margin: 1em 1em 1em 0px;" />Federal government agencies must update <strong>all government</strong> websites (as specified within scope under the Website Accessibility National Transition Strategy (NTS)) to WCAG 2.0 conformance.</p>');
+        $this->assertHTMLMatch('<p>%1% aaa xx cccc</p><p><img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="" width="354" height="160" style="float: left; margin: 1em 1em 1em 0px;" />%2% ttt uuu pp %3%</p>');
         $this->assertTrue($this->topToolbarButtonExists('justifyLeft', 'active'), 'Active left justify icon does not appear in the top toolbar');
 
         $this->clickTopToolbarButton('justifyCenter');
-        $this->assertHTMLMatch('<p>Australian governments at all levels have <strong><em>endorsed</em></strong> WCAG 2.0, and require all government websites (federal, state and territory) to meet the new guidelines at the minimum compliance level (Single A) by the end of 2012.</p><p><img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="" width="354" height="160.5854748603352" style="margin: 1em auto; display: block;" />Federal government agencies must update <strong>all government</strong> websites (as specified within scope under the Website Accessibility National Transition Strategy (NTS)) to WCAG 2.0 conformance.</p>');
+        $this->assertHTMLMatch('<p>%1% aaa xx cccc</p><p><img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="" width="354" height="160" style="margin: 1em auto; display: block;" />%2% ttt uuu pp %3%</p>');
         $this->assertTrue($this->topToolbarButtonExists('justifyCenter', 'active'), 'Active center justify icon does not appear in the top toolbar');
 
         $this->clickTopToolbarButton('justifyRight');
-        $this->assertHTMLMatch('<p>Australian governments at all levels have <strong><em>endorsed</em></strong> WCAG 2.0, and require all government websites (federal, state and territory) to meet the new guidelines at the minimum compliance level (Single A) by the end of 2012.</p><p><img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="" width="354" height="160.5854748603352" style="float: right; margin: 1em 0px 1em 1em;" />Federal government agencies must update <strong>all government</strong> websites (as specified within scope under the Website Accessibility National Transition Strategy (NTS)) to WCAG 2.0 conformance.</p>');
+        $this->assertHTMLMatch('<p>%1% aaa xx cccc</p><p><img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="" width="354" height="160" style="float: right; margin: 1em 0px 1em 1em;" />%2% ttt uuu pp %3%</p>');
         $this->assertTrue($this->topToolbarButtonExists('justifyRight', 'active'), 'Active right justify icon does not appear in the top toolbar');
 
         $this->clickTopToolbarButton('justifyRight', 'active');
-        $this->assertHTMLMatch('<p>Australian governments at all levels have <strong><em>endorsed</em></strong> WCAG 2.0, and require all government websites (federal, state and territory) to meet the new guidelines at the minimum compliance level (Single A) by the end of 2012.</p><p><img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="" width="354" height="160.5854748603352" />Federal government agencies must update <strong>all government</strong> websites (as specified within scope under the Website Accessibility National Transition Strategy (NTS)) to WCAG 2.0 conformance.</p>');
+        $this->assertHTMLMatch('<p>%1% aaa xx cccc</p><p><img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="" width="354" height="160" />%2% ttt uuu pp %3%</p>');
 
     }//end testAligningAnImage()
 
