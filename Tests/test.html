@@ -15,23 +15,15 @@
                 viper.setEditableElement(contentElement);
 
                 dfx.attr(dfxjQuery.find('.Viper-button[title]'), 'title', '');
-
-                var jsRes = dfx.getId('jsRes');
-                jsRes.value = '';
-                var t = null;
-                dfx.addEvent(jsRes, 'copy', function() {
-                    t = setTimeout(function() {
-                        viper.focus();
-                    }, 100);
-                });
-
-                var jsExec   = dfx.getId('jsExec');
-                jsExec.value = '';
-
-                dfx.addEvent(jsExec, 'focus', function(e) {
-                    viper.highlightSelection();
-                    clearTimeout(t);
-                    jsExec.value = '';
+                dfx.addEvent(document, 'keydown', function(e) {
+                    if (e.which === 74
+                        && e.ctrlKey === true
+                        && e.shiftKey === true
+                        && e.altKey === true
+                    ) {
+                        window.open('test_jsexec.html', '', 'width=400,height=100,0,status=0,left=850,top=500');
+                        return false;
+                    }
                 });
             };
         </script>
@@ -41,9 +33,6 @@
         <img id="windowTarget" src="./Core/Images/window-target.png"/>
         <div id="content">__TEST_CONTENT__</div>
         <div id="menu">
-            <textarea id="jsExec" accesskey="J"></textarea>
-            <button onclick="execJS()">Exec</button>
-            <textarea id="jsRes" accesskey="R"></textarea>
             <div id="testTitle"><em>Running:</em> __TEST_TITLE__</div>
         </div>
     </body>

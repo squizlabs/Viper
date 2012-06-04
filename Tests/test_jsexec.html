@@ -1,0 +1,29 @@
+<html>
+    <head>
+        <script type="text/javascript" src="./test.js"></script>
+    </head>
+    <body spellcheck="false" onload="document.getElementById('jsExec').focus()">
+        <textarea id="jsExec" accesskey="J"></textarea>
+        <textarea id="jsRes" accesskey="R"></textarea>
+        <button id="close" onclick="window.close();">Close</button>
+        <script>
+            var jsExec = document.getElementById('jsExec')
+            var jsRes  = document.getElementById('jsRes');
+            jsExec.onkeydown = function(e) {
+                if (e.which !== 13) {
+                    return;
+                }
+
+                var val      = jsExec.value;
+                jsRes.value  = '';
+                jsExec.value = '';
+
+                val  = 'var jsResult = ' + val + ';';
+                val += 'jsRes.value = window.opener.dfx.jsonEncode(jsResult);';
+
+                // Execute JS.
+                eval(val);
+            };
+        </script>
+    </body>
+</html>

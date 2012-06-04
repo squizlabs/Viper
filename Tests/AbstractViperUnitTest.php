@@ -232,7 +232,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
             }
 
             $this->setAutoWaitTimeout(1);
-            $this->goToURL($dest);
+            $this->goToURL($this->_getBaseUrl().'/test_tmp.html');
             self::$_testRun = TRUE;
 
             $pageLoc = $this->getPageTopLeft();
@@ -347,7 +347,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         }
 
         $dest = $baseDir.'/calibrate-text.html';
-        self::goToURL($dest);
+        $this->goToURL($this->_getBaseUrl().'/calibrate-text.html');
 
         $texts = $this->execJS('getCoords('.json_encode($this->_getKeywordsList()).')');
         $count = count($texts);
@@ -539,7 +539,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         file_put_contents($tmpFile, $calibrateHtml);
 
         $dest = $baseDir.'/tmp-calibrate.html';
-        self::goToURL($dest);
+        $this->goToURL($this->_getBaseUrl().'/tmo-calibrate.html');
 
         // Create image for the inline toolbar pattern (the arrow on top).
         sleep(2);
@@ -610,6 +610,23 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         unlink($tmpFile);
 
     }//end _calibrateImage()
+
+
+    /**
+     * Returns the base URL.
+     *
+     * @return string
+     */
+    private function _getBaseUrl()
+    {
+        $url = getenv('VIPER_TEST_URL');
+        if (empty($url) === TRUE) {
+            $url = dirname(__FILE__);
+        }
+
+        return $url;
+
+    }//end _getBaseUrl()
 
 
     /**
@@ -1527,6 +1544,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      */
     protected function execJS($js)
     {
+        // If Selenium is being used then use it to execute the JavaScript.
         if (self::$_useSelenium === TRUE) {
             usleep(100000);
             $result = self::$_selenium->execute(
@@ -1541,16 +1559,21 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
             return $result;
         }//end if
 
-        $this->keyDown($this->_getAccessKeys('j'));
+        $this->keyDown('Key.CTRL + Key.SHIFT + Key.ALT + j');
+
+        sleep(1);
+
         $this->type($js);
+        $this->keyDown('Key.ENTER');
+        usleep(10000);
+        $this->keyDown('Key.TAB');
+        $this->keyDown('Key.CMD + a');
+        usleep(10000);
+        $this->keyDown('Key.CMD + c');
+        usleep(10000);
         $this->keyDown('Key.TAB');
         $this->keyDown('Key.SPACE');
         sleep(1);
-        $this->keyDown($this->_getAccessKeys('r'));
-        usleep(500);
-        $this->keyDown('Key.CMD + a');
-        sleep(1);
-        $this->keyDown('Key.CMD + c');
 
         $text = $this->getClipboard();
         if (strpos($text, "u'") === 0) {
