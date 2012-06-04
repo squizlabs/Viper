@@ -24,27 +24,19 @@ class Viper_Tests_ViperAccessibilityPlugin_AccessibilityPluginUnitTest extends A
         sleep(1);
 
         // Check to make sure the auditor appear.
-        $imageFound = true;
-        try
-        {
-            $this->find($dir.'accessibility_auditor.png');
+        try {
+            $this->findImage('HTMLCSViewReport', '#HTMLCS-settings-view-report');
+        } catch (Exception $e) {
+            $this->fail('The accessibility auditor was not found');
         }
-        catch(Exception $e)
-        {
-            $imageFound = false;
-        }
-
-        $this->assertTrue($imageFound, 'The accessibility auditor were not found');
 
         $this->clickTopToolbarButton('accessAudit', 'selected');
 
         sleep(1);
         try
         {
-            $this->find($dir.'accessibility_auditor.png');
-        }
-        catch(Exception $e)
-        {
+            $this->findImage('HTMLCSViewReport', '#HTMLCS-settings-view-report');
+        } catch (Exception $e) {
             // Expecting the expection as we closed the sub toolbar
             $imageFound = false;
         }
@@ -61,40 +53,25 @@ class Viper_Tests_ViperAccessibilityPlugin_AccessibilityPluginUnitTest extends A
      */
     public function testViewingSourceFromAccessibilityAuditor()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $text = 'XuT';
         $this->click($this->find($text));
         $this->clickTopToolbarButton('accessAudit');
 
-        // View Report
-        $viewReportButton = $this->find($dir.'view_report_button.png');
+        // View Report.
+        $viewReportButton = $this->findImage('HTMLCSViewReport', '#HTMLCS-settings-view-report');
         $this->click($viewReportButton);
 
-        // Click warning
-        $warningButton = $this->find($dir.'auditor_warning.png');
-        $this->click($warningButton);
+        // Click warning.
+        $warningIcon = $this->findImage('HTMLCS-report-warning', '.HTMLCS-issue-type.HTMLCS-warning');
+        $this->click($warningIcon);
 
-        // Wait for pointer to stop
-        sleep(5);
+        $bubble = $this->getActiveBubble();
 
-        // View source
-        $viewSourceButton = $this->find($dir.'view_source_button.png');
-        $this->click($viewSourceButton);
-
+        // View source.
+        $this->clickButton('sourceView', NULL, FALSE, $bubble);
 
         // Check to make sure the source view appears.
-        $imageFound = true;
-        try
-        {
-            $this->find($dir.'source_view.png');
-        }
-        catch(Exception $e)
-        {
-            $imageFound = false;
-        }
-
-        $this->assertTrue($imageFound, 'Source view did not appear');
+        $this->assertTrue($this->buttonExists('Apply Changes', NULL, TRUE), 'Source view did not appear');
 
     }//end testViewingSourceFromAccessibilityAuditor()
 
