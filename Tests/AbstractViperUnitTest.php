@@ -971,17 +971,37 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
                 preg_match($tagRegex, $match, $tagMatches);
                 if ($tagMatches[1].'>' !== $match) {
                     // This tag has attributes, which need to be ordered
-                    // alphabetically.
+                    // alphabetically as the browser changes the order sometimes.
                     $attrs = array();
-                    preg_match_all('/\s+(\w+)\s*=\s*(?:"(?:[^"]+)?")/i', $match, $attrs);
+                    preg_match_all('/\s+(\w+)\s*=\s*(?:"([^"]+)?")/i', $match, $attrs);
                     asort($attrs[1]);
                     $match = $tagMatches[1];
                     foreach ($attrs[1] as $attrIndex => $attrName) {
-                        $match .= $attrs[0][$attrIndex];
-                    }
+                        if ($attrName === 'style') {
+                            $attrVal = $attrs[2][$attrIndex];
+                            // Values in a style attribute need to be ordered
+                            // alphabetically as the browser changes the order sometimes.
+                            $vals = array();
+                            preg_match_all('/(\w+)\s*:\s*[^:]+;/i', $attrVal, $vals);
+                            asort($vals[1]);
+                            $match .= ' '.$attrs[1][$attrIndex].'="';
+                            foreach ($vals[1] as $valIndex => $value) {
+                                $match .= $vals[0][$valIndex].' ';
+                            }
 
-                    $match .= '>';
-                }
+                            $match = rtrim($match);
+                            $match .= '"';
+                        } else {
+                            $match .= $attrs[0][$attrIndex];
+                        }
+                    }//end foreach
+
+                    if (substr($tagMatches[0], -2) === '/>') {
+                        $match .= ' />';
+                    } else {
+                        $match .= '>';
+                    }
+                }//end if
             }//end if
 
             $newHtml .= $match;
