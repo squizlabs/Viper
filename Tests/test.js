@@ -77,11 +77,17 @@ function gBtn(text, state, selectorPrefix)
         return false;
     }
 
-    var button = buttons[0];
-
-    if (!state && button.className !== 'Viper-button') {
-        return false;
+    var button = null;
+    for (var i = 0; i < buttons.length; i++) {
+        if (dfx.getElementHeight(buttons[i]) !== 0) {
+            button = buttons[i];
+            break;
+        }
     }
+
+    //if (!state && button.className !== 'Viper-button') {
+    //    return false;
+    //}
 
     var rect = dfx.getBoundingRectangle(button);
     if (rect) {
@@ -172,6 +178,18 @@ function gTagCounts(tagNames)
     }
 
     return tagCounts;
+
+}
+
+function gActBubble()
+{
+    var activeBubble = viper.getPluginManager().getPlugin('ViperToolbarPlugin').getActiveBubble();
+    if (!activeBubble) {
+        return null;
+    }
+
+    var rect = dfx.getBoundingRectangle(activeBubble.element);
+    return rect;
 
 }
 
