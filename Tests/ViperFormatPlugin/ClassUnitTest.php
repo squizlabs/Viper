@@ -13,26 +13,23 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
      */
     public function testAddingClassAttributeToAWordUsingTheInlineToolbar()
     {
-        $text = 'XuT';
-
-        $this->selectText($text);
+        $this->selectKeyword(2);
         $this->clickInlineToolbarButton('cssClass');
         $this->type('test');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>Lorem <span class="test">XuT</span> dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>Jumps</strong> OVER the lazy dogggg</p>');
+        $this->assertHTMLMatch('<p>%1% <span class="test">%2%</span> %3%</p><p class="test">sit amet <strong>%4%</strong></p><p>Test %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><em>The</em> %8% %9% foxxx</p><p><strong>%10%</strong> %11% the lazy dog</p>');
 
-        $this->click($this->find($text));
-        $this->selectText($text);
+        $this->click($this->findKeyword(3));
+        $this->selectKeyword(2);
         $this->assertTrue($this->topToolbarButtonExists('cssClass', 'active'), 'Class icon in Top Toolbar should be active.');
         $this->assertTrue($this->inlineToolbarButtonExists('cssClass', 'active'), 'Class icon in VITP should be active.');
 
-        $text = 'dolor';
-        $this->selectText($text);
+        $this->selectKeyword(3);
         $this->clickInlineToolbarButton('cssClass');
         $this->type('class');
         $this->clickInlineToolbarButton('Update Changes', NULL, TRUE);
-        $this->assertHTMLMatch('<p>Lorem <span class="test">XuT</span> <span class="class">dolor</span></p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>Jumps</strong> OVER the lazy dogggg</p>');
+        $this->assertHTMLMatch('<p>%1% <span class="test">%2%</span> <span class="class">%3%</span></p><p class="test">sit amet <strong>%4%</strong></p><p>Test %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><em>The</em> %8% %9% foxxx</p><p><strong>%10%</strong> %11% the lazy dog</p>');
 
     }//end testAddingClassAttributeToAWordUsingTheInlineToolbar()
 
@@ -44,12 +41,12 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
      */
     public function testClassIconAppearsInTheInlineToolbar()
     {
-        $this->selectText('ORSM');
-        $this->type('Key.RIGHT');
-        $this->type('Key.ENTER');
-        $this->type('This is a new line of ConTenT');
+        $this->selectKeyword(5);
+        $this->keyDown('Key.RIGHT');
+        $this->keyDown('Key.ENTER');
+        $this->type('This is a new line of %12%');
 
-        $this->selectText('ConTenT');
+        $this->selectKeyword(12);
         $this->assertTrue($this->inlineToolbarButtonExists('cssClass'), 'Class icon should appear in the inline toolbar.');
 
     }//end testClassIconAppearsInTheInlineToolbar()
@@ -62,26 +59,23 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
      */
     public function testAddingClassAttributeToAWordUsingTheTopToolbar()
     {
-        $text = 'XuT';
-
-        $this->selectText($text);
+        $this->selectKeyword(2);
         $this->clickTopToolbarButton('cssClass');
         $this->type('test');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>Lorem <span class="test">XuT</span> dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>Jumps</strong> OVER the lazy dogggg</p>');
+        $this->assertHTMLMatch('<p>%1% <span class="test">%2%</span> %3%</p><p class="test">sit amet <strong>%4%</strong></p><p>Test %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><em>The</em> %8% %9% foxxx</p><p><strong>%10%</strong> %11% the lazy dog</p>');
 
-        $this->click($this->find($text));
-        $this->selectText($text);
+        $this->click($this->findKeyword(1));
+        $this->selectKeyword(2);
         $this->assertTrue($this->topToolbarButtonExists('cssClass', 'active'), 'Class icon in Top Toolbar should be active.');
         $this->assertTrue($this->inlineToolbarButtonExists('cssClass', 'active'), 'Class icon in VITP should be active.');
 
-        $text = 'dolor';
-        $this->selectText($text);
+        $this->selectKeyword(3);
         $this->clickTopToolbarButton('cssClass');
         $this->type('class');
         $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
-        $this->assertHTMLMatch('<p>Lorem <span class="test">XuT</span> <span class="class">dolor</span></p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>Jumps</strong> OVER the lazy dogggg</p>');
+        $this->assertHTMLMatch('<p>%1% <span class="test">%2%</span> <span class="class">%3%</span></p><p class="test">sit amet <strong>%4%</strong></p><p>Test %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><em>The</em> %8% %9% foxxx</p><p><strong>%10%</strong> %11% the lazy dog</p>');
 
 
     }//end testAddingClassAttributeToAWordUsingTheTopToolbar()
@@ -94,11 +88,11 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
      */
     public function testUpdateChangesButtonIsDisabledForClassIcon()
     {
-        $this->selectText('XuT');
+        $this->selectKeyword(2);
         $this->clickTopToolbarButton('cssClass');
         $this->assertTrue($this->topToolbarButtonExists('Update Changes', 'disabled', TRUE), 'Update Changes button should be disabled.');
 
-        $this->selectText('dolor');
+        $this->selectKeyword(3);
         $this->clickInlineToolbarButton('cssClass');
         $this->assertTrue($this->inlineToolbarButtonExists('Update Changes', 'disabled', TRUE), 'Update Changes button should be disabled.');
 
@@ -112,9 +106,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
      */
     public function testRemovingClassAttributeFromAWordUsingTheInlineToolbar()
     {
-        $text = 'lABs';
-
-        $this->selectText($text);
+        $this->selectKeyword(6);
         $this->assertTrue($this->topToolbarButtonExists('cssClass', 'active'), 'Class icon in Top Toolbar should be active.');
         $this->assertTrue($this->inlineToolbarButtonExists('cssClass', 'active'), 'Class icon in VITP should be active.');
 
@@ -122,10 +114,10 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->clearFieldValue('Class');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz lABs is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>Jumps</strong> OVER the lazy dogggg</p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p>Test %5%</p><p>Squiz %6% is %7%</p><p><em>The</em> %8% %9% foxxx</p><p><strong>%10%</strong> %11% the lazy dog</p>');
 
-        $this->click($this->find($text));
-        $this->selectText($text);
+        $this->click($this->findKeyword(2));
+        $this->selectKeyword(6);
         $this->assertTrue($this->topToolbarButtonExists('cssClass'), 'Class icon is still active in the Top Toolbar.');
         $this->assertTrue($this->inlineToolbarButtonExists('cssClass'), 'Class icon is still active in the inline toolbar.');
 
@@ -133,14 +125,14 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->clickTopToolbarButton('cssClass');
         $this->type('test');
         $this->keyDown('Key.ENTER');
-        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="test">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>Jumps</strong> OVER the lazy dogggg</p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p>Test %5%</p><p>Squiz <span class="test">%6%</span> is %7%</p><p><em>The</em> %8% %9% foxxx</p><p><strong>%10%</strong> %11% the lazy dog</p>');
 
-        $this->selectText($text);
+        $this->selectKeyword(6);
         $this->clickInlineToolbarButton('cssClass', 'active');
         $this->clearFieldValue('Class');
         $this->clickInlineToolbarButton('Update Changes', NULL, TRUE);
 
-        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz lABs is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>Jumps</strong> OVER the lazy dogggg</p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p>Test %5%</p><p>Squiz %6% is %7%</p><p><em>The</em> %8% %9% foxxx</p><p><strong>%10%</strong> %11% the lazy dog</p>');
 
     }//end testRemovingClassAttributeFromAWordUsingTheInlineToolbar()
 
@@ -154,7 +146,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
     {
         $text = 'lABs';
 
-        $this->selectText($text);
+        $this->selectKeyword(6);
         $this->assertTrue($this->topToolbarButtonExists('cssClass', 'active'), 'Class icon in Top Toolbar should be active.');
         $this->assertTrue($this->inlineToolbarButtonExists('cssClass', 'active'), 'Class icon in VITP should be active.');
 
@@ -162,10 +154,10 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->clearFieldValue('Class');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz lABs is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>Jumps</strong> OVER the lazy dogggg</p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p>Test %5%</p><p>Squiz %6% is %7%</p><p><em>The</em> %8% %9% foxxx</p><p><strong>%10%</strong> %11% the lazy dog</p>');
 
-        $this->click($this->find($text));
-        $this->selectText($text);
+        $this->click($this->findKeyword(3));
+        $this->selectKeyword(6);
         $this->assertTrue($this->topToolbarButtonExists('cssClass'), 'Class icon is still active in the Top Toolbar.');
         $this->assertTrue($this->inlineToolbarButtonExists('cssClass'), 'Class icon is still active in the inline toolbar.');
 
@@ -173,14 +165,14 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->clickTopToolbarButton('cssClass');
         $this->type('test');
         $this->keyDown('Key.ENTER');
-        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="test">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>Jumps</strong> OVER the lazy dogggg</p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p>Test %5%</p><p>Squiz <span class="test">%6%</span> is %7%</p><p><em>The</em> %8% %9% foxxx</p><p><strong>%10%</strong> %11% the lazy dog</p>');
 
-        $this->selectText($text);
+        $this->selectKeyword(6);
         $this->clickTopToolbarButton('cssClass', 'active');
         $this->clearFieldValue('Class');
         $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
 
-        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz lABs is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>Jumps</strong> OVER the lazy dogggg</p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p>Test %5%</p><p>Squiz %6% is %7%</p><p><em>The</em> %8% %9% foxxx</p><p><strong>%10%</strong> %11% the lazy dog</p>');
 
     }//end testRemovingClassAttributeFromAWordUsingTheTopToolbar()
 
@@ -192,9 +184,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
      */
     public function testUpdatingAClassUsingTheInlineToolbar()
     {
-        $text = 'lABs';
-
-        $this->selectText($text);
+        $this->selectKeyword(6);
         $this->assertTrue($this->topToolbarButtonExists('cssClass', 'active'), 'Class icon in Top Toolbar should be active.');
         $this->assertTrue($this->inlineToolbarButtonExists('cssClass', 'active'), 'Class icon in VITP should be active.');
 
@@ -202,14 +192,15 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->type('abc');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclassabc">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>Jumps</strong> OVER the lazy dogggg</p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p>Test %5%</p><p>Squiz <span class="myclassabc">%6%</span> is %7%</p><p><em>The</em> %8% %9% foxxx</p><p><strong>%10%</strong> %11% the lazy dog</p>');
 
-        $this->selectText($text);
+        $this->click($this->findKeyword(3));
+        $this->selectKeyword(6);
         $this->clickInlineToolbarButton('cssClass', 'active');
         $this->type('def');
         $this->clickInlineToolbarButton('Update Changes', NULL, TRUE);
 
-        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclassabcdef">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>Jumps</strong> OVER the lazy dogggg</p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p>Test %5%</p><p>Squiz <span class="myclassabcdef">%6%</span> is %7%</p><p><em>The</em> %8% %9% foxxx</p><p><strong>%10%</strong> %11% the lazy dog</p>');
 
     }//end testUpdatingAClassUsingTheInlineToolbar()
 
@@ -221,9 +212,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
      */
     public function testUpdatingAClassUsingTheTopToolbar()
     {
-        $text = 'lABs';
-
-        $this->selectText($text);
+        $this->selectKeyword(6);
         $this->assertTrue($this->topToolbarButtonExists('cssClass', 'active'), 'Class icon in Top Toolbar should be active.');
         $this->assertTrue($this->inlineToolbarButtonExists('cssClass', 'active'), 'Class icon in VITP should be active.');
 
@@ -231,14 +220,15 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->type('abc');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclassabc">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>Jumps</strong> OVER the lazy dogggg</p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p>Test %5%</p><p>Squiz <span class="myclassabc">%6%</span> is %7%</p><p><em>The</em> %8% %9% foxxx</p><p><strong>%10%</strong> %11% the lazy dog</p>');
 
-        $this->selectText($text);
+        $this->click($this->findKeyword(3));
+        $this->selectKeyword(6);
         $this->clickTopToolbarButton('cssClass', 'active');
         $this->type('def');
         $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
 
-        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclassabcdef">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>Jumps</strong> OVER the lazy dogggg</p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p>Test %5%</p><p>Squiz <span class="myclassabcdef">%6%</span> is %7%</p><p><em>The</em> %8% %9% foxxx</p><p><strong>%10%</strong> %11% the lazy dog</p>');
 
     }//end testUpdatingAClassUsingTheTopToolbar()
 
@@ -250,33 +240,30 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
      */
     public function testAddingClassAttributeToAParagraphUsingTheInlineToolbar()
     {
-        $text = 'Lorem';
-
-        $this->selectText($text);
+        $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
         $this->clickInlineToolbarButton('cssClass');
         $this->type('test');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p class="test">Lorem XuT dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>Jumps</strong> OVER the lazy dogggg</p>');
+        $this->assertHTMLMatch('<p class="test">%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p>Test %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><em>The</em> %8% %9% foxxx</p><p><strong>%10%</strong> %11% the lazy dog</p>');
 
-        $this->selectText($text);
+        $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
         $this->assertTrue($this->topToolbarButtonExists('cssClass', 'active'), 'Class icon in Top Toolbar should be active.');
         $this->assertTrue($this->inlineToolbarButtonExists('cssClass', 'active'), 'Class icon in VITP should be active.');
 
-        $this->click($this->find($text));
+        $this->click($this->findKeyword(2));
 
         // Need to add the sleep so that the test passes in Firefox otherwise it doesn't click AbC
         sleep(1);
 
-        $text = 'AbC';
-        $this->selectText($text);
+        $this->selectKeyword(5);
         $this->selectInlineToolbarLineageItem(0);
         $this->clickInlineToolbarButton('cssClass');
         $this->type('class');
         $this->clickInlineToolbarButton('Update Changes', NULL, TRUE);
-        $this->assertHTMLMatch('<p class="test">Lorem XuT dolor</p><p class="test">sit amet <strong>WoW</strong></p><p class="class">Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>Jumps</strong> OVER the lazy dogggg</p>');
+        $this->assertHTMLMatch('<p class="test">%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p class="class">Test %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><em>The</em> %8% %9% foxxx</p><p><strong>%10%</strong> %11% the lazy dog</p>');
 
     }//end testAddingClassAttributeToAParagraphUsingTheInlineToolbar()
 
@@ -288,33 +275,30 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
      */
     public function testAddingClassAttributeToAParagraphUsingTheTopToolbar()
     {
-        $text = 'Lorem';
-
-        $this->selectText($text);
+        $this->selectKeyword(3);
         $this->selectInlineToolbarLineageItem(0);
         $this->clickTopToolbarButton('cssClass');
         $this->type('test');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p class="test">Lorem XuT dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>Jumps</strong> OVER the lazy dogggg</p>');
+        $this->assertHTMLMatch('<p class="test">%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p>Test %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><em>The</em> %8% %9% foxxx</p><p><strong>%10%</strong> %11% the lazy dog</p>');
 
-        $this->selectText($text);
+        $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
         $this->assertTrue($this->topToolbarButtonExists('cssClass', 'active'), 'Class icon in Top Toolbar should be active.');
         $this->assertTrue($this->inlineToolbarButtonExists('cssClass', 'active'), 'Class icon in VITP should be active.');
 
-        $this->click($this->find($text));
+        $this->click($this->findKeyword(2));
 
         // Need to add the sleep so that the test passes in Firefox otherwise it doesn't click AbC
         sleep(1);
 
-        $text = 'AbC';
-        $this->selectText($text);
+        $this->selectKeyword(5);
         $this->selectInlineToolbarLineageItem(0);
         $this->clickTopToolbarButton('cssClass');
         $this->type('class');
         $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
-        $this->assertHTMLMatch('<p class="test">Lorem XuT dolor</p><p class="test">sit amet <strong>WoW</strong></p><p class="class">Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>Jumps</strong> OVER the lazy dogggg</p>');
+        $this->assertHTMLMatch('<p class="test">%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p class="class">Test %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><em>The</em> %8% %9% foxxx</p><p><strong>%10%</strong> %11% the lazy dog</p>');
 
     }//end testAddingClassAttributeToAParagraphUsingTheTopToolbar()
 
@@ -326,24 +310,21 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
      */
     public function testAddingClassToParagraphWithClassAppliedToWord()
     {
-        $text = 'ORSM';
-
-        $this->selectText($text);
+        $this->selectKeyword(7);
         $this->selectInlineToolbarLineageItem(0);
         $this->clickInlineToolbarButton('cssClass');
         $this->type('test');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p class="test">Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>Jumps</strong> OVER the lazy dogggg</p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p>Test %5%</p><p class="test">Squiz <span class="myclass">%6%</span> is %7%</p><p><em>The</em> %8% %9% foxxx</p><p><strong>%10%</strong> %11% the lazy dog</p>');
 
-        $this->selectText($text);
+        $this->selectKeyword(7);
         $this->selectInlineToolbarLineageItem(0);
         $this->assertTrue($this->topToolbarButtonExists('cssClass', 'active'), 'Class icon in Top Toolbar should be active.');
         $this->assertTrue($this->inlineToolbarButtonExists('cssClass', 'active'), 'Class icon in VITP should be active.');
 
-        $this->click($this->find($text));
-        $text = 'lABs';
-        $this->selectText($text);
+        $this->click($this->findKeyword(7));
+        $this->selectKeyword(6);
         $this->assertTrue($this->topToolbarButtonExists('cssClass', 'active'), 'Class icon in Top Toolbar should be active.');
         $this->assertTrue($this->inlineToolbarButtonExists('cssClass', 'active'), 'Class icon in VITP should be active.');
 
@@ -357,10 +338,8 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
      */
     public function testRemovingClassAttributeFromParagraphUsingInlineToolbar()
     {
-        $text    = 'WoW';
-        $textLoc = $this->find($text);
 
-        $this->selectText($text);
+        $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(0);
         $this->assertTrue($this->topToolbarButtonExists('cssClass'), 'Class icon in Top Toolbar should be active.');
         $this->assertTrue($this->inlineToolbarButtonExists('cssClass', 'active'), 'Class icon in VITP should be active.');
@@ -369,10 +348,10 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->clearFieldValue('Class');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p>sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>Jumps</strong> OVER the lazy dogggg</p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit amet <strong>%4%</strong></p><p>Test %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><em>The</em> %8% %9% foxxx</p><p><strong>%10%</strong> %11% the lazy dog</p>');
 
-        $this->click($textLoc);
-        $this->selectText($text);
+        $this->click($this->findKeyword(2));
+        $this->selectText(4);
         $this->selectInlineToolbarLineageItem(0);
 
         $this->assertTrue($this->topToolbarButtonExists('cssClass'), 'Class icon is still active in the Top Toolbar.');
@@ -383,16 +362,16 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->type('test');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>Jumps</strong> OVER the lazy dogggg</p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p>Test %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><em>The</em> %8% %9% foxxx</p><p><strong>%10%</strong> %11% the lazy dog</p>');
 
-        $this->click($textLoc);
-        $this->selectText($text);
+        $this->click($this->findKeyword(2));
+        $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(0);
         $this->clickInlineToolbarButton('cssClass', 'active');
         $this->clearFieldValue('Class');
         $this->clickInlineToolbarButton('Update Changes', NULL, TRUE);
 
-        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p>sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>Jumps</strong> OVER the lazy dogggg</p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit amet <strong>%4%</strong></p><p>Test %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><em>The</em> %8% %9% foxxx</p><p><strong>%10%</strong> %11% the lazy dog</p>');
 
     }//end testRemovingClassAttributeFromParagraphUsingInlineToolbar()
 
@@ -404,10 +383,8 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
      */
     public function testRemovingClassAttributeFromParagraphUsingTopToolbar()
     {
-        $text = 'WoW';
-        $textLoc = $this->find($text);
 
-        $this->selectText($text);
+        $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(0);
         $this->assertTrue($this->topToolbarButtonExists('cssClass', 'active'), 'Class icon in Top Toolbar should be active.');
         $this->assertTrue($this->inlineToolbarButtonExists('cssClass', 'active'), 'Class icon in VITP should be active.');
@@ -416,10 +393,10 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->clearFieldValue('Class');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p>sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>Jumps</strong> OVER the lazy dogggg</p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit amet <strong>%4%</strong></p><p>Test %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><em>The</em> %8% %9% foxxx</p><p><strong>%10%</strong> %11% the lazy dog</p>');
 
-        $this->click($this->find($text));
-        $this->selectText($text);
+        $this->click($this->findKeyword(2));
+        $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(0);
 
         $this->assertTrue($this->topToolbarButtonExists('cssClass'), 'Class icon is still active in the Top Toolbar.');
@@ -430,16 +407,16 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->type('test');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>Jumps</strong> OVER the lazy dogggg</p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p>Test %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><em>The</em> %8% %9% foxxx</p><p><strong>%10%</strong> %11% the lazy dog</p>');
 
-        $this->click($textLoc);
-        $this->selectText($text);
+        $this->click($this->findKeyword(2));
+        $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(0);
         $this->clickTopToolbarButton('cssClass', 'active');
         $this->clearFieldValue('Class');
         $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
 
-        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p>sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>Jumps</strong> OVER the lazy dogggg</p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit amet <strong>%4%</strong></p><p>Test %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><em>The</em> %8% %9% foxxx</p><p><strong>%10%</strong> %11% the lazy dog</p>');
 
     }//end testRemovingClassAttributeFromParagraphUsingTopToolbar()
 
@@ -451,9 +428,8 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
      */
     public function testEditingTheClassForAParagraphUsingInlineToolbar()
     {
-        $text = 'WoW';
 
-        $this->selectText($text);
+        $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(0);
         $this->assertTrue($this->topToolbarButtonExists('cssClass', 'active'), 'Class icon in Top Toolbar should be active.');
         $this->assertTrue($this->inlineToolbarButtonExists('cssClass', 'active'), 'Class icon in VITP should be active.');
@@ -462,15 +438,15 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->type('abc');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p class="testabc">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>Jumps</strong> OVER the lazy dogggg</p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="testabc">sit amet <strong>%4%</strong></p><p>Test %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><em>The</em> %8% %9% foxxx</p><p><strong>%10%</strong> %11% the lazy dog</p>');
 
-        $this->selectText($text);
+        $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(0);
         $this->clickInlineToolbarButton('cssClass', 'active');
         $this->type('def');
         $this->clickInlineToolbarButton('Update Changes', NULL, TRUE);
 
-        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p class="testabcdef">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>Jumps</strong> OVER the lazy dogggg</p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="testabcdef">sit amet <strong>%4%</strong></p><p>Test %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><em>The</em> %8% %9% foxxx</p><p><strong>%10%</strong> %11% the lazy dog</p>');
 
     }//end testEditingTheClassUsingInlineToolbar()
 
@@ -482,9 +458,8 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
      */
     public function testEditingTheClassUsingTopToolbar()
     {
-        $text = 'WoW';
 
-        $this->selectText($text);
+        $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(0);
         $this->assertTrue($this->topToolbarButtonExists('cssClass', 'active'), 'Class icon in Top Toolbar should be active.');
         $this->assertTrue($this->inlineToolbarButtonExists('cssClass', 'active'), 'Class icon in VITP should be active.');
@@ -493,15 +468,15 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->type('abc');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p class="testabc">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>Jumps</strong> OVER the lazy dogggg</p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="testabc">sit amet <strong>%4%</strong></p><p>Test %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><em>The</em> %8% %9% foxxx</p><p><strong>%10%</strong> %11% the lazy dog</p>');
 
-        $this->selectText($text);
+        $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(0);
         $this->clickTopToolbarButton('cssClass');
         $this->type('def');
         $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
 
-        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p class="testabcdef">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>Jumps</strong> OVER the lazy dogggg</p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="testabcdef">sit amet <strong>%4%</strong></p><p>Test %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><em>The</em> %8% %9% foxxx</p><p><strong>%10%</strong> %11% the lazy dog</p>');
 
     }//end testEditingTheClassUsingTopToolbar()
 
@@ -513,15 +488,13 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
      */
     public function testAddingClassToAParagraphUsingInlineToolbarWithBoldFirstWord()
     {
-        $text = 'OVER';
-
-        $this->selectText($text);
+        $this->selectKeyword(11);
         $this->selectInlineToolbarLineageItem(0);
         $this->clickInlineToolbarButton('cssClass');
         $this->type('test');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p class="test"><strong>Jumps</strong> OVER the lazy dogggg</p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p>Test %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><em>The</em> %8% %9% foxxx</p><p class="test"><strong>%10%</strong> %11% the lazy dog</p>');
 
     }//end testAddingClassToAParagraphUsingInlineToolbarWithBoldFirstWord()
 
@@ -533,15 +506,13 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
      */
     public function testAddingClassToAParagraphUsingTopToolbarWithBoldFirstWord()
     {
-        $text = 'OVER';
-
-        $this->selectText($text);
+        $this->selectKeyword(11);
         $this->selectInlineToolbarLineageItem(0);
         $this->clickTopToolbarButton('cssClass');
         $this->type('test');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p class="test"><strong>Jumps</strong> OVER the lazy dogggg</p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p>Test %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><em>The</em> %8% %9% foxxx</p><p class="test"><strong>%10%</strong> %11% the lazy dog</p>');
 
     }//end testAddingClassToAParagraphUsingTopToolbarWithBoldFirstWord()
 
@@ -553,15 +524,14 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
      */
     public function testAddingClassToAParagraphUsingInlineToolbarWithItalicFirstWord()
     {
-        $text = 'QUICK';
 
-        $this->selectText($text);
+        $this->selectKeyword(9);
         $this->selectInlineToolbarLineageItem(0);
         $this->clickInlineToolbarButton('cssClass');
         $this->type('test');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p class="test"><em>The</em> QUICK brown foxxx</p><p><strong>Jumps</strong> OVER the lazy dogggg</p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p>Test %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p class="test"><em>The</em> %8% %9% foxxx</p><p><strong>%10%</strong> %11% the lazy dog</p>');
 
     }//end testAddingClassToAParagraphUsingInlineToolbarWithItalicFirstWord()
 
@@ -573,15 +543,14 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
      */
     public function testAddingClassToAParagraphUsingTopToolbarWithItalicFirstWord()
     {
-        $text = 'QUICK';
 
-        $this->selectText($text);
+        $this->selectKeyword(9);
         $this->selectInlineToolbarLineageItem(0);
         $this->clickTopToolbarButton('cssClass');
         $this->type('test');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p class="test"><em>The</em> QUICK brown foxxx</p><p><strong>Jumps</strong> OVER the lazy dogggg</p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p>Test %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p class="test"><em>The</em> %8% %9% foxxx</p><p><strong>%10%</strong> %11% the lazy dog</p>');
 
     }//end testAddingClassToAParagraphUsingTopToolbarWithItalicFirstWord()
 
@@ -593,14 +562,13 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
      */
     public function testAddingClassToABoldWord()
     {
-        $text = 'Jumps';
 
-        $this->selectText($text);
+        $this->selectKeyword(10);
         $this->clickInlineToolbarButton('cssClass');
         $this->type('test');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong class="test">Jumps</strong> OVER the lazy dogggg</p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p>Test %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><em>The</em> %8% %9% foxxx</p><p><strong class="test">%10%</strong> %11% the lazy dog</p>');
 
     }//end testAddingClassToAParagraphWithBoldFirstWord()
 
@@ -612,16 +580,15 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
      */
     public function testAddingClassToAItalicWord()
     {
-        $text = 'OVER';
 
-        $this->selectText($text);
+        $this->selectKeyword(11);
         $this->keyDown('Key.CMD + i');
 
         $this->clickInlineToolbarButton('cssClass');
         $this->type('test');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>Jumps</strong> <em class="test">OVER</em> the lazy dogggg</p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p>Test %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><em>The</em> %8% %9% foxxx</p><p><strong>%10%</strong> <em class="test">%11%</em> the lazy dog</p>');
 
     }//end testAddingClassToAItalicWord()
 
@@ -633,16 +600,16 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
      */
     public function testAddingClassToAOneBoldWord()
     {
-        $this->selectText('Jumps', 'OVER');
+        $this->selectKeyword(11, 12);
         $this->keyDown('Key.CMD + b');
-        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>Jumps OVER </strong>the lazy dogggg</p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p>Test %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><em>The</em> %8% %9% foxxx</p><p><strong>%10% %11%</strong> the lazy dog</p>');
 
-        $this->selectText('OVER');
+        $this->selectKeyword(12);
         $this->clickInlineToolbarButton('cssClass');
         $this->type('test');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>Jumps <span class="test">OVER</span> </strong>the lazy dogggg</p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p>Test %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><em>The</em> %8% %9% foxxx</p><p><strong>%10% <span class="test">%11%</span></strong> the lazy dog</p>');
 
     }//end testAddingClassToAOneBoldWord()
 
@@ -654,16 +621,16 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
      */
     public function testAddingClassToAOneItalicWord()
     {
-        $this->selectText('QUICK', 'brown');
+        $this->selectKeyword(8, 9);
         $this->keyDown('Key.CMD + i');
-        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> <em>QUICK brown</em> foxxx</p><p><strong>Jumps</strong> OVER the lazy dogggg</p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p>Test %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><em>The</em> <em>%8% %9%</em> foxxx</p><p><strong>%10%</strong> %11% the lazy dog</p>');
 
-        $this->selectText('QUICK');
+        $this->selectKeyword(8);
         $this->clickInlineToolbarButton('cssClass');
         $this->type('test');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> <em><span class="test">QUICK</span> brown</em> foxxx</p><p><strong>Jumps</strong> OVER the lazy dogggg</p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p>Test %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><em>The</em> <em><span class="test">%8%</span> %9%</em> foxxx</p><p><strong>%10%</strong> %11% the lazy dog</p>');
 
     }//end testAddingClassToAOneItalicWord()
 
@@ -675,16 +642,16 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
      */
     public function testSelectionIsMaintainedForWordWhenOpeningAndClosingClassFields()
     {
-        $this->selectText('XuT');
+        $this->selectKeyword(2);
 
         $this->clickTopToolbarButton('cssClass');
-        $this->assertEquals('XuT', $this->getSelectedText(), 'Selected text is not highlighted.');
+        $this->assertEquals($this->replaceKeywords('%2%'), $this->getSelectedText(), 'Original selection is not selected');
 
         $this->clickTopToolbarButton('cssClass', 'selected');
-        $this->assertEquals('XuT', $this->getSelectedText(), 'Selected text is not highlighted.');
+        $this->assertEquals($this->replaceKeywords('%2%'), $this->getSelectedText(), 'Original selection is not selected');
 
         $this->clickTopToolbarButton('cssClass');
-        $this->assertEquals('XuT', $this->getSelectedText(), 'Selected text is not highlighted.');
+        $this->assertEquals($this->replaceKeywords('%2%'), $this->getSelectedText(), 'Original selection is not selected');
 
     }//end testSelectionIsMaintainedForWordWhenOpeningAndClosingClassFields()
 
@@ -696,17 +663,17 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
      */
     public function testSelectionIsMaintainedForParaWhenOpeningAndClosingClassFields()
     {
-        $this->selectText('XuT');
+        $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(0);
 
         $this->clickTopToolbarButton('cssClass');
-        $this->assertEquals('Lorem XuT dolor', $this->getSelectedText(), 'Selected text is not highlighted.');
+        $this->assertEquals($this->replaceKeywords('%1% %2% %3%'), $this->getSelectedText(), 'Original selection is not selected');
 
         $this->clickTopToolbarButton('cssClass', 'selected');
-        $this->assertEquals('Lorem XuT dolor', $this->getSelectedText(), 'Selected text is not highlighted.');
+        $this->assertEquals($this->replaceKeywords('%1% %2% %3%'), $this->getSelectedText(), 'Original selection is not selected');
 
         $this->clickTopToolbarButton('cssClass');
-        $this->assertEquals('Lorem XuT dolor', $this->getSelectedText(), 'Selected text is not highlighted.');
+        $this->assertEquals($this->replaceKeywords('%1% %2% %3%'), $this->getSelectedText(), 'Original selection is not selected');
 
     }//end testSelectionIsMaintainedForParaWhenOpeningAndClosingClassFields()
 
@@ -718,7 +685,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
      */
     public function testApplyingBoldAndItalicsClickingClassRemovingBold()
     {
-        $this->selectText('XuT');
+        $this->selectKeyword(2);
 
         $this->clickInlineToolbarButton('bold');
         $this->clickInlineToolbarButton('italic');
@@ -728,7 +695,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $viperBookmarkElements = $this->execJS('dfx.getClass("viperBookmark").length');
         $this->assertEquals(0, $viperBookmarkElements, 'There should be no viper bookmark elements');
 
-        $this->assertHTMLMatch('<p>Lorem <strong>XuT</strong> dolor</p><p class="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span class="myclass">lABs</span> is ORSM</p><p><em>The</em> QUICK brown foxxx</p><p><strong>Jumps</strong> OVER the lazy dogggg</p>');
+        $this->assertHTMLMatch('<p>%1% <strong>%2%</strong> %3%</p><p class="test">sit amet <strong>%4%</strong></p><p>Test %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><em>The</em> %8% %9% foxxx</p><p><strong>%10%</strong> %11% the lazy dog</p>');
 
         $this->assertTrue($this->inlineToolbarButtonExists('italic'), 'Italics icon in VITP should not be active.');
 
