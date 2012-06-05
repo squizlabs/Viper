@@ -351,7 +351,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit amet <strong>%4%</strong></p><p>Test %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><em>The</em> %8% %9% foxxx</p><p><strong>%10%</strong> %11% the lazy dog</p>');
 
         $this->click($this->findKeyword(2));
-        $this->selectText(4);
+        $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(0);
 
         $this->assertTrue($this->topToolbarButtonExists('cssClass'), 'Class icon is still active in the Top Toolbar.');
