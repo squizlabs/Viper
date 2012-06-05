@@ -1628,7 +1628,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         $this->_switchWindow('js');
 
         sleep(1);
-
+        $this->keyDown($this->_getAccessKeys('j'));
         if (isset(self::$_jsExecCache[$js]) === TRUE) {
             $this->type(self::$_jsExecCache[$js]);
         } else {
@@ -1647,7 +1647,6 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         $this->keyDown('Key.SPACE');
 
         $this->_switchWindow('main');
-        sleep(2);
 
         $text = $this->getClipboard();
         if (strpos($text, "u'") === 0) {

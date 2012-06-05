@@ -5,7 +5,7 @@
     <body spellcheck="false" onload="document.getElementById('jsExec').focus()">
         <textarea id="jsExec" accesskey="J"></textarea>
         <textarea id="jsRes" accesskey="R"></textarea>
-        <button id="close" onclick="document.getElementById('jsExec').focus();document.getElementById('jsExec').value='';document.getElementById('jsRes').value='';">Clear</button>
+        <button id="close" onclick="document.getElementById('jsExec').value='';document.getElementById('jsRes').value='';">Clear</button>
         <script>
             var jsCache = [];
             var jsExec = document.getElementById('jsExec')
