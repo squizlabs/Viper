@@ -764,6 +764,8 @@ ViperImagePlugin.prototype = {
             this._resizeHandles = null;
         }
 
+        this._resizeImage = null;
+
     }
 
 };

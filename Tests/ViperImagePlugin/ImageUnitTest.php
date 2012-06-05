@@ -18,11 +18,10 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperUnitTest
      */
     public function resizeImage($imageIndex, $size)
     {
-        $dir      = dirname(__FILE__).'/Images/';
         $selector = 'img';
 
         $imageRect   = $this->getBoundingRectangle($selector, $imageIndex);
-        $rightHandle = $this->find($dir.'resize_bottom_right.png');
+        $rightHandle = $this->findImage('ImageHandle-se', '.Viper-image-handle-se');
 
         $width  = ($imageRect['x2'] - $imageRect['x1']);
         $height = ($imageRect['y2'] - $imageRect['y1']);
@@ -47,23 +46,20 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperUnitTest
      */
     public function testImageIconIsAvailable()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
-        $text = 'XuT';
-        $this->selectText($text);
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_image.png'), 'Image icon should be active.');
+        $this->selectKeyword(1);
+        $this->assertTrue($this->topToolbarButtonExists('image'), 'Image icon should be enabled.');
 
         $this->selectInlineToolbarLineageItem(0);
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_image.png'), 'Image icon should be active.');
+        $this->assertTrue($this->topToolbarButtonExists('image'), 'Image icon should be enabled.');
 
-        $this->click($this->find($text));
-        $this->selectText($text);
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_image.png'), 'Image icon should be active.');
+        $this->click($this->findKeyword(1));
+        $this->selectKeyword(1);
+        $this->assertTrue($this->topToolbarButtonExists('image'), 'Image icon should be enabled.');
 
-        $this->selectText('dolor');
+        $this->selectKeyword(2);
         $this->type('Key.RIGHT');
         $this->type('Key.ENTER');
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_image.png'), 'Image icon should be active.');
+        $this->assertTrue($this->topToolbarButtonExists('image'), 'Image icon should be enabled.');
 
     }//end testImageIconIsAvailable()
 
@@ -75,28 +71,25 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperUnitTest
      */
     public function testInsertingWithoutAltAndTitle()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
-        $this->selectText('dolor');
+        $this->selectKeyword(2);
         $this->type('Key.RIGHT');
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_image.png');
+        $this->clickTopToolbarButton('image');
         $this->type('http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg');
-        $this->clickTopToolbarButton($dir.'toobarIcon_image_presentational.png');
+        $this->clickField('Image is decorative');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>LOREM XuT dolor<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="" /></p><p>sit amet <strong>WoW</strong></p><p>Squiz LABS is ORSM</p>');
+        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%7% %1% %2%<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="" /></p><p>sit amet <strong>%5%</strong></p><p>%4% %6% is %3%</p>');
 
-        $this->selectText('ORSM');
+        $this->selectKeyword(3);
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_image.png');
+        $this->clickTopToolbarButton('image');
         $this->type('http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg');
-        $this->clickTopToolbarButton($dir.'toobarIcon_image_presentational.png');
+        $this->clickField('Image is decorative');
         sleep(1);
-        $updateChanges = $this->find($dir.'toolbarIcon_updateChanges.png');
-        $this->click($updateChanges);
+        $this->clickButton('Update Changes', NULL, TRUE);
 
-        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>LOREM XuT dolor<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="" /></p><p>sit amet <strong>WoW</strong></p><p>Squiz LABS is<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="" /></p>');
+        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%7% %1% %2%<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="" /></p><p>sit amet <strong>%5%</strong></p><p>%4% %6% is<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="" /></p>');
 
     }//end testInsertingWithAltAndTitle()
 
@@ -108,30 +101,28 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperUnitTest
      */
     public function testInsertingWithAltTag()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
-        $this->selectText('dolor');
+        $this->selectKeyword(2);
         $this->type('Key.RIGHT');
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_image.png');
+        $this->clickTopToolbarButton('image');
         $this->type('http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg');
         $this->keyDown('Key.TAB');
         $this->type('Alt tag');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>LOREM XuT dolor<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Alt tag" /></p><p>sit amet <strong>WoW</strong></p><p>Squiz LABS is ORSM</p>');
+        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%7% %1% %2%<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Alt tag" /></p><p>sit amet <strong>%5%</strong></p><p>%4% %6% is %3%</p>');
 
-        $this->selectText('ORSM');
+        $this->selectKeyword(3);
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_image.png');
+        $this->clickTopToolbarButton('image');
         $this->type('http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg');
         $this->keyDown('Key.TAB');
         $this->type('Another Alt tag');
         sleep(1);
-        $updateChanges = $this->find($dir.'toolbarIcon_updateChanges.png');
+        $updateChanges = $this->find('Update Changes', NULL, TRUE);
         $this->click($updateChanges);
 
-        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>LOREM XuT dolor<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Alt tag" /></p><p>sit amet <strong>WoW</strong></p><p>Squiz LABS is<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Another Alt tag" /></p>');
+        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%7% %1% %2%<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Alt tag" /></p><p>sit amet <strong>%5%</strong></p><p>%4% %6% is<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Another Alt tag" /></p>');
 
     }//end testInsertingWithAltTag()
 
@@ -143,22 +134,20 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperUnitTest
      */
     public function testSwitchingPresentational()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
-        $this->selectText('dolor');
+        $this->selectKeyword(2);
         $this->type('Key.RIGHT');
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_image.png');
+        $this->clickTopToolbarButton('image');
         $this->type('http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg');
         $this->keyDown('Key.TAB');
         $this->type('Alt tag');
-        $this->clickTopToolbarButton($dir.'toobarIcon_image_presentational.png');
+        $this->clickField('Image is decorative');
         sleep(1);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_image_presentational_active.png');
+        $this->clickField('Image is decorative');
         $this->keyDown('Key.ENTER');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_subImage_active.png');
+        $this->clickTopToolbarButton('image', 'selected');
 
-        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>LOREM XuT dolor<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Alt tag" /></p><p>sit amet <strong>WoW</strong></p><p>Squiz LABS is ORSM</p>');
+        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%7% %1% %2%<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Alt tag" /></p><p>sit amet <strong>%5%</strong></p><p>%4% %6% is %3%</p>');
 
     }//end testSwitchingPresentational()
 
@@ -170,12 +159,10 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperUnitTest
      */
     public function testInsertingWithAltAndTitleTagThenSwitchingToPresentational()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
-        $this->selectText('dolor');
+        $this->selectKeyword(2);
         $this->type('Key.RIGHT');
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_image.png');
+        $this->clickTopToolbarButton('image');
         $this->type('http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg');
         $this->keyDown('Key.TAB');
         $this->type('Alt tag');
@@ -183,16 +170,16 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperUnitTest
         $this->type('Title tag');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>LOREM XuT dolor<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Alt tag" title="Title tag" /></p><p>sit amet <strong>WoW</strong></p><p>Squiz LABS is ORSM</p>');
+        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%7% %1% %2%<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Alt tag" title="Title tag" /></p><p>sit amet <strong>%5%</strong></p><p>%4% %6% is %3%</p>');
 
         $this->clickElement('img', 1);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_image_highlighted.png');
-        $this->clickTopToolbarButton($dir.'toobarIcon_image_presentational.png');
+        $this->clickTopToolbarButton('image', 'active');
+        $this->clickField('Image is decorative');
         $this->keyDown('Key.ENTER');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_subImage_active.png');
-        $this->click($this->find('ORSM'));
+        $this->clickTopToolbarButton('image', 'selected');
+        $this->click($this->findKeyword(3));
 
-        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>LOREM XuT dolor<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="" /></p><p>sit amet <strong>WoW</strong></p><p>Squiz LABS is ORSM</p>');
+        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%7% %1% %2%<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="" /></p><p>sit amet <strong>%5%</strong></p><p>%4% %6% is %3%</p>');
 
     }//end testInsertingWithAltAndTitleTagThenSwitchingToPresentational()
 
@@ -204,12 +191,10 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperUnitTest
      */
     public function testInsertingWithAltAndTitleTag()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
-        $this->selectText('dolor');
+        $this->selectKeyword(2);
         $this->type('Key.RIGHT');
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_image.png');
+        $this->clickTopToolbarButton('image');
         $this->type('http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg');
         $this->keyDown('Key.TAB');
         $this->type('Alt tag');
@@ -217,21 +202,21 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperUnitTest
         $this->type('Title tag');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>LOREM XuT dolor<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Alt tag" title="Title tag" /></p><p>sit amet <strong>WoW</strong></p><p>Squiz LABS is ORSM</p>');
+        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%7% %1% %2%<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Alt tag" title="Title tag" /></p><p>sit amet <strong>%5%</strong></p><p>%4% %6% is %3%</p>');
 
-        $this->selectText('ORSM');
+        $this->selectKeyword(3);
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_image.png');
+        $this->clickTopToolbarButton('image');
         $this->type('http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg');
         $this->keyDown('Key.TAB');
         $this->type('Another Alt tag');
         $this->keyDown('Key.TAB');
         $this->type('Another Title tag');
         sleep(1);
-        $updateChanges = $this->find($dir.'toolbarIcon_updateChanges.png');
+        $updateChanges = $this->find('Update Changes', NULL, TRUE);
         $this->click($updateChanges);
 
-        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>LOREM XuT dolor<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Alt tag" title="Title tag" /></p><p>sit amet <strong>WoW</strong></p><p>Squiz LABS is<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Another Alt tag" title="Another Title tag" /></p>');
+        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%7% %1% %2%<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Alt tag" title="Title tag" /></p><p>sit amet <strong>%5%</strong></p><p>%4% %6% is<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Another Alt tag" title="Another Title tag" /></p>');
 
     }//end testInsertingWithAltAndTitleTag()
 
@@ -243,18 +228,16 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperUnitTest
      */
     public function testInsertingAnImageAtStartOfParagraph()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
-        $this->selectText('Squiz');
+        $this->selectKeyword(4);
         $this->type('Key.LEFT');
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_image.png');
+        $this->clickTopToolbarButton('image');
         $this->type('http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg');
         $this->keyDown('Key.TAB');
         $this->type('Alt tag');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>LOREM XuT dolor</p><p>sit amet <strong>WoW</strong></p><p><img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Alt tag" />Squiz LABS is ORSM</p>');
+        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%7% %1% %2%</p><p>sit amet <strong>%5%</strong></p><p><img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Alt tag" />%4% %6% is %3%</p>');
 
     }//end testInsertingAnImageAtStartOfParagraph()
 
@@ -266,32 +249,30 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperUnitTest
      */
     public function testInsertingAnImageAtEndOfParagraph()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
-        $this->selectText('dolor');
+        $this->selectKeyword(2);
         $this->type('Key.RIGHT');
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_image.png');
+        $this->clickTopToolbarButton('image');
         $this->type('http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg');
         $this->keyDown('Key.TAB');
         $this->type('Alt tag');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>LOREM XuT dolor<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Alt tag" /></p><p>sit amet <strong>WoW</strong></p><p>Squiz LABS is ORSM</p>');
+        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%7% %1% %2%<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Alt tag" /></p><p>sit amet <strong>%5%</strong></p><p>%4% %6% is %3%</p>');
 
-        $this->click($this->find('dolor'));
-        $this->selectText('ORSM');
+        $this->click($this->findKeyword(2));
+        $this->selectKeyword(3);
         $this->type('Key.RIGHT');
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_image.png');
+        $this->clickTopToolbarButton('image');
         $this->type('http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg');
         $this->keyDown('Key.TAB');
         $this->type('Alt tag');
         sleep(1);
-        $updateChanges = $this->find($dir.'toolbarIcon_updateChanges.png');
+        $updateChanges = $this->find('Update Changes', NULL, TRUE);
         $this->click($updateChanges);
 
-        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>LOREM XuT dolor<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Alt tag" /></p><p>sit amet <strong>WoW</strong></p><p>Squiz LABS is ORSM<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Alt tag" /></p>');
+        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%7% %1% %2%<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Alt tag" /></p><p>sit amet <strong>%5%</strong></p><p>%4% %6% is %3%<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Alt tag" /></p>');
 
     }//end testInsertingAnImageAtEndOfParagraph()
 
@@ -303,32 +284,30 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperUnitTest
      */
     public function testInsertingAnImageInMiddleOfParagraph()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
-        $this->selectText('XuT');
+        $this->selectKeyword(1);
         $this->type('Key.RIGHT');
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_image.png');
+        $this->clickTopToolbarButton('image');
         $this->type('http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg');
         $this->keyDown('Key.TAB');
         $this->type('Alt tag');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>LOREM XuT<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Alt tag" /> dolor</p><p>sit amet <strong>WoW</strong></p><p>Squiz LABS is ORSM</p>');
+        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%7% %1%<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Alt tag" /> %2%</p><p>sit amet <strong>%5%</strong></p><p>%4% %6% is %3%</p>');
 
-        $this->click($this->find('dolor'));
-        $this->selectText('LABS');
+        $this->click($this->findKeyword(2));
+        $this->selectKeyword(6);
         $this->type('Key.RIGHT');
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_image.png');
+        $this->clickTopToolbarButton('image');
         $this->type('http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg');
         $this->keyDown('Key.TAB');
         $this->type('Alt tag');
         sleep(1);
-        $updateChanges = $this->find($dir.'toolbarIcon_updateChanges.png');
+        $updateChanges = $this->find('Update Changes', NULL, TRUE);
         $this->click($updateChanges);
 
-        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>LOREM XuT<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Alt tag" /> dolor</p><p>sit amet <strong>WoW</strong></p><p>Squiz LABS<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Alt tag" /> is ORSM</p>');
+        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%7% %1%<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Alt tag" /> %2%</p><p>sit amet <strong>%5%</strong></p><p>%4% %6%<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Alt tag" /> is %3%</p>');
 
     }//end testInsertingAnImageInMiddleOfParagraph()
 
@@ -340,18 +319,17 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperUnitTest
      */
     public function testInsertingImageWithIncorrectURL()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
-        $this->selectText('dolor');
+        $this->selectKeyword(2);
         $this->type('Key.RIGHT');
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_image.png');
+        $this->clickTopToolbarButton('image');
         $this->type('http://cms.squizsuite.net/homepage-images/hero-shot.jpg');
-        $this->clickTopToolbarButton($dir.'toobarIcon_image_presentational.png');
+        $this->clickField('Image is decorative');
         $this->keyDown('Key.ENTER');
-        $this->assertTrue($this->exists($dir.'fail_to_load_message.png'));
 
-        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>LOREM XuT dolor<img src="http://cms.squizsuite.net/homepage-images/hero-shot.jpg" alt="" /></p><p>sit amet <strong>WoW</strong></p><p>Squiz LABS is ORSM</p>');
+        $this->findImage('ViperImagePlugin-loadError', '.Viper-textbox-error');
+
+        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%7% %1% %2%<img src="http://cms.squizsuite.net/homepage-images/hero-shot.jpg" alt="" /></p><p>sit amet <strong>%5%</strong></p><p>%4% %6% is %3%</p>');
 
     }//end testInsertingImageWithIncorrectURL()
 
@@ -363,29 +341,27 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperUnitTest
      */
     public function testReplacingContentWithAnImage()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
-        $this->selectText('XuT');
+        $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_image.png');
+        $this->clickTopToolbarButton('image');
         $this->type('http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg');
         $this->keyDown('Key.TAB');
         $this->type('Alt tag');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p><img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Alt tag" />&nbsp;</p><p>sit amet <strong>WoW</strong></p><p>Squiz LABS is ORSM</p>');
+        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p><img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Alt tag" />&nbsp;</p><p>sit amet <strong>%5%</strong></p><p>%4% %6% is %3%</p>');
 
-        $this->click($this->find('WoW'));
-        $this->selectText('LABS');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_image.png');
+        $this->click($this->findKeyword(5));
+        $this->selectKeyword(6);
+        $this->clickTopToolbarButton('image');
         $this->type('http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg');
         $this->keyDown('Key.TAB');
         $this->type('Alt tag');
         sleep(1);
-        $updateChanges = $this->find($dir.'toolbarIcon_updateChanges.png');
+        $updateChanges = $this->find('Update Changes', NULL, TRUE);
         $this->click($updateChanges);
 
-        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p><img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Alt tag" />&nbsp;</p><p>sit amet <strong>WoW</strong></p><p>Squiz <img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Alt tag" /> is ORSM</p>');
+        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p><img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Alt tag" />&nbsp;</p><p>sit amet <strong>%5%</strong></p><p>%4% <img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Alt tag" /> is %3%</p>');
 
     }//end testReplacingContentWithAnImage()
 
@@ -397,18 +373,16 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperUnitTest
      */
     public function testInsertingImageInNewParagraph()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
-        $this->selectText('dolor');
+        $this->selectKeyword(2);
         $this->type('Key.RIGHT');
         $this->keyDown('Key.ENTER');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_image.png');
+        $this->clickTopToolbarButton('image');
         $this->type('http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg');
         $this->keyDown('Key.TAB');
         $this->type('Alt tag');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>LOREM XuT dolor</p><p><img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Alt tag" />&nbsp;</p><p>sit amet <strong>WoW</strong></p><p>Squiz LABS is ORSM</p>');
+        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%7% %1% %2%</p><p><img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Alt tag" />&nbsp;</p><p>sit amet <strong>%5%</strong></p><p>%4% %6% is %3%</p>');
 
     }//end testInsertingImageInNewParagraph()
 
@@ -420,26 +394,24 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperUnitTest
      */
     public function testDeletingAnImage()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
-        $this->selectText('dolor');
+        $this->selectKeyword(2);
         $this->type('Key.RIGHT');
         $this->keyDown('Key.ENTER');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_image.png');
+        $this->clickTopToolbarButton('image');
         $this->type('http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg');
         $this->keyDown('Key.TAB');
         $this->type('Alt tag');
         $this->keyDown('Key.ENTER');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_subImage_active.png');
+        $this->clickTopToolbarButton('image', 'selected');
 
-        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>LOREM XuT dolor</p><p><img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Alt tag" />&nbsp;</p><p>sit amet <strong>WoW</strong></p><p>Squiz LABS is ORSM</p>');
+        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%7% %1% %2%</p><p><img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Alt tag" />&nbsp;</p><p>sit amet <strong>%5%</strong></p><p>%4% %6% is %3%</p>');
 
         $this->clickElement('img', 1);
         $this->keyDown('Key.DELETE');
 
-        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>LOREM XuT dolor</p><p>&nbsp;</p><p>sit amet <strong>WoW</strong></p><p>Squiz LABS is ORSM</p>');
+        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%7% %1% %2%</p><p>&nbsp;</p><p>sit amet <strong>%5%</strong></p><p>%4% %6% is %3%</p>');
 
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_image.png'), 'Image icon should be active.');
+        $this->assertTrue($this->topToolbarButtonExists('image'), 'Image icon should be active.');
 
     }//end testDeletingAnImage()
 
@@ -451,28 +423,26 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperUnitTest
      */
     public function testEditingTheURLForAnImage()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
-        $this->selectText('dolor');
+        $this->selectKeyword(2);
         $this->type('Key.RIGHT');
         $this->keyDown('Key.ENTER');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_image.png');
+        $this->clickTopToolbarButton('image');
         $this->type('http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg');
-        $this->clickTopToolbarButton($dir.'toobarIcon_image_presentational.png');
+        $this->clickField('Image is decorative');
         $this->keyDown('Key.ENTER');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_subImage_active.png');
+        $this->clickTopToolbarButton('image', 'selected');
 
-        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>LOREM XuT dolor</p><p><img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="" />&nbsp;</p><p>sit amet <strong>WoW</strong></p><p>Squiz LABS is ORSM</p>');
+        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%7% %1% %2%</p><p><img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="" />&nbsp;</p><p>sit amet <strong>%5%</strong></p><p>%4% %6% is %3%</p>');
 
         $this->clickElement('img', 1);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_image_highlighted.png');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_deleteValue_icon.png');
+        $this->clickTopToolbarButton('image', 'active');
+        $this->clearFieldValue('URL');
         $this->type('http://cms.squizsuite.net/__images/homepage-images/editing.png');
         $this->keyDown('Key.ENTER');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_subImage_active.png');
-        $this->click($this->find('LOREM'));
+        $this->clickTopToolbarButton('image', 'selected');
+        $this->click($this->findKeyword(7));
 
-        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>LOREM XuT dolor</p><p><img src="http://cms.squizsuite.net/__images/homepage-images/editing.png" alt="" />&nbsp;</p><p>sit amet <strong>WoW</strong></p><p>Squiz LABS is ORSM</p>');
+        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%7% %1% %2%</p><p><img src="http://cms.squizsuite.net/__images/homepage-images/editing.png" alt="" />&nbsp;</p><p>sit amet <strong>%5%</strong></p><p>%4% %6% is %3%</p>');
 
     }//end testEditingTheURLForAnImage()
 
@@ -484,46 +454,43 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperUnitTest
      */
     public function testEditingTheAltTagForAnImage()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
-        $this->selectText('dolor');
+        $this->selectKeyword(2);
         $this->type('Key.RIGHT');
         $this->keyDown('Key.ENTER');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_image.png');
+        $this->clickTopToolbarButton('image');
         $this->type('http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg');
 
         // Check that image is not inserted without alt
         $this->keyDown('Key.ENTER');
-        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>LOREM XuT dolor</p><p>sit amet <strong>WoW</strong></p><p>Squiz LABS is ORSM</p>');
+        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%7% %1% %2%</p><p>sit amet <strong>%5%</strong></p><p>%4% %6% is %3%</p>');
 
-        $altBox = $this->find($dir.'input_alt.png', $this->getTopToolbar());
-        $this->click($altBox);
-        $this->clickTopToolbarButton($dir.'toobarIcon_image_presentational.png');
+        $this->clickField('Alt');
+        $this->clickField('Image is decorative');
         $this->keyDown('Key.ENTER');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_subImage_active.png');
+        $this->clickTopToolbarButton('image', 'selected');
 
-        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>LOREM XuT dolor</p><p><img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="" />&nbsp;</p><p>sit amet <strong>WoW</strong></p><p>Squiz LABS is ORSM</p>');
+        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%7% %1% %2%</p><p><img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="" />&nbsp;</p><p>sit amet <strong>%5%</strong></p><p>%4% %6% is %3%</p>');
 
         $this->clickElement('img', 1);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_image.png');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_image_presentational_active.png');
+        $this->clickTopToolbarButton('image');
+        $this->clickField('Image is decorative');
         $this->keyDown('Key.TAB');
         $this->type('Alt tag');
         $this->keyDown('Key.ENTER');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_subImage_active.png');
-        $this->click($this->find('ORSM'));
+        $this->clickTopToolbarButton('image', 'selected');
+        $this->click($this->findKeyword(3));
 
-        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>LOREM XuT dolor</p><p><img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Alt tag" />&nbsp;</p><p>sit amet <strong>WoW</strong></p><p>Squiz LABS is ORSM</p>');
+        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%7% %1% %2%</p><p><img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Alt tag" />&nbsp;</p><p>sit amet <strong>%5%</strong></p><p>%4% %6% is %3%</p>');
 
         $this->clickElement('img', 1);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_image_highlighted.png');
+        $this->clickTopToolbarButton('image', 'active');
         $this->keyDown('Key.TAB');
         $this->type('Abcd');
         $this->keyDown('Key.ENTER');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_subImage_active.png');
-        $this->click($this->find('ORSM'));
+        $this->clickTopToolbarButton('image', 'selected');
+        $this->click($this->findKeyword(3));
 
-        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>LOREM XuT dolor</p><p><img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Abcd" />&nbsp;</p><p>sit amet <strong>WoW</strong></p><p>Squiz LABS is ORSM</p>');
+        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%7% %1% %2%</p><p><img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Abcd" />&nbsp;</p><p>sit amet <strong>%5%</strong></p><p>%4% %6% is %3%</p>');
 
     }//end testEditingTheAltTagForAnImage()
 
@@ -535,39 +502,37 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperUnitTest
      */
     public function testEditingTheTitleTagForAnImage()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
-        $this->selectText('dolor');
+        $this->selectKeyword(2);
         $this->type('Key.RIGHT');
         $this->keyDown('Key.ENTER');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_image.png');
+        $this->clickTopToolbarButton('image');
         $this->type('http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg');
         $this->keyDown('Key.TAB');
         $this->type('Alt tag');
         $this->keyDown('Key.ENTER');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_subImage_active.png');
+        $this->clickTopToolbarButton('image', 'selected');
 
-        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>LOREM XuT dolor</p><p><img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Alt tag" />&nbsp;</p><p>sit amet <strong>WoW</strong></p><p>Squiz LABS is ORSM</p>');
+        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%7% %1% %2%</p><p><img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Alt tag" />&nbsp;</p><p>sit amet <strong>%5%</strong></p><p>%4% %6% is %3%</p>');
 
         $this->clickElement('img', 1);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_image_highlighted.png');
+        $this->clickTopToolbarButton('image', 'active');
         $this->keyDown('Key.TAB');
         $this->keyDown('Key.TAB');
         $this->type('Title tag');
         $this->keyDown('Key.ENTER');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_subImage_active.png');
-        $this->click($this->find('ORSM'));
-        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>LOREM XuT dolor</p><p><img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Alt tag" title="Title tag" />&nbsp;</p><p>sit amet <strong>WoW</strong></p><p>Squiz LABS is ORSM</p>');
+        $this->clickTopToolbarButton('image', 'selected');
+        $this->click($this->findKeyword(3));
+        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%7% %1% %2%</p><p><img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Alt tag" title="Title tag" />&nbsp;</p><p>sit amet <strong>%5%</strong></p><p>%4% %6% is %3%</p>');
 
         $this->clickElement('img', 1);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_image_highlighted.png');
+        $this->clickTopToolbarButton('image', 'active');
         $this->keyDown('Key.TAB');
         $this->keyDown('Key.TAB');
         $this->type('Abcd');
         $this->keyDown('Key.ENTER');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_subImage_active.png');
-        $this->click($this->find('ORSM'));
-        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>LOREM XuT dolor</p><p><img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Alt tag" title="Abcd" />&nbsp;</p><p>sit amet <strong>WoW</strong></p><p>Squiz LABS is ORSM</p>');
+        $this->clickTopToolbarButton('image', 'selected');
+        $this->click($this->findKeyword(3));
+        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%7% %1% %2%</p><p><img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Alt tag" title="Abcd" />&nbsp;</p><p>sit amet <strong>%5%</strong></p><p>%4% %6% is %3%</p>');
 
     }//end testEditingTheTitleTagForAnImage()
 
@@ -579,29 +544,27 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperUnitTest
      */
     public function testInsertingImageThenMakingItPresentational()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
-        $this->selectText('dolor');
+        $this->selectKeyword(2);
         $this->type('Key.RIGHT');
         $this->keyDown('Key.ENTER');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_image.png');
+        $this->clickTopToolbarButton('image');
         $this->type('http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg');
         $this->keyDown('Key.TAB');
         $this->type('Alt tag');
         $this->keyDown('Key.TAB');
         $this->type('Title tag');
         $this->keyDown('Key.ENTER');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_subImage_active.png');
+        $this->clickTopToolbarButton('image', 'selected');
 
-        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>LOREM XuT dolor</p><p><img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Alt tag" title="Title tag" />&nbsp;</p><p>sit amet <strong>WoW</strong></p><p>Squiz LABS is ORSM</p>');
+        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%7% %1% %2%</p><p><img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Alt tag" title="Title tag" />&nbsp;</p><p>sit amet <strong>%5%</strong></p><p>%4% %6% is %3%</p>');
 
         $this->clickElement('img', 1);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_image_highlighted.png');
-        $this->clickTopToolbarButton($dir.'toobarIcon_image_presentational.png');
+        $this->clickTopToolbarButton('image', 'active');
+        $this->clickField('Image is decorative');
         $this->keyDown('Key.ENTER');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_subImage_active.png');
-        $this->click($this->find('ORSM'));
-        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>LOREM XuT dolor</p><p><img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="" />&nbsp;</p><p>sit amet <strong>WoW</strong></p><p>Squiz LABS is ORSM</p>');
+        $this->clickTopToolbarButton('image', 'selected');
+        $this->click($this->findKeyword(3));
+        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%7% %1% %2%</p><p><img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="" />&nbsp;</p><p>sit amet <strong>%5%</strong></p><p>%4% %6% is %3%</p>');
 
     }//end testInsertingImageThenMakingItPresentational()
 
@@ -613,25 +576,23 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperUnitTest
      */
     public function testInsertingAnImageThenClickingUndo()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
-        $this->selectText('dolor');
+        $this->selectKeyword(2);
         $this->type('Key.RIGHT');
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_image.png');
+        $this->clickTopToolbarButton('image');
         $this->type('http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg');
         $this->keyDown('Key.TAB');
         $this->type('Alt tag');
         $this->keyDown('Key.TAB');
         $this->type('Title tag');
         $this->keyDown('Key.ENTER');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_subImage_active.png');
+        $this->clickTopToolbarButton('image', 'selected');
 
-        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>LOREM XuT dolor<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Alt tag" title="Title tag" /></p><p>sit amet <strong>WoW</strong></p><p>Squiz LABS is ORSM</p>');
+        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%7% %1% %2%<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Alt tag" title="Title tag" /></p><p>sit amet <strong>%5%</strong></p><p>%4% %6% is %3%</p>');
 
-        $this->clickTopToolbarButton(dirname(dirname(__FILE__)).'/Core/Images/undoIcon_active.png');
+        $this->clickTopToolbarButton('historyUndo');
 
-        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>LOREM XuT dolor</p><p>sit amet <strong>WoW</strong></p><p>Squiz LABS is ORSM</p>');
+        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%7% %1% %2%</p><p>sit amet <strong>%5%</strong></p><p>%4% %6% is %3%</p>');
 
     }//end testInsertingAnImageThenClickingUndo()
 
@@ -643,29 +604,27 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperUnitTest
      */
     public function testInsertingAnImageDeletingThenClickingUndo()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
-        $this->selectText('dolor');
+        $this->selectKeyword(2);
         $this->type('Key.RIGHT');
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_image.png');
+        $this->clickTopToolbarButton('image');
         $this->type('http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg');
         $this->keyDown('Key.TAB');
         $this->type('Alt tag');
         $this->keyDown('Key.TAB');
         $this->type('Title tag');
         $this->keyDown('Key.ENTER');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_subImage_active.png');
+        $this->clickTopToolbarButton('image', 'selected');
 
-        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>LOREM XuT dolor<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Alt tag" title="Title tag" /></p><p>sit amet <strong>WoW</strong></p><p>Squiz LABS is ORSM</p>');
+        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%7% %1% %2%<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Alt tag" title="Title tag" /></p><p>sit amet <strong>%5%</strong></p><p>%4% %6% is %3%</p>');
 
         $this->clickElement('img', 1);
         $this->keyDown('Key.DELETE');
-        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>LOREM XuT dolor</p><p>sit amet <strong>WoW</strong></p><p>Squiz LABS is ORSM</p>');
+        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%7% %1% %2%</p><p>sit amet <strong>%5%</strong></p><p>%4% %6% is %3%</p>');
 
 
-        $this->clickTopToolbarButton(dirname(dirname(__FILE__)).'/Core/Images/undoIcon_active.png');
-        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>LOREM XuT dolor<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Alt tag" title="Title tag" /></p><p>sit amet <strong>WoW</strong></p><p>Squiz LABS is ORSM</p>');
+        $this->clickTopToolbarButton('historyUndo');
+        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%7% %1% %2%<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Alt tag" title="Title tag" /></p><p>sit amet <strong>%5%</strong></p><p>%4% %6% is %3%</p>');
 
     }//end testInsertingAnImageDeletingThenClickingUndo()
 
@@ -677,39 +636,37 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperUnitTest
      */
     public function testInsertingTwoImagesDeletingTheFirstOneThenClickingUndo()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
-        $this->selectText('dolor');
+        $this->selectKeyword(2);
         $this->type('Key.RIGHT');
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_image.png');
+        $this->clickTopToolbarButton('image');
         $this->type('http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg');
         $this->keyDown('Key.TAB');
         $this->type('Alt tag');
         $this->keyDown('Key.TAB');
         $this->type('Title tag');
         $this->keyDown('Key.ENTER');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_subImage_active.png');
+        $this->clickTopToolbarButton('image', 'selected');
 
-        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>LOREM XuT dolor<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Alt tag" title="Title tag" /></p><p>sit amet <strong>WoW</strong></p><p>Squiz LABS is ORSM</p>');
+        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%7% %1% %2%<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Alt tag" title="Title tag" /></p><p>sit amet <strong>%5%</strong></p><p>%4% %6% is %3%</p>');
 
-        $this->click($this->find('dolor'));
-        $this->selectText('ORSM');
+        $this->click($this->findKeyword(2));
+        $this->selectKeyword(3);
         $this->type('Key.RIGHT');
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_image.png');
+        $this->clickTopToolbarButton('image');
         $this->type('http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg');
         $this->keyDown('Key.TAB');
         $this->type('Alt tag');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>LOREM XuT dolor<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Alt tag" title="Title tag" /></p><p>sit amet <strong>WoW</strong></p><p>Squiz LABS is ORSM<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Alt tag" /></p>');
+        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%7% %1% %2%<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Alt tag" title="Title tag" /></p><p>sit amet <strong>%5%</strong></p><p>%4% %6% is %3%<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Alt tag" /></p>');
 
         $this->clickElement('img', 1);
         $this->keyDown('Key.DELETE');
-        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>LOREM XuT dolor</p><p>sit amet <strong>WoW</strong></p><p>Squiz LABS is ORSM<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Alt tag" /></p>');
-        $this->clickTopToolbarButton(dirname(dirname(__FILE__)).'/Core/Images/undoIcon_active.png');
-        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>LOREM XuT dolor<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Alt tag" title="Title tag" /></p><p>sit amet <strong>WoW</strong></p><p>Squiz LABS is ORSM<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Alt tag" /></p>');
+        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%7% %1% %2%</p><p>sit amet <strong>%5%</strong></p><p>%4% %6% is %3%<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Alt tag" /></p>');
+        $this->clickTopToolbarButton('historyUndo');
+        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%7% %1% %2%<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Alt tag" title="Title tag" /></p><p>sit amet <strong>%5%</strong></p><p>%4% %6% is %3%<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Alt tag" /></p>');
 
     }//end testInsertingAnImageDeletingThenClickingUndo()
 
@@ -721,15 +678,13 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperUnitTest
      */
     public function testStartingNewParagraphAfterImage()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
-        $this->selectText('XuT');
+        $this->selectKeyword(1);
         $this->keyDown('Key.RIGHT');
         $this->keyDown('Key.RIGHT');
         $this->keyDown('Key.RIGHT');
         $this->keyDown('Key.ENTER');
         $this->type('New paragraph');
-        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>LOREM XuT</p><p><img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Alt tag" /></p><p>New paragraph</p><p>LABS is ORSM</p>');
+        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%7% %1%</p><p><img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Alt tag" /></p><p>New paragraph</p><p>%6% is %3%</p>');
 
     }//end testStartingNewParagraphAfterImage()
 
@@ -741,18 +696,16 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperUnitTest
      */
     public function testFormatIconIsDisabled()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
-        $this->selectText('dolor');
+        $this->selectKeyword(2);
         $this->type('Key.RIGHT');
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_image.png');
+        $this->clickTopToolbarButton('image');
         $this->type('http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg');
-        $this->clickTopToolbarButton($dir.'toobarIcon_image_presentational.png');
+        $this->clickField('Image is decorative');
         $this->keyDown('Key.ENTER');
 
         $this->clickElement('img', 1);
-        $this->assertTrue($this->topToolbarButtonExists(dirname(dirname(__FILE__)).'/ViperFormatPlugin/Images/toolbarIcon_toggle_formats_disabled.png'), 'Formats icon should be active.');
+        $this->assertTrue($this->topToolbarButtonExists('formats', 'disabled'), 'Formats icon should be active.');
 
     }//end testFormatIconIsDisabled()
 
@@ -764,12 +717,10 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperUnitTest
      */
     public function testImageResizeHandles()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
-        $this->selectText('dolor');
+        $this->selectKeyword(2);
         $this->type('Key.RIGHT');
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_image.png');
+        $this->clickTopToolbarButton('image');
         $this->type('http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg');
         $this->keyDown('Key.TAB');
         $this->type('Alt tag');
@@ -778,8 +729,8 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperUnitTest
         $this->keyDown('Key.ENTER');
         $this->clickElement('img', 1);
 
-        $this->assertTrue($this->exists($dir.'resize_bottom_left.png'));
-        $this->assertTrue($this->exists($dir.'resize_bottom_right.png'));
+        $this->assertTrue($this->exists($this->findImage('ImageHandle-sw', '.Viper-image-handle-sw')));
+        $this->assertTrue($this->exists($this->findImage('ImageHandle-se', '.Viper-image-handle-se')));
 
     }//end testImageResizeHandles()
 
@@ -791,23 +742,21 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperUnitTest
      */
     public function testResizingAnImage()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
-        $this->selectText('dolor');
+        $this->selectKeyword(2);
         $this->type('Key.RIGHT');
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_image.png');
+        $this->clickTopToolbarButton('image');
         $this->type('http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg');
-        $this->clickTopToolbarButton($dir.'toobarIcon_image_presentational.png');
+        $this->clickField('Image is decorative');
         $this->keyDown('Key.ENTER');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_subImage_active.png');
+        $this->clickTopToolbarButton('image', 'selected');
 
-        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>LOREM XuT dolor<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="" /></p><p>sit amet <strong>WoW</strong></p><p>Squiz LABS is ORSM</p>');
+        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%7% %1% %2%<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="" /></p><p>sit amet <strong>%5%</strong></p><p>%4% %6% is %3%</p>');
 
         $this->clickElement('img', 1);
         $this->resizeImage(1, 300);
 
-         $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>LOREM XuT dolor<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="" width="286px" height="130px" /></p><p>sit amet <strong>WoW</strong></p><p>Squiz LABS is ORSM</p>');
+         $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%7% %1% %2%<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="" width="286px" height="130px" /></p><p>sit amet <strong>%5%</strong></p><p>%4% %6% is %3%</p>');
 
     }//end testResizingAnImage()
 
@@ -819,33 +768,31 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperUnitTest
      */
     public function testResizingAnImageAndEditingIt()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
-        $this->selectText('dolor');
+        $this->selectKeyword(2);
         $this->type('Key.RIGHT');
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_image.png');
+        $this->clickTopToolbarButton('image');
         $this->type('http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg');
         $this->keyDown('Key.TAB');
         $this->type('Alt tag');
         $this->keyDown('Key.ENTER');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_subImage_active.png');
+        $this->clickTopToolbarButton('image', 'selected');
 
-        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>LOREM XuT dolor<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Alt tag" /></p><p>sit amet <strong>WoW</strong></p><p>Squiz LABS is ORSM</p>');
+        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%7% %1% %2%<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Alt tag" /></p><p>sit amet <strong>%5%</strong></p><p>%4% %6% is %3%</p>');
 
         $this->clickElement('img', 1);
         $this->resizeImage(1, 300);
 
-         $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>LOREM XuT dolor<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Alt tag" width="286px" height="130px" /></p><p>sit amet <strong>WoW</strong></p><p>Squiz LABS is ORSM</p>');
+         $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%7% %1% %2%<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Alt tag" width="286px" height="130px" /></p><p>sit amet <strong>%5%</strong></p><p>%4% %6% is %3%</p>');
 
         $this->clickElement('img', 1);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_subImage_active.png');
+        $this->clickTopToolbarButton('image', 'selected');
         $this->keyDown('Key.TAB');
         $this->keyDown('Key.TAB');
         $this->type('Title tag');
         $this->keyDown('Key.ENTER');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_subImage_active.png');
-        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>LOREM XuT dolor<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Alt tag" width="286px" height="130px" title="Title tag" /></p><p>sit amet <strong>WoW</strong></p><p>Squiz LABS is ORSM</p>');
+        $this->clickTopToolbarButton('image', 'selected');
+        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%7% %1% %2%<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Alt tag" width="286px" height="130px" title="Title tag" /></p><p>sit amet <strong>%5%</strong></p><p>%4% %6% is %3%</p>');
 
     }//end testResizingAnImageAndEditingIt()
 
@@ -857,26 +804,24 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperUnitTest
      */
     public function testResizingAnImageAndClickingUndo()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
-        $this->selectText('dolor');
+        $this->selectKeyword(2);
         $this->type('Key.RIGHT');
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_image.png');
+        $this->clickTopToolbarButton('image');
         $this->type('http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg');
-        $this->clickTopToolbarButton($dir.'toobarIcon_image_presentational.png');
+        $this->clickField('Image is decorative');
         $this->keyDown('Key.ENTER');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_subImage_active.png');
+        $this->clickTopToolbarButton('image', 'selected');
 
-        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>LOREM XuT dolor<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="" /></p><p>sit amet <strong>WoW</strong></p><p>Squiz LABS is ORSM</p>');
+        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%7% %1% %2%<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="" /></p><p>sit amet <strong>%5%</strong></p><p>%4% %6% is %3%</p>');
 
         $this->clickElement('img', 1);
         $this->resizeImage(1, 300);
 
-        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>LOREM XuT dolor<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="" width="286px" height="130px" /></p><p>sit amet <strong>WoW</strong></p><p>Squiz LABS is ORSM</p>');
+        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%7% %1% %2%<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="" width="286px" height="130px" /></p><p>sit amet <strong>%5%</strong></p><p>%4% %6% is %3%</p>');
 
-        $this->clickTopToolbarButton(dirname(dirname(__FILE__)).'/Core/Images/undoIcon_active.png');
-        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>LOREM XuT dolor<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="" /></p><p>sit amet <strong>WoW</strong></p><p>Squiz LABS is ORSM</p>');
+        $this->clickTopToolbarButton('historyUndo');
+        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%7% %1% %2%<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="" /></p><p>sit amet <strong>%5%</strong></p><p>%4% %6% is %3%</p>');
 
     }//end testResizingAnImage()
 
@@ -888,18 +833,16 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperUnitTest
      */
     public function testImageIconInInlineToolbar()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         // First insert the image
-        $this->selectText('dolor');
+        $this->selectKeyword(2);
         $this->type('Key.RIGHT');
 
         $this->clickTopToolbarButton('image');
         $this->type('http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg');
-        $this->clickTopToolbarButton($dir.'toobarIcon_image_presentational.png');
+        $this->clickField('Image is decorative');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>LOREM XuT dolor<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="" /></p><p>sit amet <strong>WoW</strong></p><p>Squiz LABS is ORSM</p>');
+        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%7% %1% %2%<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="" /></p><p>sit amet <strong>%5%</strong></p><p>%4% %6% is %3%</p>');
 
         $this->clickElement('img', 1);
         $this->assertTrue($this->inlineToolbarButtonExists('image', 'active'), 'Image icon should be active.');
@@ -915,17 +858,14 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperUnitTest
      */
     public function testEditingTheImageUsingInlineToolbar()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $this->clickElement('img', 1);
         $this->clickInlineToolbarButton('image', 'active');
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_image_presentational_active.png');
-        $altBox = $this->find($dir.'input_alt.png', $this->getInlineToolbar());
-        $this->click($altBox);
+        $this->clickField('Image is decorative');
+        $this->clickField('Alt');
         $this->type('Alt text');
         $this->clickInlineToolbarButton('Update Changes', NULL, TRUE);
 
-        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>LOREM XuT</p><img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Alt text" width="369" height="167"/><p>LABS is ORSM</p>');
+        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%7% %1%</p><img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Alt text" width="369" height="167"/><p>%6% is %3%</p>');
 
     }//end testEditingTheImageUsingInlineToolbar()
 
@@ -939,15 +879,15 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperUnitTest
     {
         $this->clickElement('img', 1);
         $this->clickInlineToolbarButton('move');
-        $this->click($this->find('XuT'));
+        $this->click($this->findKeyword(1));
 
-        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>LOREM X<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="" width="369" height="167" />uT</p><p>LABS is ORSM</p>');
+        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%7% X<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="" width="369" height="167" />uT</p><p>%6% is %3%</p>');
 
         $this->assertTrue($this->inlineToolbarButtonExists('image', 'active'), 'Image icon should be active.');
 
         // Undo the move
         $this->clickTopToolbarButton('historyUndo');
-        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>LOREM XuT</p><p><img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="" width="369" height="167" /></p><p>LABS is ORSM</p>');
+        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%7% %1%</p><p><img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="" width="369" height="167" /></p><p>%6% is %3%</p>');
 
     }//end testMovingAnImage()
 

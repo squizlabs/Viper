@@ -13,21 +13,19 @@ class Viper_Tests_ViperImagePlugin_ImagesInTablesUnitTest extends AbstractViperU
      */
     public function testImageIconIsAvailable()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
-        $text = 'LAbS';
-        $this->selectText($text);
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_image.png'), 'Image icon should be active.');
+        $text = 1;
+        $this->selectKeyword($text);
+        $this->assertTrue($this->topToolbarButtonExists('image'), 'Image icon should be active.');
 
         $this->selectInlineToolbarLineageItem(3);
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_image.png'), 'Image icon should be active.');
+        $this->assertTrue($this->topToolbarButtonExists('image'), 'Image icon should be active.');
 
-        $this->click($this->find($text));
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_image.png'), 'Image icon should be active.');
+        $this->click($this->findKeyword($text));
+        $this->assertTrue($this->topToolbarButtonExists('image'), 'Image icon should be active.');
 
-        $this->selectText('Mnu');
+        $this->selectKeyword(3);
         $this->type('Key.RIGHT');
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_image.png'), 'Image icon should be active.');
+        $this->assertTrue($this->topToolbarButtonExists('image'), 'Image icon should be active.');
 
     }//end testImageIconIsAvailable()
 
@@ -39,23 +37,21 @@ class Viper_Tests_ViperImagePlugin_ImagesInTablesUnitTest extends AbstractViperU
      */
     public function testInsertingAndDeletingAnImageUsingDelete()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
-        $this->selectText('LAbS');
+        $this->selectKeyword(1);
         $this->type('Key.RIGHT');
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_image.png');
+        $this->clickTopToolbarButton('image');
         $this->type('http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg');
         $this->keyDown('Key.TAB');
         $this->type('Alt tag');
         $this->keyDown('Key.ENTER');
 
-        $this->assertEquals('UnaU LAbS<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Alt tag" /> FoX Mnu', $this->getHtml('td', 0));
+        $this->assertEquals('UnaU %1%<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Alt tag" /> FoX %3%', $this->getHtml('td', 0));
 
         $this->clickElement('img', 1);
         $this->keyDown('Key.DELETE');
 
-        $this->assertEquals('UnaU LAbS FoX Mnu', $this->getHtml('td,th', 3));
+        $this->assertEquals('UnaU %1% FoX %3%', $this->getHtml('td,th', 3));
 
     }//end testInsertingAndDeletingAnImageUsingDelete()
 
@@ -67,28 +63,26 @@ class Viper_Tests_ViperImagePlugin_ImagesInTablesUnitTest extends AbstractViperU
      */
     public function testInsertingAndEditingTheUrlForAnImage()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
-        $this->selectText('LAbS');
+        $this->selectKeyword(1);
         $this->type('Key.RIGHT');
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_image.png');
+        $this->clickTopToolbarButton('image');
         $this->type('http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg');
-        $this->clickTopToolbarButton($dir.'toobarIcon_image_presentational.png');
+        $this->clickField('Image is decorative');
         sleep(1);
         $this->keyDown('Key.ENTER');
 
-        $this->assertEquals('UnaU LAbS<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="" /> FoX Mnu', $this->getHtml('td,th', 3));
+        $this->assertEquals('UnaU %1%<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="" /> FoX %3%', $this->getHtml('td,th', 3));
 
         $this->clickElement('img', 1);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_image_highlighted.png');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_deleteValue_icon.png');
+        $this->clickTopToolbarButton('image', 'active');
+        $this->clearFieldValue('URL');
         $this->type('http://cms.squizsuite.net/__images/homepage-images/editing.png');
         $this->keyDown('Key.ENTER');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_subImage_active.png');
-        $this->click($this->find('LAbS'));
+        $this->clickTopToolbarButton('image', 'selected');
+        $this->click($this->findKeyword(1));
 
-        $this->assertEquals('UnaU LAbS<img src="http://cms.squizsuite.net/__images/homepage-images/editing.png" alt="" /> FoX Mnu', $this->getHtml('td,th', 3));
+        $this->assertEquals('UnaU %1%<img src="http://cms.squizsuite.net/__images/homepage-images/editing.png" alt="" /> FoX %3%', $this->getHtml('td,th', 3));
 
     }//end testInsertingAndEditingTheUrlForAnImage()
 
@@ -100,29 +94,26 @@ class Viper_Tests_ViperImagePlugin_ImagesInTablesUnitTest extends AbstractViperU
      */
     public function testInsertingAndEditingAnImageUsingTheUpdateChangesButton()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
-        $this->selectText('LAbS');
+        $this->selectKeyword(1);
         $this->type('Key.RIGHT');
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_image.png');
+        $this->clickTopToolbarButton('image');
         $this->type('http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg');
         $this->keyDown('Key.TAB');
         $this->type('Alt tag');
         sleep(1);
-        $updateChanges = $this->find($dir.'toolbarIcon_updateChanges.png');
-        $this->click($updateChanges);
+        $this->clickButton('Update Changes', NULL, TRUE);
 
-        $this->assertEquals('UnaU LAbS<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Alt tag" /> FoX Mnu', $this->getHtml('td,th', 3));
+        $this->assertEquals('UnaU %1%<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Alt tag" /> FoX %3%', $this->getHtml('td,th', 3));
 
         $this->clickElement('img', 1);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_image_highlighted.png');
+        $this->clickTopToolbarButton('image', 'active');
 
-        $this->clickTopToolbarButton($dir.'toobarIcon_image_presentational.png');
+        $this->clickField('Image is decorative');
         $this->click($updateChanges);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_subImage_active.png');
+        $this->clickTopToolbarButton('image', 'selected');
 
-        $this->assertEquals('UnaU LAbS<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="" /> FoX Mnu', $this->getHtml('td,th', 3));
+        $this->assertEquals('UnaU %1%<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="" /> FoX %3%', $this->getHtml('td,th', 3));
 
     }//end testInsertingAndEditingAnImageUsingTheUpdateChangesButton()
 
@@ -134,12 +125,10 @@ class Viper_Tests_ViperImagePlugin_ImagesInTablesUnitTest extends AbstractViperU
      */
     public function testReplacingContentInCellWithImage()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
-        $this->selectText('LAbS');
+        $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(3);
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_image.png');
+        $this->clickTopToolbarButton('image');
         $this->type('http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg');
         $this->keyDown('Key.TAB');
         $this->type('Alt tag');
@@ -162,12 +151,10 @@ class Viper_Tests_ViperImagePlugin_ImagesInTablesUnitTest extends AbstractViperU
      */
     public function testEditingAnImageInCell()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
-        $this->selectText('LAbS');
+        $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(3);
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_image.png');
+        $this->clickTopToolbarButton('image');
         $this->type('http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg');
         $this->keyDown('Key.TAB');
         $this->type('Alt tag');
@@ -176,11 +163,11 @@ class Viper_Tests_ViperImagePlugin_ImagesInTablesUnitTest extends AbstractViperU
         $this->assertEquals('<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Alt tag" />', $this->getHtml('td,th', 3));
 
         $this->clickElement('img', 1);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_image_highlighted.png');
+        $this->clickTopToolbarButton('image', 'active');
         $this->keyDown('Key.TAB');
         $this->type('Abcd');
         $this->keyDown('Key.ENTER');
-        $this->click($this->find('blah'));
+        $this->click($this->findKeyword(2));
 
         $this->assertEquals('<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Abcd" />', $this->getHtml('td,th', 3));
 
