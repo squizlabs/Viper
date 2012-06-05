@@ -847,7 +847,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         }
 
         $this->keyDown('Key.CMD + `');
-        usleep(50000);
+        sleep(1);
 
     }//end _switchWindow()
 
@@ -1647,6 +1647,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         $this->keyDown('Key.SPACE');
 
         $this->_switchWindow('main');
+        sleep(2);
 
         $text = $this->getClipboard();
         if (strpos($text, "u'") === 0) {
