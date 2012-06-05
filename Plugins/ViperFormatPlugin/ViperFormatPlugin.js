@@ -719,7 +719,7 @@ ViperFormatPlugin.prototype = {
                 if (!span) {
                     this.viper.selectBookmark(bookmark);
                 } else {
-                    this.viper.removeBookmark(bookmark);
+                    this.viper.removeBookmarks();
                     range.selectNode(span);
                 }
             }//end if
