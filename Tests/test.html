@@ -15,16 +15,10 @@
                 viper.setEditableElement(contentElement);
 
                 dfx.attr(dfxjQuery.find('.Viper-button[title]'), 'title', '');
-                dfx.addEvent(document, 'keydown', function(e) {
-                    if (e.which === 74
-                        && e.ctrlKey === true
-                        && e.shiftKey === true
-                        && e.altKey === true
-                    ) {
-                        window.open('test_jsexec.html', '', 'width=400,height=100,0,status=0,left=850,top=500');
-                        return false;
-                    }
-                });
+                if (window.location.hash !== '#run') {
+                    window.open('test_jsexec.html', '', 'width=400,height=100,0,status=0,left=950,top=500');
+                    window.location.hash = '#run';
+                }
             };
         </script>
         __TEST_JS_INCLUDE__

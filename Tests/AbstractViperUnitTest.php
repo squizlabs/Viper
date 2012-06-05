@@ -110,6 +110,20 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      */
     private static $_seleniumpid = NULL;
 
+    /**
+     * The active browser window.
+     *
+     * @var string
+     */
+    private static $_currentWindow = 'js';
+
+    /**
+     * Keeps cache of JS that is executed.
+     *
+     * @var array
+     */
+    private static $_jsExecCache = array();
+
 
     /**
      * Returns the path of a test file.
@@ -209,6 +223,8 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
 
         // Change browser and then change the URL.
         if (self::$_testRun === TRUE) {
+            $this->_switchWindow('main');
+
             $this->setAutoWaitTimeout(1);
             $this->resizeWindow();
             $this->setDefaultRegion(self::$_window);
@@ -233,6 +249,10 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
 
             $this->setAutoWaitTimeout(1);
             $this->goToURL($this->_getBaseUrl().'/test_tmp.html');
+
+            sleep(1);
+            $this->_switchWindow('main');
+
             self::$_testRun = TRUE;
 
             $pageLoc = $this->getPageTopLeft();
@@ -804,6 +824,32 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         $this->getBrowserWindowSize();
 
     }//end resizeWindow()
+
+
+    /**
+     * Toggles between main window and the JS execution window.
+     *
+     * @param string $type The window to switch to. If not specified then it will
+     * toggle to inactive window.
+     *
+     * @return void
+     */
+    private function _switchWindow($type=NULL)
+    {
+        if ($type === self::$_currentWindow) {
+            return;
+        }
+
+        if (self::$_currentWindow === 'js') {
+            self::$_currentWindow = 'main';
+        } else {
+            self::$_currentWindow = 'js';
+        }
+
+        $this->keyDown('Key.CMD + `');
+        usleep(50000);
+
+    }//end _switchWindow()
 
 
     /**
@@ -1579,13 +1625,19 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
             return $result;
         }//end if
 
-        $this->keyDown('Key.CTRL + Key.SHIFT + Key.ALT + j');
+        $this->_switchWindow('js');
 
         sleep(1);
 
-        $this->type($js);
-        $this->keyDown('Key.ENTER');
+        if (isset(self::$_jsExecCache[$js]) === TRUE) {
+            $this->type(self::$_jsExecCache[$js]);
+        } else {
+            $this->type($js);
+            self::$_jsExecCache[$js] = count(self::$_jsExecCache);
+        }
+
         usleep(10000);
+        $this->keyDown('Key.ENTER');
         $this->keyDown('Key.TAB');
         $this->keyDown('Key.CMD + a');
         usleep(10000);
@@ -1593,7 +1645,8 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         usleep(10000);
         $this->keyDown('Key.TAB');
         $this->keyDown('Key.SPACE');
-        sleep(1);
+
+        $this->_switchWindow('main');
 
         $text = $this->getClipboard();
         if (strpos($text, "u'") === 0) {

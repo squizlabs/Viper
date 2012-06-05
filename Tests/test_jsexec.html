@@ -5,8 +5,9 @@
     <body spellcheck="false" onload="document.getElementById('jsExec').focus()">
         <textarea id="jsExec" accesskey="J"></textarea>
         <textarea id="jsRes" accesskey="R"></textarea>
-        <button id="close" onclick="window.close();">Close</button>
+        <button id="close" onclick="document.getElementById('jsExec').focus();document.getElementById('jsExec').value='';document.getElementById('jsRes').value='';">Clear</button>
         <script>
+            var jsCache = [];
             var jsExec = document.getElementById('jsExec')
             var jsRes  = document.getElementById('jsRes');
             jsExec.onkeydown = function(e) {
@@ -18,12 +19,23 @@
                 jsRes.value  = '';
                 jsExec.value = '';
 
+                if (isNaN(parseInt(val)) === false) {
+                    val = jsCache[val];
+                } else {
+                    jsCache.push(val);
+                }
+
                 val  = 'var jsResult = ' + val + ';';
                 val += 'jsRes.value = window.opener.dfx.jsonEncode(jsResult);';
 
                 // Execute JS.
                 eval(val);
             };
+
+            function closeWindow()
+            {
+                window.close();
+            }
         </script>
     </body>
 </html>
