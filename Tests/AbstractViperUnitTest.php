@@ -1932,6 +1932,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
                    );
         $region = $this->getRegionOnPage($topLeft);
         $this->click($region);
+        sleep(1);
 
     }//end reloadPage()
 
