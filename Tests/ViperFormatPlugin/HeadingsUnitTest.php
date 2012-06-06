@@ -13,27 +13,25 @@ class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractViperUnitTe
      */
     public function testAHeading()
     {
-        $dir  = dirname(__FILE__).'/Images/';
+        $this->selectKeyword(1, 2);
+        $this->clickInlineToolbarButton('headings', 'active');
+        $this->clickInlineToolbarButton('H2', NULL, TRUE);
+        $this->assertHTMLMatch('<h2>%1% %2%</h2><p>%3% xtn dolor</p><p>sit amet <strong>%4%</strong></p><p>%5% long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar.</p>');
 
-        $this->selectText('HEADINGS', 'Test');
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_heading_subActive.png');
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_h2.png');
-        $this->assertHTMLMatch('<h2>HEADINGS Test</h2><p>Lorem xtn dolor</p><p>sit amet <strong>WoW</strong></p><p>Extra long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar.</p>');
+        $this->clickInlineToolbarButton('H3', NULL, TRUE);
+        $this->assertHTMLMatch('<h3>%1% %2%</h3><p>%3% xtn dolor</p><p>sit amet <strong>%4%</strong></p><p>%5% long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar.</p>');
 
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_h3.png');
-        $this->assertHTMLMatch('<h3>HEADINGS Test</h3><p>Lorem xtn dolor</p><p>sit amet <strong>WoW</strong></p><p>Extra long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar.</p>');
+        $this->clickInlineToolbarButton('H4', NULL, TRUE);
+        $this->assertHTMLMatch('<h4>%1% %2%</h4><p>%3% xtn dolor</p><p>sit amet <strong>%4%</strong></p><p>%5% long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar.</p>');
 
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_h4.png');
-        $this->assertHTMLMatch('<h4>HEADINGS Test</h4><p>Lorem xtn dolor</p><p>sit amet <strong>WoW</strong></p><p>Extra long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar.</p>');
+        $this->clickInlineToolbarButton('H5', NULL, TRUE);
+        $this->assertHTMLMatch('<h5>%1% %2%</h5><p>%3% xtn dolor</p><p>sit amet <strong>%4%</strong></p><p>%5% long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar.</p>');
 
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_h5.png');
-        $this->assertHTMLMatch('<h5>HEADINGS Test</h5><p>Lorem xtn dolor</p><p>sit amet <strong>WoW</strong></p><p>Extra long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar.</p>');
+        $this->clickInlineToolbarButton('H6', NULL, TRUE);
+        $this->assertHTMLMatch('<h6>%1% %2%</h6><p>%3% xtn dolor</p><p>sit amet <strong>%4%</strong></p><p>%5% long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar.</p>');
 
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_h6.png');
-        $this->assertHTMLMatch('<h6>HEADINGS Test</h6><p>Lorem xtn dolor</p><p>sit amet <strong>WoW</strong></p><p>Extra long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar.</p>');
-
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_h1.png');
-        $this->assertHTMLMatch('<h1>HEADINGS Test</h1><p>Lorem xtn dolor</p><p>sit amet <strong>WoW</strong></p><p>Extra long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar.</p>');
+        $this->clickInlineToolbarButton('H1', NULL, TRUE);
+        $this->assertHTMLMatch('<h1>%1% %2%</h1><p>%3% xtn dolor</p><p>sit amet <strong>%4%</strong></p><p>%5% long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar.</p>');
 
     }//end testHeading()
 

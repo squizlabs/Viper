@@ -599,11 +599,11 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
      */
     public function testAddingClassToAOneBoldWord()
     {
-        $this->selectKeyword(11, 12);
+        $this->selectKeyword(10, 11);
         $this->keyDown('Key.CMD + b');
         $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p>Test %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><em>The</em> %8% %9% foxxx</p><p><strong>%10% %11%</strong> the lazy dog</p>');
 
-        $this->selectKeyword(12);
+        $this->selectKeyword(11);
         $this->clickInlineToolbarButton('cssClass');
         $this->type('test');
         $this->keyDown('Key.ENTER');
