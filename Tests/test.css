@@ -62,6 +62,12 @@ em strong {
     color: brown;
 }
 
+sub, sup {
+    vertical-align: middle;
+    font-size: 20px;
+    font-family: monospace;
+}
+
 .Viper-button.Viper-disabled .Viper-buttonIcon {
     margin-top: -14px;
 }
