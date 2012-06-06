@@ -3812,7 +3812,14 @@ Viper.prototype = {
 
     setRange: function(elem, pos)
     {
+        if (document.activeElement && document.activeElement.blur) {
+            // Call the blur method of the active element incase its an input box etc
+            // which causes problems on IE when range is set below.
+            document.activeElement.blur();
+        }
+
         var range = this.getCurrentRange();
+
         range.setStart(elem, pos);
         range.collapse(true);
         return range;
