@@ -1924,10 +1924,14 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      */
     protected function reloadPage()
     {
-        $this->keyDown('Key.CMD + r');
-
-
-
+        $topLeft = array(
+                    'x1' => 0,
+                    'y1' => 0,
+                    'x2' => 14,
+                    'y2' => 14,
+                   );
+        $region = $this->getRegionOnPage($topLeft);
+        $this->click($region);
 
     }//end reloadPage()
 
