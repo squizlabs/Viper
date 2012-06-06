@@ -244,12 +244,14 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
             $this->reloadPage();
 
             // Make sure page is loaded.
-            $maxRetries = 2;
+            $maxRetries = 4;
             while ($this->topToolbarButtonExists('bold') === FALSE) {
                 $this->reloadPage();
                 if ($maxRetries === 0) {
                     throw new Exception('Failed to load Viper test page.');
                 }
+
+                sleep(2);
 
                 $maxRetries--;
             }
@@ -275,12 +277,14 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
             $this->_switchWindow('main');
 
             // Make sure page is loaded.
-            $maxRetries = 2;
+            $maxRetries = 4;
             while ($this->topToolbarButtonExists('bold') === FALSE) {
                 $this->reloadPage();
                 if ($maxRetries === 0) {
                     throw new Exception('Failed to load Viper test page.');
                 }
+
+                sleep(2);
 
                 $maxRetries--;
             }
@@ -1080,7 +1084,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
                                 $match .= $vals[0][$valIndex].' ';
                             }
 
-                            $match = rtrim($match);
+                            $match  = rtrim($match);
                             $match .= '"';
                         } else {
                             $match .= $attrs[0][$attrIndex];
@@ -1287,7 +1291,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      */
     protected function getActiveBubble()
     {
-        $rect   = $this->execJS('gActBubble()');
+        $rect = $this->execJS('gActBubble()');
 
         if (is_array($rect) === TRUE) {
             $region = $this->getRegionOnPage($rect);
@@ -1319,7 +1323,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
             } catch (Exception $e) {
                 // Try to find it again without the image.
                 try {
-                    $rect  = $this->_getTextButtonRectangle($buttonIcon, $state, 'inlineToolbar');
+                    $rect = $this->_getTextButtonRectangle($buttonIcon, $state, 'inlineToolbar');
                     $this->getRegionOnPage($rect);
                 } catch (Exception $e) {
                     return FALSE;
@@ -1358,7 +1362,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
             } catch (Exception $e) {
                 // Try to find it again without the image.
                 try {
-                    $rect  = $this->_getTextButtonRectangle($buttonIcon, $state, 'topToolbar');
+                    $rect = $this->_getTextButtonRectangle($buttonIcon, $state, 'topToolbar');
                     $this->getRegionOnPage($rect);
                 } catch (Exception $e) {
                     return FALSE;
@@ -1481,8 +1485,9 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      * @param string  $buttonIcon The name of the button.
      * @param string  $state      The name of the button state (active, selected).
      * @param boolean $isText     If TRUE then the button is a text button (i.e. no icon).
+     * @param string  $region     The region to look in to.
      *
-     * @return void
+     * @return string
      */
     protected function clickButton($buttonIcon, $state=NULL, $isText=FALSE, $region=NULL)
     {
@@ -1603,7 +1608,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
 
         return $filePath;
 
-    }//end createImageFromRectange()
+    }//end createImageFromRectangle()
 
 
     /**
@@ -1630,7 +1635,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
             return $this->findImage($imageName, $selector, $index);
         }
 
-    }//end findImage
+    }//end findImage()
 
 
     /**
@@ -1982,7 +1987,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
                     'x2' => 14,
                     'y2' => 14,
                    );
-        $region = $this->getRegionOnPage($topLeft);
+        $region  = $this->getRegionOnPage($topLeft);
         $this->click($region);
         sleep(1);
 
