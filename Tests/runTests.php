@@ -69,7 +69,7 @@ $opts = getopt('s::b::u::t::ci', array('selenium', 'url::'));
             $phpunitCMD .= ' .';
         }
 
-        passthru('phpunit '.$phpunitCMD);
+        passthru('phpunit --configuration phpunit.xml '.$phpunitCMD);
     }
 
 ?>

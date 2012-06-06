@@ -225,13 +225,25 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         if (self::$_testRun === TRUE) {
             $this->_switchWindow('main');
 
-            $this->setAutoWaitTimeout(1);
             $this->resizeWindow();
             $this->setDefaultRegion(self::$_window);
 
             // URL is already changed to the test runner, so just reload.
             $this->setSetting('MinSimilarity', self::$_similarity);
+
+            $this->setAutoWaitTimeout(1);
             $this->reloadPage();
+
+            // Make sure page is loaded.
+            $maxRetries = 2;
+            while ($this->topToolbarButtonExists('bold') === FALSE) {
+                $this->reloadPage();
+                if ($maxRetries === 0) {
+                    throw new Exception('Failed to load Viper test page.');
+                }
+
+                $maxRetries--;
+            }
         } else {
             $this->selectBrowser(self::$_browser);
             $this->resizeWindow();
@@ -247,11 +259,22 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
                 }
             }
 
-            $this->setAutoWaitTimeout(1);
             $this->goToURL($this->_getBaseUrl().'/test_tmp.html');
+            $this->setAutoWaitTimeout(1);
 
             sleep(1);
             $this->_switchWindow('main');
+
+            // Make sure page is loaded.
+            $maxRetries = 2;
+            while ($this->topToolbarButtonExists('bold') === FALSE) {
+                $this->reloadPage();
+                if ($maxRetries === 0) {
+                    throw new Exception('Failed to load Viper test page.');
+                }
+
+                $maxRetries--;
+            }
 
             self::$_testRun = TRUE;
 
@@ -850,6 +873,19 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         sleep(1);
 
     }//end _switchWindow()
+
+
+    /**
+     * Closes the JS exec window.
+     *
+     * @return void
+     */
+    public function closeJSWindow()
+    {
+        $this->execJS('cw();');
+        self::$_currentWindow = 'main';
+
+    }//end closeJSWindow()
 
 
     /**
@@ -1629,6 +1665,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
 
         sleep(1);
         $this->keyDown($this->_getAccessKeys('j'));
+
         if (isset(self::$_jsExecCache[$js]) === TRUE) {
             $this->type(self::$_jsExecCache[$js]);
         } else {
@@ -1888,7 +1925,9 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
     protected function reloadPage()
     {
         $this->keyDown('Key.CMD + r');
-        sleep(1);
+
+
+
 
     }//end reloadPage()
 

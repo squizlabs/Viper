@@ -1,0 +1,5 @@
+<phpunit>
+    <listeners>
+        <listener file="/Users/sdanis/Sites/Viper/Tests/ViperTestListener.php" class="ViperTestListener"></listener>
+    </listeners>
+</phpunit>

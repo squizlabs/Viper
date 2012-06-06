@@ -1188,7 +1188,10 @@ abstract class AbstractSikuliUnitTest extends PHPUnit_Framework_TestCase
                 }
             }//end if
 
-            ob_flush();
+            if (ob_get_level() > 0) {
+                ob_flush();
+            }
+
             if ((microtime(TRUE) - $start) > $timeout) {
                 throw new Exception('Sikuli server did not respond');
             }
