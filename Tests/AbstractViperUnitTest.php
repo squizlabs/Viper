@@ -1301,10 +1301,30 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      */
     protected function inlineToolbarButtonExists($buttonIcon, $state=NULL, $isText=FALSE)
     {
-        $button  = $this->_getButton($buttonIcon, $state, $isText);
-        $toolbar = $this->getInlineToolbar();
+        $button = $this->_getButton($buttonIcon, $state, $isText);
 
-        return $this->exists($button, $toolbar);
+        if ($isText === TRUE) {
+            // Its harder for Sikuli to match a text button so use lower similarity.
+            try {
+                $this->find($button, $this->getInlineToolbar(), 0.7);
+            } catch (Exception $e) {
+                // Try to find it again without the image.
+                try {
+                    $rect  = $this->_getTextButtonRectangle($buttonIcon, $state, 'inlineToolbar');
+                    $this->getRegionOnPage($rect);
+                } catch (Exception $e) {
+                    return FALSE;
+                }
+            }
+        } else {
+            try {
+                $this->find($button, $this->getInlineToolbar(), 0.9);
+            } catch (Exception $e) {
+                return FALSE;
+            }
+        }
+
+        return TRUE;
 
     }//end inlineToolbarButtonExists()
 
@@ -1320,10 +1340,30 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      */
     protected function topToolbarButtonExists($buttonIcon, $state=NULL, $isText=FALSE)
     {
-        $button  = $this->_getButton($buttonIcon, $state, $isText);
-        $toolbar = $this->getTopToolbar();
+        $button = $this->_getButton($buttonIcon, $state, $isText);
 
-        return $this->exists($button, $toolbar);
+        if ($isText === TRUE) {
+            // Its harder for Sikuli to match a text button so use lower similarity.
+            try {
+                $this->find($button, $this->getTopToolbar(), 0.7);
+            } catch (Exception $e) {
+                // Try to find it again without the image.
+                try {
+                    $rect  = $this->_getTextButtonRectangle($buttonIcon, $state, 'topToolbar');
+                    $this->getRegionOnPage($rect);
+                } catch (Exception $e) {
+                    return FALSE;
+                }
+            }
+        } else {
+            try {
+                $this->find($button, $this->getTopToolbar(), 0.9);
+            } catch (Exception $e) {
+                return FALSE;
+            }
+        }
+
+        return TRUE;
 
     }//end topToolbarButtonExists()
 
