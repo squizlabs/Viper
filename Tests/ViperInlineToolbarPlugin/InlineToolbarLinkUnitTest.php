@@ -13,7 +13,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarLinkUnitTest extends Abs
      */
     public function testClickingLinkInLineage()
     {
-        $this->click($this->find('WoW'));
+        $this->click($this->findKeyword(1));
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Link</li>', $lineage);
 
@@ -29,8 +29,8 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarLinkUnitTest extends Abs
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Link</li>', $lineage);
 
-        $this->click($this->find('LoreM'));
-        $this->click($this->find('BROWN'));
+        $this->click($this->findKeyword(2));
+        $this->click($this->findKeyword(3));
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Link</li>', $lineage);
 
@@ -57,7 +57,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarLinkUnitTest extends Abs
      */
     public function testLinkAppearsInLineage()
     {
-        $this->selectText('DOLOR');
+        $this->selectKeyword(4);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Selection</li>', $lineage);
 
@@ -77,7 +77,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarLinkUnitTest extends Abs
      */
     public function testLineageChangesWhenRemoveLink()
     {
-        $this->selectText('WoW');
+        $this->selectKeyword(1);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Link</li>', $lineage);
 
