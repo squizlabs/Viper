@@ -13,35 +13,33 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarLangToolUnitTest extends
      */
     public function testLineageChangesWhenLanguageIsAppliedAndRemoved()
     {
-        $dir = dirname(dirname(__FILE__)).'/ViperLangToolsPlugin/Images/';
+        $text = 1;
+        $textLoc = $this->findKeyword($text);
 
-        $text = 'AuuA';
-        $textLoc = $this->find($text);
-
-        $this->selectText($text);
+        $this->selectKeyword($text);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Selection</li>', $lineage);
 
-        $this->selectText($text);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language.png');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_language.png');
+        $this->selectKeyword($text);
+        $this->clickTopToolbarButton('langTools');
+        $this->clickTopToolbarButton('Language', NULL, TRUE);
         $this->type('en');
         $this->keyDown('Key.ENTER');
 
         $this->click($textLoc);
-        $this->selectText($text);
+        $this->selectKeyword($text);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">SPAN</li>', $lineage);
 
         $this->click($textLoc);
-        $this->selectText($text);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language_active.png');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_language_active.png');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_deleteValue_icon.png');
+        $this->selectKeyword($text);
+        $this->clickTopToolbarButton('langTools', 'active');
+        $this->clickTopToolbarButton('Language', 'active', TRUE);
+        $this->clearFieldValue('Language');
         $this->keyDown('Key.ENTER');
 
         $this->click($textLoc);
-        $this->selectText($text);
+        $this->selectKeyword($text);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Selection</li>', $lineage);
 
@@ -55,35 +53,33 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarLangToolUnitTest extends
      */
     public function testLineageChangesWhenAcronymIsAppliedAndRemovedA()
     {
-        $dir = dirname(dirname(__FILE__)).'/ViperLangToolsPlugin/Images/';
+        $text = 1;
+        $textLoc = $this->findKeyword($text);
 
-        $text = 'AuuA';
-        $textLoc = $this->find($text);
-
-        $this->selectText($text);
+        $this->selectKeyword($text);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Selection</li>', $lineage);
 
-        $this->selectText($text);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language.png');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_acronym.png');
+        $this->selectKeyword($text);
+        $this->clickTopToolbarButton('langTools');
+        $this->clickTopToolbarButton('Acronym', NULL, TRUE);
         $this->type('en');
         $this->keyDown('Key.ENTER');
 
         $this->click($textLoc);
-        $this->selectText($text);
+        $this->selectKeyword($text);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">ACRONYM</li>', $lineage);
 
         $this->click($textLoc);
-        $this->selectText($text);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language_active.png');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_acronym_active.png');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_deleteValue_icon.png');
+        $this->selectKeyword($text);
+        $this->clickTopToolbarButton('langTools', 'active');
+        $this->clickTopToolbarButton('Acronym', 'active', TRUE);
+        $this->clearFieldValue('Acronym');
         $this->keyDown('Key.ENTER');
 
         $this->click($textLoc);
-        $this->selectText($text);
+        $this->selectKeyword($text);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Selection</li>', $lineage);
 
@@ -97,35 +93,33 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarLangToolUnitTest extends
      */
     public function testLineageChangesWhenAbbreviationIsAppliedAndRemoved()
     {
-        $dir = dirname(dirname(__FILE__)).'/ViperLangToolsPlugin/Images/';
+        $text = 1;
+        $textLoc = $this->findKeyword($text);
 
-        $text = 'AuuA';
-        $textLoc = $this->find($text);
-
-        $this->selectText($text);
+        $this->selectKeyword($text);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Selection</li>', $lineage);
 
-        $this->selectText($text);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language.png');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_abbreviation.png');
+        $this->selectKeyword($text);
+        $this->clickTopToolbarButton('langTools');
+        $this->clickTopToolbarButton('Abbreviation', NULL, TRUE);
         $this->type('en');
         $this->keyDown('Key.ENTER');
 
         $this->click($textLoc);
-        $this->selectText($text);
+        $this->selectKeyword($text);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">ABBR</li>', $lineage);
 
         $this->click($textLoc);
-        $this->selectText($text);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language_active.png');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_abbreviation_active.png');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_deleteValue_icon.png');
+        $this->selectKeyword($text);
+        $this->clickTopToolbarButton('langTools', 'active');
+        $this->clickTopToolbarButton('Abbreviation', 'active', TRUE);
+        $this->clearFieldValue('Abbreviation');
         $this->keyDown('Key.ENTER');
 
         $this->click($textLoc);
-        $this->selectText($text);
+        $this->selectKeyword($text);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Selection</li>', $lineage);
 
@@ -139,35 +133,33 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarLangToolUnitTest extends
      */
     public function testLineageChangesWhenLanguageIsAppliedAndRemovedToFirstWordInParagraph()
     {
-        $dir = dirname(dirname(__FILE__)).'/ViperLangToolsPlugin/Images/';
+        $text = 2;
+        $textLoc = $this->findKeyword($text);
 
-        $text = 'LaBs';
-        $textLoc = $this->find($text);
-
-        $this->selectText($text);
+        $this->selectKeyword($text);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Selection</li>', $lineage);
 
-        $this->selectText($text);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language.png');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_language.png');
+        $this->selectKeyword($text);
+        $this->clickTopToolbarButton('langTools');
+        $this->clickTopToolbarButton('Language', NULL, TRUE);
         $this->type('en');
         $this->keyDown('Key.ENTER');
 
         $this->click($textLoc);
-        $this->selectText($text);
+        $this->selectKeyword($text);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">SPAN</li>', $lineage);
 
         $this->click($textLoc);
-        $this->selectText($text);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language_active.png');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_language_active.png');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_deleteValue_icon.png');
+        $this->selectKeyword($text);
+        $this->clickTopToolbarButton('langTools', 'active');
+        $this->clickTopToolbarButton('Language', 'active', TRUE);
+        $this->clearFieldValue('Language');
         $this->keyDown('Key.ENTER');
 
         $this->click($textLoc);
-        $this->selectText($text);
+        $this->selectKeyword($text);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Selection</li>', $lineage);
 
@@ -181,35 +173,33 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarLangToolUnitTest extends
      */
     public function testLineageChangesWhenAbbreviationIsAppliedAndRemovedToFirstWordInParagraph()
     {
-        $dir = dirname(dirname(__FILE__)).'/ViperLangToolsPlugin/Images/';
+        $text = 2;
+        $textLoc = $this->findKeyword($text);
 
-        $text = 'LaBs';
-        $textLoc = $this->find($text);
-
-        $this->selectText($text);
+        $this->selectKeyword($text);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Selection</li>', $lineage);
 
-        $this->selectText($text);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language.png');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_abbreviation.png');
+        $this->selectKeyword($text);
+        $this->clickTopToolbarButton('langTools');
+        $this->clickTopToolbarButton('Abbreviation', NULL, TRUE);
         $this->type('en');
         $this->keyDown('Key.ENTER');
 
         $this->click($textLoc);
-        $this->selectText($text);
+        $this->selectKeyword($text);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">ABBR</li>', $lineage);
 
         $this->click($textLoc);
-        $this->selectText($text);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language_active.png');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_abbreviation_active.png');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_deleteValue_icon.png');
+        $this->selectKeyword($text);
+        $this->clickTopToolbarButton('langTools', 'active');
+        $this->clickTopToolbarButton('Abbreviation', 'active', TRUE);
+        $this->clearFieldValue('Abbreviation');
         $this->keyDown('Key.ENTER');
 
         $this->click($textLoc);
-        $this->selectText($text);
+        $this->selectKeyword($text);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Selection</li>', $lineage);
 
@@ -223,35 +213,33 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarLangToolUnitTest extends
      */
     public function testLineageChangesWhenAcronymIsAppliedAndRemovedToFirstWordInParagraph()
     {
-        $dir = dirname(dirname(__FILE__)).'/ViperLangToolsPlugin/Images/';
+        $text = 2;
+        $textLoc = $this->findKeyword($text);
 
-        $text = 'LaBs';
-        $textLoc = $this->find($text);
-
-        $this->selectText($text);
+        $this->selectKeyword($text);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Selection</li>', $lineage);
 
-        $this->selectText($text);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language.png');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_acronym.png');
+        $this->selectKeyword($text);
+        $this->clickTopToolbarButton('langTools');
+        $this->clickTopToolbarButton('Acronym', NULL, TRUE);
         $this->type('en');
         $this->keyDown('Key.ENTER');
 
         $this->click($textLoc);
-        $this->selectText($text);
+        $this->selectKeyword($text);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">ACRONYM</li>', $lineage);
 
         $this->click($textLoc);
-        $this->selectText($text);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language_active.png');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_acronym_active.png');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_deleteValue_icon.png');
+        $this->selectKeyword($text);
+        $this->clickTopToolbarButton('langTools', 'active');
+        $this->clickTopToolbarButton('Acronym', 'active', TRUE);
+        $this->clearFieldValue('Acronym');
         $this->keyDown('Key.ENTER');
 
         $this->click($textLoc);
-        $this->selectText($text);
+        $this->selectKeyword($text);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Selection</li>', $lineage);
 
@@ -265,24 +253,22 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarLangToolUnitTest extends
      */
     public function testLineageDoesNotChangeWhenLanguageIsAppliedToAParagraph()
     {
-        $dir = dirname(dirname(__FILE__)).'/ViperLangToolsPlugin/Images/';
+        $text = 1;
+        $textLoc = $this->findKeyword($text);
 
-        $text = 'AuuA';
-        $textLoc = $this->find($text);
-
-        $this->selectText($text);
+        $this->selectKeyword($text);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Selection</li>', $lineage);
 
         $this->selectInlineToolbarLineageItem(0);
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language.png');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_language.png');
+        $this->clickTopToolbarButton('langTools');
+        $this->clickTopToolbarButton('Language', NULL, TRUE);
         $this->type('en');
         $this->keyDown('Key.ENTER');
 
         $this->click($textLoc);
-        $this->selectText($text);
+        $this->selectKeyword($text);
         $this->selectInlineToolbarLineageItem(0);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem Viper-selected">P</li><li class="ViperITP-lineageItem">Selection</li>', $lineage);
@@ -297,21 +283,21 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarLangToolUnitTest extends
      */
     public function testSelectingTheSpanTagInTheLineage()
     {
-        $this->selectText('WoW');
+        $this->selectKeyword(7);
 
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">SPAN</li><li class="ViperITP-lineageItem Viper-selected">Selection</li>', $lineage);
 
         $this->selectInlineToolbarLineageItem(1);
 
-        $this->assertEquals('SubS WoW', $this->getSelectedText(), 'Span tag is not selected.');
+        $this->assertEquals($this->replaceKeywords('%10% %7%'), $this->getSelectedText(), 'Span tag is not selected.');
 
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">SPAN</li><li class="ViperITP-lineageItem">Selection</li>', $lineage);
 
-        $this->selectText('SubS');
+        $this->selectKeyword(10);
         $this->selectInlineToolbarLineageItem(1);
-        $this->assertEquals('SubS WoW', $this->getSelectedText(), 'Span tag is not selected.');
+        $this->assertEquals($this->replaceKeywords('%10% %7%'), $this->getSelectedText(), 'Span tag is not selected.');
 
     }//end testSelectingTheSpanTagInTheLineage()
 
@@ -323,21 +309,21 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarLangToolUnitTest extends
      */
     public function testSelectingTheAbbreviationTagInTheLineage()
     {
-        $this->selectText('QUICK');
+        $this->selectKeyword(5);
 
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">ABBR</li><li class="ViperITP-lineageItem Viper-selected">Selection</li>', $lineage);
 
         $this->selectInlineToolbarLineageItem(1);
 
-        $this->assertEquals('QUICK BROWN', $this->getSelectedText(), 'Abbreviation tag is not selected.');
+        $this->assertEquals($this->replaceKeywords('%5% %8%'), $this->getSelectedText(), 'Abbreviation tag is not selected.');
 
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">ABBR</li><li class="ViperITP-lineageItem">Selection</li>', $lineage);
 
-        $this->selectText('BROWN');
+        $this->selectKeyword(8);
         $this->selectInlineToolbarLineageItem(1);
-        $this->assertEquals('QUICK BROWN', $this->getSelectedText(), 'Abbreviation tag is not selected.');
+        $this->assertEquals($this->replaceKeywords('%5% %8%'), $this->getSelectedText(), 'Abbreviation tag is not selected.');
 
     }//end testSelectingTheSpanTagInTheLineage()
 
@@ -349,21 +335,21 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarLangToolUnitTest extends
      */
     public function testSelectingTheAcronymTagInTheLineage()
     {
-        $this->selectText('XXX');
+        $this->selectKeyword(6);
 
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">ACRONYM</li><li class="ViperITP-lineageItem Viper-selected">Selection</li>', $lineage);
 
         $this->selectInlineToolbarLineageItem(1);
 
-        $this->assertEquals('XXX JuMps', $this->getSelectedText(), 'Acronym tag is not selected.');
+        $this->assertEquals($this->replaceKeywords('%6% %9%'), $this->getSelectedText(), 'Acronym tag is not selected.');
 
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">ACRONYM</li><li class="ViperITP-lineageItem">Selection</li>', $lineage);
 
-        $this->selectText('JuMps');
+        $this->selectKeyword(9);
         $this->selectInlineToolbarLineageItem(1);
-        $this->assertEquals('XXX JuMps', $this->getSelectedText(), 'Acronym tag is not selected.');
+        $this->assertEquals($this->replaceKeywords('%6% %9%'), $this->getSelectedText(), 'Acronym tag is not selected.');
 
     }//end testSelectingTheAcronymTagInTheLineage()
 
@@ -375,35 +361,33 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarLangToolUnitTest extends
      */
     public function testLineageChangesWhenLanguageIsAppliedAndRemovedToBoldText()
     {
-        $dir = dirname(dirname(__FILE__)).'/ViperLangToolsPlugin/Images/';
-
-        $text = 'DOLOR';
-        $textLoc = $this->find($text);
-        $this->selectText($text);
+        $text = 3;
+        $textLoc = $this->findKeyword($text);
+        $this->selectKeyword($text);
 
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Bold</li>', $lineage);
 
-        $this->selectText($text);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language.png');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_language.png');
+        $this->selectKeyword($text);
+        $this->clickTopToolbarButton('langTools');
+        $this->clickTopToolbarButton('Language', NULL, TRUE);
         $this->type('en');
         $this->keyDown('Key.ENTER');
 
         $this->click($textLoc);
-        $this->selectText($text);
+        $this->selectKeyword($text);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Bold</li>', $lineage);
 
         $this->click($textLoc);
-        $this->selectText($text);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language_active.png');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_language_active.png');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_deleteValue_icon.png');
+        $this->selectKeyword($text);
+        $this->clickTopToolbarButton('langTools', 'active');
+        $this->clickTopToolbarButton('Language', 'active', TRUE);
+        $this->clearFieldValue('Language');
         $this->keyDown('Key.ENTER');
 
         $this->click($textLoc);
-        $this->selectText($text);
+        $this->selectKeyword($text);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Bold</li>', $lineage);
 
@@ -417,35 +401,33 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarLangToolUnitTest extends
      */
     public function testLineageChangesWhenAcronymIsAppliedAndRemovedToBoldText()
     {
-        $dir = dirname(dirname(__FILE__)).'/ViperLangToolsPlugin/Images/';
-
-        $text = 'DOLOR';
-        $textLoc = $this->find($text);
-        $this->selectText($text);
+        $text = 3;
+        $textLoc = $this->findKeyword($text);
+        $this->selectKeyword($text);
 
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Bold</li>', $lineage);
 
-        $this->selectText($text);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language.png');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_acronym.png');
+        $this->selectKeyword($text);
+        $this->clickTopToolbarButton('langTools');
+        $this->clickTopToolbarButton('Acronym', NULL, TRUE);
         $this->type('en');
         $this->keyDown('Key.ENTER');
 
         $this->click($textLoc);
-        $this->selectText($text);
+        $this->selectKeyword($text);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">ACRONYM</li><li class="ViperITP-lineageItem Viper-selected">Bold</li>', $lineage);
 
         $this->click($textLoc);
-        $this->selectText($text);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language_active.png');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_acronym_active.png');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_deleteValue_icon.png');
+        $this->selectKeyword($text);
+        $this->clickTopToolbarButton('langTools', 'active');
+        $this->clickTopToolbarButton('Acronym', 'active', TRUE);
+        $this->clearFieldValue('Acronym');
         $this->keyDown('Key.ENTER');
 
         $this->click($textLoc);
-        $this->selectText($text);
+        $this->selectKeyword($text);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Bold</li>', $lineage);
 
@@ -459,35 +441,33 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarLangToolUnitTest extends
      */
     public function testLineageChangesWhenAbbreviationIsAppliedAndRemovedToBoldText()
     {
-        $dir = dirname(dirname(__FILE__)).'/ViperLangToolsPlugin/Images/';
-
-        $text = 'DOLOR';
-        $textLoc = $this->find($text);
-        $this->selectText($text);
+        $text = 3;
+        $textLoc = $this->findKeyword($text);
+        $this->selectKeyword($text);
 
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Bold</li>', $lineage);
 
-        $this->selectText($text);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language.png');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_abbreviation.png');
+        $this->selectKeyword($text);
+        $this->clickTopToolbarButton('langTools');
+        $this->clickTopToolbarButton('Abbreviation', NULL, TRUE);
         $this->type('en');
         $this->keyDown('Key.ENTER');
 
         $this->click($textLoc);
-        $this->selectText($text);
+        $this->selectKeyword($text);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">ABBR</li><li class="ViperITP-lineageItem Viper-selected">Bold</li>', $lineage);
 
         $this->click($textLoc);
-        $this->selectText($text);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language_active.png');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_abbreviation_active.png');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_deleteValue_icon.png');
+        $this->selectKeyword($text);
+        $this->clickTopToolbarButton('langTools', 'active');
+        $this->clickTopToolbarButton('Abbreviation', 'active', TRUE);
+        $this->clearFieldValue('Abbreviation');
         $this->keyDown('Key.ENTER');
 
         $this->click($textLoc);
-        $this->selectText($text);
+        $this->selectKeyword($text);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Bold</li>', $lineage);
 
@@ -501,35 +481,33 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarLangToolUnitTest extends
      */
     public function testLineageDoesNotChangeWhenLanguageIsAppliedAndRemovedToItalicText()
     {
-        $dir = dirname(dirname(__FILE__)).'/ViperLangToolsPlugin/Images/';
-
-        $text = 'LoreM';
-        $textLoc = $this->find($text);
-        $this->selectText($text);
+        $text = 4;
+        $textLoc = $this->findKeyword($text);
+        $this->selectKeyword($text);
 
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Italic</li>', $lineage);
 
-        $this->selectText($text);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language.png');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_language.png');
+        $this->selectKeyword($text);
+        $this->clickTopToolbarButton('langTools');
+        $this->clickTopToolbarButton('Language', NULL, TRUE);
         $this->type('en');
         $this->keyDown('Key.ENTER');
 
         $this->click($textLoc);
-        $this->selectText($text);
+        $this->selectKeyword($text);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Italic</li>', $lineage);
 
         $this->click($textLoc);
-        $this->selectText($text);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language_active.png');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_language_active.png');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_deleteValue_icon.png');
+        $this->selectKeyword($text);
+        $this->clickTopToolbarButton('langTools', 'active');
+        $this->clickTopToolbarButton('Language', 'active', TRUE);
+        $this->clearFieldValue('Language');
         $this->keyDown('Key.ENTER');
 
         $this->click($textLoc);
-        $this->selectText($text);
+        $this->selectKeyword($text);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Italic</li>', $lineage);
 
@@ -543,35 +521,33 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarLangToolUnitTest extends
      */
     public function testLineageChangesWhenAcronymIsAppliedAndRemovedToItalicText()
     {
-        $dir = dirname(dirname(__FILE__)).'/ViperLangToolsPlugin/Images/';
-
-        $text = 'LoreM';
-        $textLoc = $this->find($text);
-        $this->selectText($text);
+        $text = 4;
+        $textLoc = $this->findKeyword($text);
+        $this->selectKeyword($text);
 
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Italic</li>', $lineage);
 
-        $this->selectText($text);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language.png');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_acronym.png');
+        $this->selectKeyword($text);
+        $this->clickTopToolbarButton('langTools');
+        $this->clickTopToolbarButton('Acronym', NULL, TRUE);
         $this->type('en');
         $this->keyDown('Key.ENTER');
 
         $this->click($textLoc);
-        $this->selectText($text);
+        $this->selectKeyword($text);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">ACRONYM</li><li class="ViperITP-lineageItem Viper-selected">Italic</li>', $lineage);
 
         $this->click($textLoc);
-        $this->selectText($text);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language_active.png');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_acronym_active.png');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_deleteValue_icon.png');
+        $this->selectKeyword($text);
+        $this->clickTopToolbarButton('langTools', 'active');
+        $this->clickTopToolbarButton('Acronym', 'active', TRUE);
+        $this->clearFieldValue('Acronym');
         $this->keyDown('Key.ENTER');
 
         $this->click($textLoc);
-        $this->selectText($text);
+        $this->selectKeyword($text);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Italic</li>', $lineage);
 
@@ -585,35 +561,33 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarLangToolUnitTest extends
      */
     public function testLineageChangesWhenAbbreviationIsAppliedAndRemovedToItalicText()
     {
-        $dir = dirname(dirname(__FILE__)).'/ViperLangToolsPlugin/Images/';
-
-        $text = 'LoreM';
-        $textLoc = $this->find($text);
-        $this->selectText($text);
+        $text = 4;
+        $textLoc = $this->findKeyword($text);
+        $this->selectKeyword($text);
 
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Italic</li>', $lineage);
 
-        $this->selectText($text);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language.png');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_abbreviation.png');
+        $this->selectKeyword($text);
+        $this->clickTopToolbarButton('langTools');
+        $this->clickTopToolbarButton('Abbreviation', NULL, TRUE);
         $this->type('en');
         $this->keyDown('Key.ENTER');
 
         $this->click($textLoc);
-        $this->selectText($text);
+        $this->selectKeyword($text);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">ABBR</li><li class="ViperITP-lineageItem Viper-selected">Italic</li>', $lineage);
 
         $this->click($textLoc);
-        $this->selectText($text);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_language_active.png');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_abbreviation_active.png');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_deleteValue_icon.png');
+        $this->selectKeyword($text);
+        $this->clickTopToolbarButton('langTools', 'active');
+        $this->clickTopToolbarButton('Abbreviation', 'active', TRUE);
+        $this->clearFieldValue('Abbreviation');
         $this->keyDown('Key.ENTER');
 
         $this->click($textLoc);
-        $this->selectText($text);
+        $this->selectKeyword($text);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Italic</li>', $lineage);
 
