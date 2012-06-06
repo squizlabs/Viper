@@ -1663,7 +1663,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
 
         $this->_switchWindow('js');
 
-        sleep(1);
+        usleep(10000);
         $this->keyDown($this->_getAccessKeys('j'));
 
         if (isset(self::$_jsExecCache[$js]) === TRUE) {
