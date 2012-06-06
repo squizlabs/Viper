@@ -214,10 +214,19 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
             self::$_testContent = file_get_contents($baseDir.'/test.html');
         }
 
+        // Get the JS exec cache.
+        if (empty(self::$_jsExecCache) === TRUE) {
+            $jsExecCacheFile = dirname(__FILE__).'/tmp/js_cache.inc';
+            if (file_exists($jsExecCacheFile) === TRUE) {
+                self::$_jsExecCache = unserialize(file_get_contents($jsExecCacheFile));
+            }
+        }
+
         // Put the current test file contents to the main test file.
         $contents = str_replace('__TEST_CONTENT__', $testFileContent, self::$_testContent);
         $contents = str_replace('__TEST_TITLE__', $this->getName(), $contents);
         $contents = str_replace('__TEST_JS_INCLUDE__', $jsInclude, $contents);
+        $contents = str_replace('__TEST_JS_EXEC_CACHE__', json_encode(array_flip(self::$_jsExecCache)), $contents);
         $dest     = $baseDir.'/test_tmp.html';
         file_put_contents($dest, $contents);
 
@@ -1703,7 +1712,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
 
         $this->_switchWindow('js');
 
-        usleep(10000);
+        usleep(50000);
         $this->keyDown($this->_getAccessKeys('j'));
 
         if (isset(self::$_jsExecCache[$js]) === TRUE) {
@@ -1711,17 +1720,20 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         } else {
             $this->type($js);
             self::$_jsExecCache[$js] = count(self::$_jsExecCache);
+
+            file_put_contents(dirname(__FILE__).'/tmp/js_cache.inc', serialize(self::$_jsExecCache));
         }
 
-        usleep(10000);
+        usleep(50000);
         $this->keyDown('Key.ENTER');
         $this->keyDown('Key.TAB');
         $this->keyDown('Key.CMD + a');
-        usleep(10000);
+        usleep(50000);
         $this->keyDown('Key.CMD + c');
-        usleep(10000);
+        usleep(50000);
         $this->keyDown('Key.TAB');
         $this->keyDown('Key.SPACE');
+        usleep(50000);
 
         $this->_switchWindow('main');
 
