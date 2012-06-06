@@ -357,7 +357,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->assertTrue($this->topToolbarButtonExists('cssClass'), 'Class icon is still active in the Top Toolbar.');
         $this->assertTrue($this->inlineToolbarButtonExists('cssClass'), 'Class icon is still active in the inline toolbar.');
 
-        //Reapply the class so that we can delete again using the Update Changes button
+        // Reapply the class so that we can delete again using the Update Changes button.
         $this->clickInlineToolbarButton('cssClass');
         $this->type('test');
         $this->keyDown('Key.ENTER');
@@ -428,7 +428,6 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
      */
     public function testEditingTheClassForAParagraphUsingInlineToolbar()
     {
-
         $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(0);
         $this->assertTrue($this->topToolbarButtonExists('cssClass', 'active'), 'Class icon in Top Toolbar should be active.');
