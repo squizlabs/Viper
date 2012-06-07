@@ -132,6 +132,8 @@ abstract class AbstractSikuliUnitTest extends PHPUnit_Framework_TestCase
     {
         if ($region === NULL) {
             $region = $this->_defaultRegion;
+        } else if ($region < 0) {
+            $region = NULL;
         }
 
         if ($similarity !== NULL && file_exists($ps) === TRUE) {

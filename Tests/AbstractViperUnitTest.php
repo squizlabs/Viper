@@ -259,6 +259,23 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
             $this->selectBrowser(self::$_browser);
             $this->resizeWindow();
 
+            // Check if the JSExec window is open. If it is close it.
+            $jsExecWindowCheck     = FALSE;
+            $maxJsExecWindowChecks = 2;
+            while ($jsExecWindowCheck === FALSE) {
+                if ($maxJsExecWindowChecks === 0) {
+                    break;
+                }
+
+                try {
+                    $target = $this->find(dirname(__FILE__).'/Core/Images/window-target2.png', -1);
+                    $this->click($target);
+                } catch (Exception $e) {
+                    $this->keyDown('Key.CMD + `');
+                    $maxJsExecWindowChecks--;
+                }
+            }
+
             $this->setSetting('MinSimilarity', self::$_similarity);
             $calibrate = getenv('VIPER_TEST_CALIBRATE');
             if ($calibrate === 'TRUE' || file_exists($this->getBrowserImagePath()) === FALSE) {
