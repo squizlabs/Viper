@@ -195,9 +195,9 @@ class Viper_Tests_ViperCoreStylesPlugin_StylesUnitTest extends AbstractViperUnit
     public function testSelectingTextInAParagraph()
     {
         $this->selectKeyword(1, 4);
-        $this->assertFalse($this->inlineToolbarButtonExists('italic'), 'Italic icon appears in the inline toolbar');
+        $this->assertTrue($this->inlineToolbarButtonExists('italic'), 'Italic icon appears in the inline toolbar');
         $this->assertFalse($this->topToolbarButtonExists('italic', 'active'), 'Active Italic icon appears in the inline toolbar');
-        $this->assertFalse($this->inlineToolbarButtonExists('bold'), 'Bold icon appears in the inline toolbar');
+        $this->assertTrue($this->inlineToolbarButtonExists('bold'), 'Bold icon appears in the inline toolbar');
         $this->assertFalse($this->inlineToolbarButtonExists('bold', 'active'), 'Active Bold icon appears in the inline toolbar');
 
         $this->selectKeyword(5);

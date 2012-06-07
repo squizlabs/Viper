@@ -132,6 +132,8 @@ abstract class AbstractSikuliUnitTest extends PHPUnit_Framework_TestCase
     {
         if ($region === NULL) {
             $region = $this->_defaultRegion;
+        } else if ($region < 0) {
+            $region = NULL;
         }
 
         if ($similarity !== NULL && file_exists($ps) === TRUE) {
@@ -1188,7 +1190,10 @@ abstract class AbstractSikuliUnitTest extends PHPUnit_Framework_TestCase
                 }
             }//end if
 
-            ob_flush();
+            if (ob_get_level() > 0) {
+                ob_flush();
+            }
+
             if ((microtime(TRUE) - $start) > $timeout) {
                 throw new Exception('Sikuli server did not respond');
             }

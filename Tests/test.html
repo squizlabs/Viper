@@ -6,7 +6,8 @@
         <script type="text/javascript" src="./test.js"></script>
         <link rel="stylesheet" media="screen" href="./test.css" />
         <script type="text/javascript">
-            var viper = null;
+            var viper   = null;
+            var jsCache = __TEST_JS_EXEC_CACHE__;
             ViperReadyCallback = function() {
                 var contentElement = dfx.getId('content');
 
@@ -15,35 +16,18 @@
                 viper.setEditableElement(contentElement);
 
                 dfx.attr(dfxjQuery.find('.Viper-button[title]'), 'title', '');
-
-                var jsRes = dfx.getId('jsRes');
-                jsRes.value = '';
-                var t = null;
-                dfx.addEvent(jsRes, 'copy', function() {
-                    t = setTimeout(function() {
-                        viper.focus();
-                    }, 100);
-                });
-
-                var jsExec   = dfx.getId('jsExec');
-                jsExec.value = '';
-
-                dfx.addEvent(jsExec, 'focus', function(e) {
-                    viper.highlightSelection();
-                    clearTimeout(t);
-                    jsExec.value = '';
-                });
+                if (window.location.hash !== '#run') {
+                    window.open('test_jsexec.html', '', 'width=400,height=100,0,status=0,left=1000,top=850');
+                    window.location.hash = '#run';
+                }
             };
         </script>
         __TEST_JS_INCLUDE__
     </head>
     <body spellcheck="false">
-        <img id="windowTarget" src="./Core/Images/window-target.png"/>
+        <img id="windowTarget" src="./Core/Images/window-target.png" onclick="if (viper) viper.destroy();location.reload();" />
         <div id="content">__TEST_CONTENT__</div>
         <div id="menu">
-            <textarea id="jsExec" accesskey="J"></textarea>
-            <button onclick="execJS()">Exec</button>
-            <textarea id="jsRes" accesskey="R"></textarea>
             <div id="testTitle"><em>Running:</em> __TEST_TITLE__</div>
         </div>
     </body>

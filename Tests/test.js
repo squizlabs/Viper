@@ -5,10 +5,10 @@ function gHtml(selector, index)
 {
     index = index || 0;
     if (selector) {
-        var html = dfx.getHtml(dfxjQuery(selector)[index]).replace("\n", '');
-        return viper.getHtml(html);
+        var html = window.opener.dfx.getHtml(window.opener.dfxjQuery(selector)[index]).replace("\n", '');
+        return window.opener.viper.getHtml(html);
     } else {
-        return viper.getHtml();
+        return window.opener.viper.getHtml();
     }
 
 }
@@ -16,13 +16,13 @@ function gHtml(selector, index)
 function gText()
 {
     var selection    = '';
-    var selHighlights = dfx.getClass('__viper_selHighlight');
+    var selHighlights = window.opener.dfx.getClass('__viper_selHighlight');
     if (selHighlights.length > 0) {
         for (var i = 0; i < selHighlights.length; i++) {
-            selection += dfx.getNodeTextContent(selHighlights[i]);
+            selection += window.opener.dfx.getNodeTextContent(selHighlights[i]);
         }
     } else {
-        selection = viper.getViperRange().toString();
+        selection = window.opener.viper.getViperRange().toString();
     }
 
     return selection;
@@ -72,18 +72,24 @@ function gBtn(text, state, selectorPrefix)
 
     selector += ':contains(' + text + ')';
 
-    var buttons = dfxjQuery.find(selector);
+    var buttons = window.opener.dfxjQuery.find(selector);
     if (buttons.length === 0) {
         return false;
     }
 
-    var button = buttons[0];
-
-    if (!state && button.className !== 'Viper-button') {
-        return false;
+    var button = null;
+    for (var i = 0; i < buttons.length; i++) {
+        if (window.opener.dfx.getElementHeight(buttons[i]) !== 0) {
+            button = buttons[i];
+            break;
+        }
     }
 
-    var rect = dfx.getBoundingRectangle(button);
+    //if (!state && button.className !== 'Viper-button') {
+    //    return false;
+    //}
+
+    var rect = window.opener.dfx.getBoundingRectangle(button);
     if (rect) {
         rect.x1 = parseInt(rect.x1);
         rect.x2 = parseInt(rect.x2);
@@ -100,12 +106,12 @@ function gField(label)
     var selector = '.Viper-subSection.Viper-active label span';
     selector    += ':contains(' + label + ')';
 
-    var field = dfxjQuery.find(selector)[0];
+    var field = window.opener.dfxjQuery.find(selector)[0];
     if (!field) {
         return false;
     }
 
-    var rect = dfx.getBoundingRectangle(field);
+    var rect = window.opener.dfx.getBoundingRectangle(field);
     if (rect) {
         rect.x1 = parseInt(rect.x1);
         rect.x2 = parseInt(rect.x2);
@@ -123,12 +129,12 @@ function gField(label)
  */
 function execJS()
 {
-    var val = dfx.getId('jsExec').value;
-    dfx.getId('jsRes').value  = '';
-    dfx.getId('jsExec').value = '';
+    var val = window.opener.dfx.getId('jsExec').value;
+    window.opener.dfx.getId('jsRes').value  = '';
+    window.opener.dfx.getId('jsExec').value = '';
 
     val  = 'var jsResult = ' + val + ';';
-    val += 'dfx.getId("jsRes").value = dfx.jsonEncode(jsResult);';
+    val += 'window.opener.dfx.getId("jsRes").value = window.opener.dfx.jsonEncode(jsResult);';
 
     // Execute JS.
     eval(val);
@@ -140,7 +146,7 @@ function execJS()
  */
 function gBRec(selector, index)
 {
-    var rect = dfx.getBoundingRectangle(dfxjQuery(selector)[index]);
+    var rect = window.opener.dfx.getBoundingRectangle(window.opener.dfxjQuery(selector)[index]);
     rect.x1 = parseInt(rect.x1);
     rect.x2 = parseInt(rect.x2);
     rect.y1 = parseInt(rect.y1);
@@ -153,9 +159,9 @@ function gTagCounts(tagNames)
 {
     tagNames = tagNames || '*';
     var tagCounts = {};
-    var tags = dfx.getTag(tagNames, dfx.getId('content'));
+    var tags = window.opener.dfx.getTag(tagNames, window.opener.dfx.getId('content'));
     for (var i = 0; i < tags.length; i++) {
-        var tagName = dfx.getTagName(tags[i]);
+        var tagName = window.opener.dfx.getTagName(tags[i]);
         if (!tagCounts[tagName]) {
             tagCounts[tagName] = 1;
         } else {
@@ -175,12 +181,24 @@ function gTagCounts(tagNames)
 
 }
 
+function gActBubble()
+{
+    var activeBubble = window.opener.viper.getPluginManager().getPlugin('ViperToolbarPlugin').getActiveBubble();
+    if (!activeBubble) {
+        return null;
+    }
+
+    var rect = window.opener.dfx.getBoundingRectangle(activeBubble.element);
+    return rect;
+
+}
+
 /**
  * Inserts a new table.
  */
 function insTable(rows, cols, header, id)
 {
-    var table = viper.getPluginManager().getPlugin('ViperTableEditorPlugin').insertTable(rows, cols, header, id);
+    var table = window.opener.viper.getPluginManager().getPlugin('ViperTableEditorPlugin').insertTable(rows, cols, header, id);
 
     return table;
 
@@ -188,7 +206,7 @@ function insTable(rows, cols, header, id)
 
 function rmTableHeaders(tblIndex, removeid)
 {
-    var table = dfx.getTag('table')[tblIndex];
+    var table = window.opener.dfx.getTag('table')[tblIndex];
     if (!table) {
         return;
     }
@@ -197,12 +215,12 @@ function rmTableHeaders(tblIndex, removeid)
         table.removeAttribute('id');
     }
 
-    var cells = dfx.getTag('td,th');
+    var cells = window.opener.dfx.getTag('td,th');
     for (var i = 0; i < cells.length; i++) {
         cells[i].removeAttribute('id');
     }
 
-    var headers      = dfx.find(table, '[headers]');
+    var headers      = window.opener.dfx.find(table, '[headers]');
     var headersCount = headers.length;
     if (headersCount > 0) {
         for (var i = 0; i < headersCount; i++) {

@@ -13,15 +13,15 @@ class Viper_Tests_ViperListPlugin_OrderedListInTableUnitTest extends AbstractVip
      */
     public function testCreatingAListInACell()
     {
-        $this->selectText('LAbS');
+        $this->selectKeyword(1);
 
         $this->clickTopToolbarButton('listOL');
 
-        $this->assertEquals('<ol><li>UnaU LAbS FoX Mnu</li></ol>', $this->getHtml('td', 0));
+        $this->assertEquals($this->replaceKeywords('<ol><li>UnaU %1% FoX Mnu</li></ol>'), $this->getHtml('td', 0));
         $this->assertIconStatusesCorrect(TRUE, 'active', FALSE, TRUE);
 
         $this->clickTopToolbarButton('listOL', 'active');
-        $this->assertEquals('UnaU LAbS FoX Mnu', $this->getHtml('td', 0));
+        $this->assertEquals($this->replaceKeywords('UnaU %1% FoX Mnu'), $this->getHtml('td', 0));
         $this->assertIconStatusesCorrect(TRUE, TRUE, FALSE, FALSE);
 
     }//end testCreatingAListInACell()
@@ -34,20 +34,20 @@ class Viper_Tests_ViperListPlugin_OrderedListInTableUnitTest extends AbstractVip
      */
     public function testIndentingAndOutdentingAListItemUsingTopToolbar()
     {
-        $this->click($this->find('XuT'));
+        $this->selectKeyword(2);
         $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
 
         $this->clickTopToolbarButton('listIndent');
 
-        $this->assertEquals('            <ol><li>Item 1<ol><li>Item 2 XuT</li></ol></li></ol>', $this->getHtml('td', 2));
+        $this->assertEquals($this->replaceKeywords('            <ol><li>Item 1<ol><li>Item 2 %2%</li></ol></li></ol>'), $this->getHtml('td', 2));
         $this->assertIconStatusesCorrect(TRUE, 'active', FALSE, TRUE);
 
         $this->clickTopToolbarButton('listOutdent');
-        $this->assertEquals('            <ol><li>Item 1</li><li>Item 2 XuT</li></ol>', $this->getHtml('td', 2));
+        $this->assertEquals($this->replaceKeywords('            <ol><li>Item 1</li><li>Item 2 %2%</li></ol>'), $this->getHtml('td', 2));
         $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
 
         $this->clickTopToolbarButton('listOutdent');
-        $this->assertEquals('            <ol><li>Item 1</li></ol><p>Item 2 XuT</p>', $this->getHtml('td', 2));
+        $this->assertEquals($this->replaceKeywords('            <ol><li>Item 1</li></ol><p>Item 2 %2%</p>'), $this->getHtml('td', 2));
         $this->assertIconStatusesCorrect(TRUE, TRUE, FALSE, FALSE);
 
     }//end testIndentingAndOutdentingAListItemUsingTopToolbar()
@@ -60,20 +60,20 @@ class Viper_Tests_ViperListPlugin_OrderedListInTableUnitTest extends AbstractVip
      */
     public function testIndentingAndOutdentingAListItemUsingInlineToolbar()
     {
-        $this->selectText('XuT');
+        $this->selectKeyword(2);
         $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
 
         $this->clickInlineToolbarButton('listIndent');
 
-        $this->assertEquals('            <ol><li>Item 1<ol><li>Item 2 XuT</li></ol></li></ol>', $this->getHtml('td', 2));
+        $this->assertEquals($this->replaceKeywords('            <ol><li>Item 1<ol><li>Item 2 %2%</li></ol></li></ol>'), $this->getHtml('td', 2));
         $this->assertIconStatusesCorrect(TRUE, 'active', FALSE, TRUE);
 
         $this->clickInlineToolbarButton('listOutdent');
-        $this->assertEquals('            <ol><li>Item 1</li><li>Item 2 XuT</li></ol>', $this->getHtml('td', 2));
+        $this->assertEquals($this->replaceKeywords('            <ol><li>Item 1</li><li>Item 2 %2%</li></ol>'), $this->getHtml('td', 2));
         $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
 
         $this->clickInlineToolbarButton('listOutdent');
-        $this->assertEquals('            <ol><li>Item 1</li></ol><p>Item 2 XuT</p>', $this->getHtml('td', 2));
+        $this->assertEquals($this->replaceKeywords('            <ol><li>Item 1</li></ol><p>Item 2 %2%</p>'), $this->getHtml('td', 2));
         $this->assertIconStatusesCorrect(TRUE, TRUE, FALSE, FALSE);
 
     }//end testIndentingAndOutdentingAListItemUsingInlineToolbar()
@@ -87,27 +87,27 @@ class Viper_Tests_ViperListPlugin_OrderedListInTableUnitTest extends AbstractVip
     public function testIndentingAndOutdentingAListItemUsingShortcuts()
     {
 
-        $this->click($this->find('XuT'));
+        $this->click($this->findKeyword(2));
         $this->keyDown('Key.TAB');
-        $this->assertEquals('            <ol><li>Item 1<ol><li>Item 2 XuT</li></ol></li></ol>', $this->getHtml('td', 2));
+        $this->assertEquals($this->replaceKeywords('            <ol><li>Item 1<ol><li>Item 2 %2%</li></ol></li></ol>'), $this->getHtml('td', 2));
         $this->assertIconStatusesCorrect(TRUE, 'active', FALSE, TRUE);
 
-        $this->click($this->find('WoW'));
-        $this->click($this->find('XuT'));
+        $this->click($this->findKeyword(3));
+        $this->click($this->findKeyword(2));
         $this->keyDown('Key.SHIFT + Key.TAB');
-        $this->assertEquals('            <ol><li>Item 1</li><li>Item 2 XuT</li></ol>', $this->getHtml('td', 2));
+        $this->assertEquals($this->replaceKeywords('            <ol><li>Item 1</li><li>Item 2 %2%</li></ol>'), $this->getHtml('td', 2));
         $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
 
-        $this->click($this->find('WoW'));
-        $this->click($this->find('XuT'));
+        $this->click($this->findKeyword(3));
+        $this->click($this->findKeyword(2));
         $this->keyDown('Key.SHIFT + Key.TAB');
-        $this->assertEquals('            <ol><li>Item 1</li></ol><p>Item 2 XuT</p>', $this->getHtml('td', 2));
+        $this->assertEquals($this->replaceKeywords('            <ol><li>Item 1</li></ol><p>Item 2 %2%</p>'), $this->getHtml('td', 2));
         $this->assertIconStatusesCorrect(TRUE, TRUE, FALSE, FALSE);
 
-        $this->click($this->find('WoW'));
-        $this->click($this->find('XuT'));
+        $this->click($this->findKeyword(3));
+        $this->click($this->findKeyword(2));
         $this->keyDown('Key.TAB');
-        $this->assertEquals('            <ol><li>Item 1</li></ol><p>Item 2 XuT</p>', $this->getHtml('td', 2));
+        $this->assertEquals($this->replaceKeywords('            <ol><li>Item 1</li></ol><p>Item 2 %2%</p>'), $this->getHtml('td', 2));
         $this->assertIconStatusesCorrect(TRUE, TRUE, FALSE, FALSE);
 
     }//end testIndentingAndOutdentingAListItemUsingShortcuts()
@@ -120,12 +120,12 @@ class Viper_Tests_ViperListPlugin_OrderedListInTableUnitTest extends AbstractVip
      */
     public function testRemovingListUsingOrderedListIcon()
     {
-        $this->click($this->find('XuT'));
+        $this->click($this->findKeyword(2));
         $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
 
         $this->clickTopToolbarButton('listOL', 'active');
 
-        $this->assertEquals('            <p>Item 1</p><p>Item 2 XuT</p>', $this->getHtml('td', 2));
+        $this->assertEquals($this->replaceKeywords('            <p>Item 1</p><p>Item 2 %2%</p>'), $this->getHtml('td', 2));
         $this->assertIconStatusesCorrect(TRUE, TRUE, FALSE, FALSE);
 
     }//end testRemovingListUsingOrderedListIcon()
@@ -138,12 +138,12 @@ class Viper_Tests_ViperListPlugin_OrderedListInTableUnitTest extends AbstractVip
      */
     public function testRemovingListUsingOutdentIconInTopToolbar()
     {
-        $this->selectText('XuT');
+        $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(4);
 
         $this->clickTopToolbarButton('listOutdent');
 
-        $this->assertEquals('            <p>Item 1</p><p>Item 2 XuT</p>', $this->getHtml('td', 2));
+        $this->assertEquals($this->replaceKeywords('            <p>Item 1</p><p>Item 2 %2%</p>'), $this->getHtml('td', 2));
         $this->assertIconStatusesCorrect(TRUE, TRUE, FALSE, FALSE);
 
     }//end testRemovingListUsingOutdentIconInTopToolbar()
@@ -156,12 +156,12 @@ class Viper_Tests_ViperListPlugin_OrderedListInTableUnitTest extends AbstractVip
      */
     public function testRemovingListUsingOutdentIconInInlineToolbar()
     {
-        $this->selectText('XuT');
+        $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(4);
 
         $this->clickInlineToolbarButton('listOutdent');
 
-        $this->assertEquals('            <p>Item 1</p><p>Item 2 XuT</p>', $this->getHtml('td', 2));
+        $this->assertEquals($this->replaceKeywords('            <p>Item 1</p><p>Item 2 %2%</p>'), $this->getHtml('td', 2));
         $this->assertIconStatusesCorrect(TRUE, TRUE, FALSE, FALSE);
 
     }//end testRemovingListUsingOutdentIconInInlineToolbar()
@@ -174,17 +174,17 @@ class Viper_Tests_ViperListPlugin_OrderedListInTableUnitTest extends AbstractVip
      */
     public function testRemovingListAndClickingUndo()
     {
-        $this->selectText('XuT');
+        $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(4);
 
         $this->clickInlineToolbarButton('listOutdent');
 
-        $this->assertEquals('            <p>Item 1</p><p>Item 2 XuT</p>', $this->getHtml('td', 2));
+        $this->assertEquals($this->replaceKeywords('            <p>Item 1</p><p>Item 2 %2%</p>'), $this->getHtml('td', 2));
         $this->assertIconStatusesCorrect(TRUE, TRUE, FALSE, FALSE);
 
         $this->clickTopToolbarButton('historyUndo');
 
-        $this->assertEquals('            <ol><li>Item 1</li><li>Item 2 XuT</li></ol>', $this->getHtml('td', 2));
+        $this->assertEquals($this->replaceKeywords('            <ol><li>Item 1</li><li>Item 2 %2%</li></ol>'), $this->getHtml('td', 2));
 
     }//end testRemovingListUsingOutdentIconInInlineToolbar()
 
@@ -196,14 +196,12 @@ class Viper_Tests_ViperListPlugin_OrderedListInTableUnitTest extends AbstractVip
      */
     public function testSelectingAllContentInARow()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
-        $this->selectText('XuT');
+        $this->selectKeyword(2);
         $this->assertIconStatusesCorrect(TRUE, 'active', FALSE, TRUE);
         $this->selectInlineToolbarLineageItem(2);
         $this->assertIconStatusesCorrect(FALSE, FALSE, FALSE, FALSE);
 
-        $this->selectText('WoW');
+        $this->selectKeyword(3);
         $this->assertIconStatusesCorrect(TRUE, 'active', FALSE, TRUE);
         $this->selectInlineToolbarLineageItem(2);
         $this->assertIconStatusesCorrect(FALSE, FALSE, FALSE, FALSE);

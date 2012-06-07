@@ -13,10 +13,10 @@ class Viper_Tests_ViperLangToolsPlugin_LanguageUnitTest extends AbstractViperUni
      */
     public function testLanguageIconIsDisabled()
     {
-        $this->click($this->find('LOREM'));
+        $this->click($this->find(1));
         $this->assertTrue($this->topToolbarButtonExists('langTools', 'disabled'), 'Language icon in Top Toolbar should not be active.');
 
-        $this->selectText('LOREM');
+        $this->selectKeyword(1);
         $this->assertTrue($this->topToolbarButtonExists('langTools'), 'Language icon in Top Toolbar should be active.');
 
     }//end testLanguageIconIsDisabled()
@@ -29,10 +29,10 @@ class Viper_Tests_ViperLangToolsPlugin_LanguageUnitTest extends AbstractViperUni
      */
     public function testUpdateChangesButton()
     {
-        $text    = 'XuT';
-        $textLoc = $this->find($text);
+        $text    = 2;
+        $textLoc = $this->findKeyword($text);
 
-        $this->selectText($text);
+        $this->selectKeyword($text);
         $this->clickTopToolbarButton('langTools');
         $this->clickTopToolbarButton('Language', NULL, TRUE);
 
@@ -49,36 +49,36 @@ class Viper_Tests_ViperLangToolsPlugin_LanguageUnitTest extends AbstractViperUni
      */
     public function testAddingLanguageToAWord()
     {
-        $text    = 'XuT';
-        $textLoc = $this->find($text);
+        $text    = 2;
+        $textLoc = $this->findKeyword($text);
 
-        $this->selectText($text);
+        $this->selectKeyword($text);
         $this->clickTopToolbarButton('langTools');
         $this->clickTopToolbarButton('Language', NULL, TRUE);
         $this->type('en');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>LOREM <span lang="en">XuT</span> dolor</p><p lang="en">sit amet <strong>WoW</strong></p><p>Test PARA</p><p>Squiz <span lang="en">LABS</span> is orsm</p><p><em>ThE</em> QUICK brown fox</p><p><strong>jumps</strong> <em>OVER</em> the lazy dog</p>');
+        $this->assertHTMLMatch('<p>%1% <span lang="en">%2%</span> %3%</p><p lang="en">sit amet <strong>%6%</strong></p><p>Test %5%</p><p>Squiz <span lang="en">%4%</span> is orsm</p><p><em>ThE</em> %8% brown fox</p><p><strong>%9%</strong> <em>%7%</em> the lazy dog</p>');
 
         $this->click($textLoc);
-        $this->selectText($text);
+        $this->selectKeyword($text);
         $this->assertTrue($this->topToolbarButtonExists('langTools', 'active'), 'Language icon in Top Toolbar should be active.');
 
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('langTools', 'active'), 'Language icon in Top Toolbar should be active.');
 
-        $text = 'dolor';
+        $text = 3;
 
-        $this->selectText($text);
+        $this->selectKeyword($text);
         $this->clickTopToolbarButton('langTools');
         $this->clickTopToolbarButton('Language', NULL, TRUE);
         $this->type('def');
         $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
 
-        $this->assertHTMLMatch('<p>LOREM <span lang="en">XuT</span> <span lang="def">dolor</span></p><p lang="en">sit amet <strong>WoW</strong></p><p>Test PARA</p><p>Squiz <span lang="en">LABS</span> is orsm</p><p><em>ThE</em> QUICK brown fox</p><p><strong>jumps</strong> <em>OVER</em> the lazy dog</p>');
+        $this->assertHTMLMatch('<p>%1% <span lang="en">%2%</span> <span lang="def">%3%</span></p><p lang="en">sit amet <strong>%6%</strong></p><p>Test %5%</p><p>Squiz <span lang="en">%4%</span> is orsm</p><p><em>ThE</em> %8% brown fox</p><p><strong>%9%</strong> <em>%7%</em> the lazy dog</p>');
 
         $this->click($textLoc);
-        $this->selectText($text);
+        $this->selectKeyword($text);
         $this->assertTrue($this->topToolbarButtonExists('langTools', 'active'), 'Language icon in Top Toolbar should be active.');
 
         $this->clickTopToolbarButton('langTools', 'active');
@@ -94,16 +94,16 @@ class Viper_Tests_ViperLangToolsPlugin_LanguageUnitTest extends AbstractViperUni
      */
     public function testEditingALanguage()
     {
-        $text    = 'LABS';
-        $textLoc = $this->find($text);
+        $text    = 4;
+        $textLoc = $this->findKeyword($text);
 
-        $this->selectText($text);
+        $this->selectKeyword($text);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->clickTopToolbarButton('Language', 'active', TRUE);
         $this->type('abc');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>LOREM XuT dolor</p><p lang="en">sit amet <strong>WoW</strong></p><p>Test PARA</p><p>Squiz <span lang="enabc">LABS</span> is orsm</p><p><em>ThE</em> QUICK brown fox</p><p><strong>jumps</strong> <em>OVER</em> the lazy dog</p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p lang="en">sit amet <strong>%6%</strong></p><p>Test %5%</p><p>Squiz <span lang="enabc">%4%</span> is orsm</p><p><em>ThE</em> %8% brown fox</p><p><strong>%9%</strong> <em>%7%</em> the lazy dog</p>');
 
     }//end testEditingALanguage()
 
@@ -115,33 +115,33 @@ class Viper_Tests_ViperLangToolsPlugin_LanguageUnitTest extends AbstractViperUni
      */
     public function testAddingLanguageToAParagraph()
     {
-        $text = 'XuT';
+        $text = 2;
 
-        $this->selectText($text);
+        $this->selectKeyword($text);
         $this->selectInlineToolbarLineageItem(0);
         $this->clickTopToolbarButton('langTools');
         $this->clickTopToolbarButton('Language', NULL, TRUE);
         $this->type('en');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p lang="en">LOREM XuT dolor</p><p lang="en">sit amet <strong>WoW</strong></p><p>Test PARA</p><p>Squiz <span lang="en">LABS</span> is orsm</p><p><em>ThE</em> QUICK brown fox</p><p><strong>jumps</strong> <em>OVER</em> the lazy dog</p>');
+        $this->assertHTMLMatch('<p lang="en">%1% %2% %3%</p><p lang="en">sit amet <strong>%6%</strong></p><p>Test %5%</p><p>Squiz <span lang="en">%4%</span> is orsm</p><p><em>ThE</em> %8% brown fox</p><p><strong>%9%</strong> <em>%7%</em> the lazy dog</p>');
 
-        $this->selectText($text);
+        $this->selectKeyword($text);
         $this->selectInlineToolbarLineageItem(0);
         $this->assertTrue($this->topToolbarButtonExists('langTools', 'active'), 'Language icon in Top Toolbar should be active.');
 
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('langTools', 'active'), 'Language icon in Top Toolbar should be active.');
 
-        $text = 'PARA';
-        $this->selectText($text);
+        $text = 5;
+        $this->selectKeyword($text);
         $this->selectInlineToolbarLineageItem(0);
         $this->clickTopToolbarButton('langTools');
         $this->clickTopToolbarButton('Language', NULL, TRUE);
         $this->type('en');
         $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
 
-        $this->assertHTMLMatch('<p lang="en">LOREM XuT dolor</p><p lang="en">sit amet <strong>WoW</strong></p><p lang="en">Test PARA</p><p>Squiz <span lang="en">LABS</span> is orsm</p><p><em>ThE</em> QUICK brown fox</p><p><strong>jumps</strong> <em>OVER</em> the lazy dog</p>');
+        $this->assertHTMLMatch('<p lang="en">%1% %2% %3%</p><p lang="en">sit amet <strong>%6%</strong></p><p lang="en">Test %5%</p><p>Squiz <span lang="en">%4%</span> is orsm</p><p><em>ThE</em> %8% brown fox</p><p><strong>%9%</strong> <em>%7%</em> the lazy dog</p>');
 
     }//end testAddingLanguageToAParagraph()
 
@@ -153,9 +153,9 @@ class Viper_Tests_ViperLangToolsPlugin_LanguageUnitTest extends AbstractViperUni
      */
     public function testRemovingLanguageAttributeFromAParagraph()
     {
-        $text = 'WoW';
+        $text = 6;
 
-        $this->selectText($text);
+        $this->selectKeyword($text);
         $this->selectInlineToolbarLineageItem(0);
         $this->assertTrue($this->topToolbarButtonExists('langTools', 'active'), 'Language icon in Top Toolbar should be active.');
 
@@ -164,10 +164,10 @@ class Viper_Tests_ViperLangToolsPlugin_LanguageUnitTest extends AbstractViperUni
         $this->clearFieldValue('Language');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>LOREM XuT dolor</p><p>sit amet <strong>WoW</strong></p><p>Test PARA</p><p>Squiz <span lang="en">LABS</span> is orsm</p><p><em>ThE</em> QUICK brown fox</p><p><strong>jumps</strong> <em>OVER</em> the lazy dog</p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit amet <strong>%6%</strong></p><p>Test %5%</p><p>Squiz <span lang="en">%4%</span> is orsm</p><p><em>ThE</em> %8% brown fox</p><p><strong>%9%</strong> <em>%7%</em> the lazy dog</p>');
 
-        $this->click($this->find($text));
-        $this->selectText($text);
+        $this->click($this->findKeyword($text));
+        $this->selectKeyword($text);
         $this->selectInlineToolbarLineageItem(0);
 
         $this->assertTrue($this->topToolbarButtonExists('langTools'), 'Language icon is still active in ThE Top Toolbar.');
@@ -177,16 +177,16 @@ class Viper_Tests_ViperLangToolsPlugin_LanguageUnitTest extends AbstractViperUni
         $this->clickTopToolbarButton('Language', NULL, TRUE);
         $this->type('en');
         $this->keyDown('Key.ENTER');
-        $this->assertHTMLMatch('<p>LOREM XuT dolor</p><p lang="en">sit amet <strong>WoW</strong></p><p>Test PARA</p><p>Squiz <span lang="en">LABS</span> is orsm</p><p><em>ThE</em> QUICK brown fox</p><p><strong>jumps</strong> <em>OVER</em> the lazy dog</p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p lang="en">sit amet <strong>%6%</strong></p><p>Test %5%</p><p>Squiz <span lang="en">%4%</span> is orsm</p><p><em>ThE</em> %8% brown fox</p><p><strong>%9%</strong> <em>%7%</em> the lazy dog</p>');
 
-        $this->selectText($text);
+        $this->selectKeyword($text);
         $this->selectInlineToolbarLineageItem(0);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->clickTopToolbarButton('Language', 'active', TRUE);
         $this->clearFieldValue('Language');
         $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
 
-        $this->assertHTMLMatch('<p>LOREM XuT dolor</p><p>sit amet <strong>WoW</strong></p><p>Test PARA</p><p>Squiz <span lang="en">LABS</span> is orsm</p><p><em>ThE</em> QUICK brown fox</p><p><strong>jumps</strong> <em>OVER</em> the lazy dog</p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit amet <strong>%6%</strong></p><p>Test %5%</p><p>Squiz <span lang="en">%4%</span> is orsm</p><p><em>ThE</em> %8% brown fox</p><p><strong>%9%</strong> <em>%7%</em> the lazy dog</p>');
 
     }//end testRemovingLanguageAttributeFromAParagraph()
 
@@ -198,10 +198,10 @@ class Viper_Tests_ViperLangToolsPlugin_LanguageUnitTest extends AbstractViperUni
      */
     public function testRemovingLanguageAttributeFromAWord()
     {
-        $text = 'LABS';
-        $labs = $this->find($text);
+        $text = 4;
+        $labs = $this->findKeyword($text);
 
-        $this->selectText($text);
+        $this->selectKeyword($text);
         $this->assertTrue($this->topToolbarButtonExists('langTools', 'active'), 'Class icon in Top Toolbar should be active.');
 
         $this->clickTopToolbarButton('langTools', 'active');
@@ -209,7 +209,7 @@ class Viper_Tests_ViperLangToolsPlugin_LanguageUnitTest extends AbstractViperUni
         $this->clearFieldValue('Language');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>LOREM XuT dolor</p><p lang="en">sit amet <strong>WoW</strong></p><p>Test PARA</p><p>Squiz LABS is orsm</p><p><em>ThE</em> QUICK brown fox</p><p><strong>jumps</strong> <em>OVER</em> the lazy dog</p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p lang="en">sit amet <strong>%6%</strong></p><p>Test %5%</p><p>Squiz %4% is orsm</p><p><em>ThE</em> %8% brown fox</p><p><strong>%9%</strong> <em>%7%</em> the lazy dog</p>');
 
         $this->doubleClick($labs);
         $this->assertTrue($this->topToolbarButtonExists('langTools'), 'Language icon is still active in ThE Top Toolbar.');
@@ -220,7 +220,7 @@ class Viper_Tests_ViperLangToolsPlugin_LanguageUnitTest extends AbstractViperUni
         $this->type('en');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>LOREM XuT dolor</p><p lang="en">sit amet <strong>WoW</strong></p><p>Test PARA</p><p>Squiz <span lang="en">LABS</span> is orsm</p><p><em>ThE</em> QUICK brown fox</p><p><strong>jumps</strong> <em>OVER</em> the lazy dog</p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p lang="en">sit amet <strong>%6%</strong></p><p>Test %5%</p><p>Squiz <span lang="en">%4%</span> is orsm</p><p><em>ThE</em> %8% brown fox</p><p><strong>%9%</strong> <em>%7%</em> the lazy dog</p>');
 
         $this->doubleClick($labs);
         $this->clickTopToolbarButton('langTools', 'active');
@@ -228,7 +228,7 @@ class Viper_Tests_ViperLangToolsPlugin_LanguageUnitTest extends AbstractViperUni
         $this->clearFieldValue('Language');
         $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
 
-        $this->assertHTMLMatch('<p>LOREM XuT dolor</p><p lang="en">sit amet <strong>WoW</strong></p><p>Test PARA</p><p>Squiz LABS is orsm</p><p><em>ThE</em> QUICK brown fox</p><p><strong>jumps</strong> <em>OVER</em> the lazy dog</p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p lang="en">sit amet <strong>%6%</strong></p><p>Test %5%</p><p>Squiz %4% is orsm</p><p><em>ThE</em> %8% brown fox</p><p><strong>%9%</strong> <em>%7%</em> the lazy dog</p>');
 
     }//end testRemovingLanguageAttributeFromAWord()
 
@@ -240,26 +240,26 @@ class Viper_Tests_ViperLangToolsPlugin_LanguageUnitTest extends AbstractViperUni
      */
     public function testAddingAndRemovingLanguageToAParagraphWithBoldFirstWord()
     {
-        $text = 'OVER';
+        $text = 7;
 
-        $this->selectText($text);
+        $this->selectKeyword($text);
         $this->selectInlineToolbarLineageItem(0);
         $this->clickTopToolbarButton('langTools');
         $this->clickTopToolbarButton('Language', NULL, TRUE);
         $this->type('en');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>LOREM XuT dolor</p><p lang="en">sit amet <strong>WoW</strong></p><p>Test PARA</p><p>Squiz <span lang="en">LABS</span> is orsm</p><p><em>ThE</em> QUICK brown fox</p><p lang="en"><strong>jumps</strong> <em>OVER</em> the lazy dog</p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p lang="en">sit amet <strong>%6%</strong></p><p>Test %5%</p><p>Squiz <span lang="en">%4%</span> is orsm</p><p><em>ThE</em> %8% brown fox</p><p lang="en"><strong>%9%</strong> <em>%7%</em> the lazy dog</p>');
 
-        $this->click($this->find($text));
-        $this->selectText($text);
+        $this->click($this->findKeyword($text));
+        $this->selectKeyword($text);
         $this->selectInlineToolbarLineageItem(0);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->clickTopToolbarButton('Language', 'active', TRUE);
         $this->clearFieldValue('Language');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>LOREM XuT dolor</p><p lang="en">sit amet <strong>WoW</strong></p><p>Test PARA</p><p>Squiz <span lang="en">LABS</span> is orsm</p><p><em>ThE</em> QUICK brown fox</p><p><strong>jumps</strong> <em>OVER</em> the lazy dog</p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p lang="en">sit amet <strong>%6%</strong></p><p>Test %5%</p><p>Squiz <span lang="en">%4%</span> is orsm</p><p><em>ThE</em> %8% brown fox</p><p><strong>%9%</strong> <em>%7%</em> the lazy dog</p>');
 
     }//end testAddingAndRemovingLanguageToAParagraphWithBoldFirstWord()
 
@@ -271,26 +271,26 @@ class Viper_Tests_ViperLangToolsPlugin_LanguageUnitTest extends AbstractViperUni
      */
     public function testAddingAndRemovingLanguageToAParagraphWithItalicFirstWord()
     {
-        $text = 'QUICK';
+        $text = 8;
 
-        $this->selectText($text);
+        $this->selectKeyword($text);
         $this->selectInlineToolbarLineageItem(0);
         $this->clickTopToolbarButton('langTools');
         $this->clickTopToolbarButton('Language', NULL, TRUE);
         $this->type('en');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>LOREM XuT dolor</p><p lang="en">sit amet <strong>WoW</strong></p><p>Test PARA</p><p>Squiz <span lang="en">LABS</span> is orsm</p><p lang="en"><em>ThE</em> QUICK brown fox</p><p><strong>jumps</strong> <em>OVER</em> the lazy dog</p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p lang="en">sit amet <strong>%6%</strong></p><p>Test %5%</p><p>Squiz <span lang="en">%4%</span> is orsm</p><p lang="en"><em>ThE</em> %8% brown fox</p><p><strong>%9%</strong> <em>%7%</em> the lazy dog</p>');
 
-        $this->click($this->find($text));
-        $this->selectText($text);
+        $this->click($this->findKeyword($text));
+        $this->selectKeyword($text);
         $this->selectInlineToolbarLineageItem(0);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->clickTopToolbarButton('Language', 'active', TRUE);
         $this->clearFieldValue('Language');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>LOREM XuT dolor</p><p lang="en">sit amet <strong>WoW</strong></p><p>Test PARA</p><p>Squiz <span lang="en">LABS</span> is orsm</p><p><em>ThE</em> QUICK brown fox</p><p><strong>jumps</strong> <em>OVER</em> the lazy dog</p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p lang="en">sit amet <strong>%6%</strong></p><p>Test %5%</p><p>Squiz <span lang="en">%4%</span> is orsm</p><p><em>ThE</em> %8% brown fox</p><p><strong>%9%</strong> <em>%7%</em> the lazy dog</p>');
 
     }//end testAddingAndRemovingLanguageToAParagraphWithItalicFirstWord()
 
@@ -302,25 +302,25 @@ class Viper_Tests_ViperLangToolsPlugin_LanguageUnitTest extends AbstractViperUni
      */
     public function testAddingAndRemovingLanguageToABoldWord()
     {
-        $text    = 'jumps';
-        $textLoc = $this->find($text);
+        $text    = 9;
+        $textLoc = $this->findKeyword($text);
 
-        $this->selectText($text);
+        $this->selectKeyword($text);
         $this->clickTopToolbarButton('langTools');
         $this->clickTopToolbarButton('Language', NULL, TRUE);
         $this->type('en');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>LOREM XuT dolor</p><p lang="en">sit amet <strong>WoW</strong></p><p>Test PARA</p><p>Squiz <span lang="en">LABS</span> is orsm</p><p><em>ThE</em> QUICK brown fox</p><p><strong lang="en">jumps</strong> <em>OVER</em> the lazy dog</p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p lang="en">sit amet <strong>%6%</strong></p><p>Test %5%</p><p>Squiz <span lang="en">%4%</span> is orsm</p><p><em>ThE</em> %8% brown fox</p><p><strong lang="en">%9%</strong> <em>%7%</em> the lazy dog</p>');
 
         $this->click($textLoc);
-        $this->selectText($text);
+        $this->selectKeyword($text);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->clickTopToolbarButton('Language', 'active', TRUE);
         $this->clearFieldValue('Language');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>LOREM XuT dolor</p><p lang="en">sit amet <strong>WoW</strong></p><p>Test PARA</p><p>Squiz <span lang="en">LABS</span> is orsm</p><p><em>ThE</em> QUICK brown fox</p><p><strong>jumps</strong> <em>OVER</em> the lazy dog</p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p lang="en">sit amet <strong>%6%</strong></p><p>Test %5%</p><p>Squiz <span lang="en">%4%</span> is orsm</p><p><em>ThE</em> %8% brown fox</p><p><strong>%9%</strong> <em>%7%</em> the lazy dog</p>');
 
     }//end testAddingAndRemovingLanguageToABoldWord()
 
@@ -332,24 +332,24 @@ class Viper_Tests_ViperLangToolsPlugin_LanguageUnitTest extends AbstractViperUni
      */
     public function testAddingAndRemovingLanguageToItalicWord()
     {
-        $text = 'OVER';
+        $text = 7;
 
-        $this->selectText($text);
+        $this->selectKeyword($text);
         $this->clickTopToolbarButton('langTools');
         $this->clickTopToolbarButton('Language', NULL, TRUE);
         $this->type('en');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>LOREM XuT dolor</p><p lang="en">sit amet <strong>WoW</strong></p><p>Test PARA</p><p>Squiz <span lang="en">LABS</span> is orsm</p><p><em>ThE</em> QUICK brown fox</p><p><strong>jumps</strong> <em lang="en">OVER</em> the lazy dog</p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p lang="en">sit amet <strong>%6%</strong></p><p>Test %5%</p><p>Squiz <span lang="en">%4%</span> is orsm</p><p><em>ThE</em> %8% brown fox</p><p><strong>%9%</strong> <em lang="en">%7%</em> the lazy dog</p>');
 
-        $this->click($this->find($text));
-        $this->selectText($text);
+        $this->click($this->findKeyword($text));
+        $this->selectKeyword($text);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->clickTopToolbarButton('Language', 'active', TRUE);
         $this->clearFieldValue('Language');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>LOREM XuT dolor</p><p lang="en">sit amet <strong>WoW</strong></p><p>Test PARA</p><p>Squiz <span lang="en">LABS</span> is orsm</p><p><em>ThE</em> QUICK brown fox</p><p><strong>jumps</strong> <em>OVER</em> the lazy dog</p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p lang="en">sit amet <strong>%6%</strong></p><p>Test %5%</p><p>Squiz <span lang="en">%4%</span> is orsm</p><p><em>ThE</em> %8% brown fox</p><p><strong>%9%</strong> <em>%7%</em> the lazy dog</p>');
 
     }//end testAddingAndRemovingLanguageToItalicWord()
 
@@ -361,15 +361,15 @@ class Viper_Tests_ViperLangToolsPlugin_LanguageUnitTest extends AbstractViperUni
      */
     public function testAutoFocusLanguageTextbox()
     {
-        $text = 'LOREM';
+        $text = 1;
 
-        $this->selectText($text);
+        $this->selectKeyword($text);
         $this->clickTopToolbarButton('langTools');
         $this->clickTopToolbarButton('Language', NULL, TRUE);
         $this->type('en');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p><span lang="en">LOREM</span> XuT dolor</p><p lang="en">sit amet <strong>WoW</strong></p><p>Test PARA</p><p>Squiz <span lang="en">LABS</span> is orsm</p><p><em>ThE</em> QUICK brown fox</p><p><strong>jumps</strong> <em>OVER</em> the lazy dog</p>');
+        $this->assertHTMLMatch('<p><span lang="en">%1%</span> %2% %3%</p><p lang="en">sit amet <strong>%6%</strong></p><p>Test %5%</p><p>Squiz <span lang="en">%4%</span> is orsm</p><p><em>ThE</em> %8% brown fox</p><p><strong>%9%</strong> <em>%7%</em> the lazy dog</p>');
 
 
     }//end testAutoFocusLanguageTextbox()
@@ -382,18 +382,18 @@ class Viper_Tests_ViperLangToolsPlugin_LanguageUnitTest extends AbstractViperUni
      */
     public function testSelectionIsMaintainedWhenSwitchingFromLanguageToClass()
     {
-        $this->selectText('XuT');
+        $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(0);
 
         $this->clickTopToolbarButton('langTools');
         $this->clickTopToolbarButton('Language', NULL, TRUE);
-        $this->assertEquals('LOREM XuT dolor', $this->getSelectedText(), 'Selected text is not highlighted.');
+        $this->assertEquals('%1% %2% %3%', $this->getSelectedText(), 'Selected text is not highlighted.');
 
         $this->clickTopToolbarButton('cssClass');
-        $this->assertEquals('LOREM XuT dolor', $this->getSelectedText(), 'Selected text is not highlighted.');
+        $this->assertEquals('%1% %2% %3%', $this->getSelectedText(), 'Selected text is not highlighted.');
 
         $this->clickTopToolbarButton('langTools');
-        $this->assertEquals('LOREM XuT dolor', $this->getSelectedText(), 'Selected text is not highlighted.');
+        $this->assertEquals('%1% %2% %3%', $this->getSelectedText(), 'Selected text is not highlighted.');
 
     }//end testSelectionIsMaintainedWhenSwitchingFromLanguageToClass()
 

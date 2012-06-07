@@ -54,7 +54,9 @@ function ViperToolbarPlugin(viper)
     });
 
     this.viper.registerCallback('Viper:focused', 'ViperToolbarPlugin', function(range) {
-        self.enable();
+        if (clickedOutside !== true) {
+            self.enable();
+        }
     });
 
     this.viper.registerCallback('Viper:mouseDown', 'ViperToolbarPlugin', function() {

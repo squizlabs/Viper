@@ -13,22 +13,22 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarCoreStylesUnitTest exten
      */
     public function testLineageChangesWhenBoldIsAppliedAndRemoved()
     {
-        $text    = 'IPSUM';
-        $textLoc = $this->find($text);
-        $this->selectText($text);
+        $text    = 1;
+        $textLoc = $this->findKeyword($text);
+        $this->selectKeyword($text);
 
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Selection</li>', $lineage);
 
         $this->click($textLoc);
-        $this->selectText($text);
+        $this->selectKeyword($text);
         $this->keyDown('Key.CMD + b');
 
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Bold</li>', $lineage);
 
         $this->click($textLoc);
-        $this->selectText($text);
+        $this->selectKeyword($text);
         $this->keyDown('Key.CMD + b');
 
         $lineage = $this->getHtml('.ViperITP-lineage');
@@ -44,22 +44,22 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarCoreStylesUnitTest exten
      */
     public function testLineageChangesWhenItalicIsAppliedAndRemoved()
     {
-        $text    = 'IPSUM';
-        $textLoc = $this->find($text);
-        $this->selectText($text);
+        $text    = 1;
+        $textLoc = $this->findKeyword($text);
+        $this->selectKeyword($text);
 
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Selection</li>', $lineage);
 
         $this->click($textLoc);
-        $this->selectText($text);
+        $this->selectKeyword($text);
         $this->keyDown('Key.CMD + i');
 
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Italic</li>', $lineage);
 
         $this->click($textLoc);
-        $this->selectText($text);
+        $this->selectKeyword($text);
         $this->keyDown('Key.CMD + i');
 
         $lineage = $this->getHtml('.ViperITP-lineage');
@@ -75,22 +75,22 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarCoreStylesUnitTest exten
      */
     public function testLineageChangesWhenSubscriptIsAppliedAndRemoved()
     {
-        $text    = 'IPSUM';
-        $textLoc = $this->find($text);
-        $this->selectText($text);
+        $text    = 1;
+        $textLoc = $this->findKeyword($text);
+        $this->selectKeyword($text);
 
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Selection</li>', $lineage);
 
         $this->click($textLoc);
-        $this->selectText($text);
+        $this->selectKeyword($text);
         $this->clickTopToolbarButton('subscript');
 
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">SUB</li>', $lineage);
 
         $this->click($textLoc);
-        $this->selectText($text);
+        $this->selectKeyword($text);
         $this->clickTopToolbarButton('subscript', 'active');
 
         $lineage = $this->getHtml('.ViperITP-lineage');
@@ -106,22 +106,22 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarCoreStylesUnitTest exten
      */
     public function testLineageChangesWhenSuperscriptIsAppliedAndRemoved()
     {
-        $text    = 'IPSUM';
-        $textLoc = $this->find($text);
-        $this->selectText($text);
+        $text    = 1;
+        $textLoc = $this->findKeyword($text);
+        $this->selectKeyword($text);
 
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Selection</li>', $lineage);
 
         $this->click($textLoc);
-        $this->selectText($text);
+        $this->selectKeyword($text);
         $this->clickTopToolbarButton('superscript');
 
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">SUP</li>', $lineage);
 
         $this->click($textLoc);
-        $this->selectText($text);
+        $this->selectKeyword($text);
         $this->clickTopToolbarButton('superscript', 'active');
 
         $lineage = $this->getHtml('.ViperITP-lineage');
@@ -137,9 +137,9 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarCoreStylesUnitTest exten
      */
     public function testLineageChangesWhenStrikethroughIsAppliedAndRemoved()
     {
-        $text    = 'IPSUM';
-        $textLoc = $this->find($text);
-        $this->selectText($text);
+        $text    = 1;
+        $textLoc = $this->findKeyword($text);
+        $this->selectKeyword($text);
 
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Selection</li>', $lineage);
@@ -162,20 +162,20 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarCoreStylesUnitTest exten
      */
     public function testSelectingTheBoldTagInTheLineage()
     {
-        $this->selectText('XyZ');
+        $this->selectKeyword(2);
 
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Bold</li><li class="ViperITP-lineageItem Viper-selected">Selection</li>', $lineage);
 
         $this->selectInlineToolbarLineageItem(1);
-        $this->assertEquals('XyZ DFG', $this->getSelectedText(), 'Bold text is not selected.');
+        $this->assertEquals($this->replaceKeywords('%2% %9%'), $this->getSelectedText(), 'Bold text is not selected.');
 
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Bold</li><li class="ViperITP-lineageItem">Selection</li>', $lineage);
 
-        $this->selectText('DFG');
+        $this->selectKeyword(9);
         $this->selectInlineToolbarLineageItem(1);
-        $this->assertEquals('XyZ DFG', $this->getSelectedText(), 'Bold text is not selected.');
+        $this->assertEquals($this->replaceKeywords('%2% %9%'), $this->getSelectedText(), 'Bold text is not selected.');
 
     }//end testSelectingTheBoldTagInTheLineage()
 
@@ -187,21 +187,21 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarCoreStylesUnitTest exten
      */
     public function testSelectingTheItalicTagInTheLineage()
     {
-        $this->selectText('Food');
+        $this->selectKeyword(3);
 
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Italic</li><li class="ViperITP-lineageItem Viper-selected">Selection</li>', $lineage);
 
         $this->selectInlineToolbarLineageItem(1);
 
-        $this->assertEquals('Food Source', $this->getSelectedText(), 'Italics text is not selected.');
+        $this->assertEquals($this->replaceKeywords('%3% %4%'), $this->getSelectedText(), 'Italics text is not selected.');
 
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Italic</li><li class="ViperITP-lineageItem">Selection</li>', $lineage);
 
-        $this->selectText('Source');
+        $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(1);
-        $this->assertEquals('Food Source', $this->getSelectedText(), 'Italics text is not selected.');
+        $this->assertEquals($this->replaceKeywords('%3% %4%'), $this->getSelectedText(), 'Italics text is not selected.');
 
     }//end testSelectingTheItalicTagInTheLineage()
 
@@ -213,21 +213,21 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarCoreStylesUnitTest exten
      */
     public function testSelectingTheSubscriptTagInTheLineage()
     {
-        $this->selectText('SUB');
+        $this->selectKeyword(5);
 
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">SUB</li><li class="ViperITP-lineageItem Viper-selected">Selection</li>', $lineage);
 
         $this->selectInlineToolbarLineageItem(1);
 
-        $this->assertEquals('SUB RRR', $this->getSelectedText(), 'Subscript text is not selected.');
+        $this->assertEquals($this->replaceKeywords('%5% %10%'), $this->getSelectedText(), 'Subscript text is not selected.');
 
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">SUB</li><li class="ViperITP-lineageItem">Selection</li>', $lineage);
 
-        $this->selectText('RRR');
+        $this->selectKeyword(10);
         $this->selectInlineToolbarLineageItem(1);
-        $this->assertEquals('SUB RRR', $this->getSelectedText(), 'Subscript text is not selected.');
+        $this->assertEquals($this->replaceKeywords('%5% %10%'), $this->getSelectedText(), 'Subscript text is not selected.');
 
     }//end testSelectingTheItalicTagInTheLineage()
 
@@ -239,21 +239,21 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarCoreStylesUnitTest exten
      */
     public function testSelectingTheSuperscriptTagInTheLineage()
     {
-        $this->selectText('ORSM');
+        $this->selectKeyword(6);
 
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">SUP</li><li class="ViperITP-lineageItem Viper-selected">Selection</li>', $lineage);
 
         $this->selectInlineToolbarLineageItem(1);
 
-        $this->assertEquals('VerY ORSM', $this->getSelectedText(), 'Superscript text is not selected.');
+        $this->assertEquals($this->replaceKeywords('%7% %6%'), $this->getSelectedText(), 'Superscript text is not selected.');
 
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">SUP</li><li class="ViperITP-lineageItem">Selection</li>', $lineage);
 
-        $this->selectText('VerY');
+        $this->selectKeyword(7);
         $this->selectInlineToolbarLineageItem(1);
-        $this->assertEquals('VerY ORSM', $this->getSelectedText(), 'superscript text is not selected.');
+        $this->assertEquals($this->replaceKeywords('%7% %6%'), $this->getSelectedText(), 'superscript text is not selected.');
 
     }//end testSelectingTheSuperscriptTagInTheLineage()
 
@@ -265,7 +265,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarCoreStylesUnitTest exten
      */
     public function testSelectingTheStrikethroughTagInTheLineage()
     {
-        $this->selectText('ORSM');
+        $this->selectKeyword(6);
         $this->keyDown('Key.RIGHT');
         $this->keyDown('Key.RIGHT');
         $this->keyDown('Key.SHIFT + Key.RIGHT');
@@ -295,33 +295,33 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarCoreStylesUnitTest exten
      */
     public function testOrderOfBoldAndItalicLineage()
     {
-        $this->selectText('IPSUM');
+        $this->selectKeyword(1);
 
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Selection</li>', $lineage);
 
-        $this->selectText('IPSUM');
+        $this->selectKeyword(1);
         $this->keyDown('Key.CMD + b');
         $this->keyDown('Key.CMD + i');
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Bold</li><li class="ViperITP-lineageItem Viper-selected">Italic</li>', $lineage);
 
-        $this->selectText('IPSUM');
+        $this->selectKeyword(1);
         $this->keyDown('Key.CMD + b');
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Italic</li>', $lineage);
 
-        $this->selectText('IPSUM');
+        $this->selectKeyword(1);
         $this->keyDown('Key.CMD + b');
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Italic</li><li class="ViperITP-lineageItem Viper-selected">Bold</li>', $lineage);
 
-        $this->selectText('IPSUM');
+        $this->selectKeyword(1);
         $this->keyDown('Key.CMD + i');
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Bold</li>', $lineage);
 
-        $this->selectText('IPSUM');
+        $this->selectKeyword(1);
         $this->keyDown('Key.CMD + i');
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Bold</li><li class="ViperITP-lineageItem Viper-selected">Italic</li>', $lineage);
@@ -336,20 +336,20 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarCoreStylesUnitTest exten
      */
     public function testSelectingBoldAndItalic()
     {
-        $this->selectText('IPSUM', 'dolor');
+        $this->selectKeyword(1, 8);
         $this->keyDown('Key.CMD + b');
         $this->keyDown('Key.CMD + i');
 
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Bold</li><li class="ViperITP-lineageItem Viper-selected">Italic</li>', $lineage);
 
-        $this->selectText('dolor');
+        $this->selectKeyword(8);
         $this->selectInlineToolbarLineageItem(1);
-        $this->assertEquals('IPSUM dolor', $this->getSelectedText(), 'Formatted text is not selected');
+        $this->assertEquals($this->replaceKeywords('%1% %8%'), $this->getSelectedText(), 'Formatted text is not selected');
 
-        $this->selectText('IPSUM');
+        $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(2);
-        $this->assertEquals('IPSUM dolor', $this->getSelectedText(), 'Formatted text is not selected');
+        $this->assertEquals($this->replaceKeywords('%1% %8%'), $this->getSelectedText(), 'Formatted text is not selected');
 
 
     }//end testSelectingBoldAndItalic()

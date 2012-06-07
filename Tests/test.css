@@ -45,6 +45,10 @@ body {
     text-decoration: none;
 }
 
+#content table {
+    font-size: 20px;
+}
+
 em {
     color: green;
 }
@@ -56,6 +60,12 @@ strong {
 strong em,
 em strong {
     color: brown;
+}
+
+sub, sup {
+    vertical-align: middle;
+    font-size: 20px;
+    font-family: monospace;
 }
 
 .Viper-button.Viper-disabled .Viper-buttonIcon {

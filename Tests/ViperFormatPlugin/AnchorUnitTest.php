@@ -13,30 +13,30 @@ class Viper_Tests_ViperFormatPlugin_AnchorUnitTest extends AbstractViperUnitTest
      */
     public function testCreateAnchorUsingTheInlineToolbar()
     {
-        $this->selectText('Lorem');
+        $this->selectKeyword(1);
         $this->clickInlineToolbarButton('anchorID');
         $this->type('test');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p><span id="test">Lorem</span> XuT dolor</p><p id="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span id="myclass">lABs</span> is ORSM</p>');
+        $this->assertHTMLMatch('<p><span id="test">%1%</span> %2% %3%</p><p id="test">sit amet <strong>%4%</strong></p><p>Test AbC</p><p>Squiz <span id="myclass">%5%</span> is %6%</p>');
 
-        $this->click($this->find('dolor'));
+        $this->click($this->findKeyword(3));
         sleep(1);
-        $this->selectText('Lorem');
+        $this->selectKeyword(1);
         $this->assertTrue($this->topToolbarButtonExists('anchorID', 'active'), 'Anchor icon in Top Toolbar should be active.');
         $this->assertTrue($this->inlineToolbarButtonExists('anchorID', 'active'), 'Anchor icon in the inline toolbar should be active');
 
-        $this->selectText('ORSM');
+        $this->selectKeyword(6);
         $this->clickInlineToolbarButton('anchorID');
         $this->type('test');
         $updateChanges = $this->find('Update Changes', NULL, TRUE);
         $this->click($updateChanges);
 
-        $this->assertHTMLMatch('<p><span id="test">Lorem</span> XuT dolor</p><p id="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span id="myclass">lABs</span> is <span id="test">ORSM</span></p>');
+        $this->assertHTMLMatch('<p><span id="test">%1%</span> %2% %3%</p><p id="test">sit amet <strong>%4%</strong></p><p>Test AbC</p><p>Squiz <span id="myclass">%5%</span> is <span id="test">%6%</span></p>');
 
-        $this->click($this->find('dolor'));
+        $this->click($this->findKeyword(3));
         sleep(1);
-        $this->selectText('ORSM');
+        $this->selectKeyword(6);
         $this->assertTrue($this->topToolbarButtonExists('anchorID', 'active'), 'Anchor icon in Top Toolbar should be active.');
         $this->assertTrue($this->inlineToolbarButtonExists('anchorID', 'active'), 'Anchor icon in the inline toolbar should be active');
 
@@ -50,30 +50,30 @@ class Viper_Tests_ViperFormatPlugin_AnchorUnitTest extends AbstractViperUnitTest
      */
     public function testCreateAnchorUsingTheTopToolbar()
     {
-        $this->selectText('Lorem');
+        $this->selectKeyword(1);
         $this->clickTopToolbarButton('anchorID');
         $this->type('test');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p><span id="test">Lorem</span> XuT dolor</p><p id="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span id="myclass">lABs</span> is ORSM</p>');
+        $this->assertHTMLMatch('<p><span id="test">%1%</span> %2% %3%</p><p id="test">sit amet <strong>%4%</strong></p><p>Test AbC</p><p>Squiz <span id="myclass">%5%</span> is %6%</p>');
 
-        $this->click($this->find('dolor'));
+        $this->click($this->findKeyword(3));
         sleep(1);
-        $this->selectText('Lorem');
+        $this->selectKeyword(1);
         $this->assertTrue($this->topToolbarButtonExists('anchorID', 'active'), 'Anchor icon in Top Toolbar should be active.');
         $this->assertTrue($this->inlineToolbarButtonExists('anchorID', 'active'), 'Anchor icon in the inline toolbar should be active');
 
-        $this->selectText('ORSM');
+        $this->selectKeyword(6);
         $this->clickTopToolbarButton('anchorID');
         $this->type('test');
         $updateChanges = $this->find('Update Changes', NULL, TRUE);
         $this->click($updateChanges);
 
-        $this->assertHTMLMatch('<p><span id="test">Lorem</span> XuT dolor</p><p id="test">sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span id="myclass">lABs</span> is <span id="test">ORSM</span></p>');
+        $this->assertHTMLMatch('<p><span id="test">%1%</span> %2% %3%</p><p id="test">sit amet <strong>%4%</strong></p><p>Test AbC</p><p>Squiz <span id="myclass">%5%</span> is <span id="test">%6%</span></p>');
 
-        $this->click($this->find('dolor'));
+        $this->click($this->findKeyword(3));
         sleep(1);
-        $this->selectText('ORSM');
+        $this->selectKeyword(6);
         $this->assertTrue($this->topToolbarButtonExists('anchorID', 'active'), 'Anchor icon in Top Toolbar should be active.');
         $this->assertTrue($this->inlineToolbarButtonExists('anchorID', 'active'), 'Anchor icon in the inline toolbar should be active');
 
@@ -87,9 +87,9 @@ class Viper_Tests_ViperFormatPlugin_AnchorUnitTest extends AbstractViperUnitTest
      */
     public function testAnchorIconAppearsInTheInlineToolbar()
     {
-        $this->selectText('ORSM');
-        $this->type('Key.RIGHT');
-        $this->type('Key.ENTER');
+        $this->selectKeyword(6);
+        $this->keyDown('Key.RIGHT');
+        $this->keyDown('Key.ENTER');
         $this->type('This is a new line of CONTENT');
 
         $this->keyDown('Key.SHIFT + Key.LEFT');
@@ -112,7 +112,7 @@ class Viper_Tests_ViperFormatPlugin_AnchorUnitTest extends AbstractViperUnitTest
      */
     public function testSelectingAnchors()
     {
-        $this->selectText('WoW');
+        $this->selectKeyword(4);
         $this->assertTrue($this->inlineToolbarButtonExists('anchorID'), 'Anchor icon should appear in the inline toolbar.');
         $this->assertTrue($this->topToolbarButtonExists('anchorID'), 'Anchor icon should be available in the top toolbar');
 
@@ -120,9 +120,9 @@ class Viper_Tests_ViperFormatPlugin_AnchorUnitTest extends AbstractViperUnitTest
         $this->assertTrue($this->inlineToolbarButtonExists('anchorID', 'active'), 'Active anchor icon should appear in the inline toolbar.');
         $this->assertTrue($this->topToolbarButtonExists('anchorID', 'active'), 'Active anchor icon should be available in the top toolbar');
 
-        $this->click($this->find('XuT'));
+        $this->click($this->findKeyword(2));
 
-        $this->selectText('lABs');
+        $this->selectKeyword(5);
         $this->assertTrue($this->inlineToolbarButtonExists('anchorID', 'active'), 'Active anchor icon should appear in the inline toolbar.');
         $this->assertTrue($this->topToolbarButtonExists('anchorID', 'active'), 'Active anchor icon should be available in the top toolbar');
 
@@ -136,22 +136,22 @@ class Viper_Tests_ViperFormatPlugin_AnchorUnitTest extends AbstractViperUnitTest
      */
     public function testDeletingAnchorsUsingTheInlineToolbar()
     {
-        $this->selectText('WoW');
+        $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(0);
         $this->clickInlineToolbarButton('anchorID', 'active');
         $this->clearFieldValue('ID');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p>sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span id="myclass">lABs</span> is ORSM</p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit amet <strong>%4%</strong></p><p>Test AbC</p><p>Squiz <span id="myclass">%5%</span> is %6%</p>');
 
-        $this->selectText('lABs');
+        $this->selectKeyword(5);
         sleep(1);
         $this->clickInlineToolbarButton('anchorID', 'active');
         $this->clearFieldValue('ID');
         $updateChanges = $this->find('Update Changes', NULL, TRUE);
         $this->click($updateChanges);
 
-        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p>sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz lABs is ORSM</p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit amet <strong>%4%</strong></p><p>Test AbC</p><p>Squiz %5% is %6%</p>');
 
     }//end testDeletingAnchorsUsingTheInlineToolbar()
 
@@ -163,21 +163,21 @@ class Viper_Tests_ViperFormatPlugin_AnchorUnitTest extends AbstractViperUnitTest
      */
     public function testDeletingAnchorsUsingTheTopToolbar()
     {
-        $this->selectText('WoW');
+        $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(0);
         $this->clickTopToolbarButton('anchorID', 'active');
         $this->clearFieldValue('ID');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p>sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz <span id="myclass">lABs</span> is ORSM</p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit amet <strong>%4%</strong></p><p>Test AbC</p><p>Squiz <span id="myclass">%5%</span> is %6%</p>');
 
-        $this->selectText('lABs');
+        $this->selectKeyword(5);
         $this->clickTopToolbarButton('anchorID', 'active');
         $this->clearFieldValue('ID');
         $updateChanges = $this->find('Update Changes', NULL, TRUE);
         $this->click($updateChanges);
 
-        $this->assertHTMLMatch('<p>Lorem XuT dolor</p><p>sit amet <strong>WoW</strong></p><p>Test AbC</p><p>Squiz lABs is ORSM</p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit amet <strong>%4%</strong></p><p>Test AbC</p><p>Squiz %5% is %6%</p>');
 
     }//end testDeletingAnchorsUsingTheInlineToolbar()
 

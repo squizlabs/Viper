@@ -711,14 +711,19 @@ ViperFormatPlugin.prototype = {
                 span = bookmark.start.nextSibling;
                 this.viper.removeBookmarks();
                 this._setAttributeForElement(span, attr, value);
+                range.selectNode(span);
             } else {
                 var attributes = {attributes: {}};
                 attributes.attributes[attr] = value;
                 span = this.viper.surroundContents('span', attributes, range);
-                this.viper.removeBookmark(bookmark);
+                if (!span) {
+                    this.viper.selectBookmark(bookmark);
+                } else {
+                    this.viper.removeBookmarks();
+                    range.selectNode(span);
+                }
             }//end if
 
-            range.selectNode(span);
             ViperSelection.addRange(range);
             this.viper.adjustRange();
 
