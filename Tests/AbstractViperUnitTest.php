@@ -449,7 +449,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
             $i++;
         }
 
-        $tests = 2;
+        $tests = 5;
         for ($j = 1; $j <= $tests; $j++) {
             // Change the contents of the test page.
             $this->execJS('window.opener.changeContent('.$j.')', TRUE);
