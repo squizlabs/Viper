@@ -405,7 +405,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         $dest = $baseDir.'/calibrate-text.html';
         $this->goToURL($this->_getBaseUrl().'/calibrate-text.html');
 
-        $texts = $this->execJS('getCoords('.json_encode($this->_getKeywordsList()).')');
+        $texts = $this->execJS('getCoords('.json_encode(self::_getKeywordsList()).')');
         $count = count($texts);
 
         $i      = 1;
@@ -445,7 +445,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      *
      * @return array
      */
-    private function _getKeywordsList()
+    private static function _getKeywordsList()
     {
         $keywords = array(
                      'XAX',
@@ -491,7 +491,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      */
     private function _getKeyword($index)
     {
-        $keywords = $this->_getKeywordsList();
+        $keywords = self::_getKeywordsList();
         $keyword  = $keywords[$index];
 
         return $keyword;
@@ -526,7 +526,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      */
     protected function replaceKeywords($content)
     {
-        $keywords = $this->_getKeywordsList();
+        $keywords = self::_getKeywordsList();
         foreach ($keywords as $index => $keyword) {
             $content = str_replace('%'.($index + 1).'%', $keyword, $content);
         }
@@ -1038,6 +1038,28 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         $this->assertEquals($html, $pageHtml);
 
     }//end assertHTMLMatch()
+
+
+    /**
+     * Asserts that expected value is equal to the actual value.
+     *
+     * @param mixed   $expected     Expected value.
+     * @param mixed   $actual       Actual value.
+     * @param string  $message      Error Message.
+     * @param float   $delta        Delta.
+     * @param integer $maxDepth     Max array depth.
+     * @param boolean $canonicalize Canonicalize.
+     * @param boolean $ignoreCase   Ignore case.
+     *
+     * @return mixed
+     */
+    public static function assertEquals($expected, $actual, $message='', $delta=0, $maxDepth=10, $canonicalize=FALSE, $ignoreCase=FALSE)
+    {
+        $expected = self::replaceKeywords($expected);
+
+        return parent::assertEquals($expected, $actual, $message, $delta, $maxDepth, $canonicalize, $ignoreCase);
+
+    }//end assertEquals()
 
 
     /**
