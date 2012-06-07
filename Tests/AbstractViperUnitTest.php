@@ -1768,13 +1768,14 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
             file_put_contents(dirname(__FILE__).'/tmp/js_cache.inc', serialize(self::$_jsExecCache));
         }
 
-        usleep(50000);
+        usleep(100000);
         $this->keyDown('Key.ENTER');
+        usleep(200000);
         $this->keyDown('Key.TAB');
         $this->keyDown('Key.CMD + a');
-        usleep(50000);
+        usleep(100000);
         $this->keyDown('Key.CMD + c');
-        usleep(50000);
+        usleep(250000);
         $this->keyDown('Key.TAB');
         $this->keyDown('Key.SPACE');
         usleep(50000);
