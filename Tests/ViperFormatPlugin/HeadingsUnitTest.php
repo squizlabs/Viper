@@ -51,12 +51,13 @@ class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractViperUnitTe
         $this->clickInlineToolbarButton('headings', 'active');
         $this->clickInlineToolbarButton('H1', 'active', TRUE);
 
-        $this->assertTrue($this->inlineToolbarButtonExists('headings'), 'Headings icon is still highlighted in the inline toolbar');
+        $this->assertTrue($this->inlineToolbarButtonExists('headings', 'selected'), 'Headings icon is still highlighted in the inline toolbar');
+        $this->assertTrue($this->inlineToolbarButtonExists('H1', NULL, TRUE), 'H1 icon is still selected');
         $this->assertTrue($this->inlineToolbarButtonExists('formats-p', 'active'), 'Formats icon is not highlighted in the inline toolbar');
-        
+
         $this->assertTrue($this->topToolbarButtonExists('headings'), 'Headings icon is still highlighted in the top toolbar');
         $this->assertTrue($this->topToolbarButtonExists('formats-p', 'active'), 'Formats icon is not highlighted in the top toolbar');
-        
+
         $this->assertHTMLMatch('<p>%1% %2%</p><p>%3% xtn dolor</p><p>sit amet <strong>%4%</strong></p><p>%5% long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar.</p>');
 
     }//end testRemovingAHeadingStyle()
@@ -82,7 +83,7 @@ class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractViperUnitTe
 
         $this->assertTrue($this->inlineToolbarButtonExists('headings', 'active'), 'Headings icon is not active in the inline toolbar');
         $this->assertTrue($this->inlineToolbarButtonExists('H2', NULL, TRUE), 'H2 icon is not active in the inline toolbar');
-        
+
         $this->assertTrue($this->topToolbarButtonExists('headings', 'active'), 'Headings icon is not active in the inline toolbar');
 
     }//end testApplyingAHeadingStyle()
@@ -121,6 +122,7 @@ class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractViperUnitTe
         $this->selectInlineToolbarLineageItem(0);
         $this->clickInlineToolbarButton('headings');
         $this->clickInlineToolbarButton('H6', NULL, TRUE);
+        $this->selectKeyword(6);
         $this->keyDown('Key.RIGHT');
         $this->keyDown('Key.ENTER');
         $this->type('Another new line of content');
