@@ -393,13 +393,9 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
     private function _calibrate()
     {
         $this->_calibrateText();
-        sleep(1);
         $this->closeJSWindow();
-        sleep(2);
         $this->_calibrateImage();
-        sleep(1);
         $this->closeJSWindow();
-        sleep(2);
 
     }//end _calibrate()
 
@@ -428,6 +424,8 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         $dest = $baseDir.'/calibrate-text.html';
         $this->goToURL($this->_getBaseUrl().'/calibrate-text.html');
 
+        sleep(2);
+        $this->_switchWindow('main');
         sleep(2);
 
         $texts = $this->execJS('window.opener.getCoords('.json_encode(self::_getKeywordsList()).')', TRUE);
@@ -642,8 +640,8 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         // Create image for the inline toolbar pattern (the arrow on top).
         sleep(2);
         $this->selectText('PyP');
-
         sleep(1);
+
         $vitp      = $this->execJS('window.opener.getVITP()', TRUE);
         $vitp['x'] = $this->getPageXRelativeToScreen($vitp['x']);
         $vitp['y'] = $this->getPageYRelativeToScreen($vitp['y']);
@@ -937,8 +935,8 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      */
     public function closeJSWindow()
     {
+        self::$_currentWindow = 'main';
         $this->execJS('cw();', TRUE);
-        self::$_currentWindow = NULL;
 
     }//end closeJSWindow()
 
@@ -2072,6 +2070,8 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      */
     protected function goToURL($url)
     {
+        self::$_currentWindow = 'js';
+
         $this->keyDown('Key.CMD+l');
         $this->type($url);
         $this->keyDown('Key.ENTER');
