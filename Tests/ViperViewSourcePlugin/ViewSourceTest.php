@@ -13,40 +13,31 @@ class Viper_Tests_ViperViewSourcePlugin_ViewSourceTest extends AbstractViperView
      */
     public function testOpenAndCloseSourceEditor()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $this->click($this->findKeyword(2));
         $this->clickTopToolbarButton('sourceView');
 
         // Check to make sure the source editor appears.
-        $sourceEditorFound = true;
-        try
-        {
-            $this->find($dir.'source_editor.png');
-        }
-        catch(Exception $e)
-        {
-            $sourceEditorFound = false;
+        try {
+            $image = $this->findImage('dragPopupIcon', '.Viper-popup-dragIcon');
+        } catch (Exception $e) {
+            $this->fail('Source editor did not appear on the screen');
         }
 
-        $this->assertTrue($sourceEditorFound, 'Source editor did not appear on the screen');
-
-        $closeSourceIcon = $this->find($dir.'icon_close_source.png');
-        $this->click($closeSourceIcon);
+        try {
+            $closeIcon = $this->findImage('closePopupIcon', '.Viper-popup-closeIcon');
+            $this->click($closeIcon);
+        } catch (Exception $e) {
+            $this->fail('Source editor does not have a close icon');
+        }
 
         // Check to make sure the source editor does not appear.
         $sourceEditorNotFound = false;
-        try
-        {
-            $this->find($dir.'source_editor.png');
+        try {
+            $this->find($image);
+            $this->fail('Source editor still appears on the screen');
+        } catch (Exception $e) {
+            // Do nothing.
         }
-        catch(Exception $e)
-        {
-            // Expecting the exception as the source editor should be closed
-            $sourceEditorNotFound = True;
-        }
-
-        $this->assertTrue($sourceEditorNotFound, 'Source editor still appears on the screen');
 
     }//end testSourceCodeAppears()
 
@@ -58,13 +49,11 @@ class Viper_Tests_ViperViewSourcePlugin_ViewSourceTest extends AbstractViperView
      */
     public function testEditingAfterClosingSourceEditor()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $this->click($this->findKeyword(1));
         $this->clickTopToolbarButton('sourceView');
 
-        $closeSourceIcon = $this->find($dir.'icon_close_source.png');
-        $this->click($closeSourceIcon);
+        $closeIcon = $this->findImage('closePopupIcon', '.Viper-popup-closeIcon');
+        $this->click($closeIcon);
 
         $this->selectKeyword(1);
         $this->keyDown('Key.CMD + i');
@@ -81,16 +70,13 @@ class Viper_Tests_ViperViewSourcePlugin_ViewSourceTest extends AbstractViperView
      */
     public function testEditingTheSourceCode()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $this->click($this->findKeyword(2));
         $this->clickTopToolbarButton('sourceView');
         sleep(2);
         $this->keyDown('Key.CMD + a');
         $this->keyDown('Key.DELETE');
 
-        $applyChangesIcon = $this->find($dir.'icon_applyChanges.png');
-        $this->click($applyChangesIcon);
+        $this->clickButton('Apply Changes', NULL, TRUE);
 
         $this->assertHTMLMatch('<p></p>');
 
@@ -104,8 +90,6 @@ class Viper_Tests_ViperViewSourcePlugin_ViewSourceTest extends AbstractViperView
      */
     public function testEditingContentAfterDeletingSourceCode()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $this->selectKeyword(2, 3);
         $this->clickTopToolbarButton('sourceView');
         sleep(2);
@@ -121,14 +105,12 @@ class Viper_Tests_ViperViewSourcePlugin_ViewSourceTest extends AbstractViperView
         $this->keyDown('Key.SHIFT + Key.DOWN');
         $this->keyDown('Key.DELETE');
 
-
-        $applyChangesIcon = $this->find($dir.'icon_applyChanges.png');
-        $this->click($applyChangesIcon);
+        $this->clickButton('Apply Changes', NULL, TRUE);
 
         $this->assertHTMLMatch('<p>Lorem %1% dolor</p>');
 
         $this->selectKeyword(1);
-        $this->assertEquals($this->replaceKeywords('%1%'), $this->getSelectedText(), 'Keyword is not selected');
+        $this->assertEquals('%1%', $this->getSelectedText(), 'Keyword is not selected');
 
     }//end testEditingContentAfterDeletingSourceCode()
 
