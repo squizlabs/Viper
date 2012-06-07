@@ -13,26 +13,22 @@ class Viper_Tests_ViperFormatPlugin_ParagraphUnitTest extends AbstractViperUnitT
      */
     public function testApplingThePStyleUsingInlineToolbar()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
-        $text = 'XuT';
-
-        $this->selectText($text);
+        $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(0);
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_toggle_formats_highlighted.png');
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_p.png');
+        $this->clickInlineToolbarButton('formats-div', 'active');
+        $this->clickInlineToolbarButton('P', NULL, TRUE);
 
-        $this->assertHTMLMatch('<p>Lorem xtn dolor</p><p>sit amet <strong>WoW</strong></p><p>XuT paragraph to change to a p</p>');
+        $this->assertHTMLMatch('<p>%1% xtn %2%</p><p>sit amet <strong>%3%</strong></p><p>%4% paragraph to change to a p</p>');
 
-        $this->click($this->find($text));
-        $this->selectText($text);
+        $this->click($this->findKeyword(2));
+        $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(0);
 
-        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_toggle_formats_highlighted.png'), 'Toogle formats icon is not selected');
+        $this->assertTrue($this->inlineToolbarButtonExists('formats-p', 'active'), 'Toogle formats icon is not selected');
 
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_toggle_formats_highlighted.png');
+        $this->clickInlineToolbarButton('formats-p', 'active');
 
-        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_p_active.png'), 'P icon is not active');
+        $this->assertTrue($this->inlineToolbarButtonExists('P', NULL, TRUE), 'P icon is not active');
 
     }//end testApplingThePStyleUsingInlineToolbar()
 
@@ -44,26 +40,23 @@ class Viper_Tests_ViperFormatPlugin_ParagraphUnitTest extends AbstractViperUnitT
      */
     public function testApplingThePStyleUsingTopToolbar()
     {
-        $dir = dirname(__FILE__).'/Images/';
 
-        $text = 'XuT';
-
-        $this->selectText($text);
+        $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(0);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_formats_highlighted.png');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_p.png');
+        $this->clickTopToolbarButton('formats-div', 'active');
+        $this->clickTopToolbarButton('P', NULL, TRUE);
 
-        $this->assertHTMLMatch('<p>Lorem xtn dolor</p><p>sit amet <strong>WoW</strong></p><p>XuT paragraph to change to a p</p>');
+        $this->assertHTMLMatch('<p>%1% xtn %2%</p><p>sit amet <strong>%3%</strong></p><p>%4% paragraph to change to a p</p>');
 
-        $this->click($this->find($text));
-        $this->selectText($text);
+        $this->click($this->findKeyword(1));
+        $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(0);
 
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_toggle_formats_highlighted.png'), 'Toogle formats icon is not selected');
+        $this->assertTrue($this->topToolbarButtonExists('formats-p', 'active'), 'Toogle formats icon is not selected');
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_formats_highlighted.png');
+        $this->clickTopToolbarButton('formats-p', 'active');
 
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_p_active.png'), 'P icon is not active');
+        $this->assertTrue($this->topToolbarButtonExists('P', 'active', NULL), 'P icon is not active');
 
     }//end testApplingThePStyleUsingTopToolbar()
 
@@ -75,23 +68,21 @@ class Viper_Tests_ViperFormatPlugin_ParagraphUnitTest extends AbstractViperUnitT
      */
     public function testSelectParaAfterStylingShowsCorrectIcons()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
-        $this->selectText('Lorem', 'dolor');
+        $this->selectKeyword(1, 2);
         $this->keyDown('Key.CMD + b');
         $this->keyDown('Key.CMD + i');
 
         $this->selectInlineToolbarLineageItem(0);
 
         // Make sure the correct icons are being shown in the inline toolbar.
-        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_toggle_formats_highlighted.png'), 'Toogle formats icon is not selected');
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_toggle_formats_highlighted.png');
-        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_p_active.png'), 'P icon is not active');
+        $this->assertTrue($this->inlineToolbarButtonExists('formats-p', 'active'), 'Toogle formats icon is not selected');
+        $this->clickInlineToolbarButton('formats-p', 'active');
+        $this->assertTrue($this->inlineToolbarButtonExists('P', NULL, TRUE), 'P icon is not active');
 
         // Make sure the correct icons are being shown in the top toolbar.
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_toggle_formats_highlighted.png'), 'Toogle formats icon is not selected');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_formats_highlighted.png');
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_p_active.png'), 'P icon is not active');
+        $this->assertTrue($this->topToolbarButtonExists('formats-p', 'active'), 'Toogle formats icon is not selected');
+        $this->clickTopToolbarButton('formats-p', 'active');
+        $this->assertTrue($this->topToolbarButtonExists('P', NULL, TRUE), 'P icon is not active');
 
     }//end testSelectParaAfterStylingShowsCorrectIcons()
 
@@ -126,19 +117,17 @@ class Viper_Tests_ViperFormatPlugin_ParagraphUnitTest extends AbstractViperUnitT
      *
      * @return void
      */
-    public function testDivAppliedToParagraphOnPartialSelection()
+    public function testPAppliedToParagraphOnPartialSelection()
     {
-        $dir = dirname(__FILE__).'/Images/';
+        $this->selectKeyword(4);
+        $this->assertFalse($this->inlineToolbarButtonExists('formats-div', 'active'), 'Toogle formats icon should not appear in the inline toolbar');
 
-        $this->selectText('XuT');
-        $this->assertFalse($this->inlineToolbarButtonExists($dir.'toolbarIcon_toggle_formats_highlighted.png'), 'Toogle formats icon should not appear in the inline toolbar');
+        $this->clickTopToolbarButton('formats');
+        $this->clickTopToolbarButton('P', NULL, TRUE);
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_formats_highlighted.png');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_p.png');
+        $this->assertHTMLMatch('<p>%1% xtn %2%</p><p>sit amet <strong>%3%</strong></p><p>%4% paragraph to change to a p</p>');
 
-        $this->assertHTMLMatch('<p>Lorem xtn dolor</p><p>sit amet <strong>WoW</strong></p><p>XuT paragraph to change to a p</p>');
-
-    }//end testDivAppliedToParagraphOnPartialSelection()
+    }//end testPAppliedToParagraphOnPartialSelection()
 
 
     /**

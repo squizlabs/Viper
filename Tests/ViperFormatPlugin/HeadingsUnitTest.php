@@ -36,25 +36,6 @@ class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractViperUnitTe
     }//end testHeading()
 
 
-   /**
-     * Test that heading formats work.
-     *
-     * @return void
-     */
-    public function testChangingAHeadingStyle()
-    {
-        $dir  = dirname(__FILE__).'/Images/';
-
-        $this->selectText('HEADINGS', 'Test');
-
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_heading_subActive.png');
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_h3.png');
-
-        $this->assertHTMLMatch('<h3>HEADINGS Test</h3><p>Lorem xtn dolor</p><p>sit amet <strong>WoW</strong></p><p>Extra long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar.</p>');
-
-    }//end testChangingAHeadingStyle()
-
-
     /**
      * Test that removing a heading works.
      *
@@ -62,18 +43,21 @@ class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractViperUnitTe
      */
     public function testRemovingAHeadingStyle()
     {
-        $dir  = dirname(__FILE__).'/Images/';
+        $this->selectKeyword(1, 2);
 
-       $this->selectText('HEADINGS', 'Test');
+        $this->assertTrue($this->inlineToolbarButtonExists('headings', 'active'), 'Headings icon is not highlighted in the inline toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('headings', 'active'), 'Headings icon is not highlighted in the top toolbar');
 
-        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_heading_subHighlighted.png'), 'Headings icon is not highlighted in the inline toolbar');
+        $this->clickInlineToolbarButton('headings', 'active');
+        $this->clickInlineToolbarButton('H1', 'active', TRUE);
 
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_toggle_formats.png');
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_p.png');
-
-        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_heading.png'), 'Headings icon is still highlighted in the inline toolbar');
-        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_toggle_formats_highlighted.png'), 'Formats icon is not highlighted in the inline toolbar');
-        $this->assertHTMLMatch('<p>HEADINGS Test</p><p>Lorem xtn dolor</p><p>sit amet <strong>WoW</strong></p><p>Extra long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar.</p>');
+        $this->assertTrue($this->inlineToolbarButtonExists('headings'), 'Headings icon is still highlighted in the inline toolbar');
+        $this->assertTrue($this->inlineToolbarButtonExists('formats-p', 'active'), 'Formats icon is not highlighted in the inline toolbar');
+        
+        $this->assertTrue($this->topToolbarButtonExists('headings'), 'Headings icon is still highlighted in the top toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('formats-p', 'active'), 'Formats icon is not highlighted in the top toolbar');
+        
+        $this->assertHTMLMatch('<p>%1% %2%</p><p>%3% xtn dolor</p><p>sit amet <strong>%4%</strong></p><p>%5% long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar.</p>');
 
     }//end testRemovingAHeadingStyle()
 
@@ -85,20 +69,21 @@ class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractViperUnitTe
      */
     public function testApplyingAHeadingStyle()
     {
-        $dir  = dirname(__FILE__).'/Images/';
 
-        $this->selectText('Lorem');
+        $this->selectKeyword(3);
         $this->selectInlineToolbarLineageItem(0);
 
-        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_heading.png'), 'Headings icon is active in the toolbar');
+        $this->assertTrue($this->inlineToolbarButtonExists('headings'), 'Headings icon is active in the toolbar');
 
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_heading.png');
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_h2.png');
+        $this->clickInlineToolbarButton('headings');
+        $this->clickInlineToolbarButton('H2', NULL, TRUE);
 
-        $this->assertHTMLMatch('<h1>HEADINGS Test</h1><h2>Lorem xtn dolor</h2><p>sit amet <strong>WoW</strong></p><p>Extra long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar.</p>');
+        $this->assertHTMLMatch('<h1>%1% %2%</h1><h2>%3% xtn dolor</h2><p>sit amet <strong>%4%</strong></p><p>%5% long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar.</p>');
 
-        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_heading_subActive.png'), 'Headings icon is not active in the inline toolbar');
-        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_h2_active.png'), 'H2 icon is not active in the inline toolbar');
+        $this->assertTrue($this->inlineToolbarButtonExists('headings', 'active'), 'Headings icon is not active in the inline toolbar');
+        $this->assertTrue($this->inlineToolbarButtonExists('H2', NULL, TRUE), 'H2 icon is not active in the inline toolbar');
+        
+        $this->assertTrue($this->topToolbarButtonExists('headings', 'active'), 'Headings icon is not active in the inline toolbar');
 
     }//end testApplyingAHeadingStyle()
 
@@ -110,12 +95,10 @@ class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractViperUnitTe
      */
     public function testHeadingIconDoesNotAppear()
     {
-        $dir  = dirname(__FILE__).'/Images/';
-
-        $this->selectText('Extra');
+        $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
 
-        $this->assertFalse($this->inlineToolbarButtonExists($dir.'toolbarIcon_heading.png'), 'Heading icon appears in the toolbar');
+        $this->assertFalse($this->inlineToolbarButtonExists('headings'), 'Heading icon appears in the toolbar');
 
     }//end testHeadingIconDoesNotAppear()
 
@@ -127,24 +110,22 @@ class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractViperUnitTe
      */
     public function testApplyingHeadingsToNewContent()
     {
-        $dir  = dirname(__FILE__).'/Images/';
-
-        $this->selectText('Test');
+        $this->selectKeyword(2);
         $this->keyDown('Key.RIGHT');
         $this->keyDown('Key.ENTER');
-        $this->type('New line of content');
+        $this->type('New line of content %6%');
 
-        $this->assertHTMLMatch('<h1>HEADINGS Test</h1><p>New line of content</p><p>Lorem xtn dolor</p><p>sit amet <strong>WoW</strong></p><p>Extra long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar.</p>');
+        $this->assertHTMLMatch('<h1>%1% %2%</h1><p>New line of content %6%</p><p>%3% xtn dolor</p><p>sit amet <strong>%4%</strong></p><p>%5% long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar.</p>');
 
-        $this->selectText('WoW');
+        $this->selectKeyword(6);
         $this->selectInlineToolbarLineageItem(0);
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_heading.png');
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_h6.png');
+        $this->clickInlineToolbarButton('headings');
+        $this->clickInlineToolbarButton('H6', NULL, TRUE);
         $this->keyDown('Key.RIGHT');
         $this->keyDown('Key.ENTER');
         $this->type('Another new line of content');
 
-        $this->assertHTMLMatch('<h1>HEADINGS Test</h1><p>New line of content</p><p>Lorem xtn dolor</p><h6>sit amet <strong>WoW</strong></h6><p>Another new line of content</p><p>Extra long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar.</p>');
+        $this->assertHTMLMatch('<h1>%1% %2%</h1><h6>New line of content %6%</h6><p>Another new line of content</p><p>%3% xtn dolor</p><p>sit amet <strong>%4%</strong></p><p>%5% long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar.</p>');
 
     }//end testApplyingHeadingsToNewContent()
 
