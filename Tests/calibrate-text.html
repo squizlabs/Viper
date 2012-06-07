@@ -107,10 +107,15 @@
 
                 dfx.setHtml(dfx.getId('testContent'), content);
             }
+
+            if (window.location.hash !== '#run') {
+                window.open('test_jsexec.html', '', 'width=400,height=100,0,status=0,left=1000,top=850');
+                window.location.hash = '#run';
+            }
         </script>
     </head>
     <body spellcheck="false">
-        <img id="windowTarget" src="./Core/Images/window-target.png"/>
+        <img id="windowTarget" src="./Core/Images/window-target.png" onclick="if (viper) viper.destroy();location.reload();" />
         <div id="spans">
             <!--<span>{TnT}</span><br />
             <span>{XnX}</span><br />
@@ -125,11 +130,5 @@
             <span>{AxP}</span><br />-->
         </div>
         <div id="testContent" style="width: 300px;"></div>
-        <br />
-        <div id="menu">
-            <textarea id="jsExec" accesskey="J"></textarea>
-            <button onclick="execJS()">Exec</button>
-            <textarea id="jsRes" accesskey="R"></textarea>
-        </div>
     </body>
 </html>

@@ -393,7 +393,13 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
     private function _calibrate()
     {
         $this->_calibrateText();
+        sleep(1);
+        $this->closeJSWindow();
+        sleep(2);
         $this->_calibrateImage();
+        sleep(1);
+        $this->closeJSWindow();
+        sleep(2);
 
     }//end _calibrate()
 
@@ -422,7 +428,9 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         $dest = $baseDir.'/calibrate-text.html';
         $this->goToURL($this->_getBaseUrl().'/calibrate-text.html');
 
-        $texts = $this->execJS('getCoords('.json_encode(self::_getKeywordsList()).')');
+        sleep(2);
+
+        $texts = $this->execJS('window.opener.getCoords('.json_encode(self::_getKeywordsList()).')', TRUE);
         $count = count($texts);
 
         $i      = 1;
@@ -443,10 +451,10 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
             $i++;
         }
 
-        $tests = 5;
+        $tests = 2;
         for ($j = 1; $j <= $tests; $j++) {
             // Change the contents of the test page.
-            $this->execJS('changeContent('.$j.')');
+            $this->execJS('window.opener.changeContent('.$j.')', TRUE);
 
             // Test that captured images can be found on the page.
             for ($i = 1; $i <= $count; $i++) {
@@ -612,14 +620,31 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         file_put_contents($tmpFile, $calibrateHtml);
 
         $dest = $baseDir.'/tmp-calibrate.html';
-        $this->goToURL($this->_getBaseUrl().'/tmo-calibrate.html');
+        $this->goToURL($this->_getBaseUrl().'/tmp-calibrate.html');
+
+        sleep(2);
+        $this->_switchWindow('main');
+        sleep(1);
+
+        // Make sure page is loaded.
+        $maxRetries = 4;
+        while ($this->topToolbarButtonExists('bold') === FALSE) {
+            $this->reloadPage();
+            if ($maxRetries === 0) {
+                throw new Exception('Failed to load Viper test page.');
+            }
+
+            sleep(2);
+
+            $maxRetries--;
+        }
 
         // Create image for the inline toolbar pattern (the arrow on top).
         sleep(2);
         $this->selectText('PyP');
 
         sleep(1);
-        $vitp      = $this->execJS('getVITP()');
+        $vitp      = $this->execJS('window.opener.getVITP()', TRUE);
         $vitp['x'] = $this->getPageXRelativeToScreen($vitp['x']);
         $vitp['y'] = $this->getPageYRelativeToScreen($vitp['y']);
 
@@ -628,25 +653,25 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         copy($vitpImage, $imgPath.'/vitp_arrow.png');
 
         // Remove all Viper elements.
-        $this->execJS('viper.destroy()');
+        $this->execJS('window.opener.viper.destroy()', TRUE);
 
         // Create image for the text field actions.
-        $textFieldActionRevertRegion = $this->getRegionOnPage($this->execJS('dfx.getBoundingRectangle(dfx.getId("textboxActionRevert"))'));
+        $textFieldActionRevertRegion = $this->getRegionOnPage($this->execJS('window.opener.dfx.getBoundingRectangle(window.opener.dfx.getId("textboxActionRevert"))', TRUE));
         $textFieldActionRevertImage  = $this->capture($textFieldActionRevertRegion);
         copy($textFieldActionRevertImage, $imgPath.'/textField_action_revert.png');
 
-        $textFieldActionClearRegion = $this->getRegionOnPage($this->execJS('dfx.getBoundingRectangle(dfx.getId("textboxActionClear"))'));
+        $textFieldActionClearRegion = $this->getRegionOnPage($this->execJS('window.opener.dfx.getBoundingRectangle(window.opener.dfx.getId("textboxActionClear"))', TRUE));
         $textFieldActionClearImage  = $this->capture($textFieldActionClearRegion);
         copy($textFieldActionClearImage, $imgPath.'/textField_action_clear.png');
 
         foreach ($statuses as $status => $className) {
-            $btnRects = $this->execJS('getCoords("'.$status.'", "'.$className.'")');
+            $btnRects = $this->execJS('window.opener.getCoords("'.$status.'", "'.$className.'")', TRUE);
             foreach ($btnRects as $buttonName => $rect) {
                 $this->_createButtonImageFromRectangle($buttonName, $rect);
             }
         }
 
-        $this->execJS('showAllBtns()');
+        $this->execJS('window.opener.showAllBtns()', TRUE);
 
         // Remove dupe icons.
         $dupeIcons = array(
@@ -912,8 +937,8 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      */
     public function closeJSWindow()
     {
-        $this->execJS('cw();');
-        self::$_currentWindow = 'main';
+        $this->execJS('cw();', TRUE);
+        self::$_currentWindow = NULL;
 
     }//end closeJSWindow()
 
@@ -1737,7 +1762,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      *
      * @return string
      */
-    protected function execJS($js)
+    protected function execJS($js, $noCache=FALSE)
     {
         // If Selenium is being used then use it to execute the JavaScript.
         if (self::$_useSelenium === TRUE) {
@@ -1756,16 +1781,20 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
 
         $this->_switchWindow('js');
 
-        usleep(50000);
+        usleep(200000);
         $this->keyDown($this->_getAccessKeys('j'));
 
-        if (isset(self::$_jsExecCache[$js]) === TRUE) {
-            $this->type(self::$_jsExecCache[$js]);
+        if ($noCache !== TRUE) {
+            if (isset(self::$_jsExecCache[$js]) === TRUE) {
+                $this->type(self::$_jsExecCache[$js]);
+            } else {
+                $this->type($js);
+                self::$_jsExecCache[$js] = count(self::$_jsExecCache);
+
+                file_put_contents(dirname(__FILE__).'/tmp/js_cache.inc', serialize(self::$_jsExecCache));
+            }
         } else {
             $this->type($js);
-            self::$_jsExecCache[$js] = count(self::$_jsExecCache);
-
-            file_put_contents(dirname(__FILE__).'/tmp/js_cache.inc', serialize(self::$_jsExecCache));
         }
 
         usleep(100000);

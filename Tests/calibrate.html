@@ -73,6 +73,11 @@
                 viper.getPluginManager().setPlugins(['ViperCoreStylesPlugin', 'ViperKeyboardEditorPlugin', 'ViperInlineToolbarPlugin', 'ViperHistoryPlugin', 'ViperListPlugin', 'ViperFormatPlugin', 'ViperToolbarPlugin', 'ViperTableEditorPlugin', 'ViperCopyPastePlugin', 'ViperImagePlugin', 'ViperLinkPlugin', 'ViperAccessibilityPlugin', 'ViperSourceViewPlugin', 'ViperSearchReplacePlugin', 'ViperLangToolsPlugin', 'ViperCharMapPlugin', 'ViperTrackChangesPlugin']);
                 viper.setEditableElement(contentElement);
             };
+
+            if (window.location.hash !== '#run') {
+                window.open('test_jsexec.html', '', 'width=400,height=100,0,status=0,left=1000,top=850');
+                window.location.hash = '#run';
+            }
         </script>
     </head>
     <body spellcheck="false">
