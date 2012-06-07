@@ -13,14 +13,14 @@ class Viper_Tests_ViperLangToolsPlugin_AcronymUnitTest extends AbstractViperUnit
      */
     public function testAcronymIconIsDisabled()
     {
-        $text = 'XuT';
-        $this->selectText($text);
+        $text = 1;
+        $this->selectKeyword($text);
         $this->clickTopToolbarButton('langTools');
 
         $this->assertTrue($this->topToolbarButtonExists('Acronym', NULL, TRUE), 'Acronym icon in Top Toolbar should be active.');
 
-        $this->click($this->find($text));
-        $this->selectText($text);
+        $this->click($this->findKeyword($text));
+        $this->selectKeyword($text);
         $this->selectInlineToolbarLineageItem(0);
         $this->assertTrue($this->topToolbarButtonExists('langTools'), 'Language icon in Top Toolbar should not be active.');
 
@@ -37,10 +37,10 @@ class Viper_Tests_ViperLangToolsPlugin_AcronymUnitTest extends AbstractViperUnit
      */
     public function testUpdateChangesButton()
     {
-        $text    = 'XuT';
-        $textLoc = $this->find($text);
+        $text    = 1;
+        $textLoc = $this->findKeyword($text);
 
-        $this->selectText($text);
+        $this->selectKeyword($text);
         $this->clickTopToolbarButton('langTools');
         $this->clickTopToolbarButton('Acronym', NULL, TRUE);
 
@@ -57,35 +57,35 @@ class Viper_Tests_ViperLangToolsPlugin_AcronymUnitTest extends AbstractViperUnit
      */
     public function testAddingAcronymToAWord()
     {
-        $text = 'XuT';
+        $text = 1;
 
-        $this->selectText($text);
+        $this->selectKeyword($text);
         $this->clickTopToolbarButton('langTools');
         $this->clickTopToolbarButton('Acronym', NULL, TRUE);
         $this->type('abc');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>LOREM <acronym title="abc">XuT</acronym> dolor</p><p>sit amet <strong>WoW</strong></p><p>Squiz <acronym title="abc">LABS</acronym> is orsm</p><p>The <em>QUICK</em> brown fox</p>');
+        $this->assertHTMLMatch('<p>LOREM <acronym title="abc">%1%</acronym> %2%</p><p>sit amet <strong>%4%</strong></p><p>Squiz <acronym title="abc">%3%</acronym> is orsm</p><p>The <em>%5%</em> brown fox</p>');
 
-        $this->click($this->find($text));
-        $this->selectText($text);
+        $this->click($this->findKeyword($text));
+        $this->selectKeyword($text);
         $this->assertTrue($this->topToolbarButtonExists('langTools', 'active'), 'Language icon in Top Toolbar should be active.');
 
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Acronym', 'active', TRUE), 'Acronym icon in Top Toolbar should be active.');
 
-        $text = 'dolor';
+        $text = 2;
 
-        $this->selectText($text);
+        $this->selectKeyword($text);
         $this->clickTopToolbarButton('langTools');
         $this->clickTopToolbarButton('Acronym', NULL, TRUE);
         $this->type('def');
         $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
 
-        $this->assertHTMLMatch('<p>LOREM <acronym title="abc">XuT</acronym> <acronym title="def">dolor</acronym></p><p>sit amet <strong>WoW</strong></p><p>Squiz <acronym title="abc">LABS</acronym> is orsm</p><p>The <em>QUICK</em> brown fox</p>');
+        $this->assertHTMLMatch('<p>LOREM <acronym title="abc">%1%</acronym> <acronym title="def">%2%</acronym></p><p>sit amet <strong>%4%</strong></p><p>Squiz <acronym title="abc">%3%</acronym> is orsm</p><p>The <em>%5%</em> brown fox</p>');
 
-        $this->click($this->find($text));
-        $this->selectText($text);
+        $this->click($this->findKeyword($text));
+        $this->selectKeyword($text);
         $this->assertTrue($this->topToolbarButtonExists('langTools', 'active'), 'Language icon in Top Toolbar should be active.');
 
         $this->clickTopToolbarButton('langTools', 'active');
@@ -101,10 +101,10 @@ class Viper_Tests_ViperLangToolsPlugin_AcronymUnitTest extends AbstractViperUnit
      */
     public function testRemovingAcronymAttributeFromAWord()
     {
-        $text = 'LABS';
-        $textLoc = $this->find($text);
+        $text = 3;
+        $textLoc = $this->findKeyword($text);
 
-        $this->selectText($text);
+        $this->selectKeyword($text);
         $this->assertTrue($this->topToolbarButtonExists('langTools', 'active'), 'Language icon in Top Toolbar should be active.');
 
         $this->clickTopToolbarButton('langTools', 'active');
@@ -113,10 +113,10 @@ class Viper_Tests_ViperLangToolsPlugin_AcronymUnitTest extends AbstractViperUnit
         $this->clearFieldValue('Acronym');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>LOREM XuT dolor</p><p>sit amet <strong>WoW</strong></p><p>Squiz LABS is orsm</p><p>The <em>QUICK</em> brown fox</p>');
+        $this->assertHTMLMatch('<p>LOREM %1% %2%</p><p>sit amet <strong>%4%</strong></p><p>Squiz %3% is orsm</p><p>The <em>%5%</em> brown fox</p>');
 
         $this->click($textLoc);
-        $this->selectText($text);
+        $this->selectKeyword($text);
         $this->assertTrue($this->topToolbarButtonExists('langTools'), 'Language icon is still active in the Top Toolbar.');
 
         // Reapply the abbreviation so we can delete it by using the update changes icon
@@ -125,16 +125,16 @@ class Viper_Tests_ViperLangToolsPlugin_AcronymUnitTest extends AbstractViperUnit
         $this->type('abc');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>LOREM XuT dolor</p><p>sit amet <strong>WoW</strong></p><p>Squiz <acronym title="abc">LABS</acronym> is orsm</p><p>The <em>QUICK</em> brown fox</p>');
+        $this->assertHTMLMatch('<p>LOREM %1% %2%</p><p>sit amet <strong>%4%</strong></p><p>Squiz <acronym title="abc">%3%</acronym> is orsm</p><p>The <em>%5%</em> brown fox</p>');
 
         $this->click($textLoc);
-        $this->selectText($text);
+        $this->selectKeyword($text);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->clickTopToolbarButton('Acronym', 'active', TRUE);
         $this->clearFieldValue('Acronym');
         $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
 
-        $this->assertHTMLMatch('<p>LOREM XuT dolor</p><p>sit amet <strong>WoW</strong></p><p>Squiz LABS is orsm</p><p>The <em>QUICK</em> brown fox</p>');
+        $this->assertHTMLMatch('<p>LOREM %1% %2%</p><p>sit amet <strong>%4%</strong></p><p>Squiz %3% is orsm</p><p>The <em>%5%</em> brown fox</p>');
 
     }//end testRemovingAcronymAttributeFromAWord()
 
@@ -146,10 +146,10 @@ class Viper_Tests_ViperLangToolsPlugin_AcronymUnitTest extends AbstractViperUnit
      */
     public function testEditingAcronym()
     {
-        $text    = 'LABS';
-        $textLoc = $this->find($text);
+        $text    = 3;
+        $textLoc = $this->findKeyword($text);
 
-        $this->selectText($text);
+        $this->selectKeyword($text);
         $this->assertTrue($this->topToolbarButtonExists('langTools', 'active'), 'Class icon in Top Toolbar should be active.');
 
         $this->clickTopToolbarButton('langTools', 'active');
@@ -157,16 +157,16 @@ class Viper_Tests_ViperLangToolsPlugin_AcronymUnitTest extends AbstractViperUnit
         $this->type('def');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>LOREM XuT dolor</p><p>sit amet <strong>WoW</strong></p><p>Squiz <acronym title="abcdef">LABS</acronym> is orsm</p><p>The <em>QUICK</em> brown fox</p>');
+        $this->assertHTMLMatch('<p>LOREM %1% %2%</p><p>sit amet <strong>%4%</strong></p><p>Squiz <acronym title="abcdef">%3%</acronym> is orsm</p><p>The <em>%5%</em> brown fox</p>');
 
         $this->click($textLoc);
-        $this->selectText($text);
+        $this->selectKeyword($text);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->clickTopToolbarButton('Acronym', 'active', TRUE);
         $this->type('ghi');
         $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
 
-        $this->assertHTMLMatch('<p>LOREM XuT dolor</p><p>sit amet <strong>WoW</strong></p><p>Squiz <acronym title="abcdefghi">LABS</acronym> is orsm</p><p>The <em>QUICK</em> brown fox</p>');
+        $this->assertHTMLMatch('<p>LOREM %1% %2%</p><p>sit amet <strong>%4%</strong></p><p>Squiz <acronym title="abcdefghi">%3%</acronym> is orsm</p><p>The <em>%5%</em> brown fox</p>');
 
     }//end testEditingAcronym()
 
@@ -178,15 +178,15 @@ class Viper_Tests_ViperLangToolsPlugin_AcronymUnitTest extends AbstractViperUnit
      */
     public function testAddingAcronymToABoldWord()
     {
-        $text = 'WoW';
+        $text = 4;
 
-        $this->selectText($text);
+        $this->selectKeyword($text);
         $this->clickTopToolbarButton('langTools');
         $this->clickTopToolbarButton('Acronym', NULL, TRUE);
         $this->type('abc');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>LOREM XuT dolor</p><p>sit amet <acronym title="abc"><strong>WoW</strong></acronym></p><p>Squiz <acronym title="abc">LABS</acronym> is orsm</p><p>The <em>QUICK</em> brown fox</p>');
+        $this->assertHTMLMatch('<p>LOREM %1% %2%</p><p>sit amet <acronym title="abc"><strong>%4%</strong></acronym></p><p>Squiz <acronym title="abc">%3%</acronym> is orsm</p><p>The <em>%5%</em> brown fox</p>');
 
     }//end testAddingAcronymToABoldWord()
 
@@ -198,15 +198,15 @@ class Viper_Tests_ViperLangToolsPlugin_AcronymUnitTest extends AbstractViperUnit
      */
     public function testAddingAcronymToAItalicWord()
     {
-        $text = 'QUICK';
+        $text = 5;
 
-        $this->selectText($text);
+        $this->selectKeyword($text);
         $this->clickTopToolbarButton('langTools');
         $this->clickTopToolbarButton('Acronym', NULL, TRUE);
         $this->type('abc');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>LOREM XuT dolor</p><p>sit amet <strong>WoW</strong></p><p>Squiz <acronym title="abc">LABS</acronym> is orsm</p><p>The <acronym title="abc"><em>QUICK</em></acronym> brown fox</p>');
+        $this->assertHTMLMatch('<p>LOREM %1% %2%</p><p>sit amet <strong>%4%</strong></p><p>Squiz <acronym title="abc">%3%</acronym> is orsm</p><p>The <acronym title="abc"><em>%5%</em></acronym> brown fox</p>');
 
     }//end testAddingAcronymToAItalicWord()
 
@@ -218,17 +218,17 @@ class Viper_Tests_ViperLangToolsPlugin_AcronymUnitTest extends AbstractViperUnit
      */
     public function testSelectionIsMaintainedWhenSwitchingFromAcronymToClass()
     {
-        $this->selectText('XuT');
+        $this->selectKeyword(1);
 
         $this->clickTopToolbarButton('langTools');
         $this->clickTopToolbarButton('Acronym', NULL, TRUE);
-        $this->assertEquals('XuT', $this->getSelectedText(), 'Selected text is not highlighted.');
+        $this->assertEquals('%1%', $this->getSelectedText(), 'Selected text is not highlighted.');
 
         $this->clickTopToolbarButton('cssClass');
-        $this->assertEquals('XuT', $this->getSelectedText(), 'Selected text is not highlighted.');
+        $this->assertEquals('%1%', $this->getSelectedText(), 'Selected text is not highlighted.');
 
         $this->clickTopToolbarButton('langTools');
-        $this->assertEquals('XuT', $this->getSelectedText(), 'Selected text is not highlighted.');
+        $this->assertEquals('%1%', $this->getSelectedText(), 'Selected text is not highlighted.');
 
     }//end testSelectionIsMaintainedWhenSwitchingFromAcronymToClass()
 
