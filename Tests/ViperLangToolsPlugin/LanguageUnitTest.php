@@ -13,7 +13,7 @@ class Viper_Tests_ViperLangToolsPlugin_LanguageUnitTest extends AbstractViperUni
      */
     public function testLanguageIconIsDisabled()
     {
-        $this->click($this->find(1));
+        $this->click($this->findKeyword(1));
         $this->assertTrue($this->topToolbarButtonExists('langTools', 'disabled'), 'Language icon in Top Toolbar should not be active.');
 
         $this->selectKeyword(1);
