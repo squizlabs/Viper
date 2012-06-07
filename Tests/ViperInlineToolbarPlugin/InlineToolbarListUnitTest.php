@@ -12,35 +12,35 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarListUnitTest extends Abs
      */
     public function testSelectingItemTagInLineage()
     {
-        $this->selectText('oNo');
+        $this->selectKeyword(1);
 
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem Viper-selected">Selection</li>', $lineage);
 
         $this->selectInlineToolbarLineageItem(1);
 
-        $this->assertEquals('4 oNo templates', $this->getSelectedText(), 'List item is not selected.');
+        $this->assertEquals('4 %1% templates', $this->getSelectedText(), 'List item is not selected.');
 
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem Viper-selected">Item</li><li class="ViperITP-lineageItem">Selection</li>', $lineage);
 
         $this->selectInlineToolbarLineageItem(2);
-        $this->assertEquals('oNo', $this->getSelectedText(), 'Original selection is not selected');
+        $this->assertEquals('%1%', $this->getSelectedText(), 'Original selection is not selected');
 
-        $this->selectText('WoW');
+        $this->selectKeyword(2);
 
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem Viper-selected">Selection</li>', $lineage);
 
         $this->selectInlineToolbarLineageItem(1);
 
-        $this->assertEquals('WoW is cool', $this->getSelectedText(), 'List item is not selected.');
+        $this->assertEquals('%2% is cool', $this->getSelectedText(), 'List item is not selected.');
 
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem Viper-selected">Item</li><li class="ViperITP-lineageItem">Selection</li>', $lineage);
 
         $this->selectInlineToolbarLineageItem(2);
-        $this->assertEquals('WoW', $this->getSelectedText(), 'Original selection is not selected');
+        $this->assertEquals('%2%', $this->getSelectedText(), 'Original selection is not selected');
 
     }//end testSelectingItemTagInLineage()
 
@@ -52,35 +52,35 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarListUnitTest extends Abs
      */
     public function testSelectingListTagInLineage()
     {
-        $this->selectText('oNo');
+        $this->selectKeyword(1);
 
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem Viper-selected">Selection</li>', $lineage);
 
         $this->selectInlineToolbarLineageItem(0);
 
-        $this->assertEquals('aaa bbbbb ccccc4 oNo templatesAudit XuT content', $this->getSelectedText(), 'List item is not selected.');
+        $this->assertEquals('aaa bbbbb ccccc4 %1% templatesAudit XuT content', $this->getSelectedText(), 'List item is not selected.');
 
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem Viper-selected">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem">Selection</li>', $lineage);
 
         $this->selectInlineToolbarLineageItem(2);
-        $this->assertEquals('oNo', $this->getSelectedText(), 'Original selection is not selected');
+        $this->assertEquals('%1%', $this->getSelectedText(), 'Original selection is not selected');
 
-        $this->selectText('WoW');
+        $this->selectKeyword(2);
 
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem Viper-selected">Selection</li>', $lineage);
 
         $this->selectInlineToolbarLineageItem(0);
 
-        $this->assertEquals('Unordered listWoW is coolAnother list item', $this->getSelectedText(), 'List item is not selected.');
+        $this->assertEquals('Unordered list%2% is coolAnother list item', $this->getSelectedText(), 'List item is not selected.');
 
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem Viper-selected">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem">Selection</li>', $lineage);
 
         $this->selectInlineToolbarLineageItem(2);
-        $this->assertEquals('WoW', $this->getSelectedText(), 'Original selection is not selected');
+        $this->assertEquals('%2%', $this->getSelectedText(), 'Original selection is not selected');
 
     }//end testSelectingListTagInLineage()
 
@@ -92,29 +92,29 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarListUnitTest extends Abs
      */
     public function testSwitchingBetweenItemAndList()
     {
-        $this->selectText('oNo');
+        $this->selectKeyword(1);
 
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem Viper-selected">Selection</li>', $lineage);
 
         $this->selectInlineToolbarLineageItem(1);
-        $this->assertEquals('4 oNo templates', $this->getSelectedText(), 'List item is not selected.');
+        $this->assertEquals('4 %1% templates', $this->getSelectedText(), 'List item is not selected.');
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem Viper-selected">Item</li><li class="ViperITP-lineageItem">Selection</li>', $lineage);
 
         $this->selectInlineToolbarLineageItem(0);
-        $this->assertEquals('aaa bbbbb ccccc4 oNo templatesAudit XuT content', $this->getSelectedText(), 'List item is not selected.');
+        $this->assertEquals('aaa bbbbb ccccc4 %1% templatesAudit XuT content', $this->getSelectedText(), 'List item is not selected.');
 
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem Viper-selected">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem">Selection</li>', $lineage);
 
         $this->selectInlineToolbarLineageItem(1);
-        $this->assertEquals('4 oNo templates', $this->getSelectedText(), 'List item is not selected.');
+        $this->assertEquals('4 %1% templates', $this->getSelectedText(), 'List item is not selected.');
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem Viper-selected">Item</li><li class="ViperITP-lineageItem">Selection</li>', $lineage);
 
         $this->selectInlineToolbarLineageItem(2);
-        $this->assertEquals('oNo', $this->getSelectedText(), 'Original selection is not selected');
+        $this->assertEquals('%1%', $this->getSelectedText(), 'Original selection is not selected');
 
     }//end testSwitchingBetweenItemAndList()
 
@@ -126,7 +126,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarListUnitTest extends Abs
      */
     public function testLineageWhenListRemoved()
     {
-        $this->selectText('oNo');
+        $this->selectKeyword(1);
 
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem Viper-selected">Selection</li>', $lineage);
@@ -137,7 +137,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarListUnitTest extends Abs
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem Viper-selected">Selection</li>', $lineage);
 
-        $this->selectText('WoW');
+        $this->selectKeyword(2);
 
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem Viper-selected">Selection</li>', $lineage);
@@ -158,24 +158,24 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarListUnitTest extends Abs
      */
     public function testLineageWhenListIsCreatedAndRemoved()
     {
-        $this->selectText('TicT');
+        $this->selectKeyword(3);
 
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Selection</li>', $lineage);
 
-        $this->selectText('TicT');
+        $this->selectKeyword(3);
         $this->keyDown('Key.TAB');
 
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem Viper-selected">Selection</li>', $lineage);
 
         $this->selectInlineToolbarLineageItem(1);
-        $this->assertEquals('cPOc ccccc dddd. TicT', $this->getSelectedText(), 'List item is not selected.');
+        $this->assertEquals('cPOc ccccc dddd. %3%', $this->getSelectedText(), 'List item is not selected.');
 
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem Viper-selected">Item</li><li class="ViperITP-lineageItem">Selection</li>', $lineage);
 
-        $this->selectText('TicT');
+        $this->selectKeyword(3);
         $this->keyDown('Key.SHIFT + Key.TAB');
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Selection</li>', $lineage);
@@ -190,42 +190,42 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarListUnitTest extends Abs
      */
     public function testLineageWhenCreatingSubLists()
     {
-        $this->selectText('oNo');
+        $this->selectKeyword(1);
         $this->keyDown('Key.TAB');
 
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem Viper-selected">Selection</li>', $lineage);
 
         $this->selectInlineToolbarLineageItem(3);
-        $this->assertEquals('4 oNo templates', $this->getSelectedText(), 'List item is not selected.');
+        $this->assertEquals('4 %1% templates', $this->getSelectedText(), 'List item is not selected.');
         $this->selectInlineToolbarLineageItem(2);
-        $this->assertEquals('4 oNo templates', $this->getSelectedText(), 'List is not selected.');
+        $this->assertEquals('4 %1% templates', $this->getSelectedText(), 'List is not selected.');
         $this->selectInlineToolbarLineageItem(1);
-        $this->assertEquals('aaa bbbbb ccccc4 oNo templates', $this->getSelectedText(), 'List item is not selected.');
+        $this->assertEquals('aaa bbbbb ccccc4 %1% templates', $this->getSelectedText(), 'List item is not selected.');
         $this->selectInlineToolbarLineageItem(0);
-        $this->assertEquals('aaa bbbbb ccccc4 oNo templatesAudit XuT content', $this->getSelectedText(), 'List item is not selected.');
+        $this->assertEquals('aaa bbbbb ccccc4 %1% templatesAudit XuT content', $this->getSelectedText(), 'List item is not selected.');
 
-        $this->selectText('oNo');
+        $this->selectKeyword(1);
         $this->keyDown('Key.SHIFT + Key.TAB');
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem Viper-selected">Selection</li>', $lineage);
 
-        $this->selectText('WoW');
+        $this->selectKeyword(2);
         $this->keyDown('Key.TAB');
 
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem Viper-selected">Selection</li>', $lineage);
 
         $this->selectInlineToolbarLineageItem(3);
-        $this->assertEquals('WoW is cool', $this->getSelectedText(), 'List item is not selected.');
+        $this->assertEquals('%2% is cool', $this->getSelectedText(), 'List item is not selected.');
         $this->selectInlineToolbarLineageItem(2);
-        $this->assertEquals('WoW is cool', $this->getSelectedText(), 'List is not selected.');
+        $this->assertEquals('%2% is cool', $this->getSelectedText(), 'List is not selected.');
         $this->selectInlineToolbarLineageItem(1);
-        $this->assertEquals('Unordered listWoW is cool', $this->getSelectedText(), 'List item is not selected.');
+        $this->assertEquals('Unordered list%2% is cool', $this->getSelectedText(), 'List item is not selected.');
         $this->selectInlineToolbarLineageItem(0);
-        $this->assertEquals('Unordered listWoW is coolAnother list item', $this->getSelectedText(), 'List item is not selected.');
+        $this->assertEquals('Unordered list%2% is coolAnother list item', $this->getSelectedText(), 'List item is not selected.');
 
-        $this->selectText('WoW');
+        $this->selectKeyword(2);
         $this->keyDown('Key.SHIFT + Key.TAB');
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem Viper-selected">Selection</li>', $lineage);
