@@ -13,15 +13,15 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractViperUnitTest
      */
     public function testApplingTheDivStyleUsingInlineToolbar()
     {
-        $this->selectKeyword(1);
+        $this->selectKeyword(3);
         $this->selectInlineToolbarLineageItem(0);
         $this->clickInlineToolbarButton('formats-p', 'active');
         $this->clickInlineToolbarButton('DIV', NULL, TRUE);
 
-        $this->assertHTMLMatch('<div>%4% xtn dolor</div><p>spacer for the tests</p><div>sit amet <strong>%2%</strong></div><div>%1% is a paragraph to change to a %3%</div>');
+        $this->assertHTMLMatch('<div>%1% xtn dolor</div><p>spacer for the tests</p><div>sit amet <strong>%2%</strong></div><div>%3% is a paragraph to change to a %4%</div>');
 
         $this->click($this->findKeyword(2));
-        $this->selectKeyword(3);
+        $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(0);
 
         $this->assertTrue($this->inlineToolbarButtonExists('formats-div', 'active'), 'Toogle formats icon is not selected');
@@ -29,7 +29,7 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractViperUnitTest
         $this->clickInlineToolbarButton('formats-div', 'active');
         $this->clickInlineToolbarButton('DIV', 'active', TRUE);
 
-        $this->assertHTMLMatch('<div>%4% xtn dolor</div><p>spacer for the tests</p><div>sit amet <strong>%2%</strong></div>%1% is a paragraph to change to a %3%');
+        $this->assertHTMLMatch('<div>%1% xtn dolor</div><p>spacer for the tests</p><div>sit amet <strong>%2%</strong></div>%3% is a paragraph to change to a %4%');
 
     }//end testApplingTheDivStyleUsingInlineToolbar()
 
@@ -41,15 +41,15 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractViperUnitTest
      */
     public function testApplingTheDivStyleUsingTopToolbar()
     {
-        $this->selectKeyword(1);
+        $this->selectKeyword(3);
         $this->selectInlineToolbarLineageItem(0);
         $this->clickTopToolbarButton('formats-p', 'active');
         $this->clickTopToolbarButton('DIV', NULL, TRUE);
 
-        $this->assertHTMLMatch('<div>%4% xtn dolor</div><p>spacer for the tests</p><div>sit amet <strong>%2%</strong></div><div>%1% is a paragraph to change to a %3%</div>');
+        $this->assertHTMLMatch('<div>%1% xtn dolor</div><p>spacer for the tests</p><div>sit amet <strong>%2%</strong></div><div>%3% is a paragraph to change to a %4%</div>');
 
         $this->click($this->findKeyword(2));
-        $this->selectKeyword(3);
+        $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(0);
 
         $this->assertTrue($this->topToolbarButtonExists('formats-div', 'active'), 'Toogle formats icon is not selected');
@@ -69,7 +69,7 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractViperUnitTest
      */
     public function testSelectDivAfterStylingShowsCorrectIcons()
     {
-        $this->selectKeyword(4);
+        $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
 
         $this->keyDown('Key.CMD + b');
@@ -99,14 +99,14 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractViperUnitTest
      */
     public function testSelectingDivWithFormattedTextShowsCorrectIcons()
     {
-        $this->selectKeyword(4);
+        $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(0);
         $this->assertTrue($this->inlineToolbarButtonExists('formats-div', 'active'), 'Toogle formats icon is not selected');
         $this->clickInlineToolbarButton('formats-div', 'active');
         $this->assertTrue($this->inlineToolbarButtonExists('DIV', 'active', TRUE), 'Div icon is not active');
 
         $this->click($this->findKeyword(4));
-        $this->selectKeyword('sit');
+        $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
         $this->assertTrue($this->inlineToolbarButtonExists('formats-div', 'active'), 'Toogle formats icon is not selected');
         $this->clickInlineToolbarButton('formats-div', 'active');
@@ -122,15 +122,15 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractViperUnitTest
      */
     public function testUsingBoldInDiv()
     {
-        $this->selectKeyword(4);
+        $this->selectKeyword(1);
         $this->keyDown('Key.CMD + b');
 
-        $this->assertHTMLMatch('<div><strong>%4%</strong> xtn dolor</div><p>spacer for the tests</p><div>sit amet <strong>%2%</strong></div><p>%1% is a paragraph to change to a %3%</p>');
+        $this->assertHTMLMatch('<div><strong>%1%</strong> xtn dolor</div><p>spacer for the tests</p><div>sit amet <strong>%2%</strong></div><p>%3% is a paragraph to change to a %4%</p>');
 
-        $this->selectKeyword(4);
+        $this->selectKeyword(1);
         $this->keyDown('Key.CMD + b');
 
-        $this->assertHTMLMatch('<div>%4% xtn dolor</div><p>spacer for the tests</p><div>sit amet <strong>%2%</strong></div><p>%1% is a paragraph to change to a %3%</p>');
+        $this->assertHTMLMatch('<div>%1% xtn dolor</div><p>spacer for the tests</p><div>sit amet <strong>%2%</strong></div><p>%3% is a paragraph to change to a %4%</p>');
 
     }//end testUsingBoldInDiv()
 
@@ -142,15 +142,15 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractViperUnitTest
      */
     public function testUsingItalicInDiv()
     {
-        $this->selectKeyword(4);
+        $this->selectKeyword(1);
         $this->keyDown('Key.CMD + i');
 
-        $this->assertHTMLMatch('<div><em>%4%</em> xtn dolor</div><p>spacer for the tests</p><div>sit amet <strong>%2%</strong></div><p>%1% is a paragraph to change to a %3%</p>');
+        $this->assertHTMLMatch('<div><em>%1%</em> xtn dolor</div><p>spacer for the tests</p><div>sit amet <strong>%2%</strong></div><p>%3% is a paragraph to change to a %4%</p>');
 
-        $this->selectKeyword(4);
+        $this->selectKeyword(1);
         $this->keyDown('Key.CMD + i');
 
-        $this->assertHTMLMatch('<div>%4% xtn dolor</div><p>spacer for the tests</p><div>sit amet <strong>%2%</strong></div><p>%1% is a paragraph to change to a %3%</p>');
+        $this->assertHTMLMatch('<div>%1% xtn dolor</div><p>spacer for the tests</p><div>sit amet <strong>%2%</strong></div><p>%3% is a paragraph to change to a %4%</p>');
 
     }//end testUsingItalicInDiv()
 
@@ -162,7 +162,7 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractViperUnitTest
      */
     public function testDivIconIsActiveWhenSelectingDivTag()
     {
-        $this->selectKeyword(4);
+        $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
         $this->assertTrue($this->inlineToolbarButtonExists('formats-div', 'active'), 'Toogle formats icon is not selected');
         $this->clickInlineToolbarButton('formats-div', 'active');
@@ -181,13 +181,13 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractViperUnitTest
      */
     public function testDivAppliedToParagraphOnPartialSelection()
     {
-        $this->selectKeyword(1);
+        $this->selectKeyword(3);
         $this->assertFalse($this->inlineToolbarButtonExists('formats-p', 'active'), 'Toogle formats icon should not appear in the inline toolbar');
 
         $this->clickTopToolbarButton('formats-p', 'active');
         $this->clickTopToolbarButton('DIV', NULL, TRUE);
 
-        $this->assertHTMLMatch('<div>%4% xtn dolor</div><p>spacer for the tests</p><div>sit amet <strong>%2%</strong></div><div>%1% is a paragraph to change to a %3%</div>');
+        $this->assertHTMLMatch('<div>%1% xtn dolor</div><p>spacer for the tests</p><div>sit amet <strong>%2%</strong></div><div>%3% is a paragraph to change to a %4%</div>');
 
     }//end testDivAppliedToParagraphOnPartialSelection()
 
@@ -199,13 +199,13 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractViperUnitTest
      */
     public function testApplyingAndRemovingDiv()
     {
-        $this->selectKeyword(1);
+        $this->selectKeyword(3);
         $this->selectInlineToolbarLineageItem(0);
 
         $this->clickTopToolbarButton('formats-p', 'active');
         $this->clickTopToolbarButton('DIV', NULL, TRUE);
 
-        $this->assertHTMLMatch('<div>%4% xtn dolor</div><p>spacer for the tests</p><div>sit amet <strong>%2%</strong></div><div>%1% is a paragraph to change to a %3%</div>');
+        $this->assertHTMLMatch('<div>%1% xtn dolor</div><p>spacer for the tests</p><div>sit amet <strong>%2%</strong></div><div>%3% is a paragraph to change to a %4%</div>');
 
         $this->click($this->findKeyword(2));
         $this->selectKeyword(3 );
@@ -214,7 +214,7 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractViperUnitTest
         $this->clickTopToolbarButton('formats-div', 'active');
         $this->clickTopToolbarButton('DIV', 'active', TRUE);
 
-        $this->assertHTMLMatch('<div>%4% xtn dolor</div><p>spacer for the tests</p><div>sit amet <strong>%2%</strong></div>%1% is a paragraph to change to a %3%');
+        $this->assertHTMLMatch('<div>%1% xtn dolor</div><p>spacer for the tests</p><div>sit amet <strong>%2%</strong></div>%3% is a paragraph to change to a %4%');
 
         $this->assertFalse($this->topToolbarButtonExists('DIV', 'active', TRUE));
 
@@ -228,21 +228,22 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractViperUnitTest
      */
     public function testCreatingNewContentWithADivTag()
     {
-        $this->selectKeyword(1);
+        $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(0);
         $this->keyDown('Key.RIGHT');
         $this->keyDown('Key.ENTER');
-        $this->type('New content');
-        $this->keyDown('Key.SHIFT + Key.LEFT');
+        $this->type('New %5%');
+        $this->selectKeyword(5);
         $this->selectInlineToolbarLineageItem(0);
         $this->clickTopToolbarButton('formats-p', 'active');
         $this->clickTopToolbarButton('DIV', NULL, TRUE);
+        $this->selectKeyword(5);
         $this->keyDown('Key.RIGHT');
         $this->type(' on the page');
         $this->keyDown('Key.ENTER');
         $this->type('More new content');
 
-        $this->assertHTMLMatch('<div>%4% xtn dolor</div><p>spacer for the tests</p><div>sit amet <strong>%2%</strong></div><p>%1% is a paragraph to change to a %3%</p><div>New content on the page</div><p>More new content</p>');
+        $this->assertHTMLMatch('<div>%1% xtn dolor</div><p>spacer for the tests</p><div>sit amet <strong>%2%</strong></div><p>%3% is a paragraph to change to a %4%</p><div>New %5% on the page</div><p>More new content</p>');
 
     }//end testCreatingNewContentWithADivTag()
 
