@@ -531,8 +531,17 @@ ViperFormatPlugin.prototype = {
                 tools.setButtonActive(prefix + 'heading:' + tagName);
             }
 
+            var allowParaSelection = self.handleFormat('p', true, true);
             for (var tagName in formatButtons) {
                 tools.setButtonInactive(prefix + 'formats:' + formatButtons[tagName]);
+
+                if (tagName === 'p') {
+                    if (allowParaSelection === false) {
+                        tools.disableButton(prefix + 'formats:' + formatButtons[tagName]);
+                    } else {
+                        tools.enableButton(prefix + 'formats:' + formatButtons[tagName]);
+                    }
+                }
             }
 
             tools.getItem('formats').setIconClass('Viper-formats');
@@ -825,7 +834,7 @@ ViperFormatPlugin.prototype = {
      *
      * @return {boolean} True if the change can be made.
      */
-    handleFormat: function(type, testOnly)
+    handleFormat: function(type, testOnly, checkParaWrap)
     {
         testOnly          = testOnly || false;
         var range         = this.viper.getViperRange();
@@ -969,6 +978,14 @@ ViperFormatPlugin.prototype = {
 
             if (newParents.length > 0) {
                 if (testOnly === true) {
+                    if (checkParaWrap === true) {
+                        for (var i = 0; i < newParents.length; i++) {
+                            if (dfx.isTag(newParents[i], 'p') === true) {
+                                return false;
+                            }
+                        }
+                    }
+
                     return true;
                 }
 
