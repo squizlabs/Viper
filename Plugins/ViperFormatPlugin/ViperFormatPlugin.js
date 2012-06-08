@@ -980,7 +980,8 @@ ViperFormatPlugin.prototype = {
                 if (testOnly === true) {
                     if (checkParaWrap === true) {
                         for (var i = 0; i < newParents.length; i++) {
-                            if (dfx.isTag(newParents[i], 'p') === true) {
+                            var tagName = dfx.getTagName(newParents[i]);
+                            if (tagName === 'p' || tagName === 'pre' || tagName === 'blockquote') {
                                 return false;
                             }
                         }
