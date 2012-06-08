@@ -1000,11 +1000,13 @@
   width: 2.2em;
   height: 2.2em;
   opacity: 0.5;
+  filter: alpha(opacity = 50);
   cursor: pointer;
   background: none;
 }
 .Viper-popup-closeIcon:hover {
   opacity: 1;
+  filter: alpha(opacity = 100);
 }
 .Viper-popup-closeIcon:after {
   content: "";
