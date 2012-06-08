@@ -2141,7 +2141,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      *
      * @return void
      */
-    protected function clickElement($selector, $index)
+    protected function clickElement($selector, $index=0)
     {
         $elemRect = $this->getBoundingRectangle($selector, $index);
         $region   = $this->getRegionOnPage($elemRect);
