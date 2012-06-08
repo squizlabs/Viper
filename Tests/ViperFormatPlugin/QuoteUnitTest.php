@@ -13,26 +13,23 @@ class Viper_Tests_ViperFormatPlugin_QuoteUnitTest extends AbstractViperUnitTest
      */
     public function testApplingTheQuoteStyleUsingInlineToolbar()
     {
-        $dir = dirname(__FILE__).'/Images/';
 
-        $text = 'THIS';
-
-        $this->selectText($text);
+        $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(0);
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_toggle_formats_highlighted.png');
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_blockquote.png');
+        $this->clickInlineToolbarButton('formats-p', 'active');
+        $this->clickInlineToolbarButton('Quote', NULL, TRUE);
 
-        $this->assertHTMLMatch('<blockquote>Lorem xtn dolor</blockquote><blockquote>sit amet <strong>WoW</strong></blockquote><blockquote>THIS is a paragraph to change to a quote</blockquote>');
+        $this->assertHTMLMatch('<blockquote>%1% xtn %2%</blockquote><blockquote>%3% amet <strong>WoW</strong></blockquote><blockquote>%4% is a paragraph to change to a quote</blockquote>');
 
-        $this->click($this->find('WoW'));
-        $this->selectText($text);
+        $this->click($this->findKeyword(2));
+        $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(0);
 
-        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_toggle_formats_highlighted.png'), 'Toogle formats icon is not selected');
+        $this->assertTrue($this->inlineToolbarButtonExists('formats-blockquote', 'active'), 'Toogle formats icon is not selected');
 
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_toggle_formats_highlighted.png');
+        $this->clickInlineToolbarButton('formats-blockquote', 'active');
 
-        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_blockquote_active.png'), 'Quote icon is not active');
+        $this->assertTrue($this->inlineToolbarButtonExists('Quote', 'active', TRUE), 'Quote icon is not active');
 
     }//end testApplingTheQuoteStyleUsingInlineToolbar()
 
@@ -44,26 +41,23 @@ class Viper_Tests_ViperFormatPlugin_QuoteUnitTest extends AbstractViperUnitTest
      */
     public function testApplingTheQuoteStyleUsingTopToolbar()
     {
-        $dir = dirname(__FILE__).'/Images/';
 
-        $text = 'THIS';
-
-        $this->selectText($text);
+        $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(0);
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_formats_highlighted.png');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_blockquote.png');
+        $this->clickTopToolbarButton('formats-p', 'active');
+        $this->clickTopToolbarButton('Quote', NULL, TRUE);
 
-        $this->assertHTMLMatch('<blockquote>Lorem xtn dolor</blockquote><blockquote>sit amet <strong>WoW</strong></blockquote><blockquote>THIS is a paragraph to change to a quote</blockquote>');
+        $this->assertHTMLMatch('<blockquote>%1% xtn %2%</blockquote><blockquote>%3% amet <strong>WoW</strong></blockquote><blockquote>%4% is a paragraph to change to a quote</blockquote>');
 
-        $this->click($this->find('WoW'));
-        $this->selectText($text);
+        $this->click($this->findKeyword(2));
+        $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(0);
 
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_toggle_formats_highlighted.png'), 'Toogle formats icon is not selected');
+        $this->assertTrue($this->topToolbarButtonExists('formats-blockquote', 'active'), 'Toogle formats icon is not selected');
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_formats_highlighted.png');
+        $this->clickTopToolbarButton('formats-blockquote', 'active');
 
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_blockquote_active.png'), 'Quote icon is not active');
+        $this->assertTrue($this->topToolbarButtonExists('Quote', NULL, TRUE), 'Quote icon is not active');
 
     }//end testApplingTheQuoteStyleUsingTopToolbar()
 
@@ -75,23 +69,21 @@ class Viper_Tests_ViperFormatPlugin_QuoteUnitTest extends AbstractViperUnitTest
      */
     public function testSelectQuoteAfterStylingShowsCorrectIcons()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
-        $this->selectText('Lorem', 'dolor');
+        $this->selectKeyword(1, 2);
         $this->keyDown('Key.CMD + b');
         $this->keyDown('Key.CMD + i');
 
         $this->selectInlineToolbarLineageItem(0);
 
        // Make sure the correct icons are being shown in the inline toolbar.
-        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_toggle_formats_highlighted.png'), 'Toogle formats icon is not selected');
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_toggle_formats_highlighted.png');
-        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_blockquote_active.png'), 'Quote icon is not active');
+        $this->assertTrue($this->inlineToolbarButtonExists('formats-blockquote', 'active'), 'Toogle formats icon is not selected');
+        $this->clickInlineToolbarButton('formats-blockquote', 'active');
+        $this->assertTrue($this->inlineToolbarButtonExists('Quote', 'active', TRUE), 'Quote icon is not active');
 
         // Make sure the correct icons are being shown in the top toolbar.
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_toggle_formats_highlighted.png'), 'Toogle formats icon is not selected');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_formats_highlighted.png');
-        $this->assertTrue($this->topToolbarButtonExists($dir.'toolbarIcon_blockquote_active.png'), 'Quote icon is not active');
+        $this->assertTrue($this->topToolbarButtonExists('formats-blockquote', 'active'), 'Toogle formats icon is not selected');
+        $this->clickTopToolbarButton('formats-blockquote', 'active');
+        $this->assertTrue($this->topToolbarButtonExists('Quote', 'active', TRUE), 'Quote icon is not active');
 
     }//end testSelectQuoteAfterStylingShowsCorrectIcons()
 
@@ -103,20 +95,18 @@ class Viper_Tests_ViperFormatPlugin_QuoteUnitTest extends AbstractViperUnitTest
      */
     public function testSelectingQuotesWithFormattedTextShowsCorrectIcons()
     {
-        $dir = dirname(__FILE__).'/Images/';
 
-        $this->selectText('Lorem');
+        $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
-        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_toggle_formats_highlighted.png'), 'Toogle formats icon is not selected');
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_toggle_formats_highlighted.png');
-        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_blockquote_active.png'), 'Quote icon is not active');
+        $this->assertTrue($this->inlineToolbarButtonExists('formats-blockquote', 'active'), 'Toogle formats icon is not selected');
+        $this->clickInlineToolbarButton('formats-blockquote', 'active');
+        $this->assertTrue($this->inlineToolbarButtonExists('Quote', 'active', TRUE), 'Quote icon is not active');
 
-        $this->click($this->find('quote'));
-        $this->selectText('sit');
+        $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(0);
-        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_toggle_formats_highlighted.png'), 'Toogle formats icon is not selected');
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_toggle_formats_highlighted.png');
-        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_blockquote_active.png'), 'Quote icon is not active');
+        $this->assertTrue($this->inlineToolbarButtonExists('formats-blockquote', 'active'), 'Toogle formats icon is not selected');
+        $this->clickInlineToolbarButton('formats-blockquote', 'active');
+        $this->assertTrue($this->inlineToolbarButtonExists('Quote', 'active', TRUE), 'Quote icon is not active');
 
     }//end testSelectingQuotesWithFormattedTextShowsCorrectIcons()
 
@@ -128,21 +118,14 @@ class Viper_Tests_ViperFormatPlugin_QuoteUnitTest extends AbstractViperUnitTest
      */
     public function testUsingBoldInBlockquotes()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
-        $text    = 'Lorem';
-        $textLoc = $this->find($text);
-
-        $this->selectText($text);
+        $this->selectKeyword(1);
         $this->keyDown('Key.CMD + b');
 
-        $this->assertHTMLMatch('<blockquote><strong>Lorem</strong> xtn dolor</blockquote><blockquote>sit amet <strong>WoW</strong></blockquote><p>THIS is a paragraph to change to a quote</p>');
+        $this->assertHTMLMatch('<blockquote><strong>%1%</strong> xtn %2%</blockquote><blockquote>%3% amet <strong>WoW</strong></blockquote><p>%4% is a paragraph to change to a quote</p>');
 
-        $this->click($textLoc);
-        $this->selectText('Lorem');
         $this->keyDown('Key.CMD + b');
 
-        $this->assertHTMLMatch('<blockquote>Lorem xtn dolor</blockquote><blockquote>sit amet <strong>WoW</strong></blockquote><p>THIS is a paragraph to change to a quote</p>');
+        $this->assertHTMLMatch('<blockquote>%1% xtn %2%</blockquote><blockquote>%3% amet <strong>WoW</strong></blockquote><p>%4% is a paragraph to change to a quote</p>');
 
     }//end testUsingBoldInBlockquotes()
 
@@ -154,17 +137,16 @@ class Viper_Tests_ViperFormatPlugin_QuoteUnitTest extends AbstractViperUnitTest
      */
     public function testUsingItalicInBlockquotes()
     {
-        $dir = dirname(__FILE__).'/Images/';
 
-        $this->selectText('Lorem');
+        $this->selectKeyword(1);
         $this->keyDown('Key.CMD + i');
 
-        $this->assertHTMLMatch('<blockquote><em>Lorem</em> xtn dolor</blockquote><blockquote>sit amet <strong>WoW</strong></blockquote><p>THIS is a paragraph to change to a quote</p>');
+        $this->assertHTMLMatch('<blockquote><em>%1%</em> xtn %2%</blockquote><blockquote>%3% amet <strong>WoW</strong></blockquote><p>%4% is a paragraph to change to a quote</p>');
 
-        $this->selectText('Lorem');
+        $this->selectKeyword(1);
         $this->keyDown('Key.CMD + i');
 
-        $this->assertHTMLMatch('<blockquote>Lorem xtn dolor</blockquote><blockquote>sit amet <strong>WoW</strong></blockquote><p>THIS is a paragraph to change to a quote</p>');
+        $this->assertHTMLMatch('<blockquote>%1% xtn %2%</blockquote><blockquote>%3% amet <strong>WoW</strong></blockquote><p>%4% is a paragraph to change to a quote</p>');
 
     }//end testUsingItalicInBlockquotes()
 
@@ -176,16 +158,15 @@ class Viper_Tests_ViperFormatPlugin_QuoteUnitTest extends AbstractViperUnitTest
      */
     public function testQuoteIconIsActiveWhenSelectingQuoteTag()
     {
-        $dir = dirname(__FILE__).'/Images/';
 
-        $this->selectText('Lorem');
+        $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
-        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_toggle_formats_highlighted.png'), 'Toogle formats icon is not selected');
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_toggle_formats_highlighted.png');
-        $this->assertTrue($this->inlineToolbarButtonExists($dir.'toolbarIcon_blockquote_active.png'), 'Quote icon is not active');
+        $this->assertTrue($this->inlineToolbarButtonExists('formats-blockquote', 'active'), 'Toogle formats icon is not selected');
+        $this->clickInlineToolbarButton('formats-blockquote', 'active');
+        $this->assertTrue($this->inlineToolbarButtonExists('Quote', NULL, TRUE), 'Quote icon is not active');
 
         $this->selectInlineToolbarLineageItem(1);
-        $this->assertFalse($this->inlineToolbarButtonExists($dir.'toolbarIcon_toggle_formats_highlighted.png'), 'Toogle formats icon is still active in the inline toolbar');
+        $this->assertFalse($this->inlineToolbarButtonExists('formats-blockquote', 'active'), 'Toogle formats icon is still active in the inline toolbar');
 
     }//end testQuoteIconIsActiveWhenSelectingQuoteTag()
 
@@ -197,15 +178,14 @@ class Viper_Tests_ViperFormatPlugin_QuoteUnitTest extends AbstractViperUnitTest
      */
     public function testQuoteAppliedToParagraphOnPartialSelection()
     {
-        $dir = dirname(__FILE__).'/Images/';
 
-        $this->selectText('THIS');
-        $this->assertFalse($this->inlineToolbarButtonExists($dir.'toolbarIcon_toggle_formats_highlighted.png'), 'Toogle formats icon should not appear in the inline toolbar');
+        $this->selectKeyword(4);
+        $this->assertFalse($this->inlineToolbarButtonExists('formats'), 'Toogle formats icon should not appear in the inline toolbar');
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_formats_highlighted.png');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_blockquote.png');
+        $this->clickTopToolbarButton('formats-p', 'active');
+        $this->clickTopToolbarButton('Quote', NULL, TRUE);
 
-        $this->assertHTMLMatch('<blockquote>Lorem xtn dolor</blockquote><blockquote>sit amet <strong>WoW</strong></blockquote><blockquote>THIS is a paragraph to change to a quote</blockquote>');
+        $this->assertHTMLMatch('<blockquote>%1% xtn %2%</blockquote><blockquote>%3% amet <strong>WoW</strong></blockquote><blockquote>%4% is a paragraph to change to a quote</blockquote>');
 
     }//end testQuoteAppliedToParagraphOnPartialSelection()
 
@@ -217,24 +197,23 @@ class Viper_Tests_ViperFormatPlugin_QuoteUnitTest extends AbstractViperUnitTest
      */
     public function testApplyingAndRemovingQuote()
     {
-        $dir = dirname(__FILE__).'/Images/';
 
-        $this->selectText('THIS');
+        $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(0);
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_formats_highlighted.png');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_blockquote.png');
+        $this->clickTopToolbarButton('formats-p', 'active');
+        $this->clickTopToolbarButton('Quote', NULL, TRUE);
 
-        $this->assertHTMLMatch('<blockquote>Lorem xtn dolor</blockquote><blockquote>sit amet <strong>WoW</strong></blockquote><blockquote>THIS is a paragraph to change to a quote</blockquote>');
+        $this->assertHTMLMatch('<blockquote>%1% xtn %2%</blockquote><blockquote>%3% amet <strong>WoW</strong></blockquote><blockquote>%4% is a paragraph to change to a quote</blockquote>');
 
-        $this->click($this->find('WoW'));
-        $this->selectText('THIS');
+        $this->click($this->findKeyword(3));
+        $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(0);
 
-        $this->clickTopToolbarButton($dir.'toolbarIcon_toggle_formats_highlighted.png');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_blockquote_active.png');
+        $this->clickTopToolbarButton('formats-blockquote', 'active');
+        $this->clickTopToolbarButton('Quote', NULL, TRUE);
 
-        $this->assertHTMLMatch('<blockquote>Lorem xtn dolor</blockquote><blockquote>sit amet <strong>WoW</strong></blockquote>THIS is a paragraph to change to a quote');
+        $this->assertHTMLMatch('<blockquote>%1% xtn %2%</blockquote><blockquote>%3% amet <strong>WoW</strong></blockquote>%4% is a paragraph to change to a quote');
 
     }//end testApplyingAndRemovingQuote()
 
@@ -246,24 +225,24 @@ class Viper_Tests_ViperFormatPlugin_QuoteUnitTest extends AbstractViperUnitTest
      */
     public function testCreatingNewContentWithABlockquoteTag()
     {
-        $dir = dirname(__FILE__).'/Images/';
 
-        $this->selectText('THIS');
+        $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(0);
         $this->keyDown('Key.RIGHT');
         $this->keyDown('Key.ENTER');
-        $this->type('New content');
-        $this->keyDown('Key.SHIFT + Key.LEFT');
+        $this->type('New %5%');
+        $this->selectKeyword(5);
         $this->selectInlineToolbarLineageItem(0);
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_toggle_formats_highlighted.png');
-        $this->clickInlineToolbarButton($dir.'toolbarIcon_blockquote.png');
+        $this->clickInlineToolbarButton('formats-p', 'active');
+        $this->clickInlineToolbarButton('Quote', NULL, TRUE);
+        $this->selectKeyword(5);
         $this->keyDown('Key.RIGHT');
         $this->type(' on the page');
         $this->keyDown('Key.ENTER');
         $this->type('More new content');
 
-        $this->assertHTMLMatch('<blockquote>Lorem xtn dolor</blockquote><blockquote>sit amet <strong>WoW</strong></blockquote><p>THIS is a paragraph to change to a quote</p><blockquote>New content on the page</blockquote><p>More new content</p>');
-
+        $this->assertHTMLMatch('<blockquote>%1% xtn %2%</blockquote><blockquote>%3% amet <strong>WoW</strong></blockquote><p>%4% is a paragraph to change to a quote</p><blockquote>New %5% on the page</blockquote><p>More new content</p>');
+        
     }//end testCreatingNewContentWithABlockquoteTag()
 
 }//end class
