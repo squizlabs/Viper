@@ -3697,7 +3697,11 @@ Viper.prototype = {
         }
 
         if (inside !== true || this.removeHighlights() !== true) {
-            this.fireSelectionChanged(this.adjustRange());
+            var self = this;
+            setTimeout(function() {
+                // Delay calling the fireSelectionChanged to get the updated range.
+                self.fireSelectionChanged(self.adjustRange());
+            }, 5);
         }
 
         this._viperRange = null;
