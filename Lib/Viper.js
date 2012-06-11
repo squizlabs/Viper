@@ -1883,7 +1883,6 @@ Viper.prototype = {
 
             if (startBlockParent === endBlockParent
                 && !nodeSelection
-                && (!attributes || attributes.cssClass !== '__viper_selHighlight')
             ) {
                 if (!bookmark.start.previousSibling
                     && bookmark.start.parentNode !== startBlockParent
@@ -1920,19 +1919,55 @@ Viper.prototype = {
                     dfx.insertBefore(parent, bookmark.end);
                 }
 
-                var newElement = document.createElement(otag);
-                this._setWrapperElemAttributes(newElement, attributes);
+                var newElement = null;
+                if (otag !== 'span'
+                    && bookmark.start.previousSibling
+                    && dfx.isTag(bookmark.start.previousSibling, otag) === true
+                ) {
+                    // If the previous element is the same tag then just join to it.
+                    newElement = bookmark.start.previousSibling;
+                    newElement.appendChild(bookmark.start);
+                    while (rangeContents.firstChild) {
+                        newElement.appendChild(rangeContents.firstChild);
+                    }
+                    newElement.appendChild(bookmark.end);
+                } else if (otag !== 'span'
+                    && bookmark.end.nextSibling
+                    && dfx.isTag(bookmark.end.nextSibling, otag) === true
+                ) {
+                    // If the next element is the same tag then just join to it.
+                    newElement = bookmark.end.nextSibling;
+                    if (newElement.firstChild) {
+                        dfx.insertBefore(newElement.firstChild, bookmark.end);
+                    } else {
+                        newElement.appendChild(bookmark.end);
+                    }
 
-                dfx.insertAfter(bookmark.start, newElement);
+                    while (rangeContents.lastChild) {
+                        dfx.insertBefore(newElement.firstChild, rangeContents.lastChild);
+                    }
 
-                while (rangeContents.firstChild) {
-                     newElement.appendChild(rangeContents.firstChild);
+                    dfx.insertBefore(newElement.firstChild, bookmark.start);
+                } else {
+                    // Create a new element.
+                    newElement = document.createElement(otag);
+                    dfx.insertAfter(bookmark.start, newElement);
+
+                    while (rangeContents.firstChild) {
+                        newElement.appendChild(rangeContents.firstChild);
+                    }
                 }
+
+                this._setWrapperElemAttributes(newElement, attributes);
 
                 // Remove same nested tags.
                 var nestedTags = dfx.getTag(otag, newElement);
                 var nestedTagsCount = nestedTags.length;
                 for (var i = 0; i < nestedTagsCount; i++) {
+                    if (this.isBookmarkElement(nestedTags[i]) === true || otag === 'span') {
+                        continue;
+                    }
+
                     while (nestedTags[i].firstChild) {
                         dfx.insertBefore(nestedTags[i], nestedTags[i].firstChild);
                     }
@@ -2038,7 +2073,7 @@ Viper.prototype = {
             return;
         }
 
-        if (dfx.getParents(parent, tag).length > 0) {
+        if (!attributes && dfx.getParents(parent, tag).length > 0) {
             // This element is already inside the specified tag.
             // TODO: This may cause problems with spans etc and may need to check
             // specific attributes as well.
@@ -2059,12 +2094,14 @@ Viper.prototype = {
                 if (parent.previousSibling
                     && dfx.isTag(parent.previousSibling, tag) === true
                     && !dfx.attr(parent.previousSibling, 'viperbookmark')
+                    && (!attributes || attributes.cssClass !== '__viper_selHighlight')
                 ) {
                     // Add it to the preivous sibling.
                     parent.previousSibling.appendChild(parent);
                 } else if (parent.nextSibling
                     && dfx.isTag(parent.nextSibling, tag) === true
                     && !dfx.attr(parent.nextSibling, 'viperbookmark')
+                    && (!attributes || attributes.cssClass !== '__viper_selHighlight')
                 ) {
                     if (parent.nextSibling.firstChild) {
                         // Add it before the first child of the next sibling.
@@ -2735,6 +2772,16 @@ Viper.prototype = {
         dfx.remove(bookmarks);
 
         return elem;
+
+    },
+
+    isBookmarkElement: function(element)
+    {
+        if (dfx.hasClass(element, 'viperBookmark') === true) {
+            return true;
+        }
+
+        return false;
 
     },
 
@@ -4401,25 +4448,6 @@ Viper.prototype = {
                     // Nothing to see here PHPCS.
                 break;
 
-                case 'strong':
-                case 'em':
-                    if (dfx.isTag(node.parentNode, tagName) === true) {
-                        // Same as parent tag, move child nodes out and remove this
-                        // node.
-                        while (node.firstChild) {
-                            dfx.insertBefore(node, node.firstChild);
-                        }
-
-                        dfx.remove(node);
-                        break;
-                    } else if (node.previousSibling && dfx.isTag(node.previousSibling, tagName) === true) {
-                        while (node.firstChild) {
-                            node.previousSibling.appendChild(node.firstChild);
-                        }
-
-                        dfx.remove(node);
-                        break;
-                    }
                 default:
                     if (dfx.isStubElement(node) === false && !node.firstChild) {
                         // Any span with no content and class _my4_keyword is a keyword replacing with nothing.

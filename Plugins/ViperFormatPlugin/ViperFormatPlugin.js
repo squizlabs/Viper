@@ -724,13 +724,7 @@ ViperFormatPlugin.prototype = {
             } else {
                 var attributes = {attributes: {}};
                 attributes.attributes[attr] = value;
-                span = this.viper.surroundContents('span', attributes, range);
-                if (!span) {
-                    this.viper.selectBookmark(bookmark);
-                } else {
-                    this.viper.removeBookmarks();
-                    range.selectNode(span);
-                }
+                this.viper.surroundContents('span', attributes, range);
             }//end if
 
             ViperSelection.addRange(range);
