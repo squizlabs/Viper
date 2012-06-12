@@ -245,7 +245,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
 
             // Make sure page is loaded.
             $maxRetries = 4;
-            while ($this->topToolbarButtonExists('bold') === FALSE) {
+            while ($this->topToolbarButtonExists('italic') === FALSE) {
                 $this->reloadPage();
                 if ($maxRetries === 0) {
                     throw new Exception('Failed to load Viper test page.');
@@ -295,7 +295,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
 
             // Make sure page is loaded.
             $maxRetries = 4;
-            while ($this->topToolbarButtonExists('bold') === FALSE) {
+            while ($this->topToolbarButtonExists('italic') === FALSE) {
                 $this->reloadPage();
                 if ($maxRetries === 0) {
                     throw new Exception('Failed to load Viper test page.');
@@ -626,7 +626,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
 
         // Make sure page is loaded.
         $maxRetries = 4;
-        while ($this->topToolbarButtonExists('bold') === FALSE) {
+        while ($this->topToolbarButtonExists('italic') === FALSE) {
             $this->reloadPage();
             if ($maxRetries === 0) {
                 throw new Exception('Failed to load Viper test page.');
