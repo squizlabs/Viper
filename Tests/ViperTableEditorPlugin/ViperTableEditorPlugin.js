@@ -59,3 +59,20 @@ function gTblBStatus()
     return btns;
 
 }//end gTblBStatus()
+
+function gTblH()
+{
+    return viperTest.get('tableHighlightRect');
+
+}
+
+// Hook in to table
+viperTest.addReadyCallback(function() {
+    viperTest.set('tableHighlightFunction', viper.getPluginManager().getPlugin('ViperTableEditorPlugin').highlightActiveCell);
+    viper.getPluginManager().getPlugin('ViperTableEditorPlugin').highlightActiveCell = function() {
+        var retVal = viperTest.get('tableHighlightFunction').apply(this, arguments);
+        viperTest.set('tableHighlightRect', dfx.getBoundingRectangle(dfx.getClass('ViperITP-highlight')[0]));
+        return retVal;
+    }
+});
+
