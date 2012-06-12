@@ -11,13 +11,29 @@ abstract class AbstractViperTableEditorPluginUnitTest extends AbstractViperUnitT
     /**
      * Creates a blank table with the default (top) headers.
      *
+     * @param integer $rows Number of rows.
+     * @param integer $cols Number of columns.
+     *
      * @return void
      */
-    protected function insertTable()
+    protected function insertTable($rows=NULL, $cols=NULL)
     {
         $this->selectKeyword(1);
         $this->keyDown('Key.RIGHT');
         $this->clickTopToolbarButton('table');
+
+        if ($rows !== NULL && $cols !== NULL) {
+            if ($rows > 10 || $cols > 10) {
+                throw new Exception('insertTable(rows, cols) only support maximum of 10x10 table');
+            }
+
+            $cellCount = $cols;
+            if ($rows > 1) {
+                $cellCount += (($rows - 1) * 10);
+            }
+
+            $this->clickElement('.Viper-sizePicker td', $cellCount);
+        }
 
         $this->clickButton('Insert Table', NULL, TRUE);
 
@@ -135,6 +151,36 @@ abstract class AbstractViperTableEditorPluginUnitTest extends AbstractViperUnitT
 
 
     /**
+     * Returns the rectangle of the last cell highlight.
+     *
+     * @return array
+     */
+    protected function getCellHighlight()
+    {
+        return $this->execJS('window.opener.gTblH()');
+
+    }//end getCellHighlight()
+
+
+    /**
+     * Returns the match object of the specified table tools button.
+     *
+     * @param string  $type The type of the tools, table, row, col, or cell.
+     *
+     * @return string
+     */
+    protected function getToolsButton($type)
+    {
+        if ($type === 'table') {
+            $type = '';
+        }
+
+        return $this->findButton('table'.ucFirst($type));
+
+    }//end getToolsButton()
+
+
+    /**
      * Clicks the given merge/split button in inline table toolbar.
      *
      * @param string $icon The icon to click.
@@ -144,8 +190,8 @@ abstract class AbstractViperTableEditorPluginUnitTest extends AbstractViperUnitT
     protected function clickMergeSplitIcon($icon)
     {
         $this->clickInlineToolbarButton('splitMerge');
-        $this->mouseMove($this->createLocation(200, 200));
-        $this->clickInlineToolbarButton($this->getImg($icon));
+        $this->mouseMoveOffset(-50, -50);
+        $this->clickInlineToolbarButton($icon);
 
     }//end clickMergeSplitIcon()
 
