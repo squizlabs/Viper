@@ -1,3 +1,21 @@
+var viperTest = {
+    _data: {},
+    _readyCallbacks: [],
+    set: function(key, data) {
+        this._data[key] = data;
+    },
+    get: function(key) {
+        return this._data[key];
+    },
+    addReadyCallback: function(callback) {
+        this._readyCallbacks.push(callback);
+    },
+    getReadyCallbacks: function() {
+        return this._readyCallbacks;
+    }
+};
+
+
 /**
  * Returns the HTML contents of the specified element.
  */
@@ -84,10 +102,6 @@ function gBtn(text, state, selectorPrefix)
             break;
         }
     }
-
-    //if (!state && button.className !== 'Viper-button') {
-    //    return false;
-    //}
 
     var rect = window.opener.dfx.getBoundingRectangle(button);
     if (rect) {

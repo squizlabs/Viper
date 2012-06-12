@@ -3157,7 +3157,7 @@ ViperTableEditorPlugin.prototype = {
             dfx.setStyle(table, 'width', '100%');
         }
 
-        var col = dfx.getTag('td', table)[0];
+        var col         = dfx.getTag('td,th', table)[0];
         var rightWidth  = parseInt(dfx.getComputedStyle(col, 'border-right-width'));
         var bottomWidth = parseInt(dfx.getComputedStyle(col, 'border-bottom-width'));
 

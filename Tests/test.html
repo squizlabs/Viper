@@ -5,6 +5,7 @@
         <script type="text/javascript" src="../Viper-all.js"></script>
         <script type="text/javascript" src="./test.js"></script>
         <link rel="stylesheet" media="screen" href="./test.css" />
+        __TEST_JS_INCLUDE__
         <script type="text/javascript">
             var viper   = null;
             var jsCache = __TEST_JS_EXEC_CACHE__;
@@ -20,9 +21,15 @@
                     window.open('test_jsexec.html', '', 'width=400,height=100,0,status=0,left=1000,top=850');
                     window.location.hash = '#run';
                 }
+
+                var readyCallbacks = viperTest.getReadyCallbacks();
+                if (readyCallbacks) {
+                    for (var i = 0; i < readyCallbacks.length; i++) {
+                        readyCallbacks[i].call(this);
+                    }
+                }
             };
         </script>
-        __TEST_JS_INCLUDE__
     </head>
     <body spellcheck="false">
         <img id="windowTarget" src="./Core/Images/window-target.png" onclick="if (viper) viper.destroy();location.reload();" />

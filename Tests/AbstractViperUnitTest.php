@@ -1559,6 +1559,23 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
 
 
     /**
+     * Returns the found button object.
+     *
+     * @param string  $buttonIcon The name of the button.
+     * @param string  $state      The name of the button state (active, selected).
+     * @param boolean $isText     If TRUE then the button is a text button (i.e. no icon).
+     * @param string  $location   The location of the button (topToolbar, inlineToolbar, etc.).
+     *
+     * @return void
+     */
+    protected function findButton($buttonIcon, $state=NULL, $isText=FALSE, $location=NULL)
+    {
+        return $this->find($this->_getButton($buttonIcon, $state, $isText, $location));
+
+    }//end findButton()
+
+
+    /**
      * Returns the button object.
      *
      * @param string  $buttonIcon The name of the button.
