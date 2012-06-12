@@ -8,7 +8,7 @@
         <textarea id="jsRes" accesskey="R"></textarea>
         <button id="close" onclick="document.getElementById('jsExec').value='';document.getElementById('jsRes').value='';">Clear</button>
         <script>
-            var jsCache = window.opener.jsCache;
+            var jsCache = window.opener.jsCache || [];
             var jsExec = document.getElementById('jsExec')
             var jsRes  = document.getElementById('jsRes');
             jsExec.onkeydown = function(e) {

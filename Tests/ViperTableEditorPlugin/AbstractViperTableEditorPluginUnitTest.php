@@ -15,18 +15,15 @@ abstract class AbstractViperTableEditorPluginUnitTest extends AbstractViperUnitT
      */
     protected function insertTable()
     {
-        $dir = dirname(__FILE__).'/Images/';
-        
-        $this->selectText('IPSUM');
+        $this->selectKeyword(1);
         $this->keyDown('Key.RIGHT');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_createTable.png');
-        
-        $insertTable = $this->find($dir.'toolbarIcon_insertTable.png');
-        $this->click($insertTable);
+        $this->clickTopToolbarButton('table');
+
+        $this->clickButton('Insert Table', NULL, TRUE);
 
     }//end insertTable()
-    
-    
+
+
     /**
      * Creates a blank table with no headers.
      *
@@ -34,21 +31,16 @@ abstract class AbstractViperTableEditorPluginUnitTest extends AbstractViperUnitT
      */
     protected function insertTableWithNoHeaders()
     {
-        $dir = dirname(__FILE__).'/Images/';
-        
-        $this->selectText('IPSUM');
+        $this->selectKeyword(1);
         $this->keyDown('Key.RIGHT');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_createTable.png');
-        
-        $noHeaders = $this->find($dir.'toolbarIcon_noHeaders.png');
-        $this->click($noHeaders);
-        
-        $insertTable = $this->find($dir.'toolbarIcon_insertTable.png');
-        $this->click($insertTable);
+        $this->clickTopToolbarButton('table');
+
+        $this->clickElement('.VTEP-bubble-headerTitle');
+        $this->clickButton('Insert Table', NULL, TRUE);
 
     }//end insertTableWithNoHeaders()
-   
-    
+
+
     /**
      * Creates a blank table with left headers.
      *
@@ -56,21 +48,16 @@ abstract class AbstractViperTableEditorPluginUnitTest extends AbstractViperUnitT
      */
     protected function insertTableWithLeftHeaders()
     {
-        $dir = dirname(__FILE__).'/Images/';
-        
-        $this->selectText('IPSUM');
+        $this->selectKeyword(1);
         $this->keyDown('Key.RIGHT');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_createTable.png');
-        
-        $leftHeaders = $this->find($dir.'toolbarIcon_leftHeader.png');
-        $this->click($leftHeaders);
-        
-        $insertTable = $this->find($dir.'toolbarIcon_insertTable.png');
-        $this->click($insertTable);
+        $this->clickTopToolbarButton('table');
+
+        $this->clickElement('.VTEP-bubble-headerTitle', 1);
+        $this->clickButton('Insert Table', NULL, TRUE);
 
     }//end insertTableWithLeftHeaders()
 
-    
+
     /**
      * Creates a blank table with both headers.
      *
@@ -78,20 +65,15 @@ abstract class AbstractViperTableEditorPluginUnitTest extends AbstractViperUnitT
      */
     protected function insertTableWithBothHeaders()
     {
-        $dir = dirname(__FILE__).'/Images/';
-        
-        $this->selectText('IPSUM');
+        $this->selectKeyword(1);
         $this->keyDown('Key.RIGHT');
-        $this->clickTopToolbarButton($dir.'toolbarIcon_createTable.png');
-        
-        $bothHeaders = $this->find($dir.'toolbarIcon_bothHeaders.png');
-        $this->click($bothHeaders);
-        
-        $insertTable = $this->find($dir.'toolbarIcon_insertTable.png');
-        $this->click($insertTable);
+        $this->clickTopToolbarButton('table');
+
+        $this->clickElement('.VTEP-bubble-headerTitle', 3);
+        $this->clickButton('Insert Table', NULL, TRUE);
 
     }//end insertTableWithBothHeaders()
-    
+
 
     /**
      * Returns the full path of the specified image file name.
@@ -147,11 +129,7 @@ abstract class AbstractViperTableEditorPluginUnitTest extends AbstractViperUnitT
         usleep(100);
 
         // Check the highlight for row.
-        $icon = $this->find($this->getImg('icon_tools_'.$type.'.png'));
-        $this->mouseMove($icon);
-        usleep(200);
-
-        $this->click($icon);
+        $this->clickButton('table'.ucFirst($type));
 
     }//end showRowTools()
 
@@ -165,7 +143,7 @@ abstract class AbstractViperTableEditorPluginUnitTest extends AbstractViperUnitT
      */
     protected function clickMergeSplitIcon($icon)
     {
-        $this->clickInlineToolbarButton($this->getImg('icon_mergeSplit.png'));
+        $this->clickInlineToolbarButton('splitMerge');
         $this->mouseMove($this->createLocation(200, 200));
         $this->clickInlineToolbarButton($this->getImg($icon));
 

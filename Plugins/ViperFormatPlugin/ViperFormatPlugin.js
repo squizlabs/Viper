@@ -531,8 +531,17 @@ ViperFormatPlugin.prototype = {
                 tools.setButtonActive(prefix + 'heading:' + tagName);
             }
 
+            var allowParaSelection = self.handleFormat('p', true, true);
             for (var tagName in formatButtons) {
                 tools.setButtonInactive(prefix + 'formats:' + formatButtons[tagName]);
+
+                if (tagName === 'p') {
+                    if (allowParaSelection === false) {
+                        tools.disableButton(prefix + 'formats:' + formatButtons[tagName]);
+                    } else {
+                        tools.enableButton(prefix + 'formats:' + formatButtons[tagName]);
+                    }
+                }
             }
 
             tools.getItem('formats').setIconClass('Viper-formats');
@@ -715,13 +724,7 @@ ViperFormatPlugin.prototype = {
             } else {
                 var attributes = {attributes: {}};
                 attributes.attributes[attr] = value;
-                span = this.viper.surroundContents('span', attributes, range);
-                if (!span) {
-                    this.viper.selectBookmark(bookmark);
-                } else {
-                    this.viper.removeBookmarks();
-                    range.selectNode(span);
-                }
+                this.viper.surroundContents('span', attributes, range);
             }//end if
 
             ViperSelection.addRange(range);
@@ -825,7 +828,7 @@ ViperFormatPlugin.prototype = {
      *
      * @return {boolean} True if the change can be made.
      */
-    handleFormat: function(type, testOnly)
+    handleFormat: function(type, testOnly, checkParaWrap)
     {
         testOnly          = testOnly || false;
         var range         = this.viper.getViperRange();
@@ -969,6 +972,15 @@ ViperFormatPlugin.prototype = {
 
             if (newParents.length > 0) {
                 if (testOnly === true) {
+                    if (checkParaWrap === true) {
+                        for (var i = 0; i < newParents.length; i++) {
+                            var tagName = dfx.getTagName(newParents[i]);
+                            if (tagName === 'p' || tagName === 'pre' || tagName === 'blockquote') {
+                                return false;
+                            }
+                        }
+                    }
+
                     return true;
                 }
 
