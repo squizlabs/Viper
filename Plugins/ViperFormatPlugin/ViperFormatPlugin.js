@@ -725,6 +725,8 @@ ViperFormatPlugin.prototype = {
                 var attributes = {attributes: {}};
                 attributes.attributes[attr] = value;
                 this.viper.surroundContents('span', attributes, range);
+
+                this.viper.removeBookmarks();
             }//end if
 
             ViperSelection.addRange(range);
