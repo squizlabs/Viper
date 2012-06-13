@@ -19,8 +19,8 @@ function ViperIERange(rangeObj)
     this._initContainerInfo();
     this._setCollapsed();
 
-    this.shy            = Viper.document.createElement('span');
-    this.shy.innerHTML  = '&nbsp;';
+  //  this.shy            = Viper.document.createElement('span');
+  //  this.shy.innerHTML  = '&nbsp;';
     this._prevHeight    = null;
     this._prevContainer = null;
 
@@ -58,6 +58,15 @@ function ViperIERange(rangeObj)
 
 }
 
+ViperIERange._prevRange = {
+    range: null,
+    startContainer: null,
+    endContainer: null,
+    startOffset: 0,
+    endOffset: 0
+};
+
+
 ViperIERange.prototype = {
 
 
@@ -70,19 +79,43 @@ ViperIERange.prototype = {
     _initContainerInfo: function()
     {
         var clone  = this.rangeObj.duplicate();
+
+        if (ViperIERange._prevRange.range !== null) {
+            if (clone.isEqual(ViperIERange._prevRange.range) === true) {
+                this.startContainer = ViperIERange._prevRange.startContainer;
+                this.endContainer   = ViperIERange._prevRange.endContainer;
+                this.startOffset    = ViperIERange._prevRange.startOffset;
+                this.endOffset      = ViperIERange._prevRange.endOffset;
+                return;
+            }
+        }
+
+        ViperIERange._prevRange.range = clone;
+
         var eclone = this.rangeObj.duplicate();
 
         clone.collapse(true);
+
         var info = this._getContainerInfo(clone);
 
         this.startContainer = info.container;
         this.startOffset    = info.offset;
 
         eclone.collapse(false);
-        var einfo = this._getContainerInfo(eclone);
 
-        this.endContainer = einfo.container;
-        this.endOffset    = einfo.offset;
+        if (eclone.isEqual(clone) !== true) {
+            var einfo = this._getContainerInfo(eclone);
+            this.endContainer = einfo.container;
+            this.endOffset    = einfo.offset;
+        } else {
+            this.endContainer = info.container;
+            this.endOffset    = info.offset;
+        }
+
+        ViperIERange._prevRange.startContainer = this.startContainer;
+        ViperIERange._prevRange.endContainer   = this.endContainer;
+        ViperIERange._prevRange.startOffset    = this.startOffset;
+        ViperIERange._prevRange.endOffset      = this.endOffset;
 
     },
 
