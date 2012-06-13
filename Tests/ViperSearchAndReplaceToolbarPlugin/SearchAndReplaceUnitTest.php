@@ -13,8 +13,6 @@ class Viper_Tests_ViperSearchAndReplaceToolbarPlugin_SearchAndReplaceUnitTest ex
      */
     public function testIconStates()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $this->click($this->find('Simple'));
 
         $this->assertTrue($this->topToolbarButtonExists('searchReplace'), 'Toolbar button icon is not correct');
@@ -48,7 +46,6 @@ class Viper_Tests_ViperSearchAndReplaceToolbarPlugin_SearchAndReplaceUnitTest ex
      */
     public function testSearchForContentAndEditingSearch()
     {
-        $dir = dirname(__FILE__).'/Images/';
         $this->click($this->find('Simple'));
 
         $this->clickTopToolbarButton('searchReplace');
