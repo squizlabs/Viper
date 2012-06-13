@@ -27,9 +27,6 @@ class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractViperUnitTe
         $this->clickInlineToolbarButton('H5', NULL, TRUE);
         $this->assertHTMLMatch('<h5>%1% %2%</h5><p>%3% xtn dolor</p><p>sit amet <strong>%4%</strong></p><p>%5% long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar.</p>');
 
-        $this->clickInlineToolbarButton('H6', NULL, TRUE);
-        $this->assertHTMLMatch('<h6>%1% %2%</h6><p>%3% xtn dolor</p><p>sit amet <strong>%4%</strong></p><p>%5% long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar.</p>');
-
         $this->clickInlineToolbarButton('H1', NULL, TRUE);
         $this->assertHTMLMatch('<h1>%1% %2%</h1><p>%3% xtn dolor</p><p>sit amet <strong>%4%</strong></p><p>%5% long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar.</p>');
 
@@ -77,9 +74,9 @@ class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractViperUnitTe
         $this->assertTrue($this->inlineToolbarButtonExists('headings'), 'Headings icon is active in the toolbar');
 
         $this->clickInlineToolbarButton('headings');
-        $this->clickInlineToolbarButton('H2', NULL, TRUE);
+        $this->clickInlineToolbarButton('H3', NULL, TRUE);
 
-        $this->assertHTMLMatch('<h1>%1% %2%</h1><h2>%3% xtn dolor</h2><p>sit amet <strong>%4%</strong></p><p>%5% long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar.</p>');
+        $this->assertHTMLMatch('<h1>%1% %2%</h1><h3>%3% xtn dolor</h3><p>sit amet <strong>%4%</strong></p><p>%5% long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar.</p>');
 
         $this->assertTrue($this->inlineToolbarButtonExists('headings', 'active'), 'Headings icon is not active in the inline toolbar');
         $this->assertTrue($this->inlineToolbarButtonExists('H2', NULL, TRUE), 'H2 icon is not active in the inline toolbar');
@@ -121,13 +118,13 @@ class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractViperUnitTe
         $this->selectKeyword(6);
         $this->selectInlineToolbarLineageItem(0);
         $this->clickInlineToolbarButton('headings');
-        $this->clickInlineToolbarButton('H6', NULL, TRUE);
+        $this->clickInlineToolbarButton('H3', NULL, TRUE);
         $this->selectKeyword(6);
         $this->keyDown('Key.RIGHT');
         $this->keyDown('Key.ENTER');
         $this->type('Another new line of content');
 
-        $this->assertHTMLMatch('<h1>%1% %2%</h1><h6>New line of content %6%</h6><p>Another new line of content</p><p>%3% xtn dolor</p><p>sit amet <strong>%4%</strong></p><p>%5% long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar.</p>');
+        $this->assertHTMLMatch('<h1>%1% %2%</h1><h3>New line of content %6%</h3><p>Another new line of content</p><p>%3% xtn dolor</p><p>sit amet <strong>%4%</strong></p><p>%5% long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar.</p>');
 
     }//end testApplyingHeadingsToNewContent()
 

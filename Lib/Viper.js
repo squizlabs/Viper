@@ -445,16 +445,16 @@ Viper.prototype = {
      {
         if (enabled === true && this.enabled === false) {
             this._addEvents();
+            this.enabled = true;
+            this.fireCallbacks('Viper:enabled');
+            this.element.setAttribute('contentEditable', true);
+            dfx.setStyle(this.element, 'outline', 'none');
+
             var range = this.getCurrentRange();
             var editableChild = range._getFirstSelectableChild(this.element);
             if (editableChild) {
                 this.setRange(editableChild, 0);
             }
-
-            this.enabled = true;
-            this.fireCallbacks('Viper:enabled');
-            this.element.setAttribute('contentEditable', true);
-            dfx.setStyle(this.element, 'outline', 'none');
         } else if (enabled === false && this.enabled === true) {
             // Back to final mode.
             ViperChangeTracker.activateFinalMode();
@@ -3871,8 +3871,10 @@ Viper.prototype = {
 
         var range = this.getCurrentRange();
 
-        range.setStart(elem, pos);
-        range.collapse(true);
+        range.setEnd(elem, pos);
+        range.collapse(false);
+        ViperSelection.addRange(range);
+
         return range;
 
     },

@@ -332,16 +332,16 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
     {
 
         $this->click($this->findKeyword(1));
-        $this->assertFalse($this->topToolbarButtonExists('headings', 'disabled'), 'Heading icon should be disabled');
-        $this->assertFalse($this->topToolbarButtonExists('formats', 'disabled'), 'Formats icon should be disabled');
+        $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'), 'Heading icon should be disabled');
+        $this->assertTrue($this->topToolbarButtonExists('formats', 'disabled'), 'Formats icon should be disabled');
 
         $this->selectKeyword(1);
-        $this->assertFalse($this->topToolbarButtonExists('headings', 'disabled'), 'Heading icon should be disabled');
-        $this->assertFalse($this->topToolbarButtonExists('formats', 'disabled'), 'Formats icon should be disabled');
+        $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'), 'Heading icon should be disabled');
+        $this->assertTrue($this->topToolbarButtonExists('formats', 'disabled'), 'Formats icon should be disabled');
 
         $this->selectInlineToolbarLineageItem(1);
-        $this->assertFalse($this->topToolbarButtonExists('headings', 'disabled'), 'Heading icon should be disabled');
-        $this->assertFalse($this->topToolbarButtonExists('formats', 'disabled'), 'Formats icon should be disabled');
+        $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'), 'Heading icon should be disabled');
+        $this->assertTrue($this->topToolbarButtonExists('formats', 'disabled'), 'Formats icon should be disabled');
 
     }//end testHeadingAndFormatsIsDisabled()
 
