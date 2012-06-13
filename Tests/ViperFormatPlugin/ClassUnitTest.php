@@ -128,6 +128,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p>Test %5%</p><p>Squiz <span class="test">%6%</span> is %7%</p><p><em>The</em> %8% %9% foxxx</p><p><strong>%10%</strong> %11% the lazy dog</p>');
 
         $this->selectKeyword(6);
+        sleep(1);
         $this->clickInlineToolbarButton('cssClass', 'active');
         $this->clearFieldValue('Class');
         $this->clickInlineToolbarButton('Update Changes', NULL, TRUE);
@@ -691,7 +692,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->clickInlineToolbarButton('cssClass');
         $this->clickInlineToolbarButton('italic', 'active');
 
-        $viperBookmarkElements = $this->execJS('dfx.getClass("viperBookmark").length');
+        $viperBookmarkElements = $this->execJS('window.opener.dfx.getClass("viperBookmark").length');
         $this->assertEquals(0, $viperBookmarkElements, 'There should be no viper bookmark elements');
 
         $this->assertHTMLMatch('<p>%1% <strong>%2%</strong> %3%</p><p class="test">sit amet <strong>%4%</strong></p><p>Test %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><em>The</em> %8% %9% foxxx</p><p><strong>%10%</strong> %11% the lazy dog</p>');
@@ -713,6 +714,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->type('test');
         $this->keyDown('Key.ENTER');
         $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>LOREM XuT</p><p><img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="" width="369" height="167" class="test" /></p><p>LABS is ORSM</p>');
+        $this->clickInlineToolbarButton('cssClass', 'selected');
 
         $this->assertTrue($this->inlineToolbarButtonExists('cssClass', 'active'), 'Class icon in VITP should not be active.');
 

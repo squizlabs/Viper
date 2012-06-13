@@ -13,12 +13,12 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractViperUnitTest
      */
     public function testTextSelectionNoOptions()
     {
-        $this->selectKeyword(1);
+        $this->selectKeyword(2);
 
         $this->assertFalse($this->inlineToolbarButtonExists('headings'), 'VITP Heading icon should not be available for text selection');
         $this->assertFalse($this->inlineToolbarButtonExists('formats'), 'VITP format icons should not be available for text selection');
 
-        $this->selectKeyword('2');
+        $this->selectKeyword('1');
         $this->assertFalse($this->inlineToolbarButtonExists('headings'), 'VITP Heading icon should not be available for text selection');
         $this->assertFalse($this->inlineToolbarButtonExists('formats'), 'VITP format icons should not be available for text selection');
 
