@@ -83,8 +83,8 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
         $dir = dirname(__FILE__).'/Images/';
 
         $this->selectText('Lorem');
-        $this->clickInlineToolbarButton(dirname(dirname(__FILE__)).'/ViperFormatPlugin/Images/toolbarIcon_toggle_formats_highlighted.png');
-        $this->clickInlineToolbarButton(dirname(dirname(__FILE__)).'/ViperFormatPlugin/Images/toolbarIcon_pre.png');
+        $this->clickTopToolbarButton('formats-p', 'active');
+        $this->clickTopToolbarButton('PRE', NULL, TRUE);
 
         $this->type('Lorum this is more content');
         $this->keyDown('Key.ENTER');

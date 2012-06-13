@@ -38,7 +38,7 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractViperUnitTest
         $this->clickInlineToolbarButton('formats-p', 'active');
         $this->clickInlineToolbarButton('PRE', NULL, TRUE);
         sleep(1);
-        $this->assertTrue($this->inlineToolbarButtonExists('formats-pre', 'active'), 'Toolbar icon not found: toolbarIcon_pre_active.png');
+        $this->assertTrue($this->inlineToolbarButtonExists('formats-pre', 'active'), 'Active pre icon not found');
         $this->assertHTMLMatch('<h1>Heading One</h1><pre>%1% xtn dolor</pre><p>sit %2% <strong>%3%</strong></p>');
 
         $this->click($this->findKeyword(2));
@@ -65,7 +65,7 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractViperUnitTest
         $this->clickInlineToolbarButton('formats-div', 'active');
         $this->clickInlineToolbarButton('P', NULL, TRUE);
         sleep(1);
-        $this->assertTrue($this->inlineToolbarButtonExists('formats-p', 'active'), 'Toolbar icon not found: toolbarIcon_p_active.png');
+        $this->assertTrue($this->inlineToolbarButtonExists('formats-p', 'active'), 'Active P icon  not found');
         $this->assertHTMLMatch('<h1>Heading One</h1><p>%1% xtn dolor</p><p>sit %2% <strong>%3%</strong></p>');
 
 
@@ -85,22 +85,22 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractViperUnitTest
         $this->clickTopToolbarButton('formats-p', 'active');
         $this->clickTopToolbarButton('PRE', NULL, TRUE);
         sleep(1);
-        $this->assertTrue($this->topToolbarButtonExists('formats-pre', 'active'), 'Toolbar icon not found: toolbarIcon_pre_active.png');
+        $this->assertTrue($this->topToolbarButtonExists('formats-pre', 'active'), 'Active PRE icon  not found');
         $this->assertHTMLMatch('<h1>Heading One</h1><pre>%1% xtn dolor</pre><p>sit %2% <strong>%3%</strong></p>');
 
         $this->clickTopToolbarButton('Quote', NULL, TRUE);
         sleep(1);
-        $this->assertTrue($this->topToolbarButtonExists('formats-blockquote', 'active'), 'Toolbar icon not found: toolbarIcon_blockquote_active.png');
+        $this->assertTrue($this->topToolbarButtonExists('formats-blockquote', 'active'), 'Active Quote icon not found');
         $this->assertHTMLMatch('<h1>Heading One</h1><blockquote>%1% xtn dolor</blockquote><p>sit %2% <strong>%3%</strong></p>');
 
         $this->clickTopToolbarButton('DIV', NULL, TRUE);
         sleep(1);
-        $this->assertTrue($this->topToolbarButtonExists('DIV', NULL, TRUE), 'Toolbar icon not found: toolbarIcon_div_active.png');
+        $this->assertTrue($this->topToolbarButtonExists('DIV', NULL, TRUE), 'Active DIV icon not found');
         $this->assertHTMLMatch('<h1>Heading One</h1><div>%1% xtn dolor</div><p>sit %2% <strong>%3%</strong></p>');
 
         $this->clickTopToolbarButton('P', NULL, TRUE);
         sleep(1);
-        $this->assertTrue($this->topToolbarButtonExists('P', NULL, TRUE), 'Toolbar icon not found: toolbarIcon_p_active.png');
+        $this->assertTrue($this->topToolbarButtonExists('P', NULL, TRUE), 'Active P icon not found');
         $this->assertHTMLMatch('<h1>Heading One</h1><p>%1% xtn dolor</p><p>sit %2% <strong>%3%</strong></p>');
 
     }//end testSwitchingBetweenFormatsUsingTheTopToolbar()
