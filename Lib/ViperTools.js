@@ -270,6 +270,10 @@ ViperTools.prototype = {
     enableButton: function(buttonid)
     {
         var button = this.getItem(buttonid).element;
+        if (dfx.hasClass(button, 'Viper-disabled') !== true) {
+            return;
+        }
+
         button.setAttribute('title', button.getAttribute('title').replace(' [Not available]', ''));
         dfx.removeClass(button, 'Viper-disabled');
 
@@ -449,6 +453,8 @@ ViperTools.prototype = {
                 }
             }
 
+            dfx.showElement(actionIcon);
+
             dfx.removeClass(textBox, 'Viper-actionClear');
             dfx.removeClass(textBox, 'Viper-actionRevert');
 
@@ -469,7 +475,8 @@ ViperTools.prototype = {
                 dfx.removeClass(textBox, 'Viper-required');
             } else {
                 if (isTextArea !== true) {
-                    dfx.remove(actionIcon);
+                    dfx.hideElement(actionIcon);
+                   // dfx.remove(actionIcon);
                 }
 
                 if (required === true) {
@@ -519,6 +526,8 @@ ViperTools.prototype = {
                     actionIcon = actionIcon[0];
                 }
 
+                dfx.showElement(actionIcon);
+
                 dfx.removeClass(textBox, 'Viper-actionClear');
                 dfx.removeClass(textBox, 'Viper-actionRevert');
 
@@ -532,7 +541,8 @@ ViperTools.prototype = {
                     dfx.addClass(textBox, 'Viper-actionClear');
                     dfx.removeClass(textBox, 'Viper-required');
                 } else {
-                    dfx.remove(actionIcon);
+                    dfx.hideElement(actionIcon);
+                    //dfx.remove(actionIcon);
                     if (required === true) {
                         dfx.addClass(textBox, 'Viper-required');
                     }
