@@ -115,7 +115,7 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractViperUnitTest
     {
         $this->selectKeyword(2, 3);
 
-        // Check that headings, formats, class and anchor don't appear in inline toolbar
+        // Check that headings, formats doesn't appear in the inline but class and anchor do
         $this->assertFalse($this->inlineToolbarButtonExists('headings'), 'VITP Heading icon should not be available for text selection');
         $this->assertFalse($this->inlineToolbarButtonExists('formats-p', 'active'), 'VITP format icons should not be available for text selection');
         $this->assertTrue($this->inlineToolbarButtonExists('cssClass'), 'Class icon in VITP should not be active.');
