@@ -144,6 +144,10 @@ abstract class AbstractViperTableEditorPluginUnitTest extends AbstractViperUnitT
         $this->mouseMove($region);
         usleep(100);
 
+        if ($type === 'table') {
+            $type = '';
+        }
+
         // Check the highlight for row.
         $this->clickButton('table'.ucFirst($type));
 
@@ -208,6 +212,29 @@ abstract class AbstractViperTableEditorPluginUnitTest extends AbstractViperUnitT
         $this->click($region);
 
     }//end toggleCellHeading()
+
+
+    /**
+     * Removes the specified table's headers and ids.
+     *
+     * @param integer $tableIndex The table selector index.
+     * @param boolean $removeid   If TRUE then the table and cell ids will be removed.
+     *
+     * @return void
+     */
+    protected function removeTableHeaders($tableIndex=0, $removeid=TRUE)
+    {
+        $js = 'rmTableHeaders('.$tableIndex.',';
+
+        if ($removeid === TRUE) {
+            $js .= ' true);';
+        } else {
+            $js .= ' false);';
+        }
+
+        $this->execJS($js);
+
+    }//end removeTableHeaders()
 
 
     /**
