@@ -172,6 +172,7 @@ ViperHistoryManager.prototype = {
 
         // Fire nodesChanged event.
         this._ignoreAdd = true;
+        this.viper._viperRange = null;
         this.viper.fireNodesChanged([this.viper.getViperElement()]);
         this.viper.fireCallbacks('ViperHistoryManager:undo');
         this.viper.fireSelectionChanged();
@@ -204,6 +205,7 @@ ViperHistoryManager.prototype = {
 
         // Fire nodesChanged event.
         this._ignoreAdd = true;
+        this.viper._viperRange = null;
         this.viper.fireNodesChanged([this.viper.getViperElement()]);
         this.viper.fireCallbacks('ViperHistoryManager:redo');
         this.viper.fireSelectionChanged();
@@ -261,8 +263,10 @@ ViperHistoryManager.prototype = {
             var startContainer = dfx.getNode(task.range.startContainer);
             var endContainer   = dfx.getNode(task.range.endContainer);
             var range = this.viper.getCurrentRange();
+            range.setEnd(endContainer, task.range.endOffset);
             range.setStart(startContainer, task.range.startOffset);
             range.setEnd(endContainer, task.range.endOffset);
+
             if (task.range.collapsed === true) {
                 range.collapse(true);
             }
