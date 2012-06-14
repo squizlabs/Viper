@@ -13,9 +13,9 @@ class Viper_Tests_ViperTableEditorPlugin_MergeAndSplitUnitTest extends AbstractV
      */
     public function testTableIdWhenMergingSplitingAndDeletingCellsInASingleRow()
     {
-        $textLoc = $this->find('IPSUM');
+        $textLoc = $this->findKeyword(1);
 
-        $this->selectText('dolor');
+        $this->selectKeyword(3);
         $this->keyDown('Key.RIGHT');
         $this->keyDown('Key.ENTER');
 
@@ -23,22 +23,22 @@ class Viper_Tests_ViperTableEditorPlugin_MergeAndSplitUnitTest extends AbstractV
         sleep(2);
         $this->click($textLoc);
 
-        $this->assertHTMLMatch('<p>Lorem IPSUM dolor</p><p>&nbsp;</p><table style="width: 100%;" id="test" border="1"><tbody><tr><th id="testr1c1">&nbsp;</th><th id="testr1c2">&nbsp;</th><th id="testr1c3">&nbsp;</th><th id="testr1c4">&nbsp;</th><th id="testr1c5">&nbsp;</th><th id="testr1c6">&nbsp;</th></tr><tr><th id="testr2c1">&nbsp;</th><td headers="testr1c2 testr2c1">&nbsp;</td><td headers="testr1c3 testr2c1">&nbsp;</td><td headers="testr1c4 testr2c1">&nbsp;</td><td headers="testr1c5 testr2c1">&nbsp;</td><td headers="testr1c6 testr2c1">&nbsp;</td></tr><tr><th id="testr3c1">&nbsp;</th><td headers="testr1c2 testr3c1">&nbsp;</td><td headers="testr1c3 testr3c1">&nbsp;</td><td headers="testr1c4 testr3c1">&nbsp;</td><td headers="testr1c5 testr3c1">&nbsp;</td><td headers="testr1c6 testr3c1">&nbsp;</td></tr></tbody></table><p>sit amet <strong>consectetur</strong></p>');
+        $this->assertHTMLMatch('<p>%2% %1% %3%</p><p>&nbsp;</p><table style="width: 100%;" id="test" border="1"><tbody><tr><th id="testr1c1">&nbsp;</th><th id="testr1c2">&nbsp;</th><th id="testr1c3">&nbsp;</th><th id="testr1c4">&nbsp;</th><th id="testr1c5">&nbsp;</th><th id="testr1c6">&nbsp;</th></tr><tr><th id="testr2c1">&nbsp;</th><td headers="testr1c2 testr2c1">&nbsp;</td><td headers="testr1c3 testr2c1">&nbsp;</td><td headers="testr1c4 testr2c1">&nbsp;</td><td headers="testr1c5 testr2c1">&nbsp;</td><td headers="testr1c6 testr2c1">&nbsp;</td></tr><tr><th id="testr3c1">&nbsp;</th><td headers="testr1c2 testr3c1">&nbsp;</td><td headers="testr1c3 testr3c1">&nbsp;</td><td headers="testr1c4 testr3c1">&nbsp;</td><td headers="testr1c5 testr3c1">&nbsp;</td><td headers="testr1c6 testr3c1">&nbsp;</td></tr></tbody></table><p>sit amet <strong>consectetur</strong></p>');
 
         $this->showTools(8, 'cell');
-        $this->click($this->find($this->getImg('icon_mergeSplit.png'), NULL, 0.83));
-        $this->clickInlineToolbarButton($this->getImg('icon_mergeRight.png'));
-        $this->clickInlineToolbarButton($this->getImg('icon_mergeRight.png'));
-        $this->clickInlineToolbarButton($this->getImg('icon_mergeRight.png'));
+        $this->clickButton('splitMerge');
+        $this->clickButton('mergeRight');
+        $this->clickButton('mergeRight');
+        $this->clickButton('mergeRight');
 
-        $this->assertHTMLMatch('<p>Lorem IPSUM dolor</p><p>&nbsp;</p><table style="width: 100%;" id="test" border="1"><tbody><tr><th id="testr1c1">&nbsp;</th><th id="testr1c2">&nbsp;</th><th id="testr1c3">&nbsp;</th><th id="testr1c4">&nbsp;</th><th id="testr1c5">&nbsp;</th><th id="testr1c6">&nbsp;</th></tr><tr><th id="testr2c1">&nbsp;</th><td headers="testr1c2 testr2c1">&nbsp;</td><td colspan="4" headers="testr1c3 testr1c4 testr1c5 testr1c6 testr2c1">&nbsp;&nbsp;&nbsp;&nbsp;</td></tr><tr><th id="testr3c1">&nbsp;</th><td headers="testr1c2 testr3c1">&nbsp;</td><td headers="testr1c3 testr3c1">&nbsp;</td><td headers="testr1c4 testr3c1">&nbsp;</td><td headers="testr1c5 testr3c1">&nbsp;</td><td headers="testr1c6 testr3c1">&nbsp;</td></tr></tbody></table><p>sit amet <strong>consectetur</strong></p>');
+        $this->assertHTMLMatch('<p>%2% %1% %3%</p><p>&nbsp;</p><table style="width: 100%;" id="test" border="1"><tbody><tr><th id="testr1c1">&nbsp;</th><th id="testr1c2">&nbsp;</th><th id="testr1c3">&nbsp;</th><th id="testr1c4">&nbsp;</th><th id="testr1c5">&nbsp;</th><th id="testr1c6">&nbsp;</th></tr><tr><th id="testr2c1">&nbsp;</th><td headers="testr1c2 testr2c1">&nbsp;</td><td colspan="4" headers="testr1c3 testr1c4 testr1c5 testr1c6 testr2c1">&nbsp;&nbsp;&nbsp;&nbsp;</td></tr><tr><th id="testr3c1">&nbsp;</th><td headers="testr1c2 testr3c1">&nbsp;</td><td headers="testr1c3 testr3c1">&nbsp;</td><td headers="testr1c4 testr3c1">&nbsp;</td><td headers="testr1c5 testr3c1">&nbsp;</td><td headers="testr1c6 testr3c1">&nbsp;</td></tr></tbody></table><p>sit amet <strong>consectetur</strong></p>');
 
-        $this->click($this->find($this->getImg('icon_splitVert.png'), NULL, 0.83));
-        $this->assertHTMLMatch('<p>Lorem IPSUM dolor</p><p>&nbsp;</p><table style="width: 100%;" id="test" border="1"><tbody><tr><th id="testr1c1">&nbsp;</th><th id="testr1c2">&nbsp;</th><th id="testr1c3">&nbsp;</th><th id="testr1c4">&nbsp;</th><th id="testr1c5">&nbsp;</th><th id="testr1c6">&nbsp;</th></tr><tr><th id="testr2c1">&nbsp;</th><td headers="testr1c2 testr2c1">&nbsp;</td><td colspan="3" headers="testr1c3 testr1c4 testr1c5 testr2c1">&nbsp;&nbsp;&nbsp;&nbsp;</td><td headers="testr1c6 testr2c1">&nbsp;</td></tr><tr><th id="testr3c1">&nbsp;</th><td headers="testr1c2 testr3c1">&nbsp;</td><td headers="testr1c3 testr3c1">&nbsp;</td><td headers="testr1c4 testr3c1">&nbsp;</td><td headers="testr1c5 testr3c1">&nbsp;</td><td headers="testr1c6 testr3c1">&nbsp;</td></tr></tbody></table><p>sit amet <strong>consectetur</strong></p>');
+        $this->clickButton('splitVert');
+        $this->assertHTMLMatch('<p>%2% %1% %3%</p><p>&nbsp;</p><table style="width: 100%;" id="test" border="1"><tbody><tr><th id="testr1c1">&nbsp;</th><th id="testr1c2">&nbsp;</th><th id="testr1c3">&nbsp;</th><th id="testr1c4">&nbsp;</th><th id="testr1c5">&nbsp;</th><th id="testr1c6">&nbsp;</th></tr><tr><th id="testr2c1">&nbsp;</th><td headers="testr1c2 testr2c1">&nbsp;</td><td colspan="3" headers="testr1c3 testr1c4 testr1c5 testr2c1">&nbsp;&nbsp;&nbsp;&nbsp;</td><td headers="testr1c6 testr2c1">&nbsp;</td></tr><tr><th id="testr3c1">&nbsp;</th><td headers="testr1c2 testr3c1">&nbsp;</td><td headers="testr1c3 testr3c1">&nbsp;</td><td headers="testr1c4 testr3c1">&nbsp;</td><td headers="testr1c5 testr3c1">&nbsp;</td><td headers="testr1c6 testr3c1">&nbsp;</td></tr></tbody></table><p>sit amet <strong>consectetur</strong></p>');
 
         $this->showTools(4, 'col');
-        $this->click($this->find($this->getImg('icon_trash.png'), NULL, 0.83));
-        $this->assertHTMLMatch('<p>Lorem IPSUM dolor</p><p>&nbsp;</p><table style="width: 100%;" id="test" border="1"><tbody><tr><th id="testr1c1">&nbsp;</th><th id="testr1c2">&nbsp;</th><th id="testr1c3">&nbsp;</th><th id="testr1c4">&nbsp;</th><th id="testr1c6">&nbsp;</th></tr><tr><th id="testr2c1">&nbsp;</th><td headers="testr1c2 testr2c1">&nbsp;</td><td colspan="2" headers="testr1c3 testr1c4 testr2c1">&nbsp;&nbsp;&nbsp;&nbsp;</td><td headers="testr1c6 testr2c1">&nbsp;</td></tr><tr><th id="testr3c1">&nbsp;</th><td headers="testr1c2 testr3c1">&nbsp;</td><td headers="testr1c3 testr3c1">&nbsp;</td><td headers="testr1c4 testr3c1">&nbsp;</td><td headers="testr1c6 testr3c1">&nbsp;</td></tr></tbody></table><p>sit amet <strong>consectetur</strong></p>');
+        $this->clickButton('delete');
+        $this->assertHTMLMatch('<p>%2% %1% %3%</p><p>&nbsp;</p><table style="width: 100%;" id="test" border="1"><tbody><tr><th id="testr1c1">&nbsp;</th><th id="testr1c2">&nbsp;</th><th id="testr1c3">&nbsp;</th><th id="testr1c4">&nbsp;</th><th id="testr1c6">&nbsp;</th></tr><tr><th id="testr2c1">&nbsp;</th><td headers="testr1c2 testr2c1">&nbsp;</td><td colspan="2" headers="testr1c3 testr1c4 testr2c1">&nbsp;&nbsp;&nbsp;&nbsp;</td><td headers="testr1c6 testr2c1">&nbsp;</td></tr><tr><th id="testr3c1">&nbsp;</th><td headers="testr1c2 testr3c1">&nbsp;</td><td headers="testr1c3 testr3c1">&nbsp;</td><td headers="testr1c4 testr3c1">&nbsp;</td><td headers="testr1c6 testr3c1">&nbsp;</td></tr></tbody></table><p>sit amet <strong>consectetur</strong></p>');
 
 
     }//end testTableIdWhenMergingSplitingAndDeletingCellsInASingleRow()
@@ -51,9 +51,9 @@ class Viper_Tests_ViperTableEditorPlugin_MergeAndSplitUnitTest extends AbstractV
      */
     public function testTableIdWhenMergingCellsThenSplittingVertThenHorz()
     {
-        $textLoc = $this->find('IPSUM');
+        $textLoc = $this->findKeyword(1);
 
-        $this->selectText('dolor');
+        $this->selectKeyword(3);
         $this->keyDown('Key.RIGHT');
         $this->keyDown('Key.ENTER');
 
@@ -61,19 +61,19 @@ class Viper_Tests_ViperTableEditorPlugin_MergeAndSplitUnitTest extends AbstractV
         sleep(2);
         $this->click($textLoc);
 
-        $this->assertHTMLMatch('<p>Lorem IPSUM dolor</p><p>&nbsp;</p><table style="width: 100%;" id="test" border="1"><tbody><tr><th id="testr1c1">&nbsp;</th><th id="testr1c2">&nbsp;</th><th id="testr1c3">&nbsp;</th><th id="testr1c4">&nbsp;</th></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>sit amet <strong>consectetur</strong></p>');
+        $this->assertHTMLMatch('<p>%2% %1% %3%</p><p>&nbsp;</p><table style="width: 100%;" id="test" border="1"><tbody><tr><th id="testr1c1">&nbsp;</th><th id="testr1c2">&nbsp;</th><th id="testr1c3">&nbsp;</th><th id="testr1c4">&nbsp;</th></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>sit amet <strong>consectetur</strong></p>');
 
         $this->showTools(1, 'cell');
-        $this->click($this->find($this->getImg('icon_mergeSplit.png'), NULL, 0.83));
-        $this->clickInlineToolbarButton($this->getImg('icon_mergeRight.png'));
-        $this->clickInlineToolbarButton($this->getImg('icon_mergeDown.png'));
-        $this->clickInlineToolbarButton($this->getImg('icon_mergeDown.png'));
-        $this->assertHTMLMatch('<p>Lorem IPSUM dolor</p><p>&nbsp;</p><table style="width: 100%;" id="test" border="1"><tbody><tr><th id="testr1c1">&nbsp;</th><th id="testr1c2" colspan="2" rowspan="3">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th><th id="testr1c4">&nbsp;</th></tr><tr><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>sit amet <strong>consectetur</strong></p>');
+        $this->clickButton('splitMerge');
+        $this->clickButton('mergeRight');
+        $this->clickButton('mergeDown');
+        $this->clickButton('mergeDown');
+        $this->assertHTMLMatch('<p>%2% %1% %3%</p><p>&nbsp;</p><table style="width: 100%;" id="test" border="1"><tbody><tr><th id="testr1c1">&nbsp;</th><th id="testr1c2" colspan="2" rowspan="3">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th><th id="testr1c4">&nbsp;</th></tr><tr><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>sit amet <strong>consectetur</strong></p>');
 
-        $this->click($this->find($this->getImg('icon_splitVert.png'), NULL, 0.83));
-        $this->click($this->find($this->getImg('icon_splitHoriz.png'), NULL, 0.83));
-        $this->click($this->find($this->getImg('icon_splitHoriz.png'), NULL, 0.83));
-        $this->assertHTMLMatch('<p>Lorem IPSUM dolor</p><p>&nbsp;</p><table style="width: 100%;" id="test" border="1"><tbody><tr><th id="testr1c1">&nbsp;</th><th id="testr1c2" rowspan="2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th><th rowspan="3" id="testr1c3">&nbsp;</th><th id="testr1c4">&nbsp;</th></tr><tr><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><th id="testr3c2">&nbsp;</th><td>&nbsp;</td></tr></tbody></table><p>sit amet <strong>consectetur</strong></p>');
+        $this->clickButton('splitVert');
+        $this->clickButton('splitHoriz');
+        $this->clickButton('splitHoriz');
+        $this->assertHTMLMatch('<p>%2% %1% %3%</p><p>&nbsp;</p><table style="width: 100%;" id="test" border="1"><tbody><tr><th id="testr1c1">&nbsp;</th><th id="testr1c2" rowspan="2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th><th rowspan="3" id="testr1c3">&nbsp;</th><th id="testr1c4">&nbsp;</th></tr><tr><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><th id="testr3c2">&nbsp;</th><td>&nbsp;</td></tr></tbody></table><p>sit amet <strong>consectetur</strong></p>');
 
 
     }//end testTableIdWhenMergingCellsThenSplittingVertThenHorz()
@@ -86,9 +86,9 @@ class Viper_Tests_ViperTableEditorPlugin_MergeAndSplitUnitTest extends AbstractV
      */
     public function testTableIdWhenMergingCellsThenSplittingHorzThenVert()
     {
-        $textLoc = $this->find('IPSUM');
+        $textLoc = $this->findKeyword(1);
 
-        $this->selectText('dolor');
+        $this->selectKeyword(3);
         $this->keyDown('Key.RIGHT');
         $this->keyDown('Key.ENTER');
 
@@ -96,22 +96,22 @@ class Viper_Tests_ViperTableEditorPlugin_MergeAndSplitUnitTest extends AbstractV
         sleep(2);
         $this->click($textLoc);
 
-        $this->assertHTMLMatch('<p>Lorem IPSUM dolor</p><p>&nbsp;</p><table style="width: 100%;" id="test" border="1"><tbody><tr><th id="testr1c1">&nbsp;</th><th id="testr1c2">&nbsp;</th><th id="testr1c3">&nbsp;</th><th id="testr1c4">&nbsp;</th></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>sit amet <strong>consectetur</strong></p>');
+        $this->assertHTMLMatch('<p>%2% %1% %3%</p><p>&nbsp;</p><table style="width: 100%;" id="test" border="1"><tbody><tr><th id="testr1c1">&nbsp;</th><th id="testr1c2">&nbsp;</th><th id="testr1c3">&nbsp;</th><th id="testr1c4">&nbsp;</th></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>sit amet <strong>consectetur</strong></p>');
 
         $this->showTools(1, 'cell');
-        $this->click($this->find($this->getImg('icon_mergeSplit.png'), NULL, 0.83));
-        $this->clickInlineToolbarButton($this->getImg('icon_mergeRight.png'));
-        $this->clickInlineToolbarButton($this->getImg('icon_mergeDown.png'));
-        $this->clickInlineToolbarButton($this->getImg('icon_mergeDown.png'));
-        $this->assertHTMLMatch('<p>Lorem IPSUM dolor</p><p>&nbsp;</p><table style="width: 100%;" id="test" border="1"><tbody><tr><th id="testr1c1">&nbsp;</th><th id="testr1c2" colspan="2" rowspan="3">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th><th id="testr1c4">&nbsp;</th></tr><tr><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>sit amet <strong>consectetur</strong></p>');
+        $this->clickButton('splitMerge');
+        $this->clickButton('mergeRight');
+        $this->clickButton('mergeDown');
+        $this->clickButton('mergeDown');
+        $this->assertHTMLMatch('<p>%2% %1% %3%</p><p>&nbsp;</p><table style="width: 100%;" id="test" border="1"><tbody><tr><th id="testr1c1">&nbsp;</th><th id="testr1c2" colspan="2" rowspan="3">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th><th id="testr1c4">&nbsp;</th></tr><tr><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>sit amet <strong>consectetur</strong></p>');
 
-        $this->click($this->find($this->getImg('icon_splitHoriz.png'), NULL, 0.83));
+        $this->clickButton('splitHoriz');
         sleep(1);
-        $this->click($this->find($this->getImg('icon_splitHoriz.png'), NULL, 0.83));
+        $this->clickButton('splitHoriz');
         sleep(1);
-        $this->click($this->find($this->getImg('icon_splitVert.png'), NULL, 0.83));
+        $this->clickButton('splitVert');
 
-        $this->assertHTMLMatch('<p>Lorem IPSUM dolor</p><p>&nbsp;</p><table style="width: 100%;" id="test" border="1"><tbody><tr><th id="testr1c1">&nbsp;</th><th id="testr1c2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th><th id="testr1c3">&nbsp;</th><th id="testr1c4">&nbsp;</th></tr><tr><td>&nbsp;</td><th colspan="2" id="testr2c2">&nbsp;</th><td>&nbsp;</td></tr><tr><td>&nbsp;</td><th colspan="2" id="testr3c2">&nbsp;</th><td>&nbsp;</td></tr></tbody></table><p>sit amet <strong>consectetur</strong></p>');
+        $this->assertHTMLMatch('<p>%2% %1% %3%</p><p>&nbsp;</p><table style="width: 100%;" id="test" border="1"><tbody><tr><th id="testr1c1">&nbsp;</th><th id="testr1c2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th><th id="testr1c3">&nbsp;</th><th id="testr1c4">&nbsp;</th></tr><tr><td>&nbsp;</td><th colspan="2" id="testr2c2">&nbsp;</th><td>&nbsp;</td></tr><tr><td>&nbsp;</td><th colspan="2" id="testr3c2">&nbsp;</th><td>&nbsp;</td></tr></tbody></table><p>sit amet <strong>consectetur</strong></p>');
 
 
     }//end testTableIdWhenMergingAndSplitingCellsAcrossMultipleRowsAndColumns()
@@ -124,19 +124,17 @@ class Viper_Tests_ViperTableEditorPlugin_MergeAndSplitUnitTest extends AbstractV
      */
     public function testMergingAllColumnsAndRows()
     {
-        $dir = dirname(__FILE__).'/Images/';
-
         $this->insertTable();
         $this->showTools(0, 'cell');
-        $this->click($this->find($this->getImg('icon_mergeSplit.png'), NULL, 0.83));
-        $this->clickInlineToolbarButton($this->getImg('icon_mergeRight.png'));
-        $this->clickInlineToolbarButton($this->getImg('icon_mergeRight.png'));
-        $this->clickInlineToolbarButton($this->getImg('icon_mergeRight.png'));
-        $this->clickInlineToolbarButton($this->getImg('icon_mergeDown.png'));
-        $this->clickInlineToolbarButton($this->getImg('icon_mergeDown.png'));
+        $this->clickButton('splitMerge');
+        $this->clickButton('mergeRight');
+        $this->clickButton('mergeRight');
+        $this->clickButton('mergeRight');
+        $this->clickButton('mergeDown');
+        $this->clickButton('mergeDown');
 
-        $this->execJS('rmTableHeaders(0,true)');
-        $this->assertHTMLMatch('<p>Lorem IPSUM</p><table style="width: 100%;" border="1"><tbody><tr><th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th></tr></tbody></table><p>dolor</p><p>sit amet <strong>consectetur</strong></p>');
+        $this->removeTableHeaders();
+        $this->assertHTMLMatch('<p>%2% %1%</p><table style="width: 100%;" border="1"><tbody><tr><th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th></tr></tbody></table><p>%3%</p><p>sit amet <strong>consectetur</strong></p>');
 
     }//end testUsingTableIconInTopToolbar()
 
@@ -148,7 +146,7 @@ class Viper_Tests_ViperTableEditorPlugin_MergeAndSplitUnitTest extends AbstractV
      */
     public function testMergeSplitA()
     {
-        $this->selectText('dolor');
+        $this->selectKeyword(3);
         $this->keyDown('Key.RIGHT');
         $this->keyDown('Key.ENTER');
         $this->execJS('insTable(4, 5, 0, "test")');
@@ -156,7 +154,7 @@ class Viper_Tests_ViperTableEditorPlugin_MergeAndSplitUnitTest extends AbstractV
 
         $this->showTools(10, 'cell');
 
-        $this->click($this->find($this->getImg('icon_mergeSplit.png'), NULL, 0.83));
+        $this->clickButton('splitMerge');
 
         // Check that only the merge up, merge down and merge right icons are enabled
         $this->assertIconStatusesCorrect(
@@ -168,7 +166,7 @@ class Viper_Tests_ViperTableEditorPlugin_MergeAndSplitUnitTest extends AbstractV
             TRUE
         );
 
-        $this->clickInlineToolbarButton($this->getImg('icon_mergeRight.png'));
+        $this->clickButton('mergeRight');
 
          // Check that the split column, merge up, merge down and merge right icons are enabled.
          $this->assertIconStatusesCorrect(
@@ -180,34 +178,34 @@ class Viper_Tests_ViperTableEditorPlugin_MergeAndSplitUnitTest extends AbstractV
             TRUE
         );
 
-        $this->assertHTMLMatch('<p>Lorem IPSUM dolor</p><p>&nbsp;</p><table style="width: 100%;" id="test" border="1"><tbody><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td colspan="2">&nbsp;&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>sit amet <strong>consectetur</strong></p>');
+        $this->assertHTMLMatch('<p>%2% %1% %3%</p><p>&nbsp;</p><table style="width: 100%;" id="test" border="1"><tbody><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td colspan="2">&nbsp;&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>sit amet <strong>consectetur</strong></p>');
 
         $this->showTools(5, 'col');
-        $this->clickInlineToolbarButton($this->getImg('icon_insertColAfter.png'));
+        $this->clickInlineToolbarButton('addRight');
 
-        $this->assertHTMLMatch('<p>Lorem IPSUM dolor</p><p>&nbsp;</p><table style="width: 100%;" id="test" border="1"><tbody><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td colspan="3">&nbsp;&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>sit amet <strong>consectetur</strong></p>');
+        $this->assertHTMLMatch('<p>%2% %1% %3%</p><p>&nbsp;</p><table style="width: 100%;" id="test" border="1"><tbody><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td colspan="3">&nbsp;&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>sit amet <strong>consectetur</strong></p>');
 
         $this->showTools(7, 'col');
-        $this->clickInlineToolbarButton($this->getImg('icon_trash.png'));
+        $this->clickInlineToolbarButton('delete');
 
-        $this->assertHTMLMatch('<p>Lorem IPSUM dolor</p><p>&nbsp;</p><table style="width: 100%;" id="test" border="1"><tbody><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td colspan="2">&nbsp;&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>sit amet <strong>consectetur</strong></p>');
+        $this->assertHTMLMatch('<p>%2% %1% %3%</p><p>&nbsp;</p><table style="width: 100%;" id="test" border="1"><tbody><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td colspan="2">&nbsp;&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>sit amet <strong>consectetur</strong></p>');
 
         $this->showTools(14, 'col');
-        $this->clickInlineToolbarButton($this->getImg('icon_insertColAfter.png'));
+        $this->clickInlineToolbarButton('addRight');
 
-        $this->assertHTMLMatch('<p>Lorem IPSUM dolor</p><p>&nbsp;</p><table style="width: 100%;" id="test" border="1"><tbody><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td colspan="3">&nbsp;&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>sit amet <strong>consectetur</strong></p>');
-
-        $this->showTools(12, 'cell');
-        $this->click($this->find($this->getImg('icon_mergeSplit.png'), NULL, 0.83));
-        $this->clickInlineToolbarButton($this->getImg('icon_splitVert.png'));
-
-        $this->assertHTMLMatch('<p>Lorem IPSUM dolor</p><p>&nbsp;</p><table style="width: 100%;" id="test" border="1"><tbody><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td colspan="2">&nbsp;&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>sit amet <strong>consectetur</strong></p>');
+        $this->assertHTMLMatch('<p>%2% %1% %3%</p><p>&nbsp;</p><table style="width: 100%;" id="test" border="1"><tbody><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td colspan="3">&nbsp;&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>sit amet <strong>consectetur</strong></p>');
 
         $this->showTools(12, 'cell');
-        $this->click($this->find($this->getImg('icon_mergeSplit.png'), NULL, 0.83));
-        $this->clickInlineToolbarButton($this->getImg('icon_splitVert.png'));
+        $this->clickButton('splitMerge');
+        $this->clickInlineToolbarButton('splitVert');
 
-        $this->assertHTMLMatch('<p>Lorem IPSUM dolor</p><p>&nbsp;</p><table style="width: 100%;" id="test" border="1"><tbody><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>sit amet <strong>consectetur</strong></p>');
+        $this->assertHTMLMatch('<p>%2% %1% %3%</p><p>&nbsp;</p><table style="width: 100%;" id="test" border="1"><tbody><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td colspan="2">&nbsp;&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>sit amet <strong>consectetur</strong></p>');
+
+        $this->showTools(12, 'cell');
+        $this->clickButton('splitMerge');
+        $this->clickInlineToolbarButton('splitVert');
+
+        $this->assertHTMLMatch('<p>%2% %1% %3%</p><p>&nbsp;</p><table style="width: 100%;" id="test" border="1"><tbody><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>sit amet <strong>consectetur</strong></p>');
 
     }//end testMergeSplit()
 
@@ -219,14 +217,14 @@ class Viper_Tests_ViperTableEditorPlugin_MergeAndSplitUnitTest extends AbstractV
      */
     public function testMergeSplit2()
     {
-        $this->selectText('dolor');
+        $this->selectKeyword(3);
         $this->keyDown('Key.RIGHT');
         $this->keyDown('Key.ENTER');
         $this->execJS('insTable(4, 5, 2, "test")');
         sleep(1);
 
         $this->showTools(6, 'cell');
-        $this->click($this->find($this->getImg('icon_mergeSplit.png'), NULL, 0.83));
+        $this->clickButton('splitMerge');
 
         // Check that all merge icons are enabled.
         $this->assertIconStatusesCorrect(
@@ -238,7 +236,7 @@ class Viper_Tests_ViperTableEditorPlugin_MergeAndSplitUnitTest extends AbstractV
             TRUE
         );
 
-        $this->clickInlineToolbarButton($this->getImg('icon_mergeDown.png'));
+        $this->clickButton('mergeDown');
 
          // Check that all merge icons still are enabled.
         $this->assertIconStatusesCorrect(
@@ -261,7 +259,7 @@ class Viper_Tests_ViperTableEditorPlugin_MergeAndSplitUnitTest extends AbstractV
         sleep(1);
 
         $this->showTools(5, 'row');
-        $this->clickInlineToolbarButton($this->getImg('icon_insertRowAfter.png'));
+        $this->clickInlineToolbarButton('addBelow');
 
         $expectedAfter = array(
                           array(array(), array(), array(), array(), array()),
@@ -275,22 +273,22 @@ class Viper_Tests_ViperTableEditorPlugin_MergeAndSplitUnitTest extends AbstractV
         sleep(1);
 
         $this->showTools(5, 'row');
-        $this->clickInlineToolbarButton($this->getImg('icon_trash.png'));
+        $this->clickInlineToolbarButton('delete');
 
         $struct = $this->getTableStructure();
         $this->assertTableStructure($expected, $struct);
         sleep(1);
 
         $this->showTools(11, 'row');
-        $this->clickInlineToolbarButton($this->getImg('icon_insertRowBefore.png'));
+        $this->clickInlineToolbarButton('addAbove');
 
         $struct = $this->getTableStructure();
         $this->assertTableStructure($expectedAfter, $struct);
         sleep(1);
 
         $this->showTools(6, 'cell');
-        $this->click($this->find($this->getImg('icon_mergeSplit.png'), NULL, 0.83));
-        $this->clickInlineToolbarButton($this->getImg('icon_splitHoriz.png'));
+        $this->clickButton('splitMerge');
+        $this->clickInlineToolbarButton('splitHoriz');
         $expected = array(
                      array(array(), array(), array(), array(), array()),
                      array(array(), array('rowspan' => 2), array(), array(), array()),
@@ -303,8 +301,8 @@ class Viper_Tests_ViperTableEditorPlugin_MergeAndSplitUnitTest extends AbstractV
         sleep(1);
 
         $this->showTools(6, 'cell');
-        $this->click($this->find($this->getImg('icon_mergeSplit.png'), NULL, 0.83));
-        $this->clickInlineToolbarButton($this->getImg('icon_splitHoriz.png'));
+        $this->clickButton('splitMerge');
+        $this->clickInlineToolbarButton('splitHoriz');
         $expected = array(
                      array(array(), array(), array(), array(), array()),
                      array(array(), array(), array(), array(), array()),
@@ -325,14 +323,14 @@ class Viper_Tests_ViperTableEditorPlugin_MergeAndSplitUnitTest extends AbstractV
      */
     public function testMergeSplit3()
     {
-        $this->selectText('dolor');
+        $this->selectKeyword(3);
         $this->keyDown('Key.RIGHT');
         $this->keyDown('Key.ENTER');
         $this->execJS('insTable(2, 3, 2, "test")');
         sleep(1);
 
         $this->showTools(0, 'cell');
-        $this->click($this->find($this->getImg('icon_mergeSplit.png'), NULL, 0.83));
+        $this->clickButton('splitMerge');
 
         // Check to see that only the merge down and merge right icons are enabled.
         $this->assertIconStatusesCorrect(
@@ -344,7 +342,7 @@ class Viper_Tests_ViperTableEditorPlugin_MergeAndSplitUnitTest extends AbstractV
             TRUE
         );
 
-        $this->clickInlineToolbarButton($this->getImg('icon_mergeRight.png'));
+        $this->clickButton('mergeRight');
         $expected = array(
                      array(array('colspan' => 2), array()),
                      array(array(), array(), array()),
@@ -353,7 +351,7 @@ class Viper_Tests_ViperTableEditorPlugin_MergeAndSplitUnitTest extends AbstractV
         $this->assertTableStructure($expected, $struct);
         sleep(1);
 
-        $this->clickInlineToolbarButton($this->getImg('icon_mergeRight.png'));
+        $this->clickButton('mergeRight');
         $expected = array(
                      array(array('colspan' => 3)),
                      array(array(), array(), array()),
@@ -363,7 +361,7 @@ class Viper_Tests_ViperTableEditorPlugin_MergeAndSplitUnitTest extends AbstractV
         sleep(1);
 
         $this->showTools(0, 'col');
-        $this->clickInlineToolbarButton($this->getImg('icon_insertColAfter.png'));
+        $this->clickInlineToolbarButton('addRight');
         $expected = array(
                      array(array('colspan' => 3), array()),
                      array(array(), array(), array(), array()),
@@ -373,7 +371,7 @@ class Viper_Tests_ViperTableEditorPlugin_MergeAndSplitUnitTest extends AbstractV
         sleep(1);
 
         $this->showTools(0, 'row');
-        $this->clickInlineToolbarButton($this->getImg('icon_insertRowAfter.png'));
+        $this->clickInlineToolbarButton('addBelow');
         $expected = array(
                      array(array('colspan' => 3), array()),
                      array(array('colspan' => 3), array()),
@@ -384,12 +382,12 @@ class Viper_Tests_ViperTableEditorPlugin_MergeAndSplitUnitTest extends AbstractV
         sleep(1);
 
         // Click another cell to hide the tools incase its covert the 2nd cell.
-        $this->selectText('Lorem');
+        $this->selectKeyword(2);
 
         $this->showTools(2, 'cell');
-        $this->click($this->find($this->getImg('icon_mergeSplit.png'), NULL, 0.83));
-        $this->clickInlineToolbarButton($this->getImg('icon_splitVert.png'));
-        $this->clickInlineToolbarButton($this->getImg('icon_splitVert.png'));
+        $this->clickButton('splitMerge');
+        $this->clickInlineToolbarButton('splitVert');
+        $this->clickInlineToolbarButton('splitVert');
         $expected = array(
                      array(array('colspan' => 3), array()),
                      array(array(), array(), array(), array()),
@@ -400,7 +398,7 @@ class Viper_Tests_ViperTableEditorPlugin_MergeAndSplitUnitTest extends AbstractV
         sleep(1);
 
         $this->showTools(0, 'row');
-        $this->clickInlineToolbarButton($this->getImg('icon_insertRowBefore.png'));
+        $this->clickInlineToolbarButton('addAbove');
         $expected = array(
                      array(array('colspan' => 3), array()),
                      array(array('colspan' => 3), array()),
@@ -412,7 +410,7 @@ class Viper_Tests_ViperTableEditorPlugin_MergeAndSplitUnitTest extends AbstractV
         sleep(1);
 
         $this->showTools(2, 'cell');
-        $this->click($this->find($this->getImg('icon_mergeSplit.png'), NULL, 0.83));
+        $this->clickButton('splitMerge');
         $this->assertIconStatusesCorrect(
             TRUE,
             FALSE,
@@ -422,7 +420,7 @@ class Viper_Tests_ViperTableEditorPlugin_MergeAndSplitUnitTest extends AbstractV
             TRUE
         );
 
-        $this->clickInlineToolbarButton($this->getImg('icon_mergeUp.png'));
+        $this->clickButton('mergeUp');
         $expected = array(
                      array(array('colspan' => 3, 'rowspan' => 2), array()),
                      array(array()),
@@ -434,8 +432,8 @@ class Viper_Tests_ViperTableEditorPlugin_MergeAndSplitUnitTest extends AbstractV
         sleep(1);
 
         $this->showTools(1, 'cell');
-        $this->click($this->find($this->getImg('icon_mergeSplit.png'), NULL, 0.83));
-        $this->click($this->find($this->getImg('icon_mergeDown.png'), NULL, 0.83));
+        $this->clickButton('splitMerge');
+        $this->clickButton('mergeDown');
         $expected = array(
                      array(array('colspan' => 3), array()),
                      array(array(), array(), array(), array()),
@@ -446,8 +444,8 @@ class Viper_Tests_ViperTableEditorPlugin_MergeAndSplitUnitTest extends AbstractV
         sleep(1);
 
         $this->showTools(0, 'cell');
-        $this->click($this->find($this->getImg('icon_mergeSplit.png'), NULL, 0.83));
-        $this->click($this->find($this->getImg('icon_mergeDown.png'), NULL, 0.83));
+        $this->clickButton('splitMerge');
+        $this->clickButton('mergeDown');
         $expected = array(
                      array(array('colspan' => 3, 'rowspan' => 2), array()),
                      array(array()),
@@ -458,18 +456,18 @@ class Viper_Tests_ViperTableEditorPlugin_MergeAndSplitUnitTest extends AbstractV
         sleep(1);
 
         $this->showTools(0, 'cell');
-        $this->click($this->find($this->getImg('icon_mergeSplit.png'), NULL, 0.83));
-        $this->click($this->find($this->getImg('icon_splitHoriz.png'), NULL, 0.83));
+        $this->clickButton('splitMerge');
+        $this->clickButton('splitHoriz');
 
         usleep(200);
         $this->showTools(0, 'cell');
-        $this->click($this->find($this->getImg('icon_mergeSplit.png'), NULL, 0.83));
-        $this->click($this->find($this->getImg('icon_splitVert.png'), NULL, 0.83));
+        $this->clickButton('splitMerge');
+        $this->clickButton('splitVert');
 
         usleep(200);
         $this->showTools(0, 'cell');
-        $this->click($this->find($this->getImg('icon_mergeSplit.png'), NULL, 0.83));
-        $this->click($this->find($this->getImg('icon_splitVert.png'), NULL, 0.83));
+        $this->clickButton('splitMerge');
+        $this->clickButton('splitVert');
         $expected = array(
                      array(array(), array(), array(), array()),
                      array(array('colspan' => 3), array()),
@@ -488,7 +486,7 @@ class Viper_Tests_ViperTableEditorPlugin_MergeAndSplitUnitTest extends AbstractV
      */
     public function testMergeSplit4()
     {
-        $this->selectText('dolor');
+        $this->selectKeyword(3);
         $this->keyDown('Key.RIGHT');
         $this->keyDown('Key.ENTER');
         $this->execJS('insTable(2, 3, 2, "test")');
@@ -502,8 +500,8 @@ class Viper_Tests_ViperTableEditorPlugin_MergeAndSplitUnitTest extends AbstractV
         usleep(100);
         $this->toggleCellHeading();
 
-        $this->click($this->find($this->getImg('icon_mergeSplit.png'), NULL, 0.83));
-        $this->click($this->find($this->getImg('icon_mergeRight.png'), NULL, 0.83));
+        $this->clickButton('splitMerge');
+        $this->clickButton('mergeRight');
         $expected = array(
                      array(
                       array(
@@ -518,7 +516,7 @@ class Viper_Tests_ViperTableEditorPlugin_MergeAndSplitUnitTest extends AbstractV
         $this->assertTableStructure($expected, $struct);
         sleep(1);
 
-        $this->click($this->find($this->getImg('icon_splitVert.png'), NULL, 0.83));
+        $this->clickButton('splitVert');
         $expected = array(
                      array(
                       array(
@@ -536,8 +534,8 @@ class Viper_Tests_ViperTableEditorPlugin_MergeAndSplitUnitTest extends AbstractV
         sleep(1);
 
         $this->showTools(0, 'cell');
-        $this->click($this->find($this->getImg('icon_mergeSplit.png'), NULL, 0.83));
-        $this->click($this->find($this->getImg('icon_mergeDown.png'), NULL, 0.83));
+        $this->clickButton('splitMerge');
+        $this->clickButton('mergeDown');
         $expected = array(
                      array(
                       array(
@@ -554,8 +552,8 @@ class Viper_Tests_ViperTableEditorPlugin_MergeAndSplitUnitTest extends AbstractV
         sleep(1);
 
         $this->showTools(0, 'cell');
-        $this->click($this->find($this->getImg('icon_mergeSplit.png'), NULL, 0.83));
-        $this->click($this->find($this->getImg('icon_splitHoriz.png'), NULL, 0.83));
+        $this->clickButton('splitMerge');
+        $this->clickButton('splitHoriz');
         $expected = array(
                      array(
                       array(

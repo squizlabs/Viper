@@ -246,7 +246,7 @@ abstract class AbstractViperTableEditorPluginUnitTest extends AbstractViperUnitT
      */
     protected function getTableStructure($index=0, $incContent=FALSE)
     {
-        return $this->execJS('gTS('.$index.', '.((int) $incContent).')');
+        return $this->execJS('window.opener.gTS('.$index.', '.((int) $incContent).')');
 
     }//end getTableStructure()
 
