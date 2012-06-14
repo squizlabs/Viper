@@ -13,10 +13,8 @@ class Viper_Tests_ViperAccessibilityPlugin_AccessibilityPluginUnitTest extends A
      */
     public function testOpeningAccessibilityAuditor()
     {
-        $dir = dirname(__FILE__).'/Images/';
 
-        $text = 'XuT';
-        $this->click($this->find($text));
+        $this->click($this->findKeyword(1));
         $this->assertTrue($this->topToolbarButtonExists('accessAudit'), 'Accessibility auditor icon should be active.');
 
         $this->clickTopToolbarButton('accessAudit');
@@ -53,8 +51,7 @@ class Viper_Tests_ViperAccessibilityPlugin_AccessibilityPluginUnitTest extends A
      */
     public function testViewingSourceFromAccessibilityAuditor()
     {
-        $text = 'XuT';
-        $this->click($this->find($text));
+        $this->click($this->findKeyword(1));
         $this->clickTopToolbarButton('accessAudit');
 
         // View Report.

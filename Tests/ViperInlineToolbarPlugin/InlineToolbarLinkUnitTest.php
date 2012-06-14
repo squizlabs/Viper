@@ -61,7 +61,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarLinkUnitTest extends Abs
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Selection</li>', $lineage);
 
-        $this->clickInlineToolbarButton(dirname(dirname(__FILE__)).'/ViperLinkPlugin/Images/toolbarIcon_link.png');
+        $this->clickInlineToolbarButton('link');
         $this->type('http://www.squizlabs.com');
         $this->keyDown('Key.ENTER');
 
@@ -81,7 +81,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarLinkUnitTest extends Abs
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Link</li>', $lineage);
 
-        $this->clickInlineToolbarButton(dirname(dirname(__FILE__)).'/ViperLinkPlugin/Images/toolbarIcon_removeLink.png');
+        $this->clickInlineToolbarButton('linkRemove');
 
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Selection</li>', $lineage);
