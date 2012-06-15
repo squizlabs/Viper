@@ -257,9 +257,8 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
             }
         } else {
             $this->selectBrowser(self::$_browser);
-            $this->resizeWindow();
 
-            // Check if the JSExec window is open. If it is close it.
+            /*// Check if the JSExec window is open. If it is close it.
             $jsExecWindowCheck     = FALSE;
             $maxJsExecWindowChecks = 2;
             while ($jsExecWindowCheck === FALSE) {
@@ -274,7 +273,9 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
                     $this->keyDown('Key.CMD + `');
                     $maxJsExecWindowChecks--;
                 }
-            }
+            }*/
+
+            $this->resizeWindow();
 
             $this->setSetting('MinSimilarity', self::$_similarity);
             $calibrate = getenv('VIPER_TEST_CALIBRATE');
