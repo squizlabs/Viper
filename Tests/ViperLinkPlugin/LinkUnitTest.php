@@ -1127,7 +1127,6 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
      */
     public function testSubjectOnlyAppearsWhenCreatingAMailToLink()
     {
-        $dir = dirname(__FILE__).'/Images/';
 
         $this->selectKeyword(1);
         $this->clickInlineToolbarButton('link');
