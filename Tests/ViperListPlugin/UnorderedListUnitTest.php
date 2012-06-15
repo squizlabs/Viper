@@ -163,7 +163,6 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractGeneralL
         $this->clickTopToolbarButton('listUL');
         $this->assertHTMLMatch('<ul><li>%2% uuuuuu. %1%</li></ul><p>cPOc ccccc dddd. %3%</p><p>ajhsd sjsjwi hhhh:</p><ul><li>aaa %9% ccccc</li><li>%10% %5% templates</li><li>Audit %4% %7%</li><li>Accessibility audit report</li><li>Recommendations %6% plan</li><li>Squiz Matrix guide</li></ul><h2>%8%</h2>');
 
-        $this->selectKeyword(1);
         $this->assertIconStatusesCorrect('active', TRUE, FALSE, TRUE);
         $this->clickInlineToolbarButton('listOutdent');
 

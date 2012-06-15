@@ -10,21 +10,6 @@ abstract class AbstractViperListPluginUnitTest extends AbstractViperUnitTest
 
 
     /**
-     * Returns the full path of the specified image file name.
-     *
-     * @param string $img The image file name.
-     *
-     * @return string
-     */
-    protected function getImg($img)
-    {
-        $path = dirname(__FILE__).'/Images/'.$img;
-        return $path;
-
-    }//end getImg()
-
-
-    /**
      * Overrides the default window size of the browser for list tests.
      *
      * @return array
@@ -64,7 +49,7 @@ abstract class AbstractViperListPluginUnitTest extends AbstractViperUnitTest
                   'listOutdent',
                  );
 
-        $statuses = $this->execJS('gListBStatus()');
+        $statuses = $this->execJS('window.opener.gListBStatus()');
 
         if ($statuses['vitp'] !== FALSE) {
             foreach ($statuses['vitp'] as $btn => $status) {

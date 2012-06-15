@@ -196,13 +196,13 @@ class Viper_Tests_ViperListPlugin_OrderedListInTableUnitTest extends AbstractVip
      */
     public function testSelectingAllContentInARow()
     {
-        $this->selectKeyword(2);
-        $this->assertIconStatusesCorrect(TRUE, 'active', FALSE, TRUE);
+        $this->selectKeyword(1);
+        $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
         $this->selectInlineToolbarLineageItem(2);
         $this->assertIconStatusesCorrect(FALSE, FALSE, FALSE, FALSE);
 
-        $this->selectKeyword(3);
-        $this->assertIconStatusesCorrect(TRUE, 'active', FALSE, TRUE);
+        $this->selectKeyword(2);
+        $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
         $this->selectInlineToolbarLineageItem(2);
         $this->assertIconStatusesCorrect(FALSE, FALSE, FALSE, FALSE);
 
