@@ -431,8 +431,14 @@ ViperCopyPastePlugin.prototype = {
             var prevBlock = keyboardEditor.splitAtRange(true, range);
             if (!prevBlock) {
                 prevBlock = this._tmpNode;
-            } else if (!this._tmpNode.parentNode) {
-                this._tmpNode = prevBlock;
+            } else {
+                try {
+                    if (!this._tmpNode.parentNode) {
+                        this._tmpNode = prevBlock;
+                    }
+                } catch (e) {
+                    // Guess which browser this try/catch block is for....
+                }
             }
 
             if (dfx.trim(dfx.getNodeTextContent(prevBlock)) !== '') {
@@ -729,6 +735,33 @@ ViperCopyPastePlugin.prototype = {
             }
         }
 
+        // If the first element is a P tag and the next element is an empty font tag
+        // then it must be a heading element.
+        if (tmp.firstChild && dfx.isTag(tmp.firstChild, 'p') === true) {
+            var firstChild = tmp.firstChild;
+            var nextSibling = firstChild.nextSibling;
+            while (nextSibling) {
+                if (nextSibling.nodeType === dfx.TEXT_NODE && dfx.isBlank(dfx.trim(nextSibling.data)) === true) {
+                    nextSibling = nextSibling.nextSibling;
+                } else if (nextSibling && dfx.isTag(nextSibling, 'font') === true) {
+                    if (dfx.getNodeTextContent(nextSibling) === '') {
+                        // Conver this P tag to a H1 tag.
+                        var newElement = document.createElement('h1');
+                        while (firstChild.firstChild) {
+                            newElement.appendChild(firstChild.firstChild);
+                        }
+
+                        dfx.insertBefore(firstChild, newElement);
+                        dfx.remove(firstChild);
+                    }
+
+                    break;
+                } else {
+                    break;
+                }
+            }
+        }//end if
+
         // Convert [strong + em ] + font + p tags to heading tags.
         var tags = dfx.find(tmp, 'font > p');
         var c    = tags.length;
@@ -746,7 +779,7 @@ ViperCopyPastePlugin.prototype = {
                     lastParent = parent;
                     fontCount++;
                     if (parent.getAttribute('size')) {
-                        fontSize = parent.getAttribute('size');
+                        fontSize = parseInt(parent.getAttribute('size'));
                     }
                 } else if (tagName === 'em') {
                     lastParent = parent;
@@ -794,6 +827,44 @@ ViperCopyPastePlugin.prototype = {
             }
         }//end for
 
+        if (this.viper.isBrowser('msie') === true) {
+            var tags = dfx.find(tmp, 'strong > font > p');
+            var c    = tags.length;
+            for (var i = 0; i < c; i++) {
+                var heading = document.createElement('h1');
+                while (tags[i].firstChild) {
+                    heading.appendChild(tags[i].firstChild);
+                }
+
+                dfx.insertBefore(tags[i].parentNode.parentNode, heading);
+                dfx.remove(tags[i].parentNode.parentNode);
+            }
+
+            tags = dfx.find(tmp, 'strong > p');
+            c    = tags.length;
+            for (var i = 0; i < c; i++) {
+                var heading = document.createElement('h1');
+                while (tags[i].firstChild) {
+                    heading.appendChild(tags[i].firstChild);
+                }
+
+                dfx.insertBefore(tags[i].parentNode, heading);
+                dfx.remove(tags[i].parentNode);
+            }
+
+            tags = dfx.find(tmp, 'strong > em > p');
+            c    = tags.length;
+            for (var i = 0; i < c; i++) {
+                var heading = document.createElement('h1');
+                while (tags[i].firstChild) {
+                    heading.appendChild(tags[i].firstChild);
+                }
+
+                dfx.insertBefore(tags[i].parentNode.parentNode, heading);
+                dfx.remove(tags[i].parentNode.parentNode);
+            }
+        }
+
         // Remove font tags.
         // Must use regex here as IE8 has a bug with empty nodes and multiple parents
         // for DOM elemnts it seems like font tag is a major issue:
@@ -828,7 +899,54 @@ ViperCopyPastePlugin.prototype = {
             dfx.removeAttr(tags[i], 'start');
         }
 
-        content = dfx.getHtml(tmp);
+        // Move any content that is not inside a paragraph in to a previous paragraph..
+        var steps = 2;
+        for (var i = 0; i < steps; i++) {
+            // Do this twice to make sure IE8 has the correct DOM structure in the
+            // second loop..
+            var node      = tmp.firstChild;
+            var prevBlock = null;
+
+            while (node) {
+                if (dfx.isBlockElement(node) !== true) {
+                    if (node.nodeType === dfx.TEXT_NODE) {
+                        if (dfx.isBlank(dfx.trim(node.data)) === true) {
+                            var currentNode = node;
+                            node = node.nextSibling;
+                            dfx.remove(currentNode);
+                            continue;
+                        }
+                    }
+
+                    if (!prevBlock) {
+                        prevBlock = document.createElement('p');
+                    }
+
+                    if (node.nodeType !== dfx.TEXT_NODE && dfx.isStubElement(node) === false) {
+                        prevBlock.appendChild(document.createTextNode(' '));
+                    }
+
+                    var currentNode = node;
+                    node = node.nextSibling;
+                    prevBlock.appendChild(currentNode);
+                } else {
+                    if (dfx.trim(dfx.getHtml(node)).match(/^[^\w]$/)) {
+                        // Only a single non-word character in this paragraph, move it
+                        // to the previous one in the next loop.
+                        var currentNode = node;
+                        node = currentNode.firstChild;
+                        dfx.insertBefore(currentNode, node);
+                        dfx.remove(currentNode);
+                    } else {
+                        prevBlock = node;
+                        node      = node.nextSibling;
+                    }
+                }
+            }
+
+            content = dfx.getHtml(tmp);
+            dfx.setHtml(tmp, content);
+        }//end for
 
         return content;
 
