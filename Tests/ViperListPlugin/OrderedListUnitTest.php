@@ -31,7 +31,7 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractGeneralLis
         $this->type('Item 2');
         $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
 
-        $this->assertHTMLMatch('<p>%1% uuuuuu. %2%</p><p>Test list:</p><ol><li>Item 1</li><li>Item 2</li></ol><p>cPOc ccccc dddd. %3%</p><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa %4% ccccc</li><li>%5% %2% templates</li><li>Audit %7% %8%</li><li>Accessibility audit report</li><li>Recommendations %9% plan</li><li>Squiz Matrix guide</li></ol><h2>%10%</h2>');
+        $this->assertHTMLMatch('<p>%1% uuuuuu. %2%</p><p>Test list:</p><ol><li>Item 1</li><li>Item 2</li></ol><p>cPOc ccccc dddd. %3%</p><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa %4% ccccc</li><li>%5% %6% templates</li><li>Audit %7% %8%</li><li>Accessibility audit report</li><li>Recommendations %9% plan</li><li>Squiz Matrix guide</li></ol><h2>%10%</h2>');
 
     }//end testCreatingAList()
 
