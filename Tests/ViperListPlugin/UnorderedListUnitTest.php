@@ -504,14 +504,10 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractGeneralL
      */
     public function testRemoveListItems()
     {
-        $this->selectKeyword(5, 9);
-        $this->keyDown('Key.TAB');
-
-        sleep(1);
         $this->selectKeyword(5, 8);
         $this->keyDown('Key.BACKSPACE');
 
-        $this->assertHTMLMatch('<p>%1% uuuuuu. %2%</p><p>cPOc ccccc dddd. %3%</p><p>ajhsd sjsjwi hhhh:</p><ul><li>aaa %4% ccccc<ul><li>Accessibility audit report</li><li>Recommendations %9% plan</li></ul></li><li>Squiz Matrix guide</li></ul><h2>%10%</h2>');
+        $this->assertHTMLMatch('<p>%1% uuuuuu. %2%</p><p>cPOc ccccc dddd. %3%</p><p>ajhsd sjsjwi hhhh:</p><ul><li>aaa %4% ccccc</li><li>Accessibility audit report</li><li>Recommendations %9% plan</li><li>Squiz Matrix guide</li></ul><h2>%10%</h2>');
 
     }//end testRemoveListItems()
 
@@ -523,7 +519,7 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractGeneralL
      */
     public function testListKeyboardNav()
     {
-        $this->selectKeyword(6);
+        $this->click($this->findKeyword(6));
 
         $this->keyDown('Key.RIGHT');
         $this->keyDown('Key.TAB');

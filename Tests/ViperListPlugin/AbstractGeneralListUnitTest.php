@@ -62,7 +62,7 @@ abstract class AbstractGeneralListUnitTest extends AbstractViperListPluginUnitTe
         $this->click($this->findKeyword(4));
         $this->assertTrue($this->topToolbarButtonExists('formats', 'disabled'), 'Formats icon should not appear in the top toolbar.');
 
-        $this->selectKeyword(4);
+        $this->selectKeyword(5);
         $this->assertTrue($this->topToolbarButtonExists('formats', 'disabled'), 'Formats icon should not appear in the top toolbar.');
 
         $this->selectInlineToolbarLineageItem(1);
