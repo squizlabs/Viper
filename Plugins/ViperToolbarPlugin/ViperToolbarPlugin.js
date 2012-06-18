@@ -630,6 +630,10 @@ ViperToolbarPlugin.prototype = {
 
         var bubble     = this.viper.ViperTools.getItem(bubbleid).element;
         var button     = this.viper.ViperTools.getItem(this._bubbleButtons[bubbleid]).element;
+
+        // Reset the width style before getting bubble width.
+        dfx.setStyle(bubble, 'width', '');
+
         var toolsWidth = dfx.getElementWidth(bubble);
 
         var scrollCoords = dfx.getScrollCoords();

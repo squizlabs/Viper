@@ -16,7 +16,7 @@ abstract class AbstractGeneralListUnitTest extends AbstractViperListPluginUnitTe
      */
     public function testNoToolsForNonPTag()
     {
-        $this->selectKeyword(1);
+        $this->selectKeyword(10);
         $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
 
     }//end testNoToolsForNonPTag()
@@ -29,10 +29,10 @@ abstract class AbstractGeneralListUnitTest extends AbstractViperListPluginUnitTe
      */
     public function testHeadingIconNotAvailableForList()
     {
-        $this->click($this->findKeyword(2));
+        $this->click($this->findKeyword(4));
         $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'), 'Heading icon should not appear in the top toolbar.');
 
-        $this->selectKeyword(2);
+        $this->selectKeyword(4);
         $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'), 'Heading icon should not appear in the top toolbar.');
 
         $this->selectInlineToolbarLineageItem(1);
@@ -59,10 +59,10 @@ abstract class AbstractGeneralListUnitTest extends AbstractViperListPluginUnitTe
      */
     public function testFormatsIconNotAvailableForList()
     {
-        $this->click($this->findKeyword(2));
+        $this->click($this->findKeyword(4));
         $this->assertTrue($this->topToolbarButtonExists('formats', 'disabled'), 'Formats icon should not appear in the top toolbar.');
 
-        $this->selectKeyword(2);
+        $this->selectKeyword(4);
         $this->assertTrue($this->topToolbarButtonExists('formats', 'disabled'), 'Formats icon should not appear in the top toolbar.');
 
         $this->selectInlineToolbarLineageItem(1);
@@ -89,7 +89,7 @@ abstract class AbstractGeneralListUnitTest extends AbstractViperListPluginUnitTe
      */
     public function testTableIconNotAvailableForList()
     {
-        $this->click($this->findKeyword(2));
+        $this->click($this->findKeyword(4));
         $this->assertTrue($this->topToolbarButtonExists('table', 'disabled'), 'Table icon should not appear in the top toolbar.');
 
         $this->keyDown('Key.SHIFT + Key.RIGHT');
@@ -98,7 +98,7 @@ abstract class AbstractGeneralListUnitTest extends AbstractViperListPluginUnitTe
         $this->keyDown('Key.TAB');
         $this->assertTrue($this->topToolbarButtonExists('table', 'disabled'), 'Table icon should not active in the top toolbar.');
 
-        $this->selectKeyword(2);
+        $this->selectKeyword(4);
         $this->assertTrue($this->topToolbarButtonExists('table', 'disabled'), 'Table icon should not appear in the top toolbar.');
 
         $this->selectInlineToolbarLineageItem(1);
@@ -125,7 +125,7 @@ abstract class AbstractGeneralListUnitTest extends AbstractViperListPluginUnitTe
      */
     public function testHRIconNotAvailableForList()
     {
-        $this->click($this->findKeyword(2));
+        $this->click($this->findKeyword(4));
         $this->assertTrue($this->topToolbarButtonExists('insertHr', 'disabled'), 'HR icon should not appear in the top toolbar.');
 
         $this->keyDown('Key.SHIFT + Key.RIGHT');
@@ -134,7 +134,7 @@ abstract class AbstractGeneralListUnitTest extends AbstractViperListPluginUnitTe
         $this->keyDown('Key.TAB');
         $this->assertTrue($this->topToolbarButtonExists('insertHr', 'disabled'), 'HR icon should not active in the top toolbar.');
 
-        $this->selectKeyword(2);
+        $this->selectKeyword(4);
         $this->assertTrue($this->topToolbarButtonExists('insertHr', 'disabled'), 'HR icon should not appear in the top toolbar.');
 
         $this->selectInlineToolbarLineageItem(1);
