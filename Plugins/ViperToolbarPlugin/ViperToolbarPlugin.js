@@ -631,10 +631,10 @@ ViperToolbarPlugin.prototype = {
         var bubble     = this.viper.ViperTools.getItem(bubbleid).element;
         var button     = this.viper.ViperTools.getItem(this._bubbleButtons[bubbleid]).element;
 
-        // Reset the width style before getting bubble width.
-        dfx.setStyle(bubble, 'width', '');
+        var toolsWidth = null;
+        var widthStyle = bubble.style.width;
 
-        var toolsWidth = dfx.getElementWidth(bubble);
+        toolsWidth = dfx.getElementWidth(bubble);
 
         var scrollCoords = dfx.getScrollCoords();
         var windowDim    = dfx.getWindowDimensions();
@@ -652,7 +652,10 @@ ViperToolbarPlugin.prototype = {
 
         dfx.setStyle(bubble, 'left', left + 'px');
         dfx.setStyle(bubble, 'top', '35px');
-        dfx.setStyle(bubble, 'width', toolsWidth + 'px');
+
+        if (!widthStyle) {
+            dfx.setStyle(bubble, 'width', toolsWidth + 'px');
+        }
 
     },
 
