@@ -34,20 +34,20 @@ class Viper_Tests_ViperListPlugin_OrderedListInTableUnitTest extends AbstractVip
      */
     public function testIndentingAndOutdentingAListItemUsingTopToolbar()
     {
-        $this->selectKeyword(2);
+        $this->selectKeyword(3);
         $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
 
         $this->clickTopToolbarButton('listIndent');
 
-        $this->assertEquals($this->replaceKeywords('            <ol><li>Item 1<ol><li>Item 2 %2%</li></ol></li></ol>'), $this->getHtml('td', 2));
+        $this->assertEquals($this->replaceKeywords('            <ol><li>Item 1<ol><li>Item 2 %3%</li></ol></li></ol>'), $this->getHtml('td', 2));
         $this->assertIconStatusesCorrect(TRUE, 'active', FALSE, TRUE);
 
         $this->clickTopToolbarButton('listOutdent');
-        $this->assertEquals($this->replaceKeywords('            <ol><li>Item 1</li><li>Item 2 %2%</li></ol>'), $this->getHtml('td', 2));
+        $this->assertEquals($this->replaceKeywords('            <ol><li>Item 1</li><li>Item 2 %3%</li></ol>'), $this->getHtml('td', 2));
         $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
 
         $this->clickTopToolbarButton('listOutdent');
-        $this->assertEquals($this->replaceKeywords('            <ol><li>Item 1</li></ol><p>Item 2 %2%</p>'), $this->getHtml('td', 2));
+        $this->assertEquals($this->replaceKeywords('            <ol><li>Item 1</li></ol><p>Item 2 %3%</p>'), $this->getHtml('td', 2));
         $this->assertIconStatusesCorrect(TRUE, TRUE, FALSE, FALSE);
 
     }//end testIndentingAndOutdentingAListItemUsingTopToolbar()
@@ -60,20 +60,20 @@ class Viper_Tests_ViperListPlugin_OrderedListInTableUnitTest extends AbstractVip
      */
     public function testIndentingAndOutdentingAListItemUsingInlineToolbar()
     {
-        $this->selectKeyword(2);
+        $this->selectKeyword(3);
         $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
 
         $this->clickInlineToolbarButton('listIndent');
 
-        $this->assertEquals($this->replaceKeywords('            <ol><li>Item 1<ol><li>Item 2 %2%</li></ol></li></ol>'), $this->getHtml('td', 2));
+        $this->assertEquals($this->replaceKeywords('            <ol><li>Item 1<ol><li>Item 2 %3%</li></ol></li></ol>'), $this->getHtml('td', 2));
         $this->assertIconStatusesCorrect(TRUE, 'active', FALSE, TRUE);
 
         $this->clickInlineToolbarButton('listOutdent');
-        $this->assertEquals($this->replaceKeywords('            <ol><li>Item 1</li><li>Item 2 %2%</li></ol>'), $this->getHtml('td', 2));
+        $this->assertEquals($this->replaceKeywords('            <ol><li>Item 1</li><li>Item 2 %3%</li></ol>'), $this->getHtml('td', 2));
         $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
 
         $this->clickInlineToolbarButton('listOutdent');
-        $this->assertEquals($this->replaceKeywords('            <ol><li>Item 1</li></ol><p>Item 2 %2%</p>'), $this->getHtml('td', 2));
+        $this->assertEquals($this->replaceKeywords('            <ol><li>Item 1</li></ol><p>Item 2 %3%</p>'), $this->getHtml('td', 2));
         $this->assertIconStatusesCorrect(TRUE, TRUE, FALSE, FALSE);
 
     }//end testIndentingAndOutdentingAListItemUsingInlineToolbar()
@@ -87,28 +87,29 @@ class Viper_Tests_ViperListPlugin_OrderedListInTableUnitTest extends AbstractVip
     public function testIndentingAndOutdentingAListItemUsingShortcuts()
     {
 
-        $this->click($this->findKeyword(2));
+        $this->click($this->findKeyword(3));
         $this->keyDown('Key.TAB');
-        $this->assertEquals($this->replaceKeywords('            <ol><li>Item 1<ol><li>Item 2 %2%</li></ol></li></ol>'), $this->getHtml('td', 2));
+        $this->assertEquals($this->replaceKeywords('            <ol><li>Item 1<ol><li>Item 2 %3%</li></ol></li></ol>'), $this->getHtml('td', 2));
         $this->assertIconStatusesCorrect(TRUE, 'active', FALSE, TRUE);
 
-        $this->click($this->findKeyword(3));
         $this->click($this->findKeyword(2));
+        $this->click($this->findKeyword(3));
         $this->keyDown('Key.SHIFT + Key.TAB');
-        $this->assertEquals($this->replaceKeywords('            <ol><li>Item 1</li><li>Item 2 %2%</li></ol>'), $this->getHtml('td', 2));
+        $this->assertEquals($this->replaceKeywords('            <ol><li>Item 1</li><li>Item 2 %3%</li></ol>'), $this->getHtml('td', 2));
         $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
 
-        $this->click($this->findKeyword(3));
         $this->click($this->findKeyword(2));
+        $this->click($this->findKeyword(3));
         $this->keyDown('Key.SHIFT + Key.TAB');
-        $this->assertEquals($this->replaceKeywords('            <ol><li>Item 1</li></ol><p>Item 2 %2%</p>'), $this->getHtml('td', 2));
+        $this->assertEquals($this->replaceKeywords('            <ol><li>Item 1</li></ol><p>Item 2 %3%</p>'), $this->getHtml('td', 2));
         $this->assertIconStatusesCorrect(TRUE, TRUE, FALSE, FALSE);
 
-        $this->click($this->findKeyword(3));
         $this->click($this->findKeyword(2));
+        $this->click($this->findKeyword(3));
+        sleep(1);
         $this->keyDown('Key.TAB');
-        $this->assertEquals($this->replaceKeywords('            <ol><li>Item 1</li></ol><p>Item 2 %2%</p>'), $this->getHtml('td', 2));
-        $this->assertIconStatusesCorrect(TRUE, TRUE, FALSE, FALSE);
+        $this->assertEquals($this->replaceKeywords('            <ol><li>Item 1</li></ol><p>Item 2 %3%</p>'), $this->getHtml('td', 2));
+        $this->assertIconStatusesCorrect(TRUE, 'active', FALSE, FALSE);
 
     }//end testIndentingAndOutdentingAListItemUsingShortcuts()
 
@@ -120,12 +121,12 @@ class Viper_Tests_ViperListPlugin_OrderedListInTableUnitTest extends AbstractVip
      */
     public function testRemovingListUsingOrderedListIcon()
     {
-        $this->click($this->findKeyword(2));
+        $this->click($this->findKeyword(3));
         $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
 
         $this->clickTopToolbarButton('listOL', 'active');
 
-        $this->assertEquals($this->replaceKeywords('            <p>Item 1</p><p>Item 2 %2%</p>'), $this->getHtml('td', 2));
+        $this->assertEquals($this->replaceKeywords('            <p>Item 1</p><p>Item 2 %3%</p>'), $this->getHtml('td', 2));
         $this->assertIconStatusesCorrect(TRUE, TRUE, FALSE, FALSE);
 
     }//end testRemovingListUsingOrderedListIcon()
@@ -138,12 +139,12 @@ class Viper_Tests_ViperListPlugin_OrderedListInTableUnitTest extends AbstractVip
      */
     public function testRemovingListUsingOutdentIconInTopToolbar()
     {
-        $this->selectKeyword(2);
+        $this->selectKeyword(3);
         $this->selectInlineToolbarLineageItem(4);
 
         $this->clickTopToolbarButton('listOutdent');
 
-        $this->assertEquals($this->replaceKeywords('            <p>Item 1</p><p>Item 2 %2%</p>'), $this->getHtml('td', 2));
+        $this->assertEquals($this->replaceKeywords('            <p>Item 1</p><p>Item 2 %3%</p>'), $this->getHtml('td', 2));
         $this->assertIconStatusesCorrect(TRUE, TRUE, FALSE, FALSE);
 
     }//end testRemovingListUsingOutdentIconInTopToolbar()
@@ -156,12 +157,12 @@ class Viper_Tests_ViperListPlugin_OrderedListInTableUnitTest extends AbstractVip
      */
     public function testRemovingListUsingOutdentIconInInlineToolbar()
     {
-        $this->selectKeyword(2);
+        $this->selectKeyword(3);
         $this->selectInlineToolbarLineageItem(4);
 
         $this->clickInlineToolbarButton('listOutdent');
 
-        $this->assertEquals($this->replaceKeywords('            <p>Item 1</p><p>Item 2 %2%</p>'), $this->getHtml('td', 2));
+        $this->assertEquals($this->replaceKeywords('            <p>Item 1</p><p>Item 2 %3%</p>'), $this->getHtml('td', 2));
         $this->assertIconStatusesCorrect(TRUE, TRUE, FALSE, FALSE);
 
     }//end testRemovingListUsingOutdentIconInInlineToolbar()
@@ -174,17 +175,17 @@ class Viper_Tests_ViperListPlugin_OrderedListInTableUnitTest extends AbstractVip
      */
     public function testRemovingListAndClickingUndo()
     {
-        $this->selectKeyword(2);
+        $this->selectKeyword(3);
         $this->selectInlineToolbarLineageItem(4);
 
         $this->clickInlineToolbarButton('listOutdent');
 
-        $this->assertEquals($this->replaceKeywords('            <p>Item 1</p><p>Item 2 %2%</p>'), $this->getHtml('td', 2));
+        $this->assertEquals($this->replaceKeywords('            <p>Item 1</p><p>Item 2 %3%</p>'), $this->getHtml('td', 2));
         $this->assertIconStatusesCorrect(TRUE, TRUE, FALSE, FALSE);
 
         $this->clickTopToolbarButton('historyUndo');
 
-        $this->assertEquals($this->replaceKeywords('            <ol><li>Item 1</li><li>Item 2 %2%</li></ol>'), $this->getHtml('td', 2));
+        $this->assertEquals($this->replaceKeywords('            <ol><li>Item 1</li><li>Item 2 %3%</li></ol>'), $this->getHtml('td', 2));
 
     }//end testRemovingListUsingOutdentIconInInlineToolbar()
 
@@ -201,7 +202,7 @@ class Viper_Tests_ViperListPlugin_OrderedListInTableUnitTest extends AbstractVip
         $this->selectInlineToolbarLineageItem(2);
         $this->assertIconStatusesCorrect(FALSE, FALSE, FALSE, FALSE);
 
-        $this->selectKeyword(2);
+        $this->selectKeyword(3);
         $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
         $this->selectInlineToolbarLineageItem(2);
         $this->assertIconStatusesCorrect(FALSE, FALSE, FALSE, FALSE);

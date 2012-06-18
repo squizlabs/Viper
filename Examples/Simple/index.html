@@ -13,9 +13,12 @@
         var viper = null;
         ViperReadyCallback = function() {
             var viper = new Viper('test');
-            viper.getPluginManager().setPlugins(['ViperCoreStylesPlugin', 'ViperKeyboardEditorPlugin', 'ViperInlineToolbarPlugin', 'ViperHistoryPlugin', 'ViperListPlugin', 'ViperLinkPlugin']);
-            viper.setEditableElement(document.getElementById('editable'));
-            ViperChangeTracker.enableChangeTracking();
+            viper.getPluginManager().setPlugins(['ViperCoreStylesPlugin', 'ViperKeyboardEditorPlugin', 'ViperInlineToolbarPlugin', 'ViperHistoryPlugin', 'ViperListPlugin',
+            var editableEl = dfx.getId('editable');
+            dfx.addEvent(dfx.getId('clickToEdit'), 'click', function() {
+                viper.setEditableElement(editableEl);
+            });
+
         };
     </script>
 </head>
@@ -26,50 +29,9 @@
       <div id="main_content_wrapper" style="width: 880px;">
         <div class="box_content" style="padding: 20px;">
           <div id="main_content" style="width: 820px;">
+           <div id="clickToEdit">Click To Edit</div>
             <div id="editable" class="padding" style="width: 820px;">
-<h1>WCAG 2.0</h1>
-
-<p>Australian governments at all levels have endorsed WCAG 2.0, and require all government websites (federal, state and territory) to meet the new guidelines at the minimum compliance level (Single A) by the end of 2012. In addition, the Australian Government requires all federal websites to meet the medium conformance level (Double A) by the end of 2014.</p>
-
-<p>Federal government agencies must update all government websites (as specified within scope under the Website Accessibility National Transition Strategy (NTS)) to WCAG 2.0 conformance. Agencies should use the principle of progressive enhancement when building and managing websites, and test for conformance across multiple browsers and operating system configurations.</p>
-
-<p>Agencies are advised to consider the varied needs of their users and plan for accessibility from the outset. Where accessibility problems are known, agencies should put in place implementation plans to address the problem, then endeavour to minimise future risk by using standards-based web technologies and best practice content management processes.</p>
-
-<p>Further information at <a href="http://webguide.gov.au/accessibility-usability/accessibility/%20">http://webguide.gov.au/accessibility-usability/accessibility/</a> and <a href="http://www.w3.org/TR/WCAG20/">http://www.w3.org/TR/WCAG20/</a>.</p>
-
-<h2>Accessibility Audit</h2>
-
-<p>The WCAG 2.0 guidelines are very technical by nature and can look daunting, so how do you know if your website really conforms to the guidelines? Well, Squiz has developed an Accessibility Audit package that will clearly identify all issues preventing your website from meeting the relevant A or AA standard. The Accessibility Audit package includes:</p>
-
-<ul>
-<li>Audit of Homepage and 6 Section Landing pages</li>
-<li>4 additional templates</li>
-<li>Audit of 20 additional pages for content</li>
-<li>Accessibility audit report</li>
-<li>Recommendations and action plan</li>
-<li>Squiz Matrix content accessibility guide</li>
-</ul>
-
-<h3>Accessibility Audit format</h3>
-
-<ul>
-<li>Validate HTML/CSS and review code of selected pages to A or AA standard</li>
-<li>Review colour contrast of selected pages</li>
-<li>Review content of selected pages for accessibility issues</li>
-<li>Compile error report with examples</li>
-<li>Propose recommendations to meet required Accessibility standard</li>
-</ul>
-
-<p>The results of the audit will be delivered in an easy to understand format with a clear action plan for bringing your website up to standard.</p>
-
-<p>Should your requirements differ from the services offered in the Accessibility Audit package, Squiz is most happy to customise the audit to suit your needs.</p>
-
-<h2>One-day Training Course</h2>
-
-<p><em>Accessibility Techniques for Editors</em> : a new course focusing on the methods used to achieve accessible content.</p>
-
-<p>Book the MATR102 course online today.</p>
-
+             <p> </p>
             </div>
           </div>
         </div>

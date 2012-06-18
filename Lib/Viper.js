@@ -452,6 +452,29 @@ Viper.prototype = {
 
             var range = this.getCurrentRange();
             var editableChild = range._getFirstSelectableChild(this.element);
+            if (!editableChild) {
+                var blockElement = null;
+                for (var node = this.element.firstChild; node; node = node.nextSibling) {
+                    if (dfx.isBlockElement(node) === true
+                        && dfx.isStubElement(node) === false
+                    ) {
+                        blockElement = node;
+                        break;
+                    }
+                }
+
+                if (blockElement) {
+                    var tmpEl = document.createTextNode(' ');
+                    blockElement.appendChild(tmpEl);
+                    editableChild = range._getFirstSelectableChild(this.element);
+                } else {
+                    var tmpEl = document.createElement('p');
+                    dfx.setHtml(tmpEl, '&nbsp;');
+                    blockElement.appendChild(tmpEl);
+                    editableChild = range._getFirstSelectableChild(this.element);
+                }
+            }
+
             if (editableChild) {
                 this.setRange(editableChild, 0);
             }

@@ -161,12 +161,13 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractGeneralLis
         $this->clickTopToolbarButton('listOL');
 
         // Outdent icon is enabled when you click inside a list item.
+        $this->click($this->findKeyword(6));
         $this->click($this->findKeyword(2));
         $this->assertIconStatusesCorrect(TRUE, 'active', FALSE, TRUE);
 
         // Outdent icon is enabled when you select a word in a list item.
-        $this->selectKeyword(2);
-        $this->assertIconStatusesCorrect(TRUE, 'active', FALSE, TRUE);
+        $this->selectKeyword(3);
+        $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
 
         // Outdent icon is enabled when you select the list.
         $this->selectInlineToolbarLineageItem(0);
@@ -470,14 +471,10 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractGeneralLis
      */
     public function testRemoveListItems()
     {
-        $this->selectKeyword(5, 9);
-        $this->keyDown('Key.TAB');
-
-        sleep(1);
         $this->selectKeyword(5, 8);
         $this->keyDown('Key.BACKSPACE');
 
-        $this->assertHTMLMatch('<p>%1% uuuuuu. %2%</p><p>cPOc ccccc dddd. %3%</p><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa %4% ccccc<ol><li>Accessibility audit report</li><li>Recommendations %9% plan</li></ol></li><li>Squiz Matrix guide</li></ol><h2>%10%</h2>');
+        $this->assertHTMLMatch('<p>%1% uuuuuu. %2%</p><p>cPOc ccccc dddd. %3%</p><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa %4% ccccc</li><li>Accessibility audit report</li><li>Recommendations %9% plan</li><li>Squiz Matrix guide</li></ol><h2>%10%</h2>');
 
     }//end testRemoveListItems()
 
@@ -645,6 +642,7 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractGeneralLis
         $this->keyDown('Key.DOWN');
         $this->keyDown('Key.TAB');
 
+        $this->click($this->findKeyword(2));
         $this->selectKeyword(7);
 
         $this->selectInlineToolbarLineageItem(3);
