@@ -73,6 +73,8 @@ class Viper_Tests_ViperFormatPlugin_QuoteUnitTest extends AbstractViperUnitTest
         $this->keyDown('Key.CMD + b');
         $this->keyDown('Key.CMD + i');
 
+        $this->click($this->findKeyword(2));
+        $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
 
        // Make sure the correct icons are being shown in the inline toolbar.
@@ -242,7 +244,7 @@ class Viper_Tests_ViperFormatPlugin_QuoteUnitTest extends AbstractViperUnitTest
         $this->type('More new content');
 
         $this->assertHTMLMatch('<blockquote>%1% xtn %2%</blockquote><blockquote>%3% amet <strong>WoW</strong></blockquote><p>%4% is a paragraph to change to a quote</p><blockquote>New %5% on the page</blockquote><p>More new content</p>');
-        
+
     }//end testCreatingNewContentWithABlockquoteTag()
 
 }//end class

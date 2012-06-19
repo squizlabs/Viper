@@ -73,6 +73,8 @@ class Viper_Tests_ViperFormatPlugin_PreUnitTest extends AbstractViperUnitTest
         $this->keyDown('Key.CMD + b');
         $this->keyDown('Key.CMD + i');
 
+        $this->click($this->findKeyword(2));
+        $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
 
         // Make sure the correct icons are being shown in the inline toolbar.
@@ -245,7 +247,7 @@ class Viper_Tests_ViperFormatPlugin_PreUnitTest extends AbstractViperUnitTest
         $this->keyDown('Key.ENTER');
         $this->keyDown('Key.ENTER');
         $this->type('This should be a paragraph');
-        
+
 
         $this->assertHTMLMatch('<pre>%1%  xtn %2%</pre><pre>%3% amet <strong>WoW</strong></pre><p>%4% paragraph to change to a pre</p><pre>New %5% on the pageMore new content</pre><p>This should be a paragraph</p>');
 

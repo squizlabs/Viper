@@ -127,6 +127,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->keyDown('Key.ENTER');
         $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p>Test %5%</p><p>Squiz <span class="test">%6%</span> is %7%</p><p><em>The</em> %8% %9% foxxx</p><p><strong>%10%</strong> %11% the lazy dog</p>');
 
+        $this->click($this->findKeyword(7));
         $this->selectKeyword(6);
         sleep(1);
         $this->clickInlineToolbarButton('cssClass', 'active');
