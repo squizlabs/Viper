@@ -661,6 +661,10 @@ ViperToolbarPlugin.prototype = {
 
     disable: function()
     {
+        if (this._enabled === false) {
+            return;
+        }
+
         this._enabled = false;
 
         dfx.removeClass(this._toolbar, 'viper-active');
@@ -686,6 +690,10 @@ ViperToolbarPlugin.prototype = {
 
     enable: function()
     {
+        if (this._enabled === true) {
+            return;
+        }
+
         this._enabled = true;
         dfx.removeClass(this._toolbar, 'viper-inactive');
         dfx.addClass(this._toolbar, 'viper-active');
