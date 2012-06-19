@@ -351,6 +351,7 @@ Viper.prototype = {
             Viper.window = window;
         }
 
+        dfx.removeEvent(this._document.body, '.viper');
         this._removeEvents(elem);
         var self = this;
 
@@ -430,7 +431,6 @@ Viper.prototype = {
             elem = this.element;
         }
 
-        dfx.removeEvent(this._document, '.viper');
         dfx.removeEvent(elem, '.viper');
 
     },
@@ -3888,7 +3888,10 @@ Viper.prototype = {
 
     setRange: function(elem, pos)
     {
-        if (document.activeElement && document.activeElement.blur) {
+        if (document.activeElement
+            && document.activeElement !== this.element
+            && document.activeElement.blur
+        ) {
             // Call the blur method of the active element incase its an input box etc
             // which causes problems on IE when range is set below.
             document.activeElement.blur();
