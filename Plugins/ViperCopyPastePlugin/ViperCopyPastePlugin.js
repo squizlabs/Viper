@@ -957,6 +957,9 @@ ViperCopyPastePlugin.prototype = {
     _getListType: function(elem, listTypes)
     {
         var elContent = dfx.getHtml(elem);
+        elContent     = elContent.replace(/^(&nbsp;)+/m, '');
+        elContent     = dfx.trim(elContent);
+
         var info      = null;
         dfx.foreach(listTypes, function(k) {
             dfx.foreach(listTypes[k], function(j) {
