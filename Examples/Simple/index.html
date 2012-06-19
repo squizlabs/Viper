@@ -13,10 +13,13 @@
         var viper = null;
         ViperReadyCallback = function() {
             var viper = new Viper('test');
-            viper.getPluginManager().setPlugins(['ViperCoreStylesPlugin', 'ViperKeyboardEditorPlugin', 'ViperInlineToolbarPlugin', 'ViperHistoryPlugin', 'ViperListPlugin',
+            viper.getPluginManager().setPlugins(['ViperCoreStylesPlugin', 'ViperKeyboardEditorPlugin', 'ViperInlineToolbarPlugin', 'ViperHistoryPlugin', 'ViperToolbarPlugin']);
             var editableEl = dfx.getId('editable');
-            dfx.addEvent(dfx.getId('clickToEdit'), 'click', function() {
-                viper.setEditableElement(editableEl);
+            dfx.addEvent(dfx.getId('clickToEdit'), 'click', function(e) {
+               //dfx.preventDefault(e);
+               dfx.hideElement(dfx.getId('clickToEdit'));
+               viper.setEditableElement(editableEl);
+               viper.focus();
             });
 
         };
@@ -29,10 +32,8 @@
       <div id="main_content_wrapper" style="width: 880px;">
         <div class="box_content" style="padding: 20px;">
           <div id="main_content" style="width: 820px;">
-           <div id="clickToEdit">Click To Edit</div>
-            <div id="editable" class="padding" style="width: 820px;">
-             <p> </p>
-            </div>
+            <div id="editable" class="padding" style="width: 820px;"></div>
+            <div id="clickToEdit">Click To Edit</div>
           </div>
         </div>
         <div class="bottom_curve"></div>
