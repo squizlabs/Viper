@@ -899,54 +899,56 @@ ViperCopyPastePlugin.prototype = {
             dfx.removeAttr(tags[i], 'start');
         }
 
-        // Move any content that is not inside a paragraph in to a previous paragraph..
-        var steps = 2;
-        for (var i = 0; i < steps; i++) {
-            // Do this twice to make sure IE8 has the correct DOM structure in the
-            // second loop..
-            var node      = tmp.firstChild;
-            var prevBlock = null;
+        if (this.viper.isBrowser('msie') === true) {
+            // Move any content that is not inside a paragraph in to a previous paragraph..
+            var steps = 2;
+            for (var i = 0; i < steps; i++) {
+                // Do this twice to make sure IE8 has the correct DOM structure in the
+                // second loop..
+                var node      = tmp.firstChild;
+                var prevBlock = null;
 
-            while (node) {
-                if (dfx.isBlockElement(node) !== true) {
-                    if (node.nodeType === dfx.TEXT_NODE) {
-                        if (dfx.isBlank(dfx.trim(node.data)) === true) {
+                while (node) {
+                    if (dfx.isBlockElement(node) !== true) {
+                        if (node.nodeType === dfx.TEXT_NODE) {
+                            if (dfx.isBlank(dfx.trim(node.data)) === true) {
+                                var currentNode = node;
+                                node = node.nextSibling;
+                                dfx.remove(currentNode);
+                                continue;
+                            }
+                        }
+
+                        if (!prevBlock) {
+                            prevBlock = document.createElement('p');
+                        }
+
+                        if (node.nodeType !== dfx.TEXT_NODE && dfx.isStubElement(node) === false) {
+                            prevBlock.appendChild(document.createTextNode(' '));
+                        }
+
+                        var currentNode = node;
+                        node = node.nextSibling;
+                        prevBlock.appendChild(currentNode);
+                    } else {
+                        if (dfx.trim(dfx.getHtml(node)).match(/^[^\w]$/)) {
+                            // Only a single non-word character in this paragraph, move it
+                            // to the previous one in the next loop.
                             var currentNode = node;
-                            node = node.nextSibling;
+                            node = currentNode.firstChild;
+                            dfx.insertBefore(currentNode, node);
                             dfx.remove(currentNode);
-                            continue;
+                        } else {
+                            prevBlock = node;
+                            node      = node.nextSibling;
                         }
                     }
-
-                    if (!prevBlock) {
-                        prevBlock = document.createElement('p');
-                    }
-
-                    if (node.nodeType !== dfx.TEXT_NODE && dfx.isStubElement(node) === false) {
-                        prevBlock.appendChild(document.createTextNode(' '));
-                    }
-
-                    var currentNode = node;
-                    node = node.nextSibling;
-                    prevBlock.appendChild(currentNode);
-                } else {
-                    if (dfx.trim(dfx.getHtml(node)).match(/^[^\w]$/)) {
-                        // Only a single non-word character in this paragraph, move it
-                        // to the previous one in the next loop.
-                        var currentNode = node;
-                        node = currentNode.firstChild;
-                        dfx.insertBefore(currentNode, node);
-                        dfx.remove(currentNode);
-                    } else {
-                        prevBlock = node;
-                        node      = node.nextSibling;
-                    }
                 }
-            }
 
-            content = dfx.getHtml(tmp);
-            dfx.setHtml(tmp, content);
-        }//end for
+                content = dfx.getHtml(tmp);
+                dfx.setHtml(tmp, content);
+            }//end for
+        }
 
         return content;
 
