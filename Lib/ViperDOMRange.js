@@ -507,7 +507,7 @@ ViperDOMRange.prototype = {
      * @return The text container that range can extend to.
      * @type   {TextNode}
      */
-    getNextContainer: function(container, skippedBlockElem)
+    getNextContainer: function(container, skippedBlockElem, skipSpaceTextNodes)
     {
         if (!container) {
             return null;
@@ -542,11 +542,11 @@ ViperDOMRange.prototype = {
         }
 
         var selChild = this._getFirstSelectableChild(container);
-        if (selChild !== null) {
+        if (selChild !== null && (skipSpaceTextNodes !== true || dfx.trim(selChild.data) !== '')) {
             return selChild;
         }
 
-        return this.getNextContainer(container, skippedBlockElem);
+        return this.getNextContainer(container, skippedBlockElem, skipSpaceTextNodes);
 
     },
 
