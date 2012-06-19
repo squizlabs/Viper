@@ -996,7 +996,7 @@ ViperCopyPastePlugin.prototype = {
     {
         var div        = document.createElement('div');
         var ul         = null;
-        var prevMargin = null;
+        var prevLevel  = null;
         var indentLvl  = {};
         var li         = null;
         var newList    = true;
@@ -1024,54 +1024,63 @@ ViperCopyPastePlugin.prototype = {
         for (var i = 0; i < pln; i++) {
             var pEl          = pElems[i];
             var listTypeInfo = this._getListType(pEl, listTypes);
-            if (listTypeInfo !== null) {
-                var marginLeft = parseInt(dfx.getStyle(pEl, 'margin-left'));
-                var listType   = listTypeInfo.listType;
-                var listStyle  = listTypeInfo.listStyle;
-                dfx.setHtml(pEl, listTypeInfo.html);
 
-                if (!listType) {
-                    listType = 'ol';
-                }
-
-                if (newList === true) {
-                    // Start a new list.
-                    ul        = document.createElement(listType);
-                    indentLvl = {};
-
-                    indentLvl[marginLeft] = ul;
-                    dfx.insertBefore(pEl, ul);
-                } else {
-                    // We determine start of sub lists by checking indentation.
-                    // If previous margin and current margin is not the same
-                    // then this is a sub-list or part of a parent list.
-                    if (marginLeft !== prevMargin) {
-                        if (dfx.isset(indentLvl[marginLeft]) === true) {
-                            // Going back up.
-                            ul = indentLvl[marginLeft];
-                        } else if (marginLeft > prevMargin) {
-                            // Sub list, create a new list.
-                            ul = document.createElement(listType);
-                            //dfx.attr(ul, '_viperlistst', 'list-style-type:' + listStyle);
-                            li.appendChild(ul);
-
-                            // Indent list.
-                            indentLvl[marginLeft] = ul;
-                        }
-                    }
-                }//end if
-
-                // Create a new list item.
-                li = this._createListItemFromElement(pEl);
-                ul.appendChild(li);
-
-                prevMargin = marginLeft;
-                dfx.remove(pEl);
-                newList = false;
-            } else {
+            if (listTypeInfo === null) {
                 // Next list item will be the start of a new list.
                 newList = true;
-            }//end if
+                continue;
+            }
+
+            var listType   = listTypeInfo.listType;
+            var listStyle  = listTypeInfo.listStyle;
+            var level      = pEl.getAttribute('style').match(/level([\d])+/mi);
+            dfx.setHtml(pEl, listTypeInfo.html);
+
+            if (!level) {
+                level = 1;
+            } else {
+                level = level[1];
+            }
+
+            if (!listType) {
+                listType = 'ol';
+            }
+
+            if (newList === true) {
+                // Start a new list.
+                ul        = document.createElement(listType);
+                indentLvl = {};
+
+                indentLvl[level] = ul;
+                dfx.insertBefore(pEl, ul);
+            } else {
+                if (level !== prevLevel) {
+                    if (dfx.isset(indentLvl[level]) === true) {
+                        // Going back up.
+                        ul = indentLvl[level];
+                        for (var lv in indentLvl) {
+                            if (lv > level) {
+                                delete indentLvl[lv];
+                            }
+                        }
+                    } else if (level > prevLevel) {
+                        // Sub list, create a new list.
+                        ul = document.createElement(listType);
+                        //dfx.attr(ul, '_viperlistst', 'list-style-type:' + listStyle);
+                        li.appendChild(ul);
+
+                        indentLvl[level] = ul;
+                    }
+                }
+            }
+
+            // Create a new list item.
+            li = this._createListItemFromElement(pEl);
+            ul.appendChild(li);
+
+            prevLevel = level;
+            dfx.remove(pEl);
+            newList = false;
         }//end for
 
         // Make sure the sub lists are inside list items.
