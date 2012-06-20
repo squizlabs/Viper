@@ -77,6 +77,8 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractViperUnitTest
         $this->keyDown('Key.CMD + i');
         sleep(1);
 
+        $this->click($this->findKeyword(2));
+        $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
 
         // Make sure the correct icons are being shown in the inline toolbar.

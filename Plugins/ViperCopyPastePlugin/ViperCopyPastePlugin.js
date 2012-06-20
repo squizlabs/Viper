@@ -114,6 +114,21 @@ ViperCopyPastePlugin.prototype = {
                 return false;
             };
 
+        } else {
+            elem.onpaste = function(e) {
+                if (self._isFirefox === true) {
+                    self._beforePaste();
+                    var div = self._createPasteDiv();
+                    div.focus();
+                    setTimeout(function() {console.info(dfx.getHtml(div));
+                        self._handleFormattedPasteValue(false, div);
+                        self._afterPaste();
+
+                        dfx.remove(div);
+
+                    }, 30);
+                }
+            };
         }//end if
 
         elem.oncut = function(e) {
@@ -376,12 +391,13 @@ ViperCopyPastePlugin.prototype = {
 
     },
 
-    _handleFormattedPasteValue: function(stripTags)
+    _handleFormattedPasteValue: function(stripTags, pasteElement)
     {
-        this._removeEditableAttrs(this.pasteElement);
+        pasteElement = pasteElement || this.pasteElement;
+        this._removeEditableAttrs(pasteElement);
 
         // Clean paste from word document.
-        var html = dfx.getHtml(this.pasteElement);
+        var html = dfx.getHtml(pasteElement);
         html     = this._cleanWordPaste(html);
         html     = this._removeAttributes(html);
 
@@ -398,7 +414,8 @@ ViperCopyPastePlugin.prototype = {
             return;
         }
 
-        var fragment = this.rangeObj.createDocumentFragment(html);
+        var range    = this.rangeObj || this.viper.getCurrentRange();
+        var fragment = range.createDocumentFragment(html);
 
         var convertTags = this.convertTags;
         if (stripTags === true && this.convertTags !== null) {
@@ -899,54 +916,56 @@ ViperCopyPastePlugin.prototype = {
             dfx.removeAttr(tags[i], 'start');
         }
 
-        // Move any content that is not inside a paragraph in to a previous paragraph..
-        var steps = 2;
-        for (var i = 0; i < steps; i++) {
-            // Do this twice to make sure IE8 has the correct DOM structure in the
-            // second loop..
-            var node      = tmp.firstChild;
-            var prevBlock = null;
+        if (this.viper.isBrowser('msie') === true) {
+            // Move any content that is not inside a paragraph in to a previous paragraph..
+            var steps = 2;
+            for (var i = 0; i < steps; i++) {
+                // Do this twice to make sure IE8 has the correct DOM structure in the
+                // second loop..
+                var node      = tmp.firstChild;
+                var prevBlock = null;
 
-            while (node) {
-                if (dfx.isBlockElement(node) !== true) {
-                    if (node.nodeType === dfx.TEXT_NODE) {
-                        if (dfx.isBlank(dfx.trim(node.data)) === true) {
+                while (node) {
+                    if (dfx.isBlockElement(node) !== true) {
+                        if (node.nodeType === dfx.TEXT_NODE) {
+                            if (dfx.isBlank(dfx.trim(node.data)) === true) {
+                                var currentNode = node;
+                                node = node.nextSibling;
+                                dfx.remove(currentNode);
+                                continue;
+                            }
+                        }
+
+                        if (!prevBlock) {
+                            prevBlock = document.createElement('p');
+                        }
+
+                        if (node.nodeType !== dfx.TEXT_NODE && dfx.isStubElement(node) === false) {
+                            prevBlock.appendChild(document.createTextNode(' '));
+                        }
+
+                        var currentNode = node;
+                        node = node.nextSibling;
+                        prevBlock.appendChild(currentNode);
+                    } else {
+                        if (dfx.trim(dfx.getHtml(node)).match(/^[^\w]$/)) {
+                            // Only a single non-word character in this paragraph, move it
+                            // to the previous one in the next loop.
                             var currentNode = node;
-                            node = node.nextSibling;
+                            node = currentNode.firstChild;
+                            dfx.insertBefore(currentNode, node);
                             dfx.remove(currentNode);
-                            continue;
+                        } else {
+                            prevBlock = node;
+                            node      = node.nextSibling;
                         }
                     }
-
-                    if (!prevBlock) {
-                        prevBlock = document.createElement('p');
-                    }
-
-                    if (node.nodeType !== dfx.TEXT_NODE && dfx.isStubElement(node) === false) {
-                        prevBlock.appendChild(document.createTextNode(' '));
-                    }
-
-                    var currentNode = node;
-                    node = node.nextSibling;
-                    prevBlock.appendChild(currentNode);
-                } else {
-                    if (dfx.trim(dfx.getHtml(node)).match(/^[^\w]$/)) {
-                        // Only a single non-word character in this paragraph, move it
-                        // to the previous one in the next loop.
-                        var currentNode = node;
-                        node = currentNode.firstChild;
-                        dfx.insertBefore(currentNode, node);
-                        dfx.remove(currentNode);
-                    } else {
-                        prevBlock = node;
-                        node      = node.nextSibling;
-                    }
                 }
-            }
 
-            content = dfx.getHtml(tmp);
-            dfx.setHtml(tmp, content);
-        }//end for
+                content = dfx.getHtml(tmp);
+                dfx.setHtml(tmp, content);
+            }//end for
+        }
 
         return content;
 
@@ -955,6 +974,9 @@ ViperCopyPastePlugin.prototype = {
     _getListType: function(elem, listTypes)
     {
         var elContent = dfx.getHtml(elem);
+        elContent     = elContent.replace(/^(&nbsp;)+/m, '');
+        elContent     = dfx.trim(elContent);
+
         var info      = null;
         dfx.foreach(listTypes, function(k) {
             dfx.foreach(listTypes[k], function(j) {
@@ -991,7 +1013,7 @@ ViperCopyPastePlugin.prototype = {
     {
         var div        = document.createElement('div');
         var ul         = null;
-        var prevMargin = null;
+        var prevLevel  = null;
         var indentLvl  = {};
         var li         = null;
         var newList    = true;
@@ -1019,54 +1041,63 @@ ViperCopyPastePlugin.prototype = {
         for (var i = 0; i < pln; i++) {
             var pEl          = pElems[i];
             var listTypeInfo = this._getListType(pEl, listTypes);
-            if (listTypeInfo !== null) {
-                var marginLeft = parseInt(dfx.getStyle(pEl, 'margin-left'));
-                var listType   = listTypeInfo.listType;
-                var listStyle  = listTypeInfo.listStyle;
-                dfx.setHtml(pEl, listTypeInfo.html);
 
-                if (!listType) {
-                    listType = 'ol';
-                }
-
-                if (newList === true) {
-                    // Start a new list.
-                    ul        = document.createElement(listType);
-                    indentLvl = {};
-
-                    indentLvl[marginLeft] = ul;
-                    dfx.insertBefore(pEl, ul);
-                } else {
-                    // We determine start of sub lists by checking indentation.
-                    // If previous margin and current margin is not the same
-                    // then this is a sub-list or part of a parent list.
-                    if (marginLeft !== prevMargin) {
-                        if (dfx.isset(indentLvl[marginLeft]) === true) {
-                            // Going back up.
-                            ul = indentLvl[marginLeft];
-                        } else if (marginLeft > prevMargin) {
-                            // Sub list, create a new list.
-                            ul = document.createElement(listType);
-                            //dfx.attr(ul, '_viperlistst', 'list-style-type:' + listStyle);
-                            li.appendChild(ul);
-
-                            // Indent list.
-                            indentLvl[marginLeft] = ul;
-                        }
-                    }
-                }//end if
-
-                // Create a new list item.
-                li = this._createListItemFromElement(pEl);
-                ul.appendChild(li);
-
-                prevMargin = marginLeft;
-                dfx.remove(pEl);
-                newList = false;
-            } else {
+            if (listTypeInfo === null) {
                 // Next list item will be the start of a new list.
                 newList = true;
-            }//end if
+                continue;
+            }
+
+            var listType   = listTypeInfo.listType;
+            var listStyle  = listTypeInfo.listStyle;
+            var level      = pEl.getAttribute('style').match(/level([\d])+/mi);
+            dfx.setHtml(pEl, listTypeInfo.html);
+
+            if (!level) {
+                level = 1;
+            } else {
+                level = level[1];
+            }
+
+            if (!listType) {
+                listType = 'ol';
+            }
+
+            if (newList === true) {
+                // Start a new list.
+                ul        = document.createElement(listType);
+                indentLvl = {};
+
+                indentLvl[level] = ul;
+                dfx.insertBefore(pEl, ul);
+            } else {
+                if (level !== prevLevel) {
+                    if (dfx.isset(indentLvl[level]) === true) {
+                        // Going back up.
+                        ul = indentLvl[level];
+                        for (var lv in indentLvl) {
+                            if (lv > level) {
+                                delete indentLvl[lv];
+                            }
+                        }
+                    } else if (level > prevLevel) {
+                        // Sub list, create a new list.
+                        ul = document.createElement(listType);
+                        //dfx.attr(ul, '_viperlistst', 'list-style-type:' + listStyle);
+                        li.appendChild(ul);
+
+                        indentLvl[level] = ul;
+                    }
+                }
+            }
+
+            // Create a new list item.
+            li = this._createListItemFromElement(pEl);
+            ul.appendChild(li);
+
+            prevLevel = level;
+            dfx.remove(pEl);
+            newList = false;
         }//end for
 
         // Make sure the sub lists are inside list items.

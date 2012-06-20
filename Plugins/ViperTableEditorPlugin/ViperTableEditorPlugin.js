@@ -3243,15 +3243,15 @@ ViperTableEditorPlugin.prototype = {
                     // of the cell content. We'll use this later as a basis for the ID attribute
                     // although it may be prefixed with the ID of another header to make it unique.
                     var cellid = cell.getAttribute('id');
-                    if (!cellid) {
+                    if (!cellid || cellid.match(/r\d+c\d+/)) {
                         cellid = tableId + 'r' + (k + 1) + 'c' + (j + 1);
                         var existingElem = dfx.getId(cellid);
                         if (existingElem) {
                             existingElem.removeAttribute('id');
                         }
-                    }
 
-                    cell.setAttribute('id', cellid);
+                        cell.setAttribute('id', cellid);
+                    }
                 }
             }//end for
         }//end for

@@ -381,7 +381,56 @@ ViperKeyboardEditorPlugin.prototype = {
                 dfx.remove(firstBlock.previousSibling);
                 return false;
             }
-        }
+        } else if (range.startOffset === 0
+            && range.collapsed === false
+            && viper.isBrowser('chrome') === true
+        ) {
+            // Chrome has issues with removing list items from lists.
+            var startNode = range.getStartNode();
+            var endNode   = range.getEndNode();
+
+            // First issue is, if a whole list item is selected, it removes the li
+            // and it adds a span tag in place of it, creating invalid HTML and
+            // causing all sorts of issues. It should only remove the list item
+            // contents and leave the list item un touched..
+            if (startNode === endNode
+                && startNode.nodeType === dfx.TEXT_NODE
+                && dfx.isTag(startNode.parentNode, 'li') === true
+                && startNode.data.length === range.endOffset
+            ) {
+                dfx.setHtml(startNode.parentNode, '<br />');
+                return false;
+            } else if ((dfx.isTag(range.commonAncestorContainer, 'ul') || dfx.isTag(range.commonAncestorContainer, 'ol'))) {
+                // Second issue is with removing multiple list items.
+                if (endNode.data.length === range.endOffset) {
+                    var endItem = dfx.getParents(endNode, 'li')[0];
+                    if (endNode === range._getLastSelectableChild(endItem)) {
+                        // Whole list item is selected.
+                        // Get the start list item and all other list items until
+                        // the end list item.
+                        var startItem = dfx.getParents(startNode, 'li')[0];
+                        if (startNode === range._getFirstSelectableChild(startItem)) {
+                            var elements = dfx.getElementsBetween(startItem, endItem);
+                            elements.push(startItem, endItem);
+
+                            // Find a new node we can put caret in.
+                            var newSelContainer = range.getNextContainer(endNode, null, true);
+                            dfx.remove(elements);
+
+                            if (newSelContainer) {
+                                // Set the caret location.
+                                range.setStart(newSelContainer, 0);
+                                range.collapse(true);
+                                ViperSelection.addRange(range);
+                            }
+
+                            // Prevent default action.
+                            return false;
+                        }//end if
+                    }//end if
+                }//end if
+            }//end if
+        }//end if
 
     },
 
