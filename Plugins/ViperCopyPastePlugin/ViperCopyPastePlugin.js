@@ -114,6 +114,21 @@ ViperCopyPastePlugin.prototype = {
                 return false;
             };
 
+        } else {
+            elem.onpaste = function(e) {
+                if (self._isFirefox === true) {
+                    self._beforePaste();
+                    var div = self._createPasteDiv();
+                    div.focus();
+                    setTimeout(function() {console.info(dfx.getHtml(div));
+                        self._handleFormattedPasteValue(false, div);
+                        self._afterPaste();
+
+                        dfx.remove(div);
+
+                    }, 30);
+                }
+            };
         }//end if
 
         elem.oncut = function(e) {
@@ -376,12 +391,13 @@ ViperCopyPastePlugin.prototype = {
 
     },
 
-    _handleFormattedPasteValue: function(stripTags)
+    _handleFormattedPasteValue: function(stripTags, pasteElement)
     {
-        this._removeEditableAttrs(this.pasteElement);
+        pasteElement = pasteElement || this.pasteElement;
+        this._removeEditableAttrs(pasteElement);
 
         // Clean paste from word document.
-        var html = dfx.getHtml(this.pasteElement);
+        var html = dfx.getHtml(pasteElement);
         html     = this._cleanWordPaste(html);
         html     = this._removeAttributes(html);
 
@@ -398,7 +414,8 @@ ViperCopyPastePlugin.prototype = {
             return;
         }
 
-        var fragment = this.rangeObj.createDocumentFragment(html);
+        var range    = this.rangeObj || this.viper.getCurrentRange();
+        var fragment = range.createDocumentFragment(html);
 
         var convertTags = this.convertTags;
         if (stripTags === true && this.convertTags !== null) {
