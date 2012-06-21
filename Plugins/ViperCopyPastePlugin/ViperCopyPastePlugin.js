@@ -23,6 +23,7 @@ function ViperCopyPastePlugin(viper)
     this.allowedTags   = 'table|tr|td|th|ul|li|ol|br|p|a|img|form|input|select|option';
     this.convertTags   = null;
     this._tmpNode      = null;
+    this._iframe       = null;
     this._isFirefox    = viper.isBrowser('firefox');
     this._isMSIE       = viper.isBrowser('msie');
     this._isSafari     = viper.isBrowser('safari');
@@ -41,7 +42,7 @@ ViperCopyPastePlugin.prototype = {
             return self.keyDown(e);
         });
 
-        this.pasteElement = this._createPasteDiv();
+        //this.pasteElement = this._createPasteDiv();
 
     },
 
@@ -116,18 +117,30 @@ ViperCopyPastePlugin.prototype = {
 
         } else {
             elem.onpaste = function(e) {
-                if (self._isFirefox === true) {
-                    self._beforePaste();
-                    var div = self._createPasteDiv();
-                    div.focus();
-                    setTimeout(function() {console.info(dfx.getHtml(div));
-                        self._handleFormattedPasteValue(false, div);
+                self._beforePaste();
+
+                var tools   = self.viper.ViperTools;
+                var content = document.createElement('div');
+                dfx.setHtml(content, '<p style="margin:0 0 5px 0;font-size:1.3em;">Please paste the content in to the text area below</p>');
+
+                tools.createPopup('ViperCopyPastePlugin-iepopup', 'Paste Content', null, content, null, '', false, false);
+                tools.openPopup('ViperCopyPastePlugin-iepopup', null, null, '300px');
+
+                var iframe    = self._createPasteIframe(content);
+                var frameDoc  = dfx.getIframeDocument(iframe);
+                var pasteArea = frameDoc.getElementById('ViperPasteIframeDiv');
+                pasteArea.focus();
+                pasteArea.onpaste = function() {
+                    setTimeout(function() {
+                        var node = pasteArea;
+                        tools.closePopup('ViperCopyPastePlugin-iepopup');
+
+                        self._handleFormattedPasteValue(false, node);
                         self._afterPaste();
+                    }, 10);
+                };
 
-                        dfx.remove(div);
-
-                    }, 30);
-                }
+                return false;
             };
         }//end if
 
@@ -344,7 +357,7 @@ ViperCopyPastePlugin.prototype = {
 
     },
 
-    _createPasteDiv: function()
+    _createPasteDiv: function(noIframe)
     {
         // If the old exists then get rid of it as a bit of an IE8 hack to address
         // pasting positioning problems as well as range non object issues.
@@ -353,19 +366,55 @@ ViperCopyPastePlugin.prototype = {
             dfx.remove(oldEl);
         }
 
-        var div = document.createElement('div');
-        div.setAttribute('id', 'ViperPasteDiv');
-        div.setAttribute('contentEditable', true);
-        this.viper.addElement(div);
+        if (noIframe !== true) {
+            var iframe   = this._createPasteIframe();
+            iframe.id    = 'ViperPasteDivIframe';
+            var frameDoc = dfx.getIframeDocument(iframe);
+            this._iframe = iframe;
+            return frameDoc.getElementById('ViperPasteIframeDiv');
+        } else {
+            var div = document.createElement('div');
+            div.setAttribute('id', 'ViperPasteDiv');
+            div.setAttribute('contentEditable', true);
+            this.viper.addElement(div);
 
-        return div;
+            return div;
+        }
+
+    },
+
+    _createPasteIframe: function(parent)
+    {
+        var iframe = document.createElement('iframe');
+        iframe.src = 'about:blank';
+        dfx.setStyle(iframe, 'border', 'none');
+
+        if (parent) {
+            parent.appendChild(iframe);
+        } else {
+            this.viper.addElement(iframe);
+        }
+
+        var content = '<!DOCTYPE html><head>';
+        content    += '</head><body style="overflow:hidden;margin:0;"><div id="ViperPasteIframeDiv" contentEditable="true" ';
+        content    += 'style="width: 296px; height: 140px;outline:none;';
+        content    += 'background: none repeat scroll 0 0 #2B2B2B;border-bottom: 1px solid #777777;border-radius: 0.4em 0.4em 0.4em 0.4em;'
+        content    += 'border-top: 1px solid #000000;box-shadow: 0 0 3px #000000 inset;color: #5A8BD0;';
+        content    += 'display: block;padding: 4px 2px;position: relative;text-align: left;';
+        content    += 'overflow:hidden;';
+        content    += '"></div></body></html>';
+
+        var doc = dfx.getIframeDocument(iframe);
+        doc.write(content);
+
+        return iframe;
 
     },
 
     _handleFormattedPaste: function(stripTags, e)
     {
         if (!this.pasteElement) {
-            this.pasteElement = this._createPasteDiv();
+            this.pasteElement = this._createPasteDiv(this._isSafari);
         } else {
             dfx.empty(this.pasteElement);
         }
@@ -400,6 +449,11 @@ ViperCopyPastePlugin.prototype = {
         var html = dfx.getHtml(pasteElement);
         html     = this._cleanWordPaste(html);
         html     = this._removeAttributes(html);
+
+        if (this._iframe) {
+            dfx.remove(this._iframe);
+            this._iframe = null;
+        }
 
         if (stripTags === true) {
             html = dfx.stripTags(html, this.allowedTags.split('|'));
@@ -442,8 +496,8 @@ ViperCopyPastePlugin.prototype = {
             // a little bit more generic.
             var keyboardEditor = this.viper.ViperPluginManager.getPlugin('ViperKeyboardEditorPlugin');
             var range = this.viper.getCurrentRange();
-            range.setStart(this._tmpNode, 0);
-            range.collapse(true);
+            range.setEnd(this._tmpNode, 0);
+            range.collapse(false);
 
             var prevBlock = keyboardEditor.splitAtRange(true, range);
             if (!prevBlock) {
@@ -511,7 +565,7 @@ ViperCopyPastePlugin.prototype = {
             var ctNode   = null;
             while (fragment.firstChild) {
                 if (fragment.firstChild === ctNode) {
-                    GUI.message('developer', 'Failed to move nodes', 'error');
+                    console.error('Failed to move nodes');
                     break;
                 }
 
@@ -916,7 +970,7 @@ ViperCopyPastePlugin.prototype = {
             dfx.removeAttr(tags[i], 'start');
         }
 
-        if (this.viper.isBrowser('msie') === true) {
+        if (this.viper.isBrowser('msie') === true && dfx.getTag('p', tmp).length > 0) {
             // Move any content that is not inside a paragraph in to a previous paragraph..
             var steps = 2;
             for (var i = 0; i < steps; i++) {
