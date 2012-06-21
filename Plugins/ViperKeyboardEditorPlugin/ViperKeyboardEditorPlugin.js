@@ -383,7 +383,7 @@ ViperKeyboardEditorPlugin.prototype = {
             }
         } else if (range.startOffset === 0
             && range.collapsed === false
-            && viper.isBrowser('chrome') === true
+            && viper.isBrowser('msie') !== true
         ) {
             // Chrome has issues with removing list items from lists.
             var startNode = range.getStartNode();
