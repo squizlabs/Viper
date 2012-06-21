@@ -1,0 +1,55 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>Viper - Simple Example</title>
+    <link rel="stylesheet" media="screen" href="main.css">
+    <script type="text/javascript" src="../../DfxJSLib/dfx.js"></script>
+    <script type="text/javascript" src="../../Viper-all.js"></script>
+    <script type="text/javascript" src="../../Plugins/ViperSourceViewPlugin/jsbeautifier.js"></script>
+    <script type="text/javascript">
+        var viper = null;
+        ViperReadyCallback = function() {
+            viper = new Viper('test');
+            viper.getPluginManager().setPlugins(['ViperCopyPastePlugin', 'ViperKeyboardEditorPlugin']);
+            viper.setEditableElement(document.getElementById('content'));
+
+            var copyPastePlugin = viper.getPluginManager().getPlugin('ViperCopyPastePlugin');
+            var defaultFunction = copyPastePlugin._handleFormattedPasteValue;
+            copyPastePlugin._handleFormattedPasteValue = function(stripTags, pasteElement) {
+                pasteElement = pasteElement || this.pasteElement;
+
+                var tmp = pasteElement.cloneNode(true);
+                this._removeEditableAttrs(tmp);
+
+                // Clean paste from word document.
+                var html = dfx.getHtml(tmp);
+
+                dfx.getId('rawContent').value = html;
+
+                defaultFunction.apply(this, arguments);
+
+                dfx.getId('cleanContent').value = StyleHTML(viper.getHtml());
+            };
+
+            dfx.getId('content').onpaste = function() {
+            console.info(1);
+            };
+        };
+    </script>
+</head>
+<body spellcheck="false">
+    <div style="position:absolute;top:10px;left:10px;">
+        <h2>Viper</h2>
+        <div id="content" style="position:relative;overflow:hidden;width: 800px;height:800px;border:1px solid #000;"></div>
+    </div>
+    <div style="position:absolute;top:10px;left:820px;">
+        <h2>Raw Content</h2>
+        <textarea contentEditable="true" id="rawContent" style="width: 400px;height:370px;border:1px solid #000;overflow:auto;"></textarea>
+    </div>
+    <div style="position:absolute;top:440px;left:820px;">
+        <h2>Clean Content</h2>
+        <textarea contentEditable="true" id="cleanContent" style="width: 400px;height:370px;border:1px solid #000;"></textarea>
+    </div>
+</body>
+</html>
