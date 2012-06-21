@@ -16,32 +16,68 @@
 
             var copyPastePlugin = viper.getPluginManager().getPlugin('ViperCopyPastePlugin');
             var defaultFunction = copyPastePlugin._handleFormattedPasteValue;
-            copyPastePlugin._handleFormattedPasteValue = function(stripTags, pasteElement) {
+            copyPastePlugin._handleFormattedPasteValue = function(stripTags, pasteElement, _tmpNode) {
+                if (_tmpNode) {
+                    this._tmpNode = _tmpNode;
+                }
+
                 pasteElement = pasteElement || this.pasteElement;
 
-                var tmp = pasteElement.cloneNode(true);
-                this._removeEditableAttrs(tmp);
-
                 // Clean paste from word document.
-                var html = dfx.getHtml(tmp);
+                var html = pasteElement.innerHTML;
 
-                dfx.getId('rawContent').value = html;
+                if (!_tmpNode) {
+                    dfx.getId('rawContent').value = html;
+                }
 
                 defaultFunction.apply(this, arguments);
 
-                dfx.getId('cleanContent').value = StyleHTML(viper.getHtml());
+                viperHtml = viper.getHtml();
+
+                if (_tmpNode && viper.isBrowser('firefox') === true) {
+                    // Firefox seems to have an issue with creating some of the fragments
+                    // thinking they are only text.
+                    viperHtml = viperHtml.replace('&lt;', '<', 'g');
+                    viperHtml = viperHtml.replace('&gt;', '>', 'g');
+                    dfx.setHtml(viper.element, viperHtml);
+                    dfx.getId('cleanContent').value = StyleHTML(dfx.getHtml(viper.element));
+                } else {
+                    dfx.getId('cleanContent').value = StyleHTML(viperHtml);
+                }
+
             };
 
-            dfx.getId('content').onpaste = function() {
-            console.info(1);
+            var rawContent     = dfx.getId('rawContent');
+            var cleanContent   = dfx.getId('cleanContent');
+            rawContent.value   = '';
+            cleanContent.value = '';
+
+            rawContent.onpaste = function() {
+                setTimeout(function() {
+                    viper.element.focus();
+                    var tmp = document.createElement('div');
+                    dfx.setHtml(tmp, rawContent.value);
+                    copyPastePlugin._handleFormattedPasteValue(false, tmp, dfx.getId('content').firstChild.firstChild);
+                }, 30);
             };
+
+            dfx.remove(dfx.getId('loading'));
+            dfx.setStyle(dfx.getId('mainContent'), 'display', 'block');
         };
+
+        setTimeout(function() {
+            if (dfx.getId('loading')) {
+                dfx.setHtml(dfx.getId('loading'), 'Loading... FAILED!');
+            }
+
+        }, 5000);
     </script>
 </head>
-<body spellcheck="false">
+<body spellcheck="false" >
+ <div id="mainContent" style="display:none">
     <div style="position:absolute;top:10px;left:10px;">
         <h2>Viper</h2>
-        <div id="content" style="position:relative;overflow:hidden;width: 800px;height:800px;border:1px solid #000;"></div>
+        <div id="content" style="position:relative;overflow:auto;width: 800px;height:800px;border:1px solid #000;">&nbsp;</div>
     </div>
     <div style="position:absolute;top:10px;left:820px;">
         <h2>Raw Content</h2>
@@ -51,5 +87,7 @@
         <h2>Clean Content</h2>
         <textarea contentEditable="true" id="cleanContent" style="width: 400px;height:370px;border:1px solid #000;"></textarea>
     </div>
+ </div>
+ <div id="loading">Loading...</div>
 </body>
 </html>
