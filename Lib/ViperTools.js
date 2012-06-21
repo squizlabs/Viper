@@ -955,11 +955,15 @@ ViperTools.prototype = {
 
     },
 
-    openPopup: function(id, width, height)
+    openPopup: function(id, width, height, minWidth)
     {
         var popup        = this.getItem(id);
         var contentElem  = popup.midContent;
         var popupElement = popup.element;
+
+        if (minWidth) {
+            dfx.setStyle(contentElem, 'min-width', minWidth);
+        }
 
         if (width) {
             dfx.setStyle(contentElem, 'width', width + 'px');
