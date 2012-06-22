@@ -215,29 +215,6 @@ abstract class AbstractViperTableEditorPluginUnitTest extends AbstractViperUnitT
 
 
     /**
-     * Removes the specified table's headers and ids.
-     *
-     * @param integer $tableIndex The table selector index.
-     * @param boolean $removeid   If TRUE then the table and cell ids will be removed.
-     *
-     * @return void
-     */
-    protected function removeTableHeaders($tableIndex=0, $removeid=TRUE)
-    {
-        $js = 'rmTableHeaders('.$tableIndex.',';
-
-        if ($removeid === TRUE) {
-            $js .= ' true);';
-        } else {
-            $js .= ' false);';
-        }
-
-        $this->execJS($js);
-
-    }//end removeTableHeaders()
-
-
-    /**
      * Returns the table structure.
      *
      * @param integer $index The table index on the page.
