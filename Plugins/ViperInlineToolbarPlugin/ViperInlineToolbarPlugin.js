@@ -132,6 +132,7 @@ ViperInlineToolbarPlugin.prototype = {
         }
 
         var lineage = this._getSelectionLineage(range, nodeSelection);
+
         if (!lineage || lineage.length === 0) {
             return false;
         }
@@ -493,7 +494,11 @@ ViperInlineToolbarPlugin.prototype = {
             }
 
             if (startNode.nodeType !== dfx.TEXT_NODE || dfx.isBlank(startNode.data) !== true) {
-                lineage.push(startNode);
+                if (startNode !== dfx.TEXT_NODE && startNode !== range.getEndNode()) {
+                    lineage.push(range.getEndNode());
+                } else {
+                    lineage.push(startNode);
+                }
             }
         }
 
