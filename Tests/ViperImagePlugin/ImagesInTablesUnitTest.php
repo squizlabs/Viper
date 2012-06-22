@@ -23,7 +23,7 @@ class Viper_Tests_ViperImagePlugin_ImagesInTablesUnitTest extends AbstractViperU
         $this->click($this->findKeyword($text));
         $this->assertTrue($this->topToolbarButtonExists('image'), 'Image icon should be active.');
 
-        $this->selectKeyword(3);
+        $this->selectKeyword(2);
         $this->type('Key.RIGHT');
         $this->assertTrue($this->topToolbarButtonExists('image'), 'Image icon should be active.');
 
@@ -41,17 +41,19 @@ class Viper_Tests_ViperImagePlugin_ImagesInTablesUnitTest extends AbstractViperU
         $this->type('Key.RIGHT');
 
         $this->clickTopToolbarButton('image');
-        $this->type('http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg');
+        $this->type('http://www.squizlabs.com/__images/general/html-codesniffer.png');
         $this->keyDown('Key.TAB');
         $this->type('Alt tag');
         $this->keyDown('Key.ENTER');
 
-        $this->assertEquals('UnaU %1%<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Alt tag" /> FoX %3%', $this->getHtml('td', 0));
+        $this->removeTableHeaders();
+        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU %1%<img src="http://www.squizlabs.com/__images/general/html-codesniffer.png" alt="Alt tag" /> FoX %2%</td><td><strong><em>WoW</em></strong> sapien vel aliquet</td><td>Another cell</td></tr><tr><td><h3>%2%</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         $this->clickElement('img', 1);
         $this->keyDown('Key.DELETE');
 
-        $this->assertEquals('UnaU %1% FoX %3%', $this->getHtml('td,th', 3));
+        $this->removeTableHeaders();
+        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU %1% FoX %2%</td><td><strong><em>WoW</em></strong> sapien vel aliquet</td><td>Another cell</td></tr><tr><td><h3>%2%</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
     }//end testInsertingAndDeletingAnImageUsingDelete()
 
@@ -67,12 +69,13 @@ class Viper_Tests_ViperImagePlugin_ImagesInTablesUnitTest extends AbstractViperU
         $this->type('Key.RIGHT');
 
         $this->clickTopToolbarButton('image');
-        $this->type('http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg');
+        $this->type('http://www.squizlabs.com/__images/general/html-codesniffer.png');
         $this->clickField('Image is decorative');
         sleep(1);
         $this->keyDown('Key.ENTER');
 
-        $this->assertEquals('UnaU %1%<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="" /> FoX %3%', $this->getHtml('td,th', 3));
+        $this->removeTableHeaders();
+        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU %1%<img src="http://www.squizlabs.com/__images/general/html-codesniffer.png" alt="" /> FoX %2%</td><td><strong><em>WoW</em></strong> sapien vel aliquet</td><td>Another cell</td></tr><tr><td><h3>%2%</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         $this->clickElement('img', 1);
         $this->clickTopToolbarButton('image', 'active');
@@ -82,13 +85,14 @@ class Viper_Tests_ViperImagePlugin_ImagesInTablesUnitTest extends AbstractViperU
         $this->clickTopToolbarButton('image', 'selected');
         $this->click($this->findKeyword(1));
 
-        $this->assertEquals('UnaU %1%<img src="http://cms.squizsuite.net/__images/homepage-images/editing.png" alt="" /> FoX %3%', $this->getHtml('td,th', 3));
+        $this->removeTableHeaders();
+        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU %1%<img src="http://cms.squizsuite.net/__images/homepage-images/editing.png" alt="" /> FoX %2%</td><td><strong><em>WoW</em></strong> sapien vel aliquet</td><td>Another cell</td></tr><tr><td><h3>%2%</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
     }//end testInsertingAndEditingTheUrlForAnImage()
 
 
     /**
-     * Test inserting and deleting an image in a table using the update changes button.
+     * Test inserting and editing an image in a table using the update changes button.
      *
      * @return void
      */
@@ -98,22 +102,24 @@ class Viper_Tests_ViperImagePlugin_ImagesInTablesUnitTest extends AbstractViperU
         $this->type('Key.RIGHT');
 
         $this->clickTopToolbarButton('image');
-        $this->type('http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg');
+        $this->type('http://www.squizlabs.com/__images/general/html-codesniffer.png');
         $this->keyDown('Key.TAB');
         $this->type('Alt tag');
         sleep(1);
         $this->clickButton('Update Changes', NULL, TRUE);
 
-        $this->assertEquals('UnaU %1%<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Alt tag" /> FoX %3%', $this->getHtml('td,th', 3));
+        $this->removeTableHeaders();
+        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU %1%<img src="http://www.squizlabs.com/__images/general/html-codesniffer.png" alt="Alt tag" /> FoX %2%</td><td><strong><em>WoW</em></strong> sapien vel aliquet</td><td>Another cell</td></tr><tr><td><h3>%2%</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         $this->clickElement('img', 1);
         $this->clickTopToolbarButton('image', 'active');
 
         $this->clickField('Image is decorative');
-        $this->click($updateChanges);
+        $this->clickButton('Update Changes', NULL, TRUE);
         $this->clickTopToolbarButton('image', 'selected');
 
-        $this->assertEquals('UnaU %1%<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="" /> FoX %3%', $this->getHtml('td,th', 3));
+        $this->removeTableHeaders();
+        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU %1%<img src="http://www.squizlabs.com/__images/general/html-codesniffer.png" alt="" /> FoX %2%</td><td><strong><em>WoW</em></strong> sapien vel aliquet</td><td>Another cell</td></tr><tr><td><h3>%2%</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
     }//end testInsertingAndEditingAnImageUsingTheUpdateChangesButton()
 
@@ -129,17 +135,19 @@ class Viper_Tests_ViperImagePlugin_ImagesInTablesUnitTest extends AbstractViperU
         $this->selectInlineToolbarLineageItem(3);
 
         $this->clickTopToolbarButton('image');
-        $this->type('http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg');
+        $this->type('http://www.squizlabs.com/__images/general/html-codesniffer.png');
         $this->keyDown('Key.TAB');
         $this->type('Alt tag');
         $this->keyDown('Key.ENTER');
 
-        $this->assertEquals('<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Alt tag" />', $this->getHtml('td,th', 3));
+        $this->removeTableHeaders();
+        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td><img src="http://www.squizlabs.com/__images/general/html-codesniffer.png" alt="Alt tag" />&nbsp;</td><td><strong><em>WoW</em></strong> sapien vel aliquet</td><td>Another cell</td></tr><tr><td><h3>%2%</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         $this->clickElement('img', 1);
         $this->keyDown('Key.DELETE');
 
-        $this->assertEquals('', $this->getHtml('td,th', 3));
+        $this->removeTableHeaders();
+        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td&nbsp;></td><td><strong><em>WoW</em></strong> sapien vel aliquet</td><td>Another cell</td></tr><tr><td><h3>%2%</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
     }//end testReplacingContentInCellWithImage()
 
@@ -155,12 +163,13 @@ class Viper_Tests_ViperImagePlugin_ImagesInTablesUnitTest extends AbstractViperU
         $this->selectInlineToolbarLineageItem(3);
 
         $this->clickTopToolbarButton('image');
-        $this->type('http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg');
+        $this->type('http://www.squizlabs.com/__images/general/html-codesniffer.png');
         $this->keyDown('Key.TAB');
         $this->type('Alt tag');
         $this->keyDown('Key.ENTER');
 
-        $this->assertEquals('<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Alt tag" />', $this->getHtml('td,th', 3));
+        $this->removeTableHeaders();
+        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td><img src="http://www.squizlabs.com/__images/general/html-codesniffer.png" alt="Alt tag" />&nbsp;</td><td><strong><em>WoW</em></strong> sapien vel aliquet</td><td>Another cell</td></tr><tr><td><h3>%2%</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         $this->clickElement('img', 1);
         $this->clickTopToolbarButton('image', 'active');
@@ -169,7 +178,8 @@ class Viper_Tests_ViperImagePlugin_ImagesInTablesUnitTest extends AbstractViperU
         $this->keyDown('Key.ENTER');
         $this->click($this->findKeyword(2));
 
-        $this->assertEquals('<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Abcd" />', $this->getHtml('td,th', 3));
+        $this->removeTableHeaders();
+        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td><img src="http://www.squizlabs.com/__images/general/html-codesniffer.png" alt="Abcd" />&nbsp;</td><td><strong><em>WoW</em></strong> sapien vel aliquet</td><td>Another cell</td></tr><tr><td><h3>%2%</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
     }//end testEditingAnImageInCell()
 
