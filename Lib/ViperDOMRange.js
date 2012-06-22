@@ -780,6 +780,11 @@ ViperDOMRange.prototype = {
         ) {
             this._nodeSel.node = startNode;
             return startNode;
+        } else if (dfx.isStubElement(startNode) === true
+            && endNode.nodeType === dfx.TEXT_NODE
+            && endNode.data.length === range.endOffset
+        ) {
+            return startNode;
         }
 
         // We may need to adjust the "startNode" depending on its offset.
