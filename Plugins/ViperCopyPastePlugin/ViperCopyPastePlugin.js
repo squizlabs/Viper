@@ -1027,7 +1027,8 @@ ViperCopyPastePlugin.prototype = {
 
     _getListType: function(elem, listTypes)
     {
-        var elContent = dfx.getHtml(elem);
+        var elContent = dfx.getNodeTextContent(elem);
+        elContent     = elContent.replace(/\n/, '');
         elContent     = elContent.replace(/^(&nbsp;)+/m, '');
         elContent     = dfx.trim(elContent);
 
@@ -1072,19 +1073,20 @@ ViperCopyPastePlugin.prototype = {
         var li         = null;
         var newList    = true;
 
+        var circleCharsArray = [111, 167, 183, 223, 8721, 8226];
+        var circleChars      = [];
+        for (var i = 0; i < circleCharsArray.length; i++) {
+            circleChars.push(String.fromCharCode(circleCharsArray[i]));
+        }
+
+        circleChars = circleChars.join('|');
+
         var listTypes = {
             ul: {
-                circle: ['^o(\s|&nbsp;)+'],
-                disc: ['^' + String.fromCharCode(183) + '(\\s|&nbsp;)+'],
-                square: ['^' + String.fromCharCode(167) + '(\\s|&nbsp;)+'],
-                auto: ['^' + String.fromCharCode(8226) + '(\\s|&nbsp;)+']
+                circle: ['^(?:' + circleChars + ')(?:\\s|&nbsp;)+']
             },
             ol: {
-                decimal: ['^\\d+\\.(\s|&nbsp;)+'],
-                'lower-roman': ['^[ivxlcdm]+\\.(\\s|&nbsp;)+'],
-                'upper-roman': ['^[IVXLCDM]+\\.(\\s|&nbsp;)+'],
-                'lower-alpha': ['^[a-z]+\\.(\\s|&nbsp;)+'],
-                'upper-alpha': ['^[A-Z]+\\.(\\s|&nbsp;)+']
+                decimal: ['^(?:\\d+|[a-z]+)\\.(?:\\s|&nbsp;)+']
             }
         };
 
