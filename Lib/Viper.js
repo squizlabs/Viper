@@ -3891,9 +3891,12 @@ Viper.prototype = {
         if (document.activeElement
             && document.activeElement !== this.element
             && document.activeElement.blur
+            && document.activeElement !== document.body
         ) {
             // Call the blur method of the active element incase its an input box etc
             // which causes problems on IE when range is set below.
+            // Note that the above activeElement != body check is to prevent the best
+            // browser in the world changing focus to another window..
             document.activeElement.blur();
         }
 
