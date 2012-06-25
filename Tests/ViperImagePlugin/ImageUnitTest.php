@@ -885,6 +885,8 @@
             $this->click($this->getMouseLocation());
 
             $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests %1%</h1><img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="" width="369" height="167" /><p>LOREM</p><p>LABS is ORSM</p><p></p>');
+            $this->assertTrue($this->inlineToolbarButtonExists('image', 'active'), 'Image icon should be active.');
+            $this->assertTrue($this->inlineToolbarButtonExists('move'), 'Move icon should appear in the inline toolbar.');
 
             // Undo the move
             $this->clickTopToolbarButton('historyUndo');

@@ -473,6 +473,18 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractGeneralLis
     {
         $this->selectKeyword(5, 8);
         $this->keyDown('Key.BACKSPACE');
+        
+        // Check that the inline toolbar no longer appears  on the screen
+        $inlineToolbarFound = true;
+        try 
+        {
+            $this->getInlineToolbar();
+        }
+        catch  (Exception $e) {
+            $inlineToolbarFound = false;
+        }
+        
+        $this->assertFalse($inlineToolbarFound, 'The inline toolbar was found');
 
         $this->assertHTMLMatch('<p>%1% uuuuuu. %2%</p><p>cPOc ccccc dddd. %3%</p><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa %4% ccccc</li><li>Accessibility audit report</li><li>Recommendations %9% plan</li><li>Squiz Matrix guide</li></ol><h2>%10%</h2>');
 
