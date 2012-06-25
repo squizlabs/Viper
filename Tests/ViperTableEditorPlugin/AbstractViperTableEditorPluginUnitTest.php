@@ -18,7 +18,7 @@ abstract class AbstractViperTableEditorPluginUnitTest extends AbstractViperUnitT
      */
     protected function insertTable($rows=NULL, $cols=NULL)
     {
-        $this->selectKeyword(1);
+        $this->selectKeyword(3);
         $this->keyDown('Key.RIGHT');
         $this->clickTopToolbarButton('table');
 
@@ -47,7 +47,7 @@ abstract class AbstractViperTableEditorPluginUnitTest extends AbstractViperUnitT
      */
     protected function insertTableWithNoHeaders()
     {
-        $this->selectKeyword(1);
+        $this->selectKeyword(3);
         $this->keyDown('Key.RIGHT');
         $this->clickTopToolbarButton('table');
 
@@ -64,7 +64,7 @@ abstract class AbstractViperTableEditorPluginUnitTest extends AbstractViperUnitT
      */
     protected function insertTableWithLeftHeaders()
     {
-        $this->selectKeyword(1);
+        $this->selectKeyword(3);
         $this->keyDown('Key.RIGHT');
         $this->clickTopToolbarButton('table');
 
@@ -81,7 +81,7 @@ abstract class AbstractViperTableEditorPluginUnitTest extends AbstractViperUnitT
      */
     protected function insertTableWithBothHeaders()
     {
-        $this->selectKeyword(1);
+        $this->selectKeyword(3);
         $this->keyDown('Key.RIGHT');
         $this->clickTopToolbarButton('table');
 
