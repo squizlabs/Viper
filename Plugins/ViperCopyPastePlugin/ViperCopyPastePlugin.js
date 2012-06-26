@@ -124,8 +124,8 @@ ViperCopyPastePlugin.prototype = {
                     var content = document.createElement('div');
                     dfx.addClass(content, 'ViperCopyPastePlugin-pasteWrapper');
 
-                    var pasteDesc = '<p class="ViperCopyPatePlugin-pasteDesc">Due to the limitation in your browser,<br/> pasting should be done via the<br/> keyboard shortcut <strong>CTRL + V</strong></p>';
-                    pasteDesc    += '<p class="ViperCopyPatePlugin-pasteDesc">If this is not possible, <br/>paste into the box below.</p>';
+                    var pasteDesc = '<p class="ViperCopyPatePlugin-pasteDesc">Paste your content into the box below and it will be automatically inserted and cleaned up.</p>';
+                    pasteDesc    += '<p class="ViperCopyPatePlugin-pasteDesc">Avoid this step for future pastes using the keyboard shortcut <strong>CTRL + V</strong>.</p>';
 
                     dfx.setHtml(content, pasteDesc);
 
