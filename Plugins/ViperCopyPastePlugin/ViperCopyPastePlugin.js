@@ -116,29 +116,53 @@ ViperCopyPastePlugin.prototype = {
             };
 
         } else {
+            var toolbarCreated = false;
             elem.onpaste = function(e) {
-                self._beforePaste();
-
                 var tools   = self.viper.ViperTools;
-                var content = document.createElement('div');
-                dfx.setHtml(content, '<p style="margin:0 0 5px 0;font-size:1.3em;">Please paste the content in to the text area below</p>');
+                var toolbar = null;
+                //if (!toolbar) {
+                    var content = document.createElement('div');
+                    dfx.addClass(content, 'ViperCopyPastePlugin-pasteWrapper');
 
-                tools.createPopup('ViperCopyPastePlugin-iepopup', 'Paste Content', null, content, null, '', false, false);
-                tools.openPopup('ViperCopyPastePlugin-iepopup', null, null, '300px');
+                    var pasteDesc = '<p class="ViperCopyPatePlugin-pasteDesc">Due to the limitation in your browser,<br/> pasting should be done via the<br/> keyboard shortcut <strong>CTRL + V</strong></p>';
+                    pasteDesc    += '<p class="ViperCopyPatePlugin-pasteDesc">If this is not possible, <br/>paste into the box below.</p>';
 
-                var iframe    = self._createPasteIframe(content);
-                var frameDoc  = dfx.getIframeDocument(iframe);
-                var pasteArea = frameDoc.getElementById('ViperPasteIframeDiv');
-                pasteArea.focus();
-                pasteArea.onpaste = function() {
-                    setTimeout(function() {
-                        var node = pasteArea;
-                        tools.closePopup('ViperCopyPastePlugin-iepopup');
+                    dfx.setHtml(content, pasteDesc);
 
-                        self._handleFormattedPasteValue(false, node);
-                        self._afterPaste();
-                    }, 10);
-                };
+                    var toolbarElement = tools.createInlineToolbar('ViperCopyPastePlugin-paste', true, null, function() {
+                        toolbar.toggleSubSection('pasteSubSection');
+                    });
+                    toolbar = tools.getItem('ViperCopyPastePlugin-paste');
+                    toolbar.makeSubSection('pasteSubSection', content);
+                    toolbar.hideToolsSection();
+
+                    toolbar.setOnHideCallback(function() {
+                        dfx.remove(toolbarElement);
+                    });
+
+                    var iframe    = self._createPasteIframe(content);
+                    var frameDoc  = dfx.getIframeDocument(iframe);
+                    var pasteArea = frameDoc.getElementById('ViperPasteIframeDiv');
+                    pasteArea.onpaste = function() {
+                        setTimeout(function() {
+                            var node = pasteArea;
+                            toolbar.hide();
+
+                            self._handleFormattedPasteValue(false, node);
+                            self._afterPaste();
+                        }, 10);
+                    };
+
+                    pasteArea.onfocus = function() {
+                        pasteArea.innerHTML = '';
+                    };
+                //}
+
+                setTimeout(function() {
+                    toolbar.update();
+                    self._beforePaste();
+                    //pasteArea.focus();
+                }, 10);
 
                 return false;
             };
@@ -387,7 +411,7 @@ ViperCopyPastePlugin.prototype = {
     {
         var iframe = document.createElement('iframe');
         iframe.src = 'about:blank';
-        dfx.setStyle(iframe, 'border', 'none');
+        dfx.addClass(iframe, 'ViperCopyPastePlugin-iframe');
 
         if (parent) {
             parent.appendChild(iframe);
@@ -397,12 +421,12 @@ ViperCopyPastePlugin.prototype = {
 
         var content = '<!DOCTYPE html><head>';
         content    += '</head><body style="overflow:hidden;margin:0;"><div id="ViperPasteIframeDiv" contentEditable="true" ';
-        content    += 'style="width: 296px; height: 140px;outline:none;';
+        content    += 'style="width: 226px; height: 22px;outline:none;';
         content    += 'background: none repeat scroll 0 0 #2B2B2B;border-bottom: 1px solid #777777;border-radius: 0.4em 0.4em 0.4em 0.4em;'
-        content    += 'border-top: 1px solid #000000;box-shadow: 0 0 3px #000000 inset;color: #5A8BD0;';
-        content    += 'display: block;padding: 4px 2px;position: relative;text-align: left;';
+        content    += 'border-top: 1px solid #000000;box-shadow: 0 0 3px #000000 inset;color: #999;';
+        content    += 'display: block;padding: 4px 2px;position: relative;text-align: center;font-style:italic;font-family:arial;font-size:0.9em;';
         content    += 'overflow:hidden;';
-        content    += '"></div></body></html>';
+        content    += '">Paste content here</div></body></html>';
 
         var doc = dfx.getIframeDocument(iframe);
         doc.write(content);
