@@ -421,10 +421,10 @@ ViperCopyPastePlugin.prototype = {
 
         var content = '<!DOCTYPE html><head>';
         content    += '</head><body style="overflow:hidden;margin:0;"><div id="ViperPasteIframeDiv" contentEditable="true" ';
-        content    += 'style="width: 226px; height: 22px;outline:none;';
+        content    += 'style="-moz-box-sizing: border-box; box-sizing: border-box; width: 100%; height: 2.1em;outline:none;';
         content    += 'background: none repeat scroll 0 0 #2B2B2B;border-bottom: 1px solid #777777;border-radius: 0.4em 0.4em 0.4em 0.4em;'
         content    += 'border-top: 1px solid #000000;box-shadow: 0 0 3px #000000 inset;color: #999;';
-        content    += 'display: block;padding: 4px 2px;position: relative;text-align: center;font-style:italic;font-family:arial;font-size:0.9em;';
+        content    += 'display: block;padding: 4px 0.5em;position: relative;text-align: center;font-style:italic;font-family:arial;font-size:0.9em;';
         content    += 'overflow:hidden;';
         content    += '">Paste content here</div></body></html>';
 
