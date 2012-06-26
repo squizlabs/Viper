@@ -124,6 +124,28 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
 
     }//end testCopyAndPasteInPreTag()
 
+    
+    /**
+     * Test copy and paste for a table.
+     *
+     * @return void
+     */
+    public function testCopyAndPasteForAParagraph()
+    {
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->keyDown('Key.CMD + c');
+
+        $this->click($this->findKeyword(1));
+        $this->selectKeyword(2);
+        $this->keyDown('Key.RIGHT');
+        $this->keyDown('Key.ENTER');
+        $this->keyDown('Key.CMD + v');
+
+        $this->assertHTMLMatch('<p>%1% sit amet ipsum</p><p>%2%</p><p>%1% sit amet ipsum</p>');
+
+    }//end testCopyAndPasteForAParagraph()
+    
 
     /**
      * Test copy and paste for a table.

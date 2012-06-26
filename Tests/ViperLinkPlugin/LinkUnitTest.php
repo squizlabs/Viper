@@ -871,6 +871,36 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
 
     }//end testClickingUndoPutLinkBackCorrectlyAfterItHasBeenRemoved()
 
+    
+     /**
+     * Test that the inline toolbar doesn't appear after you close the link window and click in some text in the paragraph below it.
+     *
+     * @return void
+     */
+    public function testInlineToolbarDoesNotAppearAfterClosingLinkWindow()
+    {
+        // Open and close the link window in the top toolbar
+        $this->selectKeyword(3);
+        $this->clickTopToolbarButton('link');
+        sleep(1);
+        $this->clickTopToolbarButton('link', 'selected');
+
+        $this->click($this->findKeyword(5));
+        
+        // Check that the inline toolbar doesn't appear on the screen
+        $inlineToolbarFound = true;
+        try 
+        {
+            $this->getInlineToolbar();
+        }
+        catch  (Exception $e) {
+            $inlineToolbarFound = false;
+        }
+        
+        $this->assertFalse($inlineToolbarFound, 'The inline toolbar was found');
+
+    }//end testInlineToolbarDoesNotAppearAfterClosingLinkWindow()
+    
 
     /**
      * Test creating and removing links in a paragraph.
