@@ -120,45 +120,48 @@ ViperCopyPastePlugin.prototype = {
             elem.onpaste = function(e) {
                 var tools   = self.viper.ViperTools;
                 var toolbar = null;
-                //if (!toolbar) {
-                    var content = document.createElement('div');
-                    dfx.addClass(content, 'ViperCopyPastePlugin-pasteWrapper');
+                var content = document.createElement('div');
+                dfx.addClass(content, 'ViperCopyPastePlugin-pasteWrapper');
 
-                    var pasteDesc = '<p class="ViperCopyPatePlugin-pasteDesc">Paste your content into the box below and it will be automatically inserted and cleaned up.</p>';
-                    pasteDesc    += '<p class="ViperCopyPatePlugin-pasteDesc">Avoid this step for future pastes using the keyboard shortcut <strong>CTRL + V</strong>.</p>';
+                var shortcut = 'CTRL+V';
+                if (navigator.platform.indexOf('Mac') >= 0) {
+                    shortcut = 'CMD+V';
+                }
 
-                    dfx.setHtml(content, pasteDesc);
+                var pasteDesc = '<p class="ViperCopyPatePlugin-pasteDesc">Paste your content into the box below and it will be automatically inserted and cleaned up.</p>';
+                pasteDesc    += '<p class="ViperCopyPatePlugin-pasteDesc">Avoid this step for future pastes using the keyboard shortcut <strong>' + shortcut + '</strong>.</p>';
 
-                    var toolbarElement = tools.createInlineToolbar('ViperCopyPastePlugin-paste', true, null, function() {
-                        toolbar.toggleSubSection('pasteSubSection');
-                    });
-                    toolbar = tools.getItem('ViperCopyPastePlugin-paste');
-                    toolbar.makeSubSection('pasteSubSection', content);
-                    toolbar.hideToolsSection();
+                dfx.setHtml(content, pasteDesc);
 
+                var toolbarElement = tools.createInlineToolbar('ViperCopyPastePlugin-paste', false, null, function() {
+                    toolbar.toggleSubSection('pasteSubSection');
+                });
+                toolbar = tools.getItem('ViperCopyPastePlugin-paste');
+                toolbar.makeSubSection('pasteSubSection', content);
+                toolbar.hideToolsSection();
+
+                var iframe    = self._createPasteIframe(content);
+                var frameDoc  = dfx.getIframeDocument(iframe);
+                var pasteArea = frameDoc.getElementById('ViperPasteIframeDiv');
+                pasteArea.onpaste = function() {
+                    setTimeout(function() {
+                        var node = pasteArea;
+                        toolbar.hide();
+
+                        self._handleFormattedPasteValue(false, node);
+                        self._afterPaste();
+                    }, 10);
+                };
+
+                pasteArea.onfocus = function() {
+                    pasteArea.innerHTML = '';
+                };
+
+                setTimeout(function() {
                     toolbar.setOnHideCallback(function() {
                         dfx.remove(toolbarElement);
                     });
 
-                    var iframe    = self._createPasteIframe(content);
-                    var frameDoc  = dfx.getIframeDocument(iframe);
-                    var pasteArea = frameDoc.getElementById('ViperPasteIframeDiv');
-                    pasteArea.onpaste = function() {
-                        setTimeout(function() {
-                            var node = pasteArea;
-                            toolbar.hide();
-
-                            self._handleFormattedPasteValue(false, node);
-                            self._afterPaste();
-                        }, 10);
-                    };
-
-                    pasteArea.onfocus = function() {
-                        pasteArea.innerHTML = '';
-                    };
-                //}
-
-                setTimeout(function() {
                     toolbar.update();
                     self._beforePaste();
                     //pasteArea.focus();
@@ -429,7 +432,9 @@ ViperCopyPastePlugin.prototype = {
         content    += '">Paste content here</div></body></html>';
 
         var doc = dfx.getIframeDocument(iframe);
+        doc.open();
         doc.write(content);
+        doc.close();
 
         return iframe;
 
