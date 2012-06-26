@@ -118,6 +118,8 @@ ViperCopyPastePlugin.prototype = {
         } else {
             var toolbarCreated = false;
             elem.onpaste = function(e) {
+                var viperRange = self.viper.getViperRange();
+
                 var tools   = self.viper.ViperTools;
                 var toolbar = null;
                 var content = document.createElement('div');
@@ -143,7 +145,11 @@ ViperCopyPastePlugin.prototype = {
                 var iframe    = self._createPasteIframe(content);
                 var frameDoc  = dfx.getIframeDocument(iframe);
                 var pasteArea = frameDoc.getElementById('ViperPasteIframeDiv');
+
                 pasteArea.onpaste = function() {
+                    ViperSelection.addRange(viperRange);
+                    self._beforePaste(viperRange);
+
                     setTimeout(function() {
                         var node = pasteArea;
                         toolbar.hide();
@@ -158,13 +164,12 @@ ViperCopyPastePlugin.prototype = {
                 };
 
                 setTimeout(function() {
+                    ViperSelection.addRange(viperRange);
                     toolbar.setOnHideCallback(function() {
                         dfx.remove(toolbarElement);
                     });
 
                     toolbar.update();
-                    self._beforePaste();
-                    //pasteArea.focus();
                 }, 10);
 
                 return false;
@@ -300,10 +305,10 @@ ViperCopyPastePlugin.prototype = {
 
     },
 
-    _beforePaste: function()
+    _beforePaste: function(range)
     {
         this.viper.setAllowCleanDOM(false);
-        var range     = this.viper.getCurrentRange();
+        range         = range || this.viper.getCurrentRange();
         this.rangeObj = range.cloneRange();
 
         this._tmpNode = document.createTextNode('');
