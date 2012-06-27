@@ -38,7 +38,7 @@ ViperAccessibilityPlugin.prototype = {
             dfx.remove(dfx.getClass('HTMLCS-pointer'));
         });
 
-        this.viper.registerCallback('ViperToolbarPlugin:updateToolbar', 'ViperCharMapPlugin', function(data) {
+        this.viper.registerCallback('ViperToolbarPlugin:updateToolbar', 'ViperAccessibilityPlugin', function(data) {
             self.viper.ViperTools.enableButton('accessibility');
         });
 

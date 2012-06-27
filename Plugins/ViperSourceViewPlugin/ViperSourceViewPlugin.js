@@ -42,6 +42,10 @@ ViperSourceViewPlugin.prototype = {
             this.viper.registerCallback('ViperToolbarPlugin:enabled', 'ViperSourceViewPlugin', function(data) {
                 self.viper.ViperTools.enableButton('sourceEditor');
             });
+
+            this.viper.registerCallback('ViperToolbarPlugin:updateToolbar', 'ViperSourceViewPlugin', function(data) {
+                self.viper.ViperTools.enableButton('sourceEditor');
+            });
         }
 
         var updateTimer = null;
