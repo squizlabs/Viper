@@ -1141,7 +1141,7 @@ ViperCopyPastePlugin.prototype = {
 
             var listType   = listTypeInfo.listType;
             var listStyle  = listTypeInfo.listStyle;
-            var level      = pEl.getAttribute('style').match(/level([\d])+/mi);
+            var level      = (pEl.getAttribute('style') || '').match(/level([\d])+/mi);
             dfx.setHtml(pEl, listTypeInfo.html);
 
             if (!level) {
