@@ -13,14 +13,13 @@ class Viper_Tests_ViperLangToolsPlugin_AbbreviationUnitTest extends AbstractVipe
      */
     public function testAbbreviationIconIsDisabled()
     {
-        $text = 1;
-        $this->selectKeyword($text);
+        $this->selectKeyword(1);
         $this->clickTopToolbarButton('langTools');
 
         $this->assertTrue($this->topToolbarButtonExists('Abbreviation', NULL, TRUE), 'Abbreviation icon in Top Toolbar should be active.');
 
-        $this->click($this->findKeyword($text));
-        $this->selectKeyword($text);
+        $this->click($this->findKeyword(1));
+        $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
         $this->assertTrue($this->topToolbarButtonExists('langTools'), 'Language icon in Top Toolbar should not be active.');
 
@@ -37,10 +36,9 @@ class Viper_Tests_ViperLangToolsPlugin_AbbreviationUnitTest extends AbstractVipe
      */
     public function testUpdateChangesButton()
     {
-        $text    = 2;
-        $textLoc = $this->findKeyword($text);
+        $textLoc = $this->findKeyword(2);
 
-        $this->selectKeyword($text);
+        $this->selectKeyword(1);
         $this->clickTopToolbarButton('langTools');
         $this->clickTopToolbarButton('Abbreviation', NULL, TRUE);
 
@@ -57,9 +55,8 @@ class Viper_Tests_ViperLangToolsPlugin_AbbreviationUnitTest extends AbstractVipe
      */
     public function testAddingAbbreviationToAWord()
     {
-        $text = 2;
 
-        $this->selectKeyword($text);
+        $this->selectKeyword(2);
         $this->clickTopToolbarButton('langTools');
         $this->clickTopToolbarButton('Abbreviation', NULL, TRUE);
 
@@ -68,27 +65,25 @@ class Viper_Tests_ViperLangToolsPlugin_AbbreviationUnitTest extends AbstractVipe
         $this->type('abc');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>%1% <abbr title="abc">%2%</abbr> %3%</p><p>sit amet <strong>%5%</strong></p><p>Squiz <abbr title="abc">%4%</abbr> is orsm</p><p>The <em>%6%</em> brown fox</p>');
+        $this->assertHTMLMatch('<p>%1% <abbr title="abc">%2%</abbr> %3%</p><p>sit amet <strong>%4%</strong></p><p>Squiz <abbr title="abc">%5%</abbr> is orsm</p><p>The <em>%6%</em> brown fox</p>');
 
-        $this->click($this->findKeyword($text));
-        $this->selectKeyword($text);
+        $this->click($this->findKeyword(2));
+        $this->selectKeyword(2);
         $this->assertTrue($this->topToolbarButtonExists('langTools', 'active'), 'Language icon in Top Toolbar should be active.');
 
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Abbreviation', 'active', TRUE), 'Abbreviation icon in Top Toolbar should be active.');
 
-        $text = 3;
-
-        $this->selectKeyword($text);
+        $this->selectKeyword(3);
         $this->clickTopToolbarButton('langTools');
         $this->clickTopToolbarButton('Abbreviation', NULL, TRUE);
         $this->type('def');
         $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
 
-        $this->assertHTMLMatch('<p>%1% <abbr title="abc">%2%</abbr> <abbr title="def">%3%</abbr></p><p>sit amet <strong>%5%</strong></p><p>Squiz <abbr title="abc">%4%</abbr> is orsm</p><p>The <em>%6%</em> brown fox</p>');
+        $this->assertHTMLMatch('<p>%1% <abbr title="abc">%2%</abbr> <abbr title="def">%3%</abbr></p><p>sit amet <strong>%4%</strong></p><p>Squiz <abbr title="abc">%5%</abbr> is orsm</p><p>The <em>%6%</em> brown fox</p>');
 
-        $this->click($this->findKeyword($text));
-        $this->selectKeyword($text);
+        $this->click($this->findKeyword(3));
+        $this->selectKeyword(3);
         $this->assertTrue($this->topToolbarButtonExists('langTools', 'active'), 'Language icon in Top Toolbar should be active.');
 
         $this->clickTopToolbarButton('langTools', 'active');
@@ -104,10 +99,8 @@ class Viper_Tests_ViperLangToolsPlugin_AbbreviationUnitTest extends AbstractVipe
      */
     public function testRemovingAbbreviationAttributeFromAWord()
     {
-        $text    = 4;
-        $textLoc = $this->findKeyword($text);
 
-        $this->selectKeyword($text);
+        $this->selectKeyword(5);
         $this->assertTrue($this->topToolbarButtonExists('langTools', 'active'), 'Class icon in Top Toolbar should be active.');
 
         $this->clickTopToolbarButton('langTools', 'active');
@@ -115,10 +108,10 @@ class Viper_Tests_ViperLangToolsPlugin_AbbreviationUnitTest extends AbstractVipe
         $this->clearFieldValue('Abbreviation');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit amet <strong>%5%</strong></p><p>Squiz %4% is orsm</p><p>The <em>%6%</em> brown fox</p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit amet <strong>%4%</strong></p><p>Squiz %5% is orsm</p><p>The <em>%6%</em> brown fox</p>');
 
-        $this->click($textLoc);
-        $this->selectKeyword($text);
+        $this->click($this->findKeyword(5));
+        $this->selectKeyword(5);
         $this->assertTrue($this->topToolbarButtonExists('langTools'), 'Language icon is still active in the Top Toolbar.');
 
         // Reapply the abbreviation so we can delete it by using the update changes icon
@@ -127,16 +120,16 @@ class Viper_Tests_ViperLangToolsPlugin_AbbreviationUnitTest extends AbstractVipe
         $this->type('abc');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit amet <strong>%5%</strong></p><p>Squiz <abbr title="abc">%4%</abbr> is orsm</p><p>The <em>%6%</em> brown fox</p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit amet <strong>%4%</strong></p><p>Squiz <abbr title="abc">%5%</abbr> is orsm</p><p>The <em>%6%</em> brown fox</p>');
 
-        $this->click($textLoc);
-        $this->selectKeyword($text);
+        $this->click($this->findKeyword(5));
+        $this->selectKeyword(5);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->clickTopToolbarButton('Abbreviation', 'active', TRUE);
         $this->clearFieldValue('Abbreviation');
         $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
 
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit amet <strong>%5%</strong></p><p>Squiz %4% is orsm</p><p>The <em>%6%</em> brown fox</p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit amet <strong>%4%</strong></p><p>Squiz %5% is orsm</p><p>The <em>%6%</em> brown fox</p>');
 
     }//end testRemovingAbbreviationAttributeFromAWord()
 
@@ -148,10 +141,8 @@ class Viper_Tests_ViperLangToolsPlugin_AbbreviationUnitTest extends AbstractVipe
      */
     public function testEditingAbbreviation()
     {
-        $text    = 4;
-        $textLoc = $this->findKeyword($text);
 
-        $this->selectKeyword($text);
+        $this->selectKeyword(5);
         $this->assertTrue($this->topToolbarButtonExists('langTools', 'active'), 'Class icon in Top Toolbar should be active.');
 
         $this->clickTopToolbarButton('langTools', 'active');
@@ -159,16 +150,16 @@ class Viper_Tests_ViperLangToolsPlugin_AbbreviationUnitTest extends AbstractVipe
         $this->type('def');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit amet <strong>%5%</strong></p><p>Squiz <abbr title="abcdef">%4%</abbr> is orsm</p><p>The <em>%6%</em> brown fox</p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit amet <strong>%4%</strong></p><p>Squiz <abbr title="abcdef">%5%</abbr> is orsm</p><p>The <em>%6%</em> brown fox</p>');
 
-        $this->click($textLoc);
-        $this->selectKeyword($text);
+        $this->click($this->findKeyword(5));
+        $this->selectKeyword(5);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->clickTopToolbarButton('Abbreviation', 'active', TRUE);
         $this->type('ghi');
         $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
 
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit amet <strong>%5%</strong></p><p>Squiz <abbr title="abcdefghi">%4%</abbr> is orsm</p><p>The <em>%6%</em> brown fox</p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit amet <strong>%4%</strong></p><p>Squiz <abbr title="abcdefghi">%5%</abbr> is orsm</p><p>The <em>%6%</em> brown fox</p>');
 
     }//end testEditingAbbreviation()
 
@@ -180,15 +171,14 @@ class Viper_Tests_ViperLangToolsPlugin_AbbreviationUnitTest extends AbstractVipe
      */
     public function testAddingAbbreviationToABoldWord()
     {
-        $text = 5;
 
-        $this->selectKeyword($text);
+        $this->selectKeyword(4);
         $this->clickTopToolbarButton('langTools');
         $this->clickTopToolbarButton('Abbreviation', NULL, TRUE);
         $this->type('abc');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit amet <abbr title="abc"><strong>%5%</strong></abbr></p><p>Squiz <abbr title="abc">%4%</abbr> is orsm</p><p>The <em>%6%</em> brown fox</p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit amet <abbr title="abc"><strong>%4%</strong></abbr></p><p>Squiz <abbr title="abc">%5%</abbr> is orsm</p><p>The <em>%6%</em> brown fox</p>');
 
     }//end testAddingAbbreviationToABoldWord()
 
@@ -200,15 +190,14 @@ class Viper_Tests_ViperLangToolsPlugin_AbbreviationUnitTest extends AbstractVipe
      */
     public function testAddingAbbreviationToAItalicWord()
     {
-        $text = 6;
 
-        $this->selectKeyword($text);
+        $this->selectKeyword(6);
         $this->clickTopToolbarButton('langTools');
         $this->clickTopToolbarButton('Abbreviation', NULL, TRUE);
         $this->type('abc');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit amet <strong>%5%</strong></p><p>Squiz <abbr title="abc">%4%</abbr> is orsm</p><p>The <abbr title="abc"><em>%6%</em></abbr> brown fox</p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit amet <strong>%4%</strong></p><p>Squiz <abbr title="abc">%5%</abbr> is orsm</p><p>The <abbr title="abc"><em>%6%</em></abbr> brown fox</p>');
 
     }//end testAddingAbbreviationToAItalicWord()
 
