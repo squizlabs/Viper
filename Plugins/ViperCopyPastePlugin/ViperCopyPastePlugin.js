@@ -453,6 +453,7 @@ ViperCopyPastePlugin.prototype = {
             dfx.empty(this.pasteElement);
         }
 
+        this.pasteElement.innerHTML = '';
         if (this._isSafari === true) {
             var scrollCoords = dfx.getScrollCoords();
             this.pasteElement.innerHTML = '&nbsp;';
