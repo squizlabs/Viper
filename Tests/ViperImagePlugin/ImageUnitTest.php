@@ -781,9 +781,9 @@
             $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%1% %2%<img src="http://www.squizlabs.com/__images/general/html-codesniffer.png" alt="Alt tag" /></p><p>sit amet <strong>%3%</strong></p>');
 
             $this->clickElement('img', 1);
-            $this->resizeImage(1, 300);
+            $this->resizeImage(1, 100);
 
-             $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%1% %2%<img src="http://www.squizlabs.com/__images/general/html-codesniffer.png" alt="Alt tag" width="286px" height="130px" /></p><p>sit amet <strong>%3%</strong></p>');
+             $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%1% %2%<img src="http://www.squizlabs.com/__images/general/html-codesniffer.png" alt="Alt tag" width="366" height="341" /></p><p>sit amet <strong>%3%</strong></p>');
 
             $this->clickElement('img', 1);
             $this->clickTopToolbarButton('image', 'selected');
@@ -792,7 +792,7 @@
             $this->type('Title tag');
             $this->keyDown('Key.ENTER');
             $this->clickTopToolbarButton('image', 'selected');
-            $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%1% %2%<img src="http://www.squizlabs.com/__images/general/html-codesniffer.png" alt="Alt tag" width="286px" height="130px" title="Title tag" /></p><p>sit amet <strong>%3%</strong></p>');
+            $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%1% %2%<img src="http://www.squizlabs.com/__images/general/html-codesniffer.png" alt="Alt tag" width="366" height="341" title="Title tag" /></p><p>sit amet <strong>%3%</strong></p>');
 
         }//end testResizingAnImageAndEditingIt()
 
@@ -839,6 +839,7 @@
 
             $this->clickTopToolbarButton('image');
             $this->type('http://www.squizlabs.com/__images/general/html-codesniffer.png');
+            sleep(1);
             $this->clickField('Image is decorative');
             $this->keyDown('Key.ENTER');
 
