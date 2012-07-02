@@ -60,12 +60,14 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         $this->clickInlineToolbarButton('cssClass');
         $this->type('abc');
         $this->clickInlineToolbarButton('Update Changes', NULL, TRUE);
+        $this->assertTrue($this->inlineToolbarButtonExists('Update Changes', 'disabled', TRUE), 'Update Changes button should be disabled.');
+
+        $this->clickInlineToolbarButton('cssClass', 'selected');
 
         $this->assertTrue($this->topToolbarButtonExists('cssClass', 'active'), 'Class icon in Top Toolbar should be active.');
         $this->assertTrue($this->inlineToolbarButtonExists('cssClass', 'active'), 'Class icon in VITP should be active.');
-        $this->assertTrue($this->inlineToolbarButtonExists('Update Changes', 'disabled', TRUE), 'Update Changes button should be disabled.');
 
-        $this->execJS('rmTableHeaders(0,true)');
+        $this->removeTableHeaders();
         $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table %1% text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>aa %2% kk</td><td>%3%</td><td>            <ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li></ul>        </td></tr><tr><td>nec <span class="abc">%4%</span> ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         $this->click($this->findKeyword(3));
@@ -74,12 +76,14 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         $this->clickInlineToolbarButton('cssClass');
         $this->type('test');
         $this->keyDown('Key.ENTER');
+        $this->assertTrue($this->inlineToolbarButtonExists('Update Changes', 'disabled', TRUE), 'Update Changes button should be disabled.');
+
+        $this->clickInlineToolbarButton('cssClass', 'selected');
 
         $this->assertTrue($this->topToolbarButtonExists('cssClass', 'active'), 'Class icon in Top Toolbar should be active.');
         $this->assertTrue($this->inlineToolbarButtonExists('cssClass', 'active'), 'Class icon in VITP should be active.');
-        $this->assertTrue($this->inlineToolbarButtonExists('Update Changes', 'disabled', TRUE), 'Update Changes button should be disabled.');
 
-        $this->execJS('rmTableHeaders(0,true)');
+        $this->removeTableHeaders();
         $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table %1% text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>aa <span class="test">%2%</span> kk</td><td>%3%</td><td>            <ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li></ul>        </td></tr><tr><td>nec <span class="abc">%4%</span> ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
     }//end testClassesOnWordInTable()
