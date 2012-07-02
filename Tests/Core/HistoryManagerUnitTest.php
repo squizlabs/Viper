@@ -18,12 +18,12 @@ class Viper_Tests_Core_HistoryManagerUnitTest extends AbstractViperUnitTest
     {
         if ($state === FALSE) {
             $this->assertTrue(
-                $this->topToolbarButtonExists(dirname(__FILE__).'/Images/'.$button.'Icon.png'),
+                $this->topToolbarButtonExists($button),
                 'The '.$button.' button should be disabled.'
             );
         } else {
             $this->assertTrue(
-                $this->topToolbarButtonExists(dirname(__FILE__).'/Images/'.$button.'Icon_active.png'),
+                $this->topToolbarButtonExists($button, $state),
                 'The '.$button.' button should be enabled.'
             );
         }
@@ -38,62 +38,71 @@ class Viper_Tests_Core_HistoryManagerUnitTest extends AbstractViperUnitTest
      */
     public function testOnLoadButtonsDisabled()
     {
-        $this->_checkButtonState('undo', FALSE);
-        $this->_checkButtonState('redo', FALSE);
+        $this->topToolbarButtonExists('historyUndo', 'disabled');
+        $this->topToolbarButtonExists('historyRedo', 'disabled');
 
     }//end testOnLoadButtonsDisabled()
 
 
     /**
-     * Test that Undo works using short cut key and toolbar.
+     * Test that Undo works using short cut key.
      *
      * @return void
      */
-    public function testUndo()
+    public function testUndoUsingKeyboardShortcut()
     {
-        $text = $this->selectText('Lorem');
+        $text = $this->selectKeyword(1);
         $this->keyDown('Key.RIGHT');
         $this->type(' test');
 
         // Check that undo button is enabled and redo is disabled.
-        $this->_checkButtonState('undo', TRUE);
-        $this->_checkButtonState('redo', FALSE);
+        $this->topToolbarButtonExists('historyUndo');
+        $this->topToolbarButtonExists('historyRedo', 'disabled');
 
         // Undo using shortcut.
         $this->keyDown('Key.CMD + z');
 
         // Check that undo button is disabled and redo is enabled.
-        $this->_checkButtonState('undo', FALSE);
-        $this->_checkButtonState('redo', TRUE);
+        $this->topToolbarButtonExists('historyundo', 'disabled');
+        $this->topToolbarButtonExists('historyRedo');
 
         // Make sure the content is reverted.
-        $this->assertHTMLMatch('<p>Lorem</p><p>EIB MOZ</p>');
+        $this->assertHTMLMatch('<p>%1%</p><p>EIB MOZ</p>');
+        
+    }//end testUndoUsingKeyboardShortcut()
 
-        // Repeat the same process using toolbar buttons.
-        $text = $this->selectText('Lorem');
-        $this->keyDown('Key.RIGHT');
-        $this->type(' test');
-
-        $this->clickTopToolbarButton(dirname(__FILE__).'/Images/undoIcon_active.png');
-
-        // Check that undo button is disabled and redo is enabled.
-        $this->_checkButtonState('undo', FALSE);
-        $this->_checkButtonState('redo', TRUE);
-
-        // Make sure the content is reverted.
-        $this->assertHTMLMatch('<p>Lorem</p><p>EIB MOZ</p>');
-
-    }//end testUndo()
-
-
+    
     /**
-     * Test that Redo works using short cut key and toolbar.
+     * Test that Undo works using the toolbar.
      *
      * @return void
      */
-    public function testRedo()
+    public function testUndoUsingTopToolbar()
     {
-        $text = $this->selectText('Lorem');
+        $text = $this->selectKeyword(1);
+        $this->keyDown('Key.RIGHT');
+        $this->type(' test');
+
+        $this->clickTopToolbarButton('historyUndo');
+
+        // Check that undo button is disabled and redo is enabled.
+        $this->topToolbarButtonExists('historyUndo', 'disabled');
+        $this->topToolbarButtonExists('historyRedo');
+
+        // Make sure the content is reverted.
+        $this->assertHTMLMatch('<p>%1%</p><p>EIB MOZ</p>');
+
+    }//end testUndoUsingTopToolbar()
+
+
+    /**
+     * Test that Redo works using short cut key.
+     *
+     * @return void
+     */
+    public function testRedoUsingKeyboardShort()
+    {
+        $text = $this->selectKeyword(1);
         $this->keyDown('Key.RIGHT');
         $this->type(' test');
 
@@ -102,25 +111,39 @@ class Viper_Tests_Core_HistoryManagerUnitTest extends AbstractViperUnitTest
         $this->keyDown('Key.CMD + Key.SHIFT + z');
 
         // Check that undo button is enabled and redo is disabled.
-        $this->_checkButtonState('undo', TRUE);
-        $this->_checkButtonState('redo', FALSE);
+        $this->topToolbarButtonExists('historyUndo');
+        $this->topToolbarButtonExists('historyRedo', 'disabled');
 
         // Make sure caret is at the correct position.
         $this->type('...');
-
-        // Repeat the same process using toolbar buttons.
-        $this->keyDown('Key.CMD + z');
-        $this->clickTopToolbarButton(dirname(__FILE__).'/Images/redoIcon_active.png');
+         $this->assertHTMLMatch('<p>%1% test...</p><p>EIB MOZ</p>');
+        
+    }//end testRedoUsingKeyboardShort()
+    
+    
+    /**
+     * Test that Redo works using top toolbar.
+     *
+     * @return void
+     */
+    public function testRedoUsingTopToolbar()
+    {
+        $text = $this->selectKeyword(1);
+        $this->keyDown('Key.RIGHT');
+        $this->type(' test');
+        
+        $this->clickTopToolbarButton('historyUndo');
+        $this->clickTopToolbarButton('historyRedo');
 
         // Check that undo button is enabled and redo is disabled.
-        $this->_checkButtonState('undo', TRUE);
-        $this->_checkButtonState('redo', FALSE);
+        $this->topToolbarButtonExists('historyUndo');
+        $this->topToolbarButtonExists('historyRedo', 'disabled');
 
         // Make sure the content is reverted.
         $this->type('.');
-        $this->assertHTMLMatch('<p>Lorem test....</p><p>EIB MOZ</p>');
+        $this->assertHTMLMatch('<p>%1% test.</p><p>EIB MOZ</p>');
 
-    }//end testRedo()
+    }//end testRedoUsingTopToolbar()
 
 
     /**
@@ -130,7 +153,7 @@ class Viper_Tests_Core_HistoryManagerUnitTest extends AbstractViperUnitTest
      */
     public function testMaxCharlimit()
     {
-        $text = $this->selectText('Lorem');
+        $text = $this->selectKeyword(1);
         $this->keyDown('Key.RIGHT');
 
         $chars = '';
@@ -143,18 +166,18 @@ class Viper_Tests_Core_HistoryManagerUnitTest extends AbstractViperUnitTest
         $this->keyDown('Key.CMD + z');
 
         // Both Undo and Redo button should be active.
-        $this->_checkButtonState('undo', TRUE);
-        $this->_checkButtonState('redo', TRUE);
+        $this->topToolbarButtonExists('historyUndo');
+        $this->topToolbarButtonExists('historyRedo');
 
-        $this->assertHTMLMatch('<p>Loremaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</p><p>EIB MOZ</p>');
+        $this->assertHTMLMatch('<p>%1%aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</p><p>EIB MOZ</p>');
         sleep(1);
 
         $this->keyDown('Key.CMD + z');
 
-        $this->_checkButtonState('undo', FALSE);
-        $this->_checkButtonState('redo', TRUE);
+        $this->topToolbarButtonExists('historyUndo', 'disabled');
+        $this->topToolbarButtonExists('historyRedo', 'disabled');
 
-        $this->assertHTMLMatch('<p>Lorem</p><p>EIB MOZ</p>');
+        $this->assertHTMLMatch('<p>%1%</p><p>EIB MOZ</p>');
 
     }//end testMaxCharlimit()
 
