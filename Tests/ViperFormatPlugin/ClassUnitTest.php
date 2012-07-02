@@ -18,7 +18,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->type('test');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>%1% <span class="test">%2%</span> %3%</p><p class="test">sit amet <strong>%4%</strong></p><p>Test %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><em>The</em> %8% %9% foxxx</p><p><strong>%10%</strong> %11% the lazy dog</p>');
+        $this->assertHTMLMatch('<p>%1% <span class="test">%2%</span> %3%</p><p class="test">sit amet <strong>%4%</strong></p><p><em>Test</em> %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><strong>%8%</strong> %9% the lazy dog</p>');
 
         $this->click($this->findKeyword(3));
         $this->selectKeyword(2);
@@ -29,7 +29,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->clickInlineToolbarButton('cssClass');
         $this->type('class');
         $this->clickInlineToolbarButton('Update Changes', NULL, TRUE);
-        $this->assertHTMLMatch('<p>%1% <span class="test">%2%</span> <span class="class">%3%</span></p><p class="test">sit amet <strong>%4%</strong></p><p>Test %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><em>The</em> %8% %9% foxxx</p><p><strong>%10%</strong> %11% the lazy dog</p>');
+        $this->assertHTMLMatch('<p>%1% <span class="test">%2%</span> <span class="class">%3%</span></p><p class="test">sit amet <strong>%4%</strong></p><p><em>Test</em> %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><strong>%8%</strong> %9% the lazy dog</p>');
 
     }//end testAddingClassAttributeToAWordUsingTheInlineToolbar()
 
@@ -64,7 +64,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->type('test');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>%1% <span class="test">%2%</span> %3%</p><p class="test">sit amet <strong>%4%</strong></p><p>Test %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><em>The</em> %8% %9% foxxx</p><p><strong>%10%</strong> %11% the lazy dog</p>');
+        $this->assertHTMLMatch('<p>%1% <span class="test">%2%</span> %3%</p><p class="test">sit amet <strong>%4%</strong></p><p><em>Test</em> %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><strong>%8%</strong> %9% the lazy dog</p>');
 
         $this->click($this->findKeyword(1));
         $this->selectKeyword(2);
@@ -75,7 +75,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->clickTopToolbarButton('cssClass');
         $this->type('class');
         $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
-        $this->assertHTMLMatch('<p>%1% <span class="test">%2%</span> <span class="class">%3%</span></p><p class="test">sit amet <strong>%4%</strong></p><p>Test %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><em>The</em> %8% %9% foxxx</p><p><strong>%10%</strong> %11% the lazy dog</p>');
+        $this->assertHTMLMatch('<p>%1% <span class="test">%2%</span> <span class="class">%3%</span></p><p class="test">sit amet <strong>%4%</strong></p><p><em>Test</em> %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><strong>%8%</strong> %9% the lazy dog</p>');
 
 
     }//end testAddingClassAttributeToAWordUsingTheTopToolbar()
@@ -114,7 +114,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->clearFieldValue('Class');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p>Test %5%</p><p>Squiz %6% is %7%</p><p><em>The</em> %8% %9% foxxx</p><p><strong>%10%</strong> %11% the lazy dog</p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p><em>Test</em> %5%</p><p>Squiz %6% is %7%</p><p><strong>%8%</strong> %9% the lazy dog</p>');
 
         $this->click($this->findKeyword(2));
         $this->selectKeyword(6);
@@ -125,7 +125,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->clickTopToolbarButton('cssClass');
         $this->type('test');
         $this->keyDown('Key.ENTER');
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p>Test %5%</p><p>Squiz <span class="test">%6%</span> is %7%</p><p><em>The</em> %8% %9% foxxx</p><p><strong>%10%</strong> %11% the lazy dog</p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p><em>Test</em> %5%</p><p>Squiz <span class="test">%6%</span> is %7%</p><p><strong>%8%</strong> %9% the lazy dog</p>');
 
         $this->click($this->findKeyword(7));
         $this->selectKeyword(6);
@@ -134,7 +134,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->clearFieldValue('Class');
         $this->clickInlineToolbarButton('Update Changes', NULL, TRUE);
 
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p>Test %5%</p><p>Squiz %6% is %7%</p><p><em>The</em> %8% %9% foxxx</p><p><strong>%10%</strong> %11% the lazy dog</p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p><em>Test</em> %5%</p><p>Squiz %6% is %7%</p><p><strong>%8%</strong> %9% the lazy dog</p>');
 
     }//end testRemovingClassAttributeFromAWordUsingTheInlineToolbar()
 
@@ -156,7 +156,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->clearFieldValue('Class');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p>Test %5%</p><p>Squiz %6% is %7%</p><p><em>The</em> %8% %9% foxxx</p><p><strong>%10%</strong> %11% the lazy dog</p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p><em>Test</em> %5%</p><p>Squiz %6% is %7%</p><p><strong>%8%</strong> %9% the lazy dog</p>');
 
         $this->click($this->findKeyword(3));
         $this->selectKeyword(6);
@@ -167,14 +167,14 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->clickTopToolbarButton('cssClass');
         $this->type('test');
         $this->keyDown('Key.ENTER');
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p>Test %5%</p><p>Squiz <span class="test">%6%</span> is %7%</p><p><em>The</em> %8% %9% foxxx</p><p><strong>%10%</strong> %11% the lazy dog</p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p><em>Test</em> %5%</p><p>Squiz <span class="test">%6%</span> is %7%</p><p><strong>%8%</strong> %9% the lazy dog</p>');
 
         $this->selectKeyword(6);
         $this->clickTopToolbarButton('cssClass', 'active');
         $this->clearFieldValue('Class');
         $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
 
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p>Test %5%</p><p>Squiz %6% is %7%</p><p><em>The</em> %8% %9% foxxx</p><p><strong>%10%</strong> %11% the lazy dog</p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p><em>Test</em> %5%</p><p>Squiz %6% is %7%</p><p><strong>%8%</strong> %9% the lazy dog</p>');
 
     }//end testRemovingClassAttributeFromAWordUsingTheTopToolbar()
 
@@ -194,7 +194,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->type('abc');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p>Test %5%</p><p>Squiz <span class="myclassabc">%6%</span> is %7%</p><p><em>The</em> %8% %9% foxxx</p><p><strong>%10%</strong> %11% the lazy dog</p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p><em>Test</em> %5%</p><p>Squiz <span class="myclassabc">%6%</span> is %7%</p><p><strong>%8%</strong> %9% the lazy dog</p>');
 
         $this->click($this->findKeyword(3));
         $this->selectKeyword(6);
@@ -202,7 +202,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->type('def');
         $this->clickInlineToolbarButton('Update Changes', NULL, TRUE);
 
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p>Test %5%</p><p>Squiz <span class="myclassabcdef">%6%</span> is %7%</p><p><em>The</em> %8% %9% foxxx</p><p><strong>%10%</strong> %11% the lazy dog</p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p><em>Test</em> %5%</p><p>Squiz <span class="myclassabcdef">%6%</span> is %7%</p><p><strong>%8%</strong> %9% the lazy dog</p>');
 
     }//end testUpdatingAClassUsingTheInlineToolbar()
 
@@ -222,7 +222,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->type('abc');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p>Test %5%</p><p>Squiz <span class="myclassabc">%6%</span> is %7%</p><p><em>The</em> %8% %9% foxxx</p><p><strong>%10%</strong> %11% the lazy dog</p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p><em>Test</em> %5%</p><p>Squiz <span class="myclassabc">%6%</span> is %7%</p><p><strong>%8%</strong> %9% the lazy dog</p>');
 
         $this->click($this->findKeyword(3));
         $this->selectKeyword(6);
@@ -230,7 +230,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->type('def');
         $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
 
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p>Test %5%</p><p>Squiz <span class="myclassabcdef">%6%</span> is %7%</p><p><em>The</em> %8% %9% foxxx</p><p><strong>%10%</strong> %11% the lazy dog</p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p><em>Test</em> %5%</p><p>Squiz <span class="myclassabcdef">%6%</span> is %7%</p><p><strong>%8%</strong> %9% the lazy dog</p>');
 
     }//end testUpdatingAClassUsingTheTopToolbar()
 
@@ -248,7 +248,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->type('test');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p class="test">%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p>Test %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><em>The</em> %8% %9% foxxx</p><p><strong>%10%</strong> %11% the lazy dog</p>');
+        $this->assertHTMLMatch('<p class="test">%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p><em>Test</em> %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><strong>%8%</strong> %9% the lazy dog</p>');
 
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
@@ -265,7 +265,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->clickInlineToolbarButton('cssClass');
         $this->type('class');
         $this->clickInlineToolbarButton('Update Changes', NULL, TRUE);
-        $this->assertHTMLMatch('<p class="test">%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p class="class">Test %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><em>The</em> %8% %9% foxxx</p><p><strong>%10%</strong> %11% the lazy dog</p>');
+        $this->assertHTMLMatch('<p class="test">%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p class="class"><em>Test</em> %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><strong>%8%</strong> %9% the lazy dog</p>');
 
     }//end testAddingClassAttributeToAParagraphUsingTheInlineToolbar()
 
@@ -283,7 +283,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->type('test');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p class="test">%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p>Test %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><em>The</em> %8% %9% foxxx</p><p><strong>%10%</strong> %11% the lazy dog</p>');
+        $this->assertHTMLMatch('<p class="test">%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p><em>Test</em> %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><strong>%8%</strong> %9% the lazy dog</p>');
 
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
@@ -300,7 +300,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->clickTopToolbarButton('cssClass');
         $this->type('class');
         $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
-        $this->assertHTMLMatch('<p class="test">%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p class="class">Test %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><em>The</em> %8% %9% foxxx</p><p><strong>%10%</strong> %11% the lazy dog</p>');
+        $this->assertHTMLMatch('<p class="test">%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p class="class"><em>Test</em> %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><strong>%8%</strong> %9% the lazy dog</p>');
 
     }//end testAddingClassAttributeToAParagraphUsingTheTopToolbar()
 
@@ -318,7 +318,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->type('test');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p>Test %5%</p><p class="test">Squiz <span class="myclass">%6%</span> is %7%</p><p><em>The</em> %8% %9% foxxx</p><p><strong>%10%</strong> %11% the lazy dog</p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p><em>Test</em> %5%</p><p class="test">Squiz <span class="myclass">%6%</span> is %7%</p><p><strong>%8%</strong> %9% the lazy dog</p>');
 
         $this->selectKeyword(7);
         $this->selectInlineToolbarLineageItem(0);
@@ -350,7 +350,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->clearFieldValue('Class');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit amet <strong>%4%</strong></p><p>Test %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><em>The</em> %8% %9% foxxx</p><p><strong>%10%</strong> %11% the lazy dog</p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit amet <strong>%4%</strong></p><p><em>Test</em> %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><strong>%8%</strong> %9% the lazy dog</p>');
 
         $this->click($this->findKeyword(2));
         $this->selectKeyword(4);
@@ -364,7 +364,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->type('test');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p>Test %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><em>The</em> %8% %9% foxxx</p><p><strong>%10%</strong> %11% the lazy dog</p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p><em>Test</em> %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><strong>%8%</strong> %9% the lazy dog</p>');
 
         $this->click($this->findKeyword(2));
         $this->selectKeyword(4);
@@ -373,7 +373,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->clearFieldValue('Class');
         $this->clickInlineToolbarButton('Update Changes', NULL, TRUE);
 
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit amet <strong>%4%</strong></p><p>Test %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><em>The</em> %8% %9% foxxx</p><p><strong>%10%</strong> %11% the lazy dog</p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit amet <strong>%4%</strong></p><p><em>Test</em> %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><strong>%8%</strong> %9% the lazy dog</p>');
 
     }//end testRemovingClassAttributeFromParagraphUsingInlineToolbar()
 
@@ -395,7 +395,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->clearFieldValue('Class');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit amet <strong>%4%</strong></p><p>Test %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><em>The</em> %8% %9% foxxx</p><p><strong>%10%</strong> %11% the lazy dog</p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit amet <strong>%4%</strong></p><p><em>Test</em> %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><strong>%8%</strong> %9% the lazy dog</p>');
 
         $this->click($this->findKeyword(2));
         $this->selectKeyword(4);
@@ -409,7 +409,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->type('test');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p>Test %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><em>The</em> %8% %9% foxxx</p><p><strong>%10%</strong> %11% the lazy dog</p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p><em>Test</em> %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><strong>%8%</strong> %9% the lazy dog</p>');
 
         $this->click($this->findKeyword(2));
         $this->selectKeyword(4);
@@ -418,7 +418,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->clearFieldValue('Class');
         $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
 
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit amet <strong>%4%</strong></p><p>Test %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><em>The</em> %8% %9% foxxx</p><p><strong>%10%</strong> %11% the lazy dog</p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit amet <strong>%4%</strong></p><p><em>Test</em> %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><strong>%8%</strong> %9% the lazy dog</p>');
 
     }//end testRemovingClassAttributeFromParagraphUsingTopToolbar()
 
@@ -439,7 +439,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->type('abc');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="testabc">sit amet <strong>%4%</strong></p><p>Test %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><em>The</em> %8% %9% foxxx</p><p><strong>%10%</strong> %11% the lazy dog</p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="testabc">sit amet <strong>%4%</strong></p><p><em>Test</em> %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><strong>%8%</strong> %9% the lazy dog</p>');
 
         $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(0);
@@ -447,7 +447,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->type('def');
         $this->clickInlineToolbarButton('Update Changes', NULL, TRUE);
 
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="testabcdef">sit amet <strong>%4%</strong></p><p>Test %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><em>The</em> %8% %9% foxxx</p><p><strong>%10%</strong> %11% the lazy dog</p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="testabcdef">sit amet <strong>%4%</strong></p><p><em>Test</em> %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><strong>%8%</strong> %9% the lazy dog</p>');
 
     }//end testEditingTheClassUsingInlineToolbar()
 
@@ -469,7 +469,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->type('abc');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="testabc">sit amet <strong>%4%</strong></p><p>Test %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><em>The</em> %8% %9% foxxx</p><p><strong>%10%</strong> %11% the lazy dog</p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="testabc">sit amet <strong>%4%</strong></p><p><em>Test</em> %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><strong>%8%</strong> %9% the lazy dog</p>');
 
         $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(0);
@@ -477,7 +477,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->type('def');
         $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
 
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="testabcdef">sit amet <strong>%4%</strong></p><p>Test %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><em>The</em> %8% %9% foxxx</p><p><strong>%10%</strong> %11% the lazy dog</p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="testabcdef">sit amet <strong>%4%</strong></p><p><em>Test</em> %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><strong>%8%</strong> %9% the lazy dog</p>');
 
     }//end testEditingTheClassUsingTopToolbar()
 
@@ -489,13 +489,13 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
      */
     public function testAddingClassToAParagraphUsingInlineToolbarWithBoldFirstWord()
     {
-        $this->selectKeyword(11);
+        $this->selectKeyword(9);
         $this->selectInlineToolbarLineageItem(0);
         $this->clickInlineToolbarButton('cssClass');
         $this->type('test');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p>Test %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><em>The</em> %8% %9% foxxx</p><p class="test"><strong>%10%</strong> %11% the lazy dog</p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p><em>Test</em> %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p class="test"><strong>%8%</strong> %9% the lazy dog</p>');
 
     }//end testAddingClassToAParagraphUsingInlineToolbarWithBoldFirstWord()
 
@@ -507,13 +507,13 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
      */
     public function testAddingClassToAParagraphUsingTopToolbarWithBoldFirstWord()
     {
-        $this->selectKeyword(11);
+        $this->selectKeyword(9);
         $this->selectInlineToolbarLineageItem(0);
         $this->clickTopToolbarButton('cssClass');
         $this->type('test');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p>Test %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><em>The</em> %8% %9% foxxx</p><p class="test"><strong>%10%</strong> %11% the lazy dog</p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p><em>Test</em> %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p class="test"><strong>%8%</strong> %9% the lazy dog</p>');
 
     }//end testAddingClassToAParagraphUsingTopToolbarWithBoldFirstWord()
 
@@ -526,13 +526,13 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
     public function testAddingClassToAParagraphUsingInlineToolbarWithItalicFirstWord()
     {
 
-        $this->selectKeyword(9);
+        $this->selectKeyword(5);
         $this->selectInlineToolbarLineageItem(0);
         $this->clickInlineToolbarButton('cssClass');
         $this->type('test');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p>Test %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p class="test"><em>The</em> %8% %9% foxxx</p><p><strong>%10%</strong> %11% the lazy dog</p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p class="test"><em>Test</em> %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><strong>%8%</strong> %9% the lazy dog</p>');
 
     }//end testAddingClassToAParagraphUsingInlineToolbarWithItalicFirstWord()
 
@@ -545,13 +545,13 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
     public function testAddingClassToAParagraphUsingTopToolbarWithItalicFirstWord()
     {
 
-        $this->selectKeyword(9);
+        $this->selectKeyword(5);
         $this->selectInlineToolbarLineageItem(0);
         $this->clickTopToolbarButton('cssClass');
         $this->type('test');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p>Test %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p class="test"><em>The</em> %8% %9% foxxx</p><p><strong>%10%</strong> %11% the lazy dog</p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p class="test"><em>Test</em> %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><strong>%8%</strong> %9% the lazy dog</p>');
 
     }//end testAddingClassToAParagraphUsingTopToolbarWithItalicFirstWord()
 
@@ -569,7 +569,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->type('test');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p>Test %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><em>The</em> %8% %9% foxxx</p><p><strong class="test">%10%</strong> %11% the lazy dog</p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p><em>Test</em> %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><strong class="test">%8%</strong> %9% the lazy dog</p>');
 
     }//end testAddingClassToAParagraphWithBoldFirstWord()
 
@@ -582,14 +582,14 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
     public function testAddingClassToAItalicWord()
     {
 
-        $this->selectKeyword(11);
+        $this->selectKeyword(5);
         $this->keyDown('Key.CMD + i');
 
         $this->clickInlineToolbarButton('cssClass');
         $this->type('test');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p>Test %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><em>The</em> %8% %9% foxxx</p><p><strong>%10%</strong> <em class="test">%11%</em> the lazy dog</p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p><em>Test</em> <em class="test">%5%</em></p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><strong>%8%</strong> %9% the lazy dog</p>');
 
     }//end testAddingClassToAItalicWord()
 
@@ -601,16 +601,16 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
      */
     public function testAddingClassToAOneBoldWord()
     {
-        $this->selectKeyword(10, 11);
+        $this->selectKeyword(8, 9);
         $this->keyDown('Key.CMD + b');
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p>Test %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><em>The</em> %8% %9% foxxx</p><p><strong>%10% %11%</strong> the lazy dog</p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p><em>Test</em> %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><strong>%8% %9%</strong> the lazy dog</p>');
 
-        $this->selectKeyword(11);
+        $this->selectKeyword(9);
         $this->clickInlineToolbarButton('cssClass');
         $this->type('test');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p>Test %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><em>The</em> %8% %9% foxxx</p><p><strong>%10% <span class="test">%11%</span></strong> the lazy dog</p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p><em>Test</em> %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><strong>%8% <span class="test">%9%</span></strong> the lazy dog</p>');
 
     }//end testAddingClassToAOneBoldWord()
 
@@ -622,16 +622,16 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
      */
     public function testAddingClassToAOneItalicWord()
     {
-        $this->selectKeyword(8, 9);
+        $this->selectKeyword(2, 3);
         $this->keyDown('Key.CMD + i');
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p>Test %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><em>The</em> <em>%8% %9%</em> foxxx</p><p><strong>%10%</strong> %11% the lazy dog</p>');
+        $this->assertHTMLMatch('<p>%1% <em>%2% %3%</em></p><p class="test">sit amet <strong>%4%</strong></p><p><em>Test</em> %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><strong>%8%</strong> %9% the lazy dog</p>');
 
-        $this->selectKeyword(8);
+        $this->selectKeyword(2);
         $this->clickInlineToolbarButton('cssClass');
         $this->type('test');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p>Test %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><em>The</em> <em><span class="test">%8%</span> %9%</em> foxxx</p><p><strong>%10%</strong> %11% the lazy dog</p>');
+        $this->assertHTMLMatch('<p>%1% <em><span class="test">%2%</span> %3%</em></p><p class="test">sit amet <strong>%4%</strong></p><p><em>Test</em> %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><strong>%8%</strong> %9% the lazy dog</p>');
 
     }//end testAddingClassToAOneItalicWord()
 
@@ -671,7 +671,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->assertEquals($this->replaceKeywords('%1% %2% %3%'), $this->getSelectedText(), 'Original selection is not selected');
 
         $this->clickTopToolbarButton('cssClass', 'selected');
-        $this->assertEquals($this->replaceKeywords('%1% %2% %3%'), $this->getSelectedText(), 'Original selection is not selected');
+        $this->assertEquals($this->replaceKeywords('%1% %2% %3%\n'), $this->getSelectedText(), 'Original selection is not selected');
 
         $this->clickTopToolbarButton('cssClass');
         $this->assertEquals($this->replaceKeywords('%1% %2% %3%'), $this->getSelectedText(), 'Original selection is not selected');
@@ -696,7 +696,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $viperBookmarkElements = $this->execJS('window.opener.dfx.getClass("viperBookmark").length');
         $this->assertEquals(0, $viperBookmarkElements, 'There should be no viper bookmark elements');
 
-        $this->assertHTMLMatch('<p>%1% <strong>%2%</strong> %3%</p><p class="test">sit amet <strong>%4%</strong></p><p>Test %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><em>The</em> %8% %9% foxxx</p><p><strong>%10%</strong> %11% the lazy dog</p>');
+        $this->assertHTMLMatch('<p>%1% <strong>%2%</strong> %3%</p><p class="test">sit amet <strong>%4%</strong></p><p><em>Test</em> %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><strong>%8%</strong> %9% the lazy dog</p>');
 
         $this->assertTrue($this->inlineToolbarButtonExists('italic'), 'Italics icon in VITP should not be active.');
 
