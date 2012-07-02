@@ -1178,7 +1178,8 @@ ViperTools.prototype = {
                 var activeSection   = this._activeSection;
                 this.closeActiveSubsection(true);
 
-                this._buttonShown = false;
+                this._buttonShown     = false;
+                this._subSectionShown = false;
                 this.resetButtons();
 
                 if (buttonElements === null) {
@@ -1228,7 +1229,7 @@ ViperTools.prototype = {
                     buttonsToRemove[i].parentNode.removeChild(buttonsToRemove[i]);
                 }
 
-                if (this._buttonShown === true) {
+                if (this._buttonShown === true || this._subSectionShown === true) {
                     this.updatePosition(range, selectedNode);
                 } else {
                     this.hide();
@@ -1254,6 +1255,10 @@ ViperTools.prototype = {
                 this.closeActiveSubsection(true);
                 this._activeSection = null;
                 dfx.removeClass(toolbar, 'Viper-visible');
+
+                if (this._onHideCallback) {
+                    this._onHideCallback.call(this);
+                }
             },
 
             isVisible: function() {
@@ -1376,10 +1381,12 @@ ViperTools.prototype = {
                 // at this point.
                 dfx.removeClass(dfx.getClass('Viper-subSection Viper-active', subSectionContainer), 'Viper-active');
 
-                var subSectionButton = tools.getItem(this._subSectionButtons[subSectionid]).element;
-                if (dfx.hasClass(subSectionButton, 'ViperITP-button-hidden') === true) {
-                    this._activeSection = null;
-                    return;
+                if (this._subSectionButtons[subSectionid]) {
+                    var subSectionButton = tools.getItem(this._subSectionButtons[subSectionid]).element;
+                    if (dfx.hasClass(subSectionButton, 'ViperITP-button-hidden') === true) {
+                        this._activeSection = null;
+                        return;
+                    }
                 }
 
                 if (ignoreCallbacks !== true) {
@@ -1398,6 +1405,8 @@ ViperTools.prototype = {
                 this._updateSubSectionArrowPos();
 
                 this.focusSubSection();
+
+                this._subSectionShown = true;
 
                 var subSectionForm = tools.getItem(subSectionid).form;
                 dfx.removeEvent(document, 'keydown.' + id);
@@ -1428,7 +1437,10 @@ ViperTools.prototype = {
                     var prevSubSection = this._subSections[this._activeSection];
                     if (prevSubSection) {
                         dfx.removeClass(prevSubSection, 'Viper-active');
-                        dfx.removeClass(tools.getItem(this._subSectionButtons[this._activeSection]).element, 'Viper-selected');
+
+                        if (this._subSectionButtons[this._activeSection]) {
+                            dfx.removeClass(tools.getItem(this._subSectionButtons[this._activeSection]).element, 'Viper-selected');
+                        }
 
                         if (ignoreCallbacks !== true) {
                             var closeCallback = tools.getItem(this._activeSection)._onCloseCallback;
@@ -1602,13 +1614,22 @@ ViperTools.prototype = {
                 }
 
             },
+            hideToolsSection: function() {
+                dfx.hideElement(toolsContainer);
+                dfx.addClass(toolbar, 'Viper-noTools');
+            },
+            setOnHideCallback: function(callback) {
+                this._onHideCallback = callback;
+            },
             _subSections: {},
             _activeSection: null,
             _subSectionButtons: {},
             _subSectionActionWidgets: {},
             _buttonShown: false,
+            _subSectionShown: false,
             _verticalPosUpdateOnly: false,
             _keepOpenTagList: [],
+            _onHideCallback: null,
             updatePosition: function(range, selectedNode) {
                 range = range || tools.viper.getViperRange();
 
@@ -1621,20 +1642,31 @@ ViperTools.prototype = {
                 }
 
                 if (!rangeCoords || (rangeCoords.left === 0 && rangeCoords.top === 0 && tools.viper.isBrowser('firefox') === true)) {
-                    var startNode = range.getStartNode();
-                    var endNode   = range.getEndNode();
-                    if (!startNode || !endNode) {
-                        return;
-                    }
+                    if (range.collapsed === true) {
+                        var span = document.createElement('span');
+                        tools.viper.insertNodeAtCaret(span);
+                        rangeCoords = this.getElementCoords(span);
+                        dfx.remove(span);
 
-                    if (startNode.nodeType === dfx.TEXT_NODE
-                        && startNode.data.indexOf("\n") === 0
-                        && endNode.nodeType === dfx.TEXT_NODE
-                        && range.endOffset === endNode.data.length
-                    ) {
-                        range.setStart(endNode, endNode.data.length);
-                        range.collapse(true);
-                        rangeCoords = range.rangeObj.getBoundingClientRect();
+                        if (!rangeCoords) {
+                            return;
+                        }
+                    } else {
+                        var startNode = range.getStartNode();
+                        var endNode   = range.getEndNode();
+                        if (!startNode || !endNode) {
+                            return;
+                        }
+
+                        if (startNode.nodeType === dfx.TEXT_NODE
+                            && startNode.data.indexOf("\n") === 0
+                            && endNode.nodeType === dfx.TEXT_NODE
+                            && range.endOffset === endNode.data.length
+                        ) {
+                            range.setStart(endNode, endNode.data.length);
+                            range.collapse(true);
+                            rangeCoords = range.rangeObj.getBoundingClientRect();
+                        }
                     }
                 }
 

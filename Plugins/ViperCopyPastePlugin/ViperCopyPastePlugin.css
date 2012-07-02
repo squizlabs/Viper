@@ -7,3 +7,28 @@
     left: 0px;
     top: 0px;
 }
+
+.ViperCopyPatePlugin-pasteDesc {
+    color: #CCC;
+    font-size: 1.3em;
+    line-height: 1.2em;
+    margin: 0.4em 0 0.6em;
+    padding: 0 0.6em;
+    text-shadow: none;
+    text-align: center;
+}
+
+.ViperCopyPatePlugin-pasteDesc + .ViperCopyPatePlugin-pasteDesc {
+    margin-top: 0;
+}
+
+.ViperCopyPastePlugin-iframe {
+     border: none;
+     width: 100%;
+     height: 35px;
+     margin-top: 0.5em;
+}
+
+.ViperCopyPastePlugin-pasteWrapper {
+    width: 230px;
+}

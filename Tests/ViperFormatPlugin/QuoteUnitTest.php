@@ -102,13 +102,16 @@ class Viper_Tests_ViperFormatPlugin_QuoteUnitTest extends AbstractViperUnitTest
         $this->selectInlineToolbarLineageItem(0);
         $this->assertTrue($this->inlineToolbarButtonExists('formats-blockquote', 'active'), 'Toogle formats icon is not selected');
         $this->clickInlineToolbarButton('formats-blockquote', 'active');
+        $this->assertEquals($this->replaceKeywords('%1% xtn %2%'), $this->getSelectedText(), 'Original selection is not selected');
         $this->assertTrue($this->inlineToolbarButtonExists('Quote', 'active', TRUE), 'Quote icon is not active');
 
-        $this->selectKeyword(2);
+        $this->click($this->findKeyword(2));
+        $this->selectKeyword(3);
         $this->selectInlineToolbarLineageItem(0);
-        $this->assertTrue($this->inlineToolbarButtonExists('formats-blockquote', 'active'), 'Toogle formats icon is not selected');
-        $this->clickInlineToolbarButton('formats-blockquote', 'active');
-        $this->assertTrue($this->inlineToolbarButtonExists('Quote', 'active', TRUE), 'Quote icon is not active');
+        $this->assertTrue($this->topToolbarButtonExists('formats-blockquote', 'active'), 'Toogle formats icon is not selected');
+        $this->clickTopToolbarButton('formats-blockquote', 'active');
+        $this->assertEquals($this->replaceKeywords('%3% amet WoW'), $this->getSelectedText(), 'Original selection is not selected');
+        $this->assertTrue($this->topToolbarButtonExists('Quote', 'active', TRUE), 'Quote icon is not active');
 
     }//end testSelectingQuotesWithFormattedTextShowsCorrectIcons()
 

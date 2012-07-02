@@ -102,13 +102,16 @@ class Viper_Tests_ViperFormatPlugin_PreUnitTest extends AbstractViperUnitTest
         $this->selectInlineToolbarLineageItem(0);
         $this->assertTrue($this->inlineToolbarButtonExists('formats-pre', 'active'), 'Toogle formats icon is not selected');
         $this->clickInlineToolbarButton('formats-pre', 'active');
+        $this->assertEquals($this->replaceKeywords('%1%  xtn %2%'), $this->getSelectedText(), 'Original selection is not selected');
         $this->assertTrue($this->inlineToolbarButtonExists('PRE', NULL, TRUE), 'Pre icon is not active');
 
-        $this->selectKeyword(2);
+        $this->click($this->findKeyword(2));
+        $this->selectKeyword(3);
         $this->selectInlineToolbarLineageItem(0);
-        $this->assertTrue($this->inlineToolbarButtonExists('formats-pre', 'active'), 'Toogle formats icon is not selected');
-        $this->clickInlineToolbarButton('formats-pre', 'active');
-        $this->assertTrue($this->inlineToolbarButtonExists('PRE', NULL, TRUE), 'Pre icon is not active');
+        $this->assertTrue($this->topToolbarButtonExists('formats-pre', 'active'), 'Toogle formats icon is not selected');
+        $this->clickTopToolbarButton('formats-pre', 'active');
+        $this->assertEquals($this->replaceKeywords('%3% amet WoW'), $this->getSelectedText(), 'Original selection is not selected');
+        $this->assertTrue($this->topToolbarButtonExists('PRE', NULL, TRUE), 'Pre icon is not active');
 
     }//end testSelectingPreWithFormattedTextShowsCorrectIcons()
 

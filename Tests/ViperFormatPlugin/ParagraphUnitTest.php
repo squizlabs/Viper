@@ -101,14 +101,16 @@ class Viper_Tests_ViperFormatPlugin_ParagraphUnitTest extends AbstractViperUnitT
         $this->selectInlineToolbarLineageItem(0);
         $this->assertTrue($this->inlineToolbarButtonExists('formats-p', 'active'), 'Toogle formats icon is not selected');
         $this->clickInlineToolbarButton('formats-p', 'active');
+        $this->assertEquals($this->replaceKeywords('%1% xtn %2%'), $this->getSelectedText(), 'Original selection is not selected');
         $this->assertTrue($this->inlineToolbarButtonExists('P', 'active', TRUE), 'P icon is not active');
 
         $this->click($this->findKeyword(1));
         $this->selectKeyword(3);
         $this->selectInlineToolbarLineageItem(0);
-        $this->assertTrue($this->inlineToolbarButtonExists('formats-p', 'active'), 'Toogle formats icon is not selected');
-        $this->clickInlineToolbarButton('formats-p', 'active');
-        $this->assertTrue($this->inlineToolbarButtonExists('P', 'active', TRUE), 'P icon is not active');
+        $this->assertTrue($this->topToolbarButtonExists('formats-p', 'active'), 'Toogle formats icon is not selected');
+        $this->clickTopToolbarButton('formats-p', 'active');
+        $this->assertEquals($this->replaceKeywords('sit amet XCX'), $this->getSelectedText(), 'Original selection is not selected');
+        $this->assertTrue($this->topToolbarButtonExists('P', 'active', TRUE), 'P icon is not active');
 
     }//end testSelectingParagraphsWithFormattedTextShowsCorrectIcons()
 

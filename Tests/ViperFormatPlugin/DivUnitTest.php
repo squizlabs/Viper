@@ -105,14 +105,16 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractViperUnitTest
         $this->selectInlineToolbarLineageItem(0);
         $this->assertTrue($this->inlineToolbarButtonExists('formats-div', 'active'), 'Toogle formats icon is not selected');
         $this->clickInlineToolbarButton('formats-div', 'active');
+        $this->assertEquals($this->replaceKeywords('sit amet %2%'), $this->getSelectedText(), 'Original selection is not selected');
         $this->assertTrue($this->inlineToolbarButtonExists('DIV', 'active', TRUE), 'Div icon is not active');
 
         $this->click($this->findKeyword(4));
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
-        $this->assertTrue($this->inlineToolbarButtonExists('formats-div', 'active'), 'Toogle formats icon is not selected');
-        $this->clickInlineToolbarButton('formats-div', 'active');
-        $this->assertTrue($this->inlineToolbarButtonExists('DIV', 'active', TRUE), 'Div icon is not active');
+        $this->assertTrue($this->topToolbarButtonExists('formats-div', 'active'), 'Toogle formats icon is not selected');
+        $this->clickTopToolbarButton('formats-div', 'active');
+        $this->assertEquals($this->replaceKeywords('%1% xtn dolor'), $this->getSelectedText(), 'Original selection is not selected');
+        $this->assertTrue($this->topToolbarButtonExists('DIV', 'active', TRUE), 'Div icon is not active');
 
     }//end testSelectingDivWithFormattedTextShowsCorrectIcons()
 

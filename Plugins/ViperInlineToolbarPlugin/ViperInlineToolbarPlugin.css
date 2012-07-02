@@ -40,6 +40,10 @@
     border: 12px solid transparent;
 }
 
+.ViperITP.Viper-noTools:before  {
+    margin-top: -24px;
+}
+
 .ViperITP.Viper-orientationLeft {
     margin-left: -15px;
 }
@@ -143,6 +147,11 @@
     border-bottom-right-radius: 0.75em;
 }
 
+.ViperITP.Viper-noTools .ViperITP-subSectionWrapper {
+    border-radius: 0.75em;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.3) inset;
+}
+
 .ViperITP.Viper-subSectionVisible .ViperITP-subSectionWrapper {
     display: block;
 }
@@ -157,6 +166,10 @@
     border: 4px solid transparent;
     -moz-transition: left 0.2s ease-out;
     -webkit-transition: left 0.2s ease-out;
+}
+
+.ViperITP.Viper-noTools  .ViperITP-subSectionWrapper .Viper-subSectionArrow {
+    display: none;
 }
 
 .ViperITP.Viper-forTopbar  .ViperITP-subSectionWrapper:before {

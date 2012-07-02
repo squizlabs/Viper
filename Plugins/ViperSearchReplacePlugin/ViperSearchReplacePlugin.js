@@ -52,6 +52,10 @@ ViperSearchReplacePlugin.prototype = {
             self.viper.ViperTools.enableButton('searchReplace');
         });
 
+        this.viper.registerCallback('ViperToolbarPlugin:updateToolbar', 'ViperSearchReplacePlugin', function(data) {
+            self.viper.ViperTools.enableButton('searchReplace');
+        });
+
         // Create Search and replace button and popup.
         var content = document.createElement('div');
 

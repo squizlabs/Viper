@@ -116,29 +116,61 @@ ViperCopyPastePlugin.prototype = {
             };
 
         } else {
+            var toolbarCreated = false;
             elem.onpaste = function(e) {
-                self._beforePaste();
+                var viperRange = self.viper.getViperRange();
 
                 var tools   = self.viper.ViperTools;
+                var toolbar = null;
                 var content = document.createElement('div');
-                dfx.setHtml(content, '<p style="margin:0 0 5px 0;font-size:1.3em;">Please paste the content in to the text area below</p>');
+                dfx.addClass(content, 'ViperCopyPastePlugin-pasteWrapper');
 
-                tools.createPopup('ViperCopyPastePlugin-iepopup', 'Paste Content', null, content, null, '', false, false);
-                tools.openPopup('ViperCopyPastePlugin-iepopup', null, null, '300px');
+                var shortcut = 'CTRL+V';
+                if (navigator.platform.indexOf('Mac') >= 0) {
+                    shortcut = 'CMD+V';
+                }
+
+                var pasteDesc = '<p class="ViperCopyPatePlugin-pasteDesc">Paste your content into the box below and it will be automatically inserted and cleaned up.</p>';
+                pasteDesc    += '<p class="ViperCopyPatePlugin-pasteDesc">Avoid this step for future pastes using the keyboard shortcut <strong>' + shortcut + '</strong>.</p>';
+
+                dfx.setHtml(content, pasteDesc);
+
+                var toolbarElement = tools.createInlineToolbar('ViperCopyPastePlugin-paste', false, null, function() {
+                    toolbar.toggleSubSection('pasteSubSection');
+                });
+                toolbar = tools.getItem('ViperCopyPastePlugin-paste');
+                toolbar.makeSubSection('pasteSubSection', content);
+                toolbar.hideToolsSection();
 
                 var iframe    = self._createPasteIframe(content);
                 var frameDoc  = dfx.getIframeDocument(iframe);
                 var pasteArea = frameDoc.getElementById('ViperPasteIframeDiv');
-                pasteArea.focus();
+
                 pasteArea.onpaste = function() {
+                    ViperSelection.addRange(viperRange);
+                    self._beforePaste(viperRange);
+
                     setTimeout(function() {
                         var node = pasteArea;
-                        tools.closePopup('ViperCopyPastePlugin-iepopup');
+                        toolbar.hide();
 
                         self._handleFormattedPasteValue(false, node);
                         self._afterPaste();
                     }, 10);
                 };
+
+                pasteArea.onfocus = function() {
+                    pasteArea.innerHTML = '';
+                };
+
+                setTimeout(function() {
+                    ViperSelection.addRange(viperRange);
+                    toolbar.setOnHideCallback(function() {
+                        dfx.remove(toolbarElement);
+                    });
+
+                    toolbar.update();
+                }, 10);
 
                 return false;
             };
@@ -273,10 +305,10 @@ ViperCopyPastePlugin.prototype = {
 
     },
 
-    _beforePaste: function()
+    _beforePaste: function(range)
     {
         this.viper.setAllowCleanDOM(false);
-        var range     = this.viper.getCurrentRange();
+        range         = range || this.viper.getCurrentRange();
         this.rangeObj = range.cloneRange();
 
         this._tmpNode = document.createTextNode('');
@@ -387,7 +419,7 @@ ViperCopyPastePlugin.prototype = {
     {
         var iframe = document.createElement('iframe');
         iframe.src = 'about:blank';
-        dfx.setStyle(iframe, 'border', 'none');
+        dfx.addClass(iframe, 'ViperCopyPastePlugin-iframe');
 
         if (parent) {
             parent.appendChild(iframe);
@@ -397,15 +429,17 @@ ViperCopyPastePlugin.prototype = {
 
         var content = '<!DOCTYPE html><head>';
         content    += '</head><body style="overflow:hidden;margin:0;"><div id="ViperPasteIframeDiv" contentEditable="true" ';
-        content    += 'style="width: 296px; height: 140px;outline:none;';
+        content    += 'style="-moz-box-sizing: border-box; box-sizing: border-box; width: 100%; height: 2.1em;outline:none;';
         content    += 'background: none repeat scroll 0 0 #2B2B2B;border-bottom: 1px solid #777777;border-radius: 0.4em 0.4em 0.4em 0.4em;'
-        content    += 'border-top: 1px solid #000000;box-shadow: 0 0 3px #000000 inset;color: #5A8BD0;';
-        content    += 'display: block;padding: 4px 2px;position: relative;text-align: left;';
+        content    += 'border-top: 1px solid #000000;box-shadow: 0 0 3px #000000 inset;color: #999;';
+        content    += 'display: block;padding: 4px 0.5em;position: relative;text-align: center;font-style:italic;font-family:arial;font-size:0.9em;';
         content    += 'overflow:hidden;';
-        content    += '"></div></body></html>';
+        content    += '">Paste content here</div></body></html>';
 
         var doc = dfx.getIframeDocument(iframe);
+        doc.open();
         doc.write(content);
+        doc.close();
 
         return iframe;
 
@@ -419,6 +453,7 @@ ViperCopyPastePlugin.prototype = {
             dfx.empty(this.pasteElement);
         }
 
+        this.pasteElement.innerHTML = '';
         if (this._isSafari === true) {
             var scrollCoords = dfx.getScrollCoords();
             this.pasteElement.innerHTML = '&nbsp;';
@@ -1106,7 +1141,7 @@ ViperCopyPastePlugin.prototype = {
 
             var listType   = listTypeInfo.listType;
             var listStyle  = listTypeInfo.listStyle;
-            var level      = pEl.getAttribute('style').match(/level([\d])+/mi);
+            var level      = (pEl.getAttribute('style') || '').match(/level([\d])+/mi);
             dfx.setHtml(pEl, listTypeInfo.html);
 
             if (!level) {
