@@ -102,7 +102,7 @@ table.VCMP-table tr td:nth-of-type(7) {
     background-color: #444449;
 }
 
-.VCMP-hoverBtn {
+.VCMP-hoverBtn.Viper-button {
     position: fixed;
     display: none;
     font-size: 3em;
