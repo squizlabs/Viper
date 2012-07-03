@@ -159,10 +159,6 @@ ViperCopyPastePlugin.prototype = {
                     }, 10);
                 };
 
-                pasteArea.onfocus = function() {
-                    pasteArea.innerHTML = '';
-                };
-
                 setTimeout(function() {
                     ViperSelection.addRange(viperRange);
                     toolbar.setOnHideCallback(function() {
@@ -434,7 +430,7 @@ ViperCopyPastePlugin.prototype = {
         content    += 'border-top: 1px solid #000000;box-shadow: 0 0 3px #000000 inset;color: #999;';
         content    += 'display: block;padding: 4px 0.5em;position: relative;text-align: center;font-style:italic;font-family:arial;font-size:0.9em;';
         content    += 'overflow:hidden;';
-        content    += '">Paste content here</div></body></html>';
+        content    += '"></div></body></html>';
 
         var doc = dfx.getIframeDocument(iframe);
         doc.open();
