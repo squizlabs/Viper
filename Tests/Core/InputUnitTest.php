@@ -13,7 +13,7 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
      */
     public function testTextType()
     {
-        $text = $this->selectText('Lorem');
+        $text = $this->selectKeyword(1);
         $this->keyDown('Key.DELETE');
 
         $chars  = '`1234567890-=qwertyuiop[]asdfghjkl;zxcvbnm,.';
@@ -38,8 +38,8 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
      */
     public function testTextTypeReplaceSelection()
     {
-        $this->selectText('Lorem');
-        
+        $this->selectKeyword(1);
+
         $this->type('Testing input');
 
         $this->assertHTMLMatch('<p>Testing input</p><p>EIB MOZ</p>');
@@ -54,15 +54,15 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
      */
     public function testCreatingANewParagraph()
     {
-        $this->selectText('Lorem');
+        $this->selectKeyword(1);
         $this->keyDown('Key.RIGHT');
         $this->keyDown('Key.ENTER');
         $this->type('Testing input');
 
-        $this->assertHTMLMatch('<p>Lorem</p><p>Testing input</p>');
+        $this->assertHTMLMatch('<p>%1%</p><p>Testing input</p>');
 
     }//end testCreatingANewParagraph()
-    
+
 
     /**
      * Test that using UP, DOWN, RIGHT, and LEFT arrows move caret correctly.
@@ -71,7 +71,7 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
      */
     public function testKeyboradNavigation()
     {
-        $text = $this->selectText('Lorem');
+        $text = $this->selectKeyword(1);
         $this->type('Testing input');
 
         $this->keyDown('Key.LEFT');
@@ -98,7 +98,7 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
         $this->keyDown('Key.UP');
         $this->type('U');
 
-        $this->assertHTMLMatch('<p>TUesting LinRput</p><p>EIB MODZ</p>');
+        $this->assertHTMLMatch('<p>TeUsting LinRput</p><p>EIB MOZD</p>');
 
     }//end testKeyboradNavigation()
 
@@ -110,7 +110,7 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
      */
     public function testBackspace()
     {
-        $text = $this->selectText('Lorem');
+        $text = $this->selectKeyword(1);
         $this->keyDown('Key.RIGHT');
         $this->keyDown('Key.CMD + b');
         $this->type('test');
@@ -135,7 +135,7 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
      */
     public function testDelete()
     {
-        $text = $this->selectText('Lorem');
+        $text = $this->selectKeyword(1);
         $this->keyDown('Key.RIGHT');
         $this->keyDown('Key.CMD + b');
         $this->type('test');
@@ -144,15 +144,15 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
         $this->keyDown('Key.ENTER');
         $this->type('Testing...');
 
-        for ($i = 0; $i < 30; $i++) {
+        for ($i = 0; $i < 26; $i++) {
             $this->keyDown('Key.LEFT');
         }
 
-        for ($i = 0; $i < 30; $i++) {
+        for ($i = 0; $i < 26; $i++) {
             $this->keyDown('Key.DELETE');
         }
 
-        $this->assertHTMLMatch('<p>IB MOZ</p>');
+        $this->assertHTMLMatch('<p>EIB MOZ</p>');
 
     }//end testDelete()
 
@@ -164,7 +164,7 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
      */
     public function testRightKeyboardSelection()
     {
-        $text = $this->selectText('Lorem');
+        $text = $this->selectKeyword(1);
         $this->keyDown('Key.SHIFT + Key.RIGHT');
         $this->keyDown('Key.SHIFT + Key.RIGHT');
         $this->keyDown('Key.DELETE');
@@ -181,14 +181,14 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
      */
     public function testLeftKeyboardSelection()
     {
-        $text = $this->selectText('Lorem');
+        $text = $this->selectKeyword(1);
         $this->keyDown('Key.SHIFT + Key.RIGHT');
         $this->keyDown('Key.SHIFT + Key.LEFT');
         $this->keyDown('Key.SHIFT + Key.LEFT');
         $this->keyDown('Key.SHIFT + Key.LEFT');
         $this->keyDown('Key.DELETE');
         $this->type('p');
-        $this->assertHTMLMatch('<p>pem</p><p>EIB MOZ</p>');
+        $this->assertHTMLMatch('<p>pAX</p><p>EIB MOZ</p>');
 
     }//end testRightKeyboardSelection()
 
@@ -200,7 +200,7 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
      */
     public function testSelectAllAndRemove()
     {
-        $this->selectText('Lorem');
+        $this->selectKeyword(1);
         $this->keyDown('Key.CMD + a');
         $this->keyDown('Key.DELETE');
 
@@ -217,7 +217,7 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
      */
     public function testSelectAllAndReplace()
     {
-        $this->selectText('Lorem');
+        $this->selectKeyword(1);
         $this->keyDown('Key.CMD + a');
 
         sleep(1);
@@ -234,30 +234,29 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
      */
     public function testDeleteAllClickUndoAndClickRedo()
     {
-        $dir = dirname(__FILE__).'/Images/';
 
-        $this->selectText('Lorem');
+        $this->selectKeyword(1);
         $this->keyDown('Key.CMD + a');
         $this->keyDown('Key.DELETE');
         sleep(1);
         $this->assertHTMLMatch('<p></p>');
-        $this->assertTrue($this->topToolbarButtonExists($dir.'undoIcon_active.png'), 'Undo icon should be active');
-        $this->assertTrue($this->topToolbarButtonExists($dir.'redoIcon.png'), 'Redo icon should be disabled');
+        $this->assertTrue($this->topToolbarButtonExists('historyUndo'), 'Undo icon should be active');
+        $this->assertTrue($this->topToolbarButtonExists('historyRedo', 'disabled'), 'Redo icon should be disabled');
 
-        $this->clickTopToolbarButton(dirname(__FILE__).'/Images/undoIcon_active.png');
-        $this->assertHTMLMatch('<p>Lorem</p><p>EIB MOZ</p>');
-        $this->assertTrue($this->topToolbarButtonExists($dir.'undoIcon.png'), 'Undo icon should be disabled');
-        $this->assertTrue($this->topToolbarButtonExists($dir.'redoIcon_active.png'), 'Redo icon should be active');
+        $this->clickTopToolbarButton('historyUndo');
+        $this->assertHTMLMatch('<p>%1%</p><p>EIB MOZ</p>');
+        $this->assertTrue($this->topToolbarButtonExists('historyUndo', 'disabled'), 'Undo icon should be disabled');
+        $this->assertTrue($this->topToolbarButtonExists('historyRedo'), 'Redo icon should be active');
 
-        $this->clickTopToolbarButton(dirname(__FILE__).'/Images/redoIcon_active.png');
+        $this->clickTopToolbarButton('historyRedo');
         $this->assertHTMLMatch('<p></p>');
-         $this->assertTrue($this->topToolbarButtonExists($dir.'undoIcon_active.png'), 'Undo icon should be active');
-        $this->assertTrue($this->topToolbarButtonExists($dir.'redoIcon.png'), 'Redo icon should be disabled');
+        $this->assertTrue($this->topToolbarButtonExists('historyUndo'), 'Undo icon should be active');
+        $this->assertTrue($this->topToolbarButtonExists('historyRedo', 'disabled'), 'Redo icon should be disabled');
 
-        $this->clickTopToolbarButton(dirname(__FILE__).'/Images/undoIcon_active.png');
-        $this->assertHTMLMatch('<p>Lorem</p><p>EIB MOZ</p>');
-        $this->assertTrue($this->topToolbarButtonExists($dir.'undoIcon.png'), 'Undo icon should be disabled');
-        $this->assertTrue($this->topToolbarButtonExists($dir.'redoIcon_active.png'), 'Redo icon should be active');
+        $this->clickTopToolbarButton('historyUndo');
+        $this->assertHTMLMatch('<p>%1%</p><p>EIB MOZ</p>');
+        $this->assertTrue($this->topToolbarButtonExists('historyUndo', 'disabled'), 'Undo icon should be disabled');
+        $this->assertTrue($this->topToolbarButtonExists('historyRedo'), 'Redo icon should be active');
 
     }//end testDeleteAllClickUndoAndClickRedo()
 
@@ -269,30 +268,29 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
      */
     public function testDeleteAllClickUndoAndClickRedoUsingShortcuts()
     {
-        $dir = dirname(__FILE__).'/Images/';
 
-        $this->selectText('Lorem');
+        $this->selectKeyword(1);
         $this->keyDown('Key.CMD + a');
         $this->keyDown('Key.DELETE');
         sleep(1);
         $this->assertHTMLMatch('<p></p>');
-        $this->assertTrue($this->topToolbarButtonExists($dir.'undoIcon_active.png'), 'Undo icon should be active');
-        $this->assertTrue($this->topToolbarButtonExists($dir.'redoIcon.png'), 'Redo icon should be disabled');
+        $this->assertTrue($this->topToolbarButtonExists('historyUndo'), 'Undo icon should be active');
+        $this->assertTrue($this->topToolbarButtonExists('historyRedo', 'disabled'), 'Redo icon should be disabled');
 
         $this->keyDown('Key.CMD + z');
-        $this->assertHTMLMatch('<p>Lorem</p><p>EIB MOZ</p>');
-        $this->assertTrue($this->topToolbarButtonExists($dir.'undoIcon.png'), 'Undo icon should be disabled');
-        $this->assertTrue($this->topToolbarButtonExists($dir.'redoIcon_active.png'), 'Redo icon should be active');
+        $this->assertHTMLMatch('<p>%1%</p><p>EIB MOZ</p>');
+        $this->assertTrue($this->topToolbarButtonExists('historyUndo', 'disabled'), 'Undo icon should be disabled');
+        $this->assertTrue($this->topToolbarButtonExists('historyRedo'), 'Redo icon should be active');
 
         $this->keyDown('Key.CMD + Key.SHIFT + z');
         $this->assertHTMLMatch('<p></p>');
-        $this->assertTrue($this->topToolbarButtonExists($dir.'undoIcon_active.png'), 'Undo icon should be active');
-        $this->assertTrue($this->topToolbarButtonExists($dir.'redoIcon.png'), 'Redo icon should be disabled');
+        $this->assertTrue($this->topToolbarButtonExists('historyUndo'), 'Undo icon should be active');
+        $this->assertTrue($this->topToolbarButtonExists('historyRedo', 'disabled'), 'Redo icon should be disabled');
 
         $this->keyDown('Key.CMD + z');
-        $this->assertHTMLMatch('<p>Lorem</p><p>EIB MOZ</p>');
-        $this->assertTrue($this->topToolbarButtonExists($dir.'undoIcon.png'), 'Undo icon should be disabled');
-        $this->assertTrue($this->topToolbarButtonExists($dir.'redoIcon_active.png'), 'Redo icon should be active');
+        $this->assertHTMLMatch('<p>%1%</p><p>EIB MOZ</p>');
+        $this->assertTrue($this->topToolbarButtonExists('historyUndo', 'disabled'), 'Undo icon should be disabled');
+        $this->assertTrue($this->topToolbarButtonExists('historyRedo'), 'Redo icon should be active');
 
 
     }//end testDeleteAllClickUndoAndClickRedo()
