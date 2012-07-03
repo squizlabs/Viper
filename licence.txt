@@ -6,24 +6,24 @@ ACCEPT ALL THE TERMS AND CONDITIONS OF THIS AGREEMENT. THIS AGREEMENT IS ENFORCE
 AGAINST YOU, AN ENTITY OR SIMILAR (HEREAFTER "YOU") THAT OBTAINED THE SOFTWARE AND/OR
 ON WHOSE BEHALF IT IS USED.
 
-The Licensor is Squiz Australia Pty Ltd ABN 53 131 581 247 (hereafter "Squiz"). Squiz
-and its Related Bodies Corporate own all Intellectual Property in the Software. The
-Software is licenced, not sold.
+The Licensor is one of (i) Squiz Australia Pty Ltd (Australian Business Number 53 131
+581 247), (ii) Squiz UK Limited (UK Registered Number 04816468), or (iii) Squiz
+Limited (New Zealand Company Number 1027323) (hereafter "Squiz"). Squiz and its
+Related Bodies Corporate own all Intellectual Property in the Software. The Software
+is licenced, not sold.
 
 1. Definitions & Interpretations
 
     1.1 Definitions
 
-        (a) ABN means the Australian Business Number.
-
-        (b) Client Side Executable Software means the software required to run Squiz
+        (a) Client Side Executable Software means the software required to run Squiz
         Viper on a browser remote from the server on which the program is installed
         in accordance with this Agreement.
 
-        (c) Commencement Date means the date on which the Software was purchased or
+        (b) Commencement Date means the date on which the Software was purchased or
         was installed into Your system, whichever occurs first.
 
-        (d) Confidential Information means information of a Party that:
+        (c) Confidential Information means information of a Party that:
             (i) is by its nature confidential; or
             (ii) is designated by that Party as confidential; or
             (iii) the other Party knows or ought to have known is confidential,
@@ -44,45 +44,50 @@ Software is licenced, not sold.
             disclosure by a party in breach of its obligations of confidentiality
             under this agreement;
 
-        (e) Documentation means any technical and user information relating to the
+        (d) Documentation means any technical and user information relating to the
         Software provided by Squiz.
 
-        (f) Instance means a single installation of the Software on a system capable
+        (e) Instance means a single installation of the Software on a system capable
         of running it.
 
-        (g) Intellectual Property includes copyright, trade mark, design, patent,
+        (f) Intellectual Property includes copyright, trade mark, design, patent,
         semiconductor or circuit layout rights, trade, business or company names, or
         other proprietary rights, or any rights to registration of such rights,
         whether created before, on or after the commencement date of this Licence;
 
-        (h) Licence means the licence of Software granted pursuant to this Agreement.
+        (g) Licence means the licence of Software granted pursuant to this Agreement.
 
-        (i) Licence Fee means the fees payable by You to Squiz for the use of the
+        (h) Licence Fee means the fees payable by You to Squiz for the use of the
         Software as granted pursuant to this Agreement.
 
-        (j) Related Bodies Corporate has the same meaning as in the Corporations Act
-        2001 (Cth).
+        (i) Related Bodies Corporate means (i) where the Software is installed in
+        Australia, the United Kingdom or New Zealand, the same meaning as in
+        corporate law in operation in the respective jurisdiction in which the
+        Software is installed, or (ii), where the Software is not installed in
+        Australia, the United Kingdom or New Zealand, the same meaning as in
+        corporate law in operation in Australia
 
-        (k) Service Level Agreement means a contractual agreement of the same name
+        (j) Service Level Agreement means a contractual agreement of the same name
         between You and Squiz.
 
-        (l) Software means the Squiz Viper software, including the Client Side
+        (k) Software means the Squiz Viper software, including the Client Side
         Executable Software, without limitation all files comprising the Squiz Viper
         program on which it functions as per the Documentation, including updates as
         may be issued from time to time.
 
-        (m) Squiz Authorised Representative means a party with written authorisation
+        (l) Squiz Authorised Representative means a party with written authorisation
         by Squiz to market and sell the Software.
 
-        (n) Third Party means any party other than You or Squiz and includes
-        (i) Related Bodies Corporate, and (ii) parties having a different ABN to
-        You (if applicable).
+        (m) Third Party means any party other than You or Squiz and includes
+        (i) Related Bodies Corporate, and (ii) parties having a different Australian
+        Business Number, UK Registered Number or New Zealand Company Number to You
+        (if applicable).
 
-        (o) Valid Service Level Agreement means a Service Level Agreement that is
+        (n) Valid Service Level Agreement means a Service Level Agreement that is
         active and enforceable, paid up and of a level that is stipulated by Squiz in
         the Documentation to include the right to purchase Squiz Viper.
 
-        (p) You means one of either (i) the individual, (ii) an entity or
+        (o) You means one of either (i) the individual, (ii) an entity or
         (iii) similar, but does not include Related Bodies Corporate, who has
         purchased the Software from Squiz or a Squiz Authorised Representative and
         has installed the Software into their system in accordance with the terms of
@@ -163,16 +168,9 @@ Software is licenced, not sold.
     5.2 All taxes, duties and government charges imposed or levied in Australia or
     overseas in connection with this Agreement will be borne by You.
 
-    5.3 Any amounts paid by You under this Agreement include
-    Goods and Services Tax (GST) for supplies which are taxable supplies within the
-    meaning of A New Tax System (Goods and Services Tax) Act 1999 ("the GST Act").
-
-    5.4 In relation to taxable supplies made under this Agreement, Squiz agrees to
-    provide you with either:
-        (a) A tax invoice in accordance with the GST Act; or
-        (b) A document satisfying the minimum information requirements of the
-        Australian Taxation Office to entitle a recipient of a taxable supply to
-        claim an input tax credit without holding a tax invoice.
+    5.3 In relation to taxable supplies made under this Agreement, Squiz agrees to
+    provide you with a tax invoice in accordance with the tax legislation applicable
+    in the local jurisdiction.
 
 6. Ownership
 
@@ -298,7 +296,7 @@ Software is licenced, not sold.
     (a) any express provision of this Agreement is limited to the amount paid by You
     in Licence Fees.
     (b) any implied condition or warranty where the exclusion of which would
-    contravene any statute or cause this clause 12 to be void, is limited, at the
+    contravene any statute or cause this clause 13 to be void, is limited, at the
     option of Squiz, to one or more of the following:
         i. the replacement of the Software or Documentation
         ii. repair of such Software or Documentation
@@ -307,9 +305,11 @@ Software is licenced, not sold.
 
     13.1 Governing law
          This Agreement shall be governed by, and construed in accordance with the
-         laws of New South Wales, Australia. The parties agree to submit to the
-         jurisdiction of the courts and tribunals of the State of New South Wales,
-         Australia.
+         laws of (i) where the Software is installed in Australia, the United Kingdom
+         or New Zealand, the corresponding country in which the Software is
+         installed, or (ii) in all other cases, the laws of New South Wales,
+         Australia. The parties agree to submit to the jurisdiction of the courts and
+         tribunals as determined in this clause 13.1.
 
     13.2 Entire agreement
          This Agreement constitutes the entire agreement between the parties and
