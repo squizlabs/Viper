@@ -564,7 +564,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
     public function testAddingClassToABoldWord()
     {
 
-        $this->selectKeyword(10);
+        $this->selectKeyword(8);
         $this->clickInlineToolbarButton('cssClass');
         $this->type('test');
         $this->keyDown('Key.ENTER');
