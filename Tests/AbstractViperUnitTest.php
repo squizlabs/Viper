@@ -258,7 +258,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         } else {
             $this->selectBrowser(self::$_browser);
 
-            /*// Check if the JSExec window is open. If it is close it.
+            // Check if the JSExec window is open. If it is close it.
             $jsExecWindowCheck     = FALSE;
             $maxJsExecWindowChecks = 2;
             while ($jsExecWindowCheck === FALSE) {
@@ -273,7 +273,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
                     $this->keyDown('Key.CMD + `');
                     $maxJsExecWindowChecks--;
                 }
-            }*/
+            }
 
             $this->resizeWindow();
 
@@ -457,7 +457,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
 
             // Test that captured images can be found on the page.
             for ($i = 1; $i <= $count; $i++) {
-                $this->find($this->_getKeywordImage($i));
+                $this->find($this->_getKeywordImage($i, null, 0.97));
             }
         }
 
@@ -625,7 +625,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         $this->_switchWindow('main');
         sleep(1);
 
-        // Make sure page is loaded.
+        /*// Make sure page is loaded.
         $maxRetries = 4;
         while ($this->topToolbarButtonExists('italic') === FALSE) {
             $this->reloadPage();
@@ -636,7 +636,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
             sleep(2);
 
             $maxRetries--;
-        }
+        }*/
 
         // Create image for the inline toolbar pattern (the arrow on top).
         sleep(2);
@@ -1903,14 +1903,14 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         $startKeywordImage = $this->_getKeywordImage($startKeyword);
 
         if ($endKeyword === NULL) {
-            $this->doubleClick($this->find($startKeywordImage));
+            $this->doubleClick($this->find($startKeywordImage, null, 0.97));
             return;
         }
 
         $endKeywordImage = $this->_getKeywordImage($endKeyword);
 
-        $start = $this->find($startKeywordImage);
-        $end   = $this->find($endKeywordImage);
+        $start = $this->find($startKeywordImage, null, 0.97);
+        $end   = $this->find($endKeywordImage, null, 0.97);
 
         $this->click($start);
 
@@ -1943,7 +1943,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      */
     protected function findKeyword($keyword)
     {
-        return $this->find($this->_getKeywordImage($keyword));
+        return $this->find($this->_getKeywordImage($keyword), null, 0.97);
 
     }//end findKeyword()
 
