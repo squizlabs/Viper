@@ -124,6 +124,13 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      */
     private static $_jsExecCache = array();
 
+    /**
+     * Keeps cache of JS that is executed.
+     *
+     * @var array
+     */
+    private static $_data = NULL;
+
 
     /**
      * Returns the path of a test file.
@@ -450,18 +457,97 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
             $i++;
         }
 
-        $tests = 5;
-        for ($j = 1; $j <= $tests; $j++) {
-            // Change the contents of the test page.
-            $this->execJS('window.opener.changeContent('.$j.')', TRUE);
+        $tests          = 5;
+        $pass           = FALSE;
+        $textSimilarity = 0.99;
 
-            // Test that captured images can be found on the page.
-            for ($i = 1; $i <= $count; $i++) {
-                $this->find($this->_getKeywordImage($i, null, 0.97));
+        do {
+            try {
+                for ($j = 1; $j <= $tests; $j++) {
+                    // Change the contents of the test page.
+                    $this->execJS('window.opener.changeContent('.$j.', '.$textSimilarity.')', TRUE);
+
+                    // Test that captured images can be found on the page.
+                    for ($i = 1; $i <= $count; $i++) {
+                        $this->find($this->_getKeywordImage($i), NULL, $textSimilarity);
+                    }
+                }
+
+                $pass = TRUE;
+            } catch (Exception $e) {
+                if ($textSimilarity < 0.85) {
+                    throw new Exception('Text similarity test dropped below minimum threshold (85%)');
+                }
+
+                $textSimilarity -= 0.01;
+            }
+        } while ($pass !== TRUE);
+
+        $this->addData('textSimmilarity', $textSimilarity);
+
+    }//end _calibrateText()
+
+
+    /**
+     * Stores the specified data so that it can be accessed by unit test.
+     *
+     * Stored data is cached and placed in tmp/<browserId>/data.inc file.
+     *
+     * @param string $varName The name of the variable.
+     * @param mixed  $value   The value.
+     *
+     * @return void
+     */
+    protected function addData($varName, $value)
+    {
+        $path = dirname(__FILE__).'/tmp/'.$this->getBrowserid();
+        if (file_exists($path) === FALSE) {
+            mkdir($path, 0755, TRUE);
+        }
+
+        $path .= '/data.inc';
+
+        $data = self::$_data;
+
+        if ($data === NULL) {
+            if (file_exists($path) === TRUE) {
+                include $path;
             }
         }
 
-    }//end _calibrateText()
+        $data[$varName] = $value;
+
+        self::$_data = $data;
+        file_put_contents($path, '<?php $data = '.var_export($data, TRUE).'; ?>');
+
+    }//end addData()
+
+
+    /**
+     * Returns the value of a stored variable.
+     *
+     * @param string $varName Name of the variable.
+     *
+     * @return mixed
+     */
+    protected function getData($varName)
+    {
+        $data = array();
+        if (self::$_data === NULL) {
+            $path = dirname(__FILE__).'/tmp/'.$this->getBrowserid().'/data.inc';
+            if (file_exists($path) === TRUE) {
+                include $path;
+                self::$_data = $data;
+            }
+        }
+
+        if (isset(self::$_data[$varName]) === TRUE) {
+            return self::$_data[$varName];
+        }
+
+        return NULL;
+
+    }//end getData()
 
 
     /**
@@ -1903,14 +1989,14 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         $startKeywordImage = $this->_getKeywordImage($startKeyword);
 
         if ($endKeyword === NULL) {
-            $this->doubleClick($this->find($startKeywordImage, null, 0.97));
+            $this->doubleClick($this->find($startKeywordImage, NULL, $this->getData('textSimmilarity')));
             return;
         }
 
         $endKeywordImage = $this->_getKeywordImage($endKeyword);
 
-        $start = $this->find($startKeywordImage, null, 0.97);
-        $end   = $this->find($endKeywordImage, null, 0.97);
+        $start = $this->find($startKeywordImage, NULL, $this->getData('textSimmilarity'));
+        $end   = $this->find($endKeywordImage, NULL, $this->getData('textSimmilarity'));
 
         $this->click($start);
 
@@ -1943,7 +2029,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      */
     protected function findKeyword($keyword)
     {
-        return $this->find($this->_getKeywordImage($keyword), null, 0.97);
+        return $this->find($this->_getKeywordImage($keyword), NULL, $this->getData('textSimmilarity'));
 
     }//end findKeyword()
 

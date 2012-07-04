@@ -24,8 +24,10 @@
             }
 
             var spans = null;
-            function changeContent(step)
+            function changeContent(step, similarity)
             {
+                dfx.setHtml(dfx.getId('msg'), 'Test stage ' + step + ' (Similarity = ' + parseInt(similarity * 100) + '%)');
+
                 var content = '';
 
                 if (!spans) {
@@ -116,19 +118,8 @@
     </head>
     <body spellcheck="false">
         <img id="windowTarget" src="./Core/Images/window-target.png" onclick="if (viper) viper.destroy();location.reload();" />
-        <div id="spans">
-            <!--<span>{TnT}</span><br />
-            <span>{XnX}</span><br />
-            <span>{OpO}</span><br />
-            <span>{%5%}</span><br />
-            <span>{oNo}</span><br />
-            <span>{KoZ}</span><br />
-            <span>{TpY}</span><br />
-            <span>{DkD}</span><br />
-            <span>{MyO}</span><br />
-            <span>{UjZ}</span><br />
-            <span>{AxP}</span><br />-->
-        </div>
+        <div id="spans"></div>
         <div id="testContent" style="width: 300px;"></div>
+        <div id="msg" style="position:fixed;bottom: 10px;left:10px;font-size:12px;">Creating screenshots of keywords</div>
     </body>
 </html>
