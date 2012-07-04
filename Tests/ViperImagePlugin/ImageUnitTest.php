@@ -87,7 +87,7 @@
             $this->type('http://www.squizlabs.com/__images/general/html-codesniffer.png');
             $this->clickField('Image is decorative');
             sleep(1);
-            $this->clickButton('Update Changes', NULL, TRUE);
+            $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
 
             $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%1% %2%<img src="http://www.squizlabs.com/__images/general/html-codesniffer.png" alt="" /></p><p>sit amet<img src="http://www.squizlabs.com/__images/general/html-codesniffer.png" alt="" /></p>');
 
@@ -119,8 +119,7 @@
             $this->keyDown('Key.TAB');
             $this->type('Another Alt tag');
             sleep(1);
-            $updateChanges = $this->find('Update Changes', NULL, TRUE);
-            $this->click($updateChanges);
+            $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
 
             $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%1% %2%<img src="http://www.squizlabs.com/__images/general/html-codesniffer.png" alt="Alt tag" /></p><p>sit amet<img src="http://www.squizlabs.com/__images/general/html-codesniffer.png" alt="Another Alt tag" /></p>');
 
@@ -213,8 +212,7 @@
             $this->keyDown('Key.TAB');
             $this->type('Another Title tag');
             sleep(1);
-            $updateChanges = $this->find('Update Changes', NULL, TRUE);
-            $this->click($updateChanges);
+            $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
 
             $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%1% %2%<img src="http://www.squizlabs.com/__images/general/html-codesniffer.png" alt="Alt tag" title="Title tag" /></p><p>sit amet<img src="http://www.squizlabs.com/__images/general/html-codesniffer.png" alt="Another Alt tag" title="Another Title tag" /></p>');
 
@@ -269,8 +267,7 @@
             $this->keyDown('Key.TAB');
             $this->type('Alt tag');
             sleep(1);
-            $updateChanges = $this->find('Update Changes', NULL, TRUE);
-            $this->click($updateChanges);
+            $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
 
             $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%1% %2%<img src="http://www.squizlabs.com/__images/general/html-codesniffer.png" alt="Alt tag" /></p><p>sit amet <strong>%3%<img src="http://www.squizlabs.com/__images/general/html-codesniffer.png" alt="Alt tag" /></strong></p>');
 
@@ -304,10 +301,9 @@
             $this->keyDown('Key.TAB');
             $this->type('Alt tag');
             sleep(1);
-            $updateChanges = $this->find('Update Changes', NULL, TRUE);
-            $this->click($updateChanges);
+            $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
 
-            $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%1%<img src="http://www.squizlabs.com/__images/general/html-codesniffer.png" alt="Alt tag" /> %2%</p><p>sit amet <strong><img src="http://www.squizlabs.com/__images/general/html-codesniffer.png" alt="Alt tag" />%3%</strong></p>');
+            $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%1%<img src="http://www.squizlabs.com/__images/general/html-codesniffer.png" alt="Alt tag" /> %2%</p><p>sit amet <img src="http://www.squizlabs.com/__images/general/html-codesniffer.png" alt="Alt tag" /><strong>%3%</strong></p>');
 
         }//end testInsertingAnImageInMiddleOfParagraph()
 
@@ -358,8 +354,7 @@
             $this->keyDown('Key.TAB');
             $this->type('Alt tag');
             sleep(1);
-            $updateChanges = $this->find('Update Changes', NULL, TRUE);
-            $this->click($updateChanges);
+            $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
 
             $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p><img src="http://www.squizlabs.com/__images/general/html-codesniffer.png" alt="Alt tag" />&nbsp;</p><p>sit amet<img src="http://www.squizlabs.com/__images/general/html-codesniffer.png" alt="Alt tag" /></p>');
 
@@ -863,7 +858,6 @@
             $this->clickInlineToolbarButton('image', 'active');
             $this->clickField('Image is decorative');
             $this->keyDown('Key.TAB');
-            //$this->clickField('Alt');
             $this->type('Alt text');
             $this->clickInlineToolbarButton('Update Changes', NULL, TRUE);
 
