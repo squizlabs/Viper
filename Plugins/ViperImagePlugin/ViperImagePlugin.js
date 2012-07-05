@@ -744,6 +744,11 @@ ViperImagePlugin.prototype = {
                     dfx.removeEvent(document, 'mousemove.ViperImageResize');
                     dfx.removeEvent(document, 'mouseup.ViperImageResize');
 
+                    // If the style attribute is empty, remove it.
+                    if (!image.getAttribute('style')) {
+                        image.removeAttribute('style');
+                    }
+
                     if (resized === true) {
                         self.viper.fireNodesChanged();
                     }
@@ -752,6 +757,7 @@ ViperImagePlugin.prototype = {
                     self._updateToolbars(image);
 
                     self._inlineToolbar.update(null, image);
+
                 });
 
                 dfx.preventDefault(e);
