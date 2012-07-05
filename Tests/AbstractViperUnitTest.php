@@ -1536,13 +1536,15 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      * @param string  $buttonIcon The name of the button.
      * @param string  $state      The name of the button state (active, selected).
      * @param boolean $isText     If TRUE then the button is a text button (i.e. no icon).
+     * @param boolean $forceJSPos If isText option is set to TRUE and this is set to TRUE then
+     *                            image will not be used.
      *
      * @return void
      * @throws Exception If the specified icon file not found.
      */
-    protected function clickTopToolbarButton($buttonIcon, $state=NULL, $isText=FALSE)
+    protected function clickTopToolbarButton($buttonIcon, $state=NULL, $isText=FALSE, $forceJSPos=FALSE)
     {
-        $this->_clickButton($buttonIcon, $state, $isText, 'topToolbar');
+        $this->_clickButton($buttonIcon, $state, $isText, 'topToolbar', $forceJSPos);
 
     }//end clickTopToolbarButton()
 
@@ -1589,11 +1591,18 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      * @param string  $state      The name of the button state (active, selected).
      * @param boolean $isText     If TRUE then the button is a text button (i.e. no icon).
      * @param string  $location   The location of the button (topToolbar, inlineToolbar, or a region).
+     * @param boolean $forceJSPos If isText option is set to TRUE and this is set to TRUE then
+     *                            image will not be used.
      *
      * @return void
      */
-    private function _clickButton($buttonIcon, $state=NULL, $isText=FALSE, $location=NULL)
-    {
+    private function _clickButton(
+        $buttonIcon,
+        $state=NULL,
+        $isText=FALSE,
+        $location=NULL,
+        $forceJSPos=FALSE
+    ) {
         $buttonObj = $this->_getButton($buttonIcon, $state, $isText, $location);
 
         $region = NULL;
@@ -1607,13 +1616,18 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
 
         $match = NULL;
         if ($isText === TRUE) {
-            // Its harder for Sikuli to match a text button so use lower similarity.
-            try {
-                $match = $this->find($buttonObj, $region, 0.7);
-            } catch (Exception $e) {
-                // Try to find it again without the image.
+            if ($forceJSPos === TRUE) {
                 $rect  = $this->_getTextButtonRectangle($buttonIcon, $state, $location);
                 $match = $this->getRegionOnPage($rect);
+            } else {
+                // Its harder for Sikuli to match a text button so use lower similarity.
+                try {
+                    $match = $this->find($buttonObj, $region, 0.7);
+                } catch (Exception $e) {
+                    // Try to find it again without the image.
+                    $rect  = $this->_getTextButtonRectangle($buttonIcon, $state, $location);
+                    $match = $this->getRegionOnPage($rect);
+                }
             }
         } else {
             $match = $this->find($buttonObj, $region, 0.9);
