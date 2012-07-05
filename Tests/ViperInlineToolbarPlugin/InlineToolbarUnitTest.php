@@ -381,7 +381,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarUnitTest extends Abstrac
         $this->clickInlineToolbarButton('cssClass');
         $this->selectInlineToolbarLineageItem(1);
         sleep(1);
-        $this->assertEquals('%7%', $this->getSelectedText(), 'P tag is selected');
+        $this->assertEquals('%1%', $this->getSelectedText(), 'P tag is selected');
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Selection</li>', $lineage);
 
