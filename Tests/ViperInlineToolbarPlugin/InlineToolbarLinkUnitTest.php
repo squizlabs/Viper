@@ -13,7 +13,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarLinkUnitTest extends Abs
      */
     public function testClickingLinkInLineage()
     {
-        $this->click($this->findKeyword(1));
+        $this->click($this->findKeyword(3));
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Link</li>', $lineage);
 
@@ -30,7 +30,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarLinkUnitTest extends Abs
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Link</li>', $lineage);
 
         $this->click($this->findKeyword(2));
-        $this->click($this->findKeyword(3));
+        $this->click($this->findKeyword(4));
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Link</li>', $lineage);
 
@@ -57,7 +57,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarLinkUnitTest extends Abs
      */
     public function testLinkAppearsInLineage()
     {
-        $this->selectKeyword(4);
+        $this->selectKeyword(2);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Selection</li>', $lineage);
 
@@ -65,6 +65,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarLinkUnitTest extends Abs
         $this->type('http://www.squizlabs.com');
         $this->keyDown('Key.ENTER');
 
+        $this->selectKeyword(2);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Link</li>', $lineage);
     }
@@ -77,12 +78,11 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarLinkUnitTest extends Abs
      */
     public function testLineageChangesWhenRemoveLink()
     {
-        $this->selectKeyword(1);
+        $this->selectKeyword(3);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Link</li>', $lineage);
 
         $this->clickInlineToolbarButton('linkRemove');
-
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Selection</li>', $lineage);
     }
