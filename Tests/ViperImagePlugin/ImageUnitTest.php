@@ -748,9 +748,9 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperUnitTest
         $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%1% %2%<img src="http://www.squizlabs.com/__images/general/html-codesniffer.png" alt="" /></p><p>sit amet <strong>%3%</strong></p>');
 
         $this->clickElement('img', 1);
-        $this->resizeImage(1, 300);
+        $this->resizeImage(1, 200);
 
-        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%1% %2%<img src="http://www.squizlabs.com/__images/general/html-codesniffer.png" alt="" width="300" height="280" /></p><p>sit amet <strong>%3%</strong></p>');
+        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%1% %2%<img src="http://www.squizlabs.com/__images/general/html-codesniffer.png" alt="" width="200" height="186" /></p><p>sit amet <strong>%3%</strong></p>');
 
     }//end testResizingAnImage()
 
@@ -777,7 +777,7 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperUnitTest
         $this->clickElement('img', 1);
         $this->resizeImage(1, 100);
 
-         $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%1% %2%<img src="http://www.squizlabs.com/__images/general/html-codesniffer.png" alt="Alt tag" width="366" height="341" /></p><p>sit amet <strong>%3%</strong></p>');
+         $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>XAX XBX<img alt="Alt tag" height="93" src="http://www.squizlabs.com/__images/general/html-codesniffer.png" width="100" /></p><p>sit amet <strong>XCX</strong></p>');
 
         $this->clickElement('img', 1);
         $this->clickTopToolbarButton('image', 'selected');
@@ -786,7 +786,7 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperUnitTest
         $this->type('Title tag');
         $this->keyDown('Key.ENTER');
         $this->clickTopToolbarButton('image', 'selected');
-        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%1% %2%<img src="http://www.squizlabs.com/__images/general/html-codesniffer.png" alt="Alt tag" width="366" height="341" title="Title tag" /></p><p>sit amet <strong>%3%</strong></p>');
+        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%1% %2%<img src="http://www.squizlabs.com/__images/general/html-codesniffer.png" alt="Alt tag" width="100" height="93" title="Title tag" /></p><p>sit amet <strong>%3%</strong></p>');
 
     }//end testResizingAnImageAndEditingIt()
 
@@ -879,8 +879,6 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperUnitTest
         $this->click($this->getMouseLocation());
 
         $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>Another paragraph %1%<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="" width="369" height="167" /></p><p>LOREM</p><p>LABS is ORSM</p>');
-        $this->assertTrue($this->inlineToolbarButtonExists('image', 'active'), 'Image icon should be active.');
-        $this->assertTrue($this->inlineToolbarButtonExists('move'), 'Move icon should appear in the inline toolbar.');
 
         // Undo the move
         $this->clickTopToolbarButton('historyUndo');
