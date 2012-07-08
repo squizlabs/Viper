@@ -130,8 +130,17 @@ ViperImagePlugin.prototype = {
                 var parent = tags[i].parentNode;
                 dfx.removeClass(tags[i], 'ui-resizable');
                 dfx.insertBefore(parent, tags[i]);
-                self._hideImageResizeHandles(tags[i]);
+                self.hideImageResizeHandles(tags[i]);
                 dfx.remove(parent);
+
+                // Remove empty style and class attributes.
+                if (!tags[i].getAttribute('style')) {
+                    tags[i].removeAttribute('style');
+                }
+
+                if (!tags[i].getAttribute('class')) {
+                    tags[i].removeAttribute('class');
+                }
             }
         });
 

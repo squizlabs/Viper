@@ -100,7 +100,7 @@ class Viper_Tests_Core_GetHtmlTest extends AbstractViperUnitTest
     {
         $this->click($this->find('First'));
 
-        $this->_checkGetHTML('<h1>First Heading</h1><iframe src="http://www.w3schools.com"></iframe><p>Lorem XuT dolor sit <em>amet</em> <strong>WoW</strong></p>');
+        $this->_checkGetHTML('<h1>First Heading</h1><p><iframe src="http://www.w3schools.com"></iframe></p><p>Lorem XuT dolor sit <em>amet</em> <strong>WoW</strong></p>');
 
     }//end testGetHtmlDoesNotRemoveIframeTags()
 
@@ -114,7 +114,7 @@ class Viper_Tests_Core_GetHtmlTest extends AbstractViperUnitTest
     {
         $this->click($this->find('First'));
 
-        $this->_checkGetHTML('<h1>First Heading</h1><a href="#test">Test</a><p style="text-align: center;">Lorem XuT dolor sit <em>amet</em> <strong>WoW</strong></p><h2><a name="test"></a>Second Heading</h2><p style="text-align: right;">This is <del>SOME</del> <span class="myclass">information</span> for <a href="http://www.google.com" title="Google">testing</a></p>');
+        $this->_checkGetHTML('<h1>First Heading</h1><p><a href="#test">Test</a></p><p style="text-align: center;">Lorem XuT dolor sit <em>amet</em> <strong>WoW</strong></p><h2><a name="test"></a>Second Heading</h2><p style="text-align: right;">This is <del>SOME</del> <span class="myclass">information</span> for <a href="http://www.google.com" title="Google">testing</a></p>');
 
     }//end testGetHtmlDoesNotRemoveAnchorTags()
 

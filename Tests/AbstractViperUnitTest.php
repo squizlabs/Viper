@@ -265,7 +265,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         } else {
             $this->selectBrowser(self::$_browser);
 
-            // Check if the JSExec window is open. If it is close it.
+            /*// Check if the JSExec window is open. If it is close it.
             $jsExecWindowCheck     = FALSE;
             $maxJsExecWindowChecks = 2;
             while ($jsExecWindowCheck === FALSE) {
@@ -280,7 +280,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
                     $this->keyDown('Key.CMD + `');
                     $maxJsExecWindowChecks--;
                 }
-            }
+            }*/
 
             $this->resizeWindow();
 
