@@ -26,6 +26,8 @@
                     jsCache.push(val);
                 }
 
+                window.opener.dfx.setHtml(window.opener.dfx.getId('msg'), 'Exec: ' + val);
+
                 val  = 'var jsResult = ' + val + ';';
                 val += 'jsRes.value = window.opener.dfx.jsonEncode(jsResult);';
 

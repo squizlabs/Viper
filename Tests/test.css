@@ -38,6 +38,13 @@ body {
     z-index: 999999;
 }
 
+#msg {
+    bottom: 30px;
+    font-size: 12px;
+    left: 10px;
+    position: fixed;
+}
+
 * {
     font-style: normal;
     font-weight: normal;
@@ -92,4 +99,8 @@ sub, sup {
 
 h1,h2,h3,h4,h5,h6 {
     font-size: 20px;
+}
+
+td,th {
+    min-width: 20px;
 }
