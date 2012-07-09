@@ -969,7 +969,16 @@ Viper.prototype = {
         // If we have any nodes highlighted, then we want to delete them before
         // inserting the new text.
         if (range.collapsed !== true) {
-            range.deleteContents();
+            if (this.isBrowser('chrome') === true
+                && range.startOffset === 0
+                && range.startContainer === range._getFirstSelectableChild(this.element)
+                && range.endOffset === (this.element.childNodes.length - 1)
+            ) {
+                // Whole editable container.
+                dfx.setHtml(this.element, '');
+            } else {
+                range.deleteContents();
+            }
 
             if (dfx.trim(dfx.getHtml(this.element)) === '') {
                 this.initEditableElement();
