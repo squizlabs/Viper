@@ -3230,6 +3230,7 @@ ViperTableEditorPlugin.prototype = {
         for (var k = 0; k < tableRows.length; k++) {
             var row = tableRows[k];
 
+            var cellCount = 0;
             for (var j = 0; j < row.childNodes.length; j++) {
                 var cell = row.childNodes[j];
 
@@ -3244,7 +3245,7 @@ ViperTableEditorPlugin.prototype = {
                     // although it may be prefixed with the ID of another header to make it unique.
                     var cellid = cell.getAttribute('id');
                     if (!cellid || cellid.match(/r\d+c\d+/)) {
-                        cellid = tableId + 'r' + (k + 1) + 'c' + (j + 1);
+                        cellid = tableId + 'r' + (k + 1) + 'c' + (cellCount + 1);
                         var existingElem = dfx.getId(cellid);
                         if (existingElem) {
                             existingElem.removeAttribute('id');
@@ -3253,6 +3254,8 @@ ViperTableEditorPlugin.prototype = {
                         cell.setAttribute('id', cellid);
                     }
                 }
+
+                cellCount++;
             }//end for
         }//end for
 
