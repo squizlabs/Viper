@@ -1172,8 +1172,9 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
     {
         $html = $this->replaceKeywords($html);
 
-        $pageHtml = str_replace('\n', '', $this->getHtml());
-        $html     = str_replace("\n", '', $html);
+        $pageHtml = str_replace('\n', ' ', $this->getHtml());
+        $pageHtml = str_replace("\n", ' ', $pageHtml);
+        $html     = str_replace("\n", ' ', $html);
 
         if ($html !== $pageHtml) {
             $pageHtml = $this->_orderTagAttributes($pageHtml);
