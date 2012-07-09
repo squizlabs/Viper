@@ -737,6 +737,24 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         $vitpImage = $this->capture($region);
         copy($vitpImage, $imgPath.'/vitp_arrow.png');
 
+        // Left arrow.
+        $vitp      = $this->execJS('window.opener.getVITP("left")', TRUE);
+        $vitp['x'] = $this->getPageXRelativeToScreen($vitp['x']);
+        $vitp['y'] = $this->getPageYRelativeToScreen($vitp['y']);
+
+        $region    = $this->createRegion(($vitp['x'] - 2), ($vitp['y'] - 10), 30, 14);
+        $vitpImage = $this->capture($region);
+        copy($vitpImage, $imgPath.'/vitp_arrowLeft.png');
+
+        // Right arrow.
+        $vitp      = $this->execJS('window.opener.getVITP("right")', TRUE);
+        $vitp['x'] = $this->getPageXRelativeToScreen($vitp['x']);
+        $vitp['y'] = $this->getPageYRelativeToScreen($vitp['y']);
+
+        $region    = $this->createRegion(($vitp['x'] + $vitp['width'] - 24), ($vitp['y'] - 10), 30, 14);
+        $vitpImage = $this->capture($region);
+        copy($vitpImage, $imgPath.'/vitp_arrowRight.png');
+
         // Remove all Viper elements.
         $this->execJS('window.opener.viper.destroy()', TRUE);
 

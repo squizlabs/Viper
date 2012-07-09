@@ -16,16 +16,18 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarUnitTest extends Abstrac
      */
     private function _getToolbarArrow($orientation=NULL)
     {
-        $img = 'arrow_up';
-        if ($orientation !== NULL) {
-            $img .= '_'.$orientation;
+
+        $arrowImg = 'vitp_arrow';
+
+        if ($orientation === 'left') {
+            $arrowImg .= 'Left';
+        } else if ($orientation === 'right') {
+            $arrowImg .= 'Right';
         }
 
-        $toolbarPattern = $this->createPattern(dirname(__FILE__).'/Images/'.$img.'.png');
-        $toolbarPattern = $this->similar($toolbarPattern, 0.90);
+        $arrowImg .= '.png';
 
-        $toolbar = $this->find($toolbarPattern);
-        return $toolbar;
+        return $this->find($this->getBrowserImagePath().'/'.$arrowImg, NULL, 0.95);
 
     }//end _getToolbarArrow()
 
@@ -60,7 +62,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarUnitTest extends Abstrac
     {
         $toolbarX = $this->getX($this->_getToolbarArrowLocation($orientation));
         $diff     = abs($targetX - $toolbarX);
-        $this->assertTrue(($diff <= 2), 'X Position of toolbar arrow is incorrect. Difference was '.$diff.' pixels');
+        $this->assertTrue(($diff <= 4), 'X Position of toolbar arrow is incorrect. Difference was '.$diff.' pixels');
 
         $toolbarY = $this->getY($this->getTopLeft($this->_getToolbarArrow($orientation)));
         $diff     = abs($targetY - $toolbarY);
@@ -114,8 +116,11 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarUnitTest extends Abstrac
         $para = $this->findKeyword(4);
         $this->selectKeyword(4);
 
-        $wordY = $this->getY($this->getBottomLeft($para));
-        $wordX = $this->getX($this->getCenter($para));
+        $bottomLeft = $this->getBottomLeft($para);
+        $wordY      = $this->getY($bottomLeft);
+
+        // Add 400 (width of the Paragraph divided by 2).
+        $wordX = ($this->getX($bottomLeft) + 400);
         $this->_assertPosition($wordX, $wordY);
 
     }//end testParagraphSelectionPosition()
@@ -132,7 +137,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarUnitTest extends Abstrac
         $end   = $this->findKeyword(4);
         $this->selectKeyword(1, 4);
 
-        $leftX  = $this->getX($this->getTopLeft($start));
+        $leftX  = ($this->getX($this->getTopLeft($start)) + 400);
         $width  = ($this->execJS('dfx.getElementWidth(dfxjQuery("p")[0])') / 2);
         $center = ($leftX + $width);
         $wordY  = $this->getY($this->getBottomLeft($end));
@@ -168,20 +173,14 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarUnitTest extends Abstrac
      */
     public function testPositionOrientationLeft()
     {
-        $this->resizeWindow(1100, 800);
+        $this->execJS('window.opener.dfx.setStyle(window.opener.dfx.getId("content"), "margin-left", "10px")');
 
         $word = $this->findKeyword(1);
         $this->selectKeyword(1);
 
         $wordX = $this->getX($this->getCenter($word));
         $wordY = $this->getY($this->getBottomLeft($word));
-        $this->_assertPosition($wordX, $wordY);
-
-        try {
-            $this->find(dirname(__FILE__).'/Images/toolbarLeft.png', NULL, 0.83);
-        } catch (Exception $e) {
-            $this->fail('Left side of the toolbar is off screen');
-        }
+        $this->_assertPosition($wordX, $wordY, 'left');
 
     }//end testPositionOrientationLeft()
 
@@ -201,12 +200,6 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarUnitTest extends Abstrac
         $wordX = $this->getX($this->getCenter($word));
         $wordY = $this->getY($this->getBottomLeft($word));
         $this->_assertPosition($wordX, $wordY, 'right');
-
-        try {
-            $this->find(dirname(__FILE__).'/Images/toolbarRight.png', NULL, 0.83);
-        } catch (Exception $e) {
-            $this->fail('Right side of the toolbar is off screen');
-        }
 
     }//end testPositionOrientationRight()
 

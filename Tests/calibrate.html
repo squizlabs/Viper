@@ -52,15 +52,32 @@
 
             }
 
-            function getVITP()
+            function getVITP(orientation)
             {
-                var elem   = dfx.getClass('ViperITP Viper-themeDark Viper-scalable Viper-visible');
+                var elem   = dfx.getClass('ViperITP Viper-themeDark Viper-scalable Viper-visible')[0];
+
+                if (orientation === 'left') {
+                    dfx.addClass(elem, 'Viper-orientationLeft');
+                } else if (orientation === 'right') {
+                    dfx.addClass(elem, 'Viper-orientationRight');
+                }
+
+                var vitp   = {};
                 var coords = dfx.getElementCoords(elem);
                 var width  = parseInt(dfx.getStyle(elem, 'width').replace('px', ''));
-                var vitp = {
-                    x: parseInt(coords.x + (width / 2)),
-                    y: parseInt(coords.y)
-                };
+                if (orientation) {
+                    vitp = {
+                        x: parseInt(coords.x),
+                        y: parseInt(coords.y),
+                        width: width
+                    };
+                } else {
+                    vitp = {
+                        x: parseInt(coords.x + (width / 2)),
+                        y: parseInt(coords.y),
+                        width: width
+                    };
+                }
 
                 return vitp;
 
