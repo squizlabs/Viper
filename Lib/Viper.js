@@ -4405,6 +4405,10 @@ Viper.prototype = {
             elem = this.element;
         }
 
+        // Remove attributes with empty values.
+        dfx.removeAttr(dfx.find(elem, '[style=""]'), 'style');
+        dfx.removeAttr(dfx.find(elem, '[class=""]'), 'class');
+
         this._cleanDOM(elem, tag, true);
 
         var range = this.getViperRange();
