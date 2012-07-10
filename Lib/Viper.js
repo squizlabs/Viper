@@ -3688,7 +3688,11 @@ Viper.prototype = {
             }
         }
 
-        if (this._keyDownRangeCollapsed === false
+        // Shift, Control, Alt, Caps lock, esc, CMD.
+        var ignoredKeys = [16, 17, 18, 20, 27, 91];
+
+        if ((this._keyDownRangeCollapsed === false
+            && ignoredKeys.inArray(e.which) == false)
             || e.which === 8
             || e.which === 46
             || (e.which >= 37 && e.which <= 40)
