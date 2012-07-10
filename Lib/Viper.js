@@ -4564,7 +4564,7 @@ Viper.prototype = {
 
     _fixHtml: function(html)
     {
-        return dfx.fixHtml(html);
+        return dfx.replaceNamedEntities(html);
 
     },
 
