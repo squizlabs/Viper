@@ -40,6 +40,7 @@ class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractViperUnitTe
      */
     public function testRemovingAHeadingStyle()
     {
+        $this->click($this->findKeyword(3));
         $this->selectKeyword(1, 2);
 
         $this->assertTrue($this->inlineToolbarButtonExists('headings', 'active'), 'Headings icon is not highlighted in the inline toolbar');
@@ -93,6 +94,7 @@ class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractViperUnitTe
      */
     public function testHeadingIconDoesNotAppear()
     {
+        $this->click($this->findKeyword(2));
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
 

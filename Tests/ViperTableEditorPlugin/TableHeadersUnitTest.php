@@ -23,8 +23,8 @@ class Viper_Tests_ViperTableEditorPlugin_TableHeadersUnitTest extends AbstractVi
         $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>&nbsp;</p><table style="width: 100%;" id="test" border="1"><tbody><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>sit amet <strong>consectetur</strong></p>');
 
     }//end testHeaderTagsNotAddedWhenNoThCells()
-    
-    
+
+
     /**
      * Test that ids are added to the table when you create a table with a left heading column and are removed when you remove the heading column.
      *
@@ -40,13 +40,13 @@ class Viper_Tests_ViperTableEditorPlugin_TableHeadersUnitTest extends AbstractVi
         sleep(2);
 
         $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>&nbsp;</p><table style="width: 100%;" id="test" border="1"><tbody><tr><th id="testr1c1">&nbsp;</th><td headers="testr1c1">&nbsp;</td><td headers="testr1c1">&nbsp;</td><td headers="testr1c1">&nbsp;</td></tr><tr><th id="testr2c1">&nbsp;</th><td headers="testr2c1">&nbsp;</td><td headers="testr2c1">&nbsp;</td><td headers="testr2c1">&nbsp;</td></tr><tr><th id="testr3c1">&nbsp;</th><td headers="testr3c1">&nbsp;</td><td headers="testr3c1">&nbsp;</td><td headers="testr3c1">&nbsp;</td></tr></tbody></table><p>sit amet <strong>consectetur</strong></p>');
-        
+
         // Remove header column and check that ids are taken out
         $this->showTools(0, 'col');
         $this->clickField('Heading');
         sleep(1);
         $this->clickInlineToolbarButton('Update Changes', NULL, TRUE);
-        $this->assertHTMLMatch('<p>XAX XBX XCX</p><p>&nbsp;</p><table border="1" id="test" style="width: 100%;"><tbody><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>sit amet <strong>consectetur</strong></p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>&nbsp;</p><table border="1" id="test" style="width: 100%;"><tbody><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>sit amet <strong>consectetur</strong></p>');
 
     }//end testHeaderTagsForTableWithLeftColHeaders()
 
@@ -73,9 +73,9 @@ class Viper_Tests_ViperTableEditorPlugin_TableHeadersUnitTest extends AbstractVi
         sleep(1);
         $this->clickInlineToolbarButton('Update Changes', NULL, TRUE);
         $this->assertHTMLMatch('<p>XAX XBX XCX</p><p>&nbsp;</p><table border="1" id="test" style="width: 100%;"><tbody><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>sit amet <strong>consectetur</strong></p>');
-        
+
     }//end testHeaderTagsWithTopRowHeaders()
-    
+
 
    /**
      * Test that ids are added to the table when you create a table with top and left headings and are removed when you remove the heading column and row.
@@ -99,7 +99,7 @@ class Viper_Tests_ViperTableEditorPlugin_TableHeadersUnitTest extends AbstractVi
         sleep(1);
         $this->clickInlineToolbarButton('Update Changes', NULL, TRUE);
         $this->assertHTMLMatch('<p>XAX XBX XCX</p><p>&nbsp;</p><table border="1" id="test" style="width: 100%;"><tbody><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><th id="testr2c1">&nbsp;</th><td headers="testr2c1">&nbsp;</td><td headers="testr2c1">&nbsp;</td><td headers="testr2c1">&nbsp;</td></tr><tr><th id="testr3c1">&nbsp;</th><td headers="testr3c1">&nbsp;</td><td headers="testr3c1">&nbsp;</td><td headers="testr3c1">&nbsp;</td></tr></tbody></table><p>sit amet <strong>consectetur</strong></p>');
-       
+
         // Remove header column and check that ids are taken out
         $this->clickCell(2);
         $this->showTools(8, 'cell');
@@ -111,7 +111,7 @@ class Viper_Tests_ViperTableEditorPlugin_TableHeadersUnitTest extends AbstractVi
         sleep(1);
         $this->clickInlineToolbarButton('Update Changes', NULL, TRUE);
         $this->assertHTMLMatch('<p>XAX XBX XCX</p><p>&nbsp;</p><table border="1" id="test" style="width: 100%;"><tbody><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>sit amet <strong>consectetur</strong></p>');
-        
+
     }//end testHeaderTagsWithTopAndLeftHeaders()
 
 
@@ -134,17 +134,17 @@ class Viper_Tests_ViperTableEditorPlugin_TableHeadersUnitTest extends AbstractVi
         $this->clickButton('mergeLeft');
         $this->clickButton('mergeRight');
         $this->clickButton('mergeRight');
-        
+
         $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>&nbsp;</p><table id="test" style="width: 100%;" border="1"><tbody><tr><th id="testr1c1" colspan="4">&nbsp;&nbsp;&nbsp;&nbsp;</th></tr><tr><td headers="testr1c1">&nbsp;</td><td headers="testr1c1">&nbsp;</td><td headers="testr1c1">&nbsp;</td><td headers="testr1c1">&nbsp;</td></tr><tr><td headers="testr1c1">&nbsp;</td><td headers="testr1c1">&nbsp;</td><td headers="testr1c1">&nbsp;</td><td headers="testr1c1">&nbsp;</td></tr></tbody></table><p>sit amet <strong>consectetur</strong></p>');
-        
+
         $this->showTools(0, 'col');
         $this->clickInlineToolbarButton('addRight');
         sleep(1);
-        
+
         $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>&nbsp;</p><table id="test" style="width: 100%;" border="1"><tbody><tr><th id="testr1c1" colspan="4">&nbsp;&nbsp;&nbsp;&nbsp;</th><th id="testr1c2">&nbsp;</th></tr><tr><td headers="testr1c1">&nbsp;</td><td headers="testr1c1">&nbsp;</td><td headers="testr1c1">&nbsp;</td><td headers="testr1c1">&nbsp;</td><td headers="testr1c2">&nbsp;</td></tr><tr><td headers="testr1c1">&nbsp;</td><td headers="testr1c1">&nbsp;</td><td headers="testr1c1">&nbsp;</td><td headers="testr1c1">&nbsp;</td><td headers="testr1c2">&nbsp;</td></tr></tbody></table><p>sit amet <strong>consectetur</strong></p>');
 
     }//end testHeaderTagsWhenCreatingTableWithRowHeaders()
-    
+
 
    /**
      * Test that merging all header cells in the top row causes the id of the cell to be updated.
@@ -164,18 +164,18 @@ class Viper_Tests_ViperTableEditorPlugin_TableHeadersUnitTest extends AbstractVi
         $this->clickButton('splitMerge');
         $this->clickButton('mergeUp');
         $this->clickButton('mergeDown');
-        
+
         $this->assertHTMLMatch('<p>XAX XBX XCX</p><p>&nbsp;</p><table border="1" id="test" style="width: 100%;"><tbody><tr><th id="testr1c1" rowspan="3">&nbsp;&nbsp;&nbsp;</th><td headers="testr1c1">&nbsp;</td><td headers="testr1c1">&nbsp;</td><td headers="testr1c1">&nbsp;</td></tr><tr><td headers="testr1c1">&nbsp;</td><td headers="testr1c1">&nbsp;</td><td headers="testr1c1">&nbsp;</td></tr><tr><td headers="testr1c1">&nbsp;</td><td headers="testr1c1">&nbsp;</td><td headers="testr1c1">&nbsp;</td></tr></tbody></table><p>sit amet <strong>consectetur</strong></p>');
-        
+
         $this->showTools(0, 'row');
         $this->clickInlineToolbarButton('addBelow');
         sleep(1);
-        
+
         $this->assertHTMLMatch('<p>XAX XBX XCX</p><p>&nbsp;</p><table border="1" id="test" style="width: 100%;"><tbody><tr><th id="testr1c1" rowspan="3">&nbsp;&nbsp;&nbsp;</th><td headers="testr1c1">&nbsp;</td><td headers="testr1c1">&nbsp;</td><td headers="testr1c1">&nbsp;</td></tr><tr><td headers="testr1c1">&nbsp;</td><td headers="testr1c1">&nbsp;</td><td headers="testr1c1">&nbsp;</td></tr><tr><td headers="testr1c1">&nbsp;</td><td headers="testr1c1">&nbsp;</td><td headers="testr1c1">&nbsp;</td></tr><tr><th id="testr4c1">&nbsp;</th><td headers="testr4c1">&nbsp;</td><td headers="testr4c1">&nbsp;</td><td headers="testr4c1">&nbsp;</td></tr></tbody></table><p>sit amet <strong>consectetur</strong></p>');
 
     }//end testHeaderTagsWhenCreatingTableWithRowHeaders()
-    
-    
+
+
     /**
      * Test that id tags are added to the table when you apply a header row.
      *
@@ -197,10 +197,10 @@ class Viper_Tests_ViperTableEditorPlugin_TableHeadersUnitTest extends AbstractVi
         sleep(1);
         $this->clickInlineToolbarButton('Update Changes', NULL, TRUE);
         $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>&nbsp;</p><table id="test" style="width: 100%;" border="1"><tbody><tr><th id="testr1c1">&nbsp;</th><th id="testr1c2">&nbsp;</th><th id="testr1c3">&nbsp;</th><th id="testr1c4">&nbsp;</th></tr><tr><td headers="testr1c1">&nbsp;</td><td headers="testr1c2">&nbsp;</td><td headers="testr1c3">&nbsp;</td><td headers="testr1c4">&nbsp;</td></tr><tr><td headers="testr1c1">&nbsp;</td><td headers="testr1c2">&nbsp;</td><td headers="testr1c3">&nbsp;</td><td headers="testr1c4">&nbsp;</td></tr></tbody></table><p>sit amet <strong>consectetur</strong></p>');
-        
+
     }//end testHeaderTagsAddedWhenHeaderRowAdded()
-    
-    
+
+
     /**
      * Test that id tags are added to the table when you apply a header column.
      *
@@ -222,9 +222,9 @@ class Viper_Tests_ViperTableEditorPlugin_TableHeadersUnitTest extends AbstractVi
         sleep(1);
         $this->clickInlineToolbarButton('Update Changes', NULL, TRUE);
         $this->assertHTMLMatch('<p>XAX XBX XCX</p><p>&nbsp;</p><table border="1" id="test" style="width: 100%;"><tbody><tr><th id="testr1c1">&nbsp;</th><td headers="testr1c1">&nbsp;</td><td headers="testr1c1">&nbsp;</td><td headers="testr1c1">&nbsp;</td></tr><tr><th id="testr2c1">&nbsp;</th><td headers="testr2c1">&nbsp;</td><td headers="testr2c1">&nbsp;</td><td headers="testr2c1">&nbsp;</td></tr><tr><th id="testr3c1">&nbsp;</th><td headers="testr3c1">&nbsp;</td><td headers="testr3c1">&nbsp;</td><td headers="testr3c1">&nbsp;</td></tr></tbody></table><p>sit amet <strong>consectetur</strong></p>');
-        
+
     }//end testHeaderTagsAddedWhenHeaderColAdded()
-    
+
 
 }//end class
 

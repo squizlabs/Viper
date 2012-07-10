@@ -269,6 +269,7 @@ class Viper_Tests_ViperFormatPlugin_ParagraphUnitTest extends AbstractViperUnitT
     public function testChangingAParagraphToAQuote()
     {
 
+        $this->click($this->findKeyword(3));
         $this->selectKeyword(1, 2);
         $this->clickTopToolbarButton('formats-p', 'active');
         $this->clickTopToolbarButton('Quote', NULL, TRUE);
