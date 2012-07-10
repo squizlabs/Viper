@@ -106,7 +106,7 @@ class Viper_Tests_ViperImagePlugin_ImagesInTablesUnitTest extends AbstractViperU
         $this->keyDown('Key.TAB');
         $this->type('Alt tag');
         sleep(1);
-        $this->clickButton('Update Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
 
         $this->removeTableHeaders();
         $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU %1%<img src="http://www.squizlabs.com/__images/general/html-codesniffer.png" alt="Alt tag" /> FoX %2%</td><td><strong><em>WoW</em></strong> sapien vel aliquet</td><td>Another cell</td></tr><tr><td><h3>%2%</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
@@ -115,7 +115,7 @@ class Viper_Tests_ViperImagePlugin_ImagesInTablesUnitTest extends AbstractViperU
         $this->clickTopToolbarButton('image', 'active');
 
         $this->clickField('Image is decorative');
-        $this->clickButton('Update Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
         $this->clickTopToolbarButton('image', 'selected');
 
         $this->removeTableHeaders();

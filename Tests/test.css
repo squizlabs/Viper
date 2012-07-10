@@ -8,8 +8,7 @@ body {
 #content {
     width: 800px;
     height: 600px;
-    margin: auto;
-    margin-top: 90px;
+    margin: 90px 0 0 250px;
 }
 
 #menu {
@@ -37,6 +36,13 @@ body {
     left: 0;
     top: 0;
     z-index: 999999;
+}
+
+#msg {
+    bottom: 30px;
+    font-size: 12px;
+    left: 10px;
+    position: fixed;
 }
 
 * {
@@ -93,4 +99,8 @@ sub, sup {
 
 h1,h2,h3,h4,h5,h6 {
     font-size: 20px;
+}
+
+td,th {
+    min-width: 20px;
 }

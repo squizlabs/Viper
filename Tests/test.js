@@ -97,6 +97,10 @@ function gBtn(text, state, selectorPrefix)
 
     var button = null;
     for (var i = 0; i < buttons.length; i++) {
+        if (window.opener.dfx.getHtml(buttons[i]) !== text) {
+            continue;
+        }
+
         if (window.opener.dfx.getElementHeight(buttons[i]) !== 0) {
             button = buttons[i];
             break;

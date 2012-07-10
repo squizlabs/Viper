@@ -354,9 +354,9 @@ ViperTableEditorPlugin.prototype = {
 
         var c = cells.length;
         for (var i = 0; i < c; i++) {
-            var html = dfx.getHtml(cells[i]);
+            var html = dfx.trim(dfx.getHtml(cells[i]));
             if (html === '') {
-                dfx.setHtml(cells[i], '&nbsp;');
+                this._initCell(cells[i]);
             }
         }
 
@@ -2390,7 +2390,7 @@ ViperTableEditorPlugin.prototype = {
 
         var tagName = dfx.getTagName(cell);
         var elem    = document.createElement(tagName);
-        dfx.setHtml(elem, '&nbsp;');
+        this._initCell(elem);
 
         var colspan = (parseInt(cell.getAttribute('colspan')) - 1);
         this.setColspan(cell, colspan);
@@ -2431,7 +2431,7 @@ ViperTableEditorPlugin.prototype = {
 
         var colspan = this.getColspan(cell);
         var newCell = document.createElement(dfx.getTagName(cell));
-        dfx.setHtml(newCell, '&nbsp;');
+        this._initCell(newCell);
         if (colspan > 1) {
             this.setColspan(newCell, colspan);
         }
@@ -2499,7 +2499,7 @@ ViperTableEditorPlugin.prototype = {
                 this.setRowspan(rowCell, (rowspan + 1));
             } else {
                 var newCell = document.createElement(dfx.getTagName(rowCell));
-                dfx.setHtml(newCell, '&nbsp;');
+                this._initCell(newCell);
 
                 var colspan = this.getColspan(rowCell);
                 if (colspan > 1) {
@@ -2542,7 +2542,7 @@ ViperTableEditorPlugin.prototype = {
                 this.setRowspan(rowCell, (rowspan + 1));
             } else {
                 var newCell = document.createElement(dfx.getTagName(rowCell));
-                dfx.setHtml(newCell, '&nbsp;');
+                this._initCell(newCell);
 
                 var colspan = this.getColspan(rowCell);
                 if (colspan > 1) {
@@ -2648,7 +2648,7 @@ ViperTableEditorPlugin.prototype = {
                 continue;
             } else {
                 td = document.createElement(col.tagName);
-                dfx.setHtml(td, '&nbsp;');
+                this._initCell(td);
 
                 dfx.insertAfter(col, td);
             }
@@ -2680,7 +2680,7 @@ ViperTableEditorPlugin.prototype = {
                 continue;
             } else {
                 td = document.createElement(col.tagName);
-                dfx.setHtml(td, '&nbsp;');
+                this._initCell(td);
 
                 dfx.insertBefore(col, td);
             }
@@ -2776,7 +2776,7 @@ ViperTableEditorPlugin.prototype = {
             var range = this.viper.getCurrentRange();
             var child = range._getFirstSelectableChild(cell);
             if (!child) {
-                dfx.setHtml(cell, '&nbsp;');
+                this._initCell(cell);
                 child = cell.firstChild;
             }
 
@@ -3123,7 +3123,7 @@ ViperTableEditorPlugin.prototype = {
                     cell = document.createElement('td');
                 }
 
-                dfx.setHtml(cell, '&nbsp;');
+                this._initCell(cell);
 
                 tr.appendChild(cell);
 
@@ -3230,6 +3230,7 @@ ViperTableEditorPlugin.prototype = {
         for (var k = 0; k < tableRows.length; k++) {
             var row = tableRows[k];
 
+            var cellCount = 0;
             for (var j = 0; j < row.childNodes.length; j++) {
                 var cell = row.childNodes[j];
 
@@ -3244,7 +3245,7 @@ ViperTableEditorPlugin.prototype = {
                     // although it may be prefixed with the ID of another header to make it unique.
                     var cellid = cell.getAttribute('id');
                     if (!cellid || cellid.match(/r\d+c\d+/)) {
-                        cellid = tableId + 'r' + (k + 1) + 'c' + (j + 1);
+                        cellid = tableId + 'r' + (k + 1) + 'c' + (cellCount + 1);
                         var existingElem = dfx.getId(cellid);
                         if (existingElem) {
                             existingElem.removeAttribute('id');
@@ -3253,6 +3254,8 @@ ViperTableEditorPlugin.prototype = {
                         cell.setAttribute('id', cellid);
                     }
                 }
+
+                cellCount++;
             }//end for
         }//end for
 
@@ -3638,6 +3641,16 @@ ViperTableEditorPlugin.prototype = {
         }
 
         return false;
+
+    },
+
+    _initCell: function(cell)
+    {
+        if (this.viper.isBrowser('msie') === true) {
+            dfx.setHtml(cell, ' ');
+        } else {
+            dfx.setHtml(cell, '<br />');
+        }
 
     }
 

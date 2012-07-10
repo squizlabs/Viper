@@ -42,8 +42,6 @@ ViperCopyPastePlugin.prototype = {
             return self.keyDown(e);
         });
 
-        //this.pasteElement = this._createPasteDiv();
-
     },
 
     setSettings: function(settings)
@@ -303,7 +301,7 @@ ViperCopyPastePlugin.prototype = {
 
     _beforePaste: function(range)
     {
-        this.viper.setAllowCleanDOM(false);
+        //this.viper.setAllowCleanDOM(false);
         range         = range || this.viper.getCurrentRange();
         this.rangeObj = range.cloneRange();
 
@@ -314,7 +312,7 @@ ViperCopyPastePlugin.prototype = {
 
     _afterPaste: function()
     {
-        this.viper.setAllowCleanDOM(true);
+        //this.viper.setAllowCleanDOM(true);
     },
 
     _fakePaste: function(e)
@@ -536,7 +534,11 @@ ViperCopyPastePlugin.prototype = {
             } else {
                 try {
                     if (!this._tmpNode.parentNode) {
-                        this._tmpNode = prevBlock;
+                        if (prevBlock.lastChild) {
+                            this._tmpNode = prevBlock.lastChild;
+                        } else {
+                            this._tmpNode = prevBlock;
+                        }
                     }
                 } catch (e) {
                     // Guess which browser this try/catch block is for....

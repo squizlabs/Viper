@@ -80,15 +80,7 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
      */
     public function testCopyAndPasteInPreTag()
     {
-        $this->selectKeyword(1);
-        $this->clickTopToolbarButton('formats-p', 'active');
-        $this->clickTopToolbarButton('PRE', NULL, TRUE);
-
-        $this->type('Lorum this is more content');
-        $this->keyDown('Key.ENTER');
-        $this->type('%2% to test %3%');
-
-        $this->assertHTMLMatch('<pre>Lorum this is more content%2% to test %3%</pre>');
+        $this->click($this->findKeyword(1));
 
         // Open Word doc, copy its contents.
         $retval = NULL;
@@ -115,12 +107,12 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
         sleep(5);
 
         $this->switchApp($this->getBrowserName());
-        $this->selectKeyword(2, 3);
+        $this->selectKeyword(1, 2);
         $this->keyDown('Key.CMD + v');
 
         sleep(5);
 
-        $this->assertHTMLMatch('<pre>Lorum this is more content<p>Loremipsum dolor sit amet, consectetur adipiscing elit. Phasellus ornare ipsum necfelis lacinia a feugiat lectus pellentesque. Praesent in sapien sapien.</p><p>&nbsp;</p> </pre>');
+        $this->assertHTMLMatch('<pre>Lorum this is more content <p>Loremipsum dolor sit amet, consectetur adipiscing elit. Phasellus ornare ipsum necfelis lacinia a feugiat lectus pellentesque. Praesent in sapien sapien.</p><p></p></pre>');
 
     }//end testCopyAndPasteInPreTag()
 
@@ -214,7 +206,7 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
 
         sleep(5);
 
-        $this->assertHTMLMatch('<p>~ ! @ # $ % ^ &amp; * ( ) _ +</p><p>` 1 2 3 4 5 6 7 8 9 0 - =</p><p>{ } |</p><p>: &#8220;</p><p>&lt; &gt; ?</p><p>[ ]</p><p>; &#8216;</p><p>, . /</p><p>q w e r t y u i o p</p><p>Q W E R T Y U I O P</p><p>a s d f g h j k l</p><p>A S D F G H J K L</p><p>z x c v b n m</p><p>Z X C V B N M</p><p></p>');
+        $this->assertHTMLMatch('<p>~ ! @ # $ % ^ &amp; * ( ) _ +</p><p>` 1 2 3 4 5 6 7 8 9 0 - =</p><p>{ } |</p><p>: &#8220;</p><p>&lt; &gt; ?</p><p>[ ]</p><p>; &#8216;</p><p>, . /</p><p>q w e r t y u i o p</p><p>Q W E R T Y U I O P</p><p>a s d f g h j k l</p><p>A S D F G H J K L</p><p>z x c v b n m</p><p>Z X C V B N M</p>');
 
     }//end testSpecialCharactersDocCopyPaste()
 
@@ -257,7 +249,7 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
 
         sleep(5);
 
-        $this->assertHTMLMatch('<p>My complex numbered lists</p><ol><li>Asdadsads<ul><li>Dsfsdfsfd</li><li>Sdfsdfsfd<ul><li>Sfd</li><li>Sfdsfd</li><li>Dsfsdf</li><li>sdfsdf</li></ul></li><li>Sdfsdfsfd</li><li>sdfsdfsfd</li></ul></li><li>Asdadsasd</li><li>Sfdsfds</li><li>Asdasdasd</li><li>Asdasdasd</li></ol><p>My complex bulleted lists</p><ul><li>Sadsadasda<ul><li>Sdfdsf</li><li>Sdfsdfsdf<ul><li>Sdfsfdsdf</li><li>sdfsdfsdf</li></ul></li><li>Sdfsdfsfd</li><li>sdfsfdsdf</li></ul></li><li>Asdasdsad</li></ul><p></p>');
+        $this->assertHTMLMatch('<p>My complex numbered lists</p><ol><li>Asdadsads<ul><li>Dsfsdfsfd</li><li>Sdfsdfsfd<ul><li>Sfd</li><li>Sfdsfd</li><li>Dsfsdf</li><li>sdfsdf</li></ul></li><li>Sdfsdfsfd</li><li>sdfsdfsfd</li></ul></li><li>Asdadsasd</li><li>Sfdsfds</li><li>Asdasdasd</li><li>Asdasdasd</li></ol><p>My complex bulleted lists</p><ul><li>Sadsadasda<ul><li>Sdfdsf</li><li>Sdfsdfsdf<ul><li>Sdfsfdsdf</li><li>sdfsdfsdf</li></ul></li><li>Sdfsdfsfd</li><li>sdfsfdsdf</li></ul></li><li>Asdasdsad</li></ul>');
 
 
     }//end testListTestDocCopyPaste()
@@ -301,7 +293,7 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
 
         sleep(5);
 
-        $this->assertHTMLMatch('<h1>My Complex Lists Dude!</h1><p>Here is a numbered list&hellip;</p><ol><li>One baby<ol><li>Sub baby<ol><li>Subsub baby!</li><li>Sdfdsfsdf</li><li>sdfsdfsdf</li></ol></li></ol></li><li>Two baby<ol><li>Sdfsfdds</li><li>Sdfsfdsfd</li><li>sfdsdfsdf</li></ol></li><li>Three baby</li><li>Four</li></ol><p>Here is mu bulleted list&hellip;</p><ul><li>One bullet<ul><li>Dsfsdfsdf<ul><li>Sdfsfdsdf</li><li>sdfsdf</li></ul></li></ul></li><li>Two bullet<ul><li>Dsfsfd</li><li>sdfsdfsf</li></ul></li><li>Three bullet</li><li>Four<ul><li>sdfsdfsfd</li></ul></li></ul><p>Woot to lists!</p><p>&nbsp;</p><p></p>');
+        $this->assertHTMLMatch('<h1>My Complex Lists Dude!</h1><p>Here is a numbered list&hellip;</p><ol><li>One baby<ol><li>Sub baby<ol><li>Sub sub baby!</li><li>Sdfdsfsdf</li><li>sdfsdfsdf</li></ol></li></ol></li><li>Two baby<ol><li>Sdfsfdds</li><li>Sdfsfdsfd</li><li>sfdsdfsdf</li></ol></li><li>Three baby</li><li>Four</li></ol><p>Here is mu bulleted list&hellip;</p><ul><li>One bullet<ul><li>Dsfsdfsdf<ul><li>Sdfsfdsdf</li><li>sdfsdf</li></ul></li></ul></li><li>Two bullet<ul><li>Dsfsfd</li><li>sdfsdfsf</li></ul></li><li>Three bullet</li><li>Four<ul><li>sdfsdfsfd</li></ul></li></ul><p>Woot to lists!</p><p></p>');
 
 
     }//end testListTestDocCopyPaste()

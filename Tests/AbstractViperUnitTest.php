@@ -124,6 +124,13 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      */
     private static $_jsExecCache = array();
 
+    /**
+     * Keeps cache of JS that is executed.
+     *
+     * @var array
+     */
+    private static $_data = NULL;
+
 
     /**
      * Returns the path of a test file.
@@ -450,18 +457,97 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
             $i++;
         }
 
-        $tests = 5;
-        for ($j = 1; $j <= $tests; $j++) {
-            // Change the contents of the test page.
-            $this->execJS('window.opener.changeContent('.$j.')', TRUE);
+        $tests          = 5;
+        $pass           = FALSE;
+        $textSimilarity = 0.99;
 
-            // Test that captured images can be found on the page.
-            for ($i = 1; $i <= $count; $i++) {
-                $this->find($this->_getKeywordImage($i));
+        do {
+            try {
+                for ($j = 1; $j <= $tests; $j++) {
+                    // Change the contents of the test page.
+                    $this->execJS('window.opener.changeContent('.$j.', '.$textSimilarity.')', TRUE);
+
+                    // Test that captured images can be found on the page.
+                    for ($i = 1; $i <= $count; $i++) {
+                        $this->find($this->_getKeywordImage($i), NULL, $textSimilarity);
+                    }
+                }
+
+                $pass = TRUE;
+            } catch (Exception $e) {
+                if ($textSimilarity < 0.85) {
+                    throw new Exception('Text similarity test dropped below minimum threshold (85%)');
+                }
+
+                $textSimilarity -= 0.01;
+            }
+        } while ($pass !== TRUE);
+
+        $this->addData('textSimmilarity', $textSimilarity);
+
+    }//end _calibrateText()
+
+
+    /**
+     * Stores the specified data so that it can be accessed by unit test.
+     *
+     * Stored data is cached and placed in tmp/<browserId>/data.inc file.
+     *
+     * @param string $varName The name of the variable.
+     * @param mixed  $value   The value.
+     *
+     * @return void
+     */
+    protected function addData($varName, $value)
+    {
+        $path = dirname(__FILE__).'/tmp/'.$this->getBrowserid();
+        if (file_exists($path) === FALSE) {
+            mkdir($path, 0755, TRUE);
+        }
+
+        $path .= '/data.inc';
+
+        $data = self::$_data;
+
+        if ($data === NULL) {
+            if (file_exists($path) === TRUE) {
+                include $path;
             }
         }
 
-    }//end _calibrateText()
+        $data[$varName] = $value;
+
+        self::$_data = $data;
+        file_put_contents($path, '<?php $data = '.var_export($data, TRUE).'; ?>');
+
+    }//end addData()
+
+
+    /**
+     * Returns the value of a stored variable.
+     *
+     * @param string $varName Name of the variable.
+     *
+     * @return mixed
+     */
+    protected function getData($varName)
+    {
+        $data = array();
+        if (self::$_data === NULL) {
+            $path = dirname(__FILE__).'/tmp/'.$this->getBrowserid().'/data.inc';
+            if (file_exists($path) === TRUE) {
+                include $path;
+                self::$_data = $data;
+            }
+        }
+
+        if (isset(self::$_data[$varName]) === TRUE) {
+            return self::$_data[$varName];
+        }
+
+        return NULL;
+
+    }//end getData()
 
 
     /**
@@ -625,7 +711,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         $this->_switchWindow('main');
         sleep(1);
 
-        // Make sure page is loaded.
+        /*// Make sure page is loaded.
         $maxRetries = 4;
         while ($this->topToolbarButtonExists('italic') === FALSE) {
             $this->reloadPage();
@@ -636,7 +722,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
             sleep(2);
 
             $maxRetries--;
-        }
+        }*/
 
         // Create image for the inline toolbar pattern (the arrow on top).
         sleep(2);
@@ -650,6 +736,24 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         $region    = $this->createRegion(($vitp['x'] - 12), ($vitp['y'] - 10), 27, 14);
         $vitpImage = $this->capture($region);
         copy($vitpImage, $imgPath.'/vitp_arrow.png');
+
+        // Left arrow.
+        $vitp      = $this->execJS('window.opener.getVITP("left")', TRUE);
+        $vitp['x'] = $this->getPageXRelativeToScreen($vitp['x']);
+        $vitp['y'] = $this->getPageYRelativeToScreen($vitp['y']);
+
+        $region    = $this->createRegion(($vitp['x'] - 2), ($vitp['y'] - 10), 30, 14);
+        $vitpImage = $this->capture($region);
+        copy($vitpImage, $imgPath.'/vitp_arrowLeft.png');
+
+        // Right arrow.
+        $vitp      = $this->execJS('window.opener.getVITP("right")', TRUE);
+        $vitp['x'] = $this->getPageXRelativeToScreen($vitp['x']);
+        $vitp['y'] = $this->getPageYRelativeToScreen($vitp['y']);
+
+        $region    = $this->createRegion(($vitp['x'] + $vitp['width'] - 24), ($vitp['y'] - 10), 30, 14);
+        $vitpImage = $this->capture($region);
+        copy($vitpImage, $imgPath.'/vitp_arrowRight.png');
 
         // Remove all Viper elements.
         $this->execJS('window.opener.viper.destroy()', TRUE);
@@ -1068,8 +1172,9 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
     {
         $html = $this->replaceKeywords($html);
 
-        $pageHtml = str_replace('\n', '', $this->getHtml());
-        $html     = str_replace("\n", '', $html);
+        $pageHtml = str_replace('\n', ' ', $this->getHtml());
+        $pageHtml = str_replace("\n", ' ', $pageHtml);
+        $html     = str_replace("\n", ' ', $html);
 
         if ($html !== $pageHtml) {
             $pageHtml = $this->_orderTagAttributes($pageHtml);
@@ -1450,13 +1555,15 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      * @param string  $buttonIcon The name of the button.
      * @param string  $state      The name of the button state (active, selected).
      * @param boolean $isText     If TRUE then the button is a text button (i.e. no icon).
+     * @param boolean $forceJSPos If isText option is set to TRUE and this is set to TRUE then
+     *                            image will not be used.
      *
      * @return void
      * @throws Exception If the specified icon file not found.
      */
-    protected function clickTopToolbarButton($buttonIcon, $state=NULL, $isText=FALSE)
+    protected function clickTopToolbarButton($buttonIcon, $state=NULL, $isText=FALSE, $forceJSPos=FALSE)
     {
-        $this->_clickButton($buttonIcon, $state, $isText, 'topToolbar');
+        $this->_clickButton($buttonIcon, $state, $isText, 'topToolbar', $forceJSPos);
 
     }//end clickTopToolbarButton()
 
@@ -1503,11 +1610,18 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      * @param string  $state      The name of the button state (active, selected).
      * @param boolean $isText     If TRUE then the button is a text button (i.e. no icon).
      * @param string  $location   The location of the button (topToolbar, inlineToolbar, or a region).
+     * @param boolean $forceJSPos If isText option is set to TRUE and this is set to TRUE then
+     *                            image will not be used.
      *
      * @return void
      */
-    private function _clickButton($buttonIcon, $state=NULL, $isText=FALSE, $location=NULL)
-    {
+    private function _clickButton(
+        $buttonIcon,
+        $state=NULL,
+        $isText=FALSE,
+        $location=NULL,
+        $forceJSPos=FALSE
+    ) {
         $buttonObj = $this->_getButton($buttonIcon, $state, $isText, $location);
 
         $region = NULL;
@@ -1521,13 +1635,18 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
 
         $match = NULL;
         if ($isText === TRUE) {
-            // Its harder for Sikuli to match a text button so use lower similarity.
-            try {
-                $match = $this->find($buttonObj, $region, 0.7);
-            } catch (Exception $e) {
-                // Try to find it again without the image.
+            if ($forceJSPos === TRUE) {
                 $rect  = $this->_getTextButtonRectangle($buttonIcon, $state, $location);
                 $match = $this->getRegionOnPage($rect);
+            } else {
+                // Its harder for Sikuli to match a text button so use lower similarity.
+                try {
+                    $match = $this->find($buttonObj, $region, 0.7);
+                } catch (Exception $e) {
+                    // Try to find it again without the image.
+                    $rect  = $this->_getTextButtonRectangle($buttonIcon, $state, $location);
+                    $match = $this->getRegionOnPage($rect);
+                }
             }
         } else {
             $match = $this->find($buttonObj, $region, 0.9);
@@ -1903,14 +2022,14 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         $startKeywordImage = $this->_getKeywordImage($startKeyword);
 
         if ($endKeyword === NULL) {
-            $this->doubleClick($this->find($startKeywordImage));
+            $this->doubleClick($this->find($startKeywordImage, NULL, $this->getData('textSimmilarity')));
             return;
         }
 
         $endKeywordImage = $this->_getKeywordImage($endKeyword);
 
-        $start = $this->find($startKeywordImage);
-        $end   = $this->find($endKeywordImage);
+        $start = $this->find($startKeywordImage, NULL, $this->getData('textSimmilarity'));
+        $end   = $this->find($endKeywordImage, NULL, $this->getData('textSimmilarity'));
 
         $this->click($start);
 
@@ -1943,7 +2062,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      */
     protected function findKeyword($keyword)
     {
-        return $this->find($this->_getKeywordImage($keyword));
+        return $this->find($this->_getKeywordImage($keyword), NULL, $this->getData('textSimmilarity'));
 
     }//end findKeyword()
 

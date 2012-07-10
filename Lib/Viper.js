@@ -608,6 +608,7 @@ Viper.prototype = {
                 if ((dfx.isBlockElement(child) === true && dfx.isStubElement(child) === false)
                     || child.nodeType === dfx.TEXT_NODE && dfx.trim(child.data) === ''
                     || (child.nodeType !== dfx.ELEMENT_NODE && child.nodeType !== dfx.TEXT_NODE)
+                    || dfx.isTag(child, 'hr') === true
                 ) {
                     continue;
                 }
@@ -968,7 +969,16 @@ Viper.prototype = {
         // If we have any nodes highlighted, then we want to delete them before
         // inserting the new text.
         if (range.collapsed !== true) {
-            range.deleteContents();
+            if (this.isBrowser('chrome') === true
+                && range.startOffset === 0
+                && range.startContainer === range._getFirstSelectableChild(this.element)
+                && range.endOffset === (this.element.childNodes.length - 1)
+            ) {
+                // Whole editable container.
+                dfx.setHtml(this.element, '');
+            } else {
+                range.deleteContents();
+            }
 
             if (dfx.trim(dfx.getHtml(this.element)) === '') {
                 this.initEditableElement();
@@ -4395,6 +4405,10 @@ Viper.prototype = {
             elem = this.element;
         }
 
+        // Remove attributes with empty values.
+        dfx.removeAttr(dfx.find(elem, '[style=""]'), 'style');
+        dfx.removeAttr(dfx.find(elem, '[class=""]'), 'class');
+
         this._cleanDOM(elem, tag, true);
 
         var range = this.getViperRange();
@@ -4550,7 +4564,7 @@ Viper.prototype = {
 
     _fixHtml: function(html)
     {
-        return dfx.fixHtml(html);
+        return dfx.replaceNamedEntities(html);
 
     },
 
