@@ -4542,6 +4542,8 @@ Viper.prototype = {
                 } else if (dfx.trim(node.data) === '' && node.data.indexOf("\n") === 0) {
                     dfx.remove(node);
                 }
+            } else {
+                node.data = node.data.replace(/^\n+\s*$/m, '');
             }
         }//end if
 
