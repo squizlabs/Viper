@@ -485,7 +485,6 @@ ViperTools.prototype = {
             }
 
             if ((e.which !== 13 || isTextArea === true) && (input.value !== value || changed === true)) {
-                changed = true;
                 self.viper.fireCallbacks('ViperTools:changed:' + id);
             }
 
@@ -518,6 +517,7 @@ ViperTools.prototype = {
             },
             setValue: function(newValue, isInitialValue) {
                 input.value = newValue;
+                value       = newValue;
 
                 var actionIcon = dfx.getClass('Viper-textbox-action', main);
                 if (actionIcon.length === 0) {
