@@ -1041,7 +1041,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
     public function closeJSWindow()
     {
         self::$_currentWindow = 'main';
-        $this->execJS('cw();', TRUE);
+        $this->execJS('cw();', TRUE, TRUE);
 
     }//end closeJSWindow()
 
@@ -1906,7 +1906,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      *
      * @return string
      */
-    protected function execJS($js, $noCache=FALSE)
+    protected function execJS($js, $noCache=FALSE, $noReturnValue=FALSE)
     {
         // If Selenium is being used then use it to execute the JavaScript.
         if (self::$_useSelenium === TRUE) {
@@ -1943,6 +1943,11 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
 
         usleep(100000);
         $this->keyDown('Key.ENTER');
+
+        if ($noReturnValue === TRUE) {
+            return NULL;
+        }
+
         usleep(200000);
         $this->keyDown('Key.TAB');
         $this->keyDown('Key.CMD + a');
@@ -1962,9 +1967,40 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
 
         $text = str_replace("\n", '\n', $text);
         $text = str_replace('\\\\"', '\\"', $text);
+        $text = str_replace('\\\'', "'", $text);
         $text = str_replace('\xa0', ' ', $text);
 
         $text = json_decode($text, TRUE);
+
+        switch (json_last_error()) {
+            case JSON_ERROR_DEPTH:
+                throw new Exception('jsExec JSON ERROR: Maximum stack depth exceeded');
+            break;
+
+            case JSON_ERROR_STATE_MISMATCH:
+                throw new Exception('jsExec JSON ERROR: Underflow or the modes mismatch');
+            break;
+
+            case JSON_ERROR_CTRL_CHAR:
+                throw new Exception('jsExec JSON ERROR: Unexpected control character found');
+            break;
+
+            case JSON_ERROR_SYNTAX:
+                throw new Exception('jsExec JSON ERROR: Syntax error, malformed JSON');
+            break;
+
+            case JSON_ERROR_UTF8:
+                throw new Exception('jsExec JSON ERROR: Malformed UTF-8 characters, possibly incorrectly encoded');
+            break;
+
+            case JSON_ERROR_NONE:
+                // Do nothing.
+            break;
+
+            default:
+                throw new Exception('jsExec JSON ERROR: Unknown error');
+            break;
+        }//end switch
 
         return $text;
 
