@@ -1176,6 +1176,11 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         $pageHtml = str_replace("\n", ' ', $pageHtml);
         $html     = str_replace("\n", ' ', $html);
 
+        // Chrome requires &nbsp; inside block elements unlike Firefox, remove all
+        // single &nbsp; from tags and just before a start tag.
+        $pageHtml = str_replace('>&nbsp;<', '><', $pageHtml);
+        $pageHtml = str_replace('&nbsp;<', '<', $pageHtml);
+
         if ($html !== $pageHtml) {
             $pageHtml = $this->_orderTagAttributes($pageHtml);
             $html     = $this->_orderTagAttributes($html);

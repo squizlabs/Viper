@@ -640,6 +640,11 @@ ViperCopyPastePlugin.prototype = {
         // Remove style tags.
         content = content.replace(/<style>[\s\S]*?<\/style>/gi, '');
 
+        // Convert span.Apple-converted-space to normal space (Chrome only).
+        if (this.viper.isBrowser('chrome') === true) {
+            content = content.replace(/<span class="Apple-converted-space">&nbsp;<\/span>/g, ' ');
+        }
+
         // Remove span and o:p etc. tags.
         content = content.replace(/<\/?span[^>]*>/gi, "");
         content = content.replace(/<\/?\w+:[^>]*>/gi, '' );
@@ -794,6 +799,9 @@ ViperCopyPastePlugin.prototype = {
                 if (dfx.isBlank(dfx.getHtml(parent)) === true) {
                     dfx.remove(parent);
                 }
+            } else {
+                // Chrome adds slash at the end of the urls, trim them..
+                aTag.setAttribute('href', aTag.getAttribute('href').replace(/\/$/, ''));
             }
         }
 
