@@ -490,6 +490,7 @@ ViperCopyPastePlugin.prototype = {
 
         if (html) {
             html = dfx.trim(html);
+            html = this.viper.cleanHTML(html);
         }
 
         if (!html) {

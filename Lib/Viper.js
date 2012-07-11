@@ -4195,7 +4195,6 @@ Viper.prototype = {
         // before Viper returns its HTML contents.
         this.fireCallbacks('Viper:getHtml', {element: clone});
         var html = dfx.getHtml(clone);
-        html     = this._fixHtml(html);
         html     = this.cleanHTML(html);
 
         return html;
@@ -4347,6 +4346,8 @@ Viper.prototype = {
         content = content.replace(/<\/?\s*([A-Z\d]+)/g, function(str) {
             return str.toLowerCase();
         });
+
+        content = this.replaceEntities(content);
 
         // Add quotes around attributes (IE....).
         if (this.isBrowser('msie') === true) {
@@ -4568,8 +4569,24 @@ Viper.prototype = {
 
     },
 
-    _fixHtml: function(html)
+    replaceEntities: function(html)
     {
+        // Replace special Word characters with HTML ones..
+        var specialCharcodes = {
+            '8211': '--',
+            '8212': '--',
+            '8216': '\'',
+            '8217': '\'',
+            '8220': '"',
+            '8221': '"',
+            '8226': '*',
+            '8230': '...'
+        };
+
+        for (var code in specialCharcodes) {
+            html = html.replace(new RegExp(String.fromCharCode(code), 'g'), specialCharcodes[code]);
+        }
+
         return dfx.replaceNamedEntities(html);
 
     },
