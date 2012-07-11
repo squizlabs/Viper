@@ -427,27 +427,27 @@ class Viper_Tests_ViperTableEditorPlugin_ColumnUnitTest extends AbstractViperTab
      */
     public function testHeaderIdsRemovedWhenYouRemoveHeaderColumn()
     {
-        $this->selectKeyword(2);
+        $this->selectKeyword(3);
         $this->keyDown('Key.RIGHT');
         $this->keyDown('Key.ENTER');
 
         $this->execJS('insTable(3,4, 1, "test")');
         sleep(2);
 
-        $this->assertHTMLMatch('<p>Lorem %1% %2%</p><p></p><table style="width: 100%;" id="test" border="1"><tbody><tr><th id="testr1c1"></th><td headers="testr1c1"></td><td headers="testr1c1"></td><td headers="testr1c1"></td></tr><tr><th id="testr2c1"></th><td headers="testr2c1"></td><td headers="testr2c1"></td><td headers="testr2c1"></td></tr><tr><th id="testr3c1"></th><td headers="testr3c1"></td><td headers="testr3c1"></td><td headers="testr3c1"></td></tr></tbody></table>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p></p><table style="width: 100%;" id="test" border="1"><tbody><tr><th id="testr1c1"></th><td headers="testr1c1"></td><td headers="testr1c1"></td><td headers="testr1c1"></td></tr><tr><th id="testr2c1"></th><td headers="testr2c1"></td><td headers="testr2c1"></td><td headers="testr2c1"></td></tr><tr><th id="testr3c1"></th><td headers="testr3c1"></td><td headers="testr3c1"></td><td headers="testr3c1"></td></tr></tbody></table>');
 
         $this->showTools(0, 'col');
         $this->clickField('Heading');
 
         sleep(1);
         $this->clickInlineToolbarButton('Update Changes', NULL, TRUE);
-        $this->assertHTMLMatch('<p>Lorem %1% %2%</p><p></p><table style="width: 100%;" id="test" border="1"><tbody><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p></p><table style="width: 100%;" id="test" border="1"><tbody><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table>');
 
         $this->clickField('Heading');
         sleep(1);
         $this->clickInlineToolbarButton('Update Changes', NULL, TRUE);
 
-        $this->assertHTMLMatch('<p>Lorem %1% %2%</p><p></p><table style="width: 100%;" id="test" border="1"><tbody><tr><th id="testr1c1"></th><td headers="testr1c1"></td><td headers="testr1c1"></td><td headers="testr1c1"></td></tr><tr><th id="testr2c1"></th><td headers="testr2c1"></td><td headers="testr2c1"></td><td headers="testr2c1"></td></tr><tr><th id="testr3c1"></th><td headers="testr3c1"></td><td headers="testr3c1"></td><td headers="testr3c1"></td></tr></tbody></table>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p></p><table style="width: 100%;" id="test" border="1"><tbody><tr><th id="testr1c1"></th><td headers="testr1c1"></td><td headers="testr1c1"></td><td headers="testr1c1"></td></tr><tr><th id="testr2c1"></th><td headers="testr2c1"></td><td headers="testr2c1"></td><td headers="testr2c1"></td></tr><tr><th id="testr3c1"></th><td headers="testr3c1"></td><td headers="testr3c1"></td><td headers="testr3c1"></td></tr></tbody></table>');
 
     }//end testHeaderIdsRemovedWhenYouRemoveHeaderColumn()
 
