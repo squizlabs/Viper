@@ -1172,8 +1172,12 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
     {
         $html = $this->replaceKeywords($html);
 
-        $pageHtml = str_replace('\n', ' ', $this->getHtml());
+        $pageHtml = $this->getHtml();
+
+        $pageHtml = preg_replace("/<([a-z0-9]+)\n([a-z0-9]*)/i", '<$1$2', $pageHtml);
+        $pageHtml = str_replace("<\n", '<', $pageHtml);
         $pageHtml = str_replace("\n", ' ', $pageHtml);
+        $pageHtml = str_replace('\n', ' ', $pageHtml);
         $html     = str_replace("\n", ' ', $html);
 
         // Chrome requires &nbsp; inside block elements unlike Firefox, remove all

@@ -659,9 +659,8 @@ ViperCopyPastePlugin.prototype = {
         content = this._convertWordPasteList(content);
 
         // Remove class, lang and style attributes.
-        content = content.replace(/<(\w[^>]*) (class|lang)=([^ |>]*)([^>]*)/gi, "<$1$4");
-        content = content.replace(/<(\w[^>]*) (align)=([^ |>]*)([^>]*)/gi, "<$1$4");
-        content = content.replace(/<(\w[^>]*) (dir)=([^ |>]*)([^>]*)/gi, "<$1$4");
+        content = content.replace(/<(\w[^>]*) (class|lang|align|dir)=([^ |>]*)([^>]*)/gi, "<$1$4");
+        content = content.replace(/<(\w[^>]*) (\w+:\w+)=([^ |>]*)([^>]*)/gi, "<$1$4");
 
         var self = this;
         content  = content.replace(new RegExp('<(\\w[^>]*) style="([^"]*)"([^>]*)', 'gi'), function() {
@@ -832,6 +831,15 @@ ViperCopyPastePlugin.prototype = {
                 } else {
                     node = node.nextSibling;
                 }
+            }
+        }
+
+        // Remove the src attribute of images pointing to local path.
+        var tags = dfx.find(tmp, 'img');
+        for (var i = 0; i < tags.length; i++) {
+            var img = tags[i];
+            if (img.getAttribute('src').indexOf('file://') === 0) {
+                img.setAttribute('src', '');
             }
         }
 
@@ -1061,6 +1069,9 @@ ViperCopyPastePlugin.prototype = {
                 dfx.setHtml(tmp, content);
             }//end for
         }
+
+        content = dfx.getHtml(tmp);
+        dfx.setHtml(tmp, content);
 
         return content;
 
