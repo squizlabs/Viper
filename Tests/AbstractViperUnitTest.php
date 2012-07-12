@@ -1976,7 +1976,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
 
         $result = json_decode($text, TRUE);
 
-        switch (json_last_error()) {
+        /*switch (json_last_error()) {
             case JSON_ERROR_NONE:
                 // Do nothing.
             break;
@@ -2004,7 +2004,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
             default:
                 throw new Exception('jsExec JSON ERROR: Unknown error: '.$text);
             break;
-        }//end switch
+        }//end switch*/
 
         return $result;
 
