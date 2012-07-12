@@ -1000,7 +1000,7 @@ ViperFormatPlugin.prototype = {
                             var tagName = dfx.getTagName(newParents[i]);
                             if (tagName === 'p' || tagName === 'pre' || tagName === 'blockquote') {
                                 return false;
-                            } else if (dfx.getParents(newParents[i], 'p,pre,blockquote', viperElement).length > 0) {console.info(1);
+                            } else if (dfx.getParents(newParents[i], 'p,pre,blockquote', viperElement).length > 0) {
                                 return false;
                             }
                         }
