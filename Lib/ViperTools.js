@@ -1697,7 +1697,9 @@ ViperTools.prototype = {
                             }
                         }
                     } else {
-                        return;
+                        // Point to top of Viper element.
+                        rangeCoords        = this.getElementCoords(tools.viper.getViperElement());
+                        rangeCoords.bottom = (rangeCoords.top + 10);
                     }//end if
                 }//end if
 
@@ -1727,11 +1729,17 @@ ViperTools.prototype = {
 
                 var top = (rangeCoords.bottom + margin + scrollCoords.y);
 
+                var viperElemCoords = this.getElementCoords(tools.viper.getViperElement());
                 if (top === 0) {
                     this.hide();
                     return;
                 } else if (top > windowDim.height) {
                     top = windowDim.height - 200;
+                } else if (top < viperElemCoords.top) {
+                    top = (viperElemCoords.top + 50);
+                    if (left < viperElemCoords.left && this._verticalPosUpdateOnly !== true) {
+                        dfx.setStyle(toolbar, 'left', viperElemCoords.left  + 50 + 'px');
+                    }
                 }
 
                 dfx.setStyle(toolbar, 'top', top + 'px');
