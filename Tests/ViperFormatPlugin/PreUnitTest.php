@@ -69,6 +69,7 @@ class Viper_Tests_ViperFormatPlugin_PreUnitTest extends AbstractViperUnitTest
     public function testSelectPreAfterStylingShowsCorrectIcons()
     {
 
+        $this->click($this->findKeyword(3));
         $this->selectKeyword(1, 2);
         $this->keyDown('Key.CMD + b');
         $this->keyDown('Key.CMD + i');
@@ -98,6 +99,7 @@ class Viper_Tests_ViperFormatPlugin_PreUnitTest extends AbstractViperUnitTest
     public function testSelectingPreWithFormattedTextShowsCorrectIcons()
     {
 
+        $this->click($this->findKeyword(2));
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
         $this->assertTrue($this->inlineToolbarButtonExists('formats-pre', 'active'), 'Toogle formats icon is not selected');
@@ -124,6 +126,7 @@ class Viper_Tests_ViperFormatPlugin_PreUnitTest extends AbstractViperUnitTest
     public function testUsingBoldInPre()
     {
 
+        $this->click($this->findKeyword(3));
         $this->selectKeyword(1);
         $this->keyDown('Key.CMD + b');
 
@@ -146,6 +149,7 @@ class Viper_Tests_ViperFormatPlugin_PreUnitTest extends AbstractViperUnitTest
     public function testUsingItalicInPre()
     {
 
+        $this->click($this->findKeyword(3));
         $this->selectKeyword(1);
         $this->keyDown('Key.CMD + i');
 
@@ -167,6 +171,7 @@ class Viper_Tests_ViperFormatPlugin_PreUnitTest extends AbstractViperUnitTest
     public function testPreIconIsActiveWhenSelectingPreTag()
     {
 
+        $this->click($this->findKeyword(3));
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
         $this->assertTrue($this->inlineToolbarButtonExists('formats-pre', 'active'), 'Toogle formats icon is not selected');

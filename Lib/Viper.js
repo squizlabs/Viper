@@ -3688,7 +3688,11 @@ Viper.prototype = {
             }
         }
 
-        if (this._keyDownRangeCollapsed === false
+        // Shift, Control, Alt, Caps lock, esc, CMD.
+        var ignoredKeys = [16, 17, 18, 20, 27, 91];
+
+        if ((this._keyDownRangeCollapsed === false && ignoredKeys.inArray(e.which) === false)
+            && (e.ctrlKey === false && e.metaKey === false)
             || e.which === 8
             || e.which === 46
             || (e.which >= 37 && e.which <= 40)
@@ -4191,7 +4195,6 @@ Viper.prototype = {
         // before Viper returns its HTML contents.
         this.fireCallbacks('Viper:getHtml', {element: clone});
         var html = dfx.getHtml(clone);
-        html     = this._fixHtml(html);
         html     = this.cleanHTML(html);
 
         return html;
@@ -4343,6 +4346,8 @@ Viper.prototype = {
         content = content.replace(/<\/?\s*([A-Z\d]+)/g, function(str) {
             return str.toLowerCase();
         });
+
+        content = this.replaceEntities(content);
 
         // Add quotes around attributes (IE....).
         if (this.isBrowser('msie') === true) {
@@ -4538,6 +4543,8 @@ Viper.prototype = {
                 } else if (dfx.trim(node.data) === '' && node.data.indexOf("\n") === 0) {
                     dfx.remove(node);
                 }
+            } else {
+                node.data = node.data.replace(/^\n+\s*$/m, '');
             }
         }//end if
 
@@ -4562,8 +4569,24 @@ Viper.prototype = {
 
     },
 
-    _fixHtml: function(html)
+    replaceEntities: function(html)
     {
+        // Replace special Word characters with HTML ones..
+        var specialCharcodes = {
+            '8211': '--',
+            '8212': '--',
+            '8216': '\'',
+            '8217': '\'',
+            '8220': '"',
+            '8221': '"',
+            '8226': '*',
+            '8230': '...'
+        };
+
+        for (var code in specialCharcodes) {
+            html = html.replace(new RegExp(String.fromCharCode(code), 'g'), specialCharcodes[code]);
+        }
+
         return dfx.replaceNamedEntities(html);
 
     },

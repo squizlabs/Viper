@@ -1041,7 +1041,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
     public function closeJSWindow()
     {
         self::$_currentWindow = 'main';
-        $this->execJS('cw();', TRUE);
+        $this->execJS('cw();', TRUE, TRUE);
 
     }//end closeJSWindow()
 
@@ -1172,9 +1172,18 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
     {
         $html = $this->replaceKeywords($html);
 
-        $pageHtml = str_replace('\n', ' ', $this->getHtml());
+        $pageHtml = $this->getHtml();
+
+        $pageHtml = preg_replace("/<([a-z0-9]+)\n([a-z0-9]*)/i", '<$1$2', $pageHtml);
+        $pageHtml = str_replace("<\n", '<', $pageHtml);
         $pageHtml = str_replace("\n", ' ', $pageHtml);
+        $pageHtml = str_replace('\n', ' ', $pageHtml);
         $html     = str_replace("\n", ' ', $html);
+
+        // Chrome requires &nbsp; inside block elements unlike Firefox, remove all
+        // single &nbsp; from tags and just before a start tag.
+        $pageHtml = str_replace('>&nbsp;<', '><', $pageHtml);
+        $pageHtml = str_replace('&nbsp;<', '<', $pageHtml);
 
         if ($html !== $pageHtml) {
             $pageHtml = $this->_orderTagAttributes($pageHtml);
@@ -1897,7 +1906,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      *
      * @return string
      */
-    protected function execJS($js, $noCache=FALSE)
+    protected function execJS($js, $noCache=FALSE, $noReturnValue=FALSE)
     {
         // If Selenium is being used then use it to execute the JavaScript.
         if (self::$_useSelenium === TRUE) {
@@ -1934,6 +1943,11 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
 
         usleep(100000);
         $this->keyDown('Key.ENTER');
+
+        if ($noReturnValue === TRUE) {
+            return NULL;
+        }
+
         usleep(200000);
         $this->keyDown('Key.TAB');
         $this->keyDown('Key.CMD + a');
@@ -1953,11 +1967,46 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
 
         $text = str_replace("\n", '\n', $text);
         $text = str_replace('\\\\"', '\\"', $text);
+        $text = str_replace('\\\'', "'", $text);
         $text = str_replace('\xa0', ' ', $text);
 
-        $text = json_decode($text, TRUE);
+        if ($text === 'undefined' || trim($text) === '') {
+            return NULL;
+        }
 
-        return $text;
+        $result = json_decode($text, TRUE);
+
+        /*switch (json_last_error()) {
+            case JSON_ERROR_NONE:
+                // Do nothing.
+            break;
+
+            case JSON_ERROR_DEPTH:
+                throw new Exception('jsExec JSON ERROR: Maximum stack depth exceeded: '.$text);
+            break;
+
+            case JSON_ERROR_STATE_MISMATCH:
+                throw new Exception('jsExec JSON ERROR: Underflow or the modes mismatch: '.$text);
+            break;
+
+            case JSON_ERROR_CTRL_CHAR:
+                throw new Exception('jsExec JSON ERROR: Unexpected control character found: '.$text);
+            break;
+
+            case JSON_ERROR_SYNTAX:
+                throw new Exception('jsExec JSON ERROR: Syntax error, malformed JSON: '.$text);
+            break;
+
+            case JSON_ERROR_UTF8:
+                throw new Exception('jsExec JSON ERROR: Malformed UTF-8 characters, possibly incorrectly encoded: '.$text);
+            break;
+
+            default:
+                throw new Exception('jsExec JSON ERROR: Unknown error: '.$text);
+            break;
+        }//end switch*/
+
+        return $result;
 
     }//end execJS()
 

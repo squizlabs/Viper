@@ -17,7 +17,7 @@ class Viper_Tests_ViperTableEditorPlugin_CreateTableUnitTest extends AbstractVip
         sleep(2);
 
         $this->removeTableHeaders();
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><table style="width: 100%;" border="1"><tbody><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>&nbsp;</p><p>sit amet <strong>consectetur</strong></p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><table style="width: 100%;" border="1"><tbody><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p></p><p>sit amet <strong>consectetur</strong></p>');
 
     }//end testCreateTableWithoutHeaders()
 
@@ -33,7 +33,7 @@ class Viper_Tests_ViperTableEditorPlugin_CreateTableUnitTest extends AbstractVip
         sleep(2);
 
         $this->removeTableHeaders();
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><table style="width: 100%;" border="1"><tbody><tr><th>&nbsp;</th><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><th>&nbsp;</th><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><th>&nbsp;</th><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>&nbsp;</p><p>sit amet <strong>consectetur</strong></p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><table style="width: 100%;" border="1"><tbody><tr><th></th><td></td><td></td><td></td></tr><tr><th></th><td></td><td></td><td></td></tr><tr><th></th><td></td><td></td><td></td></tr></tbody></table><p></p><p>sit amet <strong>consectetur</strong></p>');
 
     }//end testCreateTableWithLeftHeaders()
 
@@ -49,7 +49,7 @@ class Viper_Tests_ViperTableEditorPlugin_CreateTableUnitTest extends AbstractVip
         sleep(2);
 
         $this->removeTableHeaders();
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><table style="width: 100%;" border="1"><tbody><tr><th>&nbsp;</th><th>&nbsp;</th><th>&nbsp;</th><th>&nbsp;</th></tr><tr><th>&nbsp;</th><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><th>&nbsp;</th><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>&nbsp;</p><p>sit amet <strong>consectetur</strong></p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><table style="width: 100%;" border="1"><tbody><tr><th></th><th></th><th></th><th></th></tr><tr><th></th><td></td><td></td><td></td></tr><tr><th></th><td></td><td></td><td></td></tr></tbody></table><p></p><p>sit amet <strong>consectetur</strong></p>');
 
     }//end insertTableWithBothHeaders()
 
@@ -84,7 +84,7 @@ class Viper_Tests_ViperTableEditorPlugin_CreateTableUnitTest extends AbstractVip
         $this->click($this->find(1));
 
         $this->removeTableHeaders();
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><table border="1" style="width: 100%;"><tbody><tr><th colspan="2">One&nbsp;Two&nbsp;</th><th>Three&nbsp;</th><th>Four&nbsp;</th></tr><tr><td>Five&nbsp;</td><td>Six&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>&nbsp;</p><p>sit amet <strong>consectetur</strong></p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><table border="1" style="width: 100%;"><tbody><tr><th colspan="2">OneTwo</th><th>Three</th><th>Four</th></tr><tr><td>Five</td><td>Six</td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p></p><p>sit amet <strong>consectetur</strong></p>');
 
     }//end testCreateTableStructure()
 
@@ -96,23 +96,15 @@ class Viper_Tests_ViperTableEditorPlugin_CreateTableUnitTest extends AbstractVip
      */
     public function testCreateTableStructure2()
     {
-        $this->insertTable();
-        sleep(2);
+        $this->selectKeyword(3);
+        $this->keyDown('Key.RIGHT');
+        $this->execJS('insTable(4,5, 0, "test")');
+        sleep(1);
 
-        $this->showTools(0, 'col');
-        $this->clickInlineToolbarButton('addRight');
-
-        $this->click($this->findKeyword(1));
-        $this->showTools(0, 'row');
-        $this->clickInlineToolbarButton('addBelow');
-        usleep(300);
-
-        $this->clickCell(0);
-        usleep(300);
         $this->clickCell(0);
         $this->type('Survey');
-
-        $this->clickCell(2);
+        $this->keyDown('Key.TAB');
+        $this->keyDown('Key.TAB');
         $this->type('All Genders');
         $this->keyDown('Key.TAB');
         $this->type('By Gender');
@@ -120,58 +112,23 @@ class Viper_Tests_ViperTableEditorPlugin_CreateTableUnitTest extends AbstractVip
         $this->showTools(0, 'cell');
         $this->clickMergeSplitIcon('mergeRight');
 
-        $this->showTools(1, 'cell');
+        $this->showTools(0, 'cell');
         $this->clickMergeSplitIcon('mergeDown');
 
-        // Click within the fourth cell of the second row (under the "By Gender" heading) and merge options.
-        $this->showTools(6, 'cell');
-        $this->clickButton('splitMerge');
-        $this->assertIconStatusesCorrect(
-            FALSE,
-            FALSE,
-            TRUE,
-            TRUE,
-            FALSE,
-            TRUE
-        );
-        sleep(1);
-
-        $this->showTools(5, 'cell');
-        $this->clickButton('splitMerge');
-        $this->assertIconStatusesCorrect(
-            FALSE,
-            FALSE,
-            FALSE,
-            TRUE,
-            TRUE,
-            FALSE
-        );
-        sleep(1);
-
-        $this->showTools(0, 'cell');
-        $this->clickButton('splitMerge');
-        $this->assertIconStatusesCorrect(
-            TRUE,
-            FALSE,
-            FALSE,
-            TRUE,
-            FALSE,
-            FALSE
-        );
-        sleep(1);
-
-        $this->clickInlineToolbarButton('mergeDown');
+        $this->showTools(1, 'cell');
+        $this->clickMergeSplitIcon('mergeDown');
 
         // Click within the third cell of the first row (the one that has "By Gender").
         $this->showTools(2, 'cell');
         $this->clickMergeSplitIcon('mergeRight');
 
+        $this->clickCell(2);
         $this->clickCell(3);
         $this->type('Males');
         $this->keyDown('Key.TAB');
         $this->type('Females');
 
-        $this->clickCell(5);
+        $this->keyDown('Key.TAB');
         $this->type('All Regions');
         $this->keyDown('Key.TAB');
         $this->type('North');
@@ -181,8 +138,8 @@ class Viper_Tests_ViperTableEditorPlugin_CreateTableUnitTest extends AbstractVip
         $this->type('1');
         $this->keyDown('Key.TAB');
         $this->type('2');
-
-        $this->clickCell(11);
+        $this->keyDown('Key.TAB');
+        $this->keyDown('Key.TAB');
         $this->type('South');
         $this->keyDown('Key.TAB');
         $this->type('3');
@@ -194,157 +151,18 @@ class Viper_Tests_ViperTableEditorPlugin_CreateTableUnitTest extends AbstractVip
         $this->showTools(5, 'cell');
         $this->clickMergeSplitIcon('mergeDown');
 
-        $this->showTools(0, 'cell');
-        $this->toggleCellHeading();
+        // Change the cells to heading cells.
+        // Do it in reverse so the inline toolbar doesn't get in the way
+        $this->toggleCellHeading(10);
+        $this->toggleCellHeading(6);
+        $this->toggleCellHeading(5);
+        $this->toggleCellHeading(4);
+        $this->toggleCellHeading(3);
+        $this->toggleCellHeading(2);
+        $this->toggleCellHeading(1);
+        $this->toggleCellHeading(0);
 
-        $this->showTools(1, 'cell');
-        $this->toggleCellHeading();
-
-        $this->showTools(2, 'cell');
-        $this->toggleCellHeading();
-        $this->clickCell(0);
-        usleep(300);
-
-        $this->showTools(3, 'cell');
-        $this->toggleCellHeading();
-
-        $this->showTools(4, 'cell');
-        $this->toggleCellHeading();
-
-        $this->showTools(5, 'cell');
-        $this->toggleCellHeading();
-
-        $this->showTools(6, 'cell');
-        $this->toggleCellHeading();
-        $this->clickCell(0);
-        usleep(300);
-
-        $this->showTools(10, 'cell');
-        $this->toggleCellHeading();
-
-        // Last checks.
-        // Survery cell.
-        $this->showTools(0, 'cell');
-        $this->clickButton('splitMerge');
-        $this->assertIconStatusesCorrect(
-            TRUE,
-            TRUE,
-            FALSE,
-            FALSE,
-            FALSE,
-            TRUE
-        );
-        sleep(1);
-
-        // All Gender cell.
-        $this->showTools(1, 'cell');
-        $this->clickButton('splitMerge');
-        $this->assertIconStatusesCorrect(
-            FALSE,
-            TRUE,
-            FALSE,
-            TRUE,
-            TRUE,
-            FALSE
-        );
-        sleep(1);
-
-        // By Gender cell.
-        $this->showTools(2, 'cell');
-        $this->clickButton('splitMerge');
-        $this->assertIconStatusesCorrect(
-            TRUE,
-            FALSE,
-            FALSE,
-            TRUE,
-            FALSE,
-            FALSE
-        );
-        sleep(1);
-
-        // All Regions cell.
-        $this->showTools(5, 'cell');
-        $this->clickButton('splitMerge');
-        $this->assertIconStatusesCorrect(
-            FALSE,
-            TRUE,
-            FALSE,
-            FALSE,
-            FALSE,
-            TRUE
-        );
-        sleep(1);
-
-        // North cell.
-        $this->showTools(6, 'cell');
-        $this->clickButton('splitMerge');
-        $this->assertIconStatusesCorrect(
-            FALSE,
-            FALSE,
-            FALSE,
-            TRUE,
-            FALSE,
-            TRUE
-        );
-        sleep(1);
-
-        $this->click($this->find(1));
-        $struct   = $this->getTableStructure(0, TRUE);
-        $expected = array(
-                     array(
-                      array(
-                       'colspan' => 2,
-                       'rowspan' => 2,
-                       'content' => 'Survey&nbsp;&nbsp;&nbsp;',
-                       'heading' => TRUE,
-                      ),
-                      array(
-                       'rowspan' => '2',
-                       'content' => 'All Genders&nbsp;&nbsp;',
-                       'heading' => TRUE,
-                      ),
-                      array(
-                       'colspan' => '2',
-                       'content' => 'By Gender&nbsp;&nbsp;',
-                       'heading' => TRUE,
-                      ),
-                     ),
-                     array(
-                      array(
-                       'content' => 'Males&nbsp;',
-                       'heading' => TRUE,
-                      ),
-                      array(
-                       'content' => 'Females&nbsp;',
-                       'heading' => TRUE,
-                      ),
-                     ),
-                     array(
-                      array(
-                       'rowspan' => 2,
-                       'content' => '&nbsp;All Regions&nbsp;',
-                       'heading' => TRUE,
-                      ),
-                      array(
-                       'content' => 'North&nbsp;',
-                       'heading' => TRUE,
-                      ),
-                      array('content' => '3&nbsp;'),
-                      array('content' => '1&nbsp;'),
-                      array('content' => '2&nbsp;'),
-                     ),
-                     array(
-                      array(
-                       'content' => '&nbsp;South',
-                       'heading' => TRUE,
-                      ),
-                      array('content' => '3&nbsp;'),
-                      array('content' => '1&nbsp;'),
-                      array('content' => '2&nbsp;'),
-                     ),
-                    );
-
-        $this->assertTableStructure($expected, $struct);
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><table border="1" id="test" style="width: 100%;"><tbody><tr><th colspan="2" id="testr1c1" rowspan="2">Survey</th><th id="testr1c2" rowspan="2">All Genders</th><th colspan="2" id="testr1c3">By Gender</th></tr><tr><th id="testr2c1">Males</th><th id="testr2c2">Females</th></tr><tr><th id="testr3c1" rowspan="2">All Regions</th><th id="testr3c2">North</th><td headers="testr1c2 testr3c1 testr3c2">3</td><td headers="testr1c3 testr2c1 testr3c1 testr3c2">1</td><td headers="testr1c3 testr2c2 testr3c1 testr3c2">2</td></tr><tr><th id="testr4c1">South</th><td headers="testr1c2 testr3c1 testr4c1">3</td><td headers="testr1c3 testr2c1 testr3c1 testr4c1">1</td><td headers="testr1c3 testr2c2 testr3c1 testr4c1">2</td></tr></tbody></table><p></p><p>sit amet <strong>consectetur</strong></p>');
 
     }//end testCreateTableStructure2()
 
@@ -382,7 +200,7 @@ class Viper_Tests_ViperTableEditorPlugin_CreateTableUnitTest extends AbstractVip
 
         sleep(1);
         $this->removeTableHeaders();
-        $this->assertHTMLMatch('<p>&nbsp;</p><table style="width: 100%;" border="1"><tbody><tr><th>&nbsp;</th><th>&nbsp;</th><th>&nbsp;</th><th>&nbsp;</th></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>sit amet <strong>consectetur</strong></p>');
+        $this->assertHTMLMatch('<p></p><table style="width: 100%;" border="1"><tbody><tr><th></th><th></th><th></th><th></th></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p>sit amet <strong>consectetur</strong></p>');
 
     }//end testReplaceParagraphWithTable()
 
@@ -401,7 +219,7 @@ class Viper_Tests_ViperTableEditorPlugin_CreateTableUnitTest extends AbstractVip
 
         sleep(1);
         $this->removeTableHeaders();
-        $this->assertHTMLMatch('<p>%1% %2%</p><table style="width: 100%;" border="1"><tbody><tr><th>&nbsp;</th><th>&nbsp;</th><th>&nbsp;</th><th>&nbsp;</th></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>&nbsp;</p><p>sit amet <strong>consectetur</strong></p>');
+        $this->assertHTMLMatch('<p>%1% %2%</p><table style="width: 100%;" border="1"><tbody><tr><th></th><th></th><th></th><th></th></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p></p><p>sit amet <strong>consectetur</strong></p>');
 
     }//end testReplaceWordWithTable()
 
@@ -416,7 +234,7 @@ class Viper_Tests_ViperTableEditorPlugin_CreateTableUnitTest extends AbstractVip
         $this->insertTable();
         sleep(2);
         $this->removeTableHeaders();
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><table style="width: 100%;" border="1"><tbody><tr><th>&nbsp;</th><th>&nbsp;</th><th>&nbsp;</th><th>&nbsp;</th></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>&nbsp;</p><p>sit amet <strong>consectetur</strong></p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><table style="width: 100%;" border="1"><tbody><tr><th></th><th></th><th></th><th></th></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p></p><p>sit amet <strong>consectetur</strong></p>');
         $this->assertTrue($this->topToolbarButtonExists('table', 'active'), 'Create table icon should be active in the toolbar');
 
         $this->clickTopToolbarButton('historyUndo');
@@ -424,7 +242,7 @@ class Viper_Tests_ViperTableEditorPlugin_CreateTableUnitTest extends AbstractVip
         $this->assertTrue($this->topToolbarButtonExists('table', 'disabled'), 'Create table icon should be disabled in the toolbar');
 
         $this->clickTopToolbarButton('historyRedo');
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><table style="width: 100%;" border="1"><tbody><tr><th>&nbsp;</th><th>&nbsp;</th><th>&nbsp;</th><th>&nbsp;</th></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>&nbsp;</p><p>sit amet <strong>consectetur</strong></p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><table style="width: 100%;" border="1"><tbody><tr><th></th><th></th><th></th><th></th></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p></p><p>sit amet <strong>consectetur</strong></p>');
         $this->assertTrue($this->topToolbarButtonExists('table', 'active'), 'Create table icon should be active in the toolbar');
 
     }//end testCreatingTableThenClickingUndo()
@@ -444,7 +262,7 @@ class Viper_Tests_ViperTableEditorPlugin_CreateTableUnitTest extends AbstractVip
 
         sleep(1);
         $this->removeTableHeaders();
-        $this->assertHTMLMatch('<p>&nbsp;</p><table style="width: 100%;" border="1"><tbody><tr><th>&nbsp;</th><th>&nbsp;</th><th>&nbsp;</th><th>&nbsp;</th></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>sit amet <strong>consectetur</strong></p>');
+        $this->assertHTMLMatch('<p></p><table style="width: 100%;" border="1"><tbody><tr><th></th><th></th><th></th><th></th></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p>sit amet <strong>consectetur</strong></p>');
         $this->assertTrue($this->topToolbarButtonExists('table', 'active'), 'Create table icon should be active in the toolbar');
 
         $this->clickTopToolbarButton('historyUndo');
@@ -452,7 +270,7 @@ class Viper_Tests_ViperTableEditorPlugin_CreateTableUnitTest extends AbstractVip
         $this->assertTrue($this->topToolbarButtonExists('table', 'disabled'), 'Create table icon should be disabled in the toolbar');
 
         $this->clickTopToolbarButton('historyRedo');
-        $this->assertHTMLMatch('<p>&nbsp;</p><table style="width: 100%;" border="1"><tbody><tr><th>&nbsp;</th><th>&nbsp;</th><th>&nbsp;</th><th>&nbsp;</th></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>sit amet <strong>consectetur</strong></p>');
+        $this->assertHTMLMatch('<p></p><table style="width: 100%;" border="1"><tbody><tr><th></th><th></th><th></th><th></th></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p>sit amet <strong>consectetur</strong></p>');
         $this->assertTrue($this->topToolbarButtonExists('table', 'active'), 'Create table icon should be active in the toolbar');
 
     }//end testReplacingParagraphWithTableThenClickingUndo()

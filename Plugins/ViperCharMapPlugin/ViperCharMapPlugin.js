@@ -207,7 +207,7 @@ ViperCharMapPlugin.prototype = {
         chars     = chars.split('|');
         var latin = chars;
 
-        chars     = '&sup1;|&sup2;|&sup3;|&times;|&divide;|&frac14;|&frac12;|&frac34;|&ordf;|&ordm;|&not;|&deg;|&plusmn;|&Delta;|&fnof;|&Omega;|&circ;|&tilde;|&ndash;|&mdash;|&dagger;|&Dagger;|&bull;|&hellip;|&lsquo;|&rsquo;|&ldquo;|&rdquo;|&lsaquo;|&rsaquo;|&radic;|&infin;|&int;|&part;|&ne;|&le;|&ge;|&sum;|&permil;|&prod;|&pi;|&loz;';
+        chars     = '&sup1;|&sup2;|&sup3;|&times;|&divide;|&frac14;|&frac12;|&frac34;|&ordf;|&ordm;|&not;|&deg;|&plusmn;|&Delta;|&fnof;|&Omega;|&circ;|&tilde;|&dagger;|&Dagger;|&bull;|&hellip;|&radic;|&infin;|&int;|&part;|&ne;|&le;|&ge;|&sum;|&permil;|&prod;|&pi;|&loz;';
         chars     = chars.split('|');
         var maths = chars;
 

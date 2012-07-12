@@ -490,6 +490,7 @@ ViperCopyPastePlugin.prototype = {
 
         if (html) {
             html = dfx.trim(html);
+            html = this.viper.cleanHTML(html);
         }
 
         if (!html) {
@@ -640,6 +641,11 @@ ViperCopyPastePlugin.prototype = {
         // Remove style tags.
         content = content.replace(/<style>[\s\S]*?<\/style>/gi, '');
 
+        // Convert span.Apple-converted-space to normal space (Chrome only).
+        if (this.viper.isBrowser('chrome') === true) {
+            content = content.replace(/<span class="Apple-converted-space">&nbsp;<\/span>/g, ' ');
+        }
+
         // Remove span and o:p etc. tags.
         content = content.replace(/<\/?span[^>]*>/gi, "");
         content = content.replace(/<\/?\w+:[^>]*>/gi, '' );
@@ -654,9 +660,8 @@ ViperCopyPastePlugin.prototype = {
         content = this._convertWordPasteList(content);
 
         // Remove class, lang and style attributes.
-        content = content.replace(/<(\w[^>]*) (class|lang)=([^ |>]*)([^>]*)/gi, "<$1$4");
-        content = content.replace(/<(\w[^>]*) (align)=([^ |>]*)([^>]*)/gi, "<$1$4");
-        content = content.replace(/<(\w[^>]*) (dir)=([^ |>]*)([^>]*)/gi, "<$1$4");
+        content = content.replace(/<(\w[^>]*) (class|lang|align|dir)=([^ |>]*)([^>]*)/gi, "<$1$4");
+        content = content.replace(/<(\w[^>]*) (\w+:\w+)=([^ |>]*)([^>]*)/gi, "<$1$4");
 
         var self = this;
         content  = content.replace(new RegExp('<(\\w[^>]*) style="([^"]*)"([^>]*)', 'gi'), function() {
@@ -794,6 +799,9 @@ ViperCopyPastePlugin.prototype = {
                 if (dfx.isBlank(dfx.getHtml(parent)) === true) {
                     dfx.remove(parent);
                 }
+            } else {
+                // Chrome adds slash at the end of the urls, trim them..
+                aTag.setAttribute('href', aTag.getAttribute('href').replace(/\/$/, ''));
             }
         }
 
@@ -824,6 +832,15 @@ ViperCopyPastePlugin.prototype = {
                 } else {
                     node = node.nextSibling;
                 }
+            }
+        }
+
+        // Remove the src attribute of images pointing to local path.
+        var tags = dfx.find(tmp, 'img');
+        for (var i = 0; i < tags.length; i++) {
+            var img = tags[i];
+            if (img.getAttribute('src').indexOf('file://') === 0) {
+                img.setAttribute('src', '');
             }
         }
 
@@ -1053,6 +1070,9 @@ ViperCopyPastePlugin.prototype = {
                 dfx.setHtml(tmp, content);
             }//end for
         }
+
+        content = dfx.getHtml(tmp);
+        dfx.setHtml(tmp, content);
 
         return content;
 

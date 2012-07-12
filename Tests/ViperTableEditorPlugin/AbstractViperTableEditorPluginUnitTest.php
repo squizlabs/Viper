@@ -51,7 +51,7 @@ abstract class AbstractViperTableEditorPluginUnitTest extends AbstractViperUnitT
         $this->keyDown('Key.RIGHT');
         $this->clickTopToolbarButton('table');
 
-        $this->clickElement('.VTEP-bubble-headerTitle');
+        $this->clickElement('.VTEP-bubble-headerTitle', 0);
         $this->clickButton('Insert Table', NULL, TRUE);
 
     }//end insertTableWithNoHeaders()
@@ -89,21 +89,6 @@ abstract class AbstractViperTableEditorPluginUnitTest extends AbstractViperUnitT
         $this->clickButton('Insert Table', NULL, TRUE);
 
     }//end insertTableWithBothHeaders()
-
-
-    /**
-     * Returns the full path of the specified image file name.
-     *
-     * @param string $img The image file name.
-     *
-     * @return string
-     */
-    protected function getImg($img)
-    {
-        $path = dirname(__FILE__).'/Images/'.$img;
-        return $path;
-
-    }//end getImg()
 
 
     /**
@@ -194,7 +179,7 @@ abstract class AbstractViperTableEditorPluginUnitTest extends AbstractViperUnitT
     protected function clickMergeSplitIcon($icon)
     {
         $this->clickInlineToolbarButton('splitMerge');
-        $this->mouseMoveOffset(-50, -50);
+        //$this->mouseMoveOffset(-50, -50);
         $this->clickInlineToolbarButton($icon);
 
     }//end clickMergeSplitIcon()
@@ -203,112 +188,17 @@ abstract class AbstractViperTableEditorPluginUnitTest extends AbstractViperUnitT
     /**
      * Toggle's the cell heading option.
      *
+     * @param int $cellNum The number of the cell to toggle the heading for
+     *
      * @return void
      */
-    protected function toggleCellHeading()
+    protected function toggleCellHeading($cellNum)
     {
-        $toolIconRect = $this->getBoundingRectangle('.cellHeading', 0);
-        $region       = $this->getRegionOnPage($toolIconRect);
-        $this->click($region);
+        $this->showTools($cellNum, 'cell');
+        $this->clickField('Heading');
+        $this->keyDown('Key.ENTER');
 
     }//end toggleCellHeading()
-
-
-    /**
-     * Returns the table structure.
-     *
-     * @param integer $index The table index on the page.
-     *
-     * @return array
-     */
-    protected function getTableStructure($index=0, $incContent=FALSE)
-    {
-        return $this->execJS('window.opener.gTS('.$index.', '.((int) $incContent).')');
-
-    }//end getTableStructure()
-
-
-    /**
-     * Asserts that the given table structures match.
-     *
-     * @param array $expected The expected table structure.
-     * @param array $actual   The actual table structure.
-     *
-     * @return void
-     */
-    protected function assertTableStructure(array $expected, array $actual)
-    {
-        if (count($actual['rows']) !== count($expected)) {
-            $this->fail('Expected '.count($expected).' rows but found '.count($actual['rows']));
-        }
-
-        foreach ($actual['rows'] as $r => $row) {
-            if (count($row['cells']) !== count($expected[$r])) {
-                $this->fail('Expected '.count($expected[$r]).' columns in row '.$r.' but found '.count($row['cells']));
-            }
-
-            foreach ($row['cells'] as $c => $cell) {
-                if (is_array($expected[$r][$c]) === FALSE) {
-                    $this->fail('Expected table does not have ['.$r.', '.$c.']');
-                }
-
-                // Row and colspan.
-                if ($cell['rowspan'] !== 0) {
-                    // Rowspan is not 0, expected array must have the same value.
-                    if (isset($expected[$r][$c]['rowspan']) !== TRUE) {
-                        $this->fail('Expected rowspan=1 but found '.$cell['rowspan'].' on ['.$r.', '.$c.']');
-                    } else if ((int) $expected[$r][$c]['rowspan'] !== (int) $cell['rowspan']) {
-                        $this->fail('Expected rowspan='.$expected[$r][$c]['rowspan'].' but found '.$cell['rowspan'].' on ['.$r.', '.$c.']');
-                    }
-                } else if (isset($expected[$r][$c]['rowspan']) === TRUE) {
-                    $this->fail('Expected rowspan='.$expected[$r][$c]['rowspan'].' but found rowspan=1 on ['.$r.', '.$c.']');
-                }
-
-                if ($cell['colspan'] !== 0) {
-                    // Rowspan is not 0, expected array must have the same value.
-                    if (isset($expected[$r][$c]['colspan']) !== TRUE) {
-                        $this->fail('Expected colspan=1 but found '.$cell['colspan'].' on ['.$r.', '.$c.']');
-                    } else if ((int) $expected[$r][$c]['colspan'] !== (int) $cell['colspan']) {
-                        $this->fail('Expected colspan='.$expected[$r][$c]['colspan'].' but found '.$cell['colspan'].' on ['.$r.', '.$c.']');
-                    }
-                } else if (isset($expected[$r][$c]['colspan']) === TRUE) {
-                    $this->fail('Expected colspan='.$expected[$r][$c]['colspan'].' but found colspan=1 on ['.$r.', '.$c.']');
-                }
-
-                if (isset($cell['heading']) === FALSE
-                    && isset($expected[$r][$c]['heading']) === TRUE
-                    && $expected[$r][$c]['heading'] === TRUE
-                ) {
-                    $this->fail('Expected ['.$r.', '.$c.'] to be a heading cell');
-                } else if (isset($cell['heading']) === TRUE
-                    && $cell['heading'] === TRUE
-                    && isset($expected[$r][$c]['heading']) === FALSE
-                ) {
-                    $this->fail('Expected ['.$r.', '.$c.'] to be a normal cell but it was a heading cell');
-                }
-
-                $expectedContent = '&nbsp;';
-                if (isset($expected[$r][$c]['content']) === TRUE) {
-                    $expectedContent = $expected[$r][$c]['content'];
-                }
-
-                if (isset($cell['content']) === FALSE) {
-                    $cell['content'] = '';
-                }
-
-                // First remove the great Firefox br tag from the end...
-                $cell['content'] = str_replace('<br>', '', $cell['content']);
-
-                // Convert all nbsp; in both to space.
-                $cell['content'] = str_replace('&nbsp;', ' ', $cell['content']);
-                $expectedContent = str_replace('&nbsp;', ' ', $expectedContent);
-
-                $this->assertEquals($expectedContent, $cell['content'], 'Content of cell ['.$c.', '.$c.'] did not match');
-
-            }//end foreach
-        }//end foreach
-
-    }//end assertTableStructure()
 
 
     /**

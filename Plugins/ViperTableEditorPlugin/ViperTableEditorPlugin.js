@@ -3628,8 +3628,16 @@ ViperTableEditorPlugin.prototype = {
             return false;
         }
 
+        if (toCell.lastChild && dfx.isTag(toCell.lastChild, 'br') === true) {
+            dfx.remove(toCell.lastChild);
+        }
+
         while (fromCell.firstChild) {
-            toCell.appendChild(fromCell.firstChild);
+            if (dfx.isTag(fromCell.firstChild, 'br') === true) {
+                dfx.remove(fromCell.firstChild);
+            } else {
+                toCell.appendChild(fromCell.firstChild);
+            }
         }
 
     },

@@ -358,7 +358,7 @@ ViperToolbarPlugin.prototype = {
                     return;
                 }
 
-                subSection.form.onsubmit = function() {
+                subSection.form.onsubmit = function() {console.info(1);
                     var button = tools.getItem(subSectionid + '-applyButton');
                     if (button.isEnabled() === false) {
                         return false;
@@ -434,6 +434,9 @@ ViperToolbarPlugin.prototype = {
             },
             setTitle: function(title) {
                 dfx.setHtml(dfx.getClass('ViperITP-header', bubble)[0], title);
+            },
+            getActiveSubSection: function() {
+                return this._subSections[this._activeSubSection];
             },
             _settings: {
                 keepOpen: false
@@ -555,6 +558,8 @@ ViperToolbarPlugin.prototype = {
             this._activeBubble = null;
         }
 
+        dfx.removeEvent(document, 'keydown.ViperToolbarPluginSubSection');
+
     },
 
     showBubble: function(bubbleid)
@@ -606,6 +611,13 @@ ViperToolbarPlugin.prototype = {
         if (inlineToolbarPlugin) {
             inlineToolbarPlugin.hideToolbar();
         }
+
+        dfx.removeEvent(document, 'keydown.ViperToolbarPluginSubSection');
+        dfx.addEvent(document, 'keydown.ViperToolbarPluginSubSection', function(e) {
+            if (e.which === 13 && bubble.getActiveSubSection()) {
+                return bubble.getActiveSubSection().onsubmit();
+            }
+        });
 
     },
 

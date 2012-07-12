@@ -18,7 +18,8 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         $this->clickTopToolbarButton('H3', NULL, TRUE);
 
         $this->execJS('rmTableHeaders(0,true)');
-        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table %1% text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td><h3>aa %2% kk</h3></td><td>%3%</td><td>            <ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li></ul>        </td></tr><tr><td>nec %4% ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table %1% text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td><h3>aa %2% kk</h3></td><td>%3%</td><td>             <ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li></ul>         </td></tr><tr><td>nec %4% ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+
 
         $this->click($this->findKeyword(3));
         $this->selectKeyword(2);
@@ -26,7 +27,7 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         $this->clickTopToolbarButton('H2', NULL, TRUE);
 
         $this->execJS('rmTableHeaders(0,true)');
-        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table %1% text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td><h2>aa %2% kk</h2></td><td>%3%</td><td>            <ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li></ul>        </td></tr><tr><td>nec %4% ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table %1% text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td><h2>aa %2% kk</h2></td><td>%3%</td><td>             <ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li></ul>         </td></tr><tr><td>nec %4% ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         $this->click($this->findKeyword(3));
         $this->selectKeyword(2);
@@ -35,7 +36,7 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         $this->clickTopToolbarButton('H1', NULL, TRUE);
 
         $this->execJS('rmTableHeaders(0,true)');
-        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table %1% text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td><h1>aa %2% kk</h1></td><td>%3%</td><td>            <ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li></ul>        </td></tr><tr><td>nec %4% ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table %1% text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td><h1>aa %2% kk</h1></td><td>%3%</td><td>             <ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li></ul>         </td></tr><tr><td>nec %4% ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         $this->click($this->findKeyword(3));
         $this->selectKeyword(2);
@@ -43,7 +44,7 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         $this->clickTopToolbarButton('H1', 'active', TRUE);
 
         $this->execJS('rmTableHeaders(0,true)');
-        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table %1% text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td><p>aa %2% kk</p></td><td>%3%</td><td>            <ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li></ul>        </td></tr><tr><td>nec %4% ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table %1% text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td><p>aa %2% kk</p></td><td>%3%</td><td>             <ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li></ul>         </td></tr><tr><td>nec %4% ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
     }//end testHeadingStylesInTableMouseSelect()
 
@@ -68,7 +69,7 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         $this->assertTrue($this->inlineToolbarButtonExists('cssClass', 'active'), 'Class icon in VITP should be active.');
 
         $this->removeTableHeaders();
-        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table %1% text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>aa %2% kk</td><td>%3%</td><td>            <ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li></ul>        </td></tr><tr><td>nec <span class="abc">%4%</span> ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table %1% text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>aa %2% kk</td><td>%3%</td><td>             <ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li></ul>         </td></tr><tr><td>nec <span class="abc">%4%</span> ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         $this->click($this->findKeyword(3));
         $this->selectKeyword(2);
@@ -84,7 +85,7 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         $this->assertTrue($this->inlineToolbarButtonExists('cssClass', 'active'), 'Class icon in VITP should be active.');
 
         $this->removeTableHeaders();
-        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table %1% text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>aa <span class="test">%2%</span> kk</td><td>%3%</td><td>            <ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li></ul>        </td></tr><tr><td>nec <span class="abc">%4%</span> ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table %1% text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>aa <span class="test">%2%</span> kk</td><td>%3%</td><td>             <ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li></ul>         </td></tr><tr><td>nec <span class="abc">%4%</span> ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
     }//end testClassesOnWordInTable()
 
@@ -106,7 +107,7 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         $this->assertTrue($this->topToolbarButtonExists('cssClass', 'active'), 'Class icon in Top Toolbar should be active.');
 
         $this->execJS('rmTableHeaders(0,true)');
-        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table %1% text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td class="test">aa %2% kk</td><td>%3%</td><td>            <ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li></ul>        </td></tr><tr><td>nec %4% ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table %1% text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td class="test">aa %2% kk</td><td>%3%</td><td>             <ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li></ul>         </td></tr><tr><td>nec %4% ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
     }//end testClassesOnContentInACellOfATable()
 
@@ -128,7 +129,7 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         $this->assertTrue($this->topToolbarButtonExists('justifyLeft', 'active'), 'Left align icon is not acitve in the top toolbar');
 
         $this->execJS('rmTableHeaders(0,true)');
-        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table %1% text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td style="text-align: left;">aa %2% kk</td><td>%3%</td><td>            <ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li></ul>        </td></tr><tr><td>nec %4% ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table %1% text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td style="text-align: left;">aa %2% kk</td><td>%3%</td><td>             <ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li></ul>         </td></tr><tr><td>nec %4% ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
     }//end testLeftAlignmentInATable()
 
@@ -150,7 +151,7 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         $this->assertTrue($this->topToolbarButtonExists('justifyRight', 'active'), 'Right align icon is not acitve in the top toolbar');
 
         $this->execJS('rmTableHeaders(0,true)');
-        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table %1% text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td style="text-align: right;">aa %2% kk</td><td>%3%</td><td>            <ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li></ul>        </td></tr><tr><td>nec %4% ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table %1% text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td style="text-align: right;">aa %2% kk</td><td>%3%</td><td>             <ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li></ul>         </td></tr><tr><td>nec %4% ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
     }//end testRightAlignmentInATable()
 
@@ -172,7 +173,7 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         $this->assertTrue($this->topToolbarButtonExists('justifyCenter', 'active'), 'Centre align icon is not acitve in the top toolbar');
 
         $this->execJS('rmTableHeaders(0,true)');
-        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table %1% text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td style="text-align: center;">aa %2% kk</td><td>%3%</td><td>            <ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li></ul>        </td></tr><tr><td>nec %4% ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table %1% text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td style="text-align: center;">aa %2% kk</td><td>%3%</td><td>             <ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li></ul>         </td></tr><tr><td>nec %4% ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
     }//end testCentreAlignmentInATable()
 
@@ -194,7 +195,7 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         $this->assertTrue($this->topToolbarButtonExists('justifyBlock', 'active'), 'Justify align icon is not acitve in the top toolbar');
 
         $this->execJS('rmTableHeaders(0,true)');
-        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table %1% text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td style="text-align: justify;">aa %2% kk</td><td>%3%</td><td>            <ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li></ul>        </td></tr><tr><td>nec %4% ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table %1% text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td style="text-align: justify;">aa %2% kk</td><td>%3%</td><td>             <ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li></ul>         </td></tr><tr><td>nec %4% ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
     }//end testJustifyAlignmentInATable()
 
@@ -214,14 +215,14 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         $this->clickTopToolbarButton('P', NULL, TRUE);
 
         $this->execJS('rmTableHeaders(0,true)');
-        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table %1% text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td><p>aa %2% kk</p></td><td>%3%</td><td>            <ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li></ul>        </td></tr><tr><td>nec %4% ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table %1% text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td><p>aa %2% kk</p></td><td>%3%</td><td>             <ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li></ul>         </td></tr><tr><td>nec %4% ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         $this->selectKeyword(2);
         $this->clickTopToolbarButton('formats-p', 'active');
         $this->clickTopToolbarButton('P', 'active', TRUE);
 
         $this->execJS('rmTableHeaders(0,true)');
-        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table %1% text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>aa %2% kk</td><td>%3%</td><td>            <ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li></ul>        </td></tr><tr><td>nec %4% ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table %1% text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>aa %2% kk</td><td>%3%</td><td>             <ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li></ul>         </td></tr><tr><td>nec %4% ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
     }//end testPInATable()
 
@@ -240,14 +241,14 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         $this->clickTopToolbarButton('PRE', NULL, TRUE);
 
         $this->execJS('rmTableHeaders(0,true)');
-        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table %1% text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td><pre>aa %2% kk</pre></td><td>%3%</td><td>            <ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li></ul>        </td></tr><tr><td>nec %4% ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table %1% text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td><pre>aa %2% kk</pre></td><td>%3%</td><td>             <ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li></ul>         </td></tr><tr><td>nec %4% ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         $this->selectKeyword(2);
         $this->clickTopToolbarButton('formats-pre', 'active');
         $this->clickTopToolbarButton('PRE', 'active', TRUE);
 
         $this->execJS('rmTableHeaders(0,true)');
-        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table %1% text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>aa %2% kk</td><td>%3%</td><td>            <ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li></ul>        </td></tr><tr><td>nec %4% ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table %1% text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>aa %2% kk</td><td>%3%</td><td>             <ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li></ul>         </td></tr><tr><td>nec %4% ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
     }//end testPreInATable()
 
@@ -266,14 +267,14 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         $this->clickTopToolbarButton('DIV', NULL, TRUE);
 
         $this->execJS('rmTableHeaders(0,true)');
-        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table %1% text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td><div>aa %2% kk</div></td><td>%3%</td><td>            <ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li></ul>        </td></tr><tr><td>nec %4% ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table %1% text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td><div>aa %2% kk</div></td><td>%3%</td><td>             <ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li></ul>         </td></tr><tr><td>nec %4% ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         $this->selectKeyword(2);
         $this->clickTopToolbarButton('formats-div', 'active');
         $this->clickTopToolbarButton('DIV', 'active', TRUE);
 
         $this->execJS('rmTableHeaders(0,true)');
-        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table %1% text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>aa %2% kk</td><td>%3%</td><td>            <ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li></ul>        </td></tr><tr><td>nec %4% ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table %1% text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>aa %2% kk</td><td>%3%</td><td>             <ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li></ul>         </td></tr><tr><td>nec %4% ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
     }//end testDivInATable()
 
@@ -292,14 +293,14 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         $this->clickTopToolbarButton('Quote', NULL, TRUE);
 
         $this->execJS('rmTableHeaders(0,true)');
-        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table %1% text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td><blockquote>aa %2% kk</blockquote></td><td>%3%</td><td>            <ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li></ul>        </td></tr><tr><td>nec %4% ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table %1% text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td><blockquote>aa %2% kk</blockquote></td><td>%3%</td><td>             <ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li></ul>         </td></tr><tr><td>nec %4% ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         $this->selectKeyword(2);
         $this->clickTopToolbarButton('formats-blockquote', 'active');
         $this->clickTopToolbarButton('Quote', 'active', TRUE);
 
         $this->execJS('rmTableHeaders(0,true)');
-        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table %1% text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>aa %2% kk</td><td>%3%</td><td>            <ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li></ul>        </td></tr><tr><td>nec %4% ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table %1% text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>aa %2% kk</td><td>%3%</td><td>             <ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li></ul>         </td></tr><tr><td>nec %4% ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
     }//end testQuoteInATable()
 
