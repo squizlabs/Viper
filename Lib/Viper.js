@@ -4573,8 +4573,8 @@ Viper.prototype = {
     {
         // Replace special Word characters with HTML ones..
         var specialCharcodes = {
-            '8211': '--',
-            '8212': '--',
+            '8211': '&ndash;',
+            '8212': '&mdash;',
             '8216': '\'',
             '8217': '\'',
             '8220': '"',
