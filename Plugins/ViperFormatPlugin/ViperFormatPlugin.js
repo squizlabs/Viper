@@ -217,6 +217,10 @@ ViperFormatPlugin.prototype = {
 
         var selectedNode = range.getNodeSelection();
         if (selectedNode && selectedNode.nodeType === dfx.ELEMENT_NODE) {
+            if (selectedNode === this.viper.getViperElement()) {
+                return null;
+            }
+
             for (var i = 0; i < c; i++) {
                 if (dfx.isTag(selectedNode, tagNames[i]) === true) {
                     return selectedNode;
@@ -842,6 +846,10 @@ ViperFormatPlugin.prototype = {
         var selectedNode  = range.getNodeSelection();
         var nodeSelection = selectedNode;
         var viperElement  = this.viper.getViperElement();
+
+        if (selectedNode === viperElement) {
+            selectedNode = null;
+        }
 
         if (!selectedNode) {
             var startNode = range.getStartNode();
