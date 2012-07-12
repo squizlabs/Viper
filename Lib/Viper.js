@@ -3560,7 +3560,12 @@ Viper.prototype = {
             || (elem.childNodes.length === 1 && dfx.isTag(elem.childNodes[0], 'br') === true)
             || (elem === range.startContainer && elem === range.endContainer && range.startOffset === 0)
         ) {
-            dfx.setHtml(this.element, '<p></p>');
+            var tagName = 'p';
+            if (elem.childNodes.length === 1 && dfx.isBlockElement(elem.childNodes[0]) === true) {
+                tagName = dfx.getTagName(elem.childNodes[0]);
+            }
+
+            dfx.setHtml(this.element, '<' + tagName + '></' + tagName + '>');
             var textNode = document.createTextNode('');
             this.element.firstChild.appendChild(textNode);
             range.setStart(textNode, 0);
@@ -3656,9 +3661,16 @@ Viper.prototype = {
             }
 
             if (resetContent === true) {
+                var tagName = 'p';
+                if (this.element.childNodes.length === 1 && dfx.isBlockElement(this.element.childNodes[0]) === true) {
+                    // There is only one block element in the content so use its tag
+                    // name.
+                    tagName = dfx.getTagName(this.element.childNodes[0]);
+                }
+
                 // The whole content is selected and a char is being
                 // typed. Remove the whole content of the editable element.
-                dfx.setHtml(this.element, '<p>&nbsp;</p>');
+                dfx.setHtml(this.element, '<' + tagName + '>&nbsp;</' + tagName + '>');
                 range.setStart(range._getFirstSelectableChild(this.element), 0);
                 range.collapse(true);
                 ViperSelection.addRange(range);
