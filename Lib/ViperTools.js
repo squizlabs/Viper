@@ -1705,7 +1705,7 @@ ViperTools.prototype = {
 
                 dfx.addClass(toolbar, 'Viper-calcWidth');
                 dfx.setStyle(toolbar, 'width', 'auto');
-                var toolbarWidth = dfx.getElementWidth(toolbar);
+                var toolbarWidth  = dfx.getElementWidth(toolbar);
                 dfx.removeClass(toolbar, 'Viper-calcWidth');
                 dfx.setStyle(toolbar, 'width', toolbarWidth + 'px');
 
@@ -1730,6 +1730,8 @@ ViperTools.prototype = {
                 if (top === 0) {
                     this.hide();
                     return;
+                } else if (top > windowDim.height) {
+                    top = windowDim.height - 200;
                 }
 
                 dfx.setStyle(toolbar, 'top', top + 'px');
