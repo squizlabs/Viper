@@ -1970,39 +1970,43 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         $text = str_replace('\\\'', "'", $text);
         $text = str_replace('\xa0', ' ', $text);
 
-        $text = json_decode($text, TRUE);
+        if ($text === 'undefined' || trim($text) === '') {
+            return NULL;
+        }
+
+        $result = json_decode($text, TRUE);
 
         switch (json_last_error()) {
-            case JSON_ERROR_DEPTH:
-                throw new Exception('jsExec JSON ERROR: Maximum stack depth exceeded');
-            break;
-
-            case JSON_ERROR_STATE_MISMATCH:
-                throw new Exception('jsExec JSON ERROR: Underflow or the modes mismatch');
-            break;
-
-            case JSON_ERROR_CTRL_CHAR:
-                throw new Exception('jsExec JSON ERROR: Unexpected control character found');
-            break;
-
-            case JSON_ERROR_SYNTAX:
-                throw new Exception('jsExec JSON ERROR: Syntax error, malformed JSON');
-            break;
-
-            case JSON_ERROR_UTF8:
-                throw new Exception('jsExec JSON ERROR: Malformed UTF-8 characters, possibly incorrectly encoded');
-            break;
-
             case JSON_ERROR_NONE:
                 // Do nothing.
             break;
 
+            case JSON_ERROR_DEPTH:
+                throw new Exception('jsExec JSON ERROR: Maximum stack depth exceeded: '.$text);
+            break;
+
+            case JSON_ERROR_STATE_MISMATCH:
+                throw new Exception('jsExec JSON ERROR: Underflow or the modes mismatch: '.$text);
+            break;
+
+            case JSON_ERROR_CTRL_CHAR:
+                throw new Exception('jsExec JSON ERROR: Unexpected control character found: '.$text);
+            break;
+
+            case JSON_ERROR_SYNTAX:
+                throw new Exception('jsExec JSON ERROR: Syntax error, malformed JSON: '.$text);
+            break;
+
+            case JSON_ERROR_UTF8:
+                throw new Exception('jsExec JSON ERROR: Malformed UTF-8 characters, possibly incorrectly encoded: '.$text);
+            break;
+
             default:
-                throw new Exception('jsExec JSON ERROR: Unknown error');
+                throw new Exception('jsExec JSON ERROR: Unknown error: '.$text);
             break;
         }//end switch
 
-        return $text;
+        return $result;
 
     }//end execJS()
 
