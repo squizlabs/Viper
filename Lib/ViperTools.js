@@ -1711,11 +1711,20 @@ ViperTools.prototype = {
                 dfx.removeClass(toolbar, 'Viper-calcWidth');
                 dfx.setStyle(toolbar, 'width', toolbarWidth + 'px');
 
-                var windowDim = dfx.getWindowDimensions();
+                var viperElemCoords = this.getElementCoords(tools.viper.getViperElement());
+                var windowDim       = dfx.getWindowDimensions();
 
                 if (this._verticalPosUpdateOnly !== true) {
                     var left = ((rangeCoords.left + ((rangeCoords.right - rangeCoords.left) / 2) + scrollCoords.x) - (toolbarWidth / 2));
                     dfx.removeClass(toolbar, 'Viper-orientationLeft Viper-orientationRight');
+
+                    if (left > windowDim.width) {
+                        // Dont go off screen, point to the editable element.
+                        left = viperElemCoords.left;
+                    }
+
+                    dfx.setStyle(toolbar, 'left', left + 'px');
+
                     if (left < 0) {
                         left += (toolbarWidth / 2);
                         dfx.addClass(toolbar, 'Viper-orientationLeft');
@@ -1723,13 +1732,10 @@ ViperTools.prototype = {
                         left -= (toolbarWidth / 2);
                         dfx.addClass(toolbar, 'Viper-orientationRight');
                     }
-
-                    dfx.setStyle(toolbar, 'left', left + 'px');
                 }
 
                 var top = (rangeCoords.bottom + margin + scrollCoords.y);
 
-                var viperElemCoords = this.getElementCoords(tools.viper.getViperElement());
                 if (top === 0) {
                     this.hide();
                     return;
