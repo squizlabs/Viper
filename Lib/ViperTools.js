@@ -556,6 +556,7 @@ ViperTools.prototype = {
             {
                 dfx.addClass(textBox, 'Viper-disabled');
                 input.setAttribute('disabled', true);
+                input.blur();
             },
             enable: function()
             {
