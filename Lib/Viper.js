@@ -4597,7 +4597,6 @@ Viper.prototype = {
             '8220': '"',
             '8221': '"',
             '8226': '*',
-            '8230': '...'
         };
 
         for (var code in specialCharcodes) {
