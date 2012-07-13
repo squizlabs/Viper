@@ -1739,8 +1739,8 @@ ViperTools.prototype = {
                 if (top === 0) {
                     this.hide();
                     return;
-                } else if (top > windowDim.height) {
-                    top = windowDim.height - 200;
+                } else if (top > windowDim.height + scrollCoords.y) {
+                    top = (windowDim.height - 200 + scrollCoords.y);
                 } else if (top < viperElemCoords.top) {
                     top = (viperElemCoords.top + 50);
                     if (left < viperElemCoords.left && this._verticalPosUpdateOnly !== true) {
