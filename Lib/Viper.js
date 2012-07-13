@@ -2031,12 +2031,17 @@ Viper.prototype = {
                     if (bookmark.start.parentNode === bookmarkEnd.parentNode) {
                         dfx.insertAfter(bookmarkEnd, bookmark.end);
                         break;
-                    } else if (bookmarkEnd.nextSibling || bookmarkEnd === this.getViperElement()) {
+                    } else if (bookmark.end.nextSibling || bookmarkEnd === this.getViperElement()) {
                         // Not the last node in this parent so we cannot move it.
                         break;
+                    } else {
+                        dfx.insertAfter(bookmarkEnd, bookmark.end);
+                        if (bookmark.end.nextSibling) {
+                            break;
+                        } else {
+                            bookmarkEnd = bookmark.end.parentNode;
+                        }
                     }
-
-                    bookmarkEnd = bookmarkEnd.parentNode;
                 }
 
                 endContainer = Viper.document.createTextNode('');
