@@ -171,6 +171,15 @@ ViperAccessibilityPlugin_WCAG2_Principle1_Guideline1_3 = {
                 });
             break;
 
+            case 'H43.IncorrectAttr':
+                this.parent.setResolutionInstruction(contentElement, '<p>Fix the header attribute of this cell.</p>');
+                var action = function() {
+                    var newAttribute = issue.msg.match(/Expected "([^"]+)"/i)[1];
+                    element.setAttribute('headers', newAttribute);
+                };
+                this.parent.addActionButton(action, contentElement, null, 'Fix headers attribute', true);
+            break;
+
             case 'H49.B':
                 this.parent.setResolutionInstruction(contentElement, '<p>Convert the B tag to the more appropriate STRONG tag.</p>');
                 var action = function() {
