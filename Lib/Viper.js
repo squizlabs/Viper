@@ -2031,12 +2031,17 @@ Viper.prototype = {
                     if (bookmark.start.parentNode === bookmarkEnd.parentNode) {
                         dfx.insertAfter(bookmarkEnd, bookmark.end);
                         break;
-                    } else if (bookmarkEnd.nextSibling || bookmarkEnd === this.getViperElement()) {
+                    } else if (bookmark.end.nextSibling || bookmarkEnd === this.getViperElement()) {
                         // Not the last node in this parent so we cannot move it.
                         break;
+                    } else {
+                        dfx.insertAfter(bookmarkEnd, bookmark.end);
+                        if (bookmark.end.nextSibling) {
+                            break;
+                        } else {
+                            bookmarkEnd = bookmark.end.parentNode;
+                        }
                     }
-
-                    bookmarkEnd = bookmarkEnd.parentNode;
                 }
 
                 endContainer = Viper.document.createTextNode('');
@@ -3560,7 +3565,12 @@ Viper.prototype = {
             || (elem.childNodes.length === 1 && dfx.isTag(elem.childNodes[0], 'br') === true)
             || (elem === range.startContainer && elem === range.endContainer && range.startOffset === 0)
         ) {
-            dfx.setHtml(this.element, '<p></p>');
+            var tagName = 'p';
+            if (elem.childNodes.length === 1 && dfx.isBlockElement(elem.childNodes[0]) === true) {
+                tagName = dfx.getTagName(elem.childNodes[0]);
+            }
+
+            dfx.setHtml(this.element, '<' + tagName + '></' + tagName + '>');
             var textNode = document.createTextNode('');
             this.element.firstChild.appendChild(textNode);
             range.setStart(textNode, 0);
@@ -3656,9 +3666,16 @@ Viper.prototype = {
             }
 
             if (resetContent === true) {
+                var tagName = 'p';
+                if (this.element.childNodes.length === 1 && dfx.isBlockElement(this.element.childNodes[0]) === true) {
+                    // There is only one block element in the content so use its tag
+                    // name.
+                    tagName = dfx.getTagName(this.element.childNodes[0]);
+                }
+
                 // The whole content is selected and a char is being
                 // typed. Remove the whole content of the editable element.
-                dfx.setHtml(this.element, '<p>&nbsp;</p>');
+                dfx.setHtml(this.element, '<' + tagName + '>&nbsp;</' + tagName + '>');
                 range.setStart(range._getFirstSelectableChild(this.element), 0);
                 range.collapse(true);
                 ViperSelection.addRange(range);
@@ -4573,8 +4590,8 @@ Viper.prototype = {
     {
         // Replace special Word characters with HTML ones..
         var specialCharcodes = {
-            '8211': '--',
-            '8212': '--',
+            '8211': '&ndash;',
+            '8212': '&mdash;',
             '8216': '\'',
             '8217': '\'',
             '8220': '"',

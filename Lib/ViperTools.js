@@ -1697,7 +1697,9 @@ ViperTools.prototype = {
                             }
                         }
                     } else {
-                        return;
+                        // Point to top of Viper element.
+                        rangeCoords        = this.getElementCoords(tools.viper.getViperElement());
+                        rangeCoords.bottom = (rangeCoords.top + 10);
                     }//end if
                 }//end if
 
@@ -1705,15 +1707,24 @@ ViperTools.prototype = {
 
                 dfx.addClass(toolbar, 'Viper-calcWidth');
                 dfx.setStyle(toolbar, 'width', 'auto');
-                var toolbarWidth = dfx.getElementWidth(toolbar);
+                var toolbarWidth  = dfx.getElementWidth(toolbar);
                 dfx.removeClass(toolbar, 'Viper-calcWidth');
                 dfx.setStyle(toolbar, 'width', toolbarWidth + 'px');
 
-                var windowDim = dfx.getWindowDimensions();
+                var viperElemCoords = this.getElementCoords(tools.viper.getViperElement());
+                var windowDim       = dfx.getWindowDimensions();
 
                 if (this._verticalPosUpdateOnly !== true) {
                     var left = ((rangeCoords.left + ((rangeCoords.right - rangeCoords.left) / 2) + scrollCoords.x) - (toolbarWidth / 2));
                     dfx.removeClass(toolbar, 'Viper-orientationLeft Viper-orientationRight');
+
+                    if (left > windowDim.width) {
+                        // Dont go off screen, point to the editable element.
+                        left = viperElemCoords.left;
+                    }
+
+                    dfx.setStyle(toolbar, 'left', left + 'px');
+
                     if (left < 0) {
                         left += (toolbarWidth / 2);
                         dfx.addClass(toolbar, 'Viper-orientationLeft');
@@ -1721,8 +1732,6 @@ ViperTools.prototype = {
                         left -= (toolbarWidth / 2);
                         dfx.addClass(toolbar, 'Viper-orientationRight');
                     }
-
-                    dfx.setStyle(toolbar, 'left', left + 'px');
                 }
 
                 var top = (rangeCoords.bottom + margin + scrollCoords.y);
@@ -1730,6 +1739,13 @@ ViperTools.prototype = {
                 if (top === 0) {
                     this.hide();
                     return;
+                } else if (top > windowDim.height) {
+                    top = windowDim.height - 200;
+                } else if (top < viperElemCoords.top) {
+                    top = (viperElemCoords.top + 50);
+                    if (left < viperElemCoords.left && this._verticalPosUpdateOnly !== true) {
+                        dfx.setStyle(toolbar, 'left', viperElemCoords.left  + 50 + 'px');
+                    }
                 }
 
                 dfx.setStyle(toolbar, 'top', top + 'px');
