@@ -336,6 +336,12 @@ Viper.prototype = {
 
     },
 
+    getEventNamespace: function()
+    {
+        return 'viper-' + this.id;
+
+    },
+
     /**
      * Adds the events required for mouse navigating and key navigating/typing.
      *
@@ -355,46 +361,48 @@ Viper.prototype = {
             Viper.window = window;
         }
 
-        dfx.removeEvent(this._document.body, '.viper');
+        var namespace = this.getEventNamespace();
+
+        dfx.removeEvent(this._document.body, '.' + namespace);
         this._removeEvents(elem);
         var self = this;
 
         if (this.isBrowser('msie') === true) {
-            dfx.addEvent(elem, 'mouseup.viper', function(e) {
+            dfx.addEvent(elem, 'mouseup.' + namespace, function(e) {
                 return self.mouseUp(e);
             });
         } else {
-            dfx.addEvent(this._document.body, 'mouseup.viper', function(e) {
+            dfx.addEvent(this._document.body, 'mouseup.' + namespace, function(e) {
                 return self.mouseUp(e);
             });
         }
 
-        dfx.addEvent(this._document.body, 'mousedown.viper', function(e) {
+        dfx.addEvent(this._document.body, 'mousedown.' + namespace, function(e) {
             return self.mouseDown(e);
         });
 
         // Add key events. Note that there is a known issue with IME keyboard events
         // see https://bugzilla.mozilla.org/show_bug.cgi?id=354358. This effects
         // change tracking while using Korean, Chinese etc.
-        dfx.addEvent(elem, 'keypress.viper', function(e) {
+        dfx.addEvent(elem, 'keypress.' + namespace, function(e) {
             return self.keyPress(e);
         });
 
-        dfx.addEvent(elem, 'keydown.viper', function(e) {
+        dfx.addEvent(elem, 'keydown.' + namespace, function(e) {
             return self.keyDown(e);
         });
 
-        dfx.addEvent(elem, 'keyup.viper', function(e) {
+        dfx.addEvent(elem, 'keyup.' + namespace, function(e) {
             return self.keyUp(e);
         });
 
-        dfx.addEvent(elem, 'blur.viper', function(e) {
+        dfx.addEvent(elem, 'blur.' + namespace, function(e) {
             if (!self._viperRange) {
                 self._viperRange = self._currentRange;
             }
         });
 
-        dfx.addEvent(elem, 'focus.viper', function(e) {
+        dfx.addEvent(elem, 'focus.' + namespace, function(e) {
             if (self.fireCallbacks('Viper:viperElementFocused') === false) {
                 return;
             }
@@ -435,7 +443,7 @@ Viper.prototype = {
             elem = this.element;
         }
 
-        dfx.removeEvent(elem, '.viper');
+        dfx.removeEvent(elem, '.' + this.getEventNamespace());
 
     },
 
@@ -499,6 +507,18 @@ Viper.prototype = {
             ViperChangeTracker.disableChangeTracking();
             ViperChangeTracker.cleanUp();
         }//end if
+
+    },
+
+    enable: function()
+    {
+        this.setEnabled(true);
+
+    },
+
+    disable: function()
+    {
+        this.setEnabled(false);
 
     },
 

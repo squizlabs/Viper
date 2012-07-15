@@ -141,7 +141,7 @@ ViperTools.prototype = {
         var preventMouseUp = false;
         var self           = this;
         if (clickAction) {
-            dfx.addEvent(button, 'mousedown.Viper', function(e) {
+            dfx.addEvent(button, 'mousedown.' + this.viper.getEventNamespace(), function(e) {
                 if (self.viper.isBrowser('msie') === true) {
                     // This block of code prevents IE moving user selection to the.
                     // button element when clicked. When the button element is removed
@@ -177,7 +177,7 @@ ViperTools.prototype = {
             });
         }//end if
 
-        dfx.addEvent(button, 'mouseup.Viper', function(e) {
+        dfx.addEvent(button, 'mouseup.' + this.viper.getEventNamespace(), function(e) {
             mouseUpAction.call(this, e);
             self._preventMouseUp = false;
             dfx.preventDefault(e);
