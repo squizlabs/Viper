@@ -11,7 +11,7 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractGeneralLis
      *
      * @return void
      */
-    public function testCreatingAList2()
+    public function testCreatingAList()
     {
 
         $this->selectKeyword(1);
@@ -479,8 +479,7 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractGeneralLis
         try
         {
             $this->getInlineToolbar();
-        }
-        catch  (Exception $e) {
+        } catch  (Exception $e) {
             $inlineToolbarFound = false;
         }
 

@@ -9,6 +9,7 @@ body {
     width: 800px;
     height: 600px;
     margin: 90px 0 0 250px;
+    overflow: auto;
 }
 
 #menu {
