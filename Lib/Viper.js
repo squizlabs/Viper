@@ -4580,7 +4580,7 @@ Viper.prototype = {
             '8217': '\'',
             '8220': '"',
             '8221': '"',
-            '8226': '*',
+            '8226': '*'
         };
 
         for (var code in specialCharcodes) {
