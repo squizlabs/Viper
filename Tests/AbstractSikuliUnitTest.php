@@ -1132,16 +1132,10 @@ abstract class AbstractSikuliUnitTest extends PHPUnit_Framework_TestCase
             return $this->_getStreamOutputWindows();
         }
 
-        $isError    = FALSE;
-        $timeout    = 10;
-        $content    = array();
-        $start      = microtime(TRUE);
-        $startOfErr = FALSE;
-
-        $streamSelectTimeout = 1;
-        if ($timeout <= 0) {
-            $streamSelectTimeout = 0;
-        }
+        $isError = FALSE;
+        $timeout = 10;
+        $content = array();
+        $start   = microtime(TRUE);
 
         while (TRUE) {
             $read    = array(
@@ -1171,7 +1165,7 @@ abstract class AbstractSikuliUnitTest extends PHPUnit_Framework_TestCase
                         }
 
                         // DEBUG.
-                        //var_dump($line);ob_flush();
+                        //var_dump($line);@ob_flush();
 
                         $start     = microtime(TRUE);
                         $content[] = $line;
@@ -1181,12 +1175,6 @@ abstract class AbstractSikuliUnitTest extends PHPUnit_Framework_TestCase
                             || preg_match('/File "<stdin>", line \d+/i', $line) === 1)
                         ) {
                             $timeout = 1;
-                            if ($startOfErr === TRUE) {
-                                // Second time we find this line, its the end of the error.
-                                break(2);
-                            }
-
-                            $startOfErr = TRUE;
                         }
                     }//end if
                 }//end foreach
