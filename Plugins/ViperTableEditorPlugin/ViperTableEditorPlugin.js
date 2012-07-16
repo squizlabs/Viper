@@ -3646,6 +3646,10 @@ ViperTableEditorPlugin.prototype = {
             }
         }
 
+        if (!toCell.lastChild) {
+            this._initCell(toCell);
+        }
+
     },
 
     isPluginElement: function(element)
