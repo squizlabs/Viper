@@ -118,7 +118,7 @@ abstract class AbstractViperTableEditorPluginUnitTest extends AbstractViperUnitT
      */
     protected function getCellHighlight()
     {
-        return $this->execJS('window.opener.gTblH()');
+        return $this->execJS('viperTest.getWindow().gTblH()');
 
     }//end getCellHighlight()
 

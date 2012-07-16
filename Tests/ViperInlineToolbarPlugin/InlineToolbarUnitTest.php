@@ -173,7 +173,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarUnitTest extends Abstrac
      */
     public function testPositionOrientationLeft()
     {
-        $this->execJS('window.opener.dfx.setStyle(window.opener.dfx.getId("content"), "margin-left", "10px")');
+        $this->execJS('viperTest.getWindow().dfx.setStyle(viperTest.getWindow().dfx.getId("content"), "margin-left", "10px")');
 
         $word = $this->findKeyword(1);
         $this->selectKeyword(1);
