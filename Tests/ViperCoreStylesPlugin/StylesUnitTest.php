@@ -84,6 +84,7 @@ class Viper_Tests_ViperCoreStylesPlugin_StylesUnitTest extends AbstractViperUnit
      */
     public function testMultiParaApplyStyle()
     {
+        $this->click($this->findKeyword(2));
         $this->selectKeyword(1, 4);
         $this->keyDown('Key.CMD + b');
 
