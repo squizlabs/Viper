@@ -42,7 +42,7 @@
             var viper = new Viper('viper3', null, null, [document.getElementById('viper3')]);
             viper.getPluginManager().setPlugins(['ViperCoreStylesPlugin', 'ViperKeyboardEditorPlugin', 'ViperInlineToolbarPlugin', 'ViperHistoryPlugin', 'ViperListPlugin', 'ViperFormatPlugin', 'ViperToolbarPlugin', 'ViperTableEditorPlugin', 'ViperCopyPastePlugin', 'ViperImagePlugin', 'ViperLinkPlugin', 'ViperAccessibilityPlugin', 'ViperSourceViewPlugin', 'ViperSearchReplacePlugin', 'ViperLangToolsPlugin', 'ViperCharMapPlugin', 'ViperTrackChangesPlugin']);
 
-            var buttons = [['bold', 'italic', 'subscript', 'class'], 'removeFormat', ['formats', 'headings'], ['undo', 'redo'], ['unorderedList', 'orderedList', 'indentList', 'outdentList'], 'insertTable', 'image', 'hr', ['insertLink', 'removeLink', 'anchor'], 'insertCharacter', 'accessibility', 'sourceEditor'];
+            var buttons = [['bold', 'italic', 'subscript', 'class'], 'removeFormat', ['formats', 'headings'], ['undo', 'redo'], ['unorderedList', 'orderedList', 'indentList', 'outdentList'], 'insertTable', ['insertLink', 'removeLink', 'anchor'], 'insertCharacter', 'accessibility', 'sourceEditor'];
             viper.getPluginManager().setPluginSettings('ViperToolbarPlugin', {buttons: buttons});
 
             var inlineToolbarButtons = [['bold', 'italic', 'class'], ['justify', 'formats', 'headings'], ['unorderedList', 'orderedList', 'indentList', 'outdentList'], ['insertLink', 'removeLink', 'anchor'], ['image', 'imageMove']];
@@ -59,7 +59,13 @@
     <style>
     #toolbarViper3, #toolbarViper2 {
         position: relative;
-        padding-top: 50px;
+        padding-top: 28px;
+    }
+
+    #viper1, #viper2, #viper3 {
+        border: 1px solid #000;
+        margin: 5px 0;
+        border-top: none;
     }
     </style>
 </head>
