@@ -546,6 +546,10 @@ Viper.prototype = {
      */
     setEditableElement: function(elem)
     {
+        if (this.element === elem) {
+            return;
+        }
+
         if (this.element) {
             this.element.setAttribute('contentEditable', false);
             dfx.setStyle(this.element, 'outline', 'invert');
