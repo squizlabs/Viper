@@ -3278,6 +3278,8 @@ Viper.prototype = {
 
         ViperSelection.addRange(range);
 
+        this._viperRange = range.cloneRange();
+
         return true;
 
     },
