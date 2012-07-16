@@ -13,11 +13,11 @@ class Viper_Tests_ViperTableEditorPlugin_CreateTableUnitTest extends AbstractVip
      */
     public function testCreateTableWithoutHeaders()
     {
-        $this->insertTableWithNoHeaders();
-        sleep(2);
+        $this->insertTable(1, 0);
+        $this->assetTableWithoutHeaders('<p>Test %1%</p><table style="width: 100%;" border="1"><tbody><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
 
-        $this->removeTableHeaders();
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><table style="width: 100%;" border="1"><tbody><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p></p><p>sit amet <strong>consectetur</strong></p>');
+        $this->insertTable(1, 0, 5, 8);
+        $this->assetTableWithoutHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><tbody><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table><p></p><table border="1" style="width: 100%;"><tbody><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
 
     }//end testCreateTableWithoutHeaders()
 
@@ -29,13 +29,29 @@ class Viper_Tests_ViperTableEditorPlugin_CreateTableUnitTest extends AbstractVip
      */
     public function testCreateTableWithLeftHeaders()
     {
-        $this->insertTableWithLeftHeaders();
-        sleep(2);
+        $this->insertTable(1, 1);
+        $this->assetTableWithoutHeaders('<p>Test %1%</p><table style="width: 100%;" border="1"><tbody><tr><th></th><td></td><td></td><td></td></tr><tr><th></th><td></td><td></td><td></td></tr><tr><th></th><td></td><td></td><td></td></tr></tbody></table><p></p>');
 
-        $this->removeTableHeaders();
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><table style="width: 100%;" border="1"><tbody><tr><th></th><td></td><td></td><td></td></tr><tr><th></th><td></td><td></td><td></td></tr><tr><th></th><td></td><td></td><td></td></tr></tbody></table><p></p><p>sit amet <strong>consectetur</strong></p>');
+        $this->insertTable(1, 1, 4, 2);
+        $this->assetTableWithoutHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><tbody><tr><th></th><td></td></tr><tr><th></th><td></td></tr><tr><th></th><td></td></tr><tr><th></th><td></td></tr></tbody></table><p></p><table border="1" style="width: 100%;"><tbody><tr><th></th><td></td><td></td><td></td></tr><tr><th></th><td></td><td></td><td></td></tr><tr><th></th><td></td><td></td><td></td></tr></tbody></table><p></p>');
 
     }//end testCreateTableWithLeftHeaders()
+
+
+    /**
+     * Test that you can create the default table using the top toolbar.
+     *
+     * @return void
+     */
+    public function testCreateWithTopHeaders()
+    {
+        $this->insertTable(1);
+        $this->assetTableWithoutHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><tbody><tr><th></th><th></th><th></th><th></th></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
+
+        $this->insertTable(1, 2, 4, 4);
+        $this->assetTableWithoutHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><tbody><tr><th></th><th></th><th></th><th></th></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p></p><table border="1" style="width: 100%;"><tbody><tr><th></th><th></th><th></th><th></th></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
+
+    }//end testCreateDefaultTable()
 
 
    /**
@@ -45,11 +61,11 @@ class Viper_Tests_ViperTableEditorPlugin_CreateTableUnitTest extends AbstractVip
      */
     public function testCreateTableWithBothHeaders()
     {
-        $this->insertTableWithBothHeaders();
-        sleep(2);
+        $this->insertTable(1, 3);
+        $this->assetTableWithoutHeaders('<p>Test %1%</p><table style="width: 100%;" border="1"><tbody><tr><th></th><th></th><th></th><th></th></tr><tr><th></th><td></td><td></td><td></td></tr><tr><th></th><td></td><td></td><td></td></tr></tbody></table><p></p>');
 
-        $this->removeTableHeaders();
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><table style="width: 100%;" border="1"><tbody><tr><th></th><th></th><th></th><th></th></tr><tr><th></th><td></td><td></td><td></td></tr><tr><th></th><td></td><td></td><td></td></tr></tbody></table><p></p><p>sit amet <strong>consectetur</strong></p>');
+        $this->insertTable(1, 3, 7, 4);
+        $this->assetTableWithoutHeaders('<p>Test XAX</p><table border="1" style="width: 100%;"><tbody><tr><th></th><th></th><th></th><th></th></tr><tr><th></th><td></td><td></td><td></td></tr><tr><th></th><td></td><td></td><td></td></tr><tr><th></th><td></td><td></td><td></td></tr><tr><th></th><td></td><td></td><td></td></tr><tr><th></th><td></td><td></td><td></td></tr><tr><th></th><td></td><td></td><td></td></tr></tbody></table><p></p><table border="1" style="width: 100%;"><tbody><tr><th></th><th></th><th></th><th></th></tr><tr><th></th><td></td><td></td><td></td></tr><tr><th></th><td></td><td></td><td></td></tr></tbody></table><p></p>');
 
     }//end insertTableWithBothHeaders()
 
@@ -61,11 +77,8 @@ class Viper_Tests_ViperTableEditorPlugin_CreateTableUnitTest extends AbstractVip
      */
     public function testCreateTableStructure()
     {
-        $this->insertTable();
-        sleep(2);
-
+        $this->insertTable(1);
         $this->clickCell(0);
-        usleep(300);
 
         $this->type('One');
         $this->keyDown('Key.TAB');
@@ -81,10 +94,8 @@ class Viper_Tests_ViperTableEditorPlugin_CreateTableUnitTest extends AbstractVip
 
         $this->showTools(0, 'cell');
         $this->clickMergeSplitIcon('mergeRight');
-        $this->click($this->find(1));
 
-        $this->removeTableHeaders();
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><table border="1" style="width: 100%;"><tbody><tr><th colspan="2">OneTwo</th><th>Three</th><th>Four</th></tr><tr><td>Five</td><td>Six</td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p></p><p>sit amet <strong>consectetur</strong></p>');
+        $this->assetTableWithoutHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><tbody><tr><th colspan="2">OneTwo</th><th>Three</th><th>Four</th></tr><tr><td>Five</td><td>Six</td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
 
     }//end testCreateTableStructure()
 
@@ -96,10 +107,7 @@ class Viper_Tests_ViperTableEditorPlugin_CreateTableUnitTest extends AbstractVip
      */
     public function testCreateTableStructure2()
     {
-        $this->selectKeyword(3);
-        $this->keyDown('Key.RIGHT');
-        $this->execJS('insTable(4,5, 0, "test")');
-        sleep(1);
+        $this->insertTableWithSpecificId('test', 4, 5, 0, 1);
 
         $this->clickCell(0);
         $this->type('Survey');
@@ -111,8 +119,6 @@ class Viper_Tests_ViperTableEditorPlugin_CreateTableUnitTest extends AbstractVip
 
         $this->showTools(0, 'cell');
         $this->clickMergeSplitIcon('mergeRight');
-
-        $this->showTools(0, 'cell');
         $this->clickMergeSplitIcon('mergeDown');
 
         $this->showTools(1, 'cell');
@@ -162,7 +168,7 @@ class Viper_Tests_ViperTableEditorPlugin_CreateTableUnitTest extends AbstractVip
         $this->toggleCellHeading(1);
         $this->toggleCellHeading(0);
 
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><table border="1" id="test" style="width: 100%;"><tbody><tr><th colspan="2" id="testr1c1" rowspan="2">Survey</th><th id="testr1c2" rowspan="2">All Genders</th><th colspan="2" id="testr1c3">By Gender</th></tr><tr><th id="testr2c1">Males</th><th id="testr2c2">Females</th></tr><tr><th id="testr3c1" rowspan="2">All Regions</th><th id="testr3c2">North</th><td headers="testr1c2 testr3c1 testr3c2">3</td><td headers="testr1c3 testr2c1 testr3c1 testr3c2">1</td><td headers="testr1c3 testr2c2 testr3c1 testr3c2">2</td></tr><tr><th id="testr4c1">South</th><td headers="testr1c2 testr3c1 testr4c1">3</td><td headers="testr1c3 testr2c1 testr3c1 testr4c1">1</td><td headers="testr1c3 testr2c2 testr3c1 testr4c1">2</td></tr></tbody></table><p></p><p>sit amet <strong>consectetur</strong></p>');
+        $this->assertHTMLMatch('<p>Test %1%</p><table border="1" id="test" style="width: 100%;"><tbody><tr><th colspan="2" id="testr1c1" rowspan="2">Survey</th><th id="testr1c2" rowspan="2">All Genders</th><th colspan="2" id="testr1c3">By Gender</th></tr><tr><th id="testr2c1">Males</th><th id="testr2c2">Females</th></tr><tr><th id="testr3c1" rowspan="2">All Regions</th><th id="testr3c2">North</th><td headers="testr1c2 testr3c1 testr3c2">3</td><td headers="testr1c3 testr2c1 testr3c1 testr3c2">1</td><td headers="testr1c3 testr2c2 testr3c1 testr3c2">2</td></tr><tr><th id="testr4c1">South</th><td headers="testr1c2 testr3c1 testr4c1">3</td><td headers="testr1c3 testr2c1 testr3c1 testr4c1">1</td><td headers="testr1c3 testr2c2 testr3c1 testr4c1">2</td></tr></tbody></table><p></p>');
 
     }//end testCreateTableStructure2()
 
@@ -193,14 +199,11 @@ class Viper_Tests_ViperTableEditorPlugin_CreateTableUnitTest extends AbstractVip
      */
     public function testReplaceParagraphWithTable()
     {
-        $this->selectKeyword(1, 3);
-
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(0);
         $this->clickTopToolbarButton('table');
         $this->clickButton('Insert Table', NULL, TRUE);
-
-        sleep(1);
-        $this->removeTableHeaders();
-        $this->assertHTMLMatch('<p></p><table style="width: 100%;" border="1"><tbody><tr><th></th><th></th><th></th><th></th></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p>sit amet <strong>consectetur</strong></p>');
+        $this->assetTableWithoutHeaders('<p></p><table style="width: 100%;" border="1"><tbody><tr><th></th><th></th><th></th><th></th></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table>');
 
     }//end testReplaceParagraphWithTable()
 
@@ -212,14 +215,10 @@ class Viper_Tests_ViperTableEditorPlugin_CreateTableUnitTest extends AbstractVip
      */
     public function testReplaceWordWithTable()
     {
-        $this->selectKeyword(3);
-
+        $this->selectKeyword(1);
         $this->clickTopToolbarButton('table');
         $this->clickButton('Insert Table', NULL, TRUE);
-
-        sleep(1);
-        $this->removeTableHeaders();
-        $this->assertHTMLMatch('<p>%1% %2%</p><table style="width: 100%;" border="1"><tbody><tr><th></th><th></th><th></th><th></th></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p></p><p>sit amet <strong>consectetur</strong></p>');
+        $this->assetTableWithoutHeaders('<p>Test</p><table style="width: 100%;" border="1"><tbody><tr><th></th><th></th><th></th><th></th></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
 
     }//end testReplaceWordWithTable()
 
@@ -231,18 +230,16 @@ class Viper_Tests_ViperTableEditorPlugin_CreateTableUnitTest extends AbstractVip
      */
     public function testCreatingTableThenClickingUndo()
     {
-        $this->insertTable();
-        sleep(2);
-        $this->removeTableHeaders();
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><table style="width: 100%;" border="1"><tbody><tr><th></th><th></th><th></th><th></th></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p></p><p>sit amet <strong>consectetur</strong></p>');
+        $this->insertTable(1);
+        $this->assetTableWithoutHeaders('<p>Test %1%</p><table style="width: 100%;" border="1"><tbody><tr><th></th><th></th><th></th><th></th></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
         $this->assertTrue($this->topToolbarButtonExists('table', 'active'), 'Create table icon should be active in the toolbar');
 
         $this->clickTopToolbarButton('historyUndo');
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit amet <strong>consectetur</strong></p>');
+        $this->assertHTMLMatch('<p>Test %1%</p>');
         $this->assertTrue($this->topToolbarButtonExists('table', 'disabled'), 'Create table icon should be disabled in the toolbar');
 
         $this->clickTopToolbarButton('historyRedo');
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><table style="width: 100%;" border="1"><tbody><tr><th></th><th></th><th></th><th></th></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p></p><p>sit amet <strong>consectetur</strong></p>');
+        $this->assertHTMLMatch('<p>Test %1%</p><table style="width: 100%;" border="1"><tbody><tr><th></th><th></th><th></th><th></th></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
         $this->assertTrue($this->topToolbarButtonExists('table', 'active'), 'Create table icon should be active in the toolbar');
 
     }//end testCreatingTableThenClickingUndo()
@@ -255,22 +252,19 @@ class Viper_Tests_ViperTableEditorPlugin_CreateTableUnitTest extends AbstractVip
      */
     public function testReplacingParagraphWithTableThenClickingUndo()
     {
-        $this->selectKeyword(1, 3);
-
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(0);
         $this->clickTopToolbarButton('table');
         $this->clickButton('Insert Table', NULL, TRUE);
-
-        sleep(1);
-        $this->removeTableHeaders();
-        $this->assertHTMLMatch('<p></p><table style="width: 100%;" border="1"><tbody><tr><th></th><th></th><th></th><th></th></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p>sit amet <strong>consectetur</strong></p>');
+        $this->assetTableWithoutHeaders('<p></p><table style="width: 100%;" border="1"><tbody><tr><th></th><th></th><th></th><th></th></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table>');
         $this->assertTrue($this->topToolbarButtonExists('table', 'active'), 'Create table icon should be active in the toolbar');
 
         $this->clickTopToolbarButton('historyUndo');
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit amet <strong>consectetur</strong></p>');
+        $this->assertHTMLMatch('<p>Test %1%</p>');
         $this->assertTrue($this->topToolbarButtonExists('table', 'disabled'), 'Create table icon should be disabled in the toolbar');
 
         $this->clickTopToolbarButton('historyRedo');
-        $this->assertHTMLMatch('<p></p><table style="width: 100%;" border="1"><tbody><tr><th></th><th></th><th></th><th></th></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p>sit amet <strong>consectetur</strong></p>');
+        $this->assertHTMLMatch('<p></p><table style="width: 100%;" border="1"><tbody><tr><th></th><th></th><th></th><th></th></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table>');
         $this->assertTrue($this->topToolbarButtonExists('table', 'active'), 'Create table icon should be active in the toolbar');
 
     }//end testReplacingParagraphWithTableThenClickingUndo()
