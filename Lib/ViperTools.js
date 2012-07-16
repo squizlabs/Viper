@@ -1582,7 +1582,7 @@ ViperTools.prototype = {
                 var addedButtons = {};
                 for (var i = 0; i < c; i++) {
                     var button = buttons[i];
-                    var id     = button.id.toLowerCase().replace(self.viper.getId() + '-vitp', '');
+                    var id     = button.id.toLowerCase().replace(self.viper.getId().toLowerCase() + '-vitp', '');
                     addedButtons[id] = button;
                 }
 
