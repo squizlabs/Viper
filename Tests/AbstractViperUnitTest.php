@@ -229,8 +229,23 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
             }
         }
 
+        $viperInclude = '';
+        if (getenv('VIPER_TEST_USE_BUILT_VIPER') === 'TRUE') {
+            $path = dirname(dirname(__FILE__)).'/build/viper.js';
+            if (file_exists($path) === FALSE) {
+                throw new Exception('Could not find: '.$path);
+            }
+
+            $viperInclude = '<script type="text/javascript" src="../build/viper.js"></script>
+                             <link rel="stylesheet" media="screen" href="../build/viper.css" />';
+        } else {
+            $viperInclude = '<script type="text/javascript" src="../DfxJSLib/dfx.js"></script>
+                             <script type="text/javascript" src="../Viper-all.js"></script>';
+        }
+
         // Put the current test file contents to the main test file.
         $contents = str_replace('__TEST_CONTENT__', $testFileContent, self::$_testContent);
+        $contents = str_replace('__TEST_VIPER_INCLUDE__', $viperInclude, $contents);
         $contents = str_replace('__TEST_TITLE__', $this->getName(), $contents);
         $contents = str_replace('__TEST_JS_INCLUDE__', $jsInclude, $contents);
         $contents = str_replace('__TEST_JS_EXEC_CACHE__', json_encode(array_flip(self::$_jsExecCache)), $contents);

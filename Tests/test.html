@@ -2,8 +2,7 @@
 <html>
     <head>
         <title>Running: __TEST_TITLE__</title>
-        <script type="text/javascript" src="../DfxJSLib/dfx.js"></script>
-        <script type="text/javascript" src="../Viper-all.js"></script>
+        __TEST_VIPER_INCLUDE__
         <script type="text/javascript" src="./test.js"></script>
         <link rel="stylesheet" media="screen" href="./test.css" />
         __TEST_JS_INCLUDE__
@@ -39,5 +38,10 @@
             <div id="testTitle"><em>Running:</em> __TEST_TITLE__</div>
             <div id="msg"></div>
         </div>
+        <script>
+            if (Viper.build === true) {
+                ViperReadyCallback();
+            }
+        </script>
     </body>
 </html>
