@@ -2123,7 +2123,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         $this->setLocation(
             $endRight,
             ($this->getX($endRight) + 2),
-            $this->getY($endRight)
+            ($this->getY($endRight) + 2)
         );
 
         $this->dragDrop($startLeft, $endRight);

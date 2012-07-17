@@ -105,3 +105,7 @@ h1,h2,h3,h4,h5,h6 {
 td,th {
     min-width: 20px;
 }
+
+.Viper-button.Viper-disabled {
+    text-align: right;
+}
