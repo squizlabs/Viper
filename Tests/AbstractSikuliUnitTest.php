@@ -99,6 +99,10 @@ abstract class AbstractSikuliUnitTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
+        if (getenv('VIPER_TEST_VERBOSE') === 'TRUE') {
+            self::$_debugging = TRUE;
+        }
+
         $this->connect();
 
     }//end setUp()
@@ -933,7 +937,7 @@ abstract class AbstractSikuliUnitTest extends PHPUnit_Framework_TestCase
      */
     protected function sendCmd($command)
     {
-        $this->_debug('>>> '.$command);
+        $this->debug('>>> '.$command);
 
         // This will allow _getStreamOutput method to stop waiting for more data.
         $command .= ";print '>>>';\n";
@@ -1192,6 +1196,7 @@ abstract class AbstractSikuliUnitTest extends PHPUnit_Framework_TestCase
                 if ($isError === TRUE) {
                     break;
                 } else {
+                    $this->debug('Exception: Sikuli server did not respond');
                     throw new Exception('Sikuli server did not respond');
                 }
             }
@@ -1200,10 +1205,11 @@ abstract class AbstractSikuliUnitTest extends PHPUnit_Framework_TestCase
         $content = implode("\n", $content);
 
         if ($isError === TRUE) {
+            $this->debug("Sikuli ERROR: \n".$content);
             throw new Exception("Sikuli ERROR: \n".$content);
         }
 
-        $this->_debug($content);
+        $this->debug($content);
 
         return $content;
 
@@ -1217,14 +1223,14 @@ abstract class AbstractSikuliUnitTest extends PHPUnit_Framework_TestCase
      *
      * @return void
      */
-    private function _debug($content)
+    protected function debug($content)
     {
-        if (self::$_debugging === TRUE) {
+        if (self::$_debugging === TRUE && trim($content) !== '') {
             echo trim($content)."\n";
-            ob_flush();
+            @ob_flush();
         }
 
-    }//end _debug()
+    }//end debug()
 
 
 }//end class

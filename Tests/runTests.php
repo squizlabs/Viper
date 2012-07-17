@@ -1,6 +1,6 @@
 <?php
 
-$opts = getopt('s::b::u::t::ci', array('selenium', 'url::', 'built'));
+$opts = getopt('s::b::u::t::civ', array('selenium', 'url::', 'built'));
 
     $browsers = array(
                  'Firefox',
@@ -31,6 +31,11 @@ $opts = getopt('s::b::u::t::ci', array('selenium', 'url::', 'built'));
     $test = NULL;
     if (isset($opts['t']) === TRUE) {
         $test = $opts['t'];
+    }
+
+    if (isset($opts['v']) === TRUE) {
+        // Turn on verbose mode.
+        putenv('VIPER_TEST_VERBOSE=TRUE');
     }
 
     if (isset($opts['c']) === TRUE) {

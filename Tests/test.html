@@ -39,7 +39,7 @@
             <div id="msg"></div>
         </div>
         <script>
-            if (Viper.build === true) {
+            if (window['Viper'] && Viper.build === true) {
                 ViperReadyCallback();
             }
         </script>

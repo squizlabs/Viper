@@ -1926,15 +1926,26 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      */
     protected function execJS($js, $noCache=FALSE, $noReturnValue=FALSE)
     {
+        $this->debug('ExecJS: '.$js);
+
         // If Selenium is being used then use it to execute the JavaScript.
         if (self::$_useSelenium === TRUE) {
             usleep(100000);
-            $result = self::$_selenium->execute(
-                array(
-                 'script' => 'return dfx.jsonEncode(window.'.$js.');',
-                 'args'   => array(),
-                )
-            );
+
+            try {
+                // Need to have window object before the sub dfx calls.
+                $js = str_replace('(dfx', '(window.dfx', $js);
+
+                $result = self::$_selenium->execute(
+                    array(
+                     'script' => 'return window.dfx.jsonEncode(window.'.$js.');',
+                     'args'   => array(),
+                    )
+                );
+            } catch (Exception $e) {
+                $this->debug('Selenium error: '.$e->getMessage());
+                throw new Exception('Selenium error: '.$e->getMessage());
+            }
 
             $result = json_decode($result, TRUE);
 
