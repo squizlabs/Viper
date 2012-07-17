@@ -757,9 +757,13 @@ ViperKeyboardEditorPlugin.prototype = {
         var preTags = dfx.getTag('pre', this.viper.getViperElement());
         var c       = preTags.length;
 
+        var bookmark = this.viper.createBookmark();
+
         for (var i = 0; i < c; i++) {
             this.cleanPreTag(preTags[i]);
         }
+
+        this.viper.selectBookmark(bookmark);
 
     },
 
