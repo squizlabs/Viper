@@ -863,6 +863,16 @@ ViperFormatPlugin.prototype = {
             if (startParent === endParent) {
                 selectedNode = startParent;
             }
+
+            if (selectedNode === viperElement) {
+                if (testOnly === true) {
+                    return true;
+                }
+
+                this._handleTopLevelFormat(type, range);
+                this.viper.fireCallbacks('ViperFormatPlugin:formatChanged', type);
+                return;
+            }
         }
 
         if (selectedNode
@@ -883,9 +893,9 @@ ViperFormatPlugin.prototype = {
 
             if (testOnly === true) {
                 if (checkParaWrap === true) {
-                    if (dfx.getTag('p', selectedNode).length > 0) {
+                    if (dfx.getTag('p,pre,blockquote,div', selectedNode).length > 0) {
                         return false;
-                    } else if (dfx.getParents(selectedNode, 'p,pre,blockquote', viperElement).length > 0) {
+                    } else if (dfx.getParents(selectedNode, 'p,pre,blockquote,div', viperElement).length > 0) {
                         return false;
                     }
                 }
@@ -998,9 +1008,9 @@ ViperFormatPlugin.prototype = {
                     if (checkParaWrap === true) {
                         for (var i = 0; i < newParents.length; i++) {
                             var tagName = dfx.getTagName(newParents[i]);
-                            if (tagName === 'p' || tagName === 'pre' || tagName === 'blockquote') {
+                            if (tagName === 'p' || tagName === 'pre' || tagName === 'blockquote' || tagName === 'div') {
                                 return false;
-                            } else if (dfx.getParents(newParents[i], 'p,pre,blockquote', viperElement).length > 0) {
+                            } else if (dfx.getParents(newParents[i], 'p,pre,blockquote,div', viperElement).length > 0) {
                                 return false;
                             }
                         }
