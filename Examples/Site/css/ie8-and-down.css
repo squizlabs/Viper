@@ -1,0 +1,33 @@
+#di-envelope {
+	display:none;
+}
+
+#di-exam-answer {
+	top:485px;
+}
+
+#di-cinema-title {
+	top:450px;
+	left:263px;
+}	
+
+.di-cinema-adult {
+	left:390px;
+}
+
+.di-cinema-theatre {
+	left:393px;
+}
+
+.di-cinema-12 {
+	left:400px;
+	top:458px;
+}
+
+#button-box:before{
+	display:none;
+}
+
+.button-label {
+	left:12px;
+}

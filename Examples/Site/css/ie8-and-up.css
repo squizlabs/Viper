@@ -1,0 +1,20 @@
+.di-book-open {
+	left:0;
+}
+
+.di-book-left {
+
+	visibility:hidden;
+}
+
+.di-book-left-open {
+	visibility:visible;
+}
+
+#button-box:before{
+	display:none;
+}
+
+.button-label {
+	left:12px;
+}
