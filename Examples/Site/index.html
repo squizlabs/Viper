@@ -20,11 +20,13 @@
     <meta name="title" content="Home">
     <meta name="description" content="">
     <meta name="keywords" content="">
-    <link rel="stylesheet" media="screen" href="../../build/viper.css" />
-    <script type="text/javascript" src="../../build/viper.js"></script>
+    <script type="text/javascript" src="../../DfxJSLib/dfx.js"></script>
+    <script type="text/javascript" src="../../Viper-all.js"></script>
     <script type="text/javascript">
         var viper = null;
-        dfx.addLoadEvent(function() {
+        ViperReadyCallback = function() {
+            $ = jQuery = window.dfxjQuery;
+
             viper = new Viper('test');
 
             var allPlugins = ['ViperCoreStylesPlugin', 'ViperKeyboardEditorPlugin', 'ViperInlineToolbarPlugin', 'ViperHistoryPlugin', 'ViperListPlugin', 'ViperFormatPlugin', 'ViperToolbarPlugin', 'ViperTableEditorPlugin', 'ViperCopyPastePlugin', 'ViperImagePlugin', 'ViperLinkPlugin', 'ViperAccessibilityPlugin', 'ViperSourceViewPlugin', 'ViperSearchReplacePlugin', 'ViperLangToolsPlugin', 'ViperCharMapPlugin', 'ViperTrackChangesPlugin'];
@@ -53,22 +55,7 @@
             var buttons = [['bold', 'italic', 'subscript', 'superscript', 'strikethrough', 'class'], 'removeFormat', ['justify', 'formats', 'headings'], ['undo', 'redo'], ['unorderedList', 'orderedList', 'indentList', 'outdentList'], 'insertTable', 'image', 'hr', ['insertLink', 'removeLink', 'anchor'], 'insertCharacter', 'searchReplace', 'langTools', 'accessibility', 'sourceEditor'];
             viper.getPluginManager().setPluginSettings('ViperToolbarPlugin', {buttons: buttons});
             viper.getPluginManager().setPluginSettings('ViperInlineToolbarPlugin', {buttons: buttons});
-        });
 
-        $ = jQuery = window.dfxjQuery;
-    </script>
-
-    <script type="text/javascript" src="scripts/jquery.easing.1.3.js"></script>
-
-    <script type="text/javascript">
-        $(function() {
-            $("#di-open").click(function() {
-                $(".di-book").toggleClass("di-book-open");
-                $(".di-book-left").toggleClass("di-book-left-open");
-            });
-        });
-
-        dfx.addLoadEvent(function() {
             var demoDivs  = dfx.getClass('demo');
             var demoCount = demoDivs.length;
             var contents  = [];
@@ -109,24 +96,34 @@
                     }
                 });
             });
-        });
 
-        // Onblur to change the exam mark depending on answer.
-        function diChangeGrade() {
-            if (document.getElementById('di-exam-answer').innerHTML != 'Viper') {
-                document.getElementById('di-exam-mark').innerHTML = 'F-';
-                } else {
-                document.getElementById('di-exam-mark').innerHTML = 'A+';
+            $(function() {
+                $("#di-open").click(function() {
+                    $(".di-book").toggleClass("di-book-open");
+                    $(".di-book-left").toggleClass("di-book-left-open");
+                });
+            });
+
+            // Onblur to change the exam mark depending on answer.
+            function diChangeGrade() {
+                if (document.getElementById('di-exam-answer').innerHTML != 'Viper') {
+                    document.getElementById('di-exam-mark').innerHTML = 'F-';
+                    } else {
+                    document.getElementById('di-exam-mark').innerHTML = 'A+';
+                }
+            }
+
+            // Clear text from diary when clicked.
+            function diNameInput() {
+                if (document.getElementById('di-name-input').innerHTML == 'Enter your name') {
+                    document.getElementById('di-name-input').innerHTML = '';
+                }
             }
         }
 
-        // Clear text from diary when clicked.
-        function diNameInput() {
-            if (document.getElementById('di-name-input').innerHTML == 'Enter your name') {
-                document.getElementById('di-name-input').innerHTML = '';
-            }
-        }
     </script>
+
+   <!-- <script type="text/javascript" src="scripts/jquery.easing.1.3.js"></script>
 
     <!-- GOOGLE WEB FONTS -->
     <link href='http://fonts.googleapis.com/css?family=Bad+Script' rel='stylesheet' type='text/css'>
