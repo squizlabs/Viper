@@ -75,49 +75,49 @@
                         });
                     }) (demoDivs[i], i, editables);
                 }
-            });
 
-            // Show info on scroll.
-            $(function() {
-                dfx.addEvent(window, 'scroll', function() {
-                    var yScrollPos = dfx.getScrollCoords().y;
+                // Show info on scroll.
+                $(function() {
+                    dfx.addEvent(window, 'scroll', function() {
+                        var yScrollPos = dfx.getScrollCoords().y;
 
-                    for (var i = 0; i < demoDivs.length; i++) {
-                        var yCoord = dfx.getElementCoords(demoDivs[i]).y;
-                        if (yScrollPos + 300 >= yCoord && yScrollPos <= yCoord + 50) {
-                            var infoElem = dfx.getClass('demo-ins-info', demoDivs[i])[0];
-                            if (dfx.hasClass(infoElem, 'demo-ins-info-active') === false) {
-                                dfxjQuery(infoElem).show().animate({
-                                    width: '990px'
-                                }, 2000, 'easeOutBounce').addClass('demo-ins-info-active');
+                        for (var i = 0; i < demoDivs.length; i++) {
+                            var yCoord = dfx.getElementCoords(demoDivs[i]).y;
+                            if (yScrollPos + 300 >= yCoord && yScrollPos <= yCoord + 50) {
+                                var infoElem = dfx.getClass('demo-ins-info', demoDivs[i])[0];
+                                if (dfx.hasClass(infoElem, 'demo-ins-info-active') === false) {
+                                    dfxjQuery(infoElem).show().animate({
+                                        width: '990px'
+                                    }, 2000, 'easeOutBounce').addClass('demo-ins-info-active');
+                                }
+                                break;
                             }
-                            break;
                         }
-                    }
+                    });
+                });
+
+                $(function() {
+                    $("#di-open").click(function() {
+                        $(".di-book").toggleClass("di-book-open");
+                        $(".di-book-left").toggleClass("di-book-left-open");
+                    });
                 });
             });
+        };
 
-            $(function() {
-                $("#di-open").click(function() {
-                    $(".di-book").toggleClass("di-book-open");
-                    $(".di-book-left").toggleClass("di-book-left-open");
-                });
-            });
-
-            // Onblur to change the exam mark depending on answer.
-            function diChangeGrade() {
-                if (document.getElementById('di-exam-answer').innerHTML != 'Viper') {
-                    document.getElementById('di-exam-mark').innerHTML = 'F-';
-                    } else {
-                    document.getElementById('di-exam-mark').innerHTML = 'A+';
-                }
+        // Onblur to change the exam mark depending on answer.
+        function diChangeGrade() {
+            if (document.getElementById('di-exam-answer').innerHTML != 'Viper') {
+                document.getElementById('di-exam-mark').innerHTML = 'F-';
+                } else {
+                document.getElementById('di-exam-mark').innerHTML = 'A+';
             }
+        }
 
-            // Clear text from diary when clicked.
-            function diNameInput() {
-                if (document.getElementById('di-name-input').innerHTML == 'Enter your name') {
-                    document.getElementById('di-name-input').innerHTML = '';
-                }
+        // Clear text from diary when clicked.
+        function diNameInput() {
+            if (document.getElementById('di-name-input').innerHTML == 'Enter your name') {
+                document.getElementById('di-name-input').innerHTML = '';
             }
         }
 
