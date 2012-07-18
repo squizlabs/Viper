@@ -69,7 +69,10 @@ ViperInlineToolbarPlugin.prototype = {
 
         if (settings.buttons) {
             this._buttons = settings.buttons;
-            this._toolbarWidget.orderButtons(this._buttons);
+
+            if (this._toolbarWidget) {
+                this._toolbarWidget.orderButtons(this._buttons);
+            }
         }
 
     },
