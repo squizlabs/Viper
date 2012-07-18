@@ -26,56 +26,56 @@
         var viper = null;
         ViperReadyCallback = function() {
             $ = jQuery = window.dfxjQuery;
+            dfx.addLoadEvent(function() {
+                viper = new Viper('test');
+                var allPlugins = ['ViperCoreStylesPlugin', 'ViperKeyboardEditorPlugin', 'ViperInlineToolbarPlugin', 'ViperHistoryPlugin', 'ViperListPlugin', 'ViperFormatPlugin', 'ViperToolbarPlugin', 'ViperTableEditorPlugin', 'ViperCopyPastePlugin', 'ViperImagePlugin', 'ViperLinkPlugin', 'ViperAccessibilityPlugin', 'ViperSourceViewPlugin', 'ViperSearchReplacePlugin', 'ViperLangToolsPlugin', 'ViperCharMapPlugin', 'ViperTrackChangesPlugin'];
+                viper.getPluginManager().setPlugins(allPlugins);
 
-            viper = new Viper('test');
-
-            var allPlugins = ['ViperCoreStylesPlugin', 'ViperKeyboardEditorPlugin', 'ViperInlineToolbarPlugin', 'ViperHistoryPlugin', 'ViperListPlugin', 'ViperFormatPlugin', 'ViperToolbarPlugin', 'ViperTableEditorPlugin', 'ViperCopyPastePlugin', 'ViperImagePlugin', 'ViperLinkPlugin', 'ViperAccessibilityPlugin', 'ViperSourceViewPlugin', 'ViperSearchReplacePlugin', 'ViperLangToolsPlugin', 'ViperCharMapPlugin', 'ViperTrackChangesPlugin'];
-            viper.getPluginManager().setPlugins(allPlugins);
-
-            var prevViperType = 'complex';
-            var editables     = dfx.getClass('Viper-editable');
-            for (var i = 0; i < editables.length; i++) {
-                (function(editableElement) {
-                    dfx.addEvent(editableElement, 'mousedown', function() {
-                        if (dfx.hasClass(editableElement, 'viper-simple') === true) {
-                            if (prevViperType !== 'simple') {
-                                prevViperType = 'simple';
-                                viper.getPluginManager().removePlugins();
+                var prevViperType = 'complex';
+                var editables     = dfx.getClass('Viper-editable');
+                for (var i = 0; i < editables.length; i++) {
+                    (function(editableElement) {
+                        dfx.addEvent(editableElement, 'mousedown', function() {
+                            if (dfx.hasClass(editableElement, 'viper-simple') === true) {
+                                if (prevViperType !== 'simple') {
+                                    prevViperType = 'simple';
+                                    viper.getPluginManager().removePlugins();
+                                }
+                            } else if (prevViperType !== 'complex') {
+                                prevViperType = 'complex';
+                                viper.getPluginManager().setPlugins(allPlugins);
                             }
-                        } else if (prevViperType !== 'complex') {
-                            prevViperType = 'complex';
-                            viper.getPluginManager().setPlugins(allPlugins);
-                        }
 
-                        viper.setEditableElement(editableElement);
-                    });
-                })
-                (editables[i]);
-            }
-            var buttons = [['bold', 'italic', 'subscript', 'superscript', 'strikethrough', 'class'], 'removeFormat', ['justify', 'formats', 'headings'], ['undo', 'redo'], ['unorderedList', 'orderedList', 'indentList', 'outdentList'], 'insertTable', 'image', 'hr', ['insertLink', 'removeLink', 'anchor'], 'insertCharacter', 'searchReplace', 'langTools', 'accessibility', 'sourceEditor'];
-            viper.getPluginManager().setPluginSettings('ViperToolbarPlugin', {buttons: buttons});
-            viper.getPluginManager().setPluginSettings('ViperInlineToolbarPlugin', {buttons: buttons});
-
-            var demoDivs  = dfx.getClass('demo');
-            var demoCount = demoDivs.length;
-            var contents  = [];
-
-            for (var i = 0; i < demoCount; i++) {
-                var editables = dfx.getClass('Viper-editable', demoDivs[i]);
-                var elen      = editables.length;
-                contents[i]   = [];
-                for (var j = 0; j < elen; j++) {
-                    contents[i][j] = dfx.getHtml(editables[j]);
+                            viper.setEditableElement(editableElement);
+                        });
+                    })
+                    (editables[i]);
                 }
+                var buttons = [['bold', 'italic', 'subscript', 'superscript', 'strikethrough', 'class'], 'removeFormat', ['justify', 'formats', 'headings'], ['undo', 'redo'], ['unorderedList', 'orderedList', 'indentList', 'outdentList'], 'insertTable', 'image', 'hr', ['insertLink', 'removeLink', 'anchor'], 'insertCharacter', 'searchReplace', 'langTools', 'accessibility', 'sourceEditor'];
+                viper.getPluginManager().setPluginSettings('ViperToolbarPlugin', {buttons: buttons});
+                viper.getPluginManager().setPluginSettings('ViperInlineToolbarPlugin', {buttons: buttons});
 
-                (function(demoDiv, index, editableElements) {
-                    dfx.addEvent(dfx.getClass('demo-ins-refresh', demoDiv)[0], 'click', function() {
-                        for (var j = 0; j < editableElements.length; j++) {
-                            dfx.setHtml(editableElements[j], contents[index][j]);
-                        }
-                    });
-                }) (demoDivs[i], i, editables);
-            }
+                var demoDivs  = dfx.getClass('demo');
+                var demoCount = demoDivs.length;
+                var contents  = [];
+
+                for (var i = 0; i < demoCount; i++) {
+                    var editables = dfx.getClass('Viper-editable', demoDivs[i]);
+                    var elen      = editables.length;
+                    contents[i]   = [];
+                    for (var j = 0; j < elen; j++) {
+                        contents[i][j] = dfx.getHtml(editables[j]);
+                    }
+
+                    (function(demoDiv, index, editableElements) {
+                        dfx.addEvent(dfx.getClass('demo-ins-refresh', demoDiv)[0], 'click', function() {
+                            for (var j = 0; j < editableElements.length; j++) {
+                                dfx.setHtml(editableElements[j], contents[index][j]);
+                            }
+                        });
+                    }) (demoDivs[i], i, editables);
+                }
+            });
 
             // Show info on scroll.
             $(function() {
