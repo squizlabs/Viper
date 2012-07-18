@@ -12,9 +12,8 @@
             ViperReadyCallback = function() {
                 var contentElement = dfx.getId('content');
 
-                viper = new Viper('test');
+                viper = new Viper('test', null, null, [contentElement]);
                 viper.getPluginManager().setPlugins(['ViperCoreStylesPlugin', 'ViperKeyboardEditorPlugin', 'ViperInlineToolbarPlugin', 'ViperHistoryPlugin', 'ViperListPlugin', 'ViperFormatPlugin', 'ViperToolbarPlugin', 'ViperTableEditorPlugin', 'ViperCopyPastePlugin', 'ViperImagePlugin', 'ViperLinkPlugin', 'ViperAccessibilityPlugin', 'ViperSourceViewPlugin', 'ViperSearchReplacePlugin', 'ViperLangToolsPlugin', 'ViperCharMapPlugin', 'ViperTrackChangesPlugin']);
-                viper.setEditableElement(contentElement);
 
                 dfx.attr(dfxjQuery.find('.Viper-button[title]'), 'title', '');
                 if (window.location.hash !== '#run') {
