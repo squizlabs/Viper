@@ -114,6 +114,12 @@ function gBtn(text, state, selectorPrefix)
         }
     }
 
+    if (!state
+        && (viperTest.getWindow().dfx.hasClass(button, 'Viper-active') === true || viperTest.getWindow().dfx.hasClass(button, 'Viper-disabled') === true)
+    ) {
+        return false;
+    }
+
     var rect = viperTest.getWindow().dfx.getBoundingRectangle(button);
     if (rect) {
         rect.x1 = parseInt(rect.x1);

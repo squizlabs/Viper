@@ -109,3 +109,7 @@ td,th {
 .Viper-button.Viper-disabled {
     text-align: right;
 }
+
+.Viper-button.Viper-active {
+    text-align: left;
+}
