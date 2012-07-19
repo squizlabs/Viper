@@ -28,9 +28,10 @@ function ViperFormatPlugin(viper)
         blockquote: 'Quote'
     };
 
-    this.toolbarPlugin = null;
-    this.activeStyles  = [];
-    this._range        = null;
+    this.toolbarPlugin  = null;
+    this.activeStyles   = [];
+    this._range         = null;
+    this._inlineToolbar = null;
 
     this._inlineToolbarActiveSubSection = null;
 
@@ -270,6 +271,8 @@ ViperFormatPlugin.prototype = {
         var prefix = 'ViperFormatPlugin:vitp:';
         var self   = this;
 
+        this._inlineToolbar = this.viper.getPluginManager().getPlugin('ViperInlineToolbarPlugin');
+
         // Headings format section.
         var headingsSubSection = toolbar.makeSubSection(prefix + 'heading:subSection', this._getHeadingsSection(prefix));
 
@@ -354,34 +357,54 @@ ViperFormatPlugin.prototype = {
             pre: 'PRE'
         };
 
-        if (this._canShowFormattingOptions(selectedNode) === true) {
-            tools.getItem('vitpFormats').setIconClass('Viper-formats');
-            data.toolbar.showButton('vitpFormats');
+        var formatButtonStatuses = null;
+        var currentElement       = data.lineage[data.current];
+        if (currentElement.nodeType === dfx.TEXT_NODE && data.lineage.length === 1) {
+            formatButtonStatuses = this.getFormatButtonStatuses();
+        } else {
+            formatButtonStatuses = this.getFormatButtonStatuses(data.lineage[data.current]);
+        }
 
-            var allowParaSelection = this.handleFormat('p', true, true);
+        var enableFormatsButton  = false;
+        for (var button in formatButtonStatuses) {
+            if (button === '_none' || button === '_canChange') {
+                continue;
+            }
 
-            for (var tag in formatButtons) {
-                tools.setButtonInactive(prefix + 'formats:' + formatButtons[tag]);
+            if (formatButtonStatuses[button] === true) {
+                enableFormatsButton = true;
+                tools.enableButton(prefix + 'formats:' + formatButtons[button]);
+                tools.setButtonInactive(prefix + 'formats:' + formatButtons[button]);
+            } else {
+                tools.setButtonInactive(prefix + 'formats:' + formatButtons[button]);
+                tools.disableButton(prefix + 'formats:' + formatButtons[button]);
+            }
+        }
+
+        tools.getItem('vitpFormats').setIconClass('Viper-formats');
+        if (enableFormatsButton === true) {
+            tools.enableButton('vitpFormats');
+
+            if (currentElement.nodeType === dfx.TEXT_NODE && data.lineage.length > 1) {
+                currentElement = data.lineage[(data.current - 1)];
+            } else {
+                 data.toolbar.showButton('vitpFormats');
             }
 
             for (var tag in formatButtons) {
-               for (var j = data.current; j < data.lineage.length; j++) {
-                   if (allowParaSelection === false && tag === 'p') {
-                       tools.disableButton(prefix + 'formats:' + formatButtons[tag]);
-                   } else if (dfx.isTag(data.lineage[j], tag) === true) {
-                       tools.enableButton(prefix + 'formats:' + formatButtons[tag]);
-                       tools.setButtonActive(prefix + 'formats:' + formatButtons[tag]);
-                       tools.setButtonActive('vitpFormats');
-                       tools.getItem('vitpFormats').setIconClass('Viper-formats-' + tag);
-                   }
+                if (dfx.isTag(currentElement, tag) === true) {
+                    if (formatButtonStatuses[tag] === true) {
+                        tools.enableButton(prefix + 'formats:' + formatButtons[tag]);
+                        tools.setButtonActive(prefix + 'formats:' + formatButtons[tag]);
+                    }
+
+                    tools.setButtonActive('vitpFormats');
+                    tools.getItem('vitpFormats').setIconClass('Viper-formats-' + tag);
                 }
             }
         } else {
-            tools.setButtonInactive('vitpFormats');
-            for (var tag in formatButtons) {
-                tools.setButtonInactive(prefix + 'formats:' + formatButtons[tag]);
-            }
-        }//end if
+            tools.disableButton('vitpFormats');
+        }
 
         buttonsToEnable = [];
         var startNode   = data.range.getStartNode();
@@ -540,28 +563,45 @@ ViperFormatPlugin.prototype = {
                 tools.setButtonActive(prefix + 'heading:' + tagName);
             }
 
-            var allowParaSelection = self.handleFormat('p', true, true);
-            for (var tagName in formatButtons) {
-                tools.setButtonInactive(prefix + 'formats:' + formatButtons[tagName]);
+            // Update the Formats button statuses.
+            tools.getItem('formats').setIconClass('Viper-formats');
+            var currentLinIndex = self._inlineToolbar.getCurrentLineageIndex();
+            var lineage         = self._inlineToolbar.getLineage();
+            var formatElement   = lineage[currentLinIndex];
 
-                if (tagName === 'p') {
-                    if (allowParaSelection === false) {
-                        tools.disableButton(prefix + 'formats:' + formatButtons[tagName]);
+            if (!formatElement || formatElement.nodeType === dfx.TEXT_NODE) {
+                formatElement = self.getTagFromRange(data.range, ['p', 'div', 'pre', 'blockquote']);
+            }
+
+            var formatButtonStatuses = self.getFormatButtonStatuses(formatElement);
+            if (formatButtonStatuses._canChange === true) {
+                tools.enableButton('formats');
+                for (var tag in formatButtons) {
+                    if (formatButtonStatuses[tag] === true) {
+                        tools.enableButton(prefix + 'formats:' + formatButtons[tag]);
+                        tools.setButtonInactive(prefix + 'formats:' + formatButtons[tag]);
                     } else {
-                        tools.enableButton(prefix + 'formats:' + formatButtons[tagName]);
+                        tools.setButtonInactive(prefix + 'formats:' + formatButtons[tag]);
+                        tools.disableButton(prefix + 'formats:' + formatButtons[tag]);
+                    }
+
+                    if (dfx.isTag(formatElement, tag) === true) {
+                        tools.setButtonActive(prefix + 'formats:' + formatButtons[tag]);
+                        tools.setButtonActive('formats');
+                        tools.getItem('formats').setIconClass('Viper-formats-' + tag);
                     }
                 }
+            } else {
+                if (formatElement && (!nodeSelection || dfx.isTag(nodeSelection, 'img') === false)) {
+                    tools.getItem('formats').setIconClass('Viper-formats-' + dfx.getTagName(formatElement));
+                } else {
+                    tools.getItem('formats').setIconClass('Viper-formats');
+                }
+
+                tools.disableButton('formats');
             }
 
-            tools.getItem('formats').setIconClass('Viper-formats');
-            var formatElement = self.getTagFromRange(data.range, ['p', 'div', 'pre', 'blockquote']);
-            if (formatElement && (!nodeSelection || dfx.isTag(nodeSelection, 'img') === false)) {
-                var tagName = dfx.getTagName(formatElement);
-                tools.setButtonActive('formats');
-                tools.setButtonActive(prefix + 'formats:' + formatButtons[tagName]);
-                tools.getItem('formats').setIconClass('Viper-formats-' + tagName);
-            }
-
+            // Anchor.
             var attrId = self._getAttributeValue('id');
             tools.getItem(prefix + 'anchor:input').setValue(attrId);
             if (attrId) {
@@ -570,6 +610,7 @@ ViperFormatPlugin.prototype = {
                 tools.setButtonInactive('anchor');
             }
 
+            // Class.
             var attrClass = self._getAttributeValue('class');
             tools.getItem(prefix + 'class:input').setValue(attrClass);
             if (attrClass) {
@@ -830,6 +871,184 @@ ViperFormatPlugin.prototype = {
     },
 
     /**
+     * Returns the statuses of buttons for the current range.
+     *
+     * @return {object}
+     */
+    getFormatButtonStatuses: function(element)
+    {
+        var statuses = {
+            p: false,
+            pre: false,
+            div: false,
+            blockquote: false,
+            _none: false,
+            _canChange: false
+        };
+
+        var range        = this.viper.getViperRange();
+        var selectedNode = element || range.getNodeSelection();
+        var viperElement = this.viper.getViperElement();
+
+        if (!selectedNode && range.startContainer === range.endContainer) {
+            selectedNode = dfx.getFirstBlockParent(range.startContainer);
+        } else if (selectedNode && selectedNode.nodeType === dfx.TEXT_NODE) {
+            selectedNode = dfx.getFirstBlockParent(range.startContainer);
+        }
+
+        if (selectedNode === viperElement) {
+            // TODO: What to do here?
+            return statuses;
+        }
+
+        if (selectedNode && dfx.isBlockElement(selectedNode) === true) {
+            for (var tagName in statuses) {
+                var canConvert = this.canConvert(selectedNode, tagName);
+                statuses[tagName] = canConvert;
+                if (canConvert === true) {
+                    statuses._canChange = true;
+                }
+            }
+        } else {
+            var start      = range.getStartNode();
+            var end        = range.getEndNode();
+            var elements   = dfx.getElementsBetween(start, end);
+            var commonElem = range.getCommonElement();
+            elements.unshift(start);
+            elements.push(end);
+
+            var parents = [];
+            for (var i = 0; i < elements.length; i++) {
+                var elem = elements[i];
+                if (elem.nodeType === dfx.TEXT_NODE && dfx.trim(elem.data) === '') {
+                    continue;
+                }
+
+                parents = parents.concat(dfx.getParents(elem, null, commonElem));
+            }
+
+            statuses.div = true;
+            statuses._canChange = true;
+
+            if (parents.length > 0) {
+                // If only P tags then blockquote is allowed.
+                var allowBlockquote = true;
+                for (var i = 0; i < parents.length; i++) {
+                    if (dfx.isTag(parents[i], 'p') !== true) {
+                        allowBlockquote = false;
+                        break;
+                    }
+                }
+
+                statuses.blockquote = allowBlockquote;
+            }
+        }//end if
+
+        return statuses;
+
+    },
+
+    canConvert: function(element, toTagName)
+    {
+        var tagName = dfx.getTagName(element);
+        if (tagName === 'p') {
+            // If the original tag is a P tag and its parent is a blockquote then
+            // it cannot be converted or removed.
+            if (dfx.isTag(element.parentNode, 'blockquote') === true) {
+                return false;
+            }
+        } else if (toTagName === '_none') {
+            // Tag can be removed.
+            return true;
+        }
+
+        switch (toTagName) {
+            case 'p':
+                // Any element can be converted to a P unless there are child block
+                // elements.
+                if (this.hadBlockChildren(element) === true) {
+                    return false;
+                }
+
+                // Or its in a PRE tag.
+                var preTags = dfx.getParents(element, 'pre', this.viper.getViperElement());
+                if (preTags.length > 0) {
+                    return false;
+                }
+            break;
+
+            case 'pre':
+                if (this.hadBlockChildren(element) === true) {
+                    return false;
+                }
+            break;
+
+            case 'blockquote':
+                var tags = dfx.getTag('*', element);
+                for (var i = 0; i < tags.length; i++) {
+                    if (dfx.isBlockElement(tags[i]) === true && dfx.isTag(tags[i], 'p') === false) {
+                        return false;
+                    }
+                }
+            break;
+        }
+
+        return true;
+
+    },
+
+    hadBlockChildren: function(element)
+    {
+        var tags = dfx.getTag('*', element);
+        for (var i = 0; i < tags.length; i++) {
+            if (dfx.isBlockElement(tags[i]) === true) {
+                return true;
+            }
+        }
+
+        return false;
+
+    },
+
+  //  isValidParent: function(childTagName, parentTagName)
+  //  {
+  //      var validParents = {
+  //          p: ',blockquote,body,button,dd,del,div,fieldset,form,ins,li,map,noscript,object,td,th,',
+  //          pre: '',
+  //          div: '',
+  //          blockquote: ''
+  //      };
+  //
+  //      if (validParents[childTagName]
+  //          && validParents[childTagName].indexOf(',' + parentTagName + ',') < 0
+  //      ) {
+  //          return false;
+  //      }
+  //
+  //      return true;
+  //
+  //  },
+  //
+  //  isValidChild: function(parentTagName, childTagName)
+  //  {
+  //      var validChildren = {
+  //          p: ',blockquote,body,button,dd,del,div,fieldset,form,ins,li,map,noscript,object,td,th,',
+  //          pre: '',
+  //          div: '',
+  //          blockquote: ''
+  //      };
+  //
+  //      if (validChildren[parentTagName]
+  //          && validChildren[parentTagName].indexOf(',' + childTagName + ',') < 0
+  //      ) {
+  //          return false;
+  //      }
+  //
+  //      return true;
+  //
+  //  },
+
+    /**
      * Handles the format change.
      *
      * @param {string}  type     The type of the element.
@@ -863,6 +1082,16 @@ ViperFormatPlugin.prototype = {
             if (startParent === endParent) {
                 selectedNode = startParent;
             }
+
+            if (selectedNode === viperElement) {
+                if (testOnly === true) {
+                    return true;
+                }
+
+                this._handleTopLevelFormat(type, range);
+                this.viper.fireCallbacks('ViperFormatPlugin:formatChanged', type);
+                return;
+            }
         }
 
         if (selectedNode
@@ -883,9 +1112,9 @@ ViperFormatPlugin.prototype = {
 
             if (testOnly === true) {
                 if (checkParaWrap === true) {
-                    if (dfx.getTag('p', selectedNode).length > 0) {
+                    if (dfx.getTag('p,pre,blockquote,div', selectedNode).length > 0) {
                         return false;
-                    } else if (dfx.getParents(selectedNode, 'p,pre,blockquote', viperElement).length > 0) {
+                    } else if (dfx.getParents(selectedNode, 'p,pre,blockquote,div', viperElement).length > 0) {
                         return false;
                     }
                 }
@@ -998,9 +1227,9 @@ ViperFormatPlugin.prototype = {
                     if (checkParaWrap === true) {
                         for (var i = 0; i < newParents.length; i++) {
                             var tagName = dfx.getTagName(newParents[i]);
-                            if (tagName === 'p' || tagName === 'pre' || tagName === 'blockquote') {
+                            if (tagName === 'p' || tagName === 'pre' || tagName === 'blockquote' || tagName === 'div') {
                                 return false;
-                            } else if (dfx.getParents(newParents[i], 'p,pre,blockquote', viperElement).length > 0) {
+                            } else if (dfx.getParents(newParents[i], 'p,pre,blockquote,div', viperElement).length > 0) {
                                 return false;
                             }
                         }

@@ -9,6 +9,7 @@ body {
     width: 800px;
     height: 600px;
     margin: 90px 0 0 250px;
+    overflow: auto;
 }
 
 #menu {
@@ -103,4 +104,12 @@ h1,h2,h3,h4,h5,h6 {
 
 td,th {
     min-width: 20px;
+}
+
+.Viper-button.Viper-disabled {
+    text-align: right;
+}
+
+.Viper-button.Viper-active {
+    text-align: left;
 }

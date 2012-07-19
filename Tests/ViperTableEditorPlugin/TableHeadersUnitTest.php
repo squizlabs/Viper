@@ -13,14 +13,9 @@ class Viper_Tests_ViperTableEditorPlugin_TableHeadersUnitTest extends AbstractVi
      */
     public function testHeaderTagsNotAddedWhenNoThCells()
     {
-        $this->selectKeyword(3);
-        $this->keyDown('Key.RIGHT');
-        $this->keyDown('Key.ENTER');
 
-        $this->execJS('insTable(3,4, 0, "test")');
-        sleep(2);
-
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>&nbsp;</p><table style="width: 100%;" id="test" border="1"><tbody><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>sit amet <strong>consectetur</strong></p>');
+        $this->insertTableWithSpecificId('test', 3, 4, 0, 1);
+        $this->assertHTMLMatch('<p>Test %1%</p><table style="width: 100%;" id="test" border="1"><tbody><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
 
     }//end testHeaderTagsNotAddedWhenNoThCells()
 
@@ -32,21 +27,15 @@ class Viper_Tests_ViperTableEditorPlugin_TableHeadersUnitTest extends AbstractVi
      */
     public function testHeaderTagsForTableWithLeftColHeaders()
     {
-        $this->selectKeyword(3);
-        $this->keyDown('Key.RIGHT');
-        $this->keyDown('Key.ENTER');
 
-        $this->execJS('insTable(3,4, 1, "test")');
-        sleep(2);
-
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>&nbsp;</p><table style="width: 100%;" id="test" border="1"><tbody><tr><th id="testr1c1">&nbsp;</th><td headers="testr1c1">&nbsp;</td><td headers="testr1c1">&nbsp;</td><td headers="testr1c1">&nbsp;</td></tr><tr><th id="testr2c1">&nbsp;</th><td headers="testr2c1">&nbsp;</td><td headers="testr2c1">&nbsp;</td><td headers="testr2c1">&nbsp;</td></tr><tr><th id="testr3c1">&nbsp;</th><td headers="testr3c1">&nbsp;</td><td headers="testr3c1">&nbsp;</td><td headers="testr3c1">&nbsp;</td></tr></tbody></table><p>sit amet <strong>consectetur</strong></p>');
+        $this->insertTableWithSpecificId('test', 3, 4, 1, 1);
+        $this->assertHTMLMatch('<p>Test %1%</p><table style="width: 100%;" id="test" border="1"><tbody><tr><th id="testr1c1"></th><td headers="testr1c1"></td><td headers="testr1c1"></td><td headers="testr1c1"></td></tr><tr><th id="testr2c1"></th><td headers="testr2c1"></td><td headers="testr2c1"></td><td headers="testr2c1"></td></tr><tr><th id="testr3c1"></th><td headers="testr3c1"></td><td headers="testr3c1"></td><td headers="testr3c1"></td></tr></tbody></table><p></p>');
 
         // Remove header column and check that ids are taken out
         $this->showTools(0, 'col');
         $this->clickField('Heading');
-        sleep(1);
         $this->clickInlineToolbarButton('Update Changes', NULL, TRUE);
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>&nbsp;</p><table border="1" id="test" style="width: 100%;"><tbody><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>sit amet <strong>consectetur</strong></p>');
+        $this->assertHTMLMatch('<p>Test %1%</p><table border="1" id="test" style="width: 100%;"><tbody><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
 
     }//end testHeaderTagsForTableWithLeftColHeaders()
 
@@ -58,21 +47,15 @@ class Viper_Tests_ViperTableEditorPlugin_TableHeadersUnitTest extends AbstractVi
      */
     public function testHeaderTagsWithTopRowHeaders()
     {
-        $this->selectKeyword(3);
-        $this->keyDown('Key.RIGHT');
-        $this->keyDown('Key.ENTER');
 
-        $this->execJS('insTable(3,4, 2, "test")');
-        sleep(2);
-
-        $this->assertHTMLMatch('<p>XAX XBX XCX</p><p>&nbsp;</p><table border="1" id="test" style="width: 100%;"><tbody><tr><th id="testr1c1">&nbsp;</th><th id="testr1c2">&nbsp;</th><th id="testr1c3">&nbsp;</th><th id="testr1c4">&nbsp;</th></tr><tr><td headers="testr1c1">&nbsp;</td><td headers="testr1c2">&nbsp;</td><td headers="testr1c3">&nbsp;</td><td headers="testr1c4">&nbsp;</td></tr><tr><td headers="testr1c1">&nbsp;</td><td headers="testr1c2">&nbsp;</td><td headers="testr1c3">&nbsp;</td><td headers="testr1c4">&nbsp;</td></tr></tbody></table><p>sit amet <strong>consectetur</strong></p>');
+        $this->insertTableWithSpecificId('test', 3, 4, 2, 1);
+        $this->assertHTMLMatch('<p>Test %1%</p><table border="1" id="test" style="width: 100%;"><tbody><tr><th id="testr1c1"></th><th id="testr1c2"></th><th id="testr1c3"></th><th id="testr1c4"></th></tr><tr><td headers="testr1c1"></td><td headers="testr1c2"></td><td headers="testr1c3"></td><td headers="testr1c4"></td></tr><tr><td headers="testr1c1"></td><td headers="testr1c2"></td><td headers="testr1c3"></td><td headers="testr1c4"></td></tr></tbody></table><p></p>');
 
          // Remove header row and check that ids are taken out
         $this->showTools(0, 'row');
         $this->clickField('Heading');
-        sleep(1);
         $this->clickInlineToolbarButton('Update Changes', NULL, TRUE);
-        $this->assertHTMLMatch('<p>XAX XBX XCX</p><p>&nbsp;</p><table border="1" id="test" style="width: 100%;"><tbody><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>sit amet <strong>consectetur</strong></p>');
+        $this->assertHTMLMatch('<p>Test %1%</p><table border="1" id="test" style="width: 100%;"><tbody><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
 
     }//end testHeaderTagsWithTopRowHeaders()
 
@@ -84,33 +67,21 @@ class Viper_Tests_ViperTableEditorPlugin_TableHeadersUnitTest extends AbstractVi
      */
     public function testHeaderTagsWithTopAndLeftHeaders()
     {
-        $this->selectKeyword(3);
-        $this->keyDown('Key.RIGHT');
-        $this->keyDown('Key.ENTER');
 
-        $this->execJS('insTable(3,4, 3, "test")');
-        sleep(2);
-
-        $this->assertHTMLMatch('<p>XAX XBX XCX</p><p>&nbsp;</p><table border="1" id="test" style="width: 100%;"><tbody><tr><th id="testr1c1">&nbsp;</th><th id="testr1c2">&nbsp;</th><th id="testr1c3">&nbsp;</th><th id="testr1c4">&nbsp;</th></tr><tr><th id="testr2c1">&nbsp;</th><td headers="testr1c2 testr2c1">&nbsp;</td><td headers="testr1c3 testr2c1">&nbsp;</td><td headers="testr1c4 testr2c1">&nbsp;</td></tr><tr><th id="testr3c1">&nbsp;</th><td headers="testr1c2 testr3c1">&nbsp;</td><td headers="testr1c3 testr3c1">&nbsp;</td><td headers="testr1c4 testr3c1">&nbsp;</td></tr></tbody></table><p>sit amet <strong>consectetur</strong></p>');
+        $this->insertTableWithSpecificId('test', 3, 4, 3, 1);
+        $this->assertHTMLMatch('<p>Test %1%</p><table border="1" id="test" style="width: 100%;"><tbody><tr><th id="testr1c1"></th><th id="testr1c2"></th><th id="testr1c3"></th><th id="testr1c4"></th></tr><tr><th id="testr2c1"></th><td headers="testr1c2 testr2c1"></td><td headers="testr1c3 testr2c1"></td><td headers="testr1c4 testr2c1"></td></tr><tr><th id="testr3c1"></th><td headers="testr1c2 testr3c1"></td><td headers="testr1c3 testr3c1"></td><td headers="testr1c4 testr3c1"></td></tr></tbody></table><p></p>');
 
         // Remove header row and check that ids are taken out
         $this->showTools(0, 'row');
         $this->clickField('Heading');
-        sleep(1);
         $this->clickInlineToolbarButton('Update Changes', NULL, TRUE);
-        $this->assertHTMLMatch('<p>XAX XBX XCX</p><p>&nbsp;</p><table border="1" id="test" style="width: 100%;"><tbody><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><th id="testr2c1">&nbsp;</th><td headers="testr2c1">&nbsp;</td><td headers="testr2c1">&nbsp;</td><td headers="testr2c1">&nbsp;</td></tr><tr><th id="testr3c1">&nbsp;</th><td headers="testr3c1">&nbsp;</td><td headers="testr3c1">&nbsp;</td><td headers="testr3c1">&nbsp;</td></tr></tbody></table><p>sit amet <strong>consectetur</strong></p>');
+        $this->assertHTMLMatch('<p>Test %1%</p><table border="1" id="test" style="width: 100%;"><tbody><tr><td></td><td></td><td></td><td></td></tr><tr><th id="testr2c1"></th><td headers="testr2c1"></td><td headers="testr2c1"></td><td headers="testr2c1"></td></tr><tr><th id="testr3c1"></th><td headers="testr3c1"></td><td headers="testr3c1"></td><td headers="testr3c1"></td></tr></tbody></table><p></p>');
 
         // Remove header column and check that ids are taken out
-        $this->clickCell(2);
-        $this->showTools(8, 'cell');
-        $this->clickField('Heading');
-        sleep(1);
-        $this->clickInlineToolbarButton('Update Changes', NULL, TRUE);
-        $this->showTools(4, 'cell');
-        $this->clickField('Heading');
-        sleep(1);
-        $this->clickInlineToolbarButton('Update Changes', NULL, TRUE);
-        $this->assertHTMLMatch('<p>XAX XBX XCX</p><p>&nbsp;</p><table border="1" id="test" style="width: 100%;"><tbody><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>sit amet <strong>consectetur</strong></p>');
+        $this->clickCell(3);
+        $this->toggleCellHeading(8);
+        $this->toggleCellHeading(4);
+        $this->assertHTMLMatch('<p>Test %1%</p><table border="1" id="test" style="width: 100%;"><tbody><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
 
     }//end testHeaderTagsWithTopAndLeftHeaders()
 
@@ -122,26 +93,19 @@ class Viper_Tests_ViperTableEditorPlugin_TableHeadersUnitTest extends AbstractVi
      */
     public function testHeaderTagsWhenMergingTopRowCells()
     {
-        $this->selectKeyword(3);
-        $this->keyDown('Key.RIGHT');
-        $this->keyDown('Key.ENTER');
 
-        $this->execJS('insTable(3,4, 2, "test")');
-        sleep(2);
+        $this->insertTableWithSpecificId('test', 3, 4, 2, 1);
 
         $this->showTools(1, 'cell');
-        $this->clickButton('splitMerge');
-        $this->clickButton('mergeLeft');
-        $this->clickButton('mergeRight');
-        $this->clickButton('mergeRight');
+        $this->clickMergeSplitIcon('mergeLeft');
+        $this->clickMergeSplitIcon('mergeRight');
+        $this->clickMergeSplitIcon('mergeRight');
+        $this->assertHTMLMatch('<p>Test %1%</p><table id="test" style="width: 100%;" border="1"><tbody><tr><th id="testr1c1" colspan="4"></th></tr><tr><td headers="testr1c1"></td><td headers="testr1c1"></td><td headers="testr1c1"></td><td headers="testr1c1"></td></tr><tr><td headers="testr1c1"></td><td headers="testr1c1"></td><td headers="testr1c1"></td><td headers="testr1c1"></td></tr></tbody></table><p></p>');
 
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>&nbsp;</p><table id="test" style="width: 100%;" border="1"><tbody><tr><th id="testr1c1" colspan="4">&nbsp;&nbsp;&nbsp;&nbsp;</th></tr><tr><td headers="testr1c1">&nbsp;</td><td headers="testr1c1">&nbsp;</td><td headers="testr1c1">&nbsp;</td><td headers="testr1c1">&nbsp;</td></tr><tr><td headers="testr1c1">&nbsp;</td><td headers="testr1c1">&nbsp;</td><td headers="testr1c1">&nbsp;</td><td headers="testr1c1">&nbsp;</td></tr></tbody></table><p>sit amet <strong>consectetur</strong></p>');
-
+        $this->clickCell(4);
         $this->showTools(0, 'col');
         $this->clickInlineToolbarButton('addRight');
-        sleep(1);
-
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>&nbsp;</p><table id="test" style="width: 100%;" border="1"><tbody><tr><th id="testr1c1" colspan="4">&nbsp;&nbsp;&nbsp;&nbsp;</th><th id="testr1c2">&nbsp;</th></tr><tr><td headers="testr1c1">&nbsp;</td><td headers="testr1c1">&nbsp;</td><td headers="testr1c1">&nbsp;</td><td headers="testr1c1">&nbsp;</td><td headers="testr1c2">&nbsp;</td></tr><tr><td headers="testr1c1">&nbsp;</td><td headers="testr1c1">&nbsp;</td><td headers="testr1c1">&nbsp;</td><td headers="testr1c1">&nbsp;</td><td headers="testr1c2">&nbsp;</td></tr></tbody></table><p>sit amet <strong>consectetur</strong></p>');
+        $this->assertHTMLMatch('<p>Test %1%</p><table id="test" style="width: 100%;" border="1"><tbody><tr><th id="testr1c1" colspan="4"></th><th id="testr1c2"></th></tr><tr><td headers="testr1c1"></td><td headers="testr1c1"></td><td headers="testr1c1"></td><td headers="testr1c1"></td><td headers="testr1c2"></td></tr><tr><td headers="testr1c1"></td><td headers="testr1c1"></td><td headers="testr1c1"></td><td headers="testr1c1"></td><td headers="testr1c2"></td></tr></tbody></table><p></p>');
 
     }//end testHeaderTagsWhenCreatingTableWithRowHeaders()
 
@@ -153,25 +117,18 @@ class Viper_Tests_ViperTableEditorPlugin_TableHeadersUnitTest extends AbstractVi
      */
     public function testHeaderTagsWhenMergingLeftColCells()
     {
-        $this->selectKeyword(3);
-        $this->keyDown('Key.RIGHT');
-        $this->keyDown('Key.ENTER');
 
-        $this->execJS('insTable(3,4, 1, "test")');
-        sleep(2);
+        $this->insertTableWithSpecificId('test', 3, 4, 1, 1);
 
         $this->showTools(4, 'cell');
-        $this->clickButton('splitMerge');
-        $this->clickButton('mergeUp');
-        $this->clickButton('mergeDown');
+        $this->clickMergeSplitIcon('mergeUp');
+        $this->clickMergeSplitIcon('mergeDown');
 
-        $this->assertHTMLMatch('<p>XAX XBX XCX</p><p>&nbsp;</p><table border="1" id="test" style="width: 100%;"><tbody><tr><th id="testr1c1" rowspan="3">&nbsp;&nbsp;&nbsp;</th><td headers="testr1c1">&nbsp;</td><td headers="testr1c1">&nbsp;</td><td headers="testr1c1">&nbsp;</td></tr><tr><td headers="testr1c1">&nbsp;</td><td headers="testr1c1">&nbsp;</td><td headers="testr1c1">&nbsp;</td></tr><tr><td headers="testr1c1">&nbsp;</td><td headers="testr1c1">&nbsp;</td><td headers="testr1c1">&nbsp;</td></tr></tbody></table><p>sit amet <strong>consectetur</strong></p>');
+        $this->assertHTMLMatch('<p>Test %1%</p><table border="1" id="test" style="width: 100%;"><tbody><tr><th id="testr1c1" rowspan="3"></th><td headers="testr1c1"></td><td headers="testr1c1"></td><td headers="testr1c1"></td></tr><tr><td headers="testr1c1"></td><td headers="testr1c1"></td><td headers="testr1c1"></td></tr><tr><td headers="testr1c1"></td><td headers="testr1c1"></td><td headers="testr1c1"></td></tr></tbody></table><p></p>');
 
         $this->showTools(0, 'row');
         $this->clickInlineToolbarButton('addBelow');
-        sleep(1);
-
-        $this->assertHTMLMatch('<p>XAX XBX XCX</p><p>&nbsp;</p><table border="1" id="test" style="width: 100%;"><tbody><tr><th id="testr1c1" rowspan="3">&nbsp;&nbsp;&nbsp;</th><td headers="testr1c1">&nbsp;</td><td headers="testr1c1">&nbsp;</td><td headers="testr1c1">&nbsp;</td></tr><tr><td headers="testr1c1">&nbsp;</td><td headers="testr1c1">&nbsp;</td><td headers="testr1c1">&nbsp;</td></tr><tr><td headers="testr1c1">&nbsp;</td><td headers="testr1c1">&nbsp;</td><td headers="testr1c1">&nbsp;</td></tr><tr><th id="testr4c1">&nbsp;</th><td headers="testr4c1">&nbsp;</td><td headers="testr4c1">&nbsp;</td><td headers="testr4c1">&nbsp;</td></tr></tbody></table><p>sit amet <strong>consectetur</strong></p>');
+        $this->assertHTMLMatch('<p>Test %1%</p><table border="1" id="test" style="width: 100%;"><tbody><tr><th id="testr1c1" rowspan="3"></th><td headers="testr1c1"></td><td headers="testr1c1"></td><td headers="testr1c1"></td></tr><tr><td headers="testr1c1"></td><td headers="testr1c1"></td><td headers="testr1c1"></td></tr><tr><td headers="testr1c1"></td><td headers="testr1c1"></td><td headers="testr1c1"></td></tr><tr><th id="testr4c1"></th><td headers="testr4c1"></td><td headers="testr4c1"></td><td headers="testr4c1"></td></tr></tbody></table><p></p>');
 
     }//end testHeaderTagsWhenCreatingTableWithRowHeaders()
 
@@ -183,20 +140,15 @@ class Viper_Tests_ViperTableEditorPlugin_TableHeadersUnitTest extends AbstractVi
      */
     public function testHeaderTagsAddedWhenHeaderRowAdded()
     {
-        $this->selectKeyword(3);
-        $this->keyDown('Key.RIGHT');
-        $this->keyDown('Key.ENTER');
 
-        $this->execJS('insTable(3,4, 0, "test")');
-        sleep(2);
+        $this->insertTableWithSpecificId('test', 3, 4, 0, 1);
 
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>&nbsp;</p><table style="width: 100%;" id="test" border="1"><tbody><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>sit amet <strong>consectetur</strong></p>');
+        $this->assertHTMLMatch('<p>Test %1%</p><table style="width: 100%;" id="test" border="1"><tbody><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
 
         $this->showTools(0, 'row');
         $this->clickField('Heading');
-        sleep(1);
         $this->clickInlineToolbarButton('Update Changes', NULL, TRUE);
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>&nbsp;</p><table id="test" style="width: 100%;" border="1"><tbody><tr><th id="testr1c1">&nbsp;</th><th id="testr1c2">&nbsp;</th><th id="testr1c3">&nbsp;</th><th id="testr1c4">&nbsp;</th></tr><tr><td headers="testr1c1">&nbsp;</td><td headers="testr1c2">&nbsp;</td><td headers="testr1c3">&nbsp;</td><td headers="testr1c4">&nbsp;</td></tr><tr><td headers="testr1c1">&nbsp;</td><td headers="testr1c2">&nbsp;</td><td headers="testr1c3">&nbsp;</td><td headers="testr1c4">&nbsp;</td></tr></tbody></table><p>sit amet <strong>consectetur</strong></p>');
+        $this->assertHTMLMatch('<p>Test %1%</p><table id="test" style="width: 100%;" border="1"><tbody><tr><th id="testr1c1"></th><th id="testr1c2"></th><th id="testr1c3"></th><th id="testr1c4"></th></tr><tr><td headers="testr1c1"></td><td headers="testr1c2"></td><td headers="testr1c3"></td><td headers="testr1c4"></td></tr><tr><td headers="testr1c1"></td><td headers="testr1c2"></td><td headers="testr1c3"></td><td headers="testr1c4"></td></tr></tbody></table><p></p>');
 
     }//end testHeaderTagsAddedWhenHeaderRowAdded()
 
@@ -208,20 +160,14 @@ class Viper_Tests_ViperTableEditorPlugin_TableHeadersUnitTest extends AbstractVi
      */
     public function testHeaderTagsAddedWhenHeaderColAdded()
     {
-        $this->selectKeyword(3);
-        $this->keyDown('Key.RIGHT');
-        $this->keyDown('Key.ENTER');
 
-        $this->execJS('insTable(3,4, 0, "test")');
-        sleep(2);
-
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>&nbsp;</p><table style="width: 100%;" id="test" border="1"><tbody><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p>sit amet <strong>consectetur</strong></p>');
+        $this->insertTableWithSpecificId('test', 3, 4, 0, 1);
+        $this->assertHTMLMatch('<p>Test %1%</p><table style="width: 100%;" id="test" border="1"><tbody><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
 
         $this->showTools(0, 'col');
         $this->clickField('Heading');
-        sleep(1);
         $this->clickInlineToolbarButton('Update Changes', NULL, TRUE);
-        $this->assertHTMLMatch('<p>XAX XBX XCX</p><p>&nbsp;</p><table border="1" id="test" style="width: 100%;"><tbody><tr><th id="testr1c1">&nbsp;</th><td headers="testr1c1">&nbsp;</td><td headers="testr1c1">&nbsp;</td><td headers="testr1c1">&nbsp;</td></tr><tr><th id="testr2c1">&nbsp;</th><td headers="testr2c1">&nbsp;</td><td headers="testr2c1">&nbsp;</td><td headers="testr2c1">&nbsp;</td></tr><tr><th id="testr3c1">&nbsp;</th><td headers="testr3c1">&nbsp;</td><td headers="testr3c1">&nbsp;</td><td headers="testr3c1">&nbsp;</td></tr></tbody></table><p>sit amet <strong>consectetur</strong></p>');
+        $this->assertHTMLMatch('<p>Test %1%</p><table border="1" id="test" style="width: 100%;"><tbody><tr><th id="testr1c1"></th><td headers="testr1c1"></td><td headers="testr1c1"></td><td headers="testr1c1"></td></tr><tr><th id="testr2c1"></th><td headers="testr2c1"></td><td headers="testr2c1"></td><td headers="testr2c1"></td></tr><tr><th id="testr3c1"></th><td headers="testr3c1"></td><td headers="testr3c1"></td><td headers="testr3c1"></td></tr></tbody></table><p></p>');
 
     }//end testHeaderTagsAddedWhenHeaderColAdded()
 

@@ -1,0 +1,827 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en-AU">
+
+<head>
+
+    <!-- MAIN STYLES -->
+    <link href='css/demos.css' rel='stylesheet' type='text/css'>
+    <link rel="Shortcut Icon" href="images/favicon.png">
+
+    <!--[if lt IE 9]>
+    <link rel="stylesheet" type="text/css" href="css/ie8-and-down.css" />
+    <![endif]-->
+    <!--[if gt IE 7]>
+    <link rel="stylesheet" type="text/css" href="css/ie8-and-up.css" />
+    <![endif]-->
+
+    <title>Squiz Viper</title>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="title" content="Home">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <script type="text/javascript" src="../../DfxJSLib/dfx.js"></script>
+    <script type="text/javascript" src="../../Viper-all.js"></script>
+    <script type="text/javascript">
+        var viper = null;
+        ViperReadyCallback = function() {
+            $ = jQuery = window.dfxjQuery;
+            dfx.addLoadEvent(function() {
+                viper = new Viper('test');
+                var allPlugins = ['ViperCoreStylesPlugin', 'ViperKeyboardEditorPlugin', 'ViperInlineToolbarPlugin', 'ViperHistoryPlugin', 'ViperListPlugin', 'ViperFormatPlugin', 'ViperToolbarPlugin', 'ViperTableEditorPlugin', 'ViperCopyPastePlugin', 'ViperImagePlugin', 'ViperLinkPlugin', 'ViperAccessibilityPlugin', 'ViperSourceViewPlugin', 'ViperSearchReplacePlugin', 'ViperLangToolsPlugin', 'ViperCharMapPlugin', 'ViperTrackChangesPlugin'];
+                viper.getPluginManager().setPlugins(allPlugins);
+
+                var prevViperType = 'complex';
+                var editables     = dfx.getClass('Viper-editable');
+                for (var i = 0; i < editables.length; i++) {
+                    (function(editableElement) {
+                        dfx.addEvent(editableElement, 'mousedown', function() {
+                            if (dfx.hasClass(editableElement, 'viper-simple') === true) {
+                                if (prevViperType !== 'simple') {
+                                    prevViperType = 'simple';
+                                    viper.getPluginManager().removePlugins();
+                                }
+                            } else if (prevViperType !== 'complex') {
+                                prevViperType = 'complex';
+                                viper.getPluginManager().setPlugins(allPlugins);
+                            }
+
+                            viper.setEditableElement(editableElement);
+                        });
+                    })
+                    (editables[i]);
+                }
+                var buttons = [['bold', 'italic', 'subscript', 'superscript', 'strikethrough', 'class'], 'removeFormat', ['justify', 'formats', 'headings'], ['undo', 'redo'], ['unorderedList', 'orderedList', 'indentList', 'outdentList'], 'insertTable', 'image', 'hr', ['insertLink', 'removeLink', 'anchor'], 'insertCharacter', 'searchReplace', 'langTools', 'accessibility', 'sourceEditor'];
+                viper.getPluginManager().setPluginSettings('ViperToolbarPlugin', {buttons: buttons});
+                viper.getPluginManager().setPluginSettings('ViperInlineToolbarPlugin', {buttons: buttons});
+
+                var demoDivs  = dfx.getClass('demo');
+                var demoCount = demoDivs.length;
+                var contents  = [];
+
+                for (var i = 0; i < demoCount; i++) {
+                    var editables = dfx.getClass('Viper-editable', demoDivs[i]);
+                    var elen      = editables.length;
+                    contents[i]   = [];
+                    for (var j = 0; j < elen; j++) {
+                        contents[i][j] = dfx.getHtml(editables[j]);
+                    }
+
+                    (function(demoDiv, index, editableElements) {
+                        dfx.addEvent(dfx.getClass('demo-ins-refresh', demoDiv)[0], 'click', function() {
+                            for (var j = 0; j < editableElements.length; j++) {
+                                dfx.setHtml(editableElements[j], contents[index][j]);
+                            }
+                        });
+                    }) (demoDivs[i], i, editables);
+                }
+
+                // Show info on scroll.
+                $(function() {
+                    dfx.addEvent(window, 'scroll', function() {
+                        var yScrollPos = dfx.getScrollCoords().y;
+
+                        for (var i = 0; i < demoDivs.length; i++) {
+                            var yCoord = dfx.getElementCoords(demoDivs[i]).y;
+                            if (yScrollPos + 300 >= yCoord && yScrollPos <= yCoord + 50) {
+                                var infoElem = dfx.getClass('demo-ins-info', demoDivs[i])[0];
+                                if (dfx.hasClass(infoElem, 'demo-ins-info-active') === false) {
+                                    dfxjQuery(infoElem).show().animate({
+                                        width: '990px'
+                                    }, 2000, 'easeOutBounce').addClass('demo-ins-info-active');
+                                }
+                                break;
+                            }
+                        }
+                    });
+                });
+
+                $(function() {
+                    $("#di-open").click(function() {
+                        $(".di-book").toggleClass("di-book-open");
+                        $(".di-book-left").toggleClass("di-book-left-open");
+                    });
+                });
+            });
+        };
+
+        // Onblur to change the exam mark depending on answer.
+        function diChangeGrade() {
+            if (document.getElementById('di-exam-answer').innerHTML != 'Viper') {
+                document.getElementById('di-exam-mark').innerHTML = 'F-';
+                } else {
+                document.getElementById('di-exam-mark').innerHTML = 'A+';
+            }
+        }
+
+        // Clear text from diary when clicked.
+        function diNameInput() {
+            if (document.getElementById('di-name-input').innerHTML == 'Enter your name') {
+                document.getElementById('di-name-input').innerHTML = '';
+            }
+        }
+
+    </script>
+
+   <!-- <script type="text/javascript" src="scripts/jquery.easing.1.3.js"></script>
+
+    <!-- GOOGLE WEB FONTS -->
+    <link href='http://fonts.googleapis.com/css?family=Bad+Script' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Francois+One' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Annie+Use+Your+Telescope' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Lobster+Two:400,700' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Loved+by+the+King' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Handlee' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Cantata+One' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=UnifrakturMaguntia' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Fresca' rel='stylesheet' type='text/css'>
+
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-359178-15']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+
+</head>
+
+<body id="content">
+
+<!--
+########## HEADER ##########
+-->
+
+<div id="header">
+
+	<h1><img src="images/header-squiz-viper.png" alt="Squiz Viper"></h1>
+
+	<div id="header-graphic"></div>
+
+	<p id="header-intro"><strong>Like what you see!</strong> Viper is a new kind of "What You See Is What You Get" editor, allowing true click-to-edit functionality.</p>
+
+	<p class="header-content">Viper makes editing your webpages intuitive, natural and even enjoyable. No need for modal windows or admin panels. To update your editable content, just click and type.</p>
+
+
+	<ul id="header-demo-list">
+		<li class="header-button"><a href="accessibility.html">Accessibility Demonstration</a></li>
+	</ul>
+
+
+</div>
+
+
+<!--
+########## INTRODUCTION (in) ##########
+-->
+
+<div class="demo" id="in"> <!-- full width container to hold demo and bgimage -->
+
+	<h2 class="screen-hide">Demonstration one: Simple inline editing</h2> <!-- hidden heading -->
+
+		<div id="in-demo"> <!-- unique fixed width demo - center aligned -->
+
+			<div id="in-bookmark">
+			</div>
+
+			<div id="in-logo">
+			</div>
+
+			<!-- writing pad -->
+
+			<div id="in-top-panel">
+			</div>
+
+			<div id="in-middle-panel">
+
+					<div class="Viper-editable">
+
+						<h3>Welcome to the future!</h3>
+
+						<p>Viper is a new type of &quot;What You See Is What You Get&quot; editor.<br> Developed with you in mind, Viper makes content editing intuitive, natural and even enjoyable, allowing you to see your changes in context.</p>
+						<p>&nbsp;</p>
+						<p>To see what we mean click on this text, try to tools that appear and start changing things around. Then scroll down to discover more!</p>
+
+					</div>
+
+			</div>
+
+			<div id="in-bottom-panel">
+			</div>
+
+		</div> <!-- close #in-demo -->
+</div>
+
+
+<!--
+########## FLOORPLAN (fp) ##########
+-->
+
+<div class="demo" id="fp"> <!-- full width container to hold demo and bgimage -->
+
+	<!-- demo instructions -->
+
+		<div class="demo-ins">
+
+			<div class="demo-ins-refresh demo-ins-refresh-fp"></div>
+
+			<div class="demo-ins-info demo-ins-info-fp"><span class="demo-ins-info-content">Edit the labels on the floorplan below, simply click on them and start editing.</span></div>
+
+		</div>
+		<!-- close demo-ins -->
+
+		<div id="fp-demo"> <!-- the unique fixed width demo - center aligned -->
+
+		<h2 class="screen-hide">Demonstration two: Advanced inline editing</h2> <!-- hidden heading -->
+
+			<div id="fp-plan-holder">
+
+				<div id="fp-boundary"></div>
+
+				<div id="fp-house"></div>
+
+				<h3 class="screen-hide">Floorplan Author Information</h3> <!-- hidden heading -->
+
+				<ul id="fp-author">
+
+					<li class="fp-author-box"><img src="images/fp-ab.png" alt="Squiz Viper logo"></li>
+					<li class="fp-author-box Viper-editable viper-simple demo-ellipsis"><span>Squiz</span></li>
+					<li class="fp-author-box Viper-editable viper-simple demo-ellipsis">Viper</li>
+					<li class="fp-author-box Viper-editable viper-simple demo-ellipsis">2012</li>
+
+				</ul> <!-- end #fp-author -->
+
+				<h3 class="screen-hide">Room Labels</h3> <!-- hidden heading -->
+
+					<ul>
+						<li class="fp-er Viper-editable viper-simple" id="fp-er-bedroom2">Bedroom 2</li>
+						<li class="fp-er Viper-editable viper-simple" id="fp-er-bathroom">Bathroom</li>
+						<li class="fp-er Viper-editable viper-simple" id="fp-er-bedroom1">Bedroom 1</li>
+						<li class="fp-er Viper-editable viper-simple" id="fp-er-kitchen">Kitchen</li>
+						<li class="fp-er Viper-editable viper-simple" id="fp-er-family">Family</li>
+						<li class="fp-er Viper-editable viper-simple" id="fp-er-laundry">Laundry</li>
+						<li class="fp-er Viper-editable viper-simple" id="fp-er-garage">Garage</li>
+						<li class="fp-er Viper-editable viper-simple" id="fp-er-dining">Dining</li>
+						<li class="fp-er Viper-editable viper-simple" id="fp-er-living">Living</li>
+					</ul>
+
+				<h3 class="screen-hide">Dimensions</h3> <!-- hidden heading -->
+
+					<ul>
+						<li class="fp-er-dim" id="fp-er-674"><span class="Viper-editable viper-simple">674</span></li>
+						<li class="fp-er-dim" id="fp-er-306"><span class="Viper-editable viper-simple">306</span></li>
+						<li class="fp-er-dim" id="fp-er-382"><span class="Viper-editable viper-simple">382</span></li>
+						<li class="fp-er-dim" id="fp-er-370"><span class="Viper-editable viper-simple">370</span></li>
+						<li class="fp-er-dim" id="fp-er-344a"><span class="Viper-editable viper-simple">344</span></li>
+						<li class="fp-er-dim" id="fp-er-344b"><span class="Viper-editable viper-simple">344</span></li>
+						<li class="fp-er-dim" id="fp-er-380"><span class="Viper-editable viper-simple">380</span></li>
+						<li class="fp-er-dim" id="fp-er-420"><span class="Viper-editable viper-simple">420</span></li>
+						<li class="fp-er-dim" id="fp-er-464"><span class="Viper-editable viper-simple">464</span></li>
+						<li class="fp-er-dim" id="fp-er-620"><span class="Viper-editable viper-simple">620</span></li>
+					</ul>
+
+				<div id="fp-pencil"></div>
+
+				<div id="fp-compass"></div>
+
+				<div id="fp-ruler"></div>
+
+			</div>
+
+				<div id="fp-table">
+
+					<h3 class="screen-hide">Tasks to be completed</h3> <!-- hidden heading -->
+
+						<table class="Viper-editable">
+							<tr>
+								<th>task</th>
+								<th>priority</th>
+								<th>description</th>
+								<th>due</th>
+							</tr>
+							<tr>
+								<td>client approval</td>
+								<td>high</td>
+								<td>client approval of layout</td>
+								<td>may 26 2012</td>
+							</tr>
+							<tr>
+								<td>council applications</td>
+								<td>low</td>
+								<td>applications have been appoved</td>
+								<td>july 01 2012</td>
+							</tr>
+							<tr>
+								<td>editing content</td>
+								<td>high</td>
+								<td>using viper to edit this table</td>
+								<td>now</td>
+							</tr>
+							</table>
+
+				</div> <!-- close #fp-table -->
+
+		</div> <!-- close #fp-demo -->
+
+</div> <!-- close #fp -->
+
+<!--
+########## NEWSPAPER ##########
+-->
+
+<div class="demo" id="np"> <!-- full width container to hold demo and bgimage -->
+
+	<!-- demo instructions -->
+
+	<div class="demo-ins">
+
+		<div class="demo-ins-refresh">
+		</div>
+
+		<div class="demo-ins-info">
+			<span class="demo-ins-info-content">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris sollicitudin, risus ut fringilla malesuada, enim magna pellentesque nulla.</span>
+		</div>
+
+	</div> <!-- close demo-ins -->
+
+	<div id="np-demo"> <!-- the unique fixed width demo - center aligned -->
+
+		<h2 class="screen-hide">Demonstration Three: Toolbar Editing 101</h2> <!-- hidden heading -->
+
+			<div class="np-pages" id="np-page1"> <!-- page one is the top page -->
+
+				<div id="np-pages-gradient"> <!-- gradient overlay for the bottom of page one -->
+				</div>
+
+				<div id="np-bg-text" class="Viper-editable viper-simple"> <!-- reversed text in the bg of the first page -->
+
+					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent ut condimentum tortor. Sed venenatis gravida egestas. Cras velit ligula, volutpat a malesuada nec, bibendum vitae mi. Curabitur at nibh orci, non eleifend enim. Etiam dui mauris, vehicula quis cursus id, mattis id sem. Sed dolor velit, consequat at euismod ac, laoreet eget felis. Ut tortor orci, semper quis aliquet non, viverra eu purus. Nulla facilisi. Sed eu tellus magna.</p>
+
+					<p>Quisque aliquam turpis a dui venenatis et ultricies urna pellentesque. Etiam at semper quam. Suspendisse potenti. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Maecenas dictum volutpat augue, et malesuada erat porttitor sed. Nunc et nisi velit, id feugiat sem. Sed nec augue id sapien auctor pharetra eleifend eu neque. Donec interdum mauris vitae sapien lacinia pellentesque eget sed neque.</p>
+
+					<p>Nunc in elit risus, ut pharetra odio. Duis facilisis lobortis nisi vitae consequat. Integer orci urna, vehicula eget hendrerit vel, vulputate ac orci. Etiam eget feugiat ante. Duis eu ligula eget mi porta dapibus. Suspendisse sit amet mauris eu nisi sagittis aliquam ac non nibh. Vivamus ullamcorper tincidunt molestie. Mauris et nunc non turpis aliquet molestie id tempor neque. Proin interdum quam vitae lorem ullamcorper suscipit euismod ipsum tincidunt. Morbi blandit rutrum augue consequat pharetra.</p>
+
+					<p>Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec aliquet sem sed nibh interdum blandit. Morbi posuere hendrerit ante id aliquam. Proin fermentum placerat varius. Duis rhoncus elit vitae libero eleifend rutrum. Nullam sit amet purus sapien, non laoreet nulla. Pellentesque ac sollicitudin ipsum. Donec sed magna et augue semper aliquam vitae vel arcu. Donec nec nulla et turpis vulputate suscipit sit amet sed neque.</p>
+
+					<p>Donec luctus, eros eu elementum varius, arcu est congue est, sit amet accumsan mauris magna id diam. Morbi nibh nulla, lacinia in ornare sed, dignissim sit amet elit. In hac habitasse platea dictumst. Duis faucibus turpis odio, vitae vestibulum tortor. In tincidunt ante eget ipsum lobortis fermentum. Praesent a odio nisi. In quis sem libero. Maecenas aliquam viverra vulputate. Phasellus volutpat odio id elit cursus scelerisque. Morbi pharetra convallis nisl. Donec porta semper ipsum, a tempus magna facilisis nec.</p>
+
+					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent ut condimentum tortor. Sed venenatis gravida egestas. Cras velit ligula, volutpat a malesuada nec, bibendum vitae mi. Curabitur at nibh orci, non eleifend enim. Etiam dui mauris, vehicula quis cursus id, mattis id sem. Sed dolor velit, consequat at euismod ac, laoreet eget felis. Ut tortor orci, semper quis aliquet non, viverra eu purus. Nulla facilisi. Sed eu tellus magna.</p>
+
+					<p>Quisque aliquam turpis a dui venenatis et ultricies urna pellentesque. Etiam at semper quam. Suspendisse potenti. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Maecenas dictum volutpat augue, et malesuada erat porttitor sed. Nunc et nisi velit, id feugiat sem. Sed nec augue id sapien auctor pharetra eleifend eu neque. Donec interdum mauris vitae sapien lacinia pellentesque eget sed neque.</p>
+
+					<p>Nunc in elit risus, ut pharetra odio. Duis facilisis lobortis nisi vitae consequat. Integer orci urna, vehicula eget hendrerit vel, vulputate ac orci. Etiam eget feugiat ante. Duis eu ligula eget mi porta dapibus. Suspendisse sit amet mauris eu nisi sagittis aliquam ac non nibh. Vivamus ullamcorper tincidunt molestie. Mauris et nunc non turpis aliquet molestie id tempor neque. Proin interdum quam vitae lorem ullamcorper suscipit euismod ipsum tincidunt. Morbi blandit rutrum augue consequat pharetra.</p>
+
+					<p>Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec aliquet sem sed nibh interdum blandit. Morbi posuere hendrerit ante id aliquam. Proin fermentum placerat varius. Duis rhoncus elit vitae libero eleifend rutrum. Nullam sit amet purus sapien, non laoreet nulla. Pellentesque ac sollicitudin ipsum. Donec sed magna et augue semper aliquam vitae vel arcu. Donec nec nulla et turpis vulputate suscipit sit amet sed neque.</p>
+
+					<p>Donec luctus, eros eu elementum varius, arcu est congue est, sit amet accumsan mauris magna id diam. Morbi nibh nulla, lacinia in ornare sed, dignissim sit amet elit. In hac habitasse platea dictumst. Duis faucibus turpis odio, vitae vestibulum tortor. In tincidunt ante eget ipsum lobortis fermentum. Praesent a odio nisi. In quis sem libero. Maecenas aliquam viverra vulputate. Phasellus volutpat odio id elit cursus scelerisque. Morbi pharetra convallis nisl. Donec porta semper ipsum, a tempus magna facilisis nec.</p>
+
+					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent ut condimentum tortor. Sed venenatis gravida egestas. Cras velit ligula, volutpat a malesuada nec, bibendum vitae mi. Curabitur at nibh orci, non eleifend enim. Etiam dui mauris, vehicula quis cursus id, mattis id sem. Sed dolor velit, consequat at euismod ac, laoreet eget felis. Ut tortor orci, semper quis aliquet non, viverra eu purus. Nulla facilisi. Sed eu tellus magna.</p>
+
+					<p>Quisque aliquam turpis a dui venenatis et ultricies urna pellentesque. Etiam at semper quam. Suspendisse potenti. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Maecenas dictum volutpat augue, et malesuada erat porttitor sed. Nunc et nisi velit, id feugiat sem. Sed nec augue id sapien auctor pharetra eleifend eu neque. Donec interdum mauris vitae sapien lacinia pellentesque eget sed neque.</p>
+
+					<p>Nunc in elit risus, ut pharetra odio. Duis facilisis lobortis nisi vitae consequat. Integer orci urna, vehicula eget hendrerit vel, vulputate ac orci. Etiam eget feugiat ante. Duis eu ligula eget mi porta dapibus. Suspendisse sit amet mauris eu nisi sagittis aliquam ac non nibh. Vivamus ullamcorper tincidunt molestie. Mauris et nunc non turpis aliquet molestie id tempor neque. Proin interdum quam vitae lorem ullamcorper suscipit euismod ipsum tincidunt. Morbi blandit rutrum augue consequat pharetra.</p>
+
+					<p>Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec aliquet sem sed nibh interdum blandit. Morbi posuere hendrerit ante id aliquam. Proin fermentum placerat varius. Duis rhoncus elit vitae libero eleifend rutrum. Nullam sit amet purus sapien, non laoreet nulla. Pellentesque ac sollicitudin ipsum. Donec sed magna et augue semper aliquam vitae vel arcu. Donec nec nulla et turpis vulputate suscipit sit amet sed neque.</p>
+
+				</div>
+
+				<div id="np-row1"> <!-- masthead -->
+
+					<div id="np-head-left">
+
+						<p class="Viper-editable viper-simple demo-ellipsis">Daily<br>Edition</p>
+
+					</div>
+
+					<div id="np-header">
+
+						<h3 class="Viper-editable viper-simple demo-ellipsis">squizville times</h3>
+
+					</div>
+
+					<div id="np-head-right">
+
+						<p class="Viper-editable viper-simple demo-ellipsis">Sunny days<br>ahead<br><span>Report page 4</span></p>
+
+					</div>
+
+				</div> <!-- end np-row1 -->
+
+
+				<div id="np-row2"> <!-- edition information -->
+
+					<ul>
+						<li id="np-row2-date" class="Viper-editable viper-simple demo-ellipsis">31 March 2012</li>
+
+						<li id="np-row2-location" class="Viper-editable viper-simple demo-ellipsis">AUSTRALIA, NEW ZEALAND, ENGLAND, POLAND, SCOTLAND</li>
+
+						<li id="np-row2-journal" class="Viper-editable viper-simple demo-ellipsis">WYSIWYG</li>
+
+					</ul>
+
+				</div> <!-- end np-row2 -->
+
+
+				<div id="np-row3"> <!-- articles -->
+
+					<div id="np-article1">
+
+						<h3 class="Viper-editable viper-simple">Viper makes a splash!</h3>
+
+						<div id="np-article1-cols" class="Viper-editable">
+
+							<p><span class="intro">With toolbar editing features like these, who needs anything else?</span></p>
+
+							<p>There's only one thing local swimming champ Danny Peters enjoys more then competing, and thats keeping his swim school's website up to date.</p>
+
+							<p>Mr Peters recently started editing his webpages with the new Viper editor from Squiz. "I thought the inline editing tools were terrific, and having the toolbar at the top of the screen means I always have familiar options available" Mr Peters told a group of website owners and editors at a recent town hall meeting.</p>
+
+							<p>Among the features Mr. Peters recommended the audience try were common type styles including bold, italic, and strikethrough. He said the ability to specify a class for elements was an especially useful tool that he used on a daily basis. &quot;I have a number of sessions and the ability to differentiate them by class makes my content much clearer&quot;.</p>
+
+							<p>Mr peters also encouraged the use of ordered and unordered lists, tables and images as well as Vipers accessibility tools.</p>
+
+							<p>The twenty-six time olympic gold medalist praised the following features of the editor:</p>
+
+							<ul>
+
+								<li>An easy to learn and mighty attractive interface</li>
+
+								<li>Integration with your websites predefined styles and layouts</li>
+
+								<li>The ability to customise which options an editor can access</li>
+
+							</ul>
+
+							<p>The swimmer says he hasn't looked back since moving to Viper, saying "I encourage everyone to try if for themselves, Just start clicking on this article and editing, you will love it. If you make a mistake or break something, just click the refresh button on this example and you will go back to the begining".</p>
+
+							<p>Attendees at the town hall meeting said they were eager to try Viper for themselves.</p>
+
+						</div>
+
+					</div> <!-- end #np-article1 -->
+
+					<div id="np-article2" class="Viper-editable">
+
+						<h3>The Search is Over</h3>
+
+							<hr class="np-hr">
+
+							<p class="intro">Lost text found, replaced</p>
+
+							<img id="np-image" src="images/np-story.gif" alt="an image">
+
+							<p>Sometimes a little help can go a long way. That&#39;s what Christina Typesalot found out when she accidently spelt her bosses name wrong on the company web site. &quot;I was creating a profile about Mr. Cache when I realised I had spelt his name wrong about twenty times&quot; Ms Typesalot said in an exclusive interview with the Squizville times. Luckily Ms. Typesalot was using Viper to edit her pages and was able to replace the offending spelling in no time at all.</p>
+
+					</div> <!-- end #np-article2 -->
+
+					<div id="np-article3">
+
+						<div id="np-article3-1" class="Viper-editable">
+
+							<h3 class="np-classified-intro">CLASSIFIEDS</h3>
+
+								<hr class="np-hr">
+
+								<p class="np-classified"><span class="np-classified-intro">TO THE INLINE EDITOR</span> I saw working in all modern browsers. You bolded my typeface. I want more.</p>
+
+								<p class="np-classified"><span class="np-classified-intro">TO THE UNDO FUNCTION</span> in the toolbar at the top of the screen, thanks for having my back.  What would I do without you?</p>
+
+						</div> <!-- close np-article3-1 -->
+
+						<hr class="np-hr">
+
+							<h3 id="np-article3-2" class="Viper-editable">Web Editors Breathe a Sigh of Relief - <em>Formatting removed with the click of a button!</em></h3>
+
+							<div id="np-article3-3" class="Viper-editable">
+
+								<h3 id="np-article3-3-header">DOUBLE A-OK? THE IMPORTANCE OF BEING ACCESSIBLE (AND HOW VIPER CAN HELP YOU) - A SQUIZVILLE TIMES SPECIAL INVESTIGATION</h3>
+
+								<p><strong>Squizville times puts your site to the test with Vipers new accessibility tools.</strong></p>
+
+								<p>There is more to crafting a great user experience then looking good and using the best technology. Making sure your website is accessible is crucial to ensuring your message reaches as many people as possible. In fact for government websites in Australia it is a legal requirement.</p>
+
+							</div> <!-- close np-article3-3 -->
+
+					</div> <!-- end np-article3 -->
+
+				</div> <!-- end  np-row3 -->
+
+		</div> <!-- end np-page1 -->
+
+		<div class="np-pages" id="np-page2">
+		</div>
+
+		<div class="np-pages" id="np-page3">
+		</div>
+
+	</div> <!-- close #np-demo -->
+
+</div> <!-- close #np -->
+
+
+<!--
+########## BLACKBOARD (bb) ##########
+-->
+
+
+<div class="demo" id="bb"> <!-- full width container to hold demo and bgimage -->
+
+	<!-- demo instructions -->
+
+	<div class="demo-ins">
+
+		<div class="demo-ins-refresh demo-ins-refresh-bb">
+		</div>
+
+		<div class="demo-ins-info demo-ins-info-bb">
+			<span class="demo-ins-info-content">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris sollicitudin, risus ut fringilla malesuada, enim magna pellentesque nulla.</span>
+		</div>
+
+	</div>
+
+	<div id="bb-demo"> <!-- the unique fixed width demo - center aligned -->
+
+		<h2 class="screen-hide">Demonstration Four: Toolbar Editing 102</h2> <!-- hidden heading -->
+
+			<h3 class="screen-hide">Blackboard Text</h3> <!-- hidden heading -->
+
+	         	<div id="bb-text-mask">
+
+		         	<div class="bb-er Viper-editable" id="bb-er6"> <!-- board background text -->
+
+		         	<p>One morning, when Gregor Samsa woke from troubled dreams, he found himself transformed in his bed into a horrible vermin. He lay on his armour-like back, and if he lifted his head a little he could see his brown belly, slightly domed and divided by arches into stiff sections. The bedding was hardly able to cover it and seemed ready to slide off any moment. His many legs, pitifully thin compared with the size of the rest of him, waved about helplessly as he looked.</p>
+
+					<p>"What's happened to me?" he thought. It wasn't a dream. His room, a proper human room although a little too small, lay peacefully between its four familiar walls. A collection of textile samples lay spread out on the table - Samsa was a travelling salesman - and above it there hung a picture that he had recently cut out of an illustrated magazine and housed in a nice, gilded frame. It showed a lady fitted out with a fur hat and fur boa who sat upright, raising a heavy fur muff that covered the whole of her lower arm towards the viewer.</p>
+
+					</div>
+
+					<p id="bb-thought"class="Viper-editable">Thought for the day <span class="green">&quot;Everything should be made as simple as possible, but not simpler.&quot;</span></p>
+
+					<p id="bb-thought-credit" class="Viper-editable viper-simple demo-ellipsis">- Albert Einstein</p>
+
+					 <!-- close #bb-thought -->
+
+					<!-- Start of main board editable regions -->
+
+					<div class="bb-er Viper-editable" id="bb-er1" height="100">
+
+						<p><span class="blue"> &iquest;Ha utilizado Viper?</span><br>
+	 					<span class="green">Es muy bueno.</span><br>
+						Facilita para editar <br>
+						p&aacute;ginas web.<br>
+	         			<span class="blue">Pru&eacute;belo</span>.</p>
+
+	         		</div>
+
+	         		<div class="bb-er Viper-editable" id="bb-er2">
+
+						<p><span class="bb-er2-large">x&pi;+ 1 = 0 </span><br>
+	 					&radic;x = y+6 = z+y-x<br>
+						5 x -3 + 3 = 17 + 3</p>
+
+	         		</div>
+
+	         		<div class="bb-er Viper-editable" id="bb-er3">
+
+						<p><span class="bb-er3-large">1+1 = ???</span><br>
+	  					&nbsp; &nbsp;x &ne; y<br>
+	  					<span class="blue">7cos(x)-6sin(x)+2</span></p>
+
+	         		</div>
+
+	         		<div class="bb-er Viper-editable" id="bb-er4">
+
+						<p>8(1-sin(x))-6sin(x)+2<br>
+	 					&nbsp; &nbsp;cos(x&plusmn;y)=<br>
+						cos(x)cos(y)-sin(x)sin(y)<br>
+	  			 		&nbsp; &frac34; = 0.75 <span class="red">***</span><br>
+	  			 		7sin(x)+6sin(z)-6</p>
+
+	         		</div>
+
+
+					<div class="bb-er Viper-editable" id="bb-er5">
+						<p><span class="red">Pop Quiz<br>
+	 					10:30am</span><br><br>
+						Homework<br>
+	  					Pages 234 - 247</p>
+	         		</div>
+
+	         	</div>
+
+				<div id="bb-ruler">
+				</div>
+
+		</div> <!-- close #bb-demo -->
+
+</div> <!-- close #bb -->
+
+<!--
+######## DIARY ########
+-->
+
+<div class="demo" id="di"> <!-- full width container to hold demo and bgimage -->
+
+<!-- demo instructions -->
+
+	<div class="demo-ins">
+
+		<div class="demo-ins-refresh">
+		</div>
+
+		<div class="demo-ins-info">
+
+			<span class="demo-ins-info-content">Click the Open graphic to open the diary.</span>
+
+		</div>
+
+	</div>
+
+	<div id="di-demo"> <!-- unique fixed width demo -->
+
+		<div id="di-wysiwyg"></div>
+
+		<div id="di-inside-objects"></div>
+
+		<div id="di-holder"> <!-- holder for the diary -->
+
+			<!-- demo bg image content -->
+
+				<!-- diary cover-->
+
+				<div id="di-book" class="di-book">
+
+					<div id="di-name-input" onclick="diNameInput()" class="Viper-editable viper-simple demo-ellipsis">Enter your name</div>
+
+					<button id="di-open" class="di-open-button"></button>
+
+				</div>
+
+				<!-- diary inside-->
+
+				<div class="di-book-left">
+
+					<div id="di-inside-pages-left">
+
+						<div class="di-binding1"></div>
+
+						<div class="di-binding2"></div>
+
+						<div id="di-left-image"></div>
+
+						<div id="di-movie">
+
+							<p id="di-cinema-title" class="Viper-editable viper-simple demo-ellipsis">SNAKES ON<br>A PLANE</p>
+
+							<p id="di-cinema">
+
+							<span class="di-cinema-adult Viper-editable viper-simple demo-ellipsis">Adult</span><br>
+
+							<span class="di-cinema-theatre Viper-editable viper-simple demo-ellipsis">Theatre</span><br>
+
+							<span class="di-cinema-12 Viper-editable viper-simple demo-ellipsis">12</span></p>
+
+						</div>
+
+
+						<div id="di-letter" class="Viper-editable">
+
+							<p>To Viper McMillian,</p>
+
+							<p>Just tried the Viper WYSIWYG .</p>
+
+							<p>It makes editing web pages super
+							<br>easy and it looks sexy, too!<br>
+							I love it.</p>
+
+							<p>More tomorrow,</p>
+
+							<p>Anon.</p>
+
+						</div>
+
+						<div id="di-squizville-cinema">
+
+							<p class="Viper-editable demo-ellipsis">Squizville Cinema<br>
+
+						</div>
+
+
+						<div id="di-envelope">
+
+							<p class="Viper-editable viper-simple demo-ellipsis">Viper McMillian<br>
+
+							87 Viper Lane<br>Squizville</p>
+
+						</div>
+
+					</div>
+
+				</div><!-- close di-book-left -->
+
+				<div class="di-book-right">
+
+					<div id="di-inside-pages-right">
+
+						<div id="di-entry" class="Viper-editable">
+
+							<p>Dear Diary,</p>
+
+							<p>I just couldn't wait to tell you about the day I had. I was asked to update the content on the website. I almost died - not another morning of pesky pop-up windows, finding my way around that confusing admin console and hoping my changes are correct before I commit them.</p>
+
+							<p>But then, dear diary, something happened, I met Viper, our new inline WYSIWYG editor. It let me edit the pages in real time - I could actually see how my page would look as I was making the changes.</p>
+
+							<p>I loved it so much I offered to update the site every morning.</p>
+
+							<p>Yours NAME</p>
+
+						</div>
+
+						<div id="di-right-image"></div>
+
+						<div id="di-exam-paper">
+
+							<div id="di-exam-name1">
+
+								<p class="Viper-editable viper-simple demo-ellipsis">Student Name:</p>
+
+							</div>
+
+							<div id="di-exam-name2">
+
+								<p class="Viper-editable viper-simple demo-ellipsis">Mario Mario</p>
+
+							</div>
+
+							<div id="di-exam-heading" >
+
+								<p class="Viper-editable viper-simple demo-ellipsis">VIPER COLLEGE<br>EXAM</p>
+
+							</div>
+
+							<div id="di-exam-question">
+
+								<p class="Viper-editable viper-simple demo-ellipsis">Which WYSIWYG editor allows you to edit your content inline?</p>
+
+							</div>
+
+
+								<p id="di-exam-answer" class="Viper-editable viper-simple demo-ellipsis" onblur="javascript:diChangeGrade(this)">Viper</p>
+
+
+						</div>
+
+						<div id="di-photo">
+
+							<img src="images/di-snake.gif" alt="A illustration of a snake">
+
+						</div>
+
+						<div id="di-photo-caption">
+
+							<p  class="Viper-editable viper-simple demo-ellipsis">My new pet, Bitey!</p>
+
+						</div>
+
+						<div id="di-date">
+
+							<p>December 23, 2012</p>
+
+						</div>
+
+						<div id="di-exam-mark">
+
+							<p  class="">A+</p>
+
+						</div>
+
+					</div> <!-- close di-inside-pages -->
+
+			</div> <!-- close di- book right -->
+
+	</div>
+</div>
+
+</div>
+
+<!-- ###### FOOTER -->
+
+<div id="footer">
+
+		<div id="footer-graphic"></div>
+
+		<div id="footer-left">
+		<p>Viper makes editing your webpages intuitive, natural and even enjoyable. No need for modal windows or admin panels. To update your editable content, just click and type.</p>
+		</div>
+
+		<a href="http://www.squiz.com.au/" title="Visit the Squiz website" id="footer-squiz-button"> </a>
+
+	</div>
+
+
+</body>
+</html>

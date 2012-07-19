@@ -141,7 +141,7 @@ ViperTools.prototype = {
         var preventMouseUp = false;
         var self           = this;
         if (clickAction) {
-            dfx.addEvent(button, 'mousedown.Viper', function(e) {
+            dfx.addEvent(button, 'mousedown.' + this.viper.getEventNamespace(), function(e) {
                 if (self.viper.isBrowser('msie') === true) {
                     // This block of code prevents IE moving user selection to the.
                     // button element when clicked. When the button element is removed
@@ -177,7 +177,7 @@ ViperTools.prototype = {
             });
         }//end if
 
-        dfx.addEvent(button, 'mouseup.Viper', function(e) {
+        dfx.addEvent(button, 'mouseup.' + this.viper.getEventNamespace(), function(e) {
             mouseUpAction.call(this, e);
             self._preventMouseUp = false;
             dfx.preventDefault(e);
@@ -1582,7 +1582,7 @@ ViperTools.prototype = {
                 var addedButtons = {};
                 for (var i = 0; i < c; i++) {
                     var button = buttons[i];
-                    var id     = button.id.toLowerCase().replace(self.viper.getId() + '-vitp', '');
+                    var id     = button.id.toLowerCase().replace(self.viper.getId().toLowerCase() + '-vitp', '');
                     addedButtons[id] = button;
                 }
 
@@ -1739,8 +1739,8 @@ ViperTools.prototype = {
                 if (top === 0) {
                     this.hide();
                     return;
-                } else if (top > windowDim.height) {
-                    top = windowDim.height - 200;
+                } else if (top > windowDim.height + scrollCoords.y) {
+                    top = (windowDim.height - 200 + scrollCoords.y);
                 } else if (top < viperElemCoords.top) {
                     top = (viperElemCoords.top + 50);
                     if (left < viperElemCoords.left && this._verticalPosUpdateOnly !== true) {

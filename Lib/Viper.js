@@ -16,7 +16,6 @@ function Viper(id, options, callback, editables)
     this.id           = id;
     this._document    = document;
     this._browserType = null;
-    this._canCleanDom = true;
     this._specialKeys = [];
     this._prevRange   = null;
     this.enabled      = false;
@@ -249,6 +248,11 @@ Viper.prototype = {
 
     },
 
+    /**
+     * Returns the version of the current browser.
+     *
+     * @return {integer}
+     */
     getBrowserVersion: function()
     {
         var browsers = ['MSIE', 'Chrome', 'Safari', 'Firefox'];
@@ -332,6 +336,12 @@ Viper.prototype = {
 
     },
 
+    getEventNamespace: function()
+    {
+        return 'viper-' + this.id;
+
+    },
+
     /**
      * Adds the events required for mouse navigating and key navigating/typing.
      *
@@ -351,46 +361,48 @@ Viper.prototype = {
             Viper.window = window;
         }
 
-        dfx.removeEvent(this._document.body, '.viper');
+        var namespace = this.getEventNamespace();
+
+        dfx.removeEvent(this._document.body, '.' + namespace);
         this._removeEvents(elem);
         var self = this;
 
         if (this.isBrowser('msie') === true) {
-            dfx.addEvent(elem, 'mouseup.viper', function(e) {
+            dfx.addEvent(elem, 'mouseup.' + namespace, function(e) {
                 return self.mouseUp(e);
             });
         } else {
-            dfx.addEvent(this._document.body, 'mouseup.viper', function(e) {
+            dfx.addEvent(this._document.body, 'mouseup.' + namespace, function(e) {
                 return self.mouseUp(e);
             });
         }
 
-        dfx.addEvent(this._document.body, 'mousedown.viper', function(e) {
+        dfx.addEvent(this._document.body, 'mousedown.' + namespace, function(e) {
             return self.mouseDown(e);
         });
 
         // Add key events. Note that there is a known issue with IME keyboard events
         // see https://bugzilla.mozilla.org/show_bug.cgi?id=354358. This effects
         // change tracking while using Korean, Chinese etc.
-        dfx.addEvent(elem, 'keypress.viper', function(e) {
+        dfx.addEvent(elem, 'keypress.' + namespace, function(e) {
             return self.keyPress(e);
         });
 
-        dfx.addEvent(elem, 'keydown.viper', function(e) {
+        dfx.addEvent(elem, 'keydown.' + namespace, function(e) {
             return self.keyDown(e);
         });
 
-        dfx.addEvent(elem, 'keyup.viper', function(e) {
+        dfx.addEvent(elem, 'keyup.' + namespace, function(e) {
             return self.keyUp(e);
         });
 
-        dfx.addEvent(elem, 'blur.viper', function(e) {
+        dfx.addEvent(elem, 'blur.' + namespace, function(e) {
             if (!self._viperRange) {
                 self._viperRange = self._currentRange;
             }
         });
 
-        dfx.addEvent(elem, 'focus.viper', function(e) {
+        dfx.addEvent(elem, 'focus.' + namespace, function(e) {
             if (self.fireCallbacks('Viper:viperElementFocused') === false) {
                 return;
             }
@@ -431,7 +443,7 @@ Viper.prototype = {
             elem = this.element;
         }
 
-        dfx.removeEvent(elem, '.viper');
+        dfx.removeEvent(elem, '.' + this.getEventNamespace());
 
     },
 
@@ -498,6 +510,23 @@ Viper.prototype = {
 
     },
 
+    enable: function()
+    {
+        this.setEnabled(true);
+
+    },
+
+    disable: function()
+    {
+        this.setEnabled(false);
+
+    },
+
+    /**
+     * Returns true if Viper is enabled false otherwise.
+     *
+     * @return {boolean}
+     */
     isEnabled: function()
     {
         return this.enabled;
@@ -517,6 +546,10 @@ Viper.prototype = {
      */
     setEditableElement: function(elem)
     {
+        if (this.element === elem) {
+            return;
+        }
+
         if (this.element) {
             this.element.setAttribute('contentEditable', false);
             dfx.setStyle(this.element, 'outline', 'invert');
@@ -2250,12 +2283,6 @@ Viper.prototype = {
      */
     removeTagFromChildren: function(parent, tag, incParent)
     {
-        // TODO: We need to move this somewhere else...
-        // Viper shouldn't know about keywords etc.
-        if (parent.tagName && parent.tagName.toLowerCase() === 'span' && dfx.hasClass(parent, '_my4_keyword') === true) {
-            return;
-        }
-
         var c          = parent.childNodes.length;
         var childNodes = [];
         for (var i = 0; i < c; i++) {
@@ -3255,6 +3282,8 @@ Viper.prototype = {
 
         ViperSelection.addRange(range);
 
+        this._viperRange = range.cloneRange();
+
         return true;
 
     },
@@ -3446,7 +3475,6 @@ Viper.prototype = {
          if ((e.which !== 0 || e.keyCode === 46)
             && e.ctrlKey !== true
             && e.altKey !== true
-            && e.shiftKey !== true
             && e.metaKey !== true
         ) {
             return true;
@@ -4231,26 +4259,6 @@ Viper.prototype = {
 
     },
 
-    getSaveContent: function(elem)
-    {
-        if (this.element === elem) {
-            // Change to the final before saving.
-            ViperChangeTracker.activateFinalMode();
-        }
-
-        var html = this.getHtml(elem);
-
-        // If track changes active then add its info to the end of the content
-        // to be saved.
-        var info = ViperChangeTracker.getTrackingInfo(elem);
-        if (info) {
-            html += '<!--viperTrackInfo=' + dfx.jsonEncode(info) + '-->';
-        }
-
-        return html;
-
-    },
-
     /**
      * Gets the HTML (not source) contents of the editable element.
      * Returned value contains Viper specific elements.
@@ -4343,18 +4351,6 @@ Viper.prototype = {
 
     },
 
-    /**
-     * If set to true then cleanDOM method will not run.
-     *
-     * Should be used by plugins that change the focus to prevent special nodes being
-     * removed.
-     */
-    setAllowCleanDOM: function(allow)
-    {
-        this._canCleanDom = allow;
-
-    },
-
     cleanHTML: function(content)
     {
         content = content.replace(/<(p|div|h1|h2|h3|h4|h5|h6|li)((\s+\w+(\s*=\s*(?:".*?"|\'.*?\'|[^\'">\s]+))?)+)?\s*>\s*/ig, "<$1$2>");
@@ -4412,17 +4408,16 @@ Viper.prototype = {
 
     },
 
-    canCleanDOM: function()
+    /**
+     * Cleans the contents of the given DOM element.
+     *
+     * @param {DOMNode} elem    The element to clean, if not specified Viper element is used.
+     * @param {string}  tagName If specified only this type of tag is cleaned.
+     *
+     * @return {void}
+     */
+    cleanDOM: function(elem, tagName)
     {
-        return this._canCleanDom;
-    },
-
-    cleanDOM: function(elem, tag)
-    {
-        if (this.canCleanDOM() === false) {
-            return;
-        }
-
         if (!elem) {
             elem = this.element;
         }
@@ -4431,7 +4426,7 @@ Viper.prototype = {
         dfx.removeAttr(dfx.find(elem, '[style=""]'), 'style');
         dfx.removeAttr(dfx.find(elem, '[class=""]'), 'class');
 
-        this._cleanDOM(elem, tag, true);
+        this._cleanDOM(elem, tagName, true);
 
         var range = this.getViperRange();
         var lastElem = range._getLastSelectableChild(elem);
@@ -4439,18 +4434,16 @@ Viper.prototype = {
             lastElem.data = dfx.rtrim(lastElem.data.replace(/(&nbsp;)*$/, ''));
         }
 
-        return elem;
-
     },
 
-    _cleanDOM: function(elem, tag, topLevel)
+    _cleanDOM: function(elem, tagName, topLevel)
     {
         if (!elem) {
             return;
         }
 
         if (elem.firstChild && dfx.isTag(elem, 'pre') !== true) {
-            this._cleanDOM(elem.firstChild, tag);
+            this._cleanDOM(elem.firstChild, tagName);
         }
 
         if (elem === this.element || topLevel === true) {
@@ -4458,10 +4451,10 @@ Viper.prototype = {
         }
 
         var nextSibling = elem.nextSibling;
-        this._cleanNode(elem, tag);
+        this._cleanNode(elem, tagName);
 
         if (nextSibling) {
-            this._cleanDOM(nextSibling, tag);
+            this._cleanDOM(nextSibling, tagName);
         }
 
     },
@@ -4543,12 +4536,6 @@ Viper.prototype = {
 
                 default:
                     if (dfx.isStubElement(node) === false && !node.firstChild) {
-                        // Any span with no content and class _my4_keyword is a keyword replacing with nothing.
-                        // We don't want to get rid of those keywords.
-                        if (tagName === 'span' && (node.getAttribute('viperchangeid') || dfx.hasClass(node, '_my4_keyword'))) {
-                            return;
-                        }
-
                         dfx.remove(node);
                     }
                 break;
@@ -4596,8 +4583,7 @@ Viper.prototype = {
             '8217': '\'',
             '8220': '"',
             '8221': '"',
-            '8226': '*',
-            '8230': '...'
+            '8226': '*'
         };
 
         for (var code in specialCharcodes) {

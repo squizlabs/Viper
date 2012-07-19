@@ -99,6 +99,10 @@ abstract class AbstractSikuliUnitTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
+        if (getenv('VIPER_TEST_VERBOSE') === 'TRUE') {
+            self::$_debugging = TRUE;
+        }
+
         $this->connect();
 
     }//end setUp()
@@ -933,7 +937,7 @@ abstract class AbstractSikuliUnitTest extends PHPUnit_Framework_TestCase
      */
     protected function sendCmd($command)
     {
-        $this->_debug('>>> '.$command);
+        $this->debug('>>> '.$command);
 
         // This will allow _getStreamOutput method to stop waiting for more data.
         $command .= ";print '>>>';\n";
@@ -957,6 +961,8 @@ abstract class AbstractSikuliUnitTest extends PHPUnit_Framework_TestCase
         if (self::$_connected === TRUE) {
             return;
         }
+
+        self::$_varCount = 0;
 
         if ($this->getOS() === 'windows') {
             $cmd     = 'start "Viper" /B "C:\Program Files\Java\jre7\bin\java.exe" -jar "C:\Program Files\Sikuli X\sikuli-script.jar" -i';
@@ -1130,16 +1136,10 @@ abstract class AbstractSikuliUnitTest extends PHPUnit_Framework_TestCase
             return $this->_getStreamOutputWindows();
         }
 
-        $isError    = FALSE;
-        $timeout    = 10;
-        $content    = array();
-        $start      = microtime(TRUE);
-        $startOfErr = FALSE;
-
-        $streamSelectTimeout = 1;
-        if ($timeout <= 0) {
-            $streamSelectTimeout = 0;
-        }
+        $isError = FALSE;
+        $timeout = 10;
+        $content = array();
+        $start   = microtime(TRUE);
 
         while (TRUE) {
             $read    = array(
@@ -1169,18 +1169,16 @@ abstract class AbstractSikuliUnitTest extends PHPUnit_Framework_TestCase
                         }
 
                         // DEBUG.
-                        // echo $line."\n";ob_flush();
+                        //var_dump($line);@ob_flush();
 
-                        $time      = microtime(TRUE);
+                        $start     = microtime(TRUE);
                         $content[] = $line;
 
-                        if ($isError === TRUE && preg_match('/  Line \d+, in file <stdin>/i', $line) === 1) {
-                            if ($startOfErr === TRUE) {
-                                // Second time we find this line, its the end of the error.
-                                break(2);
-                            }
-
-                            $startOfErr = TRUE;
+                        if ($isError === TRUE
+                            && (preg_match('/  Line \d+, in file <stdin>/i', $line) === 1
+                            || preg_match('/File "<stdin>", line \d+/i', $line) === 1)
+                        ) {
+                            $timeout = 1;
                         }
                     }//end if
                 }//end foreach
@@ -1195,17 +1193,23 @@ abstract class AbstractSikuliUnitTest extends PHPUnit_Framework_TestCase
             }
 
             if ((microtime(TRUE) - $start) > $timeout) {
-                throw new Exception('Sikuli server did not respond');
+                if ($isError === TRUE) {
+                    break;
+                } else {
+                    $this->debug('Exception: Sikuli server did not respond');
+                    throw new Exception('Sikuli server did not respond');
+                }
             }
         }//end while
 
         $content = implode("\n", $content);
 
         if ($isError === TRUE) {
-            throw new Exception($content);
+            $this->debug("Sikuli ERROR: \n".$content);
+            throw new Exception("Sikuli ERROR: \n".$content);
         }
 
-        $this->_debug($content);
+        $this->debug($content);
 
         return $content;
 
@@ -1219,14 +1223,14 @@ abstract class AbstractSikuliUnitTest extends PHPUnit_Framework_TestCase
      *
      * @return void
      */
-    private function _debug($content)
+    protected function debug($content)
     {
-        if (self::$_debugging === TRUE) {
+        if (self::$_debugging === TRUE && trim($content) !== '') {
             echo trim($content)."\n";
-            ob_flush();
+            @ob_flush();
         }
 
-    }//end _debug()
+    }//end debug()
 
 
 }//end class

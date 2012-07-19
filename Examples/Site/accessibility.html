@@ -1,0 +1,214 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en-AU">
+
+<head>
+
+    <!-- MAIN STYLES -->
+    <link href='css/accessibility.css' rel='stylesheet' type='text/css'>
+    <link rel="Shortcut Icon" href="images/favicon.png">
+
+    <!--[if lt IE 9]>
+    <link rel="stylesheet" type="text/css" href="css/ie8-and-down.css" />
+    <![endif]-->
+    <!--[if gt IE 7]>
+    <link rel="stylesheet" type="text/css" href="css/ie8-and-up.css" />
+    <![endif]-->
+
+    <title>Squiz Viper - Accessibility Demo</title>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <script type="text/javascript" src="../../DfxJSLib/dfx.js"></script>
+    <script type="text/javascript" src="../../Viper-all.js"></script>
+    <script type="text/javascript">
+        var viper = null;
+        ViperReadyCallback = function() {
+            viper = new Viper('test');
+
+            var allPlugins = ['ViperCoreStylesPlugin', 'ViperKeyboardEditorPlugin', 'ViperInlineToolbarPlugin', 'ViperHistoryPlugin', 'ViperListPlugin', 'ViperFormatPlugin', 'ViperToolbarPlugin', 'ViperTableEditorPlugin', 'ViperCopyPastePlugin', 'ViperImagePlugin', 'ViperLinkPlugin', 'ViperAccessibilityPlugin', 'ViperSourceViewPlugin', 'ViperSearchReplacePlugin', 'ViperLangToolsPlugin', 'ViperCharMapPlugin', 'ViperTrackChangesPlugin'];
+            viper.getPluginManager().setPlugins(allPlugins);
+
+            var prevViperType = 'complex';
+            var editables     = dfx.getClass('Viper-editable');
+            for (var i = 0; i < editables.length; i++) {
+                (function(editableElement) {
+                    dfx.addEvent(editableElement, 'mousedown', function() {
+                        if (dfx.hasClass(editableElement, 'viper-simple') === true) {
+                            if (prevViperType !== 'simple') {
+                                prevViperType = 'simple';
+                                viper.getPluginManager().removePlugins();
+                            }
+                        } else if (prevViperType !== 'complex') {
+                            prevViperType = 'complex';
+                            viper.getPluginManager().setPlugins(allPlugins);
+                        }
+
+                        viper.setEditableElement(editableElement);
+                    });
+                })
+                (editables[i]);
+            }
+            var buttons = [['bold', 'italic', 'subscript', 'superscript', 'strikethrough', 'class'], 'removeFormat', ['justify', 'formats', 'headings'], ['undo', 'redo'], ['unorderedList', 'orderedList', 'indentList', 'outdentList'], 'insertTable', 'image', 'hr', ['insertLink', 'removeLink', 'anchor'], 'insertCharacter', 'searchReplace', 'langTools', 'accessibility', 'sourceEditor'];
+            viper.getPluginManager().setPluginSettings('ViperToolbarPlugin', {buttons: buttons});
+            viper.getPluginManager().setPluginSettings('ViperInlineToolbarPlugin', {buttons: buttons});
+        };
+    </script>
+
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-359178-15']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+
+</head>
+
+<body>
+
+	<div id="header">
+
+		<div id="header-content">
+
+			<a href="index.html">
+			<img src="images/header-logo-sm.png" alt="Squiz Viper">
+			</a>
+
+			<div id="header-viper-logo-sm">
+
+			</div>
+
+		</div>
+
+	</div>
+
+
+	<div id="content">
+
+		<div id="navigation">
+
+
+			<a href="index.html" id="back-link">
+
+			<span id="button-box" >
+
+				<span class="button-label">Demos</span>
+
+			</span>
+
+			</a>
+
+			<div id="current-location">
+
+				Accessibility tools demonstration
+
+			</div>
+
+			<div class="demo-ins-refresh">
+
+			</div>
+
+		</div>
+
+		<div class="demo">
+
+		<div id="page">
+
+			<div id="page-header">
+
+			</div>
+
+			<div id="page-middle">
+
+				<div id="page-content" class="Viper-editable">
+
+					<h1>Accessibility</h1>
+
+					<hr>
+
+					<p class="intro">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam pellentesque lectus nec eros gravida facilisis vitae quis libero. In venenatis posuere risus. Vestibulum euismod lectus sed diam placerat rhoncus. Integer gravida tellus in est elementum eget feugiat mauris auctor. Phasellus id elit vitae felis sodales placerat a ac arcu. In congue, odio vitae viverra dictum, felis felis molestie quam, eu suscipit turpis libero eu magna. Pellentesque id sapien lacus.</p>
+
+					<h2>What is accessibility?</h2>
+
+					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam pellentesque lectus nec eros gravida facilisis vitae quis libero. In venenatis posuere risus. Vestibulum euismod lectus sed diam placerat rhoncus. Integer gravida tellus in est elementum eget feugiat mauris auctor. Phasellus id elit vitae felis sodales placerat a ac arcu. In congue, odio vitae viverra dictum, <a href="#">felis felis molestie quam</a>, eu suscipit turpis libero eu magna. Pellentesque id sapien lacus. Phasellus arcu odio, dapibus eu venenatis a, pellentesque nec mi. Morbi pretium nibh et ipsum commodo elementum. Mauris varius venenatis nibh ac viverra. Nam suscipit, mauris eleifend hendrerit ultrices, leo turpis cursus nulla, et rutrum mauris orci non lectus. Pellentesque vel quam libero.</p>
+
+					<img src="images/accessibility.jpg" class="wide-image" alt="accessibility">
+
+					<p>Nam suscipit, mauris eleifend hendrerit ultrices, leo turpis cursus nulla, et rutrum mauris orci non lectus. Pellentesque vel quam libero.</p>
+
+					<ul>
+						<li>This is a list item</li>
+						<li>Here is another one, too</li>
+					</ul>
+
+					<h2>What do I need to do?</h2>
+
+					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam pellentesque lectus nec eros gravida facilisis vitae quis libero. In venenatis posuere risus.</p>
+
+					<table>
+
+						<tr>
+
+							<th>Compliance Level</th>
+							<th>Requirements</th>
+
+						</tr>
+						<tr>
+
+							<td>Lorem ipsum dolor sit</td>
+							<td>Amet orem ipsum dolor sit un mates eget.</td>
+
+						</tr>
+						<tr>
+
+							<td>Lorem una dolor nova</td>
+							<td>Amet orem ipsum dolor sit un consectetur adipiscing elit mates eget.</td>
+
+						</tr>
+
+					</table>
+
+				</div>
+
+			</div>
+
+			<div id="page-bottom">
+
+			</div>
+
+		</div>
+
+		</div>
+
+	</div>
+
+
+
+	<div id="footer">
+
+		<div id="footer-content">
+
+			<div id="footer-graphic">
+
+			</div>
+
+			<div id="footer-left">
+
+				<p>Viper makes editing your webpages intuitive, natural and even enjoyable. No need for modal windows or admin panels. To update your editable content, just click and type.</p>
+
+				<p><a href="Squiz Viper Demonstration home"</a></p>
+
+			</div>
+
+			<a href="http://www.squiz.com.au/" title="Visit the Squiz website" id="footer-squiz-button"> </a>
+
+		</div>
+
+	</div>
+
+</body>
+</html>

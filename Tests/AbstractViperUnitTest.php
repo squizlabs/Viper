@@ -229,8 +229,23 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
             }
         }
 
+        $viperInclude = '';
+        if (getenv('VIPER_TEST_USE_BUILT_VIPER') === 'TRUE') {
+            $path = dirname(dirname(__FILE__)).'/build/viper.js';
+            if (file_exists($path) === FALSE) {
+                throw new Exception('Could not find: '.$path);
+            }
+
+            $viperInclude = '<script type="text/javascript" src="../build/viper.js"></script>
+                             <link rel="stylesheet" media="screen" href="../build/viper.css" />';
+        } else {
+            $viperInclude = '<script type="text/javascript" src="../DfxJSLib/dfx.js"></script>
+                             <script type="text/javascript" src="../Viper-all.js"></script>';
+        }
+
         // Put the current test file contents to the main test file.
         $contents = str_replace('__TEST_CONTENT__', $testFileContent, self::$_testContent);
+        $contents = str_replace('__TEST_VIPER_INCLUDE__', $viperInclude, $contents);
         $contents = str_replace('__TEST_TITLE__', $this->getName(), $contents);
         $contents = str_replace('__TEST_JS_INCLUDE__', $jsInclude, $contents);
         $contents = str_replace('__TEST_JS_EXEC_CACHE__', json_encode(array_flip(self::$_jsExecCache)), $contents);
@@ -303,7 +318,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
 
             // Make sure page is loaded.
             $maxRetries = 4;
-            while ($this->topToolbarButtonExists('italic') === FALSE) {
+            while ($this->topToolbarButtonExists('italic', 'disabled') === FALSE) {
                 $this->reloadPage();
                 if ($maxRetries === 0) {
                     throw new Exception('Failed to load Viper test page.');
@@ -436,7 +451,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         $this->_switchWindow('main');
         sleep(2);
 
-        $texts = $this->execJS('window.opener.getCoords('.json_encode(self::_getKeywordsList()).')', TRUE);
+        $texts = $this->execJS('viperTest.getWindow().getCoords('.json_encode(self::_getKeywordsList()).')', TRUE);
         $count = count($texts);
 
         $i      = 1;
@@ -465,7 +480,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
             try {
                 for ($j = 1; $j <= $tests; $j++) {
                     // Change the contents of the test page.
-                    $this->execJS('window.opener.changeContent('.$j.', '.$textSimilarity.')', TRUE);
+                    $this->execJS('viperTest.getWindow().changeContent('.$j.', '.$textSimilarity.')', TRUE);
 
                     // Test that captured images can be found on the page.
                     for ($i = 1; $i <= $count; $i++) {
@@ -729,7 +744,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         $this->selectText('PyP');
         sleep(1);
 
-        $vitp      = $this->execJS('window.opener.getVITP()', TRUE);
+        $vitp      = $this->execJS('viperTest.getWindow().getVITP()', TRUE);
         $vitp['x'] = $this->getPageXRelativeToScreen($vitp['x']);
         $vitp['y'] = $this->getPageYRelativeToScreen($vitp['y']);
 
@@ -738,7 +753,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         copy($vitpImage, $imgPath.'/vitp_arrow.png');
 
         // Left arrow.
-        $vitp      = $this->execJS('window.opener.getVITP("left")', TRUE);
+        $vitp      = $this->execJS('viperTest.getWindow().getVITP("left")', TRUE);
         $vitp['x'] = $this->getPageXRelativeToScreen($vitp['x']);
         $vitp['y'] = $this->getPageYRelativeToScreen($vitp['y']);
 
@@ -747,7 +762,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         copy($vitpImage, $imgPath.'/vitp_arrowLeft.png');
 
         // Right arrow.
-        $vitp      = $this->execJS('window.opener.getVITP("right")', TRUE);
+        $vitp      = $this->execJS('viperTest.getWindow().getVITP("right")', TRUE);
         $vitp['x'] = $this->getPageXRelativeToScreen($vitp['x']);
         $vitp['y'] = $this->getPageYRelativeToScreen($vitp['y']);
 
@@ -756,25 +771,25 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         copy($vitpImage, $imgPath.'/vitp_arrowRight.png');
 
         // Remove all Viper elements.
-        $this->execJS('window.opener.viper.destroy()', TRUE);
+        $this->execJS('viperTest.getWindow().viper.destroy()', TRUE);
 
         // Create image for the text field actions.
-        $textFieldActionRevertRegion = $this->getRegionOnPage($this->execJS('window.opener.dfx.getBoundingRectangle(window.opener.dfx.getId("textboxActionRevert"))', TRUE));
+        $textFieldActionRevertRegion = $this->getRegionOnPage($this->execJS('viperTest.getWindow().dfx.getBoundingRectangle(viperTest.getWindow().dfx.getId("textboxActionRevert"))', TRUE));
         $textFieldActionRevertImage  = $this->capture($textFieldActionRevertRegion);
         copy($textFieldActionRevertImage, $imgPath.'/textField_action_revert.png');
 
-        $textFieldActionClearRegion = $this->getRegionOnPage($this->execJS('window.opener.dfx.getBoundingRectangle(window.opener.dfx.getId("textboxActionClear"))', TRUE));
+        $textFieldActionClearRegion = $this->getRegionOnPage($this->execJS('viperTest.getWindow().dfx.getBoundingRectangle(viperTest.getWindow().dfx.getId("textboxActionClear"))', TRUE));
         $textFieldActionClearImage  = $this->capture($textFieldActionClearRegion);
         copy($textFieldActionClearImage, $imgPath.'/textField_action_clear.png');
 
         foreach ($statuses as $status => $className) {
-            $btnRects = $this->execJS('window.opener.getCoords("'.$status.'", "'.$className.'")', TRUE);
+            $btnRects = $this->execJS('viperTest.getWindow().getCoords("'.$status.'", "'.$className.'")', TRUE);
             foreach ($btnRects as $buttonName => $rect) {
                 $this->_createButtonImageFromRectangle($buttonName, $rect);
             }
         }
 
-        $this->execJS('window.opener.showAllBtns()', TRUE);
+        $this->execJS('viperTest.getWindow().showAllBtns()', TRUE);
 
         // Remove dupe icons.
         $dupeIcons = array(
@@ -1041,7 +1056,10 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
     public function closeJSWindow()
     {
         self::$_currentWindow = 'main';
-        $this->execJS('cw();', TRUE, TRUE);
+
+        if (self::$_useSelenium !== TRUE) {
+            $this->execJS('cw();', TRUE, TRUE);
+        }
 
     }//end closeJSWindow()
 
@@ -1908,15 +1926,26 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      */
     protected function execJS($js, $noCache=FALSE, $noReturnValue=FALSE)
     {
+        $this->debug('ExecJS: '.$js);
+
         // If Selenium is being used then use it to execute the JavaScript.
         if (self::$_useSelenium === TRUE) {
             usleep(100000);
-            $result = self::$_selenium->execute(
-                array(
-                 'script' => 'return dfx.jsonEncode(window.'.$js.');',
-                 'args'   => array(),
-                )
-            );
+
+            try {
+                // Need to have window object before the sub dfx calls.
+                $js = str_replace('(dfx', '(window.dfx', $js);
+
+                $result = self::$_selenium->execute(
+                    array(
+                     'script' => 'return window.dfx.jsonEncode(window.'.$js.');',
+                     'args'   => array(),
+                    )
+                );
+            } catch (Exception $e) {
+                $this->debug('Selenium error: '.$e->getMessage());
+                throw new Exception('Selenium error: '.$e->getMessage());
+            }
 
             $result = json_decode($result, TRUE);
 
@@ -2094,7 +2123,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         $this->setLocation(
             $endRight,
             ($this->getX($endRight) + 2),
-            $this->getY($endRight)
+            ($this->getY($endRight) + 2)
         );
 
         $this->dragDrop($startLeft, $endRight);

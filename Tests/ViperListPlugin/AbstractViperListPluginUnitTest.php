@@ -49,7 +49,7 @@ abstract class AbstractViperListPluginUnitTest extends AbstractViperUnitTest
                   'listOutdent',
                  );
 
-        $statuses = $this->execJS('window.opener.gListBStatus()');
+        $statuses = $this->execJS('viperTest.getWindow().gListBStatus()');
 
         if ($statuses['vitp'] !== FALSE) {
             foreach ($statuses['vitp'] as $btn => $status) {

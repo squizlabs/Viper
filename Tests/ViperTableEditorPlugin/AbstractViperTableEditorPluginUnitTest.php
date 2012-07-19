@@ -11,14 +11,16 @@ abstract class AbstractViperTableEditorPluginUnitTest extends AbstractViperUnitT
     /**
      * Creates a blank table with the default (top) headers.
      *
-     * @param integer $rows Number of rows.
-     * @param integer $cols Number of columns.
+     * @param integer $keyword      The keyword to select in the content.
+     * @param integer $rows         Number of rows.
+     * @param integer $cols         Number of columns.
+     * @param integer $headerType   The type of header to use when inserting the table.
      *
      * @return void
      */
-    protected function insertTable($rows=NULL, $cols=NULL)
+    protected function insertTable($keyword, $headerType=2, $rows=NULL, $cols=NULL)
     {
-        $this->selectKeyword(3);
+        $this->selectKeyword($keyword);
         $this->keyDown('Key.RIGHT');
         $this->clickTopToolbarButton('table');
 
@@ -27,7 +29,7 @@ abstract class AbstractViperTableEditorPluginUnitTest extends AbstractViperUnitT
                 throw new Exception('insertTable(rows, cols) only support maximum of 10x10 table');
             }
 
-            $cellCount = $cols;
+            $cellCount = $cols - 1;
             if ($rows > 1) {
                 $cellCount += (($rows - 1) * 10);
             }
@@ -35,58 +37,28 @@ abstract class AbstractViperTableEditorPluginUnitTest extends AbstractViperUnitT
             $this->clickElement('.Viper-sizePicker td', $cellCount);
         }
 
+        $this->clickElement('.VTEP-bubble-headerTitle', $headerType);
         $this->clickButton('Insert Table', NULL, TRUE);
 
     }//end insertTable()
 
 
     /**
-     * Creates a blank table with no headers.
+     * Creates a table with a specific id. If nothing is passed in the default table will be created with the id of test.
+     *
+     * @param string    $id         The id of the new table.
+     * @param integer   $rows       Number of rows.
+     * @param integer   $cols       Number of columns.
+     * @param integer   $headerType The type of headers to use when creating the table.
+     * @param integer   $keyword    The keyword to select in the content
      *
      * @return void
      */
-    protected function insertTableWithNoHeaders()
+    protected function insertTableWithSpecificId($id, $rows, $cols, $headerType, $keyword)
     {
-        $this->selectKeyword(3);
+        $this->selectKeyword($keyword);
         $this->keyDown('Key.RIGHT');
-        $this->clickTopToolbarButton('table');
-
-        $this->clickElement('.VTEP-bubble-headerTitle', 0);
-        $this->clickButton('Insert Table', NULL, TRUE);
-
-    }//end insertTableWithNoHeaders()
-
-
-    /**
-     * Creates a blank table with left headers.
-     *
-     * @return void
-     */
-    protected function insertTableWithLeftHeaders()
-    {
-        $this->selectKeyword(3);
-        $this->keyDown('Key.RIGHT');
-        $this->clickTopToolbarButton('table');
-
-        $this->clickElement('.VTEP-bubble-headerTitle', 1);
-        $this->clickButton('Insert Table', NULL, TRUE);
-
-    }//end insertTableWithLeftHeaders()
-
-
-    /**
-     * Creates a blank table with both headers.
-     *
-     * @return void
-     */
-    protected function insertTableWithBothHeaders()
-    {
-        $this->selectKeyword(3);
-        $this->keyDown('Key.RIGHT');
-        $this->clickTopToolbarButton('table');
-
-        $this->clickElement('.VTEP-bubble-headerTitle', 3);
-        $this->clickButton('Insert Table', NULL, TRUE);
+        $this->execJS('insTable('.$rows.', '.$cols.', '.$headerType.', "'.$id.'")');
 
     }//end insertTableWithBothHeaders()
 
@@ -146,7 +118,7 @@ abstract class AbstractViperTableEditorPluginUnitTest extends AbstractViperUnitT
      */
     protected function getCellHighlight()
     {
-        return $this->execJS('window.opener.gTblH()');
+        return $this->execJS('viperTest.getWindow().gTblH()');
 
     }//end getCellHighlight()
 
@@ -178,8 +150,10 @@ abstract class AbstractViperTableEditorPluginUnitTest extends AbstractViperUnitT
      */
     protected function clickMergeSplitIcon($icon)
     {
-        $this->clickInlineToolbarButton('splitMerge');
-        //$this->mouseMoveOffset(-50, -50);
+        if ($this->inlineToolbarButtonExists('splitMerge')) {
+            $this->clickInlineToolbarButton('splitMerge');
+        }
+
         $this->clickInlineToolbarButton($icon);
 
     }//end clickMergeSplitIcon()
@@ -202,8 +176,24 @@ abstract class AbstractViperTableEditorPluginUnitTest extends AbstractViperUnitT
 
 
     /**
-     * Checks that the icon statuses are correct.
+     * Checks that the expected html matches the actual html after removing the header tags from the table.
      *
+     * @param string $html The expected HTML.
+     *
+     * @return void
+     */
+    protected function assetTableWithoutHeaders($html)
+    {
+        $this->removeTableHeaders();
+        $this->assertHTMLMatch($html);
+
+    }//end assetTableWithoutHeaders()
+
+
+    /**
+     * Checks that the merge and split icon statuses are correct.
+     *
+     * @param int     $cell       The cell to check the icons for.
      * @param boolean $splitVert  The status of the split vertical button.
      * @param boolean $splitHoriz The status of the split horizontal button.
      * @param boolean $mergeUp    The status of the merge up button.
@@ -213,7 +203,8 @@ abstract class AbstractViperTableEditorPluginUnitTest extends AbstractViperUnitT
      *
      * @return void
      */
-    protected function assertIconStatusesCorrect(
+    protected function assertMergeAndSplitIconStatuses(
+        $cell,
         $splitVert,
         $splitHoriz,
         $mergeUp,
@@ -221,6 +212,10 @@ abstract class AbstractViperTableEditorPluginUnitTest extends AbstractViperUnitT
         $mergeLeft,
         $mergeRight
     ) {
+
+        $this->showTools($cell, 'cell');
+        $this->clickInlineToolbarButton('splitMerge');
+
         $icons = array(
                   'splitV',
                   'splitH',
@@ -241,7 +236,6 @@ abstract class AbstractViperTableEditorPluginUnitTest extends AbstractViperUnitT
         }
 
     }//end assertIconStatusesCorrect()
-
 
 }//end class
 

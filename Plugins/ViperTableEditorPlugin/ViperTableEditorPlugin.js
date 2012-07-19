@@ -3359,8 +3359,14 @@ ViperTableEditorPlugin.prototype = {
                 dfx.setHtml(cells[0], '&nbsp;');
             }
 
+            var cell  = cells[0];
             var range = this.viper.getCurrentRange();
-            range.setStart(range._getFirstSelectableChild(cells[0]), 0);
+            var child = range._getFirstSelectableChild(cell);
+            if (!child && cell.childNodes.length === 1) {
+                child = cell.childNodes[0];
+            }
+
+            range.setStart(child, 0);
             range.collapse(true);
             ViperSelection.addRange(range);
         }
@@ -3638,6 +3644,10 @@ ViperTableEditorPlugin.prototype = {
             } else {
                 toCell.appendChild(fromCell.firstChild);
             }
+        }
+
+        if (!toCell.lastChild) {
+            this._initCell(toCell);
         }
 
     },

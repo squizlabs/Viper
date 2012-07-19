@@ -20,6 +20,7 @@ function ViperInlineToolbarPlugin(viper)
     this._lineageItemSelected = false;
     this._margin              = 15;
     this._toolbarWidget       = null;
+    this._selectionLineage    = [];
 
     this._subSections             = {};
     this._subSectionButtons       = {};
@@ -69,7 +70,10 @@ ViperInlineToolbarPlugin.prototype = {
 
         if (settings.buttons) {
             this._buttons = settings.buttons;
-            this._toolbarWidget.orderButtons(this._buttons);
+
+            if (this._toolbarWidget) {
+                this._toolbarWidget.orderButtons(this._buttons);
+            }
         }
 
     },
@@ -132,7 +136,7 @@ ViperInlineToolbarPlugin.prototype = {
         }
 
         var lineage = this._getSelectionLineage(range, nodeSelection);
-
+        this._selectionLineage = lineage;
         if (!lineage || lineage.length === 0) {
             return false;
         }
@@ -268,6 +272,25 @@ ViperInlineToolbarPlugin.prototype = {
         var tags = dfx.getTag('li', this._lineage);
         if (tags[index]) {
             dfx.trigger(tags[index], 'mousedown');
+        }
+
+    },
+
+    getLineage: function()
+    {
+        this._selectionLineage = this._getSelectionLineage();
+        return this._selectionLineage;
+
+    },
+
+    getCurrentLineageIndex: function()
+    {
+        if (this._currentLineageIndex !== null) {
+            return this._currentLineageIndex;
+        } else if (this._selectionLineage.length === 0) {
+             return 0;
+        } else {
+            return (this._selectionLineage.length - 1)
         }
 
     },
@@ -472,6 +495,7 @@ ViperInlineToolbarPlugin.prototype = {
      */
     _getSelectionLineage: function(range, nodeSelection)
     {
+        range             = range || this.viper.getViperRange();
         var lineage       = [];
         var parent        = null;
         var nodeSelection = nodeSelection || range.getNodeSelection(range);

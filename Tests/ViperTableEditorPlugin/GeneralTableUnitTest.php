@@ -45,15 +45,13 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
      */
     public function testUsingTableIconInTopToolbar()
     {
-        $this->insertTable();
-
+        $this->insertTable(1);
+        $this->clickCell(0);
         $this->assertTrue($this->topToolbarButtonExists('table', 'active'), 'Create table should be active');
-
         $this->clickTopToolbarButton('table', 'active');
 
         // Check to make sure the table editing tools appear.
         $this->assertTrue($this->buttonExists('tableCell'), 'Table tools did not appear on screen');
-
         $this->clickTopToolbarButton('table', 'active');
 
         // Check to make sure the table editing tools don't appear.
@@ -69,7 +67,7 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
      */
     public function testHRIconNotAvailableForCaptionAndTable()
     {
-        $this->click($this->findKeyword(2));
+        $this->click($this->findKeyword(1));
         $this->assertTrue($this->topToolbarButtonExists('insertHr', 'disabled'), 'HR icon should not appear in the top toolbar.');
 
         $this->keyDown('Key.SHIFT + Key.RIGHT');
@@ -78,7 +76,7 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
         $this->selectInlineToolbarLineageItem(1);
         $this->assertTrue($this->topToolbarButtonExists('insertHr', 'disabled'), 'HR icon should not appear in the top toolbar.');
 
-        $this->click($this->findKeyword(3));
+        $this->clickCell(4);
         $this->assertTrue($this->topToolbarButtonExists('insertHr', 'disabled'), 'HR icon should not appear in the top toolbar.');
 
     }//end testHRIconNotAvailableForCaptionAndTable()
@@ -91,7 +89,8 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
      */
     public function testTableEditingIconAndTools()
     {
-        $this->insertTable();
+
+        $this->insertTable(1);
 
         // Get the first cell of the table.
         $tableRect = $this->getBoundingRectangle('table');
@@ -198,7 +197,7 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
      *
      * @return void
      */
-    public function testComplextTableHighlights2()
+    public function testComplextTableHighlights()
     {
         $table   = $this->getBoundingRectangle('table');
         $tbody   = $this->getBoundingRectangle('tbody');
@@ -447,7 +446,6 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
      */
     public function testComplextTableHighlightsNoFooter()
     {
-        $this->execJS('window.opener.dfx.remove(window.opener.dfx.getTag("tfoot"))');
 
         $table   = $this->getBoundingRectangle('table');
         $tbody   = $this->getBoundingRectangle('tbody');
@@ -522,7 +520,6 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
      */
     public function testComplextTableHighlightsNoHeader()
     {
-        $this->execJS('window.opener.dfx.remove(window.opener.dfx.getTag("thead"))');
 
         $table   = $this->getBoundingRectangle('table');
         $tbody   = $this->getBoundingRectangle('tbody');
@@ -597,7 +594,6 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
      */
     public function testComplextTableHighlightsNoCaption()
     {
-        $this->execJS('window.opener.dfx.remove(window.opener.dfx.getTag("caption"))');
 
         $table   = $this->getBoundingRectangle('table');
         $tbody   = $this->getBoundingRectangle('tbody');
@@ -672,7 +668,7 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
      */
     public function testTableKeyboardNav()
     {
-        $this->insertTable(2, 3);
+        $this->insertTable(1, 2, 2, 3);
 
         $this->clickCell(0);
         $this->keyDown('Key.TAB');
@@ -684,21 +680,7 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
         $this->keyDown('Key.SHIFT + Key.TAB');
         $this->type('1');
 
-        usleep(500);
-        $actual   = $this->getTableStructure(0, TRUE);
-        $expected = array(
-                     array(
-                      array('content' => '&nbsp;'),
-                      array('content' => '1 '),
-                      array('content' => '2 '),
-                     ),
-                     array(
-                      array('content' => '3 '),
-                      array('content' => '&nbsp;'),
-                      array('content' => '&nbsp;'),
-                     ),
-                    );
-        $this->assertTableStructure($expected, $actual);
+        $this->assetTableWithoutHeaders('<p>Test %1%</p><table style="width: 100%; " border="1"><tbody><tr><th></th><th>1</th><th>2</th></tr><tr><td>3</td><td></td><td></td></tr></tbody></table><p></p>');
 
     }//end testTableKeyboardNav()
 
@@ -708,9 +690,9 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
      *
      * @return void
      */
-    public function testTableKeyboardNavWithRowNColSpan()
+    public function testTableKeyboardNavWithRowAndColSpan()
     {
-        $this->insertTable(3, 3);
+        $this->insertTable(1, 2, 3, 3);
         $this->showTools(0, 'cell');
         $this->clickMergeSplitIcon('mergeDown');
 
@@ -743,35 +725,7 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
         $this->keyDown('Key.SHIFT + Key.TAB');
         $this->type('4');
 
-        usleep(500);
-        $actual   = $this->getTableStructure(0, TRUE);
-        $expected = array(
-                     array(
-                      array(
-                       'rowspan' => 2,
-                       'content' => '  ',
-                      ),
-                      array('content' => ' '),
-                      array('content' => '1 '),
-                     ),
-                     array(
-                      array(
-                       'colspan' => 2,
-                       'content' => '2  ',
-                      ),
-                     ),
-                     array(
-                      array('content' => '3 '),
-                      array('content' => ' '),
-                      array('content' => '4 '),
-                     ),
-                     array(
-                      array('content' => '5 '),
-                      array('content' => ' '),
-                      array('content' => ' '),
-                     ),
-                    );
-        $this->assertTableStructure($expected, $actual);
+        $this->assetTableWithoutHeaders('<p>Test %1%</p><table style="width: 100%; " border="1"><tbody><tr><th rowspan="2"></th><th></th><th>1</th></tr><tr><td colspan="2">2</td></tr><tr><td>3</td><td></td><td>4</td></tr><tr><td>5</td><td></td><td></td></tr></tbody></table><p></p>');
 
     }//end testTableKeyboardNavWithRowNColSpan()
 
@@ -783,7 +737,7 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
      */
     public function testRemoveTableOnLastRowDelete()
     {
-        $this->insertTable(2, 2);
+        $this->insertTable(1, 2, 2, 2);
 
         $this->showTools(0, 'row');
         $this->clickButton('delete');
@@ -791,10 +745,7 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
         $this->showTools(0, 'row');
         $this->clickButton('delete');
 
-        $actTagCounts = $this->execJS('gTagCounts("table")');
-        $expected     = array('table' => 1);
-
-        $this->assertEquals($expected, $actTagCounts, 'Table was not removed from the page after its last row was removed');
+        $this->assertHTMLMatch('<p>Test %1%</p><p></p>');
 
     }//end testRemoveTableOnLastRowDelete()
 
@@ -806,7 +757,7 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
      */
     public function testRemoveTableOnLastColDelete()
     {
-        $this->insertTable(2, 2);
+        $this->insertTable(1, 2, 2, 2);
 
         $this->showTools(0, 'col');
         $this->clickButton('delete');
@@ -814,10 +765,7 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
         $this->showTools(0, 'col');
         $this->clickButton('delete');
 
-        $actTagCounts = $this->execJS('gTagCounts("table")');
-        $expected     = array('table' => 1);
-
-        $this->assertEquals($expected, $actTagCounts, 'Table was not removed from the page after its last column was removed');
+        $this->assertHTMLMatch('<p>Test %1%</p><p></p>');
 
     }//end testRemoveTableOnLastColDelete()
 
@@ -829,13 +777,14 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
      */
     public function testTableNavEndFromFooter()
     {
-        $this->clickCell(3);
+        $this->insertTable(1);
+        $this->clickCell(10);
+        $this->keyDown('Key.RIGHT');
         $this->keyDown('Key.RIGHT');
         usleep(100);
-        $this->keyDown('t');
+        $this->keyDown('test');
 
-        $html = $this->getHtml('p', 3);
-        $this->assertEquals('&nbsp;t', $html);
+        $this->assetTableWithoutHeaders('<p>Test XAX</p><table border="1" style="width: 100%;"><tbody><tr><th></th><th></th><th></th><th></th></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table>tes<p></p>');
 
     }//end testTableNavFooter()
 
@@ -845,17 +794,17 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
      *
      * @return void
      */
-    public function testInlineToolbarStaysOpenAfterMove()
-    {
-        $this->execJS('dfx.setHtml(dfx.getTag("td")[6], "&nbsp;")');
+   // public function testInlineToolbarStaysOpenAfterMove()
+  //  {
 
-        $this->showTools(7, 'row');
-        $this->clickInlineToolbarButton('mergeUp');
 
-        sleep(1);
-        $this->assertTrue($this->inlineToolbarButtonExists('delete'));
+      ///  $this->showTools(7, 'row');
+     //   $this->clickInlineToolbarButton('mergeUp');
 
-    }//end testInlineToolbarStaysOpenAfterMove()
+   //     sleep(1);
+ //       $this->assertTrue($this->inlineToolbarButtonExists('delete'));
+
+//    }//end testInlineToolbarStaysOpenAfterMove()
 
 
 }//end class
