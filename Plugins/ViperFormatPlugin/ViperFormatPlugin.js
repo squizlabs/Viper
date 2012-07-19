@@ -544,7 +544,7 @@ ViperFormatPlugin.prototype = {
                 && (!nodeSelection && self.handleFormat('div', true) === true))
             ) {
                 if (!nodeSelection || dfx.isTag(nodeSelection, 'img') === false) {
-                    var parents = dfx.getParents(startNode, 'caption', self.viper.getViperElement());
+                    var parents = dfx.getParents(startNode, 'caption,blockquote', self.viper.getViperElement());
                     if (parents.length === 0) {
                         tools.enableButton('headings');
                         tools.enableButton('formats');
@@ -822,6 +822,12 @@ ViperFormatPlugin.prototype = {
                     // dont show the tools.
                     var textContent = dfx.getNodeTextContent(node);
                     if (textContent && textContent.length > 80) {
+                        return false;
+                    }
+
+                    if (dfx.isTag(node, 'p') === true
+                        && dfx.isTag(node.parentNode, 'blockquote') === true
+                    ) {
                         return false;
                     }
 
