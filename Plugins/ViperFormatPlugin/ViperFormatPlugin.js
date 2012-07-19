@@ -357,7 +357,14 @@ ViperFormatPlugin.prototype = {
             pre: 'PRE'
         };
 
-        var formatButtonStatuses = this.getFormatButtonStatuses(data.lineage[data.current]);
+        var formatButtonStatuses = null;
+        var currentElement       = data.lineage[data.current];
+        if (currentElement.nodeType === dfx.TEXT_NODE && data.lineage.length === 1) {
+            formatButtonStatuses = this.getFormatButtonStatuses();
+        } else {
+            formatButtonStatuses = this.getFormatButtonStatuses(data.lineage[data.current]);
+        }
+
         var enableFormatsButton  = false;
         for (var button in formatButtonStatuses) {
             if (button === '_none' || button === '_canChange') {
@@ -374,11 +381,17 @@ ViperFormatPlugin.prototype = {
             }
         }
 
+        tools.getItem('vitpFormats').setIconClass('Viper-formats');
         if (enableFormatsButton === true) {
             data.toolbar.showButton('vitpFormats');
             tools.enableButton('vitpFormats');
+
+            if (currentElement.nodeType === dfx.TEXT_NODE && data.lineage.length > 1) {
+                currentElement = data.lineage[(data.current - 1)];
+            }
+
             for (var tag in formatButtons) {
-                if (dfx.isTag(data.lineage[data.current], tag) === true) {
+                if (dfx.isTag(currentElement, tag) === true) {
                     if (formatButtonStatuses[tag] === true) {
                         tools.enableButton(prefix + 'formats:' + formatButtons[tag]);
                         tools.setButtonActive(prefix + 'formats:' + formatButtons[tag]);
@@ -389,7 +402,6 @@ ViperFormatPlugin.prototype = {
                 }
             }
         } else {
-            tools.getItem('vitpFormats').setIconClass('Viper-formats');
             tools.disableButton('vitpFormats');
         }
 
@@ -572,7 +584,7 @@ ViperFormatPlugin.prototype = {
                         tools.disableButton(prefix + 'formats:' + formatButtons[tag]);
                     }
 
-                    if (dfx.isTag(lineage[currentLinIndex], tag) === true) {
+                    if (dfx.isTag(formatElement, tag) === true) {
                         tools.setButtonActive(prefix + 'formats:' + formatButtons[tag]);
                         tools.setButtonActive('formats');
                         tools.getItem('formats').setIconClass('Viper-formats-' + tag);
@@ -877,6 +889,12 @@ ViperFormatPlugin.prototype = {
         var selectedNode = element || range.getNodeSelection();
         var viperElement = this.viper.getViperElement();
 
+        if (!selectedNode && range.startContainer === range.endContainer) {
+            selectedNode = dfx.getFirstBlockParent(range.startContainer);
+        } else if (selectedNode && selectedNode.nodeType === dfx.TEXT_NODE) {
+            selectedNode = dfx.getFirstBlockParent(range.startContainer);
+        }
+
         if (selectedNode === viperElement) {
             // TODO: What to do here?
             return statuses;
@@ -887,12 +905,43 @@ ViperFormatPlugin.prototype = {
                 var canConvert = this.canConvert(selectedNode, tagName);
                 statuses[tagName] = canConvert;
                 if (canConvert === true) {
-                    statuses[tagName]._canChange = true;
+                    statuses._canChange = true;
                 }
             }
         } else {
+            var start      = range.getStartNode();
+            var end        = range.getEndNode();
+            var elements   = dfx.getElementsBetween(start, end);
+            var commonElem = range.getCommonElement();
+            elements.unshift(start);
+            elements.push(end);
 
-        }
+            var parents = [];
+            for (var i = 0; i < elements.length; i++) {
+                var elem = elements[i];
+                if (elem.nodeType === dfx.TEXT_NODE && dfx.trim(elem.data) === '') {
+                    continue;
+                }
+
+                parents = parents.concat(dfx.getParents(elem, null, commonElem));
+            }
+
+            statuses.div = true;
+            statuses._canChange = true;
+
+            if (parents.length > 0) {
+                // If only P tags then blockquote is allowed.
+                var allowBlockquote = true;
+                for (var i = 0; i < parents.length; i++) {
+                    if (dfx.isTag(parents[i], 'p') !== true) {
+                        allowBlockquote = false;
+                        break;
+                    }
+                }
+
+                statuses.blockquote = allowBlockquote;
+            }
+        }//end if
 
         return statuses;
 
