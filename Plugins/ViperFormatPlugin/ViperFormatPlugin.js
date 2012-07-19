@@ -1016,44 +1016,6 @@ ViperFormatPlugin.prototype = {
 
     },
 
-  //  isValidParent: function(childTagName, parentTagName)
-  //  {
-  //      var validParents = {
-  //          p: ',blockquote,body,button,dd,del,div,fieldset,form,ins,li,map,noscript,object,td,th,',
-  //          pre: '',
-  //          div: '',
-  //          blockquote: ''
-  //      };
-  //
-  //      if (validParents[childTagName]
-  //          && validParents[childTagName].indexOf(',' + parentTagName + ',') < 0
-  //      ) {
-  //          return false;
-  //      }
-  //
-  //      return true;
-  //
-  //  },
-  //
-  //  isValidChild: function(parentTagName, childTagName)
-  //  {
-  //      var validChildren = {
-  //          p: ',blockquote,body,button,dd,del,div,fieldset,form,ins,li,map,noscript,object,td,th,',
-  //          pre: '',
-  //          div: '',
-  //          blockquote: ''
-  //      };
-  //
-  //      if (validChildren[parentTagName]
-  //          && validChildren[parentTagName].indexOf(',' + childTagName + ',') < 0
-  //      ) {
-  //          return false;
-  //      }
-  //
-  //      return true;
-  //
-  //  },
-
     /**
      * Handles the format change.
      *
@@ -1308,6 +1270,10 @@ ViperFormatPlugin.prototype = {
             }
 
             dfx.remove(element);
+        } else if (type === 'blockquote' && dfx.isTag(element, 'p') === true) {
+            var newElem = document.createElement(type);
+            dfx.insertBefore(element, newElem);
+            newElem.appendChild(element);
         } else {
             var newElem = document.createElement(type);
             while (element.firstChild) {
