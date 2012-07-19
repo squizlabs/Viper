@@ -460,7 +460,7 @@ ViperImagePlugin.prototype = {
     {
         var self = this;
         this.viper.registerCallback('ViperInlineToolbarPlugin:initToolbar', 'ViperImagePlugin', function(toolbar) {
-            self._createInlineToolbar(toolbar);
+            self.createInlineToolbar(toolbar);
         });
 
         this.viper.registerCallback('ViperInlineToolbarPlugin:updateToolbar', 'ViperImagePlugin', function(data) {
@@ -469,7 +469,7 @@ ViperImagePlugin.prototype = {
 
     },
 
-    _createInlineToolbar: function(toolbar)
+    createInlineToolbar: function(toolbar)
     {
         var self       = this;
         var tools      = this.viper.ViperTools;
