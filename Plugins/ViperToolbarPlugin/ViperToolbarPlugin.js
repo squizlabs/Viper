@@ -358,7 +358,7 @@ ViperToolbarPlugin.prototype = {
                     return;
                 }
 
-                subSection.form.onsubmit = function() {console.info(1);
+                subSection.form.onsubmit = function() {
                     var button = tools.getItem(subSectionid + '-applyButton');
                     if (button.isEnabled() === false) {
                         return false;
