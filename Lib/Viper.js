@@ -4400,6 +4400,11 @@ Viper.prototype = {
                     return attrName + '"' + value + '"';
                 });
 
+                // Make sure IE style attribute values are lower case..
+                match = match.replace(/style="[^"]+"/, function(attr) {
+                    return attr.toLowerCase();
+                });
+
                 return match;
             });
         }
