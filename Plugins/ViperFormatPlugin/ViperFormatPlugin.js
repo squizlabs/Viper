@@ -383,11 +383,12 @@ ViperFormatPlugin.prototype = {
 
         tools.getItem('vitpFormats').setIconClass('Viper-formats');
         if (enableFormatsButton === true) {
-            data.toolbar.showButton('vitpFormats');
             tools.enableButton('vitpFormats');
 
             if (currentElement.nodeType === dfx.TEXT_NODE && data.lineage.length > 1) {
                 currentElement = data.lineage[(data.current - 1)];
+            } else {
+                 data.toolbar.showButton('vitpFormats');
             }
 
             for (var tag in formatButtons) {
