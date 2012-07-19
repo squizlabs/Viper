@@ -3475,7 +3475,6 @@ Viper.prototype = {
          if ((e.which !== 0 || e.keyCode === 46)
             && e.ctrlKey !== true
             && e.altKey !== true
-            && e.shiftKey !== true
             && e.metaKey !== true
         ) {
             return true;
