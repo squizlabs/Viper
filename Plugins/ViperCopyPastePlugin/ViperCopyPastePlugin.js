@@ -660,7 +660,10 @@ ViperCopyPastePlugin.prototype = {
         content = this._convertWordPasteList(content);
 
         // Remove class, lang and style attributes.
-        content = content.replace(/<(\w[^>]*) (class|lang|align|dir)=([^ |>]*)([^>]*)/gi, "<$1$4");
+        content = content.replace(/<(\w[^>]*) (class)=([^ |>]*)([^>]*)/gi, "<$1$4");
+        content = content.replace(/<(\w[^>]*) (lang)=([^ |>]*)([^>]*)/gi, "<$1$4");
+        content = content.replace(/<(\w[^>]*) (align)=([^ |>]*)([^>]*)/gi, "<$1$4");
+        content = content.replace(/<(\w[^>]*) (dir)=([^ |>]*)([^>]*)/gi, "<$1$4");
         content = content.replace(/<(\w[^>]*) (\w+:\w+)=([^ |>]*)([^>]*)/gi, "<$1$4");
 
         var self = this;
@@ -1342,12 +1345,12 @@ ViperCopyPastePlugin.prototype = {
             range.setStart(this._tmpNode, 0);
             range.collapse(true);
             ViperSelection.addRange(range);
-        } catch (e) {}
 
-        // Remove tmp nodes.
-        dfx.remove(this.pasteElement);
-        this._tmpNode     = null;
-        this.pasteElement = null;
+            // Remove tmp nodes.
+            dfx.remove(this.pasteElement);
+            this._tmpNode     = null;
+            this.pasteElement = null;
+        } catch (e) {}
 
     }
 
