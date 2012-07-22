@@ -490,7 +490,7 @@ ViperCopyPastePlugin.prototype = {
 
         if (html) {
             html = dfx.trim(html);
-            html = this.viper.cleanHTML(html);
+            html = this.viper.cleanHTML(html, ['dir', 'class', 'lang', 'align']);
         }
 
         if (!html) {
@@ -660,11 +660,11 @@ ViperCopyPastePlugin.prototype = {
         content = this._convertWordPasteList(content);
 
         // Remove class, lang and style attributes.
-        content = content.replace(/<(\w[^>]*) (class)=([^ |>]*)([^>]*)/gi, "<$1$4");
-        content = content.replace(/<(\w[^>]*) (lang)=([^ |>]*)([^>]*)/gi, "<$1$4");
-        content = content.replace(/<(\w[^>]*) (align)=([^ |>]*)([^>]*)/gi, "<$1$4");
-        content = content.replace(/<(\w[^>]*) (dir)=([^ |>]*)([^>]*)/gi, "<$1$4");
-        content = content.replace(/<(\w[^>]*) (\w+:\w+)=([^ |>]*)([^>]*)/gi, "<$1$4");
+      //  content = content.replace(/<(\w[^>]*) (class)=([^ |>]*)([^>]*)/gi, "<$1$4");
+      //  content = content.replace(/<(\w[^>]*) (lang)=([^ |>]*)([^>]*)/gi, "<$1$4");
+      //  content = content.replace(/<(\w[^>]*) (align)=([^ |>]*)([^>]*)/gi, "<$1$4");
+      //  content = content.replace(/<(\w[^>]*) (dir)=([^ |>]*)([^>]*)/gi, "<$1$4");
+      //  content = content.replace(/<(\w[^>]*) (\w+:\w+)=([^ |>]*)([^>]*)/gi, "<$1$4");
 
         var self = this;
         content  = content.replace(new RegExp('<(\\w[^>]*) style="([^"]*)"([^>]*)', 'gi'), function() {
