@@ -1151,6 +1151,11 @@ ViperFormatPlugin.prototype = {
                 var parent     = parents[0];
                 var newElement = document.createElement(type);
                 var contents   = range.getHTMLContents();
+
+                if (type === 'blockquote') {
+                    contents = '<p>' + contents + '</p>';
+                }
+
                 dfx.setHtml(newElement, contents);
 
                 var bookmark = this.viper.createBookmark();
