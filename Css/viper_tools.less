@@ -887,8 +887,8 @@
     .Viper-checkbox.Viper-active & {
         background-color: #205caf;
     }
-
 }
+
 .Viper-checkbox-slider {
     -moz-transition: left 0.2s ease-out;
     -webkit-transition: left 0.2s ease-out;
@@ -910,7 +910,6 @@
         background: -webkit-gradient(linear, left top, left bottom, from(#e9e9eb), to(#c2c2cb));
         background: -moz-linear-gradient(top,  #e9e9eb,  #c2c2cb);
     }
-
 }
 
 .Viper-checkbox-switch:before {
@@ -930,7 +929,6 @@
     .Viper-checkbox.Viper-active & {
         opacity: 1;
     }
-
 }
 
 .Viper-checkbox input {
@@ -956,27 +954,6 @@
     color: #FFF;
     text-shadow: 0 1px 0 #FFFFFF;
     border: 1px solid transparent;
-}
-
-@media screen and (max-width: 768px) {
-  .Viper-popup,
-  .ViperITP,
-  .ViperTP-bar {
-    font-size: 13px !important;
-  }
-  .Viper-button {
-    min-width: 39px;
-  }
-}
-
-::-webkit-scrollbar {
-	-webkit-appearance: none;
-	width: 0.6em;
-	background-color: #000;
-}
-::-webkit-scrollbar-thumb {
-	border-radius: 0.2em;
-	background-color: rgba(255,255,255,0.4);
 }
 
 .Viper-popup-header {
@@ -1098,4 +1075,16 @@
     font-weight: bold;
     -moz-user-select: none;
     margin: 5px 0;
+}
+
+/* Small screen customisations */
+@media screen and (max-width: 768px) {
+  .Viper-popup,
+  .ViperITP,
+  .ViperTP-bar {
+    font-size: 13px !important;
+  }
+  .Viper-button {
+    min-width: 39px;
+  }
 }
