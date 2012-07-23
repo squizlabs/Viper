@@ -910,7 +910,15 @@ ViperFormatPlugin.prototype = {
         }
 
         if (selectedNode === viperElement) {
-            // TODO: What to do here?
+            statuses = {
+                p: true,
+                pre: true,
+                div: true,
+                blockquote: true,
+                _none: false,
+                _canChange: true
+            };
+
             return statuses;
         }
 
@@ -1080,6 +1088,8 @@ ViperFormatPlugin.prototype = {
         ) {
             // Text node, get the first block parent.
             selectedNode = dfx.getFirstBlockParent(selectedNode);
+        } else if (!selectedNode && range.collapsed === true) {
+            selectedNode = dfx.getFirstBlockParent(range.startContainer);
         }
 
         if (selectedNode) {
@@ -1180,7 +1190,7 @@ ViperFormatPlugin.prototype = {
 
             for (var i = 0; i < parents.length; i++) {
                 var parent = parents[i];
-                if (parent.parentNode !== commonElem) {
+                if (parent !== commonElem && parent.parentNode !== commonElem) {
                     var parentParents = dfx.getParents(parent, null, commonElem);
 
                     // Check if any of these parents are already in newParents array.
