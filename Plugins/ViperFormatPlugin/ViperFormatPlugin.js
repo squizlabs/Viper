@@ -579,25 +579,40 @@ ViperFormatPlugin.prototype = {
                 }
             }
 
+            var isBlockQuote = false;
+            if (dfx.isTag(formatElement, 'p') === true
+                && dfx.isTag(formatElement.parentNode, 'blockquote') === true
+            ) {
+                isBlockQuote = true;
+            }
+
             var formatButtonStatuses = self.getFormatButtonStatuses(formatElement);
             if (formatButtonStatuses._canChange === true) {
                 tools.enableButton('formats');
                 for (var tag in formatButtons) {
                     if (formatButtonStatuses[tag] === true) {
                         tools.enableButton(prefix + 'formats:' + formatButtons[tag]);
-                        tools.setButtonInactive(prefix + 'formats:' + formatButtons[tag]);
+
+                        if (tag !== 'blockquote' || isBlockQuote !== true) {
+                            tools.setButtonInactive(prefix + 'formats:' + formatButtons[tag]);
+                        }
                     } else {
                         tools.setButtonInactive(prefix + 'formats:' + formatButtons[tag]);
                         tools.disableButton(prefix + 'formats:' + formatButtons[tag]);
                     }
 
                     if (dfx.isTag(formatElement, tag) === true || (!formatElement && dfx.isTag(blockParent, tag) === true)) {
-                        if (highlightButton === true) {
-                            tools.setButtonActive(prefix + 'formats:' + formatButtons[tag]);
-                        }
-
                         tools.setButtonActive('formats');
-                        tools.getItem('formats').setIconClass('Viper-formats-' + tag);
+
+                        if (highlightButton === true) {
+                            if (isBlockQuote === true) {
+                                tools.setButtonActive(prefix + 'formats:' + formatButtons['blockquote']);
+                                tools.getItem('formats').setIconClass('Viper-formats-blockquote');
+                            } else {
+                                tools.setButtonActive(prefix + 'formats:' + formatButtons[tag]);
+                                tools.getItem('formats').setIconClass('Viper-formats-' + tag);
+                            }
+                        }
                     }
                 }
             } else {
@@ -923,7 +938,18 @@ ViperFormatPlugin.prototype = {
         }
 
         if (selectedNode && dfx.isBlockElement(selectedNode) === true) {
+            var isBlockquote = false;
+            if (dfx.isTag(selectedNode, 'p') === true && dfx.isTag(selectedNode.parentNode, 'blockquote') === true) {
+                selectedNode = selectedNode.parentNode;
+                isBlockquote = true;
+            }
+
             for (var tagName in statuses) {
+                if (isBlockquote === true) {
+                    statuses[tagName] = true;
+                    continue;
+                }
+
                 var canConvert = this.canConvert(selectedNode, tagName);
                 statuses[tagName] = canConvert;
                 if (canConvert === true) {
@@ -1270,6 +1296,12 @@ ViperFormatPlugin.prototype = {
 
     _convertSingleElement: function(element, type)
     {
+        var isBlockQuote = false;
+        if (dfx.isTag(element, 'p') === true && dfx.isTag(element.parentNode, 'blockquote') === true) {
+            element      = element.parentNode;
+            isBlockQuote = true;
+        }
+
         if (dfx.isTag(element, type) === true) {
             if (type.indexOf('h') === 0) {
                 // Heading to P tag.
@@ -1297,8 +1329,17 @@ ViperFormatPlugin.prototype = {
             newElem.appendChild(element);
         } else {
             var newElem = document.createElement(type);
-            while (element.firstChild) {
-                newElem.appendChild(element.firstChild);
+
+            if (isBlockQuote === true) {
+                for (var childPTag = element.firstChild; childPTag; childPTag = childPTag.nextSibling) {
+                    while (childPTag.firstChild) {
+                        newElem.appendChild(childPTag.firstChild);
+                    }
+                }
+            } else {
+                while (element.firstChild) {
+                    newElem.appendChild(element.firstChild);
+                }
             }
 
             if (type === 'pre') {
