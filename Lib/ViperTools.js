@@ -1412,7 +1412,7 @@ ViperTools.prototype = {
                 var subSectionForm = tools.getItem(subSectionid).form;
                 dfx.removeEvent(document, 'keydown.' + id);
                 dfx.addEvent(document, 'keydown.' + id, function(e) {
-                    if (subSectionForm && e.which === 13) {
+                    if (subSectionForm && e.which === 13 && dfx.isTag(e.target, 'textarea') === false) {
                         return subSectionForm.onsubmit();
                     }
                 });
