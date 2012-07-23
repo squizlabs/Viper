@@ -678,6 +678,7 @@
 
 .Viper-textbox-main {
     position: relative;
+    padding-right: 0.3em;
 }
 .Viper-textbox.Viper-actionRevert .Viper-textbox-main,
 .Viper-textbox.Viper-actionClear .Viper-textbox-main {
@@ -765,6 +766,10 @@
 
 }
 
+.Viper-textbox-textArea {
+    min-height: 3.5em;
+}
+
 .input-placeholder {
     color: #c44e4e;
     font-style: italic;
@@ -808,6 +813,10 @@
 
     .Viper-textbox.Viper-disabled & {
         visibility: hidden;
+    }
+    
+    .Viper-textBox-textArea & {
+        display: none;
     }
 }
 .Viper-textbox.Viper-required .Viper-textbox-main:after {
