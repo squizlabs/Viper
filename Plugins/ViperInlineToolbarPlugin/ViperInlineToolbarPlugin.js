@@ -283,9 +283,9 @@ ViperInlineToolbarPlugin.prototype = {
 
     },
 
-    getCurrentLineageIndex: function()
+    getCurrentLineageIndex: function(forceUpdate)
     {
-        if (this._currentLineageIndex !== null && this.viper.getViperRange().collapsed === false) {
+        if (this._currentLineageIndex !== null && this.viper.getViperRange().collapsed === false && forceUpdate !== true) {
             return this._currentLineageIndex;
         } else if (this._selectionLineage.length === 0) {
              return 0;
