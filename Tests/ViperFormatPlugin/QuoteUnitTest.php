@@ -204,7 +204,7 @@ class Viper_Tests_ViperFormatPlugin_QuoteUnitTest extends AbstractFormatsUnitTes
         $this->assertFalse($this->inlineToolbarButtonExists('formats-blockquote', 'active'), 'Active quote icon should not appear in the inline toolbar');
         $this->assertTrue($this->topToolbarButtonExists('formats', 'disabled'), 'Disabled formats icon should appear in the top toolbar');
 
-    }//end testPartialSelectionOfParagraph()
+    }//end testPartialSelectionOfQuote()
 
 
     /**
