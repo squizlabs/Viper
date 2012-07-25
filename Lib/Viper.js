@@ -4364,42 +4364,40 @@ Viper.prototype = {
 
         content = this.replaceEntities(content);
 
-        if (this.isBrowser('msie') === true) {
-            // Regex to get list of HTML tags.
-            var subRegex  = '\\s+([:\\w]+)(?:\\s*=\\s*("(?:[^"]+)?"|\'(?:[^\']+)?\'|[^\'">\\s]+))?';
+        // Regex to get list of HTML tags.
+        var subRegex  = '\\s+([:\\w]+)(?:\\s*=\\s*("(?:[^"]+)?"|\'(?:[^\']+)?\'|[^\'">\\s]+))?';
 
-            // Regex to get list of attributes in an HTML tag.
-            var tagRegex  = new RegExp('(<\\w+)(?:' + subRegex + ')+\\s*(\/?>)', 'g');
-            var attrRegex = new RegExp(subRegex, 'g');
+        // Regex to get list of attributes in an HTML tag.
+        var tagRegex  = new RegExp('(<\\w+)(?:' + subRegex + ')+\\s*(\/?>)', 'g');
+        var attrRegex = new RegExp(subRegex, 'g');
 
-            content = content.replace(tagRegex, function(match, tagStart, a, tagEnd) {
-                match = match.replace(attrRegex, function(a, attrName, attrValue) {
-                    // All attribute names must be lowercase.
-                    attrName = attrName.toLowerCase();
+        content = content.replace(tagRegex, function(match, tagStart, a, tagEnd) {
+            match = match.replace(attrRegex, function(a, attrName, attrValue) {
+                // All attribute names must be lowercase.
+                attrName = attrName.toLowerCase();
 
-                    if (attrBlacklist.inArray(attrName) === true) {
-                        // This attribute is not allowed
-                        return '';
-                    } else if (attrName.indexOf(':') >= 0) {
-                        return '';
-                    }
+                if (attrBlacklist.inArray(attrName) === true) {console.info(attrName);
+                    // This attribute is not allowed.
+                    return '';
+                } else if (attrName.indexOf(':') >= 0) {
+                    return '';
+                }
 
-                    if (attrName === 'style') {
-                        // Style attribute value must be lowercase.
-                        attrValue = attrValue.toLowerCase();
-                    }
+                if (attrName === 'style') {
+                    // Style attribute value must be lowercase.
+                    attrValue = attrValue.toLowerCase();
+                }
 
-                    // Remove single and double quotes and then wrap the value with
-                    // double quotes.
-                    attrValue = dfx.trim(attrValue, '"\'');
+                // Remove single and double quotes and then wrap the value with
+                // double quotes.
+                attrValue = dfx.trim(attrValue, '"\'');
 
-                    var res = ' ' + attrName + '="' + attrValue + '"';
-                    return res;
-                });
-
-                return match;
+                var res = ' ' + attrName + '="' + attrValue + '"';
+                return res;
             });
-        }//end if
+
+            return match;
+        });
 
         return content;
 
