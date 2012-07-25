@@ -267,7 +267,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
 
             // Make sure page is loaded.
             $maxRetries = 4;
-            while ($this->topToolbarButtonExists('italic') === FALSE) {
+            while ($this->topToolbarButtonExists('italic', 'disabled') === FALSE) {
                 $this->reloadPage();
                 if ($maxRetries === 0) {
                     throw new Exception('Failed to load Viper test page.');
@@ -2127,6 +2127,8 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         );
 
         $this->dragDrop($startLeft, $endRight);
+
+        usleep(50000);
 
     }//end selectKeyword()
 
