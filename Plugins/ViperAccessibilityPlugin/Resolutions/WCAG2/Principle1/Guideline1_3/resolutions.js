@@ -316,31 +316,36 @@ ViperAccessibilityPlugin_WCAG2_Principle1_Guideline1_3 = {
                 this.parent.setResolutionInstruction(contentElement, '<p>The ALIGN attribute needs to be converted to a CSS based alignment method.</p>');
                 var action = function() {
                     var align = element.getAttribute('align');
-                    switch (align) {
-                        case 'left':
-                            dfx.setStyle(element, 'float', 'left');
-                            dfx.setStyle(element, 'margin', '1em 1em 1em 0');
-                            dfx.setStyle(element, 'display', '');
-                        break;
 
-                        case 'right':
-                            dfx.setStyle(element, 'float', 'right');
-                            dfx.setStyle(element, 'margin', '1em 0 1em 1em');
-                            dfx.setStyle(element, 'display', '');
-                        break;
+                    if (dfx.isTag(align, 'img') === true) {
+                        switch (align) {
+                            case 'left':
+                                dfx.setStyle(element, 'float', 'left');
+                                dfx.setStyle(element, 'margin', '1em 1em 1em 0');
+                                dfx.setStyle(element, 'display', '');
+                            break;
 
-                        case 'middle':
-                            dfx.setStyle(element, 'margin', '1em auto');
-                            dfx.setStyle(element, 'float', '');
-                            dfx.setStyle(element, 'display', 'block');
-                        break;
+                            case 'right':
+                                dfx.setStyle(element, 'float', 'right');
+                                dfx.setStyle(element, 'margin', '1em 0 1em 1em');
+                                dfx.setStyle(element, 'display', '');
+                            break;
 
-                        default:
-                            dfx.setStyle(element, 'margin', '');
-                            dfx.setStyle(element, 'float', '');
-                            dfx.setStyle(element, 'display', '');
-                        break;
-                    }//end switch
+                            case 'middle':
+                                dfx.setStyle(element, 'margin', '1em auto');
+                                dfx.setStyle(element, 'float', '');
+                                dfx.setStyle(element, 'display', 'block');
+                            break;
+
+                            default:
+                                dfx.setStyle(element, 'margin', '');
+                                dfx.setStyle(element, 'float', '');
+                                dfx.setStyle(element, 'display', '');
+                            break;
+                        }//end switch
+                    } else {
+                        dfx.setStyle(element, 'text-align', align);
+                    }
 
                     element.removeAttribute('align');
                 };
