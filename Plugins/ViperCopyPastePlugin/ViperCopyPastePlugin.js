@@ -659,13 +659,6 @@ ViperCopyPastePlugin.prototype = {
         // Convert Words orsm "lists"..
         content = this._convertWordPasteList(content);
 
-        // Remove class, lang and style attributes.
-      //  content = content.replace(/<(\w[^>]*) (class)=([^ |>]*)([^>]*)/gi, "<$1$4");
-      //  content = content.replace(/<(\w[^>]*) (lang)=([^ |>]*)([^>]*)/gi, "<$1$4");
-      //  content = content.replace(/<(\w[^>]*) (align)=([^ |>]*)([^>]*)/gi, "<$1$4");
-      //  content = content.replace(/<(\w[^>]*) (dir)=([^ |>]*)([^>]*)/gi, "<$1$4");
-      //  content = content.replace(/<(\w[^>]*) (\w+:\w+)=([^ |>]*)([^>]*)/gi, "<$1$4");
-
         var self = this;
         content  = content.replace(new RegExp('<(\\w[^>]*) style="([^"]*)"([^>]*)', 'gi'), function() {
             var styles      = arguments[2];
@@ -774,6 +767,8 @@ ViperCopyPastePlugin.prototype = {
 
         dfxjQuery(tmp).find('[class]').removeAttr('class');
         dfxjQuery(tmp).find('[style]').removeAttr('style');
+        dfxjQuery(tmp).find('td,tr').removeAttr('valign width height');
+        dfx.remove(dfxjQuery(tmp).find('colgroup'));
 
         content = dfx.getHtml(tmp);
         return content;
