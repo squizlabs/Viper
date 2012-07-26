@@ -49,7 +49,7 @@ class Viper_Tests_ViperFormatPlugin_PreUnitTest extends AbstractFormatsUnitTest
     public function testApplingThePreStyleUsingTopToolbar()
     {
 
-        // Test clicking in a P to change to a div
+        // Test clicking in a P to change to a Pre
         $this->click($this->findKeyword(4));
         $this->clickTopToolbarButton('formats-p', 'active');
         $this->checkStatusOfFormatIconsInTheTopToolbar('active', NULL, NULL, NULL);
