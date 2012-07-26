@@ -2933,8 +2933,8 @@ ViperTableEditorPlugin.prototype = {
     {
         var main = document.createElement('div');
 
-        var maxRows            = 10;
-        var maxCols            = 10;
+        var maxRows            = 6;
+        var maxCols            = 8;
         var selectedRows       = 3;
         var selectedCols       = 4;
         var selectedHeaderType = 2;
@@ -3001,7 +3001,7 @@ ViperTableEditorPlugin.prototype = {
             selectedRows = (parseInt(row) + 1);
             selectedCols = (parseInt(col) + 1);
 
-            dfx.setHtml(dfx.getClass('Viper-sizeLabel', main)[0], 'Size (' + selectedRows + ' x ' + selectedCols + ')');
+            dfx.setHtml(dfx.getClass('Viper-sizeLabel', main)[0], 'Size (' + selectedCols + ' x ' + selectedRows + ')');
 
             for (var i = 0; i < maxRows; i++) {
                 for (var j = 0; j < maxCols; j++) {
@@ -3016,7 +3016,7 @@ ViperTableEditorPlugin.prototype = {
 
         var _setRowColsHover = function(row, col) {
 
-            dfx.setHtml(dfx.getClass('Viper-sizeLabel', main)[0], 'Size (' + (parseInt(row) + 1) + ' x ' + (parseInt(col) + 1) + ')');
+            dfx.setHtml(dfx.getClass('Viper-sizeLabel', main)[0], 'Size (' + (parseInt(col) + 1) + ' x ' + (parseInt(row) + 1) + ')');
 
             for (var i = 0; i < maxRows; i++) {
                 for (var j = 0; j < maxCols; j++) {
