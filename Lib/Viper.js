@@ -4226,6 +4226,10 @@ Viper.prototype = {
             dfx.setHtml(elem, tmp);
         }
 
+        if (!elem) {
+            return '';
+        }
+
         // Clone the element so we dont modify the actual contents.
         var clone = elem.cloneNode(true);
 
