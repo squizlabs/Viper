@@ -13,22 +13,30 @@ class Viper_Tests_ViperFormatPlugin_ParagraphUnitTest extends AbstractFormatsUni
      */
     public function testApplingThePStyleUsingInlineToolbar()
     {
-        $this->selectKeyword(4);
-        $this->selectInlineToolbarLineageItem(0);
-        $this->clickInlineToolbarButton('formats-div', 'active');
-        $this->clickInlineToolbarButton('P', NULL, TRUE);
 
-        $this->assertHTMLMatch('<p>%1% xtn %2%</p><p>sit amet <strong>%3%</strong></p><p>%4% paragraph to change to a p</p>');
-
+        // Test selecting a word in a div to change to a paragraph
         $this->click($this->findKeyword(2));
         $this->selectKeyword(4);
+        $this->assertFalse($this->inlineToolbarButtonExists('formats'), 'Toogle formats icon should not appear in the inline toolbar');
+
+        // Select all content in the div and change to a paragraph
         $this->selectInlineToolbarLineageItem(0);
+        $this->assertTrue($this->inlineToolbarButtonExists('formats-div', 'active'), 'Toogle formats should appear in the inline toolbar');
+        $this->clickInlineToolbarButton('formats-div', 'active');
+        $this->checkStatusOfFormatIconsInTheInlineToolbar(NULL, 'active', NULL, NULL);
+        $this->clickInlineToolbarButton('P', NULL, TRUE);
+        $this->assertHTMLMatch('<p>%1% xtn %2%</p><p>sit amet <strong>%3%</strong></p><p>%4% paragraph to change to a p</p>');
+        $this->checkStatusOfFormatIconsInTheInlineToolbar('active', NULL, NULL, NULL);
 
-        $this->assertTrue($this->inlineToolbarButtonExists('formats-p', 'active'), 'Toogle formats icon is not selected');
+        // Check the state of the format icon after we have changed to a paragraph
+        $this->selectKeyword(4);
+        $this->assertFalse($this->inlineToolbarButtonExists('formats'), 'formats icon should not appear in the inline toolbar');
+        $this->assertFalse($this->inlineToolbarButtonExists('formats-p', 'active'), 'Active formats icon should not appear in the inline toolbar');
 
+        $this->selectInlineToolbarLineageItem(0);
+        $this->assertTrue($this->inlineToolbarButtonExists('formats-p', 'active'), 'Active toogle formats icon should be active in the inline toolbar');
         $this->clickInlineToolbarButton('formats-p', 'active');
-
-        $this->assertTrue($this->inlineToolbarButtonExists('P', 'active', TRUE), 'P icon is not active');
+        $this->checkStatusOfFormatIconsInTheInlineToolbar('active', NULL, NULL, NULL);
 
     }//end testApplingThePStyleUsingInlineToolbar()
 
@@ -41,22 +49,41 @@ class Viper_Tests_ViperFormatPlugin_ParagraphUnitTest extends AbstractFormatsUni
     public function testApplingThePStyleUsingTopToolbar()
     {
 
-        $this->selectKeyword(4);
-        $this->selectInlineToolbarLineageItem(0);
+        // Test clicking in a div to change to a paragraph
+        $this->click($this->findKeyword(4));
         $this->clickTopToolbarButton('formats-div', 'active');
+        $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, 'active', NULL, NULL);
         $this->clickTopToolbarButton('P', NULL, TRUE);
-
         $this->assertHTMLMatch('<p>%1% xtn %2%</p><p>sit amet <strong>%3%</strong></p><p>%4% paragraph to change to a p</p>');
+        $this->checkStatusOfFormatIconsInTheTopToolbar('active', NULL, NULL, NULL);
 
-        $this->click($this->findKeyword(1));
+        // Change it back to do more testing
+        $this->clickTopToolbarButton('DIV', NULL, TRUE);
+        $this->assertHTMLMatch('<p>%1% xtn %2%</p><p>sit amet <strong>%3%</strong></p><div>%4% paragraph to change to a p</div>');
+        $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, 'active', NULL, NULL);
+
+        // Test selecting a word in a div to change to a paragraph
+        $this->click($this->findKeyword(2));
         $this->selectKeyword(4);
+        $this->assertTrue($this->topToolbarButtonExists('formats', 'active'), 'Active toogle formats icoun should appear in the top toolbar');
+
+        // Select all content in the div and change to a paragraph
         $this->selectInlineToolbarLineageItem(0);
+        $this->assertTrue($this->topToolbarButtonExists('formats-div', 'active'), 'active Div icon should appear in the top toolbar');
+        $this->clickTopToolbarButton('formats-div', 'active');
+        $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, 'active', NULL, NULL);
+        $this->clickTopToolbarButton('P', NULL, TRUE);
+        $this->assertHTMLMatch('<p>%1% xtn %2%</p><p>sit amet <strong>%3%</strong></p><p>%4% paragraph to change to a p</p>');
+        $this->checkStatusOfFormatIconsInTheTopToolbar('active', NULL, NULL, NULL);
 
-        $this->assertTrue($this->topToolbarButtonExists('formats-p', 'active'), 'Toogle formats icon is not selected');
+        // Check the state of the format icon after we have changed to a paragraph
+        $this->selectKeyword(4);
+        $this->assertTrue($this->topToolbarButtonExists('formats', 'disabled'), 'Formats icon should disabled in the top toolbar');
 
+        $this->selectInlineToolbarLineageItem(0);
+        $this->assertTrue($this->topToolbarButtonExists('formats-p', 'active'), 'Active toogle formats icon should be active in the top toolbar');
         $this->clickTopToolbarButton('formats-p', 'active');
-
-        $this->assertTrue($this->topToolbarButtonExists('P', 'active', NULL), 'P icon should be active');
+        $this->checkStatusOfFormatIconsInTheTopToolbar('active', NULL, NULL, NULL);
 
     }//end testApplingThePStyleUsingTopToolbar()
 
@@ -77,90 +104,101 @@ class Viper_Tests_ViperFormatPlugin_ParagraphUnitTest extends AbstractFormatsUni
         $this->selectInlineToolbarLineageItem(0);
 
         // Make sure the correct icons are being shown in the inline toolbar.
-        $this->assertTrue($this->inlineToolbarButtonExists('formats-p', 'active'), 'Toogle formats icon is not selected');
+        $this->assertTrue($this->inlineToolbarButtonExists('formats-p', 'active'), 'Active P icon does not appear in the inline toolbar');
         $this->clickInlineToolbarButton('formats-p', 'active');
-        $this->assertTrue($this->inlineToolbarButtonExists('P', 'active', TRUE), 'P icon should active');
+        $this->checkStatusOfFormatIconsInTheInlineToolbar('active', NULL, NULL, NULL);
+        $this->assertEquals($this->replaceKeywords('%1% xtn %2%'), $this->getSelectedText(), 'Original selection is not selected');
 
         // Make sure the correct icons are being shown in the top toolbar.
-        $this->assertTrue($this->topToolbarButtonExists('formats-p', 'active'), 'Toogle formats icon is not selected');
+        $this->assertTrue($this->topToolbarButtonExists('formats-p', 'active'), 'Active P icon does not appear in the top toolbar');
         $this->clickTopToolbarButton('formats-p', 'active');
-        $this->assertTrue($this->topToolbarButtonExists('P', 'active', TRUE), 'P icon should be active');
+        $this->checkStatusOfFormatIconsInTheTopToolbar('active', NULL, NULL, NULL);
+        $this->assertEquals($this->replaceKeywords('%1% xtn %2%'), $this->getSelectedText(), 'Original selection is not selected');
 
     }//end testSelectParaAfterStylingShowsCorrectIcons()
 
 
-     /**
-     * Tests selecting text in a paragraph.
+    /**
+     * Test that when you select part of a paragraph that you cannot change it to another format type.
      *
      * @return void
      */
-    public function testSelectingParagraphsWithFormattedTextShowsCorrectIcons()
+    public function testPartialSelectionOfParagraph()
+    {
+        $this->selectKeyword(2);
+        $this->assertFalse($this->inlineToolbarButtonExists('formats'), 'Formats icon should not appear in the inline toolbar');
+        $this->assertFalse($this->inlineToolbarButtonExists('formats-p', 'active'), 'Active P icon should not appear in the inline toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('formats', 'disabled'), 'Disabled formats icon should appear in the top toolbar');
+
+    }//end testPartialSelectionOfParagraph()
+
+
+    /**
+     * Test applying and then removing the P format using the inline toolbar.
+     *
+     * @return void
+     */
+    public function testApplyingAndRemovingPUsingInlineToolbar()
+    {
+
+        $this->selectKeyword(4);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickInlineToolbarButton('formats-div', 'active');
+        $this->clickInlineToolbarButton('P', NULL, TRUE);
+        $this->assertHTMLMatch('<p>%1% xtn %2%</p><p>sit amet <strong>%3%</strong></p><p>%4% paragraph to change to a p</p>');
+
+        $this->clickInlineToolbarButton('P', 'active', TRUE);
+        $this->assertHTMLMatch('<p>%1% xtn %2%</p><p>sit amet <strong>%3%</strong></p> %4% paragraph to change to a p');
+
+        // Make sure that the P is still enabled
+        $this->checkStatusOfFormatIconsInTheInlineToolbar();
+
+    }//end testApplyingAndRemovingPUsingInlineToolbar()
+
+
+    /**
+     * Test applying and then removing the P format using the top toolbar.
+     *
+     * @return void
+     */
+    public function testApplyingAndRemovingPUsingTopToolbar()
+    {
+
+        $this->selectKeyword(4);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickTopToolbarButton('formats-div', 'active');
+        $this->clickTopToolbarButton('P', NULL, TRUE);
+        $this->assertHTMLMatch('<p>%1% xtn %2%</p><p>sit amet <strong>%3%</strong></p><p>%4% paragraph to change to a p</p>');
+
+        $this->clickTopToolbarButton('P', 'active', TRUE);
+        $this->assertHTMLMatch('<p>%1% xtn %2%</p><p>sit amet <strong>%3%</strong></p> %4% paragraph to change to a p');
+
+        // Make sure that the P is still enabled
+        $this->checkStatusOfFormatIconsInTheTopToolbar();
+
+    }//end testApplyingAndRemovingPUsingTopToolbar()
+
+
+    /**
+     * Test applying and then removing the P format to a multi line paragraph.
+     *
+     * @return void
+     */
+    public function testRemovingAndApplyingPToMultiLineParagraph()
     {
 
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
-        $this->assertTrue($this->inlineToolbarButtonExists('formats-p', 'active'), 'Toogle formats icon is not selected');
-        $this->clickInlineToolbarButton('formats-p', 'active');
-        $this->assertEquals($this->replaceKeywords('%1% xtn %2%'), $this->getSelectedText(), 'Original selection is not selected');
-        $this->assertTrue($this->inlineToolbarButtonExists('P', 'active', TRUE), 'P icon is not active');
-
-        $this->click($this->findKeyword(1));
-        $this->selectKeyword(3);
-        $this->selectInlineToolbarLineageItem(0);
-        $this->assertTrue($this->topToolbarButtonExists('formats-p', 'active'), 'Toogle formats icon is not selected');
-        $this->clickTopToolbarButton('formats-p', 'active');
-        $this->assertEquals($this->replaceKeywords('sit amet XCX'), $this->getSelectedText(), 'Original selection is not selected');
-        $this->assertTrue($this->topToolbarButtonExists('P', 'active', TRUE), 'P icon is not active');
-
-    }//end testSelectingParagraphsWithFormattedTextShowsCorrectIcons()
-
-
-    /**
-     * Test that when you only select part of a paragraph and apply the P, it applies it to the whole paragraph.
-     *
-     * @return void
-     */
-    public function testPAppliedToParagraphOnPartialSelection()
-    {
-        $this->selectKeyword(4);
-        $this->assertFalse($this->inlineToolbarButtonExists('formats-div', 'active'), 'Toogle formats icon should not appear in the inline toolbar');
-
-        $this->clickTopToolbarButton('formats-div', 'active');
-        $this->clickTopToolbarButton('P', NULL, TRUE);
-
-        $this->assertHTMLMatch('<p>%1% xtn %2%</p><p>sit amet <strong>%3%</strong></p><p>%4% paragraph to change to a p</p>');
-
-    }//end testPAppliedToParagraphOnPartialSelection()
-
-
-    /**
-     * Test applying and then removing the P format.
-     *
-     * @return void
-     */
-    public function testApplyingAndRemovingP()
-    {
-
-        $this->selectKeyword(4);
-        $this->selectInlineToolbarLineageItem(0);
-
-        $this->clickTopToolbarButton('formats-div', 'active');
-        $this->clickTopToolbarButton('P', NULL, TRUE);
-
-        $this->assertHTMLMatch('<p>%1% xtn %2%</p><p>sit amet <strong>%3%</strong></p><p>%4% paragraph to change to a p</p>');
-
-        $this->selectKeyword(4);
-        $this->selectInlineToolbarLineageItem(0);
-
         $this->clickTopToolbarButton('formats-p', 'active');
         $this->clickTopToolbarButton('P', 'active', TRUE);
+        $this->assertHTMLMatch('%1% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.');
+        $this->checkStatusOfFormatIconsInTheTopToolbar();
 
-        $this->assertHTMLMatch('<p>%1% xtn %2%</p><p>sit amet <strong>%3%</strong></p> %4% paragraph to change to a p');
+        $this->clickTopToolbarButton('P', NULL, TRUE);
+        $this->assertHTMLMatch('<p>%1% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p>');
+        $this->checkStatusOfFormatIconsInTheTopToolbar('active');
 
-        // Make sure that the P is still enabled
-        $this->assertTrue($this->inlineToolbarButtonExists('P', NULL, TRUE), 'P icon should be enabled');
-
-    }//end testApplyingAndRemovingP()
+    }//end testRemovingAndApplyingPToMultiLineParagraph()
 
 
     /**
@@ -188,417 +226,143 @@ class Viper_Tests_ViperFormatPlugin_ParagraphUnitTest extends AbstractFormatsUni
 
 
     /**
-     * Tests changing a paragraph to a div and then back again.
+     * Tests changing a paragraph to a div and then back again using the inline toolbar.
      *
      * @return void
      */
-    public function testChangingAParagraphToADiv()
+    public function testChangingAParagraphToADivUsingInlineToolbar()
+    {
+
+        $this->selectKeyword(1, 2);
+        $this->clickInlineToolbarButton('formats-p', 'active');
+        $this->clickInlineToolbarButton('DIV', NULL, TRUE);
+        $this->checkStatusOfFormatIconsInTheInlineToolbar(NULL, 'active', NULL, NULL);
+        $this->assertHTMLMatch('<div>%1% xtn %2%</div><p>sit amet <strong>%3%</strong></p><div>%4% paragraph to change to a p</div>');
+
+        $this->clickInlineToolbarButton('P', NULL, TRUE);
+        $this->checkStatusOfFormatIconsInTheInlineToolbar('active', NULL, NULL, NULL);
+        $this->assertHTMLMatch('<p>%1% xtn %2%</p><p>sit amet <strong>%3%</strong></p><div>%4% paragraph to change to a p</div>');
+
+    }//end testChangingAParagraphToADivUsingInlineToolbar()
+
+
+    /**
+     * Tests changing a paragraph to a div and then back again using the top toolbar.
+     *
+     * @return void
+     */
+    public function testChangingAParagraphToADivUsingTopToolbar()
     {
 
         $this->selectKeyword(1, 2);
         $this->clickTopToolbarButton('formats-p', 'active');
         $this->clickTopToolbarButton('DIV', NULL, TRUE);
-
-        $this->assertTrue($this->inlineToolbarButtonExists('DIV', 'active', TRUE), 'Div icon is not active in the inline toolbar');
-
+        $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, 'active', NULL, NULL);
         $this->assertHTMLMatch('<div>%1% xtn %2%</div><p>sit amet <strong>%3%</strong></p><div>%4% paragraph to change to a p</div>');
 
-        $this->selectKeyword(1, 2);
-        $this->clickInlineToolbarButton('formats-div', 'active');
-        $this->clickInlineToolbarButton('P', NULL, TRUE);
-
-        $this->assertTrue($this->inlineToolbarButtonExists('P', 'active', TRUE), 'P icon is not active in the inline toolbar');
-
+        $this->clickTopToolbarButton('P', NULL, TRUE);
+        $this->checkStatusOfFormatIconsInTheTopToolbar('active', NULL, NULL, NULL);
         $this->assertHTMLMatch('<p>%1% xtn %2%</p><p>sit amet <strong>%3%</strong></p><div>%4% paragraph to change to a p</div>');
 
-    }//end testChangingAParagraphToADiv()
+    }//end testChangingAParagraphToADivUsingTopToolbar()
 
 
      /**
-     * Tests changing a paragraph to a PRE and then back again.
+     * Tests changing a paragraph to a PRE and then back again using the inline toolbar.
      *
      * @return void
      */
-    public function testChangingAParagraphToAPre()
+    public function testChangingAParagraphToAPreUsingTheInlineToolbar()
+    {
+
+        $this->selectKeyword(1, 2);
+        $this->clickInlineToolbarButton('formats-p', 'active');
+        $this->clickInlineToolbarButton('PRE', NULL, TRUE);
+        $this->checkStatusOfFormatIconsInTheInlineToolbar(NULL, NULL, NULL, 'active');
+        $this->assertHTMLMatch('<pre>%1% xtn %2%</pre><p>sit amet <strong>%3%</strong></p><div>%4% paragraph to change to a p</div>');
+
+        $this->clickInlineToolbarButton('P', NULL, TRUE);
+        $this->checkStatusOfFormatIconsInTheInlineToolbar('active', NULL, NULL, NULL);
+        $this->assertHTMLMatch('<p>%1% xtn %2%</p><p>sit amet <strong>%3%</strong></p><div>%4% paragraph to change to a p</div>');
+
+    }//end testChangingAParagraphToAPreUsingTheInlineToolbar()
+
+
+     /**
+     * Tests changing a paragraph to a PRE and then back again using the top toolbar.
+     *
+     * @return void
+     */
+    public function testChangingAParagraphToAPreUsingTheTopToolbar()
     {
 
         $this->selectKeyword(1, 2);
         $this->clickTopToolbarButton('formats-p', 'active');
         $this->clickTopToolbarButton('PRE', NULL, TRUE);
-
-        $this->assertTrue($this->inlineToolbarButtonExists('PRE', 'active', TRUE), 'Pre icon is not active in the inline toolbar');
-
+        $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, NULL, NULL, 'active');
         $this->assertHTMLMatch('<pre>%1% xtn %2%</pre><p>sit amet <strong>%3%</strong></p><div>%4% paragraph to change to a p</div>');
 
-        $this->selectKeyword(1, 2);
-        $this->clickInlineToolbarButton('formats-pre', 'active');
-        $this->clickInlineToolbarButton('P', NULL, TRUE);
-
-        $this->assertTrue($this->inlineToolbarButtonExists('P', 'active', TRUE), 'P icon is not active in the inline toolbar');
-
+        $this->clickTopToolbarButton('P', NULL, TRUE);
+        $this->checkStatusOfFormatIconsInTheTopToolbar('active', NULL, NULL, NULL);
         $this->assertHTMLMatch('<p>%1% xtn %2%</p><p>sit amet <strong>%3%</strong></p><div>%4% paragraph to change to a p</div>');
 
-    }//end testChangingAParagraphToAPre()
+    }//end testChangingAParagraphToAPreUsingTheTopToolbar()
 
 
      /**
-     * Tests that when you select a paragraph and apply Quotes, it wraps the P.
+     * Tests that when you select a paragraph and apply Quotes using the inline toolbar, it wraps the P.
      *
      * @return void
      */
-    public function testApplyingQuoteToAParagraph()
+    public function testApplyingQuoteToAParagraphUsingTheInlineToolbar()
     {
 
-        $this->click($this->findKeyword(3));
         $this->selectKeyword(1, 2);
-        $this->clickTopToolbarButton('formats-p', 'active');
-        $this->clickTopToolbarButton('Quote', NULL, TRUE);
-
-        $this->assertTrue($this->inlineToolbarButtonExists('Quote', 'active', TRUE), 'Quote icon should be active in the inline toolbar');
-
+        $this->clickInlineToolbarButton('formats-p', 'active');
+        $this->clickInlineToolbarButton('Quote', NULL, TRUE);
+        $this->checkStatusOfFormatIconsInTheInlineToolbar(NULL, NULL, 'active', NULL);
         $this->assertHTMLMatch('<blockquote><p>%1% xtn %2%</p></blockquote><p>sit amet <strong>%3%</strong></p><div>%4% paragraph to change to a p</div>');
 
         $this->selectKeyword(1, 2);
-        $this->assertTrue($this->inlineToolbarButtonExists('formats-p', 'active'), 'Active P icon should appear in the inline toolbar');
-        $this->assertTrue($this->topToolbarButtonExists('formats-p', 'active'), 'Active P icon should appear in the top toolbar');
+        // Check that the formats icon is not active as you cannot change the P when in a quote
+        $this->assertFalse($this->inlineToolbarButtonExists('formats-p', 'active'), 'Active P icon should not appear in the inline toolbar');
         $this->selectInlineToolbarLineageItem(0);
         $this->assertTrue($this->inlineToolbarButtonExists('formats-blockquote', 'active'), 'Active quote icon should appear in the inline toolbar');
-        $this->assertTrue($this->topToolbarButtonExists('formats-blockquote', 'active'), 'Active quote icon should appear in the top toolbar');
 
         // Remove the quote tag
         $this->clickInlineToolbarButton('formats-blockquote', 'active');
         $this->clickInlineToolbarButton('Quote', 'active', TRUE);
-
         $this->assertHTMLMatch('<p>%1% xtn %2%</p><p>sit amet <strong>%3%</strong></p><div>%4% paragraph to change to a p</div>');
 
-    }//end testApplyingQuoteToAParagraph()
+    }//end testApplyingQuoteToAParagraphUsingTheInlineToolbar()
 
 
-    /**
-     * Test trying to apply a P tag around two P tags
+     /**
+     * Tests that when you select a paragraph and apply Quotes using the top toolbar, it wraps the P.
      *
      * @return void
      */
-    public function testApplingPAroundTwoPTags()
+    public function testApplyingQuoteToAParagraphUsingTheTopToolbar()
     {
-        $this->selectKeyword(1, 3);
-        $this->clickTopToolbarButton('formats-p', 'active');
-        $this->checkStatusOfFormatIcons('disabled');
 
-    }//end testApplingPAroundTwoPTags()
-
-
-    /**
-     * Test trying to apply a P tag around a P and Div tag
-     *
-     * @return void
-     */
-    public function testApplingPAroundPAndDivTag()
-    {
-        // Test Div and P
-        $this->selectKeyword(3);
-        $this->selectInlineToolbarLineageItem(0);
-        $this->clickTopToolbarButton('formats-p', 'active');
-        $this->clickTopToolbarButton('DIV', NULL, TRUE);
-        $this->assertHTMLMatch('<p>%1% xtn %2%</p><div>sit amet <strong>%3%</strong></div><div>%4% paragraph to change to a p</div>');
-
-        $this->selectKeyword(1, 3);
-        $this->clickTopToolbarButton('formats');
-        $this->checkStatusOfFormatIcons('disabled');
-
-        // Test P and Div
-        $this->selectKeyword(3);
-        $this->selectInlineToolbarLineageItem(0);
-        $this->clickTopToolbarButton('formats-div', 'active');
-        $this->clickTopToolbarButton('P', NULL, TRUE);
-
-        $this->selectKeyword(1);
-        $this->selectInlineToolbarLineageItem(0);
-        $this->clickTopToolbarButton('formats-p', 'active');
-        $this->clickTopToolbarButton('DIV', NULL, TRUE);
-        $this->assertHTMLMatch('<div>%1% xtn %2%</div><p>sit amet <strong>%3%</strong></p><div>%4% paragraph to change to a p</div>');
-
-        $this->selectKeyword(1, 3);
-        $this->clickTopToolbarButton('formats');
-        $this->checkStatusOfFormatIcons('disabled');
-
-    }//end testApplingPAroundPAndDivTag()
-
-
-    /**
-     * Test trying to apply a P tag around a P and Quote tag
-     *
-     * @return void
-     */
-    public function testApplingPAroundPAndQuoteTag()
-    {
-        // Test Quote and P
-        $this->selectKeyword(3);
-        $this->selectInlineToolbarLineageItem(0);
+        $this->selectKeyword(1, 2);
         $this->clickTopToolbarButton('formats-p', 'active');
         $this->clickTopToolbarButton('Quote', NULL, TRUE);
-        $this->assertHTMLMatch('<p>%1% xtn %2%</p><blockquote><p>sit amet <strong>%3%</strong></p></blockquote><div>%4% paragraph to change to a p</div>');
-
-        $this->selectKeyword(1, 3);
-        $this->clickTopToolbarButton('formats');
-        $this->checkStatusOfFormatIcons('disabled');
-
-        // Test P and Quote
-        $this->selectKeyword(3);
-        $this->selectInlineToolbarLineageItem(0);
-        $this->clickTopToolbarButton('formats-blockquote', 'active');
-        $this->clickTopToolbarButton('P', NULL, TRUE);
-
-        $this->selectKeyword(1);
-        $this->selectInlineToolbarLineageItem(0);
-        $this->clickTopToolbarButton('formats-p', 'active');
-        $this->clickTopToolbarButton('Quote', NULL, TRUE);
+        $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, NULL, 'active', NULL);
         $this->assertHTMLMatch('<blockquote><p>%1% xtn %2%</p></blockquote><p>sit amet <strong>%3%</strong></p><div>%4% paragraph to change to a p</div>');
 
-        $this->selectKeyword(1, 3);
-        $this->clickTopToolbarButton('formats');
-        $this->checkStatusOfFormatIcons('disabled');
-
-    }//end testApplingPAroundPAndQuoteTag()
-
-
-    /**
-     * Test trying to apply a P tag around a P and Pre tag
-     *
-     * @return void
-     */
-    public function testApplingPAroundPAndPreTag()
-    {
-        // Test Pre and P
-        $this->selectKeyword(3);
+        $this->selectKeyword(1, 2);
+        // Check that the formats icon is not active as you cannot change the P when in a quote
+        $this->assertFalse($this->topToolbarButtonExists('formats-p', 'active'), 'Active P icon should not appear in the top toolbar');
         $this->selectInlineToolbarLineageItem(0);
-        $this->clickTopToolbarButton('formats-p', 'active');
-        $this->clickTopToolbarButton('PRE', NULL, TRUE);
-        $this->assertHTMLMatch('<p>%1% xtn %2%</p><pre>sit amet <strong>%3%</strong></pre><div>%4% paragraph to change to a p</div>');
+        $this->assertTrue($this->topToolbarButtonExists('formats-blockquote', 'active'), 'Active quote icon should appear in the top toolbar');
 
-        $this->selectKeyword(1, 3);
-        $this->clickTopToolbarButton('formats');
-        $this->checkStatusOfFormatIcons('disabled');
-
-        // Test P and Pre
-        $this->selectKeyword(3);
-        $this->selectInlineToolbarLineageItem(0);
-        $this->clickTopToolbarButton('formats-pre', 'active');
-        $this->clickTopToolbarButton('P', NULL, TRUE);
-
-        $this->selectKeyword(1);
-        $this->selectInlineToolbarLineageItem(0);
-        $this->clickTopToolbarButton('formats-p', 'active');
-        $this->clickTopToolbarButton('PRE', NULL, TRUE);
-        $this->assertHTMLMatch('<pre>%1% xtn %2%</pre><p>sit amet <strong>%3%</strong></p><div>%4% paragraph to change to a p</div>');
-
-        $this->selectKeyword(1, 3);
-        $this->clickTopToolbarButton('formats');
-        $this->checkStatusOfFormatIcons('disabled');
-
-    }//end testApplingPAroundPAndPreTag()
-
-
-    /**
-     * Test trying to apply a P tag around two div tags
-     *
-     * @return void
-     */
-    public function testApplingPAroundTwoDivTags()
-    {
-        $this->selectKeyword(3);
-        $this->selectInlineToolbarLineageItem(0);
-        $this->clickTopToolbarButton('formats-p', 'active');
-        $this->clickTopToolbarButton('DIV', NULL, TRUE);
-
-        $this->selectKeyword(1);
-        $this->selectInlineToolbarLineageItem(0);
-        $this->clickTopToolbarButton('formats-p', 'active');
-        $this->clickTopToolbarButton('DIV', NULL, TRUE);
-        $this->assertHTMLMatch('<div>%1% xtn %2%</div><div>sit amet <strong>%3%</strong></div><div>%4% paragraph to change to a p</div>');
-
-        $this->selectKeyword(1, 3);
-        $this->clickTopToolbarButton('formats');
-        $this->checkStatusOfFormatIcons('disabled');
-
-    }//end testApplingPAroundTwoDivTags()
-
-
-    /**
-     * Test trying to apply a P tag around Div and Quote tags
-     *
-     * @return void
-     */
-    public function testApplingPAroundDivAndQuote()
-    {
-        // Test Quote and Div
-        $this->selectKeyword(3);
-        $this->selectInlineToolbarLineageItem(0);
-        $this->clickTopToolbarButton('formats-p', 'active');
-        $this->clickTopToolbarButton('Div', NULL, TRUE);
-
-        $this->selectKeyword(1);
-        $this->selectInlineToolbarLineageItem(0);
-        $this->clickTopToolbarButton('formats-p', 'active');
-        $this->clickTopToolbarButton('Quote', NULL, TRUE);
-        $this->assertHTMLMatch('<div>%1% xtn %2%</div><blockquote><p>sit amet <strong>%3%</strong></p></blockquote><div>%4% paragraph to change to a p</div>');
-
-        $this->selectKeyword(1, 3);
-        $this->clickTopToolbarButton('formats');
-        $this->checkStatusOfFormatIcons('disabled');
-
-        // Test Div and Quote
-        $this->selectKeyword(3);
-        $this->selectInlineToolbarLineageItem(0);
-        $this->clickTopToolbarButton('formats-div', 'active');
-        $this->clickTopToolbarButton('Quote', NULL, TRUE);
-
-        $this->selectKeyword(1);
-        $this->selectInlineToolbarLineageItem(0);
+        // Remove the quote tag
         $this->clickTopToolbarButton('formats-blockquote', 'active');
-        $this->clickTopToolbarButton('Div', NULL, TRUE);
-        $this->assertHTMLMatch('<blockquote><p>%1% xtn %2%</p></blockquote><div>sit amet <strong>%3%</strong></div><div>%4% paragraph to change to a p</div>');
+        $this->clickTopToolbarButton('Quote', 'active', TRUE);
+        $this->assertHTMLMatch('<p>%1% xtn %2%</p><p>sit amet <strong>%3%</strong></p><div>%4% paragraph to change to a p</div>');
 
-        $this->selectKeyword(1, 3);
-        $this->clickTopToolbarButton('formats');
-        $this->checkStatusOfFormatIcons('disabled');
-
-    }//end testApplingPAroundDivAndQuote()
-
-
-    /**
-     * Test trying to apply a P tag around Div and Pre tags
-     *
-     * @return void
-     */
-    public function testApplingPAroundDivAndPre()
-    {
-        // Test Div and Pre
-        $this->selectKeyword(3);
-        $this->selectInlineToolbarLineageItem(0);
-        $this->clickTopToolbarButton('formats-p', 'active');
-        $this->clickTopToolbarButton('Div', NULL, TRUE);
-
-        $this->selectKeyword(1);
-        $this->selectInlineToolbarLineageItem(0);
-        $this->clickTopToolbarButton('formats-p', 'active');
-        $this->clickTopToolbarButton('Pre', NULL, TRUE);
-        $this->assertHTMLMatch('<pre>%1% xtn %2%</pre><div>sit amet <strong>%3%</strong></div><div>%4% paragraph to change to a p</div>');
-
-        $this->selectKeyword(1, 3);
-        $this->clickTopToolbarButton('formats');
-        $this->checkStatusOfFormatIcons('disabled');
-
-        // Test Pre and Div
-        $this->selectKeyword(3);
-        $this->selectInlineToolbarLineageItem(0);
-        $this->clickTopToolbarButton('formats-div', 'active');
-        $this->clickTopToolbarButton('Pre', NULL, TRUE);
-
-        $this->selectKeyword(1);
-        $this->selectInlineToolbarLineageItem(0);
-        $this->clickTopToolbarButton('formats-pre', 'active');
-        $this->clickTopToolbarButton('Div', NULL, TRUE);
-        $this->assertHTMLMatch('<div>%1% xtn %2%</div><pre>sit amet <strong>%3%</strong></pre><div>%4% paragraph to change to a p</div>');
-
-        $this->selectKeyword(1, 3);
-        $this->clickTopToolbarButton('formats');
-        $this->checkStatusOfFormatIcons('disabled');
-
-    }//end testApplingPAroundDivAndPre()
-
-
-    /**
-     * Test trying to apply a P tag around two Quote tags
-     *
-     * @return void
-     */
-    public function testApplingPAroundTwoQuoteTags()
-    {
-        $this->selectKeyword(3);
-        $this->selectInlineToolbarLineageItem(0);
-        $this->clickTopToolbarButton('formats-p', 'active');
-        $this->clickTopToolbarButton('Quote', NULL, TRUE);
-
-        $this->selectKeyword(1);
-        $this->selectInlineToolbarLineageItem(0);
-        $this->clickTopToolbarButton('formats-p', 'active');
-        $this->clickTopToolbarButton('Quote', NULL, TRUE);
-        $this->assertHTMLMatch('<blockquote><p>%1% xtn %2%</p></blockquote><blockquote><p>sit amet <strong>%3%</strong></p></blockquote><div>%4% paragraph to change to a p</div>');
-
-        $this->selectKeyword(1, 3);
-        $this->clickTopToolbarButton('formats');
-        $this->checkStatusOfFormatIcons('disabled');
-
-    }//end testApplingPAroundTwoQuoteTags()
-
-
-    /**
-     * Test trying to apply a P tag around Quote and Pre tags
-     *
-     * @return void
-     */
-    public function testApplingPAroundQuoteAndPreTags()
-    {
-        // Test Pre and Quote
-        $this->selectKeyword(3);
-        $this->selectInlineToolbarLineageItem(0);
-        $this->clickTopToolbarButton('formats-p', 'active');
-        $this->clickTopToolbarButton('Quote', NULL, TRUE);
-
-        $this->selectKeyword(1);
-        $this->selectInlineToolbarLineageItem(0);
-        $this->clickTopToolbarButton('formats-p', 'active');
-        $this->clickTopToolbarButton('Pre', NULL, TRUE);
-        $this->assertHTMLMatch('<blockquote><p>%1% xtn %2%</p></blockquote><pre>sit amet <strong>%3%</strong></pre><div>%4% paragraph to change to a p</div>');
-
-        $this->selectKeyword(1, 3);
-        $this->clickTopToolbarButton('formats');
-        $this->checkStatusOfFormatIcons('disabled');
-
-        // Test Quote and Pre
-        $this->selectKeyword(3);
-        $this->selectInlineToolbarLineageItem(0);
-        $this->clickTopToolbarButton('formats-pre', 'active');
-        $this->clickTopToolbarButton('Quote', NULL, TRUE);
-
-        $this->selectKeyword(1);
-        $this->selectInlineToolbarLineageItem(0);
-        $this->clickTopToolbarButton('formats-pre', 'active');
-        $this->clickTopToolbarButton('Quote', NULL, TRUE);
-        $this->assertHTMLMatch('<pre>%1% xtn %2%</pre><blockquote><p>sit amet <strong>%3%</strong></p></blockquote><div>%4% paragraph to change to a p</div>');
-
-        $this->selectKeyword(1, 3);
-        $this->clickTopToolbarButton('formats');
-        $this->checkStatusOfFormatIcons('disabled');
-
-    }//end testApplingPAroundQuoteAndPreTags()
-
-
-    /**
-     * Test trying to apply a P tag around two Pre tags
-     *
-     * @return void
-     */
-    public function testApplingPAroundTwoPreTags()
-    {
-        $this->selectKeyword(3);
-        $this->selectInlineToolbarLineageItem(0);
-        $this->clickTopToolbarButton('formats-p', 'active');
-        $this->clickTopToolbarButton('PRE', NULL, TRUE);
-
-        $this->selectKeyword(1);
-        $this->selectInlineToolbarLineageItem(0);
-        $this->clickTopToolbarButton('formats-p', 'active');
-        $this->clickTopToolbarButton('PRE', NULL, TRUE);
-        $this->assertHTMLMatch('<pre>%1% xtn %2%</pre><pre>sit amet <strong>%3%</strong></pre><div>%4% paragraph to change to a p</div>');
-
-        $this->selectKeyword(1, 3);
-        $this->clickTopToolbarButton('formats');
-        $this->checkStatusOfFormatIcons('disabled');
-
-    }//end testApplingPAroundTwoPreTags()
-
+    }//end testApplyingQuoteToAParagraphUsingTheTopToolbar()
 
 }//end class
 

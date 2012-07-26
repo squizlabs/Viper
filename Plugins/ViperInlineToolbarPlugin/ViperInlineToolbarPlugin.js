@@ -285,7 +285,7 @@ ViperInlineToolbarPlugin.prototype = {
 
     getCurrentLineageIndex: function()
     {
-        if (this._currentLineageIndex !== null) {
+        if (this._currentLineageIndex !== null && this.viper.getViperRange().collapsed === false) {
             return this._currentLineageIndex;
         } else if (this._selectionLineage.length === 0) {
              return 0;

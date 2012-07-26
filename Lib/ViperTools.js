@@ -519,32 +519,35 @@ ViperTools.prototype = {
                 input.value = newValue;
                 value       = newValue;
 
-                var actionIcon = dfx.getClass('Viper-textbox-action', main);
-                if (actionIcon.length === 0) {
-                    actionIcon = _addActionButton();
-                } else {
-                    actionIcon = actionIcon[0];
-                }
+                if (isTextArea !== true) {
+                    var actionIcon = dfx.getClass('Viper-textbox-action', main);
+                    if (actionIcon.length === 0) {
+                        actionIcon = _addActionButton();
+                    } else {
+                        actionIcon = actionIcon[0];
+                    }
 
-                dfx.showElement(actionIcon);
+                    dfx.showElement(actionIcon);
+                }
 
                 dfx.removeClass(textBox, 'Viper-actionClear');
                 dfx.removeClass(textBox, 'Viper-actionRevert');
 
-                if (input.value !== value && value !== '') {
-                    // Show the revert icon.
-                    actionIcon.setAttribute('title', 'Revert to original value');
-                    dfx.addClass(textBox, 'Viper-actionRevert');
-                    dfx.removeClass(textBox, 'Viper-required');
-                } else if (input.value !== '') {
-                    actionIcon.setAttribute('title', 'Clear this value');
-                    dfx.addClass(textBox, 'Viper-actionClear');
-                    dfx.removeClass(textBox, 'Viper-required');
-                } else {
-                    dfx.hideElement(actionIcon);
-                    //dfx.remove(actionIcon);
-                    if (required === true) {
-                        dfx.addClass(textBox, 'Viper-required');
+                if (isTextArea !== true) {
+                    if (input.value !== value && value !== '') {
+                        // Show the revert icon.
+                        actionIcon.setAttribute('title', 'Revert to original value');
+                        dfx.addClass(textBox, 'Viper-actionRevert');
+                        dfx.removeClass(textBox, 'Viper-required');
+                    } else if (input.value !== '') {
+                        actionIcon.setAttribute('title', 'Clear this value');
+                        dfx.addClass(textBox, 'Viper-actionClear');
+                        dfx.removeClass(textBox, 'Viper-required');
+                    } else {
+                        dfx.hideElement(actionIcon);
+                        if (required === true) {
+                            dfx.addClass(textBox, 'Viper-required');
+                        }
                     }
                 }
 
@@ -1412,7 +1415,7 @@ ViperTools.prototype = {
                 var subSectionForm = tools.getItem(subSectionid).form;
                 dfx.removeEvent(document, 'keydown.' + id);
                 dfx.addEvent(document, 'keydown.' + id, function(e) {
-                    if (subSectionForm && e.which === 13) {
+                    if (subSectionForm && e.which === 13 && dfx.isTag(e.target, 'textarea') === false) {
                         return subSectionForm.onsubmit();
                     }
                 });

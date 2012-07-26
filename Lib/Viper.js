@@ -4351,8 +4351,10 @@ Viper.prototype = {
 
     },
 
-    cleanHTML: function(content)
+    cleanHTML: function(content, attrBlacklist)
     {
+        attrBlacklist  = attrBlacklist || [];
+
         content = content.replace(/<(p|div|h1|h2|h3|h4|h5|h6|li)((\s+\w+(\s*=\s*(?:".*?"|\'.*?\'|[^\'">\s]+))?)+)?\s*>\s*/ig, "<$1$2>");
         content = content.replace(/\s*<\/(p|div|h1|h2|h3|h4|h5|h6|li)((\s+\w+(\s*=\s*(?:".*?"|\'.*?\'|[^\'">\s]+))?)+)?\s*>/ig, "</$1$2>");
         content = content.replace(/<(area|base|basefont|br|hr|input|img|link|meta)((\s+\w+(\s*=\s*(?:".*?"|\'.*?\'|[^\'">\s]+))?)+)?\s*>/ig, "<$1$2 />");
@@ -4362,52 +4364,40 @@ Viper.prototype = {
 
         content = this.replaceEntities(content);
 
-        // Add quotes around attributes (IE....).
-        if (this.isBrowser('msie') === true) {
-            // This requires some explanation because I'm sick of having to try and
-            // figure out what I did in this regex each time we change it.
-            // <\w+(?:(?:\s+\w+(?:\s*=\s*(?:"(?:[^"]+)?"|\'(?:[^\']+)?\'))?)+)?
-            // <[tagname](
-            //            (
-            //             spaces[attrname](
-            //                              spacemaybe[=]spacemaybe(
-            //                                                      "(...maybe)" OR
-            //                                                      '(...maybe)'
-            //                                                     )
-            //                             maybe)
-            //            ) * many
-            //           maybe)
-            // (?:\s+\w+(?:\s*=\s*(?:[^\'">\s]+))?)+
-            //           (
-            //            spaces[attrname](
-            //                             spacemaybe[=]spacemaybe(noquotes/spaces/end...)
-            //                            maybe)
-            //           ) * many
-            // (?:(?:\s+\w+(?:\s*=\s*(?:"(?:[^"]+)?"|\'(?:[^\']+)?\'|[^\'">\s]+))?)+)?\s*\/?>
-            //           (
-            //            (spaces[attrname](
-            //                              spacemaybe[=]spacemaybe(
-            //                                                      "(...maybe)" OR
-            //                                                      '(...maybe)' OR
-            //                                                      noquotes/spaces/end...
-            //                                                     )
-            //                             maybe)
-            //            ) * many
-            //           maybe)
-            //           spacesmaybe/>
-            content = content.replace(/<\w+(?:(?:\s+\w+(?:\s*=\s*(?:"(?:[^"]+)?"|\'(?:[^\']+)?\'))?)+)?(?:\s+\w+(?:\s*=\s*(?:[^\'">\s]+))?)+(?:(?:\s+\w+(?:\s*=\s*(?:"(?:[^"]+)?"|\'(?:[^\']+)?\'|[^\'">\s]+))?)+)?\s*\/?>/ig, function(match) {
-                match = match.replace(/(\s+\w+\s*=\s*)([^\'">\s]+)/gi, function(attr, attrName, value) {
-                    return attrName + '"' + value + '"';
-                });
+        // Regex to get list of HTML tags.
+        var subRegex  = '\\s+([:\\w]+)(?:\\s*=\\s*("(?:[^"]+)?"|\'(?:[^\']+)?\'|[^\'">\\s]+))?';
 
-                // Make sure IE style attribute values are lower case..
-                match = match.replace(/style="[^"]+"/, function(attr) {
-                    return attr.toLowerCase();
-                });
+        // Regex to get list of attributes in an HTML tag.
+        var tagRegex  = new RegExp('(<\\w+)(?:' + subRegex + ')+\\s*(\/?>)', 'g');
+        var attrRegex = new RegExp(subRegex, 'g');
 
-                return match;
+        content = content.replace(tagRegex, function(match, tagStart, a, tagEnd) {
+            match = match.replace(attrRegex, function(a, attrName, attrValue) {
+                // All attribute names must be lowercase.
+                attrName = attrName.toLowerCase();
+
+                if (attrBlacklist.inArray(attrName) === true) {console.info(attrName);
+                    // This attribute is not allowed.
+                    return '';
+                } else if (attrName.indexOf(':') >= 0) {
+                    return '';
+                }
+
+                if (attrName === 'style') {
+                    // Style attribute value must be lowercase.
+                    attrValue = attrValue.toLowerCase();
+                }
+
+                // Remove single and double quotes and then wrap the value with
+                // double quotes.
+                attrValue = dfx.trim(attrValue, '"\'');
+
+                var res = ' ' + attrName + '="' + attrValue + '"';
+                return res;
             });
-        }
+
+            return match;
+        });
 
         return content;
 

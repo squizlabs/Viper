@@ -107,7 +107,7 @@ td,th {
 }
 
 .Viper-button.Viper-disabled {
-    text-align: right;
+    font-family: monospace;
 }
 
 .Viper-button.Viper-active {

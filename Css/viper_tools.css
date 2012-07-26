@@ -671,6 +671,7 @@
 }
 .Viper-textbox-main {
   position: relative;
+  padding-right: 0.3em;
 }
 .Viper-textbox.Viper-actionRevert .Viper-textbox-main,
 .Viper-textbox.Viper-actionClear .Viper-textbox-main {
@@ -765,6 +766,9 @@
 .Viper-disabled .Viper-textbox-textArea {
   filter: alpha(opacity = 40);
 }
+.Viper-textbox-textArea {
+  min-height: 3.5em;
+}
 .input-placeholder {
   color: #c44e4e;
   font-style: italic;
@@ -807,6 +811,10 @@
 .Viper-textbox.Viper-disabled .Viper-textbox-action,
 .Viper-textbox.Viper-disabled .Viper-textbox.Viper-required .Viper-textbox-main:after {
   visibility: hidden;
+}
+.Viper-textBox-textArea .Viper-textbox-action,
+.Viper-textBox-textArea .Viper-textbox.Viper-required .Viper-textbox-main:after {
+  display: none;
 }
 .Viper-textbox.Viper-required .Viper-textbox-main:after {
   display: block;
@@ -932,25 +940,6 @@
   text-shadow: 0 1px 0 #FFFFFF;
   border: 1px solid transparent;
 }
-@media screen and (max-width: 768px) {
-  .Viper-popup,
-  .ViperITP,
-  .ViperTP-bar {
-    font-size: 13px !important;
-  }
-  .Viper-button {
-    min-width: 39px;
-  }
-}
-::-webkit-scrollbar {
-  -webkit-appearance: none;
-  width: 0.6em;
-  background-color: #000;
-}
-::-webkit-scrollbar-thumb {
-  border-radius: 0.2em;
-  background-color: rgba(255, 255, 255, 0.4);
-}
 .Viper-popup-header {
   position: relative;
   text-transform: uppercase;
@@ -1060,4 +1049,15 @@
   font-weight: bold;
   -moz-user-select: none;
   margin: 5px 0;
+}
+/* Small screen customisations */
+@media screen and (max-width: 768px) {
+  .Viper-popup,
+  .ViperITP,
+  .ViperTP-bar {
+    font-size: 13px !important;
+  }
+  .Viper-button {
+    min-width: 39px;
+  }
 }
