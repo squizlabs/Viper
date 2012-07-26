@@ -388,18 +388,34 @@ ViperFormatPlugin.prototype = {
             if (currentElement.nodeType === dfx.TEXT_NODE && data.lineage.length > 1) {
                 currentElement = data.lineage[(data.current - 1)];
             } else {
-                 data.toolbar.showButton('vitpFormats');
+                data.toolbar.showButton('vitpFormats');
+            }
+
+            var isBlockQuote = false;
+            if (dfx.isTag(currentElement, 'p') === true
+                && dfx.isTag(currentElement.parentNode, 'blockquote') === true
+            ) {
+                isBlockQuote = true;
             }
 
             for (var tag in formatButtons) {
                 if (dfx.isTag(currentElement, tag) === true) {
                     if (formatButtonStatuses[tag] === true) {
                         tools.enableButton(prefix + 'formats:' + formatButtons[tag]);
-                        tools.setButtonActive(prefix + 'formats:' + formatButtons[tag]);
+
+                        if (isBlockQuote !== true) {
+                            tools.setButtonActive(prefix + 'formats:' + formatButtons[tag]);
+                        }
                     }
 
                     tools.setButtonActive('vitpFormats');
-                    tools.getItem('vitpFormats').setIconClass('Viper-formats-' + tag);
+                    if (isBlockQuote === true) {
+                        tools.setButtonActive(prefix + 'formats:' + formatButtons['blockquote']);
+                        tools.getItem('vitpFormats').setIconClass('Viper-formats-blockquote');
+                    } else {
+                        tools.setButtonActive(prefix + 'formats:' + formatButtons[tag]);
+                        tools.getItem('vitpFormats').setIconClass('Viper-formats-' + tag);
+                    }
                 }
             }
         } else {
