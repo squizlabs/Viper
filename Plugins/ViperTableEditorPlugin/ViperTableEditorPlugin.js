@@ -60,6 +60,12 @@ ViperTableEditorPlugin.prototype = {
 
         // Hide the toolbar when user clicks anywhere.
         this.viper.registerCallback(['Viper:mouseDown', 'ViperHistoryManager:undo'], 'ViperTableEditorPlugin', function(data) {
+            if (self.viper.isBrowser('firefox') === true) {
+                // Disable Firefox table editing.
+                document.execCommand("enableInlineTableEditing", false, false);
+                document.execCommand("enableObjectResizing", false, false);
+            }
+
             self.setActiveCell(null);
             clickedInToolbar = false;
             if (data && data.target) {
