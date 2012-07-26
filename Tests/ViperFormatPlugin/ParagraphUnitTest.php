@@ -25,7 +25,7 @@ class Viper_Tests_ViperFormatPlugin_ParagraphUnitTest extends AbstractFormatsUni
         $this->clickInlineToolbarButton('formats-div', 'active');
         $this->checkStatusOfFormatIconsInTheInlineToolbar(NULL, 'active', NULL, NULL);
         $this->clickInlineToolbarButton('P', NULL, TRUE);
-        $this->assertHTMLMatch('<p>%1% xtn %2%</p><p>sit amet <strong>%3%</strong></p><p>%4% paragraph to change to a p</p>');
+        $this->assertHTMLMatch('<p>%1% xtn %2%</p><p>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p><p>%4% paragraph to change to a p</p>');
         $this->checkStatusOfFormatIconsInTheInlineToolbar('active', NULL, NULL, NULL);
 
         // Check the state of the format icon after we have changed to a paragraph
@@ -54,12 +54,12 @@ class Viper_Tests_ViperFormatPlugin_ParagraphUnitTest extends AbstractFormatsUni
         $this->clickTopToolbarButton('formats-div', 'active');
         $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, 'active', NULL, NULL);
         $this->clickTopToolbarButton('P', NULL, TRUE);
-        $this->assertHTMLMatch('<p>%1% xtn %2%</p><p>sit amet <strong>%3%</strong></p><p>%4% paragraph to change to a p</p>');
+        $this->assertHTMLMatch('<p>%1% xtn %2%</p><p>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p><p>%4% paragraph to change to a p</p>');
         $this->checkStatusOfFormatIconsInTheTopToolbar('active', NULL, NULL, NULL);
 
         // Change it back to do more testing
         $this->clickTopToolbarButton('DIV', NULL, TRUE);
-        $this->assertHTMLMatch('<p>%1% xtn %2%</p><p>sit amet <strong>%3%</strong></p><div>%4% paragraph to change to a p</div>');
+        $this->assertHTMLMatch('<p>%1% xtn %2%</p><p>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p><div>%4% paragraph to change to a p</div>');
         $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, 'active', NULL, NULL);
 
         // Test selecting a word in a div to change to a paragraph
@@ -73,7 +73,7 @@ class Viper_Tests_ViperFormatPlugin_ParagraphUnitTest extends AbstractFormatsUni
         $this->clickTopToolbarButton('formats-div', 'active');
         $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, 'active', NULL, NULL);
         $this->clickTopToolbarButton('P', NULL, TRUE);
-        $this->assertHTMLMatch('<p>%1% xtn %2%</p><p>sit amet <strong>%3%</strong></p><p>%4% paragraph to change to a p</p>');
+        $this->assertHTMLMatch('<p>%1% xtn %2%</p><p>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p><p>%4% paragraph to change to a p</p>');
         $this->checkStatusOfFormatIconsInTheTopToolbar('active', NULL, NULL, NULL);
 
         // Check the state of the format icon after we have changed to a paragraph
@@ -119,6 +119,35 @@ class Viper_Tests_ViperFormatPlugin_ParagraphUnitTest extends AbstractFormatsUni
 
 
     /**
+     * Tests that applying styles to a multi-line paragraph and selecting the P in lineage shows paragraph tools.
+     *
+     * @return void
+     */
+    public function testSelectMultiLineParaAfterStylingShowsCorrectIcons()
+    {
+        $this->selectKeyword(3);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->keyDown('Key.CMD + b');
+        $this->keyDown('Key.CMD + i');
+
+        $this->selectInlineToolbarLineageItem(0);
+
+        // Make sure the correct icons are being shown in the inline toolbar.
+        $this->assertTrue($this->inlineToolbarButtonExists('formats-p', 'active'), 'Active P icon does not appear in the inline toolbar');
+        $this->clickInlineToolbarButton('formats-p', 'active');
+        $this->checkStatusOfFormatIconsInTheInlineToolbar('active', NULL, NULL, NULL);
+        $this->assertEquals($this->replaceKeywords('%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.'), $this->getSelectedText(), 'Original selection is not selected');
+
+        // Make sure the correct icons are being shown in the top toolbar.
+        $this->assertTrue($this->topToolbarButtonExists('formats-p', 'active'), 'Active P icon does not appear in the top toolbar');
+        $this->clickTopToolbarButton('formats-p', 'active');
+        $this->checkStatusOfFormatIconsInTheTopToolbar('active', NULL, NULL, NULL);
+        $this->assertEquals($this->replaceKeywords('%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.'), $this->getSelectedText(), 'Original selection is not selected');
+
+    }//end testSelectMultiLineParaAfterStylingShowsCorrectIcons()
+
+
+    /**
      * Test that when you select part of a paragraph that you cannot change it to another format type.
      *
      * @return void
@@ -141,17 +170,29 @@ class Viper_Tests_ViperFormatPlugin_ParagraphUnitTest extends AbstractFormatsUni
     public function testApplyingAndRemovingPUsingInlineToolbar()
     {
 
+        // Test a single line paragraph
         $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(0);
         $this->clickInlineToolbarButton('formats-div', 'active');
         $this->clickInlineToolbarButton('P', NULL, TRUE);
-        $this->assertHTMLMatch('<p>%1% xtn %2%</p><p>sit amet <strong>%3%</strong></p><p>%4% paragraph to change to a p</p>');
+        $this->assertHTMLMatch('<p>%1% xtn %2%</p><p>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p><p>%4% paragraph to change to a p</p>');
+        $this->checkStatusOfFormatIconsInTheInlineToolbar('active', NULL, NULL, NULL);
 
         $this->clickInlineToolbarButton('P', 'active', TRUE);
-        $this->assertHTMLMatch('<p>%1% xtn %2%</p><p>sit amet <strong>%3%</strong></p> %4% paragraph to change to a p');
-
-        // Make sure that the P is still enabled
+        $this->assertHTMLMatch('<p>%1% xtn %2%</p><p>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p> %4% paragraph to change to a p');
         $this->checkStatusOfFormatIconsInTheInlineToolbar();
+
+        // Test a multi-line pagargraph
+        $this->selectKeyword(3);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickInlineToolbarButton('formats-p', 'active');
+        $this->clickInlineToolbarButton('P', 'active', TRUE);
+        $this->assertHTMLMatch('<p>%1% xtn %2%</p> %3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae. %4% paragraph to change to a p');
+        $this->checkStatusOfFormatIconsInTheInlineToolbar( );
+
+        $this->clickInlineToolbarButton('P', NULL, TRUE);
+        $this->assertHTMLMatch('<p>%1% xtn %2%</p><p>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p> %4% paragraph to change to a p');
+        $this->checkStatusOfFormatIconsInTheInlineToolbar('active', NULL, NULL, NULL);
 
     }//end testApplyingAndRemovingPUsingInlineToolbar()
 
@@ -164,17 +205,29 @@ class Viper_Tests_ViperFormatPlugin_ParagraphUnitTest extends AbstractFormatsUni
     public function testApplyingAndRemovingPUsingTopToolbar()
     {
 
+        // Test single line paragraph
         $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(0);
         $this->clickTopToolbarButton('formats-div', 'active');
         $this->clickTopToolbarButton('P', NULL, TRUE);
-        $this->assertHTMLMatch('<p>%1% xtn %2%</p><p>sit amet <strong>%3%</strong></p><p>%4% paragraph to change to a p</p>');
+        $this->assertHTMLMatch('<p>%1% xtn %2%</p><p>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p><p>%4% paragraph to change to a p</p>');
+        $this->checkStatusOfFormatIconsInTheTopToolbar('active', NULL, NULL, NULL);
 
         $this->clickTopToolbarButton('P', 'active', TRUE);
-        $this->assertHTMLMatch('<p>%1% xtn %2%</p><p>sit amet <strong>%3%</strong></p> %4% paragraph to change to a p');
-
-        // Make sure that the P is still enabled
+        $this->assertHTMLMatch('<p>%1% xtn %2%</p><p>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p> %4% paragraph to change to a p');
         $this->checkStatusOfFormatIconsInTheTopToolbar();
+
+        // Test multi-line paragraph
+        $this->selectKeyword(3);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickTopToolbarButton('formats-p', 'active');
+        $this->clickTopToolbarButton('P', 'active', TRUE);
+        $this->assertHTMLMatch('<p>%1% xtn %2%</p> %3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae. %4% paragraph to change to a p');
+        $this->checkStatusOfFormatIconsInTheTopToolbar();
+
+        $this->clickTopToolbarButton('P', NULL, TRUE);
+        $this->assertHTMLMatch('<p>%1% xtn %2%</p><p>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p> %4% paragraph to change to a p');
+        $this->checkStatusOfFormatIconsInTheTopToolbar('active', NULL, NULL, NULL);
 
     }//end testApplyingAndRemovingPUsingTopToolbar()
 
@@ -187,15 +240,15 @@ class Viper_Tests_ViperFormatPlugin_ParagraphUnitTest extends AbstractFormatsUni
     public function testRemovingAndApplyingPToMultiLineParagraph()
     {
 
-        $this->selectKeyword(1);
+        $this->selectKeyword(3);
         $this->selectInlineToolbarLineageItem(0);
         $this->clickTopToolbarButton('formats-p', 'active');
         $this->clickTopToolbarButton('P', 'active', TRUE);
-        $this->assertHTMLMatch('%1% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.');
+        $this->assertHTMLMatch('<p>%1% xtn %2%</p> %3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae. <div>%4% paragraph to change to a p</div>');
         $this->checkStatusOfFormatIconsInTheTopToolbar();
 
         $this->clickTopToolbarButton('P', NULL, TRUE);
-        $this->assertHTMLMatch('<p>%1% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p>');
+        $this->assertHTMLMatch('<p>%1% xtn %2%</p><p>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p><div>%4% paragraph to change to a p</div>');
         $this->checkStatusOfFormatIconsInTheTopToolbar('active');
 
     }//end testRemovingAndApplyingPToMultiLineParagraph()
@@ -220,7 +273,7 @@ class Viper_Tests_ViperFormatPlugin_ParagraphUnitTest extends AbstractFormatsUni
         $this->keyDown('Key.ENTER');
         $this->type('More new content');
 
-        $this->assertHTMLMatch('<p>%1% xtn %2%</p><p>sit amet <strong>%3%</strong></p><div>%4% paragraph to change to a p</div><p>New content on the page</p><p>More new content</p>');
+        $this->assertHTMLMatch('<p>%1% xtn %2%</p><p>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p><div>%4% paragraph to change to a p</div><p>New content on the page</p><p>More new content</p>');
 
     }//end testCreatingNewContentWithAPTag()
 
@@ -237,11 +290,11 @@ class Viper_Tests_ViperFormatPlugin_ParagraphUnitTest extends AbstractFormatsUni
         $this->clickInlineToolbarButton('formats-p', 'active');
         $this->clickInlineToolbarButton('DIV', NULL, TRUE);
         $this->checkStatusOfFormatIconsInTheInlineToolbar(NULL, 'active', NULL, NULL);
-        $this->assertHTMLMatch('<div>%1% xtn %2%</div><p>sit amet <strong>%3%</strong></p><div>%4% paragraph to change to a p</div>');
+        $this->assertHTMLMatch('<div>%1% xtn %2%</div><p>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p><div>%4% paragraph to change to a p</div>');
 
         $this->clickInlineToolbarButton('P', NULL, TRUE);
         $this->checkStatusOfFormatIconsInTheInlineToolbar('active', NULL, NULL, NULL);
-        $this->assertHTMLMatch('<p>%1% xtn %2%</p><p>sit amet <strong>%3%</strong></p><div>%4% paragraph to change to a p</div>');
+        $this->assertHTMLMatch('<p>%1% xtn %2%</p><p>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p><div>%4% paragraph to change to a p</div>');
 
     }//end testChangingAParagraphToADivUsingInlineToolbar()
 
@@ -258,11 +311,11 @@ class Viper_Tests_ViperFormatPlugin_ParagraphUnitTest extends AbstractFormatsUni
         $this->clickTopToolbarButton('formats-p', 'active');
         $this->clickTopToolbarButton('DIV', NULL, TRUE);
         $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, 'active', NULL, NULL);
-        $this->assertHTMLMatch('<div>%1% xtn %2%</div><p>sit amet <strong>%3%</strong></p><div>%4% paragraph to change to a p</div>');
+        $this->assertHTMLMatch('<div>%1% xtn %2%</div><p>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p><div>%4% paragraph to change to a p</div>');
 
         $this->clickTopToolbarButton('P', NULL, TRUE);
         $this->checkStatusOfFormatIconsInTheTopToolbar('active', NULL, NULL, NULL);
-        $this->assertHTMLMatch('<p>%1% xtn %2%</p><p>sit amet <strong>%3%</strong></p><div>%4% paragraph to change to a p</div>');
+        $this->assertHTMLMatch('<p>%1% xtn %2%</p><p>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p><div>%4% paragraph to change to a p</div>');
 
     }//end testChangingAParagraphToADivUsingTopToolbar()
 
@@ -279,11 +332,11 @@ class Viper_Tests_ViperFormatPlugin_ParagraphUnitTest extends AbstractFormatsUni
         $this->clickInlineToolbarButton('formats-p', 'active');
         $this->clickInlineToolbarButton('PRE', NULL, TRUE);
         $this->checkStatusOfFormatIconsInTheInlineToolbar(NULL, NULL, NULL, 'active');
-        $this->assertHTMLMatch('<pre>%1% xtn %2%</pre><p>sit amet <strong>%3%</strong></p><div>%4% paragraph to change to a p</div>');
+        $this->assertHTMLMatch('<pre>%1% xtn %2%</pre><p>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p><div>%4% paragraph to change to a p</div>');
 
         $this->clickInlineToolbarButton('P', NULL, TRUE);
         $this->checkStatusOfFormatIconsInTheInlineToolbar('active', NULL, NULL, NULL);
-        $this->assertHTMLMatch('<p>%1% xtn %2%</p><p>sit amet <strong>%3%</strong></p><div>%4% paragraph to change to a p</div>');
+        $this->assertHTMLMatch('<p>%1% xtn %2%</p><p>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p><div>%4% paragraph to change to a p</div>');
 
     }//end testChangingAParagraphToAPreUsingTheInlineToolbar()
 
@@ -300,11 +353,11 @@ class Viper_Tests_ViperFormatPlugin_ParagraphUnitTest extends AbstractFormatsUni
         $this->clickTopToolbarButton('formats-p', 'active');
         $this->clickTopToolbarButton('PRE', NULL, TRUE);
         $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, NULL, NULL, 'active');
-        $this->assertHTMLMatch('<pre>%1% xtn %2%</pre><p>sit amet <strong>%3%</strong></p><div>%4% paragraph to change to a p</div>');
+        $this->assertHTMLMatch('<pre>%1% xtn %2%</pre><p>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p><div>%4% paragraph to change to a p</div>');
 
         $this->clickTopToolbarButton('P', NULL, TRUE);
         $this->checkStatusOfFormatIconsInTheTopToolbar('active', NULL, NULL, NULL);
-        $this->assertHTMLMatch('<p>%1% xtn %2%</p><p>sit amet <strong>%3%</strong></p><div>%4% paragraph to change to a p</div>');
+        $this->assertHTMLMatch('<p>%1% xtn %2%</p><p>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p><div>%4% paragraph to change to a p</div>');
 
     }//end testChangingAParagraphToAPreUsingTheTopToolbar()
 
@@ -321,7 +374,7 @@ class Viper_Tests_ViperFormatPlugin_ParagraphUnitTest extends AbstractFormatsUni
         $this->clickInlineToolbarButton('formats-p', 'active');
         $this->clickInlineToolbarButton('Quote', NULL, TRUE);
         $this->checkStatusOfFormatIconsInTheInlineToolbar(NULL, NULL, 'active', NULL);
-        $this->assertHTMLMatch('<blockquote><p>%1% xtn %2%</p></blockquote><p>sit amet <strong>%3%</strong></p><div>%4% paragraph to change to a p</div>');
+        $this->assertHTMLMatch('<blockquote><p>%1% xtn %2%</p></blockquote><p>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p><div>%4% paragraph to change to a p</div>');
 
         $this->selectKeyword(1, 2);
         // Check that the formats icon is not active as you cannot change the P when in a quote
@@ -332,7 +385,7 @@ class Viper_Tests_ViperFormatPlugin_ParagraphUnitTest extends AbstractFormatsUni
         // Remove the quote tag
         $this->clickInlineToolbarButton('formats-blockquote', 'active');
         $this->clickInlineToolbarButton('Quote', 'active', TRUE);
-        $this->assertHTMLMatch('<p>%1% xtn %2%</p><p>sit amet <strong>%3%</strong></p><div>%4% paragraph to change to a p</div>');
+        $this->assertHTMLMatch('<p>%1% xtn %2%</p><p>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p><div>%4% paragraph to change to a p</div>');
 
     }//end testApplyingQuoteToAParagraphUsingTheInlineToolbar()
 
@@ -349,7 +402,7 @@ class Viper_Tests_ViperFormatPlugin_ParagraphUnitTest extends AbstractFormatsUni
         $this->clickTopToolbarButton('formats-p', 'active');
         $this->clickTopToolbarButton('Quote', NULL, TRUE);
         $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, NULL, 'active', NULL);
-        $this->assertHTMLMatch('<blockquote><p>%1% xtn %2%</p></blockquote><p>sit amet <strong>%3%</strong></p><div>%4% paragraph to change to a p</div>');
+        $this->assertHTMLMatch('<blockquote><p>%1% xtn %2%</p></blockquote><p>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p><div>%4% paragraph to change to a p</div>');
 
         $this->selectKeyword(1, 2);
         // Check that the formats icon is not active as you cannot change the P when in a quote
@@ -360,9 +413,29 @@ class Viper_Tests_ViperFormatPlugin_ParagraphUnitTest extends AbstractFormatsUni
         // Remove the quote tag
         $this->clickTopToolbarButton('formats-blockquote', 'active');
         $this->clickTopToolbarButton('Quote', 'active', TRUE);
-        $this->assertHTMLMatch('<p>%1% xtn %2%</p><p>sit amet <strong>%3%</strong></p><div>%4% paragraph to change to a p</div>');
+        $this->assertHTMLMatch('<p>%1% xtn %2%</p><p>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p><div>%4% paragraph to change to a p</div>');
 
     }//end testApplyingQuoteToAParagraphUsingTheTopToolbar()
+
+
+     /**
+     * Tests that when you select a paragraph and then a word in that paragraph, the disabled format icon is shown in the top toolbar.
+     *
+     * @return void
+     */
+    public function testFormatIconWhenSwitchingBetweenParagraphAndWord()
+    {
+
+        // Highlight the content of a paragraph
+        $this->selectKeyword(1, 2);
+        $this->assertTrue($this->topToolbarButtonExists('formats-p', 'active'), 'Active P icon should appear in the top toolbar');
+
+        // Highlight a word in the selected paragraph
+        $this->selectKeyword(2);
+        $this->assertTrue($this->topToolbarButtonExists('formats', 'disabled'), 'Formats icon should be disabled in the top toolbar');
+
+    }//end testFormatIconWhenSwitchingBetweenParagraphAndWord()
+
 
 }//end class
 
