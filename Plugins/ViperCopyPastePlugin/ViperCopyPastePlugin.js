@@ -478,6 +478,7 @@ ViperCopyPastePlugin.prototype = {
         var html = dfx.getHtml(pasteElement);
         html     = this._cleanWordPaste(html);
         html     = this._removeAttributes(html);
+        html     = this._updateElements(html);
 
         if (this._iframe) {
             dfx.remove(this._iframe);
@@ -767,8 +768,63 @@ ViperCopyPastePlugin.prototype = {
 
         dfxjQuery(tmp).find('[class]').removeAttr('class');
         dfxjQuery(tmp).find('[style]').removeAttr('style');
-        dfxjQuery(tmp).find('td,tr').removeAttr('valign width height');
+
+        // Remove all attributes from table related elements.
+        var tableElements = dfxjQuery(tmp).find('td,tr,table,tbody,tfoot,thead');
+        var c = tableElements.length;
+        for (var i = 0; i < c; i++) {
+            var attributes = tableElements[i].attributes;
+
+            for (var j = (attributes.length - 1); j >= 0; j--) {
+                var attrName = attributes[j].name.toLowerCase();
+                if (attrName === 'colspan' || attrName === 'rowspan') {
+                    continue;
+                }
+
+                tableElements[i].removeAttribute(attrName);
+            }
+        }
+
+        // Remove colgroup from tables.
         dfx.remove(dfxjQuery(tmp).find('colgroup'));
+
+        content = dfx.getHtml(tmp);
+        return content;
+
+    },
+
+    _updateElements: function(content)
+    {
+        var tmp = document.createElement('div');
+        dfx.setHtml(tmp, content);
+
+        // Set all table elements to have width=100%.
+        var tables = dfx.getTag('table', tmp);
+        var c      = tables.length;
+
+        for (var i = 0; i < c; i++) {
+            var table = tables[i];
+
+            dfx.setStyle(tmp, 'display', 'none');
+            this.viper.getViperElement().appendChild(tmp);
+
+            dfx.setStyle(table, 'width', '100%');
+
+            // Determine if we need to add borders.
+            var col         = dfx.getTag('td,th', table)[0];
+            var rightWidth  = parseInt(dfx.getComputedStyle(col, 'border-right-width'));
+            var bottomWidth = parseInt(dfx.getComputedStyle(col, 'border-bottom-width'));
+            if (bottomWidth === 0
+                || rightWidth === 0
+                || isNaN(bottomWidth) === true
+                || isNaN(rightWidth) === true
+            ) {
+                dfx.attr(table, 'border', 1);
+            }
+
+            dfx.remove(tmp);
+            dfx.setStyle(tmp, 'display', 'auto');
+        }
 
         content = dfx.getHtml(tmp);
         return content;

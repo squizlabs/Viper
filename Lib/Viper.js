@@ -4380,7 +4380,7 @@ Viper.prototype = {
                 // All attribute names must be lowercase.
                 attrName = attrName.toLowerCase();
 
-                if (attrBlacklist.inArray(attrName) === true) {console.info(attrName);
+                if (attrBlacklist.inArray(attrName) === true) {
                     // This attribute is not allowed.
                     return '';
                 } else if (attrName.indexOf(':') >= 0) {
