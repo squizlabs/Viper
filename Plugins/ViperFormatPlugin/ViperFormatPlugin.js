@@ -524,10 +524,7 @@ ViperFormatPlugin.prototype = {
                 tools.enableButton('class');
             }
 
-            tools.enableButton('headings');
-            tools.enableButton('formats');
-            tools.setButtonInactive('headings');
-            tools.setButtonInactive('formats');
+
 
             if (!startNode
                 && !endNode
@@ -538,12 +535,14 @@ ViperFormatPlugin.prototype = {
 
             tools.disableButton('headings');
             tools.disableButton('formats');
+            tools.setButtonInactive('headings');
+            tools.setButtonInactive('formats');
 
             if ((nodeSelection && ignoredTags.inArray(dfx.getTagName(nodeSelection)) === false)
                 || (!nodeSelection && dfx.getTagName(dfx.getFirstBlockParent(startNode)) !== 'li')
             ) {
                 if (!nodeSelection || dfx.isTag(nodeSelection, 'img') === false) {
-                    var parents = dfx.getParents(startNode, 'caption,blockquote', self.viper.getViperElement());
+                    var parents = dfx.getParents(startNode, 'caption', self.viper.getViperElement());
                     if (parents.length === 0) {
                         tools.enableButton('headings');
                         tools.enableButton('formats');
@@ -849,12 +848,6 @@ ViperFormatPlugin.prototype = {
                         return false;
                     }
 
-                    if (dfx.isTag(node, 'p') === true
-                        && dfx.isTag(node.parentNode, 'blockquote') === true
-                    ) {
-                        return false;
-                    }
-
                     return true;
                 break;
             }
@@ -1046,7 +1039,7 @@ ViperFormatPlugin.prototype = {
             case 'p':
                 // Any element can be converted to a P unless there are child block
                 // elements.
-                if (this.hadBlockChildren(element) === true) {
+                if (this.hasBlockChildren(element) === true) {
                     return false;
                 }
 
@@ -1058,7 +1051,7 @@ ViperFormatPlugin.prototype = {
             break;
 
             case 'pre':
-                if (this.hadBlockChildren(element) === true) {
+                if (this.hasBlockChildren(element) === true) {
                     return false;
                 }
             break;
@@ -1077,7 +1070,7 @@ ViperFormatPlugin.prototype = {
 
     },
 
-    hadBlockChildren: function(element)
+    hasBlockChildren: function(element)
     {
         var tags = dfx.getTag('*', element);
         for (var i = 0; i < tags.length; i++) {
