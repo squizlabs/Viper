@@ -822,6 +822,25 @@ ViperCopyPastePlugin.prototype = {
                 dfx.attr(table, 'border', 1);
             }
 
+            // Convert TDs that are inside thead elements to THs.
+            var thead = dfx.getTag('thead', table);
+            for (var j = 0; j < thead.length; j++) {
+                var tds = dfx.getTag('td', thead);
+                for (var k = 0; k < tds.length; k++) {
+                    var td = tds[k];
+                    var th = document.createElement('th');
+                    while (td.firstChild) {
+                        th.appendChild(td.firstChild);
+                    }
+
+                    th.setAttribute('colspan', dfx.attr(td, 'colspan'));
+                    th.setAttribute('rowspan', dfx.attr(td, 'rowspan'));
+
+                    dfx.insertBefore(td, th);
+                    dfx.remove(td);
+                }
+            }
+
             dfx.remove(tmp);
             dfx.setStyle(tmp, 'display', 'auto');
         }
