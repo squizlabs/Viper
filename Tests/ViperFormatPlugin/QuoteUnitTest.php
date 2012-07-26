@@ -310,6 +310,28 @@ class Viper_Tests_ViperFormatPlugin_QuoteUnitTest extends AbstractFormatsUnitTes
     }//end testChaningMultiLineDivToQuote()
 
 
+    /**
+     * Test applying and then removing the Quote format to a multi line Quote.
+     *
+     * @return void
+     */
+    public function testRemovingAndApplyingQuoteToMultiLineQuote()
+    {
+
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickTopToolbarButton('formats-blockquote', 'active');
+        $this->clickTopToolbarButton('Quote', 'active', TRUE);
+        $this->assertHTMLMatch('%1% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.');
+        $this->checkStatusOfFormatIconsInTheTopToolbar();
+
+        $this->clickTopToolbarButton('Quote', NULL, TRUE);
+        $this->assertHTMLMatch('<blockquote><p>%1% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p></blockquote>');
+        $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, NULL, 'active', NULL);
+
+    }//end testRemovingAndApplyingQuoteToMultiLineQuote()
+
+
 }//end class
 
 ?>

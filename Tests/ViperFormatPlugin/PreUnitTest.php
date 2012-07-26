@@ -301,6 +301,54 @@ class Viper_Tests_ViperFormatPlugin_PreUnitTest extends AbstractFormatsUnitTest
     }//end testCreatingNewContentWithAPreTag()
 
 
+    /**
+     * Test changing a multi-line div section to a Pre.
+     *
+     * @return void
+     */
+    public function testChaningMultiLineDivToPre()
+    {
+
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickTopToolbarButton('formats-div', 'active');
+        $this->clickTopToolbarButton('Pre', NULL, TRUE);
+        $this->assertHTMLMatch('<pre>%1% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</pre>');
+
+        $this->clickTopToolbarButton('DIV', NULL, TRUE);
+        $this->assertHTMLMatch('<div>%1% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div>');
+
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickInlineToolbarButton('formats-div', 'active');
+        $this->clickInlineToolbarButton('Pre', NULL, TRUE);
+        $this->assertHTMLMatch('<pre>%1% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</pre>');
+
+    }//end testChaningMultiLineDivToPre()
+
+
+    /**
+     * Test applying and then removing the Pre format to a multi line pre.
+     *
+     * @return void
+     */
+    public function testRemovingAndApplyingPreToMultiLinePre()
+    {
+
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickTopToolbarButton('formats-pre', 'active');
+        $this->clickTopToolbarButton('Pre', 'active', TRUE);
+        $this->assertHTMLMatch('%1% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.');
+        $this->checkStatusOfFormatIconsInTheTopToolbar();
+
+        $this->clickTopToolbarButton('Pre', NULL, TRUE);
+        $this->assertHTMLMatch('<pre>%1% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</pre>');
+        $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, NULL, NULL, 'active');
+
+    }//end testRemovingAndApplyingPreToMultiLinePre()
+
+
 }//end class
 
 ?>
