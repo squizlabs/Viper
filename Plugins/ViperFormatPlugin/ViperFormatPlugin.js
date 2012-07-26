@@ -1323,10 +1323,22 @@ ViperFormatPlugin.prototype = {
             }
 
             dfx.remove(element);
-        } else if (type === 'blockquote' && dfx.isTag(element, 'p') === true) {
+        } else if (type === 'blockquote') {
             var newElem = document.createElement(type);
             dfx.insertBefore(element, newElem);
-            newElem.appendChild(element);
+            if (dfx.isTag(element, 'p') === true) {
+                newElem.appendChild(element);
+            } else {
+                var p = document.createElement('p');
+                newElem.appendChild(p);
+                while (element.firstChild) {
+                    p.appendChild(element.firstChild);
+                }
+
+                dfx.remove(element);
+            }
+
+            return newElem;
         } else {
             var newElem = document.createElement(type);
 
