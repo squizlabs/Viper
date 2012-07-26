@@ -1088,9 +1088,19 @@ ViperFormatPlugin.prototype = {
 
     hasBlockChildren: function(element)
     {
+        var isBlockQuote = dfx.isTag(element, 'blockquote');
+        var hasBlock     = false;
+
         var tags = dfx.getTag('*', element);
         for (var i = 0; i < tags.length; i++) {
             if (dfx.isBlockElement(tags[i]) === true) {
+                if (isBlockQuote === true && hasBlock === false && dfx.isTag(tags[i], 'p') === true) {
+                    // In blockquote element only return true if there is more than
+                    // one block element.
+                    hasBlock = true;
+                    continue;
+                }
+
                 return true;
             }
         }
