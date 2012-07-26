@@ -570,7 +570,7 @@ ViperFormatPlugin.prototype = {
             var highlightButton = true;
             var blockParent     = self.getTagFromRange(data.range, ['p', 'div', 'pre', 'blockquote']);
 
-            if (!formatElement || formatElement.nodeType === dfx.TEXT_NODE) {
+            if (!formatElement || formatElement.nodeType === dfx.TEXT_NODE || dfx.isBlockElement(formatElement) === false) {
                 if (data.range.collapsed === true) {
                     formatElement   = blockParent;
                 } else {
