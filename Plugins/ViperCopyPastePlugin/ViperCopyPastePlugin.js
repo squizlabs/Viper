@@ -623,6 +623,7 @@ ViperCopyPastePlugin.prototype = {
         this.viper.cleanDOM();
 
         this.viper.fireNodesChanged();
+        this.viper.fireCallbacks('ViperCopyPastePlugin:paste');
 
     },
 
