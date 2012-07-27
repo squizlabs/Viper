@@ -176,7 +176,7 @@ ViperKeyboardEditorPlugin.prototype = {
             }
 
             if (range.collapsed === true
-                && ((endNode.nodeType === dfx.TEXT_NODE && range.endOffset === range.endContainer.data.length)
+                && ((endNode.nodeType === dfx.TEXT_NODE && range.endOffset === endNode.data.length)
                 || endNode.nodeType === dfx.ELEMENT_NODE && dfx.isTag(endNode, 'br') && !endNode.nextSibling)
             ) {
                 var firstBlock = dfx.getFirstBlockParent(endNode);
