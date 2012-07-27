@@ -128,16 +128,17 @@ ViperTableEditorPlugin.prototype = {
 
                 dfx.preventDefault(e);
                 return false;
-            } else if (e.which === 39) {
-                // Right arrow.
+            } else if (e.which === 39 || e.which === 40) {
+                // Right and down arrow.
                 // If the range is at the end of a table (last cell) then move the
                 // caret outside even if there is no next sibling.
                 var range = self.viper.getCurrentRange();
                 if (range.collapsed === true) {
                     var startNode = range.getStartNode();
-                    if (startNode && startNode.nodeType === dfx.TEXT_NODE && range.endOffset === startNode.data.length) {
-                        var cell     = self.getActiveCell();
-                        if (startNode === range._getLastSelectableChild(cell)) {
+                    if (startNode && (dfx.isTag(startNode, 'br') === true || (startNode.nodeType === dfx.TEXT_NODE && range.endOffset === startNode.data.length))) {
+                        var cell           = self.getActiveCell();
+                        var lastSelectable = range._getLastSelectableChild(cell);
+                        if (startNode === lastSelectable || (!lastSelectable && dfx.isTag(startNode, 'br') === true)) {
                             if (!self.getNextRow(cell.parentNode)) {
                                 // End of table.
                                 var table = self.getCellTable(cell);
