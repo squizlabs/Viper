@@ -40,26 +40,6 @@ ViperInlineToolbarPlugin.prototype = {
         this._topToolbar = this.viper.getPluginManager().getPlugin('ViperToolbarPlugin');
         this._initToolbar();
 
-        /*this.viper.registerCallback('Viper:elementScaled', 'ViperInlineToolbarPlugin', function(data) {
-           if (data.element !== self._toolbar) {
-               return false;
-           }
-
-           if (data.scale === 1) {
-               self._margin = 15;
-           } else {
-               self._margin = (15 - (((1 - data.scale) / 0.1) * 5));
-           }
-
-           self.updateToolbar();
-        });
-
-        dfx.addEvent(window, 'resize', function() {
-            if (dfx.hasClass(self._toolbar, 'Viper-visible') === true) {
-                self._updatePosition();
-            }
-        });*/
-
     },
 
     setSettings: function(settings)
@@ -94,6 +74,9 @@ ViperInlineToolbarPlugin.prototype = {
         });
 
         this._toolbarWidget = tools.getItem(toolbarid);
+        this._toolbarWidget.setOnHideCallback(function() {
+            self._setCurrentLineageIndex(null);
+        });
 
         // Add lineage container to the toolbar.
         var lineage = document.createElement('ul');

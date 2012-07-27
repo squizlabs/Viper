@@ -28,7 +28,6 @@
     position: fixed;
 }
 
-/* test styles that add and remove border radius to the table button when it is the only visible button */
 .Viper-button.Viper-table:first-child {
     border-top-right-radius: 0.3em;
     border-bottom-right-radius: 0.3em;
@@ -59,6 +58,8 @@
     border: medium none;
     border-collapse: collapse;
     margin-bottom: 0.7em;
+    box-shadow: 0 0 2px rgba(0,0,0,0.2);
+    width: 100%;
 }
 
 .VTEP-bubble-table td {
@@ -137,13 +138,19 @@
 }
 
 .VTEP-bubble-headersTableWrapper.Viper-selected td.Viper-hover {
-    background-color: #4C7CDF;
+    background-color: #4c7dde;
 }
 
-.VTEP-bubble-headersTableWrapper.Viper-selected table {
-    box-shadow: 0 0 2px 2px #4C7CDF;
+.VTEP-bubble-headersTableWrapper span {
+    padding: 0.1em 0.5em;
+    display: block;
 }
+
 .VTEP-bubble-headersTableWrapper.Viper-selected span {
     font-weight: bold;
     color: #FFF;
+    background-color: #2b2b2b;
+    border-radius: 0.4em;
+    text-shadow: none;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.15);
 }

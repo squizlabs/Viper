@@ -58,8 +58,26 @@ ViperTableEditorPlugin.prototype = {
             }
         });
 
+        this.viper.registerCallback('ViperCopyPastePlugin:paste', 'ViperTableEditorPlugin', function() {
+            var vap = self.viper.ViperPluginManager.getPlugin('ViperAccessibilityPlugin');
+            if (vap) {
+                vap.loadHTMLCS(function() {
+                    var tables = dfx.getTag('table', self.viper.getViperElement());
+                    for (var i = 0; i < tables.length; i++) {
+                        self.setTableHeaders(tables[i]);
+                    }
+                });
+            }
+        });
+
         // Hide the toolbar when user clicks anywhere.
         this.viper.registerCallback(['Viper:mouseDown', 'ViperHistoryManager:undo'], 'ViperTableEditorPlugin', function(data) {
+            if (self.viper.isBrowser('firefox') === true) {
+                // Disable Firefox table editing.
+                document.execCommand("enableInlineTableEditing", false, false);
+                document.execCommand("enableObjectResizing", false, false);
+            }
+
             self.setActiveCell(null);
             clickedInToolbar = false;
             if (data && data.target) {
@@ -110,16 +128,17 @@ ViperTableEditorPlugin.prototype = {
 
                 dfx.preventDefault(e);
                 return false;
-            } else if (e.which === 39) {
-                // Right arrow.
+            } else if (e.which === 39 || e.which === 40) {
+                // Right and down arrow.
                 // If the range is at the end of a table (last cell) then move the
                 // caret outside even if there is no next sibling.
                 var range = self.viper.getCurrentRange();
                 if (range.collapsed === true) {
                     var startNode = range.getStartNode();
-                    if (startNode && startNode.nodeType === dfx.TEXT_NODE && range.endOffset === startNode.data.length) {
-                        var cell     = self.getActiveCell();
-                        if (startNode === range._getLastSelectableChild(cell)) {
+                    if (startNode && (dfx.isTag(startNode, 'br') === true || (startNode.nodeType === dfx.TEXT_NODE && range.endOffset === startNode.data.length))) {
+                        var cell           = self.getActiveCell();
+                        var lastSelectable = range._getLastSelectableChild(cell);
+                        if (startNode === lastSelectable || (!lastSelectable && dfx.isTag(startNode, 'br') === true)) {
                             if (!self.getNextRow(cell.parentNode)) {
                                 // End of table.
                                 var table = self.getCellTable(cell);
@@ -135,6 +154,10 @@ ViperTableEditorPlugin.prototype = {
                         }
                     }
                 }
+            } else {
+                self.hideCellToolsIcon();
+                self.removeHighlights();
+                self.hideToolbar();
             }//end if
         });
 
@@ -355,7 +378,7 @@ ViperTableEditorPlugin.prototype = {
         var c = cells.length;
         for (var i = 0; i < c; i++) {
             var html = dfx.trim(dfx.getHtml(cells[i]));
-            if (html === '') {
+            if (html === '' || html === '&nbsp;') {
                 this._initCell(cells[i]);
             }
         }
@@ -2933,8 +2956,8 @@ ViperTableEditorPlugin.prototype = {
     {
         var main = document.createElement('div');
 
-        var maxRows            = 10;
-        var maxCols            = 10;
+        var maxRows            = 6;
+        var maxCols            = 8;
         var selectedRows       = 3;
         var selectedCols       = 4;
         var selectedHeaderType = 2;
@@ -3001,7 +3024,7 @@ ViperTableEditorPlugin.prototype = {
             selectedRows = (parseInt(row) + 1);
             selectedCols = (parseInt(col) + 1);
 
-            dfx.setHtml(dfx.getClass('Viper-sizeLabel', main)[0], 'Size (' + selectedRows + ' x ' + selectedCols + ')');
+            dfx.setHtml(dfx.getClass('Viper-sizeLabel', main)[0], 'Size (' + selectedCols + ' x ' + selectedRows + ')');
 
             for (var i = 0; i < maxRows; i++) {
                 for (var j = 0; j < maxCols; j++) {
@@ -3016,7 +3039,7 @@ ViperTableEditorPlugin.prototype = {
 
         var _setRowColsHover = function(row, col) {
 
-            dfx.setHtml(dfx.getClass('Viper-sizeLabel', main)[0], 'Size (' + (parseInt(row) + 1) + ' x ' + (parseInt(col) + 1) + ')');
+            dfx.setHtml(dfx.getClass('Viper-sizeLabel', main)[0], 'Size (' + (parseInt(col) + 1) + ' x ' + (parseInt(row) + 1) + ')');
 
             for (var i = 0; i < maxRows; i++) {
                 for (var j = 0; j < maxCols; j++) {

@@ -25,7 +25,7 @@ class Viper_Tests_ViperFormatPlugin_PreUnitTest extends AbstractFormatsUnitTest
         $this->clickInlineToolbarButton('formats-p', 'active');
         $this->checkStatusOfFormatIconsInTheInlineToolbar('active', NULL, NULL, NULL);
         $this->clickInlineToolbarButton('PRE', NULL, TRUE);
-        $this->assertHTMLMatch('<pre>%1% xtn %2%</pre><pre>%3% amet <strong>WoW</strong></pre><pre>%4% paragraph to change to a pre</pre>');
+        $this->assertHTMLMatch('<pre>%1% xtn %2%</pre><div>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div><pre>%4% paragraph to change to a pre</pre>');
         $this->checkStatusOfFormatIconsInTheInlineToolbar(NULL, NULL, NULL, 'active');
 
         // Check the state of the format icon after we have changed to a paragraph
@@ -49,17 +49,17 @@ class Viper_Tests_ViperFormatPlugin_PreUnitTest extends AbstractFormatsUnitTest
     public function testApplingThePreStyleUsingTopToolbar()
     {
 
-        // Test clicking in a P to change to a div
+        // Test clicking in a P to change to a Pre
         $this->click($this->findKeyword(4));
         $this->clickTopToolbarButton('formats-p', 'active');
         $this->checkStatusOfFormatIconsInTheTopToolbar('active', NULL, NULL, NULL);
         $this->clickTopToolbarButton('PRE', NULL, TRUE);
-        $this->assertHTMLMatch('<pre>%1% xtn %2%</pre><pre>%3% amet <strong>WoW</strong></pre><pre>%4% paragraph to change to a pre</pre>');
+        $this->assertHTMLMatch('<pre>%1% xtn %2%</pre><div>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div><pre>%4% paragraph to change to a pre</pre>');
         $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, NULL, NULL, 'active');
 
         // Change it back to do more testing
         $this->clickTopToolbarButton('P', NULL, TRUE);
-        $this->assertHTMLMatch('<pre>%1% xtn %2%</pre><pre>%3% amet <strong>WoW</strong></pre><p>%4% paragraph to change to a pre</p>');
+        $this->assertHTMLMatch('<pre>%1% xtn %2%</pre><div>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div><p>%4% paragraph to change to a pre</p>');
         $this->checkStatusOfFormatIconsInTheTopToolbar('active', NULL, NULL, NULL);
 
         // Test selecting a word in a P to change to a Pre
@@ -73,7 +73,7 @@ class Viper_Tests_ViperFormatPlugin_PreUnitTest extends AbstractFormatsUnitTest
         $this->clickTopToolbarButton('formats-p', 'active');
         $this->checkStatusOfFormatIconsInTheTopToolbar('active', NULL, NULL, NULL);
         $this->clickTopToolbarButton('PRE', NULL, TRUE);
-        $this->assertHTMLMatch('<pre>%1% xtn %2%</pre><pre>%3% amet <strong>WoW</strong></pre><pre>%4% paragraph to change to a pre</pre>');
+        $this->assertHTMLMatch('<pre>%1% xtn %2%</pre><div>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div><pre>%4% paragraph to change to a pre</pre>');
         $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, NULL, NULL, 'active');
 
         // Check the state of the format icon after we have changed to a Pre
@@ -121,6 +121,41 @@ class Viper_Tests_ViperFormatPlugin_PreUnitTest extends AbstractFormatsUnitTest
 
 
     /**
+     * Test that applying styles to multi-line pre and selecting the PRE in lineage shows correct icons.
+     *
+     * @return void
+     */
+    public function testSelectMultiLinePreAfterStylingShowsCorrectIcons()
+    {
+
+        $this->selectKeyword(3);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickTopToolbarButton('formats-div', 'active');
+        $this->clickTopToolbarButton('PRE', NULL, TRUE);
+
+        $this->selectKeyword(3);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->keyDown('Key.CMD + b');
+        $this->keyDown('Key.CMD + i');
+
+        $this->selectInlineToolbarLineageItem(0);
+
+        // Make sure the correct icons are being shown in the inline toolbar.
+        $this->assertTrue($this->inlineToolbarButtonExists('formats-pre', 'active'), 'Toogle formats icon is not selected');
+        $this->clickInlineToolbarButton('formats-pre', 'active');
+        $this->checkStatusOfFormatIconsInTheInlineToolbar(NULL, NULL, NULL, 'active');
+        $this->assertEquals($this->replaceKeywords('%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.'), $this->getSelectedText(), 'Original selection is not selected');
+
+        // Make sure the correct icons are being shown in the top toolbar.
+        $this->assertTrue($this->topToolbarButtonExists('formats-pre', 'active'), 'Toogle formats icon is not selected');
+        $this->clickTopToolbarButton('formats-pre', 'active');
+        $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, NULL, NULL, 'active');
+        $this->assertEquals($this->replaceKeywords('%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.'), $this->getSelectedText(), 'Original selection is not selected');
+
+    }//end testSelectMultiLinePreAfterStylingShowsCorrectIcons()
+
+
+    /**
      * Test bold works in Pre.
      *
      * @return void
@@ -131,11 +166,11 @@ class Viper_Tests_ViperFormatPlugin_PreUnitTest extends AbstractFormatsUnitTest
         $this->selectKeyword(1);
         $this->keyDown('Key.CMD + b');
 
-        $this->assertHTMLMatch('<pre><strong>%1%</strong> xtn %2%</pre><pre>%3% amet <strong>WoW</strong></pre><p>%4% paragraph to change to a pre</p>');
+        $this->assertHTMLMatch('<pre><strong>%1%</strong> xtn %2%</pre><div>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div><p>%4% paragraph to change to a pre</p>');
 
         $this->keyDown('Key.CMD + b');
 
-        $this->assertHTMLMatch('<pre>%1% xtn %2%</pre><pre>%3% amet <strong>WoW</strong></pre><p>%4% paragraph to change to a pre</p>');
+        $this->assertHTMLMatch('<pre>%1% xtn %2%</pre><div>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div><p>%4% paragraph to change to a pre</p>');
 
     }//end testUsingBoldInPre()
 
@@ -151,11 +186,11 @@ class Viper_Tests_ViperFormatPlugin_PreUnitTest extends AbstractFormatsUnitTest
         $this->selectKeyword(1);
         $this->keyDown('Key.CMD + i');
 
-        $this->assertHTMLMatch('<pre><em>%1%</em> xtn %2%</pre><pre>%3% amet <strong>WoW</strong></pre><p>%4% paragraph to change to a pre</p>');
+        $this->assertHTMLMatch('<pre><em>%1%</em> xtn %2%</pre><div>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div><p>%4% paragraph to change to a pre</p>');
 
         $this->keyDown('Key.CMD + i');
 
-        $this->assertHTMLMatch('<pre>%1% xtn %2%</pre><pre>%3% amet <strong>WoW</strong></pre><p>%4% paragraph to change to a pre</p>');
+        $this->assertHTMLMatch('<pre>%1% xtn %2%</pre><div>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div><p>%4% paragraph to change to a pre</p>');
 
     }//end testUsingItalicInPre()
 
@@ -258,13 +293,13 @@ class Viper_Tests_ViperFormatPlugin_PreUnitTest extends AbstractFormatsUnitTest
         $this->selectInlineToolbarLineageItem(0);
         $this->clickTopToolbarButton('formats-p', 'active');
         $this->clickTopToolbarButton('PRE', NULL, TRUE);
-        $this->assertHTMLMatch('<pre>%1% xtn %2%</pre><pre>%3% amet <strong>WoW</strong></pre><pre>%4% paragraph to change to a pre</pre>');
+        $this->assertHTMLMatch('<pre>%1% xtn %2%</pre><div>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div><pre>%4% paragraph to change to a pre</pre>');
 
         $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(0);
         $this->clickTopToolbarButton('formats-pre', 'active');
         $this->clickTopToolbarButton('PRE', 'active', TRUE);
-        $this->assertHTMLMatch('<pre>%1% xtn %2%</pre><pre>%3% amet <strong>WoW</strong></pre> %4% paragraph to change to a pre');
+        $this->assertHTMLMatch('<pre>%1% xtn %2%</pre><div>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div> %4% paragraph to change to a pre');
 
     }//end testApplyingAndRemovingPre()
 
@@ -296,7 +331,7 @@ class Viper_Tests_ViperFormatPlugin_PreUnitTest extends AbstractFormatsUnitTest
         $this->type('This should be a paragraph');
 
 
-        $this->assertHTMLMatch('<pre>%1% xtn %2%</pre><pre>%3% amet <strong>WoW</strong></pre><p>%4% paragraph to change to a pre</p><pre>New %5% on the page More new content </pre><p>This should be a paragraph</p>');
+        $this->assertHTMLMatch('<pre>%1% xtn %2%</pre><div>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div><p>%4% paragraph to change to a pre</p><pre>New %5% on the page More new content </pre><p>This should be a paragraph</p>');
 
     }//end testCreatingNewContentWithAPreTag()
 
@@ -309,20 +344,18 @@ class Viper_Tests_ViperFormatPlugin_PreUnitTest extends AbstractFormatsUnitTest
     public function testChaningMultiLineDivToPre()
     {
 
-        $this->selectKeyword(1);
+        $this->selectKeyword(3);
         $this->selectInlineToolbarLineageItem(0);
         $this->clickTopToolbarButton('formats-div', 'active');
         $this->clickTopToolbarButton('Pre', NULL, TRUE);
-        $this->assertHTMLMatch('<pre>%1% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</pre>');
+        $this->assertHTMLMatch('<pre>%1% xtn %2%</pre><pre>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</pre><p>%4% paragraph to change to a pre</p>');
 
         $this->clickTopToolbarButton('DIV', NULL, TRUE);
-        $this->assertHTMLMatch('<div>%1% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div>');
+        $this->assertHTMLMatch('<pre>%1% xtn %2%</pre><div>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div><p>%4% paragraph to change to a pre</p>');
 
-        $this->selectKeyword(1);
-        $this->selectInlineToolbarLineageItem(0);
         $this->clickInlineToolbarButton('formats-div', 'active');
-        $this->clickInlineToolbarButton('Pre', NULL, TRUE);
-        $this->assertHTMLMatch('<pre>%1% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</pre>');
+        $this->clickInlineToolbarButton('PRE', NULL, TRUE);
+        $this->assertHTMLMatch('<pre>%1% xtn %2%</pre><pre>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</pre><p>%4% paragraph to change to a pre</p>');
 
     }//end testChaningMultiLineDivToPre()
 
@@ -332,21 +365,40 @@ class Viper_Tests_ViperFormatPlugin_PreUnitTest extends AbstractFormatsUnitTest
      *
      * @return void
      */
-    public function testRemovingAndApplyingPreToMultiLinePre()
+    public function testApplyingAndRemovingPreToMultiLinePre()
     {
 
-        $this->selectKeyword(1);
+        $this->selectKeyword(3);
         $this->selectInlineToolbarLineageItem(0);
-        $this->clickTopToolbarButton('formats-pre', 'active');
-        $this->clickTopToolbarButton('Pre', 'active', TRUE);
-        $this->assertHTMLMatch('%1% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.');
+        $this->clickTopToolbarButton('formats-div', 'active');
+        $this->clickTopToolbarButton('PRE', NULL, TRUE);
+        $this->assertHTMLMatch('<pre>%1% xtn %2%</pre><pre>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</pre><p>%4% paragraph to change to a pre</p>');
         $this->checkStatusOfFormatIconsInTheTopToolbar();
 
-        $this->clickTopToolbarButton('Pre', NULL, TRUE);
-        $this->assertHTMLMatch('<pre>%1% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</pre>');
+        $this->clickTopToolbarButton('PRE', 'active', TRUE);
+        $this->assertHTMLMatch('<pre>%1% xtn %2%</pre><pre>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</pre><p>%4% paragraph to change to a pre</p>');
         $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, NULL, NULL, 'active');
 
     }//end testRemovingAndApplyingPreToMultiLinePre()
+
+
+     /**
+     * Tests that when you select a Pre and then a word in that Pre, the disabled format icon is shown in the top toolbar.
+     *
+     * @return void
+     */
+    public function testFormatIconWhenSwitchingBetweenPreAndWord()
+    {
+
+        // Highlight the content of a pre
+        $this->selectKeyword(1, 2);
+        $this->assertTrue($this->topToolbarButtonExists('formats-pre', 'active'), 'Active pre icon should appear in the top toolbar');
+
+        // Highlight a word in the selected paragraph
+        $this->selectKeyword(2);
+        $this->assertTrue($this->topToolbarButtonExists('formats', 'disabled'), 'Formats icon should be disabled in the top toolbar');
+
+    }//end testFormatIconWhenSwitchingBetweenPreAndWord()
 
 
 }//end class
