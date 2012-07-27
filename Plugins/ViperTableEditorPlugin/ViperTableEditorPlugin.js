@@ -154,6 +154,10 @@ ViperTableEditorPlugin.prototype = {
                         }
                     }
                 }
+            } else {
+                self.hideCellToolsIcon();
+                self.removeHighlights();
+                self.hideToolbar();
             }//end if
         });
 
@@ -374,7 +378,7 @@ ViperTableEditorPlugin.prototype = {
         var c = cells.length;
         for (var i = 0; i < c; i++) {
             var html = dfx.trim(dfx.getHtml(cells[i]));
-            if (html === '') {
+            if (html === '' || html === '&nbsp;') {
                 this._initCell(cells[i]);
             }
         }
