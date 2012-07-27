@@ -400,7 +400,136 @@ class Viper_Tests_ViperFormatPlugin_PreUnitTest extends AbstractFormatsUnitTest
 
     }//end testFormatIconWhenSwitchingBetweenPreAndWord()
 
+    
+    /**
+     * Tests changing a Pre to a div and then back again using the inline toolbar.
+     *
+     * @return void
+     */
+    public function testChangingAPreToADivUsingInlineToolbar()
+    {
 
+        $this->selectKeyword(1, 2);
+        $this->clickInlineToolbarButton('formats-pre', 'active');
+        $this->clickInlineToolbarButton('DIV', NULL, TRUE);
+        $this->checkStatusOfFormatIconsInTheInlineToolbar(NULL, 'active', NULL, NULL);
+        $this->assertHTMLMatch('<div>%1% xtn %2%</div><div>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div><p>%4% paragraph to change to a pre</p>');
+
+        $this->clickInlineToolbarButton('PRE', NULL, TRUE);
+        $this->checkStatusOfFormatIconsInTheInlineToolbar(NULL, NULL, NULL, 'active');
+        $this->assertHTMLMatch('<pre>%1% xtn %2%</pre><div>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div><p>%4% paragraph to change to a pre</p>');
+
+    }//end testChangingAPreToADivUsingInlineToolbar()
+
+
+    /**
+     * Tests changing a Pre to a div and then back again using the top toolbar.
+     *
+     * @return void
+     */
+    public function testChangingAPreToADivUsingTopToolbar()
+    {
+
+        $this->selectKeyword(1, 2);
+        $this->clickTopToolbarButton('formats-pre', 'active');
+        $this->clickTopToolbarButton('DIV', NULL, TRUE);
+        $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, 'active', NULL, NULL);
+        $this->assertHTMLMatch('<div>%1% xtn %2%</div><div>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div><p>%4% paragraph to change to a pre</p>');
+
+        $this->clickTopToolbarButton('PRE', NULL, TRUE);
+        $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, NULL, NULL, 'active');
+        $this->assertHTMLMatch('<pre>%1% xtn %2%</pre><div>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div><p>%4% paragraph to change to a pre</p>');
+
+    }//end testChangingAParagraphToADivUsingTopToolbar()
+
+
+     /**
+     * Tests changing a Pre to a paragraph and then back again using the inline toolbar.
+     *
+     * @return void
+     */
+    public function testChangingAPreToAPUsingTheInlineToolbar()
+    {
+
+        $this->selectKeyword(1, 2);
+        $this->clickInlineToolbarButton('formats-pre', 'active');
+        $this->clickInlineToolbarButton('P', NULL, TRUE);
+        $this->checkStatusOfFormatIconsInTheInlineToolbar('active', NULL, NULL, NULL);
+        $this->assertHTMLMatch('<p>%1% xtn %2%</p><div>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div><p>%4% paragraph to change to a pre</p>');
+
+        $this->clickInlineToolbarButton('PRE', NULL, TRUE);
+        $this->checkStatusOfFormatIconsInTheInlineToolbar(NULL, NULL, NULL, 'active');
+        $this->assertHTMLMatch('<pre>%1% xtn %2%</pre><div>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div><p>%4% paragraph to change to a pre</p>');
+
+    }//end testChangingAPreToAPUsingTheInlineToolbar()
+
+
+     /**
+     * Tests changing a Pre to a paragraph and then back again using the top toolbar.
+     *
+     * @return void
+     */
+    public function testChangingAPreToAPUsingTheTopToolbar()
+    {
+
+        $this->selectKeyword(1, 2);
+        $this->clickTopToolbarButton('formats-pre', 'active');
+        $this->clickTopToolbarButton('P', NULL, TRUE);
+        $this->checkStatusOfFormatIconsInTheTopToolbar('active', NULL, NULL, NULL);
+        $this->assertHTMLMatch('<p>%1% xtn %2%</p><div>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div><p>%4% paragraph to change to a pre</p>');
+
+        $this->clickTopToolbarButton('PRE', NULL, TRUE);
+        $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, NULL, NULL, 'active');
+        $this->assertHTMLMatch('<pre>%1% xtn %2%</pre><div>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div><p>%4% paragraph to change to a pre</p>');
+
+    }//end testChangingAPreToAPUsingTheTopToolbar()
+
+
+     /**
+     * Tests changing a Pre to a quote and then back again.
+     *
+     * @return void
+     */
+    public function testChangingAPreToAQuoteUsingTheInlineToolbar()
+    {
+
+        $this->selectKeyword(1, 2);
+        $this->clickInlineToolbarButton('formats-pre', 'active');
+        $this->clickInlineToolbarButton('Quote', NULL, TRUE);
+        $this->checkStatusOfFormatIconsInTheInlineToolbar(NULL, NULL, 'active', NULL);
+        $this->assertHTMLMatch('<blockquote><p>%1% xtn %2%</p></blockquote><div>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div><p>%4% paragraph to change to a pre</p>');
+
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickInlineToolbarButton('formats-blockquote', 'active');
+        $this->clickInlineToolbarButton('PRE', NULL, TRUE);
+        $this->checkStatusOfFormatIconsInTheInlineToolbar(NULL, NULL, NULL, 'active');
+        $this->assertHTMLMatch('<pre>%1% xtn %2%</pre><div>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div><p>%4% paragraph to change to a pre</p>');
+
+    }//end testChangingAPreToAQuoteUsingTheInlineToolbar()
+
+
+     /**
+     * Tests changing a Pre to a quote and back again.
+     *
+     * @return void
+     */
+    public function testChangingAPreToAQuoteUsingTheTopToolbar()
+    {
+
+        $this->selectKeyword(1, 2);
+        $this->clickTopToolbarButton('formats-pre', 'active');
+        $this->clickTopToolbarButton('Quote', NULL, TRUE);
+        $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, NULL, 'active', NULL);
+        $this->assertHTMLMatch('<blockquote><p>%1% xtn %2%</p></blockquote><div>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div><p>%4% paragraph to change to a pre</p>');
+
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickTopToolbarButton('formats-blockquote', 'active');
+        $this->clickTopToolbarButton('PRE', NULL, TRUE);
+        $this->assertHTMLMatch('<pre>%1% xtn %2%</pre><div>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div><p>%4% paragraph to change to a pre</p>');
+
+    }//end testChangingAPreToAQuoteUsingTheTopToolbar()
+    
+    
 }//end class
 
 ?>
