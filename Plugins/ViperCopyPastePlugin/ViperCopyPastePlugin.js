@@ -776,6 +776,18 @@ ViperCopyPastePlugin.prototype = {
         for (var i = 0; i < c; i++) {
             var attributes = tableElements[i].attributes;
 
+            if (dfx.isTag(tableElements[i], 'td') === true
+                || dfx.isTag(tableElements[i], 'th') === true
+            ) {
+                if (!dfx.trim(dfx.getHtml(tableElements[i]))) {
+                    if (this._isMSIE === true) {
+                        dfx.setHtml(tableElements[i], '&nbsp;');
+                    } else {
+                        dfx.setHtml(tableElements[i], '<br />');
+                    }
+                }
+            }
+
             for (var j = (attributes.length - 1); j >= 0; j--) {
                 var attrName = attributes[j].name.toLowerCase();
                 if (attrName === 'colspan' || attrName === 'rowspan') {
@@ -1351,9 +1363,11 @@ ViperCopyPastePlugin.prototype = {
     {
         if (node && node.nodeType === dfx.ELEMENT_NODE) {
             if ((!node.firstChild || dfx.isBlank(dfx.getHtml(node)) === true) && dfx.isStubElement(node) === false) {
-                var parent = node.parentNode;
-                parent.removeChild(node);
-                this.removeEmptyNodes(parent);
+                if (dfx.isTag(node, 'td') !== true && dfx.isTag(node, 'th') !== true) {
+                    var parent = node.parentNode;
+                    parent.removeChild(node);
+                    this.removeEmptyNodes(parent);
+                }
             }
         }
 
