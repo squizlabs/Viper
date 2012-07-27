@@ -994,6 +994,10 @@ ViperFormatPlugin.prototype = {
                     continue;
                 }
 
+                if (dfx.isBlockElement(elem) === true) {
+                    parents.push(elem);
+                }
+
                 var elemParents = dfx.getParents(elem, null, commonElem);
                 for (var j = 0; j < elemParents.length; j++) {
                     if (dfx.isBlockElement(elemParents[j]) === true) {
