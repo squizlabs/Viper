@@ -175,6 +175,11 @@ ViperKeyboardEditorPlugin.prototype = {
                 }
             }
 
+            if (!startNode && !endNode && range.collapsed === true && dfx.isTag(range.startContainer, 'br') === true) {
+                startNode = range.startContainer;
+                endNode   = startNode;
+            }
+
             if (range.collapsed === true
                 && ((endNode.nodeType === dfx.TEXT_NODE && range.endOffset === endNode.data.length)
                 || endNode.nodeType === dfx.ELEMENT_NODE && dfx.isTag(endNode, 'br') && !endNode.nextSibling)
