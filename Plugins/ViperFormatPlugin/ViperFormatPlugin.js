@@ -359,64 +359,69 @@ ViperFormatPlugin.prototype = {
 
         var formatButtonStatuses = null;
         var currentElement       = data.lineage[data.current];
-        if (currentElement.nodeType === dfx.TEXT_NODE && data.lineage.length === 1) {
-            formatButtonStatuses = this.getFormatButtonStatuses();
-        } else {
-            formatButtonStatuses = this.getFormatButtonStatuses(data.lineage[data.current]);
-        }
 
-        var enableFormatsButton  = false;
-        for (var button in formatButtonStatuses) {
-            if (button === '_none' || button === '_canChange') {
-                continue;
-            }
-
-            if (formatButtonStatuses[button] === true) {
-                enableFormatsButton = true;
-                tools.enableButton(prefix + 'formats:' + formatButtons[button]);
-                tools.setButtonInactive(prefix + 'formats:' + formatButtons[button]);
+        if (dfx.isBlockElement(currentElement) === true) {
+            if (currentElement.nodeType === dfx.TEXT_NODE && data.lineage.length === 1) {
+                formatButtonStatuses = this.getFormatButtonStatuses();
             } else {
-                tools.setButtonInactive(prefix + 'formats:' + formatButtons[button]);
-                tools.disableButton(prefix + 'formats:' + formatButtons[button]);
-            }
-        }
-
-        tools.getItem('vitpFormats').setIconClass('Viper-formats');
-        if (enableFormatsButton === true) {
-            tools.enableButton('vitpFormats');
-
-            if (currentElement.nodeType === dfx.TEXT_NODE && data.lineage.length > 1) {
-                currentElement = data.lineage[(data.current - 1)];
-            } else {
-                data.toolbar.showButton('vitpFormats');
+                formatButtonStatuses = this.getFormatButtonStatuses(data.lineage[data.current]);
             }
 
-            var isBlockQuote = false;
-            if (dfx.isTag(currentElement, 'p') === true
-                && dfx.isTag(currentElement.parentNode, 'blockquote') === true
-            ) {
-                isBlockQuote = true;
+            var enableFormatsButton  = false;
+            for (var button in formatButtonStatuses) {
+                if (button === '_none' || button === '_canChange') {
+                    continue;
+                }
+
+                if (formatButtonStatuses[button] === true) {
+                    enableFormatsButton = true;
+                    tools.enableButton(prefix + 'formats:' + formatButtons[button]);
+                    tools.setButtonInactive(prefix + 'formats:' + formatButtons[button]);
+                } else {
+                    tools.setButtonInactive(prefix + 'formats:' + formatButtons[button]);
+                    tools.disableButton(prefix + 'formats:' + formatButtons[button]);
+                }
             }
 
-            for (var tag in formatButtons) {
-                if (dfx.isTag(currentElement, tag) === true) {
-                    if (formatButtonStatuses[tag] === true) {
-                        tools.enableButton(prefix + 'formats:' + formatButtons[tag]);
+            tools.getItem('vitpFormats').setIconClass('Viper-formats');
+            if (enableFormatsButton === true) {
+                tools.enableButton('vitpFormats');
 
-                        if (isBlockQuote !== true) {
+                if (currentElement.nodeType === dfx.TEXT_NODE && data.lineage.length > 1) {
+                    currentElement = data.lineage[(data.current - 1)];
+                } else if (dfx.isBlockElement(currentElement) === true) {
+                    data.toolbar.showButton('vitpFormats');
+                }
+
+                var isBlockQuote = false;
+                if (dfx.isTag(currentElement, 'p') === true
+                    && dfx.isTag(currentElement.parentNode, 'blockquote') === true
+                ) {
+                    isBlockQuote = true;
+                }
+
+                for (var tag in formatButtons) {
+                    if (dfx.isTag(currentElement, tag) === true) {
+                        if (formatButtonStatuses[tag] === true) {
+                            tools.enableButton(prefix + 'formats:' + formatButtons[tag]);
+
+                            if (isBlockQuote !== true) {
+                                tools.setButtonActive(prefix + 'formats:' + formatButtons[tag]);
+                            }
+                        }
+
+                        tools.setButtonActive('vitpFormats');
+                        if (isBlockQuote === true) {
+                            tools.setButtonActive(prefix + 'formats:' + formatButtons['blockquote']);
+                            tools.getItem('vitpFormats').setIconClass('Viper-formats-blockquote');
+                        } else {
                             tools.setButtonActive(prefix + 'formats:' + formatButtons[tag]);
+                            tools.getItem('vitpFormats').setIconClass('Viper-formats-' + tag);
                         }
                     }
-
-                    tools.setButtonActive('vitpFormats');
-                    if (isBlockQuote === true) {
-                        tools.setButtonActive(prefix + 'formats:' + formatButtons['blockquote']);
-                        tools.getItem('vitpFormats').setIconClass('Viper-formats-blockquote');
-                    } else {
-                        tools.setButtonActive(prefix + 'formats:' + formatButtons[tag]);
-                        tools.getItem('vitpFormats').setIconClass('Viper-formats-' + tag);
-                    }
                 }
+            } else {
+                tools.disableButton('vitpFormats');
             }
         } else {
             tools.disableButton('vitpFormats');
@@ -584,11 +589,25 @@ ViperFormatPlugin.prototype = {
             var formatElement   = lineage[currentLinIndex];
             var highlightButton = true;
             var blockParent     = self.getTagFromRange(data.range, ['p', 'div', 'pre', 'blockquote']);
+            var userParentTag   = false;
 
             if (!formatElement || formatElement.nodeType === dfx.TEXT_NODE || dfx.isBlockElement(formatElement) === false) {
                 if (data.range.collapsed === true) {
                     formatElement   = blockParent;
                 } else {
+                    if (formatElement) {
+                        var firstParent  = dfx.getFirstBlockParent(formatElement);
+                        var commonParent = data.range.getCommonElement();
+                        if (dfx.isBlockElement(commonParent) === false) {
+                            commonParent = dfx.getFirstBlockParent(commonParent);
+                        }
+
+                        if (firstParent && firstParent === commonParent && formatButtons[dfx.getTagName(firstParent)]) {
+                            userParentTag = true;
+                            tools.getItem('formats').setIconClass('Viper-formats-' + dfx.getTagName(firstParent));
+                        }
+                    }
+
                     highlightButton = false;
                     formatElement = null;
                 }
@@ -633,7 +652,7 @@ ViperFormatPlugin.prototype = {
             } else {
                 if (formatElement && (!nodeSelection || dfx.isTag(nodeSelection, 'img') === false)) {
                     tools.getItem('formats').setIconClass('Viper-formats-' + dfx.getTagName(formatElement));
-                } else {
+                } else if (userParentTag === false) {
                     tools.getItem('formats').setIconClass('Viper-formats');
                 }
 
@@ -1135,8 +1154,12 @@ ViperFormatPlugin.prototype = {
             || dfx.isStubElement(selectedNode) === true
             )
         ) {
-            // Text node, get the first block parent.
-            selectedNode = dfx.getFirstBlockParent(selectedNode);
+            if (dfx.isBlockElement(selectedNode) === false) {
+                selectedNode = null;
+            } else {
+                // Text node, get the first block parent.
+                selectedNode = dfx.getFirstBlockParent(selectedNode);
+            }
         } else if (!selectedNode && range.collapsed === true) {
             selectedNode = dfx.getFirstBlockParent(range.startContainer);
         }
