@@ -1323,6 +1323,8 @@ ViperFormatPlugin.prototype = {
         if (dfx.isTag(element, 'p') === true && dfx.isTag(element.parentNode, 'blockquote') === true) {
             element      = element.parentNode;
             isBlockQuote = true;
+        } else if (dfx.isTag(element, 'blockquote') === true) {
+            isBlockQuote = true;
         }
 
         if (dfx.isTag(element, type) === true) {
