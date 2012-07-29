@@ -562,7 +562,7 @@ ViperImagePlugin.prototype = {
 
         this.hideImageResizeHandles();
         if (nodeSelection && dfx.isTag(nodeSelection, 'img') === true) {
-            self._resizeImage = nodeSelection;
+            this._resizeImage = nodeSelection;
             data.toolbar.showButton('vitpImage');
             data.toolbar.showButton('vitpImageMove');
 
