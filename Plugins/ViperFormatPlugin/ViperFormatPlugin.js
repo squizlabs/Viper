@@ -1160,7 +1160,7 @@ ViperFormatPlugin.prototype = {
                 // Text node, get the first block parent.
                 selectedNode = dfx.getFirstBlockParent(selectedNode);
             }
-        } else if (!selectedNode && range.collapsed === true) {
+        } else if (!selectedNode && (range.collapsed === true || type.match(/h\d/))) {
             selectedNode = dfx.getFirstBlockParent(range.startContainer);
         }
 

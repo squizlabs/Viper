@@ -1091,6 +1091,17 @@ ViperTableEditorPlugin.prototype = {
             return false;
         });
 
+        // Hide the highlight element when the mouse is over it. Show it again, when
+        // the mouse is over the table tools bar.
+        var self = this;
+        dfx.hover(hElem, function() {
+            dfx.hideElement(hElem);
+        }, function() {});
+
+        dfx.hover(self._toolbarWidget.element, function() {
+            dfx.showElement(hElem);
+        }, function() {});
+
     },
 
     __updateInnerContainer: function(cell, type, activeSubSection)
