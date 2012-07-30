@@ -27,7 +27,7 @@ MatrixImagePlugin.prototype = {
         // Insert anchor row after URL field.
         var urlField    = tools.getItem('ViperImagePlugin:urlInput').element;
         var assetPicker = tools.createButton('MatrixImagePlugin:assetPicker', '', 'Pick Asset', 'Viper-ees-target', function() {
-            self.pickAsset();
+            self.pickAsset('ViperImagePlugin');
         });
 
         dfx.insertAfter(urlField, urlRow);
@@ -53,7 +53,7 @@ MatrixImagePlugin.prototype = {
         var urlField    = tools.getItem('vitpImagePlugin:urlInput').element;
 
         var assetPicker = tools.createButton('MatrixImagePlugin:assetPicker-vitp', '', 'Pick Asset', 'Viper-ees-target', function() {
-            self.pickAsset();
+            self.pickAsset('vitpImagePlugin');
         });
 
         dfx.insertAfter(urlField, urlRow);
@@ -106,11 +106,11 @@ MatrixImagePlugin.prototype = {
      * Pick an asset from the asset finder
      * @param {string} idPrefix         The prefix assigned to the plugin
      */
-    pickAsset: function()
+    pickAsset: function(idPrefix)
     {
         var tools       = this.viper.ViperTools;
-        var urlField    = tools.getItem('ViperImagePlugin:urlInput'),
-            altField    = tools.getItem('ViperImagePlugin:altInput');
+        var urlField    = tools.getItem(idPrefix + ':urlInput'),
+            altField    = tools.getItem(idPrefix + ':altInput');
         EasyEditAssetManager.getCurrentAsset(function(asset){
 
             var initialValue = urlField.getValue(),
