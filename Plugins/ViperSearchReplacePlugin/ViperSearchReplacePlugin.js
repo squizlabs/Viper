@@ -248,7 +248,13 @@ ViperSearchReplacePlugin.prototype = {
 
     replace: function(replacement)
     {
-        var range = this.viper.getCurrentRange();
+        var range = null;
+        if (this.viper.isBrowser('msie') === true) {
+            range = this.viper.getViperRange();
+        } else {
+            range = this.viper.getCurrentRange();
+        }
+
         range.deleteContents();
 
         var newNode = document.createTextNode(replacement);
