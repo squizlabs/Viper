@@ -70,6 +70,18 @@ ViperTableEditorPlugin.prototype = {
             }
         });
 
+        this.viper.registerCallback('setHtml', 'ViperTableEditorPlugin', function(data) {
+            var vap = self.viper.ViperPluginManager.getPlugin('ViperAccessibilityPlugin');
+            if (vap) {
+                vap.loadHTMLCS(function() {
+                    var tables = dfx.getTag('table', data.element);
+                    for (var i = 0; i < tables.length; i++) {
+                        self.setTableHeaders(tables[i]);
+                    }
+                });
+            }
+        });
+
         // Hide the toolbar when user clicks anywhere.
         this.viper.registerCallback(['Viper:mouseDown', 'ViperHistoryManager:undo'], 'ViperTableEditorPlugin', function(data) {
             if (self.viper.isBrowser('firefox') === true) {
