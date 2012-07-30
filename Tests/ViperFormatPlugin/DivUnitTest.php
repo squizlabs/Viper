@@ -31,7 +31,7 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractFormatsUnitTest
         $this->assertFalse($this->inlineToolbarButtonExists('formats'), 'Formats icon should not appear in the inline toolbar');
 
         $this->selectInlineToolbarLineageItem(0);
-        $this->assertTrue($this->inlineToolbarButtonExists('formats-div', 'active'), 'Active div icon should be active in the inline toolbar');
+        $this->assertTrue($this->inlineToolbarButtonExists('formats-div', 'active'), 'Active div icon should appear in the inline toolbar');
         $this->clickInlineToolbarButton('formats-div', 'active');
         $this->checkStatusOfFormatIconsInTheInlineToolbar(NULL, 'active', NULL, NULL);
 
@@ -61,7 +61,7 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractFormatsUnitTest
         // Test selecting a word in a P to change to a Div
         $this->click($this->findKeyword(2));
         $this->selectKeyword(4);
-        $this->assertFalse($this->topToolbarButtonExists('formats-p', 'disabled'), 'Formats icon should be disabled in the top toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('formats-p', 'disabled'), 'Formats icon should be disabled in the top toolbar');
 
         // Select all content in the P and change to a Div
         $this->selectInlineToolbarLineageItem(0);
@@ -211,10 +211,10 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractFormatsUnitTest
     {
         $this->selectKeyword(1);
         $this->assertFalse($this->inlineToolbarButtonExists('formats'), 'Formats icon should not appear in the inline toolbar');
-        $this->assertTrue($this->topToolbarButtonExists('formats', 'active'), 'Active formats icon should appear in the top toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('formats-div', 'active'), 'Active formats icon should appear in the top toolbar');
 
         // Apply Div
-        $this->clickTopToolbarButton('formats', 'active');
+        $this->clickTopToolbarButton('formats-div', 'active');
         $this->checkStatusOfFormatIconsInTheTopToolbar();
         $this->clickTopToolbarButton('DIV', NULL, TRUE);
         $this->assertHTMLMatch('<div><div>%1%</div> xtn dolor</div><p>spacer for the tests</p><div>sit amet <strong>%2%</strong></div><p>%3% is a paragraph to change to a %4%</p><div>%5% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div>');
@@ -228,14 +228,15 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractFormatsUnitTest
         // Do the same to a bold keyword
         $this->selectKeyword(2);
         $this->assertFalse($this->inlineToolbarButtonExists('formats'), 'Formats icon should not appear in the inline toolbar');
-        $this->assertTrue($this->topToolbarButtonExists('formats', 'active'), 'Active formats icon should appear in the top toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('formats-div', 'active'), 'Active formats icon should appear in the top toolbar');
 
         // Apply Div
-        $this->clickTopToolbarButton('formats', 'active');
+        $this->clickTopToolbarButton('formats-div', 'active');
         $this->checkStatusOfFormatIconsInTheTopToolbar();
         $this->clickTopToolbarButton('DIV', NULL, TRUE);
-        $this->assertHTMLMatch('<div>%1% xtn dolor</div><p>spacer for the tests</p><div>sit amet <div><strong>%2%</strong></div></div><p>%3% is a paragraph to change to a %4%</p><div>%5% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div>');
-        $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, 'active', NULL, NIULL);
+        $this->assertHTMLMatch('<div>%1% xtn dolor</div><p>spacer for the tests</p><div>sit amet <strong><div>%2%</div></strong></div><p>%3% is a paragraph to change to a %4%</p><div>%5% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div>');
+        
+        $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, 'active', NULL, NULL);
 
         // Remove Div
         $this->clickTopToolbarButton('DIV', 'active', TRUE);
@@ -247,14 +248,14 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractFormatsUnitTest
         $this->keyDown('Key.CMD + b');
         $this->keyDown('Key.CMD + i');
         $this->assertFalse($this->inlineToolbarButtonExists('formats'), 'Formats icon should not appear in the inline toolbar');
-        $this->assertTrue($this->topToolbarButtonExists('formats', 'active'), 'Active formats icon should appear in the top toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('formats-div', 'active'), 'Active formats icon should appear in the top toolbar');
 
         // Apply Div
-        $this->clickTopToolbarButton('formats', 'active');
+        $this->clickTopToolbarButton('formats-div', 'active');
         $this->checkStatusOfFormatIconsInTheTopToolbar();
         $this->clickTopToolbarButton('DIV', NULL, TRUE);
-        $this->assertHTMLMatch('<div>%1% xtn dolor</div><p>spacer for the tests</p><div>sit amet <div><em>%2%</em></div></div><p>%3% is a paragraph to change to a %4%</p><div>%5% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div>');
-        $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, 'active', NULL, NIULL);
+        $this->assertHTMLMatch('<div>%1% xtn dolor</div><p>spacer for the tests</p><div>sit amet <em><div>%2%</div></em></div><p>%3% is a paragraph to change to a %4%</p><div>%5% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div>');
+        $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, 'active', NULL, NULL);
 
         // Remove Div
         $this->clickTopToolbarButton('DIV', 'active', TRUE);
@@ -298,18 +299,18 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractFormatsUnitTest
         $this->selectInlineToolbarLineageItem(0);
         $this->keyDown('Key.RIGHT');
         $this->keyDown('Key.ENTER');
-        $this->type('New %5%');
-        $this->selectKeyword(5);
+        $this->type('New %6%');
+        $this->selectKeyword(6);
         $this->selectInlineToolbarLineageItem(0);
         $this->clickTopToolbarButton('formats-p', 'active');
         $this->clickTopToolbarButton('DIV', NULL, TRUE);
-        $this->selectKeyword(5);
+        $this->selectKeyword(6);
         $this->keyDown('Key.RIGHT');
         $this->type(' on the page');
         $this->keyDown('Key.ENTER');
         $this->type('More new content');
 
-        $this->assertHTMLMatch('<div>%1% xtn dolor</div><p>spacer for the tests</p><div>sit amet <strong>%2%</strong></div><p>%3% is a paragraph to change to a %4%</p><div>New %5% on the page</div><p>More new content</p><div>%5% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div>');
+        $this->assertHTMLMatch('<div>%1% xtn dolor</div><p>spacer for the tests</p><div>sit amet <strong>%2%</strong></div><p>%3% is a paragraph to change to a %4%</p><div>New %6% on the page</div><p>More new content</p><div>%5% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div>');
 
     }//end testCreatingNewContentWithADivTag()
 
@@ -351,7 +352,7 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractFormatsUnitTest
 
         // Highlight a word in the selected div
         $this->selectKeyword(1);
-        $this->assertTrue($this->topToolbarButtonExists('formats', 'active'), 'Active formats icon should appear in the top toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('formats-div', 'active'), 'Active div icon should appear in the top toolbar');
 
     }//end testFormatIconWhenSwitchingBetweenDivAndWord()
 

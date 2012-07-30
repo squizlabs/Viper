@@ -37,16 +37,16 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractFormatsUnitTe
         $this->selectInlineToolbarLineageItem(0);
         $this->clickInlineToolbarButton('formats-p', 'active');
         $this->clickInlineToolbarButton('PRE', NULL, TRUE);
-        $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, NULL, NULL, 'active');
         $this->assertHTMLMatch('<h1>Heading One</h1><pre>%1% xtn dolor</pre><p>sit %2% <strong>%3%</strong></p>');
+        $this->checkStatusOfFormatIconsInTheInlineToolbar(NULL, NULL, NULL, 'active');
 
         $this->click($this->findKeyword(2));
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
         $this->clickInlineToolbarButton('formats-pre', 'active');
         $this->clickInlineToolbarButton('Quote', NULL, TRUE);
-        $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, NULL, 'active', NULL);
-        $this->assertHTMLMatch('<h1>Heading One</h1><blockquote>%1% xtn dolor</blockquote><p>sit %2% <strong>%3%</strong></p>');
+        $this->checkStatusOfFormatIconsInTheInlineToolbar(NULL, NULL, 'active', NULL);
+        $this->assertHTMLMatch('<h1>Heading One</h1><blockquote><p>%1% xtn dolor</p></blockquote><p>sit %2% <strong>%3%</strong></p>');
 
         $this->click($this->findKeyword(2));
         $this->selectKeyword(1);
@@ -54,7 +54,7 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractFormatsUnitTe
         $this->clickInlineToolbarButton('formats-blockquote', 'active');
         $this->clickInlineToolbarButton('DIV', NULL, TRUE);
         sleep(1);
-        $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, 'active', NULL, NULL);
+        $this->checkStatusOfFormatIconsInTheInlineToolbar(NULL, 'active', NULL, NULL);
         $this->assertHTMLMatch('<h1>Heading One</h1><div>%1% xtn dolor</div><p>sit %2% <strong>%3%</strong></p>');
 
         $this->click($this->findKeyword(2));
@@ -63,7 +63,7 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractFormatsUnitTe
         $this->clickInlineToolbarButton('formats-div', 'active');
         $this->clickInlineToolbarButton('P', NULL, TRUE);
         sleep(1);
-        $this->checkStatusOfFormatIconsInTheTopToolbar('active', NULL, NULL, NULL);
+        $this->checkStatusOfFormatIconsInTheInlineToolbar('active', NULL, NULL, NULL);
         $this->assertHTMLMatch('<h1>Heading One</h1><p>%1% xtn dolor</p><p>sit %2% <strong>%3%</strong></p>');
 
 
@@ -96,7 +96,19 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractFormatsUnitTe
         $this->clickTopToolbarButton('P', NULL, TRUE);
         $this->checkStatusOfFormatIconsInTheTopToolbar('active', NULL, NULL, NULL);
         $this->assertHTMLMatch('<h1>Heading One</h1><p>%1% xtn dolor</p><p>sit %2% <strong>%3%</strong></p>');
+        
+        $this->clickTopToolbarButton('Quote', NULL, TRUE);
+        $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, NULL, 'active', NULL);
+        $this->assertHTMLMatch('<h1>Heading One</h1><blockquote><p>%1% xtn dolor</p></blockquote><p>sit %2% <strong>%3%</strong></p>');
 
+        $this->clickTopToolbarButton('DIV', NULL, TRUE);
+        $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, 'active', NULL, NULL);
+        $this->assertHTMLMatch('<h1>Heading One</h1><div>%1% xtn dolor</div><p>sit %2% <strong>%3%</strong></p>');
+        
+        $this->clickTopToolbarButton('PRE', NULL, TRUE);
+        $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, NULL, NULL, 'active');
+        $this->assertHTMLMatch('<h1>Heading One</h1><pre>%1% xtn dolor</pre><p>sit %2% <strong>%3%</strong></p>');
+        
     }//end testSwitchingBetweenFormatsUsingTheTopToolbar()
 
 

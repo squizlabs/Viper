@@ -25,17 +25,18 @@ class Viper_Tests_ViperFormatPlugin_QuoteUnitTest extends AbstractFormatsUnitTes
         $this->checkStatusOfFormatIconsInTheInlineToolbar('active', NULL, NULL, NULL);
         $this->clickInlineToolbarButton('Quote', NULL, TRUE);
         $this->assertHTMLMatch('<blockquote><p>%1% xtn %2%</p></blockquote><div>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div><blockquote><p>%4% is a paragraph to change to a quote</p></blockquote>');
+        $this->assertTrue($this->inlineToolbarButtonExists('formats-blockquote', 'selected'), 'Selected quote icon should appear in the inline toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('formats-blockquote', 'active'), 'Active quote icon should appear in the inline toolbar');
         $this->checkStatusOfFormatIconsInTheInlineToolbar(NULL, NULL, 'active', NULL);
 
-        // Check the state of the format icon after we have changed to a paragraph
+        // Check the state of the format icon after we have changed to a quote
         $this->selectKeyword(4);
         $this->assertFalse($this->inlineToolbarButtonExists('formats'), 'formats icon should not appear in the inline toolbar');
         $this->assertFalse($this->inlineToolbarButtonExists('formats-blockquote', 'active'), 'Active formats icon should not appear in the inline toolbar');
 
         // Check the state of the format icon when we click P
         $this->selectInlineToolbarLineageItem(1);
-        $this->assertFalse($this->inlineToolbarButtonExists('formats'), 'Formats icon should not appear in the inline toolbar');
-        $this->assertFalse($this->inlineToolbarButtonExists('formats-p', 'active'), 'Active P icon should not appear in the inline toolbar');
+        $this->assertTrue($this->inlineToolbarButtonExists('formats-blockquote', 'active'), 'Formats icon should not appear in the inline toolbar');
 
         $this->selectInlineToolbarLineageItem(0);
         $this->assertTrue($this->topToolbarButtonExists('formats-blockquote', 'active'), 'Active quote icon should appear in the top toolbar');
@@ -60,6 +61,7 @@ class Viper_Tests_ViperFormatPlugin_QuoteUnitTest extends AbstractFormatsUnitTes
         $this->checkStatusOfFormatIconsInTheTopToolbar('active', NULL, NULL, NULL);
         $this->clickTopToolbarButton('Quote', NULL, TRUE);
         $this->assertHTMLMatch('<blockquote><p>%1% xtn %2%</p></blockquote><div>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div><blockquote><p>%4% is a paragraph to change to a quote</p></blockquote>');
+        $this->assertTrue($this->topToolbarButtonExists('formats-blockquote', 'selected'), 'Selected quote icon should appear in the inline toolbar');
         $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, NULL, 'active', NULL);
 
         // Change it back to do more testing
@@ -76,15 +78,16 @@ class Viper_Tests_ViperFormatPlugin_QuoteUnitTest extends AbstractFormatsUnitTes
         $this->checkStatusOfFormatIconsInTheTopToolbar('active', NULL, NULL, NULL);
         $this->clickTopToolbarButton('Quote', NULL, TRUE);
         $this->assertHTMLMatch('<blockquote><p>%1% xtn %2%</p></blockquote><div>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div><blockquote><p>%4% is a paragraph to change to a quote</p></blockquote>');
+        $this->assertTrue($this->topToolbarButtonExists('formats-blockquote', 'selected'), 'Selected quote icon should appear in the inline toolbar');
         $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, NULL, 'active', NULL);
 
         // Check the state of the format icon after we have changed to a quote
         $this->selectKeyword(4);
-        $this->assertTrue($this->topToolbarButtonExists('formats', 'disabled'), 'Formats icon should disabled in the top toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('formats-p', 'disabled'), 'Formats icon should disabled in the top toolbar');
 
         // Check the state of the format icon when we click P
         $this->selectInlineToolbarLineageItem(1);
-        $this->assertTrue($this->topToolbarButtonExists('formats', 'disabled'), 'Formats icon should be disabled in the top toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('formats-blockquote', 'active'), 'Active blockquote icon should appear in the top toolbar');
 
         $this->selectInlineToolbarLineageItem(0);
         $this->assertTrue($this->topToolbarButtonExists('formats-blockquote', 'active'), 'Active quote icon should appear in the top toolbar');
@@ -332,7 +335,7 @@ class Viper_Tests_ViperFormatPlugin_QuoteUnitTest extends AbstractFormatsUnitTes
         $this->clickTopToolbarButton('DIV', NULL, TRUE);
         $this->assertHTMLMatch('<blockquote><p>%1% xtn %2%</p></blockquote><div>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div><p>%4% is a paragraph to change to a quote</p>');
 
-        $this->clickInlineToolbarButton('Quote', NULL, TRUE);
+        $this->clickTopToolbarButton('Quote', NULL, TRUE);
         $this->assertHTMLMatch('<blockquote><p>%1% xtn %2%</p></blockquote><blockquote><p>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p></blockquote><p>%4% is a paragraph to change to a quote</p>');
 
     }//end testChaningMultiLineDivToQuote()
@@ -351,12 +354,14 @@ class Viper_Tests_ViperFormatPlugin_QuoteUnitTest extends AbstractFormatsUnitTes
         $this->clickTopToolbarButton('formats-div', 'active');
         $this->clickTopToolbarButton('Quote', NULL, TRUE);
         $this->assertHTMLMatch('<blockquote><p>%1% xtn %2%</p></blockquote><blockquote><p>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p></blockquote><p>%4% is a paragraph to change to a quote</p>');
-        $this->selectInlineToolbarLineageItem(0);
         $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, NULL, 'active', NULL);
 
+        $this->selectKeyword(3);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickTopToolbarButton('formats-blockquote', 'active');
         $this->clickTopToolbarButton('Quote', 'active', TRUE);
-        $this->assertHTMLMatch('<blockquote><p>%1% xtn %2%</p></blockquote> %3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae. <p>%4% is a paragraph to change to a quote</p>');
-        $this->checkStatusOfFormatIconsInTheTopToolbar();
+        $this->assertHTMLMatch('<blockquote><p>%1% xtn %2%</p></blockquote><p>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p><p>%4% is a paragraph to change to a quote</p>');
+        $this->checkStatusOfFormatIconsInTheTopToolbar('active');
 
     }//end testRemovingAndApplyingQuoteToMultiLineQuote()
 
@@ -375,7 +380,7 @@ class Viper_Tests_ViperFormatPlugin_QuoteUnitTest extends AbstractFormatsUnitTes
 
         // Highlight a word in the selected paragraph
         $this->selectKeyword(2);
-        $this->assertTrue($this->topToolbarButtonExists('formats', 'disabled'), 'Formats icon should be disabled in the top toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('formats-p', 'disabled'), 'P icon should be disabled in the top toolbar');
 
     }//end testFormatIconWhenSwitchingBetweenQuoteAndWord()
 
