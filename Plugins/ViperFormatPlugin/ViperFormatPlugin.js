@@ -1374,8 +1374,15 @@ ViperFormatPlugin.prototype = {
         } else if (type === 'blockquote') {
             var newElem = document.createElement(type);
             dfx.insertBefore(element, newElem);
+
             if (dfx.isTag(element, 'p') === true) {
                 newElem.appendChild(element);
+            } else if (dfx.getTag('p', element).length > 0) {
+                while (element.firstChild) {
+                    newElem.appendChild(element.firstChild);
+                }
+
+                dfx.remove(element);
             } else {
                 var p = document.createElement('p');
                 newElem.appendChild(p);
@@ -1390,7 +1397,7 @@ ViperFormatPlugin.prototype = {
         } else {
             var newElem = document.createElement(type);
 
-            if (isBlockQuote === true) {
+            if (isBlockQuote === true && type === 'p') {
                 for (var childPTag = element.firstChild; childPTag; childPTag = childPTag.nextSibling) {
                     while (childPTag.firstChild) {
                         newElem.appendChild(childPTag.firstChild);
