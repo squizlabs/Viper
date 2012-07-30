@@ -435,7 +435,7 @@ ViperDOMRange.prototype = {
      * @return The text container that range can extend to.
      * @type   {TextNode}
      */
-    getPreviousContainer: function(container, skippedBlockElem)
+    getPreviousContainer: function(container, skippedBlockElem, skipEmptyNodes)
     {
         if (!container) {
             return null;
@@ -447,7 +447,7 @@ ViperDOMRange.prototype = {
                 if (dfx.isStubElement(container) === true) {
                     return container;
                 } else {
-                    var child = this._getLastSelectableChild(container);
+                    var child = this._getLastSelectableChild(container, skipEmptyNodes);
                     if (child !== null) {
                         return child;
                     }
@@ -473,12 +473,12 @@ ViperDOMRange.prototype = {
             skippedBlockElem.push(container);
         }
 
-        var selChild = this._getLastSelectableChild(container);
+        var selChild = this._getLastSelectableChild(container, skipEmptyNodes);
         if (selChild !== null) {
             return selChild;
         }
 
-        return this.getPreviousContainer(container, skippedBlockElem);
+        return this.getPreviousContainer(container, skippedBlockElem, skipEmptyNodes);
 
     },
 
@@ -580,7 +580,7 @@ ViperDOMRange.prototype = {
 
     },
 
-    _getLastSelectableChild: function(element)
+    _getLastSelectableChild: function(element, skipEmptyNodes)
     {
         if (element) {
             if (element.nodeType !== dfx.TEXT_NODE) {
@@ -601,8 +601,10 @@ ViperDOMRange.prototype = {
                     }
                 }
             } else {
-                // Given element is a text node so return it.
-                return element;
+                if (skipEmptyNodes !== true || element.data.match(/^\n\s*$/) === null) {
+                    // Given element is a text node so return it.
+                    return element;
+                }
             }//end if
         }//end if
 

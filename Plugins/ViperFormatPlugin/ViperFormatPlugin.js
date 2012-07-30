@@ -1208,8 +1208,14 @@ ViperFormatPlugin.prototype = {
             var elements = dfx.getElementsBetween(start, end);
             elements.unshift(start);
 
-            if (start !== end) {
-                elements.push(end);
+            if (start !== end && end) {
+                if (end.nodeType === dfx.TEXT_NODE && range.endOffset > 0) {
+                    elements.push(end);
+                } else {
+                    var elem = range.getPreviousContainer(end, null, true);
+                    range.setEnd(elem, elem.data.length);
+                    ViperSelection.addRange(range);
+                }
             }
 
             var parents = [];
