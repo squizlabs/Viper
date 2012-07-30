@@ -117,7 +117,7 @@ ViperTableEditorPlugin.prototype = {
                 self.removeHighlights();
 
                 if (e.shiftKey === true && self.activeCell) {
-                    self.moveCaretToPreviousCell() === false
+                    self.moveCaretToPreviousCell();
                 } else {
                     if (self.activeCell && self.moveCaretToNextCell() === false) {
                         // Create a new row.
@@ -2803,6 +2803,9 @@ ViperTableEditorPlugin.prototype = {
                 child = cell.firstChild;
             }
 
+            // IE cannot jump between cells, so select the node first and then adjust
+            // its location.
+            range.selectNode(child);
             range.setEnd(child, 0);
             range.collapse(false);
             ViperSelection.addRange(range);

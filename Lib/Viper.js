@@ -488,7 +488,7 @@ Viper.prototype = {
             }
 
             if (editableChild) {
-                this.setRange(editableChild, 0);
+                //this.setRange(editableChild, 0);
             }
         } else if (enabled === false && this.enabled === true) {
             // Back to final mode.
@@ -3926,6 +3926,15 @@ Viper.prototype = {
     {
         if (this.element) {
             try {
+                if (this.isBrowser('msie') === true) {
+                    var range = this.getViperRange();
+                    ViperSelection.addRange(range);
+
+                    this.fireCaretUpdated();
+                    this.fireCallbacks('Viper:focused');
+                    return;
+                }
+
                 var scrollCoords = dfx.getScrollCoords();
                 this.element.focus();
 
