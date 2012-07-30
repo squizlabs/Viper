@@ -1002,7 +1002,7 @@ ViperFormatPlugin.prototype = {
 
             elements.unshift(start);
 
-            if (start !== end) {
+            if (start !== end && end) {
                 elements.push(end);
             }
 
