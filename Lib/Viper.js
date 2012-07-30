@@ -488,7 +488,7 @@ Viper.prototype = {
             }
 
             if (editableChild) {
-                this.setRange(editableChild, 0);
+                //this.setRange(editableChild, 0);
             }
         } else if (enabled === false && this.enabled === true) {
             // Back to final mode.
