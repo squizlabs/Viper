@@ -357,7 +357,7 @@ ViperFormatPlugin.prototype = {
             pre: 'PRE'
         };
 
-        var ignoredTags = ['caption', 'li', 'ul', 'ol'];
+        var ignoredTags = ['caption', 'li', 'ul', 'ol', 'img'];
 
         var formatButtonStatuses = null;
         var currentElement       = data.lineage[data.current];
@@ -560,7 +560,7 @@ ViperFormatPlugin.prototype = {
             tools.setButtonInactive('formats');
 
             var parents = dfx.getParents(startNode, 'caption,li,ul,ol', self.viper.getViperElement());
-            if (parents.length === 0) {
+            if (parents.length === 0 && dfx.isStubElement(startNode) === false) {
                 if ((nodeSelection && ignoredTags.inArray(dfx.getTagName(nodeSelection)) === false)
                     || (!nodeSelection && dfx.getTagName(dfx.getFirstBlockParent(startNode)) !== 'li')
                 ) {
@@ -1100,7 +1100,7 @@ ViperFormatPlugin.prototype = {
             case 'blockquote':
                 var tags = dfx.getTag('*', element);
                 for (var i = 0; i < tags.length; i++) {
-                    if (dfx.isBlockElement(tags[i]) === true && dfx.isTag(tags[i], 'p') === false) {
+                    if (dfx.isBlockElement(tags[i]) === true && dfx.isTag(tags[i], 'p') === false && dfx.isStubElement(tags[i]) === false) {
                         return false;
                     }
                 }
@@ -1118,7 +1118,7 @@ ViperFormatPlugin.prototype = {
 
         var tags = dfx.getTag('*', element);
         for (var i = 0; i < tags.length; i++) {
-            if (dfx.isBlockElement(tags[i]) === true) {
+            if (dfx.isBlockElement(tags[i]) === true && dfx.isStubElement(tags[i]) === false) {
                 if (isBlockQuote === true && hasBlock === false && dfx.isTag(tags[i], 'p') === true) {
                     // In blockquote element only return true if there is more than
                     // one block element.
