@@ -1007,6 +1007,8 @@ ViperTools.prototype = {
             }
         }
 
+        dfxjQuery(popup.element).draggable('enable');
+
         dfx.setStyle(popupElement, 'visibility', 'visible');
 
     },
@@ -1020,6 +1022,8 @@ ViperTools.prototype = {
                 return;
             }
         }
+
+        dfxjQuery(popup.element).draggable('disable');
 
         if (popup.element.parentNode) {
             popup.element.parentNode.removeChild(popup.element);
