@@ -559,14 +559,35 @@ ViperFormatPlugin.prototype = {
             tools.setButtonInactive('headings');
             tools.setButtonInactive('formats');
 
+            var lineage         = self._inlineToolbar.getLineage();
+            var currentLinIndex = self._inlineToolbar.getCurrentLineageIndex(true);
+            var formatElement   = lineage[currentLinIndex];
+            if (formatElement) {
+                nodeSelection = formatElement;
+            }
+
             var parents = dfx.getParents(startNode, 'caption,li,ul,ol', self.viper.getViperElement());
             if (parents.length === 0 && dfx.isStubElement(startNode) === false) {
                 if ((nodeSelection && ignoredTags.inArray(dfx.getTagName(nodeSelection)) === false)
                     || (!nodeSelection && dfx.getTagName(dfx.getFirstBlockParent(startNode)) !== 'li')
                 ) {
-                    if (!nodeSelection || dfx.isTag(nodeSelection, 'img') === false) {
-                        tools.enableButton('headings');
-                        tools.enableButton('formats');
+                    if (nodeSelection && nodeSelection.nodeType === dfx.TEXT_NODE) {
+                        var blockquote = dfx.getParents(nodeSelection, 'blockquote', self.viper.getViperElement());
+                        if (blockquote.length > 0 && dfx.getTag('p', blockquote[0]).length > 1) {
+                            tools.disableButton('headings');
+                        } else {
+                            tools.enableButton('headings');
+                        }
+                    } else if (!nodeSelection || dfx.isTag(nodeSelection, 'img') === false) {
+                        if (nodeSelection
+                            && (dfx.isTag(nodeSelection, 'blockquote') !== true
+                            || dfx.getTag('p', nodeSelection).length <= 1)
+                            && ((dfx.isTag(nodeSelection, 'p') !== true)
+                            || dfx.isTag(nodeSelection.parentNode, 'blockquote') === false)
+                        ) {
+                            tools.enableButton('headings');
+                            tools.enableButton('formats');
+                        }
                     }
                 }
 
@@ -583,9 +604,6 @@ ViperFormatPlugin.prototype = {
 
                 // Update the Formats button statuses.
                 tools.getItem('formats').setIconClass('Viper-formats');
-                var lineage         = self._inlineToolbar.getLineage();
-                var currentLinIndex = self._inlineToolbar.getCurrentLineageIndex(true);
-                var formatElement   = lineage[currentLinIndex];
                 var highlightButton = true;
                 var blockParent     = self.getTagFromRange(data.range, ['p', 'div', 'pre', 'blockquote']);
                 var userParentTag   = false;
@@ -875,6 +893,12 @@ ViperFormatPlugin.prototype = {
                 case 'table':
                 case 'caption':
                     return false;
+                break;
+
+                case 'blockquote':
+                    if (dfx.getTag('p', node).length > 1) {
+                        return false;
+                    }
                 break;
 
                 default:
@@ -1418,6 +1442,17 @@ ViperFormatPlugin.prototype = {
                         newElem.appendChild(childPTag.firstChild);
                     }
                 }
+            } else if (isBlockQuote === true && type.match(/h\d/)) {
+                while (element.firstChild) {
+                    newElem.appendChild(element.firstChild);
+                }
+
+                var pTag = dfx.getTag('p', newElem)[0];
+                while (pTag.firstChild) {
+                    newElem.appendChild(pTag.firstChild);
+                }
+
+                dfx.remove(pTag);
             } else {
                 while (element.firstChild) {
                     newElem.appendChild(element.firstChild);
