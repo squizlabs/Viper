@@ -393,9 +393,9 @@ ViperTools.prototype = {
             dfx.addClass(textBox, 'Viper-focused');
             self.viper.highlightSelection();
 
-            self.viper.registerCallback('ViperTools:buttonClicked', 'ViperTools:textbox', function() {
-                self.viper.focus();
-            });
+           // self.viper.registerCallback('ViperTools:buttonClicked', 'ViperTools:textbox', function() {
+           //     self.viper.focus();
+           // });
 
             // Set the caret to the end of the textfield.
             input.value = input.value;
@@ -405,7 +405,7 @@ ViperTools.prototype = {
         });
 
         dfx.addEvent(input, 'blur', function() {
-            self.viper.removeCallback('ViperTools:buttonClicked', 'ViperTools:textbox');
+            //self.viper.removeCallback('ViperTools:buttonClicked', 'ViperTools:textbox');
             dfx.removeClass(textBox, 'Viper-active');
         });
 
@@ -703,14 +703,6 @@ ViperTools.prototype = {
                 }
 
                 self.viper.fireCallbacks('ViperTools:changed:' + id);
-
-                try {
-                    self.viper.focus();
-                    checkbox.focus();
-                } catch (e) {
-                    // Igore IE8...
-                }
-
                 self.viper.highlightSelection();
             });
         } else {
@@ -1482,6 +1474,8 @@ ViperTools.prototype = {
                 }
 
                 subSection.form.onsubmit = function(e) {
+                    tools.viper.focus();
+
                     if (e) {
                         dfx.preventDefault(e);
                     }
@@ -1489,10 +1483,6 @@ ViperTools.prototype = {
                     var button = tools.getItem(subSectionid + '-applyButton');
                     if (button.isEnabled() === false) {
                         return false;
-                    }
-
-                    if (!e) {
-                        tools.viper.focus();
                     }
 
                     if (tools.viper.isBrowser('msie') === false) {
