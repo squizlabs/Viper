@@ -357,10 +357,12 @@ ViperFormatPlugin.prototype = {
             pre: 'PRE'
         };
 
+        var ignoredTags = ['caption', 'li', 'ul', 'ol'];
+
         var formatButtonStatuses = null;
         var currentElement       = data.lineage[data.current];
 
-        if (dfx.isBlockElement(currentElement) === true && dfx.isTag(currentElement, 'caption') === false) {
+        if (dfx.isBlockElement(currentElement) === true && ignoredTags.inArray(dfx.getTagName(currentElement)) === false) {
             if (currentElement.nodeType === dfx.TEXT_NODE && data.lineage.length === 1) {
                 formatButtonStatuses = this.getFormatButtonStatuses();
             } else {
@@ -557,7 +559,7 @@ ViperFormatPlugin.prototype = {
             tools.setButtonInactive('headings');
             tools.setButtonInactive('formats');
 
-            var parents = dfx.getParents(startNode, 'caption', self.viper.getViperElement());
+            var parents = dfx.getParents(startNode, 'caption,li,ul,ol', self.viper.getViperElement());
             if (parents.length === 0) {
                 if ((nodeSelection && ignoredTags.inArray(dfx.getTagName(nodeSelection)) === false)
                     || (!nodeSelection && dfx.getTagName(dfx.getFirstBlockParent(startNode)) !== 'li')
