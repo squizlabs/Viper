@@ -432,7 +432,7 @@ class Viper_Tests_ViperFormatPlugin_ParagraphUnitTest extends AbstractFormatsUni
 
         // Highlight a word in the selected paragraph
         $this->selectKeyword(2);
-        $this->assertTrue($this->topToolbarButtonExists('formats', 'disabled'), 'Formats icon should be disabled in the top toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('formats-p', 'disabled'), 'P icon should be disabled in the top toolbar');
 
     }//end testFormatIconWhenSwitchingBetweenParagraphAndWord()
 

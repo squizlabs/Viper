@@ -360,7 +360,7 @@ ViperFormatPlugin.prototype = {
         var formatButtonStatuses = null;
         var currentElement       = data.lineage[data.current];
 
-        if (dfx.isBlockElement(currentElement) === true) {
+        if (dfx.isBlockElement(currentElement) === true && dfx.isTag(currentElement, 'caption') === false) {
             if (currentElement.nodeType === dfx.TEXT_NODE && data.lineage.length === 1) {
                 formatButtonStatuses = this.getFormatButtonStatuses();
             } else {
@@ -545,8 +545,6 @@ ViperFormatPlugin.prototype = {
                 tools.enableButton('class');
             }
 
-
-
             if (!startNode
                 && !endNode
                 && data.range.startContainer === data.range.endContainer
@@ -559,105 +557,107 @@ ViperFormatPlugin.prototype = {
             tools.setButtonInactive('headings');
             tools.setButtonInactive('formats');
 
-            if ((nodeSelection && ignoredTags.inArray(dfx.getTagName(nodeSelection)) === false)
-                || (!nodeSelection && dfx.getTagName(dfx.getFirstBlockParent(startNode)) !== 'li')
-            ) {
-                if (!nodeSelection || dfx.isTag(nodeSelection, 'img') === false) {
-                    var parents = dfx.getParents(startNode, 'caption', self.viper.getViperElement());
-                    if (parents.length === 0) {
+            var parents = dfx.getParents(startNode, 'caption', self.viper.getViperElement());
+            if (parents.length === 0) {
+                if ((nodeSelection && ignoredTags.inArray(dfx.getTagName(nodeSelection)) === false)
+                    || (!nodeSelection && dfx.getTagName(dfx.getFirstBlockParent(startNode)) !== 'li')
+                ) {
+                    if (!nodeSelection || dfx.isTag(nodeSelection, 'img') === false) {
                         tools.enableButton('headings');
                         tools.enableButton('formats');
                     }
                 }
-            }
 
-            for (var i = 0; i < headingTags.length; i++) {
-                tools.setButtonInactive(prefix + 'heading:' + headingTags[i]);
-            }
-
-            var headingElement = self.getTagFromRange(data.range, headingTags);
-            if (headingElement) {
-                var tagName = dfx.getTagName(headingElement);
-                tools.setButtonActive('headings');
-                tools.setButtonActive(prefix + 'heading:' + tagName);
-            }
-
-            // Update the Formats button statuses.
-            tools.getItem('formats').setIconClass('Viper-formats');
-            var lineage         = self._inlineToolbar.getLineage();
-            var currentLinIndex = self._inlineToolbar.getCurrentLineageIndex(true);
-            var formatElement   = lineage[currentLinIndex];
-            var highlightButton = true;
-            var blockParent     = self.getTagFromRange(data.range, ['p', 'div', 'pre', 'blockquote']);
-            var userParentTag   = false;
-
-            if (!formatElement || formatElement.nodeType === dfx.TEXT_NODE || dfx.isBlockElement(formatElement) === false) {
-                if (data.range.collapsed === true) {
-                    formatElement   = blockParent;
-                } else {
-                    if (formatElement) {
-                        var firstParent  = dfx.getFirstBlockParent(formatElement);
-                        var commonParent = data.range.getCommonElement();
-                        if (dfx.isBlockElement(commonParent) === false) {
-                            commonParent = dfx.getFirstBlockParent(commonParent);
-                        }
-
-                        if (firstParent && firstParent === commonParent && formatButtons[dfx.getTagName(firstParent)]) {
-                            userParentTag = true;
-                            tools.getItem('formats').setIconClass('Viper-formats-' + dfx.getTagName(firstParent));
-                        }
-                    }
-
-                    highlightButton = false;
-                    formatElement = null;
+                for (var i = 0; i < headingTags.length; i++) {
+                    tools.setButtonInactive(prefix + 'heading:' + headingTags[i]);
                 }
-            }
 
-            var isBlockQuote = false;
-            if (dfx.isTag(formatElement, 'p') === true
-                && dfx.isTag(formatElement.parentNode, 'blockquote') === true
-            ) {
-                isBlockQuote = true;
-            }
+                var headingElement = self.getTagFromRange(data.range, headingTags);
+                if (headingElement) {
+                    var tagName = dfx.getTagName(headingElement);
+                    tools.setButtonActive('headings');
+                    tools.setButtonActive(prefix + 'heading:' + tagName);
+                }
 
-            var formatButtonStatuses = self.getFormatButtonStatuses(formatElement);
-            if (formatButtonStatuses._canChange === true) {
-                tools.enableButton('formats');
-                for (var tag in formatButtons) {
-                    if (formatButtonStatuses[tag] === true) {
-                        tools.enableButton(prefix + 'formats:' + formatButtons[tag]);
+                // Update the Formats button statuses.
+                tools.getItem('formats').setIconClass('Viper-formats');
+                var lineage         = self._inlineToolbar.getLineage();
+                var currentLinIndex = self._inlineToolbar.getCurrentLineageIndex(true);
+                var formatElement   = lineage[currentLinIndex];
+                var highlightButton = true;
+                var blockParent     = self.getTagFromRange(data.range, ['p', 'div', 'pre', 'blockquote']);
+                var userParentTag   = false;
 
-                        if (tag !== 'blockquote' || isBlockQuote !== true) {
-                            tools.setButtonInactive(prefix + 'formats:' + formatButtons[tag]);
-                        }
+                if (!formatElement || formatElement.nodeType === dfx.TEXT_NODE || dfx.isBlockElement(formatElement) === false) {
+                    if (data.range.collapsed === true) {
+                        formatElement   = blockParent;
                     } else {
-                        tools.setButtonInactive(prefix + 'formats:' + formatButtons[tag]);
-                        tools.disableButton(prefix + 'formats:' + formatButtons[tag]);
+                        if (formatElement) {
+                            var firstParent  = dfx.getFirstBlockParent(formatElement);
+                            var commonParent = data.range.getCommonElement();
+                            if (dfx.isBlockElement(commonParent) === false) {
+                                commonParent = dfx.getFirstBlockParent(commonParent);
+                            }
+
+                            if (firstParent && firstParent === commonParent && formatButtons[dfx.getTagName(firstParent)]) {
+                                userParentTag = true;
+                                tools.getItem('formats').setIconClass('Viper-formats-' + dfx.getTagName(firstParent));
+                            }
+                        }
+
+                        highlightButton = false;
+                        formatElement = null;
                     }
+                }
 
-                    if (dfx.isTag(formatElement, tag) === true || (!formatElement && dfx.isTag(blockParent, tag) === true)) {
-                        tools.setButtonActive('formats');
+                var isBlockQuote = false;
+                if (dfx.isTag(formatElement, 'p') === true
+                    && dfx.isTag(formatElement.parentNode, 'blockquote') === true
+                ) {
+                    isBlockQuote = true;
+                }
 
-                        if (highlightButton === true) {
-                            if (isBlockQuote === true) {
-                                tools.setButtonActive(prefix + 'formats:' + formatButtons['blockquote']);
-                                tools.getItem('formats').setIconClass('Viper-formats-blockquote');
-                            } else {
-                                tools.setButtonActive(prefix + 'formats:' + formatButtons[tag]);
-                                tools.getItem('formats').setIconClass('Viper-formats-' + tag);
+                var formatButtonStatuses = self.getFormatButtonStatuses(formatElement);
+                if (formatButtonStatuses._canChange === true) {
+                    tools.enableButton('formats');
+                    for (var tag in formatButtons) {
+                        if (formatButtonStatuses[tag] === true) {
+                            tools.enableButton(prefix + 'formats:' + formatButtons[tag]);
+
+                            if (tag !== 'blockquote' || isBlockQuote !== true) {
+                                tools.setButtonInactive(prefix + 'formats:' + formatButtons[tag]);
+                            }
+                        } else {
+                            tools.setButtonInactive(prefix + 'formats:' + formatButtons[tag]);
+                            tools.disableButton(prefix + 'formats:' + formatButtons[tag]);
+                        }
+
+                        if (dfx.isTag(formatElement, tag) === true || (!formatElement && dfx.isTag(blockParent, tag) === true)) {
+                            tools.setButtonActive('formats');
+
+                            if (highlightButton === true) {
+                                if (isBlockQuote === true) {
+                                    tools.setButtonActive(prefix + 'formats:' + formatButtons['blockquote']);
+                                    tools.getItem('formats').setIconClass('Viper-formats-blockquote');
+                                } else {
+                                    tools.setButtonActive(prefix + 'formats:' + formatButtons[tag]);
+                                    tools.getItem('formats').setIconClass('Viper-formats-' + tag);
+                                }
                             }
                         }
                     }
+                } else {
+                    if (formatElement && (!nodeSelection || dfx.isTag(nodeSelection, 'img') === false)) {
+                        tools.getItem('formats').setIconClass('Viper-formats-' + dfx.getTagName(formatElement));
+                    } else if (userParentTag === false) {
+                        tools.getItem('formats').setIconClass('Viper-formats');
+                    }
+
+                    tools.disableButton('formats');
                 }
             } else {
-                if (formatElement && (!nodeSelection || dfx.isTag(nodeSelection, 'img') === false)) {
-                    tools.getItem('formats').setIconClass('Viper-formats-' + dfx.getTagName(formatElement));
-                } else if (userParentTag === false) {
-                    tools.getItem('formats').setIconClass('Viper-formats');
-                }
-
-                tools.disableButton('formats');
-            }
+                tools.getItem('formats').setIconClass('Viper-formats');
+            }//end if
 
             // Anchor.
             var attrId = self._getAttributeValue('id');
@@ -1179,8 +1179,15 @@ ViperFormatPlugin.prototype = {
                 ) {
                     // Do not convert the TD tag.
                     var newElem = document.createElement(type);
-                    while (selectedNode.firstChild) {
-                        newElem.appendChild(selectedNode.firstChild);
+                    if (type === 'blockquote' && dfx.getTag(selectedNode, 'p').length === 0) {
+                        newElem.appendChild(document.createElement('p'));
+                        while (selectedNode.firstChild) {
+                            newElem.firstChild.appendChild(selectedNode.firstChild);
+                        }
+                    } else {
+                        while (selectedNode.firstChild) {
+                            newElem.appendChild(selectedNode.firstChild);
+                        }
                     }
 
                     selectedNode.appendChild(newElem);
@@ -1208,8 +1215,14 @@ ViperFormatPlugin.prototype = {
             var elements = dfx.getElementsBetween(start, end);
             elements.unshift(start);
 
-            if (start !== end) {
-                elements.push(end);
+            if (start !== end && end) {
+                if (end.nodeType === dfx.TEXT_NODE && range.endOffset > 0) {
+                    elements.push(end);
+                } else {
+                    var elem = range.getPreviousContainer(end, null, true);
+                    range.setEnd(elem, elem.data.length);
+                    ViperSelection.addRange(range);
+                }
             }
 
             var parents = [];
@@ -1374,8 +1387,15 @@ ViperFormatPlugin.prototype = {
         } else if (type === 'blockquote') {
             var newElem = document.createElement(type);
             dfx.insertBefore(element, newElem);
+
             if (dfx.isTag(element, 'p') === true) {
                 newElem.appendChild(element);
+            } else if (dfx.getTag('p', element).length > 0) {
+                while (element.firstChild) {
+                    newElem.appendChild(element.firstChild);
+                }
+
+                dfx.remove(element);
             } else {
                 var p = document.createElement('p');
                 newElem.appendChild(p);
@@ -1390,7 +1410,7 @@ ViperFormatPlugin.prototype = {
         } else {
             var newElem = document.createElement(type);
 
-            if (isBlockQuote === true) {
+            if (isBlockQuote === true && (type === 'p' || type === 'pre')) {
                 for (var childPTag = element.firstChild; childPTag; childPTag = childPTag.nextSibling) {
                     while (childPTag.firstChild) {
                         newElem.appendChild(childPTag.firstChild);
