@@ -1179,8 +1179,15 @@ ViperFormatPlugin.prototype = {
                 ) {
                     // Do not convert the TD tag.
                     var newElem = document.createElement(type);
-                    while (selectedNode.firstChild) {
-                        newElem.appendChild(selectedNode.firstChild);
+                    if (type === 'blockquote' && dfx.getTag(selectedNode, 'p').length === 0) {
+                        newElem.appendChild(document.createElement('p'));
+                        while (selectedNode.firstChild) {
+                            newElem.firstChild.appendChild(selectedNode.firstChild);
+                        }
+                    } else {
+                        while (selectedNode.firstChild) {
+                            newElem.appendChild(selectedNode.firstChild);
+                        }
                     }
 
                     selectedNode.appendChild(newElem);
