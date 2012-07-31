@@ -106,7 +106,7 @@ ViperListPlugin.prototype = {
                 } else if (dfx.isTag(startNode, 'p') === true
                     || ((startNode.nodeType === dfx.TEXT_NODE || dfx.isStubElement(startNode) === true) && dfx.isTag(dfx.getFirstBlockParent(startNode), 'p') === true)
                 ) {
-                    if (dfx.getParents(startNode, 'td,th').length === 0) {
+                    if (dfx.getParents(startNode, 'td,th,blockquote').length === 0) {
                         self.convertRangeToList(range);
                         dfx.preventDefault(e);
                         return false;
@@ -1288,6 +1288,8 @@ ViperListPlugin.prototype = {
             } else if (startParent !== endParent
                 && dfx.isTag(startParent, 'p') === true
                 && dfx.isTag(endParent, 'p') === true
+                && dfx.isTag(startParent.parentNode, 'blockquote') === false
+                && dfx.isTag(endParent.parentNode, 'blockquote') === false
             ) {
                 makeList = true;
                 var nextSibling = startParent.nextSibling;
@@ -1301,7 +1303,10 @@ ViperListPlugin.prototype = {
 
                     nextSibling = nextSibling.nextSibling;
                 }
-            } else if (mainToolbar === true && (dfx.isTag(startParent, 'p') === true || dfx.isTag(startParent, 'td') === true)) {
+            } else if (mainToolbar === true
+                && (dfx.isTag(startParent, 'p') === true || dfx.isTag(startParent, 'td') === true)
+                && dfx.isTag(startParent.parentNode, 'blockquote') === false
+            ) {
                 makeList = true;
             }
         }//end if
