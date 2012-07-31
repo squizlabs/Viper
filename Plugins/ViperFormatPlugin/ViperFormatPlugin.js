@@ -1410,7 +1410,7 @@ ViperFormatPlugin.prototype = {
         } else {
             var newElem = document.createElement(type);
 
-            if (isBlockQuote === true && type === 'p') {
+            if (isBlockQuote === true && (type === 'p' || type === 'pre')) {
                 for (var childPTag = element.firstChild; childPTag; childPTag = childPTag.nextSibling) {
                     while (childPTag.firstChild) {
                         newElem.appendChild(childPTag.firstChild);
