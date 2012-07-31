@@ -357,7 +357,7 @@ ViperFormatPlugin.prototype = {
             pre: 'PRE'
         };
 
-        var ignoredTags = ['caption', 'li', 'ul', 'ol', 'img', 'table'];
+        var ignoredTags = ['caption', 'li', 'ul', 'ol', 'img', 'table', 'tr', 'tbody', 'tfoot', 'thead'];
 
         var formatButtonStatuses = null;
         var currentElement       = data.lineage[data.current];
@@ -524,7 +524,7 @@ ViperFormatPlugin.prototype = {
             pre: 'PRE'
         };
 
-        var ignoredTags = ('tr|table|tbody|caption|ul|ol|li|img').split('|');
+        var ignoredTags = ('tr|table|tbody|thead|tfoot|caption|ul|ol|li|img').split('|');
 
         // Listen for the main toolbar update and update the statuses of the buttons.
         this.viper.registerCallback('ViperToolbarPlugin:updateToolbar', 'ViperFormatPlugin', function(data) {
@@ -566,28 +566,24 @@ ViperFormatPlugin.prototype = {
                 nodeSelection = formatElement;
             }
 
-            var parents = dfx.getParents(startNode, 'caption,li,ul,ol', self.viper.getViperElement());
-            if (parents.length === 0 && dfx.isStubElement(startNode) === false) {
-                if ((nodeSelection && ignoredTags.inArray(dfx.getTagName(nodeSelection)) === false)
-                    || (!nodeSelection && dfx.getTagName(dfx.getFirstBlockParent(startNode)) !== 'li')
-                ) {
-                    if (nodeSelection && nodeSelection.nodeType === dfx.TEXT_NODE) {
+            if (self._canEnableFormatButtons(startNode, nodeSelection) === true) {
+                if (nodeSelection) {
+                    if (nodeSelection.nodeType === dfx.TEXT_NODE) {
+                        // Disable the heading tag if the selection is in a blockquote
+                        // with multiple paragraph tags.
                         var blockquote = dfx.getParents(nodeSelection, 'blockquote', self.viper.getViperElement());
                         if (blockquote.length > 0 && dfx.getTag('p', blockquote[0]).length > 1) {
                             tools.disableButton('headings');
                         } else {
                             tools.enableButton('headings');
                         }
-                    } else if (!nodeSelection || dfx.isTag(nodeSelection, 'img') === false) {
-                        if (nodeSelection
-                            && (dfx.isTag(nodeSelection, 'blockquote') !== true
-                            || dfx.getTag('p', nodeSelection).length <= 1)
-                            && ((dfx.isTag(nodeSelection, 'p') !== true)
-                            || dfx.isTag(nodeSelection.parentNode, 'blockquote') === false)
-                        ) {
-                            tools.enableButton('headings');
-                            tools.enableButton('formats');
-                        }
+                    } else if ((dfx.isTag(nodeSelection, 'blockquote') !== true
+                        || dfx.getTag('p', nodeSelection).length <= 1)
+                        && ((dfx.isTag(nodeSelection, 'p') !== true)
+                        || dfx.isTag(nodeSelection.parentNode, 'blockquote') === false)
+                    ) {
+                        tools.enableButton('headings');
+                        tools.enableButton('formats');
                     }
                 }
 
@@ -918,35 +914,32 @@ ViperFormatPlugin.prototype = {
 
     },
 
-    _canShowFormattingOptions: function(node)
+    _canEnableFormatButtons: function(startNode, nodeSelection)
     {
-        if (!node) {
+        // Direct parent ignore list.
+        var ignoredTagsStr = 'tr|table|tbody|thead|tfoot|caption|ul|ol|li|img';
+        var ignoredTags    = ignoredTagsStr.split('|');
+        var viperElement   = self.viper.getViperElement();
+
+        // If any of the parents of the element is one of these tags then ignore it.
+        var parents = dfx.getParents(startNode, 'caption|ul|ol|li|img', viperElement);
+        if (parents.length > 0 || dfx.isStubElement(startNode) === true) {
             return false;
         }
 
-        if (node.nodeType === dfx.TEXT_NODE) {
-            // If this is a text selection then dont show the tools.
-            return false;
-        } else if (dfx.isBlockElement(node) === false && dfx.isTag(node, 'blockquote') === false) {
-            return false;
+        if (nodeSelection) {
+            if (ignoredTags.inArray(dfx.getTagName(nodeSelection)) === true) {
+                return false;
+            } else if (dfx.isBlockElement(nodeSelection) === false
+                && ignoredTags.inArray(dfx.getTagName(dfx.getFirstBlockParent(nodeSelection))) === true
+            ) {
+                return false;
+            }
         } else {
-            switch (node.tagName.toLowerCase()) {
-                case 'li':
-                case 'ul':
-                case 'ol':
-                case 'table':
-                case 'tr':
-                case 'td':
-                case 'th':
-                case 'tbody':
-                case 'caption':
-                case 'img':
-                    return false;
-                break;
-
-                default:
-                    return true;
-                break;
+            if (ignoredTags.inArray(dfx.getTagName(dfx.getFirstBlockParent(startNode))) === true) {
+                return false;
+            } else if (ignoredTags.inArray(dfx.getTagName(dfx.getFirstBlockParent(nodeSelection))) === true) {
+                return false;
             }
         }
 
