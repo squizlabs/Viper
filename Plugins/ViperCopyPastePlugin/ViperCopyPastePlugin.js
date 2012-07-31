@@ -769,6 +769,7 @@ ViperCopyPastePlugin.prototype = {
 
         dfxjQuery(tmp).find('[class]').removeAttr('class');
         dfxjQuery(tmp).find('[style]').removeAttr('style');
+        dfxjQuery(tmp).find('br[clear]').removeAttr('clear');
 
         // Remove all attributes from table related elements.
         var tableElements = dfxjQuery(tmp).find('td,tr,table,tbody,tfoot,thead');
@@ -846,8 +847,15 @@ ViperCopyPastePlugin.prototype = {
                         th.appendChild(td.firstChild);
                     }
 
-                    th.setAttribute('colspan', dfx.attr(td, 'colspan'));
-                    th.setAttribute('rowspan', dfx.attr(td, 'rowspan'));
+                    var colspan = dfx.attr(td, 'colspan');
+                    if (colspan) {
+                        th.setAttribute('colspan', colspan);
+                    }
+
+                    var rowspan = dfx.attr(td, 'rowspan');
+                    if (rowspan) {
+                        th.setAttribute('rowspan', rowspan);
+                    }
 
                     dfx.insertBefore(td, th);
                     dfx.remove(td);

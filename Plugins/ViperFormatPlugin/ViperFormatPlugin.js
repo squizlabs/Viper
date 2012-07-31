@@ -357,7 +357,7 @@ ViperFormatPlugin.prototype = {
             pre: 'PRE'
         };
 
-        var ignoredTags = ['caption', 'li', 'ul', 'ol'];
+        var ignoredTags = ['caption', 'li', 'ul', 'ol', 'img', 'table', 'tr', 'tbody', 'tfoot', 'thead'];
 
         var formatButtonStatuses = null;
         var currentElement       = data.lineage[data.current];
@@ -524,7 +524,7 @@ ViperFormatPlugin.prototype = {
             pre: 'PRE'
         };
 
-        var ignoredTags = ('tr|table|tbody|caption|ul|ol|li|img').split('|');
+        var ignoredTags = ('tr|table|tbody|thead|tfoot|caption|ul|ol|li|img').split('|');
 
         // Listen for the main toolbar update and update the statuses of the buttons.
         this.viper.registerCallback('ViperToolbarPlugin:updateToolbar', 'ViperFormatPlugin', function(data) {
@@ -559,12 +559,29 @@ ViperFormatPlugin.prototype = {
             tools.setButtonInactive('headings');
             tools.setButtonInactive('formats');
 
-            var parents = dfx.getParents(startNode, 'caption,li,ul,ol', self.viper.getViperElement());
-            if (parents.length === 0) {
-                if ((nodeSelection && ignoredTags.inArray(dfx.getTagName(nodeSelection)) === false)
-                    || (!nodeSelection && dfx.getTagName(dfx.getFirstBlockParent(startNode)) !== 'li')
-                ) {
-                    if (!nodeSelection || dfx.isTag(nodeSelection, 'img') === false) {
+            var lineage         = self._inlineToolbar.getLineage();
+            var currentLinIndex = self._inlineToolbar.getCurrentLineageIndex(true);
+            var formatElement   = lineage[currentLinIndex];
+            if (formatElement) {
+                nodeSelection = formatElement;
+            }
+
+            if (self._canEnableFormatButtons(startNode, nodeSelection) === true) {
+                if (nodeSelection) {
+                    if (nodeSelection.nodeType === dfx.TEXT_NODE) {
+                        // Disable the heading tag if the selection is in a blockquote
+                        // with multiple paragraph tags.
+                        var blockquote = dfx.getParents(nodeSelection, 'blockquote', self.viper.getViperElement());
+                        if (blockquote.length > 0 && dfx.getTag('p', blockquote[0]).length > 1) {
+                            tools.disableButton('headings');
+                        } else {
+                            tools.enableButton('headings');
+                        }
+                    } else if ((dfx.isTag(nodeSelection, 'blockquote') !== true
+                        || dfx.getTag('p', nodeSelection).length <= 1)
+                        && ((dfx.isTag(nodeSelection, 'p') !== true)
+                        || dfx.isTag(nodeSelection.parentNode, 'blockquote') === false)
+                    ) {
                         tools.enableButton('headings');
                         tools.enableButton('formats');
                     }
@@ -583,9 +600,6 @@ ViperFormatPlugin.prototype = {
 
                 // Update the Formats button statuses.
                 tools.getItem('formats').setIconClass('Viper-formats');
-                var lineage         = self._inlineToolbar.getLineage();
-                var currentLinIndex = self._inlineToolbar.getCurrentLineageIndex(true);
-                var formatElement   = lineage[currentLinIndex];
                 var highlightButton = true;
                 var blockParent     = self.getTagFromRange(data.range, ['p', 'div', 'pre', 'blockquote']);
                 var userParentTag   = false;
@@ -877,6 +891,12 @@ ViperFormatPlugin.prototype = {
                     return false;
                 break;
 
+                case 'blockquote':
+                    if (dfx.getTag('p', node).length > 1) {
+                        return false;
+                    }
+                break;
+
                 default:
                     // Check the selection length if the length is too long then
                     // dont show the tools.
@@ -894,35 +914,32 @@ ViperFormatPlugin.prototype = {
 
     },
 
-    _canShowFormattingOptions: function(node)
+    _canEnableFormatButtons: function(startNode, nodeSelection)
     {
-        if (!node) {
+        // Direct parent ignore list.
+        var ignoredTagsStr = 'tr|table|tbody|thead|tfoot|caption|ul|ol|li|img';
+        var ignoredTags    = ignoredTagsStr.split('|');
+        var viperElement   = self.viper.getViperElement();
+
+        // If any of the parents of the element is one of these tags then ignore it.
+        var parents = dfx.getParents(startNode, 'caption|ul|ol|li|img', viperElement);
+        if (parents.length > 0 || dfx.isStubElement(startNode) === true) {
             return false;
         }
 
-        if (node.nodeType === dfx.TEXT_NODE) {
-            // If this is a text selection then dont show the tools.
-            return false;
-        } else if (dfx.isBlockElement(node) === false && dfx.isTag(node, 'blockquote') === false) {
-            return false;
+        if (nodeSelection) {
+            if (ignoredTags.inArray(dfx.getTagName(nodeSelection)) === true) {
+                return false;
+            } else if (dfx.isBlockElement(nodeSelection) === false
+                && ignoredTags.inArray(dfx.getTagName(dfx.getFirstBlockParent(nodeSelection))) === true
+            ) {
+                return false;
+            }
         } else {
-            switch (node.tagName.toLowerCase()) {
-                case 'li':
-                case 'ul':
-                case 'ol':
-                case 'table':
-                case 'tr':
-                case 'td':
-                case 'th':
-                case 'tbody':
-                case 'caption':
-                case 'img':
-                    return false;
-                break;
-
-                default:
-                    return true;
-                break;
+            if (ignoredTags.inArray(dfx.getTagName(dfx.getFirstBlockParent(startNode))) === true) {
+                return false;
+            } else if (ignoredTags.inArray(dfx.getTagName(dfx.getFirstBlockParent(nodeSelection))) === true) {
+                return false;
             }
         }
 
@@ -1100,7 +1117,7 @@ ViperFormatPlugin.prototype = {
             case 'blockquote':
                 var tags = dfx.getTag('*', element);
                 for (var i = 0; i < tags.length; i++) {
-                    if (dfx.isBlockElement(tags[i]) === true && dfx.isTag(tags[i], 'p') === false) {
+                    if (dfx.isBlockElement(tags[i]) === true && dfx.isTag(tags[i], 'p') === false && dfx.isStubElement(tags[i]) === false) {
                         return false;
                     }
                 }
@@ -1118,7 +1135,7 @@ ViperFormatPlugin.prototype = {
 
         var tags = dfx.getTag('*', element);
         for (var i = 0; i < tags.length; i++) {
-            if (dfx.isBlockElement(tags[i]) === true) {
+            if (dfx.isBlockElement(tags[i]) === true && dfx.isStubElement(tags[i]) === false) {
                 if (isBlockQuote === true && hasBlock === false && dfx.isTag(tags[i], 'p') === true) {
                     // In blockquote element only return true if there is more than
                     // one block element.
@@ -1418,6 +1435,17 @@ ViperFormatPlugin.prototype = {
                         newElem.appendChild(childPTag.firstChild);
                     }
                 }
+            } else if (isBlockQuote === true && type.match(/h\d/)) {
+                while (element.firstChild) {
+                    newElem.appendChild(element.firstChild);
+                }
+
+                var pTag = dfx.getTag('p', newElem)[0];
+                while (pTag.firstChild) {
+                    newElem.appendChild(pTag.firstChild);
+                }
+
+                dfx.remove(pTag);
             } else {
                 while (element.firstChild) {
                     newElem.appendChild(element.firstChild);
