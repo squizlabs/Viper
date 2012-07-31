@@ -357,7 +357,7 @@ ViperFormatPlugin.prototype = {
             pre: 'PRE'
         };
 
-        var ignoredTags = ['caption', 'li', 'ul', 'ol', 'img'];
+        var ignoredTags = ['caption', 'li', 'ul', 'ol', 'img', 'table'];
 
         var formatButtonStatuses = null;
         var currentElement       = data.lineage[data.current];
