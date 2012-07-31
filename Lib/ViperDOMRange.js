@@ -702,6 +702,7 @@ ViperDOMRange.prototype = {
             && this._nodeSel.startOffset === range.startOffset
             && this._nodeSel.endOffset === range.endOffset
             && this._nodeSel.collapsed === range.collapsed
+            && this._nodeSel.commonAncestor === range.commonAncestorContainer
             && this._nodeSel.startNode === range.getStartNode()
             && this._nodeSel.endNode === range.getEndNode()
         ) {
@@ -715,6 +716,7 @@ ViperDOMRange.prototype = {
         this._nodeSel.collapsed      = range.collapsed;
         this._nodeSel.startNode      = range.getStartNode();
         this._nodeSel.endNode        = range.getEndNode();
+        this._nodeSel.commonAncestor = range.commonAncestorContainer;
         this._nodeSel.node           = null;
 
         // Webkit seems to get the range incorrectly when range is set on a node.
@@ -787,6 +789,16 @@ ViperDOMRange.prototype = {
             && endNode.data.length === range.endOffset
         ) {
             return startNode;
+        } else if (startNode.nodeType === dfx.TEXT_NODE
+            && endNode.nodeType === dfx.TEXT_NODE
+            && range.startOffset === 0
+            && range.endOffset === endNode.data.length
+            && range.commonAncestorContainer
+            && this._getFirstSelectableChild(range.commonAncestorContainer) === startNode
+            && this._getLastSelectableChild(range.commonAncestorContainer) === endNode
+        ) {
+            this._nodeSel.node = range.commonAncestorContainer;
+            return range.commonAncestorContainer;
         }
 
         // We may need to adjust the "startNode" depending on its offset.
