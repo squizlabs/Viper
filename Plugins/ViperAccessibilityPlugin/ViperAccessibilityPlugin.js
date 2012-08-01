@@ -140,19 +140,18 @@ ViperAccessibilityPlugin.prototype = {
             });
             resolutionHeader.appendChild(locateBtn);
             var sourceViewBtn = tools.createButton('VAP:showInSource', '', 'Show in Source View', 'Viper-sourceView', function() {
-                var tmpText = document.createTextNode('__SCROLL_TO_HERE__');
+                var tmpText = document.createTextNode('__STH__');
                 dfx.insertAfter(issue.element, tmpText);
                 var sourceViewPlugin = self.viper.getPluginManager().getPlugin('ViperSourceViewPlugin');
                 var contents = sourceViewPlugin.getContents();
                 dfx.remove(tmpText);
                 sourceViewPlugin.showSourceView(contents, function() {
-
                     if (self.viper.isBrowser('msie') === true) {
-                        sourceViewPlugin.scrollToText('__SCROLL_TO_HERE__');
+                        sourceViewPlugin.scrollToText('__STH__');
                         sourceViewPlugin.replaceSelection('');
                         sourceViewPlugin.updateOriginalSourceValue();
                     } else {
-                        sourceViewPlugin.scrollToText('__SCROLL_TO_HERE__');
+                        sourceViewPlugin.scrollToText('__STH__');
                         setTimeout(function() {
                             sourceViewPlugin.replaceSelection('');
                             sourceViewPlugin.updateOriginalSourceValue();
