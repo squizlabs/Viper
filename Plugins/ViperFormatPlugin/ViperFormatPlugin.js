@@ -919,7 +919,7 @@ ViperFormatPlugin.prototype = {
         // Direct parent ignore list.
         var ignoredTagsStr = 'tr|table|tbody|thead|tfoot|caption|ul|ol|li|img';
         var ignoredTags    = ignoredTagsStr.split('|');
-        var viperElement   = self.viper.getViperElement();
+        var viperElement   = this.viper.getViperElement();
 
         // If any of the parents of the element is one of these tags then ignore it.
         var parents = dfx.getParents(startNode, 'caption|ul|ol|li|img', viperElement);
