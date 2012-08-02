@@ -554,6 +554,8 @@ Viper.prototype = {
             return;
         }
 
+        this._viperRange = null;
+
         if (this.element) {
             this.element.setAttribute('contentEditable', false);
             dfx.setStyle(this.element, 'outline', 'invert');
