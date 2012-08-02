@@ -9,7 +9,24 @@
     <script type="text/javascript">
         var viper = null;
         ViperReadyCallback = function() {
-            viper = new Viper('test', null, null, dfx.getClass('editable'));
+            viper = new Viper('test');
+
+            viper.registerEditableElement(dfx.getId('edit1'));
+            viper.registerEditableElement(dfx.getId('edit2'));
+
+            dfx.addEvent(dfx.getClass('clickToEdit'), 'mousedown', function(e) {
+                var target   = dfx.getMouseEventTarget(e);
+                var editElem = dfx.getId(target.id.replace('_', ''));
+
+                dfx.remove(target);
+                dfx.showElement(editElem);
+
+                viper.setEditableElement(editElem);
+                viper.element.focus();
+                viper.focus();
+
+            });
+
             viper.getPluginManager().setPlugins(['ViperCoreStylesPlugin', 'ViperKeyboardEditorPlugin', 'ViperInlineToolbarPlugin', 'ViperHistoryPlugin', 'ViperListPlugin', 'ViperFormatPlugin', 'ViperToolbarPlugin', 'ViperTableEditorPlugin', 'ViperCopyPastePlugin', 'ViperImagePlugin', 'ViperLinkPlugin', 'ViperAccessibilityPlugin', 'ViperSourceViewPlugin', 'ViperSearchReplacePlugin', 'ViperLangToolsPlugin', 'ViperCharMapPlugin', 'ViperTrackChangesPlugin']);
         };
     </script>
@@ -32,15 +49,14 @@
 
 <div id="content" spellcheck="false">
     <h1>Simple Viper Example</h1>
-    <div class="editable">
-        <p>Australian governments at all levels have <u><strong><em>endorsed</em></strong></u> WCAG 2.0, and require all g<img src="" />overnment websites (federal, state and territory) to meet the new guidelines at the minimum compliance level (Single A) by the end of 2012. In addition, the Australian Government requires all federal websites to meet the medium conformance level (Double A) by the end of 2014.</p>
-
-<p>Federal government agencies must update <strong>all government</strong> websites (as specified within scope under the Website Accessibility National Transition Strategy (NTS)) to WCAG 2.0 conformance. Agencies should use the principle of progressive enhancement when building and managing websites, and test for conformance across multiple browsers and operating system configurations.</p>
-
-<p>Agencies are advised to consider the varied needs of their users and plan for accessibility from the outset. Where accessibility problems are known, agencies should put in place implementation plans to address the problem, then endeavour to minimise future risk by using standards-based web technologies and best practice content management processes.</p>
-
-<p>Further information at <a href="http://webguide.gov.au/accessibility-usability/accessibility/%20">http://webguide.gov.au/accessibility-usability/accessibility/</a> and <a href="http://www.w3.org/TR/WCAG20/">http://www.w3.org/TR/WCAG20/</a>.</p>
-</div>
+    <div class="container">
+        <div id="edit1" style="display:none;border:1px solid #000; padding:10px;"><p>&nbsp;</p></div>
+        <div class="clickToEdit" id="_edit1">Click to edit</div>
+    </div>
+    <div class="container">
+        <div id="edit2" style="display:none;border:1px solid #000; padding:10px;"><p>&nbsp;</p></div>
+        <div class="clickToEdit" id="_edit2">Click to edit</div>
+    </div>
 <div><h2>Accessibility Audit</h2></div>
 
 <p>The WCAG 2.0 guidelines are very technical by nature and can look daunting, so how do you know if your website really conforms to the guidelines? Well, Squiz has developed an Accessibility Audit package that will clearly identify all issues preventing your website from meeting the relevant A or AA standard. The Accessibility Audit package includes:</p>

@@ -935,10 +935,8 @@ ViperFormatPlugin.prototype = {
             ) {
                 return false;
             }
-        } else {
+        } else if (startNode) {
             if (ignoredTags.inArray(dfx.getTagName(dfx.getFirstBlockParent(startNode))) === true) {
-                return false;
-            } else if (ignoredTags.inArray(dfx.getTagName(dfx.getFirstBlockParent(nodeSelection))) === true) {
                 return false;
             }
         }
