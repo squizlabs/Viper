@@ -476,8 +476,12 @@ Viper.prototype = {
                 }
 
                 if (blockElement) {
-                    var tmpEl = document.createTextNode(' ');
-                    blockElement.appendChild(tmpEl);
+                    if (this.isBrowser('msie') !== true) {
+                        dfx.setHtml(blockElement, '<br />');
+                    } else {
+                        blockElement.appendChild(document.createTextNode(' '));
+                    }
+
                     editableChild = range._getFirstSelectableChild(this.element);
                 } else {
                     var tmpEl = document.createElement('p');
