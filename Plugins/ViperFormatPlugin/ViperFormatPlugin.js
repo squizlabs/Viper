@@ -832,6 +832,15 @@ ViperFormatPlugin.prototype = {
                                 }
                             }
                         }
+                    } else if (startBlock === self.viper.getViperElement()
+                        && self.viper.getViperElement() === dfx.getFirstBlockParent(endNode)
+                    ) {
+                        // Top level text selection. Allow all formats.
+                        tools.enableButton('formats');
+
+                        for (var tag in formatButtons) {
+                            tools.setButtonInactive(prefix + 'formats:' + formatButtons[tag]);
+                        }
                     } else {
                         // Text accross multiple block elements is selected.
                         // Only Div is allowed unless selection consists of only P tags
