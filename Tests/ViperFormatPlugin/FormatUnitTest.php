@@ -96,7 +96,7 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractFormatsUnitTe
         $this->clickTopToolbarButton('P', NULL, TRUE);
         $this->checkStatusOfFormatIconsInTheTopToolbar('active', NULL, NULL, NULL);
         $this->assertHTMLMatch('<h1>Heading One</h1><p>%1% xtn dolor</p><p>sit %2% <strong>%3%</strong></p>');
-        
+
         $this->clickTopToolbarButton('Quote', NULL, TRUE);
         $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, NULL, 'active', NULL);
         $this->assertHTMLMatch('<h1>Heading One</h1><blockquote><p>%1% xtn dolor</p></blockquote><p>sit %2% <strong>%3%</strong></p>');
@@ -104,11 +104,11 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractFormatsUnitTe
         $this->clickTopToolbarButton('DIV', NULL, TRUE);
         $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, 'active', NULL, NULL);
         $this->assertHTMLMatch('<h1>Heading One</h1><div>%1% xtn dolor</div><p>sit %2% <strong>%3%</strong></p>');
-        
+
         $this->clickTopToolbarButton('PRE', NULL, TRUE);
         $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, NULL, NULL, 'active');
         $this->assertHTMLMatch('<h1>Heading One</h1><pre>%1% xtn dolor</pre><p>sit %2% <strong>%3%</strong></p>');
-        
+
     }//end testSwitchingBetweenFormatsUsingTheTopToolbar()
 
 
@@ -130,8 +130,7 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractFormatsUnitTe
 
         // Check that formats doesn't appear in the top toolbar but headings, class and anchor do
         $this->assertTrue($this->topToolbarButtonExists('headings'), 'Heading icon should appear in the top toolbar');
-        $this->assertTrue($this->topToolbarButtonExists('formats', 'disabled'), 'Formats icon should be disabled in the top toolbar');
-        $this->assertFalse($this->topToolbarButtonExists('formats-p', 'active'), 'Active P icon should not appear in the top toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('formats-p', 'disabled'), 'Formats P icon should be disabled in the top toolbar');
         $this->assertTrue($this->topToolbarButtonExists('cssClass'), 'Class icon should appear in the top toolbar');
         $this->assertTrue($this->topToolbarButtonExists('anchorID'), 'Anchor icon should appear in the top toolbar');
 
@@ -735,7 +734,7 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractFormatsUnitTe
         $this->checkStatusOfFormatIconsInTheInlineToolbar('disabled', NULL, 'disabled', 'disabled');
 
         // Test applying Div around the two sections
-        $this->clickTopToolbarButton('DIV', NULL, TRUE);
+        $this->clickInlineToolbarButton('DIV', NULL, TRUE);
         $this->assertHTMLMatch('<h1>Heading One</h1><div><blockquote><p>%1% xtn dolor</p></blockquote><div>sit %2% <strong>%3%</strong></div></div>');
         $this->checkStatusOfFormatIconsInTheInlineToolbar('disabled', 'active', 'disabled', 'disabled');
         $this->clickInlineToolbarButton('DIV', 'active', TRUE);
@@ -1066,7 +1065,7 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractFormatsUnitTe
 
         // Check status of icons
         $this->selectKeyword(1, 3);
-        $this->clickTopToolbarButton('formats');
+        $this->clickInlineToolbarButton('formats');
         $this->checkStatusOfFormatIconsInTheInlineToolbar('disabled', NULL, 'disabled', 'disabled');
 
         // Test applying Div around the two sections
