@@ -1894,6 +1894,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         switch (self::$_browser) {
             case 'Safari':
             case 'Google Chrome':
+            case 'Firefox':
                 if ($os === 'osx') {
                     $keys = 'Key.CTRL + Key.ALT';
                 } else {
@@ -2117,7 +2118,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         $this->setLocation(
             $startLeft,
             ($this->getX($startLeft) + 2),
-            $this->getY($startLeft)
+            ($this->getY($startLeft) + 2)
         );
 
         $this->setLocation(
