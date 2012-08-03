@@ -65,7 +65,7 @@ class Viper_Tests_ViperFormatPlugin_ParagraphUnitTest extends AbstractFormatsUni
         // Test selecting a word in a div to change to a paragraph
         $this->click($this->findKeyword(2));
         $this->selectKeyword(4);
-        $this->assertTrue($this->topToolbarButtonExists('formats', 'active'), 'Active toogle formats icoun should appear in the top toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('formats-div'), 'Active toogle formats icoun should appear in the top toolbar');
 
         // Select all content in the div and change to a paragraph
         $this->selectInlineToolbarLineageItem(0);
@@ -78,7 +78,7 @@ class Viper_Tests_ViperFormatPlugin_ParagraphUnitTest extends AbstractFormatsUni
 
         // Check the state of the format icon after we have changed to a paragraph
         $this->selectKeyword(4);
-        $this->assertTrue($this->topToolbarButtonExists('formats', 'disabled'), 'Formats icon should disabled in the top toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('formats-p', 'disabled'), 'Formats icon should disabled in the top toolbar');
 
         $this->selectInlineToolbarLineageItem(0);
         $this->assertTrue($this->topToolbarButtonExists('formats-p', 'active'), 'Active toogle formats icon should be active in the top toolbar');
@@ -157,7 +157,7 @@ class Viper_Tests_ViperFormatPlugin_ParagraphUnitTest extends AbstractFormatsUni
         $this->selectKeyword(2);
         $this->assertFalse($this->inlineToolbarButtonExists('formats'), 'Formats icon should not appear in the inline toolbar');
         $this->assertFalse($this->inlineToolbarButtonExists('formats-p', 'active'), 'Active P icon should not appear in the inline toolbar');
-        $this->assertTrue($this->topToolbarButtonExists('formats', 'disabled'), 'Disabled formats icon should appear in the top toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('formats-p', 'disabled'), 'Disabled formats icon should appear in the top toolbar');
 
     }//end testPartialSelectionOfParagraph()
 
@@ -188,7 +188,7 @@ class Viper_Tests_ViperFormatPlugin_ParagraphUnitTest extends AbstractFormatsUni
         $this->clickInlineToolbarButton('formats-p', 'active');
         $this->clickInlineToolbarButton('P', 'active', TRUE);
         $this->assertHTMLMatch('<p>%1% xtn %2%</p> %3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae. %4% paragraph to change to a p');
-        $this->checkStatusOfFormatIconsInTheInlineToolbar( );
+        $this->checkStatusOfFormatIconsInTheInlineToolbar();
 
         $this->clickInlineToolbarButton('P', NULL, TRUE);
         $this->assertHTMLMatch('<p>%1% xtn %2%</p><p>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p> %4% paragraph to change to a p');
