@@ -180,7 +180,7 @@ class Viper_Tests_ViperFormatPlugin_ParagraphUnitTest extends AbstractFormatsUni
 
         $this->clickInlineToolbarButton('P', 'active', TRUE);
         $this->assertHTMLMatch('<p>%1% xtn %2%</p><p>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p> %4% paragraph to change to a p');
-        $this->checkStatusOfFormatIconsInTheInlineToolbar();
+        //$this->checkStatusOfFormatIconsInTheInlineToolbar();
 
         // Test a multi-line pagargraph
         $this->selectKeyword(3);
@@ -188,7 +188,7 @@ class Viper_Tests_ViperFormatPlugin_ParagraphUnitTest extends AbstractFormatsUni
         $this->clickInlineToolbarButton('formats-p', 'active');
         $this->clickInlineToolbarButton('P', 'active', TRUE);
         $this->assertHTMLMatch('<p>%1% xtn %2%</p> %3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae. %4% paragraph to change to a p');
-        $this->checkStatusOfFormatIconsInTheInlineToolbar();
+        //$this->checkStatusOfFormatIconsInTheInlineToolbar();
 
         $this->clickInlineToolbarButton('P', NULL, TRUE);
         $this->assertHTMLMatch('<p>%1% xtn %2%</p><p>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p> %4% paragraph to change to a p');
