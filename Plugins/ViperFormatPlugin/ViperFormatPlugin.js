@@ -1403,13 +1403,21 @@ ViperFormatPlugin.prototype = {
      */
     handleFormat: function(type)
     {
-        var range         = this.viper.getViperRange();
-        var selectedNode  = range.getNodeSelection();
-        var nodeSelection = selectedNode;
-        var viperElement  = this.viper.getViperElement();
+        var lineage         = this._inlineToolbar.getLineage();
+        var range           = this.viper.getViperRange();
+        var selectedNode    = selectedNode || range.getNodeSelection();
+        var nodeSelection   = selectedNode;
+        var viperElement    = this.viper.getViperElement();
 
         if (selectedNode === viperElement) {
             selectedNode = null;
+        } else if (dfx.isBlockElement(selectedNode) === false) {
+            // Not a block element selection, check if its being wrapped with
+            // block elements e.g. <p><strong>text</strong></p>.
+            var surroundingBlockElems = dfx.getSurroundingParents(selectedNode, null, true);
+            if (surroundingBlockElems.length > 0) {
+                selectedNode = surroundingBlockElems[0];
+            }
         }
 
         if (selectedNode
