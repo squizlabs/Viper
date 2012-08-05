@@ -186,6 +186,22 @@ function gBRec(selector, index)
 
 }
 
+function gVITPArrow()
+{
+    var toolbar = viperTest.getWindow().viper.getPluginManager().getPlugin('ViperInlineToolbarPlugin').getToolbar().element;
+    var rect    = viperTest.getWindow().dfx.getBoundingRectangle(toolbar);
+
+    var arrow = {
+        x1: (((rect.x2 - rect.x1) / 2) - 10),
+        x2: (((rect.x2 - rect.x1) / 2) + 10),
+        y1: (rect.y1 - 10),
+        y2: rect.y1
+    }
+
+    return arrow;
+
+}
+
 function gTagCounts(tagNames)
 {
     tagNames = tagNames || '*';

@@ -1443,7 +1443,18 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      */
     protected function getInlineToolbar()
     {
-        $match = $this->find($this->getBrowserImagePath().'/vitp_arrow.png', self::$_window, 0.85);
+        $match = null;
+        try {
+            $match = $this->find($this->getBrowserImagePath().'/vitp_arrow.png', self::$_window, 0.85);
+        } catch (Exception $e) {
+            // Get it using JS.
+            $elemRect = $this->execJS('gVITPArrow()');
+            $match    = $this->getRegionOnPage($elemRect);
+            if ($match === NULL) {
+                throw new Exception('Could not find Inline Toolbar');
+            }
+        }
+
         $this->setX($match, ($this->getX($match) - 200));
         $this->setW($match, ($this->getW($match) + 400));
         $this->setH($match, ($this->getH($match) + 200));
