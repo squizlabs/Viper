@@ -50,6 +50,10 @@ function gText()
         selection = viperTest.getWindow().viper.getViperRange().toString();
     }
 
+    // Remove extra spaces from the end of the string (Chrome likes to add new line
+    // character for block element selections).
+    selection = viperTest.getWindow().dfx.rtrim(selection);
+
     return selection;
 
 }
