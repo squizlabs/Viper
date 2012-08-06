@@ -671,7 +671,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->assertEquals($this->replaceKeywords('%1% %2% %3%'), $this->getSelectedText(), 'Original selection is not selected');
 
         $this->clickTopToolbarButton('cssClass', 'selected');
-        $this->assertEquals($this->replaceKeywords('%1% %2% %3%\n'), $this->getSelectedText(), 'Original selection is not selected');
+        $this->assertEquals($this->replaceKeywords('%1% %2% %3%'), $this->getSelectedText(), 'Original selection is not selected');
 
         $this->clickTopToolbarButton('cssClass');
         $this->assertEquals($this->replaceKeywords('%1% %2% %3%'), $this->getSelectedText(), 'Original selection is not selected');
