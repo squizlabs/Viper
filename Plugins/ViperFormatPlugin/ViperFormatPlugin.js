@@ -780,6 +780,18 @@ ViperFormatPlugin.prototype = {
                                 }
                             }
                         }
+                    } else if (parentTagName === 'div') {
+                        // Its a stub or an inline element and parent is DIV, enable
+                        // only the DIV button.
+                        for (var tag in formatButtons) {
+                            tools.setButtonInactive(prefix + 'formats:' + formatButtons[tag]);
+                            if (tag === 'div') {
+                                tools.enableButton('formats');
+                                tools.enableButton(prefix + 'formats:' + formatButtons[tag]);
+                            } else {
+                                tools.disableButton(prefix + 'formats:' + formatButtons[tag]);
+                            }
+                        }
                     }
                 } else {
                     // Its a text selection.
