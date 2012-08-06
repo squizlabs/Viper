@@ -771,22 +771,20 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
 
 
     /**
-     * Tests that right arrow moves caret out of table.
+     * Tests that down arrow moves caret out of table.
      *
      * @return void
      */
-    public function testTableNavEndFromFooter()
+    public function testTableNavigatingOutOfTable()
     {
         $this->insertTable(1);
-        $this->clickCell(10);
-        $this->keyDown('Key.RIGHT');
-        $this->keyDown('Key.RIGHT');
-        usleep(100);
-        $this->keyDown('test');
+        $this->clickCell(11);
+        $this->keyDown('Key.DOWN');
+        $this->type('test');
 
-        $this->assetTableWithoutHeaders('<p>Test XAX</p><table border="1" style="width: 100%;"><tbody><tr><th></th><th></th><th></th><th></th></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table>tes<p></p>');
+        $this->assetTableWithoutHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><tbody><tr><th></th><th></th><th></th><th></th></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p>&nbsp;test</p>');
 
-    }//end testTableNavFooter()
+    }//end testTableNavigatingOutOfTable()
 
 
     /**
