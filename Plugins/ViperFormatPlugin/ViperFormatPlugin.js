@@ -1015,6 +1015,15 @@ ViperFormatPlugin.prototype = {
         var range = this.viper.getViperRange();
         var selectedNode = range.getNodeSelection();
         if (selectedNode) {
+            if (selectedNode.nodeType === dfx.TEXT_NODE) {
+                var span = document.createElement('span');
+                dfx.insertBefore(selectedNode, span);
+                span.appendChild(selectedNode);
+                selectedNode = span;
+                range.selectNode(span);
+                ViperSelection.addRange(range);
+            }
+
             this.viper.setAttribute(selectedNode, attr, value);
             this.viper.fireSelectionChanged(null, true);
             this.viper.fireNodesChanged();
