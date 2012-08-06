@@ -192,8 +192,8 @@ function gVITPArrow()
     var rect    = viperTest.getWindow().dfx.getBoundingRectangle(toolbar);
 
     var arrow = {
-        x1: (((rect.x2 - rect.x1) / 2) - 10),
-        x2: (((rect.x2 - rect.x1) / 2) + 10),
+        x1: rect.x1 + (((rect.x2 - rect.x1) / 2) - 10),
+        x2: rect.x1 + (((rect.x2 - rect.x1) / 2) + 10),
         y1: (rect.y1 - 10),
         y2: rect.y1
     }
