@@ -1,0 +1,1 @@
+define("ace/theme/viper",["require","exports","module"],function(a,b,c){b.isDark=!0,b.cssClass="ace-viper",b.cssText="";var d=a("../lib/dom");d.importCssString(b.cssText,b.cssClass)}),function(){window.require(["ace/ace"],function(a){window.ace||(window.ace={});for(var b in a)a.hasOwnProperty(b)&&(ace[b]=a[b])})}()
