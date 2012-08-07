@@ -300,7 +300,7 @@ ViperSourceViewPlugin.prototype = {
 
     applyEditorSettings: function(editor)
     {
-        editor.setTheme("ace/theme/viper");
+        editor.setTheme("ace/theme/twilight");
         var HTMLMode = require("ace/mode/html").Mode;
         editor.getSession().setMode(new HTMLMode());
 
@@ -378,8 +378,9 @@ ViperSourceViewPlugin.prototype = {
         });
 
         var popup = self.viper.ViperTools.getItem('VSVP:popup');
+
         // If the ESC key is pressed close the popup.
-        editor.getKeyboardHandler().addKeyboardHandler({
+        editor.setKeyboardHandler({
             handleKeyboard: function(data, hashId, keyString) {
                 if (keyString === 'esc') {
                     self.viper.ViperTools.closePopup('VSVP:popup');
