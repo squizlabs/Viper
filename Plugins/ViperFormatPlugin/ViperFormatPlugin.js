@@ -648,10 +648,11 @@ ViperFormatPlugin.prototype = {
             tools.setButtonInactive('headings');
             tools.setButtonInactive('formats');
 
+            var viperElement    = self.viper.getViperElement();
             var lineage         = self._inlineToolbar.getLineage();
             var currentLinIndex = self._inlineToolbar.getCurrentLineageIndex(true);
             var formatElement   = lineage[currentLinIndex];
-            if (formatElement) {
+            if (formatElement && formatElement.nodeType !== dfx.TEXT_NODE) {
                 nodeSelection = formatElement;
             }
 
@@ -749,7 +750,7 @@ ViperFormatPlugin.prototype = {
                         parentTagName = 'blockquote';
                     }
 
-                    if (formatButtons[parentTagName]) {
+                    if (formatButtons[parentTagName] && nodeSelection !== viperElement) {
                         tools.getItem('formats').setIconClass('Viper-formats-' + parentTagName);
                     }
 
@@ -772,9 +773,13 @@ ViperFormatPlugin.prototype = {
                                 }
 
                                 if (tag === parentTagName) {
-                                    tools.setButtonActive(prefix + 'formats:' + formatButtons[tag]);
                                     tools.enableButton('formats');
-                                    tools.setButtonActive('formats');
+                                    if (nodeSelection !== viperElement) {
+                                        tools.setButtonActive(prefix + 'formats:' + formatButtons[tag]);
+                                        tools.setButtonActive('formats');
+                                    } else {
+                                        tools.setButtonInactive(prefix + 'formats:' + formatButtons[tag]);
+                                    }
                                 } else {
                                     tools.setButtonInactive(prefix + 'formats:' + formatButtons[tag]);
                                 }
@@ -798,6 +803,7 @@ ViperFormatPlugin.prototype = {
                     var startBlock    = dfx.getFirstBlockParent(startNode);
                     var commonParent  = self.getCommonFormatElement(data.range);
                     var commonTagName = dfx.getTagName(commonParent);
+
                     if (commonParent && formatButtons[commonTagName]) {
                         if (commonTagName === 'p' && dfx.isTag(commonParent.parentNode, 'blockquote') === true) {
                             tools.getItem('formats').setIconClass('Viper-formats-blockquote');
@@ -815,7 +821,7 @@ ViperFormatPlugin.prototype = {
                             // Text inside multiple block elements is selected.
                             tools.enableButton('formats');
 
-                            var formatButtonStatuses = self.getFormatButtonStatuses(parent);
+                            var formatButtonStatuses = self.getFormatButtonStatuses(commonParent);
                             for (var tag in formatButtons) {
                                 if (formatButtonStatuses[tag] === true) {
                                     tools.enableButton(prefix + 'formats:' + formatButtons[tag]);
@@ -824,7 +830,7 @@ ViperFormatPlugin.prototype = {
                                 }
 
                                 if (tag === commonTagName) {
-                                    if (tag !== 'div') {
+                                    if (tag !== 'div' || commonParent !== viperElement) {
                                         tools.setButtonActive(prefix + 'formats:' + formatButtons[tag]);
                                     }
 
@@ -838,8 +844,9 @@ ViperFormatPlugin.prototype = {
                             // Text inside a single block element is selected.
                             if (commonTagName === 'div') {
                                 // Div tag allows nested tags inside it. Set all
-                                // buttons to inactive.
+                                // buttons to inactive and enable them.
                                 for (var tag in formatButtons) {
+                                    tools.enableButton(prefix + 'formats:' + formatButtons[tag]);
                                     tools.setButtonInactive(prefix + 'formats:' + formatButtons[tag]);
                                 }
                             }
@@ -1246,6 +1253,22 @@ ViperFormatPlugin.prototype = {
                 _none: false,
                 _canChange: true
             };
+
+            var parasOnly = true;
+            for (var node = selectedNode.firstChild; node; node = node.nextSibling) {
+                if (dfx.isBlockElement(node) === true) {
+                    if (dfx.isTag(node, 'p') !== true) {
+                        parasOnly = false;
+                        break;
+                    }
+                }
+            }
+
+            if (parasOnly === false) {
+                statuses.p = false;
+                statuses.pre = false;
+                statuses.blockquote = false;
+            }
 
             return statuses;
         }
