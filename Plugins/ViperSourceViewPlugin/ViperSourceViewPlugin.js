@@ -410,7 +410,7 @@ ViperSourceViewPlugin.prototype = {
 
             var acePath =  path + '/Plugins/ViperSourceViewPlugin/Ace';
             scripts.push(acePath + '/src/ace.js');
-            scripts.push(acePath + '/src/theme-viper.js');
+            scripts.push(acePath + '/src/theme-twilight.js');
             scripts.push(acePath + '/src/mode-html.js');
 
             // Include JSBeautifier.
