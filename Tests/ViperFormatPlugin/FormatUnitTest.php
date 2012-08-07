@@ -1209,6 +1209,116 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractFormatsUnitTe
     }//end testApplyingFormatsAroundTwoPreTagsUsingTopToolbar()
 
 
+    /**
+     * Test applying different formats to different HTML structures.
+     *
+     * @return void
+     */
+    public function testComlexHTMLStructureConversion()
+    {
+        $this->useTest(1);
+        $this->selectKeyword(1, 2);
+        $this->clickTopToolbarButton('formats');
+        $this->checkStatusOfFormatIconsInTheTopToolbar('disabled', NULL, 'disabled', 'disabled');
+        $this->clickTopToolbarButton('DIV', NULL, TRUE);
+        $this->assertHTMLMatch('<div><blockquote><p>lorem %1%</p></blockquote><div><p>Test %2%</p></div></div>');
+        $this->checkStatusOfFormatIconsInTheTopToolbar('disabled', 'active', 'disabled', 'disabled');
+        $this->clickTopToolbarButton('DIV', 'active', TRUE);
+        $this->assertHTMLMatch('<blockquote><p>lorem %1%</p></blockquote><div><p>Test %2%</p></div>');
+
+        $this->useTest(2);
+        $this->selectKeyword(1, 2);
+        $this->clickTopToolbarButton('formats');
+        $this->checkStatusOfFormatIconsInTheTopToolbar('disabled', NULL, 'disabled', 'disabled');
+        $this->clickTopToolbarButton('DIV', NULL, TRUE);
+        $this->assertHTMLMatch('<div><div><p>%1% lorem</p></div><p>Test %2%</p></div>');
+        $this->checkStatusOfFormatIconsInTheTopToolbar('disabled', 'active', 'disabled', 'disabled');
+        $this->clickTopToolbarButton('DIV', 'active', TRUE);
+        $this->assertHTMLMatch('<div><p>%1% lorem</p></div><p>Test %2%</p>');
+        $this->checkStatusOfFormatIconsInTheTopToolbar('disabled', NULL, 'disabled', 'disabled');
+
+        $this->useTest(3);
+        $this->selectKeyword(1, 2);
+        $this->clickTopToolbarButton('formats');
+        $this->checkStatusOfFormatIconsInTheTopToolbar('disabled', NULL, 'disabled', 'disabled');
+        $this->clickTopToolbarButton('DIV', NULL, TRUE);
+        $this->assertHTMLMatch('<div><div><p>lorem %1%</p></div><p>Test %2%</p></div>');
+        $this->checkStatusOfFormatIconsInTheTopToolbar('disabled', 'active', 'disabled', 'disabled');
+        $this->clickTopToolbarButton('DIV', 'active', TRUE);
+        $this->assertHTMLMatch('<div><p>lorem %1%</p></div><p>Test %2%</p>');
+
+        $this->useTest(4);
+        $html = '<div><div><blockquote><p>%1% lorem</p></blockquote></div></div><div>Test %2%</div>';
+        $this->selectKeyword(1, 2);
+        $this->clickTopToolbarButton('formats');
+        $this->checkStatusOfFormatIconsInTheTopToolbar('disabled', NULL, 'disabled', 'disabled');
+        $this->clickTopToolbarButton('DIV', NULL, TRUE);
+        $this->assertHTMLMatch('<div>'.$html.'</div>');
+        $this->checkStatusOfFormatIconsInTheTopToolbar('disabled', 'active', 'disabled', 'disabled');
+        $this->clickTopToolbarButton('DIV', 'active', TRUE);
+        $this->checkStatusOfFormatIconsInTheTopToolbar('disabled', NULL, 'disabled', 'disabled');
+        $this->assertHTMLMatch($html);
+
+        $this->useTest(5);
+        $html = '<div><div><blockquote><p>lorem %1%</p></blockquote></div></div><div><p>%2% Test</p></div>';
+        $this->selectKeyword(1, 2);
+        $this->clickTopToolbarButton('formats');
+        $this->checkStatusOfFormatIconsInTheTopToolbar('disabled', NULL, 'disabled', 'disabled');
+        $this->clickTopToolbarButton('DIV', NULL, TRUE);
+        $this->assertHTMLMatch('<div>'.$html.'</div>');
+        $this->checkStatusOfFormatIconsInTheTopToolbar('disabled', 'active', 'disabled', 'disabled');
+        $this->clickTopToolbarButton('DIV', 'active', TRUE);
+        $this->checkStatusOfFormatIconsInTheTopToolbar('disabled', NULL, 'disabled', 'disabled');
+        $this->assertHTMLMatch($html);
+
+        $this->useTest(6);
+        $html = '<div><p>%1% lorem</p></div><div><div><p>%2% test</p></div></div>';
+        $this->selectKeyword(1, 2);
+        $this->clickTopToolbarButton('formats');
+        $this->checkStatusOfFormatIconsInTheTopToolbar('disabled', NULL, 'disabled', 'disabled');
+        $this->clickTopToolbarButton('DIV', NULL, TRUE);
+        $this->assertHTMLMatch('<div>'.$html.'</div>');
+        $this->checkStatusOfFormatIconsInTheTopToolbar('disabled', 'active', 'disabled', 'disabled');
+        $this->clickTopToolbarButton('DIV', 'active', TRUE);
+        $this->checkStatusOfFormatIconsInTheTopToolbar('disabled', NULL, 'disabled', 'disabled');
+        $this->assertHTMLMatch($html);
+
+        $this->useTest(7);
+        $this->selectKeyword(1, 2);
+        $this->clickTopToolbarButton('formats-div');
+        $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, NULL, NULL, NULL);
+        $this->clickTopToolbarButton('P', NULL, TRUE);
+        $this->assertHTMLMatch('<div><p>test test</p><p>%1% %2%</p><p>test test</p></div>');
+        $this->checkStatusOfFormatIconsInTheTopToolbar('active', NULL, NULL, NULL);
+        $this->clickTopToolbarButton('P', 'active', TRUE);
+        $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, NULL, NULL, NULL);
+        $this->assertHTMLMatch('<div><p>test test</p>%1% %2%<p>test test</p></div>');
+
+        $this->useTest(8);
+        $this->selectKeyword(1, 2);
+        $this->clickTopToolbarButton('formats-div');
+        $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, NULL, NULL, NULL);
+        $this->clickTopToolbarButton('P', NULL, TRUE);
+        $this->assertHTMLMatch('<div><p>test test</p><p>%1% %2%</p></div>');
+        $this->checkStatusOfFormatIconsInTheTopToolbar('active', NULL, NULL, NULL);
+        $this->clickTopToolbarButton('P', 'active', TRUE);
+        $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, NULL, NULL, NULL);
+        $this->assertHTMLMatch('<div><p>test test</p>%1% %2%</div>');
+
+        $this->useTest(9);
+        $this->selectKeyword(1, 2);
+        $this->clickTopToolbarButton('formats-div');
+        $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, NULL, NULL, NULL);
+        $this->clickTopToolbarButton('Quote', NULL, TRUE);
+        $this->assertHTMLMatch('<div><blockquote><p>%1% %2%</p></blockquote><p>test test</p></div>');
+        $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, NULL, 'active', NULL);
+        $this->clickTopToolbarButton('Quote', 'active', TRUE);
+        $this->checkStatusOfFormatIconsInTheTopToolbar('active', NULL, NULL, NULL);
+        $this->assertHTMLMatch('<div><p>%1% %2%</p><p>test test</p></div>');
+
+    }//end testComlexHTMLStructureConversion()
+
+
 }//end class
 
 ?>
