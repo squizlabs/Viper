@@ -32,6 +32,10 @@ body {
     padding: 5px 0;
 }
 
+#testTitle em {
+    color: #000;
+}
+
 #windowTarget {
     position: fixed;
     left: 0;
@@ -112,4 +116,8 @@ td,th {
 
 .Viper-button.Viper-active {
     text-align: left;
+}
+
+#content div[id^="test"] {
+    display: none;
 }

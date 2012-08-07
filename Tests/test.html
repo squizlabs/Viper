@@ -27,6 +27,18 @@
                         readyCallbacks[i].call(this);
                     }
                 }
+
+                // Check for test cases.
+                var testCases = dfx.find(contentElement, 'div[id^="test"]');
+                if (testCases.length > 0) {
+                    var testCasesHtml = [];
+                    for (var i = 0; i < testCases.length; i++) {
+                        testCasesHtml[testCases[i].id] = dfx.getHtml(testCases[i]);
+                    }
+
+                    viperTest.set('testCases', testCasesHtml);
+                    dfx.empty(contentElement);
+                }
             };
         </script>
     </head>
@@ -34,7 +46,7 @@
         <img id="windowTarget" src="./Core/Images/window-target.png" onclick="if (viper) viper.destroy();location.reload();" />
         <div id="content">__TEST_CONTENT__</div>
         <div id="menu">
-            <div id="testTitle"><em>Running:</em> __TEST_TITLE__</div>
+            <div id="testTitle"><em>Running:</em> __TEST_TITLE__<em id="testCaseTitle"></em></div>
             <div id="msg"></div>
         </div>
         <script>

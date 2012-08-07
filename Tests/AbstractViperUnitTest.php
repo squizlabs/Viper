@@ -1065,6 +1065,20 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
 
 
     /**
+     * Sets the content of the test page to the specified test case.
+     *
+     * @param string $id The ID of the test case.
+     *
+     * @return void
+     */
+    protected function useTest($id)
+    {
+        $this->execJS('useTest("test-'.$id.'")');
+
+    }//end useTest()
+
+
+    /**
      * Returns the location of the page relative to the screen.
      *
      * @return array

@@ -280,3 +280,19 @@ function rmTableHeaders(tblIndex, removeid)
     }
 
 }
+
+function useTest(id)
+{
+    var testCases = viperTest.get('testCases');
+    if (!testCases || !testCases[id]) {
+        return;
+    }
+
+    var win = viperTest.getWindow();
+    var contentElement = win.dfx.getId('content');
+    win.dfx.setHtml(contentElement, testCases[id]);
+
+    win.dfx.setHtml(win.dfx.getId('testCaseTitle'), '(Using Test #' + id + ')');
+
+
+}
