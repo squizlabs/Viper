@@ -256,7 +256,7 @@ class Viper_Tests_ViperFormatPlugin_QuoteUnitTest extends AbstractFormatsUnitTes
         $this->assertHTMLMatch('<blockquote><p>%1% xtn %2%</p></blockquote><div>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div><p>%4% is a paragraph to change to a quote</p>');
 
         // Make sure all icons are still enabled
-        $this->checkStatusOfFormatIconsInTheInlineToolbar();
+        $this->checkStatusOfFormatIconsInTheInlineToolbar('active');
 
     }//end testApplyingAndRemovingQuoteUsingInlineToolbar()
 
@@ -278,7 +278,7 @@ class Viper_Tests_ViperFormatPlugin_QuoteUnitTest extends AbstractFormatsUnitTes
         $this->assertHTMLMatch('<blockquote><p>%1% xtn %2%</p></blockquote><div>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div><p>%4% is a paragraph to change to a quote</p>');
 
         // Make sure all icons are still enabled
-        $this->checkStatusOfFormatIconsInTheTopToolbar();
+        $this->checkStatusOfFormatIconsInTheTopToolbar('active');
 
     }//end testApplyingAndRemovingQuoteUsingTopToolbar()
 
@@ -503,6 +503,96 @@ class Viper_Tests_ViperFormatPlugin_QuoteUnitTest extends AbstractFormatsUnitTes
         $this->assertHTMLMatch('<blockquote><p>%1% xtn %2%</p></blockquote><div>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div><p>%4% is a paragraph to change to a quote</p>');
 
     }//end testChangingAQuoteToAParagraphUsingTheTopToolbar()
+
+
+     /**
+     * Tests selecting the P element in a blockquote and trying to change it to a blockquote.
+     *
+     * @return void
+     */
+    public function testChangingThePElementInQuoteToAQuote()
+    {
+
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(1);
+        $this->clickInlineToolbarButton('formats-blockquote', 'active');
+        $this->clickInlineToolbarButton('Quote', 'active', TRUE);
+        $this->checkStatusOfFormatIconsInTheInlineToolbar('active', NULL, NULL, NULL);
+        $this->assertHTMLMatch('<p>%1% xtn %2%</p><div>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div><p>%4% is a paragraph to change to a quote</p>');
+
+        // Change it back so we can test the top toolbar
+        $this->clickInlineToolbarButton('Quote', NULL, TRUE);
+        $this->checkStatusOfFormatIconsInTheInlineToolbar(NULL, NULL, 'active', NULL);
+        $this->assertHTMLMatch('<blockquote><p>%1% xtn %2%</p></blockquote><div>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div><p>%4% is a paragraph to change to a quote</p>');
+
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(1);
+        $this->clickTopToolbarButton('formats-blockquote', 'active');
+        $this->clickTopToolbarButton('Quote', 'active', TRUE);
+        $this->checkStatusOfFormatIconsInTheTopToolbar('active', NULL, NULL, NULL);
+        $this->assertHTMLMatch('<p>%1% xtn %2%</p><div>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div><p>%4% is a paragraph to change to a quote</p>');
+
+    }//end testChangingThePElementInQuoteToAQuote()
+
+
+     /**
+     * Tests selecting the P element in a blockquote and changing it to a Div.
+     *
+     * @return void
+     */
+    public function testChangingThePElementInQuoteToADiv()
+    {
+
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(1);
+        $this->clickInlineToolbarButton('formats-blockquote', 'active');
+        $this->clickInlineToolbarButton('DIV', NULL, TRUE);
+        $this->checkStatusOfFormatIconsInTheInlineToolbar(NULL, 'active', NULL, NULL);
+        $this->assertHTMLMatch('<div>%1% xtn %2%</div><div>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div><p>%4% is a paragraph to change to a quote</p>');
+
+        // Change it back so we can test the top toolbar
+        $this->clickInlineToolbarButton('Quote', NULL, TRUE);
+        $this->checkStatusOfFormatIconsInTheInlineToolbar(NULL, NULL, 'active', NULL);
+        $this->assertHTMLMatch('<blockquote><p>%1% xtn %2%</p></blockquote><div>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div><p>%4% is a paragraph to change to a quote</p>');
+
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(1);
+        $this->clickTopToolbarButton('formats-blockquote', 'active');
+        $this->clickTopToolbarButton('DIV', NULL, TRUE);
+        $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, 'active', NULL, NULL);
+        $this->assertHTMLMatch('<div>%1% xtn %2%</div><div>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div><p>%4% is a paragraph to change to a quote</p>');
+
+    }//end testChangingThePElementInQuoteToADiv()
+
+
+     /**
+     * Tests selecting the P element in a blockquote and changing it to a Pre.
+     *
+     * @return void
+     */
+    public function testChangingThePElementInQuoteToAPre()
+    {
+
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(1);
+        $this->clickInlineToolbarButton('formats-blockquote', 'active');
+        $this->clickInlineToolbarButton('PRE', NULL, TRUE);
+        $this->checkStatusOfFormatIconsInTheInlineToolbar(NULL, NULL, NULL, 'active');
+        $this->assertHTMLMatch('<pre>%1% xtn %2%</pre><div>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div><p>%4% is a paragraph to change to a quote</p>');
+
+        // Change it back so we can test the top toolbar
+        $this->clickInlineToolbarButton('Quote', NULL, TRUE);
+        $this->checkStatusOfFormatIconsInTheInlineToolbar(NULL, NULL, 'active', NULL);
+        $this->assertHTMLMatch('<blockquote><p>%1% xtn %2%</p></blockquote><div>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div><p>%4% is a paragraph to change to a quote</p>');
+
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(1);
+        $this->clickTopToolbarButton('formats-blockquote', 'active');
+        $this->clickTopToolbarButton('PRE', NULL, TRUE);
+        $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, NULL, NULL, 'active');
+        $this->assertHTMLMatch('<pre>%1% xtn %2%</pre><div>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div><p>%4% is a paragraph to change to a quote</p>');
+
+    }//end testChangingThePElementInQuoteToAPre()
 
 
 }//end class
