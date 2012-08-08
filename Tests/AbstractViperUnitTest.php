@@ -280,23 +280,6 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         } else {
             $this->selectBrowser(self::$_browser);
 
-            /*// Check if the JSExec window is open. If it is close it.
-            $jsExecWindowCheck     = FALSE;
-            $maxJsExecWindowChecks = 2;
-            while ($jsExecWindowCheck === FALSE) {
-                if ($maxJsExecWindowChecks === 0) {
-                    break;
-                }
-
-                try {
-                    $target = $this->find(dirname(__FILE__).'/Core/Images/window-target2.png', -1);
-                    $this->click($target);
-                } catch (Exception $e) {
-                    $this->keyDown('Key.CMD + `');
-                    $maxJsExecWindowChecks--;
-                }
-            }*/
-
             $this->resizeWindow();
 
             $this->setSetting('MinSimilarity', self::$_similarity);
@@ -724,27 +707,13 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
 
         sleep(2);
         $this->_switchWindow('main');
-        sleep(1);
-
-        /*// Make sure page is loaded.
-        $maxRetries = 4;
-        while ($this->topToolbarButtonExists('italic') === FALSE) {
-            $this->reloadPage();
-            if ($maxRetries === 0) {
-                throw new Exception('Failed to load Viper test page.');
-            }
-
-            sleep(2);
-
-            $maxRetries--;
-        }*/
 
         // Create image for the inline toolbar pattern (the arrow on top).
         sleep(2);
         $this->selectText('PyP');
         sleep(1);
 
-        $vitp      = $this->execJS('viperTest.getWindow().getVITP()', TRUE);
+        $vitp      = $this->execJS('getVITP()', TRUE);
         $vitp['x'] = $this->getPageXRelativeToScreen($vitp['x']);
         $vitp['y'] = $this->getPageYRelativeToScreen($vitp['y']);
 
@@ -753,7 +722,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         copy($vitpImage, $imgPath.'/vitp_arrow.png');
 
         // Left arrow.
-        $vitp      = $this->execJS('viperTest.getWindow().getVITP("left")', TRUE);
+        $vitp      = $this->execJS('getVITP("left")', TRUE);
         $vitp['x'] = $this->getPageXRelativeToScreen($vitp['x']);
         $vitp['y'] = $this->getPageYRelativeToScreen($vitp['y']);
 
@@ -762,7 +731,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         copy($vitpImage, $imgPath.'/vitp_arrowLeft.png');
 
         // Right arrow.
-        $vitp      = $this->execJS('viperTest.getWindow().getVITP("right")', TRUE);
+        $vitp      = $this->execJS('getVITP("right")', TRUE);
         $vitp['x'] = $this->getPageXRelativeToScreen($vitp['x']);
         $vitp['y'] = $this->getPageYRelativeToScreen($vitp['y']);
 
@@ -770,26 +739,26 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         $vitpImage = $this->capture($region);
         copy($vitpImage, $imgPath.'/vitp_arrowRight.png');
 
-        // Remove all Viper elements.
-        $this->execJS('viperTest.getWindow().viper.destroy()', TRUE);
-
         // Create image for the text field actions.
-        $textFieldActionRevertRegion = $this->getRegionOnPage($this->execJS('viperTest.getWindow().dfx.getBoundingRectangle(viperTest.getWindow().dfx.getId("textboxActionRevert"))', TRUE));
+        $textFieldActionRevertRegion = $this->getRegionOnPage($this->execJS('dfx.getBoundingRectangle(window.opener.dfx.getId("textboxActionRevert"))', TRUE));
         $textFieldActionRevertImage  = $this->capture($textFieldActionRevertRegion);
         copy($textFieldActionRevertImage, $imgPath.'/textField_action_revert.png');
 
-        $textFieldActionClearRegion = $this->getRegionOnPage($this->execJS('viperTest.getWindow().dfx.getBoundingRectangle(viperTest.getWindow().dfx.getId("textboxActionClear"))', TRUE));
+        $textFieldActionClearRegion = $this->getRegionOnPage($this->execJS('dfx.getBoundingRectangle(window.opener.dfx.getId("textboxActionClear"))', TRUE));
         $textFieldActionClearImage  = $this->capture($textFieldActionClearRegion);
         copy($textFieldActionClearImage, $imgPath.'/textField_action_clear.png');
 
+        // Remove all Viper elements.
+        $this->execJS('viper.destroy()', TRUE);
+
         foreach ($statuses as $status => $className) {
-            $btnRects = $this->execJS('viperTest.getWindow().getCoords("'.$status.'", "'.$className.'")', TRUE);
+            $btnRects = $this->execJS('getCoords("'.$status.'", "'.$className.'")', TRUE);
             foreach ($btnRects as $buttonName => $rect) {
                 $this->_createButtonImageFromRectangle($buttonName, $rect);
             }
         }
 
-        $this->execJS('viperTest.getWindow().showAllBtns()', TRUE);
+        $this->execJS('showAllBtns()', TRUE);
 
         // Remove dupe icons.
         $dupeIcons = array(
