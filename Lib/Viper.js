@@ -1944,11 +1944,23 @@ Viper.prototype = {
                 ViperSelection.addRange(range);
 
                 return newElement;
+            } else if (startContainer.nodeType === dfx.TEXT_NODE
+                && viper.getViperElement().firstChild === startContainer
+                && dfx.trim(startContainer.data) === ''
+            ) {
+                startContainer = range._getFirstSelectableChild(viper.getViperElement());
             }
 
             var startBlockParent = dfx.getFirstBlockParent(startContainer);
             if (!endContainer) {
-                endContainer = startContainer;
+                if (range.endContainer === viper.getViperElement()
+                    && range.endContainer.childNodes
+                    && !range.endContainer.childNodes[range.endOffset]
+                ) {
+                    endContainer = range._getLastSelectableChild(viper.getViperElement());
+                } else {
+                    endContainer = startContainer;
+                }
             }
 
             var rangeContents  = range.getHTMLContentsObj();
@@ -2349,10 +2361,21 @@ Viper.prototype = {
 
     removeStyle: function(style)
     {
-        var range     = this.getViperRange();
-        range         = this.adjustRange(range);
-        var startNode = range.getStartNode();
-        var endNode   = range.getEndNode();
+        var range        = this.getViperRange();
+        range            = this.adjustRange(range);
+        var startNode    = range.getStartNode();
+        var endNode      = range.getEndNode();
+        var viperElement = this.getViperElement();
+
+        if (startNode.nodeType === dfx.TEXT_NODE
+            && dfx.trim(startNode.data) === ''
+            && startNode === viperElement.firstChild
+        ) {
+            // Firefox sets the first child to be a textNode with \n as its content
+            // if whole content is selected. Get the first selectable child.
+            startNode = range._getFirstSelectableChild(viperElement);
+        }
+
         if (!endNode) {
             endNode = startNode;
         }
@@ -2911,6 +2934,18 @@ Viper.prototype = {
 
             range.collapse(true);
             ViperSelection.addRange(range);
+        } else if (this.isBrowser('firefox') === true
+            && startContainer === endContainer
+            && startContainer === this.getViperElement()
+        ) {
+            var firstSelectable = range._getFirstSelectableChild(this.getViperElement());
+            var lastSelectable  = range._getLastSelectableChild(this.getViperElement());
+            if (firstSelectable && lastSelectable) {
+                startContainer = firstSelectable;
+                startOffset    = 0;
+                range.setStart(firstSelectable, 0);
+                range.setEnd(lastSelectable, lastSelectable.data.length);
+            }
         }
 
         // Collapse to the end of range.
@@ -2921,6 +2956,8 @@ Viper.prototype = {
         dfx.setHtml(endBookmark, '&nbsp;');
         dfx.addClass(endBookmark, 'viperBookmark viperBookmark_end');
         endBookmark.setAttribute('viperBookmark', 'end');
+
+        var startNode = range.getStartNode();
         range.insertNode(endBookmark);
         if (dfx.isChildOf(endBookmark, this.element) === false) {
             this.element.appendChild(endBookmark);
