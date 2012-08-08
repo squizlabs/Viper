@@ -1194,8 +1194,14 @@ ViperFormatPlugin.prototype = {
         var endBlock   = dfx.getFirstBlockParent(range.endContainer);
         var common     = range.getCommonElement();
         var elements   = dfx.getElementsBetween(startBlock, endBlock);
-        elements.push(startBlock);
-        elements.push(endBlock);
+
+        if (startBlock) {
+            elements.push(startBlock);
+        }
+
+        if (endBlock) {
+            elements.push(endBlock);
+        }
 
         for (var i = 0; i < elements.length; i++) {
             if (elements[i].nodeType === dfx.TEXT_NODE
