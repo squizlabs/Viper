@@ -1069,6 +1069,7 @@ ViperCoreStylesPlugin.prototype = {
         var selectedNode = range.getNodeSelection();
         var startNode    = null;
         var endNode      = null;
+        var viperElement = this.viper.getViperElement();
 
         if (!selectedNode) {
             var startNode = range.getStartNode();
@@ -1083,12 +1084,36 @@ ViperCoreStylesPlugin.prototype = {
 
         var commonParent = range.getCommonElement();
 
+        if (startNode === endNode
+            && ((startNode === viperElement)
+            || (startNode.nodeType === dfx.TEXT_NODE
+            && dfx.trim(startNode.data) === ''
+            && startNode === viperElement.firstChild))
+        ) {
+            // Whole content is selected.
+            startNode = range._getFirstSelectableChild(viperElement);
+            endNode   = range._getLastSelectableChild(viperElement);
+
+            if (dfx.getParents(startNode, style, viperElement).length > 0
+                && dfx.getParents(endNode, style, viperElement).length > 0
+            ) {
+                // Selection is inside the style tags. Remove styles.
+                var changeid = ViperChangeTracker.startBatchChange('removedFormat');
+                this.viper.removeStyle(style);
+                ViperChangeTracker.endBatchChange(changeid);
+
+                this.viper.fireNodesChanged();
+                this.viper.fireSelectionChanged(this.viper.adjustRange(), true);
+                return;
+            }
+        }
+
         if (dfx.isTag(commonParent, style) === true
             || dfx.isTag(startNode, style) === true
             || (dfx.getParents(startNode, style).length > 0
             && dfx.getParents(endNode, style).length > 0)
         ) {
-            // This selection is already bold, remove its styles.
+            // This selection is already styles, remove it.
             var changeid = ViperChangeTracker.startBatchChange('removedFormat');
             this.viper.removeStyle(style);
             ViperChangeTracker.endBatchChange(changeid);
@@ -1364,6 +1389,13 @@ ViperCoreStylesPlugin.prototype = {
         }
 
         if (startNode && endNode) {
+            var viperElement = this.viper.getViperElement();
+
+            if (startNode === endNode && startNode === viperElement) {
+                startNode = range._getFirstSelectableChild(viperElement);
+                endNode   = range._getLastSelectableChild(viperElement);
+            }
+
             // Justify state.
             activeStates.alignment = null;
 

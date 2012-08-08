@@ -463,8 +463,8 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
         $this->assertHTMLMatch('<p><strong>%1% %2% %3%</strong></p><p><strong>sit <em>%4%</em> %5%</strong></p>');
 
         $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon should be active');
-        $this->assertFalse($this->topToolbarButtonExists('class', 'active'), 'Class icon should not be active');
-        $this->assertFalse($this->topToolbarButtonExists('anchor', 'active'), 'Anchor icon should not be active');
+        $this->assertTrue($this->topToolbarButtonExists('cssClass', 'disabled'), 'Class icon should not be active');
+        $this->assertTrue($this->topToolbarButtonExists('anchorID', 'disabled'), 'Anchor icon should not be active');
 
         $this->click($this->findKeyword(2));
         $this->keyDown('Key.CMD + a');
@@ -472,8 +472,8 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
         $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit <em>%4%</em> %5%</p>');
 
         $this->assertTrue($this->topToolbarButtonExists('bold'), 'Bold icon should not be active');
-        $this->assertFalse($this->topToolbarButtonExists('class', 'active'), 'Class icon should not be active');
-        $this->assertFlase($this->topToolbarButtonExists('anchor', 'active'), 'Anchor icon should not be active');
+        $this->assertTrue($this->topToolbarButtonExists('cssClass', 'disabled'), 'Class icon should not be active');
+        $this->assertTrue($this->topToolbarButtonExists('anchorID', 'disabled'), 'Anchor icon should not be active');
 
     }//end testApplyingAndRemovingBoldToAllContent()
 
