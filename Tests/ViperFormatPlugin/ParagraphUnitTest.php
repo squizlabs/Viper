@@ -437,6 +437,42 @@ class Viper_Tests_ViperFormatPlugin_ParagraphUnitTest extends AbstractFormatsUni
     }//end testFormatIconWhenSwitchingBetweenParagraphAndWord()
 
 
+     /**
+     * Tests that the list icon is available for a paragraph.
+     *
+     * @return void
+     */
+    public function testListIconsAvailableForParagraph()
+    {
+
+        $this->click($this->findKeyword(1));
+        $this->assertTrue($this->topToolbarButtonExists('listOL'), 'Ordered list icon should be available in the top toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('listUL'), 'Unordered list icon should be available in the top toolbar');
+
+        $this->selectKeyword(1);
+        $this->assertTrue($this->topToolbarButtonExists('listOL'), 'Ordered list icon should be available in the top toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('listUL'), 'Unordered list icon should be available in the top toolbar');
+
+        $this->selectInlineToolbarLineageItem(0);
+        $this->assertTrue($this->topToolbarButtonExists('listOL'), 'Ordered list icon should be available in the top toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('listUL'), 'Unordered list icon should be available in the top toolbar');
+        $this->keyDown('Key.RIGHT');
+
+        $this->click($this->findKeyword(3));
+        $this->assertTrue($this->topToolbarButtonExists('listOL'), 'Ordered list icon should be available in the top toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('listUL'), 'Unordered list icon should be available in the top toolbar');
+
+        $this->selectKeyword(3);
+        $this->assertTrue($this->topToolbarButtonExists('listOL'), 'Ordered list icon should be available in the top toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('listUL'), 'Unordered list icon should be available in the top toolbar');
+
+        $this->selectInlineToolbarLineageItem(0);
+        $this->assertTrue($this->topToolbarButtonExists('listOL'), 'Ordered list icon should be available in the top toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('listUL'), 'Unordered list icon should be available in the top toolbar');
+
+    }//end testListIconsAvailableForParagraph()
+
+
 }//end class
 
 ?>

@@ -159,129 +159,150 @@ class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractViperUnitTe
     }//end testApplyingHeadingsToNewContent()
 
 
+//   /**
+//    * Test applying a heading to a P section.
+//    *
+//    * @return void
+//    */
+//   public function testApplyingAHeadingToPSection()
+//   {
+//       $this->click($this->findKeyword(4));
+//       $this->assertTrue($this->topToolbarButtonExists('headings'), 'Heading icon appears in the top toolbar');
+//
+//       $this->selectKeyword(4);
+//       $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'), 'Heading icon should be disabled in the top toolbar');
+//       $this->assertFalse($this->inlineToolbarButtonExists('headings'), 'Heading icon should be not appear in the inline toolbar');
+//
+//       $this->selectInlineToolbarLineageItem(0);
+//       $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'), 'Heading icon should be disabled in the top toolbar');
+//       $this->assertTrue($this->inlineToolbarButtonExists('headings'), 'Heading icon should be not appear in the inline toolbar');
+//
+//       $this->clickInlineToolbarButton('headings');
+//       $this->clickInlineToolbarButton('H3', NULL, TRUE);
+//
+//       $this->assertHTMLMatch('<h1>%1% %2%</h1><p>%3% xtn dolor</p><h3>sit amet <strong>%4%</strong></h3><p>%5% long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar.</p>');
+//
+//   }//end testApplyingAHeadingToPSection()
+
+
+//  /**
+//   * Test applying a heading to a Div section.
+//   *
+//   * @return void
+//   */
+//  public function testApplyingAHeadingToDivSection()
+//  {
+//      // Change P to a Div section
+//      $this->selectKeyword(4);
+//      $this->selectInlineToolbarLineageItem(0);
+//      $this->clickTopToolbarButton('formats-p', 'active');
+//      $this->clickTopToolbarButton('DIV', NULL, TRUE);
+//      $this->assertHTMLMatch('<h1>%1% %2%</h1><p>%3% xtn dolor</p><div>sit amet <strong>%4%</strong></div><p>%5% long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar.</p>');
+//
+//      $this->click($this->findKeyword(4));
+//      $this->assertTrue($this->topToolbarButtonExists('headings'), 'Heading icon appears in the top toolbar');
+//
+//      $this->selectKeyword(4);
+//      $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'), 'Heading icon should be disabled in the top toolbar');
+//      $this->assertFalse($this->inlineToolbarButtonExists('headings'), 'Heading icon should be not appear in the inline toolbar');
+//
+//      $this->selectInlineToolbarLineageItem(0);
+//      $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'), 'Heading icon should be disabled in the top toolbar');
+//      $this->assertTrue($this->inlineToolbarButtonExists('headings'), 'Heading icon should be not appear in the inline toolbar');
+//
+//      $this->clickInlineToolbarButton('headings');
+//      $this->clickInlineToolbarButton('H3', NULL, TRUE);
+//
+//      $this->assertHTMLMatch('<h1>%1% %2%</h1><p>%3% xtn dolor</p><h3>sit amet <strong>%4%</strong></h3><p>%5% long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar.</p>');
+//
+//  }//end testApplyingAHeadingToDivSection()
+
+
     /**
-     * Test applying a heading to a P section.
-     *
-     * @return void
-     */
-    public function testApplyingAHeadingToPSection()
-    {
-        $this->click($this->findKeyword(4));
-        $this->assertTrue($this->topToolbarButtonExists('headings'), 'Heading icon appears in the top toolbar');
-
-        $this->selectKeyword(4);
-        $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'), 'Heading icon should be disabled in the top toolbar');
-        $this->assertFalse($this->inlineToolbarButtonExists('headings'), 'Heading icon should be not appear in the inline toolbar');
-
-        $this->selectInlineToolbarLineageItem(0);
-        $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'), 'Heading icon should be disabled in the top toolbar');
-        $this->assertTrue($this->inlineToolbarButtonExists('headings'), 'Heading icon should be not appear in the inline toolbar');
-
-        $this->clickInlineToolbarButton('headings');
-        $this->clickInlineToolbarButton('H3', NULL, TRUE);
-
-        $this->assertHTMLMatch('<h1>%1% %2%</h1><p>%3% xtn dolor</p><h3>sit amet <strong>%4%</strong></h3><p>%5% long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar.</p>');
-
-    }//end testApplyingAHeadingToPSection()
-
-
-    /**
-     * Test applying a heading to a Div section.
-     *
-     * @return void
-     */
-    public function testApplyingAHeadingToDivSection()
-    {
-        // Change P to a Div section
-        $this->selectKeyword(4);
-        $this->selectInlineToolbarLineageItem(0);
-        $this->clickTopToolbarButton('formats-p', 'active');
-        $this->clickTopToolbarButton('DIV', NULL, TRUE);
-        $this->assertHTMLMatch('<h1>%1% %2%</h1><p>%3% xtn dolor</p><div>sit amet <strong>%4%</strong></div><p>%5% long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar.</p>');
-
-        $this->click($this->findKeyword(4));
-        $this->assertTrue($this->topToolbarButtonExists('headings'), 'Heading icon appears in the top toolbar');
-
-        $this->selectKeyword(4);
-        $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'), 'Heading icon should be disabled in the top toolbar');
-        $this->assertFalse($this->inlineToolbarButtonExists('headings'), 'Heading icon should be not appear in the inline toolbar');
-
-        $this->selectInlineToolbarLineageItem(0);
-        $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'), 'Heading icon should be disabled in the top toolbar');
-        $this->assertTrue($this->inlineToolbarButtonExists('headings'), 'Heading icon should be not appear in the inline toolbar');
-
-        $this->clickInlineToolbarButton('headings');
-        $this->clickInlineToolbarButton('H3', NULL, TRUE);
-
-        $this->assertHTMLMatch('<h1>%1% %2%</h1><p>%3% xtn dolor</p><h3>sit amet <strong>%4%</strong></h3><p>%5% long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar.</p>');
-
-    }//end testApplyingAHeadingToDivSection()
-
-
-    /**
-     * Test applying a heading to a Quote section.
+     * Test applying a heading to different types of Quote sections.
      *
      * @return void
      */
     public function testApplyingAHeadingToQuoteSection()
     {
-        // Change P to a Quote section
-        $this->selectKeyword(4);
-        $this->selectInlineToolbarLineageItem(0);
-        $this->clickTopToolbarButton('formats-p', 'active');
-        $this->clickTopToolbarButton('Quote', NULL, TRUE);
-        $this->assertHTMLMatch('<h1>%1% %2%</h1><p>%3% xtn dolor</p><blockquote><p>sit amet <strong>%4%</strong></p></blockquote><p>%5% long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar.</p>');
-
-        $this->click($this->findKeyword(4));
+        // Check single line quote
+        $this->click($this->findKeyword(1));
         $this->assertTrue($this->topToolbarButtonExists('headings'), 'Heading icon appears in the top toolbar');
 
-        $this->selectKeyword(4);
+        $this->selectKeyword(1);
+        $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'), 'Heading icon should be disabled in the top toolbar');
+        $this->assertFalse($this->inlineToolbarButtonExists('headings'), 'Heading icon should be not appear in the inline toolbar');
+
+       /* $this->selectInlineToolbarLineageItem(0);
+        $this->assertTrue($this->topToolbarButtonExists('headings'), 'Heading icon should be disabled in the top toolbar');
+        $this->assertTrue($this->inlineToolbarButtonExists('headings'), 'Heading icon should be not appear in the inline toolbar');
+
+        $this->clickInlineToolbarButton('headings');
+        $this->clickInlineToolbarButton('H1', NULL, TRUE);
+        $this->assertHTMLMatch('<h1>sit amet <strong>%1%</strong></h1><blockquote><p>%2% long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar.</p></blockquote><blockquote><p>sit amet %3%</p><p>%4% long paragraph for testing that the heading icon work for multiline paragraphs in quotes.</p></blockquote>');
+
+        // Check multi-line quote
+        $this->click($this->findKeyword(2));
+        $this->assertTrue($this->topToolbarButtonExists('headings'), 'Heading icon appears in the top toolbar');
+
+        $this->selectKeyword(2);
+        $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'), 'Heading icon should be disabled in the top toolbar');
+        $this->assertFalse($this->inlineToolbarButtonExists('headings'), 'Heading icon should be not appear in the inline toolbar');
+
+        $this->selectInlineToolbarLineageItem(0);
+        $this->assertTrue($this->topToolbarButtonExists('headings'), 'Heading icon should be appear in the top toolbar');
+        $this->assertTrue($this->inlineToolbarButtonExists('headings'), 'Heading icon should be not appear in the inline toolbar');
+
+        $this->clickInlineToolbarButton('headings');
+        $this->clickInlineToolbarButton('H1', NULL, TRUE);
+        $this->assertHTMLMatch('<h1>sit amet <strong>%1%</strong></h1><h1>%2% long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar.</h1><blockquote><p>sit amet %3%</p><p>%4% long paragraph for testing that the heading icon work for multiline paragraphs in quotes.</p></blockquote>');
+
+        // Check quote section with multi P's
+        $this->click($this->findKeyword(3));
+        $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'), 'Heading icon should be disabled in the top toolbar');
+
+        $this->selectKeyword(3);
         $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'), 'Heading icon should be disabled in the top toolbar');
         $this->assertFalse($this->inlineToolbarButtonExists('headings'), 'Heading icon should be not appear in the inline toolbar');
 
         $this->selectInlineToolbarLineageItem(0);
         $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'), 'Heading icon should be disabled in the top toolbar');
-        $this->assertTrue($this->inlineToolbarButtonExists('headings'), 'Heading icon should be not appear in the inline toolbar');
-
-        $this->clickInlineToolbarButton('headings');
-        $this->clickInlineToolbarButton('H3', NULL, TRUE);
-
-        $this->assertHTMLMatch('<h1>%1% %2%</h1><p>%3% xtn dolor</p><h3>sit amet <strong>%4%</strong></h3><p>%5% long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar.</p>');
+        $this->assertFalse($this->inlineToolbarButtonExists('headings'), 'Heading icon should be not appear in the inline toolbar');*/
 
     }//end testApplyingAHeadingToQuoteSection()
 
 
-    /**
-     * Test applying a heading to a Pre section.
-     *
-     * @return void
-     */
-    public function testApplyingAHeadingToPreSection()
-    {
-        // Change P to a Pre section
-        $this->selectKeyword(4);
-        $this->selectInlineToolbarLineageItem(0);
-        $this->clickTopToolbarButton('formats-p', 'active');
-        $this->clickTopToolbarButton('Pre', NULL, TRUE);
-        $this->assertHTMLMatch('<h1>%1% %2%</h1><p>%3% xtn dolor</p><pre>sit amet <strong>%4%</strong></pre><p>%5% long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar.</p>');
-
-        $this->click($this->findKeyword(4));
-        $this->assertTrue($this->topToolbarButtonExists('headings'), 'Heading icon appears in the top toolbar');
-
-        $this->selectKeyword(4);
-        $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'), 'Heading icon should be disabled in the top toolbar');
-        $this->assertFalse($this->inlineToolbarButtonExists('headings'), 'Heading icon should be not appear in the inline toolbar');
-
-        $this->selectInlineToolbarLineageItem(0);
-        $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'), 'Heading icon should be disabled in the top toolbar');
-        $this->assertTrue($this->inlineToolbarButtonExists('headings'), 'Heading icon should be not appear in the inline toolbar');
-
-        $this->clickInlineToolbarButton('headings');
-        $this->clickInlineToolbarButton('H3', NULL, TRUE);
-
-        $this->assertHTMLMatch('<h1>%1% %2%</h1><p>%3% xtn dolor</p><h3>sit amet <strong>%4%</strong></h3><p>%5% long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar.</p>');
-
-    }//end testApplyingAHeadingToPreSection()
+//  /**
+//   * Test applying a heading to a Pre section.
+//   *
+//   * @return void
+//   */
+//  public function testApplyingAHeadingToPreSection()
+//  {
+//      // Change P to a Pre section
+//      $this->selectKeyword(4);
+//      $this->selectInlineToolbarLineageItem(0);
+//      $this->clickTopToolbarButton('formats-p', 'active');
+//      $this->clickTopToolbarButton('Pre', NULL, TRUE);
+//      $this->assertHTMLMatch('<h1>%1% %2%</h1><p>%3% xtn dolor</p><pre>sit amet <strong>%4%</strong></pre><p>%5% long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar.</p>');
+//
+//      $this->click($this->findKeyword(4));
+//      $this->assertTrue($this->topToolbarButtonExists('headings'), 'Heading icon appears in the top toolbar');
+//
+//      $this->selectKeyword(4);
+//      $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'), 'Heading icon should be disabled in the top toolbar');
+//      $this->assertFalse($this->inlineToolbarButtonExists('headings'), 'Heading icon should be not appear in the inline toolbar');
+//
+//      $this->selectInlineToolbarLineageItem(0);
+//      $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'), 'Heading icon should be disabled in the top toolbar');
+//      $this->assertTrue($this->inlineToolbarButtonExists('headings'), 'Heading icon should be not appear in the inline toolbar');
+//
+//      $this->clickInlineToolbarButton('headings');
+//      $this->clickInlineToolbarButton('H3', NULL, TRUE);
+//
+//      $this->assertHTMLMatch('<h1>%1% %2%</h1><p>%3% xtn dolor</p><h3>sit amet <strong>%4%</strong></h3><p>%5% long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar.</p>');
+//
+//  }//end testApplyingAHeadingToPreSection()
 
 
 }//end class
