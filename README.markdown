@@ -268,7 +268,7 @@ The following resolution interfaces are provided by Squiz Viper:
 **Solution:** Enter an appropriate title for the iframe to describe it's purpose.  
 **Example:**
 ```html
-<iframe src="" />
+<iframe src=""></iframe>
 ```
 
 ### [Standard].Principle2.Guideline2_4.2_4_1.H64.2
@@ -276,7 +276,7 @@ The following resolution interfaces are provided by Squiz Viper:
 **Solution:** Enter an appropriate title for the iframe to describe it's purpose.  
 **Example:**
 ```html
-<iframe src="" title="Frame title text" />
+<iframe src="" title="Frame title text"></iframe>
 ```
 
 ### [Standard].Principle4.Guideline4_1.4_1_1.F77
