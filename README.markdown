@@ -78,7 +78,7 @@ The following resolution interfaces are provided by Squiz Viper:
 **Example:**
 ```html
 <table summary="Information about the table">
-  <caption>Information about the table</caption>
+  <caption>Caption for the table</caption>
   <thead>
     <tr><th id="heading">Heading</th></tr>
   </thead>
