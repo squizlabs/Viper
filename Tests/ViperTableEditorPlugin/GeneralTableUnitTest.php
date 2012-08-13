@@ -83,6 +83,41 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
 
 
     /**
+     * Test that the Headings icon is not available when in a table element other than TD or TH.
+     *
+     * @return void
+     */
+    public function testHeadingIconNotAvailableForCaptionAndTable()
+    {
+        // Test selection in caption and whole caption.
+        $this->selectKeyword(1);
+        $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'), 'Headings icon should be disabled.');
+
+        $this->selectInlineToolbarLineageItem(1);
+        $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'), 'Headings icon should be disabled.');
+
+        $this->selectInlineToolbarLineageItem(0);
+        $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'), 'Headings icon should be disabled.');
+
+        $this->selectKeyword(2);
+        $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'), 'Headings icon should be disabled.');
+
+        $this->selectInlineToolbarLineageItem(3);
+        $this->assertTrue($this->topToolbarButtonExists('headings'), 'Headings icon should be enabled.');
+
+        $this->selectInlineToolbarLineageItem(2);
+        $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'), 'Headings icon should be disabled.');
+
+        $this->selectInlineToolbarLineageItem(1);
+        $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'), 'Headings icon should be disabled.');
+
+        $this->selectInlineToolbarLineageItem(0);
+        $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'), 'Headings icon should be disabled.');
+
+    }//end testHeadingIconNotAvailableForCaptionAndTable()
+
+
+    /**
      * Test that clicking in a cell shows the table editing icon.
      *
      * @return void

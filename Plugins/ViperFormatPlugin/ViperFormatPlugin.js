@@ -674,7 +674,9 @@ ViperFormatPlugin.prototype = {
                     && ((dfx.isTag(nodeSelection, 'p') !== true)
                     || dfx.isTag(nodeSelection.parentNode, 'blockquote') === false)
                 ) {
-                    tools.enableButton('headings');
+                    if (ignoredTags.inArray(dfx.getTagName(nodeSelection)) === false) {
+                        tools.enableButton('headings');
+                    }
                 }
             }
 
