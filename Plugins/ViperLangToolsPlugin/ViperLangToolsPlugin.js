@@ -93,7 +93,7 @@ ViperLangToolsPlugin.prototype = {
         var node    = range.getNodeSelection();
         var element = null;
 
-        if (node || range.collapsed === true) {
+        if ((node && node.nodeType !== dfx.TEXT_NODE) || range.collapsed === true) {
             if (!node) {
                 var node = range.getStartNode();
                 if (!node) {
