@@ -286,6 +286,7 @@ ViperTools.prototype = {
             return;
         }
 
+        button.setAttribute('title', button.getAttribute('title').replace(' [Not available]', ''));
         button.setAttribute('title', button.getAttribute('title') + ' [Not available]');
         dfx.addClass(button, 'Viper-disabled');
 
