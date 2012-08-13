@@ -126,10 +126,10 @@ function gBtn(text, state, selectorPrefix)
 
     var rect = viperTest.getWindow().dfx.getBoundingRectangle(button);
     if (rect) {
-        rect.x1 = parseInt(rect.x1);
-        rect.x2 = parseInt(rect.x2);
-        rect.y1 = parseInt(rect.y1);
-        rect.y2 = parseInt(rect.y2);
+        rect.x1 = (parseInt(rect.x1) + 3);
+        rect.x2 = (parseInt(rect.x2) - 1);
+        rect.y1 = (parseInt(rect.y1) + 3);
+        rect.y2 = (parseInt(rect.y2) - 1);
     }
 
     return rect;
