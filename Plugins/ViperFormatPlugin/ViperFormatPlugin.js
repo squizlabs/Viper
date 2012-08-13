@@ -1150,7 +1150,7 @@ ViperFormatPlugin.prototype = {
 
         // If any of the parents of the element is one of these tags then ignore it.
         var parents = dfx.getParents(startNode, 'caption|ul|ol|li|img', viperElement);
-        if (parents.length > 0 || dfx.isStubElement(startNode) === true) {
+        if (parents.length > 0 || (dfx.isStubElement(startNode) === true && dfx.isTag(startNode, 'br') === false)) {
             return false;
         } else if (range.collapsed === true && startNode.nodeType === dfx.TEXT_NODE) {
             var blockquotes = dfx.getParents(startNode, 'blockquote', viperElement);
