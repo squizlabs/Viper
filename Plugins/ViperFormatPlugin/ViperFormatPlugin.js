@@ -766,6 +766,7 @@ ViperFormatPlugin.prototype = {
                         ) {
                             tools.disableButton('formats');
                         } else {
+                            tools.enableButton('formats');
                             var formatButtonStatuses = self.getFormatButtonStatuses(parent);
                             for (var tag in formatButtons) {
                                 if (formatButtonStatuses[tag] === true) {
@@ -775,7 +776,6 @@ ViperFormatPlugin.prototype = {
                                 }
 
                                 if (tag === parentTagName) {
-                                    tools.enableButton('formats');
                                     if (nodeSelection !== viperElement) {
                                         tools.setButtonActive(prefix + 'formats:' + formatButtons[tag]);
                                         tools.setButtonActive('formats');

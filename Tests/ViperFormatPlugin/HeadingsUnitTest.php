@@ -130,7 +130,7 @@ class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractViperUnitTe
         $this->clickTopToolbarButton('headings');
         $this->clickTopToolbarButton('H2', NULL, TRUE);
 
-        $this->assertTrue($this->topToolbarButtonExists('H1', 'active', TRUE), 'H1 icon should be active');
+        $this->assertTrue($this->topToolbarButtonExists('H2', 'active', TRUE), 'H1 icon should be active');
         $this->assertTrue($this->topToolbarButtonExists('formats'), 'Formats icon should be enabled in the top toolbar');
 
         $this->assertHTMLMatch('<h2>%1% %2%</h2>');
