@@ -3389,6 +3389,22 @@ Viper.prototype = {
 
     },
 
+    getBlockChildren: function(parent)
+    {
+        var children = [];
+        var c        = parent.childNodes.length;
+        for (var i = 0; i < c; i++) {
+            if (parent.childNodes[i].nodeType === dfx.ELEMENT_NODE) {
+                if (dfx.isBlockElement(parent.childNodes[i]) === true) {
+                    children.push(parent.childNodes[i]);
+                }
+            }
+        }
+
+        return children;
+
+    },
+
     elementIsEmpty: function(elem)
     {
         if (dfx.isBlank(dfx.getNodeTextContent(elem)) === true) {
