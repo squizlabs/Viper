@@ -480,7 +480,7 @@ ViperFormatPlugin.prototype = {
             } else {
                 tools.disableButton('vitpFormats');
             }
-        } else if (this.isWholeBlockSelection(data.range)) {
+        } else if ((!currentElement || ignoredTags.inArray(dfx.getTagName(currentElement)) === false) && this.isWholeBlockSelection(data.range)) {
             var pOnly = this._selectionHasPTagsOnly(data.range);
 
             for (var tag in formatButtons) {
@@ -879,6 +879,8 @@ ViperFormatPlugin.prototype = {
                     }//end if//end if
                 }//end if
             } else {
+                tools.getItem('formats').setIconClass('Viper-formats');
+
                 // Pick the right button icon for disabled state as nothing can be
                 // changed.
                 if (data.range.collapsed === true) {

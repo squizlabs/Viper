@@ -1319,6 +1319,27 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractFormatsUnitTe
     }//end testComlexHTMLStructureConversion()
 
 
+    /**
+     * Test that a list item or whole list selection does not enable formats icons.
+     *
+     * @return void
+     */
+    public function testNoListConversion()
+    {
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(1);
+
+        $this->assertFalse($this->inlineToolbarButtonExists('formats'), 'Formats button should not be available');
+        $this->assertTrue($this->topToolbarButtonExists('formats', 'disabled'), 'Formats button should not be available');
+
+        $this->selectInlineToolbarLineageItem(0);
+
+        $this->assertFalse($this->inlineToolbarButtonExists('formats'), 'Formats button should not be available');
+        $this->assertTrue($this->topToolbarButtonExists('formats', 'disabled'), 'Formats button should not be available');
+
+    }//end testNoListConversion()
+
+
 }//end class
 
 ?>
