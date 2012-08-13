@@ -675,7 +675,11 @@ ViperFormatPlugin.prototype = {
                     || dfx.isTag(nodeSelection.parentNode, 'blockquote') === false)
                 ) {
                     if (dfx.isBlockElement(nodeSelection) === true && ignoredTags.inArray(dfx.getTagName(nodeSelection)) === false) {
-                        tools.enableButton('headings');
+                        // Check if this node contains any block elements, if it does
+                        // then headings cannnot be applied.
+                        if (self.viper.hasBlockChildren(nodeSelection) === false) {
+                            tools.enableButton('headings');
+                        }
                     }
                 }
             }
