@@ -202,6 +202,10 @@ function gVITPArrow()
         y2: rect.y1
     }
 
+    if (arrow.x1 <= 0 || arrow.y1 <= 0) {
+        arrow = null;
+    }
+
     return arrow;
 
 }

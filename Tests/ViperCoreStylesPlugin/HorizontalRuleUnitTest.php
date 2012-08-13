@@ -142,6 +142,3 @@ class Viper_Tests_ViperCoreStylesPlugin_HorizontalRuleUnitTest extends AbstractV
 
 
 ?>
-
-
-

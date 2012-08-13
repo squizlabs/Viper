@@ -1197,6 +1197,9 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         $pageHtml = str_replace('>&nbsp;<', '><', $pageHtml);
         $pageHtml = str_replace('&nbsp;<', '<', $pageHtml);
 
+        $html = str_replace('>&nbsp;<', '><', $html);
+        $html = str_replace('&nbsp;<', '<', $html);
+
         if ($html !== $pageHtml) {
             $pageHtml = $this->_orderTagAttributes($pageHtml);
             $html     = $this->_orderTagAttributes($html);
