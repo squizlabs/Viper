@@ -685,17 +685,17 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         for ($i = 0; $i < $buttonCount; $i++) {
             if (($i % 20) === 0) {
                 if ($buttonHTML !== '') {
-                    $buttonHTML .= '</div>';
+                    $buttonHTML .= '</div></div>';
                 }
 
-                $buttonHTML .= '<div class="ViperTP-bar Viper-themeDark" style="position:relative">';
+                $buttonHTML .= '<div class="ViperTP-bar Viper-themeDark" style="position:relative"><div class="Viper-buttonGroup">';
             }
 
             $buttonHTML .= '<div id="'.$buttonNames[$i].'" class="Viper-button Viper-'.$buttonNames[$i].'">';
             $buttonHTML .= '<span class="Viper-buttonIcon Viper-'.$buttonNames[$i].'"></span>&nbsp;</div>';
         }
 
-        $buttonHTML .= '</div>';
+        $buttonHTML .= '</div></div>';
 
         $calibrateHtml = file_get_contents($baseDir.'/calibrate.html');
         $calibrateHtml = str_replace('__TEST_CONTENT__', $buttonHTML, $calibrateHtml);
@@ -772,27 +772,38 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
             }
         }
 
-        // Find each of the icons, if any fails it will throw an exception.
-        $regions = array();
-        foreach ($statuses as $status => $className) {
-            foreach ($buttonNames as $buttonName) {
-                if ($status !== '') {
-                    $buttonName .= $status;
-                }
+        for ($similarity = 0.98; $similarity > 0.90; $similarity -= 0.01) {
+            // Find each of the icons, if any fails it will throw an exception.
+            $regions = array();
+            foreach ($statuses as $status => $className) {
+                foreach ($buttonNames as $buttonName) {
+                    if ($status !== '') {
+                        $buttonName .= $status;
+                    }
 
-                $testImage = $imgPath.'/'.$buttonName.'.png';
-                $region    = $this->find($testImage);
-                $loc       = $this->getX($region).'-'.$this->getY($region);
-                if (isset($regions[$loc]) === TRUE) {
-                    throw new Exception('Image match conflict between '.$regions[$loc].' and '.$buttonName);
-                }
+                    $testImage = $imgPath.'/'.$buttonName.'.png';
+                    try {
+                        $region = $this->find($testImage, NULL, $similarity);
+                        $loc    = $this->getX($region).'-'.$this->getY($region);
 
-                $regions[$loc] = $buttonName;
+                        if (isset($regions[$loc]) === TRUE) {
+                            throw new Exception('Image match conflict between '.$regions[$loc].' and '.$buttonName);
+                        }
+
+                        $regions[$loc] = $buttonName;
+                    } catch (Exception $e) {
+                        continue(3);
+                    }
+                }
             }
+
+            break;
         }
 
         // Remove the temp calibrate file.
         unlink($tmpFile);
+
+        $this->addData('buttonSimmilarity', $similarity);
 
     }//end _calibrateImage()
 
@@ -1467,6 +1478,8 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
 
         self::$_topToolbar = $region;
 
+        $this->setAutoWaitTimeout(0.5, $region);
+
         return $region;
 
     }//end getTopToolbar()
@@ -1519,10 +1532,15 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
                 }
             }
         } else {
+            $toolbar = $this->getInlineToolbar();
             try {
-                $this->find($button, $this->getInlineToolbar(), 0.9);
+                $this->find($button, $toolbar, $this->getData('buttonSimmilarity'));
             } catch (Exception $e) {
-                return FALSE;
+                try {
+                    $this->find($button, $toolbar, 0.92);
+                } catch (Exception $e) {
+                    return FALSE;
+                }
             }
         }
 
@@ -1558,10 +1576,15 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
                 }
             }
         } else {
+            $toolbar = $this->getTopToolbar();
             try {
-                $this->find($button, $this->getTopToolbar(), 0.9);
+                $this->find($button, $toolbar, $this->getData('buttonSimmilarity'));
             } catch (Exception $e) {
-                return FALSE;
+                try {
+                    $this->find($button, $toolbar, 0.92);
+                } catch (Exception $e) {
+                    return FALSE;
+                }
             }
         }
 
@@ -1670,7 +1693,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
                 }
             }
         } else {
-            $match = $this->find($buttonObj, $region, 0.9);
+            $match = $this->find($buttonObj, $region, $this->getData('buttonSimmilarity'));
         }
 
         $this->click($match);
@@ -1711,7 +1734,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      */
     protected function findButton($buttonIcon, $state=NULL, $isText=FALSE, $location=NULL)
     {
-        return $this->find($this->_getButton($buttonIcon, $state, $isText, $location));
+        return $this->find($this->_getButton($buttonIcon, $state, $isText, $location), NULL, $this->getData('buttonSimmilarity'));
 
     }//end findButton()
 
