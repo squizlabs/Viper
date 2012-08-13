@@ -460,7 +460,7 @@ class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractViperUnitTe
 
         $this->clickInlineToolbarButton('headings');
         $this->clickInlineToolbarButton('H1', NULL, TRUE);
-        $this->assertHTMLMatch('<h1>sit amet %1%</h1><blockquote><p>%2% long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar.</p></blockquote><blockquote><p>sit amet %3%</p><p>%4% long paragraph for testing that the heading icon work for multiline paragraphs in quotes.</p></blockquote>');
+        $this->assertHTMLMatch('<h1>sit amet %1%</h1><blockquote><p>%2% long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar.</p></blockquote><blockquote><p>test1 test2 test3 sit amet %3%</p><p>%4% long paragraph for testing that the heading icon work for multiline paragraphs in quotes.</p></blockquote>');
         $this->assertTrue($this->inlineToolbarButtonExists('H1', 'active', TRUE), 'H1 icon should be not appear in the inline toolbar');
 
         // Check multi-line quote

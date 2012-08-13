@@ -677,7 +677,8 @@ ViperFormatPlugin.prototype = {
                     if (dfx.isBlockElement(nodeSelection) === true && ignoredTags.inArray(dfx.getTagName(nodeSelection)) === false) {
                         // Check if this node contains any block elements, if it does
                         // then headings cannnot be applied.
-                        if (self.viper.hasBlockChildren(nodeSelection) === false) {
+                        var blockChildren = self.viper.getBlockChildren(nodeSelection);
+                        if (blockChildren.length === 0 || (blockChildren.length === 1 && dfx.isTag(nodeSelection, 'blockquote') === true)) {
                             tools.enableButton('headings');
                         }
                     }
@@ -1109,10 +1110,21 @@ ViperFormatPlugin.prototype = {
                 case 'blockquote':
                     if (dfx.getTag('p', node).length > 1) {
                         return false;
+                    } else {
+                        var textContent = dfx.getNodeTextContent(node);
+                        if (textContent && textContent.length > 80) {
+                            return false;
+                        }
                     }
                 break;
 
                 default:
+                    if (dfx.isTag(node, 'p') === true
+                        && dfx.isTag(node.parentNode, 'blockquote') === true
+                    ) {
+                        return false;
+                    }
+
                     // Check the selection length if the length is too long then
                     // dont show the tools.
                     var textContent = dfx.getNodeTextContent(node);
