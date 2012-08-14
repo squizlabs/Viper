@@ -496,6 +496,15 @@ ViperKeyboardEditorPlugin.prototype = {
 
                 parent = parent.parentNode;
             }
+        } else if (range.startContainer === range.endContainer
+            && dfx.isStubElement(range.startContainer)
+            && range.startContainer.parentNode.firstChild === range.startContainer
+            && range.startContainer.parentNode.lastChild === range.startContainer
+        ) {
+            parent = range.startContainer.parentNode;
+            dfx.setHtml(parent, '&nbsp;');
+            range.setStart(parent.firstChild, 0);
+            range.collapse(true);
         } else {
             parent = range.startContainer;
         }//end if
