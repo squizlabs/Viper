@@ -273,6 +273,12 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractFormatsUnitTe
         $this->clickInlineToolbarButton('Quote', 'active', TRUE);
         $this->assertHTMLMatch('<h1>Heading One</h1><p>%1% xtn dolor</p><p>sit %2% <strong>%3%</strong></p>');
 
+        // Test changing a blockquote with two P's to a Div
+        $this->clickInlineToolbarButton('Quote', NULL, TRUE);
+        $this->clickInlineToolbarButton('Div', NULL, TRUE);
+        $this->assertHTMLMatch('<h1>Heading One</h1><div>%1% xtn dolor</div><div>sit %2% <strong>%3%</strong></div>');
+        $this->checkStatusOfFormatIconsInTheInlineToolbar('disabled', NULL, 'disabled', 'disabled');
+
     }//end testApplyingFormatsAroundTwoPTagsUsingTheInlineToolbar()
 
 
@@ -304,7 +310,40 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractFormatsUnitTe
         $this->clickTopToolbarButton('Quote', 'active', TRUE);
         $this->assertHTMLMatch('<h1>Heading One</h1><p>%1% xtn dolor</p><p>sit %2% <strong>%3%</strong></p>');
 
+        // Test changing a blockquote with two P's to a Div
+        $this->clickTopToolbarButton('Quote', NULL, TRUE);
+        $this->clickTopToolbarButton('Div', NULL, TRUE);
+        $this->assertHTMLMatch('<h1>Heading One</h1><div>%1% xtn dolor</div><div>sit %2% <strong>%3%</strong></div>');
+        $this->checkStatusOfFormatIconsInTheTopToolbar('disabled', NULL, 'disabled', 'disabled');
+
     }//end testApplyingFormatsAroundTwoPTagsUsingTheTopToolbar()
+
+
+    /**
+     * Test applying a div around two P's and then changing it to a quote
+     *
+     * @return void
+     */
+    public function testApplyingDivAroundTwoPTagsAndChangingToAQuote()
+    {
+        $this->selectKeyword(1, 3);
+
+        // Apply the Div
+        $this->clickInlineToolbarButton('formats');
+        $this->clickInlineToolbarButton('DIV', NULL, TRUE);
+        $this->assertHTMLMatch('<h1>Heading One</h1><div><p>%1% xtn dolor</p><p>sit %2% <strong>%3%</strong></p></div>');
+        $this->checkStatusOfFormatIconsInTheInlineToolbar('disabled', 'active', NULL, 'disabled');
+
+        // Change the Div to a Quote
+        $this->clickInlineToolbarButton('Quote', NULL, TRUE);
+        $this->assertHTMLMatch('<h1>Heading One</h1><blockquote><p>%1% xtn dolor</p><p>sit %2% <strong>%3%</strong></p></blockquote>');
+        $this->checkStatusOfFormatIconsInTheInlineToolbar('disabled', NULL, 'active', 'disabled');
+
+        // Remove the Div
+        $this->clickInlineToolbarButton('Quote', 'active', TRUE);
+        $this->assertHTMLMatch('<h1>Heading One</h1><p>%1% xtn dolor</p><p>sit %2% <strong>%3%</strong></p>');
+
+    }//end testApplyingDivAroundTwoPTagsAndChangingToAQuote()
 
 
     /**
