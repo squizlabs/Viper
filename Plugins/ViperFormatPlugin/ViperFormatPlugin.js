@@ -713,7 +713,6 @@ ViperFormatPlugin.prototype = {
             if (self._canEnableFormatButtons(startNode, nodeSelection, data.range) === true) {
                 // Reset icon of the main toolbar button.
                 tools.getItem('formats').setIconClass('Viper-formats');
-
                 if (data.range.collapsed === true) {
                     // If the range is collapsed then we need to get the most relevant
                     // parent. Which is the first block parent unless its a P tag
@@ -1376,16 +1375,7 @@ ViperFormatPlugin.prototype = {
                 statuses._canChange = true;
 
                 if (parents.length > 0) {
-                    // If only P tags then blockquote is allowed.
-                    var allowBlockquote = true;
-                    //for (var i = 0; i < parents.length; i++) {
-                    //    if (dfx.isTag(parents[i], 'p') !== true) {
-                    //        allowBlockquote = false;
-                    //        break;
-                    //    }
-                    //}
-
-                    statuses.blockquote = allowBlockquote;
+                    statuses.blockquote = true;
                 }
             }
         }//end if
@@ -1403,9 +1393,17 @@ ViperFormatPlugin.prototype = {
             if (dfx.isTag(element.parentNode, 'blockquote') === true) {
                 return false;
             }
-        } else if (toTagName === '_none') {
-            // Tag can be removed.
-            return true;
+        }
+
+        if (toTagName === '_none') {
+            if (this.viper.getDefaultBlockTag() === '') {
+                // Tag can be removed.
+                return true;
+            }
+
+            return false;
+        } else if (tagName === toTagName && this.viper.getDefaultBlockTag() !== '') {
+            return false;
         }
 
         switch (toTagName) {
@@ -1717,6 +1715,14 @@ ViperFormatPlugin.prototype = {
         }
 
         if (dfx.isTag(element, type) === true) {
+            if (this.viper.getDefaultBlockTag() !== '') {
+                if (type === this.viper.getDefaultBlockTag()) {
+                    return null;
+                } else {
+                    return this._convertSingleElement(element, this.viper.getDefaultBlockTag());
+                }
+            }
+
             if (type.indexOf('h') === 0) {
                 // Heading to P tag.
                 var p = document.createElement('p');

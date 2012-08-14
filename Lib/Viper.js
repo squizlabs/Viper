@@ -126,6 +126,12 @@ Viper.prototype = {
 
     },
 
+    getDefaultBlockTag: function()
+    {
+        return this.getSetting('defaultBlockTag') || 'p';
+
+    },
+
     /**
      * Initialise Viper.
      *
@@ -484,10 +490,15 @@ Viper.prototype = {
 
                     editableChild = range._getFirstSelectableChild(this.element);
                 } else {
-                    var tmpEl = document.createElement('p');
-                    dfx.setHtml(tmpEl, '&nbsp;');
-                    blockElement.appendChild(tmpEl);
-                    editableChild = range._getFirstSelectableChild(this.element);
+                    var tagName = this.getDefaultBlockTag();
+                    if (!tagName) {
+                        dfx.setHtml(this.element, '');
+                    } else {
+                        blockElement = document.createElement(tagName);
+                        dfx.setHtml(blockElement, '&nbsp;');
+                        editableChild.appendChild(blockElement);
+                        editableChild = range._getFirstSelectableChild(this.element);
+                    }
                 }
             }
 
@@ -627,8 +638,13 @@ Viper.prototype = {
 
             if (hasStubElems !== true) {
                 // Insert initial P tags.
-                var range = this.getCurrentRange();
-                dfx.setHtml(elem, '<p>&nbsp;</p>');
+                var range    = this.getCurrentRange();
+                var blockTag = this.getDefaultBlockTag();
+                if (!blockTag) {
+                    dfx.setHtml(elem, '');
+                } else {
+                    dfx.setHtml(elem, '<' + blockTag +'>&nbsp;</' + blockTag  + '>');
+                }
 
                 try {
                     range.setEnd(elem.firstChild, 0);
@@ -642,32 +658,35 @@ Viper.prototype = {
                 dfx.setHtml(elem, cleanedContent);
             }
 
-            for (var i = 0; i < elem.childNodes.length; i++) {
-                var child = elem.childNodes[i];
-                if ((dfx.isBlockElement(child) === true && dfx.isStubElement(child) === false)
-                    || child.nodeType === dfx.TEXT_NODE && dfx.trim(child.data) === ''
-                    || (child.nodeType !== dfx.ELEMENT_NODE && child.nodeType !== dfx.TEXT_NODE)
-                    || dfx.isTag(child, 'hr') === true
-                ) {
-                    continue;
+            var defaultTagName = this.getDefaultBlockTag();
+            if (defaultTagName) {
+                for (var i = 0; i < elem.childNodes.length; i++) {
+                    var child = elem.childNodes[i];
+                    if ((dfx.isBlockElement(child) === true && dfx.isStubElement(child) === false)
+                        || child.nodeType === dfx.TEXT_NODE && dfx.trim(child.data) === ''
+                        || (child.nodeType !== dfx.ELEMENT_NODE && child.nodeType !== dfx.TEXT_NODE)
+                        || dfx.isTag(child, 'hr') === true
+                    ) {
+                        continue;
+                    }
+
+                    var p = null;
+                    if (child.previousSibling && dfx.isTag(child.previousSibling, defaultTagName) === true) {
+                        p = child.previousSibling;
+                    } else {
+                        p = document.createElement(defaultTagName);
+                        dfx.insertBefore(child, p);
+                    }
+
+                    if (child.nodeType === dfx.TEXT_NODE) {
+                        child.data = dfx.trim(child.data);
+                    }
+
+                    p.appendChild(child);
+
                 }
-
-                var p = null;
-                if (child.previousSibling && dfx.isTag(child.previousSibling, 'p') === true) {
-                    p = child.previousSibling;
-                } else {
-                    p = document.createElement('p');
-                    dfx.insertBefore(child, p);
-                }
-
-                if (child.nodeType === dfx.TEXT_NODE) {
-                    child.data = dfx.trim(child.data);
-                }
-
-                p.appendChild(child);
-
-            }
-        }
+            }//end if
+        }//end if
 
     },
 
@@ -1360,8 +1379,9 @@ Viper.prototype = {
             return;
         } else if (container === this.element && range.startOffset === 0) {
             // The whole editable element is selected then clear its contents.
-            if (this.inlineMode !== true && dfx.getStyle(this.element, 'display') === 'block') {
-                dfx.setHtml(this.element, '<p>&nbsp;</p>');
+            var defaultTag = this.getDefaultBlockTag();
+            if (defaultTag) {
+                dfx.setHtml(this.element, '<' + defaultTag + '>&nbsp;</' + defaultTag + '>');
             } else {
                 dfx.setHtml(this.element, '&nbsp;');
             }
@@ -3653,14 +3673,20 @@ Viper.prototype = {
             || (elem.childNodes.length === 1 && dfx.isTag(elem.childNodes[0], 'br') === true)
             || (elem === range.startContainer && elem === range.endContainer && range.startOffset === 0)
         ) {
-            var tagName = 'p';
+            var tagName = this.getDefaultBlockTag();
             if (elem.childNodes.length === 1 && dfx.isBlockElement(elem.childNodes[0]) === true) {
                 tagName = dfx.getTagName(elem.childNodes[0]);
             }
 
-            dfx.setHtml(this.element, '<' + tagName + '></' + tagName + '>');
             var textNode = document.createTextNode('');
-            this.element.firstChild.appendChild(textNode);
+            if (!tagName) {
+                dfx.setHtml(this.element, '');
+                this.element.appendChild(textNode);
+            } else {
+                dfx.setHtml(this.element, '<' + tagName + '></' + tagName + '>');
+                this.element.firstChild.appendChild(textNode);
+            }
+
             range.setStart(textNode, 0);
             range.collapse(true);
             ViperSelection.addRange(range);
@@ -3754,7 +3780,7 @@ Viper.prototype = {
             }
 
             if (resetContent === true) {
-                var tagName = 'p';
+                var tagName = this.getDefaultBlockTag();
                 if (this.element.childNodes.length === 1 && dfx.isBlockElement(this.element.childNodes[0]) === true) {
                     // There is only one block element in the content so use its tag
                     // name.
@@ -3763,8 +3789,13 @@ Viper.prototype = {
 
                 // The whole content is selected and a char is being
                 // typed. Remove the whole content of the editable element.
-                dfx.setHtml(this.element, '<' + tagName + '>&nbsp;</' + tagName + '>');
-                range.setStart(range._getFirstSelectableChild(this.element), 0);
+                if (!tagName) {
+                    dfx.setHtml(this.element, '');
+                } else {
+                    dfx.setHtml(this.element, '<' + tagName + '>&nbsp;</' + tagName + '>');
+                    range.setStart(range._getFirstSelectableChild(this.element), 0);
+                }
+
                 range.collapse(true);
                 ViperSelection.addRange(range);
             }
