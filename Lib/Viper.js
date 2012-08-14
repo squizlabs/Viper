@@ -2936,6 +2936,7 @@ Viper.prototype = {
             ViperSelection.addRange(range);
         } else if (this.isBrowser('firefox') === true
             && startContainer === endContainer
+            && startOffset === 0
             && startContainer === this.getViperElement()
         ) {
             var firstSelectable = range._getFirstSelectableChild(this.getViperElement());
