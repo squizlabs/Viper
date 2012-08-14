@@ -424,7 +424,7 @@ ViperFormatPlugin.prototype = {
                 formatButtonStatuses = this.getFormatButtonStatuses(data.lineage[data.current]);
             }
 
-            var enableFormatsButton  = false;
+            var enableFormatsButton  = formatButtonStatuses._none;
             for (var button in formatButtonStatuses) {
                 if (button === '_none' || button === '_canChange') {
                     continue;
@@ -1264,6 +1264,7 @@ ViperFormatPlugin.prototype = {
         var range        = this.viper.getViperRange();
         var selectedNode = element || range.getNodeSelection();
         var viperElement = this.viper.getViperElement();
+        var defaultTag   = this.viper.getDefaultBlockTag();
 
         if (!selectedNode && range.startContainer === range.endContainer && range.collapsed === true) {
             selectedNode = dfx.getFirstBlockParent(range.startContainer);
@@ -1317,6 +1318,8 @@ ViperFormatPlugin.prototype = {
                     statuses._canChange = true;
                 }
             }
+
+            statuses._none = true;
         } else if (selectedNode && selectedNode.nodeType === dfx.TEXT_NODE) {
             var parent = dfx.getFirstBlockParent(selectedNode);
             if (dfx.isTag(parent, 'div') === true) {
@@ -1715,11 +1718,13 @@ ViperFormatPlugin.prototype = {
         }
 
         if (dfx.isTag(element, type) === true) {
-            if (this.viper.getDefaultBlockTag() !== '') {
-                if (type === this.viper.getDefaultBlockTag()) {
-                    return null;
-                } else {
-                    return this._convertSingleElement(element, this.viper.getDefaultBlockTag());
+            if (element.parentNode === this.viper.getViperElement()) {
+                if (this.viper.getDefaultBlockTag() !== '') {
+                    if (type === this.viper.getDefaultBlockTag()) {
+                        return null;
+                    } else if (this.viper.hasBlockChildren(element) === false) {
+                        return this._convertSingleElement(element, this.viper.getDefaultBlockTag());
+                    }
                 }
             }
 
