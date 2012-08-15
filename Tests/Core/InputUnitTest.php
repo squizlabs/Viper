@@ -295,6 +295,71 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
 
     }//end testDeleteAllClickUndoAndClickRedo()
 
+
+    /**
+     * Test that inputting text, creating new paragraphs etc work when no base tag is set.
+     *
+     * @return void
+     */
+    public function testNoBaseTagInput()
+    {
+        $this->execJS('viper.setSetting("defaultBlockTag", "")');
+
+        // Test that typing characters in a node with no block parent does not cause
+        // it to be wrapped with a block tag.
+        $this->useTest(1);
+        $this->selectKeyword(1);
+        $this->keyDown('Key.RIGHT');
+        $this->type(' test');
+        $this->assertHTMLMatch('%1% test');
+
+        // Test that enter key inside a paragraph still splits the container.
+        $this->useTest(2);
+        $this->selectKeyword(1);
+        $this->keyDown('Key.RIGHT');
+        $this->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>%1%</p><p>%2%</p>test');
+
+        // Test that enter key creates a BR tag instead of creating block elements
+        // if the text has no wrapping block elements.
+        $this->useTest(3);
+        $this->selectKeyword(1);
+        $this->keyDown('Key.RIGHT');
+        $this->keyDown('Key.ENTER');
+        $this->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('%1%<br /><br /> %2%');
+
+        // Test that removing whole content and typing does not wrap text in a block
+        // element.
+        $this->useTest(1);
+        $this->selectKeyword(1);
+        $this->keyDown('Key.DELETE');
+        $this->type('test');
+        $this->assertHTMLMatch('test');
+
+        // Test that removing whole content by selecting all and typing characters
+        // does not wrap text in a block element if there is no block element already.
+        $this->useTest(1);
+        $this->selectKeyword(1);
+        $this->type('test');
+        $this->assertHTMLMatch('test');
+
+        // Test that removing whole content by selecting all and typing characters
+        // uses the available block tag.
+        $this->useTest(4);
+        $this->selectKeyword(1);
+        $this->type('test');
+        $this->assertHTMLMatch('<p>test</p>');
+
+        $this->useTest(4);
+        $this->selectKeyword(1);
+        $this->keyDown('Key.DELETE');
+        $this->type('test');
+        $this->assertHTMLMatch('test');
+
+    }//end testNoBaseTagInput()
+
+
 }//end class
 
 ?>
