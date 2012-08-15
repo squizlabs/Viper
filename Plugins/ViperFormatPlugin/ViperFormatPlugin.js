@@ -1281,7 +1281,7 @@ ViperFormatPlugin.prototype = {
             };
 
             var parasOnly        = true;
-            var hasBlockChildren = true;
+            var hasBlockChildren = false;
             for (var node = selectedNode.firstChild; node; node = node.nextSibling) {
                 if (dfx.isBlockElement(node) === true) {
                     hasBlockChildren = true;
@@ -1730,7 +1730,7 @@ ViperFormatPlugin.prototype = {
                     } else if (this.viper.hasBlockChildren(element) === false) {
                         return this._convertSingleElement(element, this.viper.getDefaultBlockTag());
                     } else {
-                        var parentElem = null;debugger;
+                        var parentElem = null;
                         while (element.firstChild) {
                             if (dfx.isBlockElement(element.firstChild) === false) {
                                 if (!parentElem) {

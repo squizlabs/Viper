@@ -128,7 +128,12 @@ Viper.prototype = {
 
     getDefaultBlockTag: function()
     {
-        return this.getSetting('defaultBlockTag') || 'p';
+        var defaultBlockTag = this.getSetting('defaultBlockTag');
+        if (dfx.isset(defaultBlockTag) === true) {
+            return defaultBlockTag;
+        }
+
+        return 'p';
 
     },
 
