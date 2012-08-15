@@ -1280,9 +1280,11 @@ ViperFormatPlugin.prototype = {
                 _canChange: true
             };
 
-            var parasOnly = true;
+            var parasOnly        = true;
+            var hasBlockChildren = true;
             for (var node = selectedNode.firstChild; node; node = node.nextSibling) {
                 if (dfx.isBlockElement(node) === true) {
+                    hasBlockChildren = true;
                     if (dfx.isTag(node, 'p') !== true) {
                         parasOnly = false;
                         break;
@@ -1294,6 +1296,9 @@ ViperFormatPlugin.prototype = {
                 statuses.p = false;
                 statuses.pre = false;
                 statuses.blockquote = false;
+            } else if (hasBlockChildren === true) {
+                statuses.p = false;
+                statuses.pre = false;
             }
 
             return statuses;
@@ -1724,6 +1729,24 @@ ViperFormatPlugin.prototype = {
                         return null;
                     } else if (this.viper.hasBlockChildren(element) === false) {
                         return this._convertSingleElement(element, this.viper.getDefaultBlockTag());
+                    } else {
+                        var parentElem = null;debugger;
+                        while (element.firstChild) {
+                            if (dfx.isBlockElement(element.firstChild) === false) {
+                                if (!parentElem) {
+                                    parentElem = document.createElement(this.viper.getDefaultBlockTag());
+                                    dfx.insertBefore(element, parentElem);
+                                }
+
+                                parentElem.appendChild(element.firstChild);
+                            } else {
+                                parentElem = null;
+                                dfx.insertBefore(element, element.firstChild);
+                            }
+                        }
+
+                        dfx.remove(element);
+                        return;
                     }
                 }
             }
