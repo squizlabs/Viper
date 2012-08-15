@@ -887,6 +887,44 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperUnitTest
     }//end testMovingAnImage()
 
 
+    /**
+     * Test that inserting image with no base tag specified works.
+     *
+     * @return void
+     */
+    public function testInsertingImageWithNoBaseTag()
+    {
+        $this->execJS('viper.setSetting("defaultBlockTag", "")');
+
+        $this->useTest(1);
+        $this->selectKeyword(1, 2);
+        $this->clickTopToolbarButton('image');
+        $this->type('http://www.squizlabs.com/__images/general/html-codesniffer.png');
+        $this->clickField('Image is decorative');
+        $this->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<img alt="" src="http://www.squizlabs.com/__images/general/html-codesniffer.png" />');
+
+        $this->useTest(1);
+        $this->selectKeyword(1);
+        $this->keyDown('Key.RIGHT');
+        $this->clickTopToolbarButton('image');
+        $this->type('http://www.squizlabs.com/__images/general/html-codesniffer.png');
+        $this->clickField('Image is decorative');
+        $this->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('%1%<img alt="" src="http://www.squizlabs.com/__images/general/html-codesniffer.png" /> %2%');
+
+        $this->useTest(1);
+        $this->selectKeyword(1, 2);
+        $this->keyDown('Key.DELETE');
+        $this->clickTopToolbarButton('image');
+        $this->type('http://www.squizlabs.com/__images/general/html-codesniffer.png');
+        $this->clickField('Image is decorative');
+        $this->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<img alt="" src="http://www.squizlabs.com/__images/general/html-codesniffer.png" />');
+
+    }//end testInsertingImageWithNoBaseTag()
+
+
 }//end class
 
 ?>
