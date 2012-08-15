@@ -683,6 +683,21 @@ ViperFormatPlugin.prototype = {
                         }
                     }
                 }
+            } else if (data.range.collapsed === true) {
+                var firstBlock = dfx.getFirstBlockParent(formatElement);
+                if (ignoredTags.inArray(dfx.getTagName(firstBlock)) === false) {
+                    var isBlockQuote = false;
+                    if (dfx.isTag(firstBlock, 'p') === true && dfx.isTag(firstBlock.parentNode, 'blockquote') === true) {
+                        firstBlock = firstBlock.parentNode;
+                        isBlockQuote = true;
+                    } else if (dfx.isTag(firstBlock, 'blockquote') === true) {
+                        isBlockQuote = true;
+                    }
+
+                    if (isBlockQuote === false || dfx.getTag('p', firstBlock).length === 1) {
+                        tools.enableButton('headings');
+                    }
+                }
             }
 
             for (var i = 0; i < headingTags.length; i++) {
