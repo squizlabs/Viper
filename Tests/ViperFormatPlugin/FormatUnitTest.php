@@ -1379,6 +1379,30 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractFormatsUnitTe
     }//end testNoListConversion()
 
 
+    /**
+     * Test creating new content after a div section.
+     *
+     * @return void
+     */
+    public function testCreatingNewContentAfterDivSection()
+    {
+        $this->selectKeyword(3);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickTopToolbarButton('formats-p', 'active');
+        $this->clickTopToolbarButton('DIV', NULL, TRUE);
+        $this->assertHTMLMatch('<h1>Heading One</h1><p>%1% xtn dolor</p><div>sit %2% <strong>%3%</strong></div>');
+
+        $this->selectKeyword(3);
+        $this->keyDown('Key.RIGHT');
+        $this->keyDown('Key.ENTER');
+        $this->type('New content %4%');
+
+        $this->assertHTMLMatch('<h1>Heading One</h1><p>%1% xtn dolor</p><div>sit %2% <strong>%3%</strong></div><p>New content %4%</p>');
+        $this->assertTrue($this->topToolbarButtonExists('formats-p', 'active'), 'Active P icon should appear in the top toolbar');
+
+    }//end testCreatingNewContentAfterDivSection()
+
+
 }//end class
 
 ?>
