@@ -201,6 +201,84 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractFormatsUnitTest
 
 
     /**
+     * Test that when you only select part of a Div and apply a P, it applies a P inside a Div
+     *
+     * @return void
+     */
+    public function testApplyingPInsideDiv()
+    {
+        $this->selectKeyword(1);
+        $this->assertFalse($this->inlineToolbarButtonExists('formats'), 'Formats icon should not appear in the inline toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('formats-div'), 'DIV format icon should appear in the top toolbar');
+
+        // Apply P
+        $this->clickTopToolbarButton('formats-div');
+        $this->checkStatusOfFormatIconsInTheTopToolbar();
+        $this->clickTopToolbarButton('P', NULL, TRUE);
+        $this->assertHTMLMatch('<div><p>%1%</p> xtn dolor</div><p>spacer for the tests</p><div>sit amet <strong>%2%</strong></div><p>%3% is a paragraph to change to a %4%</p><div>%5% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div>');
+        $this->checkStatusOfFormatIconsInTheTopToolbar('active');
+
+        // Remove P
+        $this->clickTopToolbarButton('P', 'active', TRUE);
+        $this->assertHTMLMatch('<div>%1% xtn dolor</div><p>spacer for the tests</p><div>sit amet <strong>%2%</strong></div><p>%3% is a paragraph to change to a %4%</p><div>%5% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div>');
+        $this->checkStatusOfFormatIconsInTheTopToolbar();
+
+    }//end testApplyingPInsideDiv()
+
+
+    /**
+     * Test that when you only select part of a Div and apply a Pre, it applies a Pre inside a Div
+     *
+     * @return void
+     */
+    public function testApplyingPreInsideDiv()
+    {
+        $this->selectKeyword(1);
+        $this->assertFalse($this->inlineToolbarButtonExists('formats'), 'Formats icon should not appear in the inline toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('formats-div'), 'DIV format icon should appear in the top toolbar');
+
+        // Apply Pre
+        $this->clickTopToolbarButton('formats-div');
+        $this->checkStatusOfFormatIconsInTheTopToolbar();
+        $this->clickTopToolbarButton('PRE', NULL, TRUE);
+        $this->assertHTMLMatch('<div><pre>%1%</pre> xtn dolor</div><p>spacer for the tests</p><div>sit amet <strong>%2%</strong></div><p>%3% is a paragraph to change to a %4%</p><div>%5% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div>');
+        $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, NULL, NULL, 'active');
+
+        // Remove Pre
+        $this->clickTopToolbarButton('PRE', 'active', TRUE);
+        $this->assertHTMLMatch('<div>%1% xtn dolor</div><p>spacer for the tests</p><div>sit amet <strong>%2%</strong></div><p>%3% is a paragraph to change to a %4%</p><div>%5% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div>');
+        $this->checkStatusOfFormatIconsInTheTopToolbar();
+
+    }//end testApplyingPreInsideDiv()
+
+
+    /**
+     * Test that when you only select part of a Div and apply a quote, it applies a quote inside a Div
+     *
+     * @return void
+     */
+    public function testApplyingQuoteInsideDiv()
+    {
+        $this->selectKeyword(1);
+        $this->assertFalse($this->inlineToolbarButtonExists('formats'), 'Formats icon should not appear in the inline toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('formats-div'), 'DIV format icon should appear in the top toolbar');
+
+        // Apply Quote
+        $this->clickTopToolbarButton('formats-div');
+        $this->checkStatusOfFormatIconsInTheTopToolbar();
+        $this->clickTopToolbarButton('Quote', NULL, TRUE);
+        $this->assertHTMLMatch('<div><blockquote><p>%1%</p></blockquote> xtn dolor</div><p>spacer for the tests</p><div>sit amet <strong>%2%</strong></div><p>%3% is a paragraph to change to a %4%</p><div>%5% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div>');
+        $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, NULL, 'active', NULL);
+
+        // Remove Quote
+        $this->clickTopToolbarButton('Quote', 'active', TRUE);
+        $this->assertHTMLMatch('<div><p>%1%</p> xtn dolor</div><p>spacer for the tests</p><div>sit amet <strong>%2%</strong></div><p>%3% is a paragraph to change to a %4%</p><div>%5% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div>');
+        $this->checkStatusOfFormatIconsInTheTopToolbar('active');
+
+    }//end testApplyingQuoteInsideDiv()
+
+
+    /**
      * Test that when you only select part of a Div and apply the Div, it applies a Div inside a Div
      *
      * @return void
