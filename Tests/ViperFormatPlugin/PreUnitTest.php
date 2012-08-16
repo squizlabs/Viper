@@ -274,25 +274,77 @@ class Viper_Tests_ViperFormatPlugin_PreUnitTest extends AbstractFormatsUnitTest
 
 
     /**
-     * Test applying and then removing the Pre format.
+     * Test applying and then removing the Pre format using the inline toolbar.
      *
      * @return void
      */
-    public function testApplyingAndRemovingPre()
+    public function testApplyingAndRemovingPreUsingTheInlineToolbar()
     {
+        // Test single line
+        $this->selectKeyword(4);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickInlineToolbarButton('formats-p', 'active');
+        $this->clickInlineToolbarButton('PRE', NULL, TRUE);
+        $this->assertHTMLMatch('<pre>%1% xtn %2%</pre><div>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div><pre>%4% paragraph to change to a pre</pre>');
+        $this->checkStatusOfFormatIconsInTheInlineToolbar(NULL, NULL, NULL, 'active');
+
+        $this->selectKeyword(4);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickInlineToolbarButton('formats-pre', 'active');
+        $this->clickInlineToolbarButton('PRE', 'active', TRUE);
+        $this->assertHTMLMatch('<pre>%1% xtn %2%</pre><div>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div><p>%4% paragraph to change to a pre</p>');
+        $this->checkStatusOfFormatIconsInTheInlineToolbar('active');
+
+        // Test changing a multi-line section
+        $this->selectKeyword(3);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickInlineToolbarButton('formats-div', 'active');
+        $this->clickInlineToolbarButton('PRE', NULL, TRUE);
+        $this->assertHTMLMatch('<pre>%1% xtn %2%</pre><pre>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</pre><p>%4% paragraph to change to a pre</p>');
+        $this->checkStatusOfFormatIconsInTheInlineToolbar(NULL, NULL, NULL, 'active');
+
+        $this->clickInlineToolbarButton('PRE', 'active', TRUE);
+        $this->assertHTMLMatch('<pre>%1% xtn %2%</pre><p>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p><p>%4% paragraph to change to a pre</p>');
+        $this->checkStatusOfFormatIconsInTheInlineToolbar('active');
+
+    }//end testApplyingAndRemovingPreUsingTheInlineToolbar()
+
+
+    /**
+     * Test applying and then removing the Pre format using the top toolbar.
+     *
+     * @return void
+     */
+    public function testApplyingAndRemovingPreUsingTheTopToolbar()
+    {
+        // Test single line
         $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(0);
         $this->clickTopToolbarButton('formats-p', 'active');
         $this->clickTopToolbarButton('PRE', NULL, TRUE);
         $this->assertHTMLMatch('<pre>%1% xtn %2%</pre><div>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div><pre>%4% paragraph to change to a pre</pre>');
+        $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, NULL, NULL, 'active');
 
         $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(0);
         $this->clickTopToolbarButton('formats-pre', 'active');
         $this->clickTopToolbarButton('PRE', 'active', TRUE);
-        $this->assertHTMLMatch('<pre>%1% xtn %2%</pre><div>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div> %4% paragraph to change to a pre');
+        $this->assertHTMLMatch('<pre>%1% xtn %2%</pre><div>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div><p>%4% paragraph to change to a pre</p>');
+        $this->checkStatusOfFormatIconsInTheTopToolbar('active');
 
-    }//end testApplyingAndRemovingPre()
+        // Test changing a multi-line section
+        $this->selectKeyword(3);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickTopToolbarButton('formats-div', 'active');
+        $this->clickTopToolbarButton('PRE', NULL, TRUE);
+        $this->assertHTMLMatch('<pre>%1% xtn %2%</pre><pre>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</pre><p>%4% paragraph to change to a pre</p>');
+        $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, NULL, NULL, 'active');
+
+        $this->clickTopToolbarButton('PRE', 'active', TRUE);
+        $this->assertHTMLMatch('<pre>%1% xtn %2%</pre><p>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p><p>%4% paragraph to change to a pre</p>');
+        $this->checkStatusOfFormatIconsInTheTopToolbar('active');
+
+    }//end testApplyingAndRemovingPreUsingTheTopToolbar()
 
 
     /**
@@ -346,27 +398,6 @@ class Viper_Tests_ViperFormatPlugin_PreUnitTest extends AbstractFormatsUnitTest
         $this->assertHTMLMatch('<pre>%1% xtn %2%</pre><pre>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</pre><p>%4% paragraph to change to a pre</p>');
 
     }//end testChaningMultiLineDivToPre()
-
-
-    /**
-     * Test applying and then removing the Pre format to a multi line pre.
-     *
-     * @return void
-     */
-    public function testApplyingAndRemovingPreToMultiLinePre()
-    {
-        $this->selectKeyword(3);
-        $this->selectInlineToolbarLineageItem(0);
-        $this->clickTopToolbarButton('formats-div', 'active');
-        $this->clickTopToolbarButton('PRE', NULL, TRUE);
-        $this->assertHTMLMatch('<pre>%1% xtn %2%</pre><pre>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</pre><p>%4% paragraph to change to a pre</p>');
-        $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, NULL, NULL, 'active');
-
-        $this->clickTopToolbarButton('PRE', 'active', TRUE);
-        $this->assertHTMLMatch('<pre>%1% xtn %2%</pre> %3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae. <p>%4% paragraph to change to a pre</p>');
-        $this->checkStatusOfFormatIconsInTheTopToolbar();
-
-    }//end testRemovingAndApplyingPreToMultiLinePre()
 
 
      /**
