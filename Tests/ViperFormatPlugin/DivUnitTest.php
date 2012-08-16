@@ -262,12 +262,45 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractFormatsUnitTest
 
 
     /**
-     * Test applying and then removing the Div format.
+     * Test applying and then removing the Div format using the inline toolbar.
      *
      * @return void
      */
-    public function testApplyingAndRemovingDiv()
+    public function testApplyingAndRemovingDivUisngInlineToolbar()
     {
+        // Test single line
+        $this->selectKeyword(3);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickInlineToolbarButton('formats-p', 'active');
+        $this->clickInlineToolbarButton('DIV', NULL, TRUE);
+        $this->assertHTMLMatch('<div>%1% xtn dolor</div><p>spacer for the tests</p><div>sit amet <strong>%2%</strong></div><div>%3% is a paragraph to change to a %4%</div><div>%5% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div>');
+
+        $this->selectKeyword(3 );
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickInlineToolbarButton('formats-div', 'active');
+        $this->clickInlineToolbarButton('DIV', 'active', TRUE);
+        $this->assertHTMLMatch('<div>%1% xtn dolor</div><p>spacer for the tests</p><div>sit amet <strong>%2%</strong></div><p>%3% is a paragraph to change to a %4%</p><div>%5% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div>');
+        $this->checkStatusOfFormatIconsInTheInlineToolbar('active');
+
+        // Test trying to remove it from multi-line div section
+        $this->selectKeyword(5);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickInlineToolbarButton('formats-div', 'active');
+        $this->clickInlineToolbarButton('DIV', 'active', TRUE);
+        $this->assertHTMLMatch('<div>%1% xtn dolor</div><p>spacer for the tests</p><div>sit amet <strong>%2%</strong></div><p>%3% is a paragraph to change to a %4%</p><p>%5% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p>');
+        $this->checkStatusOfFormatIconsInTheInlineToolbar('active');
+
+    }//end testApplyingAndRemovingDivUisngInlineToolbar()
+
+
+    /**
+     * Test applying and then removing the Div format using the top toolbar.
+     *
+     * @return void
+     */
+    public function testApplyingAndRemovingDivUisngTopToolbar()
+    {
+        // Test single line
         $this->selectKeyword(3);
         $this->selectInlineToolbarLineageItem(0);
         $this->clickTopToolbarButton('formats-p', 'active');
@@ -278,10 +311,18 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractFormatsUnitTest
         $this->selectInlineToolbarLineageItem(0);
         $this->clickTopToolbarButton('formats-div', 'active');
         $this->clickTopToolbarButton('DIV', 'active', TRUE);
-        $this->assertHTMLMatch('<div>%1% xtn dolor</div><p>spacer for the tests</p><div>sit amet <strong>%2%</strong></div> %3% is a paragraph to change to a %4% <div>%5% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div>');
-        $this->assertFalse($this->topToolbarButtonExists('DIV', 'active', TRUE));
+        $this->assertHTMLMatch('<div>%1% xtn dolor</div><p>spacer for the tests</p><div>sit amet <strong>%2%</strong></div><p>%3% is a paragraph to change to a %4%</p><div>%5% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div>');
+        $this->checkStatusOfFormatIconsInTheTopToolbar('active');
 
-    }//end testApplyingAndRemovingDiv()
+        // Test trying to remove it from multi-line div section
+        $this->selectKeyword(5);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickTopToolbarButton('formats-div', 'active');
+        $this->clickTopToolbarButton('DIV', 'active', TRUE);
+        $this->assertHTMLMatch('<div>%1% xtn dolor</div><p>spacer for the tests</p><div>sit amet <strong>%2%</strong></div><p>%3% is a paragraph to change to a %4%</p><p>%5% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p>');
+        $this->checkStatusOfFormatIconsInTheTopToolbar('active');
+
+    }//end testApplyingAndRemovingDivUisngTopToolbar()
 
 
     /**
@@ -309,27 +350,6 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractFormatsUnitTest
         $this->assertHTMLMatch('<div>%1% xtn dolor</div><p>spacer for the tests</p><div>sit amet <strong>%2%</strong></div><p>%3% is a paragraph to change to a %4%</p><div>New %6% on the page</div><p>More new content</p><div>%5% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div>');
 
     }//end testCreatingNewContentWithADivTag()
-
-
-    /**
-     * Test applying and then removing the Div format to a multi line Div.
-     *
-     * @return void
-     */
-    public function testRemovingAndApplyingDivToMultiLineDiv()
-    {
-        $this->selectKeyword(5);
-        $this->selectInlineToolbarLineageItem(0);
-        $this->clickTopToolbarButton('formats-div', 'active');
-        $this->clickTopToolbarButton('DIV', 'active', TRUE);
-        $this->assertHTMLMatch('<div>%1% xtn dolor</div><p>spacer for the tests</p><div>sit amet <strong>%2%</strong></div><p>%3% is a paragraph to change to a %4%</p> %5% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.');
-        $this->checkStatusOfFormatIconsInTheTopToolbar();
-
-        $this->clickTopToolbarButton('DIV', NULL, TRUE);
-        $this->assertHTMLMatch('<div>%1% xtn dolor</div><p>spacer for the tests</p><div>sit amet <strong>%2%</strong></div><p>%3% is a paragraph to change to a %4%</p><div>%5% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div>');
-        $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, 'active', NULL, NULL);
-
-    }//end testRemovingAndApplyingDivToMultiLineDiv()
 
 
      /**
