@@ -683,7 +683,7 @@ ViperFormatPlugin.prototype = {
                         }
                     }
                 }
-            } else if (data.range.collapsed === true) {
+            } else if (data.range.collapsed === true && formatElement) {
                 var firstBlock = dfx.getFirstBlockParent(formatElement);
                 if (ignoredTags.inArray(dfx.getTagName(firstBlock)) === false) {
                     var isBlockQuote = false;
