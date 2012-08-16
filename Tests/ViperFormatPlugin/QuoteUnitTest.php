@@ -244,6 +244,7 @@ class Viper_Tests_ViperFormatPlugin_QuoteUnitTest extends AbstractFormatsUnitTes
      */
     public function testApplyingAndRemovingQuoteUsingInlineToolbar()
     {
+        // Test single line
         $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(0);
         $this->clickInlineToolbarButton('formats-p', 'active');
@@ -258,6 +259,21 @@ class Viper_Tests_ViperFormatPlugin_QuoteUnitTest extends AbstractFormatsUnitTes
         // Make sure all icons are still enabled
         $this->checkStatusOfFormatIconsInTheInlineToolbar('active');
 
+        // Test multi-line
+        $this->selectKeyword(3);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickInlineToolbarButton('formats-div', 'active');
+        $this->clickInlineToolbarButton('Quote', NULL, TRUE);
+        $this->assertHTMLMatch('<blockquote><p>%1% xtn %2%</p></blockquote><blockquote><p>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p></blockquote><p>%4% is a paragraph to change to a quote</p>');
+        $this->checkStatusOfFormatIconsInTheInlineToolbar(NULL, NULL, 'active', NULL);
+
+        $this->selectKeyword(3);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickInlineToolbarButton('formats-blockquote', 'active');
+        $this->clickInlineToolbarButton('Quote', 'active', TRUE);
+        $this->assertHTMLMatch('<blockquote><p>%1% xtn %2%</p></blockquote><p>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p><p>%4% is a paragraph to change to a quote</p>');
+        $this->checkStatusOfFormatIconsInTheInlineToolbar('active');
+
     }//end testApplyingAndRemovingQuoteUsingInlineToolbar()
 
 
@@ -268,6 +284,7 @@ class Viper_Tests_ViperFormatPlugin_QuoteUnitTest extends AbstractFormatsUnitTes
      */
     public function testApplyingAndRemovingQuoteUsingTopToolbar()
     {
+        // Test single line
         $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(0);
         $this->clickTopToolbarButton('formats-p', 'active');
@@ -278,6 +295,21 @@ class Viper_Tests_ViperFormatPlugin_QuoteUnitTest extends AbstractFormatsUnitTes
         $this->assertHTMLMatch('<blockquote><p>%1% xtn %2%</p></blockquote><div>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div><p>%4% is a paragraph to change to a quote</p>');
 
         // Make sure all icons are still enabled
+        $this->checkStatusOfFormatIconsInTheTopToolbar('active');
+
+        // Test multi-line
+        $this->selectKeyword(3);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickTopToolbarButton('formats-div', 'active');
+        $this->clickTopToolbarButton('Quote', NULL, TRUE);
+        $this->assertHTMLMatch('<blockquote><p>%1% xtn %2%</p></blockquote><blockquote><p>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p></blockquote><p>%4% is a paragraph to change to a quote</p>');
+        $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, NULL, 'active', NULL);
+
+        $this->selectKeyword(3);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickTopToolbarButton('formats-blockquote', 'active');
+        $this->clickTopToolbarButton('Quote', 'active', TRUE);
+        $this->assertHTMLMatch('<blockquote><p>%1% xtn %2%</p></blockquote><p>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p><p>%4% is a paragraph to change to a quote</p>');
         $this->checkStatusOfFormatIconsInTheTopToolbar('active');
 
     }//end testApplyingAndRemovingQuoteUsingTopToolbar()
@@ -330,30 +362,6 @@ class Viper_Tests_ViperFormatPlugin_QuoteUnitTest extends AbstractFormatsUnitTes
         $this->assertHTMLMatch('<blockquote><p>%1% xtn %2%</p></blockquote><blockquote><p>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p></blockquote><p>%4% is a paragraph to change to a quote</p>');
 
     }//end testChaningMultiLineDivToQuote()
-
-
-    /**
-     * Test applying and then removing the Quote format to a multi line Quote.
-     *
-     * @return void
-     */
-    public function testApplyingAndRemovingQuoteToMultiLineQuote()
-    {
-        $this->selectKeyword(3);
-        $this->selectInlineToolbarLineageItem(0);
-        $this->clickTopToolbarButton('formats-div', 'active');
-        $this->clickTopToolbarButton('Quote', NULL, TRUE);
-        $this->assertHTMLMatch('<blockquote><p>%1% xtn %2%</p></blockquote><blockquote><p>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p></blockquote><p>%4% is a paragraph to change to a quote</p>');
-        $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, NULL, 'active', NULL);
-
-        $this->selectKeyword(3);
-        $this->selectInlineToolbarLineageItem(0);
-        $this->clickTopToolbarButton('formats-blockquote', 'active');
-        $this->clickTopToolbarButton('Quote', 'active', TRUE);
-        $this->assertHTMLMatch('<blockquote><p>%1% xtn %2%</p></blockquote><p>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p><p>%4% is a paragraph to change to a quote</p>');
-        $this->checkStatusOfFormatIconsInTheTopToolbar('active');
-
-    }//end testRemovingAndApplyingQuoteToMultiLineQuote()
 
 
      /**
