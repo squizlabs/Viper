@@ -105,6 +105,32 @@ class Viper_Tests_ViperCoreStylesPlugin_RemoveFormatUnitTest extends AbstractVip
     }//end testRemoveFormatForAStyleElement()
 
 
+    /**
+     * Test remove format for a nested style element.
+     *
+     * @return void
+     */
+    public function testRemoveFormatForANestedStyleElement()
+    {
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('removeFormat');
+
+        $this->assertTrue($this->topToolbarButtonExists('bold'), 'Bold icon in the top toolbar should be enabled');
+        $this->assertTrue($this->topToolbarButtonExists('italic'), 'Italic icon in the top toolbar should be enabled');
+        $this->assertTrue($this->inlineToolbarButtonExists('bold'), 'Bold icon in the inline toolbar be enabled');
+        $this->assertTrue($this->inlineToolbarButtonExists('italic'), 'Italic icon in the inline toolbar be enabled');
+        $this->assertHTMLMatch('<p>test test %1% test test</p>');
+
+        // Test that undo and redo works.
+        $this->clickTopToolbarButton('historyUndo');
+        $this->assertHTMLMatch('<p>test test <strong><em>%1%</em></strong> test test</p>');
+
+        $this->clickTopToolbarButton('historyRedo');
+        $this->assertHTMLMatch('<p>test test %1% test test</p>');
+
+    }//end testRemoveFormatForANestedStyleElement()
+
+
 }//end class
 
 
