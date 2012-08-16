@@ -273,9 +273,10 @@ ViperKeyboardEditorPlugin.prototype = {
                         ViperSelection.addRange(range);
 
                         if (this.viper.isBrowser('firefox') === false) {
-                            this.viper.fireSelectionChanged();
                             this.viper.fireNodesChanged();
                         }
+
+                        this.viper.fireSelectionChanged();
 
                         return false;
                     }//end if
