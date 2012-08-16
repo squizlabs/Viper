@@ -3252,9 +3252,18 @@ ViperTableEditorPlugin.prototype = {
         var headersCount = headers.length;
         if (headersCount > 0) {
             for (var i = 0; i < headersCount; i++) {
-                headers[i].removeAttribute('headers');
+                var headersAttr = headers[i].getAttribute('headers');
+                if (headersAttr) {
+                    headersAttr = ' ' + headersAttr;
+                    if (headersAttr.match(/\stable\d+r\d+c\d+/)) {
+                        // If this is a Viper type headers attribute then remove it.
+                        headers[i].removeAttribute('headers');
+                    }
+                }
             }
         }
+
+        headers = null;
 
         var thElements = dfx.getTag('th', table);
         if (thElements.length === 0) {
@@ -3313,8 +3322,11 @@ ViperTableEditorPlugin.prototype = {
             var headers = HTMLCS.util.getCellHeaders(table);
             var c       = headers.length;
             for (var i = 0; i < c; i++) {
-                var header = headers[i];
-                header.cell.setAttribute('headers', header.headers);
+                var header      = headers[i];
+                var headersAttr = header.cell.getAttribute('headers');
+                if (!headersAttr || (' ' + headersAttr).match(/\stable\d+r\d+c\d+/)) {
+                    header.cell.setAttribute('headers', header.headers);
+                }
             }
         }
 
