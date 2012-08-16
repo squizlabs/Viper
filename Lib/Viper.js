@@ -783,6 +783,8 @@ Viper.prototype = {
      */
     getViperRange: function()
     {
+        var highlighted = this.highlightToSelection();
+
         if (this._viperRange) {
             return this._viperRange;
         }
@@ -3453,7 +3455,7 @@ Viper.prototype = {
     fireSelectionChanged: function(range, forceUpdate)
     {
         if (!range) {
-            range = this.getCurrentRange();
+            range = this.getViperRange();
             range = this.adjustRange(range);
         }
 
