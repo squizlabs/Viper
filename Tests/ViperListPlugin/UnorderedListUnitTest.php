@@ -509,16 +509,16 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractGeneralL
 
         // Check that the inline toolbar no longer appears  on the screen
         $inlineToolbarFound = true;
-        try 
+        try
         {
             $this->getInlineToolbar();
         }
         catch  (Exception $e) {
             $inlineToolbarFound = false;
         }
-        
+
         $this->assertFalse($inlineToolbarFound, 'The inline toolbar was found');
-        
+
         $this->assertHTMLMatch('<p>%1% uuuuuu. %2%</p><p>cPOc ccccc dddd. %3%</p><p>ajhsd sjsjwi hhhh:</p><ul><li>aaa %4% ccccc</li><li>Accessibility audit report</li><li>Recommendations %9% plan</li><li>Squiz Matrix guide</li></ul><h2>%10%</h2>');
 
     }//end testRemoveListItems()
@@ -949,6 +949,22 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractGeneralL
         $this->assertHTMLMatch('<p>ajhsd sjsjwi hhhh:</p><ul><li>Recommendations action plan</li><li>Squiz Matrix guide %1%</li></ul><p>New paragraph</p><p>Test para</p>');
 
     }//end testCreatingParagraphAfterListBeforeAParagraph()
+
+
+    /**
+     * Tests that shift+tab in a non list item does nothing.
+     *
+     * @return void
+     */
+    public function testShiftTagInNonListItem()
+    {
+        $this->click($this->findKeyword(4));
+        $this->keyDown('Key.SHIFT + Key.TAB');
+        $this->keyDown('Key.SHIFT + Key.TAB');
+
+        $this->assertHTMLMatch('<p>%1% uuuuuu. %2%</p><p>cPOc ccccc dddd. %3%</p><p>ajhsd sjsjwi hhhh:</p><p>aaa %4% ccccc</p><ul><li>%5% %6% templates</li><li>Audit %7% %8%</li><li>Accessibility audit report</li><li>Recommendations %9% plan</li><li>Squiz Matrix guide</li></ul><h2>%10%</h2>');
+
+    }//end testShiftTagInNonListItem()
 
 
 }//end class

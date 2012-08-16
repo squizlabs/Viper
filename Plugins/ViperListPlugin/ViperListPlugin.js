@@ -103,13 +103,15 @@ ViperListPlugin.prototype = {
 
                     dfx.preventDefault(e);
                     return false;
-                } else if (dfx.isTag(startNode, 'p') === true
-                    || ((startNode.nodeType === dfx.TEXT_NODE || dfx.isStubElement(startNode) === true) && dfx.isTag(dfx.getFirstBlockParent(startNode), 'p') === true)
-                ) {
-                    if (dfx.getParents(startNode, 'td,th,blockquote').length === 0) {
-                        self.convertRangeToList(range);
-                        dfx.preventDefault(e);
-                        return false;
+                } else if (e.shiftKey !== true) {
+                    if (dfx.isTag(startNode, 'p') === true
+                        || ((startNode.nodeType === dfx.TEXT_NODE || dfx.isStubElement(startNode) === true) && dfx.isTag(dfx.getFirstBlockParent(startNode), 'p') === true)
+                    ) {
+                        if (dfx.getParents(startNode, 'td,th,blockquote').length === 0) {
+                            self.convertRangeToList(range);
+                            dfx.preventDefault(e);
+                            return false;
+                        }
                     }
                 }
             }

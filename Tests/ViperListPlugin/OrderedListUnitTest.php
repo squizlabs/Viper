@@ -945,6 +945,22 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractGeneralLis
     }//end testCreatingParagraphAfterListBeforeAParagraph()
 
 
+    /**
+     * Tests that shift+tab in a non list item does nothing.
+     *
+     * @return void
+     */
+    public function testShiftTagInNonListItem()
+    {
+        $this->click($this->findKeyword(4));
+        $this->keyDown('Key.SHIFT + Key.TAB');
+        $this->keyDown('Key.SHIFT + Key.TAB');
+
+        $this->assertHTMLMatch('<p>%1% uuuuuu. %2%</p><p>cPOc ccccc dddd. %3%</p><p>ajhsd sjsjwi hhhh:</p><p>aaa %4% ccccc</p><ol><li>%5% %6% templates</li><li>Audit %7% %8%</li><li>Accessibility audit report</li><li>Recommendations %9% plan</li><li>Squiz Matrix guide</li></ol><h2>%10%</h2>');
+
+    }//end testShiftTagInNonListItem()
+
+
 }//end class
 
 ?>
