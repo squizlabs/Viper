@@ -981,7 +981,7 @@ ViperCoreStylesPlugin.prototype = {
                 self.viper.fireSelectionChanged();
             }, 10);
         } else {
-            if (nodeSelection) {
+            if (nodeSelection && nodeSelection.parentNode) {
                 range.selectNode(nodeSelection);
                 ViperSelection.addRange(range);
             }
