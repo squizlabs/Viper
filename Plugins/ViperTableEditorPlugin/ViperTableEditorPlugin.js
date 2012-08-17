@@ -77,8 +77,21 @@ ViperTableEditorPlugin.prototype = {
                     var tables = dfx.getTag('table', data.element);
                     for (var i = 0; i < tables.length; i++) {
                         self.setTableHeaders(tables[i]);
+                        self._initTable(tables[i]);
                     }
                 });
+            } else {
+                var tables = dfx.getTag('table', data.element);
+                for (var i = 0; i < tables.length; i++) {
+                    self._initTable(tables[i]);
+                }
+            }
+        });
+
+        this.viper.registerCallback('Viper:enabled', 'ViperTableEditorPlugin', function() {
+            var tables = dfx.getTag('table', self.viper.getViperElement());
+            for (var i = 0; i < tables.length; i++) {
+                self._initTable(tables[i]);
             }
         });
 
@@ -347,8 +360,6 @@ ViperTableEditorPlugin.prototype = {
                 }
 
                 self.hideCellToolsIcon();
-                //self.removeHighlights();
-
                 return true;
             });
         }//end if

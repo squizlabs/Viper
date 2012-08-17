@@ -45,6 +45,8 @@ function Viper(id, options, callback, editables)
         options = {};
     }
 
+    this.setSetting('emptyTableCellContent', '<br />');
+
     this.init();
 
     if (editables && editables.length > 0) {
@@ -120,9 +122,35 @@ Viper.prototype = {
 
     },
 
+    /**
+     * Sets the given settings.
+     *
+     * @param {object}  settings Setting name and value list.
+     * @param {boolean} clean    If true then the original settings will be wiped out.
+     *
+     * @return void
+     */
+    setSettings: function(settings, clean)
+    {
+        if (clean === true) {
+            this._settings = {};
+        }
+
+        for (var setting in settings) {
+            this.setSetting(setting, settings[setting]);
+        }
+
+    },
+
     getSetting: function(setting)
     {
         return this._settings[setting];
+
+    },
+
+    getSettings: function()
+    {
+        return dfx.clone(this._settings);
 
     },
 
@@ -4323,7 +4351,7 @@ Viper.prototype = {
      *
      * @return string.
      */
-    getHtml: function(elem)
+    getHtml: function(elem, settings)
     {
         elem = elem || this.element;
 
@@ -4335,6 +4363,16 @@ Viper.prototype = {
 
         if (!elem) {
             return '';
+        }
+
+        var originalSettings = this.getSettings();
+
+        if (!settings) {
+            // When getHtml is called the final output of empty table cells should
+            // be &nbsp; to make them look fine in all browsers.
+            this.setSetting('emptyTableCellContent', '&nbsp;');
+        } else {
+            this.setSettings(settings);
         }
 
         // Clone the element so we dont modify the actual contents.
@@ -4352,6 +4390,9 @@ Viper.prototype = {
         this.fireCallbacks('Viper:getHtml', {element: clone});
         var html = dfx.getHtml(clone);
         html     = this.cleanHTML(html);
+
+        // Revert to original settings.
+        this.setSettings(originalSettings, true);
 
         return html;
 
@@ -4582,6 +4623,18 @@ Viper.prototype = {
                     if (!node.nextSibling
                         || (node.hasAttribute && node.hasAttribute('_moz_dirty'))
                     ) {
+                        if (!node.previousSibling
+                            && (dfx.isTag(node.parentNode, 'td') === true
+                            || dfx.isTag(node.parentNode, 'th') === true)
+                        ) {
+                            // This BR element is the only child of the table cell,
+                            // depending on emptyTableCellContent, set the cell's
+                            // content.
+                            var emptyTableCellContent = this.getSetting('emptyTableCellContent');
+                            dfx.setHtml(node.parentNode, emptyTableCellContent);
+                            return;
+                        }
+
                         if (tag) {
                             var newNode = Viper.document.createTextNode(' ');
                             dfx.insertBefore(node, newNode);
