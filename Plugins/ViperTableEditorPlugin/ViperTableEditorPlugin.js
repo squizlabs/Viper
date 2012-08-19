@@ -179,7 +179,7 @@ ViperTableEditorPlugin.prototype = {
                         }
                     }
                 }
-            } else {
+            } else if (self.viper.isInputKey(e) === true) {
                 self.hideCellToolsIcon();
                 self.removeHighlights();
                 self.hideToolbar();
