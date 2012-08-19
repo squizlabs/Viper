@@ -2294,7 +2294,7 @@ ViperTableEditorPlugin.prototype = {
      *
      * @return {DOMNode} The new cell element.
      */
-    convertToCell: function(cell, type)
+    convertToCell: function(cell, type, actualType)
     {
         var elem = cell;
         type     = type || 'cell';
@@ -2330,6 +2330,10 @@ ViperTableEditorPlugin.prototype = {
             }
 
             dfx.remove(cell);
+
+            if (!actualType || actualType === 'cell') {
+                this.tableUpdated();
+            }
         } else if (type === 'col') {
             var cells   = this._getCellsExpanded();
             var cellPos = this.getCellPosition(cell);
@@ -2342,12 +2346,14 @@ ViperTableEditorPlugin.prototype = {
 
                 var colCellPos = this.getCellPosition(colCell);
                 if (colCellPos.col === cellPos.col) {
-                    var newElement = this.convertToCell(colCell);
+                    var newElement = this.convertToCell(colCell, 'cell', 'col');
                     if (cell === colCell) {
                         elem = newElement;
                     }
                 }
             }
+
+            this.tableUpdated();
         } else if (type === 'row') {
             var cellPos = this.getCellPosition(cell);
             var cells   = this._getRowCells(cell.parentNode);
@@ -2357,14 +2363,14 @@ ViperTableEditorPlugin.prototype = {
                     continue;
                 }
 
-                var newElement = this.convertToCell(rowCell);
+                var newElement = this.convertToCell(rowCell, 'cell', 'row');
                 if (cell === rowCell) {
                     elem = newElement;
                 }
             }
-        }//end if
 
-        this.tableUpdated();
+            this.tableUpdated();
+        }//end if
 
         return elem;
 
@@ -3266,7 +3272,7 @@ ViperTableEditorPlugin.prototype = {
                 var headersAttr = headers[i].getAttribute('headers');
                 if (headersAttr) {
                     headersAttr = ' ' + headersAttr;
-                    if (headersAttr.match(/\stable\d+r\d+c\d+/)) {
+                    if (headersAttr.match(/\s[\w\d]+r\d+c\d+/)) {
                         // If this is a Viper type headers attribute then remove it.
                         headers[i].removeAttribute('headers');
                     }
