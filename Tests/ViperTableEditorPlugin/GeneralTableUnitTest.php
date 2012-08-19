@@ -715,7 +715,7 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
         $this->keyDown('Key.SHIFT + Key.TAB');
         $this->type('1');
 
-        $this->assetTableWithoutHeaders('<p>Test %1%</p><table style="width: 100%; " border="1"><tbody><tr><th></th><th>1</th><th>2</th></tr><tr><td>3</td><td></td><td></td></tr></tbody></table><p></p>');
+        $this->assertTableWithoutHeaders('<p>Test %1%</p><table style="width: 100%; " border="1"><tbody><tr><th></th><th>1</th><th>2</th></tr><tr><td>3</td><td></td><td></td></tr></tbody></table><p></p>');
 
     }//end testTableKeyboardNav()
 
@@ -760,7 +760,7 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
         $this->keyDown('Key.SHIFT + Key.TAB');
         $this->type('4');
 
-        $this->assetTableWithoutHeaders('<p>Test %1%</p><table style="width: 100%; " border="1"><tbody><tr><th rowspan="2"></th><th></th><th>1</th></tr><tr><td colspan="2">2</td></tr><tr><td>3</td><td></td><td>4</td></tr><tr><td>5</td><td></td><td></td></tr></tbody></table><p></p>');
+        $this->assertTableWithoutHeaders('<p>Test %1%</p><table style="width: 100%; " border="1"><tbody><tr><th rowspan="2"></th><th></th><th>1</th></tr><tr><td colspan="2">2</td></tr><tr><td>3</td><td></td><td>4</td></tr><tr><td>5</td><td></td><td></td></tr></tbody></table><p></p>');
 
     }//end testTableKeyboardNavWithRowNColSpan()
 
@@ -817,7 +817,7 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
         $this->keyDown('Key.DOWN');
         $this->type('test');
 
-        $this->assetTableWithoutHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><tbody><tr><th></th><th></th><th></th><th></th></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p>&nbsp;test</p>');
+        $this->assertTableWithoutHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><tbody><tr><th></th><th></th><th></th><th></th></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p>&nbsp;test</p>');
 
     }//end testTableNavigatingOutOfTable()
 
