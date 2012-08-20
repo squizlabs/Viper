@@ -678,7 +678,7 @@ ViperFormatPlugin.prototype = {
                         // Check if this node contains any block elements, if it does
                         // then headings cannnot be applied.
                         var blockChildren = self.viper.getBlockChildren(nodeSelection);
-                        if (blockChildren.length === 0 || (blockChildren.length === 1 && dfx.isTag(nodeSelection, 'blockquote') === true)) {
+                        if (blockChildren.length <= 1) {
                             tools.enableButton('headings');
                         }
                     }
@@ -1495,10 +1495,16 @@ ViperFormatPlugin.prototype = {
     handleFormat: function(type)
     {
         var lineage         = this._inlineToolbar.getLineage();
+        var currentLinIndex = this._inlineToolbar.getCurrentLineageIndex();
         var range           = this.viper.getViperRange();
         var selectedNode    = selectedNode || range.getNodeSelection();
         var nodeSelection   = selectedNode;
         var viperElement    = this.viper.getViperElement();
+
+        var formatElement   = lineage[currentLinIndex];
+        if (formatElement && formatElement.nodeType !== dfx.TEXT_NODE) {
+            selectedNode = formatElement;
+        }
 
         if (selectedNode === viperElement) {
             selectedNode = null;
@@ -1818,7 +1824,7 @@ ViperFormatPlugin.prototype = {
                         newElem.appendChild(childPTag.firstChild);
                     }
                 }
-            } else if (isBlockQuote === true && type.match(/h\d/)) {
+            } else if (isBlockQuote === true && type.match(/^h\d$/)) {
                 while (element.firstChild) {
                     newElem.appendChild(element.firstChild);
                 }
@@ -1842,6 +1848,18 @@ ViperFormatPlugin.prototype = {
                 }
 
                 newElem = null;
+            } else if (type.match(/^h\d$/)) {
+                while (element.firstChild) {
+                    if (dfx.isBlockElement(element.firstChild) === true) {
+                        while (element.firstChild.firstChild) {
+                            newElem.appendChild(element.firstChild.firstChild);
+                        }
+
+                        dfx.remove(element.firstChild);
+                    } else {
+                        newElem.appendChild(element.firstChild);
+                    }
+                }
             } else {
                 while (element.firstChild) {
                     newElem.appendChild(element.firstChild);
