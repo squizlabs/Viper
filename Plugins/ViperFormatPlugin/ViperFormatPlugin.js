@@ -823,6 +823,11 @@ ViperFormatPlugin.prototype = {
                     // Its a text selection.
                     var startBlock    = dfx.getFirstBlockParent(startNode);
                     var commonParent  = self.getCommonFormatElement(data.range);
+
+                    if (commonParent && dfx.isBlockElement(commonParent) === false) {
+                        commonParent  = dfx.getFirstBlockParent(commonParent);
+                    }
+
                     var commonTagName = dfx.getTagName(commonParent);
 
                     if (commonParent && formatButtons[commonTagName]) {

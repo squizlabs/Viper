@@ -1403,6 +1403,31 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractFormatsUnitTe
     }//end testCreatingNewContentAfterDivSection()
 
 
+    /**
+     * Test that selecting text inside an inline element shows the correct toolbar button status.
+     *
+     * @return void
+     */
+    public function testFormatIconStatusForSelectionInInlineElement()
+    {
+        $this->selectKeyword(2);
+        $this->assertTrue($this->topToolbarButtonExists('formats-p', 'disabled'), 'Formats button should be disabled');
+
+        $this->click($this->findKeyword(1));
+        $this->selectKeyword(3);
+        $this->assertTrue($this->topToolbarButtonExists('formats-p', 'disabled'), 'Formats button should be disabled');
+
+        $this->click($this->findKeyword(1));
+        $this->selectKeyword(4);
+        $this->assertTrue($this->topToolbarButtonExists('formats-div'), 'Formats div button should be enabled');
+
+        $this->click($this->findKeyword(1));
+        $this->selectKeyword(5);
+        $this->assertTrue($this->topToolbarButtonExists('formats-div'), 'Formats div button should be enabled');
+
+    }//end testFormatIconStatusForSelectionInInlineElement()
+
+
 }//end class
 
 ?>
