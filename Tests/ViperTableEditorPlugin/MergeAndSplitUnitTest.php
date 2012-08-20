@@ -134,7 +134,7 @@ class Viper_Tests_ViperTableEditorPlugin_MergeAndSplitUnitTest extends AbstractV
      *
      * @return void
      */
-    public function testMergeSplitAA()
+    public function testMergeSplit1()
     {
         $this->insertTable(1, 0, 4, 5);
 
@@ -168,7 +168,7 @@ class Viper_Tests_ViperTableEditorPlugin_MergeAndSplitUnitTest extends AbstractV
         $this->clickMergeSplitIcon('splitVert');
         $this->assertTableWithoutHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><tbody><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
 
-    }//end testMergeSplit()
+    }//end testMergeSplit1()
 
 
     /**
@@ -182,7 +182,7 @@ class Viper_Tests_ViperTableEditorPlugin_MergeAndSplitUnitTest extends AbstractV
 
         $this->assertMergeAndSplitIconStatuses(6, FALSE, FALSE, TRUE, TRUE, TRUE, TRUE);
         $this->clickButton('mergeDown');
-        $this->assertMergeAndSplitIconStatuses(6, FALSE, FALSE, TRUE, TRUE, TRUE, TRUE);
+        $this->assertMergeAndSplitIconStatuses(6, FALSE, TRUE, TRUE, TRUE, TRUE, TRUE);
 
         $this->assertTableWithoutHeaders('<p>Test %1%</p><table style="width: 100%; " border="1"><tbody><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td rowspan="2"></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
 
