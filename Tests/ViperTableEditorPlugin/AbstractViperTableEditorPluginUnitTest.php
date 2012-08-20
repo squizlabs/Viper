@@ -31,7 +31,7 @@ abstract class AbstractViperTableEditorPluginUnitTest extends AbstractViperUnitT
 
             $cellCount = $cols - 1;
             if ($rows > 1) {
-                $cellCount += (($rows - 1) * 10);
+                $cellCount += (($rows - 1) * 8);
             }
 
             $this->clickElement('.Viper-sizePicker td', $cellCount);
