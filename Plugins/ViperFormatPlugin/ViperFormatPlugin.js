@@ -1534,7 +1534,7 @@ ViperFormatPlugin.prototype = {
                 // Text node, get the first block parent.
                 selectedNode = dfx.getFirstBlockParent(selectedNode);
             }
-        } else if (!selectedNode && (range.collapsed === true || type.match(/h\d/))) {
+        } else if (!selectedNode && (range.collapsed === true || type.match(/^h\d$/))) {
             selectedNode = dfx.getFirstBlockParent(range.startContainer);
         }
 
@@ -1557,6 +1557,18 @@ ViperFormatPlugin.prototype = {
                         newElem.appendChild(document.createElement('p'));
                         while (selectedNode.firstChild) {
                             newElem.firstChild.appendChild(selectedNode.firstChild);
+                        }
+                    } else if (type.match(/^h\d$/)) {
+                        while (selectedNode.firstChild) {
+                            if (dfx.isBlockElement(selectedNode.firstChild) === true) {
+                                while (selectedNode.firstChild.firstChild) {
+                                    newElem.appendChild(selectedNode.firstChild.firstChild);
+                                }
+
+                                dfx.remove(selectedNode.firstChild);
+                            } else {
+                                newElem.appendChild(selectedNode.firstChild);
+                            }
                         }
                     } else {
                         while (selectedNode.firstChild) {
