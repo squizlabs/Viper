@@ -50,7 +50,9 @@ class Viper_Tests_ViperTableEditorPlugin_TablePropertiesUnitTest extends Abstrac
 
         $this->assertTableWithoutHeaders('<table border="1" style="width: 100%;" summary="Summary"><tbody><tr><th colspan="2" rowspan="2">Survey</th><th rowspan="2">All Genders</th><th colspan="2">By Gender</th></tr><tr><th>Males</th><th>Females</th></tr><tr><th rowspan="2">All Regions</th><th>N</th><td>3</td><td>1</td><td>2</td></tr><tr><th>S</th><td>3</td><td>1</td><td>2</td></tr></tbody></table>');
 
-        $this->clearFieldValue('Summary');
+        $this->clickField('Summary');
+        $this->keyDown('Key.CMD + a');
+        $this->keyDown('Key.DELETE');
         $this->clickButton('Update Changes', NULL, TRUE);
         $this->assertTableWithoutHeaders('<table border="1" style="width: 100%;"><tbody><tr><th colspan="2" rowspan="2">Survey</th><th rowspan="2">All Genders</th><th colspan="2">By Gender</th></tr><tr><th>Males</th><th>Females</th></tr><tr><th rowspan="2">All Regions</th><th>N</th><td>3</td><td>1</td><td>2</td></tr><tr><th>S</th><td>3</td><td>1</td><td>2</td></tr></tbody></table>');
 
