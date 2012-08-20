@@ -304,7 +304,7 @@ class Viper_Tests_ViperTableEditorPlugin_RowUnitTest extends AbstractViperTableE
 
         $this->assertTableWithoutHeaders('<table style="width: 300px;" border="1" cellspacing="2" cellpadding="2"><tbody><tr><td colspan="2"></td><td></td><td colspan="2"></td></tr><tr><td style="width: 100px;" colspan="2">Survey</td><td rowspan="3">All Genders</td><td style="width: 100px;" colspan="2">By Gender</td></tr><tr><td colspan="2"></td><td colspan="2"></td></tr><tr><td></td><td></td><td>Male</td><td>Females</td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr></tbody></table>');
 
-        $this->clickCell(0);
+        $this->clickCell(1);
         $this->showTools(6, 'row');
         $this->clickButton('delete');
         $this->assertTableWithoutHeaders('<table style="width: 300px;" border="1" cellspacing="2" cellpadding="2"><tbody><tr><td colspan="2"></td><td></td><td colspan="2"></td></tr><tr><td style="width: 100px;" colspan="2">Survey</td><td rowspan="2">All Genders</td><td style="width: 100px;" colspan="2">By Gender</td></tr><tr><td></td><td></td><td>Male</td><td>Females</td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr></tbody></table>');
@@ -371,7 +371,6 @@ class Viper_Tests_ViperTableEditorPlugin_RowUnitTest extends AbstractViperTableE
      */
     public function testHeaderIdsRemovedWhenYouRemoveHeaderRow()
     {
-
         $this->insertTableWithSpecificId('test', 3, 4, 2, 1);
         $this->assertHTMLMatch('<p>Test %1%</p><table style="width: 100%;" id="test" border="1"><tbody><tr><th id="testr1c1"></th><th id="testr1c2"></th><th id="testr1c3"></th><th id="testr1c4"></th></tr><tr><td headers="testr1c1"></td><td headers="testr1c2"></td><td headers="testr1c3"></td><td headers="testr1c4"></td></tr><tr><td headers="testr1c1"></td><td headers="testr1c2"></td><td headers="testr1c3"></td><td headers="testr1c4"></td></tr></tbody></table><p></p>');
 
@@ -386,6 +385,32 @@ class Viper_Tests_ViperTableEditorPlugin_RowUnitTest extends AbstractViperTableE
         $this->assertHTMLMatch('<p>Test %1%</p><table style="width: 100%;" id="test" border="1"><tbody><tr><th id="testr1c1"></th><th id="testr1c2"></th><th id="testr1c3"></th><th id="testr1c4"></th></tr><tr><td headers="testr1c1"></td><td headers="testr1c2"></td><td headers="testr1c3"></td><td headers="testr1c4"></td></tr><tr><td headers="testr1c1"></td><td headers="testr1c2"></td><td headers="testr1c3"></td><td headers="testr1c4"></td></tr></tbody></table><p></p>');
 
     }//end testHeaderIdsRemovedWhenYouRemoveHeaderRow()
+
+
+        /**
+     * Test that undo/redo is only one event for converting header cell to a normal cell.
+     *
+     * @return void
+     */
+    public function testUndoRedoForHeaderRowToNormalRowConversion()
+    {
+        $this->insertTableWithSpecificId('test', 3, 4, 2, 1);
+        $this->assertHTMLMatch('<p>Test %1%</p><table style="width: 100%;" id="test" border="1"><tbody><tr><th id="testr1c1"></th><th id="testr1c2"></th><th id="testr1c3"></th><th id="testr1c4"></th></tr><tr><td headers="testr1c1"></td><td headers="testr1c2"></td><td headers="testr1c3"></td><td headers="testr1c4"></td></tr><tr><td headers="testr1c1"></td><td headers="testr1c2"></td><td headers="testr1c3"></td><td headers="testr1c4"></td></tr></tbody></table><p></p>');
+
+        $this->showTools(0, 'row');
+        $this->clickField('Heading');
+        $this->clickInlineToolbarButton('Update Changes', NULL, TRUE);
+        $this->assertHTMLMatch('<p>Test XAX</p><table border="1" id="test" style="width: 100%;"><tbody><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
+
+        $this->clickTopToolbarButton('historyUndo');
+
+        $this->assertHTMLMatch('<p>Test %1%</p><table style="width: 100%;" id="test" border="1"><tbody><tr><th id="testr1c1"></th><th id="testr1c2"></th><th id="testr1c3"></th><th id="testr1c4"></th></tr><tr><td headers="testr1c1"></td><td headers="testr1c2"></td><td headers="testr1c3"></td><td headers="testr1c4"></td></tr><tr><td headers="testr1c1"></td><td headers="testr1c2"></td><td headers="testr1c3"></td><td headers="testr1c4"></td></tr></tbody></table><p></p>');
+
+        $this->clickTopToolbarButton('historyRedo');
+
+        $this->assertHTMLMatch('<p>Test XAX</p><table border="1" id="test" style="width: 100%;"><tbody><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
+
+    }//end testUndoRedoForHeaderRowToNormalRowConversion()
 
 
 }//end class
