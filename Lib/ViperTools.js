@@ -286,8 +286,12 @@ ViperTools.prototype = {
             return;
         }
 
-        button.setAttribute('title', button.getAttribute('title').replace(' [Not available]', ''));
-        button.setAttribute('title', button.getAttribute('title') + ' [Not available]');
+        var title = button.getAttribute('title');
+        if (title) {
+            title = title.replace(' [Not available]', '');
+            button.setAttribute('title', title + ' [Not available]');
+        }
+
         dfx.addClass(button, 'Viper-disabled');
 
     },
