@@ -1176,16 +1176,18 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
     /**
      * Assert that given HTML string matches the test page's HTML.
      *
-     * @param string $html The HTML string to compare.
-     * @param string $msg  The error message to print.
+     * @param string  $html               The HTML string to compare.
+     * @param string  $msg                The error message to print.
+     * @param boolean $removeTableHeaders If TRUE then table headers will be removed
+     *                                    before matching HTML.
      *
      * @return void
      */
-    protected function assertHTMLMatch($html, $msg=NULL)
+    protected function assertHTMLMatch($html, $msg=NULL, $removeTableHeaders=FALSE)
     {
         $html = $this->replaceKeywords($html);
 
-        $pageHtml = $this->getHtml();
+        $pageHtml = $this->getHtml(NULL, 0, $removeTableHeaders);
 
         $pageHtml = preg_replace("/<([a-z0-9]+)\n([a-z0-9]*)/i", '<$1$2', $pageHtml);
         $pageHtml = str_replace("<\n", '<', $pageHtml);
@@ -1209,6 +1211,21 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         $this->assertEquals($html, $pageHtml, $msg);
 
     }//end assertHTMLMatch()
+
+
+    /**
+     * Checks that the expected html matches the actual html after removing the header tags from the tables.
+     *
+     * @param string $html The expected HTML.
+     * @param string $msg  The error message to print.
+     *
+     * @return void
+     */
+    protected function assertHTMLMatchNoHeaders($html, $msg=NULL)
+    {
+        $this->assertHTMLMatch($html, $msg, TRUE);
+
+    }//end assertHTMLMatchNoHeaders()
 
 
     /**
@@ -2322,17 +2339,20 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
     /**
      * Returns the HTML of the test page.
      *
-     * @param string  $selector The jQuery selector to use for finding the element.
-     * @param integer $index    The element index of the resulting array.
+     * @param string  $selector           The jQuery selector to use for finding the element.
+     * @param integer $index              The element index of the resulting array.
+     * @param boolean $removeTableHeaders If TRUE then table headers will be removed.
      *
      * @return string
      */
-    protected function getHtml($selector=NULL, $index=0)
+    protected function getHtml($selector=NULL, $index=0, $removeTableHeaders=FALSE)
     {
+        $removeTableHeaders = (int) $removeTableHeaders;
+
         if ($selector === NULL) {
-            $text = $this->execJS('gHtml()');
+            $text = $this->execJS('gHtml(null, null, '.$removeTableHeaders.')');
         } else {
-            $text = $this->execJS('gHtml("'.$selector.'", '.$index.')');
+            $text = $this->execJS('gHtml("'.$selector.'", '.$index.', '.$removeTableHeaders.')');
         }
 
         // Google Chrome always adds an extra space at the end of a style attribute
@@ -2399,8 +2419,12 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      *
      * @return void
      */
-    protected function removeTableHeaders($tableIndex=0, $removeid=TRUE)
+    protected function removeTableHeaders($tableIndex=NULL, $removeid=TRUE)
     {
+        if ($tableIndex === NULL) {
+            $tableIndex = 'null';
+        }
+
         $js = 'rmTableHeaders('.$tableIndex.',';
 
         if ($removeid === TRUE) {

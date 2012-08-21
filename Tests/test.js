@@ -26,15 +26,22 @@ var viperTest = {
 /**
  * Returns the HTML contents of the specified element.
  */
-function gHtml(selector, index)
+function gHtml(selector, index, removeTableHeaders)
 {
+    if (removeTableHeaders) {
+        rmTableHeaders(null, true);
+    }
+
+    var html = '';
     index = index || 0;
     if (selector) {
-        var html = viperTest.getWindow().dfx.getHtml(viperTest.getWindow().dfxjQuery(selector)[index]).replace("\n", '');
-        return viperTest.getWindow().viper.getHtml(html);
+        html = viperTest.getWindow().dfx.getHtml(viperTest.getWindow().dfxjQuery(selector)[index]).replace("\n", '');
+        html = viperTest.getWindow().viper.getHtml(html);
     } else {
-        return viperTest.getWindow().viper.getHtml();
+        html = viperTest.getWindow().viper.getHtml();
     }
+
+    return html;
 
 }
 
@@ -261,7 +268,17 @@ function insTable(rows, cols, header, id)
 
 function rmTableHeaders(tblIndex, removeid)
 {
-    var table = viperTest.getWindow().dfx.getTag('table')[tblIndex];
+    var tables = viperTest.getWindow().dfx.getTag('table');
+
+    if (tblIndex === null) {
+        for (var i = 0; i < tables.length; i++) {
+            rmTableHeaders(i, removeid);
+        }
+
+        return;
+    }
+
+    table = tables[tblIndex];
     if (!table) {
         return;
     }

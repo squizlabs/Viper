@@ -193,8 +193,7 @@ abstract class AbstractViperTableEditorPluginUnitTest extends AbstractViperUnitT
      */
     protected function assertTableWithoutHeaders($html, $msg=NULL)
     {
-        $this->removeTableHeaders();
-        $this->assertHTMLMatch($html, $msg);
+        $this->assertHTMLMatchNoHeaders($html, $msg);
 
     }//end assertTableWithoutHeaders()
 
