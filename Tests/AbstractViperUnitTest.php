@@ -1177,10 +1177,11 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      * Assert that given HTML string matches the test page's HTML.
      *
      * @param string $html The HTML string to compare.
+     * @param string $msg  The error message to print.
      *
      * @return void
      */
-    protected function assertHTMLMatch($html)
+    protected function assertHTMLMatch($html, $msg=NULL)
     {
         $html = $this->replaceKeywords($html);
 
@@ -1205,7 +1206,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
             $html     = $this->_orderTagAttributes($html);
         }
 
-        $this->assertEquals($html, $pageHtml);
+        $this->assertEquals($html, $pageHtml, $msg);
 
     }//end assertHTMLMatch()
 

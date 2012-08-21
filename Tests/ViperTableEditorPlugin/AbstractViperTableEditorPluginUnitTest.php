@@ -84,14 +84,17 @@ abstract class AbstractViperTableEditorPluginUnitTest extends AbstractViperUnitT
     /**
      * Shows the specified tools for the given cell.
      *
-     * @param integer $cellNum The cell to click.
+     * @param integer $cellNum The cell to click, NULL for the active cell.
      * @param string  $type    The type of the tools, table, row, col, or cell.
      *
      * @return void
      */
     protected function showTools($cellNum, $type)
     {
-        $this->clickCell($cellNum);
+        if ($cellNum !== NULL) {
+            $this->clickCell($cellNum);
+        }
+
         usleep(100);
 
         $toolIconRect = $this->getBoundingRectangle('#test-ViperTEP', 0);
@@ -179,13 +182,14 @@ abstract class AbstractViperTableEditorPluginUnitTest extends AbstractViperUnitT
      * Checks that the expected html matches the actual html after removing the header tags from the table.
      *
      * @param string $html The expected HTML.
+     * @param string $msg  The error message to print.
      *
      * @return void
      */
-    protected function assertTableWithoutHeaders($html)
+    protected function assertTableWithoutHeaders($html, $msg=NULL)
     {
         $this->removeTableHeaders();
-        $this->assertHTMLMatch($html);
+        $this->assertHTMLMatch($html, $msg);
 
     }//end assertTableWithoutHeaders()
 
