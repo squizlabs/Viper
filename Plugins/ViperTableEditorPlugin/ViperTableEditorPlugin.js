@@ -3273,6 +3273,11 @@ ViperTableEditorPlugin.prototype = {
         var tbody      = document.createElement('tbody');
         var firstCol   = null;
         var headerOpts = this._headerOptions;
+        var thead      = null;
+
+        if (headerType === 2 || headerType === 3) {
+            thead = document.createElement('thead');
+        }
 
         for (var i = 0; i < rows; i++) {
             var tr = document.createElement('tr');
@@ -3302,7 +3307,13 @@ ViperTableEditorPlugin.prototype = {
                 }
             }//end for
 
-            tbody.appendChild(tr);
+            if (thead) {
+                table.appendChild(thead);
+                thead.appendChild(tr);
+                thead = null;
+            } else {
+                tbody.appendChild(tr);
+            }
         }//end for
 
         table.appendChild(tbody);
