@@ -172,6 +172,47 @@ class Viper_Tests_ViperTableEditorPlugin_TableHeadersUnitTest extends AbstractVi
     }//end testHeaderTagsAddedWhenHeaderColAdded()
 
 
+    /**
+     * Test that header conversions and creations are done correctly.
+     *
+     * @return void
+     */
+    public function testRowHeaderConversion()
+    {
+        $results = array(
+                    1  => '<table><thead><tr><th>%1%</th><th>test</th></tr></thead></table>',
+                    2  => '<table><thead><tr><th>%1%</th><th>test</th></tr></thead></table>',
+                    3  => '<table><thead><tr><th>%1%</th><th>test</th></tr></thead><tbody><tr><td colspan="2">test</td></tr></tbody></table>',
+                    4  => '<table><tbody><tr><td colspan="2">test</td></tr><tr><th>%1%</th><th>test</th></tr></tbody></table>',
+                    5  => '<table><thead><tr><td>test</td><td>test</td></tr><tr><th>%1%</th><th>test</th></tr></thead><tbody><tr><td colspan="2">test</td></tr></tbody></table>',
+                    6  => '<table><thead><tr><td>test</td><td>test</td></tr></thead><tbody><tr><td colspan="2">test</td></tr><tr><th>%1%</th><th>test</th></tr></tbody></table>',
+                    7  => '<table><tbody><tr><td>%1%</td><td>test</td></tr></tbody></table>',
+                    8  => '<table><tbody><tr><td>%1%</td><td>test</td></tr></tbody></table>',
+                    9  => '<table><tbody><tr><td>%1%</td><td>test</td></tr><tr><td colspan="2">test</td></tr></tbody></table>',
+                    10 => '<table><tbody><tr><td colspan="2">test</td></tr><tr><td>%1%</td><td>test</td></tr></tbody></table>',
+                    11 => '<table><thead><tr><td>test</td><td>test</td></tr></thead><tbody><tr><td>%1%</td><td>test</td></tr><tr><td colspan="2">test</td></tr></tbody></table>',
+                    12 => '<table><thead><tr><td>test</td><td>test</td></tr></thead><tbody><tr><td colspan="2">test</td></tr><tr><td>%1%</td><td>test</td></tr></tbody></table>',
+                    13 => '<table><thead><tr><td>%1%</td><td>test</td></tr><tr><th>test</th><th>test</th></tr></thead><tbody><tr><td colspan="2">test</td></tr></tbody></table>',
+                    14 => '<table><thead><tr><th>test</th><th>test</th></tr></thead><tbody><tr><td>%1%</td><td>test</td></tr><tr><td colspan="2">test</td></tr></tbody></table>',
+                    15 => '<table><thead><tr><th>test</th><th>test</th></tr></thead><tbody><tr><td>%1%</td><td>test</td></tr></tbody></table>',
+                    16 => '<table><tbody><tr><td>%1%</td><td>test</td></tr></tbody></table>',
+                    17 => '<table><tfoot><tr><td colspan="2">test</td></tr></tfoot><tbody><tr><td>%1%</td><td>test</td></tr></tbody></table>',
+                   );
+
+        $testCount = count($results);
+        for ($i = 1; $i <= $testCount; $i++) {
+            $this->useTest($i);
+            $this->click($this->findKeyword(1));
+            $this->showTools(NULL, 'row');
+            $this->clickField('Heading');
+            $this->keyDown('Key.ENTER');
+
+            $this->assertTableWithoutHeaders($results[$i], 'Test '.$i.' HTML check has failed');
+        }
+
+    }//end testRowHeaderConversion()
+
+
 }//end class
 
 ?>

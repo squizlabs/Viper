@@ -1460,6 +1460,64 @@ ViperTableEditorPlugin.prototype = {
 
     },
 
+    createTableHeader: function(table)
+    {
+        if (dfx.getTag('thead', table).length > 0) {
+            return null;
+        }
+
+        var header = document.createElement('thead');
+        var tfoot  = dfx.getTag('tfoot', table);
+        if (tfoot.length === 0) {
+            var tbody = dfx.getTag('tbody', table);
+            if (tbody.length === 0) {
+                table.appendChild(header);
+            } else {
+                dfx.insertBefore(tbody[0], header);
+            }
+        } else {
+            dfx.insertBefore(tfoot[0], header);
+        }
+
+        return header;
+
+    },
+
+    getTableHeader: function(table)
+    {
+        var header = dfx.getTag('thead', table);
+        if (header.length === 0) {
+            return null;
+        }
+
+        return header[0];
+
+    },
+
+    createTableBody: function(table)
+    {
+        if (dfx.getTag('tbody', table).length > 0) {
+            return null;
+        }
+
+        var tbody = document.createElement('tbody');
+        table.appendChild(tbody);
+
+        return tbody;
+
+    },
+
+    getTableBody: function(table)
+    {
+        var tbody = dfx.getTag('tbody', table);
+        if (tbody.length === 0) {
+            return null;
+        }
+
+        return tbody[0];
+
+    },
+
     createCaption: function(table)
     {
         var caption  = null;
@@ -2217,7 +2275,7 @@ ViperTableEditorPlugin.prototype = {
      *
      * @return {DOMNode} The new header element.
      */
-    convertToHeader: function(cell, type)
+    convertToHeader: function(cell, type, actualType)
     {
         var elem = cell;
         type     = type || 'cell';
@@ -2243,6 +2301,10 @@ ViperTableEditorPlugin.prototype = {
 
             dfx.insertBefore(cell, elem);
             dfx.remove(cell);
+
+            if (!actualType || actualType === 'cell') {
+                this.tableUpdated();
+            }
         } else if (type === 'col') {
             // Get all column cells.
             var cells   = this._getCellsExpanded();
@@ -2256,29 +2318,47 @@ ViperTableEditorPlugin.prototype = {
 
                 var colCellPos = this.getCellPosition(colCell);
                 if (colCellPos.col === cellPos.col) {
-                    var newElement = this.convertToHeader(colCell);
+                    var newElement = this.convertToHeader(colCell, 'cell', 'col');
                     if (cell === colCell) {
                         elem = newElement;
                     }
                 }
             }
+
+            this.tableUpdated();
         } else if (type === 'row') {
             var cellPos = this.getCellPosition(cell);
-            var cells   = this._getRowCells(cell.parentNode);
+            var row     = cell.parentNode;
+            var cells   = this._getRowCells(row);
+
+            // Check if row needs to move in to a THEAD tag.
+            if (dfx.isTag(row.parentNode, 'thead') === false
+                && !this.getPreviousRow(row, true)
+            ) {
+                var table = this.getRowTable(row);
+                // The row is not in thead and its the first row in tbody or tfoot.
+                var thead = this.getTableHeader(table);
+                if (!thead) {
+                    thead = this.createTableHeader(table);
+                }
+
+                thead.appendChild(row);
+            }
+
             for (var i = 0; i < cells.length; i++) {
                 var rowCell    = cells[i];
                 if (!rowCell.parentNode || dfx.isTag(rowCell, 'th') === true) {
                     continue;
                 }
 
-                var newElement = this.convertToHeader(rowCell);
+                var newElement = this.convertToHeader(rowCell, 'cell', 'row');
                 if (cell === rowCell) {
                     elem = newElement;
                 }
             }
-        }//end if
 
-        this.tableUpdated();
+            this.tableUpdated();
+        }//end if
 
         return elem;
 
@@ -2358,6 +2438,29 @@ ViperTableEditorPlugin.prototype = {
         } else if (type === 'row') {
             var cellPos = this.getCellPosition(cell);
             var cells   = this._getRowCells(cell.parentNode);
+            var row     = cell.parentNode;
+
+            // Check if row needs to move in to a TBODY tag.
+            if (dfx.isTag(row.parentNode, 'thead') === true
+                && !this.getNextRow(row, true)
+            ) {
+                var table = this.getRowTable(row);
+
+                // Its the last row in thead, move it down to tbody.
+                var tbody = this.getTableBody(table);
+                if (!tbody) {
+                    tbody = this.createTableBody(table);
+                    tbody.appendChild(row);
+                } else {
+                    var rows = dfx.getTag('tr', tbody);
+                    if (rows.length === 0) {
+                        tbody.appendChild(row);
+                    } else {
+                        dfx.insertBefore(rows[0], row);
+                    }
+                }
+            }
+
             for (var i = 0; i < cells.length; i++) {
                 var rowCell    = cells[i];
                 if (!rowCell.parentNode || dfx.isTag(rowCell, 'td') === true) {
@@ -3641,7 +3744,7 @@ ViperTableEditorPlugin.prototype = {
 
     },
 
-    getPreviousRow: function(row)
+    getPreviousRow: function(row, ignorePrevParent)
     {
         var sourceRow = row;
         while (row = row.previousSibling) {
@@ -3653,7 +3756,7 @@ ViperTableEditorPlugin.prototype = {
             }
         }
 
-        if (dfx.isTag(sourceRow.parentNode, 'tbody') === true) {
+        if (ignorePrevParent !== true && dfx.isTag(sourceRow.parentNode, 'tbody') === true) {
             var rows = dfx.getTag('tr', dfx.getTag('thead', this.getRowTable(sourceRow)));
             if (rows.length > 0) {
                 return rows[(rows.length - 1)];
@@ -3662,7 +3765,7 @@ ViperTableEditorPlugin.prototype = {
 
     },
 
-    getNextRow: function(row, goPrev)
+    getNextRow: function(row, ignoreNextParent)
     {
         var sourceRow = row;
         while (row = row.nextSibling) {
@@ -3674,15 +3777,11 @@ ViperTableEditorPlugin.prototype = {
             }
         }
 
-        if (dfx.isTag(sourceRow.parentNode, 'thead') === true) {
+        if (ignoreNextParent !== true && dfx.isTag(sourceRow.parentNode, 'thead') === true) {
             var rows = dfx.getTag('tr', dfx.getTag('tbody', this.getRowTable(sourceRow)));
             if (rows.length > 0) {
                 return rows[0];
             }
-        }
-
-        if (goPrev === true) {
-            return this.getPreviousRow(row);
         }
 
     },
