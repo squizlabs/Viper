@@ -181,7 +181,7 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
     {
         // Check icons when click in a word
         $this->click($this->findKeyword(4));
-        $this->assertTrue($this->topToolbarButtonExists('justifyLeft', 'active'), 'Left alignment icon should be active');
+        $this->assertTrue($this->topToolbarButtonExists('justifyLeft'), 'Left alignment icon should be enabled');
         $this->assertTrue($this->topToolbarButtonExists('formats'), 'Formats icon should be enabled');
         $this->assertTrue($this->topToolbarButtonExists('headings'), 'Heading icon should be enabled');
         $this->assertTrue($this->topToolbarButtonExists('cssClass', 'disabled'), 'Class icon should be disabled');
@@ -189,8 +189,8 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
 
         // Check icons when selecting a word
         $this->selectKeyword(4);
-        $this->assertTrue($this->topToolbarButtonExists('justifyLeft', 'active'), 'Left alignment icon should be active');
-        $this->assertFalse($this->inlineToolbarButtonExists('justifyLeft', 'active'), 'Left alignment icon should not appear in the inline toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('justifyLeft'), 'Left alignment icon should be enabled');
+        $this->assertFalse($this->inlineToolbarButtonExists('justifyLeft'), 'Left alignment icon should not appear in the inline toolbar');
 
         $this->assertTrue($this->topToolbarButtonExists('formats'), 'Formats icon should be enabled');
         $this->assertFalse($this->inlineToolbarButtonExists('formats'), 'Formats icon should not appear in the inline toolbar');
@@ -204,26 +204,56 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         $this->assertTrue($this->topToolbarButtonExists('anchorID'), 'Anchor icon should be enabled');
         $this->assertTrue($this->inlineToolbarButtonExists('anchorID'), 'Anchor icon should be enabled in the inline toolbar');
 
+        // Check icons when selecting all content in the cell
         $this->selectInlineToolbarLineageItem(3);
-        $this->assertTrue($this->topToolbarButtonExists('justifyLeft', 'active'), 'Left alignment icon should be active');
-        $this->assertTrue($this->topToolbarButtonExists('formats'), 'Formats icon should be enabled');
-        $this->assertTrue($this->topToolbarButtonExists('headings'), 'Heading icon should be enabled');
-        $this->assertTrue($this->topToolbarButtonExists('cssClass'), 'Class icon should be enabled');
-        $this->assertTrue($this->topToolbarButtonExists('anchorID'), 'Anchor icon should be enabled');
+        $this->assertTrue($this->topToolbarButtonExists('justifyLeft'), 'Left alignment icon should be active');
+        $this->assertFalse($this->inlineToolbarButtonExists('justifyLeft'), 'Left alignment icon should not appear in the inline toolbar');
 
+        $this->assertTrue($this->topToolbarButtonExists('formats'), 'Formats icon should be enabled');
+        $this->assertTrue($this->inlineToolbarButtonExists('formats'), 'Formats icon should be enabled in the inline toolbar');
+
+        $this->assertTrue($this->topToolbarButtonExists('headings'), 'Heading icon should be enabled');
+        $this->assertFalse($this->inlineToolbarButtonExists('headings'), 'Heading icon should not appear in the inline toolbar');
+
+        $this->assertTrue($this->topToolbarButtonExists('cssClass'), 'Class icon should be enabled');
+        $this->assertTrue($this->inlineToolbarButtonExists('cssClass'), 'Class icon should be enabled');
+
+        $this->assertTrue($this->topToolbarButtonExists('anchorID'), 'Anchor icon should be enabled');
+        $this->assertTrue($this->inlineToolbarButtonExists('anchorID'), 'Anchor icon should be enabled');
+
+        // Check icons when selecting all content in the row
         $this->selectInlineToolbarLineageItem(2);
         $this->assertTrue($this->topToolbarButtonExists('justifyLeft'), 'Alignment icon should be enabled');
-        $this->assertTrue($this->topToolbarButtonExists('formats', 'disabled'), 'Formats icon should be disabled');
-        $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'), 'Heading icon should be disabled');
-        $this->assertTrue($this->topToolbarButtonExists('cssClass'), 'Class icon should be enabled');
-        $this->assertTrue($this->topToolbarButtonExists('anchorID'), 'Anchor icon should be enabled');
+        $this->assertFalse($this->inlineToolbarButtonExists('justifyLeft'), 'Alignment icon should not appear in the inline toolbar');
 
+        $this->assertTrue($this->topToolbarButtonExists('formats', 'disabled'), 'Formats icon should be disabled');
+        $this->assertFalse($this->inlineToolbarButtonExists('formats', 'disabled'), 'Formats icon should not appear in the inline toolbar');
+
+        $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'), 'Heading icon should be disabled');
+        $this->assertFalse($this->inlineToolbarButtonExists('headings', 'disabled'), 'Heading icon should not appear in the inline toolbar');
+
+        $this->assertTrue($this->topToolbarButtonExists('cssClass'), 'Class icon should be enabled');
+        $this->assertTrue($this->inlineToolbarButtonExists('cssClass'), 'Class icon should be enabled in the inline toolbar');
+
+        $this->assertTrue($this->topToolbarButtonExists('anchorID'), 'Anchor icon should be enabled');
+        $this->assertTrue($this->inlineToolbarButtonExists('anchorID'), 'Anchor icon should be enabled in the inline toolbar');
+
+        // Check icons when selecting the Tbody
         $this->selectInlineToolbarLineageItem(1);
         $this->assertTrue($this->topToolbarButtonExists('justifyLeft'), 'Alignment icon should be enabled');
+        $this->assertFalse($this->inlineToolbarButtonExists('justifyLeft'), 'Alignment icon should not appear in the inline toolbar');
+
         $this->assertTrue($this->topToolbarButtonExists('formats', 'disabled'), 'Formats icon should be disabled');
+        $this->assertFalse($this->inlineToolbarButtonExists('formats', 'disabled'), 'Formats icon should not appear in the inline toolbar');
+
         $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'), 'Heading icon should be disabled');
+        $this->assertFalse($this->inlineToolbarButtonExists('headings', 'disabled'), 'Heading icon should not appear in the inline toolbar');
+
         $this->assertTrue($this->topToolbarButtonExists('cssClass'), 'Class icon should be enabled');
+        $this->assertTrue($this->inlineToolbarButtonExists('cssClass'), 'Class icon should be enabled');
+
         $this->assertTrue($this->topToolbarButtonExists('anchorID'), 'Anchor icon should be enabled');
+        $this->assertTrue($this->inlineToolbarButtonExists('anchorID'), 'Anchor icon should be enabled');
 
     }//end testAvailabilityOfFormatIconsInTableBody()
 
@@ -235,47 +265,81 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
      */
     public function testAvailabilityOfFormatIconsInTableFooter()
     {
+        // Check icons when clicking in a word
         $this->click($this->findKeyword(3));
-        $this->assertTrue($this->topToolbarButtonExists('justifyLeft', 'active'), 'Left alignment icon should be active');
+        $this->assertTrue($this->topToolbarButtonExists('justifyLeft'), 'Left alignment icon should be enabled');
         $this->assertTrue($this->topToolbarButtonExists('formats'), 'Formats icon should be enabled');
         $this->assertTrue($this->topToolbarButtonExists('headings'), 'Heading icon should be enabled');
         $this->assertTrue($this->topToolbarButtonExists('cssClass', 'disabled'), 'Class icon should be disabled');
         $this->assertTrue($this->topToolbarButtonExists('anchorID', 'disabled'), 'Anchor icon should be disabled');
 
+        // Check icons when select a word
         $this->selectKeyword(3);
-        $this->assertTrue($this->topToolbarButtonExists('justifyLeft', 'active'), 'Left alignment icon should be active');
+        $this->assertTrue($this->topToolbarButtonExists('justifyLeft'), 'Left alignment icon should be enabled');
+        $this->assertFalse($this->inlineToolbarButtonExists('justifyLeft'), 'Left alignment icon should not appear in the inline toolbar');
+
         $this->assertTrue($this->topToolbarButtonExists('formats'), 'Formats icon should be enabled');
+        $this->assertFalse($this->inlineToolbarButtonExists('formats'), 'Formats icon should not appear in the inline toolbar');
+
         $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'), 'Heading icon should be disabled');
-        $this->assertTrue($this->topToolbarButtonExists('cssClass'), 'Class icon should be enabled');
-        $this->assertTrue($this->topToolbarButtonExists('anchorID'), 'Anchor icon should be enabled');
+        $this->assertFalse($this->inlineToolbarButtonExists('headings', 'disabled'), 'Heading icon should not appear in the inline toolbar');
 
+        $this->assertTrue($this->topToolbarButtonExists('cssClass'), 'Class icon should be enabled');
+        $this->assertTrue($this->inlineToolbarButtonExists('cssClass'), 'Class icon should be enabled in the inline toolbar');
+
+        $this->assertTrue($this->topToolbarButtonExists('anchorID'), 'Anchor icon should be enabled');
+        $this->assertTrue($this->inlineToolbarButtonExists('anchorID'), 'Anchor icon should be enabled in the inline toolbar');
+
+        // Check icons when selecting all content in the cell
         $this->selectInlineToolbarLineageItem(3);
-        $this->assertTrue($this->topToolbarButtonExists('justifyLeft', 'active'), 'Left alignment icon should be active');
-        $this->assertTrue($this->topToolbarButtonExists('formats'), 'Formats icon should be enabled');
-        $this->assertTrue($this->topToolbarButtonExists('headings'), 'Heading icon should be enabled');
-        $this->assertTrue($this->topToolbarButtonExists('cssClass'), 'Class icon should be enabled');
-        $this->assertTrue($this->topToolbarButtonExists('anchorID'), 'Anchor icon should be enabled');
+        $this->assertTrue($this->topToolbarButtonExists('justifyLeft'), 'Left alignment icon should be enabled');
+        $this->assertFalse($this->inlineToolbarButtonExists('justifyLeft'), 'Left alignment icon should not be enabled in the inline toolbar');
 
+        $this->assertTrue($this->topToolbarButtonExists('formats'), 'Formats icon should be enabled');
+        $this->assertTrue($this->inlineToolbarButtonExists('formats'), 'Formats icon should be enabled in the inline toolbar');
+
+        $this->assertTrue($this->topToolbarButtonExists('headings'), 'Heading icon should be enabled');
+        $this->assertFalse($this->inlineToolbarButtonExists('headings'), 'Heading icon should not appear in the inline toolbar');
+
+        $this->assertTrue($this->topToolbarButtonExists('cssClass'), 'Class icon should be enabled');
+        $this->assertTrue($this->inlineToolbarButtonExists('cssClass'), 'Class icon should be enabled');
+
+        $this->assertTrue($this->topToolbarButtonExists('anchorID'), 'Anchor icon should be enabled');
+        $this->assertTrue($this->inlineToolbarButtonExists('anchorID'), 'Anchor icon should be enabled');
+
+        // Check icons when selecting the row
         $this->selectInlineToolbarLineageItem(2);
         $this->assertTrue($this->topToolbarButtonExists('justifyLeft'), 'Alignment icon should be enabled');
-        $this->assertTrue($this->topToolbarButtonExists('formats', 'disabled'), 'Formats icon should be disabled');
-        $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'), 'Heading icon should be disabled');
-        $this->assertTrue($this->topToolbarButtonExists('cssClass'), 'Class icon should be enabled');
-        $this->assertTrue($this->topToolbarButtonExists('anchorID'), 'Anchor icon should be enabled');
+        $this->assertFalse($this->inlineToolbarButtonExists('justifyLeft'), 'Alignment icon should not appear in the inline toolbar');
 
+        $this->assertTrue($this->topToolbarButtonExists('formats', 'disabled'), 'Formats icon should be disabled');
+        $this->assertFalse($this->inlineToolbarButtonExists('formats', 'disabled'), 'Formats icon should not appear in the inline toolbar');
+
+        $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'), 'Heading icon should be disabled');
+        $this->assertFalse($this->inlineToolbarButtonExists('headings', 'disabled'), 'Heading icon should not appear in the inline toolbar');
+
+        $this->assertTrue($this->topToolbarButtonExists('cssClass'), 'Class icon should be enabled');
+        $this->assertTrue($this->inlineToolbarButtonExists('cssClass'), 'Class icon should be enabled in the inline toolbar');
+
+        $this->assertTrue($this->topToolbarButtonExists('anchorID'), 'Anchor icon should be enabled');
+        $this->assertTrue($this->inlineToolbarButtonExists('anchorID'), 'Anchor icon should be enabled in the inline toolbar');
+
+        // Check icons when selecting the Tfoot
         $this->selectInlineToolbarLineageItem(1);
         $this->assertTrue($this->topToolbarButtonExists('justifyLeft'), 'Alignment icon should be enabled');
-        $this->assertTrue($this->topToolbarButtonExists('formats', 'disabled'), 'Formats icon should be disabled');
-        $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'), 'Heading icon should be disabled');
-        $this->assertTrue($this->topToolbarButtonExists('cssClass'), 'Class icon should be enabled');
-        $this->assertTrue($this->topToolbarButtonExists('anchorID'), 'Anchor icon should be enabled');
+        $this->assertFalse($this->inlineToolbarButtonExists('justifyLeft'), 'Alignment icon should not appear in the inline toolbar');
 
-        $this->selectInlineToolbarLineageItem(0);
-        $this->assertTrue($this->topToolbarButtonExists('justifyLeft'), 'Alignment icon should be enabled');
         $this->assertTrue($this->topToolbarButtonExists('formats', 'disabled'), 'Formats icon should be disabled');
+        $this->assertFalse($this->inlineToolbarButtonExists('formats', 'disabled'), 'Formats icon should not appear in the inline toolbar');
+
         $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'), 'Heading icon should be disabled');
+        $this->assertFalse($this->inlineToolbarButtonExists('headings', 'disabled'), 'Heading icon should not appear in the inline toolbar');
+
         $this->assertTrue($this->topToolbarButtonExists('cssClass'), 'Class icon should be enabled');
-        $this->assertTrue($this->topToolbarButtonExists('anchorID', 'active'), 'Anchor icon should be active');
+        $this->assertTrue($this->inlineToolbarButtonExists('cssClass'), 'Class icon should be enabled in the inline toolbar');
+
+        $this->assertTrue($this->topToolbarButtonExists('anchorID'), 'Anchor icon should be enabled');
+        $this->assertTrue($this->inlineToolbarButtonExists('anchorID'), 'Anchor icon should be enabled in the inline toolbar');
 
     }//end testAvailabilityOfFormatIconsInTableBody()
 
@@ -299,9 +363,10 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th><p>Col2 %2%</p></th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Test adding heading to all content in the P section
+        $this->click($this->findKeyword(4));
         $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(4);
-        $this->clickTopToolbarButton('headings', 'active');
+        $this->clickTopToolbarButton('headings');
         $this->clickTopToolbarButton('H3', NULL, TRUE);
         $this->removeTableHeaders();
         $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th><h3>Col2 %2%</h3></th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
@@ -313,12 +378,12 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         // Test adding heading to all content in the header section
         $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(3);
-        $this->clickTopToolbarButton('headings', 'active');
-        $this->clickTopToolbarButton('H4', NULL, TRUE);
+        $this->clickTopToolbarButton('headings');
+        $this->clickTopToolbarButton('H2', NULL, TRUE);
         $this->removeTableHeaders();
-        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th><h4>Col2 %2%</h4></th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th><h2>Col2 %2%</h2></th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
-        $this->clickTopToolbarButton('H4', 'active', TRUE);
+        $this->clickTopToolbarButton('H2', 'active', TRUE);
         $this->removeTableHeaders();
         $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th><p>Col2 %2%</p></th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
@@ -344,9 +409,10 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td><p>sapien vel %4%</p></td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Test adding heading to all content in the P section
+        $this->click($this->findKeyword(3));
         $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(4);
-        $this->clickTopToolbarButton('headings', 'active');
+        $this->clickTopToolbarButton('headings');
         $this->clickTopToolbarButton('H3', NULL, TRUE);
         $this->removeTableHeaders();
         $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td><h3>sapien vel %4%</h3></td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
@@ -358,7 +424,7 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         // Test adding heading to all content in the cell section
         $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(3);
-        $this->clickTopToolbarButton('headings', 'active');
+        $this->clickTopToolbarButton('headings');
         $this->clickTopToolbarButton('H4', NULL, TRUE);
         $this->removeTableHeaders();
         $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td><h4>sapien vel %4%</h4></td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
@@ -389,9 +455,10 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3"><p>Note: this is the table footer %3%</p></td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Test adding heading to all content in the P section
+        $this->click($this->findKeyword(4));
         $this->selectKeyword(3);
         $this->selectInlineToolbarLineageItem(4);
-        $this->clickTopToolbarButton('headings', 'active');
+        $this->clickTopToolbarButton('headings');
         $this->clickTopToolbarButton('H3', NULL, TRUE);
         $this->removeTableHeaders();
         $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3"><h3>Note: this is the table footer %3%</h3></td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
@@ -401,9 +468,9 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3"><p>Note: this is the table footer %3%</p></td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Test adding heading to all content in the cell section
-        $this->selectKeyword(4);
+        $this->selectKeyword(3);
         $this->selectInlineToolbarLineageItem(3);
-        $this->clickTopToolbarButton('headings', 'active');
+        $this->clickTopToolbarButton('headings');
         $this->clickTopToolbarButton('H4', NULL, TRUE);
         $this->removeTableHeaders();
         $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3"><h4>Note: this is the table footer %3%</h4></td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
@@ -427,7 +494,7 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         // Test applying and removing from a word
         $this->selectKeyword(1);
         $this->clickInlineToolbarButton('cssClass');
-        $this->type('Test');
+        $this->type('test');
         $this->clickInlineToolbarButton('Update Changes', NULL, TRUE);
         $this->assertTrue($this->inlineToolbarButtonExists('Update Changes', 'disabled', TRUE), 'Update Changes button should be disabled.');
 
@@ -447,16 +514,16 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(1);
         $this->clickInlineToolbarButton('cssClass');
-        $this->type('Test');
+        $this->type('test');
         $this->keyDown('Key.ENTER');
         $this->assertTrue($this->inlineToolbarButtonExists('Update Changes', 'disabled', TRUE), 'Update Changes button should be disabled.');
 
         $this->removeTableHeaders();
-        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption colspan="3"><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th class="test">Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td>Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption class="test"><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(1);
-        $this->clickInlineToolbarButton('cssClass');
+        $this->clickInlineToolbarButton('cssClass', 'active');
         $this->clearFieldValue('Class');;
         $this->keyDown('Key.ENTER');
         $this->assertTrue($this->inlineToolbarButtonExists('Update Changes', 'disabled', TRUE), 'Update Changes button should be disabled.');
@@ -479,13 +546,14 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         // Test applying and removing from a word
         $this->selectKeyword(1);
         $this->clickTopToolbarButton('cssClass');
-        $this->type('Test');
+        $this->type('test');
         $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
         $this->assertTrue($this->topToolbarButtonExists('Update Changes', 'disabled', TRUE), 'Update Changes button should be disabled.');
 
         $this->removeTableHeaders();
         $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text <span class="test">%1%</span></caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
+        $this->click($this->findKeyword(4));
         $this->selectKeyword(1);
         $this->clickTopToolbarButton('cssClass', 'active');
         $this->clearFieldValue('Class');
@@ -495,17 +563,19 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         $this->removeTableHeaders();
         $this->assertHTMLMatch($originalHTML);
 
-        // Test applying and removing from content in cell
+        // Test applying and removing from all content in caption
+        $this->click($this->findKeyword(4));
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(1);
         $this->clickTopToolbarButton('cssClass');
-        $this->type('Test');
+        $this->type('test');
         $this->keyDown('Key.ENTER');
         $this->assertTrue($this->topToolbarButtonExists('Update Changes', 'disabled', TRUE), 'Update Changes button should be disabled.');
 
         $this->removeTableHeaders();
-        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption colspan="3"><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th class="test">Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td>Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption class="test"><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
+        $this->click($this->findKeyword(4));
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(1);
         $this->clickTopToolbarButton('cssClass');
@@ -531,7 +601,7 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         // Test applying and removing from a word
         $this->selectKeyword(2);
         $this->clickInlineToolbarButton('cssClass');
-        $this->type('Test');
+        $this->type('test');
         $this->clickInlineToolbarButton('Update Changes', NULL, TRUE);
         $this->assertTrue($this->inlineToolbarButtonExists('Update Changes', 'disabled', TRUE), 'Update Changes button should be disabled.');
 
@@ -551,7 +621,7 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(3);
         $this->clickInlineToolbarButton('cssClass');
-        $this->type('Test');
+        $this->type('test');
         $this->keyDown('Key.ENTER');
         $this->assertTrue($this->inlineToolbarButtonExists('Update Changes', 'disabled', TRUE), 'Update Changes button should be disabled.');
 
@@ -572,7 +642,7 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(2);
         $this->clickInlineToolbarButton('cssClass');
-        $this->type('Test');
+        $this->type('test');
         $this->keyDown('Key.ENTER');
         $this->assertTrue($this->inlineToolbarButtonExists('Update Changes', 'disabled', TRUE), 'Update Changes button should be disabled.');
 
@@ -593,7 +663,7 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(1);
         $this->clickInlineToolbarButton('cssClass');
-        $this->type('Test');
+        $this->type('test');
         $this->keyDown('Key.ENTER');
         $this->assertTrue($this->inlineToolbarButtonExists('Update Changes', 'disabled', TRUE), 'Update Changes button should be disabled.');
 
@@ -625,7 +695,7 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         // Test applying and removing from a word
         $this->selectKeyword(2);
         $this->clickTopToolbarButton('cssClass');
-        $this->type('Test');
+        $this->type('test');
         $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
         $this->assertTrue($this->topToolbarButtonExists('Update Changes', 'disabled', TRUE), 'Update Changes button should be disabled.');
 
@@ -645,7 +715,7 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(3);
         $this->clickTopToolbarButton('cssClass');
-        $this->type('Test');
+        $this->type('test');
         $this->keyDown('Key.ENTER');
         $this->assertTrue($this->topToolbarButtonExists('Update Changes', 'disabled', TRUE), 'Update Changes button should be disabled.');
 
@@ -666,7 +736,7 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(2);
         $this->clickTopToolbarButton('cssClass');
-        $this->type('Test');
+        $this->type('test');
         $this->keyDown('Key.ENTER');
         $this->assertTrue($this->topToolbarButtonExists('Update Changes', 'disabled', TRUE), 'Update Changes button should be disabled.');
 
@@ -687,7 +757,7 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(1);
         $this->clickTopToolbarButton('cssClass');
-        $this->type('Test');
+        $this->type('test');
         $this->keyDown('Key.ENTER');
         $this->assertTrue($this->topToolbarButtonExists('Update Changes', 'disabled', TRUE), 'Update Changes button should be disabled.');
 
@@ -719,7 +789,7 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         // Test applying and removing from a word
         $this->selectKeyword(4);
         $this->clickInlineToolbarButton('cssClass');
-        $this->type('Test');
+        $this->type('test');
         $this->clickInlineToolbarButton('Update Changes', NULL, TRUE);
         $this->assertTrue($this->inlineToolbarButtonExists('Update Changes', 'disabled', TRUE), 'Update Changes button should be disabled.');
 
@@ -739,7 +809,7 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(3);
         $this->clickInlineToolbarButton('cssClass');
-        $this->type('Test');
+        $this->type('test');
         $this->keyDown('Key.ENTER');
         $this->assertTrue($this->inlineToolbarButtonExists('Update Changes', 'disabled', TRUE), 'Update Changes button should be disabled.');
 
@@ -760,7 +830,7 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(2);
         $this->clickInlineToolbarButton('cssClass');
-        $this->type('Test');
+        $this->type('test');
         $this->keyDown('Key.ENTER');
         $this->assertTrue($this->inlineToolbarButtonExists('Update Changes', 'disabled', TRUE), 'Update Changes button should be disabled.');
 
@@ -781,7 +851,7 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(1);
         $this->clickInlineToolbarButton('cssClass');
-        $this->type('Test');
+        $this->type('test');
         $this->keyDown('Key.ENTER');
         $this->assertTrue($this->inlineToolbarButtonExists('Update Changes', 'disabled', TRUE), 'Update Changes button should be disabled.');
 
@@ -813,7 +883,7 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         // Test applying and removing from a word
         $this->selectKeyword(4);
         $this->clickTopToolbarButton('cssClass');
-        $this->type('Test');
+        $this->type('test');
         $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
         $this->assertTrue($this->topToolbarButtonExists('Update Changes', 'disabled', TRUE), 'Update Changes button should be disabled.');
 
@@ -833,7 +903,7 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(3);
         $this->clickTopToolbarButton('cssClass');
-        $this->type('Test');
+        $this->type('test');
         $this->keyDown('Key.ENTER');
         $this->assertTrue($this->topToolbarButtonExists('Update Changes', 'disabled', TRUE), 'Update Changes button should be disabled.');
 
@@ -854,7 +924,7 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(2);
         $this->clickTopToolbarButton('cssClass');
-        $this->type('Test');
+        $this->type('test');
         $this->keyDown('Key.ENTER');
         $this->assertTrue($this->topToolbarButtonExists('Update Changes', 'disabled', TRUE), 'Update Changes button should be disabled.');
 
@@ -875,7 +945,7 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(1);
         $this->clickTopToolbarButton('cssClass');
-        $this->type('Test');
+        $this->type('test');
         $this->keyDown('Key.ENTER');
         $this->assertTrue($this->topToolbarButtonExists('Update Changes', 'disabled', TRUE), 'Update Changes button should be disabled.');
 
@@ -907,7 +977,7 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         // Test applying and removing from a word
         $this->selectKeyword(3);
         $this->clickInlineToolbarButton('cssClass');
-        $this->type('Test');
+        $this->type('test');
         $this->clickInlineToolbarButton('Update Changes', NULL, TRUE);
         $this->assertTrue($this->inlineToolbarButtonExists('Update Changes', 'disabled', TRUE), 'Update Changes button should be disabled.');
 
@@ -927,7 +997,7 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         $this->selectKeyword(3);
         $this->selectInlineToolbarLineageItem(3);
         $this->clickInlineToolbarButton('cssClass');
-        $this->type('Test');
+        $this->type('test');
         $this->keyDown('Key.ENTER');
         $this->assertTrue($this->inlineToolbarButtonExists('Update Changes', 'disabled', TRUE), 'Update Changes button should be disabled.');
 
@@ -948,7 +1018,7 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         $this->selectKeyword(3);
         $this->selectInlineToolbarLineageItem(2);
         $this->clickInlineToolbarButton('cssClass');
-        $this->type('Test');
+        $this->type('test');
         $this->keyDown('Key.ENTER');
         $this->assertTrue($this->inlineToolbarButtonExists('Update Changes', 'disabled', TRUE), 'Update Changes button should be disabled.');
 
@@ -969,7 +1039,7 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(1);
         $this->clickInlineToolbarButton('cssClass');
-        $this->type('Test');
+        $this->type('test');
         $this->keyDown('Key.ENTER');
         $this->assertTrue($this->inlineToolbarButtonExists('Update Changes', 'disabled', TRUE), 'Update Changes button should be disabled.');
 
@@ -1001,7 +1071,7 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         // Test applying and removing from a word
         $this->selectKeyword(3);
         $this->clickTopToolbarButton('cssClass');
-        $this->type('Test');
+        $this->type('test');
         $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
         $this->assertTrue($this->topToolbarButtonExists('Update Changes', 'disabled', TRUE), 'Update Changes button should be disabled.');
 
@@ -1021,7 +1091,7 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         $this->selectKeyword(3);
         $this->selectInlineToolbarLineageItem(3);
         $this->clickTopToolbarButton('cssClass');
-        $this->type('Test');
+        $this->type('test');
         $this->keyDown('Key.ENTER');
         $this->assertTrue($this->topToolbarButtonExists('Update Changes', 'disabled', TRUE), 'Update Changes button should be disabled.');
 
@@ -1042,7 +1112,7 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         $this->selectKeyword(3);
         $this->selectInlineToolbarLineageItem(2);
         $this->clickTopToolbarButton('cssClass');
-        $this->type('Test');
+        $this->type('test');
         $this->keyDown('Key.ENTER');
         $this->assertTrue($this->topToolbarButtonExists('Update Changes', 'disabled', TRUE), 'Update Changes button should be disabled.');
 
@@ -1063,7 +1133,7 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(1);
         $this->clickTopToolbarButton('cssClass');
-        $this->type('Test');
+        $this->type('test');
         $this->keyDown('Key.ENTER');
         $this->assertTrue($this->topToolbarButtonExists('Update Changes', 'disabled', TRUE), 'Update Changes button should be disabled.');
 
@@ -1093,7 +1163,7 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(0);
         $this->clickTopToolbarButton('cssClass');
-        $this->type('Test');
+        $this->type('test');
         $this->keyDown('Key.ENTER');
         $this->assertTrue($this->topToolbarButtonExists('Update Changes', 'disabled', TRUE), 'Update Changes button should be disabled.');
 
@@ -1304,10 +1374,13 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         $this->removeTableHeaders();
         $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th style="text-align: justify;">Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
+        // Remove justification for further testiing
+        $this->clickTopToolbarButton('justifyBlock', 'active');
+
         // Test selecting the Row
         $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(2);
-        $this->clickTopToolbarButton('justifyBlock', 'active');
+        $this->clickTopToolbarButton('justifyLeft');
         $this->clickTopToolbarButton('justifyLeft');
         $this->assertTrue($this->topToolbarButtonExists('justifyLeft', 'active'), 'Left align icon should be active');
         $this->removeTableHeaders();
@@ -1328,10 +1401,13 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         $this->removeTableHeaders();
         $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr style="text-align: justify;"><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
+        // Remove justification for further testiing
+        $this->clickTopToolbarButton('justifyBlock', 'active');
+
         // Test selecting the Thead
         $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(1);
-        $this->clickTopToolbarButton('justifyBlock', 'active');
+        $this->clickTopToolbarButton('justifyLeft');
         $this->clickTopToolbarButton('justifyLeft');
         $this->assertTrue($this->topToolbarButtonExists('justifyLeft', 'active'), 'Left align icon should be active');
         $this->removeTableHeaders();
@@ -1386,6 +1462,7 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td style="text-align: justify;">sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Test select a word
+        $this->click($this->findKeyword(3));
         $this->selectKeyword(4);
         $this->clickTopToolbarButton('justifyBlock', 'active');
         $this->clickTopToolbarButton('justifyLeft');
@@ -1432,10 +1509,13 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         $this->removeTableHeaders();
         $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td style="text-align: justify;">sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
+        // Remove justification styling for further testing
+        $this->clickTopToolbarButton('justifyBlock', 'active');
+
         // Test selecting the Row
         $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(2);
-        $this->clickTopToolbarButton('justifyBlock', 'active');
+        $this->clickTopToolbarButton('justifyLeft');
         $this->clickTopToolbarButton('justifyLeft');
         $this->assertTrue($this->topToolbarButtonExists('justifyLeft', 'active'), 'Left align icon should be active');
         $this->removeTableHeaders();
@@ -1454,12 +1534,15 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         $this->clickTopToolbarButton('justifyBlock');
         $this->assertTrue($this->topToolbarButtonExists('justifyBlock', 'active'), 'Block align icon should be active');
         $this->removeTableHeaders();
-        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr style="text-align: justify;"><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr style="text-align: justify;"><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+
+        // Remove justification styling for further testing
+        $this->clickTopToolbarButton('justifyBlock', 'active');
 
         // Test selecting the Tbody
         $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(1);
-        $this->clickTopToolbarButton('justifyBlock', 'active');
+        $this->clickTopToolbarButton('justifyLeft');
         $this->clickTopToolbarButton('justifyLeft');
         $this->assertTrue($this->topToolbarButtonExists('justifyLeft', 'active'), 'Left align icon should be active');
         $this->removeTableHeaders();
@@ -1514,6 +1597,7 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td style="text-align: justify;" colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Test select a word
+        $this->click($this->findKeyword(4));
         $this->selectKeyword(3);
         $this->clickTopToolbarButton('justifyBlock', 'active');
         $this->clickTopToolbarButton('justifyLeft');
@@ -1560,10 +1644,13 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         $this->removeTableHeaders();
         $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td style="text-align: justify;" colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
+        // Remove the justification for further testing
+        $this->clickTopToolbarButton('justifyBlock', 'active');
+
         // Test selecting the Row
         $this->selectKeyword(3);
         $this->selectInlineToolbarLineageItem(2);
-        $this->clickTopToolbarButton('justifyBlock', 'active');
+        $this->clickTopToolbarButton('justifyLeft');
         $this->clickTopToolbarButton('justifyLeft');
         $this->assertTrue($this->topToolbarButtonExists('justifyLeft', 'active'), 'Left align icon should be active');
         $this->removeTableHeaders();
@@ -1584,10 +1671,13 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         $this->removeTableHeaders();
         $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr style="text-align: justify;"><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
+        // Remove the justification for further testing
+        $this->clickTopToolbarButton('justifyBlock', 'active');
+
         // Test selecting the Tfoot
         $this->selectKeyword(3);
         $this->selectInlineToolbarLineageItem(1);
-        $this->clickTopToolbarButton('justifyBlock', 'active');
+        $this->clickTopToolbarButton('justifyLeft');
         $this->clickTopToolbarButton('justifyLeft');
         $this->assertTrue($this->topToolbarButtonExists('justifyLeft', 'active'), 'Left align icon should be active');
         $this->removeTableHeaders();
@@ -1648,8 +1738,9 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Test select a word - you should only be able to select div
+        $this->click($this->findKeyword(3));
         $this->selectKeyword(2);
-        $this->clickTopToolbarButton('formats', 'active');
+        $this->clickTopToolbarButton('formats');
         $this->assertTrue($this->topToolbarButtonExists('P', 'disabled', TRUE), 'P icon should be disabled');
         $this->assertTrue($this->topToolbarButtonExists('PRE', 'disabled', TRUE), 'Pre icon should be disabled');
         $this->assertTrue($this->topToolbarButtonExists('Quote', 'disabled', TRUE), 'Quote icon should be disabled');
@@ -1668,52 +1759,71 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         $this->selectInlineToolbarLineageItem(3);
         $this->clickTopToolbarButton('formats');
         $this->clickTopToolbarButton('P', NULL, TRUE);
-        $this->assertTrue($this->topToolbarButtonExists('P', 'active', TRUE), 'P icon should be active');
         $this->removeTableHeaders();
         $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th><p>Col2 %2%</p></th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
+        // Undo the changes and apply Div
+        $this->clickTopToolbarButton('historyUndo');
+        $this->selectKeyword(2);
+        $this->selectInlineToolbarLineageItem(3);
+        $this->clickTopToolbarButton('formats');
         $this->clickTopToolbarButton('DIV', NULL, TRUE);
-        $this->assertTrue($this->topToolbarButtonExists('DIV', 'active', TRUE), 'Div icon should be active');
         $this->removeTableHeaders();
         $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th><div>Col2 %2%</div></th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
+        // Undo the changes and apply Quote
+        $this->clickTopToolbarButton('historyUndo');
+        $this->selectKeyword(2);
+        $this->selectInlineToolbarLineageItem(3);
+        $this->clickTopToolbarButton('formats');
         $this->clickTopToolbarButton('Quote', NULL, TRUE);
-        $this->assertTrue($this->topToolbarButtonExists('Quote', 'active', TRUE), 'Quote icon should be active');
         $this->removeTableHeaders();
         $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th><blockquote><p>Col2 %2%</p></blockquote></th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
+        // Undo the changes and apply Pre
+        $this->clickTopToolbarButton('historyUndo');
+        $this->selectKeyword(2);
+        $this->selectInlineToolbarLineageItem(3);
+        $this->clickTopToolbarButton('formats');
         $this->clickTopToolbarButton('PRE', NULL, TRUE);
-        $this->assertTrue($this->topToolbarButtonExists('PRE', 'active', TRUE), 'Pre icon should be active');
         $this->removeTableHeaders();
         $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th><pre>Col2 %2%</pre></th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Remove the Pre section for further testing
-        $this->clickTopToolbarButton('PRE', 'active', TRUE);
-        $this->assertTrue($this->topToolbarButtonExists('PRE', NULL, TRUE), 'Pre icon should not be active');
-        $this->removeTableHeaders();
-        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+        $this->clickTopToolbarButton('historyUndo');
 
         // Test selecting the Header and using inline toolbar
         $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(3);
         $this->clickInlineToolbarButton('formats');
         $this->clickInlineToolbarButton('P', NULL, TRUE);
-        $this->assertTrue($this->inlineToolbarButtonExists('P', 'active', TRUE), 'P icon should be active');
         $this->removeTableHeaders();
         $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th><p>Col2 %2%</p></th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
+        // Undo and apply div
+        $this->keyDown('Key.CMD + z');
+        $this->selectKeyword(2);
+        $this->selectInlineToolbarLineageItem(3);
+        $this->clickInlineToolbarButton('formats');
         $this->clickInlineToolbarButton('DIV', NULL, TRUE);
-        $this->assertTrue($this->inlineToolbarButtonExists('DIV', 'active', TRUE), 'Div icon should be active');
         $this->removeTableHeaders();
         $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th><div>Col2 %2%</div></th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
+        // Undo and apply quote
+        $this->keyDown('Key.CMD + z');
+        $this->selectKeyword(2);
+        $this->selectInlineToolbarLineageItem(3);
+        $this->clickInlineToolbarButton('formats');
         $this->clickInlineToolbarButton('Quote', NULL, TRUE);
-        $this->assertTrue($this->inlineToolbarButtonExists('Quote', 'active', TRUE), 'Quote icon should be active');
         $this->removeTableHeaders();
         $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th><blockquote><p>Col2 %2%</p></blockquote></th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
+        // Undo and apply pre
+        $this->keyDown('Key.CMD + z');
+        $this->selectKeyword(2);
+        $this->selectInlineToolbarLineageItem(3);
+        $this->clickInlineToolbarButton('formats');
         $this->clickInlineToolbarButton('PRE', NULL, TRUE);
-        $this->assertTrue($this->inlineToolbarButtonExists('PRE', 'active', TRUE), 'Pre icon should be active');
         $this->removeTableHeaders();
         $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th><pre>Col2 %2%</pre></th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
@@ -1743,7 +1853,7 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         $this->clickTopToolbarButton('Quote', NULL, TRUE);
         $this->assertTrue($this->topToolbarButtonExists('Quote', 'active', TRUE), 'Quote icon should be active');
         $this->removeTableHeaders();
-        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td><blockquote><p>sapien vel %4%</blockquote></p></td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td><blockquote><p>sapien vel %4%</p></blockquote></td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         $this->clickTopToolbarButton('PRE');
         $this->assertTrue($this->topToolbarButtonExists('PRE', 'active', TRUE), 'Pre icon should be active');
@@ -1757,8 +1867,9 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Test select a word - you should only be able to select div
+        $this->click($this->findKeyword(3));
         $this->selectKeyword(4);
-        $this->clickTopToolbarButton('formats', 'active');
+        $this->clickTopToolbarButton('formats');
         $this->assertTrue($this->topToolbarButtonExists('P', 'disabled', TRUE), 'P icon should be disabled');
         $this->assertTrue($this->topToolbarButtonExists('PRE', 'disabled', TRUE), 'Pre icon should be disabled');
         $this->assertTrue($this->topToolbarButtonExists('Quote', 'disabled', TRUE), 'Quote icon should be disabled');
@@ -1773,56 +1884,78 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Test selecting the Cell and using top toolbar
-        $this->selectKeyword(3);
+        $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(3);
         $this->clickTopToolbarButton('formats');
         $this->clickTopToolbarButton('P', NULL, TRUE);
-        $this->assertTrue($this->topToolbarButtonExists('P', 'active', TRUE), 'P icon should be active');
         $this->removeTableHeaders();
         $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td><p>sapien vel %4%</p></td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
+        // Undo and apply div
+        $this->keyDown('Key.CMD + z');
+        $this->selectKeyword(4);
+        $this->selectInlineToolbarLineageItem(3);
+        $this->clickTopToolbarButton('formats');
         $this->clickTopToolbarButton('DIV', NULL, TRUE);
-        $this->assertTrue($this->topToolbarButtonExists('DIV', 'active', TRUE), 'Div icon should be active');
         $this->removeTableHeaders();
         $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td><div>sapien vel %4%</div></td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
+        // Undo and apply quote
+        $this->keyDown('Key.CMD + z');
+        $this->selectKeyword(4);
+        $this->selectInlineToolbarLineageItem(3);
+        $this->clickTopToolbarButton('formats');
         $this->clickTopToolbarButton('Quote', NULL, TRUE);
-        $this->assertTrue($this->topToolbarButtonExists('Quote', 'active', TRUE), 'Quote icon should be active');
         $this->removeTableHeaders();
-        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td><blockquote><p>sapien vel %4%</blockquote></p></td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td><blockquote><p>sapien vel %4%</p></blockquote></td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
+        // Undo and apply pre
+        $this->clickTopToolbarButton('historyUndo');
+        sleep(1);
+        $this->selectKeyword(4);
+        $this->selectInlineToolbarLineageItem(3);
+        $this->clickTopToolbarButton('formats');
         $this->clickTopToolbarButton('PRE', NULL, TRUE);
-        $this->assertTrue($this->topToolbarButtonExists('PRE', 'active', TRUE), 'Pre icon should be active');
         $this->removeTableHeaders();
         $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td><pre>sapien vel %4%</pre></td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Remove the Pre section for further testing
-        $this->clickTopToolbarButton('PRE', 'active', TRUE);
-        $this->assertTrue($this->topToolbarButtonExists('PRE', NULL, TRUE), 'Pre icon should not be active');
-        $this->removeTableHeaders();
-        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+        $this->keyDown('Key.CMD + z');
+        sleep(1);
 
         // Test selecting the Cell and using inline toolbar
-        $this->selectKeyword(3);
+        $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(3);
         $this->clickInlineToolbarButton('formats');
         $this->clickInlineToolbarButton('P', NULL, TRUE);
-        $this->assertTrue($this->inlineToolbarButtonExists('P', 'active', TRUE), 'P icon should be active');
         $this->removeTableHeaders();
         $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td><p>sapien vel %4%</p></td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
+        // Undo and apply div
+        $this->keyDown('Key.CMD + z');
+        $this->selectKeyword(4);
+        $this->selectInlineToolbarLineageItem(3);
+        $this->clickInlineToolbarButton('formats');
         $this->clickInlineToolbarButton('DIV', NULL, TRUE);
-        $this->assertTrue($this->inlineToolbarButtonExists('DIV', 'active', TRUE), 'Div icon should be active');
         $this->removeTableHeaders();
         $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td><div>sapien vel %4%</div></td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
+        // Undo and apply quote
+        $this->keyDown('Key.CMD + z');
+        $this->selectKeyword(4);
+        $this->selectInlineToolbarLineageItem(3);
+        $this->clickInlineToolbarButton('formats');
         $this->clickInlineToolbarButton('Quote', NULL, TRUE);
-        $this->assertTrue($this->inlineToolbarButtonExists('Quote', 'active', TRUE), 'Quote icon should be active');
         $this->removeTableHeaders();
-        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td><blockquote><p>sapien vel %4%</blockquote></p></td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td><blockquote><p>sapien vel %4%</p></blockquote></td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
+        // Undo and apply pre
+        $this->keyDown('Key.CMD + z');
+        sleep(1);
+        $this->selectKeyword(4);
+        $this->selectInlineToolbarLineageItem(3);
+        $this->clickInlineToolbarButton('formats');
         $this->clickInlineToolbarButton('PRE', NULL, TRUE);
-        $this->assertTrue($this->inlineToolbarButtonExists('PRE', 'active', TRUE), 'Pre icon should be active');
         $this->removeTableHeaders();
         $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td><pre>sapien vel %4%</pre></td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
@@ -1842,17 +1975,17 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         $this->clickTopToolbarButton('P', NULL, TRUE);
         $this->assertTrue($this->topToolbarButtonExists('P', 'active', TRUE), 'P icon should be active');
         $this->removeTableHeaders();
-        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3"><p>Note: this is the table footer %3%</p></td></tr></tfoot><tbody><tr><td>nec porta ante</td><td><p>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3"><p>Note: this is the table footer %3%</p></td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         $this->clickTopToolbarButton('DIV', NULL, TRUE);
         $this->assertTrue($this->topToolbarButtonExists('DIV', 'active', TRUE), 'Div icon should be active');
         $this->removeTableHeaders();
-        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3"><div>Note: this is the table footer %3%</div></td></tr></tfoot><tbody><tr><td>nec porta ante</td><td><div>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3"><div>Note: this is the table footer %3%</div></td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         $this->clickTopToolbarButton('Quote', NULL, TRUE);
         $this->assertTrue($this->topToolbarButtonExists('Quote', 'active', TRUE), 'Quote icon should be active');
         $this->removeTableHeaders();
-        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3"><blockquote><p>Note: this is the table footer %3%</blockquote></p></td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3"><blockquote><p>Note: this is the table footer %3%</p></blockquote></td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         $this->clickTopToolbarButton('PRE');
         $this->assertTrue($this->topToolbarButtonExists('PRE', 'active', TRUE), 'Pre icon should be active');
@@ -1861,13 +1994,11 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
 
         // Remove the Pre section for further testing
         $this->clickTopToolbarButton('PRE', 'active', TRUE);
-        $this->assertTrue($this->topToolbarButtonExists('PRE', NULL, TRUE), 'Pre icon should not be active');
-        $this->removeTableHeaders();
-        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Test select a word - you should only be able to select div
-        $this->selectKeyword(4);
-        $this->clickTopToolbarButton('formats', 'active');
+        $this->click($this->findKeyword(4));
+        $this->selectKeyword(3);
+        $this->clickTopToolbarButton('formats');
         $this->assertTrue($this->topToolbarButtonExists('P', 'disabled', TRUE), 'P icon should be disabled');
         $this->assertTrue($this->topToolbarButtonExists('PRE', 'disabled', TRUE), 'Pre icon should be disabled');
         $this->assertTrue($this->topToolbarButtonExists('Quote', 'disabled', TRUE), 'Quote icon should be disabled');
@@ -1877,65 +2008,83 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
 
         // Remove the Div section for further testing
         $this->clickTopToolbarButton('DIV', 'active', TRUE);
-        $this->assertTrue($this->topToolbarButtonExists('DIV', NULL, TRUE), 'Div icon should not be active');
-        $this->removeTableHeaders();
-        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Test selecting the Cell and using top toolbar
         $this->selectKeyword(3);
         $this->selectInlineToolbarLineageItem(3);
         $this->clickTopToolbarButton('formats');
         $this->clickTopToolbarButton('P', NULL, TRUE);
-        $this->assertTrue($this->topToolbarButtonExists('P', 'active', TRUE), 'P icon should be active');
         $this->removeTableHeaders();
         $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3"><p>Note: this is the table footer %3%</p></td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
+        // Undo and apply div
+        $this->keyDown('Key.CMD + z');
+        $this->selectKeyword(3);
+        $this->selectInlineToolbarLineageItem(3);
+        $this->clickTopToolbarButton('formats');
         $this->clickTopToolbarButton('DIV', NULL, TRUE);
-        $this->assertTrue($this->topToolbarButtonExists('DIV', 'active', TRUE), 'Div icon should be active');
         $this->removeTableHeaders();
         $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3"><div>Note: this is the table footer %3%</div></td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
+        // Undo and apply quote
+        $this->keyDown('Key.CMD + z');
+        $this->selectKeyword(3);
+        $this->selectInlineToolbarLineageItem(3);
+        $this->clickTopToolbarButton('formats');
         $this->clickTopToolbarButton('Quote', NULL, TRUE);
-        $this->assertTrue($this->topToolbarButtonExists('Quote', 'active', TRUE), 'Quote icon should be active');
         $this->removeTableHeaders();
-        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3"><blockquote><p>Note: this is the table footer %3%</blockquote></p></td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3"><blockquote><p>Note: this is the table footer %3%</p></blockquote></td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
+        // Undo and apply pre
+        $this->keyDown('Key.CMD + z');
+        sleep(1);
+        $this->selectKeyword(3);
+        $this->selectInlineToolbarLineageItem(3);
+        $this->clickTopToolbarButton('formats');
         $this->clickTopToolbarButton('PRE', NULL, TRUE);
-        $this->assertTrue($this->topToolbarButtonExists('PRE', 'active', TRUE), 'Pre icon should be active');
         $this->removeTableHeaders();
         $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3"><pre>Note: this is the table footer %3%</pre></td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Remove the Pre section for further testing
-        $this->clickTopToolbarButton('PRE', 'active', TRUE);
-        $this->assertTrue($this->topToolbarButtonExists('PRE', NULL, TRUE), 'Pre icon should not be active');
-        $this->removeTableHeaders();
-        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+        $this->keyDown('Key.CMD + z');
 
         // Test selecting the Cell and using inline toolbar
         $this->selectKeyword(3);
         $this->selectInlineToolbarLineageItem(3);
         $this->clickInlineToolbarButton('formats');
         $this->clickInlineToolbarButton('P', NULL, TRUE);
-        $this->assertTrue($this->inlineToolbarButtonExists('P', 'active', TRUE), 'P icon should be active');
         $this->removeTableHeaders();
         $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3"><p>Note: this is the table footer %3%</p></td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
+        // Undo and apply div
+        $this->keyDown('Key.CMD + z');
+        $this->selectKeyword(3);
+        $this->selectInlineToolbarLineageItem(3);
+        $this->clickInlineToolbarButton('formats');
         $this->clickInlineToolbarButton('DIV', NULL, TRUE);
-        $this->assertTrue($this->inlineToolbarButtonExists('DIV', 'active', TRUE), 'Div icon should be active');
         $this->removeTableHeaders();
         $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3"><div>Note: this is the table footer %3%</div></td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
+        // Undo and apply quote
+        $this->keyDown('Key.CMD + z');
+        $this->selectKeyword(3);
+        $this->selectInlineToolbarLineageItem(3);
+        $this->clickInlineToolbarButton('formats');
         $this->clickInlineToolbarButton('Quote', NULL, TRUE);
-        $this->assertTrue($this->inlineToolbarButtonExists('Quote', 'active', TRUE), 'Quote icon should be active');
         $this->removeTableHeaders();
-        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3"><blockquote><p>Note: this is the table footer %3%</blockquote></p></td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3"><blockquote><p>Note: this is the table footer %3%</p></blockquote></td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
+        // Undo and apply pre
+        $this->keyDown('Key.CMD + z');
+        sleep(1);
+        $this->selectKeyword(3);
+        $this->selectInlineToolbarLineageItem(3);
+        $this->clickInlineToolbarButton('formats');
         $this->clickInlineToolbarButton('PRE', NULL, TRUE);
-        $this->assertTrue($this->inlineToolbarButtonExists('PRE', 'active', TRUE), 'Pre icon should be active');
         $this->removeTableHeaders();
         $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3"><pre>Note: this is the table footer %3%</pre></td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
-    }//end testFormatsInTableBody()
+    }//end testFormatsInTableFooter()
 
 
 }//end class
