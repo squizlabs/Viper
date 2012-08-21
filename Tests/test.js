@@ -293,6 +293,9 @@ function useTest(id)
     }
 
     var win = viperTest.getWindow();
+
+    win.viper.fireCallbacks('Viper:clickedOutside');
+
     var contentElement = win.dfx.getId('content');
     win.dfx.setHtml(contentElement, testCases[id]);
 
