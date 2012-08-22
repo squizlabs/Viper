@@ -565,7 +565,7 @@ ViperCoreStylesPlugin.prototype = {
         var node  = start;
         var next  = null;
 
-        var common = range.getNodeSelection();
+        var common = this.viper.getNodeSelection();
         if (!common) {
             common = range.getCommonElement();
             common = this.getFirstBlockParent(common);
@@ -1249,7 +1249,7 @@ ViperCoreStylesPlugin.prototype = {
     {
         range = range || this.viper.getViperRange();
 
-        var startNode = range.getNodeSelection();
+        var startNode = this.viper.getNodeSelection();
         if (!startNode) {
             startNode = range.getStartNode();
         }
@@ -1315,7 +1315,15 @@ ViperCoreStylesPlugin.prototype = {
             tools.disableButton('removeFormat');
         }
 
-        tools.enableButton('justify');
+        if (startNode
+            && startNode.nodeType === dfx.ELEMENT_NODE
+            && ('thead,table,tfoot'.split(',')).inArray(dfx.getTagName(startNode)) === true
+        ) {
+            tools.disableButton('justify');
+        } else {
+            tools.enableButton('justify');
+        }
+
         if (!states.alignment) {
             states.alignment = 'start';
         }
