@@ -571,7 +571,10 @@ ViperCoreStylesPlugin.prototype = {
             common = this.getFirstBlockParent(common);
         }
 
-        if (dfx.isBlockElement(common) === true && dfx.isChildOf(common, this.viper.element) === true) {
+        if (dfx.isBlockElement(common) === true
+            && ['tr', 'table'].inArray(dfx.getTagName(common)) === false
+            && dfx.isChildOf(common, this.viper.element) === true
+        ) {
             this.setJustifyChangeTrackInfo(common);
             this.toggleJustify(common, type);
         } else {
@@ -1315,14 +1318,7 @@ ViperCoreStylesPlugin.prototype = {
             tools.disableButton('removeFormat');
         }
 
-        if (startNode
-            && startNode.nodeType === dfx.ELEMENT_NODE
-            && ('thead,table,tfoot'.split(',')).inArray(dfx.getTagName(startNode)) === true
-        ) {
-            tools.disableButton('justify');
-        } else {
-            tools.enableButton('justify');
-        }
+        tools.enableButton('justify');
 
         if (!states.alignment) {
             states.alignment = 'start';
