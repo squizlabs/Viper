@@ -4324,7 +4324,7 @@ Viper.prototype = {
         }
 
         var callback = callbacks.shift();
-        if (dfx.isFn(callback) === true) {
+        if (callback) {
             var self   = this;
             var retVal = callback.call(this, data, function(retVal) {
                 self._fireCallbacks(callbacks, data, doneCallback, retVal);
