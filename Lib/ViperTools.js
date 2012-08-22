@@ -404,10 +404,6 @@ ViperTools.prototype = {
             dfx.addClass(textBox, 'Viper-focused');
             self.viper.highlightSelection();
 
-           // self.viper.registerCallback('ViperTools:buttonClicked', 'ViperTools:textbox', function() {
-           //     self.viper.focus();
-           // });
-
             // Set the caret to the end of the textfield.
             input.value = input.value;
             if (self.viper.isBrowser('firefox') === true) {
@@ -416,7 +412,6 @@ ViperTools.prototype = {
         });
 
         dfx.addEvent(input, 'blur', function() {
-            //self.viper.removeCallback('ViperTools:buttonClicked', 'ViperTools:textbox');
             dfx.removeClass(textBox, 'Viper-active');
         });
 
@@ -427,14 +422,15 @@ ViperTools.prototype = {
             main.appendChild(actionIcon);
             dfx.addEvent(actionIcon, 'click', function() {
                 if (dfx.hasClass(textBox, 'Viper-actionRevert') === true) {
-                    changed     = false;
                     input.value = value;
                     dfx.removeClass(textBox, 'Viper-actionRevert');
                     dfx.addClass(textBox, 'Viper-actionClear');
+                    actionIcon.setAttribute('title', 'Clear this value');
                 } else if (dfx.hasClass(textBox, 'Viper-actionClear') === true) {
-                    changed     = true;
                     input.value = '';
                     dfx.removeClass(textBox, 'Viper-actionClear');
+                    dfx.addClass(textBox, 'Viper-actionRevert');
+                    actionIcon.setAttribute('title', 'Revert to original value');
                     if (required === true) {
                         dfx.addClass(textBox, 'Viper-required');
                     }
@@ -487,7 +483,6 @@ ViperTools.prototype = {
             } else {
                 if (isTextArea !== true) {
                     dfx.hideElement(actionIcon);
-                   // dfx.remove(actionIcon);
                 }
 
                 if (required === true) {
@@ -495,7 +490,7 @@ ViperTools.prototype = {
                 }
             }
 
-            if ((e.which !== 13 || isTextArea === true) && (input.value !== value || changed === true)) {
+            if ((e.which !== 13 || isTextArea === true) && (input.value !== value)) {
                 self.viper.fireCallbacks('ViperTools:changed:' + id);
             }
 
