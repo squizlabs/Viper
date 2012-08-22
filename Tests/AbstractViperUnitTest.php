@@ -245,6 +245,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
 
         // Put the current test file contents to the main test file.
         $contents = str_replace('__TEST_CONTENT__', $testFileContent, self::$_testContent);
+        $contents = str_replace('__TEST_BROWSER__', $this->getBrowserid(), $contents);
         $contents = str_replace('__TEST_VIPER_INCLUDE__', $viperInclude, $contents);
         $contents = str_replace('__TEST_TITLE__', $this->getName(), $contents);
         $contents = str_replace('__TEST_JS_INCLUDE__', $jsInclude, $contents);

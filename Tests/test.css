@@ -112,6 +112,10 @@ td,th {
     padding: 4px 0;
 }
 
+.googlechrome td, .googlechrome th {
+    padding: 2px 2px;
+}
+
 .Viper-button.Viper-disabled {
     font-family: monospace;
 }
