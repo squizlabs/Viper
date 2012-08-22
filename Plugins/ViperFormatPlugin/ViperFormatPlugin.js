@@ -1047,8 +1047,9 @@ ViperFormatPlugin.prototype = {
 
     _setAttributeForSelection: function(attr, value)
     {
-        var range = this.viper.getViperRange();
-        var selectedNode = range.getNodeSelection();
+        var range        = this.viper.getViperRange();
+        var selectedNode = this.viper.getNodeSelection();
+
         if (selectedNode) {
             if (selectedNode.nodeType === dfx.TEXT_NODE) {
                 var span = document.createElement('span');

@@ -47,6 +47,18 @@ ViperInlineToolbarPlugin.prototype = {
 
         });
 
+        this.viper.registerCallback('Viper:getNodeSelection', 'ViperInlineToolbarPlugin', function(data) {
+            var lineage         = self.getLineage();
+            var currentLinIndex = self.getCurrentLineageIndex();
+
+            var element = lineage[currentLinIndex];
+            if (element && element.nodeType !== dfx.TEXT_NODE) {
+                return element;
+            }
+
+            return null;
+        });
+
     },
 
     setSettings: function(settings)

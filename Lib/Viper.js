@@ -834,6 +834,21 @@ Viper.prototype = {
 
     },
 
+    getNodeSelection: function(range)
+    {
+        range = range || this.getViperRange();
+
+        var nodeSelection = range.getNodeSelection();
+        var node = this.fireCallbacks('Viper:getNodeSelection', {range: range});
+
+        if (node) {
+            nodeSelection = node;
+        }
+
+        return nodeSelection;
+
+    },
+
     /**
      * Sets the attribute of an element.
      *
