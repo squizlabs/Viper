@@ -197,10 +197,12 @@ class Viper_Tests_ViperTableEditorPlugin_TableHeadersUnitTest extends AbstractVi
                     15 => '<table><thead><tr><th>test</th><th>test</th></tr></thead><tbody><tr><td>%1%</td><td>test</td></tr></tbody></table>',
                     16 => '<table><tbody><tr><td>%1%</td><td>test</td></tr></tbody></table>',
                     17 => '<table><tfoot><tr><td colspan="2">test</td></tr></tfoot><tbody><tr><td>%1%</td><td>test</td></tr></tbody></table>',
+                    18 => '<table><thead><tr><th>test</th><th>test</th></tr></thead><tbody><tr><th>%1%</th><th rowspan="2">test</th></tr><tr><td>test</td></tr></tbody></table>',
+                    19 => '<table><thead><tr><th>test</th><th>test</th></tr></thead><tbody><tr><th>test</th><th rowspan="2">%1%</th></tr><tr><td>test</td></tr></tbody></table>',
                    );
 
         $testCount = count($results);
-        for ($i = 1; $i <= $testCount; $i++) {
+        for ($i = 18; $i <= $testCount; $i++) {
             $this->useTest($i);
             $this->click($this->findKeyword(1));
             $this->showTools(NULL, 'row');

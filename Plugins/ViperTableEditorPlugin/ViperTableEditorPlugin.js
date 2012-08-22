@@ -2335,14 +2335,28 @@ ViperTableEditorPlugin.prototype = {
             if (dfx.isTag(row.parentNode, 'thead') === false
                 && !this.getPreviousRow(row, true)
             ) {
-                var table = this.getRowTable(row);
-                // The row is not in thead and its the first row in tbody or tfoot.
-                var thead = this.getTableHeader(table);
-                if (!thead) {
-                    thead = this.createTableHeader(table);
+                var moveToThead = true;
+                var prevRowspan = null;
+                for (var i = 0; i < cells.length; i++) {
+                    var rowspan = this.getRowspan(cells[i]);
+                    if (prevRowspan !== null && rowspan !== prevRowspan) {
+                        moveToThead = false;
+                        break;
+                    }
+
+                    prevRowspan = rowspan;
                 }
 
-                thead.appendChild(row);
+                if (moveToThead === true) {
+                    var table = this.getRowTable(row);
+                    // The row is not in thead and its the first row in tbody or tfoot.
+                    var thead = this.getTableHeader(table);
+                    if (!thead) {
+                        thead = this.createTableHeader(table);
+                    }
+
+                    thead.appendChild(row);
+                }
             }
 
             for (var i = 0; i < cells.length; i++) {
