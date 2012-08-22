@@ -25,7 +25,7 @@ abstract class AbstractViperTableEditorPluginUnitTest extends AbstractViperUnitT
         $this->clickTopToolbarButton('table');
 
         if ($rows !== NULL && $cols !== NULL) {
-            if ($rows > 10 || $cols > 10) {
+            if ($rows > 6 || $cols > 8) {
                 throw new Exception('insertTable(rows, cols) only support maximum of 10x10 table');
             }
 
