@@ -232,8 +232,9 @@ ViperTools.prototype = {
             },
             isEnabled: function()
             {
-                return !dfx.hasClass(button, 'Viper-disabled');
-            }
+                return !this._disabled;
+            },
+            _disabled: disabled
         });
 
         return button;
@@ -269,30 +270,35 @@ ViperTools.prototype = {
 
     enableButton: function(buttonid)
     {
-        var button = this.getItem(buttonid).element;
-        if (dfx.hasClass(button, 'Viper-disabled') !== true) {
+        var buttonObj = this.getItem(buttonid);
+        if (buttonObj.isEnabled() === true) {
             return;
         }
 
+        var button = buttonObj.element;
+
         button.setAttribute('title', button.getAttribute('title').replace(' [Not available]', ''));
         dfx.removeClass(button, 'Viper-disabled');
+        buttonObj._disabled = false;
 
     },
 
     disableButton: function(buttonid)
     {
-        var button = this.getItem(buttonid).element;
-        if (dfx.hasClass(button, 'Viper-disabled') === true) {
+        var buttonObj = this.getItem(buttonid);
+        if (buttonObj.isEnabled() !== true) {
             return;
         }
 
-        var title = button.getAttribute('title');
+        var button = buttonObj.element;
+        var title  = button.getAttribute('title');
         if (title) {
             title = title.replace(' [Not available]', '');
             button.setAttribute('title', title + ' [Not available]');
         }
 
         dfx.addClass(button, 'Viper-disabled');
+        buttonObj._disabled = true;
 
     },
 
