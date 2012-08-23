@@ -1269,6 +1269,60 @@ class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractViperUnitTe
     }//end testApplyingHeadginsWithTwoPreTagsInsideADiv()
 
 
+    /**
+     * Test applying headings to div sections with single block elements inside of them 
+     *
+     * @return void
+     */
+    public function testApplyingHeadginsToDivsWithSingleBlockElements()
+    {
+        // Test P inside a Div
+        $this->useTest(6);
+
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->assertTrue($this->topToolbarButtonExists('headings'), 'Heading icon should be enabled in the top toolbar');
+
+        $this->clickTopToolbarButton('headings');
+        $this->clickTopToolbarButton('H1', NULL, TRUE);
+        $this->assertHTMLMatch('<h1>Long paragraph for testing that the heading icon does not appear in the inline toolbar %1%.</h1>');
+        
+        // Test Div inside a Div
+        $this->useTest(8);
+
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->assertTrue($this->topToolbarButtonExists('headings'), 'Heading icon should be enabled in the top toolbar');
+
+        $this->clickTopToolbarButton('headings');
+        $this->clickTopToolbarButton('H1', NULL, TRUE);
+        $this->assertHTMLMatch('<h1>Long paragraph for testing that the heading icon does not appear in the inline toolbar %1%.</h1>');
+        
+        // Test Pre inside a Div
+        $this->useTest(12);
+
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->assertTrue($this->topToolbarButtonExists('headings'), 'Heading icon should be enabled in the top toolbar');
+
+        $this->clickTopToolbarButton('headings');
+        $this->clickTopToolbarButton('H1', NULL, TRUE);
+        $this->assertHTMLMatch('<h1>Long paragraph %1% for testing that the heading icon does not appear in the inline toolbar.</h1>');
+        
+         // Test Quote inside a Div
+        $this->useTest(10);
+
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->assertTrue($this->topToolbarButtonExists('headings'), 'Heading icon should be enabled in the top toolbar');
+
+        $this->clickTopToolbarButton('headings');
+        $this->clickTopToolbarButton('H1', NULL, TRUE);
+        $this->assertHTMLMatch('<h1>Long paragraph for testing that the heading icon does not appear in the inline toolbar %1%.</h1>');
+
+    }//end testApplyingHeadginsToDivsWithSingleBlockElements()
+    
+
 }//end class
 
 ?>
