@@ -95,7 +95,7 @@ abstract class AbstractViperTableEditorPluginUnitTest extends AbstractViperUnitT
             $this->clickCell($cellNum);
         }
 
-        usleep(100);
+        usleep(60000);
 
         $region = NULL;
         try {
