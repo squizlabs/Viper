@@ -39,21 +39,21 @@ class Viper_Tests_ViperTableEditorPlugin_MergeAndSplitUnitTest extends AbstractV
     {
 
         $this->insertTableWithSpecificId('test', 3, 6, 3, 1);
-        $this->assertHTMLMatch('<p>Test %1%</p><table style="width: 100%;" id="test" border="1"><tbody><tr><th id="testr1c1"></th><th id="testr1c2"></th><th id="testr1c3"></th><th id="testr1c4"></th><th id="testr1c5"></th><th id="testr1c6"></th></tr><tr><th id="testr2c1"></th><td headers="testr1c2 testr2c1"></td><td headers="testr1c3 testr2c1"></td><td headers="testr1c4 testr2c1"></td><td headers="testr1c5 testr2c1"></td><td headers="testr1c6 testr2c1"></td></tr><tr><th id="testr3c1"></th><td headers="testr1c2 testr3c1"></td><td headers="testr1c3 testr3c1"></td><td headers="testr1c4 testr3c1"></td><td headers="testr1c5 testr3c1"></td><td headers="testr1c6 testr3c1"></td></tr></tbody></table><p></p>');
+        $this->assertHTMLMatch('<p>Test %1%</p><table border="1" id="test" style="width: 100%;"><thead><tr><th id="testr1c1"></th><th id="testr1c2"></th><th id="testr1c3"></th><th id="testr1c4"></th><th id="testr1c5"></th><th id="testr1c6"></th></tr></thead><tbody><tr><th id="testr2c1"></th><td headers="testr1c2 testr2c1"></td><td headers="testr1c3 testr2c1"></td><td headers="testr1c4 testr2c1"></td><td headers="testr1c5 testr2c1"></td><td headers="testr1c6 testr2c1"></td></tr><tr><th id="testr3c1"></th><td headers="testr1c2 testr3c1"></td><td headers="testr1c3 testr3c1"></td><td headers="testr1c4 testr3c1"></td><td headers="testr1c5 testr3c1"></td><td headers="testr1c6 testr3c1"></td></tr></tbody></table><p></p>');
 
         $this->showTools(8, 'cell');
         $this->clickMergeSplitIcon('mergeRight');
         $this->clickMergeSplitIcon('mergeRight');
         $this->clickMergeSplitIcon('mergeRight');
 
-        $this->assertHTMLMatch('<p>Test %1%</p><table style="width: 100%;" id="test" border="1"><tbody><tr><th id="testr1c1"></th><th id="testr1c2"></th><th id="testr1c3"></th><th id="testr1c4"></th><th id="testr1c5"></th><th id="testr1c6"></th></tr><tr><th id="testr2c1"></th><td headers="testr1c2 testr2c1"></td><td colspan="4" headers="testr1c3 testr1c4 testr1c5 testr1c6 testr2c1"></td></tr><tr><th id="testr3c1"></th><td headers="testr1c2 testr3c1"></td><td headers="testr1c3 testr3c1"></td><td headers="testr1c4 testr3c1"></td><td headers="testr1c5 testr3c1"></td><td headers="testr1c6 testr3c1"></td></tr></tbody></table><p></p>');
+        $this->assertHTMLMatch('<p>Test %1%</p><table border="1" id="test" style="width: 100%;"><thead><tr><th id="testr1c1"></th><th id="testr1c2"></th><th id="testr1c3"></th><th id="testr1c4"></th><th id="testr1c5"></th><th id="testr1c6"></th></tr></thead><tbody><tr><th id="testr2c1"></th><td headers="testr1c2 testr2c1"></td><td colspan="4" headers="testr1c3 testr1c4 testr1c5 testr1c6 testr2c1"></td></tr><tr><th id="testr3c1"></th><td headers="testr1c2 testr3c1"></td><td headers="testr1c3 testr3c1"></td><td headers="testr1c4 testr3c1"></td><td headers="testr1c5 testr3c1"></td><td headers="testr1c6 testr3c1"></td></tr></tbody></table><p></p>');
 
         $this->clickMergeSplitIcon('splitVert');
-        $this->assertHTMLMatch('<p>Test %1%</p><table style="width: 100%;" id="test" border="1"><tbody><tr><th id="testr1c1"></th><th id="testr1c2"></th><th id="testr1c3"></th><th id="testr1c4"></th><th id="testr1c5"></th><th id="testr1c6"></th></tr><tr><th id="testr2c1"></th><td headers="testr1c2 testr2c1"></td><td colspan="3" headers="testr1c3 testr1c4 testr1c5 testr2c1"></td><td headers="testr1c6 testr2c1"></td></tr><tr><th id="testr3c1"></th><td headers="testr1c2 testr3c1"></td><td headers="testr1c3 testr3c1"></td><td headers="testr1c4 testr3c1"></td><td headers="testr1c5 testr3c1"></td><td headers="testr1c6 testr3c1"></td></tr></tbody></table><p></p>');
+        $this->assertHTMLMatch('<p>Test %1%</p><table border="1" id="test" style="width: 100%;"><thead><tr><th id="testr1c1"></th><th id="testr1c2"></th><th id="testr1c3"></th><th id="testr1c4"></th><th id="testr1c5"></th><th id="testr1c6"></th></tr></thead><tbody><tr><th id="testr2c1"></th><td headers="testr1c2 testr2c1"></td><td colspan="3" headers="testr1c3 testr1c4 testr1c5 testr2c1"></td><td headers="testr1c6 testr2c1"></td></tr><tr><th id="testr3c1"></th><td headers="testr1c2 testr3c1"></td><td headers="testr1c3 testr3c1"></td><td headers="testr1c4 testr3c1"></td><td headers="testr1c5 testr3c1"></td><td headers="testr1c6 testr3c1"></td></tr></tbody></table><p></p>');
 
         $this->showTools(4, 'col');
         $this->clickButton('delete');
-        $this->assertHTMLMatch('<p>Test %1%</p><table style="width: 100%; " id="test" border="1"><tbody><tr><th id="testr1c1"></th><th id="testr1c2"></th><th id="testr1c3"></th><th id="testr1c4"></th><th id="testr1c5"></th></tr><tr><th id="testr2c1"></th><td headers="testr1c2 testr2c1"></td><td colspan="2" headers="testr1c3 testr1c4 testr2c1"></td><td headers="testr1c5 testr2c1"></td></tr><tr><th id="testr3c1"></th><td headers="testr1c2 testr3c1"></td><td headers="testr1c3 testr3c1"></td><td headers="testr1c4 testr3c1"></td><td headers="testr1c5 testr3c1"></td></tr></tbody></table><p></p>');
+        $this->assertHTMLMatch('<p>Test %1%</p><table border="1" id="test" style="width: 100%;"><thead><tr><th id="testr1c1"></th><th id="testr1c2"></th><th id="testr1c3"></th><th id="testr1c4"></th><th id="testr1c5"></th></tr></thead><tbody><tr><th id="testr2c1"></th><td headers="testr1c2 testr2c1"></td><td colspan="2" headers="testr1c3 testr1c4 testr2c1"></td><td headers="testr1c5 testr2c1"></td></tr><tr><th id="testr3c1"></th><td headers="testr1c2 testr3c1"></td><td headers="testr1c3 testr3c1"></td><td headers="testr1c4 testr3c1"></td><td headers="testr1c5 testr3c1"></td></tr></tbody></table><p></p>');
 
     }//end testTableIdWhenMergingSplitingAndDeletingCellsInASingleRow()
 
@@ -67,18 +67,18 @@ class Viper_Tests_ViperTableEditorPlugin_MergeAndSplitUnitTest extends AbstractV
     {
 
         $this->insertTableWithSpecificId('test', 3, 4, 2, 1);
-        $this->assertHTMLMatch('<p>Test %1%</p><table border="1" id="test" style="width: 100%;"><tbody><tr><th id="testr1c1"></th><th id="testr1c2"></th><th id="testr1c3"></th><th id="testr1c4"></th></tr><tr><td headers="testr1c1"></td><td headers="testr1c2"></td><td headers="testr1c3"></td><td headers="testr1c4"></td></tr><tr><td headers="testr1c1"></td><td headers="testr1c2"></td><td headers="testr1c3"></td><td headers="testr1c4"></td></tr></tbody></table><p></p>');
+        $this->assertHTMLMatch('<p>Test %1%</p><table border="1" id="test" style="width: 100%;"><thead><tr><th id="testr1c1"></th><th id="testr1c2"></th><th id="testr1c3"></th><th id="testr1c4"></th></tr></thead><tbody><tr><td headers="testr1c1"></td><td headers="testr1c2"></td><td headers="testr1c3"></td><td headers="testr1c4"></td></tr><tr><td headers="testr1c1"></td><td headers="testr1c2"></td><td headers="testr1c3"></td><td headers="testr1c4"></td></tr></tbody></table><p></p>');
 
         $this->showTools(1, 'cell');
         $this->clickMergeSplitIcon('mergeRight');
         $this->clickMergeSplitIcon('mergeDown');
         $this->clickMergeSplitIcon('mergeDown');
-        $this->assertHTMLMatch('<p>Test %1%</p><table border="1" id="test" style="width: 100%;"><tbody><tr><th id="testr1c1"></th><th colspan="2" id="testr1c2" rowspan="3"></th><th id="testr1c3"></th></tr><tr><td headers="testr1c1"></td><td headers="testr1c2 testr1c3"></td></tr><tr><td headers="testr1c1"></td><td headers="testr1c2 testr1c3"></td></tr></tbody></table><p></p>');
+        $this->assertHTMLMatch('<p>Test %1%</p><table border="1" id="test" style="width: 100%;"><thead><tr><th id="testr1c1"></th><th colspan="2" id="testr1c2" rowspan="3"></th><th id="testr1c3"></th></tr></thead><tbody><tr><td headers="testr1c1"></td><td headers="testr1c2 testr1c3"></td></tr><tr><td headers="testr1c1"></td><td headers="testr1c2 testr1c3"></td></tr></tbody></table><p></p>');
 
         $this->clickMergeSplitIcon('splitVert');
         $this->clickMergeSplitIcon('splitHoriz');
         $this->clickMergeSplitIcon('splitHoriz');
-        $this->assertHTMLMatch('<p>Test %1%</p><table border="1" id="test" style="width: 100%;"><tbody><tr><th id="testr1c1"></th><th id="testr1c2"></th><th id="testr1c3" rowspan="3"></th><th id="testr1c4"></th></tr><tr><td headers="testr1c1"></td><th id="testr2c2"></th><td headers="testr1c3 testr1c4 testr2c2"></td></tr><tr><td headers="testr1c1"></td><th id="testr3c2"></th><td headers="testr1c3 testr1c4 testr3c2"></td></tr></tbody></table><p></p>');
+        $this->assertHTMLMatch('<p>Test %1%</p><table border="1" id="test" style="width: 100%;"><thead><tr><th id="testr1c1"></th><th id="testr1c2"></th><th id="testr1c3" rowspan="3"></th><th id="testr1c4"></th></tr></thead><tbody><tr><td headers="testr1c1"></td><th id="testr2c2"></th><td headers="testr1c3 testr1c4 testr2c2"></td></tr><tr><td headers="testr1c1"></td><th id="testr3c2"></th><td headers="testr1c3 testr1c4 testr3c2"></td></tr></tbody></table><p></p>');
 
     }//end testTableIdWhenMergingCellsThenSplittingVertThenHorz()
 
@@ -92,19 +92,19 @@ class Viper_Tests_ViperTableEditorPlugin_MergeAndSplitUnitTest extends AbstractV
     {
 
         $this->insertTableWithSpecificId('test', 3, 4, 2, 1);
-        $this->assertHTMLMatch('<p>Test %1%</p><table border="1" id="test" style="width: 100%;"><tbody><tr><th id="testr1c1"></th><th id="testr1c2"></th><th id="testr1c3"></th><th id="testr1c4"></th></tr><tr><td headers="testr1c1"></td><td headers="testr1c2"></td><td headers="testr1c3"></td><td headers="testr1c4"></td></tr><tr><td headers="testr1c1"></td><td headers="testr1c2"></td><td headers="testr1c3"></td><td headers="testr1c4"></td></tr></tbody></table><p></p>');
+        $this->assertHTMLMatch('<p>Test %1%</p><table border="1" id="test" style="width: 100%;"><thead><tr><th id="testr1c1"></th><th id="testr1c2"></th><th id="testr1c3"></th><th id="testr1c4"></th></tr></thead><tbody><tr><td headers="testr1c1"></td><td headers="testr1c2"></td><td headers="testr1c3"></td><td headers="testr1c4"></td></tr><tr><td headers="testr1c1"></td><td headers="testr1c2"></td><td headers="testr1c3"></td><td headers="testr1c4"></td></tr></tbody></table><p></p>');
 
         $this->showTools(1, 'cell');
         $this->clickMergeSplitIcon('mergeRight');
         $this->clickMergeSplitIcon('mergeDown');
         $this->clickMergeSplitIcon('mergeDown');
-        $this->assertHTMLMatch('<p>Test %1%</p><table border="1" id="test" style="width: 100%;"><tbody><tr><th id="testr1c1"></th><th colspan="2" id="testr1c2" rowspan="3"></th><th id="testr1c3"></th></tr><tr><td headers="testr1c1"></td><td headers="testr1c2 testr1c3"></td></tr><tr><td headers="testr1c1"></td><td headers="testr1c2 testr1c3"></td></tr></tbody></table><p></p>');
+        $this->assertHTMLMatch('<p>Test %1%</p><table border="1" id="test" style="width: 100%;"><thead><tr><th id="testr1c1"></th><th colspan="2" id="testr1c2" rowspan="3"></th><th id="testr1c3"></th></tr></thead><tbody><tr><td headers="testr1c1"></td><td headers="testr1c2 testr1c3"></td></tr><tr><td headers="testr1c1"></td><td headers="testr1c2 testr1c3"></td></tr></tbody></table><p></p>');
 
         $this->clickMergeSplitIcon('splitHoriz');
         $this->clickMergeSplitIcon('splitHoriz');
         $this->clickMergeSplitIcon('splitVert');
 
-        $this->assertHTMLMatch('<p>Test %1%</p><table border="1" id="test" style="width: 100%;"><tbody><tr><th id="testr1c1"></th><th id="testr1c2"></th><th id="testr1c3"></th><th id="testr1c4"></th></tr><tr><td headers="testr1c1"></td><th colspan="2" id="testr2c2"></th><td headers="testr1c4 testr2c2"></td></tr><tr><td headers="testr1c1"></td><th colspan="2" id="testr3c2"></th><td headers="testr1c4 testr3c2"></td></tr></tbody></table><p></p>');
+        $this->assertHTMLMatch('<p>Test %1%</p><table border="1" id="test" style="width: 100%;"><thead><tr><th id="testr1c1"></th><th id="testr1c2"></th><th id="testr1c3"></th><th id="testr1c4"></th></tr></thead><tbody><tr><td headers="testr1c1"></td><th colspan="2" id="testr2c2"></th><td headers="testr1c4 testr2c2"></td></tr><tr><td headers="testr1c1"></td><th colspan="2" id="testr3c2"></th><td headers="testr1c4 testr3c2"></td></tr></tbody></table><p></p>');
 
     }//end testTableIdWhenMergingAndSplitingCellsAcrossMultipleRowsAndColumns()
 
@@ -124,7 +124,7 @@ class Viper_Tests_ViperTableEditorPlugin_MergeAndSplitUnitTest extends AbstractV
         $this->clickMergeSplitIcon('mergeDown');
         $this->clickMergeSplitIcon('mergeDown');
 
-        $this->assertTableWithoutHeaders('<p>Test %1%</p><table style="width: 100%;" border="1"><tbody><tr><th></th></tr></tbody></table><p></p>');
+        $this->assertTableWithoutHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><thead><tr><th></th></tr></thead></table><p></p>');
 
     }//end testMergingAllColumnsAndRows()
 
@@ -203,7 +203,7 @@ class Viper_Tests_ViperTableEditorPlugin_MergeAndSplitUnitTest extends AbstractV
         $this->assertTableWithoutHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><tbody><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td rowspan="2"></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
 
         $this->clickMergeSplitIcon('splitHoriz');
-        $this->assertTableWithoutHeaders('<p>Test XAX</p><table border="1" style="width: 100%;"><tbody><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
+        $this->assertTableWithoutHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><tbody><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
 
     }//end testMergeSplit2()
 
@@ -221,48 +221,48 @@ class Viper_Tests_ViperTableEditorPlugin_MergeAndSplitUnitTest extends AbstractV
         $this->assertMergeAndSplitIconStatuses(0, FALSE, FALSE, FALSE, TRUE, FALSE, TRUE);
 
         $this->clickButton('mergeRight');
-        $this->assertTableWithoutHeaders('<p>Test %1%</p><table style="width: 100%; " border="1"><tbody><tr><th colspan="2"></th><th></th></tr><tr><td></td><td></td><td></td></tr></tbody></table><p></p>');
+        $this->assertTableWithoutHeaders('<p>Test %1%</p><table style="width: 100%; " border="1"><tbody><tr><th colspan="2"></th><th></th></tr></thead><tbody><tr><td></td><td></td><td></td></tr></tbody></table><p></p>');
 
         $this->clickButton('mergeRight');
-        $this->assertTableWithoutHeaders('<p>Test %1%</p><table style="width: 100%; " border="1"><tbody><tr><th colspan="3"></th></tr><tr><td></td><td></td><td></td></tr></tbody></table><p></p>');
+        $this->assertTableWithoutHeaders('<p>Test %1%</p><table style="width: 100%; " border="1"><tbody><tr><th colspan="3"></th></tr></thead><tbody><tr><td></td><td></td><td></td></tr></tbody></table><p></p>');
 
         $this->clickCell(1);
         $this->showTools(0, 'col');
         $this->clickInlineToolbarButton('addRight');
-        $this->assertTableWithoutHeaders('<p>Test %1%</p><table style="width: 100%; " border="1"><tbody><tr><th colspan="3"></th><th></th></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
+        $this->assertTableWithoutHeaders('<p>Test %1%</p><table style="width: 100%; " border="1"><tbody><tr><th colspan="3"></th><th></th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
 
         $this->showTools(0, 'row');
         $this->clickInlineToolbarButton('addBelow');
-        $this->assertTableWithoutHeaders('<p>Test %1%</p><table style="width: 100%; " border="1"><tbody><tr><th colspan="3"></th><th></th></tr><tr><th colspan="3"></th><th></th></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
+        $this->assertTableWithoutHeaders('<p>Test %1%</p><table style="width: 100%; " border="1"><tbody><tr><th colspan="3"></th><th></th></tr></thead><tbody><tr><th colspan="3"></th><th></th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
 
         $this->clickCell(1);
         $this->showTools(2, 'cell');
         $this->clickMergeSplitIcon('splitVert');
         $this->clickMergeSplitIcon('splitVert');
-        $this->assertTableWithoutHeaders('<p>Test %1%</p><table style="width: 100%; " border="1"><tbody><tr><th colspan="3"></th><th></th></tr><tr><th></th><th></th><th></th><th></th></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
+        $this->assertTableWithoutHeaders('<p>Test %1%</p><table style="width: 100%; " border="1"><tbody><tr><th colspan="3"></th><th></th></tr></thead><thead><tr><th></th><th></th><th></th><th></th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
 
         $this->showTools(0, 'row');
         $this->clickInlineToolbarButton('addAbove');
-        $this->assertTableWithoutHeaders('<p>Test %1%</p><table style="width: 100%; " border="1"><tbody><tr><th colspan="3"></th><th></th></tr><tr><th colspan="3"></th><th></th></tr><tr><th></th><th></th><th></th><th></th></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
+        $this->assertTableWithoutHeaders('<p>Test %1%</p><table style="width: 100%; " border="1"><tbody><tr><th colspan="3"></th><th></th></tr></thead><tbody><tr><th colspan="3"></th><th></th></tr></thead><thead><tr><th></th><th></th><th></th><th></th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
 
         $this->assertMergeAndSplitIconStatuses(2, TRUE, FALSE, TRUE, TRUE, FALSE, TRUE);
 
         $this->clickButton('mergeUp');
-        $this->assertTableWithoutHeaders('<p>Test %1%</p><table style="width: 100%; " border="1"><tbody><tr><th colspan="3" rowspan="2"></th><th></th></tr><tr><th></th></tr><tr><th></th><th></th><th></th><th></th></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
+        $this->assertTableWithoutHeaders('<p>Test %1%</p><table style="width: 100%; " border="1"><tbody><tr><th colspan="3" rowspan="2"></th><th></th></tr></thead><thead><tr><th></th></tr></thead><thead><tr><th></th><th></th><th></th><th></th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
 
         $this->showTools(1, 'cell');
         $this->clickMergeSplitIcon('mergeDown');
-        $this->assertTableWithoutHeaders('<p>Test %1%</p><table style="width: 100%; " border="1"><tbody><tr><th colspan="3"></th><th></th></tr><tr><th></th><th></th><th></th><th></th></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
+        $this->assertTableWithoutHeaders('<p>Test %1%</p><table style="width: 100%; " border="1"><tbody><tr><th colspan="3"></th><th></th></tr></thead><thead><tr><th></th><th></th><th></th><th></th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
 
         $this->showTools(0, 'cell');
         $this->clickMergeSplitIcon('mergeDown');
-        $this->assertTableWithoutHeaders('<p>Test %1%</p><table style="width: 100%; " border="1"><tbody><tr><th colspan="3" rowspan="2"></th><th></th></tr><tr><th></th></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
+        $this->assertTableWithoutHeaders('<p>Test %1%</p><table style="width: 100%; " border="1"><tbody><tr><th colspan="3" rowspan="2"></th><th></th></tr></thead><thead><tr><th></th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
 
         $this->showTools(0, 'cell');
         $this->clickMergeSplitIcon('splitHoriz');
         $this->clickMergeSplitIcon('splitVert');
         $this->clickMergeSplitIcon('splitVert');
-        $this->assertTableWithoutHeaders('<p>Test %1%</p><table style="width: 100%; " border="1"><tbody><tr><th></th><th></th><th></th><th></th></tr><tr><th colspan="3"></th><th></th></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
+        $this->assertTableWithoutHeaders('<p>Test %1%</p><table style="width: 100%; " border="1"><thead><tr><th></th><th></th><th></th><th></th></tr></thead><tbody><tr><th colspan="3"></th><th></th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
 
     }//end testMergeSplit3()
 
@@ -279,20 +279,20 @@ class Viper_Tests_ViperTableEditorPlugin_MergeAndSplitUnitTest extends AbstractV
 
         $this->showTools(0, 'cell');
         $this->clickMergeSplitIcon('mergeRight');
-        $this->assertTableWithoutHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><tbody><tr><th colspan="2"></th><th></th></tr><tr><td></td><td></td><td></td></tr></tbody></table><p></p>');
+        $this->assertTableWithoutHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><tbody><tr><th colspan="2"></th><th></th></tr></thead><tbody><tr><td></td><td></td><td></td></tr></tbody></table><p></p>');
 
         $this->clickMergeSplitIcon('splitVert');
-        $this->assertTableWithoutHeaders('<p>Test %1%</p><table style="width: 100%; " border="1"><tbody><tr><th></th><th></th><th></th></tr><tr><td></td><td></td><td></td></tr></tbody></table><p></p>');
+        $this->assertTableWithoutHeaders('<p>Test %1%</p><table style="width: 100%; " border="1"><thead><tr><th></th><th></th><th></th></tr></thead><tbody><tr><td></td><td></td><td></td></tr></tbody></table><p></p>');
 
         $this->clickMergeSplitIcon('mergeDown');
-        $this->assertTableWithoutHeaders('<p>Test %1%</p><table style="width: 100%; " border="1"><tbody><tr><th rowspan="2"></th><th></th><th></th></tr><tr><td></td><td></td></tr></tbody></table><p></p>');
+        $this->assertTableWithoutHeaders('<p>Test %1%</p><table style="width: 100%; " border="1"><tbody><tr><th rowspan="2"></th><th></th><th></th></tr></thead><tbody><tr><td></td><td></td></tr></tbody></table><p></p>');
 
         $this->clickMergeSplitIcon('splitHoriz');
-        $this->assertTableWithoutHeaders('<p>Test %1%</p><table style="width: 100%; " border="1"><tbody><tr><th></th><th></th><th></th></tr><tr><th></th><td></td><td></td></tr></tbody></table><p></p>');
+        $this->assertTableWithoutHeaders('<p>Test %1%</p><table style="width: 100%; " border="1"><thead><tr><th></th><th></th><th></th></tr></thead><thead><tr><th></th><td></td><td></td></tr></tbody></table><p></p>');
 
         $this->clickCell(1);
         $this->toggleCellHeading(0);
-        $this->assertTableWithoutHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><tbody><tr><td></td><th></th><th></th></tr><tr><th></th><td></td><td></td></tr></tbody></table><p></p>');
+        $this->assertTableWithoutHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><tbody><tr><td></td><th></th><th></th></tr></thead><thead><tr><th></th><td></td><td></td></tr></tbody></table><p></p>');
 
     }//end testMergeSplit4()
 
