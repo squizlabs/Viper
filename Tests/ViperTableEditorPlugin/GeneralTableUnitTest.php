@@ -701,7 +701,7 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
      *
      * @return void
      */
-    public function testTableKeyboardNav()
+    public function testTableKeyboardNav2()
     {
         $this->insertTable(1, 2, 2, 3);
 
@@ -715,7 +715,7 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
         $this->keyDown('Key.SHIFT + Key.TAB');
         $this->type('1');
 
-        $this->assertTableWithoutHeaders('<p>Test %1%</p><table style="width: 100%; " border="1"><tbody><tr><th></th><th>1</th><th>2</th></tr><tr><td>3</td><td></td><td></td></tr></tbody></table><p></p>');
+        $this->assertTableWithoutHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><thead><tr><th></th><th>1</th><th>2</th></tr></thead><tbody><tr><td>3</td><td></td><td></td></tr></tbody></table><p></p>');
 
     }//end testTableKeyboardNav()
 
@@ -727,7 +727,7 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
      */
     public function testTableKeyboardNavWithRowAndColSpan()
     {
-        $this->insertTable(1, 2, 3, 3);
+        $this->insertTable(1, 0, 3, 3);
         $this->showTools(0, 'cell');
         $this->clickMergeSplitIcon('mergeDown');
 
@@ -760,7 +760,7 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
         $this->keyDown('Key.SHIFT + Key.TAB');
         $this->type('4');
 
-        $this->assertTableWithoutHeaders('<p>Test %1%</p><table style="width: 100%; " border="1"><tbody><tr><th rowspan="2"></th><th></th><th>1</th></tr><tr><td colspan="2">2</td></tr><tr><td>3</td><td></td><td>4</td></tr><tr><td>5</td><td></td><td></td></tr></tbody></table><p></p>');
+        $this->assertTableWithoutHeaders('<p>Test %1%</p><table style="width: 100%; " border="1"><tbody><tr><td rowspan="2"></td><td></td><td>1</td></tr><tr><td colspan="2">2</td></tr><tr><td>3</td><td></td><td>4</td></tr><tr><td>5</td><td></td><td></td></tr></tbody></table><p></p>');
 
     }//end testTableKeyboardNavWithRowNColSpan()
 
@@ -817,7 +817,7 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
         $this->keyDown('Key.DOWN');
         $this->type('test');
 
-        $this->assertTableWithoutHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><tbody><tr><th></th><th></th><th></th><th></th></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p>&nbsp;test</p>');
+        $this->assertTableWithoutHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><thead><tr><th></th><th></th><th></th><th></th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p>&nbsp;test</p>');
 
     }//end testTableNavigatingOutOfTable()
 
