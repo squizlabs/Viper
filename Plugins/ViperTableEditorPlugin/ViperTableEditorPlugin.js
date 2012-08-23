@@ -1722,7 +1722,7 @@ ViperTableEditorPlugin.prototype = {
         var colspan = this.getColspan(cell);
 
         while (row && !newCell) {
-            row = this.getPreviousRow(row);
+            row = this.getPreviousRow(row, true);
             if (!row) {
                 return false;
             }
