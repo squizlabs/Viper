@@ -61,28 +61,6 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
 
 
     /**
-     * Test that the HR icon is not available for a %2% and table.
-     *
-     * @return void
-     */
-    public function testHRIconNotAvailableForCaptionAndTable()
-    {
-        $this->click($this->findKeyword(1));
-        $this->assertTrue($this->topToolbarButtonExists('insertHr', 'disabled'), 'HR icon should not appear in the top toolbar.');
-
-        $this->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->assertTrue($this->topToolbarButtonExists('insertHr', 'disabled'), 'HR icon should be active in the top toolbar.');
-
-        $this->selectInlineToolbarLineageItem(1);
-        $this->assertTrue($this->topToolbarButtonExists('insertHr', 'disabled'), 'HR icon should not appear in the top toolbar.');
-
-        $this->clickCell(4);
-        $this->assertTrue($this->topToolbarButtonExists('insertHr', 'disabled'), 'HR icon should not appear in the top toolbar.');
-
-    }//end testHRIconNotAvailableForCaptionAndTable()
-
-
-    /**
      * Test that the Headings icon is not available when in a table element other than TD or TH.
      *
      * @return void
