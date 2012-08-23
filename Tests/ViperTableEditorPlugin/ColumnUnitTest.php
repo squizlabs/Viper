@@ -43,14 +43,14 @@ class Viper_Tests_ViperTableEditorPlugin_ColumnUnitTest extends AbstractViperTab
         $this->clickField('Width');
         $this->type('50');
         $this->clickInlineToolbarButton('Update Changes', NULL, TRUE);
-        $this->assertTableWithoutHeaders('<p>Test %1%</p><table style="width: 100%; " border="1"><tbody><tr><td style="width: 50px;"></td><th></th><th></th><th></th></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
+        $this->assertTableWithoutHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><thead><tr><td style="width: 50px;"></td><th></th><th></th><th></th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
 
         // Change the width of the last column and press enter
         $this->showTools(3, 'col');
         $this->clickField('Width');
         $this->type('100');
         $this->keyDown('Key.ENTER');
-        $this->assertTableWithoutHeaders('<p>Test %1%</p><table style="width: 100%; " border="1"><tbody><tr><td style="width: 50px; "></td><th></th><th></th><td style="width: 100px;"></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
+        $this->assertTableWithoutHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><thead><tr><td style="width: 50px;"></td><th></th><th></th><td style="width: 100px;"></td></tr></thead><tbody><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
 
     }//end testChangingColumnWidth()
 
@@ -62,7 +62,6 @@ class Viper_Tests_ViperTableEditorPlugin_ColumnUnitTest extends AbstractViperTab
      */
     public function testColumnsInANewTableWithoutHeaders()
     {
-
         $this->insertTable(1, 0);
         $this->clickCell(0);
         $this->type('One');
@@ -190,36 +189,36 @@ class Viper_Tests_ViperTableEditorPlugin_ColumnUnitTest extends AbstractViperTab
         $this->showTools(0, 'col');
         $this->clickInlineToolbarButton('addRight');
 
-        $this->assertTableWithoutHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><tbody><tr><th>One</th><th></th><th></th><th>Two</th><th>Three</th><th>Four</th></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
+        $this->assertTableWithoutHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><thead><tr><th>One</th><th></th><th></th><th>Two</th><th>Three</th><th>Four</th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
 
         //Delete the second column
         $this->showTools(1, 'col');
         $this->clickInlineToolbarButton('delete');
-        $this->assertTableWithoutHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><tbody><tr><th>One</th><th></th><th>Two</th><th>Three</th><th>Four</th></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
+        $this->assertTableWithoutHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><thead><tr><th>One</th><th></th><th>Two</th><th>Three</th><th>Four</th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
 
         // Move the third column left
         $this->showTools(2, 'col');
         $this->clickInlineToolbarButton('mergeLeft');
-        $this->assertTableWithoutHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><tbody><tr><th>One</th><th>Two</th><th></th><th>Three</th><th>Four</th></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
+        $this->assertTableWithoutHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><thead><tr><th>One</th><th>Two</th><th></th><th>Three</th><th>Four</th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
 
         // Move the third column right
         $this->showTools(2, 'col');
         $this->clickInlineToolbarButton('mergeRight');
-        $this->assertTableWithoutHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><tbody><tr><th>One</th><th>Two</th><th>Three</th><th></th><th>Four</th></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
+        $this->assertTableWithoutHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><thead><tr><th>One</th><th>Two</th><th>Three</th><th></th><th>Four</th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
 
         // Change the first colum to be a header column
         $this->showTools(0, 'col');
         $this->clickField('Heading');
         sleep(1);
         $this->clickInlineToolbarButton('Update Changes', NULL, TRUE);
-        $this->assertTableWithoutHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><tbody><tr><th>One</th><th>Two</th><th>Three</th><th></th><th>Four</th></tr><tr><th></th><td></td><td></td><td></td><td></td></tr><tr><th></th><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
+        $this->assertTableWithoutHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><thead><tr><th>One</th><th>Two</th><th>Three</th><th></th><th>Four</th></tr></thead><tbody><tr><th></th><td></td><td></td><td></td><td></td></tr><tr><th></th><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
 
         // Change the third colum to be a header column
         $this->showTools(2, 'col');
         $this->clickField('Heading');
         sleep(1);
         $this->clickInlineToolbarButton('Update Changes', NULL, TRUE);
-        $this->assertTableWithoutHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><tbody><tr><th>One</th><th>Two</th><th>Three</th><th></th><th>Four</th></tr><tr><th></th><td></td><th></th><td></td><td></td></tr><tr><th></th><td></td><th></th><td></td><td></td></tr></tbody></table><p></p>');
+        $this->assertTableWithoutHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><thead><tr><th>One</th><th>Two</th><th>Three</th><th></th><th>Four</th></tr></thead><tbody><tr><th></th><td></td><th></th><td></td><td></td></tr><tr><th></th><td></td><th></th><td></td><td></td></tr></tbody></table><p></p>');
 
     }//end testColumnsInANewTableWithTopHeaders()
 
@@ -249,36 +248,36 @@ class Viper_Tests_ViperTableEditorPlugin_ColumnUnitTest extends AbstractViperTab
         //Add a new column after the first column of the table
         $this->showTools(0, 'col');
         $this->clickInlineToolbarButton('addRight');
-        $this->assertTableWithoutHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><tbody><tr><th>One</th><th></th><th></th><th>Two</th><th>Three</th><th>Four</th></tr><tr><th></th><th></th><td></td><td></td><td></td><td></td></tr><tr><th></th><th></th><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
+        $this->assertTableWithoutHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><thead><tr><th>One</th><th></th><th></th><th>Two</th><th>Three</th><th>Four</th></tr></thead><tbody><tr><th></th><th></th><td></td><td></td><td></td><td></td></tr><tr><th></th><th></th><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
 
         //Delete the second column
         $this->showTools(1, 'col');
         $this->clickInlineToolbarButton('delete');
-        $this->assertTableWithoutHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><tbody><tr><th>One</th><th></th><th>Two</th><th>Three</th><th>Four</th></tr><tr><th></th><td></td><td></td><td></td><td></td></tr><tr><th></th><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
+        $this->assertTableWithoutHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><thead><tr><th>One</th><th></th><th>Two</th><th>Three</th><th>Four</th></tr></thead><tbody><tr><th></th><td></td><td></td><td></td><td></td></tr><tr><th></th><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
 
         // Move the third column left
         $this->showTools(2, 'col');
         $this->clickInlineToolbarButton('mergeLeft');
-        $this->assertTableWithoutHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><tbody><tr><th>One</th><th>Two</th><th></th><th>Three</th><th>Four</th></tr><tr><th></th><td></td><td></td><td></td><td></td></tr><tr><th></th><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
+        $this->assertTableWithoutHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><thead><tr><th>One</th><th>Two</th><th></th><th>Three</th><th>Four</th></tr></thead><tbody><tr><th></th><td></td><td></td><td></td><td></td></tr><tr><th></th><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
 
         // Move the third column right
         $this->showTools(2, 'col');
         $this->clickInlineToolbarButton('mergeRight');
-        $this->assertTableWithoutHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><tbody><tr><th>One</th><th>Two</th><th>Three</th><th></th><th>Four</th></tr><tr><th></th><td></td><td></td><td></td><td></td></tr><tr><th></th><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
+        $this->assertTableWithoutHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><thead><tr><th>One</th><th>Two</th><th>Three</th><th></th><th>Four</th></tr></thead><tbody><tr><th></th><td></td><td></td><td></td><td></td></tr><tr><th></th><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
 
         // Change the third colum to be a header column
         $this->showTools(2, 'col');
         $this->clickField('Heading');
         sleep(1);
         $this->clickInlineToolbarButton('Update Changes', NULL, TRUE);
-        $this->assertTableWithoutHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><tbody><tr><th>One</th><th>Two</th><th>Three</th><th></th><th>Four</th></tr><tr><th></th><td></td><th></th><td></td><td></td></tr><tr><th></th><td></td><th></th><td></td><td></td></tr></tbody></table><p></p>');
+        $this->assertTableWithoutHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><thead><tr><th>One</th><th>Two</th><th>Three</th><th></th><th>Four</th></tr></thead><tbody><tr><th></th><td></td><th></th><td></td><td></td></tr><tr><th></th><td></td><th></th><td></td><td></td></tr></tbody></table><p></p>');
 
         // Change the first colum not to be a header column
         $this->showTools(0, 'col');
         $this->clickField('Heading');
         sleep(1);
         $this->clickInlineToolbarButton('Update Changes', NULL, TRUE);
-        $this->assertTableWithoutHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><tbody><tr><td>One</td><th>Two</th><th>Three</th><th></th><th>Four</th></tr><tr><td></td><td></td><th></th><td></td><td></td></tr><tr><td></td><td></td><th></th><td></td><td></td></tr></tbody></table><p></p>');
+        $this->assertTableWithoutHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><thead><tr><td>One</td><th>Two</th><th>Three</th><th></th><th>Four</th></tr></thead><tbody><tr><td></td><td></td><th></th><td></td><td></td></tr><tr><td></td><td></td><th></th><td></td><td></td></tr></tbody></table><p></p>');
 
 
     }//end testColumnsInANewTableWithBothHeaders()
