@@ -118,42 +118,6 @@ abstract class AbstractGeneralListUnitTest extends AbstractViperListPluginUnitTe
     }//end testTableIconNotAvailableForList()
 
 
-    /**
-     * Test that the HR icon is not available for a list.
-     *
-     * @return void
-     */
-    public function testHRIconNotAvailableForList()
-    {
-        $this->click($this->findKeyword(4));
-        $this->assertTrue($this->topToolbarButtonExists('insertHr', 'disabled'), 'HR icon should not appear in the top toolbar.');
-
-        $this->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->assertTrue($this->topToolbarButtonExists('insertHr', 'disabled'), 'HR icon should be active in the top toolbar.');
-
-        $this->keyDown('Key.TAB');
-        $this->assertTrue($this->topToolbarButtonExists('insertHr', 'disabled'), 'HR icon should not active in the top toolbar.');
-
-        $this->selectKeyword(4);
-        $this->assertTrue($this->topToolbarButtonExists('insertHr', 'disabled'), 'HR icon should not appear in the top toolbar.');
-
-        $this->selectInlineToolbarLineageItem(1);
-        $this->assertTrue($this->topToolbarButtonExists('insertHr', 'disabled'), 'HR icon should not appear in the top toolbar.');
-
-        $this->selectInlineToolbarLineageItem(0);
-        $this->assertTrue($this->topToolbarButtonExists('insertHr', 'disabled'), 'HR icon should not appear in the top toolbar.');
-
-        $this->keyDown('Key.RIGHT');
-        $this->keyDown('Key.ENTER');
-        $this->assertTrue($this->topToolbarButtonExists('insertHr', 'disabled'), 'HR icon should not appear in the top toolbar.');
-
-        $this->keyDown('Key.ENTER');
-        $this->type('New parra');
-        $this->assertTrue($this->topToolbarButtonExists('insertHr'), 'HR icon should appear in the top toolbar.');
-
-    }//end testHRIconNotAvailableForList()
-
-
 }//end class
 
 ?>
