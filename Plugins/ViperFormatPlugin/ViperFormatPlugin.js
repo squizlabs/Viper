@@ -1869,8 +1869,13 @@ ViperFormatPlugin.prototype = {
             } else if (type.match(/^h\d$/)) {
                 while (element.firstChild) {
                     if (dfx.isBlockElement(element.firstChild) === true) {
-                        while (element.firstChild.firstChild) {
-                            newElem.appendChild(element.firstChild.firstChild);
+                        var firstChild = element.firstChild;
+                        if (dfx.isTag(firstChild, 'blockquote') === true) {
+                            firstChild = firstChild.firstChild;
+                        }
+
+                        while (firstChild.firstChild) {
+                            newElem.appendChild(firstChild.firstChild);
                         }
 
                         dfx.remove(element.firstChild);
