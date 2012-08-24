@@ -137,6 +137,7 @@ class Viper_Tests_ViperCoreStylesPlugin_HorizontalRuleUnitTest extends AbstractV
     {
         $this->useTest(3);
 
+        // Test ul list
         $this->selectKeyword(2);
 
         $this->keyDown('Key.RIGHT');
@@ -144,7 +145,17 @@ class Viper_Tests_ViperCoreStylesPlugin_HorizontalRuleUnitTest extends AbstractV
         $this->keyDown('Key.SHIFT + Key.TAB');
         $this->clickTopToolbarButton('insertHr');
 
-        $this->assertHTMLMatch('<p>This is a list:</p><ul><li>Test removing bullet points</li><li>purus %1% luctus</li><li>vel molestie %2%</li></ul><p></p><hr /><p></p>');
+        $this->assertHTMLMatch('<p>This is ul list:</p><ul><li>List item 1</li><li>List item 2 %1%</li><li>List item 3 %2%</li></ul><p></p><hr /><p></p><p>This is ol list:</p><ol><li>List item 1</li><li>List item 2 %3%</li><li>List item 3 %4%</li></ol>');
+
+        // Test ol list
+        $this->selectKeyword(4);
+
+        $this->keyDown('Key.RIGHT');
+        $this->keyDown('Key.ENTER');
+        $this->keyDown('Key.SHIFT + Key.TAB');
+        $this->clickTopToolbarButton('insertHr');
+
+        $this->assertHTMLMatch('<p>This is ul list:</p><ul><li>List item 1</li><li>List item 2 %1%</li><li>List item 3 %2%</li></ul><p></p><hr /><p></p><p>This is ol list:</p><ol><li>List item 1</li><li>List item 2 %3%</li><li>List item 3 %4%</li></ol><p></p><hr /><p></p>');
 
     }//end testAddingHorizontalRuleAfterRemovingListItem()
 
@@ -158,7 +169,8 @@ class Viper_Tests_ViperCoreStylesPlugin_HorizontalRuleUnitTest extends AbstractV
     {
         $this->useTest(3);
 
-        $this->click($this->findKeyword(2));
+        // Test ul list
+        $this->click($this->findKeyword(1));
         $this->assertTrue($this->topToolbarButtonExists('insertHr', 'disabled'), 'HR icon should not appear in the top toolbar.');
 
         $this->keyDown('Key.SHIFT + Key.RIGHT');
@@ -167,7 +179,34 @@ class Viper_Tests_ViperCoreStylesPlugin_HorizontalRuleUnitTest extends AbstractV
         $this->keyDown('Key.TAB');
         $this->assertTrue($this->topToolbarButtonExists('insertHr', 'disabled'), 'HR icon should not active in the top toolbar.');
 
-        $this->selectKeyword(2);
+        $this->selectKeyword(1);
+        $this->assertTrue($this->topToolbarButtonExists('insertHr', 'disabled'), 'HR icon should not appear in the top toolbar.');
+
+        $this->selectInlineToolbarLineageItem(1);
+        $this->assertTrue($this->topToolbarButtonExists('insertHr', 'disabled'), 'HR icon should not appear in the top toolbar.');
+
+        $this->selectInlineToolbarLineageItem(0);
+        $this->assertTrue($this->topToolbarButtonExists('insertHr', 'disabled'), 'HR icon should not appear in the top toolbar.');
+
+        $this->keyDown('Key.RIGHT');
+        $this->keyDown('Key.ENTER');
+        $this->assertTrue($this->topToolbarButtonExists('insertHr', 'disabled'), 'HR icon should not appear in the top toolbar.');
+
+        $this->keyDown('Key.ENTER');
+        $this->type('New parra');
+        $this->assertTrue($this->topToolbarButtonExists('insertHr'), 'HR icon should appear in the top toolbar.');
+
+        // Test ol list
+        $this->click($this->findKeyword(3));
+        $this->assertTrue($this->topToolbarButtonExists('insertHr', 'disabled'), 'HR icon should not appear in the top toolbar.');
+
+        $this->keyDown('Key.SHIFT + Key.RIGHT');
+        $this->assertTrue($this->topToolbarButtonExists('insertHr', 'disabled'), 'HR icon should be active in the top toolbar.');
+
+        $this->keyDown('Key.TAB');
+        $this->assertTrue($this->topToolbarButtonExists('insertHr', 'disabled'), 'HR icon should not active in the top toolbar.');
+
+        $this->selectKeyword(3);
         $this->assertTrue($this->topToolbarButtonExists('insertHr', 'disabled'), 'HR icon should not appear in the top toolbar.');
 
         $this->selectInlineToolbarLineageItem(1);

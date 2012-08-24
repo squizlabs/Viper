@@ -1270,7 +1270,7 @@ class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractViperUnitTe
 
 
     /**
-     * Test applying headings to div sections with single block elements inside of them 
+     * Test applying headings to div sections with single block elements inside of them
      *
      * @return void
      */
@@ -1286,7 +1286,7 @@ class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractViperUnitTe
         $this->clickTopToolbarButton('headings');
         $this->clickTopToolbarButton('H1', NULL, TRUE);
         $this->assertHTMLMatch('<h1>Long paragraph for testing that the heading icon does not appear in the inline toolbar %1%.</h1>');
-        
+
         // Test Div inside a Div
         $this->useTest(8);
 
@@ -1297,7 +1297,7 @@ class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractViperUnitTe
         $this->clickTopToolbarButton('headings');
         $this->clickTopToolbarButton('H1', NULL, TRUE);
         $this->assertHTMLMatch('<h1>Long paragraph for testing that the heading icon does not appear in the inline toolbar %1%.</h1>');
-        
+
         // Test Pre inside a Div
         $this->useTest(12);
 
@@ -1308,7 +1308,7 @@ class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractViperUnitTe
         $this->clickTopToolbarButton('headings');
         $this->clickTopToolbarButton('H1', NULL, TRUE);
         $this->assertHTMLMatch('<h1>Long paragraph %1% for testing that the heading icon does not appear in the inline toolbar.</h1>');
-        
+
          // Test Quote inside a Div
         $this->useTest(10);
 
@@ -1321,7 +1321,61 @@ class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractViperUnitTe
         $this->assertHTMLMatch('<h1>Long paragraph for testing that the heading icon does not appear in the inline toolbar %1%.</h1>');
 
     }//end testApplyingHeadginsToDivsWithSingleBlockElements()
-    
+
+
+     /**
+     * Test that the heading icon is not available for a list.
+     *
+     * @return void
+     */
+    public function testHeadingIconNotAvailableForList()
+    {
+        $this->useTest(15);
+
+        // Check ul list
+        $this->click($this->findKeyword(1));
+        $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'), 'Heading icon should not appear in the top toolbar.');
+
+        $this->selectKeyword(1);
+        $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'), 'Heading icon should not appear in the top toolbar.');
+
+        $this->selectInlineToolbarLineageItem(1);
+        $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'), 'Heading icon should not appear in the top toolbar.');
+
+        $this->selectInlineToolbarLineageItem(0);
+        $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'), 'Heading icon should not appear in the top toolbar.');
+
+        $this->keyDown('Key.RIGHT');
+        $this->keyDown('Key.ENTER');
+        $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'), 'Heading icon should not appear in the top toolbar.');
+
+        $this->keyDown('Key.ENTER');
+        $this->type('New parra');
+        $this->assertTrue($this->topToolbarButtonExists('headings'), 'Heading icon should appear in the top toolbar.');
+
+        // Check 0l list
+        $this->click($this->findKeyword(2));
+        $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'), 'Heading icon should not appear in the top toolbar.');
+
+        $this->selectKeyword(2);
+        $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'), 'Heading icon should not appear in the top toolbar.');
+
+        $this->selectInlineToolbarLineageItem(1);
+        $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'), 'Heading icon should not appear in the top toolbar.');
+
+        $this->selectInlineToolbarLineageItem(0);
+        $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'), 'Heading icon should not appear in the top toolbar.');
+
+        $this->keyDown('Key.RIGHT');
+        $this->keyDown('Key.ENTER');
+        $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'), 'Heading icon should not appear in the top toolbar.');
+
+        $this->keyDown('Key.ENTER');
+        $this->type('New parra');
+        $this->assertTrue($this->topToolbarButtonExists('headings'), 'Heading icon should appear in the top toolbar.');
+
+    }//end testHeadingIconNotAvailableForList()
+
 
 }//end class
 

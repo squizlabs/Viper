@@ -1366,7 +1366,32 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractFormatsUnitTe
     public function testFormatIconInList()
     {
 
+        // Test ul list
         $this->click($this->findKeyword(1));
+        $this->assertTrue($this->topToolbarButtonExists('formats', 'disabled'), 'Formats icon should not appear in the top toolbar.');
+
+        $this->selectKeyword(1);
+        $this->assertTrue($this->topToolbarButtonExists('formats', 'disabled'), 'Formats icon should not appear in the top toolbar.');
+        $this->assertFalse($this->inlineToolbarButtonExists('formats'), 'Formats button should not be available');
+
+        $this->selectInlineToolbarLineageItem(1);
+        $this->assertTrue($this->topToolbarButtonExists('formats', 'disabled'), 'Formats icon should not appear in the top toolbar.');
+        $this->assertFalse($this->inlineToolbarButtonExists('formats'), 'Formats button should not be available');
+
+        $this->selectInlineToolbarLineageItem(0);
+        $this->assertTrue($this->topToolbarButtonExists('formats', 'disabled'), 'Formats icon should not appear in the top toolbar.');
+        $this->assertFalse($this->inlineToolbarButtonExists('formats'), 'Formats button should not be available');
+
+        $this->keyDown('Key.RIGHT');
+        $this->keyDown('Key.ENTER');
+        $this->assertTrue($this->topToolbarButtonExists('formats', 'disabled'), 'Formats icon should not appear in the top toolbar.');
+
+        $this->keyDown('Key.ENTER');
+        $this->type('New parra');
+        $this->assertTrue($this->topToolbarButtonExists('formats-p', 'active'), 'Formats icon should appear in the top toolbar.');
+
+        // Test ol list
+        $this->click($this->findKeyword(2));
         $this->assertTrue($this->topToolbarButtonExists('formats', 'disabled'), 'Formats icon should not appear in the top toolbar.');
 
         $this->selectKeyword(2);
