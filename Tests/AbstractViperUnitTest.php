@@ -796,10 +796,10 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
                         continue(3);
                     }
                 }
-            }
+            }//end foreach
 
             break;
-        }
+        }//end for
 
         // Remove the temp calibrate file.
         unlink($tmpFile);
@@ -1461,10 +1461,11 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      * Returns the match object variable of the inline toolbar.
      *
      * @return string
+     * @throws Exception If the toolbar cannot be found.
      */
     protected function getInlineToolbar()
     {
-        $match = null;
+        $match = NULL;
         try {
             $match = $this->find($this->getBrowserImagePath().'/vitp_arrow.png', self::$_window, 0.85);
         } catch (Exception $e) {
@@ -1569,7 +1570,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
                     return FALSE;
                 }
             }
-        }
+        }//end if
 
         return TRUE;
 
@@ -1613,7 +1614,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
                     return FALSE;
                 }
             }
-        }
+        }//end if
 
         return TRUE;
 
@@ -1757,7 +1758,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      * @param boolean $isText     If TRUE then the button is a text button (i.e. no icon).
      * @param string  $location   The location of the button (topToolbar, inlineToolbar, etc.).
      *
-     * @return void
+     * @return object
      */
     protected function findButton($buttonIcon, $state=NULL, $isText=FALSE, $location=NULL)
     {
@@ -1965,9 +1966,13 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
     /**
      * Executes the specified JavaScript and returns its result.
      *
-     * @param string $js The JavaScript to execute.
+     * @param string  $js            The JavaScript to execute.
+     * @param boolean $noCache       If TRUE the executed JS will not be cached.
+     * @param boolean $noReturnValue If TRUE then JS has no return value and NULL
+     *                               will be returned to speed up execution.
      *
      * @return string
+     * @throws Exception If there is a Selenium error.
      */
     protected function execJS($js, $noCache=FALSE, $noReturnValue=FALSE)
     {
@@ -2049,36 +2054,6 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         }
 
         $result = json_decode($text, TRUE);
-
-        /*switch (json_last_error()) {
-            case JSON_ERROR_NONE:
-                // Do nothing.
-            break;
-
-            case JSON_ERROR_DEPTH:
-                throw new Exception('jsExec JSON ERROR: Maximum stack depth exceeded: '.$text);
-            break;
-
-            case JSON_ERROR_STATE_MISMATCH:
-                throw new Exception('jsExec JSON ERROR: Underflow or the modes mismatch: '.$text);
-            break;
-
-            case JSON_ERROR_CTRL_CHAR:
-                throw new Exception('jsExec JSON ERROR: Unexpected control character found: '.$text);
-            break;
-
-            case JSON_ERROR_SYNTAX:
-                throw new Exception('jsExec JSON ERROR: Syntax error, malformed JSON: '.$text);
-            break;
-
-            case JSON_ERROR_UTF8:
-                throw new Exception('jsExec JSON ERROR: Malformed UTF-8 characters, possibly incorrectly encoded: '.$text);
-            break;
-
-            default:
-                throw new Exception('jsExec JSON ERROR: Unknown error: '.$text);
-            break;
-        }//end switch*/
 
         return $result;
 
@@ -2401,18 +2376,23 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
     /**
      * Clicks an element in the content.
      *
-     * @param string  $selector The jQuery selector to use for finding the element.
-     * @param integer $index    The element index of the resulting array.
+     * @param string  $selector   The jQuery selector to use for finding the element.
+     * @param integer $index      The element index of the resulting array.
+     * @param boolean $rightClick If TRUE then right mouse button is used.
      *
      * @return void
      */
-    protected function clickElement($selector, $index=0)
+    protected function clickElement($selector, $index=0, $rightClick=FALSE)
     {
         $elemRect = $this->getBoundingRectangle($selector, $index);
         $region   = $this->getRegionOnPage($elemRect);
 
         // Click the element.
-        $this->click($region);
+        if ($rightClick !== TRUE) {
+            $this->click($region);
+        } else {
+            $this->rightClick($region);
+        }
 
     }//end clickElement()
 
@@ -2442,6 +2422,70 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         $this->execJS($js);
 
     }//end removeTableHeaders()
+
+
+    /**
+     * Paste clipboard content.
+     *
+     * Note that if right click is being used then make sure to move the mouse to the
+     * target location before calling this method.
+     *
+     * @param boolean $rightClick If TRUE then contents will be pasted using the
+     *                            browser's right click menu.
+     *
+     * @return void
+     * @throws Exception If the browser is not supported.
+     */
+    protected function paste($rightClick=FALSE)
+    {
+        if ($rightClick !== TRUE) {
+            $this->keyDown('Key.CMD + v');
+        } else {
+            sleep(1);
+            $this->rightClick($this->getMouseLocation());
+
+            switch ($this->getBrowserid()) {
+                case 'firefox':
+                    // Click the paste item in the right click menu.
+                    $this->click($this->mouseMoveOffset(30, 80));
+
+                    $this->_rightClickPasteDiv();
+
+                    // Click the paste item in the right click menu.
+                    $this->click($this->mouseMoveOffset(30, 80));
+                break;
+
+                case 'googlechrome':
+                    // Google does not need the right click pop for pasting, just
+                    // click the paste from the right click menu.
+                    $this->click($this->mouseMoveOffset(30, 95));
+                break;
+
+                default:
+                    throw new Exception('Right click testing for this browser has not been implemented');
+                break;
+            }//end switch
+        }//end if
+
+    }//end paste()
+
+
+    /**
+     * Finds the location of right click paste div and right clicks the paste frame.
+     *
+     * @return void
+     */
+    private function _rightClickPasteDiv()
+    {
+        $targetIcon = $this->find(dirname(__FILE__).'/Core/Images/window-target2.png');
+        $topLeft    = $this->getTopLeft($targetIcon);
+        $loc        = array(
+                       'x' => ($this->getX($topLeft) + 50),
+                       'y' => ($this->getY($topLeft) + 100),
+                      );
+        $this->rightClick($this->createLocation($loc['x'], $loc['y']));
+
+    }//end _rightClickPasteDiv()
 
 
 }//end class
