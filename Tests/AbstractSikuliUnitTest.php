@@ -220,6 +220,21 @@ abstract class AbstractSikuliUnitTest extends PHPUnit_Framework_TestCase
 
 
     /**
+     * Right clicks the specified location.
+     *
+     * @param string $psmrl     A Pattern, String, Match, Region or Location.
+     * @param string $modifiers One or more key modifiers.
+     *
+     * @return void
+     */
+    protected function rightClick($psmrl, $modifiers=NULL)
+    {
+        $this->callFunc('rightClick', array($psmrl, $modifiers), NULL, FALSE);
+
+    }//end rightClick()
+
+
+    /**
      * Perform a drag & drop from a start to end point.
      *
      * @param string $start The start PSMRL.
@@ -265,6 +280,8 @@ abstract class AbstractSikuliUnitTest extends PHPUnit_Framework_TestCase
             $this->getY($mouseLocation) + $offsetY
         );
         $this->mouseMove($mouseLocation);
+
+        return $mouseLocation;
 
     }//end mouseMoveOffset()
 
