@@ -234,6 +234,10 @@ ViperTools.prototype = {
             {
                 return !this._disabled;
             },
+            isActive: function()
+            {
+                return dfx.hasClass(button, 'Viper-active');
+            },
             _disabled: disabled
         });
 

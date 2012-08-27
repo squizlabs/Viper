@@ -17,7 +17,7 @@ function ViperCoreStylesPlugin(viper)
 
     this.styleTags         = ['strong', 'em', 'sub', 'sup', 'del'];
     this.toolbarPlugin     = null;
-    this._onChangeAddStyle = null;
+    this._onChangeAddStyle = [];
 
     this._buttons = {
         strong: 'bold',
@@ -130,6 +130,13 @@ ViperCoreStylesPlugin.prototype = {
 
             this.viper.registerCallback('ViperToolbarPlugin:updateToolbar', 'ViperCoreStylesPlugin', function(data) {
                 self._updateToolbarButtonStates(toolbarButtons, data.range);
+
+                if (self._onChangeAddStyle.length > 0) {
+                    var style = null;
+                    while (style = self._onChangeAddStyle.shift()) {
+                        self.viper.ViperTools.setButtonInactive(self._buttons[style]);
+                    }
+                }
             });
 
             var shortcuts = {
@@ -142,7 +149,7 @@ ViperCoreStylesPlugin.prototype = {
         }//end if
 
         this.viper.registerCallback('Viper:keyPress', 'ViperCoreStylesPlugin', function(e) {
-            if (self._onChangeAddStyle && self.viper.isInputKey(e) === true) {
+            if (self._onChangeAddStyle.length > 0 && self.viper.isInputKey(e) === true) {
                 var character = String.fromCharCode(e.which);
                 return self.viper.insertTextAtCaret(character);
             }
@@ -153,7 +160,7 @@ ViperCoreStylesPlugin.prototype = {
         });
 
         this.viper.registerCallback('Viper:charInsert', 'ViperCoreStylesPlugin', function(data) {
-            self._onChangeAddStyle = null;
+            self._onChangeAddStyle = [];
         });
 
         // Inline toolbar.
@@ -1007,52 +1014,69 @@ ViperCoreStylesPlugin.prototype = {
 
     _wrapNodeWithActiveStyle: function(node, range)
     {
-        if (!node || !this._onChangeAddStyle || !range) {
+        if (!node || !this._onChangeAddStyle.length || !range) {
             return;
         }
 
-        var style = this._onChangeAddStyle;
-        var nodes = this.viper.splitNodeAtRange(style, range, true);
-        this._onChangeAddStyle = null;
+        var origData = node.data;
+        var style    = null;
+        while (style = this._onChangeAddStyle.shift()) {
+            var nodes = this.viper.splitNodeAtRange(style, range, true);
 
-        if (dfx.isTag(nodes.prevNode, style) === true || dfx.isTag(nodes.nextNode, style) === true) {
-            // Removing styles..
-            if (nodes.midNode === null) {
-                // Create an empty text node in between two new nodes.
-                dfx.insertAfter(nodes.prevNode, node);
-            } else {
-                // Find the last node and insert the text node there..
-                var tmpnode = nodes.midNode;
-                while (tmpnode.firstChild) {
-                    tmpnode = tmpnode.firstChild;
+            if (dfx.isTag(nodes.prevNode, style) === true || dfx.isTag(nodes.nextNode, style) === true) {
+                if (this._onChangeAddStyle.length > 0) {
+                    node.data = '';
+                } else {
+                    node.data = origData;
                 }
 
-                tmpnode.appendChild(node);
-            }
+                // Removing styles..
+                if (nodes.midNode === null) {
+                    // Create an empty text node in between two new nodes.
+                    dfx.insertAfter(nodes.prevNode, node);
+                } else if (nodes.midNode.nodeType === dfx.TEXT_NODE) {
+                    nodes.midNode.data = node.data + nodes.midNode.data;
+                    node = nodes.midNode;
+                } else {
+                    // Find the last node and insert the text node there..
+                    var tmpnode = nodes.midNode;
+                    while (tmpnode.firstChild) {
+                        tmpnode = tmpnode.firstChild;
+                    }
 
-            // Make sure nextNode is not empty.
-            if (dfx.getNodeTextContent(nodes.nextNode).length === 0) {
-                dfx.remove(nodes.nextNode);
-            }
+                    tmpnode.appendChild(node);
+                }
 
-            range.setStart(node, 1);
-            range.collapse(true);
-            ViperSelection.addRange(range);
-        } else {
-            // Start a new style tag.
-            var styleTag = Viper.document.createElement(style);
-            styleTag.appendChild(node);
+                // Make sure nextNode is not empty.
+                if (dfx.getNodeTextContent(nodes.nextNode).length === 0) {
+                    dfx.remove(nodes.nextNode);
+                }
 
-            if (nodes.prevNode) {
-                this.viper.insertAfter(nodes.prevNode, styleTag);
-            } else if (nodes.nextNode) {
-                this.viper.insertBefore(nodes.nextNode, styleTag);
-            }
+                if (node.data.length > 0) {
+                    range.setStart(node, 1);
+                } else {
+                    range.setStart(node, 0);
+                }
 
-            range.setStart(node, 1);
-            range.collapse(true);
-            ViperSelection.addRange(range);
-        }//end if
+                range.collapse(true);
+                ViperSelection.addRange(range);
+            } else {
+                // Start a new style tag.
+                var styleTag = Viper.document.createElement(style);
+
+                if (nodes.prevNode) {
+                    this.viper.insertAfter(nodes.prevNode, styleTag);
+                } else if (nodes.nextNode) {
+                    this.viper.insertBefore(nodes.nextNode, styleTag);
+                }
+
+                styleTag.appendChild(node);
+
+                range.setStart(node, 1);
+                range.collapse(true);
+                ViperSelection.addRange(range);
+            }//end if
+        }
 
         return false;
 
@@ -1065,7 +1089,22 @@ ViperCoreStylesPlugin.prototype = {
 
         if (range.collapsed === true) {
             // Range is collapsed. We need to listen for next insertion.
-            this._onChangeAddStyle = style;
+            var index = this._onChangeAddStyle.find(style);
+            if (index >= 0) {
+                dfx.removeArrayIndex(this._onChangeAddStyle, index);
+                this.viper.ViperTools.setButtonInactive(this._buttons[style]);
+            } else {
+                this._onChangeAddStyle.push(style);
+
+                var button = this.viper.ViperTools.getItem(this._buttons[style]);
+                if (button) {
+                    if (button.isActive() === true) {
+                        this.viper.ViperTools.setButtonInactive(this._buttons[style]);
+                    } else {
+                        this.viper.ViperTools.setButtonActive(this._buttons[style]);
+                    }
+                }
+            }
             return false;
         }
 

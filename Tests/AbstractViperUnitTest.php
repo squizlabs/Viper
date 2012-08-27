@@ -1200,9 +1200,14 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         // single &nbsp; from tags and just before a start tag.
         $pageHtml = str_replace('>&nbsp;<', '><', $pageHtml);
         $pageHtml = str_replace('&nbsp;<', '<', $pageHtml);
-
-        $html = str_replace('>&nbsp;<', '><', $html);
-        $html = str_replace('&nbsp;<', '<', $html);
+        $pageHtml = str_replace('>&nbsp;', '> ', $pageHtml);
+        $html     = str_replace('>&nbsp;<', '><', $html);
+        $html     = str_replace('&nbsp;<', '<', $html);
+        $html     = str_replace('>&nbsp;', '> ', $html);
+        $pageHtml = str_replace('> <', '><', $pageHtml);
+        $pageHtml = str_replace(' <', '<', $pageHtml);
+        $html     = str_replace('> <', '><', $html);
+        $html     = str_replace(' <', '<', $html);
 
         if ($html !== $pageHtml) {
             $pageHtml = $this->_orderTagAttributes($pageHtml);

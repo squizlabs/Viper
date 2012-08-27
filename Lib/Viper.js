@@ -3179,72 +3179,64 @@ Viper.prototype = {
                 nextNode = prevNode;
             }
         } else {
-            var prevElem = null;
-            var newElem  = null;
-            var midElem  = null;
-            var toRemove = [];
-            var parents  = [];
-            var prevLvl  = null;
-            dfx.walk(foundNode, function(elem, lvl) {
-                if (elem === bookmark.start) {
-                    return false;
+            // Construct the end section, which is selection from end bookmark to
+            // the end of the found node.
+            var selStart = document.createTextNode('');
+            var selEnd   = document.createTextNode('');
+
+            dfx.insertAfter(bookmark.end, selStart);
+            dfx.insertAfter(foundNode, selEnd);
+
+            var range = this.getViperRange();
+            range.setStart(selStart, 0);
+            range.setEnd(selEnd, 0);
+            var endContents = range.extractContents();
+
+            var tmp = document.createElement('div');
+            while (endContents.firstChild) {
+                tmp.appendChild(endContents.firstChild);
+            }
+
+            var nextNode = null;
+            if (this.elementIsEmpty(tmp) === false) {
+                while (tmp.lastChild) {
+                    nextNode = tmp.lastChild;
+                    dfx.insertAfter(selEnd, tmp.lastChild);
+                }
+            }
+
+            dfx.empty(tmp);
+
+            // Get the mid contents without the specified tag.
+            dfx.insertBefore(bookmark.start, selStart);
+            dfx.insertAfter(foundNode, selEnd);
+            range.setStart(selStart, 0);
+            range.setEnd(selEnd, 0);
+            var midContents = range.extractContents();
+
+            while (midContents.firstChild) {
+                tmp.appendChild(midContents.firstChild);
+            }
+
+            var tagsToRemove = dfx.getTag(tag, tmp);
+            for (var i = 0; i < tagsToRemove.length; i++) {
+                while (tagsToRemove[i].firstChild) {
+                    dfx.insertBefore(tagsToRemove[i], tagsToRemove[i].firstChild);
                 }
 
-                if (elem.nodeType === dfx.TEXT_NODE) {
-                    // Move element to new parent.
-                    toRemove.push(elem);
-                    parents[(lvl - 1)].appendChild(elem.cloneNode(false));
-                } else {
-                    // Clone node.
-                    var clone = elem.cloneNode(false);
-                    if (prevLvl === null) {
-                        newElem = clone;
-                        parents.push(clone);
-                    } else if (lvl === prevLvl) {
-                        parents[(lvl - 1)].appendChild(clone);
-                        parents.push(clone);
-                    } else if (lvl > prevLvl) {
-                        parents[prevLvl] = prevElem;
-                    } else if (lvl < prevLvl) {
-                        parents.pop();
-                        parents.push(clone);
-                        parents[(lvl - 1)].appendChild(clone);
-                    }
-
-                    if (copyMidTags === true) {
-                        // If there are other tags between start point and end point
-                        // then copy them between prevElem and nextElem.
-                        if (dfx.isTag(elem, tag) === false) {
-                            if (midElem === null) {
-                                midElem = elem.cloneNode(false);
-                            } else {
-                                midElem.appendChild(elem.cloneNode(false));
-                            }
-                        }
-                    }
-
-                    prevElem = clone;
-                }//end if
-
-                prevLvl = lvl;
-            });
-
-            dfx.remove(toRemove);
-            toRemove = null;
-
-            if (this.elementIsEmpty(newElem) === false) {
-                dfx.insertBefore(foundNode, newElem);
-            } else {
-                newElem = null;
+                dfx.remove(tagsToRemove);
             }
 
-            if (midElem !== null) {
-                dfx.insertBefore(foundNode, midElem);
+            while (tmp.lastChild) {
+                dfx.insertAfter(foundNode, tmp.lastChild);
             }
 
-            prevNode = newElem;
-            nextNode = foundNode;
-            midNode  = midElem;
+            var prevNode = foundNode;
+
+            dfx.remove(selEnd);
+            selStart.data = '';
+            dfx.insertAfter(bookmark.start, selStart);
+            midNode = selStart;
         }//end if
 
         this.selectBookmark(bookmark);
