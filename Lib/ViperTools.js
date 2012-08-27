@@ -1713,16 +1713,11 @@ ViperTools.prototype = {
 
                 var scrollCoords = dfx.getScrollCoords();
 
-                if (this._toolbarWidth === 0) {
-                    dfx.addClass(toolbar, 'Viper-calcWidth');
-                    dfx.setStyle(toolbar, 'width', 'auto');
-                    var toolbarWidth  = dfx.getElementWidth(toolbar);
-                    dfx.removeClass(toolbar, 'Viper-calcWidth');
-                    dfx.setStyle(toolbar, 'width', toolbarWidth + 'px');
-                    this._toolbarWidth = toolbarWidth;
-                } else {
-                    toolbarWidth = this._toolbarWidth;
-                }
+                dfx.addClass(toolbar, 'Viper-calcWidth');
+                dfx.setStyle(toolbar, 'width', 'auto');
+                var toolbarWidth  = dfx.getElementWidth(toolbar);
+                dfx.removeClass(toolbar, 'Viper-calcWidth');
+                dfx.setStyle(toolbar, 'width', toolbarWidth + 'px');
 
                 var viperElemCoords = this.getElementCoords(tools.viper.getViperElement());
                 var windowDim       = dfx.getWindowDimensions();
@@ -1799,8 +1794,7 @@ ViperTools.prototype = {
                     bottom: (elemRect.y2 - scrollCoords.y)
                 };
 
-            },
-            _toolbarWidth: 0
+            }
         });
 
         this.viper.addElement(toolbar);
