@@ -1063,19 +1063,19 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         $this->clickTopToolbarButton('justifyLeft');
         $this->clickTopToolbarButton('justifyLeft');
         $this->assertTrue($this->topToolbarButtonExists('justifyLeft', 'active'), 'Left align icon should be active');
-        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3" style="align: left;"><caption style="align: left;"><strong>Table 1.2:</strong> The table caption text XAX</caption><thead><tr><th>Col1 Header</th><th>Col2 XBX</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer XCX</td></tr></tfoot><tbody style="align: left;"><tr style="align: left;"><td>nec porta ante</td><td>sapien vel XDX</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr style="align: left;"><td style="align: left;">nec porta ante</td><td colspan="2" style="align: left;">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3" style="align: left;"><caption style="align: left;"><strong>Table 1.2:</strong> The table caption text XAX</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody style="align: left;"><tr style="align: left;"><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr style="align: left;"><td style="align: left;">nec porta ante</td><td colspan="2" style="align: left;">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         $this->clickTopToolbarButton('justifyCenter');
         $this->assertTrue($this->topToolbarButtonExists('justifyCenter', 'active'), 'Center align icon should be active');
-        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3" style="align: center;"><caption style="align: center;"><strong>Table 1.2:</strong> The table caption text XAX</caption><thead><tr><th>Col1 Header</th><th>Col2 XBX</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer XCX</td></tr></tfoot><tbody style="align: center;"><tr style="align: center;"><td>nec porta ante</td><td>sapien vel XDX</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr style="align: center;"><td style="align: center;">nec porta ante</td><td colspan="2" style="align: center;">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3" style="align: center;"><caption style="align: center;"><strong>Table 1.2:</strong> The table caption text XAX</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody style="align: center;"><tr style="align: center;"><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr style="align: center;"><td style="align: center;">nec porta ante</td><td colspan="2" style="align: center;">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         $this->clickTopToolbarButton('justifyRight');
         $this->assertTrue($this->topToolbarButtonExists('justifyRight', 'active'), 'Right align icon should be active');
-        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3" style="align: right;"><caption style="align: right;"><strong>Table 1.2:</strong> The table caption text XAX</caption><thead><tr><th>Col1 Header</th><th>Col2 XBX</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer XCX</td></tr></tfoot><tbody style="align: right;"><tr style="align: right;"><td>nec porta ante</td><td>sapien vel XDX</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr style="align: right;"><td style="align: right;">nec porta ante</td><td colspan="2" style="align: right;">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3" style="align: right;"><caption style="align: right;"><strong>Table 1.2:</strong> The table caption text XAX</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody style="align: right;"><tr style="align: right;"><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr style="align: right;"><td style="align: right;">nec porta ante</td><td colspan="2" style="align: right;">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         $this->clickTopToolbarButton('justifyBlock');
         $this->assertTrue($this->topToolbarButtonExists('justifyBlock', 'active'), 'Block align icon should be active');
-        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3" style="align: justify;"><caption style="align: justify;"><strong>Table 1.2:</strong> The table caption text XAX</caption><thead><tr><th>Col1 Header</th><th>Col2 XBX</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer XCX</td></tr></tfoot><tbody style="align: justify;"><tr style="align: justify;"><td>nec porta ante</td><td>sapien vel XDX</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr style="align: justify;"><td style="align: justify;">nec porta ante</td><td colspan="2" style="align: justify;">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3" style="align: justify;"><caption style="align: justify;"><strong>Table 1.2:</strong> The table caption text XAX</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody style="align: justify;"><tr style="align: justify;"><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr style="align: justify;"><td style="align: justify;">nec porta ante</td><td colspan="2" style="align: justify;">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
     }//end testAlignmentForTable()
 
@@ -1339,19 +1339,19 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         $this->clickTopToolbarButton('justifyLeft');
         $this->clickTopToolbarButton('justifyLeft');
         $this->assertTrue($this->topToolbarButtonExists('justifyLeft', 'active'), 'Left align icon should be active');
-        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text XAX</caption><thead><tr><th>Col1 Header</th><th>Col2 XBX</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer XCX</td></tr></tfoot><tbody><tr style="align: left;"><td style="align: left;">nec porta ante</td><td style="align: left;">sapien vel XDX</td><td style="align: left;"><ul style="align: left;"><li style="align: left;">purus neque luctus ligula, vel molestie arcu</li><li style="align: left;">purus neque luctus</li><li style="align: left;">vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text XAX</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr style="align: left;"><td style="align: left;">nec porta ante</td><td style="align: left;">sapien vel %4%</td><td style="align: left;"><ul style="align: left;"><li style="align: left;">purus neque luctus ligula, vel molestie arcu</li><li style="align: left;">purus neque luctus</li><li style="align: left;">vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         $this->clickTopToolbarButton('justifyCenter');
         $this->assertTrue($this->topToolbarButtonExists('justifyCenter', 'active'), 'Center align icon should be active');
-        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text XAX</caption><thead><tr><th>Col1 Header</th><th>Col2 XBX</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer XCX</td></tr></tfoot><tbody><tr style="align: center;"><td style="align: center;">nec porta ante</td><td style="align: center;">sapien vel XDX</td><td style="align: center;"><ul style="align: center;"><li style="align: center;">purus neque luctus ligula, vel molestie arcu</li><li style="align: center;">purus neque luctus</li><li style="align: center;">vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text XAX</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr style="align: center;"><td style="align: center;">nec porta ante</td><td style="align: center;">sapien vel %4%</td><td style="align: center;"><ul style="align: center;"><li style="align: center;">purus neque luctus ligula, vel molestie arcu</li><li style="align: center;">purus neque luctus</li><li style="align: center;">vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         $this->clickTopToolbarButton('justifyRight');
         $this->assertTrue($this->topToolbarButtonExists('justifyRight', 'active'), 'Right align icon should be active');
-        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text XAX</caption><thead><tr><th>Col1 Header</th><th>Col2 XBX</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer XCX</td></tr></tfoot><tbody><tr style="align: right;"><td style="align: right;">nec porta ante</td><td style="align: right;">sapien vel XDX</td><td style="align: right;"><ul style="align: right;"><li style="align: right;">purus neque luctus ligula, vel molestie arcu</li><li style="align: right;">purus neque luctus</li><li style="align: right;">vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text XAX</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr style="align: right;"><td style="align: right;">nec porta ante</td><td style="align: right;">sapien vel %4%</td><td style="align: right;"><ul style="align: right;"><li style="align: right;">purus neque luctus ligula, vel molestie arcu</li><li style="align: right;">purus neque luctus</li><li style="align: right;">vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         $this->clickTopToolbarButton('justifyBlock');
         $this->assertTrue($this->topToolbarButtonExists('justifyBlock', 'active'), 'Block align icon should be active');
-        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text XAX</caption><thead><tr><th>Col1 Header</th><th>Col2 XBX</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer XCX</td></tr></tfoot><tbody><tr style="align: justify;"><td style="align: justify;">nec porta ante</td><td style="align: justify;">sapien vel XDX</td><td style="align: justify;"><ul style="align: justify;"><li style="align: justify;">purus neque luctus ligula, vel molestie arcu</li><li style="align: justify;">purus neque luctus</li><li style="align: justify;">vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text XAX</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr style="align: justify;"><td style="align: justify;">nec porta ante</td><td style="align: justify;">sapien vel %4%</td><td style="align: justify;"><ul style="align: justify;"><li style="align: justify;">purus neque luctus ligula, vel molestie arcu</li><li style="align: justify;">purus neque luctus</li><li style="align: justify;">vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Remove justification styling for further testing
         $this->clickTopToolbarButton('justifyBlock', 'active');
@@ -1362,19 +1362,19 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         $this->clickTopToolbarButton('justifyLeft');
         $this->clickTopToolbarButton('justifyLeft');
         $this->assertTrue($this->topToolbarButtonExists('justifyLeft', 'active'), 'Left align icon should be active');
-        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text XAX</caption><thead><tr><th>Col1 Header</th><th>Col2 XBX</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer XCX</td></tr></tfoot><tbody style="align: left;"><tr style="align: justify;"><td>nec porta ante</td><td>sapien vel XDX</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text XAX</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody style="align: left;"><tr style="align: justify;"><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         $this->clickTopToolbarButton('justifyCenter');
         $this->assertTrue($this->topToolbarButtonExists('justifyCenter', 'active'), 'Center align icon should be active');
-        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text XAX</caption><thead><tr><th>Col1 Header</th><th>Col2 XBX</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer XCX</td></tr></tfoot><tbody style="align: center;"><tr style="align: justify;"><td>nec porta ante</td><td>sapien vel XDX</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text XAX</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody style="align: center;"><tr style="align: justify;"><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         $this->clickTopToolbarButton('justifyRight');
         $this->assertTrue($this->topToolbarButtonExists('justifyRight', 'active'), 'Right align icon should be active');
-        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text XAX</caption><thead><tr><th>Col1 Header</th><th>Col2 XBX</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer XCX</td></tr></tfoot><tbody style="align: right;"><tr style="align: justify;"><td>nec porta ante</td><td>sapien vel XDX</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text XAX</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody style="align: right;"><tr style="align: justify;"><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         $this->clickTopToolbarButton('justifyBlock');
         $this->assertTrue($this->topToolbarButtonExists('justifyBlock', 'active'), 'Block align icon should be active');
-        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text XAX</caption><thead><tr><th>Col1 Header</th><th>Col2 XBX</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer XCX</td></tr></tfoot><tbody style="align: justify;"><tr style="align: justify;"><td>nec porta ante</td><td>sapien vel XDX</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text XAX</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody style="align: justify;"><tr style="align: justify;"><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
     }//end testAlignmentInTableBody()
 
@@ -1838,6 +1838,582 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
 
     }//end testFormatsInTableFooter()
 
+
+    /**
+     * Test applying and removing anchors in a caption in a table using the inline toolbar.
+     *
+     * @return void
+     */
+    public function testApplyingAndRemovingAnchorsInCaptionUsingInlineToolbar()
+    {
+        // Test applying to a word
+        $this->selectKeyword(1);
+        $this->clickInlineToolbarButton('anchorID');
+        $this->type('test');
+        $this->clickInlineToolbarButton('Update Changes', NULL, TRUE);
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text <span id="test">%1%</span></caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+
+        $this->click($this->findKeyword(2));
+        $this->selectKeyword(1);
+        $this->clickInlineToolbarButton('anchorID', 'active');
+        $this->clearFieldValue('ID');
+        $this->keyDown('Key.ENTER');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+
+        // Test applying to the whole caption
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(1);
+        $this->clickInlineToolbarButton('anchorID');
+        $this->type('test');
+        $this->clickInlineToolbarButton('Update Changes', NULL, TRUE);
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption id="test"><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+
+        $this->click($this->findKeyword(2));
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(1);
+        $this->clickInlineToolbarButton('anchorID', 'active');
+        $this->clearFieldValue('ID');
+        $this->keyDown('Key.ENTER');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+
+    }//end testApplyingAndRemovingAnchorsInCaptionUsingInlineToolbar()
+
+
+    /**
+     * Test applying and removing anchors in a caption in a table using the top toolbar.
+     *
+     * @return void
+     */
+    public function testApplyingAndRemovingAnchorsInCaptionUsingTopToolbar()
+    {
+        // Test applying to a word
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('anchorID');
+        $this->type('test');
+        $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text <span id="test">%1%</span></caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+
+        $this->click($this->findKeyword(2));
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('anchorID', 'active');
+        $this->clearFieldValue('ID');
+        $this->keyDown('Key.ENTER');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+
+        // Test applying to the whole caption
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(1);
+        $this->clickTopToolbarButton('anchorID');
+        $this->type('test');
+        $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption id="test"><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+
+        $this->click($this->findKeyword(2));
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(1);
+        $this->clickTopToolbarButton('anchorID', 'active');
+        $this->clearFieldValue('ID');
+        $this->keyDown('Key.ENTER');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+
+    }//end testApplyingAndRemovingAnchorsInCaptionUsingTopToolbar()
+
+
+    /**
+     * Test applying and removing anchors in a header section in a table using the inline toolbar.
+     *
+     * @return void
+     */
+    public function testApplyingAndRemovingAnchorsInHeaderSectionUsingInlineToolbar()
+    {
+        // Test applying to a word
+        $this->selectKeyword(2);
+        $this->clickInlineToolbarButton('anchorID');
+        $this->type('test');
+        $this->clickInlineToolbarButton('Update Changes', NULL, TRUE);
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 <span id="test">%2%</span></th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+
+        $this->click($this->findKeyword(3));
+        $this->selectKeyword(2);
+        $this->clickInlineToolbarButton('anchorID', 'active');
+        $this->clearFieldValue('ID');
+        $this->keyDown('Key.ENTER');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+
+        // Test applying to the cell
+        $this->click($this->findKeyword(3));
+        $this->selectKeyword(2);
+        $this->selectInlineToolbarLineageItem(3);
+        $this->clickInlineToolbarButton('anchorID');
+        $this->type('test');
+        $this->keyDown('Key.ENTER');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th id="test">Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+
+        $this->click($this->findKeyword(3));
+        $this->selectKeyword(2);
+        $this->selectInlineToolbarLineageItem(3);
+        $this->clickInlineToolbarButton('anchorID', 'active');
+        $this->clearFieldValue('ID');
+        $this->keyDown('Key.ENTER');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+
+        // Test applying to the row
+        $this->click($this->findKeyword(3));
+        $this->selectKeyword(2);
+        $this->selectInlineToolbarLineageItem(2);
+        $this->clickInlineToolbarButton('anchorID');
+        $this->type('test');
+        $this->clickInlineToolbarButton('Update Changes', NULL, TRUE);
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr id="test"><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+
+        $this->click($this->findKeyword(3));
+        $this->selectKeyword(2);
+        $this->selectInlineToolbarLineageItem(2);
+        $this->clickInlineToolbarButton('anchorID', 'active');
+        $this->clearFieldValue('ID');
+        $this->keyDown('Key.ENTER');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+
+        // Test applying to the thead
+        $this->click($this->findKeyword(3));
+        $this->selectKeyword(2);
+        $this->selectInlineToolbarLineageItem(1);
+        $this->clickInlineToolbarButton('anchorID');
+        $this->type('test');
+        $this->clickInlineToolbarButton('Update Changes', NULL, TRUE);
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead id="test"><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+
+        $this->click($this->findKeyword(3));
+        $this->selectKeyword(2);
+        $this->selectInlineToolbarLineageItem(1);
+        $this->clickInlineToolbarButton('anchorID', 'active');
+        $this->clearFieldValue('ID');
+        $this->keyDown('Key.ENTER');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+
+    }//end testApplyingAndRemovingAnchorsInHeaderSectionUsingInlineToolbar()
+
+
+    /**
+     * Test applying and removing anchors in a header section in a table using the top toolbar.
+     *
+     * @return void
+     */
+    public function testApplyingAndRemovingAnchorsInHeaderSectionUsingTopToolbar()
+    {
+        // Test applying to a word
+        $this->selectKeyword(2);
+        $this->clickTopToolbarButton('anchorID');
+        $this->type('test');
+        $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 <span id="test">%2%</span></th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+
+        $this->click($this->findKeyword(3));
+        $this->selectKeyword(2);
+        $this->clickTopToolbarButton('anchorID', 'active');
+        $this->clearFieldValue('ID');
+        $this->keyDown('Key.ENTER');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+
+        // Test applying to the cell
+        $this->selectKeyword(2);
+        $this->selectInlineToolbarLineageItem(3);
+        $this->clickTopToolbarButton('anchorID');
+        $this->type('test');
+        $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th id="test">Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+
+        $this->click($this->findKeyword(3));
+        $this->selectKeyword(2);
+        $this->selectInlineToolbarLineageItem(3);
+        $this->clickTopToolbarButton('anchorID', 'active');
+        $this->clearFieldValue('ID');
+        $this->keyDown('Key.ENTER');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+
+        // Test applying to the row
+        $this->selectKeyword(2);
+        $this->selectInlineToolbarLineageItem(2);
+        $this->clickTopToolbarButton('anchorID');
+        $this->type('test');
+        $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr id="test"><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+
+        $this->click($this->findKeyword(3));
+        $this->selectKeyword(2);
+        $this->selectInlineToolbarLineageItem(2);
+        $this->clickTopToolbarButton('anchorID', 'active');
+        $this->clearFieldValue('ID');
+        $this->keyDown('Key.ENTER');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+
+        // Test applying to the thead
+        $this->selectKeyword(2);
+        $this->selectInlineToolbarLineageItem(1);
+        $this->clickTopToolbarButton('anchorID');
+        $this->type('test');
+        $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead id="test"><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+
+        $this->click($this->findKeyword(3));
+        $this->selectKeyword(2);
+        $this->selectInlineToolbarLineageItem(1);
+        $this->clickTopToolbarButton('anchorID', 'active');
+        $this->clearFieldValue('ID');
+        $this->keyDown('Key.ENTER');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+
+    }//end testApplyingAndRemovingAnchorsInHeaderSectionUsingTopToolbar()
+
+
+    /**
+     * Test applying and removing anchors in a cell in a table using the inline toolbar.
+     *
+     * @return void
+     */
+    public function testApplyingAndRemovingAnchorsInCellUsingInlineToolbar()
+    {
+        // Test applying to a word
+        $this->selectKeyword(4);
+        $this->clickInlineToolbarButton('anchorID');
+        $this->type('test');
+        $this->clickInlineToolbarButton('Update Changes', NULL, TRUE);
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel <span id="test">%4%</span></td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+
+        $this->click($this->findKeyword(2));
+        $this->selectKeyword(4);
+        $this->clickInlineToolbarButton('anchorID', 'active');
+        $this->clearFieldValue('ID');
+        $this->keyDown('Key.ENTER');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+
+        // Test applying to the cell
+        $this->click($this->findKeyword(2));
+        $this->selectKeyword(4);
+        $this->selectInlineToolbarLineageItem(3);
+        $this->clickInlineToolbarButton('anchorID');
+        $this->type('test');
+        $this->keyDown('Key.ENTER');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td id="test">sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+
+        $this->click($this->findKeyword(2));
+        $this->selectKeyword(4);
+        $this->selectInlineToolbarLineageItem(3);
+        $this->clickInlineToolbarButton('anchorID', 'active');
+        $this->clearFieldValue('ID');
+        $this->keyDown('Key.ENTER');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+
+        // Test applying to the row
+        $this->click($this->findKeyword(2));
+        $this->selectKeyword(4);
+        $this->selectInlineToolbarLineageItem(2);
+        $this->clickInlineToolbarButton('anchorID');
+        $this->type('test');
+        $this->clickInlineToolbarButton('Update Changes', NULL, TRUE);
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr id="test"><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+
+        $this->click($this->findKeyword(2));
+        $this->selectKeyword(4);
+        $this->selectInlineToolbarLineageItem(2);
+        $this->clickInlineToolbarButton('anchorID', 'active');
+        $this->clearFieldValue('ID');
+        $this->keyDown('Key.ENTER');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+
+        // Test applying to the thead
+        $this->click($this->findKeyword(2));
+        $this->selectKeyword(4);
+        $this->selectInlineToolbarLineageItem(1);
+        $this->clickInlineToolbarButton('anchorID');
+        $this->type('test');
+        $this->clickInlineToolbarButton('Update Changes', NULL, TRUE);
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody id="test"><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+
+        $this->click($this->findKeyword(2));
+        $this->selectKeyword(4);
+        $this->selectInlineToolbarLineageItem(1);
+        $this->clickInlineToolbarButton('anchorID', 'active');
+        $this->clearFieldValue('ID');
+        $this->keyDown('Key.ENTER');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+
+    }//end testApplyingAndRemovingAnchorsInCellUsingInlineToolbar()
+
+
+    /**
+     * Test applying and removing anchors in a cell in a table using the top toolbar.
+     *
+     * @return void
+     */
+    public function testApplyingAndRemovingAnchorsInCellUsingTopToolbar()
+    {
+        // Test applying to a word
+        $this->selectKeyword(4);
+        $this->clickTopToolbarButton('anchorID');
+        $this->type('test');
+        $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel <span id="test">%4%</span></td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+
+        $this->click($this->findKeyword(2));
+        $this->selectKeyword(4);
+        $this->clickTopToolbarButton('anchorID', 'active');
+        $this->clearFieldValue('ID');
+        $this->keyDown('Key.ENTER');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+
+        // Test applying to the cell
+        $this->click($this->findKeyword(2));
+        $this->selectKeyword(4);
+        $this->selectInlineToolbarLineageItem(3);
+        $this->clickTopToolbarButton('anchorID');
+        $this->type('test');
+        $this->keyDown('Key.ENTER');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td id="test">sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+
+        $this->click($this->findKeyword(2));
+        $this->selectKeyword(4);
+        $this->selectInlineToolbarLineageItem(3);
+        $this->clickTopToolbarButton('anchorID', 'active');
+        $this->clearFieldValue('ID');
+        $this->keyDown('Key.ENTER');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+
+        // Test applying to the row
+        $this->click($this->findKeyword(2));
+        $this->selectKeyword(4);
+        $this->selectInlineToolbarLineageItem(2);
+        $this->clickTopToolbarButton('anchorID');
+        $this->type('test');
+        $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr id="test"><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+
+        $this->click($this->findKeyword(2));
+        $this->selectKeyword(4);
+        $this->selectInlineToolbarLineageItem(2);
+        $this->clickTopToolbarButton('anchorID', 'active');
+        $this->clearFieldValue('ID');
+        $this->keyDown('Key.ENTER');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+
+        // Test applying to the thead
+        $this->click($this->findKeyword(2));
+        $this->selectKeyword(4);
+        $this->selectInlineToolbarLineageItem(1);
+        $this->clickTopToolbarButton('anchorID');
+        $this->type('test');
+        $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody id="test"><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+
+        $this->click($this->findKeyword(2));
+        $this->selectKeyword(4);
+        $this->selectInlineToolbarLineageItem(1);
+        $this->clickTopToolbarButton('anchorID', 'active');
+        $this->clearFieldValue('ID');
+        $this->keyDown('Key.ENTER');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+
+    }//end testApplyingAndRemovingAnchorsInCellUsingTopToolbar()
+
+
+    /**
+     * Test applying and removing anchors in a footer of a table using the inline toolbar.
+     *
+     * @return void
+     */
+    public function testApplyingAndRemovingAnchorsInFooterUsingInlineToolbar()
+    {
+        // Test applying to a word
+        $this->selectKeyword(3);
+        $this->clickInlineToolbarButton('anchorID');
+        $this->type('test');
+        $this->clickInlineToolbarButton('Update Changes', NULL, TRUE);
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer <span id="test">%3%</span></td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+
+        $this->click($this->findKeyword(2));
+        $this->selectKeyword(3);
+        $this->clickInlineToolbarButton('anchorID', 'active');
+        $this->clearFieldValue('ID');
+        $this->keyDown('Key.ENTER');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+
+        // Test applying to the cell
+        $this->click($this->findKeyword(2));
+        $this->selectKeyword(3);
+        $this->selectInlineToolbarLineageItem(3);
+        $this->clickInlineToolbarButton('anchorID');
+        $this->type('test');
+        $this->keyDown('Key.ENTER');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3" id="test">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+
+        $this->click($this->findKeyword(2));
+        $this->selectKeyword(3);
+        $this->selectInlineToolbarLineageItem(3);
+        $this->clickInlineToolbarButton('anchorID', 'active');
+        $this->clearFieldValue('ID');
+        $this->keyDown('Key.ENTER');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+
+        // Test applying to the row
+        $this->click($this->findKeyword(2));
+        $this->selectKeyword(3);
+        $this->selectInlineToolbarLineageItem(2);
+        $this->clickInlineToolbarButton('anchorID');
+        $this->type('test');
+        $this->clickInlineToolbarButton('Update Changes', NULL, TRUE);
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr id="test"><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+
+        $this->click($this->findKeyword(2));
+        $this->selectKeyword(3);
+        $this->selectInlineToolbarLineageItem(2);
+        $this->clickInlineToolbarButton('anchorID', 'active');
+        $this->clearFieldValue('ID');
+        $this->keyDown('Key.ENTER');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+
+        // Test applying to the tfoot
+        $this->click($this->findKeyword(2));
+        $this->selectKeyword(4);
+        $this->selectInlineToolbarLineageItem(1);
+        $this->clickInlineToolbarButton('anchorID');
+        $this->type('test');
+        $this->clickInlineToolbarButton('Update Changes', NULL, TRUE);
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot id="test"><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+
+        $this->click($this->findKeyword(2));
+        $this->selectKeyword(3);
+        $this->selectInlineToolbarLineageItem(1);
+        $this->clickInlineToolbarButton('anchorID', 'active');
+        $this->clearFieldValue('ID');
+        $this->keyDown('Key.ENTER');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+
+    }//end testApplyingAndRemovingAnchorsInFooterUsingInlineToolbar()
+
+
+    /**
+     * Test applying and removing anchors in a footer of a table using the top toolbar.
+     *
+     * @return void
+     */
+    public function testApplyingAndRemovingAnchorsInFooterUsingTopToolbar()
+    {
+        // Test applying to a word
+        $this->selectKeyword(3);
+        $this->clickTopToolbarButton('anchorID');
+        $this->type('test');
+        $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer <span id="test">%3%</span></td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+
+        $this->click($this->findKeyword(2));
+        $this->selectKeyword(3);
+        $this->clickTopToolbarButton('anchorID', 'active');
+        $this->clearFieldValue('ID');
+        $this->keyDown('Key.ENTER');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+
+        // Test applying to the cell
+        $this->click($this->findKeyword(2));
+        $this->selectKeyword(3);
+        $this->selectInlineToolbarLineageItem(3);
+        $this->clickTopToolbarButton('anchorID');
+        $this->type('test');
+        $this->keyDown('Key.ENTER');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3" id="test">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+
+        $this->click($this->findKeyword(2));
+        $this->selectKeyword(3);
+        $this->selectInlineToolbarLineageItem(3);
+        $this->clickTopToolbarButton('anchorID', 'active');
+        $this->clearFieldValue('ID');
+        $this->keyDown('Key.ENTER');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+
+        // Test applying to the row
+        $this->click($this->findKeyword(2));
+        $this->selectKeyword(3);
+        $this->selectInlineToolbarLineageItem(2);
+        $this->clickTopToolbarButton('anchorID');
+        $this->type('test');
+        $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr id="test"><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+
+        $this->click($this->findKeyword(2));
+        $this->selectKeyword(3);
+        $this->selectInlineToolbarLineageItem(2);
+        $this->clickTopToolbarButton('anchorID', 'active');
+        $this->clearFieldValue('ID');
+        $this->keyDown('Key.ENTER');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+
+        // Test applying to the tfoot
+        $this->click($this->findKeyword(2));
+        $this->selectKeyword(4);
+        $this->selectInlineToolbarLineageItem(1);
+        $this->clickTopToolbarButton('anchorID');
+        $this->type('test');
+        $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot id="test"><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+
+        $this->click($this->findKeyword(2));
+        $this->selectKeyword(3);
+        $this->selectInlineToolbarLineageItem(1);
+        $this->clickTopToolbarButton('anchorID', 'active');
+        $this->clearFieldValue('ID');
+        $this->keyDown('Key.ENTER');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+
+    }//end testApplyingAndRemovingAnchorsInFooterUsingTopToolbar()
+
+
+    /**
+     * Test applying and removing anchors to a table using the inline toolbar.
+     *
+     * @return void
+     */
+    public function testApplyingAndRemovingAnchorsToTableUsingInlineToolbar()
+    {
+        $this->click($this->findKeyword(2));
+        $this->selectKeyword(4);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickInlineToolbarButton('anchorID', 'active');
+        $this->clearFieldValue('ID');
+        $this->keyDown('Key.ENTER');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+
+        $this->selectKeyword(4);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickInlineToolbarButton('anchorID');
+        $this->type('test');
+        $this->clickInlineToolbarButton('Update Changes', NULL, TRUE);
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3" id="test"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+
+    }//end testApplyingAndRemovingAnchorsToTableUsingInlineToolbar()
+
+
+    /**
+     * Test applying and removing anchors to a table using the top toolbar.
+     *
+     * @return void
+     */
+    public function testApplyingAndRemovingAnchorsToTableUsingTopToolbar()
+    {
+        $this->click($this->findKeyword(2));
+        $this->selectKeyword(4);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickTopToolbarButton('anchorID', 'active');
+        $this->clearFieldValue('ID');
+        $this->keyDown('Key.ENTER');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+
+        $this->selectKeyword(4);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickTopToolbarButton('anchorID');
+        $this->type('test');
+        $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3" id="test"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+
+    }//end testApplyingAndRemovingAnchorsToTableUsingTopToolbar()
 
 }//end class
 
