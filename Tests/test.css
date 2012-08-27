@@ -127,3 +127,8 @@ td,th {
 #content div[id^="test"] {
     display: none;
 }
+
+/* Paste Div target */
+.ViperCopyPastePlugin-pasteWrapper {
+    background: url("./Core/Images/window-target2.png") no-repeat;
+}
