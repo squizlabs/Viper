@@ -1027,11 +1027,37 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
 
 
     /**
-     * Test applying and removing a class to a table.
+     * Test applying and removing a class to a table using inline toolbar.
      *
      * @return void
      */
-    public function testApplyingAndRemovingClassForTable()
+    public function testApplyingAndRemovingClassForTableUsingInlineToolbar()
+    {
+        $this->selectKeyword(4);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickInlineToolbarButton('cssClass');
+        $this->type('test');
+        $this->keyDown('Key.ENTER');
+        $this->assertTrue($this->inlineToolbarButtonExists('Update Changes', 'disabled', TRUE), 'Update Changes button should be disabled.');
+        $this->assertHTMLMatchNoHeaders('<table class="test" border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+
+        $this->selectKeyword(4);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickInlineToolbarButton('cssClass', 'active');
+        $this->clearFieldValue('Class');;
+        $this->keyDown('Key.ENTER');
+        $this->assertTrue($this->inlineToolbarButtonExists('Update Changes', 'disabled', TRUE), 'Update Changes button should be disabled.');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+
+    }//end testApplyingAndRemovingClassForTableUsingInlineToolbar()
+
+
+    /**
+     * Test applying and removing a class to a table using top toolbar.
+     *
+     * @return void
+     */
+    public function testApplyingAndRemovingClassForTableUsingTopToolbar()
     {
         $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(0);
@@ -1043,13 +1069,14 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
 
         $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(0);
-        $this->clickTopToolbarButton('cssClass');
+        $this->clickTopToolbarButton('cssClass', 'active');
         $this->clearFieldValue('Class');;
         $this->keyDown('Key.ENTER');
         $this->assertTrue($this->topToolbarButtonExists('Update Changes', 'disabled', TRUE), 'Update Changes button should be disabled.');
         $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
     }//end testApplyingAndRemovingClassForTable()
+
 
     /**
      * Test different alignments for a table.
