@@ -800,24 +800,6 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
     }//end testTableNavigatingOutOfTable()
 
 
-    /**
-     * Tests that inline toolbar stays open after row move operation.
-     *
-     * @return void
-     */
-   // public function testInlineToolbarStaysOpenAfterMove()
-  //  {
-
-
-      ///  $this->showTools(7, 'row');
-     //   $this->clickInlineToolbarButton('mergeUp');
-
-   //     sleep(1);
- //       $this->assertTrue($this->inlineToolbarButtonExists('delete'));
-
-//    }//end testInlineToolbarStaysOpenAfterMove()
-
-
 }//end class
 
 ?>
