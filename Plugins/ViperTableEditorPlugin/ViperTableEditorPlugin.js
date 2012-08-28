@@ -247,7 +247,7 @@ ViperTableEditorPlugin.prototype = {
         if (this._isiPad() === false) {
             var showToolbar = false;
             this.viper.registerCallback('Viper:mouseUp', 'ViperTableEditorPlugin', function(e) {
-                var range = self.viper.getViperRange();
+                var range = self.viper.getCurrentRange();
                 var target = dfx.getMouseEventTarget(e);
 
                 if (!target) {
