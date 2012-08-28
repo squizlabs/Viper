@@ -624,8 +624,16 @@ ViperFormatPlugin.prototype = {
                 startNode = data.range.startContainer;
             }
 
+            var viperElement    = self.viper.getViperElement();
+            var lineage         = self._inlineToolbar.getLineage();
+            var currentLinIndex = self._inlineToolbar.getCurrentLineageIndex(true);
+            var formatElement   = lineage[currentLinIndex];
+            if (formatElement && formatElement.nodeType !== dfx.TEXT_NODE) {
+                nodeSelection = formatElement;
+            }
+
             // Anchor.
-            var attrId = self._getAttributeValue('id');
+            var attrId = self._getAttributeValue('id', nodeSelection);
             tools.getItem(prefix + 'anchor:input').setValue(attrId);
             if (attrId) {
                 tools.setButtonActive('anchor');
@@ -634,7 +642,7 @@ ViperFormatPlugin.prototype = {
             }
 
             // Class.
-            var attrClass = self._getAttributeValue('class');
+            var attrClass = self._getAttributeValue('class', nodeSelection);
             tools.getItem(prefix + 'class:input').setValue(attrClass);
             if (attrClass) {
                 tools.setButtonActive('class');
@@ -647,14 +655,6 @@ ViperFormatPlugin.prototype = {
             tools.disableButton('formats');
             tools.setButtonInactive('headings');
             tools.setButtonInactive('formats');
-
-            var viperElement    = self.viper.getViperElement();
-            var lineage         = self._inlineToolbar.getLineage();
-            var currentLinIndex = self._inlineToolbar.getCurrentLineageIndex(true);
-            var formatElement   = lineage[currentLinIndex];
-            if (formatElement && formatElement.nodeType !== dfx.TEXT_NODE) {
-                nodeSelection = formatElement;
-            }
 
             // Heading button.
             // Heading button will only be enabled if its a whole node selection or
