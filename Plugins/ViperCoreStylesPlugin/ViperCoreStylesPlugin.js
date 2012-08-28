@@ -1206,12 +1206,18 @@ ViperCoreStylesPlugin.prototype = {
             return true;
         }
 
+        var tagName = dfx.getTagName(node);
         if (dfx.isBlockElement(node) === true) {
             if (dfx.isTag(node, 'li') !== true
                 && dfx.isTag(node, 'td') !== true
                 && dfx.isTag(node, 'th') !== true
                 && dfx.isTag(node, 'img') !== true
             ) {
+                return false;
+            }
+        } else {
+            var tagNames = ['thead', 'tfoot'];
+            if (tagNames.inArray(tagName) === true) {
                 return false;
             }
         }
