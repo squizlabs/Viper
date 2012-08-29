@@ -1,41 +1,9 @@
 <?php
 
-require_once 'AbstractViperUnitTest.php';
+require_once 'AbstractViperImagePluginUnitTest.php';
 
-class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperUnitTest
+class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperImagePluginUnitTest
 {
-
-
-     /**
-     * Resize specified image to given width.
-     *
-     * Returns the rectangle of the image after resize.
-     *
-     * @param integer $imageIndex The image index on the page.
-     * @param integer $width      The new width of the image.
-     *
-     * @return array
-     */
-    public function resizeImage($imageIndex, $size)
-    {
-        $selector = 'img';
-
-        $imageRect   = $this->getBoundingRectangle($selector, $imageIndex);
-        $rightHandle = $this->findImage('ImageHandle-se', '.Viper-image-handle-se');
-
-        $width  = ($imageRect['x2'] - $imageRect['x1']);
-        $diff   = ($size - $width);
-        $newX   = ($this->getX($rightHandle) + $diff + 9);
-        $newY   = $this->getY($rightHandle);
-
-        $loc = $this->createLocation($newX, $newY);
-
-        $this->dragDrop($rightHandle, $loc);
-
-        $imageRect = $this->getBoundingRectangle($selector, $imageIndex);
-        return $imageRect;
-
-    }//end resizeImage()
 
 
     /**
@@ -721,6 +689,7 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperUnitTest
         $this->keyDown('Key.TAB');
         $this->type('Title tag');
         $this->keyDown('Key.ENTER');
+        $this->click($this->findKeyword(1));
         $this->clickElement('img', 1);
 
         $this->findImage('ImageHandle-sw', '.Viper-image-handle-sw');
