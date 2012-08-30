@@ -281,7 +281,11 @@ ViperTools.prototype = {
 
         var button = buttonObj.element;
 
-        button.setAttribute('title', button.getAttribute('title').replace(' [Not available]', ''));
+        var title = button.getAttribute('title');
+        if (title) {
+            button.setAttribute('title', title.replace(' [Not available]', ''));
+        }
+
         dfx.removeClass(button, 'Viper-disabled');
         buttonObj._disabled = false;
 
