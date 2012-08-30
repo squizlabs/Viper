@@ -192,6 +192,12 @@ ViperTableEditorPlugin.prototype = {
             self.removeHighlights();
         });
 
+        this.viper.registerCallback('ViperFormatPlugin:elementAttributeSet', 'ViperTableEditorPlugin', function(element) {
+            if (element && dfx.isTag(element, 'th') === true) {
+                self.setTableHeaders(self.getCellTable(element));
+            }
+        });
+
         this.toolbarPlugin = this.viper.ViperPluginManager.getPlugin('ViperToolbarPlugin');
         if (this.toolbarPlugin) {
             var insertTable = true;
