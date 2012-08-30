@@ -606,7 +606,10 @@ ViperCoreStylesPlugin.prototype = {
                         toggleAlignment = false;
                     }
 
-                    parentElements.push(node);
+                    if (parentElements.inArray(node) === false) {
+                        parentElements.push(node);
+                    }
+
                     parent = null;
                 } else if (parent === null && (parent = this.getFirstBlockParent(node))) {
                     // If we havent found a good parent and the node's parent is a block
@@ -615,7 +618,10 @@ ViperCoreStylesPlugin.prototype = {
                         toggleAlignment = false;
                     }
 
-                    parentElements.push(parent);
+                    if (parentElements.inArray(parent) === false) {
+                        parentElements.push(parent);
+                    }
+
                     parent = null;
                 } else if (node.nodeType == dfx.TEXT_NODE && dfx.isBlank(dfx.trim(node.data)) === true) {
                     continue;
@@ -637,7 +643,9 @@ ViperCoreStylesPlugin.prototype = {
                     // Add the node to the new P elem.
                     parent.appendChild(node);
 
-                    parentElements.push(parent);
+                    if (parentElements.inArray(parent) === false) {
+                        parentElements.push(parent);
+                    }
                 }//end if
 
                 if (node === end) {

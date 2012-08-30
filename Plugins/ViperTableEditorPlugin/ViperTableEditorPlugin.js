@@ -192,9 +192,18 @@ ViperTableEditorPlugin.prototype = {
             self.removeHighlights();
         });
 
-        this.viper.registerCallback('ViperFormatPlugin:elementAttributeSet', 'ViperTableEditorPlugin', function(element) {
-            if (element && dfx.isTag(element, 'th') === true) {
-                self.setTableHeaders(self.getCellTable(element));
+        this.viper.registerCallback('ViperFormatPlugin:elementAttributeSet', 'ViperTableEditorPlugin', function(data) {
+            if (data.element && dfx.isTag(data.element, 'th') === true) {
+                var table      = self.getCellTable(data.element);
+                var headerAttr = dfx.find(table, '[headers~="' + data.oldValue + '"]');
+                for (var i = 0; i < headerAttr.length; i++) {
+                    var attr = ' ' + headerAttr[i].getAttribute('headers');
+                    attr     = attr.replace(' ' + data.oldValue, (data.element.getAttribute('id') || ''));
+                    console.info(attr);
+                    headerAttr[i].setAttribute('headers', dfx.trim(attr));
+                }
+
+                self.setTableHeaders(table);
             }
         });
 

@@ -1271,7 +1271,7 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         // Test selecting the Thead
         $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(1);
-        $this->clickTopToolbarButton('justifyLeft', 'active');
+        $this->clickTopToolbarButton('justifyLeft');
         $this->clickTopToolbarButton('justifyLeft');
         $this->assertTrue($this->topToolbarButtonExists('justifyLeft', 'active'), 'Left align icon should be active');
         $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr style="text-align: left;"><th style="text-align: left;">Col1 Header</th><th style="text-align: left;">Col2 %2%</th><th style="text-align: left;">Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
@@ -1337,7 +1337,8 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         $this->assertTrue($this->topToolbarButtonExists('justifyBlock', 'active'), 'Block align icon should be active');
         $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td style="text-align: justify;">sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
-        // Test selecting the cell
+        // Test selecting the cell.
+        $this->click($this->findKeyword(3));
         $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(3);
         $this->clickTopToolbarButton('justifyBlock', 'active');
@@ -1360,7 +1361,8 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         // Remove justification styling for further testing
         $this->clickTopToolbarButton('justifyBlock', 'active');
 
-        // Test selecting the Row
+        // Test selecting the Row.
+        $this->click($this->findKeyword(3));
         $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(2);
         $this->clickTopToolbarButton('justifyLeft');
@@ -1383,7 +1385,8 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         // Remove justification styling for further testing
         $this->clickTopToolbarButton('justifyBlock', 'active');
 
-        // Test selecting the Tbody
+        // Test selecting the Tbody.
+        $this->click($this->findKeyword(3));
         $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(1);
         $this->clickTopToolbarButton('justifyLeft');
@@ -1452,7 +1455,8 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         $this->assertTrue($this->topToolbarButtonExists('justifyBlock', 'active'), 'Block align icon should be active');
         $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td style="text-align: justify;" colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
-        // Test selecting the cell
+        // Test selecting the cell.
+        $this->click($this->findKeyword(4));
         $this->selectKeyword(3);
         $this->selectInlineToolbarLineageItem(3);
         $this->clickTopToolbarButton('justifyBlock', 'active');
@@ -1475,7 +1479,8 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         // Remove the justification for further testing
         $this->clickTopToolbarButton('justifyBlock', 'active');
 
-        // Test selecting the Row
+        // Test selecting the Row.
+        $this->click($this->findKeyword(4));
         $this->selectKeyword(3);
         $this->selectInlineToolbarLineageItem(2);
         $this->clickTopToolbarButton('justifyLeft');
@@ -1498,7 +1503,8 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         // Remove the justification for further testing
         $this->clickTopToolbarButton('justifyBlock', 'active');
 
-        // Test selecting the Tfoot
+        // Test selecting the Tfoot.
+        $this->click($this->findKeyword(4));
         $this->selectKeyword(3);
         $this->selectInlineToolbarLineageItem(1);
         $this->clickTopToolbarButton('justifyLeft');
@@ -2014,7 +2020,7 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         $this->clearFieldValue('ID');
         $this->type('test123');
         $this->keyDown('Key.ENTER');
-        $this->assertHTMLMatch('<table id="test" border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th id="testr1c1">Col1 Header</th><th id="test123">Col2 %2%</th><th id="testr1c3">Col3 Header</th></tr></thead><tfoot><tr><td headers="testr1c1 test123 testr1c3" colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td headers="testr1c1">nec porta ante</td><td headers="test123">sapien vel %4%</td><td headers="testr1c3"><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td headers="testr1c1">nec porta ante</td><td headers="test123 testr1c3" colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3" id="test"><caption><strong>Table 1.2:</strong> The table caption text XAX</caption><thead><tr><th id="testr1c1">Col1 Header</th><th id="test123">Col2 XBX</th><th id="testr1c3">Col3 Header</th></tr></thead><tfoot><tr><td colspan="3" headers="test123 testr1c1 testr1c3">Note: this is the table footer XCX</td></tr></tfoot><tbody><tr><td headers="testr1c1">nec porta ante</td><td headers="test123">sapien vel XDX</td><td headers="testr1c3"><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td headers="testr1c1">nec porta ante</td><td colspan="2" headers="test123 testr1c3">purus neque luctus<strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Test clearing the id for a header cell so it reverts back to the table id
         $this->selectKeyword(2);
@@ -2087,7 +2093,7 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         $this->clearFieldValue('ID');
         $this->type('test123');
         $this->keyDown('Key.ENTER');
-        $this->assertHTMLMatch('<table id="test" border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th id="testr1c1">Col1 Header</th><th id="test123">Col2 %2%</th><th id="testr1c3">Col3 Header</th></tr></thead><tfoot><tr><td headers="testr1c1 test123 testr1c3" colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td headers="testr1c1">nec porta ante</td><td headers="test123">sapien vel %4%</td><td headers="testr1c3"><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td headers="testr1c1">nec porta ante</td><td headers="test123 testr1c3" colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3" id="test"><caption><strong>Table 1.2:</strong> The table caption text XAX</caption><thead><tr><th id="testr1c1">Col1 Header</th><th id="test123">Col2 XBX</th><th id="testr1c3">Col3 Header</th></tr></thead><tfoot><tr><td colspan="3" headers="test123 testr1c1 testr1c3">Note: this is the table footer XCX</td></tr></tfoot><tbody><tr><td headers="testr1c1">nec porta ante</td><td headers="test123">sapien vel XDX</td><td headers="testr1c3"><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td headers="testr1c1">nec porta ante</td><td colspan="2" headers="test123 testr1c3">purus neque luctus<strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Test clearing the id for a header cell so it reverts back to the table id
         $this->selectKeyword(2);
@@ -2389,7 +2395,7 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         $this->clearFieldValue('ID');
         $this->type('test123');
         $this->keyDown('Key.ENTER');
-        $this->assertHTMLMatch('<table id="test123" border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th id="test123r1c1">Col1 Header</th><th id="test123r1c2">Col2 %2%</th><th id="test123r1c3">Col3 Header</th></tr></thead><tfoot><tr><td headers="test123r1c1 test123r1c2 test123r1c3" colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td headers="test123r1c1">nec porta ante</td><td headers="test123r1c2">sapien vel %4%</td><td headers="test123r1c3"><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td headers="test123r1c1">nec porta ante</td><td headers="test123r1c2 test123r1c3" colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3" id="test123"><caption><strong>Table 1.2:</strong> The table caption text XAX</caption><thead><tr><th id="testr1c1">Col1 Header</th><th id="testr1c2">Col2 XBX</th><th id="testr1c3">Col3 Header</th></tr></thead><tfoot><tr><td colspan="3" headers="testr1c1 testr1c2 testr1c3">Note: this is the table footer XCX</td></tr></tfoot><tbody><tr><td headers="testr1c1">nec porta ante</td><td headers="testr1c2">sapien vel XDX</td><td headers="testr1c3"><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td headers="testr1c1">nec porta ante</td><td colspan="2" headers="testr1c2 testr1c3">purus neque luctus<strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
     }//end testEditingTheTableIdUsingInlineToolbar()
 
@@ -2407,7 +2413,7 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         $this->clearFieldValue('ID');
         $this->type('test123');
         $this->keyDown('Key.ENTER');
-        $this->assertHTMLMatch('<table id="test123" border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th id="test123r1c1">Col1 Header</th><th id="test123r1c2">Col2 %2%</th><th id="test123r1c3">Col3 Header</th></tr></thead><tfoot><tr><td headers="test123r1c1 test123r1c2 test123r1c3" colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td headers="test123r1c1">nec porta ante</td><td headers="test123r1c2">sapien vel %4%</td><td headers="test123r1c3"><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td headers="test123r1c1">nec porta ante</td><td headers="test123r1c2 test123r1c3" colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+        $this->assertHTMLMatch('<table border="1" cellpadding="2" cellspacing="3" id="test123"><caption><strong>Table 1.2:</strong> The table caption text XAX</caption><thead><tr><th id="testr1c1">Col1 Header</th><th id="testr1c2">Col2 XBX</th><th id="testr1c3">Col3 Header</th></tr></thead><tfoot><tr><td colspan="3" headers="testr1c1 testr1c2 testr1c3">Note: this is the table footer XCX</td></tr></tfoot><tbody><tr><td headers="testr1c1">nec porta ante</td><td headers="testr1c2">sapien vel XDX</td><td headers="testr1c3"><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td headers="testr1c1">nec porta ante</td><td colspan="2" headers="testr1c2 testr1c3">purus neque luctus<strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
     }//end testEditingTheTableIdUsingTopToolbar()
 

@@ -1051,6 +1051,7 @@ ViperFormatPlugin.prototype = {
         var selectedNode = this.viper.getNodeSelection();
 
         if (selectedNode) {
+            var oldVal = '';
             if (selectedNode.nodeType === dfx.TEXT_NODE) {
                 var span = document.createElement('span');
                 dfx.insertBefore(selectedNode, span);
@@ -1058,13 +1059,15 @@ ViperFormatPlugin.prototype = {
                 selectedNode = span;
                 range.selectNode(span);
                 ViperSelection.addRange(range);
+            } else {
+                oldVal = selectedNode.getAttribute(attr) || '';
             }
 
             this.viper.setAttribute(selectedNode, attr, value);
             this.viper.fireSelectionChanged(null, true);
             this.viper.fireNodesChanged();
 
-            this.viper.fireCallbacks('ViperFormatPlugin:elementAttributeSet', selectedNode);
+            this.viper.fireCallbacks('ViperFormatPlugin:elementAttributeSet', {element: selectedNode, oldValue: oldVal});
             return;
         }
 
