@@ -761,7 +761,7 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
 
         $this->assertHTMLMatch('<p>%1% %2% <a href="http://www.squizlabs.com" class="class" id="anchor">%3%</a></p><p>sit %4% <strong>%5%</strong></p>');
 
-        $this->click($this->find($text));
+        $this->click($this->findKeyword(1));
         $this->selectKeyword($text);
         $this->clickInlineToolbarButton('linkRemove');
 
