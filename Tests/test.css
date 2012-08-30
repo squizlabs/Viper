@@ -109,7 +109,7 @@ h1,h2,h3,h4,h5,h6 {
 
 td,th {
     min-width: 30px;
-    padding: 4px 0;
+    padding: 4px 1px;
 }
 
 .googlechrome td, .googlechrome th {
