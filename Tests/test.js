@@ -23,6 +23,47 @@ var viperTest = {
 };
 
 
+function initJSPoller()
+{
+    var scriptUrl = window.location.href.replace('test_tmp.html', 'jspoller.php');
+    var seconds   = 1;
+    var stop      = false;
+    var interval  = null;
+    interval = setInterval(function() {
+        if (stop === true) {
+            return;
+        }
+
+        stop = true;
+        dfx.get(scriptUrl, null, function(val) {
+            if (!val) {
+                stop = false;
+                return;
+            }
+
+            dfx.setHtml(dfx.getId('msg'), 'Exec: ' + val);
+
+            if (val === 'cw()' || val === 'cw();') {
+                stop = true;
+                clearInterval(interval);
+                return;
+            }
+
+            val  = 'var jsResult = ' + val + ';';
+            val += 'dfx.jsonEncode(jsResult);';
+
+            // Execute JS.
+            var retval = eval(val);
+
+            dfx.get(scriptUrl, {res: retval}, function() {
+                stop = false;
+            });
+        });
+    }, (1000 * seconds));
+
+}
+
+
 /**
  * Returns the HTML contents of the specified element.
  */
@@ -131,12 +172,15 @@ function gBtn(text, state, selectorPrefix)
         return false;
     }
 
-    var rect = viperTest.getWindow().dfx.getBoundingRectangle(button);
-    if (rect) {
-        rect.x1 = (parseInt(rect.x1) + 3);
-        rect.x2 = (parseInt(rect.x2) - 1);
-        rect.y1 = (parseInt(rect.y1) + 3);
-        rect.y2 = (parseInt(rect.y2) - 1);
+    var rect = null;
+    if (button) {
+        rect = viperTest.getWindow().dfx.getBoundingRectangle(button);
+        if (rect) {
+            rect.x1 = (parseInt(rect.x1) + 3);
+            rect.x2 = (parseInt(rect.x2) - 1);
+            rect.y1 = (parseInt(rect.y1) + 3);
+            rect.y2 = (parseInt(rect.y2) - 1);
+        }
     }
 
     return rect;

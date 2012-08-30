@@ -9,16 +9,22 @@
         <script type="text/javascript">
             var viper   = null;
             var jsCache = __TEST_JS_EXEC_CACHE__;
+            var polling = __TEST_JS_EXEC_USEPOLLING__;
             ViperReadyCallback = function() {
                 var contentElement = dfx.getId('content');
 
                 viper = new Viper('test', null, null, [contentElement]);
                 viper.getPluginManager().setPlugins(['ViperCoreStylesPlugin', 'ViperKeyboardEditorPlugin', 'ViperInlineToolbarPlugin', 'ViperHistoryPlugin', 'ViperListPlugin', 'ViperFormatPlugin', 'ViperToolbarPlugin', 'ViperTableEditorPlugin', 'ViperCopyPastePlugin', 'ViperImagePlugin', 'ViperLinkPlugin', 'ViperAccessibilityPlugin', 'ViperSourceViewPlugin', 'ViperSearchReplacePlugin', 'ViperLangToolsPlugin', 'ViperCharMapPlugin', 'ViperTrackChangesPlugin']);
 
-                dfx.attr(dfxjQuery.find('.Viper-button[title]'), 'title', '');
-                if (window.location.hash !== '#run') {
-                    window.open('test_jsexec.html', '', 'width=400,height=100,0,status=0,left=1000,top=850');
-                    window.location.hash = '#run';
+                dfxjQuery('[title]').removeAttr('title');
+
+                if (polling !== true) {
+                    if (window.location.hash !== '#run') {
+                        window.open('test_jsexec.html', '', 'width=400,height=100,0,status=0,left=1000,top=850');
+                        window.location.hash = '#run';
+                    }
+                } else {
+                    initJSPoller();
                 }
 
                 var readyCallbacks = viperTest.getReadyCallbacks();

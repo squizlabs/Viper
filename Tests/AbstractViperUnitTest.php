@@ -102,6 +102,20 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
     private static $_useSelenium = FALSE;
 
     /**
+     * If TRUE then AJAX polling is used to execute JS.
+     *
+     * @var boolean
+     */
+    private static $_usePolling = FALSE;
+
+    /**
+     * If TRUE then AJAX polling is used to execute JS.
+     *
+     * @var boolean
+     */
+    private static $_pollFilePath = NULL;
+
+    /**
      * The Selenium PID.
      *
      * This is used to kill the Selenium process at the end of testing.
@@ -192,6 +206,22 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
 
             if (getenv('VIPER_TEST_USE_SELENIUM') === 'TRUE') {
                 self::$_useSelenium = TRUE;
+            } else if (getenv('VIPER_TEST_USE_POLLING') === 'TRUE') {
+                self::$_usePolling   = TRUE;
+                self::$_pollFilePath = dirname(__FILE__).'/tmp/poll';
+
+                if (file_exists(self::$_pollFilePath) === FALSE) {
+                    mkdir(self::$_pollFilePath);
+                    chmod(self::$_pollFilePath, 0777);
+                } else {
+                    if (file_exists(self::$_pollFilePath.'/_jsres.tmp') === TRUE) {
+                        unlink(self::$_pollFilePath.'/_jsres.tmp');
+                    }
+
+                    if (file_exists(self::$_pollFilePath.'/_jsexec.tmp') === TRUE) {
+                        unlink(self::$_pollFilePath.'/_jsexec.tmp');
+                    }
+                }
             }
         }//end if
 
@@ -243,6 +273,11 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
                              <script type="text/javascript" src="../Viper-all.js"></script>';
         }
 
+        $usePolling = 'false';
+        if (self::$_usePolling === TRUE) {
+            $usePolling = 'true';
+        }
+
         // Put the current test file contents to the main test file.
         $contents = str_replace('__TEST_CONTENT__', $testFileContent, self::$_testContent);
         $contents = str_replace('__TEST_BROWSER__', $this->getBrowserid(), $contents);
@@ -250,6 +285,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         $contents = str_replace('__TEST_TITLE__', $this->getName(), $contents);
         $contents = str_replace('__TEST_JS_INCLUDE__', $jsInclude, $contents);
         $contents = str_replace('__TEST_JS_EXEC_CACHE__', json_encode(array_flip(self::$_jsExecCache)), $contents);
+        $contents = str_replace('__TEST_JS_EXEC_USEPOLLING__', $usePolling, $contents);
         $dest     = $baseDir.'/test_tmp.html';
         file_put_contents($dest, $contents);
 
@@ -297,7 +333,6 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
             $this->goToURL($this->_getBaseUrl().'/test_tmp.html');
             $this->setAutoWaitTimeout(1);
 
-            sleep(1);
             $this->_switchWindow('main');
 
             // Make sure page is loaded.
@@ -1013,6 +1048,10 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      */
     private function _switchWindow($type=NULL)
     {
+        if (self::$_usePolling === TRUE) {
+            return;
+        }
+
         if ($type === self::$_currentWindow) {
             return;
         }
@@ -1481,6 +1520,8 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         $this->setW($match, ($this->getW($match) + 400));
         $this->setH($match, ($this->getH($match) + 200));
 
+        $this->setAutoWaitTimeout(0.5, $match);
+
         return $match;
 
     }//end getInlineToolbar()
@@ -1728,7 +1769,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
 
         // Move the mouse pointer away from the button so that its tooltip does not
         // cause issues.
-        $this->mouseMove($this->createLocation($this->getX($match), $this->getY($match)));
+        $this->mouseMove($this->createLocation(($this->getX($match) - 5), ($this->getY($match) - 5)));
 
     }//end _clickButton()
 
@@ -1998,6 +2039,32 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
             }
 
             $result = json_decode($result, TRUE);
+
+            return $result;
+        } else if (self::$_usePolling === TRUE) {
+            file_put_contents(self::$_pollFilePath.'/_jsexec.tmp', $js);
+            chmod(self::$_pollFilePath.'/_jsexec.tmp', 0777);
+
+            if ($js === 'cw();' || $noReturnValue === TRUE) {
+                return;
+            }
+
+            $startTime = microtime(TRUE);
+            $timeout   = 3;
+            while (file_exists(self::$_pollFilePath.'/_jsres.tmp') === FALSE) {
+                if ((microtime(TRUE) - $startTime) > $timeout) {
+                    break;
+                }
+
+                usleep(50000);
+            }
+
+            $result = NULL;
+            if (file_exists(self::$_pollFilePath.'/_jsres.tmp') === TRUE) {
+                $result = file_get_contents(self::$_pollFilePath.'/_jsres.tmp');
+                $result = json_decode($result, TRUE);
+                unlink(self::$_pollFilePath.'/_jsres.tmp');
+            }
 
             return $result;
         }//end if
@@ -2419,7 +2486,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
             $js .= ' false);';
         }
 
-        $this->execJS($js);
+        $this->execJS($js, NULL, TRUE);
 
     }//end removeTableHeaders()
 
