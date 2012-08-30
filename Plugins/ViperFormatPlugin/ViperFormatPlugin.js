@@ -1063,6 +1063,8 @@ ViperFormatPlugin.prototype = {
             this.viper.setAttribute(selectedNode, attr, value);
             this.viper.fireSelectionChanged(null, true);
             this.viper.fireNodesChanged();
+
+            this.viper.fireCallbacks('ViperFormatPlugin:elementAttributeSet', selectedNode);
             return;
         }
 
