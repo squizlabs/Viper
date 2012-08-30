@@ -15,7 +15,7 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
     {
         // Check icons when clicking in a word in the caption
         $this->click($this->findKeyword(1));
-        $this->assertTrue($this->topToolbarButtonExists('justifyLeft'), 'Justify icon should be enabled');
+        $this->assertTrue($this->topToolbarButtonExists('justifyCenter', 'active'), 'Justify icon should be active');
         $this->assertTrue($this->topToolbarButtonExists('formats', 'disabled'), 'Formats icon should be disabled');
         $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'), 'Heading icon should be disabled');
         $this->assertTrue($this->topToolbarButtonExists('cssClass', 'disabled'), 'Class icon should be disabled');
@@ -23,7 +23,7 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
 
         // Check icons when selecting a word  in the caption
         $this->selectKeyword(1);
-        $this->assertTrue($this->topToolbarButtonExists('justifyLeft'), 'Justify icon should be enabled');
+        $this->assertTrue($this->topToolbarButtonExists('justifyCenter', 'active'), 'Justify icon should be active');
         $this->assertFalse($this->inlineToolbarButtonExists('justifyLeft'), 'Justify icon should not appear in the inline toolbar');
 
         $this->assertTrue($this->topToolbarButtonExists('formats', 'disabled'), 'Formats icon should be disabled');
@@ -40,7 +40,7 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
 
         // Check icons when selecting all content in a caption
         $this->selectInlineToolbarLineageItem(1);
-        $this->assertTrue($this->topToolbarButtonExists('justifyLeft'), 'Justify icon should be enabled');
+        $this->assertTrue($this->topToolbarButtonExists('justifyCenter', 'active'), 'Justify icon should be enabled');
         $this->assertFalse($this->inlineToolbarButtonExists('justifyLeft'), 'Justify icon should not appear in the inline toolbar');
 
         $this->assertTrue($this->topToolbarButtonExists('formats', 'disabled'), 'Formats icon should be disabled');
@@ -68,8 +68,8 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(0);
 
-        $this->assertTrue($this->topToolbarButtonExists('justifyLeft'), 'Alignment icon should be enabled');
-        $this->assertFalse($this->inlineToolbarButtonExists('justifyLeft'), 'Justify icon should not appear in the inline toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('justifyCenter', 'active'), 'Justify icon should be active');
+        $this->assertFalse($this->inlineToolbarButtonExists('justifyCenter', 'active'), 'Justify icon should not appear in the inline toolbar');
 
         $this->assertTrue($this->topToolbarButtonExists('formats', 'disabled'), 'Formats icon should be disabled');
         $this->assertFalse($this->inlineToolbarButtonExists('formats'), 'Formats icon should not appear in the inline toolbar');
@@ -103,7 +103,7 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
 
         // Check icons when selecting a word in the header row
         $this->selectKeyword(2);
-        $this->assertTrue($this->topToolbarButtonExists('justifyLeft', 'active'), 'Center alignment icon should be active');
+        $this->assertTrue($this->topToolbarButtonExists('justifyCenter', 'active'), 'Center alignment icon should be active');
         $this->assertFalse($this->inlineToolbarButtonExists('justifyCenter', 'active'), 'Center alignment icon should not appear in the inline toolbar');
 
         $this->assertTrue($this->topToolbarButtonExists('formats'), 'Formats icon should be enabled');
@@ -1013,9 +1013,9 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         $this->type('test');
         $this->keyDown('Key.ENTER');
         $this->assertTrue($this->topToolbarButtonExists('Update Changes', 'disabled', TRUE), 'Update Changes button should be disabled.');
-        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot class="test"><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead class="test"><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus<strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
-        $this->selectKeyword(3);
+        $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(1);
         $this->clickTopToolbarButton('cssClass', 'active');
         $this->clearFieldValue('Class');;
@@ -1090,19 +1090,19 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         $this->clickTopToolbarButton('justifyLeft');
         $this->clickTopToolbarButton('justifyLeft');
         $this->assertTrue($this->topToolbarButtonExists('justifyLeft', 'active'), 'Left align icon should be active');
-        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3" style="align: left;"><caption style="align: left;"><strong>Table 1.2:</strong> The table caption text XAX</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody style="align: left;"><tr style="align: left;"><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr style="align: left;"><td style="align: left;">nec porta ante</td><td colspan="2" style="align: left;">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3" style="align: left;"><caption style="align: left;"><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody style="align: left;"><tr style="align: left;"><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr style="align: left;"><td style="align: left;">nec porta ante</td><td colspan="2" style="align: left;">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         $this->clickTopToolbarButton('justifyCenter');
         $this->assertTrue($this->topToolbarButtonExists('justifyCenter', 'active'), 'Center align icon should be active');
-        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3" style="align: center;"><caption style="align: center;"><strong>Table 1.2:</strong> The table caption text XAX</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody style="align: center;"><tr style="align: center;"><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr style="align: center;"><td style="align: center;">nec porta ante</td><td colspan="2" style="align: center;">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3" style="align: center;"><caption style="align: center;"><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody style="align: center;"><tr style="align: center;"><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr style="align: center;"><td style="align: center;">nec porta ante</td><td colspan="2" style="align: center;">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         $this->clickTopToolbarButton('justifyRight');
         $this->assertTrue($this->topToolbarButtonExists('justifyRight', 'active'), 'Right align icon should be active');
-        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3" style="align: right;"><caption style="align: right;"><strong>Table 1.2:</strong> The table caption text XAX</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody style="align: right;"><tr style="align: right;"><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr style="align: right;"><td style="align: right;">nec porta ante</td><td colspan="2" style="align: right;">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3" style="align: right;"><caption style="align: right;"><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody style="align: right;"><tr style="align: right;"><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr style="align: right;"><td style="align: right;">nec porta ante</td><td colspan="2" style="align: right;">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         $this->clickTopToolbarButton('justifyBlock');
         $this->assertTrue($this->topToolbarButtonExists('justifyBlock', 'active'), 'Block align icon should be active');
-        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3" style="align: justify;"><caption style="align: justify;"><strong>Table 1.2:</strong> The table caption text XAX</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody style="align: justify;"><tr style="align: justify;"><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr style="align: justify;"><td style="align: justify;">nec porta ante</td><td colspan="2" style="align: justify;">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3" style="align: justify;"><caption style="align: justify;"><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody style="align: justify;"><tr style="align: justify;"><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr style="align: justify;"><td style="align: justify;">nec porta ante</td><td colspan="2" style="align: justify;">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
     }//end testAlignmentForTable()
 
@@ -1116,7 +1116,7 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
     {
         // Test clicking in word
         $this->click($this->findKeyword(1));
-        $this->clickTopToolbarButton('justifyLeft');
+        $this->clickTopToolbarButton('justifyCenter', 'active');
         $this->clickTopToolbarButton('justifyLeft');
         $this->assertTrue($this->topToolbarButtonExists('justifyLeft', 'active'), 'Left align icon should be active');
         $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption style="text-align: left;"><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
@@ -1185,7 +1185,7 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
     {
         // Test clicking in word
         $this->click($this->findKeyword(2));
-        $this->clickTopToolbarButton('justifyLeft');
+        $this->clickTopToolbarButton('justifyCenter', 'active');
         $this->clickTopToolbarButton('justifyLeft');
         $this->assertTrue($this->topToolbarButtonExists('justifyLeft', 'active'), 'Left align icon should be active');
         $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th style="text-align: left;">Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
@@ -1366,19 +1366,19 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         $this->clickTopToolbarButton('justifyLeft');
         $this->clickTopToolbarButton('justifyLeft');
         $this->assertTrue($this->topToolbarButtonExists('justifyLeft', 'active'), 'Left align icon should be active');
-        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text XAX</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr style="align: left;"><td style="align: left;">nec porta ante</td><td style="align: left;">sapien vel %4%</td><td style="align: left;"><ul style="align: left;"><li style="align: left;">purus neque luctus ligula, vel molestie arcu</li><li style="align: left;">purus neque luctus</li><li style="align: left;">vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr style="align: left;"><td style="align: left;">nec porta ante</td><td style="align: left;">sapien vel %4%</td><td style="align: left;"><ul style="align: left;"><li style="align: left;">purus neque luctus ligula, vel molestie arcu</li><li style="align: left;">purus neque luctus</li><li style="align: left;">vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         $this->clickTopToolbarButton('justifyCenter');
         $this->assertTrue($this->topToolbarButtonExists('justifyCenter', 'active'), 'Center align icon should be active');
-        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text XAX</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr style="align: center;"><td style="align: center;">nec porta ante</td><td style="align: center;">sapien vel %4%</td><td style="align: center;"><ul style="align: center;"><li style="align: center;">purus neque luctus ligula, vel molestie arcu</li><li style="align: center;">purus neque luctus</li><li style="align: center;">vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr style="align: center;"><td style="align: center;">nec porta ante</td><td style="align: center;">sapien vel %4%</td><td style="align: center;"><ul style="align: center;"><li style="align: center;">purus neque luctus ligula, vel molestie arcu</li><li style="align: center;">purus neque luctus</li><li style="align: center;">vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         $this->clickTopToolbarButton('justifyRight');
         $this->assertTrue($this->topToolbarButtonExists('justifyRight', 'active'), 'Right align icon should be active');
-        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text XAX</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr style="align: right;"><td style="align: right;">nec porta ante</td><td style="align: right;">sapien vel %4%</td><td style="align: right;"><ul style="align: right;"><li style="align: right;">purus neque luctus ligula, vel molestie arcu</li><li style="align: right;">purus neque luctus</li><li style="align: right;">vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr style="align: right;"><td style="align: right;">nec porta ante</td><td style="align: right;">sapien vel %4%</td><td style="align: right;"><ul style="align: right;"><li style="align: right;">purus neque luctus ligula, vel molestie arcu</li><li style="align: right;">purus neque luctus</li><li style="align: right;">vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         $this->clickTopToolbarButton('justifyBlock');
         $this->assertTrue($this->topToolbarButtonExists('justifyBlock', 'active'), 'Block align icon should be active');
-        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text XAX</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr style="align: justify;"><td style="align: justify;">nec porta ante</td><td style="align: justify;">sapien vel %4%</td><td style="align: justify;"><ul style="align: justify;"><li style="align: justify;">purus neque luctus ligula, vel molestie arcu</li><li style="align: justify;">purus neque luctus</li><li style="align: justify;">vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr style="align: justify;"><td style="align: justify;">nec porta ante</td><td style="align: justify;">sapien vel %4%</td><td style="align: justify;"><ul style="align: justify;"><li style="align: justify;">purus neque luctus ligula, vel molestie arcu</li><li style="align: justify;">purus neque luctus</li><li style="align: justify;">vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Remove justification styling for further testing
         $this->clickTopToolbarButton('justifyBlock', 'active');
@@ -1389,19 +1389,19 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         $this->clickTopToolbarButton('justifyLeft');
         $this->clickTopToolbarButton('justifyLeft');
         $this->assertTrue($this->topToolbarButtonExists('justifyLeft', 'active'), 'Left align icon should be active');
-        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text XAX</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody style="align: left;"><tr style="align: justify;"><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody style="align: left;"><tr style="align: justify;"><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         $this->clickTopToolbarButton('justifyCenter');
         $this->assertTrue($this->topToolbarButtonExists('justifyCenter', 'active'), 'Center align icon should be active');
-        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text XAX</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody style="align: center;"><tr style="align: justify;"><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody style="align: center;"><tr style="align: justify;"><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         $this->clickTopToolbarButton('justifyRight');
         $this->assertTrue($this->topToolbarButtonExists('justifyRight', 'active'), 'Right align icon should be active');
-        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text XAX</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody style="align: right;"><tr style="align: justify;"><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody style="align: right;"><tr style="align: justify;"><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         $this->clickTopToolbarButton('justifyBlock');
         $this->assertTrue($this->topToolbarButtonExists('justifyBlock', 'active'), 'Block align icon should be active');
-        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text XAX</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody style="align: justify;"><tr style="align: justify;"><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody style="align: justify;"><tr style="align: justify;"><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
     }//end testAlignmentInTableBody()
 
@@ -1543,7 +1543,7 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         $this->assertTrue($this->topToolbarButtonExists('Quote', 'active', TRUE), 'Quote icon should be active');
         $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th><blockquote><p>Col2 %2%</p></blockquote></th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
-        $this->clickTopToolbarButton('PRE');
+        $this->clickTopToolbarButton('PRE', NULL, TRUE);
         $this->assertTrue($this->topToolbarButtonExists('PRE', 'active', TRUE), 'Pre icon should be active');
         $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th><pre>Col2 %2%</pre></th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
@@ -1657,7 +1657,7 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         $this->assertTrue($this->topToolbarButtonExists('Quote', 'active', TRUE), 'Quote icon should be active');
         $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td><blockquote><p>sapien vel %4%</p></blockquote></td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
-        $this->clickTopToolbarButton('PRE');
+        $this->clickTopToolbarButton('PRE', NULL, TRUE);
         $this->assertTrue($this->topToolbarButtonExists('PRE', 'active', TRUE), 'Pre icon should be active');
         $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td><pre>sapien vel %4%</pre></td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
@@ -1681,7 +1681,8 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         $this->assertTrue($this->topToolbarButtonExists('DIV', NULL, TRUE), 'Div icon should not be active');
         $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
-        // Test selecting the Cell and using top toolbar
+        // Test selecting the Cell and using top toolbar.
+        $this->click($this->findKeyword(2));
         $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(3);
         $this->clickTopToolbarButton('formats');
@@ -1690,6 +1691,7 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
 
         // Undo and apply div
         $this->keyDown('Key.CMD + z');
+        $this->click($this->findKeyword(2));
         $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(3);
         $this->clickTopToolbarButton('formats');
@@ -1698,6 +1700,7 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
 
         // Undo and apply quote
         $this->keyDown('Key.CMD + z');
+        $this->click($this->findKeyword(2));
         $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(3);
         $this->clickTopToolbarButton('formats');
@@ -1707,6 +1710,7 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         // Undo and apply pre
         $this->clickTopToolbarButton('historyUndo');
         sleep(1);
+        $this->click($this->findKeyword(2));
         $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(3);
         $this->clickTopToolbarButton('formats');
@@ -1718,6 +1722,7 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         sleep(1);
 
         // Test selecting the Cell and using inline toolbar
+        $this->click($this->findKeyword(2));
         $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(3);
         $this->clickInlineToolbarButton('formats');
@@ -1726,6 +1731,7 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
 
         // Undo and apply div
         $this->keyDown('Key.CMD + z');
+        $this->click($this->findKeyword(2));
         $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(3);
         $this->clickInlineToolbarButton('formats');
@@ -1734,6 +1740,7 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
 
         // Undo and apply quote
         $this->keyDown('Key.CMD + z');
+        $this->click($this->findKeyword(2));
         $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(3);
         $this->clickInlineToolbarButton('formats');
@@ -1743,6 +1750,7 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         // Undo and apply pre
         $this->keyDown('Key.CMD + z');
         sleep(1);
+        $this->click($this->findKeyword(2));
         $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(3);
         $this->clickInlineToolbarButton('formats');
@@ -1774,7 +1782,7 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         $this->assertTrue($this->topToolbarButtonExists('Quote', 'active', TRUE), 'Quote icon should be active');
         $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3"><blockquote><p>Note: this is the table footer %3%</p></blockquote></td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
-        $this->clickTopToolbarButton('PRE');
+        $this->clickTopToolbarButton('PRE', NULL, TRUE);
         $this->assertTrue($this->topToolbarButtonExists('PRE', 'active', TRUE), 'Pre icon should be active');
         $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3"><pre>Note: this is the table footer %3%</pre></td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
