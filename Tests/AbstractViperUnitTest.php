@@ -2187,7 +2187,9 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         $startKeywordImage = $this->_getKeywordImage($startKeyword);
 
         if ($endKeyword === NULL) {
-            $this->doubleClick($this->find($startKeywordImage, NULL, $this->getData('textSimmilarity')));
+            $loc = $this->find($startKeywordImage, NULL, $this->getData('textSimmilarity'));
+            $this->click($loc);
+            $this->doubleClick($loc);
             return;
         }
 
