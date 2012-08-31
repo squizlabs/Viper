@@ -267,8 +267,10 @@ ViperTools.prototype = {
 
     setButtonActive: function(buttonid)
     {
-        dfx.addClass(this.getItem(buttonid).element, 'Viper-active');
-        dfx.removeClass(this.getItem(buttonid).element, 'Viper-disabled');
+        var button = this.getItem(buttonid);
+
+        dfx.addClass(button.element, 'Viper-active');
+        this.enableButton(buttonid);
 
     },
 
@@ -1735,8 +1737,6 @@ ViperTools.prototype = {
                         left = viperElemCoords.left;
                     }
 
-                    dfx.setStyle(toolbar, 'left', left + 'px');
-
                     if (left < 0) {
                         left += (toolbarWidth / 2);
                         dfx.addClass(toolbar, 'Viper-orientationLeft');
@@ -1744,6 +1744,8 @@ ViperTools.prototype = {
                         left -= (toolbarWidth / 2);
                         dfx.addClass(toolbar, 'Viper-orientationRight');
                     }
+
+                    dfx.setStyle(toolbar, 'left', left + 'px');
                 }
 
                 var top = (rangeCoords.bottom + margin + scrollCoords.y);
