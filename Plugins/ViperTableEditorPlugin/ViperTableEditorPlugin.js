@@ -199,7 +199,6 @@ ViperTableEditorPlugin.prototype = {
                 for (var i = 0; i < headerAttr.length; i++) {
                     var attr = ' ' + headerAttr[i].getAttribute('headers');
                     attr     = attr.replace(' ' + data.oldValue, (data.element.getAttribute('id') || ''));
-                    console.info(attr);
                     headerAttr[i].setAttribute('headers', dfx.trim(attr));
                 }
 
@@ -274,7 +273,10 @@ ViperTableEditorPlugin.prototype = {
                     return false;
                 }
 
-                if (range.collapsed === false || dfx.isTag(target, 'a') === true) {
+                if (range.collapsed === false
+                    || dfx.isTag(target, 'a') === true
+                    || dfx.isTag(target, 'img') === true
+                ) {
                     self.removeHighlights();
                     self.hideCellToolsIcon();
                     return true;
