@@ -20,6 +20,7 @@ function ViperSourceViewPlugin(viper)
     this._sourceView   = null;
     this._sourceCont   = null;
     this._closeConfirm = null;
+    this._isVisible    = false;
 
     this._originalSource = null;
     this._inNewWindow    = false;
@@ -109,11 +110,13 @@ ViperSourceViewPlugin.prototype = {
                 this.viper.ViperTools.openPopup('VSVP:popup', 800, 600);
                 this._editor.resize();
                 this._editor.focus();
+                this._isVisible = true;
             } else {
                 this._textEditor.value = content;
                 this._originalSource   = this._textEditor.value;
                 this.viper.ViperTools.openPopup('VSVP:popup', 800, 600);
                 this._textEditor.focus();
+                this._isVisible = true;
             }
 
             if (callback) {
@@ -169,7 +172,7 @@ ViperSourceViewPlugin.prototype = {
 
     updateSourceContents: function(content)
     {
-        if (!this._editor) {
+        if (!this._editor || this._isVisible !== true) {
             return;
         }
 
@@ -265,6 +268,7 @@ ViperSourceViewPlugin.prototype = {
 
                 // Hide the Confirm message.
                 self.viper.ViperTools.getItem('VSVP:popup').hideTop();
+                self._isVisible = false;
             },
             function() {
                 if (self._editor) {
@@ -378,6 +382,7 @@ ViperSourceViewPlugin.prototype = {
         });
 
         var popup = self.viper.ViperTools.getItem('VSVP:popup');
+
         // If the ESC key is pressed close the popup.
         editor.getKeyboardHandler().addKeyboardHandler({
             handleKeyboard: function(data, hashId, keyString) {
@@ -517,7 +522,7 @@ ViperSourceViewPlugin.prototype = {
 
     getContents: function()
     {
-        var html = this.viper.getHtml();
+        var html = this.viper.getHtml(null, {emptyTableCellContent:''});
 
         if (window.StyleHTML) {
             html = StyleHTML(html);

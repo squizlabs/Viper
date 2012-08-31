@@ -70,6 +70,7 @@ ViperAccessibilityPlugin_WCAG2_Principle1_Guideline1_1 = {
             break;
 
             case 'H2.EG3':
+            case 'H2.EG5':
             case 'H30.2':
             case 'G94.Image':
                 var msg = '';
@@ -79,6 +80,10 @@ ViperAccessibilityPlugin_WCAG2_Principle1_Guideline1_1 = {
                     msg = 'Make sure the image\'s alt text describes the purpose of the link it\'s being used for.';
                 } else if (technique === 'G94') {
                     msg = 'Ensure the image\'s alt text describes the purpose or content of the image.';
+                }
+
+                if (dfx.isTag(element, 'a') === true) {
+                    element = dfx.getTag('img', element)[0];
                 }
 
                 this._getImageResContent(contentElement, element, msg);

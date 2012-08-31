@@ -1,6 +1,6 @@
 <?php
 
-$opts = getopt('s::b::u::t::civ', array('selenium', 'url::', 'built'));
+$opts = getopt('s::b::u::t::civ', array('selenium', 'poll', 'url::', 'built'));
 
     $browsers = array(
                  'Firefox',
@@ -48,6 +48,8 @@ $opts = getopt('s::b::u::t::civ', array('selenium', 'url::', 'built'));
 
     if (array_key_exists('selenium', $opts) === TRUE) {
         putenv('VIPER_TEST_USE_SELENIUM=TRUE');
+    } else if (array_key_exists('poll', $opts) === TRUE) {
+        putenv('VIPER_TEST_USE_POLLING=TRUE');
     }
 
     if (array_key_exists('url', $opts) === TRUE) {

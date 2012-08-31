@@ -72,6 +72,22 @@ The following resolution interfaces are provided by Squiz Viper:
 </table>
 ```
 
+### [Standard].Principle1.Guideline1_3.1_3_1.H43.IncorrectAttr
+**Error:** Incorrect headers attribute on this td element. Expected [expected headers] but found [actual headers]  
+**Solution:** Fix the header attribute of this cell.  
+**Example:**
+```html
+<table summary="Information about the table">
+  <caption>Caption for the table</caption>
+  <thead>
+    <tr><th id="heading">Heading</th></tr>
+  </thead>
+  <tbody>
+    <tr><td headers="content">Content</td></tr>
+  </tbody>
+</table>
+```
+
 ### [Standard].Principle1.Guideline1_3.1_3_1.H48.1
 **Warning:** Content appears to have the visual appearance of a bulleted list. It may be appropriate to mark this content up using a ul element.  
 **Solution:** This section of content resembles a content list. If this is intentional, it should be converted to the proper list format.  
@@ -252,7 +268,7 @@ The following resolution interfaces are provided by Squiz Viper:
 **Solution:** Enter an appropriate title for the iframe to describe it's purpose.  
 **Example:**
 ```html
-<iframe src="" />
+<iframe src=""></iframe>
 ```
 
 ### [Standard].Principle2.Guideline2_4.2_4_1.H64.2
@@ -260,7 +276,7 @@ The following resolution interfaces are provided by Squiz Viper:
 **Solution:** Enter an appropriate title for the iframe to describe it's purpose.  
 **Example:**
 ```html
-<iframe src="" title="Frame title text" />
+<iframe src="" title="Frame title text"></iframe>
 ```
 
 ### [Standard].Principle4.Guideline4_1.4_1_1.F77
@@ -282,9 +298,6 @@ The following resolution interfaces are still be completed:
 ### [Standard].Principle1.Guideline1_3.1_3_1.H43,H63
 **Error:** Associate data cells with table headings using either the scope or headers attribute techniques.
 
-### [Standard].Principle1.Guideline1_3.1_3_1.H43.IncorrectAttr
-**Error:** Incorrect headers attribute, expected [expected headers] but found [actual headers]
-
 ### [Standard].Principle1.Guideline1_3.1_3_1.H43.MissingHeadersAttrs
 **Error:** Not all td elements contain a headers attribute, which list the ids of all headers associated with that cell.
 
@@ -293,3 +306,6 @@ The following resolution interfaces are still be completed:
 
 ### [Standard].Principle3.Guideline3_1.3_1_2.H58.1.Lang
 **Error:** The language specified in the lang attribute of this element does not appear to be well-formed.
+
+### [Standard].Principle1.Guideline1_3.1_3_1.H39.3.LayoutTable
+**Error:** This table appears to be used for layout, but contains a caption element. Layout tables must not contain captions.

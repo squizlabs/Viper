@@ -45,6 +45,8 @@ function Viper(id, options, callback, editables)
         options = {};
     }
 
+    this.setSetting('emptyTableCellContent', '<br />');
+
     this.init();
 
     if (editables && editables.length > 0) {
@@ -120,9 +122,46 @@ Viper.prototype = {
 
     },
 
+    /**
+     * Sets the given settings.
+     *
+     * @param {object}  settings Setting name and value list.
+     * @param {boolean} clean    If true then the original settings will be wiped out.
+     *
+     * @return void
+     */
+    setSettings: function(settings, clean)
+    {
+        if (clean === true) {
+            this._settings = {};
+        }
+
+        for (var setting in settings) {
+            this.setSetting(setting, settings[setting]);
+        }
+
+    },
+
     getSetting: function(setting)
     {
         return this._settings[setting];
+
+    },
+
+    getSettings: function()
+    {
+        return dfx.clone(this._settings);
+
+    },
+
+    getDefaultBlockTag: function()
+    {
+        var defaultBlockTag = this.getSetting('defaultBlockTag');
+        if (dfx.isset(defaultBlockTag) === true) {
+            return defaultBlockTag;
+        }
+
+        return 'p';
 
     },
 
@@ -484,10 +523,15 @@ Viper.prototype = {
 
                     editableChild = range._getFirstSelectableChild(this.element);
                 } else {
-                    var tmpEl = document.createElement('p');
-                    dfx.setHtml(tmpEl, '&nbsp;');
-                    blockElement.appendChild(tmpEl);
-                    editableChild = range._getFirstSelectableChild(this.element);
+                    var tagName = this.getDefaultBlockTag();
+                    if (!tagName) {
+                        dfx.setHtml(this.element, '');
+                    } else {
+                        blockElement = document.createElement(tagName);
+                        dfx.setHtml(blockElement, '&nbsp;');
+                        editableChild.appendChild(blockElement);
+                        editableChild = range._getFirstSelectableChild(this.element);
+                    }
                 }
             }
 
@@ -627,8 +671,13 @@ Viper.prototype = {
 
             if (hasStubElems !== true) {
                 // Insert initial P tags.
-                var range = this.getCurrentRange();
-                dfx.setHtml(elem, '<p>&nbsp;</p>');
+                var range    = this.getCurrentRange();
+                var blockTag = this.getDefaultBlockTag();
+                if (!blockTag) {
+                    dfx.setHtml(elem, '');
+                } else {
+                    dfx.setHtml(elem, '<' + blockTag +'>&nbsp;</' + blockTag  + '>');
+                }
 
                 try {
                     range.setEnd(elem.firstChild, 0);
@@ -642,32 +691,35 @@ Viper.prototype = {
                 dfx.setHtml(elem, cleanedContent);
             }
 
-            for (var i = 0; i < elem.childNodes.length; i++) {
-                var child = elem.childNodes[i];
-                if ((dfx.isBlockElement(child) === true && dfx.isStubElement(child) === false)
-                    || child.nodeType === dfx.TEXT_NODE && dfx.trim(child.data) === ''
-                    || (child.nodeType !== dfx.ELEMENT_NODE && child.nodeType !== dfx.TEXT_NODE)
-                    || dfx.isTag(child, 'hr') === true
-                ) {
-                    continue;
+            var defaultTagName = this.getDefaultBlockTag();
+            if (defaultTagName) {
+                for (var i = 0; i < elem.childNodes.length; i++) {
+                    var child = elem.childNodes[i];
+                    if ((dfx.isBlockElement(child) === true && dfx.isStubElement(child) === false)
+                        || child.nodeType === dfx.TEXT_NODE && dfx.trim(child.data) === ''
+                        || (child.nodeType !== dfx.ELEMENT_NODE && child.nodeType !== dfx.TEXT_NODE)
+                        || dfx.isTag(child, 'hr') === true
+                    ) {
+                        continue;
+                    }
+
+                    var p = null;
+                    if (child.previousSibling && dfx.isTag(child.previousSibling, defaultTagName) === true) {
+                        p = child.previousSibling;
+                    } else {
+                        p = document.createElement(defaultTagName);
+                        dfx.insertBefore(child, p);
+                    }
+
+                    if (child.nodeType === dfx.TEXT_NODE) {
+                        child.data = dfx.trim(child.data);
+                    }
+
+                    p.appendChild(child);
+
                 }
-
-                var p = null;
-                if (child.previousSibling && dfx.isTag(child.previousSibling, 'p') === true) {
-                    p = child.previousSibling;
-                } else {
-                    p = document.createElement('p');
-                    dfx.insertBefore(child, p);
-                }
-
-                if (child.nodeType === dfx.TEXT_NODE) {
-                    child.data = dfx.trim(child.data);
-                }
-
-                p.appendChild(child);
-
-            }
-        }
+            }//end if
+        }//end if
 
     },
 
@@ -759,6 +811,8 @@ Viper.prototype = {
      */
     getViperRange: function()
     {
+        var highlighted = this.highlightToSelection();
+
         if (this._viperRange) {
             return this._viperRange;
         }
@@ -777,6 +831,21 @@ Viper.prototype = {
         var range = this.getViperRange();
         range.selectNode(element);
         ViperSelection.addRange(range);
+
+    },
+
+    getNodeSelection: function(range)
+    {
+        range = range || this.getViperRange();
+
+        var nodeSelection = range.getNodeSelection();
+        var node = this.fireCallbacks('Viper:getNodeSelection', {range: range});
+
+        if (node) {
+            nodeSelection = node;
+        }
+
+        return nodeSelection;
 
     },
 
@@ -1360,8 +1429,9 @@ Viper.prototype = {
             return;
         } else if (container === this.element && range.startOffset === 0) {
             // The whole editable element is selected then clear its contents.
-            if (this.inlineMode !== true && dfx.getStyle(this.element, 'display') === 'block') {
-                dfx.setHtml(this.element, '<p>&nbsp;</p>');
+            var defaultTag = this.getDefaultBlockTag();
+            if (defaultTag) {
+                dfx.setHtml(this.element, '<' + defaultTag + '>&nbsp;</' + defaultTag + '>');
             } else {
                 dfx.setHtml(this.element, '&nbsp;');
             }
@@ -1944,11 +2014,23 @@ Viper.prototype = {
                 ViperSelection.addRange(range);
 
                 return newElement;
+            } else if (startContainer.nodeType === dfx.TEXT_NODE
+                && viper.getViperElement().firstChild === startContainer
+                && dfx.trim(startContainer.data) === ''
+            ) {
+                startContainer = range._getFirstSelectableChild(viper.getViperElement());
             }
 
             var startBlockParent = dfx.getFirstBlockParent(startContainer);
             if (!endContainer) {
-                endContainer = startContainer;
+                if (range.endContainer === viper.getViperElement()
+                    && range.endContainer.childNodes
+                    && !range.endContainer.childNodes[range.endOffset]
+                ) {
+                    endContainer = range._getLastSelectableChild(viper.getViperElement());
+                } else {
+                    endContainer = startContainer;
+                }
             }
 
             var rangeContents  = range.getHTMLContentsObj();
@@ -2349,10 +2431,21 @@ Viper.prototype = {
 
     removeStyle: function(style)
     {
-        var range     = this.getCurrentRange();
-        range         = this.adjustRange(range);
-        var startNode = range.getStartNode();
-        var endNode   = range.getEndNode();
+        var range        = this.getViperRange();
+        range            = this.adjustRange(range);
+        var startNode    = range.getStartNode();
+        var endNode      = range.getEndNode();
+        var viperElement = this.getViperElement();
+
+        if (startNode.nodeType === dfx.TEXT_NODE
+            && dfx.trim(startNode.data) === ''
+            && startNode === viperElement.firstChild
+        ) {
+            // Firefox sets the first child to be a textNode with \n as its content
+            // if whole content is selected. Get the first selectable child.
+            startNode = range._getFirstSelectableChild(viperElement);
+        }
+
         if (!endNode) {
             endNode = startNode;
         }
@@ -2911,6 +3004,19 @@ Viper.prototype = {
 
             range.collapse(true);
             ViperSelection.addRange(range);
+        } else if (this.isBrowser('firefox') === true
+            && startContainer === endContainer
+            && startOffset === 0
+            && startContainer === this.getViperElement()
+        ) {
+            var firstSelectable = range._getFirstSelectableChild(this.getViperElement());
+            var lastSelectable  = range._getLastSelectableChild(this.getViperElement());
+            if (firstSelectable && lastSelectable) {
+                startContainer = firstSelectable;
+                startOffset    = 0;
+                range.setStart(firstSelectable, 0);
+                range.setEnd(lastSelectable, lastSelectable.data.length);
+            }
         }
 
         // Collapse to the end of range.
@@ -2921,6 +3027,8 @@ Viper.prototype = {
         dfx.setHtml(endBookmark, '&nbsp;');
         dfx.addClass(endBookmark, 'viperBookmark viperBookmark_end');
         endBookmark.setAttribute('viperBookmark', 'end');
+
+        var startNode = range.getStartNode();
         range.insertNode(endBookmark);
         if (dfx.isChildOf(endBookmark, this.element) === false) {
             this.element.appendChild(endBookmark);
@@ -3071,72 +3179,64 @@ Viper.prototype = {
                 nextNode = prevNode;
             }
         } else {
-            var prevElem = null;
-            var newElem  = null;
-            var midElem  = null;
-            var toRemove = [];
-            var parents  = [];
-            var prevLvl  = null;
-            dfx.walk(foundNode, function(elem, lvl) {
-                if (elem === bookmark.start) {
-                    return false;
+            // Construct the end section, which is selection from end bookmark to
+            // the end of the found node.
+            var selStart = document.createTextNode('');
+            var selEnd   = document.createTextNode('');
+
+            dfx.insertAfter(bookmark.end, selStart);
+            dfx.insertAfter(foundNode, selEnd);
+
+            var range = this.getViperRange();
+            range.setStart(selStart, 0);
+            range.setEnd(selEnd, 0);
+            var endContents = range.extractContents();
+
+            var tmp = document.createElement('div');
+            while (endContents.firstChild) {
+                tmp.appendChild(endContents.firstChild);
+            }
+
+            var nextNode = null;
+            if (this.elementIsEmpty(tmp) === false) {
+                while (tmp.lastChild) {
+                    nextNode = tmp.lastChild;
+                    dfx.insertAfter(selEnd, tmp.lastChild);
+                }
+            }
+
+            dfx.empty(tmp);
+
+            // Get the mid contents without the specified tag.
+            dfx.insertBefore(bookmark.start, selStart);
+            dfx.insertAfter(foundNode, selEnd);
+            range.setStart(selStart, 0);
+            range.setEnd(selEnd, 0);
+            var midContents = range.extractContents();
+
+            while (midContents.firstChild) {
+                tmp.appendChild(midContents.firstChild);
+            }
+
+            var tagsToRemove = dfx.getTag(tag, tmp);
+            for (var i = 0; i < tagsToRemove.length; i++) {
+                while (tagsToRemove[i].firstChild) {
+                    dfx.insertBefore(tagsToRemove[i], tagsToRemove[i].firstChild);
                 }
 
-                if (elem.nodeType === dfx.TEXT_NODE) {
-                    // Move element to new parent.
-                    toRemove.push(elem);
-                    parents[(lvl - 1)].appendChild(elem.cloneNode(false));
-                } else {
-                    // Clone node.
-                    var clone = elem.cloneNode(false);
-                    if (prevLvl === null) {
-                        newElem = clone;
-                        parents.push(clone);
-                    } else if (lvl === prevLvl) {
-                        parents[(lvl - 1)].appendChild(clone);
-                        parents.push(clone);
-                    } else if (lvl > prevLvl) {
-                        parents[prevLvl] = prevElem;
-                    } else if (lvl < prevLvl) {
-                        parents.pop();
-                        parents.push(clone);
-                        parents[(lvl - 1)].appendChild(clone);
-                    }
-
-                    if (copyMidTags === true) {
-                        // If there are other tags between start point and end point
-                        // then copy them between prevElem and nextElem.
-                        if (dfx.isTag(elem, tag) === false) {
-                            if (midElem === null) {
-                                midElem = elem.cloneNode(false);
-                            } else {
-                                midElem.appendChild(elem.cloneNode(false));
-                            }
-                        }
-                    }
-
-                    prevElem = clone;
-                }//end if
-
-                prevLvl = lvl;
-            });
-
-            dfx.remove(toRemove);
-            toRemove = null;
-
-            if (this.elementIsEmpty(newElem) === false) {
-                dfx.insertBefore(foundNode, newElem);
-            } else {
-                newElem = null;
+                dfx.remove(tagsToRemove);
             }
 
-            if (midElem !== null) {
-                dfx.insertBefore(foundNode, midElem);
+            while (tmp.lastChild) {
+                dfx.insertAfter(foundNode, tmp.lastChild);
             }
 
-            prevNode = newElem;
-            nextNode = foundNode;
-            midNode  = midElem;
+            var prevNode = foundNode;
+
+            dfx.remove(selEnd);
+            selStart.data = '';
+            dfx.insertAfter(bookmark.start, selStart);
+            midNode = selStart;
         }//end if
 
         this.selectBookmark(bookmark);
@@ -3352,6 +3452,22 @@ Viper.prototype = {
 
     },
 
+    getBlockChildren: function(parent)
+    {
+        var children = [];
+        var c        = parent.childNodes.length;
+        for (var i = 0; i < c; i++) {
+            if (parent.childNodes[i].nodeType === dfx.ELEMENT_NODE) {
+                if (dfx.isBlockElement(parent.childNodes[i]) === true) {
+                    children.push(parent.childNodes[i]);
+                }
+            }
+        }
+
+        return children;
+
+    },
+
     elementIsEmpty: function(elem)
     {
         if (dfx.isBlank(dfx.getNodeTextContent(elem)) === true) {
@@ -3374,7 +3490,7 @@ Viper.prototype = {
     fireSelectionChanged: function(range, forceUpdate)
     {
         if (!range) {
-            range = this.getCurrentRange();
+            range = this.getViperRange();
             range = this.adjustRange(range);
         }
 
@@ -3599,14 +3715,20 @@ Viper.prototype = {
             || (elem.childNodes.length === 1 && dfx.isTag(elem.childNodes[0], 'br') === true)
             || (elem === range.startContainer && elem === range.endContainer && range.startOffset === 0)
         ) {
-            var tagName = 'p';
+            var tagName = this.getDefaultBlockTag();
             if (elem.childNodes.length === 1 && dfx.isBlockElement(elem.childNodes[0]) === true) {
                 tagName = dfx.getTagName(elem.childNodes[0]);
             }
 
-            dfx.setHtml(this.element, '<' + tagName + '></' + tagName + '>');
             var textNode = document.createTextNode('');
-            this.element.firstChild.appendChild(textNode);
+            if (!tagName) {
+                dfx.setHtml(this.element, '');
+                this.element.appendChild(textNode);
+            } else {
+                dfx.setHtml(this.element, '<' + tagName + '></' + tagName + '>');
+                this.element.firstChild.appendChild(textNode);
+            }
+
             range.setStart(textNode, 0);
             range.collapse(true);
             ViperSelection.addRange(range);
@@ -3700,7 +3822,7 @@ Viper.prototype = {
             }
 
             if (resetContent === true) {
-                var tagName = 'p';
+                var tagName = this.getDefaultBlockTag();
                 if (this.element.childNodes.length === 1 && dfx.isBlockElement(this.element.childNodes[0]) === true) {
                     // There is only one block element in the content so use its tag
                     // name.
@@ -3709,8 +3831,13 @@ Viper.prototype = {
 
                 // The whole content is selected and a char is being
                 // typed. Remove the whole content of the editable element.
-                dfx.setHtml(this.element, '<' + tagName + '>&nbsp;</' + tagName + '>');
-                range.setStart(range._getFirstSelectableChild(this.element), 0);
+                if (!tagName) {
+                    dfx.setHtml(this.element, '');
+                } else {
+                    dfx.setHtml(this.element, '<' + tagName + '>&nbsp;</' + tagName + '>');
+                    range.setStart(range._getFirstSelectableChild(this.element), 0);
+                }
+
                 range.collapse(true);
                 ViperSelection.addRange(range);
             }
@@ -4189,7 +4316,7 @@ Viper.prototype = {
         }
 
         var callback = callbacks.shift();
-        if (dfx.isFn(callback) === true) {
+        if (callback) {
             var self   = this;
             var retVal = callback.call(this, data, function(retVal) {
                 self._fireCallbacks(callbacks, data, doneCallback, retVal);
@@ -4231,7 +4358,7 @@ Viper.prototype = {
      *
      * @return string.
      */
-    getHtml: function(elem)
+    getHtml: function(elem, settings)
     {
         elem = elem || this.element;
 
@@ -4243,6 +4370,16 @@ Viper.prototype = {
 
         if (!elem) {
             return '';
+        }
+
+        var originalSettings = this.getSettings();
+
+        if (!settings) {
+            // When getHtml is called the final output of empty table cells should
+            // be &nbsp; to make them look fine in all browsers.
+            this.setSetting('emptyTableCellContent', '&nbsp;');
+        } else {
+            this.setSettings(settings);
         }
 
         // Clone the element so we dont modify the actual contents.
@@ -4260,6 +4397,9 @@ Viper.prototype = {
         this.fireCallbacks('Viper:getHtml', {element: clone});
         var html = dfx.getHtml(clone);
         html     = this.cleanHTML(html);
+
+        // Revert to original settings.
+        this.setSettings(originalSettings, true);
 
         return html;
 
@@ -4490,6 +4630,18 @@ Viper.prototype = {
                     if (!node.nextSibling
                         || (node.hasAttribute && node.hasAttribute('_moz_dirty'))
                     ) {
+                        if (!node.previousSibling
+                            && (dfx.isTag(node.parentNode, 'td') === true
+                            || dfx.isTag(node.parentNode, 'th') === true)
+                        ) {
+                            // This BR element is the only child of the table cell,
+                            // depending on emptyTableCellContent, set the cell's
+                            // content.
+                            var emptyTableCellContent = this.getSetting('emptyTableCellContent');
+                            dfx.setHtml(node.parentNode, emptyTableCellContent);
+                            return;
+                        }
+
                         if (tag) {
                             var newNode = Viper.document.createTextNode(' ');
                             dfx.insertBefore(node, newNode);

@@ -9,16 +9,22 @@
         <script type="text/javascript">
             var viper   = null;
             var jsCache = __TEST_JS_EXEC_CACHE__;
+            var polling = __TEST_JS_EXEC_USEPOLLING__;
             ViperReadyCallback = function() {
                 var contentElement = dfx.getId('content');
 
                 viper = new Viper('test', null, null, [contentElement]);
                 viper.getPluginManager().setPlugins(['ViperCoreStylesPlugin', 'ViperKeyboardEditorPlugin', 'ViperInlineToolbarPlugin', 'ViperHistoryPlugin', 'ViperListPlugin', 'ViperFormatPlugin', 'ViperToolbarPlugin', 'ViperTableEditorPlugin', 'ViperCopyPastePlugin', 'ViperImagePlugin', 'ViperLinkPlugin', 'ViperAccessibilityPlugin', 'ViperSourceViewPlugin', 'ViperSearchReplacePlugin', 'ViperLangToolsPlugin', 'ViperCharMapPlugin', 'ViperTrackChangesPlugin']);
 
-                dfx.attr(dfxjQuery.find('.Viper-button[title]'), 'title', '');
-                if (window.location.hash !== '#run') {
-                    window.open('test_jsexec.html', '', 'width=400,height=100,0,status=0,left=1000,top=850');
-                    window.location.hash = '#run';
+                dfxjQuery('.Viper-button[title]').removeAttr('title');
+
+                if (polling !== true) {
+                    if (window.location.hash !== '#run') {
+                        window.open('test_jsexec.html', '', 'width=400,height=100,0,status=0,left=1000,top=850');
+                        window.location.hash = '#run';
+                    }
+                } else {
+                    initJSPoller();
                 }
 
                 var readyCallbacks = viperTest.getReadyCallbacks();
@@ -27,14 +33,26 @@
                         readyCallbacks[i].call(this);
                     }
                 }
+
+                // Check for test cases.
+                var testCases = dfx.find(contentElement, 'div[id^="test"]');
+                if (testCases.length > 0) {
+                    var testCasesHtml = [];
+                    for (var i = 0; i < testCases.length; i++) {
+                        testCasesHtml[testCases[i].id] = dfx.getHtml(testCases[i]);
+                    }
+
+                    viperTest.set('testCases', testCasesHtml);
+                    dfx.empty(contentElement);
+                }
             };
         </script>
     </head>
     <body spellcheck="false">
         <img id="windowTarget" src="./Core/Images/window-target.png" onclick="if (viper) viper.destroy();location.reload();" />
-        <div id="content">__TEST_CONTENT__</div>
+        <div id="content" class="__TEST_BROWSER__">__TEST_CONTENT__</div>
         <div id="menu">
-            <div id="testTitle"><em>Running:</em> __TEST_TITLE__</div>
+            <div id="testTitle"><em>Running:</em> __TEST_TITLE__<em id="testCaseTitle"></em></div>
             <div id="msg"></div>
         </div>
         <script>

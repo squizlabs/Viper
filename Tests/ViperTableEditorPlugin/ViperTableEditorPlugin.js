@@ -51,8 +51,15 @@ function gTblBStatus()
     };
 
     for (var btn in btns) {
-        if (dfx.hasClass(dfx.getClass(btn)[0], 'disabled') === false){
-            btns[btn] = true;
+        var elems = dfx.getClass('Viper-' + btn);
+        for (var i = 0; i < elems.length; i++) {
+            if (dfx.getElementHeight(elems[i]) > 0) {
+                if (dfx.hasClass(elems[i], 'Viper-disabled') === false) {
+                    btns[btn] = true;
+                }
+
+                break;
+            }
         }
     }
 

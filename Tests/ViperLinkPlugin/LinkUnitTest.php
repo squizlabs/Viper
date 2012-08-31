@@ -292,16 +292,15 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
 
 
     /**
-     * Test that selecting nodes with different parents will not show link icon.
+     * Test that selecting nodes with different parents but in same block parent will show link icon.
      *
      * @return void
      */
-    public function testSelectMultiParentNoLink()
+    public function testSelectMultiParentLink()
     {
         $this->selectKeyword(4, 5);
 
-        $this->assertFalse($this->inlineToolbarButtonExists('link'), 'Link icon should not be available.');
-        $this->assertFalse($this->inlineToolbarButtonExists('linkRemove'), 'Link icon should not be available.');
+        $this->assertTrue($this->inlineToolbarButtonExists('link'), 'Link icon should be available.');
 
     }//end testSelectMultiParentNoLink()
 
@@ -334,7 +333,6 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit %4% <strong>%5%</strong></p>');
 
         // Mail to link
-        $this->selectKeyword(1);
         $this->clickInlineToolbarButton('link');
         $this->type('labs@squiz.com.au');
         $this->keyDown('Key.TAB');
@@ -763,7 +761,7 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
 
         $this->assertHTMLMatch('<p>%1% %2% <a href="http://www.squizlabs.com" class="class" id="anchor">%3%</a></p><p>sit %4% <strong>%5%</strong></p>');
 
-        $this->click($this->find($text));
+        $this->click($this->findKeyword(1));
         $this->selectKeyword($text);
         $this->clickInlineToolbarButton('linkRemove');
 
@@ -871,7 +869,7 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
 
     }//end testClickingUndoPutLinkBackCorrectlyAfterItHasBeenRemoved()
 
-    
+
      /**
      * Test that the inline toolbar doesn't appear after you close the link window and click in some text in the paragraph below it.
      *
@@ -886,21 +884,21 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->clickTopToolbarButton('link', 'selected');
 
         $this->click($this->findKeyword(5));
-        
+
         // Check that the inline toolbar doesn't appear on the screen
         $inlineToolbarFound = true;
-        try 
+        try
         {
-            $this->getInlineToolbar();
+            var_dump($this->getInlineToolbar());ob_flush();
         }
         catch  (Exception $e) {
             $inlineToolbarFound = false;
         }
-        
+
         $this->assertFalse($inlineToolbarFound, 'The inline toolbar was found');
 
     }//end testInlineToolbarDoesNotAppearAfterClosingLinkWindow()
-    
+
 
     /**
      * Test creating and removing links in a paragraph.
@@ -1242,8 +1240,6 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->keyDown('Key.ENTER');
 
         $this->assertHTMLMatch('<p>%1% XuT</p><p><a href="www.squizlabs.com" title="Squiz Labs"><img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="Alt tag" /></a></p><p>LABS is ORSM</p>');
-
-        $this->click($this->findKeyword(1));
 
         $this->clickElement('img', 1);
         $this->clickTopToolbarButton('linkRemove');

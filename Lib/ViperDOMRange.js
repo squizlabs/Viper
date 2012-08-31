@@ -731,6 +731,11 @@ ViperDOMRange.prototype = {
             this._nodeSel.node = null;
             return null;
         } else if (startNode && !endNode) {
+            if (startNode.nodeType === dfx.TEXT_NODE && dfx.trim(startNode.data) === '') {
+                this._nodeSel.node = null;
+                return null;
+            }
+
             this._nodeSel.node = startNode;
             return startNode;
         } else if (!startNode && endNode) {

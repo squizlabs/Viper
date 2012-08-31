@@ -1,14 +1,12 @@
 <html>
-    <head>
-        <script type="text/javascript" src="./test.js"></script>
-    </head>
-    <body spellcheck="false" onload="document.getElementById('jsExec').focus()">
+    <head></head>
+    <body spellcheck="false">
         <img src="Core/Images/window-target2.png" onclick="window.close();" />
         <textarea id="jsExec" accesskey="J"></textarea>
         <textarea id="jsRes" accesskey="R"></textarea>
         <button id="close" onclick="document.getElementById('jsExec').value='';document.getElementById('jsRes').value='';">Clear</button>
         <script>
-            var jsCache = viperTest.getWindow().jsCache || [];
+            var jsCache = window.opener.jsCache || [];
             var jsExec = document.getElementById('jsExec')
             var jsRes  = document.getElementById('jsRes');
             jsExec.onkeydown = function(e) {
@@ -26,10 +24,16 @@
                     jsCache.push(val);
                 }
 
-                viperTest.getWindow().dfx.setHtml(viperTest.getWindow().dfx.getId('msg'), 'Exec: ' + val);
+                window.opener.dfx.setHtml(window.opener.dfx.getId('msg'), 'Exec: ' + val);
 
-                val  = 'var jsResult = ' + val + ';';
-                val += 'jsRes.value = viperTest.getWindow().dfx.jsonEncode(jsResult);';
+                if (val === 'cw()' || val === 'cw();') {
+                    // Close this popup.
+                    cw();
+                    return;
+                }
+
+                val  = 'var jsResult = window.opener.' + val + ';';
+                val += 'jsRes.value = window.opener.dfx.jsonEncode(jsResult);';
 
                 // Execute JS.
                 eval(val);

@@ -40,6 +40,25 @@ ViperInlineToolbarPlugin.prototype = {
         this._topToolbar = this.viper.getPluginManager().getPlugin('ViperToolbarPlugin');
         this._initToolbar();
 
+        this.viper.registerCallback('Viper:selectionChanged', 'ViperInlineToolbarPlugin', function() {
+            if (self._toolbarWidget.isVisible() === false) {
+                self._setCurrentLineageIndex(null);
+            }
+
+        });
+
+        this.viper.registerCallback('Viper:getNodeSelection', 'ViperInlineToolbarPlugin', function(data) {
+            var lineage         = self.getLineage();
+            var currentLinIndex = self.getCurrentLineageIndex();
+
+            var element = lineage[currentLinIndex];
+            if (element && element.nodeType !== dfx.TEXT_NODE) {
+                return element;
+            }
+
+            return null;
+        });
+
     },
 
     setSettings: function(settings)
@@ -74,9 +93,6 @@ ViperInlineToolbarPlugin.prototype = {
         });
 
         this._toolbarWidget = tools.getItem(toolbarid);
-        this._toolbarWidget.setOnHideCallback(function() {
-            self._setCurrentLineageIndex(null);
-        });
 
         // Add lineage container to the toolbar.
         var lineage = document.createElement('ul');

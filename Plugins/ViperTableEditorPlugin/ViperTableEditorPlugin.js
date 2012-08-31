@@ -77,8 +77,21 @@ ViperTableEditorPlugin.prototype = {
                     var tables = dfx.getTag('table', data.element);
                     for (var i = 0; i < tables.length; i++) {
                         self.setTableHeaders(tables[i]);
+                        self._initTable(tables[i]);
                     }
                 });
+            } else {
+                var tables = dfx.getTag('table', data.element);
+                for (var i = 0; i < tables.length; i++) {
+                    self._initTable(tables[i]);
+                }
+            }
+        });
+
+        this.viper.registerCallback('Viper:enabled', 'ViperTableEditorPlugin', function() {
+            var tables = dfx.getTag('table', self.viper.getViperElement());
+            for (var i = 0; i < tables.length; i++) {
+                self._initTable(tables[i]);
             }
         });
 
@@ -166,7 +179,8 @@ ViperTableEditorPlugin.prototype = {
                         }
                     }
                 }
-            } else {
+            } else if (self.viper.isInputKey(e) === true && e.which !== 13) {
+                // Not input key or enter key, hide tools.
                 self.hideCellToolsIcon();
                 self.removeHighlights();
                 self.hideToolbar();
@@ -176,6 +190,20 @@ ViperTableEditorPlugin.prototype = {
         this.viper.registerCallback('Viper:clickedOutside', 'ViperTableEditorPlugin', function(data) {
             self.hideCellToolsIcon();
             self.removeHighlights();
+        });
+
+        this.viper.registerCallback('ViperFormatPlugin:elementAttributeSet', 'ViperTableEditorPlugin', function(data) {
+            if (data.element && dfx.isTag(data.element, 'th') === true) {
+                var table      = self.getCellTable(data.element);
+                var headerAttr = dfx.find(table, '[headers~="' + data.oldValue + '"]');
+                for (var i = 0; i < headerAttr.length; i++) {
+                    var attr = ' ' + headerAttr[i].getAttribute('headers');
+                    attr     = attr.replace(' ' + data.oldValue, (data.element.getAttribute('id') || ''));
+                    headerAttr[i].setAttribute('headers', dfx.trim(attr));
+                }
+
+                self.setTableHeaders(table);
+            }
         });
 
         this.toolbarPlugin = this.viper.ViperPluginManager.getPlugin('ViperToolbarPlugin');
@@ -233,7 +261,7 @@ ViperTableEditorPlugin.prototype = {
         if (this._isiPad() === false) {
             var showToolbar = false;
             this.viper.registerCallback('Viper:mouseUp', 'ViperTableEditorPlugin', function(e) {
-                var range = self.viper.getViperRange();
+                var range = self.viper.getCurrentRange();
                 var target = dfx.getMouseEventTarget(e);
 
                 if (!target) {
@@ -245,7 +273,10 @@ ViperTableEditorPlugin.prototype = {
                     return false;
                 }
 
-                if (range.collapsed === false || dfx.isTag(target, 'a') === true) {
+                if (range.collapsed === false
+                    || dfx.isTag(target, 'a') === true
+                    || dfx.isTag(target, 'img') === true
+                ) {
                     self.removeHighlights();
                     self.hideCellToolsIcon();
                     return true;
@@ -347,8 +378,6 @@ ViperTableEditorPlugin.prototype = {
                 }
 
                 self.hideCellToolsIcon();
-                //self.removeHighlights();
-
                 return true;
             });
         }//end if
@@ -1448,6 +1477,64 @@ ViperTableEditorPlugin.prototype = {
 
     },
 
+    createTableHeader: function(table)
+    {
+        if (dfx.getTag('thead', table).length > 0) {
+            return null;
+        }
+
+        var header = document.createElement('thead');
+        var tfoot  = dfx.getTag('tfoot', table);
+        if (tfoot.length === 0) {
+            var tbody = dfx.getTag('tbody', table);
+            if (tbody.length === 0) {
+                table.appendChild(header);
+            } else {
+                dfx.insertBefore(tbody[0], header);
+            }
+        } else {
+            dfx.insertBefore(tfoot[0], header);
+        }
+
+        return header;
+
+    },
+
+    getTableHeader: function(table)
+    {
+        var header = dfx.getTag('thead', table);
+        if (header.length === 0) {
+            return null;
+        }
+
+        return header[0];
+
+    },
+
+    createTableBody: function(table)
+    {
+        if (dfx.getTag('tbody', table).length > 0) {
+            return null;
+        }
+
+        var tbody = document.createElement('tbody');
+        table.appendChild(tbody);
+
+        return tbody;
+
+    },
+
+    getTableBody: function(table)
+    {
+        var tbody = dfx.getTag('tbody', table);
+        if (tbody.length === 0) {
+            return null;
+        }
+
+        return tbody[0];
+
+    },
+
     createCaption: function(table)
     {
         var caption  = null;
@@ -1603,7 +1690,7 @@ ViperTableEditorPlugin.prototype = {
         var colspan = this.getColspan(cell);
 
         while (rowspan >= 1) {
-            row = this.getNextRow(row);
+            row = this.getNextRow(row, true);
             rowspan--;
         }
 
@@ -1652,7 +1739,7 @@ ViperTableEditorPlugin.prototype = {
         var colspan = this.getColspan(cell);
 
         while (row && !newCell) {
-            row = this.getPreviousRow(row);
+            row = this.getPreviousRow(row, true);
             if (!row) {
                 return false;
             }
@@ -2205,7 +2292,7 @@ ViperTableEditorPlugin.prototype = {
      *
      * @return {DOMNode} The new header element.
      */
-    convertToHeader: function(cell, type)
+    convertToHeader: function(cell, type, actualType)
     {
         var elem = cell;
         type     = type || 'cell';
@@ -2231,6 +2318,10 @@ ViperTableEditorPlugin.prototype = {
 
             dfx.insertBefore(cell, elem);
             dfx.remove(cell);
+
+            if (!actualType || actualType === 'cell') {
+                this.tableUpdated();
+            }
         } else if (type === 'col') {
             // Get all column cells.
             var cells   = this._getCellsExpanded();
@@ -2244,29 +2335,61 @@ ViperTableEditorPlugin.prototype = {
 
                 var colCellPos = this.getCellPosition(colCell);
                 if (colCellPos.col === cellPos.col) {
-                    var newElement = this.convertToHeader(colCell);
+                    var newElement = this.convertToHeader(colCell, 'cell', 'col');
                     if (cell === colCell) {
                         elem = newElement;
                     }
                 }
             }
+
+            this.tableUpdated();
         } else if (type === 'row') {
             var cellPos = this.getCellPosition(cell);
-            var cells   = this._getRowCells(cell.parentNode);
+            var row     = cell.parentNode;
+            var cells   = this._getRowCells(row);
+
+            // Check if row needs to move in to a THEAD tag.
+            if (dfx.isTag(row.parentNode, 'thead') === false
+                && !this.getPreviousRow(row, true)
+            ) {
+                var moveToThead = true;
+                var prevRowspan = null;
+                for (var i = 0; i < cells.length; i++) {
+                    var rowspan = this.getRowspan(cells[i]);
+                    if (prevRowspan !== null && rowspan !== prevRowspan) {
+                        moveToThead = false;
+                        break;
+                    }
+
+                    prevRowspan = rowspan;
+                }
+
+                if (moveToThead === true) {
+                    var table = this.getRowTable(row);
+                    // The row is not in thead and its the first row in tbody or tfoot.
+                    var thead = this.getTableHeader(table);
+                    if (!thead) {
+                        thead = this.createTableHeader(table);
+                    }
+
+                    thead.appendChild(row);
+                }
+            }
+
             for (var i = 0; i < cells.length; i++) {
                 var rowCell    = cells[i];
                 if (!rowCell.parentNode || dfx.isTag(rowCell, 'th') === true) {
                     continue;
                 }
 
-                var newElement = this.convertToHeader(rowCell);
+                var newElement = this.convertToHeader(rowCell, 'cell', 'row');
                 if (cell === rowCell) {
                     elem = newElement;
                 }
             }
-        }//end if
 
-        this.tableUpdated();
+            this.tableUpdated();
+        }//end if
 
         return elem;
 
@@ -2283,7 +2406,7 @@ ViperTableEditorPlugin.prototype = {
      *
      * @return {DOMNode} The new cell element.
      */
-    convertToCell: function(cell, type)
+    convertToCell: function(cell, type, actualType)
     {
         var elem = cell;
         type     = type || 'cell';
@@ -2319,6 +2442,10 @@ ViperTableEditorPlugin.prototype = {
             }
 
             dfx.remove(cell);
+
+            if (!actualType || actualType === 'cell') {
+                this.tableUpdated();
+            }
         } else if (type === 'col') {
             var cells   = this._getCellsExpanded();
             var cellPos = this.getCellPosition(cell);
@@ -2331,29 +2458,54 @@ ViperTableEditorPlugin.prototype = {
 
                 var colCellPos = this.getCellPosition(colCell);
                 if (colCellPos.col === cellPos.col) {
-                    var newElement = this.convertToCell(colCell);
+                    var newElement = this.convertToCell(colCell, 'cell', 'col');
                     if (cell === colCell) {
                         elem = newElement;
                     }
                 }
             }
+
+            this.tableUpdated();
         } else if (type === 'row') {
             var cellPos = this.getCellPosition(cell);
             var cells   = this._getRowCells(cell.parentNode);
+            var row     = cell.parentNode;
+
+            // Check if row needs to move in to a TBODY tag.
+            if (dfx.isTag(row.parentNode, 'thead') === true
+                && !this.getNextRow(row, true)
+            ) {
+                var table = this.getRowTable(row);
+
+                // Its the last row in thead, move it down to tbody.
+                var tbody = this.getTableBody(table);
+                if (!tbody) {
+                    tbody = this.createTableBody(table);
+                    tbody.appendChild(row);
+                } else {
+                    var rows = dfx.getTag('tr', tbody);
+                    if (rows.length === 0) {
+                        tbody.appendChild(row);
+                    } else {
+                        dfx.insertBefore(rows[0], row);
+                    }
+                }
+            }
+
             for (var i = 0; i < cells.length; i++) {
                 var rowCell    = cells[i];
                 if (!rowCell.parentNode || dfx.isTag(rowCell, 'td') === true) {
                     continue;
                 }
 
-                var newElement = this.convertToCell(rowCell);
+                var newElement = this.convertToCell(rowCell, 'cell', 'row');
                 if (cell === rowCell) {
                     elem = newElement;
                 }
             }
-        }//end if
 
-        this.tableUpdated();
+            this.tableUpdated();
+        }//end if
 
         return elem;
 
@@ -3152,6 +3304,11 @@ ViperTableEditorPlugin.prototype = {
         var tbody      = document.createElement('tbody');
         var firstCol   = null;
         var headerOpts = this._headerOptions;
+        var thead      = null;
+
+        if (headerType === 2 || headerType === 3) {
+            thead = document.createElement('thead');
+        }
 
         for (var i = 0; i < rows; i++) {
             var tr = document.createElement('tr');
@@ -3181,7 +3338,13 @@ ViperTableEditorPlugin.prototype = {
                 }
             }//end for
 
-            tbody.appendChild(tr);
+            if (thead) {
+                table.appendChild(thead);
+                thead.appendChild(tr);
+                thead = null;
+            } else {
+                tbody.appendChild(tr);
+            }
         }//end for
 
         table.appendChild(tbody);
@@ -3252,9 +3415,18 @@ ViperTableEditorPlugin.prototype = {
         var headersCount = headers.length;
         if (headersCount > 0) {
             for (var i = 0; i < headersCount; i++) {
-                headers[i].removeAttribute('headers');
+                var headersAttr = headers[i].getAttribute('headers');
+                if (headersAttr) {
+                    headersAttr = ' ' + headersAttr;
+                    if (headersAttr.match(/\s[\w\d]+r\d+c\d+/)) {
+                        // If this is a Viper type headers attribute then remove it.
+                        headers[i].removeAttribute('headers');
+                    }
+                }
             }
         }
+
+        headers = null;
 
         var thElements = dfx.getTag('th', table);
         if (thElements.length === 0) {
@@ -3313,8 +3485,11 @@ ViperTableEditorPlugin.prototype = {
             var headers = HTMLCS.util.getCellHeaders(table);
             var c       = headers.length;
             for (var i = 0; i < c; i++) {
-                var header = headers[i];
-                header.cell.setAttribute('headers', header.headers);
+                var header      = headers[i];
+                var headersAttr = header.cell.getAttribute('headers');
+                if (!headersAttr || (' ' + headersAttr).match(/\stable\d+r\d+c\d+/)) {
+                    header.cell.setAttribute('headers', header.headers);
+                }
             }
         }
 
@@ -3611,7 +3786,7 @@ ViperTableEditorPlugin.prototype = {
 
     },
 
-    getPreviousRow: function(row)
+    getPreviousRow: function(row, ignorePrevParent)
     {
         var sourceRow = row;
         while (row = row.previousSibling) {
@@ -3623,7 +3798,7 @@ ViperTableEditorPlugin.prototype = {
             }
         }
 
-        if (dfx.isTag(sourceRow.parentNode, 'tbody') === true) {
+        if (ignorePrevParent !== true && dfx.isTag(sourceRow.parentNode, 'tbody') === true) {
             var rows = dfx.getTag('tr', dfx.getTag('thead', this.getRowTable(sourceRow)));
             if (rows.length > 0) {
                 return rows[(rows.length - 1)];
@@ -3632,7 +3807,7 @@ ViperTableEditorPlugin.prototype = {
 
     },
 
-    getNextRow: function(row, goPrev)
+    getNextRow: function(row, ignoreNextParent)
     {
         var sourceRow = row;
         while (row = row.nextSibling) {
@@ -3644,15 +3819,11 @@ ViperTableEditorPlugin.prototype = {
             }
         }
 
-        if (dfx.isTag(sourceRow.parentNode, 'thead') === true) {
+        if (ignoreNextParent !== true && dfx.isTag(sourceRow.parentNode, 'thead') === true) {
             var rows = dfx.getTag('tr', dfx.getTag('tbody', this.getRowTable(sourceRow)));
             if (rows.length > 0) {
                 return rows[0];
             }
-        }
-
-        if (goPrev === true) {
-            return this.getPreviousRow(row);
         }
 
     },

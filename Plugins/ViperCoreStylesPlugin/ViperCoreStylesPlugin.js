@@ -17,7 +17,7 @@ function ViperCoreStylesPlugin(viper)
 
     this.styleTags         = ['strong', 'em', 'sub', 'sup', 'del'];
     this.toolbarPlugin     = null;
-    this._onChangeAddStyle = null;
+    this._onChangeAddStyle = [];
 
     this._buttons = {
         strong: 'bold',
@@ -130,6 +130,13 @@ ViperCoreStylesPlugin.prototype = {
 
             this.viper.registerCallback('ViperToolbarPlugin:updateToolbar', 'ViperCoreStylesPlugin', function(data) {
                 self._updateToolbarButtonStates(toolbarButtons, data.range);
+
+                if (self._onChangeAddStyle.length > 0) {
+                    var style = null;
+                    while (style = self._onChangeAddStyle.shift()) {
+                        self.viper.ViperTools.setButtonInactive(self._buttons[style]);
+                    }
+                }
             });
 
             var shortcuts = {
@@ -142,7 +149,7 @@ ViperCoreStylesPlugin.prototype = {
         }//end if
 
         this.viper.registerCallback('Viper:keyPress', 'ViperCoreStylesPlugin', function(e) {
-            if (self._onChangeAddStyle && self.viper.isInputKey(e) === true) {
+            if (self._onChangeAddStyle.length > 0 && self.viper.isInputKey(e) === true) {
                 var character = String.fromCharCode(e.which);
                 return self.viper.insertTextAtCaret(character);
             }
@@ -153,7 +160,7 @@ ViperCoreStylesPlugin.prototype = {
         });
 
         this.viper.registerCallback('Viper:charInsert', 'ViperCoreStylesPlugin', function(data) {
-            self._onChangeAddStyle = null;
+            self._onChangeAddStyle = [];
         });
 
         // Inline toolbar.
@@ -565,13 +572,16 @@ ViperCoreStylesPlugin.prototype = {
         var node  = start;
         var next  = null;
 
-        var common = range.getNodeSelection();
+        var common = this.viper.getNodeSelection();
         if (!common) {
             common = range.getCommonElement();
             common = this.getFirstBlockParent(common);
         }
 
-        if (dfx.isBlockElement(common) === true && dfx.isChildOf(common, this.viper.element) === true) {
+        if (dfx.isBlockElement(common) === true
+            && ['tr', 'table'].inArray(dfx.getTagName(common)) === false
+            && dfx.isChildOf(common, this.viper.element) === true
+        ) {
             this.setJustifyChangeTrackInfo(common);
             this.toggleJustify(common, type);
         } else {
@@ -596,7 +606,10 @@ ViperCoreStylesPlugin.prototype = {
                         toggleAlignment = false;
                     }
 
-                    parentElements.push(node);
+                    if (parentElements.inArray(node) === false) {
+                        parentElements.push(node);
+                    }
+
                     parent = null;
                 } else if (parent === null && (parent = this.getFirstBlockParent(node))) {
                     // If we havent found a good parent and the node's parent is a block
@@ -605,7 +618,10 @@ ViperCoreStylesPlugin.prototype = {
                         toggleAlignment = false;
                     }
 
-                    parentElements.push(parent);
+                    if (parentElements.inArray(parent) === false) {
+                        parentElements.push(parent);
+                    }
+
                     parent = null;
                 } else if (node.nodeType == dfx.TEXT_NODE && dfx.isBlank(dfx.trim(node.data)) === true) {
                     continue;
@@ -627,7 +643,9 @@ ViperCoreStylesPlugin.prototype = {
                     // Add the node to the new P elem.
                     parent.appendChild(node);
 
-                    parentElements.push(parent);
+                    if (parentElements.inArray(parent) === false) {
+                        parentElements.push(parent);
+                    }
                 }//end if
 
                 if (node === end) {
@@ -981,7 +999,7 @@ ViperCoreStylesPlugin.prototype = {
                 self.viper.fireSelectionChanged();
             }, 10);
         } else {
-            if (nodeSelection) {
+            if (nodeSelection && nodeSelection.parentNode) {
                 range.selectNode(nodeSelection);
                 ViperSelection.addRange(range);
             }
@@ -1004,52 +1022,69 @@ ViperCoreStylesPlugin.prototype = {
 
     _wrapNodeWithActiveStyle: function(node, range)
     {
-        if (!node || !this._onChangeAddStyle || !range) {
+        if (!node || !this._onChangeAddStyle.length || !range) {
             return;
         }
 
-        var style = this._onChangeAddStyle;
-        var nodes = this.viper.splitNodeAtRange(style, range, true);
-        this._onChangeAddStyle = null;
+        var origData = node.data;
+        var style    = null;
+        while (style = this._onChangeAddStyle.shift()) {
+            var nodes = this.viper.splitNodeAtRange(style, range, true);
 
-        if (dfx.isTag(nodes.prevNode, style) === true || dfx.isTag(nodes.nextNode, style) === true) {
-            // Removing styles..
-            if (nodes.midNode === null) {
-                // Create an empty text node in between two new nodes.
-                dfx.insertAfter(nodes.prevNode, node);
-            } else {
-                // Find the last node and insert the text node there..
-                var tmpnode = nodes.midNode;
-                while (tmpnode.firstChild) {
-                    tmpnode = tmpnode.firstChild;
+            if (dfx.isTag(nodes.prevNode, style) === true || dfx.isTag(nodes.nextNode, style) === true) {
+                if (this._onChangeAddStyle.length > 0) {
+                    node.data = '';
+                } else {
+                    node.data = origData;
                 }
 
-                tmpnode.appendChild(node);
-            }
+                // Removing styles..
+                if (nodes.midNode === null) {
+                    // Create an empty text node in between two new nodes.
+                    dfx.insertAfter(nodes.prevNode, node);
+                } else if (nodes.midNode.nodeType === dfx.TEXT_NODE) {
+                    nodes.midNode.data = node.data + nodes.midNode.data;
+                    node = nodes.midNode;
+                } else {
+                    // Find the last node and insert the text node there..
+                    var tmpnode = nodes.midNode;
+                    while (tmpnode.firstChild) {
+                        tmpnode = tmpnode.firstChild;
+                    }
 
-            // Make sure nextNode is not empty.
-            if (dfx.getNodeTextContent(nodes.nextNode).length === 0) {
-                dfx.remove(nodes.nextNode);
-            }
+                    tmpnode.appendChild(node);
+                }
 
-            range.setStart(node, 1);
-            range.collapse(true);
-            ViperSelection.addRange(range);
-        } else {
-            // Start a new style tag.
-            var styleTag = Viper.document.createElement(style);
-            styleTag.appendChild(node);
+                // Make sure nextNode is not empty.
+                if (dfx.getNodeTextContent(nodes.nextNode).length === 0) {
+                    dfx.remove(nodes.nextNode);
+                }
 
-            if (nodes.prevNode) {
-                this.viper.insertAfter(nodes.prevNode, styleTag);
-            } else if (nodes.nextNode) {
-                this.viper.insertBefore(nodes.nextNode, styleTag);
-            }
+                if (node.data.length > 0) {
+                    range.setStart(node, 1);
+                } else {
+                    range.setStart(node, 0);
+                }
 
-            range.setStart(node, 1);
-            range.collapse(true);
-            ViperSelection.addRange(range);
-        }//end if
+                range.collapse(true);
+                ViperSelection.addRange(range);
+            } else {
+                // Start a new style tag.
+                var styleTag = Viper.document.createElement(style);
+
+                if (nodes.prevNode) {
+                    this.viper.insertAfter(nodes.prevNode, styleTag);
+                } else if (nodes.nextNode) {
+                    this.viper.insertBefore(nodes.nextNode, styleTag);
+                }
+
+                styleTag.appendChild(node);
+
+                range.setStart(node, 1);
+                range.collapse(true);
+                ViperSelection.addRange(range);
+            }//end if
+        }
 
         return false;
 
@@ -1062,17 +1097,33 @@ ViperCoreStylesPlugin.prototype = {
 
         if (range.collapsed === true) {
             // Range is collapsed. We need to listen for next insertion.
-            this._onChangeAddStyle = style;
+            var index = this._onChangeAddStyle.find(style);
+            if (index >= 0) {
+                dfx.removeArrayIndex(this._onChangeAddStyle, index);
+                this.viper.ViperTools.setButtonInactive(this._buttons[style]);
+            } else {
+                this._onChangeAddStyle.push(style);
+
+                var button = this.viper.ViperTools.getItem(this._buttons[style]);
+                if (button) {
+                    if (button.isActive() === true) {
+                        this.viper.ViperTools.setButtonInactive(this._buttons[style]);
+                    } else {
+                        this.viper.ViperTools.setButtonActive(this._buttons[style]);
+                    }
+                }
+            }
             return false;
         }
 
         var selectedNode = range.getNodeSelection();
         var startNode    = null;
         var endNode      = null;
+        var viperElement = this.viper.getViperElement();
 
         if (!selectedNode) {
-            var startNode = range.getStartNode();
-            var endNode   = range.getEndNode();
+            startNode = range.getStartNode();
+            endNode   = range.getEndNode();
         } else {
             startNode = selectedNode;
         }
@@ -1083,12 +1134,36 @@ ViperCoreStylesPlugin.prototype = {
 
         var commonParent = range.getCommonElement();
 
+        if (startNode === endNode
+            && ((startNode === viperElement)
+            || (startNode.nodeType === dfx.TEXT_NODE
+            && dfx.trim(startNode.data) === ''
+            && startNode === viperElement.firstChild))
+        ) {
+            // Whole content is selected.
+            startNode = range._getFirstSelectableChild(viperElement);
+            endNode   = range._getLastSelectableChild(viperElement);
+
+            if (dfx.getParents(startNode, style, viperElement).length > 0
+                && dfx.getParents(endNode, style, viperElement).length > 0
+            ) {
+                // Selection is inside the style tags. Remove styles.
+                var changeid = ViperChangeTracker.startBatchChange('removedFormat');
+                this.viper.removeStyle(style);
+                ViperChangeTracker.endBatchChange(changeid);
+
+                this.viper.fireNodesChanged();
+                this.viper.fireSelectionChanged(this.viper.adjustRange(), true);
+                return;
+            }
+        }
+
         if (dfx.isTag(commonParent, style) === true
             || dfx.isTag(startNode, style) === true
             || (dfx.getParents(startNode, style).length > 0
             && dfx.getParents(endNode, style).length > 0)
         ) {
-            // This selection is already bold, remove its styles.
+            // This selection is already styles, remove it.
             var changeid = ViperChangeTracker.startBatchChange('removedFormat');
             this.viper.removeStyle(style);
             ViperChangeTracker.endBatchChange(changeid);
@@ -1139,12 +1214,18 @@ ViperCoreStylesPlugin.prototype = {
             return true;
         }
 
+        var tagName = dfx.getTagName(node);
         if (dfx.isBlockElement(node) === true) {
             if (dfx.isTag(node, 'li') !== true
                 && dfx.isTag(node, 'td') !== true
                 && dfx.isTag(node, 'th') !== true
                 && dfx.isTag(node, 'img') !== true
             ) {
+                return false;
+            }
+        } else {
+            var tagNames = ['thead', 'tfoot'];
+            if (tagNames.inArray(tagName) === true) {
                 return false;
             }
         }
@@ -1224,7 +1305,7 @@ ViperCoreStylesPlugin.prototype = {
     {
         range = range || this.viper.getViperRange();
 
-        var startNode = range.getNodeSelection();
+        var startNode = this.viper.getNodeSelection();
         if (!startNode) {
             startNode = range.getStartNode();
         }
@@ -1291,6 +1372,7 @@ ViperCoreStylesPlugin.prototype = {
         }
 
         tools.enableButton('justify');
+
         if (!states.alignment) {
             states.alignment = 'start';
         }
@@ -1325,7 +1407,7 @@ ViperCoreStylesPlugin.prototype = {
         }//end if
 
         var enableHr     = true;
-        var hrIgnoreTags = 'td,th,li,caption,img';
+        var hrIgnoreTags = 'tr,td,th,li,caption,img';
         if (hrIgnoreTags.split(',').inArray(dfx.getTagName(startNode)) === true) {
             enableHr = false;
         }
@@ -1364,6 +1446,13 @@ ViperCoreStylesPlugin.prototype = {
         }
 
         if (startNode && endNode) {
+            var viperElement = this.viper.getViperElement();
+
+            if (startNode === endNode && startNode === viperElement) {
+                startNode = range._getFirstSelectableChild(viperElement);
+                endNode   = range._getLastSelectableChild(viperElement);
+            }
+
             // Justify state.
             activeStates.alignment = null;
 

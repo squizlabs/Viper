@@ -96,7 +96,7 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractFormatsUnitTe
         $this->clickTopToolbarButton('P', NULL, TRUE);
         $this->checkStatusOfFormatIconsInTheTopToolbar('active', NULL, NULL, NULL);
         $this->assertHTMLMatch('<h1>Heading One</h1><p>%1% xtn dolor</p><p>sit %2% <strong>%3%</strong></p>');
-        
+
         $this->clickTopToolbarButton('Quote', NULL, TRUE);
         $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, NULL, 'active', NULL);
         $this->assertHTMLMatch('<h1>Heading One</h1><blockquote><p>%1% xtn dolor</p></blockquote><p>sit %2% <strong>%3%</strong></p>');
@@ -104,11 +104,11 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractFormatsUnitTe
         $this->clickTopToolbarButton('DIV', NULL, TRUE);
         $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, 'active', NULL, NULL);
         $this->assertHTMLMatch('<h1>Heading One</h1><div>%1% xtn dolor</div><p>sit %2% <strong>%3%</strong></p>');
-        
+
         $this->clickTopToolbarButton('PRE', NULL, TRUE);
         $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, NULL, NULL, 'active');
         $this->assertHTMLMatch('<h1>Heading One</h1><pre>%1% xtn dolor</pre><p>sit %2% <strong>%3%</strong></p>');
-        
+
     }//end testSwitchingBetweenFormatsUsingTheTopToolbar()
 
 
@@ -128,10 +128,9 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractFormatsUnitTe
         $this->assertTrue($this->inlineToolbarButtonExists('cssClass'), 'Class icon in VITP should not be active.');
         $this->assertTrue($this->inlineToolbarButtonExists('anchorID'), 'Anchor icon in VITP should not be active.');
 
-        // Check that formats doesn't appear in the top toolbar but headings, class and anchor do
-        $this->assertTrue($this->topToolbarButtonExists('headings'), 'Heading icon should appear in the top toolbar');
-        $this->assertTrue($this->topToolbarButtonExists('formats', 'disabled'), 'Formats icon should be disabled in the top toolbar');
-        $this->assertFalse($this->topToolbarButtonExists('formats-p', 'active'), 'Active P icon should not appear in the top toolbar');
+        // Check that formats and headings is disabled in the top toolbar but class and anchor do
+        $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'), 'Heading icon should be disabled in the top toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('formats-p', 'disabled'), 'Formats P icon should be disabled in the top toolbar');
         $this->assertTrue($this->topToolbarButtonExists('cssClass'), 'Class icon should appear in the top toolbar');
         $this->assertTrue($this->topToolbarButtonExists('anchorID'), 'Anchor icon should appear in the top toolbar');
 
@@ -274,6 +273,12 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractFormatsUnitTe
         $this->clickInlineToolbarButton('Quote', 'active', TRUE);
         $this->assertHTMLMatch('<h1>Heading One</h1><p>%1% xtn dolor</p><p>sit %2% <strong>%3%</strong></p>');
 
+        // Test changing a blockquote with two P's to a Div
+        $this->clickInlineToolbarButton('Quote', NULL, TRUE);
+        $this->clickInlineToolbarButton('Div', NULL, TRUE);
+        $this->assertHTMLMatch('<h1>Heading One</h1><div>%1% xtn dolor</div><div>sit %2% <strong>%3%</strong></div>');
+        $this->checkStatusOfFormatIconsInTheInlineToolbar('disabled', NULL, 'disabled', 'disabled');
+
     }//end testApplyingFormatsAroundTwoPTagsUsingTheInlineToolbar()
 
 
@@ -305,7 +310,40 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractFormatsUnitTe
         $this->clickTopToolbarButton('Quote', 'active', TRUE);
         $this->assertHTMLMatch('<h1>Heading One</h1><p>%1% xtn dolor</p><p>sit %2% <strong>%3%</strong></p>');
 
+        // Test changing a blockquote with two P's to a Div
+        $this->clickTopToolbarButton('Quote', NULL, TRUE);
+        $this->clickTopToolbarButton('Div', NULL, TRUE);
+        $this->assertHTMLMatch('<h1>Heading One</h1><div>%1% xtn dolor</div><div>sit %2% <strong>%3%</strong></div>');
+        $this->checkStatusOfFormatIconsInTheTopToolbar('disabled', NULL, 'disabled', 'disabled');
+
     }//end testApplyingFormatsAroundTwoPTagsUsingTheTopToolbar()
+
+
+    /**
+     * Test applying a div around two P's and then changing it to a quote
+     *
+     * @return void
+     */
+    public function testApplyingDivAroundTwoPTagsAndChangingToAQuote()
+    {
+        $this->selectKeyword(1, 3);
+
+        // Apply the Div
+        $this->clickInlineToolbarButton('formats');
+        $this->clickInlineToolbarButton('DIV', NULL, TRUE);
+        $this->assertHTMLMatch('<h1>Heading One</h1><div><p>%1% xtn dolor</p><p>sit %2% <strong>%3%</strong></p></div>');
+        $this->checkStatusOfFormatIconsInTheInlineToolbar('disabled', 'active', NULL, 'disabled');
+
+        // Change the Div to a Quote
+        $this->clickInlineToolbarButton('Quote', NULL, TRUE);
+        $this->assertHTMLMatch('<h1>Heading One</h1><blockquote><p>%1% xtn dolor</p><p>sit %2% <strong>%3%</strong></p></blockquote>');
+        $this->checkStatusOfFormatIconsInTheInlineToolbar('disabled', NULL, 'active', 'disabled');
+
+        // Remove the Div
+        $this->clickInlineToolbarButton('Quote', 'active', TRUE);
+        $this->assertHTMLMatch('<h1>Heading One</h1><p>%1% xtn dolor</p><p>sit %2% <strong>%3%</strong></p>');
+
+    }//end testApplyingDivAroundTwoPTagsAndChangingToAQuote()
 
 
     /**
@@ -735,7 +773,7 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractFormatsUnitTe
         $this->checkStatusOfFormatIconsInTheInlineToolbar('disabled', NULL, 'disabled', 'disabled');
 
         // Test applying Div around the two sections
-        $this->clickTopToolbarButton('DIV', NULL, TRUE);
+        $this->clickInlineToolbarButton('DIV', NULL, TRUE);
         $this->assertHTMLMatch('<h1>Heading One</h1><div><blockquote><p>%1% xtn dolor</p></blockquote><div>sit %2% <strong>%3%</strong></div></div>');
         $this->checkStatusOfFormatIconsInTheInlineToolbar('disabled', 'active', 'disabled', 'disabled');
         $this->clickInlineToolbarButton('DIV', 'active', TRUE);
@@ -1066,7 +1104,7 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractFormatsUnitTe
 
         // Check status of icons
         $this->selectKeyword(1, 3);
-        $this->clickTopToolbarButton('formats');
+        $this->clickInlineToolbarButton('formats');
         $this->checkStatusOfFormatIconsInTheInlineToolbar('disabled', NULL, 'disabled', 'disabled');
 
         // Test applying Div around the two sections
@@ -1208,6 +1246,224 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractFormatsUnitTe
         $this->checkStatusOfFormatIconsInTheTopToolbar('disabled', NULL, 'disabled', 'disabled');
 
     }//end testApplyingFormatsAroundTwoPreTagsUsingTopToolbar()
+
+
+    /**
+     * Test applying different formats to different HTML structures.
+     *
+     * @return void
+     */
+    public function testComlexHTMLStructureConversion()
+    {
+        $this->useTest(1);
+        $this->selectKeyword(1, 2);
+        $this->clickTopToolbarButton('formats');
+        $this->checkStatusOfFormatIconsInTheTopToolbar('disabled', NULL, 'disabled', 'disabled');
+        $this->clickTopToolbarButton('DIV', NULL, TRUE);
+        $this->assertHTMLMatch('<div><blockquote><p>lorem %1%</p></blockquote><div><p>Test %2%</p></div></div>');
+        $this->checkStatusOfFormatIconsInTheTopToolbar('disabled', 'active', 'disabled', 'disabled');
+        $this->clickTopToolbarButton('DIV', 'active', TRUE);
+        $this->assertHTMLMatch('<blockquote><p>lorem %1%</p></blockquote><div><p>Test %2%</p></div>');
+
+        $this->useTest(2);
+        $this->selectKeyword(1, 2);
+        $this->clickTopToolbarButton('formats');
+        $this->checkStatusOfFormatIconsInTheTopToolbar('disabled', NULL, 'disabled', 'disabled');
+        $this->clickTopToolbarButton('DIV', NULL, TRUE);
+        $this->assertHTMLMatch('<div><div><p>%1% lorem</p></div><p>Test %2%</p></div>');
+        $this->checkStatusOfFormatIconsInTheTopToolbar('disabled', 'active', 'disabled', 'disabled');
+        $this->clickTopToolbarButton('DIV', 'active', TRUE);
+        $this->assertHTMLMatch('<div><p>%1% lorem</p></div><p>Test %2%</p>');
+        $this->checkStatusOfFormatIconsInTheTopToolbar('disabled', NULL, 'disabled', 'disabled');
+
+        $this->useTest(3);
+        $this->selectKeyword(1, 2);
+        $this->clickTopToolbarButton('formats');
+        $this->checkStatusOfFormatIconsInTheTopToolbar('disabled', NULL, 'disabled', 'disabled');
+        $this->clickTopToolbarButton('DIV', NULL, TRUE);
+        $this->assertHTMLMatch('<div><div><p>lorem %1%</p></div><p>Test %2%</p></div>');
+        $this->checkStatusOfFormatIconsInTheTopToolbar('disabled', 'active', 'disabled', 'disabled');
+        $this->clickTopToolbarButton('DIV', 'active', TRUE);
+        $this->assertHTMLMatch('<div><p>lorem %1%</p></div><p>Test %2%</p>');
+
+        $this->useTest(4);
+        $html = '<div><div><blockquote><p>%1% lorem</p></blockquote></div></div><div>Test %2%</div>';
+        $this->selectKeyword(1, 2);
+        $this->clickTopToolbarButton('formats');
+        $this->checkStatusOfFormatIconsInTheTopToolbar('disabled', NULL, 'disabled', 'disabled');
+        $this->clickTopToolbarButton('DIV', NULL, TRUE);
+        $this->assertHTMLMatch('<div>'.$html.'</div>');
+        $this->checkStatusOfFormatIconsInTheTopToolbar('disabled', 'active', 'disabled', 'disabled');
+        $this->clickTopToolbarButton('DIV', 'active', TRUE);
+        $this->checkStatusOfFormatIconsInTheTopToolbar('disabled', NULL, 'disabled', 'disabled');
+        $this->assertHTMLMatch($html);
+
+        $this->useTest(5);
+        $html = '<div><div><blockquote><p>lorem %1%</p></blockquote></div></div><div><p>%2% Test</p></div>';
+        $this->selectKeyword(1, 2);
+        $this->clickTopToolbarButton('formats');
+        $this->checkStatusOfFormatIconsInTheTopToolbar('disabled', NULL, 'disabled', 'disabled');
+        $this->clickTopToolbarButton('DIV', NULL, TRUE);
+        $this->assertHTMLMatch('<div>'.$html.'</div>');
+        $this->checkStatusOfFormatIconsInTheTopToolbar('disabled', 'active', 'disabled', 'disabled');
+        $this->clickTopToolbarButton('DIV', 'active', TRUE);
+        $this->checkStatusOfFormatIconsInTheTopToolbar('disabled', NULL, 'disabled', 'disabled');
+        $this->assertHTMLMatch($html);
+
+        $this->useTest(6);
+        $html = '<div><p>%1% lorem</p></div><div><div><p>%2% test</p></div></div>';
+        $this->selectKeyword(1, 2);
+        $this->clickTopToolbarButton('formats');
+        $this->checkStatusOfFormatIconsInTheTopToolbar('disabled', NULL, 'disabled', 'disabled');
+        $this->clickTopToolbarButton('DIV', NULL, TRUE);
+        $this->assertHTMLMatch('<div>'.$html.'</div>');
+        $this->checkStatusOfFormatIconsInTheTopToolbar('disabled', 'active', 'disabled', 'disabled');
+        $this->clickTopToolbarButton('DIV', 'active', TRUE);
+        $this->checkStatusOfFormatIconsInTheTopToolbar('disabled', NULL, 'disabled', 'disabled');
+        $this->assertHTMLMatch($html);
+
+        $this->useTest(7);
+        $this->selectKeyword(1, 2);
+        $this->clickTopToolbarButton('formats-div');
+        $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, NULL, NULL, NULL);
+        $this->clickTopToolbarButton('P', NULL, TRUE);
+        $this->assertHTMLMatch('<div><p>test test</p><p>%1% %2%</p><p>test test</p></div>');
+        $this->checkStatusOfFormatIconsInTheTopToolbar('active', NULL, NULL, NULL);
+        $this->clickTopToolbarButton('P', 'active', TRUE);
+        $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, NULL, NULL, NULL);
+        $this->assertHTMLMatch('<div><p>test test</p>%1% %2%<p>test test</p></div>');
+
+        $this->useTest(8);
+        $this->selectKeyword(1, 2);
+        $this->clickTopToolbarButton('formats-div');
+        $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, NULL, NULL, NULL);
+        $this->clickTopToolbarButton('P', NULL, TRUE);
+        $this->assertHTMLMatch('<div><p>test test</p><p>%1% %2%</p></div>');
+        $this->checkStatusOfFormatIconsInTheTopToolbar('active', NULL, NULL, NULL);
+        $this->clickTopToolbarButton('P', 'active', TRUE);
+        $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, NULL, NULL, NULL);
+        $this->assertHTMLMatch('<div><p>test test</p>%1% %2%</div>');
+
+        $this->useTest(9);
+        $this->selectKeyword(1, 2);
+        $this->clickTopToolbarButton('formats-div');
+        $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, NULL, NULL, NULL);
+        $this->clickTopToolbarButton('Quote', NULL, TRUE);
+        $this->assertHTMLMatch('<div><blockquote><p>%1% %2%</p></blockquote><p>test test</p></div>');
+        $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, NULL, 'active', NULL);
+        $this->clickTopToolbarButton('Quote', 'active', TRUE);
+        $this->checkStatusOfFormatIconsInTheTopToolbar('active', NULL, NULL, NULL);
+        $this->assertHTMLMatch('<div><p>%1% %2%</p><p>test test</p></div>');
+
+    }//end testComlexHTMLStructureConversion()
+
+
+    /**
+     * Test that a list item or whole list selection does not enable formats icons.
+     *
+     * @return void
+     */
+    public function testFormatIconInList()
+    {
+
+        // Test ul list
+        $this->click($this->findKeyword(1));
+        $this->assertTrue($this->topToolbarButtonExists('formats', 'disabled'), 'Formats icon should not appear in the top toolbar.');
+
+        $this->selectKeyword(1);
+        $this->assertTrue($this->topToolbarButtonExists('formats', 'disabled'), 'Formats icon should not appear in the top toolbar.');
+        $this->assertFalse($this->inlineToolbarButtonExists('formats'), 'Formats button should not be available');
+
+        $this->selectInlineToolbarLineageItem(1);
+        $this->assertTrue($this->topToolbarButtonExists('formats', 'disabled'), 'Formats icon should not appear in the top toolbar.');
+        $this->assertFalse($this->inlineToolbarButtonExists('formats'), 'Formats button should not be available');
+
+        $this->selectInlineToolbarLineageItem(0);
+        $this->assertTrue($this->topToolbarButtonExists('formats', 'disabled'), 'Formats icon should not appear in the top toolbar.');
+        $this->assertFalse($this->inlineToolbarButtonExists('formats'), 'Formats button should not be available');
+
+        $this->keyDown('Key.RIGHT');
+        $this->keyDown('Key.ENTER');
+        $this->assertTrue($this->topToolbarButtonExists('formats', 'disabled'), 'Formats icon should not appear in the top toolbar.');
+
+        $this->keyDown('Key.ENTER');
+        $this->type('New parra');
+        $this->assertTrue($this->topToolbarButtonExists('formats-p', 'active'), 'Formats icon should appear in the top toolbar.');
+
+        // Test ol list
+        $this->click($this->findKeyword(2));
+        $this->assertTrue($this->topToolbarButtonExists('formats', 'disabled'), 'Formats icon should not appear in the top toolbar.');
+
+        $this->selectKeyword(2);
+        $this->assertTrue($this->topToolbarButtonExists('formats', 'disabled'), 'Formats icon should not appear in the top toolbar.');
+        $this->assertFalse($this->inlineToolbarButtonExists('formats'), 'Formats button should not be available');
+
+        $this->selectInlineToolbarLineageItem(1);
+        $this->assertTrue($this->topToolbarButtonExists('formats', 'disabled'), 'Formats icon should not appear in the top toolbar.');
+        $this->assertFalse($this->inlineToolbarButtonExists('formats'), 'Formats button should not be available');
+
+        $this->selectInlineToolbarLineageItem(0);
+        $this->assertTrue($this->topToolbarButtonExists('formats', 'disabled'), 'Formats icon should not appear in the top toolbar.');
+        $this->assertFalse($this->inlineToolbarButtonExists('formats'), 'Formats button should not be available');
+
+        $this->keyDown('Key.RIGHT');
+        $this->keyDown('Key.ENTER');
+        $this->assertTrue($this->topToolbarButtonExists('formats', 'disabled'), 'Formats icon should not appear in the top toolbar.');
+
+        $this->keyDown('Key.ENTER');
+        $this->type('New parra');
+        $this->assertTrue($this->topToolbarButtonExists('formats-p', 'active'), 'Formats icon should appear in the top toolbar.');
+
+    }//end testFormatIconInList()
+
+
+    /**
+     * Test creating new content after a div section.
+     *
+     * @return void
+     */
+    public function testCreatingNewContentAfterDivSection()
+    {
+        $this->selectKeyword(3);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickTopToolbarButton('formats-p', 'active');
+        $this->clickTopToolbarButton('DIV', NULL, TRUE);
+        $this->assertHTMLMatch('<h1>Heading One</h1><p>%1% xtn dolor</p><div>sit %2% <strong>%3%</strong></div>');
+
+        $this->selectKeyword(3);
+        $this->keyDown('Key.RIGHT');
+        $this->keyDown('Key.ENTER');
+        $this->type('New content %4%');
+
+        $this->assertHTMLMatch('<h1>Heading One</h1><p>%1% xtn dolor</p><div>sit %2% <strong>%3%</strong></div><p>New content %4%</p>');
+        $this->assertTrue($this->topToolbarButtonExists('formats-p', 'active'), 'Active P icon should appear in the top toolbar');
+
+    }//end testCreatingNewContentAfterDivSection()
+
+
+    /**
+     * Test that selecting text inside an inline element shows the correct toolbar button status.
+     *
+     * @return void
+     */
+    public function testFormatIconStatusForSelectionInInlineElement()
+    {
+        $this->selectKeyword(2);
+        $this->assertTrue($this->topToolbarButtonExists('formats-p', 'disabled'), 'Formats button should be disabled');
+
+        $this->click($this->findKeyword(1));
+        $this->selectKeyword(3);
+        $this->assertTrue($this->topToolbarButtonExists('formats-p', 'disabled'), 'Formats button should be disabled');
+
+        $this->click($this->findKeyword(1));
+        $this->selectKeyword(4);
+        $this->assertTrue($this->topToolbarButtonExists('formats-div'), 'Formats div button should be enabled');
+
+        $this->click($this->findKeyword(1));
+        $this->selectKeyword(5);
+        $this->assertTrue($this->topToolbarButtonExists('formats-div'), 'Formats div button should be enabled');
+
+    }//end testFormatIconStatusForSelectionInInlineElement()
 
 
 }//end class

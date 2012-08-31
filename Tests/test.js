@@ -23,18 +23,66 @@ var viperTest = {
 };
 
 
+function initJSPoller()
+{
+    var scriptUrl = window.location.href.replace('test_tmp.html', 'jspoller.php');
+    var seconds   = 1;
+    var stop      = false;
+    var interval  = null;
+    interval = setInterval(function() {
+        if (stop === true) {
+            return;
+        }
+
+        stop = true;
+        dfx.get(scriptUrl, null, function(val) {
+            if (!val) {
+                stop = false;
+                return;
+            }
+
+            dfx.setHtml(dfx.getId('msg'), 'Exec: ' + val);
+
+            if (val === 'cw()' || val === 'cw();') {
+                stop = true;
+                clearInterval(interval);
+                return;
+            }
+
+            val  = 'var jsResult = ' + val + ';';
+            val += 'dfx.jsonEncode(jsResult);';
+
+            // Execute JS.
+            var retval = eval(val);
+
+            dfx.get(scriptUrl, {res: retval}, function() {
+                stop = false;
+            });
+        });
+    }, (1000 * seconds));
+
+}
+
+
 /**
  * Returns the HTML contents of the specified element.
  */
-function gHtml(selector, index)
+function gHtml(selector, index, removeTableHeaders)
 {
+    if (removeTableHeaders) {
+        rmTableHeaders(null, true);
+    }
+
+    var html = '';
     index = index || 0;
     if (selector) {
-        var html = viperTest.getWindow().dfx.getHtml(viperTest.getWindow().dfxjQuery(selector)[index]).replace("\n", '');
-        return viperTest.getWindow().viper.getHtml(html);
+        html = viperTest.getWindow().dfx.getHtml(viperTest.getWindow().dfxjQuery(selector)[index]).replace("\n", '');
+        html = viperTest.getWindow().viper.getHtml(html);
     } else {
-        return viperTest.getWindow().viper.getHtml();
+        html = viperTest.getWindow().viper.getHtml();
     }
+
+    return html;
 
 }
 
@@ -49,6 +97,10 @@ function gText()
     } else {
         selection = viperTest.getWindow().viper.getViperRange().toString();
     }
+
+    // Remove extra spaces from the end of the string (Chrome likes to add new line
+    // character for block element selections).
+    selection = viperTest.getWindow().dfx.rtrim(selection);
 
     return selection;
 
@@ -120,12 +172,15 @@ function gBtn(text, state, selectorPrefix)
         return false;
     }
 
-    var rect = viperTest.getWindow().dfx.getBoundingRectangle(button);
-    if (rect) {
-        rect.x1 = parseInt(rect.x1);
-        rect.x2 = parseInt(rect.x2);
-        rect.y1 = parseInt(rect.y1);
-        rect.y2 = parseInt(rect.y2);
+    var rect = null;
+    if (button) {
+        rect = viperTest.getWindow().dfx.getBoundingRectangle(button);
+        if (rect) {
+            rect.x1 = (parseInt(rect.x1) + 3);
+            rect.x2 = (parseInt(rect.x2) - 1);
+            rect.y1 = (parseInt(rect.y1) + 3);
+            rect.y2 = (parseInt(rect.y2) - 1);
+        }
     }
 
     return rect;
@@ -186,6 +241,26 @@ function gBRec(selector, index)
 
 }
 
+function gVITPArrow()
+{
+    var toolbar = viperTest.getWindow().viper.getPluginManager().getPlugin('ViperInlineToolbarPlugin').getToolbar().element;
+    var rect    = viperTest.getWindow().dfx.getBoundingRectangle(toolbar);
+
+    var arrow = {
+        x1: rect.x1 + (((rect.x2 - rect.x1) / 2) - 10),
+        x2: rect.x1 + (((rect.x2 - rect.x1) / 2) + 10),
+        y1: (rect.y1 - 10),
+        y2: rect.y1
+    }
+
+    if (arrow.x1 <= 0 || arrow.y1 <= 0) {
+        arrow = null;
+    }
+
+    return arrow;
+
+}
+
 function gTagCounts(tagNames)
 {
     tagNames = tagNames || '*';
@@ -237,7 +312,17 @@ function insTable(rows, cols, header, id)
 
 function rmTableHeaders(tblIndex, removeid)
 {
-    var table = viperTest.getWindow().dfx.getTag('table')[tblIndex];
+    var tables = viperTest.getWindow().dfx.getTag('table');
+
+    if (tblIndex === null) {
+        for (var i = 0; i < tables.length; i++) {
+            rmTableHeaders(i, removeid);
+        }
+
+        return;
+    }
+
+    table = tables[tblIndex];
     if (!table) {
         return;
     }
@@ -258,5 +343,24 @@ function rmTableHeaders(tblIndex, removeid)
             headers[i].removeAttribute('headers');
         }
     }
+
+}
+
+function useTest(id)
+{
+    var testCases = viperTest.get('testCases');
+    if (!testCases || !testCases[id]) {
+        return;
+    }
+
+    var win = viperTest.getWindow();
+
+    win.viper.fireCallbacks('Viper:clickedOutside');
+
+    var contentElement = win.dfx.getId('content');
+    win.dfx.setHtml(contentElement, testCases[id]);
+
+    win.dfx.setHtml(win.dfx.getId('testCaseTitle'), '(Using Test #' + id + ')');
+
 
 }

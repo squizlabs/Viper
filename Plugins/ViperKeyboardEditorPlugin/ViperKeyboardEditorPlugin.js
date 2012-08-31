@@ -154,9 +154,7 @@ ViperKeyboardEditorPlugin.prototype = {
 
     handleEnter: function(returnFirstBlock)
     {
-        if (this.viper.inlineMode === true) {
-            return this.handleSoftEnter();
-        }
+        var defaultTagName = this.viper.getDefaultBlockTag();
 
         var self = this;
 
@@ -186,7 +184,19 @@ ViperKeyboardEditorPlugin.prototype = {
             ) {
                 var firstBlock = dfx.getFirstBlockParent(endNode);
 
-                if (firstBlock) {
+                if (firstBlock && !defaultTagName && firstBlock === this.viper.getViperElement()) {
+                    var br = document.createElement('br');
+                    this.viper.insertNodeAtCaret(br);
+                    if (!br.nextSibling) {
+                        dfx.insertAfter(br, document.createElement('br'));
+                    }
+
+                    range.setStart(br.nextSibling, 0);
+                    range.collapse(true);
+                    ViperSelection.addRange(range);
+
+                    return false;
+                } else if (firstBlock) {
                     var firstBlockTagName = dfx.getTagName(firstBlock);
                     var handleEnter       = false;
                     var removeFirstBlock  = false;
@@ -201,12 +211,21 @@ ViperKeyboardEditorPlugin.prototype = {
                     }
 
                     if (handleEnter === true) {
+                        if (defaultTagName === '') {
+                            var br = document.createElement('br');
+                            dfx.insertAfter(firstBlock, br);
+                            range.setStart(br, 0);
+                            range.collapse(true);
+                            ViperSelection.addRange(range);
+                            return false;
+                        }
+
                         var content = '<br />';
                         if (this.viper.isBrowser('msie') === true) {
                             content = '&nbsp;';
                         }
 
-                        var tagName = 'p';
+                        var tagName = defaultTagName;
                         var p = document.createElement(tagName);
                         dfx.setHtml(p, content);
 
@@ -254,9 +273,10 @@ ViperKeyboardEditorPlugin.prototype = {
                         ViperSelection.addRange(range);
 
                         if (this.viper.isBrowser('firefox') === false) {
-                            this.viper.fireSelectionChanged();
                             this.viper.fireNodesChanged();
                         }
+
+                        this.viper.fireSelectionChanged();
 
                         return false;
                     }//end if
@@ -297,6 +317,15 @@ ViperKeyboardEditorPlugin.prototype = {
                 } else {
                     this.insertTextAtRange(range, "\n");
                 }
+
+                return false;
+            } else if (blockParent === this.viper.getViperElement() && !defaultTagName) {
+                var br = document.createElement('br');
+                this.viper.insertNodeAtCaret(br);
+
+                range.setStart(br.nextSibling, 0);
+                range.collapse(true);
+                ViperSelection.addRange(range);
 
                 return false;
             }//end if
@@ -429,6 +458,10 @@ ViperKeyboardEditorPlugin.prototype = {
                                 ViperSelection.addRange(range);
                             }
 
+                            if (this.viper.isBrowser('chrome') === true) {
+                                this.viper.fireNodesChanged();
+                            }
+
                             // Prevent default action.
                             return false;
                         }//end if
@@ -496,6 +529,15 @@ ViperKeyboardEditorPlugin.prototype = {
 
                 parent = parent.parentNode;
             }
+        } else if (range.startContainer === range.endContainer
+            && dfx.isStubElement(range.startContainer)
+            && range.startContainer.parentNode.firstChild === range.startContainer
+            && range.startContainer.parentNode.lastChild === range.startContainer
+        ) {
+            parent = range.startContainer.parentNode;
+            dfx.setHtml(parent, '&nbsp;');
+            range.setStart(parent.firstChild, 0);
+            range.collapse(true);
         } else {
             parent = range.startContainer;
         }//end if

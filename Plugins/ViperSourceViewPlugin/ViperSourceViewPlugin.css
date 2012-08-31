@@ -90,42 +90,42 @@
 }
 
 /* Ace Editor overrides*/
-.ace_editor {
+.Viper-popup-content .ace_editor {
     font-size: 1.3em !important;
     border-radius: 0.25em;
     border: 1px solid #2b2b2b;
     border-bottom-color: rgba(255,255,255,0.25);
 }
-.ace_scroller {
+.Viper-popup-content .ace_scroller {
     overflow-x: hidden !important;
 }
-.ace_gutter-cell {
+.Viper-popup-content .ace_gutter-cell {
     font-size: 0.8em !important;
 }
-.ace-viper .ace_gutter {
+.Viper-popup-content .ace-viper .ace_gutter {
     min-width: 3.5em !important;
 }
-.ace_gutter-cell {
+.Viper-popup-content .ace_gutter-cell {
     padding-left: 0 !important;
 }
 
 /* Source Scroller for webkit */
 
-.ace_editor .ace_sb::-webkit-scrollbar {
+.Viper-popup-content .ace_editor .ace_sb::-webkit-scrollbar {
 	-webkit-appearance: none;
 	width: 0.6em;
 }
-.ace_editor .ace_sb::-webkit-scrollbar-button:start:decrement,
-.ace_editor .ace_sb::-webkit-scrollbar-button:end:increment  {
+.Viper-popup-content .ace_editor .ace_sb::-webkit-scrollbar-button:start:decrement,
+.Viper-popup-content .ace_editor .ace_sb::-webkit-scrollbar-button:end:increment  {
     height: 2px;
     display: block;
 }
-.ace_editor .ace_sb::-webkit-scrollbar-track {
+.Viper-popup-content .ace_editor .ace_sb::-webkit-scrollbar-track {
     width: 0.6em;
 }
-.ace_editor .ace_sb::-webkit-scrollbar-track-piece  {
+.Viper-popup-content .ace_editor .ace_sb::-webkit-scrollbar-track-piece  {
 }
-.ace_editor .ace_sb::-webkit-scrollbar-thumb:vertical {
+.Viper-popup-content .ace_editor .ace_sb::-webkit-scrollbar-thumb:vertical {
 	border-radius: 0.4em;
 	background-color: rgba(255,255,255,0.4);
 	height: 50px;
@@ -134,124 +134,124 @@
 
 /* default Viper source theme */
 
-.ace-viper .ace_editor {
+.Viper-popup-content .ace-viper .ace_editor {
     border: 2px solid rgb(159, 159, 159);
 }
-.ace-viper .ace_editor.ace_focus {
+.Viper-popup-content .ace-viper .ace_editor.ace_focus {
     border: 2px solid #327fbd;
 }
-.ace-viper .ace_gutter { min-width: 55px;
+.Viper-popup-content .ace-viper .ace_gutter { min-width: 55px;
     background: #383838;
     color: #FFF;
 }
-.ace-viper .ace_print_margin {
+.Viper-popup-content .ace-viper .ace_print_margin {
     width: 1px;
     background: #e8e8e8;
 }
-.ace-viper .ace_scroller {
+.Viper-popup-content .ace-viper .ace_scroller {
     background-color: #141414;
 }
-.ace-viper .ace_text-layer {
+.Viper-popup-content .ace-viper .ace_text-layer {
     cursor: text;
     color: #F8F8F8;
 }
-.ace-viper .ace_cursor {
+.Viper-popup-content .ace-viper .ace_cursor {
     border-left: 2px solid #A7A7A7;
 }
-.ace-viper .ace_cursor.ace_overwrite {
+.Viper-popup-content .ace-viper .ace_cursor.ace_overwrite {
     border-left: 0px;
     border-bottom: 1px solid #A7A7A7;
 }
-.ace-viper .ace_marker-layer .ace_selection {
+.Viper-popup-content .ace-viper .ace_marker-layer .ace_selection {
     background: rgba(221, 240, 255, 0.20);
 }
-.ace-viper .ace_marker-layer .ace_step {
+.Viper-popup-content .ace-viper .ace_marker-layer .ace_step {
     background: rgb(198, 219, 174);
 }
-.ace-viper .ace_marker-layer .ace_bracket {
+.Viper-popup-content .ace-viper .ace_marker-layer .ace_bracket {
     margin: -1px 0 0 -1px;
     border: 1px solid rgba(255, 255, 255, 0.25);
 }
-.ace-viper .ace_marker-layer .ace_active_line {
+.Viper-popup-content .ace-viper .ace_marker-layer .ace_active_line {
     background: #444547;
     border-top: 1px solid #5e6064;
 }
-.ace_active_line:nth-of-type(3) {
+.Viper-popup-content .ace_active_line:nth-of-type(3) {
     border-top: none !important;
     border-bottom: 1px solid #5e6064;
 }
-.ace_active_line[style*="width:0px"] {
+.Viper-popup-content .ace_active_line[style*="width:0px"] {
     border: none !important;
 }
-.ace-viper .ace_marker-layer .ace_selected_word {
+.Viper-popup-content .ace-viper .ace_marker-layer .ace_selected_word {
     border: 1px solid rgba(221, 240, 255, 0.20);
 }
-.ace-viper .ace_invisible {
+.Viper-popup-content .ace-viper .ace_invisible {
     color: #666;
     font-size: 1.1em;
     font-weight: bold;
 }
-.ace-viper .ace_keyword {
+.Viper-popup-content .ace-viper .ace_keyword {
     color: #CDA869;
 }
-.ace-viper .ace_constant {
+.Viper-popup-content .ace-viper .ace_constant {
     color: #CF6A4C;
 }
-.ace-viper .ace_invalid.ace_illegal {
+.Viper-popup-content .ace-viper .ace_invalid.ace_illegal {
     color: #F8F8F8;
     background-color: rgba(86, 45, 86, 0.75);
 }
-.ace-viper .ace_invalid.ace_deprecated {
+.Viper-popup-content .ace-viper .ace_invalid.ace_deprecated {
     text-decoration: underline;
     font-style: italic;
     color: #D2A8A1;
 }
-.ace-viper .ace_support {
+.Viper-popup-content .ace-viper .ace_support {
     color: #9B859D;
 }
-.ace-viper .ace_fold {
+.Viper-popup-content .ace-viper .ace_fold {
     background-color: #AC885B;
     border-color: #F8F8F8;
 }
-.ace-viper .ace_support.ace_function {
+.Viper-popup-content .ace-viper .ace_support.ace_function {
     color: #DAD085;
 }
-.ace-viper .ace_string {
+.Viper-popup-content .ace-viper .ace_string {
     color: #309bf0;
 }
-.ace-viper .ace_string.ace_regexp {
+.Viper-popup-content .ace-viper .ace_string.ace_regexp {
     color: #E9C062;
 }
-.ace-viper .ace_line {
+.Viper-popup-content .ace-viper .ace_line {
     color: #f8f8f8;
 }
-.ace-viper .ace_comment {
+.Viper-popup-content .ace-viper .ace_comment {
     color: #b2d8a2;
 }
-.ace-viper .ace_variable {
+.Viper-popup-content .ace-viper .ace_variable {
     color: #7587A6;
 }
-.ace-viper .ace_xml_pe {
+.Viper-popup-content .ace-viper .ace_xml_pe {
     color: #494949;
 }
-.ace-viper .ace_meta.ace_tag {
+.Viper-popup-content .ace-viper .ace_meta.ace_tag {
      color: #c188cc;
 }
-.ace-viper .ace_entity.ace_attribute-name {
+.Viper-popup-content .ace-viper .ace_entity.ace_attribute-name {
     color: #dc9c57;
 }
-.ace-viper .ace_keyword.ace_operator {
+.Viper-popup-content .ace-viper .ace_keyword.ace_operator {
     color: #c188cc;
 }
-.ace-viper .ace_entity.ace_name.ace_function {
+.Viper-popup-content .ace-viper .ace_entity.ace_name.ace_function {
     color: #AC885B;
 }
-.ace-viper .ace_markup.ace_underline {
+.Viper-popup-content .ace-viper .ace_markup.ace_underline {
     text-decoration: underline;
 }
-.ace-viper .ace_markup.ace_heading {
+.Viper-popup-content .ace-viper .ace_markup.ace_heading {
     color: #CF6A4C;
 }
-.ace-viper .ace_markup.ace_list {
+.Viper-popup-content .ace-viper .ace_markup.ace_list {
     color: #F9EE98;
 }

@@ -61,25 +61,67 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
 
 
     /**
-     * Test that the HR icon is not available for a %2% and table.
+     * Test that the table icon is not available for a list.
      *
      * @return void
      */
-    public function testHRIconNotAvailableForCaptionAndTable()
+    public function testTableIconNotAvailableForList()
     {
+        // Check an unordered list
         $this->click($this->findKeyword(1));
-        $this->assertTrue($this->topToolbarButtonExists('insertHr', 'disabled'), 'HR icon should not appear in the top toolbar.');
+        $this->assertTrue($this->topToolbarButtonExists('table', 'disabled'), 'Table icon should not appear in the top toolbar.');
 
         $this->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->assertTrue($this->topToolbarButtonExists('insertHr', 'disabled'), 'HR icon should be active in the top toolbar.');
+        $this->assertTrue($this->topToolbarButtonExists('table'), 'Table icon should be active in the top toolbar.');
+
+        $this->keyDown('Key.TAB');
+        $this->assertTrue($this->topToolbarButtonExists('table', 'disabled'), 'Table icon should not active in the top toolbar.');
+
+        $this->selectKeyword(1);
+        $this->assertTrue($this->topToolbarButtonExists('table', 'disabled'), 'Table icon should not appear in the top toolbar.');
 
         $this->selectInlineToolbarLineageItem(1);
-        $this->assertTrue($this->topToolbarButtonExists('insertHr', 'disabled'), 'HR icon should not appear in the top toolbar.');
+        $this->assertTrue($this->topToolbarButtonExists('table', 'disabled'), 'Table icon should not appear in the top toolbar.');
 
-        $this->clickCell(4);
-        $this->assertTrue($this->topToolbarButtonExists('insertHr', 'disabled'), 'HR icon should not appear in the top toolbar.');
+        $this->selectInlineToolbarLineageItem(0);
+        $this->assertTrue($this->topToolbarButtonExists('table', 'disabled'), 'Table icon should not appear in the top toolbar.');
 
-    }//end testHRIconNotAvailableForCaptionAndTable()
+        $this->keyDown('Key.RIGHT');
+        $this->keyDown('Key.ENTER');
+        $this->assertTrue($this->topToolbarButtonExists('table', 'disabled'), 'Table icon should not appear in the top toolbar.');
+
+        $this->keyDown('Key.ENTER');
+        $this->type('New parra');
+        $this->assertTrue($this->topToolbarButtonExists('table'), 'Table icon should appear in the top toolbar.');
+
+        // Check an ordered list
+        $this->click($this->findKeyword(2));
+        $this->assertTrue($this->topToolbarButtonExists('table', 'disabled'), 'Table icon should not appear in the top toolbar.');
+
+        $this->keyDown('Key.SHIFT + Key.RIGHT');
+        $this->assertTrue($this->topToolbarButtonExists('table'), 'Table icon should be active in the top toolbar.');
+
+        $this->keyDown('Key.TAB');
+        $this->assertTrue($this->topToolbarButtonExists('table', 'disabled'), 'Table icon should not active in the top toolbar.');
+
+        $this->selectKeyword(2);
+        $this->assertTrue($this->topToolbarButtonExists('table', 'disabled'), 'Table icon should not appear in the top toolbar.');
+
+        $this->selectInlineToolbarLineageItem(1);
+        $this->assertTrue($this->topToolbarButtonExists('table', 'disabled'), 'Table icon should not appear in the top toolbar.');
+
+        $this->selectInlineToolbarLineageItem(0);
+        $this->assertTrue($this->topToolbarButtonExists('table', 'disabled'), 'Table icon should not appear in the top toolbar.');
+
+        $this->keyDown('Key.RIGHT');
+        $this->keyDown('Key.ENTER');
+        $this->assertTrue($this->topToolbarButtonExists('table', 'disabled'), 'Table icon should not appear in the top toolbar.');
+
+        $this->keyDown('Key.ENTER');
+        $this->type('New parra');
+        $this->assertTrue($this->topToolbarButtonExists('table'), 'Table icon should appear in the top toolbar.');
+
+    }//end testTableIconNotAvailableForList()
 
 
     /**
@@ -666,7 +708,7 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
      *
      * @return void
      */
-    public function testTableKeyboardNav()
+    public function testTableKeyboardNav2()
     {
         $this->insertTable(1, 2, 2, 3);
 
@@ -680,7 +722,7 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
         $this->keyDown('Key.SHIFT + Key.TAB');
         $this->type('1');
 
-        $this->assetTableWithoutHeaders('<p>Test %1%</p><table style="width: 100%; " border="1"><tbody><tr><th></th><th>1</th><th>2</th></tr><tr><td>3</td><td></td><td></td></tr></tbody></table><p></p>');
+        $this->assertTableWithoutHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><thead><tr><th></th><th>1</th><th>2</th></tr></thead><tbody><tr><td>3</td><td></td><td></td></tr></tbody></table><p></p>');
 
     }//end testTableKeyboardNav()
 
@@ -692,7 +734,7 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
      */
     public function testTableKeyboardNavWithRowAndColSpan()
     {
-        $this->insertTable(1, 2, 3, 3);
+        $this->insertTable(1, 0, 3, 3);
         $this->showTools(0, 'cell');
         $this->clickMergeSplitIcon('mergeDown');
 
@@ -725,7 +767,7 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
         $this->keyDown('Key.SHIFT + Key.TAB');
         $this->type('4');
 
-        $this->assetTableWithoutHeaders('<p>Test %1%</p><table style="width: 100%; " border="1"><tbody><tr><th rowspan="2"></th><th></th><th>1</th></tr><tr><td colspan="2">2</td></tr><tr><td>3</td><td></td><td>4</td></tr><tr><td>5</td><td></td><td></td></tr></tbody></table><p></p>');
+        $this->assertTableWithoutHeaders('<p>Test %1%</p><table style="width: 100%; " border="1"><tbody><tr><td rowspan="2"></td><td></td><td>1</td></tr><tr><td colspan="2">2</td></tr><tr><td>3</td><td></td><td>4</td></tr><tr><td>5</td><td></td><td></td></tr></tbody></table><p></p>');
 
     }//end testTableKeyboardNavWithRowNColSpan()
 
@@ -771,40 +813,20 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
 
 
     /**
-     * Tests that right arrow moves caret out of table.
+     * Tests that down arrow moves caret out of table.
      *
      * @return void
      */
-    public function testTableNavEndFromFooter()
+    public function testTableNavigatingOutOfTable()
     {
         $this->insertTable(1);
-        $this->clickCell(10);
-        $this->keyDown('Key.RIGHT');
-        $this->keyDown('Key.RIGHT');
-        usleep(100);
-        $this->keyDown('test');
+        $this->clickCell(11);
+        $this->keyDown('Key.DOWN');
+        $this->type('test');
 
-        $this->assetTableWithoutHeaders('<p>Test XAX</p><table border="1" style="width: 100%;"><tbody><tr><th></th><th></th><th></th><th></th></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table>tes<p></p>');
+        $this->assertTableWithoutHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><thead><tr><th></th><th></th><th></th><th></th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p>&nbsp;test</p>');
 
-    }//end testTableNavFooter()
-
-
-    /**
-     * Tests that inline toolbar stays open after row move operation.
-     *
-     * @return void
-     */
-   // public function testInlineToolbarStaysOpenAfterMove()
-  //  {
-
-
-      ///  $this->showTools(7, 'row');
-     //   $this->clickInlineToolbarButton('mergeUp');
-
-   //     sleep(1);
- //       $this->assertTrue($this->inlineToolbarButtonExists('delete'));
-
-//    }//end testInlineToolbarStaysOpenAfterMove()
+    }//end testTableNavigatingOutOfTable()
 
 
 }//end class

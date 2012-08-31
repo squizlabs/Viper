@@ -32,6 +32,10 @@ body {
     padding: 5px 0;
 }
 
+#testTitle em {
+    color: #000;
+}
+
 #windowTarget {
     position: fixed;
     left: 0;
@@ -76,7 +80,8 @@ sub, sup {
 }
 
 .Viper-button.Viper-disabled .Viper-buttonIcon {
-    margin-top: -14px;
+    /*margin-top: -12px;*/
+    margin-left: -8px;
 }
 
 .Viper-button.Viper-active .Viper-buttonIcon {
@@ -103,7 +108,12 @@ h1,h2,h3,h4,h5,h6 {
 }
 
 td,th {
-    min-width: 20px;
+    min-width: 30px;
+    padding: 4px 1px;
+}
+
+.googlechrome td, .googlechrome th {
+    padding: 2px 2px;
 }
 
 .Viper-button.Viper-disabled {
@@ -112,4 +122,13 @@ td,th {
 
 .Viper-button.Viper-active {
     text-align: left;
+}
+
+#content div[id^="test"] {
+    display: none;
+}
+
+/* Paste Div target */
+.ViperCopyPastePlugin-pasteWrapper {
+    background: url("./Core/Images/window-target2.png") no-repeat;
 }
