@@ -458,6 +458,10 @@ ViperKeyboardEditorPlugin.prototype = {
                                 ViperSelection.addRange(range);
                             }
 
+                            if (this.viper.isBrowser('chrome') === true) {
+                                this.viper.fireNodesChanged();
+                            }
+
                             // Prevent default action.
                             return false;
                         }//end if
