@@ -16,7 +16,7 @@
                 viper = new Viper('test', null, null, [contentElement]);
                 viper.getPluginManager().setPlugins(['ViperCoreStylesPlugin', 'ViperKeyboardEditorPlugin', 'ViperInlineToolbarPlugin', 'ViperHistoryPlugin', 'ViperListPlugin', 'ViperFormatPlugin', 'ViperToolbarPlugin', 'ViperTableEditorPlugin', 'ViperCopyPastePlugin', 'ViperImagePlugin', 'ViperLinkPlugin', 'ViperAccessibilityPlugin', 'ViperSourceViewPlugin', 'ViperSearchReplacePlugin', 'ViperLangToolsPlugin', 'ViperCharMapPlugin', 'ViperTrackChangesPlugin']);
 
-                dfxjQuery('[title]').removeAttr('title');
+                dfxjQuery('.Viper-button[title]').removeAttr('title');
 
                 if (polling !== true) {
                     if (window.location.hash !== '#run') {
