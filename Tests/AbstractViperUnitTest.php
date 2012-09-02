@@ -2062,8 +2062,17 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
             $result = NULL;
             if (file_exists(self::$_pollFilePath.'/_jsres.tmp') === TRUE) {
                 $result = file_get_contents(self::$_pollFilePath.'/_jsres.tmp');
+
+                if ($result === 'undefined' || trim($result) === '') {
+                    return NULL;
+                }
+
                 $result = json_decode($result, TRUE);
                 unlink(self::$_pollFilePath.'/_jsres.tmp');
+
+                if (is_string($result) === TRUE) {
+                    $result = str_replace("\n", '\n', $result);
+                }
             }
 
             return $result;
