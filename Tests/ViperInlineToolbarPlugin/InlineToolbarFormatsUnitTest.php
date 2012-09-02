@@ -305,8 +305,9 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarFormatsUnitTest extends 
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem Viper-selected">P</li>', $lineage);
 
-        // Check multi-line paragraph
+        // Check multi-line paragraph.
         $this->selectKeyword(2);
+        sleep(1);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Selection</li>', $lineage);
 
@@ -314,7 +315,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarFormatsUnitTest extends 
         $this->clickInlineToolbarButton('formats-p', 'active');
         $this->clickInlineToolbarButton('Quote', NULL, TRUE);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">Quote</li><li class="ViperITP-lineageItem Viper-selected">P</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem Viper-selected">Quote</li>', $lineage);
         $this->clickInlineToolbarButton('P', NULL, TRUE);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem Viper-selected">P</li>', $lineage);
@@ -450,7 +451,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarFormatsUnitTest extends 
         $this->clickInlineToolbarButton('formats-div', 'active');
         $this->clickInlineToolbarButton('Quote', NULL, TRUE);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">Quote</li><li class="ViperITP-lineageItem Viper-selected">P</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem Viper-selected">Quote</li>', $lineage);
         $this->clickInlineToolbarButton('DIV', NULL, TRUE);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem Viper-selected">DIV</li>', $lineage);
