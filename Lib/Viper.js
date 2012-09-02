@@ -3008,6 +3008,7 @@ Viper.prototype = {
             && startContainer === endContainer
             && startOffset === 0
             && startContainer === this.getViperElement()
+            && endOffset >= endContainer.childNodes.length
         ) {
             var firstSelectable = range._getFirstSelectableChild(this.getViperElement());
             var lastSelectable  = range._getLastSelectableChild(this.getViperElement());
