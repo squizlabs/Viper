@@ -199,6 +199,18 @@ ViperSearchReplacePlugin.prototype = {
 
         var viperRange = null;
         if (fromStart === true) {
+            if (document.activeElement
+                && document.activeElement !== this.element
+                && document.activeElement.blur
+                && document.activeElement !== document.body
+            ) {
+                // Call the blur method of the active element incase its an input box etc
+                // which causes problems on IE when range is set below.
+                // Note that the above activeElement != body check is to prevent the best
+                // browser in the world changing focus to another window..
+                document.activeElement.blur();
+            }
+
             viperRange = this.viper.getCurrentRange();
             viperRange.setStart(viperRange._getFirstSelectableChild(element), 0);
             viperRange.collapse(true);
