@@ -519,7 +519,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarFormatsUnitTest extends 
         $this->clickInlineToolbarButton('formats-pre', 'active');
         $this->clickInlineToolbarButton('Quote', NULL, TRUE);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">Quote</li><li class="ViperITP-lineageItem Viper-selected">P</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem Viper-selected">Quote</li>', $lineage);
         $this->clickInlineToolbarButton('PRE', NULL, TRUE);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem Viper-selected">PRE</li>', $lineage);
