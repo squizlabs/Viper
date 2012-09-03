@@ -811,7 +811,9 @@ Viper.prototype = {
      */
     getViperRange: function()
     {
-        var highlighted = this.highlightToSelection();
+        if (this.isBrowser('msie') === false) {
+            this.highlightToSelection();
+        }
 
         if (this._viperRange) {
             return this._viperRange;
