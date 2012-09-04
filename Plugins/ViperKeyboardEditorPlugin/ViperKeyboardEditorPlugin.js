@@ -328,6 +328,27 @@ ViperKeyboardEditorPlugin.prototype = {
                 ViperSelection.addRange(range);
 
                 return false;
+            } else if (this.viper.isBrowser('msie') === true
+                && range.startOffset === 0
+                && range.collapsed === true
+                && dfx.isTag(startNode, 'li') === true
+                && this.viper.getBrowserVersion() >= 9
+            ) {
+                if (!startNode.nextSibling || (startNode.nextSibling.nodeType === dfx.TEXT_NODE && !startNode.nextSibling.nextSibling)) {
+                    if (startNode.parentNode.parentNode === this.viper.getViperElement()) {
+                        var p = document.createElement('p');
+                        dfx.setHtml(p, '&nbsp');
+                        dfx.insertAfter(startNode.parentNode, p);
+                        range.setEnd(p.firstChild, 0);
+                        range.collapse(false);
+                        ViperSelection.addRange(range);
+
+                        this.viper.fireSelectionChanged();
+                        dfx.remove(startNode);
+                        return false;
+                    }
+                }
+
             }//end if
 
             setTimeout(function() {
