@@ -899,6 +899,9 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractViperListP
         sleep(1);
         $this->type('New paragraph');
 
+        // Press the down arrow to make sure IE doesn't throw an exception
+        $this->keyDown('Key.DOWN');
+
         sleep(1);
         $this->assertHTMLMatch('<p>ajhsd sjsjwi hhhh:</p><ol><li>Recommendations action plan</li><li>Squiz Matrix guide %1%</li></ol><p>New paragraph</p><div>Test div</div>');
 
@@ -917,6 +920,9 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractViperListP
         $this->keyDown('Key.ENTER');
         $this->keyDown('Key.ENTER');
         $this->type('New paragraph');
+
+        // Press the down arrow to make sure IE doesn't throw an exception
+        $this->keyDown('Key.DOWN');
 
         sleep(1);
         $this->assertHTMLMatch('<p>ajhsd sjsjwi hhhh:</p><ol><li>Recommendations action plan</li><li>Squiz Matrix guide %1%</li></ol><p>New paragraph</p><pre>Test pre</pre>');
@@ -937,6 +943,9 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractViperListP
         $this->keyDown('Key.ENTER');
         $this->type('New paragraph');
 
+        // Press the down arrow to make sure IE doesn't throw an exception
+        $this->keyDown('Key.DOWN');
+
         sleep(1);
         $this->assertHTMLMatch('<p>ajhsd sjsjwi hhhh:</p><ol><li>Recommendations action plan</li><li>Squiz Matrix guide %1%</li></ol><p>New paragraph</p><blockquote>Test blockquote</blockquote>');
 
@@ -955,6 +964,9 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractViperListP
         $this->keyDown('Key.ENTER');
         $this->keyDown('Key.ENTER');
         $this->type('New paragraph');
+
+        // Press the down arrow to make sure IE doesn't throw an exception
+        $this->keyDown('Key.DOWN');
 
         sleep(1);
         $this->assertHTMLMatch('<p>ajhsd sjsjwi hhhh:</p><ol><li>Recommendations action plan</li><li>Squiz Matrix guide %1%</li></ol><p>New paragraph</p><p>Test para</p>');

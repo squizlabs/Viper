@@ -811,7 +811,9 @@ Viper.prototype = {
      */
     getViperRange: function()
     {
-        var highlighted = this.highlightToSelection();
+        if (this.isBrowser('msie') === false) {
+            this.highlightToSelection();
+        }
 
         if (this._viperRange) {
             return this._viperRange;
@@ -3492,7 +3494,10 @@ Viper.prototype = {
     {
         if (!range) {
             range = this.getViperRange();
-            range = this.adjustRange(range);
+
+            try {
+                range = this.adjustRange(range);
+            } catch (e) {}
         }
 
         if (!this._prevRange
@@ -3917,8 +3922,13 @@ Viper.prototype = {
         if (inside !== true || this.removeHighlights() !== true) {
             var self = this;
             setTimeout(function() {
+                var range = null;
+                try {
+                    range = self.adjustRange();
+                } catch (e) {}
+
                 // Delay calling the fireSelectionChanged to get the updated range.
-                self.fireSelectionChanged(self.adjustRange());
+                self.fireSelectionChanged(range);
             }, 5);
         }
 
@@ -3943,7 +3953,10 @@ Viper.prototype = {
         // to update the selection object..
         var self = this;
         setTimeout(function() {
-            var range = self.adjustRange();
+            var range = null;
+            try {
+                range = self.adjustRange();
+            } catch (e) {}
             self.fireSelectionChanged(range);
         }, 5);
 

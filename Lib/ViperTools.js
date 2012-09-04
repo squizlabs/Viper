@@ -1442,7 +1442,10 @@ ViperTools.prototype = {
                     if (inputElements.length > 0) {
                         inputElements[0].focus();
                         dfx.removeClass(inputElements[0].parentNode.parentNode.parentNode, 'Viper-active');
-                        tools.viper.highlightSelection();
+
+                        if (self.viper.isBrowser('msie') === false) {
+                            tools.viper.highlightSelection();
+                        }
                     }
                 } catch (e) {}
 

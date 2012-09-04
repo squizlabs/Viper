@@ -328,6 +328,27 @@ ViperKeyboardEditorPlugin.prototype = {
                 ViperSelection.addRange(range);
 
                 return false;
+            } else if (this.viper.isBrowser('msie') === true
+                && range.startOffset === 0
+                && range.collapsed === true
+                && dfx.isTag(startNode, 'li') === true
+                && this.viper.getBrowserVersion() >= 9
+            ) {
+                if (!startNode.nextSibling || (startNode.nextSibling.nodeType === dfx.TEXT_NODE && !startNode.nextSibling.nextSibling)) {
+                    if (startNode.parentNode.parentNode === this.viper.getViperElement()) {
+                        var p = document.createElement('p');
+                        dfx.setHtml(p, '&nbsp');
+                        dfx.insertAfter(startNode.parentNode, p);
+                        range.setEnd(p.firstChild, 0);
+                        range.collapse(false);
+                        ViperSelection.addRange(range);
+
+                        this.viper.fireSelectionChanged();
+                        dfx.remove(startNode);
+                        return false;
+                    }
+                }
+
             }//end if
 
             setTimeout(function() {
@@ -398,6 +419,19 @@ ViperKeyboardEditorPlugin.prototype = {
             if (dfx.trim(rangeClone.getHTMLContents()) === '<HR>') {
                 range.moveStart('character', -2);
                 range.deleteContents();
+            } else {
+                if (rangeClone.endContainer.nodeType === dfx.ELEMENT_NODE
+                    && rangeClone.endOffset === 0
+                    && rangeClone.endContainer.innerHTML === ''
+                ) {
+                    var nextNode = rangeClone.getNextContainer(rangeClone.startContainer, null, true);
+                    dfx.remove(rangeClone.endContainer);
+                    rangeClone.setEnd(nextNode, 0);
+                    rangeClone.collapse(false);
+                    ViperSelection.addRange(rangeClone);
+
+                    return false;
+                }
             }
         } else if (range.startOffset === 0
             && range.collapsed === true
@@ -468,7 +502,19 @@ ViperKeyboardEditorPlugin.prototype = {
                     }//end if
                 }//end if
             }//end if
-        }//end if
+        } else if (range.startOffset === 0
+            && range.collapsed === true
+            && range.startContainer === range.endContainer
+            && (this.viper.elementIsEmpty(range.startContainer) === true || dfx.getHtml(range.startContainer) === '<br>')
+        ) {
+            var nextNode = range.getNextContainer(range.endContainer, null, true);
+            dfx.remove(range.endContainer);
+            range.setEnd(nextNode, 0);
+            range.collapse(false);
+            ViperSelection.addRange(range);
+
+            return false;
+        }
 
     },
 

@@ -47,20 +47,24 @@ ViperHistoryManager.prototype = {
             return;
         }
 
-        var range = this.viper.getCurrentRange();
-        if (this.viper.rangeInViperBounds(range) === false) {
-            // Set the range to be the first selectable element of Viper element.
-            var child = range._getFirstSelectableChild(this.viper.getViperElement());
-            if (!child) {
-                range = null;
-            } else {
-                try {
-                    range.setStart(child, 0);
-                    range.collapse(true);
-                } catch (e) {
+        try {
+            var range = this.viper.getCurrentRange();
+            if (this.viper.rangeInViperBounds(range) === false) {
+                // Set the range to be the first selectable element of Viper element.
+                var child = range._getFirstSelectableChild(this.viper.getViperElement());
+                if (!child) {
                     range = null;
+                } else {
+                    try {
+                        range.setStart(child, 0);
+                        range.collapse(true);
+                    } catch (e) {
+                        range = null;
+                    }
                 }
             }
+        } catch (e) {
+            range = null;
         }
 
         if (!range) {
