@@ -446,6 +446,7 @@ ViperSourceViewPlugin.prototype = {
         window[viperid] = this;
 
         var childWindow = window.open('about:blank', "Viper Source View", "width=850,height=800,0,status=0,scrollbars=0");
+        this._isVisible = true;
         childWindow.document.write(this._getFrameContent(viperid));
         this._childWindow = childWindow;
         this._inNewWindow = true;
