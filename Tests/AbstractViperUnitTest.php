@@ -211,7 +211,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
                 self::$_pollFilePath = dirname(__FILE__).'/tmp/poll';
 
                 if (file_exists(self::$_pollFilePath) === FALSE) {
-                    mkdir(self::$_pollFilePath);
+                    mkdir(self::$_pollFilePath, 0777, TRUE);
                     chmod(self::$_pollFilePath, 0777);
                 } else {
                     if (file_exists(self::$_pollFilePath.'/_jsres.tmp') === TRUE) {
@@ -1472,6 +1472,8 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         } else if (self::$_browserSelected === FALSE) {
             if ($browser === 'Firefox') {
                 $browser = '/Applications/Firefox.app';
+            } else if ($browser === 'Internet Explorer') {
+                $browser = 'Windows Internet Explorer';
             }
 
             $app = $this->switchApp($browser);
@@ -1493,7 +1495,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
             }//end if
         }//end if
 
-        self::$_window = $this->callFunc('App.focusedWindow', array(), NULL, TRUE);
+        //self::$_window = $this->callFunc('App.focusedWindow', array(), NULL, TRUE);
 
         if (self::$_testRun === TRUE) {
             // Adjust the brwoser window region so that its only the area of the actual page.
