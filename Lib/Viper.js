@@ -2802,6 +2802,8 @@ Viper.prototype = {
 
     selectBookmark: function(bookmark)
     {
+        this.blurActiveElement();
+
         var range       = this.getCurrentRange();
         var startPos    = null;
         var endPos      = null;
@@ -3237,7 +3239,13 @@ Viper.prototype = {
             var prevNode = foundNode;
 
             dfx.remove(selEnd);
-            selStart.data = '';
+
+            try {
+                selStart.data = '';
+            } catch (e) {
+                selStart = document.createTextNode('');
+            }
+
             dfx.insertAfter(bookmark.start, selStart);
             midNode = selStart;
         }//end if
@@ -4103,6 +4111,20 @@ Viper.prototype = {
 
     setRange: function(elem, pos)
     {
+        this.blurActiveElement();
+
+        var range = this.getCurrentRange();
+
+        range.setEnd(elem, pos);
+        range.collapse(false);
+        ViperSelection.addRange(range);
+
+        return range;
+
+    },
+
+    blurActiveElement: function()
+    {
         if (document.activeElement
             && document.activeElement !== this.element
             && document.activeElement.blur
@@ -4114,14 +4136,6 @@ Viper.prototype = {
             // browser in the world changing focus to another window..
             document.activeElement.blur();
         }
-
-        var range = this.getCurrentRange();
-
-        range.setEnd(elem, pos);
-        range.collapse(false);
-        ViperSelection.addRange(range);
-
-        return range;
 
     },
 

@@ -1028,11 +1028,13 @@ ViperCoreStylesPlugin.prototype = {
 
         var origData = node.data;
         var style    = null;
+        var removeStyle = false;
         while (style = this._onChangeAddStyle.shift()) {
             var nodes = this.viper.splitNodeAtRange(style, range, true);
 
-            if (dfx.isTag(nodes.prevNode, style) === true || dfx.isTag(nodes.nextNode, style) === true) {
+            if (removeStyle === true || dfx.isTag(nodes.prevNode, style) === true || dfx.isTag(nodes.nextNode, style) === true) {
                 if (this._onChangeAddStyle.length > 0) {
+                    removeStyle = true;
                     node.data = '';
                 } else {
                     node.data = origData;
@@ -1060,13 +1062,21 @@ ViperCoreStylesPlugin.prototype = {
                     dfx.remove(nodes.nextNode);
                 }
 
-                if (node.data.length > 0) {
-                    range.setStart(node, 1);
-                } else {
-                    range.setStart(node, 0);
+                if ((!nodes.midNode
+                    || !nodes.midNode.parentNode)
+                    && (nodes.prevNode
+                    && nodes.prevNode.parentNode)
+                ) {
+                    dfx.insertAfter(nodes.prevNode, node);
                 }
 
-                range.collapse(true);
+                if (node.data.length > 0) {
+                    range.setEnd(node, 1);
+                } else {
+                    range.setEnd(node, 0);
+                }
+
+                range.collapse(false);
                 ViperSelection.addRange(range);
             } else {
                 // Start a new style tag.
