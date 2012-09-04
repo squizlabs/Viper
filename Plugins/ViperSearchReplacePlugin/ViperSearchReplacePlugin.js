@@ -164,11 +164,9 @@ ViperSearchReplacePlugin.prototype = {
         tools.getItem('ViperSearchPlugin:searchInput').setValue('');
         tools.getItem('ViperSearchPlugin:searchInput').setValue(val);
 
-        if (this.viper.isBrowser('firefox') === true) {
-            // Select the original range.
-            ViperSelection.addRange(clone);
-            this.viper.focus();
-        }
+        // Select the original range.
+        ViperSelection.addRange(clone);
+        this.viper.focus();
 
     },
 
@@ -265,6 +263,9 @@ ViperSearchReplacePlugin.prototype = {
             range = this.viper.getViperRange();
         } else {
             range = this.viper.getCurrentRange();
+            if (this.viper.rangeInViperBounds(range) === false) {
+                range = this.viper.getViperRange();
+            }
         }
 
         range.deleteContents();
