@@ -3237,7 +3237,13 @@ Viper.prototype = {
             var prevNode = foundNode;
 
             dfx.remove(selEnd);
-            selStart.data = '';
+
+            try {
+                selStart.data = '';
+            } catch (e) {
+                selStart = document.createTextNode('');
+            }
+
             dfx.insertAfter(bookmark.start, selStart);
             midNode = selStart;
         }//end if
