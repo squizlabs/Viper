@@ -91,9 +91,11 @@
                 viper.setEditableElement(contentElement);
             };
 
-            if (window.location.hash !== '#run') {
+            if (window.location.hash !== '#run' && window.location.hash !== '#poll') {
                 window.open('test_jsexec.html', '', 'width=400,height=100,0,status=0,left=1000,top=850');
                 window.location.hash = '#run';
+            } else if (window.location.hash === '#poll') {console.info(11);
+                initJSPoller();
             }
         </script>
     </head>

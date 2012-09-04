@@ -464,7 +464,14 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         }
 
         $dest = $baseDir.'/calibrate-text.html';
-        $this->goToURL($this->_getBaseUrl().'/calibrate-text.html');
+
+        $url = $this->_getBaseUrl().'/calibrate-text.html';
+
+        if (self::$_usePolling === TRUE) {
+            $url .= '#poll';
+        }
+
+        $this->goToURL($url);
 
         sleep(2);
         $this->_switchWindow('main');
@@ -739,7 +746,13 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         file_put_contents($tmpFile, $calibrateHtml);
 
         $dest = $baseDir.'/tmp-calibrate.html';
-        $this->goToURL($this->_getBaseUrl().'/tmp-calibrate.html');
+
+        $url = $this->_getBaseUrl().'/tmp-calibrate.html';
+        if (self::$_usePolling === TRUE) {
+            $url .= '#poll';
+        }
+
+        $this->goToURL($url);
 
         sleep(2);
         $this->_switchWindow('main');
@@ -776,11 +789,11 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         copy($vitpImage, $imgPath.'/vitp_arrowRight.png');
 
         // Create image for the text field actions.
-        $textFieldActionRevertRegion = $this->getRegionOnPage($this->execJS('dfx.getBoundingRectangle(window.opener.dfx.getId("textboxActionRevert"))', TRUE));
+        $textFieldActionRevertRegion = $this->getRegionOnPage($this->execJS('dfx.getBoundingRectangle(dfx.getId("textboxActionRevert"))', TRUE));
         $textFieldActionRevertImage  = $this->capture($textFieldActionRevertRegion);
         copy($textFieldActionRevertImage, $imgPath.'/textField_action_revert.png');
 
-        $textFieldActionClearRegion = $this->getRegionOnPage($this->execJS('dfx.getBoundingRectangle(window.opener.dfx.getId("textboxActionClear"))', TRUE));
+        $textFieldActionClearRegion = $this->getRegionOnPage($this->execJS('dfx.getBoundingRectangle(dfx.getId("textboxActionClear"))', TRUE));
         $textFieldActionClearImage  = $this->capture($textFieldActionClearRegion);
         copy($textFieldActionClearImage, $imgPath.'/textField_action_clear.png');
 
@@ -789,6 +802,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
 
         foreach ($statuses as $status => $className) {
             $btnRects = $this->execJS('getCoords("'.$status.'", "'.$className.'")', TRUE);
+            sleep(1);
             foreach ($btnRects as $buttonName => $rect) {
                 $this->_createButtonImageFromRectangle($buttonName, $rect);
             }

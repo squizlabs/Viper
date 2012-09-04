@@ -25,10 +25,13 @@ var viperTest = {
 
 function initJSPoller()
 {
-    var scriptUrl = window.location.href.replace('test_tmp.html', 'jspoller.php');
-    var seconds   = 1;
-    var stop      = false;
-    var interval  = null;
+    var scriptUrl = window.location.href.split('/');
+    scriptUrl.pop();
+    scriptUrl = scriptUrl.join('/') + '/jspoller.php';
+
+    var seconds  = 1;
+    var stop     = false;
+    var interval = null;
     interval = setInterval(function() {
         if (stop === true) {
             return;
