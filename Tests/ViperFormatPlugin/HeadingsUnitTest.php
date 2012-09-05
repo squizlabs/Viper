@@ -194,6 +194,25 @@ class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractViperUnitTe
 
 
     /**
+     * Test deleting a heading from the content of the page
+     *
+     * @return void
+     */
+    public function testDeletingAHeading()
+    {
+        $this->useTest(16);
+
+        // Remove the heading
+        $this->selectKeyword(1, 2);
+        $this->keyDown('Key.BACKSPACE');
+        $this->keyDown('Key.BACKSPACE');
+
+        $this->assertHTMLMatch('<p>Test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test</p>');
+
+    }//end testDeletingAHeading()
+
+
+    /**
      * Test applying headings to new content.
      *
      * @return void
