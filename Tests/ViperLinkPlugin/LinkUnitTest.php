@@ -385,6 +385,23 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
 
 
     /**
+     * Test that a link can be removed when have the link fields open in the inline toolbar.
+     *
+     * @return void
+     */
+    public function testRemoveLinkWhenLinkFieldsAreOpen()
+    {
+        $this->click($this->findKeyword(1));
+        $this->clickInlineToolbarButton('link', 'active');
+        $this->clickInlineToolbarButton('linkRemove');
+        $this->assertTrue($this->inlineToolbarButtonExists('link', 'selected'), 'Link icon should still be selected in the inline toolbar');
+        $this->assertFalse($this->inlineToolbarButtonExists('linkRemove'), 'Remove link icon should not be available in the inline toolbar');
+        $this->assertHTMLMatch('<p>%1% remove link test</p>');
+
+    }//end testRemoveLinkWhenLinkFieldsAreOpen()
+
+
+    /**
      * Test that the remove link icon in the inline toolbar removes all links in a paragraph.
      *
      * @return void
