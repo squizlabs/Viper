@@ -773,10 +773,7 @@ abstract class AbstractSikuliUnitTest extends PHPUnit_Framework_TestCase
     protected function setSetting($setting, $value)
     {
         $this->sendCmd('Settings.'.$setting.' = '.$value);
-
-        if ($this->getOS() !== 'windows') {
-            $this->_getStreamOutput();
-        }
+        $this->_getStreamOutput();
 
     }//end setSetting()
 
@@ -957,7 +954,12 @@ abstract class AbstractSikuliUnitTest extends PHPUnit_Framework_TestCase
      */
     protected function sendCmd($command)
     {
-        $this->debug('>>> '.$command);
+        //$this->debug('CMD>>> '.$command);
+
+        if ($this->getOS() === 'windows') {
+            $filePath  = dirname(__FILE__).'/sikuli.out';
+            file_put_contents($filePath, '');
+        }
 
         // This will allow _getStreamOutput method to stop waiting for more data.
         $command .= ";print '>>>';\n";
@@ -1002,7 +1004,7 @@ abstract class AbstractSikuliUnitTest extends PHPUnit_Framework_TestCase
             self::$_sikuliOutput = $sikuliOut;
 
             // Redirect Sikuli output to a file.
-            $this->sendCmd('sys.stdout = open("'.$sikuliOutputFile.'", "w", 1)');
+            $this->sendCmd('sys.stdout = sys.stderr = open("'.$sikuliOutputFile.'", "w", 1000)');
         } else {
             $cmd = '/usr/bin/java -jar '.$this->_sikuliPath.'/Contents/Resources/Java/sikuli-script.jar -i';
             $descriptorspec = array(
@@ -1112,25 +1114,16 @@ abstract class AbstractSikuliUnitTest extends PHPUnit_Framework_TestCase
         $filePath  = dirname(__FILE__).'/sikuli.out';
 
         while (TRUE) {
-            clearstatcache();
-            $fileSize = filesize($filePath);
-
-            if ($fileSize !== self::$_fileSize) {
-                $startTime       = microtime(TRUE);
-                self::$_fileSize = $fileSize;
-
-                $contents = file_get_contents($filePath);
-                $contents = explode("\n", $contents);
-                $contents = $contents[$this->_lastIndex];
-
-                if (trim($contents) !== '>>>') {
-                    // When there is data there will be two lines printed, first line
-                    // is the actual Sikuli output and the 2nd line is our >>>.
-                    $this->_lastIndex++;
+            $contents = trim(file_get_contents($filePath));
+            if ($contents !== '') {
+                $startTime = microtime(TRUE);
+                
+                if (strpos($contents, 'File "<stdin>"') !== FALSE) {
+                    $contents = str_replace("print '>>>';", '', $contents);
+                    throw new Exception('Sikuli Error:'."\n".$contents);
                 }
-
+                               
                 $contents = trim(str_replace('>>>', '', $contents));
-                $this->_lastIndex++;
                 return $contents;
             }
 

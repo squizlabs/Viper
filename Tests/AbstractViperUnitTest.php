@@ -1473,33 +1473,39 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
                 self::$_browserSelected = TRUE;
                 return;
             }//end if
-        } else if (self::$_browserSelected === FALSE) {
+        } else {           
             if ($browser === 'Firefox') {
                 $browser = '/Applications/Firefox.app';
             } else if ($browser === 'Internet Explorer') {
                 $browser = 'Windows Internet Explorer';
             }
 
-            $app = $this->switchApp($browser);
-            if ($this->getOS() !== 'windows') {
-                $windowNum = 0;
-                switch ($browser) {
-                    case 'Google Chrome':
-                        $windowNum = 1;
-                    break;
+            if (self::$_browserSelected === FALSE) {
+                $app = $this->switchApp($browser);
+                if ($this->getOS() !== 'windows') {
+                    $windowNum = 0;
+                    switch ($browser) {
+                        case 'Google Chrome':
+                            $windowNum = 1;
+                        break;
 
-                    default:
-                        $windowNum = 0;
-                    break;
-                }
+                        default:
+                            $windowNum = 0;
+                        break;
+                    }
 
-                self::$_window = $this->callFunc('window', array($windowNum), $app, TRUE);
-            } else {
-                self::$_window = $app;
-            }//end if
+                    self::$_window = $this->callFunc('window', array($windowNum), $app, TRUE);
+                } else {
+                    self::$_window = $app;
+                }//end if
+            }
         }//end if
 
-        //self::$_window = $this->callFunc('App.focusedWindow', array(), NULL, TRUE);
+        if ($this->getOS() !== 'windows') {
+            self::$_window = $this->callFunc('App.focusedWindow', array(), NULL, TRUE);
+        } else {
+            self::$_window = $this->switchApp($browser);
+        }
 
         if (self::$_testRun === TRUE) {
             // Adjust the brwoser window region so that its only the area of the actual page.
