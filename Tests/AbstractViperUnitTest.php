@@ -770,6 +770,8 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         $vitpImage = $this->capture($region);
         copy($vitpImage, $imgPath.'/vitp_arrow.png');
 
+        sleep(2);
+
         // Left arrow.
         $vitp      = $this->execJS('getVITP("left")', TRUE);
         $vitp['x'] = $this->getPageXRelativeToScreen($vitp['x']);
@@ -778,6 +780,8 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         $region    = $this->createRegion(($vitp['x'] - 2), ($vitp['y'] - 10), 30, 14);
         $vitpImage = $this->capture($region);
         copy($vitpImage, $imgPath.'/vitp_arrowLeft.png');
+
+        sleep(2);
 
         // Right arrow.
         $vitp      = $this->execJS('getVITP("right")', TRUE);
@@ -2087,6 +2091,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
                 unlink(self::$_pollFilePath.'/_jsres.tmp');
 
                 if (is_string($result) === TRUE) {
+                    $result = str_replace("\r\n", '\n', $result);
                     $result = str_replace("\n", '\n', $result);
                 }
             }
@@ -2212,16 +2217,19 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         $startKeywordImage = $this->_getKeywordImage($startKeyword);
 
         if ($endKeyword === NULL) {
-            $loc = $this->find($startKeywordImage, NULL, $this->getData('textSimmilarity'));
-            $this->click($loc);
-            $this->doubleClick($loc);
-            return;
+            //$loc = $this->find($startKeywordImage, NULL, $this->getData('textSimmilarity'));
+            //$this->click($loc);
+            //$this->doubleClick($loc);
+            //return;
+            $endKeyword = $startKeyword;
         }
 
-        $endKeywordImage = $this->_getKeywordImage($endKeyword);
-
         $start = $this->find($startKeywordImage, NULL, $this->getData('textSimmilarity'));
-        $end   = $this->find($endKeywordImage, NULL, $this->getData('textSimmilarity'));
+
+        $end = $start;
+        if ($startKeyword !== $endKeyword) {
+            $end = $this->find($this->_getKeywordImage($endKeyword), NULL, $this->getData('textSimmilarity'));
+        }
 
         $this->click($start);
 
