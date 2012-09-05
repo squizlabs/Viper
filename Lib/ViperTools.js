@@ -415,7 +415,10 @@ ViperTools.prototype = {
             self.viper.highlightSelection();
 
             // Set the caret to the end of the textfield.
-            input.value = input.value;
+            if (self.viper.isBrowser('msie') === false) {
+                input.value = input.value;
+            }
+
             if (self.viper.isBrowser('firefox') === true) {
                 input.selectionStart = input.value.length;
             }
