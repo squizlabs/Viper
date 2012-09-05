@@ -27,6 +27,7 @@ function ViperSourceViewPlugin(viper)
 
     this._ignoreUpdate       = false;
     this._ignoreSourceUpdate = false;
+    this._newWindowContents  = '';
 }
 
 ViperSourceViewPlugin.prototype = {
@@ -126,7 +127,7 @@ ViperSourceViewPlugin.prototype = {
 
     },
 
-    hideSourceView: function()
+    hideSourceView: function(newWindow)
     {
         if (this._inNewWindow === true && this._childWindow) {
             this._childWindow.close();
@@ -136,7 +137,11 @@ ViperSourceViewPlugin.prototype = {
             this._sourceView = null;
             this._editor     = null;
         } else if (this._sourceView) {
-            this.viper.ViperTools.closePopup('VSVP:popup');
+            if (newWindow === true) {
+                self.viper.ViperTools.closePopup('VSVP:popup', 'discardChanges');
+            } else {
+                this.viper.ViperTools.closePopup('VSVP:popup');
+            }
         }
 
     },
@@ -155,11 +160,7 @@ ViperSourceViewPlugin.prototype = {
     {
         var value = content;
         if (!value) {
-            if (this._editor) {
-                value = this._editor.getSession().getValue();
-            } else if (this._textEditor) {
-                value = this._textEditor.value;
-            }
+            value = this.getSourceContents();
         }
 
         if (this._originalSource === value) {
@@ -167,6 +168,19 @@ ViperSourceViewPlugin.prototype = {
         }
 
         this.viper.setHtml(value);
+
+    },
+
+    getSourceContents: function()
+    {
+        var value = '';
+        if (this._editor) {
+            value = this._editor.getSession().getValue();
+        } else if (this._textEditor) {
+            value = this._textEditor.value;
+        }
+
+        return value;
 
     },
 
@@ -385,10 +399,17 @@ ViperSourceViewPlugin.prototype = {
 
         // If the ESC key is pressed close the popup.
         editor.getKeyboardHandler().addKeyboardHandler({
-            handleKeyboard: function(data, hashId, keyString) {
+            handleKeyboard: function(data, hashId, keyString, n, e) {
+                if (!e) {
+                    return;
+                }
+
                 if (keyString === 'esc') {
                     self.viper.ViperTools.closePopup('VSVP:popup');
-                } else {
+                } else if (e.metaKey !== true
+                    && e.ctrlKey !== true
+                    && e.which !== 16
+                ) {
                     popup.hideTop();
                 }
             }
@@ -439,7 +460,7 @@ ViperSourceViewPlugin.prototype = {
     openInNewWindow: function()
     {
         // Hide current editor.
-        this.hideSourceView();
+        this.hideSourceView(true);
 
         // Add this Viper plugin object to global var.
         var viperid = 'Viper-' + this.viper.getId() + '-ViperSVP';
@@ -463,10 +484,18 @@ ViperSourceViewPlugin.prototype = {
 
     },
 
+    getNewWindowContents: function()
+    {
+        return this._newWindowContents;
+
+    },
+
     _getFrameContent: function(viperid)
     {
         var path    = this.viper.getViperPath();
         var content = '';
+
+        this._newWindowContents = this.getSourceContents();
 
         content += '<!DOCTYPE html><html lang="en"><head>';
         content += '<meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">';
@@ -498,7 +527,7 @@ ViperSourceViewPlugin.prototype = {
         content += 'viperSVP.applyEditorSettings(editor);';
         content += 'viperSVP.initEditorEvents(editor);';
         content += 'viperSVP._editor = editor;';
-        content += 'viperSVP.updateSourceContents();</script></body></html>';
+        content += 'viperSVP.updateSourceContents(viperSVP.getNewWindowContents());</script></body></html>';
 
         return content;
 
