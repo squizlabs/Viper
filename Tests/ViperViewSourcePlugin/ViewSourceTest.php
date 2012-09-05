@@ -39,7 +39,7 @@ class Viper_Tests_ViperViewSourcePlugin_ViewSourceTest extends AbstractViperView
             // Do nothing.
         }
 
-    }//end testSourceCodeAppears()
+    }//end testOpenAndCloseSourceEditor()
 
 
    /**
@@ -81,6 +81,106 @@ class Viper_Tests_ViperViewSourcePlugin_ViewSourceTest extends AbstractViperView
         $this->assertHTMLMatch('<p></p>');
 
     }//end testEditingTheSourceCode()
+
+
+   /**
+     * Test that you can edit the source code, click close but apply the changes.
+     *
+     * @return void
+     */
+    public function testEditingClosingTheWindowWithApplyingChanges()
+    {
+        $this->markTestSkipped('Atm the top buttons are removed when it switches windows. Need a way to keep the buttons there');
+
+        $this->click($this->findKeyword(2));
+        $this->clickTopToolbarButton('sourceView');
+        sleep(2);
+        $this->keyDown('Key.CMD + a');
+        $this->keyDown('Key.DELETE');
+
+        $closeIcon = $this->findImage('closePopupIcon', '.Viper-popup-closeIcon');
+        $this->click($closeIcon);
+
+        $this->clickButton('Apply Changes', NULL, TRUE);
+
+        $this->assertHTMLMatch('<p></p>');
+
+    }//end testEditingClosingTheWindowWithApplyingChanges()
+
+
+   /**
+     * Test that you can edit the source code and then discard the changes.
+     *
+     * @return void
+     */
+    public function testEditingAndDiscardingChanges()
+    {
+        $this->markTestSkipped('Atm the top buttons are removed when it switches windows. Need a way to keep the buttons there');
+
+        $this->click($this->findKeyword(2));
+        $this->clickTopToolbarButton('sourceView');
+        sleep(2);
+        $this->keyDown('Key.CMD + a');
+        $this->keyDown('Key.DELETE');
+
+        $closeIcon = $this->findImage('closePopupIcon', '.Viper-popup-closeIcon');
+        $this->click($closeIcon);
+
+        $this->clickButton('Discard', NULL, TRUE);
+
+        $this->assertHTMLMatch('<p>Lorem %1% dolor</p><p><strong>%2%</strong> sit amet</p><p>%3% p <em>XuT</em></p>');
+
+    }//end testEditingAndDiscardingChanges()
+
+
+   /**
+     * Test that you can open source view in a new window.
+     *
+     * @return void
+     */
+    public function testOpeningSourceViewInNewWindow()
+    {
+        $this->markTestSkipped('Atm the testing system cannot handle more than one window');
+
+        $this->click($this->findKeyword(2));
+        $this->clickTopToolbarButton('sourceView');
+        sleep(2);
+
+        $newWindowIcon = $this->findImage('newWindowIcon', '.Viper-sourceNewWindow');
+        $this->click($newWindowIcon);
+
+        $this->clickButton('Close Window', NULL, TRUE);
+
+        $this->assertHTMLMatch('<p>Lorem %1% dolor</p><p><strong>%2%</strong> sit amet</p><p>%3% p <em>XuT</em></p>');
+
+    }//end testOpeningSourceViewInNewWindow()
+
+
+   /**
+     * Test that you can open source view in a new window and edit it.
+     *
+     * @return void
+     */
+    public function testOpeningSourceViewInNewWindowAndEditing()
+    {
+        $this->markTestSkipped('Atm the testing system cannot handle more than one window');
+
+        $this->click($this->findKeyword(2));
+        $this->clickTopToolbarButton('sourceView');
+        sleep(2);
+
+        $newWindowIcon = $this->findImage('newWindowIcon', '.Viper-sourceNewWindow');
+        $this->click($newWindowIcon);
+
+        sleep(2);
+        $this->keyDown('Key.CMD + a');
+        $this->keyDown('Key.DELETE');
+
+        $this->clickButton('Close Window', NULL, TRUE);
+
+        $this->assertHTMLMatch('<p></p>');
+
+    }//end testOpeningSourceViewInNewWindowAndEditing()
 
 
    /**
