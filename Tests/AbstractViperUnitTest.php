@@ -304,7 +304,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
 
             // Make sure page is loaded.
             $maxRetries = 4;
-            while ($this->topToolbarButtonExists('italic', 'disabled') === FALSE) {
+            while ($this->topToolbarButtonExists('bold', 'disabled') === FALSE) {
                 $this->reloadPage();
                 if ($maxRetries === 0) {
                     throw new Exception('Failed to load Viper test page.');
@@ -337,7 +337,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
 
             // Make sure page is loaded.
             $maxRetries = 4;
-            while ($this->topToolbarButtonExists('italic', 'disabled') === FALSE) {
+            while ($this->topToolbarButtonExists('bold', 'disabled') === FALSE) {
                 $this->reloadPage();
                 if ($maxRetries === 0) {
                     throw new Exception('Failed to load Viper test page.');
@@ -1474,10 +1474,16 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
                 return;
             }//end if
         } else {           
-            if ($browser === 'Firefox') {
+            if ($this->getOS() === 'windows') {
+                if ($browser === 'Google Chrome') {
+                    $browser = '- Google Chrome';
+                } else if ($browser === 'Firefox') {
+                    $browser = 'Mozilla Firefox';
+                } else if ($browser === 'Internet Explorer') {
+                    $browser = 'Windows Internet Explorer';
+                }
+            } else if ($browser === 'Firefox') {
                 $browser = '/Applications/Firefox.app';
-            } else if ($browser === 'Internet Explorer') {
-                $browser = 'Windows Internet Explorer';
             }
 
             if (self::$_browserSelected === FALSE) {
