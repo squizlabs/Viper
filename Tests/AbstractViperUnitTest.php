@@ -500,7 +500,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
 
         $tests          = 5;
         $pass           = FALSE;
-        $textSimilarity = 0.99;
+        $textSimilarity = 0.98;
 
         do {
             try {
@@ -1473,7 +1473,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
                 self::$_browserSelected = TRUE;
                 return;
             }//end if
-        } else {           
+        } else {
             if ($this->getOS() === 'windows') {
                 if ($browser === 'Google Chrome') {
                     $browser = '- Google Chrome';
