@@ -537,7 +537,7 @@ ViperSourceViewPlugin.prototype = {
         content += '<div class="Viper-popup Viper-themeDark VSVP-popup">';
         content += '<div class="VSVP-confirmPanel Viper-popup-top">';
         content += '<div class="VSVP-confirmText">Source code changes will be reflected in your edit preview window in real time.</div>';
-        content += '<div class="Viper-button" title="Revert Changes" onclick="viperSVP.revertChanges();window.close();">Revert Changes</div>';
+        content += '<div class="Viper-button" title="Revert Changes" onclick="viperSVP.revertChanges();">Revert Changes</div>';
         content += '<div class="Viper-button" title="Close Source View" onclick="window.close();">Close Window</div></div>';
         content += '<div class="Viper-popup-content"><pre id="editor"></pre></div></div>';
         content += '<script>';
