@@ -14,7 +14,7 @@
 function ViperPluginManager(viper)
 {
     this.viper              = viper;
-    this.plugins            = {};
+    this.plugins            = null;
     this.pluginConstructors = {};
     this.activePlugin       = null;
     this.allowTextInput     = false;
@@ -37,6 +37,8 @@ ViperPluginManager.prototype = {
 
     setPlugins: function(plugins)
     {
+        this.plugins = {};
+
         var c = plugins.length;
         for (var i = 0; i < c; i++) {
             var plugin = plugins[i];
@@ -172,6 +174,12 @@ ViperPluginManager.prototype = {
     getPlugin: function(name)
     {
         return this.plugins[name];
+
+    },
+
+    getPlugins: function()
+    {
+        return this.plugins;
 
     },
 
