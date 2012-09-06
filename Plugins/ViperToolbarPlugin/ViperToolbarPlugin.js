@@ -21,6 +21,7 @@ function ViperToolbarPlugin(viper)
     this._bubbleButtons  = {};
     this._settingButtons = null;
     this._enabled        = false;
+    this._enabledButtons = [];
 
     this.createToolbar();
 
@@ -689,10 +690,17 @@ ViperToolbarPlugin.prototype = {
         var buttons = dfx.getClass('Viper-button', this._toolbar);
         var c       = buttons.length;
         var viperid = this.viper.getId();
+        var enabledButtons = [];
         for (var i = 0; i < c; i++) {
             var buttonid = buttons[i].id.replace(viperid + '-', '');
+            if (this.viper.ViperTools.getItem(buttonid).isEnabled() === true) {
+                enabledButtons.push(buttonid);
+            }
+
             this.viper.ViperTools.disableButton(buttonid);
         }
+
+        this._enabledButtons = enabledButtons;
 
         this.viper.fireCallbacks('ViperToolbarPlugin:disabled');
 
@@ -709,6 +717,10 @@ ViperToolbarPlugin.prototype = {
         dfx.addClass(this._toolbar, 'viper-active');
 
         this.viper.fireCallbacks('ViperToolbarPlugin:enabled');
+
+        while (this._enabledButtons.length) {
+            this.viper.ViperTools.enableButton(this._enabledButtons.pop());
+        }
 
     },
 

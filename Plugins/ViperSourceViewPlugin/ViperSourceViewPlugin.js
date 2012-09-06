@@ -283,6 +283,8 @@ ViperSourceViewPlugin.prototype = {
                 // Hide the Confirm message.
                 self.viper.ViperTools.getItem('VSVP:popup').hideTop();
                 self._isVisible = false;
+                self.toolbarPlugin.enable();
+                self.viper.focus();
             },
             function() {
                 if (self._editor) {
@@ -417,11 +419,21 @@ ViperSourceViewPlugin.prototype = {
 
         var onFocus = editor.onFocus;
         editor.onFocus = function() {
+            if (self._inNewWindow !== true) {
+                self.toolbarPlugin.disable();
+            }
+
             onFocus.call(editor);
             setTimeout(function() {
                 popup.hideTop();
             }, 200);
         }
+
+        editor.onBlur = function() {
+            if (self._inNewWindow !== true) {
+                self.toolbarPlugin.enable();
+            }
+        };
 
     },
 
@@ -461,6 +473,7 @@ ViperSourceViewPlugin.prototype = {
     {
         // Hide current editor.
         this.hideSourceView(true);
+        this.toolbarPlugin.enable();
 
         // Add this Viper plugin object to global var.
         var viperid = 'Viper-' + this.viper.getId() + '-ViperSVP';
