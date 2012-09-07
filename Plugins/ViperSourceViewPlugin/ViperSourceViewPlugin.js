@@ -547,7 +547,11 @@ ViperSourceViewPlugin.prototype = {
         content += 'viperSVP.applyEditorSettings(editor);';
         content += 'viperSVP.initEditorEvents(editor);';
         content += 'viperSVP._editor = editor;';
-        content += 'viperSVP.updateSourceContents(viperSVP.getNewWindowContents());</script></body></html>';
+        content += 'viperSVP.updateSourceContents(viperSVP.getNewWindowContents());';
+        content += 'var editorWrapper = document.getElementById("editor").parentNode;';
+        content += 'window.onresize = function() {console.info(editorWrapper);editorWrapper.style.height = (window.innerHeight - 55) + "px";};';
+        content += 'window.onresize();';
+        content += '</script></body></html>';
 
         return content;
 

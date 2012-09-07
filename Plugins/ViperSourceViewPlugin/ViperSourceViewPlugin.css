@@ -46,6 +46,10 @@
 .VSVP-bottomPanel-newWindow {
 }
 
+#ViperSourceViewPlugin-window .Viper-popup {
+    background: url(../Images/bgTexture-dark1.gif) repeat 0 0 #54535A;
+}
+
 .VSVP-confirmPanel {
     display: none;
     text-align: right;
