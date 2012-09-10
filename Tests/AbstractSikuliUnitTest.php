@@ -84,13 +84,6 @@ abstract class AbstractSikuliUnitTest extends PHPUnit_Framework_TestCase
      */
     private static $_fileSize = NULL;
 
-    /**
-     * Last index that was returned from sikuli output.
-     *
-     * @var integer
-     */
-    private $_lastIndex = 0;
-
 
     /**
      * Setup test.
@@ -121,19 +114,6 @@ abstract class AbstractSikuliUnitTest extends PHPUnit_Framework_TestCase
         ob_flush();
 
     }//end tearDown()
-
-
-    protected function cleanUp()
-    {
-        // Cleans up variables.
-        $cmd = 'del var_1';
-        for ($i = 2; $i < self::$_varCount; $i++) {
-            $cmd .= ', var_'.$i;
-        }
-
-        $this->sendCmd($cmd);
-
-    }//end cleanUp()
 
 
     /**

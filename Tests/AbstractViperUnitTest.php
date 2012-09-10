@@ -145,6 +145,13 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      */
     private static $_data = NULL;
 
+    /**
+     * Number of tests run.
+     *
+     * @var integer
+     */
+    private static $_testCount = 0;
+
 
     /**
      * Returns the path of a test file.
@@ -195,6 +202,8 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      */
     protected function setUp()
     {
+        self::$_testCount++;
+
         // Determine browser and OS.
         if (self::$_browser === NULL) {
             $browser = getenv('VIPER_TEST_BROWSER');
@@ -243,7 +252,17 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
             $jsInclude  = '<script type="text/javascript" src="'.$jsFilePath.'"></script>';
         }
 
-        // Create a new Sikuli connection if its not connected already.
+        // Reset the Sikuli connection after 20 tests.
+        if ((self::$_testCount % 20) === 0) {
+            $this->disconnect();
+            self::$_browserSelected = FALSE;
+            self::$_window = NULL;
+            self::$_windowSize = NULL;
+            self::$_testRun = FALSE;
+            self::$_topToolbar = NULL;
+            self::$_pageTopLeft = NULL;
+        }
+
         parent::setUp();
 
         // Create the test file.
@@ -419,7 +438,6 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      */
     protected function tearDown()
     {
-        $this->cleanUp();
 
     }//end tearDown()
 
