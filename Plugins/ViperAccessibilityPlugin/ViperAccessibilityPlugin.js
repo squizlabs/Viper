@@ -95,7 +95,11 @@ ViperAccessibilityPlugin.prototype = {
             },
             showIssueCallback: function(issueid) {
                 self.viper.fireCallbacks('ViperAccessibilityPlugin:showResolution:' + issueid);
-            }
+            },
+            ignoreMsgCodes: [
+                /Guideline1_4\.1_4_3/,
+                /Guideline1_4\.1_4_6/
+            ]
         });
 
     },
