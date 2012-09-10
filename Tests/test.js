@@ -38,7 +38,7 @@ function initJSPoller()
         }
 
         stop = true;
-        dfx.get(scriptUrl, null, function(val) {
+        dfx.get(scriptUrl, {_t:(new Date().getTime())}, function(val) {
             if (!val) {
                 stop = false;
                 return;
@@ -58,7 +58,7 @@ function initJSPoller()
             // Execute JS.
             var retval = eval(val);
 
-            dfx.get(scriptUrl, {res: retval}, function() {
+            dfx.get(scriptUrl, {res: retval, _t:(new Date().getTime())}, function() {
                 stop = false;
             });
         });
