@@ -701,6 +701,14 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
             $content = str_replace('%'.($index + 1).'%', $keyword, $content);
         }
 
+        // Replace URL keyword.
+        $url = getenv('VIPER_TEST_URL');
+        if (empty($url) === TRUE) {
+            $url = dirname(__FILE__);
+        }
+
+        $content = str_replace('%url%', $url, $content);
+
         return $content;
 
     }//end replaceKeywords()
@@ -896,6 +904,13 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         return $url;
 
     }//end _getBaseUrl()
+
+
+    protected function getTestURL($path='')
+    {
+        return $this->_getBaseUrl().$path;
+
+    }//end getTestURL()
 
 
     /**
