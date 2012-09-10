@@ -419,6 +419,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      */
     protected function tearDown()
     {
+        $this->cleanUp();
 
     }//end tearDown()
 

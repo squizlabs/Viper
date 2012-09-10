@@ -123,6 +123,19 @@ abstract class AbstractSikuliUnitTest extends PHPUnit_Framework_TestCase
     }//end tearDown()
 
 
+    protected function cleanUp()
+    {
+        // Cleans up variables.
+        $cmd = 'del var_1';
+        for ($i = 2; $i < self::$_varCount; $i++) {
+            $cmd .= ', var_'.$i;
+        }
+
+        $this->sendCmd($cmd);
+
+    }//end cleanUp()
+
+
     /**
      * Find a particular GUI element.
      *
@@ -954,7 +967,7 @@ abstract class AbstractSikuliUnitTest extends PHPUnit_Framework_TestCase
      */
     protected function sendCmd($command)
     {
-        //$this->debug('CMD>>> '.$command);
+        $this->debug('CMD>>> '.$command);
 
         if ($this->getOS() === 'windows') {
             $filePath  = dirname(__FILE__).'/sikuli.out';
@@ -1117,12 +1130,12 @@ abstract class AbstractSikuliUnitTest extends PHPUnit_Framework_TestCase
             $contents = trim(file_get_contents($filePath));
             if ($contents !== '') {
                 $startTime = microtime(TRUE);
-                
+
                 if (strpos($contents, 'File "<stdin>"') !== FALSE) {
                     $contents = str_replace("print '>>>';", '', $contents);
                     throw new Exception('Sikuli Error:'."\n".$contents);
                 }
-                               
+
                 $contents = trim(str_replace('>>>', '', $contents));
                 return $contents;
             }
