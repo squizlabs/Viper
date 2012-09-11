@@ -83,16 +83,11 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
         $this->click($this->findKeyword(1));
 
         // Open Word doc, copy its contents.
-        $retval = NULL;
-
-        system('open '.escapeshellarg(dirname(__FILE__).'/CopyPasteDoc.docx'), $retval);
-
-        if ($retval === 1) {
+        if ($this->openFile(dirname(__FILE__).'/CopyPasteDoc.docx', 'Microsoft Word') === FALSE) {
             $this->markTestSkipped('MS Word is not available');
-            return;
-        } else {
-            sleep(2);
         }
+
+        sleep(2);
 
         // Switch to MS Word.
         $this->switchApp('Microsoft Word');
@@ -176,30 +171,20 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
     public function testHtmlTablesInPageCopyPaste()
     {
         // Open Word doc, copy its contents.
-        $retval = NULL;
-
-        system('open '.escapeshellarg(dirname(__FILE__).'/HtmlTablesInPage.html'), $retval);
-
-        if ($retval === 1) {
-            $this->markTestSkipped('Firefox is not available');
-            return;
-        } else {
-            sleep(2);
+        if ($this->openFile(dirname(__FILE__).'/HtmlTablesInPage.html', $this->getBrowserName()) === FALSE) {
+            $this->markTestSkipped('MS Word is not available');
         }
 
-        // Switch to Firefox.
-        $this->switchApp('Firefox');
+        sleep(2);
 
         // Copy text.
         $this->keyDown('Key.CMD + a');
         sleep(1);
         $this->keyDown('Key.CMD + c');
         sleep(1);
-        $this->keyDown('Key.CMD + w');
-        $this->keyDown('Key.CMD + q');
-        sleep(5);
+        $this->closeApp($this->getBrowserName());
+        sleep(1);
 
-        $this->switchApp($this->getBrowserName());
         $this->selectKeyword(1);
 
         $this->keyDown('Key.CMD + v');
@@ -225,16 +210,11 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
     public function testSpecialCharactersDocCopyPaste()
     {
         // Open Word doc, copy its contents.
-        $retval = NULL;
-
-        system('open '.escapeshellarg(dirname(__FILE__).'/SpecialCharactersDoc.docx'), $retval);
-
-        if ($retval === 1) {
+        if ($this->openFile(dirname(__FILE__).'/SpecialCharactersDoc.docx', 'Microsoft Word') === FALSE) {
             $this->markTestSkipped('MS Word is not available');
-            return;
-        } else {
-            sleep(2);
         }
+
+        sleep(2);
 
         // Switch to MS Word.
         $this->switchApp('Microsoft Word');
@@ -268,16 +248,11 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
     public function testListTestDocCopyPaste()
     {
         // Open Word doc, copy its contents.
-        $retval = NULL;
-
-        system('open '.escapeshellarg(dirname(__FILE__).'/ListsTestDoc.docx'), $retval);
-
-        if ($retval === 1) {
+        if ($this->openFile(dirname(__FILE__).'/ListsTestDoc.docx', 'Microsoft Word') === FALSE) {
             $this->markTestSkipped('MS Word is not available');
-            return;
-        } else {
-            sleep(2);
         }
+
+        sleep(2);
 
         // Switch to MS Word.
         $this->switchApp('Microsoft Word');
@@ -312,16 +287,11 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
     public function testComplexListDocCopyPaste()
     {
         // Open Word doc, copy its contents.
-        $retval = NULL;
-
-        system('open '.escapeshellarg(dirname(__FILE__).'/ComplexListDoc.docx'), $retval);
-
-        if ($retval === 1) {
+        if ($this->openFile(dirname(__FILE__).'/ComplexListDoc.docx', 'Microsoft Word') === FALSE) {
             $this->markTestSkipped('MS Word is not available');
-            return;
-        } else {
-            sleep(2);
         }
+
+        sleep(2);
 
         // Switch to MS Word.
         $this->switchApp('Microsoft Word');
@@ -356,16 +326,11 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
     public function testWordTablesWithAttributesCopyPaste()
     {
         // Open Word doc, copy its contents.
-        $retval = NULL;
-
-        system('open '.escapeshellarg(dirname(__FILE__).'/WordTablesWithAttributes.docx'), $retval);
-
-        if ($retval === 1) {
+        if ($this->openFile(dirname(__FILE__).'/WordTablesWithAttributes.docx', 'Microsoft Word') === FALSE) {
             $this->markTestSkipped('MS Word is not available');
-            return;
-        } else {
-            sleep(2);
         }
+
+        sleep(2);
 
         // Switch to MS Word.
         $this->switchApp('Microsoft Word');
@@ -403,16 +368,11 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
     public function testWordTableExamplesDocCopyPaste()
     {
         // Open Word doc, copy its contents.
-        $retval = NULL;
-
-        system('open '.escapeshellarg(dirname(__FILE__).'/WordTableExamples.docx'), $retval);
-
-        if ($retval === 1) {
+        if ($this->openFile(dirname(__FILE__).'/WordTableExamples.docx', 'Microsoft Word') === FALSE) {
             $this->markTestSkipped('MS Word is not available');
-            return;
-        } else {
-            sleep(2);
         }
+
+        sleep(2);
 
         // Switch to MS Word.
         $this->switchApp('Microsoft Word');
@@ -452,16 +412,11 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
     public function testViperTestDocCopyPasteWithPasteShortcut()
     {
         // Open Word doc, copy its contents.
-        $retval = NULL;
-
-        system('open '.escapeshellarg(dirname(__FILE__).'/ViperTestDoc.docx'), $retval);
-
-        if ($retval === 1) {
+        if ($this->openFile(dirname(__FILE__).'/ViperTestDoc.docx', 'Microsoft Word') === FALSE) {
             $this->markTestSkipped('MS Word is not available');
-            return;
-        } else {
-            sleep(5);
         }
+
+        sleep(2);
 
         // Switch to MS Word.
         $this->switchApp('Microsoft Word');
@@ -494,16 +449,11 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
     public function testViperTestDocCopyPasteWithRightClickPaste()
     {
         // Open Word doc, copy its contents.
-        $retval = NULL;
-
-        system('open '.escapeshellarg(dirname(__FILE__).'/ViperTestDoc.docx'), $retval);
-
-        if ($retval === 1) {
+        if ($this->openFile(dirname(__FILE__).'/ViperTestDoc.docx', 'Microsoft Word') === FALSE) {
             $this->markTestSkipped('MS Word is not available');
-            return;
-        } else {
-            sleep(5);
         }
+
+        sleep(2);
 
         // Switch to MS Word.
         $this->switchApp('Microsoft Word');

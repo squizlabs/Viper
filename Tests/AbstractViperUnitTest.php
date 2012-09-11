@@ -152,6 +152,13 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      */
     private static $_testCount = 0;
 
+    /**
+     * List of applications and if they are available in the current system.
+     *
+     * @return array
+     */
+    private static $_apps = array();
+
 
     /**
      * Returns the path of a test file.
@@ -2543,6 +2550,82 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         }
 
     }//end clickElement()
+
+
+    /**
+     * Open file using specified application.
+     *
+     * If the application is not available then this method will return FALSE.
+     * If the application that is being opened is the current browser then a new tab
+     * will be opened instead.
+     *
+     * @param string $filePath The file to open.
+     * @param string $appName  The name of the application to use to open the file.
+     *
+     * @return boolean
+     */
+    protected function openFile($filePath, $appName)
+    {
+        if ($appName === $this->getBrowserName()) {
+            // Open a new tab in this browser.
+            $this->keyDown('Key.CMD + t');
+            sleep(1);
+            $this->goToURL($filePath);
+            return TRUE;
+        }
+
+        if (array_key_exists($appName, self::$_apps) === TRUE) {
+            if (self::$_apps[$appName] === TRUE) {
+                system('open '.escapeshellarg($filePath));
+                return TRUE;
+            } else {
+                return FALSE;
+            }
+        } else {
+            $retval = NULL;
+            if ($this->getOS() === 'windows') {
+                system('open '.escapeshellarg($filePath), $retval);
+            } else {
+                system('open -a'.escapeshellarg($appName).' '.escapeshellarg($filePath), $retval);
+            }
+
+            if ($retval === 1) {
+                self::$_apps[$appName] = FALSE;
+                return FALSE;
+            } else {
+                self::$_apps[$appName] = TRUE;
+                return TRUE;
+            }
+        }//end if
+
+    }//end openFile()
+
+
+    /**
+     * Close the specified app.
+     *
+     * Note if the current browser is being closed then it will close its tab instead
+     * of the whole application.
+     *
+     * @param string $appName The name of the application to close.
+     *
+     * @return void
+     */
+    protected function closeApp($appName)
+    {
+        $this->switchApp($appName);
+        if ($this->getOS() === 'windows') {
+            $this->keyDown('Key.ALT + F4');
+        } else {
+            if ($appName === $this->getBrowserName()) {
+                sleep(5);
+                $this->keyDown('Key.CMD + w');
+            } else {
+                $this->keyDown('Key.CMD + q');
+            }
+        }
+
+    }//end closeApp()
 
 
     /**
