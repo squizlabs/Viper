@@ -6,7 +6,8 @@ $opts = getopt('s::b::u::t::civ', array('selenium', 'popup', 'url::', 'built'));
                  'Firefox',
                  'Safari',
                  'Google Chrome',
-                 'Internet Explorer',
+                 'IE8',
+                 'IE9',
                 );
 
     /*if (isset($opts['s']) === TRUE) {

@@ -304,8 +304,16 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
             $usePolling = 'true';
         }
 
+        $metaTag = '';
+        if ($this->getBrowserid() === 'ie8') {
+            $metaTag = '<meta http-equiv="X-UA-Compatible" content="IE=8" >';
+        } else if($this->getBrowserid() === 'ie9') {
+            $metaTag = '<meta http-equiv="X-UA-Compatible" content="IE=9" >';
+        }
+
         // Put the current test file contents to the main test file.
         $contents = str_replace('__TEST_CONTENT__', $testFileContent, self::$_testContent);
+        $contents = str_replace('__TEST_IE_VERSION_METATAG__', $metaTag, $contents);
         $contents = str_replace('__TEST_BROWSER__', $this->getBrowserid(), $contents);
         $contents = str_replace('__TEST_VIPER_INCLUDE__', $viperInclude, $contents);
         $contents = str_replace('__TEST_TITLE__', $this->getName(), $contents);
@@ -774,7 +782,15 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
 
         $buttonHTML .= '</div></div>';
 
+        $metaTag = '';
+        if ($this->getBrowserid() === 'ie8') {
+            $metaTag = '<meta http-equiv="X-UA-Compatible" content="IE=8" >';
+        } else if($this->getBrowserid() === 'ie9') {
+            $metaTag = '<meta http-equiv="X-UA-Compatible" content="IE=9" >';
+        }
+
         $calibrateHtml = file_get_contents($baseDir.'/calibrate.html');
+        $calibrateHtml = str_replace('__TEST_IE_VERSION_METATAG__', $metaTag, $calibrateHtml);
         $calibrateHtml = str_replace('__TEST_CONTENT__', $buttonHTML, $calibrateHtml);
 
         file_put_contents($tmpFile, $calibrateHtml);
@@ -1520,7 +1536,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
                     $browser = '- Google Chrome';
                 } else if ($browser === 'Firefox') {
                     $browser = 'Mozilla Firefox';
-                } else if ($browser === 'Internet Explorer') {
+                } else if ($browser === 'IE8' || $browser === 'IE9') {
                     $browser = 'Windows Internet Explorer';
                 }
             } else if ($browser === 'Firefox') {
