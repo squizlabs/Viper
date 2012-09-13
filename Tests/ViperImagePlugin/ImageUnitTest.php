@@ -847,11 +847,11 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperImagePlugi
         $this->mouseMoveOffset(15, 0);
         $this->click($this->getMouseLocation());
 
-        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>Another paragraph %1%<img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="" width="369" height="167" /></p><p>LOREM</p><p>LABS is ORSM</p>');
+        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>Another paragraph %1%<img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt="" width="369" height="167" /></p><p>LOREM</p><p>LABS is ORSM</p>');
 
         // Undo the move
         $this->clickTopToolbarButton('historyUndo');
-        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>Another paragraph %1%</p><p>LOREM</p><p><img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="" width="369" height="167"/></p><p>LABS is ORSM</p>');
+        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>Another paragraph %1%</p><p>LOREM</p><p><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt="" width="369" height="167"/></p><p>LABS is ORSM</p>');
 
     }//end testMovingAnImage()
 

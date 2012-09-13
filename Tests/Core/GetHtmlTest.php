@@ -43,7 +43,7 @@ class Viper_Tests_Core_GetHtmlTest extends AbstractViperUnitTest
     {
         $this->click($this->find('First'));
 
-        $this->_checkGetHTML('<h1>First Heading</h1><p style="text-align: center;">Lorem XuT dolor sit <em>amet</em> <strong>WoW</strong></p><p><img alt="" src="http://www.squizlabs.com/__images/general/html-codesniffer.png" /></p>');
+        $this->_checkGetHTML('<h1>First Heading</h1><p style="text-align: center;">Lorem XuT dolor sit <em>amet</em> <strong>WoW</strong></p><p><img alt="" src="%url%/ViperImagePlugin/Images/html-codesniffer.png" />&nbsp;</p>');
 
     }//end testGetHtmlForImages()
 

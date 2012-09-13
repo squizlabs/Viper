@@ -1181,13 +1181,13 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->type('Squiz Labs');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>%1% XuT</p><a href="www.squizlabs.com" title="Squiz Labs"><img src="http://www.squizlabs.com/__images/general/html-codesniffer.png" alt="Alt tag" /></a><p>second paragraph</p>');
+        $this->assertHTMLMatch('<p>%1% XuT</p><a href="www.squizlabs.com" title="Squiz Labs"><img src="%url%/ViperImagePlugin/Images/html-codesniffer.png" alt="Alt tag" /></a><p>second paragraph</p>');
 
         $this->click($this->findKeyword(1));
 
         $this->clickElement('img', 1);
         $this->clickInlineToolbarButton('linkRemove');
-        $this->assertHTMLMatch('<p>%1% XuT</p><img src="http://www.squizlabs.com/__images/general/html-codesniffer.png" alt="Alt tag" /><p>second paragraph</p>');
+        $this->assertHTMLMatch('<p>%1% XuT</p><img src="%url%/ViperImagePlugin/Images/html-codesniffer.png" alt="Alt tag" /><p>second paragraph</p>');
 
     }//end testLinkingAnImageUsingInlineToolbar()
 
@@ -1208,11 +1208,11 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->type('Squiz Labs');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>%1% XuT</p><a href="www.squizlabs.com" title="Squiz Labs"><img src="http://www.squizlabs.com/__images/general/html-codesniffer.png" alt="Alt tag" /></a><p>second paragraph</p>');
+        $this->assertHTMLMatch('<p>%1% XuT</p><a href="www.squizlabs.com" title="Squiz Labs"><img src="%url%/ViperImagePlugin/Images/html-codesniffer.png" alt="Alt tag" /></a><p>second paragraph</p>');
 
         $this->clickElement('img', 1);
         $this->clickTopToolbarButton('linkRemove');
-        $this->assertHTMLMatch('<p>%1% XuT</p><img src="http://www.squizlabs.com/__images/general/html-codesniffer.png" alt="Alt tag" /><p>second paragraph</p>');
+        $this->assertHTMLMatch('<p>%1% XuT</p><img src="%url%/ViperImagePlugin/Images/html-codesniffer.png" alt="Alt tag" /><p>second paragraph</p>');
 
     }//end testLinkingAnImageUsingTopToolbar()
 

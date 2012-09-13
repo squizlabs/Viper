@@ -342,7 +342,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarTABLEUnitTest extends Ab
         $this->selectKeyword(4);
         $this->type('Key.RIGHT');
         $this->clickTopToolbarButton('image');
-        $this->type('http://www.squizlabs.com/__images/general/html-codesniffer.png');
+        $this->type('%url%/ViperImagePlugin/Images/html-codesniffer.png');
         $this->keyDown('Key.TAB');
         $this->type('Alt tag');
         $this->keyDown('Key.ENTER');
