@@ -76,6 +76,7 @@ $opts = getopt('s::b::u::t::civ', array('selenium', 'popup', 'url::', 'built'));
     }
 
     foreach ($browsers as $browser) {
+        $browser = trim($browser);
         if (empty($browser) === TRUE) {
             continue;
         }
