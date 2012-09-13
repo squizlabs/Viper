@@ -1417,7 +1417,7 @@ ViperCoreStylesPlugin.prototype = {
         }//end if
 
         var enableHr     = true;
-        var hrIgnoreTags = 'tr,td,th,li,caption,img';
+        var hrIgnoreTags = 'tr,td,th,li,caption,img,ul,ol';
         if (hrIgnoreTags.split(',').inArray(dfx.getTagName(startNode)) === true) {
             enableHr = false;
         }
