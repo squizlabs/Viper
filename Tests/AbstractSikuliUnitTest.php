@@ -1059,6 +1059,19 @@ abstract class AbstractSikuliUnitTest extends PHPUnit_Framework_TestCase
 
 
     /**
+     * Resets the Sikuli connection.
+     *
+     * @return void
+     */
+    protected function resetConnection()
+    {
+        $this->disconnect();
+        $this->connect();
+
+    }//end resetConnection()
+
+
+    /**
      * Returns the name of the Operating System the PHP is running on.
      *
      * @return string
@@ -1211,6 +1224,10 @@ abstract class AbstractSikuliUnitTest extends PHPUnit_Framework_TestCase
         $content = implode("\n", $content);
 
         if ($isError === TRUE) {
+            if (strpos('java.lang.OutOfMemoryError', $content) !== FALSE) {
+                $this->resetConnection();
+            }
+
             $this->debug("Sikuli ERROR: \n".$content);
             throw new Exception("Sikuli ERROR: \n".$content);
         }

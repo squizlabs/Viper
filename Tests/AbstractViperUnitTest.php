@@ -55,7 +55,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      * @var array
      */
     private $_defaultWindowSize = array(
-                                   'w' => 1300,
+                                   'w' => 1270,
                                    'h' => 800,
                                   );
 
@@ -259,15 +259,9 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
             $jsInclude  = '<script type="text/javascript" src="'.$jsFilePath.'"></script>';
         }
 
-        // Reset the Sikuli connection after 20 tests.
-        if ((self::$_testCount % 20) === 0) {
-            $this->disconnect();
-            self::$_browserSelected = FALSE;
-            self::$_window = NULL;
-            self::$_windowSize = NULL;
-            self::$_testRun = FALSE;
-            self::$_topToolbar = NULL;
-            self::$_pageTopLeft = NULL;
+        // Reset the Sikuli connection after 15 tests.
+        if ((self::$_testCount % 15) === 0) {
+            $this->resetConnection();
         }
 
         parent::setUp();
@@ -391,6 +385,25 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         }//end if
 
     }//end setUp()
+
+
+    /**
+     * Resets the Sikuli connection.
+     *
+     * @return void
+     */
+    protected function resetConnection()
+    {
+        self::$_browserSelected = FALSE;
+        self::$_window          = NULL;
+        self::$_windowSize      = NULL;
+        self::$_testRun         = FALSE;
+        self::$_topToolbar      = NULL;
+        self::$_pageTopLeft     = NULL;
+
+        parent::resetConnection();
+
+    }//end resetConnection()
 
 
     /**
