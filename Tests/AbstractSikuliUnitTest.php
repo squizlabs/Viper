@@ -837,6 +837,20 @@ abstract class AbstractSikuliUnitTest extends PHPUnit_Framework_TestCase
 
 
     /**
+     * Returns the free memory remaining in Java.
+     *
+     * @return integer
+     */
+    protected function getMemoryAvailable()
+    {
+        $this->sendCmd('from java.lang import Runtime;print Runtime.getRuntime().freeMemory()');
+        $memory = (int) $this->_getStreamOutput();
+        return $memory;
+
+    }//end getMemoryAvailable()
+
+
+    /**
      * Highlights the specified region for given seconds.
      *
      * @param string  $region  The region variable.
@@ -1063,7 +1077,7 @@ abstract class AbstractSikuliUnitTest extends PHPUnit_Framework_TestCase
      *
      * @return void
      */
-    protected function resetConnection()
+    protected function restConnection()
     {
         $this->disconnect();
         $this->connect();
