@@ -1616,6 +1616,7 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
 
         // Undo and apply div
         $this->keyDown('Key.CMD + z');
+        sleep(1);
         $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(3);
         $this->clickInlineToolbarButton('formats');
@@ -1624,6 +1625,7 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
 
         // Undo and apply quote
         $this->keyDown('Key.CMD + z');
+        sleep(1);
         $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(3);
         $this->clickInlineToolbarButton('formats');
@@ -1632,6 +1634,7 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
 
         // Undo and apply pre
         $this->keyDown('Key.CMD + z');
+        sleep(1);
         $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(3);
         $this->clickInlineToolbarButton('formats');
@@ -1697,6 +1700,7 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
 
         // Undo and apply div
         $this->keyDown('Key.CMD + z');
+        sleep(1);
         $this->click($this->findKeyword(2));
         $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(3);
@@ -1706,6 +1710,7 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
 
         // Undo and apply quote
         $this->keyDown('Key.CMD + z');
+        sleep(1);
         $this->click($this->findKeyword(2));
         $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(3);
@@ -1737,6 +1742,7 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
 
         // Undo and apply div
         $this->keyDown('Key.CMD + z');
+        sleep(1);
         $this->click($this->findKeyword(2));
         $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(3);
@@ -1746,6 +1752,7 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
 
         // Undo and apply quote
         $this->keyDown('Key.CMD + z');
+        sleep(1);
         $this->click($this->findKeyword(2));
         $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(3);
@@ -1826,6 +1833,7 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
 
         // Undo and apply quote
         $this->keyDown('Key.CMD + z');
+        sleep(1);
         $this->selectKeyword(3);
         $this->selectInlineToolbarLineageItem(3);
         $this->clickTopToolbarButton('formats');
@@ -1854,6 +1862,7 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
 
         // Undo and apply div
         $this->keyDown('Key.CMD + z');
+        sleep(1);
         $this->selectKeyword(3);
         $this->selectInlineToolbarLineageItem(3);
         $this->clickInlineToolbarButton('formats');
@@ -1862,6 +1871,7 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
 
         // Undo and apply quote
         $this->keyDown('Key.CMD + z');
+        sleep(1);
         $this->selectKeyword(3);
         $this->selectInlineToolbarLineageItem(3);
         $this->clickInlineToolbarButton('formats');
