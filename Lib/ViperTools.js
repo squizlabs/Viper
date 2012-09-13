@@ -420,7 +420,9 @@ ViperTools.prototype = {
             }
 
             if (self.viper.isBrowser('firefox') === true) {
-                input.selectionStart = input.value.length;
+                setTimeout(function() {
+                    input.selectionStart = input.value.length;
+                }, 5);
             }
         });
 
