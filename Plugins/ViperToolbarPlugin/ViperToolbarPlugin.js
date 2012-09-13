@@ -739,9 +739,41 @@ ViperToolbarPlugin.prototype = {
 
     },
 
+    hide: function()
+    {
+        dfx.setStyle(this._toolbar, 'display', 'none');
+
+    },
+
+    show: function()
+    {
+        dfx.setStyle(this._toolbar, 'display', 'block');
+
+    },
+
     isDisabled: function()
     {
         return !this._enabled;
+
+    },
+
+    isVisible: function()
+    {
+        if (dfx.getStyle(this._toolbar, 'display') === 'none') {
+            return false;
+        }
+
+        return true;
+
+    },
+
+    exists: function()
+    {
+        if (this._toolbar) {
+            return true;
+        }
+
+        return false;
 
     },
 
