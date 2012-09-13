@@ -359,14 +359,19 @@ ViperToolbarPlugin.prototype = {
                     return;
                 }
 
-                subSection.form.onsubmit = function() {
+                subSection.form.onsubmit = function(e) {
+                    self.viper.focus();
+
+                    if (e) {
+                        dfx.preventDefault(e);
+                    }
+
                     var button = tools.getItem(subSectionid + '-applyButton');
                     if (button.isEnabled() === false) {
                         return false;
                     }
 
                     tools.disableButton(subSectionid + '-applyButton');
-                    self.viper.focus();
 
                     // IE needs this timeout so focus works <3..
                     if (self.viper.isBrowser('msie') === false) {
@@ -383,6 +388,16 @@ ViperToolbarPlugin.prototype = {
                                 console.error(e.message);
                             }
                         }, 10);
+                    }
+
+                    tools.disableButton(subSectionid + '-applyButton');
+
+                    // Give focus back to the form field.
+                    var inputElements = dfx.getTag('input[type=text], textarea', subSection.form);
+                    if (inputElements.length > 0) {
+                        try {
+                            inputElements[0].focus();
+                        } catch(e) {}
                     }
 
                     return false;
