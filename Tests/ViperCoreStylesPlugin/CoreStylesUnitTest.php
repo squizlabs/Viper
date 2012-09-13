@@ -117,6 +117,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreStylesUnitTest extends AbstractViper
     public function testMultiParaRemoveStyles()
     {
         $this->selectKeyword(1, 4);
+        sleep(1);
         $this->keyDown('Key.CMD + b');
         $this->keyDown('Key.CMD + i');
         $this->keyDown('Key.CMD + i');
