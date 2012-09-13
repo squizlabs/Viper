@@ -1077,7 +1077,7 @@ abstract class AbstractSikuliUnitTest extends PHPUnit_Framework_TestCase
      *
      * @return void
      */
-    protected function restConnection()
+    protected function resetConnection()
     {
         $this->disconnect();
         $this->connect();
