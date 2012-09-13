@@ -2394,7 +2394,12 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      */
     protected function clearFieldValue($label)
     {
-        $fieldLabel   = $this->find($this->_getLabel($label), NULL, 0.7);
+        try {
+            $fieldLabel = $this->find($this->_getLabel($label), NULL, 0.7);
+        } catch (Exception $e) {
+            $fieldLabel = $this->find($this->_getLabel($label, TRUE), NULL, 0.7);
+        }
+
         $fieldRegion  = $this->extendRight($fieldLabel, 400);
         $actionImage  = $this->getBrowserImagePath().'/textField_action_clear.png';
         $actionButton = $this->find($actionImage, $fieldRegion);
@@ -2413,7 +2418,12 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      */
     protected function revertFieldValue($label)
     {
-        $fieldLabel   = $this->find($this->_getLabel($label), NULL, 0.7);
+        try {
+            $fieldLabel = $this->find($this->_getLabel($label), NULL, 0.7);
+        } catch (Exception $e) {
+            $fieldLabel = $this->find($this->_getLabel($label, TRUE), NULL, 0.7);
+        }
+
         $fieldRegion  = $this->extendRight($fieldLabel, 400);
         $actionImage  = $this->getBrowserImagePath().'/textField_action_revert.png';
         $actionButton = $this->find($actionImage, $fieldRegion);
@@ -2428,12 +2438,12 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      *
      * @return string
      */
-    private function _getLabel($label)
+    private function _getLabel($label, $force=FALSE)
     {
         $labelImg  = preg_replace('#\W#', '_', $label);
         $imagePath = $this->getBrowserImagePath().'/label_'.$labelImg.'.png';
 
-        if (file_exists($imagePath) === FALSE) {
+        if (file_exists($imagePath) === FALSE || $force === TRUE) {
             $rect    = $this->execJS('gField("'.$label.'")');
             $region  = $this->getRegionOnPage($rect);
             $tmpPath = $this->capture($region);
