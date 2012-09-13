@@ -86,12 +86,24 @@ $opts = getopt('s::b::u::t::civ', array('selenium', 'popup', 'url::', 'built'));
 
         $phpunitCMD = '';
 
+        // Setup logging if there is no filter.
+        if ($test === NULL) {
+            $browserid      = getBrowserid($browser);
+            $browserTmpPath = dirname(__FILE__).'/tmp/'.$browserid;
+            if (file_exists($browserTmpPath) === FALSE) {
+                mkdir($browserTmpPath, 0755, TRUE);
+            }
+
+            $logPath     = $browserTmpPath.'/test.log';
+            $phpunitCMD .= '--log-junit '.$logPath;
+        }
+
         if ($unitTests !== NULL) {
             $phpunitCMD .= $unitTests;
         }
 
         if ($test !== NULL) {
-            $phpunitCMD .= '--filter "'.$test.'"';
+            $phpunitCMD .= ' --filter "'.$test.'"';
         }
 
         if (empty($unitTests) === TRUE) {
@@ -100,5 +112,47 @@ $opts = getopt('s::b::u::t::civ', array('selenium', 'popup', 'url::', 'built'));
 
         passthru('phpunit --configuration phpunit.xml '.$phpunitCMD);
     }
+
+    function getBrowserid($browser)
+    {
+        $id = $browser;
+        if (getOS() === 'windows'
+            && strpos($id, '.exe') !== FALSE
+        ) {
+            $id = explode('\\', $id);
+            $id = array_pop($id);
+            $id = str_replace('.exe', '', $id);
+        }
+
+        $id = strtolower($id);
+        $id = str_replace(' ', '', $id);
+        return $id;
+
+    }//end getBrowserid()
+
+    function getOS()
+    {
+        $os = strtolower(php_uname('s'));
+        switch ($os) {
+            case 'darwin':
+                $os = 'osx';
+            break;
+
+            case 'linux':
+                $os = 'linux';
+            break;
+
+            case 'windows nt':
+                $os = 'windows';
+            break;
+
+            default:
+                $os = $os;
+            break;
+        }//end switch
+
+        return $os;
+
+    }//end getOS()
 
 ?>
