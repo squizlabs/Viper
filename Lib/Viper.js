@@ -701,10 +701,12 @@ Viper.prototype = {
                 for (var i = 0; i < elem.childNodes.length; i++) {
                     var child = elem.childNodes[i];
                     if ((dfx.isBlockElement(child) === true && dfx.isStubElement(child) === false)
-                        || child.nodeType === dfx.TEXT_NODE && dfx.trim(child.data) === ''
                         || (child.nodeType !== dfx.ELEMENT_NODE && child.nodeType !== dfx.TEXT_NODE)
                         || dfx.isTag(child, 'hr') === true
                     ) {
+                        continue;
+                    } else if (child.nodeType === dfx.TEXT_NODE && dfx.trim(child.data) === '') {
+                        dfx.remove(child);
                         continue;
                     }
 
