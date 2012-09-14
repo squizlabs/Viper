@@ -775,7 +775,18 @@ ViperFormatPlugin.prototype = {
                         tools.getItem('formats').setIconClass('Viper-formats-' + parentTagName);
                     }
 
-                    if (dfx.isBlockElement(nodeSelection) === true) {
+                    var isBlockElement  = dfx.isBlockElement(nodeSelection);
+                    var hasInlineParent = false;
+                    if (isBlockElement === true) {
+                        while (nodeSelection.parentNode && nodeSelection.parentNode !== viperElement) {
+                            if (dfx.isBlockElement(nodeSelection.parentNode) === false) {
+                                hasInlineParent = true;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (isBlockElement === true && hasInlineParent === false) {
                         // If this is a P tag selection and P tag belongs to a
                         // blockquote and blockquote has more than one P tag then
                         // do not allow this P tag to be converted to anything else.
