@@ -79,6 +79,10 @@ sub, sup {
     font-family: monospace;
 }
 
+caption {
+    text-align: center;
+}
+
 .Viper-button.Viper-disabled .Viper-buttonIcon {
     /*margin-top: -12px;*/
     margin-left: -8px;
