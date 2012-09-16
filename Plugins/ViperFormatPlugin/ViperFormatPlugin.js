@@ -778,11 +778,14 @@ ViperFormatPlugin.prototype = {
                     var isBlockElement  = dfx.isBlockElement(nodeSelection);
                     var hasInlineParent = false;
                     if (isBlockElement === true) {
-                        while (nodeSelection.parentNode && nodeSelection.parentNode !== viperElement) {
-                            if (dfx.isBlockElement(nodeSelection.parentNode) === false) {
+                        var node = nodeSelection.parentNode;
+                        while (node && node !== viperElement) {
+                            if (dfx.isBlockElement(node) === false) {
                                 hasInlineParent = true;
                                 break;
                             }
+
+                            node = node.parentNode;
                         }
                     }
 
