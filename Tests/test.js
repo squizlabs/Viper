@@ -365,5 +365,8 @@ function useTest(id)
 
     win.dfx.setHtml(win.dfx.getId('testCaseTitle'), '(Using Test #' + id + ')');
 
+    if (win.viper.element) {
+        win.viper.element.blur();
+    }
 
 }
