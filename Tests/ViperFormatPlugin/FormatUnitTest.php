@@ -1253,7 +1253,7 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractFormatsUnitTe
      *
      * @return void
      */
-    public function testComlexHTMLStructureConversion()
+    public function testComplexHTMLStructureConversion()
     {
         $this->useTest(1);
         $this->selectKeyword(1, 2);
@@ -1355,7 +1355,7 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractFormatsUnitTe
         $this->checkStatusOfFormatIconsInTheTopToolbar('active', NULL, NULL, NULL);
         $this->assertHTMLMatch('<div><p>%1% %2%</p><p>test test</p></div>');
 
-    }//end testComlexHTMLStructureConversion()
+    }//end testComplexHTMLStructureConversion()
 
 
     /**
