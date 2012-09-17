@@ -698,6 +698,7 @@ Viper.prototype = {
 
             var defaultTagName = this.getDefaultBlockTag();
             if (defaultTagName) {
+                var nodesToRemove = [];
                 for (var i = 0; i < elem.childNodes.length; i++) {
                     var child = elem.childNodes[i];
                     if ((dfx.isBlockElement(child) === true && dfx.isStubElement(child) === false)
@@ -706,7 +707,7 @@ Viper.prototype = {
                     ) {
                         continue;
                     } else if (child.nodeType === dfx.TEXT_NODE && dfx.trim(child.data) === '') {
-                        dfx.remove(child);
+                        nodesToRemove.push(child);
                         continue;
                     }
 
@@ -725,6 +726,8 @@ Viper.prototype = {
                     p.appendChild(child);
 
                 }
+
+                dfx.remove(nodesToRemove);
             }//end if
         }//end if
 
