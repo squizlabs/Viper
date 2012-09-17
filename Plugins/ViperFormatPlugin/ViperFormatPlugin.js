@@ -776,7 +776,7 @@ ViperFormatPlugin.prototype = {
                     }
 
                     var isBlockElement  = dfx.isBlockElement(nodeSelection);
-                    var hasInlineParent = false;
+                    /*var hasInlineParent = false;
                     if (isBlockElement === true) {
                         var node = nodeSelection.parentNode;
                         while (node && node !== viperElement) {
@@ -787,9 +787,9 @@ ViperFormatPlugin.prototype = {
 
                             node = node.parentNode;
                         }
-                    }
+                    }*/
 
-                    if (isBlockElement === true && hasInlineParent === false) {
+                    if (isBlockElement === true) {
                         // If this is a P tag selection and P tag belongs to a
                         // blockquote and blockquote has more than one P tag then
                         // do not allow this P tag to be converted to anything else.
