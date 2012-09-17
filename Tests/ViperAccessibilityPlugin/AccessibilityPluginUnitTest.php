@@ -66,6 +66,7 @@ class Viper_Tests_ViperAccessibilityPlugin_AccessibilityPluginUnitTest extends A
 
         // View source.
         $this->clickButton('sourceView', NULL, FALSE, $bubble);
+        sleep(2);
 
         // Check to make sure the source view appears.
         $this->assertTrue($this->buttonExists('Apply Changes', NULL, TRUE), 'Source view did not appear');

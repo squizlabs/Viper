@@ -359,6 +359,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
             }
 
             $this->goToURL($this->_getBaseUrl().'/test_tmp.html');
+            sleep(2);
             $this->setAutoWaitTimeout(1);
 
             $this->_switchWindow('main');
