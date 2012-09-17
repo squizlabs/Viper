@@ -2300,10 +2300,6 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         $startKeywordImage = $this->_getKeywordImage($startKeyword);
 
         if ($endKeyword === NULL) {
-            //$loc = $this->find($startKeywordImage, NULL, $this->getData('textSimmilarity'));
-            //$this->click($loc);
-            //$this->doubleClick($loc);
-            //return;
             $endKeyword = $startKeyword;
         }
 
@@ -2315,6 +2311,10 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         }
 
         $this->click($start);
+
+        if ($this->getBrowserid() === 'safari') {
+            sleep(1);
+        }
 
         $startLeft = $this->getTopLeft($start);
         $endRight  = $this->getTopRight($end);
