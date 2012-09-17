@@ -52,13 +52,13 @@ function initJSPoller()
                 return;
             }
 
-            val  = 'var jsResult = ' + val + ';';
-            val += 'dfx.jsonEncode(jsResult);';
+            var jsResult = null;
+            val = 'try {jsResult = dfx.jsonEncode(' + val + ');} catch (e) {}';
 
             // Execute JS.
-            var retval = eval(val);
+            eval(val);
 
-            dfx.get(scriptUrl, {res: retval, _t:(new Date().getTime())}, function() {
+            dfx.get(scriptUrl, {res: jsResult, _t:(new Date().getTime())}, function() {
                 stop = false;
             });
         });
