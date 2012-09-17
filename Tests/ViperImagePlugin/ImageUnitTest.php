@@ -749,7 +749,7 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperImagePlugi
          $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>XAX XBX<img alt="Alt tag" height="93" src="'.$this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png').'" width="100" /></p><p>sit amet <strong>XCX</strong></p>');
 
         $this->clickElement('img', 1);
-        $this->clickTopToolbarButton('image', 'selected');
+        $this->clickTopToolbarButton('image', 'active');
         $this->keyDown('Key.TAB');
         $this->keyDown('Key.TAB');
         $this->type('Title tag');

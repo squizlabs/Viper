@@ -119,9 +119,13 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreStylesUnitTest extends AbstractViper
         $this->selectKeyword(1, 4);
         sleep(1);
         $this->keyDown('Key.CMD + b');
+        usleep(50000);
         $this->keyDown('Key.CMD + i');
+        usleep(50000);
         $this->keyDown('Key.CMD + i');
+        usleep(50000);
         $this->keyDown('Key.CMD + b');
+        usleep(50000);
 
         $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit %4% <strong>%5%</strong></p>');
 

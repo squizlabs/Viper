@@ -528,7 +528,7 @@ ViperLinkPlugin.prototype = {
             && range.collapsed === true
         ) {
             if (range.collapsed === true && data.lineage[data.current].nodeType === dfx.TEXT_NODE) {
-                var parents = dfx.getSurroundingParents(data.lineage[data.current].parentNode, 'a');
+                var parents = dfx.getParents(data.lineage[data.current].parentNode, 'a');
                 if (parents.length > 0) {
                     return true;
                 }

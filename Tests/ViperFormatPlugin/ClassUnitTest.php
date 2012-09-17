@@ -719,6 +719,9 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
 
         $this->assertTrue($this->inlineToolbarButtonExists('cssClass', 'active'), 'Class icon in VITP should not be active.');
 
+        $this->clickElement('img', 1);
+        $this->assertTrue($this->inlineToolbarButtonExists('cssClass', 'active'), 'Class icon in VITP should not be active.');
+
         $this->clickTopToolbarButton('cssClass', 'active');
         $this->type('abc');
         $this->keyDown('Key.ENTER');
