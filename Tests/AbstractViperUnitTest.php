@@ -102,6 +102,13 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
     private static $_useSelenium = FALSE;
 
     /**
+     * If TRUE then a popup is used to execute JS.
+     *
+     * @var boolean
+     */
+    private static $_usePopup = FALSE;
+
+    /**
      * If TRUE then AJAX polling is used to execute JS.
      *
      * @var boolean
@@ -238,6 +245,8 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
                         unlink(self::$_pollFilePath.'/_jsexec.tmp');
                     }
                 }
+            } else {
+                self::$_usePopup = TRUE;
             }
         }//end if
 
@@ -515,8 +524,8 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
 
         $url = $this->_getBaseUrl().'/calibrate-text.html';
 
-        if (self::$_usePolling === TRUE) {
-            $url .= '#poll';
+        if (self::$_usePopup === TRUE) {
+            $url .= '#popup';
         }
 
         $this->goToURL($url);
@@ -812,8 +821,8 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         $dest = $baseDir.'/tmp-calibrate.html';
 
         $url = $this->_getBaseUrl().'/tmp-calibrate.html';
-        if (self::$_usePolling === TRUE) {
-            $url .= '#poll';
+        if (self::$_usePopup === TRUE) {
+            $url .= '#popup';
         }
 
         $this->goToURL($url);
