@@ -243,6 +243,34 @@ abstract class AbstractSikuliUnitTest extends PHPUnit_Framework_TestCase
 
 
     /**
+     * Start a drag operation.
+     *
+     * @param string $start The start PSMRL.
+     *
+     * @return void
+     */
+    protected function drag($start)
+    {
+        $this->callFunc('drag', array($start));
+
+    }//end drag()
+
+
+    /**
+     * Complete a drag and drop operation by dropping at the given point.
+     *
+     * @param string $end The end PSMRL.
+     *
+     * @return void
+     */
+    protected function dropAt($end)
+    {
+        $this->callFunc('dropAt', array($end));
+
+    }//end dropAt()
+
+
+    /**
      * Move the mouse pointer to a location indicated by PSRML.
      *
      * @param string $psmrl A Pattern, String, Match, Region or Location.

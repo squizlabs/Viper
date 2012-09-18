@@ -2340,7 +2340,20 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
             ($this->getY($endRight) + 2)
         );
 
-        $this->dragDrop($startLeft, $endRight);
+        if ($this->getBrowserid() === 'ie8' || $this->getBrowserid() === 'ie9') {
+            // Of course, even a simple thing like selecting words is a problem in
+            // IE. When you select words it also selects the space after it, causing
+            // tests to fail where style is applied to the selection or modification
+            // are made to the selection. To prevent this we need to select the words
+            // and then move the mouse back a few pixels while holding down left
+            // button and then drop it at the end of the last word.
+            $this->drag($startLeft);
+            $this->mouseMove($endRight);
+            $this->mouseMoveOffset(-10, 0);
+            $this->dropAt($endRight);
+        } else {
+            $this->dragDrop($startLeft, $endRight);
+        }
 
         usleep(50000);
 
