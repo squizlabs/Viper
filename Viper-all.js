@@ -10,7 +10,6 @@
  * +--------------------------------------------------------------------+
  *
  */
-
 ViperReadyCallback = null;
 (function() {
     dfxLoadedCallback = function() {
@@ -89,6 +88,17 @@ ViperReadyCallback = null;
             _loadScripts(path + 'Plugins/', plugins.concat([]), function() {
                 if (ViperReadyCallback) {
                     ViperReadyCallback.call(window);
+                } else {
+                    var maxTry = 10;
+                    var interval = setInterval(function() {
+                        maxTry--;
+                        if (ViperReadyCallback) {
+                            ViperReadyCallback.call(window);
+                            clearInterval(interval);
+                        } else if (maxTry === 0) {
+                            clearInterval(interval);
+                        }
+                    }, 500);
                 }
             }, true);
 
