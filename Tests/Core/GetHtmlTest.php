@@ -13,9 +13,9 @@ class Viper_Tests_Core_GetHtmlTest extends AbstractViperUnitTest
      */
     public function testGetHtmlForWords()
     {
-        $this->click($this->find('First'));
+        $this->click($this->findKeyword(1));
 
-        $this->_checkGetHTML('<h1>First Heading</h1><p>Lorem XuT dolor sit <em>amet</em> <strong>WoW</strong></p>');
+        $this->_checkGetHTML('<h1>%1% Heading</h1><p>Lorem XuT dolor sit <em>amet</em> <strong>WoW</strong></p>');
 
     }//end testGetHtmlForParagraphs()
 
@@ -27,9 +27,9 @@ class Viper_Tests_Core_GetHtmlTest extends AbstractViperUnitTest
      */
     public function testGetHtmlForParagraphs()
     {
-        $this->click($this->find('First'));
+        $this->click($this->findKeyword(1));
 
-        $this->_checkGetHTML('<h1>First Heading</h1><p style="text-align: center;">Lorem XuT dolor sit <em>amet</em> <strong>WoW</strong></p><h2>Second Heading</h2><p style="text-align: right;">This is <del>SOME</del> <span class="myclass">information</span> for <a href="http://www.google.com" title="Google">testing</a></p><p>Another paragraph</p><ul style="text-align: center;"><li>Test removing bullet points</li><li style="text-align: right;">purus <u>oNo</u> luctus</li><li>vel molestie arcu</li></ul><div>&nbsp;</div><hr /><p>This is a <sub>sub</sub> script. This is a <sup>super</sup> script</p>');
+        $this->_checkGetHTML('<h1>%1% Heading</h1><p style="text-align: center;">Lorem XuT dolor sit <em>amet</em> <strong>WoW</strong></p><h2>Second Heading</h2><p style="text-align: right;">This is <del>SOME</del> <span class="myclass">information</span> for <a href="http://www.google.com" title="Google">testing</a></p><p>Another paragraph</p><ul style="text-align: center;"><li>Test removing bullet points</li><li style="text-align: right;">purus <u>oNo</u> luctus</li><li>vel molestie arcu</li></ul><div>&nbsp;</div><hr /><p>This is a <sub>sub</sub> script. This is a <sup>super</sup> script</p>');
 
     }//end testGetHtmlForParagraphs()
 
@@ -41,9 +41,9 @@ class Viper_Tests_Core_GetHtmlTest extends AbstractViperUnitTest
      */
     public function testGetHtmlForImages()
     {
-        $this->click($this->find('First'));
+        $this->click($this->findKeyword(1));
 
-        $this->_checkGetHTML('<h1>First Heading</h1><p style="text-align: center;">Lorem XuT dolor sit <em>amet</em> <strong>WoW</strong></p><p><img alt="" src="%url%/ViperImagePlugin/Images/html-codesniffer.png" />&nbsp;</p>');
+        $this->_checkGetHTML('<h1>%1% Heading</h1><p style="text-align: center;">Lorem XuT dolor sit <em>amet</em> <strong>WoW</strong></p><p><img alt="" src="%url%/ViperImagePlugin/Images/html-codesniffer.png" />&nbsp;</p>');
 
     }//end testGetHtmlForImages()
 
@@ -69,9 +69,9 @@ class Viper_Tests_Core_GetHtmlTest extends AbstractViperUnitTest
      */
     public function testGetHtmlRemovesMarker()
     {
-        $this->click($this->find('First'));
+        $this->click($this->findKeyword(1));
 
-        $this->_checkGetHTML('<h1>First Heading</h1><p>Lorem <span class="__viperMarker">XuT</span> dolor sit <em>amet</em> <strong>WoW</strong></p>');
+        $this->_checkGetHTML('<h1>%1% Heading</h1><p>Lorem <span class="__viperMarker">XuT</span> dolor sit <em>amet</em> <strong>WoW</strong></p>');
 
     }//end testGetHtmlRemovesMarker()
 
@@ -83,9 +83,9 @@ class Viper_Tests_Core_GetHtmlTest extends AbstractViperUnitTest
      */
     public function testGetHtmlRemovesBookmark()
     {
-        $this->click($this->find('First'));
+        $this->click($this->findKeyword(1));
 
-        $this->_checkGetHTML('<h1>First Heading</h1><p style="text-align: center;">Lorem XuT dolor sit <em>amet</em> <strong>WoW</strong></p><h2>Second Heading</h2><p style="text-align: right;">This is <del>SOME</del> <span class="myclass">information</span> for <a href="http://www.google.com" title="Google">testing</a></p><ul style="text-align: center;"><li>Test removing bullet points</li><li style="text-align: right;">purus <u>oNo</u> luctus</li><li>vel molestie arcu</li></ul>');
+        $this->_checkGetHTML('<h1>%1% Heading</h1><p style="text-align: center;">Lorem XuT dolor sit <em>amet</em> <strong>WoW</strong></p><h2>Second Heading</h2><p style="text-align: right;">This is <del>SOME</del> <span class="myclass">information</span> for <a href="http://www.google.com" title="Google">testing</a></p><ul style="text-align: center;"><li>Test removing bullet points</li><li style="text-align: right;">purus <u>oNo</u> luctus</li><li>vel molestie arcu</li></ul>');
 
     }//end testGetHtmlRemovesBookmark()
 
@@ -97,9 +97,9 @@ class Viper_Tests_Core_GetHtmlTest extends AbstractViperUnitTest
      */
     public function testGetHtmlDoesNotRemoveIframeTags()
     {
-        $this->click($this->find('First'));
+        $this->click($this->findKeyword(1));
 
-        $this->_checkGetHTML('<h1>First Heading</h1><p><iframe src="http://www.w3schools.com"></iframe></p><p>Lorem XuT dolor sit <em>amet</em> <strong>WoW</strong></p>');
+        $this->_checkGetHTML('<h1>%1% Heading</h1><p><iframe src="http://www.w3schools.com"></iframe></p><p>Lorem XuT dolor sit <em>amet</em> <strong>WoW</strong></p>');
 
     }//end testGetHtmlDoesNotRemoveIframeTags()
 
@@ -111,9 +111,9 @@ class Viper_Tests_Core_GetHtmlTest extends AbstractViperUnitTest
      */
     public function testGetHtmlDoesNotRemoveAnchorTags()
     {
-        $this->click($this->find('First'));
+        $this->click($this->findKeyword(1));
 
-        $this->_checkGetHTML('<h1>First Heading</h1><p><a href="#test">Test</a></p><p style="text-align: center;">Lorem XuT dolor sit <em>amet</em> <strong>WoW</strong></p><h2><a name="test"></a>Second Heading</h2><p style="text-align: right;">This is <del>SOME</del> <span class="myclass">information</span> for <a href="http://www.google.com" title="Google">testing</a></p>');
+        $this->_checkGetHTML('<h1>%1% Heading</h1><p><a href="#test">Test</a></p><p style="text-align: center;">Lorem XuT dolor sit <em>amet</em> <strong>WoW</strong></p><h2><a name="test"></a>Second Heading</h2><p style="text-align: right;">This is <del>SOME</del> <span class="myclass">information</span> for <a href="http://www.google.com" title="Google">testing</a></p>');
 
     }//end testGetHtmlDoesNotRemoveAnchorTags()
 
