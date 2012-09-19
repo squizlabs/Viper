@@ -77,13 +77,6 @@ abstract class AbstractSikuliUnitTest extends PHPUnit_Framework_TestCase
      */
     private static $_debugging = FALSE;
 
-    /**
-     * Size of the sikuli.out file.
-     *
-     * @var integer
-     */
-    private static $_fileSize = NULL;
-
 
     /**
      * Setup test.
@@ -1032,8 +1025,6 @@ abstract class AbstractSikuliUnitTest extends PHPUnit_Framework_TestCase
             file_put_contents($sikuliOutputFile, '');
             $sikuliOut = fopen($sikuliOutputFile, 'r');
 
-            self::$_fileSize = filesize($sikuliOutputFile);
-
             self::$_sikuliHandle = $process;
             self::$_sikuliInput  = $process;
             self::$_sikuliOutput = $sikuliOut;
@@ -1092,8 +1083,13 @@ abstract class AbstractSikuliUnitTest extends PHPUnit_Framework_TestCase
 
         fclose(self::$_sikuliOutput);
         fclose(self::$_sikuliInput);
-        fclose(self::$_sikuliError);
-        proc_close(self::$_sikuliHandle);
+
+        if ($this->getOS() === 'windows') {
+            self::$_sikuliHandle = NULL;
+        } else {
+            fclose(self::$_sikuliError);
+            proc_close(self::$_sikuliHandle);
+        }
 
         self::$_connected = FALSE;
 
