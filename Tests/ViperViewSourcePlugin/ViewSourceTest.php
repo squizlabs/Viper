@@ -57,6 +57,7 @@ class Viper_Tests_ViperViewSourcePlugin_ViewSourceTest extends AbstractViperView
 
         $this->selectKeyword(1);
         $this->keyDown('Key.CMD + i');
+        $this->click($this->findKeyword(1));
         $this->click($this->findKeyword(3));
         $this->assertHTMLMatch('<p>Lorem <em>%1%</em> dolor</p><p><strong>%2%</strong> sit amet</p><p>%3% p <em>XuT</em></p>');
 

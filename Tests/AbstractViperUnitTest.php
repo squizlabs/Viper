@@ -2707,9 +2707,9 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         $js = 'rmTableHeaders('.$tableIndex.',';
 
         if ($removeid === TRUE) {
-            $js .= ' true);';
+            $js .= ' true)';
         } else {
-            $js .= ' false);';
+            $js .= ' false)';
         }
 
         $this->execJS($js, NULL, TRUE);
