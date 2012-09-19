@@ -120,17 +120,18 @@
                  'firefox'      => 'Firefox',
                  'googlechrome' => 'Google Chrome',
                  'safari'       => 'Safari',
+                 'ie8'          => 'IE8',
+                 'ie9'          => 'IE9',
                 );
 
     foreach ($browsers as $browser => $browserName) {
         $logFile = dirname(__FILE__).'/tmp/'.$browser.'/test.log';
-        echo '<div class="wrapper">';
-        echo '<h1>'.$browserName.'</h1>';
-
         if (file_exists($logFile) === FALSE) {
-            echo '<p>No tests run for this browser.</p>';
             continue;
         }
+
+        echo '<div class="wrapper">';
+        echo '<h1>'.$browserName.'</h1>';
 
         $doc = new DOMDocument();
         $doc->load($logFile);
