@@ -177,6 +177,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarUnitTest extends Abstrac
 
         $word = $this->findKeyword(1);
         $this->selectKeyword(1);
+        sleep(1);
 
         $wordX = $this->getX($this->getCenter($word));
         $wordY = $this->getY($this->getBottomLeft($word));
