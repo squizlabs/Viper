@@ -314,12 +314,21 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
             $metaTag = '<meta http-equiv="X-UA-Compatible" content="IE=9" >';
         }
 
+        $testTitle = $this->getName();
+        $numFails  = ViperTestListener::getFailures();
+        $numErrors = ViperTestListener::getErrors();
+
+        if ($numFails !== 0 || $numErrors !== 0) {
+            $testTitle .= '(F:'.ViperTestListener::getFailures().', ';
+            $testTitle .= 'E:'.ViperTestListener::getErrors().')';
+        }
+
         // Put the current test file contents to the main test file.
         $contents = str_replace('__TEST_CONTENT__', $testFileContent, self::$_testContent);
         $contents = str_replace('__TEST_IE_VERSION_METATAG__', $metaTag, $contents);
         $contents = str_replace('__TEST_BROWSER__', $this->getBrowserid(), $contents);
         $contents = str_replace('__TEST_VIPER_INCLUDE__', $viperInclude, $contents);
-        $contents = str_replace('__TEST_TITLE__', $this->getName(), $contents);
+        $contents = str_replace('__TEST_TITLE__', $testTitle, $contents);
         $contents = str_replace('__TEST_JS_INCLUDE__', $jsInclude, $contents);
         $contents = str_replace('__TEST_JS_EXEC_CACHE__', json_encode(array_flip(self::$_jsExecCache)), $contents);
         $contents = str_replace('__TEST_JS_EXEC_USEPOLLING__', $usePolling, $contents);
