@@ -410,14 +410,21 @@ ViperTools.prototype = {
         }
 
         var self = this;
-        dfx.addEvent(input, 'focus', function() {
+        dfx.addEvent(input, 'focus', function(e) {
             dfx.addClass(textBox, 'Viper-focused');
             self.viper.highlightSelection();
 
             // Set the caret to the end of the textfield.
-            input.value = input.value;
+            if (self.viper.isBrowser('msie') === false) {
+                input.value = input.value;
+            }
+
             if (self.viper.isBrowser('firefox') === true) {
-                input.selectionStart = input.value.length;
+                if (dfx.isTag(e.originalEvent.explicitOriginalTarget, 'input') === false) {
+                    setTimeout(function() {
+                        input.selectionStart = input.value.length;
+                    }, 2);
+                }
             }
         });
 
@@ -1127,6 +1134,14 @@ ViperTools.prototype = {
                     _update = true;
                     return;
                 } else {
+                    var allParents = dfx.getParents(target, null, self.viper.getViperElement());
+                    for (var i = 0; i < allParents.length; i++) {
+                        if (self.getItem(id)._keepOpenTagList.inArray(dfx.getTagName(allParents[i])) === true) {
+                            _update = true;
+                            return;
+                        }
+                    }
+
                     var parents = dfx.getSurroundingParents(target);
                     for (var i = 0; i < parents.length; i++) {
                         if (self.getItem(id)._keepOpenTagList.inArray(dfx.getTagName(parents[i])) === true) {

@@ -484,19 +484,19 @@ class Viper_Tests_ViperFormatPlugin_AlignmentUnitTest extends AbstractViperUnitT
         $this->assertTrue($this->topToolbarButtonExists('justifyBlock', 'disabled'), 'Block justify icon appears in the top toolbar');
 
         $this->clickTopToolbarButton('justifyLeft');
-        $this->assertHTMLMatch('<p>%1% aaa xx cccc</p><p><img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="" width="354" height="160" style="float: left; margin: 1em 1em 1em 0px;" />%2% ttt uuu pp %3%</p>');
+        $this->assertHTMLMatch('<p>%1% aaa xx cccc</p><p><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt="" width="354" height="160" style="float: left; margin: 1em 1em 1em 0px;" />%2% ttt uuu pp %3%</p>');
         $this->assertTrue($this->topToolbarButtonExists('justifyLeft', 'active'), 'Active left justify icon does not appear in the top toolbar');
 
         $this->clickTopToolbarButton('justifyCenter');
-        $this->assertHTMLMatch('<p>%1% aaa xx cccc</p><p><img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="" width="354" height="160" style="margin: 1em auto; display: block;" />%2% ttt uuu pp %3%</p>');
+        $this->assertHTMLMatch('<p>%1% aaa xx cccc</p><p><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt="" width="354" height="160" style="margin: 1em auto; display: block;" />%2% ttt uuu pp %3%</p>');
         $this->assertTrue($this->topToolbarButtonExists('justifyCenter', 'active'), 'Active center justify icon does not appear in the top toolbar');
 
         $this->clickTopToolbarButton('justifyRight');
-        $this->assertHTMLMatch('<p>%1% aaa xx cccc</p><p><img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="" width="354" height="160" style="float: right; margin: 1em 0px 1em 1em;" />%2% ttt uuu pp %3%</p>');
+        $this->assertHTMLMatch('<p>%1% aaa xx cccc</p><p><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt="" width="354" height="160" style="float: right; margin: 1em 0px 1em 1em;" />%2% ttt uuu pp %3%</p>');
         $this->assertTrue($this->topToolbarButtonExists('justifyRight', 'active'), 'Active right justify icon does not appear in the top toolbar');
 
         $this->clickTopToolbarButton('justifyRight', 'active');
-        $this->assertHTMLMatch('<p>%1% aaa xx cccc</p><p><img src="http://cms.squizsuite.net/__images/homepage-images/hero-shot.jpg" alt="" width="354" height="160" />%2% ttt uuu pp %3%</p>');
+        $this->assertHTMLMatch('<p>%1% aaa xx cccc</p><p><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt="" width="354" height="160" />%2% ttt uuu pp %3%</p>');
 
     }//end testAligningAnImage()
 

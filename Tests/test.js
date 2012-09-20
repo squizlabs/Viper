@@ -25,17 +25,20 @@ var viperTest = {
 
 function initJSPoller()
 {
-    var scriptUrl = window.location.href.replace('test_tmp.html', 'jspoller.php');
-    var seconds   = 1;
-    var stop      = false;
-    var interval  = null;
+    var scriptUrl = window.location.href.split('/');
+    scriptUrl.pop();
+    scriptUrl = scriptUrl.join('/') + '/jspoller.php';
+
+    var seconds  = 1;
+    var stop     = false;
+    var interval = null;
     interval = setInterval(function() {
         if (stop === true) {
             return;
         }
 
         stop = true;
-        dfx.get(scriptUrl, null, function(val) {
+        dfx.get(scriptUrl, {_t:(new Date().getTime())}, function(val) {
             if (!val) {
                 stop = false;
                 return;
@@ -49,13 +52,13 @@ function initJSPoller()
                 return;
             }
 
-            val  = 'var jsResult = ' + val + ';';
-            val += 'dfx.jsonEncode(jsResult);';
+            var jsResult = null;
+            val = 'try {jsResult = dfx.jsonEncode(' + val + ');} catch (e) {}';
 
             // Execute JS.
-            var retval = eval(val);
+            eval(val);
 
-            dfx.get(scriptUrl, {res: retval}, function() {
+            dfx.get(scriptUrl, {res: jsResult, _t:(new Date().getTime())}, function() {
                 stop = false;
             });
         });
@@ -362,5 +365,8 @@ function useTest(id)
 
     win.dfx.setHtml(win.dfx.getId('testCaseTitle'), '(Using Test #' + id + ')');
 
+    if (win.viper.element) {
+        win.viper.element.blur();
+    }
 
 }

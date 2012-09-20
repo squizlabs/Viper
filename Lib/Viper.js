@@ -598,6 +598,11 @@ Viper.prototype = {
             return;
         }
 
+        // Load default plugin set if nothing has been set yet.
+        if (this.ViperPluginManager.getPlugins() === null) {
+            this._useDefaultPlugins();
+        }
+
         this._viperRange = null;
 
         if (this.element) {
@@ -693,13 +698,16 @@ Viper.prototype = {
 
             var defaultTagName = this.getDefaultBlockTag();
             if (defaultTagName) {
+                var nodesToRemove = [];
                 for (var i = 0; i < elem.childNodes.length; i++) {
                     var child = elem.childNodes[i];
                     if ((dfx.isBlockElement(child) === true && dfx.isStubElement(child) === false)
-                        || child.nodeType === dfx.TEXT_NODE && dfx.trim(child.data) === ''
                         || (child.nodeType !== dfx.ELEMENT_NODE && child.nodeType !== dfx.TEXT_NODE)
                         || dfx.isTag(child, 'hr') === true
                     ) {
+                        continue;
+                    } else if (child.nodeType === dfx.TEXT_NODE && dfx.trim(child.data) === '') {
+                        nodesToRemove.push(child);
                         continue;
                     }
 
@@ -718,6 +726,8 @@ Viper.prototype = {
                     p.appendChild(child);
 
                 }
+
+                dfx.remove(nodesToRemove);
             }//end if
         }//end if
 
@@ -726,6 +736,25 @@ Viper.prototype = {
     getEditableElement: function()
     {
         return this.element;
+
+    },
+
+    _useDefaultPlugins: function()
+    {
+        // Default plugins (all Viper plugins).
+        this.ViperPluginManager.setPlugins(['ViperCoreStylesPlugin', 'ViperKeyboardEditorPlugin', 'ViperInlineToolbarPlugin', 'ViperHistoryPlugin', 'ViperListPlugin', 'ViperFormatPlugin', 'ViperToolbarPlugin', 'ViperTableEditorPlugin', 'ViperCopyPastePlugin', 'ViperImagePlugin', 'ViperLinkPlugin', 'ViperAccessibilityPlugin', 'ViperSourceViewPlugin', 'ViperSearchReplacePlugin', 'ViperLangToolsPlugin', 'ViperCharMapPlugin', 'ViperTrackChangesPlugin']);
+
+        // Default button ordering.
+        var buttons = [['bold', 'italic', 'subscript', 'superscript', 'strikethrough', 'class'], 'removeFormat', ['justify', 'formats', 'headings'], ['undo', 'redo'], ['unorderedList', 'orderedList', 'indentList', 'outdentList'], 'insertTable', 'image', 'hr', ['insertLink', 'removeLink', 'anchor'], 'insertCharacter', 'searchReplace', 'langTools', 'accessibility', 'sourceEditor'];
+        this.getPluginManager().setPluginSettings('ViperToolbarPlugin', {buttons: buttons});
+
+        var inlineToolbarButtons = [['bold', 'italic', 'class'], ['justify', 'formats', 'headings'], ['unorderedList', 'orderedList', 'indentList', 'outdentList'], ['insertLink', 'removeLink', 'anchor'], ['image', 'imageMove']];
+        this.getPluginManager().setPluginSettings('ViperInlineToolbarPlugin', {buttons: inlineToolbarButtons});
+
+        // Accessibility Plugin, standard.
+        this.getPluginManager().setPluginSettings('ViperAccessibilityPlugin', {standard: 'WCAG2AA'});
+
+        this.setSetting('defaultBlockTag', 'p');
 
     },
 

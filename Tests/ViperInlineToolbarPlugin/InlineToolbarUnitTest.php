@@ -137,8 +137,8 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarUnitTest extends Abstrac
         $end   = $this->findKeyword(4);
         $this->selectKeyword(1, 4);
 
-        $leftX  = ($this->getX($this->getTopLeft($start)) + 400);
-        $width  = ($this->execJS('dfx.getElementWidth(dfxjQuery("p")[0])') / 2);
+        $leftX  = ($this->getX($this->getTopLeft($start)));
+        $width  = ($this->execJS('dfx.getElementWidth(dfx.getId("content"))') / 2);
         $center = ($leftX + $width);
         $wordY  = $this->getY($this->getBottomLeft($end));
         $this->_assertPosition($center, $wordY);
@@ -177,6 +177,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarUnitTest extends Abstrac
 
         $word = $this->findKeyword(1);
         $this->selectKeyword(1);
+        sleep(1);
 
         $wordX = $this->getX($this->getCenter($word));
         $wordY = $this->getY($this->getBottomLeft($word));

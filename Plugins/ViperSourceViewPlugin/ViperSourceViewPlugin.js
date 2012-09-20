@@ -27,6 +27,7 @@ function ViperSourceViewPlugin(viper)
 
     this._ignoreUpdate       = false;
     this._ignoreSourceUpdate = false;
+    this._newWindowContents  = '';
 }
 
 ViperSourceViewPlugin.prototype = {
@@ -126,7 +127,7 @@ ViperSourceViewPlugin.prototype = {
 
     },
 
-    hideSourceView: function()
+    hideSourceView: function(newWindow)
     {
         if (this._inNewWindow === true && this._childWindow) {
             this._childWindow.close();
@@ -136,7 +137,11 @@ ViperSourceViewPlugin.prototype = {
             this._sourceView = null;
             this._editor     = null;
         } else if (this._sourceView) {
-            this.viper.ViperTools.closePopup('VSVP:popup');
+            if (newWindow === true) {
+                self.viper.ViperTools.closePopup('VSVP:popup', 'discardChanges');
+            } else {
+                this.viper.ViperTools.closePopup('VSVP:popup');
+            }
         }
 
     },
@@ -155,11 +160,7 @@ ViperSourceViewPlugin.prototype = {
     {
         var value = content;
         if (!value) {
-            if (this._editor) {
-                value = this._editor.getSession().getValue();
-            } else if (this._textEditor) {
-                value = this._textEditor.value;
-            }
+            value = this.getSourceContents();
         }
 
         if (this._originalSource === value) {
@@ -167,6 +168,19 @@ ViperSourceViewPlugin.prototype = {
         }
 
         this.viper.setHtml(value);
+
+    },
+
+    getSourceContents: function()
+    {
+        var value = '';
+        if (this._editor) {
+            value = this._editor.getSession().getValue();
+        } else if (this._textEditor) {
+            value = this._textEditor.value;
+        }
+
+        return value;
 
     },
 
@@ -198,6 +212,12 @@ ViperSourceViewPlugin.prototype = {
         }
 
         this._originalSource = content;
+
+    },
+
+    revertChanges: function()
+    {
+        this.viper.setHtml(this._originalSource);
 
     },
 
@@ -269,6 +289,8 @@ ViperSourceViewPlugin.prototype = {
                 // Hide the Confirm message.
                 self.viper.ViperTools.getItem('VSVP:popup').hideTop();
                 self._isVisible = false;
+                self.toolbarPlugin.enable();
+                self.viper.focus();
             },
             function() {
                 if (self._editor) {
@@ -385,10 +407,17 @@ ViperSourceViewPlugin.prototype = {
 
         // If the ESC key is pressed close the popup.
         editor.getKeyboardHandler().addKeyboardHandler({
-            handleKeyboard: function(data, hashId, keyString) {
+            handleKeyboard: function(data, hashId, keyString, n, e) {
+                if (!e) {
+                    return;
+                }
+
                 if (keyString === 'esc') {
                     self.viper.ViperTools.closePopup('VSVP:popup');
-                } else {
+                } else if (e.metaKey !== true
+                    && e.ctrlKey !== true
+                    && e.which !== 16
+                ) {
                     popup.hideTop();
                 }
             }
@@ -396,11 +425,21 @@ ViperSourceViewPlugin.prototype = {
 
         var onFocus = editor.onFocus;
         editor.onFocus = function() {
+            if (self._inNewWindow !== true) {
+                self.toolbarPlugin.disable();
+            }
+
             onFocus.call(editor);
             setTimeout(function() {
                 popup.hideTop();
             }, 200);
         }
+
+        editor.onBlur = function() {
+            if (self._inNewWindow !== true) {
+                self.toolbarPlugin.enable();
+            }
+        };
 
     },
 
@@ -439,7 +478,8 @@ ViperSourceViewPlugin.prototype = {
     openInNewWindow: function()
     {
         // Hide current editor.
-        this.hideSourceView();
+        this.hideSourceView(true);
+        this.toolbarPlugin.enable();
 
         // Add this Viper plugin object to global var.
         var viperid = 'Viper-' + this.viper.getId() + '-ViperSVP';
@@ -463,10 +503,18 @@ ViperSourceViewPlugin.prototype = {
 
     },
 
+    getNewWindowContents: function()
+    {
+        return this._newWindowContents;
+
+    },
+
     _getFrameContent: function(viperid)
     {
         var path    = this.viper.getViperPath();
         var content = '';
+
+        this._newWindowContents = this.getSourceContents();
 
         content += '<!DOCTYPE html><html lang="en"><head>';
         content += '<meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">';
@@ -488,8 +536,9 @@ ViperSourceViewPlugin.prototype = {
         content += '<body id="ViperSourceViewPlugin-window" class="ViperSourceViewPlugin-window">';
         content += '<div class="Viper-popup Viper-themeDark VSVP-popup">';
         content += '<div class="VSVP-confirmPanel Viper-popup-top">';
-        content += '<div class="VSVP-confirmText">Changes you make to the source code will be reflected in your edit preview window in real time.</div>';
-        content += '<div class="Viper-button" title="Close Changes" onclick="window.close();">Close Window</div></div>';
+        content += '<div class="VSVP-confirmText">Source code changes will be reflected in your edit preview window in real time.</div>';
+        content += '<div class="Viper-button" title="Revert Changes" onclick="viperSVP.revertChanges();">Revert Changes</div>';
+        content += '<div class="Viper-button" title="Close Source View" onclick="window.close();">Close Window</div></div>';
         content += '<div class="Viper-popup-content"><pre id="editor"></pre></div></div>';
         content += '<script>';
         content += 'var viperid = "' + viperid + '";';
@@ -498,7 +547,11 @@ ViperSourceViewPlugin.prototype = {
         content += 'viperSVP.applyEditorSettings(editor);';
         content += 'viperSVP.initEditorEvents(editor);';
         content += 'viperSVP._editor = editor;';
-        content += 'viperSVP.updateSourceContents();</script></body></html>';
+        content += 'viperSVP.updateSourceContents(viperSVP.getNewWindowContents());';
+        content += 'var editorWrapper = document.getElementById("editor").parentNode;';
+        content += 'window.onresize = function() {console.info(editorWrapper);editorWrapper.style.height = (window.innerHeight - 55) + "px";};';
+        content += 'window.onresize();';
+        content += '</script></body></html>';
 
         return content;
 

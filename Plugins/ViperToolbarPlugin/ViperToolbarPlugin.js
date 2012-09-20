@@ -21,6 +21,7 @@ function ViperToolbarPlugin(viper)
     this._bubbleButtons  = {};
     this._settingButtons = null;
     this._enabled        = false;
+    this._enabledButtons = [];
 
     this.createToolbar();
 
@@ -358,14 +359,19 @@ ViperToolbarPlugin.prototype = {
                     return;
                 }
 
-                subSection.form.onsubmit = function() {
+                subSection.form.onsubmit = function(e) {
+                    self.viper.focus();
+
+                    if (e) {
+                        dfx.preventDefault(e);
+                    }
+
                     var button = tools.getItem(subSectionid + '-applyButton');
                     if (button.isEnabled() === false) {
                         return false;
                     }
 
                     tools.disableButton(subSectionid + '-applyButton');
-                    self.viper.focus();
 
                     // IE needs this timeout so focus works <3..
                     if (self.viper.isBrowser('msie') === false) {
@@ -382,6 +388,16 @@ ViperToolbarPlugin.prototype = {
                                 console.error(e.message);
                             }
                         }, 10);
+                    }
+
+                    tools.disableButton(subSectionid + '-applyButton');
+
+                    // Give focus back to the form field.
+                    var inputElements = dfx.getTag('input[type=text], textarea', subSection.form);
+                    if (inputElements.length > 0) {
+                        try {
+                            inputElements[0].focus();
+                        } catch(e) {}
                     }
 
                     return false;
@@ -689,10 +705,17 @@ ViperToolbarPlugin.prototype = {
         var buttons = dfx.getClass('Viper-button', this._toolbar);
         var c       = buttons.length;
         var viperid = this.viper.getId();
+        var enabledButtons = [];
         for (var i = 0; i < c; i++) {
             var buttonid = buttons[i].id.replace(viperid + '-', '');
+            if (this.viper.ViperTools.getItem(buttonid).isEnabled() === true) {
+                enabledButtons.push(buttonid);
+            }
+
             this.viper.ViperTools.disableButton(buttonid);
         }
+
+        this._enabledButtons = enabledButtons;
 
         this.viper.fireCallbacks('ViperToolbarPlugin:disabled');
 
@@ -710,11 +733,47 @@ ViperToolbarPlugin.prototype = {
 
         this.viper.fireCallbacks('ViperToolbarPlugin:enabled');
 
+        while (this._enabledButtons.length) {
+            this.viper.ViperTools.enableButton(this._enabledButtons.pop());
+        }
+
+    },
+
+    hide: function()
+    {
+        dfx.setStyle(this._toolbar, 'display', 'none');
+
+    },
+
+    show: function()
+    {
+        dfx.setStyle(this._toolbar, 'display', 'block');
+
     },
 
     isDisabled: function()
     {
         return !this._enabled;
+
+    },
+
+    isVisible: function()
+    {
+        if (dfx.getStyle(this._toolbar, 'display') === 'none') {
+            return false;
+        }
+
+        return true;
+
+    },
+
+    exists: function()
+    {
+        if (this._toolbar) {
+            return true;
+        }
+
+        return false;
 
     },
 

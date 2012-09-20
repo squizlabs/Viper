@@ -123,6 +123,33 @@ class Viper_Tests_ViperSearchAndReplaceToolbarPlugin_SearchAndReplaceUnitTest ex
 
 
     /**
+     * Test that you can find content and then replace it.
+     *
+     * @return void
+     */
+    public function testFindAndThenReplace()
+    {
+        $this->click($this->findKeyword(1));
+
+        $this->clickTopToolbarButton('searchReplace');
+        $this->type('FIND');
+        $this->clickTopToolbarButton('Find Next', NULL, TRUE);
+
+        $this->clickField('Replace');
+        $this->type('replace');
+        $this->clickTopToolbarButton('Replace', NULL, TRUE, TRUE);
+
+        $this->assertHTMLMatch('<h1>%1% Simple Viper Example</h1><p>Australian governments at all levels have <strong><em>endorsed</em></strong> WCAG 2.0, and require all government websites (federal, state and territory) to meet the new guidelines replace at the minimum compliance level (Single A) by the end of 2012. In addition, the Australian Government requires all federal websites to meet the medium conformance level (Double A) by the end of FIND 2014.</p><p>Further information at <a href="http://webguide.gov.au/accessibility-usability/accessibility/%20">http://webguide.gov.au/accessibility-usability/accessibility/</a> and <a href="http://www.w3.org/TR/WCAG20/">http://www.w3.org/TR/WCAG20/</a>.</p><ul><li>Audit of Homepage and 6 Section Landing pages</li><li>4 additional templates</li><li>Audit of 20 additional pages for content</li><li>Accessibility audit report</li><li>Recommendations and action plan</li><li>Squiz Matrix content accessibility guide</li></ul>');
+
+        $this->clickTopToolbarButton('Find Next', NULL, TRUE);
+        $this->clickTopToolbarButton('Replace', NULL, TRUE, TRUE);
+
+        $this->assertHTMLMatch('<h1>%1% Simple Viper Example</h1><p>Australian governments at all levels have <strong><em>endorsed</em></strong> WCAG 2.0, and require all government websites (federal, state and territory) to meet the new guidelines replace at the minimum compliance level (Single A) by the end of 2012. In addition, the Australian Government requires all federal websites to meet the medium conformance level (Double A) by the end of replace 2014.</p><p>Further information at <a href="http://webguide.gov.au/accessibility-usability/accessibility/%20">http://webguide.gov.au/accessibility-usability/accessibility/</a> and <a href="http://www.w3.org/TR/WCAG20/">http://www.w3.org/TR/WCAG20/</a>.</p><ul><li>Audit of Homepage and 6 Section Landing pages</li><li>4 additional templates</li><li>Audit of 20 additional pages for content</li><li>Accessibility audit report</li><li>Recommendations and action plan</li><li>Squiz Matrix content accessibility guide</li></ul>');
+
+    }//end testFindAndThenReplace()
+
+
+    /**
      * Test search and replace all.
      *
      * @return void

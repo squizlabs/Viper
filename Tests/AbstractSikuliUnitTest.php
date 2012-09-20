@@ -77,20 +77,6 @@ abstract class AbstractSikuliUnitTest extends PHPUnit_Framework_TestCase
      */
     private static $_debugging = FALSE;
 
-    /**
-     * Size of the sikuli.out file.
-     *
-     * @var integer
-     */
-    private static $_fileSize = NULL;
-
-    /**
-     * Last index that was returned from sikuli output.
-     *
-     * @var integer
-     */
-    private $_lastIndex = 0;
-
 
     /**
      * Setup test.
@@ -247,6 +233,34 @@ abstract class AbstractSikuliUnitTest extends PHPUnit_Framework_TestCase
         $this->callFunc('dragDrop', array($start, $end));
 
     }//end dragDrop()
+
+
+    /**
+     * Start a drag operation.
+     *
+     * @param string $start The start PSMRL.
+     *
+     * @return void
+     */
+    protected function drag($start)
+    {
+        $this->callFunc('drag', array($start));
+
+    }//end drag()
+
+
+    /**
+     * Complete a drag and drop operation by dropping at the given point.
+     *
+     * @param string $end The end PSMRL.
+     *
+     * @return void
+     */
+    protected function dropAt($end)
+    {
+        $this->callFunc('dropAt', array($end));
+
+    }//end dropAt()
 
 
     /**
@@ -844,6 +858,20 @@ abstract class AbstractSikuliUnitTest extends PHPUnit_Framework_TestCase
 
 
     /**
+     * Returns the free memory remaining in Java.
+     *
+     * @return integer
+     */
+    protected function getMemoryAvailable()
+    {
+        $this->sendCmd('from java.lang import Runtime;print Runtime.getRuntime().freeMemory()');
+        $memory = (int) $this->_getStreamOutput();
+        return $memory;
+
+    }//end getMemoryAvailable()
+
+
+    /**
      * Highlights the specified region for given seconds.
      *
      * @param string  $region  The region variable.
@@ -954,7 +982,12 @@ abstract class AbstractSikuliUnitTest extends PHPUnit_Framework_TestCase
      */
     protected function sendCmd($command)
     {
-        $this->debug('>>> '.$command);
+        $this->debug('CMD>>> '.$command);
+
+        if ($this->getOS() === 'windows') {
+            $filePath  = dirname(__FILE__).'/sikuli.out';
+            file_put_contents($filePath, '');
+        }
 
         // This will allow _getStreamOutput method to stop waiting for more data.
         $command .= ";print '>>>';\n";
@@ -992,14 +1025,12 @@ abstract class AbstractSikuliUnitTest extends PHPUnit_Framework_TestCase
             file_put_contents($sikuliOutputFile, '');
             $sikuliOut = fopen($sikuliOutputFile, 'r');
 
-            self::$_fileSize = filesize($sikuliOutputFile);
-
             self::$_sikuliHandle = $process;
             self::$_sikuliInput  = $process;
             self::$_sikuliOutput = $sikuliOut;
 
             // Redirect Sikuli output to a file.
-            $this->sendCmd('sys.stdout = open("'.$sikuliOutputFile.'", "w", 1)');
+            $this->sendCmd('sys.stdout = sys.stderr = open("'.$sikuliOutputFile.'", "w", 1000)');
         } else {
             $cmd = '/usr/bin/java -jar '.$this->_sikuliPath.'/Contents/Resources/Java/sikuli-script.jar -i';
             $descriptorspec = array(
@@ -1052,12 +1083,30 @@ abstract class AbstractSikuliUnitTest extends PHPUnit_Framework_TestCase
 
         fclose(self::$_sikuliOutput);
         fclose(self::$_sikuliInput);
-        fclose(self::$_sikuliError);
-        proc_close(self::$_sikuliHandle);
+
+        if ($this->getOS() === 'windows') {
+            self::$_sikuliHandle = NULL;
+        } else {
+            fclose(self::$_sikuliError);
+            proc_close(self::$_sikuliHandle);
+        }
 
         self::$_connected = FALSE;
 
     }//end disconnect()
+
+
+    /**
+     * Resets the Sikuli connection.
+     *
+     * @return void
+     */
+    protected function resetConnection()
+    {
+        $this->disconnect();
+        $this->connect();
+
+    }//end resetConnection()
 
 
     /**
@@ -1109,25 +1158,16 @@ abstract class AbstractSikuliUnitTest extends PHPUnit_Framework_TestCase
         $filePath  = dirname(__FILE__).'/sikuli.out';
 
         while (TRUE) {
-            clearstatcache();
-            $fileSize = filesize($filePath);
+            $contents = trim(file_get_contents($filePath));
+            if ($contents !== '') {
+                $startTime = microtime(TRUE);
 
-            if ($fileSize !== self::$_fileSize) {
-                $startTime       = microtime(TRUE);
-                self::$_fileSize = $fileSize;
-
-                $contents = file_get_contents($filePath);
-                $contents = explode("\n", $contents);
-                $contents = $contents[$this->_lastIndex];
-
-                if (trim($contents) !== '>>>') {
-                    // When there is data there will be two lines printed, first line
-                    // is the actual Sikuli output and the 2nd line is our >>>.
-                    $this->_lastIndex++;
+                if (strpos($contents, 'File "<stdin>"') !== FALSE) {
+                    $contents = str_replace("print '>>>';", '', $contents);
+                    throw new Exception('Sikuli Error:'."\n".$contents);
                 }
 
                 $contents = trim(str_replace('>>>', '', $contents));
-                $this->_lastIndex++;
                 return $contents;
             }
 
@@ -1222,6 +1262,10 @@ abstract class AbstractSikuliUnitTest extends PHPUnit_Framework_TestCase
         $content = implode("\n", $content);
 
         if ($isError === TRUE) {
+            if (strpos('java.lang.OutOfMemoryError', $content) !== FALSE) {
+                $this->resetConnection();
+            }
+
             $this->debug("Sikuli ERROR: \n".$content);
             throw new Exception("Sikuli ERROR: \n".$content);
         }

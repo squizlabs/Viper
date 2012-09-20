@@ -72,7 +72,7 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractFormatsUnitTest
 
         // Check the state of the format icon after we have changed to a Div
         $this->selectKeyword(4);
-        $this->assertTrue($this->topToolbarButtonExists('formats-div', 'active'), 'Active Div icon should appear in the top toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('formats-div'), 'Active Div icon should appear in the top toolbar');
 
         $this->selectInlineToolbarLineageItem(0);
         $this->assertTrue($this->topToolbarButtonExists('formats-div', 'active'), 'Active Div icon should appear in the top toolbar');
@@ -444,7 +444,7 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractFormatsUnitTest
 
         // Highlight a word in the selected div
         $this->selectKeyword(1);
-        $this->assertTrue($this->topToolbarButtonExists('formats-div', 'active'), 'Active div icon should appear in the top toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('formats-div'), 'Div icon should be enabled in the top toolbar');
 
     }//end testFormatIconWhenSwitchingBetweenDivAndWord()
 

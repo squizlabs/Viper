@@ -55,7 +55,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      * @var array
      */
     private $_defaultWindowSize = array(
-                                   'w' => 1300,
+                                   'w' => 1270,
                                    'h' => 800,
                                   );
 
@@ -102,6 +102,13 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
     private static $_useSelenium = FALSE;
 
     /**
+     * If TRUE then a popup is used to execute JS.
+     *
+     * @var boolean
+     */
+    private static $_usePopup = FALSE;
+
+    /**
      * If TRUE then AJAX polling is used to execute JS.
      *
      * @var boolean
@@ -144,6 +151,20 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      * @var array
      */
     private static $_data = NULL;
+
+    /**
+     * Number of tests run.
+     *
+     * @var integer
+     */
+    private static $_testCount = 0;
+
+    /**
+     * List of applications and if they are available in the current system.
+     *
+     * @return array
+     */
+    private static $_apps = array();
 
 
     /**
@@ -195,6 +216,8 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      */
     protected function setUp()
     {
+        self::$_testCount++;
+
         // Determine browser and OS.
         if (self::$_browser === NULL) {
             $browser = getenv('VIPER_TEST_BROWSER');
@@ -211,7 +234,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
                 self::$_pollFilePath = dirname(__FILE__).'/tmp/poll';
 
                 if (file_exists(self::$_pollFilePath) === FALSE) {
-                    mkdir(self::$_pollFilePath);
+                    mkdir(self::$_pollFilePath, 0777, TRUE);
                     chmod(self::$_pollFilePath, 0777);
                 } else {
                     if (file_exists(self::$_pollFilePath.'/_jsres.tmp') === TRUE) {
@@ -222,6 +245,8 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
                         unlink(self::$_pollFilePath.'/_jsexec.tmp');
                     }
                 }
+            } else {
+                self::$_usePopup = TRUE;
             }
         }//end if
 
@@ -243,7 +268,11 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
             $jsInclude  = '<script type="text/javascript" src="'.$jsFilePath.'"></script>';
         }
 
-        // Create a new Sikuli connection if its not connected already.
+        // Reset the Sikuli connection after 15 tests.
+        if ((self::$_testCount % 15) === 0) {
+            $this->resetConnection();
+        }
+
         parent::setUp();
 
         // Create the test file.
@@ -278,8 +307,16 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
             $usePolling = 'true';
         }
 
+        $metaTag = '';
+        if ($this->getBrowserid() === 'ie8') {
+            $metaTag = '<meta http-equiv="X-UA-Compatible" content="IE=8" >';
+        } else if($this->getBrowserid() === 'ie9') {
+            $metaTag = '<meta http-equiv="X-UA-Compatible" content="IE=9" >';
+        }
+
         // Put the current test file contents to the main test file.
         $contents = str_replace('__TEST_CONTENT__', $testFileContent, self::$_testContent);
+        $contents = str_replace('__TEST_IE_VERSION_METATAG__', $metaTag, $contents);
         $contents = str_replace('__TEST_BROWSER__', $this->getBrowserid(), $contents);
         $contents = str_replace('__TEST_VIPER_INCLUDE__', $viperInclude, $contents);
         $contents = str_replace('__TEST_TITLE__', $this->getName(), $contents);
@@ -304,7 +341,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
 
             // Make sure page is loaded.
             $maxRetries = 4;
-            while ($this->topToolbarButtonExists('italic', 'disabled') === FALSE) {
+            while ($this->topToolbarButtonExists('bold', 'disabled') === FALSE) {
                 $this->reloadPage();
                 if ($maxRetries === 0) {
                     throw new Exception('Failed to load Viper test page.');
@@ -331,13 +368,14 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
             }
 
             $this->goToURL($this->_getBaseUrl().'/test_tmp.html');
+            sleep(2);
             $this->setAutoWaitTimeout(1);
 
             $this->_switchWindow('main');
 
             // Make sure page is loaded.
             $maxRetries = 4;
-            while ($this->topToolbarButtonExists('italic', 'disabled') === FALSE) {
+            while ($this->topToolbarButtonExists('bold', 'disabled') === FALSE) {
                 $this->reloadPage();
                 if ($maxRetries === 0) {
                     throw new Exception('Failed to load Viper test page.');
@@ -357,6 +395,25 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         }//end if
 
     }//end setUp()
+
+
+    /**
+     * Resets the Sikuli connection.
+     *
+     * @return void
+     */
+    protected function resetConnection()
+    {
+        self::$_browserSelected = FALSE;
+        self::$_window          = NULL;
+        self::$_windowSize      = NULL;
+        self::$_testRun         = FALSE;
+        self::$_topToolbar      = NULL;
+        self::$_pageTopLeft     = NULL;
+
+        parent::resetConnection();
+
+    }//end resetConnection()
 
 
     /**
@@ -464,7 +521,14 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         }
 
         $dest = $baseDir.'/calibrate-text.html';
-        $this->goToURL($this->_getBaseUrl().'/calibrate-text.html');
+
+        $url = $this->_getBaseUrl().'/calibrate-text.html';
+
+        if (self::$_usePopup === TRUE) {
+            $url .= '#popup';
+        }
+
+        $this->goToURL($url);
 
         sleep(2);
         $this->_switchWindow('main');
@@ -493,7 +557,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
 
         $tests          = 5;
         $pass           = FALSE;
-        $textSimilarity = 0.99;
+        $textSimilarity = 0.98;
 
         do {
             try {
@@ -675,6 +739,14 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
             $content = str_replace('%'.($index + 1).'%', $keyword, $content);
         }
 
+        // Replace URL keyword.
+        $url = getenv('VIPER_TEST_URL');
+        if (empty($url) === TRUE) {
+            $url = dirname(__FILE__);
+        }
+
+        $content = str_replace('%url%', $url, $content);
+
         return $content;
 
     }//end replaceKeywords()
@@ -733,13 +805,27 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
 
         $buttonHTML .= '</div></div>';
 
+        $metaTag = '';
+        if ($this->getBrowserid() === 'ie8') {
+            $metaTag = '<meta http-equiv="X-UA-Compatible" content="IE=8" >';
+        } else if($this->getBrowserid() === 'ie9') {
+            $metaTag = '<meta http-equiv="X-UA-Compatible" content="IE=9" >';
+        }
+
         $calibrateHtml = file_get_contents($baseDir.'/calibrate.html');
+        $calibrateHtml = str_replace('__TEST_IE_VERSION_METATAG__', $metaTag, $calibrateHtml);
         $calibrateHtml = str_replace('__TEST_CONTENT__', $buttonHTML, $calibrateHtml);
 
         file_put_contents($tmpFile, $calibrateHtml);
 
         $dest = $baseDir.'/tmp-calibrate.html';
-        $this->goToURL($this->_getBaseUrl().'/tmp-calibrate.html');
+
+        $url = $this->_getBaseUrl().'/tmp-calibrate.html';
+        if (self::$_usePopup === TRUE) {
+            $url .= '#popup';
+        }
+
+        $this->goToURL($url);
 
         sleep(2);
         $this->_switchWindow('main');
@@ -757,6 +843,8 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         $vitpImage = $this->capture($region);
         copy($vitpImage, $imgPath.'/vitp_arrow.png');
 
+        sleep(2);
+
         // Left arrow.
         $vitp      = $this->execJS('getVITP("left")', TRUE);
         $vitp['x'] = $this->getPageXRelativeToScreen($vitp['x']);
@@ -765,6 +853,8 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         $region    = $this->createRegion(($vitp['x'] - 2), ($vitp['y'] - 10), 30, 14);
         $vitpImage = $this->capture($region);
         copy($vitpImage, $imgPath.'/vitp_arrowLeft.png');
+
+        sleep(2);
 
         // Right arrow.
         $vitp      = $this->execJS('getVITP("right")', TRUE);
@@ -776,11 +866,11 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         copy($vitpImage, $imgPath.'/vitp_arrowRight.png');
 
         // Create image for the text field actions.
-        $textFieldActionRevertRegion = $this->getRegionOnPage($this->execJS('dfx.getBoundingRectangle(window.opener.dfx.getId("textboxActionRevert"))', TRUE));
+        $textFieldActionRevertRegion = $this->getRegionOnPage($this->execJS('dfx.getBoundingRectangle(dfx.getId("textboxActionRevert"))', TRUE));
         $textFieldActionRevertImage  = $this->capture($textFieldActionRevertRegion);
         copy($textFieldActionRevertImage, $imgPath.'/textField_action_revert.png');
 
-        $textFieldActionClearRegion = $this->getRegionOnPage($this->execJS('dfx.getBoundingRectangle(window.opener.dfx.getId("textboxActionClear"))', TRUE));
+        $textFieldActionClearRegion = $this->getRegionOnPage($this->execJS('dfx.getBoundingRectangle(dfx.getId("textboxActionClear"))', TRUE));
         $textFieldActionClearImage  = $this->capture($textFieldActionClearRegion);
         copy($textFieldActionClearImage, $imgPath.'/textField_action_clear.png');
 
@@ -789,6 +879,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
 
         foreach ($statuses as $status => $className) {
             $btnRects = $this->execJS('getCoords("'.$status.'", "'.$className.'")', TRUE);
+            sleep(1);
             foreach ($btnRects as $buttonName => $rect) {
                 $this->_createButtonImageFromRectangle($buttonName, $rect);
             }
@@ -859,6 +950,13 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         return $url;
 
     }//end _getBaseUrl()
+
+
+    protected function getTestURL($path='')
+    {
+        return $this->_getBaseUrl().$path;
+
+    }//end getTestURL()
 
 
     /**
@@ -1455,31 +1553,45 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
                 self::$_browserSelected = TRUE;
                 return;
             }//end if
-        } else if (self::$_browserSelected === FALSE) {
-            if ($browser === 'Firefox') {
+        } else {
+            if ($this->getOS() === 'windows') {
+                if ($browser === 'Google Chrome') {
+                    $browser = '- Google Chrome';
+                } else if ($browser === 'Firefox') {
+                    $browser = 'Mozilla Firefox';
+                } else if ($browser === 'IE8' || $browser === 'IE9') {
+                    $browser = 'Windows Internet Explorer';
+                }
+            } else if ($browser === 'Firefox') {
                 $browser = '/Applications/Firefox.app';
             }
 
-            $app = $this->switchApp($browser);
-            if ($this->getOS() !== 'windows') {
-                $windowNum = 0;
-                switch ($browser) {
-                    case 'Google Chrome':
-                        $windowNum = 1;
-                    break;
+            if (self::$_browserSelected === FALSE) {
+                $app = $this->switchApp($browser);
+                if ($this->getOS() !== 'windows') {
+                    $windowNum = 0;
+                    switch ($browser) {
+                        case 'Google Chrome':
+                            $windowNum = 1;
+                        break;
 
-                    default:
-                        $windowNum = 0;
-                    break;
-                }
+                        default:
+                            $windowNum = 0;
+                        break;
+                    }
 
-                self::$_window = $this->callFunc('window', array($windowNum), $app, TRUE);
-            } else {
-                self::$_window = $app;
-            }//end if
+                    self::$_window = $this->callFunc('window', array($windowNum), $app, TRUE);
+                } else {
+                    self::$_window = $app;
+                }//end if
+            }
         }//end if
 
-        self::$_window = $this->callFunc('App.focusedWindow', array(), NULL, TRUE);
+        if ($this->getOS() !== 'windows') {
+            self::$_window = $this->callFunc('App.focusedWindow', array(), NULL, TRUE);
+        } else {
+            self::$_window = $this->switchApp($browser);
+        }
 
         if (self::$_testRun === TRUE) {
             // Adjust the brwoser window region so that its only the area of the actual page.
@@ -2071,6 +2183,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
                 unlink(self::$_pollFilePath.'/_jsres.tmp');
 
                 if (is_string($result) === TRUE) {
+                    $result = str_replace("\r\n", '\n', $result);
                     $result = str_replace("\n", '\n', $result);
                 }
             }
@@ -2196,18 +2309,21 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         $startKeywordImage = $this->_getKeywordImage($startKeyword);
 
         if ($endKeyword === NULL) {
-            $loc = $this->find($startKeywordImage, NULL, $this->getData('textSimmilarity'));
-            $this->click($loc);
-            $this->doubleClick($loc);
-            return;
+            $endKeyword = $startKeyword;
         }
 
-        $endKeywordImage = $this->_getKeywordImage($endKeyword);
-
         $start = $this->find($startKeywordImage, NULL, $this->getData('textSimmilarity'));
-        $end   = $this->find($endKeywordImage, NULL, $this->getData('textSimmilarity'));
+
+        $end = $start;
+        if ($startKeyword !== $endKeyword) {
+            $end = $this->find($this->_getKeywordImage($endKeyword), NULL, $this->getData('textSimmilarity'));
+        }
 
         $this->click($start);
+
+        if ($this->getBrowserid() === 'safari') {
+            sleep(1);
+        }
 
         $startLeft = $this->getTopLeft($start);
         $endRight  = $this->getTopRight($end);
@@ -2224,7 +2340,20 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
             ($this->getY($endRight) + 2)
         );
 
-        $this->dragDrop($startLeft, $endRight);
+        if ($this->getBrowserid() === 'ie8' || $this->getBrowserid() === 'ie9') {
+            // Of course, even a simple thing like selecting words is a problem in
+            // IE. When you select words it also selects the space after it, causing
+            // tests to fail where style is applied to the selection or modification
+            // are made to the selection. To prevent this we need to select the words
+            // and then move the mouse back a few pixels while holding down left
+            // button and then drop it at the end of the last word.
+            $this->drag($startLeft);
+            $this->mouseMove($endRight);
+            $this->mouseMoveOffset(-10, 0);
+            $this->dropAt($endRight);
+        } else {
+            $this->dragDrop($startLeft, $endRight);
+        }
 
         usleep(50000);
 
@@ -2288,7 +2417,12 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      */
     protected function clearFieldValue($label)
     {
-        $fieldLabel   = $this->find($this->_getLabel($label), NULL, 0.7);
+        try {
+            $fieldLabel = $this->find($this->_getLabel($label), NULL, 0.7);
+        } catch (Exception $e) {
+            $fieldLabel = $this->find($this->_getLabel($label, TRUE), NULL, 0.7);
+        }
+
         $fieldRegion  = $this->extendRight($fieldLabel, 400);
         $actionImage  = $this->getBrowserImagePath().'/textField_action_clear.png';
         $actionButton = $this->find($actionImage, $fieldRegion);
@@ -2307,7 +2441,12 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      */
     protected function revertFieldValue($label)
     {
-        $fieldLabel   = $this->find($this->_getLabel($label), NULL, 0.7);
+        try {
+            $fieldLabel = $this->find($this->_getLabel($label), NULL, 0.7);
+        } catch (Exception $e) {
+            $fieldLabel = $this->find($this->_getLabel($label, TRUE), NULL, 0.7);
+        }
+
         $fieldRegion  = $this->extendRight($fieldLabel, 400);
         $actionImage  = $this->getBrowserImagePath().'/textField_action_revert.png';
         $actionButton = $this->find($actionImage, $fieldRegion);
@@ -2322,12 +2461,12 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      *
      * @return string
      */
-    private function _getLabel($label)
+    private function _getLabel($label, $force=FALSE)
     {
         $labelImg  = preg_replace('#\W#', '_', $label);
         $imagePath = $this->getBrowserImagePath().'/label_'.$labelImg.'.png';
 
-        if (file_exists($imagePath) === FALSE) {
+        if (file_exists($imagePath) === FALSE || $force === TRUE) {
             $rect    = $this->execJS('gField("'.$label.'")');
             $region  = $this->getRegionOnPage($rect);
             $tmpPath = $this->capture($region);
@@ -2476,6 +2615,82 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
 
 
     /**
+     * Open file using specified application.
+     *
+     * If the application is not available then this method will return FALSE.
+     * If the application that is being opened is the current browser then a new tab
+     * will be opened instead.
+     *
+     * @param string $filePath The file to open.
+     * @param string $appName  The name of the application to use to open the file.
+     *
+     * @return boolean
+     */
+    protected function openFile($filePath, $appName)
+    {
+        if ($appName === $this->getBrowserName()) {
+            // Open a new tab in this browser.
+            $this->keyDown('Key.CMD + t');
+            sleep(1);
+            $this->goToURL($filePath);
+            return TRUE;
+        }
+
+        if (array_key_exists($appName, self::$_apps) === TRUE) {
+            if (self::$_apps[$appName] === TRUE) {
+                system('open '.escapeshellarg($filePath));
+                return TRUE;
+            } else {
+                return FALSE;
+            }
+        } else {
+            $retval = NULL;
+            if ($this->getOS() === 'windows') {
+                system('open '.escapeshellarg($filePath), $retval);
+            } else {
+                system('open -a'.escapeshellarg($appName).' '.escapeshellarg($filePath), $retval);
+            }
+
+            if ($retval === 1) {
+                self::$_apps[$appName] = FALSE;
+                return FALSE;
+            } else {
+                self::$_apps[$appName] = TRUE;
+                return TRUE;
+            }
+        }//end if
+
+    }//end openFile()
+
+
+    /**
+     * Close the specified app.
+     *
+     * Note if the current browser is being closed then it will close its tab instead
+     * of the whole application.
+     *
+     * @param string $appName The name of the application to close.
+     *
+     * @return void
+     */
+    protected function closeApp($appName)
+    {
+        $this->switchApp($appName);
+        if ($this->getOS() === 'windows') {
+            $this->keyDown('Key.ALT + F4');
+        } else {
+            if ($appName === $this->getBrowserName()) {
+                sleep(5);
+                $this->keyDown('Key.CMD + w');
+            } else {
+                $this->keyDown('Key.CMD + q');
+            }
+        }
+
+    }//end closeApp()
+
+
+    /**
      * Removes the specified table's headers and ids.
      *
      * @param integer $tableIndex The table selector index.
@@ -2492,9 +2707,9 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         $js = 'rmTableHeaders('.$tableIndex.',';
 
         if ($removeid === TRUE) {
-            $js .= ' true);';
+            $js .= ' true)';
         } else {
-            $js .= ' false);';
+            $js .= ' false)';
         }
 
         $this->execJS($js, NULL, TRUE);
