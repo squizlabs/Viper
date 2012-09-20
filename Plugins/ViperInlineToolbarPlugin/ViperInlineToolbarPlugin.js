@@ -344,9 +344,10 @@ ViperInlineToolbarPlugin.prototype = {
                         // IE changes the range when the mouse is released on an element
                         // that is not part of viper causing Viper to lose focus..
                         // Use time out to set the range back in to Viper..
+                        self.viper.focus();
                         setTimeout(function() {
                             self._selectNode(selectionElem);
-                        }, 50);
+                        }, 30);
                     } else {
                         self._selectNode(selectionElem);
                     }
