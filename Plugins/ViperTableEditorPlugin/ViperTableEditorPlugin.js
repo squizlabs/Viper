@@ -244,6 +244,11 @@ ViperTableEditorPlugin.prototype = {
                     if (cell) {
                         if (self._cellTools && dfx.hasClass(self._cellTools, 'Viper-topBar') === true) {
                             self.hideCellToolsIcon();
+                        } else if (self.viper.isBrowser('msie') === true) {
+                            // This must be in a timeout to be able to calculate the bubbles position correctly.
+                            setTimeout(function() {
+                                self.showCellToolsIcon(cell, true);
+                            }, 10);
                         } else {
                             self.showCellToolsIcon(cell, true);
                         }
@@ -251,7 +256,7 @@ ViperTableEditorPlugin.prototype = {
                 } else {
                     if (self.viper.isBrowser('msie') === true) {
                         // This must be in a timeout to be able to calculate the bubbles position correctly.
-                        setTimeout(function() {console.info(1);
+                        setTimeout(function() {
                             self.toolbarPlugin.toggleBubble('VTEP-bubble');    
                         }, 10);
                     } else {
@@ -2316,7 +2321,13 @@ ViperTableEditorPlugin.prototype = {
             }
 
             for (var i = 0; i < cell.attributes.length; i++) {
-                elem.setAttribute(cell.attributes[i].nodeName, cell.attributes[i].nodeValue);
+                if (cell.attributes[i].nodeName.toLowerCase() === 'rowspan') {
+                    this.setRowspan(elem, cell.attributes[i].nodeValue);
+                } else if (cell.attributes[i].nodeName.toLowerCase() === 'colspan') {
+                    this.setColspan(elem, cell.attributes[i].nodeValue);
+                } else {
+                    elem.setAttribute(cell.attributes[i].nodeName, cell.attributes[i].nodeValue);
+                }
             }
 
             if (cell === activeCell) {
@@ -2430,7 +2441,13 @@ ViperTableEditorPlugin.prototype = {
             }
 
             for (var i = 0; i < cell.attributes.length; i++) {
-                elem.setAttribute(cell.attributes[i].nodeName, cell.attributes[i].nodeValue);
+                if (cell.attributes[i].nodeName.toLowerCase() === 'rowspan') {
+                    this.setRowspan(elem, cell.attributes[i].nodeValue);
+                } else if (cell.attributes[i].nodeName.toLowerCase() === 'colspan') {
+                    this.setColspan(elem, cell.attributes[i].nodeValue);
+                } else {
+                    elem.setAttribute(cell.attributes[i].nodeName, cell.attributes[i].nodeValue);
+                }
             }
 
             if (cell === activeCell) {
