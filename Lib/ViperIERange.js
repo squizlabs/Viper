@@ -141,6 +141,10 @@ ViperIERange.prototype = {
      */
     setStart: function(node, offset)
     {
+        if (document.activeElement && dfx.isTag(document.activeElement, 'input')) {
+            document.activeElement.blur();
+        }
+
         var moveTo = node;
         if (moveTo.nodeType === dfx.TEXT_NODE) {
             moveTo = moveTo.parentNode;
@@ -178,6 +182,10 @@ ViperIERange.prototype = {
      */
     setEnd: function(node, offset)
     {
+        if (document.activeElement && dfx.isTag(document.activeElement, 'input')) {
+            document.activeElement.blur();
+        }
+        
         var moveTo = node;
         if (moveTo.nodeType === dfx.TEXT_NODE) {
             moveTo = moveTo.parentNode;
