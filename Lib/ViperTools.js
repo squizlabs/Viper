@@ -758,7 +758,7 @@ ViperTools.prototype = {
             getValue: function() {
                 return checkbox.checked;
             },
-            setValue: function(checked) {
+            setValue: function(checked, isInitialValue) {
                 checkbox.checked = checked;
 
                 if (checked === true) {
@@ -767,7 +767,7 @@ ViperTools.prototype = {
                     dfx.removeClass(labelElem, 'Viper-active');
                 }
 
-                if (changeCallback) {
+                if (changeCallback && isInitialValue !== true) {
                     changeCallback.call(this, checked, true);
                 }
             }
