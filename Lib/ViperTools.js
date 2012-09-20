@@ -149,15 +149,22 @@ ViperTools.prototype = {
                     if (button.previousSibling) {
                         var sibling = button.previousSibling;
                         button.parentNode.removeChild(button);
-                        dfx.insertAfter(sibling, button);
+                        setTimeout(function() {
+                            dfx.insertAfter(sibling, button);
+                        }, 1);  
                     } else if (button.nextSibling) {
                         var sibling = button.nextSibling;
                         button.parentNode.removeChild(button);
-                        dfx.insertBefore(sibling, button);
+                        setTimeout(function() {
+                            dfx.insertBefore(sibling, button);    
+                        }, 1);
+                        
                     } else {
                         var parent = button.parentNode;
                         button.parentNode.removeChild(button);
-                        parent.appendChild(button);
+                        setTimeout(function() {
+                            parent.appendChild(button);
+                        }, 1);
                     }
                 }//end if
 

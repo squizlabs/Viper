@@ -101,11 +101,17 @@ ViperIERange.prototype = {
         this.startContainer = info.container;
         this.startOffset    = info.offset;
 
-        if (eclone.htmlText.charAt(eclone.htmlText.length - 1) === '>') {
-            eclone.moveEnd('character', -1);
+        if (eclone.text.length > 0
+            && eclone.htmlText.charAt(0) === '<'
+            && eclone.htmlText.charAt(eclone.htmlText.length - 1) === '>'
+        ) {
+            var startParentElement = clone.parentElement();
+            if (startParentElement !== eclone.parentElement() || dfx.isBlockElement(startParentElement) === true) {
+                eclone.moveEnd('character', -1);
+            }
         }
 
-        eclone.collapse(false);
+        eclone.collapse(false); 
 
         if (eclone.isEqual(clone) !== true) {
             var einfo = this._getContainerInfo(eclone);
