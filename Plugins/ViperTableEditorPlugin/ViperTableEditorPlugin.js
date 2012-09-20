@@ -249,7 +249,14 @@ ViperTableEditorPlugin.prototype = {
                         }
                     }
                 } else {
-                    self.toolbarPlugin.toggleBubble('VTEP-bubble');
+                    if (self.viper.isBrowser('msie') === true) {
+                        // This must be in a timeout to be able to calculate the bubbles position correctly.
+                        setTimeout(function() {console.info(1);
+                            self.toolbarPlugin.toggleBubble('VTEP-bubble');    
+                        }, 10);
+                    } else {
+                        self.toolbarPlugin.toggleBubble('VTEP-bubble');
+                    }   
                 }
             }, true);
             this.toolbarPlugin.addButton(button);
@@ -784,7 +791,7 @@ ViperTableEditorPlugin.prototype = {
             }
         }
 
-        this._tools.getItem('VTEP:colProps:heading').setValue(wholeColHeading);
+        this._tools.getItem('VTEP:colProps:heading').setValue(wholeColHeading, true);
 
         // Enable/disable move col icons.
         if (this.canMoveColLeft(cell) === true) {
