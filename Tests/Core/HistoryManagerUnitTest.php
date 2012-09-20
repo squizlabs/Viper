@@ -51,8 +51,7 @@ class Viper_Tests_Core_HistoryManagerUnitTest extends AbstractViperUnitTest
      */
     public function testUndoUsingKeyboardShortcut()
     {
-        $text = $this->selectKeyword(1);
-        $this->keyDown('Key.RIGHT');
+        $this->moveToKeyword(1, 'right');
         $this->type(' test');
 
         // Check that undo button is enabled and redo is disabled.
@@ -79,8 +78,7 @@ class Viper_Tests_Core_HistoryManagerUnitTest extends AbstractViperUnitTest
      */
     public function testUndoUsingTopToolbar()
     {
-        $text = $this->selectKeyword(1);
-        $this->keyDown('Key.RIGHT');
+        $this->moveToKeyword(1, 'right');
         $this->type(' test');
 
         $this->clickTopToolbarButton('historyUndo');
@@ -102,8 +100,7 @@ class Viper_Tests_Core_HistoryManagerUnitTest extends AbstractViperUnitTest
      */
     public function testRedoUsingKeyboardShort()
     {
-        $text = $this->selectKeyword(1);
-        $this->keyDown('Key.RIGHT');
+        $this->moveToKeyword(1, 'right');
         $this->type(' test');
 
         // Undo and then Redo using shortcut.
@@ -116,7 +113,7 @@ class Viper_Tests_Core_HistoryManagerUnitTest extends AbstractViperUnitTest
 
         // Make sure caret is at the correct position.
         $this->type('...');
-         $this->assertHTMLMatch('<p>%1% test...</p><p>EIB MOZ</p>');
+        $this->assertHTMLMatch('<p>%1% test...</p><p>EIB MOZ</p>');
         
     }//end testRedoUsingKeyboardShort()
     
@@ -128,8 +125,7 @@ class Viper_Tests_Core_HistoryManagerUnitTest extends AbstractViperUnitTest
      */
     public function testRedoUsingTopToolbar()
     {
-        $text = $this->selectKeyword(1);
-        $this->keyDown('Key.RIGHT');
+        $this->moveToKeyword(1, 'right');
         $this->type(' test');
         
         $this->clickTopToolbarButton('historyUndo');
@@ -153,8 +149,7 @@ class Viper_Tests_Core_HistoryManagerUnitTest extends AbstractViperUnitTest
      */
     public function testMaxCharlimit()
     {
-        $text = $this->selectKeyword(1);
-        $this->keyDown('Key.RIGHT');
+        $this->moveToKeyword(1, 'right');
 
         $chars = '';
         for ($i = 0; $i < 55; $i++) {
