@@ -14,11 +14,14 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
     public function testSimpleTextCopyPaste()
     {
         $this->selectKeyword(1);
+        sleep(1);
         $this->keyDown('Key.CMD + c');
         $this->keyDown('Key.CMD + v');
         $this->type('A');
+        sleep(1);
         $this->keyDown('Key.CMD + v');
         $this->type('B');
+        sleep(1);
         $this->keyDown('Key.CMD + v');
         $this->type('C');
 
@@ -35,15 +38,18 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
     public function testBoldTextCopyPaste()
     {
         $this->selectKeyword(1);
+        sleep(1);
         $this->keyDown('Key.CMD + b');
         $this->keyDown('Key.CMD + c');
         $this->keyDown('Key.CMD + v');
         $this->type('A');
+        sleep(1);
         $this->keyDown('Key.CMD + v');
         $this->type('B');
+        sleep(1);
         $this->keyDown('Key.CMD + v');
         $this->type('C');
-        sleep(2);
+        sleep(1);
 
         $this->assertHTMLMatch('<p><strong>%1%A%1%B%1%C</strong></p>');
 
@@ -58,15 +64,18 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
     public function testItalicTextCopyPaste()
     {
         $this->selectKeyword(1);
+        sleep(1);
         $this->keyDown('Key.CMD + i');
         $this->keyDown('Key.CMD + c');
         $this->keyDown('Key.CMD + v');
         $this->type('A');
+        sleep(1);
         $this->keyDown('Key.CMD + v');
         $this->type('B');
+        sleep(1);
         $this->keyDown('Key.CMD + v');
         $this->type('C');
-        sleep(2);
+        sleep(1);
 
         $this->assertHTMLMatch('<p><em>%1%A%1%B%1%C</em></p>');
 
