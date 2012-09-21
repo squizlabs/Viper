@@ -83,13 +83,19 @@ caption {
     text-align: center;
 }
 
+.Viper-button .Viper-buttonIcon {
+    margin-left: -16px;
+    margin-top: -8px;
+}
+
 .Viper-button.Viper-disabled .Viper-buttonIcon {
-    /*margin-top: -12px;*/
-    margin-left: -8px;
+    margin-left: -15px;
+    margin-top: -15px;
 }
 
 .Viper-button.Viper-active .Viper-buttonIcon {
     margin-top: -8px;
+    margin-left: -9px;
 }
 
 #__allBtns {
