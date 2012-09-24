@@ -1207,6 +1207,12 @@ ViperTools.prototype = {
                 }
 
                 var activeSection   = this._activeSection;
+                if (range.collapsed === true) {
+                    // Clicking inside a link element etc should not activate the
+                    // sub section again.
+                    activeSection = null;
+                }
+
                 this.closeActiveSubsection(true);
 
                 this._buttonShown     = false;
