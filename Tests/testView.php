@@ -130,15 +130,17 @@
             continue;
         }
 
+        $doc = new DOMDocument();
+        if (@$doc->load($logFile) === FALSE) {
+            continue;
+        }
+
         echo '<div class="wrapper">';
         echo '<h1>'.$browserName.'</h1>';
 
-        $doc = new DOMDocument();
-        $doc->load($logFile);
-
         $testSuites = $doc->getElementsByTagName('testsuite')->item(0);
 
-        echo '<p>Time: '.$testSuites->getAttribute('time').'s';
+        echo '<p>Time: '.gmdate("H:i:s", $testSuites->getAttribute('time'));
         echo ',&nbsp;&nbsp;Tests: '.$testSuites->getAttribute('tests');
         echo ',&nbsp;&nbsp;Errors: '.$testSuites->getAttribute('errors');
         echo ',&nbsp;&nbsp;Failures: '.$testSuites->getAttribute('failures');

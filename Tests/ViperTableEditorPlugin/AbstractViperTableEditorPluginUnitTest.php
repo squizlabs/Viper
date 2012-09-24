@@ -220,7 +220,6 @@ abstract class AbstractViperTableEditorPluginUnitTest extends AbstractViperUnitT
         $mergeLeft,
         $mergeRight
     ) {
-
         $this->showTools($cell, 'cell');
         $this->clickInlineToolbarButton('splitMerge');
 

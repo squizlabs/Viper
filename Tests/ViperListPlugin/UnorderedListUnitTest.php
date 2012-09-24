@@ -677,15 +677,17 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperLis
     public function testRemoveSubListFromList()
     {
         $this->selectKeyword(5);
+        sleep(1);
         $this->keyDown('Key.TAB');
         sleep(1);
         $this->assertHTMLMatch('<p>%1% uuuuuu. %2%</p><p>cPOc ccccc dddd. %3%</p><p>ajhsd sjsjwi hhhh:</p><ul><li>aaa %4% ccccc<ul><li>%5% %6% templates</li></ul></li><li>Audit %7% %8%</li><li>Accessibility audit report</li><li>Recommendations %9% plan</li><li>Squiz Matrix guide</li></ul>');
 
         $this->selectInlineToolbarLineageItem(3);
-        sleep(1);
+        sleep(2);
 
         // Remove whole item .
         $this->keyDown('Key.BACKSPACE');
+        sleep(1);
 
         // Remove the item element.
         $this->keyDown('Key.BACKSPACE');

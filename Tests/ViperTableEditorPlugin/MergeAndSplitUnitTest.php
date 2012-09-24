@@ -12,20 +12,20 @@ class Viper_Tests_ViperTableEditorPlugin_MergeAndSplitUnitTest extends AbstractV
      */
     public function testMergeAndSplitIconStatesInComplexTable()
     {
-        $this->assertMergeAndSplitIconStatuses(0, TRUE, TRUE, FALSE, FALSE, FALSE, TRUE);
-        $this->assertMergeAndSplitIconStatuses(1, FALSE, TRUE, FALSE, TRUE, TRUE, FALSE);
-        $this->assertMergeAndSplitIconStatuses(2, TRUE, FALSE, FALSE, TRUE, FALSE, FALSE);
-        $this->assertMergeAndSplitIconStatuses(3, FALSE, FALSE, FALSE, TRUE, FALSE, TRUE);
-        $this->assertMergeAndSplitIconStatuses(4, FALSE, FALSE, FALSE, TRUE, TRUE, FALSE);
-        $this->assertMergeAndSplitIconStatuses(5, FALSE, TRUE, FALSE, FALSE, FALSE, TRUE);
-        $this->assertMergeAndSplitIconStatuses(6, FALSE, FALSE, FALSE, TRUE, FALSE, TRUE);
-        $this->assertMergeAndSplitIconStatuses(7, FALSE, FALSE, TRUE, TRUE, TRUE, TRUE);
-        $this->assertMergeAndSplitIconStatuses(8, FALSE, FALSE, TRUE, TRUE, TRUE, TRUE);
-        $this->assertMergeAndSplitIconStatuses(9, FALSE, FALSE, TRUE, TRUE, TRUE, FALSE);
-        $this->assertMergeAndSplitIconStatuses(10, FALSE, FALSE, TRUE, FALSE, FALSE, TRUE);
-        $this->assertMergeAndSplitIconStatuses(11, FALSE, FALSE, TRUE, FALSE, TRUE, TRUE);
-        $this->assertMergeAndSplitIconStatuses(12, FALSE, FALSE, TRUE, FALSE, TRUE, TRUE);
         $this->assertMergeAndSplitIconStatuses(13, FALSE, FALSE, TRUE, FALSE, TRUE, FALSE);
+        $this->assertMergeAndSplitIconStatuses(12, FALSE, FALSE, TRUE, FALSE, TRUE, TRUE);
+        $this->assertMergeAndSplitIconStatuses(11, FALSE, FALSE, TRUE, FALSE, TRUE, TRUE);
+        $this->assertMergeAndSplitIconStatuses(10, FALSE, FALSE, TRUE, FALSE, FALSE, TRUE);
+        $this->assertMergeAndSplitIconStatuses(9, FALSE, FALSE, TRUE, TRUE, TRUE, FALSE);
+        $this->assertMergeAndSplitIconStatuses(8, FALSE, FALSE, TRUE, TRUE, TRUE, TRUE);
+        $this->assertMergeAndSplitIconStatuses(7, FALSE, FALSE, TRUE, TRUE, TRUE, TRUE);
+        $this->assertMergeAndSplitIconStatuses(6, FALSE, FALSE, FALSE, TRUE, FALSE, TRUE);
+        $this->assertMergeAndSplitIconStatuses(5, FALSE, TRUE, FALSE, FALSE, FALSE, TRUE);
+        $this->assertMergeAndSplitIconStatuses(4, FALSE, FALSE, FALSE, TRUE, TRUE, FALSE);
+        $this->assertMergeAndSplitIconStatuses(3, FALSE, FALSE, FALSE, TRUE, FALSE, TRUE);
+        $this->assertMergeAndSplitIconStatuses(2, TRUE, FALSE, FALSE, TRUE, FALSE, FALSE);
+        $this->assertMergeAndSplitIconStatuses(1, FALSE, TRUE, FALSE, TRUE, TRUE, FALSE);
+        $this->assertMergeAndSplitIconStatuses(0, TRUE, TRUE, FALSE, FALSE, FALSE, TRUE);
 
     }//end testMergeAndSplitIconStatesInComplexTable()
 
