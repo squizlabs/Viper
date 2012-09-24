@@ -104,8 +104,7 @@ class Viper_Tests_ViperListPlugin_OrderedListInTableUnitTest extends AbstractVip
         $this->assertEquals($this->replaceKeywords('            <ol><li>Item 1</li></ol><p>Item 2 %3%</p>'), $this->getHtml('td', 2));
         $this->assertIconStatusesCorrect(TRUE, TRUE, FALSE, FALSE);
 
-        $this->click($this->findKeyword(2));
-        $this->click($this->findKeyword(3));
+        $this->click($this->getMouseLocation());
         sleep(1);
         $this->keyDown('Key.TAB');
         $this->assertEquals($this->replaceKeywords('            <ol><li>Item 1</li></ol><p>Item 2 %3%</p>'), $this->getHtml('td', 2));
