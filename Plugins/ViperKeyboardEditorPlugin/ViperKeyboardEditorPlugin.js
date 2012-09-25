@@ -554,6 +554,10 @@ ViperKeyboardEditorPlugin.prototype = {
                 }
 
                 ViperSelection.addRange(range);
+                if (this.viper.isBrowser('firefox') !== true) {
+                    this.viper.fireNodesChanged();
+                }
+
                 return false;
             }
         }
