@@ -29,7 +29,7 @@ function initJSPoller()
     scriptUrl.pop();
     scriptUrl = scriptUrl.join('/') + '/jspoller.php';
 
-    var seconds  = 1;
+    var seconds  = 0.7;
     var stop     = false;
     var interval = null;
     interval = setInterval(function() {

@@ -517,6 +517,35 @@ ViperKeyboardEditorPlugin.prototype = {
             return false;
         }
 
+        if (range.startOffset === 0
+            && range.collapsed === false
+            && this.viper.isBrowser('firefox') === true
+            && range.startContainer !== range.endContainer
+            && range.startContainer.nodeType === dfx.TEXT_NODE
+            && range.endContainer.nodeType === dfx.TEXT_NODE
+            && range.endOffset === range.endContainer.data.length
+        ) {
+            var startParent     = dfx.getFirstBlockParent(range.startContainer);
+            var endParent       = dfx.getFirstBlockParent(range.endContainer);
+            var firstSelectable = range._getFirstSelectableChild(startParent);
+            var lastSelectable  = range._getLastSelectableChild(endParent);
+
+            if (firstSelectable === range.startContainer
+                && lastSelectable === range.endContainer
+            ) {
+                var p = document.createElement('p');
+                dfx.setHtml(p, '<br />');
+                dfx.insertBefore(startParent, p);
+                dfx.remove(dfx.getElementsBetween(startParent, endParent));
+                dfx.remove(startParent);
+                dfx.remove(endParent);
+                range.setStart(p, 0);
+                range.collapse(true);
+                ViperSelection.addRange(range);
+                return false;
+            }
+        }
+
     },
 
     splitAtRange: function(returnFirstBlock, range)

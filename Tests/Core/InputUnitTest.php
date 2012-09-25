@@ -297,6 +297,27 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
 
 
     /**
+     * Tests that after removing paragraphs and typing it creates a new paragraph.
+     *
+     * @return void
+     */
+    public function testDeleteParagraphAndType()
+    {
+        $this->selectKeyword(1, 2);
+        $this->keyDown('Key.DELETE');
+        $this->type('test123');
+        sleep(1);
+        $this->assertHTMLMatch('<p>test test1 test2</p><p>test3 test4 test5</p><p>test123</p>');
+
+        $this->keyDown('Key.ENTER');
+        $this->type('123test');
+        sleep(1);
+        $this->assertHTMLMatch('<p>test test1 test2</p><p>test3 test4 test5</p><p>test123</p><p>123test</p>');
+
+    }//end testDeleteParagraphAndType()
+
+
+    /**
      * Test that inputting text, creating new paragraphs etc work when no base tag is set.
      *
      * @return void
