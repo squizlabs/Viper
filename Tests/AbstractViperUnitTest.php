@@ -56,7 +56,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      */
     private $_defaultWindowSize = array(
                                    'w' => 1270,
-                                   'h' => 800,
+                                   'h' => 900,
                                   );
 
     /**

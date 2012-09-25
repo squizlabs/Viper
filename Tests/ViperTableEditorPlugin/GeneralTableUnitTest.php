@@ -72,7 +72,7 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
         $this->assertTrue($this->topToolbarButtonExists('table', 'disabled'), 'Table icon should not appear in the top toolbar.');
 
         $this->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->assertTrue($this->topToolbarButtonExists('table'), 'Table icon should be active in the top toolbar.');
+        $this->assertTrue($this->topToolbarButtonExists('table', 'disabled'), 'Table icon should be disabled in the top toolbar.');
 
         $this->keyDown('Key.TAB');
         $this->assertTrue($this->topToolbarButtonExists('table', 'disabled'), 'Table icon should not active in the top toolbar.');
@@ -99,7 +99,7 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
         $this->assertTrue($this->topToolbarButtonExists('table', 'disabled'), 'Table icon should not appear in the top toolbar.');
 
         $this->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->assertTrue($this->topToolbarButtonExists('table'), 'Table icon should be active in the top toolbar.');
+        $this->assertTrue($this->topToolbarButtonExists('table', 'disabled'), 'Table icon should be disabled in the top toolbar.');
 
         $this->keyDown('Key.TAB');
         $this->assertTrue($this->topToolbarButtonExists('table', 'disabled'), 'Table icon should not active in the top toolbar.');
