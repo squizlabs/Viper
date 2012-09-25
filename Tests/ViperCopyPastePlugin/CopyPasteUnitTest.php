@@ -503,6 +503,7 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
         $this->selectKeyword(2);
         $this->paste(TRUE);
 
+        sleep(1);
         $this->assertHTMLMatch('<p>test %1% test %1%</p>');
 
     }//end testRightClickPaste()

@@ -2757,6 +2757,16 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
                     $this->click($this->mouseMoveOffset(30, 80));
                 break;
 
+                case 'safari':
+                    // Click the paste item in the right click menu.
+                    $this->click($this->mouseMoveOffset(30, 100));
+
+                    $this->_rightClickPasteDiv();
+
+                    // Click the paste item in the right click menu.
+                    $this->click($this->mouseMoveOffset(30, 40));
+                break;
+
                 case 'googlechrome':
                     // Google does not need the right click pop for pasting, just
                     // click the paste from the right click menu.
