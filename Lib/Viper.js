@@ -116,6 +116,12 @@ Viper.prototype = {
 
     },
 
+    getHistoryManager: function()
+    {
+        return this.ViperHistoryManager;
+
+    },
+
     setSetting: function(setting, value)
     {
         this._settings[setting] = value;

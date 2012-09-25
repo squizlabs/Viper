@@ -51,7 +51,7 @@ ViperHistoryPlugin.prototype = {
 
             this._updateToolbarButtonStates(toolbarButtons);
 
-            this.viper.registerCallback(['ViperHistoryManager:add', 'ViperHistoryManager:undo', 'ViperHistoryManager:redo'], 'ViperHistoryPlugin', function(e) {
+            this.viper.registerCallback(['ViperHistoryManager:add', 'ViperHistoryManager:undo', 'ViperHistoryManager:redo', 'ViperHistoryManager:clear'], 'ViperHistoryPlugin', function(e) {
                 self._updateToolbarButtonStates(toolbarButtons);
             });
         }
