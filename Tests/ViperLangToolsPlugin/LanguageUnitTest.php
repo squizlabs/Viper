@@ -121,7 +121,7 @@ class Viper_Tests_ViperLangToolsPlugin_LanguageUnitTest extends AbstractViperUni
         $this->assertTrue($this->topToolbarButtonExists('langTools', 'active'), 'Language icon in Top Toolbar should be active.');
 
         $this->clickTopToolbarButton('langTools', 'active');
-        $this->assertTrue($this->topToolbarButtonExists('langTools', 'active'), 'Language icon in Top Toolbar should be active.');
+        $this->assertTrue($this->topToolbarButtonExists('langTools', 'selected'), 'Language icon in Top Toolbar should be active.');
 
         $this->selectKeyword(5);
         $this->selectInlineToolbarLineageItem(0);
