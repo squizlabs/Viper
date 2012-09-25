@@ -1394,6 +1394,9 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractFormatsUnitTe
         $this->click($this->findKeyword(2));
         $this->assertTrue($this->topToolbarButtonExists('formats', 'disabled'), 'Formats icon should not appear in the top toolbar.');
 
+        $this->click($this->findKeyword(1));
+        sleep(1);
+        
         $this->selectKeyword(2);
         $this->assertTrue($this->topToolbarButtonExists('formats', 'disabled'), 'Formats icon should not appear in the top toolbar.');
         $this->assertFalse($this->inlineToolbarButtonExists('formats'), 'Formats button should not be available');

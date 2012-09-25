@@ -292,6 +292,7 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperImagePlugi
         $this->clickField('Image is decorative');
         $this->keyDown('Key.ENTER');
 
+        sleep(2);
         $this->findImage('ViperImagePlugin-loadError', '.Viper-textbox-error');
 
         $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%1% %2%<img src="http://www.squizlabs.com/html-codesniffer.png" alt="" /></p><p>sit amet <strong>%3%</strong></p>');

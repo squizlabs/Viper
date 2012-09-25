@@ -101,6 +101,10 @@ body.Viper-unitTest .ViperAccessibilityPlugin #HTMLCS-wrapper .Viper-buttonIcon 
     margin-left: -17px;
 }
 
+.Viper-buttonIcon.Viper-justifyBlock {
+    width: 10px;
+}   
+
 
 #__allBtns {
     top: 20px;

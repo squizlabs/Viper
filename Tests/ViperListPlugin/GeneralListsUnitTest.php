@@ -272,6 +272,8 @@ class Viper_Tests_ViperListPlugin_GeneralListsUnitTest extends AbstractViperList
         $this->click($this->findKeyword(2));
         $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
 
+        $this->click($this->findKeyword(1));
+        sleep(1);
         $this->selectKeyword(2);
         $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
 
@@ -574,6 +576,8 @@ class Viper_Tests_ViperListPlugin_GeneralListsUnitTest extends AbstractViperList
         $this->click($this->findKeyword(4));
         $this->assertIconStatusesCorrect(TRUE, TRUE, NULL, NULL);
 
+        $this->click($this->findKeyword(3));
+        sleep(1);
         $this->selectKeyword(4);
         $this->assertIconStatusesCorrect(TRUE, TRUE, NULL, NULL);
 

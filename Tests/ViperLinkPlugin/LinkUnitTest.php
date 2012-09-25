@@ -713,7 +713,7 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
 
         $this->assertHTMLMatch('<p>%1% link test <a href="http://www.squizlabs.com" class="class" id="anchor">%2%</a></p>');
 
-        $this->assertTrue($this->inlineToolbarButtonExists('link', 'active'), 'Link icon should be active in the inline toolbar.');
+        $this->assertTrue($this->inlineToolbarButtonExists('link', 'selected'), 'Link icon should be active in the inline toolbar.');
         $this->assertTrue($this->topToolbarButtonExists('link', 'active'), 'Link icon should be active in the top toolbar.');
 
         $this->assertTrue($this->inlineToolbarButtonExists('cssClass', 'active'), 'Class icon should be active in the inline toolbar.');
