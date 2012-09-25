@@ -453,7 +453,6 @@ ViperKeyboardEditorPlugin.prototype = {
         } else if (range.startOffset === 0
             && range.collapsed === false
             && viper.isBrowser('msie') !== true
-            && viper.isBrowser('safari') !== true
         ) {
             // Chrome has issues with removing list items from lists.
             var startNode = range.getStartNode();
