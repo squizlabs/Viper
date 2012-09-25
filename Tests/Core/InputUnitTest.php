@@ -306,6 +306,7 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
         $this->useTest(1);
         $this->selectKeyword(1, 2);
         $this->keyDown('Key.DELETE');
+        $this->assertTrue($this->topToolbarButtonExists('historyUndo'), 'Undo icon should be enabled');
         $this->type('test123');
         sleep(1);
         $this->assertHTMLMatch('<p>test test1 test2</p><p>test3 test4 test5</p><p>test123</p>');
@@ -320,6 +321,7 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
 
         $this->selectKeyword(1, 2);
         $this->keyDown('Key.DELETE');
+        $this->assertTrue($this->topToolbarButtonExists('historyUndo'), 'Undo icon should be enabled');
         $this->type('test123');
         sleep(1);
         $this->assertHTMLMatch('<p>test test1 test2</p><p>test3 test4 test5</p><div>test123</div>');
@@ -334,7 +336,7 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
 
         $this->selectKeyword(1, 2);
         $this->keyDown('Key.DELETE');
-        sleep(1);
+        $this->assertTrue($this->topToolbarButtonExists('historyUndo'), 'Undo icon should be enabled');
         $this->type('test123');
         sleep(1);
         $this->assertHTMLMatch('<p>test test1 test2</p><p>test3 test4 test5</p>test123');
