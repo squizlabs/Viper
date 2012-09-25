@@ -369,4 +369,6 @@ function useTest(id)
         win.viper.element.blur();
     }
 
+    win.viper.getHistoryManager().clear();
+
 }
