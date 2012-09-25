@@ -388,6 +388,7 @@ ViperKeyboardEditorPlugin.prototype = {
             return;
         }
 
+        var defaultTagName  = this.viper.getDefaultBlockTag();
         var viperElement    = this.viper.getViperElement();
         var firstSelectable = range._getFirstSelectableChild(viperElement);
 
@@ -519,7 +520,7 @@ ViperKeyboardEditorPlugin.prototype = {
 
         if (range.startOffset === 0
             && range.collapsed === false
-            && this.viper.isBrowser('firefox') === true
+            && this.viper.isBrowser('msie') !== true
             && range.startContainer !== range.endContainer
             && range.startContainer.nodeType === dfx.TEXT_NODE
             && range.endContainer.nodeType === dfx.TEXT_NODE
@@ -533,14 +534,25 @@ ViperKeyboardEditorPlugin.prototype = {
             if (firstSelectable === range.startContainer
                 && lastSelectable === range.endContainer
             ) {
-                var p = document.createElement('p');
-                dfx.setHtml(p, '<br />');
-                dfx.insertBefore(startParent, p);
-                dfx.remove(dfx.getElementsBetween(startParent, endParent));
-                dfx.remove(startParent);
-                dfx.remove(endParent);
-                range.setStart(p, 0);
-                range.collapse(true);
+                if (defaultTagName !== '') {
+                    var p = document.createElement(defaultTagName);
+                    dfx.setHtml(p, '<br />');
+                    dfx.insertBefore(startParent, p);
+                    dfx.remove(dfx.getElementsBetween(startParent, endParent));
+                    dfx.remove(startParent);
+                    dfx.remove(endParent);
+                    range.setStart(p, 0);
+                    range.collapse(true);
+                } else {
+                    var br = document.createElement('br');
+                    dfx.insertBefore(startParent, br);
+                    dfx.remove(dfx.getElementsBetween(startParent, endParent));
+                    dfx.remove(startParent);
+                    dfx.remove(endParent);
+                    range.setStart(br, 0);
+                    range.collapse(true);
+                }
+
                 ViperSelection.addRange(range);
                 return false;
             }

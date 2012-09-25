@@ -303,6 +303,7 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
      */
     public function testDeleteParagraphAndType()
     {
+        $this->useTest(1);
         $this->selectKeyword(1, 2);
         $this->keyDown('Key.DELETE');
         $this->type('test123');
@@ -313,6 +314,36 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
         $this->type('123test');
         sleep(1);
         $this->assertHTMLMatch('<p>test test1 test2</p><p>test3 test4 test5</p><p>test123</p><p>123test</p>');
+
+        $this->useTest(1);
+        $this->execJS('viper.setSetting("defaultBlockTag", "div")');
+
+        $this->selectKeyword(1, 2);
+        $this->keyDown('Key.DELETE');
+        $this->type('test123');
+        sleep(1);
+        $this->assertHTMLMatch('<p>test test1 test2</p><p>test3 test4 test5</p><div>test123</div>');
+
+        $this->keyDown('Key.ENTER');
+        $this->type('123test');
+        sleep(1);
+        $this->assertHTMLMatch('<p>test test1 test2</p><p>test3 test4 test5</p><div>test123</div><div>123test</div>');
+
+        $this->useTest(1);
+        $this->execJS('viper.setSetting("defaultBlockTag", "")');
+
+        $this->selectKeyword(1, 2);
+        $this->keyDown('Key.DELETE');
+        sleep(1);
+        $this->type('test123');
+        sleep(1);
+        $this->assertHTMLMatch('<p>test test1 test2</p><p>test3 test4 test5</p>test123');
+
+        $this->keyDown('Key.ENTER');
+        $this->type('123test');
+        sleep(1);
+        $this->assertHTMLMatch('<p>test test1 test2</p><p>test3 test4 test5</p>test123<br />123test');
+
 
     }//end testDeleteParagraphAndType()
 
