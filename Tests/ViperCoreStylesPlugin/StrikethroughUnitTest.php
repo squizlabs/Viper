@@ -168,11 +168,11 @@ class Viper_Tests_ViperCoreStylesPlugin_StrikethroughUnitTest extends AbstractVi
 
 
     /**
-     * Test that you can undo strikethrough after you have applied it.
+     * Test that you can undo strikethrough after you have applied it and then redo it.
      *
      * @return void
      */
-    public function testUndoStrikethrough()
+    public function testUndoAndRedoStrikethrough()
     {
         $this->selectKeyword(2);
 
@@ -184,9 +184,10 @@ class Viper_Tests_ViperCoreStylesPlugin_StrikethroughUnitTest extends AbstractVi
         $this->clickTopToolbarButton('historyUndo');
         $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough'), 'Strikethrough icon in the top toolbar should not be active');
+        $this->clickTopToolbarButton('historyRedo');
+        $this->assertHTMLMatch('<p>%1% <del>%2%</del> %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
-    }//end testUndoStrikethrough()
+    }//end testUndoAndRedoStrikethrough()
 
 }//end class
 

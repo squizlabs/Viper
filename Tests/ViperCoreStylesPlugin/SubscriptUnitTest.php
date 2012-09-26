@@ -192,11 +192,11 @@ class Viper_Tests_ViperCoreStylesPlugin_SubscriptUnitTest extends AbstractViperU
 
 
     /**
-     * Test that you can undo subscript after you have applied it.
+     * Test that you can undo subscript after you have applied it and then redo it.
      *
      * @return void
      */
-    public function testUndoSubscript()
+    public function testUndoAndRedoSubscript()
     {
         $this->selectKeyword(2);
 
@@ -208,9 +208,10 @@ class Viper_Tests_ViperCoreStylesPlugin_SubscriptUnitTest extends AbstractViperU
         $this->clickTopToolbarButton('historyUndo');
         $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
-        $this->assertTrue($this->topToolbarButtonExists('subscript'), 'Subscript icon in the top toolbar should not be active');
-
-    }//end testUndoSubscript()
+        $this->clickTopToolbarButton('historyRedo');
+        $this->assertHTMLMatch('<p>%1% <sub>%2%</sub> %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
+        
+    }//end testUndoAndRedoSubscript()
 
 
 
