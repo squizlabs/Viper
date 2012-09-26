@@ -40,6 +40,26 @@ class Viper_Tests_ViperSearchAndReplaceToolbarPlugin_SearchAndReplaceUnitTest ex
 
 
     /**
+     * Test replace buttons are not active when it can't find the text.
+     *
+     * @return void
+     */
+    public function testReplaceButtonsNotActive()
+    {
+        $this->click($this->findKeyword(1));
+
+
+        $this->clickTopToolbarButton('searchReplace');
+        $this->type('blah');
+        $this->clickTopToolbarButton('Find Next', NULL, TRUE);
+        $this->assertTrue($this->topToolbarButtonExists('Find Next', NULL, TRUE), 'Find Next Icon should be enabled.');
+        $this->assertTrue($this->topToolbarButtonExists('Replace', 'disabled', TRUE), 'Replace Icon should be disabled.');
+        $this->assertTrue($this->topToolbarButtonExists('Replace All', 'disabled', TRUE), 'Replace All Icon should be disabled.');
+
+    }//end testReplaceButtonsNotActive()
+
+
+    /**
      * Test that you can perform a search wihtout replacing content.
      *
      * @return void
@@ -189,7 +209,6 @@ class Viper_Tests_ViperSearchAndReplaceToolbarPlugin_SearchAndReplaceUnitTest ex
         $this->assertHTMLMatch('<h1>%1% Simple Viper Example</h1><p>Australian governments at all levels have <strong><em>endorsed</em></strong> WCAG 2.0, and require all government websites (federal, state and territory) to meet the new guidelines replace at the minimum compliance level (Single A) by the end of 2012. In addition, the Australian Government requires all federal websites to meet the medium conformance level (Double A) by the end of FIND 2014.</p><p>Further information at <a href="http://webguide.gov.au/accessibility-usability/accessibility/%20">http://webguide.gov.au/accessibility-usability/accessibility/</a> and <a href="http://www.w3.org/TR/WCAG20/">http://www.w3.org/TR/WCAG20/</a>.</p><ul><li>Audit of Homepage and 6 Section Landing pages</li><li>4 additional templates</li><li>Audit of 20 additional pages for content</li><li>Accessibility audit report</li><li>Recommendations and action plan</li><li>Squiz Matrix content accessibility guide</li></ul>');
 
         $this->clickTopToolbarButton('historyUndo');
-
         $this->assertHTMLMatch('<h1>%1% Simple Viper Example</h1><p>Australian governments at all levels have <strong><em>endorsed</em></strong> WCAG 2.0, and require all government websites (federal, state and territory) to meet the new guidelines find at the minimum compliance level (Single A) by the end of 2012. In addition, the Australian Government requires all federal websites to meet the medium conformance level (Double A) by the end of FIND 2014.</p><p>Further information at <a href="http://webguide.gov.au/accessibility-usability/accessibility/%20">http://webguide.gov.au/accessibility-usability/accessibility/</a> and <a href="http://www.w3.org/TR/WCAG20/">http://www.w3.org/TR/WCAG20/</a>.</p><ul><li>Audit of Homepage and 6 Section Landing pages</li><li>4 additional templates</li><li>Audit of 20 additional pages for content</li><li>Accessibility audit report</li><li>Recommendations and action plan</li><li>Squiz Matrix content accessibility guide</li></ul>');
 
         $this->clickTopToolbarButton('historyRedo');
@@ -213,7 +232,6 @@ class Viper_Tests_ViperSearchAndReplaceToolbarPlugin_SearchAndReplaceUnitTest ex
         $this->type('replace');
         $this->clickTopToolbarButton('Find Next', NULL, TRUE);
         $this->clickTopToolbarButton('Replace All', NULL, TRUE);
-
 
         $this->assertHTMLMatch('<h1>%1% Simple Viper Example</h1><p>Australian governments at all levels have <strong><em>endorsed</em></strong> WCAG 2.0, and require all government websites (federal, state and territory) to meet the new guidelines replace at the minimum compliance level (Single A) by the end of 2012. In addition, the Australian Government requires all federal websites to meet the medium conformance level (Double A) by the end of replace 2014.</p><p>Further information at <a href="http://webguide.gov.au/accessibility-usability/accessibility/%20">http://webguide.gov.au/accessibility-usability/accessibility/</a> and <a href="http://www.w3.org/TR/WCAG20/">http://www.w3.org/TR/WCAG20/</a>.</p><ul><li>Audit of Homepage and 6 Section Landing pages</li><li>4 additional templates</li><li>Audit of 20 additional pages for content</li><li>Accessibility audit report</li><li>Recommendations and action plan</li><li>Squiz Matrix content accessibility guide</li></ul>');
 
@@ -246,6 +264,41 @@ class Viper_Tests_ViperSearchAndReplaceToolbarPlugin_SearchAndReplaceUnitTest ex
 
     }//end testSearchAndReplaceLastWordInList()
 
+
+    /**
+     * Test performing a search and replace, closing the fields and opening them again.
+     *
+     * @return void
+     */
+    public function testSearchAndReplaceAfterClosingFields()
+    {
+        $this->click($this->findKeyword(1));
+
+        $this->clickTopToolbarButton('searchReplace');
+        $this->type('FIND');
+        $this->keyDown('Key.TAB');
+        $this->type('replace');
+        $this->clickTopToolbarButton('Find Next', NULL, TRUE);
+        $this->clickTopToolbarButton('Replace', NULL, TRUE);
+
+        $this->assertHTMLMatch('<h1>%1% Simple Viper Example</h1><p>Australian governments at all levels have <strong><em>endorsed</em></strong> WCAG 2.0, and require all government websites (federal, state and territory) to meet the new guidelines replace at the minimum compliance level (Single A) by the end of 2012. In addition, the Australian Government requires all federal websites to meet the medium conformance level (Double A) by the end of FIND 2014.</p><p>Further information at <a href="http://webguide.gov.au/accessibility-usability/accessibility/%20">http://webguide.gov.au/accessibility-usability/accessibility/</a> and <a href="http://www.w3.org/TR/WCAG20/">http://www.w3.org/TR/WCAG20/</a>.</p><ul><li>Audit of Homepage and 6 Section Landing pages</li><li>4 additional templates</li><li>Audit of 20 additional pages for content</li><li>Accessibility audit report</li><li>Recommendations and action plan</li><li>Squiz Matrix content accessibility guide</li></ul>');
+
+        // Close the search fields
+        $this->clickTopToolbarButton('searchReplace', 'selected');
+        $this->click($this->findKeyword(1));
+
+        // Open the search fields again and make sure only the Find Next button is enabled
+        $this->clickTopToolbarButton('searchReplace');
+        $this->assertTrue($this->topToolbarButtonExists('Find Next', NULL, TRUE), 'Find Next Icon should be enabled.');
+        $this->assertTrue($this->topToolbarButtonExists('Replace', 'disabled', TRUE), 'Replace Icon should be disabled.');
+        $this->assertTrue($this->topToolbarButtonExists('Replace All', 'disabled', TRUE), 'Replace All Icon should be disabled.');
+
+        $this->clickTopToolbarButton('Find Next', NULL, TRUE);
+        $this->clickTopToolbarButton('Replace', NULL, TRUE);
+
+        $this->assertHTMLMatch('<h1>%1% Simple Viper Example</h1><p>Australian governments at all levels have <strong><em>endorsed</em></strong> WCAG 2.0, and require all government websites (federal, state and territory) to meet the new guidelines replace at the minimum compliance level (Single A) by the end of 2012. In addition, the Australian Government requires all federal websites to meet the medium conformance level (Double A) by the end of replace 2014.</p><p>Further information at <a href="http://webguide.gov.au/accessibility-usability/accessibility/%20">http://webguide.gov.au/accessibility-usability/accessibility/</a> and <a href="http://www.w3.org/TR/WCAG20/">http://www.w3.org/TR/WCAG20/</a>.</p><ul><li>Audit of Homepage and 6 Section Landing pages</li><li>4 additional templates</li><li>Audit of 20 additional pages for content</li><li>Accessibility audit report</li><li>Recommendations and action plan</li><li>Squiz Matrix content accessibility guide</li></ul>');
+
+    }//end testSearchAndReplaceAfterClosingFields()
 
 }//end class
 
