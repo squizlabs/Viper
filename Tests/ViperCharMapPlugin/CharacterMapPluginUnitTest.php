@@ -70,6 +70,9 @@ class Viper_Tests_ViperCharMapPlugin_CharacterMapPluginUnitTest extends Abstract
         $this->clickTopToolbarButton('historyUndo');
         $this->assertHTMLMatch('<p>LOREM %1% dolor</p><p>sit amet <strong>WoW</strong></p>');
 
+        $this->clickTopToolbarButton('historyRedo');
+        $this->assertHTMLMatch('<p>LOREM X&para;AX dolor</p><p>sit amet <strong>WoW</strong></p>');
+
     }//end testInsertingASymbolAndClickingUndo()
 
 
