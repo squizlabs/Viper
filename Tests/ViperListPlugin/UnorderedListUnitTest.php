@@ -445,6 +445,7 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperLis
     {
         $this->selectKeyword(6, 9);
         $this->keyDown('Key.TAB');
+        sleep(1);
         $this->keyDown('Key.CMD + b');
 
         $this->assertHTMLMatch('<p>%1% uuuuuu. %2%</p><p>cPOc ccccc dddd. %3%</p><p>ajhsd sjsjwi hhhh:</p><ul><li>aaa %4% ccccc<ul><li>%5% <strong>%6% templates</strong></li><li><strong>Audit %7% %8%</strong></li><li><strong>Accessibility audit report</strong></li><li><strong>Recommendations %9%</strong> plan</li></ul></li><li>Squiz Matrix guide</li></ul>');

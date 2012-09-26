@@ -522,26 +522,42 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractViperListP
         $this->selectKeyword(2);
 
         $this->keyDown('Key.RIGHT');
+        usleep(50000);
         $this->keyDown('Key.TAB');
+        usleep(50000);
         $this->keyDown('Key.DOWN');
+        usleep(50000);
 
         $this->keyDown('Key.TAB');
+        usleep(50000);
 
         $this->keyDown('Key.DOWN');
+        usleep(50000);
         $this->keyDown('Key.TAB');
+        usleep(50000);
 
         $this->keyDown('Key.UP');
+        usleep(50000);
         $this->keyDown('Key.SHIFT + Key.TAB');
+        usleep(50000);
         $this->keyDown('Key.DOWN');
+        usleep(50000);
         $this->keyDown('Key.TAB');
+        usleep(50000);
         $this->keyDown('Key.TAB');
+        usleep(50000);
 
         $this->keyDown('Key.DOWN');
+        usleep(50000);
         $this->keyDown('Key.TAB');
+        usleep(50000);
         $this->keyDown('Key.TAB');
+        usleep(50000);
 
         $this->keyDown('Key.DOWN');
+        usleep(50000);
         $this->keyDown('Key.TAB');
+        usleep(50000);
 
         $this->assertHTMLMatch('<ul><li>%1% uuuuuu. %2%</li></ul><p>cPOc ccccc dddd. %3%</p><ul><li>ajhsd sjsjwi hhhh:</li></ul><ol><li>aaa %4% ccccc<ol><li>%5% %6% templates</li></ol></li><li>Audit %7% %8%</li><li>Accessibility audit report</li><li>Recommendations %9% plan</li><li>Squiz Matrix guide</li></ol>');
 
