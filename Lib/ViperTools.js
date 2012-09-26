@@ -1519,8 +1519,6 @@ ViperTools.prototype = {
                 }
 
                 subSection.form.onsubmit = function(e) {
-                    tools.viper.focus();
-
                     if (e) {
                         dfx.preventDefault(e);
                     }
@@ -1529,6 +1527,8 @@ ViperTools.prototype = {
                     if (button.isEnabled() === false) {
                         return false;
                     }
+
+                    tools.viper.focus();
 
                     if (tools.viper.isBrowser('msie') === false) {
                         try {
