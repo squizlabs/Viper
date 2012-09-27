@@ -13,7 +13,6 @@ class Viper_Tests_ViperTableEditorPlugin_TablePropertiesUnitTest extends Abstrac
      */
     public function testTableToolIconsCorrect()
     {
-
         $this->showTools(0, 'table');
 
         $this->assertTrue($this->inlineToolbarButtonExists('tableSettings', 'selected'));
@@ -133,7 +132,6 @@ class Viper_Tests_ViperTableEditorPlugin_TablePropertiesUnitTest extends Abstrac
      */
     public function testAddingClassToTable()
     {
-
         // Apply a class to the table and press update changes
         $this->showTools(0, 'table');
         $this->clickInlineToolbarButton('cssClass');
@@ -169,7 +167,6 @@ class Viper_Tests_ViperTableEditorPlugin_TablePropertiesUnitTest extends Abstrac
      */
     public function testDeleteingATable()
     {
-
         $this->showTools(0, 'table');
         $this->clickInlineToolbarButton('delete');
         $this->assertHTMLMatch('');
@@ -187,7 +184,6 @@ class Viper_Tests_ViperTableEditorPlugin_TablePropertiesUnitTest extends Abstrac
      */
     public function testCaptionsForTables()
     {
-
         //Apply the caption and click update changes
         $this->showTools(0, 'table');
         $this->clickField('Use Caption');

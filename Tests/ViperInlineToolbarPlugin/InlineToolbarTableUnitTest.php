@@ -339,8 +339,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarTABLEUnitTest extends Ab
     public function testLineageForAnImageInTable()
     {
         // Insert an image
-        $this->selectKeyword(4);
-        $this->type('Key.RIGHT');
+        $this->moveToKeyword(4, 'right');
         $this->clickTopToolbarButton('image');
         $this->type('%url%/ViperImagePlugin/Images/html-codesniffer.png');
         $this->keyDown('Key.TAB');

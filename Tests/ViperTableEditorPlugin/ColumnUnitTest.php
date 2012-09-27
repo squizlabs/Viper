@@ -43,14 +43,14 @@ class Viper_Tests_ViperTableEditorPlugin_ColumnUnitTest extends AbstractViperTab
         $this->clickField('Width');
         $this->type('50');
         $this->clickInlineToolbarButton('Update Changes', NULL, TRUE);
-        $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><thead><tr><td style="width: 50px;"></td><th></th><th></th><th></th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
+        $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><thead><tr><th style="width: 50px;"></th><th></th><th></th><th></th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
 
         // Change the width of the last column and press enter
         $this->showTools(3, 'col');
         $this->clickField('Width');
         $this->type('100');
         $this->keyDown('Key.ENTER');
-        $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><thead><tr><td style="width: 50px;"></td><th></th><th></th><td style="width: 100px;"></td></tr></thead><tbody><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
+        $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><thead><tr><th style="width: 50px;"></th><th></th><th></th><th style="width: 100px;"></th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
 
     }//end testChangingColumnWidth()
 

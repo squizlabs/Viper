@@ -23,8 +23,7 @@ class Viper_Tests_ViperImagePlugin_ImagesInTablesUnitTest extends AbstractViperI
         $this->click($this->findKeyword($text));
         $this->assertTrue($this->topToolbarButtonExists('image'), 'Image icon should be active.');
 
-        $this->selectKeyword(2);
-        $this->type('Key.RIGHT');
+        $this->moveToKeyword(2, 'right');
         $this->assertTrue($this->topToolbarButtonExists('image'), 'Image icon should be active.');
 
     }//end testImageIconIsAvailable()
@@ -37,8 +36,7 @@ class Viper_Tests_ViperImagePlugin_ImagesInTablesUnitTest extends AbstractViperI
      */
     public function testInsertingAndDeletingAnImageUsingDelete()
     {
-        $this->selectKeyword(1);
-        $this->type('Key.RIGHT');
+        $this->moveToKeyword(1, 'right');
 
         $this->clickTopToolbarButton('image');
         $this->type('%url%/ViperImagePlugin/Images/html-codesniffer.png');
@@ -63,8 +61,7 @@ class Viper_Tests_ViperImagePlugin_ImagesInTablesUnitTest extends AbstractViperI
      */
     public function testInsertingAndEditingTheUrlForAnImage()
     {
-        $this->selectKeyword(1);
-        $this->type('Key.RIGHT');
+        $this->moveToKeyword(1, 'right');
 
         $this->clickTopToolbarButton('image');
         $this->type('%url%/ViperImagePlugin/Images/html-codesniffer.png');
@@ -94,8 +91,7 @@ class Viper_Tests_ViperImagePlugin_ImagesInTablesUnitTest extends AbstractViperI
      */
     public function testInsertingAndEditingAnImageUsingTheUpdateChangesButton()
     {
-        $this->selectKeyword(1);
-        $this->type('Key.RIGHT');
+        $this->moveToKeyword(1, 'right');
 
         $this->clickTopToolbarButton('image');
         $this->type('%url%/ViperImagePlugin/Images/html-codesniffer.png');
@@ -283,6 +279,9 @@ class Viper_Tests_ViperImagePlugin_ImagesInTablesUnitTest extends AbstractViperI
         $this->clickTopToolbarButton('historyUndo');
         $this->assertHTMLMatchNoHeaders('<table border="0" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td><img src="%url%/ViperImagePlugin/Images/html-codesniffer.png" alt="Alt tag" /></td><td><strong><em>WoW</em></strong> sapien vel aliquet</td><td>Another cell</td></tr><tr><td><h3>%3%</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
+        $this->clickTopToolbarButton('historyRedo');
+        $this->assertHTMLMatchNoHeaders('<table border="0" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td><img alt="Alt tag" height="93" src="%url%/ViperImagePlugin/Images/html-codesniffer.png" width="100" /></td><td><strong><em>WoW</em></strong> sapien vel aliquet</td><td>Another cell</td></tr><tr><td><h3>XCX</h3></td><td colspan="2">purus neque luctus<strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+
     }//end testResizingAnImageAndClickingUndoInATable()
 
 
@@ -368,7 +367,39 @@ class Viper_Tests_ViperImagePlugin_ImagesInTablesUnitTest extends AbstractViperI
         $this->clickTopToolbarButton('historyUndo');
         $this->assertHTMLMatchNoHeaders('<table border="0" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la </caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU %1% FoX %2%</td><td><strong><em>WoW</em></strong> sapien vel aliquet</td><td>Another cell</td></tr><tr><td><h3><img src="%url%/ViperImagePlugin/Images/html-codesniffer.png" alt="Alt tag" /></h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu </td></tr></tbody></table>');
 
+        // Redo the move
+        $this->clickTopToolbarButton('historyRedo');
+        $this->assertHTMLMatchNoHeaders('<table border="0" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la </caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU %1%<img src="%url%/ViperImagePlugin/Images/html-codesniffer.png" alt="Alt tag" /> FoX %2%</td><td><strong><em>WoW</em></strong> sapien vel aliquet</td><td>Another cell</td></tr><tr><td><h3>&nbsp;</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu </td></tr></tbody></table>');
+
     }//end testMovingAnImageInATable()
+
+
+    /**
+     * Test undo and redo for an image in the table.
+     *
+     * @return void
+     */
+    public function testUndoAndRedoForImageInTable()
+    {
+        $this->selectKeyword(1);
+        $this->type('Key.RIGHT');
+
+        $this->clickTopToolbarButton('image');
+        $this->type('%url%/ViperImagePlugin/Images/html-codesniffer.png');
+        $this->keyDown('Key.TAB');
+        $this->type('Alt tag');
+        $this->keyDown('Key.ENTER');
+
+        $this->assertHTMLMatchNoHeaders('<table border="0" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU %1%<img src="%url%/ViperImagePlugin/Images/html-codesniffer.png" alt="Alt tag" /> FoX %2%</td><td><strong><em>WoW</em></strong> sapien vel aliquet</td><td>Another cell</td></tr><tr><td><h3>%3%</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+
+        $this->clickTopToolbarButton('historyUndo');
+        $this->assertHTMLMatchNoHeaders('<table border="0" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU %1% FoX %2%</td><td><strong><em>WoW</em></strong> sapien vel aliquet</td><td>Another cell</td></tr><tr><td><h3>%3%</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+
+        $this->clickTopToolbarButton('historyRedo');
+        $this->assertHTMLMatchNoHeaders('<table border="0" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU %1%<img src="%url%/ViperImagePlugin/Images/html-codesniffer.png" alt="Alt tag" /> FoX %2%</td><td><strong><em>WoW</em></strong> sapien vel aliquet</td><td>Another cell</td></tr><tr><td><h3>%3%</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+
+    }//end testUndoAndRedoForImageInTable()
+
 
 }//end class
 

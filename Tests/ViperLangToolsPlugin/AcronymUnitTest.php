@@ -222,6 +222,31 @@ class Viper_Tests_ViperLangToolsPlugin_AcronymUnitTest extends AbstractViperUnit
     }//end testSelectionIsMaintainedWhenSwitchingFromAcronymToClass()
 
 
+    /**
+     * Test undo and redo for acronym's.
+     *
+     * @return void
+     */
+    public function testUndoAndRedoForAcronym()
+    {
+
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('langTools');
+        $this->clickTopToolbarButton('Acronym', NULL, TRUE);
+        $this->type('abc');
+        $this->keyDown('Key.ENTER');
+
+        $this->assertHTMLMatch('<p>LOREM <acronym title="abc">%1%</acronym> %2%</p><p>sit amet <strong>%3%</strong></p><p>Squiz <acronym title="abc">%4%</acronym> is orsm</p><p>The <em>%5%</em> brown fox</p>');
+
+       $this->clickTopToolbarButton('historyUndo');
+       $this->assertHTMLMatch('<p>LOREM %1% %2%</p><p>sit amet <strong>%3%</strong></p><p>Squiz <acronym title="abc">%4%</acronym> is orsm</p><p>The <em>%5%</em> brown fox</p>');
+
+       $this->clickTopToolbarButton('historyRedo');
+       $this->assertHTMLMatch('<p>LOREM <acronym title="abc">%1%</acronym> %2%</p><p>sit amet <strong>%3%</strong></p><p>Squiz <acronym title="abc">%4%</acronym> is orsm</p><p>The <em>%5%</em> brown fox</p>');
+
+    }//end testUndoAndRedoForAcronym()
+
+
 }//end class
 
 ?>

@@ -24,8 +24,7 @@ class Viper_Tests_ViperListPlugin_GeneralListsUnitTest extends AbstractViperList
         $this->selectInlineToolbarLineageItem(0);
         $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
 
-        $this->selectKeyword(1);
-        $this->keyDown('Key.RIGHT');
+        $this->moveToKeyword(1, 'right');
         $this->keyDown('Key.ENTER');
         $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
 
@@ -51,8 +50,7 @@ class Viper_Tests_ViperListPlugin_GeneralListsUnitTest extends AbstractViperList
         $this->selectInlineToolbarLineageItem(0);
         $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
 
-        $this->selectKeyword(1);
-        $this->keyDown('Key.RIGHT');
+        $this->moveToKeyword(1, 'right');
         $this->keyDown('Key.ENTER');
         $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
 
@@ -66,8 +64,7 @@ class Viper_Tests_ViperListPlugin_GeneralListsUnitTest extends AbstractViperList
         $this->selectInlineToolbarLineageItem(0);
         $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
 
-        $this->selectKeyword(2);
-        $this->keyDown('Key.RIGHT');
+        $this->moveToKeyword(2, 'right');
         $this->keyDown('Key.ENTER');
         $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
 
@@ -93,8 +90,7 @@ class Viper_Tests_ViperListPlugin_GeneralListsUnitTest extends AbstractViperList
         $this->selectInlineToolbarLineageItem(0);
         $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
 
-        $this->selectKeyword(1);
-        $this->keyDown('Key.RIGHT');
+        $this->moveToKeyword(1, 'right');
         $this->keyDown('Key.ENTER');
         $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
 
@@ -108,8 +104,7 @@ class Viper_Tests_ViperListPlugin_GeneralListsUnitTest extends AbstractViperList
         $this->selectInlineToolbarLineageItem(0);
         $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
 
-        $this->selectKeyword(2);
-        $this->keyDown('Key.RIGHT');
+        $this->moveToKeyword(2, 'right');
         $this->keyDown('Key.ENTER');
         $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
 
@@ -138,8 +133,7 @@ class Viper_Tests_ViperListPlugin_GeneralListsUnitTest extends AbstractViperList
         $this->selectInlineToolbarLineageItem(0);
         $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
 
-        $this->selectKeyword(1);
-        $this->keyDown('Key.RIGHT');
+        $this->moveToKeyword(1, 'right');
         $this->keyDown('Key.ENTER');
         $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
 
@@ -156,8 +150,7 @@ class Viper_Tests_ViperListPlugin_GeneralListsUnitTest extends AbstractViperList
         $this->selectInlineToolbarLineageItem(0);
         $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
 
-        $this->selectKeyword(2);
-        $this->keyDown('Key.RIGHT');
+        $this->moveToKeyword(2, 'right');
         $this->keyDown('Key.ENTER');
         $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
 
@@ -174,8 +167,7 @@ class Viper_Tests_ViperListPlugin_GeneralListsUnitTest extends AbstractViperList
         $this->selectInlineToolbarLineageItem(0);
         $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
 
-        $this->selectKeyword(3);
-        $this->keyDown('Key.RIGHT');
+        $this->moveToKeyword(3, 'right');
         $this->keyDown('Key.ENTER');
         $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
 
@@ -191,8 +183,7 @@ class Viper_Tests_ViperListPlugin_GeneralListsUnitTest extends AbstractViperList
         $this->selectInlineToolbarLineageItem(0);
         $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
 
-        $this->selectKeyword(4);
-        $this->keyDown('Key.RIGHT');
+        $this->moveToKeyword(4, 'right');
         $this->keyDown('Key.ENTER');
         $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
 
@@ -218,8 +209,7 @@ class Viper_Tests_ViperListPlugin_GeneralListsUnitTest extends AbstractViperList
         $this->selectInlineToolbarLineageItem(0);
         $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
 
-        $this->selectKeyword(1);
-        $this->keyDown('Key.RIGHT');
+        $this->moveToKeyword(1, 'right');
         $this->keyDown('Key.ENTER');
         $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
 
@@ -233,8 +223,7 @@ class Viper_Tests_ViperListPlugin_GeneralListsUnitTest extends AbstractViperList
         $this->selectInlineToolbarLineageItem(0);
         $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
 
-        $this->selectKeyword(2);
-        $this->keyDown('Key.RIGHT');
+        $this->moveToKeyword(2, 'right');
         $this->keyDown('Key.ENTER');
         $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
 
@@ -263,8 +252,7 @@ class Viper_Tests_ViperListPlugin_GeneralListsUnitTest extends AbstractViperList
         $this->selectInlineToolbarLineageItem(0);
         $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
 
-        $this->selectKeyword(1);
-        $this->keyDown('Key.RIGHT');
+        $this->moveToKeyword(1, 'right');
         $this->keyDown('Key.ENTER');
         $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
 
@@ -283,8 +271,7 @@ class Viper_Tests_ViperListPlugin_GeneralListsUnitTest extends AbstractViperList
         $this->selectInlineToolbarLineageItem(0);
         $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
 
-        $this->selectKeyword(2);
-        $this->keyDown('Key.RIGHT');
+        $this->moveToKeyword(2, 'right');
         $this->keyDown('Key.ENTER');
         $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
 
@@ -300,8 +287,7 @@ class Viper_Tests_ViperListPlugin_GeneralListsUnitTest extends AbstractViperList
         $this->selectInlineToolbarLineageItem(0);
         $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
 
-        $this->selectKeyword(3);
-        $this->keyDown('Key.RIGHT');
+        $this->moveToKeyword(3, 'right');
         $this->keyDown('Key.ENTER');
         $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
 
@@ -330,8 +316,7 @@ class Viper_Tests_ViperListPlugin_GeneralListsUnitTest extends AbstractViperList
         $this->selectInlineToolbarLineageItem(0);
         $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
 
-        $this->selectKeyword(1);
-        $this->keyDown('Key.RIGHT');
+        $this->moveToKeyword(1, 'right');
         $this->keyDown('Key.ENTER');
         $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
 
@@ -348,8 +333,7 @@ class Viper_Tests_ViperListPlugin_GeneralListsUnitTest extends AbstractViperList
         $this->selectInlineToolbarLineageItem(0);
         $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
 
-        $this->selectKeyword(2);
-        $this->keyDown('Key.RIGHT');
+        $this->moveToKeyword(2, 'right');
         $this->keyDown('Key.ENTER');
         $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
 
@@ -365,8 +349,7 @@ class Viper_Tests_ViperListPlugin_GeneralListsUnitTest extends AbstractViperList
         $this->selectInlineToolbarLineageItem(0);
         $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
 
-        $this->selectKeyword(3);
-        $this->keyDown('Key.RIGHT');
+        $this->moveToKeyword(3, 'right');
         $this->keyDown('Key.ENTER');
         $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
 
@@ -398,8 +381,7 @@ class Viper_Tests_ViperListPlugin_GeneralListsUnitTest extends AbstractViperList
         $this->selectInlineToolbarLineageItem(0);
         $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
 
-        $this->selectKeyword(1);
-        $this->keyDown('Key.RIGHT');
+        $this->moveToKeyword(1, 'right');
         $this->keyDown('Key.ENTER');
         $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
 
@@ -419,8 +401,7 @@ class Viper_Tests_ViperListPlugin_GeneralListsUnitTest extends AbstractViperList
         $this->selectInlineToolbarLineageItem(0);
         $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
 
-        $this->selectKeyword(2);
-        $this->keyDown('Key.RIGHT');
+        $this->moveToKeyword(2, 'right');
         $this->keyDown('Key.ENTER');
         $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
 
@@ -439,8 +420,7 @@ class Viper_Tests_ViperListPlugin_GeneralListsUnitTest extends AbstractViperList
         $this->selectInlineToolbarLineageItem(0);
         $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
 
-        $this->selectKeyword(3);
-        $this->keyDown('Key.RIGHT');
+        $this->moveToKeyword(3, 'right');
         $this->keyDown('Key.ENTER');
         $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
 
@@ -469,8 +449,7 @@ class Viper_Tests_ViperListPlugin_GeneralListsUnitTest extends AbstractViperList
         $this->selectInlineToolbarLineageItem(0);
         $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
 
-        $this->selectKeyword(1);
-        $this->keyDown('Key.RIGHT');
+        $this->moveToKeyword(1, 'right');
         $this->keyDown('Key.ENTER');
         $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
 
@@ -487,8 +466,7 @@ class Viper_Tests_ViperListPlugin_GeneralListsUnitTest extends AbstractViperList
         $this->selectInlineToolbarLineageItem(0);
         $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
 
-        $this->selectKeyword(2);
-        $this->keyDown('Key.RIGHT');
+        $this->moveToKeyword(2, 'right');
         $this->keyDown('Key.ENTER');
         $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
 
@@ -504,8 +482,7 @@ class Viper_Tests_ViperListPlugin_GeneralListsUnitTest extends AbstractViperList
         $this->selectInlineToolbarLineageItem(0);
         $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
 
-        $this->selectKeyword(3);
-        $this->keyDown('Key.RIGHT');
+        $this->moveToKeyword(3, 'right');
         $this->keyDown('Key.ENTER');
         $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
 

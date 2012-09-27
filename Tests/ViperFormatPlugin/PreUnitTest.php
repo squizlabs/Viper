@@ -363,8 +363,7 @@ class Viper_Tests_ViperFormatPlugin_PreUnitTest extends AbstractFormatsUnitTest
         $this->selectInlineToolbarLineageItem(0);
         $this->clickInlineToolbarButton('formats-p', 'active');
         $this->clickInlineToolbarButton('PRE', NULL, TRUE);
-        $this->selectKeyword(5);
-        $this->keyDown('Key.RIGHT');
+        $this->moveToKeyword(5, 'right');
         $this->type(' on the page');
         $this->keyDown('Key.ENTER');
         $this->type('More new content');
@@ -583,6 +582,28 @@ class Viper_Tests_ViperFormatPlugin_PreUnitTest extends AbstractFormatsUnitTest
         $this->assertTrue($this->topToolbarButtonExists('listUL', 'disabled'), 'Unordered list icon should be available in the top toolbar');
 
     }//end testListIconsNotAvailableForPre()
+
+
+    /**
+     * Test undo and redo for a pre.
+     *
+     * @return void
+     */
+    public function testUndoAndRedoForPre()
+    {
+        $this->selectKeyword(4);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickInlineToolbarButton('formats-p', 'active');
+        $this->clickInlineToolbarButton('PRE', NULL, TRUE);
+        $this->assertHTMLMatch('<pre>%1% xtn %2%</pre><div>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div><pre>%4% paragraph to change to a pre</pre>');
+
+        $this->clickTopToolbarButton('historyUndo');
+        $this->assertHTMLMatch('<pre>%1% xtn %2%</pre><div>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div><p>%4% paragraph to change to a pre</p>');
+
+        $this->clickTopToolbarButton('historyRedo');
+        $this->assertHTMLMatch('<pre>%1% xtn %2%</pre><div>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div><pre>%4% paragraph to change to a pre</pre>');
+
+    }//end testUndoAndRedoForPre()
 
 
 }//end class

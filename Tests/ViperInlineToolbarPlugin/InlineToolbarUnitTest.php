@@ -235,8 +235,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarUnitTest extends Abstrac
      */
     public function testHideOnCaretMove()
     {
-        $this->selectKeyword(1);
-        $this->keyDown('Key.RIGHT');
+        $this->moveToKeyword(1, 'right');
         sleep(2);
 
         try {

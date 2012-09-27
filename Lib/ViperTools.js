@@ -149,15 +149,22 @@ ViperTools.prototype = {
                     if (button.previousSibling) {
                         var sibling = button.previousSibling;
                         button.parentNode.removeChild(button);
-                        dfx.insertAfter(sibling, button);
+                        setTimeout(function() {
+                            dfx.insertAfter(sibling, button);
+                        }, 1);  
                     } else if (button.nextSibling) {
                         var sibling = button.nextSibling;
                         button.parentNode.removeChild(button);
-                        dfx.insertBefore(sibling, button);
+                        setTimeout(function() {
+                            dfx.insertBefore(sibling, button);    
+                        }, 1);
+                        
                     } else {
                         var parent = button.parentNode;
                         button.parentNode.removeChild(button);
-                        parent.appendChild(button);
+                        setTimeout(function() {
+                            parent.appendChild(button);
+                        }, 1);
                     }
                 }//end if
 
@@ -751,7 +758,7 @@ ViperTools.prototype = {
             getValue: function() {
                 return checkbox.checked;
             },
-            setValue: function(checked) {
+            setValue: function(checked, isInitialValue) {
                 checkbox.checked = checked;
 
                 if (checked === true) {
@@ -760,7 +767,7 @@ ViperTools.prototype = {
                     dfx.removeClass(labelElem, 'Viper-active');
                 }
 
-                if (changeCallback) {
+                if (changeCallback && isInitialValue !== true) {
                     changeCallback.call(this, checked, true);
                 }
             }
@@ -1466,7 +1473,11 @@ ViperTools.prototype = {
 
                         if (self.viper.isBrowser('msie') === false) {
                             tools.viper.highlightSelection();
-                        }
+                        } else {
+                            setTimeout(function() {console.info(2);
+                                inputElements[0].focus();
+                            }, 10);
+                        }   
                     }
                 } catch (e) {}
 

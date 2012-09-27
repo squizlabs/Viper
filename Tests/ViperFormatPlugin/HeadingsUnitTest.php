@@ -221,8 +221,7 @@ class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractViperUnitTe
     {
         $this->useTest(1);
 
-        $this->selectKeyword(2);
-        $this->keyDown('Key.RIGHT');
+        $this->moveToKeyword(2, 'right');
         $this->keyDown('Key.ENTER');
         $this->type('New line of content %3%');
 
@@ -232,8 +231,7 @@ class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractViperUnitTe
         $this->selectInlineToolbarLineageItem(0);
         $this->clickInlineToolbarButton('headings');
         $this->clickInlineToolbarButton('H3', NULL, TRUE);
-        $this->selectKeyword(3);
-        $this->keyDown('Key.RIGHT');
+        $this->moveToKeyword(3, 'right');
         $this->keyDown('Key.ENTER');
         $this->type('Another new line of content');
 
@@ -941,6 +939,10 @@ class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractViperUnitTe
         $this->selectInlineToolbarLineageItem(0);
         $this->assertTrue($this->topToolbarButtonExists('headings'), 'Heading icon should be enabled in the top toolbar');
 
+        $this->clickTopToolbarButton('headings');
+        $this->clickTopToolbarButton('H1', NULL, TRUE);
+        $this->assertHTMLMatch('<h1>Long paragraph for testing that the heading icon does not appear in the inline toolbar %1%.</h1>');
+
     }//end testApplyingHeadginsWithOnePInsideADiv()
 
 
@@ -1397,6 +1399,30 @@ class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractViperUnitTe
         $this->assertTrue($this->topToolbarButtonExists('headings'), 'Heading icon should appear in the top toolbar.');
 
     }//end testHeadingIconNotAvailableForList()
+
+
+    /**
+     * Test undo and redo for headings.
+     *
+     * @return void
+     */
+    public function testUndoAndRedoForHeadings()
+    {
+
+        $this->useTest(1);
+
+        $this->selectKeyword(1, 2);
+        $this->clickInlineToolbarButton('headings', 'active');
+        $this->clickInlineToolbarButton('H2', NULL, TRUE);
+        $this->assertHTMLMatch('<h2>%1% %2%</h2>');
+
+        $this->clickTopToolbarButton('historyUndo');
+        $this->assertHTMLMatch('<h1>%1% %2%</h1>');
+
+        $this->clickTopToolbarButton('historyRedo');
+        $this->assertHTMLMatch('<h2>%1% %2%</h2>');
+
+    }//end testUndoAndRedoForHeadings()
 
 
 }//end class

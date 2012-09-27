@@ -1,7 +1,6 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
     <head>
-        __TEST_IE_VERSION_METATAG__
         <meta http-equiv="content-type" content="text/html; charset=UTF-8">
         <script type="text/javascript" src="../DfxJSLib/dfx.js"></script>
         <script type="text/javascript" src="./test.js"></script>
@@ -19,8 +18,8 @@
                     buttons[i].className = 'Viper-button ' + className;
                     var dim  = dfx.getBoundingRectangle(buttons[i]);
                     coords[buttons[i].id + status] = {
-                        x1: parseInt(dim.x1 + 3),
-                        y1: parseInt(dim.y1 + 3),
+                        x1: parseInt(dim.x1 + 2),
+                        y1: parseInt(dim.y1 + 2),
                         x2: parseInt(dim.x2 - 1),
                         y2: parseInt(dim.y2 - 1)
                     };

@@ -24,7 +24,6 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarClassUnitTest extends Ab
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">SPAN</li>', $lineage);
 
-        $this->click($this->findKeyword(6));
         $this->selectKeyword(6);
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">SPAN</li>', $lineage);
 
@@ -69,7 +68,6 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarClassUnitTest extends Ab
         $this->type('test');
         $this->keyDown('Key.ENTER');
 
-        $this->click($this->findKeyword(6));
         $this->selectKeyword(6);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">SPAN</li>', $lineage);
@@ -78,7 +76,6 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarClassUnitTest extends Ab
         $this->clearFieldValue('Class');
         $this->keyDown('Key.ENTER');
 
-        $this->click($this->findKeyword(6));
         $this->selectKeyword(6);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Selection</li>', $lineage);
@@ -105,7 +102,6 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarClassUnitTest extends Ab
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem Viper-selected">P</li>', $lineage);
 
-        $this->click($this->findKeyword(6));
         $this->selectKeyword(6);
         $this->selectInlineToolbarLineageItem(0);
         $lineage = $this->getHtml('.ViperITP-lineage');
@@ -155,7 +151,6 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarClassUnitTest extends Ab
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Bold</li>', $lineage);
 
-        $this->click($this->findKeyword(2));
         $this->selectKeyword(3);
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Bold</li>', $lineage);
 
@@ -185,7 +180,6 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarClassUnitTest extends Ab
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Italic</li>', $lineage);
 
-        $this->click($this->findKeyword(1));
         $this->selectKeyword(1);
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Italic</li>', $lineage);
 
@@ -216,7 +210,6 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarClassUnitTest extends Ab
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Bold</li><li class="ViperITP-lineageItem Viper-selected">SPAN</li>', $lineage);
 
-        $this->click($this->findKeyword(6));
         $this->selectKeyword(7);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Bold</li><li class="ViperITP-lineageItem Viper-selected">SPAN</li>', $lineage);
@@ -244,7 +237,6 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarClassUnitTest extends Ab
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Italic</li><li class="ViperITP-lineageItem Viper-selected">SPAN</li>', $lineage);
 
-        $this->click($this->findKeyword(6));
         $this->selectKeyword(7);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Italic</li><li class="ViperITP-lineageItem Viper-selected">SPAN</li>', $lineage);

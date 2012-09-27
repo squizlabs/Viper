@@ -71,8 +71,7 @@ class Viper_Tests_ViperCoreStylesPlugin_SubscriptUnitTest extends AbstractViperU
 
         $this->assertHTMLMatch('<p>%1% <sub>%2% %3%</sub></p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
-        $this->selectKeyword(1);
-        $this->keyDown('Key.RIGHT');
+        $this->moveToKeyword(1, 'right');
         $this->keyDown('Key.RIGHT');
         $this->keyDown('Key.RIGHT');
         $this->keyDown('Key.RIGHT');
@@ -87,8 +86,7 @@ class Viper_Tests_ViperCoreStylesPlugin_SubscriptUnitTest extends AbstractViperU
 
         $this->assertHTMLMatch('<p>%1% <sub>%2% </sub>%3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
-        $this->selectKeyword(1);
-        $this->keyDown('Key.RIGHT');
+        $this->moveToKeyword(1, 'right');
         $this->keyDown('Key.RIGHT');
         $this->keyDown('Key.SHIFT + Key.RIGHT');
         $this->keyDown('Key.SHIFT + Key.RIGHT');
@@ -180,8 +178,7 @@ class Viper_Tests_ViperCoreStylesPlugin_SubscriptUnitTest extends AbstractViperU
         $this->clickTopToolbarButton('subscript');
         $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar is not active');
 
-        $this->selectKeyword(4);
-        $this->keyDown('Key.RIGHT');
+        $this->moveToKeyword(4, 'right');
         $this->keyDown('Key.RIGHT');
         $this->keyDown('Key.SHIFT + Key.RIGHT');
         $this->keyDown('Key.SHIFT + Key.RIGHT');
@@ -210,7 +207,7 @@ class Viper_Tests_ViperCoreStylesPlugin_SubscriptUnitTest extends AbstractViperU
 
         $this->clickTopToolbarButton('historyRedo');
         $this->assertHTMLMatch('<p>%1% <sub>%2%</sub> %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
-        
+
     }//end testUndoAndRedoSubscript()
 
 
