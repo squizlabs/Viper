@@ -41,8 +41,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
      */
     public function testClassIconAppearsInTheInlineToolbar()
     {
-        $this->selectKeyword(5);
-        $this->keyDown('Key.RIGHT');
+        $this->moveToKeyword(5, 'right');
         $this->keyDown('Key.ENTER');
         $this->type('This is a new line of %12%');
 

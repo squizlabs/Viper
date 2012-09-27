@@ -23,8 +23,7 @@ class Viper_Tests_ViperImagePlugin_ImagesInTablesUnitTest extends AbstractViperI
         $this->click($this->findKeyword($text));
         $this->assertTrue($this->topToolbarButtonExists('image'), 'Image icon should be active.');
 
-        $this->selectKeyword(2);
-        $this->type('Key.RIGHT');
+        $this->moveToKeyword(2, 'right');
         $this->assertTrue($this->topToolbarButtonExists('image'), 'Image icon should be active.');
 
     }//end testImageIconIsAvailable()
@@ -37,8 +36,7 @@ class Viper_Tests_ViperImagePlugin_ImagesInTablesUnitTest extends AbstractViperI
      */
     public function testInsertingAndDeletingAnImageUsingDelete()
     {
-        $this->selectKeyword(1);
-        $this->type('Key.RIGHT');
+        $this->moveToKeyword(1, 'right');
 
         $this->clickTopToolbarButton('image');
         $this->type('%url%/ViperImagePlugin/Images/html-codesniffer.png');
@@ -63,8 +61,7 @@ class Viper_Tests_ViperImagePlugin_ImagesInTablesUnitTest extends AbstractViperI
      */
     public function testInsertingAndEditingTheUrlForAnImage()
     {
-        $this->selectKeyword(1);
-        $this->type('Key.RIGHT');
+        $this->moveToKeyword(1, 'right');
 
         $this->clickTopToolbarButton('image');
         $this->type('%url%/ViperImagePlugin/Images/html-codesniffer.png');
@@ -94,8 +91,7 @@ class Viper_Tests_ViperImagePlugin_ImagesInTablesUnitTest extends AbstractViperI
      */
     public function testInsertingAndEditingAnImageUsingTheUpdateChangesButton()
     {
-        $this->selectKeyword(1);
-        $this->type('Key.RIGHT');
+        $this->moveToKeyword(1, 'right');
 
         $this->clickTopToolbarButton('image');
         $this->type('%url%/ViperImagePlugin/Images/html-codesniffer.png');

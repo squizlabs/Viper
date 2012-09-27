@@ -87,8 +87,7 @@ class Viper_Tests_ViperFormatPlugin_AnchorUnitTest extends AbstractViperUnitTest
      */
     public function testAnchorIconAppearsInTheInlineToolbar()
     {
-        $this->selectKeyword(6);
-        $this->keyDown('Key.RIGHT');
+        $this->moveToKeyword(6, 'right');
         $this->keyDown('Key.ENTER');
         $this->type('This is a new line of CONTENT');
 

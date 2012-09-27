@@ -419,8 +419,7 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractFormatsUnitTest
         $this->selectInlineToolbarLineageItem(0);
         $this->clickTopToolbarButton('formats-p', 'active');
         $this->clickTopToolbarButton('DIV', NULL, TRUE);
-        $this->selectKeyword(6);
-        $this->keyDown('Key.RIGHT');
+        $this->moveToKeyword(6, 'right');
         $this->type(' on the page');
         $this->keyDown('Key.ENTER');
         $this->type('More new content');
