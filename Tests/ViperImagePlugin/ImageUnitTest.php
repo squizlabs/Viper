@@ -537,8 +537,10 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperImagePlugi
         $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%1% %2%<img src="'.$this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png').'" alt="Alt tag" title="Title tag" /></p><p>sit amet <strong>%3%</strong></p>');
 
         $this->clickTopToolbarButton('historyUndo');
-
         $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%1% %2%</p><p>sit amet <strong>%3%</strong></p>');
+
+        $this->clickTopToolbarButton('historyRedo');
+        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%1% %2%<img src="'.$this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png').'" alt="Alt tag" title="Title tag" /></p><p>sit amet <strong>%3%</strong></p>');
 
     }//end testInsertingAnImageThenClickingUndo()
 
@@ -566,7 +568,6 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperImagePlugi
         $this->clickElement('img', 1);
         $this->keyDown('Key.DELETE');
         $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%1% %2%</p><p>sit amet <strong>%3%</strong></p>');
-
 
         $this->clickTopToolbarButton('historyUndo');
         $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%1% %2%<img src="'.$this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png').'" alt="Alt tag" title="Title tag" /></p><p>sit amet <strong>%3%</strong></p>');
@@ -762,6 +763,9 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperImagePlugi
         $this->clickTopToolbarButton('historyUndo');
         $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%1% %2%<img src="'.$this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png').'" alt="" /></p><p>sit amet <strong>%3%</strong></p>');
 
+        $this->clickTopToolbarButton('historyRedo');
+        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%1% %2%<img src="'.$this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png').'" alt="" width="300" height="280" /></p><p>sit amet <strong>%3%</strong></p>');
+
     }//end testResizingAnImage()
 
 
@@ -866,6 +870,35 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperImagePlugi
         $this->assertHTMLMatch('<img alt="" src="'.$this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png').'" />');
 
     }//end testInsertingImageWithNoBaseTag()
+
+
+    /**
+     * Test inserting an image and then clicking undo and redo.
+     *
+     * @return void
+     */
+    public function testUndoAndRedoForInsertingAnImage()
+    {
+        $this->selectKeyword(2);
+        $this->type('Key.RIGHT');
+
+        $this->clickTopToolbarButton('image');
+        $this->type($this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png'));
+        $this->keyDown('Key.TAB');
+        $this->type('Alt tag');
+        $this->keyDown('Key.TAB');
+        $this->type('Title tag');
+        $this->keyDown('Key.ENTER');
+
+        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%1% %2%<img src="'.$this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png').'" alt="Alt tag" title="Title tag" /></p><p>sit amet <strong>%3%</strong></p>');
+
+        $this->clickTopToolbarButton('historyUndo');
+        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%1% %2%</p><p>sit amet <strong>%3%</strong></p>');
+
+        $this->clickTopToolbarButton('historyRedo');
+        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%1% %2%<img src="'.$this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png').'" alt="Alt tag" title="Title tag" /></p><p>sit amet <strong>%3%</strong></p>');
+
+    }//end testUndoAndRedoForInsertingAnImage()
 
 
 }//end class
