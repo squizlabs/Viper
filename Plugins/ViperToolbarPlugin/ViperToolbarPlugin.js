@@ -626,6 +626,11 @@ ViperToolbarPlugin.prototype = {
         if (inputElements.length > 0) {
             try {
                 inputElements[0].focus();
+                if (this.viper.isBrowser('msie') === true) {
+                    setTimeout(function() {
+                        inputElements[0].focus();
+                    }, 10);
+                }
             } catch(e) {}
         }
 
