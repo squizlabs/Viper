@@ -1473,7 +1473,11 @@ ViperTools.prototype = {
 
                         if (self.viper.isBrowser('msie') === false) {
                             tools.viper.highlightSelection();
-                        }
+                        } else {
+                            setTimeout(function() {console.info(2);
+                                inputElements[0].focus();
+                            }, 10);
+                        }   
                     }
                 } catch (e) {}
 
