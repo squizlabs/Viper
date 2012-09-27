@@ -16,7 +16,6 @@ class Viper_Tests_ViperFormatPlugin_AlignmentUnitTest extends AbstractViperUnitT
         $this->click($this->findKeyword(7));
 
         $this->clickTopToolbarButton('justifyLeft');
-        sleep(1);
         $this->clickTopToolbarButton('justifyCenter');
         $this->assertTrue($this->topToolbarButtonExists('justifyCenter', 'active'));
 
@@ -34,7 +33,6 @@ class Viper_Tests_ViperFormatPlugin_AlignmentUnitTest extends AbstractViperUnitT
     {
         $this->selectKeyword(6, 8);
         $this->clickTopToolbarButton('justifyLeft');
-        sleep(1);
         $this->clickTopToolbarButton('justifyLeft');
 
         $this->assertHTMLMatch('<p style="text-align: left;">%1% amet %2%</p><p style="text-align: center;">%3% TpT</p><p style="text-align: right;">%4% aaa</p><p style="text-align: justify;">%5% GaG</p><p style="text-align: left;">%6% %7% %8%</p><p>test <strong>%9%</strong> text</p><p>test <em>%10%</em> text.</p>');
@@ -53,7 +51,6 @@ class Viper_Tests_ViperFormatPlugin_AlignmentUnitTest extends AbstractViperUnitT
     {
         $this->selectKeyword(9);
         $this->clickTopToolbarButton('justifyLeft');
-        sleep(1);
         $this->clickTopToolbarButton('justifyLeft');
 
         $this->assertHTMLMatch('<p style="text-align: left;">%1% amet %2%</p><p style="text-align: center;">%3% TpT</p><p style="text-align: right;">%4% aaa</p><p style="text-align: justify;">%5% GaG</p><p>%6% %7% %8%</p><p style="text-align: left;">test <strong>%9%</strong> text</p><p>test <em>%10%</em> text.</p>');
@@ -72,7 +69,6 @@ class Viper_Tests_ViperFormatPlugin_AlignmentUnitTest extends AbstractViperUnitT
     {
         $this->selectKeyword(10);
         $this->clickTopToolbarButton('justifyLeft');
-        sleep(1);
         $this->clickTopToolbarButton('justifyLeft');
 
         $this->assertHTMLMatch('<p style="text-align: left;">%1% amet %2%</p><p style="text-align: center;">%3% TpT</p><p style="text-align: right;">%4% aaa</p><p style="text-align: justify;">%5% GaG</p><p>%6% %7% %8%</p><p>test <strong>%9%</strong> text</p><p style="text-align: left;">test <em>%10%</em> text.</p>');
@@ -90,7 +86,6 @@ class Viper_Tests_ViperFormatPlugin_AlignmentUnitTest extends AbstractViperUnitT
     public function testSelectingParagraphWithLeftJustification()
     {
         $this->selectKeyword(1, 2);
-
         $this->assertTrue($this->topToolbarButtonExists('justifyLeft', 'active'), 'Left justify icon is not active in the top toolbar');
 
     }//end testSelectingParagraphWithLeftJustification()
@@ -106,7 +101,6 @@ class Viper_Tests_ViperFormatPlugin_AlignmentUnitTest extends AbstractViperUnitT
         $this->selectKeyword(1, 2);
 
         $this->clickTopToolbarButton('justifyLeft', 'active');
-        sleep(1);
         $this->clickTopToolbarButton('justifyLeft', 'active');
 
         $this->assertHTMLMatch('<p>%1% amet %2%</p><p style="text-align: center;">%3% TpT</p><p style="text-align: right;">%4% aaa</p><p style="text-align: justify;">%5% GaG</p><p>%6% %7% %8%</p><p>test <strong>%9%</strong> text</p><p>test <em>%10%</em> text.</p>');
@@ -123,7 +117,6 @@ class Viper_Tests_ViperFormatPlugin_AlignmentUnitTest extends AbstractViperUnitT
     {
         $this->selectKeyword(6, 8);
         $this->clickTopToolbarButton('justifyLeft');
-        sleep(1);
         $this->clickTopToolbarButton('justifyRight');
 
         $this->assertHTMLMatch('<p style="text-align: left;">%1% amet %2%</p><p style="text-align: center;">%3% TpT</p><p style="text-align: right;">%4% aaa</p><p style="text-align: justify;">%5% GaG</p><p style="text-align: right;">%6% %7% %8%</p><p>test <strong>%9%</strong> text</p><p>test <em>%10%</em> text.</p>');
@@ -142,7 +135,6 @@ class Viper_Tests_ViperFormatPlugin_AlignmentUnitTest extends AbstractViperUnitT
     {
         $this->selectKeyword(9);
         $this->clickTopToolbarButton('justifyLeft');
-        sleep(1);
         $this->clickTopToolbarButton('justifyRight');
 
         $this->assertHTMLMatch('<p style="text-align: left;">%1% amet %2%</p><p style="text-align: center;">%3% TpT</p><p style="text-align: right;">%4% aaa</p><p style="text-align: justify;">%5% GaG</p><p>%6% %7% %8%</p><p style="text-align: right;">test <strong>%9%</strong> text</p><p>test <em>%10%</em> text.</p>');
@@ -161,7 +153,6 @@ class Viper_Tests_ViperFormatPlugin_AlignmentUnitTest extends AbstractViperUnitT
     {
         $this->selectKeyword(10);
         $this->clickTopToolbarButton('justifyLeft');
-        sleep(1);
         $this->clickTopToolbarButton('justifyRight');
 
         $this->assertHTMLMatch('<p style="text-align: left;">%1% amet %2%</p><p style="text-align: center;">%3% TpT</p><p style="text-align: right;">%4% aaa</p><p style="text-align: justify;">%5% GaG</p><p>%6% %7% %8%</p><p>test <strong>%9%</strong> text</p><p style="text-align: right;">test <em>%10%</em> text.</p>');
@@ -196,7 +187,6 @@ class Viper_Tests_ViperFormatPlugin_AlignmentUnitTest extends AbstractViperUnitT
         $this->selectKeyword(4);
 
         $this->clickTopToolbarButton('justifyRight', 'active');
-        sleep(1);
         $this->clickTopToolbarButton('justifyRight', 'active');
 
         $this->assertHTMLMatch('<p style="text-align: left;">%1% amet %2%</p><p style="text-align: center;">%3% TpT</p><p>%4% aaa</p><p style="text-align: justify;">%5% GaG</p><p>%6% %7% %8%</p><p>test <strong>%9%</strong> text</p><p>test <em>%10%</em> text.</p>');
@@ -213,7 +203,6 @@ class Viper_Tests_ViperFormatPlugin_AlignmentUnitTest extends AbstractViperUnitT
     {
         $this->selectKeyword(6, 8);
         $this->clickTopToolbarButton('justifyLeft');
-        sleep(1);
         $this->clickTopToolbarButton('justifyCenter');
 
         $this->assertHTMLMatch('<p style="text-align: left;">%1% amet %2%</p><p style="text-align: center;">%3% TpT</p><p style="text-align: right;">%4% aaa</p><p style="text-align: justify;">%5% GaG</p><p style="text-align: center;">%6% %7% %8%</p><p>test <strong>%9%</strong> text</p><p>test <em>%10%</em> text.</p>');
@@ -232,7 +221,6 @@ class Viper_Tests_ViperFormatPlugin_AlignmentUnitTest extends AbstractViperUnitT
     {
         $this->selectKeyword(9);
         $this->clickTopToolbarButton('justifyLeft');
-        sleep(1);
         $this->clickTopToolbarButton('justifyCenter');
 
         $this->assertHTMLMatch('<p style="text-align: left;">%1% amet %2%</p><p style="text-align: center;">%3% TpT</p><p style="text-align: right;">%4% aaa</p><p style="text-align: justify;">%5% GaG</p><p>%6% %7% %8%</p><p style="text-align: center;">test <strong>%9%</strong> text</p><p>test <em>%10%</em> text.</p>');
@@ -251,7 +239,6 @@ class Viper_Tests_ViperFormatPlugin_AlignmentUnitTest extends AbstractViperUnitT
     {
         $this->selectKeyword(10);
         $this->clickTopToolbarButton('justifyLeft');
-        sleep(1);
         $this->clickTopToolbarButton('justifyCenter');
 
         $this->assertHTMLMatch('<p style="text-align: left;">%1% amet %2%</p><p style="text-align: center;">%3% TpT</p><p style="text-align: right;">%4% aaa</p><p style="text-align: justify;">%5% GaG</p><p>%6% %7% %8%</p><p>test <strong>%9%</strong> text</p><p style="text-align: center;">test <em>%10%</em> text.</p>');
@@ -286,7 +273,6 @@ class Viper_Tests_ViperFormatPlugin_AlignmentUnitTest extends AbstractViperUnitT
         $this->selectKeyword(3);
         $this->selectInlineToolbarLineageItem(0);
         $this->clickTopToolbarButton('justifyCenter', 'active');
-        sleep(1);
         $this->clickTopToolbarButton('justifyCenter', 'active');
 
         $this->assertHTMLMatch('<p style="text-align: left;">%1% amet %2%</p><p>%3% TpT</p><p style="text-align: right;">%4% aaa</p><p style="text-align: justify;">%5% GaG</p><p>%6% %7% %8%</p><p>test <strong>%9%</strong> text</p><p>test <em>%10%</em> text.</p>');
@@ -303,7 +289,6 @@ class Viper_Tests_ViperFormatPlugin_AlignmentUnitTest extends AbstractViperUnitT
     {
         $this->selectKeyword(6, 8);
         $this->clickTopToolbarButton('justifyLeft');
-        sleep(1);
         $this->clickTopToolbarButton('justifyBlock');
 
         $this->assertHTMLMatch('<p style="text-align: left;">%1% amet %2%</p><p style="text-align: center;">%3% TpT</p><p style="text-align: right;">%4% aaa</p><p style="text-align: justify;">%5% GaG</p><p style="text-align: justify;">%6% %7% %8%</p><p>test <strong>%9%</strong> text</p><p>test <em>%10%</em> text.</p>');
@@ -322,7 +307,6 @@ class Viper_Tests_ViperFormatPlugin_AlignmentUnitTest extends AbstractViperUnitT
     {
         $this->selectKeyword(9);
         $this->clickTopToolbarButton('justifyLeft');
-        sleep(1);
         $this->clickTopToolbarButton('justifyBlock');
 
         $this->assertHTMLMatch('<p style="text-align: left;">%1% amet %2%</p><p style="text-align: center;">%3% TpT</p><p style="text-align: right;">%4% aaa</p><p style="text-align: justify;">%5% GaG</p><p>%6% %7% %8%</p><p style="text-align: justify;">test <strong>%9%</strong> text</p><p>test <em>%10%</em> text.</p>');
@@ -341,7 +325,6 @@ class Viper_Tests_ViperFormatPlugin_AlignmentUnitTest extends AbstractViperUnitT
     {
         $this->selectKeyword(10);
         $this->clickTopToolbarButton('justifyLeft');
-        sleep(1);
         $this->clickTopToolbarButton('justifyBlock');
 
         $this->assertHTMLMatch('<p style="text-align: left;">%1% amet %2%</p><p style="text-align: center;">%3% TpT</p><p style="text-align: right;">%4% aaa</p><p style="text-align: justify;">%5% GaG</p><p>%6% %7% %8%</p><p>test <strong>%9%</strong> text</p><p style="text-align: justify;">test <em>%10%</em> text.</p>');
@@ -377,7 +360,6 @@ class Viper_Tests_ViperFormatPlugin_AlignmentUnitTest extends AbstractViperUnitT
         $this->selectInlineToolbarLineageItem(0);
 
         $this->clickTopToolbarButton('justifyBlock', 'active');
-        sleep(1);
         $this->clickTopToolbarButton('justifyBlock', 'active');
 
         $this->assertHTMLMatch('<p style="text-align: left;">%1% amet %2%</p><p style="text-align: center;">%3% TpT</p><p style="text-align: right;">%4% aaa</p><p>%5% GaG</p><p>%6% %7% %8%</p><p>test <strong>%9%</strong> text</p><p>test <em>%10%</em> text.</p>');
@@ -395,7 +377,6 @@ class Viper_Tests_ViperFormatPlugin_AlignmentUnitTest extends AbstractViperUnitT
         $this->selectKeyword(6);
 
         $this->clickTopToolbarButton('justifyLeft');
-        sleep(1);
         $this->clickTopToolbarButton('justifyLeft');
 
         $this->assertHTMLMatch('<p style="text-align: left;">%1% amet %2%</p><p style="text-align: center;">%3% TpT</p><p style="text-align: right;">%4% aaa</p><p style="text-align: justify;">%5% GaG</p><p style="text-align: left;">%6% %7% %8%</p><p>test <strong>%9%</strong> text</p><p>test <em>%10%</em> text.</p>');
@@ -415,7 +396,6 @@ class Viper_Tests_ViperFormatPlugin_AlignmentUnitTest extends AbstractViperUnitT
         $this->click($this->findKeyword(8));
 
         $this->clickTopToolbarButton('justifyLeft');
-        sleep(1);
         $this->clickTopToolbarButton('justifyRight');
 
         $this->assertHTMLMatch('<p style="text-align: left;">%1% amet %2%</p><p style="text-align: center;">%3% TpT</p><p style="text-align: right;">%4% aaa</p><p style="text-align: justify;">%5% GaG</p><p style="text-align: right;">%6% %7% %8%</p><p>test <strong>%9%</strong> text</p><p>test <em>%10%</em> text.</p>');
@@ -434,8 +414,7 @@ class Viper_Tests_ViperFormatPlugin_AlignmentUnitTest extends AbstractViperUnitT
     {
         $this->selectkeyword(2, 7);
 
-        $this->clickTopToolbarButton('justifyLeft', 'active');
-        sleep(1);
+        $this->clickTopToolbarButton('justifyLeft');
         $this->clickTopToolbarButton('justifyRight');
 
         $this->assertHTMLMatch('<p style="text-align: right;">%1% amet %2%</p><p style="text-align: right;">%3% TpT</p><p style="text-align: right;">%4% aaa</p><p style="text-align: right;">%5% GaG</p><p style="text-align: right;">%6% %7% %8%</p><p>test <strong>%9%</strong> text</p><p>test <em>%10%</em> text.</p>');
@@ -443,8 +422,6 @@ class Viper_Tests_ViperFormatPlugin_AlignmentUnitTest extends AbstractViperUnitT
         $this->click($this->findkeyword(9));
 
         $this->selectkeyword(2, 7);
-
-        sleep(1);
         $this->assertTrue($this->topToolbarButtonExists('justifyRight', 'active'), 'Acitve right justify icon does not appear in the top toolbar');
 
     }//end testJustificationMultipleParagraphsWithAlignmentsApplied()
@@ -460,7 +437,6 @@ class Viper_Tests_ViperFormatPlugin_AlignmentUnitTest extends AbstractViperUnitT
         $this->selectKeyword(6, 10);
 
         $this->clickTopToolbarButton('justifyLeft');
-        sleep(1);
         $this->clickTopToolbarButton('justifyCenter');
 
         $this->assertHTMLMatch('<p style="text-align: left;">%1% amet %2%</p><p style="text-align: center;">%3% TpT</p><p style="text-align: right;">%4% aaa</p><p style="text-align: justify;">%5% GaG</p><p style="text-align: center;">%6% %7% %8%</p><p style="text-align: center;">test <strong>%9%</strong> text</p><p style="text-align: center;">test <em>%10%</em> text.</p>');
@@ -477,7 +453,7 @@ class Viper_Tests_ViperFormatPlugin_AlignmentUnitTest extends AbstractViperUnitT
     {
         $this->clickElement('img', 1);
         $this->clickTopToolbarButton('justifyLeft');
-        sleep(1);
+
         $this->assertTrue($this->topToolbarButtonExists('justifyLeft'), 'Left justify icon does not appear in the top toolbar');
         $this->assertTrue($this->topToolbarButtonExists('justifyRight'), 'Right justify icon does not appear in the top toolbar');
         $this->assertTrue($this->topToolbarButtonExists('justifyCenter'), 'Center justify icon does not appear in the top toolbar');
@@ -499,6 +475,63 @@ class Viper_Tests_ViperFormatPlugin_AlignmentUnitTest extends AbstractViperUnitT
         $this->assertHTMLMatch('<p>%1% aaa xx cccc</p><p><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt="" width="354" height="160" />%2% ttt uuu pp %3%</p>');
 
     }//end testAligningAnImage()
+
+
+    /**
+     * Test undo and redo icons.
+     *
+     * @return void
+     */
+    public function testUndoAndRedoForAlignments()
+    {
+        $this->selectKeyword(6, 8);
+
+        // Test left justification
+        $this->clickTopToolbarButton('justifyLeft');
+        $this->clickTopToolbarButton('justifyLeft');
+
+        $this->assertHTMLMatch('<p style="text-align: left;">%1% amet %2%</p><p style="text-align: center;">%3% TpT</p><p style="text-align: right;">%4% aaa</p><p style="text-align: justify;">%5% GaG</p><p style="text-align: left;">%6% %7% %8%</p><p>test <strong>%9%</strong> text</p><p>test <em>%10%</em> text.</p>');
+
+        $this->clickTopToolbarButton('historyUndo');
+        $this->assertHTMLMatch('<p style="text-align: left;">%1% amet %2%</p><p style="text-align: center;">%3% TpT</p><p style="text-align: right;">%4% aaa</p><p style="text-align: justify;">%5% GaG</p><p>%6% %7% %8%</p><p>test <strong>%9%</strong> text</p><p>test <em>%10%</em> text.</p>');
+
+        $this->clickTopToolbarButton('historyRedo');
+        $this->assertHTMLMatch('<p style="text-align: left;">%1% amet %2%</p><p style="text-align: center;">%3% TpT</p><p style="text-align: right;">%4% aaa</p><p style="text-align: justify;">%5% GaG</p><p style="text-align: left;">%6% %7% %8%</p><p>test <strong>%9%</strong> text</p><p>test <em>%10%</em> text.</p>');
+
+        // Test center justification
+        $this->clickTopToolbarButton('justifyCenter');
+
+        $this->assertHTMLMatch('<p style="text-align: left;">%1% amet %2%</p><p style="text-align: center;">%3% TpT</p><p style="text-align: right;">%4% aaa</p><p style="text-align: justify;">%5% GaG</p><p style="text-align: center;">%6% %7% %8%</p><p>test <strong>%9%</strong> text</p><p>test <em>%10%</em> text.</p>');
+
+        $this->clickTopToolbarButton('historyUndo');
+        $this->assertHTMLMatch('<p style="text-align: left;">%1% amet %2%</p><p style="text-align: center;">%3% TpT</p><p style="text-align: right;">%4% aaa</p><p style="text-align: justify;">%5% GaG</p><p style="text-align: left;">%6% %7% %8%</p><p>test <strong>%9%</strong> text</p><p>test <em>%10%</em> text.</p>');
+
+        $this->clickTopToolbarButton('historyRedo');
+        $this->assertHTMLMatch('<p style="text-align: left;">%1% amet %2%</p><p style="text-align: center;">%3% TpT</p><p style="text-align: right;">%4% aaa</p><p style="text-align: justify;">%5% GaG</p><p style="text-align: center;">%6% %7% %8%</p><p>test <strong>%9%</strong> text</p><p>test <em>%10%</em> text.</p>');
+
+        // Test right justification
+        $this->clickTopToolbarButton('justifyRight');
+
+        $this->assertHTMLMatch('<p style="text-align: left;">%1% amet %2%</p><p style="text-align: center;">%3% TpT</p><p style="text-align: right;">%4% aaa</p><p style="text-align: justify;">%5% GaG</p><p style="text-align: right;">%6% %7% %8%</p><p>test <strong>%9%</strong> text</p><p>test <em>%10%</em> text.</p>');
+
+        $this->clickTopToolbarButton('historyUndo');
+        $this->assertHTMLMatch('<p style="text-align: left;">%1% amet %2%</p><p style="text-align: center;">%3% TpT</p><p style="text-align: right;">%4% aaa</p><p style="text-align: justify;">%5% GaG</p><p style="text-align: center;">%6% %7% %8%</p><p>test <strong>%9%</strong> text</p><p>test <em>%10%</em> text.</p>');
+
+        $this->clickTopToolbarButton('historyRedo');
+        $this->assertHTMLMatch('<p style="text-align: left;">%1% amet %2%</p><p style="text-align: center;">%3% TpT</p><p style="text-align: right;">%4% aaa</p><p style="text-align: justify;">%5% GaG</p><p style="text-align: right;">%6% %7% %8%</p><p>test <strong>%9%</strong> text</p><p>test <em>%10%</em> text.</p>');
+
+        // Test block justification
+        $this->clickTopToolbarButton('justifyBlock');
+
+        $this->assertHTMLMatch('<p style="text-align: left;">%1% amet %2%</p><p style="text-align: center;">%3% TpT</p><p style="text-align: right;">%4% aaa</p><p style="text-align: justify;">%5% GaG</p><p style="text-align: justify;">%6% %7% %8%</p><p>test <strong>%9%</strong> text</p><p>test <em>%10%</em> text.</p>');
+
+        $this->clickTopToolbarButton('historyUndo');
+        $this->assertHTMLMatch('<p style="text-align: left;">%1% amet %2%</p><p style="text-align: center;">%3% TpT</p><p style="text-align: right;">%4% aaa</p><p style="text-align: justify;">%5% GaG</p><p style="text-align: right;">%6% %7% %8%</p><p>test <strong>%9%</strong> text</p><p>test <em>%10%</em> text.</p>');
+
+        $this->clickTopToolbarButton('historyRedo');
+        $this->assertHTMLMatch('<p style="text-align: left;">%1% amet %2%</p><p style="text-align: center;">%3% TpT</p><p style="text-align: right;">%4% aaa</p><p style="text-align: justify;">%5% GaG</p><p style="text-align: justify;">%6% %7% %8%</p><p>test <strong>%9%</strong> text</p><p>test <em>%10%</em> text.</p>');
+
+    }//end testUndoAndRedoForAlignments()
 
 
 }//end class
