@@ -307,13 +307,6 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
             $usePolling = 'true';
         }
 
-        $metaTag = '';
-        if ($this->getBrowserid() === 'ie8') {
-            $metaTag = '<meta http-equiv="X-UA-Compatible" content="IE=8" >';
-        } else if($this->getBrowserid() === 'ie9') {
-            $metaTag = '<meta http-equiv="X-UA-Compatible" content="IE=9" >';
-        }
-
         $testTitle = $this->getName();
         $numFails  = ViperTestListener::getFailures();
         $numErrors = ViperTestListener::getErrors();
@@ -325,7 +318,6 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
 
         // Put the current test file contents to the main test file.
         $contents = str_replace('__TEST_CONTENT__', $testFileContent, self::$_testContent);
-        $contents = str_replace('__TEST_IE_VERSION_METATAG__', $metaTag, $contents);
         $contents = str_replace('__TEST_BROWSER__', $this->getBrowserid(), $contents);
         $contents = str_replace('__TEST_VIPER_INCLUDE__', $viperInclude, $contents);
         $contents = str_replace('__TEST_TITLE__', $testTitle, $contents);
@@ -356,7 +348,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
                     throw new Exception('Failed to load Viper test page.');
                 }
 
-                sleep(2);
+                sleep(4);
 
                 $maxRetries--;
             }
@@ -390,7 +382,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
                     throw new Exception('Failed to load Viper test page.');
                 }
 
-                sleep(2);
+                sleep(4);
 
                 $maxRetries--;
             }
@@ -798,6 +790,12 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
 
         $buttonHTML = '';
 
+        $browserClass = '';
+
+        if ($this->getBrowserid() === 'ie8') {
+            $browserClass = 'Viper-browser-msie Viper-browserVer-msie8';
+        }
+
         $buttonCount = count($buttonNames);
         for ($i = 0; $i < $buttonCount; $i++) {
             if (($i % 20) === 0) {
@@ -805,7 +803,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
                     $buttonHTML .= '</div></div>';
                 }
 
-                $buttonHTML .= '<div class="ViperTP-bar Viper-themeDark" style="position:relative"><div class="Viper-buttonGroup">';
+                $buttonHTML .= '<div class="ViperTP-bar Viper-themeDark '.$browserClass.'" style="position:relative"><div class="Viper-buttonGroup">';
             }
 
             $buttonHTML .= '<div id="'.$buttonNames[$i].'" class="Viper-button Viper-'.$buttonNames[$i].'">';
@@ -814,15 +812,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
 
         $buttonHTML .= '</div></div>';
 
-        $metaTag = '';
-        if ($this->getBrowserid() === 'ie8') {
-            $metaTag = '<meta http-equiv="X-UA-Compatible" content="IE=8" >';
-        } else if($this->getBrowserid() === 'ie9') {
-            $metaTag = '<meta http-equiv="X-UA-Compatible" content="IE=9" >';
-        }
-
         $calibrateHtml = file_get_contents($baseDir.'/calibrate.html');
-        $calibrateHtml = str_replace('__TEST_IE_VERSION_METATAG__', $metaTag, $calibrateHtml);
         $calibrateHtml = str_replace('__TEST_CONTENT__', $buttonHTML, $calibrateHtml);
 
         file_put_contents($tmpFile, $calibrateHtml);
@@ -888,7 +878,6 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
 
         foreach ($statuses as $status => $className) {
             $btnRects = $this->execJS('getCoords("'.$status.'", "'.$className.'")', TRUE);
-            sleep(1);
             foreach ($btnRects as $buttonName => $rect) {
                 $this->_createButtonImageFromRectangle($buttonName, $rect);
             }
@@ -1441,10 +1430,14 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
                             // Values in a style attribute need to be ordered
                             // alphabetically as the browser changes the order sometimes.
                             $vals = array();
-                            preg_match_all('/(\w+)\s*:\s*[^:]+;/i', $attrVal, $vals);
+                            preg_match_all('/(\w+)\s*:\s*[^:]+;?/i', $attrVal, $vals);
                             asort($vals[1]);
                             $match .= ' '.$attrs[1][$attrIndex].'="';
                             foreach ($vals[1] as $valIndex => $value) {
+                                if (strpos($vals[0][$valIndex], ';') === FALSE) {
+                                    $vals[0][$valIndex] .= ';';
+                                }
+
                                 $match .= $vals[0][$valIndex].' ';
                             }
 
@@ -2186,12 +2179,13 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
             if (file_exists(self::$_pollFilePath.'/_jsres.tmp') === TRUE) {
                 $result = file_get_contents(self::$_pollFilePath.'/_jsres.tmp');
 
+                unlink(self::$_pollFilePath.'/_jsres.tmp');
+
                 if ($result === 'undefined' || trim($result) === '') {
                     return NULL;
                 }
 
                 $result = json_decode($result, TRUE);
-                unlink(self::$_pollFilePath.'/_jsres.tmp');
 
                 if (is_string($result) === TRUE) {
                     $result = str_replace("\r\n", '\n', $result);
@@ -2351,7 +2345,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
             ($this->getY($endRight) + 2)
         );
 
-        if ($this->getBrowserid() === 'ie8' || $this->getBrowserid() === 'ie9') {
+        if ($endKeyword !== $startKeyword && ($this->getBrowserid() === 'ie8' || $this->getBrowserid() === 'ie9')) {
             // Of course, even a simple thing like selecting words is a problem in
             // IE. When you select words it also selects the space after it, causing
             // tests to fail where style is applied to the selection or modification
@@ -2362,13 +2356,38 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
             $this->mouseMove($endRight);
             $this->mouseMoveOffset(-10, 0);
             $this->dropAt($endRight);
+            sleep(1);
         } else {
             $this->dragDrop($startLeft, $endRight);
-        }
-
-        usleep(50000);
+            usleep(50000);
+        }//end if
 
     }//end selectKeyword()
+
+    /**
+     * Moves the caret to the right or left of the specified keyword.
+     *
+     * @param integer $keyword  The keyword to move to.
+     * @param string  $position To the right or left.
+     *
+     * @return void
+     */
+    protected function moveToKeyword($keyword, $position='right')
+    {
+        $this->selectKeyword($keyword);
+
+        if ($position === 'right' && ($this->getBrowserid() === 'ie8' || $this->getBrowserid() === 'ie9')) {
+            $this->keyDown('Key.LEFT');
+            $this->keyDown('Key.RIGHT');
+            $this->keyDown('Key.RIGHT');
+            $this->keyDown('Key.RIGHT');
+        } else if ($position === 'right') {
+            $this->keyDown('Key.RIGHT');
+        } else if ($position === 'left') {
+            $this->keyDown('Key.LEFT');
+        }
+
+    }//end moveToKeyword()
 
 
     /**
@@ -2554,7 +2573,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      *
      * @return string
      */
-    protected function getHtml($selector=NULL, $index=0, $removeTableHeaders=FALSE)
+    protected function getHtml($selector=NULL, $index=0, $removeTableHeaders=FALSE, $noModify=FALSE)
     {
         $removeTableHeaders = (int) $removeTableHeaders;
 
@@ -2562,6 +2581,11 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
             $text = $this->execJS('gHtml(null, null, '.$removeTableHeaders.')');
         } else {
             $text = $this->execJS('gHtml("'.$selector.'", '.$index.', '.$removeTableHeaders.')');
+        }
+
+        if ($noModify !== TRUE) {
+            $text = str_replace("\n", '', $text);
+            $text = str_replace('\n', '', $text);
         }
 
         // Google Chrome always adds an extra space at the end of a style attribute
