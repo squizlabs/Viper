@@ -4740,7 +4740,10 @@ Viper.prototype = {
                 case 'td':
                 case 'th':
                 case 'caption':
-                    // Nothing to see here PHPCS.
+                    var html = dfx.trim(dfx.getHtml(node));
+                    if (html === '' || dfx.trim(html.replace(/&nbsp;/g, '')) === '') {
+                        dfx.setHtml(node, '&nbsp;');
+                    }
                 break;
 
                 case 'strong':
