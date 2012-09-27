@@ -941,6 +941,10 @@ class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractViperUnitTe
         $this->selectInlineToolbarLineageItem(0);
         $this->assertTrue($this->topToolbarButtonExists('headings'), 'Heading icon should be enabled in the top toolbar');
 
+        $this->clickTopToolbarButton('headings');
+        $this->clickTopToolbarButton('H1', NULL, TRUE);
+        $this->assertHTMLMatch('<h1>Long paragraph for testing that the heading icon does not appear in the inline toolbar %1%.</h1>');
+
     }//end testApplyingHeadginsWithOnePInsideADiv()
 
 
@@ -1397,6 +1401,30 @@ class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractViperUnitTe
         $this->assertTrue($this->topToolbarButtonExists('headings'), 'Heading icon should appear in the top toolbar.');
 
     }//end testHeadingIconNotAvailableForList()
+
+
+    /**
+     * Test undo and redo for headings.
+     *
+     * @return void
+     */
+    public function testUndoAndRedoForHeadings()
+    {
+
+        $this->useTest(1);
+
+        $this->selectKeyword(1, 2);
+        $this->clickInlineToolbarButton('headings', 'active');
+        $this->clickInlineToolbarButton('H2', NULL, TRUE);
+        $this->assertHTMLMatch('<h2>%1% %2%</h2>');
+
+        $this->clickTopToolbarButton('historyUndo');
+        $this->assertHTMLMatch('<h1>%1% %2%</h1>');
+
+        $this->clickTopToolbarButton('historyRedo');
+        $this->assertHTMLMatch('<h2>%1% %2%</h2>');
+
+    }//end testUndoAndRedoForHeadings()
 
 
 }//end class

@@ -207,6 +207,43 @@ class Viper_Tests_ViperFormatPlugin_AnchorUnitTest extends AbstractViperUnitTest
     }//end testApplyingAnAnchorToAnImage()
 
 
+    /**
+     * Test undo and redo.
+     *
+     * @return void
+     */
+    public function testUndoAndRedoForAnchors()
+    {
+        $this->selectKeyword(1);
+        $this->clickInlineToolbarButton('anchorID');
+        $this->type('test');
+        $this->keyDown('Key.ENTER');
+
+        $this->assertHTMLMatch('<p><span id="test">%1%</span> %2% %3%</p><p id="test">sit amet <strong>%4%</strong></p><p>Test AbC</p><p>Squiz <span id="myclass">%5%</span> is %6%</p>');
+
+        $this->clickTopToolbarButton('historyUndo');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p id="test">sit amet <strong>%4%</strong></p><p>Test AbC</p><p>Squiz <span id="myclass">%5%</span> is %6%</p>');
+
+        $this->clickTopToolbarButton('historyRedo');
+        $this->assertHTMLMatch('<p><span id="test">%1%</span> %2% %3%</p><p id="test">sit amet <strong>%4%</strong></p><p>Test AbC</p><p>Squiz <span id="myclass">%5%</span> is %6%</p>');
+
+        $this->click($this->findKeyword(3));
+        $this->selectKeyword(4);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickTopToolbarButton('anchorID', 'active');
+        $this->clearFieldValue('ID');
+        $this->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p><span id="test">%1%</span> %2% %3%</p><p>sit amet <strong>%4%</strong></p><p>Test AbC</p><p>Squiz <span id="myclass">%5%</span> is %6%</p>');
+
+        $this->clickTopToolbarButton('historyUndo');
+        $this->assertHTMLMatch('<p><span id="test">%1%</span> %2% %3%</p><p id="test">sit amet <strong>%4%</strong></p><p>Test AbC</p><p>Squiz <span id="myclass">%5%</span> is %6%</p>');
+
+        $this->clickTopToolbarButton('historyRedo');
+        $this->assertHTMLMatch('<p><span id="test">%1%</span> %2% %3%</p><p>sit amet <strong>%4%</strong></p><p>Test AbC</p><p>Squiz <span id="myclass">%5%</span> is %6%</p>');
+
+    }//end testUndoAndRedoForAnchors()
+
+
 }//end class
 
 ?>

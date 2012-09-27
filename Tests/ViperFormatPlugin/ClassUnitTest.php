@@ -730,6 +730,40 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
     }//end testApplyingAClassToAnImage()
 
 
+    /**
+     * Test undo and redo for Class.
+     *
+     * @return void
+     */
+    public function testUndoAndRedoForClass()
+    {
+        $this->selectKeyword(2);
+        $this->clickInlineToolbarButton('cssClass');
+        $this->type('test');
+        $this->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>%1% <span class="test">%2%</span> %3%</p><p class="test">sit amet <strong>%4%</strong></p><p><em>Test</em> %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><strong>%8%</strong> %9% the lazy dog</p>');
+
+        $this->clickTopToolbarButton('historyUndo');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p><em>Test</em> %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><strong>%8%</strong> %9% the lazy dog</p>');
+
+        $this->clickTopToolbarButton('historyRedo');
+        $this->assertHTMLMatch('<p>%1% <span class="test">%2%</span> %3%</p><p class="test">sit amet <strong>%4%</strong></p><p><em>Test</em> %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><strong>%8%</strong> %9% the lazy dog</p>');
+
+        $this->selectKeyword(6);
+        $this->clickInlineToolbarButton('cssClass', 'active');
+        $this->clearFieldValue('Class');
+        $this->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>%1% <span class="test">%2%</span> %3%</p><p class="test">sit amet <strong>%4%</strong></p><p><em>Test</em> %5%</p><p>Squiz %6% is %7%</p><p><strong>%8%</strong> %9% the lazy dog</p>');
+
+        $this->clickTopToolbarButton('historyUndo');
+        $this->assertHTMLMatch('<p>%1% <span class="test">%2%</span> %3%</p><p class="test">sit amet <strong>%4%</strong></p><p><em>Test</em> %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><strong>%8%</strong> %9% the lazy dog</p>');
+
+        $this->clickTopToolbarButton('historyRedo');
+        $this->assertHTMLMatch('<p>%1% <span class="test">%2%</span> %3%</p><p class="test">sit amet <strong>%4%</strong></p><p><em>Test</em> %5%</p><p>Squiz %6% is %7%</p><p><strong>%8%</strong> %9% the lazy dog</p>');
+
+    }//end testUndoAndRedoForClass()
+
+
 }//end class
 
 ?>
