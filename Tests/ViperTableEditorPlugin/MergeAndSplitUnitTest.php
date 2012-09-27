@@ -227,6 +227,7 @@ class Viper_Tests_ViperTableEditorPlugin_MergeAndSplitUnitTest extends AbstractV
         $this->assertTableWithoutHeaders('<p>Test %1%</p><table style="width: 100%; " border="1"><thead><tr><th colspan="3"></th></tr></thead><tbody><tr><td></td><td></td><td></td></tr></tbody></table><p></p>');
 
         $this->clickCell(1);
+        sleep(1);
         $this->showTools(0, 'col');
         $this->clickInlineToolbarButton('addRight');
         $this->assertTableWithoutHeaders('<p>Test %1%</p><table style="width: 100%; " border="1"><thead><tr><th colspan="3"></th><th></th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
@@ -236,6 +237,7 @@ class Viper_Tests_ViperTableEditorPlugin_MergeAndSplitUnitTest extends AbstractV
         $this->assertTableWithoutHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><thead><tr><th colspan="3"></th><th></th></tr><tr><th colspan="3"></th><th></th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
 
         $this->clickCell(1);
+        sleep(1);
         $this->showTools(2, 'cell');
         $this->clickMergeSplitIcon('splitVert');
         $this->clickMergeSplitIcon('splitVert');

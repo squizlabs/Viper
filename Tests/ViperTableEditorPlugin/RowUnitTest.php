@@ -107,6 +107,7 @@ class Viper_Tests_ViperTableEditorPlugin_RowUnitTest extends AbstractViperTableE
 
         // Delete the third row
         $this->clickCell(0);
+        sleep(1);
         $this->showTools(10, 'row');
         $this->clickButton('delete');
         $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table style="width: 100%;" border="1"><tbody><tr><td></td><td></td><td></td><td></td></tr><tr><td>One</td><td></td><td></td><td></td></tr><tr><td>Two</td><td></td><td></td><td></td></tr><tr><td>Three</td><td></td><td></td><td></td></tr></tbody></table><p></p>');
@@ -156,6 +157,7 @@ class Viper_Tests_ViperTableEditorPlugin_RowUnitTest extends AbstractViperTableE
 
         // Delete the third row
         $this->clickCell(0);
+        sleep(1);
         $this->showTools(10, 'row');
         $this->clickButton('delete');
         $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table style="width: 100%;" border="1"><tbody><tr><th></th><td></td><td></td><td></td></tr><tr><th>One</th><td></td><td></td><td></td></tr><tr><th>Two</th><td></td><td></td><td></td></tr><tr><th>Three</th><td></td><td></td><td></td></tr></tbody></table><p></p>');
@@ -167,6 +169,7 @@ class Viper_Tests_ViperTableEditorPlugin_RowUnitTest extends AbstractViperTableE
 
         // Move the second row down
         $this->clickCell(0);
+        sleep(1);
         $this->showTools(6, 'row');
         $this->clickButton('mergeDown');
         $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table style="width: 100%;" border="1"><tbody><tr><th>One</th><td></td><td></td><td></td></tr><tr><th>Two</th><td></td><td></td><td></td></tr><tr><th></th><td></td><td></td><td></td></tr><tr><th>Three</th><td></td><td></td><td></td></tr></tbody></table><p></p>');
@@ -207,6 +210,7 @@ class Viper_Tests_ViperTableEditorPlugin_RowUnitTest extends AbstractViperTableE
 
         // Delete the second row
         $this->clickCell(0);
+        sleep(1);
         $this->showTools(5, 'row');
         $this->clickButton('delete');
         $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table style="width: 100%;" border="1"><thead><tr><th>One</th><th></th><th></th><th></th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td></tr><tr><td>Two</td><td></td><td></td><td></td></tr><tr><td>Three</td><td></td><td></td><td></td></tr></tbody></table><p></p>');
@@ -218,6 +222,7 @@ class Viper_Tests_ViperTableEditorPlugin_RowUnitTest extends AbstractViperTableE
 
         // Move the second row down
         $this->clickCell(0);
+        sleep(1);
         $this->showTools(5, 'row');
         $this->clickButton('mergeDown');
         $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><thead><tr><td></td><td></td><td></td><td></td></tr></thead><tbody><tr><td>Two</td><td></td><td></td><td></td></tr><tr><th>One</th><th></th><th></th><th></th></tr><tr><td>Three</td><td></td><td></td><td></td></tr></tbody></table><p></p>');
@@ -265,6 +270,7 @@ class Viper_Tests_ViperTableEditorPlugin_RowUnitTest extends AbstractViperTableE
 
         // Delete the third row
         $this->clickCell(0);
+        sleep(1);
         $this->showTools(9, 'row');
         $this->clickButton('delete');
         $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><thead><tr><th>One</th><th></th><th></th><th></th></tr><tr><th></th><th></th><th></th><th></th></tr></thead><tbody><tr><th>Two</th><td></td><td></td><td></td></tr><tr><th>Three</th><td></td><td></td><td></td></tr></tbody></table><p></p>');
@@ -276,6 +282,7 @@ class Viper_Tests_ViperTableEditorPlugin_RowUnitTest extends AbstractViperTableE
 
         // Move the second row down
         $this->clickCell(0);
+        sleep(1);
         $this->showTools(5, 'row');
         $this->clickButton('mergeDown');
         $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><thead><tr><th></th><th></th><th></th><th></th></tr></thead><tbody><tr><th>Two</th><td></td><td></td><td></td></tr><tr><th>One</th><th></th><th></th><th></th></tr><tr><th>Three</th><td></td><td></td><td></td></tr></tbody></table><p></p>');
@@ -303,6 +310,7 @@ class Viper_Tests_ViperTableEditorPlugin_RowUnitTest extends AbstractViperTableE
         $this->assertHTMLMatchNoHeaders('<table style="width: 300px;" border="1" cellspacing="2" cellpadding="2"><tbody><tr><td colspan="2"></td><td></td><td colspan="2"></td></tr><tr><td style="width: 100px;" colspan="2">Survey</td><td rowspan="3">All Genders</td><td style="width: 100px;" colspan="2">By Gender</td></tr><tr><td colspan="2"></td><td colspan="2"></td></tr><tr><td></td><td></td><td>Male</td><td>Females</td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr></tbody></table>');
 
         $this->clickCell(1);
+        sleep(1);
         $this->showTools(6, 'row');
         $this->clickButton('delete');
         $this->assertHTMLMatchNoHeaders('<table style="width: 300px;" border="1" cellspacing="2" cellpadding="2"><tbody><tr><td colspan="2"></td><td></td><td colspan="2"></td></tr><tr><td style="width: 100px;" colspan="2">Survey</td><td rowspan="2">All Genders</td><td style="width: 100px;" colspan="2">By Gender</td></tr><tr><td></td><td></td><td>Male</td><td>Females</td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr></tbody></table>');
