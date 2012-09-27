@@ -878,6 +878,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
 
         foreach ($statuses as $status => $className) {
             $btnRects = $this->execJS('getCoords("'.$status.'", "'.$className.'")', TRUE);
+            sleep(1);
             foreach ($btnRects as $buttonName => $rect) {
                 $this->_createButtonImageFromRectangle($buttonName, $rect);
             }
