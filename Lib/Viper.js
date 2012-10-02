@@ -510,36 +510,40 @@ Viper.prototype = {
             var range = this.getCurrentRange();
             var editableChild = range._getFirstSelectableChild(this.element);
             if (!editableChild) {
-                var blockElement = null;
-                for (var node = this.element.firstChild; node; node = node.nextSibling) {
-                    if (dfx.isBlockElement(node) === true
-                        && dfx.isStubElement(node) === false
-                    ) {
-                        blockElement = node;
-                        break;
-                    }
-                }
-
-                if (blockElement) {
-                    if (this.isBrowser('msie') !== true) {
-                        dfx.setHtml(blockElement, '<br />');
-                    } else {
-                        blockElement.appendChild(document.createTextNode(' '));
+                // Check if any of these elements exist in the content.
+                var tags = 'iframe,img,object';
+                if (dfx.getTag(tags, this.element).length === 0) {
+                    var blockElement = null;
+                    for (var node = this.element.firstChild; node; node = node.nextSibling) {
+                        if (dfx.isBlockElement(node) === true
+                            && dfx.isStubElement(node) === false
+                        ) {
+                            blockElement = node;
+                            break;
+                        }
                     }
 
-                    editableChild = range._getFirstSelectableChild(this.element);
-                } else {
-                    var tagName = this.getDefaultBlockTag();
-                    if (!tagName) {
-                        dfx.setHtml(this.element, '');
-                    } else {
-                        blockElement = document.createElement(tagName);
-                        dfx.setHtml(blockElement, '&nbsp;');
-                        editableChild.appendChild(blockElement);
+                    if (blockElement) {
+                        if (this.isBrowser('msie') !== true) {
+                            dfx.setHtml(blockElement, '<br />');
+                        } else {
+                            blockElement.appendChild(document.createTextNode(' '));
+                        }
+
                         editableChild = range._getFirstSelectableChild(this.element);
-                    }
-                }
-            }
+                    } else {
+                        var tagName = this.getDefaultBlockTag();
+                        if (!tagName) {
+                            dfx.setHtml(this.element, '');
+                        } else {
+                            blockElement = document.createElement(tagName);
+                            dfx.setHtml(blockElement, '&nbsp;');
+                            editableChild.appendChild(blockElement);
+                            editableChild = range._getFirstSelectableChild(this.element);
+                        }
+                    }//end if
+                }//end if
+            }//end if
 
             if (editableChild) {
                 //this.setRange(editableChild, 0);
