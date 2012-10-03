@@ -512,6 +512,27 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractViperListP
 
 
     /**
+     * Test creat list and click undo.
+     *
+     * @return void
+     */
+    public function testCreateListItemsAndClickUndo()
+    {
+        $this->click($this->findKeyword(2));
+
+        $this->clickTopToolbarButton('listOL');
+        $this->assertHTMLMatch('<ol><li>%1% uuuuuu. %2%</li></ol><p>cPOc ccccc dddd. %3%</p><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa %4% ccccc</li><li>%5% %6% templates</li><li>Audit %7% %8%</li><li>Accessibility audit report</li><li>Recommendations %9% plan</li><li>Squiz Matrix guide</li></ol>');
+
+        $this->clickTopToolbarButton('historyUndo');
+        $this->assertHTMLMatch('<p>%1% uuuuuu. %2%</p><p>cPOc ccccc dddd. %3%</p><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa %4% ccccc</li><li>%5% %6% templates</li><li>Audit %7% %8%</li><li>Accessibility audit report</li><li>Recommendations %9% plan</li><li>Squiz Matrix guide</li></ol>');
+
+        $this->clickTopToolbarButton('historyRedo');
+        $this->assertHTMLMatch('<ol><li>%1% uuuuuu. %2%</li></ol><p>cPOc ccccc dddd. %3%</p><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa %4% ccccc</li><li>%5% %6% templates</li><li>Audit %7% %8%</li><li>Accessibility audit report</li><li>Recommendations %9% plan</li><li>Squiz Matrix guide</li></ol>');
+
+    }//end testCreateListItemsAndClickUndo()
+
+
+    /**
      * Test keyboard navigation.
      *
      * @return void
