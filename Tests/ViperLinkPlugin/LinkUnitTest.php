@@ -1217,6 +1217,30 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
     }//end testLinkingAnImageUsingTopToolbar()
 
 
+    /**
+     * Test undo and redo for link.
+     *
+     * @return void
+     */
+    public function testUndoAndRedoForLinks()
+    {
+        $this->useTest(1);
+
+        $this->selectKeyword(1);
+        $this->clickInlineToolbarButton('link');
+        $this->type('http://www.squizlabs.com');
+        $this->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com">%1%</a> link test %2%</p>');
+
+        $this->clickTopToolbarButton('historyUndo');
+        $this->assertHTMLMatch('<p>%1% link test %2%</p>');
+
+        $this->clickTopToolbarButton('historyRedo');
+        $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com">%1%</a> link test %2%</p>');
+
+    }//end testUndoAndRedoForLinks()
+
+
 }//end class
 
 ?>
