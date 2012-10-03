@@ -721,6 +721,8 @@ Viper.prototype = {
                     if ((dfx.isBlockElement(child) === true && dfx.isStubElement(child) === false)
                         || (child.nodeType !== dfx.ELEMENT_NODE && child.nodeType !== dfx.TEXT_NODE)
                         || dfx.isTag(child, 'hr') === true
+                        || dfx.isTag(child, 'iframe') === true
+                        || dfx.isTag(child, 'object') === true
                     ) {
                         continue;
                     } else if (child.nodeType === dfx.TEXT_NODE && dfx.trim(child.data) === '') {
