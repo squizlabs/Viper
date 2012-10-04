@@ -1140,6 +1140,10 @@ ViperCoreStylesPlugin.prototype = {
 
         if (!endNode) {
             endNode = startNode;
+        } else if (endNode.nodeType === dfx.ELEMENT_NODE && this.viper.isBrowser('msie') === true) {
+            endNode = range._getLastSelectableChild(endNode);
+            range.setEnd(endNode, endNode.data.length);
+            ViperSelection.addRange(range);
         }
 
         var commonParent = range.getCommonElement();

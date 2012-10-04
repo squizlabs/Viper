@@ -2282,6 +2282,11 @@ Viper.prototype = {
             return;
         } else if (dfx.attr(parent, 'viperbookmark')) {
             return;
+        } else if (parent.nodeType === dfx.COMMENT_NODE) {
+            if (callback) {
+                callback.call(this, parent);
+            }
+            return;
         }
 
         if (!attributes && dfx.getParents(parent, tag).length > 0) {
