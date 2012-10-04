@@ -33,8 +33,7 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperLis
      */
     public function testListShortcuts()
     {
-        $this->selectKeyword(2);
-        $this->keyDown('Key.RIGHT');
+        $this->moveToKeyword(2, 'right');
         $this->keyDown('Key.ENTER');
 
         $this->keyDown('Key.TAB');
@@ -59,8 +58,7 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperLis
      */
     public function testCreatingAList()
     {
-        $this->selectKeyword(2);
-        $this->keyDown('Key.RIGHT');
+        $this->moveToKeyword(2, 'right');
         $this->keyDown('Key.ENTER');
 
         $this->type('Test list:');
@@ -85,8 +83,7 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperLis
      */
     public function testCreatingAListWithASubList()
     {
-        $this->selectKeyword(2);
-        $this->keyDown('Key.RIGHT');
+        $this->moveToKeyword(2, 'right');
         $this->keyDown('Key.ENTER');
 
         $this->type('Test list:');
@@ -445,6 +442,7 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperLis
     {
         $this->selectKeyword(6, 9);
         $this->keyDown('Key.TAB');
+        sleep(1);
         $this->keyDown('Key.CMD + b');
 
         $this->assertHTMLMatch('<p>%1% uuuuuu. %2%</p><p>cPOc ccccc dddd. %3%</p><p>ajhsd sjsjwi hhhh:</p><ul><li>aaa %4% ccccc<ul><li>%5% <strong>%6% templates</strong></li><li><strong>Audit %7% %8%</strong></li><li><strong>Accessibility audit report</strong></li><li><strong>Recommendations %9%</strong> plan</li></ul></li><li>Squiz Matrix guide</li></ul>');
@@ -543,6 +541,27 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperLis
         $this->assertHTMLMatch('<p>%1% uuuuuu. %2%</p><p>cPOc ccccc dddd. %3%</p><p>ajhsd sjsjwi hhhh:</p><ul><li>aaa %4% ccccc</li><li>Accessibility audit report</li><li>Recommendations %9% plan</li><li>Squiz Matrix guide</li></ul>');
 
     }//end testRemoveListItemsAndClickUndo()
+
+
+    /**
+     * Test creat list and click undo.
+     *
+     * @return void
+     */
+    public function testCreateListItemsAndClickUndo()
+    {
+        $this->click($this->findKeyword(2));
+
+        $this->clickTopToolbarButton('listUL');
+        $this->assertHTMLMatch('<ul><li>%1% uuuuuu. %2%</li></ul><p>cPOc ccccc dddd. %3%</p><p>ajhsd sjsjwi hhhh:</p><ul><li>aaa %4% ccccc</li><li>%5% %6% templates</li><li>Audit %7% %8%</li><li>Accessibility audit report</li><li>Recommendations %9% plan</li><li>Squiz Matrix guide</li></ul>');
+
+        $this->clickTopToolbarButton('historyUndo');
+        $this->assertHTMLMatch('<p>%1% uuuuuu. %2%</p><p>cPOc ccccc dddd. %3%</p><p>ajhsd sjsjwi hhhh:</p><ul><li>aaa %4% ccccc</li><li>%5% %6% templates</li><li>Audit %7% %8%</li><li>Accessibility audit report</li><li>Recommendations %9% plan</li><li>Squiz Matrix guide</li></ul>');
+
+        $this->clickTopToolbarButton('historyRedo');
+        $this->assertHTMLMatch('<ul><li>%1% uuuuuu. %2%</li></ul><p>cPOc ccccc dddd. %3%</p><p>ajhsd sjsjwi hhhh:</p><ul><li>aaa %4% ccccc</li><li>%5% %6% templates</li><li>Audit %7% %8%</li><li>Accessibility audit report</li><li>Recommendations %9% plan</li><li>Squiz Matrix guide</li></ul>');
+
+    }//end testCreateListItemsAndClickUndo()
 
 
     /**
@@ -787,8 +806,7 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperLis
      */
     public function testConvertListFromUnorderedToOrderedWithSubList()
     {
-        $this->selectKeyword(5);
-        $this->keyDown('Key.RIGHT');
+        $this->moveToKeyword(5, 'right');
         $this->keyDown('Key.TAB');
         $this->keyDown('Key.DOWN');
         $this->keyDown('Key.TAB');
@@ -812,8 +830,7 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperLis
      */
     public function testConvertSubListType()
     {
-        $this->selectKeyword(7);
-        $this->keyDown('Key.RIGHT');
+        $this->moveToKeyword(7, 'right');
         $this->keyDown('Key.TAB');
         $this->keyDown('Key.UP');
         $this->keyDown('Key.TAB');
@@ -858,8 +875,7 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperLis
         $this->selectKeyword(5, 8);
         $this->keyDown('Key.CMD + c');
 
-        $this->selectKeyword(3);
-        $this->keyDown('Key.RIGHT');
+        $this->moveToKeyword(3, 'right');
         $this->keyDown('Key.ENTER');
         $this->keyDown('Key.CMD + v');
 
@@ -881,8 +897,7 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperLis
         $this->selectInlineToolbarLineageItem(0);
         $this->keyDown('Key.CMD + c');
 
-        $this->selectKeyword(3);
-        $this->keyDown('Key.RIGHT');
+        $this->moveToKeyword(3, 'right');
         $this->keyDown('Key.ENTER');
         $this->keyDown('Key.CMD + v');
 
@@ -900,8 +915,7 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperLis
      */
     public function testCreatingParagraphAfterListBeforeADiv()
     {
-        $this->selectKeyword(1);
-        $this->keyDown('Key.RIGHT');
+        $this->moveToKeyword(1, 'right');
         $this->keyDown('Key.ENTER');
         $this->keyDown('Key.ENTER');
         $this->type('New paragraph');
@@ -922,8 +936,7 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperLis
      */
     public function testCreatingParagraphAfterListBeforeAPre()
     {
-        $this->selectKeyword(1);
-        $this->keyDown('Key.RIGHT');
+        $this->moveToKeyword(1, 'right');
         $this->keyDown('Key.ENTER');
         $this->keyDown('Key.ENTER');
         $this->type('New paragraph');
@@ -944,8 +957,7 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperLis
      */
     public function testCreatingParagraphAfterListBeforeAQuote()
     {
-        $this->selectKeyword(1);
-        $this->keyDown('Key.RIGHT');
+        $this->moveToKeyword(1, 'right');
         $this->keyDown('Key.ENTER');
         $this->keyDown('Key.ENTER');
         $this->type('New paragraph');
@@ -966,8 +978,7 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperLis
      */
     public function testCreatingParagraphAfterListBeforeAParagraph()
     {
-        $this->selectKeyword(1);
-        $this->keyDown('Key.RIGHT');
+        $this->moveToKeyword(1, 'right');
         $this->keyDown('Key.ENTER');
         $this->keyDown('Key.ENTER');
         $this->type('New paragraph');

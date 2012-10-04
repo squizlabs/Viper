@@ -377,6 +377,29 @@ class Viper_Tests_ViperCoreStylesPlugin_ItalicUnitTest extends AbstractViperUnit
     }//end testApplyingAndRemovingItalicToAllContent()
 
 
+    /**
+     * Test that undo and redo buttons for italic formatting.
+     *
+     * @return void
+     */
+    public function testUndoAndRedoForItalic()
+    {
+        $this->selectKeyword(1);
+        $this->clickInlineToolbarButton('italic');
+
+        $this->assertHTMLMatch('<p><em>%1%</em> %2% %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
+
+        $this->clickTopToolbarButton('historyUndo');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
+
+        $this->clickTopToolbarButton('historyRedo');
+        $this->assertHTMLMatch('<p><em>%1%</em> %2% %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
+        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon should be active in the inline toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon should be active in the top toolbar');
+
+    }//end testUndoAndRedoForBold()
+
+
 }//end class
 
 ?>

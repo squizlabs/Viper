@@ -128,7 +128,10 @@ ViperSearchReplacePlugin.prototype = {
         content.appendChild(findNext);
 
         // Create the bubble.
-        var searchTools = toolbar.createBubble('ViperSearchPlugin:bubble', 'Search & Replace', content);
+        var searchTools = toolbar.createBubble('ViperSearchPlugin:bubble', 'Search & Replace', content, null, function() {
+            self._matchCount = 0;
+            self._updateButtonStates(false);
+        });
         var searchBtn   = tools.createButton('searchReplace', '', 'Search & Replace', 'Viper-searchReplace', null, true);
         toolbar.addButton(searchBtn);
         toolbar.setBubbleButton('ViperSearchPlugin:bubble', 'searchReplace');

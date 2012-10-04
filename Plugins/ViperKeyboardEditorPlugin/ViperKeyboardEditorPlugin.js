@@ -388,6 +388,7 @@ ViperKeyboardEditorPlugin.prototype = {
             return;
         }
 
+        var defaultTagName  = this.viper.getDefaultBlockTag();
         var viperElement    = this.viper.getViperElement();
         var firstSelectable = range._getFirstSelectableChild(viperElement);
 
@@ -452,7 +453,6 @@ ViperKeyboardEditorPlugin.prototype = {
         } else if (range.startOffset === 0
             && range.collapsed === false
             && viper.isBrowser('msie') !== true
-            && viper.isBrowser('safari') !== true
         ) {
             // Chrome has issues with removing list items from lists.
             var startNode = range.getStartNode();
@@ -515,6 +515,50 @@ ViperKeyboardEditorPlugin.prototype = {
             ViperSelection.addRange(range);
 
             return false;
+        }
+
+        if (range.startOffset === 0
+            && range.collapsed === false
+            && this.viper.isBrowser('msie') !== true
+            && range.startContainer !== range.endContainer
+            && range.startContainer.nodeType === dfx.TEXT_NODE
+            && range.endContainer.nodeType === dfx.TEXT_NODE
+            && range.endOffset === range.endContainer.data.length
+        ) {
+            var startParent     = dfx.getFirstBlockParent(range.startContainer);
+            var endParent       = dfx.getFirstBlockParent(range.endContainer);
+            var firstSelectable = range._getFirstSelectableChild(startParent);
+            var lastSelectable  = range._getLastSelectableChild(endParent);
+
+            if (firstSelectable === range.startContainer
+                && lastSelectable === range.endContainer
+            ) {
+                if (defaultTagName !== '') {
+                    var p = document.createElement(defaultTagName);
+                    dfx.setHtml(p, '<br />');
+                    dfx.insertBefore(startParent, p);
+                    dfx.remove(dfx.getElementsBetween(startParent, endParent));
+                    dfx.remove(startParent);
+                    dfx.remove(endParent);
+                    range.setStart(p, 0);
+                    range.collapse(true);
+                } else {
+                    var br = document.createElement('br');
+                    dfx.insertBefore(startParent, br);
+                    dfx.remove(dfx.getElementsBetween(startParent, endParent));
+                    dfx.remove(startParent);
+                    dfx.remove(endParent);
+                    range.setStart(br, 0);
+                    range.collapse(true);
+                }
+
+                ViperSelection.addRange(range);
+                if (this.viper.isBrowser('firefox') !== true) {
+                    this.viper.fireNodesChanged();
+                }
+
+                return false;
+            }
         }
 
     },

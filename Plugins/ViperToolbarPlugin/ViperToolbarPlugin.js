@@ -380,6 +380,14 @@ ViperToolbarPlugin.prototype = {
                         } catch (e) {
                             console.error(e.message);
                         }
+
+                        // Give focus back to the form field.
+                        var inputElements = dfx.getTag('input[type=text], textarea', subSection.form);
+                        if (inputElements.length > 0) {
+                            try {
+                                inputElements[0].focus();
+                            } catch(e) {}
+                        }
                     } else {
                         setTimeout(function() {
                             try {
@@ -387,18 +395,16 @@ ViperToolbarPlugin.prototype = {
                             } catch (e) {
                                 console.error(e.message);
                             }
+
+                            // Give focus back to the form field.
+                            var inputElements = dfx.getTag('input[type=text], textarea', subSection.form);
+                            if (inputElements.length > 0) {
+                                try {
+                                    inputElements[0].focus();
+                                } catch(e) {}
+                            }
                         }, 10);
-                    }
-
-                    tools.disableButton(subSectionid + '-applyButton');
-
-                    // Give focus back to the form field.
-                    var inputElements = dfx.getTag('input[type=text], textarea', subSection.form);
-                    if (inputElements.length > 0) {
-                        try {
-                            inputElements[0].focus();
-                        } catch(e) {}
-                    }
+                    }//end if
 
                     return false;
                 };
@@ -620,6 +626,11 @@ ViperToolbarPlugin.prototype = {
         if (inputElements.length > 0) {
             try {
                 inputElements[0].focus();
+                if (this.viper.isBrowser('msie') === true) {
+                    setTimeout(function() {
+                        inputElements[0].focus();
+                    }, 10);
+                }
             } catch(e) {}
         }
 

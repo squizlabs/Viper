@@ -224,11 +224,11 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->type('Squiz Labs');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com" title="Squiz Labs">%1%</a> link test %2%</p>');
-
         $this->selectKeyword(1);
-        $this->assertTrue($this->inlineToolbarButtonExists('link', 'active'), 'Toolbar button icon is not correct');
+        $this->assertTrue($this->inlineToolbarButtonExists('link', 'active'), 'Link icon should be active in the inline toolbar');
         $this->assertTrue($this->inlineToolbarButtonExists('linkRemove'), 'Remove link icon should be available.');
+
+        $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com" title="Squiz Labs">%1%</a> link test %2%</p>');
 
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Link</li>', $lineage);
@@ -401,7 +401,7 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->keyDown('Key.ENTER');
         $this->click($this->findKeyword(2));
         $this->clickInlineToolbarButton('linkRemove');
-        $this->assertTrue($this->topToolbarButtonExists('link'), 'Link icon should be available.');
+        $this->assertTrue($this->topToolbarButtonExists('link', 'disabled'), 'Link icon should be disabled.');
         $this->assertHTMLMatch('<p>%1% link test %2%</p>');
 
         // Mail to link
@@ -413,7 +413,7 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->keyDown('Key.ENTER');
         $this->click($this->findKeyword(1));
         $this->clickInlineToolbarButton('linkRemove');
-        $this->assertTrue($this->topToolbarButtonExists('link'), 'Link icon should be available.');
+        $this->assertTrue($this->topToolbarButtonExists('link', 'disabled'), 'Link icon should be disabled.');
         $this->assertHTMLMatch('<p>%1% link test %2%</p>');
 
     }//end testRemoveLinkWhenClickingInLink()
@@ -713,7 +713,7 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
 
         $this->assertHTMLMatch('<p>%1% link test <a href="http://www.squizlabs.com" class="class" id="anchor">%2%</a></p>');
 
-        $this->assertTrue($this->inlineToolbarButtonExists('link', 'active'), 'Link icon should be active in the inline toolbar.');
+        $this->assertTrue($this->inlineToolbarButtonExists('link', 'selected'), 'Link icon should be active in the inline toolbar.');
         $this->assertTrue($this->topToolbarButtonExists('link', 'active'), 'Link icon should be active in the top toolbar.');
 
         $this->assertTrue($this->inlineToolbarButtonExists('cssClass', 'active'), 'Class icon should be active in the inline toolbar.');
@@ -787,7 +787,7 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
 
         $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com" class="class" id="anchor">%1%</a> link test %2%</p>');
 
-        $this->assertTrue($this->inlineToolbarButtonExists('link', 'active'), 'Link icon should be active in the inline toolbar.');
+        $this->assertTrue($this->inlineToolbarButtonExists('link', 'selected'), 'Link icon should be active in the inline toolbar.');
         $this->assertTrue($this->topToolbarButtonExists('link', 'active'), 'Link icon should be active in the top toolbar.');
 
         $this->assertTrue($this->inlineToolbarButtonExists('cssClass', 'active'), 'Class icon should be active in the inline toolbar.');
@@ -1215,6 +1215,30 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->assertHTMLMatch('<p>%1% XuT</p><img src="%url%/ViperImagePlugin/Images/html-codesniffer.png" alt="Alt tag" /><p>second paragraph</p>');
 
     }//end testLinkingAnImageUsingTopToolbar()
+
+
+    /**
+     * Test undo and redo for link.
+     *
+     * @return void
+     */
+    public function testUndoAndRedoForLinks()
+    {
+        $this->useTest(1);
+
+        $this->selectKeyword(1);
+        $this->clickInlineToolbarButton('link');
+        $this->type('http://www.squizlabs.com');
+        $this->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com">%1%</a> link test %2%</p>');
+
+        $this->clickTopToolbarButton('historyUndo');
+        $this->assertHTMLMatch('<p>%1% link test %2%</p>');
+
+        $this->clickTopToolbarButton('historyRedo');
+        $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com">%1%</a> link test %2%</p>');
+
+    }//end testUndoAndRedoForLinks()
 
 
 }//end class

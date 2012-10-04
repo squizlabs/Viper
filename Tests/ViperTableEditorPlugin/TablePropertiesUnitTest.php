@@ -13,7 +13,6 @@ class Viper_Tests_ViperTableEditorPlugin_TablePropertiesUnitTest extends Abstrac
      */
     public function testTableToolIconsCorrect()
     {
-
         $this->showTools(0, 'table');
 
         $this->assertTrue($this->inlineToolbarButtonExists('tableSettings', 'selected'));
@@ -133,7 +132,6 @@ class Viper_Tests_ViperTableEditorPlugin_TablePropertiesUnitTest extends Abstrac
      */
     public function testAddingClassToTable()
     {
-
         // Apply a class to the table and press update changes
         $this->showTools(0, 'table');
         $this->clickInlineToolbarButton('cssClass');
@@ -169,7 +167,6 @@ class Viper_Tests_ViperTableEditorPlugin_TablePropertiesUnitTest extends Abstrac
      */
     public function testDeleteingATable()
     {
-
         $this->showTools(0, 'table');
         $this->clickInlineToolbarButton('delete');
         $this->assertHTMLMatch('');
@@ -187,7 +184,6 @@ class Viper_Tests_ViperTableEditorPlugin_TablePropertiesUnitTest extends Abstrac
      */
     public function testCaptionsForTables()
     {
-
         //Apply the caption and click update changes
         $this->showTools(0, 'table');
         $this->clickField('Use Caption');
@@ -208,7 +204,9 @@ class Viper_Tests_ViperTableEditorPlugin_TablePropertiesUnitTest extends Abstrac
         $this->assertHTMLMatchNoHeaders('<table border="1" style="width: 100%;"><caption></caption><tbody><tr><th colspan="2" rowspan="2">Survey</th><th rowspan="2">All Genders</th><th colspan="2">By Gender</th></tr><tr><th>Males</th><th>Females</th></tr><tr><th rowspan="2">All Regions</th><th>N</th><td>3</td><td>1</td><td>2</td></tr><tr><th>S</th><td>3</td><td>1</td><td>2</td></tr></tbody></table>');
 
         //Remove the caption and press enter
+        sleep(1);
         $this->clickField('Use Caption');
+        sleep(1);
         $this->keyDown('Key.ENTER');
         usleep(50000);
         $this->assertHTMLMatchNoHeaders('<table border="1" style="width: 100%;"><tbody><tr><th colspan="2" rowspan="2">Survey</th><th rowspan="2">All Genders</th><th colspan="2">By Gender</th></tr><tr><th>Males</th><th>Females</th></tr><tr><th rowspan="2">All Regions</th><th>N</th><td>3</td><td>1</td><td>2</td></tr><tr><th>S</th><td>3</td><td>1</td><td>2</td></tr></tbody></table>');

@@ -478,6 +478,28 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
     }//end testApplyingAndRemovingBoldToAllContent()
 
 
+    /**
+     * Test that undo and redo buttons for bold formatting.
+     *
+     * @return void
+     */
+    public function testUndoAndRedoForBold()
+    {
+        $this->selectKeyword(1);
+        $this->clickInlineToolbarButton('bold');
+
+        $this->assertHTMLMatch('<p><strong>%1%</strong> %2% %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
+
+        $this->clickTopToolbarButton('historyUndo');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
+
+        $this->clickTopToolbarButton('historyRedo');
+        $this->assertHTMLMatch('<p><strong>%1%</strong> %2% %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
+        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon should be active in the inline toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon should be active in the top toolbar');
+
+    }//end testUndoAndRedoForBold()
+
 }//end class
 
 ?>

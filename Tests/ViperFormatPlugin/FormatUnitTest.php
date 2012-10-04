@@ -158,14 +158,12 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractFormatsUnitTe
         $this->assertTrue($this->topToolbarButtonExists('formats-div', 'active'), 'Active div icon should appear in the inline toolbar');
         $this->assertTrue($this->inlineToolbarButtonExists('formats-div', 'active'), 'Active div icon should appear in the top toolbar');
 
-        $this->selectKeyword(3);
-        $this->keyDown('Key.RIGHT');
+        $this->moveToKeyword(3, 'right');
         $this->keyDown('Key.ENTER');
         $this->type('test new line %4%');
         $this->assertHTMLMatch('<h1>Heading One</h1><div><p>%1% xtn dolor</p><p>sit %2% <strong>%3%</strong></p><p>test new line %4%</p></div>');
 
-        $this->selectKeyword(4);
-        $this->keyDown('Key.RIGHT');
+        $this->moveToKeyword(4, 'right');
         $this->keyDown('Key.ENTER');
         $this->keyDown('Key.ENTER');
         $this->type('test new paragraph');
@@ -186,8 +184,7 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractFormatsUnitTe
         $this->clickTopToolbarButton('DIV', NULL, TRUE);
         $this->assertHTMLMatch('<h1>Heading One</h1><div><p>%1% xtn dolor</p><p>sit %2% <strong>%3%</strong></p></div>');
 
-        $this->selectKeyword(3);
-        $this->keyDown('Key.RIGHT');
+        $this->moveToKeyword(3, 'right');
         $this->keyDown('Key.ENTER');
         $this->keyDown('Key.ENTER');
         $this->type('%4% new div section');
@@ -204,8 +201,7 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractFormatsUnitTe
         $this->clickTopToolbarButton('DIV', NULL, TRUE);
         $this->assertHTMLMatch('<h1>Heading One</h1><div><div><p>%1% xtn dolor</p><p>sit %2% <strong>%3%</strong></p></div><div><p>%4% new div section</p><p>with two paragraphs %5%</p></div></div>');
 
-        $this->selectKeyword(3);
-        $this->keyDown('Key.RIGHT');
+        $this->moveToKeyword(3, 'right');
         $this->keyDown('Key.ENTER');
         $this->keyDown('Key.ENTER');
         $this->type('new paragraph in parent div');
@@ -214,29 +210,25 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractFormatsUnitTe
         $this->type('new paragraph in parent div');
         $this->assertHTMLMatch('<h1>Heading One</h1><div><div><p>%1% xtn dolor</p><p>sit %2% <strong>%3%</strong></p></div><p>new paragraph in parent div</p><p>new paragraph in parent div</p><div><p>%4% new div section</p><p>with two paragraphs %5%</p></div></div>');
 
-        $this->selectKeyword(3);
-        $this->keyDown('Key.RIGHT');
+        $this->moveToKeyword(3, 'right');
         $this->keyDown('Key.ENTER');
         $this->type('new paragraph in child div');
         $this->assertHTMLMatch('<h1>Heading One</h1><div><div><p>%1% xtn dolor</p><p>sit %2% <strong>%3%</strong></p><p>new paragraph in child div</p></div><p>new paragraph in parent div</p><p>new paragraph in parent div</p><div><p>%4% new div section</p><p>with two paragraphs %5%</p></div></div>');
 
-        $this->selectKeyword(5);
-        $this->keyDown('Key.RIGHT');
+        $this->moveToKeyword(5, 'right');
         $this->keyDown('Key.ENTER');
         $this->keyDown('Key.ENTER');
         $this->keyDown('Key.ENTER');
         $this->type('new paragraph outside parent div');
         $this->assertHTMLMatch('<h1>Heading One</h1><div><div><p>%1% xtn dolor</p><p>sit %2% <strong>%3%</strong></p><p>new paragraph in child div</p></div><p>new paragraph in parent div</p><p>new paragraph in parent div</p><div><p>%4% new div section</p><p>with two paragraphs %5%</p></div></div><p>new paragraph outside parent div</p>');
 
-        $this->selectKeyword(5);
-        $this->keyDown('Key.RIGHT');
+        $this->moveToKeyword(5, 'right');
         $this->keyDown('Key.ENTER');
         $this->keyDown('Key.ENTER');
         $this->type('new paragraph inside parent div');
         $this->assertHTMLMatch('<h1>Heading One</h1><div><div><p>%1% xtn dolor</p><p>sit %2% <strong>%3%</strong></p><p>new paragraph in child div</p></div><p>new paragraph in parent div</p><p>new paragraph in parent div</p><div><p>%4% new div section</p><p>with two paragraphs %5%</p></div><p>new paragraph inside parent div</p></div><p>new paragraph outside parent div</p>');
 
-        $this->selectKeyword(5);
-        $this->keyDown('Key.RIGHT');
+        $this->moveToKeyword(5, 'right');
         $this->keyDown('Key.ENTER');
         $this->type('new paragraph inside child div');
         $this->assertHTMLMatch('<h1>Heading One</h1><div><div><p>%1% xtn dolor</p><p>sit %2% <strong>%3%</strong></p><p>new paragraph in child div</p></div><p>new paragraph in parent div</p><p>new paragraph in parent div</p><div><p>%4% new div section</p><p>with two paragraphs %5%</p><p>new paragraph inside child div</p></div><p>new paragraph inside parent div</p></div><p>new paragraph outside parent div</p>');
@@ -1394,6 +1386,9 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractFormatsUnitTe
         $this->click($this->findKeyword(2));
         $this->assertTrue($this->topToolbarButtonExists('formats', 'disabled'), 'Formats icon should not appear in the top toolbar.');
 
+        $this->click($this->findKeyword(1));
+        sleep(1);
+
         $this->selectKeyword(2);
         $this->assertTrue($this->topToolbarButtonExists('formats', 'disabled'), 'Formats icon should not appear in the top toolbar.');
         $this->assertFalse($this->inlineToolbarButtonExists('formats'), 'Formats button should not be available');
@@ -1430,8 +1425,7 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractFormatsUnitTe
         $this->clickTopToolbarButton('DIV', NULL, TRUE);
         $this->assertHTMLMatch('<h1>Heading One</h1><p>%1% xtn dolor</p><div>sit %2% <strong>%3%</strong></div>');
 
-        $this->selectKeyword(3);
-        $this->keyDown('Key.RIGHT');
+        $this->moveToKeyword(3, 'right');
         $this->keyDown('Key.ENTER');
         $this->type('New content %4%');
 

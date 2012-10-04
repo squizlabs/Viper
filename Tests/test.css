@@ -7,7 +7,7 @@ body {
 
 #content {
     width: 800px;
-    height: 600px;
+    height: 650px;
     margin: 90px 0 0 250px;
     overflow: auto;
 }
@@ -85,20 +85,26 @@ caption {
 
 .Viper-button .Viper-buttonIcon,
 .Viper-button.Viper-selected .Viper-buttonIcon,
-.Viper-button.Viper-selected.Viper-active .Viper-buttonIcon {
+.Viper-button.Viper-selected.Viper-active .Viper-buttonIcon,
+body.Viper-unitTest .ViperAccessibilityPlugin #HTMLCS-wrapper .Viper-buttonIcon {
     margin-left: -16px;
-    margin-top: -8px;
+    margin-top: -6px;
 }
 
 .Viper-button.Viper-disabled .Viper-buttonIcon {
-    margin-left: -15px;
+    margin-left: -8px;
     margin-top: -15px;
 }
 
 .Viper-button.Viper-active .Viper-buttonIcon {
-    margin-top: -8px;
-    margin-left: -9px;
+    margin-top: -14px;
+    margin-left: -17px;
 }
+
+.Viper-buttonIcon.Viper-justifyBlock {
+    width: 10px;
+}   
+
 
 #__allBtns {
     top: 20px;
@@ -119,7 +125,7 @@ h1,h2,h3,h4,h5,h6 {
     font-size: 20px;
 }
 
-td,th {
+#content td, #content th {
     min-width: 30px;
     padding: 4px 1px;
 }

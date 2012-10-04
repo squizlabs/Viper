@@ -223,8 +223,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreStylesUnitTest extends AbstractViper
      */
     public function testStartAndStopStyleWithShortcut()
     {
-        $this->selectKeyword(1);
-        $this->keyDown('Key.RIGHT');
+        $this->moveToKeyword(1, 'right');
 
         $this->keyDown('Key.CMD + b');
         $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar is not active');
@@ -263,8 +262,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreStylesUnitTest extends AbstractViper
      */
     public function testStartAndStopStyleWithButtons()
     {
-        $this->selectKeyword(1);
-        $this->keyDown('Key.RIGHT');
+        $this->moveToKeyword(1, 'right');
 
         $this->clickTopToolbarButton('bold');
         $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar is not active');
@@ -309,8 +307,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreStylesUnitTest extends AbstractViper
         $this->keyDown('Key.CMD + b');
         $this->assertHTMLMatch('<p><em><strong>%1% %2% %3%</strong></em></p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
-        $this->selectKeyword(1);
-        $this->keyDown('Key.RIGHT');
+        $this->moveToKeyword(1, 'right');
 
         $this->type(' ');
 
@@ -350,8 +347,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreStylesUnitTest extends AbstractViper
         $this->keyDown('Key.CMD + b');
         $this->assertHTMLMatch('<p><em><strong>%1% %2% %3%</strong></em></p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
-        $this->selectKeyword(3);
-        $this->keyDown('Key.RIGHT');
+        $this->moveToKeyword(3, 'right');
 
         $this->keyDown('Key.CMD + b');
         $this->assertTrue($this->topToolbarButtonExists('bold'), 'Bold icon in the top toolbar is active');
@@ -371,8 +367,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreStylesUnitTest extends AbstractViper
      */
     public function testStartingStylesForNewParagraph()
     {
-        $this->selectKeyword(3);
-        $this->keyDown('Key.RIGHT');
+        $this->moveToKeyword(3, 'right');
         $this->keyDown('Key.ENTER');
 
         $this->keyDown('Key.CMD + b');
@@ -393,8 +388,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreStylesUnitTest extends AbstractViper
      */
     public function testStartingStylesForNewParagraphUsingIcons()
     {
-        $this->selectKeyword(3);
-        $this->keyDown('Key.RIGHT');
+        $this->moveToKeyword(3, 'right');
         $this->keyDown('Key.ENTER');
 
         $this->clickTopToolbarButton('bold');
@@ -415,8 +409,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreStylesUnitTest extends AbstractViper
      */
     public function testStartingAndStoppingStylesAfterWordThatIsStyled()
     {
-        $this->selectKeyword(4);
-        $this->keyDown('Key.RIGHT');
+        $this->moveToKeyword(4, 'right');
         $this->keyDown('Key.CMD + i');
         $this->assertTrue($this->topToolbarButtonExists('italic'), 'italic icon in the top toolbar should not be active');
         $this->type('test');
@@ -426,8 +419,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreStylesUnitTest extends AbstractViper
 
         $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit <em>%4%</em>test<em>test</em> <strong>%5%</strong></p>');
 
-        $this->selectKeyword(5);
-        $this->keyDown('Key.RIGHT');
+        $this->moveToKeyword(5, 'right');
         $this->keyDown('Key.CMD + b');
         $this->assertTrue($this->topToolbarButtonExists('bold'), 'bold icon in the top toolbar should not be active');
         $this->type('test');
@@ -448,8 +440,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreStylesUnitTest extends AbstractViper
      */
     public function testStartingAndStoppingStylesAfterWordThatIsStyledUsingIcons()
     {
-        $this->selectKeyword(4);
-        $this->keyDown('Key.RIGHT');
+        $this->moveToKeyword(4, 'right');
         $this->clickTopToolbarButton('italic', 'active');
         $this->assertTrue($this->topToolbarButtonExists('italic'), 'italic icon in the top toolbar should not be active');
         $this->type('test');
@@ -459,8 +450,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreStylesUnitTest extends AbstractViper
 
         $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit <em>%4%</em>test<em>test</em> <strong>%5%</strong></p>');
 
-        $this->selectKeyword(5);
-        $this->keyDown('Key.RIGHT');
+        $this->moveToKeyword(5, 'right');
         $this->clickTopToolbarButton('bold', 'active');
         $this->assertTrue($this->topToolbarButtonExists('bold'), 'bold icon in the top toolbar should not be active');
 

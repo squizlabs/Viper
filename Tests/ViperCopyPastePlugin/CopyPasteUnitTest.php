@@ -134,8 +134,7 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
         $this->keyDown('Key.CMD + c');
 
         $this->click($this->findKeyword(1));
-        $this->selectKeyword(2);
-        $this->keyDown('Key.RIGHT');
+        $this->moveToKeyword(2, 'right');
         $this->keyDown('Key.ENTER');
         $this->keyDown('Key.CMD + v');
 
@@ -156,8 +155,7 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
         sleep(1);
         $this->keyDown('Key.CMD + c');
 
-        $this->selectKeyword(1);
-        $this->keyDown('Key.RIGHT');
+        $this->moveToKeyword(1, 'right');
         $this->keyDown('Key.ENTER');
         $this->keyDown('Key.CMD + v');
         sleep(1);
@@ -503,6 +501,7 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
         $this->selectKeyword(2);
         $this->paste(TRUE);
 
+        sleep(1);
         $this->assertHTMLMatch('<p>test %1% test %1%</p>');
 
     }//end testRightClickPaste()

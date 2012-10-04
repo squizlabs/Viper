@@ -116,6 +116,12 @@ Viper.prototype = {
 
     },
 
+    getHistoryManager: function()
+    {
+        return this.ViperHistoryManager;
+
+    },
+
     setSetting: function(setting, value)
     {
         this._settings[setting] = value;
@@ -504,36 +510,40 @@ Viper.prototype = {
             var range = this.getCurrentRange();
             var editableChild = range._getFirstSelectableChild(this.element);
             if (!editableChild) {
-                var blockElement = null;
-                for (var node = this.element.firstChild; node; node = node.nextSibling) {
-                    if (dfx.isBlockElement(node) === true
-                        && dfx.isStubElement(node) === false
-                    ) {
-                        blockElement = node;
-                        break;
-                    }
-                }
-
-                if (blockElement) {
-                    if (this.isBrowser('msie') !== true) {
-                        dfx.setHtml(blockElement, '<br />');
-                    } else {
-                        blockElement.appendChild(document.createTextNode(' '));
+                // Check if any of these elements exist in the content.
+                var tags = 'iframe,img,object';
+                if (dfx.getTag(tags, this.element).length === 0) {
+                    var blockElement = null;
+                    for (var node = this.element.firstChild; node; node = node.nextSibling) {
+                        if (dfx.isBlockElement(node) === true
+                            && dfx.isStubElement(node) === false
+                        ) {
+                            blockElement = node;
+                            break;
+                        }
                     }
 
-                    editableChild = range._getFirstSelectableChild(this.element);
-                } else {
-                    var tagName = this.getDefaultBlockTag();
-                    if (!tagName) {
-                        dfx.setHtml(this.element, '');
-                    } else {
-                        blockElement = document.createElement(tagName);
-                        dfx.setHtml(blockElement, '&nbsp;');
-                        editableChild.appendChild(blockElement);
+                    if (blockElement) {
+                        if (this.isBrowser('msie') !== true) {
+                            dfx.setHtml(blockElement, '<br />');
+                        } else {
+                            blockElement.appendChild(document.createTextNode(' '));
+                        }
+
                         editableChild = range._getFirstSelectableChild(this.element);
-                    }
-                }
-            }
+                    } else {
+                        var tagName = this.getDefaultBlockTag();
+                        if (!tagName) {
+                            dfx.setHtml(this.element, '');
+                        } else {
+                            blockElement = document.createElement(tagName);
+                            dfx.setHtml(blockElement, '&nbsp;');
+                            editableChild.appendChild(blockElement);
+                            editableChild = range._getFirstSelectableChild(this.element);
+                        }
+                    }//end if
+                }//end if
+            }//end if
 
             if (editableChild) {
                 //this.setRange(editableChild, 0);
@@ -594,6 +604,8 @@ Viper.prototype = {
      */
     setEditableElement: function(elem)
     {
+        var self = this;
+
         if (this.element === elem) {
             return;
         }
@@ -626,7 +638,12 @@ Viper.prototype = {
         this.ViperHistoryManager.setActiveElement(elem);
         this.inlineMode = false;
         elem.setAttribute('contentEditable', true);
+        elem.setAttribute('tabindex', 0);
         dfx.setStyle(elem, 'outline', 'none');
+
+        elem.onfocus = function() {
+            self.setEnabled(true);
+        }
 
         if (this.getSetting('changeTracking') === true) {
             ViperChangeTracker.enableChangeTracking();
@@ -704,6 +721,8 @@ Viper.prototype = {
                     if ((dfx.isBlockElement(child) === true && dfx.isStubElement(child) === false)
                         || (child.nodeType !== dfx.ELEMENT_NODE && child.nodeType !== dfx.TEXT_NODE)
                         || dfx.isTag(child, 'hr') === true
+                        || dfx.isTag(child, 'iframe') === true
+                        || dfx.isTag(child, 'object') === true
                     ) {
                         continue;
                     } else if (child.nodeType === dfx.TEXT_NODE && dfx.trim(child.data) === '') {
@@ -4734,7 +4753,10 @@ Viper.prototype = {
                 case 'td':
                 case 'th':
                 case 'caption':
-                    // Nothing to see here PHPCS.
+                    var html = dfx.trim(dfx.getHtml(node));
+                    if (html === '' || dfx.trim(html.replace(/&nbsp;/g, '')) === '') {
+                        dfx.setHtml(node, '&nbsp;');
+                    }
                 break;
 
                 case 'strong':

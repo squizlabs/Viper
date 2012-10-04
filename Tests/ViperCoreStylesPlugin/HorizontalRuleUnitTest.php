@@ -15,8 +15,7 @@ class Viper_Tests_ViperCoreStylesPlugin_HorizontalRuleUnitTest extends AbstractV
     {
         $this->useTest(1);
 
-        $this->selectKeyword(3);
-        $this->keyDown('Key.RIGHT');
+        $this->moveToKeyword(3, 'right');
 
         $this->clickTopToolbarButton('insertHr');
 
@@ -44,8 +43,7 @@ class Viper_Tests_ViperCoreStylesPlugin_HorizontalRuleUnitTest extends AbstractV
     {
         $this->useTest(1);
 
-        $this->selectKeyword(2);
-        $this->type('Key.RIGHT');
+        $this->moveToKeyword(2, 'right');
 
         $this->clickTopToolbarButton('insertHr');
 
@@ -86,8 +84,7 @@ class Viper_Tests_ViperCoreStylesPlugin_HorizontalRuleUnitTest extends AbstractV
     {
         $this->useTest(2);
 
-        $this->selectKeyword(1);
-        $this->keyDown('Key.RIGHT');
+        $this->moveToKeyword(1, 'right');
 
         $this->clickTopToolbarButton('insertHr');
 
@@ -138,9 +135,7 @@ class Viper_Tests_ViperCoreStylesPlugin_HorizontalRuleUnitTest extends AbstractV
         $this->useTest(3);
 
         // Test ul list
-        $this->selectKeyword(2);
-
-        $this->keyDown('Key.RIGHT');
+        $this->moveToKeyword(2, 'right');
         $this->keyDown('Key.ENTER');
         $this->keyDown('Key.SHIFT + Key.TAB');
         $this->clickTopToolbarButton('insertHr');
@@ -148,9 +143,7 @@ class Viper_Tests_ViperCoreStylesPlugin_HorizontalRuleUnitTest extends AbstractV
         $this->assertHTMLMatch('<p>This is ul list:</p><ul><li>List item 1</li><li>List item 2 %1%</li><li>List item 3 %2%</li></ul><p></p><hr /><p></p><p>This is ol list:</p><ol><li>List item 1</li><li>List item 2 %3%</li><li>List item 3 %4%</li></ol>');
 
         // Test ol list
-        $this->selectKeyword(4);
-
-        $this->keyDown('Key.RIGHT');
+        $this->moveToKeyword(4, 'right');
         $this->keyDown('Key.ENTER');
         $this->keyDown('Key.SHIFT + Key.TAB');
         $this->clickTopToolbarButton('insertHr');

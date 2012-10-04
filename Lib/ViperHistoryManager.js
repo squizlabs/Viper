@@ -25,6 +25,7 @@ function ViperHistoryManager(viper)
     this._ignoreAdd     = false;
     this._maxChars      = 50;
     this._charCount     = 0;
+    this._lastAction    = null;
 
 }
 
@@ -217,6 +218,24 @@ ViperHistoryManager.prototype = {
         this._lastAction = null;
 
         return this.redoHistory.length;
+
+    },
+
+    /**
+     * Clear the history.
+     */
+    clear: function()
+    {
+        var lastUndo = this.undoHistory.pop();
+        this.undoHistory = [lastUndo];
+        this.redoHistory = [];
+        this.batchCount  = 0;
+        this.batchTask   = null;
+        this._ignoreAdd  = false;
+        this._lastAction = null;
+        this._charCount  = 0;
+
+        this.viper.fireCallbacks('ViperHistoryManager:clear');
 
     },
 

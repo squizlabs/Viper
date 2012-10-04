@@ -121,7 +121,7 @@ class Viper_Tests_ViperLangToolsPlugin_LanguageUnitTest extends AbstractViperUni
         $this->assertTrue($this->topToolbarButtonExists('langTools', 'active'), 'Language icon in Top Toolbar should be active.');
 
         $this->clickTopToolbarButton('langTools', 'active');
-        $this->assertTrue($this->topToolbarButtonExists('langTools', 'active'), 'Language icon in Top Toolbar should be active.');
+        $this->assertTrue($this->topToolbarButtonExists('langTools', 'selected'), 'Language icon in Top Toolbar should be active.');
 
         $this->selectKeyword(5);
         $this->selectInlineToolbarLineageItem(0);
@@ -377,6 +377,29 @@ class Viper_Tests_ViperLangToolsPlugin_LanguageUnitTest extends AbstractViperUni
 
     }//end testSelectionIsMaintainedWhenSwitchingFromLanguageToClass()
 
+
+    /**
+     * Test undo and redo for language.
+     *
+     * @return void
+     */
+    public function testUndoAndRedoForLanguage()
+    {
+        $this->selectKeyword(2);
+        $this->clickTopToolbarButton('langTools');
+        $this->clickTopToolbarButton('Language', NULL, TRUE);
+        $this->type('en');
+        $this->keyDown('Key.ENTER');
+
+        $this->assertHTMLMatch('<p>%1% <span lang="en">%2%</span> %3%</p><p lang="en">sit amet <strong>%4%</strong></p><p>Test %5%</p><p>Squiz <span lang="en">%6%</span> is orsm</p><p><em>ThE</em> %7% brown fox</p><p><strong>%8%</strong> <em>%9%</em> the lazy dog</p>');
+
+        $this->clickTopToolbarButton('historyUndo');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p lang="en">sit amet <strong>%4%</strong></p><p>Test %5%</p><p>Squiz <span lang="en">%6%</span> is orsm</p><p><em>ThE</em> %7% brown fox</p><p><strong>%8%</strong> <em>%9%</em> the lazy dog</p>');
+
+        $this->clickTopToolbarButton('historyRedo');
+        $this->assertHTMLMatch('<p>%1% <span lang="en">%2%</span> %3%</p><p lang="en">sit amet <strong>%4%</strong></p><p>Test %5%</p><p>Squiz <span lang="en">%6%</span> is orsm</p><p><em>ThE</em> %7% brown fox</p><p><strong>%8%</strong> <em>%9%</em> the lazy dog</p>');
+
+    }//end testUndoAndRedoForLanguage()
 
 
 }//end class

@@ -43,8 +43,7 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractViperListP
      */
     public function testCreatingAListWithASubList()
     {
-        $this->selectKeyword(2);
-        $this->keyDown('Key.RIGHT');
+        $this->moveToKeyword(2, 'right');
         $this->keyDown('Key.ENTER');
 
         $this->type('Test list:');
@@ -513,35 +512,70 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractViperListP
 
 
     /**
+     * Test creat list and click undo.
+     *
+     * @return void
+     */
+    public function testCreateListItemsAndClickUndo()
+    {
+        $this->click($this->findKeyword(2));
+
+        $this->clickTopToolbarButton('listOL');
+        $this->assertHTMLMatch('<ol><li>%1% uuuuuu. %2%</li></ol><p>cPOc ccccc dddd. %3%</p><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa %4% ccccc</li><li>%5% %6% templates</li><li>Audit %7% %8%</li><li>Accessibility audit report</li><li>Recommendations %9% plan</li><li>Squiz Matrix guide</li></ol>');
+
+        $this->clickTopToolbarButton('historyUndo');
+        $this->assertHTMLMatch('<p>%1% uuuuuu. %2%</p><p>cPOc ccccc dddd. %3%</p><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa %4% ccccc</li><li>%5% %6% templates</li><li>Audit %7% %8%</li><li>Accessibility audit report</li><li>Recommendations %9% plan</li><li>Squiz Matrix guide</li></ol>');
+
+        $this->clickTopToolbarButton('historyRedo');
+        $this->assertHTMLMatch('<ol><li>%1% uuuuuu. %2%</li></ol><p>cPOc ccccc dddd. %3%</p><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa %4% ccccc</li><li>%5% %6% templates</li><li>Audit %7% %8%</li><li>Accessibility audit report</li><li>Recommendations %9% plan</li><li>Squiz Matrix guide</li></ol>');
+
+    }//end testCreateListItemsAndClickUndo()
+
+
+    /**
      * Test keyboard navigation.
      *
      * @return void
      */
     public function testListKeyboardNav()
     {
-        $this->selectKeyword(2);
-
-        $this->keyDown('Key.RIGHT');
+        $this->moveToKeyword(2, 'right');
+        usleep(50000);
         $this->keyDown('Key.TAB');
+        usleep(50000);
         $this->keyDown('Key.DOWN');
+        usleep(50000);
 
         $this->keyDown('Key.TAB');
+        usleep(50000);
 
         $this->keyDown('Key.DOWN');
+        usleep(50000);
         $this->keyDown('Key.TAB');
+        usleep(50000);
 
         $this->keyDown('Key.UP');
+        usleep(50000);
         $this->keyDown('Key.SHIFT + Key.TAB');
+        usleep(50000);
         $this->keyDown('Key.DOWN');
+        usleep(50000);
         $this->keyDown('Key.TAB');
+        usleep(50000);
         $this->keyDown('Key.TAB');
+        usleep(50000);
 
         $this->keyDown('Key.DOWN');
+        usleep(50000);
         $this->keyDown('Key.TAB');
+        usleep(50000);
         $this->keyDown('Key.TAB');
+        usleep(50000);
 
         $this->keyDown('Key.DOWN');
+        usleep(50000);
         $this->keyDown('Key.TAB');
+        usleep(50000);
 
         $this->assertHTMLMatch('<ul><li>%1% uuuuuu. %2%</li></ul><p>cPOc ccccc dddd. %3%</p><ul><li>ajhsd sjsjwi hhhh:</li></ul><ol><li>aaa %4% ccccc<ol><li>%5% %6% templates</li></ol></li><li>Audit %7% %8%</li><li>Accessibility audit report</li><li>Recommendations %9% plan</li><li>Squiz Matrix guide</li></ol>');
 
@@ -781,8 +815,7 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractViperListP
      */
     public function testConvertListTypeWithSubList2()
     {
-        $this->selectKeyword(6);
-        $this->keyDown('Key.RIGHT');
+        $this->moveToKeyword(6, 'right');
         $this->keyDown('Key.TAB');
         $this->keyDown('Key.DOWN');
         $this->keyDown('Key.TAB');
@@ -804,8 +837,7 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractViperListP
      */
     public function testConvertSubListTypeA()
     {
-        $this->selectKeyword(7);
-        $this->keyDown('Key.RIGHT');
+        $this->moveToKeyword(7, 'right');
         $this->keyDown('Key.TAB');
         $this->keyDown('Key.UP');
         $this->keyDown('Key.TAB');
@@ -849,8 +881,7 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractViperListP
         $this->selectKeyword(4, 8);
         $this->keyDown('Key.CMD + c');
 
-        $this->selectKeyword(3);
-        $this->keyDown('Key.RIGHT');
+        $this->moveToKeyword(3, 'right');
         $this->keyDown('Key.ENTER');
         $this->keyDown('Key.CMD + v');
 
@@ -872,8 +903,7 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractViperListP
         $this->selectInlineToolbarLineageItem(0);
         $this->keyDown('Key.CMD + c');
 
-        $this->selectKeyword(3);
-        $this->keyDown('Key.RIGHT');
+        $this->moveToKeyword(3, 'right');
         $this->keyDown('Key.ENTER');
         $this->keyDown('Key.CMD + v');
 
@@ -891,8 +921,7 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractViperListP
      */
     public function testCreatingParagraphAfterListBeforeADiv()
     {
-        $this->selectKeyword(1);
-        $this->keyDown('Key.RIGHT');
+        $this->moveToKeyword(1, 'right');
         $this->keyDown('Key.ENTER');
         sleep(1);
         $this->keyDown('Key.ENTER');
@@ -915,8 +944,7 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractViperListP
      */
     public function testCreatingParagraphAfterListBeforeAPre()
     {
-        $this->selectKeyword(1);
-        $this->keyDown('Key.RIGHT');
+        $this->moveToKeyword(1, 'right');
         $this->keyDown('Key.ENTER');
         $this->keyDown('Key.ENTER');
         $this->type('New paragraph');
@@ -937,8 +965,7 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractViperListP
      */
     public function testCreatingParagraphAfterListBeforeAQuote()
     {
-        $this->selectKeyword(1);
-        $this->keyDown('Key.RIGHT');
+        $this->moveToKeyword(1, 'right');
         $this->keyDown('Key.ENTER');
         $this->keyDown('Key.ENTER');
         $this->type('New paragraph');
@@ -959,8 +986,7 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractViperListP
      */
     public function testCreatingParagraphAfterListBeforeAParagraph()
     {
-        $this->selectKeyword(1);
-        $this->keyDown('Key.RIGHT');
+        $this->moveToKeyword(1, 'right');
         $this->keyDown('Key.ENTER');
         $this->keyDown('Key.ENTER');
         $this->type('New paragraph');

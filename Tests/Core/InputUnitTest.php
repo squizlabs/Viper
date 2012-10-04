@@ -54,8 +54,7 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
      */
     public function testCreatingANewParagraph()
     {
-        $this->selectKeyword(1);
-        $this->keyDown('Key.RIGHT');
+        $this->moveToKeyword(1, 'right');
         $this->keyDown('Key.ENTER');
         $this->type('Testing input');
 
@@ -110,8 +109,7 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
      */
     public function testBackspace()
     {
-        $text = $this->selectKeyword(1);
-        $this->keyDown('Key.RIGHT');
+        $this->moveToKeyword(1, 'right');
         $this->keyDown('Key.CMD + b');
         $this->type('test');
         $this->keyDown('Key.CMD + b');
@@ -135,8 +133,7 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
      */
     public function testDelete()
     {
-        $text = $this->selectKeyword(1);
-        $this->keyDown('Key.RIGHT');
+        $this->moveToKeyword(1, 'right');
         $this->keyDown('Key.CMD + b');
         $this->type('test');
         $this->keyDown('Key.CMD + b');
@@ -297,6 +294,60 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
 
 
     /**
+     * Tests that after removing paragraphs and typing it creates a new paragraph.
+     *
+     * @return void
+     */
+    public function testDeleteParagraphAndType()
+    {
+        $this->useTest(1);
+        $this->selectKeyword(1, 2);
+        $this->keyDown('Key.DELETE');
+        $this->assertTrue($this->topToolbarButtonExists('historyUndo'), 'Undo icon should be enabled');
+        $this->type('test123');
+        sleep(1);
+        $this->assertHTMLMatch('<p>test test1 test2</p><p>test3 test4 test5</p><p>test123</p>');
+
+        $this->keyDown('Key.ENTER');
+        $this->type('123test');
+        sleep(1);
+        $this->assertHTMLMatch('<p>test test1 test2</p><p>test3 test4 test5</p><p>test123</p><p>123test</p>');
+
+        $this->useTest(1);
+        $this->execJS('viper.setSetting("defaultBlockTag", "div")');
+
+        $this->selectKeyword(1, 2);
+        $this->keyDown('Key.DELETE');
+        $this->assertTrue($this->topToolbarButtonExists('historyUndo'), 'Undo icon should be enabled');
+        $this->type('test123');
+        sleep(1);
+        $this->assertHTMLMatch('<p>test test1 test2</p><p>test3 test4 test5</p><div>test123</div>');
+
+        $this->keyDown('Key.ENTER');
+        $this->type('123test');
+        sleep(1);
+        $this->assertHTMLMatch('<p>test test1 test2</p><p>test3 test4 test5</p><div>test123</div><div>123test</div>');
+
+        $this->useTest(1);
+        $this->execJS('viper.setSetting("defaultBlockTag", "")');
+
+        $this->selectKeyword(1, 2);
+        $this->keyDown('Key.DELETE');
+        $this->assertTrue($this->topToolbarButtonExists('historyUndo'), 'Undo icon should be enabled');
+        $this->type('test123');
+        sleep(1);
+        $this->assertHTMLMatch('<p>test test1 test2</p><p>test3 test4 test5</p>test123');
+
+        $this->keyDown('Key.ENTER');
+        $this->type('123test');
+        sleep(1);
+        $this->assertHTMLMatch('<p>test test1 test2</p><p>test3 test4 test5</p>test123<br />123test');
+
+
+    }//end testDeleteParagraphAndType()
+
+
+    /**
      * Test that inputting text, creating new paragraphs etc work when no base tag is set.
      *
      * @return void
@@ -308,23 +359,20 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
         // Test that typing characters in a node with no block parent does not cause
         // it to be wrapped with a block tag.
         $this->useTest(1);
-        $this->selectKeyword(1);
-        $this->keyDown('Key.RIGHT');
+        $this->moveToKeyword(1, 'right');
         $this->type(' test');
         $this->assertHTMLMatch('%1% test');
 
         // Test that enter key inside a paragraph still splits the container.
         $this->useTest(2);
-        $this->selectKeyword(1);
-        $this->keyDown('Key.RIGHT');
+        $this->moveToKeyword(1, 'right');
         $this->keyDown('Key.ENTER');
         $this->assertHTMLMatch('<p>%1%</p><p>%2%</p>test');
 
         // Test that enter key creates a BR tag instead of creating block elements
         // if the text has no wrapping block elements.
         $this->useTest(3);
-        $this->selectKeyword(1);
-        $this->keyDown('Key.RIGHT');
+        $this->moveToKeyword(1, 'right');
         $this->keyDown('Key.ENTER');
         $this->keyDown('Key.ENTER');
         $this->assertHTMLMatch('%1%<br /><br /> %2%');

@@ -13,8 +13,7 @@ class Viper_Tests_ViperCharMapPlugin_CharacterMapPluginUnitTest extends Abstract
      */
     public function testInsertingCharacter()
     {
-        $this->selectKeyword(1);
-        $this->keyDown('Key.RIGHT');
+        $this->moveToKeyword(1, 'right');
         $this->assertTrue($this->topToolbarButtonExists('charMap'), 'Character map icon should be enabled.');
 
         $this->clickTopToolbarButton('charMap');
@@ -69,6 +68,9 @@ class Viper_Tests_ViperCharMapPlugin_CharacterMapPluginUnitTest extends Abstract
 
         $this->clickTopToolbarButton('historyUndo');
         $this->assertHTMLMatch('<p>LOREM %1% dolor</p><p>sit amet <strong>WoW</strong></p>');
+
+        $this->clickTopToolbarButton('historyRedo');
+        $this->assertHTMLMatch('<p>LOREM X&para;AX dolor</p><p>sit amet <strong>WoW</strong></p>');
 
     }//end testInsertingASymbolAndClickingUndo()
 
