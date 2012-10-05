@@ -4531,10 +4531,20 @@ Viper.prototype = {
             dfx.remove(bookmarks);
         }
 
-        try {
-            // Remove viper selection.
-            this.highlightToSelection(elem);
-        } catch (e) {}
+        // Remove viper selection.
+        var highlights = dfx.getClass('__viper_selHighlight', elem);
+        for (var i = 0; i < highlights.length; i++) {
+            if (dfx.hasClass(highlights[i], '__viper_cleanOnly') !== true) {
+                while (highlights[i].firstChild) {
+                    dfx.insertBefore(highlights[i], highlights[i].firstChild);
+                }
+
+                dfx.remove(highlights[i]);
+            } else {
+                dfx.removeClass(highlights[i], '__viper_selHighlight');
+                dfx.removeClass(highlights[i], '__viper_cleanOnly');
+            }
+        }
 
     },
 
