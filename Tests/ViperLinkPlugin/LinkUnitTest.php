@@ -520,6 +520,7 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->keyDown('Key.ENTER');
         $this->clickTopToolbarButton('link', 'selected');
 
+        $this->click($this->findKeyword(2));
         $this->selectKeyword(1);
 
         $this->clickTopToolbarButton('link', 'active');
@@ -634,7 +635,6 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->clickInlineToolbarButton('linkRemove');
 
         // Test two words
-        $this->click($this->findKeyword(1));
         $this->selectKeyword(1, 2);
         $this->clickInlineToolbarButton('link');
         $this->type('http://www.squizlabs.com');
@@ -673,8 +673,7 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
 
         $this->clickInlineToolbarButton('linkRemove');
 
-        // Test two words
-        $this->click($this->findKeyword(1));
+        // Test two words.
         $this->selectKeyword(1, 2);
         $this->clickInlineToolbarButton('link');
         $this->type('http://www.squizlabs.com');
