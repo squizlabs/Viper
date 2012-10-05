@@ -107,7 +107,17 @@ ViperIERange.prototype = {
         ) {
             var startParentElement = clone.parentElement();
             if (startParentElement !== eclone.parentElement() || dfx.isBlockElement(startParentElement) === true) {
+                var pElemB = eclone.parentElement();
                 eclone.moveEnd('character', -1);
+                var pElemA = eclone.parentElement();
+                if (dfx.isBlockElement(pElemB) === true 
+                    && dfx.isBlockElement(pElemA) === false
+                    && !pElemA.nextSibling
+                ) {
+                    // eclone.moveEnd('character', -1);
+                } else {
+                    eclone.moveEnd('character', 1);
+                }
             }
         }
 
