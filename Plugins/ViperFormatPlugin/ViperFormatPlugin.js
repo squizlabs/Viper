@@ -598,7 +598,7 @@ ViperFormatPlugin.prototype = {
 
         // Listen for the main toolbar update and update the statuses of the buttons.
         this.viper.registerCallback('ViperToolbarPlugin:updateToolbar', 'ViperFormatPlugin', function(data) {
-            var nodeSelection = data.range.getNodeSelection();
+            var nodeSelection = data.range.getNodeSelection(null, true);
             var startNode = data.range.getStartNode();
             var endNode   = data.range.getEndNode();
             if (!endNode) {

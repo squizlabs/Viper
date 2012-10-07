@@ -127,6 +127,7 @@ class Viper_Tests_ViperFormatPlugin_ParagraphUnitTest extends AbstractFormatsUni
     {
         $this->selectKeyword(3);
         $this->selectInlineToolbarLineageItem(0);
+        sleep(1);
         $this->keyDown('Key.CMD + b');
         $this->keyDown('Key.CMD + i');
 
@@ -235,13 +236,19 @@ class Viper_Tests_ViperFormatPlugin_ParagraphUnitTest extends AbstractFormatsUni
         $this->selectInlineToolbarLineageItem(0);
         $this->keyDown('Key.RIGHT');
         $this->keyDown('Key.ENTER');
+        sleep(1);
         $this->type('New content');
+        sleep(1);
         $this->keyDown('Key.SHIFT + Key.LEFT');
+        sleep(1);
         $this->selectInlineToolbarLineageItem(0);
         $this->keyDown('Key.RIGHT');
+        sleep(1);
         $this->type(' on the page');
         $this->keyDown('Key.ENTER');
+        sleep(1);
         $this->type('More new content');
+        sleep(1);
 
         $this->assertHTMLMatch('<p>%1% xtn %2%</p><p>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p><div>%4% paragraph to change to a p</div><p>New content on the page</p><p>More new content</p>');
 
@@ -432,6 +439,7 @@ class Viper_Tests_ViperFormatPlugin_ParagraphUnitTest extends AbstractFormatsUni
         $this->assertTrue($this->topToolbarButtonExists('listOL'), 'Ordered list icon should be available in the top toolbar');
         $this->assertTrue($this->topToolbarButtonExists('listUL'), 'Unordered list icon should be available in the top toolbar');
 
+        $this->click($this->findKeyword(1));
         $this->selectKeyword(3);
         $this->assertTrue($this->topToolbarButtonExists('listOL'), 'Ordered list icon should be available in the top toolbar');
         $this->assertTrue($this->topToolbarButtonExists('listUL'), 'Unordered list icon should be available in the top toolbar');
