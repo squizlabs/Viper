@@ -103,7 +103,7 @@ body.Viper-unitTest .ViperAccessibilityPlugin #HTMLCS-wrapper .Viper-buttonIcon 
 
 .Viper-buttonIcon.Viper-justifyBlock {
     width: 10px;
-}   
+}
 
 
 #__allBtns {
@@ -130,7 +130,7 @@ h1,h2,h3,h4,h5,h6 {
     padding: 4px 1px;
 }
 
-.googlechrome td, .googlechrome th {
+#content.googlechrome td, #content.googlechrome th {
     padding: 2px 2px;
 }
 
