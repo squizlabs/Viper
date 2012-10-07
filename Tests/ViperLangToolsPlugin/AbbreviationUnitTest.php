@@ -250,6 +250,41 @@ class Viper_Tests_ViperLangToolsPlugin_AbbreviationUnitTest extends AbstractVipe
     }//end testUndoAndRedoForAbbreviation()
 
 
+    /**
+     * Test applying abbreviation, deleting it and then clicking undo.
+     *
+     * @return void
+     */
+    public function testUndoAfterDeletingAbbreviation()
+    {
+        // Apply abbreviation
+        $this->selectKeyword(2);
+        $this->clickTopToolbarButton('langTools');
+        $this->clickTopToolbarButton('Abbreviation', NULL, TRUE);
+        $this->clickField('Abbreviation');
+        $this->type('abc');
+        $this->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>%1% <abbr title="abc">%2%</abbr> %3%</p><p>sit amet <strong>%4%</strong></p><p>Squiz <abbr title="abc">%5%</abbr> is orsm</p><p>The <em>%6%</em> brown fox</p>');
+
+        // Delete abbreviation
+        $this->selectKeyword(2);
+        $this->clickTopToolbarButton('langTools', 'active');
+        $this->clickTopToolbarButton('Abbreviation', 'active', TRUE);
+        $this->clearFieldValue('Abbreviation');
+        $this->keyDown('Key.ENTER');
+        $this->clickTopToolbarButton('langTools', 'selected');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit amet <strong>%4%</strong></p><p>Squiz <abbr title="abc">%5%</abbr> is orsm</p><p>The <em>%6%</em> brown fox</p>');
+
+        // Press undo
+        $this->clickTopToolbarButton('historyUndo');
+        $this->assertHTMLMatch('<p>%1% <abbr title="abc">%2%</abbr> %3%</p><p>sit amet <strong>%4%</strong></p><p>Squiz <abbr title="abc">%5%</abbr> is orsm</p><p>The <em>%6%</em> brown fox</p>');
+
+        $this->clickTopToolbarButton('historyRedo');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit amet <strong>%4%</strong></p><p>Squiz <abbr title="abc">%5%</abbr> is orsm</p><p>The <em>%6%</em> brown fox</p>');
+
+    }//end testUndoAfterDeletingAbbreviation()
+
+
 }//end class
 
 ?>
