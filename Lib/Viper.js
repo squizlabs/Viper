@@ -4205,6 +4205,8 @@ Viper.prototype = {
             nodes = [this.element];
         }
 
+        this.getViperRange().clearNodeSelectionCache();
+
         this.fireCallbacks('Viper:nodesChanged', nodes);
 
         // Update the markers.

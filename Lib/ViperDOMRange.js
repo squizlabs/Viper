@@ -690,13 +690,25 @@ ViperDOMRange.prototype = {
 
     },
 
+    /**
+     * Caching for the getNodeSelection method.
+     */
     _nodeSel: {},
 
-    getNodeSelection: function(range)
+    /**
+     * Clears the getNodeSelection() method cache.
+     */
+    clearNodeSelectionCache: function()
+    {
+        this._nodeSel = {};
+    },
+
+    getNodeSelection: function(range, forceUpdate)
     {
         range = range || this;
 
-        if (this._nodeSel
+        if (forceUpdate !== true
+            && this._nodeSel
             && this._nodeSel.startContainer === range.startContainer
             && this._nodeSel.endContainer === range.endContainer
             && this._nodeSel.startOffset === range.startOffset
