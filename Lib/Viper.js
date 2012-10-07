@@ -4543,6 +4543,9 @@ Viper.prototype = {
             } else {
                 dfx.removeClass(highlights[i], '__viper_selHighlight');
                 dfx.removeClass(highlights[i], '__viper_cleanOnly');
+                if (!highlights[0].getAttribute('class')) {
+                    highlights[0].removeAttribute('class');
+                }
             }
         }
 
