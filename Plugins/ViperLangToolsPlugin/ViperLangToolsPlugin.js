@@ -146,7 +146,7 @@ ViperLangToolsPlugin.prototype = {
         var lastChild  = elem.lastChild;
 
         while (elem.firstChild) {
-            this.viper.insertBefore(elem, elem.firstChild);
+            dfx.insertBefore(elem, elem.firstChild);
         }
 
         dfx.remove(elem);
