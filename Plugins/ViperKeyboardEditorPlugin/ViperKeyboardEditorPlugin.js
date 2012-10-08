@@ -178,6 +178,10 @@ ViperKeyboardEditorPlugin.prototype = {
                 endNode   = startNode;
             }
 
+            if (dfx.trim(dfx.trim(endNode.data)).replace(String.fromCharCode(160), '') === '') {
+                endNode.data = '';
+            }
+
             if (range.collapsed === true
                 && ((endNode.nodeType === dfx.TEXT_NODE && range.endOffset === endNode.data.length)
                 || endNode.nodeType === dfx.ELEMENT_NODE && dfx.isTag(endNode, 'br') && !endNode.nextSibling)
@@ -263,13 +267,23 @@ ViperKeyboardEditorPlugin.prototype = {
                         }
 
                         if (p.firstChild.nodeType === dfx.TEXT_NODE) {
-                            range.setEnd(p.firstChild, 0);
-                            range.setStart(p.firstChild, 0);
+                            if (this.viper.isBrowser('msie') === true
+                                && p.firstChild.data === String.fromCharCode(160)
+                            ) {
+                                range.setEnd(p.firstChild, 1);
+                                range.collapse(false);
+                                range.moveEnd('character', -1);
+                                range.collapse(false);
+                            } else {
+                                range.setEnd(p.firstChild, 0);
+                                range.collapse(false);
+                            }
                         } else {
                             range.selectNode(p.firstChild);
+                            range.collapse(true);
                         }
 
-                        range.collapse(true);
+                        
                         ViperSelection.addRange(range);
 
                         if (this.viper.isBrowser('firefox') === false) {
