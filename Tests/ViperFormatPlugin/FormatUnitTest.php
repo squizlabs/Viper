@@ -784,7 +784,8 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractFormatsUnitTe
         $this->clickInlineToolbarButton('Div', NULL, TRUE);
         $this->assertHTMLMatch('<h1>Heading One</h1><div>%1% xtn dolor</div><blockquote><p>sit %2% <strong>%3%</strong></p></blockquote>');
 
-        // Check the status of the format icons
+        // Check the status of the format icons.
+        $this->click($this->findKeyword(1));
         $this->selectKeyword(1, 3);
         $this->clickInlineToolbarButton('formats');
         $this->checkStatusOfFormatIconsInTheInlineToolbar('disabled', NULL, 'disabled', 'disabled');
@@ -1362,6 +1363,7 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractFormatsUnitTe
         $this->click($this->findKeyword(1));
         $this->assertTrue($this->topToolbarButtonExists('formats', 'disabled'), 'Formats icon should not appear in the top toolbar.');
 
+        $this->click($this->findKeyword(2));
         $this->selectKeyword(1);
         $this->assertTrue($this->topToolbarButtonExists('formats', 'disabled'), 'Formats icon should not appear in the top toolbar.');
         $this->assertFalse($this->inlineToolbarButtonExists('formats'), 'Formats button should not be available');
