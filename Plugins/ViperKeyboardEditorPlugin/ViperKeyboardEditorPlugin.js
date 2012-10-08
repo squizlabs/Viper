@@ -178,7 +178,10 @@ ViperKeyboardEditorPlugin.prototype = {
                 endNode   = startNode;
             }
 
-            if (dfx.trim(dfx.trim(endNode.data)).replace(String.fromCharCode(160), '') === '') {
+            if (endNode 
+                && endNode.nodeType === dfx.TEXT_NODE 
+                && dfx.trim(dfx.trim(endNode.data)).replace(String.fromCharCode(160), '') === ''
+            ) {
                 endNode.data = '';
             }
 
@@ -346,14 +349,15 @@ ViperKeyboardEditorPlugin.prototype = {
                 && range.startOffset === 0
                 && range.collapsed === true
                 && dfx.isTag(startNode, 'li') === true
-                && this.viper.getBrowserVersion() >= 9
+               // && this.viper.getBrowserVersion() >= 9
             ) {
                 if (!startNode.nextSibling || (startNode.nextSibling.nodeType === dfx.TEXT_NODE && !startNode.nextSibling.nextSibling)) {
                     if (startNode.parentNode.parentNode === this.viper.getViperElement()) {
                         var p = document.createElement('p');
                         dfx.setHtml(p, '&nbsp');
                         dfx.insertAfter(startNode.parentNode, p);
-                        range.setEnd(p.firstChild, 0);
+                        range.setEnd(p.firstChild, 1);
+                        range.moveEnd('character', -1);
                         range.collapse(false);
                         ViperSelection.addRange(range);
 
@@ -372,7 +376,7 @@ ViperKeyboardEditorPlugin.prototype = {
                 // started by browser then getting range without delay would still
                 // point to the empty list item. With delay it will be in the new
                 // paragraph tag.
-                self.viper.fireSelectionChanged();
+                self.viper.fireSelectionChanged(range, true);
             }, 5);
 
             // Let the browser handle everything else.

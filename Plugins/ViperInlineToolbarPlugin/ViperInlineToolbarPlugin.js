@@ -498,7 +498,7 @@ ViperInlineToolbarPlugin.prototype = {
         range             = range || this.viper.getViperRange();
         var lineage       = [];
         var parent        = null;
-        var nodeSelection = nodeSelection || range.getNodeSelection(range);
+        var nodeSelection = nodeSelection || range.getNodeSelection(range, true);
 
         if (nodeSelection) {
             parent = nodeSelection;
