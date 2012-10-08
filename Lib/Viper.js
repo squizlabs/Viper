@@ -4018,7 +4018,18 @@ Viper.prototype = {
             try {
                 range = self.adjustRange();
             } catch (e) {}
-            self.fireSelectionChanged(range);
+            
+            if (range.collapsed === true && self.isBrowser('msie') === true) {
+                // If clicked inside the previous selection then IE takes a lot  
+                // longer to update the caret position so if the range is collapsed
+                // wait nearly half a second to trigger the selection changed
+                // event.
+                setTimeout(function() {
+                    self.fireSelectionChanged(self.adjustRange(), true);
+                }, 500);
+            } else {
+                self.fireSelectionChanged(range, true);
+            }
         }, 5);
 
     },
