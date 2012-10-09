@@ -690,13 +690,25 @@ ViperDOMRange.prototype = {
 
     },
 
+    /**
+     * Caching for the getNodeSelection method.
+     */
     _nodeSel: {},
 
-    getNodeSelection: function(range)
+    /**
+     * Clears the getNodeSelection() method cache.
+     */
+    clearNodeSelectionCache: function()
+    {
+        this._nodeSel = {};
+    },
+
+    getNodeSelection: function(range, forceUpdate)
     {
         range = range || this;
 
-        if (this._nodeSel
+        if (forceUpdate !== true
+            && this._nodeSel
             && this._nodeSel.startContainer === range.startContainer
             && this._nodeSel.endContainer === range.endContainer
             && this._nodeSel.startOffset === range.startOffset
@@ -799,11 +811,22 @@ ViperDOMRange.prototype = {
             && range.startOffset === 0
             && range.endOffset === endNode.data.length
             && range.commonAncestorContainer
+            && range.commonAncestorContainer.nodeType === dfx.ELEMENT_NODE
             && this._getFirstSelectableChild(range.commonAncestorContainer) === startNode
             && this._getLastSelectableChild(range.commonAncestorContainer) === endNode
         ) {
             this._nodeSel.node = range.commonAncestorContainer;
             return range.commonAncestorContainer;
+        } else if (startNode.nodeType === dfx.TEXT_NODE
+            && endNode.nodeType === dfx.TEXT_NODE
+            && range.startOffset === 0
+            && range.endOffset === endNode.data.length
+            && common
+            && this._getFirstSelectableChild(common) === startNode
+            && this._getLastSelectableChild(common) === endNode
+        ) {
+            this._nodeSel.node = common;
+            return common;
         }
 
         // We may need to adjust the "startNode" depending on its offset.

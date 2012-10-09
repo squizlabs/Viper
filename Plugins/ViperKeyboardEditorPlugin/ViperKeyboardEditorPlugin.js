@@ -178,6 +178,13 @@ ViperKeyboardEditorPlugin.prototype = {
                 endNode   = startNode;
             }
 
+            if (endNode
+                && endNode.nodeType === dfx.TEXT_NODE
+                && dfx.trim(dfx.trim(endNode.data)).replace(String.fromCharCode(160), '') === ''
+            ) {
+                endNode.data = '';
+            }
+
             if (range.collapsed === true
                 && ((endNode.nodeType === dfx.TEXT_NODE && range.endOffset === endNode.data.length)
                 || endNode.nodeType === dfx.ELEMENT_NODE && dfx.isTag(endNode, 'br') && !endNode.nextSibling)
@@ -263,13 +270,23 @@ ViperKeyboardEditorPlugin.prototype = {
                         }
 
                         if (p.firstChild.nodeType === dfx.TEXT_NODE) {
-                            range.setEnd(p.firstChild, 0);
-                            range.setStart(p.firstChild, 0);
+                            if (this.viper.isBrowser('msie') === true
+                                && p.firstChild.data === String.fromCharCode(160)
+                            ) {
+                                range.setEnd(p.firstChild, 1);
+                                range.collapse(false);
+                                range.moveEnd('character', -1);
+                                range.collapse(false);
+                            } else {
+                                range.setEnd(p.firstChild, 0);
+                                range.collapse(false);
+                            }
                         } else {
                             range.selectNode(p.firstChild);
+                            range.collapse(true);
                         }
 
-                        range.collapse(true);
+
                         ViperSelection.addRange(range);
 
                         if (this.viper.isBrowser('firefox') === false) {
@@ -332,14 +349,15 @@ ViperKeyboardEditorPlugin.prototype = {
                 && range.startOffset === 0
                 && range.collapsed === true
                 && dfx.isTag(startNode, 'li') === true
-                && this.viper.getBrowserVersion() >= 9
+               // && this.viper.getBrowserVersion() >= 9
             ) {
                 if (!startNode.nextSibling || (startNode.nextSibling.nodeType === dfx.TEXT_NODE && !startNode.nextSibling.nextSibling)) {
                     if (startNode.parentNode.parentNode === this.viper.getViperElement()) {
                         var p = document.createElement('p');
                         dfx.setHtml(p, '&nbsp');
                         dfx.insertAfter(startNode.parentNode, p);
-                        range.setEnd(p.firstChild, 0);
+                        range.setEnd(p.firstChild, 1);
+                        range.moveEnd('character', -1);
                         range.collapse(false);
                         ViperSelection.addRange(range);
 
@@ -348,7 +366,52 @@ ViperKeyboardEditorPlugin.prototype = {
                         return false;
                     }
                 }
+            }//end if
 
+            var selectedNode = range.getNodeSelection();
+            var viperElem    = this.viper.getViperElement();
+            if (selectedNode && selectedNode === viperElem) {
+                var elem = document.createElement(defaultTagName);
+                dfx.setHtml(elem, '<br />');
+                if (viperElem.firstChild) {
+                    dfx.insertBefore(viperElem.firstChild, elem);
+                } else {
+                    viperElem.appendChild(elem);
+                }
+
+                range.selectNode(elem.firstChild);
+                range.collapse(true);
+                ViperSelection.addRange(range);
+                this.viper.fireSelectionChanged();
+                return false;
+            } else if (!selectedNode
+                && startNode
+                && startNode === endNode
+                && startNode.nodeType === dfx.ELEMENT_NODE
+            ) {
+                var elem = document.createElement(defaultTagName);
+                dfx.setHtml(elem, '<br />');
+                dfx.insertBefore(startNode, elem);
+                range.selectNode(elem.firstChild);
+                range.collapse(true);
+                ViperSelection.addRange(range);
+                this.viper.fireSelectionChanged();
+                return false;
+            } else if (!selectedNode
+                && startNode
+                && endNode
+                && startNode !== endNode
+                && startNode.nodeType === dfx.ELEMENT_NODE
+                && endNode.nodeType === dfx.ELEMENT_NODE
+            ) {
+                var elem = document.createElement(defaultTagName);
+                dfx.setHtml(elem, '<br />');
+                dfx.insertAfter(endNode, elem);
+                range.selectNode(elem.firstChild);
+                range.collapse(true);
+                ViperSelection.addRange(range);
+                this.viper.fireSelectionChanged();
+                return false;
             }//end if
 
             setTimeout(function() {
@@ -358,7 +421,7 @@ ViperKeyboardEditorPlugin.prototype = {
                 // started by browser then getting range without delay would still
                 // point to the empty list item. With delay it will be in the new
                 // paragraph tag.
-                self.viper.fireSelectionChanged();
+                self.viper.fireSelectionChanged(range, true);
             }, 5);
 
             // Let the browser handle everything else.

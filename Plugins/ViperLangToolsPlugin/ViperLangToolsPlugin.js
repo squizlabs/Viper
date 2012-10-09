@@ -146,7 +146,7 @@ ViperLangToolsPlugin.prototype = {
         var lastChild  = elem.lastChild;
 
         while (elem.firstChild) {
-            this.viper.insertBefore(elem, elem.firstChild);
+            dfx.insertBefore(elem, elem.firstChild);
         }
 
         dfx.remove(elem);
@@ -318,6 +318,8 @@ ViperLangToolsPlugin.prototype = {
                     node.removeAttribute('lang');
                     if (!node.className && !node.id && dfx.isTag(node, 'span') === true) {
                         this.removeElement(node);
+                    } else {
+                        this.viper.fireNodesChanged();
                     }
                 } else {
                     var parents = this.getSurroundingParents(node);

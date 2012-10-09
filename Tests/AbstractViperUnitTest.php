@@ -2318,8 +2318,24 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
             $endKeyword = $startKeyword;
         }
 
-        $start = $this->find($startKeywordImage, NULL, $this->getData('textSimmilarity'));
+        try {
+            $start = $this->find($startKeywordImage, NULL, $this->getData('textSimmilarity'));
+        } catch (Exception $e) {
+            // Sometimes the caret is causing Sikuli not to find the keyword, Click on another keyword
+            // and then try to find this keyword again.
+            try {
+                if ($startKeyword === 1) {
+                    $this->click($this->findKeyword($startKeyword + 1));
+                } else {
+                    $this->click($this->findKeyword(1));
+                }
 
+                $start = $this->find($startKeywordImage, NULL, $this->getData('textSimmilarity'));
+            } catch (Exception $e) {
+                throw new Exception('Failed to find keyword: '.$this->getKeyword($startKeyword));
+            }
+        }
+        
         $end = $start;
         if ($startKeyword !== $endKeyword) {
             $end = $this->find($this->_getKeywordImage($endKeyword), NULL, $this->getData('textSimmilarity'));

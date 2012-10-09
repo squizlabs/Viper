@@ -670,7 +670,7 @@ ViperCoreStylesPlugin.prototype = {
 
     toggleJustify: function(node, type, force)
     {
-        var current = dfx.getStyle(node, 'text-align');
+        var current = node.style.textAlign;
         if (force !== true && current === type) {
             dfx.setStyle(node, 'text-align', '');
 
@@ -1140,6 +1140,10 @@ ViperCoreStylesPlugin.prototype = {
 
         if (!endNode) {
             endNode = startNode;
+        } else if (endNode.nodeType === dfx.ELEMENT_NODE && this.viper.isBrowser('msie') === true) {
+            endNode = range._getLastSelectableChild(endNode);
+            range.setEnd(endNode, endNode.data.length);
+            ViperSelection.addRange(range);
         }
 
         var commonParent = range.getCommonElement();
@@ -1490,9 +1494,9 @@ ViperCoreStylesPlugin.prototype = {
                         }
                     }
                 }
-            } else {
-                activeStates.alignment = dfx.getStyle(startParent, 'text-align');
-            }
+            } else if (startParent && startParent.style) {
+                activeStates.alignment = startParent.style.textAlign;    
+            }//end if
 
             if (startNode === endNode
                 || range.getNodeSelection()

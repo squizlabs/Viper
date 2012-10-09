@@ -247,6 +247,41 @@ class Viper_Tests_ViperLangToolsPlugin_AcronymUnitTest extends AbstractViperUnit
     }//end testUndoAndRedoForAcronym()
 
 
+    /**
+     * Test applying acronym, deleting it and then clicking undo.
+     *
+     * @return void
+     */
+    public function testUndoAfterDeletingAcronym()
+    {
+        // Apply acronym
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('langTools');
+        $this->clickTopToolbarButton('Acronym', NULL, TRUE);
+        $this->clickField('Acronym');
+        $this->type('abc');
+        $this->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>LOREM <acronym title="abc">%1%</acronym> %2%</p><p>sit amet <strong>%3%</strong></p><p>Squiz <acronym title="abc">%4%</acronym> is orsm</p><p>The <em>%5%</em> brown fox</p>');
+
+        // Delete abbreviation
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('langTools', 'active');
+        $this->clickTopToolbarButton('Acronym', 'active', TRUE);
+        $this->clearFieldValue('Acronym');
+        $this->keyDown('Key.ENTER');
+        $this->clickTopToolbarButton('langTools', 'selected');
+        $this->assertHTMLMatch('<p>LOREM %1% %2%</p><p>sit amet <strong>%3%</strong></p><p>Squiz <acronym title="abc">%4%</acronym> is orsm</p><p>The <em>%5%</em> brown fox</p>');
+
+        // Press undo
+        $this->clickTopToolbarButton('historyUndo');
+        $this->assertHTMLMatch('<p>LOREM <acronym title="abc">%1%</acronym> %2%</p><p>sit amet <strong>%3%</strong></p><p>Squiz <acronym title="abc">%4%</acronym> is orsm</p><p>The <em>%5%</em> brown fox</p>');
+
+        $this->clickTopToolbarButton('historyRedo');
+        $this->assertHTMLMatch('<p>LOREM %1% %2%</p><p>sit amet <strong>%3%</strong></p><p>Squiz <acronym title="abc">%4%</acronym> is orsm</p><p>The <em>%5%</em> brown fox</p>');
+
+    }//end testUndoAfterDeletingAcronym()
+
+
 }//end class
 
 ?>

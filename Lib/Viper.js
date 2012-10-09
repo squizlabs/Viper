@@ -2282,6 +2282,11 @@ Viper.prototype = {
             return;
         } else if (dfx.attr(parent, 'viperbookmark')) {
             return;
+        } else if (parent.nodeType === dfx.COMMENT_NODE) {
+            if (callback) {
+                callback.call(this, parent);
+            }
+            return;
         }
 
         if (!attributes && dfx.getParents(parent, tag).length > 0) {
@@ -4013,7 +4018,18 @@ Viper.prototype = {
             try {
                 range = self.adjustRange();
             } catch (e) {}
-            self.fireSelectionChanged(range);
+            
+            if (range.collapsed === true && self.isBrowser('msie') === true) {
+                // If clicked inside the previous selection then IE takes a lot  
+                // longer to update the caret position so if the range is collapsed
+                // wait nearly half a second to trigger the selection changed
+                // event.
+                setTimeout(function() {
+                    self.fireSelectionChanged(self.adjustRange(), true);
+                }, 500);
+            } else {
+                self.fireSelectionChanged(range, true);
+            }
         }, 5);
 
     },
@@ -4199,6 +4215,8 @@ Viper.prototype = {
         if (!nodes) {
             nodes = [this.element];
         }
+
+        this.getViperRange().clearNodeSelectionCache();
 
         this.fireCallbacks('Viper:nodesChanged', nodes);
 
@@ -4526,10 +4544,23 @@ Viper.prototype = {
             dfx.remove(bookmarks);
         }
 
-        try {
-            // Remove viper selection.
-            this.highlightToSelection(elem);
-        } catch (e) {}
+        // Remove viper selection.
+        var highlights = dfx.getClass('__viper_selHighlight', elem);
+        for (var i = 0; i < highlights.length; i++) {
+            if (dfx.hasClass(highlights[i], '__viper_cleanOnly') !== true) {
+                while (highlights[i].firstChild) {
+                    dfx.insertBefore(highlights[i], highlights[i].firstChild);
+                }
+
+                dfx.remove(highlights[i]);
+            } else {
+                dfx.removeClass(highlights[i], '__viper_selHighlight');
+                dfx.removeClass(highlights[i], '__viper_cleanOnly');
+                if (!highlights[0].getAttribute('class')) {
+                    highlights[0].removeAttribute('class');
+                }
+            }
+        }
 
     },
 
