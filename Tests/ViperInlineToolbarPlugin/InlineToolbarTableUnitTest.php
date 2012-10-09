@@ -385,6 +385,37 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarTABLEUnitTest extends Ab
     }//end testLineageForAnImageInTable()
 
 
+    /**
+     * Test the original lineage items remain the same when lineage is changed.
+     *
+     * @return void
+     */
+    public function testLineageSelectionAfterSelectingLineageItems()
+    {
+        $this->selectKeyword(4);
+        $this->selectInlineToolbarLineageItem(3);
+        $lineage = $this->getHtml('.ViperITP-lineage');
+        $this->assertEquals('<li class="ViperITP-lineageItem">TABLE</li><li class="ViperITP-lineageItem">TBODY</li><li class="ViperITP-lineageItem">Row</li><li class="ViperITP-lineageItem Viper-selected">Cell</li><li class="ViperITP-lineageItem">Selection</li>', $lineage);
+
+        $this->selectInlineToolbarLineageItem(2);
+        $lineage = $this->getHtml('.ViperITP-lineage');
+        $this->assertEquals('<li class="ViperITP-lineageItem">TABLE</li><li class="ViperITP-lineageItem">TBODY</li><li class="ViperITP-lineageItem Viper-selected">Row</li><li class="ViperITP-lineageItem">Cell</li><li class="ViperITP-lineageItem">Selection</li>', $lineage);
+
+        $this->selectInlineToolbarLineageItem(1);
+        $lineage = $this->getHtml('.ViperITP-lineage');
+        $this->assertEquals('<li class="ViperITP-lineageItem">TABLE</li><li class="ViperITP-lineageItem Viper-selected">TBODY</li><li class="ViperITP-lineageItem">Row</li><li class="ViperITP-lineageItem">Cell</li><li class="ViperITP-lineageItem">Selection</li>', $lineage);
+
+        $this->selectInlineToolbarLineageItem(0);
+        $lineage = $this->getHtml('.ViperITP-lineage');
+        $this->assertEquals('<li class="ViperITP-lineageItem Viper-selected">TABLE</li><li class="ViperITP-lineageItem">TBODY</li><li class="ViperITP-lineageItem">Row</li><li class="ViperITP-lineageItem">Cell</li><li class="ViperITP-lineageItem">Selection</li>', $lineage);
+
+        $this->selectInlineToolbarLineageItem(4);
+        $lineage = $this->getHtml('.ViperITP-lineage');
+        $this->assertEquals('<li class="ViperITP-lineageItem">TABLE</li><li class="ViperITP-lineageItem">TBODY</li><li class="ViperITP-lineageItem">Row</li><li class="ViperITP-lineageItem">Cell</li><li class="ViperITP-lineageItem Viper-selected">Selection</li>', $lineage);
+
+    }//end testLineageSelectionAfterSelectingLineageItems()
+
+
 }//end class
 
 ?>
