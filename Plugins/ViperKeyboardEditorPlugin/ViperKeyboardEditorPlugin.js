@@ -349,7 +349,6 @@ ViperKeyboardEditorPlugin.prototype = {
                 && range.startOffset === 0
                 && range.collapsed === true
                 && dfx.isTag(startNode, 'li') === true
-               // && this.viper.getBrowserVersion() >= 9
             ) {
                 if (!startNode.nextSibling || (startNode.nextSibling.nodeType === dfx.TEXT_NODE && !startNode.nextSibling.nextSibling)) {
                     if (startNode.parentNode.parentNode === this.viper.getViperElement()) {
