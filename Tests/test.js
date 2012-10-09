@@ -372,3 +372,8 @@ function useTest(id)
     win.viper.getHistoryManager().clear();
 
 }
+
+function testJSExec()
+{
+    return 'Pass';
+}

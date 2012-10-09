@@ -535,7 +535,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         $this->_switchWindow('main');
         sleep(2);
 
-        $texts = $this->execJS('viperTest.getWindow().getCoords('.json_encode(self::_getKeywordsList()).')', TRUE);
+        $texts = $this->execJS('getCoords('.json_encode(self::_getKeywordsList()).')', TRUE);
         $count = count($texts);
 
         $i      = 1;
@@ -564,7 +564,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
             try {
                 for ($j = 1; $j <= $tests; $j++) {
                     // Change the contents of the test page.
-                    $this->execJS('viperTest.getWindow().changeContent('.$j.', '.$textSimilarity.')', TRUE);
+                    $this->execJS('changeContent('.$j.', '.$textSimilarity.')', TRUE);
 
                     // Test that captured images can be found on the page.
                     for ($i = 1; $i <= $count; $i++) {
@@ -828,6 +828,10 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
 
         sleep(2);
         $this->_switchWindow('main');
+
+        if ($this->execJS('testJSExec()', TRUE) !== 'Pass') {
+            throw new Exception('JavaScript execution test failed!!');
+        }
 
         // Create image for the inline toolbar pattern (the arrow on top).
         sleep(2);
@@ -2335,7 +2339,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
                 throw new Exception('Failed to find keyword: '.$this->getKeyword($startKeyword));
             }
         }
-        
+
         $end = $start;
         if ($startKeyword !== $endKeyword) {
             $end = $this->find($this->_getKeywordImage($endKeyword), NULL, $this->getData('textSimmilarity'));
