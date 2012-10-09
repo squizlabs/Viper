@@ -602,7 +602,7 @@ ViperLinkPlugin.prototype = {
                 tools.enableButton('removeLink');
                 self.updateBubbleFields(link);
             } else {
-                var nodeSelection = data.range.getNodeSelection();
+                var nodeSelection = self.viper.getNodeSelection();
                 var startNode     = null;
                 var endNode       = null;
 
