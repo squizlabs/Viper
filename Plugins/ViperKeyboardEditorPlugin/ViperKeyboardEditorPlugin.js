@@ -178,8 +178,8 @@ ViperKeyboardEditorPlugin.prototype = {
                 endNode   = startNode;
             }
 
-            if (endNode 
-                && endNode.nodeType === dfx.TEXT_NODE 
+            if (endNode
+                && endNode.nodeType === dfx.TEXT_NODE
                 && dfx.trim(dfx.trim(endNode.data)).replace(String.fromCharCode(160), '') === ''
             ) {
                 endNode.data = '';
@@ -286,7 +286,7 @@ ViperKeyboardEditorPlugin.prototype = {
                             range.collapse(true);
                         }
 
-                        
+
                         ViperSelection.addRange(range);
 
                         if (this.viper.isBrowser('firefox') === false) {
@@ -366,7 +366,52 @@ ViperKeyboardEditorPlugin.prototype = {
                         return false;
                     }
                 }
+            }//end if
 
+            var selectedNode = range.getNodeSelection();
+            var viperElem    = this.viper.getViperElement();
+            if (selectedNode && selectedNode === viperElem) {
+                var elem = document.createElement(defaultTagName);
+                dfx.setHtml(elem, '<br />');
+                if (viperElem.firstChild) {
+                    dfx.insertBefore(viperElem.firstChild, elem);
+                } else {
+                    viperElem.appendChild(elem);
+                }
+
+                range.selectNode(elem.firstChild);
+                range.collapse(true);
+                ViperSelection.addRange(range);
+                this.viper.fireSelectionChanged();
+                return false;
+            } else if (!selectedNode
+                && startNode
+                && startNode === endNode
+                && startNode.nodeType === dfx.ELEMENT_NODE
+            ) {
+                var elem = document.createElement(defaultTagName);
+                dfx.setHtml(elem, '<br />');
+                dfx.insertBefore(startNode, elem);
+                range.selectNode(elem.firstChild);
+                range.collapse(true);
+                ViperSelection.addRange(range);
+                this.viper.fireSelectionChanged();
+                return false;
+            } else if (!selectedNode
+                && startNode
+                && endNode
+                && startNode !== endNode
+                && startNode.nodeType === dfx.ELEMENT_NODE
+                && endNode.nodeType === dfx.ELEMENT_NODE
+            ) {
+                var elem = document.createElement(defaultTagName);
+                dfx.setHtml(elem, '<br />');
+                dfx.insertAfter(endNode, elem);
+                range.selectNode(elem.firstChild);
+                range.collapse(true);
+                ViperSelection.addRange(range);
+                this.viper.fireSelectionChanged();
+                return false;
             }//end if
 
             setTimeout(function() {
