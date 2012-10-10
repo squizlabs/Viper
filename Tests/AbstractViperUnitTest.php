@@ -266,21 +266,9 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
             // URL is already changed to the test runner, so just reload.
             $this->setSetting('MinSimilarity', self::$_similarity);
 
-            $this->setAutoWaitTimeout(1);
             $this->reloadPage();
-
-            // Make sure page is loaded.
-            $maxRetries = 4;
-            while ($this->topToolbarButtonExists('bold', 'disabled') === FALSE) {
-                $this->reloadPage();
-                if ($maxRetries === 0) {
-                    throw new Exception('Failed to load Viper test page.');
-                }
-
-                sleep(4);
-
-                $maxRetries--;
-            }
+            $this->setAutoWaitTimeout(1);
+            $this->_waitForViper();
         } else {
             $this->selectBrowser(self::$_browser);
 
@@ -298,21 +286,8 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
             }
 
             $this->goToURL($this->_getBaseUrl().'/test_tmp.html');
-            sleep(2);
             $this->setAutoWaitTimeout(1);
-
-            // Make sure page is loaded.
-            $maxRetries = 4;
-            while ($this->topToolbarButtonExists('bold', 'disabled') === FALSE) {
-                $this->reloadPage();
-                if ($maxRetries === 0) {
-                    throw new Exception('Failed to load Viper test page.');
-                }
-
-                sleep(4);
-
-                $maxRetries--;
-            }
+            $this->_waitForViper();
 
             self::$_testRun = TRUE;
 
@@ -422,6 +397,32 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         }
 
     }//end tearDownAfterClass()
+
+
+    /**
+     * Waits till the Viper elements are loaded.
+     *
+     * @return void
+     * @throws Exception If Viper fails to load on the page.
+     */
+    private function _waitForViper()
+    {
+        $this->setAutoWaitTimeout(5, $this->getTopToolbar());
+
+        // Make sure page is loaded.
+        $maxRetries = 3;
+        while ($this->topToolbarButtonExists('bold', 'disabled') === FALSE) {
+            if ($maxRetries === 0) {
+                throw new Exception('Failed to load Viper test page.');
+            }
+
+            $maxRetries--;
+            $this->reloadPage();
+        }
+
+        $this->setAutoWaitTimeout(1, $this->getTopToolbar());
+
+    }//end _waitForViper()
 
 
     /**
