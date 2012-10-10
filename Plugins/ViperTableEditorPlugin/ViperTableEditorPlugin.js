@@ -3909,7 +3909,9 @@ ViperTableEditorPlugin.prototype = {
     _initCell: function(cell)
     {
         if (this.viper.isBrowser('msie') === true) {
-            dfx.setHtml(cell, '&nbsp;');
+            if (dfx.trim(dfx.getHtml(cell)) === '') {
+                dfx.setHtml(cell, '&nbsp;');
+            }
         } else {
             dfx.setHtml(cell, '<br />');
         }
