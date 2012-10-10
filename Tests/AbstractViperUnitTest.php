@@ -88,62 +88,11 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
     private static $_browserSelected = FALSE;
 
     /**
-     * The selenium session object.
-     *
-     * @var object
-     */
-    private static $_selenium = NULL;
-
-    /**
-     * If TRUE then Selenium session is being used.
-     *
-     * @var boolean
-     */
-    private static $_useSelenium = FALSE;
-
-    /**
-     * If TRUE then a popup is used to execute JS.
-     *
-     * @var boolean
-     */
-    private static $_usePopup = FALSE;
-
-    /**
-     * If TRUE then AJAX polling is used to execute JS.
-     *
-     * @var boolean
-     */
-    private static $_usePolling = FALSE;
-
-    /**
      * If TRUE then AJAX polling is used to execute JS.
      *
      * @var boolean
      */
     private static $_pollFilePath = NULL;
-
-    /**
-     * The Selenium PID.
-     *
-     * This is used to kill the Selenium process at the end of testing.
-     *
-     * @var integer
-     */
-    private static $_seleniumpid = NULL;
-
-    /**
-     * The active browser window.
-     *
-     * @var string
-     */
-    private static $_currentWindow = 'js';
-
-    /**
-     * Keeps cache of JS that is executed.
-     *
-     * @var array
-     */
-    private static $_jsExecCache = array();
 
     /**
      * Keeps cache of JS that is executed.
@@ -225,28 +174,20 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
                 throw new Exception('Invalid browser');
             }
 
-            self::$_browser = $browser;
+            self::$_browser      = $browser;
+            self::$_pollFilePath = dirname(__FILE__).'/tmp/poll';
 
-            if (getenv('VIPER_TEST_USE_SELENIUM') === 'TRUE') {
-                self::$_useSelenium = TRUE;
-            } else if (getenv('VIPER_TEST_USE_POLLING') === 'TRUE') {
-                self::$_usePolling   = TRUE;
-                self::$_pollFilePath = dirname(__FILE__).'/tmp/poll';
-
-                if (file_exists(self::$_pollFilePath) === FALSE) {
-                    mkdir(self::$_pollFilePath, 0777, TRUE);
-                    chmod(self::$_pollFilePath, 0777);
-                } else {
-                    if (file_exists(self::$_pollFilePath.'/_jsres.tmp') === TRUE) {
-                        unlink(self::$_pollFilePath.'/_jsres.tmp');
-                    }
-
-                    if (file_exists(self::$_pollFilePath.'/_jsexec.tmp') === TRUE) {
-                        unlink(self::$_pollFilePath.'/_jsexec.tmp');
-                    }
-                }
+            if (file_exists(self::$_pollFilePath) === FALSE) {
+                mkdir(self::$_pollFilePath, 0777, TRUE);
+                chmod(self::$_pollFilePath, 0777);
             } else {
-                self::$_usePopup = TRUE;
+                if (file_exists(self::$_pollFilePath.'/_jsres.tmp') === TRUE) {
+                    unlink(self::$_pollFilePath.'/_jsres.tmp');
+                }
+
+                if (file_exists(self::$_pollFilePath.'/_jsexec.tmp') === TRUE) {
+                    unlink(self::$_pollFilePath.'/_jsexec.tmp');
+                }
             }
         }//end if
 
@@ -280,14 +221,6 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
             self::$_testContent = file_get_contents($baseDir.'/test.html');
         }
 
-        // Get the JS exec cache.
-        if (empty(self::$_jsExecCache) === TRUE) {
-            $jsExecCacheFile = dirname(__FILE__).'/tmp/js_cache.inc';
-            if (file_exists($jsExecCacheFile) === TRUE) {
-                self::$_jsExecCache = unserialize(file_get_contents($jsExecCacheFile));
-            }
-        }
-
         $viperInclude = '';
         if (getenv('VIPER_TEST_USE_BUILT_VIPER') === 'TRUE') {
             $path = dirname(dirname(__FILE__)).'/build/viper.js';
@@ -300,11 +233,6 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         } else {
             $viperInclude = '<script type="text/javascript" src="../DfxJSLib/dfx.js"></script>
                              <script type="text/javascript" src="../Viper-all.js"></script>';
-        }
-
-        $usePolling = 'false';
-        if (self::$_usePolling === TRUE) {
-            $usePolling = 'true';
         }
 
         $testTitle = $this->getName();
@@ -322,15 +250,11 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         $contents = str_replace('__TEST_VIPER_INCLUDE__', $viperInclude, $contents);
         $contents = str_replace('__TEST_TITLE__', $testTitle, $contents);
         $contents = str_replace('__TEST_JS_INCLUDE__', $jsInclude, $contents);
-        $contents = str_replace('__TEST_JS_EXEC_CACHE__', json_encode(array_flip(self::$_jsExecCache)), $contents);
-        $contents = str_replace('__TEST_JS_EXEC_USEPOLLING__', $usePolling, $contents);
         $dest     = $baseDir.'/test_tmp.html';
         file_put_contents($dest, $contents);
 
         // Change browser and then change the URL.
         if (self::$_testRun === TRUE) {
-            $this->_switchWindow('main');
-
             $this->resizeWindow();
             $this->setDefaultRegion(self::$_window);
 
@@ -371,8 +295,6 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
             $this->goToURL($this->_getBaseUrl().'/test_tmp.html');
             sleep(2);
             $this->setAutoWaitTimeout(1);
-
-            $this->_switchWindow('main');
 
             // Make sure page is loaded.
             $maxRetries = 4;
@@ -525,15 +447,8 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
 
         $url = $this->_getBaseUrl().'/calibrate-text.html';
 
-        if (self::$_usePopup === TRUE) {
-            $url .= '#popup';
-        }
-
         $this->goToURL($url);
-
-        sleep(2);
-        $this->_switchWindow('main');
-        sleep(2);
+        sleep(3);
 
         $texts = $this->execJS('getCoords('.json_encode(self::_getKeywordsList()).')', TRUE);
         $count = count($texts);
@@ -820,14 +735,9 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         $dest = $baseDir.'/tmp-calibrate.html';
 
         $url = $this->_getBaseUrl().'/tmp-calibrate.html';
-        if (self::$_usePopup === TRUE) {
-            $url .= '#popup';
-        }
 
         $this->goToURL($url);
-
-        sleep(2);
-        $this->_switchWindow('main');
+        sleep(3);
 
         if ($this->execJS('testJSExec()', TRUE) !== 'Pass') {
             throw new Exception('JavaScript execution test failed!!');
@@ -973,13 +883,6 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         if (file_exists($path) === TRUE) {
             // Remove the tmp file.
             unlink($path);
-        }
-
-        if (self::$_selenium !== NULL) {
-            if (self::$_seleniumpid !== NULL) {
-                exec('kill -KILL '.self::$_seleniumpid);
-                self::$_seleniumpid = NULL;
-            }
         }
 
     }//end tearDownAfterClass()
@@ -1140,47 +1043,13 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
 
 
     /**
-     * Toggles between main window and the JS execution window.
-     *
-     * @param string $type The window to switch to. If not specified then it will
-     * toggle to inactive window.
-     *
-     * @return void
-     */
-    private function _switchWindow($type=NULL)
-    {
-        if (self::$_usePolling === TRUE) {
-            return;
-        }
-
-        if ($type === self::$_currentWindow) {
-            return;
-        }
-
-        if (self::$_currentWindow === 'js') {
-            self::$_currentWindow = 'main';
-        } else {
-            self::$_currentWindow = 'js';
-        }
-
-        $this->keyDown('Key.CMD + `');
-        sleep(1);
-
-    }//end _switchWindow()
-
-
-    /**
      * Closes the JS exec window.
      *
      * @return void
      */
     public function closeJSWindow()
     {
-        self::$_currentWindow = 'main';
-
-        if (self::$_useSelenium !== TRUE) {
-            $this->execJS('cw();', TRUE, TRUE);
-        }
+        $this->execJS('cw();', TRUE, TRUE);
 
     }//end closeJSWindow()
 
@@ -1530,71 +1399,37 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      */
     protected function selectBrowser($browser)
     {
-        if (self::$_useSelenium === TRUE) {
-            if (self::$_selenium === NULL) {
-                $seleniumPath = dirname(__FILE__).'/Selenium';
-
-                include_once $seleniumPath.'/selenium_webdriver/__init__.php';
-
-                $seleniumCmd = 'java -jar '.$seleniumPath.'/selenium-server-standalone-2.21.0.jar';
-
-                $browser = strtolower($browser);
-                if ($browser === 'google chrome') {
-                    $browser      = 'chrome';
-                    $seleniumCmd .= ' -Dwebdriver.chrome.driver='.$seleniumPath.'/chromedriver';
-                }
-
-                $seleniumCmd .= ' > /dev/null & echo $!';
-
-                self::$_seleniumpid = shell_exec($seleniumCmd);
-                sleep(10);
-
-                $webDriver       = new WebDriver();
-                $session         = $webDriver->session($browser);
-                self::$_selenium = $session;
-                sleep(2);
-
-                if ($browser === 'chrome') {
-                    // Focus Chrome window (TODO: Find another way).
-                    $this->keyDown('Key.SHIFT + Key.CMD + Key.TAB');
-                }
-
-                self::$_browserSelected = TRUE;
-                return;
-            }//end if
-        } else {
-            if ($this->getOS() === 'windows') {
-                if ($browser === 'Google Chrome') {
-                    $browser = '- Google Chrome';
-                } else if ($browser === 'Firefox') {
-                    $browser = 'Mozilla Firefox';
-                } else if ($browser === 'IE8' || $browser === 'IE9') {
-                    $browser = 'Windows Internet Explorer';
-                }
+        if ($this->getOS() === 'windows') {
+            if ($browser === 'Google Chrome') {
+                $browser = '- Google Chrome';
             } else if ($browser === 'Firefox') {
-                $browser = '/Applications/Firefox.app';
+                $browser = 'Mozilla Firefox';
+            } else if ($browser === 'IE8' || $browser === 'IE9') {
+                $browser = 'Windows Internet Explorer';
             }
+        } else if ($browser === 'Firefox') {
+            $browser = '/Applications/Firefox.app';
+        }
 
-            if (self::$_browserSelected === FALSE) {
-                $app = $this->switchApp($browser);
-                if ($this->getOS() !== 'windows') {
-                    $windowNum = 0;
-                    switch ($browser) {
-                        case 'Google Chrome':
-                            $windowNum = 1;
-                        break;
+        if (self::$_browserSelected === FALSE) {
+            $app = $this->switchApp($browser);
+            if ($this->getOS() !== 'windows') {
+                $windowNum = 0;
+                switch ($browser) {
+                    case 'Google Chrome':
+                        $windowNum = 1;
+                    break;
 
-                        default:
-                            $windowNum = 0;
-                        break;
-                    }
+                    default:
+                        $windowNum = 0;
+                    break;
+                }
 
-                    self::$_window = $this->callFunc('window', array($windowNum), $app, TRUE);
-                } else {
-                    self::$_window = $app;
-                }//end if
-            }
-        }//end if
+                self::$_window = $this->callFunc('window', array($windowNum), $app, TRUE);
+            } else {
+                self::$_window = $app;
+            }//end if
+        }
 
         if ($this->getOS() !== 'windows') {
             self::$_window = $this->callFunc('App.focusedWindow', array(), NULL, TRUE);
@@ -2140,119 +1975,40 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
     {
         $this->debug('ExecJS: '.$js);
 
-        // If Selenium is being used then use it to execute the JavaScript.
-        if (self::$_useSelenium === TRUE) {
-            usleep(100000);
+        file_put_contents(self::$_pollFilePath.'/_jsexec.tmp', $js);
+        chmod(self::$_pollFilePath.'/_jsexec.tmp', 0777);
 
-            try {
-                // Need to have window object before the sub dfx calls.
-                $js = str_replace('(dfx', '(window.dfx', $js);
+        if ($js === 'cw();' || $noReturnValue === TRUE) {
+            return;
+        }
 
-                $result = self::$_selenium->execute(
-                    array(
-                     'script' => 'return window.dfx.jsonEncode(window.'.$js.');',
-                     'args'   => array(),
-                    )
-                );
-            } catch (Exception $e) {
-                $this->debug('Selenium error: '.$e->getMessage());
-                throw new Exception('Selenium error: '.$e->getMessage());
+        $startTime = microtime(TRUE);
+        $timeout   = 3;
+        while (file_exists(self::$_pollFilePath.'/_jsres.tmp') === FALSE) {
+            if ((microtime(TRUE) - $startTime) > $timeout) {
+                break;
+            }
+
+            usleep(50000);
+        }
+
+        $result = NULL;
+        if (file_exists(self::$_pollFilePath.'/_jsres.tmp') === TRUE) {
+            $result = file_get_contents(self::$_pollFilePath.'/_jsres.tmp');
+
+            unlink(self::$_pollFilePath.'/_jsres.tmp');
+
+            if ($result === 'undefined' || trim($result) === '') {
+                return NULL;
             }
 
             $result = json_decode($result, TRUE);
 
-            return $result;
-        } else if (self::$_usePolling === TRUE) {
-            file_put_contents(self::$_pollFilePath.'/_jsexec.tmp', $js);
-            chmod(self::$_pollFilePath.'/_jsexec.tmp', 0777);
-
-            if ($js === 'cw();' || $noReturnValue === TRUE) {
-                return;
+            if (is_string($result) === TRUE) {
+                $result = str_replace("\r\n", '\n', $result);
+                $result = str_replace("\n", '\n', $result);
             }
-
-            $startTime = microtime(TRUE);
-            $timeout   = 3;
-            while (file_exists(self::$_pollFilePath.'/_jsres.tmp') === FALSE) {
-                if ((microtime(TRUE) - $startTime) > $timeout) {
-                    break;
-                }
-
-                usleep(50000);
-            }
-
-            $result = NULL;
-            if (file_exists(self::$_pollFilePath.'/_jsres.tmp') === TRUE) {
-                $result = file_get_contents(self::$_pollFilePath.'/_jsres.tmp');
-
-                unlink(self::$_pollFilePath.'/_jsres.tmp');
-
-                if ($result === 'undefined' || trim($result) === '') {
-                    return NULL;
-                }
-
-                $result = json_decode($result, TRUE);
-
-                if (is_string($result) === TRUE) {
-                    $result = str_replace("\r\n", '\n', $result);
-                    $result = str_replace("\n", '\n', $result);
-                }
-            }
-
-            return $result;
-        }//end if
-
-        $this->_switchWindow('js');
-
-        usleep(200000);
-        $this->keyDown($this->_getAccessKeys('j'));
-
-        if ($noCache !== TRUE) {
-            if (isset(self::$_jsExecCache[$js]) === TRUE) {
-                $this->type(self::$_jsExecCache[$js]);
-            } else {
-                $this->type($js);
-                self::$_jsExecCache[$js] = count(self::$_jsExecCache);
-
-                file_put_contents(dirname(__FILE__).'/tmp/js_cache.inc', serialize(self::$_jsExecCache));
-            }
-        } else {
-            $this->type($js);
         }
-
-        usleep(100000);
-        $this->keyDown('Key.ENTER');
-
-        if ($noReturnValue === TRUE) {
-            return NULL;
-        }
-
-        usleep(200000);
-        $this->keyDown('Key.TAB');
-        $this->keyDown('Key.CMD + a');
-        usleep(100000);
-        $this->keyDown('Key.CMD + c');
-        usleep(250000);
-        $this->keyDown('Key.TAB');
-        $this->keyDown('Key.SPACE');
-        usleep(50000);
-
-        $this->_switchWindow('main');
-
-        $text = $this->getClipboard();
-        if (strpos($text, "u'") === 0) {
-            $text = substr($text, 2, -1);
-        }
-
-        $text = str_replace("\n", '\n', $text);
-        $text = str_replace('\\\\"', '\\"', $text);
-        $text = str_replace('\\\'', "'", $text);
-        $text = str_replace('\xa0', ' ', $text);
-
-        if ($text === 'undefined' || trim($text) === '') {
-            return NULL;
-        }
-
-        $result = json_decode($text, TRUE);
 
         return $result;
 
@@ -2575,8 +2331,6 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      */
     protected function goToURL($url)
     {
-        self::$_currentWindow = 'js';
-
         $this->keyDown('Key.CMD+l');
         $this->type($url);
         $this->keyDown('Key.ENTER');
