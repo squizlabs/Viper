@@ -216,7 +216,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
 
         parent::setUp();
 
-        // Create the test file.
+        // Get the contents of the test file template.
         if (self::$_testContent === NULL) {
             self::$_testContent = file_get_contents($baseDir.'/test.html');
         }
@@ -235,6 +235,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
                              <script type="text/javascript" src="../Viper-all.js"></script>';
         }
 
+        // Get stats.
         $testTitle = $this->getName();
         $numFails  = ViperTestListener::getFailures();
         $numErrors = ViperTestListener::getErrors();
@@ -1429,12 +1430,12 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
             } else {
                 self::$_window = $app;
             }//end if
-        }
-
-        if ($this->getOS() !== 'windows') {
-            self::$_window = $this->callFunc('App.focusedWindow', array(), NULL, TRUE);
         } else {
-            self::$_window = $this->switchApp($browser);
+            if ($this->getOS() !== 'windows') {
+                self::$_window = $this->callFunc('App.focusedWindow', array(), NULL, TRUE);
+            } else {
+                self::$_window = $this->switchApp($browser);
+            }
         }
 
         if (self::$_testRun === TRUE) {
