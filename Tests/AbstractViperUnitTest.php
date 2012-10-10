@@ -236,9 +236,13 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         }
 
         // Get stats.
-        $testTitle = $this->getName();
-        $numFails  = ViperTestListener::getFailures();
-        $numErrors = ViperTestListener::getErrors();
+        $testTitle  = $this->getName();
+        $numFails   = ViperTestListener::getFailures();
+        $numErrors  = ViperTestListener::getErrors();
+        $totalTests = ViperTestListener::getNumberOfTests();
+        $testsRun   = ViperTestListener::getTestsRun();
+
+        $testTitle .= '['.$testsRun.'/'.$totalTests.']';
 
         if ($numFails !== 0 || $numErrors !== 0) {
             $testTitle .= '(F:'.ViperTestListener::getFailures().', ';

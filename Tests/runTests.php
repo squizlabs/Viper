@@ -91,6 +91,7 @@ $opts = getopt('s::b::u::t::civ', array('url::', 'built'));
 
         if ($test !== NULL) {
             $phpunitCMD .= ' --filter "'.$test.'"';
+            putenv('VIPER_TEST_FILTER='.$test);
         }
 
         if (empty($unitTests) === TRUE) {
