@@ -421,8 +421,16 @@ ViperTools.prototype = {
             dfx.addClass(textBox, 'Viper-focused');
             self.viper.highlightSelection();
 
-            // Set the caret to the end of the textfield.
-            input.value = input.value;
+            if (self.viper.isBrowser('msie') === true) {
+                setTimeout(function() {
+                    input.focus();
+                    // Set the caret to the end of the textfield.
+                    input.value = input.value;
+                }, 10);
+            } else {
+                // Set the caret to the end of the textfield.
+                input.value = input.value;
+            }
 
             if (self.viper.isBrowser('firefox') === true) {
                 if (dfx.isTag(e.originalEvent.explicitOriginalTarget, 'input') === false) {
