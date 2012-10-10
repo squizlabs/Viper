@@ -111,7 +111,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
     /**
      * List of applications and if they are available in the current system.
      *
-     * @return array
+     * @var array
      */
     private static $_apps = array();
 
@@ -405,6 +405,22 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
 
 
     /**
+     * Cleans up after all tests are completed.
+     *
+     * @return void
+     */
+    public static function tearDownAfterClass()
+    {
+        $path = dirname(__FILE__).'/test_tmp.html';
+        if (file_exists($path) === TRUE) {
+            // Remove the tmp file.
+            unlink($path);
+        }
+
+    }//end tearDownAfterClass()
+
+
+    /**
      * Calibrates the testing to work with the current browser.
      *
      * This method will create images of each button image and place it in a temp
@@ -415,23 +431,19 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      */
     private function _calibrate()
     {
-        $this->_calibrateText();
-        $this->closeJSWindow();
-        $this->_calibrateImage();
-        $this->closeJSWindow();
+        $this->_calibrateKeywords();
+        $this->_calibrateIcons();
 
     }//end _calibrate()
 
 
     /**
-     * Creates special text used by Viper.
-     *
-     * Creates the screenshots of the text
+     * Creates screenshot for the keywords.
      *
      * @return void
      * @throws Exception If it fails to calibrate.
      */
-    private function _calibrateText()
+    private function _calibrateKeywords()
     {
         $this->setAutoWaitTimeout(0.5);
         $baseDir = dirname(__FILE__);
@@ -500,173 +512,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
 
         $this->addData('textSimmilarity', $textSimilarity);
 
-    }//end _calibrateText()
-
-
-    /**
-     * Stores the specified data so that it can be accessed by unit test.
-     *
-     * Stored data is cached and placed in tmp/<browserId>/data.inc file.
-     *
-     * @param string $varName The name of the variable.
-     * @param mixed  $value   The value.
-     *
-     * @return void
-     */
-    protected function addData($varName, $value)
-    {
-        $path = dirname(__FILE__).'/tmp/'.$this->getBrowserid();
-        if (file_exists($path) === FALSE) {
-            mkdir($path, 0755, TRUE);
-        }
-
-        $path .= '/data.inc';
-
-        $data = self::$_data;
-
-        if ($data === NULL) {
-            if (file_exists($path) === TRUE) {
-                include $path;
-            }
-        }
-
-        $data[$varName] = $value;
-
-        self::$_data = $data;
-        file_put_contents($path, '<?php $data = '.var_export($data, TRUE).'; ?>');
-
-    }//end addData()
-
-
-    /**
-     * Returns the value of a stored variable.
-     *
-     * @param string $varName Name of the variable.
-     *
-     * @return mixed
-     */
-    protected function getData($varName)
-    {
-        $data = array();
-        if (self::$_data === NULL) {
-            $path = dirname(__FILE__).'/tmp/'.$this->getBrowserid().'/data.inc';
-            if (file_exists($path) === TRUE) {
-                include $path;
-                self::$_data = $data;
-            }
-        }
-
-        if (isset(self::$_data[$varName]) === TRUE) {
-            return self::$_data[$varName];
-        }
-
-        return NULL;
-
-    }//end getData()
-
-
-    /**
-     * Returns list of available keywords that can be used in tests.
-     *
-     * @return array
-     */
-    private static function _getKeywordsList()
-    {
-        $keywords = array(
-                     'XAX',
-                     'XBX',
-                     'XCX',
-                     'XDX',
-                     'XTX',
-                     'XFX',
-                     'XGX',
-                     'XHX',
-                     'XIX',
-                     'XJX',
-                     'XKX',
-                     'XLX',
-                     'XMX',
-                    );
-        return $keywords;
-
-    }//end _getKeywordsList()
-
-
-    /**
-     * Returns the keyword string for the specifed keyword index.
-     *
-     * @param integer $index The index of the keyword.
-     *
-     * @return string
-     */
-    protected function getKeyword($index)
-    {
-        $keyword = $this->_getKeyword($index - 1);
-        return $keyword;
-
-    }//end getKeyword()
-
-
-    /**
-     * Returns the keyword string for the specifed keyword index.
-     *
-     * @param integer $index The index of the keyword.
-     *
-     * @return string
-     */
-    private function _getKeyword($index)
-    {
-        $keywords = self::_getKeywordsList();
-        $keyword  = $keywords[$index];
-
-        return $keyword;
-
-    }//end _getKeyword()
-
-
-    /**
-     * Returns the image path of the specified keyword.
-     *
-     * @param integer $index The index of the keyword.
-     *
-     * @return string
-     */
-    private function _getKeywordImage($index)
-    {
-        $baseDir  = dirname(__FILE__);
-        $imgPath  = $baseDir.'/tmp/Images/'.$this->getBrowserid();
-        $imgPath .= '/text-'.$index.'.png';
-
-        return $imgPath;
-
-    }//end _getKeywordImage()
-
-
-    /**
-     * Replaces the keywords in given content.
-     *
-     * @param string $content The content to search.
-     *
-     * @return string
-     */
-    protected function replaceKeywords($content)
-    {
-        $keywords = self::_getKeywordsList();
-        foreach ($keywords as $index => $keyword) {
-            $content = str_replace('%'.($index + 1).'%', $keyword, $content);
-        }
-
-        // Replace URL keyword.
-        $url = getenv('VIPER_TEST_URL');
-        if (empty($url) === TRUE) {
-            $url = dirname(__FILE__);
-        }
-
-        $content = str_replace('%url%', $url, $content);
-
-        return $content;
-
-    }//end replaceKeywords()
+    }//end _calibrateKeywords()
 
 
     /**
@@ -675,7 +521,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      * @return void
      * @throws Exception If it fails to calibrate.
      */
-    private function _calibrateImage()
+    private function _calibrateIcons()
     {
         $this->setAutoWaitTimeout(0.5);
 
@@ -846,7 +692,173 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
 
         $this->addData('buttonSimmilarity', $similarity);
 
-    }//end _calibrateImage()
+    }//end _calibrateIcons()
+
+
+    /**
+     * Stores the specified data so that it can be accessed by unit test.
+     *
+     * Stored data is cached and placed in tmp/<browserId>/data.inc file.
+     *
+     * @param string $varName The name of the variable.
+     * @param mixed  $value   The value.
+     *
+     * @return void
+     */
+    protected function addData($varName, $value)
+    {
+        $path = dirname(__FILE__).'/tmp/'.$this->getBrowserid();
+        if (file_exists($path) === FALSE) {
+            mkdir($path, 0755, TRUE);
+        }
+
+        $path .= '/data.inc';
+
+        $data = self::$_data;
+
+        if ($data === NULL) {
+            if (file_exists($path) === TRUE) {
+                include $path;
+            }
+        }
+
+        $data[$varName] = $value;
+
+        self::$_data = $data;
+        file_put_contents($path, '<?php $data = '.var_export($data, TRUE).'; ?>');
+
+    }//end addData()
+
+
+    /**
+     * Returns the value of a stored variable.
+     *
+     * @param string $varName Name of the variable.
+     *
+     * @return mixed
+     */
+    protected function getData($varName)
+    {
+        $data = array();
+        if (self::$_data === NULL) {
+            $path = dirname(__FILE__).'/tmp/'.$this->getBrowserid().'/data.inc';
+            if (file_exists($path) === TRUE) {
+                include $path;
+                self::$_data = $data;
+            }
+        }
+
+        if (isset(self::$_data[$varName]) === TRUE) {
+            return self::$_data[$varName];
+        }
+
+        return NULL;
+
+    }//end getData()
+
+
+    /**
+     * Returns list of available keywords that can be used in tests.
+     *
+     * @return array
+     */
+    private static function _getKeywordsList()
+    {
+        $keywords = array(
+                     'XAX',
+                     'XBX',
+                     'XCX',
+                     'XDX',
+                     'XTX',
+                     'XFX',
+                     'XGX',
+                     'XHX',
+                     'XIX',
+                     'XJX',
+                     'XKX',
+                     'XLX',
+                     'XMX',
+                    );
+        return $keywords;
+
+    }//end _getKeywordsList()
+
+
+    /**
+     * Returns the keyword string for the specifed keyword index.
+     *
+     * @param integer $index The index of the keyword.
+     *
+     * @return string
+     */
+    protected function getKeyword($index)
+    {
+        $keyword = $this->_getKeyword($index - 1);
+        return $keyword;
+
+    }//end getKeyword()
+
+
+    /**
+     * Returns the keyword string for the specifed keyword index.
+     *
+     * @param integer $index The index of the keyword.
+     *
+     * @return string
+     */
+    private function _getKeyword($index)
+    {
+        $keywords = self::_getKeywordsList();
+        $keyword  = $keywords[$index];
+
+        return $keyword;
+
+    }//end _getKeyword()
+
+
+    /**
+     * Returns the image path of the specified keyword.
+     *
+     * @param integer $index The index of the keyword.
+     *
+     * @return string
+     */
+    private function _getKeywordImage($index)
+    {
+        $baseDir  = dirname(__FILE__);
+        $imgPath  = $baseDir.'/tmp/Images/'.$this->getBrowserid();
+        $imgPath .= '/text-'.$index.'.png';
+
+        return $imgPath;
+
+    }//end _getKeywordImage()
+
+
+    /**
+     * Replaces the keywords in given content.
+     *
+     * @param string $content The content to search.
+     *
+     * @return string
+     */
+    protected function replaceKeywords($content)
+    {
+        $keywords = self::_getKeywordsList();
+        foreach ($keywords as $index => $keyword) {
+            $content = str_replace('%'.($index + 1).'%', $keyword, $content);
+        }
+
+        // Replace URL keyword.
+        $url = getenv('VIPER_TEST_URL');
+        if (empty($url) === TRUE) {
+            $url = dirname(__FILE__);
+        }
+
+        $content = str_replace('%url%', $url, $content);
+
+        return $content;
+
+    }//end replaceKeywords()
 
 
     /**
@@ -866,6 +878,13 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
     }//end _getBaseUrl()
 
 
+    /**
+     * Returns the URL for the test page.
+     *
+     * @param string $path The additional path.
+     *
+     * @return string
+     */
     protected function getTestURL($path='')
     {
         return $this->_getBaseUrl().$path;
@@ -874,19 +893,102 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
 
 
     /**
-     * Cleans up after all tests are completed.
+     * Reloads the page.
      *
      * @return void
      */
-    public static function tearDownAfterClass()
+    protected function reloadPage()
     {
-        $path = dirname(__FILE__).'/test_tmp.html';
-        if (file_exists($path) === TRUE) {
-            // Remove the tmp file.
-            unlink($path);
+        $topLeft = array(
+                    'x1' => 0,
+                    'y1' => 0,
+                    'x2' => 14,
+                    'y2' => 14,
+                   );
+        $region  = $this->getRegionOnPage($topLeft);
+        $this->click($region);
+        sleep(1);
+
+    }//end reloadPage()
+
+
+    /**
+     * Sets the browser URL to the specified URL.
+     *
+     * @param string $url The new URL.
+     *
+     * @return void
+     */
+    protected function goToURL($url)
+    {
+        $this->keyDown('Key.CMD+l');
+        $this->type($url);
+        $this->keyDown('Key.ENTER');
+        sleep(1);
+
+    }//end goToURL()
+
+
+    /**
+     * Changes the active application to the specified browser.
+     *
+     * @param string $browser The name of the browser.
+     *
+     * @return void
+     */
+    protected function selectBrowser($browser)
+    {
+        if ($this->getOS() === 'windows') {
+            if ($browser === 'Google Chrome') {
+                $browser = '- Google Chrome';
+            } else if ($browser === 'Firefox') {
+                $browser = 'Mozilla Firefox';
+            } else if ($browser === 'IE8' || $browser === 'IE9') {
+                $browser = 'Windows Internet Explorer';
+            }
+        } else if ($browser === 'Firefox') {
+            $browser = '/Applications/Firefox.app';
         }
 
-    }//end tearDownAfterClass()
+        if (self::$_browserSelected === FALSE) {
+            $app = $this->switchApp($browser);
+            if ($this->getOS() !== 'windows') {
+                $windowNum = 0;
+                switch ($browser) {
+                    case 'Google Chrome':
+                        $windowNum = 1;
+                    break;
+
+                    default:
+                        $windowNum = 0;
+                    break;
+                }
+
+                self::$_window = $this->callFunc('window', array($windowNum), $app, TRUE);
+            } else {
+                self::$_window = $app;
+            }//end if
+        } else {
+            if ($this->getOS() !== 'windows') {
+                self::$_window = $this->callFunc('App.focusedWindow', array(), NULL, TRUE);
+            } else {
+                self::$_window = $this->switchApp($browser);
+            }
+        }//end if
+
+        if (self::$_testRun === TRUE) {
+            // Adjust the brwoser window region so that its only the area of the actual page.
+            $pageLoc = $this->getPageTopLeft();
+            $this->setH(self::$_window, ($this->getH(self::$_window) - ($pageLoc['y'] - $this->getY(self::$_window))));
+            $this->setX(self::$_window, $pageLoc['x']);
+            $this->setY(self::$_window, $pageLoc['y']);
+        }
+
+        $this->setDefaultRegion(self::$_window);
+
+        self::$_browserSelected = TRUE;
+
+    }//end selectBrowser()
 
 
     /**
@@ -946,12 +1048,12 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         $w = $this->getW($this->getBrowserWindow());
         $h = $this->getH($this->getBrowserWindow());
 
-        self::$_windowSize = array(
-                              'w' => $w,
-                              'h' => $h,
-                             );
+        $size = array(
+                 'w' => $w,
+                 'h' => $h,
+                );
 
-        return self::$_windowSize;
+        return $size;
 
     }//end getBrowserWindowSize()
 
@@ -1038,7 +1140,10 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         // Update the self::$_window object.
         $this->selectBrowser($this->getBrowserName());
 
-        $this->getBrowserWindowSize();
+        self::$_windowSize = array(
+                              'w' => $w,
+                              'h' => $h,
+                             );
 
     }//end resizeWindow()
 
@@ -1269,77 +1374,6 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
 
 
     /**
-     * Rebuilds a HTML string with tag attributes in alphabetical order.
-     *
-     * @param string $html The HTML string to rebuild.
-     *
-     * @return string
-     */
-    private function _orderTagAttributes($html)
-    {
-        $attrRegex = '(?:(?:\s+\w+(?:\s*=\s*(?:"(?:[^"]+)?"))?)+)?(?:(?:\s+\w+(?:\s*=\s*(?:"(?:[^"]+)?"))?)+)?\s*\/?';
-        $matches   = preg_split(
-            '/(<\w+'.$attrRegex.'>)/i',
-            $html,
-            -1,
-            (PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY)
-        );
-
-        $newHtml = '';
-        foreach ($matches as $match) {
-            if ($match[0] === '<' && $match[1] !== '/') {
-                // This is an open tag.
-                $tagMatches = array();
-                $tagRegex   = '/(<\w+)'.$attrRegex.'>/i';
-                preg_match($tagRegex, $match, $tagMatches);
-                if ($tagMatches[1].'>' !== $match) {
-                    // This tag has attributes, which need to be ordered
-                    // alphabetically as the browser changes the order sometimes.
-                    $attrs = array();
-                    preg_match_all('/\s+(\w+)\s*=\s*(?:"([^"]+)?")/i', $match, $attrs);
-                    asort($attrs[1]);
-                    $match = $tagMatches[1];
-                    foreach ($attrs[1] as $attrIndex => $attrName) {
-                        if ($attrName === 'style') {
-                            $attrVal = $attrs[2][$attrIndex];
-                            // Values in a style attribute need to be ordered
-                            // alphabetically as the browser changes the order sometimes.
-                            $vals = array();
-                            preg_match_all('/(\w+)\s*:\s*[^:]+;?/i', $attrVal, $vals);
-                            asort($vals[1]);
-                            $match .= ' '.$attrs[1][$attrIndex].'="';
-                            foreach ($vals[1] as $valIndex => $value) {
-                                if (strpos($vals[0][$valIndex], ';') === FALSE) {
-                                    $vals[0][$valIndex] .= ';';
-                                }
-
-                                $match .= $vals[0][$valIndex].' ';
-                            }
-
-                            $match  = rtrim($match);
-                            $match .= '"';
-                        } else {
-                            $match .= $attrs[0][$attrIndex];
-                        }
-                    }//end foreach
-
-                    if (substr($tagMatches[0], -2) === '/>') {
-                        $match .= ' />';
-                    } else {
-                        $match .= '>';
-                    }
-                }//end if
-            }//end if
-
-            $newHtml .= $match;
-        }//end foreach
-
-        return $newHtml;
-
-    }//end _orderTagAttributes()
-
-
-    /**
      * Assert that given HTML string matches the test page's HTML.
      *
      * @param string  $html             The HTML string to compare.
@@ -1392,65 +1426,74 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
 
 
     /**
-     * Changes the active application to the specified browser.
+     * Rebuilds a HTML string with tag attributes in alphabetical order.
      *
-     * @param string $browser The name of the browser.
+     * @param string $html The HTML string to rebuild.
      *
-     * @return void
+     * @return string
      */
-    protected function selectBrowser($browser)
+    private function _orderTagAttributes($html)
     {
-        if ($this->getOS() === 'windows') {
-            if ($browser === 'Google Chrome') {
-                $browser = '- Google Chrome';
-            } else if ($browser === 'Firefox') {
-                $browser = 'Mozilla Firefox';
-            } else if ($browser === 'IE8' || $browser === 'IE9') {
-                $browser = 'Windows Internet Explorer';
-            }
-        } else if ($browser === 'Firefox') {
-            $browser = '/Applications/Firefox.app';
-        }
+        $attrRegex = '(?:(?:\s+\w+(?:\s*=\s*(?:"(?:[^"]+)?"))?)+)?(?:(?:\s+\w+(?:\s*=\s*(?:"(?:[^"]+)?"))?)+)?\s*\/?';
+        $matches   = preg_split(
+            '/(<\w+'.$attrRegex.'>)/i',
+            $html,
+            -1,
+            (PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY)
+        );
 
-        if (self::$_browserSelected === FALSE) {
-            $app = $this->switchApp($browser);
-            if ($this->getOS() !== 'windows') {
-                $windowNum = 0;
-                switch ($browser) {
-                    case 'Google Chrome':
-                        $windowNum = 1;
-                    break;
+        $newHtml = '';
+        foreach ($matches as $match) {
+            if ($match[0] === '<' && $match[1] !== '/') {
+                // This is an open tag.
+                $tagMatches = array();
+                $tagRegex   = '/(<\w+)'.$attrRegex.'>/i';
+                preg_match($tagRegex, $match, $tagMatches);
+                if ($tagMatches[1].'>' !== $match) {
+                    // This tag has attributes, which need to be ordered
+                    // alphabetically as the browser changes the order sometimes.
+                    $attrs = array();
+                    preg_match_all('/\s+(\w+)\s*=\s*(?:"([^"]+)?")/i', $match, $attrs);
+                    asort($attrs[1]);
+                    $match = $tagMatches[1];
+                    foreach ($attrs[1] as $attrIndex => $attrName) {
+                        if ($attrName === 'style') {
+                            $attrVal = $attrs[2][$attrIndex];
+                            // Values in a style attribute need to be ordered
+                            // alphabetically as the browser changes the order sometimes.
+                            $vals = array();
+                            preg_match_all('/(\w+)\s*:\s*[^:]+;?/i', $attrVal, $vals);
+                            asort($vals[1]);
+                            $match .= ' '.$attrs[1][$attrIndex].'="';
+                            foreach ($vals[1] as $valIndex => $value) {
+                                if (strpos($vals[0][$valIndex], ';') === FALSE) {
+                                    $vals[0][$valIndex] .= ';';
+                                }
 
-                    default:
-                        $windowNum = 0;
-                    break;
-                }
+                                $match .= $vals[0][$valIndex].' ';
+                            }
 
-                self::$_window = $this->callFunc('window', array($windowNum), $app, TRUE);
-            } else {
-                self::$_window = $app;
+                            $match  = rtrim($match);
+                            $match .= '"';
+                        } else {
+                            $match .= $attrs[0][$attrIndex];
+                        }//end if
+                    }//end foreach
+
+                    if (substr($tagMatches[0], -2) === '/>') {
+                        $match .= ' />';
+                    } else {
+                        $match .= '>';
+                    }
+                }//end if
             }//end if
-        } else {
-            if ($this->getOS() !== 'windows') {
-                self::$_window = $this->callFunc('App.focusedWindow', array(), NULL, TRUE);
-            } else {
-                self::$_window = $this->switchApp($browser);
-            }
-        }
 
-        if (self::$_testRun === TRUE) {
-            // Adjust the brwoser window region so that its only the area of the actual page.
-            $pageLoc = $this->getPageTopLeft();
-            $this->setH(self::$_window, ($this->getH(self::$_window) - ($pageLoc['y'] - $this->getY(self::$_window))));
-            $this->setX(self::$_window, $pageLoc['x']);
-            $this->setY(self::$_window, $pageLoc['y']);
-        }
+            $newHtml .= $match;
+        }//end foreach
 
-        $this->setDefaultRegion(self::$_window);
+        return $newHtml;
 
-        self::$_browserSelected = TRUE;
-
-    }//end selectBrowser()
+    }//end _orderTagAttributes()
 
 
     /**
@@ -1924,44 +1967,6 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
 
 
     /**
-     * Returns the accesskey combination depending on OS and browser.
-     *
-     * @param string $key The key to include in the combination.
-     *
-     * @return string
-     */
-    private function _getAccessKeys($key)
-    {
-        $os   = $this->getOS();
-        $keys = '';
-        switch (self::$_browser) {
-            case 'Safari':
-            case 'Google Chrome':
-            case 'Firefox':
-                if ($os === 'osx') {
-                    $keys = 'Key.CTRL + Key.ALT';
-                } else {
-                    $keys = 'Key.ALT';
-                }
-            break;
-
-            default:
-                if ($os === 'windows') {
-                    $keys = 'Key.ALT';
-                } else {
-                    $keys = 'Key.CTRL';
-                }
-            break;
-        }//end switch
-
-        $keys .= ' + '.$key;
-
-        return $keys;
-
-    }//end _getAccessKeys()
-
-
-    /**
      * Executes the specified JavaScript and returns its result.
      *
      * @param string  $js            The JavaScript to execute.
@@ -1980,7 +1985,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         chmod(self::$_pollFilePath.'/_jsexec.tmp', 0777);
 
         if ($js === 'cw();' || $noReturnValue === TRUE) {
-            return;
+            return NULL;
         }
 
         $startTime = microtime(TRUE);
@@ -2070,6 +2075,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      * @param integer $endKeyword   The keyword where the selection will end.
      *
      * @return void
+     * @throws Exception If the keyword is not found.
      */
     protected function selectKeyword($startKeyword, $endKeyword=NULL)
     {
@@ -2141,6 +2147,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         }//end if
 
     }//end selectKeyword()
+
 
     /**
      * Moves the caret to the right or left of the specified keyword.
@@ -2265,7 +2272,8 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
     /**
      * Returns the label image for the specified label element.
      *
-     * @param string $label The label of a field.
+     * @param string  $label The label of a field.
+     * @param boolean $force Force update the label screenshot.
      *
      * @return string
      */
@@ -2304,48 +2312,12 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
 
 
     /**
-     * Reloads the page.
-     *
-     * @return void
-     */
-    protected function reloadPage()
-    {
-        $topLeft = array(
-                    'x1' => 0,
-                    'y1' => 0,
-                    'x2' => 14,
-                    'y2' => 14,
-                   );
-        $region  = $this->getRegionOnPage($topLeft);
-        $this->click($region);
-        sleep(1);
-
-    }//end reloadPage()
-
-
-    /**
-     * Sets the browser URL to the specified URL.
-     *
-     * @param string $url The new URL.
-     *
-     * @return void
-     */
-    protected function goToURL($url)
-    {
-        $this->keyDown('Key.CMD+l');
-        $this->type($url);
-        $this->keyDown('Key.ENTER');
-        sleep(1);
-
-    }//end goToURL()
-
-
-    /**
      * Returns the HTML of the test page.
      *
      * @param string  $selector           The jQuery selector to use for finding the element.
      * @param integer $index              The element index of the resulting array.
      * @param boolean $removeTableHeaders If TRUE then table headers will be removed.
+     * @param boolean $noModify           If TRUE the HTML will not be modified.
      *
      * @return string
      */
