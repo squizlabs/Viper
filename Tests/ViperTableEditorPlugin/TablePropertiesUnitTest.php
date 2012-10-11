@@ -15,6 +15,7 @@ class Viper_Tests_ViperTableEditorPlugin_TablePropertiesUnitTest extends Abstrac
     {
         $this->showTools(0, 'table');
 
+        $this->mouseMoveOffset(-100, -100);
         $this->assertTrue($this->inlineToolbarButtonExists('tableSettings', 'selected'));
         $this->assertTrue($this->inlineToolbarButtonExists('cssClass'));
         $this->assertTrue($this->inlineToolbarButtonExists('delete'));
@@ -25,6 +26,7 @@ class Viper_Tests_ViperTableEditorPlugin_TablePropertiesUnitTest extends Abstrac
         $this->clickCell(7);
         $this->clickTopToolbarButton('table', 'active');
         $this->click($this->getToolsButton('table'));
+        $this->mouseMoveOffset(-100, -100);
 
         $this->assertTrue($this->inlineToolbarButtonExists('tableSettings', 'selected'));
         $this->assertTrue($this->inlineToolbarButtonExists('cssClass'));

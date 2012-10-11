@@ -431,12 +431,12 @@ class Viper_Tests_ViperTableEditorPlugin_RowUnitTest extends AbstractViperTableE
         // Test moving a row up
         $this->showTools(7, 'row');
         $this->clickInlineToolbarButton('mergeUp');
-        $this->assertTrue($this->inlineToolbarButtonExists('delete'));
+        $this->assertTrue($this->inlineToolbarButtonExists('addAbove'));
 
         // Test moving a row down
         $this->showTools(5, 'row');
         $this->clickInlineToolbarButton('mergeDown');
-        $this->assertTrue($this->inlineToolbarButtonExists('delete'));
+        $this->assertTrue($this->inlineToolbarButtonExists('addAbove'));
 
     }//end testInlineToolbarStaysOpenAfterMovingRow()
 
