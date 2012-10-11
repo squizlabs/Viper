@@ -422,6 +422,11 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
 
         $this->setAutoWaitTimeout(1, $this->getTopToolbar());
 
+        if ($this->getBrowserid() === 'ie8') {
+            // Give some time for IE to catch up....
+            sleep(2);
+        }
+
     }//end _waitForViper()
 
 
@@ -904,6 +909,8 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      */
     protected function reloadPage()
     {
+        $this->execJS('viper.destroy()');
+
         $topLeft = array(
                     'x1' => 0,
                     'y1' => 0,
