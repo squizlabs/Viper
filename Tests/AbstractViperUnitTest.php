@@ -409,6 +409,10 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
     {
         $this->setAutoWaitTimeout(5, $this->getTopToolbar());
 
+        // Make sure the page is loaded first with the window target icon loaded.
+        $this->setAutoWaitTimeout(10);
+        $this->getPageTopLeft();
+
         // Make sure page is loaded.
         $maxRetries = 3;
         while ($this->topToolbarButtonExists('bold', 'disabled') === FALSE) {
@@ -421,6 +425,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         }
 
         $this->setAutoWaitTimeout(1, $this->getTopToolbar());
+        $this->setAutoWaitTimeout(1);
 
         if ($this->getBrowserid() === 'ie8') {
             // Give some time for IE to catch up....
