@@ -136,6 +136,23 @@ ViperTableEditorPlugin.prototype = {
             }
         });
 
+        this.viper.registerCallback('Viper:keyUp', 'ViperTableEditorPlugin', function(e) {
+            var range = self.viper.getViperRange();
+
+            if (range.collapsed === true
+                && range.startContainer.nodeType === dfx.TEXT_NODE
+                && ['td', 'th'].inArray(dfx.getTagName(range.startContainer.parentNode)) === true
+            ) {
+                var ohtml = dfx.getHtml(range.startContainer.parentNode);
+                var nhtml = ohtml.replace(/^&nbsp;/g, '');
+                nhtml     = nhtml.replace(/&nbsp;$/g, '');
+
+                if (nhtml !== ohtml && nhtml !== '') {
+                    dfx.setHtml(range.startContainer.parentNode, nhtml);
+                }
+            }
+        });
+
         this.viper.registerCallback('Viper:keyDown', 'ViperTableEditorPlugin', function(e) {
             if (e.which === 9) {
                 // Handle tab key.
@@ -305,9 +322,18 @@ ViperTableEditorPlugin.prototype = {
                     self.hideCellToolsIcon();
                     self.removeHighlights();
 
-                    showToolbar = true;
                     // Show cell Tools.
-                    return self.showCellToolsIcon(cell);
+                    if (self.viper.isBrowser('msie') === true) {
+                        setTimeout(function() {
+                            showToolbar = true;
+                            self.showCellToolsIcon(cell);
+                        }, 10);    
+                    } else {
+                        showToolbar = true;
+                        self.showCellToolsIcon(cell);
+                    }
+                    
+                    return;
                 }
 
                 self.hideCellToolsIcon();
