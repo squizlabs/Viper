@@ -2970,6 +2970,8 @@ Viper.prototype = {
                 ViperSelection.removeAllRanges();
                 range.setEnd(endPos, endOffset);
                 range.setStart(startPos, startOffset);
+                range.setEnd(endPos, endOffset);
+                range.setStart(startPos, startOffset);
             }//end if
         }
 
