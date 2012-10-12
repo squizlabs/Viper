@@ -2591,6 +2591,25 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
     }//end _rightClickPasteDiv()
 
 
+    /**
+     * Runs the test only if the specified OS or the browser is being used.
+     *
+     * @param string $os The OS the test runs for, if NULL it will run for all OS types.
+     * @param string $browser The browser the test runs for, if NULL it will run for all browsers.
+     *
+     * @return void
+     */
+    protected function runTestFor($os=NULL, $browser=NULL)
+    {
+        if ($os !== NULL && $os !== $this->getOS()) {
+            $this->markTestSkipped('This test does not run for this OS');
+        } else if ($browser !== NULL && $browser !== $this->getBrowserid()) {
+            $this->markTestSkipped('This test does not run for this browser');
+        }
+
+    }//end runTestFor()
+
+
 }//end class
 
 ?>
