@@ -407,11 +407,11 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      */
     private function _waitForViper()
     {
-        $this->setAutoWaitTimeout(5, $this->getTopToolbar());
-
         // Make sure the page is loaded first with the window target icon loaded.
         $this->setAutoWaitTimeout(10);
         $this->getPageTopLeft();
+
+        $this->setAutoWaitTimeout(5, $this->getTopToolbar());
 
         // Make sure page is loaded.
         $maxRetries = 3;
@@ -2036,8 +2036,6 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
                 $result = str_replace("\r\n", '\n', $result);
                 $result = str_replace("\n", '\n', $result);
             }
-        } else {
-            throw new Exception('Did not get a valid result from JavaScript');
         }
 
         return $result;
