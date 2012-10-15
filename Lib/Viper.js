@@ -4020,9 +4020,9 @@ Viper.prototype = {
             try {
                 range = self.adjustRange();
             } catch (e) {}
-            
+
             if (range.collapsed === true && self.isBrowser('msie') === true) {
-                // If clicked inside the previous selection then IE takes a lot  
+                // If clicked inside the previous selection then IE takes a lot
                 // longer to update the caret position so if the range is collapsed
                 // wait nearly half a second to trigger the selection changed
                 // event.
@@ -4868,7 +4868,7 @@ Viper.prototype = {
             html = html.replace(new RegExp(String.fromCharCode(code), 'g'), specialCharcodes[code]);
         }
 
-        return dfx.replaceNamedEntities(html);
+        return dfx.replaceCommonNamedEntities(html);
 
     },
 
