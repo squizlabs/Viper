@@ -114,12 +114,7 @@
                 dfx.setHtml(dfx.getId('testContent'), content);
             }
 
-            if (window.location.hash !== '#run' && window.location.hash === '#popup') {
-                window.open('test_jsexec.html', '', 'width=400,height=100,0,status=0,left=1000,top=850');
-                window.location.hash = '#run';
-            } else if (window.location.hash === '') {
-                initJSPoller();
-            }
+            initJSPoller();
         </script>
     </head>
     <body spellcheck="false">

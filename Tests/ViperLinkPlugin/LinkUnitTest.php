@@ -97,8 +97,7 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->selectKeyword(2);
         $this->clickTopToolbarButton('link');
         $this->type('http://www.squizlabs.com');
-        $updateChangesButton = $this->find('Update Changes', NULL, TRUE);
-        $this->click($updateChangesButton);
+        $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
 
         $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com">%1%</a> link test <a href="http://www.squizlabs.com">%2%</a></p>');
 
@@ -163,8 +162,7 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->type('Squiz Labs');
         $this->clickField('Open a New Window');
         sleep(1);
-        $updateChangesButton = $this->find('Update Changes', NULL, TRUE);
-        $this->click($updateChangesButton);
+        $this->clickInlineToolbarButton('Update Changes', NULL, TRUE);
 
         $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com" title="Squiz Labs" target="_blank">%1%</a> link test <a href="http://www.squizlabs.com" title="Squiz Labs" target="_blank">%2%</a></p>');
 
@@ -199,8 +197,7 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->type('Squiz Labs');
         $this->clickField('Open a New Window');
         sleep(1);
-        $updateChangesButton = $this->find('Update Changes', NULL, TRUE);
-        $this->click($updateChangesButton);
+        $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
 
         $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com" title="Squiz Labs" target="_blank">%1%</a> link test <a href="http://www.squizlabs.com" title="Squiz Labs" target="_blank">%2%</a></p>');
 
@@ -469,8 +466,7 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->clickInlineToolbarButton('link', 'active');
         $this->clearFieldValue('URL');
         $this->type('http://www.google.com');
-        $updateChangesButton = $this->find('Update Changes', NULL, TRUE);
-        $this->click($updateChangesButton);
+        $this->clickInlineToolbarButton('Update Changes', NULL, TRUE);
 
         $this->assertHTMLMatch('<p><a href="http://www.google.com">%1%</a> link test %2%</p>');
 
@@ -526,8 +522,7 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->clickTopToolbarButton('link', 'active');
         $this->clearFieldValue('URL');
         $this->type('http://www.google.com');
-        $updateChangesButton = $this->find('Update Changes', NULL, TRUE);
-        $this->click($updateChangesButton);
+        $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
 
         $this->assertHTMLMatch('<p><a href="http://www.google.com">%1%</a> link test %2%</p>');
 
@@ -567,8 +562,7 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->clickInlineToolbarButton('link', 'active');
         $this->clickField('Title');
         $this->type('abc');
-        $updateChangesButton = $this->find('Update Changes', NULL, TRUE);
-        $this->click($updateChangesButton);
+        $this->clickInlineToolbarButton('Update Changes', NULL, TRUE);
 
         $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com" title="titleabc">%1%</a> link test %2%</p>');
 
@@ -604,8 +598,7 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->clickTopToolbarButton('link', 'active');
         $this->clickField('Title');
         $this->type('abc');
-        $updateChangesButton = $this->find('Update Changes', NULL, TRUE);
-        $this->click($updateChangesButton);
+        $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
 
         $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com" title="titleabc">%1%</a> link test %2%</p>');
 

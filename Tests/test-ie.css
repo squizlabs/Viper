@@ -24,3 +24,9 @@ em strong {
     margin-top: -8px;
     margin-left: -9px;
 }
+
+#content a,
+#content a:hover,
+#content a:visited {
+	color: #888;
+}

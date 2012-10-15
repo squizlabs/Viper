@@ -19,7 +19,9 @@ var viperTest = {
         } else {
             return window;
         }
-    }
+    },
+    scriptURL: null,
+    stopPolling: false
 };
 
 
@@ -28,41 +30,67 @@ function initJSPoller()
     var scriptUrl = window.location.href.split('/');
     scriptUrl.pop();
     scriptUrl = scriptUrl.join('/') + '/jspoller.php';
+    viperTest.scriptURL = scriptUrl;
+
+    viperTest.stopPolling = false;
 
     var seconds  = 0.7;
-    var stop     = false;
     var interval = null;
     interval = setInterval(function() {
-        if (stop === true) {
+        if (viperTest.stopPolling === true) {
             return;
         }
 
-        stop = true;
+        viperTest.stopPolling = true;
         dfx.get(scriptUrl, {_t:(new Date().getTime())}, function(val) {
             if (!val) {
-                stop = false;
+                viperTest.stopPolling = false;
                 return;
+            }
+
+            var async = false;
+            if (val.indexOf('__asynchronous__') === 0) {
+                async = true;
+                val   = val.replace('__asynchronous__', '');
             }
 
             dfx.setHtml(dfx.getId('msg'), 'Exec: ' + val);
 
             if (val === 'cw()' || val === 'cw();') {
-                stop = true;
+                viperTest.stopPolling = true;
                 clearInterval(interval);
                 return;
             }
 
-            var jsResult = null;
-            val = 'try {jsResult = dfx.jsonEncode(' + val + ');} catch (e) {}';
+            if (async === false) {
+                var jsResult = null;
+                val = 'try {jsResult = dfx.jsonEncode(' + val + ');} catch (e) {}';
 
-            // Execute JS.
-            eval(val);
+                // Execute JS.
+                eval(val);
 
-            dfx.get(scriptUrl, {res: jsResult, _t:(new Date().getTime())}, function() {
-                stop = false;
-            });
+                dfx.get(viperTest.scriptURL, {res: jsResult, _t:(new Date().getTime())}, function() {
+                    viperTest.stopPolling = false;
+                });
+            } else {
+                eval(val);
+            }
         });
     }, (1000 * seconds));
+
+}
+
+function sendResult(result)
+{
+    if (result) {
+        result = dfx.jsonEncode(result);
+    } else {
+        result = null;
+    }
+
+    dfx.get(viperTest.scriptURL, {res: result, _t:(new Date().getTime())}, function() {
+        viperTest.stopPolling = false;
+    });
 
 }
 
@@ -371,4 +399,27 @@ function useTest(id)
 
     win.viper.getHistoryManager().clear();
 
+}
+
+function pasteFromURL(url)
+{
+    var copyPastePlugin = viperTest.getWindow().viper.getPluginManager().getPlugin('ViperCopyPastePlugin');
+
+    dfx.get(url, null, function(data) {
+        var tmp = document.createElement('div');
+        dfx.setHtml(tmp, data);
+
+        var bookmark = viper.createBookmark();
+        copyPastePlugin._tmpNode = document.createElement('div');
+        dfx.insertBefore(bookmark.start, copyPastePlugin._tmpNode);
+        viper.selectBookmark(bookmark);
+        copyPastePlugin._handleFormattedPasteValue(false, tmp, viper.getViperElement());
+        sendResult();
+    });
+
+}
+
+function testJSExec()
+{
+    return 'Pass';
 }

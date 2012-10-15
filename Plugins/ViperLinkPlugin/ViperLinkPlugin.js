@@ -94,7 +94,15 @@ ViperLinkPlugin.prototype = {
             }
         }
 
-        link.setAttribute('href', url);
+        if (this.viper.isBrowser('msie') === true) {
+            // IE for whatever reason, changed the content of the link to be the href
+            // when its a mailto link.....
+            var linkContent = dfx.getHtml(link);
+            link.setAttribute('href', url);
+            dfx.setHtml(link, linkContent);
+        } else {
+            link.setAttribute('href', url);
+        }
 
         if (title) {
             link.setAttribute('title', title);
@@ -227,8 +235,13 @@ ViperLinkPlugin.prototype = {
         dfx.remove(linkTag);
 
         this.viper.selectBookmark(bookmark);
-        this.viper.fireSelectionChanged(null, true);
-        this.viper.fireNodesChanged();
+
+        var self = this;
+        setTimeout(function() {
+            self.viper.fireSelectionChanged(null, true);
+            self.viper.fireNodesChanged();    
+        }, 10);
+        
 
     },
 
@@ -602,7 +615,7 @@ ViperLinkPlugin.prototype = {
                 tools.enableButton('removeLink');
                 self.updateBubbleFields(link);
             } else {
-                var nodeSelection = data.range.getNodeSelection();
+                var nodeSelection = self.viper.getNodeSelection();
                 var startNode     = null;
                 var endNode       = null;
 

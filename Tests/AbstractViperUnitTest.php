@@ -88,62 +88,11 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
     private static $_browserSelected = FALSE;
 
     /**
-     * The selenium session object.
-     *
-     * @var object
-     */
-    private static $_selenium = NULL;
-
-    /**
-     * If TRUE then Selenium session is being used.
-     *
-     * @var boolean
-     */
-    private static $_useSelenium = FALSE;
-
-    /**
-     * If TRUE then a popup is used to execute JS.
-     *
-     * @var boolean
-     */
-    private static $_usePopup = FALSE;
-
-    /**
-     * If TRUE then AJAX polling is used to execute JS.
-     *
-     * @var boolean
-     */
-    private static $_usePolling = FALSE;
-
-    /**
      * If TRUE then AJAX polling is used to execute JS.
      *
      * @var boolean
      */
     private static $_pollFilePath = NULL;
-
-    /**
-     * The Selenium PID.
-     *
-     * This is used to kill the Selenium process at the end of testing.
-     *
-     * @var integer
-     */
-    private static $_seleniumpid = NULL;
-
-    /**
-     * The active browser window.
-     *
-     * @var string
-     */
-    private static $_currentWindow = 'js';
-
-    /**
-     * Keeps cache of JS that is executed.
-     *
-     * @var array
-     */
-    private static $_jsExecCache = array();
 
     /**
      * Keeps cache of JS that is executed.
@@ -162,7 +111,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
     /**
      * List of applications and if they are available in the current system.
      *
-     * @return array
+     * @var array
      */
     private static $_apps = array();
 
@@ -225,28 +174,20 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
                 throw new Exception('Invalid browser');
             }
 
-            self::$_browser = $browser;
+            self::$_browser      = $browser;
+            self::$_pollFilePath = dirname(__FILE__).'/tmp/poll';
 
-            if (getenv('VIPER_TEST_USE_SELENIUM') === 'TRUE') {
-                self::$_useSelenium = TRUE;
-            } else if (getenv('VIPER_TEST_USE_POLLING') === 'TRUE') {
-                self::$_usePolling   = TRUE;
-                self::$_pollFilePath = dirname(__FILE__).'/tmp/poll';
-
-                if (file_exists(self::$_pollFilePath) === FALSE) {
-                    mkdir(self::$_pollFilePath, 0777, TRUE);
-                    chmod(self::$_pollFilePath, 0777);
-                } else {
-                    if (file_exists(self::$_pollFilePath.'/_jsres.tmp') === TRUE) {
-                        unlink(self::$_pollFilePath.'/_jsres.tmp');
-                    }
-
-                    if (file_exists(self::$_pollFilePath.'/_jsexec.tmp') === TRUE) {
-                        unlink(self::$_pollFilePath.'/_jsexec.tmp');
-                    }
-                }
+            if (file_exists(self::$_pollFilePath) === FALSE) {
+                mkdir(self::$_pollFilePath, 0777, TRUE);
+                chmod(self::$_pollFilePath, 0777);
             } else {
-                self::$_usePopup = TRUE;
+                if (file_exists(self::$_pollFilePath.'/_jsres.tmp') === TRUE) {
+                    unlink(self::$_pollFilePath.'/_jsres.tmp');
+                }
+
+                if (file_exists(self::$_pollFilePath.'/_jsexec.tmp') === TRUE) {
+                    unlink(self::$_pollFilePath.'/_jsexec.tmp');
+                }
             }
         }//end if
 
@@ -275,17 +216,9 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
 
         parent::setUp();
 
-        // Create the test file.
+        // Get the contents of the test file template.
         if (self::$_testContent === NULL) {
             self::$_testContent = file_get_contents($baseDir.'/test.html');
-        }
-
-        // Get the JS exec cache.
-        if (empty(self::$_jsExecCache) === TRUE) {
-            $jsExecCacheFile = dirname(__FILE__).'/tmp/js_cache.inc';
-            if (file_exists($jsExecCacheFile) === TRUE) {
-                self::$_jsExecCache = unserialize(file_get_contents($jsExecCacheFile));
-            }
         }
 
         $viperInclude = '';
@@ -302,14 +235,14 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
                              <script type="text/javascript" src="../Viper-all.js"></script>';
         }
 
-        $usePolling = 'false';
-        if (self::$_usePolling === TRUE) {
-            $usePolling = 'true';
-        }
+        // Get stats.
+        $testTitle  = $this->getName();
+        $numFails   = ViperTestListener::getFailures();
+        $numErrors  = ViperTestListener::getErrors();
+        $totalTests = ViperTestListener::getNumberOfTests();
+        $testsRun   = ViperTestListener::getTestsRun();
 
-        $testTitle = $this->getName();
-        $numFails  = ViperTestListener::getFailures();
-        $numErrors = ViperTestListener::getErrors();
+        $testTitle .= '['.$testsRun.'/'.$totalTests.']';
 
         if ($numFails !== 0 || $numErrors !== 0) {
             $testTitle .= '(F:'.ViperTestListener::getFailures().', ';
@@ -322,36 +255,20 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         $contents = str_replace('__TEST_VIPER_INCLUDE__', $viperInclude, $contents);
         $contents = str_replace('__TEST_TITLE__', $testTitle, $contents);
         $contents = str_replace('__TEST_JS_INCLUDE__', $jsInclude, $contents);
-        $contents = str_replace('__TEST_JS_EXEC_CACHE__', json_encode(array_flip(self::$_jsExecCache)), $contents);
-        $contents = str_replace('__TEST_JS_EXEC_USEPOLLING__', $usePolling, $contents);
         $dest     = $baseDir.'/test_tmp.html';
         file_put_contents($dest, $contents);
 
         // Change browser and then change the URL.
         if (self::$_testRun === TRUE) {
-            $this->_switchWindow('main');
-
             $this->resizeWindow();
             $this->setDefaultRegion(self::$_window);
 
             // URL is already changed to the test runner, so just reload.
             $this->setSetting('MinSimilarity', self::$_similarity);
 
-            $this->setAutoWaitTimeout(1);
             $this->reloadPage();
-
-            // Make sure page is loaded.
-            $maxRetries = 4;
-            while ($this->topToolbarButtonExists('bold', 'disabled') === FALSE) {
-                $this->reloadPage();
-                if ($maxRetries === 0) {
-                    throw new Exception('Failed to load Viper test page.');
-                }
-
-                sleep(4);
-
-                $maxRetries--;
-            }
+            $this->setAutoWaitTimeout(1);
+            $this->_waitForViper();
         } else {
             $this->selectBrowser(self::$_browser);
 
@@ -369,23 +286,8 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
             }
 
             $this->goToURL($this->_getBaseUrl().'/test_tmp.html');
-            sleep(2);
             $this->setAutoWaitTimeout(1);
-
-            $this->_switchWindow('main');
-
-            // Make sure page is loaded.
-            $maxRetries = 4;
-            while ($this->topToolbarButtonExists('bold', 'disabled') === FALSE) {
-                $this->reloadPage();
-                if ($maxRetries === 0) {
-                    throw new Exception('Failed to load Viper test page.');
-                }
-
-                sleep(4);
-
-                $maxRetries--;
-            }
+            $this->_waitForViper();
 
             self::$_testRun = TRUE;
 
@@ -482,6 +384,58 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
 
 
     /**
+     * Cleans up after all tests are completed.
+     *
+     * @return void
+     */
+    public static function tearDownAfterClass()
+    {
+        $path = dirname(__FILE__).'/test_tmp.html';
+        if (file_exists($path) === TRUE) {
+            // Remove the tmp file.
+            unlink($path);
+        }
+
+    }//end tearDownAfterClass()
+
+
+    /**
+     * Waits till the Viper elements are loaded.
+     *
+     * @return void
+     * @throws Exception If Viper fails to load on the page.
+     */
+    private function _waitForViper()
+    {
+        $this->setAutoWaitTimeout(5, $this->getTopToolbar());
+
+        // Make sure the page is loaded first with the window target icon loaded.
+        $this->setAutoWaitTimeout(10);
+        $this->getPageTopLeft();
+
+        // Make sure page is loaded.
+        $maxRetries = 3;
+        while ($this->topToolbarButtonExists('bold', 'disabled') === FALSE) {
+            if ($maxRetries === 0) {
+                throw new Exception('Failed to load Viper test page.');
+            }
+
+            $maxRetries--;
+            $this->reloadPage();
+        }
+
+        $this->setAutoWaitTimeout(1, $this->getTopToolbar());
+        $this->setAutoWaitTimeout(1);
+
+        if ($this->getBrowserid() === 'ie8') {
+            // Give some time for IE to catch up....
+            sleep(2);
+        }
+
+    }//end _waitForViper()
+
+
+    /**
      * Calibrates the testing to work with the current browser.
      *
      * This method will create images of each button image and place it in a temp
@@ -492,23 +446,19 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      */
     private function _calibrate()
     {
-        $this->_calibrateText();
-        $this->closeJSWindow();
-        $this->_calibrateImage();
-        $this->closeJSWindow();
+        $this->_calibrateKeywords();
+        $this->_calibrateIcons();
 
     }//end _calibrate()
 
 
     /**
-     * Creates special text used by Viper.
-     *
-     * Creates the screenshots of the text
+     * Creates screenshot for the keywords.
      *
      * @return void
      * @throws Exception If it fails to calibrate.
      */
-    private function _calibrateText()
+    private function _calibrateKeywords()
     {
         $this->setAutoWaitTimeout(0.5);
         $baseDir = dirname(__FILE__);
@@ -525,17 +475,10 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
 
         $url = $this->_getBaseUrl().'/calibrate-text.html';
 
-        if (self::$_usePopup === TRUE) {
-            $url .= '#popup';
-        }
-
         $this->goToURL($url);
+        sleep(3);
 
-        sleep(2);
-        $this->_switchWindow('main');
-        sleep(2);
-
-        $texts = $this->execJS('viperTest.getWindow().getCoords('.json_encode(self::_getKeywordsList()).')', TRUE);
+        $texts = $this->execJS('getCoords('.json_encode(self::_getKeywordsList()).')');
         $count = count($texts);
 
         $i      = 1;
@@ -564,7 +507,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
             try {
                 for ($j = 1; $j <= $tests; $j++) {
                     // Change the contents of the test page.
-                    $this->execJS('viperTest.getWindow().changeContent('.$j.', '.$textSimilarity.')', TRUE);
+                    $this->execJS('changeContent('.$j.', '.$textSimilarity.')');
 
                     // Test that captured images can be found on the page.
                     for ($i = 1; $i <= $count; $i++) {
@@ -584,7 +527,187 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
 
         $this->addData('textSimmilarity', $textSimilarity);
 
-    }//end _calibrateText()
+    }//end _calibrateKeywords()
+
+
+    /**
+     * Creates button images that are used in Viper for the current browser.
+     *
+     * @return void
+     * @throws Exception If it fails to calibrate.
+     */
+    private function _calibrateIcons()
+    {
+        $this->setAutoWaitTimeout(0.5);
+
+        // Calibrate image recognition.
+        $baseDir = dirname(__FILE__);
+        $imgPath = $baseDir.'/tmp/Images/'.$this->getBrowserid();
+
+        if (file_exists($imgPath) === FALSE) {
+            mkdir($imgPath, 0755, TRUE);
+        }
+
+        $cssContents = file_get_contents($baseDir.'/../Css/viper_tools.css');
+
+        $matches = array();
+        preg_match_all('#.Viper-buttonIcon.Viper-([\w-_]+)#', $cssContents, $matches);
+
+        $buttonNames = array_values(array_unique($matches[1]));
+
+        // Create the temp calibration file.
+        $tmpFile = $baseDir.'/tmp-calibrate.html';
+
+        $statuses = array(
+                     ''          => ' Viper-dummyClass',
+                     '_selected' => ' Viper-selected',
+                     '_active'   => ' Viper-active',
+                     '_disabled' => ' Viper-disabled',
+                    );
+
+        $buttonHTML = '';
+
+        $browserClass = '';
+
+        if ($this->getBrowserid() === 'ie8') {
+            $browserClass = 'Viper-browser-msie Viper-browserVer-msie8';
+        }
+
+        $buttonCount = count($buttonNames);
+        for ($i = 0; $i < $buttonCount; $i++) {
+            if (($i % 20) === 0) {
+                if ($buttonHTML !== '') {
+                    $buttonHTML .= '</div></div>';
+                }
+
+                $buttonHTML .= '<div class="ViperTP-bar Viper-themeDark '.$browserClass.'" style="position:relative"><div class="Viper-buttonGroup">';
+            }
+
+            $buttonHTML .= '<div id="'.$buttonNames[$i].'" class="Viper-button Viper-'.$buttonNames[$i].'">';
+            $buttonHTML .= '<span class="Viper-buttonIcon Viper-'.$buttonNames[$i].'"></span>&nbsp;</div>';
+        }
+
+        $buttonHTML .= '</div></div>';
+
+        $calibrateHtml = file_get_contents($baseDir.'/calibrate.html');
+        $calibrateHtml = str_replace('__TEST_CONTENT__', $buttonHTML, $calibrateHtml);
+
+        file_put_contents($tmpFile, $calibrateHtml);
+
+        $dest = $baseDir.'/tmp-calibrate.html';
+
+        $url = $this->_getBaseUrl().'/tmp-calibrate.html';
+
+        $this->goToURL($url);
+        sleep(3);
+
+        if ($this->execJS('testJSExec()') !== 'Pass') {
+            throw new Exception('JavaScript execution test failed!!');
+        }
+
+        // Create image for the inline toolbar pattern (the arrow on top).
+        sleep(2);
+        $this->selectText('PyP');
+        sleep(1);
+
+        $vitp      = $this->execJS('getVITP()');
+        $vitp['x'] = $this->getPageXRelativeToScreen($vitp['x']);
+        $vitp['y'] = $this->getPageYRelativeToScreen($vitp['y']);
+
+        $region    = $this->createRegion(($vitp['x'] - 12), ($vitp['y'] - 10), 27, 14);
+        $vitpImage = $this->capture($region);
+        copy($vitpImage, $imgPath.'/vitp_arrow.png');
+
+        sleep(2);
+
+        // Left arrow.
+        $vitp      = $this->execJS('getVITP("left")');
+        $vitp['x'] = $this->getPageXRelativeToScreen($vitp['x']);
+        $vitp['y'] = $this->getPageYRelativeToScreen($vitp['y']);
+
+        $region    = $this->createRegion(($vitp['x'] - 2), ($vitp['y'] - 10), 30, 14);
+        $vitpImage = $this->capture($region);
+        copy($vitpImage, $imgPath.'/vitp_arrowLeft.png');
+
+        sleep(2);
+
+        // Right arrow.
+        $vitp      = $this->execJS('getVITP("right")');
+        $vitp['x'] = $this->getPageXRelativeToScreen($vitp['x']);
+        $vitp['y'] = $this->getPageYRelativeToScreen($vitp['y']);
+
+        $region    = $this->createRegion(($vitp['x'] + $vitp['width'] - 24), ($vitp['y'] - 10), 30, 14);
+        $vitpImage = $this->capture($region);
+        copy($vitpImage, $imgPath.'/vitp_arrowRight.png');
+
+        // Create image for the text field actions.
+        $textFieldActionRevertRegion = $this->getRegionOnPage($this->execJS('dfx.getBoundingRectangle(dfx.getId("textboxActionRevert"))'));
+        $textFieldActionRevertImage  = $this->capture($textFieldActionRevertRegion);
+        copy($textFieldActionRevertImage, $imgPath.'/textField_action_revert.png');
+
+        $textFieldActionClearRegion = $this->getRegionOnPage($this->execJS('dfx.getBoundingRectangle(dfx.getId("textboxActionClear"))'));
+        $textFieldActionClearImage  = $this->capture($textFieldActionClearRegion);
+        copy($textFieldActionClearImage, $imgPath.'/textField_action_clear.png');
+
+        // Remove all Viper elements.
+        $this->execJS('viper.destroy()');
+
+        foreach ($statuses as $status => $className) {
+            $btnRects = $this->execJS('getCoords("'.$status.'", "'.$className.'")');
+            sleep(1);
+            foreach ($btnRects as $buttonName => $rect) {
+                $this->_createButtonImageFromRectangle($buttonName, $rect);
+            }
+        }
+
+        $this->execJS('showAllBtns()');
+
+        // Remove dupe icons.
+        $dupeIcons = array(
+                      'tableSettings',
+                      'sourceNewWindow',
+                     );
+        foreach ($dupeIcons as $dupeIcon) {
+            $btnIndex = array_search($dupeIcon, $buttonNames);
+            if ($btnIndex !== FALSE) {
+                unset($buttonNames[$btnIndex]);
+            }
+        }
+
+        for ($similarity = 0.98; $similarity > 0.90; $similarity -= 0.01) {
+            // Find each of the icons, if any fails it will throw an exception.
+            $regions = array();
+            foreach ($statuses as $status => $className) {
+                foreach ($buttonNames as $buttonName) {
+                    if ($status !== '') {
+                        $buttonName .= $status;
+                    }
+
+                    $testImage = $imgPath.'/'.$buttonName.'.png';
+                    try {
+                        $region = $this->find($testImage, NULL, $similarity);
+                        $loc    = $this->getX($region).'-'.$this->getY($region);
+
+                        if (isset($regions[$loc]) === TRUE) {
+                            throw new Exception('Image match conflict between '.$regions[$loc].' and '.$buttonName);
+                        }
+
+                        $regions[$loc] = $buttonName;
+                    } catch (Exception $e) {
+                        continue(3);
+                    }
+                }
+            }//end foreach
+
+            break;
+        }//end for
+
+        // Remove the temp calibrate file.
+        unlink($tmpFile);
+
+        $this->addData('buttonSimmilarity', $similarity);
+
+    }//end _calibrateIcons()
 
 
     /**
@@ -754,187 +877,6 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
 
 
     /**
-     * Creates button images that are used in Viper for the current browser.
-     *
-     * @return void
-     * @throws Exception If it fails to calibrate.
-     */
-    private function _calibrateImage()
-    {
-        $this->setAutoWaitTimeout(0.5);
-
-        // Calibrate image recognition.
-        $baseDir = dirname(__FILE__);
-        $imgPath = $baseDir.'/tmp/Images/'.$this->getBrowserid();
-
-        if (file_exists($imgPath) === FALSE) {
-            mkdir($imgPath, 0755, TRUE);
-        }
-
-        $cssContents = file_get_contents($baseDir.'/../Css/viper_tools.css');
-
-        $matches = array();
-        preg_match_all('#.Viper-buttonIcon.Viper-([\w-_]+)#', $cssContents, $matches);
-
-        $buttonNames = array_values(array_unique($matches[1]));
-
-        // Create the temp calibration file.
-        $tmpFile = $baseDir.'/tmp-calibrate.html';
-
-        $statuses = array(
-                     ''          => ' Viper-dummyClass',
-                     '_selected' => ' Viper-selected',
-                     '_active'   => ' Viper-active',
-                     '_disabled' => ' Viper-disabled',
-                    );
-
-        $buttonHTML = '';
-
-        $browserClass = '';
-
-        if ($this->getBrowserid() === 'ie8') {
-            $browserClass = 'Viper-browser-msie Viper-browserVer-msie8';
-        }
-
-        $buttonCount = count($buttonNames);
-        for ($i = 0; $i < $buttonCount; $i++) {
-            if (($i % 20) === 0) {
-                if ($buttonHTML !== '') {
-                    $buttonHTML .= '</div></div>';
-                }
-
-                $buttonHTML .= '<div class="ViperTP-bar Viper-themeDark '.$browserClass.'" style="position:relative"><div class="Viper-buttonGroup">';
-            }
-
-            $buttonHTML .= '<div id="'.$buttonNames[$i].'" class="Viper-button Viper-'.$buttonNames[$i].'">';
-            $buttonHTML .= '<span class="Viper-buttonIcon Viper-'.$buttonNames[$i].'"></span>&nbsp;</div>';
-        }
-
-        $buttonHTML .= '</div></div>';
-
-        $calibrateHtml = file_get_contents($baseDir.'/calibrate.html');
-        $calibrateHtml = str_replace('__TEST_CONTENT__', $buttonHTML, $calibrateHtml);
-
-        file_put_contents($tmpFile, $calibrateHtml);
-
-        $dest = $baseDir.'/tmp-calibrate.html';
-
-        $url = $this->_getBaseUrl().'/tmp-calibrate.html';
-        if (self::$_usePopup === TRUE) {
-            $url .= '#popup';
-        }
-
-        $this->goToURL($url);
-
-        sleep(2);
-        $this->_switchWindow('main');
-
-        // Create image for the inline toolbar pattern (the arrow on top).
-        sleep(2);
-        $this->selectText('PyP');
-        sleep(1);
-
-        $vitp      = $this->execJS('getVITP()', TRUE);
-        $vitp['x'] = $this->getPageXRelativeToScreen($vitp['x']);
-        $vitp['y'] = $this->getPageYRelativeToScreen($vitp['y']);
-
-        $region    = $this->createRegion(($vitp['x'] - 12), ($vitp['y'] - 10), 27, 14);
-        $vitpImage = $this->capture($region);
-        copy($vitpImage, $imgPath.'/vitp_arrow.png');
-
-        sleep(2);
-
-        // Left arrow.
-        $vitp      = $this->execJS('getVITP("left")', TRUE);
-        $vitp['x'] = $this->getPageXRelativeToScreen($vitp['x']);
-        $vitp['y'] = $this->getPageYRelativeToScreen($vitp['y']);
-
-        $region    = $this->createRegion(($vitp['x'] - 2), ($vitp['y'] - 10), 30, 14);
-        $vitpImage = $this->capture($region);
-        copy($vitpImage, $imgPath.'/vitp_arrowLeft.png');
-
-        sleep(2);
-
-        // Right arrow.
-        $vitp      = $this->execJS('getVITP("right")', TRUE);
-        $vitp['x'] = $this->getPageXRelativeToScreen($vitp['x']);
-        $vitp['y'] = $this->getPageYRelativeToScreen($vitp['y']);
-
-        $region    = $this->createRegion(($vitp['x'] + $vitp['width'] - 24), ($vitp['y'] - 10), 30, 14);
-        $vitpImage = $this->capture($region);
-        copy($vitpImage, $imgPath.'/vitp_arrowRight.png');
-
-        // Create image for the text field actions.
-        $textFieldActionRevertRegion = $this->getRegionOnPage($this->execJS('dfx.getBoundingRectangle(dfx.getId("textboxActionRevert"))', TRUE));
-        $textFieldActionRevertImage  = $this->capture($textFieldActionRevertRegion);
-        copy($textFieldActionRevertImage, $imgPath.'/textField_action_revert.png');
-
-        $textFieldActionClearRegion = $this->getRegionOnPage($this->execJS('dfx.getBoundingRectangle(dfx.getId("textboxActionClear"))', TRUE));
-        $textFieldActionClearImage  = $this->capture($textFieldActionClearRegion);
-        copy($textFieldActionClearImage, $imgPath.'/textField_action_clear.png');
-
-        // Remove all Viper elements.
-        $this->execJS('viper.destroy()', TRUE);
-
-        foreach ($statuses as $status => $className) {
-            $btnRects = $this->execJS('getCoords("'.$status.'", "'.$className.'")', TRUE);
-            sleep(1);
-            foreach ($btnRects as $buttonName => $rect) {
-                $this->_createButtonImageFromRectangle($buttonName, $rect);
-            }
-        }
-
-        $this->execJS('showAllBtns()', TRUE);
-
-        // Remove dupe icons.
-        $dupeIcons = array(
-                      'tableSettings',
-                      'sourceNewWindow',
-                     );
-        foreach ($dupeIcons as $dupeIcon) {
-            $btnIndex = array_search($dupeIcon, $buttonNames);
-            if ($btnIndex !== FALSE) {
-                unset($buttonNames[$btnIndex]);
-            }
-        }
-
-        for ($similarity = 0.98; $similarity > 0.90; $similarity -= 0.01) {
-            // Find each of the icons, if any fails it will throw an exception.
-            $regions = array();
-            foreach ($statuses as $status => $className) {
-                foreach ($buttonNames as $buttonName) {
-                    if ($status !== '') {
-                        $buttonName .= $status;
-                    }
-
-                    $testImage = $imgPath.'/'.$buttonName.'.png';
-                    try {
-                        $region = $this->find($testImage, NULL, $similarity);
-                        $loc    = $this->getX($region).'-'.$this->getY($region);
-
-                        if (isset($regions[$loc]) === TRUE) {
-                            throw new Exception('Image match conflict between '.$regions[$loc].' and '.$buttonName);
-                        }
-
-                        $regions[$loc] = $buttonName;
-                    } catch (Exception $e) {
-                        continue(3);
-                    }
-                }
-            }//end foreach
-
-            break;
-        }//end for
-
-        // Remove the temp calibrate file.
-        unlink($tmpFile);
-
-        $this->addData('buttonSimmilarity', $similarity);
-
-    }//end _calibrateImage()
-
-
-    /**
      * Returns the base URL.
      *
      * @return string
@@ -951,6 +893,13 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
     }//end _getBaseUrl()
 
 
+    /**
+     * Returns the URL for the test page.
+     *
+     * @param string $path The additional path.
+     *
+     * @return string
+     */
     protected function getTestURL($path='')
     {
         return $this->_getBaseUrl().$path;
@@ -959,26 +908,104 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
 
 
     /**
-     * Cleans up after all tests are completed.
+     * Reloads the page.
      *
      * @return void
      */
-    public static function tearDownAfterClass()
+    protected function reloadPage()
     {
-        $path = dirname(__FILE__).'/test_tmp.html';
-        if (file_exists($path) === TRUE) {
-            // Remove the tmp file.
-            unlink($path);
-        }
+        $this->execJS('viper.destroy()');
 
-        if (self::$_selenium !== NULL) {
-            if (self::$_seleniumpid !== NULL) {
-                exec('kill -KILL '.self::$_seleniumpid);
-                self::$_seleniumpid = NULL;
+        $topLeft = array(
+                    'x1' => 0,
+                    'y1' => 0,
+                    'x2' => 14,
+                    'y2' => 14,
+                   );
+        $region  = $this->getRegionOnPage($topLeft);
+        $this->click($region);
+        sleep(1);
+
+    }//end reloadPage()
+
+
+    /**
+     * Sets the browser URL to the specified URL.
+     *
+     * @param string $url The new URL.
+     *
+     * @return void
+     */
+    protected function goToURL($url)
+    {
+        $this->keyDown('Key.CMD+l');
+        $this->type($url);
+        $this->keyDown('Key.ENTER');
+        sleep(1);
+
+    }//end goToURL()
+
+
+    /**
+     * Changes the active application to the specified browser.
+     *
+     * @param string $browser The name of the browser.
+     *
+     * @return void
+     */
+    protected function selectBrowser($browser)
+    {
+        if ($this->getOS() === 'windows') {
+            if ($browser === 'Google Chrome') {
+                $browser = '- Google Chrome';
+            } else if ($browser === 'Firefox') {
+                $browser = 'Mozilla Firefox';
+            } else if ($browser === 'IE8' || $browser === 'IE9') {
+                $browser = 'Windows Internet Explorer';
             }
+        } else if ($browser === 'Firefox') {
+            $browser = '/Applications/Firefox.app';
         }
 
-    }//end tearDownAfterClass()
+        if (self::$_browserSelected === FALSE) {
+            $app = $this->switchApp($browser);
+            if ($this->getOS() !== 'windows') {
+                $windowNum = 0;
+                switch ($browser) {
+                    case 'Google Chrome':
+                        $windowNum = 1;
+                    break;
+
+                    default:
+                        $windowNum = 0;
+                    break;
+                }
+
+                self::$_window = $this->callFunc('window', array($windowNum), $app, TRUE);
+            } else {
+                self::$_window = $app;
+            }//end if
+        } else {
+            if ($this->getOS() !== 'windows') {
+                self::$_window = $this->callFunc('App.focusedWindow', array(), NULL, TRUE);
+            } else {
+                self::$_window = $this->switchApp($browser);
+            }
+        }//end if
+
+        if (self::$_testRun === TRUE) {
+            // Adjust the brwoser window region so that its only the area of the actual page.
+            $pageLoc = $this->getPageTopLeft();
+            $this->setH(self::$_window, ($this->getH(self::$_window) - ($pageLoc['y'] - $this->getY(self::$_window))));
+            $this->setX(self::$_window, $pageLoc['x']);
+            $this->setY(self::$_window, $pageLoc['y']);
+        }
+
+        $this->setDefaultRegion(self::$_window);
+
+        self::$_browserSelected = TRUE;
+
+    }//end selectBrowser()
 
 
     /**
@@ -1038,12 +1065,12 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         $w = $this->getW($this->getBrowserWindow());
         $h = $this->getH($this->getBrowserWindow());
 
-        self::$_windowSize = array(
-                              'w' => $w,
-                              'h' => $h,
-                             );
+        $size = array(
+                 'w' => $w,
+                 'h' => $h,
+                );
 
-        return self::$_windowSize;
+        return $size;
 
     }//end getBrowserWindowSize()
 
@@ -1130,39 +1157,12 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         // Update the self::$_window object.
         $this->selectBrowser($this->getBrowserName());
 
-        $this->getBrowserWindowSize();
+        self::$_windowSize = array(
+                              'w' => $w,
+                              'h' => $h,
+                             );
 
     }//end resizeWindow()
-
-
-    /**
-     * Toggles between main window and the JS execution window.
-     *
-     * @param string $type The window to switch to. If not specified then it will
-     * toggle to inactive window.
-     *
-     * @return void
-     */
-    private function _switchWindow($type=NULL)
-    {
-        if (self::$_usePolling === TRUE) {
-            return;
-        }
-
-        if ($type === self::$_currentWindow) {
-            return;
-        }
-
-        if (self::$_currentWindow === 'js') {
-            self::$_currentWindow = 'main';
-        } else {
-            self::$_currentWindow = 'js';
-        }
-
-        $this->keyDown('Key.CMD + `');
-        sleep(1);
-
-    }//end _switchWindow()
 
 
     /**
@@ -1172,11 +1172,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      */
     public function closeJSWindow()
     {
-        self::$_currentWindow = 'main';
-
-        if (self::$_useSelenium !== TRUE) {
-            $this->execJS('cw();', TRUE, TRUE);
-        }
+        $this->execJS('cw();', TRUE);
 
     }//end closeJSWindow()
 
@@ -1395,77 +1391,6 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
 
 
     /**
-     * Rebuilds a HTML string with tag attributes in alphabetical order.
-     *
-     * @param string $html The HTML string to rebuild.
-     *
-     * @return string
-     */
-    private function _orderTagAttributes($html)
-    {
-        $attrRegex = '(?:(?:\s+\w+(?:\s*=\s*(?:"(?:[^"]+)?"))?)+)?(?:(?:\s+\w+(?:\s*=\s*(?:"(?:[^"]+)?"))?)+)?\s*\/?';
-        $matches   = preg_split(
-            '/(<\w+'.$attrRegex.'>)/i',
-            $html,
-            -1,
-            (PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY)
-        );
-
-        $newHtml = '';
-        foreach ($matches as $match) {
-            if ($match[0] === '<' && $match[1] !== '/') {
-                // This is an open tag.
-                $tagMatches = array();
-                $tagRegex   = '/(<\w+)'.$attrRegex.'>/i';
-                preg_match($tagRegex, $match, $tagMatches);
-                if ($tagMatches[1].'>' !== $match) {
-                    // This tag has attributes, which need to be ordered
-                    // alphabetically as the browser changes the order sometimes.
-                    $attrs = array();
-                    preg_match_all('/\s+(\w+)\s*=\s*(?:"([^"]+)?")/i', $match, $attrs);
-                    asort($attrs[1]);
-                    $match = $tagMatches[1];
-                    foreach ($attrs[1] as $attrIndex => $attrName) {
-                        if ($attrName === 'style') {
-                            $attrVal = $attrs[2][$attrIndex];
-                            // Values in a style attribute need to be ordered
-                            // alphabetically as the browser changes the order sometimes.
-                            $vals = array();
-                            preg_match_all('/(\w+)\s*:\s*[^:]+;?/i', $attrVal, $vals);
-                            asort($vals[1]);
-                            $match .= ' '.$attrs[1][$attrIndex].'="';
-                            foreach ($vals[1] as $valIndex => $value) {
-                                if (strpos($vals[0][$valIndex], ';') === FALSE) {
-                                    $vals[0][$valIndex] .= ';';
-                                }
-
-                                $match .= $vals[0][$valIndex].' ';
-                            }
-
-                            $match  = rtrim($match);
-                            $match .= '"';
-                        } else {
-                            $match .= $attrs[0][$attrIndex];
-                        }
-                    }//end foreach
-
-                    if (substr($tagMatches[0], -2) === '/>') {
-                        $match .= ' />';
-                    } else {
-                        $match .= '>';
-                    }
-                }//end if
-            }//end if
-
-            $newHtml .= $match;
-        }//end foreach
-
-        return $newHtml;
-
-    }//end _orderTagAttributes()
-
-
-    /**
      * Assert that given HTML string matches the test page's HTML.
      *
      * @param string  $html             The HTML string to compare.
@@ -1518,99 +1443,74 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
 
 
     /**
-     * Changes the active application to the specified browser.
+     * Rebuilds a HTML string with tag attributes in alphabetical order.
      *
-     * @param string $browser The name of the browser.
+     * @param string $html The HTML string to rebuild.
      *
-     * @return void
+     * @return string
      */
-    protected function selectBrowser($browser)
+    private function _orderTagAttributes($html)
     {
-        if (self::$_useSelenium === TRUE) {
-            if (self::$_selenium === NULL) {
-                $seleniumPath = dirname(__FILE__).'/Selenium';
+        $attrRegex = '(?:(?:\s+\w+(?:\s*=\s*(?:"(?:[^"]+)?"))?)+)?(?:(?:\s+\w+(?:\s*=\s*(?:"(?:[^"]+)?"))?)+)?\s*\/?';
+        $matches   = preg_split(
+            '/(<\w+'.$attrRegex.'>)/i',
+            $html,
+            -1,
+            (PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY)
+        );
 
-                include_once $seleniumPath.'/selenium_webdriver/__init__.php';
+        $newHtml = '';
+        foreach ($matches as $match) {
+            if ($match[0] === '<' && $match[1] !== '/') {
+                // This is an open tag.
+                $tagMatches = array();
+                $tagRegex   = '/(<\w+)'.$attrRegex.'>/i';
+                preg_match($tagRegex, $match, $tagMatches);
+                if ($tagMatches[1].'>' !== $match) {
+                    // This tag has attributes, which need to be ordered
+                    // alphabetically as the browser changes the order sometimes.
+                    $attrs = array();
+                    preg_match_all('/\s+(\w+)\s*=\s*(?:"([^"]+)?")/i', $match, $attrs);
+                    asort($attrs[1]);
+                    $match = $tagMatches[1];
+                    foreach ($attrs[1] as $attrIndex => $attrName) {
+                        if ($attrName === 'style') {
+                            $attrVal = $attrs[2][$attrIndex];
+                            // Values in a style attribute need to be ordered
+                            // alphabetically as the browser changes the order sometimes.
+                            $vals = array();
+                            preg_match_all('/(\w+)\s*:\s*[^:]+;?/i', $attrVal, $vals);
+                            asort($vals[1]);
+                            $match .= ' '.$attrs[1][$attrIndex].'="';
+                            foreach ($vals[1] as $valIndex => $value) {
+                                if (strpos($vals[0][$valIndex], ';') === FALSE) {
+                                    $vals[0][$valIndex] .= ';';
+                                }
 
-                $seleniumCmd = 'java -jar '.$seleniumPath.'/selenium-server-standalone-2.21.0.jar';
+                                $match .= $vals[0][$valIndex].' ';
+                            }
 
-                $browser = strtolower($browser);
-                if ($browser === 'google chrome') {
-                    $browser      = 'chrome';
-                    $seleniumCmd .= ' -Dwebdriver.chrome.driver='.$seleniumPath.'/chromedriver';
-                }
+                            $match  = rtrim($match);
+                            $match .= '"';
+                        } else {
+                            $match .= $attrs[0][$attrIndex];
+                        }//end if
+                    }//end foreach
 
-                $seleniumCmd .= ' > /dev/null & echo $!';
-
-                self::$_seleniumpid = shell_exec($seleniumCmd);
-                sleep(10);
-
-                $webDriver       = new WebDriver();
-                $session         = $webDriver->session($browser);
-                self::$_selenium = $session;
-                sleep(2);
-
-                if ($browser === 'chrome') {
-                    // Focus Chrome window (TODO: Find another way).
-                    $this->keyDown('Key.SHIFT + Key.CMD + Key.TAB');
-                }
-
-                self::$_browserSelected = TRUE;
-                return;
-            }//end if
-        } else {
-            if ($this->getOS() === 'windows') {
-                if ($browser === 'Google Chrome') {
-                    $browser = '- Google Chrome';
-                } else if ($browser === 'Firefox') {
-                    $browser = 'Mozilla Firefox';
-                } else if ($browser === 'IE8' || $browser === 'IE9') {
-                    $browser = 'Windows Internet Explorer';
-                }
-            } else if ($browser === 'Firefox') {
-                $browser = '/Applications/Firefox.app';
-            }
-
-            if (self::$_browserSelected === FALSE) {
-                $app = $this->switchApp($browser);
-                if ($this->getOS() !== 'windows') {
-                    $windowNum = 0;
-                    switch ($browser) {
-                        case 'Google Chrome':
-                            $windowNum = 1;
-                        break;
-
-                        default:
-                            $windowNum = 0;
-                        break;
+                    if (substr($tagMatches[0], -2) === '/>') {
+                        $match .= ' />';
+                    } else {
+                        $match .= '>';
                     }
-
-                    self::$_window = $this->callFunc('window', array($windowNum), $app, TRUE);
-                } else {
-                    self::$_window = $app;
                 }//end if
-            }
-        }//end if
+            }//end if
 
-        if ($this->getOS() !== 'windows') {
-            self::$_window = $this->callFunc('App.focusedWindow', array(), NULL, TRUE);
-        } else {
-            self::$_window = $this->switchApp($browser);
-        }
+            $newHtml .= $match;
+        }//end foreach
 
-        if (self::$_testRun === TRUE) {
-            // Adjust the brwoser window region so that its only the area of the actual page.
-            $pageLoc = $this->getPageTopLeft();
-            $this->setH(self::$_window, ($this->getH(self::$_window) - ($pageLoc['y'] - $this->getY(self::$_window))));
-            $this->setX(self::$_window, $pageLoc['x']);
-            $this->setY(self::$_window, $pageLoc['y']);
-        }
+        return $newHtml;
 
-        $this->setDefaultRegion(self::$_window);
-
-        self::$_browserSelected = TRUE;
-
-    }//end selectBrowser()
+    }//end _orderTagAttributes()
 
 
     /**
@@ -2084,171 +1984,61 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
 
 
     /**
-     * Returns the accesskey combination depending on OS and browser.
-     *
-     * @param string $key The key to include in the combination.
-     *
-     * @return string
-     */
-    private function _getAccessKeys($key)
-    {
-        $os   = $this->getOS();
-        $keys = '';
-        switch (self::$_browser) {
-            case 'Safari':
-            case 'Google Chrome':
-            case 'Firefox':
-                if ($os === 'osx') {
-                    $keys = 'Key.CTRL + Key.ALT';
-                } else {
-                    $keys = 'Key.ALT';
-                }
-            break;
-
-            default:
-                if ($os === 'windows') {
-                    $keys = 'Key.ALT';
-                } else {
-                    $keys = 'Key.CTRL';
-                }
-            break;
-        }//end switch
-
-        $keys .= ' + '.$key;
-
-        return $keys;
-
-    }//end _getAccessKeys()
-
-
-    /**
      * Executes the specified JavaScript and returns its result.
      *
      * @param string  $js            The JavaScript to execute.
-     * @param boolean $noCache       If TRUE the executed JS will not be cached.
      * @param boolean $noReturnValue If TRUE then JS has no return value and NULL
      *                               will be returned to speed up execution.
+     * @param boolean $asynchronous  If TURE then the JS that is being executed is
+     *                               asynchronous.
      *
      * @return string
      * @throws Exception If there is a Selenium error.
      */
-    protected function execJS($js, $noCache=FALSE, $noReturnValue=FALSE)
+    protected function execJS($js, $noReturnValue=FALSE, $asynchronous=FALSE)
     {
+        if ($asynchronous === TRUE) {
+            $js = '__asynchronous__'.$js;
+        }
+
         $this->debug('ExecJS: '.$js);
 
-        // If Selenium is being used then use it to execute the JavaScript.
-        if (self::$_useSelenium === TRUE) {
-            usleep(100000);
+        file_put_contents(self::$_pollFilePath.'/_jsexec.tmp', $js);
+        chmod(self::$_pollFilePath.'/_jsexec.tmp', 0777);
 
-            try {
-                // Need to have window object before the sub dfx calls.
-                $js = str_replace('(dfx', '(window.dfx', $js);
+        if ($js === 'cw();' || ($noReturnValue === TRUE && $asynchronous === FALSE)) {
+            return NULL;
+        }
 
-                $result = self::$_selenium->execute(
-                    array(
-                     'script' => 'return window.dfx.jsonEncode(window.'.$js.');',
-                     'args'   => array(),
-                    )
-                );
-            } catch (Exception $e) {
-                $this->debug('Selenium error: '.$e->getMessage());
-                throw new Exception('Selenium error: '.$e->getMessage());
+        $startTime = microtime(TRUE);
+        $timeout   = 3;
+        while (file_exists(self::$_pollFilePath.'/_jsres.tmp') === FALSE) {
+            if ((microtime(TRUE) - $startTime) > $timeout) {
+                break;
+            }
+
+            usleep(50000);
+        }
+
+        $result = NULL;
+        if (file_exists(self::$_pollFilePath.'/_jsres.tmp') === TRUE) {
+            $result = file_get_contents(self::$_pollFilePath.'/_jsres.tmp');
+
+            unlink(self::$_pollFilePath.'/_jsres.tmp');
+
+            if ($result === 'undefined' || trim($result) === '') {
+                return NULL;
             }
 
             $result = json_decode($result, TRUE);
 
-            return $result;
-        } else if (self::$_usePolling === TRUE) {
-            file_put_contents(self::$_pollFilePath.'/_jsexec.tmp', $js);
-            chmod(self::$_pollFilePath.'/_jsexec.tmp', 0777);
-
-            if ($js === 'cw();' || $noReturnValue === TRUE) {
-                return;
-            }
-
-            $startTime = microtime(TRUE);
-            $timeout   = 3;
-            while (file_exists(self::$_pollFilePath.'/_jsres.tmp') === FALSE) {
-                if ((microtime(TRUE) - $startTime) > $timeout) {
-                    break;
-                }
-
-                usleep(50000);
-            }
-
-            $result = NULL;
-            if (file_exists(self::$_pollFilePath.'/_jsres.tmp') === TRUE) {
-                $result = file_get_contents(self::$_pollFilePath.'/_jsres.tmp');
-
-                unlink(self::$_pollFilePath.'/_jsres.tmp');
-
-                if ($result === 'undefined' || trim($result) === '') {
-                    return NULL;
-                }
-
-                $result = json_decode($result, TRUE);
-
-                if (is_string($result) === TRUE) {
-                    $result = str_replace("\r\n", '\n', $result);
-                    $result = str_replace("\n", '\n', $result);
-                }
-            }
-
-            return $result;
-        }//end if
-
-        $this->_switchWindow('js');
-
-        usleep(200000);
-        $this->keyDown($this->_getAccessKeys('j'));
-
-        if ($noCache !== TRUE) {
-            if (isset(self::$_jsExecCache[$js]) === TRUE) {
-                $this->type(self::$_jsExecCache[$js]);
-            } else {
-                $this->type($js);
-                self::$_jsExecCache[$js] = count(self::$_jsExecCache);
-
-                file_put_contents(dirname(__FILE__).'/tmp/js_cache.inc', serialize(self::$_jsExecCache));
+            if (is_string($result) === TRUE) {
+                $result = str_replace("\r\n", '\n', $result);
+                $result = str_replace("\n", '\n', $result);
             }
         } else {
-            $this->type($js);
+            throw new Exception('Did not get a valid result from JavaScript');
         }
-
-        usleep(100000);
-        $this->keyDown('Key.ENTER');
-
-        if ($noReturnValue === TRUE) {
-            return NULL;
-        }
-
-        usleep(200000);
-        $this->keyDown('Key.TAB');
-        $this->keyDown('Key.CMD + a');
-        usleep(100000);
-        $this->keyDown('Key.CMD + c');
-        usleep(250000);
-        $this->keyDown('Key.TAB');
-        $this->keyDown('Key.SPACE');
-        usleep(50000);
-
-        $this->_switchWindow('main');
-
-        $text = $this->getClipboard();
-        if (strpos($text, "u'") === 0) {
-            $text = substr($text, 2, -1);
-        }
-
-        $text = str_replace("\n", '\n', $text);
-        $text = str_replace('\\\\"', '\\"', $text);
-        $text = str_replace('\\\'', "'", $text);
-        $text = str_replace('\xa0', ' ', $text);
-
-        if ($text === 'undefined' || trim($text) === '') {
-            return NULL;
-        }
-
-        $result = json_decode($text, TRUE);
 
         return $result;
 
@@ -2309,6 +2099,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      * @param integer $endKeyword   The keyword where the selection will end.
      *
      * @return void
+     * @throws Exception If the keyword is not found.
      */
     protected function selectKeyword($startKeyword, $endKeyword=NULL)
     {
@@ -2335,7 +2126,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
                 throw new Exception('Failed to find keyword: '.$this->getKeyword($startKeyword));
             }
         }
-        
+
         $end = $start;
         if ($startKeyword !== $endKeyword) {
             $end = $this->find($this->_getKeywordImage($endKeyword), NULL, $this->getData('textSimmilarity'));
@@ -2380,6 +2171,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         }//end if
 
     }//end selectKeyword()
+
 
     /**
      * Moves the caret to the right or left of the specified keyword.
@@ -2504,7 +2296,8 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
     /**
      * Returns the label image for the specified label element.
      *
-     * @param string $label The label of a field.
+     * @param string  $label The label of a field.
+     * @param boolean $force Force update the label screenshot.
      *
      * @return string
      */
@@ -2543,50 +2336,12 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
 
 
     /**
-     * Reloads the page.
-     *
-     * @return void
-     */
-    protected function reloadPage()
-    {
-        $topLeft = array(
-                    'x1' => 0,
-                    'y1' => 0,
-                    'x2' => 14,
-                    'y2' => 14,
-                   );
-        $region  = $this->getRegionOnPage($topLeft);
-        $this->click($region);
-        sleep(1);
-
-    }//end reloadPage()
-
-
-    /**
-     * Sets the browser URL to the specified URL.
-     *
-     * @param string $url The new URL.
-     *
-     * @return void
-     */
-    protected function goToURL($url)
-    {
-        self::$_currentWindow = 'js';
-
-        $this->keyDown('Key.CMD+l');
-        $this->type($url);
-        $this->keyDown('Key.ENTER');
-        sleep(1);
-
-    }//end goToURL()
-
-
-    /**
      * Returns the HTML of the test page.
      *
      * @param string  $selector           The jQuery selector to use for finding the element.
      * @param integer $index              The element index of the resulting array.
      * @param boolean $removeTableHeaders If TRUE then table headers will be removed.
+     * @param boolean $noModify           If TRUE the HTML will not be modified.
      *
      * @return string
      */
@@ -2764,7 +2519,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
             $js .= ' false)';
         }
 
-        $this->execJS($js, NULL, TRUE);
+        $this->execJS($js, TRUE);
 
     }//end removeTableHeaders()
 
@@ -2826,6 +2581,20 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
 
 
     /**
+     * Pastes content from specified URL in to Viper.
+     *
+     * @param string $url The URL to get the content from.
+     *
+     * @return void
+     */
+    protected function pasteFromURL($url)
+    {
+        $this->execJS('pasteFromURL("'.$url.'")', TRUE, TRUE);
+
+    }//end pasteFromURL()
+
+
+    /**
      * Finds the location of right click paste div and right clicks the paste frame.
      *
      * @return void
@@ -2841,6 +2610,25 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         $this->rightClick($this->createLocation($loc['x'], $loc['y']));
 
     }//end _rightClickPasteDiv()
+
+
+    /**
+     * Runs the test only if the specified OS or the browser is being used.
+     *
+     * @param string $os The OS the test runs for, if NULL it will run for all OS types.
+     * @param string $browser The browser the test runs for, if NULL it will run for all browsers.
+     *
+     * @return void
+     */
+    protected function runTestFor($os=NULL, $browser=NULL)
+    {
+        if ($os !== NULL && $os !== $this->getOS()) {
+            $this->markTestSkipped('This test does not run for this OS');
+        } else if ($browser !== NULL && $browser !== $this->getBrowserid()) {
+            $this->markTestSkipped('This test does not run for this browser');
+        }
+
+    }//end runTestFor()
 
 
 }//end class

@@ -131,7 +131,9 @@ class Viper_Tests_ViperTableEditorPlugin_CreateTableUnitTest extends AbstractVip
         $this->clickCell(2);
         $this->clickCell(3);
         $this->type('Males');
+        sleep(1);
         $this->keyDown('Key.TAB');
+        sleep(1);
         $this->type('Females');
 
         $this->keyDown('Key.TAB');

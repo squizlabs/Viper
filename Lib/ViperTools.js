@@ -151,14 +151,14 @@ ViperTools.prototype = {
                         button.parentNode.removeChild(button);
                         setTimeout(function() {
                             dfx.insertAfter(sibling, button);
-                        }, 1);  
+                        }, 1);
                     } else if (button.nextSibling) {
                         var sibling = button.nextSibling;
                         button.parentNode.removeChild(button);
                         setTimeout(function() {
-                            dfx.insertBefore(sibling, button);    
+                            dfx.insertBefore(sibling, button);
                         }, 1);
-                        
+
                     } else {
                         var parent = button.parentNode;
                         button.parentNode.removeChild(button);
@@ -421,8 +421,16 @@ ViperTools.prototype = {
             dfx.addClass(textBox, 'Viper-focused');
             self.viper.highlightSelection();
 
-            // Set the caret to the end of the textfield.
-            input.value = input.value;
+            if (self.viper.isBrowser('msie') === true) {
+                setTimeout(function() {
+                    input.focus();
+                    // Set the caret to the end of the textfield.
+                    input.value = input.value;
+                }, 10);
+            } else {
+                // Set the caret to the end of the textfield.
+                input.value = input.value;
+            }
 
             if (self.viper.isBrowser('firefox') === true) {
                 if (dfx.isTag(e.originalEvent.explicitOriginalTarget, 'input') === false) {
@@ -1472,10 +1480,10 @@ ViperTools.prototype = {
                         if (self.viper.isBrowser('msie') === false) {
                             tools.viper.highlightSelection();
                         } else {
-                            setTimeout(function() {console.info(2);
+                            setTimeout(function() {
                                 inputElements[0].focus();
                             }, 10);
-                        }   
+                        }
                     }
                 } catch (e) {}
 

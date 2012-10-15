@@ -20,8 +20,8 @@ abstract class AbstractViperTableEditorPluginUnitTest extends AbstractViperUnitT
      */
     protected function insertTable($keyword, $headerType=2, $rows=NULL, $cols=NULL)
     {
-        $this->selectKeyword($keyword);
-        $this->keyDown('Key.RIGHT');
+        $this->moveToKeyword($keyword, 'right');
+        usleep(50000);
         $this->clickTopToolbarButton('table');
 
         if ($rows !== NULL && $cols !== NULL) {
@@ -56,8 +56,8 @@ abstract class AbstractViperTableEditorPluginUnitTest extends AbstractViperUnitT
      */
     protected function insertTableWithSpecificId($id, $rows, $cols, $headerType, $keyword)
     {
-        $this->selectKeyword($keyword);
-        $this->keyDown('Key.RIGHT');
+        $this->moveToKeyword($keyword, 'right');
+        usleep(50000);
         $this->execJS('insTable('.$rows.', '.$cols.', '.$headerType.', "'.$id.'")');
 
     }//end insertTableWithBothHeaders()

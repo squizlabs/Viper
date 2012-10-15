@@ -319,7 +319,7 @@ ViperToolbarPlugin.prototype = {
                 }
 
                 var inputElements = dfx.getTag('input[type=text], textarea', this._subSections[id]);
-                if (inputElements.length > 0) {
+                if (inputElements.length > 0 && dfx.getElementHeight(inputElements[0]) > 0) {
                     try {
                         setTimeout(function() {
                             inputElements[0].focus();
