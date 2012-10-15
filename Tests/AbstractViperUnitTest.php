@@ -914,16 +914,17 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      */
     protected function reloadPage()
     {
-        $this->execJS('viper.destroy()');
+        $this->execJS('clean()');
+        $this->keyDown('Key.CMD + r');
 
-        $topLeft = array(
+        /*$topLeft = array(
                     'x1' => 0,
                     'y1' => 0,
                     'x2' => 14,
                     'y2' => 14,
                    );
         $region  = $this->getRegionOnPage($topLeft);
-        $this->click($region);
+        $this->click($region);*/
         sleep(1);
 
     }//end reloadPage()

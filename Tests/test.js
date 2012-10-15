@@ -419,6 +419,14 @@ function pasteFromURL(url)
 
 }
 
+function clean()
+{
+    viper.destroy();
+    dfx.remove(dfx.getId('windowTarget'));
+    dfx.setHtml(dfx.getId('content'), '');
+
+}
+
 function testJSExec()
 {
     return 'Pass';

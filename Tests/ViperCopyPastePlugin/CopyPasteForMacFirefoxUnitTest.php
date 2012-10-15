@@ -39,7 +39,7 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteForMacFirefoxUnitTest extends Ab
 
         $this->moveToKeyword(1, 'right');
         $this->keyDown('Key.ENTER');
-        $this->pasteFromURL($this->getTestURL('/ViperCopyPastePlugin/TextFiles/MacFirefox/ListTestDoc.txt'));
+        $this->pasteFromURL($this->getTestURL('/ViperCopyPastePlugin/TextFiles/MacFirefox/ListsTestDoc.txt'));
 
         sleep(10);
 
@@ -106,7 +106,7 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteForMacFirefoxUnitTest extends Ab
 
         $this->moveToKeyword(1, 'right');
         $this->keyDown('Key.ENTER');
-        $this->pasteFromURL($this->getTestURL('/ViperCopyPastePlugin/TextFiles/MacFirefox/WordTablesExamples.txt'));
+        $this->pasteFromURL($this->getTestURL('/ViperCopyPastePlugin/TextFiles/MacFirefox/WordTableExamples.txt'));
 
         sleep(10);
 
