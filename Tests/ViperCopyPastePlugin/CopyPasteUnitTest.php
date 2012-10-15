@@ -105,34 +105,13 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
         $this->assertHTMLMatch('<pre>Lorum this is more content %1% to test %2%</pre>');
 
         // Test copy and paste
-        $this->click($this->findKeyword(1));
-
-        // Open Word doc, copy its contents.
-        if ($this->openFile(dirname(__FILE__).'/CopyPasteDoc.docx', 'Microsoft Word') === FALSE) {
-            $this->markTestSkipped('MS Word is not available');
-        }
-
-        sleep(2);
-
-        // Switch to MS Word.
-        $this->switchApp('Microsoft Word');
-
-        // Copy text.
-        $this->keyDown('Key.CMD + a');
-        sleep(1);
-        $this->keyDown('Key.CMD + c');
-        sleep(1);
-        $this->keyDown('Key.CMD + w');
-        $this->keyDown('Key.CMD + q');
-        sleep(5);
-
-        $this->switchApp($this->getBrowserName());
         $this->selectKeyword(1, 2);
+        $this->keyDown('Key.CMD + c');
+        $this->moveToKeyword(2, 'right');
         $this->keyDown('Key.CMD + v');
+        sleep(1);
 
-        sleep(5);
-
-        $this->assertHTMLMatch('<pre>Lorum this is more content <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus ornare ipsum nec felis lacinia a feugiat lectus pellentesque. Praesent in sapien sapien.</p></pre>');
+        $this->assertHTMLMatch('<pre>Lorum this is more content %1% to test %2%%1% to test %2%</pre>');
 
     }//end testCopyAndPasteInPreTag()
 
@@ -154,34 +133,13 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
         $this->assertHTMLMatch('<div>Lorum this is more content %1% to test %2%</div>');
 
         // Test copy and paste
-        $this->click($this->findKeyword(1));
-
-        // Open Word doc, copy its contents.
-        if ($this->openFile(dirname(__FILE__).'/CopyPasteDoc.docx', 'Microsoft Word') === FALSE) {
-            $this->markTestSkipped('MS Word is not available');
-        }
-
-        sleep(2);
-
-        // Switch to MS Word.
-        $this->switchApp('Microsoft Word');
-
-        // Copy text.
-        $this->keyDown('Key.CMD + a');
-        sleep(1);
-        $this->keyDown('Key.CMD + c');
-        sleep(1);
-        $this->keyDown('Key.CMD + w');
-        $this->keyDown('Key.CMD + q');
-        sleep(5);
-
-        $this->switchApp($this->getBrowserName());
         $this->selectKeyword(1, 2);
+        $this->keyDown('Key.CMD + c');
+        $this->moveToKeyword(2, 'right');
         $this->keyDown('Key.CMD + v');
+        sleep(1);
 
-        sleep(5);
-
-        $this->assertHTMLMatch('<div>Lorum this is more content</div><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus ornare ipsum nec felis lacinia a feugiat lectus pellentesque. Praesent in sapien sapien.</p>');
+        $this->assertHTMLMatch('<div>Lorum this is more content %1% to test %2%%1% to test %2%</div>');
 
     }//end testCopyAndPasteInDivTag()
 
@@ -203,34 +161,13 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
         $this->assertHTMLMatch('<blockquote><p>Lorum this is more content %1% to test %2%</p></blockquote>');
 
         // Test copy and paste
-        $this->click($this->findKeyword(1));
-
-        // Open Word doc, copy its contents.
-        if ($this->openFile(dirname(__FILE__).'/CopyPasteDoc.docx', 'Microsoft Word') === FALSE) {
-            $this->markTestSkipped('MS Word is not available');
-        }
-
-        sleep(2);
-
-        // Switch to MS Word.
-        $this->switchApp('Microsoft Word');
-
-        // Copy text.
-        $this->keyDown('Key.CMD + a');
-        sleep(1);
-        $this->keyDown('Key.CMD + c');
-        sleep(1);
-        $this->keyDown('Key.CMD + w');
-        $this->keyDown('Key.CMD + q');
-        sleep(5);
-
-        $this->switchApp($this->getBrowserName());
         $this->selectKeyword(1, 2);
+        $this->keyDown('Key.CMD + c');
+        $this->moveToKeyword(2, 'right');
         $this->keyDown('Key.CMD + v');
+        sleep(1);
 
-        sleep(5);
-
-        $this->assertHTMLMatch('<blockquote><p>Lorum this is more content</p></blockquote><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus ornare ipsum nec felis lacinia a feugiat lectus pellentesque. Praesent in sapien sapien.</p>');
+        $this->assertHTMLMatch('<blockquote><p>Lorum this is more content %1% to test %2%%1% to test %2%</p></blockquote>');
 
     }//end testCopyAndPasteInQuoteTag()
 
@@ -240,7 +177,7 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
      *
      * @return void
      */
-    public function testCopyAndPasteForAParagraph()
+    public function testCopyAndPasteForAParagraphSection()
     {
         $this->useTest(2);
 
@@ -264,7 +201,7 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
      *
      * @return void
      */
-    public function testCopyAndPasteForADiv()
+    public function testCopyAndPasteForADivSection()
     {
         $this->useTest(2);
 
@@ -296,7 +233,7 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
      *
      * @return void
      */
-    public function testCopyAndPasteForAQuote()
+    public function testCopyAndPasteForAQuoteSection()
     {
         $this->useTest(2);
 
@@ -328,7 +265,7 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
      *
      * @return void
      */
-    public function testCopyAndPasteForAPre()
+    public function testCopyAndPasteForAPreSection()
     {
         $this->useTest(2);
 
@@ -396,7 +333,7 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
     {
         $this->useTest(1);
 
-        // Open Word doc, copy its contents.
+        // Open HTML doc, copy its contents.
         if ($this->openFile(dirname(__FILE__).'/HtmlTablesInPage.html', $this->getBrowserName()) === FALSE) {
             $this->markTestSkipped('MS Word is not available');
         }
