@@ -5,6 +5,103 @@ require_once 'AbstractViperTableEditorPluginUnitTest.php';
 class Viper_Tests_ViperTableEditorPlugin_MergeAndSplitUnitTest extends AbstractViperTableEditorPluginUnitTest
 {
 
+
+   /**
+     * Test merge and split icons in a table without headers.
+     *
+     * @return void
+     */
+    public function testMergeAndSplitIconsInTableWithoutHeaders()
+    {
+        $this->insertTable(1, 0);
+        $this->assertMergeAndSplitIconStatuses(11, FALSE, FALSE, TRUE, FALSE, TRUE, FALSE);
+        $this->assertMergeAndSplitIconStatuses(10, FALSE, FALSE, TRUE, FALSE, TRUE, TRUE);
+        $this->assertMergeAndSplitIconStatuses(9, FALSE, FALSE, TRUE, FALSE, TRUE, TRUE);
+        $this->assertMergeAndSplitIconStatuses(8, FALSE, FALSE, TRUE, FALSE, FALSE, TRUE);
+        $this->assertMergeAndSplitIconStatuses(7, FALSE, FALSE, TRUE, TRUE, TRUE, FALSE);
+        $this->assertMergeAndSplitIconStatuses(6, FALSE, FALSE, TRUE, TRUE, TRUE, TRUE);
+        $this->assertMergeAndSplitIconStatuses(5, FALSE, FALSE, TRUE, TRUE, TRUE, TRUE);
+        $this->assertMergeAndSplitIconStatuses(4, FALSE, FALSE, TRUE, TRUE, FALSE, TRUE);
+        $this->assertMergeAndSplitIconStatuses(3, FALSE, FALSE, FALSE, TRUE, TRUE, FALSE);
+        $this->assertMergeAndSplitIconStatuses(2, FALSE, FALSE, FALSE, TRUE, TRUE, TRUE);
+        $this->assertMergeAndSplitIconStatuses(1, FALSE, FALSE, FALSE, TRUE, TRUE, TRUE);
+        $this->assertMergeAndSplitIconStatuses(0, FALSE, FALSE, FALSE, TRUE, FALSE, TRUE);
+
+    }//end testMergeAndSplitIconsInTableWithoutHeaders()
+
+
+   /**
+     * Test merge and split icons in a table with left headers.
+     *
+     * @return void
+     */
+    public function testMergeAndSplitIconsInTableWithLeftHeaders()
+    {
+        $this->insertTable(1, 1);
+        $this->assertMergeAndSplitIconStatuses(11, FALSE, FALSE, TRUE, FALSE, TRUE, FALSE);
+        $this->assertMergeAndSplitIconStatuses(10, FALSE, FALSE, TRUE, FALSE, TRUE, TRUE);
+        $this->assertMergeAndSplitIconStatuses(9, FALSE, FALSE, TRUE, FALSE, TRUE, TRUE);
+        $this->assertMergeAndSplitIconStatuses(8, FALSE, FALSE, TRUE, FALSE, FALSE, TRUE);
+        $this->assertMergeAndSplitIconStatuses(7, FALSE, FALSE, TRUE, TRUE, TRUE, FALSE);
+        $this->assertMergeAndSplitIconStatuses(6, FALSE, FALSE, TRUE, TRUE, TRUE, TRUE);
+        $this->assertMergeAndSplitIconStatuses(5, FALSE, FALSE, TRUE, TRUE, TRUE, TRUE);
+        $this->assertMergeAndSplitIconStatuses(4, FALSE, FALSE, TRUE, TRUE, FALSE, TRUE);
+        $this->assertMergeAndSplitIconStatuses(3, FALSE, FALSE, FALSE, TRUE, TRUE, FALSE);
+        $this->assertMergeAndSplitIconStatuses(2, FALSE, FALSE, FALSE, TRUE, TRUE, TRUE);
+        $this->assertMergeAndSplitIconStatuses(1, FALSE, FALSE, FALSE, TRUE, TRUE, TRUE);
+        $this->assertMergeAndSplitIconStatuses(0, FALSE, FALSE, FALSE, TRUE, FALSE, TRUE);
+
+    }//end testMergeAndSplitIconsInTableWithLeftHeaders()
+
+
+   /**
+     * Test merge and split icons in a table with top headers.
+     *
+     * @return void
+     */
+    public function testMergeAndSplitIconsInTableWithTopHeaders()
+    {
+        $this->insertTable(1);
+        $this->assertMergeAndSplitIconStatuses(11, FALSE, FALSE, TRUE, FALSE, TRUE, FALSE);
+        $this->assertMergeAndSplitIconStatuses(10, FALSE, FALSE, TRUE, FALSE, TRUE, TRUE);
+        $this->assertMergeAndSplitIconStatuses(9, FALSE, FALSE, TRUE, FALSE, TRUE, TRUE);
+        $this->assertMergeAndSplitIconStatuses(8, FALSE, FALSE, TRUE, FALSE, FALSE, TRUE);
+        $this->assertMergeAndSplitIconStatuses(7, FALSE, FALSE, FALSE, TRUE, TRUE, FALSE);
+        $this->assertMergeAndSplitIconStatuses(6, FALSE, FALSE, FALSE, TRUE, TRUE, TRUE);
+        $this->assertMergeAndSplitIconStatuses(5, FALSE, FALSE, FALSE, TRUE, TRUE, TRUE);
+        $this->assertMergeAndSplitIconStatuses(4, FALSE, FALSE, FALSE, TRUE, FALSE, TRUE);
+        $this->assertMergeAndSplitIconStatuses(3, FALSE, FALSE, FALSE, FALSE, TRUE, FALSE);
+        $this->assertMergeAndSplitIconStatuses(2, FALSE, FALSE, FALSE, FALSE, TRUE, TRUE);
+        $this->assertMergeAndSplitIconStatuses(1, FALSE, FALSE, FALSE, FALSE, TRUE, TRUE);
+        $this->assertMergeAndSplitIconStatuses(0, FALSE, FALSE, FALSE, FALSE, FALSE, TRUE);
+
+    }//end testMergeAndSplitIconsInTableWithTopHeaders()
+
+
+   /**
+     * Test merge and split icons in a table with both headers.
+     *
+     * @return void
+     */
+    public function testMergeAndSplitIconsInTableWithBothHeaders()
+    {
+        $this->insertTable(1, 3);
+        $this->assertMergeAndSplitIconStatuses(11, FALSE, FALSE, TRUE, FALSE, TRUE, FALSE);
+        $this->assertMergeAndSplitIconStatuses(10, FALSE, FALSE, TRUE, FALSE, TRUE, TRUE);
+        $this->assertMergeAndSplitIconStatuses(9, FALSE, FALSE, TRUE, FALSE, TRUE, TRUE);
+        $this->assertMergeAndSplitIconStatuses(8, FALSE, FALSE, TRUE, FALSE, FALSE, TRUE);
+        $this->assertMergeAndSplitIconStatuses(7, FALSE, FALSE, FALSE, TRUE, TRUE, FALSE);
+        $this->assertMergeAndSplitIconStatuses(6, FALSE, FALSE, FALSE, TRUE, TRUE, TRUE);
+        $this->assertMergeAndSplitIconStatuses(5, FALSE, FALSE, FALSE, TRUE, TRUE, TRUE);
+        $this->assertMergeAndSplitIconStatuses(4, FALSE, FALSE, FALSE, TRUE, FALSE, TRUE);
+        $this->assertMergeAndSplitIconStatuses(3, FALSE, FALSE, FALSE, FALSE, TRUE, FALSE);
+        $this->assertMergeAndSplitIconStatuses(2, FALSE, FALSE, FALSE, FALSE, TRUE, TRUE);
+        $this->assertMergeAndSplitIconStatuses(1, FALSE, FALSE, FALSE, FALSE, TRUE, TRUE);
+        $this->assertMergeAndSplitIconStatuses(0, FALSE, FALSE, FALSE, FALSE, FALSE, TRUE);
+
+    }//end testMergeAndSplitIconsInTableWithBothHeaders()
+
+
     /**
      * Test that the states of the merge and split icons are correct in a complex table.
      *
