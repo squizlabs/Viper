@@ -478,7 +478,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         $this->goToURL($url);
         sleep(3);
 
-        $texts = $this->execJS('getCoords('.json_encode(self::_getKeywordsList()).')', TRUE);
+        $texts = $this->execJS('getCoords('.json_encode(self::_getKeywordsList()).')');
         $count = count($texts);
 
         $i      = 1;
@@ -507,7 +507,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
             try {
                 for ($j = 1; $j <= $tests; $j++) {
                     // Change the contents of the test page.
-                    $this->execJS('changeContent('.$j.', '.$textSimilarity.')', TRUE);
+                    $this->execJS('changeContent('.$j.', '.$textSimilarity.')');
 
                     // Test that captured images can be found on the page.
                     for ($i = 1; $i <= $count; $i++) {
@@ -601,7 +601,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         $this->goToURL($url);
         sleep(3);
 
-        if ($this->execJS('testJSExec()', TRUE) !== 'Pass') {
+        if ($this->execJS('testJSExec()') !== 'Pass') {
             throw new Exception('JavaScript execution test failed!!');
         }
 
@@ -610,7 +610,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         $this->selectText('PyP');
         sleep(1);
 
-        $vitp      = $this->execJS('getVITP()', TRUE);
+        $vitp      = $this->execJS('getVITP()');
         $vitp['x'] = $this->getPageXRelativeToScreen($vitp['x']);
         $vitp['y'] = $this->getPageYRelativeToScreen($vitp['y']);
 
@@ -621,7 +621,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         sleep(2);
 
         // Left arrow.
-        $vitp      = $this->execJS('getVITP("left")', TRUE);
+        $vitp      = $this->execJS('getVITP("left")');
         $vitp['x'] = $this->getPageXRelativeToScreen($vitp['x']);
         $vitp['y'] = $this->getPageYRelativeToScreen($vitp['y']);
 
@@ -632,7 +632,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         sleep(2);
 
         // Right arrow.
-        $vitp      = $this->execJS('getVITP("right")', TRUE);
+        $vitp      = $this->execJS('getVITP("right")');
         $vitp['x'] = $this->getPageXRelativeToScreen($vitp['x']);
         $vitp['y'] = $this->getPageYRelativeToScreen($vitp['y']);
 
@@ -641,26 +641,26 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         copy($vitpImage, $imgPath.'/vitp_arrowRight.png');
 
         // Create image for the text field actions.
-        $textFieldActionRevertRegion = $this->getRegionOnPage($this->execJS('dfx.getBoundingRectangle(dfx.getId("textboxActionRevert"))', TRUE));
+        $textFieldActionRevertRegion = $this->getRegionOnPage($this->execJS('dfx.getBoundingRectangle(dfx.getId("textboxActionRevert"))'));
         $textFieldActionRevertImage  = $this->capture($textFieldActionRevertRegion);
         copy($textFieldActionRevertImage, $imgPath.'/textField_action_revert.png');
 
-        $textFieldActionClearRegion = $this->getRegionOnPage($this->execJS('dfx.getBoundingRectangle(dfx.getId("textboxActionClear"))', TRUE));
+        $textFieldActionClearRegion = $this->getRegionOnPage($this->execJS('dfx.getBoundingRectangle(dfx.getId("textboxActionClear"))'));
         $textFieldActionClearImage  = $this->capture($textFieldActionClearRegion);
         copy($textFieldActionClearImage, $imgPath.'/textField_action_clear.png');
 
         // Remove all Viper elements.
-        $this->execJS('viper.destroy()', TRUE);
+        $this->execJS('viper.destroy()');
 
         foreach ($statuses as $status => $className) {
-            $btnRects = $this->execJS('getCoords("'.$status.'", "'.$className.'")', TRUE);
+            $btnRects = $this->execJS('getCoords("'.$status.'", "'.$className.'")');
             sleep(1);
             foreach ($btnRects as $buttonName => $rect) {
                 $this->_createButtonImageFromRectangle($buttonName, $rect);
             }
         }
 
-        $this->execJS('showAllBtns()', TRUE);
+        $this->execJS('showAllBtns()');
 
         // Remove dupe icons.
         $dupeIcons = array(
@@ -1172,7 +1172,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      */
     public function closeJSWindow()
     {
-        $this->execJS('cw();', TRUE, TRUE);
+        $this->execJS('cw();', TRUE);
 
     }//end closeJSWindow()
 
@@ -1987,21 +1987,26 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      * Executes the specified JavaScript and returns its result.
      *
      * @param string  $js            The JavaScript to execute.
-     * @param boolean $noCache       If TRUE the executed JS will not be cached.
      * @param boolean $noReturnValue If TRUE then JS has no return value and NULL
      *                               will be returned to speed up execution.
+     * @param boolean $asynchronous  If TURE then the JS that is being executed is
+     *                               asynchronous.
      *
      * @return string
      * @throws Exception If there is a Selenium error.
      */
-    protected function execJS($js, $noCache=FALSE, $noReturnValue=FALSE)
+    protected function execJS($js, $noReturnValue=FALSE, $asynchronous=FALSE)
     {
+        if ($asynchronous === TRUE) {
+            $js = '__asynchronous__'.$js;
+        }
+
         $this->debug('ExecJS: '.$js);
 
         file_put_contents(self::$_pollFilePath.'/_jsexec.tmp', $js);
         chmod(self::$_pollFilePath.'/_jsexec.tmp', 0777);
 
-        if ($js === 'cw();' || $noReturnValue === TRUE) {
+        if ($js === 'cw();' || ($noReturnValue === TRUE && $asynchronous === FALSE)) {
             return NULL;
         }
 
@@ -2031,6 +2036,8 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
                 $result = str_replace("\r\n", '\n', $result);
                 $result = str_replace("\n", '\n', $result);
             }
+        } else {
+            throw new Exception('Did not get a valid result from JavaScript');
         }
 
         return $result;
@@ -2512,7 +2519,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
             $js .= ' false)';
         }
 
-        $this->execJS($js, NULL, TRUE);
+        $this->execJS($js, TRUE);
 
     }//end removeTableHeaders()
 
@@ -2571,6 +2578,20 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         }//end if
 
     }//end paste()
+
+
+    /**
+     * Pastes content from specified URL in to Viper.
+     *
+     * @param string $url The URL to get the content from.
+     *
+     * @return void
+     */
+    protected function pasteFromURL($url)
+    {
+        $this->execJS('pasteFromURL("'.$url.'")', TRUE, TRUE);
+
+    }//end pasteFromURL()
 
 
     /**
