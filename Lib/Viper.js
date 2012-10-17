@@ -638,12 +638,7 @@ Viper.prototype = {
         this.ViperHistoryManager.setActiveElement(elem);
         this.inlineMode = false;
         elem.setAttribute('contentEditable', true);
-        elem.setAttribute('tabindex', 0);
         dfx.setStyle(elem, 'outline', 'none');
-
-        elem.onfocus = function() {
-            self.setEnabled(true);
-        }
 
         if (this.getSetting('changeTracking') === true) {
             ViperChangeTracker.enableChangeTracking();
