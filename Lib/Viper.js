@@ -638,12 +638,7 @@ Viper.prototype = {
         this.ViperHistoryManager.setActiveElement(elem);
         this.inlineMode = false;
         elem.setAttribute('contentEditable', true);
-        elem.setAttribute('tabindex', 0);
         dfx.setStyle(elem, 'outline', 'none');
-
-        elem.onfocus = function() {
-            self.setEnabled(true);
-        }
 
         if (this.getSetting('changeTracking') === true) {
             ViperChangeTracker.enableChangeTracking();
@@ -2065,19 +2060,19 @@ Viper.prototype = {
 
                 return newElement;
             } else if (startContainer.nodeType === dfx.TEXT_NODE
-                && viper.getViperElement().firstChild === startContainer
+                && this.getViperElement().firstChild === startContainer
                 && dfx.trim(startContainer.data) === ''
             ) {
-                startContainer = range._getFirstSelectableChild(viper.getViperElement());
+                startContainer = range._getFirstSelectableChild(this.getViperElement());
             }
 
             var startBlockParent = dfx.getFirstBlockParent(startContainer);
             if (!endContainer) {
-                if (range.endContainer === viper.getViperElement()
+                if (range.endContainer === this.getViperElement()
                     && range.endContainer.childNodes
                     && !range.endContainer.childNodes[range.endOffset]
                 ) {
-                    endContainer = range._getLastSelectableChild(viper.getViperElement());
+                    endContainer = range._getLastSelectableChild(this.getViperElement());
                 } else {
                     endContainer = startContainer;
                 }

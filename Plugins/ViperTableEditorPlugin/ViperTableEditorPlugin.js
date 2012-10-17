@@ -274,11 +274,11 @@ ViperTableEditorPlugin.prototype = {
                     if (self.viper.isBrowser('msie') === true) {
                         // This must be in a timeout to be able to calculate the bubbles position correctly.
                         setTimeout(function() {
-                            self.toolbarPlugin.toggleBubble('VTEP-bubble');    
+                            self.toolbarPlugin.toggleBubble('VTEP-bubble');
                         }, 10);
                     } else {
                         self.toolbarPlugin.toggleBubble('VTEP-bubble');
-                    }   
+                    }
                 }
             }, true);
             this.toolbarPlugin.addButton(button);
@@ -327,12 +327,12 @@ ViperTableEditorPlugin.prototype = {
                         setTimeout(function() {
                             showToolbar = true;
                             self.showCellToolsIcon(cell);
-                        }, 10);    
+                        }, 10);
                     } else {
                         showToolbar = true;
                         self.showCellToolsIcon(cell);
                     }
-                    
+
                     return;
                 }
 
@@ -3487,7 +3487,8 @@ ViperTableEditorPlugin.prototype = {
 
         if (!tableId) {
             while (!tableId) {
-                tableId   = 'table' + dfx.getUniqueId().substr(-5, 5);
+                var uniqueid = dfx.getUniqueId();
+                tableId   = 'table' + uniqueid.substr((uniqueid.length - 5), 5);
                 var tElem = dfx.getId(tableId);
                 if (tElem) {
                     tableId = null;

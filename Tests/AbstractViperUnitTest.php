@@ -914,16 +914,17 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      */
     protected function reloadPage()
     {
-        $this->execJS('viper.destroy()');
+        $this->execJS('clean()');
+        $this->keyDown('Key.CMD + r');
 
-        $topLeft = array(
+        /*$topLeft = array(
                     'x1' => 0,
                     'y1' => 0,
                     'x2' => 14,
                     'y2' => 14,
                    );
         $region  = $this->getRegionOnPage($topLeft);
-        $this->click($region);
+        $this->click($region);*/
         sleep(1);
 
     }//end reloadPage()
@@ -2534,7 +2535,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      * @return void
      * @throws Exception If the browser is not supported.
      */
-    protected function paste($rightClick=FALSE)
+    protected function paste($rightClick=FALSE, $sourceURL=NULL)
     {
         if ($rightClick !== TRUE) {
             $this->keyDown('Key.CMD + v');
@@ -2547,10 +2548,15 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
                     // Click the paste item in the right click menu.
                     $this->click($this->mouseMoveOffset(30, 80));
 
-                    $this->_rightClickPasteDiv();
+                    if ($sourceURL !== NULL) {
+                        $this->pasteFromURL($sourceURL);
+                        $this->execJS('viper.ViperTools.getItem(\'ViperCopyPastePlugin-paste\').hide()');
+                    } else {
+                        $this->_rightClickPasteDiv();
 
-                    // Click the paste item in the right click menu.
-                    $this->click($this->mouseMoveOffset(30, 80));
+                        // Click the paste item in the right click menu.
+                        $this->click($this->mouseMoveOffset(30, 80));
+                    }
                 break;
 
                 case 'safari':

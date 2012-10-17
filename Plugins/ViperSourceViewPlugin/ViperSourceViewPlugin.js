@@ -138,7 +138,7 @@ ViperSourceViewPlugin.prototype = {
             this._editor     = null;
         } else if (this._sourceView) {
             if (newWindow === true) {
-                self.viper.ViperTools.closePopup('VSVP:popup', 'discardChanges');
+                this.viper.ViperTools.closePopup('VSVP:popup', 'discardChanges');
             } else {
                 this.viper.ViperTools.closePopup('VSVP:popup');
             }

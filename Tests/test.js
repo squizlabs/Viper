@@ -42,7 +42,7 @@ function initJSPoller()
         }
 
         viperTest.stopPolling = true;
-        dfx.get(scriptUrl, {_t:(new Date().getTime())}, function(val) {
+        dfx.post(scriptUrl, {_t:(new Date().getTime())}, function(val) {
             if (!val) {
                 viperTest.stopPolling = false;
                 return;
@@ -69,7 +69,7 @@ function initJSPoller()
                 // Execute JS.
                 eval(val);
 
-                dfx.get(viperTest.scriptURL, {res: jsResult, _t:(new Date().getTime())}, function() {
+                dfx.post(viperTest.scriptURL, {res: jsResult, _t:(new Date().getTime())}, function() {
                     viperTest.stopPolling = false;
                 });
             } else {
@@ -82,13 +82,8 @@ function initJSPoller()
 
 function sendResult(result)
 {
-    if (result) {
-        result = dfx.jsonEncode(result);
-    } else {
-        result = null;
-    }
-
-    dfx.get(viperTest.scriptURL, {res: result, _t:(new Date().getTime())}, function() {
+    result = dfx.jsonEncode(result);
+    dfx.post(viperTest.scriptURL, {res: result, _t:(new Date().getTime())}, function() {
         viperTest.stopPolling = false;
     });
 
@@ -405,7 +400,7 @@ function pasteFromURL(url)
 {
     var copyPastePlugin = viperTest.getWindow().viper.getPluginManager().getPlugin('ViperCopyPastePlugin');
 
-    dfx.get(url, null, function(data) {
+    dfx.post(url, null, function(data) {
         var tmp = document.createElement('div');
         dfx.setHtml(tmp, data);
 
@@ -416,6 +411,14 @@ function pasteFromURL(url)
         copyPastePlugin._handleFormattedPasteValue(false, tmp, viper.getViperElement());
         sendResult();
     });
+
+}
+
+function clean()
+{
+    viper.destroy();
+    dfx.remove(dfx.getId('windowTarget'));
+    dfx.setHtml(dfx.getId('content'), '');
 
 }
 
