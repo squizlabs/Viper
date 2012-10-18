@@ -104,7 +104,7 @@ ViperSourceViewPlugin.prototype = {
             var iframeTags = dfx.getTag('iframe', this.viper.getViperElement());
             for (var i = 0; i < iframeTags.length; i++) {
                 var src = iframeTags[i].getAttribute('src');
-                if (src && src.match('youtube.com') && !src.match('wmode=opaque')) {
+                if (src && src.match('youtube') && !src.match('wmode=opaque')) {
                     src = dfx.addToQueryString(src, {wmode: 'opaque'});
                     iframeTags[i].src = src;
                 }
