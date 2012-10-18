@@ -554,7 +554,12 @@ Viper.prototype = {
             this.cleanDOM(this.element);
 
             if (dfx.trim(dfx.getNodeTextContent(this.element)) === '') {
-                this.initEditableElement();
+                if (this.isBrowser('msie') === true && dfx.getTag('*', this.element).length === 0) {
+                    // This check is to prevent iframe elements stuffing up the whole browser screen in IE8 when
+                    // they are the only content on the page. Makes no sense but when
+                    // did IE ever make sense?
+                    this.initEditableElement();
+                }
             }
 
             this.element.setAttribute('contentEditable', false);
@@ -4620,7 +4625,7 @@ Viper.prototype = {
 
         content = content.replace(/<(p|div|h1|h2|h3|h4|h5|h6|li)((\s+\w+(\s*=\s*(?:".*?"|\'.*?\'|[^\'">\s]+))?)+)?\s*>\s*/ig, "<$1$2>");
         content = content.replace(/\s*<\/(p|div|h1|h2|h3|h4|h5|h6|li)((\s+\w+(\s*=\s*(?:".*?"|\'.*?\'|[^\'">\s]+))?)+)?\s*>/ig, "</$1$2>");
-        content = content.replace(/<(area|base|basefont|br|hr|input|img|link|meta)((\s+\w+(\s*=\s*(?:".*?"|\'.*?\'|[^\'">\s]+))?)+)?\s*>/ig, "<$1$2 />");
+        content = content.replace(/<(area|base|basefont|br|hr|input|img|link|meta|param|embed)((\s+\w+(\s*=\s*(?:".*?"|\'.*?\'|[^\'">\s]+))?)+)?\s*>/ig, "<$1$2 />");
         content = content.replace(/<\/?\s*([A-Z\d]+)/g, function(str) {
             return str.toLowerCase();
         });
