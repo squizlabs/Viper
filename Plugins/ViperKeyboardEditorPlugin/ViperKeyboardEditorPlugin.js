@@ -393,7 +393,7 @@ ViperKeyboardEditorPlugin.prototype = {
                 && startNode
                 && startNode === endNode
                 && startNode.nodeType === dfx.ELEMENT_NODE
-                && (this.viper.isBrowser('firefox') !== true || !(dfx.isTag(startNode, 'br') === true && dfx.isTag(blockParent, 'li') === false))
+                && (this.viper.isBrowser('firefox') !== true || !(dfx.isTag(startNode, 'br') === true && (!blockParent || dfx.isTag(blockParent, 'li') === true)))
             ) {
                 var elem = document.createElement(defaultTagName);
                 dfx.setHtml(elem, '<br />');
