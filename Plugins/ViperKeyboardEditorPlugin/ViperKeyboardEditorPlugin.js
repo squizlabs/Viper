@@ -370,6 +370,12 @@ ViperKeyboardEditorPlugin.prototype = {
             var selectedNode = range.getNodeSelection();
             var viperElem    = this.viper.getViperElement();
             if (selectedNode && selectedNode === viperElem) {
+                if (this.viper.isBrowser('msie') === true) {
+                    // Let IE do it as there is no way of telling if the caret is
+                    // before or after the iframe.
+                    return;
+                }
+
                 var elem = document.createElement(defaultTagName);
                 dfx.setHtml(elem, '<br />');
                 if (viperElem.firstChild) {
@@ -387,7 +393,7 @@ ViperKeyboardEditorPlugin.prototype = {
                 && startNode
                 && startNode === endNode
                 && startNode.nodeType === dfx.ELEMENT_NODE
-                && (this.viper.isBrowser('firefox') !== true || !(dfx.isTag(startNode, 'br') === true && dfx.isTag(blockParent, 'li') === false))
+                && (this.viper.isBrowser('firefox') !== true || !(dfx.isTag(startNode, 'br') === true && (!blockParent || dfx.isTag(blockParent, 'li') === true)))
             ) {
                 var elem = document.createElement(defaultTagName);
                 dfx.setHtml(elem, '<br />');
