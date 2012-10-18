@@ -416,17 +416,33 @@ ViperTools.prototype = {
             textBox.appendChild(descEl);
         }
 
+        var moveCaretToEnd = true;
+        if (this.viper.isBrowser('msie') === true) {
+            // Need to add this mouseDown event for IE to disable the caret moving
+            // to the end of the text in the input field. When the mouse is clicked
+            // the caret is placed to the start of the field instead of the end,
+            // so when the mouse is used to focus in to the field we do not move it
+            // to the end of the textbox.
+            dfx.addEvent(input, 'mousedown', function(e) {
+                moveCaretToEnd = false;
+            });
+        }
+
         var self = this;
         dfx.addEvent(input, 'focus', function(e) {
             dfx.addClass(textBox, 'Viper-focused');
             self.viper.highlightSelection();
 
             if (self.viper.isBrowser('msie') === true) {
-                setTimeout(function() {
-                    input.focus();
-                    // Set the caret to the end of the textfield.
-                    input.value = input.value;
-                }, 10);
+                if (moveCaretToEnd === true) {
+                    setTimeout(function() {
+                        input.focus();
+                        // Set the caret to the end of the textfield.
+                        input.value = input.value;
+                    }, 10);
+                }
+
+                moveCaretToEnd = true;
             } else {
                 // Set the caret to the end of the textfield.
                 input.value = input.value;
