@@ -418,6 +418,29 @@ ViperKeyboardEditorPlugin.prototype = {
                 ViperSelection.addRange(range);
                 this.viper.fireSelectionChanged();
                 return false;
+            } else if (this.viper.isBrowser('firefox') === true
+                && startNode.nodeType === dfx.TEXT_NODE
+                && endNode === startNode
+                && range.startOffset === startNode.data.length
+                && range.collapsed === true
+                && dfx.isTag(blockParent, 'li') === true
+                && dfx.isChildOf(dfx.getFirstBlockParent(range.getNextContainer(startNode)), blockParent)
+            ) {
+                // There is a sublist and the range is at the end of the main list
+                // item. When enter is pressed Firefox creates a new main list item
+                // but the caret is placed to the start of the sub list items and
+                // its not possible to move the caret to the new main list item.
+                var li = document.createElement('li');
+                li.appendChild(document.createElement('br'));
+                while (startNode.nextSibling) {
+                    li.appendChild(startNode.nextSibling);
+                }
+
+                dfx.insertAfter(blockParent, li);
+                range.selectNode(li.firstChild);
+                range.collapse(true);
+                ViperSelection.addRange(range);
+                return false;
             }//end if
 
             setTimeout(function() {
