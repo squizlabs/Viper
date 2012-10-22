@@ -4658,7 +4658,11 @@ Viper.prototype = {
 
                 // Remove single and double quotes and then wrap the value with
                 // double quotes.
-                attrValue = dfx.trim(attrValue, '"\'');
+                if (attrValue) {
+                    attrValue = dfx.trim(attrValue, '"\'');
+                } else {
+                    attrValue = '';
+                }
 
                 var res = ' ' + attrName + '="' + attrValue + '"';
                 return res;
