@@ -1016,6 +1016,57 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractViperListP
     }//end testShiftTagInNonListItem()
 
 
+    /**
+     * Tests that pressing enter key at the end of a list item with sub list creats a new list item.
+     *
+     * @return void
+     */
+    public function testCreatingNewListItemBeforeASubList()
+    {
+        $this->moveToKeyword(2, 'right');
+        $this->keyDown('Key.ENTER');
+        $this->keyDown('Key.TAB');
+        $this->clickTopToolbarButton('listOL');
+
+        $this->type('abcde%10%');
+        $this->keyDown('Key.ENTER');
+        $this->keyDown('Key.TAB');
+        $this->type('fghij');
+        $this->moveToKeyword(10, 'right');
+        $this->keyDown('Key.ENTER');
+        $this->type('klmnop');
+
+        $this->assertHTMLMatch('<p>%1% uuuuuu. %2%</p><ol><li>abcde%10%</li><li>klmnop<br /><ol><li>fghij</li></ol></li></ol><p>cPOc ccccc dddd. %3%</p><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa %4% ccccc</li><li>%5% %6% templates</li><li>Audit %7% %8%</li><li>Accessibility audit report</li><li>Recommendations %9% plan</li><li>Squiz Matrix guide</li></ol>');
+
+    }//end testCreatingNewListItemBeforeASubList()
+
+
+    /**
+     * Tests that pressing enter key at the in an empty sub list item creates a new list item.
+     *
+     * @return void
+     */
+    public function testCreatingNewListItemFromEmptySubList()
+    {
+        $this->moveToKeyword(2, 'right');
+        $this->keyDown('Key.ENTER');
+        $this->keyDown('Key.TAB');
+        $this->clickTopToolbarButton('listOL');
+        $this->type('abcde');
+        $this->keyDown('Key.ENTER');
+        $this->keyDown('Key.TAB');
+        $this->type('fghij%10%');
+        $this->keyDown('Key.ENTER');
+        $this->type('klmnop');
+        $this->moveToKeyword(10, 'right');
+        $this->keyDown('Key.ENTER');
+        $this->keyDown('Key.ENTER');
+
+        $this->assertHTMLMatch('<p>%1% uuuuuu. %2%</p><ol><li>abcde<ol><li>fghij%10%</li></ol></li><li><br /><ol><li>klmnop</li></ol></li></ol><p>cPOc ccccc dddd. %3%</p><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa %4% ccccc</li><li>%5% %6% templates</li><li>Audit %7% %8%</li><li>Accessibility audit report</li><li>Recommendations %9% plan</li><li>Squiz Matrix guide</li></ol>');
+
+    }//end testCreatingNewListItemFromEmptySubList()
+
+
 }//end class
 
 ?>

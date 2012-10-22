@@ -248,6 +248,37 @@ ViperKeyboardEditorPlugin.prototype = {
                             removeFirstBlock = true;
                         } else {
                             if (firstBlockTagName === 'li') {
+                                if (this.viper.isBrowser('chrome') === true || this.viper.isBrowser('safari') === true) {
+                                    var parentListItem = dfx.getFirstBlockParent(firstBlock.parentNode);
+                                    if (parentListItem && dfx.isTag(parentListItem, 'li') === true) {
+                                        newList = document.createElement('li');
+                                        newList.appendChild(document.createElement('br'));
+
+                                        var subList = null;
+                                        while (firstBlock.nextSibling) {
+                                            if (dfx.isTag(firstBlock.nextSibling, 'li') === true) {
+                                                if (!subList) {
+                                                    subList = document.createElement(dfx.getTagName(firstBlock.parentNode));
+                                                    newList.appendChild(subList);
+                                                }
+
+                                                subList.appendChild(firstBlock.nextSibling);
+                                            } else if (subList) {
+                                                subList.appendChild(firstBlock.nextSibling);
+                                            } else {
+                                                newList.appendChild(firstBlock.nextSibling);
+                                            }
+                                        }
+
+                                        dfx.remove(firstBlock);
+                                        dfx.insertAfter(parentListItem, newList);
+                                        range.selectNode(newList.firstChild);
+                                        range.collapse(true);
+                                        ViperSelection.addRange(range);
+                                        return false;
+                                    }
+                                }
+
                                 // Need to move rest of the list items to a new
                                 // list.
                                 var newList = document.createElement(dfx.getTagName(firstBlock.parentNode));
@@ -441,7 +472,49 @@ ViperKeyboardEditorPlugin.prototype = {
                 range.collapse(true);
                 ViperSelection.addRange(range);
                 return false;
-            }//end if
+            } else if (selectedNode
+                && dfx.isTag(selectedNode, 'li') === true
+                && blockParent === selectedNode
+                && startNode === endNode
+                && dfx.isTag(startNode, 'br') === true
+                && range.collapsed === true
+                && !startNode.nextSibling
+            ) {
+                var parentListItem = dfx.getFirstBlockParent(blockParent.parentNode);
+                if (parentListItem && dfx.isTag(parentListItem, 'li') === true) {
+                    // Pressing enter at the start of an empty sub list item should
+                    // be creating a new main list item and moving all remaining
+                    // sub list items to the new list item.
+                    var li = document.createElement('li');
+                    li.appendChild(document.createElement('br'));
+                    while (startNode.nextSibling) {
+                        li.appendChild(startNode.nextSibling);
+                    }
+
+                    var subList = null;
+                    while (blockParent.nextSibling) {
+                        if (dfx.isTag(blockParent.nextSibling, 'li') === true) {
+                            if (!subList) {
+                                subList = document.createElement(dfx.getTagName(blockParent.parentNode));
+                                li.appendChild(subList);
+                            }
+
+                            subList.appendChild(blockParent.nextSibling);
+                        } else if (subList) {
+                            subList.appendChild(blockParent.nextSibling);
+                        } else {
+                            li.appendChild(blockParent.nextSibling);
+                        }
+                    }
+
+                    dfx.remove(blockParent);
+                    dfx.insertAfter(parentListItem, li);
+                    range.selectNode(li.firstChild);
+                    range.collapse(true);
+                    ViperSelection.addRange(range);
+                    return false;
+                }
+            } //end if
 
             setTimeout(function() {
                 // Fire selection changed here for enter events after a delay so that

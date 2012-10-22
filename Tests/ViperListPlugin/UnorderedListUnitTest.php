@@ -1031,6 +1031,31 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperLis
     }//end testCreatingNewListItemBeforeASubList()
 
 
+    /**
+     * Tests that pressing enter key at the in an empty sub list item creates a new list item.
+     *
+     * @return void
+     */
+    public function testCreatingNewListItemFromEmptySubList()
+    {
+        $this->moveToKeyword(2, 'right');
+        $this->keyDown('Key.ENTER');
+        $this->keyDown('Key.TAB');
+        $this->type('abcde');
+        $this->keyDown('Key.ENTER');
+        $this->keyDown('Key.TAB');
+        $this->type('fghij%10%');
+        $this->keyDown('Key.ENTER');
+        $this->type('klmnop');
+        $this->moveToKeyword(10, 'right');
+        $this->keyDown('Key.ENTER');
+        $this->keyDown('Key.ENTER');
+
+        $this->assertHTMLMatch('<p>%1% uuuuuu. %2%</p><ul><li>abcde<ul><li>fghij%10%</li></ul></li><li><br /><ul><li>klmnop</li></ul></li></ul><p>cPOc ccccc dddd. %3%</p><p>ajhsd sjsjwi hhhh:</p><ul><li>aaa %4% ccccc</li><li>%5% %6% templates</li><li>Audit %7% %8%</li><li>Accessibility audit report</li><li>Recommendations %9% plan</li><li>Squiz Matrix guide</li></ul>');
+
+    }//end testCreatingNewListItemFromEmptySubList()
+
+
 }//end class
 
 ?>
