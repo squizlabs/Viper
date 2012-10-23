@@ -1,0 +1,79 @@
+<font color="#000000" size="3" face="Times New Roman">
+
+</font><h1 style="margin: 24pt 0cm 0pt;"><font color="#365f91" size="5" face="Cambria">My Complex </font><a name="_GoBack"></a><font color="#365f91" size="5" face="Cambria">Lists Dude!</font></h1><font color="#000000" size="3" face="Times New Roman">
+
+</font><p style="margin: 0cm 0cm 10pt;" class="MsoNormal"><font color="#000000" size="3" face="Calibri">Here is a numbered list…</font></p><font color="#000000" size="3" face="Times New Roman">
+
+</font><p style="margin: 0cm 0cm 0pt 36pt; text-indent: -18pt; mso-list: l0 level1 lfo1;" class="MsoListParagraphCxSpFirst"><font color="#000000"><span style="mso-bidi-font-family: Calibri; mso-bidi-theme-font: minor-latin;"><span style="mso-list: Ignore;"><font size="3" face="Calibri">1.</font><span style='font: 7pt/normal "Times New Roman"; font-size-adjust: none; font-stretch: normal;'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><font size="3" face="Calibri">One baby</font></font></p><font color="#000000" size="3" face="Times New Roman">
+
+</font><p style="margin: 0cm 0cm 0pt 72pt; text-indent: -18pt; mso-add-space: auto; mso-list: l0 level2 lfo1;" class="MsoListParagraphCxSpMiddle"><font color="#000000"><span style="mso-bidi-font-family: Calibri; mso-bidi-theme-font: minor-latin;"><span style="mso-list: Ignore;"><font size="3" face="Calibri">a.</font><span style='font: 7pt/normal "Times New Roman"; font-size-adjust: none; font-stretch: normal;'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><font size="3" face="Calibri">Sub baby</font></font></p><font color="#000000" size="3" face="Times New Roman">
+
+</font><p style="margin: 0cm 0cm 0pt 108pt; text-indent: -108pt; mso-add-space: auto; mso-list: l0 level3 lfo1; mso-text-indent-alt: -9.0pt;" class="MsoListParagraphCxSpMiddle"><font color="#000000"><span style="mso-bidi-font-family: Calibri; mso-bidi-theme-font: minor-latin;"><span style="mso-list: Ignore;"><span style='font: 7pt/normal "Times New Roman"; font-size-adjust: none; font-stretch: normal;'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span><font size="3" face="Calibri">i.</font><span style='font: 7pt/normal "Times New Roman"; font-size-adjust: none; font-stretch: normal;'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><font size="3" face="Calibri">Sub sub baby!</font></font></p><font color="#000000" size="3" face="Times New Roman">
+
+</font><p style="margin: 0cm 0cm 0pt 108pt; text-indent: -108pt; mso-add-space: auto; mso-list: l0 level3 lfo1; mso-text-indent-alt: -9.0pt;" class="MsoListParagraphCxSpMiddle"><font color="#000000"><span style="mso-bidi-font-family: Calibri; mso-bidi-theme-font: minor-latin;"><span style="mso-list: Ignore;"><span style='font: 7pt/normal "Times New Roman"; font-size-adjust: none; font-stretch: normal;'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span><font size="3" face="Calibri">ii.</font><span style='font: 7pt/normal "Times New Roman"; font-size-adjust: none; font-stretch: normal;'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><font size="3" face="Calibri">Sdfdsfsdf</font></font></p><font color="#000000" size="3" face="Times New Roman">
+
+</font><p style="margin: 0cm 0cm 0pt 108pt; text-indent: -108pt; mso-add-space: auto; mso-list: l0 level3 lfo1; mso-text-indent-alt: -9.0pt;" class="MsoListParagraphCxSpMiddle"><font color="#000000"><span style="mso-bidi-font-family: Calibri; mso-bidi-theme-font: minor-latin;"><span style="mso-list: Ignore;"><span style='font: 7pt/normal "Times New Roman"; font-size-adjust: none; font-stretch: normal;'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span><font size="3" face="Calibri">iii.</font><span style='font: 7pt/normal "Times New Roman"; font-size-adjust: none; font-stretch: normal;'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><font size="3" face="Calibri">sdfsdfsdf</font></font></p><font color="#000000" size="3" face="Times New Roman">
+
+</font><p style="margin: 0cm 0cm 0pt 36pt; text-indent: -18pt; mso-list: l0 level1 lfo1;" class="MsoListParagraphCxSpMiddle"><font color="#000000"><span style="mso-bidi-font-family: Calibri; mso-bidi-theme-font: minor-latin;"><span style="mso-list: Ignore;"><font size="3" face="Calibri">2.</font><span style='font: 7pt/normal "Times New Roman"; font-size-adjust: none; font-stretch: normal;'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><font size="3" face="Calibri">Two baby</font></font></p><font color="#000000" size="3" face="Times New Roman">
+
+</font><p style="margin: 0cm 0cm 0pt 72pt; text-indent: -18pt; mso-add-space: auto; mso-list: l0 level2 lfo1;" class="MsoListParagraphCxSpMiddle"><font color="#000000"><span style="mso-bidi-font-family: Calibri; mso-bidi-theme-font: minor-latin;"><span style="mso-list: Ignore;"><font size="3" face="Calibri">a.</font><span style='font: 7pt/normal "Times New Roman"; font-size-adjust: none; font-stretch: normal;'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><font size="3" face="Calibri">Sdfsfdds</font></font></p><font color="#000000" size="3" face="Times New Roman">
+
+</font><p style="margin: 0cm 0cm 0pt 72pt; text-indent: -18pt; mso-add-space: auto; mso-list: l0 level2 lfo1;" class="MsoListParagraphCxSpMiddle"><font color="#000000"><span style="mso-bidi-font-family: Calibri; mso-bidi-theme-font: minor-latin;"><span style="mso-list: Ignore;"><font size="3" face="Calibri">b.</font><span style='font: 7pt/normal "Times New Roman"; font-size-adjust: none; font-stretch: normal;'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><font size="3" face="Calibri">Sdfsfdsfd</font></font></p><font color="#000000" size="3" face="Times New Roman">
+
+</font><p style="margin: 0cm 0cm 0pt 72pt; text-indent: -18pt; mso-add-space: auto; mso-list: l0 level2 lfo1;" class="MsoListParagraphCxSpMiddle"><font color="#000000"><span style="mso-bidi-font-family: Calibri; mso-bidi-theme-font: minor-latin;"><span style="mso-list: Ignore;"><font size="3" face="Calibri">c.</font><span style='font: 7pt/normal "Times New Roman"; font-size-adjust: none; font-stretch: normal;'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><font size="3" face="Calibri">sfdsdfsdf</font></font></p><font color="#000000" size="3" face="Times New Roman">
+
+</font><p style="margin: 0cm 0cm 0pt 36pt; text-indent: -18pt; mso-list: l0 level1 lfo1;" class="MsoListParagraphCxSpMiddle"><font color="#000000"><span style="mso-bidi-font-family: Calibri; mso-bidi-theme-font: minor-latin;"><span style="mso-list: Ignore;"><font size="3" face="Calibri">3.</font><span style='font: 7pt/normal "Times New Roman"; font-size-adjust: none; font-stretch: normal;'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><font size="3" face="Calibri">Three baby</font></font></p><font color="#000000" size="3" face="Times New Roman">
+
+</font><p style="margin: 0cm 0cm 10pt 36pt; text-indent: -18pt; mso-list: l0 level1 lfo1;" class="MsoListParagraphCxSpLast"><font color="#000000"><span style="mso-bidi-font-family: Calibri; mso-bidi-theme-font: minor-latin;"><span style="mso-list: Ignore;"><font size="3" face="Calibri">4.</font><span style='font: 7pt/normal "Times New Roman"; font-size-adjust: none; font-stretch: normal;'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><font size="3" face="Calibri">Four</font></font></p><font color="#000000" size="3" face="Times New Roman">
+
+</font><p style="margin: 0cm 0cm 10pt;" class="MsoNormal"><font color="#000000" size="3" face="Calibri">Here is mu bulleted list…</font></p><font color="#000000" size="3" face="Times New Roman">
+
+</font><p style="margin: 0cm 0cm 0pt 36pt; text-indent: -18pt; mso-list: l1 level1 lfo2;" class="MsoListParagraphCxSpFirst"><font color="#000000"><span style="font-family: Symbol; mso-fareast-font-family: Symbol; mso-bidi-font-family: Symbol;"><span style="mso-list: Ignore;"><font size="3">·</font><span style='font: 7pt/normal "Times New Roman"; font-size-adjust: none; font-stretch: normal;'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><font size="3" face="Calibri">One bullet</font></font></p><font color="#000000" size="3" face="Times New Roman">
+
+</font><p style="margin: 0cm 0cm 0pt 72pt; text-indent: -18pt; mso-add-space: auto; mso-list: l1 level2 lfo2;" class="MsoListParagraphCxSpMiddle"><font color="#000000"><span style='font-family: "Courier New"; mso-fareast-font-family: "Courier New";'><span style="mso-list: Ignore;"><font size="3">o</font><span style='font: 7pt/normal "Times New Roman"; font-size-adjust: none; font-stretch: normal;'>&nbsp;&nbsp;
+</span></span></span><font size="3" face="Calibri">Dsfsdfsdf</font></font></p><font color="#000000" size="3" face="Times New Roman">
+
+</font><p style="margin: 0cm 0cm 0pt 108pt; text-indent: -18pt; mso-add-space: auto; mso-list: l1 level3 lfo2;" class="MsoListParagraphCxSpMiddle"><font color="#000000"><span style="font-family: Wingdings; mso-fareast-font-family: Wingdings; mso-bidi-font-family: Wingdings;"><span style="mso-list: Ignore;"><font size="3">§</font><span style='font: 7pt/normal "Times New Roman"; font-size-adjust: none; font-stretch: normal;'>&nbsp;
+</span></span></span><font size="3" face="Calibri">Sdfsfdsdf</font></font></p><font color="#000000" size="3" face="Times New Roman">
+
+</font><p style="margin: 0cm 0cm 0pt 108pt; text-indent: -18pt; mso-add-space: auto; mso-list: l1 level3 lfo2;" class="MsoListParagraphCxSpMiddle"><font color="#000000"><span style="font-family: Wingdings; mso-fareast-font-family: Wingdings; mso-bidi-font-family: Wingdings;"><span style="mso-list: Ignore;"><font size="3">§</font><span style='font: 7pt/normal "Times New Roman"; font-size-adjust: none; font-stretch: normal;'>&nbsp;
+</span></span></span><font size="3" face="Calibri">sdfsdf</font></font></p><font color="#000000" size="3" face="Times New Roman">
+
+</font><p style="margin: 0cm 0cm 0pt 36pt; text-indent: -18pt; mso-list: l1 level1 lfo2;" class="MsoListParagraphCxSpMiddle"><font color="#000000"><span style="font-family: Symbol; mso-fareast-font-family: Symbol; mso-bidi-font-family: Symbol;"><span style="mso-list: Ignore;"><font size="3">·</font><span style='font: 7pt/normal "Times New Roman"; font-size-adjust: none; font-stretch: normal;'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><font size="3" face="Calibri">Two bullet</font></font></p><font color="#000000" size="3" face="Times New Roman">
+
+</font><p style="margin: 0cm 0cm 0pt 72pt; text-indent: -18pt; mso-add-space: auto; mso-list: l1 level2 lfo2;" class="MsoListParagraphCxSpMiddle"><font color="#000000"><span style='font-family: "Courier New"; mso-fareast-font-family: "Courier New";'><span style="mso-list: Ignore;"><font size="3">o</font><span style='font: 7pt/normal "Times New Roman"; font-size-adjust: none; font-stretch: normal;'>&nbsp;&nbsp;
+</span></span></span><font size="3" face="Calibri">Dsfsfd</font></font></p><font color="#000000" size="3" face="Times New Roman">
+
+</font><p style="margin: 0cm 0cm 0pt 72pt; text-indent: -18pt; mso-add-space: auto; mso-list: l1 level2 lfo2;" class="MsoListParagraphCxSpMiddle"><font color="#000000"><span style='font-family: "Courier New"; mso-fareast-font-family: "Courier New";'><span style="mso-list: Ignore;"><font size="3">o</font><span style='font: 7pt/normal "Times New Roman"; font-size-adjust: none; font-stretch: normal;'>&nbsp;&nbsp;
+</span></span></span><font size="3" face="Calibri">sdfsdfsf</font></font></p><font color="#000000" size="3" face="Times New Roman">
+
+</font><p style="margin: 0cm 0cm 0pt 36pt; text-indent: -18pt; mso-list: l1 level1 lfo2;" class="MsoListParagraphCxSpMiddle"><font color="#000000"><span style="font-family: Symbol; mso-fareast-font-family: Symbol; mso-bidi-font-family: Symbol;"><span style="mso-list: Ignore;"><font size="3">·</font><span style='font: 7pt/normal "Times New Roman"; font-size-adjust: none; font-stretch: normal;'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><font size="3" face="Calibri">Three bullet</font></font></p><font color="#000000" size="3" face="Times New Roman">
+
+</font><p style="margin: 0cm 0cm 0pt 36pt; text-indent: -18pt; mso-list: l1 level1 lfo2;" class="MsoListParagraphCxSpMiddle"><font color="#000000"><span style="font-family: Symbol; mso-fareast-font-family: Symbol; mso-bidi-font-family: Symbol;"><span style="mso-list: Ignore;"><font size="3">·</font><span style='font: 7pt/normal "Times New Roman"; font-size-adjust: none; font-stretch: normal;'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><font size="3" face="Calibri">Four</font></font></p><font color="#000000" size="3" face="Times New Roman">
+
+</font><p style="margin: 0cm 0cm 10pt 72pt; text-indent: -18pt; mso-add-space: auto; mso-list: l1 level2 lfo2;" class="MsoListParagraphCxSpLast"><font color="#000000"><span style='font-family: "Courier New"; mso-fareast-font-family: "Courier New";'><span style="mso-list: Ignore;"><font size="3">o</font><span style='font: 7pt/normal "Times New Roman"; font-size-adjust: none; font-stretch: normal;'>&nbsp;&nbsp;
+</span></span></span><font size="3" face="Calibri">sdfsdfsfd</font></font></p><font color="#000000" size="3" face="Times New Roman">
+
+</font><p style="margin: 0cm 0cm 10pt;" class="MsoNormal"><font color="#000000" size="3" face="Calibri">Woot to lists!</font></p><font color="#000000" size="3" face="Times New Roman">
+
+</font><p style="margin: 0cm 0cm 10pt;" class="MsoNormal"><?xml:namespace prefix = o ns = "urn:schemas-microsoft-com:office:office" /><o:p><font color="#000000" size="3" face="Calibri">&nbsp;</font></o:p></p><font color="#000000" size="3" face="Times New Roman">
+
+</font>

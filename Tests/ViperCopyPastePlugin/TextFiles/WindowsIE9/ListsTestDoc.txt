@@ -1,0 +1,70 @@
+<font color="#000000" size="3" face="Times New Roman">
+
+</font><p style="margin: 0cm 0cm 10pt;" class="MsoNormal"><font color="#000000" size="3" face="Cambria">My complex numbered lists</font></p><font color="#000000" size="3" face="Times New Roman">
+
+</font><p style="margin: 0cm 0cm 0pt 18pt; text-indent: -18pt; mso-add-space: auto; mso-list: l0 level1 lfo2;" class="MsoListParagraphCxSpFirst"><font color="#000000"><span style="mso-bidi-font-family: Cambria; mso-bidi-theme-font: minor-latin;"><span style="mso-list: Ignore;"><font size="3" face="Cambria">1.</font><span style='font: 7pt/normal "Times New Roman"; font-size-adjust: none; font-stretch: normal;'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><font size="3" face="Cambria">Asdadsads</font></font></p><font color="#000000" size="3" face="Times New Roman">
+
+</font><p style="margin: 0cm 0cm 0pt 54pt; text-indent: -18pt; mso-add-space: auto; mso-list: l0 level2 lfo2;" class="MsoListParagraphCxSpMiddle"><font color="#000000"><span style='font-family: "Courier New"; mso-fareast-font-family: "Courier New";'><span style="mso-list: Ignore;"><font size="3">o</font><span style='font: 7pt/normal "Times New Roman"; font-size-adjust: none; font-stretch: normal;'>&nbsp;&nbsp;
+</span></span></span><font size="3" face="Cambria">Dsfsdfsfd</font></font></p><font color="#000000" size="3" face="Times New Roman">
+
+</font><p style="margin: 0cm 0cm 0pt 54pt; text-indent: -18pt; mso-add-space: auto; mso-list: l0 level2 lfo2;" class="MsoListParagraphCxSpMiddle"><font color="#000000"><span style='font-family: "Courier New"; mso-fareast-font-family: "Courier New";'><span style="mso-list: Ignore;"><font size="3">o</font><span style='font: 7pt/normal "Times New Roman"; font-size-adjust: none; font-stretch: normal;'>&nbsp;&nbsp;
+</span></span></span><font size="3" face="Cambria">Sdfsdfsfd</font></font></p><font color="#000000" size="3" face="Times New Roman">
+
+</font><p style="margin: 0cm 0cm 0pt 90pt; text-indent: -18pt; mso-add-space: auto; mso-list: l0 level3 lfo2;" class="MsoListParagraphCxSpMiddle"><font color="#000000"><span style="font-family: Wingdings; mso-fareast-font-family: Wingdings; mso-bidi-font-family: Wingdings;"><span style="mso-list: Ignore;"><font size="3">§</font><span style='font: 7pt/normal "Times New Roman"; font-size-adjust: none; font-stretch: normal;'>&nbsp;
+</span></span></span><font size="3" face="Cambria">Sfd</font></font></p><font color="#000000" size="3" face="Times New Roman">
+
+</font><p style="margin: 0cm 0cm 0pt 90pt; text-indent: -18pt; mso-add-space: auto; mso-list: l0 level3 lfo2;" class="MsoListParagraphCxSpMiddle"><font color="#000000"><span style="font-family: Wingdings; mso-fareast-font-family: Wingdings; mso-bidi-font-family: Wingdings;"><span style="mso-list: Ignore;"><font size="3">§</font><span style='font: 7pt/normal "Times New Roman"; font-size-adjust: none; font-stretch: normal;'>&nbsp;
+</span></span></span><font size="3" face="Cambria">Sfdsfd</font></font></p><font color="#000000" size="3" face="Times New Roman">
+
+</font><p style="margin: 0cm 0cm 0pt 90pt; text-indent: -18pt; mso-add-space: auto; mso-list: l0 level3 lfo2;" class="MsoListParagraphCxSpMiddle"><font color="#000000"><span style="font-family: Wingdings; mso-fareast-font-family: Wingdings; mso-bidi-font-family: Wingdings;"><span style="mso-list: Ignore;"><font size="3">§</font><span style='font: 7pt/normal "Times New Roman"; font-size-adjust: none; font-stretch: normal;'>&nbsp;
+</span></span></span><font size="3" face="Cambria">Dsfsdf</font></font></p><font color="#000000" size="3" face="Times New Roman">
+
+</font><p style="margin: 0cm 0cm 0pt 90pt; text-indent: -18pt; mso-add-space: auto; mso-list: l0 level3 lfo2;" class="MsoListParagraphCxSpMiddle"><font color="#000000"><span style="font-family: Wingdings; mso-fareast-font-family: Wingdings; mso-bidi-font-family: Wingdings;"><span style="mso-list: Ignore;"><font size="3">§</font><span style='font: 7pt/normal "Times New Roman"; font-size-adjust: none; font-stretch: normal;'>&nbsp;
+</span></span></span><font size="3" face="Cambria">sdfsdf</font></font></p><font color="#000000" size="3" face="Times New Roman">
+
+</font><p style="margin: 0cm 0cm 0pt 54pt; text-indent: -18pt; mso-add-space: auto; mso-list: l0 level2 lfo2;" class="MsoListParagraphCxSpMiddle"><font color="#000000"><span style='font-family: "Courier New"; mso-fareast-font-family: "Courier New";'><span style="mso-list: Ignore;"><font size="3">o</font><span style='font: 7pt/normal "Times New Roman"; font-size-adjust: none; font-stretch: normal;'>&nbsp;&nbsp;
+</span></span></span><font size="3" face="Cambria">Sdfsdfsfd</font></font></p><font color="#000000" size="3" face="Times New Roman">
+
+</font><p style="margin: 0cm 0cm 0pt 54pt; text-indent: -18pt; mso-add-space: auto; mso-list: l0 level2 lfo2;" class="MsoListParagraphCxSpMiddle"><font color="#000000"><span style='font-family: "Courier New"; mso-fareast-font-family: "Courier New";'><span style="mso-list: Ignore;"><font size="3">o</font><span style='font: 7pt/normal "Times New Roman"; font-size-adjust: none; font-stretch: normal;'>&nbsp;&nbsp;
+</span></span></span><font size="3" face="Cambria">sdfsdfsfd</font></font></p><font color="#000000" size="3" face="Times New Roman">
+
+</font><p style="margin: 0cm 0cm 0pt 18pt; text-indent: -18pt; mso-add-space: auto; mso-list: l0 level1 lfo2;" class="MsoListParagraphCxSpMiddle"><font color="#000000"><span style="mso-bidi-font-family: Cambria; mso-bidi-theme-font: minor-latin;"><span style="mso-list: Ignore;"><font size="3" face="Cambria">2.</font><span style='font: 7pt/normal "Times New Roman"; font-size-adjust: none; font-stretch: normal;'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><font size="3" face="Cambria">Asdadsasd</font></font></p><font color="#000000" size="3" face="Times New Roman">
+
+</font><p style="margin: 0cm 0cm 0pt 18pt; text-indent: -18pt; mso-add-space: auto; mso-list: l0 level1 lfo2;" class="MsoListParagraphCxSpMiddle"><font color="#000000"><span style="mso-bidi-font-family: Cambria; mso-bidi-theme-font: minor-latin;"><span style="mso-list: Ignore;"><font size="3" face="Cambria">3.</font><span style='font: 7pt/normal "Times New Roman"; font-size-adjust: none; font-stretch: normal;'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><font face="Cambria"><font size="3">Sfdsfds</font><span style="mso-tab-count: 1;"><font size="3">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font></span></font></font></p><font color="#000000" size="3" face="Times New Roman">
+
+</font><p style="margin: 0cm 0cm 0pt 18pt; text-indent: -18pt; mso-add-space: auto; mso-list: l0 level1 lfo2;" class="MsoListParagraphCxSpMiddle"><font color="#000000"><span style="mso-bidi-font-family: Cambria; mso-bidi-theme-font: minor-latin;"><span style="mso-list: Ignore;"><font size="3" face="Cambria">4.</font><span style='font: 7pt/normal "Times New Roman"; font-size-adjust: none; font-stretch: normal;'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><font size="3" face="Cambria">Asdasdasd</font></font></p><font color="#000000" size="3" face="Times New Roman">
+
+</font><p style="margin: 0cm 0cm 10pt 18pt; text-indent: -18pt; mso-add-space: auto; mso-list: l0 level1 lfo2;" class="MsoListParagraphCxSpLast"><font color="#000000"><span style="mso-bidi-font-family: Cambria; mso-bidi-theme-font: minor-latin;"><span style="mso-list: Ignore;"><font size="3" face="Cambria">5.</font><span style='font: 7pt/normal "Times New Roman"; font-size-adjust: none; font-stretch: normal;'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><font size="3" face="Cambria">Asdasdasd</font></font></p><font color="#000000" size="3" face="Times New Roman">
+
+</font><p style="margin: 0cm 0cm 10pt;" class="MsoNormal"><font color="#000000" size="3" face="Cambria">My complex bulleted lists</font></p><font color="#000000" size="3" face="Times New Roman">
+
+</font><p style="margin: 0cm 0cm 0pt 36pt; text-indent: -18pt; mso-list: l1 level1 lfo1;" class="MsoListParagraphCxSpFirst"><font color="#000000"><span style="font-family: Symbol; mso-fareast-font-family: Symbol; mso-bidi-font-family: Symbol;"><span style="mso-list: Ignore;"><font size="3">·</font><span style='font: 7pt/normal "Times New Roman"; font-size-adjust: none; font-stretch: normal;'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><font size="3" face="Cambria">Sadsadasda</font></font></p><font color="#000000" size="3" face="Times New Roman">
+
+</font><p style="margin: 0cm 0cm 0pt 72pt; text-indent: -18pt; mso-add-space: auto; mso-list: l1 level2 lfo1;" class="MsoListParagraphCxSpMiddle"><font color="#000000"><span style='font-family: "Courier New"; mso-fareast-font-family: "Courier New";'><span style="mso-list: Ignore;"><font size="3">o</font><span style='font: 7pt/normal "Times New Roman"; font-size-adjust: none; font-stretch: normal;'>&nbsp;&nbsp;
+</span></span></span><font size="3" face="Cambria">Sdfdsf</font></font></p><font color="#000000" size="3" face="Times New Roman">
+
+</font><p style="margin: 0cm 0cm 0pt 72pt; text-indent: -18pt; mso-add-space: auto; mso-list: l1 level2 lfo1;" class="MsoListParagraphCxSpMiddle"><font color="#000000"><span style='font-family: "Courier New"; mso-fareast-font-family: "Courier New";'><span style="mso-list: Ignore;"><font size="3">o</font><span style='font: 7pt/normal "Times New Roman"; font-size-adjust: none; font-stretch: normal;'>&nbsp;&nbsp;
+</span></span></span><font size="3" face="Cambria">Sdfsdfsdf</font></font></p><font color="#000000" size="3" face="Times New Roman">
+
+</font><p style="margin: 0cm 0cm 0pt 108pt; text-indent: -18pt; mso-add-space: auto; mso-list: l1 level3 lfo1;" class="MsoListParagraphCxSpMiddle"><font color="#000000"><span style="font-family: Wingdings; mso-fareast-font-family: Wingdings; mso-bidi-font-family: Wingdings;"><span style="mso-list: Ignore;"><font size="3">§</font><span style='font: 7pt/normal "Times New Roman"; font-size-adjust: none; font-stretch: normal;'>&nbsp;
+</span></span></span><font size="3" face="Cambria">Sdfsfdsdf</font></font></p><font color="#000000" size="3" face="Times New Roman">
+
+</font><p style="margin: 0cm 0cm 0pt 108pt; text-indent: -18pt; mso-add-space: auto; mso-list: l1 level3 lfo1;" class="MsoListParagraphCxSpMiddle"><font color="#000000"><span style="font-family: Wingdings; mso-fareast-font-family: Wingdings; mso-bidi-font-family: Wingdings;"><span style="mso-list: Ignore;"><font size="3">§</font><span style='font: 7pt/normal "Times New Roman"; font-size-adjust: none; font-stretch: normal;'>&nbsp;
+</span></span></span><font size="3" face="Cambria">sdfsdfsdf</font></font></p><font color="#000000" size="3" face="Times New Roman">
+
+</font><p style="margin: 0cm 0cm 0pt 72pt; text-indent: -18pt; mso-add-space: auto; mso-list: l1 level2 lfo1;" class="MsoListParagraphCxSpMiddle"><font color="#000000"><span style='font-family: "Courier New"; mso-fareast-font-family: "Courier New";'><span style="mso-list: Ignore;"><font size="3">o</font><span style='font: 7pt/normal "Times New Roman"; font-size-adjust: none; font-stretch: normal;'>&nbsp;&nbsp;
+</span></span></span><font size="3" face="Cambria">Sdfsdfsfd</font></font></p><font color="#000000" size="3" face="Times New Roman">
+
+</font><p style="margin: 0cm 0cm 0pt 72pt; text-indent: -18pt; mso-add-space: auto; mso-list: l1 level2 lfo1;" class="MsoListParagraphCxSpMiddle"><font color="#000000"><span style='font-family: "Courier New"; mso-fareast-font-family: "Courier New";'><span style="mso-list: Ignore;"><font size="3">o</font><span style='font: 7pt/normal "Times New Roman"; font-size-adjust: none; font-stretch: normal;'>&nbsp;&nbsp;
+</span></span></span><font size="3" face="Cambria">sdfsfdsdf</font></font></p><font color="#000000" size="3" face="Times New Roman">
+
+</font><p style="margin: 0cm 0cm 10pt 36pt; text-indent: -18pt; mso-list: l1 level1 lfo1;" class="MsoListParagraphCxSpLast"><font color="#000000"><span style="font-family: Symbol; mso-fareast-font-family: Symbol; mso-bidi-font-family: Symbol;"><span style="mso-list: Ignore;"><font size="3">·</font><span style='font: 7pt/normal "Times New Roman"; font-size-adjust: none; font-stretch: normal;'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><font size="3" face="Cambria">Asdasdsad</font></font><a name="_GoBack"></a></p><font color="#000000" size="3" face="Times New Roman">
+
+</font>

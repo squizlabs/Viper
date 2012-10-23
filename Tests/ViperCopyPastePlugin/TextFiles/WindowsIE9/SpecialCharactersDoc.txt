@@ -1,0 +1,33 @@
+<font color="#000000" size="3" face="Times New Roman">
+
+</font><p style="margin: 0cm 0cm 0pt;" class="MsoNormal"><span lang="EN-US"><font color="#000000" size="3" face="Cambria">~ ! @ # $ % ^ &amp; * ( ) _ + </font></span></p><font color="#000000" size="3" face="Times New Roman">
+
+</font><p style="margin: 0cm 0cm 0pt;" class="MsoNormal"><span lang="EN-US"><font color="#000000" size="3" face="Cambria">` 1 2 3 4 5 6 7 8 9 0 - = </font></span></p><font color="#000000" size="3" face="Times New Roman">
+
+</font><p style="margin: 0cm 0cm 0pt;" class="MsoNormal"><span lang="EN-US"><font color="#000000" size="3" face="Cambria">{ } | </font></span></p><font color="#000000" size="3" face="Times New Roman">
+
+</font><p style="margin: 0cm 0cm 0pt;" class="MsoNormal"><span lang="EN-US"><font color="#000000" size="3" face="Cambria">: </font></span></p><font color="#000000" size="3" face="Times New Roman">
+
+</font><p style="margin: 0cm 0cm 0pt;" class="MsoNormal"><span lang="EN-US"><font color="#000000" size="3" face="Cambria">&lt; &gt; ? </font></span></p><font color="#000000" size="3" face="Times New Roman">
+
+</font><p style="margin: 0cm 0cm 0pt;" class="MsoNormal"><span lang="EN-US"><font color="#000000" size="3" face="Cambria">[ ]</font></span></p><font color="#000000" size="3" face="Times New Roman">
+
+</font><p style="margin: 0cm 0cm 0pt;" class="MsoNormal"><span lang="EN-US"><font color="#000000" size="3" face="Cambria">; “a” ‘b’ </font></span></p><font color="#000000" size="3" face="Times New Roman">
+
+</font><p style="margin: 0cm 0cm 0pt;" class="MsoNormal"><span lang="EN-US"><font color="#000000" size="3" face="Cambria">, . / </font></span></p><font color="#000000" size="3" face="Times New Roman">
+
+</font><p style="margin: 0cm 0cm 0pt;" class="MsoNormal"><span lang="EN-US"><font color="#000000" size="3" face="Cambria">… </font></span></p><font color="#000000" size="3" face="Times New Roman">
+
+</font><p style="margin: 0cm 0cm 0pt;" class="MsoNormal"><a name="_GoBack"></a><span lang="EN-US"><font color="#000000" size="3" face="Cambria">q w e r t y u i o p </font></span></p><font color="#000000" size="3" face="Times New Roman">
+
+</font><p style="margin: 0cm 0cm 0pt;" class="MsoNormal"><span lang="EN-US"><font color="#000000" size="3" face="Cambria">Q W E R T Y U I O P </font></span></p><font color="#000000" size="3" face="Times New Roman">
+
+</font><p style="margin: 0cm 0cm 0pt;" class="MsoNormal"><span lang="EN-US"><font color="#000000" size="3" face="Cambria">a s d f g h j k l </font></span></p><font color="#000000" size="3" face="Times New Roman">
+
+</font><p style="margin: 0cm 0cm 0pt;" class="MsoNormal"><span lang="EN-US"><font color="#000000" size="3" face="Cambria">A S D F G H J K L </font></span></p><font color="#000000" size="3" face="Times New Roman">
+
+</font><p style="margin: 0cm 0cm 0pt;" class="MsoNormal"><span lang="EN-US"><font color="#000000" size="3" face="Cambria">z x c v b n m </font></span></p><font color="#000000" size="3" face="Times New Roman">
+
+</font><p style="margin: 0cm 0cm 0pt;" class="MsoNormal"><span lang="EN-US"><font color="#000000" size="3" face="Cambria">Z X C V B N M</font></span></p><font color="#000000" size="3" face="Times New Roman">
+
+</font>
