@@ -278,8 +278,8 @@ ViperSourceViewPlugin.prototype = {
         var popupBottom = document.createElement('div');
         dfx.addClass(popupBottom, 'VSVP-bottomPanel');
 
-        if (this.viper.isBrowser('msie') === false) {
-            var newWindowButton   = tools.createButton('VSVP:newWindow', '', 'Open In new window', 'VSVP-bottomPanel-newWindow Viper-sourceNewWindow', function() {
+        if (this.viper.isBrowser('msie') === false && (this.viper.getViperPath() || this.getViperURL())) {
+            var newWindowButton = tools.createButton('VSVP:newWindow', '', 'Open In new window', 'VSVP-bottomPanel-newWindow Viper-sourceNewWindow', function() {
                 self.openInNewWindow();
             });
             popupBottom.appendChild(newWindowButton);
