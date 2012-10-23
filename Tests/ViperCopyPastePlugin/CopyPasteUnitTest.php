@@ -384,6 +384,41 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
     }//end testRightClickPaste()
 
 
+    /**
+     * Test that copying/pasting German content.
+     *
+     * @return void
+     */
+    public function testCopyPasteGermanContent()
+    {
+        $this->useTest(1);
+
+        $this->moveToKeyword(1, 'right');
+        $this->keyDown('Key.ENTER');
+        $this->paste(TRUE, $this->getTestURL('/ViperCopyPastePlugin/GermanContent.txt'));
+
+        $this->assertHTMLMatch('<p>%1%</p><p>  Am letzten Tag der 62. Tagung des WHO-Regionalkomitees für Europa verabschiedeten die Mitgliedstaaten die Strategie und den Aktionsplan für gesundes Altern in der Europäischen Region (2012&ndash;2020) (nach der Erörterung dieses Dokuments am dritten Tag) sowie den Europäischen Aktionsplan zur Stärkung  der Kapazitäten und Angebote im Bereich der öffentlichen Gesundheit.<br />Europäischer Aktionsplan zur Stärkung der Kapazitäten und Angebote im Bereich der öffentlichen Gesundheit<br />In seiner Vorstellung des Aktionsplans sagte Dr. Hans Kluge, Direktor der Abteilung für Gesundheitssysteme und öffentliche Gesundheit, dass dies ein großartiger Moment sei, „weil die  Thematik öffentliche Gesundheit in der Europäischen Region wieder mit Leben gefüllt" werde. Er führte aus, dass der Plan in umfassenden Konsultationen in der Absicht entwickelt worden sei, die integrierte Leistungserbringung für Gesundheitsschutz, Krankheitsprävention und Gesundheitsförderung zu stärken.<br  />Angesichts der Veränderungen der Gesellschaften des 21. Jahrhunderts (Globalisierung, Überalterung der Bevölkerung, Klimawandel) sei eine erneute Betonung der öffentlichen Gesundheit zeitlich und inhaltlich angebracht, weil so trotz knapper Kassen optimale gesundheitliche Ergebnisse möglich seien.<br  />Der Plan sei in Übereinstimmung mit dem Rahmenkonzept „Gesundheit 2020" aufgestellt worden und baue auf einer soliden Grundlage aus Erkenntnissen auf, unter anderem durch Untersuchungen zu den Angeboten im Bereich der öffentlichen Gesundheit in 41 der 53 Mitgliedstaaten. Das Kernstück des Aktionsplans  bildeten die zehn überarbeiteten grundlegenden gesundheitspolitischen Maßnahmen (EPHO):<br />&nbsp;&nbsp; &nbsp;1.&nbsp;&nbsp; &nbsp;Surveillance von Gesundheit und Wohlbefinden der Bevölkerung<br />&nbsp;&nbsp; &nbsp;2.&nbsp;&nbsp; &nbsp;Beobachtung von Gesundheitsgefahren und gesundheitlichen Notlagen  und Gegenmaßnahmen<br />&nbsp;&nbsp; &nbsp;3.&nbsp;&nbsp; &nbsp;Gesundheitsschutzmaßnahmen (u. a. in den Bereichen Umwelt-, Arbeits- und Nahrungsmittelsicherheit)<br />&nbsp;&nbsp; &nbsp;4.&nbsp;&nbsp; &nbsp;Gesundheitsförderung, einschließlich Maßnahmen in Bezug auf soziale Determinanten und gesundheitliche  Benachteiligung<br />&nbsp;&nbsp; &nbsp;5.&nbsp;&nbsp; &nbsp;Krankheitsprävention, einschließlich Früherkennung<br />&nbsp;&nbsp; &nbsp;6.&nbsp;&nbsp; &nbsp;Gewährleistung von Politikgestaltung und Steuerung für mehr Gesundheit und Wohlbefinden<br />&nbsp;&nbsp; &nbsp;7.&nbsp;&nbsp; &nbsp;Gewährleistung  einer ausreichenden Zahl von fachkundigem Personal im Bereich der öffentlichen Gesundheit<br />&nbsp;&nbsp; &nbsp;8.&nbsp;&nbsp; &nbsp;Gewährleistung von nachhaltigen Organisationsstrukturen und Finanzierung<br />&nbsp;&nbsp; &nbsp;9.&nbsp;&nbsp; &nbsp;Überzeugungsarbeit, Kommunikation und soziale Mobilisierung  für die Gesundheit<br />&nbsp;&nbsp; &nbsp;10.&nbsp;&nbsp; &nbsp;Förderung der Forschung im Bereich der öffentlichen Gesundheit zwecks Anwendung in Politik und Praxis</p>');
+
+    }//end testCopyPasteGermanContent()
+
+
+    /**
+     * Test that copying/pasting french content.
+     *
+     * @return void
+     */
+    public function testCopyPasteFrenchContent()
+    {
+        $this->useTest(1);
+
+        $this->moveToKeyword(1, 'right');
+        $this->keyDown('Key.ENTER');
+        $this->paste(TRUE, $this->getTestURL('/ViperCopyPastePlugin/FrenchContent.txt'));
+
+        $this->assertHTMLMatch('<p>%1%</p><p>  Lors de la dernière journée de la soixante-deuxième session du Comité régional de l\'OMS pour l\'Europe, les États membres de la Région européenne ont adopté la Stratégie (Plan d\'action) pour vieillir en bonne santé en Europe, 2012-2020 (examinée lors de la 3e journée), et le Plan d\'action européen pour  le renforcement des capacités et services de santé publique.<br />Plan d\'action européen pour le renforcement des capacités et services de santé publique<br />En présentant le Plan d\'action européen, le docteur Hans Kluge, directeur de la Division des systèmes de santé et de la santé publique, fait remarquer qu\'il s\'agit &laquo; d\'un grand moment, étant donné  la nouveau souffle accordé à la santé publique dans la Région européenne. &raquo; Il explique que le Plan d\'action a été élaboré dans le cadre d\'un vaste processus de consultation pour renforcer la prestation de services intégrés en matière de protection de la santé, de prévention des maladies et de  promotion de la santé.<br />Compte tenu des défis confrontés par la société au XXIe siècle (mondialisation, vieillissement de la population, changement climatique), un recentrage sur la santé publique est à la fois opportun et approprié afin d\'obtenir les meilleurs résultats sanitaires avec des ressources  limitées.<br />Le Plan d\'action a été formulé conformément au cadre politique de la santé, Santé 2020, et s\'inspire d\'informations factuelles solides, notamment de plusieurs études réalisées sur les services de santé publique dans 41 des 53 États membres de la Région européenne. Dix opérations essentielles  de santé publique révisées sont à la base du Plan d\'action :<br />&nbsp;&nbsp; &nbsp;1.&nbsp;&nbsp; &nbsp;surveillance de la santé et du bien-être de la population ;<br />&nbsp;&nbsp; &nbsp;2.&nbsp;&nbsp; &nbsp;surveillance et intervention en cas de risques et d\'urgences sanitaires ;<br />&nbsp;&nbsp;  &nbsp;3.&nbsp;&nbsp; &nbsp;protection de la santé (sécurité de l\'environnement et du travail, sécurité sanitaire des aliments, etc.) ;<br />&nbsp;&nbsp; &nbsp;4.&nbsp;&nbsp; &nbsp;promotion de la santé, dont l\'action sur les déterminants de la santé et le manque d\'équité en santé ;<br />&nbsp;&nbsp;  &nbsp;5.&nbsp;&nbsp; &nbsp;prévention des maladies, dont le dépistage rapide ;<br />&nbsp;&nbsp; &nbsp;6.&nbsp;&nbsp; &nbsp;garantir la gouvernance pour la santé et le bien-être ;<br />&nbsp;&nbsp; &nbsp;7.&nbsp;&nbsp; &nbsp;s\'assurer de disposer d\'un personnel compétent dans le domaine de la santé publique  et d\'effectifs suffisants ;<br />&nbsp;&nbsp; &nbsp;8.&nbsp;&nbsp; &nbsp;garantir des structures organisationnelles et un financement durables ;<br />&nbsp;&nbsp; &nbsp;9.&nbsp;&nbsp; &nbsp;sensibilisation, communication et mobilisation sociale pour la santé ;<br />&nbsp;&nbsp; &nbsp;10.&nbsp;&nbsp;  &nbsp;faire progresser la recherche en santé publique pour élaborer des politiques et des pratiques en conséquence.</p>');
+
+    }//end testCopyPasteFrenchContent()
+
 }//end class
 
 ?>
