@@ -651,6 +651,42 @@ Viper.prototype = {
 
         this.fireCallbacks('Viper:editableElementChanged', {element: elem});
 
+        // Create a text field that is off screen that will handle tabbing in to Viper.
+        var tabTextfield  = document.createElement('input');
+        tabTextfield.type = 'text';
+        dfx.setStyle(tabTextfield, 'left', '-9999px');
+        dfx.setStyle(tabTextfield, 'top', '-9999px');
+        dfx.setStyle(tabTextfield, 'position', 'absolute');
+        dfx.insertBefore(this.element, tabTextfield);
+        dfx.addEvent(tabTextfield, 'focus', function(e) {
+            tabTextfield.blur();
+            self.setEnabled(true);
+
+            self.focus();
+            self.fireCallbacks('Viper:clickedInside', e);
+            self.initEditableElement();
+
+            var range = self.getViperRange();
+
+            var selectable = range._getFirstSelectableChild(self.element);
+            if (!selectable) {
+                var brTags = dfx.getTag('br', self.element);
+                if (brTags.length > 0) {
+                    selectable = brTags[0];
+                    range.selectNode(selectable);
+                }
+            }
+
+            if (!selectable) {
+                range.setEnd(range._getFirstSelectableChild(self.element), 0);
+                range.setStart(range._getFirstSelectableChild(self.element), 0);
+            }
+
+            range.collapse(true);
+            ViperSelection.addRange(range);
+            self.fireSelectionChanged(range, true);
+        });
+
     },
 
     registerEditableElements: function(elements)
