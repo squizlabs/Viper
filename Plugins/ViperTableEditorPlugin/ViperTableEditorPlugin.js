@@ -138,19 +138,20 @@ ViperTableEditorPlugin.prototype = {
 
         this.viper.registerCallback('Viper:keyUp', 'ViperTableEditorPlugin', function(e) {
             var range = self.viper.getViperRange();
+            try {
+                if (range.collapsed === true
+                    && range.startContainer.nodeType === dfx.TEXT_NODE
+                    && ['td', 'th'].inArray(dfx.getTagName(range.startContainer.parentNode)) === true
+                ) {
+                    var ohtml = dfx.getHtml(range.startContainer.parentNode);
+                    var nhtml = ohtml.replace(/^&nbsp;/g, '');
+                    nhtml     = nhtml.replace(/&nbsp;$/g, '');
 
-            if (range.collapsed === true
-                && range.startContainer.nodeType === dfx.TEXT_NODE
-                && ['td', 'th'].inArray(dfx.getTagName(range.startContainer.parentNode)) === true
-            ) {
-                var ohtml = dfx.getHtml(range.startContainer.parentNode);
-                var nhtml = ohtml.replace(/^&nbsp;/g, '');
-                nhtml     = nhtml.replace(/&nbsp;$/g, '');
-
-                if (nhtml !== ohtml && nhtml !== '') {
-                    dfx.setHtml(range.startContainer.parentNode, nhtml);
+                    if (nhtml !== ohtml && nhtml !== '') {
+                        dfx.setHtml(range.startContainer.parentNode, nhtml);
+                    }
                 }
-            }
+            } catch (e) {}
         });
 
         this.viper.registerCallback('Viper:keyDown', 'ViperTableEditorPlugin', function(e) {
