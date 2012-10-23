@@ -68,6 +68,28 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractViperListP
 
 
     /**
+     * Test that you can create a list after starting with a new paragraph.
+     *
+     * @return void
+     */
+    public function testCreatingAListFromANewParagraph()
+    {
+        $this->moveToKeyword(2, 'right');
+        $this->keyDown('Key.ENTER');
+
+        $this->type('New list item');
+        $this->clickTopToolbarButton('listOL');
+        $this->assertIconStatusesCorrect(TRUE, 'active', NULL, TRUE);
+        $this->keyDown('Key.ENTER');
+        $this->type('Second list item');
+        $this->assertIconStatusesCorrect(TRUE, 'active', NULL, TRUE);
+
+        $this->assertHTMLMatch('<p>%1% uuuuuu. %2%</p><ol><li>New list item</li><li>Second list item</li></ol><p>cPOc ccccc dddd. %3%</p><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa %4% ccccc</li><li>%5% %6% templates</li><li>Audit %7% %8%</li><li>Accessibility audit report</li><li>Recommendations %9% plan</li><li>Squiz Matrix guide</li></ol>');
+
+    }//end testCreatingAListFromANewParagraph()
+
+
+    /**
      * Test that unordered list is added and removed for the paragraph when you click inside a word.
      *
      * @return void
