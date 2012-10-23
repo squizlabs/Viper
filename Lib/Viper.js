@@ -651,6 +651,42 @@ Viper.prototype = {
 
         this.fireCallbacks('Viper:editableElementChanged', {element: elem});
 
+        // Create a text field that is off screen that will handle tabbing in to Viper.
+        var tabTextfield  = document.createElement('input');
+        tabTextfield.type = 'text';
+        dfx.setStyle(tabTextfield, 'left', '-9999px');
+        dfx.setStyle(tabTextfield, 'top', '-9999px');
+        dfx.setStyle(tabTextfield, 'position', 'absolute');
+        dfx.insertBefore(this.element, tabTextfield);
+        dfx.addEvent(tabTextfield, 'focus', function(e) {
+            tabTextfield.blur();
+            self.setEnabled(true);
+
+            self.focus();
+            self.fireCallbacks('Viper:clickedInside', e);
+            self.initEditableElement();
+
+            var range = self.getViperRange();
+
+            var selectable = range._getFirstSelectableChild(self.element);
+            if (!selectable) {
+                var brTags = dfx.getTag('br', self.element);
+                if (brTags.length > 0) {
+                    selectable = brTags[0];
+                    range.selectNode(selectable);
+                }
+            }
+
+            if (!selectable) {
+                range.setEnd(range._getFirstSelectableChild(self.element), 0);
+                range.setStart(range._getFirstSelectableChild(self.element), 0);
+            }
+
+            range.collapse(true);
+            ViperSelection.addRange(range);
+            self.fireSelectionChanged(range, true);
+        });
+
     },
 
     registerEditableElements: function(elements)
@@ -4494,6 +4530,11 @@ Viper.prototype = {
         var html = dfx.getHtml(clone);
         html     = this.cleanHTML(html);
 
+        html = html.replace(/<\/viper:param>/ig, '');
+        html = html.replace(/<viper:param /ig, '<param ');
+        html = html.replace(/<:object/ig, '<object');
+        html = html.replace(/<\/:object/ig, '</object');
+
         // Revert to original settings.
         this.setSettings(originalSettings, true);
 
@@ -4534,6 +4575,11 @@ Viper.prototype = {
         // before Viper returns its HTML contents.
         this.fireCallbacks('getContents', {element: clone});
         var html = dfx.getHtml(clone);
+
+        if (this.isBrowser('msie') === true) {
+            html = html.replace(/<:object /ig, '<object ');
+            html = html.replace(/<\/:object>/ig, '</object>');
+        }
 
         return html;
 
@@ -4609,8 +4655,18 @@ Viper.prototype = {
 
         var self = this;
         this.fireCallbacks('setHtml', {element: clone}, function() {
-            self.element.innerHTML = dfx.getHtml(clone);
+            var html = dfx.getHtml(clone);
+            if (self.isBrowser('msie') === true && self.getBrowserVersion() === 8) {
+                // IE8 has problems with param tags, it removes them from the content
+                // so Viper needs to change the tag name when content is being set
+                // and change it back to original when content is being retrieved.
+                html = html.replace(/<\/param>/ig, '</viper:param>');
+                html = html.replace(/<param /ig, '<viper:param ');
+            }
+
+            self.element.innerHTML = html;
             self.initEditableElement();
+
             self.fireNodesChanged();
             if (callback) {
                 callback.call(this);
@@ -4625,8 +4681,8 @@ Viper.prototype = {
 
         content = content.replace(/<(p|div|h1|h2|h3|h4|h5|h6|li)((\s+\w+(\s*=\s*(?:".*?"|\'.*?\'|[^\'">\s]+))?)+)?\s*>\s*/ig, "<$1$2>");
         content = content.replace(/\s*<\/(p|div|h1|h2|h3|h4|h5|h6|li)((\s+\w+(\s*=\s*(?:".*?"|\'.*?\'|[^\'">\s]+))?)+)?\s*>/ig, "</$1$2>");
-        content = content.replace(/<(area|base|basefont|br|hr|input|img|link|meta|param|embed)((\s+\w+(\s*=\s*(?:".*?"|\'.*?\'|[^\'">\s]+))?)+)?\s*>/ig, "<$1$2 />");
-        content = content.replace(/<\/?\s*([A-Z\d]+)/g, function(str) {
+        content = content.replace(/<(area|base|basefont|br|hr|input|img|link|meta|embed|viper:param|param)((\s+\w+(\s*=\s*(?:".*?"|\'.*?\'|[^\'">\s]+))?)+)?\s*>/ig, "<$1$2 />");
+        content = content.replace(/<\/?\s*([A-Z\d:]+)/g, function(str) {
             return str.toLowerCase();
         });
 
@@ -4636,7 +4692,7 @@ Viper.prototype = {
         var subRegex  = '\\s+([:\\w]+)(?:\\s*=\\s*("(?:[^"]+)?"|\'(?:[^\']+)?\'|[^\'">\\s]+))?';
 
         // Regex to get list of attributes in an HTML tag.
-        var tagRegex  = new RegExp('(<\\w+)(?:' + subRegex + ')+\\s*(\/?>)', 'g');
+        var tagRegex  = new RegExp('(<[\\w:]+)(?:' + subRegex + ')+\\s*(\/?>)', 'g');
         var attrRegex = new RegExp(subRegex, 'g');
 
         content = content.replace(tagRegex, function(match, tagStart, a, tagEnd) {
