@@ -662,24 +662,24 @@ Viper.prototype = {
             tabTextfield.blur();
             self.setEnabled(true);
 
-            self.focus();
+            self.element.focus();
+
             self.fireCallbacks('Viper:clickedInside', e);
             self.initEditableElement();
 
-            var range = self.getViperRange();
+            var range = self.getCurrentRange();
 
             var selectable = range._getFirstSelectableChild(self.element);
             if (!selectable) {
                 var brTags = dfx.getTag('br', self.element);
                 if (brTags.length > 0) {
-                    selectable = brTags[0];
-                    range.selectNode(selectable);
+                    range.selectNode(brTags[0]);
                 }
             }
 
-            if (!selectable) {
-                range.setEnd(range._getFirstSelectableChild(self.element), 0);
-                range.setStart(range._getFirstSelectableChild(self.element), 0);
+            if (selectable) {
+                range.setEnd(selectable, 0);
+                range.setStart(selectable, 0);
             }
 
             range.collapse(true);

@@ -408,6 +408,46 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
     }//end testNoBaseTagInput()
 
 
+    /**
+     * Test that tabbing in to Viper from another input field works.
+     *
+     * @return void
+     */
+    public function testTabInToViper()
+    {
+        $this->moveToKeyword(1, 'right');
+
+        $this->execJS('(function(){var input = document.createElement("input");dfx.insertBefore(document.body.firstChild, input);input.focus();return true;})()');
+        sleep(2);
+        $this->keyDown('Key.TAB');
+        $this->type('123456');
+
+        $this->assertHTMLMatch('<p>123456%1%</p><p>EIB MOZ</p>');
+
+    }//end testTabInToViper()
+
+
+    /**
+     * Test that tabbing in to Viper from another input field works.
+     *
+     * @return void
+     */
+    public function testTabInToViperWithNoContent()
+    {
+        $this->selectKeyword(1);
+        $this->keyDown('Key.CMD + a');
+        $this->keyDown('Key.DELETE');
+
+        $this->execJS('(function(){var input = document.createElement("input");dfx.insertBefore(document.body.firstChild, input);input.focus();return true;})()');
+        sleep(2);
+        $this->keyDown('Key.TAB');
+        $this->type('123456');
+
+        $this->assertHTMLMatch('<p>123456</p>');
+
+    }//end testTabInToViperWithNoContent()
+
+
 }//end class
 
 ?>
