@@ -399,7 +399,7 @@ class Viper_Tests_ViperLangToolsPlugin_LangToolsInTablesUnitTest extends Abstrac
         $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(3);
         $this->clickTopToolbarButton('langTools');
-        $this->clickTopToolbarButton('Language', 'active', TRUE);
+        $this->clickTopToolbarButton('Language', NULL, TRUE);
         $this->type('test');
         $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
         $this->assertHTMLMatchNoHeaders('<table cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th lang="test">Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
@@ -408,16 +408,16 @@ class Viper_Tests_ViperLangToolsPlugin_LangToolsInTablesUnitTest extends Abstrac
         $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(2);
         $this->clickTopToolbarButton('langTools');
-        $this->clickTopToolbarButton('Language', 'active', TRUE);
+        $this->clickTopToolbarButton('Language', NULL, TRUE);
         $this->type('test');
         $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
         $this->assertHTMLMatchNoHeaders('<table cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr lang="test"><th>Col1 Header</th><th lang="test">Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Test applying language to the thead cell
         $this->selectKeyword(2);
-        $this->selectInlineToolbarLineageItem(2);
+        $this->selectInlineToolbarLineageItem(1);
         $this->clickTopToolbarButton('langTools');
-        $this->clickTopToolbarButton('Language', 'active', TRUE);
+        $this->clickTopToolbarButton('Language', NULL, TRUE);
         $this->type('test');
         $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
         $this->assertHTMLMatchNoHeaders('<table cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead lang="test"><tr lang="test"><th>Col1 Header</th><th lang="test">Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
@@ -589,7 +589,7 @@ class Viper_Tests_ViperLangToolsPlugin_LangToolsInTablesUnitTest extends Abstrac
         $this->selectKeyword(3);
         $this->selectInlineToolbarLineageItem(3);
         $this->clickTopToolbarButton('langTools');
-        $this->clickTopToolbarButton('Language', 'active', TRUE);
+        $this->clickTopToolbarButton('Language', NULL, TRUE);
         $this->type('test');
         $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
         $this->assertHTMLMatchNoHeaders('<table cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3" lang="test">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
@@ -598,16 +598,16 @@ class Viper_Tests_ViperLangToolsPlugin_LangToolsInTablesUnitTest extends Abstrac
         $this->selectKeyword(3);
         $this->selectInlineToolbarLineageItem(2);
         $this->clickTopToolbarButton('langTools');
-        $this->clickTopToolbarButton('Language', 'active', TRUE);
+        $this->clickTopToolbarButton('Language', NULL, TRUE);
         $this->type('test');
         $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
         $this->assertHTMLMatchNoHeaders('<table cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr lang="test"><td colspan="3" lang="test">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Test applying language to the thead cell
         $this->selectKeyword(3);
-        $this->selectInlineToolbarLineageItem(2);
+        $this->selectInlineToolbarLineageItem(1);
         $this->clickTopToolbarButton('langTools');
-        $this->clickTopToolbarButton('Language', 'active', TRUE);
+        $this->clickTopToolbarButton('Language', NULL, TRUE);
         $this->type('test');
         $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
         $this->assertHTMLMatchNoHeaders('<table cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot lang="test"><tr lang="test"><td colspan="3" lang="test">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
@@ -779,7 +779,7 @@ class Viper_Tests_ViperLangToolsPlugin_LangToolsInTablesUnitTest extends Abstrac
         $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(3);
         $this->clickTopToolbarButton('langTools');
-        $this->clickTopToolbarButton('Language', 'active', TRUE);
+        $this->clickTopToolbarButton('Language', NULL, TRUE);
         $this->type('test');
         $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
         $this->assertHTMLMatchNoHeaders('<table cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td lang="test">sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
@@ -788,16 +788,16 @@ class Viper_Tests_ViperLangToolsPlugin_LangToolsInTablesUnitTest extends Abstrac
         $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(2);
         $this->clickTopToolbarButton('langTools');
-        $this->clickTopToolbarButton('Language', 'active', TRUE);
+        $this->clickTopToolbarButton('Language', NULL, TRUE);
         $this->type('test');
         $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
         $this->assertHTMLMatchNoHeaders('<table cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr lang="test"><td>nec porta ante</td><td lang="test">sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Test applying language to the tbdoy cell
         $this->selectKeyword(4);
-        $this->selectInlineToolbarLineageItem(2);
+        $this->selectInlineToolbarLineageItem(1);
         $this->clickTopToolbarButton('langTools');
-        $this->clickTopToolbarButton('Language', 'active', TRUE);
+        $this->clickTopToolbarButton('Language', NULL, TRUE);
         $this->type('test');
         $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
         $this->assertHTMLMatchNoHeaders('<table cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody lang="test"><tr lang="test"><td>nec porta ante</td><td lang="test">sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');

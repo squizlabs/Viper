@@ -90,7 +90,7 @@ ViperLangToolsPlugin.prototype = {
         }
 
         var range   = this.viper.getViperRange();
-        var node    = range.getNodeSelection();
+        var node    = this.viper.getNodeSelection();
         var element = null;
 
         if ((node && node.nodeType !== dfx.TEXT_NODE) || range.collapsed === true) {
@@ -175,7 +175,7 @@ ViperLangToolsPlugin.prototype = {
 
     getTagFromRange: function(range, tagName)
     {
-        var selectedNode = range.getNodeSelection();
+        var selectedNode = this.viper.getNodeSelection();
         if (selectedNode && selectedNode.nodeType === dfx.ELEMENT_NODE) {
             if (tagName && dfx.isTag(selectedNode, tagName) === true) {
                 return selectedNode;
@@ -189,6 +189,8 @@ ViperLangToolsPlugin.prototype = {
                 } else {
                     return null;
                 }
+            } else {
+                return null;
             }
         }
 
