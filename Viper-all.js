@@ -88,7 +88,7 @@ ViperReadyCallback = null;
             _loadScripts(path + 'Plugins/', plugins.concat([]), function() {
                 if (ViperReadyCallback) {
                     ViperReadyCallback.call(window);
-                } /*else {
+                } else {
                     var maxTry = 10;
                     var interval = setInterval(function() {
                         maxTry--;
@@ -99,7 +99,7 @@ ViperReadyCallback = null;
                             clearInterval(interval);
                         }
                     }, 500);
-                }*/
+                }
             }, true);
 
 

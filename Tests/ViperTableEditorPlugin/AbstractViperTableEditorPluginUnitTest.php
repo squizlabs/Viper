@@ -95,14 +95,20 @@ abstract class AbstractViperTableEditorPluginUnitTest extends AbstractViperUnitT
             $this->clickCell($cellNum);
         }
 
-        usleep(60000);
+        sleep(1);
 
         $region = NULL;
         try {
             $region = $this->findImage('ViperTableTools', '#test-ViperTEP');
         } catch (Exception $e) {
             $toolIconRect = $this->getBoundingRectangle('#test-ViperTEP', 0);
-            $region       = $this->getRegionOnPage($toolIconRect);
+            if ($toolIconRect === NULL && $cellNum !== NULL) {
+                $this->clickCell($cellNum);
+                sleep(1);
+                $toolIconRect = $this->getBoundingRectangle('#test-ViperTEP', 0);
+            }
+
+            $region = $this->getRegionOnPage($toolIconRect);
         }
 
         // Move mouse on top of the icon.
