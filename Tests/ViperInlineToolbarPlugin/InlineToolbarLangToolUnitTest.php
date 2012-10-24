@@ -367,6 +367,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarLangToolUnitTest extends
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">ACRONYM</li><li class="ViperITP-lineageItem Viper-selected">Bold</li>', $lineage);
 
+        $this->selectInlineToolbarLineageItem(1);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->clickTopToolbarButton('Acronym', 'active', TRUE);
         $this->clearFieldValue('Acronym');
@@ -401,6 +402,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarLangToolUnitTest extends
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">ABBR</li><li class="ViperITP-lineageItem Viper-selected">Bold</li>', $lineage);
 
+        $this->selectInlineToolbarLineageItem(1);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->clickTopToolbarButton('Abbreviation', 'active', TRUE);
         $this->clearFieldValue('Abbreviation');
@@ -470,6 +472,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarLangToolUnitTest extends
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">ACRONYM</li><li class="ViperITP-lineageItem Viper-selected">Italic</li>', $lineage);
 
+        $this->selectInlineToolbarLineageItem(1);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->clickTopToolbarButton('Acronym', 'active', TRUE);
         $this->clearFieldValue('Acronym');
@@ -505,6 +508,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarLangToolUnitTest extends
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">ABBR</li><li class="ViperITP-lineageItem Viper-selected">Italic</li>', $lineage);
 
+        $this->selectInlineToolbarLineageItem(1);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->clickTopToolbarButton('Abbreviation', 'active', TRUE);
         $this->clearFieldValue('Abbreviation');

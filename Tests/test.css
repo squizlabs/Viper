@@ -134,8 +134,12 @@ h1,h2,h3,h4,h5,h6 {
     padding: 2px 2px;
 }
 
-#content.firefox td, #content.firefox th {
-    padding: 4px 3px;
+#content.firefox td {
+    padding: 5px;
+}
+
+#content.firefox th {
+    padding: 4px;
 }
 
 .Viper-button {
