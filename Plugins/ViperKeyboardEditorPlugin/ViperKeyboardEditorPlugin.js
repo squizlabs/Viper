@@ -529,7 +529,7 @@ ViperKeyboardEditorPlugin.prototype = {
                 // started by browser then getting range without delay would still
                 // point to the empty list item. With delay it will be in the new
                 // paragraph tag.
-                self.viper.fireSelectionChanged(range, true);
+                self.viper.fireSelectionChanged(null, true);
             }, 5);
 
             // Let the browser handle everything else.

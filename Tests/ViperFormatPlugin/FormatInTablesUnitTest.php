@@ -15,7 +15,7 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
     {
         // Check icons when clicking in a word in the caption
         $this->click($this->findKeyword(1));
-        $this->assertTrue($this->topToolbarButtonExists('justifyCenter', 'active'), 'Justify icon should be active');
+        $this->assertTrue($this->topToolbarButtonExists('justifyLeft'), 'Justify icon should be enabled');
         $this->assertTrue($this->topToolbarButtonExists('formats', 'disabled'), 'Formats icon should be disabled');
         $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'), 'Heading icon should be disabled');
         $this->assertTrue($this->topToolbarButtonExists('cssClass', 'disabled'), 'Class icon should be disabled');
@@ -23,7 +23,7 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
 
         // Check icons when selecting a word  in the caption
         $this->selectKeyword(1);
-        $this->assertTrue($this->topToolbarButtonExists('justifyCenter', 'active'), 'Justify icon should be active');
+        $this->assertTrue($this->topToolbarButtonExists('justifyLeft'), 'Justify left icon should be enabled');
         $this->assertFalse($this->inlineToolbarButtonExists('justifyLeft'), 'Justify icon should not appear in the inline toolbar');
 
         $this->assertTrue($this->topToolbarButtonExists('formats', 'disabled'), 'Formats icon should be disabled');
@@ -40,7 +40,7 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
 
         // Check icons when selecting all content in a caption
         $this->selectInlineToolbarLineageItem(1);
-        $this->assertTrue($this->topToolbarButtonExists('justifyCenter', 'active'), 'Justify icon should be enabled');
+        $this->assertTrue($this->topToolbarButtonExists('justifyLeft'), 'Justify left icon should be enabled');
         $this->assertFalse($this->inlineToolbarButtonExists('justifyLeft'), 'Justify icon should not appear in the inline toolbar');
 
         $this->assertTrue($this->topToolbarButtonExists('formats', 'disabled'), 'Formats icon should be disabled');
@@ -68,7 +68,7 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(0);
 
-        $this->assertTrue($this->topToolbarButtonExists('justifyCenter', 'active'), 'Justify icon should be active');
+        $this->assertTrue($this->topToolbarButtonExists('justifyLeft'), 'Justify icon should be enabled');
         $this->assertFalse($this->inlineToolbarButtonExists('justifyCenter', 'active'), 'Justify icon should not appear in the inline toolbar');
 
         $this->assertTrue($this->topToolbarButtonExists('formats', 'disabled'), 'Formats icon should be disabled');
@@ -95,7 +95,7 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
     {
         // Check icons when clicking in a word
         $this->click($this->findKeyword(2));
-        $this->assertTrue($this->topToolbarButtonExists('justifyCenter', 'active'), 'Center alignment icon should be active');
+        $this->assertTrue($this->topToolbarButtonExists('justifyLeft'), 'Justify icon should be enabled');
         $this->assertTrue($this->topToolbarButtonExists('formats'), 'Formats icon should be enabled');
         $this->assertTrue($this->topToolbarButtonExists('headings'), 'Heading icon should be enabled');
         $this->assertTrue($this->topToolbarButtonExists('cssClass', 'disabled'), 'Class icon should be disabled');
@@ -103,8 +103,8 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
 
         // Check icons when selecting a word in the header row
         $this->selectKeyword(2);
-        $this->assertTrue($this->topToolbarButtonExists('justifyCenter', 'active'), 'Center alignment icon should be active');
-        $this->assertFalse($this->inlineToolbarButtonExists('justifyCenter', 'active'), 'Center alignment icon should not appear in the inline toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('justifyLeft'), 'Justify icon should be active');
+        $this->assertFalse($this->inlineToolbarButtonExists('justifyLeft'), 'Justify icon should not appear in the inline toolbar');
 
         $this->assertTrue($this->topToolbarButtonExists('formats'), 'Formats icon should be enabled');
         $this->assertFalse($this->inlineToolbarButtonExists('formats'), 'Formats icon should be available in the inline toolbar');
@@ -120,8 +120,8 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
 
         // Check icons when you select all content in the header cell
         $this->selectInlineToolbarLineageItem(3);
-        $this->assertTrue($this->topToolbarButtonExists('justifyCenter', 'active'), 'Center alignment icon should be active');
-        $this->assertFalse($this->inlineToolbarButtonExists('justifyCenter', 'active'), 'Center alignment icon should not appear in the inline toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('justifyLeft'), 'Justify icon should be active');
+        $this->assertFalse($this->inlineToolbarButtonExists('justifyLeft'), 'Justify icon should not appear in the inline toolbar');
 
         $this->assertTrue($this->topToolbarButtonExists('formats'), 'Formats icon should be enabled');
         $this->assertTrue($this->inlineToolbarButtonExists('formats'), 'Formats icon should be enabled in the inline toolbar');
@@ -1116,7 +1116,7 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
     {
         // Test clicking in word
         $this->click($this->findKeyword(1));
-        $this->clickTopToolbarButton('justifyCenter', 'active');
+        $this->clickTopToolbarButton('justifyLeft');
         $this->clickTopToolbarButton('justifyLeft');
         $this->assertTrue($this->topToolbarButtonExists('justifyLeft', 'active'), 'Left align icon should be active');
         $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption style="text-align: left;"><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
@@ -1185,7 +1185,7 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
     {
         // Test clicking in word
         $this->click($this->findKeyword(2));
-        $this->clickTopToolbarButton('justifyCenter', 'active');
+        $this->clickTopToolbarButton('justifyLeft');
         $this->clickTopToolbarButton('justifyLeft');
         $this->assertTrue($this->topToolbarButtonExists('justifyLeft', 'active'), 'Left align icon should be active');
         $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th style="text-align: left;">Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
@@ -1919,7 +1919,7 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         $this->clickInlineToolbarButton('Update Changes', NULL, TRUE);
         $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption id="test"><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
-        $this->click($this->findKeyword(2));
+        $this->click($this->findKeyword(3));
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(1);
         $this->clickInlineToolbarButton('anchorID', 'active');

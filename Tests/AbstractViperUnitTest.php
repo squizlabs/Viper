@@ -405,26 +405,26 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      * @return void
      * @throws Exception If Viper fails to load on the page.
      */
-    private function _waitForViper()
+    private function _waitForViper($retries=3)
     {
-        // Make sure the page is loaded first with the window target icon loaded.
-        $this->setAutoWaitTimeout(10);
-        $this->getPageTopLeft();
-
-        $this->setAutoWaitTimeout(5, $this->getTopToolbar());
-
-        // Make sure page is loaded.
-        $maxRetries = 3;
-        while ($this->topToolbarButtonExists('bold', 'disabled') === FALSE) {
-            if ($maxRetries === 0) {
-                throw new Exception('Failed to load Viper test page.');
-            }
-
-            $maxRetries--;
-            $this->reloadPage();
+        if ($retries === 0) {
+            throw new Exception('Failed to load Viper test page.');
         }
 
-        $this->setAutoWaitTimeout(1, $this->getTopToolbar());
+        // Make sure the page is loaded first with the window target icon loaded.
+        $this->setAutoWaitTimeout(5);
+        $this->getPageTopLeft();
+
+        $this->setAutoWaitTimeout(4, $this->getTopToolbar());
+
+        // Make sure page is loaded.
+        if ($this->topToolbarButtonExists('bold', 'disabled') === FALSE) {
+            $this->keyDown('Key.CMD + r');
+            $this->_waitForViper($retries - 1);
+            return;
+        }
+
+        $this->setAutoWaitTimeout(0.5, $this->getTopToolbar());
         $this->setAutoWaitTimeout(1);
 
         if ($this->getBrowserid() === 'ie8') {
@@ -915,16 +915,8 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
     protected function reloadPage()
     {
         $this->execJS('clean()');
+        sleep(1);
         $this->keyDown('Key.CMD + r');
-
-        /*$topLeft = array(
-                    'x1' => 0,
-                    'y1' => 0,
-                    'x2' => 14,
-                    'y2' => 14,
-                   );
-        $region  = $this->getRegionOnPage($topLeft);
-        $this->click($region);*/
         sleep(1);
 
     }//end reloadPage()
