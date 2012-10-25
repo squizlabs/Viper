@@ -99,32 +99,6 @@ ViperSourceViewPlugin.prototype = {
                 self.showSourceView(content, callback);
             });
         } else {
-            // Find iframe elements for youtube.com videos to add wmode=opaque to query
-            // string so that the video does not sit on top of the editor window in IE.
-            var iframeTags = dfx.getTag('iframe', this.viper.getViperElement());
-            for (var i = 0; i < iframeTags.length; i++) {
-                var src = iframeTags[i].getAttribute('src');
-                if (src && src.match('youtube') && !src.match('wmode=opaque')) {
-                    src = dfx.addToQueryString(src, {wmode: 'opaque'});
-                    iframeTags[i].src = src;
-                }
-            }
-
-           /* // Add wmode=transparent to old object code.
-            var embedTags = dfx.getTag('embed', this.viper.getViperElement());
-            for (var i = 0; i < embedTags.length; i++) {
-                if (dfx.isTag(embedTags[i].parentNode, 'object') === true) {
-                    var clone = embedTags[i].parentNode.cloneNode(true);
-                    var paramTag = document.createElement('param');
-                    paramTag.setAttribute('name', 'wmode');
-                    paramTag.setAttribute('value', 'transparent');
-                    dfx.insertBefore(clone, paramTag);
-                    clone.setAttribute('wmode', 'transparent');
-                    dfx.insertBefore(embedTags[i].parentNode, clone);
-                    dfx.remove(embedTags[i].parentNode);
-                }
-            }*/
-
             if (!content) {
                 content = this.getContents();
             } else {
