@@ -99,7 +99,7 @@ class Viper_Tests_Core_GetHtmlTest extends AbstractViperUnitTest
     {
         $this->click($this->findKeyword(1));
 
-        $this->_checkGetHTML('<h1>%1% Heading</h1><p><iframe src="http://www.w3schools.com"></iframe></p><p>Lorem XuT dolor sit <em>amet</em> <strong>WoW</strong></p>');
+        $this->_checkGetHTML('<h1>%1% Heading</h1><iframe src="http://www.w3schools.com"></iframe><p>Lorem XuT dolor sit <em>amet</em> <strong>WoW</strong></p>');
 
     }//end testGetHtmlDoesNotRemoveIframeTags()
 

@@ -72,7 +72,7 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
         $this->assertTrue($this->topToolbarButtonExists('table', 'disabled'), 'Table icon should not appear in the top toolbar.');
 
         $this->keyDown('Key.SHIFT + Key.RIGHT');
-        
+
         $this->assertTrue($this->topToolbarButtonExists('table', 'disabled'), 'Table icon should be disabled in the top toolbar.');
 
         $this->keyDown('Key.TAB');
@@ -235,6 +235,32 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
 
 
     /**
+     * Retuns the icon for the table tools.
+     *
+     * @param integer $cellNum The cell to click.
+     *
+     * @return object
+     */
+    private function _getTableToolsIcon($cellNum)
+    {
+        $this->clickCell($cellNum);
+        $icon =  NULL;
+
+        try {
+            $toolIconRect = $this->getBoundingRectangle('#test-ViperTEP', 0);
+            $icon         = $this->getRegionOnPage($toolIconRect);
+        } catch (Exception $e) {
+            $this->clickCell($cellNum);
+            $toolIconRect = $this->getBoundingRectangle('#test-ViperTEP', 0);
+            $icon         = $this->getRegionOnPage($toolIconRect);
+        }
+
+        return $icon;
+
+    }//end _getTableToolsIcon()
+
+
+    /**
      * Tests that table highlights work in complex tables.
      *
      * Complex tables have tbody, thead, tfoot, %2%, cells with rowspan and colspan.
@@ -252,10 +278,7 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
         $firstCell = $this->getBoundingRectangle('th');
 
         // Test highlights in heading.
-        $this->clickCell(0);
-
-        $toolIconRect = $this->getBoundingRectangle('#test-ViperTEP', 0);
-        $icon         = $this->getRegionOnPage($toolIconRect);
+        $icon = $this->_getTableToolsIcon(0);
 
         // Move mouse on top of the icon.
         $this->mouseMove($icon);
@@ -310,11 +333,8 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
         usleep(200);
 
         // Test highlights in a cell with colspan.
-        $this->clickCell(8);
+        $icon = $this->_getTableToolsIcon(8);
         $colspanCell = $this->getBoundingRectangle('td', 5);
-
-        $toolIconRect = $this->getBoundingRectangle('#test-ViperTEP', 0);
-        $icon         = $this->getRegionOnPage($toolIconRect);
 
         // Move mouse on top of the icon.
         $this->mouseMove($icon);
@@ -369,11 +389,8 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
         usleep(200);
 
         // Test highlights in a row with rowspan.
-        $this->clickCell(11);
+        $icon = $this->_getTableToolsIcon(11);
         $colspanCell = $this->getBoundingRectangle('td', 8);
-
-        $toolIconRect = $this->getBoundingRectangle('#test-ViperTEP', 0);
-        $icon         = $this->getRegionOnPage($toolIconRect);
 
         // Move mouse on top of the icon.
         $this->mouseMove($icon);
@@ -425,11 +442,8 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
         $this->assertHighlightPos($highlight['y2'], $colspanCell['y2']);
 
         // Test highlights in footer.
-        $this->clickCell(3);
+        $icon = $this->_getTableToolsIcon(3);
         $colspanCell = $this->getBoundingRectangle('td', 0);
-
-        $toolIconRect = $this->getBoundingRectangle('#test-ViperTEP', 0);
-        $icon         = $this->getRegionOnPage($toolIconRect);
 
         // Move mouse on top of the icon.
         $this->mouseMove($icon);
@@ -500,10 +514,7 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
         sleep(1);
 
         // Test highlights in heading.
-        $this->clickCell(7);
-
-        $toolIconRect = $this->getBoundingRectangle('#test-ViperTEP', 0);
-        $icon         = $this->getRegionOnPage($toolIconRect);
+        $icon = $this->_getTableToolsIcon(7);
 
         // Move mouse on top of the icon.
         $this->mouseMove($icon);
@@ -574,10 +585,7 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
         sleep(1);
 
         // Test highlights in heading.
-        $this->clickCell(4);
-
-        $toolIconRect = $this->getBoundingRectangle('#test-ViperTEP', 0);
-        $icon         = $this->getRegionOnPage($toolIconRect);
+        $icon = $this->_getTableToolsIcon(4);
 
         // Move mouse on top of the icon.
         $this->mouseMove($icon);
@@ -648,10 +656,7 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
         sleep(1);
 
         // Test highlights in heading.
-        $this->clickCell(7);
-
-        $toolIconRect = $this->getBoundingRectangle('#test-ViperTEP', 0);
-        $icon         = $this->getRegionOnPage($toolIconRect);
+        $icon = $this->_getTableToolsIcon(7);
 
         // Move mouse on top of the icon.
         $this->mouseMove($icon);
