@@ -4704,7 +4704,7 @@ Viper.prototype = {
 
     cleanHTML: function(content, attrBlacklist)
     {
-        attrBlacklist  = attrBlacklist || [];
+        attrBlacklist  = attrBlacklist || ['sizset'];
 
         content = content.replace(/<(p|div|h1|h2|h3|h4|h5|h6|li)((\s+\w+(\s*=\s*(?:".*?"|\'.*?\'|[^\'">\s]+))?)+)?\s*>\s*/ig, "<$1$2>");
         content = content.replace(/\s*<\/(p|div|h1|h2|h3|h4|h5|h6|li)((\s+\w+(\s*=\s*(?:".*?"|\'.*?\'|[^\'">\s]+))?)+)?\s*>/ig, "</$1$2>");
@@ -4731,6 +4731,8 @@ Viper.prototype = {
                     // This attribute is not allowed.
                     return '';
                 } else if (attrName.indexOf(':') >= 0) {
+                    return '';
+                } else if (attrName.match(/^sizcache\d+$/)) {
                     return '';
                 }
 
