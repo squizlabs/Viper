@@ -1,6 +1,6 @@
 <?php
 
-$opts = getopt('s::b::u::t::civ', array('url::', 'built'));
+$opts = getopt('s::b::u::t::civ', array('url::', 'built', 'log::'));
 
     $browsers = array(
                  'Firefox',
@@ -36,6 +36,11 @@ $opts = getopt('s::b::u::t::civ', array('url::', 'built'));
 
     if (array_key_exists('built', $opts) === TRUE) {
         putenv('VIPER_TEST_USE_BUILT_VIPER=TRUE');
+    }
+
+    $logFilePath = '';
+    if (array_key_exists('log', $opts) === TRUE) {
+        $logFilePath = $opts['log'];
     }
 
     $urlFile = dirname(__FILE__).'/tmp/url.inc';
@@ -74,15 +79,18 @@ $opts = getopt('s::b::u::t::civ', array('url::', 'built'));
         $phpunitCMD = '';
 
         // Setup logging if there is no filter.
-        if ($test === NULL) {
+        if ($test === NULL || empty($logFilePath) === FALSE) {
             $browserid      = getBrowserid($browser);
             $browserTmpPath = dirname(__FILE__).'/tmp/'.$browserid;
             if (file_exists($browserTmpPath) === FALSE) {
                 mkdir($browserTmpPath, 0755, TRUE);
             }
 
-            $logPath     = $browserTmpPath.'/test.log';
-            $phpunitCMD .= '--log-junit '.$logPath;
+            if (empty($logFilePath) === TRUE) {
+                $logFilePath = $browserTmpPath.'/test.log';
+            }
+
+            $phpunitCMD .= '--log-junit '.$logFilePath;
         }
 
         if ($unitTests !== NULL) {
@@ -98,7 +106,7 @@ $opts = getopt('s::b::u::t::civ', array('url::', 'built'));
             $phpunitCMD .= ' .';
         }
 
-        passthru('phpunit --configuration phpunit.xml '.$phpunitCMD);
+        passthru('phpunit '.$phpunitCMD);
     }
 
     function getBrowserid($browser)
