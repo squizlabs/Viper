@@ -1,5 +1,7 @@
 <?php
 
+chdir(dirname(__FILE__));
+
 $opts = getopt('s::b::u::t::civ', array('url::', 'built', 'log::'));
 
     $browsers = array(
