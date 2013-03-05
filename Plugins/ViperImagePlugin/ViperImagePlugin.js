@@ -144,6 +144,10 @@ ViperImagePlugin.prototype = {
             }
         });
 
+        this.viper.registerCallback('ViperToolbarPlugin:enabled', 'ViperImagePlugin', function(data) {
+            self.viper.ViperTools.enableButton('image');
+        });
+
         this.viper.registerCallback('Viper:clickedOutside', 'ViperImagePlugin', function(range) {
             self.hideImageResizeHandles();
         });
