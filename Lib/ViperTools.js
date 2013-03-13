@@ -36,6 +36,25 @@ ViperTools.prototype = {
 
     },
 
+    removeItem: function(id)
+    {
+        var item = this.getItem(id);
+        if (!item) {
+            return;
+        }
+
+        delete this._items[id];
+
+        if (item.element) {
+            dfx.remove(item.element);
+        }
+
+        this.viper.removeCallback(null, 'ViperTools-' + id);
+        this.viper.removeCallback(null, id);
+
+        this.viper.fireCallbacks('ViperTools:itemRemoved', id);
+    },
+
     getItem: function(id)
     {
         return this._items[id];

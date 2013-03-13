@@ -26,8 +26,9 @@ function ViperInlineToolbarPlugin(viper)
     this._subSectionButtons       = {};
     this._subSectionActionWidgets = {};
 
-    this._topToolbar = null;
-    this._buttons    = null;
+    this._topToolbar  = null;
+    this._buttons     = null;
+    this._initialised = false;
 
 }
 
@@ -102,6 +103,14 @@ ViperInlineToolbarPlugin.prototype = {
 
         var toolbar = tools.getItem(toolbarid);
         this.viper.fireCallbacks('ViperInlineToolbarPlugin:initToolbar', toolbar);
+
+        this._initialised = true;
+
+    },
+
+    isInitialised: function()
+    {
+        return this._initialised;
 
     },
 
@@ -291,6 +300,12 @@ ViperInlineToolbarPlugin.prototype = {
         } else {
             return (this._selectionLineage.length - 1)
         }
+
+    },
+
+    remove: function()
+    {
+         this.viper.ViperTools.removeItem('ViperInlineToolbar');
 
     },
 

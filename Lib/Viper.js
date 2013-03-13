@@ -821,6 +821,12 @@ Viper.prototype = {
 
     },
 
+    resetPlugins: function()
+    {
+        this._useDefaultPlugins();
+
+    },
+
     _useDefaultPlugins: function()
     {
         // Default plugins (all Viper plugins).
@@ -3782,10 +3788,6 @@ Viper.prototype = {
      */
     keyDown: function(e)
     {
-        if (this.pluginActive() === true && this.ViperPluginManager.allowTextInput !== true) {
-            return;
-        }
-
         this._viperRange = null;
 
         if (this._keyDownRangeCollapsed === true) {
@@ -3894,10 +3896,6 @@ Viper.prototype = {
     {
         if (this._preventKeyPress === true || this.enabled !== true) {
             this._preventKeyPress = false;
-            return true;
-        }
-
-        if (this.pluginActive() === true && this.ViperPluginManager.allowTextInput !== true) {
             return true;
         }
 
@@ -4395,12 +4393,6 @@ Viper.prototype = {
 
     },
 
-    pluginActive: function()
-    {
-        return (this.ViperPluginManager.getActivePlugin() !== null);
-
-    },
-
     getPluginForElement: function(element)
     {
         return this.getPluginManager().getPluginForElement(element);
@@ -4429,10 +4421,6 @@ Viper.prototype = {
         }
 
         if (namespace) {
-            if (!this.callbacks[type].namespaces[namespace]) {
-                this.callbacks[type].namespaces[namespace] = [];
-            }
-
             this.callbacks[type].namespaces[namespace] = callback;
         } else {
             this.callbacks[type].others.push(callback);
@@ -4500,7 +4488,7 @@ Viper.prototype = {
         } else if (this.callbacks[type]) {
             if (namespace) {
                 if (this.callbacks[type].namespaces[namespace]) {
-                    this.callbacks[type].namespaces[namespace] = [];
+                    //this.callbacks[type].namespaces[namespace] = [];
                     delete this.callbacks[type].namespaces[namespace];
                 }
             } else {

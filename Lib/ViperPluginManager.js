@@ -13,12 +13,10 @@
 
 function ViperPluginManager(viper)
 {
-    this.viper              = viper;
-    this.plugins            = null;
-    this.pluginConstructors = {};
-    this.activePlugin       = null;
-    this.allowTextInput     = false;
-    this._pluginSettings    = {};
+    this.viper           = viper;
+    this._plugins        = null;
+    this._pluginSettings = {};
+    this._pluginSets     = {};
 
 }
 
@@ -27,7 +25,7 @@ ViperPluginManager.prototype = {
     getPluginNames: function()
     {
         var plugins = [];
-        for (var name in this.plugins) {
+        for (var name in this._plugins) {
             plugins.push(name);
         }
 
@@ -35,75 +33,88 @@ ViperPluginManager.prototype = {
 
     },
 
-    setPlugins: function(plugins)
+    setPlugins: function(plugins, pluginSetName)
     {
-        this.plugins = {};
+        if (this._plugins) {
+            for (var plugin in this._plugins) {
+                this.removePlugin(plugin);
+            }
+        }
+
+        if (!pluginSetName) {
+            pluginSetName = '*';
+        }
+
+        this._pluginSets[pluginSetName] = plugins;
+        this._pluginSettings = {};
+        this._plugins        = {};
 
         var c = plugins.length;
         for (var i = 0; i < c; i++) {
-            var plugin = plugins[i];
-            if (dfx.isset(window[plugin]) === true) {
-                this.addPlugin(plugin, window[plugin]);
-            } else {
-                throw new Error('Plugin object not loaded: ' + plugin);
-            }
-        }
-
-        for (var i = 0; i < c; i++) {
-            var plugin     = plugins[i];
-            var pluginName = '';
+            var pluginName     = '';
+            var pluginSettings = null;
             if (typeof plugin === 'object') {
-                pluginName = plugin.name;
+                pluginName     = plugins[i].name;
+                pluginSettings = plugins[i].settings;
             } else {
-                pluginName = plugin;
+                pluginName = plugins[i];
             }
 
-            var pluginConstructor = this.pluginConstructors[pluginName];
-            if (pluginConstructor) {
-                var pluginObj            = new pluginConstructor(this.viper);
-                this.plugins[pluginName] = pluginObj;
-
-                // Set plugin settings.
-                if (dfx.isset(plugin.settings) === true) {
-                    pluginObj.setSettings(plugin.settings);
-                } else if (this._pluginSettings[pluginName]) {
-                    pluginObj.setSettings(this._pluginSettings[pluginName]);
-                }
-            }
+            this.addPlugin(pluginName, pluginSettings, true);
         }//end for
 
         // Call the start method of the plugins.
-        for (var pluginName in this.plugins) {
-            if (this.plugins[pluginName].init) {
-                this.plugins[pluginName].init();
+        for (var pluginName in this._plugins) {
+            if (this._plugins[pluginName].init) {
+                this._plugins[pluginName].init();
             }
         }
 
     },
 
-    addPlugin: function(name, pluginConstructor)
+    createPluginSet: function(pluginSetName, plugins)
     {
-        if (typeof pluginConstructor !== 'function') {
-            throw Error('ViperPluginException: plugin must be a constructor function');
-        }
-
-        if (dfx.isset(this.pluginConstructors[name]) === false) {
-            this.pluginConstructors[name] = pluginConstructor;
-        }
+        this._pluginSets[pluginSetName] = plugins;
 
     },
 
-    setActivePlugin: function(name, allowTextInput)
+    usePluginSet: function(pluginSetName)
     {
-        allowTextInput      = allowTextInput || false;
-        this.activePlugin   = name;
-        this.allowTextInput = allowTextInput;
+        if (!this._pluginSets[pluginSetName]) {
+            console.error('Invalid plugin set: ' + pluginSetName);
+            return;
+        }
+
+        this.setPlugins(this._pluginSets[pluginSetName], pluginSetName);
 
     },
 
-    getActivePlugin: function()
+    addPlugin: function(pluginName, settings, batch)
     {
-        return this.activePlugin;
+        var pluginConstructor = window[pluginName];
+        if (dfx.isset(pluginConstructor) === true) {
+            if (typeof pluginConstructor !== 'function') {
+                console.error('Plugin ' + pluginName + 'must be a constructor function');
+            }
+        } else {
+            console.error('Plugin object not loaded: ' + pluginName);
+        }
+
+        if (pluginConstructor) {
+            var pluginObj            = new pluginConstructor(this.viper);
+            this._plugins[pluginName] = pluginObj;
+
+            // Set plugin settings.
+            if (dfx.isset(settings) === true) {
+                pluginObj.setSettings(settings);
+            } else if (this._pluginSettings[pluginName]) {
+                pluginObj.setSettings(this._pluginSettings[pluginName]);
+            }
+
+            if (batch !== true) {
+                pluginObj.init();
+            }
+        }
 
     },
 
@@ -125,11 +136,11 @@ ViperPluginManager.prototype = {
      */
     removePlugin: function(pluginName)
     {
-        if (this.plugins[pluginName]) {
+        if (this._plugins[pluginName]) {
 
             // Call the remove fn of the plugin incase it needs to do cleanup.
-            if (dfx.isFn(this.plugins[pluginName].remove) === true) {
-                this.plugins[pluginName].remove();
+            if (dfx.isFn(this._plugins[pluginName].remove) === true) {
+                this._plugins[pluginName].remove();
             }
 
             // Remove registered callbacks.
@@ -137,7 +148,7 @@ ViperPluginManager.prototype = {
 
             this.viper.fireCallbacks('ViperPluginManager:pluginRemoved', pluginName);
 
-            delete this.plugins[pluginName];
+            delete this._plugins[pluginName];
         }
 
     },
@@ -151,7 +162,7 @@ ViperPluginManager.prototype = {
     removePlugins: function(pluginNames)
     {
         if (!pluginNames) {
-            for (var pluginName in this.plugins) {
+            for (var pluginName in this._plugins) {
                 this.removePlugin(pluginName);
             }
         } else {
@@ -173,20 +184,20 @@ ViperPluginManager.prototype = {
      */
     getPlugin: function(name)
     {
-        return this.plugins[name];
+        return this._plugins[name];
 
     },
 
     getPlugins: function()
     {
-        return this.plugins;
+        return this._plugins;
 
     },
 
     setPluginSettings: function(pluginName, settings)
     {
-        if (this.plugins[pluginName]) {
-            this.plugins[pluginName].setSettings(settings);
+        if (this._plugins[pluginName]) {
+            this._plugins[pluginName].setSettings(settings);
         }
 
         this._pluginSettings[pluginName] = settings;
@@ -195,17 +206,17 @@ ViperPluginManager.prototype = {
 
     disablePlugin: function(name)
     {
-        if (this.plugins[name].disable) {
-            this.plugins[name].disable();
+        if (this._plugins[name].disable) {
+            this._plugins[name].disable();
         }
 
     },
 
     getPluginForElement: function(element)
     {
-        for (var i in this.plugins) {
-            if (this.plugins[i].isPluginElement) {
-                if (this.plugins[i].isPluginElement(element) === true) {
+        for (var i in this._plugins) {
+            if (this._plugins[i].isPluginElement) {
+                if (this._plugins[i].isPluginElement(element) === true) {
                     return i;
                 }
             }

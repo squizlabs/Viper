@@ -75,7 +75,7 @@ ViperCopyPastePlugin.prototype = {
         var self = this;
         if (this._isMSIE !== true && this._isFirefox !== true && this._isSafari !== true) {
             elem.onpaste = function(e) {
-                if (!e.clipboardData || self._canPaste() === false) {
+                if (!e.clipboardData) {
                     return;
                 }
 
@@ -173,16 +173,6 @@ ViperCopyPastePlugin.prototype = {
         elem.oncut = function(e) {
             self.viper.fireNodesChanged();
         };
-    },
-
-    _canPaste: function()
-    {
-        if (this.viper.pluginActive() === true && this.viper.ViperPluginManager.allowTextInput !== true) {
-            return false;
-        }
-
-        return true;
-
     },
 
     keyDown: function (e)
