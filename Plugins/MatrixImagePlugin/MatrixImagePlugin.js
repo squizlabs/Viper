@@ -121,14 +121,22 @@ MatrixImagePlugin.prototype = {
 
             EasyEditAssetFinder.init({
                 focusAssetId: focusId,
-                types: ['image','thumbnail'],
+                types: ['image','thumbnail', 'image_variety'],
                 callback: function(selectedAsset){
-                    if (selectedAsset.attribute('type_code') === 'image') {
+                    var typeCode = selectedAsset.attribute('type_code');
+                    if ((typeCode.substr(0,5) === 'image') || (typeCode === 'thumbnail')) {
                         urlField.setValue('./?a=' + selectedAsset.id,false);
                         altField.setValue(selectedAsset.attribute('alt'),false);
                     } else {
-                        alert(EasyEditLocalise.translate('You have selected a %1 asset. Only image assets can be selected.',selectedAsset.attribute('type_code')));
+                        alert(EasyEditLocalise.translate('You have selected a %1 asset. Only image assets can be selected.', typeCode));
                     }// End if
+                },
+                itemRefiner: function(asset) {
+                    // Unset image variety dependant flag so they can be selected.
+                    if (asset.type_code === 'image_variety') {
+                        asset.is_dependant = '0';
+                    }
+                    return asset;
                 }
             });
         });
