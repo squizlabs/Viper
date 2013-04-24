@@ -842,7 +842,7 @@ Viper.prototype = {
         // Accessibility Plugin, standard.
         this.getPluginManager().setPluginSettings('ViperAccessibilityPlugin', {standard: 'WCAG2AA'});
 
-        this.setSetting('defaultBlockTag', 'p');
+        this.setSetting('defaultBlockTag', this.getDefaultBlockTag());
 
     },
 
@@ -1140,6 +1140,39 @@ Viper.prototype = {
         return coords;
 
     },
+
+
+    getDocumentOffset: function()
+    {
+        var doc    = Viper.document;
+        var offset = {
+            x: 0,
+            y: 0
+        };
+
+        while (document !== doc) {
+            var frameElem = doc.defaultView.frameElement;
+            if (!frameElem) {
+                continue;
+            }
+
+            var coords    = dfx.getElementCoords(frameElem);
+            offset.x += coords.x;
+            offset.y += coords.y;
+            doc = frameElem.ownerDocument;
+        }
+
+        return offset;
+
+    },
+
+
+    getDocumentWindow: function()
+    {
+        return Viper.document.defaultView;
+
+    },
+
 
     /**
      * Returns true if given selection is in side the Viper element false otherwise.
@@ -3081,6 +3114,7 @@ Viper.prototype = {
 
     removeBookmarks: function(elem)
     {
+        elem = elem || this.element;
         dfx.remove(dfx.getClass('viperBookmark', elem, 'span'));
 
     },
