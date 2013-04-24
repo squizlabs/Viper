@@ -1081,7 +1081,7 @@ ViperFormatPlugin.prototype = {
             this.viper.fireSelectionChanged(null, true);
             this.viper.fireNodesChanged();
 
-            this.viper.fireCallbacks('ViperFormatPlugin:elementAttributeSet', {element: selectedNode, oldValue: oldVal});
+            this.viper.fireCallbacks('ViperFormatPlugin:elementAttributeSet', {element: selectedNode, oldValue: oldVal, newValue:value});
             return;
         }
 
@@ -1113,6 +1113,8 @@ ViperFormatPlugin.prototype = {
 
             this.viper.fireSelectionChanged(range, true);
             this.viper.fireNodesChanged();
+
+            this.viper.fireCallbacks('ViperFormatPlugin:elementAttributeSet', {element: span, oldValue: '', newValue:value});
 
             return span;
         }

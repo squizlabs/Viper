@@ -1793,6 +1793,20 @@ ViperTools.prototype = {
                     }//end if
                 }//end if
 
+                if (Viper.document !== document && Viper.document.defaultView.frameElement) {
+                    // Viper element is inside an iframe, need to adjust the position.
+                    var frameOffset  = tools.viper.getDocumentOffset();
+                    var newCoords    = {};
+                    newCoords.bottom = (rangeCoords.bottom + frameOffset.y);
+                    newCoords.top    = (rangeCoords.top + frameOffset.y);
+                    newCoords.bottom = (rangeCoords.bottom + frameOffset.y);
+                    newCoords.left   = (rangeCoords.left + frameOffset.x);
+                    newCoords.right  = (rangeCoords.right + frameOffset.x);
+                    newCoords.height = rangeCoords.height;
+                    newCoords.width  = rangeCoords.width;
+                    rangeCoords      = newCoords;
+                }
+
                 var scrollCoords = dfx.getScrollCoords();
 
                 dfx.addClass(toolbar, 'Viper-calcWidth');

@@ -682,7 +682,12 @@ ViperImagePlugin.prototype = {
         var swHandle = document.createElement('div');
         dfx.addClass(swHandle, 'Viper-image-handle Viper-image-handle-sw');
 
-        var rect = dfx.getBoundingRectangle(image);
+        var rect   = dfx.getBoundingRectangle(image);
+        var offset = this.viper.getDocumentOffset();
+        rect.x1 += offset.x;
+        rect.x2 += offset.x;
+        rect.y1 += offset.y;
+        rect.y2 += offset.y;
 
         // Set the position of handles.
         dfx.setStyle(swHandle, 'left', rect.x1 + 'px');
@@ -706,8 +711,8 @@ ViperImagePlugin.prototype = {
             dfx.addEvent(handle, 'mousedown', function(e) {
                 var width    = image.clientWidth;
                 var height   = image.clientHeight;
-                var prevPosX = e.clientX;
-                var prevPosY = e.clientY;
+                var prevPosX = e.clientX - offset.x;
+                var prevPosY = e.clientY - offset.y;
                 var resized  = false;
                 var both     = e.shiftKey;
                 var ratio    = (height / width);
@@ -719,7 +724,7 @@ ViperImagePlugin.prototype = {
 
                 self._inlineToolbar.hide();
 
-                dfx.addEvent(document, 'mousemove.ViperImageResize', function(e) {
+                dfx.addEvent(Viper.document, 'mousemove.ViperImageResize', function(e) {
                     var wDiff = (e.clientX - prevPosX);
                     var hDiff = (e.clientY - prevPosY);
                     prevPosX  = e.clientX;
@@ -742,20 +747,20 @@ ViperImagePlugin.prototype = {
                     }
 
                     var rect = dfx.getBoundingRectangle(image);
-                    dfx.setStyle(seHandle, 'left', (rect.x2) + 'px');
-                    dfx.setStyle(seHandle, 'top', (rect.y2) + 'px');
+                    dfx.setStyle(seHandle, 'left', (rect.x2 + offset.x) + 'px');
+                    dfx.setStyle(seHandle, 'top', (rect.y2 + offset.y) + 'px');
 
-                    dfx.setStyle(swHandle, 'left', rect.x1 + 'px');
-                    dfx.setStyle(swHandle, 'top', (rect.y2) + 'px');
+                    dfx.setStyle(swHandle, 'left', (rect.x1 + offset.x) + 'px');
+                    dfx.setStyle(swHandle, 'top', (rect.y2 + offset.y) + 'px');
 
                     dfx.preventDefault(e);
                     return false;
                 });
 
                 // Remove mousemove event.
-                dfx.addEvent(document, 'mouseup.ViperImageResize', function(e) {
-                    dfx.removeEvent(document, 'mousemove.ViperImageResize');
-                    dfx.removeEvent(document, 'mouseup.ViperImageResize');
+                dfx.addEvent(Viper.document, 'mouseup.ViperImageResize', function(e) {
+                    dfx.removeEvent(Viper.document, 'mousemove.ViperImageResize');
+                    dfx.removeEvent(Viper.document, 'mouseup.ViperImageResize');
 
                     // If the style attribute is empty, remove it.
                     if (!image.getAttribute('style')) {
