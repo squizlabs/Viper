@@ -15,18 +15,19 @@ function ViperCopyPastePlugin(viper)
 {
     this.viper = viper;
 
-    this.pasteElement  = null;
-    this.pasteValue    = null;
-    this.rangeObj      = null;
-    this.pasteType     = 'formatted';
-    this.cutType       = 'formatted';
-    this.allowedTags   = 'table|tr|td|th|ul|li|ol|br|p|a|img|form|input|select|option';
-    this.convertTags   = null;
-    this._tmpNode      = null;
-    this._iframe       = null;
-    this._isFirefox    = viper.isBrowser('firefox');
-    this._isMSIE       = viper.isBrowser('msie');
-    this._isSafari     = viper.isBrowser('safari');
+    this.pasteElement    = null;
+    this.pasteValue      = null;
+    this.rangeObj        = null;
+    this.pasteType       = 'formatted';
+    this.cutType         = 'formatted';
+    this.allowedTags     = 'table|tr|td|th|ul|li|ol|br|p|a|img|form|input|select|option';
+    this.convertTags     = null;
+    this._tmpNode        = null;
+    this._iframe         = null;
+    this._isFirefox      = viper.isBrowser('firefox');
+    this._isMSIE         = viper.isBrowser('msie');
+    this._isSafari       = viper.isBrowser('safari');
+    this._toolbarElement = null;
 
 }
 
@@ -133,7 +134,11 @@ ViperCopyPastePlugin.prototype = {
 
                 dfx.setHtml(content, pasteDesc);
 
-                var toolbarElement = tools.createInlineToolbar('ViperCopyPastePlugin-paste', false, null, function() {
+                if (self._toolbarElement) {
+                    dfx.remove(self._toolbarElement);
+                }
+
+                self._toolbarElement = tools.createInlineToolbar('ViperCopyPastePlugin-paste', false, null, function() {
                     toolbar.toggleSubSection('pasteSubSection');
                 });
                 toolbar = tools.getItem('ViperCopyPastePlugin-paste');
@@ -159,9 +164,30 @@ ViperCopyPastePlugin.prototype = {
 
                 setTimeout(function() {
                     ViperSelection.addRange(viperRange);
-                    toolbar.setOnHideCallback(function() {
-                        dfx.remove(toolbarElement);
-                    });
+
+                    if (self._isMSIE === true) {
+                        // The selection changed event fires after 500ms due to
+                        // another workaround, which causes the toolbar to close
+                        // as soon as it opens. So the first onclose callback
+                        // needs to prevent toolbar closing.
+                        var ignore = true;
+                        toolbar.setOnHideCallback(function() {
+                            if (ignore === true) {
+                                ignore = false;
+                                // Do not close the inline paste toolbar.
+                                return false;
+                            }
+
+                            // Close the inline paste toolbar.
+                            dfx.remove(self._toolbarElement);
+                            ignore = true;
+                            return true;
+                        });
+                    } else {
+                        toolbar.setOnHideCallback(function() {
+                            dfx.remove(self._toolbarElement);
+                        });
+                    }
 
                     toolbar.update();
                 }, 10);
@@ -919,10 +945,11 @@ ViperCopyPastePlugin.prototype = {
             var node = lists[i].firstChild;
             while (node) {
                 if (dfx.isTag(node, 'li') === false) {
-                    // Not a list item, remove it..
-                    var removeNode = node;
-                    node = node.nextSibling;
-                    dfx.remove(removeNode);
+                    while (node.firstChild) {
+                        dfx.insertBefore(node, node.firstChild);
+                    }
+                    dfx.remove(node);
+                    node = lists[i].firstChild;
                 } else {
                     node = node.nextSibling;
                 }
