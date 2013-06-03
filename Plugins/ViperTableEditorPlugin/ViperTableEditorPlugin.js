@@ -140,6 +140,7 @@ ViperTableEditorPlugin.prototype = {
             var range = self.viper.getViperRange();
             try {
                 if (range.collapsed === true
+                    && self.viper.isBrowser('msie') === true
                     && range.startContainer.nodeType === dfx.TEXT_NODE
                     && ['td', 'th'].inArray(dfx.getTagName(range.startContainer.parentNode)) === true
                 ) {
