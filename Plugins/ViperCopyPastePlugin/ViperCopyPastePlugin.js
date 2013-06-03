@@ -96,7 +96,14 @@ ViperCopyPastePlugin.prototype = {
                     }
 
                     self.pasteElement = self._createPasteDiv();
-                    dfx.setHtml(self.pasteElement, e.clipboardData.getData(dataType));
+
+                    var pasteContent = e.clipboardData.getData(dataType);
+                    if (dataType === 'text/plain') {
+                        pasteContent = pasteContent.replace(/\r\n/g, '<br />');
+                        pasteContent = pasteContent.replace(/\n/g, '<br />');
+                    }
+
+                    dfx.setHtml(self.pasteElement, pasteContent);
                     self._handleFormattedPasteValue((self.pasteType === 'formattedClean'));
                 } else {
                     if (dataType === null) {
