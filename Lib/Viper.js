@@ -195,6 +195,7 @@ Viper.prototype = {
     {
         this.fireCallbacks('Viper:destroy');
         this.setEnabled(false);
+        dfx.removeEvent(this._document.body, '.' + this.getEventNamespace());
 
         if (this._viperElementHolder) {
             dfx.remove(this._viperElementHolder);
