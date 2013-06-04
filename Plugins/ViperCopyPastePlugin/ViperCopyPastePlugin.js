@@ -156,9 +156,26 @@ ViperCopyPastePlugin.prototype = {
                 var frameDoc  = dfx.getIframeDocument(iframe);
                 var pasteArea = frameDoc.getElementById('ViperPasteIframeDiv');
 
-                pasteArea.onpaste = function() {
+                pasteArea.onpaste = function(e) {
                     ViperSelection.addRange(viperRange);
                     self._beforePaste(viperRange);
+                    if (self._isSafari === true
+                        && e.clipboardData
+                        && e.clipboardData.types
+                        && dfx.inArray('text/html', e.clipboardData.types) === false
+                        && dfx.inArray('text/plain', e.clipboardData.types) === true
+                    ) {
+                        // Plain text content is being pasted, replace all new line
+                        // characters with BR tags.
+                        var pasteContent = e.clipboardData.getData('text/plain');
+                        pasteContent = pasteContent.replace(/\r\n/g, '<br />');
+                        pasteContent = pasteContent.replace(/\n/g, '<br />');
+                        var node     = pasteArea;
+                        dfx.setHtml(node, pasteContent);
+                        self._handleFormattedPasteValue(false, node);
+                        dfx.preventDefault(e);
+                        return false;
+                    }
 
                     setTimeout(function() {
                         var node = pasteArea;
@@ -492,10 +509,27 @@ ViperCopyPastePlugin.prototype = {
 
         var self = this;
         this.pasteElement.onpaste = function(e) {
-            setTimeout(function() {
-               self._handleFormattedPasteValue(stripTags);
-               self.viper.focus();
-            }, 100);
+            if (self._isSafari === true
+                && e.clipboardData
+                && e.clipboardData.types
+                && e.clipboardData.types.inArray('text/html') === false
+                && e.clipboardData.types.inArray('text/plain') === true
+            ) {
+                // Plain text content is being pasted, replace all new line
+                // characters with BR tags.
+                var pasteContent = e.clipboardData.getData('text/plain');
+                pasteContent = pasteContent.replace(/\r\n/g, '<br />');
+                pasteContent = pasteContent.replace(/\n/g, '<br />');
+                dfx.setHtml(self.pasteElement, pasteContent);
+                self._handleFormattedPasteValue(stripTags);
+                dfx.preventDefault(e);
+                return false;
+            } else {
+                setTimeout(function() {
+                    self._handleFormattedPasteValue(stripTags);
+                    self.viper.focus();
+                }, 100);
+            }
         };
 
         return true;
