@@ -953,6 +953,9 @@ ViperCopyPastePlugin.prototype = {
             } else {
                 // Chrome adds slash at the end of the urls, trim them..
                 aTag.setAttribute('href', aTag.getAttribute('href').replace(/\/$/, ''));
+
+                // Outlook adds blocked:: prefix to hrefs. Remove it.
+                aTag.setAttribute('href', aTag.getAttribute('href').replace(/^blocked::/i, ''));
             }
         }
 
