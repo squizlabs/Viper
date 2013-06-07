@@ -555,6 +555,91 @@ ViperKeyboardEditorPlugin.prototype = {
     {
         var range = this.viper.getViperRange();
 
+        if (this.viper.isBrowser('chrome') === true) {
+            // This block of code is a workaround for the delete bug in Chrome.
+            // See http://goo.gl/QPB0v
+            if (e.keyCode === 46
+                && range.collapsed === true
+                && range.startContainer.nodeType === dfx.TEXT_NODE
+                && range.startOffset === range.startContainer.data.length
+                && !range.startContainer.nextSibling
+            ) {
+                // At the end of an element. Check to see if next available
+                // element is a block.
+                var nextSelectable = range.getNextContainer(range.startContainer, null, true);
+                var currentParent  = dfx.getFirstBlockParent(range.startContainer);
+                var nextParent     = dfx.getFirstBlockParent(nextSelectable);
+                if (currentParent !== nextParent && this.viper.isOutOfBounds(nextSelectable) === false) {
+                    while (nextParent.firstChild) {
+                        currentParent.appendChild(nextParent.firstChild);
+                    }
+
+                    dfx.remove(nextParent);
+                    dfx.preventDefault(e);
+                    this.viper.fireNodesChanged();
+                    return false;
+                }
+            } else if (e.keyCode === 8
+                && range.collapsed === true
+                && range.startContainer.nodeType === dfx.TEXT_NODE
+                && range.startOffset === 0
+                && !range.startContainer.previousSibling
+            ) {
+                // At the start of an element. Check to see if the previous
+                // element is a part of another block element. If it is then
+                // join these elements.
+                var prevSelectable = range.getPreviousContainer(range.startContainer, null, true);
+                var currentParent  = dfx.getFirstBlockParent(range.startContainer);
+                var prevParent     = dfx.getFirstBlockParent(prevSelectable);
+                if (currentParent !== prevParent && this.viper.isOutOfBounds(prevSelectable) === false) {
+                    while (currentParent.firstChild) {
+                        prevParent.appendChild(currentParent.firstChild);
+                    }
+
+                    dfx.remove(currentParent);
+                    dfx.preventDefault(e);
+                    range.setStart(prevSelectable, prevSelectable.data.length);
+                    range.collapse(true);
+                    ViperSelection.addRange(range);
+                    this.viper.fireNodesChanged();
+
+                    return false;
+                }
+            } else if (
+                range.collapsed === false
+                && range.startContainer !== range.endContainer
+                && range.startContainer.nodeType === dfx.TEXT_NODE
+                && range.endContainer.nodeType === dfx.TEXT_NODE
+            ) {
+                // This is a selection on different text nodes. Check to see
+                // if these nodes are part of two different block elements.
+                var startParent = dfx.getFirstBlockParent(range.startContainer);
+                var endParent   = dfx.getFirstBlockParent(range.endContainer);
+                if (startParent !== endParent) {
+                    // Two different parents. We need to join these parents.
+                    // First remove all elements in between.
+                    range.deleteContents();
+
+                    // Now bring the contents of the next selectable to the
+                    // start parent.
+                    var nextSelectable = range.getNextContainer(range.startContainer, null, true);
+                    var nextParent     = dfx.getFirstBlockParent(nextSelectable);
+
+                    while (nextParent.firstChild) {
+                        startParent.appendChild(nextParent.firstChild);
+                    }
+
+                    dfx.remove(nextParent);
+
+                    dfx.preventDefault(e);
+                    range.collapse(true);
+                    ViperSelection.addRange(range);
+                    this.viper.fireNodesChanged();
+                    return false;
+                }//end if
+            }//end if
+        }//end if
+
         if (range.startOffset !== 0) {
             return;
         }
@@ -1019,6 +1104,8 @@ ViperKeyboardEditorPlugin.prototype = {
             // caret between these two br tags we need to insert a text node in
             // between them.
             this.viper.insertAfter(node.previousSibling, this.viper.createSpaceNode());
+        } else if (!node.nextSibling && dfx.isBlockElement(node.parentNode) === false) {
+            dfx.insertAfter(node.parentNode, node);
         }
 
         return !this.viper.setCaretAfterNode(node);

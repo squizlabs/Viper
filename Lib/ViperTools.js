@@ -1318,13 +1318,17 @@ ViperTools.prototype = {
             },
 
             hide: function() {
+                if (this._onHideCallback) {
+                    if (this._onHideCallback.call(this) === false) {
+                        return false;
+                    }
+                }
+
                 this.closeActiveSubsection(true);
                 this._activeSection = null;
                 dfx.removeClass(toolbar, 'Viper-visible');
+                return true;
 
-                if (this._onHideCallback) {
-                    this._onHideCallback.call(this);
-                }
             },
 
             isVisible: function() {

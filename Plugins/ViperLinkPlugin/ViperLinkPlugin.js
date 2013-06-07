@@ -90,7 +90,7 @@ ViperLinkPlugin.prototype = {
             url = 'mailto:' + url.replace(/\s*mailto:\s*/i, '');
             var subject = this.viper.ViperTools.getItem(idPrefix + ':subject').getValue();
             if (subject) {
-                url += '?subject=' + subject;
+                url += '?subject=' + encodeURIComponent(subject);
             }
         }
 
@@ -239,9 +239,9 @@ ViperLinkPlugin.prototype = {
         var self = this;
         setTimeout(function() {
             self.viper.fireSelectionChanged(null, true);
-            self.viper.fireNodesChanged();    
+            self.viper.fireNodesChanged();
         }, 10);
-        
+
 
     },
 
@@ -694,7 +694,7 @@ ViperLinkPlugin.prototype = {
         var tools = this.viper.ViperTools;
         tools.getItem('ViperLinkPlugin:vtp:url').setValue(href || '');
         tools.getItem('ViperLinkPlugin:vtp:title').setValue(title || '');
-        tools.getItem('ViperLinkPlugin:vtp:subject').setValue(subject || '');
+        tools.getItem('ViperLinkPlugin:vtp:subject').setValue(decodeURIComponent(subject) || '');
         tools.getItem('ViperLinkPlugin:vtp:newWindow').setValue(newWindow);
     },
 
@@ -738,7 +738,7 @@ ViperLinkPlugin.prototype = {
         var tools = this.viper.ViperTools;
         tools.getItem('ViperLinkPlugin:vitp:url').setValue(href || '');
         tools.getItem('ViperLinkPlugin:vitp:title').setValue(title || '');
-        tools.getItem('ViperLinkPlugin:vitp:subject').setValue(subject || '');
+        tools.getItem('ViperLinkPlugin:vitp:subject').setValue(decodeURIComponent(subject) || '');
         tools.getItem('ViperLinkPlugin:vitp:newWindow').setValue(newWindow);
 
     }

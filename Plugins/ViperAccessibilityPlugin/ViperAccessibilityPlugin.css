@@ -122,6 +122,7 @@
     padding: 0 0.5em;
     position: relative;
     text-align: center;
+    background-color: #E9E9EB;
 }
 
 .ViperAccessibilityPlugin #HTMLCS-wrapper .Viper-buttonIcon.Viper-locate {
@@ -151,6 +152,7 @@
     overflow: hidden;
     padding: 0;
     position: relative;
+    color: #EEEEEE;
 }
 
 .ViperAccessibilityPlugin #HTMLCS-wrapper .ViperAP-issueResolution .Viper-resolutionHeader {

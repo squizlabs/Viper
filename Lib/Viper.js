@@ -538,7 +538,7 @@ Viper.prototype = {
                         } else {
                             blockElement = document.createElement(tagName);
                             dfx.setHtml(blockElement, '&nbsp;');
-                            editableChild.appendChild(blockElement);
+                            this.element.appendChild(blockElement);
                             editableChild = range._getFirstSelectableChild(this.element);
                         }
                     }//end if
