@@ -1104,6 +1104,8 @@ ViperKeyboardEditorPlugin.prototype = {
             // caret between these two br tags we need to insert a text node in
             // between them.
             this.viper.insertAfter(node.previousSibling, this.viper.createSpaceNode());
+        } else if (!node.nextSibling && dfx.isBlockElement(node.parentNode) === false) {
+            dfx.insertAfter(node.parentNode, node);
         }
 
         return !this.viper.setCaretAfterNode(node);
