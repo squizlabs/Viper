@@ -57,8 +57,14 @@ ViperLinkPlugin.prototype = {
             url        = url[1];
             var length = url.length;
             var a      = document.createElement('a');
-            a.setAttribute('href', url);
+
             dfx.setHtml(a, url);
+
+            if (url.match(/^[^:]+(?=:\/\/)/) === null) {
+                url = 'http://' + url;
+            }
+
+            a.setAttribute('href', url);
 
             var nextNode = startNode.splitText((range.startOffset - 1 - length));
             dfx.insertBefore(nextNode, a);
