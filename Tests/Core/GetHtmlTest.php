@@ -119,6 +119,34 @@ class Viper_Tests_Core_GetHtmlTest extends AbstractViperUnitTest
 
 
     /**
+     * Test getHTML removes the <br/> when it is before a closing inline element.
+     *
+     * @return void
+     */
+    public function testGetHtmlRemovesBreakTagsBeforeClosingInlineElements()
+    {
+        $this->click($this->findKeyword(1));
+
+        $this->_checkGetHTML('<p>asdas <strong>%1%</strong> asdas</p><p>asdas <em>%2%</em> asdas</p><p>asdas <span>%3%</span> asdas</p><p>asdas <sub>%4%</sub> asdas</p><p>asdas <sup>%5%</sup> asdas</p><p>asdas <del>%6%</del> asdas</p>');
+
+    }//end testGetHtmlRemovesBreakTagsBeforeClosingInlineElements()
+
+
+    /**
+     * Test getHTML doesn't remove the <br/> when it is after a closing inline element.
+     *
+     * @return void
+     */
+    public function testGetHtmlLeavesBreakTagsAfterClosingInlineElements()
+    {
+        $this->click($this->findKeyword(1));
+
+        $this->_checkGetHTML('<p>asdas <strong>%1%</strong><br /> asdas</p><p>asdas <em>%2%</em><br /> asdas</p><p>asdas <span>%3%</span><br /> asdas</p><p>asdas <sub>%4%</sub><br /> asdas</p><p>asdas <sup>%5%</sup><br /> asdas</p><p>asdas <del>%6%</del><br /> asdas</p>');
+
+    }//end testGetHtmlLeavesBreakTagsAfterClosingInlineElements()
+
+
+    /**
      * Checks that expected HTML matches the returned HTML.
      *
      * @param string $expectedHTML The expected HTML that will be returned by Viper.
