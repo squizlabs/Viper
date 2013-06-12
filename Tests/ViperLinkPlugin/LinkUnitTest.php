@@ -1233,6 +1233,25 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
     }//end testUndoAndRedoForLinks()
 
 
+    /**
+     * Test that a link is automatically created when you type a URL in the content.
+     *
+     * @return void
+     */
+    public function testAutoCreatingLinks()
+    {
+        $this->useTest(1);
+
+        $this->selectKeyword(2);
+        $this->keyDown('Key.RIGHT');
+        $this->keyDown('Key.ENTER');
+
+        $this->type('Some text http://www.squizlabs.com some text www.example.com ');
+        $this->assertHTMLMatch('<p>%1% link test %2%</p><p>Some text <a href="http://www.squizlabs.com">http://www.squizlabs.com</a> some text <a href="http://www.example.com">www.example.com</a></p>');
+
+    }//end testAutoCreatingLinks()
+
+
 }//end class
 
 ?>
