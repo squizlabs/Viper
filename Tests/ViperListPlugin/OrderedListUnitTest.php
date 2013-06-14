@@ -82,7 +82,7 @@ class Viper_Tests_ViperListPlugin_OrderedListUnitTest extends AbstractViperListP
         $this->assertIconStatusesCorrect(TRUE, 'active', NULL, TRUE);
         $this->keyDown('Key.ENTER');
         $this->type('Second list item');
-        $this->assertIconStatusesCorrect(TRUE, 'active', NULL, TRUE);
+        $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
 
         $this->assertHTMLMatch('<p>%1% uuuuuu. %2%</p><ol><li>New list item</li><li>Second list item</li></ol><p>cPOc ccccc dddd. %3%</p><p>ajhsd sjsjwi hhhh:</p><ol><li>aaa %4% ccccc</li><li>%5% %6% templates</li><li>Audit %7% %8%</li><li>Accessibility audit report</li><li>Recommendations %9% plan</li><li>Squiz Matrix guide</li></ol>');
 
