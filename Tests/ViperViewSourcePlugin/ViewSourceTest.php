@@ -222,7 +222,7 @@ class Viper_Tests_ViperViewSourcePlugin_ViewSourceTest extends AbstractViperView
      *
      * @return void
      */
-    public function testOpenSourceEditorAfterEmbedingVideo()
+    public function testOpenSourceEditorAfterEmbeddingVideo()
     {
         $this->click($this->findKeyword(2));
         $this->clickTopToolbarButton('sourceView');
@@ -258,7 +258,7 @@ class Viper_Tests_ViperViewSourcePlugin_ViewSourceTest extends AbstractViperView
             $this->fail('Source editor did not appear on the screen');
         }
 
-    }//end testOpenSourceEditorAfterEmbedingVideo()
+    }//end testOpenSourceEditorAfterEmbeddingVideo()
 
 
 }//end class
