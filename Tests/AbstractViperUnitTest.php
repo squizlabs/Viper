@@ -1220,10 +1220,10 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
     {
         $pageLoc = $this->getPageTopLeft();
 
-        $x = ($pageLoc['x'] + $rect['x1']);
-        $y = ($pageLoc['y'] + $rect['y1']);
-        $w = ($rect['x2'] - $rect['x1']);
-        $h = ($rect['y2'] - $rect['y1']);
+        $x = (int) ($pageLoc['x'] + $rect['x1']);
+        $y = (int) ($pageLoc['y'] + $rect['y1']);
+        $w = (int) ($rect['x2'] - $rect['x1']);
+        $h = (int) ($rect['y2'] - $rect['y1']);
 
         $region = $this->createRegion($x, $y, $w, $h);
         return $region;
