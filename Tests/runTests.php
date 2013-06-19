@@ -93,6 +93,12 @@ $opts = getopt('s::b::u::t::civ', array('url::', 'built', 'log::'));
             }
 
             $phpunitCMD .= '--log-junit '.$logFilePath;
+
+            // If there is an existing log file, move it.
+            if (file_exists($logFilePath) === TRUE) {
+                copy($logFilePath, $browserTmpPath.'/test_'.date('d_m_y', filemtime($logFilePath)).'.log');
+            }
+
         }
 
         if ($unitTests !== NULL) {

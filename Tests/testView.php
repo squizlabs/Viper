@@ -145,6 +145,7 @@
         echo ',&nbsp;&nbsp;Errors: '.$testSuites->getAttribute('errors');
         echo ',&nbsp;&nbsp;Failures: '.$testSuites->getAttribute('failures');
         echo ',&nbsp;&nbsp;Assertions: '.$testSuites->getAttribute('assertions');
+        echo ',&nbsp;&nbsp;Date: '.date('d F Y H:i', filemtime($logFile));
         echo '</p>';
 
         echo '<table><tbody><tr>';
