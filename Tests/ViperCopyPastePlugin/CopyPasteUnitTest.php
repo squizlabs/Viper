@@ -285,6 +285,8 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
         $this->click($this->findKeyword(1));
         $this->moveToKeyword(2, 'right');
         $this->keyDown('Key.ENTER');
+        $this->keyDown('Key.ENTER');
+        sleep(1);
         $this->keyDown('Key.CMD + v');
 
         $this->assertHTMLMatch('<pre>Lorum this is more content %1% to test %2%</pre><p>Lorum this is more content %1% to test %2%</p>');
