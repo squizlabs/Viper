@@ -16,11 +16,11 @@ class Viper_Tests_ViperListPlugin_OrderedListInTableUnitTest extends AbstractVip
         $this->selectKeyword(1);
 
         $this->clickTopToolbarButton('listOL');
-        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td><ol><li>UnaU %1% FoX Mnu</li></ol></td><td><strong><em>%2%</em></strong> sapien vel aliquet</td><td><ol><li>Item 1</li><li>Item 2 %3%</li></ol></td></tr><tr><td><h3>blah</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td><ol><li>UnaU %1% FoX Mnu</li></ol></td><td><strong><em>%2%</em></strong> sapien vel aliquet</td><td><ol><li>item1</li><li>%3%</li></ol></td></tr><tr><td><h3>blah</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
         $this->assertIconStatusesCorrect(TRUE, 'active', FALSE, TRUE);
 
         $this->clickTopToolbarButton('listOL', 'active');
-        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU %1% FoX Mnu</td><td><strong><em>%2%</em></strong> sapien vel aliquet</td><td><ol><li>Item 1</li><li>Item 2 %3%</li></ol></td></tr><tr><td><h3>blah</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU %1% FoX Mnu</td><td><strong><em>%2%</em></strong> sapien vel aliquet</td><td><ol><li>item1</li><li>%3%</li></ol></td></tr><tr><td><h3>blah</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
         $this->assertIconStatusesCorrect(TRUE, TRUE, FALSE, FALSE);
 
     }//end testCreatingAListInACell()
@@ -37,15 +37,15 @@ class Viper_Tests_ViperListPlugin_OrderedListInTableUnitTest extends AbstractVip
         $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
 
         $this->clickTopToolbarButton('listIndent');
-        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU %1% FoX Mnu</td><td><strong><em>%2%</em></strong> sapien vel aliquet</td><td><ol><li>Item 1<ol><li>Item 2 %3%</li></ol></li></ol></td></tr><tr><td><h3>blah</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU %1% FoX Mnu</td><td><strong><em>%2%</em></strong> sapien vel aliquet</td><td><ol><li>item1<ol><li>%3%</li></ol></li></ol></td></tr><tr><td><h3>blah</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
         $this->assertIconStatusesCorrect(TRUE, 'active', FALSE, TRUE);
 
         $this->clickTopToolbarButton('listOutdent');
-        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU %1% FoX Mnu</td><td><strong><em>%2%</em></strong> sapien vel aliquet</td><td><ol><li>Item 1</li><li>Item 2 %3%</li></ol></td></tr><tr><td><h3>blah</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU %1% FoX Mnu</td><td><strong><em>%2%</em></strong> sapien vel aliquet</td><td><ol><li>item1</li><li>%3%</li></ol></td></tr><tr><td><h3>blah</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
         $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
 
         $this->clickTopToolbarButton('listOutdent');
-        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU %1% FoX Mnu</td><td><strong><em>%2%</em></strong> sapien vel aliquet</td><td><ol><li>Item 1</li></ol><p>Item 2 %3%</p></td></tr><tr><td><h3>blah</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU %1% FoX Mnu</td><td><strong><em>%2%</em></strong> sapien vel aliquet</td><td><ol><li>item1</li></ol><p>%3%</p></td></tr><tr><td><h3>blah</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
         $this->assertIconStatusesCorrect(TRUE, TRUE, FALSE, FALSE);
 
     }//end testIndentingAndOutdentingAListItemUsingTopToolbar()
@@ -62,15 +62,15 @@ class Viper_Tests_ViperListPlugin_OrderedListInTableUnitTest extends AbstractVip
         $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
 
         $this->clickInlineToolbarButton('listIndent');
-        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU %1% FoX Mnu</td><td><strong><em>%2%</em></strong> sapien vel aliquet</td><td><ol><li>Item 1<ol><li>Item 2 %3%</li></ol></li></ol></td></tr><tr><td><h3>blah</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU %1% FoX Mnu</td><td><strong><em>%2%</em></strong> sapien vel aliquet</td><td><ol><li>item1<ol><li>%3%</li></ol></li></ol></td></tr><tr><td><h3>blah</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
         $this->assertIconStatusesCorrect(TRUE, 'active', FALSE, TRUE);
 
         $this->clickInlineToolbarButton('listOutdent');
-        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU %1% FoX Mnu</td><td><strong><em>%2%</em></strong> sapien vel aliquet</td><td><ol><li>Item 1</li><li>Item 2 %3%</li></ol></td></tr><tr><td><h3>blah</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU %1% FoX Mnu</td><td><strong><em>%2%</em></strong> sapien vel aliquet</td><td><ol><li>item1</li><li>%3%</li></ol></td></tr><tr><td><h3>blah</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
         $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
 
         $this->clickInlineToolbarButton('listOutdent');
-        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU %1% FoX Mnu</td><td><strong><em>%2%</em></strong> sapien vel aliquet</td><td><ol><li>Item 1</li></ol><p>Item 2 %3%</p></td></tr><tr><td><h3>blah</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU %1% FoX Mnu</td><td><strong><em>%2%</em></strong> sapien vel aliquet</td><td><ol><li>item1</li></ol><p>%3%</p></td></tr><tr><td><h3>blah</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
         $this->assertIconStatusesCorrect(TRUE, TRUE, FALSE, FALSE);
 
     }//end testIndentingAndOutdentingAListItemUsingInlineToolbar()
@@ -86,25 +86,25 @@ class Viper_Tests_ViperListPlugin_OrderedListInTableUnitTest extends AbstractVip
 
         $this->click($this->findKeyword(3));
         $this->keyDown('Key.TAB');
-        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU %1% FoX Mnu</td><td><strong><em>%2%</em></strong> sapien vel aliquet</td><td><ol><li>Item 1<ol><li>Item 2 %3%</li></ol></li></ol></td></tr><tr><td><h3>blah</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU %1% FoX Mnu</td><td><strong><em>%2%</em></strong> sapien vel aliquet</td><td><ol><li>item1<ol><li>%3%</li></ol></li></ol></td></tr><tr><td><h3>blah</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
         $this->assertIconStatusesCorrect(TRUE, 'active', FALSE, TRUE);
 
         $this->click($this->findKeyword(2));
         $this->click($this->findKeyword(3));
         $this->keyDown('Key.SHIFT + Key.TAB');
-        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU %1% FoX Mnu</td><td><strong><em>%2%</em></strong> sapien vel aliquet</td><td><ol><li>Item 1</li><li>Item 2 %3%</li></ol></td></tr><tr><td><h3>blah</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU %1% FoX Mnu</td><td><strong><em>%2%</em></strong> sapien vel aliquet</td><td><ol><li>item1</li><li>%3%</li></ol></td></tr><tr><td><h3>blah</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
         $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
 
         $this->click($this->findKeyword(2));
         $this->click($this->findKeyword(3));
         $this->keyDown('Key.SHIFT + Key.TAB');
-        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU %1% FoX Mnu</td><td><strong><em>%2%</em></strong> sapien vel aliquet</td><td><ol><li>Item 1</li></ol><p>Item 2 %3%</p></td></tr><tr><td><h3>blah</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU %1% FoX Mnu</td><td><strong><em>%2%</em></strong> sapien vel aliquet</td><td><ol><li>item1</li></ol><p>%3%</p></td></tr><tr><td><h3>blah</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
         $this->assertIconStatusesCorrect(TRUE, TRUE, FALSE, FALSE);
 
         $this->click($this->getMouseLocation());
         sleep(1);
         $this->keyDown('Key.TAB');
-        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU %1% FoX Mnu</td><td><strong><em>%2%</em></strong> sapien vel aliquet</td><td><ol><li>Item 1</li></ol><p>Item 2 %3%</p></td></tr><tr><td><h3>blah</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU %1% FoX Mnu</td><td><strong><em>%2%</em></strong> sapien vel aliquet</td><td><ol><li>item1</li></ol><p>%3%</p></td></tr><tr><td><h3>blah</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
         $this->assertIconStatusesCorrect(TRUE, 'active', FALSE, FALSE);
 
     }//end testIndentingAndOutdentingAListItemUsingShortcuts()
@@ -121,7 +121,7 @@ class Viper_Tests_ViperListPlugin_OrderedListInTableUnitTest extends AbstractVip
         $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
         $this->clickTopToolbarButton('listOL', 'active');
 
-        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU %1% FoX Mnu</td><td><strong><em>%2%</em></strong> sapien vel aliquet</td><td><p>Item 1</p><p>Item 2 %3%</p></td></tr><tr><td><h3>blah</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU %1% FoX Mnu</td><td><strong><em>%2%</em></strong> sapien vel aliquet</td><td><p>item1</p><p>%3%</p></td></tr><tr><td><h3>blah</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
         $this->assertIconStatusesCorrect(TRUE, TRUE, FALSE, FALSE);
 
     }//end testRemovingListUsingOrderedListIcon()
@@ -137,7 +137,7 @@ class Viper_Tests_ViperListPlugin_OrderedListInTableUnitTest extends AbstractVip
         $this->selectKeyword(3);
         $this->selectInlineToolbarLineageItem(4);
         $this->clickInlineToolbarButton('listOutdent');
-        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU %1% FoX Mnu</td><td><strong><em>%2%</em></strong> sapien vel aliquet</td><td><p>Item 1</p><p>Item 2 %3%</p></td></tr><tr><td><h3>blah</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU %1% FoX Mnu</td><td><strong><em>%2%</em></strong> sapien vel aliquet</td><td><p>item1</p><p>%3%</p></td></tr><tr><td><h3>blah</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
         $this->assertIconStatusesCorrect(TRUE, TRUE, FALSE, FALSE);
 
         // Click undo so we can test the top toolbar
@@ -146,7 +146,7 @@ class Viper_Tests_ViperListPlugin_OrderedListInTableUnitTest extends AbstractVip
         $this->selectKeyword(3);
         $this->selectInlineToolbarLineageItem(4);
         $this->clickTopToolbarButton('listOutdent');
-        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU %1% FoX Mnu</td><td><strong><em>%2%</em></strong> sapien vel aliquet</td><td><p>Item 1</p><p>Item 2 %3%</p></td></tr><tr><td><h3>blah</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU %1% FoX Mnu</td><td><strong><em>%2%</em></strong> sapien vel aliquet</td><td><p>item1</p><p>%3%</p></td></tr><tr><td><h3>blah</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
         $this->assertIconStatusesCorrect(TRUE, TRUE, FALSE, FALSE);
 
     }//end testRemovingListUsingOutdentIcon()
@@ -163,13 +163,13 @@ class Viper_Tests_ViperListPlugin_OrderedListInTableUnitTest extends AbstractVip
         $this->selectInlineToolbarLineageItem(4);
 
         $this->clickInlineToolbarButton('listOutdent');
-        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU %1% FoX Mnu</td><td><strong><em>%2%</em></strong> sapien vel aliquet</td><td><p>Item 1</p><p>Item 2 %3%</p></td></tr><tr><td><h3>blah</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU %1% FoX Mnu</td><td><strong><em>%2%</em></strong> sapien vel aliquet</td><td><p>item1</p><p>%3%</p></td></tr><tr><td><h3>blah</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         $this->clickTopToolbarButton('historyUndo');
-        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU %1% FoX Mnu</td><td><strong><em>%2%</em></strong> sapien vel aliquet</td><td><ol><li>Item 1</li><li>Item 2 %3%</li></ol></td></tr><tr><td><h3>blah</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU %1% FoX Mnu</td><td><strong><em>%2%</em></strong> sapien vel aliquet</td><td><ol><li>item1</li><li>%3%</li></ol></td></tr><tr><td><h3>blah</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         $this->clickTopToolbarButton('historyRedo');
-        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU %1% FoX Mnu</td><td><strong><em>%2%</em></strong> sapien vel aliquet</td><td><p>Item 1</p><p>Item 2 %3%</p></td></tr><tr><td><h3>blah</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU %1% FoX Mnu</td><td><strong><em>%2%</em></strong> sapien vel aliquet</td><td><p>item1</p><p>%3%</p></td></tr><tr><td><h3>blah</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
     }//end testRemovingListAndClickingUndo()
 
@@ -184,13 +184,13 @@ class Viper_Tests_ViperListPlugin_OrderedListInTableUnitTest extends AbstractVip
         $this->selectKeyword(1);
 
         $this->clickTopToolbarButton('listOL');
-        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td><ol><li>UnaU %1% FoX Mnu</li></ol></td><td><strong><em>%2%</em></strong> sapien vel aliquet</td><td><ol><li>Item 1</li><li>Item 2 %3%</li></ol></td></tr><tr><td><h3>blah</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td><ol><li>UnaU %1% FoX Mnu</li></ol></td><td><strong><em>%2%</em></strong> sapien vel aliquet</td><td><ol><li>item1</li><li>%3%</li></ol></td></tr><tr><td><h3>blah</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         $this->clickTopToolbarButton('historyUndo');
-        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU %1% FoX Mnu</td><td><strong><em>%2%</em></strong> sapien vel aliquet</td><td><ol><li>Item 1</li><li>Item 2 %3%</li></ol></td></tr><tr><td><h3>blah</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU %1% FoX Mnu</td><td><strong><em>%2%</em></strong> sapien vel aliquet</td><td><ol><li>item1</li><li>%3%</li></ol></td></tr><tr><td><h3>blah</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         $this->clickTopToolbarButton('historyRedo');
-        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td><ol><li>UnaU %1% FoX Mnu</li></ol></td><td><strong><em>%2%</em></strong> sapien vel aliquet</td><td><ol><li>Item 1</li><li>Item 2 %3%</li></ol></td></tr><tr><td><h3>blah</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td><ol><li>UnaU %1% FoX Mnu</li></ol></td><td><strong><em>%2%</em></strong> sapien vel aliquet</td><td><ol><li>item1</li><li>%3%</li></ol></td></tr><tr><td><h3>blah</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
     }//end testCreateListAndClickingUndo()
 
