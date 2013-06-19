@@ -76,10 +76,11 @@ class Viper_Tests_ViperViewSourcePlugin_ViewSourceTest extends AbstractViperView
         sleep(2);
         $this->keyDown('Key.CMD + a');
         $this->keyDown('Key.DELETE');
+        $this->type('<p>Hello world</p>');
 
         $this->clickButton('Apply Changes', NULL, TRUE);
 
-        $this->assertHTMLMatch('<p></p>');
+        $this->assertHTMLMatch('<p>Hello world</p>');
 
     }//end testEditingTheSourceCode()
 
@@ -214,6 +215,50 @@ class Viper_Tests_ViperViewSourcePlugin_ViewSourceTest extends AbstractViperView
         $this->assertEquals('%1%', $this->getSelectedText(), 'Keyword is not selected');
 
     }//end testEditingContentAfterDeletingSourceCode()
+
+
+    /**
+     * Test that you can open the source editor after you embed a youtube video.
+     *
+     * @return void
+     */
+    public function testOpenSourceEditorAfterEmbeddingVideo()
+    {
+        $this->click($this->findKeyword(2));
+        $this->clickTopToolbarButton('sourceView');
+
+        // Check to make sure the source editor appears.
+        try {
+            $image = $this->findImage('dragPopupIcon', '.Viper-popup-dragIcon');
+        } catch (Exception $e) {
+            $this->fail('Source editor did not appear on the screen');
+        }
+
+        // Embed the video
+        $this->keyDown('Key.CMD + a');
+        $this->keyDown('Key.DELETE');
+        $this->type('<iframe title="Roadmap" src="http://www.youtube.com/embed/PYm4Atlxe4M" allowfullscreen="" frameborder="0" height="315" width="420"></iframe>');
+        $this->clickButton('Apply Changes', NULL, TRUE);
+
+        // Check to make sure the source editor does not appear.
+        $sourceEditorNotFound = false;
+        try {
+            $this->find($image);
+            $this->fail('Source editor still appears on the screen');
+        } catch (Exception $e) {
+            // Do nothing.
+        }
+
+        $this->clickTopToolbarButton('sourceView');
+
+        // Check to make sure the source editor appears.
+        try {
+            $image = $this->findImage('dragPopupIcon', '.Viper-popup-dragIcon');
+        } catch (Exception $e) {
+            $this->fail('Source editor did not appear on the screen');
+        }
+
+    }//end testOpenSourceEditorAfterEmbeddingVideo()
 
 
 }//end class

@@ -613,30 +613,35 @@ ViperKeyboardEditorPlugin.prototype = {
             ) {
                 // This is a selection on different text nodes. Check to see
                 // if these nodes are part of two different block elements.
-                var startParent = dfx.getFirstBlockParent(range.startContainer);
-                var endParent   = dfx.getFirstBlockParent(range.endContainer);
-                if (startParent !== endParent) {
-                    // Two different parents. We need to join these parents.
-                    // First remove all elements in between.
-                    range.deleteContents();
+                var nodeSelection = range.getNodeSelection();
+                if (nodeSelection) {
+                    dfx.remove(nodeSelection);
+                } else {
+                    var startParent = dfx.getFirstBlockParent(range.startContainer);
+                    var endParent   = dfx.getFirstBlockParent(range.endContainer);
+                    if (startParent !== endParent) {
+                        // Two different parents. We need to join these parents.
+                        // First remove all elements in between.
+                        range.deleteContents();
 
-                    // Now bring the contents of the next selectable to the
-                    // start parent.
-                    var nextSelectable = range.getNextContainer(range.startContainer, null, true);
-                    var nextParent     = dfx.getFirstBlockParent(nextSelectable);
+                        // Now bring the contents of the next selectable to the
+                        // start parent.
+                        var nextSelectable = range.getNextContainer(range.startContainer, null, true);
+                        var nextParent     = dfx.getFirstBlockParent(nextSelectable);
 
-                    while (nextParent.firstChild) {
-                        startParent.appendChild(nextParent.firstChild);
-                    }
+                        while (nextParent.firstChild) {
+                            startParent.appendChild(nextParent.firstChild);
+                        }
 
-                    dfx.remove(nextParent);
-
-                    dfx.preventDefault(e);
-                    range.collapse(true);
-                    ViperSelection.addRange(range);
-                    this.viper.fireNodesChanged();
-                    return false;
+                        dfx.remove(nextParent);
+                    }//end if
                 }//end if
+
+                dfx.preventDefault(e);
+                range.collapse(true);
+                ViperSelection.addRange(range);
+                this.viper.fireNodesChanged();
+                return false;
             }//end if
         }//end if
 

@@ -24,7 +24,7 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
 
         $expected  = '`1234567890-=qwertyuiop[]asdfghjkl;zxcvbnm,.';
         $expected .= 'QWERTYUIOPASDFGHJKLZXCVBNM';
-        $expected .= '~!@#$%^&amp;*()_+{}|:"&lt;&gt;? &nbsp; .&nbsp;';
+        $expected .= '~!@#$%^&amp;*()_+{}|:"&lt;&gt;? &nbsp; .';
 
         $this->assertHTMLMatch('<p>'.$expected.'</p><p>EIB MOZ</p>');
 
@@ -446,6 +446,53 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
         $this->assertHTMLMatch('<p>123456</p>');
 
     }//end testTabInToViperWithNoContent()
+
+
+    /**
+     * Test embedding a youtube video.
+     *
+     * @return void
+     */
+    public function testEmbeddingVideo()
+    {
+        $this->click($this->findKeyword(1));
+        $this->clickTopToolbarButton('sourceView');
+
+        // Check to make sure the source editor appears.
+        try {
+            $image = $this->findImage('dragPopupIcon', '.Viper-popup-dragIcon');
+        } catch (Exception $e) {
+            $this->fail('Source editor did not appear on the screen');
+        }
+
+        // Embed the video
+        $this->keyDown('Key.CMD + a');
+        $this->keyDown('Key.DELETE');
+        $this->type('<iframe title="Roadmap" src="http://www.youtube.com/embed/PYm4Atlxe4M" allowfullscreen="" frameborder="0" height="315" width="420"></iframe>');
+        $this->clickButton('Apply Changes', NULL, TRUE);
+
+        $this->assertHTMLMatch('<iframe title="Roadmap" src="http://www.youtube.com/embed/PYm4Atlxe4M" allowfullscreen="" frameborder="0" height="315" width="420"></iframe>');
+
+        
+
+        $this->clickTopToolbarButton('sourceView');
+
+        // Check to make sure the source editor appears.
+        try {
+            $image = $this->findImage('dragPopupIcon', '.Viper-popup-dragIcon');
+        } catch (Exception $e) {
+            $this->fail('Source editor did not appear on the screen');
+        }
+
+        // Embed the video
+        $this->keyDown('Key.CMD + a');
+        $this->keyDown('Key.DELETE');
+        $this->pasteFromURL($this->getTestURL('/Core/VideoWithObjectTags.txt'));
+        $this->clickButton('Apply Changes', NULL, TRUE);
+
+        $this->assertHTMLMatch('<object width="560" height="315"><param name="movie" value="http://www.youtube.com/v/f6ZSZbNfSpk?version=3&amp;hl=en_GB"></param><param name="allowFullScreen" value="true"></param><param name="allowscriptaccess" value="always"></param><embed src="http://www.youtube.com/v/f6ZSZbNfSpk?version=3&amp;hl=en_GB" type="application/x-shockwave-flash" width="560" height="315" allowscriptaccess="always" allowfullscreen="true"></embed></object>'); 
+
+    }//end testEmbeddingVideo()
 
 
 }//end class
