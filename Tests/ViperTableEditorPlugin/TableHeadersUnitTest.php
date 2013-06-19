@@ -206,6 +206,7 @@ class Viper_Tests_ViperTableEditorPlugin_TableHeadersUnitTest extends AbstractVi
         for ($i = 1; $i <= $testCount; $i++) {
             $this->useTest($i);
             $this->click($this->findKeyword(1));
+            $this->click($this->findKeyword(1));
             $this->showTools(NULL, 'row');
             $this->clickField('Heading');
             $this->keyDown('Key.ENTER');
