@@ -58,6 +58,7 @@ body {
 
 #content table {
     font-size: 20px;
+    border: none;
 }
 
 em {
@@ -128,6 +129,7 @@ h1,h2,h3,h4,h5,h6 {
 #content td, #content th {
     min-width: 30px;
     padding: 4px 2px;
+    border: none;
 }
 
 #content.googlechrome td, #content.googlechrome th {
