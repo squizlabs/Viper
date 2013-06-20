@@ -708,7 +708,7 @@ ViperCopyPastePlugin.prototype = {
         content = content.replace(/<!--(.|\s)*?-->/gi, '');
 
         // Remove style tags.
-        content = content.replace(/<style>[\s\S]*?<\/style>/gi, '');
+        content = content.replace(/<style[\s\S]*?<\/style>/gi, '');
 
         // Convert span.Apple-converted-space to normal space (Chrome only).
         if (this.viper.isBrowser('chrome') === true) {
