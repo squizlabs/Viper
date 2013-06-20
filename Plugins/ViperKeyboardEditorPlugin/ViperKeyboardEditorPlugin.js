@@ -592,15 +592,25 @@ ViperKeyboardEditorPlugin.prototype = {
                 var currentParent  = dfx.getFirstBlockParent(range.startContainer);
                 var prevParent     = dfx.getFirstBlockParent(prevSelectable);
                 if (currentParent !== prevParent && this.viper.isOutOfBounds(prevSelectable) === false) {
-                    while (currentParent.firstChild) {
-                        prevParent.appendChild(currentParent.firstChild);
+                    // Check if there are any other elements in between.
+                    var elemsBetween = dfx.getElementsBetween(prevParent, currentParent);
+                    if (elemsBetween.length > 0) {
+                        // There is at least one non block element in between.
+                        // Remove it.
+                        dfx.remove(elemsBetween[(elemsBetween.length - 1)]);
+                    } else {
+                        while (currentParent.firstChild) {
+                            prevParent.appendChild(currentParent.firstChild);
+                        }
+
+                        dfx.remove(currentParent);
+
+                        range.setStart(prevSelectable, prevSelectable.data.length);
+                        range.collapse(true);
+                        ViperSelection.addRange(range);
                     }
 
-                    dfx.remove(currentParent);
                     dfx.preventDefault(e);
-                    range.setStart(prevSelectable, prevSelectable.data.length);
-                    range.collapse(true);
-                    ViperSelection.addRange(range);
                     this.viper.fireNodesChanged();
 
                     return false;
