@@ -241,6 +241,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         $numErrors  = ViperTestListener::getErrors();
         $totalTests = ViperTestListener::getNumberOfTests();
         $testsRun   = ViperTestListener::getTestsRun();
+        ViperTestListener::$browserid = $this->getBrowserid();
 
         $testTitle .= '['.$testsRun.'/'.$totalTests.']';
 

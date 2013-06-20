@@ -80,14 +80,20 @@ $opts = getopt('s::b::u::t::civ', array('url::', 'built', 'log::'));
 
         $phpunitCMD = '';
 
+        $browserid      = getBrowserid($browser);
+        $browserTmpPath = dirname(__FILE__).'/tmp/'.$browserid;
+        if (file_exists($browserTmpPath) === FALSE) {
+            mkdir($browserTmpPath, 0755, TRUE);
+        }
+
+        if (file_exists($browserTmpPath.'/run') === FALSE) {
+            mkdir($browserTmpPath.'/run', 0755, TRUE);
+        } else {
+            exec('rm -rf '.$browserTmpPath.'/run/*');
+        }
+
         // Setup logging if there is no filter.
         if ($test === NULL || empty($logFilePath) === FALSE) {
-            $browserid      = getBrowserid($browser);
-            $browserTmpPath = dirname(__FILE__).'/tmp/'.$browserid;
-            if (file_exists($browserTmpPath) === FALSE) {
-                mkdir($browserTmpPath, 0755, TRUE);
-            }
-
             if (empty($logFilePath) === TRUE) {
                 $logFilePath = $browserTmpPath.'/test.log';
             }
