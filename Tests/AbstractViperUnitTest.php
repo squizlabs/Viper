@@ -2321,8 +2321,25 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      */
     protected function type($text, $modifiers=NULL, $psmrl=NULL)
     {
-        $text = $this->replaceKeywords($text);
-        return parent::type($text, $modifiers, $psmrl);
+        // We may need to increase the timeout when typing. It takes about 5s to
+        // type 100 characters.
+        $length  = strlen($text);
+        $timeout = (int) (($length * 5) / 100);
+
+        $currentTimeout = NULL;
+        if ($timeout > 10) {
+            $timeout       += 5;
+            $currentTimeout = $this->setSikuliCMDTimeout($timeout);
+        }
+
+        $text   = $this->replaceKeywords($text);
+        $result = parent::type($text, $modifiers, $psmrl);
+
+        if ($timeout > 10) {
+            $this->setSikuliCMDTimeout($currentTimeout);
+        }
+
+        return $result;
 
     }//end type()
 

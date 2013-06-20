@@ -36,6 +36,13 @@ abstract class AbstractSikuliUnitTest extends PHPUnit_Framework_TestCase
     private static $_sikuliError = NULL;
 
     /**
+     * Sikuli command timeout in seconds.
+     *
+     * @var integer
+     */
+    private static $_sikuliCMDTimeout = 10;
+
+    /**
      * Number of variables created.
      *
      * @var resource
@@ -903,6 +910,22 @@ abstract class AbstractSikuliUnitTest extends PHPUnit_Framework_TestCase
 
 
     /**
+     * Sets the seconds before the Sikuli command timeout.
+     *
+     * @param integer $seconds The number of seconds before timeout.
+     *
+     * @return integer
+     */
+    protected function setSikuliCMDTimeout($seconds)
+    {
+        $current = self::$_sikuliCMDTimeout;
+        self::$_sikuliCMDTimeout = $seconds;
+        return $current;
+
+    }//end setSikuliCMDTimeout()
+
+
+    /**
      * Calls the specified function.
      *
      * If $assignToVar is set to TRUE then the return value will be the name of the
@@ -1194,7 +1217,7 @@ abstract class AbstractSikuliUnitTest extends PHPUnit_Framework_TestCase
         }
 
         $isError = FALSE;
-        $timeout = 10;
+        $timeout = self::$_sikuliCMDTimeout;
         $content = array();
         $start   = microtime(TRUE);
 
