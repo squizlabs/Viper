@@ -366,6 +366,29 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
 
 
     /**
+     * Tests that after joining paragraphs splitting them again works when caret is at the end of a tag.
+     *
+     * @return void
+     */
+    public function testJoinParagraphsAndSplitAtEndOfTag()
+    {
+        $this->useTest(1);
+        $this->moveToKeyword(1, 'right');
+        $this->type('test');
+        $this->selectKeyword(1);
+        $this->keyDown('Key.CMD + b');
+        $this->keyDown('Key.RIGHT');
+        $this->keyDown('Key.RIGHT');
+        $this->keyDown('Key.LEFT');
+        $this->keyDown('Key.ENTER');
+        $this->type('test');
+
+        $this->assertHTMLMatch('<p><strong>XAX</strong></p><p>testtest</p><p>EIB MOZ</p>');
+
+    }//end testJoinParagraphsAndSplitAtEndOfTag()
+
+
+    /**
      * Test that inputting text, creating new paragraphs etc work when no base tag is set.
      *
      * @return void
