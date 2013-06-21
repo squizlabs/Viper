@@ -645,6 +645,9 @@ ViperKeyboardEditorPlugin.prototype = {
                         }
 
                         dfx.remove(nextParent);
+                    } else {
+                        // Same container just remove contents.
+                        range.deleteContents();
                     }//end if
                 }//end if
 
@@ -800,10 +803,16 @@ ViperKeyboardEditorPlugin.prototype = {
                 return;
             }
 
+            var parent = endCont.parentNode;
             dfx.remove(endCont);
+            while (parent.childNodes.length === 0) {
+                var remove = parent;
+                parent = parent.parentNode;
+                dfx.remove(remove);
+            }
 
             return false;
-        }
+        }//end if
 
         if (range.startOffset === 0
             && range.collapsed === false
