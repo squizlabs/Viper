@@ -348,6 +348,24 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
 
 
     /**
+     * Tests that after joining paragraphs splitting them again works.
+     *
+     * @return void
+     */
+    public function testJoinParagraphsAndSplit()
+    {
+        $this->useTest(1);
+        $this->moveToKeyword(1, 'right');
+        $this->keyDown('Key.DELETE');
+        $this->keyDown('Key.ENTER');
+        $this->type('test');
+
+        $this->assertHTMLMatch('<p>XAX</p><p>testEIB MOZ</p>');
+
+    }//end testDeleteParagraphAndType()
+
+
+    /**
      * Test that inputting text, creating new paragraphs etc work when no base tag is set.
      *
      * @return void
@@ -473,7 +491,7 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
 
         $this->assertHTMLMatch('<iframe title="Roadmap" src="http://www.youtube.com/embed/PYm4Atlxe4M" allowfullscreen="" frameborder="0" height="315" width="420"></iframe>');
 
-        
+
 
         $this->clickTopToolbarButton('sourceView');
 
@@ -490,7 +508,7 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
         $this->pasteFromURL($this->getTestURL('/Core/VideoWithObjectTags.txt'));
         $this->clickButton('Apply Changes', NULL, TRUE);
 
-        $this->assertHTMLMatch('<object width="560" height="315"><param name="movie" value="http://www.youtube.com/v/f6ZSZbNfSpk?version=3&amp;hl=en_GB"></param><param name="allowFullScreen" value="true"></param><param name="allowscriptaccess" value="always"></param><embed src="http://www.youtube.com/v/f6ZSZbNfSpk?version=3&amp;hl=en_GB" type="application/x-shockwave-flash" width="560" height="315" allowscriptaccess="always" allowfullscreen="true"></embed></object>'); 
+        $this->assertHTMLMatch('<object width="560" height="315"><param name="movie" value="http://www.youtube.com/v/f6ZSZbNfSpk?version=3&amp;hl=en_GB"></param><param name="allowFullScreen" value="true"></param><param name="allowscriptaccess" value="always"></param><embed src="http://www.youtube.com/v/f6ZSZbNfSpk?version=3&amp;hl=en_GB" type="application/x-shockwave-flash" width="560" height="315" allowscriptaccess="always" allowfullscreen="true"></embed></object>');
 
     }//end testEmbeddingVideo()
 
