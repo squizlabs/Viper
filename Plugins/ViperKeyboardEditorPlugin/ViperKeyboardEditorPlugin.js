@@ -191,12 +191,13 @@ ViperKeyboardEditorPlugin.prototype = {
                 return;
             }
 
+            var firstBlock = dfx.getFirstBlockParent(endNode);
             if (range.collapsed === true
                 && ((endNode.nodeType === dfx.TEXT_NODE && range.endOffset === endNode.data.length)
-                || endNode.nodeType === dfx.ELEMENT_NODE && dfx.isTag(endNode, 'br') && !endNode.nextSibling)
+                || endNode.nodeType === dfx.ELEMENT_NODE && dfx.isTag(endNode, 'br'))
+                && !endNode.nextSibling
+                && range._getLastSelectableChild(firstBlock, true) === endNode
             ) {
-                var firstBlock = dfx.getFirstBlockParent(endNode);
-
                 if (firstBlock && !defaultTagName && firstBlock === this.viper.getViperElement()) {
                     var br = document.createElement('br');
                     this.viper.insertNodeAtCaret(br);
