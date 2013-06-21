@@ -583,7 +583,7 @@ ViperKeyboardEditorPlugin.prototype = {
             } else if (e.keyCode === 8
                 && range.collapsed === true
                 && range.startContainer.nodeType === dfx.TEXT_NODE
-                && range.startOffset === 0
+                && (range.startOffset === 0 || (range.startOffset === 1 && range.startContainer.data.charAt(0) === ' '))
                 && !range.startContainer.previousSibling
             ) {
                 // At the start of an element. Check to see if the previous
