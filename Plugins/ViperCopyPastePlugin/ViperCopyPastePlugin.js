@@ -725,6 +725,16 @@ ViperCopyPastePlugin.prototype = {
         // Generic cleanup.
         content = this._cleanPaste(content);
 
+        if (this._isMSIE === true) {
+            // Remove the font tags here before putting the contents in to a
+            // DOM object. In IE8 font tags are not in correct DOM strucutre,
+            // there are cases similar to this: <font><p>invalid dom</font></p>.
+            // This causes problems with spacing, and when the content is set as
+            // the html attribute of DOM elements IE tries to fix it by creating
+            // more paragraphs...
+            content = content.replace(/<\/?font[^>]*>/gi, "");
+        }
+
         // Convert Words orsm "lists"..
         content = this._convertWordPasteList(content);
 
@@ -757,6 +767,8 @@ ViperCopyPastePlugin.prototype = {
 
         // Page breaks?
         content = content.replace('<br clear="all">', '');
+
+
 
         content = this._removeWordTags(content);
 
@@ -1256,7 +1268,7 @@ ViperCopyPastePlugin.prototype = {
                 dfx.foreach(listTypes[k][j], function(m) {
                     if ((new RegExp(listTypes[k][j][m])).test(elContent) === true) {
                         info = {
-                            html: elContent.replace(new RegExp(listTypes[k][j][m]), ''),
+                            html: dfx.getHtml(elem).replace(new RegExp(listTypes[k][j][m]), ''),
                             listType: k,
                             listStyle: j
                         };

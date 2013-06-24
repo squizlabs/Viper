@@ -667,6 +667,15 @@ ViperKeyboardEditorPlugin.prototype = {
         var viperElement    = this.viper.getViperElement();
         var firstSelectable = range._getFirstSelectableChild(viperElement);
 
+        if (range.collapsed === true) {
+            var startNode = range.getStartNode();
+            var node        = range.getPreviousContainer(startNode, null, true);
+            if (this.viper.isOutOfBounds(node) === true) {
+                // Range is at the start of the editable element, nothing to delete.
+                return false;
+            }
+        }
+
         if (firstSelectable === range.startContainer || viperElement === range.startContainer) {
             var lastSelectable  = range._getLastSelectableChild(viperElement);
             if (range.endContainer === viperElement
