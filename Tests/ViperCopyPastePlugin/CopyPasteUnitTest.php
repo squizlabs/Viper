@@ -421,6 +421,42 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
 
     }//end testCopyPasteFrenchContent()
 
+
+    /**
+     * Test that copying/pasting links works.
+     *
+     * @return void
+     */
+    public function testCopyPasteLinks()
+    {
+        $this->useTest(1);
+
+        // Open HTML doc, copy its contents.
+        if ($this->openFile(dirname(__FILE__).'/ExampleLinks.html', $this->getBrowserName()) === FALSE) {
+            $this->markTestSkipped('MS Word is not available');
+        }
+
+        sleep(2);
+
+        // Copy text.
+        $this->keyDown('Key.CMD + a');
+        sleep(1);
+        $this->keyDown('Key.CMD + c');
+        sleep(1);
+        $this->closeApp($this->getBrowserName());
+        sleep(1);
+
+        $this->selectKeyword(1);
+
+        $this->keyDown('Key.CMD + v');
+
+        sleep(5);
+
+        $this->assertHTMLMatch('<p>link with http - <a href="http://www.squizlabs.com">http://www.squizlabs.com</a></p><p>link with https - <a href="https://www.squizlabs.com">https://www.squizlabs.com</a></p><p>blocked link with http - <a href="http://www.squizlabs.com">blocked::http://www.squizlabs.com</a></p><p>blocked link with https - <a href="https://www.squizlabs.com">blocked::https://www.squizlabs.com</a></p>');
+
+    }//end testCopyPasteLinks()
+
+
 }//end class
 
 ?>
