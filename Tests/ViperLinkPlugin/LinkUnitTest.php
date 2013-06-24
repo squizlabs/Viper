@@ -1246,8 +1246,17 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->keyDown('Key.RIGHT');
         $this->keyDown('Key.ENTER');
 
+        // Press space after the link text
         $this->type('Some text http://www.squizlabs.com some text www.example.com ');
         $this->assertHTMLMatch('<p>%1% link test %2%</p><p>Some text <a href="http://www.squizlabs.com">http://www.squizlabs.com</a> some text <a href="http://www.example.com">www.example.com</a></p>');
+
+        // Press enter after the link text
+        $this->keyDown('Key.ENTER');
+        $this->type('Third link http://www.squizlabs.com');
+        $this->keyDown('Key.ENTER');
+        $this->type('Fourth link www.example.com');
+        $this->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>%1% link test %2%</p><p>Some text <a href="http://www.squizlabs.com">http://www.squizlabs.com</a> some text <a href="http://www.example.com">www.example.com</a></p><p>Third link <a href="http://www.squizlabs.com">http://www.squizlabs.com</a></p><p>Fourth link <a href="http://www.example.com">www.example.com</a></p>');
 
     }//end testAutoCreatingLinks()
 
