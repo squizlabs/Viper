@@ -432,6 +432,7 @@ ViperKeyboardEditorPlugin.prototype = {
                 && startNode === endNode
                 && startNode.nodeType === dfx.ELEMENT_NODE
                 && (this.viper.isBrowser('firefox') !== true || !(dfx.isTag(startNode, 'br') === true && (!blockParent || dfx.isTag(blockParent, 'li') === true)))
+                && dfx.isStubElement(startNode) === false
             ) {
                 var elem = document.createElement(defaultTagName);
                 dfx.setHtml(elem, '<br />');
@@ -450,7 +451,13 @@ ViperKeyboardEditorPlugin.prototype = {
             ) {
                 var elem = document.createElement(defaultTagName);
                 dfx.setHtml(elem, '<br />');
-                dfx.insertAfter(endNode, elem);
+
+                if (dfx.isStubElement(endNode) === true) {
+                    dfx.insertAfter(startNode, elem);
+                } else {
+                    dfx.insertAfter(endNode, elem);
+                }
+
                 range.selectNode(elem.firstChild);
                 range.collapse(true);
                 ViperSelection.addRange(range);
