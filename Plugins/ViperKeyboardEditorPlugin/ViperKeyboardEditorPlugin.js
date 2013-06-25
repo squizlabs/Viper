@@ -716,8 +716,46 @@ ViperKeyboardEditorPlugin.prototype = {
                     ViperSelection.addRange(rangeClone);
 
                     return false;
-                }
-            }
+                } else if (range.startContainer
+                    && range.startContainer.nodeType === dfx.TEXT_NODE
+                    && range.endContainer
+                    && range.endContainer.nodeType === dfx.TEXT_NODE
+                    && range.startOffset === 0
+                    && range.endOffset === range.endContainer.data.length
+                ) {
+                    // Remove a whle list element. IE seems to remove the list
+                    // items but not the UL/OL element...
+                    var parentLists = dfx.getParents(range.startContainer, 'ul,ol', this.viper.getViperElement());
+                    while (parentLists.length > 0) {
+                        var parentList = parentLists.shift();
+                        var firstSelectable = range._getFirstSelectableChild(parentList);
+                        var lastSelectable  = range._getLastSelectableChild(parentList);
+                        if (firstSelectable === range.startContainer
+                            && lastSelectable === range.endContainer
+                        ) {
+                            var newSelectable = range.getNextContainer(lastSelectable, null, true);
+                            if (!newSelectable || this.viper.isOutOfBounds(newSelectable) === true) {
+                                newSelectable = range.getPreviousContainer(firstSelectable, null, true);
+                                if (newSelectable) {
+                                    dfx.remove(parentList);
+                                    range.setEnd(newSelectable, newSelectable.data.length);
+                                    range.collapse(false);
+                                    ViperSelection.addRange(range);
+                                }
+                            } else {
+                                dfx.remove(parentList);
+                                range.setEnd(newSelectable, 0);
+                                range.collapse(false);
+                                ViperSelection.addRange(range);
+                            }
+
+                            this.viper.fireNodesChanged();
+
+                            return false;
+                        }//end if
+                    }//end if
+                }//end if
+            }//end if
         } else if (range.startOffset === 0
             && range.collapsed === true
             && range.startContainer.nodeType === dfx.TEXT_NODE
