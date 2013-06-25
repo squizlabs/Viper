@@ -4117,6 +4117,10 @@ Viper.prototype = {
         var startNode = range.getStartNode();
         var endNode   = range.getEndNode();
 
+        if (!endNode && startNode && dfx.isStubElement(startNode) === true) {
+            return range;
+        }
+
         if (!endNode && range.startContainer && range.startContainer.nodeType === dfx.ELEMENT_NODE) {
             var lastSelectable = range._getLastSelectableChild(range.startContainer);
             if (lastSelectable) {
