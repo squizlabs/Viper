@@ -183,7 +183,7 @@ ViperTableEditorPlugin.prototype = {
                         var cell           = self.getActiveCell();
                         var lastSelectable = range._getLastSelectableChild(cell);
                         if (startNode === lastSelectable || (!lastSelectable && dfx.isTag(startNode, 'br') === true)) {
-                            if (!self.getNextRow(cell.parentNode)) {
+                            if (cell && !self.getNextRow(cell.parentNode)) {
                                 // End of table.
                                 var table = self.getCellTable(cell);
                                 if (!table.nextSibling || table.nextSibling.data && table.nextSibling.data.match(/^\n\s*$/)) {

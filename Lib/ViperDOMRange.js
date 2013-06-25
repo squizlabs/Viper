@@ -473,9 +473,11 @@ ViperDOMRange.prototype = {
             skippedBlockElem.push(container);
         }
 
-        var selChild = this._getLastSelectableChild(container, skipEmptyNodes);
-        if (selChild !== null) {
-            return selChild;
+        if (container && container.nodeType !== dfx.TEXT_NODE) {
+            var selChild = this._getLastSelectableChild(container, skipEmptyNodes);
+            if (selChild !== null) {
+                return selChild;
+            }
         }
 
         return this.getPreviousContainer(container, skippedBlockElem, skipEmptyNodes);

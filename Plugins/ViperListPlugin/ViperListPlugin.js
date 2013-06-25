@@ -1790,9 +1790,11 @@ ViperListPlugin.prototype = {
                     }
                 }
             }
-        } else {
+        } else if (elems[0]) {
             sameParent = true;
             parentList = elems[0].parentNode;
+        } else {
+            return;
         }
 
         if (sameParent === true) {
