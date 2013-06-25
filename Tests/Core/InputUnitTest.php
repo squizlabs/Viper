@@ -225,6 +225,94 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
 
 
     /**
+     * Test undo and redo icons.
+     *
+     * @return void
+     */
+    public function testUndoAndRedoIcons()
+    {
+
+        $this->findKeyword(1);
+        $this->assertTrue($this->topToolbarButtonExists('historyUndo', 'disabled'), 'Undo icon should be disabled');
+        $this->assertTrue($this->topToolbarButtonExists('historyRedo', 'disabled'), 'Redo icon should be disabled');
+
+        $this->selectKeyword(1);
+        $this->keyDown('Key.RIGHT');
+        $this->keyDown('Key.ENTER');
+        $this->type('New content');
+        $this->assertHTMLMatch('<p>%1%</p><p>New content</p><p>EIB MOZ</p>');
+        $this->assertTrue($this->topToolbarButtonExists('historyUndo'), 'Undo icon should be active');
+        $this->assertTrue($this->topToolbarButtonExists('historyRedo', 'disabled'), 'Redo icon should be disabled');
+
+        $this->clickTopToolbarButton('historyUndo');
+        $this->clickTopToolbarButton('historyUndo');
+        $this->clickTopToolbarButton('historyUndo');
+        $this->assertHTMLMatch('<p>%1%</p><p>EIB MOZ</p>');
+        $this->assertTrue($this->topToolbarButtonExists('historyUndo', 'disabled'), 'Undo icon should be disabled');
+        $this->assertTrue($this->topToolbarButtonExists('historyRedo'), 'Redo icon should be active');
+
+        $this->clickTopToolbarButton('historyRedo');
+        $this->clickTopToolbarButton('historyRedo');
+        $this->clickTopToolbarButton('historyRedo');
+        $this->assertHTMLMatch('<p>%1%</p><p>New content</p><p>EIB MOZ</p>');
+        $this->assertTrue($this->topToolbarButtonExists('historyUndo'), 'Undo icon should be active');
+        $this->assertTrue($this->topToolbarButtonExists('historyRedo', 'disabled'), 'Redo icon should be disabled');
+
+        $this->clickTopToolbarButton('historyUndo');
+        $this->clickTopToolbarButton('historyUndo');
+        $this->clickTopToolbarButton('historyUndo');
+        $this->assertHTMLMatch('<p>%1%</p><p>EIB MOZ</p>');
+        $this->assertTrue($this->topToolbarButtonExists('historyUndo', 'disabled'), 'Undo icon should be disabled');
+        $this->assertTrue($this->topToolbarButtonExists('historyRedo'), 'Redo icon should be active');
+
+    }//end testUndoAndRedoIcons()
+
+
+    /**
+     * Test that you can delete all content and then undo the changes using the keyboard shortcuts.
+     *
+     * @return void
+     */
+    public function testtestUndoAndRedoUsingShortcuts()
+    {
+
+        $this->findKeyword(1);
+        $this->assertTrue($this->topToolbarButtonExists('historyUndo', 'disabled'), 'Undo icon should be disabled');
+        $this->assertTrue($this->topToolbarButtonExists('historyRedo', 'disabled'), 'Redo icon should be disabled');
+
+        $this->selectKeyword(1);
+        $this->keyDown('Key.RIGHT');
+        $this->keyDown('Key.ENTER');
+        $this->type('New content');
+        $this->assertHTMLMatch('<p>%1%</p><p>New content</p><p>EIB MOZ</p>');
+        $this->assertTrue($this->topToolbarButtonExists('historyUndo'), 'Undo icon should be active');
+        $this->assertTrue($this->topToolbarButtonExists('historyRedo', 'disabled'), 'Redo icon should be disabled');
+
+        $this->keyDown('Key.CMD + z');
+        $this->keyDown('Key.CMD + z');
+        $this->keyDown('Key.CMD + z');
+        $this->assertHTMLMatch('<p>%1%</p><p>EIB MOZ</p>');
+        $this->assertTrue($this->topToolbarButtonExists('historyUndo', 'disabled'), 'Undo icon should be disabled');
+        $this->assertTrue($this->topToolbarButtonExists('historyRedo'), 'Redo icon should be active');
+
+        $this->keyDown('Key.CMD + Key.SHIFT + z');
+        $this->keyDown('Key.CMD + Key.SHIFT + z');
+        $this->keyDown('Key.CMD + Key.SHIFT + z');
+        $this->assertHTMLMatch('<p>%1%</p><p>New content</p><p>EIB MOZ</p>');
+        $this->assertTrue($this->topToolbarButtonExists('historyUndo'), 'Undo icon should be active');
+        $this->assertTrue($this->topToolbarButtonExists('historyRedo', 'disabled'), 'Redo icon should be disabled');
+
+        $this->keyDown('Key.CMD + z');
+        $this->keyDown('Key.CMD + z');
+        $this->keyDown('Key.CMD + z');
+        $this->assertHTMLMatch('<p>%1%</p><p>EIB MOZ</p>');
+        $this->assertTrue($this->topToolbarButtonExists('historyUndo', 'disabled'), 'Undo icon should be disabled');
+        $this->assertTrue($this->topToolbarButtonExists('historyRedo'), 'Redo icon should be active');
+
+    }//end testtestUndoAndRedoUsingShortcuts()
+
+
+    /**
      * Test that you can delete all content and then undo the changes.
      *
      * @return void
@@ -235,7 +323,7 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
         $this->selectKeyword(1);
         $this->keyDown('Key.CMD + a');
         $this->keyDown('Key.DELETE');
-        sleep(1);
+        sleep(2);
         $this->assertHTMLMatch('<p></p>');
         $this->assertTrue($this->topToolbarButtonExists('historyUndo'), 'Undo icon should be active');
         $this->assertTrue($this->topToolbarButtonExists('historyRedo', 'disabled'), 'Redo icon should be disabled');
