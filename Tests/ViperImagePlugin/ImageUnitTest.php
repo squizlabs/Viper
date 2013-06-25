@@ -770,13 +770,61 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperImagePlugi
 
 
     /**
-     * Test that the image icon appears in the inline toolbar after you insert an image.
+     * Test that the image icon appears in the inline toolbar after you insert an image at the start of a paragraph.
      *
      * @return void
      */
-    public function testImageIconInInlineToolbar()
+    public function testImageIconInInlineToolbarWhenImageAtStartOfParagraph()
     {
-        // First insert the image
+        $this->moveToKeyword(1, 'left');
+
+        $this->clickTopToolbarButton('image');
+        $this->type($this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png'));
+        sleep(1);
+        $this->clickField('Image is decorative');
+        $this->keyDown('Key.ENTER');
+
+        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p><img src="'.$this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png').'" alt="" />%1% %2%</p><p>sit amet <strong>%3%</strong></p>');
+        
+        $this->clickElement('img', 1);
+        $this->assertTrue($this->inlineToolbarButtonExists('image', 'active'), 'Image icon should be active.');
+        $this->assertTrue($this->inlineToolbarButtonExists('move'), 'Move icon should appear in the inline toolbar.');
+
+    }//end testImageIconInInlineToolbarWhenImageAtStartOfParagraph()
+
+
+    /**
+     * Test that the image icon appears in the inline toolbar after you insert an image in the middle of a paragraph.
+     *
+     * @return void
+     */
+    public function testImageIconInInlineToolbarWhenImageInMiddleOfParagraph()
+    {
+        $this->moveToKeyword(1, 'right');
+
+        $this->clickTopToolbarButton('image');
+        $this->type($this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png'));
+        sleep(1);
+        $this->clickField('Image is decorative');
+        $this->keyDown('Key.ENTER');
+
+        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%1%<img src="'.$this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png').'" alt="" /> %2%</p><p>sit amet <strong>%3%</strong></p>');
+        
+        $this->clickElement('img', 1);
+        $this->assertTrue($this->inlineToolbarButtonExists('image', 'active'), 'Image icon should be active.');
+        $this->assertTrue($this->inlineToolbarButtonExists('move'), 'Move icon should appear in the inline toolbar.');
+   
+    }//end testImageIconInInlineToolbarWhenImageInMiddleOfParagraph()
+
+
+    /**
+     * Test that the image icon appears in the inline toolbar after you insert an image at the end of a paragraph.
+     *
+     * @return void
+     */
+    public function testImageIconInInlineToolbarWhenImageAtEndOfParagraph()
+    {
+        
         $this->moveToKeyword(2, 'right');
 
         $this->clickTopToolbarButton('image');
@@ -785,13 +833,13 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperImagePlugi
         $this->clickField('Image is decorative');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%1% %2%<img src="'.$this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png').'" alt="" /></p><p>sit amet <strong>%3%</strong></p>');
+        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p><%1% %2%<img src="'.$this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png').'" alt="" /></p><p>sit amet <strong>%3%</strong></p>');
 
         $this->clickElement('img', 1);
         $this->assertTrue($this->inlineToolbarButtonExists('image', 'active'), 'Image icon should be active.');
         $this->assertTrue($this->inlineToolbarButtonExists('move'), 'Move icon should appear in the inline toolbar.');
 
-    }//end testImageIconInInlineToolbar()
+    }//end testImageIconInInlineToolbarWhenImageAtEndOfParagraph()
 
 
     /**
