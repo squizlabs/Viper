@@ -13,13 +13,14 @@
 
 function ViperHistoryPlugin(viper)
 {
-    var self = this;
+    var self           = this;
+    var _toolbarPlugin = null;
 
     this.init = function()
     {
         var toolbarPlugin = viper.ViperPluginManager.getPlugin('ViperToolbarPlugin');
         if (toolbarPlugin) {
-            this._toolbarPlugin = toolbarPlugin;
+            _toolbarPlugin = toolbarPlugin;
             var tools = viper.ViperTools;
 
             var toolbarButtons = {
@@ -72,7 +73,7 @@ function ViperHistoryPlugin(viper)
 
     var _updateToolbarButtonStates = function(toolbarButtons)
     {
-        if (!this._toolbarPlugin) {
+        if (!_toolbarPlugin) {
             return;
         }
 
