@@ -626,7 +626,19 @@ ViperKeyboardEditorPlugin.prototype = {
                 // if these nodes are part of two different block elements.
                 var nodeSelection = range.getNodeSelection();
                 if (nodeSelection) {
-                    dfx.remove(nodeSelection);
+                    if (nodeSelection === this.viper.getViperElement()) {
+                        var defaultTagName = this.viper.getDefaultBlockTag();
+                        if (defaultTagName !== '') {
+                            var defTag = document.createElement(defaultTagName);
+                            dfx.setHtml(defTag, '&nbsp;');
+                            dfx.setHtml(nodeSelection, '');
+                            nodeSelection.appendChild(defTag);
+                        } else {
+                            dfx.setHtml(nodeSelection, '<br />');
+                        }
+                    } else {
+                        dfx.remove(nodeSelection);
+                    }
                 } else {
                     var startParent = dfx.getFirstBlockParent(range.startContainer);
                     var endParent   = dfx.getFirstBlockParent(range.endContainer);
