@@ -833,13 +833,39 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperImagePlugi
         $this->clickField('Image is decorative');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p><%1% %2%<img src="'.$this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png').'" alt="" /></p><p>sit amet <strong>%3%</strong></p>');
-
+        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%1% %2%<img src="'.$this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png').'" alt="" /></p><p>sit amet <strong>%3%</strong></p>');
+        
         $this->clickElement('img', 1);
         $this->assertTrue($this->inlineToolbarButtonExists('image', 'active'), 'Image icon should be active.');
         $this->assertTrue($this->inlineToolbarButtonExists('move'), 'Move icon should appear in the inline toolbar.');
 
     }//end testImageIconInInlineToolbarWhenImageAtEndOfParagraph()
+
+
+    /**
+     * Test that the image icon appears in the inline toolbar after you insert an image in a new paragraph.
+     *
+     * @return void
+     */
+    public function testImageIconInInlineToolbarWhenImageInNewParagraph()
+    {
+        
+        $this->moveToKeyword(2, 'right');
+        $this->keyDown('Key.ENTER');
+
+        $this->clickTopToolbarButton('image');
+        $this->type($this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png'));
+        sleep(1);
+        $this->clickField('Image is decorative');
+        $this->keyDown('Key.ENTER');
+
+        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%1% %2%</p><p><img src="'.$this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png').'" alt="" /></p><p>sit amet <strong>%3%</strong></p>');
+        
+        $this->clickElement('img', 1);
+        $this->assertTrue($this->inlineToolbarButtonExists('image', 'active'), 'Image icon should be active.');
+        $this->assertTrue($this->inlineToolbarButtonExists('move'), 'Move icon should appear in the inline toolbar.');
+
+    }//end testImageIconInInlineToolbarWhenImageInNewParagraph()
 
 
     /**
