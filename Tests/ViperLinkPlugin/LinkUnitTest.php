@@ -248,6 +248,7 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->type('http://www.squizlabs.com');
         $this->keyDown('Key.ENTER');
 
+        $this->click($this->findKeyword(1));
         $this->click($this->findKeyword(2));
         $this->keyDown('Key.SHIFT + Key.RIGHT');
 
@@ -275,6 +276,7 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->type('http://www.squizlabs.com');
         $this->keyDown('Key.ENTER');
 
+        $this->click($this->findKeyword(1));
         $this->click($this->findKeyword(2));
         $this->assertTrue($this->inlineToolbarButtonExists('link', 'active'), 'Link icon should be active.');
         $this->assertTrue($this->inlineToolbarButtonExists('linkRemove'), 'Remove link icon should be available.');
