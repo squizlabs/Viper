@@ -666,6 +666,28 @@ class Viper_Tests_ViperFormatPlugin_QuoteUnitTest extends AbstractFormatsUnitTes
 
     }//end testUndoAndRedoForQuote()
 
+
+    /**
+     * Test combining two Quote sections.
+     *
+     * @return void
+     */
+    public function testCombiningQuoteSections()
+    {
+        // Change the div to a quote
+        $this->selectKeyword(3);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickTopToolbarButton('formats-div', 'active');
+        $this->clickTopToolbarButton('Quote', NULL, TRUE);
+        $this->assertHTMLMatch('<blockquote><p>%1% xtn %2%</p></blockquote><blockquote><p>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p></blockquote><p>%4% is a paragraph to change to a quote</p>');
+
+        $this->moveToKeyword(3, 'left');
+        $this->keyDown('Key.BACKSPACE');
+        
+        $this->assertHTMLMatch('<blockquote><p>%1% xtn %2%%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p></blockquote><p>%4% is a paragraph to change to a quote</p>');
+
+    }//end testCombiningQuoteSections()
+
 }//end class
 
 ?>

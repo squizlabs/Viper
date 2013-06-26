@@ -473,6 +473,22 @@ class Viper_Tests_ViperFormatPlugin_ParagraphUnitTest extends AbstractFormatsUni
     }//end testUndoAndRedoForParagraph()
 
 
+    /**
+     * Test combining two paragraphs.
+     *
+     * @return void
+     */
+    public function testCombiningParagraphs()
+    {
+
+        $this->moveToKeyword(3, 'left');
+        $this->keyDown('Key.BACKSPACE');
+        
+        $this->assertHTMLMatch('<p>%1% xtn %2%%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p><div>%4% paragraph to change to a p</div>');
+
+    }//end testCombiningParagraphs()
+
+
 }//end class
 
 ?>

@@ -637,6 +637,27 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractFormatsUnitTest
     }//end testUndoAndRedoForDiv()
 
 
+    /**
+     * Test combining two Div sections.
+     *
+     * @return void
+     */
+    public function testCombiningDivSections()
+    {
+        // Change the p to a div
+        $this->selectKeyword(3);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickTopToolbarButton('formats-p', 'active');
+        $this->clickTopToolbarButton('DIV', NULL, TRUE);
+        $this->assertHTMLMatch('<div>%1% xtn dolor</div><p>spacer for the tests</p><div>sit amet <strong>%2%</strong></div><div>%3% is a paragraph to change to a %4%</div><div>%5% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div>');
+
+        $this->moveToKeyword(3, 'left');
+        $this->keyDown('Key.BACKSPACE');
+        
+        $this->assertHTMLMatch('<div>%1% xtn dolor</div><p>spacer for the tests</p><div>sit amet <strong>%2%</strong>%3% is a paragraph to change to a %4%</div><div>%5% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div>');
+
+    }//end testCombiningDivSections()
+
 }//end class
 
 ?>

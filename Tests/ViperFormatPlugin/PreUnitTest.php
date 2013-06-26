@@ -606,6 +606,27 @@ class Viper_Tests_ViperFormatPlugin_PreUnitTest extends AbstractFormatsUnitTest
     }//end testUndoAndRedoForPre()
 
 
+    /**
+     * Test combining two PRE sections.
+     *
+     * @return void
+     */
+    public function testCombiningPreSections()
+    {
+        // Change the div to a Pre
+        $this->selectKeyword(3);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickTopToolbarButton('formats-div', 'active');
+        $this->clickTopToolbarButton('PRE', NULL, TRUE);
+        $this->assertHTMLMatch('<pre>%1% xtn %2%</pre><pre>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</pre><p>%4% paragraph to change to a pre</p>');
+
+        $this->moveToKeyword(3, 'left');
+        $this->keyDown('Key.BACKSPACE');
+        
+        $this->assertHTMLMatch('<pre>%1% xtn %2%%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</pre><p>%4% paragraph to change to a pre</p>');
+
+    }//end testCombiningPreSections()
+
 }//end class
 
 ?>
