@@ -686,9 +686,9 @@ ViperKeyboardEditorPlugin.prototype = {
         var viperElement    = this.viper.getViperElement();
         var firstSelectable = range._getFirstSelectableChild(viperElement);
 
-        if (range.collapsed === true) {
+        if (range.collapsed === true && e.keyCode === 8) {
             var startNode = range.getStartNode();
-            var node        = range.getPreviousContainer(startNode, null, true);
+            var node      = range.getPreviousContainer(startNode, null, true);
             if (this.viper.isOutOfBounds(node) === true) {
                 // Range is at the start of the editable element, nothing to delete.
                 return false;
