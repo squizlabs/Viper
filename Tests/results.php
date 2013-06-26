@@ -160,9 +160,9 @@ function printResults($results, $commonFailures, $browsers)
             foreach ($types as $type) {
                 if (empty($secResults[$type]) === FALSE) {
                     foreach ($secResults[$type] as $name => $content) {
-                         $testName    = $section.'::'.$name;
-                         $testContent = '<strong>Test:</strong> '.$testName."\n";
-                         $testContent = '<strong>Type:</strong> '.ucfirst($type)."\n";
+                         $testName     = $section.'::'.$name;
+                         $testContent  = '<strong>Test:</strong> '.$testName."\n";
+                         $testContent .= '<strong>Type:</strong> '.ucfirst($type)."\n";
 
                          if (count($commonFailures[$testName]) > 1) {
                              $testContent .= '<strong>Also Failing in:</strong> ';
