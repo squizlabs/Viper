@@ -478,7 +478,7 @@ class Viper_Tests_ViperFormatPlugin_ParagraphUnitTest extends AbstractFormatsUni
      *
      * @return void
      */
-    public function testCombiningParagraphs()
+    public function testCombiningTwoParagraphs()
     {
 
         $this->moveToKeyword(3, 'left');
@@ -488,6 +488,64 @@ class Viper_Tests_ViperFormatPlugin_ParagraphUnitTest extends AbstractFormatsUni
 
     }//end testCombiningParagraphs()
 
+
+    /**
+     * Test combining a paragraphs and a div.
+     *
+     * @return void
+     */
+    public function testCombiningParagraphAndDiv()
+    {
+        $this->moveToKeyword(4, 'left');
+        $this->keyDown('Key.BACKSPACE');
+        
+        $this->assertHTMLMatch('<p>%1% xtn %2%</p><p>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.%4% paragraph to change to a p</p>');
+
+    }//end testCombiningParagraphAndDiv()
+
+
+    /**
+     * Test combining a paragraphs and a quote.
+     *
+     * @return void
+     */
+    public function testCombiningParagraphAndQuote()
+    {
+        //Change P to Quote
+        $this->selectKeyword(3);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickInlineToolbarButton('formats-p', 'active');
+        $this->clickInlineToolbarButton('Quote', NULL, TRUE);
+        $this->assertHTMLMatch('<p>%1% xtn %2%</p><blockquote><p>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p></blockquote><div>%4% paragraph to change to a p</div>');
+
+        $this->moveToKeyword(3, 'left');
+        $this->keyDown('Key.BACKSPACE');
+        
+        $this->assertHTMLMatch('<p>%1% xtn %2%%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p><div>%4% paragraph to change to a p</div>');
+
+    }//end testCombiningParagraphAndQuote()
+
+
+    /**
+     * Test combining a paragraphs and a Pre.
+     *
+     * @return void
+     */
+    public function testCombiningParagraphAndPre()
+    {
+        //Change P to Pre
+        $this->selectKeyword(3);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickInlineToolbarButton('formats-p', 'active');
+        $this->clickInlineToolbarButton('Pre', NULL, TRUE);
+        $this->assertHTMLMatch('<p>%1% xtn %2%</p><pre>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</pre><div>%4% paragraph to change to a p</div>');
+
+        $this->moveToKeyword(3, 'left');
+        $this->keyDown('Key.BACKSPACE');
+        
+        $this->assertHTMLMatch('<p>%1% xtn %2%%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p><div>%4% paragraph to change to a p</div>');
+
+    }//end testCombiningParagraphAndPre()
 
 }//end class
 
