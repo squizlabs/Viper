@@ -1267,8 +1267,13 @@ ViperCopyPastePlugin.prototype = {
             dfx.foreach(listTypes[k], function(j) {
                 dfx.foreach(listTypes[k][j], function(m) {
                     if ((new RegExp(listTypes[k][j][m])).test(elContent) === true) {
+                        var html = dfx.getHtml(elem);
+                        html     = html.replace(/\n/mg, ' ');
+                        html     = html.replace(/^(&nbsp;)+/m, '');
+                        html     = dfx.trim(html);
+                        html     = html.replace(new RegExp(listTypes[k][j][m]), '');
                         info = {
-                            html: dfx.getHtml(elem).replace(new RegExp(listTypes[k][j][m]), ''),
+                            html: html,
                             listType: k,
                             listStyle: j
                         };
