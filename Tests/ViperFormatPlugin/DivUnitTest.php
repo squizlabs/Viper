@@ -658,6 +658,65 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractFormatsUnitTest
 
     }//end testCombiningDivSections()
 
+
+    /**
+     * Test combining a Div and a P section.
+     *
+     * @return void
+     */
+    public function testCombiningDivAndPSections()
+    {
+        $this->moveToKeyword(3, 'left');
+        $this->keyDown('Key.BACKSPACE');
+        
+        $this->assertHTMLMatch('<div>%1% xtn dolor</div><p>spacer for the tests</p><div>sit amet <strong>%2%</strong>%3% is a paragraph to change to a %4%</div><div>%5% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div>');
+
+    }//end testCombiningDivAndPSections()
+
+
+    /**
+     * Test combining a Div and a Quote section.
+     *
+     * @return void
+     */
+    public function testCombiningDivAndQuoteSections()
+    {
+        // Change the p to a quote
+        $this->selectKeyword(3);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickTopToolbarButton('formats-p', 'active');
+        $this->clickTopToolbarButton('Quote', NULL, TRUE);
+        $this->assertHTMLMatch('<div>%1% xtn dolor</div><p>spacer for the tests</p><div>sit amet <strong>%2%</strong></div><blockquote><p>%3% is a paragraph to change to a %4%</p></blockquote><div>%5% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div>');
+
+        $this->moveToKeyword(3, 'left');
+        $this->keyDown('Key.BACKSPACE');
+        
+        $this->assertHTMLMatch('<div>%1% xtn dolor</div><p>spacer for the tests</p><div>sit amet <strong>%2%</strong>%3% is a paragraph to change to a %4%</div><div>%5% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div>');
+
+    }//end testCombiningDivAndQuoteSections()
+
+
+    /**
+     * Test combining a Div and a Pre section.
+     *
+     * @return void
+     */
+    public function testCombiningDivAndPreSections()
+    {
+        // Change the p to a pre
+        $this->selectKeyword(3);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickTopToolbarButton('formats-p', 'active');
+        $this->clickTopToolbarButton('PRE', NULL, TRUE);
+        $this->assertHTMLMatch('<div>%1% xtn dolor</div><p>spacer for the tests</p><div>sit amet <strong>%2%</strong></div><pre>%3% is a paragraph to change to a %4%</pre><div>%5% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div>');
+
+        $this->moveToKeyword(3, 'left');
+        $this->keyDown('Key.BACKSPACE');
+        
+        $this->assertHTMLMatch('<div>%1% xtn dolor</div><p>spacer for the tests</p><div>sit amet <strong>%2%</strong>%3% is a paragraph to change to a %4%</div><div>%5% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div>');
+
+    }//end testCombiningDivAndPreSections()
+
 }//end class
 
 ?>
