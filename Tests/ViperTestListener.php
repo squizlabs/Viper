@@ -7,15 +7,30 @@ class ViperTestListener implements PHPUnit_Framework_TestListener
     private static $_numTests = 0;
     private static $_testsRun = 0;
     public static $browserid  = NULL;
+    private static $_startTime = NULL;
 
-    private function _exportFail($type, $test, $msg)
+    private static function _getExportPath()
     {
-        $exportPath = dirname(__FILE__).'/tmp/'.self::$browserid.'/run/'.get_class($test);
+        $exportPath  = dirname(__FILE__).'/tmp/'.self::$browserid.'/results/';
+        $exportPath .= date('d_M_y_H-i', self::$_startTime);
+
+        return $exportPath;
+
+    }
+
+    private function _exportFail($type, $test, $e)
+    {
+        $exportPath = self::_getExportPath();
+
+        $exportPath .= '/'.get_class($test);
         if (file_exists($exportPath) === FALSE) {
             mkdir($exportPath, 0755, TRUE);
         }
 
         $exportPath .= '/'.$type.'-'.$test->getName().'.txt';
+
+        $msg  = PHPUnit_Framework_TestFailure::exceptionToString($e)."\n";
+        $msg .= PHPUnit_Util_Filter::getFilteredStacktrace($e);
 
         file_put_contents($exportPath, $msg);
 
@@ -46,7 +61,7 @@ class ViperTestListener implements PHPUnit_Framework_TestListener
     public function addFailure(PHPUnit_Framework_Test $test, PHPUnit_Framework_AssertionFailedError $e, $time)
     {
         self::$_failures++;
-        $this->_exportFail('failure', $test, $e->getMessage());
+        $this->_exportFail('failure', $test, $e);
 
     }
 
@@ -62,12 +77,28 @@ class ViperTestListener implements PHPUnit_Framework_TestListener
     {
         // Report progress.
         if ((self::$_testsRun >= self::$_numTests) || ((self::$_testsRun - 1) % 10) === 0) {
+            $startTime   = date('d M y, H:i', self::$_startTime);
+            $currentTime = date('d M y, H:i', time());
+
+            $datetime1 = new DateTime($startTime);
+            $datetime2 = new DateTime($currentTime);
+            $interval = $datetime1->diff($datetime2);
+
             $progress  = 'Tests: '.self::$_numTests."\n";
             $progress .= 'Completed: '.self::$_testsRun.' ('.((int) ((self::$_testsRun / self::$_numTests) * 100))."%)\n";
             $progress .= 'Errors: '.self::$_errors."\n";
             $progress .= 'Failures: '.self::$_failures."\n";
+            $progress .= 'Start Time: '.$startTime."\n";
+            $progress .= 'Last Updated: '.$currentTime."\n";
+            $progress .= 'Run Time: '.$interval->format('%hh %im')."\n";
 
-            $path = dirname(__FILE__).'/tmp/'.self::$browserid.'/run/progress.txt';
+            // Init export dir.
+            $path = self::_getExportPath();
+            if (file_exists($path) === FALSE) {
+                mkdir($path, 0755, TRUE);
+            }
+
+            $path = self::_getExportPath().'/progress.txt';
             file_put_contents($path, $progress);
         }
 
@@ -76,6 +107,8 @@ class ViperTestListener implements PHPUnit_Framework_TestListener
     public function startTestSuite(PHPUnit_Framework_TestSuite $suite)
     {
         if (self::$_numTests === 0) {
+            self::$_startTime = time();
+
             $filter = getenv('VIPER_TEST_FILTER');
             if ($filter) {
                 $tests = $suite->tests();

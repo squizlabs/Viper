@@ -86,12 +86,6 @@ $opts = getopt('s::b::u::t::civ', array('url::', 'built', 'log::'));
             mkdir($browserTmpPath, 0755, TRUE);
         }
 
-        if (file_exists($browserTmpPath.'/run') === FALSE) {
-            mkdir($browserTmpPath.'/run', 0755, TRUE);
-        } else {
-            exec('rm -rf '.$browserTmpPath.'/run/*');
-        }
-
         // Setup logging if there is no filter.
         if ($test === NULL || empty($logFilePath) === FALSE) {
             if (empty($logFilePath) === TRUE) {
