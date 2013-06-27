@@ -529,8 +529,50 @@ ViperKeyboardEditorPlugin.prototype = {
                     range.collapse(true);
                     ViperSelection.addRange(range);
                     return false;
+                } else if (this.viper.isBrowser('chrome') === true) {
+                    // Latest Chrome is creating DIV element with span tag when
+                    // exiting a top level list (hitting enter in an empty top level list item).
+                    // Create the default tag instead.
+                    var elem = null;
+                    if (defaultTagName) {
+                        elem = document.createElement(defaultTagName);
+                        elem.appendChild(document.createElement('br'));
+                    } else {
+                        elem = document.createElement('br');
+                    }
+
+                    dfx.insertAfter(blockParent.parentNode, elem);
+
+                    // If the list item is not the last one we need to move
+                    // the rest of them to a new list.
+                    var listItems = [];
+                    for (var node = blockParent; node; node = node.nextSibling) {
+                        if (dfx.isTag(node, 'li') === true) {
+                            listItems.push(node);
+                        }
+                    }
+
+                    if (listItems.length > 0) {
+                        var newList = document.createElement(dfx.getTagName(blockParent.parentNode));
+                        dfx.insertAfter(elem, newList);
+                        while (listItems.length > 0) {
+                            newList.appendChild(listItems.shift());
+                        }
+                    }
+
+                    dfx.remove(blockParent);
+
+                    if (defaultTagName) {
+                        range.selectNode(elem.firstChild);
+                    } else {
+                        range.selectNode(elem);
+                    }
+
+                    range.collapse(true);
+                    ViperSelection.addRange(range);
+                    return false;
                 }
-            } //end if
+            }//end if
 
             setTimeout(function() {
                 // Fire selection changed here for enter events after a delay so that
