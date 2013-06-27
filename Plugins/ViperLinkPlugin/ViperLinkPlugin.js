@@ -36,45 +36,64 @@ ViperLinkPlugin.prototype = {
                 return;
             }
 
-            var range = self.viper.getViperRange();
-            if (range.collapsed !== true) {
-                return;
-            }
+            self._autoLink(false);
 
-            var startNode = range.getStartNode();
-            if (startNode.nodeType !== dfx.TEXT_NODE) {
-                return;
-            }
+        });
 
-            // If the text node content up to the current caret position ends with
-            // a URL then convert the text to an A tag.
-            var text = startNode.data.substr(0, (range.startOffset - 1));
-            var url  = text.match(/ ((http:\/\/|www\.)\S+)$/);
+        this.viper.registerCallback('ViperKeyboardEditorPlugin:beforeEnter', 'ViperLinkPlugin', function() {
+            self._autoLink(true);
+        });
+
+    },
+
+    _autoLink: function(isEnter)
+    {
+        var range = self.viper.getViperRange();
+        if (range.collapsed !== true) {
+            return;
+        }
+
+        var startNode = range.getStartNode();
+        if (startNode.nodeType !== dfx.TEXT_NODE) {
+            return;
+        }
+
+        var mod = 1;
+        if (isEnter === true) {
+            mod = 0;
+        }
+
+        // If the text node content up to the current caret position ends with
+        // a URL then convert the text to an A tag.
+        var text = startNode.data.substr(0, (range.startOffset - mod));
+        var url  = text.match(/ ((http:\/\/|www\.)\S+)$/);
+        if (!url) {
+            url = text.match(/^((http:\/\/|www\.)\S+)$/);
             if (!url) {
                 return;
             }
+        }
 
-            url        = url[1];
-            var length = url.length;
-            var a      = document.createElement('a');
+        url        = url[1];
+        var length = url.length;
+        var a      = document.createElement('a');
 
-            dfx.setHtml(a, url);
+        dfx.setHtml(a, url);
 
-            if (url.match(/^[^:]+(?=:\/\/)/) === null) {
-                url = 'http://' + url;
-            }
+        if (url.match(/^[^:]+(?=:\/\/)/) === null) {
+            url = 'http://' + url;
+        }
 
-            a.setAttribute('href', url);
+        a.setAttribute('href', url);
 
-            var nextNode = startNode.splitText((range.startOffset - 1 - length));
-            dfx.insertBefore(nextNode, a);
+        var nextNode = startNode.splitText((range.startOffset - mod - length));
+        dfx.insertBefore(nextNode, a);
 
-            nextNode.data = nextNode.data.slice(length);
+        nextNode.data = nextNode.data.slice(length);
 
-            range.setStart(nextNode, 1);
-            range.collapse(true);
-            ViperSelection.addRange(range);
-        });
+        range.setStart(nextNode, mod);
+        range.collapse(true);
+        ViperSelection.addRange(range);
 
     },
 

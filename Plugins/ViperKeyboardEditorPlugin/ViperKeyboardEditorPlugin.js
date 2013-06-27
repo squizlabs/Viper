@@ -154,6 +154,8 @@ ViperKeyboardEditorPlugin.prototype = {
 
     handleEnter: function(returnFirstBlock)
     {
+        this.viper.fireCallbacks('ViperKeyboardEditorPlugin:beforeEnter');
+
         var defaultTagName = this.viper.getDefaultBlockTag();
 
         var self = this;
