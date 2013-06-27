@@ -1269,7 +1269,9 @@ ViperCopyPastePlugin.prototype = {
                     if ((new RegExp(listTypes[k][j][m])).test(elContent) === true) {
                         var html = dfx.getHtml(elem);
                         html     = html.replace(/\n/mg, ' ');
+                        html     = dfx.trim(html);
                         html     = html.replace(/^(&nbsp;)+/m, '');
+                        html     = html.replace(/(&nbsp;)+$/m, '');
                         html     = dfx.trim(html);
                         html     = html.replace(new RegExp(listTypes[k][j][m]), '');
                         info = {
