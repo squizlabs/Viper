@@ -404,10 +404,8 @@ function pasteFromURL(url)
         var tmp = document.createElement('div');
         dfx.setHtml(tmp, data);
 
-        var bookmark = viper.createBookmark();
-        copyPastePlugin._tmpNode = document.createElement('div');
-        dfx.insertBefore(bookmark.start, copyPastePlugin._tmpNode);
-        viper.selectBookmark(bookmark);
+        copyPastePlugin._beforePaste();
+
         copyPastePlugin._handleFormattedPasteValue(false, tmp, viper.getViperElement());
         sendResult();
     });
