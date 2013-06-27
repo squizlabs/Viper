@@ -1314,7 +1314,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
     {
         $html = $this->replaceKeywords($html);
 
-        $pageHtml = $this->getHtml(NULL, 0, $removeTableHeaders);
+        $pageHtml = $this->getHtml(NULL, 0, $removeTableHeaders, TRUE);
 
         $pageHtml = preg_replace("/<([a-z0-9]+)\n([a-z0-9]*)/i", '<$1$2', $pageHtml);
         $pageHtml = str_replace("<\n", '<', $pageHtml);
