@@ -1078,6 +1078,40 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperLis
     }//end testCreatingNewListItemFromEmptySubList()
 
 
+    /**
+     * Tests creating a new list and then deleting it
+     *
+     * @return void
+     */
+    public function testCreatingNewListAndDeletingIt()
+    {
+        //Enter content
+        $this->moveToKeyword(2, 'right');
+        $this->keyDown('Key.ENTER');
+        $this->type('This is content');
+        $this->keyDown('Key.ENTER');
+        $this->type('%10% Item one');
+        $this->keyDown('Key.ENTER');
+        $this->type('Item two');
+        $this->keyDown('Key.ENTER');
+        $this->type('Item three %11%');
+        $this->keyDown('Key.ENTER');
+        $this->type('End content');
+
+        // Create list
+        $this->selectKeyword(10, 11);
+        $this->clickTopToolbarButton('listUL');
+        $this->assertHTMLMatch('<p>%1% uuuuuu. %2%</p><p>This is content</p><ul><li>%10% Item one</li><li>Item two</li><li>Item three %11%</li></ul><p>End content</p><p>cPOc ccccc dddd. %3%</p><p>ajhsd sjsjwi hhhh:</p><ul><li>aaa %4% ccccc</li><li>%5% %6% templates</li><li>Audit %7% %8%</li><li>Accessibility audit report</li><li>Recommendations %9% plan</li><li>Squiz Matrix guide</li></ul>');
+
+        // Delete list
+        $this->selectKeyword(10, 11);
+        $this->keyDown('Key.DELETE');
+        $this->assertHTMLMatch('<p>%1% uuuuuu. %2%</p><p>This is content</p><p>End content</p><p>cPOc ccccc dddd. %3%</p><p>ajhsd sjsjwi hhhh:</p><ul><li>aaa %4% ccccc</li><li>%5% %6% templates</li><li>Audit %7% %8%</li><li>Accessibility audit report</li><li>Recommendations %9% plan</li><li>Squiz Matrix guide</li></ul>');
+
+        
+    }//end testCreatingNewListAndDeletingIt()
+
+
 }//end class
 
 ?>
