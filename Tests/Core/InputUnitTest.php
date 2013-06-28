@@ -117,6 +117,8 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
         $this->keyDown('Key.ENTER');
         $this->type('Testing...');
 
+        $this->assertHTMLMatch('<p>XAX<b>test</b> input...</p><p>Testing...</p><p>EIB MOZ</p>');
+
         for ($i = 0; $i < 30; $i++) {
             $this->keyDown('Key.BACKSPACE');
         }
