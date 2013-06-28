@@ -8,6 +8,7 @@ class ViperTestListener implements PHPUnit_Framework_TestListener
     private static $_testsRun = 0;
     public static $browserid  = NULL;
     private static $_startTime = NULL;
+    public static $viperTestObj = NULL;
 
     private static function _getExportPath()
     {
@@ -36,6 +37,24 @@ class ViperTestListener implements PHPUnit_Framework_TestListener
 
     }
 
+    private function _screenshot($test, $e, $type='error')
+    {
+        $exportPath = self::_getExportPath();
+
+        $exportPath .= '/'.get_class($test);
+        if (file_exists($exportPath) === FALSE) {
+            mkdir($exportPath, 0755, TRUE);
+        }
+
+        $exportPath .= '/'.$type.'-'.$test->getName().'.png';
+
+        $imagePath = self::$viperTestObj->callFunc('capture', array('SCREEN', '_noQuotes' => TRUE));
+        $imagePath = str_replace('u\'', '', $imagePath);
+        $imagePath = trim($imagePath, '\'');
+        rename($imagePath, $exportPath);
+
+    }
+
     public function startTest(PHPUnit_Framework_Test $test)
     {
         $this->_test = $test;
@@ -55,6 +74,7 @@ class ViperTestListener implements PHPUnit_Framework_TestListener
     {
         self::$_errors++;
         $this->_exportFail('error', $test, $e);
+        $this->_screenshot($test, $e, 'error');
 
     }
 

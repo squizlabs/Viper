@@ -242,6 +242,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         $totalTests = ViperTestListener::getNumberOfTests();
         $testsRun   = ViperTestListener::getTestsRun();
         ViperTestListener::$browserid = $this->getBrowserid();
+        ViperTestListener::$viperTestObj = $this;
 
         $testTitle .= '['.$testsRun.'/'.$totalTests.']';
 
@@ -2580,9 +2581,14 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
                 break;
 
                 case 'googlechrome':
-                    // Google does not need the right click pop for pasting, just
-                    // click the paste from the right click menu.
-                    $this->click($this->mouseMoveOffset(30, 95));
+                    if ($sourceURL !== NULL) {
+                        $this->pasteFromURL($sourceURL);
+                        $this->execJS('viper.ViperTools.getItem(\'ViperCopyPastePlugin-paste\').hide()');
+                    } else {
+                        // Google does not need the right click pop for pasting, just
+                        // click the paste from the right click menu.
+                        $this->click($this->mouseMoveOffset(30, 95));
+                    }
                 break;
 
                 default:

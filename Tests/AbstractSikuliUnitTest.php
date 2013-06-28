@@ -939,7 +939,7 @@ abstract class AbstractSikuliUnitTest extends PHPUnit_Framework_TestCase
      *
      * @return string
      */
-    protected function callFunc($name, array $args=array(), $obj=NULL, $assignToVar=FALSE)
+    public function callFunc($name, array $args=array(), $obj=NULL, $assignToVar=FALSE)
     {
         $command = '';
         $var     = NULL;
@@ -1055,6 +1055,7 @@ abstract class AbstractSikuliUnitTest extends PHPUnit_Framework_TestCase
             // Redirect Sikuli output to a file.
             $this->sendCmd('sys.stdout = sys.stderr = open("'.$sikuliOutputFile.'", "w", 1000)');
         } else {
+            //$cmd = dirname(__FILE__).'/SikuliX/osx/sikuli-script -i';
             $cmd = '/usr/bin/java -jar '.$this->_sikuliPath.'/Contents/Resources/Java/sikuli-script.jar -i';
             $descriptorspec = array(
                                0 => array(
@@ -1239,7 +1240,7 @@ abstract class AbstractSikuliUnitTest extends PHPUnit_Framework_TestCase
 
                 foreach ($lines as $line) {
                     if (strlen($line) > 0) {
-                        if ($line === '>>>' || $line === '[info] VDictProxy loaded.') {
+                        if ($line === '>>>' || $line === '[info] VDictProxy loaded.' || $line === '... use ctrl-d to end the session') {
                             break(2);
                         }
 
