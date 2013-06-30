@@ -17,7 +17,7 @@
 
 
         .testName.error {
-            color: red;
+            color: rgb(192, 33, 33);
         }
 
         .testContent {
@@ -34,6 +34,7 @@
             display: inline-block;
             color: #000;
             cursor: auto;
+            font-weight: normal;
         }
 
         .testName {
@@ -73,6 +74,10 @@
 
         .browser {
             margin-left: 25px;
+        }
+
+        .multiBrowserFail {
+            font-weight: bold;
         }
 
     </style>
@@ -129,7 +134,10 @@ foreach ($browsers as $browserid => $browserName) {
     arsort($resultDirs);
 
     foreach ($resultDirs as $name => $time) {
-        getResults($browserid, $resultsPath.'/'.$name, $time);
+        if (getResults($browserid, $resultsPath.'/'.$name, $time) === FALSE) {
+            continue;
+        }
+
         break;
     }
 
@@ -164,7 +172,10 @@ function printResults($results, $commonFailures, $browsers)
                          $testContent  = '<strong>Test:</strong> '.$testName."\n";
                          $testContent .= '<strong>Type:</strong> '.ucfirst($type)."\n";
 
+                         $failsInOtherBrowsersClass = '';
+
                          if (count($commonFailures[$testName]) > 1) {
+                             $failsInOtherBrowsersClass = 'multiBrowserFail';
                              $testContent .= '<strong>Also Failing in:</strong> ';
                              $alsoFailing  = array();
                              foreach ($commonFailures[$testName] as $bid => $type) {
@@ -182,7 +193,7 @@ function printResults($results, $commonFailures, $browsers)
                          $testContent .= htmlentities($content);
                          $testContent  = nl2br($testContent);
 
-                         echo '<li class="testName '.$type.'"><div class="title" onclick="dfx.toggleClass(this.parentNode, \'visible\')">'.$name.'</div>';
+                         echo '<li class="testName '.$type.' '.$failsInOtherBrowsersClass.'"><div class="title" onclick="dfx.toggleClass(this.parentNode, \'visible\')">'.$name.'</div>';
                          echo '<div class="testContent"><div>'.$testContent.'</div></div>';
                          echo '</li>';
                     }
@@ -210,8 +221,16 @@ function getResults($browserid, $path, $time)
     global $results;
     global $commonFailures;
 
+    $progressContent = file_get_contents($path.'/progress.txt');
+    $progressParts   = explode("\n", $progressContent);
+    $numberOfTests   = (int) preg_replace('/[^\d]/', '', $progressParts[0]);
+    if ($numberOfTests < 10) {
+        return FALSE;
+    }
 
-    $results[$browserid] = array('progress' => nl2br(file_get_contents($path.'/progress.txt')));
+    $progressContent = nl2br($progressContent);
+
+    $results[$browserid] = array('progress' => $progressContent);
     while (($fileName = readdir($handle)) !== FALSE) {
         if (strpos($fileName, '.') === 0 || $fileName === 'progress.txt') {
             continue;
@@ -228,7 +247,7 @@ function getResults($browserid, $path, $time)
         }
 
         while (($errFile = readdir($subHandle)) !== FALSE) {
-            if ($errFile === '.' || $errFile === '..') {
+            if ($errFile === '.' || $errFile === '..' || strpos($errFile, '.png') !== FALSE) {
                 continue;
             }
 
@@ -249,6 +268,8 @@ function getResults($browserid, $path, $time)
     }
 
     closedir($handle);
+
+    return TRUE;
 
 }//end printResults()
 
