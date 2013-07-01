@@ -1070,6 +1070,19 @@ ViperCoreStylesPlugin.prototype = {
                     dfx.insertAfter(nodes.prevNode, node);
                 }
 
+                var emptyTextNode = null;
+                while (emptyTextNode = node.nextSibling) {
+                    if (emptyTextNode.nodeType === dfx.TEXT_NODE
+                        && emptyTextNode.data.length === 0
+                    ) {
+                        dfx.remove(emptyTextNode);
+                    }
+                }
+
+                if (!node.nextSibling) {
+                    dfx.insertAfter(node, document.createElement('br'));
+                }
+
                 if (node.data.length > 0) {
                     range.setEnd(node, 1);
                 } else {
@@ -1089,6 +1102,7 @@ ViperCoreStylesPlugin.prototype = {
                 }
 
                 styleTag.appendChild(node);
+                styleTag.appendChild(document.createElement('br'));
 
                 range.setStart(node, 1);
                 range.collapse(true);
