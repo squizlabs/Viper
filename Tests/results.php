@@ -87,6 +87,10 @@
 <?php
 
 $testDir = dirname(__FILE__);
+if (isset($_GET['path']) === TRUE) {
+    $testDir = $_GET['path'];
+}
+
 $browsers = array(
              'googlechrome' => 'Google Chrome',
              'firefox'      => 'Firefox',
