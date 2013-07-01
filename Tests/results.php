@@ -172,34 +172,39 @@ function printResults($results, $commonFailures, $browsers)
             foreach ($types as $type) {
                 if (empty($secResults[$type]) === FALSE) {
                     foreach ($secResults[$type] as $name => $content) {
-                         $testName     = $section.'::'.$name;
-                         $testContent  = '<strong>Test:</strong> '.$testName."\n";
-                         $testContent .= '<strong>Type:</strong> '.ucfirst($type)."\n";
+                        $testName     = $section.'::'.$name;
+                        $testContent  = '<strong>Test:</strong> '.$testName."\n";
+                        $testContent .= '<strong>Type:</strong> '.ucfirst($type)."\n";
 
-                         $failsInOtherBrowsersClass = '';
+                        if ($type === 'error') {
+                            $ssURL = './tmp/'.$browserid.'/results/'.date('d_M_y_H-i', $browserResults['time']).'/'.$section.'/'.$type.'-'.$name.'.png';
+                            $testContent .= '<a href="'.$ssURL.'" target="__blank">Screenshot</a>';
+                        }
 
-                         if (count($commonFailures[$testName]) > 1) {
-                             $failsInOtherBrowsersClass = 'multiBrowserFail';
-                             $testContent .= '<strong>Also Failing in:</strong> ';
-                             $alsoFailing  = array();
-                             foreach ($commonFailures[$testName] as $bid => $type) {
-                                 if ($bid === $browserid) {
-                                     continue;
-                                 }
+                        $failsInOtherBrowsersClass = '';
 
-                                 $alsoFailing[] = $browsers[$bid].' ('.$type.')';
-                             }
+                        if (count($commonFailures[$testName]) > 1) {
+                            $failsInOtherBrowsersClass = 'multiBrowserFail';
+                            $testContent .= '<strong>Also Failing in:</strong> ';
+                            $alsoFailing  = array();
+                            foreach ($commonFailures[$testName] as $bid => $type) {
+                                if ($bid === $browserid) {
+                                    continue;
+                                }
 
-                             $testContent .= implode(', ', $alsoFailing)."\n";
-                         }
+                                $alsoFailing[] = $browsers[$bid].' ('.$type.')';
+                            }
 
-                         $testContent .= "\n----\n";
-                         $testContent .= htmlentities($content);
-                         $testContent  = nl2br($testContent);
+                            $testContent .= implode(', ', $alsoFailing)."\n";
+                        }
 
-                         echo '<li class="testName '.$type.' '.$failsInOtherBrowsersClass.'"><div class="title" onclick="dfx.toggleClass(this.parentNode, \'visible\')">'.$name.'</div>';
-                         echo '<div class="testContent"><div>'.$testContent.'</div></div>';
-                         echo '</li>';
+                        $testContent .= "\n----\n";
+                        $testContent .= htmlentities($content);
+                        $testContent  = nl2br($testContent);
+
+                        echo '<li class="testName '.$type.' '.$failsInOtherBrowsersClass.'"><div class="title" onclick="dfx.toggleClass(this.parentNode, \'visible\')">'.$name.'</div>';
+                        echo '<div class="testContent"><div>'.$testContent.'</div></div>';
+                        echo '</li>';
                     }
                 }
             }
@@ -232,9 +237,14 @@ function getResults($browserid, $path, $time)
         return FALSE;
     }
 
+
     $progressContent = nl2br($progressContent);
 
-    $results[$browserid] = array('progress' => $progressContent);
+    $results[$browserid] = array(
+                            'progress' => $progressContent,
+                            'time'     => $time,
+                           );
+
     while (($fileName = readdir($handle)) !== FALSE) {
         if (strpos($fileName, '.') === 0 || $fileName === 'progress.txt') {
             continue;
