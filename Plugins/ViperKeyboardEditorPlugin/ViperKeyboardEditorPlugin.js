@@ -732,10 +732,12 @@ ViperKeyboardEditorPlugin.prototype = {
 
         if (range.collapsed === true && e.keyCode === 8) {
             var startNode = range.getStartNode();
-            var node      = range.getPreviousContainer(startNode, null, true);
-            if (this.viper.isOutOfBounds(node) === true) {
-                // Range is at the start of the editable element, nothing to delete.
-                return false;
+            if (startNode) {
+                var node      = range.getPreviousContainer(startNode, null, true);
+                if (this.viper.isOutOfBounds(node) === true) {
+                    // Range is at the start of the editable element, nothing to delete.
+                    return false;
+                }
             }
         }
 
