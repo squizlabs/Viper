@@ -2551,8 +2551,10 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         if ($rightClick !== TRUE) {
             $this->keyDown('Key.CMD + v');
         } else {
-            sleep(1);
-            $this->rightClick($this->getMouseLocation());
+            if ($this->getBrowserid() !== 'googlechrome') {
+                sleep(1);
+                $this->rightClick($this->getMouseLocation());
+            }
 
             switch ($this->getBrowserid()) {
                 case 'firefox':
@@ -2576,8 +2578,13 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
 
                     $this->_rightClickPasteDiv();
 
-                    // Click the paste item in the right click menu.
-                    $this->click($this->mouseMoveOffset(30, 40));
+                    if ($sourceURL !== NULL) {
+                        $this->pasteFromURL($sourceURL);
+                        $this->execJS('viper.ViperTools.getItem(\'ViperCopyPastePlugin-paste\').hide()');
+                    } else {
+                        // Click the paste item in the right click menu.
+                        $this->click($this->mouseMoveOffset(30, 40));
+                    }
                 break;
 
                 case 'googlechrome':
@@ -2649,6 +2656,20 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         }
 
     }//end runTestFor()
+
+
+    /**
+     * Moves the mouse to the next line from its current position and clicks it.
+     *
+     * Note that the mouse must already be pointing to a line.
+     *
+     * @return void
+     */
+    protected function clickNextLine()
+    {
+        $this->click($this->mouseMoveOffset(0, 50));
+
+    }//end clickNextLine()
 
 
 }//end class
