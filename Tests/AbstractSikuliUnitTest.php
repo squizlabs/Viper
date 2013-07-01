@@ -1055,8 +1055,8 @@ abstract class AbstractSikuliUnitTest extends PHPUnit_Framework_TestCase
             // Redirect Sikuli output to a file.
             $this->sendCmd('sys.stdout = sys.stderr = open("'.$sikuliOutputFile.'", "w", 1000)');
         } else {
-            //$cmd = dirname(__FILE__).'/SikuliX/osx/sikuli-script -i';
-            $cmd = '/usr/bin/java -jar '.$this->_sikuliPath.'/Contents/Resources/Java/sikuli-script.jar -i';
+            $cmd = dirname(__FILE__).'/SikuliX/'.$this->getOS().'/sikuli-script -i';
+            //$cmd = '/usr/bin/java -jar '.$this->_sikuliPath.'/Contents/Resources/Java/sikuli-script.jar -i';
             $descriptorspec = array(
                                0 => array(
                                      'pipe',
