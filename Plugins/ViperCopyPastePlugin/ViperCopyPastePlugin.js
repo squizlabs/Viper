@@ -491,7 +491,7 @@ ViperCopyPastePlugin.prototype = {
 
     _handleFormattedPaste: function(stripTags, e)
     {
-        if (!this.pasteElement) {
+        if (!this.pasteElement || this._isMSIE === true) {
             this.pasteElement = this._createPasteDiv(this._isSafari);
         } else {
             dfx.empty(this.pasteElement);
@@ -952,6 +952,14 @@ ViperCopyPastePlugin.prototype = {
                 var br    = null;
                 var first = true;
                 while (br = brs.shift()) {
+                    if (br.parentNode
+                        && br.parentNode.firstChild === br
+                        && dfx.isBlockElement(br.parentNode) === true
+                    ) {
+                        dfx.remove(br);
+                        continue;
+                    }
+
                     // Find the next double BR tag and replace them with a new
                     // block element (p, div, etc.).
                     if (dfx.isTag(br.nextSibling, 'br') === true) {
