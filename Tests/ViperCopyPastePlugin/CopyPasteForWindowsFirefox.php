@@ -2,7 +2,7 @@
 
 require_once 'AbstractViperUnitTest.php';
 
-class Viper_Tests_ViperCopyPastePlugin_CopyPasteForMacSafariUnitTest extends AbstractViperUnitTest
+class Viper_Tests_ViperCopyPastePlugin_CopyPasteForWindowsFirefoxUnitTest extends AbstractViperUnitTest
 {
 
 
@@ -13,12 +13,12 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteForMacSafariUnitTest extends Abs
      */
     public function testSpecialCharactersDocCopyPaste()
     {
-        $this->runTestFor('osx', 'safari');
+        $this->runTestFor('windows', 'firefox');
         $this->useTest(1);
 
         $this->moveToKeyword(1, 'right');
         $this->keyDown('Key.ENTER');
-        $this->paste(TRUE, $this->getTestURL('/ViperCopyPastePlugin/TextFiles/MacSafari/SpecialCharactersDoc.txt'));
+        $this->paste(TRUE, $this->getTestURL('/ViperCopyPastePlugin/TextFiles/WindowsFirefox/SpecialCharactersDoc.txt'));
 
         $this->assertHTMLMatch('<p>%1%</p><p>  ~ ! @ # $ % ^ &amp; * ( ) _ +</p><p>  ` 1 2 3 4 5 6 7 8 9 0 - =</p><p>  { } |</p><p>  :</p><p>  &lt; &gt; ?</p><p>  [ ]</p><p>  ; "a" \'b\'</p><p>  , . /</p><p>  &hellip;</p><p>  q w e r t y u i o p</p><p>  Q W E R T Y U I O P</p><p>  a s d f g h j k l</p><p>  A S D F G H J K L</p><p>  z x c v b n m</p><p>  Z X C V B N M</p>');
 
@@ -32,12 +32,12 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteForMacSafariUnitTest extends Abs
      */
     public function testListTestDocCopyPaste()
     {
-        $this->runTestFor('osx', 'safari');
+        $this->runTestFor('windows', 'firefox');
         $this->useTest(1);
 
         $this->moveToKeyword(1, 'right');
         $this->keyDown('Key.ENTER');
-        $this->pasteFromURL($this->getTestURL('/ViperCopyPastePlugin/TextFiles/MacSafari/ListsTestDoc.txt'));
+        $this->pasteFromURL($this->getTestURL('/ViperCopyPastePlugin/TextFiles/WindowsFirefox/ListsTestDoc.txt'));
 
         $this->assertHTMLMatch('<p>%1%</p><p>My complex numbered lists</p><ol><li>Asdadsads<ul><li>Dsfsdfsfd</li><li>Sdfsdfsfd<ul><li>Sfd</li><li>Sfdsfd</li><li>Dsfsdf</li><li>sdfsdf</li></ul></li><li>Sdfsdfsfd</li><li>sdfsdfsfd</li></ul></li><li>Asdadsasd</li><li>Sfdsfds</li><li>Asdasdasd</li><li>Asdasdasd</li></ol><p>My complex bulleted lists</p><ul><li>Sadsadasda<ul><li>Sdfdsf</li><li>Sdfsdfsdf<ul><li>Sdfsfdsdf</li><li>sdfsdfsdf</li></ul></li><li>Sdfsdfsfd</li><li>sdfsfdsdf</li></ul></li><li>Asdasdsad</li></ul>');
 
@@ -52,12 +52,12 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteForMacSafariUnitTest extends Abs
      */
     public function testComplexListDocCopyPaste()
     {
-        $this->runTestFor('osx', 'safari');
+        $this->runTestFor('windows', 'firefox');
         $this->useTest(1);
 
         $this->moveToKeyword(1, 'right');
         $this->keyDown('Key.ENTER');
-        $this->pasteFromURL($this->getTestURL('/ViperCopyPastePlugin/TextFiles/MacSafari/ComplexListDoc.txt'));
+        $this->pasteFromURL($this->getTestURL('/ViperCopyPastePlugin/TextFiles/WindowsFirefox/ComplexListDoc.txt'));
 
         $this->assertHTMLMatch('<p>%1%</p><h1>My Complex Lists Dude!</h1><p>Here is a numbered list&hellip;</p><ol><li>One baby<ol><li>Sub baby<ol><li>Sub sub baby!</li><li>Sdfdsfsdf</li><li>sdfsdfsdf</li></ol></li></ol></li><li>Two baby<ol><li>Sdfsfdds</li><li>Sdfsfdsfd</li><li>sfdsdfsdf</li></ol></li><li>Three baby</li><li>Four</li></ol><p>Here is mu bulleted list&hellip;</p><ul><li>One bullet<ul><li>Dsfsdfsdf<ul><li>Sdfsfdsdf</li><li>sdfsdf</li></ul></li></ul></li><li>Two bullet<ul><li>Dsfsfd</li><li>sdfsdfsf</li></ul></li><li>Three bullet</li><li>Four<ul><li>sdfsdfsfd</li></ul></li></ul><p>Woot to lists!</p>');
 
@@ -71,12 +71,12 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteForMacSafariUnitTest extends Abs
      */
     public function testWordTablesWithAttributesCopyPaste()
     {
-        $this->runTestFor('osx', 'safari');
+        $this->runTestFor('windows', 'firefox');
         $this->useTest(1);
 
         $this->moveToKeyword(1, 'right');
         $this->keyDown('Key.ENTER');
-        $this->pasteFromURL($this->getTestURL('/ViperCopyPastePlugin/TextFiles/MacSafari/WordTablesWithAttributes.txt'));
+        $this->pasteFromURL($this->getTestURL('/ViperCopyPastePlugin/TextFiles/WindowsFirefox/WordTablesWithAttributes.txt'));
 
         $this->removeTableHeaders();
 
@@ -92,12 +92,12 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteForMacSafariUnitTest extends Abs
      */
     public function testWordTableExamplesDocCopyPaste()
     {
-        $this->runTestFor('osx', 'safari');
+        $this->runTestFor('windows', 'firefox');
         $this->useTest(1);
 
         $this->moveToKeyword(1, 'right');
         $this->keyDown('Key.ENTER');
-        $this->pasteFromURL($this->getTestURL('/ViperCopyPastePlugin/TextFiles/MacSafari/WordTableExamples.txt'));
+        $this->pasteFromURL($this->getTestURL('/ViperCopyPastePlugin/TextFiles/WindowsFirefox/WordTableExamples.txt'));
 
         $this->removeTableHeaders();
 
@@ -107,39 +107,18 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteForMacSafariUnitTest extends Abs
 
 
     /**
-     * Test that copying/pasting from the TextAlignment doc works correctly.
-     *
-     * @return void
-     */
-    public function testTextAlignmentDocCopyPaste()
-    {
-        $this->runTestFor('osx', 'safari');
-        $this->useTest(1);
-
-        $this->moveToKeyword(1, 'right');
-        $this->keyDown('Key.ENTER');
-        $this->pasteFromURL($this->getTestURL('/ViperCopyPastePlugin/TextFiles/MacSafari/TextAlignmentDoc.txt'));
-
-        $this->removeTableHeaders();
-
-        $this->assertHTMLMatch('<p>XAX</p><p>First para default.</p><p>Second para centered.</p><p>Third para right aligned.</p><p>Fourth para justified (by love).</p><p>Fifth para changed from justified to left align.</p><h3>Table Editing With Aligned Text</h3><ul><li>One</li><li>Two</li><li>Three<ul><li>Sub One</li><li>Sub Two</li></ul></li><li>Four</li><li>One</li><li>Two</li><li>Three<ol><li>Sub One</li><li>Sub Two</li></ol></li><li>Four</li></ul><h3>Table Editing With Aligned Text</h3><table style="width: 100%;" border="1"><tbody><tr><td><p>Item</p></td><td><p>Price</p></td><td><p>Quantity</p></td></tr><tr><td><p>Book (hard cover)</p></td><td><p>$15.60</p></td><td><p>3</p></td></tr><tr><td><p>DVD</p></td><td><p>$8.50</p></td><td><p>1</p></td></tr></tbody></table><table style="width: 100%;" border="1"><tbody><tr><td><p><strong>H1</strong></p></td><td><p><strong>H2</strong></p></td><td><p><strong>H3</strong></p></td><td><p><strong>H4</strong></p></td><td><p><strong>H5</strong></p></td><td><p><strong>H6</strong></p></td><td><p><strong>H7</strong></p></td><td><p><strong>H8</strong></p></td><td><p><strong>H9</strong></p></td><td><p><strong>H10</strong></p></td></tr><tr><td><p><strong>1a</strong></p></td><td><p>2a</p></td><td><p>3a</p></td><td><p>4a</p></td><td><p>5a</p></td><td><p>6a</p></td><td> <p>7a</p></td><td><p>8a</p></td><td><p>9a</p></td><td><p>10a</p></td></tr><tr><td><p><strong>1b</strong></p></td><td><p>2b</p></td><td><p>3b</p></td><td><p>4b</p></td><td><p>5b</p></td><td><p>6b</p></td><td><p>7b</p></td><td><p>8b</p></td><td><p>9b</p></td><td><p>10b</p></td></tr><tr><td><p><strong>1c</strong></p></td><td><p>2c</p></td><td><p>3c</p></td><td><p>4c</p></td><td><p>5c</p></td><td><p>6c</p></td><td><p>7c</p></td><td><p>8c</p></td><td><p>9c</p></td><td><p>10c</p></td></tr></tbody></table>');
-
-    }//end testTextAlignmentDocCopyPaste()
-
-
-    /**
      * Test that copying/pasting from the ViperTestDoc works correctly.
      *
      * @return void
      */
     public function testViperTestDocCopyPasteWithPasteShortcut()
     {
-        $this->runTestFor('osx', 'safari');
+        $this->runTestFor('windows', 'firefox');
         $this->useTest(1);
 
         $this->moveToKeyword(1, 'right');
         $this->keyDown('Key.ENTER');
-        $this->pasteFromURL($this->getTestURL('/ViperCopyPastePlugin/TextFiles/MacSafari/ViperTestDoc.txt'));
+        $this->pasteFromURL($this->getTestURL('/ViperCopyPastePlugin/TextFiles/WindowsFirefox/ViperTestDoc.txt'));
 
         $this->removeTableHeaders();
 
