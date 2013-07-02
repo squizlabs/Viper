@@ -279,7 +279,7 @@ ViperInlineToolbarPlugin.prototype = {
     {
         var tags = dfx.getTag('li', this._lineage);
         if (tags[index]) {
-            dfx.trigger(tags[index], 'mouseup');
+            dfx.trigger(tags[index], 'click');
         }
 
     },
@@ -344,7 +344,7 @@ ViperInlineToolbarPlugin.prototype = {
 
             (function(clickElem, selectionElem, index) {
                 // When clicked set the user selection to the selected element.
-                dfx.addEvent(clickElem, 'mouseup.ViperInlineToolbarPlugin', function(e) {
+                dfx.addEvent(clickElem, 'click.ViperInlineToolbarPlugin', function(e) {
                     self.viper.fireCallbacks('ViperInlineToolbarPlugin:lineageClicked');
 
                     // We set the _lineageClicked to true here so that when the
@@ -388,7 +388,7 @@ ViperInlineToolbarPlugin.prototype = {
         linElems.push(parent);
         this._lineage.appendChild(parent);
 
-        dfx.addEvent(parent, 'mouseup.ViperInlineToolbarPlugin', function(e) {
+        dfx.addEvent(parent, 'click.ViperInlineToolbarPlugin', function(e) {
             self.viper.fireCallbacks('ViperInlineToolbarPlugin:lineageClicked');
 
             // When clicked set the selection to the original selection.
