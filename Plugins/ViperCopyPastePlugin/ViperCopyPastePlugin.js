@@ -933,7 +933,75 @@ ViperCopyPastePlugin.prototype = {
 
             dfx.remove(tmp);
             dfx.setStyle(tmp, 'display', 'auto');
-        }
+        }//end for
+
+        var defaultTag = this.viper.getDefaultBlockTag();
+        if (defaultTag !== '') {
+            var brs = dfx.getTag('br', tmp);
+            if (brs.length !== 0) {
+                var br    = null;
+                var first = true;
+                while (br = brs.shift()) {
+                    // Find the next double BR tag and replace them with a new
+                    // block element (p, div, etc.).
+                    if (dfx.isTag(br.nextSibling, 'br') === true) {
+                        while (dfx.isTag(br.nextSibling, 'br') === true) {
+                            // Remove the next BR.
+                            dfx.remove(brs.shift());
+                        }
+
+                        // Create the new wrapper element and insert it after the
+                        // BR tag.
+                        var wrapper = document.createElement(defaultTag);
+                        dfx.insertAfter(br, wrapper);
+
+                        // We no longer need this BR.
+                        dfx.remove(br);
+
+                        // If this is the first double BR found then move any
+                        // content before them until a block tag is found or
+                        // to the beginning of content in to a new block element.
+                        var node = null;
+                        if (first === true) {
+                            first = false;
+                            var preWrapper = document.createElement(defaultTag);
+                            while (node = wrapper.previousSibling) {
+                                if (dfx.isBlockElement(node) === true) {
+                                    break;
+                                }
+
+                                if (preWrapper.firstChild) {
+                                    dfx.insertBefore(preWrapper.firstChild, node);
+                                } else {
+                                    preWrapper.appendChild(node);
+                                }
+                            }
+
+                            if (preWrapper.childNodes.length !== 0) {
+                                dfx.insertBefore(wrapper, preWrapper);
+                            }
+                        }
+
+                        // Move all content after the new wrapper tag till next
+                        // block element or double BR.
+                        node = null;
+                        while (node = wrapper.nextSibling) {
+                            if (dfx.isBlockElement(node) === true
+                                || (dfx.isTag(node, 'br') === true && dfx.isTag(node.nextSibling, 'br') === true)
+                            ) {
+                                break;
+                            } else if (node.nodeType !== dfx.TEXT_NODE || node.data.length !== 0) {
+                                wrapper.appendChild(node);
+                            }
+                        }
+
+                        if (wrapper.childNodes.length === 0) {
+                            dfx.remove(wrapper);
+                        }
+                    }//end if
+                }//end while
+            }//end if
+        }//end if
 
         content = dfx.getHtml(tmp);
         return content;
