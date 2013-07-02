@@ -886,6 +886,12 @@ Viper.prototype = {
 
     },
 
+    getViperElementDocument: function()
+    {
+        return this.element.ownerDocument;
+
+    },
+
     getViperSubElement: function()
     {
         if (this._subElementActive === true) {

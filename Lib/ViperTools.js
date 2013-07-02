@@ -1156,6 +1156,28 @@ ViperTools.prototype = {
             self.getItem(id).update(range);
         });
 
+        // Add scroll event to iframes so that the toolbar is closed when the
+        // scroll is happening.
+        this.viper.registerCallback('Viper:editableElementChanged', id, function() {
+            var elemDoc = self.viper.getViperElementDocument();
+            if (elemDoc !== document) {
+                var t = null;
+                var toolbar = self.getItem(id);
+                dfx.removeEvent(elemDoc.defaultView, 'scroll.' + id);
+                dfx.addEvent(elemDoc.defaultView, 'scroll.' + id, function(e) {
+                    if (toolbar.isVisible() === true) {
+                        toolbar.hide();
+                    }
+
+                    clearTimeout(t);
+                    t = setTimeout(function() {
+                        dfx.removeClass(toolbar.element, 'scrolling');
+                        self.getItem(id).update();
+                    }, 300);
+                });
+            }
+        });
+
         this.viper.registerCallback('Viper:clickedOutside', id, function(range) {
             self.getItem(id).hide();
         });
@@ -1820,7 +1842,7 @@ ViperTools.prototype = {
                 dfx.setStyle(toolbar, 'width', toolbarWidth + 'px');
 
                 var viperElemCoords = this.getElementCoords(tools.viper.getViperElement());
-                var windowDim       = dfx.getWindowDimensions();
+                var windowDim       = dfx.getWindowDimensions(Viper.document.defaultView);
 
                 if (this._verticalPosUpdateOnly !== true) {
                     var left = ((rangeCoords.left + ((rangeCoords.right - rangeCoords.left) / 2) + scrollCoords.x) - (toolbarWidth / 2));
@@ -1848,12 +1870,16 @@ ViperTools.prototype = {
                     this.hide();
                     return;
                 } else if (top > windowDim.height + scrollCoords.y) {
-                    top = (windowDim.height - 200 + scrollCoords.y);
-                } else if (top < viperElemCoords.top) {
+                    this.hide();
+                    return;
+                } else if (top < viperElemCoords.top && Viper.document === document) {
                     top = (viperElemCoords.top + 50);
                     if (left < viperElemCoords.left && this._verticalPosUpdateOnly !== true) {
                         dfx.setStyle(toolbar, 'left', viperElemCoords.left  + 50 + 'px');
                     }
+                } else if (Viper.document !== document && top < tools.viper.getDocumentOffset().y) {
+                    this.hide();
+                    return;
                 }
 
                 dfx.setStyle(toolbar, 'top', top + 'px');
