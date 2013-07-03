@@ -633,8 +633,11 @@ ViperCopyPastePlugin.prototype = {
                 }
             }
 
-            if (prevBlock.nextSibling && dfx.trim(dfx.getNodeTextContent(prevBlock.nextSibling)) === '') {
-                dfx.remove(prevBlock.nextSibling);
+            if (prevBlock.nextSibling) {
+                prevCheckCont = dfx.trim(dfx.getNodeTextContent(prevBlock.nextSibling));
+                if (prevCheckCont === '' || (prevCheckCont.length === 1 && prevCheckCont.charCodeAt(0) === 160)) {
+                    dfx.remove(prevBlock.nextSibling);
+                }
             }
 
             var convertBrTags = false;
