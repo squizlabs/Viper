@@ -341,12 +341,17 @@ ViperCopyPastePlugin.prototype = {
 
     _beforePaste: function(range)
     {
-        //this.viper.setAllowCleanDOM(false);
         range         = range || this.viper.getCurrentRange();
         this.rangeObj = range.cloneRange();
 
         this._tmpNode = document.createTextNode('');
-        this.viper.insertNodeAtCaret(this._tmpNode);
+
+        try {
+            this.viper.insertNodeAtCaret(this._tmpNode);
+        } catch (e) {
+            this.viper.initEditableElement();
+            this.viper.insertNodeAtCaret(this._tmpNode);
+        }
 
     },
 
@@ -601,15 +606,28 @@ ViperCopyPastePlugin.prototype = {
                     }
                 } catch (e) {
                     // Guess which browser this try/catch block is for....
+                    this._tmpNode = document.createTextNode('');
+                    if (prevBlock.firstChild) {
+                        dfx.insertBefore(prevBlock.firstChild, this._tmpNode);
+                    } else {
+                        prevBlock.appendChild(this._tmpNode);
+                    }
                 }
             }
 
-            if (dfx.trim(dfx.getNodeTextContent(prevBlock)) !== '') {
-                prevBlock     = prevBlock.nextSibling;
+            var prevCheckCont = dfx.trim(dfx.getNodeTextContent(prevBlock));
+            if (prevCheckCont !== '') {
+                // Lets to another check for IE..
+                if (prevCheckCont.length === 1 && prevCheckCont.charCodeAt(0) !== 160) {
+                    prevBlock = prevBlock.nextSibling;
+                }
             }
 
-            if (prevBlock.nextSibling && dfx.trim(dfx.getNodeTextContent(prevBlock.nextSibling)) === '') {
-                dfx.remove(prevBlock.nextSibling);
+            if (prevBlock.nextSibling) {
+                prevCheckCont = dfx.trim(dfx.getNodeTextContent(prevBlock.nextSibling));
+                if (prevCheckCont === '' || (prevCheckCont.length === 1 && prevCheckCont.charCodeAt(0) === 160)) {
+                    dfx.remove(prevBlock.nextSibling);
+                }
             }
 
             var convertBrTags = false;
@@ -1591,6 +1609,7 @@ ViperCopyPastePlugin.prototype = {
     {
         try {
             var range = this.viper.getCurrentRange();
+
             range.setStart(this._tmpNode, 0);
             range.collapse(true);
             ViperSelection.addRange(range);
@@ -1599,7 +1618,9 @@ ViperCopyPastePlugin.prototype = {
             dfx.remove(this.pasteElement);
             this._tmpNode     = null;
             this.pasteElement = null;
-        } catch (e) {}
+        } catch (e) {
+
+        }
 
     }
 
