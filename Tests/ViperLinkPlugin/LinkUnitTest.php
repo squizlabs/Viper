@@ -411,6 +411,7 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->keyDown('Key.TAB');
         $this->type('Subject');
         $this->keyDown('Key.ENTER');
+        $this->click($this->findKeyword(2));
         $this->click($this->findKeyword(1));
         $this->clickInlineToolbarButton('linkRemove');
         $this->assertTrue($this->topToolbarButtonExists('link', 'disabled'), 'Link icon should be disabled.');
