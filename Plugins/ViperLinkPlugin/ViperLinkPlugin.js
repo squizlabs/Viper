@@ -48,7 +48,7 @@ ViperLinkPlugin.prototype = {
 
     _autoLink: function(isEnter)
     {
-        var range = self.viper.getViperRange();
+        var range = this.viper.getViperRange();
         if (range.collapsed !== true) {
             return;
         }

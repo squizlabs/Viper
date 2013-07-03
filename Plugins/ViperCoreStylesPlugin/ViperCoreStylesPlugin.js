@@ -1076,10 +1076,12 @@ ViperCoreStylesPlugin.prototype = {
                         && emptyTextNode.data.length === 0
                     ) {
                         dfx.remove(emptyTextNode);
+                    } else {
+                        break;
                     }
                 }
 
-                if (!node.nextSibling) {
+                if (!node.nextSibling && node.nodeType === dfx.TEXT_NODE) {
                     dfx.insertAfter(node, document.createElement('br'));
                 }
 
@@ -1102,7 +1104,6 @@ ViperCoreStylesPlugin.prototype = {
                 }
 
                 styleTag.appendChild(node);
-                styleTag.appendChild(document.createElement('br'));
 
                 range.setStart(node, 1);
                 range.collapse(true);
@@ -1509,7 +1510,7 @@ ViperCoreStylesPlugin.prototype = {
                     }
                 }
             } else if (startParent && startParent.style) {
-                activeStates.alignment = startParent.style.textAlign;    
+                activeStates.alignment = startParent.style.textAlign;
             }//end if
 
             if (startNode === endNode
