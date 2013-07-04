@@ -4262,7 +4262,7 @@ Viper.prototype = {
                     return;
                 }
 
-                var scrollCoords = dfx.getScrollCoords();
+                var scrollCoords = dfx.getScrollCoords(this.getDocumentWindow());
                 this.element.focus();
 
                 var range = this.getViperRange();
