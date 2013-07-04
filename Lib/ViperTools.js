@@ -1819,9 +1819,10 @@ ViperTools.prototype = {
                     }//end if
                 }//end if
 
+                var frameOffset = {x: 0, y: 0};
                 if (Viper.document !== document && Viper.document.defaultView.frameElement) {
                     // Viper element is inside an iframe, need to adjust the position.
-                    var frameOffset  = tools.viper.getDocumentOffset();
+                    frameOffset      = tools.viper.getDocumentOffset();
                     var newCoords    = {};
                     newCoords.bottom = (rangeCoords.bottom + frameOffset.y);
                     newCoords.top    = (rangeCoords.top + frameOffset.y);
@@ -1848,7 +1849,7 @@ ViperTools.prototype = {
                     var left = ((rangeCoords.left + ((rangeCoords.right - rangeCoords.left) / 2) + scrollCoords.x) - (toolbarWidth / 2));
                     dfx.removeClass(toolbar, 'Viper-orientationLeft Viper-orientationRight');
 
-                    if (left > windowDim.width) {
+                    if (left > (windowDim.width + frameOffset.x)) {
                         // Dont go off screen, point to the editable element.
                         left = viperElemCoords.left;
                     }
@@ -1856,7 +1857,7 @@ ViperTools.prototype = {
                     if (left < 0) {
                         left += (toolbarWidth / 2);
                         dfx.addClass(toolbar, 'Viper-orientationLeft');
-                    } else if (left + toolbarWidth > windowDim.width) {
+                    } else if (left + toolbarWidth > (windowDim.width + frameOffset.x)) {
                         left -= (toolbarWidth / 2);
                         dfx.addClass(toolbar, 'Viper-orientationRight');
                     }
@@ -1912,7 +1913,7 @@ ViperTools.prototype = {
             },
             getElementCoords: function(element) {
                 var elemRect     = dfx.getBoundingRectangle(element);
-                var scrollCoords = dfx.getScrollCoords();
+                var scrollCoords = dfx.getScrollCoords(element.ownerDocument.defaultView);
                 return {
                     left: (elemRect.x1 - scrollCoords.x),
                     right: (elemRect.x2 - scrollCoords.x),
