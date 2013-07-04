@@ -1843,13 +1843,14 @@ ViperTools.prototype = {
                 dfx.setStyle(toolbar, 'width', toolbarWidth + 'px');
 
                 var viperElemCoords = this.getElementCoords(tools.viper.getViperElement());
-                var windowDim       = dfx.getWindowDimensions(Viper.document.defaultView);
+                var elemWindowDim   = dfx.getWindowDimensions(Viper.document.defaultView);
+                var mainWindowDim   = dfx.getWindowDimensions();
 
                 if (this._verticalPosUpdateOnly !== true) {
                     var left = ((rangeCoords.left + ((rangeCoords.right - rangeCoords.left) / 2) + scrollCoords.x) - (toolbarWidth / 2));
                     dfx.removeClass(toolbar, 'Viper-orientationLeft Viper-orientationRight');
 
-                    if (left > (windowDim.width + frameOffset.x)) {
+                    if (left > (elemWindowDim.width + frameOffset.x)) {
                         // Dont go off screen, point to the editable element.
                         left = viperElemCoords.left;
                     }
@@ -1857,7 +1858,7 @@ ViperTools.prototype = {
                     if (left < 0) {
                         left += (toolbarWidth / 2);
                         dfx.addClass(toolbar, 'Viper-orientationLeft');
-                    } else if (left + toolbarWidth > (windowDim.width + frameOffset.x)) {
+                    } else if (left + toolbarWidth > mainWindowDim.width) {
                         left -= (toolbarWidth / 2);
                         dfx.addClass(toolbar, 'Viper-orientationRight');
                     }
@@ -1870,7 +1871,7 @@ ViperTools.prototype = {
                 if (top === 0) {
                     this.hide();
                     return;
-                } else if (top > windowDim.height + scrollCoords.y) {
+                } else if (top > elemWindowDim.height + scrollCoords.y) {
                     this.hide();
                     return;
                 } else if (top < viperElemCoords.top && Viper.document === document) {
