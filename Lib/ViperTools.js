@@ -1871,7 +1871,7 @@ ViperTools.prototype = {
                 if (top === 0) {
                     this.hide();
                     return;
-                } else if (top > elemWindowDim.height + scrollCoords.y) {
+                } else if (((top + 50) > mainWindowDim.height) || (top > elemWindowDim.height + scrollCoords.y + frameOffset.y)) {
                     this.hide();
                     return;
                 } else if (top < viperElemCoords.top && Viper.document === document) {
