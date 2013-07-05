@@ -195,7 +195,7 @@ Viper.prototype = {
     {
         this.fireCallbacks('Viper:destroy');
         this.setEnabled(false);
-        dfx.removeEvent(this._document.body, '.' + this.getEventNamespace());
+        dfx.removeEvent(dfx.getDocuments(), '.' + this.getEventNamespace());
 
         if (this._viperElementHolder) {
             dfx.remove(this._viperElementHolder);
@@ -409,7 +409,7 @@ Viper.prototype = {
 
         var namespace = this.getEventNamespace();
 
-        dfx.removeEvent(this._document.body, '.' + namespace);
+        dfx.removeEvent(dfx.getDocuments(), '.' + namespace);
         this._removeEvents(elem);
         var self = this;
 
@@ -418,12 +418,12 @@ Viper.prototype = {
                 return self.mouseUp(e);
             });
         } else {
-            dfx.addEvent(this._document.body, 'mouseup.' + namespace, function(e) {
+            dfx.addEvent(dfx.getDocuments(), 'mouseup.' + namespace, function(e) {
                 return self.mouseUp(e);
             });
         }
 
-        dfx.addEvent(this._document.body, 'mousedown.' + namespace, function(e) {
+        dfx.addEvent(dfx.getDocuments(), 'mousedown.' + namespace, function(e) {
             return self.mouseDown(e);
         });
 
