@@ -54,7 +54,7 @@ ViperLinkPlugin.prototype = {
         }
 
         var startNode = range.getStartNode();
-        if (startNode.nodeType !== dfx.TEXT_NODE) {
+        if (!startNode || startNode.nodeType !== dfx.TEXT_NODE) {
             return;
         }
 
