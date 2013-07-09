@@ -289,7 +289,7 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
         sleep(1);
         $this->keyDown('Key.CMD + v');
 
-        $this->assertHTMLMatch('<pre>Lorum this is more content %1% to test %2%</pre><p>Lorum this is more content %1% to test %2%</p>');
+        $this->assertHTMLMatch('<pre>Lorum this is more content %1% to test %2%</pre><pre>Lorum this is more content %1% to test %2%</pre>');
 
     }//end testCopyAndPasteForAPre()
 
