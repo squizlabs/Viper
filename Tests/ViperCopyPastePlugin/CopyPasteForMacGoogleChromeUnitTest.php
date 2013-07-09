@@ -16,11 +16,10 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteForMacGoogleChromeUnitTest exten
         $this->runTestFor('osx', 'googlechrome');
         $this->useTest(1);
 
-        $this->moveToKeyword(1, 'right');
-        $this->keyDown('Key.ENTER');
+        $this->selectKeyword(1);
         $this->pasteFromURL($this->getTestURL('/ViperCopyPastePlugin/TextFiles/MacGoogleChrome/SpecialCharactersDoc.txt'));
 
-        $this->assertHTMLMatch('<p>%1%</p><p>~ ! @ # $ % ^ &amp; * ( ) _ +</p><p>` 1 2 3 4 5 6 7 8 9 0 - =</p><p>{ } |</p><p>:</p><p>&lt; &gt; ?</p><p>[ ]</p><p>; "a" \'b\'</p><p>, . /</p><p>&hellip;</p><p>q w e r t y u i o p</p><p>Q W E R T Y U I O P</p><p>a s d f g h j k l</p><p>A S D F G H J K L</p><p>z x c v b n m</p><p>Z X C V B N M</p>');
+        $this->assertHTMLMatch('<p>~ ! @ # $ % ^ &amp; * ( ) _ +</p><p>` 1 2 3 4 5 6 7 8 9 0 - =</p><p>{ } |</p><p>:</p><p>&lt; &gt; ?</p><p>[ ]</p><p>; "a" \'b\'</p><p>, . /</p><p>&hellip;</p><p>q w e r t y u i o p</p><p>Q W E R T Y U I O P</p><p>a s d f g h j k l</p><p>A S D F G H J K L</p><p>z x c v b n m</p><p>Z X C V B N M</p>');
 
     }//end testSpecialCharactersDocCopyPaste()
 
