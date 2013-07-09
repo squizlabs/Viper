@@ -143,11 +143,11 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
         $this->keyDown('Key.ENTER');
         $this->type('Testing...');
 
-        for ($i = 0; $i < 26; $i++) {
+        for ($i = 0; $i < 27; $i++) {
             $this->keyDown('Key.LEFT');
         }
 
-        for ($i = 0; $i < 26; $i++) {
+        for ($i = 0; $i < 28; $i++) {
             $this->keyDown('Key.DELETE');
         }
 
