@@ -384,11 +384,11 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
 
 
     /**
-     * Tests that after removing paragraphs and typing it creates a new paragraph.
+     * Tests changing the defailt block tags and entering content.
      *
      * @return void
      */
-    public function testDeleteParagraphAndType()
+    public function testDifferentDefaultBlockTags()
     {
         $this->useTest(1);
         $this->selectKeyword(1, 2);
@@ -416,7 +416,7 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
         $this->keyDown('Key.ENTER');
         $this->type('123test');
         sleep(1);
-        $this->assertHTMLMatch('<p>test test1 test2</p><p>test3 test4 test5</p><div>test123</div><div>123test</div>');
+        $this->assertHTMLMatch('<p>test test1 test2</p><p>test3 test4 test5</p><div>test123<br />123test</div>');
 
         $this->useTest(1);
         $this->execJS('viper.setSetting("defaultBlockTag", "")');
@@ -434,7 +434,7 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
         $this->assertHTMLMatch('<p>test test1 test2</p><p>test3 test4 test5</p>test123<br />123test');
 
 
-    }//end testDeleteParagraphAndType()
+    }//end testDifferentDefaultBlockTags()
 
 
     /**
