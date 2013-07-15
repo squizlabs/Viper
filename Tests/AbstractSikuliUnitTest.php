@@ -160,7 +160,7 @@ abstract class AbstractSikuliUnitTest extends PHPUnit_Framework_TestCase
             $region = $this->_defaultRegion;
         }
 
-        $this->callFunc('setAutoWaitTimeout', array($timeout), $region);
+        $this->callFunc('setAutoWaitTimeout', array($timeout, '_noQuotes' => TRUE), $region);
 
     }//end setAutoWaitTimeout()
 
@@ -1090,6 +1090,8 @@ abstract class AbstractSikuliUnitTest extends PHPUnit_Framework_TestCase
 
             $this->_getStreamOutput();
         }//end if
+
+        $this->setSetting('OcrTextSearch', TRUE);
 
         self::$_connected = TRUE;
 

@@ -129,9 +129,7 @@ class Viper_Tests_ViperCoreStylesPlugin_ItalicUnitTest extends AbstractViperUnit
      */
     public function testAddingAndRemovingFormattingToAParagraph()
     {
-        $start = $this->findKeyword(1);
-        $end   = $this->findKeyword(3);
-        $this->dragDrop($this->getTopLeft($start), $this->getTopRight($end));
+        $this->selectKeyword(1, 3);
 
         // Inline Toolbar icon should not be displayed.
         $this->assertFalse($this->inlineToolbarButtonExists('italic'), 'Italic icon appears in the inline toolbar');

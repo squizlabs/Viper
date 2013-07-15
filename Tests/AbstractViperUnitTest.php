@@ -278,6 +278,9 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
 
             $this->setSetting('MinSimilarity', self::$_similarity);
             $calibrate = getenv('VIPER_TEST_CALIBRATE');
+
+            // Turn off calibration incase of reconnection to Sikuli server.
+            putenv('VIPER_TEST_CALIBRATE=FALSE');
             if ($calibrate === 'TRUE' || file_exists($this->getBrowserImagePath()) === FALSE) {
                 try {
                     $this->_calibrate();
@@ -609,7 +612,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
 
         // Create image for the inline toolbar pattern (the arrow on top).
         sleep(2);
-        $this->selectText('PyP');
+        $this->selectKeyword(1);
         sleep(1);
 
         $vitp      = $this->execJS('getVITP()');
@@ -642,6 +645,9 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         $vitpImage = $this->capture($region);
         copy($vitpImage, $imgPath.'/vitp_arrowRight.png');
 
+        // Remove all Viper elements.
+        $this->execJS('viper.destroy()');
+
         // Create image for the text field actions.
         $textFieldActionRevertRegion = $this->getRegionOnPage($this->execJS('dfx.getBoundingRectangle(dfx.getId("textboxActionRevert"))'));
         $textFieldActionRevertImage  = $this->capture($textFieldActionRevertRegion);
@@ -650,9 +656,6 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         $textFieldActionClearRegion = $this->getRegionOnPage($this->execJS('dfx.getBoundingRectangle(dfx.getId("textboxActionClear"))'));
         $textFieldActionClearImage  = $this->capture($textFieldActionClearRegion);
         copy($textFieldActionClearImage, $imgPath.'/textField_action_clear.png');
-
-        // Remove all Viper elements.
-        $this->execJS('viper.destroy()');
 
         foreach ($statuses as $status => $className) {
             $btnRects = $this->execJS('getCoords("'.$status.'", "'.$className.'")');
@@ -676,7 +679,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
             }
         }
 
-        for ($similarity = 0.98; $similarity > 0.90; $similarity -= 0.01) {
+        for ($similarity = 0.93; $similarity < 0.99; $similarity += 0.01) {
             // Find each of the icons, if any fails it will throw an exception.
             $regions = array();
             foreach ($statuses as $status => $className) {
@@ -1532,7 +1535,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         $this->setW($match, ($this->getW($match) + 400));
         $this->setH($match, ($this->getH($match) + 200));
 
-        $this->setAutoWaitTimeout(0.5, $match);
+        $this->setAutoWaitTimeout(0.3, $match);
 
         return $match;
 
@@ -1617,11 +1620,12 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
             try {
                 $this->find($button, $toolbar, $this->getData('buttonSimmilarity'));
             } catch (Exception $e) {
-                try {
+                /*try {
                     $this->find($button, $toolbar, 0.92);
                 } catch (Exception $e) {
                     return FALSE;
-                }
+                }*/
+                return FALSE;
             }
         }//end if
 
@@ -1974,6 +1978,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         $rect   = $this->getBoundingRectangle('.ViperITP-lineageItem', $index);
         $region = $this->getRegionOnPage($rect);
         $this->click($region);
+        usleep(80000);
 
     }//end selectInlineToolbarLineageItem()
 

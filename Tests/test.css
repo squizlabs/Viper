@@ -6,9 +6,9 @@ body {
 }
 
 #content {
-    width: 800px;
+    width: 900px;
     height: 650px;
-    margin: 90px 0 0 250px;
+    margin: 90px 0 0 150px;
     overflow: auto;
 }
 
