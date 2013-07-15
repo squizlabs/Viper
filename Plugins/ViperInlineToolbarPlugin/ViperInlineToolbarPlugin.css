@@ -12,12 +12,28 @@
     font-size: 9px;
     position: absolute;
     border: 1px solid transparent;
-    opacity: 0;
-    display: none;
     border-radius: 0.8em;
     background-color: #000;
     color: #FFF;
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.7), 0 1px 0 rgba(255,255,255,0.4) inset;
+    transform:rotateX(90deg);
+    transition-property: transform, opacity;
+    transition-duration: 0.2s;
+    transition-timing-function: ease;
+
+    -webkit-transform:rotateX(90deg);
+    -webkit-transition-property: -webkit-transform, opacity;
+    -webkit-transition-duration: 0.2s;
+    -webkit-transition-timing-function: ease;
+
+    -ms-transform:rotateX(90deg);
+    -ms-transition-property: -ms-transform, opacity;
+    -ms-transition-duration: 0.2s;
+    -ms-transition-timing-function: ease;
+
+     transform-origin: 0 -10% 0;
+    -webkit-transform-origin: 0 -10% 0;
+    -ms-transform-origin: 0 -10% 0;
 }
 
 .ViperITP.device-ipad {
@@ -76,7 +92,6 @@
     margin-top: -7px;
 }
 
-
 .ViperITP.Viper-calcWidth,
 .ViperITP.Viper-calcWidth .ViperITP-subSectionWrapper,
 .ViperITP.Viper-calcWidth .ViperITP-subSectionWrapper .Viper-subSection {
@@ -86,7 +101,9 @@
 
 .ViperITP.Viper-visible {
     opacity: 1;
-    display: block;
+    transform:rotateX(0deg);
+    -webkit-transform:rotateX(0deg);
+    -ms-transform:rotateX(0deg);
 }
 
 .ViperITP-tools {
