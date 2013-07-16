@@ -103,11 +103,11 @@ table.VCMP-table tr td:nth-of-type(7) {
 }
 
 .VCMP-hoverBtn.Viper-button {
-    position: fixed;
+    position: absolute;
     display: none;
     font-size: 3em;
     margin-left: -0.03em;
-    margin-top: -0.5em;
+    margin-top: -1.4em;
     padding: 0.1em 0.3em 0.5em 0.3em;
     min-width: 42px;
 }
