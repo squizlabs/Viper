@@ -474,7 +474,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
 
         $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(0);
-        $this->clickTopToolbarButton('cssClass');
+        $this->clickTopToolbarButton('cssClass', 'active');
         $this->type('def');
         $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
 
