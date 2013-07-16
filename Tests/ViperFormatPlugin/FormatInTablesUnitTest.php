@@ -546,7 +546,7 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         $this->click($this->findKeyword(4));
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(1);
-        $this->clickTopToolbarButton('cssClass');
+        $this->clickTopToolbarButton('cssClass', 'active');
         $this->clearFieldValue('Class');;
         $this->keyDown('Key.ENTER');
         $this->assertTrue($this->topToolbarButtonExists('Update Changes', 'disabled', TRUE), 'Update Changes button should be disabled.');
@@ -669,7 +669,7 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
 
         $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(3);
-        $this->clickTopToolbarButton('cssClass');
+        $this->clickTopToolbarButton('cssClass', 'active');
         $this->clearFieldValue('Class');;
         $this->keyDown('Key.ENTER');
         $this->assertTrue($this->topToolbarButtonExists('Update Changes', 'disabled', TRUE), 'Update Changes button should be disabled.');
@@ -686,7 +686,7 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
 
         $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(2);
-        $this->clickTopToolbarButton('cssClass');
+        $this->clickTopToolbarButton('cssClass', 'active');
         $this->clearFieldValue('Class');;
         $this->keyDown('Key.ENTER');
         $this->assertTrue($this->topToolbarButtonExists('Update Changes', 'disabled', TRUE), 'Update Changes button should be disabled.');
@@ -729,7 +729,6 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
         $this->assertTrue($this->inlineToolbarButtonExists('Update Changes', 'disabled', TRUE), 'Update Changes button should be disabled.');
         $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel <span class="test">%4%</span></td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
-        $this->click($this->findKeyword(3));
         $this->selectKeyword(4);
         $this->clickInlineToolbarButton('cssClass', 'active');
         $this->clearFieldValue('Class');

@@ -47,7 +47,6 @@ class Viper_Tests_ViperSearchAndReplaceToolbarPlugin_SearchAndReplaceInTablesUni
     public function testSearchIconStatesInTableHeader()
     {
         $this->click($this->findKeyword(2));
-
         $this->assertTrue($this->topToolbarButtonExists('searchReplace'), 'Search and replace icon should be enabled');
 
         $this->clickTopToolbarButton('searchReplace');

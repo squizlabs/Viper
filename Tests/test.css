@@ -6,9 +6,9 @@ body {
 }
 
 #content {
-    width: 900px;
+    width: 1000px;
     height: 650px;
-    margin: 90px 0 0 150px;
+    margin: 90px 0 0 90px;
     overflow: auto;
 }
 
@@ -132,8 +132,25 @@ h1,h2,h3,h4,h5,h6 {
     border: none;
 }
 
-#content.googlechrome td, #content.googlechrome th {
-    padding: 2px 2px;
+#content.googlechrome td {
+    padding: 5px 4px;
+}
+
+#content.googlechrome th {
+    padding: 0 10px;
+}
+
+/*#content.googlechrome td ul,
+#content.googlechrome td ol {
+    white-space: nowrap;
+}*/
+
+#content.googlechrome th p {
+    margin: 0;
+}
+
+#content.googlechrome table {
+    white-space: nowrap;
 }
 
 #content.firefox td {

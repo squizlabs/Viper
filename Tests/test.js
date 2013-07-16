@@ -34,7 +34,7 @@ function initJSPoller()
 
     viperTest.stopPolling = false;
 
-    var seconds  = 0.7;
+    var seconds  = 0.5;
     var interval = null;
     interval = setInterval(function() {
         if (viperTest.stopPolling === true) {
