@@ -85,7 +85,7 @@ class Viper_Tests_ViperAccessibilityPlugin_AccessibilityPluginUnitTest extends A
     public function testCaretPositionInAccessibilityAuditor()
     {
         $this->useTest(2);
-        
+
         $this->click($this->findKeyword(1));
         $this->clickTopToolbarButton('accessAudit');
 
@@ -96,6 +96,8 @@ class Viper_Tests_ViperAccessibilityPlugin_AccessibilityPluginUnitTest extends A
         // Click error.
         $warningIcon = $this->findImage('HTMLCS-report-error', '.HTMLCS-issue-type.HTMLCS-error');
         $this->click($warningIcon);
+
+        sleep(1);
 
         // Click alt field.
         $this->clickField('Alt');
