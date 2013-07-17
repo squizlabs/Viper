@@ -378,6 +378,16 @@ ViperKeyboardEditorPlugin.prototype = {
 
                 return false;
             } else if (blockParent === this.viper.getViperElement() && !defaultTagName) {
+                if (startNode.nodeType === dfx.TEXT_NODE
+                    && startNode.data.length > (range.startOffset + 1)
+                    && startNode.data.charCodeAt(range.startOffset) === 32
+                ) {
+                    startNode.data = startNode.data.substring(0, range.startOffset) + String.fromCharCode(160) +  startNode.data.substring(range.startOffset + 1);
+                    range.setStart(startNode, range.startOffset);
+                    range.collapse(true);
+                    ViperSelection.addRange(range);
+                }
+
                 var br = document.createElement('br');
                 this.viper.insertNodeAtCaret(br);
 
@@ -573,6 +583,19 @@ ViperKeyboardEditorPlugin.prototype = {
                     ViperSelection.addRange(range);
                     return false;
                 }
+            } else if (range.collapsed === true
+                && startNode.nodeType === dfx.TEXT_NODE
+                && startNode.data.length > (range.startOffset + 1)
+                && startNode.data.charCodeAt(range.startOffset) === 32
+            ) {
+                // If this is a textnode, range is collapsed and the next
+                // character is a space then replace it with a non breaking
+                // space char to keep it at the beginning of the new container
+                // that will be created.
+                startNode.data = startNode.data.substring(0, range.startOffset) + String.fromCharCode(160) +  startNode.data.substring(range.startOffset + 1);
+                range.setStart(startNode, range.startOffset);
+                range.collapse(true);
+                ViperSelection.addRange(range);
             }//end if
 
             setTimeout(function() {
