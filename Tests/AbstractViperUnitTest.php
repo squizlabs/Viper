@@ -2205,9 +2205,38 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      */
     protected function findKeyword($keyword)
     {
-        return $this->find($this->_getKeywordImage($keyword), NULL, $this->getData('textSimmilarity'));
+        $loc = NULL;
+        try {
+            $loc = $this->find($this->_getKeywordImage($keyword), NULL, $this->getData('textSimmilarity'));
+        } catch (Exception $e) {
+            // Try searching for it using JS.
+            $loc = $this->getStringLocation($this->getKeyword($keyword));
+            if (is_array($loc) === FALSE) {
+                throw new Exception('Failed to find keyword: '.$this->getKeyword($keyword));
+            }
+
+
+            $loc = $this->getRegionOnPage($loc);
+        }
+
+        return $loc;
 
     }//end findKeyword()
+
+
+    /**
+     * Returns the location of the given string.
+     *
+     * @param string $string String to search for.
+     *
+     * @return mixed
+     */
+    protected function getStringLocation($string)
+    {
+        $loc = $this->execJS('gStringLoc("'.$string.'")');
+        return $loc;
+
+    }//end getStringLocation()
 
 
     /**

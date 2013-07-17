@@ -54,7 +54,13 @@ function initJSPoller()
                 val   = val.replace('__asynchronous__', '');
             }
 
-            dfx.setHtml(dfx.getId('msg'), 'Exec: ' + val);
+            if (val.indexOf('gStringLoc') !== false) {
+                // Need to remove the searched string so that its not found in
+                // the msg div.
+                dfx.setHtml(dfx.getId('msg'), 'Exec: ' + val.replace(/"(.+)"/, ''));
+            } else {
+                dfx.setHtml(dfx.getId('msg'), 'Exec: ' + val);
+            }
 
             if (val === 'cw()' || val === 'cw();') {
                 viperTest.stopPolling = true;
@@ -326,6 +332,23 @@ function gActBubble()
 
     var rect = viperTest.getWindow().dfx.getBoundingRectangle(activeBubble.element);
     return rect;
+
+}
+
+function gStringLoc(str)
+{
+    var loc = null;
+    if (window.find(str, true, false, true, true, true) === true) {
+        loc = viper.getCurrentRange().rangeObj.getBoundingClientRect();
+        loc = {
+            x1: loc.left,
+            x2: loc.right,
+            y1: loc.top,
+            y2: loc.bottom
+        };
+    }
+
+    return loc;
 
 }
 

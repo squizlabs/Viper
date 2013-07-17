@@ -83,7 +83,6 @@ class Viper_Tests_ViperListPlugin_UnorderedListInTableUnitTest extends AbstractV
      */
     public function testIndentingAndOutdentingAListItemUsingShortcuts()
     {
-
         $this->click($this->findKeyword(3));
         $this->keyDown('Key.TAB');
         $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU %1% FoX Mnu</td><td><strong><em>%2%</em></strong> sapien vel aliquet</td><td><ul><li>item1<ul><li>%3%</li></ul></li></ul></td></tr><tr><td><h3>blah</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
