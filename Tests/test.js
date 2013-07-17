@@ -270,6 +270,10 @@ function gBRec(selector, index)
 function gVITPArrow()
 {
     var toolbar = viperTest.getWindow().viper.getPluginManager().getPlugin('ViperInlineToolbarPlugin').getToolbar().element;
+    if (dfx.hasClass(toolbar, 'Viper-visible') === false) {
+        return null;
+    }
+
     var rect    = viperTest.getWindow().dfx.getBoundingRectangle(toolbar);
 
     var arrow = {

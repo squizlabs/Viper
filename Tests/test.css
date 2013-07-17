@@ -140,11 +140,6 @@ h1,h2,h3,h4,h5,h6 {
     padding: 0 10px;
 }
 
-/*#content.googlechrome td ul,
-#content.googlechrome td ol {
-    white-space: nowrap;
-}*/
-
 #content.googlechrome th p {
     margin: 0;
 }
@@ -178,4 +173,11 @@ h1,h2,h3,h4,h5,h6 {
 /* Paste Div target */
 .ViperCopyPastePlugin-pasteWrapper {
     background: url("./Core/Images/window-target2.png") no-repeat;
+}
+
+/* Disable inline toolbar animation */
+.ViperITP {
+    transition-duration: 0s !important;
+    -ms-transition-duration: 0s !important;
+    -webkit-transition-duration: 0s !important;
 }

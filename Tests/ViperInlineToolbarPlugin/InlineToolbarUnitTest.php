@@ -119,8 +119,8 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarUnitTest extends Abstrac
         $bottomLeft = $this->getBottomLeft($para);
         $wordY      = $this->getY($bottomLeft);
 
-        // Add 400 (width of the Paragraph divided by 2).
-        $wordX = ($this->getX($bottomLeft) + 400);
+        // Add 500 (width of the Paragraph divided by 2).
+        $wordX = ($this->getX($bottomLeft) + 500);
         $this->_assertPosition($wordX, $wordY);
 
     }//end testParagraphSelectionPosition()
@@ -193,7 +193,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarUnitTest extends Abstrac
      */
     public function testPositionOrientationRight()
     {
-        $this->resizeWindow(1100, 800);
+        $this->resizeWindow(1150, 800);
 
         $word = $this->findKeyword(5);
         $this->selectKeyword(5);

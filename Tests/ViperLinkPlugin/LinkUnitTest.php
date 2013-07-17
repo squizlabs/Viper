@@ -23,14 +23,14 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->type('http://www.squizlabs.com');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com">%1%</a> link test %2%</p>');
+        $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com">%1%</a> link test test %2%</p>');
 
         $this->selectKeyword(2);
         $this->clickInlineToolbarButton('link');
         $this->type('http://www.squizlabs.com');
         $this->clickInlineToolbarButton('Update Changes', NULL, TRUE);
 
-        $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com">%1%</a> link test <a href="http://www.squizlabs.com">%2%</a></p>');
+        $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com">%1%</a> link test test <a href="http://www.squizlabs.com">%2%</a></p>');
 
     }//end testCreateLinkPlainTextUsingInlineToolbar()
 
@@ -50,24 +50,24 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->type('http://www.squizlabs.com');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>Link test <a href="http://www.squizlabs.com">%1% <strong>%2%</strong></a></p>');
+        $this->assertHTMLMatch('<p>link test test <a href="http://www.squizlabs.com">%1% <strong>%2%</strong></a></p>');
 
         $this->click($this->findKeyword(2));
         $this->clickInlineToolbarButton('linkRemove');
 
-        $this->assertHTMLMatch('<p>Link test %1% <strong>%2%</strong></p>');
+        $this->assertHTMLMatch('<p>link test test %1% <strong>%2%</strong></p>');
 
         $this->selectKeyword(1, 2);
         $this->clickInlineToolbarButton('link');
         $this->type('http://www.squizlabs.com');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>Link test <a href="http://www.squizlabs.com">%1% <strong>%2%</strong></a></p>');
+        $this->assertHTMLMatch('<p>link test test <a href="http://www.squizlabs.com">%1% <strong>%2%</strong></a></p>');
 
         $this->click($this->findKeyword(2));
         $this->clickInlineToolbarButton('linkRemove');
 
-        $this->assertHTMLMatch('<p>Link test %1% <strong>%2%</strong></p>');
+        $this->assertHTMLMatch('<p>link test test %1% <strong>%2%</strong></p>');
 
         $this->selectKeyword(1, 2);
         $this->assertTrue($this->inlineToolbarButtonExists('link'), 'Toolbar button icon is not correct');
@@ -92,14 +92,14 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->type('http://www.squizlabs.com');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com">%1%</a> link test %2%</p>');
+        $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com">%1%</a> link test test %2%</p>');
 
         $this->selectKeyword(2);
         $this->clickTopToolbarButton('link');
         $this->type('http://www.squizlabs.com');
         $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
 
-        $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com">%1%</a> link test <a href="http://www.squizlabs.com">%2%</a></p>');
+        $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com">%1%</a> link test test <a href="http://www.squizlabs.com">%2%</a></p>');
 
     }//end testCreateLinkUsingTopToolbar()
 
@@ -120,7 +120,7 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->keyDown('Key.TAB');
         $this->type('Squiz Labs');
         $this->keyDown('Key.ENTER');
-        $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com" title="Squiz Labs">%1%</a> link test %2%</p>');
+        $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com" title="Squiz Labs">%1%</a> link test test %2%</p>');
 
         // Test top toolbar
         $this->selectKeyword(2);
@@ -129,7 +129,7 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->keyDown('Key.TAB');
         $this->type('Squiz Labs');
         $this->keyDown('Key.ENTER');
-        $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com" title="Squiz Labs">%1%</a> link test <a href="http://www.squizlabs.com" title="Squiz Labs">%2%</a></p>');
+        $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com" title="Squiz Labs">%1%</a> link test test <a href="http://www.squizlabs.com" title="Squiz Labs">%2%</a></p>');
 
     }//end testCreateLinkPlainTextWithTitle()
 
@@ -153,7 +153,7 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         sleep(1);
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com" title="Squiz Labs" target="_blank">%1%</a> link test %2%</p>');
+        $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com" title="Squiz Labs" target="_blank">%1%</a> link test test %2%</p>');
 
         $this->selectKeyword(2);
         $this->clickInlineToolbarButton('link');
@@ -164,7 +164,7 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         sleep(1);
         $this->clickInlineToolbarButton('Update Changes', NULL, TRUE);
 
-        $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com" title="Squiz Labs" target="_blank">%1%</a> link test <a href="http://www.squizlabs.com" title="Squiz Labs" target="_blank">%2%</a></p>');
+        $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com" title="Squiz Labs" target="_blank">%1%</a> link test test <a href="http://www.squizlabs.com" title="Squiz Labs" target="_blank">%2%</a></p>');
 
     }//end testCreateLinkThatOpensInNewWindowUsingInlineToolbar()
 
@@ -188,7 +188,7 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         sleep(1);
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com" title="Squiz Labs" target="_blank">%1%</a> link test %2%</p>');
+        $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com" title="Squiz Labs" target="_blank">%1%</a> link test test %2%</p>');
 
         $this->selectKeyword(2);
         $this->clickTopToolbarButton('link');
@@ -199,7 +199,7 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         sleep(1);
         $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
 
-        $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com" title="Squiz Labs" target="_blank">%1%</a> link test <a href="http://www.squizlabs.com" title="Squiz Labs" target="_blank">%2%</a></p>');
+        $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com" title="Squiz Labs" target="_blank">%1%</a> link test test <a href="http://www.squizlabs.com" title="Squiz Labs" target="_blank">%2%</a></p>');
 
     }//end testCreateLinkThatOpensInNewWindowUsingTopToolbar()
 
@@ -225,7 +225,7 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->assertTrue($this->inlineToolbarButtonExists('link', 'active'), 'Link icon should be active in the inline toolbar');
         $this->assertTrue($this->inlineToolbarButtonExists('linkRemove'), 'Remove link icon should be available.');
 
-        $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com" title="Squiz Labs">%1%</a> link test %2%</p>');
+        $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com" title="Squiz Labs">%1%</a> link test test %2%</p>');
 
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Link</li>', $lineage);
@@ -257,7 +257,7 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
 
         $this->clickInlineToolbarButton('linkRemove');
         $this->click($this->findKeyword(1));
-        $this->assertHTMLMatch('<p>%1% link test %2%</p>');
+        $this->assertHTMLMatch('<p>%1% link test test %2%</p>');
 
     }//end testSelectPartialLinkShowsToolbar()
 
@@ -283,7 +283,7 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
 
         $this->clickInlineToolbarButton('linkRemove');
         $this->click($this->findKeyword(1));
-        $this->assertHTMLMatch('<p>%1% link test %2%</p>');
+        $this->assertHTMLMatch('<p>%1% link test test %2%</p>');
 
     }//end testClickingInLinkShowToolbar()
 
@@ -299,7 +299,7 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
 
         $this->selectKeyword(2);
         $this->keyDown('Key.CMD + b');
-        $this->assertHTMLMatch('<p>%1% link test <strong>%2%</strong></p>');
+        $this->assertHTMLMatch('<p>%1% link test test <strong>%2%</strong></p>');
 
         $this->clickInlineToolbarButton('link');
         $this->type('http://www.squizlabs.com');
@@ -307,7 +307,7 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->type('Squiz Labs');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>%1% link test <strong><a href="http://www.squizlabs.com" title="Squiz Labs">%2%</a></strong></p>');
+        $this->assertHTMLMatch('<p>%1% link test test <strong><a href="http://www.squizlabs.com" title="Squiz Labs">%2%</a></strong></p>');
 
     }//end testSelectNodeThenCreateLink()
 
@@ -331,7 +331,7 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->type('Squiz Labs');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>Link test <a href="http://www.squizlabs.com" title="Squiz Labs">%1% <strong>%2%</strong></a></p>');
+        $this->assertHTMLMatch('<p>link test test <a href="http://www.squizlabs.com" title="Squiz Labs">%1% <strong>%2%</strong></a></p>');
 
     }//end testSelectMultiParentLink()
 
@@ -362,7 +362,7 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->clickInlineToolbarButton('linkRemove');
         $this->assertFalse($this->inlineToolbarButtonExists('linkRemove'), 'Remove link icon should not be available.');
         $this->assertTrue($this->inlineToolbarButtonExists('link'), 'Link icon should be available.');
-        $this->assertHTMLMatch('<p>%1% link test %2%</p>');
+        $this->assertHTMLMatch('<p>%1% link test test %2%</p>');
 
         // Mail to link
         $this->selectKeyword(1);
@@ -377,7 +377,7 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->clickInlineToolbarButton('linkRemove');
         $this->assertFalse($this->inlineToolbarButtonExists('linkRemove'), 'Remove link icon should not be available.');
         $this->assertTrue($this->inlineToolbarButtonExists('link'), 'Link icon should be available.');
-        $this->assertHTMLMatch('<p>%1% link test %2%</p>');
+        $this->assertHTMLMatch('<p>%1% link test test %2%</p>');
 
     }//end testRemoveLinkWhenSelectingText()
 
@@ -402,7 +402,7 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->click($this->findKeyword(2));
         $this->clickInlineToolbarButton('linkRemove');
         $this->assertTrue($this->topToolbarButtonExists('link', 'disabled'), 'Link icon should be disabled.');
-        $this->assertHTMLMatch('<p>%1% link test %2%</p>');
+        $this->assertHTMLMatch('<p>%1% link test test %2%</p>');
 
         // Mail to link
         $this->selectKeyword(1);
@@ -415,7 +415,7 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->click($this->findKeyword(1));
         $this->clickInlineToolbarButton('linkRemove');
         $this->assertTrue($this->topToolbarButtonExists('link', 'disabled'), 'Link icon should be disabled.');
-        $this->assertHTMLMatch('<p>%1% link test %2%</p>');
+        $this->assertHTMLMatch('<p>%1% link test test %2%</p>');
 
     }//end testRemoveLinkWhenClickingInLink()
 
@@ -443,7 +443,7 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->clickInlineToolbarButton('linkRemove');
         $this->assertTrue($this->inlineToolbarButtonExists('link', 'selected'), 'Link icon should still be selected in the inline toolbar');
         $this->assertFalse($this->inlineToolbarButtonExists('linkRemove'), 'Remove link icon should not be available in the inline toolbar');
-        $this->assertHTMLMatch('<p>%1% link test %2%</p>');
+        $this->assertHTMLMatch('<p>%1% link test test %2%</p>');
 
     }//end testRemoveLinkWhenLinkFieldsAreOpen()
 
@@ -472,7 +472,7 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->type('http://www.google.com');
         $this->clickInlineToolbarButton('Update Changes', NULL, TRUE);
 
-        $this->assertHTMLMatch('<p><a href="http://www.google.com">%1%</a> link test %2%</p>');
+        $this->assertHTMLMatch('<p><a href="http://www.google.com">%1%</a> link test test %2%</p>');
 
     }//end testEditingTheURLFieldUsingTheInlineToolbar()
 
@@ -500,7 +500,7 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->clearFieldValue('URL');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com">%1%</a> link test %2%</p>');
+        $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com">%1%</a> link test test %2%</p>');
 
     }//end testTryingToDeleteLinkUsingLinkIcon()
 
@@ -528,7 +528,7 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->type('http://www.google.com');
         $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
 
-        $this->assertHTMLMatch('<p><a href="http://www.google.com">%1%</a> link test %2%</p>');
+        $this->assertHTMLMatch('<p><a href="http://www.google.com">%1%</a> link test test %2%</p>');
 
     }//end testEditingTheURLFieldUsingTheTopToolbar()
 
@@ -558,7 +558,7 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->type('title');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com" title="title">%1%</a> link test %2%</p>');
+        $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com" title="title">%1%</a> link test test %2%</p>');
 
         $this->click($this->findKeyword(2));
         $this->selectKeyword(1);
@@ -568,7 +568,7 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->type('abc');
         $this->clickInlineToolbarButton('Update Changes', NULL, TRUE);
 
-        $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com" title="titleabc">%1%</a> link test %2%</p>');
+        $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com" title="titleabc">%1%</a> link test test %2%</p>');
 
     }//end testAddingAndEditingTheTitleUsingInlineToolbar()
 
@@ -595,7 +595,7 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->type('title');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com" title="title">%1%</a> link test %2%</p>');
+        $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com" title="title">%1%</a> link test test %2%</p>');
 
         $this->click($this->findKeyword(2));
         $this->selectKeyword(1);
@@ -604,7 +604,7 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->type('abc');
         $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
 
-        $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com" title="titleabc">%1%</a> link test %2%</p>');
+        $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com" title="titleabc">%1%</a> link test test %2%</p>');
 
     }//end testAddingAndEditingTheTitleUsingTopToolbar()
 
@@ -657,7 +657,7 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->selectKeyword(2);
         $this->keyDown('Key.CMD + b');
         $this->keyDown('Key.CMD + i');
-        $this->assertHTMLMatch('<p>Link test %1% <em>%2%</em></p>');
+        $this->assertHTMLMatch('<p>link test test %1% <em>%2%</em></p>');
 
         $this->clickInlineToolbarButton('link');
         $this->type('http://www.squizlabs.com');
@@ -707,7 +707,7 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->type('http://www.squizlabs.com');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>%1% link test <a href="http://www.squizlabs.com" class="class" id="anchor">%2%</a></p>');
+        $this->assertHTMLMatch('<p>%1% link test test <a href="http://www.squizlabs.com" class="class" id="anchor">%2%</a></p>');
 
         $this->assertTrue($this->inlineToolbarButtonExists('link', 'selected'), 'Link icon should be active in the inline toolbar.');
         $this->assertTrue($this->topToolbarButtonExists('link', 'active'), 'Link icon should be active in the top toolbar.');
@@ -744,13 +744,13 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->type('http://www.squizlabs.com');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com" class="class" id="anchor">%1%</a> link test %2%</p>');
+        $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com" class="class" id="anchor">%1%</a> link test test %2%</p>');
 
         $this->click($this->findKeyword(2));
         $this->click($this->findKeyword(1));
         $this->clickInlineToolbarButton('linkRemove');
 
-        $this->assertHTMLMatch('<p>%1% link test %2%</p>');
+        $this->assertHTMLMatch('<p>%1% link test test %2%</p>');
 
     }//end testClassAndIdAreRemovedWhenLinkIsRemoved()
 
@@ -781,7 +781,7 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->type('http://www.squizlabs.com');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com" class="class" id="anchor">%1%</a> link test %2%</p>');
+        $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com" class="class" id="anchor">%1%</a> link test test %2%</p>');
 
         $this->assertTrue($this->inlineToolbarButtonExists('link', 'selected'), 'Link icon should be active in the inline toolbar.');
         $this->assertTrue($this->topToolbarButtonExists('link', 'active'), 'Link icon should be active in the top toolbar.');
@@ -842,12 +842,12 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->selectKeyword(1);
         $this->clickInlineToolbarButton('linkRemove');
         $this->clickTopToolbarButton('historyUndo');
-        $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com">%1%</a> link test %2%</p>');
+        $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com">%1%</a> link test test %2%</p>');
 
         $this->click($this->findKeyword(1));
         $this->clickInlineToolbarButton('linkRemove');
         $this->clickTopToolbarButton('historyUndo');
-        $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com">%1%</a> link test %2%</p>');
+        $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com">%1%</a> link test test %2%</p>');
 
     }//end testClickingUndoPutLinkBackCorrectlyAfterItHasBeenRemoved()
 
@@ -908,7 +908,7 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->type('http://www.google.com');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com">%1%</a> link test <a href="http://www.google.com">%2%</a></p>');
+        $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com">%1%</a> link test test <a href="http://www.google.com">%2%</a></p>');
 
         // Remove links in paragraph using inline toolbar
         $this->selectKeyword(1);
@@ -917,19 +917,19 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->assertTrue($this->topToolbarButtonExists('linkRemove'), 'Remove link icon should appear in the inline toolbar.');
 
         $this->clickInlineToolbarButton('linkRemove');
-        $this->assertEquals($this->replaceKeywords('%1% link test %2%'), $this->getSelectedText(), 'Paragraph is not selected.');
-        $this->assertHTMLMatch('<p>%1% link test %2%</p>');
+        $this->assertEquals($this->replaceKeywords('%1% link test test %2%'), $this->getSelectedText(), 'Paragraph is not selected.');
+        $this->assertHTMLMatch('<p>%1% link test test %2%</p>');
 
         // Undo so we can use the remove link in the top toolbar
         $this->clickTopToolbarButton('historyUndo');
-        $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com">%1%</a> link test <a href="http://www.google.com">%2%</a></p>');
+        $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com">%1%</a> link test test <a href="http://www.google.com">%2%</a></p>');
 
         // Remove links in parargraph using top toolbar
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
         $this->clickTopToolbarButton('linkRemove');
-        $this->assertEquals($this->replaceKeywords('%1% link test %2%'), $this->getSelectedText(), 'Paragraph is not selected.');
-        $this->assertHTMLMatch('<p>%1% link test %2%</p>');
+        $this->assertEquals($this->replaceKeywords('%1% link test test %2%'), $this->getSelectedText(), 'Paragraph is not selected.');
+        $this->assertHTMLMatch('<p>%1% link test test %2%</p>');
 
     }//end testCreateLinkPlainTextUsingInlineToolbar()
 
@@ -973,13 +973,13 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
 
         $this->type('labs@squiz.com.au');
         $this->keyDown('Key.ENTER');
-        $this->assertHTMLMatch('<p><a href="mailto:labs@squiz.com.au">%1%</a> link test %2%</p>');
+        $this->assertHTMLMatch('<p><a href="mailto:labs@squiz.com.au">%1%</a> link test test %2%</p>');
 
         $this->selectKeyword(2);
         $this->clickInlineToolbarButton('link');
         $this->type('mailto: labs@squiz.com.au');
         $this->clickInlineToolbarButton('Update Changes', NULL, TRUE);
-        $this->assertHTMLMatch('<p><a href="mailto:labs@squiz.com.au">%1%</a> link test <a href="mailto:labs@squiz.com.au">%2%</a></p>');
+        $this->assertHTMLMatch('<p><a href="mailto:labs@squiz.com.au">%1%</a> link test test <a href="mailto:labs@squiz.com.au">%2%</a></p>');
 
     }//end testCreatingAMailToLinkUsingTheInlineToolbar()
 
@@ -1003,7 +1003,7 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->keyDown('Key.TAB');
         $this->type('Subject');
         $this->keyDown('Key.ENTER');
-        $this->assertHTMLMatch('<p><a href="mailto:labs@squiz.com.au?subject=Subject">%1%</a> link test %2%</p>');
+        $this->assertHTMLMatch('<p><a href="mailto:labs@squiz.com.au?subject=Subject">%1%</a> link test test %2%</p>');
 
         $this->selectKeyword(2);
         $this->clickInlineToolbarButton('link');
@@ -1011,7 +1011,7 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->keyDown('Key.TAB');
         $this->type('Subject');
         $this->clickInlineToolbarButton('Update Changes', NULL, TRUE);
-        $this->assertHTMLMatch('<p><a href="mailto:labs@squiz.com.au?subject=Subject">%1%</a> link test <a href="mailto:labs@squiz.com.au?subject=Subject">%2%</a></p>');
+        $this->assertHTMLMatch('<p><a href="mailto:labs@squiz.com.au?subject=Subject">%1%</a> link test test <a href="mailto:labs@squiz.com.au?subject=Subject">%2%</a></p>');
 
     }//end testCreatingAMailToLinkWithSubjectUsingTheInlineToolbar()
 
@@ -1033,7 +1033,7 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->type('Subject');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p><a href="mailto:labs@squiz.com.au?subject=Subject">%1%</a> link test %2%</p>');
+        $this->assertHTMLMatch('<p><a href="mailto:labs@squiz.com.au?subject=Subject">%1%</a> link test test %2%</p>');
 
         $this->selectKeyword(2);
         $this->clickInlineToolbarButton('link');
@@ -1043,7 +1043,7 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->type('Test');
         $this->clickInlineToolbarButton('Update Changes', NULL, TRUE);
 
-        $this->assertHTMLMatch('<p><a href="mailto:labs@squiz.com.au?subject=Subject">%1%</a> link test <a href="mailto:labs@squiz.com.au?subject=Test">%2%</a></p>');
+        $this->assertHTMLMatch('<p><a href="mailto:labs@squiz.com.au?subject=Subject">%1%</a> link test test <a href="mailto:labs@squiz.com.au?subject=Test">%2%</a></p>');
 
     }//end testEnteringMailToLinkPressEnterThenEnterSubject()
 
@@ -1064,14 +1064,14 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
 
         $this->type('labs@squiz.com.au');
         $this->keyDown('Key.ENTER');
-        $this->assertHTMLMatch('<p><a href="mailto:labs@squiz.com.au">%1%</a> link test %2%</p>');
+        $this->assertHTMLMatch('<p><a href="mailto:labs@squiz.com.au">%1%</a> link test test %2%</p>');
         $this->clickTopToolbarButton('link', 'selected');
 
         $this->selectKeyword(2);
         $this->clickTopToolbarButton('link');
         $this->type('mailto: labs@squiz.com.au');
         $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
-        $this->assertHTMLMatch('<p><a href="mailto:labs@squiz.com.au">%1%</a> link test <a href="mailto:labs@squiz.com.au">%2%</a></p>');
+        $this->assertHTMLMatch('<p><a href="mailto:labs@squiz.com.au">%1%</a> link test test <a href="mailto:labs@squiz.com.au">%2%</a></p>');
 
     }//end testCreatingAMailToLinkUsingTheTopToolbar()
 
@@ -1094,7 +1094,7 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->keyDown('Key.TAB');
         $this->type('Subject');
         $this->keyDown('Key.ENTER');
-        $this->assertHTMLMatch('<p><a href="mailto:labs@squiz.com.au?subject=Subject">%1%</a> link test %2%</p>');
+        $this->assertHTMLMatch('<p><a href="mailto:labs@squiz.com.au?subject=Subject">%1%</a> link test test %2%</p>');
 
         $this->clickTopToolbarButton('link', 'selected');
 
@@ -1104,7 +1104,7 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->keyDown('Key.TAB');
         $this->type('Subject');
         $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
-        $this->assertHTMLMatch('<p><a href="mailto:labs@squiz.com.au?subject=Subject">%1%</a> link test <a href="mailto:labs@squiz.com.au?subject=Subject">%2%</a></p>');
+        $this->assertHTMLMatch('<p><a href="mailto:labs@squiz.com.au?subject=Subject">%1%</a> link test test <a href="mailto:labs@squiz.com.au?subject=Subject">%2%</a></p>');
 
     }//end testCreatingAMailToLinkWithSubjectUsingTheTopToolbar()
 
@@ -1129,7 +1129,7 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->type('Subject');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p><a href="mailto:labs@squiz.com.au?subject=Subject">%1%</a> link test %2%</p>');
+        $this->assertHTMLMatch('<p><a href="mailto:labs@squiz.com.au?subject=Subject">%1%</a> link test test %2%</p>');
 
         $this->selectKeyword(2);
         $this->clickInlineToolbarButton('link');
@@ -1226,13 +1226,13 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->clickInlineToolbarButton('link');
         $this->type('http://www.squizlabs.com');
         $this->keyDown('Key.ENTER');
-        $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com">%1%</a> link test %2%</p>');
+        $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com">%1%</a> link test test %2%</p>');
 
         $this->clickTopToolbarButton('historyUndo');
-        $this->assertHTMLMatch('<p>%1% link test %2%</p>');
+        $this->assertHTMLMatch('<p>%1% link test test %2%</p>');
 
         $this->clickTopToolbarButton('historyRedo');
-        $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com">%1%</a> link test %2%</p>');
+        $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com">%1%</a> link test test %2%</p>');
 
     }//end testUndoAndRedoForLinks()
 
@@ -1252,7 +1252,7 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
 
         // Press space after the link text
         $this->type('Some text http://www.squizlabs.com some text www.example.com ');
-        $this->assertHTMLMatch('<p>%1% link test %2%</p><p>Some text <a href="http://www.squizlabs.com">http://www.squizlabs.com</a> some text <a href="http://www.example.com">www.example.com</a></p>');
+        $this->assertHTMLMatch('<p>%1% link test test %2%</p><p>Some text <a href="http://www.squizlabs.com">http://www.squizlabs.com</a> some text <a href="http://www.example.com">www.example.com</a></p>');
 
         // Press enter after the link text
         $this->keyDown('Key.ENTER');
@@ -1260,7 +1260,7 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->keyDown('Key.ENTER');
         $this->type('Fourth link www.example.com');
         $this->keyDown('Key.ENTER');
-        $this->assertHTMLMatch('<p>%1% link test %2%</p><p>Some text <a href="http://www.squizlabs.com">http://www.squizlabs.com</a> some text <a href="http://www.example.com">www.example.com</a></p><p>Third link <a href="http://www.squizlabs.com">http://www.squizlabs.com</a></p><p>Fourth link <a href="http://www.example.com">www.example.com</a></p>');
+        $this->assertHTMLMatch('<p>%1% link test test %2%</p><p>Some text <a href="http://www.squizlabs.com">http://www.squizlabs.com</a> some text <a href="http://www.example.com">www.example.com</a></p><p>Third link <a href="http://www.squizlabs.com">http://www.squizlabs.com</a></p><p>Fourth link <a href="http://www.example.com">www.example.com</a></p>');
 
     }//end testAutoCreatingLinks()
 
