@@ -281,6 +281,7 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
 
             // Turn off calibration incase of reconnection to Sikuli server.
             putenv('VIPER_TEST_CALIBRATE=FALSE');
+
             if ($calibrate === 'TRUE' || file_exists($this->getBrowserImagePath()) === FALSE) {
                 try {
                     $this->_calibrate();
@@ -451,6 +452,11 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
      */
     private function _calibrate()
     {
+        // Clean up old files.
+        $baseDir = dirname(__FILE__);
+        $imgPath = $baseDir.'/tmp/Images/'.$this->getBrowserid();
+        exec('rm '.$imgPath.'/*.png');
+
         $this->_calibrateKeywords();
         $this->_calibrateIcons();
 
@@ -623,10 +629,9 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         $vitpImage = $this->capture($region);
         copy($vitpImage, $imgPath.'/vitp_arrow.png');
 
-        sleep(2);
-
         // Left arrow.
         $vitp      = $this->execJS('getVITP("left")');
+        sleep(1);
         $vitp['x'] = $this->getPageXRelativeToScreen($vitp['x']);
         $vitp['y'] = $this->getPageYRelativeToScreen($vitp['y']);
 
@@ -634,10 +639,9 @@ abstract class AbstractViperUnitTest extends AbstractSikuliUnitTest
         $vitpImage = $this->capture($region);
         copy($vitpImage, $imgPath.'/vitp_arrowLeft.png');
 
-        sleep(2);
-
         // Right arrow.
         $vitp      = $this->execJS('getVITP("right")');
+        sleep(1);
         $vitp['x'] = $this->getPageXRelativeToScreen($vitp['x']);
         $vitp['y'] = $this->getPageYRelativeToScreen($vitp['y']);
 
