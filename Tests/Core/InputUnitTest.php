@@ -452,7 +452,7 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
 
         $this->assertHTMLMatch('<p>XAX</p><p>testEIB MOZ</p>');
 
-    }//end testDeleteParagraphAndType()
+    }//end testJoinParagraphsAndSplit()
 
 
     /**
