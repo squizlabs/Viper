@@ -72,7 +72,12 @@ class Viper_Tests_ViperAccessibilityPlugin_AccessibilityPluginUnitTest extends A
         sleep(2);
 
         // Check to make sure the source view appears.
-        $this->assertTrue($this->buttonExists('Apply Changes', NULL, TRUE), 'Source view did not appear');
+        try {
+            $image = $this->findImage('closePopupIcon', '.Viper-popup-closeIcon');
+        } catch (Exception $e) {
+            $this->fail('Source editor did not appear on the screen');
+        }
+        //$this->assertTrue($this->buttonExists('Apply Changes', NULL, TRUE), 'Source view did not appear');
 
     }//end testViewingSourceFromAccessibilityAuditor()
 
