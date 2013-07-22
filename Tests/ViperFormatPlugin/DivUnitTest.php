@@ -410,9 +410,8 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractFormatsUnitTest
      */
     public function testCreatingNewContentWithADivTag()
     {
-        $this->selectKeyword(4);
-        $this->selectInlineToolbarLineageItem(0);
-        $this->keyDown('Key.RIGHT');
+        $this->moveToKeyword(4);
+
         $this->keyDown('Key.ENTER');
         $this->type('New %6%');
         $this->selectKeyword(6);
@@ -424,7 +423,7 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractFormatsUnitTest
         $this->keyDown('Key.ENTER');
         $this->type('More new content');
 
-        $this->assertHTMLMatch('<div>%1% xtn dolor</div><p>spacer for the tests</p><div>sit amet <strong>%2%</strong></div><p>%3% is a paragraph to change to a %4%</p><div>New %6% on the page</div><p>More new content</p><div>%5% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div>');
+        $this->assertHTMLMatch('<div>%1% xtn dolor</div><p>spacer for the tests</p><div>sit amet <strong>%2%</strong></div><p>%3% is a paragraph to change to a %4%</p><div>New %6% on the page<br />More new content</div><div>%5% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div>');
 
     }//end testCreatingNewContentWithADivTag()
 
@@ -689,6 +688,7 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractFormatsUnitTest
         $this->assertHTMLMatch('<div>%1% xtn dolor</div><p>spacer for the tests</p><div>sit amet <strong>%2%</strong></div><blockquote><p>%3% is a paragraph to change to a %4%</p></blockquote><div>%5% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div>');
 
         $this->moveToKeyword(3, 'left');
+        $this->keyDown('Key.BACKSPACE');
         $this->keyDown('Key.BACKSPACE');
         
         $this->assertHTMLMatch('<div>%1% xtn dolor</div><p>spacer for the tests</p><div>sit amet <strong>%2%</strong>%3% is a paragraph to change to a %4%</div><div>%5% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div>');
