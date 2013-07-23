@@ -1147,16 +1147,18 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
     {
         $this->useTest(3);
 
-        $this->click($this->findKeyword(1));
-        $this->keyDown('Key.CMD + a');
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(0);
+        
         $this->keyDown('Key.CMD + c');
+        sleep(2);
         $this->clickTopToolbarButton('link');
         $this->keyDown('Key.CMD + v');
         $this->keyDown('Key.TAB');
         $this->type('Subject');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p><a href="mailto:%1%@squiz.com.au?subject=Subject">%1%@squiz.com.au</a></p>');
+        $this->assertHTMLMatch('<p>test</p><p><a href="mailto:%1%@squiz.com.au?subject=Subject">%1%@squiz.com.au</a></p>');
 
     }//end testCopyAndPasteMailtoLink()
 
