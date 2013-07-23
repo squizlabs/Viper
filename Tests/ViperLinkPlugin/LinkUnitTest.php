@@ -50,24 +50,24 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->type('http://www.squizlabs.com');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>link test test <a href="http://www.squizlabs.com">%1% <strong>%2%</strong></a></p>');
+        $this->assertHTMLMatch('<p>Link test <a href="http://www.squizlabs.com">%1% <strong>%2%</strong></a></p>');
 
         $this->click($this->findKeyword(2));
         $this->clickInlineToolbarButton('linkRemove');
 
-        $this->assertHTMLMatch('<p>link test test %1% <strong>%2%</strong></p>');
+        $this->assertHTMLMatch('<p>Link test %1% <strong>%2%</strong></p>');
 
         $this->selectKeyword(1, 2);
         $this->clickInlineToolbarButton('link');
         $this->type('http://www.squizlabs.com');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>link test test <a href="http://www.squizlabs.com">%1% <strong>%2%</strong></a></p>');
+        $this->assertHTMLMatch('<p>Link test <a href="http://www.squizlabs.com">%1% <strong>%2%</strong></a></p>');
 
         $this->click($this->findKeyword(2));
         $this->clickInlineToolbarButton('linkRemove');
 
-        $this->assertHTMLMatch('<p>link test test %1% <strong>%2%</strong></p>');
+        $this->assertHTMLMatch('<p>Link test %1% <strong>%2%</strong></p>');
 
         $this->selectKeyword(1, 2);
         $this->assertTrue($this->inlineToolbarButtonExists('link'), 'Toolbar button icon is not correct');
@@ -331,7 +331,7 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->type('Squiz Labs');
         $this->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>link test test <a href="http://www.squizlabs.com" title="Squiz Labs">%1% <strong>%2%</strong></a></p>');
+        $this->assertHTMLMatch('<p>Link test <a href="http://www.squizlabs.com" title="Squiz Labs">%1% <strong>%2%</strong></a></p>');
 
     }//end testSelectMultiParentLink()
 
@@ -657,7 +657,7 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->selectKeyword(2);
         $this->keyDown('Key.CMD + b');
         $this->keyDown('Key.CMD + i');
-        $this->assertHTMLMatch('<p>link test test %1% <em>%2%</em></p>');
+        $this->assertHTMLMatch('<p>Link test %1% <em>%2%</em></p>');
 
         $this->clickInlineToolbarButton('link');
         $this->type('http://www.squizlabs.com');
