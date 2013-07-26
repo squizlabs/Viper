@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Viper in Turkish\n"
 "POT-Creation-Date: 2013-07-26 11:19+1000\n"
-"PO-Revision-Date: 2013-07-26 11:19+1000\n"
+"PO-Revision-Date: 2013-07-26 15:24+1000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -18,7 +18,7 @@ msgid "Locate Element"
 msgstr ""
 
 msgid "Show in Source View"
-msgstr ""
+msgstr "Kaynak'ta Göster"
 
 msgid "Refresh Issue"
 msgstr ""
@@ -27,28 +27,28 @@ msgid "Accessibility Auditor"
 msgstr ""
 
 msgid "Re-checking issue"
-msgstr ""
+msgstr "Denetimi tekrarla"
 
 msgid "This issue has not been resolved"
 msgstr ""
 
 msgid "OK"
-msgstr ""
+msgstr "Tamam"
 
 msgid "Insert Character"
-msgstr ""
+msgstr "Karakter Ekle"
 
 msgid "Symbols"
-msgstr ""
+msgstr "Semboller"
 
 msgid "Latin"
-msgstr ""
+msgstr "Latin"
 
 msgid "Mathematics"
-msgstr ""
+msgstr "Matematik"
 
 msgid "Currency"
-msgstr ""
+msgstr "Döviz"
 
 msgid ""
 "Paste your content into the box below and it will be automatically inserted "
@@ -74,19 +74,19 @@ msgid "Strikethrough"
 msgstr "Üstü Çizgili"
 
 msgid "Left Justify"
-msgstr ""
+msgstr "Sola Dayali"
 
 msgid "Center Justify"
-msgstr ""
+msgstr "Ortalanmış"
 
 msgid "Right Justify"
-msgstr ""
+msgstr "Sağa Dayalı"
 
 msgid "Block Justify"
-msgstr ""
+msgstr "İki Kenara Yaslanmış"
 
 msgid "Horizontal Rule"
-msgstr ""
+msgstr "Yatay Çizgi"
 
 msgid "Justification"
 msgstr ""
@@ -95,85 +95,85 @@ msgid "Toggle Justification"
 msgstr ""
 
 msgid "Heading 1"
-msgstr ""
+msgstr "Başlık 1"
 
 msgid "Heading 2"
-msgstr ""
+msgstr "Başlık 2"
 
 msgid "Heading 3"
-msgstr ""
+msgstr "Başlık 3"
 
 msgid "Heading 4"
-msgstr ""
+msgstr "Başlık 4"
 
 msgid "Heading 5"
-msgstr ""
+msgstr "Başlık 5"
 
 msgid "Heading 6"
-msgstr ""
+msgstr "Başlık 6"
 
 msgid "Paragraph"
-msgstr ""
+msgstr "Paragraf"
 
 msgid "Preformatted"
 msgstr ""
 
 msgid "Address"
-msgstr ""
+msgstr "Adres"
 
 msgid "Quote"
 msgstr ""
 
 msgid "ID"
-msgstr ""
+msgstr "Kimlik"
 
 msgid "Class"
-msgstr ""
+msgstr "Sinif"
 
 msgid "Toggle Formats"
-msgstr ""
+msgstr "Biçimler"
 
 msgid "Toggle Headings"
-msgstr ""
+msgstr "Başlıklar"
 
 msgid "Anchor name (ID)"
-msgstr ""
+msgstr "Çapa Adı"
 
 msgid "Class name"
-msgstr ""
+msgstr "Biçim Sınıfı İsmi"
 
 msgid "Formats"
-msgstr ""
+msgstr "Biçimler"
 
 msgid "Headings"
-msgstr ""
+msgstr "Başlıklar"
 
 msgid "Anchor ID"
-msgstr ""
+msgstr "Çapa Kimliği"
 
 msgid "Undo"
-msgstr ""
+msgstr "Geri Al"
 
 msgid "Redo"
-msgstr ""
+msgstr "Tekrarla"
 
 msgid "Insert Image"
-msgstr ""
+msgstr "Resim"
 
 msgid "Toggle Image Options"
-msgstr ""
+msgstr "Resim Ayarları"
 
 msgid "URL"
-msgstr ""
+msgstr "URL"
 
 msgid "Image is decorative"
-msgstr ""
+msgstr "Dekoratif resim"
 
 msgid "Alt"
-msgstr ""
+msgstr "Alternatif Yazı"
 
 msgid "Title"
-msgstr ""
+msgstr "Başlik"
 
 msgid ""
 "The selected image will be moved to the next location you click. To cancel "
@@ -181,49 +181,49 @@ msgid ""
 msgstr ""
 
 msgid "Move Image"
-msgstr ""
+msgstr "Resimi Yerleştir"
 
 msgid "Loading preview"
-msgstr ""
+msgstr "Ön izleme yükleniyor"
 
 msgid "Failed to load image"
-msgstr ""
+msgstr "Resim yüklenemedi"
 
 msgid "Underline"
-msgstr ""
+msgstr "Altı Çizgili"
 
 msgid "Item"
-msgstr ""
+msgstr "Liste öğesi"
 
 msgid "List"
-msgstr ""
+msgstr "Liste"
 
 msgid "Cell"
-msgstr ""
+msgstr "Hücre"
 
 msgid "Row"
-msgstr ""
+msgstr "Satır"
 
 msgid "Header"
-msgstr ""
+msgstr "Başlık"
 
 msgid "Link"
-msgstr ""
+msgstr "Bağlanti"
 
 msgid "Image"
-msgstr ""
+msgstr "Resim"
 
 msgid "Acronym"
-msgstr ""
+msgstr "Kısaltma"
 
 msgid "Abbreviation"
 msgstr ""
 
 msgid "Language"
-msgstr ""
+msgstr "Dil"
 
 msgid "Language Tools"
-msgstr ""
+msgstr "Dil Araçları"
 
 msgid "Toggle Language Tools"
 msgstr ""
@@ -238,49 +238,49 @@ msgid "Toggle Language Options"
 msgstr ""
 
 msgid "Subject"
-msgstr ""
+msgstr "Konu"
 
 msgid "Open a New Window"
-msgstr ""
+msgstr "Yeni Pencere"
 
 msgid "Toggle Link Options"
-msgstr ""
+msgstr "Bağlantı Ayarları"
 
 msgid "Remove Link"
-msgstr ""
+msgstr "Bağlantıyı Kaldır"
 
 msgid "Insert Link"
-msgstr ""
+msgstr "Bağlantı Ekle"
 
 msgid "Make Unordered List"
-msgstr ""
+msgstr "Sırasız Liste "
 
 msgid "Make Ordered List"
-msgstr ""
+msgstr "Sıralı Liste"
 
 msgid "Indent List"
-msgstr ""
+msgstr "Girintiyi Arttır"
 
 msgid "Outdent List"
-msgstr ""
+msgstr "Girintiyi Azalt"
 
 msgid "Search"
-msgstr ""
+msgstr "Bul"
 
 msgid "Replace"
-msgstr ""
+msgstr "Değiştir"
 
 msgid "Replace All"
-msgstr ""
+msgstr "Hepsini Değiştir"
 
 msgid "Find Next"
-msgstr ""
+msgstr "Sonraki"
 
 msgid "Search & Replace"
-msgstr ""
+msgstr "Bul ve Değiştir"
 
 msgid "Toggle Source View"
-msgstr ""
+msgstr "Kaynak Görünümü"
 
 msgid "Discard"
 msgstr ""
@@ -289,19 +289,19 @@ msgid "Discard Changes"
 msgstr ""
 
 msgid "Apply Changes"
-msgstr ""
+msgstr "Değişiklikleri Uygula"
 
 msgid "Would you like to apply your changes?"
-msgstr ""
+msgstr "Değişiklikleri uygulamak istermisiniz?"
 
 msgid "Open In new window"
-msgstr ""
+msgstr "Yeni pencerede aç"
 
 msgid "Source Editor"
-msgstr ""
+msgstr "Kaynak Görünümü"
 
 msgid "Viper Source View"
-msgstr ""
+msgstr "Viper Kaynak Görünümü"
 
 msgid ""
 "Source code changes will be reflected in your edit preview window in real "
@@ -309,103 +309,103 @@ msgid ""
 msgstr ""
 
 msgid "Revert Changes"
-msgstr ""
+msgstr "Değişiklikleri Geri Al"
 
 msgid "Close Source View"
-msgstr ""
+msgstr "Kaynak Görünümünü Kapat"
 
 msgid "Close Window"
-msgstr ""
+msgstr "Pencereyi Kapat"
 
 msgid "Insert Table"
-msgstr ""
+msgstr "Tablo Ekle"
 
 msgid "Show Table tools"
-msgstr ""
+msgstr "Tablo Ayarlarını Göster"
 
 msgid "Show Row tools"
-msgstr ""
+msgstr "Satır Ayarlarını Göster"
 
 msgid "Show Column tools"
-msgstr ""
+msgstr "Sütun Ayarlarını Göster"
 
 msgid "Show Cell tools"
-msgstr ""
+msgstr "Hücre Ayarlarını Göster"
 
 msgid "Table"
-msgstr ""
+msgstr "Tablo"
 
 msgid "Column"
-msgstr ""
+msgstr "Hücre"
 
 msgid "Toggle Settings"
 msgstr ""
 
 msgid "Heading"
-msgstr ""
+msgstr "Başlık"
 
 msgid "Split Vertically"
-msgstr ""
+msgstr "Dikey Böl"
 
 msgid "Split Horizontally"
-msgstr ""
+msgstr "Yatay Böl"
 
 msgid "Merge Up"
-msgstr ""
+msgstr "Yukarı ile Birleştir"
 
 msgid "Merge Down"
-msgstr ""
+msgstr "Aşağıdaki ile Birleştir"
 
 msgid "Merge Left"
-msgstr ""
+msgstr "Soldaki ile Birleştir"
 
 msgid "Merge Right"
-msgstr ""
+msgstr "Sağdaki ile Birleştir"
 
 msgid "Toggle Merge/Split Options"
-msgstr ""
+msgstr "Birleştirme/Ayırma Ayarları"
 
 msgid "Width"
-msgstr ""
+msgstr "Genişlik"
 
 msgid "Insert Column Before"
-msgstr ""
+msgstr "Öne Sütun Ekle"
 
 msgid "Insert Column After"
-msgstr ""
+msgstr "Sonra Sütun Ekle"
 
 msgid "Move Left"
-msgstr ""
+msgstr "Soldaki ile Değiştir"
 
 msgid "Move Right"
-msgstr ""
+msgstr "Sağdaki ile Değiştir"
 
 msgid "Remove Column"
-msgstr ""
+msgstr "Sütunu Sil"
 
 msgid "Insert Row Before"
-msgstr ""
+msgstr "Yukarı Satır Ekle"
 
 msgid "Insert Row After"
-msgstr ""
+msgstr "Aşağı Satır Ekle"
 
 msgid "Move Up"
-msgstr ""
+msgstr "Yukarıdaki ile Değiştir"
 
 msgid "Move Down"
-msgstr ""
+msgstr "Aşağidaki ile Değiştir"
 
 msgid "Remove Row"
-msgstr ""
+msgstr "Satırı Sil"
 
 msgid "Summary"
-msgstr ""
+msgstr "Özet"
 
 msgid "Use Caption"
-msgstr ""
+msgstr "Başlık Kullan"
 
 msgid "Remove Table"
-msgstr ""
+msgstr "Tabloyu Sil"
 
 msgid "None"
 msgstr ""
