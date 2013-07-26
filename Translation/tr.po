@@ -1,0 +1,435 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Viper in Turkish\n"
+"POT-Creation-Date: 2013-07-26 11:19+1000\n"
+"PO-Revision-Date: 2013-07-26 11:19+1000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.7\n"
+"X-Poedit-KeywordsList: _\n"
+"X-Poedit-Basepath: ../\n"
+"X-Poedit-SearchPath-0: ./Plugins\n"
+"X-Poedit-SearchPath-1: ./Lib\n"
+
+msgid "Locate Element"
+msgstr ""
+
+msgid "Show in Source View"
+msgstr ""
+
+msgid "Refresh Issue"
+msgstr ""
+
+msgid "Accessibility Auditor"
+msgstr ""
+
+msgid "Re-checking issue"
+msgstr ""
+
+msgid "This issue has not been resolved"
+msgstr ""
+
+msgid "OK"
+msgstr ""
+
+msgid "Insert Character"
+msgstr ""
+
+msgid "Symbols"
+msgstr ""
+
+msgid "Latin"
+msgstr ""
+
+msgid "Mathematics"
+msgstr ""
+
+msgid "Currency"
+msgstr ""
+
+msgid ""
+"Paste your content into the box below and it will be automatically inserted "
+"and cleaned up."
+msgstr ""
+
+msgid "Bold"
+msgstr "Kalın"
+
+msgid "Italic"
+msgstr "İtalik"
+
+msgid "Remove Format"
+msgstr "Biçimi Kaldır"
+
+msgid "Subscript"
+msgstr "Alt Simge"
+
+msgid "Superscript"
+msgstr "Üst Simge"
+
+msgid "Strikethrough"
+msgstr "Üstü Çizgili"
+
+msgid "Left Justify"
+msgstr ""
+
+msgid "Center Justify"
+msgstr ""
+
+msgid "Right Justify"
+msgstr ""
+
+msgid "Block Justify"
+msgstr ""
+
+msgid "Horizontal Rule"
+msgstr ""
+
+msgid "Justification"
+msgstr ""
+
+msgid "Toggle Justification"
+msgstr ""
+
+msgid "Heading 1"
+msgstr ""
+
+msgid "Heading 2"
+msgstr ""
+
+msgid "Heading 3"
+msgstr ""
+
+msgid "Heading 4"
+msgstr ""
+
+msgid "Heading 5"
+msgstr ""
+
+msgid "Heading 6"
+msgstr ""
+
+msgid "Paragraph"
+msgstr ""
+
+msgid "Preformatted"
+msgstr ""
+
+msgid "Address"
+msgstr ""
+
+msgid "Quote"
+msgstr ""
+
+msgid "ID"
+msgstr ""
+
+msgid "Class"
+msgstr ""
+
+msgid "Toggle Formats"
+msgstr ""
+
+msgid "Toggle Headings"
+msgstr ""
+
+msgid "Anchor name (ID)"
+msgstr ""
+
+msgid "Class name"
+msgstr ""
+
+msgid "Formats"
+msgstr ""
+
+msgid "Headings"
+msgstr ""
+
+msgid "Anchor ID"
+msgstr ""
+
+msgid "Undo"
+msgstr ""
+
+msgid "Redo"
+msgstr ""
+
+msgid "Insert Image"
+msgstr ""
+
+msgid "Toggle Image Options"
+msgstr ""
+
+msgid "URL"
+msgstr ""
+
+msgid "Image is decorative"
+msgstr ""
+
+msgid "Alt"
+msgstr ""
+
+msgid "Title"
+msgstr ""
+
+msgid ""
+"The selected image will be moved to the next location you click. To cancel "
+"press the move icon again or ESC"
+msgstr ""
+
+msgid "Move Image"
+msgstr ""
+
+msgid "Loading preview"
+msgstr ""
+
+msgid "Failed to load image"
+msgstr ""
+
+msgid "Underline"
+msgstr ""
+
+msgid "Item"
+msgstr ""
+
+msgid "List"
+msgstr ""
+
+msgid "Cell"
+msgstr ""
+
+msgid "Row"
+msgstr ""
+
+msgid "Header"
+msgstr ""
+
+msgid "Link"
+msgstr ""
+
+msgid "Image"
+msgstr ""
+
+msgid "Acronym"
+msgstr ""
+
+msgid "Abbreviation"
+msgstr ""
+
+msgid "Language"
+msgstr ""
+
+msgid "Language Tools"
+msgstr ""
+
+msgid "Toggle Language Tools"
+msgstr ""
+
+msgid "Toggle Acronym Options"
+msgstr ""
+
+msgid "Toggle Abbreviation Options"
+msgstr ""
+
+msgid "Toggle Language Options"
+msgstr ""
+
+msgid "Subject"
+msgstr ""
+
+msgid "Open a New Window"
+msgstr ""
+
+msgid "Toggle Link Options"
+msgstr ""
+
+msgid "Remove Link"
+msgstr ""
+
+msgid "Insert Link"
+msgstr ""
+
+msgid "Make Unordered List"
+msgstr ""
+
+msgid "Make Ordered List"
+msgstr ""
+
+msgid "Indent List"
+msgstr ""
+
+msgid "Outdent List"
+msgstr ""
+
+msgid "Search"
+msgstr ""
+
+msgid "Replace"
+msgstr ""
+
+msgid "Replace All"
+msgstr ""
+
+msgid "Find Next"
+msgstr ""
+
+msgid "Search & Replace"
+msgstr ""
+
+msgid "Toggle Source View"
+msgstr ""
+
+msgid "Discard"
+msgstr ""
+
+msgid "Discard Changes"
+msgstr ""
+
+msgid "Apply Changes"
+msgstr ""
+
+msgid "Would you like to apply your changes?"
+msgstr ""
+
+msgid "Open In new window"
+msgstr ""
+
+msgid "Source Editor"
+msgstr ""
+
+msgid "Viper Source View"
+msgstr ""
+
+msgid ""
+"Source code changes will be reflected in your edit preview window in real "
+"time."
+msgstr ""
+
+msgid "Revert Changes"
+msgstr ""
+
+msgid "Close Source View"
+msgstr ""
+
+msgid "Close Window"
+msgstr ""
+
+msgid "Insert Table"
+msgstr ""
+
+msgid "Show Table tools"
+msgstr ""
+
+msgid "Show Row tools"
+msgstr ""
+
+msgid "Show Column tools"
+msgstr ""
+
+msgid "Show Cell tools"
+msgstr ""
+
+msgid "Table"
+msgstr ""
+
+msgid "Column"
+msgstr ""
+
+msgid "Toggle Settings"
+msgstr ""
+
+msgid "Heading"
+msgstr ""
+
+msgid "Split Vertically"
+msgstr ""
+
+msgid "Split Horizontally"
+msgstr ""
+
+msgid "Merge Up"
+msgstr ""
+
+msgid "Merge Down"
+msgstr ""
+
+msgid "Merge Left"
+msgstr ""
+
+msgid "Merge Right"
+msgstr ""
+
+msgid "Toggle Merge/Split Options"
+msgstr ""
+
+msgid "Width"
+msgstr ""
+
+msgid "Insert Column Before"
+msgstr ""
+
+msgid "Insert Column After"
+msgstr ""
+
+msgid "Move Left"
+msgstr ""
+
+msgid "Move Right"
+msgstr ""
+
+msgid "Remove Column"
+msgstr ""
+
+msgid "Insert Row Before"
+msgstr ""
+
+msgid "Insert Row After"
+msgstr ""
+
+msgid "Move Up"
+msgstr ""
+
+msgid "Move Down"
+msgstr ""
+
+msgid "Remove Row"
+msgstr ""
+
+msgid "Summary"
+msgstr ""
+
+msgid "Use Caption"
+msgstr ""
+
+msgid "Remove Table"
+msgstr ""
+
+msgid "None"
+msgstr ""
+
+msgid "Left"
+msgstr ""
+
+msgid "Top"
+msgstr ""
+
+msgid "Both"
+msgstr ""
+
+msgid "Headers"
+msgstr ""
+
+msgid "Size"
+msgstr ""
+
+msgid "Viper by Squiz"
+msgstr ""
+
+msgid "Update Changes"
+msgstr ""
+
+msgid "Not available"
+msgstr ""
