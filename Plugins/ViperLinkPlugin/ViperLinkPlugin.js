@@ -390,10 +390,10 @@ ViperLinkPlugin.prototype = {
     {
         var self      = this;
         var tools     = this.viper.ViperTools;
-        var url       = tools.createTextbox(idPrefix + ':url', 'URL', '', null, true);
-        var title     = tools.createTextbox(idPrefix + ':title', 'Title', '');
-        var subject   = tools.createTextbox(idPrefix + ':subject', 'Subject', '');
-        var newWindow = tools.createCheckbox(idPrefix + ':newWindow', 'Open a New Window');
+        var url       = tools.createTextbox(idPrefix + ':url', _('URL'), '', null, true);
+        var title     = tools.createTextbox(idPrefix + ':title', _('Title'), '');
+        var subject   = tools.createTextbox(idPrefix + ':subject', _('Subject'), '');
+        var newWindow = tools.createCheckbox(idPrefix + ':newWindow', _('Open a New Window'));
 
         var urlRow = tools.createRow(idPrefix + ':urlRow', 'Viper-urlRow');
         urlRow.appendChild(url);
@@ -468,8 +468,8 @@ ViperLinkPlugin.prototype = {
             }
         });
 
-        var insertLinkBtn = this.viper.ViperTools.createButton('vitpInsertLink', '', 'Toggle Link Options', 'Viper-link');
-        var removeLinkBtn = this.viper.ViperTools.createButton('vitpRemoveLink', '', 'Remove Link', 'Viper-linkRemove', function() {
+        var insertLinkBtn = this.viper.ViperTools.createButton('vitpInsertLink', '', _('Toggle Link Options'), 'Viper-link');
+        var removeLinkBtn = this.viper.ViperTools.createButton('vitpRemoveLink', '', _('Remove Link'), 'Viper-linkRemove', function() {
             var range = self.viper.getViperRange();
             var link  = self.getLinkFromRange(range);
             if (!link) {
@@ -592,8 +592,8 @@ ViperLinkPlugin.prototype = {
         var disabled = true;
         var self     = this;
 
-        tools.createButton('insertLink', '', 'Toggle Link Options', 'Viper-link', null, disabled);
-        tools.createButton('removeLink', '', 'Remove Link', 'Viper-linkRemove', function() {
+        tools.createButton('insertLink', '', _('Toggle Link Options'), 'Viper-link', null, disabled);
+        tools.createButton('removeLink', '', _('Remove Link'), 'Viper-linkRemove', function() {
             if (self.selectionHasLinks() === true) {
                 self.removeLinks();
             } else {
@@ -607,7 +607,7 @@ ViperLinkPlugin.prototype = {
         toolbar.addButton(btnGroup);
 
         var main = document.createElement('div');
-        toolbar.createBubble('ViperLinkPlugin:vtp:link', 'Insert Link', main, null, function() {
+        toolbar.createBubble('ViperLinkPlugin:vtp:link', _('Insert Link'), main, null, function() {
             var range = self.viper.getViperRange();
             var node  = self.getLinkFromRange(range);
             if (node) {

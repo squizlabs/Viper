@@ -311,7 +311,7 @@ ViperTools.prototype = {
 
         var title = button.getAttribute('title');
         if (title) {
-            button.setAttribute('title', title.replace(' [Not available]', ''));
+            button.setAttribute('title', title.replace(' [' + _('Not available') + ']', ''));
         }
 
         dfx.removeClass(button, 'Viper-disabled');
@@ -329,8 +329,8 @@ ViperTools.prototype = {
         var button = buttonObj.element;
         var title  = button.getAttribute('title');
         if (title) {
-            title = title.replace(' [Not available]', '');
-            button.setAttribute('title', title + ' [Not available]');
+            title = title.replace(' [' + _('Not available') + ']', '');
+            button.setAttribute('title', title + ' [' + _('Not available') + ']');
         }
 
         dfx.addClass(button, 'Viper-disabled');

@@ -98,6 +98,15 @@ Viper.prototype = {
                     self._processOptions(options, callback);
                 });
                 return;
+            }
+
+            fn = '_' + fn;
+            if (dfx.isFn(this[fn]) === true) {
+                this[fn](options[op], function() {
+                    delete options[op];
+                    self._processOptions(options, callback);
+                });
+                return;
             } else {
                 this.setSetting(op, options[op]);
                 delete options[op];
@@ -125,6 +134,11 @@ Viper.prototype = {
     setSetting: function(setting, value)
     {
         this._settings[setting] = value;
+
+        var fn = 'set' + dfx.ucFirst(setting);
+        if (dfx.isFn(this[fn]) === true) {
+            this[fn].call(this, value);
+        }
 
     },
 
@@ -168,6 +182,39 @@ Viper.prototype = {
         }
 
         return 'p';
+
+    },
+
+    _setLanguage: function(lang, callback)
+    {
+        if (!lang) {
+            return;
+        }
+
+        var code = null;
+        var src  = null;
+        if (typeof(lang) === 'object') {
+            code = lang.code;
+            src  = lang.src;
+        } else {
+            code = lang;
+            src  = this.getViperPath().replace(/\/build$/, '') + '/build/Translation/' + code + '.js';
+        }
+
+        if (code === 'en') {
+            callback.call(this);
+            return;
+        }
+
+        if (ViperTranslation.isLoaded(code) === false && src) {
+            this.loadScript(src, function() {
+                ViperTranslation.setLanguage(code);
+                callback.call(this);
+            }, 2000);
+        } else {
+            ViperTranslation.setLanguage(code);
+            callback.call(this);
+        }
 
     },
 
@@ -374,12 +421,46 @@ Viper.prototype = {
                     // library, so we can extract the path and include the rest.
                     path = scripts[i].src.replace(/\/viper-combined\.js/,'');
                     break;
+                } else if (scripts[i].src.match(/\/viper\.js/)) {
+                    path = scripts[i].src.replace(/\/viper\.js/,'');
+                    break;
                 }
             }
         }
 
         return path;
 
+    },
+
+    loadScript: function(src, callback, timeout) {
+        var t = null;
+        if (timeout) {
+            t = setTimeout(callback, timeout);
+        }
+
+        var script    = document.createElement('script');
+        script.onload = function() {
+            clearTimeout(t);
+            script.onload = null;
+            script.onreadystatechange = null;
+            callback.call(this);
+        };
+
+        script.onreadystatechange = function() {
+            if (/^(complete|loaded)$/.test(this.readyState) === true) {
+                clearTimeout(t);
+                script.onreadystatechange = null;
+                script.onload();
+            }
+        }
+
+        script.src = src;
+
+        if (document.head) {
+            document.head.appendChild(script);
+        } else {
+            document.getElementsByTagName('head')[0].appendChild(script);
+        }
     },
 
     getEventNamespace: function()
@@ -733,7 +814,6 @@ Viper.prototype = {
                     paramTag.setAttribute('value', 'transparent');
                     dfx.insertBefore(embedTags[i], paramTag);
                     embedTags[i].setAttribute('wmode', 'transparent');
-                    console.info(1);
                 }
             }
         }//end if

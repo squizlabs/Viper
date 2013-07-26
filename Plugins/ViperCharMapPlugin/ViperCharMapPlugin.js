@@ -93,9 +93,9 @@ ViperCharMapPlugin.prototype = {
 
         var tools = this.viper.ViperTools;
 
-        var map = toolbar.createBubble('ViperCMP:bubble', 'Insert Character', subContent, null, null, null, 'VCMP-main');
+        var map = toolbar.createBubble('ViperCMP:bubble', _('Insert Character'), subContent, null, null, null, 'VCMP-main');
 
-        var toggle = tools.createButton('insertCharacter', '', 'Insert Character', 'Viper-charMap', null, true);
+        var toggle = tools.createButton('insertCharacter', '', _('Insert Character'), 'Viper-charMap', null, true);
         toolbar.setBubbleButton('ViperCMP:bubble', 'insertCharacter');
         toolbar.addButton(toggle);
 
@@ -216,22 +216,22 @@ ViperCharMapPlugin.prototype = {
         var symbols = chars;
 
         categories.push({
-            name: 'Symbols',
+            name: _('Symbols'),
             chars: symbols
         });
 
         categories.push({
-            name: 'Latin',
+            name: _('Latin'),
             chars: latin
         });
 
         categories.push({
-            name: 'Mathematics',
+            name: _('Mathematics'),
             chars: maths
         });
 
         categories.push({
-            name: 'Currency',
+            name: _('Currency'),
             chars: currency
         });
 

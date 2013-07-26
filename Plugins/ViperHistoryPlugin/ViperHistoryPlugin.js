@@ -29,10 +29,10 @@ function ViperHistoryPlugin(viper)
             };
 
             var btnGroup = tools.createButtonGroup('ViperHistoryPlugin:buttons');
-            tools.createButton('undo', '', 'Undo', 'Viper-historyUndo', function() {
+            tools.createButton('undo', '', _('Undo'), 'Viper-historyUndo', function() {
                 return self.handleUndo();
             });
-            tools.createButton('redo', '', 'Redo', 'Viper-historyRedo', function() {
+            tools.createButton('redo', '', _('Redo'), 'Viper-historyRedo', function() {
                 return self.handleRedo();
             });
             tools.addButtonToGroup('undo', 'ViperHistoryPlugin:buttons');

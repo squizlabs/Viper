@@ -60,7 +60,7 @@ ViperSearchReplacePlugin.prototype = {
         var content = document.createElement('div');
 
         // Search text box.
-        var search = tools.createTextbox('ViperSearchPlugin:searchInput', 'Search', '', function(value) {
+        var search = tools.createTextbox('ViperSearchPlugin:searchInput', _('Search'), '', function(value) {
             var found = self.find(value);
             if (found !== true) {
                 self._matchCount = 0;
@@ -78,7 +78,7 @@ ViperSearchReplacePlugin.prototype = {
         content.appendChild(search);
 
         // Replace text box.
-        var replace = tools.createTextbox('ViperSearchPlugin:replaceInput', 'Replace', '', function(value) {
+        var replace = tools.createTextbox('ViperSearchPlugin:replaceInput', _('Replace'), '', function(value) {
             var search = tools.getItem('ViperSearchPlugin:searchInput').getValue();
             self.getNumberOfMatches(search);
             self.find(search, false, true);
@@ -87,7 +87,7 @@ ViperSearchReplacePlugin.prototype = {
         });
         content.appendChild(replace);
 
-        var replaceAllBtn = tools.createButton('ViperSearchPlugin:replaceAll', 'Replace All', 'Replace All', 'Viper-replaceAll', function() {
+        var replaceAllBtn = tools.createButton('ViperSearchPlugin:replaceAll', _('Replace All'), _('Replace All'), 'Viper-replaceAll', function() {
             var replaceCount = 0;
             var fromStart    = true;
             while (self.find(tools.getItem('ViperSearchPlugin:searchInput').getValue(), false, fromStart) === true) {
@@ -100,7 +100,7 @@ ViperSearchReplacePlugin.prototype = {
             self._updateButtonStates();
             self.viper.fireNodesChanged();
         }, true);
-        var replaceBtn = tools.createButton('ViperSearchPlugin:replace', 'Replace', 'Replace', 'Viper-replaceText', function() {
+        var replaceBtn = tools.createButton('ViperSearchPlugin:replace', _('Replace'), _('Replace'), 'Viper-replaceText', function() {
             self.replace(tools.getItem('ViperSearchPlugin:replaceInput').getValue());
             self._updateButtonStates();
             self.viper.fireNodesChanged();
@@ -108,7 +108,7 @@ ViperSearchReplacePlugin.prototype = {
         content.appendChild(replaceAllBtn);
         content.appendChild(replaceBtn);
 
-        var findNext = tools.createButton('ViperSearchPlugin:findNext', 'Find Next', 'Find Next', '', function() {
+        var findNext = tools.createButton('ViperSearchPlugin:findNext', _('Find Next'), _('Find Next'), '', function() {
             // Find again.
             var found = self.find(tools.getItem('ViperSearchPlugin:searchInput').getValue());
             if (found !== true) {
@@ -128,11 +128,11 @@ ViperSearchReplacePlugin.prototype = {
         content.appendChild(findNext);
 
         // Create the bubble.
-        var searchTools = toolbar.createBubble('ViperSearchPlugin:bubble', 'Search & Replace', content, null, function() {
+        var searchTools = toolbar.createBubble('ViperSearchPlugin:bubble', _('Search & Replace'), content, null, function() {
             self._matchCount = 0;
             self._updateButtonStates(false);
         });
-        var searchBtn   = tools.createButton('searchReplace', '', 'Search & Replace', 'Viper-searchReplace', null, true);
+        var searchBtn   = tools.createButton('searchReplace', '', _('Search & Replace'), 'Viper-searchReplace', null, true);
         toolbar.addButton(searchBtn);
         toolbar.setBubbleButton('ViperSearchPlugin:bubble', 'searchReplace');
 

@@ -213,52 +213,52 @@ ViperInlineToolbarPlugin.prototype = {
     {
         switch (tagName) {
             case 'strong':
-                tagName = 'Bold';
+                tagName = _('Bold');
             break;
 
             case 'u':
-                tagName = 'Underline';
+                tagName = _('Underline');
             break;
 
             case 'em':
             case 'i':
-                tagName = 'Italic';
+                tagName = _('Italic');
             break;
 
             case 'li':
-                tagName = 'Item';
+                tagName = _('Item');
             break;
 
             case 'ul':
-                tagName = 'List';
+                tagName = _('List');
             break;
 
             case 'ol':
-                tagName = 'List';
+                tagName = _('List');
             break;
 
             case 'td':
-                tagName = 'Cell';
+                tagName = _('Cell');
             break;
 
             case 'tr':
-                tagName = 'Row';
+                tagName = _('Row');
             break;
 
             case 'th':
-                tagName = 'Header';
+                tagName = _('Header');
             break;
 
             case 'a':
-                tagName = 'Link';
+                tagName = _('Link');
             break;
 
             case 'blockquote':
-                tagName = 'Quote';
+                tagName = _('Quote');
             break;
 
             case 'img':
-                tagName = 'Image';
+                tagName = _('Image');
             break;
 
             default:
@@ -384,7 +384,7 @@ ViperInlineToolbarPlugin.prototype = {
         // Add the original user selection to the lineage.
         var parent = document.createElement('li');
         dfx.addClass(parent, 'ViperITP-lineageItem Viper-selected');
-        dfx.setHtml(parent, 'Selection');
+        dfx.setHtml(parent, _('Selection'));
         linElems.push(parent);
         this._lineage.appendChild(parent);
 

@@ -139,11 +139,11 @@ ViperAccessibilityPlugin.prototype = {
 
             // Create resolution tools.
             var tools = self.viper.ViperTools;
-            var locateBtn     = tools.createButton('VAP:locateElem', '', 'Locate Element', 'Viper-locate', function() {
+            var locateBtn     = tools.createButton('VAP:locateElem', '', _('Locate Element'), 'Viper-locate', function() {
                 HTMLCSAuditor.pointToElement(issue.element);
             });
             resolutionHeader.appendChild(locateBtn);
-            var sourceViewBtn = tools.createButton('VAP:showInSource', '', 'Show in Source View', 'Viper-sourceView', function() {
+            var sourceViewBtn = tools.createButton('VAP:showInSource', '', _('Show in Source View'), 'Viper-sourceView', function() {
                 var tmpText = document.createTextNode('__STH__');
                 dfx.insertAfter(issue.element, tmpText);
                 var sourceViewPlugin = self.viper.getPluginManager().getPlugin('ViperSourceViewPlugin');
@@ -165,7 +165,7 @@ ViperAccessibilityPlugin.prototype = {
             });
             resolutionHeader.appendChild(sourceViewBtn);
 
-            var refreshIssueBtn = tools.createButton('VAP:toggleIssueDone', '', 'Refresh Issue', 'Viper-accessRerun', function() {
+            var refreshIssueBtn = tools.createButton('VAP:toggleIssueDone', '', _('Refresh Issue'), 'Viper-accessRerun', function() {
                 self.refreshIssue(id, issue, detailsElem, detailsElem);
             });
             resolutionHeader.appendChild(refreshIssueBtn);
@@ -222,7 +222,7 @@ ViperAccessibilityPlugin.prototype = {
 
         // Create the Toolbar Bubble for the plugin interface. The bubble's main content
         // is the tools section.
-        var aaTools = toolbar.createBubble('VAP:bubble', 'Accessibility Auditor - ' + this._standard, null, null, function() {
+        var aaTools = toolbar.createBubble('VAP:bubble', _('Accessibility Auditor') + ' - ' + this._standard, null, null, function() {
             self.getIssues();
         }, function() {
         }, 'ViperAccessibilityPlugin');
@@ -250,7 +250,7 @@ ViperAccessibilityPlugin.prototype = {
         dfx.addClass(issueRecheck, 'ViperAP-issueRecheck');
         issueDetails.appendChild(issueRecheck);
 
-        dfx.setHtml(issueRecheck, '<div class="Viper-issueChecking">Re-checking issue …</div>');
+        dfx.setHtml(issueRecheck, '<div class="Viper-issueChecking">' + _('Re-checking issue') + ' …</div>');
 
         var self     = this;
         this.runChecks(function() {
@@ -273,8 +273,8 @@ ViperAccessibilityPlugin.prototype = {
                 dfx.empty(issueRecheck);
                 var issueRemains = document.createElement('div');
                 dfx.addClass(issueRemains, 'Viper-issueRemains');
-                dfx.setHtml(issueRemains, '<span class="Viper-recheckMessage">This issue has not been resolved</span>');
-                issueRemains.appendChild(self.viper.ViperTools.createButton('VAP-issues:notResolvedBtn', 'OK', '', '', function() {
+                dfx.setHtml(issueRemains, '<span class="Viper-recheckMessage">' + _('This issue has not been resolved') + '</span>');
+                issueRemains.appendChild(self.viper.ViperTools.createButton('VAP-issues:notResolvedBtn', _('OK'), '', '', function() {
                     dfx.setHtml(issueRecheck, '');
                     dfx.removeClass(issueElem, 'Viper-rechecking');
                 }));
@@ -324,7 +324,7 @@ ViperAccessibilityPlugin.prototype = {
         // Updates the standard info from HTMLCSAuditor.
         this._standard = HTMLCSAuditor.getCurrentStandard();
 
-        this.viper.ViperTools.getItem('VAP:bubble').setTitle('Accessibility Auditor - ' + this._standard);
+        this.viper.ViperTools.getItem('VAP:bubble').setTitle(_('Accessibility Auditor') + ' - ' + this._standard);
     },
 
     _markAsDone: function(issueNum)
