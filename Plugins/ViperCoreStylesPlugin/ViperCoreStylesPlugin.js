@@ -54,6 +54,76 @@ ViperCoreStylesPlugin.prototype = {
         var tools = this.viper.ViperTools;
         var toolbarPlugin  = this.viper.ViperPluginManager.getPlugin('ViperToolbarPlugin');
         this.toolbarPlugin = toolbarPlugin;
+
+        var toolbarButtons = {};
+        var btnGroup = tools.createButtonGroup('ViperCoreStylesPlugin:vtp:stylesBtns');
+
+        // Main styles and remove format button groups.
+        toolbarButtons.styles   = ['strong', 'em', 'sub', 'sup', 'del'];
+        toolbarButtons.removeFormat = ['removeFormat'];
+        toolbarButtons.justify = ['left', 'center', 'right', 'block'];
+        toolbarButtons.other = ['hr'];
+
+        tools.createButton('bold', '', _('Bold'), 'Viper-bold', function() {
+            return self.handleStyle('strong');
+        }, true);
+        tools.createButton('italic', '', _('Italic'), 'Viper-italic', function() {
+            return self.handleStyle('em');
+        }, true);
+        tools.createButton('removeFormat', '', _('Remove Format'), 'Viper-removeFormat', function() {
+            self.removeFormat();
+        }, true);
+
+        tools.addButtonToGroup('bold', 'ViperCoreStylesPlugin:vtp:stylesBtns');
+        tools.addButtonToGroup('italic', 'ViperCoreStylesPlugin:vtp:stylesBtns');
+        tools.addButtonToGroup('removeFormat', 'ViperCoreStylesPlugin:vtp:stylesBtns');
+
+        // Extra style buttons, sub, sup and strike.
+        var btnGroup2 = tools.createButtonGroup('ViperCoreStylesPlugin:vtp:btnGroup2');
+        tools.createButton('subscript', '', _('Subscript'), 'Viper-subscript', function() {
+            self.handleStyle('sub');
+        }, true);
+        tools.createButton('superscript', '', _('Superscript'), 'Viper-superscript', function() {
+            self.handleStyle('sup');
+        }, true);
+        tools.createButton('strikethrough', '', _('Strikethrough'), 'Viper-strikethrough', function() {
+            self.handleStyle('del');
+        }, true);
+
+        tools.addButtonToGroup('subscript', 'ViperCoreStylesPlugin:vtp:btnGroup2');
+        tools.addButtonToGroup('superscript', 'ViperCoreStylesPlugin:vtp:btnGroup2');
+        tools.addButtonToGroup('strikethrough', 'ViperCoreStylesPlugin:vtp:btnGroup2');
+
+        // Justify buttons bubble.
+        var justifyBubbleContent = document.createElement('div');
+        var btnGroup3 = tools.createButtonGroup('ViperCoreStylesPlugin:vtp:btnGroup3');
+        tools.createButton('ViperCoreStylesPlugin:vtp:left', '', _('Left Justify'), 'Viper-justifyLeft', function() {
+            self.handleJustify('left');
+        });
+        tools.createButton('ViperCoreStylesPlugin:vtp:center', '', _('Center Justify'), 'Viper-justifyCenter', function() {
+            self.handleJustify('center');
+        });
+        tools.createButton('ViperCoreStylesPlugin:vtp:right', '', _('Right Justify'), 'Viper-justifyRight', function() {
+            self.handleJustify('right');
+        });
+        tools.createButton('ViperCoreStylesPlugin:vtp:block', '', _('Block Justify'), 'Viper-justifyBlock', function() {
+            self.handleJustify('justify');
+        });
+
+        tools.addButtonToGroup('ViperCoreStylesPlugin:vtp:left', 'ViperCoreStylesPlugin:vtp:btnGroup3');
+        tools.addButtonToGroup('ViperCoreStylesPlugin:vtp:center', 'ViperCoreStylesPlugin:vtp:btnGroup3');
+        tools.addButtonToGroup('ViperCoreStylesPlugin:vtp:right', 'ViperCoreStylesPlugin:vtp:btnGroup3');
+        tools.addButtonToGroup('ViperCoreStylesPlugin:vtp:block', 'ViperCoreStylesPlugin:vtp:btnGroup3');
+        justifyBubbleContent.appendChild(btnGroup3);
+
+        var hr = tools.createButton('hr', '', _('Horizontal Rule'), 'Viper-insertHr', function() {
+            self.handleHR();
+        }, true);
+
+        tools.getItem('bold').setButtonShortcut('CTRL+B');
+        tools.getItem('italic').setButtonShortcut('CTRL+I');
+
+        var callbackType = 'Viper:selectionChanged';
         if (toolbarPlugin) {
             var toolbarButtons = {};
             var btnGroup = tools.createButtonGroup('ViperCoreStylesPlugin:vtp:stylesBtns');
@@ -96,30 +166,8 @@ ViperCoreStylesPlugin.prototype = {
             tools.addButtonToGroup('strikethrough', 'ViperCoreStylesPlugin:vtp:btnGroup2');
             toolbarPlugin.addButton(btnGroup2);
 
-            // Justify buttons bubble.
-            var justifyBubbleContent = document.createElement('div');
-            var btnGroup3 = tools.createButtonGroup('ViperCoreStylesPlugin:vtp:btnGroup3');
-            tools.createButton('ViperCoreStylesPlugin:vtp:left', '', 'Left Justify', 'Viper-justifyLeft', function() {
-                self.handleJustify('left');
-            });
-            tools.createButton('ViperCoreStylesPlugin:vtp:center', '', 'Center Justify', 'Viper-justifyCenter', function() {
-                self.handleJustify('center');
-            });
-            tools.createButton('ViperCoreStylesPlugin:vtp:right', '', 'Right Justify', 'Viper-justifyRight', function() {
-                self.handleJustify('right');
-            });
-            tools.createButton('ViperCoreStylesPlugin:vtp:block', '', 'Block Justify', 'Viper-justifyBlock', function() {
-                self.handleJustify('justify');
-            });
-
-            tools.addButtonToGroup('ViperCoreStylesPlugin:vtp:left', 'ViperCoreStylesPlugin:vtp:btnGroup3');
-            tools.addButtonToGroup('ViperCoreStylesPlugin:vtp:center', 'ViperCoreStylesPlugin:vtp:btnGroup3');
-            tools.addButtonToGroup('ViperCoreStylesPlugin:vtp:right', 'ViperCoreStylesPlugin:vtp:btnGroup3');
-            tools.addButtonToGroup('ViperCoreStylesPlugin:vtp:block', 'ViperCoreStylesPlugin:vtp:btnGroup3');
-            justifyBubbleContent.appendChild(btnGroup3);
-
-            toolbarPlugin.createBubble('ViperCoreStylesPlugin:justifyBubble', 'Justification', null, justifyBubbleContent);
-            var justifyBubbleToggle = tools.createButton('justify', '', 'Toggle Justification', 'Viper-justifyLeft', null, true);
+            toolbarPlugin.createBubble('ViperCoreStylesPlugin:justifyBubble', _('Justification'), null, justifyBubbleContent);
+            var justifyBubbleToggle = tools.createButton('justify', '', _('Toggle Justification'), 'Viper-justifyLeft', null, true);
             toolbarPlugin.addButton(justifyBubbleToggle);
             toolbarPlugin.setBubbleButton('ViperCoreStylesPlugin:justifyBubble', 'justify');
 
@@ -172,11 +220,11 @@ ViperCoreStylesPlugin.prototype = {
         });
 
         var tagNames = {
-            em: 'Italic',
-            strong: 'Bold',
-            sub: 'Subscript',
-            sup: 'Superscript',
-            del: 'Strikethrough'
+            em: _('Italic'),
+            strong: _('Bold'),
+            sub: _('Subscript'),
+            sup: _('Superscript'),
+            del: _('Strikethrough')
         };
 
         this.viper.registerCallback('Viper:mouseDown', 'ViperCoreStylesPlugin', function(e) {
@@ -1272,10 +1320,10 @@ ViperCoreStylesPlugin.prototype = {
         var tools       = this.viper.ViperTools;
         var buttonGroup = tools.createButtonGroup('ViperCoreStylesPlugin:vitp:btnGroup');
 
-        tools.createButton('vitpBold', '', 'Bold', 'Viper-bold', function() {
+        tools.createButton('vitpBold', '', _('Bold'), 'Viper-bold', function() {
             return self.handleStyle('strong');
         });
-        tools.createButton('vitpItalic', '', 'Italic', 'Viper-italic', function() {
+        tools.createButton('vitpItalic', '', _('Italic'), 'Viper-italic', function() {
             return self.handleStyle('em');
         });
 

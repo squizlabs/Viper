@@ -140,7 +140,7 @@ ViperCopyPastePlugin.prototype = {
                     shortcut = 'CMD+V';
                 }
 
-                var pasteDesc = '<p class="ViperCopyPatePlugin-pasteDesc">Paste your content into the box below and it will be automatically inserted and cleaned up.</p>';
+                var pasteDesc = '<p class="ViperCopyPatePlugin-pasteDesc">' + _('Paste your content into the box below and it will be automatically inserted and cleaned up.') + '</p>';
                 pasteDesc    += '<p class="ViperCopyPatePlugin-pasteDesc">Avoid this step for future pastes using the keyboard shortcut <strong>' + shortcut + '</strong>.</p>';
 
                 dfx.setHtml(content, pasteDesc);
