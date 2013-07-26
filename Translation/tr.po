@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Viper in Turkish\n"
 "POT-Creation-Date: 2013-07-26 11:19+1000\n"
-"PO-Revision-Date: 2013-07-26 15:24+1000\n"
+"PO-Revision-Date: 2013-07-26 15:48+1000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -15,22 +15,22 @@ msgstr ""
 "X-Poedit-SearchPath-1: ./Lib\n"
 
 msgid "Locate Element"
-msgstr ""
+msgstr "Elemani Bul"
 
 msgid "Show in Source View"
 msgstr "Kaynak'ta Göster"
 
 msgid "Refresh Issue"
-msgstr ""
+msgstr "Sorunu Yenile"
 
 msgid "Accessibility Auditor"
-msgstr ""
+msgstr "Erişilebilirlik Denetçisi"
 
 msgid "Re-checking issue"
 msgstr "Denetimi tekrarla"
 
 msgid "This issue has not been resolved"
-msgstr ""
+msgstr "Bu sorun çözülmüş değil"
 
 msgid "OK"
 msgstr "Tamam"
@@ -54,6 +54,8 @@ msgid ""
 "Paste your content into the box below and it will be automatically inserted "
 "and cleaned up."
 msgstr ""
+"İçeriginizi aşağıdaki kutuya yapıştırın ve otomatik olarak temizlenip "
+"eklenicektir. "
 
 msgid "Bold"
 msgstr "Kalın"
@@ -89,10 +91,10 @@ msgid "Horizontal Rule"
 msgstr "Yatay Çizgi"
 
 msgid "Justification"
-msgstr ""
+msgstr "Hiza"
 
 msgid "Toggle Justification"
-msgstr ""
+msgstr "Hiza Ayarları"
 
 msgid "Heading 1"
 msgstr "Başlık 1"
@@ -116,13 +118,13 @@ msgid "Paragraph"
 msgstr "Paragraf"
 
 msgid "Preformatted"
-msgstr ""
+msgstr "Önceden Biçimlendirilmiş"
 
 msgid "Address"
 msgstr "Adres"
 
 msgid "Quote"
-msgstr ""
+msgstr "Alıntı"
 
 msgid "ID"
 msgstr "Kimlik"
@@ -179,6 +181,8 @@ msgid ""
 "The selected image will be moved to the next location you click. To cancel "
 "press the move icon again or ESC"
 msgstr ""
+"Seçilen resim birdahaki tıkladığınız konuma taşınacaktır. İptal etmek için "
+"tekrar konum değiştirme simgesine  veya ESC tuşuna basın."
 
 msgid "Move Image"
 msgstr "Resimi Yerleştir"
@@ -217,7 +221,7 @@ msgid "Acronym"
 msgstr "Kısaltma"
 
 msgid "Abbreviation"
-msgstr ""
+msgstr "Kısaltma"
 
 msgid "Language"
 msgstr "Dil"
@@ -226,16 +230,16 @@ msgid "Language Tools"
 msgstr "Dil Araçları"
 
 msgid "Toggle Language Tools"
-msgstr ""
+msgstr "Dil Araçları"
 
 msgid "Toggle Acronym Options"
-msgstr ""
+msgstr "Kisaltma Araçları"
 
 msgid "Toggle Abbreviation Options"
-msgstr ""
+msgstr "Kisaltma Araçları"
 
 msgid "Toggle Language Options"
-msgstr ""
+msgstr "Dil Seçenekleri"
 
 msgid "Subject"
 msgstr "Konu"
@@ -283,10 +287,10 @@ msgid "Toggle Source View"
 msgstr "Kaynak Görünümü"
 
 msgid "Discard"
-msgstr ""
+msgstr "Vazgeç"
 
 msgid "Discard Changes"
-msgstr ""
+msgstr "Değişikliklerden Vazgeç"
 
 msgid "Apply Changes"
 msgstr "Değişiklikleri Uygula"
@@ -307,6 +311,8 @@ msgid ""
 "Source code changes will be reflected in your edit preview window in real "
 "time."
 msgstr ""
+"Kaynak kodu değişiklikleri aynı zamanda düzenleme önizleme penceresinde "
+"yansıyacaktır."
 
 msgid "Revert Changes"
 msgstr "Değişiklikleri Geri Al"
@@ -339,7 +345,7 @@ msgid "Column"
 msgstr "Hücre"
 
 msgid "Toggle Settings"
-msgstr ""
+msgstr "Ayarlar"
 
 msgid "Heading"
 msgstr "Başlık"
@@ -408,28 +414,28 @@ msgid "Remove Table"
 msgstr "Tabloyu Sil"
 
 msgid "None"
-msgstr ""
+msgstr "Yok"
 
 msgid "Left"
-msgstr ""
+msgstr "Sol"
 
 msgid "Top"
-msgstr ""
+msgstr "Tepe"
 
 msgid "Both"
-msgstr ""
+msgstr "Her İkisi"
 
 msgid "Headers"
-msgstr ""
+msgstr "Başlıklar"
 
 msgid "Size"
-msgstr ""
+msgstr "Boyut"
 
 msgid "Viper by Squiz"
-msgstr ""
+msgstr "Squiz'den Viper"
 
 msgid "Update Changes"
-msgstr ""
+msgstr "Değişiklikler Güncelleştir"
 
 msgid "Not available"
-msgstr ""
+msgstr "Kullanılamaz"
