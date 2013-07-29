@@ -193,17 +193,25 @@ Viper.prototype = {
 
         var code = null;
         var src  = null;
-        if (typeof(lang) === 'object') {
+        if (typeof(lang) === 'object' && lang.code) {
             code = lang.code;
             src  = lang.src;
         } else {
             code = lang;
-            src  = this.getViperPath().replace(/\/build$/, '') + '/build/Translation/' + code + '.js';
+        }
+
+        if (code) {
+            // If given code is in en-au (language code - country code) format then just use the language code.
+            code = code.replace(/-\w+/, '');
         }
 
         if (code === 'en') {
             callback.call(this);
             return;
+        }
+
+        if (!src) {
+            src  = this.getViperPath().replace(/\/build$/, '') + '/build/Translation/' + code + '.js';
         }
 
         if (ViperTranslation.isLoaded(code) === false && src) {
