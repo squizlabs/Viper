@@ -139,7 +139,7 @@ ViperTools.prototype = {
 
         if (titleAttr) {
             if (disabled === true) {
-                titleAttr = titleAttr + ' [Not available]';
+                titleAttr = titleAttr + ' [' + _('Not available') + ']';
             }
 
             button.setAttribute('title', titleAttr);
@@ -424,7 +424,7 @@ ViperTools.prototype = {
         main.appendChild(input);
 
         if (required === true) {
-            input.setAttribute('placeholder', 'required');
+            input.setAttribute('placeholder', _('required'));
         }
 
         if (desc) {
@@ -640,7 +640,7 @@ ViperTools.prototype = {
             setRequired: function(required)
             {
                 if (required === true) {
-                    input.setAttribute('placeholder', 'required');
+                    input.setAttribute('placeholder', _('required'));
 
                     if (dfx.trim(input.value) === '') {
                         dfx.addClass(textBox, 'Viper-required');
@@ -1630,7 +1630,7 @@ ViperTools.prototype = {
                     return false;
                 };
 
-                var button = tools.createButton(subSectionid + '-applyButton', 'Update Changes', 'Update Changes', '', subSection.form.onsubmit, true);
+                var button = tools.createButton(subSectionid + '-applyButton', _('Update Changes'), _('Update Changes'), '', subSection.form.onsubmit, true);
                 subSection.element.appendChild(button);
 
                 this.addSubSectionActionWidgets(subSectionid, widgetids);

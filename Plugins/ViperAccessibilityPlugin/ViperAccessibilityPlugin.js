@@ -235,7 +235,7 @@ ViperAccessibilityPlugin.prototype = {
         toolbar.getBubble('VAP:bubble').showSubSection('VAP:subSection');
 
         // The main toolbar button to toggle the toolbar bubble on and off.
-        var vapButton = tools.createButton('accessibility', '', 'Accessibility Auditor', 'Viper-accessAudit', null, true);
+        var vapButton = tools.createButton('accessibility', '', _('Accessibility Auditor'), 'Viper-accessAudit', null, true);
         toolbar.setBubbleButton('VAP:bubble', 'accessibility');
         toolbar.addButton(vapButton);
 

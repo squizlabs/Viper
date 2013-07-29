@@ -137,7 +137,7 @@ ViperCopyPastePlugin.prototype = {
                 }
 
                 var pasteDesc = '<p class="ViperCopyPatePlugin-pasteDesc">' + _('Paste your content into the box below and it will be automatically inserted and cleaned up.') + '</p>';
-                pasteDesc    += '<p class="ViperCopyPatePlugin-pasteDesc">Avoid this step for future pastes using the keyboard shortcut <strong>' + shortcut + '</strong>.</p>';
+                pasteDesc    += '<p class="ViperCopyPatePlugin-pasteDesc">' + dfx.sprintf(_('Avoid this step for future pastes using the keyboard shortcut %s.'), '<strong>' + shortcut + '</strong>') + '</p>';
 
                 dfx.setHtml(content, pasteDesc);
 

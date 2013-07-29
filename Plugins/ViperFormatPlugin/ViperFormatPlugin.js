@@ -104,7 +104,7 @@ ViperFormatPlugin.prototype = {
 
         for (var i = 1; i <= 6; i++) {
             (function(headingCount) {
-                tools.createButton(prefix + 'heading:h' + headingCount, 'H' + headingCount, 'Convert to Heading ' + headingCount, null, function() {
+                tools.createButton(prefix + 'heading:h' + headingCount, 'H' + headingCount, dfx.sprintf(_('Convert to Heading %s'), headingCount), null, function() {
                     self.handleFormat('h' + headingCount);
                 });
                 tools.addButtonToGroup(prefix + 'heading:h' + headingCount, prefix + 'headingFormats');
@@ -130,7 +130,7 @@ ViperFormatPlugin.prototype = {
 
         for (var tag in formatButtons) {
             (function(tagName) {
-                var button = tools.createButton(prefix + 'formats:' + formatButtons[tagName], formatButtons[tagName], 'Convert to ' + formatButtons[tagName], null, function() {
+                var button = tools.createButton(prefix + 'formats:' + formatButtons[tagName], formatButtons[tagName], dfx.sprintf(_('Convert to %s'), formatButtons[tagName]), null, function() {
                     self.handleFormat(tagName);
                 });
                 formatsSubSection.appendChild(button);

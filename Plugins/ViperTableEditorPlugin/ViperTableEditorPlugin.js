@@ -3329,7 +3329,7 @@ ViperTableEditorPlugin.prototype = {
         }
 
         var self = this;
-        var insertTableBtn = this.viper.ViperTools.createButton('VTEP-insertTableButton', 'Insert Table', 'Insert Table', '', function() {
+        var insertTableBtn = this.viper.ViperTools.createButton('VTEP-insertTableButton', _('Insert Table'), _('Insert Table'), '', function() {
             self.toolbarPlugin.closeBubble('VTEP-bubble');
             self.insertTable(selectedRows, selectedCols, selectedHeaderType);
         });

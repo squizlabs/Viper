@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Viper in Turkish\n"
-"POT-Creation-Date: 2013-07-26 11:19+1000\n"
-"PO-Revision-Date: 2013-07-26 15:48+1000\n"
+"POT-Creation-Date: 2013-07-29 10:07+1000\n"
+"PO-Revision-Date: 2013-07-29 10:21+1000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -56,6 +56,11 @@ msgid ""
 msgstr ""
 "İçeriginizi aşağıdaki kutuya yapıştırın ve otomatik olarak temizlenip "
 "eklenicektir. "
+
+msgid "Avoid this step for future pastes using the keyboard shortcut %s."
+msgstr ""
+"İlerideki yapıştırmalarda %s klavye kısayolunu kullanarak bu adımı "
+"atlayabilirsiniz."
 
 msgid "Bold"
 msgstr "Kalın"
@@ -125,6 +130,12 @@ msgstr "Adres"
 
 msgid "Quote"
 msgstr "Alıntı"
+
+msgid "Convert to Heading %s"
+msgstr "Başlık %s elemanına dönüştür"
+
+msgid "Convert to %s"
+msgstr "%s elemanına dönüştür"
 
 msgid "ID"
 msgstr "Kimlik"
@@ -212,10 +223,13 @@ msgid "Header"
 msgstr "Başlık"
 
 msgid "Link"
-msgstr "Bağlanti"
+msgstr "Bağlantı"
 
 msgid "Image"
 msgstr "Resim"
+
+msgid "Selection"
+msgstr "Seçim"
 
 msgid "Acronym"
 msgstr "Kısaltma"
@@ -342,7 +356,7 @@ msgid "Table"
 msgstr "Tablo"
 
 msgid "Column"
-msgstr "Hücre"
+msgstr "Sütun"
 
 msgid "Toggle Settings"
 msgstr "Ayarlar"
@@ -420,7 +434,7 @@ msgid "Left"
 msgstr "Sol"
 
 msgid "Top"
-msgstr "Tepe"
+msgstr "Üst"
 
 msgid "Both"
 msgstr "Her İkisi"
@@ -435,7 +449,10 @@ msgid "Viper by Squiz"
 msgstr "Squiz'den Viper"
 
 msgid "Update Changes"
-msgstr "Değişiklikler Güncelleştir"
+msgstr "Değişiklikleri Güncelleştir"
 
 msgid "Not available"
 msgstr "Kullanılamaz"
+
+msgid "required"
+msgstr "zorunlu"
