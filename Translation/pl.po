@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: Korean translation for Viper\n"
-"POT-Creation-Date: 2013-07-29 13:47+1000\n"
-"PO-Revision-Date: 2013-07-29 13:49+1000\n"
+"Project-Id-Version: Polish translation for Viper\n"
+"POT-Creation-Date: 2013-07-29 15:17+1000\n"
+"PO-Revision-Date: 2013-07-29 15:24+1000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -59,34 +59,34 @@ msgid "Avoid this step for future pastes using the keyboard shortcut %s."
 msgstr ""
 
 msgid "Bold"
-msgstr "진하게"
+msgstr "Pogrubienie"
 
 msgid "Italic"
-msgstr "이텔릭"
+msgstr "Kursywa"
 
 msgid "Remove Format"
 msgstr ""
 
 msgid "Subscript"
-msgstr "아래 첨자"
+msgstr "Indeks dolny"
 
 msgid "Superscript"
-msgstr "위 첨자"
+msgstr "Indeks górny"
 
 msgid "Strikethrough"
-msgstr "취소선"
+msgstr "Przekreślenie"
 
 msgid "Left Justify"
-msgstr ""
+msgstr "Wyrównaj do lewej"
 
 msgid "Center Justify"
-msgstr ""
+msgstr "Wyrównaj do środka"
 
 msgid "Right Justify"
-msgstr ""
+msgstr "Wyrównaj do prawej"
 
 msgid "Block Justify"
-msgstr ""
+msgstr "Wyrównaj do lewej i prawej"
 
 msgid "Horizontal Rule"
 msgstr ""
@@ -161,13 +161,13 @@ msgid "Anchor ID"
 msgstr ""
 
 msgid "Undo"
-msgstr ""
+msgstr "Cofnij"
 
 msgid "Redo"
-msgstr ""
+msgstr "Ponów"
 
 msgid "Insert Image"
-msgstr ""
+msgstr "Wstaw Obrazek"
 
 msgid "Toggle Image Options"
 msgstr ""
@@ -179,10 +179,10 @@ msgid "Image is decorative"
 msgstr ""
 
 msgid "Alt"
-msgstr ""
+msgstr "Tekst zastępczy"
 
 msgid "Title"
-msgstr ""
+msgstr "Właściwości obrazka"
 
 msgid ""
 "The selected image will be moved to the next location you click. To cancel "
@@ -199,7 +199,7 @@ msgid "Failed to load image"
 msgstr ""
 
 msgid "Underline"
-msgstr ""
+msgstr "Podkreślenie"
 
 msgid "Item"
 msgstr ""
@@ -226,13 +226,13 @@ msgid "Selection"
 msgstr ""
 
 msgid "Acronym"
-msgstr ""
+msgstr "Akronim"
 
 msgid "Abbreviation"
-msgstr ""
+msgstr "Skrót"
 
 msgid "Language"
-msgstr ""
+msgstr "Język"
 
 msgid "Language Tools"
 msgstr ""
@@ -441,7 +441,7 @@ msgid "Viper by Squiz"
 msgstr ""
 
 msgid "Update Changes"
-msgstr ""
+msgstr "Aktualizować Zmienia"
 
 msgid "Not available"
 msgstr ""

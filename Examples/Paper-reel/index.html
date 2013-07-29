@@ -9,10 +9,22 @@
     <script type="text/javascript">
         var viperTest = null;
         ViperReadyCallback = function() {
-            viperTest = new Viper('test', {language: 'en'}, function(viper) {
+            var lang = 'en';
+            var search = window.location.search;
+            if (search && search.indexOf('?lang=') === 0) {
+                lang = search.replace('?lang=', '');
+                dfx.getId('langSelector').value = lang;
+            }
+
+            viperTest = new Viper('test', {language: lang}, function(viper) {
                 viper.setEditableElement(document.getElementById('content'));
             });
         };
+
+        function changeLang(lang)
+        {
+            window.location = dfx.baseUrl(window.location.href) + '?lang=' + lang;
+        }
     </script>
 </head>
 <body spellcheck="false">
@@ -26,8 +38,14 @@
     <strong class="screen_hide">Current lineage:</strong>
     <ol id="lineageList">
         <li class="lineage-home"><a title="Central Home" href="#"><span class="screen_hide">Home</span></a></li>
-        <li class="lineage-item"><a href="#">Articles</a></li>
-        <li class="lineage-item"><a href="#">Viper Example</a></li>
+        <li class="lineage-item">Viper Language:
+            <select id="langSelector" onchange="changeLang(this.value);">
+                <option value="en" selected="true">English</option>
+                <option value="tr">Turkish</option>
+                <option value="ko">Korean</option>
+                <option value="pl">Polish</option>
+            </select>
+        </li>
     </ol>
 </div>
 
