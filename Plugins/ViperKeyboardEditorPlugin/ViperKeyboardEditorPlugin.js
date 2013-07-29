@@ -199,7 +199,7 @@ ViperKeyboardEditorPlugin.prototype = {
                 || endNode.nodeType === dfx.ELEMENT_NODE && dfx.isTag(endNode, 'br'))
                 && !endNode.nextSibling
                 && (range._getLastSelectableChild(firstBlock, true) === endNode
-                || range._getLastSelectableChild(firstBlock, true) === null && dfx.isTag(endNode, 'br') === true)
+                || range._getLastSelectableChild(firstBlock, true) === null && dfx.isTag(endNode, 'br') === true || (endNode.nodeType === dfx.TEXT_NODE && endNode.data.length === 0))
             ) {
                 if (firstBlock && !defaultTagName && firstBlock === this.viper.getViperElement()) {
                     var br = document.createElement('br');
