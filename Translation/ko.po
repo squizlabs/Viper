@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Korean translation for Viper\n"
 "POT-Creation-Date: 2013-07-29 13:47+1000\n"
-"PO-Revision-Date: 2013-07-31 10:26+1000\n"
+"PO-Revision-Date: 2013-07-31 14:11+1000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -62,7 +62,7 @@ msgid "Bold"
 msgstr "굵게"
 
 msgid "Italic"
-msgstr "기울"
+msgstr "기울임"
 
 msgid "Remove Format"
 msgstr ""
@@ -152,7 +152,7 @@ msgid "Class name"
 msgstr ""
 
 msgid "Formats"
-msgstr ""
+msgstr "포맷"
 
 msgid "Headings"
 msgstr ""
@@ -161,7 +161,7 @@ msgid "Anchor ID"
 msgstr ""
 
 msgid "Undo"
-msgstr ""
+msgstr "취소"
 
 msgid "Redo"
 msgstr ""
@@ -182,7 +182,7 @@ msgid "Alt"
 msgstr ""
 
 msgid "Title"
-msgstr ""
+msgstr "제목"
 
 msgid ""
 "The selected image will be moved to the next location you click. To cancel "
@@ -190,13 +190,13 @@ msgid ""
 msgstr ""
 
 msgid "Move Image"
-msgstr ""
+msgstr "사진 옮기기"
 
 msgid "Loading preview"
 msgstr ""
 
 msgid "Failed to load image"
-msgstr ""
+msgstr "사진 불러오기 실패"
 
 msgid "Underline"
 msgstr "밑줄"
@@ -217,25 +217,25 @@ msgid "Header"
 msgstr ""
 
 msgid "Link"
-msgstr ""
+msgstr "링크"
 
 msgid "Image"
-msgstr ""
+msgstr "사진"
 
 msgid "Selection"
-msgstr ""
+msgstr "선택"
 
 msgid "Acronym"
-msgstr ""
+msgstr "약칭"
 
 msgid "Abbreviation"
-msgstr ""
+msgstr "축약형"
 
 msgid "Language"
-msgstr ""
+msgstr "언어"
 
 msgid "Language Tools"
-msgstr ""
+msgstr "언어툴"
 
 msgid "Toggle Language Tools"
 msgstr ""
@@ -253,7 +253,7 @@ msgid "Subject"
 msgstr ""
 
 msgid "Open a New Window"
-msgstr ""
+msgstr "새 창에 열기"
 
 msgid "Toggle Link Options"
 msgstr ""
@@ -262,7 +262,7 @@ msgid "Remove Link"
 msgstr ""
 
 msgid "Insert Link"
-msgstr ""
+msgstr "링크 삽입"
 
 msgid "Make Unordered List"
 msgstr ""
@@ -277,19 +277,19 @@ msgid "Outdent List"
 msgstr ""
 
 msgid "Search"
-msgstr ""
+msgstr "찾기"
 
 msgid "Replace"
-msgstr ""
+msgstr "바꾸기"
 
 msgid "Replace All"
-msgstr ""
+msgstr "모두 바꾸기"
 
 msgid "Find Next"
 msgstr ""
 
 msgid "Search & Replace"
-msgstr ""
+msgstr "찾기 & 바꾸"
 
 msgid "Toggle Source View"
 msgstr ""
@@ -301,7 +301,7 @@ msgid "Discard Changes"
 msgstr ""
 
 msgid "Apply Changes"
-msgstr ""
+msgstr "적용"
 
 msgid "Would you like to apply your changes?"
 msgstr ""
@@ -313,7 +313,7 @@ msgid "Source Editor"
 msgstr ""
 
 msgid "Viper Source View"
-msgstr ""
+msgstr "소스 보기"
 
 msgid ""
 "Source code changes will be reflected in your edit preview window in real "
@@ -327,7 +327,7 @@ msgid "Close Source View"
 msgstr ""
 
 msgid "Close Window"
-msgstr ""
+msgstr "창 닫기"
 
 msgid "Insert Table"
 msgstr "표삽입"
@@ -345,7 +345,7 @@ msgid "Show Cell tools"
 msgstr ""
 
 msgid "Table"
-msgstr ""
+msgstr "표"
 
 msgid "Column"
 msgstr ""
@@ -378,7 +378,7 @@ msgid "Toggle Merge/Split Options"
 msgstr ""
 
 msgid "Width"
-msgstr ""
+msgstr "너비"
 
 msgid "Insert Column Before"
 msgstr ""
@@ -414,7 +414,7 @@ msgid "Summary"
 msgstr "요약 "
 
 msgid "Use Caption"
-msgstr ""
+msgstr "캡션 사용하기"
 
 msgid "Remove Table"
 msgstr ""
@@ -441,7 +441,7 @@ msgid "Viper by Squiz"
 msgstr "Viper by Squiz"
 
 msgid "Update Changes"
-msgstr ""
+msgstr "적용"
 
 msgid "Not available"
 msgstr ""
