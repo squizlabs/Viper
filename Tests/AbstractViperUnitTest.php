@@ -155,11 +155,6 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
             $jsInclude  = '<script type="text/javascript" src="'.$jsFilePath.'"></script>';
         }
 
-        // Reset the Sikuli connection after 15 tests.
-        if ((self::$_testCount % 15) === 0) {
-            $this->resetConnection();
-        }
-
         parent::setUp();
 
         if (self::$_sikuli === NULL) {
@@ -168,6 +163,11 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
         }
 
         $this->sikuli = self::$_sikuli;
+
+        // Reset the Sikuli connection after 15 tests.
+        if ((self::$_testCount % 15) === 0) {
+            $this->resetConnection();
+        }
 
         // Get the contents of the test file template.
         if (self::$_testContent === NULL) {
@@ -258,7 +258,8 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
         self::$_testRun         = FALSE;
         self::$_topToolbar      = NULL;
 
-        parent::resetConnection();
+        $this->sikuli->resetConnection();
+        $this->sikuli->resize();
 
     }//end resetConnection()
 
