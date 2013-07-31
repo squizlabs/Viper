@@ -2085,7 +2085,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
         } else {
             if ($this->sikuli->getBrowserid() !== 'googlechrome') {
                 sleep(1);
-                $this->rightClick($this->getMouseLocation());
+                $this->sikuli->rightClick($this->getMouseLocation());
             }
 
             switch ($this->sikuli->getBrowserid()) {
@@ -2166,7 +2166,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
                        'x' => ($this->sikuli->getX($topLeft) + 50),
                        'y' => ($this->sikuli->getY($topLeft) + 100),
                       );
-        $this->rightClick($this->sikuli->createLocation($loc['x'], $loc['y']));
+        $this->sikuli->rightClick($this->sikuli->createLocation($loc['x'], $loc['y']));
 
     }//end _rightClickPasteDiv()
 
