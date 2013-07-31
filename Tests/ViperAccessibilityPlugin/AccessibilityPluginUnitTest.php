@@ -15,7 +15,7 @@ class Viper_Tests_ViperAccessibilityPlugin_AccessibilityPluginUnitTest extends A
     {
         $this->useTest(1);
 
-        $this->click($this->findKeyword(1));
+        $this->sikuli->click($this->findKeyword(1));
         $this->assertTrue($this->topToolbarButtonExists('accessAudit'), 'Accessibility auditor icon should be active.');
 
         $this->clickTopToolbarButton('accessAudit');
@@ -54,16 +54,16 @@ class Viper_Tests_ViperAccessibilityPlugin_AccessibilityPluginUnitTest extends A
     {
         $this->useTest(1);
 
-        $this->click($this->findKeyword(1));
+        $this->sikuli->click($this->findKeyword(1));
         $this->clickTopToolbarButton('accessAudit');
 
         // View Report.
         $viewReportButton = $this->findImage('HTMLCSViewReport', '#HTMLCS-settings-view-report');
-        $this->click($viewReportButton);
+        $this->sikuli->click($viewReportButton);
 
         // Click warning.
         $warningIcon = $this->findImage('HTMLCS-report-warning', '.HTMLCS-issue-type.HTMLCS-warning');
-        $this->click($warningIcon);
+        $this->sikuli->click($warningIcon);
 
         $bubble = $this->getActiveBubble();
 
@@ -91,16 +91,16 @@ class Viper_Tests_ViperAccessibilityPlugin_AccessibilityPluginUnitTest extends A
     {
         $this->useTest(2);
 
-        $this->click($this->findKeyword(1));
+        $this->sikuli->click($this->findKeyword(1));
         $this->clickTopToolbarButton('accessAudit');
 
         // View Report.
         $viewReportButton = $this->findImage('HTMLCSViewReport', '#HTMLCS-settings-view-report');
-        $this->click($viewReportButton);
+        $this->sikuli->click($viewReportButton);
 
         // Click error.
         $warningIcon = $this->findImage('HTMLCS-report-error', '.HTMLCS-issue-type.HTMLCS-error');
-        $this->click($warningIcon);
+        $this->sikuli->click($warningIcon);
 
         sleep(1);
 

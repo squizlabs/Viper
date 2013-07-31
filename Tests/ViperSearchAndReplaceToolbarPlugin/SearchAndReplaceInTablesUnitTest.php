@@ -13,7 +13,7 @@ class Viper_Tests_ViperSearchAndReplaceToolbarPlugin_SearchAndReplaceInTablesUni
      */
     public function testSearchIconStatesInCaption()
     {
-        $this->click($this->findKeyword(1));
+        $this->sikuli->click($this->findKeyword(1));
 
         $this->assertTrue($this->topToolbarButtonExists('searchReplace'), 'Search and replace icon should be enabled');
 
@@ -25,7 +25,7 @@ class Viper_Tests_ViperSearchAndReplaceToolbarPlugin_SearchAndReplaceInTablesUni
         $this->assertTrue($this->topToolbarButtonExists('Replace', 'disabled', TRUE), 'Replace Icon should be disabled.');
         $this->assertTrue($this->topToolbarButtonExists('Replace All', 'disabled', TRUE), 'Replace All Icon should be disabled.');
 
-        $this->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.TAB');
         $this->type('replace');
         $this->assertTrue($this->topToolbarButtonExists('Find Next', NULL, TRUE), 'Find Next Icon should be enabled.');
         $this->assertTrue($this->topToolbarButtonExists('Replace', 'disabled', TRUE), 'Replace Icon should be disabled.');
@@ -46,7 +46,7 @@ class Viper_Tests_ViperSearchAndReplaceToolbarPlugin_SearchAndReplaceInTablesUni
      */
     public function testSearchIconStatesInTableHeader()
     {
-        $this->click($this->findKeyword(2));
+        $this->sikuli->click($this->findKeyword(2));
         $this->assertTrue($this->topToolbarButtonExists('searchReplace'), 'Search and replace icon should be enabled');
 
         $this->clickTopToolbarButton('searchReplace');
@@ -57,7 +57,7 @@ class Viper_Tests_ViperSearchAndReplaceToolbarPlugin_SearchAndReplaceInTablesUni
         $this->assertTrue($this->topToolbarButtonExists('Replace', 'disabled', TRUE), 'Replace Icon should be disabled.');
         $this->assertTrue($this->topToolbarButtonExists('Replace All', 'disabled', TRUE), 'Replace All Icon should be disabled.');
 
-        $this->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.TAB');
         $this->type('replace');
         $this->assertTrue($this->topToolbarButtonExists('Find Next', NULL, TRUE), 'Find Next Icon should be enabled.');
         $this->assertTrue($this->topToolbarButtonExists('Replace', 'disabled', TRUE), 'Replace Icon should be disabled.');
@@ -78,7 +78,7 @@ class Viper_Tests_ViperSearchAndReplaceToolbarPlugin_SearchAndReplaceInTablesUni
      */
     public function testSearchIconStatesInTableFooter()
     {
-        $this->click($this->findKeyword(3));
+        $this->sikuli->click($this->findKeyword(3));
 
         $this->assertTrue($this->topToolbarButtonExists('searchReplace'), 'Search and replace icon should be enabled');
 
@@ -90,7 +90,7 @@ class Viper_Tests_ViperSearchAndReplaceToolbarPlugin_SearchAndReplaceInTablesUni
         $this->assertTrue($this->topToolbarButtonExists('Replace', 'disabled', TRUE), 'Replace Icon should be disabled.');
         $this->assertTrue($this->topToolbarButtonExists('Replace All', 'disabled', TRUE), 'Replace All Icon should be disabled.');
 
-        $this->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.TAB');
         $this->type('replace');
         $this->assertTrue($this->topToolbarButtonExists('Find Next', NULL, TRUE), 'Find Next Icon should be enabled.');
         $this->assertTrue($this->topToolbarButtonExists('Replace', 'disabled', TRUE), 'Replace Icon should be disabled.');
@@ -111,7 +111,7 @@ class Viper_Tests_ViperSearchAndReplaceToolbarPlugin_SearchAndReplaceInTablesUni
      */
     public function testSearchIconStatesInTableBody()
     {
-        $this->click($this->findKeyword(4));
+        $this->sikuli->click($this->findKeyword(4));
 
         $this->assertTrue($this->topToolbarButtonExists('searchReplace'), 'Search and replace icon should be enabled');
 
@@ -123,7 +123,7 @@ class Viper_Tests_ViperSearchAndReplaceToolbarPlugin_SearchAndReplaceInTablesUni
         $this->assertTrue($this->topToolbarButtonExists('Replace', 'disabled', TRUE), 'Replace Icon should be disabled.');
         $this->assertTrue($this->topToolbarButtonExists('Replace All', 'disabled', TRUE), 'Replace All Icon should be disabled.');
 
-        $this->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.TAB');
         $this->type('replace');
         $this->assertTrue($this->topToolbarButtonExists('Find Next', NULL, TRUE), 'Find Next Icon should be enabled.');
         $this->assertTrue($this->topToolbarButtonExists('Replace', 'disabled', TRUE), 'Replace Icon should be disabled.');
@@ -144,7 +144,7 @@ class Viper_Tests_ViperSearchAndReplaceToolbarPlugin_SearchAndReplaceInTablesUni
      */
     public function testReplaceButtonsNotActive()
     {
-        $this->click($this->findKeyword(1));
+        $this->sikuli->click($this->findKeyword(1));
 
 
         $this->clickTopToolbarButton('searchReplace');
@@ -164,7 +164,7 @@ class Viper_Tests_ViperSearchAndReplaceToolbarPlugin_SearchAndReplaceInTablesUni
      */
     public function testSearchForContentAndEditingSearch()
     {
-        $this->click($this->findKeyword(1));
+        $this->sikuli->click($this->findKeyword(1));
 
         $this->clickTopToolbarButton('searchReplace');
         $this->type('caption');
@@ -196,11 +196,11 @@ class Viper_Tests_ViperSearchAndReplaceToolbarPlugin_SearchAndReplaceInTablesUni
      */
     public function testSearchAndReplace()
     {
-        $this->click($this->findKeyword(1));
+        $this->sikuli->click($this->findKeyword(1));
 
         $this->clickTopToolbarButton('searchReplace');
         $this->type('porta');
-        $this->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.TAB');
         $this->type('replace');
         $this->clickTopToolbarButton('Find Next', NULL, TRUE);
         $this->clickTopToolbarButton('Replace', NULL, TRUE, TRUE);
@@ -222,7 +222,7 @@ class Viper_Tests_ViperSearchAndReplaceToolbarPlugin_SearchAndReplaceInTablesUni
      */
     public function testFindAndThenReplace()
     {
-        $this->click($this->findKeyword(1));
+        $this->sikuli->click($this->findKeyword(1));
 
         $this->clickTopToolbarButton('searchReplace');
         $this->type('porta');
@@ -249,11 +249,11 @@ class Viper_Tests_ViperSearchAndReplaceToolbarPlugin_SearchAndReplaceInTablesUni
      */
     public function testSearchAndReplaceAll()
     {
-        $this->click($this->findKeyword(1));
+        $this->sikuli->click($this->findKeyword(1));
 
         $this->clickTopToolbarButton('searchReplace');
         $this->type('porta');
-        $this->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.TAB');
         $this->type('replace');
         $this->clickTopToolbarButton('Find Next', NULL, TRUE);
         $this->clickTopToolbarButton('Replace All', NULL, TRUE);
@@ -270,11 +270,11 @@ class Viper_Tests_ViperSearchAndReplaceToolbarPlugin_SearchAndReplaceInTablesUni
      */
     public function testUndoAfterReplace()
     {
-        $this->click($this->findKeyword(1));
+        $this->sikuli->click($this->findKeyword(1));
 
         $this->clickTopToolbarButton('searchReplace');
         $this->type('porta');
-        $this->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.TAB');
         $this->type('replace');
         $this->clickTopToolbarButton('Find Next', NULL, TRUE);
         $this->clickTopToolbarButton('Replace', NULL, TRUE, TRUE);
@@ -297,11 +297,11 @@ class Viper_Tests_ViperSearchAndReplaceToolbarPlugin_SearchAndReplaceInTablesUni
      */
     public function testUndoAfterReplaceAll()
     {
-        $this->click($this->findKeyword(1));
+        $this->sikuli->click($this->findKeyword(1));
 
         $this->clickTopToolbarButton('searchReplace');
         $this->type('porta');
-        $this->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.TAB');
         $this->type('replace');
         $this->clickTopToolbarButton('Find Next', NULL, TRUE);
         $this->clickTopToolbarButton('Replace All', NULL, TRUE);
@@ -325,11 +325,11 @@ class Viper_Tests_ViperSearchAndReplaceToolbarPlugin_SearchAndReplaceInTablesUni
      */
     public function testSearchAndReplaceAfterClosingFields()
     {
-        $this->click($this->findKeyword(1));
+        $this->sikuli->click($this->findKeyword(1));
 
         $this->clickTopToolbarButton('searchReplace');
         $this->type('porta');
-        $this->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.TAB');
         $this->type('replace');
         $this->clickTopToolbarButton('Find Next', NULL, TRUE);
         $this->clickTopToolbarButton('Replace', NULL, TRUE);
@@ -338,7 +338,7 @@ class Viper_Tests_ViperSearchAndReplaceToolbarPlugin_SearchAndReplaceInTablesUni
 
         // Close the search fields
         $this->clickTopToolbarButton('searchReplace', 'selected');
-        $this->click($this->findKeyword(1));
+        $this->sikuli->click($this->findKeyword(1));
 
         // Open the search fields again and make sure only the Find Next button is enabled
         $this->clickTopToolbarButton('searchReplace');

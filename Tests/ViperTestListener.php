@@ -1,14 +1,15 @@
 <?php
 class ViperTestListener implements PHPUnit_Framework_TestListener
 {
-    private $_test            = NULL;
-    private static $_failures = 0;
-    private static $_errors   = 0;
-    private static $_numTests = 0;
-    private static $_testsRun = 0;
-    public static $browserid  = NULL;
-    private static $_startTime = NULL;
-    public static $viperTestObj = NULL;
+    private $_test                = NULL;
+    private static $_failures     = 0;
+    private static $_errors       = 0;
+    private static $_numTests     = 0;
+    private static $_testsRun     = 0;
+    public static $browserid      = NULL;
+    private static $_startTime    = NULL;
+    public static $viperTestObj   = NULL;
+    private static $_minTestCount = 10;
 
     private static function _getExportPath()
     {
@@ -48,10 +49,13 @@ class ViperTestListener implements PHPUnit_Framework_TestListener
 
         $exportPath .= '/'.$type.'-'.$test->getName().'.png';
 
-        $imagePath = self::$viperTestObj->callFunc('capture', array('SCREEN', '_noQuotes' => TRUE));
-        $imagePath = str_replace('u\'', '', $imagePath);
-        $imagePath = trim($imagePath, '\'');
-        rename($imagePath, $exportPath);
+        $sikuli = self::$viperTestObj->getSikuli();
+        if (empty($sikuli) === FALSE) {
+            $imagePath = $sikuli->capture(array('SCREEN', '_noQuotes' => TRUE));
+            $imagePath = str_replace('u\'', '', $imagePath);
+            $imagePath = trim($imagePath, '\'');
+            rename($imagePath, $exportPath);
+        }
 
     }
 
@@ -64,8 +68,14 @@ class ViperTestListener implements PHPUnit_Framework_TestListener
 
     public function endTestSuite(PHPUnit_Framework_TestSuite $suite)
     {
-        if ($suite->getName() === '.' && $this->_test !== NULL) {
-            $this->_test->closeJSWindow();
+        if (self::$viperTestObj !== NULL
+            && $suite->getName() === '.'
+            && $this->_test !== NULL
+        ) {
+            $sikuli = self::$viperTestObj->getSikuli();
+            if (empty($sikuli) === FALSE) {
+                $sikuli->stopJSPolling();
+            }
         }
 
     }
@@ -73,15 +83,21 @@ class ViperTestListener implements PHPUnit_Framework_TestListener
     public function addError(PHPUnit_Framework_Test $test, Exception $e, $time)
     {
         self::$_errors++;
-        $this->_exportFail('error', $test, $e);
-        $this->_screenshot($test, $e, 'error');
+
+        if (self::$_numTests > self::$_minTestCount) {
+            $this->_exportFail('error', $test, $e);
+            $this->_screenshot($test, $e, 'error');
+        }
 
     }
 
     public function addFailure(PHPUnit_Framework_Test $test, PHPUnit_Framework_AssertionFailedError $e, $time)
     {
         self::$_failures++;
-        $this->_exportFail('failure', $test, $e);
+
+        if (self::$_numTests > self::$_minTestCount) {
+            $this->_exportFail('failure', $test, $e);
+        }
 
     }
 
@@ -96,7 +112,7 @@ class ViperTestListener implements PHPUnit_Framework_TestListener
     public function endTest(PHPUnit_Framework_Test $test, $time)
     {
         // Report progress.
-        if ((self::$_testsRun >= self::$_numTests) || ((self::$_testsRun - 1) % 10) === 0) {
+        if (self::$_numTests > self::$_minTestCount && ((self::$_testsRun >= self::$_numTests) || ((self::$_testsRun - 1) % 10) === 0)) {
             $startTime   = date('d M y, H:i', self::$_startTime);
             $currentTime = date('d M y, H:i', time());
 

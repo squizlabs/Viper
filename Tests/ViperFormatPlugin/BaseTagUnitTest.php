@@ -76,7 +76,7 @@ class Viper_Tests_ViperFormatPlugin_BaseTagUnitTest extends AbstractFormatsUnitT
      */
     public function testNoBaseTagConversions()
     {
-        $this->execJS('viper.setSetting("defaultBlockTag", "")');
+        $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "")');
 
         $this->useTest(1);
         $this->selectKeyword(1, 2);

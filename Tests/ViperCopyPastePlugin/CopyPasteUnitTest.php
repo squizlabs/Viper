@@ -17,14 +17,14 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
 
         $this->selectKeyword(1);
         sleep(1);
-        $this->keyDown('Key.CMD + c');
-        $this->keyDown('Key.CMD + v');
+        $this->sikuli->keyDown('Key.CMD + c');
+        $this->sikuli->keyDown('Key.CMD + v');
         $this->type('A');
         sleep(1);
-        $this->keyDown('Key.CMD + v');
+        $this->sikuli->keyDown('Key.CMD + v');
         $this->type('B');
         sleep(1);
-        $this->keyDown('Key.CMD + v');
+        $this->sikuli->keyDown('Key.CMD + v');
         $this->type('C');
 
         $this->assertHTMLMatch('<p>%1%A%1%B%1%C</p>');
@@ -43,15 +43,15 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
 
         $this->selectKeyword(1);
         sleep(1);
-        $this->keyDown('Key.CMD + b');
-        $this->keyDown('Key.CMD + c');
-        $this->keyDown('Key.CMD + v');
+        $this->sikuli->keyDown('Key.CMD + b');
+        $this->sikuli->keyDown('Key.CMD + c');
+        $this->sikuli->keyDown('Key.CMD + v');
         $this->type('A');
         sleep(1);
-        $this->keyDown('Key.CMD + v');
+        $this->sikuli->keyDown('Key.CMD + v');
         $this->type('B');
         sleep(1);
-        $this->keyDown('Key.CMD + v');
+        $this->sikuli->keyDown('Key.CMD + v');
         $this->type('C');
         sleep(1);
 
@@ -71,15 +71,15 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
 
         $this->selectKeyword(1);
         sleep(1);
-        $this->keyDown('Key.CMD + i');
-        $this->keyDown('Key.CMD + c');
-        $this->keyDown('Key.CMD + v');
+        $this->sikuli->keyDown('Key.CMD + i');
+        $this->sikuli->keyDown('Key.CMD + c');
+        $this->sikuli->keyDown('Key.CMD + v');
         $this->type('A');
         sleep(1);
-        $this->keyDown('Key.CMD + v');
+        $this->sikuli->keyDown('Key.CMD + v');
         $this->type('B');
         sleep(1);
-        $this->keyDown('Key.CMD + v');
+        $this->sikuli->keyDown('Key.CMD + v');
         $this->type('C');
         sleep(1);
 
@@ -106,9 +106,9 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
 
         // Test copy and paste
         $this->selectKeyword(1, 2);
-        $this->keyDown('Key.CMD + c');
+        $this->sikuli->keyDown('Key.CMD + c');
         $this->moveToKeyword(2, 'right');
-        $this->keyDown('Key.CMD + v');
+        $this->sikuli->keyDown('Key.CMD + v');
         sleep(1);
 
         $this->assertHTMLMatch('<pre>Lorum this is more content %1% to test %2%%1% to test %2%</pre>');
@@ -134,9 +134,9 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
 
         // Test copy and paste
         $this->selectKeyword(1, 2);
-        $this->keyDown('Key.CMD + c');
+        $this->sikuli->keyDown('Key.CMD + c');
         $this->moveToKeyword(2, 'right');
-        $this->keyDown('Key.CMD + v');
+        $this->sikuli->keyDown('Key.CMD + v');
         sleep(1);
 
         $this->assertHTMLMatch('<div>Lorum this is more content %1% to test %2%%1% to test %2%</div>');
@@ -162,9 +162,9 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
 
         // Test copy and paste
         $this->selectKeyword(1, 2);
-        $this->keyDown('Key.CMD + c');
+        $this->sikuli->keyDown('Key.CMD + c');
         $this->moveToKeyword(2, 'right');
-        $this->keyDown('Key.CMD + v');
+        $this->sikuli->keyDown('Key.CMD + v');
         sleep(1);
 
         $this->assertHTMLMatch('<blockquote><p>Lorum this is more content %1% to test %2%%1% to test %2%</p></blockquote>');
@@ -184,12 +184,12 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
         sleep(1);
-        $this->keyDown('Key.CMD + c');
+        $this->sikuli->keyDown('Key.CMD + c');
 
-        $this->click($this->findKeyword(1));
+        $this->sikuli->click($this->findKeyword(1));
         $this->moveToKeyword(2, 'right');
-        $this->keyDown('Key.ENTER');
-        $this->keyDown('Key.CMD + v');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.CMD + v');
 
         $this->assertHTMLMatch('<p>Lorum this is more content %1% to test %2%</p><p>Lorum this is more content %1% to test %2%</p>');
 
@@ -216,12 +216,12 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
         sleep(1);
-        $this->keyDown('Key.CMD + c');
+        $this->sikuli->keyDown('Key.CMD + c');
 
-        $this->click($this->findKeyword(1));
+        $this->sikuli->click($this->findKeyword(1));
         $this->moveToKeyword(2, 'right');
-        $this->keyDown('Key.ENTER');
-        $this->keyDown('Key.CMD + v');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.CMD + v');
 
         $this->assertHTMLMatch('<div>Lorum this is more content %1% to test %2%</div><p>Lorum this is more content %1% to test %2%</p>');
 
@@ -248,12 +248,12 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
         sleep(1);
-        $this->keyDown('Key.CMD + c');
+        $this->sikuli->keyDown('Key.CMD + c');
 
-        $this->click($this->findKeyword(1));
+        $this->sikuli->click($this->findKeyword(1));
         $this->moveToKeyword(2, 'right');
-        $this->keyDown('Key.ENTER');
-        $this->keyDown('Key.CMD + v');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.CMD + v');
 
         $this->assertHTMLMatch('<blockquote><p>Lorum this is more content %1% to test %2%</p><p>Lorum this is more content %1% to test %2%</p></blockquote>');
 
@@ -280,14 +280,14 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
         sleep(1);
-        $this->keyDown('Key.CMD + c');
+        $this->sikuli->keyDown('Key.CMD + c');
 
-        $this->click($this->findKeyword(1));
+        $this->sikuli->click($this->findKeyword(1));
         $this->moveToKeyword(2, 'right');
-        $this->keyDown('Key.ENTER');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
         sleep(1);
-        $this->keyDown('Key.CMD + v');
+        $this->sikuli->keyDown('Key.CMD + v');
 
         $this->assertHTMLMatch('<pre>Lorum this is more content %1% to test %2%</pre><pre>Lorum this is more content %1% to test %2%</pre>');
 
@@ -306,11 +306,11 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
         $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(0);
         sleep(1);
-        $this->keyDown('Key.CMD + c');
+        $this->sikuli->keyDown('Key.CMD + c');
 
         $this->moveToKeyword(1, 'right');
-        $this->keyDown('Key.ENTER');
-        $this->keyDown('Key.CMD + v');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.CMD + v');
         sleep(1);
 
         $this->removeTableHeaders();
@@ -343,16 +343,16 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
         sleep(2);
 
         // Copy text.
-        $this->keyDown('Key.CMD + a');
+        $this->sikuli->keyDown('Key.CMD + a');
         sleep(1);
-        $this->keyDown('Key.CMD + c');
+        $this->sikuli->keyDown('Key.CMD + c');
         sleep(1);
         $this->closeApp($this->getBrowserName());
         sleep(1);
 
         $this->selectKeyword(1);
 
-        $this->keyDown('Key.CMD + v');
+        $this->sikuli->keyDown('Key.CMD + v');
 
         sleep(5);
 
@@ -375,7 +375,7 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
 
         $this->selectKeyword(1);
         sleep(1);
-        $this->keyDown('Key.CMD + c');
+        $this->sikuli->keyDown('Key.CMD + c');
 
         $this->selectKeyword(2);
         $this->paste(TRUE);
@@ -396,7 +396,7 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
         $this->useTest(1);
 
         $this->moveToKeyword(1, 'right');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
         $this->paste(TRUE, $this->getTestURL('/ViperCopyPastePlugin/GermanContent.txt'));
 
         $this->assertHTMLMatch('<p>%1%</p><p>  Am letzten Tag der 62. Tagung des WHO-Regionalkomitees fŸr Europa verabschiedeten die Mitgliedstaaten die Strategie und den Aktionsplan fŸr gesundes Altern in der EuropŠischen Region (2012&ndash;2020) (nach der Eršrterung dieses Dokuments am dritten Tag) sowie den EuropŠischen Aktionsplan zur StŠrkung  der KapazitŠten und Angebote im Bereich der šffentlichen Gesundheit.<br />EuropŠischer Aktionsplan zur StŠrkung der KapazitŠten und Angebote im Bereich der šffentlichen Gesundheit<br />In seiner Vorstellung des Aktionsplans sagte Dr. Hans Kluge, Direktor der Abteilung fŸr Gesundheitssysteme und šffentliche Gesundheit, dass dies ein gro§artiger Moment sei, ãweil die  Thematik šffentliche Gesundheit in der EuropŠischen Region wieder mit Leben gefŸllt" werde. Er fŸhrte aus, dass der Plan in umfassenden Konsultationen in der Absicht entwickelt worden sei, die integrierte Leistungserbringung fŸr Gesundheitsschutz, KrankheitsprŠvention und Gesundheitsfšrderung zu stŠrken.<br  />Angesichts der VerŠnderungen der Gesellschaften des 21. Jahrhunderts (Globalisierung, †beralterung der Bevšlkerung, Klimawandel) sei eine erneute Betonung der šffentlichen Gesundheit zeitlich und inhaltlich angebracht, weil so trotz knapper Kassen optimale gesundheitliche Ergebnisse mšglich seien.<br  />Der Plan sei in †bereinstimmung mit dem Rahmenkonzept ãGesundheit 2020" aufgestellt worden und baue auf einer soliden Grundlage aus Erkenntnissen auf, unter anderem durch Untersuchungen zu den Angeboten im Bereich der šffentlichen Gesundheit in 41 der 53 Mitgliedstaaten. Das KernstŸck des Aktionsplans  bildeten die zehn Ÿberarbeiteten grundlegenden gesundheitspolitischen Ma§nahmen (EPHO):<br />&nbsp;&nbsp; &nbsp;1.&nbsp;&nbsp; &nbsp;Surveillance von Gesundheit und Wohlbefinden der Bevšlkerung<br />&nbsp;&nbsp; &nbsp;2.&nbsp;&nbsp; &nbsp;Beobachtung von Gesundheitsgefahren und gesundheitlichen Notlagen  und Gegenma§nahmen<br />&nbsp;&nbsp; &nbsp;3.&nbsp;&nbsp; &nbsp;Gesundheitsschutzma§nahmen (u. a. in den Bereichen Umwelt-, Arbeits- und Nahrungsmittelsicherheit)<br />&nbsp;&nbsp; &nbsp;4.&nbsp;&nbsp; &nbsp;Gesundheitsfšrderung, einschlie§lich Ma§nahmen in Bezug auf soziale Determinanten und gesundheitliche  Benachteiligung<br />&nbsp;&nbsp; &nbsp;5.&nbsp;&nbsp; &nbsp;KrankheitsprŠvention, einschlie§lich FrŸherkennung<br />&nbsp;&nbsp; &nbsp;6.&nbsp;&nbsp; &nbsp;GewŠhrleistung von Politikgestaltung und Steuerung fŸr mehr Gesundheit und Wohlbefinden<br />&nbsp;&nbsp; &nbsp;7.&nbsp;&nbsp; &nbsp;GewŠhrleistung  einer ausreichenden Zahl von fachkundigem Personal im Bereich der šffentlichen Gesundheit<br />&nbsp;&nbsp; &nbsp;8.&nbsp;&nbsp; &nbsp;GewŠhrleistung von nachhaltigen Organisationsstrukturen und Finanzierung<br />&nbsp;&nbsp; &nbsp;9.&nbsp;&nbsp; &nbsp;†berzeugungsarbeit, Kommunikation und soziale Mobilisierung  fŸr die Gesundheit<br />&nbsp;&nbsp; &nbsp;10.&nbsp;&nbsp; &nbsp;Fšrderung der Forschung im Bereich der šffentlichen Gesundheit zwecks Anwendung in Politik und Praxis</p>');
@@ -414,7 +414,7 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
         $this->useTest(1);
 
         $this->moveToKeyword(1, 'right');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
 
         $this->clickNextLine();
 
@@ -442,16 +442,16 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
         sleep(2);
 
         // Copy text.
-        $this->keyDown('Key.CMD + a');
+        $this->sikuli->keyDown('Key.CMD + a');
         sleep(1);
-        $this->keyDown('Key.CMD + c');
+        $this->sikuli->keyDown('Key.CMD + c');
         sleep(1);
         $this->closeApp($this->getBrowserName());
         sleep(1);
 
         $this->selectKeyword(1);
 
-        $this->keyDown('Key.CMD + v');
+        $this->sikuli->keyDown('Key.CMD + v');
 
         sleep(5);
 

@@ -15,7 +15,7 @@ class Viper_Tests_ViperFormatPlugin_ParagraphUnitTest extends AbstractFormatsUni
     {
 
         // Test selecting a word in a div to change to a paragraph
-        $this->click($this->findKeyword(2));
+        $this->sikuli->click($this->findKeyword(2));
         $this->selectKeyword(4);
         $this->assertFalse($this->inlineToolbarButtonExists('formats'), 'Toogle formats icon should not appear in the inline toolbar');
 
@@ -50,7 +50,7 @@ class Viper_Tests_ViperFormatPlugin_ParagraphUnitTest extends AbstractFormatsUni
     {
 
         // Test clicking in a div to change to a paragraph
-        $this->click($this->findKeyword(4));
+        $this->sikuli->click($this->findKeyword(4));
         $this->clickTopToolbarButton('formats-div', 'active');
         $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, 'active', NULL, NULL);
         $this->clickTopToolbarButton('P', NULL, TRUE);
@@ -63,7 +63,7 @@ class Viper_Tests_ViperFormatPlugin_ParagraphUnitTest extends AbstractFormatsUni
         $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, 'active', NULL, NULL);
 
         // Test selecting a word in a div to change to a paragraph
-        $this->click($this->findKeyword(2));
+        $this->sikuli->click($this->findKeyword(2));
         $this->selectKeyword(4);
         $this->assertTrue($this->topToolbarButtonExists('formats-div'), 'Active toogle formats icoun should appear in the top toolbar');
 
@@ -96,10 +96,10 @@ class Viper_Tests_ViperFormatPlugin_ParagraphUnitTest extends AbstractFormatsUni
     public function testSelectParaAfterStylingShowsCorrectIcons()
     {
         $this->selectKeyword(1, 2);
-        $this->keyDown('Key.CMD + b');
-        $this->keyDown('Key.CMD + i');
+        $this->sikuli->keyDown('Key.CMD + b');
+        $this->sikuli->keyDown('Key.CMD + i');
 
-        $this->click($this->findKeyword(2));
+        $this->sikuli->click($this->findKeyword(2));
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
 
@@ -128,8 +128,8 @@ class Viper_Tests_ViperFormatPlugin_ParagraphUnitTest extends AbstractFormatsUni
         $this->selectKeyword(3);
         $this->selectInlineToolbarLineageItem(0);
         sleep(1);
-        $this->keyDown('Key.CMD + b');
-        $this->keyDown('Key.CMD + i');
+        $this->sikuli->keyDown('Key.CMD + b');
+        $this->sikuli->keyDown('Key.CMD + i');
 
         $this->selectInlineToolbarLineageItem(0);
 
@@ -234,18 +234,18 @@ class Viper_Tests_ViperFormatPlugin_ParagraphUnitTest extends AbstractFormatsUni
     {
         $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(0);
-        $this->keyDown('Key.RIGHT');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.RIGHT');
+        $this->sikuli->keyDown('Key.ENTER');
         sleep(1);
         $this->type('New content');
         sleep(1);
-        $this->keyDown('Key.SHIFT + Key.LEFT');
+        $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
         sleep(1);
         $this->selectInlineToolbarLineageItem(0);
-        $this->keyDown('Key.RIGHT');
+        $this->sikuli->keyDown('Key.RIGHT');
         sleep(1);
         $this->type(' on the page');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
         sleep(1);
         $this->type('More new content');
         sleep(1);
@@ -422,7 +422,7 @@ class Viper_Tests_ViperFormatPlugin_ParagraphUnitTest extends AbstractFormatsUni
     public function testListIconsAvailableForParagraph()
     {
 
-        $this->click($this->findKeyword(1));
+        $this->sikuli->click($this->findKeyword(1));
         $this->assertTrue($this->topToolbarButtonExists('listOL'), 'Ordered list icon should be available in the top toolbar');
         $this->assertTrue($this->topToolbarButtonExists('listUL'), 'Unordered list icon should be available in the top toolbar');
 
@@ -433,13 +433,13 @@ class Viper_Tests_ViperFormatPlugin_ParagraphUnitTest extends AbstractFormatsUni
         $this->selectInlineToolbarLineageItem(0);
         $this->assertTrue($this->topToolbarButtonExists('listOL'), 'Ordered list icon should be available in the top toolbar');
         $this->assertTrue($this->topToolbarButtonExists('listUL'), 'Unordered list icon should be available in the top toolbar');
-        $this->keyDown('Key.RIGHT');
+        $this->sikuli->keyDown('Key.RIGHT');
 
-        $this->click($this->findKeyword(3));
+        $this->sikuli->click($this->findKeyword(3));
         $this->assertTrue($this->topToolbarButtonExists('listOL'), 'Ordered list icon should be available in the top toolbar');
         $this->assertTrue($this->topToolbarButtonExists('listUL'), 'Unordered list icon should be available in the top toolbar');
 
-        $this->click($this->findKeyword(1));
+        $this->sikuli->click($this->findKeyword(1));
         $this->selectKeyword(3);
         $this->assertTrue($this->topToolbarButtonExists('listOL'), 'Ordered list icon should be available in the top toolbar');
         $this->assertTrue($this->topToolbarButtonExists('listUL'), 'Unordered list icon should be available in the top toolbar');
@@ -482,8 +482,8 @@ class Viper_Tests_ViperFormatPlugin_ParagraphUnitTest extends AbstractFormatsUni
     {
 
         $this->moveToKeyword(3, 'left');
-        $this->keyDown('Key.BACKSPACE');
-        
+        $this->sikuli->keyDown('Key.BACKSPACE');
+
         $this->assertHTMLMatch('<p>%1% xtn %2%%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p><div>%4% paragraph to change to a p</div>');
 
     }//end testCombiningParagraphs()
@@ -497,8 +497,8 @@ class Viper_Tests_ViperFormatPlugin_ParagraphUnitTest extends AbstractFormatsUni
     public function testCombiningParagraphAndDiv()
     {
         $this->moveToKeyword(4, 'left');
-        $this->keyDown('Key.BACKSPACE');
-        
+        $this->sikuli->keyDown('Key.BACKSPACE');
+
         $this->assertHTMLMatch('<p>%1% xtn %2%</p><p>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.%4% paragraph to change to a p</p>');
 
     }//end testCombiningParagraphAndDiv()
@@ -519,8 +519,8 @@ class Viper_Tests_ViperFormatPlugin_ParagraphUnitTest extends AbstractFormatsUni
         $this->assertHTMLMatch('<p>%1% xtn %2%</p><blockquote><p>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p></blockquote><div>%4% paragraph to change to a p</div>');
 
         $this->moveToKeyword(3, 'left');
-        $this->keyDown('Key.BACKSPACE');
-        
+        $this->sikuli->keyDown('Key.BACKSPACE');
+
         $this->assertHTMLMatch('<p>%1% xtn %2%%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p><div>%4% paragraph to change to a p</div>');
 
     }//end testCombiningParagraphAndQuote()
@@ -541,8 +541,8 @@ class Viper_Tests_ViperFormatPlugin_ParagraphUnitTest extends AbstractFormatsUni
         $this->assertHTMLMatch('<p>%1% xtn %2%</p><pre>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</pre><div>%4% paragraph to change to a p</div>');
 
         $this->moveToKeyword(3, 'left');
-        $this->keyDown('Key.BACKSPACE');
-        
+        $this->sikuli->keyDown('Key.BACKSPACE');
+
         $this->assertHTMLMatch('<p>%1% xtn %2%%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p><div>%4% paragraph to change to a p</div>');
 
     }//end testCombiningParagraphAndPre()

@@ -14,7 +14,7 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
     public function testTextType()
     {
         $text = $this->selectKeyword(1);
-        $this->keyDown('Key.DELETE');
+        $this->sikuli->keyDown('Key.DELETE');
 
         $chars  = '`1234567890-=qwertyuiop[]asdfghjkl;zxcvbnm,.';
         $chars .= 'QWERTYUIOPASDFGHJKLZXCVBNM';
@@ -55,7 +55,7 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
     public function testCreatingANewParagraph()
     {
         $this->moveToKeyword(1, 'right');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
         $this->type('Testing input');
 
         $this->assertHTMLMatch('<p>%1%</p><p>Testing input</p>');
@@ -73,28 +73,28 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
         $text = $this->selectKeyword(1);
         $this->type('Testing input');
 
-        $this->keyDown('Key.LEFT');
-        $this->keyDown('Key.LEFT');
-        $this->keyDown('Key.LEFT');
-        $this->keyDown('Key.LEFT');
-        $this->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.LEFT');
         $this->type('L');
-        $this->keyDown('Key.RIGHT');
-        $this->keyDown('Key.RIGHT');
+        $this->sikuli->keyDown('Key.RIGHT');
+        $this->sikuli->keyDown('Key.RIGHT');
         $this->type('R');
-        $this->keyDown('Key.LEFT');
-        $this->keyDown('Key.LEFT');
-        $this->keyDown('Key.LEFT');
-        $this->keyDown('Key.LEFT');
-        $this->keyDown('Key.DOWN');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.DOWN');
         $this->type('D');
-        $this->keyDown('Key.LEFT');
-        $this->keyDown('Key.LEFT');
-        $this->keyDown('Key.LEFT');
-        $this->keyDown('Key.LEFT');
-        $this->keyDown('Key.LEFT');
-        $this->keyDown('Key.LEFT');
-        $this->keyDown('Key.UP');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.UP');
         $this->type('U');
 
         $this->assertHTMLMatch('<p>TeUsting LinRput</p><p>EIB MOZD</p>');
@@ -110,17 +110,17 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
     public function testBackspace()
     {
         $this->moveToKeyword(1, 'right');
-        $this->keyDown('Key.CMD + b');
+        $this->sikuli->keyDown('Key.CMD + b');
         $this->type('test');
-        $this->keyDown('Key.CMD + b');
+        $this->sikuli->keyDown('Key.CMD + b');
         $this->type(' input...');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
         $this->type('Testing...');
 
         $this->assertHTMLMatch('<p>XAX<strong>test</strong> input...</p><p>Testing...</p><p>EIB MOZ</p>');
 
         for ($i = 0; $i < 30; $i++) {
-            $this->keyDown('Key.BACKSPACE');
+            $this->sikuli->keyDown('Key.BACKSPACE');
         }
 
         $this->assertHTMLMatch('<p>EIB MOZ</p>');
@@ -136,19 +136,19 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
     public function testDelete()
     {
         $this->moveToKeyword(1, 'right');
-        $this->keyDown('Key.CMD + b');
+        $this->sikuli->keyDown('Key.CMD + b');
         $this->type('test');
-        $this->keyDown('Key.CMD + b');
+        $this->sikuli->keyDown('Key.CMD + b');
         $this->type(' input...');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
         $this->type('Testing...');
 
         for ($i = 0; $i < 27; $i++) {
-            $this->keyDown('Key.LEFT');
+            $this->sikuli->keyDown('Key.LEFT');
         }
 
         for ($i = 0; $i < 28; $i++) {
-            $this->keyDown('Key.DELETE');
+            $this->sikuli->keyDown('Key.DELETE');
         }
 
         $this->assertHTMLMatch('<p>EIB MOZ</p>');
@@ -164,9 +164,9 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
     public function testRightKeyboardSelection()
     {
         $text = $this->selectKeyword(1);
-        $this->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->keyDown('Key.DELETE');
+        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
+        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
+        $this->sikuli->keyDown('Key.DELETE');
         $this->type('p');
         $this->assertHTMLMatch('<p>pIB MOZ</p>');
 
@@ -181,11 +181,11 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
     public function testLeftKeyboardSelection()
     {
         $text = $this->selectKeyword(1);
-        $this->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->keyDown('Key.SHIFT + Key.LEFT');
-        $this->keyDown('Key.SHIFT + Key.LEFT');
-        $this->keyDown('Key.SHIFT + Key.LEFT');
-        $this->keyDown('Key.DELETE');
+        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
+        $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
+        $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
+        $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
+        $this->sikuli->keyDown('Key.DELETE');
         $this->type('p');
         $this->assertHTMLMatch('<p>pAX</p><p>EIB MOZ</p>');
 
@@ -200,8 +200,8 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
     public function testSelectAllAndRemove()
     {
         $this->selectKeyword(1);
-        $this->keyDown('Key.CMD + a');
-        $this->keyDown('Key.DELETE');
+        $this->sikuli->keyDown('Key.CMD + a');
+        $this->sikuli->keyDown('Key.DELETE');
 
         $this->type('abc');
         $this->assertHTMLMatch('<p>abc</p>');
@@ -217,7 +217,7 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
     public function testSelectAllAndReplace()
     {
         $this->selectKeyword(1);
-        $this->keyDown('Key.CMD + a');
+        $this->sikuli->keyDown('Key.CMD + a');
 
         sleep(1);
         $this->type('abc');
@@ -239,8 +239,8 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
         $this->assertTrue($this->topToolbarButtonExists('historyRedo', 'disabled'), 'Redo icon should be disabled');
 
         $this->selectKeyword(1);
-        $this->keyDown('Key.RIGHT');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.RIGHT');
+        $this->sikuli->keyDown('Key.ENTER');
         $this->type('New content');
         $this->assertHTMLMatch('<p>%1%</p><p>New content</p><p>EIB MOZ</p>');
         $this->assertTrue($this->topToolbarButtonExists('historyUndo'), 'Undo icon should be active');
@@ -283,30 +283,30 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
         $this->assertTrue($this->topToolbarButtonExists('historyRedo', 'disabled'), 'Redo icon should be disabled');
 
         $this->selectKeyword(1);
-        $this->keyDown('Key.RIGHT');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.RIGHT');
+        $this->sikuli->keyDown('Key.ENTER');
         $this->type('New content');
         $this->assertHTMLMatch('<p>%1%</p><p>New content</p><p>EIB MOZ</p>');
         $this->assertTrue($this->topToolbarButtonExists('historyUndo'), 'Undo icon should be active');
         $this->assertTrue($this->topToolbarButtonExists('historyRedo', 'disabled'), 'Redo icon should be disabled');
 
-        $this->keyDown('Key.CMD + z');
-        $this->keyDown('Key.CMD + z');
-        $this->keyDown('Key.CMD + z');
+        $this->sikuli->keyDown('Key.CMD + z');
+        $this->sikuli->keyDown('Key.CMD + z');
+        $this->sikuli->keyDown('Key.CMD + z');
         $this->assertHTMLMatch('<p>%1%</p><p>EIB MOZ</p>');
         $this->assertTrue($this->topToolbarButtonExists('historyUndo', 'disabled'), 'Undo icon should be disabled');
         $this->assertTrue($this->topToolbarButtonExists('historyRedo'), 'Redo icon should be active');
 
-        $this->keyDown('Key.CMD + Key.SHIFT + z');
-        $this->keyDown('Key.CMD + Key.SHIFT + z');
-        $this->keyDown('Key.CMD + Key.SHIFT + z');
+        $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
+        $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
+        $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
         $this->assertHTMLMatch('<p>%1%</p><p>New content</p><p>EIB MOZ</p>');
         $this->assertTrue($this->topToolbarButtonExists('historyUndo'), 'Undo icon should be active');
         $this->assertTrue($this->topToolbarButtonExists('historyRedo', 'disabled'), 'Redo icon should be disabled');
 
-        $this->keyDown('Key.CMD + z');
-        $this->keyDown('Key.CMD + z');
-        $this->keyDown('Key.CMD + z');
+        $this->sikuli->keyDown('Key.CMD + z');
+        $this->sikuli->keyDown('Key.CMD + z');
+        $this->sikuli->keyDown('Key.CMD + z');
         $this->assertHTMLMatch('<p>%1%</p><p>EIB MOZ</p>');
         $this->assertTrue($this->topToolbarButtonExists('historyUndo', 'disabled'), 'Undo icon should be disabled');
         $this->assertTrue($this->topToolbarButtonExists('historyRedo'), 'Redo icon should be active');
@@ -323,8 +323,8 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
     {
 
         $this->selectKeyword(1);
-        $this->keyDown('Key.CMD + a');
-        $this->keyDown('Key.DELETE');
+        $this->sikuli->keyDown('Key.CMD + a');
+        $this->sikuli->keyDown('Key.DELETE');
         sleep(2);
         $this->assertHTMLMatch('<p></p>');
         $this->assertTrue($this->topToolbarButtonExists('historyUndo'), 'Undo icon should be active');
@@ -357,24 +357,24 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
     {
 
         $this->selectKeyword(1);
-        $this->keyDown('Key.CMD + a');
-        $this->keyDown('Key.DELETE');
+        $this->sikuli->keyDown('Key.CMD + a');
+        $this->sikuli->keyDown('Key.DELETE');
         sleep(1);
         $this->assertHTMLMatch('<p></p>');
         $this->assertTrue($this->topToolbarButtonExists('historyUndo'), 'Undo icon should be active');
         $this->assertTrue($this->topToolbarButtonExists('historyRedo', 'disabled'), 'Redo icon should be disabled');
 
-        $this->keyDown('Key.CMD + z');
+        $this->sikuli->keyDown('Key.CMD + z');
         $this->assertHTMLMatch('<p>%1%</p><p>EIB MOZ</p>');
         $this->assertTrue($this->topToolbarButtonExists('historyUndo', 'disabled'), 'Undo icon should be disabled');
         $this->assertTrue($this->topToolbarButtonExists('historyRedo'), 'Redo icon should be active');
 
-        $this->keyDown('Key.CMD + Key.SHIFT + z');
+        $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
         $this->assertHTMLMatch('<p></p>');
         $this->assertTrue($this->topToolbarButtonExists('historyUndo'), 'Undo icon should be active');
         $this->assertTrue($this->topToolbarButtonExists('historyRedo', 'disabled'), 'Redo icon should be disabled');
 
-        $this->keyDown('Key.CMD + z');
+        $this->sikuli->keyDown('Key.CMD + z');
         $this->assertHTMLMatch('<p>%1%</p><p>EIB MOZ</p>');
         $this->assertTrue($this->topToolbarButtonExists('historyUndo', 'disabled'), 'Undo icon should be disabled');
         $this->assertTrue($this->topToolbarButtonExists('historyRedo'), 'Redo icon should be active');
@@ -392,43 +392,43 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
     {
         $this->useTest(1);
         $this->selectKeyword(1, 2);
-        $this->keyDown('Key.DELETE');
+        $this->sikuli->keyDown('Key.DELETE');
         $this->assertTrue($this->topToolbarButtonExists('historyUndo'), 'Undo icon should be enabled');
         $this->type('test123');
         sleep(1);
         $this->assertHTMLMatch('<p>test test1 test2</p><p>test3 test4 test5</p><p>test123</p>');
 
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
         $this->type('123test');
         sleep(1);
         $this->assertHTMLMatch('<p>test test1 test2</p><p>test3 test4 test5</p><p>test123</p><p>123test</p>');
 
         $this->useTest(1);
-        $this->execJS('viper.setSetting("defaultBlockTag", "div")');
+        $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "div")');
 
         $this->selectKeyword(1, 2);
-        $this->keyDown('Key.DELETE');
+        $this->sikuli->keyDown('Key.DELETE');
         $this->assertTrue($this->topToolbarButtonExists('historyUndo'), 'Undo icon should be enabled');
         $this->type('test123');
         sleep(1);
         $this->assertHTMLMatch('<p>test test1 test2</p><p>test3 test4 test5</p><div>test123</div>');
 
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
         $this->type('123test');
         sleep(1);
         $this->assertHTMLMatch('<p>test test1 test2</p><p>test3 test4 test5</p><div>test123<br />123test</div>');
 
         $this->useTest(1);
-        $this->execJS('viper.setSetting("defaultBlockTag", "")');
+        $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "")');
 
         $this->selectKeyword(1, 2);
-        $this->keyDown('Key.DELETE');
+        $this->sikuli->keyDown('Key.DELETE');
         $this->assertTrue($this->topToolbarButtonExists('historyUndo'), 'Undo icon should be enabled');
         $this->type('test123');
         sleep(1);
         $this->assertHTMLMatch('<p>test test1 test2</p><p>test3 test4 test5</p>test123');
 
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
         $this->type('123test');
         sleep(1);
         $this->assertHTMLMatch('<p>test test1 test2</p><p>test3 test4 test5</p>test123<br />123test');
@@ -446,8 +446,8 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
     {
         $this->useTest(1);
         $this->moveToKeyword(1, 'right');
-        $this->keyDown('Key.DELETE');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->sikuli->keyDown('Key.ENTER');
         $this->type('test');
 
         $this->assertHTMLMatch('<p>XAX</p><p>testEIB MOZ</p>');
@@ -466,11 +466,11 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
         $this->moveToKeyword(1, 'right');
         $this->type('test');
         $this->selectKeyword(1);
-        $this->keyDown('Key.CMD + b');
-        $this->keyDown('Key.RIGHT');
-        $this->keyDown('Key.RIGHT');
-        $this->keyDown('Key.LEFT');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.CMD + b');
+        $this->sikuli->keyDown('Key.RIGHT');
+        $this->sikuli->keyDown('Key.RIGHT');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.ENTER');
         $this->type('test');
 
         $this->assertHTMLMatch('<p><strong>XAX</strong></p><p>testtest</p><p>EIB MOZ</p>');
@@ -485,7 +485,7 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
      */
     public function testNoBaseTagInput()
     {
-        $this->execJS('viper.setSetting("defaultBlockTag", "")');
+        $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "")');
 
         // Test that typing characters in a node with no block parent does not cause
         // it to be wrapped with a block tag.
@@ -497,22 +497,22 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
         // Test that enter key inside a paragraph still splits the container.
         $this->useTest(2);
         $this->moveToKeyword(1, 'right');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
         $this->assertHTMLMatch('<p>%1%</p><p> %2%</p>test');
 
         // Test that enter key creates a BR tag instead of creating block elements
         // if the text has no wrapping block elements.
         $this->useTest(3);
         $this->moveToKeyword(1, 'right');
-        $this->keyDown('Key.ENTER');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
         $this->assertHTMLMatch('%1%<br /><br /> %2%');
 
         // Test that removing whole content and typing does not wrap text in a block
         // element.
         $this->useTest(1);
         $this->selectKeyword(1);
-        $this->keyDown('Key.DELETE');
+        $this->sikuli->keyDown('Key.DELETE');
         $this->type('test');
         $this->assertHTMLMatch('test');
 
@@ -532,7 +532,7 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
 
         $this->useTest(4);
         $this->selectKeyword(1);
-        $this->keyDown('Key.DELETE');
+        $this->sikuli->keyDown('Key.DELETE');
         $this->type('test');
         $this->assertHTMLMatch('test');
 
@@ -548,9 +548,9 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
     {
         $this->moveToKeyword(1, 'right');
 
-        $this->execJS('(function(){var input = document.createElement("input");dfx.insertBefore(document.body.firstChild, input);input.focus();return true;})()');
+        $this->sikuli->execJS('(function(){var input = document.createElement("input");dfx.insertBefore(document.body.firstChild, input);input.focus();return true;})()');
         sleep(2);
-        $this->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.TAB');
         $this->type('123456');
 
         $this->assertHTMLMatch('<p>123456%1%</p><p>EIB MOZ</p>');
@@ -566,12 +566,12 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
     public function testTabInToViperWithNoContent()
     {
         $this->selectKeyword(1);
-        $this->keyDown('Key.CMD + a');
-        $this->keyDown('Key.DELETE');
+        $this->sikuli->keyDown('Key.CMD + a');
+        $this->sikuli->keyDown('Key.DELETE');
 
-        $this->execJS('(function(){var input = document.createElement("input");dfx.insertBefore(document.body.firstChild, input);input.focus();return true;})()');
+        $this->sikuli->execJS('(function(){var input = document.createElement("input");dfx.insertBefore(document.body.firstChild, input);input.focus();return true;})()');
         sleep(2);
-        $this->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.TAB');
         $this->type('123456');
 
         $this->assertHTMLMatch('<p>123456</p>');
@@ -586,7 +586,7 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
      */
     public function testEmbeddingVideo()
     {
-        $this->click($this->findKeyword(1));
+        $this->sikuli->click($this->findKeyword(1));
         $this->clickTopToolbarButton('sourceView');
 
         // Check to make sure the source editor appears.
@@ -597,8 +597,8 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
         }
 
         // Embed the video
-        $this->keyDown('Key.CMD + a');
-        $this->keyDown('Key.DELETE');
+        $this->sikuli->keyDown('Key.CMD + a');
+        $this->sikuli->keyDown('Key.DELETE');
         $this->type('<iframe title="Roadmap" src="http://www.youtube.com/embed/PYm4Atlxe4M" allowfullscreen="" frameborder="0" height="315" width="420"></iframe>');
         $this->clickButton('Apply Changes', NULL, TRUE);
 
@@ -614,8 +614,8 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
         }
 
         // Embed the video using object tags
-        $this->keyDown('Key.CMD + a');
-        $this->keyDown('Key.DELETE');
+        $this->sikuli->keyDown('Key.CMD + a');
+        $this->sikuli->keyDown('Key.DELETE');
         $this->type('<object width="560" height="315"><param name="movie" value="http://www.youtube.com/v/f6ZSZbNfSpk?version=3&amp;hl=en_GB"></param><param name="allowFullScreen" value="true"></param><param name="allowscriptaccess" value="always"></param><embed src="http://www.youtube.com/v/f6ZSZbNfSpk?version=3&amp;hl=en_GB" type="application/x-shockwave-flash" width="560" height="315" allowscriptaccess="always" allowfullscreen="true"></embed></object>');
         $this->clickButton('Apply Changes', NULL, TRUE);
 

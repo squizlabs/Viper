@@ -205,11 +205,11 @@ class Viper_Tests_ViperTableEditorPlugin_TableHeadersUnitTest extends AbstractVi
         $testCount = count($results);
         for ($i = 1; $i <= $testCount; $i++) {
             $this->useTest($i);
-            $this->click($this->findKeyword(1));
-            $this->click($this->findKeyword(1));
+            $this->sikuli->click($this->findKeyword(1));
+            $this->sikuli->click($this->findKeyword(1));
             $this->showTools(NULL, 'row');
             $this->clickField('Heading');
-            $this->keyDown('Key.ENTER');
+            $this->sikuli->keyDown('Key.ENTER');
 
             $this->assertTableWithoutHeaders($results[$i], 'Test '.$i.' HTML check has failed');
         }

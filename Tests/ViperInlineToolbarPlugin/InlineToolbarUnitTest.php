@@ -27,7 +27,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarUnitTest extends Abstrac
 
         $arrowImg .= '.png';
 
-        return $this->find($this->getBrowserImagePath().'/'.$arrowImg, NULL, 0.95);
+        return $this->sikuli->find($this->getBrowserImagePath().'/'.$arrowImg, NULL, 0.95);
 
     }//end _getToolbarArrow()
 
@@ -138,7 +138,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarUnitTest extends Abstrac
         $this->selectKeyword(1, 4);
 
         $leftX  = ($this->getX($this->getTopLeft($start)));
-        $width  = ($this->execJS('dfx.getElementWidth(dfx.getId("content"))') / 2);
+        $width  = ($this->sikuli->execJS('dfx.getElementWidth(dfx.getId("content"))') / 2);
         $center = ($leftX + $width);
         $wordY  = $this->getY($this->getBottomLeft($end));
         $this->_assertPosition($center, $wordY);
@@ -154,7 +154,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarUnitTest extends Abstrac
     public function testPositionAfterWindowResize()
     {
         $this->selectKeyword(2);
-        $this->resizeWindow(1600, 800);
+        $this->sikuli->resizeWindow(1600, 800);
 
         $word = $this->findKeyword(2);
 
@@ -173,7 +173,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarUnitTest extends Abstrac
      */
     public function testPositionOrientationLeft()
     {
-        $this->execJS('viperTest.getWindow().dfx.setStyle(viperTest.getWindow().dfx.getId("content"), "margin-left", "10px")');
+        $this->sikuli->execJS('viperTest.getWindow().dfx.setStyle(viperTest.getWindow().dfx.getId("content"), "margin-left", "10px")');
 
         $word = $this->findKeyword(1);
         $this->selectKeyword(1);
@@ -193,7 +193,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarUnitTest extends Abstrac
      */
     public function testPositionOrientationRight()
     {
-        $this->resizeWindow(1150, 800);
+        $this->sikuli->resizeWindow(1150, 800);
 
         $word = $this->findKeyword(5);
         $this->selectKeyword(5);
@@ -214,7 +214,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarUnitTest extends Abstrac
     {
         $word = $this->findKeyword(1);
         $this->selectKeyword(1);
-        $this->click($word);
+        $this->sikuli->click($word);
         sleep(2);
 
         try {
@@ -333,7 +333,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarUnitTest extends Abstrac
     {
         $this->selectKeyword(1);
 
-        $this->click($this->_getToolbarArrow());
+        $this->sikuli->click($this->_getToolbarArrow());
         sleep(2);
         $this->getInlineToolbar();
 

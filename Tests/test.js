@@ -24,68 +24,6 @@ var viperTest = {
     stopPolling: false
 };
 
-
-function initJSPoller()
-{
-    var scriptUrl = window.location.href.split('/');
-    scriptUrl.pop();
-    scriptUrl = scriptUrl.join('/') + '/jspoller.php';
-    viperTest.scriptURL = scriptUrl;
-
-    viperTest.stopPolling = false;
-
-    var seconds  = 0.5;
-    var interval = null;
-    interval = setInterval(function() {
-        if (viperTest.stopPolling === true) {
-            return;
-        }
-
-        viperTest.stopPolling = true;
-        dfx.post(scriptUrl, {_t:(new Date().getTime())}, function(val) {
-            if (!val) {
-                viperTest.stopPolling = false;
-                return;
-            }
-
-            var async = false;
-            if (val.indexOf('__asynchronous__') === 0) {
-                async = true;
-                val   = val.replace('__asynchronous__', '');
-            }
-
-            if (val.indexOf('gStringLoc') !== false) {
-                // Need to remove the searched string so that its not found in
-                // the msg div.
-                dfx.setHtml(dfx.getId('msg'), 'Exec: ' + val.replace(/"(.+)"/, ''));
-            } else {
-                dfx.setHtml(dfx.getId('msg'), 'Exec: ' + val);
-            }
-
-            if (val === 'cw()' || val === 'cw();') {
-                viperTest.stopPolling = true;
-                clearInterval(interval);
-                return;
-            }
-
-            if (async === false) {
-                var jsResult = null;
-                val = 'try {jsResult = dfx.jsonEncode(' + val + ');} catch (e) {}';
-
-                // Execute JS.
-                eval(val);
-
-                dfx.post(viperTest.scriptURL, {res: jsResult, _t:(new Date().getTime())}, function() {
-                    viperTest.stopPolling = false;
-                });
-            } else {
-                eval(val);
-            }
-        });
-    }, (1000 * seconds));
-
-}
-
 function sendResult(result)
 {
     result = dfx.jsonEncode(result);

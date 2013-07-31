@@ -13,7 +13,7 @@ class Viper_Tests_ViperFormatPlugin_AlignmentUnitTest extends AbstractViperUnitT
      */
     public function testAlignmentInNoneBlockTag()
     {
-        $this->click($this->findKeyword(7));
+        $this->sikuli->click($this->findKeyword(7));
 
         $this->clickTopToolbarButton('justifyLeft');
         $this->clickTopToolbarButton('justifyCenter');
@@ -393,7 +393,7 @@ class Viper_Tests_ViperFormatPlugin_AlignmentUnitTest extends AbstractViperUnitT
      */
     public function testJustificationWhenClickingInAWord()
     {
-        $this->click($this->findKeyword(8));
+        $this->sikuli->click($this->findKeyword(8));
 
         $this->clickTopToolbarButton('justifyLeft');
         $this->clickTopToolbarButton('justifyRight');
@@ -419,7 +419,7 @@ class Viper_Tests_ViperFormatPlugin_AlignmentUnitTest extends AbstractViperUnitT
 
         $this->assertHTMLMatch('<p style="text-align: right;">%1% amet %2%</p><p style="text-align: right;">%3% TpT</p><p style="text-align: right;">%4% aaa</p><p style="text-align: right;">%5% GaG</p><p style="text-align: right;">%6% %7% %8%</p><p>test <strong>%9%</strong> text</p><p>test <em>%10%</em> text.</p>');
 
-        $this->click($this->findkeyword(9));
+        $this->sikuli->click($this->findkeyword(9));
 
         $this->selectkeyword(2, 7);
         $this->assertTrue($this->topToolbarButtonExists('justifyRight', 'active'), 'Acitve right justify icon does not appear in the top toolbar');

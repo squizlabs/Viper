@@ -58,7 +58,7 @@ abstract class AbstractViperTableEditorPluginUnitTest extends AbstractViperUnitT
     {
         $this->moveToKeyword($keyword, 'right');
         usleep(50000);
-        $this->execJS('insTable('.$rows.', '.$cols.', '.$headerType.', "'.$id.'")');
+        $this->sikuli->execJS('insTable('.$rows.', '.$cols.', '.$headerType.', "'.$id.'")');
 
     }//end insertTableWithBothHeaders()
 
@@ -73,10 +73,10 @@ abstract class AbstractViperTableEditorPluginUnitTest extends AbstractViperUnitT
     protected function clickCell($cellNum)
     {
         $cellRect = $this->getBoundingRectangle('td,th', $cellNum);
-        $region   = $this->getRegionOnPage($cellRect);
+        $region   = $this->sikuli->getRegionOnPage($cellRect);
 
         // Click inside the cell.
-        $this->click($region);
+        $this->sikuli->click($region);
 
     }//end clickCell()
 
@@ -108,7 +108,7 @@ abstract class AbstractViperTableEditorPluginUnitTest extends AbstractViperUnitT
                 $toolIconRect = $this->getBoundingRectangle('#test-ViperTEP', 0);
             }
 
-            $region = $this->getRegionOnPage($toolIconRect);
+            $region = $this->sikuli->getRegionOnPage($toolIconRect);
         }
 
         // Move mouse on top of the icon.
@@ -132,7 +132,7 @@ abstract class AbstractViperTableEditorPluginUnitTest extends AbstractViperUnitT
      */
     protected function getCellHighlight()
     {
-        return $this->execJS('viperTest.getWindow().gTblH()');
+        return $this->sikuli->execJS('viperTest.getWindow().gTblH()');
 
     }//end getCellHighlight()
 
@@ -184,7 +184,7 @@ abstract class AbstractViperTableEditorPluginUnitTest extends AbstractViperUnitT
     {
         $this->showTools($cellNum, 'cell');
         $this->clickField('Heading');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
 
     }//end toggleCellHeading()
 
@@ -238,7 +238,7 @@ abstract class AbstractViperTableEditorPluginUnitTest extends AbstractViperUnitT
                   'mergeRight',
                  );
 
-        $statuses = $this->execJS('gTblBStatus()');
+        $statuses = $this->sikuli->execJS('gTblBStatus()');
 
         foreach ($statuses as $btn => $status) {
             if ($status === TRUE && $$btn === FALSE) {

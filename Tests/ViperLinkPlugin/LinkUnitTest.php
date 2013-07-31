@@ -21,7 +21,7 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->assertTrue($this->inlineToolbarButtonExists('link', 'selected'), 'Toolbar button icon is not correct');
 
         $this->type('http://www.squizlabs.com');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
 
         $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com">%1%</a> link test test %2%</p>');
 
@@ -48,11 +48,11 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
 
         $this->clickInlineToolbarButton('link');
         $this->type('http://www.squizlabs.com');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
 
         $this->assertHTMLMatch('<p>Link test <a href="http://www.squizlabs.com">%1% <strong>%2%</strong></a></p>');
 
-        $this->click($this->findKeyword(2));
+        $this->sikuli->click($this->findKeyword(2));
         $this->clickInlineToolbarButton('linkRemove');
 
         $this->assertHTMLMatch('<p>Link test %1% <strong>%2%</strong></p>');
@@ -60,11 +60,11 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->selectKeyword(1, 2);
         $this->clickInlineToolbarButton('link');
         $this->type('http://www.squizlabs.com');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
 
         $this->assertHTMLMatch('<p>Link test <a href="http://www.squizlabs.com">%1% <strong>%2%</strong></a></p>');
 
-        $this->click($this->findKeyword(2));
+        $this->sikuli->click($this->findKeyword(2));
         $this->clickInlineToolbarButton('linkRemove');
 
         $this->assertHTMLMatch('<p>Link test %1% <strong>%2%</strong></p>');
@@ -90,7 +90,7 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->assertTrue($this->topToolbarButtonExists('link', 'selected'), 'Toolbar button icon is not correct');
 
         $this->type('http://www.squizlabs.com');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
 
         $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com">%1%</a> link test test %2%</p>');
 
@@ -117,18 +117,18 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->selectKeyword(1);
         $this->clickInlineToolbarButton('link');
         $this->type('http://www.squizlabs.com');
-        $this->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.TAB');
         $this->type('Squiz Labs');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
         $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com" title="Squiz Labs">%1%</a> link test test %2%</p>');
 
         // Test top toolbar
         $this->selectKeyword(2);
         $this->clickTopToolbarButton('link');
         $this->type('http://www.squizlabs.com');
-        $this->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.TAB');
         $this->type('Squiz Labs');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
         $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com" title="Squiz Labs">%1%</a> link test test <a href="http://www.squizlabs.com" title="Squiz Labs">%2%</a></p>');
 
     }//end testCreateLinkPlainTextWithTitle()
@@ -147,18 +147,18 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
 
         $this->clickInlineToolbarButton('link');
         $this->type('http://www.squizlabs.com');
-        $this->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.TAB');
         $this->type('Squiz Labs');
         $this->clickField('Open a New Window');
         sleep(1);
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
 
         $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com" title="Squiz Labs" target="_blank">%1%</a> link test test %2%</p>');
 
         $this->selectKeyword(2);
         $this->clickInlineToolbarButton('link');
         $this->type('http://www.squizlabs.com');
-        $this->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.TAB');
         $this->type('Squiz Labs');
         $this->clickField('Open a New Window');
         sleep(1);
@@ -182,18 +182,18 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
 
         $this->clickTopToolbarButton('link');
         $this->type('http://www.squizlabs.com');
-        $this->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.TAB');
         $this->type('Squiz Labs');
         $this->clickField('Open a New Window');
         sleep(1);
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
 
         $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com" title="Squiz Labs" target="_blank">%1%</a> link test test %2%</p>');
 
         $this->selectKeyword(2);
         $this->clickTopToolbarButton('link');
         $this->type('http://www.squizlabs.com');
-        $this->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.TAB');
         $this->type('Squiz Labs');
         $this->clickField('Open a New Window');
         sleep(1);
@@ -217,9 +217,9 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
 
         $this->clickInlineToolbarButton('link');
         $this->type('http://www.squizlabs.com');
-        $this->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.TAB');
         $this->type('Squiz Labs');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
 
         $this->selectKeyword(1);
         $this->assertTrue($this->inlineToolbarButtonExists('link', 'active'), 'Link icon should be active in the inline toolbar');
@@ -246,17 +246,17 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
 
         $this->clickInlineToolbarButton('link');
         $this->type('http://www.squizlabs.com');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
 
-        $this->click($this->findKeyword(1));
-        $this->click($this->findKeyword(2));
-        $this->keyDown('Key.SHIFT + Key.RIGHT');
+        $this->sikuli->click($this->findKeyword(1));
+        $this->sikuli->click($this->findKeyword(2));
+        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
 
         $this->assertTrue($this->inlineToolbarButtonExists('link', 'active'), 'Link icon should be active.');
         $this->assertTrue($this->inlineToolbarButtonExists('linkRemove'), 'Remove link icon should be available.');
 
         $this->clickInlineToolbarButton('linkRemove');
-        $this->click($this->findKeyword(1));
+        $this->sikuli->click($this->findKeyword(1));
         $this->assertHTMLMatch('<p>%1% link test test %2%</p>');
 
     }//end testSelectPartialLinkShowsToolbar()
@@ -274,15 +274,15 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->selectKeyword(2);
         $this->clickInlineToolbarButton('link');
         $this->type('http://www.squizlabs.com');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
 
-        $this->click($this->findKeyword(1));
-        $this->click($this->findKeyword(2));
+        $this->sikuli->click($this->findKeyword(1));
+        $this->sikuli->click($this->findKeyword(2));
         $this->assertTrue($this->inlineToolbarButtonExists('link', 'active'), 'Link icon should be active.');
         $this->assertTrue($this->inlineToolbarButtonExists('linkRemove'), 'Remove link icon should be available.');
 
         $this->clickInlineToolbarButton('linkRemove');
-        $this->click($this->findKeyword(1));
+        $this->sikuli->click($this->findKeyword(1));
         $this->assertHTMLMatch('<p>%1% link test test %2%</p>');
 
     }//end testClickingInLinkShowToolbar()
@@ -298,14 +298,14 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->useTest(1);
 
         $this->selectKeyword(2);
-        $this->keyDown('Key.CMD + b');
+        $this->sikuli->keyDown('Key.CMD + b');
         $this->assertHTMLMatch('<p>%1% link test test <strong>%2%</strong></p>');
 
         $this->clickInlineToolbarButton('link');
         $this->type('http://www.squizlabs.com');
-        $this->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.TAB');
         $this->type('Squiz Labs');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
 
         $this->assertHTMLMatch('<p>%1% link test test <strong><a href="http://www.squizlabs.com" title="Squiz Labs">%2%</a></strong></p>');
 
@@ -327,9 +327,9 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
 
         $this->clickInlineToolbarButton('link');
         $this->type('http://www.squizlabs.com');
-        $this->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.TAB');
         $this->type('Squiz Labs');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
 
         $this->assertHTMLMatch('<p>Link test <a href="http://www.squizlabs.com" title="Squiz Labs">%1% <strong>%2%</strong></a></p>');
 
@@ -349,11 +349,11 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->selectKeyword(1);
         $this->clickInlineToolbarButton('link');
         $this->type('http://www.squizlabs.com');
-        $this->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.TAB');
         $this->type('Squiz Labs');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
 
-        $this->click($this->findKeyword(2));
+        $this->sikuli->click($this->findKeyword(2));
         $this->selectKeyword(1);
 
         // Move the pointer away from link to prevent tooltip.
@@ -368,11 +368,11 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->selectKeyword(1);
         $this->clickInlineToolbarButton('link');
         $this->type('labs@squiz.com.au');
-        $this->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.TAB');
         $this->type('Subject');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
 
-        $this->click($this->findKeyword(2));
+        $this->sikuli->click($this->findKeyword(2));
         $this->selectKeyword(1);
         $this->clickInlineToolbarButton('linkRemove');
         $this->assertFalse($this->inlineToolbarButtonExists('linkRemove'), 'Remove link icon should not be available.');
@@ -395,11 +395,11 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->selectKeyword(2);
         $this->clickInlineToolbarButton('link');
         $this->type('http://www.squizlabs.com');
-        $this->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.TAB');
         $this->type('Squiz Labs');
-        $this->keyDown('Key.ENTER');
-        $this->click($this->findKeyword(1));
-        $this->click($this->findKeyword(2));
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->sikuli->click($this->findKeyword(1));
+        $this->sikuli->click($this->findKeyword(2));
         $this->clickInlineToolbarButton('linkRemove');
         $this->assertTrue($this->topToolbarButtonExists('link', 'disabled'), 'Link icon should be disabled.');
         $this->assertHTMLMatch('<p>%1% link test test %2%</p>');
@@ -408,11 +408,11 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->selectKeyword(1);
         $this->clickInlineToolbarButton('link');
         $this->type('labs@squiz.com.au');
-        $this->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.TAB');
         $this->type('Subject');
-        $this->keyDown('Key.ENTER');
-        $this->click($this->findKeyword(2));
-        $this->click($this->findKeyword(1));
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->sikuli->click($this->findKeyword(2));
+        $this->sikuli->click($this->findKeyword(1));
         $this->clickInlineToolbarButton('linkRemove');
         $this->assertTrue($this->topToolbarButtonExists('link', 'disabled'), 'Link icon should be disabled.');
         $this->assertHTMLMatch('<p>%1% link test test %2%</p>');
@@ -432,13 +432,13 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->selectKeyword(1);
         $this->clickInlineToolbarButton('link');
         $this->type('http://www.squizlabs.com');
-        $this->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.TAB');
         $this->type('Squiz Labs');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
 
         // Click in link, open fields and remove link
-        $this->click($this->findKeyword(2));
-        $this->click($this->findKeyword(1));
+        $this->sikuli->click($this->findKeyword(2));
+        $this->sikuli->click($this->findKeyword(1));
         $this->clickInlineToolbarButton('link', 'active');
         $this->clickInlineToolbarButton('linkRemove');
         $this->assertTrue($this->inlineToolbarButtonExists('link', 'selected'), 'Link icon should still be selected in the inline toolbar');
@@ -460,9 +460,9 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->selectKeyword(1);
         $this->clickInlineToolbarButton('link');
         $this->type('http://www.squizlabs.com');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
 
-        $this->click($this->findKeyword(2));
+        $this->sikuli->click($this->findKeyword(2));
         $this->selectKeyword(1);
         $this->assertTrue($this->inlineToolbarButtonExists('linkRemove'), 'Remove link icon should be available.');
         $this->assertTrue($this->topToolbarButtonExists('linkRemove'), 'Remove link icon should be available in top toolbar.');
@@ -489,16 +489,16 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->selectKeyword(1);
         $this->clickInlineToolbarButton('link');
         $this->type('http://www.squizlabs.com');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
 
-        $this->click($this->findKeyword(2));
+        $this->sikuli->click($this->findKeyword(2));
         $this->selectKeyword(1);
         $this->assertTrue($this->inlineToolbarButtonExists('linkRemove'), 'Remove link icon should be available.');
         $this->assertTrue($this->topToolbarButtonExists('linkRemove'), 'Remove link icon should be available in top toolbar.');
 
         $this->clickInlineToolbarButton('link', 'active');
         $this->clearFieldValue('URL');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
 
         $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com">%1%</a> link test test %2%</p>');
 
@@ -517,10 +517,10 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->selectKeyword(1);
         $this->clickTopToolbarButton('link');
         $this->type('http://www.squizlabs.com');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
         $this->clickTopToolbarButton('link', 'selected');
 
-        $this->click($this->findKeyword(2));
+        $this->sikuli->click($this->findKeyword(2));
         $this->selectKeyword(1);
 
         $this->clickTopToolbarButton('link', 'active');
@@ -546,9 +546,9 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
 
         $this->clickInlineToolbarButton('link');
         $this->type('http://www.squizlabs.com');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
 
-        $this->click($this->findKeyword(2));
+        $this->sikuli->click($this->findKeyword(2));
         $this->selectKeyword(1);
         $this->assertTrue($this->inlineToolbarButtonExists('linkRemove'), 'Remove link icon should be available.');
         $this->assertTrue($this->topToolbarButtonExists('linkRemove'), 'Remove link icon should be available in top toolbar.');
@@ -556,11 +556,11 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->clickInlineToolbarButton('link', 'active');
         $this->clickField('Title');
         $this->type('title');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
 
         $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com" title="title">%1%</a> link test test %2%</p>');
 
-        $this->click($this->findKeyword(2));
+        $this->sikuli->click($this->findKeyword(2));
         $this->selectKeyword(1);
         $this->mouseMoveOffset(50, 50);
         $this->clickInlineToolbarButton('link', 'active');
@@ -586,18 +586,18 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
 
         $this->clickTopToolbarButton('link');
         $this->type('http://www.squizlabs.com');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
 
-        $this->click($this->findKeyword(2));
+        $this->sikuli->click($this->findKeyword(2));
         $this->selectKeyword(1);
         $this->clickTopToolbarButton('link', 'active');
         $this->clickField('Title');
         $this->type('title');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
 
         $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com" title="title">%1%</a> link test test %2%</p>');
 
-        $this->click($this->findKeyword(2));
+        $this->sikuli->click($this->findKeyword(2));
         $this->selectKeyword(1);
         $this->clickTopToolbarButton('link', 'active');
         $this->clickField('Title');
@@ -622,10 +622,10 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->selectKeyword(2);
         $this->clickInlineToolbarButton('link');
         $this->type('http://www.squizlabs.com');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
 
-        $this->click($this->findKeyword(1));
-        $this->click($this->findKeyword(2));
+        $this->sikuli->click($this->findKeyword(1));
+        $this->sikuli->click($this->findKeyword(2));
         $this->assertTrue($this->inlineToolbarButtonExists('linkRemove'), 'Remove link icon should be available.');
         $this->assertTrue($this->inlineToolbarButtonExists('link', 'active'), 'Link icon should be available.');
 
@@ -635,10 +635,10 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->selectKeyword(1, 2);
         $this->clickInlineToolbarButton('link');
         $this->type('http://www.squizlabs.com');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
 
-        $this->click($this->findKeyword(1));
-        $this->click($this->findKeyword(2));
+        $this->sikuli->click($this->findKeyword(1));
+        $this->sikuli->click($this->findKeyword(2));
         $this->assertTrue($this->inlineToolbarButtonExists('linkRemove'), 'Remove link icon should be available.');
         $this->assertTrue($this->inlineToolbarButtonExists('link', 'active'), 'Link icon should be available.');
 
@@ -655,16 +655,16 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->useTest(5);
 
         $this->selectKeyword(2);
-        $this->keyDown('Key.CMD + b');
-        $this->keyDown('Key.CMD + i');
+        $this->sikuli->keyDown('Key.CMD + b');
+        $this->sikuli->keyDown('Key.CMD + i');
         $this->assertHTMLMatch('<p>Link test %1% <em>%2%</em></p>');
 
         $this->clickInlineToolbarButton('link');
         $this->type('http://www.squizlabs.com');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
 
-        $this->click($this->findKeyword(1));
-        $this->click($this->findKeyword(2));
+        $this->sikuli->click($this->findKeyword(1));
+        $this->sikuli->click($this->findKeyword(2));
         $this->assertTrue($this->inlineToolbarButtonExists('linkRemove'), 'Remove link icon should be available.');
         $this->assertTrue($this->inlineToolbarButtonExists('link', 'active'), 'Link icon should be available.');
 
@@ -674,10 +674,10 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->selectKeyword(1, 2);
         $this->clickInlineToolbarButton('link');
         $this->type('http://www.squizlabs.com');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
 
-        $this->click($this->findKeyword(1));
-        $this->click($this->findKeyword(2));
+        $this->sikuli->click($this->findKeyword(1));
+        $this->sikuli->click($this->findKeyword(2));
         $this->assertTrue($this->inlineToolbarButtonExists('linkRemove'), 'Remove link icon should be available.');
         $this->assertTrue($this->inlineToolbarButtonExists('link', 'active'), 'Link icon should be available.');
 
@@ -697,15 +697,15 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
 
         $this->clickInlineToolbarButton('cssClass');
         $this->type('class');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
 
         $this->clickInlineToolbarButton('anchorID');
         $this->type('anchor');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
 
         $this->clickInlineToolbarButton('link');
         $this->type('http://www.squizlabs.com');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
 
         $this->assertHTMLMatch('<p>%1% link test test <a href="http://www.squizlabs.com" class="class" id="anchor">%2%</a></p>');
 
@@ -734,20 +734,20 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
 
         $this->clickInlineToolbarButton('cssClass');
         $this->type('class');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
 
         $this->clickInlineToolbarButton('anchorID');
         $this->type('anchor');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
 
         $this->clickInlineToolbarButton('link');
         $this->type('http://www.squizlabs.com');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
 
         $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com" class="class" id="anchor">%1%</a> link test test %2%</p>');
 
-        $this->click($this->findKeyword(2));
-        $this->click($this->findKeyword(1));
+        $this->sikuli->click($this->findKeyword(2));
+        $this->sikuli->click($this->findKeyword(1));
         $this->clickInlineToolbarButton('linkRemove');
 
         $this->assertHTMLMatch('<p>%1% link test test %2%</p>');
@@ -768,18 +768,18 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
 
         $this->clickInlineToolbarButton('cssClass');
         $this->type('class');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
 
         $this->clickInlineToolbarButton('anchorID');
         $this->type('anchor');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
 
-        $this->click($this->findKeyword(2));
+        $this->sikuli->click($this->findKeyword(2));
         $this->selectKeyword(1);
 
         $this->clickInlineToolbarButton('link');
         $this->type('http://www.squizlabs.com');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
 
         $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com" class="class" id="anchor">%1%</a> link test test %2%</p>');
 
@@ -807,16 +807,16 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->selectKeyword(1);
         $this->clickInlineToolbarButton('link');
         $this->type('http://www.squizlabs.com');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
 
-        $this->click($this->findKeyword(2));
-        $this->click($this->findKeyword(1));
+        $this->sikuli->click($this->findKeyword(2));
+        $this->sikuli->click($this->findKeyword(1));
         $this->clickInlineToolbarButton('link', 'active');
         $this->assertEquals($this->getKeyword(1), $this->getSelectedText(), 'Original selection is still not selected.');
 
-        $this->click($this->findKeyword(2));
+        $this->sikuli->click($this->findKeyword(2));
 
-        $this->click($this->findKeyword(1));
+        $this->sikuli->click($this->findKeyword(1));
         $this->clickTopToolbarButton('link', 'active');
         $this->assertEquals($this->getKeyword(1), $this->getSelectedText(), 'Original selection is still not selected.');
 
@@ -837,14 +837,14 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
 
         $this->clickInlineToolbarButton('link');
         $this->type('http://www.squizlabs.com');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
 
         $this->selectKeyword(1);
         $this->clickInlineToolbarButton('linkRemove');
         $this->clickTopToolbarButton('historyUndo');
         $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com">%1%</a> link test test %2%</p>');
 
-        $this->click($this->findKeyword(1));
+        $this->sikuli->click($this->findKeyword(1));
         $this->clickInlineToolbarButton('linkRemove');
         $this->clickTopToolbarButton('historyUndo');
         $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com">%1%</a> link test test %2%</p>');
@@ -867,7 +867,7 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         sleep(1);
         $this->clickTopToolbarButton('link', 'selected');
 
-        $this->click($this->findKeyword(2));
+        $this->sikuli->click($this->findKeyword(2));
 
         // Check that the inline toolbar doesn't appear on the screen
         $inlineToolbarFound = true;
@@ -901,12 +901,12 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->selectKeyword(1);
         $this->clickInlineToolbarButton('link');
         $this->type('http://www.squizlabs.com');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
 
         $this->selectKeyword(2);
         $this->clickInlineToolbarButton('link');
         $this->type('http://www.google.com');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
 
         $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com">%1%</a> link test test <a href="http://www.google.com">%2%</a></p>');
 
@@ -947,7 +947,7 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->mouseMoveOffset(50, 50);
         $this->assertTrue($this->inlineToolbarButtonExists('link'), 'Link icon should appear in the inline toolbar.');
         $this->assertFalse($this->inlineToolbarButtonExists('linkRemove'), 'Remove link icon should not appear in the inline toolbar.');
-        $this->click($this->findKeyword(1));
+        $this->sikuli->click($this->findKeyword(1));
 
         $this->selectKeyword(5);
         $this->mouseMoveOffset(50, 50);
@@ -972,7 +972,7 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->assertTrue($this->inlineToolbarButtonExists('link', 'selected'), 'Toolbar button icon is not correct');
 
         $this->type('labs@squiz.com.au');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
         $this->assertHTMLMatch('<p><a href="mailto:labs@squiz.com.au">%1%</a> link test test %2%</p>');
 
         $this->selectKeyword(2);
@@ -1000,15 +1000,15 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->assertTrue($this->inlineToolbarButtonExists('link', 'selected'), 'Toolbar button icon is not correct');
 
         $this->type('labs@squiz.com.au');
-        $this->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.TAB');
         $this->type('Subject');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
         $this->assertHTMLMatch('<p><a href="mailto:labs@squiz.com.au?subject=Subject">%1%</a> link test test %2%</p>');
 
         $this->selectKeyword(2);
         $this->clickInlineToolbarButton('link');
         $this->type('mailto: labs@squiz.com.au');
-        $this->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.TAB');
         $this->type('Subject');
         $this->clickInlineToolbarButton('Update Changes', NULL, TRUE);
         $this->assertHTMLMatch('<p><a href="mailto:labs@squiz.com.au?subject=Subject">%1%</a> link test test <a href="mailto:labs@squiz.com.au?subject=Subject">%2%</a></p>');
@@ -1028,17 +1028,17 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->selectKeyword(1);
         $this->clickInlineToolbarButton('link');
         $this->type('labs@squiz.com.au');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
         $this->clickField('Subject');
         $this->type('Subject');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
 
         $this->assertHTMLMatch('<p><a href="mailto:labs@squiz.com.au?subject=Subject">%1%</a> link test test %2%</p>');
 
         $this->selectKeyword(2);
         $this->clickInlineToolbarButton('link');
         $this->type('labs@squiz.com.au');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
         $this->clickField('Subject');
         $this->type('Test');
         $this->clickInlineToolbarButton('Update Changes', NULL, TRUE);
@@ -1063,7 +1063,7 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->assertTrue($this->topToolbarButtonExists('link', 'selected'), 'Toolbar button icon is not correct');
 
         $this->type('labs@squiz.com.au');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
         $this->assertHTMLMatch('<p><a href="mailto:labs@squiz.com.au">%1%</a> link test test %2%</p>');
         $this->clickTopToolbarButton('link', 'selected');
 
@@ -1091,9 +1091,9 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->assertTrue($this->topToolbarButtonExists('link', 'selected'), 'Toolbar button icon is not correct');
 
         $this->type('labs@squiz.com.au');
-        $this->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.TAB');
         $this->type('Subject');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
         $this->assertHTMLMatch('<p><a href="mailto:labs@squiz.com.au?subject=Subject">%1%</a> link test test %2%</p>');
 
         $this->clickTopToolbarButton('link', 'selected');
@@ -1101,7 +1101,7 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->selectKeyword(2);
         $this->clickTopToolbarButton('link');
         $this->type('mailto: labs@squiz.com.au');
-        $this->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.TAB');
         $this->type('Subject');
         $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
         $this->assertHTMLMatch('<p><a href="mailto:labs@squiz.com.au?subject=Subject">%1%</a> link test test <a href="mailto:labs@squiz.com.au?subject=Subject">%2%</a></p>');
@@ -1122,12 +1122,12 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->selectKeyword(1);
         $this->clickInlineToolbarButton('link');
         $this->type('labs@squiz.com.au');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
 
         $this->assertTrue($this->fieldExists('Subject'));
         $this->clickField('Subject');
         $this->type('Subject');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
 
         $this->assertHTMLMatch('<p><a href="mailto:labs@squiz.com.au?subject=Subject">%1%</a> link test test %2%</p>');
 
@@ -1149,14 +1149,14 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
 
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
-        
-        $this->keyDown('Key.CMD + c');
+
+        $this->sikuli->keyDown('Key.CMD + c');
         sleep(2);
         $this->clickTopToolbarButton('link');
-        $this->keyDown('Key.CMD + v');
-        $this->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.CMD + v');
+        $this->sikuli->keyDown('Key.TAB');
         $this->type('Subject');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
 
         $this->assertHTMLMatch('<p>test</p><p><a href="mailto:%1%@squiz.com.au?subject=Subject">%1%@squiz.com.au</a></p>');
 
@@ -1175,13 +1175,13 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->clickElement('img', 1);
         $this->clickInlineToolbarButton('link');
         $this->type('www.squizlabs.com');
-        $this->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.TAB');
         $this->type('Squiz Labs');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
 
         $this->assertHTMLMatch('<p>%1% XuT</p><a href="www.squizlabs.com" title="Squiz Labs"><img src="%url%/ViperImagePlugin/Images/html-codesniffer.png" alt="Alt tag" /></a><p>second paragraph</p>');
 
-        $this->click($this->findKeyword(1));
+        $this->sikuli->click($this->findKeyword(1));
 
         $this->clickElement('img', 1);
         $this->clickInlineToolbarButton('linkRemove');
@@ -1202,9 +1202,9 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->clickElement('img', 1);
         $this->clickTopToolbarButton('link');
         $this->type('www.squizlabs.com');
-        $this->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.TAB');
         $this->type('Squiz Labs');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
 
         $this->assertHTMLMatch('<p>%1% XuT</p><a href="www.squizlabs.com" title="Squiz Labs"><img src="%url%/ViperImagePlugin/Images/html-codesniffer.png" alt="Alt tag" /></a><p>second paragraph</p>');
 
@@ -1227,7 +1227,7 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->selectKeyword(1);
         $this->clickInlineToolbarButton('link');
         $this->type('http://www.squizlabs.com');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
         $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com">%1%</a> link test test %2%</p>');
 
         $this->clickTopToolbarButton('historyUndo');
@@ -1249,19 +1249,19 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->useTest(1);
 
         $this->selectKeyword(2);
-        $this->keyDown('Key.RIGHT');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.RIGHT');
+        $this->sikuli->keyDown('Key.ENTER');
 
         // Press space after the link text
         $this->type('Some text http://www.squizlabs.com some text www.example.com ');
         $this->assertHTMLMatch('<p>%1% link test test %2%</p><p>Some text <a href="http://www.squizlabs.com">http://www.squizlabs.com</a> some text <a href="http://www.example.com">www.example.com</a></p>');
 
         // Press enter after the link text
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
         $this->type('Third link http://www.squizlabs.com');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
         $this->type('Fourth link www.example.com');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
         $this->assertHTMLMatch('<p>%1% link test test %2%</p><p>Some text <a href="http://www.squizlabs.com">http://www.squizlabs.com</a> some text <a href="http://www.example.com">www.example.com</a></p><p>Third link <a href="http://www.squizlabs.com">http://www.squizlabs.com</a></p><p>Fourth link <a href="http://www.example.com">www.example.com</a></p>');
 
     }//end testAutoCreatingLinks()

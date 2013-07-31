@@ -20,32 +20,32 @@ class Viper_Tests_ViperCharMapPlugin_CharacterMapPluginUnitTest extends Abstract
 
         // Insert char.
         $char = $this->findImage('ViperCharMapPlugin-symbolChar-1', 'table.VCMP-table.Viper-visible td', 10);
-        $this->click($char);
+        $this->sikuli->click($char);
 
         // Insert char.
         $char = $this->findImage('ViperCharMapPlugin-symbolChar-2', 'table.VCMP-table.Viper-visible td', 11);
-        $this->click($char);
+        $this->sikuli->click($char);
 
         // Change to Latin char list.
-        $this->click($this->findImage('ViperCharMapPlugin-latinList', 'ul.VCMP-list li', 1));
+        $this->sikuli->click($this->findImage('ViperCharMapPlugin-latinList', 'ul.VCMP-list li', 1));
 
         // Insert char.
         $char = $this->findImage('ViperCharMapPlugin-symbolChar-3', 'table.VCMP-table.Viper-visible td', 9);
-        $this->click($char);
+        $this->sikuli->click($char);
 
         // Change to Mathematics char list.
-        $this->click($this->findImage('ViperCharMapPlugin-mathList', 'ul.VCMP-list li', 2));
+        $this->sikuli->click($this->findImage('ViperCharMapPlugin-mathList', 'ul.VCMP-list li', 2));
 
         // Insert char.
         $char = $this->findImage('ViperCharMapPlugin-symbolChar-4', 'table.VCMP-table.Viper-visible td', 3);
-        $this->click($char);
+        $this->sikuli->click($char);
 
         // Change to Mathematics char list.
-        $this->click($this->findImage('ViperCharMapPlugin-currList', 'ul.VCMP-list li', 3));
+        $this->sikuli->click($this->findImage('ViperCharMapPlugin-currList', 'ul.VCMP-list li', 3));
 
         // Insert char.
         $char = $this->findImage('ViperCharMapPlugin-symbolChar-5', 'table.VCMP-table.Viper-visible td', 10);
-        $this->click($char);
+        $this->sikuli->click($char);
 
         $this->assertHTMLMatch('<p>LOREM XAX&para;§ä&times;฿ dolor</p><p>sit amet<strong>WoW</strong></p>');
 
@@ -59,12 +59,12 @@ class Viper_Tests_ViperCharMapPlugin_CharacterMapPluginUnitTest extends Abstract
      */
     public function testInsertingASymbolAndClickingUndo()
     {
-        $this->click($this->findKeyword(1));
+        $this->sikuli->click($this->findKeyword(1));
         $this->clickTopToolbarButton('charMap');
 
         // Insert char.
         $char = $this->findImage('ViperCharMapPlugin-symbolChar-1', 'table.VCMP-table.Viper-visible td', 10);
-        $this->click($char);
+        $this->sikuli->click($char);
 
         $this->clickTopToolbarButton('historyUndo');
         $this->assertHTMLMatch('<p>LOREM %1% dolor</p><p>sit amet <strong>WoW</strong></p>');

@@ -117,7 +117,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarListUnitTest extends Abs
         $this->assertEquals('<li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem Viper-selected">Selection</li>', $lineage);
 
         $this->selectInlineToolbarLineageItem(0);
-        $this->keyDown('Key.SHIFT + Key.TAB');
+        $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
 
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem Viper-selected">Selection</li>', $lineage);
@@ -127,7 +127,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarListUnitTest extends Abs
         $this->assertEquals('<li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem Viper-selected">Selection</li>', $lineage);
 
         $this->selectInlineToolbarLineageItem(0);
-        $this->keyDown('Key.SHIFT + Key.TAB');
+        $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
 
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem Viper-selected">Selection</li>', $lineage);
@@ -146,7 +146,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarListUnitTest extends Abs
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Selection</li>', $lineage);
 
-        $this->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.TAB');
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem Viper-selected">Selection</li>', $lineage);
 
@@ -156,7 +156,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarListUnitTest extends Abs
         $this->assertEquals('<li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem Viper-selected">Item</li><li class="ViperITP-lineageItem">Selection</li>', $lineage);
 
         $this->selectKeyword(1);
-        $this->keyDown('Key.SHIFT + Key.TAB');
+        $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Selection</li>', $lineage);
 
@@ -171,7 +171,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarListUnitTest extends Abs
     public function testLineageWhenCreatingSubLists()
     {
         $this->selectKeyword(2);
-        $this->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.TAB');
 
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem Viper-selected">Selection</li>', $lineage);
@@ -189,12 +189,12 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarListUnitTest extends Abs
         $this->assertEquals($this->replaceKeywords('aaa bbbbb ccccc4 %2% templates\n    \n    Audit XuT content'), $this->getSelectedText(), 'List item is not selected.');
 
         $this->selectKeyword(2);
-        $this->keyDown('Key.SHIFT + Key.TAB');
+        $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem Viper-selected">Selection</li>', $lineage);
 
         $this->selectKeyword(3);
-        $this->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.TAB');
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem Viper-selected">Selection</li>', $lineage);
 
@@ -211,7 +211,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarListUnitTest extends Abs
         $this->assertEquals($this->replaceKeywords('Unordered list%3% is cool\n    \n    Another list item'), $this->getSelectedText(), 'List item is not selected.');
 
         $this->selectKeyword(3);
-        $this->keyDown('Key.SHIFT + Key.TAB');
+        $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem Viper-selected">Selection</li>', $lineage);
 
