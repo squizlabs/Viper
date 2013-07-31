@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Korean translation for Viper\n"
 "POT-Creation-Date: 2013-07-29 13:47+1000\n"
-"PO-Revision-Date: 2013-07-29 13:49+1000\n"
+"PO-Revision-Date: 2013-07-31 10:26+1000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -24,7 +24,7 @@ msgid "Refresh Issue"
 msgstr ""
 
 msgid "Accessibility Auditor"
-msgstr ""
+msgstr "웹 접근성 테스트 툴"
 
 msgid "Re-checking issue"
 msgstr ""
@@ -36,19 +36,19 @@ msgid "OK"
 msgstr ""
 
 msgid "Insert Character"
-msgstr ""
+msgstr "특수기호"
 
 msgid "Symbols"
-msgstr ""
+msgstr "심볼"
 
 msgid "Latin"
-msgstr ""
+msgstr "라틴심볼"
 
 msgid "Mathematics"
-msgstr ""
+msgstr "수학심볼"
 
 msgid "Currency"
-msgstr ""
+msgstr "화폐심볼"
 
 msgid ""
 "Paste your content into the box below and it will be automatically inserted "
@@ -59,10 +59,10 @@ msgid "Avoid this step for future pastes using the keyboard shortcut %s."
 msgstr ""
 
 msgid "Bold"
-msgstr "진하게"
+msgstr "굵게"
 
 msgid "Italic"
-msgstr "이텔릭"
+msgstr "기울"
 
 msgid "Remove Format"
 msgstr ""
@@ -77,46 +77,46 @@ msgid "Strikethrough"
 msgstr "취소선"
 
 msgid "Left Justify"
-msgstr ""
+msgstr "왼쪽정렬"
 
 msgid "Center Justify"
-msgstr ""
+msgstr "가운데정렬"
 
 msgid "Right Justify"
-msgstr ""
+msgstr "오른쪽정렬"
 
 msgid "Block Justify"
-msgstr ""
+msgstr "양쪽정렬"
 
 msgid "Horizontal Rule"
-msgstr ""
+msgstr "가로자"
 
 msgid "Justification"
-msgstr ""
+msgstr "정렬"
 
 msgid "Toggle Justification"
-msgstr ""
+msgstr "정렬"
 
 msgid "Heading 1"
-msgstr ""
+msgstr "헤딩 1"
 
 msgid "Heading 2"
-msgstr ""
+msgstr "헤딩 2"
 
 msgid "Heading 3"
-msgstr ""
+msgstr "헤딩 3"
 
 msgid "Heading 4"
-msgstr ""
+msgstr "헤딩 4"
 
 msgid "Heading 5"
-msgstr ""
+msgstr "헤딩 5"
 
 msgid "Heading 6"
-msgstr ""
+msgstr "헤딩 6"
 
 msgid "Paragraph"
-msgstr ""
+msgstr "문단"
 
 msgid "Preformatted"
 msgstr ""
@@ -167,13 +167,13 @@ msgid "Redo"
 msgstr ""
 
 msgid "Insert Image"
-msgstr ""
+msgstr "사진넣기"
 
 msgid "Toggle Image Options"
 msgstr ""
 
 msgid "URL"
-msgstr ""
+msgstr "URL"
 
 msgid "Image is decorative"
 msgstr ""
@@ -199,7 +199,7 @@ msgid "Failed to load image"
 msgstr ""
 
 msgid "Underline"
-msgstr ""
+msgstr "밑줄"
 
 msgid "Item"
 msgstr ""
@@ -307,7 +307,7 @@ msgid "Would you like to apply your changes?"
 msgstr ""
 
 msgid "Open In new window"
-msgstr ""
+msgstr "새 창에 열기"
 
 msgid "Source Editor"
 msgstr ""
@@ -330,7 +330,7 @@ msgid "Close Window"
 msgstr ""
 
 msgid "Insert Table"
-msgstr ""
+msgstr "표삽입"
 
 msgid "Show Table tools"
 msgstr ""
@@ -357,10 +357,10 @@ msgid "Heading"
 msgstr ""
 
 msgid "Split Vertically"
-msgstr ""
+msgstr "세로분할"
 
 msgid "Split Horizontally"
-msgstr ""
+msgstr "가로분할"
 
 msgid "Merge Up"
 msgstr ""
@@ -387,10 +387,10 @@ msgid "Insert Column After"
 msgstr ""
 
 msgid "Move Left"
-msgstr ""
+msgstr "왼쪽으로"
 
 msgid "Move Right"
-msgstr ""
+msgstr "오른쪽으로"
 
 msgid "Remove Column"
 msgstr ""
@@ -402,16 +402,16 @@ msgid "Insert Row After"
 msgstr ""
 
 msgid "Move Up"
-msgstr ""
+msgstr "위로 "
 
 msgid "Move Down"
-msgstr ""
+msgstr "아래로"
 
 msgid "Remove Row"
 msgstr ""
 
 msgid "Summary"
-msgstr ""
+msgstr "요약 "
 
 msgid "Use Caption"
 msgstr ""
@@ -420,25 +420,25 @@ msgid "Remove Table"
 msgstr ""
 
 msgid "None"
-msgstr ""
+msgstr "없음"
 
 msgid "Left"
-msgstr ""
+msgstr "왼쪽"
 
 msgid "Top"
-msgstr ""
+msgstr "위"
 
 msgid "Both"
-msgstr ""
+msgstr "모두"
 
 msgid "Headers"
-msgstr ""
+msgstr "서식"
 
 msgid "Size"
-msgstr ""
+msgstr "사이즈"
 
 msgid "Viper by Squiz"
-msgstr ""
+msgstr "Viper by Squiz"
 
 msgid "Update Changes"
 msgstr ""
