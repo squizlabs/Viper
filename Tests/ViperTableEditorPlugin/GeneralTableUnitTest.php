@@ -150,8 +150,8 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
         $icon         = $this->sikuli->getRegionOnPage($toolIconRect);
 
         // Check that position is correct.
-        $iconX = $this->sikuli->getPageX($this->getCenter($icon));
-        $iconY = $this->sikuli->getPageY($this->getTopLeft($icon));
+        $iconX = $this->sikuli->getPageX($this->sikuli->getCenter($icon));
+        $iconY = $this->sikuli->getPageY($this->sikuli->getTopLeft($icon));
 
         $cellCenter = ($cellRect['x1'] + (($cellRect['x2'] - $cellRect['x1']) / 2));
         $cellBottom = $cellRect['y2'];
@@ -160,14 +160,14 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
         $this->assertTrue(($cellBottom <= $iconY && $cellBottom + 10 > $iconY), 'Y Position of table editing icon is incorrect.');
 
         // Move mouse on top of the icon.
-        $this->mouseMove($icon);
+        $this->sikuli->mouseMove($icon);
         usleep(200);
 
         // Check to make sure the table editing tools appear.
         $this->assertTrue($this->buttonExists('tableCell'));
 
         // Check the highlight for table icon.
-        $this->mouseMove($this->getToolsButton('table'));
+        $this->sikuli->mouseMove($this->getToolsButton('table'));
         usleep(200);
 
         $highlightRect = $this->getCellHighlight();
@@ -180,11 +180,11 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
         }
 
         // Move mouse on top of the icon.
-        $this->mouseMove($icon);
+        $this->sikuli->mouseMove($icon);
         usleep(200);
 
         // Check the highlight for row.
-        $this->mouseMove($this->getToolsButton('row'));
+        $this->sikuli->mouseMove($this->getToolsButton('row'));
         usleep(200);
 
         // Note that +1 or -1 is for cellpadding.
@@ -198,11 +198,11 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
         }
 
         // Move mouse on top of the icon.
-        $this->mouseMove($icon);
+        $this->sikuli->mouseMove($icon);
         usleep(200);
 
         // Check the highlight for cell.
-        $this->mouseMove($this->getToolsButton('col'));
+        $this->sikuli->mouseMove($this->getToolsButton('col'));
         usleep(200);
 
         $highlightRect = $this->getCellHighlight();
@@ -215,11 +215,11 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
         }
 
         // Move mouse on top of the icon.
-        $this->mouseMove($icon);
+        $this->sikuli->mouseMove($icon);
         usleep(200);
 
         // Check the highlight for cell.
-        $this->mouseMove($this->getToolsButton('cell'));
+        $this->sikuli->mouseMove($this->getToolsButton('cell'));
         usleep(200);
 
         $highlightRect = $this->getCellHighlight();
@@ -281,11 +281,11 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
         $icon = $this->_getTableToolsIcon(0);
 
         // Move mouse on top of the icon.
-        $this->mouseMove($icon);
+        $this->sikuli->mouseMove($icon);
         usleep(200);
 
         // Check the highlight for table.
-        $this->mouseMove($this->getToolsButton('table'));
+        $this->sikuli->mouseMove($this->getToolsButton('table'));
         usleep(200);
         $highlight = $this->getCellHighlight();
         $this->assertHighlightPos($highlight['x1'], $table['x1']);
@@ -293,11 +293,11 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
         $this->assertHighlightPos($highlight['y1'], $table['y1']);
         $this->assertHighlightPos($highlight['y2'], $tfoot['y2']);
 
-        $this->mouseMove($icon);
+        $this->sikuli->mouseMove($icon);
         usleep(200);
 
         // Check the highlight for row.
-        $this->mouseMove($this->getToolsButton('row'));
+        $this->sikuli->mouseMove($this->getToolsButton('row'));
         usleep(200);
         $highlight = $this->getCellHighlight();
         $this->assertHighlightPos($highlight['x1'], $tbody['x1']);
@@ -305,11 +305,11 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
         $this->assertHighlightPos($highlight['y1'], $thead['y1']);
         $this->assertHighlightPos($highlight['y2'], $thead['y2']);
 
-        $this->mouseMove($icon);
+        $this->sikuli->mouseMove($icon);
         usleep(200);
 
         // Check the highlight for col.
-        $this->mouseMove($this->getToolsButton('col'));
+        $this->sikuli->mouseMove($this->getToolsButton('col'));
         usleep(200);
         $highlight = $this->getCellHighlight();
         $this->assertHighlightPos($highlight['x1'], $firstCell['x1']);
@@ -317,11 +317,11 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
         $this->assertHighlightPos($highlight['y1'], $thead['y1']);
         $this->assertHighlightPos($highlight['y2'], $tfoot['y2']);
 
-        $this->mouseMove($icon);
+        $this->sikuli->mouseMove($icon);
         usleep(200);
 
         // Check the highlight for col.
-        $this->mouseMove($this->getToolsButton('cell'));
+        $this->sikuli->mouseMove($this->getToolsButton('cell'));
         usleep(200);
         $highlight = $this->getCellHighlight();
         $this->assertHighlightPos($highlight['x1'], $firstCell['x1']);
@@ -329,7 +329,7 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
         $this->assertHighlightPos($highlight['y1'], $firstCell['y1']);
         $this->assertHighlightPos($highlight['y2'], $firstCell['y2']);
 
-        $this->mouseMove($icon);
+        $this->sikuli->mouseMove($icon);
         usleep(200);
 
         // Test highlights in a cell with colspan.
@@ -337,11 +337,11 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
         $colspanCell = $this->getBoundingRectangle('td', 5);
 
         // Move mouse on top of the icon.
-        $this->mouseMove($icon);
+        $this->sikuli->mouseMove($icon);
         usleep(200);
 
         // Check the highlight for table.
-        $this->mouseMove($this->getToolsButton('table'));
+        $this->sikuli->mouseMove($this->getToolsButton('table'));
         usleep(200);
         $highlight = $this->getCellHighlight();
         $this->assertHighlightPos($highlight['x1'], $table['x1']);
@@ -349,11 +349,11 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
         $this->assertHighlightPos($highlight['y1'], $caption['y1']);
         $this->assertHighlightPos($highlight['y2'], $tfoot['y2']);
 
-        $this->mouseMove($icon);
+        $this->sikuli->mouseMove($icon);
         usleep(200);
 
         // Check the highlight for row.
-        $this->mouseMove($this->getToolsButton('row'));
+        $this->sikuli->mouseMove($this->getToolsButton('row'));
         usleep(200);
         $highlight = $this->getCellHighlight();
         $this->assertHighlightPos($highlight['x1'], $tbody['x1']);
@@ -361,11 +361,11 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
         $this->assertHighlightPos($highlight['y1'], $colspanCell['y1']);
         $this->assertHighlightPos($highlight['y2'], $colspanCell['y2']);
 
-        $this->mouseMove($icon);
+        $this->sikuli->mouseMove($icon);
         usleep(200);
 
         // Check the highlight for col.
-        $this->mouseMove($this->getToolsButton('col'));
+        $this->sikuli->mouseMove($this->getToolsButton('col'));
         usleep(200);
         $highlight = $this->getCellHighlight();
         $this->assertHighlightPos($highlight['x1'], $colspanCell['x1']);
@@ -373,11 +373,11 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
         $this->assertHighlightPos($highlight['y1'], $thead['y1']);
         $this->assertHighlightPos($highlight['y2'], $tfoot['y2']);
 
-        $this->mouseMove($icon);
+        $this->sikuli->mouseMove($icon);
         usleep(200);
 
         // Check the highlight for col.
-        $this->mouseMove($this->getToolsButton('cell'));
+        $this->sikuli->mouseMove($this->getToolsButton('cell'));
         usleep(200);
         $highlight = $this->getCellHighlight();
         $this->assertHighlightPos($highlight['x1'], $colspanCell['x1']);
@@ -385,7 +385,7 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
         $this->assertHighlightPos($highlight['y1'], $colspanCell['y1']);
         $this->assertHighlightPos($highlight['y2'], $colspanCell['y2']);
 
-        $this->mouseMove($icon);
+        $this->sikuli->mouseMove($icon);
         usleep(200);
 
         // Test highlights in a row with rowspan.
@@ -393,11 +393,11 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
         $colspanCell = $this->getBoundingRectangle('td', 8);
 
         // Move mouse on top of the icon.
-        $this->mouseMove($icon);
+        $this->sikuli->mouseMove($icon);
         usleep(200);
 
         // Check the highlight for table.
-        $this->mouseMove($this->getToolsButton('table'));
+        $this->sikuli->mouseMove($this->getToolsButton('table'));
         usleep(200);
         $highlight = $this->getCellHighlight();
         $this->assertHighlightPos($highlight['x1'], $table['x1']);
@@ -405,11 +405,11 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
         $this->assertHighlightPos($highlight['y1'], $caption['y1']);
         $this->assertHighlightPos($highlight['y2'], $tfoot['y2']);
 
-        $this->mouseMove($icon);
+        $this->sikuli->mouseMove($icon);
         usleep(200);
 
         // Check the highlight for row.
-        $this->mouseMove($this->getToolsButton('row'));
+        $this->sikuli->mouseMove($this->getToolsButton('row'));
         usleep(200);
         $highlight = $this->getCellHighlight();
         $this->assertHighlightPos($highlight['x1'], $tbody['x1']);
@@ -417,11 +417,11 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
         $this->assertHighlightPos($highlight['y1'], $colspanCell['y1']);
         $this->assertHighlightPos($highlight['y2'], $colspanCell['y2']);
 
-        $this->mouseMove($icon);
+        $this->sikuli->mouseMove($icon);
         usleep(200);
 
         // Check the highlight for col.
-        $this->mouseMove($this->getToolsButton('col'));
+        $this->sikuli->mouseMove($this->getToolsButton('col'));
         usleep(200);
         $highlight = $this->getCellHighlight();
         $this->assertHighlightPos($highlight['x1'], $colspanCell['x1']);
@@ -429,11 +429,11 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
         $this->assertHighlightPos($highlight['y1'], $thead['y1']);
         $this->assertHighlightPos($highlight['y2'], $tfoot['y2']);
 
-        $this->mouseMove($icon);
+        $this->sikuli->mouseMove($icon);
         usleep(200);
 
         // Check the highlight for col.
-        $this->mouseMove($this->getToolsButton('cell'));
+        $this->sikuli->mouseMove($this->getToolsButton('cell'));
         usleep(200);
         $highlight = $this->getCellHighlight();
         $this->assertHighlightPos($highlight['x1'], $colspanCell['x1']);
@@ -446,11 +446,11 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
         $colspanCell = $this->getBoundingRectangle('td', 0);
 
         // Move mouse on top of the icon.
-        $this->mouseMove($icon);
+        $this->sikuli->mouseMove($icon);
         usleep(200);
 
         // Check the highlight for table.
-        $this->mouseMove($this->getToolsButton('table'));
+        $this->sikuli->mouseMove($this->getToolsButton('table'));
         usleep(200);
         $highlight = $this->getCellHighlight();
         $this->assertHighlightPos($highlight['x1'], $table['x1']);
@@ -458,11 +458,11 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
         $this->assertHighlightPos($highlight['y1'], $caption['y1']);
         $this->assertHighlightPos($highlight['y2'], $tfoot['y2']);
 
-        $this->mouseMove($icon);
+        $this->sikuli->mouseMove($icon);
         usleep(200);
 
         // Check the highlight for row.
-        $this->mouseMove($this->getToolsButton('row'));
+        $this->sikuli->mouseMove($this->getToolsButton('row'));
         usleep(200);
         $highlight = $this->getCellHighlight();
         $this->assertHighlightPos($highlight['x1'], $tbody['x1']);
@@ -470,11 +470,11 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
         $this->assertHighlightPos($highlight['y1'], $colspanCell['y1']);
         $this->assertHighlightPos($highlight['y2'], $colspanCell['y2']);
 
-        $this->mouseMove($icon);
+        $this->sikuli->mouseMove($icon);
         usleep(200);
 
         // Check the highlight for col.
-        $this->mouseMove($this->getToolsButton('col'));
+        $this->sikuli->mouseMove($this->getToolsButton('col'));
         usleep(200);
         $highlight = $this->getCellHighlight();
         $this->assertHighlightPos($highlight['x1'], $colspanCell['x1']);
@@ -482,11 +482,11 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
         $this->assertHighlightPos($highlight['y1'], $thead['y1']);
         $this->assertHighlightPos($highlight['y2'], $tfoot['y2']);
 
-        $this->mouseMove($icon);
+        $this->sikuli->mouseMove($icon);
         usleep(200);
 
         // Check the highlight for col.
-        $this->mouseMove($this->getToolsButton('cell'));
+        $this->sikuli->mouseMove($this->getToolsButton('cell'));
         usleep(200);
         $highlight = $this->getCellHighlight();
         $this->assertHighlightPos($highlight['x1'], $colspanCell['x1']);
@@ -517,11 +517,11 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
         $icon = $this->_getTableToolsIcon(7);
 
         // Move mouse on top of the icon.
-        $this->mouseMove($icon);
+        $this->sikuli->mouseMove($icon);
         usleep(200);
 
         // Check the highlight for table.
-        $this->mouseMove($this->getToolsButton('table'));
+        $this->sikuli->mouseMove($this->getToolsButton('table'));
         usleep(200);
         $highlight = $this->getCellHighlight();
         $this->assertHighlightPos($highlight['x1'], $table['x1']);
@@ -529,11 +529,11 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
         $this->assertHighlightPos($highlight['y1'], $caption['y1']);
         $this->assertHighlightPos($highlight['y2'], $tbody['y2']);
 
-        $this->mouseMove($icon);
+        $this->sikuli->mouseMove($icon);
         usleep(200);
 
         // Check the highlight for row.
-        $this->mouseMove($this->getToolsButton('row'));
+        $this->sikuli->mouseMove($this->getToolsButton('row'));
         usleep(200);
         $highlight = $this->getCellHighlight();
         $this->assertHighlightPos($highlight['x1'], $tbody['x1']);
@@ -541,11 +541,11 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
         $this->assertHighlightPos($highlight['y1'], $cell['y1']);
         $this->assertHighlightPos($highlight['y2'], $cell['y2']);
 
-        $this->mouseMove($icon);
+        $this->sikuli->mouseMove($icon);
         usleep(200);
 
         // Check the highlight for col.
-        $this->mouseMove($this->getToolsButton('col'));
+        $this->sikuli->mouseMove($this->getToolsButton('col'));
         usleep(200);
         $highlight = $this->getCellHighlight();
         $this->assertHighlightPos($highlight['x1'], $cell['x1']);
@@ -553,11 +553,11 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
         $this->assertHighlightPos($highlight['y1'], $thead['y1']);
         $this->assertHighlightPos($highlight['y2'], $tbody['y2']);
 
-        $this->mouseMove($icon);
+        $this->sikuli->mouseMove($icon);
         usleep(200);
 
         // Check the highlight for col.
-        $this->mouseMove($this->getToolsButton('cell'));
+        $this->sikuli->mouseMove($this->getToolsButton('cell'));
         usleep(200);
         $highlight = $this->getCellHighlight();
         $this->assertHighlightPos($highlight['x1'], $cell['x1']);
@@ -588,11 +588,11 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
         $icon = $this->_getTableToolsIcon(4);
 
         // Move mouse on top of the icon.
-        $this->mouseMove($icon);
+        $this->sikuli->mouseMove($icon);
         usleep(200);
 
         // Check the highlight for table.
-        $this->mouseMove($this->getToolsButton('table'));
+        $this->sikuli->mouseMove($this->getToolsButton('table'));
         usleep(200);
         $highlight = $this->getCellHighlight();
         $this->assertHighlightPos($highlight['x1'], $table['x1']);
@@ -600,11 +600,11 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
         $this->assertHighlightPos($highlight['y1'], $caption['y1']);
         $this->assertHighlightPos($highlight['y2'], $tfoot['y2']);
 
-        $this->mouseMove($icon);
+        $this->sikuli->mouseMove($icon);
         usleep(200);
 
         // Check the highlight for row.
-        $this->mouseMove($this->getToolsButton('row'));
+        $this->sikuli->mouseMove($this->getToolsButton('row'));
         usleep(200);
         $highlight = $this->getCellHighlight();
         $this->assertHighlightPos($highlight['x1'], $tbody['x1']);
@@ -612,11 +612,11 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
         $this->assertHighlightPos($highlight['y1'], $cell['y1']);
         $this->assertHighlightPos($highlight['y2'], $cell['y2']);
 
-        $this->mouseMove($icon);
+        $this->sikuli->mouseMove($icon);
         usleep(200);
 
         // Check the highlight for col.
-        $this->mouseMove($this->getToolsButton('col'));
+        $this->sikuli->mouseMove($this->getToolsButton('col'));
         usleep(200);
         $highlight = $this->getCellHighlight();
         $this->assertHighlightPos($highlight['x1'], $cell['x1']);
@@ -624,11 +624,11 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
         $this->assertHighlightPos($highlight['y1'], $tbody['y1']);
         $this->assertHighlightPos($highlight['y2'], $tfoot['y2']);
 
-        $this->mouseMove($icon);
+        $this->sikuli->mouseMove($icon);
         usleep(200);
 
         // Check the highlight for col.
-        $this->mouseMove($this->getToolsButton('cell'));
+        $this->sikuli->mouseMove($this->getToolsButton('cell'));
         usleep(200);
         $highlight = $this->getCellHighlight();
         $this->assertHighlightPos($highlight['x1'], $cell['x1']);
@@ -659,11 +659,11 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
         $icon = $this->_getTableToolsIcon(7);
 
         // Move mouse on top of the icon.
-        $this->mouseMove($icon);
+        $this->sikuli->mouseMove($icon);
         usleep(200);
 
         // Check the highlight for table.
-        $this->mouseMove($this->getToolsButton('table'));
+        $this->sikuli->mouseMove($this->getToolsButton('table'));
         usleep(200);
         $highlight = $this->getCellHighlight();
         $this->assertHighlightPos($highlight['x1'], $table['x1']);
@@ -671,11 +671,11 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
         $this->assertHighlightPos($highlight['y1'], $thead['y1']);
         $this->assertHighlightPos($highlight['y2'], $tfoot['y2']);
 
-        $this->mouseMove($icon);
+        $this->sikuli->mouseMove($icon);
         usleep(200);
 
         // Check the highlight for row.
-        $this->mouseMove($this->getToolsButton('row'));
+        $this->sikuli->mouseMove($this->getToolsButton('row'));
         usleep(200);
         $highlight = $this->getCellHighlight();
         $this->assertHighlightPos($highlight['x1'], $tbody['x1']);
@@ -683,11 +683,11 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
         $this->assertHighlightPos($highlight['y1'], $cell['y1']);
         $this->assertHighlightPos($highlight['y2'], $cell['y2']);
 
-        $this->mouseMove($icon);
+        $this->sikuli->mouseMove($icon);
         usleep(200);
 
         // Check the highlight for col.
-        $this->mouseMove($this->getToolsButton('col'));
+        $this->sikuli->mouseMove($this->getToolsButton('col'));
         usleep(200);
         $highlight = $this->getCellHighlight();
         $this->assertHighlightPos($highlight['x1'], $cell['x1']);
@@ -695,11 +695,11 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
         $this->assertHighlightPos($highlight['y1'], $thead['y1']);
         $this->assertHighlightPos($highlight['y2'], $tfoot['y2']);
 
-        $this->mouseMove($icon);
+        $this->sikuli->mouseMove($icon);
         usleep(200);
 
         // Check the highlight for col.
-        $this->mouseMove($this->getToolsButton('cell'));
+        $this->sikuli->mouseMove($this->getToolsButton('cell'));
         usleep(200);
         $highlight = $this->getCellHighlight();
         $this->assertHighlightPos($highlight['x1'], $cell['x1']);

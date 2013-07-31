@@ -42,7 +42,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarUnitTest extends Abstrac
      */
     private function _getToolbarArrowLocation($orientation=NULL)
     {
-        $loc = $this->getCenter($this->_getToolbarArrow($orientation));
+        $loc = $this->sikuli->getCenter($this->_getToolbarArrow($orientation));
         return $loc;
 
     }//end _getToolbarArrowLocation()
@@ -60,11 +60,11 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarUnitTest extends Abstrac
      */
     private function _assertPosition($targetX, $targetY, $orientation=NULL)
     {
-        $toolbarX = $this->getX($this->_getToolbarArrowLocation($orientation));
+        $toolbarX = $this->sikuli->getX($this->_getToolbarArrowLocation($orientation));
         $diff     = abs($targetX - $toolbarX);
         $this->assertTrue(($diff <= 4), 'X Position of toolbar arrow is incorrect. Difference was '.$diff.' pixels');
 
-        $toolbarY = $this->getY($this->getTopLeft($this->_getToolbarArrow($orientation)));
+        $toolbarY = $this->sikuli->getY($this->sikuli->getTopLeft($this->_getToolbarArrow($orientation)));
         $diff     = abs($targetY - $toolbarY);
         $this->assertTrue(($diff <= 15), 'Y Position of toolbar arrow is incorrect. Difference was '.$diff.' pixels');
 
@@ -99,8 +99,8 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarUnitTest extends Abstrac
         $word = $this->findKeyword(2);
         $this->selectKeyword(2);
 
-        $wordX = $this->getX($this->getCenter($word));
-        $wordY = $this->getY($this->getBottomLeft($word));
+        $wordX = $this->sikuli->getX($this->sikuli->getCenter($word));
+        $wordY = $this->sikuli->getY($this->sikuli->getBottomLeft($word));
         $this->_assertPosition($wordX, $wordY);
 
     }//end testSimpleSelectionPosition()
@@ -116,11 +116,11 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarUnitTest extends Abstrac
         $para = $this->findKeyword(4);
         $this->selectKeyword(4);
 
-        $bottomLeft = $this->getBottomLeft($para);
-        $wordY      = $this->getY($bottomLeft);
+        $bottomLeft = $this->sikuli->getBottomLeft($para);
+        $wordY      = $this->sikuli->getY($bottomLeft);
 
         // Add 500 (width of the Paragraph divided by 2).
-        $wordX = ($this->getX($bottomLeft) + 500);
+        $wordX = ($this->sikuli->getX($bottomLeft) + 500);
         $this->_assertPosition($wordX, $wordY);
 
     }//end testParagraphSelectionPosition()
@@ -137,10 +137,10 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarUnitTest extends Abstrac
         $end   = $this->findKeyword(4);
         $this->selectKeyword(1, 4);
 
-        $leftX  = ($this->getX($this->getTopLeft($start)));
+        $leftX  = ($this->sikuli->getX($this->sikuli->getTopLeft($start)));
         $width  = ($this->sikuli->execJS('dfx.getElementWidth(dfx.getId("content"))') / 2);
         $center = ($leftX + $width);
-        $wordY  = $this->getY($this->getBottomLeft($end));
+        $wordY  = $this->sikuli->getY($this->sikuli->getBottomLeft($end));
         $this->_assertPosition($center, $wordY);
 
     }//end testMultiParagraphSelectionPosition()
@@ -158,8 +158,8 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarUnitTest extends Abstrac
 
         $word = $this->findKeyword(2);
 
-        $wordX = $this->getX($this->getCenter($word));
-        $wordY = $this->getY($this->getBottomLeft($word));
+        $wordX = $this->sikuli->getX($this->sikuli->getCenter($word));
+        $wordY = $this->sikuli->getY($this->sikuli->getBottomLeft($word));
 
         $this->_assertPosition($wordX, $wordY);
 
@@ -179,8 +179,8 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarUnitTest extends Abstrac
         $this->selectKeyword(1);
         sleep(1);
 
-        $wordX = $this->getX($this->getCenter($word));
-        $wordY = $this->getY($this->getBottomLeft($word));
+        $wordX = $this->sikuli->getX($this->sikuli->getCenter($word));
+        $wordY = $this->sikuli->getY($this->sikuli->getBottomLeft($word));
         $this->_assertPosition($wordX, $wordY, 'left');
 
     }//end testPositionOrientationLeft()
@@ -198,8 +198,8 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarUnitTest extends Abstrac
         $word = $this->findKeyword(5);
         $this->selectKeyword(5);
 
-        $wordX = $this->getX($this->getCenter($word));
-        $wordY = $this->getY($this->getBottomLeft($word));
+        $wordX = $this->sikuli->getX($this->sikuli->getCenter($word));
+        $wordY = $this->sikuli->getY($this->sikuli->getBottomLeft($word));
         $this->_assertPosition($wordX, $wordY, 'right');
 
     }//end testPositionOrientationRight()

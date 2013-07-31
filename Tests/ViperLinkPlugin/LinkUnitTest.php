@@ -357,7 +357,7 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->selectKeyword(1);
 
         // Move the pointer away from link to prevent tooltip.
-        $this->mouseMoveOffset(50, 50);
+        $this->sikuli->mouseMoveOffset(50, 50);
 
         $this->clickInlineToolbarButton('linkRemove');
         $this->assertFalse($this->inlineToolbarButtonExists('linkRemove'), 'Remove link icon should not be available.');
@@ -562,7 +562,7 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
 
         $this->sikuli->click($this->findKeyword(2));
         $this->selectKeyword(1);
-        $this->mouseMoveOffset(50, 50);
+        $this->sikuli->mouseMoveOffset(50, 50);
         $this->clickInlineToolbarButton('link', 'active');
         $this->clickField('Title');
         $this->type('abc');
@@ -944,13 +944,13 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->useTest(2);
 
         $this->selectKeyword(2);
-        $this->mouseMoveOffset(50, 50);
+        $this->sikuli->mouseMoveOffset(50, 50);
         $this->assertTrue($this->inlineToolbarButtonExists('link'), 'Link icon should appear in the inline toolbar.');
         $this->assertFalse($this->inlineToolbarButtonExists('linkRemove'), 'Remove link icon should not appear in the inline toolbar.');
         $this->sikuli->click($this->findKeyword(1));
 
         $this->selectKeyword(5);
-        $this->mouseMoveOffset(50, 50);
+        $this->sikuli->mouseMoveOffset(50, 50);
         $this->assertTrue($this->inlineToolbarButtonExists('link'), 'Link icon should appear in the inline toolbar.');
         $this->assertFalse($this->inlineToolbarButtonExists('linkRemove'), 'Remove link icon should not appear in the inline toolbar.');
 

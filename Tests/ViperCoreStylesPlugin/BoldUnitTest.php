@@ -231,7 +231,7 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
     {
         $start = $this->findKeyword(1);
         $end   = $this->findKeyword(3);
-        $this->dragDrop($this->getTopLeft($start), $this->getTopRight($end));
+        $this->sikuli->dragDrop($this->sikuli->getTopLeft($start), $this->sikuli->getTopRight($end));
 
         // Inline Toolbar icon should not be displayed.
         $this->assertFalse($this->inlineToolbarButtonExists('bold'), 'Bold icon appears in the inline toolbar');

@@ -1309,7 +1309,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
     protected function buttonExists($buttonIcon, $state=NULL, $isText=FALSE, $region=NULL)
     {
         $button = $this->_getButton($buttonIcon, $state, $isText);
-        return $this->exists($button, $region);
+        return $this->sikuli->exists($button, $region);
 
     }//end buttonExists()
 
@@ -1580,7 +1580,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
     {
         if (empty($endWord) === TRUE) {
             $ipsum = $this->sikuli->find($startWord, $this->getBrowserWindow());
-            $this->doubleClick($ipsum);
+            $this->sikuli->doubleClick($ipsum);
             return;
         }
 
@@ -1590,7 +1590,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
         $this->sikuli->click($start);
 
         $startLeft = $this->sikuli->getTopLeft($start);
-        $endRight  = $this->getBottomRight($end);
+        $endRight  = $this->sikuli->getBottomRight($end);
 
         $this->sikuli->setLocation(
             $startLeft,
@@ -1994,7 +1994,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
             }
         } else {
             $retval = NULL;
-            if ($this->getOS() === 'windows') {
+            if ($this->sikuli->getOS() === 'windows') {
                 system('open '.escapeshellarg($filePath), $retval);
             } else {
                 system('open -a'.escapeshellarg($appName).' '.escapeshellarg($filePath), $retval);
@@ -2025,7 +2025,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
     protected function closeApp($appName)
     {
         $this->switchApp($appName);
-        if ($this->getOS() === 'windows') {
+        if ($this->sikuli->getOS() === 'windows') {
             $this->sikuli->keyDown('Key.ALT + F4');
         } else {
             if ($appName === $this->getBrowserName()) {
@@ -2085,7 +2085,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
         } else {
             if ($this->sikuli->getBrowserid() !== 'googlechrome') {
                 sleep(1);
-                $this->sikuli->rightClick($this->getMouseLocation());
+                $this->sikuli->rightClick($this->sikuli->getMouseLocation());
             }
 
             switch ($this->sikuli->getBrowserid()) {

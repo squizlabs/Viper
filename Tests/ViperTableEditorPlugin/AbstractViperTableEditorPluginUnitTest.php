@@ -112,7 +112,7 @@ abstract class AbstractViperTableEditorPluginUnitTest extends AbstractViperUnitT
         }
 
         // Move mouse on top of the icon.
-        $this->mouseMove($region);
+        $this->sikuli->mouseMove($region);
         usleep(100);
 
         if ($type === 'table') {

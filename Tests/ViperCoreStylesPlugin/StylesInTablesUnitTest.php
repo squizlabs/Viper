@@ -295,7 +295,7 @@ class Viper_Tests_ViperCoreStylesPlugin_StylesInTablesUnitTest extends AbstractV
 
         $this->clickInlineToolbarButton('bold');
         $this->clickInlineToolbarButton('italic');
-        $this->mouseMove($this->createLocation(0, 0));
+        $this->sikuli->mouseMove($this->sikuli->createLocation(0, 0));
         $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'));
         $this->assertTrue($this->topToolbarButtonExists('bold', 'active'));
         $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'));

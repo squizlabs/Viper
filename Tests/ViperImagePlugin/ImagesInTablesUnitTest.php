@@ -357,9 +357,9 @@ class Viper_Tests_ViperImagePlugin_ImagesInTablesUnitTest extends AbstractViperI
         //$this->clickElement('img', 1);
         $this->clickElement('img', 1);
         $this->clickInlineToolbarButton('move');
-        $this->mouseMove($this->findKeyword(1));
-        $this->mouseMoveOffset(15, 0);
-        $this->sikuli->click($this->getMouseLocation());
+        $this->sikuli->mouseMove($this->findKeyword(1));
+        $this->sikuli->mouseMoveOffset(15, 0);
+        $this->sikuli->click($this->sikuli->getMouseLocation());
 
         $this->assertHTMLMatchNoHeaders('<table border="0" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la </caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU %1%<img src="%url%/ViperImagePlugin/Images/html-codesniffer.png" alt="Alt tag" /> FoX %2%</td><td><strong><em>WoW</em></strong> sapien vel aliquet</td><td>Another cell</td></tr><tr><td><h3>&nbsp;</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu </td></tr></tbody></table>');
 

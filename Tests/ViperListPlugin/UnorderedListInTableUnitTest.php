@@ -100,7 +100,7 @@ class Viper_Tests_ViperListPlugin_UnorderedListInTableUnitTest extends AbstractV
         $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU %1% FoX Mnu</td><td><strong><em>%2%</em></strong> sapien vel aliquet</td><td><ul><li>item1</li></ul><p>%3%</p></td></tr><tr><td><h3>blah</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
         $this->assertIconStatusesCorrect(TRUE, TRUE, FALSE, FALSE);
 
-        $this->sikuli->click($this->getMouseLocation());
+        $this->sikuli->click($this->sikuli->getMouseLocation());
         sleep(1);
         $this->sikuli->keyDown('Key.TAB');
         $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU %1% FoX Mnu</td><td><strong><em>%2%</em></strong> sapien vel aliquet</td><td><ul><li>item1</li></ul><p>%3%</p></td></tr><tr><td><h3>blah</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');

@@ -896,9 +896,9 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperImagePlugi
     {
         $this->clickElement('img', 1);
         $this->clickInlineToolbarButton('move');
-        $this->mouseMove($this->findKeyword(1));
-        $this->mouseMoveOffset(15, 0);
-        $this->sikuli->click($this->getMouseLocation());
+        $this->sikuli->mouseMove($this->findKeyword(1));
+        $this->sikuli->mouseMoveOffset(15, 0);
+        $this->sikuli->click($this->sikuli->getMouseLocation());
 
         $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>Another paragraph %1%<img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt="" width="369" height="167" /></p><p>LOREM</p><p>LABS is ORSM</p>');
 
