@@ -255,8 +255,9 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      */
     protected function resetConnection()
     {
-        self::$_testRun         = FALSE;
-        self::$_topToolbar      = NULL;
+        $this->sikuli->execJS('clean()');
+
+        self::$_topToolbar = NULL;
 
         $this->sikuli->resetConnection();
         $this->sikuli->resize();
@@ -283,8 +284,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      */
     protected function reloadPage()
     {
-        $this->sikuli->execJS('clean()', TRUE);
-        sleep(1);
+        $this->sikuli->execJS('clean()');
         $this->sikuli->reloadPage();
 
     }//end reloadPage()
