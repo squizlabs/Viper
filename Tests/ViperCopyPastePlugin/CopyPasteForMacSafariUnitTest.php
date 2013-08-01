@@ -173,7 +173,7 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteForMacSafariUnitTest extends Abs
         $this->sikuli->keyDown('Key.CMD + q');
         sleep(5);
 
-        $this->switchApp($this->getBrowserName());
+        $this->switchApp($this->sikuli->getBrowserName());
         $this->selectKeyword(1);
 
         $this->paste(TRUE);

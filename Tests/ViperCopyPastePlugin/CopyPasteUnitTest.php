@@ -336,7 +336,7 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
         $this->useTest(1);
 
         // Open HTML doc, copy its contents.
-        if ($this->openFile(dirname(__FILE__).'/HtmlTablesInPage.html', $this->getBrowserName()) === FALSE) {
+        if ($this->openFile(dirname(__FILE__).'/HtmlTablesInPage.html', $this->sikuli->getBrowserName()) === FALSE) {
             $this->markTestSkipped('MS Word is not available');
         }
 
@@ -347,7 +347,7 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
         sleep(1);
         $this->sikuli->keyDown('Key.CMD + c');
         sleep(1);
-        $this->closeApp($this->getBrowserName());
+        $this->closeApp($this->sikuli->getBrowserName());
         sleep(1);
 
         $this->selectKeyword(1);
@@ -435,7 +435,7 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
         $this->useTest(1);
 
         // Open HTML doc, copy its contents.
-        if ($this->openFile(dirname(__FILE__).'/ExampleLinks.html', $this->getBrowserName()) === FALSE) {
+        if ($this->openFile(dirname(__FILE__).'/ExampleLinks.html', $this->sikuli->getBrowserName()) === FALSE) {
             $this->markTestSkipped('MS Word is not available');
         }
 
@@ -446,7 +446,7 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
         sleep(1);
         $this->sikuli->keyDown('Key.CMD + c');
         sleep(1);
-        $this->closeApp($this->getBrowserName());
+        $this->closeApp($this->sikuli->getBrowserName());
         sleep(1);
 
         $this->selectKeyword(1);

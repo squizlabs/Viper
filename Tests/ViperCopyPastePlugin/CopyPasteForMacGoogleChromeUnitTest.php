@@ -175,7 +175,7 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteForMacGoogleChromeUnitTest exten
         $this->sikuli->keyDown('Key.CMD + q');
         sleep(5);
 
-        $this->switchApp($this->getBrowserName());
+        $this->switchApp($this->sikuli->getBrowserName());
         $this->selectKeyword(1);
 
         $this->paste(TRUE);

@@ -1973,7 +1973,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      */
     protected function openFile($filePath, $appName)
     {
-        if ($appName === $this->getBrowserName()) {
+        if ($appName === $this->sikuli->getBrowserName()) {
             // Open a new tab in this browser.
             $this->sikuli->keyDown('Key.CMD + t');
             sleep(1);
@@ -2024,7 +2024,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
         if ($this->sikuli->getOS() === 'windows') {
             $this->sikuli->keyDown('Key.ALT + F4');
         } else {
-            if ($appName === $this->getBrowserName()) {
+            if ($appName === $this->sikuli->getBrowserName()) {
                 sleep(5);
                 $this->sikuli->keyDown('Key.CMD + w');
             } else {
