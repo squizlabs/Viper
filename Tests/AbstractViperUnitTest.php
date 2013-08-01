@@ -1,6 +1,6 @@
 <?php
 require_once 'PHPUnit/Framework/TestCase.php';
-require_once 'PHPSikuli/PHPSikuliBrowser.inc';
+require_once 'PHPSikuli/PHPSikuliBrowser.php';
 
 /**
  * An abstract class that all Viper unit tests must extend.
