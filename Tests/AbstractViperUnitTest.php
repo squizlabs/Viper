@@ -303,7 +303,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
             $browserid = $this->sikuli->getBrowserid();
         }
 
-        $path = dirname(__FILE__).'/tmp/Images/'.$browserid;
+        $path = dirname(__FILE__).'/tmp/'.$browserid.'/images';
 
         return $path;
 
@@ -322,7 +322,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
     protected function getButtonIconPath($buttonName, $state=NULL)
     {
         // Calibrate image recognition.
-        $imgPath  = dirname(__FILE__).'/tmp/Images/'.$this->sikuli->getBrowserid();
+        $imgPath  = $this->getBrowserImagePath();
         $imgPath .= '/'.$buttonName;
 
         if ($state !== NULL) {
@@ -414,8 +414,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
     private function _calibrate()
     {
         // Clean up old files.
-        $baseDir = dirname(__FILE__);
-        $imgPath = $baseDir.'/tmp/Images/'.$this->sikuli->getBrowserid();
+        $imgPath = $this->getBrowserImagePath();
         exec('rm '.$imgPath.'/*.png');
 
         $this->_calibrateKeywords();
@@ -433,11 +432,10 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
     private function _calibrateKeywords()
     {
         $this->sikuli->setAutoWaitTimeout(0.5);
-        $baseDir = dirname(__FILE__);
 
         // Calibrate image recognition.
         $baseDir = dirname(__FILE__);
-        $imgPath = $baseDir.'/tmp/Images/'.$this->sikuli->getBrowserid();
+        $imgPath = $this->getBrowserImagePath();
 
         if (file_exists($imgPath) === FALSE) {
             mkdir($imgPath, 0755, TRUE);
@@ -513,7 +511,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
 
         // Calibrate image recognition.
         $baseDir = dirname(__FILE__);
-        $imgPath = $baseDir.'/tmp/Images/'.$this->sikuli->getBrowserid();
+        $imgPath = $this->getBrowserImagePath();
 
         if (file_exists($imgPath) === FALSE) {
             mkdir($imgPath, 0755, TRUE);
@@ -809,8 +807,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      */
     private function _getKeywordImage($index)
     {
-        $baseDir  = dirname(__FILE__);
-        $imgPath  = $baseDir.'/tmp/Images/'.$this->sikuli->getBrowserid();
+        $imgPath  = $this->getBrowserImagePath();
         $imgPath .= '/text-'.$index.'.png';
 
         return $imgPath;

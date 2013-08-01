@@ -5,11 +5,11 @@ chdir(dirname(__FILE__));
 $opts = getopt('s::b::u::t::civ', array('url::', 'built', 'log::'));
 
     $browsers = array(
-                 'Firefox',
-                 'Safari',
-                 'Chrome',
-                 'IE8',
-                 'IE9',
+                 'firefox',
+                 'safari',
+                 'chrome',
+                 'ie8',
+                 'ie9',
                 );
 
     // Browsers.
@@ -71,11 +71,9 @@ $opts = getopt('s::b::u::t::civ', array('url::', 'built', 'log::'));
         $browser = trim($browser);
         if (empty($browser) === TRUE) {
             continue;
-        } else if ($browser === 'Chrome') {
-            $browser = 'Google Chrome';
         }
 
-        echo "\n=== Running tests on: $browser ===\n";
+        echo "\n=== Running tests on: ".ucfirst($browser)." ===\n";
         putenv('VIPER_TEST_BROWSER='.$browser);
 
         $phpunitCMD = '';
