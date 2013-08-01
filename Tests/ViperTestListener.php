@@ -51,7 +51,7 @@ class ViperTestListener implements PHPUnit_Framework_TestListener
 
         $sikuli = self::$viperTestObj->getSikuli();
         if (empty($sikuli) === FALSE) {
-            $imagePath = $sikuli->capture(array('SCREEN', '_noQuotes' => TRUE));
+            $imagePath = $sikuli->capture();
             $imagePath = str_replace('u\'', '', $imagePath);
             $imagePath = trim($imagePath, '\'');
             rename($imagePath, $exportPath);

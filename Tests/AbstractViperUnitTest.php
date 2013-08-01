@@ -456,8 +456,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
         $i      = 1;
         $coords = array();
         foreach ($texts as $id => $textRect) {
-            $region = $this->sikuli->getRegionOnPage($textRect);
-
+            $region     = $this->sikuli->getRegionOnPage($textRect);
             $coordsText = $this->sikuli->getX($region).'-'.$this->sikuli->getY($region);
 
             if (isset($coords[$coordsText]) === TRUE) {
