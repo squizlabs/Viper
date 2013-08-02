@@ -154,7 +154,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarUnitTest extends Abstrac
     public function testPositionAfterWindowResize()
     {
         $this->selectKeyword(2);
-        $this->sikuli->resizeWindow(1600, 800);
+        $this->sikuli->resize(1600, 800);
 
         $word = $this->findKeyword(2);
 
@@ -193,7 +193,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarUnitTest extends Abstrac
      */
     public function testPositionOrientationRight()
     {
-        $this->sikuli->resizeWindow(1150, 800);
+        $this->sikuli->resize(1150, 800);
 
         $word = $this->findKeyword(5);
         $this->selectKeyword(5);
