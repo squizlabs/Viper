@@ -350,6 +350,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
+        $this->sikuli->clearVars();
 
     }//end tearDown()
 
@@ -1144,6 +1145,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
         );
 
         self::$_topToolbar = $region;
+        $this->sikuli->addCacheVar($region);
 
         $this->sikuli->setAutoWaitTimeout(0.5, $region);
 
