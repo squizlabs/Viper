@@ -43,6 +43,10 @@ ViperCopyPastePlugin.prototype = {
             return self.keyDown(e);
         });
 
+        if (this._isMSIE === true) {
+            this.pasteElement = this._createPasteDiv();
+        }
+
     },
 
     setSettings: function(settings)
@@ -496,7 +500,7 @@ ViperCopyPastePlugin.prototype = {
 
     _handleFormattedPaste: function(stripTags, e)
     {
-        if (!this.pasteElement || this._isMSIE === true) {
+        if (!this.pasteElement) {
             this.pasteElement = this._createPasteDiv(this._isSafari);
         } else {
             dfx.empty(this.pasteElement);
@@ -533,6 +537,9 @@ ViperCopyPastePlugin.prototype = {
                 setTimeout(function() {
                     self._handleFormattedPasteValue(stripTags);
                     self.viper.focus();
+                    if (self._isMSIE === true) {
+                        self.pasteElement = self._createPasteDiv();
+                    }
                 }, 100);
             }
         };
