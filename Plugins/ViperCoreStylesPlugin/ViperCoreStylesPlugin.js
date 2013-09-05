@@ -965,6 +965,9 @@ ViperCoreStylesPlugin.prototype = {
                         }
 
                         dfx.remove(elem);
+                        if (nodeSelection === elem) {
+                            return false;
+                        }
                     }
                 }
             }
