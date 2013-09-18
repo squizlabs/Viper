@@ -808,11 +808,13 @@
   top: 50%;
   margin-top: -9px;
 }
-.Viper-textbox.Viper-disabled .Viper-textbox-action,
+.Viper-textbox.Viper-actionRevert.Viper-required .Viper-textbox-main:after,
+.Viper-textbox.Viper-actionClear.Viper-required .Viper-textbox-main:after {
+  display: none;
+}
 .Viper-textbox.Viper-disabled .Viper-textbox.Viper-required .Viper-textbox-main:after {
   visibility: hidden;
 }
-.Viper-textBox-textArea .Viper-textbox-action,
 .Viper-textBox-textArea .Viper-textbox.Viper-required .Viper-textbox-main:after {
   display: none;
 }
