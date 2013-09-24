@@ -166,7 +166,7 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteForMacFirefoxUnitTest extends Ab
         sleep(2);
 
         // Switch to MS Word.
-        $this->switchApp('Microsoft Word');
+        $this->sikuli->switchApp('Microsoft Word');
 
         // Copy text.
         $this->sikuli->keyDown('Key.CMD + a');
@@ -175,7 +175,7 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteForMacFirefoxUnitTest extends Ab
         $this->sikuli->keyDown('Key.CMD + q');
         sleep(5);
 
-        $this->switchApp($this->sikuli->getBrowserName());
+        $this->sikuli->switchApp($this->sikuli->getBrowserName());
         $this->selectKeyword(1);
 
         $this->paste(TRUE);
