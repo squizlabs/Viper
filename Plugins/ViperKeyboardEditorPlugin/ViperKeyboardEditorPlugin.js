@@ -934,6 +934,7 @@ ViperKeyboardEditorPlugin.prototype = {
         } else if (range.startOffset === 0
             && range.collapsed === true
             && range.startContainer === range.endContainer
+            && e.keyCode === 8
             && (this.viper.elementIsEmpty(range.startContainer) === true || dfx.getHtml(range.startContainer) === '<br>')
         ) {
             var skippedBlockElem = [];
