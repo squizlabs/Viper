@@ -159,7 +159,13 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
 
         if (self::$_sikuli === NULL) {
             $browser       = getenv('VIPER_TEST_BROWSER');
-            self::$_sikuli = new PHPSikuliBrowser($browser);
+            $options       = array(
+                              'size' => array(
+                                         'width'  => 1270,
+                                         'height' => 900,
+                                        ),
+                             );
+            self::$_sikuli = new PHPSikuliBrowser($browser, $options);
         }
 
         $this->sikuli = self::$_sikuli;
@@ -350,7 +356,9 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-        $this->sikuli->clearVars();
+        if ($this->sikuli !== NULL) {
+            $this->sikuli->clearVars();
+        }
 
     }//end tearDown()
 
@@ -2022,7 +2030,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      */
     protected function closeApp($appName)
     {
-        $this->switchApp($appName);
+        $this->sikuli->switchApp($appName);
         if ($this->sikuli->getOS() === 'windows') {
             $this->sikuli->keyDown('Key.ALT + F4');
         } else {
