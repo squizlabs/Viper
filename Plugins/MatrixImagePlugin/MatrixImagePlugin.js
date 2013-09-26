@@ -115,7 +115,7 @@ MatrixImagePlugin.prototype = {
 
             var initialValue = urlField.getValue(),
                 focusId = asset.id;
-            if (/^[0-9]+$/.test(initialValue)) {
+            if (/^[0-9]+([:].*)?$/.test(initialValue)) {
                 focusId = initialValue;
             }// End if
 
