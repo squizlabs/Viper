@@ -559,6 +559,19 @@ ViperCopyPastePlugin.prototype = {
         html     = this._removeAttributes(html);
         html     = this._updateElements(html);
 
+        var self = this;
+        this.viper.fireCallbacks('ViperCopyPastePlugin:cleanPaste', {html: html, stripTags: stripTags}, function(obj, newHTML) {
+            if (newHTML) {
+                html = newHTML;
+            }
+
+            self._pasteContent(html, stripTags);
+        });
+
+    },
+
+    _pasteContent: function(html, stripTags)
+    {
         if (this._iframe) {
             dfx.remove(this._iframe);
             this._iframe = null;

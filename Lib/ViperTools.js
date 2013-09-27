@@ -475,10 +475,16 @@ ViperTools.prototype = {
                 } else if (dfx.hasClass(textBox, 'Viper-actionClear') === true) {
                     input.value = '';
                     dfx.removeClass(textBox, 'Viper-actionClear');
-                    dfx.addClass(textBox, 'Viper-actionRevert');
-                    actionIcon.setAttribute('title', 'Revert to original value');
-                    if (required === true) {
+
+                    if (value) {
+                        dfx.addClass(textBox, 'Viper-actionRevert');
+                        actionIcon.setAttribute('title', 'Revert to original value');
+                        if (required === true) {
+                            dfx.addClass(textBox, 'Viper-required');
+                        }
+                    } else if (required === true) {
                         dfx.addClass(textBox, 'Viper-required');
+                        dfx.hideElement(actionIcon);
                     }
                 }
 
