@@ -124,18 +124,25 @@ MatrixImagePlugin.prototype = {
                 focusAssetId: focusId,
                 types: allowedTypes,
                 itemRefiner: function(asset) {
+                    // Unlock image variety from looking dependent. This allows
+                    // them to be selected.
                     if (asset.type_code === 'image_variety') {
                         asset.is_dependant = 0;
                     }
                     return asset;
                 },
                 callback: function(selectedAsset){
-                    //if (selectedAsset.attribute('type_code') === 'image') {
-                        urlField.setValue('./?a=' + selectedAsset.id,false);
-                        altField.setValue(selectedAsset.attribute('alt'),false);
-//                    } else {
-//                        alert(EasyEditLocalise.translate('You have selected a %1 asset. Only image assets can be selected.',selectedAsset.attribute('type_code')));
-//                    }// End if
+                    for (var i = 0; i < allowedTypes.length; i++) {
+                        if (selectedAsset.attribute('type_code') === allowedTypes[i]) {
+                            urlField.setValue(selectedAsset.id,false);
+                            altField.setValue(selectedAsset.attribute('alt'),false);
+                            break;
+                        }
+                    }
+
+                    if (i >= allowedTypes.length) {
+                        alert(EasyEditLocalise.translate('You have selected a %1 asset. Only image, thumbnail or image variety assets can be selected.',selectedAsset.attribute('type_code')));
+                    }// End if
                 }
             });
         });
