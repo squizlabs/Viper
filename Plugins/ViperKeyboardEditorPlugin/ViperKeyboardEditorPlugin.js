@@ -733,7 +733,7 @@ ViperKeyboardEditorPlugin.prototype = {
 
         if (range.collapsed === true && e.keyCode === 8) {
             var startNode = range.getStartNode();
-            if (startNode) {
+            if (startNode && startNode.nodeType === dfx.TEXT_NODE) {
                 var skippedBlockElem = [];
                 var node      = range.getPreviousContainer(startNode, skippedBlockElem, true, true);
                 if (this.viper.isOutOfBounds(node) === true) {
