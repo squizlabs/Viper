@@ -435,7 +435,7 @@ ViperDOMRange.prototype = {
      * @return The text container that range can extend to.
      * @type   {TextNode}
      */
-    getPreviousContainer: function(container, skippedBlockElem, skipEmptyNodes)
+    getPreviousContainer: function(container, skippedBlockElem, skipEmptyNodes, brIsSelectable)
     {
         if (!container) {
             return null;
@@ -447,7 +447,7 @@ ViperDOMRange.prototype = {
                 if (dfx.isStubElement(container) === true) {
                     return container;
                 } else {
-                    var child = this._getLastSelectableChild(container, skipEmptyNodes);
+                    var child = this._getLastSelectableChild(container, skipEmptyNodes, brIsSelectable);
                     if (child !== null) {
                         return child;
                     }
@@ -474,13 +474,13 @@ ViperDOMRange.prototype = {
         }
 
         if (container && container.nodeType !== dfx.TEXT_NODE) {
-            var selChild = this._getLastSelectableChild(container, skipEmptyNodes);
+            var selChild = this._getLastSelectableChild(container, skipEmptyNodes, brIsSelectable);
             if (selChild !== null) {
                 return selChild;
             }
         }
 
-        return this.getPreviousContainer(container, skippedBlockElem, skipEmptyNodes);
+        return this.getPreviousContainer(container, skippedBlockElem, skipEmptyNodes, brIsSelectable);
 
     },
 
@@ -582,13 +582,13 @@ ViperDOMRange.prototype = {
 
     },
 
-    _getLastSelectableChild: function(element, skipEmptyNodes)
+    _getLastSelectableChild: function(element, skipEmptyNodes, brIsSelectable)
     {
         if (element) {
             if (element.nodeType !== dfx.TEXT_NODE) {
                 var child = element.lastChild;
                 while (child) {
-                    if (this._isSelectable(child) === true) {
+                    if (this._isSelectable(child) === true || (brIsSelectable === true && dfx.isTag(child, 'br') === true)) {
                         return child;
                     } else if (child.lastChild) {
                         // This node does have child nodes.
