@@ -1,0 +1,350 @@
+Squiz Viper Licence Agreement
+
+PLEASE READ THIS SOFTWARE LICENCE AGREEMENT CAREFULLY BEFORE DOWNLOADING OR USING THE
+SOFTWARE. BY COPYING, INSTALLING OR USING ALL OR ANY PORTION OF THE SOFTWARE YOU
+ACCEPT ALL THE TERMS AND CONDITIONS OF THIS AGREEMENT. THIS AGREEMENT IS ENFORCEABLE
+AGAINST YOU, AN ENTITY OR SIMILAR (HEREAFTER "YOU") THAT OBTAINED THE SOFTWARE AND/OR
+ON WHOSE BEHALF IT IS USED.
+
+The Licensor is one of (i) Squiz Australia Pty Ltd (Australian Business Number 53 131
+581 247), (ii) Squiz UK Limited (UK Registered Number 04816468), or (iii) Squiz
+Limited (New Zealand Company Number 1027323) (hereafter "Squiz"). Squiz and its
+Related Bodies Corporate own all Intellectual Property in the Software. The Software
+is licenced, not sold.
+
+1. Definitions & Interpretations
+
+    1.1 Definitions
+
+        (a) Client Side Executable Software means the software required to run Squiz
+        Viper on a browser remote from the server on which the program is installed
+        in accordance with this Agreement.
+
+        (b) Commencement Date means the date on which the Software was purchased or
+        was installed into Your system, whichever occurs first.
+
+        (c) Confidential Information means information of a Party that:
+            (i) is by its nature confidential; or
+            (ii) is designated by that Party as confidential; or
+            (iii) the other Party knows or ought to have known is confidential,
+
+            including, without limitation, information relating to:
+
+            (iv) the source code, design, specification and content of the
+            Software; and
+            (v) the personnel, policies or business strategies of Squiz; and
+            (vi) the terms upon which the Software is being licenced under this
+            Agreement.
+
+            but does not include
+
+            (vii) information already known to the receiving party at the time of
+            disclosure by the other party; or
+            (viii) information in the public domain other than as a result of
+            disclosure by a party in breach of its obligations of confidentiality
+            under this agreement;
+
+        (d) Documentation means any technical and user information relating to the
+        Software provided by Squiz.
+
+        (e) Instance means a single installation of the Software on a system capable
+        of running it.
+
+        (f) Intellectual Property includes copyright, trade mark, design, patent,
+        semiconductor or circuit layout rights, trade, business or company names, or
+        other proprietary rights, or any rights to registration of such rights,
+        whether created before, on or after the commencement date of this Licence;
+
+        (g) Licence means the licence of Software granted pursuant to this Agreement.
+
+        (h) Licence Fee means the fees payable by You to Squiz for the use of the
+        Software as granted pursuant to this Agreement.
+
+        (i) Related Bodies Corporate means (i) where the Software is installed in
+        Australia, the United Kingdom or New Zealand, the same meaning as in
+        corporate law in operation in the respective jurisdiction in which the
+        Software is installed, or (ii), where the Software is not installed in
+        Australia, the United Kingdom or New Zealand, the same meaning as in
+        corporate law in operation in Australia
+
+        (j) Service Level Agreement means a contractual agreement of the same name
+        between You and Squiz.
+
+        (k) Software means the Squiz Viper software, including the Client Side
+        Executable Software, without limitation all files comprising the Squiz Viper
+        program on which it functions as per the Documentation, including updates as
+        may be issued from time to time.
+
+        (l) Squiz Authorised Representative means a party with written authorisation
+        by Squiz to market and sell the Software.
+
+        (m) Third Party means any party other than You or Squiz and includes
+        (i) Related Bodies Corporate, and (ii) parties having a different Australian
+        Business Number, UK Registered Number or New Zealand Company Number to You
+        (if applicable).
+
+        (n) Valid Service Level Agreement means a Service Level Agreement that is
+        active and enforceable, paid up and of a level that is stipulated by Squiz in
+        the Documentation to include the right to purchase Squiz Viper.
+
+        (o) You means one of either (i) the individual, (ii) an entity or
+        (iii) similar, but does not include Related Bodies Corporate, who has
+        purchased the Software from Squiz or a Squiz Authorised Representative and
+        has installed the Software into their system in accordance with the terms of
+        the Licence granted in this Agreement.
+
+    1.2 Presumptions and interpretation
+
+        Unless the context otherwise requires a word which denotes:
+            (a) the singular denotes the plural and vice versa; and
+            (b) any gender denotes the other genders; and
+            (c) a person includes an individual, a body corporate, and a government.
+            Unless the context otherwise requires a reference to
+            (d) any legislation includes any regulation or instrument made under it
+            and where amended, re-enacted or replaced means that amended, re-enacted
+            or replacement legislation; and
+            (e) any other agreement or instrument where amended or replaced means
+            that agreement or instrument as amended or replaced; and
+            (f) a group of persons includes any one or more of them; and
+            (g) a thing or amount is a reference to the whole and each part of it.
+
+2. Licence Grant
+
+    2.1 Subject to the terms of this Agreement, Squiz grants You:
+
+        (a) a limited, non-exclusive and non-transferable licence to use the Software
+        in the manner and for the purposes described in the Documentation;
+        (b) the right to install one Instance of the Software;
+        (c) the right to download from the server referred in (b) above unlimited
+        copies of the Client Side Executable Software to a Squiz Supported Browser
+        (as defined in the Documentation) for the direct benefit of Your employees,
+        agents and subcontractors;
+        (d) the right to make a reasonable number of backup copies of the Software,
+        provided Your backup copies are not installed or used for other than archival
+        purposes.
+        (e) the right to use the Documentation.
+
+3. Duration
+
+    3.1 This Agreement and the Licence granted herein commences on the
+    Commencement Date.
+
+    3.2 Subject to the terms of this Agreement, the Licence shall continue until
+    Termination.
+
+4. Conditions of Licence
+
+    4.1 You must not, and must not allow or cause any other person, entity or
+    similar to:
+
+        (a) lease, licence, disclose, distribute, provide or otherwise make available
+        all or any part of the Software or Documentation to any Third Party, except
+        as otherwise expressly permitted in this Agreement; or
+        (b) copy, in whole or in part, the Software or Documentation, modify the
+        Software, reverse compile or reverse assemble all or any portion of the
+        Software or rent, lease, distribute, sell or create derivative works of the
+        Software; or
+        (c) use the Software or Documentation to develop, enhance, modify, market or
+        demonstrate other products; or
+        (d) alter, change, obscure or remove any logo, copyright or other proprietary
+        notices, symbols or labels in the Software or Documentation.
+
+    4.2 You must not have received the Software from a party other than Squiz or a
+    Squiz Authorised Representative.
+
+    4.3 You must have and continue to have a Valid Service Level Agreement.
+
+    4.4 You must immediately notify Squiz if You become aware of any breach of this
+    agreement and must give Squiz all necessary assistance in connection with any
+    proceedings Squiz may institute relating to such breach.
+
+    4.5 This clause will survive the termination of this Agreement.
+
+5. Charges
+
+    5.1 You agree to pay the Licence Fee within the terms specified on the invoice
+    received from Squiz.
+
+    5.2 All taxes, duties and government charges imposed or levied in Australia or
+    overseas in connection with this Agreement will be borne by You.
+
+    5.3 In relation to taxable supplies made under this Agreement, Squiz agrees to
+    provide you with a tax invoice in accordance with the tax legislation applicable
+    in the local jurisdiction.
+
+6. Ownership
+
+    6.1 You acknowledge that Squiz retains ownership of the Software and
+    Documentation, and all proprietary rights in the Software and Documentation.
+
+    6.2 You agree all Intellectual Proprietary Rights in the Software and
+    Documentation are and shall remain the exclusive property of Squiz and any of its
+    third party suppliers.
+
+    6.3 Unless expressly permitted in this Agreement, You must not use any of Squiz's
+    or its third party suppliers' intellectual property without Squiz or its third
+    party suppliers' prior written consent.
+
+    6.4 Nothing in this Agreement should be construed as transferring any aspects of
+    such rights mentioned in this clause to You or any Third Party. Squiz reserves
+    any and all rights not expressly granted herein.
+
+7. Confidentiality
+
+    7.1 You agree not to disclose Squiz's Confidential Information.
+
+    7.2 You will not be in breach of clause 7.1 in circumstances where You are
+    legally compelled to disclose Squiz's Confidential Information.
+
+    7.3 You will take all reasonable steps to ensure that its employees and agents,
+    and any subcontractors engaged for the purposes of this Agreement, do not make
+    public or disclose the other party's Confidential Information.
+
+    7.4 This clause will survive the termination of this Agreement.
+
+8. Support
+
+    8.1 Squiz may from time to time make available updated versions of the Software.
+    This Agreement does not create an obligation for Squiz to provide You with
+    updated versions of the Software or support and upgrade services relating to the
+    Software.
+
+9. Termination
+
+    9.1 This Agreement and the Licence granted herein shall terminate upon the
+    happening of any of the following events:
+        (a) You fail to comply with any of the terms and conditions of this
+        Agreement, including the non-payment of Charges described in Clause 5 and the
+        non-continuance of a Service Level Agreement described in Clause 4.3;
+        (b) You have received the Software from a party other than Squiz or a Squiz
+        Authorised Representative;
+        (c) Squiz provides You with another licence, and You agree to be bound by its
+        terms; or
+        (d) You become liquidated, dissolved, bankrupt or insolvent, whether
+        voluntarily or involuntarily; or
+        (e) You and Squiz agree, in writing, to terminate this Agreement.
+
+    9.2 On termination, You must immediately cease use of the Software and return to
+    Squiz all copies of the Software, all revisions, enhancements and upgrades of the
+    Software and the Documentation. Alternatively, You must destroy such Software,
+    copies, revisions, enhancements and upgrades and must certify in writing to Squiz
+    that they have been destroyed.
+
+    9.3 On termination, any amounts paid by You to Squiz are non-refundable in their
+    entirety.
+
+10. Warranty
+
+    10.1 Squiz warrants that as at the Commencement Date it has the rights, power and
+    authority to enter into this Agreement and to grant the Licence.
+
+    10.2 Squiz warrants that the Software will operate substantially in accordance
+    with the Documentation. If the Software fails to operate substantially in
+    accordance with the Documentation, Squiz will supply another copy of the Software
+    at its cost.
+
+    10.3 The warranty provided in the preceding clause 10.2 is subject to a separate
+    agreement entered into between You and Squiz.
+
+    10.4 Except as expressly warranted above, Squiz does not warrant or make any
+    representations:
+        (a) that the Software is suitable for Your use, or is fit for any other
+        purpose; or
+        (b) that operation of the Software will be-uninterrupted or that the Software
+        is error-free; or
+        (c) regarding the results of any use of the whole or any part of the
+        Software; or
+        (d) as to the accuracy, reliability or content of any data, information,
+        service or goods obtained through any use of the whole or any part of the
+        Software.
+
+11. Indemnity
+
+    11.1 You hereby agree to indemnify, defend and hold Squiz, its directors,
+    officers, employees and affiliates harmless from and against any and all
+    liability and costs, including reasonable legal fees incurred, in connection this
+    Agreement.
+
+    11.2 This clause will survive the termination of this Agreement.
+
+12. Exclusions and Limitation of Liability
+
+    12.1 Squiz makes no express or implied warranties under this Agreement, except
+    under clause 10 (Warranty).
+
+    12.2 To the extent permitted by law, Squiz excludes:
+        (a) from this Agreement all conditions, warranties and terms implied by
+        statute, general law, international convention or custom;
+        (b) all liability to You in contract for consequential or indirect damages
+        arising out of or in connection with this Agreement even if:
+            i. Squiz knew they were possible; or
+            ii. they were otherwise foreseeable
+            including without limitation, damages for loss of business profits or
+            other pecuniary loss and damages suffered as a result of claims by any
+            Third Party.
+        (c) all liability to You in contract for direct or consequential or indirect
+        damages arising out of or in connection with the use or inability to use the
+        Software or Documentation including without limitation, damages for loss of
+        business profits or other pecuniary loss and damages suffered as a result of
+        claims by any Third Party; and
+        (d) all liability to You in negligence or other non-contractual cause of
+        action in respect of which liability can be excluded for acts or omissions of
+        Squiz, its employees, agents and contractors arising out of or in connection
+        with this Agreement.
+
+    12.3 Squiz's liability to You for breach of
+    (a) any express provision of this Agreement is limited to the amount paid by You
+    in Licence Fees.
+    (b) any implied condition or warranty where the exclusion of which would
+    contravene any statute or cause this clause 13 to be void, is limited, at the
+    option of Squiz, to one or more of the following:
+        i. the replacement of the Software or Documentation
+        ii. repair of such Software or Documentation
+
+13. General Terms
+
+    13.1 Governing law
+         This Agreement shall be governed by, and construed in accordance with the
+         laws of (i) where the Software is installed in Australia, the United Kingdom
+         or New Zealand, the corresponding country in which the Software is
+         installed, or (ii) in all other cases, the laws of New South Wales,
+         Australia. The parties agree to submit to the jurisdiction of the courts and
+         tribunals as determined in this clause 13.1.
+
+    13.2 Entire agreement
+         This Agreement constitutes the entire agreement between the parties and
+         supersedes all prior representations, agreements, statements and
+         understandings, whether verbal or in writing.
+
+    13.3 No reliance on other matters
+         Each of the parties acknowledges that in agreeing to enter into this
+         Agreement it has not relied on any representation, warranty or other
+         assurance except those set out in this Agreement.
+
+    13.4 New Versions of the Agreement
+         Notwithstanding clause 13.5 below, Squiz reserves the right to modify this
+         Agreement at any time by providing such revised Agreement to You. Your
+         continued use of the Software shall constitute Your acceptance to be bound
+         by the terms and conditions of the revised Agreement.
+
+    13.5 Amendment of Agreement
+         No amendment to or modification of this Agreement shall be binding unless in
+         writing and signed by both parties.
+
+    13.6 Assignment
+         You must not assign, whether in whole or part, the benefit of this agreement
+         or any rights or obligations hereunder, without the prior written consent of
+         Squiz.
+
+    13.7 Severability
+         If any provision of this Agreement shall be held by a court of competent
+         jurisdiction to be contrary to law; that provision will be enforced to the
+         maximum extent permissible and the remaining provisions of this Agreement
+         will remain in full force and effect.
+
+    13.8 Waiver
+         A waiver by either party in respect of a breach of a provision of this
+         Agreement by the other party shall not be deemed to be a waiver in respect
+         of any other breach and the failure of either party to enforce at any time a
+         provision of this Agreement shall in no way be interpreted as a waiver of
+         such provision.
