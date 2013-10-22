@@ -7,25 +7,40 @@ function MatrixCopyPastePlugin(viper)
 MatrixCopyPastePlugin.prototype = {
     init: function()
     {
+        var tags = {
+            'a': ['href'],
+            'img': ['src']
+        }
+
         var self = this;
         this.viper.registerCallback('ViperCopyPastePlugin:cleanPaste', 'MatrixCopyPastePlugin', function(data) {
             if (data.html) {
                 var tmp = document.createElement('div');
                 dfx.setHtml(tmp, data.html);
+                var found    = false;
 
-                var aTags = dfx.getTag('a', tmp);
-                var c     = aTags.length;
-                var found = false;
+                for (tag in tags) {
+                    var attrs = tags[tag];
 
-                for (var i = 0; i < c; i++) {
-                    var aTag    = aTags[i];
-                    var matches = aTag.href.match(/\/\?a=\d+.*/);
-                    if (!matches) {
-                        continue;
-                    }
+                    var hrefTags = dfx.getTag(tag, tmp);
+                    var c        = hrefTags.length;
 
-                    aTag.href = '.' + matches[0];
-                    found     = true;
+                    for (var i = 0; i < c; i++) {
+                        var hrefTag = hrefTags[i];
+                        for (var atr = 0; atr < attrs.length; atr++) {
+                            try {
+                                var matches = hrefTag.getAttribute(attrs[atr]).match(/\/\?a=\d+.*/);
+                                if (!matches) {
+                                    continue;
+                                }
+
+                                hrefTag.setAttribute(attrs[atr], '.' + matches[0]);
+                                found        = true;
+                            } catch (ex) {
+                                // Ignore any exceptions due to lack of attribute
+                            }//end try
+                        }//end for
+                    }//end for
                 }//end for
 
                 if (found === true) {
