@@ -276,12 +276,17 @@ Viper.prototype = {
     getBrowserType: function()
     {
         if (this._browserType === null) {
-            var tests = ['msie', 'firefox', 'chrome', 'safari'];
+            var tests = ['trident', 'msie', 'firefox', 'chrome', 'safari'];
             var tln   = tests.length;
             for (var i = 0; i < tln; i++) {
                 var r = new RegExp(tests[i], 'i');
                 if (r.test(navigator.userAgent) === true) {
-                    this._browserType = tests[i];
+                    if (tests[i] === 'trident') {
+                        // No MSIE token for IE11+.
+                        this._browserType = 'msie';
+                    } else {
+                        this._browserType = tests[i];
+                    }
                     return this._browserType;
                 }
             }
@@ -300,7 +305,7 @@ Viper.prototype = {
      */
     getBrowserVersion: function()
     {
-        var browsers = ['MSIE', 'Chrome', 'Safari', 'Firefox'];
+        var browsers = ['Trident', 'MSIE', 'Chrome', 'Safari', 'Firefox'];
         var c        = browsers.length;
         var uAgent   = navigator.userAgent;
 
@@ -324,6 +329,8 @@ Viper.prototype = {
         var re = null;
         if (browserName === 'MSIE') {
             re = new RegExp('MSIE (\\d+)');
+        } else if (browserName === 'Trident') {
+            re = new RegExp('rv:(\\d+)');
         } else {
             re = new RegExp(browserName + '/(\\d+)');
         }
