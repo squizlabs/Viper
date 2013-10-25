@@ -305,7 +305,7 @@ Viper.prototype = {
      */
     getBrowserVersion: function()
     {
-        var browsers = ['Trident', 'MSIE', 'Chrome', 'Safari', 'Firefox'];
+        var browsers = ['MSIE', 'Trident', 'Chrome', 'Safari', 'Firefox'];
         var c        = browsers.length;
         var uAgent   = navigator.userAgent;
 
