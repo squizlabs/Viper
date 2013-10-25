@@ -86,6 +86,12 @@ MatrixImagePlugin.prototype = {
     setUrlFieldValue: function(url)
     {
         url = url.replace(/^\.\/\?a=/, '');
+
+        // If there is a shadow asset, chop off the trailing "$"
+        if ((url.indexOf(':') !== -1) && (url.substr((url.length - 1)) === '$')) {
+                url = url.substr(0, (url.length - 1));
+            }
+
         ViperImagePlugin.prototype.setUrlFieldValue.call(this, url);
 
     },
@@ -96,6 +102,11 @@ MatrixImagePlugin.prototype = {
 
         if (this._isInternalLink(url) === true) {
             url = './?a=' + url;
+
+            // If this is a shadow asset, add the trailing "$"
+            if (url.indexOf(':') !== -1) {
+                url += '$';
+            }
         }
 
         return url;
