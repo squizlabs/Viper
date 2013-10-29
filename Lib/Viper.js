@@ -510,11 +510,14 @@ Viper.prototype = {
         if (enabled === true && this.enabled === false) {
             this._addEvents();
             this.enabled = true;
-            this.fireCallbacks('Viper:enabled');
             this.element.setAttribute('contentEditable', true);
             dfx.setStyle(this.element, 'outline', 'none');
 
             var range = this.getCurrentRange();
+            if (this.rangeInViperBounds(range) === false) {
+                this.initEditableElement();
+            }
+
             var editableChild = range._getFirstSelectableChild(this.element);
             if (!editableChild) {
                 // Check if any of these elements exist in the content.
@@ -552,9 +555,7 @@ Viper.prototype = {
                 }//end if
             }//end if
 
-            if (editableChild) {
-                //this.setRange(editableChild, 0);
-            }
+            this.fireCallbacks('Viper:enabled');
         } else if (enabled === false && this.enabled === true) {
             // Back to final mode.
             ViperChangeTracker.activateFinalMode();
@@ -739,7 +740,6 @@ Viper.prototype = {
                     paramTag.setAttribute('value', 'transparent');
                     dfx.insertBefore(embedTags[i], paramTag);
                     embedTags[i].setAttribute('wmode', 'transparent');
-                    console.info(1);
                 }
             }
         }//end if
@@ -817,6 +817,20 @@ Viper.prototype = {
                 }
 
                 dfx.remove(nodesToRemove);
+
+                var range = this.getCurrentRange();
+                var firstSelectable = range._getFirstSelectableChild(elem);
+                if (!firstSelectable && elem.childNodes.length > 0) {
+                    for (var i = 0; i < elem.childNodes.length; i++) {
+                        var child = elem.childNodes[i];
+                        if (dfx.isBlockElement(child) === true
+                            && dfx.isStubElement(child) === false
+                            && dfx.getHtml(child) === ''
+                        ) {
+                            dfx.setHtml(child, '&nbsp;');
+                        }
+                    }
+                }
             }//end if
         }//end if
 
