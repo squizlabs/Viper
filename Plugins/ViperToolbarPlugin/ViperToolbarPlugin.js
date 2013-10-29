@@ -43,6 +43,14 @@ function ViperToolbarPlugin(viper)
             self._updateToolbar();
     });
 
+    this.viper.registerCallback('Viper:enabled', 'ViperToolbarPlugin', function(range) {
+            self._updateToolbar();
+    });
+
+    this.viper.registerCallback('Viper:disabled', 'ViperToolbarPlugin', function(range) {
+            self.disable();
+    });
+
     this.viper.registerCallback('Viper:clickedOutside', 'ViperToolbarPlugin', function(range) {
         clickedOutside = true;
 

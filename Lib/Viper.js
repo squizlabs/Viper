@@ -332,12 +332,17 @@ Viper.prototype = {
     getBrowserType: function()
     {
         if (this._browserType === null) {
-            var tests = ['msie', 'firefox', 'chrome', 'safari'];
+            var tests = ['trident', 'msie', 'firefox', 'chrome', 'safari'];
             var tln   = tests.length;
             for (var i = 0; i < tln; i++) {
                 var r = new RegExp(tests[i], 'i');
                 if (r.test(navigator.userAgent) === true) {
-                    this._browserType = tests[i];
+                    if (tests[i] === 'trident') {
+                        // No MSIE token for IE11+.
+                        this._browserType = 'msie';
+                    } else {
+                        this._browserType = tests[i];
+                    }
                     return this._browserType;
                 }
             }
@@ -356,7 +361,7 @@ Viper.prototype = {
      */
     getBrowserVersion: function()
     {
-        var browsers = ['MSIE', 'Chrome', 'Safari', 'Firefox'];
+        var browsers = ['MSIE', 'Trident', 'Chrome', 'Safari', 'Firefox'];
         var c        = browsers.length;
         var uAgent   = navigator.userAgent;
 
@@ -380,6 +385,8 @@ Viper.prototype = {
         var re = null;
         if (browserName === 'MSIE') {
             re = new RegExp('MSIE (\\d+)');
+        } else if (browserName === 'Trident') {
+            re = new RegExp('rv:(\\d+)');
         } else {
             re = new RegExp(browserName + '/(\\d+)');
         }
@@ -593,11 +600,14 @@ Viper.prototype = {
         if (enabled === true && this.enabled === false) {
             this._addEvents();
             this.enabled = true;
-            this.fireCallbacks('Viper:enabled');
             this.element.setAttribute('contentEditable', true);
             dfx.setStyle(this.element, 'outline', 'none');
 
             var range = this.getCurrentRange();
+            if (this.rangeInViperBounds(range) === false) {
+                this.initEditableElement();
+            }
+
             var editableChild = range._getFirstSelectableChild(this.element);
             if (!editableChild) {
                 // Check if any of these elements exist in the content.
@@ -635,9 +645,7 @@ Viper.prototype = {
                 }//end if
             }//end if
 
-            if (editableChild) {
-                //this.setRange(editableChild, 0);
-            }
+            this.fireCallbacks('Viper:enabled');
         } else if (enabled === false && this.enabled === true) {
             // Back to final mode.
             ViperChangeTracker.activateFinalMode();
@@ -899,6 +907,20 @@ Viper.prototype = {
                 }
 
                 dfx.remove(nodesToRemove);
+
+                var range = this.getCurrentRange();
+                var firstSelectable = range._getFirstSelectableChild(elem);
+                if (!firstSelectable && elem.childNodes.length > 0) {
+                    for (var i = 0; i < elem.childNodes.length; i++) {
+                        var child = elem.childNodes[i];
+                        if (dfx.isBlockElement(child) === true
+                            && dfx.isStubElement(child) === false
+                            && dfx.getHtml(child) === ''
+                        ) {
+                            dfx.setHtml(child, '&nbsp;');
+                        }
+                    }
+                }
             }//end if
         }//end if
 
