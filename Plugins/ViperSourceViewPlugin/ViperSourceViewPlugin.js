@@ -444,6 +444,11 @@ ViperSourceViewPlugin.prototype = {
 
     _includeAce: function(callback)
     {
+        if (ace) {
+            callback.call(this);
+            return;
+        }
+
         var path = this.viper.getViperPath();
         if (!path) {
             callback.call(this);
