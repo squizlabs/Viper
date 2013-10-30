@@ -1371,6 +1371,11 @@ ViperCopyPastePlugin.prototype = {
 
     _getListType: function(elem, listTypes)
     {
+        var style = elem.getAttribute('style');
+        if (!style || style.indexOf('mso-list') === -1) {
+            return null;
+        }
+
         var elContent = dfx.getNodeTextContent(elem);
         elContent     = elContent.replace(/\n/, '');
         elContent     = elContent.replace(/^(&nbsp;)+/m, '');

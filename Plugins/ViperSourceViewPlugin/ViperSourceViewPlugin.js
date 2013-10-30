@@ -109,9 +109,11 @@ ViperSourceViewPlugin.prototype = {
                 this._originalSource = content;
                 this._editor.getSession().setValue(content);
                 this.viper.ViperTools.openPopup('VSVP:popup', 800, 600);
-                this._editor.resize();
-                this._editor.focus();
-                this._isVisible = true;
+                setTimeout(function() {
+                    self._editor.resize();
+                    self._editor.focus();
+                    self._isVisible = true;
+                }, 50);
             } else {
                 this._textEditor.value = content;
                 this._originalSource   = this._textEditor.value;
@@ -444,6 +446,11 @@ ViperSourceViewPlugin.prototype = {
 
     _includeAce: function(callback)
     {
+        if (window['ace']) {
+            callback.call(this);
+            return;
+        }
+
         var path = this.viper.getViperPath();
         if (!path) {
             callback.call(this);

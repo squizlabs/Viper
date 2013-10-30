@@ -252,6 +252,8 @@ var ViperChangeTracker = {
 
     enableChangeTracking: function()
     {
+        return;
+
         // Create infobox holder which will contain all the infoboxes.
         this._infoBoxHolder = this._createInfoboxHolder();
         this._markerHolder  = this._createMarkerHolder();
@@ -784,6 +786,8 @@ var ViperChangeTracker = {
 
     _createMarkerHolder: function()
     {
+        return;
+
         if (this._markerHolder) {
             dfx.remove(this._markerHolder);
         }
@@ -914,6 +918,8 @@ var ViperChangeTracker = {
 
     _createInfoboxHolder: function()
     {
+        return;
+
         var id     = this._className + '-infoBoxHolder';
         var holder = dfx.getId(id);
         if (holder) {
@@ -931,6 +937,8 @@ var ViperChangeTracker = {
 
     updateInfoBoxPosition: function()
     {
+        return;
+
         if (!this._infoBoxHolder) {
             this._infoBoxHolder = this._createInfoboxHolder();
         }

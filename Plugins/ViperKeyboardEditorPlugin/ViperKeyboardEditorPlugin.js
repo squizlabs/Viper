@@ -632,16 +632,25 @@ ViperKeyboardEditorPlugin.prototype = {
                     this.viper.fireNodesChanged();
                     return false;
                 }
+            } if (e.keyCode === 46
+                && range.collapsed === true
+                && range.startContainer.nodeType === dfx.ELEMENT_NODE
+                && dfx.isTag(range.getStartNode(), 'br') === true
+            ) {
+                dfx.remove(range.getStartNode());
+                dfx.preventDefault(e);
+                this.viper.fireNodesChanged();
+                return false;
             } else if (e.keyCode === 8
                 && range.collapsed === true
                 && range.startContainer.nodeType === dfx.TEXT_NODE
                 && (range.startOffset === 0 || (range.startOffset === 1 && range.startContainer.data.charAt(0) === ' '))
-                && !range.startContainer.previousSibling
+                && (!range.startContainer.previousSibling || dfx.isTag(range.startContainer.previousSibling, 'br') === true)
             ) {
                 // At the start of an element. Check to see if the previous
                 // element is a part of another block element. If it is then
                 // join these elements.
-                var prevSelectable = range.getPreviousContainer(range.startContainer, null, true);
+                var prevSelectable = range.getPreviousContainer(range.startContainer, null, true, true);
                 var currentParent  = dfx.getFirstBlockParent(range.startContainer);
                 var prevParent     = dfx.getFirstBlockParent(prevSelectable);
                 if (currentParent !== prevParent && this.viper.isOutOfBounds(prevSelectable) === false) {
@@ -658,7 +667,12 @@ ViperKeyboardEditorPlugin.prototype = {
 
                         dfx.remove(currentParent);
 
-                        range.setStart(prevSelectable, prevSelectable.data.length);
+                        if (prevSelectable.nodeType === dfx.TEXT_NODE) {
+                            range.setStart(prevSelectable, prevSelectable.data.length);
+                        } else {
+                            range.setStartAfter(prevSelectable);
+                        }
+
                         range.collapse(true);
                         ViperSelection.addRange(range);
                     }
@@ -666,6 +680,11 @@ ViperKeyboardEditorPlugin.prototype = {
                     dfx.preventDefault(e);
                     this.viper.fireNodesChanged();
 
+                    return false;
+                } else if (dfx.isTag(prevSelectable, 'br') === true) {
+                    dfx.remove(prevSelectable);
+                    dfx.preventDefault(e);
+                    this.viper.fireNodesChanged();
                     return false;
                 }
             } else if (
@@ -733,7 +752,7 @@ ViperKeyboardEditorPlugin.prototype = {
 
         if (range.collapsed === true && e.keyCode === 8) {
             var startNode = range.getStartNode();
-            if (startNode) {
+            if (startNode && startNode.nodeType === dfx.TEXT_NODE) {
                 var skippedBlockElem = [];
                 var node      = range.getPreviousContainer(startNode, skippedBlockElem, true, true);
                 if (this.viper.isOutOfBounds(node) === true) {

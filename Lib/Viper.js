@@ -510,11 +510,14 @@ Viper.prototype = {
         if (enabled === true && this.enabled === false) {
             this._addEvents();
             this.enabled = true;
-            this.fireCallbacks('Viper:enabled');
             this.element.setAttribute('contentEditable', true);
             dfx.setStyle(this.element, 'outline', 'none');
 
             var range = this.getCurrentRange();
+            if (this.rangeInViperBounds(range) === false) {
+                this.initEditableElement();
+            }
+
             var editableChild = range._getFirstSelectableChild(this.element);
             if (!editableChild) {
                 // Check if any of these elements exist in the content.
@@ -552,9 +555,7 @@ Viper.prototype = {
                 }//end if
             }//end if
 
-            if (editableChild) {
-                //this.setRange(editableChild, 0);
-            }
+            this.fireCallbacks('Viper:enabled');
         } else if (enabled === false && this.enabled === true) {
             // Back to final mode.
             ViperChangeTracker.activateFinalMode();
@@ -739,7 +740,6 @@ Viper.prototype = {
                     paramTag.setAttribute('value', 'transparent');
                     dfx.insertBefore(embedTags[i], paramTag);
                     embedTags[i].setAttribute('wmode', 'transparent');
-                    console.info(1);
                 }
             }
         }//end if
@@ -817,6 +817,20 @@ Viper.prototype = {
                 }
 
                 dfx.remove(nodesToRemove);
+
+                var range = this.getCurrentRange();
+                var firstSelectable = range._getFirstSelectableChild(elem);
+                if (!firstSelectable && elem.childNodes.length > 0) {
+                    for (var i = 0; i < elem.childNodes.length; i++) {
+                        var child = elem.childNodes[i];
+                        if (dfx.isBlockElement(child) === true
+                            && dfx.isStubElement(child) === false
+                            && dfx.getHtml(child) === ''
+                        ) {
+                            dfx.setHtml(child, '&nbsp;');
+                        }
+                    }
+                }
             }//end if
         }//end if
 
@@ -1761,7 +1775,7 @@ Viper.prototype = {
                 if (dfx.isChildOf(sParent, this.element) === false) {
                     // If the endContainer is inside the editable text region then
                     // move the start of the range to the beginning.
-                    var firstChild = dfx.getFirstChild(this.element);
+                    var firstChild = dfx.getFirstChildTextNode(this.element);
                     if (!firstChild) {
                         return false;
                     } else {
@@ -2597,7 +2611,7 @@ Viper.prototype = {
             var end       = startTopParent.cloneNode(true);
 
             // First remove everything from start bookmark to last child.
-            var lastChild    = dfx.getLastChild(start);
+            var lastChild    = dfx.getLastChildTextNode(start);
             var elemsBetween = dfx.getElementsBetween(this.getBookmark(start, 'start'), lastChild);
             elemsBetween.push(this.getBookmark(start, 'start'));
             elemsBetween.push(this.getBookmark(start, 'end'));
@@ -2605,7 +2619,7 @@ Viper.prototype = {
             dfx.remove(elemsBetween);
 
             // Remove everything from first child to end bookmark.
-            var firstChild   = dfx.getFirstChild(end);
+            var firstChild   = dfx.getFirstChildTextNode(end);
             var elemsBetween = dfx.getElementsBetween(firstChild, this.getBookmark(end, 'end'));
             elemsBetween.push(this.getBookmark(end, 'end'));
             elemsBetween.push(this.getBookmark(end, 'start'));
@@ -2613,11 +2627,11 @@ Viper.prototype = {
             dfx.remove(elemsBetween);
 
             // Remove everything before and after bookmark start and end.
-            var firstChild   = dfx.getFirstChild(selection);
+            var firstChild   = dfx.getFirstChildTextNode(selection);
             var elemsBetween = dfx.getElementsBetween(firstChild, this.getBookmark(selection, 'start'));
             elemsBetween.push(firstChild);
             dfx.remove(elemsBetween);
-            var lastChild    = dfx.getLastChild(selection);
+            var lastChild    = dfx.getLastChildTextNode(selection);
             var elemsBetween = dfx.getElementsBetween(this.getBookmark(selection, 'end'), lastChild);
             elemsBetween.push(lastChild);
             dfx.remove(elemsBetween);
@@ -2676,14 +2690,14 @@ Viper.prototype = {
             var clone = startTopParent.cloneNode(true);
 
             // Remove everything from bookmark to lastChild (inclusive).
-            var lastChild    = dfx.getLastChild(startTopParent);
+            var lastChild    = dfx.getLastChildTextNode(startTopParent);
             var elemsBetween = dfx.getElementsBetween(bookmark.start, lastChild);
             elemsBetween.push(bookmark.start);
             elemsBetween.push(lastChild);
             dfx.remove(elemsBetween);
 
             // From the cloned node, remove everything from firstChild to start bookmark.
-            var firstChild = dfx.getFirstChild(clone);
+            var firstChild = dfx.getFirstChildTextNode(clone);
             elemsBetween   = dfx.getElementsBetween(firstChild, this.getBookmark(clone, 'start'));
             elemsBetween.push(firstChild);
             dfx.remove(elemsBetween);
@@ -2707,13 +2721,13 @@ Viper.prototype = {
             var clone = endTopParent.cloneNode(true);
 
             // Remove everything from firstChild to bookmark (inclusive).
-            var firstChild   = dfx.getFirstChild(endTopParent);
+            var firstChild   = dfx.getFirstChildTextNode(endTopParent);
             var elemsBetween = dfx.getElementsBetween(firstChild, bookmark.end);
             elemsBetween.push(firstChild);
             dfx.remove(elemsBetween);
 
             // From the cloned node, remove everything from end bookmark to lastChild.
-            var lastChild = dfx.getLastChild(clone);
+            var lastChild = dfx.getLastChildTextNode(clone);
             elemsBetween  = dfx.getElementsBetween(this.getBookmark(clone, 'end'), lastChild);
             elemsBetween.push(lastChild);
             dfx.remove(elemsBetween);
@@ -2938,41 +2952,41 @@ Viper.prototype = {
             // Bookmark is collapsed.
             if (bookmark.end.nextSibling) {
                 if ((dfx.isTag(bookmark.end.nextSibling, 'span') !== true || dfx.hasClass(bookmark.end.nextSibling, 'viperBookmark') === false)) {
-                    startPos = dfx.getFirstChild(bookmark.end.nextSibling);
+                    startPos = dfx.getFirstChildTextNode(bookmark.end.nextSibling);
                 } else {
                     startPos = document.createTextNode('');
                     dfx.insertAfter(bookmark.end, startPos);
                 }
             } else if (bookmark.start.previousSibling) {
-                startPos = dfx.getFirstChild(bookmark.start.previousSibling);
+                startPos = dfx.getFirstChildTextNode(bookmark.start.previousSibling);
                 if (startPos.nodeType === dfx.TEXT_NODE) {
                     startOffset = startPos.length;
                 }
             } else {
                 // Create a text node in parent.
                 bookmark.end.parentNode.appendChild(Viper.document.createTextNode(''));
-                startPos = dfx.getFirstChild(bookmark.end.nextSibling);
+                startPos = dfx.getFirstChildTextNode(bookmark.end.nextSibling);
             }
         } else {
             if (bookmark.start.nextSibling) {
-                startPos = dfx.getFirstChild(bookmark.start.nextSibling);
+                startPos = dfx.getFirstChildTextNode(bookmark.start.nextSibling);
             } else {
                 if (!bookmark.start.previousSibling) {
                     var tmp = Viper.document.createTextNode('');
                     dfx.insertBefore(bookmark.start, tmp);
                 }
 
-                startPos    = dfx.getLastChild(bookmark.start.previousSibling);
+                startPos    = dfx.getLastChildTextNode(bookmark.start.previousSibling);
                 startOffset = startPos.length;
             }
 
             if (bookmark.end.previousSibling) {
-                endPos    = dfx.getLastChild(bookmark.end.previousSibling);
+                endPos    = dfx.getLastChildTextNode(bookmark.end.previousSibling);
                 if (endPos.data) {
                     endOffset = endPos.data.length;
                 }
             } else {
-                endPos    = dfx.getFirstChild(bookmark.end.nextSibling);
+                endPos    = dfx.getFirstChildTextNode(bookmark.end.nextSibling);
                 endOffset = 0;
             }
         }//end if
