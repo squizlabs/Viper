@@ -239,12 +239,17 @@ Viper.prototype = {
     getBrowserType: function()
     {
         if (this._browserType === null) {
-            var tests = ['msie', 'firefox', 'chrome', 'safari'];
+            var tests = ['trident', 'msie', 'firefox', 'chrome', 'safari'];
             var tln   = tests.length;
             for (var i = 0; i < tln; i++) {
                 var r = new RegExp(tests[i], 'i');
                 if (r.test(navigator.userAgent) === true) {
-                    this._browserType = tests[i];
+                    if (tests[i] === 'trident') {
+                        // No MSIE token for IE11+.
+                        this._browserType = 'msie';
+                    } else {
+                        this._browserType = tests[i];
+                    }
                     return this._browserType;
                 }
             }
@@ -259,7 +264,7 @@ Viper.prototype = {
     
     getBrowserVersion: function()
     {
-        var browsers = ['MSIE', 'Chrome', 'Safari', 'Firefox'];
+        var browsers = ['MSIE', 'Trident', 'Chrome', 'Safari', 'Firefox'];
         var c        = browsers.length;
         var uAgent   = navigator.userAgent;
 
@@ -283,6 +288,8 @@ Viper.prototype = {
         var re = null;
         if (browserName === 'MSIE') {
             re = new RegExp('MSIE (\\d+)');
+        } else if (browserName === 'Trident') {
+            re = new RegExp('rv:(\\d+)');
         } else {
             re = new RegExp(browserName + '/(\\d+)');
         }
@@ -437,11 +444,14 @@ Viper.prototype = {
         if (enabled === true && this.enabled === false) {
             this._addEvents();
             this.enabled = true;
-            this.fireCallbacks('Viper:enabled');
             this.element.setAttribute('contentEditable', true);
             dfx.setStyle(this.element, 'outline', 'none');
 
             var range = this.getCurrentRange();
+            if (this.rangeInViperBounds(range) === false) {
+                this.initEditableElement();
+            }
+
             var editableChild = range._getFirstSelectableChild(this.element);
             if (!editableChild) {
                 // Check if any of these elements exist in the content.
@@ -479,9 +489,7 @@ Viper.prototype = {
                 }//end if
             }//end if
 
-            if (editableChild) {
-                //this.setRange(editableChild, 0);
-            }
+            this.fireCallbacks('Viper:enabled');
         } else if (enabled === false && this.enabled === true) {
             // Back to final mode.
             ViperChangeTracker.activateFinalMode();
@@ -652,7 +660,6 @@ Viper.prototype = {
                     paramTag.setAttribute('value', 'transparent');
                     dfx.insertBefore(embedTags[i], paramTag);
                     embedTags[i].setAttribute('wmode', 'transparent');
-                    console.info(1);
                 }
             }
         }//end if
@@ -730,6 +737,20 @@ Viper.prototype = {
                 }
 
                 dfx.remove(nodesToRemove);
+
+                var range = this.getCurrentRange();
+                var firstSelectable = range._getFirstSelectableChild(elem);
+                if (!firstSelectable && elem.childNodes.length > 0) {
+                    for (var i = 0; i < elem.childNodes.length; i++) {
+                        var child = elem.childNodes[i];
+                        if (dfx.isBlockElement(child) === true
+                            && dfx.isStubElement(child) === false
+                            && dfx.getHtml(child) === ''
+                        ) {
+                            dfx.setHtml(child, '&nbsp;');
+                        }
+                    }
+                }
             }//end if
         }//end if
 
@@ -24896,6 +24917,6133 @@ ViperSearchReplacePlugin.prototype = {
 };
 
 
+function StyleHTML(html_source, indent_size, indent_character, max_char, brace_style)
+{
+    var Parser, multi_parser;
+
+  function Parser() {
+
+    this.pos = 0; //Parser position
+    this.token = '';
+    this.current_mode = 'CONTENT'; //reflects the current Parser mode: TAG/CONTENT
+    this.tags = { //An object to hold tags, their position, and their parent-tags, initiated with default values
+      parent: 'parent1',
+      parentcount: 1,
+      parent1: ''
+    };
+    this.tag_type = '';
+    this.token_text = this.last_token = this.last_text = this.token_type = '';
+
+
+    this.Utils = { //Uilities made available to the various functions
+      whitespace: "\n\r\t ".split(''),
+      single_token: 'br,input,link,meta,!doctype,basefont,base,area,hr,wbr,param,img,isindex,?xml,embed'.split(','), //all the single tags for HTML
+      extra_liners: 'head,body,/html'.split(','), //for tags that need a line of whitespace before them
+      in_array: function (what, arr) {
+        for (var i=0; i<arr.length; i++) {
+          if (what === arr[i]) {
+            return true;
+          }
+        }
+        return false;
+      }
+    }
+
+    this.get_content = function () { //function to capture regular content between tags
+
+      var input_char = '';
+      var content = [];
+      var space = false; //if a space is needed
+
+      while (this.input.charAt(this.pos) !== '<') {
+        if (this.pos >= this.input.length) {
+          return content.length?content.join(''):['', 'TK_EOF'];
+        }
+
+        input_char = this.input.charAt(this.pos);
+        this.pos++;
+        this.line_char_count++;
+
+
+        if (this.Utils.in_array(input_char, this.Utils.whitespace)) {
+          if (content.length || input_char === ' ') {
+            space = true;
+          }
+          this.line_char_count--;
+          continue; //don't want to insert unnecessary space
+        }
+        else if (space) {
+          if (this.line_char_count >= this.max_char) { //insert a line when the max_char is reached
+            content.push('\n');
+            for (var i=0; i<this.indent_level; i++) {
+              content.push(this.indent_string);
+            }
+            this.line_char_count = 0;
+          }
+          else{
+            content.push(' ');
+            this.line_char_count++;
+          }
+          space = false;
+        }
+        content.push(input_char); //letter at-a-time (or string) inserted to an array
+      }
+
+      if (space === true) {
+          content.push(input_char);
+          space = false;
+      }
+
+      return content.length?content.join(''):'';
+    }
+
+    this.get_script = function () { //get the full content of a script to pass to js_beautify
+
+      var input_char = '';
+      var content = [];
+      var reg_match = new RegExp('\<\/script' + '\>', 'igm');
+      reg_match.lastIndex = this.pos;
+      var reg_array = reg_match.exec(this.input);
+      var end_script = reg_array?reg_array.index:this.input.length; //absolute end of script
+      while(this.pos < end_script) { //get everything in between the script tags
+        if (this.pos >= this.input.length) {
+          return content.length?content.join(''):['', 'TK_EOF'];
+        }
+
+        input_char = this.input.charAt(this.pos);
+        this.pos++;
+
+
+        content.push(input_char);
+      }
+      return content.length?content.join(''):''; //we might not have any content at all
+    }
+
+    this.record_tag = function (tag){ //function to record a tag and its parent in this.tags Object
+      if (this.tags[tag + 'count']) { //check for the existence of this tag type
+        this.tags[tag + 'count']++;
+        this.tags[tag + this.tags[tag + 'count']] = this.indent_level; //and record the present indent level
+      }
+      else { //otherwise initialize this tag type
+        this.tags[tag + 'count'] = 1;
+        this.tags[tag + this.tags[tag + 'count']] = this.indent_level; //and record the present indent level
+      }
+      this.tags[tag + this.tags[tag + 'count'] + 'parent'] = this.tags.parent; //set the parent (i.e. in the case of a div this.tags.div1parent)
+      this.tags.parent = tag + this.tags[tag + 'count']; //and make this the current parent (i.e. in the case of a div 'div1')
+    }
+
+    this.retrieve_tag = function (tag) { //function to retrieve the opening tag to the corresponding closer
+      if (this.tags[tag + 'count']) { //if the openener is not in the Object we ignore it
+        var temp_parent = this.tags.parent; //check to see if it's a closable tag.
+        while (temp_parent) { //till we reach '' (the initial value);
+          if (tag + this.tags[tag + 'count'] === temp_parent) { //if this is it use it
+            break;
+          }
+          temp_parent = this.tags[temp_parent + 'parent']; //otherwise keep on climbing up the DOM Tree
+        }
+        if (temp_parent) { //if we caught something
+          this.indent_level = this.tags[tag + this.tags[tag + 'count']]; //set the indent_level accordingly
+          this.tags.parent = this.tags[temp_parent + 'parent']; //and set the current parent
+        }
+        delete this.tags[tag + this.tags[tag + 'count'] + 'parent']; //delete the closed tags parent reference...
+        delete this.tags[tag + this.tags[tag + 'count']]; //...and the tag itself
+        if (this.tags[tag + 'count'] == 1) {
+          delete this.tags[tag + 'count'];
+        }
+        else {
+          this.tags[tag + 'count']--;
+        }
+      }
+    }
+
+    this.get_tag = function () { //function to get a full tag and parse its type
+      var input_char = '';
+      var content = [];
+      var space = false;
+
+      do {
+        if (this.pos >= this.input.length) {
+          return content.length?content.join(''):['', 'TK_EOF'];
+        }
+
+        input_char = this.input.charAt(this.pos);
+        this.pos++;
+        this.line_char_count++;
+
+        if (this.Utils.in_array(input_char, this.Utils.whitespace)) { //don't want to insert unnecessary space
+          space = true;
+          this.line_char_count--;
+          continue;
+        }
+
+        if (input_char === "'" || input_char === '"') {
+          if (!content[1] || content[1] !== '!') { //if we're in a comment strings don't get treated specially
+            input_char += this.get_unformatted(input_char);
+            space = true;
+          }
+        }
+
+        if (input_char === '=') { //no space before =
+          space = false;
+        }
+
+        if (content.length && content[content.length-1] !== '=' && input_char !== '>'
+            && space) { //no space after = or before >
+          if (this.line_char_count >= this.max_char) {
+            this.print_newline(false, content);
+            this.line_char_count = 0;
+          }
+          else {
+            content.push(' ');
+            this.line_char_count++;
+          }
+          space = false;
+        }
+        content.push(input_char); //inserts character at-a-time (or string)
+      } while (input_char !== '>');
+
+      var tag_complete = content.join('');
+      var tag_index;
+      if (tag_complete.indexOf(' ') != -1) { //if there's whitespace, thats where the tag name ends
+        tag_index = tag_complete.indexOf(' ');
+      }
+      else { //otherwise go with the tag ending
+        tag_index = tag_complete.indexOf('>');
+      }
+      var tag_check = tag_complete.substring(1, tag_index).toLowerCase();
+      if (tag_complete.charAt(tag_complete.length-2) === '/' ||
+          this.Utils.in_array(tag_check, this.Utils.single_token)) { //if this tag name is a single tag type (either in the list or has a closing /)
+        this.tag_type = 'SINGLE';
+      }
+      else if (tag_check === 'script') { //for later script handling
+        this.record_tag(tag_check);
+        this.tag_type = 'SCRIPT';
+      }
+      else if (tag_check === 'style') { //for future style handling (for now it justs uses get_content)
+        this.record_tag(tag_check);
+        this.tag_type = 'STYLE';
+      }
+      else if (tag_check === 'a') { // do not reformat the <a> links
+        var comment = this.get_unformatted('</a>', tag_complete); //...delegate to get_unformatted function
+        content.push(comment);
+        // --> SQUIZ
+        this.tag_type = 'INLINE';
+        // -- SQUIZ
+      }
+      // --> SQUIZ
+      else if (('|pre|strong|em|i|sub|sup|u|strike|').indexOf('|' + tag_check + '|') >= 0) {
+        content.push(this.get_unformatted('</' + tag_check + '>'));
+        this.tag_type = 'INLINE';
+      }
+      // -- SQUIZ
+      else if (tag_check.charAt(0) === '!') { //peek for <!-- comment
+        if (tag_check.indexOf('[if') != -1) { //peek for <!--[if conditional comment
+          if (tag_complete.indexOf('!IE') != -1) { //this type needs a closing --> so...
+            var comment = this.get_unformatted('-->', tag_complete); //...delegate to get_unformatted
+            content.push(comment);
+          }
+          this.tag_type = 'START';
+        }
+        else if (tag_check.indexOf('[endif') != -1) {//peek for <!--[endif end conditional comment
+          this.tag_type = 'END';
+          this.unindent();
+        }
+        else if (tag_check.indexOf('[cdata[') != -1) { //if it's a <[cdata[ comment...
+          var comment = this.get_unformatted(']]>', tag_complete); //...delegate to get_unformatted function
+          content.push(comment);
+          this.tag_type = 'SINGLE'; //<![CDATA[ comments are treated like single tags
+        }
+        else {
+          var comment = this.get_unformatted('-->', tag_complete);
+          content.push(comment);
+          this.tag_type = 'SINGLE';
+        }
+      }
+      else {
+        if (tag_check.charAt(0) === '/') { //this tag is a double tag so check for tag-ending
+          this.retrieve_tag(tag_check.substring(1)); //remove it and all ancestors
+          this.tag_type = 'END';
+        }
+        else { //otherwise it's a start-tag
+          this.record_tag(tag_check); //push it on the tag stack
+          this.tag_type = 'START';
+        }
+        if (this.Utils.in_array(tag_check, this.Utils.extra_liners)) { //check if this double needs an extra line
+          this.print_newline(true, this.output);
+        }
+      }
+      return content.join(''); //returns fully formatted tag
+    }
+
+    this.get_unformatted = function (delimiter, orig_tag) { //function to return unformatted content in its entirety
+
+      if (orig_tag && orig_tag.indexOf(delimiter) != -1) {
+        return '';
+      }
+      var input_char = '';
+      var content = '';
+      var space = true;
+      do {
+
+        if (this.pos >= this.input.length) {
+          return content;
+        }
+
+        input_char = this.input.charAt(this.pos);
+        this.pos++
+        if (delimiter === '</pre>') {
+            content += input_char;
+            continue;
+        }
+
+        if (this.Utils.in_array(input_char, this.Utils.whitespace)) {
+          if (!space) {
+            this.line_char_count--;
+            continue;
+          }
+          if (input_char === '\n' || input_char === '\r') {
+            content += '\n';
+            for (var i=0; i<this.indent_level; i++) {
+              content += this.indent_string;
+            }
+            space = false; //...and make sure other indentation is erased
+            this.line_char_count = 0;
+            continue;
+          }
+        }
+        content += input_char;
+        this.line_char_count++;
+        space = true;
+
+
+      } while (content.indexOf(delimiter) == -1);
+      return content;
+    }
+
+    this.get_token = function () { //initial handler for token-retrieval
+      var token;
+
+      if (this.last_token === 'TK_TAG_SCRIPT') { //check if we need to format javascript
+        var temp_token = this.get_script();
+        if (typeof temp_token !== 'string') {
+          return temp_token;
+        }
+        token = StyleHTML(temp_token,
+                {indent_size: this.indent_size, indent_char: this.indent_character, indent_level: this.indent_level, brace_style: this.brace_style}); //call the JS Beautifier
+        return [token, 'TK_CONTENT'];
+      }
+      if (this.current_mode === 'CONTENT') {
+        token = this.get_content();
+        if (typeof token !== 'string') {
+          return token;
+        }
+        else {
+          return [token, 'TK_CONTENT'];
+        }
+      }
+
+      if(this.current_mode === 'TAG') {
+        token = this.get_tag();
+        if (typeof token !== 'string') {
+          return token;
+        }
+        else {
+          var tag_name_type = 'TK_TAG_' + this.tag_type;
+          return [token, tag_name_type];
+        }
+      }
+    }
+
+    this.printer = function (js_source, indent_character, indent_size, max_char, brace_style) { //handles input/output and some other printing functions
+
+      this.input = js_source || ''; //gets the input for the Parser
+      this.output = [];
+      this.indent_character = indent_character || ' ';
+      this.indent_string = '';
+      this.indent_size = indent_size || 2;
+      this.brace_style = brace_style || 'collapse';
+      this.indent_level = 0;
+      this.max_char = max_char || 70; //maximum amount of characters per line
+      this.line_char_count = 0; //count to see if max_char was exceeded
+
+      for (var i=0; i<this.indent_size; i++) {
+        this.indent_string += this.indent_character;
+      }
+
+      this.print_newline = function (ignore, arr) {
+        this.line_char_count = 0;
+        if (!arr || !arr.length) {
+          return;
+        }
+        if (!ignore) { //we might want the extra line
+          while (this.Utils.in_array(arr[arr.length-1], this.Utils.whitespace)) {
+            arr.pop();
+          }
+        }
+        arr.push('\n');
+        for (var i=0; i<this.indent_level; i++) {
+          arr.push(this.indent_string);
+        }
+      }
+
+
+      this.print_token = function (text) {
+        this.output.push(text);
+      }
+
+      this.indent = function () {
+        this.indent_level++;
+      }
+
+      this.unindent = function () {
+        if (this.indent_level > 0) {
+          this.indent_level--;
+        }
+      }
+    }
+    return this;
+  }
+
+  
+
+
+
+  multi_parser = new Parser(); //wrapping functions Parser
+  multi_parser.printer(html_source, indent_character, indent_size, 300, brace_style); //initialize starting values
+
+
+
+  while (true) {
+      var t = multi_parser.get_token();
+      multi_parser.token_text = t[0];
+      multi_parser.token_type = t[1];
+
+    if (multi_parser.token_type === 'TK_EOF') {
+      break;
+    }
+
+
+    switch (multi_parser.token_type) {
+      case 'TK_TAG_START': case 'TK_TAG_SCRIPT': case 'TK_TAG_STYLE':
+        multi_parser.print_newline(false, multi_parser.output);
+        multi_parser.print_token(multi_parser.token_text);
+        multi_parser.indent();
+        multi_parser.current_mode = 'CONTENT';
+        break;
+      case 'TK_TAG_END':
+        multi_parser.print_newline(true, multi_parser.output);
+        multi_parser.print_token(multi_parser.token_text);
+        multi_parser.current_mode = 'CONTENT';
+        break;
+      case 'TK_TAG_SINGLE':
+        //multi_parser.print_newline(false, multi_parser.output);
+        multi_parser.print_token(multi_parser.token_text);
+        multi_parser.current_mode = 'CONTENT';
+        break;
+      // --> SQUIZ
+      case 'TK_TAG_INLINE':
+        multi_parser.print_token(multi_parser.token_text);
+        multi_parser.current_mode = 'CONTENT';
+        break;
+      // -- SQUIZ
+      case 'TK_CONTENT':
+        if (multi_parser.token_text !== '') {
+            // --> SQUIZ
+            if (multi_parser.last_token !== 'TK_TAG_INLINE' && multi_parser.last_token !== 'TK_TAG_SINGLE') {
+                multi_parser.print_newline(false, multi_parser.output);
+            }
+            // -- SQUIZ
+
+            multi_parser.print_token(multi_parser.token_text);
+        }
+        multi_parser.current_mode = 'TAG';
+        break;
+    }
+    multi_parser.last_token = multi_parser.token_type;
+    multi_parser.last_text = multi_parser.token_text;
+  }
+  return multi_parser.output.join('');
+}
+
+
+
+function ViperSourceViewPlugin(viper)
+{
+    this.viper         = viper;
+    this._editor       = null;
+    this._textEditor   = null;
+    this._resizeHandle = null;
+    this._sourceView   = null;
+    this._sourceCont   = null;
+    this._closeConfirm = null;
+    this._isVisible    = false;
+
+    this._originalSource = null;
+    this._inNewWindow    = false;
+
+    this._ignoreUpdate       = false;
+    this._ignoreSourceUpdate = false;
+    this._newWindowContents  = '';
+}
+
+ViperSourceViewPlugin.prototype = {
+    init: function()
+    {
+        var self = this;
+        this.toolbarPlugin = this.viper.ViperPluginManager.getPlugin('ViperToolbarPlugin');
+        if (this.toolbarPlugin) {
+            var toggle = this.viper.ViperTools.createButton('sourceEditor', '', 'Toggle Source View', 'Viper-sourceView', function() {
+                self.toggleSourceView();
+            }, true);
+            this.toolbarPlugin.addButton(toggle);
+
+            this.viper.registerCallback('ViperToolbarPlugin:enabled', 'ViperSourceViewPlugin', function(data) {
+                self.viper.ViperTools.enableButton('sourceEditor');
+            });
+
+            this.viper.registerCallback('ViperToolbarPlugin:updateToolbar', 'ViperSourceViewPlugin', function(data) {
+                self.viper.ViperTools.enableButton('sourceEditor');
+            });
+        }
+
+        var updateTimer = null;
+        this.viper.registerCallback('Viper:nodesChanged', 'ViperSourceViewPlugin', function(nodes) {
+            clearTimeout(updateTimer);
+            if (self._ignoreSourceUpdate === true) {
+                self._ignoreSourceUpdate = false;
+                return;
+            }
+
+            updateTimer = setTimeout(function() {
+                self.updateSourceContents();
+            }, 250);
+        });
+
+        this.viper.registerCallback(['Viper:editableElementChanged', 'Viper:disabled'], 'ViperSourceViewPlugin', function(nodes) {
+            self.hideSourceView();
+        });
+
+    },
+
+    isSourceChanged: function()
+    {
+        var value = null;
+        if (this._editor) {
+            value = this._editor.getSession().getValue();
+        } else if (this._textEditor) {
+            value = this._textEditor.value;
+        }
+
+        if (this._originalSource === value) {
+            return false;
+        }
+
+        return true;
+
+    },
+
+    showSourceView: function(content, callback)
+    {
+        var self = this;
+        if (!this._sourceView) {
+            this._createSourceView(function() {
+                if (!content) {
+                    content = self.getContents();
+                }
+
+                self._originalSource = content;
+                self.showSourceView(content, callback);
+            });
+        } else {
+            if (!content) {
+                content = this.getContents();
+            } else {
+                content = StyleHTML(content);
+            }
+
+            if (this._editor) {
+                this._originalSource = content;
+                this._editor.getSession().setValue(content);
+                this.viper.ViperTools.openPopup('VSVP:popup', 800, 600);
+                setTimeout(function() {
+                    self._editor.resize();
+                    self._editor.focus();
+                    self._isVisible = true;
+                }, 50);
+            } else {
+                this._textEditor.value = content;
+                this._originalSource   = this._textEditor.value;
+                this.viper.ViperTools.openPopup('VSVP:popup', 800, 600);
+                this._textEditor.focus();
+                this._isVisible = true;
+            }
+
+            if (callback) {
+                callback.call(this);
+            }
+        }//end if
+
+    },
+
+    hideSourceView: function(newWindow)
+    {
+        if (this._inNewWindow === true && this._childWindow) {
+            this._childWindow.close();
+            this._inNewWindow = false;
+            this._childWindow = false;
+            dfx.remove(this._sourceView);
+            this._sourceView = null;
+            this._editor     = null;
+        } else if (this._sourceView) {
+            if (newWindow === true) {
+                this.viper.ViperTools.closePopup('VSVP:popup', 'discardChanges');
+            } else {
+                this.viper.ViperTools.closePopup('VSVP:popup');
+            }
+        }
+
+    },
+
+    toggleSourceView: function()
+    {
+        if (!this._sourceView || (!this._sourceView.parentNode || this._sourceView.nodeType !== dfx.DOCUMENT_FRAGMENT_NODE)) {
+            this.showSourceView();
+        } else {
+            this.hideSourceView();
+        }
+
+    },
+
+    updatePageContents: function(content)
+    {
+        var value = content;
+        if (!value) {
+            value = this.getSourceContents();
+        }
+
+        if (this._originalSource === value) {
+            return;
+        }
+
+        this.viper.setHtml(value);
+
+    },
+
+    getSourceContents: function()
+    {
+        var value = '';
+        if (this._editor) {
+            value = this._editor.getSession().getValue();
+        } else if (this._textEditor) {
+            value = this._textEditor.value;
+        }
+
+        return value;
+
+    },
+
+    updateSourceContents: function(content)
+    {
+        if (!this._editor || this._isVisible !== true) {
+            return;
+        }
+
+        this._ignoreUpdate = true;
+        var value = content || this.getContents();
+
+        if (this._editor) {
+            this._editor.getSession().setValue(value);
+        } else if (this._textEditor) {
+            this._textEditor.value = value;
+        }
+
+    },
+
+    updateOriginalSourceValue: function(content)
+    {
+        if (!content) {
+            if (this._editor) {
+                content = this._editor.getSession().getValue();
+            } else if (this._textEditor) {
+                content = this._textEditor.value;
+            }
+        }
+
+        this._originalSource = content;
+
+    },
+
+    revertChanges: function()
+    {
+        this.viper.setHtml(this._originalSource);
+
+    },
+
+    _createSourceView: function(callback)
+    {
+        var self  = this;
+        var tools = this.viper.ViperTools
+
+        var content      = document.createElement('div');
+
+        // Confirm change panel.
+        var popupTop = document.createElement('div');
+        dfx.addClass(popupTop, 'VSVP-confirmPanel');
+        var discardButton = tools.createButton('VSVP:discard', 'Discard', 'Discard Changes', 'VSVP-confirmButton-discard', function() {
+            self.viper.ViperTools.closePopup('VSVP:popup', 'discardChanges');
+        });
+        var applyButton   = tools.createButton('VSVP:apply', 'Apply Changes', 'Apply Changes', 'VSVP-confirmButton-apply', function() {
+            self.updatePageContents();
+            self.viper.ViperTools.closePopup('VSVP:popup', 'applyChanges');
+        });
+        dfx.setHtml(popupTop, '<div class="VSVP-confirmText">Would you like to apply your changes?</div>');
+        popupTop.appendChild(applyButton);
+        popupTop.appendChild(discardButton);
+        this._closeConfirm = popupTop;
+
+        var source = document.createElement('div');
+        dfx.addClass(source, 'VSVP-source');
+        content.appendChild(source);
+        this._sourceCont = source;
+
+        // Add the bottom section.
+        var popupBottom = document.createElement('div');
+        dfx.addClass(popupBottom, 'VSVP-bottomPanel');
+
+        if (this.viper.isBrowser('msie') === false && (this.viper.getViperPath() || this.getViperURL())) {
+            var newWindowButton = tools.createButton('VSVP:newWindow', '', 'Open In new window', 'VSVP-bottomPanel-newWindow Viper-sourceNewWindow', function() {
+                self.openInNewWindow();
+            });
+            popupBottom.appendChild(newWindowButton);
+        }
+
+        var applyButtonBottom = tools.createButton('VSVP:apply', 'Apply Changes', 'Apply Changes', 'VSVP-bottomPanel-apply', function() {
+            self.updatePageContents();
+            self.viper.ViperTools.closePopup('VSVP:popup', 'applyChanges');
+        });
+        popupBottom.appendChild(applyButtonBottom);
+
+        // Create the popup.
+        this._sourceView = tools.createPopup(
+            'VSVP:popup',
+            'Source Editor',
+            popupTop,
+            content,
+            popupBottom,
+            'VSVP-popup',
+            true,
+            true,
+            null,
+            function(closer) {
+                // Close callback.
+                if (closer !== 'discardChanges' && closer !== 'applyChanges') {
+                    // If there are changes prevent popup from closing.
+                    if (self.isSourceChanged() === true) {
+                        self.showCloseConfirm();
+                        return false;
+                    }
+                }
+
+                // Hide the Confirm message.
+                self.viper.ViperTools.getItem('VSVP:popup').hideTop();
+                self._isVisible = false;
+                self.toolbarPlugin.enable();
+                self.viper.focus();
+            },
+            function() {
+                if (self._editor) {
+                    // Resize callback.
+                    self._editor.resize();
+                }
+            }
+        );
+
+        if (this.viper.isBrowser('msie') === true) {
+            this._includeStyleHTML(function() {
+                var editor = document.createElement('textarea');
+                self._textEditor = editor;
+                self._sourceCont.appendChild(editor);
+                callback.call(self);
+            });
+        } else {
+            this._includeAce(function() {
+                // Setup the Ace editor.
+                var editor   = ace.edit(source);
+                self._editor = editor;
+
+                self.applyEditorSettings(editor);
+
+                // Init editor events.
+                self.initEditorEvents(editor);
+
+                callback.call(self);
+            });
+        }
+
+    },
+
+    applyEditorSettings: function(editor)
+    {
+        editor.setTheme("ace/theme/viper");
+        editor.getSession().setMode("ace/mode/html");
+
+        // Use wrapping.
+        editor.getSession().setUseWrapMode(true);
+
+        // Do not show the print margin.
+        editor.renderer.setShowPrintMargin(false);
+
+        // Highlight the active line.
+        editor.setHighlightActiveLine(true);
+
+        // Show invisible characters
+        editor.setShowInvisibles(true);
+        editor.renderer.$textLayer.EOL_CHAR = String.fromCharCode(8629);
+
+        // Set the selection style to be line (other option is 'text').
+        editor.setSelectionStyle('line');
+
+        // Always show the horizontal scrollbar.
+        editor.renderer.setHScrollBarAlwaysVisible(true);
+
+        // Use spaces instead of tabs.
+        editor.getSession().setUseSoftTabs(true);
+
+    },
+
+    showCloseConfirm: function()
+    {
+        this.viper.ViperTools.getItem('VSVP:popup').showTop();
+
+    },
+
+    scrollToText: function(text)
+    {
+        var self = this;
+
+        if (this._editor) {
+            this._editor.find(text);
+            setTimeout(function() {
+                var anchor = self._editor.getSelection().getSelectionAnchor();
+                self._editor.navigateTo(anchor.row, anchor.column);
+            }, 500);
+        } else {
+            var range = this._textEditor.createTextRange();
+            if (range.findText(text) === true) {
+                range.select();
+                range.scrollIntoView();
+            }
+        }
+    },
+
+    replaceSelection: function(replacement)
+    {
+        if (this._editor) {
+            this._editor.replace(replacement);
+        } else {
+            var selection = document.selection;
+            selection.clear();
+        }
+
+    },
+
+    initEditorEvents: function(editor)
+    {
+        var self = this;
+        editor.getSession().addEventListener("tokenizerUpdate", function() {
+            if (self._ignoreUpdate === true) {
+                self._ignoreUpdate = false;
+                return;
+            } else if (self._inNewWindow === true) {
+                self._ignoreSourceUpdate = true;
+                self.updatePageContents();
+            }
+        });
+
+        var popup = self.viper.ViperTools.getItem('VSVP:popup');
+
+        // If the ESC key is pressed close the popup.
+        editor.keyBinding.addKeyboardHandler({
+            handleKeyboard: function(data, hashId, keyString, n, e) {
+                if (!e) {
+                    return;
+                }
+
+                if (keyString === 'esc') {
+                    self.viper.ViperTools.closePopup('VSVP:popup');
+                } else if (e.metaKey !== true
+                    && e.ctrlKey !== true
+                    && e.which !== 16
+                ) {
+                    popup.hideTop();
+                }
+            }
+        });
+
+        var onFocus = editor.onFocus;
+        editor.onFocus = function() {
+            if (self._inNewWindow !== true) {
+                self.toolbarPlugin.disable();
+            }
+
+            onFocus.call(editor);
+            setTimeout(function() {
+                popup.hideTop();
+            }, 200);
+        }
+
+        editor.onBlur = function() {
+            if (self._inNewWindow !== true) {
+                self.toolbarPlugin.enable();
+            }
+        };
+
+    },
+
+    _includeAce: function(callback)
+    {
+        if (window['ace']) {
+            callback.call(this);
+            return;
+        }
+
+        var path = this.viper.getViperPath();
+        if (!path) {
+            callback.call(this);
+        } else {
+            var scripts  = [];
+
+            var acePath =  path + '/Plugins/ViperSourceViewPlugin/Ace';
+            scripts.push(acePath + '/src/ace.js');
+            scripts.push(acePath + '/src/theme-viper.js');
+            scripts.push(acePath + '/src/mode-html.js');
+
+            // Include JSBeautifier.
+            scripts.push(path + '/Plugins/ViperSourceViewPlugin/jsbeautifier.js');
+
+            this._includeScripts(scripts, callback);
+        }
+
+    },
+
+    _includeStyleHTML: function(callback)
+    {
+        var path = this.viper.getViperPath();
+        if (!path) {
+            callback.call(this);
+        } else {
+            this._includeScripts([path + '/Plugins/ViperSourceViewPlugin/jsbeautifier.js'], callback);
+        }
+
+    },
+
+    openInNewWindow: function()
+    {
+        // Hide current editor.
+        this.hideSourceView(true);
+        this.toolbarPlugin.enable();
+
+        // Add this Viper plugin object to global var.
+        var viperid = 'Viper-' + this.viper.getId() + '-ViperSVP';
+        window[viperid] = this;
+
+        var childWindow = window.open('about:blank', "Viper Source View", "width=850,height=800,0,status=0,scrollbars=0");
+        this._isVisible = true;
+        childWindow.document.write(this._getFrameContent(viperid));
+        this._childWindow = childWindow;
+        this._inNewWindow = true;
+
+        // Detect if the window is closed and reset SourceView..
+        var interval = null;
+        var self     = this;
+        interval = setInterval(function() {
+            if (!childWindow || childWindow.closed === true) {
+                clearInterval(interval);
+                self.hideSourceView();
+            }
+        }, 700);
+
+    },
+
+    getNewWindowContents: function()
+    {
+        return this._newWindowContents;
+
+    },
+
+    _getFrameContent: function(viperid)
+    {
+        var path    = this.viper.getViperPath();
+        var content = '';
+
+        this._newWindowContents = this.getSourceContents();
+
+        content += '<!DOCTYPE html><html lang="en"><head>';
+        content += '<meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">';
+        content += '<title>Viper Source View</title>';
+        content += '<style type="text/css" media="screen">body {overflow: hidden;}</style>';
+
+        if (!path) {
+            var viperPath = this.getViperURL();
+            content += '<link href="' + viperPath + 'viper.css" media="screen" rel="stylesheet" />';
+            content += '<script src="' + viperPath + 'viper.js" type="text/javascript" charset="utf-8"></script></head>';
+        } else {
+            content += '<link href="' + path + '/Css/viper_tools.css" media="screen" rel="stylesheet" />';
+            content += '<link href="' + path + '/Plugins/ViperSourceViewPlugin/ViperSourceViewPlugin.css" media="screen" rel="stylesheet" />';
+            content += '<script src="' + path + '/Plugins/ViperSourceViewPlugin/Ace/src/ace.js" type="text/javascript" charset="utf-8"></script>';
+            content += '<script src="' + path + '/Plugins/ViperSourceViewPlugin/Ace/src/theme-viper.js" type="text/javascript" charset="utf-8"></script>';
+            content += '<script src="' + path + '/Plugins/ViperSourceViewPlugin/Ace/src/mode-html.js" type="text/javascript" charset="utf-8"></script>';
+        }
+
+        content += '<body id="ViperSourceViewPlugin-window" class="ViperSourceViewPlugin-window">';
+        content += '<div class="Viper-popup Viper-themeDark VSVP-popup">';
+        content += '<div class="VSVP-confirmPanel Viper-popup-top">';
+        content += '<div class="VSVP-confirmText">Source code changes will be reflected in your edit preview window in real time.</div>';
+        content += '<div class="Viper-button" title="Revert Changes" onclick="viperSVP.revertChanges();">Revert Changes</div>';
+        content += '<div class="Viper-button" title="Close Source View" onclick="window.close();">Close Window</div></div>';
+        content += '<div class="Viper-popup-content"><pre id="editor"></pre></div></div>';
+        content += '<script>';
+        content += 'var viperid = "' + viperid + '";';
+        content += 'var viperSVP = window.opener[viperid];';
+        content += 'var editor = ace.edit("editor");';
+        content += 'viperSVP.applyEditorSettings(editor);';
+        content += 'viperSVP.initEditorEvents(editor);';
+        content += 'viperSVP._editor = editor;';
+        content += 'viperSVP.updateSourceContents(viperSVP.getNewWindowContents());';
+        content += 'var editorWrapper = document.getElementById("editor").parentNode;';
+        content += 'window.onresize = function() {editorWrapper.style.height = (window.innerHeight - 55) + "px";};';
+        content += 'window.onresize();';
+        content += '</script></body></html>';
+
+        return content;
+
+    },
+
+    getViperURL: function()
+    {
+        var scripts = document.getElementsByTagName('script');
+        var path    = null;
+        var c       = scripts.length;
+        for (var i = 0; i < c; i++) {
+            if (scripts[i].src) {
+                if (scripts[i].src.match(/\/viper\.js/)) {
+                    return scripts[i].src.replace('/viper.js', '/');
+                }
+            }
+        }
+
+        return null;
+
+    },
+
+    getContents: function()
+    {
+        var html = this.viper.getHtml(null, {emptyTableCellContent:''});
+
+        if (window.StyleHTML) {
+            html = StyleHTML(html);
+        }
+
+        return html;
+
+    },
+
+    isPluginElement: function(element)
+    {
+        if (element !== this._sourceView && dfx.isChildOf(element, this._sourceView) === false) {
+            return false;
+        }
+
+        return true;
+
+    },
+
+    _includeScripts: function(scripts, callback)
+    {
+        var self = this;
+        var _includeScripts = function(scripts, callback) {
+            if (scripts.length === 0) {
+                callback.call(this);
+                return;
+            }
+
+            var script = scripts.shift();
+            self._includeScript(script, function() {
+                _includeScripts(scripts, callback);
+            });
+        };
+
+        _includeScripts(scripts.concat([]), callback);
+
+    },
+
+
+    
+    _includeScript: function(src, callback) {
+        var script    = document.createElement('script');
+        script.onload = function() {
+            script.onload = null;
+            script.onreadystatechange = null;
+            callback.call(this);
+        };
+
+        script.onreadystatechange = function() {
+            if (/^(complete|loaded)$/.test(this.readyState) === true) {
+                script.onreadystatechange = null;
+                script.onload();
+            }
+        }
+
+        script.src = src;
+
+        if (document.head) {
+            document.head.appendChild(script);
+        } else {
+            document.getElementsByTagName('head')[0].appendChild(script);
+        }
+    }
+
+};
+
+
+
+function ViperTableEditorPlugin(viper)
+{
+    this.viper             = viper;
+    this._tools            = viper.ViperTools;
+    this._toolbarWidget    = null;
+    this.toolbarPlugin     = null;
+    this.activeCell        = null;
+    this._highlightElement = null;
+    this._cellTools        = null;
+
+    this._buttonClicked = false;
+    this._tableRawCells = null;
+    this._currentType   = null;
+    this._margin        = 15;
+    this._headerOptions = [null, [1, 0, 0, 1, 0, 0, 1, 0, 0], [1, 1, 1], [1, 1, 1, 1, 0, 0, 1, 0, 0]];
+
+    this._targetToolbarButton = false;
+
+}
+
+ViperTableEditorPlugin.prototype = {
+
+    init: function()
+    {
+        var self = this;
+        var clickedInToolbar = false;
+
+        this.viper.registerCallback('Viper:editableElementChanged', 'ViperTableEditorPlugin', function() {
+            self._initTable();
+
+            if (self.viper.isBrowser('firefox') === true) {
+                // Disable Firefox table editing.
+                document.execCommand("enableInlineTableEditing", false, false);
+                document.execCommand("enableObjectResizing", false, false);
+            }
+
+            var vap = self.viper.ViperPluginManager.getPlugin('ViperAccessibilityPlugin');
+            if (vap) {
+                vap.loadHTMLCS(function() {
+                    var tables = dfx.getTag('table', self.viper.getViperElement());
+                    for (var i = 0; i < tables.length; i++) {
+                        self.setTableHeaders(tables[i]);
+                    }
+                });
+            }
+        });
+
+        this.viper.registerCallback('ViperCopyPastePlugin:paste', 'ViperTableEditorPlugin', function() {
+            var vap = self.viper.ViperPluginManager.getPlugin('ViperAccessibilityPlugin');
+            if (vap) {
+                vap.loadHTMLCS(function() {
+                    var tables = dfx.getTag('table', self.viper.getViperElement());
+                    for (var i = 0; i < tables.length; i++) {
+                        self.setTableHeaders(tables[i]);
+                    }
+                });
+            }
+        });
+
+        this.viper.registerCallback('setHtml', 'ViperTableEditorPlugin', function(data) {
+            var vap = self.viper.ViperPluginManager.getPlugin('ViperAccessibilityPlugin');
+            if (vap) {
+                vap.loadHTMLCS(function() {
+                    var tables = dfx.getTag('table', data.element);
+                    for (var i = 0; i < tables.length; i++) {
+                        self.setTableHeaders(tables[i]);
+                        self._initTable(tables[i]);
+                    }
+                });
+            } else {
+                var tables = dfx.getTag('table', data.element);
+                for (var i = 0; i < tables.length; i++) {
+                    self._initTable(tables[i]);
+                }
+            }
+        });
+
+        this.viper.registerCallback('Viper:enabled', 'ViperTableEditorPlugin', function() {
+            var tables = dfx.getTag('table', self.viper.getViperElement());
+            for (var i = 0; i < tables.length; i++) {
+                self._initTable(tables[i]);
+            }
+        });
+
+        // Hide the toolbar when user clicks anywhere.
+        this.viper.registerCallback(['Viper:mouseDown', 'ViperHistoryManager:undo'], 'ViperTableEditorPlugin', function(data) {
+            if (self.viper.isBrowser('firefox') === true) {
+                // Disable Firefox table editing.
+                document.execCommand("enableInlineTableEditing", false, false);
+                document.execCommand("enableObjectResizing", false, false);
+            }
+
+            self.setActiveCell(null);
+            clickedInToolbar = false;
+            if (data && data.target) {
+                var target = dfx.getMouseEventTarget(data);
+                if (target === self._toolbar || dfx.isChildOf(target, self._toolbar) === true) {
+                    clickedInToolbar = true;
+                    if (dfx.isTag(target, 'input') === true
+                        || dfx.isTag(target, 'textarea') === true
+                    ) {
+                        // Allow event to bubble so the input element can get focus etc.
+                        return true;
+                    }
+
+                    return false;
+                } else if (dfx.isTag(target, 'caption') === true && dfx.getNodeTextContent(target) === '') {
+                    target.innerHTML = '&nbsp;';
+                }
+            }
+
+            self.hideToolbar();
+        });
+
+        dfx.addEvent(window, 'resize', function() {
+            self.hideCellToolsIcon();
+            self.removeHighlights();
+
+            var cell = self.getActiveCell();
+            if (cell && self._toolbarWidget.isVisible() === true) {
+                self._updatePosition(cell);
+                self.highlightActiveCell(self._currentType);
+            }
+        });
+
+        this.viper.registerCallback('Viper:keyUp', 'ViperTableEditorPlugin', function(e) {
+            var range = self.viper.getViperRange();
+            try {
+                if (range.collapsed === true
+                    && self.viper.isBrowser('msie') === true
+                    && range.startContainer.nodeType === dfx.TEXT_NODE
+                    && ['td', 'th'].inArray(dfx.getTagName(range.startContainer.parentNode)) === true
+                ) {
+                    var ohtml = dfx.getHtml(range.startContainer.parentNode);
+                    var nhtml = ohtml.replace(/^&nbsp;/g, '');
+                    nhtml     = nhtml.replace(/&nbsp;$/g, '');
+
+                    if (nhtml !== ohtml && nhtml !== '') {
+                        dfx.setHtml(range.startContainer.parentNode, nhtml);
+                    }
+                }
+            } catch (e) {}
+        });
+
+        this.viper.registerCallback('Viper:keyDown', 'ViperTableEditorPlugin', function(e) {
+            if (e.which === 9) {
+                // Handle tab key.
+                self.removeHighlights();
+
+                if (e.shiftKey === true && self.activeCell) {
+                    self.moveCaretToPreviousCell();
+                } else {
+                    if (self.activeCell && self.moveCaretToNextCell() === false) {
+                        // Create a new row.
+                        self.insertRowAfter(self.activeCell);
+                        self.moveCaretToNextCell();
+                    }
+                }
+
+                dfx.preventDefault(e);
+                return false;
+            } else if (e.which === 39 || e.which === 40) {
+                // Right and down arrow.
+                // If the range is at the end of a table (last cell) then move the
+                // caret outside even if there is no next sibling.
+                var range = self.viper.getCurrentRange();
+                if (range.collapsed === true) {
+                    var startNode = range.getStartNode();
+                    if (startNode && (dfx.isTag(startNode, 'br') === true || (startNode.nodeType === dfx.TEXT_NODE && range.endOffset === startNode.data.length))) {
+                        var cell           = self.getActiveCell();
+                        var lastSelectable = range._getLastSelectableChild(cell);
+                        if (startNode === lastSelectable || (!lastSelectable && dfx.isTag(startNode, 'br') === true)) {
+                            if (cell && !self.getNextRow(cell.parentNode)) {
+                                // End of table.
+                                var table = self.getCellTable(cell);
+                                if (!table.nextSibling || table.nextSibling.data && table.nextSibling.data.match(/^\n\s*$/)) {
+                                    var newNode = document.createElement('p');
+                                    dfx.setHtml(newNode, '&nbsp;');
+                                    dfx.insertAfter(table, newNode);
+                                    range.setStart(newNode.firstChild, 0);
+                                    range.collapse(true);
+                                    ViperSelection.addRange(range);
+                                }
+                            }
+                        }
+                    }
+                }
+            } else if (self.viper.isInputKey(e) === true && e.which !== 13) {
+                // Not input key or enter key, hide tools.
+                self.hideCellToolsIcon();
+                self.removeHighlights();
+                self.hideToolbar();
+            }//end if
+        });
+
+        this.viper.registerCallback('Viper:clickedOutside', 'ViperTableEditorPlugin', function(data) {
+            self.hideCellToolsIcon();
+            self.removeHighlights();
+        });
+
+        this.viper.registerCallback('ViperFormatPlugin:elementAttributeSet', 'ViperTableEditorPlugin', function(data) {
+            if (data.element && dfx.isTag(data.element, 'th') === true) {
+                var table      = self.getCellTable(data.element);
+                var headerAttr = dfx.find(table, '[headers~="' + data.oldValue + '"]');
+                for (var i = 0; i < headerAttr.length; i++) {
+                    var attr = ' ' + headerAttr[i].getAttribute('headers');
+                    attr     = attr.replace(' ' + data.oldValue, (data.element.getAttribute('id') || ''));
+                    headerAttr[i].setAttribute('headers', dfx.trim(attr));
+                }
+
+                self.setTableHeaders(table);
+            }
+        });
+
+        this.toolbarPlugin = this.viper.ViperPluginManager.getPlugin('ViperToolbarPlugin');
+        if (this.toolbarPlugin) {
+            var insertTable = true;
+
+            this.viper.registerCallback('ViperToolbarPlugin:positionUpdated', 'ViperTableEditorPlugin', function(data) {
+                if (self._targetToolbarButton === true) {
+                    var activeCell = self.getActiveCell();
+                    if (activeCell) {
+                        self.showCellToolsIcon(activeCell, true);
+                    }
+                }
+            });
+
+            this.viper.registerCallback('ViperToolbarPlugin:enabled', 'ViperTableEditorPlugin', function(data) {
+                self.viper.ViperTools.enableButton('insertTable');
+            });
+
+            var button = this.viper.ViperTools.createButton('insertTable', '', 'Insert Table', 'Viper-table', function() {
+                var range = self.viper.getViperRange();
+                var node  = range.getStartNode();
+                if (!node) {
+                    node = range.getEndNode();
+                    if (!node) {
+                        return;
+                    }
+                }
+
+                insertTable = true;
+
+                // Do not allow table insertion inside another table.
+                var parents = dfx.getParents(node, 'table', self.viper.getViperElement());
+                if (parents.length > 0) {
+                    insertTable = false;
+                    // Show cell tools.
+                    var cell = self._getCellElement(node);
+                    if (cell) {
+                        if (self._cellTools && dfx.hasClass(self._cellTools, 'Viper-topBar') === true) {
+                            self.hideCellToolsIcon();
+                        } else if (self.viper.isBrowser('msie') === true) {
+                            // This must be in a timeout to be able to calculate the bubbles position correctly.
+                            setTimeout(function() {
+                                self.showCellToolsIcon(cell, true);
+                            }, 10);
+                        } else {
+                            self.showCellToolsIcon(cell, true);
+                        }
+                    }
+                } else {
+                    if (self.viper.isBrowser('msie') === true) {
+                        // This must be in a timeout to be able to calculate the bubbles position correctly.
+                        setTimeout(function() {
+                            self.toolbarPlugin.toggleBubble('VTEP-bubble');
+                        }, 10);
+                    } else {
+                        self.toolbarPlugin.toggleBubble('VTEP-bubble');
+                    }
+                }
+            }, true);
+            this.toolbarPlugin.addButton(button);
+
+            // Create the toolbar bubble.
+            this._createToolbarEditorBubble();
+        }
+
+        if (this._isiPad() === false) {
+            var showToolbar = false;
+            this.viper.registerCallback('Viper:mouseUp', 'ViperTableEditorPlugin', function(e) {
+                var range = self.viper.getCurrentRange();
+                var target = dfx.getMouseEventTarget(e);
+
+                if (!target) {
+                    return;
+                }
+
+                if (target === self._toolbar || dfx.isChildOf(target, self._toolbar) === true) {
+                    self._buttonClicked = false;
+                    return false;
+                }
+
+                if (range.collapsed === false
+                    || dfx.isTag(target, 'a') === true
+                    || dfx.isTag(target, 'img') === true
+                ) {
+                    self.removeHighlights();
+                    self.hideCellToolsIcon();
+                    return true;
+                }
+
+                if (self.viper.isOutOfBounds(target) === true) {
+                    return;
+                }
+
+                var cell = self._getCellElement(target);
+                if (cell) {
+                    self._initTable(self.getCellTable(cell));
+
+                    self.hideCellToolsIcon();
+                    self.removeHighlights();
+
+                    // Show cell Tools.
+                    if (self.viper.isBrowser('msie') === true) {
+                        setTimeout(function() {
+                            showToolbar = true;
+                            self.showCellToolsIcon(cell);
+                        }, 10);
+                    } else {
+                        showToolbar = true;
+                        self.showCellToolsIcon(cell);
+                    }
+
+                    return;
+                }
+
+                self.hideCellToolsIcon();
+                self.removeHighlights();
+
+                return true;
+            });
+
+            this.viper.registerCallback('Viper:selectionChanged', 'ViperTableEditorPlugin', function(range) {
+                var node = range.getStartNode();
+                if (!node) {
+                    node = range.getEndNode();
+                    if (!node) {
+                        if (range.startContainer && dfx.isStubElement(range.startContainer) === true) {
+                            node = range.startContainer;
+                        } else {
+                            return;
+                        }
+                    }
+                }
+
+                if (self.viper.isOutOfBounds(node) === true) {
+                    return;
+                }
+
+                if (self.toolbarPlugin.isDisabled() === true) {
+                    self._tools.setButtonInactive('insertTable');
+                } else {
+                    // Do not allow table insertion inside another table.
+                    var parents = dfx.getParents(node, 'table', self.viper.getViperElement());
+                    if (parents.length > 0 && self._tools) {
+                        // Set the table icon as active.
+                        if (self.toolbarPlugin.isDisabled() === false) {
+                            self._tools.setButtonActive('insertTable');
+                        }
+                    } else {
+                        if (dfx.getParents(node, 'li', self.viper.getViperElement()).length > 0) {
+                            self._tools.disableButton('insertTable');
+                        } else {
+                            var nodeSelection = range.getNodeSelection();
+                            if (!nodeSelection || dfx.isStubElement(nodeSelection) === false) {
+                                self._tools.enableButton('insertTable');
+                                self._tools.setButtonInactive('insertTable');
+                            } else {
+                                self._tools.disableButton('insertTable');
+                                self._tools.setButtonInactive('insertTable');
+                            }
+                        }
+                    }
+                }
+
+                if (range.collapsed === false) {
+                    return;
+                }
+
+                if (clickedInToolbar === true || self.viper.rangeInViperBounds(range) === false) {
+                    clickedInToolbar = false;
+                    return;
+                }
+
+                if (showToolbar === false) {
+                    self.hideCellToolsIcon();
+                    self.hideToolbar();
+                } else {
+                    showToolbar = false;
+                }
+            });
+        } else {
+            // For iPad.
+            this.viper.registerCallback('Viper:selectionChanged', 'ViperTableEditorPlugin', function(range) {
+                var startNode = range.getStartNode();
+                var cell      = self._getCellElement(startNode);
+                if (cell) {
+                    self.hideCellToolsIcon();
+                    self.removeHighlights();
+
+                    showToolbar = true;
+                    // Show cell Tools.
+                    return self.showCellToolsIcon(cell);
+                }
+
+                self.hideCellToolsIcon();
+                return true;
+            });
+        }//end if
+
+        if (this._isiPad() === true) {
+            // During zooming hide the toolbar.
+            dfx.addEvent(window, 'gesturestart', function() {
+                self.hideToolbar();
+            });
+
+            this.viper.registerCallback('Viper:elementScaled', 'ViperTableEditorPlugin', function(data) {
+                if (data.element !== self._toolbar) {
+                    return false;
+                }
+
+                if (data.scale === 1) {
+                    self._margin = 15;
+                } else {
+                    self._margin = (15 - (((1 - data.scale) / 0.1) * 5));
+                }
+
+                self.updateToolbar(self.getActiveCell(), self._currentType);
+            });
+        }//end if
+
+        this._initToolbar();
+
+    },
+
+    _initTable: function(table)
+    {
+        var cells = [];
+        if (!table) {
+            cells = dfx.getTag('td, th', this.viper.getViperElement());
+        } else {
+            cells = dfx.getTag('td,th', table);
+        }
+
+        var c = cells.length;
+        for (var i = 0; i < c; i++) {
+            var html = dfx.trim(dfx.getHtml(cells[i]));
+            if (html === '' || html === '&nbsp;') {
+                this._initCell(cells[i]);
+            }
+        }
+
+    },
+
+
+    
+    showCellToolsIcon: function(cell, inTopBar)
+    {
+        if (!cell) {
+            return;
+        }
+
+        this.hideToolbar();
+
+        var toolsid = this.viper.getId() + '-ViperTEP';
+        var tools   = dfx.getId(toolsid);
+
+        if (tools) {
+            dfx.remove(tools);
+        }
+
+        this.setActiveCell(cell);
+
+        var self      = this;
+        var showTools = function(type) {
+            dfx.remove(tools);
+            var range = self.viper.getCurrentRange();
+            range.collapse(true);
+            ViperSelection.addRange(range);
+            self.showTableTools(cell, type);
+        };
+
+        tools    = document.createElement('div');
+        tools.id = toolsid;
+        dfx.addClass(tools, 'ViperITP Viper-themeDark Viper-compact Viper-visible');
+        this._cellTools = tools;
+
+        // Table, row, col and cell buttons. Initially only the table icon is visible
+        // Whent he mouse is moved over the table icon, rest of the buttons become
+        // visible where user can pick the tools they want to use.
+        var buttonGroup = this.viper.ViperTools.createButtonGroup('VTEP:cellTools:buttons', 'ViperITP-tools');
+        var tableBtn    = this._tools.createButton('VTEP:cellTools:table', '', 'Show Table tools', 'Viper-table', function() {
+            showTools('table');
+        });
+        var rowBtn = this._tools.createButton('VTEP:cellTools:row', '', 'Show Row tools', 'Viper-tableRow Viper-hidden', function() {
+            showTools('row');
+        });
+        var colBtn = this._tools.createButton('VTEP:cellTools:col', '', 'Show Column tools', 'Viper-tableCol Viper-hidden', function() {
+            showTools('col');
+        });
+        var cellBtn = this._tools.createButton('VTEP:cellTools:cell', '', 'Show Cell tools', 'Viper-tableCell Viper-hidden', function() {
+            showTools('cell');
+        });
+        this._tools.addButtonToGroup('VTEP:cellTools:table', 'VTEP:cellTools:buttons');
+        this._tools.addButtonToGroup('VTEP:cellTools:row', 'VTEP:cellTools:buttons');
+        this._tools.addButtonToGroup('VTEP:cellTools:col', 'VTEP:cellTools:buttons');
+        this._tools.addButtonToGroup('VTEP:cellTools:cell', 'VTEP:cellTools:buttons');
+
+        var btns = [rowBtn, colBtn, cellBtn];
+
+        tools.appendChild(buttonGroup);
+
+        var cellCoords = null;
+        var toolsWidth = 42;
+
+        if (inTopBar !== true) {
+            this._targetToolbarButton = false;
+            cellCoords = dfx.getBoundingRectangle(cell);
+        } else {
+            var scrollCoords = dfx.getScrollCoords();
+
+            this._targetToolbarButton = true;
+            dfx.removeClass(btns, 'Viper-hidden');
+            dfx.setStyle(tools, 'margin-left', '-45px');
+            cellCoords     = dfx.getBoundingRectangle(this._tools.getItem('insertTable').element);
+
+            if (dfx.getStyle(this._tools.getItem('insertTable').element.parentNode, 'position') === 'fixed') {
+                cellCoords.y2 += (5 - scrollCoords.y);
+                dfx.setStyle(tools, 'position', 'fixed');
+            } else {
+                dfx.setStyle(tools, 'position', 'absolute');
+            }
+
+            dfx.addClass(tools, 'Viper-topBar');
+        }
+
+        dfx.setStyle(tools, 'top', cellCoords.y2 + 5 + 'px');
+        dfx.setStyle(tools, 'left', Math.ceil(cellCoords.x1 + ((cellCoords.x2 - cellCoords.x1) / 2) - (toolsWidth / 2)) + 1 + 'px');
+
+        if (this._isiPad() === false) {
+            // On Hover of the buttons highlight the table/row/col/cell.
+            dfx.hover(tableBtn, function() {
+                self.setActiveCell(cell);
+                self.highlightActiveCell('table');
+            }, function() {
+                self.removeHighlights();
+            });
+            dfx.hover(rowBtn, function() {
+                self.setActiveCell(cell);
+                self.highlightActiveCell('row');
+            }, function() {
+                self.removeHighlights();
+            });
+            dfx.hover(colBtn, function() {
+                self.setActiveCell(cell);
+                self.highlightActiveCell('col');
+            }, function() {
+                self.removeHighlights();
+            });
+            dfx.hover(cellBtn, function() {
+                self.setActiveCell(cell);
+                self.highlightActiveCell('cell');
+            }, function() {
+                self.removeHighlights();
+            });
+
+            if (this._targetToolbarButton !== true) {
+                // On hover show the list of available table properties buttons.
+                dfx.hover(tools, function() {
+                    self.setActiveCell(cell);
+                    self.highlightActiveCell();
+                    dfx.removeClass(btns, 'Viper-hidden');
+                    dfx.setStyle(tools, 'margin-left', '-45px');
+                }, function() {
+                    self.removeHighlights();
+                    dfx.addClass(btns, 'Viper-hidden');
+                    dfx.setStyle(tools, 'margin-left', '0');
+                });
+            }
+        } else {
+            // On iPad just show the tools.
+            dfx.addEvent(tools, 'click', function() {
+                showTools('cell');
+            });
+        }//end if
+
+        this.viper.addElement(tools);
+
+    },
+
+    hideCellToolsIcon: function()
+    {
+        if (!this._cellTools) {
+            return;
+        }
+
+        var toolsid = this.viper.getId() + '-ViperTEP';
+        var tools   = dfx.getId(toolsid);
+
+        if (tools) {
+            dfx.remove(tools);
+        }
+
+        this._cellTools = null;
+
+    },
+
+    showTableTools: function(cell, type)
+    {
+        if (!cell) {
+            return;
+        }
+
+        this.updateToolbar(cell, type);
+
+    },
+
+    _initToolbar: function()
+    {
+        var tools       = this.viper.ViperTools;
+        var toolbarid   = 'ViperTableEditor-toolbar';
+        var self        = this;
+        var toolbarElem = tools.createInlineToolbar(toolbarid);
+        var toolbar     = tools.getItem(toolbarid);
+
+        this._toolbarWidget = toolbar;
+
+        // Add lineage container to the toolbar.
+        var lineage = document.createElement('ul');
+        dfx.addClass(lineage, 'ViperITP-lineage');
+        dfx.insertBefore(toolbarElem.firstChild, lineage);
+        this._lineage = lineage;
+
+        // Add the table buttons.
+        this._createCellProperties();
+        this.viper.fireCallbacks('ViperTableEditorPlugin:initToolbar', {toolbar: toolbar, type: 'cell'});
+
+        this._createColProperties();
+        this.viper.fireCallbacks('ViperTableEditorPlugin:initToolbar', {toolbar: toolbar, type: 'col'});
+
+        this._createRowProperties();
+        this.viper.fireCallbacks('ViperTableEditorPlugin:initToolbar', {toolbar: toolbar, type: 'row'});
+
+        this._createTableProperties();
+        this.viper.fireCallbacks('ViperTableEditorPlugin:initToolbar', {toolbar: toolbar, type: 'table'});
+
+    },
+
+    hideToolbar: function()
+    {
+        this._toolbarWidget.hide();
+
+    },
+
+    getCurrentViewType: function()
+    {
+        return this._type;
+
+    },
+
+    
+    updateToolbar: function(cell, type, activeSubSection)
+    {
+        this._activeSection = null;
+        this._tableRawCells = null;
+        this.setActiveCell(cell);
+
+        this.removeHighlights();
+        this.hideToolbar();
+
+        this._currentType = type;
+
+        dfx.removeClass(this._toolbar, 'Viper-subSectionVisible');
+
+        // Set highlight to active cell.
+        this.highlightActiveCell();
+
+        this._toolbarWidget.resetButtons();
+        this._updateLineage(type);
+        this._updateInnerContainer(cell, type, activeSubSection);
+        this._updatePosition(cell, type);
+        this.highlightActiveCell(type);
+        this._toolbarWidget._updateSubSectionArrowPos();
+
+        this._toolbarWidget.focusSubSection();
+        this.viper.removeHighlights();
+
+    },
+
+    _updateInnerContainer: function(cell, type, activeSubSection)
+    {
+        switch (type) {
+            case 'cell':
+            default:
+                this._showCellProperties(cell, activeSubSection);
+            break;
+
+            case 'col':
+                this._showColProperties(cell);
+            break;
+
+            case 'row':
+                this._showRowProperties(cell);
+            break;
+
+            case 'table':
+                this._showTableProperties(cell);
+            break;
+        }
+
+        var callbackData = {
+            toolbar: this,
+            cell: cell,
+            type: type,
+            toolbar: this._toolbarWidget
+        };
+        this.viper.fireCallbacks('ViperTableEditorPlugin:updateToolbar', callbackData);
+
+    },
+
+    _showCellProperties: function(cell, activeSubSection)
+    {
+        this._toolbarWidget.showButton('VTEP:cellProps:mergeSplitSubSectionToggle');
+        this._toolbarWidget.showButton('VTEP:cellProps:settings');
+
+        this._tools.getItem('VTEP:cellProps:heading').setValue(dfx.isTag(cell, 'th'));
+
+        if (this.getRowspan(cell) <= 1) {
+            this._tools.disableButton('VTEP:cellProps:splitHoriz');
+        } else {
+            this._tools.enableButton('VTEP:cellProps:splitHoriz');
+        }
+
+        if (this.getColspan(cell) <= 1) {
+            this._tools.disableButton('VTEP:cellProps:splitVert');
+        } else {
+            this._tools.enableButton('VTEP:cellProps:splitVert');
+        }
+
+        if (this.canMergeUp(cell) !== false) {
+            this._tools.enableButton('VTEP:cellProps:mergeUp');
+        } else {
+            this._tools.disableButton('VTEP:cellProps:mergeUp');
+        }
+
+        if (this.canMergeDown(cell) !== false) {
+            this._tools.enableButton('VTEP:cellProps:mergeDown');
+        } else {
+            this._tools.disableButton('VTEP:cellProps:mergeDown');
+        }
+
+        if (this.canMergeRight(cell) !== false) {
+            this._tools.enableButton('VTEP:cellProps:mergeRight');
+        } else {
+            this._tools.disableButton('VTEP:cellProps:mergeRight');
+        }
+
+        if (this.canMergeLeft(cell) !== false) {
+            this._tools.enableButton('VTEP:cellProps:mergeLeft');
+        } else {
+            this._tools.disableButton('VTEP:cellProps:mergeLeft');
+        }
+
+        if (activeSubSection === 'merge') {
+            this._toolbarWidget.toggleSubSection('VTEP:cellProps:mergeSplitSubSection');
+        } else {
+            this._toolbarWidget.toggleSubSection('VTEP:cellProps:settingsSubSection');
+        }
+
+    },
+
+    _showColProperties: function(cell)
+    {
+        this._toolbarWidget.showButton('VTEP:colProps:settings');
+        this._toolbarWidget.showButton('VTEP:colProps:insBefore');
+        this._toolbarWidget.showButton('VTEP:colProps:insAfter');
+        this._toolbarWidget.showButton('VTEP:colProps:moveLeft');
+        this._toolbarWidget.showButton('VTEP:colProps:moveRight');
+        this._toolbarWidget.showButton('VTEP:colProps:remove');
+
+        var colWidth = this.getColumnWidth(cell);
+        this._tools.getItem('VTEP:colProps:width').setValue(colWidth);
+
+        /// Heading.
+        var wholeColHeading = true;
+        var cells   = this._getCellsExpanded();
+        var cellPos = this.getCellPosition(cell);
+
+        for (var i = 0; i < cells.length; i++) {
+            var colCell    = cells[i][cellPos.col];
+            var colCellPos = this.getCellPosition(colCell);
+            if (colCellPos.col === cellPos.col) {
+                if (dfx.isTag(colCell, 'td') === true) {
+                    wholeColHeading = false;
+                    break;
+                }
+            }
+        }
+
+        this._tools.getItem('VTEP:colProps:heading').setValue(wholeColHeading, true);
+
+        // Enable/disable move col icons.
+        if (this.canMoveColLeft(cell) === true) {
+            this._tools.enableButton('VTEP:colProps:moveLeft');
+        } else {
+            this._tools.disableButton('VTEP:colProps:moveLeft');
+        }
+
+        // Enable/disable move col icons.
+        if (this.canMoveColRight(cell) === true) {
+            this._tools.enableButton('VTEP:colProps:moveRight');
+        } else {
+            this._tools.disableButton('VTEP:colProps:moveRight');
+        }
+
+        this._toolbarWidget.toggleSubSection('VTEP:colProps:settingsSubSection');
+
+    },
+
+    _showRowProperties: function(cell)
+    {
+        this._toolbarWidget.showButton('VTEP:rowProps:settings');
+        this._toolbarWidget.showButton('VTEP:rowProps:insBefore');
+        this._toolbarWidget.showButton('VTEP:rowProps:insAfter');
+        this._toolbarWidget.showButton('VTEP:rowProps:moveUp');
+        this._toolbarWidget.showButton('VTEP:rowProps:moveDown');
+        this._toolbarWidget.showButton('VTEP:rowProps:remove');
+
+        this._tools.getItem('VTEP:rowProps:heading').setValue(dfx.getTag('td', cell.parentNode).length === 0);
+
+        if (this.canMoveRowUp(cell) === false) {
+            this._tools.disableButton('VTEP:rowProps:moveUp');
+        } else {
+            this._tools.enableButton('VTEP:rowProps:moveUp');
+        }
+
+        if (this.canMoveRowDown(cell) === false) {
+            this._tools.disableButton('VTEP:rowProps:moveDown');
+        } else {
+            this._tools.enableButton('VTEP:rowProps:moveDown');
+        }
+
+        this._toolbarWidget.toggleSubSection('VTEP:rowProps:settingsSubSection');
+
+    },
+
+    _showTableProperties: function(cell)
+    {
+        var table = this.getCellTable(cell);
+        this._toolbarWidget.showButton('VTEP:tableProps:settings');
+        this._toolbarWidget.showButton('VTEP:tableProps:remove');
+
+        var tableWidth = this.getTableWidth(table);
+        this._tools.getItem('VTEP:tableProps:width').setValue(tableWidth);
+
+        var summary = table.getAttribute('summary') || '';
+        this._tools.getItem('VTEP:tableProps:summary').setValue(summary);
+
+        this._tools.getItem('VTEP:tableProps:caption').setValue((dfx.getTag('caption', table).length > 0));
+
+        this._toolbarWidget.toggleSubSection('VTEP:tableProps:settingsSubSection');
+
+    },
+
+    tableUpdated: function(table)
+    {
+        this._tableRawCells = null;
+        table = table || this.getCellTable(this.activeCell);
+
+        this.setTableHeaders(table);
+        this.viper.fireNodesChanged([table]);
+
+    },
+
+    _isiPad: function()
+    {
+        if (navigator.userAgent.match(/iPad/i) !== null) {
+            return true;
+        }
+
+        return false;
+
+    },
+
+    
+    _updatePosition: function(cell, verticalOnly)
+    {
+        var rangeCoords = this._toolbarWidget.getElementCoords(cell);
+
+        if (!rangeCoords) {
+            return;
+        }
+
+        var scrollCoords = dfx.getScrollCoords();
+
+        var toolbar = this._toolbarWidget.element;
+
+        dfx.addClass(toolbar, 'Viper-calcWidth');
+        dfx.setStyle(toolbar, 'width', 'auto');
+        var toolbarWidth = dfx.getElementWidth(toolbar);
+        dfx.removeClass(toolbar, 'Viper-calcWidth');
+        dfx.setStyle(toolbar, 'width', toolbarWidth + 'px');
+
+        var left = 0;
+        var top  = 0;
+        if (this._targetToolbarButton !== true) {
+            if (verticalOnly !== true) {
+                left = ((rangeCoords.left + ((rangeCoords.right - rangeCoords.left) / 2) + scrollCoords.x) - (toolbarWidth / 2));
+                dfx.setStyle(toolbar, 'left', left + 'px');
+            }
+
+            top = (rangeCoords.bottom + this._margin + scrollCoords.y);
+            dfx.setStyle(toolbar, 'position', 'absolute');
+        } else {
+            var cellCoords = dfx.getBoundingRectangle(this._tools.getItem('insertTable').element);
+            top  = cellCoords.y2 + 15 - scrollCoords.y;
+            left = ((cellCoords.x1 + ((cellCoords.x2 - cellCoords.x1) / 2) + scrollCoords.x) - (toolbarWidth / 2));
+
+            dfx.setStyle(toolbar, 'left', left + 'px');
+            dfx.setStyle(toolbar, 'position', 'fixed');
+        }
+
+        dfx.setStyle(toolbar, 'top', top + 'px');
+        dfx.addClass(toolbar, 'Viper-visible');
+
+    },
+
+    _updateLineage: function(type)
+    {
+        var self = this;
+
+        dfx.empty(this._lineage);
+
+        dfx.removeClass(dfx.getClass('Viper-selected', this._lineage), 'Viper-selected');
+
+        // Table.
+        var table = document.createElement('li');
+        dfx.addClass(table, 'ViperITP-lineageItem');
+        dfx.setHtml(table, 'Table');
+        this._lineage.appendChild(table);
+        dfx.addEvent(table, 'mousedown', function(e) {
+            self._buttonClicked = true;
+            self.updateToolbar(self.getActiveCell(), 'table');
+            dfx.preventDefault(e);
+            return false;
+        });
+
+        if (type === 'table') {
+            dfx.addClass(table, 'Viper-selected');
+        }
+
+        // Row.
+        var row = document.createElement('li');
+        dfx.addClass(row, 'ViperITP-lineageItem');
+        dfx.setHtml(row, 'Row');
+        this._lineage.appendChild(row);
+        dfx.addEvent(row, 'mousedown', function(e) {
+            dfx.removeClass(dfx.getClass('Viper-selected', self._lineage), 'Viper-selected');
+            dfx.addClass(row, 'Viper-selected');
+            self._buttonClicked = true;
+            self.updateToolbar(self.getActiveCell(), 'row');
+            dfx.preventDefault(e);
+            return false;
+        });
+
+        if (type === 'row') {
+            dfx.addClass(row, 'Viper-selected');
+        }
+
+        // Col.
+        var col = document.createElement('li');
+        dfx.addClass(col, 'ViperITP-lineageItem');
+        dfx.setHtml(col, 'Column');
+        this._lineage.appendChild(col);
+        dfx.addEvent(col, 'mousedown', function(e) {
+            self._buttonClicked = true;
+            self.updateToolbar(self.getActiveCell(), 'col');
+            dfx.preventDefault(e);
+            return false;
+        });
+
+        if (type === 'col') {
+            dfx.addClass(col, 'Viper-selected');
+        }
+
+        // Cell.
+        var cell = document.createElement('li');
+        dfx.addClass(cell, 'ViperITP-lineageItem');
+        dfx.setHtml(cell, 'Cell');
+        this._lineage.appendChild(cell);
+        dfx.addEvent(cell, 'mousedown', function(e) {
+            self._buttonClicked = true;
+            self.updateToolbar(self.getActiveCell(), 'cell');
+            dfx.preventDefault(e);
+            return false;
+        });
+        if (!type || type === 'cell') {
+            dfx.addClass(cell, 'Viper-selected');
+        }
+
+        setTimeout(function() {
+            // Add the hover events after a few ms of showing the toolbar so that
+            // if the pointer is on top of the lineage item it does not change the
+            // highlighted cell.
+            dfx.hover(table, function() {
+                self.highlightActiveCell('table');
+            }, function() {
+                self.removeHighlights();
+                self.highlightActiveCell(self._currentType);
+            });
+
+            dfx.hover(row, function() {
+                self.highlightActiveCell('row');
+            }, function() {
+                self.removeHighlights();
+                self.highlightActiveCell(self._currentType);
+            });
+
+            dfx.hover(col, function() {
+                self.highlightActiveCell('col');
+            }, function() {
+                self.removeHighlights();
+                self.highlightActiveCell(self._currentType);
+            });
+
+            dfx.hover(cell, function() {
+                self.highlightActiveCell('cell');
+            }, function() {
+                self.removeHighlights();
+                self.highlightActiveCell(self._currentType);
+            });
+        }, 100);
+
+    },
+
+    removeHighlights: function()
+    {
+        dfx.remove(this._highlightElement);
+
+    },
+
+
+    highlightActiveCell: function(parentType)
+    {
+        parentType     = parentType || 'cell';
+        var activeCell = this.getActiveCell();
+        var element    = null;
+        var coords     = null;
+
+        if (!activeCell) {
+            return;
+        }
+
+        switch (parentType) {
+            case 'cell':
+            default:
+                element = activeCell;
+            break;
+
+            case 'table':
+                var table = this.getCellTable(activeCell);
+                var tfoot = dfx.getTag('tfoot', table);
+                coords    = dfx.getBoundingRectangle(table);
+
+                if (this.viper.isBrowser('firefox') === true) {
+                    // Caption height fix..
+                    var caption = dfx.getTag('caption', table);
+                    if (caption.length > 0) {
+                        caption    = caption[0];
+                        coords.y2 += dfx.getElementHeight(caption);
+                    }
+                }
+            break;
+
+            case 'row':
+                if (this.getRowspan(activeCell) > 1) {
+                    coords         = dfx.getBoundingRectangle(activeCell.parentNode);
+                    var cellCoords = dfx.getBoundingRectangle(activeCell);
+                    coords.y2      = cellCoords.y2;
+                } else {
+                    element = activeCell.parentNode;
+                }
+            break;
+
+            case 'col':
+                // Column is a bit harder to calculate.
+                // Get the tables rectangle.
+                var table   = this.getCellTable(activeCell);
+                var caption = dfx.getTag('caption', table);
+                coords      = dfx.getBoundingRectangle(table);
+
+                if (caption.length > 0) {
+                    var captionHeight = dfx.getElementHeight(caption[0]);
+                    coords.y1        += captionHeight;
+
+                    if (this.viper.isBrowser('firefox') === true) {
+                        // Firefox caption height fix.
+                        coords.y2 += captionHeight;
+                    }
+                }
+
+                // Get the width and height of the cell.
+                var cellRect = dfx.getBoundingRectangle(activeCell);
+
+                // Modify the table coords so that the width and height only for this col.
+                coords.x1 = cellRect.x1;
+                coords.x2 = cellRect.x2;
+            break;
+        }//end switch
+
+        this.removeHighlights();
+
+        if (element && !coords) {
+            coords = dfx.getBoundingRectangle(element);
+        }
+
+        var hElem = document.createElement('div');
+        dfx.addClass(hElem, 'ViperITP-highlight Viper-tableHighlight');
+
+        dfx.setStyle(hElem, 'width', (coords.x2 - coords.x1) + 'px');
+        dfx.setStyle(hElem, 'height', (coords.y2 - coords.y1) + 'px');
+        dfx.setStyle(hElem, 'top', coords.y1 + 'px');
+        dfx.setStyle(hElem, 'left', coords.x1 + 'px');
+
+        this.viper.addElement(hElem);
+        this._highlightElement = hElem;
+
+        dfx.addEvent(hElem, 'mousedown', function(e) {
+            dfx.preventDefault(e);
+            dfx.remove(hElem);
+            return false;
+        });
+
+        // Hide the highlight element when the mouse is over it. Show it again, when
+        // the mouse is over the table tools bar.
+        var self = this;
+        dfx.hover(hElem, function() {
+            dfx.hideElement(hElem);
+        }, function() {});
+
+        dfx.hover(self._toolbarWidget.element, function() {
+            dfx.showElement(hElem);
+        }, function() {});
+
+    },
+
+    __updateInnerContainer: function(cell, type, activeSubSection)
+    {
+        var callbackData = {
+            toolbar: this,
+            cell: cell,
+            type: type
+        };
+        this.viper.fireCallbacks('ViperTableEditorPlugin:updateToolbar', callbackData);
+
+    },
+
+    _createCellProperties: function()
+    {
+        var self               = this;
+        var settingsContent    = document.createElement('div');
+        var headingChanged     = false;
+        var settingsSubSection = this._toolbarWidget.makeSubSection('VTEP:cellProps:settingsSubSection', settingsContent);
+        var settingsButton     = this._tools.createButton('VTEP:cellProps:settings', '', 'Toggle Settings', 'Viper-tableSettings');
+        this._toolbarWidget.addButton(settingsButton);
+        this._toolbarWidget.setSubSectionButton('VTEP:cellProps:settings', 'VTEP:cellProps:settingsSubSection');
+        this._toolbarWidget.setSubSectionAction('VTEP:cellProps:settingsSubSection', function() {
+            var cell = self.getActiveCell();
+            if (headingChanged === true) {
+                var newCell = null;
+                if (self._tools.getItem('VTEP:cellProps:heading').getValue() === true) {
+                    newCell = self.convertToHeader(cell, 'cell');
+                } else {
+                    newCell = self.convertToCell(cell, 'cell');
+                }
+
+                self.updateToolbar(newCell, 'cell');
+            }
+        }, ['VTEP:cellProps:heading']);
+        var heading = this._tools.createCheckbox('VTEP:cellProps:heading', 'Heading', false, function() {
+            headingChanged = true;
+        });
+        settingsContent.appendChild(heading);
+
+        // Split buttons.
+        this._tools.createButton('VTEP:cellProps:splitVert', '', 'Split Vertically', 'Viper-splitVert', function() {
+            var cell = self.getActiveCell();
+            self._buttonClicked = true;
+            self.splitVertical(cell);
+            self.updateToolbar(cell, 'cell', 'merge');
+        });
+
+        this._tools.createButton('VTEP:cellProps:splitHoriz', '', 'Split Horizontally', 'Viper-splitHoriz', function() {
+            var cell = self.getActiveCell();
+            self._buttonClicked = true;
+            self.splitHorizontal(cell);
+            self.updateToolbar(cell, 'cell', 'merge');
+        });
+
+        var splitBtnGroup = this._tools.createButtonGroup('VTEP:cellProps:splitButtons');
+        this._tools.addButtonToGroup('VTEP:cellProps:splitVert', 'VTEP:cellProps:splitButtons');
+        this._tools.addButtonToGroup('VTEP:cellProps:splitHoriz', 'VTEP:cellProps:splitButtons');
+
+        // Merge buttons.
+        var mergeUp = this._tools.createButton('VTEP:cellProps:mergeUp', '', 'Merge Up', 'Viper-mergeUp', function() {
+            var cell = self.getActiveCell();
+            self._buttonClicked = true;
+            self.updateToolbar(self.mergeUp(cell), 'cell', 'merge');
+        });
+
+        var mergeDown = this._tools.createButton('VTEP:cellProps:mergeDown', '', 'Merge Down', 'Viper-mergeDown', function() {
+            var cell = self.getActiveCell();
+            self._buttonClicked = true;
+            self.updateToolbar(self.mergeDown(cell), 'cell', 'merge');
+        });
+
+        var mergeLeft = this._tools.createButton('VTEP:cellProps:mergeLeft', '', 'Merge Left', 'Viper-mergeLeft', function() {
+            var cell = self.getActiveCell();
+            self._buttonClicked = true;
+            self.updateToolbar(self.mergeLeft(cell), 'cell', 'merge');
+        });
+
+        var mergeRight = this._tools.createButton('VTEP:cellProps:mergeRight', '', 'Merge Right', 'Viper-mergeRight', function() {
+            var cell = self.getActiveCell();
+            self._buttonClicked = true;
+            self.updateToolbar(self.mergeRight(cell), 'cell', 'merge');
+        });
+
+        var mergeBtnGroup = this._tools.createButtonGroup('VTEP:cellProps:mergeButtons');
+        this._tools.addButtonToGroup('VTEP:cellProps:mergeUp', 'VTEP:cellProps:mergeButtons');
+        this._tools.addButtonToGroup('VTEP:cellProps:mergeDown', 'VTEP:cellProps:mergeButtons');
+        this._tools.addButtonToGroup('VTEP:cellProps:mergeLeft', 'VTEP:cellProps:mergeButtons');
+        this._tools.addButtonToGroup('VTEP:cellProps:mergeRight', 'VTEP:cellProps:mergeButtons');
+
+        var mergeSubWrapper = document.createElement('div');
+        mergeSubWrapper.appendChild(splitBtnGroup);
+        mergeSubWrapper.appendChild(mergeBtnGroup);
+
+        // Create the merge/split sub section toggle button.
+        var mergeSubSection = this._toolbarWidget.makeSubSection('VTEP:cellProps:mergeSplitSubSection', mergeSubWrapper);
+        var mergeSplitToggle = this._tools.createButton('VTEP:cellProps:mergeSplitSubSectionToggle', '', 'Toggle Merge/Split Options', 'Viper-splitMerge');
+        this._toolbarWidget.addButton(mergeSplitToggle);
+        this._toolbarWidget.setSubSectionButton('VTEP:cellProps:mergeSplitSubSectionToggle', 'VTEP:cellProps:mergeSplitSubSection');
+
+    },
+
+    _createColProperties: function()
+    {
+        var self = this;
+
+        var settingsContent = document.createElement('div');
+
+        // Create the settings sub section.
+        var headingChanged     = false;
+        var settingsSubSection = this._toolbarWidget.makeSubSection('VTEP:colProps:settingsSubSection', settingsContent);
+        var settingsButton     = this._tools.createButton('VTEP:colProps:settings', '', 'Toggle Settings', 'Viper-tableSettings');
+        this._toolbarWidget.addButton(settingsButton);
+        this._toolbarWidget.setSubSectionButton('VTEP:colProps:settings', 'VTEP:colProps:settingsSubSection');
+        this._toolbarWidget.setSubSectionAction('VTEP:colProps:settingsSubSection', function() {
+            var cell = self.getActiveCell();
+            // Set column width.
+            var width = self._tools.getItem('VTEP:colProps:width').getValue();
+            self.setColumnWidth(cell, width);
+
+            if (headingChanged === true) {
+                var headingChecked = self._tools.getItem('VTEP:colProps:heading').getValue();
+
+                // Switch between header and normal cell.
+                var newCell = null;
+                if (headingChecked !== true) {
+                    newCell = self.convertToCell(cell, 'col');
+                } else {
+                    newCell = self.convertToHeader(cell, 'col');
+                }
+
+                self.updateToolbar(newCell, 'col');
+            } else {
+                self.updateToolbar(self.getActiveCell(), 'col');
+            }
+        }, ['VTEP:colProps:width', 'VTEP:colProps:heading']);
+
+        // Width.
+        var width = this._tools.createTextbox('VTEP:colProps:width', 'Width');
+        settingsContent.appendChild(width);
+
+        var heading = this._tools.createCheckbox('VTEP:colProps:heading', 'Heading', false, function() {
+            headingChanged = true;
+        });
+        settingsContent.appendChild(heading);
+
+        this._tools.createButton('VTEP:colProps:insBefore', '', 'Insert Column Before', 'Viper-addLeft', function() {
+            var cell = self.getActiveCell();
+            self._buttonClicked = true;
+            self.insertColBefore(cell);
+            self.updateToolbar(cell, 'col');
+        });
+        this._tools.createButton('VTEP:colProps:insAfter', '', 'Insert Column After', 'Viper-addRight', function() {
+            var cell = self.getActiveCell();
+            self._buttonClicked = true;
+            self.insertColAfter(cell);
+            self.updateToolbar(cell, 'col');
+        });
+
+        var btnGroup = this._tools.createButtonGroup('VTEP:insColButtons');
+        this._tools.addButtonToGroup('VTEP:colProps:insBefore', 'VTEP:insColButtons');
+        this._tools.addButtonToGroup('VTEP:colProps:insAfter', 'VTEP:insColButtons');
+        this._toolbarWidget.addButton(btnGroup);
+
+        this._tools.createButton('VTEP:colProps:moveLeft', '', 'Move Left', 'Viper-mergeLeft', function() {
+            var cell = self.getActiveCell();
+            self._buttonClicked = true;
+            self.updateToolbar(self.moveColLeft(cell), 'col');
+        });
+        this._tools.createButton('VTEP:colProps:moveRight', '', 'Move Right', 'Viper-mergeRight', function() {
+            var cell = self.getActiveCell();
+            self._buttonClicked = true;
+            self.updateToolbar(self.moveColRight(cell), 'col');
+        });
+
+        btnGroup = this._tools.createButtonGroup('VTEP:moveColButtons');
+        this._tools.addButtonToGroup('VTEP:colProps:moveLeft', 'VTEP:moveColButtons');
+        this._tools.addButtonToGroup('VTEP:colProps:moveRight', 'VTEP:moveColButtons');
+        this._toolbarWidget.addButton(btnGroup);
+
+        var removeCol = this._tools.createButton('VTEP:colProps:remove', '', 'Remove Column', 'Viper-delete', function() {
+            var cell  = self.getActiveCell();
+            var table = self.getCellTable(cell);
+            self._buttonClicked = true;
+            self.removeCol(cell);
+            self.hideToolbar();
+            self.removeHighlights();
+
+            self._setCaretToStart(table);
+        });
+        this._toolbarWidget.addButton(removeCol);
+
+        dfx.hover(removeCol, function() {
+            dfx.addClass(self._highlightElement, 'Viper-deleteOverlay');
+        }, function() {
+            dfx.removeClass(self._highlightElement, 'Viper-deleteOverlay');
+        });
+
+    },
+
+    _createRowProperties: function()
+    {
+        var self               = this;
+        var settingsContent    = document.createElement('div');
+        var headingChanged     = false;
+        var settingsSubSection = this._toolbarWidget.makeSubSection('VTEP:rowProps:settingsSubSection', settingsContent);
+        var settingsButton     = this._tools.createButton('VTEP:rowProps:settings', '', 'Toggle Settings', 'Viper-tableSettings');
+        this._toolbarWidget.addButton(settingsButton);
+        this._toolbarWidget.setSubSectionButton('VTEP:rowProps:settings', 'VTEP:rowProps:settingsSubSection');
+        this._toolbarWidget.setSubSectionAction('VTEP:rowProps:settingsSubSection', function() {
+            if (headingChanged === true) {
+                var cell    = self.getActiveCell();
+                var newCell = null;
+                if (self._tools.getItem('VTEP:rowProps:heading').getValue() === true) {
+                    newCell = self.convertToHeader(cell, 'row');
+                } else {
+                    newCell = self.convertToCell(cell, 'row');
+                }
+
+                self.updateToolbar(newCell, 'row');
+            }
+        }, ['VTEP:rowProps:heading']);
+
+        var heading = this._tools.createCheckbox('VTEP:rowProps:heading', 'Heading', false, function() {
+            headingChanged = true;
+        });
+        settingsContent.appendChild(heading);
+
+        this._tools.createButton('VTEP:rowProps:insBefore', '', 'Insert Row Before', 'Viper-addAbove', function() {
+            var cell = self.getActiveCell();
+            self._buttonClicked = true;
+            self.insertRowBefore(cell);
+            self.updateToolbar(cell, 'row');
+        });
+        this._tools.createButton('VTEP:rowProps:insAfter', '', 'Insert Row After', 'Viper-addBelow', function() {
+            var cell = self.getActiveCell();
+            self.insertRowAfter(cell);
+            self.updateToolbar(cell, 'row');
+        });
+        var btnGroup = this._tools.createButtonGroup('VTEP:insRowButtons');
+        this._tools.addButtonToGroup('VTEP:rowProps:insBefore', 'VTEP:insRowButtons');
+        this._tools.addButtonToGroup('VTEP:rowProps:insAfter', 'VTEP:insRowButtons');
+        this._toolbarWidget.addButton(btnGroup);
+
+        this._tools.createButton('VTEP:rowProps:moveUp', '', 'Move Up', 'Viper-mergeUp', function() {
+            var cell = self.getActiveCell();
+            self._buttonClicked = true;
+            self.updateToolbar(self.moveRowUp(cell), 'row');
+        });
+        this._tools.createButton('VTEP:rowProps:moveDown', '', 'Move Down', 'Viper-mergeDown', function() {
+            var cell = self.getActiveCell();
+            self._buttonClicked = true;
+            self.updateToolbar(self.moveRowDown(cell), 'row');
+        });
+        btnGroup = this._tools.createButtonGroup('VTEP:moveRowButtons');
+        this._tools.addButtonToGroup('VTEP:rowProps:moveUp', 'VTEP:moveRowButtons');
+        this._tools.addButtonToGroup('VTEP:rowProps:moveDown', 'VTEP:moveRowButtons');
+        this._toolbarWidget.addButton(btnGroup);
+
+        var removeRow = this._tools.createButton('VTEP:rowProps:remove', '', 'Remove Row', 'Viper-delete', function() {
+            var cell  = self.getActiveCell();
+            var table = self.getCellTable(cell);
+            self._buttonClicked = true;
+            self.removeRow(cell);
+            self.hideToolbar();
+            self.removeHighlights();
+
+            self._setCaretToStart(table);
+        });
+        this._toolbarWidget.addButton(removeRow);
+
+        dfx.hover(removeRow, function() {
+            dfx.addClass(self._highlightElement, 'Viper-deleteOverlay');
+        }, function() {
+            dfx.removeClass(self._highlightElement, 'Viper-deleteOverlay');
+        });
+
+    },
+
+    _createTableProperties: function(cell)
+    {
+        var self = this;
+
+        var settingsContent = document.createElement('div');
+
+        // Create the settings sub section.
+        var settingsSubSection = this._toolbarWidget.makeSubSection('VTEP:tableProps:settingsSubSection', settingsContent);
+        var settingsButton     = this._tools.createButton('VTEP:tableProps:settings', '', 'Toggle Settings', 'Viper-tableSettings');
+        this._toolbarWidget.addButton(settingsButton);
+        this._toolbarWidget.setSubSectionButton('VTEP:tableProps:settings', 'VTEP:tableProps:settingsSubSection');
+        this._toolbarWidget.setSubSectionAction('VTEP:tableProps:settingsSubSection', function() {
+            var table = self.getCellTable(self.getActiveCell());
+            self.setTableWidth(table, self._tools.getItem('VTEP:tableProps:width').getValue());
+            self.viper.setAttribute(table, 'summary', self._tools.getItem('VTEP:tableProps:summary').getValue());
+
+            var captionCheckbox = self._tools.getItem('VTEP:tableProps:caption').getValue();
+            if (captionCheckbox === true) {
+                self.createCaption(table);
+            } else {
+                self.removeCaption(table);
+            }
+
+            self.updateToolbar(self.getActiveCell(), 'table');
+        }, ['VTEP:tableProps:width', 'VTEP:tableProps:summary', 'VTEP:tableProps:caption']);
+
+        // Width.
+        var width = this._tools.createTextbox('VTEP:tableProps:width', 'Width', '', null, false, false, '', null, '4.5em');
+        settingsContent.appendChild(width);
+
+        // Summary.
+        var tableSummary = this._tools.createTextarea('VTEP:tableProps:summary', 'Summary', '', false, '', null, '4.5em');
+        settingsContent.appendChild(tableSummary);
+
+        // Caption.
+        var caption = this._tools.createCheckbox('VTEP:tableProps:caption', 'Use Caption');
+        settingsContent.appendChild(caption);
+
+        var remove = this._tools.createButton('VTEP:tableProps:remove', '', 'Remove Table', 'Viper-delete', function() {
+            var table = self.getCellTable(self.getActiveCell());
+            self._buttonClicked = true;
+            self.removeTable(table);
+            self.hideToolbar();
+            self.removeHighlights();
+        });
+        this._toolbarWidget.addButton(remove);
+
+        dfx.hover(remove, function() {
+            dfx.addClass(self._highlightElement, 'Viper-deleteOverlay');
+        }, function() {
+            dfx.removeClass(self._highlightElement, 'Viper-deleteOverlay');
+        });
+
+    },
+
+    setActiveCell: function(cell)
+    {
+        this.activeCell = cell;
+
+    },
+
+    getActiveCell: function(cell)
+    {
+        return this.activeCell;
+
+    },
+
+    createTableHeader: function(table)
+    {
+        if (dfx.getTag('thead', table).length > 0) {
+            return null;
+        }
+
+        var header = document.createElement('thead');
+        var tfoot  = dfx.getTag('tfoot', table);
+        if (tfoot.length === 0) {
+            var tbody = dfx.getTag('tbody', table);
+            if (tbody.length === 0) {
+                table.appendChild(header);
+            } else {
+                dfx.insertBefore(tbody[0], header);
+            }
+        } else {
+            dfx.insertBefore(tfoot[0], header);
+        }
+
+        return header;
+
+    },
+
+    getTableHeader: function(table)
+    {
+        var header = dfx.getTag('thead', table);
+        if (header.length === 0) {
+            return null;
+        }
+
+        return header[0];
+
+    },
+
+    createTableBody: function(table)
+    {
+        if (dfx.getTag('tbody', table).length > 0) {
+            return null;
+        }
+
+        var tbody = document.createElement('tbody');
+        table.appendChild(tbody);
+
+        return tbody;
+
+    },
+
+    getTableBody: function(table)
+    {
+        var tbody = dfx.getTag('tbody', table);
+        if (tbody.length === 0) {
+            return null;
+        }
+
+        return tbody[0];
+
+    },
+
+    createCaption: function(table)
+    {
+        var caption  = null;
+        var captions = dfx.getTag('caption', table);
+        if (captions.length > 0) {
+            caption = captions[0];
+        } else {
+            caption = document.createElement('caption');
+            dfx.setHtml(caption, '&nbsp;');
+
+            dfx.insertBefore(table.firstChild, caption);
+        }
+
+        var range      = this.viper.getCurrentRange();
+        var selectNode = range._getFirstSelectableChild(caption);
+        range.setStart(selectNode, 0);
+        range.collapse(true);
+        ViperSelection.addRange(range);
+        this.viper.fireSelectionChanged();
+
+        this.removeHighlights();
+        this.hideCellToolsIcon();
+
+    },
+
+    removeCaption: function(table)
+    {
+        var caption  = null;
+        var captions = dfx.getTag('caption', table);
+        if (captions.length > 0) {
+            dfx.remove(captions);
+        }
+
+    },
+
+    
+    canMergeLeft: function(cell)
+    {
+        var cells   = this._getCellsExpanded();
+        var cellPos = this.getCellPosition(cell);
+        var rowspan = this.getRowspan(cell);
+
+        if (cellPos.col === 0) {
+            // First column so cannot merge left.
+            return false;
+        }
+
+        var processedCells = [];
+        var rowspans       = 0;
+        var prevColspan    = null;
+        for (var i = 0; i < rowspan; i++) {
+            // Check each previous cell, make sure:
+            // - First one start from current cell's row position
+            // - They all have the same colspan
+            // - Total rowspan must be the same as current cell's rowspan.
+            var prevCell = cells[(cellPos.row + i)][(cellPos.col - 1)];
+            if (processedCells.inArray(prevCell) === true) {
+                continue;
+            }
+
+            processedCells.push(prevCell);
+
+            var pos = this.getCellPosition(prevCell);
+            if (i === 0 && pos.row !== cellPos.row) {
+                // First previous cell must be at the same level as the current cell.
+                return false;
+            }
+
+            rowspans += this.getRowspan(prevCell);
+
+            if (rowspans > rowspan) {
+                // Total rowspan must be the same as current cell's rowspan.
+                return false;
+            } else if (prevColspan !== null && prevColspan !== this.getColspan(prevCell)) {
+                // They all have the same colspan.
+                return false;
+            }
+
+            prevColspan = this.getColspan(prevCell);
+        }//end for
+
+        if (rowspans === rowspan) {
+            // Total rowspan must be the same as current cell's rowspan.
+            return processedCells;
+        }
+
+        return false;
+
+    },
+
+    canMergeRight: function(cell)
+    {
+        var cells   = this._getCellsExpanded();
+        var cellPos = this.getCellPosition(cell);
+        var rowspan = this.getRowspan(cell);
+        var colspan = this.getColspan(cell);
+
+        if (cell === (cells[cellPos.row][(cells[cellPos.row].length - 1)])) {
+            // Last column so cannot merge right.
+            return false;
+        }
+
+        var processedCells = [];
+        var rowspans       = 0;
+        var prevColspan    = null;
+        for (var i = 0; i < rowspan; i++) {
+            // Check each next cell, make sure:
+            // - First one start from current cell's row position
+            // - They all have the same colspan
+            // - Total rowspan must be the same as current cell's rowspan.
+            var nextCell = cells[(cellPos.row + i)][(cellPos.col + colspan)];
+            if (processedCells.inArray(nextCell) === true) {
+                continue;
+            }
+
+            processedCells.push(nextCell);
+
+            var pos = this.getCellPosition(nextCell);
+            if (i === 0 && pos.row !== cellPos.row) {
+                // First previous cell must be at the same level as the current cell.
+                return false;
+            }
+
+            rowspans += this.getRowspan(nextCell);
+
+            if (rowspans > rowspan) {
+                // Total rowspan must be the same as current cell's rowspan.
+                return false;
+            } else if (prevColspan !== null && prevColspan !== this.getColspan(nextCell)) {
+                // They all have the same colspan.
+                return false;
+            }
+
+            prevColspan = this.getColspan(nextCell);
+        }//end for
+
+        if (rowspans === rowspan) {
+            // Total rowspan must be the same as current cell's rowspan.
+            return processedCells;
+        }
+
+        return false;
+
+    },
+
+    canMergeDown: function(cell)
+    {
+        var rowspan = this.getRowspan(cell);
+        var colNum  = this.getColNum(cell);
+        var row     = cell.parentNode;
+        var colspan = this.getColspan(cell);
+
+        while (rowspan >= 1) {
+            row = this.getNextRow(row, true);
+            rowspan--;
+        }
+
+        if (row) {
+            var cspan          = 0;
+            var processedCells = [];
+            var prevRowspan    = null;
+            for (var i = 0; i < colspan; i++) {
+                var newCell = this.getCell(row, (colNum + i));
+                if (!newCell) {
+                    return false;
+                }
+
+                if (processedCells.inArray(newCell) === true) {
+                    continue;
+                }
+
+                processedCells.push(newCell);
+
+                var newCellRowspan = this.getRowspan(newCell);
+                if (prevRowspan !== null && prevRowspan !== newCellRowspan) {
+                    return false
+                }
+
+                prevRowspan = newCellRowspan;
+
+                cspan += this.getColspan(newCell);
+                if (colspan < cspan) {
+                    return false;
+                }
+            }//end for
+
+            return processedCells;
+        }//end if
+
+        return false;
+
+    },
+
+    canMergeUp: function(cell)
+    {
+        var rowspan = this.getRowspan(cell);
+        var colNum  = this.getColNum(cell);
+        var row     = cell.parentNode;
+        var newCell = null;
+        var colspan = this.getColspan(cell);
+
+        while (row && !newCell) {
+            row = this.getPreviousRow(row, true);
+            if (!row) {
+                return false;
+            }
+
+            newCell = this.getCell(row, colNum);
+        }
+
+        if (row) {
+            var cspan          = 0;
+            var processedCells = [];
+            var prevRowspan    = null;
+            for (var i = 0; i < colspan; i++) {
+                var newCell = this.getCell(row, (colNum + i));
+                if (!newCell) {
+                    return false;
+                }
+
+                if (processedCells.inArray(newCell) === true) {
+                    continue;
+                }
+
+                processedCells.push(newCell);
+
+                var newCellRowspan = this.getRowspan(newCell);
+                if (prevRowspan !== null && prevRowspan !== newCellRowspan) {
+                    return false
+                }
+
+                prevRowspan = newCellRowspan;
+
+                cspan += this.getColspan(newCell);
+                if (colspan < cspan) {
+                    return false;
+                }
+            }//end for
+
+            return processedCells;
+        }//end if
+
+        return false;
+
+    },
+
+    mergeLeft: function(cell)
+    {
+        var mergeCells = this.canMergeLeft(cell);
+        if (!mergeCells || mergeCells.length === 0) {
+            return;
+        }
+
+        var newColspan = (this.getColspan(cell) + this.getColspan(mergeCells[0]));
+        this.setColspan(cell, newColspan);
+
+        for (var i = 0; i < mergeCells.length; i++) {
+            this._moveCellContent(mergeCells[i], cell);
+            dfx.remove(mergeCells[i]);
+        }
+
+        var table = this.getCellTable(cell);
+        if (dfx.getTag('tr', table).length === 1) {
+            this.setColspan(cell, 1);
+        }
+
+        this.tableUpdated();
+
+        return cell;
+
+    },
+
+    mergeRight: function(cell)
+    {
+        var mergeCells = this.canMergeRight(cell);
+        if (!mergeCells || mergeCells.length === 0) {
+            return;
+        }
+
+        var newColspan = (this.getColspan(cell) + this.getColspan(mergeCells[0]));
+        this.setColspan(cell, newColspan);
+
+        for (var i = 0; i < mergeCells.length; i++) {
+            this._moveCellContent(mergeCells[i], cell);
+            dfx.remove(mergeCells[i]);
+        }
+
+        var table = this.getCellTable(cell);
+        if (dfx.getTag('tr', table).length === 1) {
+            this.setColspan(cell, 1);
+        }
+
+        var cells = dfx.getTag('td,th', table);
+        if (cells.length === 1) {
+            this.setColspan(cells[0], 1);
+            this.setRowspan(cells[0], 1);
+
+            // Remove empty rows.
+            var rows = dfx.getTag('tr', table);
+            for (var i = 0; i < rows.length; i++) {
+                if (dfx.getTag('td,th', rows[i]).length === 0) {
+                    dfx.remove(rows[i]);
+                }
+            }
+        }
+
+        this.tableUpdated();
+
+        return cell;
+
+    },
+
+    mergeDown: function(cell)
+    {
+        var mergeCells = this.canMergeDown(cell);
+        if (mergeCells.length === 0) {
+            return false;
+        }
+
+        this.setActiveCell(cell);
+
+        var parent = mergeCells[0].parentNode;
+
+        for (var i = 0; i < mergeCells.length; i++) {
+            this._moveCellContent(mergeCells[i], cell);
+            dfx.remove(mergeCells[i]);
+        }
+
+        var rowspan = this.getRowspan(cell) + this.getRowspan(mergeCells[0]);
+        this.setRowspan(cell, rowspan);
+
+        var cells    = this._getCellsExpanded(true);
+        var rowCells = this._getRowCells(parent);
+        if (rowCells.length === 0) {
+            // Find the row index.
+            var rows     = dfx.getTag('tr', this.getCellTable(cell));
+            var rowIndex = -1;
+            for (var i = 0; i < rows.length; i++) {
+                if (rows[i] === parent) {
+                    rowIndex = i;
+                    break;
+                }
+            }
+
+            if (rowIndex >= 0) {
+                var processedCells = [];
+                cells = cells[rowIndex];
+                for (var i = 0; i < cells.length; i++) {
+                    if (processedCells.inArray(cells[i]) === true) {
+                        continue;
+                    }
+
+                    processedCells.push(cells[i]);
+
+                    var rowspan = (this.getRowspan(cells[i]) - 1);
+                    this.setRowspan(cells[i], rowspan);
+                }
+            }
+
+            dfx.remove(parent);
+        }//end if
+
+        var table = this.getCellTable(cell);
+        if (dfx.getTag('tr', table).length === 1) {
+            this.setColspan(cell, 1);
+        }
+
+        this.tableUpdated();
+
+        return cell;
+
+    },
+
+    mergeUp: function(cell)
+    {
+        var mergeCells = this.canMergeUp(cell);
+        if (mergeCells.length === 0) {
+            return false;
+        }
+
+        this.setActiveCell(cell);
+
+        var cellPos = this.getCellPosition(cell);
+
+        var parent    = cell.parentNode;
+        var firstCell = mergeCells[0];
+
+        for (var i = 1; i < mergeCells.length; i++) {
+            this.setColspan(firstCell, this.getColspan(firstCell) + this.getColspan(mergeCells[i]));
+            this._moveCellContent(mergeCells[i], firstCell);
+            dfx.remove(mergeCells[i]);
+        }
+
+        this._moveCellContent(cell, firstCell);
+
+        dfx.remove(cell);
+
+        var rowspan = this.getRowspan(firstCell) + this.getRowspan(cell);
+        this.setRowspan(firstCell, rowspan);
+
+        this.setActiveCell(firstCell);
+
+        // Check if we need to remove the cell's parent row if empty.
+        var cells    = this._getCellsExpanded(true);
+        var rowCells = cells[cellPos.row];
+        var prevPos  = this.getCellPosition(firstCell).row;
+        var remove   = true;
+
+        for (var i = 0; i < rowCells.length; i++) {
+            var pos = this.getCellPosition(rowCells[i]);
+            if (pos.row !== prevPos || rowspan !== this.getRowspan(rowCells[i])) {
+                remove = false;
+                break;
+            }
+        }
+
+        if (remove === true) {
+            // Remove row.
+            dfx.remove(parent);
+
+            // Reduce rowspan.
+            var processedCells = [];
+            for (var i = 0; i < rowCells.length; i++) {
+                if (processedCells.inArray(rowCells[i]) === true) {
+                    continue;
+                }
+
+                processedCells.push(rowCells[i]);
+
+                var newRowspan = (this.getRowspan(rowCells[i]) - 1);
+                this.setRowspan(rowCells[i], newRowspan);
+            }
+        }
+
+        var table = this.getCellTable(firstCell);
+        if (dfx.getTag('tr', table).length === 1) {
+            this.setColspan(firstCell, 1);
+        }
+
+        this.tableUpdated();
+
+        return firstCell;
+
+    },
+
+    
+    canMoveColLeft: function(cell)
+    {
+         var colNum = this.getColNum(cell);
+         if (colNum === 0) {
+             return false;
+         }
+
+         var pos     = this.getCellPosition(cell);
+         var cells   = this._getCellsExpanded(true);
+         var colspan = this.getColspan(cell);
+
+         for (var i = 0; i < cells.length; i++) {
+             var currColspan = this.getColspan(cells[i][pos.col]);
+             var prevColspan = this.getColspan(cells[i][(pos.col - 1)]);
+             var currRowspan = this.getRowspan(cells[i][pos.col]);
+             var prevRowspan = this.getRowspan(cells[i][(pos.col - 1)]);
+
+             if (colspan !== currColspan || currColspan !== prevColspan) {
+                 return false;
+             } else if (currRowspan !== prevRowspan) {
+                 return false;
+             }
+         }
+
+         return true;
+
+    },
+
+    canMoveColRight: function(cell)
+    {
+         var pos     = this.getCellPosition(cell);
+         var cells   = this._getCellsExpanded(true);
+         var colspan = this.getColspan(cell);
+
+         if (!cells[pos.row][(pos.col + 1)]) {
+             return false;
+         }
+
+         for (var i = 0; i < cells.length; i++) {
+             var currColspan = this.getColspan(cells[i][pos.col]);
+             var nextColspan = this.getColspan(cells[i][(pos.col + 1)]);
+             var currRowspan = this.getRowspan(cells[i][pos.col]);
+             var nextRowspan = this.getRowspan(cells[i][(pos.col + 1)]);
+
+             if (colspan !== currColspan || currColspan !== nextColspan) {
+                 return false;
+             } else if (currRowspan !== nextRowspan) {
+                 return false;
+             }
+         }
+
+         return true;
+
+    },
+
+    canMoveRowUp: function(cell)
+    {
+        var pos = this.getCellPosition(cell);
+
+        if (pos.row === 0) {
+            return false;
+        }
+
+        var rowspan = this.getRowspan(cell);
+        var cellRow = this.getCellRow(cell);
+        var prevRow = this.getPreviousRow(cellRow);
+
+        if (!prevRow) {
+            return false;
+        }
+
+        var rowCellsCount    = this._getRowCellCount(cellRow);
+        var prevRowCellCount = this._getRowCellCount(prevRow);
+
+        if (rowCellsCount !== prevRowCellCount) {
+            return false;
+        }
+
+        // Also need to make sure the current cell has higher or equal rowspan than
+        // the rest of the column on its row and all cells must start from the current
+        // row (e.g. a cell cannot be from a previous row with rowspan).
+        var cells = this._getCellsExpanded();
+
+        for (var i = 0; i < cells[pos.row].length; i++) {
+            var rowCell = cells[pos.row][i];
+            if (rowCell === cell) {
+                continue;
+            }
+
+            var cellPos = this.getCellPosition(rowCell);
+            if (cellPos.row !== pos.row || rowspan < this.getRowspan(rowCell)) {
+                return false;
+            }
+        }
+
+        return true;
+
+    },
+
+    canMoveRowDown: function(cell)
+    {
+        var pos = this.getCellPosition(cell);
+
+        var cellRow = this.getCellRow(cell);
+        var rowspan = this.getRowspan(cell);
+
+        var nextRow = cellRow;
+        for (var i = 0; i < rowspan; i++) {
+            nextRow = this.getNextRow(nextRow);
+            if (!nextRow) {
+                return false;
+            }
+        }
+
+        var rowCellsCount    = this._getRowCellCount(cellRow);
+        var nextRowCellCount = this._getRowCellCount(nextRow);
+
+        if (rowCellsCount !== nextRowCellCount) {
+            return false;
+        }
+
+        // Also need to make sure the current cell has higher or equal rowspan than
+        // the rest of the column on its row and all cells must start from the current
+        // row (e.g. a cell cannot be from a previous row with rowspan).
+        var cells = this._getCellsExpanded();
+
+        for (var i = 0; i < cells[pos.row].length; i++) {
+            var rowCell = cells[pos.row][i];
+            if (rowCell === cell) {
+                continue;
+            }
+
+            var cellPos = this.getCellPosition(rowCell);
+            if (cellPos.row !== pos.row || rowspan < this.getRowspan(rowCell)) {
+                return false;
+            }
+        }
+
+        return true;
+
+    },
+
+    moveColLeft: function(cell)
+    {
+        if (this.canMoveColLeft(cell) === false) {
+            return false;
+        }
+
+        var pos   = this.getCellPosition(cell);
+        var cells = this._getCellsExpanded(true);
+
+        if (!cells[pos.row][(pos.col - 1)]) {
+            return false;
+        }
+
+        for (var i = 0; i < cells.length; i++) {
+            dfx.insertBefore(cells[i][(pos.col - 1)], cells[i][pos.col]);
+        }
+
+        this.tableUpdated();
+
+        return cell;
+
+    },
+
+    moveColRight: function(cell)
+    {
+        if (this.canMoveColRight(cell) === false) {
+            return false;
+        }
+
+        var pos   = this.getCellPosition(cell);
+        var cells = this._getCellsExpanded(true);
+
+        if (!cells[pos.row][(pos.col + 1)]) {
+            return false;
+        }
+
+        for (var i = 0; i < cells.length; i++) {
+            dfx.insertAfter(cells[i][(pos.col + 1)], cells[i][pos.col]);
+        }
+
+        this.tableUpdated();
+
+        return cell;
+
+    },
+
+    moveRowUp: function(cell)
+    {
+        if (this.canMoveRowUp(cell) === false) {
+            return false;
+        }
+
+        var cellRow = this.getCellRow(cell);
+        var prevRow = this.getPreviousRow(cellRow);
+        var rowspan = this.getRowspan(cell);
+
+        for (var i = 0; i < rowspan; i++) {
+            cellRow = this.getNextRow(prevRow);
+            dfx.insertBefore(prevRow, cellRow);
+        }
+
+        this.tableUpdated();
+
+        return cell;
+
+    },
+
+    moveRowDown: function(cell)
+    {
+        if (this.canMoveRowDown(cell) === false) {
+            return false;
+        }
+
+        var rowspan = this.getRowspan(cell);
+        var cellRow = this.getCellRow(cell);
+
+        var nextRow = cellRow;
+        for (var i = 0; i < rowspan; i++) {
+            nextRow = this.getNextRow(nextRow);
+            if (!nextRow) {
+                return false;
+            }
+        }
+
+        var startRow = nextRow;
+
+        // If the afterRow contains cells with rowspans then we need to move the
+        // current row after the rowspans.
+        var cells      = this._getRowCells(startRow);
+        var maxRowspan = 1;
+        for (var i = 0; i < cells.length; i++) {
+            var cellRowspan = this.getRowspan(cells[i]);
+            if (maxRowspan < cellRowspan) {
+                maxRowspan = cellRowspan;
+            }
+        }
+
+        if (maxRowspan > 1) {
+            for (var i = 0; i < (maxRowspan - 1); i++) {
+                nextRow = this.getNextRow(nextRow);
+            }
+
+            afterRow = nextRow
+        } else {
+            afterRow = startRow;
+        }
+
+        for (var i = 0; i < rowspan; i++) {
+            var prevRow = this.getPreviousRow(startRow);
+            if (!prevRow) {
+                return false;
+            }
+
+            dfx.insertAfter(afterRow, prevRow);
+        }
+
+        this.tableUpdated();
+
+        return cell;
+
+    },
+
+    getRowspan: function(cell)
+    {
+        return parseInt(cell.getAttribute('rowspan') || 1);
+
+    },
+
+    setRowspan: function(cell, rowspan)
+    {
+        if (rowspan > 1) {
+            cell.setAttribute('rowspan', rowspan);
+        } else {
+            dfx.removeAttr(cell, 'rowspan');
+        }
+
+    },
+
+    getColspan: function(cell)
+    {
+        return parseInt(cell.getAttribute('colspan') || 1);
+
+    },
+
+    setColspan: function(cell, colspan)
+    {
+        if (colspan > 1) {
+            cell.setAttribute('colspan', colspan);
+        } else {
+            dfx.removeAttr(cell, 'colspan');
+        }
+
+    },
+
+    
+    convertToHeader: function(cell, type, actualType)
+    {
+        var elem = cell;
+        type     = type || 'cell';
+
+        if (type === 'cell' && dfx.isTag(cell, 'td') === false) {
+            return elem;
+        }
+
+        var activeCell = this.getActiveCell();
+        if (type === 'cell') {
+            elem = document.createElement('th');
+            while (cell.firstChild) {
+                elem.appendChild(cell.firstChild);
+            }
+
+            for (var i = 0; i < cell.attributes.length; i++) {
+                if (cell.attributes[i].nodeName.toLowerCase() === 'rowspan') {
+                    this.setRowspan(elem, cell.attributes[i].nodeValue);
+                } else if (cell.attributes[i].nodeName.toLowerCase() === 'colspan') {
+                    this.setColspan(elem, cell.attributes[i].nodeValue);
+                } else {
+                    elem.setAttribute(cell.attributes[i].nodeName, cell.attributes[i].nodeValue);
+                }
+            }
+
+            if (cell === activeCell) {
+                this.setActiveCell(elem);
+            }
+
+            dfx.insertBefore(cell, elem);
+            dfx.remove(cell);
+
+            if (!actualType || actualType === 'cell') {
+                this.tableUpdated();
+            }
+        } else if (type === 'col') {
+            // Get all column cells.
+            var cells   = this._getCellsExpanded();
+            var cellPos = this.getCellPosition(cell);
+
+            for (var i = 0; i < cells.length; i++) {
+                var colCell    = cells[i][cellPos.col];
+                if (!colCell.parentNode || dfx.isTag(colCell, 'th') === true) {
+                    continue;
+                }
+
+                var colCellPos = this.getCellPosition(colCell);
+                if (colCellPos.col === cellPos.col) {
+                    var newElement = this.convertToHeader(colCell, 'cell', 'col');
+                    if (cell === colCell) {
+                        elem = newElement;
+                    }
+                }
+            }
+
+            this.tableUpdated();
+        } else if (type === 'row') {
+            var cellPos = this.getCellPosition(cell);
+            var row     = cell.parentNode;
+            var cells   = this._getRowCells(row);
+
+            // Check if row needs to move in to a THEAD tag.
+            if (dfx.isTag(row.parentNode, 'thead') === false
+                && !this.getPreviousRow(row, true)
+            ) {
+                var moveToThead = true;
+                var prevRowspan = null;
+                for (var i = 0; i < cells.length; i++) {
+                    var rowspan = this.getRowspan(cells[i]);
+                    if (prevRowspan !== null && rowspan !== prevRowspan) {
+                        moveToThead = false;
+                        break;
+                    }
+
+                    prevRowspan = rowspan;
+                }
+
+                if (moveToThead === true) {
+                    var table = this.getRowTable(row);
+                    // The row is not in thead and its the first row in tbody or tfoot.
+                    var thead = this.getTableHeader(table);
+                    if (!thead) {
+                        thead = this.createTableHeader(table);
+                    }
+
+                    thead.appendChild(row);
+                }
+            }
+
+            for (var i = 0; i < cells.length; i++) {
+                var rowCell    = cells[i];
+                if (!rowCell.parentNode || dfx.isTag(rowCell, 'th') === true) {
+                    continue;
+                }
+
+                var newElement = this.convertToHeader(rowCell, 'cell', 'row');
+                if (cell === rowCell) {
+                    elem = newElement;
+                }
+            }
+
+            this.tableUpdated();
+        }//end if
+
+        return elem;
+
+    },
+
+    
+    convertToCell: function(cell, type, actualType)
+    {
+        var elem = cell;
+        type     = type || 'cell';
+
+        if (type === 'cell' && dfx.isTag(cell, 'th') === false) {
+            return elem;
+        }
+
+        var activeCell = this.getActiveCell();
+        if (type === 'cell') {
+            elem = document.createElement('td');
+            while (cell.firstChild) {
+                elem.appendChild(cell.firstChild);
+            }
+
+            for (var i = 0; i < cell.attributes.length; i++) {
+                if (cell.attributes[i].nodeName.toLowerCase() === 'rowspan') {
+                    this.setRowspan(elem, cell.attributes[i].nodeValue);
+                } else if (cell.attributes[i].nodeName.toLowerCase() === 'colspan') {
+                    this.setColspan(elem, cell.attributes[i].nodeValue);
+                } else {
+                    elem.setAttribute(cell.attributes[i].nodeName, cell.attributes[i].nodeValue);
+                }
+            }
+
+            if (cell === activeCell) {
+                this.setActiveCell(elem);
+            }
+
+            dfx.insertBefore(cell, elem);
+
+            var tableid = this.getCellTable(elem).id;
+            var cellid  = elem.id;
+            if (cellid && cellid.indexOf(tableid) === 0) {
+                cellid = cellid.replace(tableid, '');
+                if (cellid.match(/r\d+c\d+/)) {
+                    elem.removeAttribute('id');
+                }
+            }
+
+            dfx.remove(cell);
+
+            if (!actualType || actualType === 'cell') {
+                this.tableUpdated();
+            }
+        } else if (type === 'col') {
+            var cells   = this._getCellsExpanded();
+            var cellPos = this.getCellPosition(cell);
+
+            for (var i = 0; i < cells.length; i++) {
+                var colCell    = cells[i][cellPos.col];
+                if (!colCell.parentNode || dfx.isTag(colCell, 'td') === true) {
+                    continue;
+                }
+
+                var colCellPos = this.getCellPosition(colCell);
+                if (colCellPos.col === cellPos.col) {
+                    var newElement = this.convertToCell(colCell, 'cell', 'col');
+                    if (cell === colCell) {
+                        elem = newElement;
+                    }
+                }
+            }
+
+            this.tableUpdated();
+        } else if (type === 'row') {
+            var cellPos = this.getCellPosition(cell);
+            var cells   = this._getRowCells(cell.parentNode);
+            var row     = cell.parentNode;
+
+            // Check if row needs to move in to a TBODY tag.
+            if (dfx.isTag(row.parentNode, 'thead') === true
+                && !this.getNextRow(row, true)
+            ) {
+                var table = this.getRowTable(row);
+
+                // Its the last row in thead, move it down to tbody.
+                var tbody = this.getTableBody(table);
+                if (!tbody) {
+                    tbody = this.createTableBody(table);
+                    tbody.appendChild(row);
+                } else {
+                    var rows = dfx.getTag('tr', tbody);
+                    if (rows.length === 0) {
+                        tbody.appendChild(row);
+                    } else {
+                        dfx.insertBefore(rows[0], row);
+                    }
+                }
+            }
+
+            for (var i = 0; i < cells.length; i++) {
+                var rowCell    = cells[i];
+                if (!rowCell.parentNode || dfx.isTag(rowCell, 'td') === true) {
+                    continue;
+                }
+
+                var newElement = this.convertToCell(rowCell, 'cell', 'row');
+                if (cell === rowCell) {
+                    elem = newElement;
+                }
+            }
+
+            this.tableUpdated();
+        }//end if
+
+        return elem;
+
+    },
+
+    setColumnWidth: function (cell, width)
+    {
+        if (parseInt(width) === width) {
+            width = width + 'px';
+        }
+
+        var cells   = this._getCellsExpanded();
+        var cellPos = this.getCellPosition(cell);
+
+        // Find the first cell that belongs to the same column.
+        for (var i = 0; i < cells.length; i++) {
+            var colCell    = cells[i][cellPos.col];
+            var colCellPos = this.getCellPosition(colCell);
+            if (colCellPos.col === cellPos.col) {
+                dfx.setStyle(colCell, 'width', width);
+                return;
+            }
+        }
+
+    },
+
+    getColumnWidth: function(cell)
+    {
+        var cells   = this._getCellsExpanded();
+        var cellPos = this.getCellPosition(cell);
+
+        // Find the first cell that belongs to the same column.
+        for (var i = 0; i < cells.length; i++) {
+            var colCell    = cells[i][cellPos.col];
+            var colCellPos = this.getCellPosition(colCell);
+            if (colCellPos.col === cellPos.col) {
+                return colCell.style.width || '';
+            }
+        }
+
+        return '';
+
+    },
+
+    setTableWidth: function(table, width)
+    {
+        if (parseInt(width) === width) {
+            width = width + 'px';
+        }
+
+        dfx.setStyle(table, 'width', width);
+
+        if (table.getAttribute('style') === '') {
+            table.removeAttribute('style');
+        }
+
+        this.tableUpdated(table);
+
+    },
+
+    getTableWidth: function(table)
+    {
+        var width = table.style.width || '';
+        return width;
+
+    },
+
+    
+    splitVertical: function(cell)
+    {
+        if (!cell || !cell.getAttribute('colspan')) {
+            return;
+        }
+
+        var tagName = dfx.getTagName(cell);
+        var elem    = document.createElement(tagName);
+        this._initCell(elem);
+
+        var colspan = (parseInt(cell.getAttribute('colspan')) - 1);
+        this.setColspan(cell, colspan);
+
+        var rowspan = cell.getAttribute('rowspan');
+        if (rowspan > 1) {
+            this.setRowspan(elem, rowspan);
+        }
+
+        dfx.insertAfter(cell, elem);
+
+        this.tableUpdated();
+
+        return elem;
+
+    },
+
+    
+    splitHorizontal: function(cell)
+    {
+        var rowspan = this.getRowspan(cell);
+        if (!cell || rowspan <= 1) {
+            return false;
+        }
+
+        var rows    = dfx.getTag('tr', this.getCellTable(cell));
+        var cellPos = this.getCellPosition(cell);
+        var cells   = this._getCellsExpanded();
+
+        // Decrease the rowspan of this cell by 1.
+        this.setRowspan(cell, (rowspan - 1));
+
+        var colspan = this.getColspan(cell);
+        var newCell = document.createElement(dfx.getTagName(cell));
+        this._initCell(newCell);
+        if (colspan > 1) {
+            this.setColspan(newCell, colspan);
+        }
+
+        // Find the new cell's insertion point.
+        // Next row is startRowPosition + originalRowspan - 1 (minus 1 since default rowspan is 1).
+        var nextRowIndex = (cellPos.row + rowspan - 1);
+        var rowCells     = this._getRowCells(rows[nextRowIndex]);
+
+        if (rowCells.length === 0) {
+            rows[nextRowIndex].appendChild(newCell);
+        } else if (cellPos.col === 0) {
+            dfx.insertBefore(rowCells[0], newCell);
+        } else {
+            var cellIndex = cellPos.col;
+
+            // Look behind to see if there is a real column.
+            var inserted = false;
+            while (cells[nextRowIndex][--cellIndex]) {
+                if (this.getCellPosition(cells[nextRowIndex][cellIndex]).row === nextRowIndex) {
+                    inserted = true;
+                    dfx.insertAfter(cells[nextRowIndex][cellIndex], newCell);
+                    break;
+                }
+            }
+
+            if (inserted === false) {
+                // Look forward.
+                cellIndex = cellPos.col;
+                while (cells[nextRowIndex][++cellIndex]) {
+                    if (this.getCellPosition(cells[nextRowIndex][cellIndex]).row === nextRowIndex) {
+                        dfx.insertBefore(cells[nextRowIndex][cellIndex], newCell);
+                        break;
+                    }
+                }
+            }
+        }//end if
+
+        this.tableUpdated();
+
+        return newCell;
+
+    },
+
+    insertRowBefore: function(cell)
+    {
+        var cellRow  = cell.parentNode;
+        var cellPos  = this.getCellPosition(cell);
+        var cells    = this._getCellsExpanded();
+        var rowCells = cells[cellPos.row];
+        var rlen     = rowCells.length;
+
+        var newRow = document.createElement('tr');
+
+        var processedCells = [];
+        for (var i = 0; i < rlen; i++) {
+            var rowCell = rowCells[i];
+            if (processedCells.inArray(rowCell) === true) {
+                continue;
+            }
+
+            var rowspan = this.getRowspan(rowCell);
+            if (rowspan > 1 && this.getCellPosition(rowCell).row < cellPos.row) {
+                // Increase the rowspan instead of creating a new cell.
+                this.setRowspan(rowCell, (rowspan + 1));
+            } else {
+                var newCell = document.createElement(dfx.getTagName(rowCell));
+                this._initCell(newCell);
+
+                var colspan = this.getColspan(rowCell);
+                if (colspan > 1) {
+                    this.setColspan(newCell, colspan);
+                }
+
+                newRow.appendChild(newCell);
+            }
+
+            processedCells.push(rowCell);
+        }//end for
+
+        dfx.insertBefore(cellRow, newRow);
+
+        this.tableUpdated();
+
+    },
+
+    insertRowAfter: function(cell)
+    {
+        var rows     = dfx.getTag('tr', this.getCellTable(cell));
+        var cellPos  = this.getCellPosition(cell);
+        var cells    = this._getCellsExpanded();
+        var rowCells = cells[cellPos.row + (this.getRowspan(cell) - 1)];
+        var rlen     = rowCells.length;
+        var cellRow  = rows[cellPos.row + (this.getRowspan(cell) - 1)];
+
+        var newRow = document.createElement('tr');
+
+        var processedCells = [];
+        for (var i = 0; i < rlen; i++) {
+            var rowCell = rowCells[i];
+            if (processedCells.inArray(rowCell) === true) {
+                continue;
+            }
+
+            var rowspan = this.getRowspan(rowCell);
+            if (rowspan > 1 && rowCell !== cell && (this.getCellPosition(rowCell).row + this.getRowspan(rowCell) - 1) > cellPos.row) {
+                // Increase the rowspan instead of creating a new cell.
+                this.setRowspan(rowCell, (rowspan + 1));
+            } else {
+                var newCell = document.createElement(dfx.getTagName(rowCell));
+                this._initCell(newCell);
+
+                var colspan = this.getColspan(rowCell);
+                if (colspan > 1) {
+                    this.setColspan(newCell, colspan);
+                }
+
+                newRow.appendChild(newCell);
+            }
+
+            processedCells.push(rowCell);
+        }//end for
+
+        dfx.insertAfter(cellRow, newRow);
+
+        this.tableUpdated();
+
+    },
+
+    removeRow: function(cell)
+    {
+        var table   = this.getCellTable(cell);
+        var tr      = this.getCellRow(cell);
+        var cellPos = this.getCellPosition(cell);
+        var cells   = this._getCellsExpanded();
+        var rowspan = this.getRowspan(cell);
+
+        var nextRowIndex = (cellPos.row + rowspan);
+        var nextRow      = tr;
+        for (var i = 0; i < rowspan; i++) {
+            var rowToRemove = nextRow;
+            nextRow         = this.getNextRow(nextRow);
+            rowToRemove.parentNode.removeChild(rowToRemove);
+        }
+
+        var rowCells    = cells[cellPos.row];
+        var cellsToMove = [];
+        for (var i = 0; i < rowCells.length; i++) {
+            var rowCell        = rowCells[i];
+            var rowCellPos     = this.getCellPosition(rowCell);
+            var rowCellRowspan = this.getRowspan(rowCell);
+            if (rowCellPos.row !== cellPos.row || rowCellRowspan > rowspan) {
+                if (rowCellPos.row === cellPos.row) {
+                    cellsToMove.push(rowCell);
+                }
+
+                this.setRowspan(rowCell, (rowCellRowspan - rowspan));
+            }
+        }
+
+        for (var i = 0; i < cellsToMove.length; i++) {
+            var rowCell        = cellsToMove[i];
+            var rowCellPos     = this.getCellPosition(rowCell);
+            var rowCellRowspan = this.getRowspan(rowCell);
+            rowCells           = cells[(cellPos.row + rowspan)];
+
+            var index = rowCells.find(rowCell);
+            if (index > 0) {
+                for (var j = (index - 1); j >= 0; j--) {
+                    if (this.getCellPosition(rowCells[j]).row === nextRowIndex) {
+                        dfx.insertAfter(rowCells[j], rowCell);
+                        break;
+                    }
+                }
+            } else if (index === 0) {
+                for (var j = 0; j < rowCells.length; j++) {
+                    if (this.getCellPosition(rowCells[j]).row === nextRowIndex) {
+                        dfx.insertBefore(rowCells[j], rowCell);
+                        break;
+                    }
+                }
+            }
+        }//end for
+
+        // If the table is now empty then remove it.
+        var rows = dfx.getTag('tr', table);
+        if (rows.length === 0) {
+            dfx.remove(table);
+        }
+
+        this.tableUpdated(table);
+
+    },
+
+    insertColAfter: function(cell)
+    {
+        var table  = this.getCellTable(cell);
+        var rows   = dfx.getTag('tr', table);
+        var rln    = rows.length;
+        var colNum = (this.getColNum(cell) + (this.getColspan(cell) - 1));
+
+        var td = null;
+        for (var i = 0; i < rln; i++) {
+            var col     = this.getCell(i, colNum);
+            var cellPos = this.getCellPosition(col);
+
+            if ((cellPos.col !== colNum && col !== cell) || (col !== cell && this.getColspan(col) > 1)) {
+                this.setColspan(col, (this.getColspan(col) + 1));
+            } else if (cellPos.row < i) {
+                if (td) {
+                    this.setRowspan(td, (this.getRowspan(td) + 1));
+                }
+
+                continue;
+            } else {
+                td = document.createElement(col.tagName);
+                this._initCell(td);
+
+                dfx.insertAfter(col, td);
+            }
+        }
+
+        this.tableUpdated();
+
+    },
+
+    insertColBefore: function(cell)
+    {
+        var table  = this.getCellTable(cell);
+        var rows   = dfx.getTag('tr', table);
+        var rln    = rows.length;
+        var colNum = this.getColNum(cell);
+
+        var td = null;
+        for (var i = 0; i < rln; i++) {
+            var col     = this.getCell(i, colNum);
+            var cellPos = this.getCellPosition(col);
+
+            if (cellPos.col !== colNum && col !== cell) {
+                this.setColspan(col, (this.getColspan(col) + 1));
+            } else if (cellPos.row < i) {
+                if (td) {
+                    this.setRowspan(td, (this.getRowspan(td) + 1));
+                }
+
+                continue;
+            } else {
+                td = document.createElement(col.tagName);
+                this._initCell(td);
+
+                dfx.insertBefore(col, td);
+            }
+        }
+
+        this.tableUpdated();
+
+    },
+
+    getColumnCells: function(table, colNum)
+    {
+        if (!table) {
+            return;
+        }
+
+        var cols = [];
+        var rows = dfx.getTag('tr', table);
+        var rln  = rows.length;
+        for (var i = 0; i < rln; i++) {
+            cols.push(this.getCell(rows[i], colNum));
+        }
+
+        return cols;
+
+    },
+
+    removeCol: function(cell)
+    {
+        var table    = this.getCellTable(cell);
+        var cellPos  = this.getCellPosition(cell);
+        var cells    = this._getCellsExpanded();
+        var rowCount = cells.length;
+        var colspan  = this.getColspan(cell);
+
+        var processedCells = [];
+        for (var i = 0; i < rowCount; i++) {
+            for (var j = cellPos.col; j < (cellPos.col + colspan); j++) {
+                var rowCell = cells[i][j];
+                if (processedCells.inArray(rowCell) === true) {
+                    continue;
+                }
+
+                var rowCellColspan = this.getColspan(rowCell);
+                if (rowCellColspan > colspan || (rowCellColspan > 1 && this.getCellPosition(rowCell).col !== cellPos.col)) {
+                    // Reduce colspan.
+                    this.setColspan(rowCell, (rowCellColspan - 1));
+                } else {
+                    // Remove cell.
+                    dfx.remove(rowCell);
+                }
+
+                processedCells.push(rowCell);
+            }
+        }
+
+        // If the table is now empty then remove it.
+        var rows = dfx.getTag('td', table);
+        if (rows.length === 0) {
+            dfx.remove(table);
+        }
+
+        this.tableUpdated(table);
+
+    },
+
+    getNextCell: function(cell)
+    {
+        var pos = this.getCellPosition(cell);
+        if (!pos) {
+            return null;
+        }
+
+        var nextCell = this.getCell(pos.row, (pos.col + this.getColspan(cell)));
+        return nextCell;
+
+    },
+
+    getPreviousCell: function(cell)
+    {
+        var pos = this.getCellPosition(cell);
+        if (!pos) {
+            return null;
+        }
+
+        var prevCell = this.getCell(pos.row, (pos.col - 1));
+        return prevCell;
+
+    },
+
+    moveCaretToCell: function(cell)
+    {
+        if (cell) {
+            var range = this.viper.getCurrentRange();
+            var child = range._getFirstSelectableChild(cell);
+            if (!child) {
+                this._initCell(cell);
+                child = cell.firstChild;
+            }
+
+            // IE cannot jump between cells, so select the node first and then adjust
+            // its location.
+            range.selectNode(child);
+            range.setEnd(child, 0);
+            range.collapse(false);
+            ViperSelection.addRange(range);
+
+            this.setActiveCell(cell);
+            this.showCellToolsIcon(cell);
+
+            return range;
+        } else {
+            this.hideCellToolsIcon();
+        }
+
+    },
+
+    moveCaretToNextCell: function()
+    {
+        var range = this.viper.getCurrentRange();
+        var cell  = this._getRangeCellElement(range);
+
+        if (!cell) {
+            return false;
+        }
+
+        this.setActiveCell(cell);
+
+        var node = cell;
+        while (node) {
+            if (!node.nextSibling) {
+                // Get next row.
+                var nextRow = this.getNextRow(node.parentNode);
+                if (!nextRow) {
+                    return false;
+                } else {
+                    node = nextRow.firstChild;
+                }
+            } else {
+                node = node.nextSibling;
+            }
+
+            if (dfx.isTag(node, 'th') === true || dfx.isTag(node, 'td') === true) {
+                break;
+            }
+        }
+
+        if (!node) {
+            return false;
+        }
+
+        this.moveCaretToCell(node);
+
+        return true;
+
+    },
+
+    moveCaretToPreviousCell: function()
+    {
+        var range = this.viper.getCurrentRange();
+        var cell  = this._getRangeCellElement(range);
+
+        if (!cell) {
+            return false;
+        }
+
+        this.setActiveCell(cell);
+
+        var node = cell;
+        while (node) {
+            if (!node.previousSibling) {
+                // Get next row.
+                var previousRow = this.getPreviousRow(node.parentNode);
+                if (!previousRow) {
+                    return false;
+                } else {
+                    node = previousRow.lastChild;
+                }
+            } else {
+                node = node.previousSibling;
+            }
+
+            if (dfx.isTag(node, 'th') === true || dfx.isTag(node, 'td') === true) {
+                break;
+            }
+        }
+
+        if (!node) {
+            return false;
+        }
+
+        this.moveCaretToCell(node);
+
+        return true;
+
+    },
+
+    removeTable: function(table, emptyOnly)
+    {
+        if (emptyOnly === true) {
+            // Check if the table is empty (no cols);.
+            if (dfx.find(table, 'tr > td').length > 0 || dfx.find(table, 'tr > th').length > 0) {
+                return;
+            }
+        }
+
+        dfx.remove(table);
+
+        this.viper.fireSelectionChanged();
+        this.viper.fireNodesChanged(this.viper.getViperElement());
+
+        this.hideCellToolsIcon();
+
+    },
+
+    getCellTable: function(cell)
+    {
+        if (!cell) {
+            return null;
+        }
+
+        var node = cell;
+        while (node) {
+            if (node.nodeType === dfx.ELEMENT_NODE) {
+                var tagName = node.tagName.toLowerCase();
+                if (tagName === 'table') {
+                    return node;
+                }
+            }
+
+            node = node.parentNode;
+        }
+
+    },
+
+    getRowTable: function(row, tbody)
+    {
+        return this.getCellTable(row);
+
+    },
+
+    getCellRow: function(cell)
+    {
+        var rows    = dfx.getTag('tr', this.getCellTable(cell));
+        var cellPos = this.getCellPosition(cell);
+        return rows[cellPos.row];
+
+    },
+
+    
+    _createToolbarEditorBubble: function()
+    {
+        var main = document.createElement('div');
+
+        var maxRows            = 6;
+        var maxCols            = 8;
+        var selectedRows       = 3;
+        var selectedCols       = 4;
+        var selectedHeaderType = 2;
+
+        var content    = '';
+        var sizePicker = '<p class="VTEP-bubble-label Viper-sizeLabel">Size (' + selectedCols + ' x ' + selectedRows + ')</p>';
+        sizePicker    += '<table class="VTEP-bubble-table Viper-sizePicker"><tbody>';
+        for (var i = 0; i < maxRows; i++) {
+            sizePicker += '<tr>';
+            for (var j = 0; j < maxCols; j++) {
+                var classAttr = '';
+                if (selectedRows > i && selectedCols > j) {
+                    classAttr = ' class="Viper-selected"';
+                }
+
+                sizePicker += '<td data-viper-rowcol="' + i + ', ' + j + '"' + classAttr + ' ></td>';
+            }
+
+            sizePicker += '</tr>';
+        }
+
+        sizePicker += '</tbody></table>';
+        content    += sizePicker;
+
+        var headerOpts      = this._headerOptions;
+        var headerOptTitles = ['None', 'Left', 'Top', 'Both'];
+        var headers = '<p class="VTEP-bubble-label Viper-headers">Headers</p><div class="VTEP-bubble-headersWrapper">';
+        for (var h = 0; h < headerOpts.length; h++) {
+            var selected = '';
+            if (h === selectedHeaderType) {
+                selected = ' Viper-selected';
+            }
+
+            headers    += '<div class="VTEP-bubble-headersTableWrapper' + selected + '">';
+            headers    += '<table class="VTEP-bubble-table Viper-headers"><tbody>';
+            var c = 0;
+            for (var i = 0; i < 3; i++) {
+                headers += '<tr>';
+                for (var j = 0; j < 3; j++) {
+                    if (headerOpts[h] && headerOpts[h][c]) {
+                        headers += '<td class="Viper-hover"></td>';
+                    } else {
+                        headers += '<td></td>';
+                    }
+
+                    c++;
+                }
+
+                headers += '</tr>';
+            }
+
+            headers += '</tbody></table>';
+            headers += '<span class="VTEP-bubble-headerTitle">' + headerOptTitles[h] + '</span></div>';
+        }
+
+        headers += '</div>';
+        content += headers;
+
+        dfx.setHtml(main, content);
+
+        var trs = dfx.getTag('tr', dfx.getClass('Viper-sizePicker', main)[0]);
+
+        var _setRowColsActive = function(row, col) {
+            selectedRows = (parseInt(row) + 1);
+            selectedCols = (parseInt(col) + 1);
+
+            dfx.setHtml(dfx.getClass('Viper-sizeLabel', main)[0], 'Size (' + selectedCols + ' x ' + selectedRows + ')');
+
+            for (var i = 0; i < maxRows; i++) {
+                for (var j = 0; j < maxCols; j++) {
+                    if (i <= row && j <= col) {
+                        dfx.addClass(trs[i].childNodes[j], 'Viper-selected');
+                    } else {
+                        dfx.removeClass(trs[i].childNodes[j], 'Viper-selected');
+                    }
+                }
+            }
+        };
+
+        var _setRowColsHover = function(row, col) {
+
+            dfx.setHtml(dfx.getClass('Viper-sizeLabel', main)[0], 'Size (' + (parseInt(col) + 1) + ' x ' + (parseInt(row) + 1) + ')');
+
+            for (var i = 0; i < maxRows; i++) {
+                for (var j = 0; j < maxCols; j++) {
+                    if (i <= row && j <= col) {
+                        dfx.addClass(trs[i].childNodes[j], 'Viper-hover');
+                    } else {
+                        dfx.removeClass(trs[i].childNodes[j], 'Viper-hover');
+                    }
+                }
+            }
+        };
+
+        var tdHover        = null;
+        var sizePickerElem = dfx.getClass('Viper-sizePicker', main)[0];
+        dfx.addEvent(sizePickerElem, 'mousemove', function(e) {
+            var td = dfx.getMouseEventTarget(e);
+            if (td !== tdHover && dfx.isTag(td, 'td') === true) {
+                tdHover = td;
+                var rowcol = td.getAttribute('data-viper-rowcol').split(',');
+                _setRowColsHover(rowcol[0], rowcol[1]);
+            }
+        });
+
+        dfx.addEvent(sizePickerElem, 'click', function(e) {
+            var td = dfx.getMouseEventTarget(e);
+            if (td && dfx.isTag(td, 'td') === true) {
+                var rowcol = td.getAttribute('data-viper-rowcol').split(',');
+                _setRowColsActive(rowcol[0], rowcol[1]);
+            }
+        });
+
+        dfx.hover(sizePickerElem, function() {}, function() {
+            dfx.removeClass(dfx.getClass('Viper-hover', sizePickerElem), 'Viper-hover');
+            dfx.setHtml(dfx.getClass('Viper-sizeLabel', main)[0], 'Size (' + selectedRows + ' x ' + selectedCols + ')');
+        })
+
+        var headerTables       = dfx.getClass('VTEP-bubble-headersTableWrapper', main);
+        for (var i = 0; i < headerTables.length; i++) {
+            (function(type) {
+                dfx.addEvent(headerTables[type], 'click', function(e) {
+                    selectedHeaderType = type;
+                    dfx.removeClass(headerTables, 'Viper-selected');
+                    dfx.addClass(headerTables[type], 'Viper-selected');
+                });
+            }) (i);
+        }
+
+        var self = this;
+        var insertTableBtn = this.viper.ViperTools.createButton('VTEP-insertTableButton', 'Insert Table', 'Insert Table', '', function() {
+            self.toolbarPlugin.closeBubble('VTEP-bubble');
+            self.insertTable(selectedRows, selectedCols, selectedHeaderType);
+        });
+        main.appendChild(insertTableBtn);
+
+        this.toolbarPlugin.createBubble('VTEP-bubble', 'Insert Table', main);
+        this.toolbarPlugin.setBubbleButton('VTEP-bubble', 'insertTable', true);
+
+    },
+
+    insertTable: function(rows, cols, headerType, tableid)
+    {
+        this.viper.ViperHistoryManager.begin();
+
+        rows = rows || 3;
+        cols = cols || 3;
+
+        var table = document.createElement('table');
+        // First hide the table so we can determine if there are borders etc.
+        dfx.setStyle(table, 'display', 'none');
+
+        // Create a table id.
+        if (!tableid) {
+            while (!tableid) {
+                tableid   = 'table' + dfx.getUniqueId().substr(-5, 5);
+                var tElem = dfx.getId(tableid);
+                if (tElem) {
+                    tableid = null;
+                }
+            }
+        }
+
+        table.setAttribute('id', tableid);
+
+        var tbody      = document.createElement('tbody');
+        var firstCol   = null;
+        var headerOpts = this._headerOptions;
+        var thead      = null;
+
+        if (headerType === 2 || headerType === 3) {
+            thead = document.createElement('thead');
+        }
+
+        for (var i = 0; i < rows; i++) {
+            var tr = document.createElement('tr');
+            for (var j = 0; j < cols; j++) {
+                var cell     = null;
+                var isHeader = false;
+                if (headerType === 1 && j === 0) {
+                    isHeader = true;
+                } else if (headerType === 2 && i === 0) {
+                    isHeader = true;
+                } else if (headerType === 3 && (i === 0 || j === 0)) {
+                    isHeader = true;
+                }
+
+                if (isHeader) {
+                    cell = document.createElement('th');
+                } else {
+                    cell = document.createElement('td');
+                }
+
+                this._initCell(cell);
+
+                tr.appendChild(cell);
+
+                if (firstCol === null) {
+                    firstCol = cell;
+                }
+            }//end for
+
+            if (thead) {
+                table.appendChild(thead);
+                thead.appendChild(tr);
+                thead = null;
+            } else {
+                tbody.appendChild(tr);
+            }
+        }//end for
+
+        table.appendChild(tbody);
+
+        // Insert table to the bookmarks position.
+        var keyboardEditorPlugin = this.viper.ViperPluginManager.getPlugin('ViperKeyboardEditorPlugin');
+        var prevNode = keyboardEditorPlugin.splitAtRange(true);
+        if (dfx.isTag(prevNode, 'li') === true) {
+            prevNode.appendChild(table);
+            if (dfx.isBlank(dfx.getNodeTextContent(prevNode.nextSibling)) === true) {
+                dfx.remove(prevNode.nextSibling);
+            }
+        } else {
+            dfx.insertAfter(prevNode, table);
+        }
+
+        // Now determine if we need to add borders or width to this table.
+        // Done over here so that if there are CSS styles applied to tables
+        // then we don't override them.
+        var width = parseInt(dfx.getComputedStyle(table, 'width'));
+        if (!width) {
+            dfx.setStyle(table, 'width', '100%');
+        }
+
+        var col         = dfx.getTag('td,th', table)[0];
+        var rightWidth  = parseInt(dfx.getComputedStyle(col, 'border-right-width'));
+        var bottomWidth = parseInt(dfx.getComputedStyle(col, 'border-bottom-width'));
+
+        if (bottomWidth === 0
+            || rightWidth === 0
+            || isNaN(bottomWidth) === true
+            || isNaN(rightWidth) === true
+        ) {
+            dfx.attr(table, 'border', 1);
+        }
+
+        dfx.setStyle(table, 'display', '');
+        if (!table.getAttribute('style')) {
+            table.removeAttribute('style');
+        }
+
+        if (firstCol) {
+            var range = this.viper.getCurrentRange();
+            range.setStart(firstCol.firstChild, 0);
+            range.collapse(true);
+            ViperSelection.addRange(range);
+            this.setActiveCell(firstCol);
+        }
+
+        this.viper.fireSelectionChanged();
+        this.viper.fireNodesChanged([table]);
+
+        this.setTableHeaders(table);
+
+        this.viper.ViperHistoryManager.end();
+
+        return table;
+
+    },
+
+    setTableHeaders: function(table)
+    {
+        if (!table) {
+            return;
+        }
+
+        var headers      = dfx.find(table, '[headers]');
+        var headersCount = headers.length;
+        if (headersCount > 0) {
+            for (var i = 0; i < headersCount; i++) {
+                var headersAttr = headers[i].getAttribute('headers');
+                if (headersAttr) {
+                    headersAttr = ' ' + headersAttr;
+                    if (headersAttr.match(/\s[\w\d]+r\d+c\d+/)) {
+                        // If this is a Viper type headers attribute then remove it.
+                        headers[i].removeAttribute('headers');
+                    }
+                }
+            }
+        }
+
+        headers = null;
+
+        var thElements = dfx.getTag('th', table);
+        if (thElements.length === 0) {
+            return;
+        }
+
+        var tableId = table.getAttribute('id');
+
+        if (!tableId) {
+            while (!tableId) {
+                var uniqueid = dfx.getUniqueId();
+                tableId   = 'table' + uniqueid.substr((uniqueid.length - 5), 5);
+                var tElem = dfx.getId(tableId);
+                if (tElem) {
+                    tableId = null;
+                }
+            }
+
+            table.setAttribute('id', tableId);
+        }
+
+        var tableRows = dfx.getTag('tr', table);
+        for (var k = 0; k < tableRows.length; k++) {
+            var row = tableRows[k];
+
+            var cellCount = 0;
+            for (var j = 0; j < row.childNodes.length; j++) {
+                var cell = row.childNodes[j];
+
+                // Skip text nodes.
+                if (cell.nodeType === dfx.TEXT_NODE) {
+                    continue;
+                }
+
+                if (dfx.isTag(cell, 'th') === true) {
+                    // This is a table header, so figure out an ID-based representation
+                    // of the cell content. We'll use this later as a basis for the ID attribute
+                    // although it may be prefixed with the ID of another header to make it unique.
+                    var cellid = cell.getAttribute('id');
+                    if (!cellid || cellid.match(/r\d+c\d+/)) {
+                        cellid = tableId + 'r' + (k + 1) + 'c' + (cellCount + 1);
+                        var existingElem = dfx.getId(cellid);
+                        if (existingElem) {
+                            existingElem.removeAttribute('id');
+                        }
+
+                        cell.setAttribute('id', cellid);
+                    }
+                }
+
+                cellCount++;
+            }//end for
+        }//end for
+
+        // Get HTMLCS to give us the correct table headers...
+        if (window['HTMLCS']) {
+            var headers = HTMLCS.util.getCellHeaders(table);
+            var c       = headers.length;
+            for (var i = 0; i < c; i++) {
+                var header      = headers[i];
+                var headersAttr = header.cell.getAttribute('headers');
+                if (!headersAttr || (' ' + headersAttr).match(/\stable\d+r\d+c\d+/)) {
+                    header.cell.setAttribute('headers', header.headers);
+                }
+            }
+        }
+
+    },
+
+    getHeadersContent: function(element)
+    {
+        var headers = element.getAttribute('headers');
+        if (!headers) {
+            return '';
+        }
+
+        var parts   = headers.split(' ');
+        var content = [];
+        for (var i = 0; i < parts.length; i++) {
+            var part = parts[i];
+
+            content.push(dfx.getHtml(dfx.getId(part)));
+        }
+
+        content.push(dfx.getHtml(element));
+        content = content.join(' ');
+
+        return content;
+
+    },
+
+    getCellContent: function (table, row, column)
+    {
+        var rows = dfx.getTag('tr', table);
+        if (!rows[row]) {
+            return null;
+        }
+
+        var rowElem = rows[row];
+
+        var cols = dfx.getTag('td,th', rowElem);
+        if (!cols[column]) {
+            return null;
+        }
+
+        return dfx.getHtml(cols[column]);
+
+    },
+
+    arrayUnique: function(array)
+    {
+        var tmp    = {};
+        var unique = [];
+        var count  = array.length;
+
+        for (var i = 0; i < count; i++) {
+            tmp[array[i]] = array[i];
+        }
+
+        for (var item in tmp) {
+            unique.push(tmp[item]);
+        }
+
+        return unique;
+
+    },
+
+    arrayIntersect: function(array1, array2)
+    {
+        var tmp    = {};
+        var unique = [];
+        var count  = array2.length;
+
+        for (var i = 0; i < count; i++) {
+            tmp[array2[i]] = array2[i];
+        }
+
+        count = array1.length;
+        for (var i = count; i >= 0; i--) {
+            if (dfx.isset(tmp[array1[i]]) === false) {
+                dfx.unset(array1, i);
+            }
+        }
+
+        return array1;
+
+    },
+
+    _setCaretToStart: function(table)
+    {
+        // Set the caret to the first cell of the table.
+        var cells = dfx.getTag('td,th', table);
+        if (cells.length > 0) {
+            if (dfx.getHtml(cells[0]) === '') {
+                dfx.setHtml(cells[0], '&nbsp;');
+            }
+
+            var cell  = cells[0];
+            var range = this.viper.getCurrentRange();
+            var child = range._getFirstSelectableChild(cell);
+            if (!child && cell.childNodes.length === 1) {
+                child = cell.childNodes[0];
+            }
+
+            range.setStart(child, 0);
+            range.collapse(true);
+            ViperSelection.addRange(range);
+        }
+
+    },
+
+    _getRangeCellElement: function(range)
+    {
+        return this._getCellElement(range.getCommonElement());
+
+    },
+
+    _getCellElement: function(element)
+    {
+        var cellElement = null;
+        if (dfx.isTag(element, 'td') === false
+            && dfx.isTag(element, 'th') === false
+        ) {
+            // Check if any of the parents td or th.
+            var parents = dfx.getParents(element, null, this.viper.getViperElement());
+            var plen    = parents.length;
+            for (var i = 0; i < plen; i++) {
+                if (dfx.isTag(parents[i], 'td') === true
+                    || dfx.isTag(parents[i], 'th') === true
+                ) {
+                    cellElement = parents[i];
+                    break;
+                }
+            }
+        } else {
+            cellElement = element;
+        }
+
+        if (!cellElement) {
+            return false;
+        }
+
+        return cellElement;
+
+    },
+
+    _getTableCells: function(table, stopCell)
+    {
+        if (!table) {
+            table = this.getCellTable(this.getActiveCell());
+        }
+
+        var cells = {};
+        var rows  = dfx.getTag('tr', table);
+        var rlen  = rows.length;
+        for (var i = 0; i < rlen; i++) {
+            var rowCells      = this._getRowCells(rows[i]);
+            var rowCellsCount = rowCells.length;
+            cells[i]          = [];
+            for (var j = 0; j < rowCellsCount; j++) {
+                cells[i].push({
+                    cell: rowCells[j],
+                    rowspan: this.getRowspan(rowCells[j]),
+                    colspan: this.getColspan(rowCells[j])
+                });
+
+                if (stopCell === rowCells[j]) {
+                    return cells;
+                }
+            }
+        }
+
+        return cells;
+
+    },
+
+    _getRowNum: function(row)
+    {
+        var table = this.getRowTable(row, true);
+        var rows  = dfx.getTag('tr', table);
+        var rlen  = rows.length;
+        for (var i = 0; i < rlen; i++) {
+            if (rows[i] === row) {
+                return i;
+            }
+        }
+
+        return null;
+
+    },
+
+    getColNum: function(cell)
+    {
+        if (!cell) {
+            return null;
+        }
+
+        var cellNum = null;
+        var cells   = this._getCellsExpanded();
+        var rows    = cells.length;
+
+        for (var i = 0; i < rows; i++) {
+            var cellCount = cells[i].length;
+            for (var j = 0; j < cellCount; j++) {
+                if (cells[i][j] === cell) {
+                    return j;
+                }
+            }
+        }
+
+        return null;
+
+    },
+
+    
+    getCell: function(row, cell)
+    {
+        if (dfx.isset(cell) === false) {
+            return null;
+        }
+
+        if (typeof row !== 'number') {
+            row = this._getRowNum(row);
+        }
+
+        var cells = this._getCellsExpanded();
+
+        return cells[row][cell];
+
+    },
+
+    getCellPosition: function(cell)
+    {
+        var cells = this._getCellsExpanded();
+        var rows  = cells.length;
+
+        for (var i = 0; i < rows; i++) {
+            var cellCount = cells[i].length;
+            for (var j = 0; j < cellCount; j++) {
+                if (cells[i][j] === cell) {
+                    return {
+                        row: i,
+                        col: j
+                    };
+                }
+            }
+        }
+
+        return null;
+
+    },
+
+    _getCellsExpanded: function(forceUpdate)
+    {
+        if (forceUpdate !== true && this._tableRawCells) {
+            return this._tableRawCells;
+        }
+
+        var tableCells = this._getTableCells();
+        var rawCells   = [];
+        dfx.foreach(tableCells, function(rowNum) {
+            rowNum = parseInt(rowNum);
+            if (!rawCells[rowNum]) {
+                rawCells[rowNum] = [];
+            }
+
+            dfx.foreach(tableCells[rowNum], function(j) {
+                var rowCell  = tableCells[rowNum][j].cell;
+                var rowspan  = tableCells[rowNum][j].rowspan;
+                var colspan  = tableCells[rowNum][j].colspan;
+                var modifier = 0;
+                for (var i = 0; i < rowspan; i++) {
+                    for (var k = 0; k < colspan; k++) {
+                        if (!rawCells[(rowNum + i)]) {
+                            rawCells[(rowNum + i)] = [];
+                        }
+
+                        while (rawCells[(rowNum + i)][(j + k + modifier)]) {
+                            modifier++;
+                        }
+
+                        rawCells[(rowNum + i)][(j + k + modifier)] = rowCell;
+                    }
+                }
+            });
+        });
+
+        this._tableRawCells = rawCells;
+
+        return rawCells;
+
+    },
+
+    getPreviousRow: function(row, ignorePrevParent)
+    {
+        var sourceRow = row;
+        while (row = row.previousSibling) {
+            if (row.nodeType === dfx.ELEMENT_NODE) {
+                var tagName = row.tagName.toLowerCase();
+                if (tagName === 'tr') {
+                    return row;
+                }
+            }
+        }
+
+        if (ignorePrevParent !== true && dfx.isTag(sourceRow.parentNode, 'tbody') === true) {
+            var rows = dfx.getTag('tr', dfx.getTag('thead', this.getRowTable(sourceRow)));
+            if (rows.length > 0) {
+                return rows[(rows.length - 1)];
+            }
+        }
+
+    },
+
+    getNextRow: function(row, ignoreNextParent)
+    {
+        var sourceRow = row;
+        while (row = row.nextSibling) {
+            if (row.nodeType === dfx.ELEMENT_NODE) {
+                var tagName = row.tagName.toLowerCase();
+                if (tagName === 'tr') {
+                    return row;
+                }
+            }
+        }
+
+        if (ignoreNextParent !== true && dfx.isTag(sourceRow.parentNode, 'thead') === true) {
+            var rows = dfx.getTag('tr', dfx.getTag('tbody', this.getRowTable(sourceRow)));
+            if (rows.length > 0) {
+                return rows[0];
+            }
+        }
+
+    },
+
+    _getRowCells: function(row)
+    {
+        var tags = dfx.getTag('td,th', row);
+        return tags;
+
+    },
+
+    _getRowCellCount: function(row)
+    {
+        var cellCount = 0;
+        for (var node = row.firstChild; node; node = node.nextSibling) {
+            if (dfx.isTag(node, 'th') === true || dfx.isTag(node, 'td') === true) {
+                cellCount += this.getColspan(node);
+            }
+        }
+
+        return cellCount;
+
+    },
+
+    _moveCellContent: function(fromCell, toCell)
+    {
+        if (!fromCell || !toCell) {
+            return false;
+        }
+
+        if (toCell.lastChild && dfx.isTag(toCell.lastChild, 'br') === true) {
+            dfx.remove(toCell.lastChild);
+        }
+
+        while (fromCell.firstChild) {
+            if (dfx.isTag(fromCell.firstChild, 'br') === true) {
+                dfx.remove(fromCell.firstChild);
+            } else {
+                toCell.appendChild(fromCell.firstChild);
+            }
+        }
+
+        if (!toCell.lastChild) {
+            this._initCell(toCell);
+        }
+
+    },
+
+    isPluginElement: function(element)
+    {
+        if (element === this._highlightElement) {
+            return true;
+        }
+
+        return false;
+
+    },
+
+    _initCell: function(cell)
+    {
+        if (this.viper.isBrowser('msie') === true) {
+            if (dfx.trim(dfx.getHtml(cell)) === '') {
+                dfx.setHtml(cell, '&nbsp;');
+            }
+        } else {
+            dfx.setHtml(cell, '<br />');
+        }
+
+    }
+
+};
+
+
+
+function ViperToolbarPlugin(viper)
+{
+    this.viper    = viper;
+    this._toolbar = null;
+
+    this._activeBubble   = null;
+    this._bubbles        = {};
+    this._bubbleButtons  = {};
+    this._settingButtons = null;
+    this._enabled        = false;
+    this._enabledButtons = [];
+
+    this.createToolbar();
+
+    var self           = this;
+    var clickedOutside = true;
+    this.viper.registerCallback('Viper:selectionChanged', 'ViperToolbarPlugin', function(range) {
+        if (clickedOutside === true || self.viper.rangeInViperBounds(range) === false) {
+            return;
+        }
+
+        if (self._enabled !== true) {
+            self.enable();
+        }
+
+        self._updateToolbar(range);
+    });
+
+    this.viper.registerCallback('Viper:editableElementChanged', 'ViperToolbarPlugin', function(range) {
+            self._updateToolbar();
+    });
+
+    this.viper.registerCallback('Viper:enabled', 'ViperToolbarPlugin', function(range) {
+            self._updateToolbar();
+    });
+
+    this.viper.registerCallback('Viper:disabled', 'ViperToolbarPlugin', function(range) {
+            self.disable();
+    });
+
+    this.viper.registerCallback('Viper:clickedOutside', 'ViperToolbarPlugin', function(range) {
+        clickedOutside = true;
+
+        // Disable all buttons.
+        self.disable();
+    });
+
+    this.viper.registerCallback('Viper:clickedInside', 'ViperToolbarPlugin', function(range) {
+        clickedOutside = false;
+    });
+
+    this.viper.registerCallback('Viper:focused', 'ViperToolbarPlugin', function(range) {
+        self.enable();
+    });
+
+    this.viper.registerCallback('Viper:mouseDown', 'ViperToolbarPlugin', function() {
+        if (self._activeBubble) {
+            var bubble = self.getBubble(self._activeBubble);
+            if (bubble && bubble.getSetting('keepOpen') !== true) {
+                self.closeBubble(self._activeBubble);
+            }
+        }
+    });
+
+    this.viper.registerCallback('Viper:destroy', 'ViperToolbarPlugin', function(range) {
+        self.remove();
+    });
+
+}
+
+ViperToolbarPlugin.prototype = {
+    init: function()
+    {
+        this.viper.addElement(this._toolbar);
+
+    },
+
+    setSettings: function(settings)
+    {
+        if (!settings) {
+            return;
+        }
+
+        if (settings.parent) {
+            var parent = settings.parent;
+            if (typeof parent === 'string') {
+                parent = dfx.getId(settings.parent);
+            }
+
+            this.setParentElement(parent);
+        }
+
+        if (settings.buttons) {
+            this.setButtons(settings.buttons);
+        }
+
+    },
+
+    setButtons: function(buttons)
+    {
+        this._settingButtons = buttons;
+
+        // Remove all buttons that were adding by other plugins.
+        if (this.viper.isBrowser('msie') === true) {
+            while(this._toolbar.firstChild) {
+                this._toolbar.removeChild(this._toolbar.firstChild);
+            }
+        } else {
+            this._toolbar.innerHTML = '';
+        }
+
+        var logo = document.createElement('div');
+        logo.setAttribute('title', 'Viper by Squiz');
+        dfx.addClass(logo, 'Viper-logo');
+        this._toolbar.appendChild(logo);
+
+        var buttonsLen = buttons.length;
+        for (var i = 0; i < buttonsLen; i++) {
+            if (typeof buttons[i] === 'string') {
+                // Single button.
+                var button = this.viper.ViperTools.getItem(buttons[i]);
+                if (!button || button.type !== 'button') {
+                    throw new Error('Invalid button type: ' + buttons[i]);
+                }
+
+                this._toolbar.appendChild(button.element);
+            } else if (buttons[i].length) {
+                // Create button group.
+                var groupid = 'ViperToolbarPlugin:buttons:' + i;
+                var group   = this.viper.ViperTools.createButtonGroup(groupid);
+
+                var subButtonsLen = buttons[i].length;
+                for (var j = 0; j < subButtonsLen; j++) {
+                    var button = this.viper.ViperTools.getItem(buttons[i][j]);
+                    if (!button || button.type !== 'button') {
+                        throw new Error('Invalid button type: ' + buttons[i][j]);
+                    }
+
+                    this.viper.ViperTools.addButtonToGroup(buttons[i][j], groupid);
+                }
+
+                this._toolbar.appendChild(group);
+            }
+        }
+
+    },
+
+    createToolbar: function()
+    {
+        var elem = document.createElement('div');
+
+        var logo = document.createElement('div');
+        logo.setAttribute('title', 'Viper by Squiz');
+        dfx.addClass(logo, 'Viper-logo');
+        elem.appendChild(logo);
+
+        dfx.addClass(elem, 'ViperTP-bar Viper-themeDark Viper-scalable');
+        this._toolbar = elem;
+        dfx.addClass(this._toolbar, 'viper-inactive');
+        dfx.addClass(this._toolbar, this.viper.getElementHolder().className);
+
+        dfx.addEvent(elem, 'mousedown', function(e) {
+            var target = dfx.getMouseEventTarget(e);
+            if (dfx.isTag(target, 'input') !== true
+                && dfx.isTag(target, 'textarea') !== true
+                && dfx.isTag(target, 'select') !== true
+            ) {
+                dfx.preventDefault(e);
+                return false;
+            }
+        });
+
+        dfx.addEvent(elem, 'mouseup', function(e) {
+            var target = dfx.getMouseEventTarget(e);
+            if (dfx.isTag(target, 'input') !== true
+                && dfx.isTag(target, 'textarea') !== true
+                && dfx.isTag(target, 'select') !== true
+            ) {
+                dfx.preventDefault(e);
+                return false;
+            }
+        });
+
+        if (navigator.userAgent.match(/iPad/i) !== null) {
+            dfx.addClass(this._toolbar, 'device-ipad');
+        }
+
+    },
+
+    setParentElement: function(parent)
+    {
+        dfx.setStyle(this._toolbar, 'position', 'absolute');
+        dfx.setStyle(this._toolbar, 'top', '0px');
+        parent.appendChild(this._toolbar);
+
+        this.positionUpdated();
+
+    },
+
+    positionUpdated: function()
+    {
+        this.positionBubble();
+        this.viper.fireCallbacks('ViperToolbarPlugin:positionUpdated');
+
+    },
+
+    
+    addButton: function(button)
+    {
+        if (!this._settingButtons) {
+            this._toolbar.appendChild(button);
+        }
+
+    },
+
+    createBubble: function(id, title, subSectionElement, toolsElement, openCallback, closeCallback, customClass)
+    {
+        title = title || '&nbsp;';
+
+        var bubble = document.createElement('div');
+        dfx.addClass(bubble, 'ViperITP Viper-themeDark Viper-visible Viper-forTopbar');
+        dfx.setHtml(bubble, '<div class="ViperITP-header">' + title + '</div>');
+
+        dfx.addEvent(bubble, 'mousedown', function(e) {
+            var target = dfx.getMouseEventTarget(e);
+            if (dfx.isTag(target, 'input') !== true
+                && dfx.isTag(target, 'textarea') !== true
+                && dfx.isTag(target, 'select') !== true
+            ) {
+                dfx.preventDefault(e);
+                return false;
+            }
+        });
+
+        if (toolsElement) {
+            var wrapper = document.createElement('div');
+            dfx.addClass(wrapper, 'ViperITP-tools');
+            bubble.appendChild(wrapper);
+            wrapper.appendChild(toolsElement);
+        }
+
+        if (customClass) {
+            dfx.addClass(bubble, customClass);
+        }
+
+        var self = this;
+
+        this._bubbles[id] = bubble;
+        var bubbleObj     = {
+            type: 'VTPBubble',
+            element: bubble,
+            addSubSection: function(id, element) {
+                var wrapper = dfx.getClass('ViperITP-subSectionWrapper', bubble);
+                if (wrapper.length > 0) {
+                    wrapper = wrapper[0];
+                } else {
+                    wrapper = document.createElement('div');
+                    dfx.setHtml(wrapper, '<span class="Viper-subSectionArrow"></span>');
+                    dfx.addClass(wrapper, 'ViperITP-subSectionWrapper');
+                    bubble.appendChild(wrapper);
+                }
+
+                var form = document.createElement('form');
+                dfx.addClass(form, 'Viper-subSection');
+                form.onsubmit = function() {
+                    return false;
+                };
+
+                var submitBtn  = document.createElement('input');
+                submitBtn.type = 'submit';
+                dfx.setStyle(submitBtn, 'display', 'none');
+                form.appendChild(submitBtn);
+
+                form.appendChild(element);
+                wrapper.appendChild(form);
+
+                this._subSections[id] = form;
+                self.viper.ViperTools.addItem(id, {
+                    type: 'VTPSubSection',
+                    element: wrapper,
+                    form: form
+                });
+
+                return element;
+            },
+            showSubSection: function(id) {
+                if (this._activeSubSection) {
+                    if (this._activeSubSection !== id) {
+                        this.hideSubSection(this._activeSubSection);
+                    } else {
+                        return;
+                    }
+                }
+
+                dfx.addClass(bubble, 'Viper-subSectionVisible');
+                dfx.addClass(this._subSections[id], 'Viper-active');
+
+                if (this._subSectionButtons[id]) {
+                    var button = this._subSectionButtons[id].element;
+                    dfx.addClass(button, 'Viper-selected');
+
+                    // Update the position of the sub section arrow.
+                    var subSectionArrow = dfx.getClass('Viper-subSectionArrow', bubble)[0];
+                    var pos             = dfx.getBoundingRectangle(button);
+                    var bubblePos       = dfx.getBoundingRectangle(bubble);
+                    dfx.setStyle(subSectionArrow, 'left', (pos.x1 - bubblePos.x1) + ((pos.x2 - pos.x1) / 2) + 'px');
+                    dfx.addClass(subSectionArrow, 'Viper-visible');
+                }
+
+                var inputElements = dfx.getTag('input[type=text], textarea', this._subSections[id]);
+                if (inputElements.length > 0 && dfx.getElementHeight(inputElements[0]) > 0) {
+                    try {
+                        setTimeout(function() {
+                            inputElements[0].focus();
+                        }, 10);
+                    } catch(e) {}
+                }
+
+                this._activeSubSection = id;
+            },
+            hideSubSection: function(id) {
+                id = id || this._activeSubSection;
+                dfx.removeClass(bubble, 'Viper-subSectionVisible');
+                dfx.removeClass(this._subSections[id], 'Viper-active');
+                this._activeSubSection = null;
+
+                if (this._subSectionButtons[id]) {
+                    dfx.removeClass(this._subSectionButtons[id].element, 'Viper-selected');
+                }
+            },
+            setSubSectionButton: function(sectionid, buttonid) {
+                if (!this._subSections[sectionid]) {
+                    return false;
+                }
+
+                var button = self.viper.ViperTools.getItem(buttonid);
+                if (!button || !button.type === 'button') {
+                    return false;
+                }
+
+                this._subSectionButtons[sectionid] = button;
+            },
+            setSubSectionAction: function(subSectionid, action, widgetids) {
+                widgetids      = widgetids || [];
+                var tools      = self.viper.ViperTools;
+                var subSection = tools.getItem(subSectionid);
+                if (!subSection) {
+                    return;
+                }
+
+                subSection.form.onsubmit = function(e) {
+                    self.viper.focus();
+
+                    if (e) {
+                        dfx.preventDefault(e);
+                    }
+
+                    var button = tools.getItem(subSectionid + '-applyButton');
+                    if (button.isEnabled() === false) {
+                        return false;
+                    }
+
+                    tools.disableButton(subSectionid + '-applyButton');
+
+                    // IE needs this timeout so focus works <3..
+                    if (self.viper.isBrowser('msie') === false) {
+                        try {
+                            action.call(this);
+                        } catch (e) {
+                            console.error(e.message);
+                        }
+
+                        // Give focus back to the form field.
+                        var inputElements = dfx.getTag('input[type=text], textarea', subSection.form);
+                        if (inputElements.length > 0) {
+                            try {
+                                inputElements[0].focus();
+                            } catch(e) {}
+                        }
+                    } else {
+                        setTimeout(function() {
+                            try {
+                                action.call(this);
+                            } catch (e) {
+                                console.error(e.message);
+                            }
+
+                            // Give focus back to the form field.
+                            var inputElements = dfx.getTag('input[type=text], textarea', subSection.form);
+                            if (inputElements.length > 0) {
+                                try {
+                                    inputElements[0].focus();
+                                } catch(e) {}
+                            }
+                        }, 10);
+                    }//end if
+
+                    return false;
+                };
+
+                var button = tools.createButton(subSectionid + '-applyButton', 'Update Changes', 'Update Changes', '', subSection.form.onsubmit, true);
+                subSection.form.appendChild(button);
+
+                this.addSubSectionActionWidgets(subSectionid, widgetids);
+
+            },
+            addSubSectionActionWidgets: function(subSectionid, widgetids)
+            {
+                if (!this._subSectionActionWidgets[subSectionid]) {
+                    this._subSectionActionWidgets[subSectionid] = [];
+                }
+
+                var subsec = this;
+                var tools  = self.viper.ViperTools;
+                for (var i = 0; i < widgetids.length; i++) {
+                    this._subSectionActionWidgets[subSectionid].push(widgetids[i]);
+                    (function(widgetid) {
+                        self.viper.registerCallback('ViperTools:changed:' + widgetid, 'ViperToolbarPlugin', function() {
+                            var subSectionWidgets = subsec._subSectionActionWidgets[subSectionid];
+                            var c = subSectionWidgets.length;
+                            var enable = true;
+                            for (var j = 0; j < c; j++) {
+                                var widget = tools.getItem(subSectionWidgets[j]);
+                                if (widget.required === true && dfx.trim(widget.getValue()) === '') {
+                                    enable = false;
+                                    break;
+                                }
+                            }
+
+                            if (enable === true) {
+                                tools.enableButton(subSectionid + '-applyButton');
+                            } else {
+                                tools.disableButton(subSectionid + '-applyButton');
+                            }
+                        });
+                    }) (widgetids[i]);
+                }
+
+            },
+            setSetting: function(setting, value) {
+                this._settings[setting] = value;
+            },
+            getSetting: function(setting) {
+                return this._settings[setting];
+            },
+            setTitle: function(title) {
+                dfx.setHtml(dfx.getClass('ViperITP-header', bubble)[0], title);
+            },
+            getActiveSubSection: function() {
+                return this._subSections[this._activeSubSection];
+            },
+            _settings: {
+                keepOpen: false
+            },
+            _subSections: {},
+            _subSectionButtons: {},
+            _activeSubSection: null,
+            _openCallback: openCallback,
+            _closeCallback: closeCallback,
+            _subSectionActionWidgets: {}
+        };
+
+        if (subSectionElement) {
+            bubbleObj.addSubSection(id + 'SubSection', subSectionElement);
+            if (!toolsElement) {
+                bubbleObj.showSubSection(id + 'SubSection');
+            }
+        }
+
+        this.viper.ViperTools.addItem(id, bubbleObj);
+
+        return bubble;
+
+    },
+
+    getBubble: function(id)
+    {
+        return this.viper.ViperTools.getItem(id);
+
+    },
+
+    setBubbleButton: function(bubbleid, buttonid, useCustomToggler)
+    {
+        if (!this._bubbles[bubbleid]) {
+            // Throw exception not a valid bubble id.
+            return false;
+        }
+
+        var bubble = this.getBubble(bubbleid);
+        var button = this.viper.ViperTools.getItem(buttonid).element;
+        var self   = this;
+
+        this._bubbleButtons[bubbleid] = buttonid;
+
+        if (useCustomToggler !== true) {
+            dfx.removeEvent(button, 'mousedown');
+            dfx.addEvent(button, 'mousedown', function(e) {
+                if (self.viper.isBrowser('msie') === true) {
+                    // This block of code prevents IE moving user selection to the.
+                    // button element when clicked. When the button element is removed
+                    // and added back to DOM selection is not moved. Seriously, IE?
+                    if (button.previousSibling) {
+                        var sibling = button.previousSibling;
+                        button.parentNode.removeChild(button);
+                        dfx.insertAfter(sibling, button);
+                    } else if (button.nextSibling) {
+                        var sibling = button.nextSibling;
+                        button.parentNode.removeChild(button);
+                        dfx.insertBefore(sibling, button);
+                    } else {
+                        var parent = button.parentNode;
+                        button.parentNode.removeChild(button);
+                        parent.appendChild(button);
+                    }
+                }//end if
+
+                if (dfx.hasClass(button, 'Viper-disabled') === true) {
+                    return;
+                }
+
+                self.toggleBubble(bubbleid);
+                dfx.preventDefault(e);
+            });
+        }
+
+    },
+
+    toggleBubble: function(bubbleid)
+    {
+        if (!this._activeBubble || this._activeBubble !== bubbleid) {
+            this.showBubble(bubbleid);
+            return true;
+        } else {
+            this.closeBubble(bubbleid);
+            return false;
+        }
+
+    },
+
+    closeBubble: function(bubbleid)
+    {
+        if (!this._activeBubble) {
+            return;
+        }
+
+        if (this._closeBubble(bubbleid) !== false) {
+            this.viper.focus();
+            this.viper.highlightToSelection();
+        }
+
+    },
+
+    _closeBubble: function(bubbleid)
+    {
+        dfx.removeClass(this.viper.ViperTools.getItem(this._bubbleButtons[bubbleid]).element, 'Viper-selected');
+        var bubble     = this.viper.ViperTools.getItem(bubbleid);
+        var bubbleElem = bubble.element;
+        if (bubbleElem.parentNode && bubbleElem.parentNode.nodeType !== dfx.DOCUMENT_FRAGMENT_NODE) {
+            bubbleElem.parentNode.removeChild(bubbleElem);
+        } else {
+            return false;
+        }
+
+        if (bubble._closeCallback) {
+            bubble._closeCallback.call(this);
+        }
+
+        if (this._activeBubble === bubbleid) {
+            this._activeBubble = null;
+        }
+
+        dfx.removeEvent(document, 'keydown.ViperToolbarPluginSubSection');
+
+    },
+
+    showBubble: function(bubbleid)
+    {
+        if (this._activeBubble) {
+            if (this._activeBubble === bubbleid) {
+                // Already showing.
+                return;
+            }
+
+            // Hide the current active bubble.
+            this._closeBubble(this._activeBubble);
+        }
+
+        dfx.addClass(this.viper.ViperTools.getItem(this._bubbleButtons[bubbleid]).element, 'Viper-selected');
+
+        var bubble     = this.viper.ViperTools.getItem(bubbleid);
+        var bubbleElem = bubble.element;
+
+        if (bubble._openCallback) {
+            bubble._openCallback.call(this);
+        }
+
+        if (!bubbleElem.parentNode || bubbleElem.parentNode.nodeType === dfx.DOCUMENT_FRAGMENT_NODE) {
+            this._toolbar.appendChild(bubbleElem);
+        }
+
+        // Before we show the bubble set all its sub section apply changes button
+        // statuses to disabled.
+        for (var subSectionid in bubble._subSections) {
+            var applyChangesBtn = this.viper.ViperTools.getItem(subSectionid + '-applyButton');
+            if (applyChangesBtn) {
+                this.viper.ViperTools.disableButton(subSectionid + '-applyButton');
+            }
+        }
+
+        this.positionBubble(bubbleid);
+
+        this._activeBubble = bubbleid;
+
+        var inputElements = dfx.getTag('input[type=text], textarea', bubbleElem);
+        if (inputElements.length > 0) {
+            try {
+                inputElements[0].focus();
+                if (this.viper.isBrowser('msie') === true) {
+                    setTimeout(function() {
+                        inputElements[0].focus();
+                    }, 10);
+                }
+            } catch(e) {}
+        }
+
+        var inlineToolbarPlugin = this.viper.getPluginManager().getPlugin('ViperInlineToolbarPlugin');
+        if (inlineToolbarPlugin) {
+            inlineToolbarPlugin.hideToolbar();
+        }
+
+        dfx.removeEvent(document, 'keydown.ViperToolbarPluginSubSection');
+        dfx.addEvent(document, 'keydown.ViperToolbarPluginSubSection', function(e) {
+            if (e.which === 13 && bubble.getActiveSubSection()) {
+                return bubble.getActiveSubSection().onsubmit();
+            }
+        });
+
+    },
+
+    getActiveBubble: function()
+    {
+        if (!this._activeBubble) {
+            return null;
+        }
+
+        return this.getBubble(this._activeBubble);
+
+    },
+
+    positionBubble: function(bubbleid)
+    {
+        bubbleid = bubbleid || this._activeBubble;
+        if (!bubbleid) {
+            return;
+        }
+
+        var bubble     = this.viper.ViperTools.getItem(bubbleid).element;
+        var button     = this.viper.ViperTools.getItem(this._bubbleButtons[bubbleid]).element;
+
+        var toolsWidth = null;
+        var widthStyle = bubble.style.width;
+
+        toolsWidth = dfx.getElementWidth(bubble);
+
+        var scrollCoords = dfx.getScrollCoords();
+        var windowDim    = dfx.getWindowDimensions();
+        var elemDim      = dfx.getBoundingRectangle(button);
+        var toolbarDim   = dfx.getBoundingRectangle(this._toolbar);
+
+        var left = ((elemDim.x1 + ((elemDim.x2 - elemDim.x1) / 2) - (toolsWidth / 2) - scrollCoords.x) - toolbarDim.x1);
+
+        if ((left + toolsWidth) >= windowDim.width) {
+            left -= ((toolsWidth / 2) - 40);
+            dfx.addClass(bubble, 'Viper-orientationLeft');
+        } else {
+            dfx.removeClass(bubble, 'Viper-orientationLeft');
+        }
+
+        dfx.setStyle(bubble, 'left', left + 'px');
+        dfx.setStyle(bubble, 'top', '35px');
+
+        if (!widthStyle) {
+            dfx.setStyle(bubble, 'width', toolsWidth + 'px');
+        }
+
+    },
+
+    disable: function()
+    {
+        if (this._enabled === false) {
+            return;
+        }
+
+        this._enabled = false;
+
+        dfx.removeClass(this._toolbar, 'viper-active');
+        dfx.addClass(this._toolbar, 'viper-inactive');
+
+        // Close active bubble.
+        if (this._activeBubble) {
+            this.closeBubble(this._activeBubble);
+        }
+
+        // Get all buttons in the toolbar and disable them.
+        var buttons = dfx.getClass('Viper-button', this._toolbar);
+        var c       = buttons.length;
+        var viperid = this.viper.getId();
+        var enabledButtons = [];
+        for (var i = 0; i < c; i++) {
+            var buttonid = buttons[i].id.replace(viperid + '-', '');
+            if (this.viper.ViperTools.getItem(buttonid).isEnabled() === true) {
+                enabledButtons.push(buttonid);
+            }
+
+            this.viper.ViperTools.disableButton(buttonid);
+        }
+
+        this._enabledButtons = enabledButtons;
+
+        this.viper.fireCallbacks('ViperToolbarPlugin:disabled');
+
+    },
+
+    enable: function()
+    {
+        if (this._enabled === true) {
+            return;
+        }
+
+        this._enabled = true;
+        dfx.removeClass(this._toolbar, 'viper-inactive');
+        dfx.addClass(this._toolbar, 'viper-active');
+
+        this.viper.fireCallbacks('ViperToolbarPlugin:enabled');
+
+        while (this._enabledButtons.length) {
+            this.viper.ViperTools.enableButton(this._enabledButtons.pop());
+        }
+
+    },
+
+    hide: function()
+    {
+        dfx.setStyle(this._toolbar, 'display', 'none');
+
+    },
+
+    show: function()
+    {
+        dfx.setStyle(this._toolbar, 'display', 'block');
+
+    },
+
+    isDisabled: function()
+    {
+        return !this._enabled;
+
+    },
+
+    isVisible: function()
+    {
+        if (dfx.getStyle(this._toolbar, 'display') === 'none') {
+            return false;
+        }
+
+        return true;
+
+    },
+
+    exists: function()
+    {
+        if (this._toolbar) {
+            return true;
+        }
+
+        return false;
+
+    },
+
+    remove: function()
+    {
+        dfx.remove(this._toolbar);
+
+    },
+
+    isPluginElement: function(element)
+    {
+        if (element !== this._toolbar && dfx.isChildOf(element, this._toolbar) === false) {
+            return false;
+        }
+
+        return true;
+
+    },
+
+    _updateToolbar: function(range)
+    {
+        if (this.viper.isEnabled() === false) {
+            return;
+        }
+
+        if (this.viper.isBrowser('msie') === true) {
+            // IE fix.. When a toolbar button is clicked IE moves the selection to that
+            // button unless the button no longer exists... So we remove the toolbar
+            // here to prevent selection changing......
+            var parent = this._toolbar.parentNode;
+            parent.removeChild(this._toolbar);
+        }
+
+        range = range || this.viper.getCurrentRange();
+
+        this.viper.fireCallbacks('ViperToolbarPlugin:updateToolbar', {range: range});
+
+        if (this.viper.isBrowser('msie') === true) {
+            parent.appendChild(this._toolbar);
+        }
+
+    }
+
+};
+
+
+
+function ViperTrackChangesPlugin(viper)
+{
+    this.viper = viper;
+    this.subToolbarPlugin = null;
+    this.optionCheckboxes = {};
+    this._barActive       = false;
+    this._newCommentid    = null;
+    this._initialising    = false;
+    this.viewSettings     = {
+        finalMode: {},
+        originalMode: {}
+    };
+
+}
+
+ViperTrackChangesPlugin.prototype = {
+    init: function()
+    {
+        var self = this;
+
+        this._setupToolbar();
+
+        ViperChangeTracker.addChangeType('viperComment', 'Comment', 'comment');
+        ViperChangeTracker.setRejectCallback('viperComment', function(clone, node) {
+            while (node.firstChild) {
+                dfx.insertBefore(node, node.firstChild);
+            }
+
+            dfx.remove(node);
+        });
+
+        // Change Tracker will ask for the description of the change.
+        // For comments display a editable area where user can type comment and
+        // read other comments. Comment in change object is updated when the subElement is disabled.
+        ViperChangeTracker.setDescriptionCallback('viperComment', function(node, ctnType, changeid) {
+            var div = Viper.document.createElement('div');
+            dfx.addClass(div, 'viperCommentDiv');
+
+            // Set the changeid of this div so that when subElementDisabled event
+            // is fired, we can determine the changeid of active comment.
+            div.setAttribute('changeid', changeid);
+            div.setAttribute('id', 'viperComment-' + changeid);
+
+            var comment = ViperChangeTracker._comments[changeid] || '&nbsp;';
+            dfx.setHtml(div, comment);
+
+            dfx.addEvent(div, 'mousedown', function() {
+                self.viper.setSubElementState(div, true);
+
+                dfx.removeEvent(div, 'mouseup.viperSubElem');
+                dfx.addEvent(div, 'mouseup.viperSubElem', function(e) {
+                    setTimeout(function() {
+                        self.viper.mouseUp(e);
+                    }, 200);
+                });
+
+                // We need to add a new class to top level element so the box
+                // stays on top of others.
+                var parent = div.parentNode.parentNode.parentNode;
+                dfx.addClass(parent, 'active');
+            });
+
+            if (self._newCommentid === changeid) {
+                self.viper.registerCallback('ViperChangeTracker:infoBoxAdded', 'ViperTrackChangesPlugin', function(chid) {
+                    if (chid !== changeid) {
+                        return;
+                    }
+
+                    var markerElem = ViperChangeTracker.getMarker(changeid);
+                    if (markerElem) {
+                        dfx.trigger(markerElem, 'click');
+                    }
+
+                    self.viper.setSubElementState(div, true);
+                    div.focus();
+
+                    // We need to add a new class to top level element so the box
+                    // stays on top of others.
+                    var parent = div.parentNode.parentNode.parentNode;
+                    dfx.addClass(parent, 'active');
+
+                    var range = self.viper.getCurrentRange();
+                    range.setStart(div.firstChild, 0);
+                    range.collapse(true);
+
+                    self.viper.removeCallback('ViperChangeTracker:infoBoxAdded', 'ViperTrackChangesPlugin');
+                });
+
+                self._newCommentid = null;
+            }//end if
+
+            return div;
+        });
+
+        this.viper.registerCallback('subElementDisabled', 'ViperTrackChangesPlugin', function(elem) {
+            if (elem && elem.parentNode && elem.parentNode.parentNode) {
+                var parent = elem.parentNode.parentNode.parentNode;
+                dfx.removeClass(parent, 'active');
+            }
+        });
+
+    },
+
+    toggleTrackChanges: function()
+    {
+        this._barActive = this.subToolbarPlugin.toggleToolbar('TrackChanges');
+        if (this._barActive === true) {
+            this.viper.ViperTools.setButtonActive('trackChanges');
+        } else {
+            this.viper.ViperTools.setButtonInactive('trackChanges');
+        }
+
+        if (ViperChangeTracker.isTracking() === false
+            && ViperChangeTracker.hasChanges() === false
+        ) {
+            ViperChangeTracker.enableChangeTracking();
+        }
+
+    },
+
+    
+    addComment: function()
+    {
+        this.viper.focus();
+        var info     = ViperHistoryManager.createNodeChangeInfo(this.viper.element);
+        var bookmark = this.viper.createBookmark();
+        var elements = dfx.getElementsBetween(bookmark.start, bookmark.end);
+
+        var eln      = elements.length;
+        var changeid = ViperChangeTracker.addChange('viperComment');
+
+        this._newCommentid = changeid;
+
+        if (eln === 0) {
+            var el = Viper.document.createElement('span');
+            dfx.insertBefore(bookmark.start, el);
+            ViperChangeTracker.addNodeToChange(changeid, el);
+        } else {
+            for (var i = 0; i < eln; i++) {
+                if (ViperChangeTracker.getCTNode(elements[i], 'viperComment') === null) {
+                    this.viper._wrapElement(elements[i], 'span', function(newElem) {
+                        // Add new class to wrap element to mark it as "deleted".
+                        ViperChangeTracker.addNodeToChange(changeid, newElem);
+                    });
+                }
+            }
+        }
+
+        this.viper.selectBookmark(bookmark);
+        this.viper.fireNodesChanged('ViperTrackChangesPlugin:update');
+
+    },
+
+    enableTracking: function()
+    {
+        ViperChangeTracker.enableChangeTracking();
+
+    },
+
+    disableTracking: function()
+    {
+        ViperChangeTracker.disableChangeTracking();
+
+    },
+
+    _setupToolbar: function()
+    {
+        var self      = this;
+        var tcEnabled = false;
+        var tools     = this.viper.ViperTools;
+        var toolbar   = this.viper.ViperPluginManager.getPlugin('ViperToolbarPlugin');
+
+        var tcBtn = tools.createButton('trackChanges', 'TC', 'Toggle Track Changes', '', function() {
+            if (tcEnabled === true) {
+                tcEnabled = false;
+                tools.setButtonInactive('trackChanges');
+                self.disableTracking();
+            } else {
+                tcEnabled = true;
+                tools.setButtonActive('trackChanges');
+                self.enableTracking();
+            }
+        });
+
+        toolbar.addButton(tcBtn);
+
+    }
+
+};
+
+
+ViperReadyCallback = null;
+(function() {
+    dfxLoadedCallback = function() {
+        var dfxScripts = document.getElementsByTagName('script');
+        var path       = null;
+
+        // Loop through all the script tags that exist in the document and find the one
+        // that has included this file.
+        var dfxScriptsLen = dfxScripts.length;
+        for (var i = 0; i < dfxScriptsLen; i++) {
+            if (dfxScripts[i].src) {
+                if (dfxScripts[i].src.match(/Viper-all\.js/)) {
+                    // We have found our appropriate <script> tag that includes the
+                    // DfxJSLib library, so we can extract the path and include the rest.
+                    path = dfxScripts[i].src.replace(/Viper-all\.js/,'');
+                    break;
+                }
+            }
+        }
+
+        var _loadScript = function(path, scriptName, callback, scriptNameAsPath) {
+            var script = document.createElement('script');
+
+            if (navigator.appName == 'Microsoft Internet Explorer') {
+                var rv = -1;
+                var re = new RegExp("MSIE ([0-9]{1,}[\.0-9]{0,})");
+                if (re.exec(navigator.userAgent) != null) {
+                    rv = parseFloat(RegExp.$1);
+                }
+
+                if (rv <= 8.0) {
+                    script.onreadystatechange = function() {
+                        if (/^(loaded|complete)$/.test(this.readyState) === true) {
+                            callback.call(window);
+                        }
+                    };
+                }
+            }//end if
+
+            script.onload = function() {
+                callback.call(window);
+            };
+
+            if (scriptNameAsPath === true) {
+                script.src = path + scriptName + '/' + scriptName + '.js';
+            } else {
+                script.src = path + scriptName;
+            }
+
+            if (document.head) {
+                document.head.appendChild(script);
+            } else {
+                document.getElementsByTagName('head')[0].appendChild(script);
+            }
+        };
+        var _loadScripts = function(path, scripts, callback, scriptNameAsPath) {
+            if (scripts.length === 0) {
+                callback.call(window);
+                return;
+            }
+
+            var script = scripts.shift();
+            _loadScript(path, script, function() {
+                _loadScripts(path, scripts, callback, scriptNameAsPath);
+            }, scriptNameAsPath);
+        };
+
+        // Viper core files.
+        var jsFiles = 'Viper.js|ViperChangeTracker.js|ViperTools.js|ViperDOMRange.js|ViperIERange.js|ViperMozRange.js|ViperSelection.js|ViperPluginManager.js|ViperHistoryManager.js';
+        jsFiles     = jsFiles.split('|');
+
+        _loadScripts(path + '/Lib/', jsFiles, function() {
+            var plugins    = 'ViperCopyPastePlugin|ViperToolbarPlugin|ViperInlineToolbarPlugin|ViperCoreStylesPlugin|ViperFormatPlugin|ViperKeyboardEditorPlugin|ViperListPlugin|ViperHistoryPlugin|ViperTableEditorPlugin|ViperTrackChangesPlugin|ViperLinkPlugin|ViperAccessibilityPlugin|ViperSourceViewPlugin|ViperImagePlugin|ViperSearchReplacePlugin|ViperLangToolsPlugin|ViperCharMapPlugin';
+            plugins        = plugins.split('|');
+
+            _loadScripts(path + 'Plugins/', plugins.concat([]), function() {
+                if (ViperReadyCallback) {
+                    ViperReadyCallback.call(window);
+                } else {
+                    var maxTry = 10;
+                    var interval = setInterval(function() {
+                        maxTry--;
+                        if (ViperReadyCallback) {
+                            ViperReadyCallback.call(window);
+                            clearInterval(interval);
+                        } else if (maxTry === 0) {
+                            clearInterval(interval);
+                        }
+                    }, 500);
+                }
+            }, true);
+
+
+            var coreCSS = 'viper|viper_moz'.split('|');
+            for (var j = 0; j < coreCSS.length; j++) {
+                var link   = document.createElement('link');
+                link.rel   = 'stylesheet';
+                link.media = 'screen';
+                link.href  = path + 'Css/' + coreCSS[j] + '.css';
+                document.getElementsByTagName('head')[0].appendChild(link);
+            }
+
+            for (var j = 0; j < plugins.length; j++) {
+                var link   = document.createElement('link');
+                link.rel   = 'stylesheet';
+                link.media = 'screen';
+                link.href  = path + 'Plugins/' + plugins[j] + '/' + plugins[j] + '.css';
+                document.getElementsByTagName('head')[0].appendChild(link);
+            }
+        });
+    };
+}) ();
+
+if (!/MSIE/.test(navigator.userAgent)) {
+/* ***** BEGIN LICENSE BLOCK *****
+ * Distributed under the BSD license:
+ *
+ * Copyright (c) 2010, Ajax.org B.V.
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *     * Redistributions of source code must retain the above copyright
+ *       notice, this list of conditions and the following disclaimer.
+ *     * Redistributions in binary form must reproduce the above copyright
+ *       notice, this list of conditions and the following disclaimer in the
+ *       documentation and/or other materials provided with the distribution.
+ *     * Neither the name of Ajax.org B.V. nor the
+ *       names of its contributors may be used to endorse or promote products
+ *       derived from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL AJAX.ORG B.V. BE LIABLE FOR ANY
+ * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+ * ***** END LICENSE BLOCK ***** */
 
 (function() {
 
@@ -25330,7 +31478,7 @@ var boxedString = Object("a"),
     splitString = boxedString[0] != "a" || !(0 in boxedString);
 
 if (!Array.prototype.forEach) {
-    Array.prototype.forEach = function forEach(fun ) {
+    Array.prototype.forEach = function forEach(fun /*, thisp*/) {
         var object = toObject(this),
             self = splitString && _toString(this) == "[object String]" ?
                 this.split("") :
@@ -25350,7 +31498,7 @@ if (!Array.prototype.forEach) {
     };
 }
 if (!Array.prototype.map) {
-    Array.prototype.map = function map(fun ) {
+    Array.prototype.map = function map(fun /*, thisp*/) {
         var object = toObject(this),
             self = splitString && _toString(this) == "[object String]" ?
                 this.split("") :
@@ -25370,7 +31518,7 @@ if (!Array.prototype.map) {
     };
 }
 if (!Array.prototype.filter) {
-    Array.prototype.filter = function filter(fun ) {
+    Array.prototype.filter = function filter(fun /*, thisp */) {
         var object = toObject(this),
             self = splitString && _toString(this) == "[object String]" ?
                 this.split("") :
@@ -25395,7 +31543,7 @@ if (!Array.prototype.filter) {
     };
 }
 if (!Array.prototype.every) {
-    Array.prototype.every = function every(fun ) {
+    Array.prototype.every = function every(fun /*, thisp */) {
         var object = toObject(this),
             self = splitString && _toString(this) == "[object String]" ?
                 this.split("") :
@@ -25415,7 +31563,7 @@ if (!Array.prototype.every) {
     };
 }
 if (!Array.prototype.some) {
-    Array.prototype.some = function some(fun ) {
+    Array.prototype.some = function some(fun /*, thisp */) {
         var object = toObject(this),
             self = splitString && _toString(this) == "[object String]" ?
                 this.split("") :
@@ -25435,7 +31583,7 @@ if (!Array.prototype.some) {
     };
 }
 if (!Array.prototype.reduce) {
-    Array.prototype.reduce = function reduce(fun ) {
+    Array.prototype.reduce = function reduce(fun /*, initial*/) {
         var object = toObject(this),
             self = splitString && _toString(this) == "[object String]" ?
                 this.split("") :
@@ -25474,7 +31622,7 @@ if (!Array.prototype.reduce) {
     };
 }
 if (!Array.prototype.reduceRight) {
-    Array.prototype.reduceRight = function reduceRight(fun ) {
+    Array.prototype.reduceRight = function reduceRight(fun /*, initial*/) {
         var object = toObject(this),
             self = splitString && _toString(this) == "[object String]" ?
                 this.split("") :
@@ -25512,7 +31660,7 @@ if (!Array.prototype.reduceRight) {
     };
 }
 if (!Array.prototype.indexOf || ([0, 1].indexOf(1, 2) != -1)) {
-    Array.prototype.indexOf = function indexOf(sought  ) {
+    Array.prototype.indexOf = function indexOf(sought /*, fromIndex */ ) {
         var self = splitString && _toString(this) == "[object String]" ?
                 this.split("") :
                 toObject(this),
@@ -25536,7 +31684,7 @@ if (!Array.prototype.indexOf || ([0, 1].indexOf(1, 2) != -1)) {
     };
 }
 if (!Array.prototype.lastIndexOf || ([0, 1].lastIndexOf(0, -3) != -1)) {
-    Array.prototype.lastIndexOf = function lastIndexOf(sought ) {
+    Array.prototype.lastIndexOf = function lastIndexOf(sought /*, fromIndex */) {
         var self = splitString && _toString(this) == "[object String]" ?
                 this.split("") :
                 toObject(this),
@@ -36827,7 +42975,8 @@ width: 100%;\
 -moz-box-sizing: border-box;\
 -webkit-box-sizing: border-box;\
 box-sizing: border-box;\
-\
+/* setting pointer-events: auto; on node under the mouse, which changes\
+during scroll, will break mouse wheel scrolling in Safari */\
 pointer-events: none;\
 }\
 .ace_gutter-layer {\
@@ -36993,7 +43142,9 @@ background-color: rgba(0, 0, 0, 0.05);\
 -webkit-box-shadow: 0 1px 1px rgba(255, 255, 255, 0.8);\
 box-shadow: 0 1px 1px rgba(255, 255, 255, 0.8);\
 }\
-\
+/**\
+* Dark version for fold widgets\
+*/\
 .ace_dark .ace_fold-widget {\
 background-image: url(\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHklEQVQIW2P4//8/AzoGEQ7oGCaLLAhWiSwB146BAQCSTPYocqT0AAAAAElFTkSuQmCC\");\
 }\
@@ -41123,6092 +47274,8 @@ dom.importCssString(exports.cssText, exports.cssClass);
                 });
             })();
 
-define("ace/mode/html",["require","exports","module","ace/lib/oop","ace/mode/text","ace/mode/javascript","ace/mode/css","ace/tokenizer","ace/mode/html_highlight_rules","ace/mode/behaviour/html","ace/mode/folding/html","ace/mode/html_completions"],function(e,t,n){var r=e("../lib/oop"),i=e("./text").Mode,s=e("./javascript").Mode,o=e("./css").Mode,u=e("../tokenizer").Tokenizer,a=e("./html_highlight_rules").HtmlHighlightRules,f=e("./behaviour/html").HtmlBehaviour,l=e("./folding/html").FoldMode,c=e("./html_completions").HtmlCompletions,h=function(){var e=new a;this.$tokenizer=new u(e.getRules()),this.$behaviour=new f,this.$completer=new c,this.$embeds=e.getEmbeds(),this.createModeDelegates({"js-":s,"css-":o}),this.foldingRules=new l};r.inherits(h,i),function(){this.blockComment={start:"<!--",end:"-->"},this.getNextLineIndent=function(e,t,n){return this.$getIndent(t)},this.checkOutdent=function(e,t,n){return!1},this.getCompletions=function(e,t,n,r){return this.$completer.getCompletions(e,t,n,r)}}.call(h.prototype),t.Mode=h}),define("ace/mode/javascript",["require","exports","module","ace/lib/oop","ace/mode/text","ace/tokenizer","ace/mode/javascript_highlight_rules","ace/mode/matching_brace_outdent","ace/range","ace/worker/worker_client","ace/mode/behaviour/cstyle","ace/mode/folding/cstyle"],function(e,t,n){var r=e("../lib/oop"),i=e("./text").Mode,s=e("../tokenizer").Tokenizer,o=e("./javascript_highlight_rules").JavaScriptHighlightRules,u=e("./matching_brace_outdent").MatchingBraceOutdent,a=e("../range").Range,f=e("../worker/worker_client").WorkerClient,l=e("./behaviour/cstyle").CstyleBehaviour,c=e("./folding/cstyle").FoldMode,h=function(){var e=new o;this.$tokenizer=new s(e.getRules()),this.$outdent=new u,this.$behaviour=new l,this.$keywordList=e.$keywordList,this.foldingRules=new c};r.inherits(h,i),function(){this.lineCommentStart="//",this.blockComment={start:""},this.getNextLineIndent=function(e,t,n){var r=this.$getIndent(t),i=this.$tokenizer.getLineTokens(t,e),s=i.tokens,o=i.state;if(s.length&&s[s.length-1].type=="comment")return r;if(e=="start"||e=="no_regex"){var u=t.match(/^.*(?:\bcase\b.*\:|[\{\(\[])\s*$/);u&&(r+=n)}else if(e=="doc-start"){if(o=="start"||o=="no_regex")return"";var u=t.match(/^\s*(\/?)\*/);u&&(u[1]&&(r+=" "),r+="* ")}return r},this.checkOutdent=function(e,t,n){return this.$outdent.checkOutdent(t,n)},this.autoOutdent=function(e,t,n){this.$outdent.autoOutdent(t,n)},this.createWorker=function(e){var t=new f(["ace"],"ace/mode/javascript_worker","JavaScriptWorker");return t.attachToDocument(e.getDocument()),t.on("jslint",function(t){e.setAnnotations(t.data)}),t.on("terminate",function(){e.clearAnnotations()}),t}}.call(h.prototype),t.Mode=h}),define("ace/mode/javascript_highlight_rules",["require","exports","module","ace/lib/oop","ace/mode/doc_comment_highlight_rules","ace/mode/text_highlight_rules"],function(e,t,n){var r=e("../lib/oop"),i=e("./doc_comment_highlight_rules").DocCommentHighlightRules,s=e("./text_highlight_rules").TextHighlightRules,o=function(){var e=this.createKeywordMapper({"variable.language":"Array|Boolean|Date|Function|Iterator|Number|Object|RegExp|String|Proxy|Namespace|QName|XML|XMLList|ArrayBuffer|Float32Array|Float64Array|Int16Array|Int32Array|Int8Array|Uint16Array|Uint32Array|Uint8Array|Uint8ClampedArray|Error|EvalError|InternalError|RangeError|ReferenceError|StopIteration|SyntaxError|TypeError|URIError|decodeURI|decodeURIComponent|encodeURI|encodeURIComponent|eval|isFinite|isNaN|parseFloat|parseInt|JSON|Math|this|arguments|prototype|window|document",keyword:"const|yield|import|get|set|break|case|catch|continue|default|delete|do|else|finally|for|function|if|in|instanceof|new|return|switch|throw|try|typeof|let|var|while|with|debugger|__parent__|__count__|escape|unescape|with|__proto__|class|enum|extends|super|export|implements|private|public|interface|package|protected|static","storage.type":"const|let|var|function","constant.language":"null|Infinity|NaN|undefined","support.function":"alert","constant.language.boolean":"true|false"},"identifier"),t="case|do|else|finally|in|instanceof|return|throw|try|typeof|yield|void",n="[a-zA-Z\\$_¡-￿][a-zA-Z\\d\\$_¡-￿]*\\b",r="\\\\(?:x[0-9a-fA-F]{2}|u[0-9a-fA-F]{4}|[0-2][0-7]{0,2}|3[0-6][0-7]?|37[0-7]?|[4-7][0-7]?|.)";this.$rules={no_regex:[{token:"comment",regex:"\\/\\/",next:"line_comment"},i.getStartRule("doc-start"),{token:"comment",regex:/\/\*/,next:"comment"},{token:"string",regex:"'(?=.)",next:"qstring"},{token:"string",regex:'"(?=.)',next:"qqstring"},{token:"constant.numeric",regex:/0[xX][0-9a-fA-F]+\b/},{token:"constant.numeric",regex:/[+-]?\d+(?:(?:\.\d*)?(?:[eE][+-]?\d+)?)?\b/},{token:["storage.type","punctuation.operator","support.function","punctuation.operator","entity.name.function","text","keyword.operator"],regex:"("+n+")(\\.)(prototype)(\\.)("+n+")(\\s*)(=)",next:"function_arguments"},{token:["storage.type","punctuation.operator","entity.name.function","text","keyword.operator","text","storage.type","text","paren.lparen"],regex:"("+n+")(\\.)("+n+")(\\s*)(=)(\\s*)(function)(\\s*)(\\()",next:"function_arguments"},{token:["entity.name.function","text","keyword.operator","text","storage.type","text","paren.lparen"],regex:"("+n+")(\\s*)(=)(\\s*)(function)(\\s*)(\\()",next:"function_arguments"},{token:["storage.type","punctuation.operator","entity.name.function","text","keyword.operator","text","storage.type","text","entity.name.function","text","paren.lparen"],regex:"("+n+")(\\.)("+n+")(\\s*)(=)(\\s*)(function)(\\s+)(\\w+)(\\s*)(\\()",next:"function_arguments"},{token:["storage.type","text","entity.name.function","text","paren.lparen"],regex:"(function)(\\s+)("+n+")(\\s*)(\\()",next:"function_arguments"},{token:["entity.name.function","text","punctuation.operator","text","storage.type","text","paren.lparen"],regex:"("+n+")(\\s*)(:)(\\s*)(function)(\\s*)(\\()",next:"function_arguments"},{token:["text","text","storage.type","text","paren.lparen"],regex:"(:)(\\s*)(function)(\\s*)(\\()",next:"function_arguments"},{token:"keyword",regex:"(?:"+t+")\\b",next:"start"},{token:["punctuation.operator","support.function"],regex:/(\.)(s(?:h(?:ift|ow(?:Mod(?:elessDialog|alDialog)|Help))|croll(?:X|By(?:Pages|Lines)?|Y|To)?|t(?:op|rike)|i(?:n|zeToContent|debar|gnText)|ort|u(?:p|b(?:str(?:ing)?)?)|pli(?:ce|t)|e(?:nd|t(?:Re(?:sizable|questHeader)|M(?:i(?:nutes|lliseconds)|onth)|Seconds|Ho(?:tKeys|urs)|Year|Cursor|Time(?:out)?|Interval|ZOptions|Date|UTC(?:M(?:i(?:nutes|lliseconds)|onth)|Seconds|Hours|Date|FullYear)|FullYear|Active)|arch)|qrt|lice|avePreferences|mall)|h(?:ome|andleEvent)|navigate|c(?:har(?:CodeAt|At)|o(?:s|n(?:cat|textual|firm)|mpile)|eil|lear(?:Timeout|Interval)?|a(?:ptureEvents|ll)|reate(?:StyleSheet|Popup|EventObject))|t(?:o(?:GMTString|S(?:tring|ource)|U(?:TCString|pperCase)|Lo(?:caleString|werCase))|est|a(?:n|int(?:Enabled)?))|i(?:s(?:NaN|Finite)|ndexOf|talics)|d(?:isableExternalCapture|ump|etachEvent)|u(?:n(?:shift|taint|escape|watch)|pdateCommands)|j(?:oin|avaEnabled)|p(?:o(?:p|w)|ush|lugins.refresh|a(?:ddings|rse(?:Int|Float)?)|r(?:int|ompt|eference))|e(?:scape|nableExternalCapture|val|lementFromPoint|x(?:p|ec(?:Script|Command)?))|valueOf|UTC|queryCommand(?:State|Indeterm|Enabled|Value)|f(?:i(?:nd|le(?:ModifiedDate|Size|CreatedDate|UpdatedDate)|xed)|o(?:nt(?:size|color)|rward)|loor|romCharCode)|watch|l(?:ink|o(?:ad|g)|astIndexOf)|a(?:sin|nchor|cos|t(?:tachEvent|ob|an(?:2)?)|pply|lert|b(?:s|ort))|r(?:ou(?:nd|teEvents)|e(?:size(?:By|To)|calc|turnValue|place|verse|l(?:oad|ease(?:Capture|Events)))|andom)|g(?:o|et(?:ResponseHeader|M(?:i(?:nutes|lliseconds)|onth)|Se(?:conds|lection)|Hours|Year|Time(?:zoneOffset)?|Da(?:y|te)|UTC(?:M(?:i(?:nutes|lliseconds)|onth)|Seconds|Hours|Da(?:y|te)|FullYear)|FullYear|A(?:ttention|llResponseHeaders)))|m(?:in|ove(?:B(?:y|elow)|To(?:Absolute)?|Above)|ergeAttributes|a(?:tch|rgins|x))|b(?:toa|ig|o(?:ld|rderWidths)|link|ack))\b(?=\()/},{token:["punctuation.operator","support.function.dom"],regex:/(\.)(s(?:ub(?:stringData|mit)|plitText|e(?:t(?:NamedItem|Attribute(?:Node)?)|lect))|has(?:ChildNodes|Feature)|namedItem|c(?:l(?:ick|o(?:se|neNode))|reate(?:C(?:omment|DATASection|aption)|T(?:Head|extNode|Foot)|DocumentFragment|ProcessingInstruction|E(?:ntityReference|lement)|Attribute))|tabIndex|i(?:nsert(?:Row|Before|Cell|Data)|tem)|open|delete(?:Row|C(?:ell|aption)|T(?:Head|Foot)|Data)|focus|write(?:ln)?|a(?:dd|ppend(?:Child|Data))|re(?:set|place(?:Child|Data)|move(?:NamedItem|Child|Attribute(?:Node)?)?)|get(?:NamedItem|Element(?:sBy(?:Name|TagName)|ById)|Attribute(?:Node)?)|blur)\b(?=\()/},{token:["punctuation.operator","support.constant"],regex:/(\.)(s(?:ystemLanguage|cr(?:ipts|ollbars|een(?:X|Y|Top|Left))|t(?:yle(?:Sheets)?|atus(?:Text|bar)?)|ibling(?:Below|Above)|ource|uffixes|e(?:curity(?:Policy)?|l(?:ection|f)))|h(?:istory|ost(?:name)?|as(?:h|Focus))|y|X(?:MLDocument|SLDocument)|n(?:ext|ame(?:space(?:s|URI)|Prop))|M(?:IN_VALUE|AX_VALUE)|c(?:haracterSet|o(?:n(?:structor|trollers)|okieEnabled|lorDepth|mp(?:onents|lete))|urrent|puClass|l(?:i(?:p(?:boardData)?|entInformation)|osed|asses)|alle(?:e|r)|rypto)|t(?:o(?:olbar|p)|ext(?:Transform|Indent|Decoration|Align)|ags)|SQRT(?:1_2|2)|i(?:n(?:ner(?:Height|Width)|put)|ds|gnoreCase)|zIndex|o(?:scpu|n(?:readystatechange|Line)|uter(?:Height|Width)|p(?:sProfile|ener)|ffscreenBuffering)|NEGATIVE_INFINITY|d(?:i(?:splay|alog(?:Height|Top|Width|Left|Arguments)|rectories)|e(?:scription|fault(?:Status|Ch(?:ecked|arset)|View)))|u(?:ser(?:Profile|Language|Agent)|n(?:iqueID|defined)|pdateInterval)|_content|p(?:ixelDepth|ort|ersonalbar|kcs11|l(?:ugins|atform)|a(?:thname|dding(?:Right|Bottom|Top|Left)|rent(?:Window|Layer)?|ge(?:X(?:Offset)?|Y(?:Offset)?))|r(?:o(?:to(?:col|type)|duct(?:Sub)?|mpter)|e(?:vious|fix)))|e(?:n(?:coding|abledPlugin)|x(?:ternal|pando)|mbeds)|v(?:isibility|endor(?:Sub)?|Linkcolor)|URLUnencoded|P(?:I|OSITIVE_INFINITY)|f(?:ilename|o(?:nt(?:Size|Family|Weight)|rmName)|rame(?:s|Element)|gColor)|E|whiteSpace|l(?:i(?:stStyleType|n(?:eHeight|kColor))|o(?:ca(?:tion(?:bar)?|lName)|wsrc)|e(?:ngth|ft(?:Context)?)|a(?:st(?:M(?:odified|atch)|Index|Paren)|yer(?:s|X)|nguage))|a(?:pp(?:MinorVersion|Name|Co(?:deName|re)|Version)|vail(?:Height|Top|Width|Left)|ll|r(?:ity|guments)|Linkcolor|bove)|r(?:ight(?:Context)?|e(?:sponse(?:XML|Text)|adyState))|global|x|m(?:imeTypes|ultiline|enubar|argin(?:Right|Bottom|Top|Left))|L(?:N(?:10|2)|OG(?:10E|2E))|b(?:o(?:ttom|rder(?:Width|RightWidth|BottomWidth|Style|Color|TopWidth|LeftWidth))|ufferDepth|elow|ackground(?:Color|Image)))\b/},{token:["storage.type","punctuation.operator","support.function.firebug"],regex:/(console)(\.)(warn|info|log|error|time|timeEnd|assert)\b/},{token:e,regex:n},{token:"keyword.operator",regex:/--|\+\+|[!$%&*+\-~]|===|==|=|!=|!==|<=|>=|<<=|>>=|>>>=|<>|<|>|!|&&|\|\||\?\:|\*=|%=|\+=|\-=|&=|\^=/,next:"start"},{token:"punctuation.operator",regex:/\?|\:|\,|\;|\./,next:"start"},{token:"paren.lparen",regex:/[\[({]/,next:"start"},{token:"paren.rparen",regex:/[\])}]/},{token:"keyword.operator",regex:/\/=?/,next:"start"},{token:"comment",regex:/^#!.*$/}],start:[i.getStartRule("doc-start"),{token:"comment",regex:"\\/\\*",next:"comment_regex_allowed"},{token:"comment",regex:"\\/\\/",next:"line_comment_regex_allowed"},{token:"string.regexp",regex:"\\/",next:"regex"},{token:"text",regex:"\\s+|^$",next:"start"},{token:"empty",regex:"",next:"no_regex"}],regex:[{token:"regexp.keyword.operator",regex:"\\\\(?:u[\\da-fA-F]{4}|x[\\da-fA-F]{2}|.)"},{token:"string.regexp",regex:"/\\w*",next:"no_regex"},{token:"invalid",regex:/\{\d+\b,?\d*\}[+*]|[+*$^?][+*]|[$^][?]|\?{3,}/},{token:"constant.language.escape",regex:/\(\?[:=!]|\)|\{\d+\b,?\d*\}|[+*]\?|[()$^+*?]/},{token:"constant.language.delimiter",regex:/\|/},{token:"constant.language.escape",regex:/\[\^?/,next:"regex_character_class"},{token:"empty",regex:"$",next:"no_regex"},{defaultToken:"string.regexp"}],regex_character_class:[{token:"regexp.keyword.operator",regex:"\\\\(?:u[\\da-fA-F]{4}|x[\\da-fA-F]{2}|.)"},{token:"constant.language.escape",regex:"]",next:"regex"},{token:"constant.language.escape",regex:"-"},{token:"empty",regex:"$",next:"no_regex"},{defaultToken:"string.regexp.charachterclass"}],function_arguments:[{token:"variable.parameter",regex:n},{token:"punctuation.operator",regex:"[, ]+"},{token:"punctuation.operator",regex:"$"},{token:"empty",regex:"",next:"no_regex"}],comment_regex_allowed:[{token:"comment",regex:"\\*\\/",next:"start"},{defaultToken:"comment"}],comment:[{token:"comment",regex:"\\*\\/",next:"no_regex"},{defaultToken:"comment"}],line_comment_regex_allowed:[{token:"comment",regex:"$|^",next:"start"},{defaultToken:"comment"}],line_comment:[{token:"comment",regex:"$|^",next:"no_regex"},{defaultToken:"comment"}],qqstring:[{token:"constant.language.escape",regex:r},{token:"string",regex:"\\\\$",next:"qqstring"},{token:"string",regex:'"|$',next:"no_regex"},{defaultToken:"string"}],qstring:[{token:"constant.language.escape",regex:r},{token:"string",regex:"\\\\$",next:"qstring"},{token:"string",regex:"'|$",next:"no_regex"},{defaultToken:"string"}]},this.embedRules(i,"doc-",[i.getEndRule("no_regex")])};r.inherits(o,s),t.JavaScriptHighlightRules=o}),define("ace/mode/doc_comment_highlight_rules",["require","exports","module","ace/lib/oop","ace/mode/text_highlight_rules"],function(e,t,n){var r=e("../lib/oop"),i=e("./text_highlight_rules").TextHighlightRules,s=function(){this.$rules={start:[{token:"comment.doc.tag",regex:"@[\\w\\d_]+"},{token:"comment.doc.tag",regex:"\\bTODO\\b"},{defaultToken:"comment.doc"}]}};r.inherits(s,i),s.getStartRule=function(e){return{token:"comment.doc",regex:"\\/\\*(?=\\*)",next:e}},s.getEndRule=function(e){return{token:"comment.doc",regex:"\\*\\/",next:e}},t.DocCommentHighlightRules=s}),define("ace/mode/matching_brace_outdent",["require","exports","module","ace/range"],function(e,t,n){var r=e("../range").Range,i=function(){};(function(){this.checkOutdent=function(e,t){return/^\s+$/.test(e)?/^\s*\}/.test(t):!1},this.autoOutdent=function(e,t){var n=e.getLine(t),i=n.match(/^(\s*\})/);if(!i)return 0;var s=i[1].length,o=e.findMatchingBracket({row:t,column:s});if(!o||o.row==t)return 0;var u=this.$getIndent(e.getLine(o.row));e.replace(new r(t,0,t,s-1),u)},this.$getIndent=function(e){return e.match(/^\s*/)[0]}}).call(i.prototype),t.MatchingBraceOutdent=i}),define("ace/mode/behaviour/cstyle",["require","exports","module","ace/lib/oop","ace/mode/behaviour","ace/token_iterator","ace/lib/lang"],function(e,t,n){var r=e("../../lib/oop"),i=e("../behaviour").Behaviour,s=e("../../token_iterator").TokenIterator,o=e("../../lib/lang"),u=["text","paren.rparen","punctuation.operator"],a=["text","paren.rparen","punctuation.operator","comment"],f=0,l=-1,c="",h=0,p=-1,d="",v="",m=function(){m.isSaneInsertion=function(e,t){var n=e.getCursorPosition(),r=new s(t,n.row,n.column);if(!this.$matchTokenType(r.getCurrentToken()||"text",u)){var i=new s(t,n.row,n.column+1);if(!this.$matchTokenType(i.getCurrentToken()||"text",u))return!1}return r.stepForward(),r.getCurrentTokenRow()!==n.row||this.$matchTokenType(r.getCurrentToken()||"text",a)},m.$matchTokenType=function(e,t){return t.indexOf(e.type||e)>-1},m.recordAutoInsert=function(e,t,n){var r=e.getCursorPosition(),i=t.doc.getLine(r.row);this.isAutoInsertedClosing(r,i,c[0])||(f=0),l=r.row,c=n+i.substr(r.column),f++},m.recordMaybeInsert=function(e,t,n){var r=e.getCursorPosition(),i=t.doc.getLine(r.row);this.isMaybeInsertedClosing(r,i)||(h=0),p=r.row,d=i.substr(0,r.column)+n,v=i.substr(r.column),h++},m.isAutoInsertedClosing=function(e,t,n){return f>0&&e.row===l&&n===c[0]&&t.substr(e.column)===c},m.isMaybeInsertedClosing=function(e,t){return h>0&&e.row===p&&t.substr(e.column)===v&&t.substr(0,e.column)==d},m.popAutoInsertedClosing=function(){c=c.substr(1),f--},m.clearMaybeInsertedClosing=function(){h=0,p=-1},this.add("braces","insertion",function(e,t,n,r,i){var s=n.getCursorPosition(),u=r.doc.getLine(s.row);if(i=="{"){var a=n.getSelectionRange(),f=r.doc.getTextRange(a);if(f!==""&&f!=="{"&&n.getWrapBehavioursEnabled())return{text:"{"+f+"}",selection:!1};if(m.isSaneInsertion(n,r))return/[\]\}\)]/.test(u[s.column])?(m.recordAutoInsert(n,r,"}"),{text:"{}",selection:[1,1]}):(m.recordMaybeInsert(n,r,"{"),{text:"{",selection:[1,1]})}else if(i=="}"){var l=u.substring(s.column,s.column+1);if(l=="}"){var c=r.$findOpeningBracket("}",{column:s.column+1,row:s.row});if(c!==null&&m.isAutoInsertedClosing(s,u,i))return m.popAutoInsertedClosing(),{text:"",selection:[1,1]}}}else if(i=="\n"||i=="\r\n"){var p="";m.isMaybeInsertedClosing(s,u)&&(p=o.stringRepeat("}",h),m.clearMaybeInsertedClosing());var l=u.substring(s.column,s.column+1);if(l=="}"||p!==""){var d=r.findMatchingBracket({row:s.row,column:s.column},"}");if(!d)return null;var v=this.getNextLineIndent(e,u.substring(0,s.column),r.getTabString()),g=this.$getIndent(u);return{text:"\n"+v+"\n"+g+p,selection:[1,v.length,1,v.length]}}}}),this.add("braces","deletion",function(e,t,n,r,i){var s=r.doc.getTextRange(i);if(!i.isMultiLine()&&s=="{"){var o=r.doc.getLine(i.start.row),u=o.substring(i.end.column,i.end.column+1);if(u=="}")return i.end.column++,i;h--}}),this.add("parens","insertion",function(e,t,n,r,i){if(i=="("){var s=n.getSelectionRange(),o=r.doc.getTextRange(s);if(o!==""&&n.getWrapBehavioursEnabled())return{text:"("+o+")",selection:!1};if(m.isSaneInsertion(n,r))return m.recordAutoInsert(n,r,")"),{text:"()",selection:[1,1]}}else if(i==")"){var u=n.getCursorPosition(),a=r.doc.getLine(u.row),f=a.substring(u.column,u.column+1);if(f==")"){var l=r.$findOpeningBracket(")",{column:u.column+1,row:u.row});if(l!==null&&m.isAutoInsertedClosing(u,a,i))return m.popAutoInsertedClosing(),{text:"",selection:[1,1]}}}}),this.add("parens","deletion",function(e,t,n,r,i){var s=r.doc.getTextRange(i);if(!i.isMultiLine()&&s=="("){var o=r.doc.getLine(i.start.row),u=o.substring(i.start.column+1,i.start.column+2);if(u==")")return i.end.column++,i}}),this.add("brackets","insertion",function(e,t,n,r,i){if(i=="["){var s=n.getSelectionRange(),o=r.doc.getTextRange(s);if(o!==""&&n.getWrapBehavioursEnabled())return{text:"["+o+"]",selection:!1};if(m.isSaneInsertion(n,r))return m.recordAutoInsert(n,r,"]"),{text:"[]",selection:[1,1]}}else if(i=="]"){var u=n.getCursorPosition(),a=r.doc.getLine(u.row),f=a.substring(u.column,u.column+1);if(f=="]"){var l=r.$findOpeningBracket("]",{column:u.column+1,row:u.row});if(l!==null&&m.isAutoInsertedClosing(u,a,i))return m.popAutoInsertedClosing(),{text:"",selection:[1,1]}}}}),this.add("brackets","deletion",function(e,t,n,r,i){var s=r.doc.getTextRange(i);if(!i.isMultiLine()&&s=="["){var o=r.doc.getLine(i.start.row),u=o.substring(i.start.column+1,i.start.column+2);if(u=="]")return i.end.column++,i}}),this.add("string_dquotes","insertion",function(e,t,n,r,i){if(i=='"'||i=="'"){var s=i,o=n.getSelectionRange(),u=r.doc.getTextRange(o);if(u!==""&&u!=="'"&&u!='"'&&n.getWrapBehavioursEnabled())return{text:s+u+s,selection:!1};var a=n.getCursorPosition(),f=r.doc.getLine(a.row),l=f.substring(a.column-1,a.column);if(l=="\\")return null;var c=r.getTokens(o.start.row),h=0,p,d=-1;for(var v=0;v<c.length;v++){p=c[v],p.type=="string"?d=-1:d<0&&(d=p.value.indexOf(s));if(p.value.length+h>o.start.column)break;h+=c[v].value.length}if(!p||d<0&&p.type!=="comment"&&(p.type!=="string"||o.start.column!==p.value.length+h-1&&p.value.lastIndexOf(s)===p.value.length-1)){if(!m.isSaneInsertion(n,r))return;return{text:s+s,selection:[1,1]}}if(p&&p.type==="string"){var g=f.substring(a.column,a.column+1);if(g==s)return{text:"",selection:[1,1]}}}}),this.add("string_dquotes","deletion",function(e,t,n,r,i){var s=r.doc.getTextRange(i);if(!i.isMultiLine()&&(s=='"'||s=="'")){var o=r.doc.getLine(i.start.row),u=o.substring(i.start.column+1,i.start.column+2);if(u==s)return i.end.column++,i}})};r.inherits(m,i),t.CstyleBehaviour=m}),define("ace/mode/folding/cstyle",["require","exports","module","ace/lib/oop","ace/range","ace/mode/folding/fold_mode"],function(e,t,n){var r=e("../../lib/oop"),i=e("../../range").Range,s=e("./fold_mode").FoldMode,o=t.FoldMode=function(e){e&&(this.foldingStartMarker=new RegExp(this.foldingStartMarker.source.replace(/\|[^|]*?$/,"|"+e.start)),this.foldingStopMarker=new RegExp(this.foldingStopMarker.source.replace(/\|[^|]*?$/,"|"+e.end)))};r.inherits(o,s),function(){this.foldingStartMarker=/(\{|\[)[^\}\]]*$|^\s*(\/\*)/,this.foldingStopMarker=/^[^\[\{]*(\}|\])|^[\s\*]*(\*\/)/,this.getFoldWidgetRange=function(e,t,n){var r=e.getLine(n),i=r.match(this.foldingStartMarker);if(i){var s=i.index;return i[1]?this.openingBracketBlock(e,i[1],n,s):e.getCommentFoldRange(n,s+i[0].length,1)}if(t!=="markbeginend")return;var i=r.match(this.foldingStopMarker);if(i){var s=i.index+i[0].length;return i[1]?this.closingBracketBlock(e,i[1],n,s):e.getCommentFoldRange(n,s,-1)}}}.call(o.prototype)}),define("ace/mode/css",["require","exports","module","ace/lib/oop","ace/mode/text","ace/tokenizer","ace/mode/css_highlight_rules","ace/mode/matching_brace_outdent","ace/worker/worker_client","ace/mode/behaviour/css","ace/mode/folding/cstyle"],function(e,t,n){var r=e("../lib/oop"),i=e("./text").Mode,s=e("../tokenizer").Tokenizer,o=e("./css_highlight_rules").CssHighlightRules,u=e("./matching_brace_outdent").MatchingBraceOutdent,a=e("../worker/worker_client").WorkerClient,f=e("./behaviour/css").CssBehaviour,l=e("./folding/cstyle").FoldMode,c=function(){var e=new o;this.$tokenizer=new s(e.getRules()),this.$outdent=new u,this.$behaviour=new f,this.$keywordList=e.$keywordList,this.foldingRules=new l};r.inherits(c,i),function(){this.foldingRules="cStyle",this.blockComment={start:""},this.getNextLineIndent=function(e,t,n){var r=this.$getIndent(t),i=this.$tokenizer.getLineTokens(t,e).tokens;if(i.length&&i[i.length-1].type=="comment")return r;var s=t.match(/^.*\{\s*$/);return s&&(r+=n),r},this.checkOutdent=function(e,t,n){return this.$outdent.checkOutdent(t,n)},this.autoOutdent=function(e,t,n){this.$outdent.autoOutdent(t,n)},this.createWorker=function(e){var t=new a(["ace"],"ace/mode/css_worker","Worker");return t.attachToDocument(e.getDocument()),t.on("csslint",function(t){e.setAnnotations(t.data)}),t.on("terminate",function(){e.clearAnnotations()}),t}}.call(c.prototype),t.Mode=c}),define("ace/mode/css_highlight_rules",["require","exports","module","ace/lib/oop","ace/lib/lang","ace/mode/text_highlight_rules"],function(e,t,n){var r=e("../lib/oop"),i=e("../lib/lang"),s=e("./text_highlight_rules").TextHighlightRules,o=t.supportType="animation-fill-mode|alignment-adjust|alignment-baseline|animation-delay|animation-direction|animation-duration|animation-iteration-count|animation-name|animation-play-state|animation-timing-function|animation|appearance|azimuth|backface-visibility|background-attachment|background-break|background-clip|background-color|background-image|background-origin|background-position|background-repeat|background-size|background|baseline-shift|binding|bleed|bookmark-label|bookmark-level|bookmark-state|bookmark-target|border-bottom|border-bottom-color|border-bottom-left-radius|border-bottom-right-radius|border-bottom-style|border-bottom-width|border-collapse|border-color|border-image|border-image-outset|border-image-repeat|border-image-slice|border-image-source|border-image-width|border-left|border-left-color|border-left-style|border-left-width|border-radius|border-right|border-right-color|border-right-style|border-right-width|border-spacing|border-style|border-top|border-top-color|border-top-left-radius|border-top-right-radius|border-top-style|border-top-width|border-width|border|bottom|box-align|box-decoration-break|box-direction|box-flex-group|box-flex|box-lines|box-ordinal-group|box-orient|box-pack|box-shadow|box-sizing|break-after|break-before|break-inside|caption-side|clear|clip|color-profile|color|column-count|column-fill|column-gap|column-rule|column-rule-color|column-rule-style|column-rule-width|column-span|column-width|columns|content|counter-increment|counter-reset|crop|cue-after|cue-before|cue|cursor|direction|display|dominant-baseline|drop-initial-after-adjust|drop-initial-after-align|drop-initial-before-adjust|drop-initial-before-align|drop-initial-size|drop-initial-value|elevation|empty-cells|fit|fit-position|float-offset|float|font-family|font-size|font-size-adjust|font-stretch|font-style|font-variant|font-weight|font|grid-columns|grid-rows|hanging-punctuation|height|hyphenate-after|hyphenate-before|hyphenate-character|hyphenate-lines|hyphenate-resource|hyphens|icon|image-orientation|image-rendering|image-resolution|inline-box-align|left|letter-spacing|line-height|line-stacking-ruby|line-stacking-shift|line-stacking-strategy|line-stacking|list-style-image|list-style-position|list-style-type|list-style|margin-bottom|margin-left|margin-right|margin-top|margin|mark-after|mark-before|mark|marks|marquee-direction|marquee-play-count|marquee-speed|marquee-style|max-height|max-width|min-height|min-width|move-to|nav-down|nav-index|nav-left|nav-right|nav-up|opacity|orphans|outline-color|outline-offset|outline-style|outline-width|outline|overflow-style|overflow-x|overflow-y|overflow|padding-bottom|padding-left|padding-right|padding-top|padding|page-break-after|page-break-before|page-break-inside|page-policy|page|pause-after|pause-before|pause|perspective-origin|perspective|phonemes|pitch-range|pitch|play-during|position|presentation-level|punctuation-trim|quotes|rendering-intent|resize|rest-after|rest-before|rest|richness|right|rotation-point|rotation|ruby-align|ruby-overhang|ruby-position|ruby-span|size|speak-header|speak-numeral|speak-punctuation|speak|speech-rate|stress|string-set|table-layout|target-name|target-new|target-position|target|text-align-last|text-align|text-decoration|text-emphasis|text-height|text-indent|text-justify|text-outline|text-shadow|text-transform|text-wrap|top|transform-origin|transform-style|transform|transition-delay|transition-duration|transition-property|transition-timing-function|transition|unicode-bidi|vertical-align|visibility|voice-balance|voice-duration|voice-family|voice-pitch-range|voice-pitch|voice-rate|voice-stress|voice-volume|volume|white-space-collapse|white-space|widows|width|word-break|word-spacing|word-wrap|z-index",u=t.supportFunction="rgb|rgba|url|attr|counter|counters",a=t.supportConstant="absolute|after-edge|after|all-scroll|all|alphabetic|always|antialiased|armenian|auto|avoid-column|avoid-page|avoid|balance|baseline|before-edge|before|below|bidi-override|block-line-height|block|bold|bolder|border-box|both|bottom|box|break-all|break-word|capitalize|caps-height|caption|center|central|char|circle|cjk-ideographic|clone|close-quote|col-resize|collapse|column|consider-shifts|contain|content-box|cover|crosshair|cubic-bezier|dashed|decimal-leading-zero|decimal|default|disabled|disc|disregard-shifts|distribute-all-lines|distribute-letter|distribute-space|distribute|dotted|double|e-resize|ease-in|ease-in-out|ease-out|ease|ellipsis|end|exclude-ruby|fill|fixed|georgian|glyphs|grid-height|groove|hand|hanging|hebrew|help|hidden|hiragana-iroha|hiragana|horizontal|icon|ideograph-alpha|ideograph-numeric|ideograph-parenthesis|ideograph-space|ideographic|inactive|include-ruby|inherit|initial|inline-block|inline-box|inline-line-height|inline-table|inline|inset|inside|inter-ideograph|inter-word|invert|italic|justify|katakana-iroha|katakana|keep-all|last|left|lighter|line-edge|line-through|line|linear|list-item|local|loose|lower-alpha|lower-greek|lower-latin|lower-roman|lowercase|lr-tb|ltr|mathematical|max-height|max-size|medium|menu|message-box|middle|move|n-resize|ne-resize|newspaper|no-change|no-close-quote|no-drop|no-open-quote|no-repeat|none|normal|not-allowed|nowrap|nw-resize|oblique|open-quote|outset|outside|overline|padding-box|page|pointer|pre-line|pre-wrap|pre|preserve-3d|progress|relative|repeat-x|repeat-y|repeat|replaced|reset-size|ridge|right|round|row-resize|rtl|s-resize|scroll|se-resize|separate|slice|small-caps|small-caption|solid|space|square|start|static|status-bar|step-end|step-start|steps|stretch|strict|sub|super|sw-resize|table-caption|table-cell|table-column-group|table-column|table-footer-group|table-header-group|table-row-group|table-row|table|tb-rl|text-after-edge|text-before-edge|text-bottom|text-size|text-top|text|thick|thin|transparent|underline|upper-alpha|upper-latin|upper-roman|uppercase|use-script|vertical-ideographic|vertical-text|visible|w-resize|wait|whitespace|z-index|zero",f=t.supportConstantColor="aqua|black|blue|fuchsia|gray|green|lime|maroon|navy|olive|orange|purple|red|silver|teal|white|yellow",l=t.supportConstantFonts="arial|century|comic|courier|garamond|georgia|helvetica|impact|lucida|symbol|system|tahoma|times|trebuchet|utopia|verdana|webdings|sans-serif|serif|monospace",c=t.numRe="\\-?(?:(?:[0-9]+)|(?:[0-9]*\\.[0-9]+))",h=t.pseudoElements="(\\:+)\\b(after|before|first-letter|first-line|moz-selection|selection)\\b",p=t.pseudoClasses="(:)\\b(active|checked|disabled|empty|enabled|first-child|first-of-type|focus|hover|indeterminate|invalid|last-child|last-of-type|link|not|nth-child|nth-last-child|nth-last-of-type|nth-of-type|only-child|only-of-type|required|root|target|valid|visited)\\b",d=function(){var e=this.createKeywordMapper({"support.function":u,"support.constant":a,"support.type":o,"support.constant.color":f,"support.constant.fonts":l},"text",!0);this.$rules={start:[{token:"comment",regex:"\\/\\*",push:"comment"},{token:"paren.lparen",regex:"\\{",push:"ruleset"},{token:"string",regex:"@.*?{",push:"media"},{token:"keyword",regex:"#[a-z0-9-_]+"},{token:"variable",regex:"\\.[a-z0-9-_]+"},{token:"string",regex:":[a-z0-9-_]+"},{token:"constant",regex:"[a-z0-9-_]+"},{caseInsensitive:!0}],media:[{token:"comment",regex:"\\/\\*",push:"comment"},{token:"paren.lparen",regex:"\\{",push:"ruleset"},{token:"string",regex:"\\}",next:"pop"},{token:"keyword",regex:"#[a-z0-9-_]+"},{token:"variable",regex:"\\.[a-z0-9-_]+"},{token:"string",regex:":[a-z0-9-_]+"},{token:"constant",regex:"[a-z0-9-_]+"},{caseInsensitive:!0}],comment:[{token:"comment",regex:"\\*\\/",next:"pop"},{defaultToken:"comment"}],ruleset:[{token:"paren.rparen",regex:"\\}",next:"pop"},{token:"comment",regex:"\\/\\*",push:"comment"},{token:"string",regex:'["](?:(?:\\\\.)|(?:[^"\\\\]))*?["]'},{token:"string",regex:"['](?:(?:\\\\.)|(?:[^'\\\\]))*?[']"},{token:["constant.numeric","keyword"],regex:"("+c+")(ch|cm|deg|em|ex|fr|gd|grad|Hz|in|kHz|mm|ms|pc|pt|px|rad|rem|s|turn|vh|vm|vw|%)"},{token:"constant.numeric",regex:c},{token:"constant.numeric",regex:"#[a-f0-9]{6}"},{token:"constant.numeric",regex:"#[a-f0-9]{3}"},{token:["punctuation","entity.other.attribute-name.pseudo-element.css"],regex:h},{token:["punctuation","entity.other.attribute-name.pseudo-class.css"],regex:p},{token:["support.function","string","support.function"],regex:"(url\\()(.*)(\\))"},{token:e,regex:"\\-?[a-zA-Z_][a-zA-Z0-9_\\-]*"},{caseInsensitive:!0}]},this.normalizeRules()};r.inherits(d,s),t.CssHighlightRules=d}),define("ace/mode/behaviour/css",["require","exports","module","ace/lib/oop","ace/mode/behaviour","ace/mode/behaviour/cstyle","ace/token_iterator"],function(e,t,n){var r=e("../../lib/oop"),i=e("../behaviour").Behaviour,s=e("./cstyle").CstyleBehaviour,o=e("../../token_iterator").TokenIterator,u=function(){this.inherit(s),this.add("colon","insertion",function(e,t,n,r,i){if(i===":"){var s=n.getCursorPosition(),u=new o(r,s.row,s.column),a=u.getCurrentToken();a&&a.value.match(/\s+/)&&(a=u.stepBackward());if(a&&a.type==="support.type"){var f=r.doc.getLine(s.row),l=f.substring(s.column,s.column+1);if(l===":")return{text:"",selection:[1,1]};if(!f.substring(s.column).match(/^\s*;/))return{text:":;",selection:[1,1]}}}}),this.add("colon","deletion",function(e,t,n,r,i){var s=r.doc.getTextRange(i);if(!i.isMultiLine()&&s===":"){var u=n.getCursorPosition(),a=new o(r,u.row,u.column),f=a.getCurrentToken();f&&f.value.match(/\s+/)&&(f=a.stepBackward());if(f&&f.type==="support.type"){var l=r.doc.getLine(i.start.row),c=l.substring(i.end.column,i.end.column+1);if(c===";")return i.end.column++,i}}}),this.add("semicolon","insertion",function(e,t,n,r,i){if(i===";"){var s=n.getCursorPosition(),o=r.doc.getLine(s.row),u=o.substring(s.column,s.column+1);if(u===";")return{text:"",selection:[1,1]}}})};r.inherits(u,s),t.CssBehaviour=u}),define("ace/mode/html_highlight_rules",["require","exports","module","ace/lib/oop","ace/lib/lang","ace/mode/css_highlight_rules","ace/mode/javascript_highlight_rules","ace/mode/xml_highlight_rules"],function(e,t,n){var r=e("../lib/oop"),i=e("../lib/lang"),s=e("./css_highlight_rules").CssHighlightRules,o=e("./javascript_highlight_rules").JavaScriptHighlightRules,u=e("./xml_highlight_rules").XmlHighlightRules,a=i.createMap({a:"anchor",button:"form",form:"form",img:"image",input:"form",label:"form",script:"script",select:"form",textarea:"form",style:"style",table:"table",tbody:"table",td:"table",tfoot:"table",th:"table",tr:"table"}),f=function(){u.call(this),this.addRules({attributes:[{include:"space"},{token:"entity.other.attribute-name",regex:"[-_a-zA-Z0-9:]+"},{token:"keyword.operator.separator",regex:"=",push:[{include:"space"},{token:"string",regex:"[^<>='\"`\\s]+",next:"pop"},{token:"empty",regex:"",next:"pop"}]},{include:"string"}],tag:[{token:function(e,t){var n=a[t];return["meta.tag.punctuation.begin","meta.tag.name"+(n?"."+n:"")]},regex:"(<)([-_a-zA-Z0-9:]+)",next:"start_tag_stuff"},{token:function(e,t){var n=a[t];return["meta.tag.punctuation.begin","meta.tag.name"+(n?"."+n:"")]},regex:"(</)([-_a-zA-Z0-9:]+)",next:"end_tag_stuff"}],start_tag_stuff:[{include:"attributes"},{token:"meta.tag.punctuation.end",regex:"/?>",next:"start"}],end_tag_stuff:[{include:"space"},{token:"meta.tag.punctuation.end",regex:">",next:"start"}]}),this.embedTagRules(s,"css-","style"),this.embedTagRules(o,"js-","script"),this.constructor===f&&this.normalizeRules()};r.inherits(f,u),t.HtmlHighlightRules=f}),define("ace/mode/xml_highlight_rules",["require","exports","module","ace/lib/oop","ace/mode/xml_util","ace/mode/text_highlight_rules"],function(e,t,n){var r=e("../lib/oop"),i=e("./xml_util"),s=e("./text_highlight_rules").TextHighlightRules,o=function(e){this.$rules={start:[{token:"punctuation.string.begin",regex:"<\\!\\[CDATA\\[",next:"cdata"},{token:["punctuation.instruction.begin","keyword.instruction"],regex:"(<\\?)(xml)(?=[\\s])",next:"xml_declaration"},{token:["punctuation.instruction.begin","keyword.instruction"],regex:"(<\\?)([-_a-zA-Z0-9]+)",next:"instruction"},{token:"comment",regex:"<\\!--",next:"comment"},{token:["punctuation.doctype.begin","meta.tag.doctype"],regex:"(<\\!)(DOCTYPE)(?=[\\s])",next:"doctype"},{include:"tag"},{include:"reference"}],xml_declaration:[{include:"attributes"},{include:"instruction"}],instruction:[{token:"punctuation.instruction.end",regex:"\\?>",next:"start"}],doctype:[{include:"space"},{include:"string"},{token:"punctuation.doctype.end",regex:">",next:"start"},{token:"xml-pe",regex:"[-_a-zA-Z0-9:]+"},{token:"punctuation.begin",regex:"\\[",push:"declarations"}],declarations:[{token:"text",regex:"\\s+"},{token:"punctuation.end",regex:"]",next:"pop"},{token:["punctuation.begin","keyword"],regex:"(<\\!)([-_a-zA-Z0-9]+)",push:[{token:"text",regex:"\\s+"},{token:"punctuation.end",regex:">",next:"pop"},{include:"string"}]}],cdata:[{token:"string.end",regex:"\\]\\]>",next:"start"},{token:"text",regex:"\\s+"},{token:"text",regex:"(?:[^\\]]|\\](?!\\]>))+"}],comment:[{token:"comment",regex:"-->",next:"start"},{defaultToken:"comment"}],tag:[{token:["meta.tag.punctuation.begin","meta.tag.name"],regex:"(<)((?:[-_a-zA-Z0-9]+:)?[-_a-zA-Z0-9]+)",next:[{include:"attributes"},{token:"meta.tag.punctuation.end",regex:"/?>",next:"start"}]},{token:["meta.tag.punctuation.begin","meta.tag.name"],regex:"(</)((?:[-_a-zA-Z0-9]+:)?[-_a-zA-Z0-9]+)",next:[{include:"space"},{token:"meta.tag.punctuation.end",regex:">",next:"start"}]}],space:[{token:"text",regex:"\\s+"}],reference:[{token:"constant.language.escape",regex:"(?:&#[0-9]+;)|(?:&#x[0-9a-fA-F]+;)|(?:&[a-zA-Z0-9_:\\.-]+;)"},{token:"invalid.illegal",regex:"&"}],string:[{token:"string",regex:"'",push:"qstring_inner"},{token:"string",regex:'"',push:"qqstring_inner"}],qstring_inner:[{token:"string",regex:"'",next:"pop"},{include:"reference"},{defaultToken:"string"}],qqstring_inner:[{token:"string",regex:'"',next:"pop"},{include:"reference"},{defaultToken:"string"}],attributes:[{token:"entity.other.attribute-name",regex:"(?:[-_a-zA-Z0-9]+:)?[-_a-zA-Z0-9]+"},{token:"keyword.operator.separator",regex:"="},{include:"space"},{include:"string"}]},this.constructor===o&&this.normalizeRules()};(function(){this.embedTagRules=function(e,t,n){this.$rules.tag.unshift({token:["meta.tag.punctuation.begin","meta.tag.name."+n],regex:"(<)("+n+")",next:[{include:"space"},{include:"attributes"},{token:"meta.tag.punctuation.end",regex:"/?>",next:t+"start"}]}),this.$rules[n+"-end"]=[{include:"space"},{token:"meta.tag.punctuation.end",regex:">",next:"start",onMatch:function(e,t,n){return n.splice(0),this.token}}],this.embedRules(e,t,[{token:["meta.tag.punctuation.begin","meta.tag.name."+n],regex:"(</)("+n+")",next:n+"-end"},{token:"string.begin",regex:"<\\!\\[CDATA\\["},{token:"string.end",regex:"\\]\\]>"}])}}).call(s.prototype),r.inherits(o,s),t.XmlHighlightRules=o}),define("ace/mode/xml_util",["require","exports","module"],function(e,t,n){function r(e){return[{token:"string",regex:'"',next:e+"_qqstring"},{token:"string",regex:"'",next:e+"_qstring"}]}function i(e,t){return[{token:"string",regex:e,next:t},{token:"constant.language.escape",regex:"(?:&#[0-9]+;)|(?:&#x[0-9a-fA-F]+;)|(?:&[a-zA-Z0-9_:\\.-]+;)"},{defaultToken:"string"}]}t.tag=function(e,t,n,s){e[t]=[{token:"text",regex:"\\s+"},{token:s?function(e){return s[e]?"meta.tag.tag-name."+s[e]:"meta.tag.tag-name"}:"meta.tag.tag-name",regex:"[-_a-zA-Z0-9:]+",next:t+"_embed_attribute_list"},{token:"empty",regex:"",next:t+"_embed_attribute_list"}],e[t+"_qstring"]=i("'",t+"_embed_attribute_list"),e[t+"_qqstring"]=i('"',t+"_embed_attribute_list"),e[t+"_embed_attribute_list"]=[{token:"meta.tag.r",regex:"/?>",next:n},{token:"keyword.operator",regex:"="},{token:"entity.other.attribute-name",regex:"[-_a-zA-Z0-9:]+"},{token:"constant.numeric",regex:"[+-]?\\d+(?:(?:\\.\\d*)?(?:[eE][+-]?\\d+)?)?\\b"},{token:"text",regex:"\\s+"}].concat(r(t))}}),define("ace/mode/behaviour/html",["require","exports","module","ace/lib/oop","ace/mode/behaviour/xml","ace/mode/behaviour/cstyle","ace/token_iterator"],function(e,t,n){function a(e,t){var n=e.type.split(".");return t.split(".").every(function(e){return n.indexOf(e)!==-1})}var r=e("../../lib/oop"),i=e("../behaviour/xml").XmlBehaviour,s=e("./cstyle").CstyleBehaviour,o=e("../../token_iterator").TokenIterator,u=["area","base","br","col","command","embed","hr","img","input","keygen","link","meta","param","source","track","wbr"],f=function(){this.inherit(i),this.add("autoclosing","insertion",function(e,t,n,r,i){if(i==">"){var s=n.getCursorPosition(),f=new o(r,s.row,s.column),l=f.getCurrentToken();if(l&&a(l,"string")&&f.getCurrentTokenColumn()+l.value.length>s.column)return;var c=!1;if(!l||!a(l,"meta.tag")&&(!a(l,"text")||!l.value.match("/"))){do l=f.stepBackward();while(l&&(a(l,"string")||a(l,"keyword.operator")||a(l,"entity.attribute-name")||a(l,"text")))}else c=!0;if(!l||!a(l,"meta.tag.name")||f.stepBackward().value.match("/"))return;var h=l.value;if(c)var h=h.substring(0,s.column-l.start);if(u.indexOf(h)!==-1)return;return{text:"></"+h+">",selection:[1,1]}}})};r.inherits(f,i),t.HtmlBehaviour=f}),define("ace/mode/behaviour/xml",["require","exports","module","ace/lib/oop","ace/mode/behaviour","ace/mode/behaviour/cstyle","ace/token_iterator"],function(e,t,n){function u(e,t){var n=e.type.split(".");return t.split(".").every(function(e){return n.indexOf(e)!==-1})}var r=e("../../lib/oop"),i=e("../behaviour").Behaviour,s=e("./cstyle").CstyleBehaviour,o=e("../../token_iterator").TokenIterator,a=function(){this.inherit(s,["string_dquotes"]),this.add("autoclosing","insertion",function(e,t,n,r,i){if(i==">"){var s=n.getCursorPosition(),a=new o(r,s.row,s.column),f=a.getCurrentToken();if(f&&u(f,"string")&&a.getCurrentTokenColumn()+f.value.length>s.column)return;var l=!1;if(!f||!u(f,"meta.tag")&&(!u(f,"text")||!f.value.match("/"))){do f=a.stepBackward();while(f&&(u(f,"string")||u(f,"keyword.operator")||u(f,"entity.attribute-name")||u(f,"text")))}else l=!0;if(!f||!u(f,"meta.tag.name")||a.stepBackward().value.match("/"))return;var c=f.value;if(l)var c=c.substring(0,s.column-f.start);return{text:"></"+c+">",selection:[1,1]}}}),this.add("autoindent","insertion",function(e,t,n,r,i){if(i=="\n"){var s=n.getCursorPosition(),o=r.getLine(s.row),u=o.substring(s.column,s.column+2);if(u=="</"){var a=this.$getIndent(o),f=a+r.getTabString();return{text:"\n"+f+"\n"+a,selection:[1,f.length,1,f.length]}}}})};r.inherits(a,i),t.XmlBehaviour=a}),define("ace/mode/folding/html",["require","exports","module","ace/lib/oop","ace/mode/folding/mixed","ace/mode/folding/xml","ace/mode/folding/cstyle"],function(e,t,n){var r=e("../../lib/oop"),i=e("./mixed").FoldMode,s=e("./xml").FoldMode,o=e("./cstyle").FoldMode,u=t.FoldMode=function(){i.call(this,new s({area:1,base:1,br:1,col:1,command:1,embed:1,hr:1,img:1,input:1,keygen:1,link:1,meta:1,param:1,source:1,track:1,wbr:1,li:1,dt:1,dd:1,p:1,rt:1,rp:1,optgroup:1,option:1,colgroup:1,td:1,th:1}),{"js-":new o,"css-":new o})};r.inherits(u,i)}),define("ace/mode/folding/mixed",["require","exports","module","ace/lib/oop","ace/mode/folding/fold_mode"],function(e,t,n){var r=e("../../lib/oop"),i=e("./fold_mode").FoldMode,s=t.FoldMode=function(e,t){this.defaultMode=e,this.subModes=t};r.inherits(s,i),function(){this.$getMode=function(e){typeof e!="string"&&(e=e[0]);for(var t in this.subModes)if(e.indexOf(t)===0)return this.subModes[t];return null},this.$tryMode=function(e,t,n,r){var i=this.$getMode(e);return i?i.getFoldWidget(t,n,r):""},this.getFoldWidget=function(e,t,n){return this.$tryMode(e.getState(n-1),e,t,n)||this.$tryMode(e.getState(n),e,t,n)||this.defaultMode.getFoldWidget(e,t,n)},this.getFoldWidgetRange=function(e,t,n){var r=this.$getMode(e.getState(n-1));if(!r||!r.getFoldWidget(e,t,n))r=this.$getMode(e.getState(n));if(!r||!r.getFoldWidget(e,t,n))r=this.defaultMode;return r.getFoldWidgetRange(e,t,n)}}.call(s.prototype)}),define("ace/mode/folding/xml",["require","exports","module","ace/lib/oop","ace/lib/lang","ace/range","ace/mode/folding/fold_mode","ace/token_iterator"],function(e,t,n){var r=e("../../lib/oop"),i=e("../../lib/lang"),s=e("../../range").Range,o=e("./fold_mode").FoldMode,u=e("../../token_iterator").TokenIterator,a=t.FoldMode=function(e){o.call(this),this.voidElements=e||{}};r.inherits(a,o),function(){this.getFoldWidget=function(e,t,n){var r=this._getFirstTagInLine(e,n);return r.closing?t=="markbeginend"?"end":"":!r.tagName||this.voidElements[r.tagName.toLowerCase()]?"":r.selfClosing?"":r.value.indexOf("/"+r.tagName)!==-1?"":"start"},this._getFirstTagInLine=function(e,t){var n=e.getTokens(t),r="";for(var s=0;s<n.length;s++){var o=n[s];o.type.lastIndexOf("meta.tag",0)===0?r+=o.value:r+=i.stringRepeat(" ",o.value.length)}return this._parseTag(r)},this.tagRe=/^(\s*)(<?(\/?)([-_a-zA-Z0-9:!]*)\s*(\/?)>?)/,this._parseTag=function(e){var t=e.match(this.tagRe),n=0;return{value:e,match:t?t[2]:"",closing:t?!!t[3]:!1,selfClosing:t?!!t[5]||t[2]=="/>":!1,tagName:t?t[4]:"",column:t[1]?n+t[1].length:n}},this._readTagForward=function(e){var t=e.getCurrentToken();if(!t)return null;var n="",r;do if(t.type.lastIndexOf("meta.tag",0)===0){if(!r)var r={row:e.getCurrentTokenRow(),column:e.getCurrentTokenColumn()};n+=t.value;if(n.indexOf(">")!==-1){var i=this._parseTag(n);return i.start=r,i.end={row:e.getCurrentTokenRow(),column:e.getCurrentTokenColumn()+t.value.length},e.stepForward(),i}}while(t=e.stepForward());return null},this._readTagBackward=function(e){var t=e.getCurrentToken();if(!t)return null;var n="",r;do if(t.type.lastIndexOf("meta.tag",0)===0){r||(r={row:e.getCurrentTokenRow(),column:e.getCurrentTokenColumn()+t.value.length}),n=t.value+n;if(n.indexOf("<")!==-1){var i=this._parseTag(n);return i.end=r,i.start={row:e.getCurrentTokenRow(),column:e.getCurrentTokenColumn()},e.stepBackward(),i}}while(t=e.stepBackward());return null},this._pop=function(e,t){while(e.length){var n=e[e.length-1];if(!t||n.tagName==t.tagName)return e.pop();if(this.voidElements[t.tagName])return;if(this.voidElements[n.tagName]){e.pop();continue}return null}},this.getFoldWidgetRange=function(e,t,n){var r=this._getFirstTagInLine(e,n);if(!r.match)return null;var i=r.closing||r.selfClosing,o=[],a;if(!i){var f=new u(e,n,r.column),l={row:n,column:r.column+r.tagName.length+2};while(a=this._readTagForward(f)){if(a.selfClosing){if(!o.length)return a.start.column+=a.tagName.length+2,a.end.column-=2,s.fromPoints(a.start,a.end);continue}if(a.closing){this._pop(o,a);if(o.length==0)return s.fromPoints(l,a.start)}else o.push(a)}}else{var f=new u(e,n,r.column+r.match.length),c={row:n,column:r.column};while(a=this._readTagBackward(f)){if(a.selfClosing){if(!o.length)return a.start.column+=a.tagName.length+2,a.end.column-=2,s.fromPoints(a.start,a.end);continue}if(!a.closing){this._pop(o,a);if(o.length==0)return a.start.column+=a.tagName.length+2,s.fromPoints(a.start,c)}else o.push(a)}}}}.call(a.prototype)}),define("ace/mode/html_completions",["require","exports","module","ace/token_iterator"],function(e,t,n){function f(e,t){var n=e.type.split(".");return t.split(".").every(function(e){return n.indexOf(e)!==-1})}function l(e,t){var n=new r(e,t.row,t.column),i=n.getCurrentToken();if(!i||!f(i,"tag")&&(!f(i,"text")||!i.value.match("/")))do i=n.stepBackward();while(i&&(f(i,"string")||f(i,"operator")||f(i,"attribute-name")||f(i,"text")));if(i&&f(i,"tag-name")&&!n.stepBackward().value.match("/"))return i.value}var r=e("../token_iterator").TokenIterator,i=["accesskey","class","contenteditable","contextmenu","dir","draggable","dropzone","hidden","id","lang","spellcheck","style","tabindex","title","translate"],s=["onabort","onblur","oncancel","oncanplay","oncanplaythrough","onchange","onclick","onclose","oncontextmenu","oncuechange","ondblclick","ondrag","ondragend","ondragenter","ondragleave","ondragover","ondragstart","ondrop","ondurationchange","onemptied","onended","onerror","onfocus","oninput","oninvalid","onkeydown","onkeypress","onkeyup","onload","onloadeddata","onloadedmetadata","onloadstart","onmousedown","onmousemove","onmouseout","onmouseover","onmouseup","onmousewheel","onpause","onplay","onplaying","onprogress","onratechange","onreset","onscroll","onseeked","onseeking","onselect","onshow","onstalled","onsubmit","onsuspend","ontimeupdate","onvolumechange","onwaiting"],o=i.concat(s),u={html:["manifest"],head:[],title:[],base:["href","target"],link:["href","hreflang","rel","media","type","sizes"],meta:["http-equiv","name","content","charset"],style:["type","media","scoped"],script:["charset","type","src","defer","async"],noscript:["href"],body:["onafterprint","onbeforeprint","onbeforeunload","onhashchange","onmessage","onoffline","onpopstate","onredo","onresize","onstorage","onundo","onunload"],section:[],nav:[],article:["pubdate"],aside:[],h1:[],h2:[],h3:[],h4:[],h5:[],h6:[],header:[],footer:[],address:[],main:[],p:[],hr:[],pre:[],blockquote:["cite"],ol:["start","reversed"],ul:[],li:["value"],dl:[],dt:[],dd:[],figure:[],figcaption:[],div:[],a:["href","target","ping","rel","media","hreflang","type"],em:[],strong:[],small:[],s:[],cite:[],q:["cite"],dfn:[],abbr:[],data:[],time:["datetime"],code:[],"var":[],samp:[],kbd:[],sub:[],sup:[],i:[],b:[],u:[],mark:[],ruby:[],rt:[],rp:[],bdi:[],bdo:[],span:[],br:[],wbr:[],ins:["cite","datetime"],del:["cite","datetime"],img:["alt","src","height","width","usemap","ismap"],iframe:["name","src","height","width","sandbox","seamless"],embed:["src","height","width","type"],object:["param","data","type","height","width","usemap","name","form","classid"],param:["name","value"],video:["src","autobuffer","autoplay","loop","controls","width","height","poster"],audio:["src","autobuffer","autoplay","loop","controls"],source:["src","type","media"],track:["kind","src","srclang","label","default"],canvas:["width","height"],map:["name"],area:["shape","coords","href","hreflang","alt","target","media","rel","ping","type"],svg:[],math:[],table:["summary"],caption:[],colgroup:["span"],col:["span"],tbody:[],thead:[],tfoot:[],tr:[],td:["headers","rowspan","colspan"],th:["headers","rowspan","colspan","scope"],form:["accept-charset","action","autocomplete","enctype","method","name","novalidate","target"],fieldset:["disabled","form","name"],legend:[],label:["form","for"],input:["type","accept","alt","autocomplete","checked","disabled","form","formaction","formenctype","formmethod","formnovalidate","formtarget","height","list","max","maxlength","min","multiple","pattern","placeholder","readonly","required","size","src","step","width","files","value"],button:["autofocus","disabled","form","formaction","formenctype","formmethod","formnovalidate","formtarget","name","value","type"],select:["autofocus","disabled","form","multiple","name","size"],datalist:[],optgroup:["disabled","label"],option:["disabled","selected","label","value"],textarea:["autofocus","disabled","form","maxlength","name","placeholder","readonly","required","rows","cols","wrap"],keygen:["autofocus","challenge","disabled","form","keytype","name"],output:["for","form","name"],progress:["value","max"],meter:["value","min","max","low","high","optimum"],details:["open"],summary:[],command:["type","label","icon","disabled","checked","radiogroup","command"],menu:["type","label"],dialog:["open"]},a=Object.keys(u),c=function(){};(function(){this.getCompletions=function(e,t,n,r){var i=t.getTokenAt(n.row,n.column);return i?f(i,"tag-name")||i.value=="<"&&f(i,"text")?this.getTagCompletions(e,t,n,r):f(i,"text")||f(i,"attribute-name")?this.getAttributeCompetions(e,t,n,r):[]:[]},this.getTagCompletions=function(e,t,n,r){var i=a;return r&&(i=i.filter(function(e){return e.indexOf(r)===0})),i.map(function(e){return{value:e,meta:"tag"}})},this.getAttributeCompetions=function(e,t,n,r){var i=l(t,n);if(!i)return[];var s=o;return i in u&&(s=s.concat(u[i])),r&&(s=s.filter(function(e){return e.indexOf(r)===0})),s.map(function(e){return{caption:e,snippet:e+'="$0"',meta:"attribute"}})}}).call(c.prototype),t.HtmlCompletions=c})
 define("ace/theme/viper",["require","exports","module"],function(a,b,c){b.isDark=!0,b.cssClass="ace-viper",b.cssText="";var d=a("../lib/dom");d.importCssString(b.cssText,b.cssClass)}),function(){window.require(["ace/ace"],function(a){window.ace||(window.ace={});for(var b in a)a.hasOwnProperty(b)&&(ace[b]=a[b])})}()
-
-function StyleHTML(html_source, indent_size, indent_character, max_char, brace_style)
-{
-    var Parser, multi_parser;
-
-  function Parser() {
-
-    this.pos = 0; //Parser position
-    this.token = '';
-    this.current_mode = 'CONTENT'; //reflects the current Parser mode: TAG/CONTENT
-    this.tags = { //An object to hold tags, their position, and their parent-tags, initiated with default values
-      parent: 'parent1',
-      parentcount: 1,
-      parent1: ''
-    };
-    this.tag_type = '';
-    this.token_text = this.last_token = this.last_text = this.token_type = '';
-
-
-    this.Utils = { //Uilities made available to the various functions
-      whitespace: "\n\r\t ".split(''),
-      single_token: 'br,input,link,meta,!doctype,basefont,base,area,hr,wbr,param,img,isindex,?xml,embed'.split(','), //all the single tags for HTML
-      extra_liners: 'head,body,/html'.split(','), //for tags that need a line of whitespace before them
-      in_array: function (what, arr) {
-        for (var i=0; i<arr.length; i++) {
-          if (what === arr[i]) {
-            return true;
-          }
-        }
-        return false;
-      }
-    }
-
-    this.get_content = function () { //function to capture regular content between tags
-
-      var input_char = '';
-      var content = [];
-      var space = false; //if a space is needed
-
-      while (this.input.charAt(this.pos) !== '<') {
-        if (this.pos >= this.input.length) {
-          return content.length?content.join(''):['', 'TK_EOF'];
-        }
-
-        input_char = this.input.charAt(this.pos);
-        this.pos++;
-        this.line_char_count++;
-
-
-        if (this.Utils.in_array(input_char, this.Utils.whitespace)) {
-          if (content.length || input_char === ' ') {
-            space = true;
-          }
-          this.line_char_count--;
-          continue; //don't want to insert unnecessary space
-        }
-        else if (space) {
-          if (this.line_char_count >= this.max_char) { //insert a line when the max_char is reached
-            content.push('\n');
-            for (var i=0; i<this.indent_level; i++) {
-              content.push(this.indent_string);
-            }
-            this.line_char_count = 0;
-          }
-          else{
-            content.push(' ');
-            this.line_char_count++;
-          }
-          space = false;
-        }
-        content.push(input_char); //letter at-a-time (or string) inserted to an array
-      }
-
-      if (space === true) {
-          content.push(input_char);
-          space = false;
-      }
-
-      return content.length?content.join(''):'';
-    }
-
-    this.get_script = function () { //get the full content of a script to pass to js_beautify
-
-      var input_char = '';
-      var content = [];
-      var reg_match = new RegExp('\<\/script' + '\>', 'igm');
-      reg_match.lastIndex = this.pos;
-      var reg_array = reg_match.exec(this.input);
-      var end_script = reg_array?reg_array.index:this.input.length; //absolute end of script
-      while(this.pos < end_script) { //get everything in between the script tags
-        if (this.pos >= this.input.length) {
-          return content.length?content.join(''):['', 'TK_EOF'];
-        }
-
-        input_char = this.input.charAt(this.pos);
-        this.pos++;
-
-
-        content.push(input_char);
-      }
-      return content.length?content.join(''):''; //we might not have any content at all
-    }
-
-    this.record_tag = function (tag){ //function to record a tag and its parent in this.tags Object
-      if (this.tags[tag + 'count']) { //check for the existence of this tag type
-        this.tags[tag + 'count']++;
-        this.tags[tag + this.tags[tag + 'count']] = this.indent_level; //and record the present indent level
-      }
-      else { //otherwise initialize this tag type
-        this.tags[tag + 'count'] = 1;
-        this.tags[tag + this.tags[tag + 'count']] = this.indent_level; //and record the present indent level
-      }
-      this.tags[tag + this.tags[tag + 'count'] + 'parent'] = this.tags.parent; //set the parent (i.e. in the case of a div this.tags.div1parent)
-      this.tags.parent = tag + this.tags[tag + 'count']; //and make this the current parent (i.e. in the case of a div 'div1')
-    }
-
-    this.retrieve_tag = function (tag) { //function to retrieve the opening tag to the corresponding closer
-      if (this.tags[tag + 'count']) { //if the openener is not in the Object we ignore it
-        var temp_parent = this.tags.parent; //check to see if it's a closable tag.
-        while (temp_parent) { //till we reach '' (the initial value);
-          if (tag + this.tags[tag + 'count'] === temp_parent) { //if this is it use it
-            break;
-          }
-          temp_parent = this.tags[temp_parent + 'parent']; //otherwise keep on climbing up the DOM Tree
-        }
-        if (temp_parent) { //if we caught something
-          this.indent_level = this.tags[tag + this.tags[tag + 'count']]; //set the indent_level accordingly
-          this.tags.parent = this.tags[temp_parent + 'parent']; //and set the current parent
-        }
-        delete this.tags[tag + this.tags[tag + 'count'] + 'parent']; //delete the closed tags parent reference...
-        delete this.tags[tag + this.tags[tag + 'count']]; //...and the tag itself
-        if (this.tags[tag + 'count'] == 1) {
-          delete this.tags[tag + 'count'];
-        }
-        else {
-          this.tags[tag + 'count']--;
-        }
-      }
-    }
-
-    this.get_tag = function () { //function to get a full tag and parse its type
-      var input_char = '';
-      var content = [];
-      var space = false;
-
-      do {
-        if (this.pos >= this.input.length) {
-          return content.length?content.join(''):['', 'TK_EOF'];
-        }
-
-        input_char = this.input.charAt(this.pos);
-        this.pos++;
-        this.line_char_count++;
-
-        if (this.Utils.in_array(input_char, this.Utils.whitespace)) { //don't want to insert unnecessary space
-          space = true;
-          this.line_char_count--;
-          continue;
-        }
-
-        if (input_char === "'" || input_char === '"') {
-          if (!content[1] || content[1] !== '!') { //if we're in a comment strings don't get treated specially
-            input_char += this.get_unformatted(input_char);
-            space = true;
-          }
-        }
-
-        if (input_char === '=') { //no space before =
-          space = false;
-        }
-
-        if (content.length && content[content.length-1] !== '=' && input_char !== '>'
-            && space) { //no space after = or before >
-          if (this.line_char_count >= this.max_char) {
-            this.print_newline(false, content);
-            this.line_char_count = 0;
-          }
-          else {
-            content.push(' ');
-            this.line_char_count++;
-          }
-          space = false;
-        }
-        content.push(input_char); //inserts character at-a-time (or string)
-      } while (input_char !== '>');
-
-      var tag_complete = content.join('');
-      var tag_index;
-      if (tag_complete.indexOf(' ') != -1) { //if there's whitespace, thats where the tag name ends
-        tag_index = tag_complete.indexOf(' ');
-      }
-      else { //otherwise go with the tag ending
-        tag_index = tag_complete.indexOf('>');
-      }
-      var tag_check = tag_complete.substring(1, tag_index).toLowerCase();
-      if (tag_complete.charAt(tag_complete.length-2) === '/' ||
-          this.Utils.in_array(tag_check, this.Utils.single_token)) { //if this tag name is a single tag type (either in the list or has a closing /)
-        this.tag_type = 'SINGLE';
-      }
-      else if (tag_check === 'script') { //for later script handling
-        this.record_tag(tag_check);
-        this.tag_type = 'SCRIPT';
-      }
-      else if (tag_check === 'style') { //for future style handling (for now it justs uses get_content)
-        this.record_tag(tag_check);
-        this.tag_type = 'STYLE';
-      }
-      else if (tag_check === 'a') { // do not reformat the <a> links
-        var comment = this.get_unformatted('</a>', tag_complete); //...delegate to get_unformatted function
-        content.push(comment);
-        // --> SQUIZ
-        this.tag_type = 'INLINE';
-        // -- SQUIZ
-      }
-      // --> SQUIZ
-      else if (('|pre|strong|em|i|sub|sup|u|strike|').indexOf('|' + tag_check + '|') >= 0) {
-        content.push(this.get_unformatted('</' + tag_check + '>'));
-        this.tag_type = 'INLINE';
-      }
-      // -- SQUIZ
-      else if (tag_check.charAt(0) === '!') { //peek for <!-- comment
-        if (tag_check.indexOf('[if') != -1) { //peek for <!--[if conditional comment
-          if (tag_complete.indexOf('!IE') != -1) { //this type needs a closing --> so...
-            var comment = this.get_unformatted('-->', tag_complete); //...delegate to get_unformatted
-            content.push(comment);
-          }
-          this.tag_type = 'START';
-        }
-        else if (tag_check.indexOf('[endif') != -1) {//peek for <!--[endif end conditional comment
-          this.tag_type = 'END';
-          this.unindent();
-        }
-        else if (tag_check.indexOf('[cdata[') != -1) { //if it's a <[cdata[ comment...
-          var comment = this.get_unformatted(']]>', tag_complete); //...delegate to get_unformatted function
-          content.push(comment);
-          this.tag_type = 'SINGLE'; //<![CDATA[ comments are treated like single tags
-        }
-        else {
-          var comment = this.get_unformatted('-->', tag_complete);
-          content.push(comment);
-          this.tag_type = 'SINGLE';
-        }
-      }
-      else {
-        if (tag_check.charAt(0) === '/') { //this tag is a double tag so check for tag-ending
-          this.retrieve_tag(tag_check.substring(1)); //remove it and all ancestors
-          this.tag_type = 'END';
-        }
-        else { //otherwise it's a start-tag
-          this.record_tag(tag_check); //push it on the tag stack
-          this.tag_type = 'START';
-        }
-        if (this.Utils.in_array(tag_check, this.Utils.extra_liners)) { //check if this double needs an extra line
-          this.print_newline(true, this.output);
-        }
-      }
-      return content.join(''); //returns fully formatted tag
-    }
-
-    this.get_unformatted = function (delimiter, orig_tag) { //function to return unformatted content in its entirety
-
-      if (orig_tag && orig_tag.indexOf(delimiter) != -1) {
-        return '';
-      }
-      var input_char = '';
-      var content = '';
-      var space = true;
-      do {
-
-        if (this.pos >= this.input.length) {
-          return content;
-        }
-
-        input_char = this.input.charAt(this.pos);
-        this.pos++
-        if (delimiter === '</pre>') {
-            content += input_char;
-            continue;
-        }
-
-        if (this.Utils.in_array(input_char, this.Utils.whitespace)) {
-          if (!space) {
-            this.line_char_count--;
-            continue;
-          }
-          if (input_char === '\n' || input_char === '\r') {
-            content += '\n';
-            for (var i=0; i<this.indent_level; i++) {
-              content += this.indent_string;
-            }
-            space = false; //...and make sure other indentation is erased
-            this.line_char_count = 0;
-            continue;
-          }
-        }
-        content += input_char;
-        this.line_char_count++;
-        space = true;
-
-
-      } while (content.indexOf(delimiter) == -1);
-      return content;
-    }
-
-    this.get_token = function () { //initial handler for token-retrieval
-      var token;
-
-      if (this.last_token === 'TK_TAG_SCRIPT') { //check if we need to format javascript
-        var temp_token = this.get_script();
-        if (typeof temp_token !== 'string') {
-          return temp_token;
-        }
-        token = StyleHTML(temp_token,
-                {indent_size: this.indent_size, indent_char: this.indent_character, indent_level: this.indent_level, brace_style: this.brace_style}); //call the JS Beautifier
-        return [token, 'TK_CONTENT'];
-      }
-      if (this.current_mode === 'CONTENT') {
-        token = this.get_content();
-        if (typeof token !== 'string') {
-          return token;
-        }
-        else {
-          return [token, 'TK_CONTENT'];
-        }
-      }
-
-      if(this.current_mode === 'TAG') {
-        token = this.get_tag();
-        if (typeof token !== 'string') {
-          return token;
-        }
-        else {
-          var tag_name_type = 'TK_TAG_' + this.tag_type;
-          return [token, tag_name_type];
-        }
-      }
-    }
-
-    this.printer = function (js_source, indent_character, indent_size, max_char, brace_style) { //handles input/output and some other printing functions
-
-      this.input = js_source || ''; //gets the input for the Parser
-      this.output = [];
-      this.indent_character = indent_character || ' ';
-      this.indent_string = '';
-      this.indent_size = indent_size || 2;
-      this.brace_style = brace_style || 'collapse';
-      this.indent_level = 0;
-      this.max_char = max_char || 70; //maximum amount of characters per line
-      this.line_char_count = 0; //count to see if max_char was exceeded
-
-      for (var i=0; i<this.indent_size; i++) {
-        this.indent_string += this.indent_character;
-      }
-
-      this.print_newline = function (ignore, arr) {
-        this.line_char_count = 0;
-        if (!arr || !arr.length) {
-          return;
-        }
-        if (!ignore) { //we might want the extra line
-          while (this.Utils.in_array(arr[arr.length-1], this.Utils.whitespace)) {
-            arr.pop();
-          }
-        }
-        arr.push('\n');
-        for (var i=0; i<this.indent_level; i++) {
-          arr.push(this.indent_string);
-        }
-      }
-
-
-      this.print_token = function (text) {
-        this.output.push(text);
-      }
-
-      this.indent = function () {
-        this.indent_level++;
-      }
-
-      this.unindent = function () {
-        if (this.indent_level > 0) {
-          this.indent_level--;
-        }
-      }
-    }
-    return this;
-  }
-
-  
-
-
-
-  multi_parser = new Parser(); //wrapping functions Parser
-  multi_parser.printer(html_source, indent_character, indent_size, 300, brace_style); //initialize starting values
-
-
-
-  while (true) {
-      var t = multi_parser.get_token();
-      multi_parser.token_text = t[0];
-      multi_parser.token_type = t[1];
-
-    if (multi_parser.token_type === 'TK_EOF') {
-      break;
-    }
-
-
-    switch (multi_parser.token_type) {
-      case 'TK_TAG_START': case 'TK_TAG_SCRIPT': case 'TK_TAG_STYLE':
-        multi_parser.print_newline(false, multi_parser.output);
-        multi_parser.print_token(multi_parser.token_text);
-        multi_parser.indent();
-        multi_parser.current_mode = 'CONTENT';
-        break;
-      case 'TK_TAG_END':
-        multi_parser.print_newline(true, multi_parser.output);
-        multi_parser.print_token(multi_parser.token_text);
-        multi_parser.current_mode = 'CONTENT';
-        break;
-      case 'TK_TAG_SINGLE':
-        //multi_parser.print_newline(false, multi_parser.output);
-        multi_parser.print_token(multi_parser.token_text);
-        multi_parser.current_mode = 'CONTENT';
-        break;
-      // --> SQUIZ
-      case 'TK_TAG_INLINE':
-        multi_parser.print_token(multi_parser.token_text);
-        multi_parser.current_mode = 'CONTENT';
-        break;
-      // -- SQUIZ
-      case 'TK_CONTENT':
-        if (multi_parser.token_text !== '') {
-            // --> SQUIZ
-            if (multi_parser.last_token !== 'TK_TAG_INLINE' && multi_parser.last_token !== 'TK_TAG_SINGLE') {
-                multi_parser.print_newline(false, multi_parser.output);
-            }
-            // -- SQUIZ
-
-            multi_parser.print_token(multi_parser.token_text);
-        }
-        multi_parser.current_mode = 'TAG';
-        break;
-    }
-    multi_parser.last_token = multi_parser.token_type;
-    multi_parser.last_text = multi_parser.token_text;
-  }
-  return multi_parser.output.join('');
-}
-
-
-
-function ViperSourceViewPlugin(viper)
-{
-    this.viper         = viper;
-    this._editor       = null;
-    this._textEditor   = null;
-    this._resizeHandle = null;
-    this._sourceView   = null;
-    this._sourceCont   = null;
-    this._closeConfirm = null;
-    this._isVisible    = false;
-
-    this._originalSource = null;
-    this._inNewWindow    = false;
-
-    this._ignoreUpdate       = false;
-    this._ignoreSourceUpdate = false;
-    this._newWindowContents  = '';
-}
-
-ViperSourceViewPlugin.prototype = {
-    init: function()
-    {
-        var self = this;
-        this.toolbarPlugin = this.viper.ViperPluginManager.getPlugin('ViperToolbarPlugin');
-        if (this.toolbarPlugin) {
-            var toggle = this.viper.ViperTools.createButton('sourceEditor', '', 'Toggle Source View', 'Viper-sourceView', function() {
-                self.toggleSourceView();
-            }, true);
-            this.toolbarPlugin.addButton(toggle);
-
-            this.viper.registerCallback('ViperToolbarPlugin:enabled', 'ViperSourceViewPlugin', function(data) {
-                self.viper.ViperTools.enableButton('sourceEditor');
-            });
-
-            this.viper.registerCallback('ViperToolbarPlugin:updateToolbar', 'ViperSourceViewPlugin', function(data) {
-                self.viper.ViperTools.enableButton('sourceEditor');
-            });
-        }
-
-        var updateTimer = null;
-        this.viper.registerCallback('Viper:nodesChanged', 'ViperSourceViewPlugin', function(nodes) {
-            clearTimeout(updateTimer);
-            if (self._ignoreSourceUpdate === true) {
-                self._ignoreSourceUpdate = false;
-                return;
-            }
-
-            updateTimer = setTimeout(function() {
-                self.updateSourceContents();
-            }, 250);
-        });
-
-        this.viper.registerCallback(['Viper:editableElementChanged', 'Viper:disabled'], 'ViperSourceViewPlugin', function(nodes) {
-            self.hideSourceView();
-        });
-
-    },
-
-    isSourceChanged: function()
-    {
-        var value = null;
-        if (this._editor) {
-            value = this._editor.getSession().getValue();
-        } else if (this._textEditor) {
-            value = this._textEditor.value;
-        }
-
-        if (this._originalSource === value) {
-            return false;
-        }
-
-        return true;
-
-    },
-
-    showSourceView: function(content, callback)
-    {
-        var self = this;
-        if (!this._sourceView) {
-            this._createSourceView(function() {
-                if (!content) {
-                    content = self.getContents();
-                }
-
-                self._originalSource = content;
-                self.showSourceView(content, callback);
-            });
-        } else {
-            if (!content) {
-                content = this.getContents();
-            } else {
-                content = StyleHTML(content);
-            }
-
-            if (this._editor) {
-                this._originalSource = content;
-                this._editor.getSession().setValue(content);
-                this.viper.ViperTools.openPopup('VSVP:popup', 800, 600);
-                this._editor.resize();
-                this._editor.focus();
-                this._isVisible = true;
-            } else {
-                this._textEditor.value = content;
-                this._originalSource   = this._textEditor.value;
-                this.viper.ViperTools.openPopup('VSVP:popup', 800, 600);
-                this._textEditor.focus();
-                this._isVisible = true;
-            }
-
-            if (callback) {
-                callback.call(this);
-            }
-        }//end if
-
-    },
-
-    hideSourceView: function(newWindow)
-    {
-        if (this._inNewWindow === true && this._childWindow) {
-            this._childWindow.close();
-            this._inNewWindow = false;
-            this._childWindow = false;
-            dfx.remove(this._sourceView);
-            this._sourceView = null;
-            this._editor     = null;
-        } else if (this._sourceView) {
-            if (newWindow === true) {
-                this.viper.ViperTools.closePopup('VSVP:popup', 'discardChanges');
-            } else {
-                this.viper.ViperTools.closePopup('VSVP:popup');
-            }
-        }
-
-    },
-
-    toggleSourceView: function()
-    {
-        if (!this._sourceView || (!this._sourceView.parentNode || this._sourceView.nodeType !== dfx.DOCUMENT_FRAGMENT_NODE)) {
-            this.showSourceView();
-        } else {
-            this.hideSourceView();
-        }
-
-    },
-
-    updatePageContents: function(content)
-    {
-        var value = content;
-        if (!value) {
-            value = this.getSourceContents();
-        }
-
-        if (this._originalSource === value) {
-            return;
-        }
-
-        this.viper.setHtml(value);
-
-    },
-
-    getSourceContents: function()
-    {
-        var value = '';
-        if (this._editor) {
-            value = this._editor.getSession().getValue();
-        } else if (this._textEditor) {
-            value = this._textEditor.value;
-        }
-
-        return value;
-
-    },
-
-    updateSourceContents: function(content)
-    {
-        if (!this._editor || this._isVisible !== true) {
-            return;
-        }
-
-        this._ignoreUpdate = true;
-        var value = content || this.getContents();
-
-        if (this._editor) {
-            this._editor.getSession().setValue(value);
-        } else if (this._textEditor) {
-            this._textEditor.value = value;
-        }
-
-    },
-
-    updateOriginalSourceValue: function(content)
-    {
-        if (!content) {
-            if (this._editor) {
-                content = this._editor.getSession().getValue();
-            } else if (this._textEditor) {
-                content = this._textEditor.value;
-            }
-        }
-
-        this._originalSource = content;
-
-    },
-
-    revertChanges: function()
-    {
-        this.viper.setHtml(this._originalSource);
-
-    },
-
-    _createSourceView: function(callback)
-    {
-        var self  = this;
-        var tools = this.viper.ViperTools
-
-        var content      = document.createElement('div');
-
-        // Confirm change panel.
-        var popupTop = document.createElement('div');
-        dfx.addClass(popupTop, 'VSVP-confirmPanel');
-        var discardButton = tools.createButton('VSVP:discard', 'Discard', 'Discard Changes', 'VSVP-confirmButton-discard', function() {
-            self.viper.ViperTools.closePopup('VSVP:popup', 'discardChanges');
-        });
-        var applyButton   = tools.createButton('VSVP:apply', 'Apply Changes', 'Apply Changes', 'VSVP-confirmButton-apply', function() {
-            self.updatePageContents();
-            self.viper.ViperTools.closePopup('VSVP:popup', 'applyChanges');
-        });
-        dfx.setHtml(popupTop, '<div class="VSVP-confirmText">Would you like to apply your changes?</div>');
-        popupTop.appendChild(applyButton);
-        popupTop.appendChild(discardButton);
-        this._closeConfirm = popupTop;
-
-        var source = document.createElement('div');
-        dfx.addClass(source, 'VSVP-source');
-        content.appendChild(source);
-        this._sourceCont = source;
-
-        // Add the bottom section.
-        var popupBottom = document.createElement('div');
-        dfx.addClass(popupBottom, 'VSVP-bottomPanel');
-
-        if (this.viper.isBrowser('msie') === false && (this.viper.getViperPath() || this.getViperURL())) {
-            var newWindowButton = tools.createButton('VSVP:newWindow', '', 'Open In new window', 'VSVP-bottomPanel-newWindow Viper-sourceNewWindow', function() {
-                self.openInNewWindow();
-            });
-            popupBottom.appendChild(newWindowButton);
-        }
-
-        var applyButtonBottom = tools.createButton('VSVP:apply', 'Apply Changes', 'Apply Changes', 'VSVP-bottomPanel-apply', function() {
-            self.updatePageContents();
-            self.viper.ViperTools.closePopup('VSVP:popup', 'applyChanges');
-        });
-        popupBottom.appendChild(applyButtonBottom);
-
-        // Create the popup.
-        this._sourceView = tools.createPopup(
-            'VSVP:popup',
-            'Source Editor',
-            popupTop,
-            content,
-            popupBottom,
-            'VSVP-popup',
-            true,
-            true,
-            null,
-            function(closer) {
-                // Close callback.
-                if (closer !== 'discardChanges' && closer !== 'applyChanges') {
-                    // If there are changes prevent popup from closing.
-                    if (self.isSourceChanged() === true) {
-                        self.showCloseConfirm();
-                        return false;
-                    }
-                }
-
-                // Hide the Confirm message.
-                self.viper.ViperTools.getItem('VSVP:popup').hideTop();
-                self._isVisible = false;
-                self.toolbarPlugin.enable();
-                self.viper.focus();
-            },
-            function() {
-                if (self._editor) {
-                    // Resize callback.
-                    self._editor.resize();
-                }
-            }
-        );
-
-        if (this.viper.isBrowser('msie') === true) {
-            this._includeStyleHTML(function() {
-                var editor = document.createElement('textarea');
-                self._textEditor = editor;
-                self._sourceCont.appendChild(editor);
-                callback.call(self);
-            });
-        } else {
-            this._includeAce(function() {
-                // Setup the Ace editor.
-                var editor   = ace.edit(source);
-                self._editor = editor;
-
-                self.applyEditorSettings(editor);
-
-                // Init editor events.
-                self.initEditorEvents(editor);
-
-                callback.call(self);
-            });
-        }
-
-    },
-
-    applyEditorSettings: function(editor)
-    {
-        editor.setTheme("ace/theme/viper");
-        editor.getSession().setMode("ace/mode/html");
-
-        // Use wrapping.
-        editor.getSession().setUseWrapMode(true);
-
-        // Do not show the print margin.
-        editor.renderer.setShowPrintMargin(false);
-
-        // Highlight the active line.
-        editor.setHighlightActiveLine(true);
-
-        // Show invisible characters
-        editor.setShowInvisibles(true);
-        editor.renderer.$textLayer.EOL_CHAR = String.fromCharCode(8629);
-
-        // Set the selection style to be line (other option is 'text').
-        editor.setSelectionStyle('line');
-
-        // Always show the horizontal scrollbar.
-        editor.renderer.setHScrollBarAlwaysVisible(true);
-
-        // Use spaces instead of tabs.
-        editor.getSession().setUseSoftTabs(true);
-
-    },
-
-    showCloseConfirm: function()
-    {
-        this.viper.ViperTools.getItem('VSVP:popup').showTop();
-
-    },
-
-    scrollToText: function(text)
-    {
-        var self = this;
-
-        if (this._editor) {
-            this._editor.find(text);
-            setTimeout(function() {
-                var anchor = self._editor.getSelection().getSelectionAnchor();
-                self._editor.navigateTo(anchor.row, anchor.column);
-            }, 500);
-        } else {
-            var range = this._textEditor.createTextRange();
-            if (range.findText(text) === true) {
-                range.select();
-                range.scrollIntoView();
-            }
-        }
-    },
-
-    replaceSelection: function(replacement)
-    {
-        if (this._editor) {
-            this._editor.replace(replacement);
-        } else {
-            var selection = document.selection;
-            selection.clear();
-        }
-
-    },
-
-    initEditorEvents: function(editor)
-    {
-        var self = this;
-        editor.getSession().addEventListener("tokenizerUpdate", function() {
-            if (self._ignoreUpdate === true) {
-                self._ignoreUpdate = false;
-                return;
-            } else if (self._inNewWindow === true) {
-                self._ignoreSourceUpdate = true;
-                self.updatePageContents();
-            }
-        });
-
-        var popup = self.viper.ViperTools.getItem('VSVP:popup');
-
-        // If the ESC key is pressed close the popup.
-        editor.keyBinding.addKeyboardHandler({
-            handleKeyboard: function(data, hashId, keyString, n, e) {
-                if (!e) {
-                    return;
-                }
-
-                if (keyString === 'esc') {
-                    self.viper.ViperTools.closePopup('VSVP:popup');
-                } else if (e.metaKey !== true
-                    && e.ctrlKey !== true
-                    && e.which !== 16
-                ) {
-                    popup.hideTop();
-                }
-            }
-        });
-
-        var onFocus = editor.onFocus;
-        editor.onFocus = function() {
-            if (self._inNewWindow !== true) {
-                self.toolbarPlugin.disable();
-            }
-
-            onFocus.call(editor);
-            setTimeout(function() {
-                popup.hideTop();
-            }, 200);
-        }
-
-        editor.onBlur = function() {
-            if (self._inNewWindow !== true) {
-                self.toolbarPlugin.enable();
-            }
-        };
-
-    },
-
-    _includeAce: function(callback)
-    {
-        var path = this.viper.getViperPath();
-        if (!path) {
-            callback.call(this);
-        } else {
-            var scripts  = [];
-
-            var acePath =  path + '/Plugins/ViperSourceViewPlugin/Ace';
-            scripts.push(acePath + '/src/ace.js');
-            scripts.push(acePath + '/src/theme-viper.js');
-            scripts.push(acePath + '/src/mode-html.js');
-
-            // Include JSBeautifier.
-            scripts.push(path + '/Plugins/ViperSourceViewPlugin/jsbeautifier.js');
-
-            this._includeScripts(scripts, callback);
-        }
-
-    },
-
-    _includeStyleHTML: function(callback)
-    {
-        var path = this.viper.getViperPath();
-        if (!path) {
-            callback.call(this);
-        } else {
-            this._includeScripts([path + '/Plugins/ViperSourceViewPlugin/jsbeautifier.js'], callback);
-        }
-
-    },
-
-    openInNewWindow: function()
-    {
-        // Hide current editor.
-        this.hideSourceView(true);
-        this.toolbarPlugin.enable();
-
-        // Add this Viper plugin object to global var.
-        var viperid = 'Viper-' + this.viper.getId() + '-ViperSVP';
-        window[viperid] = this;
-
-        var childWindow = window.open('about:blank', "Viper Source View", "width=850,height=800,0,status=0,scrollbars=0");
-        this._isVisible = true;
-        childWindow.document.write(this._getFrameContent(viperid));
-        this._childWindow = childWindow;
-        this._inNewWindow = true;
-
-        // Detect if the window is closed and reset SourceView..
-        var interval = null;
-        var self     = this;
-        interval = setInterval(function() {
-            if (!childWindow || childWindow.closed === true) {
-                clearInterval(interval);
-                self.hideSourceView();
-            }
-        }, 700);
-
-    },
-
-    getNewWindowContents: function()
-    {
-        return this._newWindowContents;
-
-    },
-
-    _getFrameContent: function(viperid)
-    {
-        var path    = this.viper.getViperPath();
-        var content = '';
-
-        this._newWindowContents = this.getSourceContents();
-
-        content += '<!DOCTYPE html><html lang="en"><head>';
-        content += '<meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">';
-        content += '<title>Viper Source View</title>';
-        content += '<style type="text/css" media="screen">body {overflow: hidden;}</style>';
-
-        if (!path) {
-            var viperPath = this.getViperURL();
-            content += '<link href="' + viperPath + 'viper.css" media="screen" rel="stylesheet" />';
-            content += '<script src="' + viperPath + 'viper.js" type="text/javascript" charset="utf-8"></script></head>';
-        } else {
-            content += '<link href="' + path + '/Css/viper_tools.css" media="screen" rel="stylesheet" />';
-            content += '<link href="' + path + '/Plugins/ViperSourceViewPlugin/ViperSourceViewPlugin.css" media="screen" rel="stylesheet" />';
-            content += '<script src="' + path + '/Plugins/ViperSourceViewPlugin/Ace/src/ace.js" type="text/javascript" charset="utf-8"></script>';
-            content += '<script src="' + path + '/Plugins/ViperSourceViewPlugin/Ace/src/theme-viper.js" type="text/javascript" charset="utf-8"></script>';
-            content += '<script src="' + path + '/Plugins/ViperSourceViewPlugin/Ace/src/mode-html.js" type="text/javascript" charset="utf-8"></script>';
-        }
-
-        content += '<body id="ViperSourceViewPlugin-window" class="ViperSourceViewPlugin-window">';
-        content += '<div class="Viper-popup Viper-themeDark VSVP-popup">';
-        content += '<div class="VSVP-confirmPanel Viper-popup-top">';
-        content += '<div class="VSVP-confirmText">Source code changes will be reflected in your edit preview window in real time.</div>';
-        content += '<div class="Viper-button" title="Revert Changes" onclick="viperSVP.revertChanges();">Revert Changes</div>';
-        content += '<div class="Viper-button" title="Close Source View" onclick="window.close();">Close Window</div></div>';
-        content += '<div class="Viper-popup-content"><pre id="editor"></pre></div></div>';
-        content += '<script>';
-        content += 'var viperid = "' + viperid + '";';
-        content += 'var viperSVP = window.opener[viperid];';
-        content += 'var editor = ace.edit("editor");';
-        content += 'viperSVP.applyEditorSettings(editor);';
-        content += 'viperSVP.initEditorEvents(editor);';
-        content += 'viperSVP._editor = editor;';
-        content += 'viperSVP.updateSourceContents(viperSVP.getNewWindowContents());';
-        content += 'var editorWrapper = document.getElementById("editor").parentNode;';
-        content += 'window.onresize = function() {editorWrapper.style.height = (window.innerHeight - 55) + "px";};';
-        content += 'window.onresize();';
-        content += '</script></body></html>';
-
-        return content;
-
-    },
-
-    getViperURL: function()
-    {
-        var scripts = document.getElementsByTagName('script');
-        var path    = null;
-        var c       = scripts.length;
-        for (var i = 0; i < c; i++) {
-            if (scripts[i].src) {
-                if (scripts[i].src.match(/\/viper\.js/)) {
-                    return scripts[i].src.replace('/viper.js', '/');
-                }
-            }
-        }
-
-        return null;
-
-    },
-
-    getContents: function()
-    {
-        var html = this.viper.getHtml(null, {emptyTableCellContent:''});
-
-        if (window.StyleHTML) {
-            html = StyleHTML(html);
-        }
-
-        return html;
-
-    },
-
-    isPluginElement: function(element)
-    {
-        if (element !== this._sourceView && dfx.isChildOf(element, this._sourceView) === false) {
-            return false;
-        }
-
-        return true;
-
-    },
-
-    _includeScripts: function(scripts, callback)
-    {
-        var self = this;
-        var _includeScripts = function(scripts, callback) {
-            if (scripts.length === 0) {
-                callback.call(this);
-                return;
-            }
-
-            var script = scripts.shift();
-            self._includeScript(script, function() {
-                _includeScripts(scripts, callback);
-            });
-        };
-
-        _includeScripts(scripts.concat([]), callback);
-
-    },
-
-
-    
-    _includeScript: function(src, callback) {
-        var script    = document.createElement('script');
-        script.onload = function() {
-            script.onload = null;
-            script.onreadystatechange = null;
-            callback.call(this);
-        };
-
-        script.onreadystatechange = function() {
-            if (/^(complete|loaded)$/.test(this.readyState) === true) {
-                script.onreadystatechange = null;
-                script.onload();
-            }
-        }
-
-        script.src = src;
-
-        if (document.head) {
-            document.head.appendChild(script);
-        } else {
-            document.getElementsByTagName('head')[0].appendChild(script);
-        }
-    }
-
-};
-
-
-
-function ViperTableEditorPlugin(viper)
-{
-    this.viper             = viper;
-    this._tools            = viper.ViperTools;
-    this._toolbarWidget    = null;
-    this.toolbarPlugin     = null;
-    this.activeCell        = null;
-    this._highlightElement = null;
-    this._cellTools        = null;
-
-    this._buttonClicked = false;
-    this._tableRawCells = null;
-    this._currentType   = null;
-    this._margin        = 15;
-    this._headerOptions = [null, [1, 0, 0, 1, 0, 0, 1, 0, 0], [1, 1, 1], [1, 1, 1, 1, 0, 0, 1, 0, 0]];
-
-    this._targetToolbarButton = false;
-
-}
-
-ViperTableEditorPlugin.prototype = {
-
-    init: function()
-    {
-        var self = this;
-        var clickedInToolbar = false;
-
-        this.viper.registerCallback('Viper:editableElementChanged', 'ViperTableEditorPlugin', function() {
-            self._initTable();
-
-            if (self.viper.isBrowser('firefox') === true) {
-                // Disable Firefox table editing.
-                document.execCommand("enableInlineTableEditing", false, false);
-                document.execCommand("enableObjectResizing", false, false);
-            }
-
-            var vap = self.viper.ViperPluginManager.getPlugin('ViperAccessibilityPlugin');
-            if (vap) {
-                vap.loadHTMLCS(function() {
-                    var tables = dfx.getTag('table', self.viper.getViperElement());
-                    for (var i = 0; i < tables.length; i++) {
-                        self.setTableHeaders(tables[i]);
-                    }
-                });
-            }
-        });
-
-        this.viper.registerCallback('ViperCopyPastePlugin:paste', 'ViperTableEditorPlugin', function() {
-            var vap = self.viper.ViperPluginManager.getPlugin('ViperAccessibilityPlugin');
-            if (vap) {
-                vap.loadHTMLCS(function() {
-                    var tables = dfx.getTag('table', self.viper.getViperElement());
-                    for (var i = 0; i < tables.length; i++) {
-                        self.setTableHeaders(tables[i]);
-                    }
-                });
-            }
-        });
-
-        this.viper.registerCallback('setHtml', 'ViperTableEditorPlugin', function(data) {
-            var vap = self.viper.ViperPluginManager.getPlugin('ViperAccessibilityPlugin');
-            if (vap) {
-                vap.loadHTMLCS(function() {
-                    var tables = dfx.getTag('table', data.element);
-                    for (var i = 0; i < tables.length; i++) {
-                        self.setTableHeaders(tables[i]);
-                        self._initTable(tables[i]);
-                    }
-                });
-            } else {
-                var tables = dfx.getTag('table', data.element);
-                for (var i = 0; i < tables.length; i++) {
-                    self._initTable(tables[i]);
-                }
-            }
-        });
-
-        this.viper.registerCallback('Viper:enabled', 'ViperTableEditorPlugin', function() {
-            var tables = dfx.getTag('table', self.viper.getViperElement());
-            for (var i = 0; i < tables.length; i++) {
-                self._initTable(tables[i]);
-            }
-        });
-
-        // Hide the toolbar when user clicks anywhere.
-        this.viper.registerCallback(['Viper:mouseDown', 'ViperHistoryManager:undo'], 'ViperTableEditorPlugin', function(data) {
-            if (self.viper.isBrowser('firefox') === true) {
-                // Disable Firefox table editing.
-                document.execCommand("enableInlineTableEditing", false, false);
-                document.execCommand("enableObjectResizing", false, false);
-            }
-
-            self.setActiveCell(null);
-            clickedInToolbar = false;
-            if (data && data.target) {
-                var target = dfx.getMouseEventTarget(data);
-                if (target === self._toolbar || dfx.isChildOf(target, self._toolbar) === true) {
-                    clickedInToolbar = true;
-                    if (dfx.isTag(target, 'input') === true
-                        || dfx.isTag(target, 'textarea') === true
-                    ) {
-                        // Allow event to bubble so the input element can get focus etc.
-                        return true;
-                    }
-
-                    return false;
-                } else if (dfx.isTag(target, 'caption') === true && dfx.getNodeTextContent(target) === '') {
-                    target.innerHTML = '&nbsp;';
-                }
-            }
-
-            self.hideToolbar();
-        });
-
-        dfx.addEvent(window, 'resize', function() {
-            self.hideCellToolsIcon();
-            self.removeHighlights();
-
-            var cell = self.getActiveCell();
-            if (cell && self._toolbarWidget.isVisible() === true) {
-                self._updatePosition(cell);
-                self.highlightActiveCell(self._currentType);
-            }
-        });
-
-        this.viper.registerCallback('Viper:keyUp', 'ViperTableEditorPlugin', function(e) {
-            var range = self.viper.getViperRange();
-            try {
-                if (range.collapsed === true
-                    && self.viper.isBrowser('msie') === true
-                    && range.startContainer.nodeType === dfx.TEXT_NODE
-                    && ['td', 'th'].inArray(dfx.getTagName(range.startContainer.parentNode)) === true
-                ) {
-                    var ohtml = dfx.getHtml(range.startContainer.parentNode);
-                    var nhtml = ohtml.replace(/^&nbsp;/g, '');
-                    nhtml     = nhtml.replace(/&nbsp;$/g, '');
-
-                    if (nhtml !== ohtml && nhtml !== '') {
-                        dfx.setHtml(range.startContainer.parentNode, nhtml);
-                    }
-                }
-            } catch (e) {}
-        });
-
-        this.viper.registerCallback('Viper:keyDown', 'ViperTableEditorPlugin', function(e) {
-            if (e.which === 9) {
-                // Handle tab key.
-                self.removeHighlights();
-
-                if (e.shiftKey === true && self.activeCell) {
-                    self.moveCaretToPreviousCell();
-                } else {
-                    if (self.activeCell && self.moveCaretToNextCell() === false) {
-                        // Create a new row.
-                        self.insertRowAfter(self.activeCell);
-                        self.moveCaretToNextCell();
-                    }
-                }
-
-                dfx.preventDefault(e);
-                return false;
-            } else if (e.which === 39 || e.which === 40) {
-                // Right and down arrow.
-                // If the range is at the end of a table (last cell) then move the
-                // caret outside even if there is no next sibling.
-                var range = self.viper.getCurrentRange();
-                if (range.collapsed === true) {
-                    var startNode = range.getStartNode();
-                    if (startNode && (dfx.isTag(startNode, 'br') === true || (startNode.nodeType === dfx.TEXT_NODE && range.endOffset === startNode.data.length))) {
-                        var cell           = self.getActiveCell();
-                        var lastSelectable = range._getLastSelectableChild(cell);
-                        if (startNode === lastSelectable || (!lastSelectable && dfx.isTag(startNode, 'br') === true)) {
-                            if (cell && !self.getNextRow(cell.parentNode)) {
-                                // End of table.
-                                var table = self.getCellTable(cell);
-                                if (!table.nextSibling || table.nextSibling.data && table.nextSibling.data.match(/^\n\s*$/)) {
-                                    var newNode = document.createElement('p');
-                                    dfx.setHtml(newNode, '&nbsp;');
-                                    dfx.insertAfter(table, newNode);
-                                    range.setStart(newNode.firstChild, 0);
-                                    range.collapse(true);
-                                    ViperSelection.addRange(range);
-                                }
-                            }
-                        }
-                    }
-                }
-            } else if (self.viper.isInputKey(e) === true && e.which !== 13) {
-                // Not input key or enter key, hide tools.
-                self.hideCellToolsIcon();
-                self.removeHighlights();
-                self.hideToolbar();
-            }//end if
-        });
-
-        this.viper.registerCallback('Viper:clickedOutside', 'ViperTableEditorPlugin', function(data) {
-            self.hideCellToolsIcon();
-            self.removeHighlights();
-        });
-
-        this.viper.registerCallback('ViperFormatPlugin:elementAttributeSet', 'ViperTableEditorPlugin', function(data) {
-            if (data.element && dfx.isTag(data.element, 'th') === true) {
-                var table      = self.getCellTable(data.element);
-                var headerAttr = dfx.find(table, '[headers~="' + data.oldValue + '"]');
-                for (var i = 0; i < headerAttr.length; i++) {
-                    var attr = ' ' + headerAttr[i].getAttribute('headers');
-                    attr     = attr.replace(' ' + data.oldValue, (data.element.getAttribute('id') || ''));
-                    headerAttr[i].setAttribute('headers', dfx.trim(attr));
-                }
-
-                self.setTableHeaders(table);
-            }
-        });
-
-        this.toolbarPlugin = this.viper.ViperPluginManager.getPlugin('ViperToolbarPlugin');
-        if (this.toolbarPlugin) {
-            var insertTable = true;
-
-            this.viper.registerCallback('ViperToolbarPlugin:positionUpdated', 'ViperTableEditorPlugin', function(data) {
-                if (self._targetToolbarButton === true) {
-                    var activeCell = self.getActiveCell();
-                    if (activeCell) {
-                        self.showCellToolsIcon(activeCell, true);
-                    }
-                }
-            });
-
-            this.viper.registerCallback('ViperToolbarPlugin:enabled', 'ViperTableEditorPlugin', function(data) {
-                self.viper.ViperTools.enableButton('insertTable');
-            });
-
-            var button = this.viper.ViperTools.createButton('insertTable', '', 'Insert Table', 'Viper-table', function() {
-                var range = self.viper.getViperRange();
-                var node  = range.getStartNode();
-                if (!node) {
-                    node = range.getEndNode();
-                    if (!node) {
-                        return;
-                    }
-                }
-
-                insertTable = true;
-
-                // Do not allow table insertion inside another table.
-                var parents = dfx.getParents(node, 'table', self.viper.getViperElement());
-                if (parents.length > 0) {
-                    insertTable = false;
-                    // Show cell tools.
-                    var cell = self._getCellElement(node);
-                    if (cell) {
-                        if (self._cellTools && dfx.hasClass(self._cellTools, 'Viper-topBar') === true) {
-                            self.hideCellToolsIcon();
-                        } else if (self.viper.isBrowser('msie') === true) {
-                            // This must be in a timeout to be able to calculate the bubbles position correctly.
-                            setTimeout(function() {
-                                self.showCellToolsIcon(cell, true);
-                            }, 10);
-                        } else {
-                            self.showCellToolsIcon(cell, true);
-                        }
-                    }
-                } else {
-                    if (self.viper.isBrowser('msie') === true) {
-                        // This must be in a timeout to be able to calculate the bubbles position correctly.
-                        setTimeout(function() {
-                            self.toolbarPlugin.toggleBubble('VTEP-bubble');
-                        }, 10);
-                    } else {
-                        self.toolbarPlugin.toggleBubble('VTEP-bubble');
-                    }
-                }
-            }, true);
-            this.toolbarPlugin.addButton(button);
-
-            // Create the toolbar bubble.
-            this._createToolbarEditorBubble();
-        }
-
-        if (this._isiPad() === false) {
-            var showToolbar = false;
-            this.viper.registerCallback('Viper:mouseUp', 'ViperTableEditorPlugin', function(e) {
-                var range = self.viper.getCurrentRange();
-                var target = dfx.getMouseEventTarget(e);
-
-                if (!target) {
-                    return;
-                }
-
-                if (target === self._toolbar || dfx.isChildOf(target, self._toolbar) === true) {
-                    self._buttonClicked = false;
-                    return false;
-                }
-
-                if (range.collapsed === false
-                    || dfx.isTag(target, 'a') === true
-                    || dfx.isTag(target, 'img') === true
-                ) {
-                    self.removeHighlights();
-                    self.hideCellToolsIcon();
-                    return true;
-                }
-
-                if (self.viper.isOutOfBounds(target) === true) {
-                    return;
-                }
-
-                var cell = self._getCellElement(target);
-                if (cell) {
-                    self._initTable(self.getCellTable(cell));
-
-                    self.hideCellToolsIcon();
-                    self.removeHighlights();
-
-                    // Show cell Tools.
-                    if (self.viper.isBrowser('msie') === true) {
-                        setTimeout(function() {
-                            showToolbar = true;
-                            self.showCellToolsIcon(cell);
-                        }, 10);
-                    } else {
-                        showToolbar = true;
-                        self.showCellToolsIcon(cell);
-                    }
-
-                    return;
-                }
-
-                self.hideCellToolsIcon();
-                self.removeHighlights();
-
-                return true;
-            });
-
-            this.viper.registerCallback('Viper:selectionChanged', 'ViperTableEditorPlugin', function(range) {
-                var node = range.getStartNode();
-                if (!node) {
-                    node = range.getEndNode();
-                    if (!node) {
-                        if (range.startContainer && dfx.isStubElement(range.startContainer) === true) {
-                            node = range.startContainer;
-                        } else {
-                            return;
-                        }
-                    }
-                }
-
-                if (self.viper.isOutOfBounds(node) === true) {
-                    return;
-                }
-
-                if (self.toolbarPlugin.isDisabled() === true) {
-                    self._tools.setButtonInactive('insertTable');
-                } else {
-                    // Do not allow table insertion inside another table.
-                    var parents = dfx.getParents(node, 'table', self.viper.getViperElement());
-                    if (parents.length > 0 && self._tools) {
-                        // Set the table icon as active.
-                        if (self.toolbarPlugin.isDisabled() === false) {
-                            self._tools.setButtonActive('insertTable');
-                        }
-                    } else {
-                        if (dfx.getParents(node, 'li', self.viper.getViperElement()).length > 0) {
-                            self._tools.disableButton('insertTable');
-                        } else {
-                            var nodeSelection = range.getNodeSelection();
-                            if (!nodeSelection || dfx.isStubElement(nodeSelection) === false) {
-                                self._tools.enableButton('insertTable');
-                                self._tools.setButtonInactive('insertTable');
-                            } else {
-                                self._tools.disableButton('insertTable');
-                                self._tools.setButtonInactive('insertTable');
-                            }
-                        }
-                    }
-                }
-
-                if (range.collapsed === false) {
-                    return;
-                }
-
-                if (clickedInToolbar === true || self.viper.rangeInViperBounds(range) === false) {
-                    clickedInToolbar = false;
-                    return;
-                }
-
-                if (showToolbar === false) {
-                    self.hideCellToolsIcon();
-                    self.hideToolbar();
-                } else {
-                    showToolbar = false;
-                }
-            });
-        } else {
-            // For iPad.
-            this.viper.registerCallback('Viper:selectionChanged', 'ViperTableEditorPlugin', function(range) {
-                var startNode = range.getStartNode();
-                var cell      = self._getCellElement(startNode);
-                if (cell) {
-                    self.hideCellToolsIcon();
-                    self.removeHighlights();
-
-                    showToolbar = true;
-                    // Show cell Tools.
-                    return self.showCellToolsIcon(cell);
-                }
-
-                self.hideCellToolsIcon();
-                return true;
-            });
-        }//end if
-
-        if (this._isiPad() === true) {
-            // During zooming hide the toolbar.
-            dfx.addEvent(window, 'gesturestart', function() {
-                self.hideToolbar();
-            });
-
-            this.viper.registerCallback('Viper:elementScaled', 'ViperTableEditorPlugin', function(data) {
-                if (data.element !== self._toolbar) {
-                    return false;
-                }
-
-                if (data.scale === 1) {
-                    self._margin = 15;
-                } else {
-                    self._margin = (15 - (((1 - data.scale) / 0.1) * 5));
-                }
-
-                self.updateToolbar(self.getActiveCell(), self._currentType);
-            });
-        }//end if
-
-        this._initToolbar();
-
-    },
-
-    _initTable: function(table)
-    {
-        var cells = [];
-        if (!table) {
-            cells = dfx.getTag('td, th', this.viper.getViperElement());
-        } else {
-            cells = dfx.getTag('td,th', table);
-        }
-
-        var c = cells.length;
-        for (var i = 0; i < c; i++) {
-            var html = dfx.trim(dfx.getHtml(cells[i]));
-            if (html === '' || html === '&nbsp;') {
-                this._initCell(cells[i]);
-            }
-        }
-
-    },
-
-
-    
-    showCellToolsIcon: function(cell, inTopBar)
-    {
-        if (!cell) {
-            return;
-        }
-
-        this.hideToolbar();
-
-        var toolsid = this.viper.getId() + '-ViperTEP';
-        var tools   = dfx.getId(toolsid);
-
-        if (tools) {
-            dfx.remove(tools);
-        }
-
-        this.setActiveCell(cell);
-
-        var self      = this;
-        var showTools = function(type) {
-            dfx.remove(tools);
-            var range = self.viper.getCurrentRange();
-            range.collapse(true);
-            ViperSelection.addRange(range);
-            self.showTableTools(cell, type);
-        };
-
-        tools    = document.createElement('div');
-        tools.id = toolsid;
-        dfx.addClass(tools, 'ViperITP Viper-themeDark Viper-compact Viper-visible');
-        this._cellTools = tools;
-
-        // Table, row, col and cell buttons. Initially only the table icon is visible
-        // Whent he mouse is moved over the table icon, rest of the buttons become
-        // visible where user can pick the tools they want to use.
-        var buttonGroup = this.viper.ViperTools.createButtonGroup('VTEP:cellTools:buttons', 'ViperITP-tools');
-        var tableBtn    = this._tools.createButton('VTEP:cellTools:table', '', 'Show Table tools', 'Viper-table', function() {
-            showTools('table');
-        });
-        var rowBtn = this._tools.createButton('VTEP:cellTools:row', '', 'Show Row tools', 'Viper-tableRow Viper-hidden', function() {
-            showTools('row');
-        });
-        var colBtn = this._tools.createButton('VTEP:cellTools:col', '', 'Show Column tools', 'Viper-tableCol Viper-hidden', function() {
-            showTools('col');
-        });
-        var cellBtn = this._tools.createButton('VTEP:cellTools:cell', '', 'Show Cell tools', 'Viper-tableCell Viper-hidden', function() {
-            showTools('cell');
-        });
-        this._tools.addButtonToGroup('VTEP:cellTools:table', 'VTEP:cellTools:buttons');
-        this._tools.addButtonToGroup('VTEP:cellTools:row', 'VTEP:cellTools:buttons');
-        this._tools.addButtonToGroup('VTEP:cellTools:col', 'VTEP:cellTools:buttons');
-        this._tools.addButtonToGroup('VTEP:cellTools:cell', 'VTEP:cellTools:buttons');
-
-        var btns = [rowBtn, colBtn, cellBtn];
-
-        tools.appendChild(buttonGroup);
-
-        var cellCoords = null;
-        var toolsWidth = 42;
-
-        if (inTopBar !== true) {
-            this._targetToolbarButton = false;
-            cellCoords = dfx.getBoundingRectangle(cell);
-        } else {
-            var scrollCoords = dfx.getScrollCoords();
-
-            this._targetToolbarButton = true;
-            dfx.removeClass(btns, 'Viper-hidden');
-            dfx.setStyle(tools, 'margin-left', '-45px');
-            cellCoords     = dfx.getBoundingRectangle(this._tools.getItem('insertTable').element);
-
-            if (dfx.getStyle(this._tools.getItem('insertTable').element.parentNode, 'position') === 'fixed') {
-                cellCoords.y2 += (5 - scrollCoords.y);
-                dfx.setStyle(tools, 'position', 'fixed');
-            } else {
-                dfx.setStyle(tools, 'position', 'absolute');
-            }
-
-            dfx.addClass(tools, 'Viper-topBar');
-        }
-
-        dfx.setStyle(tools, 'top', cellCoords.y2 + 5 + 'px');
-        dfx.setStyle(tools, 'left', Math.ceil(cellCoords.x1 + ((cellCoords.x2 - cellCoords.x1) / 2) - (toolsWidth / 2)) + 1 + 'px');
-
-        if (this._isiPad() === false) {
-            // On Hover of the buttons highlight the table/row/col/cell.
-            dfx.hover(tableBtn, function() {
-                self.setActiveCell(cell);
-                self.highlightActiveCell('table');
-            }, function() {
-                self.removeHighlights();
-            });
-            dfx.hover(rowBtn, function() {
-                self.setActiveCell(cell);
-                self.highlightActiveCell('row');
-            }, function() {
-                self.removeHighlights();
-            });
-            dfx.hover(colBtn, function() {
-                self.setActiveCell(cell);
-                self.highlightActiveCell('col');
-            }, function() {
-                self.removeHighlights();
-            });
-            dfx.hover(cellBtn, function() {
-                self.setActiveCell(cell);
-                self.highlightActiveCell('cell');
-            }, function() {
-                self.removeHighlights();
-            });
-
-            if (this._targetToolbarButton !== true) {
-                // On hover show the list of available table properties buttons.
-                dfx.hover(tools, function() {
-                    self.setActiveCell(cell);
-                    self.highlightActiveCell();
-                    dfx.removeClass(btns, 'Viper-hidden');
-                    dfx.setStyle(tools, 'margin-left', '-45px');
-                }, function() {
-                    self.removeHighlights();
-                    dfx.addClass(btns, 'Viper-hidden');
-                    dfx.setStyle(tools, 'margin-left', '0');
-                });
-            }
-        } else {
-            // On iPad just show the tools.
-            dfx.addEvent(tools, 'click', function() {
-                showTools('cell');
-            });
-        }//end if
-
-        this.viper.addElement(tools);
-
-    },
-
-    hideCellToolsIcon: function()
-    {
-        if (!this._cellTools) {
-            return;
-        }
-
-        var toolsid = this.viper.getId() + '-ViperTEP';
-        var tools   = dfx.getId(toolsid);
-
-        if (tools) {
-            dfx.remove(tools);
-        }
-
-        this._cellTools = null;
-
-    },
-
-    showTableTools: function(cell, type)
-    {
-        if (!cell) {
-            return;
-        }
-
-        this.updateToolbar(cell, type);
-
-    },
-
-    _initToolbar: function()
-    {
-        var tools       = this.viper.ViperTools;
-        var toolbarid   = 'ViperTableEditor-toolbar';
-        var self        = this;
-        var toolbarElem = tools.createInlineToolbar(toolbarid);
-        var toolbar     = tools.getItem(toolbarid);
-
-        this._toolbarWidget = toolbar;
-
-        // Add lineage container to the toolbar.
-        var lineage = document.createElement('ul');
-        dfx.addClass(lineage, 'ViperITP-lineage');
-        dfx.insertBefore(toolbarElem.firstChild, lineage);
-        this._lineage = lineage;
-
-        // Add the table buttons.
-        this._createCellProperties();
-        this.viper.fireCallbacks('ViperTableEditorPlugin:initToolbar', {toolbar: toolbar, type: 'cell'});
-
-        this._createColProperties();
-        this.viper.fireCallbacks('ViperTableEditorPlugin:initToolbar', {toolbar: toolbar, type: 'col'});
-
-        this._createRowProperties();
-        this.viper.fireCallbacks('ViperTableEditorPlugin:initToolbar', {toolbar: toolbar, type: 'row'});
-
-        this._createTableProperties();
-        this.viper.fireCallbacks('ViperTableEditorPlugin:initToolbar', {toolbar: toolbar, type: 'table'});
-
-    },
-
-    hideToolbar: function()
-    {
-        this._toolbarWidget.hide();
-
-    },
-
-    getCurrentViewType: function()
-    {
-        return this._type;
-
-    },
-
-    
-    updateToolbar: function(cell, type, activeSubSection)
-    {
-        this._activeSection = null;
-        this._tableRawCells = null;
-        this.setActiveCell(cell);
-
-        this.removeHighlights();
-        this.hideToolbar();
-
-        this._currentType = type;
-
-        dfx.removeClass(this._toolbar, 'Viper-subSectionVisible');
-
-        // Set highlight to active cell.
-        this.highlightActiveCell();
-
-        this._toolbarWidget.resetButtons();
-        this._updateLineage(type);
-        this._updateInnerContainer(cell, type, activeSubSection);
-        this._updatePosition(cell, type);
-        this.highlightActiveCell(type);
-        this._toolbarWidget._updateSubSectionArrowPos();
-
-        this._toolbarWidget.focusSubSection();
-        this.viper.removeHighlights();
-
-    },
-
-    _updateInnerContainer: function(cell, type, activeSubSection)
-    {
-        switch (type) {
-            case 'cell':
-            default:
-                this._showCellProperties(cell, activeSubSection);
-            break;
-
-            case 'col':
-                this._showColProperties(cell);
-            break;
-
-            case 'row':
-                this._showRowProperties(cell);
-            break;
-
-            case 'table':
-                this._showTableProperties(cell);
-            break;
-        }
-
-        var callbackData = {
-            toolbar: this,
-            cell: cell,
-            type: type,
-            toolbar: this._toolbarWidget
-        };
-        this.viper.fireCallbacks('ViperTableEditorPlugin:updateToolbar', callbackData);
-
-    },
-
-    _showCellProperties: function(cell, activeSubSection)
-    {
-        this._toolbarWidget.showButton('VTEP:cellProps:mergeSplitSubSectionToggle');
-        this._toolbarWidget.showButton('VTEP:cellProps:settings');
-
-        this._tools.getItem('VTEP:cellProps:heading').setValue(dfx.isTag(cell, 'th'));
-
-        if (this.getRowspan(cell) <= 1) {
-            this._tools.disableButton('VTEP:cellProps:splitHoriz');
-        } else {
-            this._tools.enableButton('VTEP:cellProps:splitHoriz');
-        }
-
-        if (this.getColspan(cell) <= 1) {
-            this._tools.disableButton('VTEP:cellProps:splitVert');
-        } else {
-            this._tools.enableButton('VTEP:cellProps:splitVert');
-        }
-
-        if (this.canMergeUp(cell) !== false) {
-            this._tools.enableButton('VTEP:cellProps:mergeUp');
-        } else {
-            this._tools.disableButton('VTEP:cellProps:mergeUp');
-        }
-
-        if (this.canMergeDown(cell) !== false) {
-            this._tools.enableButton('VTEP:cellProps:mergeDown');
-        } else {
-            this._tools.disableButton('VTEP:cellProps:mergeDown');
-        }
-
-        if (this.canMergeRight(cell) !== false) {
-            this._tools.enableButton('VTEP:cellProps:mergeRight');
-        } else {
-            this._tools.disableButton('VTEP:cellProps:mergeRight');
-        }
-
-        if (this.canMergeLeft(cell) !== false) {
-            this._tools.enableButton('VTEP:cellProps:mergeLeft');
-        } else {
-            this._tools.disableButton('VTEP:cellProps:mergeLeft');
-        }
-
-        if (activeSubSection === 'merge') {
-            this._toolbarWidget.toggleSubSection('VTEP:cellProps:mergeSplitSubSection');
-        } else {
-            this._toolbarWidget.toggleSubSection('VTEP:cellProps:settingsSubSection');
-        }
-
-    },
-
-    _showColProperties: function(cell)
-    {
-        this._toolbarWidget.showButton('VTEP:colProps:settings');
-        this._toolbarWidget.showButton('VTEP:colProps:insBefore');
-        this._toolbarWidget.showButton('VTEP:colProps:insAfter');
-        this._toolbarWidget.showButton('VTEP:colProps:moveLeft');
-        this._toolbarWidget.showButton('VTEP:colProps:moveRight');
-        this._toolbarWidget.showButton('VTEP:colProps:remove');
-
-        var colWidth = this.getColumnWidth(cell);
-        this._tools.getItem('VTEP:colProps:width').setValue(colWidth);
-
-        /// Heading.
-        var wholeColHeading = true;
-        var cells   = this._getCellsExpanded();
-        var cellPos = this.getCellPosition(cell);
-
-        for (var i = 0; i < cells.length; i++) {
-            var colCell    = cells[i][cellPos.col];
-            var colCellPos = this.getCellPosition(colCell);
-            if (colCellPos.col === cellPos.col) {
-                if (dfx.isTag(colCell, 'td') === true) {
-                    wholeColHeading = false;
-                    break;
-                }
-            }
-        }
-
-        this._tools.getItem('VTEP:colProps:heading').setValue(wholeColHeading, true);
-
-        // Enable/disable move col icons.
-        if (this.canMoveColLeft(cell) === true) {
-            this._tools.enableButton('VTEP:colProps:moveLeft');
-        } else {
-            this._tools.disableButton('VTEP:colProps:moveLeft');
-        }
-
-        // Enable/disable move col icons.
-        if (this.canMoveColRight(cell) === true) {
-            this._tools.enableButton('VTEP:colProps:moveRight');
-        } else {
-            this._tools.disableButton('VTEP:colProps:moveRight');
-        }
-
-        this._toolbarWidget.toggleSubSection('VTEP:colProps:settingsSubSection');
-
-    },
-
-    _showRowProperties: function(cell)
-    {
-        this._toolbarWidget.showButton('VTEP:rowProps:settings');
-        this._toolbarWidget.showButton('VTEP:rowProps:insBefore');
-        this._toolbarWidget.showButton('VTEP:rowProps:insAfter');
-        this._toolbarWidget.showButton('VTEP:rowProps:moveUp');
-        this._toolbarWidget.showButton('VTEP:rowProps:moveDown');
-        this._toolbarWidget.showButton('VTEP:rowProps:remove');
-
-        this._tools.getItem('VTEP:rowProps:heading').setValue(dfx.getTag('td', cell.parentNode).length === 0);
-
-        if (this.canMoveRowUp(cell) === false) {
-            this._tools.disableButton('VTEP:rowProps:moveUp');
-        } else {
-            this._tools.enableButton('VTEP:rowProps:moveUp');
-        }
-
-        if (this.canMoveRowDown(cell) === false) {
-            this._tools.disableButton('VTEP:rowProps:moveDown');
-        } else {
-            this._tools.enableButton('VTEP:rowProps:moveDown');
-        }
-
-        this._toolbarWidget.toggleSubSection('VTEP:rowProps:settingsSubSection');
-
-    },
-
-    _showTableProperties: function(cell)
-    {
-        var table = this.getCellTable(cell);
-        this._toolbarWidget.showButton('VTEP:tableProps:settings');
-        this._toolbarWidget.showButton('VTEP:tableProps:remove');
-
-        var tableWidth = this.getTableWidth(table);
-        this._tools.getItem('VTEP:tableProps:width').setValue(tableWidth);
-
-        var summary = table.getAttribute('summary') || '';
-        this._tools.getItem('VTEP:tableProps:summary').setValue(summary);
-
-        this._tools.getItem('VTEP:tableProps:caption').setValue((dfx.getTag('caption', table).length > 0));
-
-        this._toolbarWidget.toggleSubSection('VTEP:tableProps:settingsSubSection');
-
-    },
-
-    tableUpdated: function(table)
-    {
-        this._tableRawCells = null;
-        table = table || this.getCellTable(this.activeCell);
-
-        this.setTableHeaders(table);
-        this.viper.fireNodesChanged([table]);
-
-    },
-
-    _isiPad: function()
-    {
-        if (navigator.userAgent.match(/iPad/i) !== null) {
-            return true;
-        }
-
-        return false;
-
-    },
-
-    
-    _updatePosition: function(cell, verticalOnly)
-    {
-        var rangeCoords = this._toolbarWidget.getElementCoords(cell);
-
-        if (!rangeCoords) {
-            return;
-        }
-
-        var scrollCoords = dfx.getScrollCoords();
-
-        var toolbar = this._toolbarWidget.element;
-
-        dfx.addClass(toolbar, 'Viper-calcWidth');
-        dfx.setStyle(toolbar, 'width', 'auto');
-        var toolbarWidth = dfx.getElementWidth(toolbar);
-        dfx.removeClass(toolbar, 'Viper-calcWidth');
-        dfx.setStyle(toolbar, 'width', toolbarWidth + 'px');
-
-        var left = 0;
-        var top  = 0;
-        if (this._targetToolbarButton !== true) {
-            if (verticalOnly !== true) {
-                left = ((rangeCoords.left + ((rangeCoords.right - rangeCoords.left) / 2) + scrollCoords.x) - (toolbarWidth / 2));
-                dfx.setStyle(toolbar, 'left', left + 'px');
-            }
-
-            top = (rangeCoords.bottom + this._margin + scrollCoords.y);
-            dfx.setStyle(toolbar, 'position', 'absolute');
-        } else {
-            var cellCoords = dfx.getBoundingRectangle(this._tools.getItem('insertTable').element);
-            top  = cellCoords.y2 + 15 - scrollCoords.y;
-            left = ((cellCoords.x1 + ((cellCoords.x2 - cellCoords.x1) / 2) + scrollCoords.x) - (toolbarWidth / 2));
-
-            dfx.setStyle(toolbar, 'left', left + 'px');
-            dfx.setStyle(toolbar, 'position', 'fixed');
-        }
-
-        dfx.setStyle(toolbar, 'top', top + 'px');
-        dfx.addClass(toolbar, 'Viper-visible');
-
-    },
-
-    _updateLineage: function(type)
-    {
-        var self = this;
-
-        dfx.empty(this._lineage);
-
-        dfx.removeClass(dfx.getClass('Viper-selected', this._lineage), 'Viper-selected');
-
-        // Table.
-        var table = document.createElement('li');
-        dfx.addClass(table, 'ViperITP-lineageItem');
-        dfx.setHtml(table, 'Table');
-        this._lineage.appendChild(table);
-        dfx.addEvent(table, 'mousedown', function(e) {
-            self._buttonClicked = true;
-            self.updateToolbar(self.getActiveCell(), 'table');
-            dfx.preventDefault(e);
-            return false;
-        });
-
-        if (type === 'table') {
-            dfx.addClass(table, 'Viper-selected');
-        }
-
-        // Row.
-        var row = document.createElement('li');
-        dfx.addClass(row, 'ViperITP-lineageItem');
-        dfx.setHtml(row, 'Row');
-        this._lineage.appendChild(row);
-        dfx.addEvent(row, 'mousedown', function(e) {
-            dfx.removeClass(dfx.getClass('Viper-selected', self._lineage), 'Viper-selected');
-            dfx.addClass(row, 'Viper-selected');
-            self._buttonClicked = true;
-            self.updateToolbar(self.getActiveCell(), 'row');
-            dfx.preventDefault(e);
-            return false;
-        });
-
-        if (type === 'row') {
-            dfx.addClass(row, 'Viper-selected');
-        }
-
-        // Col.
-        var col = document.createElement('li');
-        dfx.addClass(col, 'ViperITP-lineageItem');
-        dfx.setHtml(col, 'Column');
-        this._lineage.appendChild(col);
-        dfx.addEvent(col, 'mousedown', function(e) {
-            self._buttonClicked = true;
-            self.updateToolbar(self.getActiveCell(), 'col');
-            dfx.preventDefault(e);
-            return false;
-        });
-
-        if (type === 'col') {
-            dfx.addClass(col, 'Viper-selected');
-        }
-
-        // Cell.
-        var cell = document.createElement('li');
-        dfx.addClass(cell, 'ViperITP-lineageItem');
-        dfx.setHtml(cell, 'Cell');
-        this._lineage.appendChild(cell);
-        dfx.addEvent(cell, 'mousedown', function(e) {
-            self._buttonClicked = true;
-            self.updateToolbar(self.getActiveCell(), 'cell');
-            dfx.preventDefault(e);
-            return false;
-        });
-        if (!type || type === 'cell') {
-            dfx.addClass(cell, 'Viper-selected');
-        }
-
-        setTimeout(function() {
-            // Add the hover events after a few ms of showing the toolbar so that
-            // if the pointer is on top of the lineage item it does not change the
-            // highlighted cell.
-            dfx.hover(table, function() {
-                self.highlightActiveCell('table');
-            }, function() {
-                self.removeHighlights();
-                self.highlightActiveCell(self._currentType);
-            });
-
-            dfx.hover(row, function() {
-                self.highlightActiveCell('row');
-            }, function() {
-                self.removeHighlights();
-                self.highlightActiveCell(self._currentType);
-            });
-
-            dfx.hover(col, function() {
-                self.highlightActiveCell('col');
-            }, function() {
-                self.removeHighlights();
-                self.highlightActiveCell(self._currentType);
-            });
-
-            dfx.hover(cell, function() {
-                self.highlightActiveCell('cell');
-            }, function() {
-                self.removeHighlights();
-                self.highlightActiveCell(self._currentType);
-            });
-        }, 100);
-
-    },
-
-    removeHighlights: function()
-    {
-        dfx.remove(this._highlightElement);
-
-    },
-
-
-    highlightActiveCell: function(parentType)
-    {
-        parentType     = parentType || 'cell';
-        var activeCell = this.getActiveCell();
-        var element    = null;
-        var coords     = null;
-
-        if (!activeCell) {
-            return;
-        }
-
-        switch (parentType) {
-            case 'cell':
-            default:
-                element = activeCell;
-            break;
-
-            case 'table':
-                var table = this.getCellTable(activeCell);
-                var tfoot = dfx.getTag('tfoot', table);
-                coords    = dfx.getBoundingRectangle(table);
-
-                if (this.viper.isBrowser('firefox') === true) {
-                    // Caption height fix..
-                    var caption = dfx.getTag('caption', table);
-                    if (caption.length > 0) {
-                        caption    = caption[0];
-                        coords.y2 += dfx.getElementHeight(caption);
-                    }
-                }
-            break;
-
-            case 'row':
-                if (this.getRowspan(activeCell) > 1) {
-                    coords         = dfx.getBoundingRectangle(activeCell.parentNode);
-                    var cellCoords = dfx.getBoundingRectangle(activeCell);
-                    coords.y2      = cellCoords.y2;
-                } else {
-                    element = activeCell.parentNode;
-                }
-            break;
-
-            case 'col':
-                // Column is a bit harder to calculate.
-                // Get the tables rectangle.
-                var table   = this.getCellTable(activeCell);
-                var caption = dfx.getTag('caption', table);
-                coords      = dfx.getBoundingRectangle(table);
-
-                if (caption.length > 0) {
-                    var captionHeight = dfx.getElementHeight(caption[0]);
-                    coords.y1        += captionHeight;
-
-                    if (this.viper.isBrowser('firefox') === true) {
-                        // Firefox caption height fix.
-                        coords.y2 += captionHeight;
-                    }
-                }
-
-                // Get the width and height of the cell.
-                var cellRect = dfx.getBoundingRectangle(activeCell);
-
-                // Modify the table coords so that the width and height only for this col.
-                coords.x1 = cellRect.x1;
-                coords.x2 = cellRect.x2;
-            break;
-        }//end switch
-
-        this.removeHighlights();
-
-        if (element && !coords) {
-            coords = dfx.getBoundingRectangle(element);
-        }
-
-        var hElem = document.createElement('div');
-        dfx.addClass(hElem, 'ViperITP-highlight Viper-tableHighlight');
-
-        dfx.setStyle(hElem, 'width', (coords.x2 - coords.x1) + 'px');
-        dfx.setStyle(hElem, 'height', (coords.y2 - coords.y1) + 'px');
-        dfx.setStyle(hElem, 'top', coords.y1 + 'px');
-        dfx.setStyle(hElem, 'left', coords.x1 + 'px');
-
-        this.viper.addElement(hElem);
-        this._highlightElement = hElem;
-
-        dfx.addEvent(hElem, 'mousedown', function(e) {
-            dfx.preventDefault(e);
-            dfx.remove(hElem);
-            return false;
-        });
-
-        // Hide the highlight element when the mouse is over it. Show it again, when
-        // the mouse is over the table tools bar.
-        var self = this;
-        dfx.hover(hElem, function() {
-            dfx.hideElement(hElem);
-        }, function() {});
-
-        dfx.hover(self._toolbarWidget.element, function() {
-            dfx.showElement(hElem);
-        }, function() {});
-
-    },
-
-    __updateInnerContainer: function(cell, type, activeSubSection)
-    {
-        var callbackData = {
-            toolbar: this,
-            cell: cell,
-            type: type
-        };
-        this.viper.fireCallbacks('ViperTableEditorPlugin:updateToolbar', callbackData);
-
-    },
-
-    _createCellProperties: function()
-    {
-        var self               = this;
-        var settingsContent    = document.createElement('div');
-        var headingChanged     = false;
-        var settingsSubSection = this._toolbarWidget.makeSubSection('VTEP:cellProps:settingsSubSection', settingsContent);
-        var settingsButton     = this._tools.createButton('VTEP:cellProps:settings', '', 'Toggle Settings', 'Viper-tableSettings');
-        this._toolbarWidget.addButton(settingsButton);
-        this._toolbarWidget.setSubSectionButton('VTEP:cellProps:settings', 'VTEP:cellProps:settingsSubSection');
-        this._toolbarWidget.setSubSectionAction('VTEP:cellProps:settingsSubSection', function() {
-            var cell = self.getActiveCell();
-            if (headingChanged === true) {
-                var newCell = null;
-                if (self._tools.getItem('VTEP:cellProps:heading').getValue() === true) {
-                    newCell = self.convertToHeader(cell, 'cell');
-                } else {
-                    newCell = self.convertToCell(cell, 'cell');
-                }
-
-                self.updateToolbar(newCell, 'cell');
-            }
-        }, ['VTEP:cellProps:heading']);
-        var heading = this._tools.createCheckbox('VTEP:cellProps:heading', 'Heading', false, function() {
-            headingChanged = true;
-        });
-        settingsContent.appendChild(heading);
-
-        // Split buttons.
-        this._tools.createButton('VTEP:cellProps:splitVert', '', 'Split Vertically', 'Viper-splitVert', function() {
-            var cell = self.getActiveCell();
-            self._buttonClicked = true;
-            self.splitVertical(cell);
-            self.updateToolbar(cell, 'cell', 'merge');
-        });
-
-        this._tools.createButton('VTEP:cellProps:splitHoriz', '', 'Split Horizontally', 'Viper-splitHoriz', function() {
-            var cell = self.getActiveCell();
-            self._buttonClicked = true;
-            self.splitHorizontal(cell);
-            self.updateToolbar(cell, 'cell', 'merge');
-        });
-
-        var splitBtnGroup = this._tools.createButtonGroup('VTEP:cellProps:splitButtons');
-        this._tools.addButtonToGroup('VTEP:cellProps:splitVert', 'VTEP:cellProps:splitButtons');
-        this._tools.addButtonToGroup('VTEP:cellProps:splitHoriz', 'VTEP:cellProps:splitButtons');
-
-        // Merge buttons.
-        var mergeUp = this._tools.createButton('VTEP:cellProps:mergeUp', '', 'Merge Up', 'Viper-mergeUp', function() {
-            var cell = self.getActiveCell();
-            self._buttonClicked = true;
-            self.updateToolbar(self.mergeUp(cell), 'cell', 'merge');
-        });
-
-        var mergeDown = this._tools.createButton('VTEP:cellProps:mergeDown', '', 'Merge Down', 'Viper-mergeDown', function() {
-            var cell = self.getActiveCell();
-            self._buttonClicked = true;
-            self.updateToolbar(self.mergeDown(cell), 'cell', 'merge');
-        });
-
-        var mergeLeft = this._tools.createButton('VTEP:cellProps:mergeLeft', '', 'Merge Left', 'Viper-mergeLeft', function() {
-            var cell = self.getActiveCell();
-            self._buttonClicked = true;
-            self.updateToolbar(self.mergeLeft(cell), 'cell', 'merge');
-        });
-
-        var mergeRight = this._tools.createButton('VTEP:cellProps:mergeRight', '', 'Merge Right', 'Viper-mergeRight', function() {
-            var cell = self.getActiveCell();
-            self._buttonClicked = true;
-            self.updateToolbar(self.mergeRight(cell), 'cell', 'merge');
-        });
-
-        var mergeBtnGroup = this._tools.createButtonGroup('VTEP:cellProps:mergeButtons');
-        this._tools.addButtonToGroup('VTEP:cellProps:mergeUp', 'VTEP:cellProps:mergeButtons');
-        this._tools.addButtonToGroup('VTEP:cellProps:mergeDown', 'VTEP:cellProps:mergeButtons');
-        this._tools.addButtonToGroup('VTEP:cellProps:mergeLeft', 'VTEP:cellProps:mergeButtons');
-        this._tools.addButtonToGroup('VTEP:cellProps:mergeRight', 'VTEP:cellProps:mergeButtons');
-
-        var mergeSubWrapper = document.createElement('div');
-        mergeSubWrapper.appendChild(splitBtnGroup);
-        mergeSubWrapper.appendChild(mergeBtnGroup);
-
-        // Create the merge/split sub section toggle button.
-        var mergeSubSection = this._toolbarWidget.makeSubSection('VTEP:cellProps:mergeSplitSubSection', mergeSubWrapper);
-        var mergeSplitToggle = this._tools.createButton('VTEP:cellProps:mergeSplitSubSectionToggle', '', 'Toggle Merge/Split Options', 'Viper-splitMerge');
-        this._toolbarWidget.addButton(mergeSplitToggle);
-        this._toolbarWidget.setSubSectionButton('VTEP:cellProps:mergeSplitSubSectionToggle', 'VTEP:cellProps:mergeSplitSubSection');
-
-    },
-
-    _createColProperties: function()
-    {
-        var self = this;
-
-        var settingsContent = document.createElement('div');
-
-        // Create the settings sub section.
-        var headingChanged     = false;
-        var settingsSubSection = this._toolbarWidget.makeSubSection('VTEP:colProps:settingsSubSection', settingsContent);
-        var settingsButton     = this._tools.createButton('VTEP:colProps:settings', '', 'Toggle Settings', 'Viper-tableSettings');
-        this._toolbarWidget.addButton(settingsButton);
-        this._toolbarWidget.setSubSectionButton('VTEP:colProps:settings', 'VTEP:colProps:settingsSubSection');
-        this._toolbarWidget.setSubSectionAction('VTEP:colProps:settingsSubSection', function() {
-            var cell = self.getActiveCell();
-            // Set column width.
-            var width = self._tools.getItem('VTEP:colProps:width').getValue();
-            self.setColumnWidth(cell, width);
-
-            if (headingChanged === true) {
-                var headingChecked = self._tools.getItem('VTEP:colProps:heading').getValue();
-
-                // Switch between header and normal cell.
-                var newCell = null;
-                if (headingChecked !== true) {
-                    newCell = self.convertToCell(cell, 'col');
-                } else {
-                    newCell = self.convertToHeader(cell, 'col');
-                }
-
-                self.updateToolbar(newCell, 'col');
-            } else {
-                self.updateToolbar(self.getActiveCell(), 'col');
-            }
-        }, ['VTEP:colProps:width', 'VTEP:colProps:heading']);
-
-        // Width.
-        var width = this._tools.createTextbox('VTEP:colProps:width', 'Width');
-        settingsContent.appendChild(width);
-
-        var heading = this._tools.createCheckbox('VTEP:colProps:heading', 'Heading', false, function() {
-            headingChanged = true;
-        });
-        settingsContent.appendChild(heading);
-
-        this._tools.createButton('VTEP:colProps:insBefore', '', 'Insert Column Before', 'Viper-addLeft', function() {
-            var cell = self.getActiveCell();
-            self._buttonClicked = true;
-            self.insertColBefore(cell);
-            self.updateToolbar(cell, 'col');
-        });
-        this._tools.createButton('VTEP:colProps:insAfter', '', 'Insert Column After', 'Viper-addRight', function() {
-            var cell = self.getActiveCell();
-            self._buttonClicked = true;
-            self.insertColAfter(cell);
-            self.updateToolbar(cell, 'col');
-        });
-
-        var btnGroup = this._tools.createButtonGroup('VTEP:insColButtons');
-        this._tools.addButtonToGroup('VTEP:colProps:insBefore', 'VTEP:insColButtons');
-        this._tools.addButtonToGroup('VTEP:colProps:insAfter', 'VTEP:insColButtons');
-        this._toolbarWidget.addButton(btnGroup);
-
-        this._tools.createButton('VTEP:colProps:moveLeft', '', 'Move Left', 'Viper-mergeLeft', function() {
-            var cell = self.getActiveCell();
-            self._buttonClicked = true;
-            self.updateToolbar(self.moveColLeft(cell), 'col');
-        });
-        this._tools.createButton('VTEP:colProps:moveRight', '', 'Move Right', 'Viper-mergeRight', function() {
-            var cell = self.getActiveCell();
-            self._buttonClicked = true;
-            self.updateToolbar(self.moveColRight(cell), 'col');
-        });
-
-        btnGroup = this._tools.createButtonGroup('VTEP:moveColButtons');
-        this._tools.addButtonToGroup('VTEP:colProps:moveLeft', 'VTEP:moveColButtons');
-        this._tools.addButtonToGroup('VTEP:colProps:moveRight', 'VTEP:moveColButtons');
-        this._toolbarWidget.addButton(btnGroup);
-
-        var removeCol = this._tools.createButton('VTEP:colProps:remove', '', 'Remove Column', 'Viper-delete', function() {
-            var cell  = self.getActiveCell();
-            var table = self.getCellTable(cell);
-            self._buttonClicked = true;
-            self.removeCol(cell);
-            self.hideToolbar();
-            self.removeHighlights();
-
-            self._setCaretToStart(table);
-        });
-        this._toolbarWidget.addButton(removeCol);
-
-        dfx.hover(removeCol, function() {
-            dfx.addClass(self._highlightElement, 'Viper-deleteOverlay');
-        }, function() {
-            dfx.removeClass(self._highlightElement, 'Viper-deleteOverlay');
-        });
-
-    },
-
-    _createRowProperties: function()
-    {
-        var self               = this;
-        var settingsContent    = document.createElement('div');
-        var headingChanged     = false;
-        var settingsSubSection = this._toolbarWidget.makeSubSection('VTEP:rowProps:settingsSubSection', settingsContent);
-        var settingsButton     = this._tools.createButton('VTEP:rowProps:settings', '', 'Toggle Settings', 'Viper-tableSettings');
-        this._toolbarWidget.addButton(settingsButton);
-        this._toolbarWidget.setSubSectionButton('VTEP:rowProps:settings', 'VTEP:rowProps:settingsSubSection');
-        this._toolbarWidget.setSubSectionAction('VTEP:rowProps:settingsSubSection', function() {
-            if (headingChanged === true) {
-                var cell    = self.getActiveCell();
-                var newCell = null;
-                if (self._tools.getItem('VTEP:rowProps:heading').getValue() === true) {
-                    newCell = self.convertToHeader(cell, 'row');
-                } else {
-                    newCell = self.convertToCell(cell, 'row');
-                }
-
-                self.updateToolbar(newCell, 'row');
-            }
-        }, ['VTEP:rowProps:heading']);
-
-        var heading = this._tools.createCheckbox('VTEP:rowProps:heading', 'Heading', false, function() {
-            headingChanged = true;
-        });
-        settingsContent.appendChild(heading);
-
-        this._tools.createButton('VTEP:rowProps:insBefore', '', 'Insert Row Before', 'Viper-addAbove', function() {
-            var cell = self.getActiveCell();
-            self._buttonClicked = true;
-            self.insertRowBefore(cell);
-            self.updateToolbar(cell, 'row');
-        });
-        this._tools.createButton('VTEP:rowProps:insAfter', '', 'Insert Row After', 'Viper-addBelow', function() {
-            var cell = self.getActiveCell();
-            self.insertRowAfter(cell);
-            self.updateToolbar(cell, 'row');
-        });
-        var btnGroup = this._tools.createButtonGroup('VTEP:insRowButtons');
-        this._tools.addButtonToGroup('VTEP:rowProps:insBefore', 'VTEP:insRowButtons');
-        this._tools.addButtonToGroup('VTEP:rowProps:insAfter', 'VTEP:insRowButtons');
-        this._toolbarWidget.addButton(btnGroup);
-
-        this._tools.createButton('VTEP:rowProps:moveUp', '', 'Move Up', 'Viper-mergeUp', function() {
-            var cell = self.getActiveCell();
-            self._buttonClicked = true;
-            self.updateToolbar(self.moveRowUp(cell), 'row');
-        });
-        this._tools.createButton('VTEP:rowProps:moveDown', '', 'Move Down', 'Viper-mergeDown', function() {
-            var cell = self.getActiveCell();
-            self._buttonClicked = true;
-            self.updateToolbar(self.moveRowDown(cell), 'row');
-        });
-        btnGroup = this._tools.createButtonGroup('VTEP:moveRowButtons');
-        this._tools.addButtonToGroup('VTEP:rowProps:moveUp', 'VTEP:moveRowButtons');
-        this._tools.addButtonToGroup('VTEP:rowProps:moveDown', 'VTEP:moveRowButtons');
-        this._toolbarWidget.addButton(btnGroup);
-
-        var removeRow = this._tools.createButton('VTEP:rowProps:remove', '', 'Remove Row', 'Viper-delete', function() {
-            var cell  = self.getActiveCell();
-            var table = self.getCellTable(cell);
-            self._buttonClicked = true;
-            self.removeRow(cell);
-            self.hideToolbar();
-            self.removeHighlights();
-
-            self._setCaretToStart(table);
-        });
-        this._toolbarWidget.addButton(removeRow);
-
-        dfx.hover(removeRow, function() {
-            dfx.addClass(self._highlightElement, 'Viper-deleteOverlay');
-        }, function() {
-            dfx.removeClass(self._highlightElement, 'Viper-deleteOverlay');
-        });
-
-    },
-
-    _createTableProperties: function(cell)
-    {
-        var self = this;
-
-        var settingsContent = document.createElement('div');
-
-        // Create the settings sub section.
-        var settingsSubSection = this._toolbarWidget.makeSubSection('VTEP:tableProps:settingsSubSection', settingsContent);
-        var settingsButton     = this._tools.createButton('VTEP:tableProps:settings', '', 'Toggle Settings', 'Viper-tableSettings');
-        this._toolbarWidget.addButton(settingsButton);
-        this._toolbarWidget.setSubSectionButton('VTEP:tableProps:settings', 'VTEP:tableProps:settingsSubSection');
-        this._toolbarWidget.setSubSectionAction('VTEP:tableProps:settingsSubSection', function() {
-            var table = self.getCellTable(self.getActiveCell());
-            self.setTableWidth(table, self._tools.getItem('VTEP:tableProps:width').getValue());
-            self.viper.setAttribute(table, 'summary', self._tools.getItem('VTEP:tableProps:summary').getValue());
-
-            var captionCheckbox = self._tools.getItem('VTEP:tableProps:caption').getValue();
-            if (captionCheckbox === true) {
-                self.createCaption(table);
-            } else {
-                self.removeCaption(table);
-            }
-
-            self.updateToolbar(self.getActiveCell(), 'table');
-        }, ['VTEP:tableProps:width', 'VTEP:tableProps:summary', 'VTEP:tableProps:caption']);
-
-        // Width.
-        var width = this._tools.createTextbox('VTEP:tableProps:width', 'Width', '', null, false, false, '', null, '4.5em');
-        settingsContent.appendChild(width);
-
-        // Summary.
-        var tableSummary = this._tools.createTextarea('VTEP:tableProps:summary', 'Summary', '', false, '', null, '4.5em');
-        settingsContent.appendChild(tableSummary);
-
-        // Caption.
-        var caption = this._tools.createCheckbox('VTEP:tableProps:caption', 'Use Caption');
-        settingsContent.appendChild(caption);
-
-        var remove = this._tools.createButton('VTEP:tableProps:remove', '', 'Remove Table', 'Viper-delete', function() {
-            var table = self.getCellTable(self.getActiveCell());
-            self._buttonClicked = true;
-            self.removeTable(table);
-            self.hideToolbar();
-            self.removeHighlights();
-        });
-        this._toolbarWidget.addButton(remove);
-
-        dfx.hover(remove, function() {
-            dfx.addClass(self._highlightElement, 'Viper-deleteOverlay');
-        }, function() {
-            dfx.removeClass(self._highlightElement, 'Viper-deleteOverlay');
-        });
-
-    },
-
-    setActiveCell: function(cell)
-    {
-        this.activeCell = cell;
-
-    },
-
-    getActiveCell: function(cell)
-    {
-        return this.activeCell;
-
-    },
-
-    createTableHeader: function(table)
-    {
-        if (dfx.getTag('thead', table).length > 0) {
-            return null;
-        }
-
-        var header = document.createElement('thead');
-        var tfoot  = dfx.getTag('tfoot', table);
-        if (tfoot.length === 0) {
-            var tbody = dfx.getTag('tbody', table);
-            if (tbody.length === 0) {
-                table.appendChild(header);
-            } else {
-                dfx.insertBefore(tbody[0], header);
-            }
-        } else {
-            dfx.insertBefore(tfoot[0], header);
-        }
-
-        return header;
-
-    },
-
-    getTableHeader: function(table)
-    {
-        var header = dfx.getTag('thead', table);
-        if (header.length === 0) {
-            return null;
-        }
-
-        return header[0];
-
-    },
-
-    createTableBody: function(table)
-    {
-        if (dfx.getTag('tbody', table).length > 0) {
-            return null;
-        }
-
-        var tbody = document.createElement('tbody');
-        table.appendChild(tbody);
-
-        return tbody;
-
-    },
-
-    getTableBody: function(table)
-    {
-        var tbody = dfx.getTag('tbody', table);
-        if (tbody.length === 0) {
-            return null;
-        }
-
-        return tbody[0];
-
-    },
-
-    createCaption: function(table)
-    {
-        var caption  = null;
-        var captions = dfx.getTag('caption', table);
-        if (captions.length > 0) {
-            caption = captions[0];
-        } else {
-            caption = document.createElement('caption');
-            dfx.setHtml(caption, '&nbsp;');
-
-            dfx.insertBefore(table.firstChild, caption);
-        }
-
-        var range      = this.viper.getCurrentRange();
-        var selectNode = range._getFirstSelectableChild(caption);
-        range.setStart(selectNode, 0);
-        range.collapse(true);
-        ViperSelection.addRange(range);
-        this.viper.fireSelectionChanged();
-
-        this.removeHighlights();
-        this.hideCellToolsIcon();
-
-    },
-
-    removeCaption: function(table)
-    {
-        var caption  = null;
-        var captions = dfx.getTag('caption', table);
-        if (captions.length > 0) {
-            dfx.remove(captions);
-        }
-
-    },
-
-    
-    canMergeLeft: function(cell)
-    {
-        var cells   = this._getCellsExpanded();
-        var cellPos = this.getCellPosition(cell);
-        var rowspan = this.getRowspan(cell);
-
-        if (cellPos.col === 0) {
-            // First column so cannot merge left.
-            return false;
-        }
-
-        var processedCells = [];
-        var rowspans       = 0;
-        var prevColspan    = null;
-        for (var i = 0; i < rowspan; i++) {
-            // Check each previous cell, make sure:
-            // - First one start from current cell's row position
-            // - They all have the same colspan
-            // - Total rowspan must be the same as current cell's rowspan.
-            var prevCell = cells[(cellPos.row + i)][(cellPos.col - 1)];
-            if (processedCells.inArray(prevCell) === true) {
-                continue;
-            }
-
-            processedCells.push(prevCell);
-
-            var pos = this.getCellPosition(prevCell);
-            if (i === 0 && pos.row !== cellPos.row) {
-                // First previous cell must be at the same level as the current cell.
-                return false;
-            }
-
-            rowspans += this.getRowspan(prevCell);
-
-            if (rowspans > rowspan) {
-                // Total rowspan must be the same as current cell's rowspan.
-                return false;
-            } else if (prevColspan !== null && prevColspan !== this.getColspan(prevCell)) {
-                // They all have the same colspan.
-                return false;
-            }
-
-            prevColspan = this.getColspan(prevCell);
-        }//end for
-
-        if (rowspans === rowspan) {
-            // Total rowspan must be the same as current cell's rowspan.
-            return processedCells;
-        }
-
-        return false;
-
-    },
-
-    canMergeRight: function(cell)
-    {
-        var cells   = this._getCellsExpanded();
-        var cellPos = this.getCellPosition(cell);
-        var rowspan = this.getRowspan(cell);
-        var colspan = this.getColspan(cell);
-
-        if (cell === (cells[cellPos.row][(cells[cellPos.row].length - 1)])) {
-            // Last column so cannot merge right.
-            return false;
-        }
-
-        var processedCells = [];
-        var rowspans       = 0;
-        var prevColspan    = null;
-        for (var i = 0; i < rowspan; i++) {
-            // Check each next cell, make sure:
-            // - First one start from current cell's row position
-            // - They all have the same colspan
-            // - Total rowspan must be the same as current cell's rowspan.
-            var nextCell = cells[(cellPos.row + i)][(cellPos.col + colspan)];
-            if (processedCells.inArray(nextCell) === true) {
-                continue;
-            }
-
-            processedCells.push(nextCell);
-
-            var pos = this.getCellPosition(nextCell);
-            if (i === 0 && pos.row !== cellPos.row) {
-                // First previous cell must be at the same level as the current cell.
-                return false;
-            }
-
-            rowspans += this.getRowspan(nextCell);
-
-            if (rowspans > rowspan) {
-                // Total rowspan must be the same as current cell's rowspan.
-                return false;
-            } else if (prevColspan !== null && prevColspan !== this.getColspan(nextCell)) {
-                // They all have the same colspan.
-                return false;
-            }
-
-            prevColspan = this.getColspan(nextCell);
-        }//end for
-
-        if (rowspans === rowspan) {
-            // Total rowspan must be the same as current cell's rowspan.
-            return processedCells;
-        }
-
-        return false;
-
-    },
-
-    canMergeDown: function(cell)
-    {
-        var rowspan = this.getRowspan(cell);
-        var colNum  = this.getColNum(cell);
-        var row     = cell.parentNode;
-        var colspan = this.getColspan(cell);
-
-        while (rowspan >= 1) {
-            row = this.getNextRow(row, true);
-            rowspan--;
-        }
-
-        if (row) {
-            var cspan          = 0;
-            var processedCells = [];
-            var prevRowspan    = null;
-            for (var i = 0; i < colspan; i++) {
-                var newCell = this.getCell(row, (colNum + i));
-                if (!newCell) {
-                    return false;
-                }
-
-                if (processedCells.inArray(newCell) === true) {
-                    continue;
-                }
-
-                processedCells.push(newCell);
-
-                var newCellRowspan = this.getRowspan(newCell);
-                if (prevRowspan !== null && prevRowspan !== newCellRowspan) {
-                    return false
-                }
-
-                prevRowspan = newCellRowspan;
-
-                cspan += this.getColspan(newCell);
-                if (colspan < cspan) {
-                    return false;
-                }
-            }//end for
-
-            return processedCells;
-        }//end if
-
-        return false;
-
-    },
-
-    canMergeUp: function(cell)
-    {
-        var rowspan = this.getRowspan(cell);
-        var colNum  = this.getColNum(cell);
-        var row     = cell.parentNode;
-        var newCell = null;
-        var colspan = this.getColspan(cell);
-
-        while (row && !newCell) {
-            row = this.getPreviousRow(row, true);
-            if (!row) {
-                return false;
-            }
-
-            newCell = this.getCell(row, colNum);
-        }
-
-        if (row) {
-            var cspan          = 0;
-            var processedCells = [];
-            var prevRowspan    = null;
-            for (var i = 0; i < colspan; i++) {
-                var newCell = this.getCell(row, (colNum + i));
-                if (!newCell) {
-                    return false;
-                }
-
-                if (processedCells.inArray(newCell) === true) {
-                    continue;
-                }
-
-                processedCells.push(newCell);
-
-                var newCellRowspan = this.getRowspan(newCell);
-                if (prevRowspan !== null && prevRowspan !== newCellRowspan) {
-                    return false
-                }
-
-                prevRowspan = newCellRowspan;
-
-                cspan += this.getColspan(newCell);
-                if (colspan < cspan) {
-                    return false;
-                }
-            }//end for
-
-            return processedCells;
-        }//end if
-
-        return false;
-
-    },
-
-    mergeLeft: function(cell)
-    {
-        var mergeCells = this.canMergeLeft(cell);
-        if (!mergeCells || mergeCells.length === 0) {
-            return;
-        }
-
-        var newColspan = (this.getColspan(cell) + this.getColspan(mergeCells[0]));
-        this.setColspan(cell, newColspan);
-
-        for (var i = 0; i < mergeCells.length; i++) {
-            this._moveCellContent(mergeCells[i], cell);
-            dfx.remove(mergeCells[i]);
-        }
-
-        var table = this.getCellTable(cell);
-        if (dfx.getTag('tr', table).length === 1) {
-            this.setColspan(cell, 1);
-        }
-
-        this.tableUpdated();
-
-        return cell;
-
-    },
-
-    mergeRight: function(cell)
-    {
-        var mergeCells = this.canMergeRight(cell);
-        if (!mergeCells || mergeCells.length === 0) {
-            return;
-        }
-
-        var newColspan = (this.getColspan(cell) + this.getColspan(mergeCells[0]));
-        this.setColspan(cell, newColspan);
-
-        for (var i = 0; i < mergeCells.length; i++) {
-            this._moveCellContent(mergeCells[i], cell);
-            dfx.remove(mergeCells[i]);
-        }
-
-        var table = this.getCellTable(cell);
-        if (dfx.getTag('tr', table).length === 1) {
-            this.setColspan(cell, 1);
-        }
-
-        var cells = dfx.getTag('td,th', table);
-        if (cells.length === 1) {
-            this.setColspan(cells[0], 1);
-            this.setRowspan(cells[0], 1);
-
-            // Remove empty rows.
-            var rows = dfx.getTag('tr', table);
-            for (var i = 0; i < rows.length; i++) {
-                if (dfx.getTag('td,th', rows[i]).length === 0) {
-                    dfx.remove(rows[i]);
-                }
-            }
-        }
-
-        this.tableUpdated();
-
-        return cell;
-
-    },
-
-    mergeDown: function(cell)
-    {
-        var mergeCells = this.canMergeDown(cell);
-        if (mergeCells.length === 0) {
-            return false;
-        }
-
-        this.setActiveCell(cell);
-
-        var parent = mergeCells[0].parentNode;
-
-        for (var i = 0; i < mergeCells.length; i++) {
-            this._moveCellContent(mergeCells[i], cell);
-            dfx.remove(mergeCells[i]);
-        }
-
-        var rowspan = this.getRowspan(cell) + this.getRowspan(mergeCells[0]);
-        this.setRowspan(cell, rowspan);
-
-        var cells    = this._getCellsExpanded(true);
-        var rowCells = this._getRowCells(parent);
-        if (rowCells.length === 0) {
-            // Find the row index.
-            var rows     = dfx.getTag('tr', this.getCellTable(cell));
-            var rowIndex = -1;
-            for (var i = 0; i < rows.length; i++) {
-                if (rows[i] === parent) {
-                    rowIndex = i;
-                    break;
-                }
-            }
-
-            if (rowIndex >= 0) {
-                var processedCells = [];
-                cells = cells[rowIndex];
-                for (var i = 0; i < cells.length; i++) {
-                    if (processedCells.inArray(cells[i]) === true) {
-                        continue;
-                    }
-
-                    processedCells.push(cells[i]);
-
-                    var rowspan = (this.getRowspan(cells[i]) - 1);
-                    this.setRowspan(cells[i], rowspan);
-                }
-            }
-
-            dfx.remove(parent);
-        }//end if
-
-        var table = this.getCellTable(cell);
-        if (dfx.getTag('tr', table).length === 1) {
-            this.setColspan(cell, 1);
-        }
-
-        this.tableUpdated();
-
-        return cell;
-
-    },
-
-    mergeUp: function(cell)
-    {
-        var mergeCells = this.canMergeUp(cell);
-        if (mergeCells.length === 0) {
-            return false;
-        }
-
-        this.setActiveCell(cell);
-
-        var cellPos = this.getCellPosition(cell);
-
-        var parent    = cell.parentNode;
-        var firstCell = mergeCells[0];
-
-        for (var i = 1; i < mergeCells.length; i++) {
-            this.setColspan(firstCell, this.getColspan(firstCell) + this.getColspan(mergeCells[i]));
-            this._moveCellContent(mergeCells[i], firstCell);
-            dfx.remove(mergeCells[i]);
-        }
-
-        this._moveCellContent(cell, firstCell);
-
-        dfx.remove(cell);
-
-        var rowspan = this.getRowspan(firstCell) + this.getRowspan(cell);
-        this.setRowspan(firstCell, rowspan);
-
-        this.setActiveCell(firstCell);
-
-        // Check if we need to remove the cell's parent row if empty.
-        var cells    = this._getCellsExpanded(true);
-        var rowCells = cells[cellPos.row];
-        var prevPos  = this.getCellPosition(firstCell).row;
-        var remove   = true;
-
-        for (var i = 0; i < rowCells.length; i++) {
-            var pos = this.getCellPosition(rowCells[i]);
-            if (pos.row !== prevPos || rowspan !== this.getRowspan(rowCells[i])) {
-                remove = false;
-                break;
-            }
-        }
-
-        if (remove === true) {
-            // Remove row.
-            dfx.remove(parent);
-
-            // Reduce rowspan.
-            var processedCells = [];
-            for (var i = 0; i < rowCells.length; i++) {
-                if (processedCells.inArray(rowCells[i]) === true) {
-                    continue;
-                }
-
-                processedCells.push(rowCells[i]);
-
-                var newRowspan = (this.getRowspan(rowCells[i]) - 1);
-                this.setRowspan(rowCells[i], newRowspan);
-            }
-        }
-
-        var table = this.getCellTable(firstCell);
-        if (dfx.getTag('tr', table).length === 1) {
-            this.setColspan(firstCell, 1);
-        }
-
-        this.tableUpdated();
-
-        return firstCell;
-
-    },
-
-    
-    canMoveColLeft: function(cell)
-    {
-         var colNum = this.getColNum(cell);
-         if (colNum === 0) {
-             return false;
-         }
-
-         var pos     = this.getCellPosition(cell);
-         var cells   = this._getCellsExpanded(true);
-         var colspan = this.getColspan(cell);
-
-         for (var i = 0; i < cells.length; i++) {
-             var currColspan = this.getColspan(cells[i][pos.col]);
-             var prevColspan = this.getColspan(cells[i][(pos.col - 1)]);
-             var currRowspan = this.getRowspan(cells[i][pos.col]);
-             var prevRowspan = this.getRowspan(cells[i][(pos.col - 1)]);
-
-             if (colspan !== currColspan || currColspan !== prevColspan) {
-                 return false;
-             } else if (currRowspan !== prevRowspan) {
-                 return false;
-             }
-         }
-
-         return true;
-
-    },
-
-    canMoveColRight: function(cell)
-    {
-         var pos     = this.getCellPosition(cell);
-         var cells   = this._getCellsExpanded(true);
-         var colspan = this.getColspan(cell);
-
-         if (!cells[pos.row][(pos.col + 1)]) {
-             return false;
-         }
-
-         for (var i = 0; i < cells.length; i++) {
-             var currColspan = this.getColspan(cells[i][pos.col]);
-             var nextColspan = this.getColspan(cells[i][(pos.col + 1)]);
-             var currRowspan = this.getRowspan(cells[i][pos.col]);
-             var nextRowspan = this.getRowspan(cells[i][(pos.col + 1)]);
-
-             if (colspan !== currColspan || currColspan !== nextColspan) {
-                 return false;
-             } else if (currRowspan !== nextRowspan) {
-                 return false;
-             }
-         }
-
-         return true;
-
-    },
-
-    canMoveRowUp: function(cell)
-    {
-        var pos = this.getCellPosition(cell);
-
-        if (pos.row === 0) {
-            return false;
-        }
-
-        var rowspan = this.getRowspan(cell);
-        var cellRow = this.getCellRow(cell);
-        var prevRow = this.getPreviousRow(cellRow);
-
-        if (!prevRow) {
-            return false;
-        }
-
-        var rowCellsCount    = this._getRowCellCount(cellRow);
-        var prevRowCellCount = this._getRowCellCount(prevRow);
-
-        if (rowCellsCount !== prevRowCellCount) {
-            return false;
-        }
-
-        // Also need to make sure the current cell has higher or equal rowspan than
-        // the rest of the column on its row and all cells must start from the current
-        // row (e.g. a cell cannot be from a previous row with rowspan).
-        var cells = this._getCellsExpanded();
-
-        for (var i = 0; i < cells[pos.row].length; i++) {
-            var rowCell = cells[pos.row][i];
-            if (rowCell === cell) {
-                continue;
-            }
-
-            var cellPos = this.getCellPosition(rowCell);
-            if (cellPos.row !== pos.row || rowspan < this.getRowspan(rowCell)) {
-                return false;
-            }
-        }
-
-        return true;
-
-    },
-
-    canMoveRowDown: function(cell)
-    {
-        var pos = this.getCellPosition(cell);
-
-        var cellRow = this.getCellRow(cell);
-        var rowspan = this.getRowspan(cell);
-
-        var nextRow = cellRow;
-        for (var i = 0; i < rowspan; i++) {
-            nextRow = this.getNextRow(nextRow);
-            if (!nextRow) {
-                return false;
-            }
-        }
-
-        var rowCellsCount    = this._getRowCellCount(cellRow);
-        var nextRowCellCount = this._getRowCellCount(nextRow);
-
-        if (rowCellsCount !== nextRowCellCount) {
-            return false;
-        }
-
-        // Also need to make sure the current cell has higher or equal rowspan than
-        // the rest of the column on its row and all cells must start from the current
-        // row (e.g. a cell cannot be from a previous row with rowspan).
-        var cells = this._getCellsExpanded();
-
-        for (var i = 0; i < cells[pos.row].length; i++) {
-            var rowCell = cells[pos.row][i];
-            if (rowCell === cell) {
-                continue;
-            }
-
-            var cellPos = this.getCellPosition(rowCell);
-            if (cellPos.row !== pos.row || rowspan < this.getRowspan(rowCell)) {
-                return false;
-            }
-        }
-
-        return true;
-
-    },
-
-    moveColLeft: function(cell)
-    {
-        if (this.canMoveColLeft(cell) === false) {
-            return false;
-        }
-
-        var pos   = this.getCellPosition(cell);
-        var cells = this._getCellsExpanded(true);
-
-        if (!cells[pos.row][(pos.col - 1)]) {
-            return false;
-        }
-
-        for (var i = 0; i < cells.length; i++) {
-            dfx.insertBefore(cells[i][(pos.col - 1)], cells[i][pos.col]);
-        }
-
-        this.tableUpdated();
-
-        return cell;
-
-    },
-
-    moveColRight: function(cell)
-    {
-        if (this.canMoveColRight(cell) === false) {
-            return false;
-        }
-
-        var pos   = this.getCellPosition(cell);
-        var cells = this._getCellsExpanded(true);
-
-        if (!cells[pos.row][(pos.col + 1)]) {
-            return false;
-        }
-
-        for (var i = 0; i < cells.length; i++) {
-            dfx.insertAfter(cells[i][(pos.col + 1)], cells[i][pos.col]);
-        }
-
-        this.tableUpdated();
-
-        return cell;
-
-    },
-
-    moveRowUp: function(cell)
-    {
-        if (this.canMoveRowUp(cell) === false) {
-            return false;
-        }
-
-        var cellRow = this.getCellRow(cell);
-        var prevRow = this.getPreviousRow(cellRow);
-        var rowspan = this.getRowspan(cell);
-
-        for (var i = 0; i < rowspan; i++) {
-            cellRow = this.getNextRow(prevRow);
-            dfx.insertBefore(prevRow, cellRow);
-        }
-
-        this.tableUpdated();
-
-        return cell;
-
-    },
-
-    moveRowDown: function(cell)
-    {
-        if (this.canMoveRowDown(cell) === false) {
-            return false;
-        }
-
-        var rowspan = this.getRowspan(cell);
-        var cellRow = this.getCellRow(cell);
-
-        var nextRow = cellRow;
-        for (var i = 0; i < rowspan; i++) {
-            nextRow = this.getNextRow(nextRow);
-            if (!nextRow) {
-                return false;
-            }
-        }
-
-        var startRow = nextRow;
-
-        // If the afterRow contains cells with rowspans then we need to move the
-        // current row after the rowspans.
-        var cells      = this._getRowCells(startRow);
-        var maxRowspan = 1;
-        for (var i = 0; i < cells.length; i++) {
-            var cellRowspan = this.getRowspan(cells[i]);
-            if (maxRowspan < cellRowspan) {
-                maxRowspan = cellRowspan;
-            }
-        }
-
-        if (maxRowspan > 1) {
-            for (var i = 0; i < (maxRowspan - 1); i++) {
-                nextRow = this.getNextRow(nextRow);
-            }
-
-            afterRow = nextRow
-        } else {
-            afterRow = startRow;
-        }
-
-        for (var i = 0; i < rowspan; i++) {
-            var prevRow = this.getPreviousRow(startRow);
-            if (!prevRow) {
-                return false;
-            }
-
-            dfx.insertAfter(afterRow, prevRow);
-        }
-
-        this.tableUpdated();
-
-        return cell;
-
-    },
-
-    getRowspan: function(cell)
-    {
-        return parseInt(cell.getAttribute('rowspan') || 1);
-
-    },
-
-    setRowspan: function(cell, rowspan)
-    {
-        if (rowspan > 1) {
-            cell.setAttribute('rowspan', rowspan);
-        } else {
-            dfx.removeAttr(cell, 'rowspan');
-        }
-
-    },
-
-    getColspan: function(cell)
-    {
-        return parseInt(cell.getAttribute('colspan') || 1);
-
-    },
-
-    setColspan: function(cell, colspan)
-    {
-        if (colspan > 1) {
-            cell.setAttribute('colspan', colspan);
-        } else {
-            dfx.removeAttr(cell, 'colspan');
-        }
-
-    },
-
-    
-    convertToHeader: function(cell, type, actualType)
-    {
-        var elem = cell;
-        type     = type || 'cell';
-
-        if (type === 'cell' && dfx.isTag(cell, 'td') === false) {
-            return elem;
-        }
-
-        var activeCell = this.getActiveCell();
-        if (type === 'cell') {
-            elem = document.createElement('th');
-            while (cell.firstChild) {
-                elem.appendChild(cell.firstChild);
-            }
-
-            for (var i = 0; i < cell.attributes.length; i++) {
-                if (cell.attributes[i].nodeName.toLowerCase() === 'rowspan') {
-                    this.setRowspan(elem, cell.attributes[i].nodeValue);
-                } else if (cell.attributes[i].nodeName.toLowerCase() === 'colspan') {
-                    this.setColspan(elem, cell.attributes[i].nodeValue);
-                } else {
-                    elem.setAttribute(cell.attributes[i].nodeName, cell.attributes[i].nodeValue);
-                }
-            }
-
-            if (cell === activeCell) {
-                this.setActiveCell(elem);
-            }
-
-            dfx.insertBefore(cell, elem);
-            dfx.remove(cell);
-
-            if (!actualType || actualType === 'cell') {
-                this.tableUpdated();
-            }
-        } else if (type === 'col') {
-            // Get all column cells.
-            var cells   = this._getCellsExpanded();
-            var cellPos = this.getCellPosition(cell);
-
-            for (var i = 0; i < cells.length; i++) {
-                var colCell    = cells[i][cellPos.col];
-                if (!colCell.parentNode || dfx.isTag(colCell, 'th') === true) {
-                    continue;
-                }
-
-                var colCellPos = this.getCellPosition(colCell);
-                if (colCellPos.col === cellPos.col) {
-                    var newElement = this.convertToHeader(colCell, 'cell', 'col');
-                    if (cell === colCell) {
-                        elem = newElement;
-                    }
-                }
-            }
-
-            this.tableUpdated();
-        } else if (type === 'row') {
-            var cellPos = this.getCellPosition(cell);
-            var row     = cell.parentNode;
-            var cells   = this._getRowCells(row);
-
-            // Check if row needs to move in to a THEAD tag.
-            if (dfx.isTag(row.parentNode, 'thead') === false
-                && !this.getPreviousRow(row, true)
-            ) {
-                var moveToThead = true;
-                var prevRowspan = null;
-                for (var i = 0; i < cells.length; i++) {
-                    var rowspan = this.getRowspan(cells[i]);
-                    if (prevRowspan !== null && rowspan !== prevRowspan) {
-                        moveToThead = false;
-                        break;
-                    }
-
-                    prevRowspan = rowspan;
-                }
-
-                if (moveToThead === true) {
-                    var table = this.getRowTable(row);
-                    // The row is not in thead and its the first row in tbody or tfoot.
-                    var thead = this.getTableHeader(table);
-                    if (!thead) {
-                        thead = this.createTableHeader(table);
-                    }
-
-                    thead.appendChild(row);
-                }
-            }
-
-            for (var i = 0; i < cells.length; i++) {
-                var rowCell    = cells[i];
-                if (!rowCell.parentNode || dfx.isTag(rowCell, 'th') === true) {
-                    continue;
-                }
-
-                var newElement = this.convertToHeader(rowCell, 'cell', 'row');
-                if (cell === rowCell) {
-                    elem = newElement;
-                }
-            }
-
-            this.tableUpdated();
-        }//end if
-
-        return elem;
-
-    },
-
-    
-    convertToCell: function(cell, type, actualType)
-    {
-        var elem = cell;
-        type     = type || 'cell';
-
-        if (type === 'cell' && dfx.isTag(cell, 'th') === false) {
-            return elem;
-        }
-
-        var activeCell = this.getActiveCell();
-        if (type === 'cell') {
-            elem = document.createElement('td');
-            while (cell.firstChild) {
-                elem.appendChild(cell.firstChild);
-            }
-
-            for (var i = 0; i < cell.attributes.length; i++) {
-                if (cell.attributes[i].nodeName.toLowerCase() === 'rowspan') {
-                    this.setRowspan(elem, cell.attributes[i].nodeValue);
-                } else if (cell.attributes[i].nodeName.toLowerCase() === 'colspan') {
-                    this.setColspan(elem, cell.attributes[i].nodeValue);
-                } else {
-                    elem.setAttribute(cell.attributes[i].nodeName, cell.attributes[i].nodeValue);
-                }
-            }
-
-            if (cell === activeCell) {
-                this.setActiveCell(elem);
-            }
-
-            dfx.insertBefore(cell, elem);
-
-            var tableid = this.getCellTable(elem).id;
-            var cellid  = elem.id;
-            if (cellid && cellid.indexOf(tableid) === 0) {
-                cellid = cellid.replace(tableid, '');
-                if (cellid.match(/r\d+c\d+/)) {
-                    elem.removeAttribute('id');
-                }
-            }
-
-            dfx.remove(cell);
-
-            if (!actualType || actualType === 'cell') {
-                this.tableUpdated();
-            }
-        } else if (type === 'col') {
-            var cells   = this._getCellsExpanded();
-            var cellPos = this.getCellPosition(cell);
-
-            for (var i = 0; i < cells.length; i++) {
-                var colCell    = cells[i][cellPos.col];
-                if (!colCell.parentNode || dfx.isTag(colCell, 'td') === true) {
-                    continue;
-                }
-
-                var colCellPos = this.getCellPosition(colCell);
-                if (colCellPos.col === cellPos.col) {
-                    var newElement = this.convertToCell(colCell, 'cell', 'col');
-                    if (cell === colCell) {
-                        elem = newElement;
-                    }
-                }
-            }
-
-            this.tableUpdated();
-        } else if (type === 'row') {
-            var cellPos = this.getCellPosition(cell);
-            var cells   = this._getRowCells(cell.parentNode);
-            var row     = cell.parentNode;
-
-            // Check if row needs to move in to a TBODY tag.
-            if (dfx.isTag(row.parentNode, 'thead') === true
-                && !this.getNextRow(row, true)
-            ) {
-                var table = this.getRowTable(row);
-
-                // Its the last row in thead, move it down to tbody.
-                var tbody = this.getTableBody(table);
-                if (!tbody) {
-                    tbody = this.createTableBody(table);
-                    tbody.appendChild(row);
-                } else {
-                    var rows = dfx.getTag('tr', tbody);
-                    if (rows.length === 0) {
-                        tbody.appendChild(row);
-                    } else {
-                        dfx.insertBefore(rows[0], row);
-                    }
-                }
-            }
-
-            for (var i = 0; i < cells.length; i++) {
-                var rowCell    = cells[i];
-                if (!rowCell.parentNode || dfx.isTag(rowCell, 'td') === true) {
-                    continue;
-                }
-
-                var newElement = this.convertToCell(rowCell, 'cell', 'row');
-                if (cell === rowCell) {
-                    elem = newElement;
-                }
-            }
-
-            this.tableUpdated();
-        }//end if
-
-        return elem;
-
-    },
-
-    setColumnWidth: function (cell, width)
-    {
-        if (parseInt(width) === width) {
-            width = width + 'px';
-        }
-
-        var cells   = this._getCellsExpanded();
-        var cellPos = this.getCellPosition(cell);
-
-        // Find the first cell that belongs to the same column.
-        for (var i = 0; i < cells.length; i++) {
-            var colCell    = cells[i][cellPos.col];
-            var colCellPos = this.getCellPosition(colCell);
-            if (colCellPos.col === cellPos.col) {
-                dfx.setStyle(colCell, 'width', width);
-                return;
-            }
-        }
-
-    },
-
-    getColumnWidth: function(cell)
-    {
-        var cells   = this._getCellsExpanded();
-        var cellPos = this.getCellPosition(cell);
-
-        // Find the first cell that belongs to the same column.
-        for (var i = 0; i < cells.length; i++) {
-            var colCell    = cells[i][cellPos.col];
-            var colCellPos = this.getCellPosition(colCell);
-            if (colCellPos.col === cellPos.col) {
-                return colCell.style.width || '';
-            }
-        }
-
-        return '';
-
-    },
-
-    setTableWidth: function(table, width)
-    {
-        if (parseInt(width) === width) {
-            width = width + 'px';
-        }
-
-        dfx.setStyle(table, 'width', width);
-
-        if (table.getAttribute('style') === '') {
-            table.removeAttribute('style');
-        }
-
-        this.tableUpdated(table);
-
-    },
-
-    getTableWidth: function(table)
-    {
-        var width = table.style.width || '';
-        return width;
-
-    },
-
-    
-    splitVertical: function(cell)
-    {
-        if (!cell || !cell.getAttribute('colspan')) {
-            return;
-        }
-
-        var tagName = dfx.getTagName(cell);
-        var elem    = document.createElement(tagName);
-        this._initCell(elem);
-
-        var colspan = (parseInt(cell.getAttribute('colspan')) - 1);
-        this.setColspan(cell, colspan);
-
-        var rowspan = cell.getAttribute('rowspan');
-        if (rowspan > 1) {
-            this.setRowspan(elem, rowspan);
-        }
-
-        dfx.insertAfter(cell, elem);
-
-        this.tableUpdated();
-
-        return elem;
-
-    },
-
-    
-    splitHorizontal: function(cell)
-    {
-        var rowspan = this.getRowspan(cell);
-        if (!cell || rowspan <= 1) {
-            return false;
-        }
-
-        var rows    = dfx.getTag('tr', this.getCellTable(cell));
-        var cellPos = this.getCellPosition(cell);
-        var cells   = this._getCellsExpanded();
-
-        // Decrease the rowspan of this cell by 1.
-        this.setRowspan(cell, (rowspan - 1));
-
-        var colspan = this.getColspan(cell);
-        var newCell = document.createElement(dfx.getTagName(cell));
-        this._initCell(newCell);
-        if (colspan > 1) {
-            this.setColspan(newCell, colspan);
-        }
-
-        // Find the new cell's insertion point.
-        // Next row is startRowPosition + originalRowspan - 1 (minus 1 since default rowspan is 1).
-        var nextRowIndex = (cellPos.row + rowspan - 1);
-        var rowCells     = this._getRowCells(rows[nextRowIndex]);
-
-        if (rowCells.length === 0) {
-            rows[nextRowIndex].appendChild(newCell);
-        } else if (cellPos.col === 0) {
-            dfx.insertBefore(rowCells[0], newCell);
-        } else {
-            var cellIndex = cellPos.col;
-
-            // Look behind to see if there is a real column.
-            var inserted = false;
-            while (cells[nextRowIndex][--cellIndex]) {
-                if (this.getCellPosition(cells[nextRowIndex][cellIndex]).row === nextRowIndex) {
-                    inserted = true;
-                    dfx.insertAfter(cells[nextRowIndex][cellIndex], newCell);
-                    break;
-                }
-            }
-
-            if (inserted === false) {
-                // Look forward.
-                cellIndex = cellPos.col;
-                while (cells[nextRowIndex][++cellIndex]) {
-                    if (this.getCellPosition(cells[nextRowIndex][cellIndex]).row === nextRowIndex) {
-                        dfx.insertBefore(cells[nextRowIndex][cellIndex], newCell);
-                        break;
-                    }
-                }
-            }
-        }//end if
-
-        this.tableUpdated();
-
-        return newCell;
-
-    },
-
-    insertRowBefore: function(cell)
-    {
-        var cellRow  = cell.parentNode;
-        var cellPos  = this.getCellPosition(cell);
-        var cells    = this._getCellsExpanded();
-        var rowCells = cells[cellPos.row];
-        var rlen     = rowCells.length;
-
-        var newRow = document.createElement('tr');
-
-        var processedCells = [];
-        for (var i = 0; i < rlen; i++) {
-            var rowCell = rowCells[i];
-            if (processedCells.inArray(rowCell) === true) {
-                continue;
-            }
-
-            var rowspan = this.getRowspan(rowCell);
-            if (rowspan > 1 && this.getCellPosition(rowCell).row < cellPos.row) {
-                // Increase the rowspan instead of creating a new cell.
-                this.setRowspan(rowCell, (rowspan + 1));
-            } else {
-                var newCell = document.createElement(dfx.getTagName(rowCell));
-                this._initCell(newCell);
-
-                var colspan = this.getColspan(rowCell);
-                if (colspan > 1) {
-                    this.setColspan(newCell, colspan);
-                }
-
-                newRow.appendChild(newCell);
-            }
-
-            processedCells.push(rowCell);
-        }//end for
-
-        dfx.insertBefore(cellRow, newRow);
-
-        this.tableUpdated();
-
-    },
-
-    insertRowAfter: function(cell)
-    {
-        var rows     = dfx.getTag('tr', this.getCellTable(cell));
-        var cellPos  = this.getCellPosition(cell);
-        var cells    = this._getCellsExpanded();
-        var rowCells = cells[cellPos.row + (this.getRowspan(cell) - 1)];
-        var rlen     = rowCells.length;
-        var cellRow  = rows[cellPos.row + (this.getRowspan(cell) - 1)];
-
-        var newRow = document.createElement('tr');
-
-        var processedCells = [];
-        for (var i = 0; i < rlen; i++) {
-            var rowCell = rowCells[i];
-            if (processedCells.inArray(rowCell) === true) {
-                continue;
-            }
-
-            var rowspan = this.getRowspan(rowCell);
-            if (rowspan > 1 && rowCell !== cell && (this.getCellPosition(rowCell).row + this.getRowspan(rowCell) - 1) > cellPos.row) {
-                // Increase the rowspan instead of creating a new cell.
-                this.setRowspan(rowCell, (rowspan + 1));
-            } else {
-                var newCell = document.createElement(dfx.getTagName(rowCell));
-                this._initCell(newCell);
-
-                var colspan = this.getColspan(rowCell);
-                if (colspan > 1) {
-                    this.setColspan(newCell, colspan);
-                }
-
-                newRow.appendChild(newCell);
-            }
-
-            processedCells.push(rowCell);
-        }//end for
-
-        dfx.insertAfter(cellRow, newRow);
-
-        this.tableUpdated();
-
-    },
-
-    removeRow: function(cell)
-    {
-        var table   = this.getCellTable(cell);
-        var tr      = this.getCellRow(cell);
-        var cellPos = this.getCellPosition(cell);
-        var cells   = this._getCellsExpanded();
-        var rowspan = this.getRowspan(cell);
-
-        var nextRowIndex = (cellPos.row + rowspan);
-        var nextRow      = tr;
-        for (var i = 0; i < rowspan; i++) {
-            var rowToRemove = nextRow;
-            nextRow         = this.getNextRow(nextRow);
-            rowToRemove.parentNode.removeChild(rowToRemove);
-        }
-
-        var rowCells    = cells[cellPos.row];
-        var cellsToMove = [];
-        for (var i = 0; i < rowCells.length; i++) {
-            var rowCell        = rowCells[i];
-            var rowCellPos     = this.getCellPosition(rowCell);
-            var rowCellRowspan = this.getRowspan(rowCell);
-            if (rowCellPos.row !== cellPos.row || rowCellRowspan > rowspan) {
-                if (rowCellPos.row === cellPos.row) {
-                    cellsToMove.push(rowCell);
-                }
-
-                this.setRowspan(rowCell, (rowCellRowspan - rowspan));
-            }
-        }
-
-        for (var i = 0; i < cellsToMove.length; i++) {
-            var rowCell        = cellsToMove[i];
-            var rowCellPos     = this.getCellPosition(rowCell);
-            var rowCellRowspan = this.getRowspan(rowCell);
-            rowCells           = cells[(cellPos.row + rowspan)];
-
-            var index = rowCells.find(rowCell);
-            if (index > 0) {
-                for (var j = (index - 1); j >= 0; j--) {
-                    if (this.getCellPosition(rowCells[j]).row === nextRowIndex) {
-                        dfx.insertAfter(rowCells[j], rowCell);
-                        break;
-                    }
-                }
-            } else if (index === 0) {
-                for (var j = 0; j < rowCells.length; j++) {
-                    if (this.getCellPosition(rowCells[j]).row === nextRowIndex) {
-                        dfx.insertBefore(rowCells[j], rowCell);
-                        break;
-                    }
-                }
-            }
-        }//end for
-
-        // If the table is now empty then remove it.
-        var rows = dfx.getTag('tr', table);
-        if (rows.length === 0) {
-            dfx.remove(table);
-        }
-
-        this.tableUpdated(table);
-
-    },
-
-    insertColAfter: function(cell)
-    {
-        var table  = this.getCellTable(cell);
-        var rows   = dfx.getTag('tr', table);
-        var rln    = rows.length;
-        var colNum = (this.getColNum(cell) + (this.getColspan(cell) - 1));
-
-        var td = null;
-        for (var i = 0; i < rln; i++) {
-            var col     = this.getCell(i, colNum);
-            var cellPos = this.getCellPosition(col);
-
-            if ((cellPos.col !== colNum && col !== cell) || (col !== cell && this.getColspan(col) > 1)) {
-                this.setColspan(col, (this.getColspan(col) + 1));
-            } else if (cellPos.row < i) {
-                if (td) {
-                    this.setRowspan(td, (this.getRowspan(td) + 1));
-                }
-
-                continue;
-            } else {
-                td = document.createElement(col.tagName);
-                this._initCell(td);
-
-                dfx.insertAfter(col, td);
-            }
-        }
-
-        this.tableUpdated();
-
-    },
-
-    insertColBefore: function(cell)
-    {
-        var table  = this.getCellTable(cell);
-        var rows   = dfx.getTag('tr', table);
-        var rln    = rows.length;
-        var colNum = this.getColNum(cell);
-
-        var td = null;
-        for (var i = 0; i < rln; i++) {
-            var col     = this.getCell(i, colNum);
-            var cellPos = this.getCellPosition(col);
-
-            if (cellPos.col !== colNum && col !== cell) {
-                this.setColspan(col, (this.getColspan(col) + 1));
-            } else if (cellPos.row < i) {
-                if (td) {
-                    this.setRowspan(td, (this.getRowspan(td) + 1));
-                }
-
-                continue;
-            } else {
-                td = document.createElement(col.tagName);
-                this._initCell(td);
-
-                dfx.insertBefore(col, td);
-            }
-        }
-
-        this.tableUpdated();
-
-    },
-
-    getColumnCells: function(table, colNum)
-    {
-        if (!table) {
-            return;
-        }
-
-        var cols = [];
-        var rows = dfx.getTag('tr', table);
-        var rln  = rows.length;
-        for (var i = 0; i < rln; i++) {
-            cols.push(this.getCell(rows[i], colNum));
-        }
-
-        return cols;
-
-    },
-
-    removeCol: function(cell)
-    {
-        var table    = this.getCellTable(cell);
-        var cellPos  = this.getCellPosition(cell);
-        var cells    = this._getCellsExpanded();
-        var rowCount = cells.length;
-        var colspan  = this.getColspan(cell);
-
-        var processedCells = [];
-        for (var i = 0; i < rowCount; i++) {
-            for (var j = cellPos.col; j < (cellPos.col + colspan); j++) {
-                var rowCell = cells[i][j];
-                if (processedCells.inArray(rowCell) === true) {
-                    continue;
-                }
-
-                var rowCellColspan = this.getColspan(rowCell);
-                if (rowCellColspan > colspan || (rowCellColspan > 1 && this.getCellPosition(rowCell).col !== cellPos.col)) {
-                    // Reduce colspan.
-                    this.setColspan(rowCell, (rowCellColspan - 1));
-                } else {
-                    // Remove cell.
-                    dfx.remove(rowCell);
-                }
-
-                processedCells.push(rowCell);
-            }
-        }
-
-        // If the table is now empty then remove it.
-        var rows = dfx.getTag('td', table);
-        if (rows.length === 0) {
-            dfx.remove(table);
-        }
-
-        this.tableUpdated(table);
-
-    },
-
-    getNextCell: function(cell)
-    {
-        var pos = this.getCellPosition(cell);
-        if (!pos) {
-            return null;
-        }
-
-        var nextCell = this.getCell(pos.row, (pos.col + this.getColspan(cell)));
-        return nextCell;
-
-    },
-
-    getPreviousCell: function(cell)
-    {
-        var pos = this.getCellPosition(cell);
-        if (!pos) {
-            return null;
-        }
-
-        var prevCell = this.getCell(pos.row, (pos.col - 1));
-        return prevCell;
-
-    },
-
-    moveCaretToCell: function(cell)
-    {
-        if (cell) {
-            var range = this.viper.getCurrentRange();
-            var child = range._getFirstSelectableChild(cell);
-            if (!child) {
-                this._initCell(cell);
-                child = cell.firstChild;
-            }
-
-            // IE cannot jump between cells, so select the node first and then adjust
-            // its location.
-            range.selectNode(child);
-            range.setEnd(child, 0);
-            range.collapse(false);
-            ViperSelection.addRange(range);
-
-            this.setActiveCell(cell);
-            this.showCellToolsIcon(cell);
-
-            return range;
-        } else {
-            this.hideCellToolsIcon();
-        }
-
-    },
-
-    moveCaretToNextCell: function()
-    {
-        var range = this.viper.getCurrentRange();
-        var cell  = this._getRangeCellElement(range);
-
-        if (!cell) {
-            return false;
-        }
-
-        this.setActiveCell(cell);
-
-        var node = cell;
-        while (node) {
-            if (!node.nextSibling) {
-                // Get next row.
-                var nextRow = this.getNextRow(node.parentNode);
-                if (!nextRow) {
-                    return false;
-                } else {
-                    node = nextRow.firstChild;
-                }
-            } else {
-                node = node.nextSibling;
-            }
-
-            if (dfx.isTag(node, 'th') === true || dfx.isTag(node, 'td') === true) {
-                break;
-            }
-        }
-
-        if (!node) {
-            return false;
-        }
-
-        this.moveCaretToCell(node);
-
-        return true;
-
-    },
-
-    moveCaretToPreviousCell: function()
-    {
-        var range = this.viper.getCurrentRange();
-        var cell  = this._getRangeCellElement(range);
-
-        if (!cell) {
-            return false;
-        }
-
-        this.setActiveCell(cell);
-
-        var node = cell;
-        while (node) {
-            if (!node.previousSibling) {
-                // Get next row.
-                var previousRow = this.getPreviousRow(node.parentNode);
-                if (!previousRow) {
-                    return false;
-                } else {
-                    node = previousRow.lastChild;
-                }
-            } else {
-                node = node.previousSibling;
-            }
-
-            if (dfx.isTag(node, 'th') === true || dfx.isTag(node, 'td') === true) {
-                break;
-            }
-        }
-
-        if (!node) {
-            return false;
-        }
-
-        this.moveCaretToCell(node);
-
-        return true;
-
-    },
-
-    removeTable: function(table, emptyOnly)
-    {
-        if (emptyOnly === true) {
-            // Check if the table is empty (no cols);.
-            if (dfx.find(table, 'tr > td').length > 0 || dfx.find(table, 'tr > th').length > 0) {
-                return;
-            }
-        }
-
-        dfx.remove(table);
-
-        this.viper.fireSelectionChanged();
-        this.viper.fireNodesChanged(this.viper.getViperElement());
-
-        this.hideCellToolsIcon();
-
-    },
-
-    getCellTable: function(cell)
-    {
-        if (!cell) {
-            return null;
-        }
-
-        var node = cell;
-        while (node) {
-            if (node.nodeType === dfx.ELEMENT_NODE) {
-                var tagName = node.tagName.toLowerCase();
-                if (tagName === 'table') {
-                    return node;
-                }
-            }
-
-            node = node.parentNode;
-        }
-
-    },
-
-    getRowTable: function(row, tbody)
-    {
-        return this.getCellTable(row);
-
-    },
-
-    getCellRow: function(cell)
-    {
-        var rows    = dfx.getTag('tr', this.getCellTable(cell));
-        var cellPos = this.getCellPosition(cell);
-        return rows[cellPos.row];
-
-    },
-
-    
-    _createToolbarEditorBubble: function()
-    {
-        var main = document.createElement('div');
-
-        var maxRows            = 6;
-        var maxCols            = 8;
-        var selectedRows       = 3;
-        var selectedCols       = 4;
-        var selectedHeaderType = 2;
-
-        var content    = '';
-        var sizePicker = '<p class="VTEP-bubble-label Viper-sizeLabel">Size (' + selectedCols + ' x ' + selectedRows + ')</p>';
-        sizePicker    += '<table class="VTEP-bubble-table Viper-sizePicker"><tbody>';
-        for (var i = 0; i < maxRows; i++) {
-            sizePicker += '<tr>';
-            for (var j = 0; j < maxCols; j++) {
-                var classAttr = '';
-                if (selectedRows > i && selectedCols > j) {
-                    classAttr = ' class="Viper-selected"';
-                }
-
-                sizePicker += '<td data-viper-rowcol="' + i + ', ' + j + '"' + classAttr + ' ></td>';
-            }
-
-            sizePicker += '</tr>';
-        }
-
-        sizePicker += '</tbody></table>';
-        content    += sizePicker;
-
-        var headerOpts      = this._headerOptions;
-        var headerOptTitles = ['None', 'Left', 'Top', 'Both'];
-        var headers = '<p class="VTEP-bubble-label Viper-headers">Headers</p><div class="VTEP-bubble-headersWrapper">';
-        for (var h = 0; h < headerOpts.length; h++) {
-            var selected = '';
-            if (h === selectedHeaderType) {
-                selected = ' Viper-selected';
-            }
-
-            headers    += '<div class="VTEP-bubble-headersTableWrapper' + selected + '">';
-            headers    += '<table class="VTEP-bubble-table Viper-headers"><tbody>';
-            var c = 0;
-            for (var i = 0; i < 3; i++) {
-                headers += '<tr>';
-                for (var j = 0; j < 3; j++) {
-                    if (headerOpts[h] && headerOpts[h][c]) {
-                        headers += '<td class="Viper-hover"></td>';
-                    } else {
-                        headers += '<td></td>';
-                    }
-
-                    c++;
-                }
-
-                headers += '</tr>';
-            }
-
-            headers += '</tbody></table>';
-            headers += '<span class="VTEP-bubble-headerTitle">' + headerOptTitles[h] + '</span></div>';
-        }
-
-        headers += '</div>';
-        content += headers;
-
-        dfx.setHtml(main, content);
-
-        var trs = dfx.getTag('tr', dfx.getClass('Viper-sizePicker', main)[0]);
-
-        var _setRowColsActive = function(row, col) {
-            selectedRows = (parseInt(row) + 1);
-            selectedCols = (parseInt(col) + 1);
-
-            dfx.setHtml(dfx.getClass('Viper-sizeLabel', main)[0], 'Size (' + selectedCols + ' x ' + selectedRows + ')');
-
-            for (var i = 0; i < maxRows; i++) {
-                for (var j = 0; j < maxCols; j++) {
-                    if (i <= row && j <= col) {
-                        dfx.addClass(trs[i].childNodes[j], 'Viper-selected');
-                    } else {
-                        dfx.removeClass(trs[i].childNodes[j], 'Viper-selected');
-                    }
-                }
-            }
-        };
-
-        var _setRowColsHover = function(row, col) {
-
-            dfx.setHtml(dfx.getClass('Viper-sizeLabel', main)[0], 'Size (' + (parseInt(col) + 1) + ' x ' + (parseInt(row) + 1) + ')');
-
-            for (var i = 0; i < maxRows; i++) {
-                for (var j = 0; j < maxCols; j++) {
-                    if (i <= row && j <= col) {
-                        dfx.addClass(trs[i].childNodes[j], 'Viper-hover');
-                    } else {
-                        dfx.removeClass(trs[i].childNodes[j], 'Viper-hover');
-                    }
-                }
-            }
-        };
-
-        var tdHover        = null;
-        var sizePickerElem = dfx.getClass('Viper-sizePicker', main)[0];
-        dfx.addEvent(sizePickerElem, 'mousemove', function(e) {
-            var td = dfx.getMouseEventTarget(e);
-            if (td !== tdHover && dfx.isTag(td, 'td') === true) {
-                tdHover = td;
-                var rowcol = td.getAttribute('data-viper-rowcol').split(',');
-                _setRowColsHover(rowcol[0], rowcol[1]);
-            }
-        });
-
-        dfx.addEvent(sizePickerElem, 'click', function(e) {
-            var td = dfx.getMouseEventTarget(e);
-            if (td && dfx.isTag(td, 'td') === true) {
-                var rowcol = td.getAttribute('data-viper-rowcol').split(',');
-                _setRowColsActive(rowcol[0], rowcol[1]);
-            }
-        });
-
-        dfx.hover(sizePickerElem, function() {}, function() {
-            dfx.removeClass(dfx.getClass('Viper-hover', sizePickerElem), 'Viper-hover');
-            dfx.setHtml(dfx.getClass('Viper-sizeLabel', main)[0], 'Size (' + selectedRows + ' x ' + selectedCols + ')');
-        })
-
-        var headerTables       = dfx.getClass('VTEP-bubble-headersTableWrapper', main);
-        for (var i = 0; i < headerTables.length; i++) {
-            (function(type) {
-                dfx.addEvent(headerTables[type], 'click', function(e) {
-                    selectedHeaderType = type;
-                    dfx.removeClass(headerTables, 'Viper-selected');
-                    dfx.addClass(headerTables[type], 'Viper-selected');
-                });
-            }) (i);
-        }
-
-        var self = this;
-        var insertTableBtn = this.viper.ViperTools.createButton('VTEP-insertTableButton', 'Insert Table', 'Insert Table', '', function() {
-            self.toolbarPlugin.closeBubble('VTEP-bubble');
-            self.insertTable(selectedRows, selectedCols, selectedHeaderType);
-        });
-        main.appendChild(insertTableBtn);
-
-        this.toolbarPlugin.createBubble('VTEP-bubble', 'Insert Table', main);
-        this.toolbarPlugin.setBubbleButton('VTEP-bubble', 'insertTable', true);
-
-    },
-
-    insertTable: function(rows, cols, headerType, tableid)
-    {
-        this.viper.ViperHistoryManager.begin();
-
-        rows = rows || 3;
-        cols = cols || 3;
-
-        var table = document.createElement('table');
-        // First hide the table so we can determine if there are borders etc.
-        dfx.setStyle(table, 'display', 'none');
-
-        // Create a table id.
-        if (!tableid) {
-            while (!tableid) {
-                tableid   = 'table' + dfx.getUniqueId().substr(-5, 5);
-                var tElem = dfx.getId(tableid);
-                if (tElem) {
-                    tableid = null;
-                }
-            }
-        }
-
-        table.setAttribute('id', tableid);
-
-        var tbody      = document.createElement('tbody');
-        var firstCol   = null;
-        var headerOpts = this._headerOptions;
-        var thead      = null;
-
-        if (headerType === 2 || headerType === 3) {
-            thead = document.createElement('thead');
-        }
-
-        for (var i = 0; i < rows; i++) {
-            var tr = document.createElement('tr');
-            for (var j = 0; j < cols; j++) {
-                var cell     = null;
-                var isHeader = false;
-                if (headerType === 1 && j === 0) {
-                    isHeader = true;
-                } else if (headerType === 2 && i === 0) {
-                    isHeader = true;
-                } else if (headerType === 3 && (i === 0 || j === 0)) {
-                    isHeader = true;
-                }
-
-                if (isHeader) {
-                    cell = document.createElement('th');
-                } else {
-                    cell = document.createElement('td');
-                }
-
-                this._initCell(cell);
-
-                tr.appendChild(cell);
-
-                if (firstCol === null) {
-                    firstCol = cell;
-                }
-            }//end for
-
-            if (thead) {
-                table.appendChild(thead);
-                thead.appendChild(tr);
-                thead = null;
-            } else {
-                tbody.appendChild(tr);
-            }
-        }//end for
-
-        table.appendChild(tbody);
-
-        // Insert table to the bookmarks position.
-        var keyboardEditorPlugin = this.viper.ViperPluginManager.getPlugin('ViperKeyboardEditorPlugin');
-        var prevNode = keyboardEditorPlugin.splitAtRange(true);
-        if (dfx.isTag(prevNode, 'li') === true) {
-            prevNode.appendChild(table);
-            if (dfx.isBlank(dfx.getNodeTextContent(prevNode.nextSibling)) === true) {
-                dfx.remove(prevNode.nextSibling);
-            }
-        } else {
-            dfx.insertAfter(prevNode, table);
-        }
-
-        // Now determine if we need to add borders or width to this table.
-        // Done over here so that if there are CSS styles applied to tables
-        // then we don't override them.
-        var width = parseInt(dfx.getComputedStyle(table, 'width'));
-        if (!width) {
-            dfx.setStyle(table, 'width', '100%');
-        }
-
-        var col         = dfx.getTag('td,th', table)[0];
-        var rightWidth  = parseInt(dfx.getComputedStyle(col, 'border-right-width'));
-        var bottomWidth = parseInt(dfx.getComputedStyle(col, 'border-bottom-width'));
-
-        if (bottomWidth === 0
-            || rightWidth === 0
-            || isNaN(bottomWidth) === true
-            || isNaN(rightWidth) === true
-        ) {
-            dfx.attr(table, 'border', 1);
-        }
-
-        dfx.setStyle(table, 'display', '');
-        if (!table.getAttribute('style')) {
-            table.removeAttribute('style');
-        }
-
-        if (firstCol) {
-            var range = this.viper.getCurrentRange();
-            range.setStart(firstCol.firstChild, 0);
-            range.collapse(true);
-            ViperSelection.addRange(range);
-            this.setActiveCell(firstCol);
-        }
-
-        this.viper.fireSelectionChanged();
-        this.viper.fireNodesChanged([table]);
-
-        this.setTableHeaders(table);
-
-        this.viper.ViperHistoryManager.end();
-
-        return table;
-
-    },
-
-    setTableHeaders: function(table)
-    {
-        if (!table) {
-            return;
-        }
-
-        var headers      = dfx.find(table, '[headers]');
-        var headersCount = headers.length;
-        if (headersCount > 0) {
-            for (var i = 0; i < headersCount; i++) {
-                var headersAttr = headers[i].getAttribute('headers');
-                if (headersAttr) {
-                    headersAttr = ' ' + headersAttr;
-                    if (headersAttr.match(/\s[\w\d]+r\d+c\d+/)) {
-                        // If this is a Viper type headers attribute then remove it.
-                        headers[i].removeAttribute('headers');
-                    }
-                }
-            }
-        }
-
-        headers = null;
-
-        var thElements = dfx.getTag('th', table);
-        if (thElements.length === 0) {
-            return;
-        }
-
-        var tableId = table.getAttribute('id');
-
-        if (!tableId) {
-            while (!tableId) {
-                var uniqueid = dfx.getUniqueId();
-                tableId   = 'table' + uniqueid.substr((uniqueid.length - 5), 5);
-                var tElem = dfx.getId(tableId);
-                if (tElem) {
-                    tableId = null;
-                }
-            }
-
-            table.setAttribute('id', tableId);
-        }
-
-        var tableRows = dfx.getTag('tr', table);
-        for (var k = 0; k < tableRows.length; k++) {
-            var row = tableRows[k];
-
-            var cellCount = 0;
-            for (var j = 0; j < row.childNodes.length; j++) {
-                var cell = row.childNodes[j];
-
-                // Skip text nodes.
-                if (cell.nodeType === dfx.TEXT_NODE) {
-                    continue;
-                }
-
-                if (dfx.isTag(cell, 'th') === true) {
-                    // This is a table header, so figure out an ID-based representation
-                    // of the cell content. We'll use this later as a basis for the ID attribute
-                    // although it may be prefixed with the ID of another header to make it unique.
-                    var cellid = cell.getAttribute('id');
-                    if (!cellid || cellid.match(/r\d+c\d+/)) {
-                        cellid = tableId + 'r' + (k + 1) + 'c' + (cellCount + 1);
-                        var existingElem = dfx.getId(cellid);
-                        if (existingElem) {
-                            existingElem.removeAttribute('id');
-                        }
-
-                        cell.setAttribute('id', cellid);
-                    }
-                }
-
-                cellCount++;
-            }//end for
-        }//end for
-
-        // Get HTMLCS to give us the correct table headers...
-        if (window['HTMLCS']) {
-            var headers = HTMLCS.util.getCellHeaders(table);
-            var c       = headers.length;
-            for (var i = 0; i < c; i++) {
-                var header      = headers[i];
-                var headersAttr = header.cell.getAttribute('headers');
-                if (!headersAttr || (' ' + headersAttr).match(/\stable\d+r\d+c\d+/)) {
-                    header.cell.setAttribute('headers', header.headers);
-                }
-            }
-        }
-
-    },
-
-    getHeadersContent: function(element)
-    {
-        var headers = element.getAttribute('headers');
-        if (!headers) {
-            return '';
-        }
-
-        var parts   = headers.split(' ');
-        var content = [];
-        for (var i = 0; i < parts.length; i++) {
-            var part = parts[i];
-
-            content.push(dfx.getHtml(dfx.getId(part)));
-        }
-
-        content.push(dfx.getHtml(element));
-        content = content.join(' ');
-
-        return content;
-
-    },
-
-    getCellContent: function (table, row, column)
-    {
-        var rows = dfx.getTag('tr', table);
-        if (!rows[row]) {
-            return null;
-        }
-
-        var rowElem = rows[row];
-
-        var cols = dfx.getTag('td,th', rowElem);
-        if (!cols[column]) {
-            return null;
-        }
-
-        return dfx.getHtml(cols[column]);
-
-    },
-
-    arrayUnique: function(array)
-    {
-        var tmp    = {};
-        var unique = [];
-        var count  = array.length;
-
-        for (var i = 0; i < count; i++) {
-            tmp[array[i]] = array[i];
-        }
-
-        for (var item in tmp) {
-            unique.push(tmp[item]);
-        }
-
-        return unique;
-
-    },
-
-    arrayIntersect: function(array1, array2)
-    {
-        var tmp    = {};
-        var unique = [];
-        var count  = array2.length;
-
-        for (var i = 0; i < count; i++) {
-            tmp[array2[i]] = array2[i];
-        }
-
-        count = array1.length;
-        for (var i = count; i >= 0; i--) {
-            if (dfx.isset(tmp[array1[i]]) === false) {
-                dfx.unset(array1, i);
-            }
-        }
-
-        return array1;
-
-    },
-
-    _setCaretToStart: function(table)
-    {
-        // Set the caret to the first cell of the table.
-        var cells = dfx.getTag('td,th', table);
-        if (cells.length > 0) {
-            if (dfx.getHtml(cells[0]) === '') {
-                dfx.setHtml(cells[0], '&nbsp;');
-            }
-
-            var cell  = cells[0];
-            var range = this.viper.getCurrentRange();
-            var child = range._getFirstSelectableChild(cell);
-            if (!child && cell.childNodes.length === 1) {
-                child = cell.childNodes[0];
-            }
-
-            range.setStart(child, 0);
-            range.collapse(true);
-            ViperSelection.addRange(range);
-        }
-
-    },
-
-    _getRangeCellElement: function(range)
-    {
-        return this._getCellElement(range.getCommonElement());
-
-    },
-
-    _getCellElement: function(element)
-    {
-        var cellElement = null;
-        if (dfx.isTag(element, 'td') === false
-            && dfx.isTag(element, 'th') === false
-        ) {
-            // Check if any of the parents td or th.
-            var parents = dfx.getParents(element, null, this.viper.getViperElement());
-            var plen    = parents.length;
-            for (var i = 0; i < plen; i++) {
-                if (dfx.isTag(parents[i], 'td') === true
-                    || dfx.isTag(parents[i], 'th') === true
-                ) {
-                    cellElement = parents[i];
-                    break;
-                }
-            }
-        } else {
-            cellElement = element;
-        }
-
-        if (!cellElement) {
-            return false;
-        }
-
-        return cellElement;
-
-    },
-
-    _getTableCells: function(table, stopCell)
-    {
-        if (!table) {
-            table = this.getCellTable(this.getActiveCell());
-        }
-
-        var cells = {};
-        var rows  = dfx.getTag('tr', table);
-        var rlen  = rows.length;
-        for (var i = 0; i < rlen; i++) {
-            var rowCells      = this._getRowCells(rows[i]);
-            var rowCellsCount = rowCells.length;
-            cells[i]          = [];
-            for (var j = 0; j < rowCellsCount; j++) {
-                cells[i].push({
-                    cell: rowCells[j],
-                    rowspan: this.getRowspan(rowCells[j]),
-                    colspan: this.getColspan(rowCells[j])
-                });
-
-                if (stopCell === rowCells[j]) {
-                    return cells;
-                }
-            }
-        }
-
-        return cells;
-
-    },
-
-    _getRowNum: function(row)
-    {
-        var table = this.getRowTable(row, true);
-        var rows  = dfx.getTag('tr', table);
-        var rlen  = rows.length;
-        for (var i = 0; i < rlen; i++) {
-            if (rows[i] === row) {
-                return i;
-            }
-        }
-
-        return null;
-
-    },
-
-    getColNum: function(cell)
-    {
-        if (!cell) {
-            return null;
-        }
-
-        var cellNum = null;
-        var cells   = this._getCellsExpanded();
-        var rows    = cells.length;
-
-        for (var i = 0; i < rows; i++) {
-            var cellCount = cells[i].length;
-            for (var j = 0; j < cellCount; j++) {
-                if (cells[i][j] === cell) {
-                    return j;
-                }
-            }
-        }
-
-        return null;
-
-    },
-
-    
-    getCell: function(row, cell)
-    {
-        if (dfx.isset(cell) === false) {
-            return null;
-        }
-
-        if (typeof row !== 'number') {
-            row = this._getRowNum(row);
-        }
-
-        var cells = this._getCellsExpanded();
-
-        return cells[row][cell];
-
-    },
-
-    getCellPosition: function(cell)
-    {
-        var cells = this._getCellsExpanded();
-        var rows  = cells.length;
-
-        for (var i = 0; i < rows; i++) {
-            var cellCount = cells[i].length;
-            for (var j = 0; j < cellCount; j++) {
-                if (cells[i][j] === cell) {
-                    return {
-                        row: i,
-                        col: j
-                    };
-                }
-            }
-        }
-
-        return null;
-
-    },
-
-    _getCellsExpanded: function(forceUpdate)
-    {
-        if (forceUpdate !== true && this._tableRawCells) {
-            return this._tableRawCells;
-        }
-
-        var tableCells = this._getTableCells();
-        var rawCells   = [];
-        dfx.foreach(tableCells, function(rowNum) {
-            rowNum = parseInt(rowNum);
-            if (!rawCells[rowNum]) {
-                rawCells[rowNum] = [];
-            }
-
-            dfx.foreach(tableCells[rowNum], function(j) {
-                var rowCell  = tableCells[rowNum][j].cell;
-                var rowspan  = tableCells[rowNum][j].rowspan;
-                var colspan  = tableCells[rowNum][j].colspan;
-                var modifier = 0;
-                for (var i = 0; i < rowspan; i++) {
-                    for (var k = 0; k < colspan; k++) {
-                        if (!rawCells[(rowNum + i)]) {
-                            rawCells[(rowNum + i)] = [];
-                        }
-
-                        while (rawCells[(rowNum + i)][(j + k + modifier)]) {
-                            modifier++;
-                        }
-
-                        rawCells[(rowNum + i)][(j + k + modifier)] = rowCell;
-                    }
-                }
-            });
-        });
-
-        this._tableRawCells = rawCells;
-
-        return rawCells;
-
-    },
-
-    getPreviousRow: function(row, ignorePrevParent)
-    {
-        var sourceRow = row;
-        while (row = row.previousSibling) {
-            if (row.nodeType === dfx.ELEMENT_NODE) {
-                var tagName = row.tagName.toLowerCase();
-                if (tagName === 'tr') {
-                    return row;
-                }
-            }
-        }
-
-        if (ignorePrevParent !== true && dfx.isTag(sourceRow.parentNode, 'tbody') === true) {
-            var rows = dfx.getTag('tr', dfx.getTag('thead', this.getRowTable(sourceRow)));
-            if (rows.length > 0) {
-                return rows[(rows.length - 1)];
-            }
-        }
-
-    },
-
-    getNextRow: function(row, ignoreNextParent)
-    {
-        var sourceRow = row;
-        while (row = row.nextSibling) {
-            if (row.nodeType === dfx.ELEMENT_NODE) {
-                var tagName = row.tagName.toLowerCase();
-                if (tagName === 'tr') {
-                    return row;
-                }
-            }
-        }
-
-        if (ignoreNextParent !== true && dfx.isTag(sourceRow.parentNode, 'thead') === true) {
-            var rows = dfx.getTag('tr', dfx.getTag('tbody', this.getRowTable(sourceRow)));
-            if (rows.length > 0) {
-                return rows[0];
-            }
-        }
-
-    },
-
-    _getRowCells: function(row)
-    {
-        var tags = dfx.getTag('td,th', row);
-        return tags;
-
-    },
-
-    _getRowCellCount: function(row)
-    {
-        var cellCount = 0;
-        for (var node = row.firstChild; node; node = node.nextSibling) {
-            if (dfx.isTag(node, 'th') === true || dfx.isTag(node, 'td') === true) {
-                cellCount += this.getColspan(node);
-            }
-        }
-
-        return cellCount;
-
-    },
-
-    _moveCellContent: function(fromCell, toCell)
-    {
-        if (!fromCell || !toCell) {
-            return false;
-        }
-
-        if (toCell.lastChild && dfx.isTag(toCell.lastChild, 'br') === true) {
-            dfx.remove(toCell.lastChild);
-        }
-
-        while (fromCell.firstChild) {
-            if (dfx.isTag(fromCell.firstChild, 'br') === true) {
-                dfx.remove(fromCell.firstChild);
-            } else {
-                toCell.appendChild(fromCell.firstChild);
-            }
-        }
-
-        if (!toCell.lastChild) {
-            this._initCell(toCell);
-        }
-
-    },
-
-    isPluginElement: function(element)
-    {
-        if (element === this._highlightElement) {
-            return true;
-        }
-
-        return false;
-
-    },
-
-    _initCell: function(cell)
-    {
-        if (this.viper.isBrowser('msie') === true) {
-            if (dfx.trim(dfx.getHtml(cell)) === '') {
-                dfx.setHtml(cell, '&nbsp;');
-            }
-        } else {
-            dfx.setHtml(cell, '<br />');
-        }
-
-    }
-
-};
-
-
-
-function ViperToolbarPlugin(viper)
-{
-    this.viper    = viper;
-    this._toolbar = null;
-
-    this._activeBubble   = null;
-    this._bubbles        = {};
-    this._bubbleButtons  = {};
-    this._settingButtons = null;
-    this._enabled        = false;
-    this._enabledButtons = [];
-
-    this.createToolbar();
-
-    var self           = this;
-    var clickedOutside = true;
-    this.viper.registerCallback('Viper:selectionChanged', 'ViperToolbarPlugin', function(range) {
-        if (clickedOutside === true || self.viper.rangeInViperBounds(range) === false) {
-            return;
-        }
-
-        if (self._enabled !== true) {
-            self.enable();
-        }
-
-        self._updateToolbar(range);
-    });
-
-    this.viper.registerCallback('Viper:editableElementChanged', 'ViperToolbarPlugin', function(range) {
-            self._updateToolbar();
-    });
-
-    this.viper.registerCallback('Viper:clickedOutside', 'ViperToolbarPlugin', function(range) {
-        clickedOutside = true;
-
-        // Disable all buttons.
-        self.disable();
-    });
-
-    this.viper.registerCallback('Viper:clickedInside', 'ViperToolbarPlugin', function(range) {
-        clickedOutside = false;
-    });
-
-    this.viper.registerCallback('Viper:focused', 'ViperToolbarPlugin', function(range) {
-        self.enable();
-    });
-
-    this.viper.registerCallback('Viper:mouseDown', 'ViperToolbarPlugin', function() {
-        if (self._activeBubble) {
-            var bubble = self.getBubble(self._activeBubble);
-            if (bubble && bubble.getSetting('keepOpen') !== true) {
-                self.closeBubble(self._activeBubble);
-            }
-        }
-    });
-
-    this.viper.registerCallback('Viper:destroy', 'ViperToolbarPlugin', function(range) {
-        self.remove();
-    });
-
-}
-
-ViperToolbarPlugin.prototype = {
-    init: function()
-    {
-        this.viper.addElement(this._toolbar);
-
-    },
-
-    setSettings: function(settings)
-    {
-        if (!settings) {
-            return;
-        }
-
-        if (settings.parent) {
-            var parent = settings.parent;
-            if (typeof parent === 'string') {
-                parent = dfx.getId(settings.parent);
-            }
-
-            this.setParentElement(parent);
-        }
-
-        if (settings.buttons) {
-            this.setButtons(settings.buttons);
-        }
-
-    },
-
-    setButtons: function(buttons)
-    {
-        this._settingButtons = buttons;
-
-        // Remove all buttons that were adding by other plugins.
-        if (this.viper.isBrowser('msie') === true) {
-            while(this._toolbar.firstChild) {
-                this._toolbar.removeChild(this._toolbar.firstChild);
-            }
-        } else {
-            this._toolbar.innerHTML = '';
-        }
-
-        var logo = document.createElement('div');
-        logo.setAttribute('title', 'Viper by Squiz');
-        dfx.addClass(logo, 'Viper-logo');
-        this._toolbar.appendChild(logo);
-
-        var buttonsLen = buttons.length;
-        for (var i = 0; i < buttonsLen; i++) {
-            if (typeof buttons[i] === 'string') {
-                // Single button.
-                var button = this.viper.ViperTools.getItem(buttons[i]);
-                if (!button || button.type !== 'button') {
-                    throw new Error('Invalid button type: ' + buttons[i]);
-                }
-
-                this._toolbar.appendChild(button.element);
-            } else if (buttons[i].length) {
-                // Create button group.
-                var groupid = 'ViperToolbarPlugin:buttons:' + i;
-                var group   = this.viper.ViperTools.createButtonGroup(groupid);
-
-                var subButtonsLen = buttons[i].length;
-                for (var j = 0; j < subButtonsLen; j++) {
-                    var button = this.viper.ViperTools.getItem(buttons[i][j]);
-                    if (!button || button.type !== 'button') {
-                        throw new Error('Invalid button type: ' + buttons[i][j]);
-                    }
-
-                    this.viper.ViperTools.addButtonToGroup(buttons[i][j], groupid);
-                }
-
-                this._toolbar.appendChild(group);
-            }
-        }
-
-    },
-
-    createToolbar: function()
-    {
-        var elem = document.createElement('div');
-
-        var logo = document.createElement('div');
-        logo.setAttribute('title', 'Viper by Squiz');
-        dfx.addClass(logo, 'Viper-logo');
-        elem.appendChild(logo);
-
-        dfx.addClass(elem, 'ViperTP-bar Viper-themeDark Viper-scalable');
-        this._toolbar = elem;
-        dfx.addClass(this._toolbar, 'viper-inactive');
-        dfx.addClass(this._toolbar, this.viper.getElementHolder().className);
-
-        dfx.addEvent(elem, 'mousedown', function(e) {
-            var target = dfx.getMouseEventTarget(e);
-            if (dfx.isTag(target, 'input') !== true
-                && dfx.isTag(target, 'textarea') !== true
-                && dfx.isTag(target, 'select') !== true
-            ) {
-                dfx.preventDefault(e);
-                return false;
-            }
-        });
-
-        dfx.addEvent(elem, 'mouseup', function(e) {
-            var target = dfx.getMouseEventTarget(e);
-            if (dfx.isTag(target, 'input') !== true
-                && dfx.isTag(target, 'textarea') !== true
-                && dfx.isTag(target, 'select') !== true
-            ) {
-                dfx.preventDefault(e);
-                return false;
-            }
-        });
-
-        if (navigator.userAgent.match(/iPad/i) !== null) {
-            dfx.addClass(this._toolbar, 'device-ipad');
-        }
-
-    },
-
-    setParentElement: function(parent)
-    {
-        dfx.setStyle(this._toolbar, 'position', 'absolute');
-        dfx.setStyle(this._toolbar, 'top', '0px');
-        parent.appendChild(this._toolbar);
-
-        this.positionUpdated();
-
-    },
-
-    positionUpdated: function()
-    {
-        this.positionBubble();
-        this.viper.fireCallbacks('ViperToolbarPlugin:positionUpdated');
-
-    },
-
-    
-    addButton: function(button)
-    {
-        if (!this._settingButtons) {
-            this._toolbar.appendChild(button);
-        }
-
-    },
-
-    createBubble: function(id, title, subSectionElement, toolsElement, openCallback, closeCallback, customClass)
-    {
-        title = title || '&nbsp;';
-
-        var bubble = document.createElement('div');
-        dfx.addClass(bubble, 'ViperITP Viper-themeDark Viper-visible Viper-forTopbar');
-        dfx.setHtml(bubble, '<div class="ViperITP-header">' + title + '</div>');
-
-        dfx.addEvent(bubble, 'mousedown', function(e) {
-            var target = dfx.getMouseEventTarget(e);
-            if (dfx.isTag(target, 'input') !== true
-                && dfx.isTag(target, 'textarea') !== true
-                && dfx.isTag(target, 'select') !== true
-            ) {
-                dfx.preventDefault(e);
-                return false;
-            }
-        });
-
-        if (toolsElement) {
-            var wrapper = document.createElement('div');
-            dfx.addClass(wrapper, 'ViperITP-tools');
-            bubble.appendChild(wrapper);
-            wrapper.appendChild(toolsElement);
-        }
-
-        if (customClass) {
-            dfx.addClass(bubble, customClass);
-        }
-
-        var self = this;
-
-        this._bubbles[id] = bubble;
-        var bubbleObj     = {
-            type: 'VTPBubble',
-            element: bubble,
-            addSubSection: function(id, element) {
-                var wrapper = dfx.getClass('ViperITP-subSectionWrapper', bubble);
-                if (wrapper.length > 0) {
-                    wrapper = wrapper[0];
-                } else {
-                    wrapper = document.createElement('div');
-                    dfx.setHtml(wrapper, '<span class="Viper-subSectionArrow"></span>');
-                    dfx.addClass(wrapper, 'ViperITP-subSectionWrapper');
-                    bubble.appendChild(wrapper);
-                }
-
-                var form = document.createElement('form');
-                dfx.addClass(form, 'Viper-subSection');
-                form.onsubmit = function() {
-                    return false;
-                };
-
-                var submitBtn  = document.createElement('input');
-                submitBtn.type = 'submit';
-                dfx.setStyle(submitBtn, 'display', 'none');
-                form.appendChild(submitBtn);
-
-                form.appendChild(element);
-                wrapper.appendChild(form);
-
-                this._subSections[id] = form;
-                self.viper.ViperTools.addItem(id, {
-                    type: 'VTPSubSection',
-                    element: wrapper,
-                    form: form
-                });
-
-                return element;
-            },
-            showSubSection: function(id) {
-                if (this._activeSubSection) {
-                    if (this._activeSubSection !== id) {
-                        this.hideSubSection(this._activeSubSection);
-                    } else {
-                        return;
-                    }
-                }
-
-                dfx.addClass(bubble, 'Viper-subSectionVisible');
-                dfx.addClass(this._subSections[id], 'Viper-active');
-
-                if (this._subSectionButtons[id]) {
-                    var button = this._subSectionButtons[id].element;
-                    dfx.addClass(button, 'Viper-selected');
-
-                    // Update the position of the sub section arrow.
-                    var subSectionArrow = dfx.getClass('Viper-subSectionArrow', bubble)[0];
-                    var pos             = dfx.getBoundingRectangle(button);
-                    var bubblePos       = dfx.getBoundingRectangle(bubble);
-                    dfx.setStyle(subSectionArrow, 'left', (pos.x1 - bubblePos.x1) + ((pos.x2 - pos.x1) / 2) + 'px');
-                    dfx.addClass(subSectionArrow, 'Viper-visible');
-                }
-
-                var inputElements = dfx.getTag('input[type=text], textarea', this._subSections[id]);
-                if (inputElements.length > 0 && dfx.getElementHeight(inputElements[0]) > 0) {
-                    try {
-                        setTimeout(function() {
-                            inputElements[0].focus();
-                        }, 10);
-                    } catch(e) {}
-                }
-
-                this._activeSubSection = id;
-            },
-            hideSubSection: function(id) {
-                id = id || this._activeSubSection;
-                dfx.removeClass(bubble, 'Viper-subSectionVisible');
-                dfx.removeClass(this._subSections[id], 'Viper-active');
-                this._activeSubSection = null;
-
-                if (this._subSectionButtons[id]) {
-                    dfx.removeClass(this._subSectionButtons[id].element, 'Viper-selected');
-                }
-            },
-            setSubSectionButton: function(sectionid, buttonid) {
-                if (!this._subSections[sectionid]) {
-                    return false;
-                }
-
-                var button = self.viper.ViperTools.getItem(buttonid);
-                if (!button || !button.type === 'button') {
-                    return false;
-                }
-
-                this._subSectionButtons[sectionid] = button;
-            },
-            setSubSectionAction: function(subSectionid, action, widgetids) {
-                widgetids      = widgetids || [];
-                var tools      = self.viper.ViperTools;
-                var subSection = tools.getItem(subSectionid);
-                if (!subSection) {
-                    return;
-                }
-
-                subSection.form.onsubmit = function(e) {
-                    self.viper.focus();
-
-                    if (e) {
-                        dfx.preventDefault(e);
-                    }
-
-                    var button = tools.getItem(subSectionid + '-applyButton');
-                    if (button.isEnabled() === false) {
-                        return false;
-                    }
-
-                    tools.disableButton(subSectionid + '-applyButton');
-
-                    // IE needs this timeout so focus works <3..
-                    if (self.viper.isBrowser('msie') === false) {
-                        try {
-                            action.call(this);
-                        } catch (e) {
-                            console.error(e.message);
-                        }
-
-                        // Give focus back to the form field.
-                        var inputElements = dfx.getTag('input[type=text], textarea', subSection.form);
-                        if (inputElements.length > 0) {
-                            try {
-                                inputElements[0].focus();
-                            } catch(e) {}
-                        }
-                    } else {
-                        setTimeout(function() {
-                            try {
-                                action.call(this);
-                            } catch (e) {
-                                console.error(e.message);
-                            }
-
-                            // Give focus back to the form field.
-                            var inputElements = dfx.getTag('input[type=text], textarea', subSection.form);
-                            if (inputElements.length > 0) {
-                                try {
-                                    inputElements[0].focus();
-                                } catch(e) {}
-                            }
-                        }, 10);
-                    }//end if
-
-                    return false;
-                };
-
-                var button = tools.createButton(subSectionid + '-applyButton', 'Update Changes', 'Update Changes', '', subSection.form.onsubmit, true);
-                subSection.form.appendChild(button);
-
-                this.addSubSectionActionWidgets(subSectionid, widgetids);
-
-            },
-            addSubSectionActionWidgets: function(subSectionid, widgetids)
-            {
-                if (!this._subSectionActionWidgets[subSectionid]) {
-                    this._subSectionActionWidgets[subSectionid] = [];
-                }
-
-                var subsec = this;
-                var tools  = self.viper.ViperTools;
-                for (var i = 0; i < widgetids.length; i++) {
-                    this._subSectionActionWidgets[subSectionid].push(widgetids[i]);
-                    (function(widgetid) {
-                        self.viper.registerCallback('ViperTools:changed:' + widgetid, 'ViperToolbarPlugin', function() {
-                            var subSectionWidgets = subsec._subSectionActionWidgets[subSectionid];
-                            var c = subSectionWidgets.length;
-                            var enable = true;
-                            for (var j = 0; j < c; j++) {
-                                var widget = tools.getItem(subSectionWidgets[j]);
-                                if (widget.required === true && dfx.trim(widget.getValue()) === '') {
-                                    enable = false;
-                                    break;
-                                }
-                            }
-
-                            if (enable === true) {
-                                tools.enableButton(subSectionid + '-applyButton');
-                            } else {
-                                tools.disableButton(subSectionid + '-applyButton');
-                            }
-                        });
-                    }) (widgetids[i]);
-                }
-
-            },
-            setSetting: function(setting, value) {
-                this._settings[setting] = value;
-            },
-            getSetting: function(setting) {
-                return this._settings[setting];
-            },
-            setTitle: function(title) {
-                dfx.setHtml(dfx.getClass('ViperITP-header', bubble)[0], title);
-            },
-            getActiveSubSection: function() {
-                return this._subSections[this._activeSubSection];
-            },
-            _settings: {
-                keepOpen: false
-            },
-            _subSections: {},
-            _subSectionButtons: {},
-            _activeSubSection: null,
-            _openCallback: openCallback,
-            _closeCallback: closeCallback,
-            _subSectionActionWidgets: {}
-        };
-
-        if (subSectionElement) {
-            bubbleObj.addSubSection(id + 'SubSection', subSectionElement);
-            if (!toolsElement) {
-                bubbleObj.showSubSection(id + 'SubSection');
-            }
-        }
-
-        this.viper.ViperTools.addItem(id, bubbleObj);
-
-        return bubble;
-
-    },
-
-    getBubble: function(id)
-    {
-        return this.viper.ViperTools.getItem(id);
-
-    },
-
-    setBubbleButton: function(bubbleid, buttonid, useCustomToggler)
-    {
-        if (!this._bubbles[bubbleid]) {
-            // Throw exception not a valid bubble id.
-            return false;
-        }
-
-        var bubble = this.getBubble(bubbleid);
-        var button = this.viper.ViperTools.getItem(buttonid).element;
-        var self   = this;
-
-        this._bubbleButtons[bubbleid] = buttonid;
-
-        if (useCustomToggler !== true) {
-            dfx.removeEvent(button, 'mousedown');
-            dfx.addEvent(button, 'mousedown', function(e) {
-                if (self.viper.isBrowser('msie') === true) {
-                    // This block of code prevents IE moving user selection to the.
-                    // button element when clicked. When the button element is removed
-                    // and added back to DOM selection is not moved. Seriously, IE?
-                    if (button.previousSibling) {
-                        var sibling = button.previousSibling;
-                        button.parentNode.removeChild(button);
-                        dfx.insertAfter(sibling, button);
-                    } else if (button.nextSibling) {
-                        var sibling = button.nextSibling;
-                        button.parentNode.removeChild(button);
-                        dfx.insertBefore(sibling, button);
-                    } else {
-                        var parent = button.parentNode;
-                        button.parentNode.removeChild(button);
-                        parent.appendChild(button);
-                    }
-                }//end if
-
-                if (dfx.hasClass(button, 'Viper-disabled') === true) {
-                    return;
-                }
-
-                self.toggleBubble(bubbleid);
-                dfx.preventDefault(e);
-            });
-        }
-
-    },
-
-    toggleBubble: function(bubbleid)
-    {
-        if (!this._activeBubble || this._activeBubble !== bubbleid) {
-            this.showBubble(bubbleid);
-            return true;
-        } else {
-            this.closeBubble(bubbleid);
-            return false;
-        }
-
-    },
-
-    closeBubble: function(bubbleid)
-    {
-        if (!this._activeBubble) {
-            return;
-        }
-
-        if (this._closeBubble(bubbleid) !== false) {
-            this.viper.focus();
-            this.viper.highlightToSelection();
-        }
-
-    },
-
-    _closeBubble: function(bubbleid)
-    {
-        dfx.removeClass(this.viper.ViperTools.getItem(this._bubbleButtons[bubbleid]).element, 'Viper-selected');
-        var bubble     = this.viper.ViperTools.getItem(bubbleid);
-        var bubbleElem = bubble.element;
-        if (bubbleElem.parentNode && bubbleElem.parentNode.nodeType !== dfx.DOCUMENT_FRAGMENT_NODE) {
-            bubbleElem.parentNode.removeChild(bubbleElem);
-        } else {
-            return false;
-        }
-
-        if (bubble._closeCallback) {
-            bubble._closeCallback.call(this);
-        }
-
-        if (this._activeBubble === bubbleid) {
-            this._activeBubble = null;
-        }
-
-        dfx.removeEvent(document, 'keydown.ViperToolbarPluginSubSection');
-
-    },
-
-    showBubble: function(bubbleid)
-    {
-        if (this._activeBubble) {
-            if (this._activeBubble === bubbleid) {
-                // Already showing.
-                return;
-            }
-
-            // Hide the current active bubble.
-            this._closeBubble(this._activeBubble);
-        }
-
-        dfx.addClass(this.viper.ViperTools.getItem(this._bubbleButtons[bubbleid]).element, 'Viper-selected');
-
-        var bubble     = this.viper.ViperTools.getItem(bubbleid);
-        var bubbleElem = bubble.element;
-
-        if (bubble._openCallback) {
-            bubble._openCallback.call(this);
-        }
-
-        if (!bubbleElem.parentNode || bubbleElem.parentNode.nodeType === dfx.DOCUMENT_FRAGMENT_NODE) {
-            this._toolbar.appendChild(bubbleElem);
-        }
-
-        // Before we show the bubble set all its sub section apply changes button
-        // statuses to disabled.
-        for (var subSectionid in bubble._subSections) {
-            var applyChangesBtn = this.viper.ViperTools.getItem(subSectionid + '-applyButton');
-            if (applyChangesBtn) {
-                this.viper.ViperTools.disableButton(subSectionid + '-applyButton');
-            }
-        }
-
-        this.positionBubble(bubbleid);
-
-        this._activeBubble = bubbleid;
-
-        var inputElements = dfx.getTag('input[type=text], textarea', bubbleElem);
-        if (inputElements.length > 0) {
-            try {
-                inputElements[0].focus();
-                if (this.viper.isBrowser('msie') === true) {
-                    setTimeout(function() {
-                        inputElements[0].focus();
-                    }, 10);
-                }
-            } catch(e) {}
-        }
-
-        var inlineToolbarPlugin = this.viper.getPluginManager().getPlugin('ViperInlineToolbarPlugin');
-        if (inlineToolbarPlugin) {
-            inlineToolbarPlugin.hideToolbar();
-        }
-
-        dfx.removeEvent(document, 'keydown.ViperToolbarPluginSubSection');
-        dfx.addEvent(document, 'keydown.ViperToolbarPluginSubSection', function(e) {
-            if (e.which === 13 && bubble.getActiveSubSection()) {
-                return bubble.getActiveSubSection().onsubmit();
-            }
-        });
-
-    },
-
-    getActiveBubble: function()
-    {
-        if (!this._activeBubble) {
-            return null;
-        }
-
-        return this.getBubble(this._activeBubble);
-
-    },
-
-    positionBubble: function(bubbleid)
-    {
-        bubbleid = bubbleid || this._activeBubble;
-        if (!bubbleid) {
-            return;
-        }
-
-        var bubble     = this.viper.ViperTools.getItem(bubbleid).element;
-        var button     = this.viper.ViperTools.getItem(this._bubbleButtons[bubbleid]).element;
-
-        var toolsWidth = null;
-        var widthStyle = bubble.style.width;
-
-        toolsWidth = dfx.getElementWidth(bubble);
-
-        var scrollCoords = dfx.getScrollCoords();
-        var windowDim    = dfx.getWindowDimensions();
-        var elemDim      = dfx.getBoundingRectangle(button);
-        var toolbarDim   = dfx.getBoundingRectangle(this._toolbar);
-
-        var left = ((elemDim.x1 + ((elemDim.x2 - elemDim.x1) / 2) - (toolsWidth / 2) - scrollCoords.x) - toolbarDim.x1);
-
-        if ((left + toolsWidth) >= windowDim.width) {
-            left -= ((toolsWidth / 2) - 40);
-            dfx.addClass(bubble, 'Viper-orientationLeft');
-        } else {
-            dfx.removeClass(bubble, 'Viper-orientationLeft');
-        }
-
-        dfx.setStyle(bubble, 'left', left + 'px');
-        dfx.setStyle(bubble, 'top', '35px');
-
-        if (!widthStyle) {
-            dfx.setStyle(bubble, 'width', toolsWidth + 'px');
-        }
-
-    },
-
-    disable: function()
-    {
-        if (this._enabled === false) {
-            return;
-        }
-
-        this._enabled = false;
-
-        dfx.removeClass(this._toolbar, 'viper-active');
-        dfx.addClass(this._toolbar, 'viper-inactive');
-
-        // Close active bubble.
-        if (this._activeBubble) {
-            this.closeBubble(this._activeBubble);
-        }
-
-        // Get all buttons in the toolbar and disable them.
-        var buttons = dfx.getClass('Viper-button', this._toolbar);
-        var c       = buttons.length;
-        var viperid = this.viper.getId();
-        var enabledButtons = [];
-        for (var i = 0; i < c; i++) {
-            var buttonid = buttons[i].id.replace(viperid + '-', '');
-            if (this.viper.ViperTools.getItem(buttonid).isEnabled() === true) {
-                enabledButtons.push(buttonid);
-            }
-
-            this.viper.ViperTools.disableButton(buttonid);
-        }
-
-        this._enabledButtons = enabledButtons;
-
-        this.viper.fireCallbacks('ViperToolbarPlugin:disabled');
-
-    },
-
-    enable: function()
-    {
-        if (this._enabled === true) {
-            return;
-        }
-
-        this._enabled = true;
-        dfx.removeClass(this._toolbar, 'viper-inactive');
-        dfx.addClass(this._toolbar, 'viper-active');
-
-        this.viper.fireCallbacks('ViperToolbarPlugin:enabled');
-
-        while (this._enabledButtons.length) {
-            this.viper.ViperTools.enableButton(this._enabledButtons.pop());
-        }
-
-    },
-
-    hide: function()
-    {
-        dfx.setStyle(this._toolbar, 'display', 'none');
-
-    },
-
-    show: function()
-    {
-        dfx.setStyle(this._toolbar, 'display', 'block');
-
-    },
-
-    isDisabled: function()
-    {
-        return !this._enabled;
-
-    },
-
-    isVisible: function()
-    {
-        if (dfx.getStyle(this._toolbar, 'display') === 'none') {
-            return false;
-        }
-
-        return true;
-
-    },
-
-    exists: function()
-    {
-        if (this._toolbar) {
-            return true;
-        }
-
-        return false;
-
-    },
-
-    remove: function()
-    {
-        dfx.remove(this._toolbar);
-
-    },
-
-    isPluginElement: function(element)
-    {
-        if (element !== this._toolbar && dfx.isChildOf(element, this._toolbar) === false) {
-            return false;
-        }
-
-        return true;
-
-    },
-
-    _updateToolbar: function(range)
-    {
-        if (this.viper.isEnabled() === false) {
-            return;
-        }
-
-        if (this.viper.isBrowser('msie') === true) {
-            // IE fix.. When a toolbar button is clicked IE moves the selection to that
-            // button unless the button no longer exists... So we remove the toolbar
-            // here to prevent selection changing......
-            var parent = this._toolbar.parentNode;
-            parent.removeChild(this._toolbar);
-        }
-
-        range = range || this.viper.getCurrentRange();
-
-        this.viper.fireCallbacks('ViperToolbarPlugin:updateToolbar', {range: range});
-
-        if (this.viper.isBrowser('msie') === true) {
-            parent.appendChild(this._toolbar);
-        }
-
-    }
-
-};
-
-
-
-function ViperTrackChangesPlugin(viper)
-{
-    this.viper = viper;
-    this.subToolbarPlugin = null;
-    this.optionCheckboxes = {};
-    this._barActive       = false;
-    this._newCommentid    = null;
-    this._initialising    = false;
-    this.viewSettings     = {
-        finalMode: {},
-        originalMode: {}
-    };
-
-}
-
-ViperTrackChangesPlugin.prototype = {
-    init: function()
-    {
-        var self = this;
-
-        this._setupToolbar();
-
-        ViperChangeTracker.addChangeType('viperComment', 'Comment', 'comment');
-        ViperChangeTracker.setRejectCallback('viperComment', function(clone, node) {
-            while (node.firstChild) {
-                dfx.insertBefore(node, node.firstChild);
-            }
-
-            dfx.remove(node);
-        });
-
-        // Change Tracker will ask for the description of the change.
-        // For comments display a editable area where user can type comment and
-        // read other comments. Comment in change object is updated when the subElement is disabled.
-        ViperChangeTracker.setDescriptionCallback('viperComment', function(node, ctnType, changeid) {
-            var div = Viper.document.createElement('div');
-            dfx.addClass(div, 'viperCommentDiv');
-
-            // Set the changeid of this div so that when subElementDisabled event
-            // is fired, we can determine the changeid of active comment.
-            div.setAttribute('changeid', changeid);
-            div.setAttribute('id', 'viperComment-' + changeid);
-
-            var comment = ViperChangeTracker._comments[changeid] || '&nbsp;';
-            dfx.setHtml(div, comment);
-
-            dfx.addEvent(div, 'mousedown', function() {
-                self.viper.setSubElementState(div, true);
-
-                dfx.removeEvent(div, 'mouseup.viperSubElem');
-                dfx.addEvent(div, 'mouseup.viperSubElem', function(e) {
-                    setTimeout(function() {
-                        self.viper.mouseUp(e);
-                    }, 200);
-                });
-
-                // We need to add a new class to top level element so the box
-                // stays on top of others.
-                var parent = div.parentNode.parentNode.parentNode;
-                dfx.addClass(parent, 'active');
-            });
-
-            if (self._newCommentid === changeid) {
-                self.viper.registerCallback('ViperChangeTracker:infoBoxAdded', 'ViperTrackChangesPlugin', function(chid) {
-                    if (chid !== changeid) {
-                        return;
-                    }
-
-                    var markerElem = ViperChangeTracker.getMarker(changeid);
-                    if (markerElem) {
-                        dfx.trigger(markerElem, 'click');
-                    }
-
-                    self.viper.setSubElementState(div, true);
-                    div.focus();
-
-                    // We need to add a new class to top level element so the box
-                    // stays on top of others.
-                    var parent = div.parentNode.parentNode.parentNode;
-                    dfx.addClass(parent, 'active');
-
-                    var range = self.viper.getCurrentRange();
-                    range.setStart(div.firstChild, 0);
-                    range.collapse(true);
-
-                    self.viper.removeCallback('ViperChangeTracker:infoBoxAdded', 'ViperTrackChangesPlugin');
-                });
-
-                self._newCommentid = null;
-            }//end if
-
-            return div;
-        });
-
-        this.viper.registerCallback('subElementDisabled', 'ViperTrackChangesPlugin', function(elem) {
-            if (elem && elem.parentNode && elem.parentNode.parentNode) {
-                var parent = elem.parentNode.parentNode.parentNode;
-                dfx.removeClass(parent, 'active');
-            }
-        });
-
-    },
-
-    toggleTrackChanges: function()
-    {
-        this._barActive = this.subToolbarPlugin.toggleToolbar('TrackChanges');
-        if (this._barActive === true) {
-            this.viper.ViperTools.setButtonActive('trackChanges');
-        } else {
-            this.viper.ViperTools.setButtonInactive('trackChanges');
-        }
-
-        if (ViperChangeTracker.isTracking() === false
-            && ViperChangeTracker.hasChanges() === false
-        ) {
-            ViperChangeTracker.enableChangeTracking();
-        }
-
-    },
-
-    
-    addComment: function()
-    {
-        this.viper.focus();
-        var info     = ViperHistoryManager.createNodeChangeInfo(this.viper.element);
-        var bookmark = this.viper.createBookmark();
-        var elements = dfx.getElementsBetween(bookmark.start, bookmark.end);
-
-        var eln      = elements.length;
-        var changeid = ViperChangeTracker.addChange('viperComment');
-
-        this._newCommentid = changeid;
-
-        if (eln === 0) {
-            var el = Viper.document.createElement('span');
-            dfx.insertBefore(bookmark.start, el);
-            ViperChangeTracker.addNodeToChange(changeid, el);
-        } else {
-            for (var i = 0; i < eln; i++) {
-                if (ViperChangeTracker.getCTNode(elements[i], 'viperComment') === null) {
-                    this.viper._wrapElement(elements[i], 'span', function(newElem) {
-                        // Add new class to wrap element to mark it as "deleted".
-                        ViperChangeTracker.addNodeToChange(changeid, newElem);
-                    });
-                }
-            }
-        }
-
-        this.viper.selectBookmark(bookmark);
-        this.viper.fireNodesChanged('ViperTrackChangesPlugin:update');
-
-    },
-
-    enableTracking: function()
-    {
-        ViperChangeTracker.enableChangeTracking();
-
-    },
-
-    disableTracking: function()
-    {
-        ViperChangeTracker.disableChangeTracking();
-
-    },
-
-    _setupToolbar: function()
-    {
-        var self      = this;
-        var tcEnabled = false;
-        var tools     = this.viper.ViperTools;
-        var toolbar   = this.viper.ViperPluginManager.getPlugin('ViperToolbarPlugin');
-
-        var tcBtn = tools.createButton('trackChanges', 'TC', 'Toggle Track Changes', '', function() {
-            if (tcEnabled === true) {
-                tcEnabled = false;
-                tools.setButtonInactive('trackChanges');
-                self.disableTracking();
-            } else {
-                tcEnabled = true;
-                tools.setButtonActive('trackChanges');
-                self.enableTracking();
-            }
-        });
-
-        toolbar.addButton(tcBtn);
-
-    }
-
-};
-
-
-ViperReadyCallback = null;
-(function() {
-    dfxLoadedCallback = function() {
-        var dfxScripts = document.getElementsByTagName('script');
-        var path       = null;
-
-        // Loop through all the script tags that exist in the document and find the one
-        // that has included this file.
-        var dfxScriptsLen = dfxScripts.length;
-        for (var i = 0; i < dfxScriptsLen; i++) {
-            if (dfxScripts[i].src) {
-                if (dfxScripts[i].src.match(/Viper-all\.js/)) {
-                    // We have found our appropriate <script> tag that includes the
-                    // DfxJSLib library, so we can extract the path and include the rest.
-                    path = dfxScripts[i].src.replace(/Viper-all\.js/,'');
-                    break;
-                }
-            }
-        }
-
-        var _loadScript = function(path, scriptName, callback, scriptNameAsPath) {
-            var script = document.createElement('script');
-
-            if (navigator.appName == 'Microsoft Internet Explorer') {
-                var rv = -1;
-                var re = new RegExp("MSIE ([0-9]{1,}[\.0-9]{0,})");
-                if (re.exec(navigator.userAgent) != null) {
-                    rv = parseFloat(RegExp.$1);
-                }
-
-                if (rv <= 8.0) {
-                    script.onreadystatechange = function() {
-                        if (/^(loaded|complete)$/.test(this.readyState) === true) {
-                            callback.call(window);
-                        }
-                    };
-                }
-            }//end if
-
-            script.onload = function() {
-                callback.call(window);
-            };
-
-            if (scriptNameAsPath === true) {
-                script.src = path + scriptName + '/' + scriptName + '.js';
-            } else {
-                script.src = path + scriptName;
-            }
-
-            if (document.head) {
-                document.head.appendChild(script);
-            } else {
-                document.getElementsByTagName('head')[0].appendChild(script);
-            }
-        };
-        var _loadScripts = function(path, scripts, callback, scriptNameAsPath) {
-            if (scripts.length === 0) {
-                callback.call(window);
-                return;
-            }
-
-            var script = scripts.shift();
-            _loadScript(path, script, function() {
-                _loadScripts(path, scripts, callback, scriptNameAsPath);
-            }, scriptNameAsPath);
-        };
-
-        // Viper core files.
-        var jsFiles = 'Viper.js|ViperChangeTracker.js|ViperTools.js|ViperDOMRange.js|ViperIERange.js|ViperMozRange.js|ViperSelection.js|ViperPluginManager.js|ViperHistoryManager.js';
-        jsFiles     = jsFiles.split('|');
-
-        _loadScripts(path + '/Lib/', jsFiles, function() {
-            var plugins    = 'ViperCopyPastePlugin|ViperToolbarPlugin|ViperInlineToolbarPlugin|ViperCoreStylesPlugin|ViperFormatPlugin|ViperKeyboardEditorPlugin|ViperListPlugin|ViperHistoryPlugin|ViperTableEditorPlugin|ViperTrackChangesPlugin|ViperLinkPlugin|ViperAccessibilityPlugin|ViperSourceViewPlugin|ViperImagePlugin|ViperSearchReplacePlugin|ViperLangToolsPlugin|ViperCharMapPlugin';
-            plugins        = plugins.split('|');
-
-            _loadScripts(path + 'Plugins/', plugins.concat([]), function() {
-                if (ViperReadyCallback) {
-                    ViperReadyCallback.call(window);
-                } else {
-                    var maxTry = 10;
-                    var interval = setInterval(function() {
-                        maxTry--;
-                        if (ViperReadyCallback) {
-                            ViperReadyCallback.call(window);
-                            clearInterval(interval);
-                        } else if (maxTry === 0) {
-                            clearInterval(interval);
-                        }
-                    }, 500);
-                }
-            }, true);
-
-
-            var coreCSS = 'viper|viper_moz'.split('|');
-            for (var j = 0; j < coreCSS.length; j++) {
-                var link   = document.createElement('link');
-                link.rel   = 'stylesheet';
-                link.media = 'screen';
-                link.href  = path + 'Css/' + coreCSS[j] + '.css';
-                document.getElementsByTagName('head')[0].appendChild(link);
-            }
-
-            for (var j = 0; j < plugins.length; j++) {
-                var link   = document.createElement('link');
-                link.rel   = 'stylesheet';
-                link.media = 'screen';
-                link.href  = path + 'Plugins/' + plugins[j] + '/' + plugins[j] + '.css';
-                document.getElementsByTagName('head')[0].appendChild(link);
-            }
-        });
-    };
-}) ();
-
-if (!/MSIE/.test(navigator.userAgent)) {
+define("ace/mode/html",["require","exports","module","ace/lib/oop","ace/mode/text","ace/mode/javascript","ace/mode/css","ace/tokenizer","ace/mode/html_highlight_rules","ace/mode/behaviour/html","ace/mode/folding/html","ace/mode/html_completions"],function(e,t,n){var r=e("../lib/oop"),i=e("./text").Mode,s=e("./javascript").Mode,o=e("./css").Mode,u=e("../tokenizer").Tokenizer,a=e("./html_highlight_rules").HtmlHighlightRules,f=e("./behaviour/html").HtmlBehaviour,l=e("./folding/html").FoldMode,c=e("./html_completions").HtmlCompletions,h=function(){var e=new a;this.$tokenizer=new u(e.getRules()),this.$behaviour=new f,this.$completer=new c,this.$embeds=e.getEmbeds(),this.createModeDelegates({"js-":s,"css-":o}),this.foldingRules=new l};r.inherits(h,i),function(){this.blockComment={start:"<!--",end:"-->"},this.getNextLineIndent=function(e,t,n){return this.$getIndent(t)},this.checkOutdent=function(e,t,n){return!1},this.getCompletions=function(e,t,n,r){return this.$completer.getCompletions(e,t,n,r)}}.call(h.prototype),t.Mode=h}),define("ace/mode/javascript",["require","exports","module","ace/lib/oop","ace/mode/text","ace/tokenizer","ace/mode/javascript_highlight_rules","ace/mode/matching_brace_outdent","ace/range","ace/worker/worker_client","ace/mode/behaviour/cstyle","ace/mode/folding/cstyle"],function(e,t,n){var r=e("../lib/oop"),i=e("./text").Mode,s=e("../tokenizer").Tokenizer,o=e("./javascript_highlight_rules").JavaScriptHighlightRules,u=e("./matching_brace_outdent").MatchingBraceOutdent,a=e("../range").Range,f=e("../worker/worker_client").WorkerClient,l=e("./behaviour/cstyle").CstyleBehaviour,c=e("./folding/cstyle").FoldMode,h=function(){var e=new o;this.$tokenizer=new s(e.getRules()),this.$outdent=new u,this.$behaviour=new l,this.$keywordList=e.$keywordList,this.foldingRules=new c};r.inherits(h,i),function(){this.lineCommentStart="//",this.blockComment={start:"/*",end:"*/"},this.getNextLineIndent=function(e,t,n){var r=this.$getIndent(t),i=this.$tokenizer.getLineTokens(t,e),s=i.tokens,o=i.state;if(s.length&&s[s.length-1].type=="comment")return r;if(e=="start"||e=="no_regex"){var u=t.match(/^.*(?:\bcase\b.*\:|[\{\(\[])\s*$/);u&&(r+=n)}else if(e=="doc-start"){if(o=="start"||o=="no_regex")return"";var u=t.match(/^\s*(\/?)\*/);u&&(u[1]&&(r+=" "),r+="* ")}return r},this.checkOutdent=function(e,t,n){return this.$outdent.checkOutdent(t,n)},this.autoOutdent=function(e,t,n){this.$outdent.autoOutdent(t,n)},this.createWorker=function(e){var t=new f(["ace"],"ace/mode/javascript_worker","JavaScriptWorker");return t.attachToDocument(e.getDocument()),t.on("jslint",function(t){e.setAnnotations(t.data)}),t.on("terminate",function(){e.clearAnnotations()}),t}}.call(h.prototype),t.Mode=h}),define("ace/mode/javascript_highlight_rules",["require","exports","module","ace/lib/oop","ace/mode/doc_comment_highlight_rules","ace/mode/text_highlight_rules"],function(e,t,n){var r=e("../lib/oop"),i=e("./doc_comment_highlight_rules").DocCommentHighlightRules,s=e("./text_highlight_rules").TextHighlightRules,o=function(){var e=this.createKeywordMapper({"variable.language":"Array|Boolean|Date|Function|Iterator|Number|Object|RegExp|String|Proxy|Namespace|QName|XML|XMLList|ArrayBuffer|Float32Array|Float64Array|Int16Array|Int32Array|Int8Array|Uint16Array|Uint32Array|Uint8Array|Uint8ClampedArray|Error|EvalError|InternalError|RangeError|ReferenceError|StopIteration|SyntaxError|TypeError|URIError|decodeURI|decodeURIComponent|encodeURI|encodeURIComponent|eval|isFinite|isNaN|parseFloat|parseInt|JSON|Math|this|arguments|prototype|window|document",keyword:"const|yield|import|get|set|break|case|catch|continue|default|delete|do|else|finally|for|function|if|in|instanceof|new|return|switch|throw|try|typeof|let|var|while|with|debugger|__parent__|__count__|escape|unescape|with|__proto__|class|enum|extends|super|export|implements|private|public|interface|package|protected|static","storage.type":"const|let|var|function","constant.language":"null|Infinity|NaN|undefined","support.function":"alert","constant.language.boolean":"true|false"},"identifier"),t="case|do|else|finally|in|instanceof|return|throw|try|typeof|yield|void",n="[a-zA-Z\\$_¡-￿][a-zA-Z\\d\\$_¡-￿]*\\b",r="\\\\(?:x[0-9a-fA-F]{2}|u[0-9a-fA-F]{4}|[0-2][0-7]{0,2}|3[0-6][0-7]?|37[0-7]?|[4-7][0-7]?|.)";this.$rules={no_regex:[{token:"comment",regex:"\\/\\/",next:"line_comment"},i.getStartRule("doc-start"),{token:"comment",regex:/\/\*/,next:"comment"},{token:"string",regex:"'(?=.)",next:"qstring"},{token:"string",regex:'"(?=.)',next:"qqstring"},{token:"constant.numeric",regex:/0[xX][0-9a-fA-F]+\b/},{token:"constant.numeric",regex:/[+-]?\d+(?:(?:\.\d*)?(?:[eE][+-]?\d+)?)?\b/},{token:["storage.type","punctuation.operator","support.function","punctuation.operator","entity.name.function","text","keyword.operator"],regex:"("+n+")(\\.)(prototype)(\\.)("+n+")(\\s*)(=)",next:"function_arguments"},{token:["storage.type","punctuation.operator","entity.name.function","text","keyword.operator","text","storage.type","text","paren.lparen"],regex:"("+n+")(\\.)("+n+")(\\s*)(=)(\\s*)(function)(\\s*)(\\()",next:"function_arguments"},{token:["entity.name.function","text","keyword.operator","text","storage.type","text","paren.lparen"],regex:"("+n+")(\\s*)(=)(\\s*)(function)(\\s*)(\\()",next:"function_arguments"},{token:["storage.type","punctuation.operator","entity.name.function","text","keyword.operator","text","storage.type","text","entity.name.function","text","paren.lparen"],regex:"("+n+")(\\.)("+n+")(\\s*)(=)(\\s*)(function)(\\s+)(\\w+)(\\s*)(\\()",next:"function_arguments"},{token:["storage.type","text","entity.name.function","text","paren.lparen"],regex:"(function)(\\s+)("+n+")(\\s*)(\\()",next:"function_arguments"},{token:["entity.name.function","text","punctuation.operator","text","storage.type","text","paren.lparen"],regex:"("+n+")(\\s*)(:)(\\s*)(function)(\\s*)(\\()",next:"function_arguments"},{token:["text","text","storage.type","text","paren.lparen"],regex:"(:)(\\s*)(function)(\\s*)(\\()",next:"function_arguments"},{token:"keyword",regex:"(?:"+t+")\\b",next:"start"},{token:["punctuation.operator","support.function"],regex:/(\.)(s(?:h(?:ift|ow(?:Mod(?:elessDialog|alDialog)|Help))|croll(?:X|By(?:Pages|Lines)?|Y|To)?|t(?:op|rike)|i(?:n|zeToContent|debar|gnText)|ort|u(?:p|b(?:str(?:ing)?)?)|pli(?:ce|t)|e(?:nd|t(?:Re(?:sizable|questHeader)|M(?:i(?:nutes|lliseconds)|onth)|Seconds|Ho(?:tKeys|urs)|Year|Cursor|Time(?:out)?|Interval|ZOptions|Date|UTC(?:M(?:i(?:nutes|lliseconds)|onth)|Seconds|Hours|Date|FullYear)|FullYear|Active)|arch)|qrt|lice|avePreferences|mall)|h(?:ome|andleEvent)|navigate|c(?:har(?:CodeAt|At)|o(?:s|n(?:cat|textual|firm)|mpile)|eil|lear(?:Timeout|Interval)?|a(?:ptureEvents|ll)|reate(?:StyleSheet|Popup|EventObject))|t(?:o(?:GMTString|S(?:tring|ource)|U(?:TCString|pperCase)|Lo(?:caleString|werCase))|est|a(?:n|int(?:Enabled)?))|i(?:s(?:NaN|Finite)|ndexOf|talics)|d(?:isableExternalCapture|ump|etachEvent)|u(?:n(?:shift|taint|escape|watch)|pdateCommands)|j(?:oin|avaEnabled)|p(?:o(?:p|w)|ush|lugins.refresh|a(?:ddings|rse(?:Int|Float)?)|r(?:int|ompt|eference))|e(?:scape|nableExternalCapture|val|lementFromPoint|x(?:p|ec(?:Script|Command)?))|valueOf|UTC|queryCommand(?:State|Indeterm|Enabled|Value)|f(?:i(?:nd|le(?:ModifiedDate|Size|CreatedDate|UpdatedDate)|xed)|o(?:nt(?:size|color)|rward)|loor|romCharCode)|watch|l(?:ink|o(?:ad|g)|astIndexOf)|a(?:sin|nchor|cos|t(?:tachEvent|ob|an(?:2)?)|pply|lert|b(?:s|ort))|r(?:ou(?:nd|teEvents)|e(?:size(?:By|To)|calc|turnValue|place|verse|l(?:oad|ease(?:Capture|Events)))|andom)|g(?:o|et(?:ResponseHeader|M(?:i(?:nutes|lliseconds)|onth)|Se(?:conds|lection)|Hours|Year|Time(?:zoneOffset)?|Da(?:y|te)|UTC(?:M(?:i(?:nutes|lliseconds)|onth)|Seconds|Hours|Da(?:y|te)|FullYear)|FullYear|A(?:ttention|llResponseHeaders)))|m(?:in|ove(?:B(?:y|elow)|To(?:Absolute)?|Above)|ergeAttributes|a(?:tch|rgins|x))|b(?:toa|ig|o(?:ld|rderWidths)|link|ack))\b(?=\()/},{token:["punctuation.operator","support.function.dom"],regex:/(\.)(s(?:ub(?:stringData|mit)|plitText|e(?:t(?:NamedItem|Attribute(?:Node)?)|lect))|has(?:ChildNodes|Feature)|namedItem|c(?:l(?:ick|o(?:se|neNode))|reate(?:C(?:omment|DATASection|aption)|T(?:Head|extNode|Foot)|DocumentFragment|ProcessingInstruction|E(?:ntityReference|lement)|Attribute))|tabIndex|i(?:nsert(?:Row|Before|Cell|Data)|tem)|open|delete(?:Row|C(?:ell|aption)|T(?:Head|Foot)|Data)|focus|write(?:ln)?|a(?:dd|ppend(?:Child|Data))|re(?:set|place(?:Child|Data)|move(?:NamedItem|Child|Attribute(?:Node)?)?)|get(?:NamedItem|Element(?:sBy(?:Name|TagName)|ById)|Attribute(?:Node)?)|blur)\b(?=\()/},{token:["punctuation.operator","support.constant"],regex:/(\.)(s(?:ystemLanguage|cr(?:ipts|ollbars|een(?:X|Y|Top|Left))|t(?:yle(?:Sheets)?|atus(?:Text|bar)?)|ibling(?:Below|Above)|ource|uffixes|e(?:curity(?:Policy)?|l(?:ection|f)))|h(?:istory|ost(?:name)?|as(?:h|Focus))|y|X(?:MLDocument|SLDocument)|n(?:ext|ame(?:space(?:s|URI)|Prop))|M(?:IN_VALUE|AX_VALUE)|c(?:haracterSet|o(?:n(?:structor|trollers)|okieEnabled|lorDepth|mp(?:onents|lete))|urrent|puClass|l(?:i(?:p(?:boardData)?|entInformation)|osed|asses)|alle(?:e|r)|rypto)|t(?:o(?:olbar|p)|ext(?:Transform|Indent|Decoration|Align)|ags)|SQRT(?:1_2|2)|i(?:n(?:ner(?:Height|Width)|put)|ds|gnoreCase)|zIndex|o(?:scpu|n(?:readystatechange|Line)|uter(?:Height|Width)|p(?:sProfile|ener)|ffscreenBuffering)|NEGATIVE_INFINITY|d(?:i(?:splay|alog(?:Height|Top|Width|Left|Arguments)|rectories)|e(?:scription|fault(?:Status|Ch(?:ecked|arset)|View)))|u(?:ser(?:Profile|Language|Agent)|n(?:iqueID|defined)|pdateInterval)|_content|p(?:ixelDepth|ort|ersonalbar|kcs11|l(?:ugins|atform)|a(?:thname|dding(?:Right|Bottom|Top|Left)|rent(?:Window|Layer)?|ge(?:X(?:Offset)?|Y(?:Offset)?))|r(?:o(?:to(?:col|type)|duct(?:Sub)?|mpter)|e(?:vious|fix)))|e(?:n(?:coding|abledPlugin)|x(?:ternal|pando)|mbeds)|v(?:isibility|endor(?:Sub)?|Linkcolor)|URLUnencoded|P(?:I|OSITIVE_INFINITY)|f(?:ilename|o(?:nt(?:Size|Family|Weight)|rmName)|rame(?:s|Element)|gColor)|E|whiteSpace|l(?:i(?:stStyleType|n(?:eHeight|kColor))|o(?:ca(?:tion(?:bar)?|lName)|wsrc)|e(?:ngth|ft(?:Context)?)|a(?:st(?:M(?:odified|atch)|Index|Paren)|yer(?:s|X)|nguage))|a(?:pp(?:MinorVersion|Name|Co(?:deName|re)|Version)|vail(?:Height|Top|Width|Left)|ll|r(?:ity|guments)|Linkcolor|bove)|r(?:ight(?:Context)?|e(?:sponse(?:XML|Text)|adyState))|global|x|m(?:imeTypes|ultiline|enubar|argin(?:Right|Bottom|Top|Left))|L(?:N(?:10|2)|OG(?:10E|2E))|b(?:o(?:ttom|rder(?:Width|RightWidth|BottomWidth|Style|Color|TopWidth|LeftWidth))|ufferDepth|elow|ackground(?:Color|Image)))\b/},{token:["storage.type","punctuation.operator","support.function.firebug"],regex:/(console)(\.)(warn|info|log|error|time|timeEnd|assert)\b/},{token:e,regex:n},{token:"keyword.operator",regex:/--|\+\+|[!$%&*+\-~]|===|==|=|!=|!==|<=|>=|<<=|>>=|>>>=|<>|<|>|!|&&|\|\||\?\:|\*=|%=|\+=|\-=|&=|\^=/,next:"start"},{token:"punctuation.operator",regex:/\?|\:|\,|\;|\./,next:"start"},{token:"paren.lparen",regex:/[\[({]/,next:"start"},{token:"paren.rparen",regex:/[\])}]/},{token:"keyword.operator",regex:/\/=?/,next:"start"},{token:"comment",regex:/^#!.*$/}],start:[i.getStartRule("doc-start"),{token:"comment",regex:"\\/\\*",next:"comment_regex_allowed"},{token:"comment",regex:"\\/\\/",next:"line_comment_regex_allowed"},{token:"string.regexp",regex:"\\/",next:"regex"},{token:"text",regex:"\\s+|^$",next:"start"},{token:"empty",regex:"",next:"no_regex"}],regex:[{token:"regexp.keyword.operator",regex:"\\\\(?:u[\\da-fA-F]{4}|x[\\da-fA-F]{2}|.)"},{token:"string.regexp",regex:"/\\w*",next:"no_regex"},{token:"invalid",regex:/\{\d+\b,?\d*\}[+*]|[+*$^?][+*]|[$^][?]|\?{3,}/},{token:"constant.language.escape",regex:/\(\?[:=!]|\)|\{\d+\b,?\d*\}|[+*]\?|[()$^+*?]/},{token:"constant.language.delimiter",regex:/\|/},{token:"constant.language.escape",regex:/\[\^?/,next:"regex_character_class"},{token:"empty",regex:"$",next:"no_regex"},{defaultToken:"string.regexp"}],regex_character_class:[{token:"regexp.keyword.operator",regex:"\\\\(?:u[\\da-fA-F]{4}|x[\\da-fA-F]{2}|.)"},{token:"constant.language.escape",regex:"]",next:"regex"},{token:"constant.language.escape",regex:"-"},{token:"empty",regex:"$",next:"no_regex"},{defaultToken:"string.regexp.charachterclass"}],function_arguments:[{token:"variable.parameter",regex:n},{token:"punctuation.operator",regex:"[, ]+"},{token:"punctuation.operator",regex:"$"},{token:"empty",regex:"",next:"no_regex"}],comment_regex_allowed:[{token:"comment",regex:"\\*\\/",next:"start"},{defaultToken:"comment"}],comment:[{token:"comment",regex:"\\*\\/",next:"no_regex"},{defaultToken:"comment"}],line_comment_regex_allowed:[{token:"comment",regex:"$|^",next:"start"},{defaultToken:"comment"}],line_comment:[{token:"comment",regex:"$|^",next:"no_regex"},{defaultToken:"comment"}],qqstring:[{token:"constant.language.escape",regex:r},{token:"string",regex:"\\\\$",next:"qqstring"},{token:"string",regex:'"|$',next:"no_regex"},{defaultToken:"string"}],qstring:[{token:"constant.language.escape",regex:r},{token:"string",regex:"\\\\$",next:"qstring"},{token:"string",regex:"'|$",next:"no_regex"},{defaultToken:"string"}]},this.embedRules(i,"doc-",[i.getEndRule("no_regex")])};r.inherits(o,s),t.JavaScriptHighlightRules=o}),define("ace/mode/doc_comment_highlight_rules",["require","exports","module","ace/lib/oop","ace/mode/text_highlight_rules"],function(e,t,n){var r=e("../lib/oop"),i=e("./text_highlight_rules").TextHighlightRules,s=function(){this.$rules={start:[{token:"comment.doc.tag",regex:"@[\\w\\d_]+"},{token:"comment.doc.tag",regex:"\\bTODO\\b"},{defaultToken:"comment.doc"}]}};r.inherits(s,i),s.getStartRule=function(e){return{token:"comment.doc",regex:"\\/\\*(?=\\*)",next:e}},s.getEndRule=function(e){return{token:"comment.doc",regex:"\\*\\/",next:e}},t.DocCommentHighlightRules=s}),define("ace/mode/matching_brace_outdent",["require","exports","module","ace/range"],function(e,t,n){var r=e("../range").Range,i=function(){};(function(){this.checkOutdent=function(e,t){return/^\s+$/.test(e)?/^\s*\}/.test(t):!1},this.autoOutdent=function(e,t){var n=e.getLine(t),i=n.match(/^(\s*\})/);if(!i)return 0;var s=i[1].length,o=e.findMatchingBracket({row:t,column:s});if(!o||o.row==t)return 0;var u=this.$getIndent(e.getLine(o.row));e.replace(new r(t,0,t,s-1),u)},this.$getIndent=function(e){return e.match(/^\s*/)[0]}}).call(i.prototype),t.MatchingBraceOutdent=i}),define("ace/mode/behaviour/cstyle",["require","exports","module","ace/lib/oop","ace/mode/behaviour","ace/token_iterator","ace/lib/lang"],function(e,t,n){var r=e("../../lib/oop"),i=e("../behaviour").Behaviour,s=e("../../token_iterator").TokenIterator,o=e("../../lib/lang"),u=["text","paren.rparen","punctuation.operator"],a=["text","paren.rparen","punctuation.operator","comment"],f=0,l=-1,c="",h=0,p=-1,d="",v="",m=function(){m.isSaneInsertion=function(e,t){var n=e.getCursorPosition(),r=new s(t,n.row,n.column);if(!this.$matchTokenType(r.getCurrentToken()||"text",u)){var i=new s(t,n.row,n.column+1);if(!this.$matchTokenType(i.getCurrentToken()||"text",u))return!1}return r.stepForward(),r.getCurrentTokenRow()!==n.row||this.$matchTokenType(r.getCurrentToken()||"text",a)},m.$matchTokenType=function(e,t){return t.indexOf(e.type||e)>-1},m.recordAutoInsert=function(e,t,n){var r=e.getCursorPosition(),i=t.doc.getLine(r.row);this.isAutoInsertedClosing(r,i,c[0])||(f=0),l=r.row,c=n+i.substr(r.column),f++},m.recordMaybeInsert=function(e,t,n){var r=e.getCursorPosition(),i=t.doc.getLine(r.row);this.isMaybeInsertedClosing(r,i)||(h=0),p=r.row,d=i.substr(0,r.column)+n,v=i.substr(r.column),h++},m.isAutoInsertedClosing=function(e,t,n){return f>0&&e.row===l&&n===c[0]&&t.substr(e.column)===c},m.isMaybeInsertedClosing=function(e,t){return h>0&&e.row===p&&t.substr(e.column)===v&&t.substr(0,e.column)==d},m.popAutoInsertedClosing=function(){c=c.substr(1),f--},m.clearMaybeInsertedClosing=function(){h=0,p=-1},this.add("braces","insertion",function(e,t,n,r,i){var s=n.getCursorPosition(),u=r.doc.getLine(s.row);if(i=="{"){var a=n.getSelectionRange(),f=r.doc.getTextRange(a);if(f!==""&&f!=="{"&&n.getWrapBehavioursEnabled())return{text:"{"+f+"}",selection:!1};if(m.isSaneInsertion(n,r))return/[\]\}\)]/.test(u[s.column])?(m.recordAutoInsert(n,r,"}"),{text:"{}",selection:[1,1]}):(m.recordMaybeInsert(n,r,"{"),{text:"{",selection:[1,1]})}else if(i=="}"){var l=u.substring(s.column,s.column+1);if(l=="}"){var c=r.$findOpeningBracket("}",{column:s.column+1,row:s.row});if(c!==null&&m.isAutoInsertedClosing(s,u,i))return m.popAutoInsertedClosing(),{text:"",selection:[1,1]}}}else if(i=="\n"||i=="\r\n"){var p="";m.isMaybeInsertedClosing(s,u)&&(p=o.stringRepeat("}",h),m.clearMaybeInsertedClosing());var l=u.substring(s.column,s.column+1);if(l=="}"||p!==""){var d=r.findMatchingBracket({row:s.row,column:s.column},"}");if(!d)return null;var v=this.getNextLineIndent(e,u.substring(0,s.column),r.getTabString()),g=this.$getIndent(u);return{text:"\n"+v+"\n"+g+p,selection:[1,v.length,1,v.length]}}}}),this.add("braces","deletion",function(e,t,n,r,i){var s=r.doc.getTextRange(i);if(!i.isMultiLine()&&s=="{"){var o=r.doc.getLine(i.start.row),u=o.substring(i.end.column,i.end.column+1);if(u=="}")return i.end.column++,i;h--}}),this.add("parens","insertion",function(e,t,n,r,i){if(i=="("){var s=n.getSelectionRange(),o=r.doc.getTextRange(s);if(o!==""&&n.getWrapBehavioursEnabled())return{text:"("+o+")",selection:!1};if(m.isSaneInsertion(n,r))return m.recordAutoInsert(n,r,")"),{text:"()",selection:[1,1]}}else if(i==")"){var u=n.getCursorPosition(),a=r.doc.getLine(u.row),f=a.substring(u.column,u.column+1);if(f==")"){var l=r.$findOpeningBracket(")",{column:u.column+1,row:u.row});if(l!==null&&m.isAutoInsertedClosing(u,a,i))return m.popAutoInsertedClosing(),{text:"",selection:[1,1]}}}}),this.add("parens","deletion",function(e,t,n,r,i){var s=r.doc.getTextRange(i);if(!i.isMultiLine()&&s=="("){var o=r.doc.getLine(i.start.row),u=o.substring(i.start.column+1,i.start.column+2);if(u==")")return i.end.column++,i}}),this.add("brackets","insertion",function(e,t,n,r,i){if(i=="["){var s=n.getSelectionRange(),o=r.doc.getTextRange(s);if(o!==""&&n.getWrapBehavioursEnabled())return{text:"["+o+"]",selection:!1};if(m.isSaneInsertion(n,r))return m.recordAutoInsert(n,r,"]"),{text:"[]",selection:[1,1]}}else if(i=="]"){var u=n.getCursorPosition(),a=r.doc.getLine(u.row),f=a.substring(u.column,u.column+1);if(f=="]"){var l=r.$findOpeningBracket("]",{column:u.column+1,row:u.row});if(l!==null&&m.isAutoInsertedClosing(u,a,i))return m.popAutoInsertedClosing(),{text:"",selection:[1,1]}}}}),this.add("brackets","deletion",function(e,t,n,r,i){var s=r.doc.getTextRange(i);if(!i.isMultiLine()&&s=="["){var o=r.doc.getLine(i.start.row),u=o.substring(i.start.column+1,i.start.column+2);if(u=="]")return i.end.column++,i}}),this.add("string_dquotes","insertion",function(e,t,n,r,i){if(i=='"'||i=="'"){var s=i,o=n.getSelectionRange(),u=r.doc.getTextRange(o);if(u!==""&&u!=="'"&&u!='"'&&n.getWrapBehavioursEnabled())return{text:s+u+s,selection:!1};var a=n.getCursorPosition(),f=r.doc.getLine(a.row),l=f.substring(a.column-1,a.column);if(l=="\\")return null;var c=r.getTokens(o.start.row),h=0,p,d=-1;for(var v=0;v<c.length;v++){p=c[v],p.type=="string"?d=-1:d<0&&(d=p.value.indexOf(s));if(p.value.length+h>o.start.column)break;h+=c[v].value.length}if(!p||d<0&&p.type!=="comment"&&(p.type!=="string"||o.start.column!==p.value.length+h-1&&p.value.lastIndexOf(s)===p.value.length-1)){if(!m.isSaneInsertion(n,r))return;return{text:s+s,selection:[1,1]}}if(p&&p.type==="string"){var g=f.substring(a.column,a.column+1);if(g==s)return{text:"",selection:[1,1]}}}}),this.add("string_dquotes","deletion",function(e,t,n,r,i){var s=r.doc.getTextRange(i);if(!i.isMultiLine()&&(s=='"'||s=="'")){var o=r.doc.getLine(i.start.row),u=o.substring(i.start.column+1,i.start.column+2);if(u==s)return i.end.column++,i}})};r.inherits(m,i),t.CstyleBehaviour=m}),define("ace/mode/folding/cstyle",["require","exports","module","ace/lib/oop","ace/range","ace/mode/folding/fold_mode"],function(e,t,n){var r=e("../../lib/oop"),i=e("../../range").Range,s=e("./fold_mode").FoldMode,o=t.FoldMode=function(e){e&&(this.foldingStartMarker=new RegExp(this.foldingStartMarker.source.replace(/\|[^|]*?$/,"|"+e.start)),this.foldingStopMarker=new RegExp(this.foldingStopMarker.source.replace(/\|[^|]*?$/,"|"+e.end)))};r.inherits(o,s),function(){this.foldingStartMarker=/(\{|\[)[^\}\]]*$|^\s*(\/\*)/,this.foldingStopMarker=/^[^\[\{]*(\}|\])|^[\s\*]*(\*\/)/,this.getFoldWidgetRange=function(e,t,n){var r=e.getLine(n),i=r.match(this.foldingStartMarker);if(i){var s=i.index;return i[1]?this.openingBracketBlock(e,i[1],n,s):e.getCommentFoldRange(n,s+i[0].length,1)}if(t!=="markbeginend")return;var i=r.match(this.foldingStopMarker);if(i){var s=i.index+i[0].length;return i[1]?this.closingBracketBlock(e,i[1],n,s):e.getCommentFoldRange(n,s,-1)}}}.call(o.prototype)}),define("ace/mode/css",["require","exports","module","ace/lib/oop","ace/mode/text","ace/tokenizer","ace/mode/css_highlight_rules","ace/mode/matching_brace_outdent","ace/worker/worker_client","ace/mode/behaviour/css","ace/mode/folding/cstyle"],function(e,t,n){var r=e("../lib/oop"),i=e("./text").Mode,s=e("../tokenizer").Tokenizer,o=e("./css_highlight_rules").CssHighlightRules,u=e("./matching_brace_outdent").MatchingBraceOutdent,a=e("../worker/worker_client").WorkerClient,f=e("./behaviour/css").CssBehaviour,l=e("./folding/cstyle").FoldMode,c=function(){var e=new o;this.$tokenizer=new s(e.getRules()),this.$outdent=new u,this.$behaviour=new f,this.$keywordList=e.$keywordList,this.foldingRules=new l};r.inherits(c,i),function(){this.foldingRules="cStyle",this.blockComment={start:"/*",end:"*/"},this.getNextLineIndent=function(e,t,n){var r=this.$getIndent(t),i=this.$tokenizer.getLineTokens(t,e).tokens;if(i.length&&i[i.length-1].type=="comment")return r;var s=t.match(/^.*\{\s*$/);return s&&(r+=n),r},this.checkOutdent=function(e,t,n){return this.$outdent.checkOutdent(t,n)},this.autoOutdent=function(e,t,n){this.$outdent.autoOutdent(t,n)},this.createWorker=function(e){var t=new a(["ace"],"ace/mode/css_worker","Worker");return t.attachToDocument(e.getDocument()),t.on("csslint",function(t){e.setAnnotations(t.data)}),t.on("terminate",function(){e.clearAnnotations()}),t}}.call(c.prototype),t.Mode=c}),define("ace/mode/css_highlight_rules",["require","exports","module","ace/lib/oop","ace/lib/lang","ace/mode/text_highlight_rules"],function(e,t,n){var r=e("../lib/oop"),i=e("../lib/lang"),s=e("./text_highlight_rules").TextHighlightRules,o=t.supportType="animation-fill-mode|alignment-adjust|alignment-baseline|animation-delay|animation-direction|animation-duration|animation-iteration-count|animation-name|animation-play-state|animation-timing-function|animation|appearance|azimuth|backface-visibility|background-attachment|background-break|background-clip|background-color|background-image|background-origin|background-position|background-repeat|background-size|background|baseline-shift|binding|bleed|bookmark-label|bookmark-level|bookmark-state|bookmark-target|border-bottom|border-bottom-color|border-bottom-left-radius|border-bottom-right-radius|border-bottom-style|border-bottom-width|border-collapse|border-color|border-image|border-image-outset|border-image-repeat|border-image-slice|border-image-source|border-image-width|border-left|border-left-color|border-left-style|border-left-width|border-radius|border-right|border-right-color|border-right-style|border-right-width|border-spacing|border-style|border-top|border-top-color|border-top-left-radius|border-top-right-radius|border-top-style|border-top-width|border-width|border|bottom|box-align|box-decoration-break|box-direction|box-flex-group|box-flex|box-lines|box-ordinal-group|box-orient|box-pack|box-shadow|box-sizing|break-after|break-before|break-inside|caption-side|clear|clip|color-profile|color|column-count|column-fill|column-gap|column-rule|column-rule-color|column-rule-style|column-rule-width|column-span|column-width|columns|content|counter-increment|counter-reset|crop|cue-after|cue-before|cue|cursor|direction|display|dominant-baseline|drop-initial-after-adjust|drop-initial-after-align|drop-initial-before-adjust|drop-initial-before-align|drop-initial-size|drop-initial-value|elevation|empty-cells|fit|fit-position|float-offset|float|font-family|font-size|font-size-adjust|font-stretch|font-style|font-variant|font-weight|font|grid-columns|grid-rows|hanging-punctuation|height|hyphenate-after|hyphenate-before|hyphenate-character|hyphenate-lines|hyphenate-resource|hyphens|icon|image-orientation|image-rendering|image-resolution|inline-box-align|left|letter-spacing|line-height|line-stacking-ruby|line-stacking-shift|line-stacking-strategy|line-stacking|list-style-image|list-style-position|list-style-type|list-style|margin-bottom|margin-left|margin-right|margin-top|margin|mark-after|mark-before|mark|marks|marquee-direction|marquee-play-count|marquee-speed|marquee-style|max-height|max-width|min-height|min-width|move-to|nav-down|nav-index|nav-left|nav-right|nav-up|opacity|orphans|outline-color|outline-offset|outline-style|outline-width|outline|overflow-style|overflow-x|overflow-y|overflow|padding-bottom|padding-left|padding-right|padding-top|padding|page-break-after|page-break-before|page-break-inside|page-policy|page|pause-after|pause-before|pause|perspective-origin|perspective|phonemes|pitch-range|pitch|play-during|position|presentation-level|punctuation-trim|quotes|rendering-intent|resize|rest-after|rest-before|rest|richness|right|rotation-point|rotation|ruby-align|ruby-overhang|ruby-position|ruby-span|size|speak-header|speak-numeral|speak-punctuation|speak|speech-rate|stress|string-set|table-layout|target-name|target-new|target-position|target|text-align-last|text-align|text-decoration|text-emphasis|text-height|text-indent|text-justify|text-outline|text-shadow|text-transform|text-wrap|top|transform-origin|transform-style|transform|transition-delay|transition-duration|transition-property|transition-timing-function|transition|unicode-bidi|vertical-align|visibility|voice-balance|voice-duration|voice-family|voice-pitch-range|voice-pitch|voice-rate|voice-stress|voice-volume|volume|white-space-collapse|white-space|widows|width|word-break|word-spacing|word-wrap|z-index",u=t.supportFunction="rgb|rgba|url|attr|counter|counters",a=t.supportConstant="absolute|after-edge|after|all-scroll|all|alphabetic|always|antialiased|armenian|auto|avoid-column|avoid-page|avoid|balance|baseline|before-edge|before|below|bidi-override|block-line-height|block|bold|bolder|border-box|both|bottom|box|break-all|break-word|capitalize|caps-height|caption|center|central|char|circle|cjk-ideographic|clone|close-quote|col-resize|collapse|column|consider-shifts|contain|content-box|cover|crosshair|cubic-bezier|dashed|decimal-leading-zero|decimal|default|disabled|disc|disregard-shifts|distribute-all-lines|distribute-letter|distribute-space|distribute|dotted|double|e-resize|ease-in|ease-in-out|ease-out|ease|ellipsis|end|exclude-ruby|fill|fixed|georgian|glyphs|grid-height|groove|hand|hanging|hebrew|help|hidden|hiragana-iroha|hiragana|horizontal|icon|ideograph-alpha|ideograph-numeric|ideograph-parenthesis|ideograph-space|ideographic|inactive|include-ruby|inherit|initial|inline-block|inline-box|inline-line-height|inline-table|inline|inset|inside|inter-ideograph|inter-word|invert|italic|justify|katakana-iroha|katakana|keep-all|last|left|lighter|line-edge|line-through|line|linear|list-item|local|loose|lower-alpha|lower-greek|lower-latin|lower-roman|lowercase|lr-tb|ltr|mathematical|max-height|max-size|medium|menu|message-box|middle|move|n-resize|ne-resize|newspaper|no-change|no-close-quote|no-drop|no-open-quote|no-repeat|none|normal|not-allowed|nowrap|nw-resize|oblique|open-quote|outset|outside|overline|padding-box|page|pointer|pre-line|pre-wrap|pre|preserve-3d|progress|relative|repeat-x|repeat-y|repeat|replaced|reset-size|ridge|right|round|row-resize|rtl|s-resize|scroll|se-resize|separate|slice|small-caps|small-caption|solid|space|square|start|static|status-bar|step-end|step-start|steps|stretch|strict|sub|super|sw-resize|table-caption|table-cell|table-column-group|table-column|table-footer-group|table-header-group|table-row-group|table-row|table|tb-rl|text-after-edge|text-before-edge|text-bottom|text-size|text-top|text|thick|thin|transparent|underline|upper-alpha|upper-latin|upper-roman|uppercase|use-script|vertical-ideographic|vertical-text|visible|w-resize|wait|whitespace|z-index|zero",f=t.supportConstantColor="aqua|black|blue|fuchsia|gray|green|lime|maroon|navy|olive|orange|purple|red|silver|teal|white|yellow",l=t.supportConstantFonts="arial|century|comic|courier|garamond|georgia|helvetica|impact|lucida|symbol|system|tahoma|times|trebuchet|utopia|verdana|webdings|sans-serif|serif|monospace",c=t.numRe="\\-?(?:(?:[0-9]+)|(?:[0-9]*\\.[0-9]+))",h=t.pseudoElements="(\\:+)\\b(after|before|first-letter|first-line|moz-selection|selection)\\b",p=t.pseudoClasses="(:)\\b(active|checked|disabled|empty|enabled|first-child|first-of-type|focus|hover|indeterminate|invalid|last-child|last-of-type|link|not|nth-child|nth-last-child|nth-last-of-type|nth-of-type|only-child|only-of-type|required|root|target|valid|visited)\\b",d=function(){var e=this.createKeywordMapper({"support.function":u,"support.constant":a,"support.type":o,"support.constant.color":f,"support.constant.fonts":l},"text",!0);this.$rules={start:[{token:"comment",regex:"\\/\\*",push:"comment"},{token:"paren.lparen",regex:"\\{",push:"ruleset"},{token:"string",regex:"@.*?{",push:"media"},{token:"keyword",regex:"#[a-z0-9-_]+"},{token:"variable",regex:"\\.[a-z0-9-_]+"},{token:"string",regex:":[a-z0-9-_]+"},{token:"constant",regex:"[a-z0-9-_]+"},{caseInsensitive:!0}],media:[{token:"comment",regex:"\\/\\*",push:"comment"},{token:"paren.lparen",regex:"\\{",push:"ruleset"},{token:"string",regex:"\\}",next:"pop"},{token:"keyword",regex:"#[a-z0-9-_]+"},{token:"variable",regex:"\\.[a-z0-9-_]+"},{token:"string",regex:":[a-z0-9-_]+"},{token:"constant",regex:"[a-z0-9-_]+"},{caseInsensitive:!0}],comment:[{token:"comment",regex:"\\*\\/",next:"pop"},{defaultToken:"comment"}],ruleset:[{token:"paren.rparen",regex:"\\}",next:"pop"},{token:"comment",regex:"\\/\\*",push:"comment"},{token:"string",regex:'["](?:(?:\\\\.)|(?:[^"\\\\]))*?["]'},{token:"string",regex:"['](?:(?:\\\\.)|(?:[^'\\\\]))*?[']"},{token:["constant.numeric","keyword"],regex:"("+c+")(ch|cm|deg|em|ex|fr|gd|grad|Hz|in|kHz|mm|ms|pc|pt|px|rad|rem|s|turn|vh|vm|vw|%)"},{token:"constant.numeric",regex:c},{token:"constant.numeric",regex:"#[a-f0-9]{6}"},{token:"constant.numeric",regex:"#[a-f0-9]{3}"},{token:["punctuation","entity.other.attribute-name.pseudo-element.css"],regex:h},{token:["punctuation","entity.other.attribute-name.pseudo-class.css"],regex:p},{token:["support.function","string","support.function"],regex:"(url\\()(.*)(\\))"},{token:e,regex:"\\-?[a-zA-Z_][a-zA-Z0-9_\\-]*"},{caseInsensitive:!0}]},this.normalizeRules()};r.inherits(d,s),t.CssHighlightRules=d}),define("ace/mode/behaviour/css",["require","exports","module","ace/lib/oop","ace/mode/behaviour","ace/mode/behaviour/cstyle","ace/token_iterator"],function(e,t,n){var r=e("../../lib/oop"),i=e("../behaviour").Behaviour,s=e("./cstyle").CstyleBehaviour,o=e("../../token_iterator").TokenIterator,u=function(){this.inherit(s),this.add("colon","insertion",function(e,t,n,r,i){if(i===":"){var s=n.getCursorPosition(),u=new o(r,s.row,s.column),a=u.getCurrentToken();a&&a.value.match(/\s+/)&&(a=u.stepBackward());if(a&&a.type==="support.type"){var f=r.doc.getLine(s.row),l=f.substring(s.column,s.column+1);if(l===":")return{text:"",selection:[1,1]};if(!f.substring(s.column).match(/^\s*;/))return{text:":;",selection:[1,1]}}}}),this.add("colon","deletion",function(e,t,n,r,i){var s=r.doc.getTextRange(i);if(!i.isMultiLine()&&s===":"){var u=n.getCursorPosition(),a=new o(r,u.row,u.column),f=a.getCurrentToken();f&&f.value.match(/\s+/)&&(f=a.stepBackward());if(f&&f.type==="support.type"){var l=r.doc.getLine(i.start.row),c=l.substring(i.end.column,i.end.column+1);if(c===";")return i.end.column++,i}}}),this.add("semicolon","insertion",function(e,t,n,r,i){if(i===";"){var s=n.getCursorPosition(),o=r.doc.getLine(s.row),u=o.substring(s.column,s.column+1);if(u===";")return{text:"",selection:[1,1]}}})};r.inherits(u,s),t.CssBehaviour=u}),define("ace/mode/html_highlight_rules",["require","exports","module","ace/lib/oop","ace/lib/lang","ace/mode/css_highlight_rules","ace/mode/javascript_highlight_rules","ace/mode/xml_highlight_rules"],function(e,t,n){var r=e("../lib/oop"),i=e("../lib/lang"),s=e("./css_highlight_rules").CssHighlightRules,o=e("./javascript_highlight_rules").JavaScriptHighlightRules,u=e("./xml_highlight_rules").XmlHighlightRules,a=i.createMap({a:"anchor",button:"form",form:"form",img:"image",input:"form",label:"form",script:"script",select:"form",textarea:"form",style:"style",table:"table",tbody:"table",td:"table",tfoot:"table",th:"table",tr:"table"}),f=function(){u.call(this),this.addRules({attributes:[{include:"space"},{token:"entity.other.attribute-name",regex:"[-_a-zA-Z0-9:]+"},{token:"keyword.operator.separator",regex:"=",push:[{include:"space"},{token:"string",regex:"[^<>='\"`\\s]+",next:"pop"},{token:"empty",regex:"",next:"pop"}]},{include:"string"}],tag:[{token:function(e,t){var n=a[t];return["meta.tag.punctuation.begin","meta.tag.name"+(n?"."+n:"")]},regex:"(<)([-_a-zA-Z0-9:]+)",next:"start_tag_stuff"},{token:function(e,t){var n=a[t];return["meta.tag.punctuation.begin","meta.tag.name"+(n?"."+n:"")]},regex:"(</)([-_a-zA-Z0-9:]+)",next:"end_tag_stuff"}],start_tag_stuff:[{include:"attributes"},{token:"meta.tag.punctuation.end",regex:"/?>",next:"start"}],end_tag_stuff:[{include:"space"},{token:"meta.tag.punctuation.end",regex:">",next:"start"}]}),this.embedTagRules(s,"css-","style"),this.embedTagRules(o,"js-","script"),this.constructor===f&&this.normalizeRules()};r.inherits(f,u),t.HtmlHighlightRules=f}),define("ace/mode/xml_highlight_rules",["require","exports","module","ace/lib/oop","ace/mode/xml_util","ace/mode/text_highlight_rules"],function(e,t,n){var r=e("../lib/oop"),i=e("./xml_util"),s=e("./text_highlight_rules").TextHighlightRules,o=function(e){this.$rules={start:[{token:"punctuation.string.begin",regex:"<\\!\\[CDATA\\[",next:"cdata"},{token:["punctuation.instruction.begin","keyword.instruction"],regex:"(<\\?)(xml)(?=[\\s])",next:"xml_declaration"},{token:["punctuation.instruction.begin","keyword.instruction"],regex:"(<\\?)([-_a-zA-Z0-9]+)",next:"instruction"},{token:"comment",regex:"<\\!--",next:"comment"},{token:["punctuation.doctype.begin","meta.tag.doctype"],regex:"(<\\!)(DOCTYPE)(?=[\\s])",next:"doctype"},{include:"tag"},{include:"reference"}],xml_declaration:[{include:"attributes"},{include:"instruction"}],instruction:[{token:"punctuation.instruction.end",regex:"\\?>",next:"start"}],doctype:[{include:"space"},{include:"string"},{token:"punctuation.doctype.end",regex:">",next:"start"},{token:"xml-pe",regex:"[-_a-zA-Z0-9:]+"},{token:"punctuation.begin",regex:"\\[",push:"declarations"}],declarations:[{token:"text",regex:"\\s+"},{token:"punctuation.end",regex:"]",next:"pop"},{token:["punctuation.begin","keyword"],regex:"(<\\!)([-_a-zA-Z0-9]+)",push:[{token:"text",regex:"\\s+"},{token:"punctuation.end",regex:">",next:"pop"},{include:"string"}]}],cdata:[{token:"string.end",regex:"\\]\\]>",next:"start"},{token:"text",regex:"\\s+"},{token:"text",regex:"(?:[^\\]]|\\](?!\\]>))+"}],comment:[{token:"comment",regex:"-->",next:"start"},{defaultToken:"comment"}],tag:[{token:["meta.tag.punctuation.begin","meta.tag.name"],regex:"(<)((?:[-_a-zA-Z0-9]+:)?[-_a-zA-Z0-9]+)",next:[{include:"attributes"},{token:"meta.tag.punctuation.end",regex:"/?>",next:"start"}]},{token:["meta.tag.punctuation.begin","meta.tag.name"],regex:"(</)((?:[-_a-zA-Z0-9]+:)?[-_a-zA-Z0-9]+)",next:[{include:"space"},{token:"meta.tag.punctuation.end",regex:">",next:"start"}]}],space:[{token:"text",regex:"\\s+"}],reference:[{token:"constant.language.escape",regex:"(?:&#[0-9]+;)|(?:&#x[0-9a-fA-F]+;)|(?:&[a-zA-Z0-9_:\\.-]+;)"},{token:"invalid.illegal",regex:"&"}],string:[{token:"string",regex:"'",push:"qstring_inner"},{token:"string",regex:'"',push:"qqstring_inner"}],qstring_inner:[{token:"string",regex:"'",next:"pop"},{include:"reference"},{defaultToken:"string"}],qqstring_inner:[{token:"string",regex:'"',next:"pop"},{include:"reference"},{defaultToken:"string"}],attributes:[{token:"entity.other.attribute-name",regex:"(?:[-_a-zA-Z0-9]+:)?[-_a-zA-Z0-9]+"},{token:"keyword.operator.separator",regex:"="},{include:"space"},{include:"string"}]},this.constructor===o&&this.normalizeRules()};(function(){this.embedTagRules=function(e,t,n){this.$rules.tag.unshift({token:["meta.tag.punctuation.begin","meta.tag.name."+n],regex:"(<)("+n+")",next:[{include:"space"},{include:"attributes"},{token:"meta.tag.punctuation.end",regex:"/?>",next:t+"start"}]}),this.$rules[n+"-end"]=[{include:"space"},{token:"meta.tag.punctuation.end",regex:">",next:"start",onMatch:function(e,t,n){return n.splice(0),this.token}}],this.embedRules(e,t,[{token:["meta.tag.punctuation.begin","meta.tag.name."+n],regex:"(</)("+n+")",next:n+"-end"},{token:"string.begin",regex:"<\\!\\[CDATA\\["},{token:"string.end",regex:"\\]\\]>"}])}}).call(s.prototype),r.inherits(o,s),t.XmlHighlightRules=o}),define("ace/mode/xml_util",["require","exports","module"],function(e,t,n){function r(e){return[{token:"string",regex:'"',next:e+"_qqstring"},{token:"string",regex:"'",next:e+"_qstring"}]}function i(e,t){return[{token:"string",regex:e,next:t},{token:"constant.language.escape",regex:"(?:&#[0-9]+;)|(?:&#x[0-9a-fA-F]+;)|(?:&[a-zA-Z0-9_:\\.-]+;)"},{defaultToken:"string"}]}t.tag=function(e,t,n,s){e[t]=[{token:"text",regex:"\\s+"},{token:s?function(e){return s[e]?"meta.tag.tag-name."+s[e]:"meta.tag.tag-name"}:"meta.tag.tag-name",regex:"[-_a-zA-Z0-9:]+",next:t+"_embed_attribute_list"},{token:"empty",regex:"",next:t+"_embed_attribute_list"}],e[t+"_qstring"]=i("'",t+"_embed_attribute_list"),e[t+"_qqstring"]=i('"',t+"_embed_attribute_list"),e[t+"_embed_attribute_list"]=[{token:"meta.tag.r",regex:"/?>",next:n},{token:"keyword.operator",regex:"="},{token:"entity.other.attribute-name",regex:"[-_a-zA-Z0-9:]+"},{token:"constant.numeric",regex:"[+-]?\\d+(?:(?:\\.\\d*)?(?:[eE][+-]?\\d+)?)?\\b"},{token:"text",regex:"\\s+"}].concat(r(t))}}),define("ace/mode/behaviour/html",["require","exports","module","ace/lib/oop","ace/mode/behaviour/xml","ace/mode/behaviour/cstyle","ace/token_iterator"],function(e,t,n){function a(e,t){var n=e.type.split(".");return t.split(".").every(function(e){return n.indexOf(e)!==-1})}var r=e("../../lib/oop"),i=e("../behaviour/xml").XmlBehaviour,s=e("./cstyle").CstyleBehaviour,o=e("../../token_iterator").TokenIterator,u=["area","base","br","col","command","embed","hr","img","input","keygen","link","meta","param","source","track","wbr"],f=function(){this.inherit(i),this.add("autoclosing","insertion",function(e,t,n,r,i){if(i==">"){var s=n.getCursorPosition(),f=new o(r,s.row,s.column),l=f.getCurrentToken();if(l&&a(l,"string")&&f.getCurrentTokenColumn()+l.value.length>s.column)return;var c=!1;if(!l||!a(l,"meta.tag")&&(!a(l,"text")||!l.value.match("/"))){do l=f.stepBackward();while(l&&(a(l,"string")||a(l,"keyword.operator")||a(l,"entity.attribute-name")||a(l,"text")))}else c=!0;if(!l||!a(l,"meta.tag.name")||f.stepBackward().value.match("/"))return;var h=l.value;if(c)var h=h.substring(0,s.column-l.start);if(u.indexOf(h)!==-1)return;return{text:"></"+h+">",selection:[1,1]}}})};r.inherits(f,i),t.HtmlBehaviour=f}),define("ace/mode/behaviour/xml",["require","exports","module","ace/lib/oop","ace/mode/behaviour","ace/mode/behaviour/cstyle","ace/token_iterator"],function(e,t,n){function u(e,t){var n=e.type.split(".");return t.split(".").every(function(e){return n.indexOf(e)!==-1})}var r=e("../../lib/oop"),i=e("../behaviour").Behaviour,s=e("./cstyle").CstyleBehaviour,o=e("../../token_iterator").TokenIterator,a=function(){this.inherit(s,["string_dquotes"]),this.add("autoclosing","insertion",function(e,t,n,r,i){if(i==">"){var s=n.getCursorPosition(),a=new o(r,s.row,s.column),f=a.getCurrentToken();if(f&&u(f,"string")&&a.getCurrentTokenColumn()+f.value.length>s.column)return;var l=!1;if(!f||!u(f,"meta.tag")&&(!u(f,"text")||!f.value.match("/"))){do f=a.stepBackward();while(f&&(u(f,"string")||u(f,"keyword.operator")||u(f,"entity.attribute-name")||u(f,"text")))}else l=!0;if(!f||!u(f,"meta.tag.name")||a.stepBackward().value.match("/"))return;var c=f.value;if(l)var c=c.substring(0,s.column-f.start);return{text:"></"+c+">",selection:[1,1]}}}),this.add("autoindent","insertion",function(e,t,n,r,i){if(i=="\n"){var s=n.getCursorPosition(),o=r.getLine(s.row),u=o.substring(s.column,s.column+2);if(u=="</"){var a=this.$getIndent(o),f=a+r.getTabString();return{text:"\n"+f+"\n"+a,selection:[1,f.length,1,f.length]}}}})};r.inherits(a,i),t.XmlBehaviour=a}),define("ace/mode/folding/html",["require","exports","module","ace/lib/oop","ace/mode/folding/mixed","ace/mode/folding/xml","ace/mode/folding/cstyle"],function(e,t,n){var r=e("../../lib/oop"),i=e("./mixed").FoldMode,s=e("./xml").FoldMode,o=e("./cstyle").FoldMode,u=t.FoldMode=function(){i.call(this,new s({area:1,base:1,br:1,col:1,command:1,embed:1,hr:1,img:1,input:1,keygen:1,link:1,meta:1,param:1,source:1,track:1,wbr:1,li:1,dt:1,dd:1,p:1,rt:1,rp:1,optgroup:1,option:1,colgroup:1,td:1,th:1}),{"js-":new o,"css-":new o})};r.inherits(u,i)}),define("ace/mode/folding/mixed",["require","exports","module","ace/lib/oop","ace/mode/folding/fold_mode"],function(e,t,n){var r=e("../../lib/oop"),i=e("./fold_mode").FoldMode,s=t.FoldMode=function(e,t){this.defaultMode=e,this.subModes=t};r.inherits(s,i),function(){this.$getMode=function(e){typeof e!="string"&&(e=e[0]);for(var t in this.subModes)if(e.indexOf(t)===0)return this.subModes[t];return null},this.$tryMode=function(e,t,n,r){var i=this.$getMode(e);return i?i.getFoldWidget(t,n,r):""},this.getFoldWidget=function(e,t,n){return this.$tryMode(e.getState(n-1),e,t,n)||this.$tryMode(e.getState(n),e,t,n)||this.defaultMode.getFoldWidget(e,t,n)},this.getFoldWidgetRange=function(e,t,n){var r=this.$getMode(e.getState(n-1));if(!r||!r.getFoldWidget(e,t,n))r=this.$getMode(e.getState(n));if(!r||!r.getFoldWidget(e,t,n))r=this.defaultMode;return r.getFoldWidgetRange(e,t,n)}}.call(s.prototype)}),define("ace/mode/folding/xml",["require","exports","module","ace/lib/oop","ace/lib/lang","ace/range","ace/mode/folding/fold_mode","ace/token_iterator"],function(e,t,n){var r=e("../../lib/oop"),i=e("../../lib/lang"),s=e("../../range").Range,o=e("./fold_mode").FoldMode,u=e("../../token_iterator").TokenIterator,a=t.FoldMode=function(e){o.call(this),this.voidElements=e||{}};r.inherits(a,o),function(){this.getFoldWidget=function(e,t,n){var r=this._getFirstTagInLine(e,n);return r.closing?t=="markbeginend"?"end":"":!r.tagName||this.voidElements[r.tagName.toLowerCase()]?"":r.selfClosing?"":r.value.indexOf("/"+r.tagName)!==-1?"":"start"},this._getFirstTagInLine=function(e,t){var n=e.getTokens(t),r="";for(var s=0;s<n.length;s++){var o=n[s];o.type.lastIndexOf("meta.tag",0)===0?r+=o.value:r+=i.stringRepeat(" ",o.value.length)}return this._parseTag(r)},this.tagRe=/^(\s*)(<?(\/?)([-_a-zA-Z0-9:!]*)\s*(\/?)>?)/,this._parseTag=function(e){var t=e.match(this.tagRe),n=0;return{value:e,match:t?t[2]:"",closing:t?!!t[3]:!1,selfClosing:t?!!t[5]||t[2]=="/>":!1,tagName:t?t[4]:"",column:t[1]?n+t[1].length:n}},this._readTagForward=function(e){var t=e.getCurrentToken();if(!t)return null;var n="",r;do if(t.type.lastIndexOf("meta.tag",0)===0){if(!r)var r={row:e.getCurrentTokenRow(),column:e.getCurrentTokenColumn()};n+=t.value;if(n.indexOf(">")!==-1){var i=this._parseTag(n);return i.start=r,i.end={row:e.getCurrentTokenRow(),column:e.getCurrentTokenColumn()+t.value.length},e.stepForward(),i}}while(t=e.stepForward());return null},this._readTagBackward=function(e){var t=e.getCurrentToken();if(!t)return null;var n="",r;do if(t.type.lastIndexOf("meta.tag",0)===0){r||(r={row:e.getCurrentTokenRow(),column:e.getCurrentTokenColumn()+t.value.length}),n=t.value+n;if(n.indexOf("<")!==-1){var i=this._parseTag(n);return i.end=r,i.start={row:e.getCurrentTokenRow(),column:e.getCurrentTokenColumn()},e.stepBackward(),i}}while(t=e.stepBackward());return null},this._pop=function(e,t){while(e.length){var n=e[e.length-1];if(!t||n.tagName==t.tagName)return e.pop();if(this.voidElements[t.tagName])return;if(this.voidElements[n.tagName]){e.pop();continue}return null}},this.getFoldWidgetRange=function(e,t,n){var r=this._getFirstTagInLine(e,n);if(!r.match)return null;var i=r.closing||r.selfClosing,o=[],a;if(!i){var f=new u(e,n,r.column),l={row:n,column:r.column+r.tagName.length+2};while(a=this._readTagForward(f)){if(a.selfClosing){if(!o.length)return a.start.column+=a.tagName.length+2,a.end.column-=2,s.fromPoints(a.start,a.end);continue}if(a.closing){this._pop(o,a);if(o.length==0)return s.fromPoints(l,a.start)}else o.push(a)}}else{var f=new u(e,n,r.column+r.match.length),c={row:n,column:r.column};while(a=this._readTagBackward(f)){if(a.selfClosing){if(!o.length)return a.start.column+=a.tagName.length+2,a.end.column-=2,s.fromPoints(a.start,a.end);continue}if(!a.closing){this._pop(o,a);if(o.length==0)return a.start.column+=a.tagName.length+2,s.fromPoints(a.start,c)}else o.push(a)}}}}.call(a.prototype)}),define("ace/mode/html_completions",["require","exports","module","ace/token_iterator"],function(e,t,n){function f(e,t){var n=e.type.split(".");return t.split(".").every(function(e){return n.indexOf(e)!==-1})}function l(e,t){var n=new r(e,t.row,t.column),i=n.getCurrentToken();if(!i||!f(i,"tag")&&(!f(i,"text")||!i.value.match("/")))do i=n.stepBackward();while(i&&(f(i,"string")||f(i,"operator")||f(i,"attribute-name")||f(i,"text")));if(i&&f(i,"tag-name")&&!n.stepBackward().value.match("/"))return i.value}var r=e("../token_iterator").TokenIterator,i=["accesskey","class","contenteditable","contextmenu","dir","draggable","dropzone","hidden","id","lang","spellcheck","style","tabindex","title","translate"],s=["onabort","onblur","oncancel","oncanplay","oncanplaythrough","onchange","onclick","onclose","oncontextmenu","oncuechange","ondblclick","ondrag","ondragend","ondragenter","ondragleave","ondragover","ondragstart","ondrop","ondurationchange","onemptied","onended","onerror","onfocus","oninput","oninvalid","onkeydown","onkeypress","onkeyup","onload","onloadeddata","onloadedmetadata","onloadstart","onmousedown","onmousemove","onmouseout","onmouseover","onmouseup","onmousewheel","onpause","onplay","onplaying","onprogress","onratechange","onreset","onscroll","onseeked","onseeking","onselect","onshow","onstalled","onsubmit","onsuspend","ontimeupdate","onvolumechange","onwaiting"],o=i.concat(s),u={html:["manifest"],head:[],title:[],base:["href","target"],link:["href","hreflang","rel","media","type","sizes"],meta:["http-equiv","name","content","charset"],style:["type","media","scoped"],script:["charset","type","src","defer","async"],noscript:["href"],body:["onafterprint","onbeforeprint","onbeforeunload","onhashchange","onmessage","onoffline","onpopstate","onredo","onresize","onstorage","onundo","onunload"],section:[],nav:[],article:["pubdate"],aside:[],h1:[],h2:[],h3:[],h4:[],h5:[],h6:[],header:[],footer:[],address:[],main:[],p:[],hr:[],pre:[],blockquote:["cite"],ol:["start","reversed"],ul:[],li:["value"],dl:[],dt:[],dd:[],figure:[],figcaption:[],div:[],a:["href","target","ping","rel","media","hreflang","type"],em:[],strong:[],small:[],s:[],cite:[],q:["cite"],dfn:[],abbr:[],data:[],time:["datetime"],code:[],"var":[],samp:[],kbd:[],sub:[],sup:[],i:[],b:[],u:[],mark:[],ruby:[],rt:[],rp:[],bdi:[],bdo:[],span:[],br:[],wbr:[],ins:["cite","datetime"],del:["cite","datetime"],img:["alt","src","height","width","usemap","ismap"],iframe:["name","src","height","width","sandbox","seamless"],embed:["src","height","width","type"],object:["param","data","type","height","width","usemap","name","form","classid"],param:["name","value"],video:["src","autobuffer","autoplay","loop","controls","width","height","poster"],audio:["src","autobuffer","autoplay","loop","controls"],source:["src","type","media"],track:["kind","src","srclang","label","default"],canvas:["width","height"],map:["name"],area:["shape","coords","href","hreflang","alt","target","media","rel","ping","type"],svg:[],math:[],table:["summary"],caption:[],colgroup:["span"],col:["span"],tbody:[],thead:[],tfoot:[],tr:[],td:["headers","rowspan","colspan"],th:["headers","rowspan","colspan","scope"],form:["accept-charset","action","autocomplete","enctype","method","name","novalidate","target"],fieldset:["disabled","form","name"],legend:[],label:["form","for"],input:["type","accept","alt","autocomplete","checked","disabled","form","formaction","formenctype","formmethod","formnovalidate","formtarget","height","list","max","maxlength","min","multiple","pattern","placeholder","readonly","required","size","src","step","width","files","value"],button:["autofocus","disabled","form","formaction","formenctype","formmethod","formnovalidate","formtarget","name","value","type"],select:["autofocus","disabled","form","multiple","name","size"],datalist:[],optgroup:["disabled","label"],option:["disabled","selected","label","value"],textarea:["autofocus","disabled","form","maxlength","name","placeholder","readonly","required","rows","cols","wrap"],keygen:["autofocus","challenge","disabled","form","keytype","name"],output:["for","form","name"],progress:["value","max"],meter:["value","min","max","low","high","optimum"],details:["open"],summary:[],command:["type","label","icon","disabled","checked","radiogroup","command"],menu:["type","label"],dialog:["open"]},a=Object.keys(u),c=function(){};(function(){this.getCompletions=function(e,t,n,r){var i=t.getTokenAt(n.row,n.column);return i?f(i,"tag-name")||i.value=="<"&&f(i,"text")?this.getTagCompletions(e,t,n,r):f(i,"text")||f(i,"attribute-name")?this.getAttributeCompetions(e,t,n,r):[]:[]},this.getTagCompletions=function(e,t,n,r){var i=a;return r&&(i=i.filter(function(e){return e.indexOf(r)===0})),i.map(function(e){return{value:e,meta:"tag"}})},this.getAttributeCompetions=function(e,t,n,r){var i=l(t,n);if(!i)return[];var s=o;return i in u&&(s=s.concat(u[i])),r&&(s=s.filter(function(e){return e.indexOf(r)===0})),s.map(function(e){return{caption:e,snippet:e+'="$0"',meta:"attribute"}})}}).call(c.prototype),t.HtmlCompletions=c})
 
 }
 Viper.build = true;
