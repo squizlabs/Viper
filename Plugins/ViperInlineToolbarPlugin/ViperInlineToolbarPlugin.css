@@ -36,6 +36,11 @@
     -ms-transform-origin: 0 -10% 0;
 }
 
+.Viper-browserVer-msie8 .ViperITP,
+.Viper-browserVer-msie9 .ViperITP {
+  display: none;
+}
+
 .ViperITP.device-ipad {
 /*     font-size: 13px; */
 }
@@ -104,6 +109,11 @@
     transform:rotateX(0deg);
     -webkit-transform:rotateX(0deg);
     -ms-transform:rotateX(0deg);
+}
+
+.Viper-browserVer-msie8 .ViperITP.Viper-visible,
+.Viper-browserVer-msie9 .ViperITP.Viper-visible {
+  display: block;
 }
 
 .ViperITP-tools {
