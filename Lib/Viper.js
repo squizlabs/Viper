@@ -198,7 +198,7 @@ Viper.prototype = {
             src  = lang.src;
         } else {
             code = lang;
-            src  = this.getViperPath().replace(/\/build$/, '') + '/build/Translation/' + code + '.js';
+            src  = this.getViperPath().replace(/\/$/, '') + '/Translation/' + code + '.js';
         }
 
         if (code === 'en') {
