@@ -120,7 +120,7 @@ ViperTools.prototype = {
 
         if (titleAttr) {
             if (disabled === true) {
-                titleAttr = titleAttr + ' [Not available]';
+                titleAttr = titleAttr + ' [' + _('Not available') + ']';
             }
 
             button.setAttribute('title', titleAttr);
