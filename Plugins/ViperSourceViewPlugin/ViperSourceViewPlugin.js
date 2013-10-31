@@ -28,6 +28,7 @@ function ViperSourceViewPlugin(viper)
     this._ignoreUpdate       = false;
     this._ignoreSourceUpdate = false;
     this._newWindowContents  = '';
+    this._jqueryURL          = null;
 }
 
 ViperSourceViewPlugin.prototype = {
@@ -66,6 +67,14 @@ ViperSourceViewPlugin.prototype = {
         this.viper.registerCallback(['Viper:editableElementChanged', 'Viper:disabled'], 'ViperSourceViewPlugin', function(nodes) {
             self.hideSourceView();
         });
+
+    },
+
+    setSettings: function(settings)
+    {
+        if (settings.jqueryURL) {
+            this._jqueryURL = settings.jqueryURL;
+        }
 
     },
 
@@ -530,7 +539,12 @@ ViperSourceViewPlugin.prototype = {
         if (!path) {
             var viperPath = this.getViperURL();
             content += '<link href="' + viperPath + 'viper.css" media="screen" rel="stylesheet" />';
-            content += '<script src="' + viperPath + 'viper.js" type="text/javascript" charset="utf-8"></script></head>';
+
+            if (this._jqueryURL !== null) {
+                content += '<script src="' + this._jqueryURL + '" type="text/javascript" charset="utf-8"></script>';
+            }
+
+            content += '<script src="' + viperPath + 'viper.js" type="text/javascript" charset="utf-8"></script>';
         } else {
             content += '<link href="' + path + '/Css/viper_tools.css" media="screen" rel="stylesheet" />';
             content += '<link href="' + path + '/Plugins/ViperSourceViewPlugin/ViperSourceViewPlugin.css" media="screen" rel="stylesheet" />';
@@ -539,6 +553,7 @@ ViperSourceViewPlugin.prototype = {
             content += '<script src="' + path + '/Plugins/ViperSourceViewPlugin/Ace/src/mode-html.js" type="text/javascript" charset="utf-8"></script>';
         }
 
+        content += '</head>';
         content += '<body id="ViperSourceViewPlugin-window" class="ViperSourceViewPlugin-window">';
         content += '<div class="Viper-popup Viper-themeDark VSVP-popup">';
         content += '<div class="VSVP-confirmPanel Viper-popup-top">';
