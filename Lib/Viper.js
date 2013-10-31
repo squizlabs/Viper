@@ -507,6 +507,8 @@ Viper.prototype = {
      */
      setEnabled: function(enabled)
      {
+        this._viperRange = null;
+
         if (enabled === true && this.enabled === false) {
             this._addEvents();
             this.enabled = true;
