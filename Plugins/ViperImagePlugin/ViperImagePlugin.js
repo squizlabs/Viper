@@ -38,6 +38,10 @@ ViperImagePlugin.prototype = {
             self._ieImageResize = null;
 
             if (dfx.isTag(target, 'img') === true) {
+                if (self.viper.isBrowser('firefox') === true) {
+                    self.viper.focus();
+                }
+
                 dfx.preventDefault(e);
                 self.hideImageResizeHandles();
                 self.showImageResizeHandles(target);
@@ -211,8 +215,6 @@ ViperImagePlugin.prototype = {
 
         this.viper.removeBookmark(bookmark);
 
-        //range.selectNode(img);
-        //ViperSelection.addRange(range);
         ViperSelection.removeAllRanges();
 
         this.viper.fireSelectionChanged();
@@ -236,6 +238,18 @@ ViperImagePlugin.prototype = {
             } else if (image.previousSibling && image.previousSibling.nodeType === dfx.TEXT_NODE) {
                 node  = image.previousSibling;
                 start = node.data.length;
+            } else if (image.parentNode && dfx.isTag(image.parentNode, 'a') === true) {
+                if (image.parentNode.nextSibling && image.parentNode.nextSibling.nodeType === dfx.TEXT_NODE) {
+                    node = image.parentNode.nextSibling;
+                } else if (image.parentNode.previousSibling && image.parentNode.previousSibling.nodeType === dfx.TEXT_NODE) {
+                    node = image.parentNode.previousSibling;
+                    start = image.parentNode.previousSibling.data.length;
+                } else {
+                    node = document.createTextNode(' ');
+                    dfx.insertAfter(image.parentNode, node);
+                }
+
+                dfx.remove(image.parentNode);
             } else {
                 node = document.createTextNode(' ');
                 dfx.insertAfter(image, node);
