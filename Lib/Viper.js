@@ -515,6 +515,12 @@ Viper.prototype = {
             this.element.setAttribute('contentEditable', true);
             dfx.setStyle(this.element, 'outline', 'none');
 
+            if (this.isBrowser('msie') === true) {
+                this.element.focus();
+            } else {
+                this.focus();
+            }
+
             var range = this.getCurrentRange();
             if (this.rangeInViperBounds(range) === false) {
                 this.initEditableElement();
@@ -648,6 +654,7 @@ Viper.prototype = {
         if (this._registeredElements.inArray(elem) === false) {
             this.registerEditableElement(elem);
         }
+
 
         this.setEnabled(true);
         this.ViperHistoryManager.setActiveElement(elem);
