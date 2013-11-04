@@ -38,10 +38,6 @@ ViperImagePlugin.prototype = {
             self._ieImageResize = null;
 
             if (dfx.isTag(target, 'img') === true) {
-                if (self.viper.isBrowser('firefox') === true) {
-                    self.viper.focus();
-                }
-
                 dfx.preventDefault(e);
                 self.hideImageResizeHandles();
                 self.showImageResizeHandles(target);
