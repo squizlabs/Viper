@@ -441,11 +441,19 @@ Viper.prototype = {
     
      setEnabled: function(enabled)
      {
+        this._viperRange = null;
+
         if (enabled === true && this.enabled === false) {
             this._addEvents();
             this.enabled = true;
             this.element.setAttribute('contentEditable', true);
             dfx.setStyle(this.element, 'outline', 'none');
+
+            if (this.isBrowser('msie') === true) {
+                this.element.focus();
+            } else {
+                this.focus();
+            }
 
             var range = this.getCurrentRange();
             if (this.rangeInViperBounds(range) === false) {
@@ -566,6 +574,7 @@ Viper.prototype = {
         if (this._registeredElements.inArray(elem) === false) {
             this.registerEditableElement(elem);
         }
+
 
         this.setEnabled(true);
         this.ViperHistoryManager.setActiveElement(elem);
@@ -18636,8 +18645,6 @@ ViperImagePlugin.prototype = {
 
         this.viper.removeBookmark(bookmark);
 
-        //range.selectNode(img);
-        //ViperSelection.addRange(range);
         ViperSelection.removeAllRanges();
 
         this.viper.fireSelectionChanged();
@@ -18661,6 +18668,18 @@ ViperImagePlugin.prototype = {
             } else if (image.previousSibling && image.previousSibling.nodeType === dfx.TEXT_NODE) {
                 node  = image.previousSibling;
                 start = node.data.length;
+            } else if (image.parentNode && dfx.isTag(image.parentNode, 'a') === true) {
+                if (image.parentNode.nextSibling && image.parentNode.nextSibling.nodeType === dfx.TEXT_NODE) {
+                    node = image.parentNode.nextSibling;
+                } else if (image.parentNode.previousSibling && image.parentNode.previousSibling.nodeType === dfx.TEXT_NODE) {
+                    node = image.parentNode.previousSibling;
+                    start = image.parentNode.previousSibling.data.length;
+                } else {
+                    node = document.createTextNode(' ');
+                    dfx.insertAfter(image.parentNode, node);
+                }
+
+                dfx.remove(image.parentNode);
             } else {
                 node = document.createTextNode(' ');
                 dfx.insertAfter(image, node);
@@ -25384,6 +25403,7 @@ function ViperSourceViewPlugin(viper)
     this._ignoreUpdate       = false;
     this._ignoreSourceUpdate = false;
     this._newWindowContents  = '';
+    this._jqueryURL          = null;
 }
 
 ViperSourceViewPlugin.prototype = {
@@ -25422,6 +25442,14 @@ ViperSourceViewPlugin.prototype = {
         this.viper.registerCallback(['Viper:editableElementChanged', 'Viper:disabled'], 'ViperSourceViewPlugin', function(nodes) {
             self.hideSourceView();
         });
+
+    },
+
+    setSettings: function(settings)
+    {
+        if (settings.jqueryURL) {
+            this._jqueryURL = settings.jqueryURL;
+        }
 
     },
 
@@ -25886,7 +25914,12 @@ ViperSourceViewPlugin.prototype = {
         if (!path) {
             var viperPath = this.getViperURL();
             content += '<link href="' + viperPath + 'viper.css" media="screen" rel="stylesheet" />';
-            content += '<script src="' + viperPath + 'viper.js" type="text/javascript" charset="utf-8"></script></head>';
+
+            if (this._jqueryURL !== null) {
+                content += '<script src="' + this._jqueryURL + '" type="text/javascript" charset="utf-8"></script>';
+            }
+
+            content += '<script src="' + viperPath + 'viper.js" type="text/javascript" charset="utf-8"></script>';
         } else {
             content += '<link href="' + path + '/Css/viper_tools.css" media="screen" rel="stylesheet" />';
             content += '<link href="' + path + '/Plugins/ViperSourceViewPlugin/ViperSourceViewPlugin.css" media="screen" rel="stylesheet" />';
@@ -25895,6 +25928,7 @@ ViperSourceViewPlugin.prototype = {
             content += '<script src="' + path + '/Plugins/ViperSourceViewPlugin/Ace/src/mode-html.js" type="text/javascript" charset="utf-8"></script>';
         }
 
+        content += '</head>';
         content += '<body id="ViperSourceViewPlugin-window" class="ViperSourceViewPlugin-window">';
         content += '<div class="Viper-popup Viper-themeDark VSVP-popup">';
         content += '<div class="VSVP-confirmPanel Viper-popup-top">';
@@ -29920,7 +29954,7 @@ function ViperToolbarPlugin(viper)
     });
 
     this.viper.registerCallback('Viper:enabled', 'ViperToolbarPlugin', function(range) {
-            self._updateToolbar();
+        self._updateToolbar();
     });
 
     this.viper.registerCallback('Viper:disabled', 'ViperToolbarPlugin', function(range) {
