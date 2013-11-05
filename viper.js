@@ -22386,6 +22386,10 @@ ViperLinkPlugin.prototype = {
         this.viper.registerCallback('ViperToolbarPlugin:updateToolbar', 'ViperLinkPlugin', function(data) {
             var range = data.range;
 
+            if (self.viper.rangeInViperBounds(range) === false) {
+                return;
+            }
+
             var selectionHasLinks = self.selectionHasLinks(range);
             if (selectionHasLinks === true) {
                 tools.disableButton('insertLink');
