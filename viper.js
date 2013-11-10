@@ -3765,6 +3765,11 @@ Viper.prototype = {
 
     mouseDown: function(e)
     {
+        if (e.which === 3) {
+            this.fireCallbacks('Viper:rightMouseDown', e);
+            return false;
+        }
+
         var target = dfx.getMouseEventTarget(e);
         var inside = true;
 
@@ -3813,6 +3818,11 @@ Viper.prototype = {
 
     mouseUp: function(e)
     {
+        if (e.which === 3) {
+            this.fireCallbacks('Viper:rightMouseUp', e);
+            return false;
+        }
+
         if (this.fireCallbacks('Viper:mouseUp', e) === false) {
             dfx.preventDefault(e);
             return false;
@@ -19276,6 +19286,10 @@ ViperInlineToolbarPlugin.prototype = {
                 self._setCurrentLineageIndex(null);
             }
 
+        });
+
+        this.viper.registerCallback('Viper:rightMouseDown', 'ViperInlineToolbarPlugin', function() {
+            self.hideToolbar();
         });
 
         this.viper.registerCallback('Viper:getNodeSelection', 'ViperInlineToolbarPlugin', function(data) {
