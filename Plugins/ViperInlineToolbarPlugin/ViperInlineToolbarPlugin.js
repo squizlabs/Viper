@@ -48,6 +48,10 @@ ViperInlineToolbarPlugin.prototype = {
 
         });
 
+        this.viper.registerCallback('Viper:rightMouseDown', 'ViperInlineToolbarPlugin', function() {
+            self.hideToolbar();
+        });
+
         this.viper.registerCallback('Viper:getNodeSelection', 'ViperInlineToolbarPlugin', function(data) {
             var lineage         = self.getLineage();
             var currentLinIndex = self.getCurrentLineageIndex();
