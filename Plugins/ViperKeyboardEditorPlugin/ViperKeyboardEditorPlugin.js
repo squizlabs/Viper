@@ -714,7 +714,6 @@ ViperKeyboardEditorPlugin.prototype = {
                 range.collapsed === false
                 && range.startContainer !== range.endContainer
                 && range.startContainer.nodeType === dfx.TEXT_NODE
-                && range.endContainer.nodeType === dfx.TEXT_NODE
             ) {
                 // This is a selection on different text nodes. Check to see
                 // if these nodes are part of two different block elements.
@@ -744,13 +743,15 @@ ViperKeyboardEditorPlugin.prototype = {
                         // Now bring the contents of the next selectable to the
                         // start parent.
                         var nextSelectable = range.getNextContainer(range.startContainer, null, true);
-                        var nextParent     = dfx.getFirstBlockParent(nextSelectable);
+                        if (this.viper.isOutOfBounds(nextSelectable) === false) {
+                            var nextParent     = dfx.getFirstBlockParent(nextSelectable);
 
-                        while (nextParent.firstChild) {
-                            startParent.appendChild(nextParent.firstChild);
+                            while (nextParent.firstChild) {
+                                startParent.appendChild(nextParent.firstChild);
+                            }
+
+                            dfx.remove(nextParent);
                         }
-
-                        dfx.remove(nextParent);
                     } else {
                         // Same container just remove contents.
                         range.deleteContents();
