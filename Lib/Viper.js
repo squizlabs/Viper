@@ -534,6 +534,20 @@ Viper.prototype = {
             return self.keyDown(e);
         });
 
+        // This keydown event will make sure that any selection started outside of Viper element and ended inside
+        // Viper element is not going to trigger browser's 'back button'.
+        dfx.addEvent(Viper.document, 'keydown.' + namespace, function(e) {
+            if (e.which === 8 || e.which === 46) {
+                var range = self.getCurrentRange();
+                if (self.isOutOfBounds(range.startContainer) === true
+                    ^ self.isOutOfBounds(range.endContainer) === true
+                ) {
+                    dfx.preventDefault(e);
+                    return false;
+                }
+            }
+        });
+
         dfx.addEvent(elem, 'keyup.' + namespace, function(e) {
             return self.keyUp(e);
         });
