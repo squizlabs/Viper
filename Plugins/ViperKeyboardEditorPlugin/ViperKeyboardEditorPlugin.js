@@ -157,7 +157,6 @@ ViperKeyboardEditorPlugin.prototype = {
         this.viper.fireCallbacks('ViperKeyboardEditorPlugin:beforeEnter');
 
         var defaultTagName = this.viper.getDefaultBlockTag();
-
         var self = this;
 
         if (ViperChangeTracker.isTracking() !== true) {
@@ -192,6 +191,72 @@ ViperKeyboardEditorPlugin.prototype = {
                 // IE error catch...
                 return;
             }
+
+            // Break out of blockquote tag when enter is pressed twice at the start, end and middle of a P tag in a
+            // blockquote.
+            if (range.collapsed === true
+                && (startNode && startNode.nodeType === dfx.TEXT_NODE || dfx.isTag(startNode, 'br') === true)
+                && !startNode.previousSibling
+                && range.startOffset === 0
+                && dfx.getParents(startNode, 'blockquote', this.viper.getViperElement()).length > 0
+                && dfx.isTag(dfx.getFirstBlockParent(startNode), 'p') === true
+            ) {
+                // Make sure this is not the first P tag in a blockquote.
+                var parentPtag = dfx.getFirstBlockParent(startNode);
+                var prevTag    = parentPtag.previousSibling;
+                while (prevTag) {
+                    if (dfx.isBlockElement(prevTag) === true) {
+                        break;
+                    }
+
+                    prevTag = prevTag.previousSibling;
+                }
+
+                if (prevTag) {
+                    var parentBlockquote = dfx.getParents(parentPtag, 'blockquote', this.viper.getViperElement())[0];
+                    var newBlockquote    = parentBlockquote.cloneNode(false);
+
+                    // Move the sibliings after the current P tag to the new blockquote element.
+                    if (parentPtag.nextSibling) {
+                        // Do not move empty block elements.
+                        while (parentPtag.nextSibling) {
+                            if (this.isEmptyBlockElement(parentPtag.nextSibling) === true) {
+                                dfx.remove(parentPtag.nextSibling);
+                            } else {
+                                newBlockquote.appendChild(parentPtag.nextSibling);
+                            }
+                        }
+
+                        dfx.insertBefore(newBlockquote.firstChild, parentPtag);
+                    } else {
+                        newBlockquote.appendChild(parentPtag);
+                    }
+
+                    // If the current P tag is empty then remove it. This happens when the caret is at the end of a P
+                    // tag and enter is pressed twice.
+                    if (this.isEmptyBlockElement(parentPtag) === true) {
+                        dfx.remove(parentPtag);
+                    }
+
+                    // Final check to make sure that we do not create an empty blockquote element.
+                    dfx.removeEmptyNodes(newBlockquote);
+                    if (this.isEmptyBlockElement(newBlockquote) === false) {
+                        dfx.insertAfter(parentBlockquote, newBlockquote);
+                    }
+
+                    // Create a new P tag to be placed between two blockquotes.
+                    var midP = document.createElement('p');
+                    midP.appendChild(document.createElement('br'));
+                    dfx.insertAfter(parentBlockquote, midP);
+
+                    // Set the caret to the newly created P tag.
+                    range.selectNode(midP.firstChild);
+                    range.collapse(true);
+                    ViperSelection.addRange(range);
+                    this.viper.fireSelectionChanged();
+                    return false;
+                }
+            }//end if
 
             var firstBlock = dfx.getFirstBlockParent(endNode);
             if (range.collapsed === true
@@ -1424,6 +1489,39 @@ ViperKeyboardEditorPlugin.prototype = {
             dfx.insertBefore(elem, document.createTextNode("\n"));
             dfx.remove(elem);
         }
+
+    },
+
+    isEmptyBlockElement: function(element)
+    {
+        if (dfx.isBlockElement(element) === false) {
+            return false;
+        }
+
+        if (!element.firstChild) {
+            return true;
+        }
+
+        var brCount = 0;
+        for (var i = 0; i < element.childNodes.length; i++) {
+            var el = element.childNodes[i];
+            if (el.nodeType === dfx.TEXT_NODE) {
+                if (dfx.trim(el.data).length !== 0) {
+                    return false;
+                } else {
+                    // Ignore empty text nodes.
+                    continue;
+                }
+            } else if (dfx.isTag(el, 'br') === false) {
+                return false;
+            } else if (brCount !== 0) {
+                return false;
+            } else {
+                brCount++;
+            }
+        }
+
+        return true;
 
     }
 
