@@ -25,7 +25,7 @@ ViperAccessibilityPlugin_WCAG2_Principle1_Guideline1_1 = {
                 var altid      = null;
                 var titleid    = null;
                 var checkboxid = null;
-                checkboxid   = dfx.getUniqueId();
+                checkboxid   = ViperUtil.getUniqueId();
                 var checkbox = viper.ViperTools.createCheckbox(checkboxid, 'Image is decorative', (technique === 'H67.2'), function(checked) {
                     if (checked === true) {
                         viper.ViperTools.getItem(altid).disable();
@@ -37,11 +37,11 @@ ViperAccessibilityPlugin_WCAG2_Principle1_Guideline1_1 = {
                 });
                 editPanel.appendChild(checkbox);
 
-                altid   = dfx.getUniqueId();
+                altid   = ViperUtil.getUniqueId();
                 var alt = viper.ViperTools.createTextbox(altid, 'Alt', element.getAttribute('alt'));
                 editPanel.appendChild(alt);
 
-                titleid   = dfx.getUniqueId();
+                titleid   = ViperUtil.getUniqueId();
                 var title = viper.ViperTools.createTextbox(titleid, 'Title', element.getAttribute('title'));
                 editPanel.appendChild(title);
 
@@ -82,15 +82,15 @@ ViperAccessibilityPlugin_WCAG2_Principle1_Guideline1_1 = {
                     msg = 'Ensure the image\'s alt text describes the purpose or content of the image.';
                 }
 
-                if (dfx.isTag(element, 'a') === true) {
-                    element = dfx.getTag('img', element)[0];
+                if (ViperUtil.isTag(element, 'a') === true) {
+                    element = ViperUtil.getTag('img', element)[0];
                 }
 
                 this._getImageResContent(contentElement, element, msg);
 
                 editPanel = this.parent.getResolutionActionsContainer(contentElement);
 
-                var altid = dfx.getUniqueId();
+                var altid = ViperUtil.getUniqueId();
                 var alt   = viper.ViperTools.createTextbox(altid, 'Alt', element.getAttribute('alt'));
                 editPanel.appendChild(alt);
                 action = function() {

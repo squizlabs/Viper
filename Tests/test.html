@@ -14,12 +14,12 @@
         <script type="text/javascript">
             var viper   = null;
             ViperReadyCallback = function() {
-                var contentElement = dfx.getId('content');
+                var contentElement = ViperUtil.getid('content');
 
                 viper = new Viper('test', null, null, [contentElement]);
                 viper.getPluginManager().setPlugins(['ViperCoreStylesPlugin', 'ViperKeyboardEditorPlugin', 'ViperInlineToolbarPlugin', 'ViperHistoryPlugin', 'ViperListPlugin', 'ViperFormatPlugin', 'ViperToolbarPlugin', 'ViperTableEditorPlugin', 'ViperCopyPastePlugin', 'ViperImagePlugin', 'ViperLinkPlugin', 'ViperAccessibilityPlugin', 'ViperSourceViewPlugin', 'ViperSearchReplacePlugin', 'ViperLangToolsPlugin', 'ViperCharMapPlugin', 'ViperTrackChangesPlugin']);
 
-                dfxjQuery('.Viper-button[title]').removeAttr('title');
+                $('.Viper-button[title]').removeAttr('title');
 
                 var readyCallbacks = viperTest.getReadyCallbacks();
                 if (readyCallbacks) {
@@ -29,15 +29,15 @@
                 }
 
                 // Check for test cases.
-                var testCases = dfx.find(contentElement, 'div[id^="test"]');
+                var testCases = ViperUtil.find(contentElement, 'div[id^="test"]');
                 if (testCases.length > 0) {
                     var testCasesHtml = [];
                     for (var i = 0; i < testCases.length; i++) {
-                        testCasesHtml[testCases[i].id] = dfx.getHtml(testCases[i]);
+                        testCasesHtml[testCases[i].id] = ViperUtil.getHtml(testCases[i]);
                     }
 
                     viperTest.set('testCases', testCasesHtml);
-                    dfx.empty(contentElement);
+                    ViperUtil.empty(contentElement);
                 }
             };
         </script>

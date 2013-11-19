@@ -13,7 +13,7 @@
 
 function ViperMozRange(rangeObj)
 {
-    dfx.inherits('ViperMozRange', 'ViperDOMRange');
+    ViperUtil.inherits('ViperMozRange', 'ViperDOMRange');
     ViperDOMRange.call(this, rangeObj);
 
     this.startContainer          = rangeObj.startContainer;
@@ -335,9 +335,9 @@ ViperMozRange.prototype = {
         // Normalise.
         var nextSibling = startContainer.nextSibling;
         while (nextSibling) {
-            if (nextSibling && nextSibling.nodeType === dfx.TEXT_NODE) {
+            if (nextSibling && nextSibling.nodeType === ViperUtil.TEXT_NODE) {
                 startContainer.data += nextSibling.data;
-                dfx.remove(nextSibling);
+                ViperUtil.remove(nextSibling);
                 nextSibling = startContainer.nextSibling;
             } else {
                 break;
@@ -416,8 +416,8 @@ ViperMozRange.prototype = {
      */
     insertNode: function(node)
     {
-        if (this.startContainer.nodeType === dfx.ELEMENT_NODE) {
-            if (dfx.isStubElement(this.startContainer) === true) {
+        if (this.startContainer.nodeType === ViperUtil.ELEMENT_NODE) {
+            if (ViperUtil.isStubElement(this.startContainer) === true) {
                 // HIERARCHY_REQUEST_ERR: Raised if the container of the start
                 // of the Range is of a type that does not allow children of the
                 // type of node.
@@ -427,15 +427,15 @@ ViperMozRange.prototype = {
 
         this.rangeObj.insertNode(node);
 
-        if (node.previousSibling && node.previousSibling.nodeType === dfx.TEXT_NODE) {
+        if (node.previousSibling && node.previousSibling.nodeType === ViperUtil.TEXT_NODE) {
             if (node.previousSibling.data === '') {
-                dfx.remove(node.previousSibling);
+                ViperUtil.remove(node.previousSibling);
             }
         }
 
-        if (node.nextSibling && node.nextSibling.nodeType === dfx.TEXT_NODE) {
+        if (node.nextSibling && node.nextSibling.nodeType === ViperUtil.TEXT_NODE) {
             if (node.nextSibling.data === '') {
-                dfx.remove(node.nextSibling);
+                ViperUtil.remove(node.nextSibling);
             }
         }
 
@@ -515,7 +515,7 @@ ViperMozRange.prototype = {
     // Extensions to the W3CRange standard.
     getCommonElement: function()
     {
-        if (this.commonAncestorContainer.nodeType === dfx.ELEMENT_NODE) {
+        if (this.commonAncestorContainer.nodeType === ViperUtil.ELEMENT_NODE) {
             return this.commonAncestorContainer;
         }
 
@@ -538,9 +538,9 @@ ViperMozRange.prototype = {
         clone.collapse(toStart);
 
         var normalize = true;
-        if (clone.startContainer.nodeType === dfx.TEXT_NODE) {
+        if (clone.startContainer.nodeType === ViperUtil.TEXT_NODE) {
             if (clone.startOffset === 0) {
-                if (clone.startContainer.previousSibling && clone.startContainer.previousSibling.nodeType !== dfx.TEXT_NODE) {
+                if (clone.startContainer.previousSibling && clone.startContainer.previousSibling.nodeType !== ViperUtil.TEXT_NODE) {
                     normalize = false;
                 }
             }
@@ -553,19 +553,19 @@ ViperMozRange.prototype = {
 
         var previous = posSpan.previousSibling;
         var next     = posSpan.nextSibling;
-        var c        = dfxjQuery(posSpan).position();
+        var c        = $(posSpan).position();
         var coords   = {
             x: c.left,
             y: c.top
         };
 
         // We're done with the posSpan.
-        dfx.remove(posSpan);
+        ViperUtil.remove(posSpan);
 
         // We need to restore the text back to the way it was.
         if (normalize) {
             previous.data += next.data;
-            dfx.remove(next);
+            ViperUtil.remove(next);
 
             this.setEnd(this.endContainer, this.endOffset);
             this.setStart(this.startContainer, this.startOffset);
@@ -667,7 +667,7 @@ ViperMozRange.prototype = {
 
         offset += units;
 
-        if (container.nodeType === dfx.ELEMENT_NODE) {
+        if (container.nodeType === ViperUtil.ELEMENT_NODE) {
             if (container.hasChildNodes()) {
                 // If the start or end container is an element then we are referencing
                 // a node within the element. So we want to force the selection of
@@ -682,7 +682,7 @@ ViperMozRange.prototype = {
             while (offset < 0) {
                 var skippedBlockElem = [];
                 container = this.getPreviousContainer(container, skippedBlockElem);
-                if (container.nodeType === dfx.ELEMENT_NODE) {
+                if (container.nodeType === ViperUtil.ELEMENT_NODE) {
                     continue;
                 }
 
@@ -694,7 +694,7 @@ ViperMozRange.prototype = {
                 // and | is after moving to left. This is not the case for block
                 // elements (e.g. P tag), caret needs to be positioned after the
                 // last char.
-                if (container.nodeType === dfx.TEXT_NODE
+                if (container.nodeType === ViperUtil.TEXT_NODE
                     && skippedBlockElem.length === 0
                 ) {
                     offset--;
@@ -732,14 +732,14 @@ ViperMozRange.prototype = {
 
     _getNextTextNode: function(container)
     {
-        if (container.nodeType === dfx.ELEMENT_NODE) {
+        if (container.nodeType === ViperUtil.ELEMENT_NODE) {
             if (container.childNodes.length !== 0) {
                 return this._getFirstSelectableChild(container);
             }
         }
 
         container = this.getNextContainer(container);
-        if (container.nodeType === dfx.TEXT_NODE) {
+        if (container.nodeType === ViperUtil.TEXT_NODE) {
             return container;
         }
 
@@ -759,9 +759,9 @@ ViperMozRange.prototype = {
             offset    = this.endOffset;
         }
 
-        if (container.nodeType === dfx.ELEMENT_NODE) {
+        if (container.nodeType === ViperUtil.ELEMENT_NODE) {
             container = container.childNodes[offset];
-            if (container.nodeType !== dfx.TEXT_NODE) {
+            if (container.nodeType !== ViperUtil.TEXT_NODE) {
                 container = this._getNextTextNode(container);
             }
 
@@ -776,7 +776,7 @@ ViperMozRange.prototype = {
             // We need to move to the next selectable container.
             while (diff > 0) {
                 container = this.getNextContainer(container, skippedBlockElem);
-                if (container.nodeType === dfx.ELEMENT_NODE) {
+                if (container.nodeType === ViperUtil.ELEMENT_NODE) {
                     continue;
                 }
 
@@ -798,7 +798,7 @@ ViperMozRange.prototype = {
             // and | is after moving to left. This is not the case for block
             // elements (e.g. P tag), caret needs to be positioned after the
             // last char.
-            if (container.nodeType === dfx.TEXT_NODE
+            if (container.nodeType === ViperUtil.TEXT_NODE
                 && skippedBlockElem.length === 0
             ) {
                 offset++;
@@ -835,7 +835,7 @@ ViperMozRange.prototype = {
             offset    = this.endOffset;
         }
 
-        if (container.nodeType === dfx.ELEMENT_NODE) {
+        if (container.nodeType === ViperUtil.ELEMENT_NODE) {
             container = this.getPreviousContainer(container);
         }
 
@@ -866,7 +866,7 @@ ViperMozRange.prototype = {
                 // Found the next non empty container.
                 while (found === false) {
                     container = this.getPreviousContainer(container);
-                    if (container !== null && container.nodeType === dfx.TEXT_NODE && container.data.length !== 0) {
+                    if (container !== null && container.nodeType === ViperUtil.TEXT_NODE && container.data.length !== 0) {
                         found = true;
                     }
                 }
@@ -937,7 +937,7 @@ ViperMozRange.prototype = {
             offset    = this.endOffset;
         }
 
-        if (container.nodeType === dfx.ELEMENT_NODE) {
+        if (container.nodeType === ViperUtil.ELEMENT_NODE) {
             container = this.getNextContainer(container);
         }
 

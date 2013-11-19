@@ -16,12 +16,12 @@
                     content += '<span>' + keywords[i] + '</span><br />';
                 }
 
-                dfx.setHtml(dfx.getId('spans'), content);
+                ViperUtil.setHtml(ViperUtil.getid('spans'), content);
 
                 var coords = {};
-                var spans  = dfx.getTag('span');
+                var spans  = ViperUtil.getTag('span');
                 for (var i = 0; i < spans.length; i++) {
-                    coords[dfx.getHtml(spans[i])] = dfx.getBoundingRectangle(spans[i]);
+                    coords[ViperUtil.getHtml(spans[i])] = ViperUtil.getBoundingRectangle(spans[i]);
                 }
 
                 return coords;
@@ -31,19 +31,19 @@
             var spans = null;
             function changeContent(step, similarity)
             {
-                dfx.setHtml(dfx.getId('msg'), 'Test stage ' + step + ' (Similarity = ' + parseInt(similarity * 100) + '%)');
+                ViperUtil.setHtml(ViperUtil.getid('msg'), 'Test stage ' + step + ' (Similarity = ' + parseInt(similarity * 100) + '%)');
 
                 var content = '';
 
                 if (!spans) {
-                    spans = dfx.getTag('span');
-                    dfx.remove(dfx.getId('spans'));
+                    spans = ViperUtil.getTag('span');
+                    ViperUtil.remove(ViperUtil.getid('spans'));
                 }
 
                 if (!step || step === 1) {
                     var content = '';
                     for (var i = 0; i < spans.length; i++) {
-                        content += dfx.getHtml(spans[i]) + ' ';
+                        content += ViperUtil.getHtml(spans[i]) + ' ';
                     }
                 } else if (step > 1) {
                     var randText = 'UANBZXU@Nsday2783rpaadNMBZXJalknc:POAMN:+#)(=uzJBMNC&#HAJ!)(*&TUSFYHSJb9qyr9qwidiqwyrqwriyjzxcKAJKWRGHFIUGVBZNLfbclsebcrL:ZCMMXCUW';
@@ -75,7 +75,7 @@
                             }
                         }
 
-                        content += dfx.getHtml(spans[i]);
+                        content += ViperUtil.getHtml(spans[i]);
 
                         if (step === 2) {
                             content += '</strong>';
@@ -112,7 +112,7 @@
                     }
                 }
 
-                dfx.setHtml(dfx.getId('testContent'), content);
+                ViperUtil.setHtml(ViperUtil.getid('testContent'), content);
             }
         </script>
     </head>

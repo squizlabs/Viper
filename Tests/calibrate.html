@@ -14,10 +14,10 @@
             function getCoords(status, className)
             {
                 var coords  = {};
-                var buttons = dfx.getClass('Viper-button', dfx.getId('__buttons'));
+                var buttons = ViperUtil.getClass('Viper-button', ViperUtil.getid('__buttons'));
                 for (var i = 0; i < buttons.length; i++) {
                     buttons[i].className = 'Viper-button ' + className;
-                    var dim  = dfx.getBoundingRectangle(buttons[i]);
+                    var dim  = ViperUtil.getBoundingRectangle(buttons[i]);
                     coords[buttons[i].id + status] = {
                         x1: parseInt(dim.x1 + 2),
                         y1: parseInt(dim.y1 + 2),
@@ -33,11 +33,11 @@
             function showAllBtns()
             {
                 var classNames = ['Viper-dummyClass', 'Viper-selected', 'Viper-active', 'Viper-disabled'];
-                var buttonsContainer = dfx.getId('__buttons');
+                var buttonsContainer = ViperUtil.getid('__buttons');
 
-                dfx.remove(buttonsContainer);
-                dfx.remove(dfx.getId('content'));
-                dfx.remove(dfx.getId('__textFields'));
+                ViperUtil.remove(buttonsContainer);
+                ViperUtil.remove(ViperUtil.getid('content'));
+                ViperUtil.remove(ViperUtil.getid('__textFields'));
 
                 var allBtns = document.createElement('div');
                 allBtns.id  = '__allBtns';
@@ -46,7 +46,7 @@
                     var className = classNames[i];
                     var clone     = buttonsContainer.cloneNode(true);
                     clone.removeAttribute('id');
-                    var buttons = dfx.getClass('Viper-button', clone);
+                    var buttons = ViperUtil.getClass('Viper-button', clone);
                     for (var j = 0; j < buttons.length; j++) {
                         buttons[j].className = 'Viper-button ' + className;
                     }
@@ -54,23 +54,23 @@
                     allBtns.appendChild(clone);
                 }
 
-                dfx.insertBefore(menu, allBtns);
+                ViperUtil.insertBefore(menu, allBtns);
 
             }
 
             function getVITP(orientation)
             {
-                var elem   = dfx.getClass('ViperITP Viper-themeDark Viper-scalable Viper-visible')[0];
+                var elem   = ViperUtil.getClass('ViperITP Viper-themeDark Viper-scalable Viper-visible')[0];
 
                 if (orientation === 'left') {
-                    dfx.addClass(elem, 'Viper-orientationLeft');
+                    ViperUtil.addClass(elem, 'Viper-orientationLeft');
                 } else if (orientation === 'right') {
-                    dfx.addClass(elem, 'Viper-orientationRight');
+                    ViperUtil.addClass(elem, 'Viper-orientationRight');
                 }
 
                 var vitp   = {};
-                var coords = dfx.getElementCoords(elem);
-                var width  = parseInt(dfx.getStyle(elem, 'width').replace('px', ''));
+                var coords = ViperUtil.getElementCoords(elem);
+                var width  = parseInt(ViperUtil.getStyle(elem, 'width').replace('px', ''));
                 if (orientation) {
                     vitp = {
                         x: parseInt(coords.x),
@@ -90,7 +90,7 @@
 
             var viper = null;
             ViperReadyCallback = function() {
-                var contentElement = dfx.getId('content');
+                var contentElement = ViperUtil.getid('content');
                 viper = new Viper('test');
                 viper.getPluginManager().setPlugins(['ViperCoreStylesPlugin', 'ViperKeyboardEditorPlugin', 'ViperInlineToolbarPlugin', 'ViperHistoryPlugin', 'ViperListPlugin', 'ViperFormatPlugin', 'ViperToolbarPlugin', 'ViperTableEditorPlugin', 'ViperCopyPastePlugin', 'ViperImagePlugin', 'ViperLinkPlugin', 'ViperAccessibilityPlugin', 'ViperSourceViewPlugin', 'ViperSearchReplacePlugin', 'ViperLangToolsPlugin', 'ViperCharMapPlugin', 'ViperTrackChangesPlugin']);
                 viper.setEditableElement(contentElement);

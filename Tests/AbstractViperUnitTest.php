@@ -620,11 +620,11 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
         $this->sikuli->execJS('viper.destroy()');
 
         // Create image for the text field actions.
-        $textFieldActionRevertRegion = $this->sikuli->getRegionOnPage($this->sikuli->execJS('dfx.getBoundingRectangle(dfx.getId("textboxActionRevert"))'));
+        $textFieldActionRevertRegion = $this->sikuli->getRegionOnPage($this->sikuli->execJS('ViperUtil.getBoundingRectangle(ViperUtil.getid("textboxActionRevert"))'));
         $textFieldActionRevertImage  = $this->sikuli->capture($textFieldActionRevertRegion);
         copy($textFieldActionRevertImage, $imgPath.'/textField_action_revert.png');
 
-        $textFieldActionClearRegion = $this->sikuli->getRegionOnPage($this->sikuli->execJS('dfx.getBoundingRectangle(dfx.getId("textboxActionClear"))'));
+        $textFieldActionClearRegion = $this->sikuli->getRegionOnPage($this->sikuli->execJS('ViperUtil.getBoundingRectangle(ViperUtil.getid("textboxActionClear"))'));
         $textFieldActionClearImage  = $this->sikuli->capture($textFieldActionClearRegion);
         copy($textFieldActionClearImage, $imgPath.'/textField_action_clear.png');
 

@@ -10,10 +10,10 @@
         ViperReadyCallback = function() {
             var viper = new Viper('test');
             viper.getPluginManager().setPlugins(['ViperCoreStylesPlugin', 'ViperKeyboardEditorPlugin', 'ViperInlineToolbarPlugin', 'ViperHistoryPlugin', 'ViperToolbarPlugin']);
-            var editableEl = dfx.getId('editable');
-            dfx.addEvent(dfx.getId('clickToEdit'), 'click', function(e) {
-               //dfx.preventDefault(e);
-               dfx.hideElement(dfx.getId('clickToEdit'));
+            var editableEl = ViperUtil.getid('editable');
+            ViperUtil.addEvent(ViperUtil.getid('clickToEdit'), 'click', function(e) {
+               //ViperUtil.preventDefault(e);
+               ViperUtil.hideElement(ViperUtil.getid('clickToEdit'));
                viper.setEditableElement(editableEl);
                viper.focus();
             });

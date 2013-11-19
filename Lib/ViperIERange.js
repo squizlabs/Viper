@@ -13,7 +13,7 @@
 
 function ViperIERange(rangeObj)
 {
-    dfx.inherits('ViperIERange', 'ViperDOMRange');
+    ViperUtil.inherits('ViperIERange', 'ViperDOMRange');
     ViperDOMRange.call(this, rangeObj);
 
     this._initContainerInfo();
@@ -106,12 +106,12 @@ ViperIERange.prototype = {
             && eclone.htmlText.charAt(eclone.htmlText.length - 1) === '>'
         ) {
             var startParentElement = clone.parentElement();
-            if (startParentElement !== eclone.parentElement() || dfx.isBlockElement(startParentElement) === true) {
+            if (startParentElement !== eclone.parentElement() || ViperUtil.isBlockElement(startParentElement) === true) {
                 var pElemB = eclone.parentElement();
                 eclone.moveEnd('character', -1);
                 var pElemA = eclone.parentElement();
-                if (dfx.isBlockElement(pElemB) === true 
-                    && dfx.isBlockElement(pElemA) === false
+                if (ViperUtil.isBlockElement(pElemB) === true
+                    && ViperUtil.isBlockElement(pElemA) === false
                     && !pElemA.nextSibling
                 ) {
                     // eclone.moveEnd('character', -1);
@@ -121,7 +121,7 @@ ViperIERange.prototype = {
             }
         }
 
-        eclone.collapse(false); 
+        eclone.collapse(false);
 
         if (eclone.isEqual(clone) !== true) {
             var einfo = this._getContainerInfo(eclone);
@@ -151,12 +151,12 @@ ViperIERange.prototype = {
      */
     setStart: function(node, offset)
     {
-        if (document.activeElement && dfx.isTag(document.activeElement, 'input')) {
+        if (document.activeElement && ViperUtil.isTag(document.activeElement, 'input')) {
             document.activeElement.blur();
         }
 
         var moveTo = node;
-        if (moveTo.nodeType === dfx.TEXT_NODE) {
+        if (moveTo.nodeType === ViperUtil.TEXT_NODE) {
             moveTo = moveTo.parentNode;
         }
 
@@ -192,12 +192,12 @@ ViperIERange.prototype = {
      */
     setEnd: function(node, offset)
     {
-        if (document.activeElement && dfx.isTag(document.activeElement, 'input')) {
+        if (document.activeElement && ViperUtil.isTag(document.activeElement, 'input')) {
             document.activeElement.blur();
         }
-        
+
         var moveTo = node;
-        if (moveTo.nodeType === dfx.TEXT_NODE) {
+        if (moveTo.nodeType === ViperUtil.TEXT_NODE) {
             moveTo = moveTo.parentNode;
         }
 
@@ -252,7 +252,7 @@ ViperIERange.prototype = {
     {
         var next = this.getNextContainer(node);
         this.setStart(next, 0);
-        /*if (next.nodeType != dfx.ELEMENT_NODE) {
+        /*if (next.nodeType != ViperUtil.ELEMENT_NODE) {
             next = next.parentNode;
         }
 
@@ -277,7 +277,7 @@ ViperIERange.prototype = {
     setEndBefore: function(node)
     {
         var previous = this.getPreviousContainer(node);
-        if (previous.nodeType === dfx.TEXT_NODE) {
+        if (previous.nodeType === ViperUtil.TEXT_NODE) {
             this.setEnd(previous, previous.length);
         } else {
             var clone = this.rangeObj.duplicate();
@@ -315,7 +315,7 @@ ViperIERange.prototype = {
      */
     selectNode: function(node)
     {
-        if (node.nodeType === dfx.TEXT_NODE) {
+        if (node.nodeType === ViperUtil.TEXT_NODE) {
             this.setStart(node, 0);
             this.setEnd(node, node.length);
         } else {
@@ -342,7 +342,7 @@ ViperIERange.prototype = {
 
     _findElementNodeOffset: function(node)
     {
-        if (node.nodeType !== dfx.ELEMENT_NODE) {
+        if (node.nodeType !== ViperUtil.ELEMENT_NODE) {
             return;
         }
 
@@ -368,7 +368,7 @@ ViperIERange.prototype = {
      */
     selectNodeContents: function(node)
     {
-        if (node.nodeType === dfx.TEXT_NODE) {
+        if (node.nodeType === ViperUtil.TEXT_NODE) {
             this.setStart(node, 0);
             this.setEnd(node, node.length);
         } else {
@@ -458,7 +458,7 @@ ViperIERange.prototype = {
     deleteContents: function()
     {
         if (this.startContainer === this.endContainer
-            && this.startContainer.nodeType === dfx.TEXT_NODE
+            && this.startContainer.nodeType === ViperUtil.TEXT_NODE
         ) {
             // Do not use execCommand in this case. Because if the node is at the end
             // of a paragraph then the execCommand will join the next paragraph to
@@ -496,7 +496,7 @@ ViperIERange.prototype = {
     {
         var fragment = Viper.document.createDocumentFragment();
         var div      = Viper.document.createElement('div');
-        dfx.setHtml(div, this.rangeObj.htmlText);
+        ViperUtil.setHtml(div, this.rangeObj.htmlText);
         // Add the children of the div to fragment.
         var c = div.childNodes.length;
         for (var i = 0; i < c; i++) {
@@ -560,7 +560,7 @@ ViperIERange.prototype = {
     insertNode: function(node)
     {
         var before = null;
-        if (this.startContainer.nodeType === dfx.ELEMENT_NODE) {
+        if (this.startContainer.nodeType === ViperUtil.ELEMENT_NODE) {
             if (this.startContainer.childNodes.length === this.startOffset) {
                 this.startContainer.appendChild(node);
             } else {
@@ -569,7 +569,7 @@ ViperIERange.prototype = {
             }
 
             return;
-        } else if (this.startContainer.nodeType === dfx.TEXT_NODE) {
+        } else if (this.startContainer.nodeType === ViperUtil.TEXT_NODE) {
             if (this.startOffset === 0) {
                 before = this.startContainer;
             } else {
@@ -588,7 +588,7 @@ ViperIERange.prototype = {
         }//end if
 
         if (before !== null) {
-            dfx.insertBefore(before, node);
+            ViperUtil.insertBefore(before, node);
         }
 
         this.setStart(node, 0);
@@ -636,7 +636,7 @@ ViperIERange.prototype = {
             return null;
         }
 
-        if (this.startContainer.nodeType === dfx.ELEMENT_NODE) {
+        if (this.startContainer.nodeType === ViperUtil.ELEMENT_NODE) {
             var node = this.startContainer.childNodes[this.startOffset];
             if (node) {
                 return node;
@@ -674,7 +674,7 @@ ViperIERange.prototype = {
         if (this.startContainer === this.endContainer) {
             this.commonAncestorContainer = this.startContainer;
         } else {
-            this.commonAncestorContainer = dfx.getCommonAncestor(this.startContainer, this.endContainer);
+            this.commonAncestorContainer = ViperUtil.getCommonAncestor(this.startContainer, this.endContainer);
         }
 
     },
@@ -714,7 +714,7 @@ ViperIERange.prototype = {
         // Loop through child nodes.
         while (node) {
             switch (node.nodeType) {
-                case dfx.TEXT_NODE:
+                case ViperUtil.TEXT_NODE:
                     nodeLength = node.data.length;
                     if (nodeLength < rangeLength) {
                         var difference = (rangeLength - nodeLength);
@@ -740,8 +740,8 @@ ViperIERange.prototype = {
                     }//end if
                 break;
 
-                case dfx.ELEMENT_NODE:
-                    if (dfx.isStubElement(node) === true) {
+                case ViperUtil.ELEMENT_NODE:
+                    if (ViperUtil.isStubElement(node) === true) {
                         // Note: |<BR>|
                         // Len:  1    2.
                         nodeLength = 2;
@@ -808,10 +808,10 @@ ViperIERange.prototype = {
         // NEW Version: 08-01-09 (Thanks to Mozile).
         var move    = null;
         var tmpNode = null;
-        if (node.nodeType === dfx.TEXT_NODE) {
+        if (node.nodeType === ViperUtil.TEXT_NODE) {
             move    = offset;
             tmpNode = node.previousSibling;
-        } else if (node.nodeType === dfx.ELEMENT_NODE) {
+        } else if (node.nodeType === ViperUtil.ELEMENT_NODE) {
             move = 0;
             if (offset > 0) {
                 tmpNode = node.childNodes[(offset - 1)];
@@ -822,14 +822,14 @@ ViperIERange.prototype = {
 
         while (tmpNode) {
             var nodeLength = 0;
-            if (tmpNode.nodeType === dfx.ELEMENT_NODE) {
+            if (tmpNode.nodeType === ViperUtil.ELEMENT_NODE) {
                 nodeLength = tmpNode.innerText.length;
-                if (dfx.isStubElement(tmpNode) === true) {
+                if (ViperUtil.isStubElement(tmpNode) === true) {
                     nodeLength = 1;
-                } else if (dfx.isBlockElement(tmpNode) === true) {
+                } else if (ViperUtil.isBlockElement(tmpNode) === true) {
                     nodeLength++;
                 }
-            } else if (tmpNode.nodeType === dfx.TEXT_NODE) {
+            } else if (tmpNode.nodeType === ViperUtil.TEXT_NODE) {
                 nodeLength = tmpNode.data.length;
             }
 
@@ -1061,7 +1061,7 @@ ViperIERange.prototype = {
         clone.collapse(toStart);
 
         var normalize = true;
-        if (clone.startContainer.nodeType === dfx.TEXT_NODE) {
+        if (clone.startContainer.nodeType === ViperUtil.TEXT_NODE) {
             if (clone.startOffset === 0) {
                 normalize = false;
             } else if (clone.endOffset === clone.startContainer.data.length) {
@@ -1076,7 +1076,7 @@ ViperIERange.prototype = {
 
         var previous = shy.previousSibling;
         var next     = shy.nextSibling;
-        var c        = dfxjQuery(shy).position();
+        var c        = $(shy).position();
         var coords   = {
             x: c.left,
             y: c.top
@@ -1087,7 +1087,7 @@ ViperIERange.prototype = {
         // as its parent's offsetTop. So, if we are in the same block of text
         // and the height of the span changes then we adjust the Y coord.
         if (this.startContainer === this._prevContainer) {
-            var height = dfx.getElementHeight(shy);
+            var height = ViperUtil.getElementHeight(shy);
             if (this._prevHeight === null) {
                 this._prevHeight = height;
             } else if (height !== this._prevHeight) {
@@ -1099,16 +1099,16 @@ ViperIERange.prototype = {
         }
 
         // We're done with the shy.
-        dfx.remove(shy);
+        ViperUtil.remove(shy);
 
         // We need to restore the text back to the way it was.
         if (normalize && previous) {
-            if (next && next.nodeType === dfx.TEXT_NODE) {
+            if (next && next.nodeType === ViperUtil.TEXT_NODE) {
                 if (next === this.endContainer) {
                     this.endContainer = previous;
                 }
 
-                dfx.remove(next);
+                ViperUtil.remove(next);
                 previous.data += next.data;
             }
 
@@ -1142,7 +1142,7 @@ ViperIERange.prototype = {
     getHTMLContentsObj: function()
     {
         var div = Viper.document.createElement('div');
-        dfx.setHtml(div, this.rangeObj.htmlText);
+        ViperUtil.setHtml(div, this.rangeObj.htmlText);
         return div;
 
     },

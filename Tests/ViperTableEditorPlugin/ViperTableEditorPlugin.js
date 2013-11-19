@@ -7,11 +7,11 @@ function gTS(index, incContent)
         rows: []
     };
 
-    var table = dfx.getTag('table')[0];
-    var rows  = dfx.getTag('tr', table);
+    var table = ViperUtil.getTag('table')[0];
+    var rows  = ViperUtil.getTag('tr', table);
     for (var i = 0; i < rows.length; i++) {
         var row   = rows[i];
-        var cells = dfx.getTag('td,th', row);
+        var cells = ViperUtil.getTag('td,th', row);
 
         var rowInfo = {
             cells: []
@@ -22,11 +22,11 @@ function gTS(index, incContent)
             var cellInfo = {
                 rowspan: cell.getAttribute('rowspan') || 0,
                 colspan: cell.getAttribute('colspan') || 0,
-                heading: dfx.isTag(cell, 'th')
+                heading: ViperUtil.isTag(cell, 'th')
             };
 
             if (incContent) {
-                cellInfo.content = dfx.getHtml(cell);
+                cellInfo.content = ViperUtil.getHtml(cell);
             }
 
             rowInfo.cells.push(cellInfo);
@@ -51,10 +51,10 @@ function gTblBStatus()
     };
 
     for (var btn in btns) {
-        var elems = dfx.getClass('Viper-' + btn);
+        var elems = ViperUtil.getClass('Viper-' + btn);
         for (var i = 0; i < elems.length; i++) {
-            if (dfx.getElementHeight(elems[i]) > 0) {
-                if (dfx.hasClass(elems[i], 'Viper-disabled') === false) {
+            if (ViperUtil.getElementHeight(elems[i]) > 0) {
+                if (ViperUtil.hasClass(elems[i], 'Viper-disabled') === false) {
                     btns[btn] = true;
                 }
 
@@ -78,7 +78,7 @@ viperTest.addReadyCallback(function() {
     viperTest.set('tableHighlightFunction', viper.getPluginManager().getPlugin('ViperTableEditorPlugin').highlightActiveCell);
     viper.getPluginManager().getPlugin('ViperTableEditorPlugin').highlightActiveCell = function() {
         var retVal = viperTest.get('tableHighlightFunction').apply(this, arguments);
-        viperTest.set('tableHighlightRect', dfx.getBoundingRectangle(dfx.getClass('ViperITP-highlight')[0]));
+        viperTest.set('tableHighlightRect', ViperUtil.getBoundingRectangle(ViperUtil.getClass('ViperITP-highlight')[0]));
         return retVal;
     }
 });

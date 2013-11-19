@@ -31,7 +31,7 @@ class Viper_Tests_Core_CleanDOMUnitTest extends AbstractViperUnitTest
     public function testCleanDOMFiltered()
     {
         $this->sikuli->click($this->findKeyword(1));
-        $this->sikuli->execJS('viper.cleanDOM(dfx.getTag("p")[2])');
+        $this->sikuli->execJS('viper.cleanDOM(ViperUtil.getTag("p")[2])');
 
         $expected = '<p>%1%</p><p><img src="" /><br /><span>test</span></p><ul><li>test</li></ul><table><tbody><tr><td></td></tr></tbody></table><table><tbody><tr><td>test</td></tr></tbody></table><h2>test</h2><p><br /><a name="test"></a><a id="test2" href="">test</a></p>';
 

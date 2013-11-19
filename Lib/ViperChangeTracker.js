@@ -90,14 +90,14 @@ var ViperChangeTracker = {
                         loadedData = [];
                     }
 
-                    dfx.foreach(loadedData, function(changeid) {
-                        if (dfx.isset(loadedData[changeid].comment) === true) {
+                    ViperUtil.foreach(loadedData, function(changeid) {
+                        if (ViperUtil.isset(loadedData[changeid].comment) === true) {
                             self._comments[changeid] = loadedData[changeid].comment;
                         }
                     });
 
                     // Remove the node.
-                    dfx.remove(node);
+                    ViperUtil.remove(node);
 
                     // No need to coninue.
                     break;
@@ -107,7 +107,7 @@ var ViperChangeTracker = {
             // Load CTNodes.
             var changes      = self.loadCTNodes(self._viper.getViperElement());
             var foundChanges = false;
-            dfx.foreach(changes, function(changeid) {
+            ViperUtil.foreach(changes, function(changeid) {
                 self._changes[changeid] = changes[changeid];
                 foundChanges = true;
             });
@@ -130,7 +130,7 @@ var ViperChangeTracker = {
             self.reLoad();
         });
 
-        dfxjQuery(window).resize(function() {
+        $(window).resize(function() {
           self.updatePositionMarkers(true);
         });
 
@@ -148,7 +148,7 @@ var ViperChangeTracker = {
         var self         = this;
         var changes      = this.loadCTNodes(this._viper.getViperElement());
         var foundChanges = false;
-        dfx.foreach(changes, function(changeid) {
+        ViperUtil.foreach(changes, function(changeid) {
             self._changes[changeid] = changes[changeid];
             foundChanges = true;
         });
@@ -184,12 +184,12 @@ var ViperChangeTracker = {
         this._orientation = 'right';
 
         if (this._infoBoxHolder) {
-            dfx.remove(this._infoBoxHolder);
+            ViperUtil.remove(this._infoBoxHolder);
             this._infoBoxHolder = null;
         }
 
         if (this._markerHolder) {
-            dfx.remove(this._markerHolder);
+            ViperUtil.remove(this._markerHolder);
             this._markerHolder = null;
         }
 
@@ -202,7 +202,7 @@ var ViperChangeTracker = {
      */
     hasChanges: function()
     {
-        return (dfx.isEmpty(this._changes) !== true);
+        return (ViperUtil.isEmpty(this._changes) !== true);
 
     },
 
@@ -228,9 +228,9 @@ var ViperChangeTracker = {
      */
     isTrackingNode: function(node, ctNodeType)
     {
-        if (node && node.nodeType === dfx.ELEMENT_NODE && dfx.hasClass(node, this._nodeClassName) === true) {
+        if (node && node.nodeType === ViperUtil.ELEMENT_NODE && ViperUtil.hasClass(node, this._nodeClassName) === true) {
             if (!ctNodeType
-                || dfx.hasClass(node, 'CT-' + ctNodeType) === true
+                || ViperUtil.hasClass(node, 'CT-' + ctNodeType) === true
                 || node.tagName.toLowerCase() === 'ins'
                 || node.tagName.toLowerCase() === 'del'
                 || this.isInsertType(this.getCTNTypeFromNode(node)) === true
@@ -284,11 +284,11 @@ var ViperChangeTracker = {
     {
         this._nodeTypeVisibility[nodeType] = visible;
 
-        var elems = dfx.getClass('CT-' + nodeType, this._viper.getViperElement());
+        var elems = ViperUtil.getClass('CT-' + nodeType, this._viper.getViperElement());
         if (visible === false) {
-            dfx.addClass(elems, 'CT-disabled');
+            ViperUtil.addClass(elems, 'CT-disabled');
         } else {
-            dfx.removeClass(elems, 'CT-disabled');
+            ViperUtil.removeClass(elems, 'CT-disabled');
         }
 
     },
@@ -339,7 +339,7 @@ var ViperChangeTracker = {
      */
     isNodeTypeVisible: function(ctNodeType)
     {
-        if (dfx.isset(this._nodeTypeVisibility[ctNodeType]) === true && this._nodeTypeVisibility[ctNodeType] !== true) {
+        if (ViperUtil.isset(this._nodeTypeVisibility[ctNodeType]) === true && this._nodeTypeVisibility[ctNodeType] !== true) {
             return false;
         }
 
@@ -355,7 +355,7 @@ var ViperChangeTracker = {
                     continue;
                 }
 
-                if (dfx.hasClass(ctNode, 'CT-' + ctType) === true) {
+                if (ViperUtil.hasClass(ctNode, 'CT-' + ctType) === true) {
                     return this._nodeTypeVisibility[ctType];
                 }
             }
@@ -434,9 +434,9 @@ var ViperChangeTracker = {
     getCTNode: function(node, ctnType)
     {
         while (node && node !== this._viper.getViperElement()) {
-            if (dfx.hasClass(node, '_viper-CTNode') === true) {
+            if (ViperUtil.hasClass(node, '_viper-CTNode') === true) {
                 if (ctnType) {
-                    if (dfx.hasClass(node, 'CT-' + ctnType) === true) {
+                    if (ViperUtil.hasClass(node, 'CT-' + ctnType) === true) {
                         return node;
                     }
                 } else {
@@ -454,8 +454,8 @@ var ViperChangeTracker = {
     getCTNTypeFromNode: function(node)
     {
         var ctnType = '';
-        dfx.foreach(this._changeTypes, function(type) {
-            if (dfx.hasClass(node, 'CT-' + type) === true) {
+        ViperUtil.foreach(this._changeTypes, function(type) {
+            if (ViperUtil.hasClass(node, 'CT-' + type) === true) {
                 ctnType = type;
                 return false;
             }
@@ -472,7 +472,7 @@ var ViperChangeTracker = {
         }
 
         var node = Viper.document.createElement(nodeType);
-        dfx.addClass(node, this._nodeClassName + ' CT-' + ctnType);
+        ViperUtil.addClass(node, this._nodeClassName + ' CT-' + ctnType);
 
         if (!childNode) {
             var textNode = Viper.document.createTextNode('');
@@ -483,7 +483,7 @@ var ViperChangeTracker = {
 
         // If this CTN type is disabled then add 'disabled' class to the element.
         if (this.isNodeTypeVisible(ctnType) === false) {
-            dfx.addClass(node, 'CT-disabled');
+            ViperUtil.addClass(node, 'CT-disabled');
         }
 
         return node;
@@ -493,8 +493,8 @@ var ViperChangeTracker = {
     trackNodes: function(nodes, ctnType)
     {
         var ctnClass = this.getCTNodeClass(ctnType);
-        dfx.foreach(nodes, function(i) {
-            dfx.addClass(nodes[i], ctnClass);
+        ViperUtil.foreach(nodes, function(i) {
+            ViperUtil.addClass(nodes[i], ctnClass);
         });
 
     },
@@ -518,7 +518,7 @@ var ViperChangeTracker = {
             className = 'CT-' + ctnType;
         }
 
-        var nodes = dfx.getClass(className, parentElement);
+        var nodes = ViperUtil.getClass(className, parentElement);
         return nodes;
 
     },
@@ -566,7 +566,7 @@ var ViperChangeTracker = {
         }
 
         var elemid = this._className + '-marker-' + changeid;
-        var marker = dfx.getId(elemid);
+        var marker = ViperUtil.getid(elemid);
 
         if (!marker) {
             return null;
@@ -582,7 +582,7 @@ var ViperChangeTracker = {
 
         var rect = null;
         if (!this._tmpData.viperElemRect) {
-            rect = dfx.getBoundingRectangle(this._viper.getViperElement());
+            rect = ViperUtil.getBoundingRectangle(this._viper.getViperElement());
             this._tmpData.viperElemRect = rect;
         } else {
             rect = this._tmpData.viperElemRect;
@@ -591,18 +591,18 @@ var ViperChangeTracker = {
         var elem = Viper.document.createElement('div');
         var c    = this._className + '-marker';
         elem.id  = this._className + '-marker-' + changeid;
-        dfx.addClass(elem, c + ' CT-' + ctnType + ' CT-' + colour);
+        ViperUtil.addClass(elem, c + ' CT-' + ctnType + ' CT-' + colour);
 
         if (this._orientation === 'left') {
-            dfx.setStyle(elem, 'left', parseInt(rect.x1 - 26) + 'px');
+            ViperUtil.setStyle(elem, 'left', parseInt(rect.x1 - 26) + 'px');
         } else {
-            dfx.setStyle(elem, 'left', parseInt(posX) + 'px');
+            ViperUtil.setStyle(elem, 'left', parseInt(posX) + 'px');
         }
 
-        dfx.setStyle(elem, 'top', parseInt(posY) + 'px');
+        ViperUtil.setStyle(elem, 'top', parseInt(posY) + 'px');
 
         if (show !== true) {
-            dfx.addClass(elem, 'CT-ins');
+            ViperUtil.addClass(elem, 'CT-ins');
         }
 
         var orientation = '';
@@ -611,7 +611,7 @@ var ViperChangeTracker = {
         }
 
         var content = '<div class="' + c + '-teardrop' + orientation + '"></div>';
-        dfx.setHtml(elem, content);
+        ViperUtil.setHtml(elem, content);
 
         // Marker's width will change depending on the editable area and the
         // position of the marker relative to the editable area.
@@ -623,7 +623,7 @@ var ViperChangeTracker = {
             width = parseInt((rect.x2 + 30) - posX);
         }
 
-        dfx.setStyle(elem, 'width', width + 'px');
+        ViperUtil.setStyle(elem, 'width', width + 'px');
 
         return elem;
 
@@ -709,21 +709,21 @@ var ViperChangeTracker = {
             var canShowType  = this.canShowType(change.type);
 
             var tmp = Viper.document.createElement('span');
-            dfx.setHtml(tmp, '&nbsp;');
+            ViperUtil.setHtml(tmp, '&nbsp;');
 
-            if (dfx.isBlockElement(node) === true && dfx.isStubElement(node) !== true) {
+            if (ViperUtil.isBlockElement(node) === true && ViperUtil.isStubElement(node) !== true) {
                 if (node.firstChild) {
-                    dfx.insertBefore(node.firstChild, tmp);
+                    ViperUtil.insertBefore(node.firstChild, tmp);
                 } else {
                     node.appendChild(tmp);
                 }
             } else {
-                dfx.insertBefore(node, tmp);
+                ViperUtil.insertBefore(node, tmp);
             }
 
-            var tmpPos = dfx.getBoundingRectangle(tmp);
+            var tmpPos = ViperUtil.getBoundingRectangle(tmp);
             var marker = self._createMarker(change.type, tmpPos.x1, tmpPos.y2, colourIndex, canShowType, changeid);
-            dfx.remove(tmp);
+            ViperUtil.remove(tmp);
             this._markerHolder.appendChild(marker);
 
             // Set infobox information for this change.
@@ -755,7 +755,7 @@ var ViperChangeTracker = {
 
     removePositionMarkers: function()
     {
-        dfx.remove(dfx.getClass(this._className + '-marker'));
+        ViperUtil.remove(ViperUtil.getClass(this._className + '-marker'));
 
     },
 
@@ -789,11 +789,11 @@ var ViperChangeTracker = {
         return;
 
         if (this._markerHolder) {
-            dfx.remove(this._markerHolder);
+            ViperUtil.remove(this._markerHolder);
         }
 
         var holder = Viper.document.createElement('div');
-        dfx.addClass(holder, this._className + '-markerHolder');
+        ViperUtil.addClass(holder, this._className + '-markerHolder');
         Viper.document.body.appendChild(holder);
         this._markerHolder = holder;
 
@@ -812,15 +812,15 @@ var ViperChangeTracker = {
         // Setup line box. This is the box that shows the L shaped lines which
         // connect marker to info box.
         var lineBox = Viper.document.createElement('div');
-        dfx.addClass(lineBox, this._className + '-lineBox CT-' + colour);
+        ViperUtil.addClass(lineBox, this._className + '-lineBox CT-' + colour);
 
         // Setup infobox.
         var c       = this._className + '-infoBox';
         var infoBox = Viper.document.createElement('div');
-        dfx.addClass(infoBox, c);
+        ViperUtil.addClass(infoBox, c);
 
         var description = '';
-        if (dfx.isObj(data.desc) !== true) {
+        if (ViperUtil.isObj(data.desc) !== true) {
             description = data.desc;
         }
 
@@ -851,15 +851,15 @@ var ViperChangeTracker = {
         content += '<div class="' + c + '-bottom"><strong>' + data.typeName + ':</strong> ';
         content += description;
         content += '</div>';
-        dfx.setHtml(infoBox, content);
+        ViperUtil.setHtml(infoBox, content);
 
-        if (dfx.isObj(data.desc) === true) {
-            if (dfx.isArray(data.desc) !== true) {
+        if (ViperUtil.isObj(data.desc) === true) {
+            if (ViperUtil.isArray(data.desc) !== true) {
                 data.desc = [data.desc];
             }
 
-            dfx.foreach(data.desc, function(i) {
-                dfx.getClass(c + '-bottom', infoBox)[0].appendChild(data.desc[i]);
+            ViperUtil.foreach(data.desc, function(i) {
+                ViperUtil.getClass(c + '-bottom', infoBox)[0].appendChild(data.desc[i]);
             });
         }
 
@@ -871,7 +871,7 @@ var ViperChangeTracker = {
 
     removeInfoBoxPosition: function()
     {
-        dfx.empty(this._infoBoxHolder);
+        ViperUtil.empty(this._infoBoxHolder);
 
     },
 
@@ -888,7 +888,7 @@ var ViperChangeTracker = {
         // Calculate the total height.
         while (prevBox = prevBox.previousSibling) {
             // Offset is the distance between the new box and the previous box.
-            var prevRect = dfx.getBoundingRectangle(prevBox.firstChild);
+            var prevRect = ViperUtil.getBoundingRectangle(prevBox.firstChild);
             if (parseInt(prevRect.y2 - prevRect.y1) > 0) {
                 height = parseInt(prevRect.y2 - dim.y2) + offset;
                 break;
@@ -896,23 +896,23 @@ var ViperChangeTracker = {
         }
 
         if (show !== true) {
-            dfx.addClass(infoBox, 'CT-ins');
+            ViperUtil.addClass(infoBox, 'CT-ins');
         }
 
         if (this._orientation === 'left') {
-            dfx.setStyle(infoBox, 'left', 'auto');
-            dfx.setStyle(infoBox, 'right', 0);
+            ViperUtil.setStyle(infoBox, 'left', 'auto');
+            ViperUtil.setStyle(infoBox, 'right', 0);
         } else {
-            dfx.setStyle(infoBox, 'right', 'auto');
-            dfx.setStyle(infoBox, 'left', 0);
+            ViperUtil.setStyle(infoBox, 'right', 'auto');
+            ViperUtil.setStyle(infoBox, 'left', 0);
         }
 
-        dfx.setStyle(infoBox, 'top', parseInt(dim.y2) + 'px');
+        ViperUtil.setStyle(infoBox, 'top', parseInt(dim.y2) + 'px');
         if (height > 0) {
-            dfx.setStyle(infoBox, 'height', height + 'px');
+            ViperUtil.setStyle(infoBox, 'height', height + 'px');
         }
 
-        dfx.addClass(infoBox, 'visible');
+        ViperUtil.addClass(infoBox, 'visible');
 
     },
 
@@ -921,14 +921,14 @@ var ViperChangeTracker = {
         return;
 
         var id     = this._className + '-infoBoxHolder';
-        var holder = dfx.getId(id);
+        var holder = ViperUtil.getid(id);
         if (holder) {
-            dfx.remove(holder);
+            ViperUtil.remove(holder);
         }
 
         holder    = Viper.document.createElement('div');
         holder.id = id;
-        dfx.addClass(holder, this._className + '-infoBoxHolder');
+        ViperUtil.addClass(holder, this._className + '-infoBoxHolder');
         Viper.document.body.appendChild(holder);
 
         return holder;
@@ -943,28 +943,28 @@ var ViperChangeTracker = {
             this._infoBoxHolder = this._createInfoboxHolder();
         }
 
-        var rect      = dfx.getBoundingRectangle(this._viper.getViperElement());
-        var windowDim = dfx.getWindowDimensions();
+        var rect      = ViperUtil.getBoundingRectangle(this._viper.getViperElement());
+        var windowDim = ViperUtil.getWindowDimensions();
         var leftPos   = rect.x2;
         if (windowDim) {
-            var infoWidth = parseInt(dfx.getStyle(this._infoBoxHolder, 'width'));
+            var infoWidth = parseInt(ViperUtil.getStyle(this._infoBoxHolder, 'width'));
             if ((windowDim.width < (rect.x2 + infoWidth))
                 && (rect.x1 > infoWidth)
             ) {
                 // Need to display the callout boxes on left.
                 leftPos = (rect.x1 - infoWidth - 26);
-                dfx.addClass(this._infoBoxHolder, 'orientationLeft');
+                ViperUtil.addClass(this._infoBoxHolder, 'orientationLeft');
                 this._orientation = 'left';
             } else {
                 this._orientation = 'right';
-                dfx.removeClass(this._infoBoxHolder, 'orientationLeft');
+                ViperUtil.removeClass(this._infoBoxHolder, 'orientationLeft');
             }
         } else {
             this._orientation = 'right';
-            dfx.removeClass(this._infoBoxHolder, 'orientationLeft');
+            ViperUtil.removeClass(this._infoBoxHolder, 'orientationLeft');
         }
 
-        dfx.setStyle(this._infoBoxHolder, 'left', leftPos + 'px');
+        ViperUtil.setStyle(this._infoBoxHolder, 'left', leftPos + 'px');
 
     },
 
@@ -997,7 +997,7 @@ var ViperChangeTracker = {
     getUserColour: function(userid)
     {
         var colourIndex = null;
-        if (dfx.isset(this._userColours[userid]) === true) {
+        if (ViperUtil.isset(this._userColours[userid]) === true) {
             colourIndex = this._userColours[userid];
         } else {
             colourIndex = this.getAvailableColour();
@@ -1020,7 +1020,7 @@ var ViperChangeTracker = {
         var cln  = this._colours.length;
         for (var i = 0; i < cln; i++) {
             var found = false;
-            dfx.foreach(this._userColours, function(userid) {
+            ViperUtil.foreach(this._userColours, function(userid) {
                 if (parseInt(self._userColours[userid]) === i) {
                     found = true;
                     return false;
@@ -1075,7 +1075,7 @@ var ViperChangeTracker = {
         }//end if
 
         var self = this;
-        dfx.foreach(ctNodes, function(i) {
+        ViperUtil.foreach(ctNodes, function(i) {
             self.addNodeToChange(changeid, ctNodes[i]);
         });
 
@@ -1112,21 +1112,21 @@ var ViperChangeTracker = {
             ctNode.setAttribute('time', parseInt(change.time));
         }
 
-        if (dfx.hasClass(ctNode, ViperChangeTracker.getCTNodeClass(change.type)) === false) {
-            dfx.addClass(ctNode, ViperChangeTracker.getCTNodeClass(change.type));
+        if (ViperUtil.hasClass(ctNode, ViperChangeTracker.getCTNodeClass(change.type)) === false) {
+            ViperUtil.addClass(ctNode, ViperChangeTracker.getCTNodeClass(change.type));
         }
 
         var colourIndex = ViperChangeTracker.getUserColour(change.userid);
         var colour      = ViperChangeTracker.getColour(colourIndex);
-        if (dfx.hasClass(ctNode, 'CT-' + colour) === false) {
-            dfx.addClass(ctNode, 'CT-' + colour);
+        if (ViperUtil.hasClass(ctNode, 'CT-' + colour) === false) {
+            ViperUtil.addClass(ctNode, 'CT-' + colour);
         }
 
         if (replaceNode) {
             var nl = change.nodes.length;
             for (var i = 0; i < nl; i++) {
                 if (change.nodes[i] === replaceNode) {
-                    dfx.removeArrayIndex(change.nodes, i);
+                    ViperUtil.removeArrayIndex(change.nodes, i);
                     break;
                 }
             }
@@ -1183,7 +1183,7 @@ var ViperChangeTracker = {
         if (this._users[userid]) {
             var userAsset = this._users[userid];
             var info      = {
-                ownerName: dfx.ellipsize(userAsset.name, 13),
+                ownerName: ViperUtil.ellipsize(userAsset.name, 13),
                 ownerid: userAsset.id,
                 time: dfx.date('d/M/y h:ia', parseInt(change.time)),
                 typeName: ViperChangeTracker.getTypeTitle(change.type),
@@ -1225,7 +1225,7 @@ var ViperChangeTracker = {
     getDescription: function(ctnType, node, changeid)
     {
         var desc = '';
-        if (dfx.isFn(this._descCallbacks[ctnType]) === true) {
+        if (ViperUtil.isFn(this._descCallbacks[ctnType]) === true) {
             desc = this._descCallbacks[ctnType].call(this, node, ctnType, changeid);
         } else {
             var change = this.getChange(changeid);
@@ -1233,7 +1233,7 @@ var ViperChangeTracker = {
                 desc = change.desc;
             } else {
                 var cnode = node.cloneNode(true);
-                dfx.remove(dfx.getTag('del', cnode));
+                ViperUtil.remove(ViperUtil.getTag('del', cnode));
 
                 var textContent = '';
                 if (node.innerText) {
@@ -1241,10 +1241,10 @@ var ViperChangeTracker = {
                 } else if (node.textContent) {
                     textContent = cnode.textContent;
                 } else {
-                    textContent = dfx.getHtml(cnode);
+                    textContent = ViperUtil.getHtml(cnode);
                 }
 
-                desc  = dfx.ellipsize(textContent, 30);
+                desc  = ViperUtil.ellipsize(textContent, 30);
                 cnode = null;
             }//end if
         }//end if
@@ -1312,7 +1312,7 @@ var ViperChangeTracker = {
         if (this.isInsertType(ctnType) === true) {
             var self    = this;
             var ctNodes = this.getCTNodes(null, node);
-            dfx.foreach(ctNodes, function(i) {
+            ViperUtil.foreach(ctNodes, function(i) {
                 self.approveChanges(ctNodes[i].getAttribute('changeid'), ctNodes[i]);
             });
         }
@@ -1370,24 +1370,24 @@ var ViperChangeTracker = {
     showInfoBox: function(marker, infoBox)
     {
         // Hide other info boxes.
-        var elems = dfx.getClass('_viper-CT-lineBox', this._infoBoxHolder);
-        dfx.removeClass(elems, 'visible');
-        dfx.removeClass(elems, 'show');
+        var elems = ViperUtil.getClass('_viper-CT-lineBox', this._infoBoxHolder);
+        ViperUtil.removeClass(elems, 'visible');
+        ViperUtil.removeClass(elems, 'show');
 
-        var melems = dfx.getClass('_viper-CT-marker', this._markerHolder);
-        dfx.addClass(melems, 'CT-hidden');
-        dfx.removeClass(melems, 'show');
+        var melems = ViperUtil.getClass('_viper-CT-marker', this._markerHolder);
+        ViperUtil.addClass(melems, 'CT-hidden');
+        ViperUtil.removeClass(melems, 'show');
 
-        dfx.addClass(infoBox, 'visible');
-        dfx.removeClass(marker, 'CT-hidden');
+        ViperUtil.addClass(infoBox, 'visible');
+        ViperUtil.removeClass(marker, 'CT-hidden');
 
-        var dim = dfx.getBoundingRectangle(marker);
-        dfx.addClass([marker, infoBox], 'show');
+        var dim = ViperUtil.getBoundingRectangle(marker);
+        ViperUtil.addClass([marker, infoBox], 'show');
         this._positionInfoBox(infoBox, dim, true);
 
         var self = this;
-        dfx.addEvent(document, 'click.ViperChangeTracker', function() {
-            dfx.removeEvent(document, 'click.ViperChangeTracker');
+        ViperUtil.addEvent(document, 'click.ViperChangeTracker', function() {
+            ViperUtil.removeEvent(document, 'click.ViperChangeTracker');
             self.updatePositionMarkers(false);
         });
 
@@ -1395,7 +1395,7 @@ var ViperChangeTracker = {
 
     _positionInfoBoxes: function()
     {
-        var elems = dfx.getClass(this._className + '-lineBox', this._infoBoxHolder);
+        var elems = ViperUtil.getClass(this._className + '-lineBox', this._infoBoxHolder);
         var eln   = elems.length;
 
         if (elems.length === 0) {
@@ -1407,7 +1407,7 @@ var ViperChangeTracker = {
         for (var i = 0; i < eln; i++) {
             var box     = elems[i];
             var height  = 0;
-            var boxRect = dfx.getBoundingRectangle(box);
+            var boxRect = ViperUtil.getBoundingRectangle(box);
             if ((boxRect.y2 - boxRect.y1) <= 0) {
                 continue;
             } else if (prevBox === null) {
@@ -1415,11 +1415,11 @@ var ViperChangeTracker = {
                 continue;
             }
 
-            var prevRect = dfx.getBoundingRectangle(prevBox.firstChild);
+            var prevRect = ViperUtil.getBoundingRectangle(prevBox.firstChild);
             if (parseInt(prevRect.y2 - prevRect.y1) > 0) {
                 height = parseInt(prevRect.y2 - boxRect.y1) + offset;
 
-                dfx.setStyle(box, 'height', height + 'px');
+                ViperUtil.setStyle(box, 'height', height + 'px');
             }
 
             prevBox = box;
@@ -1430,21 +1430,21 @@ var ViperChangeTracker = {
     _setMouseEvents: function(infoBox, marker, node, isInsertType, changeid)
     {
         var self = this;
-        dfx.addEvent([infoBox, marker, node], 'mouseover', function() {
-            dfx.addClass([infoBox, marker], 'selected');
+        ViperUtil.addEvent([infoBox, marker, node], 'mouseover', function() {
+            ViperUtil.addClass([infoBox, marker], 'selected');
         });
 
-        dfx.addEvent(marker, 'click', function(e) {
+        ViperUtil.addEvent(marker, 'click', function(e) {
             self.showInfoBox(marker, infoBox);
             self._positionInfoBoxes();
 
-            dfx.preventDefault(e);
+            ViperUtil.preventDefault(e);
             return false;
         });
 
         var c          = this._className + '-infoBox-actionBtns';
-        var rejectBtn  = dfx.getClass(c + '-reject', infoBox)[0];
-        var approveBtn = dfx.getClass(c + '-approve', infoBox)[0];
+        var rejectBtn  = ViperUtil.getClass(c + '-reject', infoBox)[0];
+        var approveBtn = ViperUtil.getClass(c + '-approve', infoBox)[0];
         var parentNode = null;
 
         if (!approveBtn && !rejectBtn) {
@@ -1457,35 +1457,35 @@ var ViperChangeTracker = {
             parentNode = approveBtn.parentNode.parentNode;
         }
 
-        dfx.addEvent([infoBox, marker, node], 'mouseout', function() {
-            dfx.removeClass([infoBox, marker], 'selected');
-            dfx.removeClass(parentNode, 'approve');
-            dfx.removeClass(parentNode, 'reject');
+        ViperUtil.addEvent([infoBox, marker, node], 'mouseout', function() {
+            ViperUtil.removeClass([infoBox, marker], 'selected');
+            ViperUtil.removeClass(parentNode, 'approve');
+            ViperUtil.removeClass(parentNode, 'reject');
         });
 
         // Action button events.
         if (rejectBtn) {
-            dfx.addEvent(rejectBtn, 'mouseover', function() {
-                dfx.addClass(parentNode, 'reject');
-                dfx.removeClass(parentNode, 'approve');
+            ViperUtil.addEvent(rejectBtn, 'mouseover', function() {
+                ViperUtil.addClass(parentNode, 'reject');
+                ViperUtil.removeClass(parentNode, 'approve');
             });
 
-            dfx.addEvent(rejectBtn, 'click', function(e) {
+            ViperUtil.addEvent(rejectBtn, 'click', function(e) {
                 self.rejectChanges(changeid);
-                dfx.preventDefault(e);
+                ViperUtil.preventDefault(e);
                 return false;
             });
         }
 
         if (approveBtn) {
-            dfx.addEvent(approveBtn, 'mouseover', function() {
-                dfx.addClass(parentNode, 'approve');
-                dfx.removeClass(parentNode, 'reject');
+            ViperUtil.addEvent(approveBtn, 'mouseover', function() {
+                ViperUtil.addClass(parentNode, 'approve');
+                ViperUtil.removeClass(parentNode, 'reject');
             });
 
-            dfx.addEvent(approveBtn, 'click', function(e) {
+            ViperUtil.addEvent(approveBtn, 'click', function(e) {
                 self.approveChanges(changeid);
-                dfx.preventDefault(e);
+                ViperUtil.preventDefault(e);
                 return false;
             });
         }
@@ -1503,7 +1503,7 @@ var ViperChangeTracker = {
 
         var elems = [];
         if (nodeOnly !== true) {
-            elems = dfx.getClass(this._nodeClassName, node);
+            elems = ViperUtil.getClass(this._nodeClassName, node);
         }
 
         elems.push(node);
@@ -1511,27 +1511,27 @@ var ViperChangeTracker = {
         var r = new RegExp('_viper-|\\s*CTN?[a-zA-Z-]*', 'g');
 
         var self = this;
-        dfx.foreach(elems, function(i) {
+        ViperUtil.foreach(elems, function(i) {
             if (!elems[i].parentNode) {
                 return;
             }
 
-            var classAttr = dfx.attr(elems[i], 'class');
+            var classAttr = ViperUtil.attr(elems[i], 'class');
             classAttr     = classAttr.replace(r, '');
-            dfx.attr(elems[i], 'class', classAttr);
+            ViperUtil.attr(elems[i], 'class', classAttr);
 
-            if (dfx.attr(elems[i], 'class') === '') {
-                dfx.removeAttr(elems[i], 'class');
+            if (ViperUtil.attr(elems[i], 'class') === '') {
+                ViperUtil.removeAttr(elems[i], 'class');
             }
 
-            dfx.removeAttr(elems[i], 'viperchangeid');
-            dfx.removeAttr(elems[i], 'time');
+            ViperUtil.removeAttr(elems[i], 'viperchangeid');
+            ViperUtil.removeAttr(elems[i], 'time');
 
             // If element is a del tag then move contents inside to before it
             // and remove node.
-            if (dfx.isTag(elems[i], 'del') === true || dfx.isTag(elems[i], 'ins') === true) {
-                dfx.insertBefore(elems[i], elems[i].childNodes);
-                dfx.remove(elems[i]);
+            if (ViperUtil.isTag(elems[i], 'del') === true || ViperUtil.isTag(elems[i], 'ins') === true) {
+                ViperUtil.insertBefore(elems[i], elems[i].childNodes);
+                ViperUtil.remove(elems[i]);
             } else if (ViperChangeTracker.getCurrentMode() === 'original') {
                 // If the tag has a ctdata then convert its tag.
                 var ctdata = self.getCTData(elems[i], 'tagName');
@@ -1541,12 +1541,12 @@ var ViperChangeTracker = {
                         newTag.appendChild(elems[i].firstChild);
                     }
 
-                    dfx.insertBefore(elems[i], newTag);
-                    dfx.remove(elems[i]);
+                    ViperUtil.insertBefore(elems[i], newTag);
+                    ViperUtil.remove(elems[i]);
                 }
             }
 
-            dfx.removeAttr(elems[i], 'ctdata');
+            ViperUtil.removeAttr(elems[i], 'ctdata');
         });
 
     },
@@ -1575,7 +1575,7 @@ var ViperChangeTracker = {
             ctdata       = {};
             ctdata[type] = value;
         } else if (value === null) {
-            if (dfx.isset(ctdata[type]) === true) {
+            if (ViperUtil.isset(ctdata[type]) === true) {
                 // If the value is null and the ctdata for type is set then remove it.
                 delete ctdata[type];
             } else {
@@ -1590,11 +1590,11 @@ var ViperChangeTracker = {
         ctdata = dfx.jsonEncode(ctdata);
         if (ctdata === '{}') {
             // Data is empty so no reason to keep the attribute.
-            dfx.removeAttr(node, 'ctdata');
+            ViperUtil.removeAttr(node, 'ctdata');
             return true;
         }
 
-        dfx.attr(node, 'ctdata', ctdata);
+        ViperUtil.attr(node, 'ctdata', ctdata);
         return true;
 
     },
@@ -1605,7 +1605,7 @@ var ViperChangeTracker = {
             return null;
         }
 
-        var ctdata = dfx.attr(node, 'ctdata');
+        var ctdata = ViperUtil.attr(node, 'ctdata');
         if (!ctdata) {
             return null;
         }
@@ -1624,7 +1624,7 @@ var ViperChangeTracker = {
         if (node) {
             if (!type) {
                 // Remove the whole attr.
-                dfx.removeAttr(node, 'ctdata');
+                ViperUtil.removeAttr(node, 'ctdata');
             } else {
                 this.setCTData(node, type, null);
             }
@@ -1639,12 +1639,12 @@ var ViperChangeTracker = {
     {
         var info    = null;
         var changes = this.loadCTNodes(elem);
-        dfx.foreach(changes, function(changeid) {
+        ViperUtil.foreach(changes, function(changeid) {
             if (info === null) {
                 info = {};
             }
 
-            if (dfx.isset(changes[changeid].comment) === true) {
+            if (ViperUtil.isset(changes[changeid].comment) === true) {
                 info[changeid] = {
                     comment: changes[changeid].comment
                 };
@@ -1661,7 +1661,7 @@ var ViperChangeTracker = {
         var changes = {};
         var self    = this;
 
-        dfx.foreach(ctNodes, function(i) {
+        ViperUtil.foreach(ctNodes, function(i) {
             var node = ctNodes[i];
 
             // Get information from the node.

@@ -25,18 +25,18 @@
     <script type="text/javascript">
         var viper = null;
         ViperReadyCallback = function() {
-            $ = jQuery = window.dfxjQuery;
+            $ = jQuery = window.$;
             dfx.addLoadEvent(function() {
                 viper = new Viper('test');
                 var allPlugins = ['ViperCoreStylesPlugin', 'ViperKeyboardEditorPlugin', 'ViperInlineToolbarPlugin', 'ViperHistoryPlugin', 'ViperListPlugin', 'ViperFormatPlugin', 'ViperToolbarPlugin', 'ViperTableEditorPlugin', 'ViperCopyPastePlugin', 'ViperImagePlugin', 'ViperLinkPlugin', 'ViperAccessibilityPlugin', 'ViperSourceViewPlugin', 'ViperSearchReplacePlugin', 'ViperLangToolsPlugin', 'ViperCharMapPlugin', 'ViperTrackChangesPlugin'];
                 viper.getPluginManager().setPlugins(allPlugins);
 
                 var prevViperType = 'complex';
-                var editables     = dfx.getClass('Viper-editable');
+                var editables     = ViperUtil.getClass('Viper-editable');
                 for (var i = 0; i < editables.length; i++) {
                     (function(editableElement) {
-                        dfx.addEvent(editableElement, 'mousedown', function() {
-                            if (dfx.hasClass(editableElement, 'viper-simple') === true) {
+                        ViperUtil.addEvent(editableElement, 'mousedown', function() {
+                            if (ViperUtil.hasClass(editableElement, 'viper-simple') === true) {
                                 if (prevViperType !== 'simple') {
                                     prevViperType = 'simple';
                                     viper.getPluginManager().removePlugins();
@@ -55,22 +55,22 @@
                 viper.getPluginManager().setPluginSettings('ViperToolbarPlugin', {buttons: buttons});
                 viper.getPluginManager().setPluginSettings('ViperInlineToolbarPlugin', {buttons: buttons});
 
-                var demoDivs  = dfx.getClass('demo');
+                var demoDivs  = ViperUtil.getClass('demo');
                 var demoCount = demoDivs.length;
                 var contents  = [];
 
                 for (var i = 0; i < demoCount; i++) {
-                    var editables = dfx.getClass('Viper-editable', demoDivs[i]);
+                    var editables = ViperUtil.getClass('Viper-editable', demoDivs[i]);
                     var elen      = editables.length;
                     contents[i]   = [];
                     for (var j = 0; j < elen; j++) {
-                        contents[i][j] = dfx.getHtml(editables[j]);
+                        contents[i][j] = ViperUtil.getHtml(editables[j]);
                     }
 
                     (function(demoDiv, index, editableElements) {
-                        dfx.addEvent(dfx.getClass('demo-ins-refresh', demoDiv)[0], 'click', function() {
+                        ViperUtil.addEvent(ViperUtil.getClass('demo-ins-refresh', demoDiv)[0], 'click', function() {
                             for (var j = 0; j < editableElements.length; j++) {
-                                dfx.setHtml(editableElements[j], contents[index][j]);
+                                ViperUtil.setHtml(editableElements[j], contents[index][j]);
                             }
                         });
                     }) (demoDivs[i], i, editables);
@@ -78,15 +78,15 @@
 
                 // Show info on scroll.
                 $(function() {
-                    dfx.addEvent(window, 'scroll', function() {
-                        var yScrollPos = dfx.getScrollCoords().y;
+                    ViperUtil.addEvent(window, 'scroll', function() {
+                        var yScrollPos = ViperUtil.getScrollCoords().y;
 
                         for (var i = 0; i < demoDivs.length; i++) {
-                            var yCoord = dfx.getElementCoords(demoDivs[i]).y;
+                            var yCoord = ViperUtil.getElementCoords(demoDivs[i]).y;
                             if (yScrollPos + 300 >= yCoord && yScrollPos <= yCoord + 50) {
-                                var infoElem = dfx.getClass('demo-ins-info', demoDivs[i])[0];
-                                if (dfx.hasClass(infoElem, 'demo-ins-info-active') === false) {
-                                    dfxjQuery(infoElem).show().animate({
+                                var infoElem = ViperUtil.getClass('demo-ins-info', demoDivs[i])[0];
+                                if (ViperUtil.hasClass(infoElem, 'demo-ins-info-active') === false) {
+                                    $(infoElem).show().animate({
                                         width: '990px'
                                     }, 2000, 'easeOutBounce').addClass('demo-ins-info-active');
                                 }

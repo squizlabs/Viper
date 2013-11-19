@@ -17,7 +17,7 @@ ViperAccessibilityPlugin_WCAG2_Principle4_Guideline4_1 = {
                 var editPanel = this.parent.getResolutionActionsContainer(contentElement);
 
                 var idAttrid =  null;
-                idAttrid     = dfx.getUniqueId();
+                idAttrid     = ViperUtil.getUniqueId();
                 var idAttr   = viper.ViperTools.createTextbox(idAttrid, 'ID', element.getAttribute('id') || '');
                 editPanel.appendChild(idAttr);
 
@@ -27,12 +27,12 @@ ViperAccessibilityPlugin_WCAG2_Principle4_Guideline4_1 = {
                 };
 
                 this.parent.addActionButton(action, contentElement, [idAttrid], null, null, function() {
-                    var idAttrVal = dfx.trim(viper.ViperTools.getItem(idAttrid).getValue());
+                    var idAttrVal = ViperUtil.trim(viper.ViperTools.getItem(idAttrid).getValue());
                     if (!idAttrVal) {
                         return false;
                     } else {
-                        var elem = dfx.getId(idAttrVal);
-                        if (dfx.getParents(elem).inArray(viper.getViperElement()) === true) {
+                        var elem = ViperUtil.getid(idAttrVal);
+                        if (ViperUtil.getParents(elem).inArray(viper.getViperElement()) === true) {
                             return false;
                         }
                     }

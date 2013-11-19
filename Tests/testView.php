@@ -84,10 +84,10 @@
         var browser = idParts[0];
         id          = idParts[1];
 
-        var infoContainer = dfx.getId('infoContainer');
+        var infoContainer = ViperUtil.getid('infoContainer');
         var info = _info[browser][id];
 
-        dfx.removeClass(dfx.getTag('td'), 'active');
+        ViperUtil.removeClass(ViperUtil.getTag('td'), 'active');
 
         var title = [];
         for (var browser in _info) {
@@ -101,13 +101,13 @@
         title = title.join('<br /> ');
 
         if (!info) {
-            dfx.setHtml(infoContainer, '');
+            ViperUtil.setHtml(infoContainer, '');
             return;
         }
 
-        dfx.addClass(elem, 'active');
+        ViperUtil.addClass(elem, 'active');
 
-        dfx.setHtml(infoContainer, '<h2>' + browser + ': ' + info.type +"</h2><p>" + title + "</p><pre>\n\n" + info.info + '</pre>');
+        ViperUtil.setHtml(infoContainer, '<h2>' + browser + ': ' + info.type +"</h2><p>" + title + "</p><pre>\n\n" + info.info + '</pre>');
     }
     </script>
 </head>

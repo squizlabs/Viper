@@ -4,7 +4,8 @@
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <title>Viper - Simple Example</title>
     <link rel="stylesheet" media="screen" href="main.css">
-    <script type="text/javascript" src="../../DfxJSLib/dfx.js"></script>
+    <script type="text/javascript" src="../../../DfxJSLib/jquery.js"></script>
+    <script type="text/javascript" src="../../../DfxJSLib/jquery.ui.js"></script>
     <script type="text/javascript" src="../../Viper-all.js"></script>
     <script type="text/javascript">
         var viperTest = null;
@@ -13,7 +14,7 @@
             var search = window.location.search;
             if (search && search.indexOf('?lang=') === 0) {
                 lang = search.replace('?lang=', '');
-                dfx.getId('langSelector').value = lang;
+                ViperUtil.getid('langSelector').value = lang;
             }
 
             viperTest = new Viper('test', {language: lang}, function(viper) {

@@ -160,7 +160,7 @@ function printResults($results, $commonFailures, $browsers)
         echo '<div class="progressInfo">';
         echo $browserResults['progress'];
         echo '</div>';
-        echo '<div class="toggleResults" onclick="dfx.toggle(dfx.getId(\''.$browserid.'-results\'));">Toggle Results</div>';
+        echo '<div class="toggleResults" onclick="dfx.toggle(ViperUtil.getid(\''.$browserid.'-results\'));">Toggle Results</div>';
 
         unset($browserResults['progress']);
         echo '<ul id="'.$browserid.'-results" class="results">';
