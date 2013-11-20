@@ -436,6 +436,23 @@ var ViperUtil = {
 
     },
 
+    safedblclick: function(elements, clickCallback, dblClickCallback, data)
+    {
+        var t = null;
+        $(elements).bind('click', data, function(e) {
+            clearTimeout(t);
+            t = setTimeout(function() {
+                clickCallback.call(this, e, data);
+            }, 250);
+        });
+
+        $(elements).bind('dblclick', data, function(e) {
+            clearTimeout(t);
+            dblClickCallback.call(this, e, data);
+        });
+
+    },
+
     /**
      * Trigger a type of event on all specified elements.
      */
@@ -781,6 +798,50 @@ var ViperUtil = {
     },
 
     /**
+     * Returns the siblings of the element.
+     *
+     * @param DomNode element          The element.
+     * @param string  dir              Direction of the siblings. (values: prev, next).
+     * @param boolean elementNodesOnly If true then only the ELEMENT_NODEs will be returned.
+     *                                 Other nodes like TEXT_NODE will be ignored.
+     * @param DomNode stopElem         If specified any sibling from stopElem will not be returned.
+     */
+    getSiblings: function(element, dir, elementNodesOnly, stopElem)
+    {
+        if (elementNodesOnly === true) {
+            if (dir === 'prev') {
+                return $(element).prevAll();
+            } else {
+                return $(element).nextAll();
+            }
+        } else {
+            var elems = [];
+            if (dir === 'prev') {
+                while (element.previousSibling) {
+                    element = element.previousSibling;
+                    if (element === stopElem) {
+                        break;
+                    }
+
+                    elems.push(element);
+                }
+            } else {
+                while (element.nextSibling) {
+                    element = element.nextSibling;
+                    if (element === stopElem) {
+                        break;
+                    }
+
+                    elems.push(element);
+                }
+            }
+
+            return elems;
+        }//end if
+
+    },
+
+    /**
      * Merges an array of any type similiar to PHP.
      *
      * If array1 is a JS array the elements will simply be added to the end of array1.
@@ -941,7 +1002,7 @@ var ViperUtil = {
      * Completely removes all content that is contained within the passed element.
      *
      * If the element was the following: <p id="mypara"><span>Content</span></p>,
-     * when called with dom.empty(ViperUtil.getId('mypara')) the paragraph would become
+     * when called with dom.empty(ViperUtil.getid('mypara')) the paragraph would become
      * <p id="mypara"></p>.
      *
      * @param {DomElement} element The element to empty.
@@ -1634,6 +1695,17 @@ var ViperUtil = {
 
     },
 
+    strRepeat: function(str, multiplier)
+    {
+        var rstr = '';
+        for (var i = 0; i < multiplier; i++) {
+            rstr += str;
+        }
+
+        return rstr;
+
+    },
+
     /**
      * Validates an email.
      *
@@ -2121,12 +2193,77 @@ var ViperUtil = {
             mergedUrl = url;
         }
 
-        var anchorPartURL = ViperUtil.anchorPart(url);
+        var anchorPartURL = ViperUtil.getURLAnchor(url);
         if (anchorPartURL.length > 0) {
             mergedUrl = mergedUrl + anchorPartURL;
         }
 
         return mergedUrl;
+
+    },
+
+    /**
+     * Returns the anchor part of the URL.  Blank if no # or
+     * hash followed by the actual anchor name
+     */
+    getURLAnchor: function(url)
+    {
+        if (typeof url === 'string') {
+            var aStartIdx = url.search(/\#/);
+            if (aStartIdx === -1) {
+                url = '';
+            } else {
+                url = url.substr(aStartIdx, (url.length - aStartIdx));
+            }
+        }
+
+        return url;
+
+    },
+
+    baseUrl: function(fullUrl)
+    {
+        var qStartIdx = fullUrl.search(/\?|#/);
+        if (qStartIdx === -1) {
+            return fullUrl;
+        } else {
+            var baseUrl = fullUrl.substr(0, qStartIdx);
+            return baseUrl;
+        }
+
+    },
+
+    objectMerge: function (ob1, ob2)
+    {
+        ViperUtil.foreach(ob2, function(key) {
+            ob1[key] = ob2[key];
+            return true;
+        });
+
+        return ob1;
+
+    },
+
+    /**
+     * Converts a property like background-color to backgroundColor.
+     *
+     * @param {String} property The string to convert.
+     *
+     * @return The converted string.
+     * @type   string
+     */
+    camelCase: function(property)
+    {
+        // Regular expression to find the next hyphen followed by a letter and to
+        // seperate the letter in the results.
+        var hyphenTest = /-([a-z])/;
+        // While there is a hyphen in the string (reg.test == true) replace it with
+        // its' trailing letter uppercased.
+        while (hyphenTest.test(property) == true) {
+            property = property.replace(hyphenTest, RegExp.$1.toUpperCase());
+        }
+
+        return property;
 
     }
 
