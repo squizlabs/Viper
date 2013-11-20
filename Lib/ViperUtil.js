@@ -1,5 +1,5 @@
 var ViperUtil = {
-    $: window.$ || window.jQuery || window.dfxJQuery || (function() {throw new Error('jQuery not found!')})(),
+    $: window.$ || window.jQuery || window.dfxjQuery || (function() {throw new Error('jQuery not found!')})(),
     ELEMENT_NODE: 1,
     ATTRIBUTE_NODE: 2,
     TEXT_NODE: 3,
