@@ -46,7 +46,7 @@ function gHtml(selector, index, removeTableHeaders)
     var html = '';
     index = index || 0;
     if (selector) {
-        html = viperTest.getWindow().ViperUtil.getHtml(viperTest.getWindow().$(selector)[index]).replace("\n", '');
+        html = viperTest.getWindow().ViperUtil.getHtml(viperTest.getWindow().ViperUtil.$(selector)[index]).replace("\n", '');
         html = viperTest.getWindow().viper.getHtml(html);
     } else {
         html = viperTest.getWindow().viper.getHtml();
@@ -119,7 +119,7 @@ function gBtn(text, state, selectorPrefix)
 
     selector += ':contains(' + text + ')';
 
-    var buttons = viperTest.getWindow().$.find(selector);
+    var buttons = viperTest.getWindow().ViperUtil.$.find(selector);
     if (buttons.length === 0) {
         return false;
     }
@@ -162,7 +162,7 @@ function gField(label)
     var selector = '.Viper-subSection.Viper-active label span';
     selector    += ':contains(' + label + ')';
 
-    var field = viperTest.getWindow().$.find(selector)[0];
+    var field = viperTest.getWindow().ViperUtil.$.find(selector)[0];
     if (!field) {
         return false;
     }
@@ -202,7 +202,7 @@ function execJS()
  */
 function gBRec(selector, index)
 {
-    var rect = viperTest.getWindow().ViperUtil.getBoundingRectangle(viperTest.getWindow().$(selector)[index]);
+    var rect = viperTest.getWindow().ViperUtil.getBoundingRectangle(viperTest.getWindow().ViperUtil.$(selector)[index]);
     rect.x1 = parseInt(rect.x1);
     rect.x2 = parseInt(rect.x2);
     rect.y1 = parseInt(rect.y1);

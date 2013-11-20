@@ -5,10 +5,12 @@
     <title>Viper - Simple Example</title>
     <link rel="stylesheet" media="screen" href="main.css" />
     <link rel="stylesheet" media="screen" href="../../build/viper.css" />
+    <script type="text/javascript" src="../../../DfxJSLib/jquery.js"></script>
+    <script type="text/javascript" src="../../../DfxJSLib/jquery.ui.js"></script>
     <script type="text/javascript" src="../../build/viper.js"></script>
     <script type="text/javascript">
         var viperTest = null;
-        dfx.addLoadEvent(function() {
+        jQuery(document).ready(function() {
             viperTest = new Viper('test', {language: 'en'}, function(viperTest) {
                 viperTest.getPluginManager().setPlugins(['ViperCoreStylesPlugin', 'ViperKeyboardEditorPlugin', 'ViperInlineToolbarPlugin', 'ViperHistoryPlugin', 'ViperListPlugin', 'ViperFormatPlugin', 'ViperToolbarPlugin', 'ViperTableEditorPlugin', 'ViperCopyPastePlugin', 'ViperImagePlugin', 'ViperLinkPlugin', 'ViperAccessibilityPlugin', 'ViperSourceViewPlugin', 'ViperSearchReplacePlugin', 'ViperLangToolsPlugin', 'ViperCharMapPlugin', 'ViperTrackChangesPlugin']);
                 viperTest.setEditableElement(document.getElementById('content'));

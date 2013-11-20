@@ -130,7 +130,7 @@ var ViperChangeTracker = {
             self.reLoad();
         });
 
-        $(window).resize(function() {
+        ViperUtil.$(window).resize(function() {
           self.updatePositionMarkers(true);
         });
 

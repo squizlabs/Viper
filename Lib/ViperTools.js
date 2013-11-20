@@ -880,7 +880,7 @@ ViperTools.prototype = {
             ViperUtil.addClass(dragIcon, 'Viper-popup-dragIcon');
             header.appendChild(dragIcon);
 
-            $(main).draggable({
+            ViperUtil.$(main).draggable({
                 handle: header
             });
         }
@@ -984,7 +984,7 @@ ViperTools.prototype = {
                 ViperUtil.setStyle(midContent, 'height', ui.size.height + 'px');
             };
 
-            $(midContent).resizable({
+            ViperUtil.$(midContent).resizable({
                 handles: 'se',
                 resize: function(e, ui) {
                     if (resizeCallback) {
@@ -1084,7 +1084,7 @@ ViperTools.prototype = {
             }
         }
 
-        $(popup.element).draggable('enable');
+        ViperUtil.$(popup.element).draggable('enable');
 
         ViperUtil.setStyle(popupElement, 'visibility', 'visible');
 
@@ -1100,7 +1100,7 @@ ViperTools.prototype = {
             }
         }
 
-        $(popup.element).draggable('disable');
+        ViperUtil.$(popup.element).draggable('disable');
 
         if (popup.element.parentNode) {
             popup.element.parentNode.removeChild(popup.element);

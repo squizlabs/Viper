@@ -553,7 +553,7 @@ ViperMozRange.prototype = {
 
         var previous = posSpan.previousSibling;
         var next     = posSpan.nextSibling;
-        var c        = $(posSpan).position();
+        var c        = ViperUtil.$(posSpan).position();
         var coords   = {
             x: c.left,
             y: c.top

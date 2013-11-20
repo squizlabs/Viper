@@ -1076,7 +1076,7 @@ ViperIERange.prototype = {
 
         var previous = shy.previousSibling;
         var next     = shy.nextSibling;
-        var c        = $(shy).position();
+        var c        = ViperUtil.$(shy).position();
         var coords   = {
             x: c.left,
             y: c.top

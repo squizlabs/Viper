@@ -1,4 +1,5 @@
 var ViperUtil = {
+    $: window.$ || window.jQuery || window.dfxJQuery || (function() {throw new Error('jQuery not found!')})(),
     ELEMENT_NODE: 1,
     ATTRIBUTE_NODE: 2,
     TEXT_NODE: 3,
@@ -51,7 +52,7 @@ var ViperUtil = {
     remove: function(element)
     {
         if (element) {
-            return $(element).remove();
+            return ViperUtil.$(element).remove();
         }
 
     },
@@ -67,7 +68,7 @@ var ViperUtil = {
      */
     insertBefore: function(before, elem)
     {
-        $(before).before(elem);
+        ViperUtil.$(before).before(elem);
 
     },
 
@@ -82,7 +83,7 @@ var ViperUtil = {
      */
     insertAfter: function(after, elem)
     {
-        $(after).after(elem);
+        ViperUtil.$(after).after(elem);
 
     },
 
@@ -97,7 +98,7 @@ var ViperUtil = {
      */
     addClass: function(element, classNames)
     {
-        $(element).addClass(classNames);
+        ViperUtil.$(element).addClass(classNames);
 
     },
 
@@ -112,7 +113,7 @@ var ViperUtil = {
      */
     removeClass: function(element, classNames)
     {
-        $(element).removeClass(classNames);
+        ViperUtil.$(element).removeClass(classNames);
 
     },
 
@@ -132,7 +133,7 @@ var ViperUtil = {
     setStyle: function(element, property, value)
     {
         if (element) {
-            $(element).css(property, value);
+            ViperUtil.$(element).css(property, value);
         }
 
     },
@@ -157,9 +158,9 @@ var ViperUtil = {
         }
 
         if (onlyChildren === true) {
-            ret = $.makeArray($(startElement).children(tagName));
+            ret = ViperUtil.$.makeArray(ViperUtil.$(startElement).children(tagName));
         } else {
-            ret = $.makeArray($(startElement).find(tagName));
+            ret = ViperUtil.$.makeArray(ViperUtil.$(startElement).find(tagName));
         }
 
         return ret;
@@ -182,7 +183,7 @@ var ViperUtil = {
     setHtml: function(element, content)
     {
         if (element) {
-            $(element).html(content);
+            ViperUtil.$(element).html(content);
         }
 
     },
@@ -201,7 +202,7 @@ var ViperUtil = {
      */
     getHtml: function(element)
     {
-        return $(element).html();
+        return ViperUtil.$(element).html();
 
     },
 
@@ -404,7 +405,7 @@ var ViperUtil = {
 
     isArray: function(v)
     {
-        return $.isArray(v);
+        return ViperUtil.$.isArray(v);
 
     },
 
@@ -417,9 +418,9 @@ var ViperUtil = {
             if (type === 'safedblclick') {
                 ViperUtil.safedblclick(elements, callback, data);
             } else if (type === 'mousewheel') {
-                $(elements).mousewheel(callback);
+                ViperUtil.$(elements).mousewheel(callback);
             } else {
-                $(elements).bind(type, data, callback);
+                ViperUtil.$(elements).bind(type, data, callback);
             }
         }
 
@@ -431,7 +432,7 @@ var ViperUtil = {
     removeEvent: function(elements, type, func)
     {
         if (elements) {
-            $(elements).unbind(type, func);
+            ViperUtil.$(elements).unbind(type, func);
         }
 
     },
@@ -439,14 +440,14 @@ var ViperUtil = {
     safedblclick: function(elements, clickCallback, dblClickCallback, data)
     {
         var t = null;
-        $(elements).bind('click', data, function(e) {
+        ViperUtil.$(elements).bind('click', data, function(e) {
             clearTimeout(t);
             t = setTimeout(function() {
                 clickCallback.call(this, e, data);
             }, 250);
         });
 
-        $(elements).bind('dblclick', data, function(e) {
+        ViperUtil.$(elements).bind('dblclick', data, function(e) {
             clearTimeout(t);
             dblClickCallback.call(this, e, data);
         });
@@ -459,7 +460,7 @@ var ViperUtil = {
     trigger: function(elements, type, data)
     {
         if (elements) {
-            $(elements).trigger(type, data);
+            ViperUtil.$(elements).trigger(type, data);
         }
 
     },
@@ -467,7 +468,7 @@ var ViperUtil = {
     hover: function(elements, over, out)
     {
         if (elements) {
-            $(elements).hover(over, out);
+            ViperUtil.$(elements).hover(over, out);
         }
 
     },
@@ -535,9 +536,9 @@ var ViperUtil = {
         }
 
         if (onlyChildren === true) {
-            ret = $.makeArray($(startElement).children(className));
+            ret = ViperUtil.$.makeArray(ViperUtil.$(startElement).children(className));
         } else {
-            ret = $.makeArray($(startElement).find(className));
+            ret = ViperUtil.$.makeArray(ViperUtil.$(startElement).find(className));
         }
 
         return ret;
@@ -555,7 +556,7 @@ var ViperUtil = {
      */
     hasClass: function(element, className)
     {
-        return $(element).hasClass(className);
+        return ViperUtil.$(element).hasClass(className);
 
     },
 
@@ -571,7 +572,7 @@ var ViperUtil = {
      */
     getStyle: function(element, property)
     {
-        return $(element).css(property);
+        return ViperUtil.$(element).css(property);
 
     },
 
@@ -620,7 +621,7 @@ var ViperUtil = {
 
     getParents: function(elements, filter, stopEl, blockElementsOnly)
     {
-        var res = $(elements).parents(filter);
+        var res = ViperUtil.$(elements).parents(filter);
         var ln  = res.length;
         var ar  = [];
         for (var i = 0; i < ln; i++) {
@@ -810,9 +811,9 @@ var ViperUtil = {
     {
         if (elementNodesOnly === true) {
             if (dir === 'prev') {
-                return $(element).prevAll();
+                return ViperUtil.$(element).prevAll();
             } else {
-                return $(element).nextAll();
+                return ViperUtil.$(element).nextAll();
             }
         } else {
             var elems = [];
@@ -915,16 +916,16 @@ var ViperUtil = {
     attr: function(elements, key, val)
     {
         if (ViperUtil.isset(val) === true) {
-            return $(elements).attr(key, val);
+            return ViperUtil.$(elements).attr(key, val);
         } else {
-            return $(elements).attr(key);
+            return ViperUtil.$(elements).attr(key);
         }
 
     },
 
     removeAttr: function(elements, name)
     {
-        $(elements).removeAttr(name);
+        ViperUtil.$(elements).removeAttr(name);
 
     },
 
@@ -966,7 +967,7 @@ var ViperUtil = {
      */
     getNodeTextContent: function(node)
     {
-       return $(node).text();
+       return ViperUtil.$(node).text();
 
     },
 
@@ -1013,7 +1014,7 @@ var ViperUtil = {
     empty: function(element)
     {
         if (element) {
-            return $(element).empty();
+            return ViperUtil.$(element).empty();
         }
 
     },
@@ -1021,7 +1022,7 @@ var ViperUtil = {
     find: function(parent, exp)
     {
         // Note: For valid selectors for exp go to http://docs.jquery.com/Selectors.
-        return $(parent).find(exp);
+        return ViperUtil.$(parent).find(exp);
 
     },
 
@@ -1310,7 +1311,7 @@ var ViperUtil = {
      */
     getElementCoords: function(element, relative)
     {
-        var offset = $(element).offset();
+        var offset = ViperUtil.$(element).offset();
         return {
             x: offset.left,
             y: offset.top
@@ -1320,7 +1321,7 @@ var ViperUtil = {
 
     removeEmptyNodes: function(parent, callback)
     {
-        var elems = $(parent).find(':empty');
+        var elems = ViperUtil.$(parent).find(':empty');
         var i     = elems.length;
         while (i > 0) {
             i--;
@@ -1521,7 +1522,7 @@ var ViperUtil = {
      */
     setNodeTextContent: function(node, txt)
     {
-       return $(node).text(txt);
+       return ViperUtil.$(node).text(txt);
 
     },
 
@@ -2160,13 +2161,13 @@ var ViperUtil = {
 
     blindDown: function(elements, speed, callback)
     {
-        $(elements).slideDown(speed, callback);
+        ViperUtil.$(elements).slideDown(speed, callback);
 
     },
 
     blindUp: function(elements, speed, callback)
     {
-        $(elements).slideUp(speed, callback);
+        ViperUtil.$(elements).slideUp(speed, callback);
 
     },
 

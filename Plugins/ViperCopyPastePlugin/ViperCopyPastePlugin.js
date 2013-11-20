@@ -874,12 +874,12 @@ ViperCopyPastePlugin.prototype = {
         var tmp = document.createElement('div');
         ViperUtil.setHtml(tmp, content);
 
-        $(tmp).find('[class]').removeAttr('class');
-        $(tmp).find('[style]').removeAttr('style');
-        $(tmp).find('br[clear]').removeAttr('clear');
+        ViperUtil.$(tmp).find('[class]').removeAttr('class');
+        ViperUtil.$(tmp).find('[style]').removeAttr('style');
+        ViperUtil.$(tmp).find('br[clear]').removeAttr('clear');
 
         // Remove all attributes from table related elements.
-        var tableElements = $(tmp).find('td,tr,table,tbody,tfoot,thead');
+        var tableElements = ViperUtil.$(tmp).find('td,tr,table,tbody,tfoot,thead');
         var c = tableElements.length;
         for (var i = 0; i < c; i++) {
             var attributes = tableElements[i].attributes;
@@ -907,7 +907,7 @@ ViperCopyPastePlugin.prototype = {
         }
 
         // Remove colgroup from tables.
-        ViperUtil.remove($(tmp).find('colgroup'));
+        ViperUtil.remove(ViperUtil.$(tmp).find('colgroup'));
 
         content = ViperUtil.getHtml(tmp);
         return content;
