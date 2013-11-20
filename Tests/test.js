@@ -26,8 +26,8 @@ var viperTest = {
 
 function sendResult(result)
 {
-    result = dfx.jsonEncode(result);
-    dfx.post(viperTest.scriptURL, {res: result, _t:(new Date().getTime())}, function() {
+    result = JSON.stringify(result);
+    ViperUtil.$.post(viperTest.scriptURL, {res: result, _t:(new Date().getTime())}, function() {
         viperTest.stopPolling = false;
     });
 
@@ -190,7 +190,7 @@ function execJS()
     viperTest.getWindow().ViperUtil.getid('jsExec').value = '';
 
     val  = 'var jsResult = ' + val + ';';
-    val += 'viperTest.getWindow().ViperUtil.getid("jsRes").value = viperTest.getWindow().dfx.jsonEncode(jsResult);';
+    val += 'ViperUtil.getid("jsRes").value = JSON.stringify(jsResult);';
 
     // Execute JS.
     eval(val);
@@ -365,7 +365,7 @@ function pasteFromURL(url)
 {
     var copyPastePlugin = viperTest.getWindow().viper.getPluginManager().getPlugin('ViperCopyPastePlugin');
 
-    dfx.post(url, null, function(data) {
+    ViperUtil.$.post(url, null, function(data) {
         var tmp = document.createElement('div');
         ViperUtil.setHtml(tmp, data);
 

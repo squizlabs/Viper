@@ -190,8 +190,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
             $viperInclude = '<script type="text/javascript" src="../build/viper.js"></script>
                              <link rel="stylesheet" media="screen" href="../build/viper.css" />';
         } else {
-            $viperInclude = '<script type="text/javascript" src="../DfxJSLib/dfx.js"></script>
-                             <script type="text/javascript" src="../Viper-all.js"></script>';
+            $viperInclude = '<script type="text/javascript" src="../Viper-all.js"></script>';
         }
 
         // Get stats.
