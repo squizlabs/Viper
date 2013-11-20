@@ -84,7 +84,7 @@ var ViperChangeTracker = {
                 if (node.nodeType === 8 && node.data.indexOf('viperTrackInfo=') === 0) {
                     var loadedData = node.data.replace('viperTrackInfo=', '');
                     try {
-                        loadedData = dfx.jsonDecode(loadedData);
+                        loadedData = JSON.parse(loadedData);
                     } catch (e) {
                         // Failed to parse..
                         loadedData = [];
@@ -1185,7 +1185,7 @@ var ViperChangeTracker = {
             var info      = {
                 ownerName: ViperUtil.ellipsize(userAsset.name, 13),
                 ownerid: userAsset.id,
-                time: dfx.date('d/M/y h:ia', parseInt(change.time)),
+                time: '',
                 typeName: ViperChangeTracker.getTypeTitle(change.type),
                 typeid: change.type,
                 desc: ViperChangeTracker.getDescription(change.type, change.nodes[0], changeid)
@@ -1587,7 +1587,7 @@ var ViperChangeTracker = {
             ctdata[type] = value;
         }//end if
 
-        ctdata = dfx.jsonEncode(ctdata);
+        ctdata = JSON.stringify(ctdata);
         if (ctdata === '{}') {
             // Data is empty so no reason to keep the attribute.
             ViperUtil.removeAttr(node, 'ctdata');
@@ -1610,7 +1610,7 @@ var ViperChangeTracker = {
             return null;
         }
 
-        ctdata = dfx.jsonDecode(ctdata);
+        ctdata = JSON.parse(ctdata);
         if (!type) {
             return ctdata;
         }

@@ -12,18 +12,16 @@
  */
 ViperReadyCallback = null;
 (function() {
-    var dfxScripts = document.getElementsByTagName('script');
+    var scripts = document.getElementsByTagName('script');
     var path       = null;
 
     // Loop through all the script tags that exist in the document and find the one
     // that has included this file.
-    var dfxScriptsLen = dfxScripts.length;
-    for (var i = 0; i < dfxScriptsLen; i++) {
-        if (dfxScripts[i].src) {
-            if (dfxScripts[i].src.match(/Viper-all\.js/)) {
-                // We have found our appropriate <script> tag that includes the
-                // DfxJSLib library, so we can extract the path and include the rest.
-                path = dfxScripts[i].src.replace(/Viper-all\.js/,'');
+    var scriptsLen = scripts.length;
+    for (var i = 0; i < scriptsLen; i++) {
+        if (scripts[i].src) {
+            if (scripts[i].src.match(/Viper-all\.js/)) {
+                path = scripts[i].src.replace(/Viper-all\.js/,'');
                 break;
             }
         }

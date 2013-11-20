@@ -20,13 +20,14 @@
     <meta name="title" content="Home">
     <meta name="description" content="">
     <meta name="keywords" content="">
-    <script type="text/javascript" src="../../DfxJSLib/dfx.js"></script>
+    <script type="text/javascript" src="../jquery.js"></script>
+    <script type="text/javascript" src="../jquery.ui.js"></script>
     <script type="text/javascript" src="../../Viper-all.js"></script>
     <script type="text/javascript">
         var viper = null;
         ViperReadyCallback = function() {
             $ = jQuery = window.$;
-            dfx.addLoadEvent(function() {
+            $(document).ready(function() {
                 viper = new Viper('test');
                 var allPlugins = ['ViperCoreStylesPlugin', 'ViperKeyboardEditorPlugin', 'ViperInlineToolbarPlugin', 'ViperHistoryPlugin', 'ViperListPlugin', 'ViperFormatPlugin', 'ViperToolbarPlugin', 'ViperTableEditorPlugin', 'ViperCopyPastePlugin', 'ViperImagePlugin', 'ViperLinkPlugin', 'ViperAccessibilityPlugin', 'ViperSourceViewPlugin', 'ViperSearchReplacePlugin', 'ViperLangToolsPlugin', 'ViperCharMapPlugin', 'ViperTrackChangesPlugin'];
                 viper.getPluginManager().setPlugins(allPlugins);
