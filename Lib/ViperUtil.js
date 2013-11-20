@@ -1429,7 +1429,7 @@ var ViperUtil = {
      *
      * @return {DocumentElement}
      */
-    getIframeDocument: function(iframe)
+    getIFrameDocument: function(iframe)
     {
         var doc = null;
         if (iframe.contentDocument) {
