@@ -617,11 +617,26 @@ ViperImagePlugin.prototype = {
 
     updateImagePreview: function(url)
     {
-        this.setPreviewContent(false, true);
         var self = this;
-        ViperUtil.getImage(url, function(img) {
+        this.setPreviewContent(false, true);
+        this.loadImage(url, function(img) {
             self.setPreviewContent(img);
         });
+
+    },
+
+    loadImage: function(url, callback)
+    {
+        var img    = new Image();
+        img.onload = function() {
+            callback.call(this, img);
+        };
+
+        img.onerror = function() {
+            callback.call(this, false);
+        };
+
+        img.src = url;
 
     },
 

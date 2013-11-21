@@ -503,7 +503,7 @@ ViperTools.prototype = {
                         }
                     } else if (required === true) {
                         ViperUtil.addClass(textBox, 'Viper-required');
-                        ViperUtil.hideElement(actionIcon);
+                        ViperUtil.setStyle(actionIcon, 'display', 'none');
                     }
                 }
 
@@ -531,7 +531,8 @@ ViperTools.prototype = {
                 }
             }
 
-            ViperUtil.showElement(actionIcon);
+            ViperUtil.setStyle(actionIcon, 'display', 'block');
+            ViperUtil.setStyle(actionIcon, 'visibility', 'visible');
 
             ViperUtil.removeClass(textBox, 'Viper-actionClear');
             ViperUtil.removeClass(textBox, 'Viper-actionRevert');
@@ -553,7 +554,7 @@ ViperTools.prototype = {
                 ViperUtil.removeClass(textBox, 'Viper-required');
             } else {
                 if (isTextArea !== true) {
-                    ViperUtil.hideElement(actionIcon);
+                    ViperUtil.setStyle(actionIcon, 'display', 'none');
                 }
 
                 if (required === true) {
@@ -604,7 +605,7 @@ ViperTools.prototype = {
                         actionIcon = actionIcon[0];
                     }
 
-                    ViperUtil.showElement(actionIcon);
+                    ViperUtil.setStyle(actionIcon, 'display', 'block');
                 }
 
                 ViperUtil.removeClass(textBox, 'Viper-actionClear');
@@ -621,7 +622,7 @@ ViperTools.prototype = {
                         ViperUtil.addClass(textBox, 'Viper-actionClear');
                         ViperUtil.removeClass(textBox, 'Viper-required');
                     } else {
-                        ViperUtil.hideElement(actionIcon);
+                        ViperUtil.setStyle(actionIcon, 'display', 'none');
                         if (required === true) {
                             ViperUtil.addClass(textBox, 'Viper-required');
                         }
@@ -912,7 +913,6 @@ ViperTools.prototype = {
         });
 
         var showfullScreen = function() {
-            ViperUtil.getElementDimensions(midContent);
             var headerHeight  = ViperUtil.getElementHeight(header);
             var topHeight     = ViperUtil.getElementHeight(topContent);
             var bottomHeight  = ViperUtil.getElementHeight(bottomContent);
@@ -1009,14 +1009,14 @@ ViperTools.prototype = {
             openCallback: openCallback,
             closeCallback: closeCallback,
             showTop: function() {
-                ViperUtil.blindDown(topContent, function() {
+                ViperUtil.$(topContent).slideDown(null, function() {
                     if (fullScreen === true) {
                         showfullScreen();
                     }
                 });
             },
             hideTop: function() {
-                ViperUtil.blindUp(topContent, function() {
+                ViperUtil.$(topContent).slideUp(null, function() {
                     if (fullScreen === true) {
                         showfullScreen();
                     }
@@ -1738,7 +1738,7 @@ ViperTools.prototype = {
 
             },
             hideToolsSection: function() {
-                ViperUtil.hideElement(toolsContainer);
+                ViperUtil.setStyle(toolsContainer, 'display', 'none');
                 ViperUtil.addClass(toolbar, 'Viper-noTools');
             },
             setOnHideCallback: function(callback) {

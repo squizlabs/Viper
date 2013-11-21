@@ -1175,11 +1175,11 @@ ViperTableEditorPlugin.prototype = {
         // the mouse is over the table tools bar.
         var self = this;
         ViperUtil.hover(hElem, function() {
-            ViperUtil.hideElement(hElem);
+            ViperUtil.setStyle(hElem, 'display', 'none');
         }, function() {});
 
         ViperUtil.hover(self._toolbarWidget.element, function() {
-            ViperUtil.showElement(hElem);
+            ViperUtil.setStyle(hElem, 'display', 'block');
         }, function() {});
 
     },
@@ -3596,45 +3596,6 @@ ViperTableEditorPlugin.prototype = {
         }
 
         return ViperUtil.getHtml(cols[column]);
-
-    },
-
-    arrayUnique: function(array)
-    {
-        var tmp    = {};
-        var unique = [];
-        var count  = array.length;
-
-        for (var i = 0; i < count; i++) {
-            tmp[array[i]] = array[i];
-        }
-
-        for (var item in tmp) {
-            unique.push(tmp[item]);
-        }
-
-        return unique;
-
-    },
-
-    arrayIntersect: function(array1, array2)
-    {
-        var tmp    = {};
-        var unique = [];
-        var count  = array2.length;
-
-        for (var i = 0; i < count; i++) {
-            tmp[array2[i]] = array2[i];
-        }
-
-        count = array1.length;
-        for (var i = count; i >= 0; i--) {
-            if (ViperUtil.isset(tmp[array1[i]]) === false) {
-                ViperUtil.unsetIndex(array1, i);
-            }
-        }
-
-        return array1;
 
     },
 

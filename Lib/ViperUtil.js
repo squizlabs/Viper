@@ -20,12 +20,14 @@ var ViperUtil = {
     DOM_VK_ENTER: 13,
     DOM_VK_BACKSPACE: 46,
 
-    isTag: function(node, tag) {
+    isTag: function(node, tag)
+    {
         if (node && node.tagName && node.tagName.toLowerCase() === tag.toLowerCase()) {
             return true;
         }
 
         return false;
+
     },
 
     getTagName: function(node)
@@ -283,13 +285,15 @@ var ViperUtil = {
                 case 'area':
                 case 'embed':
                     return true;
+
                 break;
 
                 default:
                     return false;
+
                 break;
-            }
-        }
+            }//end switch
+        }//end if
 
         return false;
 
@@ -400,12 +404,6 @@ var ViperUtil = {
         }
 
         return true;
-
-    },
-
-    isArray: function(v)
-    {
-        return ViperUtil.$.isArray(v);
 
     },
 
@@ -944,14 +942,15 @@ var ViperUtil = {
     {
         // Retrieve the coordinates and dimensions of the element.
         var coords     = ViperUtil.getElementCoords(element);
-        var dimensions = ViperUtil.getElementDimensions(element);
+        var width      = ViperUtil.getElementWidth(element);
+        var height     = ViperUtil.getElementHeight(element);
 
         // Create an array by using the elements dimensions.
         var result = {
             x1: parseInt(coords.x),
             y1: parseInt(coords.y),
-            x2: parseInt(coords.x + dimensions.width),
-            y2: parseInt(coords.y + dimensions.height)
+            x2: parseInt(coords.x + width),
+            y2: parseInt(coords.y + height)
         };
         return result;
 
@@ -1269,40 +1268,6 @@ var ViperUtil = {
     },
 
     /**
-     * Hides the element so it becomes invisible to the user.
-     *
-     * @param {DomElement} element The element to hide.
-     *
-     * @return void
-     * @type void
-     */
-    hideElement: function(element, visibilityOnly)
-    {
-        ViperUtil.setStyle(element, 'visibility', 'hidden');
-        if (ViperUtil.isset(visibilityOnly) === false || visibilityOnly === false) {
-            ViperUtil.setStyle(element, 'display', 'none');
-        }
-
-    },
-
-    /**
-     * Shows the element so it becomes visible to the user.
-     *
-     * @param {DomElement} element The element to show.
-     *
-     * @return void
-     * @type void
-     */
-    showElement: function(element, visibilityOnly)
-    {
-        ViperUtil.setStyle(element, 'visibility', 'visible');
-        if (ViperUtil.isset(visibilityOnly) === false || visibilityOnly === false) {
-            ViperUtil.setStyle(element, 'display', 'block');
-        }
-
-    },
-
-    /**
      * Retrieves the coordinate of the element relative to the page.
      *
      * @param {DomElement} el  The element which we want the coordinates for.
@@ -1526,36 +1491,8 @@ var ViperUtil = {
 
     },
 
-    removeArrayIndex: function(array, index)
-    {
-        if (!array || ViperUtil.isset(array[index]) === false) {
-            return null;
-        }
-
-        return array.splice(index, 1);
-
-    },
-
     /**
      * Implements inheritance for two classes.
-     *
-     * @param {funcPtr} child  The class that is inheriting the parent methods.
-     * @param {funcPtr} parent The parent that is being implemented.
-     *
-     * @return void
-     * @type   void
-     */
-    inherits: function(child, parent)
-    {
-        ViperUtil.noInclusionInherits(child, parent);
-
-    },
-
-    /**
-     * Implements inheritance for two classes.
-     *
-     * The main difference with inherits() function is that
-     * this does not include parent widget type before inheritance operation.
      *
      * @param {funcPtr} child  The class that is inheriting the parent methods.
      * @param {funcPtr} parent The parent that is being implemented.
@@ -1564,7 +1501,7 @@ var ViperUtil = {
      * @type   void
      */
     _inherited: {},
-    noInclusionInherits: function(child, parent)
+    inherits: function(child, parent)
     {
         if (ViperUtil._inherited[child + parent]) {
             return;
@@ -1599,6 +1536,12 @@ var ViperUtil = {
             above.prototype.constructor = parent;
             child.prototype['super']    = new above();
         }
+
+    },
+
+    isArray: function(v)
+    {
+        return ViperUtil.$.isArray(v);
 
     },
 
@@ -1650,6 +1593,16 @@ var ViperUtil = {
         }
 
         return -1;
+
+    },
+
+    removeArrayIndex: function(array, index)
+    {
+        if (!array || ViperUtil.isset(array[index]) === false) {
+            return null;
+        }
+
+        return array.splice(index, 1);
 
     },
 
@@ -1727,56 +1680,6 @@ var ViperUtil = {
         }
 
         return rstr;
-
-    },
-
-    /**
-     * Validates an email.
-     *
-     * Chose not to use a domain white list given .anything is on the way.  A feature
-     * this regex currently does not support is <Name Part> of an email so add if
-     * needed.  This expression is based on Arluison Guillaume http://www.mi-ange.net/
-     * email regex.
-     *
-     * @return boolean
-     */
-    validateEmail: function(email)
-    {
-        var regExStr = '^[-a-z0-9~!$%^&*_=+}{\'?]+(\.[-a-z0-9~!$%^&*_=+}{\'?]+)*@([a-z0-9_][-a-z0-9_]*(\.[-a-z0-9_]+)*\.([a-z][a-z]+)|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$';
-
-        var regExp = new RegExp(regExStr, 'i');
-
-        // Finally run the regular expression.
-        var matches = email.match(regExp);
-        if (matches === null) {
-            var emailValid = false;
-        } else {
-            var emailValid = true;
-        }
-
-        return emailValid;
-
-    },
-
-    /**
-     * Equivalent of PHP unset($array[$idx]) for arrays.
-     *
-     * Using the avoids getting undefined value left in normal JS array when you use
-     * delete $array[$idx].  You also don't need to worry about what type of array you
-     * were given.
-     *
-     * @param {array|object} anyArray Any type of array to count the elements of.
-     * @param {int|string}   index    The index of the item to delete.
-     *
-     * @return void
-     */
-    unsetIndex: function(anyArray, index)
-    {
-        if (anyArray instanceof Array) {
-            anyArray.splice(index, 1);
-        } else {
-            delete anyArray[index];
-        }
 
     },
 
@@ -2096,48 +1999,6 @@ var ViperUtil = {
 
     },
 
-    getImage: function(url, callback)
-    {
-        var img    = new Image();
-        img.onload = function() {
-            callback.call(this, img);
-        };
-
-        img.onerror = function() {
-            callback.call(this, false);
-        };
-
-        img.src = url;
-
-    },
-
-    /**
-     * Returns the absolute dimensions of the passed element.
-     *
-     * By default, returns the "outer" dimensions, including padding and borders. If the
-     * "inner" parameter is passed as true, the dimensions returned will exclude these.
-     *
-     * @param {DomElement} element The element which we want the dimensions for.
-     * @param {Boolean}    inner   true indicates inner dimensions wanted.
-     *
-     * @return Object
-     */
-    getElementDimensions: function(element, inner)
-    {
-        // Default to outer dimensions by default.
-        if (inner === undefined) {
-            inner = false;
-        }
-
-        var result = {
-            'width'  : ViperUtil.getElementWidth(element, inner),
-            'height' : ViperUtil.getElementHeight(element, inner)
-        };
-
-        return result;
-
-    },
-
     getCommonAncestor: function(a, b)
     {
         var node = a;
@@ -2179,18 +2040,6 @@ var ViperUtil = {
         }
 
         return valueClone;
-
-    },
-
-    blindDown: function(elements, speed, callback)
-    {
-        ViperUtil.$(elements).slideDown(speed, callback);
-
-    },
-
-    blindUp: function(elements, speed, callback)
-    {
-        ViperUtil.$(elements).slideUp(speed, callback);
 
     },
 
