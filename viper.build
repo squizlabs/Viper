@@ -1,1 +1,2 @@
-build-dev: --nojquery, --nodfxjslib
+build-framework: --nojquery, --nodfxjslib
+build-stable: -m

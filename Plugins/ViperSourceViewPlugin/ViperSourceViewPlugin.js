@@ -529,6 +529,10 @@ ViperSourceViewPlugin.prototype = {
         var path    = this.viper.getViperPath();
         var content = '';
 
+        if (Viper.build === true) {
+            path = null;
+        }
+
         this._newWindowContents = this.getSourceContents();
 
         content += '<!DOCTYPE html><html lang="en"><head>';
@@ -586,7 +590,7 @@ ViperSourceViewPlugin.prototype = {
         for (var i = 0; i < c; i++) {
             if (scripts[i].src) {
                 if (scripts[i].src.match(/\/viper\.js/)) {
-                    return scripts[i].src.replace('/viper.js', '/');
+                    return scripts[i].src.replace(/\/viper.js.*/, '/');
                 }
             }
         }
