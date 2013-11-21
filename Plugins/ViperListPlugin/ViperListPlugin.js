@@ -527,7 +527,7 @@ ViperListPlugin.prototype = {
                     }
 
                     var li = this._getListItem(elems[i]);
-                    if (li && listItems.inArray(li) === false) {
+                    if (li && ViperUtil.inArray(li, listItems) === false) {
                         listItems.push(li);
                     }
                 } else {
@@ -956,7 +956,7 @@ ViperListPlugin.prototype = {
             var c     = elems.length;
             for (var i = 0; i < c; i++) {
                 var p = this._getValidParentElement(elems[i]);
-                if (p && pElems.inArray(p) === false) {
+                if (p && ViperUtil.inArray(p, pElems) === false) {
                     pElems.push(p);
                 }
             }
@@ -1551,7 +1551,7 @@ ViperListPlugin.prototype = {
                         if (elem === this.viper.element) {
                             break;
                         } else if (ViperUtil.isBlockElement(elem) === true) {
-                            if (parents.inArray(elem) === false) {
+                            if (ViperUtil.inArray(elem, parents) === false) {
                                 parents.push(elem);
                             }
 

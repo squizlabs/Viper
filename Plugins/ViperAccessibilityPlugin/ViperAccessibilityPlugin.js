@@ -353,7 +353,7 @@ ViperAccessibilityPlugin.prototype = {
                 continue;
             }
 
-            if (this._dismissedIssues[issue.code].inArray(issue.element) === true) {
+            if (ViperUtil.inArray(issue.element, this._dismissedIssues[issue.code]) === true) {
                 toMoveIndexes.push(i);
                 toMoveElements.push(issue);
             }
@@ -384,7 +384,7 @@ ViperAccessibilityPlugin.prototype = {
                 continue;
             }
 
-            if (this._dismissedIssues[issue.code].inArray(issue.element) === true) {
+            if (ViperUtil.inArray(issue.element, this._dismissedIssues[issue.code]) === true) {
                 this._markAsDone(i);
             }
         }
@@ -466,7 +466,7 @@ ViperAccessibilityPlugin.prototype = {
 
     loadObject: function(src, objName, callback)
     {
-        if (window[objName] || this._loadedScripts.find(src) >= 0) {
+        if (window[objName] || ViperUtil.inArray(src, this._loadedScripts) === true) {
             callback.call(this, window[objName]);
             return;
         }
@@ -539,7 +539,7 @@ ViperAccessibilityPlugin.prototype = {
      * @param {function} callback The function to call once the script is loaded.
      */
     includeCss: function(href) {
-        if (this._includedCSS.find(href) >= 0) {
+        if (ViperUtil.inArray(href, this._includedCSS) === true) {
             return;
         }
 

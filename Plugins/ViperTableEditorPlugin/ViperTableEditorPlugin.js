@@ -142,7 +142,7 @@ ViperTableEditorPlugin.prototype = {
                 if (range.collapsed === true
                     && self.viper.isBrowser('msie') === true
                     && range.startContainer.nodeType === ViperUtil.TEXT_NODE
-                    && ['td', 'th'].inArray(ViperUtil.getTagName(range.startContainer.parentNode)) === true
+                    && ViperUtil.inArray(ViperUtil.getTagName(range.startContainer.parentNode), ['td', 'th']) === true
                 ) {
                     var ohtml = ViperUtil.getHtml(range.startContainer.parentNode);
                     var nhtml = ohtml.replace(/^&nbsp;/g, '');
@@ -1644,7 +1644,7 @@ ViperTableEditorPlugin.prototype = {
             // - They all have the same colspan
             // - Total rowspan must be the same as current cell's rowspan.
             var prevCell = cells[(cellPos.row + i)][(cellPos.col - 1)];
-            if (processedCells.inArray(prevCell) === true) {
+            if (ViperUtil.inArray(prevCell, processedCells) === true) {
                 continue;
             }
 
@@ -1699,7 +1699,7 @@ ViperTableEditorPlugin.prototype = {
             // - They all have the same colspan
             // - Total rowspan must be the same as current cell's rowspan.
             var nextCell = cells[(cellPos.row + i)][(cellPos.col + colspan)];
-            if (processedCells.inArray(nextCell) === true) {
+            if (ViperUtil.inArray(nextCell, processedCells) === true) {
                 continue;
             }
 
@@ -1755,7 +1755,7 @@ ViperTableEditorPlugin.prototype = {
                     return false;
                 }
 
-                if (processedCells.inArray(newCell) === true) {
+                if (ViperUtil.inArray(newCell, processedCells) === true) {
                     continue;
                 }
 
@@ -1808,7 +1808,7 @@ ViperTableEditorPlugin.prototype = {
                     return false;
                 }
 
-                if (processedCells.inArray(newCell) === true) {
+                if (ViperUtil.inArray(newCell, processedCells) === true) {
                     continue;
                 }
 
@@ -1936,7 +1936,7 @@ ViperTableEditorPlugin.prototype = {
                 var processedCells = [];
                 cells = cells[rowIndex];
                 for (var i = 0; i < cells.length; i++) {
-                    if (processedCells.inArray(cells[i]) === true) {
+                    if (ViperUtil.inArray(cells[i], processedCells) === true) {
                         continue;
                     }
 
@@ -2011,7 +2011,7 @@ ViperTableEditorPlugin.prototype = {
             // Reduce rowspan.
             var processedCells = [];
             for (var i = 0; i < rowCells.length; i++) {
-                if (processedCells.inArray(rowCells[i]) === true) {
+                if (ViperUtil.inArray(rowCells[i], processedCells) === true) {
                     continue;
                 }
 
@@ -2750,7 +2750,7 @@ ViperTableEditorPlugin.prototype = {
         var processedCells = [];
         for (var i = 0; i < rlen; i++) {
             var rowCell = rowCells[i];
-            if (processedCells.inArray(rowCell) === true) {
+            if (ViperUtil.inArray(rowCell, processedCells) === true) {
                 continue;
             }
 
@@ -2793,7 +2793,7 @@ ViperTableEditorPlugin.prototype = {
         var processedCells = [];
         for (var i = 0; i < rlen; i++) {
             var rowCell = rowCells[i];
-            if (processedCells.inArray(rowCell) === true) {
+            if (ViperUtil.inArray(rowCell, processedCells) === true) {
                 continue;
             }
 
@@ -2859,7 +2859,7 @@ ViperTableEditorPlugin.prototype = {
             var rowCellRowspan = this.getRowspan(rowCell);
             rowCells           = cells[(cellPos.row + rowspan)];
 
-            var index = rowCells.find(rowCell);
+            var index = ViperUtil.arraySearch(rowCell, rowCells);
             if (index > 0) {
                 for (var j = (index - 1); j >= 0; j--) {
                     if (this.getCellPosition(rowCells[j]).row === nextRowIndex) {
@@ -2980,7 +2980,7 @@ ViperTableEditorPlugin.prototype = {
         for (var i = 0; i < rowCount; i++) {
             for (var j = cellPos.col; j < (cellPos.col + colspan); j++) {
                 var rowCell = cells[i][j];
-                if (processedCells.inArray(rowCell) === true) {
+                if (ViperUtil.inArray(rowCell, processedCells) === true) {
                     continue;
                 }
 

@@ -530,7 +530,7 @@ ViperLinkPlugin.prototype = {
         // Check if we need to show the link options.
         if ((ViperUtil.isTag(data.lineage[data.current], 'img') !== true
             && ViperUtil.isBlockElement(data.lineage[data.current]) === true)
-            || ('thead,tfoot'.split(',')).inArray(ViperUtil.getTagName(data.lineage[data.current])) === true
+            || ViperUtil.inArray(ViperUtil.getTagName(data.lineage[data.current]), ('thead,tfoot'.split(','))) === true
         ) {
             return false;
         }
@@ -668,7 +668,7 @@ ViperLinkPlugin.prototype = {
                 } else {
                     if (nodeSelection
                         && nodeSelection.nodeType === ViperUtil.ELEMENT_NODE
-                        && ('tr,table,thead,tfoot'.split(',')).inArray(ViperUtil.getTagName(nodeSelection))
+                        && ViperUtil.inArray(ViperUtil.getTagName(nodeSelection), ('tr,table,thead,tfoot'.split(',')))
                     ) {
                         tools.disableButton('insertLink');
                     } else {

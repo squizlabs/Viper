@@ -282,7 +282,7 @@ ViperKeyboardEditorPlugin.prototype = {
                     var firstBlockTagName = ViperUtil.getTagName(firstBlock);
                     var handleEnter       = false;
                     var removeFirstBlock  = false;
-                    if (this._tagList.inArray(firstBlockTagName) === true) {
+                    if (ViperUtil.inArray(firstBlockTagName, this._tagList) === true) {
                         handleEnter = true;
                     } else if (firstBlockTagName === 'li'
                         && (this.viper.isBrowser('chrome') === true || this.viper.isBrowser('safari') === true)

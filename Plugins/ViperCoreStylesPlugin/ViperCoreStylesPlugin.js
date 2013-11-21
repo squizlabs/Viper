@@ -592,7 +592,7 @@ ViperCoreStylesPlugin.prototype = {
         }
 
         if (ViperUtil.isBlockElement(common) === true
-            && ['tr', 'table'].inArray(ViperUtil.getTagName(common)) === false
+            && ViperUtil.inArray(ViperUtil.getTagName(common), ['tr', 'table']) === false
             && ViperUtil.isChildOf(common, this.viper.element) === true
         ) {
             this.setJustifyChangeTrackInfo(common);
@@ -619,7 +619,7 @@ ViperCoreStylesPlugin.prototype = {
                         toggleAlignment = false;
                     }
 
-                    if (parentElements.inArray(node) === false) {
+                    if (ViperUtil.inArray(node, parentElements) === false) {
                         parentElements.push(node);
                     }
 
@@ -631,7 +631,7 @@ ViperCoreStylesPlugin.prototype = {
                         toggleAlignment = false;
                     }
 
-                    if (parentElements.inArray(parent) === false) {
+                    if (ViperUtil.inArray(parent, parentElements) === false) {
                         parentElements.push(parent);
                     }
 
@@ -656,7 +656,7 @@ ViperCoreStylesPlugin.prototype = {
                     // Add the node to the new P elem.
                     parent.appendChild(node);
 
-                    if (parentElements.inArray(parent) === false) {
+                    if (ViperUtil.inArray(parent, parentElements) === false) {
                         parentElements.push(parent);
                     }
                 }//end if
@@ -1138,7 +1138,7 @@ ViperCoreStylesPlugin.prototype = {
 
         if (range.collapsed === true) {
             // Range is collapsed. We need to listen for next insertion.
-            var index = this._onChangeAddStyle.find(style);
+            var index = ViperUtil.arraySearch(style, this._onChangeAddStyle);
             if (index >= 0) {
                 ViperUtil.removeArrayIndex(this._onChangeAddStyle, index);
                 this.viper.ViperTools.setButtonInactive(this._buttons[style]);
@@ -1270,7 +1270,7 @@ ViperCoreStylesPlugin.prototype = {
             }
         } else {
             var tagNames = ['thead', 'tfoot'];
-            if (tagNames.inArray(tagName) === true) {
+            if (ViperUtil.inArray(tagName, tagNames) === true) {
                 return false;
             }
         }
@@ -1453,7 +1453,7 @@ ViperCoreStylesPlugin.prototype = {
 
         var enableHr     = true;
         var hrIgnoreTags = 'tr,td,th,li,caption,img,ul,ol,table';
-        if (hrIgnoreTags.split(',').inArray(ViperUtil.getTagName(startNode)) === true) {
+        if (ViperUtil.inArray(ViperUtil.getTagName(startNode), hrIgnoreTags.split(',')) === true) {
             enableHr = false;
         }
 
@@ -1536,7 +1536,7 @@ ViperCoreStylesPlugin.prototype = {
                     && ViperUtil.isBlockElement(startNode) !== true
                     && startNode !== this.viper.getViperElement()
                 ) {
-                    var pos = tagNames.find(ViperUtil.getTagName(startNode));
+                    var pos = ViperUtil.arraySearch(ViperUtil.getTagName(startNode), tagNames);
                     if (pos >= 0) {
                         activeStates.push(tagNames[pos]);
                     }
@@ -1549,7 +1549,7 @@ ViperCoreStylesPlugin.prototype = {
                     && ViperUtil.isBlockElement(startNode) !== true
                     && startNode !== this.viper.getViperElement()
                 ) {
-                    var pos = tagNames.find(ViperUtil.getTagName(startNode));
+                    var pos = ViperUtil.arraySearch(ViperUtil.getTagName(startNode), tagNames);
                     if (pos >= 0) {
                         foundTags.push(tagNames[pos]);
                     }
@@ -1562,7 +1562,7 @@ ViperCoreStylesPlugin.prototype = {
                     && endNode !== this.viper.getViperElement()
                 ) {
                     var tagName = ViperUtil.getTagName(endNode);
-                    var pos = foundTags.find(tagName);
+                    var pos = ViperUtil.arraySearch(tagName, foundTags);
                     if (pos >= 0) {
                         activeStates.push(tagName);
                     }

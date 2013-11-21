@@ -1630,6 +1630,29 @@ var ViperUtil = {
 
     },
 
+    /*
+     * Searches the array for the given item.
+     *
+     * Returns the item index if found, else false.
+     *
+     * @param mixed needle   Item to search in the specified array.
+     * @param array haystack The array.
+     *
+     * @return int
+     */
+    arraySearch: function(needle, haystack)
+    {
+        var length = haystack.length;
+        for (var i = 0; i < length; i++) {
+            if (haystack[i] === needle) {
+                return i;
+            }
+        }
+
+        return -1;
+
+    },
+
     /**
      * Computes the difference of two arrays.
      * If firstOnly is set to TRUE then only the elements that are in first array
@@ -2267,51 +2290,5 @@ var ViperUtil = {
         return property;
 
     }
-
-};
-
-Array.prototype.inArray = function(value)
-{
-    if (Array.prototype.indexOf) {
-        if (this.indexOf(value) >= 0) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    // Value is not a string, so the array must be iterated through and each
-    // element checked against the search string.
-    var len = this.length;
-    for (var i = 0; i < len; i++) {
-        if (this[i] === value) {
-            return true;
-        }
-    }
-
-    return false;
-
-};
-
-/*
- * Searches the array for the given item.
- *
- * Returns the item index if found, else false.
- *
- * @param array array The array.
- * @param mixed item  Item to search in the specified array.
- *
- * @return int
- */
-Array.prototype.find = function(item)
-{
-    var length = this.length;
-    for (var i = 0; i < length; i++) {
-        if (this[i] === item) {
-            return i;
-        }
-    }
-
-    return -1;
 
 };

@@ -86,9 +86,9 @@ ViperCopyPastePlugin.prototype = {
 
                 var dataType = null;
                 if (e.clipboardData.types) {
-                    if (e.clipboardData.types.inArray('text/html') === true) {
+                    if (ViperUtil.inArray('text/html', e.clipboardData.types) === true) {
                         dataType = 'text/html';
-                    } else if (e.clipboardData.types.inArray('text/plain') === true) {
+                    } else if (ViperUtil.inArray('text/plain', e.clipboardData.types) === true) {
                         dataType = 'text/plain';
                     }
                 }
@@ -511,8 +511,8 @@ ViperCopyPastePlugin.prototype = {
             if (self._isSafari === true
                 && e.clipboardData
                 && e.clipboardData.types
-                && e.clipboardData.types.inArray('text/html') === false
-                && e.clipboardData.types.inArray('text/plain') === true
+                && ViperUtil.inArray('text/html', e.clipboardData.types) === false
+                && ViperUtil.inArray('text/plain', e.clipboardData.types) === true
             ) {
                 // Plain text content is being pasted, replace all new line
                 // characters with BR tags.
@@ -814,7 +814,7 @@ ViperCopyPastePlugin.prototype = {
 
         var styleName     = style.split(':');
         var allowedStyles = ['height', 'width', 'padding', 'text-align', 'text-indent', 'border-collapse', 'border', 'border-top', 'border-bottom', 'border-right', 'border-left'];
-        if (allowedStyles.find(styleName[0]) >= 0) {
+        if (ViperUtil.inArray(styleName[0], allowedStyles) === true) {
             return true;
         }
 

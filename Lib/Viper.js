@@ -755,10 +755,9 @@ Viper.prototype = {
         this.setEnabled(false);
         this.element = elem;
 
-        if (ViperUtil.inArray(this._registeredElements, elem) === false) {
+        if (ViperUtil.inArray(elem, this._registeredElements) === false) {
             this.registerEditableElement(elem);
         }
-
 
         this.setEnabled(true);
         this.ViperHistoryManager.setActiveElement(elem);
@@ -3598,7 +3597,7 @@ Viper.prototype = {
             var parentNode = span.parentNode;
             if (parentNode) {
                 var tagName = ViperUtil.getTagName(parentNode);
-                if (['table', 'tbody', 'tr'].inArray(tagName) === true) {
+                if (ViperUtil.inArray(tagName, ['table', 'tbody', 'tr']) === true) {
                     ViperUtil.remove(span);
                 }
             }
@@ -3927,7 +3926,7 @@ Viper.prototype = {
      */
     isSpecialKey: function(e)
     {
-        return this._specialKeys.inArray(e.which);
+        return ViperUtil.inArray(e.which, this._specialKeys);
 
     },
 
@@ -4173,7 +4172,7 @@ Viper.prototype = {
         // Shift, Control, Alt, Caps lock, esc, CMD.
         var ignoredKeys = [16, 17, 18, 20, 27, 91];
 
-        if ((this._keyDownRangeCollapsed === false && ignoredKeys.inArray(e.which) === false)
+        if ((this._keyDownRangeCollapsed === false && ViperUtil.inArray(e.which, ignoredKeys) === false)
             && (e.ctrlKey === false && e.metaKey === false)
             || e.which === 8
             || e.which === 46
@@ -4485,7 +4484,7 @@ Viper.prototype = {
     isChildOfElems: function(el, parents)
     {
         while (el && el.parentNode) {
-            if (parents.inArray(el.parentNode) === true) {
+            if (ViperUtil.inArray(el.parentNode, parents) === true) {
                 return true;
             }
 
@@ -4903,7 +4902,7 @@ Viper.prototype = {
                 // All attribute names must be lowercase.
                 attrName = attrName.toLowerCase();
 
-                if (attrBlacklist.inArray(attrName) === true) {
+                if (ViperUtil.inArray(attrName, attrBlacklist) === true) {
                     // This attribute is not allowed.
                     return '';
                 } else if (attrName.indexOf(':') >= 0) {

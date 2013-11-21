@@ -32,7 +32,7 @@ ViperAccessibilityPlugin_WCAG2_Principle4_Guideline4_1 = {
                         return false;
                     } else {
                         var elem = ViperUtil.getid(idAttrVal);
-                        if (ViperUtil.getParents(elem).inArray(viper.getViperElement()) === true) {
+                        if (ViperUtil.inArray(viper.getViperElement(), ViperUtil.getParents(elem)) === true) {
                             return false;
                         }
                     }

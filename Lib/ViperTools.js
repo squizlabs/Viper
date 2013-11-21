@@ -1202,17 +1202,17 @@ ViperTools.prototype = {
 
                     return false;
                 } else if (elementTypes
-                    && elementTypes.inArray(ViperUtil.getTagName(target)) === true
+                    && ViperUtil.inArray(ViperUtil.getTagName(target), elementTypes) === true
                 ) {
                     self.getItem(id).update(null, target);
                     return;
-                } else if (self.getItem(id)._keepOpenTagList.inArray(ViperUtil.getTagName(target)) === true) {
+                } else if (ViperUtil.inArray(ViperUtil.getTagName(target), self.getItem(id)._keepOpenTagList) === true) {
                     _update = true;
                     return;
                 } else {
                     var allParents = ViperUtil.getParents(target, null, self.viper.getViperElement());
                     for (var i = 0; i < allParents.length; i++) {
-                        if (self.getItem(id)._keepOpenTagList.inArray(ViperUtil.getTagName(allParents[i])) === true) {
+                        if (ViperUtil.inArray(ViperUtil.getTagName(allParents[i]), self.getItem(id)._keepOpenTagList) === true) {
                             _update = true;
                             return;
                         }
@@ -1220,7 +1220,7 @@ ViperTools.prototype = {
 
                     var parents = ViperUtil.getSurroundingParents(target);
                     for (var i = 0; i < parents.length; i++) {
-                        if (self.getItem(id)._keepOpenTagList.inArray(ViperUtil.getTagName(parents[i])) === true) {
+                        if (ViperUtil.inArray(ViperUtil.getTagName(parents[i]), self.getItem(id)._keepOpenTagList) === true) {
                             _update = true;
                             return;
                         }
