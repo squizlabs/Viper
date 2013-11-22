@@ -125,7 +125,7 @@
                 );
 
     foreach ($browsers as $browser => $browserName) {
-        $logFile = dirname(__FILE__).'/tmp/'.$browser.'/test.log';
+        $logFile = dirname(dirname(__FILE__)).'/tmp/'.$browser.'/test.log';
         if (file_exists($logFile) === FALSE) {
             continue;
         }

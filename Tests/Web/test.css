@@ -5,6 +5,10 @@ body {
     font-family: monospace;
 }
 
+.type-wrapper {
+    display: none;
+}
+
 #content {
     width: 1000px;
     height: 650px;

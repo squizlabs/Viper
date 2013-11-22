@@ -86,7 +86,7 @@
 <body>
 <?php
 
-$testDir = dirname(__FILE__);
+$testDir = dirname(dirname(__FILE__));
 if (isset($_GET['path']) === TRUE) {
     $testDir = $_GET['path'];
 }

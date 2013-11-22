@@ -177,7 +177,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
 
         // Get the contents of the test file template.
         if (self::$_testContent === NULL) {
-            self::$_testContent = file_get_contents($baseDir.'/test.html');
+            self::$_testContent = file_get_contents($baseDir.'/Web/test-template.html');
         }
 
         $viperInclude = '';
@@ -187,10 +187,10 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
                 throw new Exception('Could not find: '.$path);
             }
 
-            $viperInclude = '<script type="text/javascript" src="../build/viper.js"></script>
-                             <link rel="stylesheet" media="screen" href="../build/viper.css" />';
+            $viperInclude = '<script type="text/javascript" src="../../build/viper.js"></script>
+                             <link rel="stylesheet" media="screen" href="../../build/viper.css" />';
         } else {
-            $viperInclude = '<script type="text/javascript" src="../Viper-all.js"></script>';
+            $viperInclude = '<script type="text/javascript" src="../../Viper-all.js"></script>';
         }
 
         // Get stats.
@@ -215,7 +215,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
         $contents = str_replace('__TEST_VIPER_INCLUDE__', $viperInclude, $contents);
         $contents = str_replace('__TEST_TITLE__', $testTitle, $contents);
         $contents = str_replace('__TEST_JS_INCLUDE__', $jsInclude, $contents);
-        $dest     = $baseDir.'/test_tmp.html';
+        $dest     = $baseDir.'/tmp/test_tmp.html';
         file_put_contents($dest, $contents);
 
         $this->sikuli->resize();
@@ -243,7 +243,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
                 }
             }
 
-            $this->sikuli->goToURL($this->_getBaseUrl().'/test_tmp.html');
+            $this->sikuli->goToURL($this->_getBaseUrl().'/tmp/test_tmp.html');
             $this->sikuli->setAutoWaitTimeout(1);
             $this->_waitForViper();
 
@@ -423,7 +423,11 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
     {
         // Clean up old files.
         $imgPath = $this->getBrowserImagePath();
-        exec('rm '.$imgPath.'/*.png');
+        @exec('rm '.$imgPath.'/*.png');
+
+        $url = $this->_getBaseUrl().'/Web/calibrate.html';
+        $this->sikuli->goToURL($url);
+        sleep(3);
 
         $this->_calibrateKeywords();
         $this->_calibrateIcons();
@@ -442,21 +446,15 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
         $this->sikuli->setAutoWaitTimeout(0.5);
 
         // Calibrate image recognition.
-        $baseDir = dirname(__FILE__);
         $imgPath = $this->getBrowserImagePath();
 
         if (file_exists($imgPath) === FALSE) {
             mkdir($imgPath, 0755, TRUE);
         }
 
-        $dest = $baseDir.'/calibrate-text.html';
+        $this->sikuli->execJS('calibrate("keywords")');
 
-        $url = $this->_getBaseUrl().'/calibrate-text.html';
-
-        $this->sikuli->goToURL($url);
-        sleep(3);
-
-        $texts = $this->sikuli->execJS('getCoords('.json_encode(self::_getKeywordsList()).')');
+        $texts = $this->sikuli->execJS('getKeywordCoords('.json_encode(self::_getKeywordsList()).')');
         $count = count($texts);
 
         $i      = 1;
@@ -530,21 +528,16 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
         $matches = array();
         preg_match_all('#.Viper-buttonIcon.Viper-([\w-_]+)#', $cssContents, $matches);
 
-        $buttonNames = array_values(array_unique($matches[1]));
-
-        // Create the temp calibration file.
-        $tmpFile = $baseDir.'/tmp-calibrate.html';
-
-        $statuses = array(
-                     ''          => ' Viper-dummyClass',
-                     '_selected' => ' Viper-selected',
-                     '_active'   => ' Viper-active',
-                     '_disabled' => ' Viper-disabled',
-                    );
-
-        $buttonHTML = '';
-
+        $buttonHTML   = '';
         $browserClass = '';
+        $buttonNames  = array_values(array_unique($matches[1]));
+        $statuses     = array(
+                         ''          => ' Viper-dummyClass',
+                         '_selected' => ' Viper-selected',
+                         '_active'   => ' Viper-active',
+                         '_disabled' => ' Viper-disabled',
+                        );
+
 
         if ($this->sikuli->getBrowserid() === 'ie8') {
             $browserClass = 'Viper-browser-msie Viper-browserVer-msie8';
@@ -566,21 +559,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
 
         $buttonHTML .= '</div></div>';
 
-        $calibrateHtml = file_get_contents($baseDir.'/calibrate.html');
-        $calibrateHtml = str_replace('__TEST_CONTENT__', $buttonHTML, $calibrateHtml);
-
-        file_put_contents($tmpFile, $calibrateHtml);
-
-        $dest = $baseDir.'/tmp-calibrate.html';
-
-        $url = $this->_getBaseUrl().'/tmp-calibrate.html';
-
-        $this->sikuli->goToURL($url);
-        sleep(3);
-
-        if ($this->sikuli->execJS('testJSExec()') !== 'Pass') {
-            throw new Exception('JavaScript execution test failed!!');
-        }
+        $this->sikuli->execJS('calibrate("icons", '.json_encode($buttonHTML).')');
 
         // Create image for the inline toolbar pattern (the arrow on top).
         sleep(2);
@@ -676,9 +655,6 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
 
             break;
         }//end for
-
-        // Remove the temp calibrate file.
-        unlink($tmpFile);
 
         $this->addData('buttonSimmilarity', $similarity);
 
