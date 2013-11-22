@@ -151,7 +151,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
         $jsFilePath = $this->_getTestFile('js');
         $jsInclude  = '';
         if ($jsFilePath !== NULL) {
-            $jsFilePath = str_replace($baseDir, '.', $jsFilePath);
+            $jsFilePath = str_replace($baseDir, '../', $jsFilePath);
             $jsInclude  = '<script type="text/javascript" src="'.$jsFilePath.'"></script>';
         }
 
