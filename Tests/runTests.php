@@ -2,7 +2,12 @@
 
     chdir(dirname(__FILE__));
 
-    $opts = getopt('s::b::u::t::civ', array('url::', 'built', 'log::'));
+    $opts = getopt('b::u::t::cv', array('url::', 'built', 'log::', 'help'));
+
+    if (isset($opts['help']) === TRUE) {
+        printHelp();
+        exit;
+    }
 
     $browsers = array(
                  'firefox',
@@ -156,5 +161,25 @@
         return $os;
 
     }//end getOS()
+
+    function printHelp()
+    {
+        echo "Usage: php runTests.php <switches>\n\n";
+        echo "  -b            Comma separated browsers to test. I.e: firefox, chrome, safari, ie8, ie9.\n";
+        echo "  -t            Name of the test to run.\n";
+        echo "  -c            Run the test calibration.\n";
+        echo "  -v            Output more verbose information.\n";
+        echo "  --url <url>   Sets the URL for Viper testing. Must point to Viper's Test directory.\n";
+        echo "  --built       Run tests on Viper build.\n";
+        echo "  --log <file>  Logs test execution.\n";
+        echo "  --help        Prints this help message.\n";
+        echo "\nExamples:\n";
+        echo "  # Run calibration on Firefox and run the test named testStartOfParaBold.\n";
+        echo "  php runTests.php -bfirefox -c -ttestStartOfParaBold\n\n";
+        echo "  # Run all tests that contain the ParaBold in their name on Firefox and Chrome.\n";
+        echo "  php runTests.php -bfirefox,chrome -tParaBold";
+        echo "\n\n";
+
+    }//end printHelp()
 
 ?>
