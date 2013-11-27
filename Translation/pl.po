@@ -1,0 +1,457 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Polish translation for Viper\n"
+"POT-Creation-Date: 2013-10-03 10:32+0100\n"
+"PO-Revision-Date: 2013-10-03 14:16+0100\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.7\n"
+"X-Poedit-KeywordsList: _;gettext;gettext_noop\n"
+"X-Poedit-Basepath: ../\n"
+"X-Poedit-SearchPath-0: ./Plugins\n"
+"X-Poedit-SearchPath-1: ./Lib\n"
+
+msgid "Locate Element"
+msgstr "Znajdź element"
+
+msgid "Show in Source View"
+msgstr "Pokaż w widoku kodu źródłowego"
+
+msgid "Refresh Issue"
+msgstr "Odśwież problem"
+
+msgid "Accessibility Auditor"
+msgstr "Kontrola dostępności"
+
+msgid "Re-checking issue"
+msgstr "Ponowne sprawdzanie problemu"
+
+msgid "This issue has not been resolved"
+msgstr "Problem nie został rozwiązany"
+
+msgid "OK"
+msgstr "OK"
+
+msgid "Insert Character"
+msgstr "Wstaw znak"
+
+msgid "Symbols"
+msgstr "Symbole"
+
+msgid "Latin"
+msgstr "Łaciński"
+
+msgid "Mathematics"
+msgstr "Matematyczne"
+
+msgid "Currency"
+msgstr "Symbole walut"
+
+msgid ""
+"Paste your content into the box below and it will be automatically inserted "
+"and cleaned up."
+msgstr ""
+"Wklej treść w poniższe okienko, aby wstawić ją automatycznie i uporządkować."
+
+msgid "Avoid this step for future pastes using the keyboard shortcut %s."
+msgstr ""
+"Aby uniknąć tego kroku przy kolejnych operacjach wklejania, użyj skrótu "
+"klawiaturowego %s."
+
+msgid "Bold"
+msgstr "Pogrubienie"
+
+msgid "Italic"
+msgstr "Kursywa"
+
+msgid "Remove Format"
+msgstr "Usuń formatowanie"
+
+msgid "Subscript"
+msgstr "Indeks dolny"
+
+msgid "Superscript"
+msgstr "Indeks górny"
+
+msgid "Strikethrough"
+msgstr "Przekreślenie"
+
+msgid "Left Justify"
+msgstr "Wyrównaj do lewej"
+
+msgid "Center Justify"
+msgstr "Do środka"
+
+msgid "Right Justify"
+msgstr "Wyrównaj do prawej"
+
+msgid "Block Justify"
+msgstr "Wyjustuj"
+
+msgid "Horizontal Rule"
+msgstr "Linia pozioma"
+
+msgid "Justification"
+msgstr "Justowanie"
+
+msgid "Toggle Justification"
+msgstr "Przełącz justowanie"
+
+msgid "Heading 1"
+msgstr "Nagłówek 1"
+
+msgid "Heading 2"
+msgstr "Nagłówek 2"
+
+msgid "Heading 3"
+msgstr "Nagłówek 3"
+
+msgid "Heading 4"
+msgstr "Nagłówek 4"
+
+msgid "Heading 5"
+msgstr "Nagłówek 5"
+
+msgid "Heading 6"
+msgstr "Nagłówek 6"
+
+msgid "Paragraph"
+msgstr "Akapit"
+
+msgid "Preformatted"
+msgstr "Wstępnie sformatowane"
+
+msgid "Address"
+msgstr "Adres"
+
+msgid "Quote"
+msgstr "Cytat"
+
+msgid "Convert to Heading %s"
+msgstr "Zamień na nagłówek %s"
+
+msgid "Convert to %s"
+msgstr "Zamień na %s"
+
+msgid "ID"
+msgstr "ID"
+
+msgid "Class"
+msgstr "Klasa"
+
+msgid "Toggle Formats"
+msgstr "Przełącz formaty"
+
+msgid "Toggle Headings"
+msgstr "Przełącz nagłówki"
+
+msgid "Anchor name (ID)"
+msgstr "Nazwa kotwicy (ID)"
+
+msgid "Class name"
+msgstr "Nazwa klasy"
+
+msgid "Formats"
+msgstr "Formaty"
+
+msgid "Headings"
+msgstr "Nagłówki"
+
+msgid "Anchor ID"
+msgstr "ID kotwicy"
+
+msgid "Undo"
+msgstr "Cofnij"
+
+msgid "Redo"
+msgstr "Wykonaj ponownie"
+
+msgid "Insert Image"
+msgstr "Wstaw obraz"
+
+msgid "Toggle Image Options"
+msgstr "Przełączaj opcje obrazów"
+
+msgid "URL"
+msgstr "URL"
+
+msgid "Image is decorative"
+msgstr "Obraz dekoracyjny"
+
+msgid "Alt"
+msgstr "Alt"
+
+msgid "Title"
+msgstr "Tytuł"
+
+msgid ""
+"The selected image will be moved to the next location you click. To cancel "
+"press the move icon again or ESC"
+msgstr ""
+"Wybrany obraz zostanie przeniesiony do następnej zaznaczonej lokalizacji. "
+"Aby anulować, ponownie naciśnij ikonę Przenieś lub ESC."
+
+msgid "Move Image"
+msgstr "Przenieś obraz"
+
+msgid "Loading preview"
+msgstr "Ładowanie podglądu"
+
+msgid "Failed to load image"
+msgstr "Błąd wczytywania obrazu"
+
+msgid "Underline"
+msgstr "Podkreślenie"
+
+msgid "Item"
+msgstr "Punkt"
+
+msgid "List"
+msgstr "Lista"
+
+msgid "Cell"
+msgstr "Komórka"
+
+msgid "Row"
+msgstr "Wiersz"
+
+msgid "Header"
+msgstr "Nagłówek"
+
+msgid "Link"
+msgstr "Link"
+
+msgid "Image"
+msgstr "Obraz"
+
+msgid "Selection"
+msgstr "Wybór"
+
+msgid "Acronym"
+msgstr "Skrótowiec"
+
+msgid "Abbreviation"
+msgstr "Skrót"
+
+msgid "Language"
+msgstr "Język"
+
+msgid "Language Tools"
+msgstr "Narzędzia językowe"
+
+msgid "Toggle Language Tools"
+msgstr "Przełączaj narzędzia językowe"
+
+msgid "Toggle Acronym Options"
+msgstr "Przełączaj opcje skrótowców"
+
+msgid "Toggle Abbreviation Options"
+msgstr "Przełączaj opcje skrótów"
+
+msgid "Toggle Language Options"
+msgstr "Przełączaj opcje językowe"
+
+msgid "Subject"
+msgstr "Temat"
+
+msgid "Open a New Window"
+msgstr "Otwórz nowe okno"
+
+msgid "Toggle Link Options"
+msgstr "Przełączaj opcje linków"
+
+msgid "Remove Link"
+msgstr "Usuń link"
+
+msgid "Insert Link"
+msgstr "Wstaw link"
+
+msgid "Make Unordered List"
+msgstr "Utwórz listę wypunktowaną "
+
+msgid "Make Ordered List"
+msgstr "Utwórz listę numerowaną"
+
+msgid "Indent List"
+msgstr "Zwiększ wcięcie"
+
+msgid "Outdent List"
+msgstr "Zmniejsz wcięcie"
+
+msgid "Search"
+msgstr "Szukaj"
+
+msgid "Replace"
+msgstr "Zamień"
+
+msgid "Replace All"
+msgstr "Zamień wszystko"
+
+msgid "Find Next"
+msgstr "Znajdź następny"
+
+msgid "Search & Replace"
+msgstr "Szukaj i zamień"
+
+msgid "Toggle Source View"
+msgstr "Przełączaj widok kodu źródłowego"
+
+msgid "Discard"
+msgstr "Porzuć"
+
+msgid "Discard Changes"
+msgstr "Porzuć zmiany"
+
+msgid "Apply Changes"
+msgstr "Zastosuj zmiany"
+
+msgid "Would you like to apply your changes?"
+msgstr "Czy chcesz zastosować zmiany?"
+
+msgid "Open In new window"
+msgstr "Otwórz w nowym oknie"
+
+msgid "Source Editor"
+msgstr "Edytor kodu źródłowego"
+
+msgid "Viper Source View"
+msgstr "Widok kodu źródłowego Viper"
+
+msgid ""
+"Source code changes will be reflected in your edit preview window in real "
+"time."
+msgstr ""
+"Zmiany w kodzie źródłowym będą widoczne w oknie podglądu edycji w czasie "
+"rzeczywistym."
+
+msgid "Revert Changes"
+msgstr "Cofnij zmiany"
+
+msgid "Close Source View"
+msgstr "Zamknij widok kodu źródłowego"
+
+msgid "Close Window"
+msgstr "Zamknij okno"
+
+msgid "Insert Table"
+msgstr "Wstaw tabelę"
+
+msgid "Show Table tools"
+msgstr "Pokaż narzędzia tabeli"
+
+msgid "Show Row tools"
+msgstr "Pokaż narzędzia wiersza"
+
+msgid "Show Column tools"
+msgstr "Pokaż narzędzia kolumny"
+
+msgid "Show Cell tools"
+msgstr "Pokaż narzędzia komórki"
+
+msgid "Table"
+msgstr "Tabela"
+
+msgid "Column"
+msgstr "Kolumna"
+
+msgid "Toggle Settings"
+msgstr "Przełącz ustawienia"
+
+msgid "Heading"
+msgstr "Nagłówek"
+
+msgid "Split Vertically"
+msgstr "Podziel pionowo"
+
+msgid "Split Horizontally"
+msgstr "Podziel poziomo"
+
+msgid "Merge Up"
+msgstr "Połącz w górę"
+
+msgid "Merge Down"
+msgstr "Połącz w dół"
+
+msgid "Merge Left"
+msgstr "Połącz w lewo"
+
+msgid "Merge Right"
+msgstr "Połącz w prawo"
+
+msgid "Toggle Merge/Split Options"
+msgstr "Przełącz opcje Połącz/Podziel"
+
+msgid "Width"
+msgstr "Szerokość"
+
+msgid "Insert Column Before"
+msgstr "Wstaw kolumnę z lewej"
+
+msgid "Insert Column After"
+msgstr "Wstaw kolumnę z prawej"
+
+msgid "Move Left"
+msgstr "Przesuń w lewo"
+
+msgid "Move Right"
+msgstr "Przesuń w prawo"
+
+msgid "Remove Column"
+msgstr "Usuń kolumnę"
+
+msgid "Insert Row Before"
+msgstr "Wstaw wiersz powyżej"
+
+msgid "Insert Row After"
+msgstr "Wstaw wiersz poniżej"
+
+msgid "Move Up"
+msgstr "Przesuń w górę"
+
+msgid "Move Down"
+msgstr "Przesuń w dół"
+
+msgid "Remove Row"
+msgstr "Usuń wiersz"
+
+msgid "Summary"
+msgstr "Podsumowanie"
+
+msgid "Use Caption"
+msgstr "Użyj podpisu"
+
+msgid "Remove Table"
+msgstr "Usuń tabelę"
+
+msgid "None"
+msgstr "Brak"
+
+msgid "Left"
+msgstr "Lewa"
+
+msgid "Top"
+msgstr "Góra"
+
+msgid "Both"
+msgstr "Oba"
+
+msgid "Headers"
+msgstr "Nagłówki"
+
+msgid "Size"
+msgstr "Rozmiar"
+
+msgid "Viper by Squiz"
+msgstr "Viper firmy Squiz"
+
+msgid "Update Changes"
+msgstr "Aktualizuj zmiany"
+
+msgid "Not available"
+msgstr "Niedostępne"
+
+msgid "required"
+msgstr "wymagane"

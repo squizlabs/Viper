@@ -98,6 +98,15 @@ Viper.prototype = {
                     self._processOptions(options, callback);
                 });
                 return;
+            }
+
+            fn = '_' + fn;
+            if (dfx.isFn(this[fn]) === true) {
+                this[fn](options[op], function() {
+                    delete options[op];
+                    self._processOptions(options, callback);
+                });
+                return;
             } else {
                 this.setSetting(op, options[op]);
                 delete options[op];
@@ -125,6 +134,11 @@ Viper.prototype = {
     setSetting: function(setting, value)
     {
         this._settings[setting] = value;
+
+        var fn = 'set' + dfx.ucFirst(setting);
+        if (dfx.isFn(this[fn]) === true) {
+            this[fn].call(this, value);
+        }
 
     },
 
@@ -168,6 +182,39 @@ Viper.prototype = {
         }
 
         return 'p';
+
+    },
+
+    _setLanguage: function(lang, callback)
+    {
+        if (!lang) {
+            return;
+        }
+
+        var code = null;
+        var src  = null;
+        if (typeof(lang) === 'object') {
+            code = lang.code;
+            src  = lang.src;
+        } else {
+            code = lang;
+            src  = this.getViperPath().replace(/\/$/, '') + '/Translation/' + code + '.js';
+        }
+
+        if (code === 'en') {
+            callback.call(this);
+            return;
+        }
+
+        if (ViperTranslation.isLoaded(code) === false && src) {
+            this.loadScript(src, function() {
+                ViperTranslation.setLanguage(code);
+                callback.call(this);
+            }, 2000);
+        } else {
+            ViperTranslation.setLanguage(code);
+            callback.call(this);
+        }
 
     },
 
@@ -380,12 +427,46 @@ Viper.prototype = {
                     // library, so we can extract the path and include the rest.
                     path = scripts[i].src.replace(/\/viper-combined\.js/,'');
                     break;
+                } else if (scripts[i].src.match(/\/viper\.js/)) {
+                    path = scripts[i].src.replace(/\/viper\.js/,'');
+                    break;
                 }
             }
         }
 
         return path;
 
+    },
+
+    loadScript: function(src, callback, timeout) {
+        var t = null;
+        if (timeout) {
+            t = setTimeout(callback, timeout);
+        }
+
+        var script    = document.createElement('script');
+        script.onload = function() {
+            clearTimeout(t);
+            script.onload = null;
+            script.onreadystatechange = null;
+            callback.call(this);
+        };
+
+        script.onreadystatechange = function() {
+            if (/^(complete|loaded)$/.test(this.readyState) === true) {
+                clearTimeout(t);
+                script.onreadystatechange = null;
+                script.onload();
+            }
+        }
+
+        script.src = src;
+
+        if (document.head) {
+            document.head.appendChild(script);
+        } else {
+            document.getElementsByTagName('head')[0].appendChild(script);
+        }
     },
 
     getEventNamespace: function()
@@ -507,14 +588,25 @@ Viper.prototype = {
      */
      setEnabled: function(enabled)
      {
+        this._viperRange = null;
+
         if (enabled === true && this.enabled === false) {
             this._addEvents();
             this.enabled = true;
-            this.fireCallbacks('Viper:enabled');
             this.element.setAttribute('contentEditable', true);
             dfx.setStyle(this.element, 'outline', 'none');
 
+            if (this.isBrowser('msie') === true) {
+                this.element.focus();
+            } else {
+                this.focus();
+            }
+
             var range = this.getCurrentRange();
+            if (this.rangeInViperBounds(range) === false) {
+                this.initEditableElement();
+            }
+
             var editableChild = range._getFirstSelectableChild(this.element);
             if (!editableChild) {
                 // Check if any of these elements exist in the content.
@@ -552,9 +644,7 @@ Viper.prototype = {
                 }//end if
             }//end if
 
-            if (editableChild) {
-                //this.setRange(editableChild, 0);
-            }
+            this.fireCallbacks('Viper:enabled');
         } else if (enabled === false && this.enabled === true) {
             // Back to final mode.
             ViperChangeTracker.activateFinalMode();
@@ -645,6 +735,7 @@ Viper.prototype = {
         if (this._registeredElements.inArray(elem) === false) {
             this.registerEditableElement(elem);
         }
+
 
         this.setEnabled(true);
         this.ViperHistoryManager.setActiveElement(elem);
@@ -739,7 +830,6 @@ Viper.prototype = {
                     paramTag.setAttribute('value', 'transparent');
                     dfx.insertBefore(embedTags[i], paramTag);
                     embedTags[i].setAttribute('wmode', 'transparent');
-                    console.info(1);
                 }
             }
         }//end if
@@ -817,6 +907,20 @@ Viper.prototype = {
                 }
 
                 dfx.remove(nodesToRemove);
+
+                var range = this.getCurrentRange();
+                var firstSelectable = range._getFirstSelectableChild(elem);
+                if (!firstSelectable && elem.childNodes.length > 0) {
+                    for (var i = 0; i < elem.childNodes.length; i++) {
+                        var child = elem.childNodes[i];
+                        if (dfx.isBlockElement(child) === true
+                            && dfx.isStubElement(child) === false
+                            && dfx.getHtml(child) === ''
+                        ) {
+                            dfx.setHtml(child, '&nbsp;');
+                        }
+                    }
+                }
             }//end if
         }//end if
 
@@ -1761,7 +1865,7 @@ Viper.prototype = {
                 if (dfx.isChildOf(sParent, this.element) === false) {
                     // If the endContainer is inside the editable text region then
                     // move the start of the range to the beginning.
-                    var firstChild = dfx.getFirstChild(this.element);
+                    var firstChild = dfx.getFirstChildTextNode(this.element);
                     if (!firstChild) {
                         return false;
                     } else {
@@ -2597,7 +2701,7 @@ Viper.prototype = {
             var end       = startTopParent.cloneNode(true);
 
             // First remove everything from start bookmark to last child.
-            var lastChild    = dfx.getLastChild(start);
+            var lastChild    = dfx.getLastChildTextNode(start);
             var elemsBetween = dfx.getElementsBetween(this.getBookmark(start, 'start'), lastChild);
             elemsBetween.push(this.getBookmark(start, 'start'));
             elemsBetween.push(this.getBookmark(start, 'end'));
@@ -2605,7 +2709,7 @@ Viper.prototype = {
             dfx.remove(elemsBetween);
 
             // Remove everything from first child to end bookmark.
-            var firstChild   = dfx.getFirstChild(end);
+            var firstChild   = dfx.getFirstChildTextNode(end);
             var elemsBetween = dfx.getElementsBetween(firstChild, this.getBookmark(end, 'end'));
             elemsBetween.push(this.getBookmark(end, 'end'));
             elemsBetween.push(this.getBookmark(end, 'start'));
@@ -2613,11 +2717,11 @@ Viper.prototype = {
             dfx.remove(elemsBetween);
 
             // Remove everything before and after bookmark start and end.
-            var firstChild   = dfx.getFirstChild(selection);
+            var firstChild   = dfx.getFirstChildTextNode(selection);
             var elemsBetween = dfx.getElementsBetween(firstChild, this.getBookmark(selection, 'start'));
             elemsBetween.push(firstChild);
             dfx.remove(elemsBetween);
-            var lastChild    = dfx.getLastChild(selection);
+            var lastChild    = dfx.getLastChildTextNode(selection);
             var elemsBetween = dfx.getElementsBetween(this.getBookmark(selection, 'end'), lastChild);
             elemsBetween.push(lastChild);
             dfx.remove(elemsBetween);
@@ -2676,14 +2780,14 @@ Viper.prototype = {
             var clone = startTopParent.cloneNode(true);
 
             // Remove everything from bookmark to lastChild (inclusive).
-            var lastChild    = dfx.getLastChild(startTopParent);
+            var lastChild    = dfx.getLastChildTextNode(startTopParent);
             var elemsBetween = dfx.getElementsBetween(bookmark.start, lastChild);
             elemsBetween.push(bookmark.start);
             elemsBetween.push(lastChild);
             dfx.remove(elemsBetween);
 
             // From the cloned node, remove everything from firstChild to start bookmark.
-            var firstChild = dfx.getFirstChild(clone);
+            var firstChild = dfx.getFirstChildTextNode(clone);
             elemsBetween   = dfx.getElementsBetween(firstChild, this.getBookmark(clone, 'start'));
             elemsBetween.push(firstChild);
             dfx.remove(elemsBetween);
@@ -2707,13 +2811,13 @@ Viper.prototype = {
             var clone = endTopParent.cloneNode(true);
 
             // Remove everything from firstChild to bookmark (inclusive).
-            var firstChild   = dfx.getFirstChild(endTopParent);
+            var firstChild   = dfx.getFirstChildTextNode(endTopParent);
             var elemsBetween = dfx.getElementsBetween(firstChild, bookmark.end);
             elemsBetween.push(firstChild);
             dfx.remove(elemsBetween);
 
             // From the cloned node, remove everything from end bookmark to lastChild.
-            var lastChild = dfx.getLastChild(clone);
+            var lastChild = dfx.getLastChildTextNode(clone);
             elemsBetween  = dfx.getElementsBetween(this.getBookmark(clone, 'end'), lastChild);
             elemsBetween.push(lastChild);
             dfx.remove(elemsBetween);
@@ -2938,41 +3042,41 @@ Viper.prototype = {
             // Bookmark is collapsed.
             if (bookmark.end.nextSibling) {
                 if ((dfx.isTag(bookmark.end.nextSibling, 'span') !== true || dfx.hasClass(bookmark.end.nextSibling, 'viperBookmark') === false)) {
-                    startPos = dfx.getFirstChild(bookmark.end.nextSibling);
+                    startPos = dfx.getFirstChildTextNode(bookmark.end.nextSibling);
                 } else {
                     startPos = document.createTextNode('');
                     dfx.insertAfter(bookmark.end, startPos);
                 }
             } else if (bookmark.start.previousSibling) {
-                startPos = dfx.getFirstChild(bookmark.start.previousSibling);
+                startPos = dfx.getFirstChildTextNode(bookmark.start.previousSibling);
                 if (startPos.nodeType === dfx.TEXT_NODE) {
                     startOffset = startPos.length;
                 }
             } else {
                 // Create a text node in parent.
                 bookmark.end.parentNode.appendChild(Viper.document.createTextNode(''));
-                startPos = dfx.getFirstChild(bookmark.end.nextSibling);
+                startPos = dfx.getFirstChildTextNode(bookmark.end.nextSibling);
             }
         } else {
             if (bookmark.start.nextSibling) {
-                startPos = dfx.getFirstChild(bookmark.start.nextSibling);
+                startPos = dfx.getFirstChildTextNode(bookmark.start.nextSibling);
             } else {
                 if (!bookmark.start.previousSibling) {
                     var tmp = Viper.document.createTextNode('');
                     dfx.insertBefore(bookmark.start, tmp);
                 }
 
-                startPos    = dfx.getLastChild(bookmark.start.previousSibling);
+                startPos    = dfx.getLastChildTextNode(bookmark.start.previousSibling);
                 startOffset = startPos.length;
             }
 
             if (bookmark.end.previousSibling) {
-                endPos    = dfx.getLastChild(bookmark.end.previousSibling);
+                endPos    = dfx.getLastChildTextNode(bookmark.end.previousSibling);
                 if (endPos.data) {
                     endOffset = endPos.data.length;
                 }
             } else {
-                endPos    = dfx.getFirstChild(bookmark.end.nextSibling);
+                endPos    = dfx.getFirstChildTextNode(bookmark.end.nextSibling);
                 endOffset = 0;
             }
         }//end if

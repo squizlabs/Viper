@@ -9,8 +9,9 @@
     <script type="text/javascript">
         var viperTest = null;
         ViperReadyCallback = function() {
-            viperTest = new Viper('test');
-            viperTest.setEditableElement(document.getElementById('content'));
+            viperTest = new Viper('test', {language: 'en'}, function(viper) {
+                viper.setEditableElement(document.getElementById('content'));
+            });
         };
     </script>
 </head>

@@ -7,15 +7,16 @@
     <link rel="stylesheet" media="screen" href="../../build/viper.css" />
     <script type="text/javascript" src="../../build/viper.js"></script>
     <script type="text/javascript">
-        var viper = null;
+        var viperTest = null;
         dfx.addLoadEvent(function() {
-            viper = new Viper('test');
-            viper.getPluginManager().setPlugins(['ViperCoreStylesPlugin', 'ViperKeyboardEditorPlugin', 'ViperInlineToolbarPlugin', 'ViperHistoryPlugin', 'ViperListPlugin', 'ViperFormatPlugin', 'ViperToolbarPlugin', 'ViperTableEditorPlugin', 'ViperCopyPastePlugin', 'ViperImagePlugin', 'ViperLinkPlugin', 'ViperAccessibilityPlugin', 'ViperSourceViewPlugin', 'ViperSearchReplacePlugin', 'ViperLangToolsPlugin', 'ViperCharMapPlugin', 'ViperTrackChangesPlugin']);
-            viper.setEditableElement(document.getElementById('content'));
+            viperTest = new Viper('test', {language: 'en'}, function(viperTest) {
+                viperTest.getPluginManager().setPlugins(['ViperCoreStylesPlugin', 'ViperKeyboardEditorPlugin', 'ViperInlineToolbarPlugin', 'ViperHistoryPlugin', 'ViperListPlugin', 'ViperFormatPlugin', 'ViperToolbarPlugin', 'ViperTableEditorPlugin', 'ViperCopyPastePlugin', 'ViperImagePlugin', 'ViperLinkPlugin', 'ViperAccessibilityPlugin', 'ViperSourceViewPlugin', 'ViperSearchReplacePlugin', 'ViperLangToolsPlugin', 'ViperCharMapPlugin', 'ViperTrackChangesPlugin']);
+                viperTest.setEditableElement(document.getElementById('content'));
 
-            var buttons = [['bold', 'italic', 'subscript', 'superscript', 'strikethrough', 'class'], 'removeFormat', ['justify', 'formats', 'headings'], ['undo', 'redo'], ['unorderedList', 'orderedList', 'indentList', 'outdentList'], 'insertTable', 'image', 'hr', ['insertLink', 'removeLink', 'anchor'], 'insertCharacter', 'searchReplace', 'langTools', 'accessibility', 'sourceEditor'];
-            viper.getPluginManager().setPluginSettings('ViperToolbarPlugin', {buttons: buttons});
-            viper.getPluginManager().setPluginSettings('ViperInlineToolbarPlugin', {buttons: buttons});
+                var buttons = [['bold', 'italic', 'subscript', 'superscript', 'strikethrough', 'class'], 'removeFormat', ['justify', 'formats', 'headings'], ['undo', 'redo'], ['unorderedList', 'orderedList', 'indentList', 'outdentList'], 'insertTable', 'image', 'hr', ['insertLink', 'removeLink', 'anchor'], 'insertCharacter', 'searchReplace', 'langTools', 'accessibility', 'sourceEditor'];
+                viperTest.getPluginManager().setPluginSettings('ViperToolbarPlugin', {buttons: buttons});
+                viperTest.getPluginManager().setPluginSettings('ViperInlineToolbarPlugin', {buttons: buttons});
+            });
         });
     </script>
 </head>

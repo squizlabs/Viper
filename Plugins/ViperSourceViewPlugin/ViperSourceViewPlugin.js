@@ -28,6 +28,7 @@ function ViperSourceViewPlugin(viper)
     this._ignoreUpdate       = false;
     this._ignoreSourceUpdate = false;
     this._newWindowContents  = '';
+    this._jqueryURL          = null;
 }
 
 ViperSourceViewPlugin.prototype = {
@@ -36,7 +37,7 @@ ViperSourceViewPlugin.prototype = {
         var self = this;
         this.toolbarPlugin = this.viper.ViperPluginManager.getPlugin('ViperToolbarPlugin');
         if (this.toolbarPlugin) {
-            var toggle = this.viper.ViperTools.createButton('sourceEditor', '', 'Toggle Source View', 'Viper-sourceView', function() {
+            var toggle = this.viper.ViperTools.createButton('sourceEditor', '', _('Toggle Source View'), 'Viper-sourceView', function() {
                 self.toggleSourceView();
             }, true);
             this.toolbarPlugin.addButton(toggle);
@@ -66,6 +67,14 @@ ViperSourceViewPlugin.prototype = {
         this.viper.registerCallback(['Viper:editableElementChanged', 'Viper:disabled'], 'ViperSourceViewPlugin', function(nodes) {
             self.hideSourceView();
         });
+
+    },
+
+    setSettings: function(settings)
+    {
+        if (settings.jqueryURL) {
+            this._jqueryURL = settings.jqueryURL;
+        }
 
     },
 
@@ -109,9 +118,11 @@ ViperSourceViewPlugin.prototype = {
                 this._originalSource = content;
                 this._editor.getSession().setValue(content);
                 this.viper.ViperTools.openPopup('VSVP:popup', 800, 600);
-                this._editor.resize();
-                this._editor.focus();
-                this._isVisible = true;
+                setTimeout(function() {
+                    self._editor.resize();
+                    self._editor.focus();
+                    self._isVisible = true;
+                }, 50);
             } else {
                 this._textEditor.value = content;
                 this._originalSource   = this._textEditor.value;
@@ -231,14 +242,14 @@ ViperSourceViewPlugin.prototype = {
         // Confirm change panel.
         var popupTop = document.createElement('div');
         dfx.addClass(popupTop, 'VSVP-confirmPanel');
-        var discardButton = tools.createButton('VSVP:discard', 'Discard', 'Discard Changes', 'VSVP-confirmButton-discard', function() {
+        var discardButton = tools.createButton('VSVP:discard', _('Discard'), _('Discard Changes'), 'VSVP-confirmButton-discard', function() {
             self.viper.ViperTools.closePopup('VSVP:popup', 'discardChanges');
         });
-        var applyButton   = tools.createButton('VSVP:apply', 'Apply Changes', 'Apply Changes', 'VSVP-confirmButton-apply', function() {
+        var applyButton   = tools.createButton('VSVP:apply', _('Apply Changes'), _('Apply Changes'), 'VSVP-confirmButton-apply', function() {
             self.updatePageContents();
             self.viper.ViperTools.closePopup('VSVP:popup', 'applyChanges');
         });
-        dfx.setHtml(popupTop, '<div class="VSVP-confirmText">Would you like to apply your changes?</div>');
+        dfx.setHtml(popupTop, '<div class="VSVP-confirmText">' + _('Would you like to apply your changes?') + '</div>');
         popupTop.appendChild(applyButton);
         popupTop.appendChild(discardButton);
         this._closeConfirm = popupTop;
@@ -253,13 +264,13 @@ ViperSourceViewPlugin.prototype = {
         dfx.addClass(popupBottom, 'VSVP-bottomPanel');
 
         if (this.viper.isBrowser('msie') === false && (this.viper.getViperPath() || this.getViperURL())) {
-            var newWindowButton = tools.createButton('VSVP:newWindow', '', 'Open In new window', 'VSVP-bottomPanel-newWindow Viper-sourceNewWindow', function() {
+            var newWindowButton = tools.createButton('VSVP:newWindow', '', _('Open In new window'), 'VSVP-bottomPanel-newWindow Viper-sourceNewWindow', function() {
                 self.openInNewWindow();
             });
             popupBottom.appendChild(newWindowButton);
         }
 
-        var applyButtonBottom = tools.createButton('VSVP:apply', 'Apply Changes', 'Apply Changes', 'VSVP-bottomPanel-apply', function() {
+        var applyButtonBottom = tools.createButton('VSVP:apply', _('Apply Changes'), _('Apply Changes'), 'VSVP-bottomPanel-apply', function() {
             self.updatePageContents();
             self.viper.ViperTools.closePopup('VSVP:popup', 'applyChanges');
         });
@@ -268,7 +279,7 @@ ViperSourceViewPlugin.prototype = {
         // Create the popup.
         this._sourceView = tools.createPopup(
             'VSVP:popup',
-            'Source Editor',
+            _('Source Editor'),
             popupTop,
             content,
             popupBottom,
@@ -444,6 +455,11 @@ ViperSourceViewPlugin.prototype = {
 
     _includeAce: function(callback)
     {
+        if (window['ace']) {
+            callback.call(this);
+            return;
+        }
+
         var path = this.viper.getViperPath();
         if (!path) {
             callback.call(this);
@@ -484,7 +500,7 @@ ViperSourceViewPlugin.prototype = {
         var viperid = 'Viper-' + this.viper.getId() + '-ViperSVP';
         window[viperid] = this;
 
-        var childWindow = window.open('about:blank', "Viper Source View", "width=850,height=800,0,status=0,scrollbars=0");
+        var childWindow = window.open('about:blank', _('Viper Source View'), "width=850,height=800,0,status=0,scrollbars=0");
         this._isVisible = true;
         childWindow.document.write(this._getFrameContent(viperid));
         this._childWindow = childWindow;
@@ -517,13 +533,18 @@ ViperSourceViewPlugin.prototype = {
 
         content += '<!DOCTYPE html><html lang="en"><head>';
         content += '<meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">';
-        content += '<title>Viper Source View</title>';
+        content += '<title>' + _('Viper Source View') + '</title>';
         content += '<style type="text/css" media="screen">body {overflow: hidden;}</style>';
 
         if (!path) {
             var viperPath = this.getViperURL();
             content += '<link href="' + viperPath + 'viper.css" media="screen" rel="stylesheet" />';
-            content += '<script src="' + viperPath + 'viper.js" type="text/javascript" charset="utf-8"></script></head>';
+
+            if (this._jqueryURL !== null) {
+                content += '<script src="' + this._jqueryURL + '" type="text/javascript" charset="utf-8"></script>';
+            }
+
+            content += '<script src="' + viperPath + 'viper.js" type="text/javascript" charset="utf-8"></script>';
         } else {
             content += '<link href="' + path + '/Css/viper_tools.css" media="screen" rel="stylesheet" />';
             content += '<link href="' + path + '/Plugins/ViperSourceViewPlugin/ViperSourceViewPlugin.css" media="screen" rel="stylesheet" />';
@@ -532,12 +553,13 @@ ViperSourceViewPlugin.prototype = {
             content += '<script src="' + path + '/Plugins/ViperSourceViewPlugin/Ace/src/mode-html.js" type="text/javascript" charset="utf-8"></script>';
         }
 
+        content += '</head>';
         content += '<body id="ViperSourceViewPlugin-window" class="ViperSourceViewPlugin-window">';
         content += '<div class="Viper-popup Viper-themeDark VSVP-popup">';
         content += '<div class="VSVP-confirmPanel Viper-popup-top">';
-        content += '<div class="VSVP-confirmText">Source code changes will be reflected in your edit preview window in real time.</div>';
-        content += '<div class="Viper-button" title="Revert Changes" onclick="viperSVP.revertChanges();">Revert Changes</div>';
-        content += '<div class="Viper-button" title="Close Source View" onclick="window.close();">Close Window</div></div>';
+        content += '<div class="VSVP-confirmText">' + _('Source code changes will be reflected in your edit preview window in real time.') + '</div>';
+        content += '<div class="Viper-button" title="' + _('Revert Changes') + '" onclick="viperSVP.revertChanges();">' + _('Revert Changes') + '</div>';
+        content += '<div class="Viper-button" title="' + _('Close Source View') + '" onclick="window.close();">' + _('Close Window') + '</div></div>';
         content += '<div class="Viper-popup-content"><pre id="editor"></pre></div></div>';
         content += '<script>';
         content += 'var viperid = "' + viperid + '";';

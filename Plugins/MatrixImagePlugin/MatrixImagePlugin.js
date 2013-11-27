@@ -145,8 +145,13 @@ MatrixImagePlugin.prototype = {
                 callback: function(selectedAsset){
                     for (var i = 0; i < allowedTypes.length; i++) {
                         if (selectedAsset.attribute('type_code') === allowedTypes[i]) {
+                            var altText = selectedAsset.attribute('alt');
+                            if (!altText) {
+                                altText = '';
+                            }
+
                             urlField.setValue(selectedAsset.id,false);
-                            altField.setValue(selectedAsset.attribute('alt'),false);
+                            altField.setValue(altText,false);
                             break;
                         }
                     }

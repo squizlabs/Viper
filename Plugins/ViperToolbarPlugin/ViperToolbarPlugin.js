@@ -43,6 +43,14 @@ function ViperToolbarPlugin(viper)
             self._updateToolbar();
     });
 
+    this.viper.registerCallback('Viper:enabled', 'ViperToolbarPlugin', function(range) {
+        self._updateToolbar();
+    });
+
+    this.viper.registerCallback('Viper:disabled', 'ViperToolbarPlugin', function(range) {
+            self.disable();
+    });
+
     this.viper.registerCallback('Viper:clickedOutside', 'ViperToolbarPlugin', function(range) {
         clickedOutside = true;
 
@@ -115,7 +123,7 @@ ViperToolbarPlugin.prototype = {
         }
 
         var logo = document.createElement('div');
-        logo.setAttribute('title', 'Viper by Squiz');
+        logo.setAttribute('title', _('Viper by Squiz'));
         dfx.addClass(logo, 'Viper-logo');
         this._toolbar.appendChild(logo);
 
@@ -155,7 +163,7 @@ ViperToolbarPlugin.prototype = {
         var elem = document.createElement('div');
 
         var logo = document.createElement('div');
-        logo.setAttribute('title', 'Viper by Squiz');
+        logo.setAttribute('title', _('Viper by Squiz'));
         dfx.addClass(logo, 'Viper-logo');
         elem.appendChild(logo);
 
@@ -409,7 +417,7 @@ ViperToolbarPlugin.prototype = {
                     return false;
                 };
 
-                var button = tools.createButton(subSectionid + '-applyButton', 'Update Changes', 'Update Changes', '', subSection.form.onsubmit, true);
+                var button = tools.createButton(subSectionid + '-applyButton', _('Update Changes'), _('Update Changes'), '', subSection.form.onsubmit, true);
                 subSection.form.appendChild(button);
 
                 this.addSubSectionActionWidgets(subSectionid, widgetids);

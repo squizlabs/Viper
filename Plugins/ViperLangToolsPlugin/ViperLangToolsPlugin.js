@@ -341,7 +341,7 @@ ViperLangToolsPlugin.prototype = {
     {
         var self  = this;
         var elem  = document.createElement('div');
-        var input = this.viper.ViperTools.createTextbox('VLTP:acronymInput', 'Acronym');
+        var input = this.viper.ViperTools.createTextbox('VLTP:acronymInput', _('Acronym'));
 
         elem.appendChild(input);
 
@@ -353,7 +353,7 @@ ViperLangToolsPlugin.prototype = {
     {
         var self  = this;
         var elem  = document.createElement('div');
-        var input = this.viper.ViperTools.createTextbox('VLTP:abbrInput', 'Abbreviation');
+        var input = this.viper.ViperTools.createTextbox('VLTP:abbrInput', _('Abbreviation'));
 
         elem.appendChild(input);
 
@@ -365,7 +365,7 @@ ViperLangToolsPlugin.prototype = {
     {
         var self  = this;
         var elem  = document.createElement('div');
-        var input = this.viper.ViperTools.createTextbox('VLTP:langInput', 'Language');
+        var input = this.viper.ViperTools.createTextbox('VLTP:langInput', _('Language'));
 
         elem.appendChild(input);
 
@@ -398,7 +398,7 @@ ViperLangToolsPlugin.prototype = {
         // Create the bubble.
         var contents = document.createElement('div');
 
-        toolbar.createBubble('ViperLangToolsPlugin:bubble', 'Language Tools', null, contents, function() {
+        toolbar.createBubble('ViperLangToolsPlugin:bubble', _('Language Tools'), null, contents, function() {
             self._originalRange = self.viper.getViperRange().cloneRange();
         }, function() {
             tools.getItem('ViperLangToolsPlugin:bubble').hideSubSection();
@@ -406,20 +406,20 @@ ViperLangToolsPlugin.prototype = {
 
         var bubble = tools.getItem('ViperLangToolsPlugin:bubble');
 
-        var toggleBtn = tools.createButton('langTools', '', 'Toggle Language Tools', 'Viper-langTools', null, true);
+        var toggleBtn = tools.createButton('langTools', '', _('Toggle Language Tools'), 'Viper-langTools', null, true);
         toolbar.setBubbleButton('ViperLangToolsPlugin:bubble', 'langTools');
         toolbar.addButton(toggleBtn);
 
         // Create all the buttons inside the bubble.
-        var acronymButton = tools.createButton('ViperLangToolsPlugin:acronymButton', 'Acronym', 'Toggle Acronym Options', '', function() {
+        var acronymButton = tools.createButton('ViperLangToolsPlugin:acronymButton', _('Acronym'), _('Toggle Acronym Options'), '', function() {
             bubble.showSubSection('VLTP:acronymSubSection');
             self._selectTag('acronym');
         });
-        var abbrButton = tools.createButton('ViperLangToolsPlugin:abbrButton', 'Abbreviation', 'Toggle Abbreviation Options', '', function() {
+        var abbrButton = tools.createButton('ViperLangToolsPlugin:abbrButton', _('Abbreviation'), _('Toggle Abbreviation Options'), '', function() {
             bubble.showSubSection('VLTP:abbreviationSubSection');
             self._selectTag('abbr');
         });
-        var langButton = tools.createButton('ViperLangToolsPlugin:langButton', 'Language', 'Toggle Language Options', '', function() {
+        var langButton = tools.createButton('ViperLangToolsPlugin:langButton', _('Language'), _('Toggle Language Options'), '', function() {
             bubble.showSubSection('VLTP:langSubSection');
             self._selectTag('lang');
         });

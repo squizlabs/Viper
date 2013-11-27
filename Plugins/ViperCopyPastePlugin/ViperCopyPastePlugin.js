@@ -140,7 +140,7 @@ ViperCopyPastePlugin.prototype = {
                     shortcut = 'CMD+V';
                 }
 
-                var pasteDesc = '<p class="ViperCopyPatePlugin-pasteDesc">Paste your content into the box below and it will be automatically inserted and cleaned up.</p>';
+                var pasteDesc = '<p class="ViperCopyPatePlugin-pasteDesc">' + _('Paste your content into the box below and it will be automatically inserted and cleaned up.') + '</p>';
                 pasteDesc    += '<p class="ViperCopyPatePlugin-pasteDesc">Avoid this step for future pastes using the keyboard shortcut <strong>' + shortcut + '</strong>.</p>';
 
                 dfx.setHtml(content, pasteDesc);
@@ -1371,6 +1371,11 @@ ViperCopyPastePlugin.prototype = {
 
     _getListType: function(elem, listTypes)
     {
+        var style = elem.getAttribute('style');
+        if (!style || style.indexOf('mso-list') === -1) {
+            return null;
+        }
+
         var elContent = dfx.getNodeTextContent(elem);
         elContent     = elContent.replace(/\n/, '');
         elContent     = elContent.replace(/^(&nbsp;)+/m, '');
