@@ -4008,11 +4008,12 @@ Viper.prototype = {
         // Shift, Control, Alt, Caps lock, esc, CMD.
         var ignoredKeys = [16, 17, 18, 20, 27, 91];
 
+        // Key 8/46 = Backspace/Delete; 33-36 = Page Up/Down, Home/End; 37-40 = arrows.
         if ((this._keyDownRangeCollapsed === false && ignoredKeys.inArray(e.which) === false)
             && (e.ctrlKey === false && e.metaKey === false)
             || e.which === 8
             || e.which === 46
-            || (e.which >= 37 && e.which <= 40)
+            || (e.which >= 33 && e.which <= 40)
         ) {
             this.fireSelectionChanged();
         }
