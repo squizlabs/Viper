@@ -1348,25 +1348,29 @@ ViperFormatPlugin.prototype = {
 
         if (selectedNode && ViperUtil.isBlockElement(selectedNode) === true) {
             var isBlockquote = false;
+            var singlePTag   = true;
             if (ViperUtil.isTag(selectedNode, 'p') === true && ViperUtil.isTag(selectedNode.parentNode, 'blockquote') === true) {
                 selectedNode = selectedNode.parentNode;
                 isBlockquote = true;
+                if (ViperUtil.getTag('p', selectedNode).length > 1) {
+                    singlePTag = false;
+                }
             }
 
             for (var tagName in statuses) {
                 if (isBlockquote === true) {
-                    statuses[tagName] = true;
+                    statuses[tagName] = singlePTag;
                     continue;
                 }
 
                 var canConvert = this.canConvert(selectedNode, tagName);
                 statuses[tagName] = canConvert;
                 if (canConvert === true) {
-                    statuses._canChange = true;
+                    statuses._canChange = false;
                 }
             }
 
-            statuses._none = true;
+            statuses._none = singlePTag;
         } else if (selectedNode && selectedNode.nodeType === ViperUtil.TEXT_NODE) {
             var parent = ViperUtil.getFirstBlockParent(selectedNode);
             if (ViperUtil.isTag(parent, 'div') === true) {
