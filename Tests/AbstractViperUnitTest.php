@@ -2141,7 +2141,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      */
     private function _rightClickPasteDiv()
     {
-        $targetIcon = $this->sikuli->find(dirname(__FILE__).'/Core/Images/window-target2.png');
+        $targetIcon = $this->sikuli->find(dirname(dirname(__FILE__)).'/Core/Images/window-target2.png');
         $topLeft    = $this->sikuli->getTopLeft($targetIcon);
         $loc        = array(
                        'x' => ($this->sikuli->getX($topLeft) + 50),
