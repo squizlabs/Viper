@@ -1267,8 +1267,8 @@ ViperKeyboardEditorPlugin.prototype = {
             if (!range.startContainer.nextSibling) {
                 var newTextNode = Viper.document.createTextNode('');
                 dfx.insertAfter(range.startContainer.parentNode, newTextNode);
-                range.setStart(newTextNode, 0);
-                range.collapse(true);
+                range.setEnd(newTextNode, 0);
+                range.collapse(false);
             }
         }
 
