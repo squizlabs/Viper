@@ -13,7 +13,7 @@ class Viper_Tests_ViperSearchAndReplaceToolbarPlugin_SearchAndReplaceInTablesUni
      */
     public function testSearchIconStatesInCaption()
     {
-        $this->click($this->findKeyword(1));
+        $this->sikuli->click($this->findKeyword(1));
 
         $this->assertTrue($this->topToolbarButtonExists('searchReplace'), 'Search and replace icon should be enabled');
 
@@ -25,7 +25,7 @@ class Viper_Tests_ViperSearchAndReplaceToolbarPlugin_SearchAndReplaceInTablesUni
         $this->assertTrue($this->topToolbarButtonExists('Replace', 'disabled', TRUE), 'Replace Icon should be disabled.');
         $this->assertTrue($this->topToolbarButtonExists('Replace All', 'disabled', TRUE), 'Replace All Icon should be disabled.');
 
-        $this->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.TAB');
         $this->type('replace');
         $this->assertTrue($this->topToolbarButtonExists('Find Next', NULL, TRUE), 'Find Next Icon should be enabled.');
         $this->assertTrue($this->topToolbarButtonExists('Replace', 'disabled', TRUE), 'Replace Icon should be disabled.');
@@ -46,8 +46,7 @@ class Viper_Tests_ViperSearchAndReplaceToolbarPlugin_SearchAndReplaceInTablesUni
      */
     public function testSearchIconStatesInTableHeader()
     {
-        $this->click($this->findKeyword(2));
-
+        $this->sikuli->click($this->findKeyword(2));
         $this->assertTrue($this->topToolbarButtonExists('searchReplace'), 'Search and replace icon should be enabled');
 
         $this->clickTopToolbarButton('searchReplace');
@@ -58,7 +57,7 @@ class Viper_Tests_ViperSearchAndReplaceToolbarPlugin_SearchAndReplaceInTablesUni
         $this->assertTrue($this->topToolbarButtonExists('Replace', 'disabled', TRUE), 'Replace Icon should be disabled.');
         $this->assertTrue($this->topToolbarButtonExists('Replace All', 'disabled', TRUE), 'Replace All Icon should be disabled.');
 
-        $this->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.TAB');
         $this->type('replace');
         $this->assertTrue($this->topToolbarButtonExists('Find Next', NULL, TRUE), 'Find Next Icon should be enabled.');
         $this->assertTrue($this->topToolbarButtonExists('Replace', 'disabled', TRUE), 'Replace Icon should be disabled.');
@@ -79,7 +78,7 @@ class Viper_Tests_ViperSearchAndReplaceToolbarPlugin_SearchAndReplaceInTablesUni
      */
     public function testSearchIconStatesInTableFooter()
     {
-        $this->click($this->findKeyword(3));
+        $this->sikuli->click($this->findKeyword(3));
 
         $this->assertTrue($this->topToolbarButtonExists('searchReplace'), 'Search and replace icon should be enabled');
 
@@ -91,7 +90,7 @@ class Viper_Tests_ViperSearchAndReplaceToolbarPlugin_SearchAndReplaceInTablesUni
         $this->assertTrue($this->topToolbarButtonExists('Replace', 'disabled', TRUE), 'Replace Icon should be disabled.');
         $this->assertTrue($this->topToolbarButtonExists('Replace All', 'disabled', TRUE), 'Replace All Icon should be disabled.');
 
-        $this->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.TAB');
         $this->type('replace');
         $this->assertTrue($this->topToolbarButtonExists('Find Next', NULL, TRUE), 'Find Next Icon should be enabled.');
         $this->assertTrue($this->topToolbarButtonExists('Replace', 'disabled', TRUE), 'Replace Icon should be disabled.');
@@ -112,7 +111,7 @@ class Viper_Tests_ViperSearchAndReplaceToolbarPlugin_SearchAndReplaceInTablesUni
      */
     public function testSearchIconStatesInTableBody()
     {
-        $this->click($this->findKeyword(4));
+        $this->sikuli->click($this->findKeyword(4));
 
         $this->assertTrue($this->topToolbarButtonExists('searchReplace'), 'Search and replace icon should be enabled');
 
@@ -124,7 +123,7 @@ class Viper_Tests_ViperSearchAndReplaceToolbarPlugin_SearchAndReplaceInTablesUni
         $this->assertTrue($this->topToolbarButtonExists('Replace', 'disabled', TRUE), 'Replace Icon should be disabled.');
         $this->assertTrue($this->topToolbarButtonExists('Replace All', 'disabled', TRUE), 'Replace All Icon should be disabled.');
 
-        $this->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.TAB');
         $this->type('replace');
         $this->assertTrue($this->topToolbarButtonExists('Find Next', NULL, TRUE), 'Find Next Icon should be enabled.');
         $this->assertTrue($this->topToolbarButtonExists('Replace', 'disabled', TRUE), 'Replace Icon should be disabled.');
@@ -145,7 +144,7 @@ class Viper_Tests_ViperSearchAndReplaceToolbarPlugin_SearchAndReplaceInTablesUni
      */
     public function testReplaceButtonsNotActive()
     {
-        $this->click($this->findKeyword(1));
+        $this->sikuli->click($this->findKeyword(1));
 
 
         $this->clickTopToolbarButton('searchReplace');
@@ -165,7 +164,7 @@ class Viper_Tests_ViperSearchAndReplaceToolbarPlugin_SearchAndReplaceInTablesUni
      */
     public function testSearchForContentAndEditingSearch()
     {
-        $this->click($this->findKeyword(1));
+        $this->sikuli->click($this->findKeyword(1));
 
         $this->clickTopToolbarButton('searchReplace');
         $this->type('caption');
@@ -197,21 +196,21 @@ class Viper_Tests_ViperSearchAndReplaceToolbarPlugin_SearchAndReplaceInTablesUni
      */
     public function testSearchAndReplace()
     {
-        $this->click($this->findKeyword(1));
+        $this->sikuli->click($this->findKeyword(1));
 
         $this->clickTopToolbarButton('searchReplace');
         $this->type('porta');
-        $this->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.TAB');
         $this->type('replace');
         $this->clickTopToolbarButton('Find Next', NULL, TRUE);
         $this->clickTopToolbarButton('Replace', NULL, TRUE, TRUE);
 
-        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1% replace</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3% porta</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1% replace</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3% porta</td></tr></tfoot><tbody><tr><td>%4% nec porta ante</td><td>sapien vel</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         $this->clickTopToolbarButton('Find Next', NULL, TRUE);
         $this->clickTopToolbarButton('Replace', NULL, TRUE, TRUE);
 
-        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1% replace</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3% replace</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1% replace</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3% replace</td></tr></tfoot><tbody><tr><td>%4% nec porta ante</td><td>sapien vel</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
     }//end testSearchAndReplace()
 
@@ -223,7 +222,7 @@ class Viper_Tests_ViperSearchAndReplaceToolbarPlugin_SearchAndReplaceInTablesUni
      */
     public function testFindAndThenReplace()
     {
-        $this->click($this->findKeyword(1));
+        $this->sikuli->click($this->findKeyword(1));
 
         $this->clickTopToolbarButton('searchReplace');
         $this->type('porta');
@@ -233,12 +232,12 @@ class Viper_Tests_ViperSearchAndReplaceToolbarPlugin_SearchAndReplaceInTablesUni
         $this->type('replace');
         $this->clickTopToolbarButton('Replace', NULL, TRUE, TRUE);
 
-        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1% replace</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3% porta</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1% replace</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3% porta</td></tr></tfoot><tbody><tr><td>%4% nec porta ante</td><td>sapien vel</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         $this->clickTopToolbarButton('Find Next', NULL, TRUE);
         $this->clickTopToolbarButton('Replace', NULL, TRUE, TRUE);
 
-        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1% replace</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3% replace</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1% replace</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3% replace</td></tr></tfoot><tbody><tr><td>%4% nec porta ante</td><td>sapien vel</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
     }//end testFindAndThenReplace()
 
@@ -250,16 +249,16 @@ class Viper_Tests_ViperSearchAndReplaceToolbarPlugin_SearchAndReplaceInTablesUni
      */
     public function testSearchAndReplaceAll()
     {
-        $this->click($this->findKeyword(1));
+        $this->sikuli->click($this->findKeyword(1));
 
         $this->clickTopToolbarButton('searchReplace');
         $this->type('porta');
-        $this->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.TAB');
         $this->type('replace');
         $this->clickTopToolbarButton('Find Next', NULL, TRUE);
         $this->clickTopToolbarButton('Replace All', NULL, TRUE);
 
-        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1% replace</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3% replace</td></tr></tfoot><tbody><tr><td>nec replace ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec replace ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1% replace</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3% replace</td></tr></tfoot><tbody><tr><td>%4% nec replace ante</td><td>sapien vel</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec replace ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
     }//end testSearchAndReplaceAll()
 
@@ -271,22 +270,22 @@ class Viper_Tests_ViperSearchAndReplaceToolbarPlugin_SearchAndReplaceInTablesUni
      */
     public function testUndoAfterReplace()
     {
-        $this->click($this->findKeyword(1));
+        $this->sikuli->click($this->findKeyword(1));
 
         $this->clickTopToolbarButton('searchReplace');
         $this->type('porta');
-        $this->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.TAB');
         $this->type('replace');
         $this->clickTopToolbarButton('Find Next', NULL, TRUE);
         $this->clickTopToolbarButton('Replace', NULL, TRUE, TRUE);
 
-        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1% replace</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3% porta</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1% replace</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3% porta</td></tr></tfoot><tbody><tr><td>%4% nec porta ante</td><td>sapien vel</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         $this->clickTopToolbarButton('historyUndo');
-        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1% porta</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3% porta</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1% porta</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3% porta</td></tr></tfoot><tbody><tr><td>%4% nec porta ante</td><td>sapien vel</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         $this->clickTopToolbarButton('historyRedo');
-        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1% replace</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3% porta</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1% replace</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3% porta</td></tr></tfoot><tbody><tr><td>%4% nec porta ante</td><td>sapien vel</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
     }//end testUndoAfterReplace()
 
@@ -298,22 +297,22 @@ class Viper_Tests_ViperSearchAndReplaceToolbarPlugin_SearchAndReplaceInTablesUni
      */
     public function testUndoAfterReplaceAll()
     {
-        $this->click($this->findKeyword(1));
+        $this->sikuli->click($this->findKeyword(1));
 
         $this->clickTopToolbarButton('searchReplace');
         $this->type('porta');
-        $this->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.TAB');
         $this->type('replace');
         $this->clickTopToolbarButton('Find Next', NULL, TRUE);
         $this->clickTopToolbarButton('Replace All', NULL, TRUE);
 
-        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1% replace</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3% replace</td></tr></tfoot><tbody><tr><td>nec replace ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec replace ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1% replace</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3% replace</td></tr></tfoot><tbody><tr><td>%4% nec replace ante</td><td>sapien vel</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec replace ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         $this->clickTopToolbarButton('historyUndo');
-        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1% porta</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3% porta</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1% porta</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3% porta</td></tr></tfoot><tbody><tr><td>%4% nec porta ante</td><td>sapien vel</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         $this->clickTopToolbarButton('historyRedo');
-        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1% replace</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3% replace</td></tr></tfoot><tbody><tr><td>nec replace ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec replace ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1% replace</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3% replace</td></tr></tfoot><tbody><tr><td>%4% nec replace ante</td><td>sapien vel</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec replace ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
     }//end testSearchAndReplaceAll()
 
@@ -326,20 +325,20 @@ class Viper_Tests_ViperSearchAndReplaceToolbarPlugin_SearchAndReplaceInTablesUni
      */
     public function testSearchAndReplaceAfterClosingFields()
     {
-        $this->click($this->findKeyword(1));
+        $this->sikuli->click($this->findKeyword(1));
 
         $this->clickTopToolbarButton('searchReplace');
         $this->type('porta');
-        $this->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.TAB');
         $this->type('replace');
         $this->clickTopToolbarButton('Find Next', NULL, TRUE);
         $this->clickTopToolbarButton('Replace', NULL, TRUE);
 
-        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1% replace</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3% porta</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1% replace</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3% porta</td></tr></tfoot><tbody><tr><td>%4% nec porta ante</td><td>sapien vel</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Close the search fields
         $this->clickTopToolbarButton('searchReplace', 'selected');
-        $this->click($this->findKeyword(1));
+        $this->sikuli->click($this->findKeyword(1));
 
         // Open the search fields again and make sure only the Find Next button is enabled
         $this->clickTopToolbarButton('searchReplace');
@@ -350,7 +349,7 @@ class Viper_Tests_ViperSearchAndReplaceToolbarPlugin_SearchAndReplaceInTablesUni
         $this->clickTopToolbarButton('Find Next', NULL, TRUE);
         $this->clickTopToolbarButton('Replace', NULL, TRUE);
 
-        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1% replace</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3% replace</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1% replace</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3% replace</td></tr></tfoot><tbody><tr><td>%4% nec porta ante</td><td>sapien vel</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
     }//end testSearchAndReplaceAfterClosingFields()
 

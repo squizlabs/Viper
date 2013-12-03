@@ -14,8 +14,8 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreStylesUnitTest extends AbstractViper
     {
         $this->selectKeyword(1);
 
-        $this->keyDown('Key.CMD + b');
-        $this->keyDown('Key.CMD + i');
+        $this->sikuli->keyDown('Key.CMD + b');
+        $this->sikuli->keyDown('Key.CMD + i');
 
         $this->clickTopToolbarButton('subscript');
         $this->clickTopToolbarButton('superscript');
@@ -46,10 +46,10 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreStylesUnitTest extends AbstractViper
     public function testStyleTags()
     {
         $this->selectKeyword(1);
-        $this->keyDown('Key.CMD + b');
+        $this->sikuli->keyDown('Key.CMD + b');
 
         $this->selectKeyword(1, 2);
-        $this->keyDown('Key.CMD + i');
+        $this->sikuli->keyDown('Key.CMD + i');
 
         $this->assertHTMLMatch('<p><em><strong>%1%</strong> %2%</em> %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
@@ -65,8 +65,8 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreStylesUnitTest extends AbstractViper
     {
         $this->selectKeyword(1);
 
-        $this->keyDown('Key.CMD + b');
-        $this->keyDown('Key.CMD + i');
+        $this->sikuli->keyDown('Key.CMD + b');
+        $this->sikuli->keyDown('Key.CMD + i');
         $this->assertHTMLMatch('<p><strong><em>%1%</em></strong> %2% %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
         $this->selectKeyword(1);
@@ -84,9 +84,9 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreStylesUnitTest extends AbstractViper
      */
     public function testMultiParaApplyStyle()
     {
-        $this->click($this->findKeyword(2));
+        $this->sikuli->click($this->findKeyword(2));
         $this->selectKeyword(1, 4);
-        $this->keyDown('Key.CMD + b');
+        $this->sikuli->keyDown('Key.CMD + b');
 
         $this->assertHTMLMatch('<p><strong>%1% %2% %3%</strong></p><p><strong>sit <em>%4%</em></strong> <strong>%5%</strong></p>');
 
@@ -101,8 +101,8 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreStylesUnitTest extends AbstractViper
     public function testMultiParaRemoveStyle()
     {
         $this->selectKeyword(1, 4);
-        $this->keyDown('Key.CMD + b');
-        $this->keyDown('Key.CMD + b');
+        $this->sikuli->keyDown('Key.CMD + b');
+        $this->sikuli->keyDown('Key.CMD + b');
 
         $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
@@ -118,13 +118,13 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreStylesUnitTest extends AbstractViper
     {
         $this->selectKeyword(1, 4);
         sleep(1);
-        $this->keyDown('Key.CMD + b');
+        $this->sikuli->keyDown('Key.CMD + b');
         usleep(50000);
-        $this->keyDown('Key.CMD + i');
+        $this->sikuli->keyDown('Key.CMD + i');
         usleep(50000);
-        $this->keyDown('Key.CMD + i');
+        $this->sikuli->keyDown('Key.CMD + i');
         usleep(50000);
-        $this->keyDown('Key.CMD + b');
+        $this->sikuli->keyDown('Key.CMD + b');
         usleep(50000);
 
         $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit %4% <strong>%5%</strong></p>');
@@ -140,8 +140,8 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreStylesUnitTest extends AbstractViper
     public function testSelectParaAfterStyling()
     {
         $this->selectKeyword(1, 3);
-        $this->keyDown('Key.CMD + b');
-        $this->keyDown('Key.CMD + i');
+        $this->sikuli->keyDown('Key.CMD + b');
+        $this->sikuli->keyDown('Key.CMD + i');
 
         $this->selectInlineToolbarLineageItem(0);
 
@@ -166,8 +166,8 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreStylesUnitTest extends AbstractViper
         $this->selectKeyword(1);
 
         //Add bold and italics
-        $this->keyDown('Key.CMD + b');
-        $this->keyDown('Key.CMD + i');
+        $this->sikuli->keyDown('Key.CMD + b');
+        $this->sikuli->keyDown('Key.CMD + i');
 
         $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon is not active in the inline toolbar');
         $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon is not active in the top toolbar');
@@ -179,13 +179,13 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreStylesUnitTest extends AbstractViper
 
         //Remove italics
         $this->selectKeyword(1);
-        $this->keyDown('Key.CMD + i');
+        $this->sikuli->keyDown('Key.CMD + i');
 
         $this->assertTrue($this->inlineToolbarButtonExists('italic'), 'Italic icon is still active in the inline toolbar');
         $this->assertTrue($this->topToolbarButtonExists('italic'), 'Italic icon is still active in the top toolbar');
 
         //Remove bold
-        $this->keyDown('Key.CMD + b');
+        $this->sikuli->keyDown('Key.CMD + b');
 
         $this->assertTrue($this->inlineToolbarButtonExists('bold'), 'Bold icon is still active in the inline toolbar');
         $this->assertTrue($this->topToolbarButtonExists('bold'), 'Bold icon is still active in the top toolbar');
@@ -225,30 +225,30 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreStylesUnitTest extends AbstractViper
     {
         $this->moveToKeyword(1, 'right');
 
-        $this->keyDown('Key.CMD + b');
+        $this->sikuli->keyDown('Key.CMD + b');
         $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar is not active');
         $this->type('TEST');
-        $this->keyDown('Key.CMD + b');
+        $this->sikuli->keyDown('Key.CMD + b');
         $this->assertTrue($this->topToolbarButtonExists('bold'), 'Bold icon in the top toolbar is active');
 
         $this->type(' ');
-        $this->keyDown('Key.CMD + i');
-        $this->keyDown('Key.CMD + b');
+        $this->sikuli->keyDown('Key.CMD + i');
+        $this->sikuli->keyDown('Key.CMD + b');
         $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar is not active');
         $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar is not active');
         $this->type('TEST');
-        $this->keyDown('Key.CMD + b');
-        $this->keyDown('Key.CMD + i');
+        $this->sikuli->keyDown('Key.CMD + b');
+        $this->sikuli->keyDown('Key.CMD + i');
 
         $this->assertTrue($this->topToolbarButtonExists('bold'), 'Bold icon in the top toolbar is active');
         $this->assertTrue($this->topToolbarButtonExists('italic'), 'Italic icon in the top toolbar is active');
         $this->type('TEST');
-        $this->keyDown('Key.CMD + b');
+        $this->sikuli->keyDown('Key.CMD + b');
         $this->type('TEST');
-        $this->keyDown('Key.CMD + i');
+        $this->sikuli->keyDown('Key.CMD + i');
         $this->type('TEST');
-        $this->keyDown('Key.CMD + i');
-        $this->keyDown('Key.CMD + b');
+        $this->sikuli->keyDown('Key.CMD + i');
+        $this->sikuli->keyDown('Key.CMD + b');
 
         $this->assertHTMLMatch('<p>%1%<strong>TEST</strong><em><strong>TEST</strong></em>TEST<strong>TEST<em>TEST</em></strong> %2% %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
@@ -303,8 +303,8 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreStylesUnitTest extends AbstractViper
     {
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
-        $this->keyDown('Key.CMD + i');
-        $this->keyDown('Key.CMD + b');
+        $this->sikuli->keyDown('Key.CMD + i');
+        $this->sikuli->keyDown('Key.CMD + b');
         $this->assertHTMLMatch('<p><em><strong>%1% %2% %3%</strong></em></p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
         $this->moveToKeyword(1, 'right');
@@ -315,18 +315,18 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreStylesUnitTest extends AbstractViper
         $this->clickTopToolbarButton('bold', 'active');
         $this->clickTopToolbarButton('italic', 'active');
         $this->type('TEST');
-        $this->keyDown('Key.CMD + i');
+        $this->sikuli->keyDown('Key.CMD + i');
         $this->type('TEST');
-        $this->keyDown('Key.CMD + b');
-        $this->keyDown('Key.CMD + b');
-        $this->keyDown('Key.CMD + b');
+        $this->sikuli->keyDown('Key.CMD + b');
+        $this->sikuli->keyDown('Key.CMD + b');
+        $this->sikuli->keyDown('Key.CMD + b');
         $this->type('TEST');
-        $this->keyDown('Key.CMD + b');
-        $this->keyDown('Key.CMD + i');
-        $this->keyDown('Key.CMD + i');
+        $this->sikuli->keyDown('Key.CMD + b');
+        $this->sikuli->keyDown('Key.CMD + i');
+        $this->sikuli->keyDown('Key.CMD + i');
         $this->type('TEST');
-        $this->keyDown('Key.CMD + b');
-        $this->keyDown('Key.CMD + i');
+        $this->sikuli->keyDown('Key.CMD + b');
+        $this->sikuli->keyDown('Key.CMD + i');
         $this->type('TEST');
 
         $this->assertHTMLMatch('<p><em><strong>%1%</strong></em>TESTTEST<strong>TEST</strong>TEST<strong><em>TEST</em></strong><em><strong> %2% %3%</strong></em></p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
@@ -343,15 +343,15 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreStylesUnitTest extends AbstractViper
     {
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
-        $this->keyDown('Key.CMD + i');
-        $this->keyDown('Key.CMD + b');
+        $this->sikuli->keyDown('Key.CMD + i');
+        $this->sikuli->keyDown('Key.CMD + b');
         $this->assertHTMLMatch('<p><em><strong>%1% %2% %3%</strong></em></p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
         $this->moveToKeyword(3, 'right');
 
-        $this->keyDown('Key.CMD + b');
+        $this->sikuli->keyDown('Key.CMD + b');
         $this->assertTrue($this->topToolbarButtonExists('bold'), 'Bold icon in the top toolbar is active');
-        $this->keyDown('Key.CMD + i');
+        $this->sikuli->keyDown('Key.CMD + i');
         $this->assertTrue($this->topToolbarButtonExists('italic'), 'italic icon in the top toolbar is active');
         $this->type('TEST');
 
@@ -368,11 +368,11 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreStylesUnitTest extends AbstractViper
     public function testStartingStylesForNewParagraph()
     {
         $this->moveToKeyword(3, 'right');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
 
-        $this->keyDown('Key.CMD + b');
+        $this->sikuli->keyDown('Key.CMD + b');
         $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-        $this->keyDown('Key.CMD + i');
+        $this->sikuli->keyDown('Key.CMD + i');
         $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'italic icon in the top toolbar should be active');
         $this->type('This is a new paragraph');
 
@@ -389,7 +389,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreStylesUnitTest extends AbstractViper
     public function testStartingStylesForNewParagraphUsingIcons()
     {
         $this->moveToKeyword(3, 'right');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
 
         $this->clickTopToolbarButton('bold');
         $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
@@ -410,20 +410,20 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreStylesUnitTest extends AbstractViper
     public function testStartingAndStoppingStylesAfterWordThatIsStyled()
     {
         $this->moveToKeyword(4, 'right');
-        $this->keyDown('Key.CMD + i');
+        $this->sikuli->keyDown('Key.CMD + i');
         $this->assertTrue($this->topToolbarButtonExists('italic'), 'italic icon in the top toolbar should not be active');
         $this->type('test');
-        $this->keyDown('Key.CMD + i');
+        $this->sikuli->keyDown('Key.CMD + i');
         $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'italic icon in the top toolbar should be active');
         $this->type('test');
 
         $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit <em>%4%</em>test<em>test</em> <strong>%5%</strong></p>');
 
         $this->moveToKeyword(5, 'right');
-        $this->keyDown('Key.CMD + b');
+        $this->sikuli->keyDown('Key.CMD + b');
         $this->assertTrue($this->topToolbarButtonExists('bold'), 'bold icon in the top toolbar should not be active');
         $this->type('test');
-        $this->keyDown('Key.CMD + b');
+        $this->sikuli->keyDown('Key.CMD + b');
         $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'bold icon in the top toolbar should be active');
         $this->type('test');
 

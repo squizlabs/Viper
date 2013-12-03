@@ -20,7 +20,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarClassUnitTest extends Ab
 
         $this->clickInlineToolbarButton('cssClass');
         $this->type('test');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">SPAN</li>', $lineage);
 
@@ -29,7 +29,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarClassUnitTest extends Ab
 
         $this->clickInlineToolbarButton('cssClass', 'active');
         $this->clearFieldValue('Class');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Selection</li>', $lineage);
 
@@ -39,12 +39,12 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarClassUnitTest extends Ab
 
         $this->clickInlineToolbarButton('cssClass');
         $this->type('test');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">SPAN</li>', $lineage);
 
         $this->clearFieldValue('Class');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Selection</li>', $lineage);
 
@@ -66,7 +66,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarClassUnitTest extends Ab
 
         $this->clickTopToolbarButton('cssClass');
         $this->type('test');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
 
         $this->selectKeyword(6);
         $lineage = $this->getHtml('.ViperITP-lineage');
@@ -74,7 +74,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarClassUnitTest extends Ab
 
         $this->clickTopToolbarButton('cssClass', 'active');
         $this->clearFieldValue('Class');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
 
         $this->selectKeyword(6);
         $lineage = $this->getHtml('.ViperITP-lineage');
@@ -98,7 +98,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarClassUnitTest extends Ab
         $this->selectInlineToolbarLineageItem(0);
         $this->clickInlineToolbarButton('cssClass');
         $this->type('test');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem Viper-selected">P</li>', $lineage);
 
@@ -147,7 +147,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarClassUnitTest extends Ab
 
         $this->clickInlineToolbarButton('cssClass');
         $this->type('test');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Bold</li>', $lineage);
 
@@ -156,7 +156,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarClassUnitTest extends Ab
 
         $this->clickInlineToolbarButton('cssClass', 'active');
         $this->clearFieldValue('Class');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Bold</li>', $lineage);
 
@@ -176,7 +176,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarClassUnitTest extends Ab
 
         $this->clickInlineToolbarButton('cssClass');
         $this->type('test');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Italic</li>', $lineage);
 
@@ -185,7 +185,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarClassUnitTest extends Ab
 
         $this->clickInlineToolbarButton('cssClass', 'active');
         $this->clearFieldValue('Class');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Italic</li>', $lineage);
 
@@ -206,7 +206,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarClassUnitTest extends Ab
         $this->selectKeyword(7);
         $this->clickInlineToolbarButton('cssClass');
         $this->type('test');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Bold</li><li class="ViperITP-lineageItem Viper-selected">SPAN</li>', $lineage);
 
@@ -225,15 +225,15 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarClassUnitTest extends Ab
     public function testLineageWhenAddingClassToAOneItalicWord()
     {
         $this->selectKeyword(7, 8);
-        $this->keyDown('Key.CMD + b');
-        $this->keyDown('Key.CMD + i');
+        $this->sikuli->keyDown('Key.CMD + b');
+        $this->sikuli->keyDown('Key.CMD + i');
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Italic</li>', $lineage);
 
         $this->selectKeyword(7);
         $this->clickInlineToolbarButton('cssClass');
         $this->type('test');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Italic</li><li class="ViperITP-lineageItem Viper-selected">SPAN</li>', $lineage);
 

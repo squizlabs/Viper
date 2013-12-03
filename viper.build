@@ -1,1 +1,2 @@
-build-ees: -m, --nojquery
+build-framework: --nojquery, --nodfxjslib
+build-stable: -m

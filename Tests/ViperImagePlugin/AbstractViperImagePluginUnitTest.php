@@ -28,12 +28,12 @@ abstract class AbstractViperImagePluginUnitTest extends AbstractViperUnitTest
 
         $width  = ($imageRect['x2'] - $imageRect['x1']);
         $diff   = ($size - $width);
-        $newX   = ($this->getX($rightHandle) + $diff + 9);
-        $newY   = $this->getY($rightHandle);
+        $newX   = ($this->sikuli->getX($rightHandle) + $diff + 9);
+        $newY   = $this->sikuli->getY($rightHandle);
 
-        $loc = $this->createLocation($newX, $newY);
+        $loc = $this->sikuli->createLocation($newX, $newY);
 
-        $this->dragDrop($rightHandle, $loc);
+        $this->sikuli->dragDrop($rightHandle, $loc);
 
         $imageRect = $this->getBoundingRectangle($selector, $imageIndex);
         return $imageRect;

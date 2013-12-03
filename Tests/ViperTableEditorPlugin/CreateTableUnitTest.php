@@ -81,15 +81,15 @@ class Viper_Tests_ViperTableEditorPlugin_CreateTableUnitTest extends AbstractVip
         $this->clickCell(0);
 
         $this->type('One');
-        $this->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.TAB');
         $this->type('Two');
-        $this->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.TAB');
         $this->type('Three');
-        $this->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.TAB');
         $this->type('Four');
-        $this->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.TAB');
         $this->type('Five');
-        $this->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.TAB');
         $this->type('Six');
 
         $this->showTools(0, 'cell');
@@ -111,10 +111,10 @@ class Viper_Tests_ViperTableEditorPlugin_CreateTableUnitTest extends AbstractVip
 
         $this->clickCell(0);
         $this->type('Survey');
-        $this->keyDown('Key.TAB');
-        $this->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.TAB');
         $this->type('All Genders');
-        $this->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.TAB');
         $this->type('By Gender');
 
         $this->showTools(0, 'cell');
@@ -132,28 +132,28 @@ class Viper_Tests_ViperTableEditorPlugin_CreateTableUnitTest extends AbstractVip
         $this->clickCell(3);
         $this->type('Males');
         sleep(1);
-        $this->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.TAB');
         sleep(1);
         $this->type('Females');
 
-        $this->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.TAB');
         $this->type('All Regions');
-        $this->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.TAB');
         $this->type('North');
-        $this->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.TAB');
         $this->type('3');
-        $this->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.TAB');
         $this->type('1');
-        $this->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.TAB');
         $this->type('2');
-        $this->keyDown('Key.TAB');
-        $this->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.TAB');
         $this->type('South');
-        $this->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.TAB');
         $this->type('3');
-        $this->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.TAB');
         $this->type('1');
-        $this->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.TAB');
         $this->type('2');
 
         $this->showTools(5, 'cell');
@@ -183,11 +183,11 @@ class Viper_Tests_ViperTableEditorPlugin_CreateTableUnitTest extends AbstractVip
     public function testCreateTableInList()
     {
         $this->moveToKeyword(1, 'right');
-        $this->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.TAB');
 
         $this->assertTrue($this->topToolbarButtonExists('table', 'disabled'), 'Create table icon should be disabled in the toolbar');
 
-        $this->click($this->find(1));
+        $this->sikuli->click($this->findKeyword(1));
         $this->assertTrue($this->topToolbarButtonExists('table', 'disabled'), 'Create table icon should be disabled in the toolbar');
 
     }//end testCreateTableInList()

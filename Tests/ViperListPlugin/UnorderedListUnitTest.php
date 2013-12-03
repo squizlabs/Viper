@@ -13,7 +13,7 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperLis
      */
     public function testListCreationFromClickingInText()
     {
-        $this->click($this->findKeyword(1));
+        $this->sikuli->click($this->findKeyword(1));
 
         $this->clickTopToolbarButton('listUL');
         $this->assertIconStatusesCorrect('active', TRUE, FALSE, TRUE);
@@ -34,15 +34,15 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperLis
     public function testListShortcuts()
     {
         $this->moveToKeyword(2, 'right');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
 
-        $this->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.TAB');
         $this->assertIconStatusesCorrect('active', TRUE, NULL, TRUE);
         sleep(1);
-        $this->keyDown('Key.SHIFT + Key.TAB');
+        $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
         $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
         sleep(1);
-        $this->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.TAB');
         $this->type('Item 1');
         $this->assertIconStatusesCorrect('active', TRUE, NULL, TRUE);
 
@@ -59,15 +59,15 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperLis
     public function testCreatingAList()
     {
         $this->moveToKeyword(2, 'right');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
 
         $this->type('Test list:');
-        $this->keyDown('Key.ENTER');
-        $this->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.TAB');
         $this->type('Item 1');
         $this->assertIconStatusesCorrect('active', TRUE, NULL, TRUE);
         sleep(1);
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
         $this->type('Item 2');
         $this->assertIconStatusesCorrect('active', TRUE, TRUE, TRUE);
 
@@ -84,21 +84,21 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperLis
     public function testCreatingAListWithASubList()
     {
         $this->moveToKeyword(2, 'right');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
 
         $this->type('Test list:');
-        $this->keyDown('Key.ENTER');
-        $this->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.TAB');
         $this->type('Item 1');
         $this->assertIconStatusesCorrect('active', TRUE, NULL, TRUE);
         sleep(1);
-        $this->keyDown('Key.ENTER');
-        $this->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.TAB');
         $this->type('Item 2');
         $this->assertIconStatusesCorrect('active', TRUE, NULL, TRUE);
         sleep(1);
-        $this->keyDown('Key.ENTER');
-        $this->keyDown('Key.SHIFT + Key.TAB');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
         $this->type('Item 3');
         $this->assertIconStatusesCorrect('active', TRUE, TRUE, TRUE);
 
@@ -115,12 +115,12 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperLis
     public function testCreatingAListFromANewParagraph()
     {
         $this->moveToKeyword(2, 'right');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
 
         $this->type('New list item');
-        $this->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.TAB');
         $this->assertIconStatusesCorrect('active', TRUE, NULL, TRUE);
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
         $this->type('Second list item');
         $this->assertIconStatusesCorrect('active', TRUE, TRUE, TRUE);
 
@@ -204,7 +204,7 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperLis
         $this->clickTopToolbarButton('listUL');
 
         // Outdent icon is enabled when you click inside a list item.
-        $this->click($this->findKeyword(1));
+        $this->sikuli->click($this->findKeyword(1));
         $this->assertIconStatusesCorrect('active', TRUE, FALSE, TRUE);
 
         // Outdent icon is enabled when you select a word in a list item.
@@ -238,7 +238,7 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperLis
         $this->assertHTMLMatch('<ul><li>%1% uuuuuu. %2%</li><li>cPOc ccccc dddd. %3%</li></ul><p>ajhsd sjsjwi hhhh:</p><ul><li>aaa %4% ccccc</li><li>%5% %6% templates</li><li>Audit %7% %8%</li><li>Accessibility audit report</li><li>Recommendations %9% plan</li><li>Squiz Matrix guide</li></ul>');
 
         $this->selectKeyword(1);
-        $this->keyDown('Key.SHIFT + Key.TAB');
+        $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
         $this->assertHTMLMatch('<p>%1% uuuuuu. %2%</p><ul><li>cPOc ccccc dddd. %3%</li></ul><p>ajhsd sjsjwi hhhh:</p><ul><li>aaa %4% ccccc</li><li>%5% %6% templates</li><li>Audit %7% %8%</li><li>Accessibility audit report</li><li>Recommendations %9% plan</li><li>Squiz Matrix guide</li></ul>');
 
     }//end testOutdentFirstItemSelectionShortcut()
@@ -258,7 +258,7 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperLis
         $this->assertHTMLMatch('<ul><li>%1% uuuuuu. %2%</li><li>cPOc ccccc dddd. %3%</li></ul><p>ajhsd sjsjwi hhhh:</p><ul><li>aaa %4% ccccc</li><li>%5% %6% templates</li><li>Audit %7% %8%</li><li>Accessibility audit report</li><li>Recommendations %9% plan</li><li>Squiz Matrix guide</li></ul>');
 
         $this->selectKeyword(3);
-        $this->keyDown('Key.SHIFT + Key.TAB');
+        $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
         $this->assertHTMLMatch('<ul><li>%1% uuuuuu. %2%</li></ul><p>cPOc ccccc dddd. %3%</p><p>ajhsd sjsjwi hhhh:</p><ul><li>aaa %4% ccccc</li><li>%5% %6% templates</li><li>Audit %7% %8%</li><li>Accessibility audit report</li><li>Recommendations %9% plan</li><li>Squiz Matrix guide</li></ul>');
 
     }//end testOutdentLastItemSelectionShortcut()
@@ -272,12 +272,12 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperLis
     public function testOutdentAndIndentListItemsUsingKeyboardShortcuts()
     {
         $this->selectKeyword(4, 7);
-        $this->keyDown('Key.SHIFT + Key.TAB');
+        $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
 
         $this->assertHTMLMatch('<p>%1% uuuuuu. %2%</p><p>cPOc ccccc dddd. %3%</p><p>ajhsd sjsjwi hhhh:</p><p>aaa %4% ccccc</p><p>%5% %6% templates</p><p>Audit %7% %8%</p><ul><li>Accessibility audit report</li><li>Recommendations %9% plan</li><li>Squiz Matrix guide</li></ul>');
 
         $this->selectKeyword(4, 7);
-        $this->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.TAB');
 
         $this->assertHTMLMatch('<p>%1% uuuuuu. %2%</p><p>cPOc ccccc dddd. %3%</p><p>ajhsd sjsjwi hhhh:</p><ul><li>aaa %4% ccccc</li><li>%5% %6% templates</li><li>Audit %7% %8%</li><li>Accessibility audit report</li><li>Recommendations %9% plan</li><li>Squiz Matrix guide</li></ul>');
 
@@ -292,22 +292,22 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperLis
     public function testOutdentAndIndentListItemsMultipleTimes()
     {
         $this->selectKeyword(1, 2);
-        $this->keyDown('Key.SHIFT + Key.TAB');
+        $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
 
         $this->assertHTMLMatch('<ul><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ul><p>aaa %1% ccccc</p><p>4 oNo templates</p><p>Audit %2% content</p>');
 
         $this->selectKeyword(1, 2);
-        $this->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.TAB');
 
         $this->assertHTMLMatch('<ul><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li><li>aaa %1% ccccc</li><li>4 oNo templates</li><li>Audit %2% content</li></ul>');
 
         $this->selectKeyword(1, 2);
-        $this->keyDown('Key.SHIFT + Key.TAB');
+        $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
 
         $this->assertHTMLMatch('<ul><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li></ul><p>aaa %1% ccccc</p><p>4 oNo templates</p><p>Audit %2% content</p>');
 
         $this->selectKeyword(1, 2);
-        $this->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.TAB');
 
         $this->assertHTMLMatch('<ul><li>Accessibility audit report</li><li>Recommendations action plan</li><li>Squiz Matrix guide</li><li>aaa %1% ccccc</li><li>4 oNo templates</li><li>Audit %2% content</li></ul>');
 
@@ -322,7 +322,7 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperLis
     public function testOutdentThirdListItemAndAddBackToList()
     {
         $textLoc = $this->findKeyword(7);
-        $this->click($textLoc);
+        $this->sikuli->click($textLoc);
 
         $this->clickTopToolbarButton('listOutdent');
         sleep(1);
@@ -353,10 +353,10 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperLis
 
         $this->selectKeyword(1);
         // Make sure multiple tabs dont cause issues.
-        $this->keyDown('Key.TAB');
-        $this->keyDown('Key.TAB');
-        $this->keyDown('Key.TAB');
-        $this->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.TAB');
 
         $this->assertHTMLMatch('<ul><li>%1% uuuuuu. %2%</li><li>cPOc ccccc dddd. %3%</li></ul><p>ajhsd sjsjwi hhhh:</p><ul><li>aaa %4% ccccc</li><li>%5% %6% templates</li><li>Audit %7% %8%</li><li>Accessibility audit report</li><li>Recommendations %9% plan</li><li>Squiz Matrix guide</li></ul>');
 
@@ -378,7 +378,7 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperLis
         $this->selectKeyword(3);
         $this->assertIconStatusesCorrect('active', TRUE, TRUE, TRUE);
         sleep(1);
-        $this->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.TAB');
 
         $this->assertHTMLMatch('<ul><li>%1% uuuuuu. %2%<ul><li>cPOc ccccc dddd. %3%</li></ul></li></ul><p>ajhsd sjsjwi hhhh:</p><ul><li>aaa %4% ccccc</li><li>%5% %6% templates</li><li>Audit %7% %8%</li><li>Accessibility audit report</li><li>Recommendations %9% plan</li><li>Squiz Matrix guide</li></ul>');
 
@@ -423,8 +423,8 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperLis
 
         $this->selectKeyword(3);
 
-        $this->keyDown('Key.TAB');
-        $this->keyDown('Key.SHIFT + Key.TAB');
+        $this->sikuli->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
         $this->assertHTMLMatch('<ul><li>%1% uuuuuu. %2%</li><li>cPOc ccccc dddd. %3%</li></ul><p>ajhsd sjsjwi hhhh:</p><ul><li>aaa %4% ccccc</li><li>%5% %6% templates</li><li>Audit %7% %8%</li><li>Accessibility audit report</li><li>Recommendations %9% plan</li><li>Squiz Matrix guide</li></ul>');
 
     }//end testIndentOutdentLastItemSelectionShortcut()
@@ -438,17 +438,17 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperLis
     public function testIndentOutdentItems()
     {
         $this->selectKeyword(6, 9);
-        $this->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.TAB');
 
         sleep(1);
         $this->selectKeyword(8);
-        $this->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.TAB');
 
         $this->assertHTMLMatch('<p>%1% uuuuuu. %2%</p><p>cPOc ccccc dddd. %3%</p><p>ajhsd sjsjwi hhhh:</p><ul><li>aaa %4% ccccc<ul><li>%5% %6% templates<ul><li>Audit %7% %8%</li></ul></li><li>Accessibility audit report</li><li>Recommendations %9% plan</li></ul></li><li>Squiz Matrix guide</li></ul>');
 
         sleep(1);
         $this->selectKeyword(5);
-        $this->keyDown('Key.SHIFT + Key.TAB');
+        $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
 
         $this->assertHTMLMatch('<p>%1% uuuuuu. %2%</p><p>cPOc ccccc dddd. %3%</p><p>ajhsd sjsjwi hhhh:</p><ul><li>aaa %4% ccccc</li><li>%5% %6% templates<ul><li>Audit %7% %8%</li><li>Accessibility audit report</li><li>Recommendations %9% plan</li></ul></li><li>Squiz Matrix guide</li></ul>');
 
@@ -463,17 +463,17 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperLis
     public function testIndentSelectionKeptStyleApplied()
     {
         $this->selectKeyword(6, 9);
-        $this->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.TAB');
         sleep(1);
-        $this->keyDown('Key.CMD + b');
+        $this->sikuli->keyDown('Key.CMD + b');
 
         $this->assertHTMLMatch('<p>%1% uuuuuu. %2%</p><p>cPOc ccccc dddd. %3%</p><p>ajhsd sjsjwi hhhh:</p><ul><li>aaa %4% ccccc<ul><li>%5% <strong>%6% templates</strong></li><li><strong>Audit %7% %8%</strong></li><li><strong>Accessibility audit report</strong></li><li><strong>Recommendations %9%</strong> plan</li></ul></li><li>Squiz Matrix guide</li></ul>');
 
         sleep(1);
 
         $this->selectKeyword(6, 9);
-        $this->keyDown('Key.SHIFT + Key.TAB');
-        $this->keyDown('Key.CMD + b');
+        $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
+        $this->sikuli->keyDown('Key.CMD + b');
 
         $this->assertHTMLMatch('<p>%1% uuuuuu. %2%</p><p>cPOc ccccc dddd. %3%</p><p>ajhsd sjsjwi hhhh:</p><ul><li>aaa %4% ccccc</li><li>%5% %6% templates</li><li>Audit %7% %8%</li><li>Accessibility audit report</li><li>Recommendations %9% plan</li><li>Squiz Matrix guide</li></ul>');
 
@@ -523,7 +523,7 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperLis
     public function testRemoveListItems()
     {
         $this->selectKeyword(5, 8);
-        $this->keyDown('Key.BACKSPACE');
+        $this->sikuli->keyDown('Key.BACKSPACE');
         sleep(1);
 
         // Check that the inline toolbar no longer appears  on the screen
@@ -551,7 +551,7 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperLis
     public function testRemoveListItemsAndClickUndo()
     {
         $this->selectKeyword(5, 8);
-        $this->keyDown('Key.BACKSPACE');
+        $this->sikuli->keyDown('Key.BACKSPACE');
         sleep(1);
 
         $this->assertHTMLMatch('<p>%1% uuuuuu. %2%</p><p>cPOc ccccc dddd. %3%</p><p>ajhsd sjsjwi hhhh:</p><ul><li>aaa %4% ccccc</li><li>Accessibility audit report</li><li>Recommendations %9% plan</li><li>Squiz Matrix guide</li></ul>');
@@ -572,7 +572,7 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperLis
      */
     public function testCreateListItemsAndClickUndo()
     {
-        $this->click($this->findKeyword(2));
+        $this->sikuli->click($this->findKeyword(2));
 
         $this->clickTopToolbarButton('listUL');
         $this->assertHTMLMatch('<ul><li>%1% uuuuuu. %2%</li></ul><p>cPOc ccccc dddd. %3%</p><p>ajhsd sjsjwi hhhh:</p><ul><li>aaa %4% ccccc</li><li>%5% %6% templates</li><li>Audit %7% %8%</li><li>Accessibility audit report</li><li>Recommendations %9% plan</li><li>Squiz Matrix guide</li></ul>');
@@ -593,29 +593,29 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperLis
      */
     public function testListKeyboardNav()
     {
-        $this->click($this->findKeyword(6));
+        $this->sikuli->click($this->findKeyword(6));
 
-        $this->keyDown('Key.RIGHT');
-        $this->keyDown('Key.TAB');
-        $this->keyDown('Key.DOWN');
+        $this->sikuli->keyDown('Key.RIGHT');
+        $this->sikuli->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.DOWN');
 
-        $this->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.TAB');
 
-        $this->keyDown('Key.DOWN');
-        $this->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.DOWN');
+        $this->sikuli->keyDown('Key.TAB');
 
-        $this->keyDown('Key.UP');
-        $this->keyDown('Key.SHIFT + Key.TAB');
-        $this->keyDown('Key.DOWN');
-        $this->keyDown('Key.TAB');
-        $this->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.UP');
+        $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
+        $this->sikuli->keyDown('Key.DOWN');
+        $this->sikuli->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.TAB');
 
-        $this->keyDown('Key.DOWN');
-        $this->keyDown('Key.TAB');
-        $this->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.DOWN');
+        $this->sikuli->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.TAB');
 
-        $this->keyDown('Key.DOWN');
-        $this->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.DOWN');
+        $this->sikuli->keyDown('Key.TAB');
 
         $this->assertHTMLMatch('<p>%1% uuuuuu. %2%</p><p>cPOc ccccc dddd. %3%</p><p>ajhsd sjsjwi hhhh:</p><ul><li>aaa %4% ccccc<ul><li>%5% %6% templates</li></ul></li><li>Audit %7% %8%<ul><li>Accessibility audit report<ul><li>Recommendations %9% plan</li></ul></li><li>Squiz Matrix guide</li></ul></li></ul>');
 
@@ -665,20 +665,20 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperLis
     {
         $this->selectKeyword(5);
         $this->selectInlineToolbarLineageItem(1);
-        $this->keyDown('Key.RIGHT');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.RIGHT');
+        $this->sikuli->keyDown('Key.ENTER');
         $this->type('Test');
-        $this->keyDown('Key.ENTER');
-        $this->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.TAB');
         $this->type('Test 2');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
         $this->type('Test 3');
-        $this->keyDown('Key.ENTER');
-        $this->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.TAB');
         $this->type('Test 4');
-        $this->keyDown('Key.ENTER');
-        $this->keyDown('Key.SHIFT + Key.TAB');
-        $this->keyDown('Key.SHIFT + Key.TAB');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
+        $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
         $this->type('Test 5');
 
         $this->assertHTMLMatch('<p>%1% uuuuuu. %2%</p><p>cPOc ccccc dddd. %3%</p><p>ajhsd sjsjwi hhhh:</p><ul><li>aaa %4% ccccc</li><li>%5% %6% templates</li><li>Test<ul><li>Test 2</li><li>Test 3<ul><li>Test 4</li></ul></li></ul></li><li>Test 5</li><li>Audit %7% %8%</li><li>Accessibility audit report</li><li>Recommendations %9% plan</li><li>Squiz Matrix guide</li></ul>');
@@ -698,10 +698,10 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperLis
         sleep(1);
 
         // Remove whole item.
-        $this->keyDown('Key.BACKSPACE');
+        $this->sikuli->keyDown('Key.BACKSPACE');
 
         // Remove the item element.
-        $this->keyDown('Key.BACKSPACE');
+        $this->sikuli->keyDown('Key.BACKSPACE');
         sleep(1);
 
         $this->assertHTMLMatch('<p>%1% uuuuuu. %2%</p><p>cPOc ccccc dddd. %3%</p><p>ajhsd sjsjwi hhhh:</p><ul><li>aaa %4% ccccc</li><li>Audit %7% %8%</li><li>Accessibility audit report</li><li>Recommendations %9% plan</li><li>Squiz Matrix guide</li></ul>');
@@ -719,7 +719,7 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperLis
     {
         $this->selectKeyword(5);
         sleep(1);
-        $this->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.TAB');
         sleep(1);
         $this->assertHTMLMatch('<p>%1% uuuuuu. %2%</p><p>cPOc ccccc dddd. %3%</p><p>ajhsd sjsjwi hhhh:</p><ul><li>aaa %4% ccccc<ul><li>%5% %6% templates</li></ul></li><li>Audit %7% %8%</li><li>Accessibility audit report</li><li>Recommendations %9% plan</li><li>Squiz Matrix guide</li></ul>');
 
@@ -727,11 +727,11 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperLis
         sleep(2);
 
         // Remove whole item .
-        $this->keyDown('Key.BACKSPACE');
+        $this->sikuli->keyDown('Key.BACKSPACE');
         sleep(1);
 
         // Remove the item element.
-        $this->keyDown('Key.BACKSPACE');
+        $this->sikuli->keyDown('Key.BACKSPACE');
 
         $this->assertHTMLMatch('<p>%1% uuuuuu. %2%</p><p>cPOc ccccc dddd. %3%</p><p>ajhsd sjsjwi hhhh:</p><ul><li>aaa %4% ccccc</li><li>Audit %7% %8%</li><li>Accessibility audit report</li><li>Recommendations %9% plan</li><li>Squiz Matrix guide</li></ul>');
 
@@ -746,10 +746,10 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperLis
     public function testRemoveSubListItemFromList2()
     {
         $this->selectKeyword(5);
-        $this->keyDown('Key.TAB');
-        $this->keyDown('Key.RIGHT');
-        $this->keyDown('Key.DOWN');
-        $this->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.RIGHT');
+        $this->sikuli->keyDown('Key.DOWN');
+        $this->sikuli->keyDown('Key.TAB');
 
         sleep(1);
         $this->selectKeyword(7);
@@ -758,10 +758,10 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperLis
         sleep(1);
 
         // Remove whole item.
-        $this->keyDown('Key.BACKSPACE');
+        $this->sikuli->keyDown('Key.BACKSPACE');
 
         // Remove the item element.
-        $this->keyDown('Key.BACKSPACE');
+        $this->sikuli->keyDown('Key.BACKSPACE');
         sleep(1);
 
         $this->assertHTMLMatch('<p>%1% uuuuuu. %2%</p><p>cPOc ccccc dddd. %3%</p><p>ajhsd sjsjwi hhhh:</p><ul><li>aaa %4% ccccc<ul><li>%5% %6% templates</li></ul></li><li>Accessibility audit report</li><li>Recommendations %9% plan</li><li>Squiz Matrix guide</li></ul>');
@@ -780,7 +780,7 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperLis
         $this->selectInlineToolbarLineageItem(0);
 
         // Remove everything except the last list item.
-        $this->keyDown('Key.BACKSPACE');
+        $this->sikuli->keyDown('Key.BACKSPACE');
 
         $this->assertHTMLMatch('<p>%1% uuuuuu. %2%</p><p>cPOc ccccc dddd. %3%</p><p>ajhsd sjsjwi hhhh:</p>');
 
@@ -829,9 +829,9 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperLis
     public function testConvertListFromUnorderedToOrderedWithSubList()
     {
         $this->moveToKeyword(5, 'right');
-        $this->keyDown('Key.TAB');
-        $this->keyDown('Key.DOWN');
-        $this->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.DOWN');
+        $this->sikuli->keyDown('Key.TAB');
 
         sleep(1);
         $this->selectKeyword(7);
@@ -853,9 +853,9 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperLis
     public function testConvertSubListType()
     {
         $this->moveToKeyword(7, 'right');
-        $this->keyDown('Key.TAB');
-        $this->keyDown('Key.UP');
-        $this->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.UP');
+        $this->sikuli->keyDown('Key.TAB');
         sleep(1);
 
         $this->selectKeyword(7);
@@ -877,7 +877,7 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperLis
      */
     public function testClickUndoAfterRemovingList()
     {
-        $this->click($this->findKeyword(5));
+        $this->sikuli->click($this->findKeyword(5));
         $this->clickTopToolbarButton('listUL', 'active');
         $this->assertHTMLMatch('<p>%1% uuuuuu. %2%</p><p>cPOc ccccc dddd. %3%</p><p>ajhsd sjsjwi hhhh:</p><p>aaa %4% ccccc</p><p>%5% %6% templates</p><p>Audit %7% %8%</p><p>Accessibility audit report</p><p>Recommendations %9% plan</p><p>Squiz Matrix guide</p>');
 
@@ -895,11 +895,11 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperLis
     public function testCopyAndPastePartOfList()
     {
         $this->selectKeyword(5, 8);
-        $this->keyDown('Key.CMD + c');
+        $this->sikuli->keyDown('Key.CMD + c');
 
         $this->moveToKeyword(3, 'right');
-        $this->keyDown('Key.ENTER');
-        $this->keyDown('Key.CMD + v');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.CMD + v');
 
         sleep(1);
 
@@ -917,11 +917,11 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperLis
     {
         $this->selectKeyword(5);
         $this->selectInlineToolbarLineageItem(0);
-        $this->keyDown('Key.CMD + c');
+        $this->sikuli->keyDown('Key.CMD + c');
 
         $this->moveToKeyword(3, 'right');
-        $this->keyDown('Key.ENTER');
-        $this->keyDown('Key.CMD + v');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.CMD + v');
 
         sleep(1);
 
@@ -938,12 +938,12 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperLis
     public function testCreatingParagraphAfterListBeforeADiv()
     {
         $this->moveToKeyword(1, 'right');
-        $this->keyDown('Key.ENTER');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
         $this->type('New paragraph');
 
         // Press the down arrow to make sure IE doesn't throw an exception
-        $this->keyDown('Key.DOWN');
+        $this->sikuli->keyDown('Key.DOWN');
 
         sleep(1);
         $this->assertHTMLMatch('<p>ajhsd sjsjwi hhhh:</p><ul><li>Recommendations action plan</li><li>Squiz Matrix guide %1%</li></ul><p>New paragraph</p><div>Test div</div>');
@@ -959,12 +959,12 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperLis
     public function testCreatingParagraphAfterListBeforeAPre()
     {
         $this->moveToKeyword(1, 'right');
-        $this->keyDown('Key.ENTER');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
         $this->type('New paragraph');
 
         // Press the down arrow to make sure IE doesn't throw an exception
-        $this->keyDown('Key.DOWN');
+        $this->sikuli->keyDown('Key.DOWN');
 
         sleep(1);
         $this->assertHTMLMatch('<p>ajhsd sjsjwi hhhh:</p><ul><li>Recommendations action plan</li><li>Squiz Matrix guide %1%</li></ul><p>New paragraph</p><pre>Test pre</pre>');
@@ -980,12 +980,12 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperLis
     public function testCreatingParagraphAfterListBeforeAQuote()
     {
         $this->moveToKeyword(1, 'right');
-        $this->keyDown('Key.ENTER');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
         $this->type('New paragraph');
 
         // Press the down arrow to make sure IE doesn't throw an exception
-        $this->keyDown('Key.DOWN');
+        $this->sikuli->keyDown('Key.DOWN');
 
         sleep(1);
         $this->assertHTMLMatch('<p>ajhsd sjsjwi hhhh:</p><ul><li>Recommendations action plan</li><li>Squiz Matrix guide %1%</li></ul><p>New paragraph</p><blockquote>Test blockquote</blockquote>');
@@ -1001,12 +1001,12 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperLis
     public function testCreatingParagraphAfterListBeforeAParagraph()
     {
         $this->moveToKeyword(1, 'right');
-        $this->keyDown('Key.ENTER');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
         $this->type('New paragraph');
 
         // Press the down arrow to make sure IE doesn't throw an exception
-        $this->keyDown('Key.DOWN');
+        $this->sikuli->keyDown('Key.DOWN');
 
         sleep(1);
         $this->assertHTMLMatch('<p>ajhsd sjsjwi hhhh:</p><ul><li>Recommendations action plan</li><li>Squiz Matrix guide %1%</li></ul><p>New paragraph</p><p>Test para</p>');
@@ -1021,9 +1021,9 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperLis
      */
     public function testShiftTagInNonListItem()
     {
-        $this->click($this->findKeyword(4));
-        $this->keyDown('Key.SHIFT + Key.TAB');
-        $this->keyDown('Key.SHIFT + Key.TAB');
+        $this->sikuli->click($this->findKeyword(4));
+        $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
+        $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
 
         $this->assertHTMLMatch('<p>%1% uuuuuu. %2%</p><p>cPOc ccccc dddd. %3%</p><p>ajhsd sjsjwi hhhh:</p><p>aaa %4% ccccc</p><ul><li>%5% %6% templates</li><li>Audit %7% %8%</li><li>Accessibility audit report</li><li>Recommendations %9% plan</li><li>Squiz Matrix guide</li></ul>');
 
@@ -1038,14 +1038,14 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperLis
     public function testCreatingNewListItemBeforeASubList()
     {
         $this->moveToKeyword(2, 'right');
-        $this->keyDown('Key.ENTER');
-        $this->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.TAB');
         $this->type('abcde%10%');
-        $this->keyDown('Key.ENTER');
-        $this->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.TAB');
         $this->type('fghij');
         $this->moveToKeyword(10, 'right');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
         $this->type('klmnop');
 
         $this->assertHTMLMatch('<p>%1% uuuuuu. %2%</p><ul><li>abcde%10%</li><li>klmnop<br /><ul><li>fghij</li></ul></li></ul><p>cPOc ccccc dddd. %3%</p><p>ajhsd sjsjwi hhhh:</p><ul><li>aaa %4% ccccc</li><li>%5% %6% templates</li><li>Audit %7% %8%</li><li>Accessibility audit report</li><li>Recommendations %9% plan</li><li>Squiz Matrix guide</li></ul>');
@@ -1061,21 +1061,55 @@ class Viper_Tests_ViperListPlugin_UnorderedListUnitTest extends AbstractViperLis
     public function testCreatingNewListItemFromEmptySubList()
     {
         $this->moveToKeyword(2, 'right');
-        $this->keyDown('Key.ENTER');
-        $this->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.TAB');
         $this->type('abcde');
-        $this->keyDown('Key.ENTER');
-        $this->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.TAB');
         $this->type('fghij%10%');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
         $this->type('klmnop');
         $this->moveToKeyword(10, 'right');
-        $this->keyDown('Key.ENTER');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
 
         $this->assertHTMLMatch('<p>%1% uuuuuu. %2%</p><ul><li>abcde<ul><li>fghij%10%</li></ul></li><li><br /><ul><li>klmnop</li></ul></li></ul><p>cPOc ccccc dddd. %3%</p><p>ajhsd sjsjwi hhhh:</p><ul><li>aaa %4% ccccc</li><li>%5% %6% templates</li><li>Audit %7% %8%</li><li>Accessibility audit report</li><li>Recommendations %9% plan</li><li>Squiz Matrix guide</li></ul>');
 
     }//end testCreatingNewListItemFromEmptySubList()
+
+
+    /**
+     * Tests creating a new list and then deleting it
+     *
+     * @return void
+     */
+    public function testCreatingNewListAndDeletingIt()
+    {
+        //Enter content
+        $this->moveToKeyword(2, 'right');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->type('This is content');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->type('%10% Item one');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->type('Item two');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->type('Item three %11%');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->type('End content');
+
+        // Create list
+        $this->selectKeyword(10, 11);
+        $this->clickTopToolbarButton('listUL');
+        $this->assertHTMLMatch('<p>%1% uuuuuu. %2%</p><p>This is content</p><ul><li>%10% Item one</li><li>Item two</li><li>Item three %11%</li></ul><p>End content</p><p>cPOc ccccc dddd. %3%</p><p>ajhsd sjsjwi hhhh:</p><ul><li>aaa %4% ccccc</li><li>%5% %6% templates</li><li>Audit %7% %8%</li><li>Accessibility audit report</li><li>Recommendations %9% plan</li><li>Squiz Matrix guide</li></ul>');
+
+        // Delete list
+        $this->selectKeyword(10, 11);
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->assertHTMLMatch('<p>%1% uuuuuu. %2%</p><p>This is content</p><p>End content</p><p>cPOc ccccc dddd. %3%</p><p>ajhsd sjsjwi hhhh:</p><ul><li>aaa %4% ccccc</li><li>%5% %6% templates</li><li>Audit %7% %8%</li><li>Accessibility audit report</li><li>Recommendations %9% plan</li><li>Squiz Matrix guide</li></ul>');
+
+
+    }//end testCreatingNewListAndDeletingIt()
 
 
 }//end class

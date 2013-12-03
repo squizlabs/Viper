@@ -54,7 +54,7 @@ class Viper_Tests_ViperFormatPlugin_QuoteUnitTest extends AbstractFormatsUnitTes
     public function testApplingTheQuoteStyleUsingTopToolbar()
     {
         // Test clicking in a P to change to a Quote
-        $this->click($this->findKeyword(4));
+        $this->sikuli->click($this->findKeyword(4));
         $this->clickTopToolbarButton('formats-p', 'active');
         $this->checkStatusOfFormatIconsInTheTopToolbar('active', NULL, NULL, NULL);
         $this->clickTopToolbarButton('Quote', NULL, TRUE);
@@ -68,7 +68,7 @@ class Viper_Tests_ViperFormatPlugin_QuoteUnitTest extends AbstractFormatsUnitTes
         $this->checkStatusOfFormatIconsInTheTopToolbar('active', NULL, NULL, NULL);
 
         // Test selecting a paragraph to change to a quote
-        $this->click($this->findKeyword(2));
+        $this->sikuli->click($this->findKeyword(2));
         $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(0);
         $this->assertTrue($this->topToolbarButtonExists('formats-p', 'active'), 'active P icon should appear in the top toolbar');
@@ -103,8 +103,8 @@ class Viper_Tests_ViperFormatPlugin_QuoteUnitTest extends AbstractFormatsUnitTes
     public function testSelectQuoteAfterStylingShowsCorrectIcons()
     {
         $this->selectKeyword(1, 2);
-        $this->keyDown('Key.CMD + b');
-        $this->keyDown('Key.CMD + i');
+        $this->sikuli->keyDown('Key.CMD + b');
+        $this->sikuli->keyDown('Key.CMD + i');
 
         $this->selectInlineToolbarLineageItem(0);
 
@@ -137,8 +137,8 @@ class Viper_Tests_ViperFormatPlugin_QuoteUnitTest extends AbstractFormatsUnitTes
 
         $this->selectKeyword(3);
         $this->selectInlineToolbarLineageItem(0);
-        $this->keyDown('Key.CMD + b');
-        $this->keyDown('Key.CMD + i');
+        $this->sikuli->keyDown('Key.CMD + b');
+        $this->sikuli->keyDown('Key.CMD + i');
 
         $this->selectInlineToolbarLineageItem(0);
 
@@ -165,11 +165,11 @@ class Viper_Tests_ViperFormatPlugin_QuoteUnitTest extends AbstractFormatsUnitTes
     public function testUsingBoldInBlockquotes()
     {
         $this->selectKeyword(1);
-        $this->keyDown('Key.CMD + b');
+        $this->sikuli->keyDown('Key.CMD + b');
 
         $this->assertHTMLMatch('<blockquote><p><strong>%1%</strong> xtn %2%</p></blockquote><div>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div><p>%4% is a paragraph to change to a quote</p>');
 
-        $this->keyDown('Key.CMD + b');
+        $this->sikuli->keyDown('Key.CMD + b');
 
         $this->assertHTMLMatch('<blockquote><p>%1% xtn %2%</p></blockquote><div>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div><p>%4% is a paragraph to change to a quote</p>');
 
@@ -184,12 +184,12 @@ class Viper_Tests_ViperFormatPlugin_QuoteUnitTest extends AbstractFormatsUnitTes
     public function testUsingItalicInBlockquotes()
     {
         $this->selectKeyword(1);
-        $this->keyDown('Key.CMD + i');
+        $this->sikuli->keyDown('Key.CMD + i');
 
         $this->assertHTMLMatch('<blockquote><p><em>%1%</em> xtn %2%</p></blockquote><div>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div><p>%4% is a paragraph to change to a quote</p>');
 
         $this->selectKeyword(1);
-        $this->keyDown('Key.CMD + i');
+        $this->sikuli->keyDown('Key.CMD + i');
 
         $this->assertHTMLMatch('<blockquote><p>%1% xtn %2%</p></blockquote><div>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div><p>%4% is a paragraph to change to a quote</p>');
 
@@ -324,8 +324,8 @@ class Viper_Tests_ViperFormatPlugin_QuoteUnitTest extends AbstractFormatsUnitTes
     {
         $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(0);
-        $this->keyDown('Key.RIGHT');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.RIGHT');
+        $this->sikuli->keyDown('Key.ENTER');
         $this->type('New %5%');
         $this->selectKeyword(5);
         $this->selectInlineToolbarLineageItem(0);
@@ -333,7 +333,7 @@ class Viper_Tests_ViperFormatPlugin_QuoteUnitTest extends AbstractFormatsUnitTes
         $this->clickInlineToolbarButton('Quote', NULL, TRUE);
         $this->moveToKeyword(5, 'right');
         $this->type(' on the page');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
         $this->type('More new content');
 
         $this->assertHTMLMatch('<blockquote><p>%1% xtn %2%</p></blockquote><div>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div><p>%4% is a paragraph to change to a quote</p><blockquote><p>New XTX on the page</p><p>More new content</p></blockquote>');
@@ -610,7 +610,7 @@ class Viper_Tests_ViperFormatPlugin_QuoteUnitTest extends AbstractFormatsUnitTes
     public function testListIconsNotAvailableForQuote()
     {
 
-        $this->click($this->findKeyword(1));
+        $this->sikuli->click($this->findKeyword(1));
         $this->assertTrue($this->topToolbarButtonExists('listOL', 'disabled'), 'Ordered list icon should be available in the top toolbar');
         $this->assertTrue($this->topToolbarButtonExists('listUL', 'disabled'), 'Unordered list icon should be available in the top toolbar');
 
@@ -621,7 +621,7 @@ class Viper_Tests_ViperFormatPlugin_QuoteUnitTest extends AbstractFormatsUnitTes
         $this->selectInlineToolbarLineageItem(0);
         $this->assertTrue($this->topToolbarButtonExists('listOL', 'disabled'), 'Ordered list icon should be available in the top toolbar');
         $this->assertTrue($this->topToolbarButtonExists('listUL', 'disabled'), 'Unordered list icon should be available in the top toolbar');
-        $this->keyDown('Key.RIGHT');
+        $this->sikuli->keyDown('Key.RIGHT');
 
         // Change the div to a quote
         $this->selectKeyword(3);
@@ -630,7 +630,7 @@ class Viper_Tests_ViperFormatPlugin_QuoteUnitTest extends AbstractFormatsUnitTes
         $this->clickTopToolbarButton('Quote', NULL, TRUE);
         $this->assertHTMLMatch('<blockquote><p>%1% xtn %2%</p></blockquote><blockquote><p>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p></blockquote><p>%4% is a paragraph to change to a quote</p>');
 
-        $this->click($this->findKeyword(3));
+        $this->sikuli->click($this->findKeyword(3));
         $this->assertTrue($this->topToolbarButtonExists('listOL', 'disabled'), 'Ordered list icon should be available in the top toolbar');
         $this->assertTrue($this->topToolbarButtonExists('listUL', 'disabled'), 'Unordered list icon should be available in the top toolbar');
 
@@ -665,6 +665,87 @@ class Viper_Tests_ViperFormatPlugin_QuoteUnitTest extends AbstractFormatsUnitTes
         $this->assertHTMLMatch('<blockquote><p>%1% xtn %2%</p></blockquote><div>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div><blockquote><p>%4% is a paragraph to change to a quote</p></blockquote>');
 
     }//end testUndoAndRedoForQuote()
+
+
+    /**
+     * Test combining two Quote sections.
+     *
+     * @return void
+     */
+    public function testCombiningQuoteSections()
+    {
+        // Change the div to a quote
+        $this->selectKeyword(3);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickTopToolbarButton('formats-div', 'active');
+        $this->clickTopToolbarButton('Quote', NULL, TRUE);
+        $this->assertHTMLMatch('<blockquote><p>%1% xtn %2%</p></blockquote><blockquote><p>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p></blockquote><p>%4% is a paragraph to change to a quote</p>');
+
+        $this->moveToKeyword(3, 'left');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+
+        $this->assertHTMLMatch('<blockquote><p>%1% xtn %2%%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p></blockquote><p>%4% is a paragraph to change to a quote</p>');
+
+    }//end testCombiningQuoteSections()
+
+
+    /**
+     * Test combining a Quote sand P section.
+     *
+     * @return void
+     */
+    public function testCombiningQuoteAndPSections()
+    {
+        // Change the div to a P
+        $this->selectKeyword(3);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickTopToolbarButton('formats-div', 'active');
+        $this->clickTopToolbarButton('P', NULL, TRUE);
+        $this->assertHTMLMatch('<blockquote><p>%1% xtn %2%</p></blockquote><p>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p><p>%4% is a paragraph to change to a quote</p>');
+
+        $this->moveToKeyword(3, 'left');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+
+        $this->assertHTMLMatch('<blockquote><p>%1% xtn %2%%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p></blockquote><p>%4% is a paragraph to change to a quote</p>');
+
+    }//end testCombiningQuoteAndPSections()
+
+
+    /**
+     * Test combining a Quote sand Div section.
+     *
+     * @return void
+     */
+    public function testCombiningQuoteAndDivSections()
+    {
+        $this->moveToKeyword(3, 'left');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+
+        $this->assertHTMLMatch('<blockquote><p>%1% xtn %2%%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p></blockquote><p>%4% is a paragraph to change to a quote</p>');
+
+    }//end testCombiningQuoteAndDivSections()
+
+
+    /**
+     * Test combining a Quote sand Pre section.
+     *
+     * @return void
+     */
+    public function testCombiningQuoteAndPreSections()
+    {
+        // Change the div to a Pre
+        $this->selectKeyword(3);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickTopToolbarButton('formats-div', 'active');
+        $this->clickTopToolbarButton('PRE', NULL, TRUE);
+        $this->assertHTMLMatch('<blockquote><p>%1% xtn %2%</p></blockquote><pre>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</pre><p>%4% is a paragraph to change to a quote</p>');
+
+        $this->moveToKeyword(3, 'left');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+
+        $this->assertHTMLMatch('<blockquote><p>%1% xtn %2%%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p></blockquote><p>%4% is a paragraph to change to a quote</p>');
+
+    }//end testCombiningQuoteAndPreSections()
 
 }//end class
 

@@ -17,14 +17,14 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
 
         $this->selectKeyword(1);
         sleep(1);
-        $this->keyDown('Key.CMD + c');
-        $this->keyDown('Key.CMD + v');
+        $this->sikuli->keyDown('Key.CMD + c');
+        $this->sikuli->keyDown('Key.CMD + v');
         $this->type('A');
         sleep(1);
-        $this->keyDown('Key.CMD + v');
+        $this->sikuli->keyDown('Key.CMD + v');
         $this->type('B');
         sleep(1);
-        $this->keyDown('Key.CMD + v');
+        $this->sikuli->keyDown('Key.CMD + v');
         $this->type('C');
 
         $this->assertHTMLMatch('<p>%1%A%1%B%1%C</p>');
@@ -43,15 +43,15 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
 
         $this->selectKeyword(1);
         sleep(1);
-        $this->keyDown('Key.CMD + b');
-        $this->keyDown('Key.CMD + c');
-        $this->keyDown('Key.CMD + v');
+        $this->sikuli->keyDown('Key.CMD + b');
+        $this->sikuli->keyDown('Key.CMD + c');
+        $this->sikuli->keyDown('Key.CMD + v');
         $this->type('A');
         sleep(1);
-        $this->keyDown('Key.CMD + v');
+        $this->sikuli->keyDown('Key.CMD + v');
         $this->type('B');
         sleep(1);
-        $this->keyDown('Key.CMD + v');
+        $this->sikuli->keyDown('Key.CMD + v');
         $this->type('C');
         sleep(1);
 
@@ -71,15 +71,15 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
 
         $this->selectKeyword(1);
         sleep(1);
-        $this->keyDown('Key.CMD + i');
-        $this->keyDown('Key.CMD + c');
-        $this->keyDown('Key.CMD + v');
+        $this->sikuli->keyDown('Key.CMD + i');
+        $this->sikuli->keyDown('Key.CMD + c');
+        $this->sikuli->keyDown('Key.CMD + v');
         $this->type('A');
         sleep(1);
-        $this->keyDown('Key.CMD + v');
+        $this->sikuli->keyDown('Key.CMD + v');
         $this->type('B');
         sleep(1);
-        $this->keyDown('Key.CMD + v');
+        $this->sikuli->keyDown('Key.CMD + v');
         $this->type('C');
         sleep(1);
 
@@ -106,9 +106,9 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
 
         // Test copy and paste
         $this->selectKeyword(1, 2);
-        $this->keyDown('Key.CMD + c');
+        $this->sikuli->keyDown('Key.CMD + c');
         $this->moveToKeyword(2, 'right');
-        $this->keyDown('Key.CMD + v');
+        $this->sikuli->keyDown('Key.CMD + v');
         sleep(1);
 
         $this->assertHTMLMatch('<pre>Lorum this is more content %1% to test %2%%1% to test %2%</pre>');
@@ -134,9 +134,9 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
 
         // Test copy and paste
         $this->selectKeyword(1, 2);
-        $this->keyDown('Key.CMD + c');
+        $this->sikuli->keyDown('Key.CMD + c');
         $this->moveToKeyword(2, 'right');
-        $this->keyDown('Key.CMD + v');
+        $this->sikuli->keyDown('Key.CMD + v');
         sleep(1);
 
         $this->assertHTMLMatch('<div>Lorum this is more content %1% to test %2%%1% to test %2%</div>');
@@ -162,9 +162,9 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
 
         // Test copy and paste
         $this->selectKeyword(1, 2);
-        $this->keyDown('Key.CMD + c');
+        $this->sikuli->keyDown('Key.CMD + c');
         $this->moveToKeyword(2, 'right');
-        $this->keyDown('Key.CMD + v');
+        $this->sikuli->keyDown('Key.CMD + v');
         sleep(1);
 
         $this->assertHTMLMatch('<blockquote><p>Lorum this is more content %1% to test %2%%1% to test %2%</p></blockquote>');
@@ -184,12 +184,12 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
         sleep(1);
-        $this->keyDown('Key.CMD + c');
+        $this->sikuli->keyDown('Key.CMD + c');
 
-        $this->click($this->findKeyword(1));
+        $this->sikuli->click($this->findKeyword(1));
         $this->moveToKeyword(2, 'right');
-        $this->keyDown('Key.ENTER');
-        $this->keyDown('Key.CMD + v');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.CMD + v');
 
         $this->assertHTMLMatch('<p>Lorum this is more content %1% to test %2%</p><p>Lorum this is more content %1% to test %2%</p>');
 
@@ -216,12 +216,12 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
         sleep(1);
-        $this->keyDown('Key.CMD + c');
+        $this->sikuli->keyDown('Key.CMD + c');
 
-        $this->click($this->findKeyword(1));
+        $this->sikuli->click($this->findKeyword(1));
         $this->moveToKeyword(2, 'right');
-        $this->keyDown('Key.ENTER');
-        $this->keyDown('Key.CMD + v');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.CMD + v');
 
         $this->assertHTMLMatch('<div>Lorum this is more content %1% to test %2%</div><p>Lorum this is more content %1% to test %2%</p>');
 
@@ -248,12 +248,12 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
         sleep(1);
-        $this->keyDown('Key.CMD + c');
+        $this->sikuli->keyDown('Key.CMD + c');
 
-        $this->click($this->findKeyword(1));
+        $this->sikuli->click($this->findKeyword(1));
         $this->moveToKeyword(2, 'right');
-        $this->keyDown('Key.ENTER');
-        $this->keyDown('Key.CMD + v');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.CMD + v');
 
         $this->assertHTMLMatch('<blockquote><p>Lorum this is more content %1% to test %2%</p><p>Lorum this is more content %1% to test %2%</p></blockquote>');
 
@@ -280,16 +280,16 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
         sleep(1);
-        $this->keyDown('Key.CMD + c');
+        $this->sikuli->keyDown('Key.CMD + c');
 
-        $this->click($this->findKeyword(1));
+        $this->sikuli->click($this->findKeyword(1));
         $this->moveToKeyword(2, 'right');
-        $this->keyDown('Key.ENTER');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
         sleep(1);
-        $this->keyDown('Key.CMD + v');
+        $this->sikuli->keyDown('Key.CMD + v');
 
-        $this->assertHTMLMatch('<pre>Lorum this is more content %1% to test %2%</pre><p>Lorum this is more content %1% to test %2%</p>');
+        $this->assertHTMLMatch('<pre>Lorum this is more content %1% to test %2%</pre><pre>Lorum this is more content %1% to test %2%</pre>');
 
     }//end testCopyAndPasteForAPre()
 
@@ -306,22 +306,22 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
         $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(0);
         sleep(1);
-        $this->keyDown('Key.CMD + c');
+        $this->sikuli->keyDown('Key.CMD + c');
 
         $this->moveToKeyword(1, 'right');
-        $this->keyDown('Key.ENTER');
-        $this->keyDown('Key.CMD + v');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.CMD + v');
         sleep(1);
 
         $this->removeTableHeaders();
         sleep(1);
-        $this->assertHTMLMatch('<p>Lorem XAX</p><table border="1" cellpadding="3" cellspacing="0"><caption><strong>Table 1.2:</strong> The table caption text</caption><thead><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">This is the table footer</td></tr></tfoot><tbody><tr><td>XBX test</td><td>sapien vel aliquet</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr><tr><td>nec <strong>porta</strong> ante</td><td>sapien vel aliquet</td><td rowspan="2">purus neque luctus ligula, vel molestie arcu</td></tr><tr><td colspan="2">sapien vel aliquet</td></tr></tbody></table><p></p><p>sit amet <strong>consectetur</strong></p><p>eooee</p><table border="1" cellpadding="3" cellspacing="0"><caption><strong>Table 1.2:</strong> The table caption text</caption><thead><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">This is the table footer</td></tr></tfoot><tbody><tr><td>XBX test</td><td>sapien vel aliquet</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr><tr><td>nec <strong>porta</strong> ante</td><td>sapien vel aliquet</td><td rowspan="2">purus neque luctus ligula, vel molestie arcu</td></tr><tr><td colspan="2">sapien vel aliquet</td></tr></tbody></table>');
+        $this->assertHTMLMatch('<p>Lorem XAX</p><table border="1" style="width: 100%;"><caption><strong>Table 1.2:</strong> The table caption text</caption><thead><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">This is the table footer</td></tr></tfoot><tbody><tr><td>XBX test</td><td>sapien vel aliquet</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr><tr><td>nec <strong>porta</strong> ante</td><td>sapien vel aliquet</td><td rowspan="2">purus neque luctus ligula, vel molestie arcu</td></tr><tr><td colspan="2">sapien vel aliquet</td></tr></tbody></table><p></p><p>sit amet <strong>consectetur</strong></p><p>eooee</p><table border="1" cellpadding="3" cellspacing="0"><caption><strong>Table 1.2:</strong> The table caption text</caption><thead><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">This is the table footer</td></tr></tfoot><tbody><tr><td>XBX test</td><td>sapien vel aliquet</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr><tr><td>nec <strong>porta</strong> ante</td><td>sapien vel aliquet</td><td rowspan="2">purus neque luctus ligula, vel molestie arcu</td></tr><tr><td colspan="2">sapien vel aliquet</td></tr></tbody></table>');
 
         // Check that the cursor is under the new table
         $this->type('type some more content');
         $this->removeTableHeaders();
         sleep(1);
-        $this->assertHTMLMatch('<p>Lorem XAX</p><table border="1" cellpadding="3" cellspacing="0"><caption><strong>Table 1.2:</strong> The table caption text</caption><thead><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">This is the table footer</td></tr></tfoot><tbody><tr><td>XBX test</td><td>sapien vel aliquet</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr><tr><td>nec <strong>porta</strong> ante</td><td>sapien vel aliquet</td><td rowspan="2">purus neque luctus ligula, vel molestie arcu</td></tr><tr><td colspan="2">sapien vel aliquet</td></tr></tbody></table><p>type some more content</p><p>sit amet <strong>consectetur</strong></p><p>eooee</p><table border="1" cellpadding="3" cellspacing="0"><caption><strong>Table 1.2:</strong> The table caption text</caption><thead><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">This is the table footer</td></tr></tfoot><tbody><tr><td>XBX test</td><td>sapien vel aliquet</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr><tr><td>nec <strong>porta</strong> ante</td><td>sapien vel aliquet</td><td rowspan="2">purus neque luctus ligula, vel molestie arcu</td></tr><tr><td colspan="2">sapien vel aliquet</td></tr></tbody></table>');
+        $this->assertHTMLMatch('<p>Lorem XAX</p><table border="1" style="width: 100%;"><caption><strong>Table 1.2:</strong> The table caption text</caption><thead><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">This is the table footer</td></tr></tfoot><tbody><tr><td>XBX test</td><td>sapien vel aliquet</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr><tr><td>nec <strong>porta</strong> ante</td><td>sapien vel aliquet</td><td rowspan="2">purus neque luctus ligula, vel molestie arcu</td></tr><tr><td colspan="2">sapien vel aliquet</td></tr></tbody></table><p>type some more content</p><p>sit amet <strong>consectetur</strong></p><p>eooee</p><table border="1" cellpadding="3" cellspacing="0"><caption><strong>Table 1.2:</strong> The table caption text</caption><thead><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">This is the table footer</td></tr></tfoot><tbody><tr><td>XBX test</td><td>sapien vel aliquet</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr><tr><td>nec <strong>porta</strong> ante</td><td>sapien vel aliquet</td><td rowspan="2">purus neque luctus ligula, vel molestie arcu</td></tr><tr><td colspan="2">sapien vel aliquet</td></tr></tbody></table>');
 
     }//end testCopyAndPasteForTable()
 
@@ -336,23 +336,23 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
         $this->useTest(1);
 
         // Open HTML doc, copy its contents.
-        if ($this->openFile(dirname(__FILE__).'/HtmlTablesInPage.html', $this->getBrowserName()) === FALSE) {
+        if ($this->openFile(dirname(__FILE__).'/HtmlTablesInPage.html', $this->sikuli->getBrowserName()) === FALSE) {
             $this->markTestSkipped('MS Word is not available');
         }
 
         sleep(2);
 
         // Copy text.
-        $this->keyDown('Key.CMD + a');
+        $this->sikuli->keyDown('Key.CMD + a');
         sleep(1);
-        $this->keyDown('Key.CMD + c');
+        $this->sikuli->keyDown('Key.CMD + c');
         sleep(1);
-        $this->closeApp($this->getBrowserName());
+        $this->closeApp($this->sikuli->getBrowserName());
         sleep(1);
 
         $this->selectKeyword(1);
 
-        $this->keyDown('Key.CMD + v');
+        $this->sikuli->keyDown('Key.CMD + v');
 
         sleep(5);
 
@@ -375,7 +375,7 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
 
         $this->selectKeyword(1);
         sleep(1);
-        $this->keyDown('Key.CMD + c');
+        $this->sikuli->keyDown('Key.CMD + c');
 
         $this->selectKeyword(2);
         $this->paste(TRUE);
@@ -396,10 +396,10 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
         $this->useTest(1);
 
         $this->moveToKeyword(1, 'right');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
         $this->paste(TRUE, $this->getTestURL('/ViperCopyPastePlugin/GermanContent.txt'));
 
-        $this->assertHTMLMatch('<p>%1%</p><p>  Am letzten Tag der 62. Tagung des WHO-Regionalkomitees für Europa verabschiedeten die Mitgliedstaaten die Strategie und den Aktionsplan für gesundes Altern in der Europäischen Region (2012&ndash;2020) (nach der Erörterung dieses Dokuments am dritten Tag) sowie den Europäischen Aktionsplan zur Stärkung  der Kapazitäten und Angebote im Bereich der öffentlichen Gesundheit.<br />Europäischer Aktionsplan zur Stärkung der Kapazitäten und Angebote im Bereich der öffentlichen Gesundheit<br />In seiner Vorstellung des Aktionsplans sagte Dr. Hans Kluge, Direktor der Abteilung für Gesundheitssysteme und öffentliche Gesundheit, dass dies ein großartiger Moment sei, „weil die  Thematik öffentliche Gesundheit in der Europäischen Region wieder mit Leben gefüllt" werde. Er führte aus, dass der Plan in umfassenden Konsultationen in der Absicht entwickelt worden sei, die integrierte Leistungserbringung für Gesundheitsschutz, Krankheitsprävention und Gesundheitsförderung zu stärken.<br  />Angesichts der Veränderungen der Gesellschaften des 21. Jahrhunderts (Globalisierung, Überalterung der Bevölkerung, Klimawandel) sei eine erneute Betonung der öffentlichen Gesundheit zeitlich und inhaltlich angebracht, weil so trotz knapper Kassen optimale gesundheitliche Ergebnisse möglich seien.<br  />Der Plan sei in Übereinstimmung mit dem Rahmenkonzept „Gesundheit 2020" aufgestellt worden und baue auf einer soliden Grundlage aus Erkenntnissen auf, unter anderem durch Untersuchungen zu den Angeboten im Bereich der öffentlichen Gesundheit in 41 der 53 Mitgliedstaaten. Das Kernstück des Aktionsplans  bildeten die zehn überarbeiteten grundlegenden gesundheitspolitischen Maßnahmen (EPHO):<br />&nbsp;&nbsp; &nbsp;1.&nbsp;&nbsp; &nbsp;Surveillance von Gesundheit und Wohlbefinden der Bevölkerung<br />&nbsp;&nbsp; &nbsp;2.&nbsp;&nbsp; &nbsp;Beobachtung von Gesundheitsgefahren und gesundheitlichen Notlagen  und Gegenmaßnahmen<br />&nbsp;&nbsp; &nbsp;3.&nbsp;&nbsp; &nbsp;Gesundheitsschutzmaßnahmen (u. a. in den Bereichen Umwelt-, Arbeits- und Nahrungsmittelsicherheit)<br />&nbsp;&nbsp; &nbsp;4.&nbsp;&nbsp; &nbsp;Gesundheitsförderung, einschließlich Maßnahmen in Bezug auf soziale Determinanten und gesundheitliche  Benachteiligung<br />&nbsp;&nbsp; &nbsp;5.&nbsp;&nbsp; &nbsp;Krankheitsprävention, einschließlich Früherkennung<br />&nbsp;&nbsp; &nbsp;6.&nbsp;&nbsp; &nbsp;Gewährleistung von Politikgestaltung und Steuerung für mehr Gesundheit und Wohlbefinden<br />&nbsp;&nbsp; &nbsp;7.&nbsp;&nbsp; &nbsp;Gewährleistung  einer ausreichenden Zahl von fachkundigem Personal im Bereich der öffentlichen Gesundheit<br />&nbsp;&nbsp; &nbsp;8.&nbsp;&nbsp; &nbsp;Gewährleistung von nachhaltigen Organisationsstrukturen und Finanzierung<br />&nbsp;&nbsp; &nbsp;9.&nbsp;&nbsp; &nbsp;Überzeugungsarbeit, Kommunikation und soziale Mobilisierung  für die Gesundheit<br />&nbsp;&nbsp; &nbsp;10.&nbsp;&nbsp; &nbsp;Förderung der Forschung im Bereich der öffentlichen Gesundheit zwecks Anwendung in Politik und Praxis</p>');
+        $this->assertHTMLMatch('<p>%1%</p><p>  Am letzten Tag der 62. Tagung des WHO-Regionalkomitees f≈∏r Europa verabschiedeten die Mitgliedstaaten die Strategie und den Aktionsplan f≈∏r gesundes Altern in der Europ≈†ischen Region (2012&ndash;2020) (nach der Er≈°rterung dieses Dokuments am dritten Tag) sowie den Europ≈†ischen Aktionsplan zur St≈†rkung  der Kapazit≈†ten und Angebote im Bereich der ≈°ffentlichen Gesundheit.<br />Europ≈†ischer Aktionsplan zur St≈†rkung der Kapazit≈†ten und Angebote im Bereich der ≈°ffentlichen Gesundheit<br />In seiner Vorstellung des Aktionsplans sagte Dr. Hans Kluge, Direktor der Abteilung f≈∏r Gesundheitssysteme und ≈°ffentliche Gesundheit, dass dies ein gro¬ßartiger Moment sei, √£weil die  Thematik ≈°ffentliche Gesundheit in der Europ≈†ischen Region wieder mit Leben gef≈∏llt" werde. Er f≈∏hrte aus, dass der Plan in umfassenden Konsultationen in der Absicht entwickelt worden sei, die integrierte Leistungserbringung f≈∏r Gesundheitsschutz, Krankheitspr≈†vention und Gesundheitsf≈°rderung zu st≈†rken.<br  />Angesichts der Ver≈†nderungen der Gesellschaften des 21. Jahrhunderts (Globalisierung, ‚Ä†beralterung der Bev≈°lkerung, Klimawandel) sei eine erneute Betonung der ≈°ffentlichen Gesundheit zeitlich und inhaltlich angebracht, weil so trotz knapper Kassen optimale gesundheitliche Ergebnisse m≈°glich seien.<br  />Der Plan sei in ‚Ä†bereinstimmung mit dem Rahmenkonzept √£Gesundheit 2020" aufgestellt worden und baue auf einer soliden Grundlage aus Erkenntnissen auf, unter anderem durch Untersuchungen zu den Angeboten im Bereich der ≈°ffentlichen Gesundheit in 41 der 53 Mitgliedstaaten. Das Kernst≈∏ck des Aktionsplans  bildeten die zehn ≈∏berarbeiteten grundlegenden gesundheitspolitischen Ma¬ßnahmen (EPHO):<br />&nbsp;&nbsp; &nbsp;1.&nbsp;&nbsp; &nbsp;Surveillance von Gesundheit und Wohlbefinden der Bev≈°lkerung<br />&nbsp;&nbsp; &nbsp;2.&nbsp;&nbsp; &nbsp;Beobachtung von Gesundheitsgefahren und gesundheitlichen Notlagen  und Gegenma¬ßnahmen<br />&nbsp;&nbsp; &nbsp;3.&nbsp;&nbsp; &nbsp;Gesundheitsschutzma¬ßnahmen (u. a. in den Bereichen Umwelt-, Arbeits- und Nahrungsmittelsicherheit)<br />&nbsp;&nbsp; &nbsp;4.&nbsp;&nbsp; &nbsp;Gesundheitsf≈°rderung, einschlie¬ßlich Ma¬ßnahmen in Bezug auf soziale Determinanten und gesundheitliche  Benachteiligung<br />&nbsp;&nbsp; &nbsp;5.&nbsp;&nbsp; &nbsp;Krankheitspr≈†vention, einschlie¬ßlich Fr≈∏herkennung<br />&nbsp;&nbsp; &nbsp;6.&nbsp;&nbsp; &nbsp;Gew≈†hrleistung von Politikgestaltung und Steuerung f≈∏r mehr Gesundheit und Wohlbefinden<br />&nbsp;&nbsp; &nbsp;7.&nbsp;&nbsp; &nbsp;Gew≈†hrleistung  einer ausreichenden Zahl von fachkundigem Personal im Bereich der ≈°ffentlichen Gesundheit<br />&nbsp;&nbsp; &nbsp;8.&nbsp;&nbsp; &nbsp;Gew≈†hrleistung von nachhaltigen Organisationsstrukturen und Finanzierung<br />&nbsp;&nbsp; &nbsp;9.&nbsp;&nbsp; &nbsp;‚Ä†berzeugungsarbeit, Kommunikation und soziale Mobilisierung  f≈∏r die Gesundheit<br />&nbsp;&nbsp; &nbsp;10.&nbsp;&nbsp; &nbsp;F≈°rderung der Forschung im Bereich der ≈°ffentlichen Gesundheit zwecks Anwendung in Politik und Praxis</p>');
 
     }//end testCopyPasteGermanContent()
 
@@ -414,12 +414,51 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
         $this->useTest(1);
 
         $this->moveToKeyword(1, 'right');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
+
+        $this->clickNextLine();
+
         $this->paste(TRUE, $this->getTestURL('/ViperCopyPastePlugin/FrenchContent.txt'));
 
-        $this->assertHTMLMatch('<p>%1%</p><p>  Lors de la dernière journée de la soixante-deuxième session du Comité régional de l\'OMS pour l\'Europe, les États membres de la Région européenne ont adopté la Stratégie (Plan d\'action) pour vieillir en bonne santé en Europe, 2012-2020 (examinée lors de la 3e journée), et le Plan d\'action européen pour  le renforcement des capacités et services de santé publique.<br />Plan d\'action européen pour le renforcement des capacités et services de santé publique<br />En présentant le Plan d\'action européen, le docteur Hans Kluge, directeur de la Division des systèmes de santé et de la santé publique, fait remarquer qu\'il s\'agit &laquo; d\'un grand moment, étant donné  la nouveau souffle accordé à la santé publique dans la Région européenne. &raquo; Il explique que le Plan d\'action a été élaboré dans le cadre d\'un vaste processus de consultation pour renforcer la prestation de services intégrés en matière de protection de la santé, de prévention des maladies et de  promotion de la santé.<br />Compte tenu des défis confrontés par la société au XXIe siècle (mondialisation, vieillissement de la population, changement climatique), un recentrage sur la santé publique est à la fois opportun et approprié afin d\'obtenir les meilleurs résultats sanitaires avec des ressources  limitées.<br />Le Plan d\'action a été formulé conformément au cadre politique de la santé, Santé 2020, et s\'inspire d\'informations factuelles solides, notamment de plusieurs études réalisées sur les services de santé publique dans 41 des 53 États membres de la Région européenne. Dix opérations essentielles  de santé publique révisées sont à la base du Plan d\'action :<br />&nbsp;&nbsp; &nbsp;1.&nbsp;&nbsp; &nbsp;surveillance de la santé et du bien-être de la population ;<br />&nbsp;&nbsp; &nbsp;2.&nbsp;&nbsp; &nbsp;surveillance et intervention en cas de risques et d\'urgences sanitaires ;<br />&nbsp;&nbsp;  &nbsp;3.&nbsp;&nbsp; &nbsp;protection de la santé (sécurité de l\'environnement et du travail, sécurité sanitaire des aliments, etc.) ;<br />&nbsp;&nbsp; &nbsp;4.&nbsp;&nbsp; &nbsp;promotion de la santé, dont l\'action sur les déterminants de la santé et le manque d\'équité en santé ;<br />&nbsp;&nbsp;  &nbsp;5.&nbsp;&nbsp; &nbsp;prévention des maladies, dont le dépistage rapide ;<br />&nbsp;&nbsp; &nbsp;6.&nbsp;&nbsp; &nbsp;garantir la gouvernance pour la santé et le bien-être ;<br />&nbsp;&nbsp; &nbsp;7.&nbsp;&nbsp; &nbsp;s\'assurer de disposer d\'un personnel compétent dans le domaine de la santé publique  et d\'effectifs suffisants ;<br />&nbsp;&nbsp; &nbsp;8.&nbsp;&nbsp; &nbsp;garantir des structures organisationnelles et un financement durables ;<br />&nbsp;&nbsp; &nbsp;9.&nbsp;&nbsp; &nbsp;sensibilisation, communication et mobilisation sociale pour la santé ;<br />&nbsp;&nbsp; &nbsp;10.&nbsp;&nbsp;  &nbsp;faire progresser la recherche en santé publique pour élaborer des politiques et des pratiques en conséquence.</p>');
+        $this->assertHTMLMatch('<p>XAX</p><p>Lors de la derni√®re journ√©e de la soixante-deuxi√®me session du Comit√© r√©gional de l\'OMS pour l\'Europe, les √âtats membres de la R√©gion europ√©enne ont adopt√© la Strat√©gie (Plan d\'action) pour vieillir en bonne sant√© en Europe, 2012-2020 (examin√©e lors de la 3e journ√©e), et le Plan d\'action europ√©en pour le renforcement des capacit√©s et services de sant√© publique. Plan d\'action europ√©en pour le renforcement des capacit√©s et services de sant√© publique En pr√©sentant le Plan d\'action europ√©en, le docteur Hans Kluge, directeur de la Division des syst√®mes de sant√© et de la sant√© publique, fait remarquer qu\'il s\'agit &laquo; d\'un grand moment, √©tant donn√© la nouveau souffle accord√© √† la sant√© publique dans la R√©gion europ√©enne. &raquo; Il explique que le Plan d\'action a √©t√© √©labor√© dans le cadre d\'un vaste processus de consultation pour renforcer la prestation de services int√©gr√©s en mati√®re de protection de la sant√©, de pr√©vention des maladies et de promotion de la sant√©. Compte tenu des d√©fis confront√©s par la soci√©t√© au XXIe si√®cle (mondialisation, vieillissement de la population, changement climatique), un recentrage sur la sant√© publique est √† la fois opportun et appropri√© afin d\'obtenir les meilleurs r√©sultats sanitaires avec des ressources limit√©es. Le Plan d\'action a √©t√© formul√© conform√©ment au cadre politique de la sant√©, Sant√© 2020, et s\'inspire d\'informations factuelles solides, notamment de plusieurs √©tudes r√©alis√©es sur les services de sant√© publique dans 41 des 53 √âtats membres de la R√©gion europ√©enne. Dix op√©rations essentielles de sant√© publique r√©vis√©es sont √† la base du Plan d\'action :  1.  surveillance de la sant√© et du bien-√™tre de la population ;     2.  surveillance et intervention en cas de risques et d\'urgences sanitaires ;   3.  protection de la sant√© (s√©curit√© de l\'environnement et du travail, s√©curit√© sanitaire des aliments, etc.) ;     4.  promotion de la sant√©, dont l\'action sur les d√©terminants de la sant√© et le manque d\'√©quit√© en sant√© ;  5.  pr√©vention des maladies, dont le d√©pistage rapide ;     6.  garantir la gouvernance pour la sant√© et le bien-√™tre ; 7.  s\'assurer de disposer d\'un personnel comp√©tent dans le domaine de la sant√© publique et d\'effectifs suffisants ; 8.  garantir des structures organisationnelles et un financement durables ;     9.  sensibilisation, communication et mobilisation sociale pour la sant√© ;  10. faire progresser la recherche en sant√© publique pour √©laborer des politiques et des pratiques en cons√©quence.</p>');
 
     }//end testCopyPasteFrenchContent()
+
+
+    /**
+     * Test that copying/pasting links works.
+     *
+     * @return void
+     */
+    public function testCopyPasteLinks()
+    {
+        $this->useTest(1);
+
+        // Open HTML doc, copy its contents.
+        if ($this->openFile(dirname(__FILE__).'/ExampleLinks.html', $this->sikuli->getBrowserName()) === FALSE) {
+            $this->markTestSkipped('MS Word is not available');
+        }
+
+        sleep(2);
+
+        // Copy text.
+        $this->sikuli->keyDown('Key.CMD + a');
+        sleep(1);
+        $this->sikuli->keyDown('Key.CMD + c');
+        sleep(1);
+        $this->closeApp($this->sikuli->getBrowserName());
+        sleep(1);
+
+        $this->selectKeyword(1);
+
+        $this->sikuli->keyDown('Key.CMD + v');
+
+        sleep(5);
+
+        $this->assertHTMLMatch('<p>link with http - <a href="http://www.squizlabs.com">http://www.squizlabs.com</a></p><p>link with https - <a href="https://www.squizlabs.com">https://www.squizlabs.com</a></p><p>blocked link with http - <a href="http://www.squizlabs.com">blocked::http://www.squizlabs.com</a></p><p>blocked link with https - <a href="https://www.squizlabs.com">blocked::https://www.squizlabs.com</a></p>');
+
+    }//end testCopyPasteLinks()
+
 
 }//end class
 

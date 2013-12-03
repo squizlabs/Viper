@@ -36,6 +36,25 @@ ViperTools.prototype = {
 
     },
 
+    removeItem: function(id)
+    {
+        var item = this.getItem(id);
+        if (!item) {
+            return;
+        }
+
+        delete this._items[id];
+
+        if (item.element) {
+            dfx.remove(item.element);
+        }
+
+        this.viper.removeCallback(null, 'ViperTools-' + id);
+        this.viper.removeCallback(null, id);
+
+        this.viper.fireCallbacks('ViperTools:itemRemoved', id);
+    },
+
     getItem: function(id)
     {
         return this._items[id];
@@ -405,7 +424,7 @@ ViperTools.prototype = {
         main.appendChild(input);
 
         if (required === true) {
-            input.setAttribute('placeholder', 'required');
+            input.setAttribute('placeholder', _('required'));
         }
 
         if (desc) {
@@ -627,7 +646,7 @@ ViperTools.prototype = {
             setRequired: function(required)
             {
                 if (required === true) {
-                    input.setAttribute('placeholder', 'required');
+                    input.setAttribute('placeholder', _('required'));
 
                     if (dfx.trim(input.value) === '') {
                         dfx.addClass(textBox, 'Viper-required');
@@ -1143,6 +1162,28 @@ ViperTools.prototype = {
             self.getItem(id).update(range);
         });
 
+        // Add scroll event to iframes so that the toolbar is closed when the
+        // scroll is happening.
+        this.viper.registerCallback('Viper:editableElementChanged', id, function() {
+            var elemDoc = self.viper.getViperElementDocument();
+            if (elemDoc !== document) {
+                var t = null;
+                var toolbar = self.getItem(id);
+                dfx.removeEvent(elemDoc.defaultView, 'scroll.' + id);
+                dfx.addEvent(elemDoc.defaultView, 'scroll.' + id, function(e) {
+                    if (toolbar.isVisible() === true) {
+                        toolbar.hide();
+                    }
+
+                    clearTimeout(t);
+                    t = setTimeout(function() {
+                        dfx.removeClass(toolbar.element, 'scrolling');
+                        self.getItem(id).update();
+                    }, 300);
+                });
+            }
+        });
+
         this.viper.registerCallback('Viper:clickedOutside', id, function(range) {
             self.getItem(id).hide();
         });
@@ -1595,7 +1636,7 @@ ViperTools.prototype = {
                     return false;
                 };
 
-                var button = tools.createButton(subSectionid + '-applyButton', 'Update Changes', 'Update Changes', '', subSection.form.onsubmit, true);
+                var button = tools.createButton(subSectionid + '-applyButton', _('Update Changes'), _('Update Changes'), '', subSection.form.onsubmit, true);
                 subSection.element.appendChild(button);
 
                 this.addSubSectionActionWidgets(subSectionid, widgetids);
@@ -1784,6 +1825,21 @@ ViperTools.prototype = {
                     }//end if
                 }//end if
 
+                var frameOffset = {x: 0, y: 0};
+                if (Viper.document !== document && Viper.document.defaultView.frameElement) {
+                    // Viper element is inside an iframe, need to adjust the position.
+                    frameOffset      = tools.viper.getDocumentOffset();
+                    var newCoords    = {};
+                    newCoords.bottom = (rangeCoords.bottom + frameOffset.y);
+                    newCoords.top    = (rangeCoords.top + frameOffset.y);
+                    newCoords.bottom = (rangeCoords.bottom + frameOffset.y);
+                    newCoords.left   = (rangeCoords.left + frameOffset.x);
+                    newCoords.right  = (rangeCoords.right + frameOffset.x);
+                    newCoords.height = rangeCoords.height;
+                    newCoords.width  = rangeCoords.width;
+                    rangeCoords      = newCoords;
+                }
+
                 var scrollCoords = dfx.getScrollCoords();
 
                 dfx.addClass(toolbar, 'Viper-calcWidth');
@@ -1793,13 +1849,14 @@ ViperTools.prototype = {
                 dfx.setStyle(toolbar, 'width', toolbarWidth + 'px');
 
                 var viperElemCoords = this.getElementCoords(tools.viper.getViperElement());
-                var windowDim       = dfx.getWindowDimensions();
+                var elemWindowDim   = dfx.getWindowDimensions(Viper.document.defaultView);
+                var mainWindowDim   = dfx.getWindowDimensions();
 
                 if (this._verticalPosUpdateOnly !== true) {
                     var left = ((rangeCoords.left + ((rangeCoords.right - rangeCoords.left) / 2) + scrollCoords.x) - (toolbarWidth / 2));
                     dfx.removeClass(toolbar, 'Viper-orientationLeft Viper-orientationRight');
 
-                    if (left > windowDim.width) {
+                    if (left > (elemWindowDim.width + frameOffset.x)) {
                         // Dont go off screen, point to the editable element.
                         left = viperElemCoords.left;
                     }
@@ -1807,7 +1864,7 @@ ViperTools.prototype = {
                     if (left < 0) {
                         left += (toolbarWidth / 2);
                         dfx.addClass(toolbar, 'Viper-orientationLeft');
-                    } else if (left + toolbarWidth > windowDim.width) {
+                    } else if (left + toolbarWidth > mainWindowDim.width) {
                         left -= (toolbarWidth / 2);
                         dfx.addClass(toolbar, 'Viper-orientationRight');
                     }
@@ -1820,13 +1877,17 @@ ViperTools.prototype = {
                 if (top === 0) {
                     this.hide();
                     return;
-                } else if (top > windowDim.height + scrollCoords.y) {
-                    top = (windowDim.height - 200 + scrollCoords.y);
-                } else if (top < viperElemCoords.top) {
+                } else if (((top + 50) > (mainWindowDim.height + scrollCoords.y)) || (top > elemWindowDim.height + scrollCoords.y + frameOffset.y)) {
+                    this.hide();
+                    return;
+                } else if (top < viperElemCoords.top && Viper.document === document) {
                     top = (viperElemCoords.top + 50);
                     if (left < viperElemCoords.left && this._verticalPosUpdateOnly !== true) {
                         dfx.setStyle(toolbar, 'left', viperElemCoords.left  + 50 + 'px');
                     }
+                } else if (Viper.document !== document && top < tools.viper.getDocumentOffset().y) {
+                    this.hide();
+                    return;
                 }
 
                 dfx.setStyle(toolbar, 'top', top + 'px');
@@ -1859,7 +1920,7 @@ ViperTools.prototype = {
             },
             getElementCoords: function(element) {
                 var elemRect     = dfx.getBoundingRectangle(element);
-                var scrollCoords = dfx.getScrollCoords();
+                var scrollCoords = dfx.getScrollCoords(element.ownerDocument.defaultView);
                 return {
                     left: (elemRect.x1 - scrollCoords.x),
                     right: (elemRect.x2 - scrollCoords.x),

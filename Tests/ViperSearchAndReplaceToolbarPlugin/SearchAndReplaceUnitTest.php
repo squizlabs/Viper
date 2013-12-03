@@ -13,7 +13,7 @@ class Viper_Tests_ViperSearchAndReplaceToolbarPlugin_SearchAndReplaceUnitTest ex
      */
     public function testIconStates()
     {
-        $this->click($this->findKeyword(1));
+        $this->sikuli->click($this->findKeyword(1));
 
         $this->assertTrue($this->topToolbarButtonExists('searchReplace'), 'Toolbar button icon is not correct');
 
@@ -25,7 +25,7 @@ class Viper_Tests_ViperSearchAndReplaceToolbarPlugin_SearchAndReplaceUnitTest ex
         $this->assertTrue($this->topToolbarButtonExists('Replace', 'disabled', TRUE), 'Replace Icon should be disabled.');
         $this->assertTrue($this->topToolbarButtonExists('Replace All', 'disabled', TRUE), 'Replace All Icon should be disabled.');
 
-        $this->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.TAB');
         $this->type('replace');
         $this->assertTrue($this->topToolbarButtonExists('Find Next', NULL, TRUE), 'Find Next Icon should be enabled.');
         $this->assertTrue($this->topToolbarButtonExists('Replace', 'disabled', TRUE), 'Replace Icon should be disabled.');
@@ -46,7 +46,7 @@ class Viper_Tests_ViperSearchAndReplaceToolbarPlugin_SearchAndReplaceUnitTest ex
      */
     public function testReplaceButtonsNotActive()
     {
-        $this->click($this->findKeyword(1));
+        $this->sikuli->click($this->findKeyword(1));
 
 
         $this->clickTopToolbarButton('searchReplace');
@@ -66,7 +66,7 @@ class Viper_Tests_ViperSearchAndReplaceToolbarPlugin_SearchAndReplaceUnitTest ex
      */
     public function testSearchForContentAndEditingSearch()
     {
-        $this->click($this->findKeyword(1));
+        $this->sikuli->click($this->findKeyword(1));
 
         $this->clickTopToolbarButton('searchReplace');
         $this->type('government');
@@ -98,7 +98,7 @@ class Viper_Tests_ViperSearchAndReplaceToolbarPlugin_SearchAndReplaceUnitTest ex
      */
     public function testSearchForFindInContent()
     {
-        $this->click($this->findKeyword(1));
+        $this->sikuli->click($this->findKeyword(1));
 
         $this->clickTopToolbarButton('searchReplace');
         $this->type('FIND');
@@ -123,11 +123,11 @@ class Viper_Tests_ViperSearchAndReplaceToolbarPlugin_SearchAndReplaceUnitTest ex
      */
     public function testSearchAndReplace()
     {
-        $this->click($this->findKeyword(1));
+        $this->sikuli->click($this->findKeyword(1));
 
         $this->clickTopToolbarButton('searchReplace');
         $this->type('FIND');
-        $this->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.TAB');
         $this->type('replace');
         $this->clickTopToolbarButton('Find Next', NULL, TRUE);
         $this->clickTopToolbarButton('Replace', NULL, TRUE, TRUE);
@@ -149,7 +149,7 @@ class Viper_Tests_ViperSearchAndReplaceToolbarPlugin_SearchAndReplaceUnitTest ex
      */
     public function testFindAndThenReplace()
     {
-        $this->click($this->findKeyword(1));
+        $this->sikuli->click($this->findKeyword(1));
 
         $this->clickTopToolbarButton('searchReplace');
         $this->type('FIND');
@@ -176,11 +176,11 @@ class Viper_Tests_ViperSearchAndReplaceToolbarPlugin_SearchAndReplaceUnitTest ex
      */
     public function testSearchAndReplaceAll()
     {
-        $this->click($this->findKeyword(1));
+        $this->sikuli->click($this->findKeyword(1));
 
         $this->clickTopToolbarButton('searchReplace');
         $this->type('FIND');
-        $this->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.TAB');
         $this->type('replace');
         $this->clickTopToolbarButton('Find Next', NULL, TRUE);
         $this->clickTopToolbarButton('Replace All', NULL, TRUE);
@@ -197,11 +197,11 @@ class Viper_Tests_ViperSearchAndReplaceToolbarPlugin_SearchAndReplaceUnitTest ex
      */
     public function testUndoAfterReplace()
     {
-        $this->click($this->findKeyword(1));
+        $this->sikuli->click($this->findKeyword(1));
 
         $this->clickTopToolbarButton('searchReplace');
         $this->type('FIND');
-        $this->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.TAB');
         $this->type('replace');
         $this->clickTopToolbarButton('Find Next', NULL, TRUE);
         $this->clickTopToolbarButton('Replace', NULL, TRUE, TRUE);
@@ -224,11 +224,11 @@ class Viper_Tests_ViperSearchAndReplaceToolbarPlugin_SearchAndReplaceUnitTest ex
      */
     public function testUndoAfterReplaceAll()
     {
-        $this->click($this->findKeyword(1));
+        $this->sikuli->click($this->findKeyword(1));
 
         $this->clickTopToolbarButton('searchReplace');
         $this->type('FIND');
-        $this->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.TAB');
         $this->type('replace');
         $this->clickTopToolbarButton('Find Next', NULL, TRUE);
         $this->clickTopToolbarButton('Replace All', NULL, TRUE);
@@ -251,11 +251,11 @@ class Viper_Tests_ViperSearchAndReplaceToolbarPlugin_SearchAndReplaceUnitTest ex
      */
     public function testSearchAndReplaceLastWordInList()
     {
-        $this->click($this->findKeyword(1));
+        $this->sikuli->click($this->findKeyword(1));
 
         $this->clickTopToolbarButton('searchReplace');
         $this->type('templates');
-        $this->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.TAB');
         $this->type('replace');
         $this->clickTopToolbarButton('Find Next', NULL, TRUE);
         $this->clickTopToolbarButton('Replace', NULL, TRUE);
@@ -272,11 +272,11 @@ class Viper_Tests_ViperSearchAndReplaceToolbarPlugin_SearchAndReplaceUnitTest ex
      */
     public function testSearchAndReplaceAfterClosingFields()
     {
-        $this->click($this->findKeyword(1));
+        $this->sikuli->click($this->findKeyword(1));
 
         $this->clickTopToolbarButton('searchReplace');
         $this->type('FIND');
-        $this->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.TAB');
         $this->type('replace');
         $this->clickTopToolbarButton('Find Next', NULL, TRUE);
         $this->clickTopToolbarButton('Replace', NULL, TRUE);
@@ -285,7 +285,7 @@ class Viper_Tests_ViperSearchAndReplaceToolbarPlugin_SearchAndReplaceUnitTest ex
 
         // Close the search fields
         $this->clickTopToolbarButton('searchReplace', 'selected');
-        $this->click($this->findKeyword(1));
+        $this->sikuli->click($this->findKeyword(1));
 
         // Open the search fields again and make sure only the Find Next button is enabled
         $this->clickTopToolbarButton('searchReplace');

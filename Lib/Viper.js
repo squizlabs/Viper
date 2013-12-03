@@ -193,17 +193,25 @@ Viper.prototype = {
 
         var code = null;
         var src  = null;
-        if (typeof(lang) === 'object') {
+        if (typeof(lang) === 'object' && lang.code) {
             code = lang.code;
             src  = lang.src;
         } else {
             code = lang;
-            src  = this.getViperPath().replace(/\/$/, '') + '/Translation/' + code + '.js';
+        }
+
+        if (code) {
+            // If given code is in en-au (language code - country code) format then just use the language code.
+            code = code.replace(/-\w+/, '');
         }
 
         if (code === 'en') {
             callback.call(this);
             return;
+        }
+
+        if (!src) {
+            src  = this.getViperPath().replace(/\/build$/, '') + '/build/Translation/' + code + '.js';
         }
 
         if (ViperTranslation.isLoaded(code) === false && src) {
@@ -242,6 +250,7 @@ Viper.prototype = {
     {
         this.fireCallbacks('Viper:destroy');
         this.setEnabled(false);
+        dfx.removeEvent(dfx.getDocuments(), '.' + this.getEventNamespace());
 
         if (this._viperElementHolder) {
             dfx.remove(this._viperElementHolder);
@@ -496,7 +505,7 @@ Viper.prototype = {
 
         var namespace = this.getEventNamespace();
 
-        dfx.removeEvent(this._document.body, '.' + namespace);
+        dfx.removeEvent(dfx.getDocuments(), '.' + namespace);
         this._removeEvents(elem);
         var self = this;
 
@@ -505,12 +514,12 @@ Viper.prototype = {
                 return self.mouseUp(e);
             });
         } else {
-            dfx.addEvent(this._document.body, 'mouseup.' + namespace, function(e) {
+            dfx.addEvent(dfx.getDocuments(), 'mouseup.' + namespace, function(e) {
                 return self.mouseUp(e);
             });
         }
 
-        dfx.addEvent(this._document.body, 'mousedown.' + namespace, function(e) {
+        dfx.addEvent(dfx.getDocuments(), 'mousedown.' + namespace, function(e) {
             return self.mouseDown(e);
         });
 
@@ -523,6 +532,20 @@ Viper.prototype = {
 
         dfx.addEvent(elem, 'keydown.' + namespace, function(e) {
             return self.keyDown(e);
+        });
+
+        // This keydown event will make sure that any selection started outside of Viper element and ended inside
+        // Viper element is not going to trigger browser's 'back button'.
+        dfx.addEvent(Viper.document, 'keydown.' + namespace, function(e) {
+            if (e.which === 8 || e.which === 46) {
+                var range = self.getCurrentRange();
+                if (self.isOutOfBounds(range.startContainer) === true
+                    ^ self.isOutOfBounds(range.endContainer) === true
+                ) {
+                    dfx.preventDefault(e);
+                    return false;
+                }
+            }
         });
 
         dfx.addEvent(elem, 'keyup.' + namespace, function(e) {
@@ -932,6 +955,12 @@ Viper.prototype = {
 
     },
 
+    resetPlugins: function()
+    {
+        this._useDefaultPlugins();
+
+    },
+
     _useDefaultPlugins: function()
     {
         // Default plugins (all Viper plugins).
@@ -947,7 +976,7 @@ Viper.prototype = {
         // Accessibility Plugin, standard.
         this.getPluginManager().setPluginSettings('ViperAccessibilityPlugin', {standard: 'WCAG2AA'});
 
-        this.setSetting('defaultBlockTag', 'p');
+        this.setSetting('defaultBlockTag', this.getDefaultBlockTag());
 
     },
 
@@ -987,6 +1016,12 @@ Viper.prototype = {
         }
 
         return this.element;
+
+    },
+
+    getViperElementDocument: function()
+    {
+        return this.element.ownerDocument;
 
     },
 
@@ -1245,6 +1280,39 @@ Viper.prototype = {
         return coords;
 
     },
+
+
+    getDocumentOffset: function()
+    {
+        var doc    = Viper.document;
+        var offset = {
+            x: 0,
+            y: 0
+        };
+
+        while (document !== doc) {
+            var frameElem = doc.defaultView.frameElement;
+            if (!frameElem) {
+                continue;
+            }
+
+            var coords    = dfx.getElementCoords(frameElem);
+            offset.x += coords.x;
+            offset.y += coords.y;
+            doc = frameElem.ownerDocument;
+        }
+
+        return offset;
+
+    },
+
+
+    getDocumentWindow: function()
+    {
+        return Viper.document.defaultView;
+
+    },
+
 
     /**
      * Returns true if given selection is in side the Viper element false otherwise.
@@ -3186,6 +3254,7 @@ Viper.prototype = {
 
     removeBookmarks: function(elem)
     {
+        elem = elem || this.element;
         dfx.remove(dfx.getClass('viperBookmark', elem, 'span'));
 
     },
@@ -3893,10 +3962,6 @@ Viper.prototype = {
      */
     keyDown: function(e)
     {
-        if (this.pluginActive() === true && this.ViperPluginManager.allowTextInput !== true) {
-            return;
-        }
-
         this._viperRange = null;
 
         if (this._keyDownRangeCollapsed === true) {
@@ -4008,10 +4073,6 @@ Viper.prototype = {
             return true;
         }
 
-        if (this.pluginActive() === true && this.ViperPluginManager.allowTextInput !== true) {
-            return true;
-        }
-
         // Check that keyCode is not 0 as Firefox fires keyPress for arrow keys which
         // have key code of 0.
         if (e.which !== 0 && ViperChangeTracker.isTracking() === true) {
@@ -4112,12 +4173,11 @@ Viper.prototype = {
         // Shift, Control, Alt, Caps lock, esc, CMD.
         var ignoredKeys = [16, 17, 18, 20, 27, 91];
 
-        // Key 8/46 = Backspace/Delete; 33-36 = Page Up/Down, Home/End; 37-40 = arrows.
         if ((this._keyDownRangeCollapsed === false && ignoredKeys.inArray(e.which) === false)
             && (e.ctrlKey === false && e.metaKey === false)
             || e.which === 8
             || e.which === 46
-            || (e.which >= 33 && e.which <= 40)
+            || (e.which >= 37 && e.which <= 40)
         ) {
             this.fireSelectionChanged();
         }
@@ -4128,6 +4188,11 @@ Viper.prototype = {
 
     mouseDown: function(e)
     {
+        if (e.which === 3) {
+            this.fireCallbacks('Viper:rightMouseDown', e);
+            return false;
+        }
+
         var target = dfx.getMouseEventTarget(e);
         var inside = true;
 
@@ -4176,6 +4241,11 @@ Viper.prototype = {
 
     mouseUp: function(e)
     {
+        if (e.which === 3) {
+            this.fireCallbacks('Viper:rightMouseUp', e);
+            return false;
+        }
+
         if (this.fireCallbacks('Viper:mouseUp', e) === false) {
             dfx.preventDefault(e);
             return false;
@@ -4335,7 +4405,7 @@ Viper.prototype = {
                     return;
                 }
 
-                var scrollCoords = dfx.getScrollCoords();
+                var scrollCoords = dfx.getScrollCoords(this.getDocumentWindow());
                 this.element.focus();
 
                 var range = this.getViperRange();
@@ -4511,12 +4581,6 @@ Viper.prototype = {
 
     },
 
-    pluginActive: function()
-    {
-        return (this.ViperPluginManager.getActivePlugin() !== null);
-
-    },
-
     getPluginForElement: function(element)
     {
         return this.getPluginManager().getPluginForElement(element);
@@ -4545,10 +4609,6 @@ Viper.prototype = {
         }
 
         if (namespace) {
-            if (!this.callbacks[type].namespaces[namespace]) {
-                this.callbacks[type].namespaces[namespace] = [];
-            }
-
             this.callbacks[type].namespaces[namespace] = callback;
         } else {
             this.callbacks[type].others.push(callback);
@@ -4616,7 +4676,7 @@ Viper.prototype = {
         } else if (this.callbacks[type]) {
             if (namespace) {
                 if (this.callbacks[type].namespaces[namespace]) {
-                    this.callbacks[type].namespaces[namespace] = [];
+                    //this.callbacks[type].namespaces[namespace] = [];
                     delete this.callbacks[type].namespaces[namespace];
                 }
             } else {

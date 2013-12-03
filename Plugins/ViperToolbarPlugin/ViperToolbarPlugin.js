@@ -156,6 +156,8 @@ ViperToolbarPlugin.prototype = {
             }
         }
 
+        this._settingButtons = null;
+
     },
 
     createToolbar: function()

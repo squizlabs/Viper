@@ -80,7 +80,7 @@ ViperCopyPastePlugin.prototype = {
         var self = this;
         if (this._isMSIE !== true && this._isFirefox !== true && this._isSafari !== true) {
             elem.onpaste = function(e) {
-                if (!e.clipboardData || self._canPaste() === false) {
+                if (!e.clipboardData) {
                     return;
                 }
 
@@ -141,7 +141,7 @@ ViperCopyPastePlugin.prototype = {
                 }
 
                 var pasteDesc = '<p class="ViperCopyPatePlugin-pasteDesc">' + _('Paste your content into the box below and it will be automatically inserted and cleaned up.') + '</p>';
-                pasteDesc    += '<p class="ViperCopyPatePlugin-pasteDesc">Avoid this step for future pastes using the keyboard shortcut <strong>' + shortcut + '</strong>.</p>';
+                pasteDesc    += '<p class="ViperCopyPatePlugin-pasteDesc">' + dfx.sprintf(_('Avoid this step for future pastes using the keyboard shortcut %s.'), '<strong>' + shortcut + '</strong>') + '</p>';
 
                 dfx.setHtml(content, pasteDesc);
 
@@ -227,16 +227,6 @@ ViperCopyPastePlugin.prototype = {
         elem.oncut = function(e) {
             self.viper.fireNodesChanged();
         };
-    },
-
-    _canPaste: function()
-    {
-        if (this.viper.pluginActive() === true && this.viper.ViperPluginManager.allowTextInput !== true) {
-            return false;
-        }
-
-        return true;
-
     },
 
     keyDown: function (e)

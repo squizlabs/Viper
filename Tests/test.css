@@ -6,9 +6,9 @@ body {
 }
 
 #content {
-    width: 800px;
+    width: 1000px;
     height: 650px;
-    margin: 90px 0 0 250px;
+    margin: 90px 0 0 90px;
     overflow: auto;
 }
 
@@ -58,6 +58,7 @@ body {
 
 #content table {
     font-size: 20px;
+    border: none;
 }
 
 em {
@@ -128,18 +129,33 @@ h1,h2,h3,h4,h5,h6 {
 #content td, #content th {
     min-width: 30px;
     padding: 4px 2px;
+    border: none;
 }
 
-#content.googlechrome td, #content.googlechrome th {
-    padding: 2px 2px;
+#content.googlechrome td {
+    padding: 5px 4px;
+}
+
+#content.googlechrome th {
+    padding: 0 10px;
+}
+
+#content.googlechrome th p {
+    margin: 0;
+}
+
+#content table {
+    white-space: nowrap;
 }
 
 #content.firefox td {
-    padding: 5px;
+    padding: 15px;
+    line-height: 26px;
 }
 
 #content.firefox th {
-    padding: 4px;
+    padding: 0;
+    line-height: 26px;
 }
 
 .Viper-button {
@@ -157,4 +173,11 @@ h1,h2,h3,h4,h5,h6 {
 /* Paste Div target */
 .ViperCopyPastePlugin-pasteWrapper {
     background: url("./Core/Images/window-target2.png") no-repeat;
+}
+
+/* Disable inline toolbar animation */
+.ViperITP {
+    transition-duration: 0s !important;
+    -ms-transition-duration: 0s !important;
+    -webkit-transition-duration: 0s !important;
 }

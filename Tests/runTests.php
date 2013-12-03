@@ -5,11 +5,11 @@ chdir(dirname(__FILE__));
 $opts = getopt('s::b::u::t::civ', array('url::', 'built', 'log::'));
 
     $browsers = array(
-                 'Firefox',
-                 'Safari',
-                 'Chrome',
-                 'IE8',
-                 'IE9',
+                 'firefox',
+                 'safari',
+                 'chrome',
+                 'ie8',
+                 'ie9',
                 );
 
     // Browsers.
@@ -71,28 +71,32 @@ $opts = getopt('s::b::u::t::civ', array('url::', 'built', 'log::'));
         $browser = trim($browser);
         if (empty($browser) === TRUE) {
             continue;
-        } else if ($browser === 'Chrome') {
-            $browser = 'Google Chrome';
         }
 
-        echo "\n=== Running tests on: $browser ===\n";
+        echo "\n=== Running tests on: ".ucfirst($browser)." ===\n";
         putenv('VIPER_TEST_BROWSER='.$browser);
 
         $phpunitCMD = '';
 
+        $browserid      = getBrowserid($browser);
+        $browserTmpPath = dirname(__FILE__).'/tmp/'.$browserid;
+        if (file_exists($browserTmpPath) === FALSE) {
+            mkdir($browserTmpPath, 0755, TRUE);
+        }
+
         // Setup logging if there is no filter.
         if ($test === NULL || empty($logFilePath) === FALSE) {
-            $browserid      = getBrowserid($browser);
-            $browserTmpPath = dirname(__FILE__).'/tmp/'.$browserid;
-            if (file_exists($browserTmpPath) === FALSE) {
-                mkdir($browserTmpPath, 0755, TRUE);
-            }
-
             if (empty($logFilePath) === TRUE) {
                 $logFilePath = $browserTmpPath.'/test.log';
             }
 
             $phpunitCMD .= '--log-junit '.$logFilePath;
+
+            // If there is an existing log file, move it.
+            if (file_exists($logFilePath) === TRUE) {
+                copy($logFilePath, $browserTmpPath.'/test_'.date('d_m_y', filemtime($logFilePath)).'.log');
+            }
+
         }
 
         if ($unitTests !== NULL) {

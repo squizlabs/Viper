@@ -140,11 +140,11 @@ ViperCharMapPlugin.prototype = {
 
         dfx.hover(dfx.getTag('td', subContent), function(e) {
             dfx.setHtml(btn, dfx.getHtml(e.target));
+            var mapCoords    = dfx.getElementCoords(map);
             var coords       = dfx.getElementCoords(e.target);
-            var scrollCoords = dfx.getScrollCoords();
 
-            dfx.setStyle(btn, 'left', (coords.x - scrollCoords.x) + 'px');
-            dfx.setStyle(btn, 'top', (coords.y - scrollCoords.y) + 'px');
+            dfx.setStyle(btn, 'left', (coords.x - mapCoords.x) + 'px');
+            dfx.setStyle(btn, 'top', (coords.y - mapCoords.y) + 'px');
             dfx.setStyle(btn, 'display', 'block');
         }, function(e) {});
 

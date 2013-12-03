@@ -24,62 +24,6 @@ var viperTest = {
     stopPolling: false
 };
 
-
-function initJSPoller()
-{
-    var scriptUrl = window.location.href.split('/');
-    scriptUrl.pop();
-    scriptUrl = scriptUrl.join('/') + '/jspoller.php';
-    viperTest.scriptURL = scriptUrl;
-
-    viperTest.stopPolling = false;
-
-    var seconds  = 0.7;
-    var interval = null;
-    interval = setInterval(function() {
-        if (viperTest.stopPolling === true) {
-            return;
-        }
-
-        viperTest.stopPolling = true;
-        dfx.post(scriptUrl, {_t:(new Date().getTime())}, function(val) {
-            if (!val) {
-                viperTest.stopPolling = false;
-                return;
-            }
-
-            var async = false;
-            if (val.indexOf('__asynchronous__') === 0) {
-                async = true;
-                val   = val.replace('__asynchronous__', '');
-            }
-
-            dfx.setHtml(dfx.getId('msg'), 'Exec: ' + val);
-
-            if (val === 'cw()' || val === 'cw();') {
-                viperTest.stopPolling = true;
-                clearInterval(interval);
-                return;
-            }
-
-            if (async === false) {
-                var jsResult = null;
-                val = 'try {jsResult = dfx.jsonEncode(' + val + ');} catch (e) {}';
-
-                // Execute JS.
-                eval(val);
-
-                dfx.post(viperTest.scriptURL, {res: jsResult, _t:(new Date().getTime())}, function() {
-                    viperTest.stopPolling = false;
-                });
-            } else {
-                eval(val);
-            }
-        });
-    }, (1000 * seconds));
-
-}
-
 function sendResult(result)
 {
     result = dfx.jsonEncode(result);
@@ -270,6 +214,10 @@ function gBRec(selector, index)
 function gVITPArrow()
 {
     var toolbar = viperTest.getWindow().viper.getPluginManager().getPlugin('ViperInlineToolbarPlugin').getToolbar().element;
+    if (dfx.hasClass(toolbar, 'Viper-visible') === false) {
+        return null;
+    }
+
     var rect    = viperTest.getWindow().dfx.getBoundingRectangle(toolbar);
 
     var arrow = {
@@ -322,6 +270,23 @@ function gActBubble()
 
     var rect = viperTest.getWindow().dfx.getBoundingRectangle(activeBubble.element);
     return rect;
+
+}
+
+function gStringLoc(str)
+{
+    var loc = null;
+    if (window.find(str, true, false, true, true, true) === true) {
+        loc = viper.getCurrentRange().rangeObj.getBoundingClientRect();
+        loc = {
+            x1: loc.left,
+            x2: loc.right,
+            y1: loc.top,
+            y2: loc.bottom
+        };
+    }
+
+    return loc;
 
 }
 

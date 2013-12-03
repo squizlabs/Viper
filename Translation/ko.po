@@ -1,0 +1,450 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Korean translation for Viper\n"
+"POT-Creation-Date: 2013-07-29 13:47+1000\n"
+"PO-Revision-Date: 2013-07-31 14:11+1000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.7\n"
+"X-Poedit-KeywordsList: _\n"
+"X-Poedit-Basepath: ../\n"
+"X-Poedit-SearchPath-0: ./Plugins\n"
+"X-Poedit-SearchPath-1: ./Lib\n"
+
+msgid "Locate Element"
+msgstr ""
+
+msgid "Show in Source View"
+msgstr ""
+
+msgid "Refresh Issue"
+msgstr ""
+
+msgid "Accessibility Auditor"
+msgstr "웹 접근성 테스트 툴"
+
+msgid "Re-checking issue"
+msgstr ""
+
+msgid "This issue has not been resolved"
+msgstr ""
+
+msgid "OK"
+msgstr ""
+
+msgid "Insert Character"
+msgstr "특수기호"
+
+msgid "Symbols"
+msgstr "심볼"
+
+msgid "Latin"
+msgstr "라틴심볼"
+
+msgid "Mathematics"
+msgstr "수학심볼"
+
+msgid "Currency"
+msgstr "화폐심볼"
+
+msgid ""
+"Paste your content into the box below and it will be automatically inserted "
+"and cleaned up."
+msgstr ""
+
+msgid "Avoid this step for future pastes using the keyboard shortcut %s."
+msgstr ""
+
+msgid "Bold"
+msgstr "굵게"
+
+msgid "Italic"
+msgstr "기울임"
+
+msgid "Remove Format"
+msgstr ""
+
+msgid "Subscript"
+msgstr "아래 첨자"
+
+msgid "Superscript"
+msgstr "위 첨자"
+
+msgid "Strikethrough"
+msgstr "취소선"
+
+msgid "Left Justify"
+msgstr "왼쪽정렬"
+
+msgid "Center Justify"
+msgstr "가운데정렬"
+
+msgid "Right Justify"
+msgstr "오른쪽정렬"
+
+msgid "Block Justify"
+msgstr "양쪽정렬"
+
+msgid "Horizontal Rule"
+msgstr "가로자"
+
+msgid "Justification"
+msgstr "정렬"
+
+msgid "Toggle Justification"
+msgstr "정렬"
+
+msgid "Heading 1"
+msgstr "헤딩 1"
+
+msgid "Heading 2"
+msgstr "헤딩 2"
+
+msgid "Heading 3"
+msgstr "헤딩 3"
+
+msgid "Heading 4"
+msgstr "헤딩 4"
+
+msgid "Heading 5"
+msgstr "헤딩 5"
+
+msgid "Heading 6"
+msgstr "헤딩 6"
+
+msgid "Paragraph"
+msgstr "문단"
+
+msgid "Preformatted"
+msgstr ""
+
+msgid "Address"
+msgstr ""
+
+msgid "Quote"
+msgstr ""
+
+msgid "Convert to Heading %s"
+msgstr ""
+
+msgid "Convert to %s"
+msgstr ""
+
+msgid "ID"
+msgstr ""
+
+msgid "Class"
+msgstr ""
+
+msgid "Toggle Formats"
+msgstr ""
+
+msgid "Toggle Headings"
+msgstr ""
+
+msgid "Anchor name (ID)"
+msgstr ""
+
+msgid "Class name"
+msgstr ""
+
+msgid "Formats"
+msgstr "포맷"
+
+msgid "Headings"
+msgstr ""
+
+msgid "Anchor ID"
+msgstr ""
+
+msgid "Undo"
+msgstr "취소"
+
+msgid "Redo"
+msgstr ""
+
+msgid "Insert Image"
+msgstr "사진넣기"
+
+msgid "Toggle Image Options"
+msgstr ""
+
+msgid "URL"
+msgstr "URL"
+
+msgid "Image is decorative"
+msgstr ""
+
+msgid "Alt"
+msgstr ""
+
+msgid "Title"
+msgstr "제목"
+
+msgid ""
+"The selected image will be moved to the next location you click. To cancel "
+"press the move icon again or ESC"
+msgstr ""
+
+msgid "Move Image"
+msgstr "사진 옮기기"
+
+msgid "Loading preview"
+msgstr ""
+
+msgid "Failed to load image"
+msgstr "사진 불러오기 실패"
+
+msgid "Underline"
+msgstr "밑줄"
+
+msgid "Item"
+msgstr ""
+
+msgid "List"
+msgstr ""
+
+msgid "Cell"
+msgstr ""
+
+msgid "Row"
+msgstr ""
+
+msgid "Header"
+msgstr ""
+
+msgid "Link"
+msgstr "링크"
+
+msgid "Image"
+msgstr "사진"
+
+msgid "Selection"
+msgstr "선택"
+
+msgid "Acronym"
+msgstr "약칭"
+
+msgid "Abbreviation"
+msgstr "축약형"
+
+msgid "Language"
+msgstr "언어"
+
+msgid "Language Tools"
+msgstr "언어툴"
+
+msgid "Toggle Language Tools"
+msgstr ""
+
+msgid "Toggle Acronym Options"
+msgstr ""
+
+msgid "Toggle Abbreviation Options"
+msgstr ""
+
+msgid "Toggle Language Options"
+msgstr ""
+
+msgid "Subject"
+msgstr ""
+
+msgid "Open a New Window"
+msgstr "새 창에 열기"
+
+msgid "Toggle Link Options"
+msgstr ""
+
+msgid "Remove Link"
+msgstr ""
+
+msgid "Insert Link"
+msgstr "링크 삽입"
+
+msgid "Make Unordered List"
+msgstr ""
+
+msgid "Make Ordered List"
+msgstr ""
+
+msgid "Indent List"
+msgstr ""
+
+msgid "Outdent List"
+msgstr ""
+
+msgid "Search"
+msgstr "찾기"
+
+msgid "Replace"
+msgstr "바꾸기"
+
+msgid "Replace All"
+msgstr "모두 바꾸기"
+
+msgid "Find Next"
+msgstr ""
+
+msgid "Search & Replace"
+msgstr "찾기 & 바꾸"
+
+msgid "Toggle Source View"
+msgstr ""
+
+msgid "Discard"
+msgstr ""
+
+msgid "Discard Changes"
+msgstr ""
+
+msgid "Apply Changes"
+msgstr "적용"
+
+msgid "Would you like to apply your changes?"
+msgstr ""
+
+msgid "Open In new window"
+msgstr "새 창에 열기"
+
+msgid "Source Editor"
+msgstr ""
+
+msgid "Viper Source View"
+msgstr "소스 보기"
+
+msgid ""
+"Source code changes will be reflected in your edit preview window in real "
+"time."
+msgstr ""
+
+msgid "Revert Changes"
+msgstr ""
+
+msgid "Close Source View"
+msgstr ""
+
+msgid "Close Window"
+msgstr "창 닫기"
+
+msgid "Insert Table"
+msgstr "표삽입"
+
+msgid "Show Table tools"
+msgstr ""
+
+msgid "Show Row tools"
+msgstr ""
+
+msgid "Show Column tools"
+msgstr ""
+
+msgid "Show Cell tools"
+msgstr ""
+
+msgid "Table"
+msgstr "표"
+
+msgid "Column"
+msgstr ""
+
+msgid "Toggle Settings"
+msgstr ""
+
+msgid "Heading"
+msgstr ""
+
+msgid "Split Vertically"
+msgstr "세로분할"
+
+msgid "Split Horizontally"
+msgstr "가로분할"
+
+msgid "Merge Up"
+msgstr ""
+
+msgid "Merge Down"
+msgstr ""
+
+msgid "Merge Left"
+msgstr ""
+
+msgid "Merge Right"
+msgstr ""
+
+msgid "Toggle Merge/Split Options"
+msgstr ""
+
+msgid "Width"
+msgstr "너비"
+
+msgid "Insert Column Before"
+msgstr ""
+
+msgid "Insert Column After"
+msgstr ""
+
+msgid "Move Left"
+msgstr "왼쪽으로"
+
+msgid "Move Right"
+msgstr "오른쪽으로"
+
+msgid "Remove Column"
+msgstr ""
+
+msgid "Insert Row Before"
+msgstr ""
+
+msgid "Insert Row After"
+msgstr ""
+
+msgid "Move Up"
+msgstr "위로 "
+
+msgid "Move Down"
+msgstr "아래로"
+
+msgid "Remove Row"
+msgstr ""
+
+msgid "Summary"
+msgstr "요약 "
+
+msgid "Use Caption"
+msgstr "캡션 사용하기"
+
+msgid "Remove Table"
+msgstr ""
+
+msgid "None"
+msgstr "없음"
+
+msgid "Left"
+msgstr "왼쪽"
+
+msgid "Top"
+msgstr "위"
+
+msgid "Both"
+msgstr "모두"
+
+msgid "Headers"
+msgstr "서식"
+
+msgid "Size"
+msgstr "사이즈"
+
+msgid "Viper by Squiz"
+msgstr "Viper by Squiz"
+
+msgid "Update Changes"
+msgstr "적용"
+
+msgid "Not available"
+msgstr ""
+
+msgid "required"
+msgstr ""

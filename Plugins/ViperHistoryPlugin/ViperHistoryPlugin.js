@@ -13,18 +13,15 @@
 
 function ViperHistoryPlugin(viper)
 {
-    this.viper = viper;
+    var self           = this;
+    var _toolbarPlugin = null;
 
-}
-
-ViperHistoryPlugin.prototype = {
-    init: function()
+    this.init = function()
     {
-        var toolbarPlugin = this.viper.ViperPluginManager.getPlugin('ViperToolbarPlugin');
+        var toolbarPlugin = viper.ViperPluginManager.getPlugin('ViperToolbarPlugin');
         if (toolbarPlugin) {
-            var self            = this;
-            this._toolbarPlugin = toolbarPlugin;
-            var tools = this.viper.ViperTools;
+            _toolbarPlugin = toolbarPlugin;
+            var tools = viper.ViperTools;
 
             var toolbarButtons = {
                 undo: 'undo',
@@ -45,49 +42,49 @@ ViperHistoryPlugin.prototype = {
             tools.getItem('undo').setButtonShortcut('CTRL+Z');
             tools.getItem('redo').setButtonShortcut('CTRL+SHIFT+Z');
 
-            this.viper.registerCallback('ViperToolbarPlugin:updateToolbar', 'ViperHistoryPlugin', function(data) {
-                self._updateToolbarButtonStates(toolbarButtons);
+            viper.registerCallback('ViperToolbarPlugin:updateToolbar', 'ViperHistoryPlugin', function(data) {
+                _updateToolbarButtonStates(toolbarButtons);
             });
 
-            this._updateToolbarButtonStates(toolbarButtons);
+            _updateToolbarButtonStates(toolbarButtons);
 
-            this.viper.registerCallback(['ViperHistoryManager:add', 'ViperHistoryManager:undo', 'ViperHistoryManager:redo', 'ViperHistoryManager:clear'], 'ViperHistoryPlugin', function(e) {
-                self._updateToolbarButtonStates(toolbarButtons);
+            viper.registerCallback(['ViperHistoryManager:add', 'ViperHistoryManager:undo', 'ViperHistoryManager:redo', 'ViperHistoryManager:clear'], 'ViperHistoryPlugin', function(e) {
+                _updateToolbarButtonStates(toolbarButtons);
             });
         }
 
-    },
+    };
 
-    handleUndo: function()
+    this.handleUndo = function()
     {
-        this.viper.ViperHistoryManager.undo();
+        viper.ViperHistoryManager.undo();
 
         return false;
 
-    },
+    };
 
-    handleRedo: function()
+    this.handleRedo = function()
     {
-        this.viper.ViperHistoryManager.redo();
+        viper.ViperHistoryManager.redo();
 
         return false;
 
-    },
+    };
 
-    _updateToolbarButtonStates: function(toolbarButtons)
+    var _updateToolbarButtonStates = function(toolbarButtons)
     {
-        if (!this._toolbarPlugin) {
+        if (!_toolbarPlugin) {
             return;
         }
 
-        var tools = this.viper.ViperTools;
-        if (this.viper.ViperHistoryManager.getUndoCount() > 1) {
+        var tools = viper.ViperTools;
+        if (viper.ViperHistoryManager.getUndoCount() > 1) {
             tools.enableButton(toolbarButtons.undo);
         } else {
             tools.disableButton(toolbarButtons.undo);
         }
 
-        if (this.viper.ViperHistoryManager.getRedoCount() > 0) {
+        if (viper.ViperHistoryManager.getRedoCount() > 0) {
             tools.enableButton(toolbarButtons.redo);
         } else {
             tools.disableButton(toolbarButtons.redo);

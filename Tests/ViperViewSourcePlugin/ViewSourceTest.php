@@ -13,7 +13,7 @@ class Viper_Tests_ViperViewSourcePlugin_ViewSourceTest extends AbstractViperView
      */
     public function testOpenAndCloseSourceEditor()
     {
-        $this->click($this->findKeyword(2));
+        $this->sikuli->click($this->findKeyword(2));
         $this->clickTopToolbarButton('sourceView');
 
         // Check to make sure the source editor appears.
@@ -25,7 +25,7 @@ class Viper_Tests_ViperViewSourcePlugin_ViewSourceTest extends AbstractViperView
 
         try {
             $closeIcon = $this->findImage('closePopupIcon', '.Viper-popup-closeIcon');
-            $this->click($closeIcon);
+            $this->sikuli->click($closeIcon);
         } catch (Exception $e) {
             $this->fail('Source editor does not have a close icon');
         }
@@ -33,7 +33,7 @@ class Viper_Tests_ViperViewSourcePlugin_ViewSourceTest extends AbstractViperView
         // Check to make sure the source editor does not appear.
         $sourceEditorNotFound = false;
         try {
-            $this->find($image);
+            $this->sikuli->find($image);
             $this->fail('Source editor still appears on the screen');
         } catch (Exception $e) {
             // Do nothing.
@@ -49,16 +49,16 @@ class Viper_Tests_ViperViewSourcePlugin_ViewSourceTest extends AbstractViperView
      */
     public function testEditingAfterClosingSourceEditor()
     {
-        $this->click($this->findKeyword(1));
+        $this->sikuli->click($this->findKeyword(1));
         $this->clickTopToolbarButton('sourceView');
 
         $closeIcon = $this->findImage('closePopupIcon', '.Viper-popup-closeIcon');
-        $this->click($closeIcon);
+        $this->sikuli->click($closeIcon);
 
         $this->selectKeyword(1);
-        $this->keyDown('Key.CMD + i');
-        $this->click($this->findKeyword(1));
-        $this->click($this->findKeyword(3));
+        $this->sikuli->keyDown('Key.CMD + i');
+        $this->sikuli->click($this->findKeyword(1));
+        $this->sikuli->click($this->findKeyword(3));
         $this->assertHTMLMatch('<p>Lorem <em>%1%</em> dolor</p><p><strong>%2%</strong> sit amet</p><p>%3% p <em>XuT</em></p>');
 
     }//end testEditingAfterClosingSourceEditor()
@@ -71,11 +71,11 @@ class Viper_Tests_ViperViewSourcePlugin_ViewSourceTest extends AbstractViperView
      */
     public function testEditingTheSourceCode()
     {
-        $this->click($this->findKeyword(2));
+        $this->sikuli->click($this->findKeyword(2));
         $this->clickTopToolbarButton('sourceView');
         sleep(2);
-        $this->keyDown('Key.CMD + a');
-        $this->keyDown('Key.DELETE');
+        $this->sikuli->keyDown('Key.CMD + a');
+        $this->sikuli->keyDown('Key.DELETE');
         $this->type('<p>Hello world</p>');
 
         $this->clickButton('Apply Changes', NULL, TRUE);
@@ -94,14 +94,14 @@ class Viper_Tests_ViperViewSourcePlugin_ViewSourceTest extends AbstractViperView
     {
         $this->markTestSkipped('Atm the top buttons are removed when it switches windows. Need a way to keep the buttons there');
 
-        $this->click($this->findKeyword(2));
+        $this->sikuli->click($this->findKeyword(2));
         $this->clickTopToolbarButton('sourceView');
         sleep(2);
-        $this->keyDown('Key.CMD + a');
-        $this->keyDown('Key.DELETE');
+        $this->sikuli->keyDown('Key.CMD + a');
+        $this->sikuli->keyDown('Key.DELETE');
 
         $closeIcon = $this->findImage('closePopupIcon', '.Viper-popup-closeIcon');
-        $this->click($closeIcon);
+        $this->sikuli->click($closeIcon);
 
         $this->clickButton('Apply Changes', NULL, TRUE);
 
@@ -119,14 +119,14 @@ class Viper_Tests_ViperViewSourcePlugin_ViewSourceTest extends AbstractViperView
     {
         $this->markTestSkipped('Atm the top buttons are removed when it switches windows. Need a way to keep the buttons there');
 
-        $this->click($this->findKeyword(2));
+        $this->sikuli->click($this->findKeyword(2));
         $this->clickTopToolbarButton('sourceView');
         sleep(2);
-        $this->keyDown('Key.CMD + a');
-        $this->keyDown('Key.DELETE');
+        $this->sikuli->keyDown('Key.CMD + a');
+        $this->sikuli->keyDown('Key.DELETE');
 
         $closeIcon = $this->findImage('closePopupIcon', '.Viper-popup-closeIcon');
-        $this->click($closeIcon);
+        $this->sikuli->click($closeIcon);
 
         $this->clickButton('Discard', NULL, TRUE);
 
@@ -144,12 +144,12 @@ class Viper_Tests_ViperViewSourcePlugin_ViewSourceTest extends AbstractViperView
     {
         $this->markTestSkipped('Atm the testing system cannot handle more than one window');
 
-        $this->click($this->findKeyword(2));
+        $this->sikuli->click($this->findKeyword(2));
         $this->clickTopToolbarButton('sourceView');
         sleep(2);
 
         $newWindowIcon = $this->findImage('newWindowIcon', '.Viper-sourceNewWindow');
-        $this->click($newWindowIcon);
+        $this->sikuli->click($newWindowIcon);
 
         $this->clickButton('Close Window', NULL, TRUE);
 
@@ -167,16 +167,16 @@ class Viper_Tests_ViperViewSourcePlugin_ViewSourceTest extends AbstractViperView
     {
         $this->markTestSkipped('Atm the testing system cannot handle more than one window');
 
-        $this->click($this->findKeyword(2));
+        $this->sikuli->click($this->findKeyword(2));
         $this->clickTopToolbarButton('sourceView');
         sleep(2);
 
         $newWindowIcon = $this->findImage('newWindowIcon', '.Viper-sourceNewWindow');
-        $this->click($newWindowIcon);
+        $this->sikuli->click($newWindowIcon);
 
         sleep(2);
-        $this->keyDown('Key.CMD + a');
-        $this->keyDown('Key.DELETE');
+        $this->sikuli->keyDown('Key.CMD + a');
+        $this->sikuli->keyDown('Key.DELETE');
 
         $this->clickButton('Close Window', NULL, TRUE);
 
@@ -195,17 +195,17 @@ class Viper_Tests_ViperViewSourcePlugin_ViewSourceTest extends AbstractViperView
         $this->selectKeyword(2, 3);
         $this->clickTopToolbarButton('sourceView');
         sleep(2);
-        $this->keyDown('Key.DOWN');
-        $this->keyDown('Key.DOWN');
-        $this->keyDown('Key.DOWN');
-        $this->keyDown('Key.DOWN');
-        $this->keyDown('Key.SHIFT + Key.DOWN');
-        $this->keyDown('Key.SHIFT + Key.DOWN');
-        $this->keyDown('Key.SHIFT + Key.DOWN');
-        $this->keyDown('Key.SHIFT + Key.DOWN');
-        $this->keyDown('Key.SHIFT + Key.DOWN');
-        $this->keyDown('Key.SHIFT + Key.DOWN');
-        $this->keyDown('Key.DELETE');
+        $this->sikuli->keyDown('Key.DOWN');
+        $this->sikuli->keyDown('Key.DOWN');
+        $this->sikuli->keyDown('Key.DOWN');
+        $this->sikuli->keyDown('Key.DOWN');
+        $this->sikuli->keyDown('Key.SHIFT + Key.DOWN');
+        $this->sikuli->keyDown('Key.SHIFT + Key.DOWN');
+        $this->sikuli->keyDown('Key.SHIFT + Key.DOWN');
+        $this->sikuli->keyDown('Key.SHIFT + Key.DOWN');
+        $this->sikuli->keyDown('Key.SHIFT + Key.DOWN');
+        $this->sikuli->keyDown('Key.SHIFT + Key.DOWN');
+        $this->sikuli->keyDown('Key.DELETE');
 
         $this->clickButton('Apply Changes', NULL, TRUE);
 
@@ -224,7 +224,7 @@ class Viper_Tests_ViperViewSourcePlugin_ViewSourceTest extends AbstractViperView
      */
     public function testOpenSourceEditorAfterEmbeddingVideo()
     {
-        $this->click($this->findKeyword(2));
+        $this->sikuli->click($this->findKeyword(2));
         $this->clickTopToolbarButton('sourceView');
 
         // Check to make sure the source editor appears.
@@ -235,15 +235,15 @@ class Viper_Tests_ViperViewSourcePlugin_ViewSourceTest extends AbstractViperView
         }
 
         // Embed the video
-        $this->keyDown('Key.CMD + a');
-        $this->keyDown('Key.DELETE');
+        $this->sikuli->keyDown('Key.CMD + a');
+        $this->sikuli->keyDown('Key.DELETE');
         $this->type('<iframe title="Roadmap" src="http://www.youtube.com/embed/PYm4Atlxe4M" allowfullscreen="" frameborder="0" height="315" width="420"></iframe>');
         $this->clickButton('Apply Changes', NULL, TRUE);
 
         // Check to make sure the source editor does not appear.
         $sourceEditorNotFound = false;
         try {
-            $this->find($image);
+            $this->sikuli->find($image);
             $this->fail('Source editor still appears on the screen');
         } catch (Exception $e) {
             // Do nothing.

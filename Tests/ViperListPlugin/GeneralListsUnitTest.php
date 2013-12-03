@@ -15,7 +15,7 @@ class Viper_Tests_ViperListPlugin_GeneralListsUnitTest extends AbstractViperList
     {
         $this->useTest(1);
 
-        $this->click($this->findKeyword(1));
+        $this->sikuli->click($this->findKeyword(1));
         $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
 
         $this->selectKeyword(1);
@@ -25,7 +25,7 @@ class Viper_Tests_ViperListPlugin_GeneralListsUnitTest extends AbstractViperList
         $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
 
         $this->moveToKeyword(1, 'right');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
         $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
 
     }//end testNoListToolsForAHeading()
@@ -41,7 +41,7 @@ class Viper_Tests_ViperListPlugin_GeneralListsUnitTest extends AbstractViperList
         $this->useTest(2);
 
         // Test single line paragraph
-        $this->click($this->findKeyword(1));
+        $this->sikuli->click($this->findKeyword(1));
         $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
 
         $this->selectKeyword(1);
@@ -51,11 +51,11 @@ class Viper_Tests_ViperListPlugin_GeneralListsUnitTest extends AbstractViperList
         $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
 
         $this->moveToKeyword(1, 'right');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
         $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
 
         // Test multi-line paragraph
-        $this->click($this->findKeyword(2));
+        $this->sikuli->click($this->findKeyword(2));
         $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
 
         $this->selectKeyword(2);
@@ -65,7 +65,7 @@ class Viper_Tests_ViperListPlugin_GeneralListsUnitTest extends AbstractViperList
         $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
 
         $this->moveToKeyword(2, 'right');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
         $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
 
     }//end testListToolsAvailableForAParagraph()
@@ -81,7 +81,7 @@ class Viper_Tests_ViperListPlugin_GeneralListsUnitTest extends AbstractViperList
         $this->useTest(3);
 
         // Test single line pre
-        $this->click($this->findKeyword(1));
+        $this->sikuli->click($this->findKeyword(1));
         $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
 
         $this->selectKeyword(1);
@@ -91,11 +91,11 @@ class Viper_Tests_ViperListPlugin_GeneralListsUnitTest extends AbstractViperList
         $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
 
         $this->moveToKeyword(1, 'right');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
         $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
 
         // Test multi-line pre
-        $this->click($this->findKeyword(2));
+        $this->sikuli->click($this->findKeyword(2));
         $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
 
         $this->selectKeyword(2);
@@ -105,7 +105,7 @@ class Viper_Tests_ViperListPlugin_GeneralListsUnitTest extends AbstractViperList
         $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
 
         $this->moveToKeyword(2, 'right');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
         $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
 
     }//end testListToolsAreNotAvailableForAPre()
@@ -121,7 +121,7 @@ class Viper_Tests_ViperListPlugin_GeneralListsUnitTest extends AbstractViperList
         $this->useTest(4);
 
         // Test single line quote
-        $this->click($this->findKeyword(1));
+        $this->sikuli->click($this->findKeyword(1));
         $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
 
         $this->selectKeyword(1);
@@ -134,11 +134,11 @@ class Viper_Tests_ViperListPlugin_GeneralListsUnitTest extends AbstractViperList
         $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
 
         $this->moveToKeyword(1, 'right');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
         $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
 
         // Test multi-line quote
-        $this->click($this->findKeyword(2));
+        $this->sikuli->click($this->findKeyword(2));
         $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
 
         $this->selectKeyword(2);
@@ -151,11 +151,11 @@ class Viper_Tests_ViperListPlugin_GeneralListsUnitTest extends AbstractViperList
         $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
 
         $this->moveToKeyword(2, 'right');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
         $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
 
         // Test quote section inside multiple P's
-        $this->click($this->findKeyword(3));
+        $this->sikuli->click($this->findKeyword(3));
         $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
 
         $this->selectKeyword(3);
@@ -168,10 +168,10 @@ class Viper_Tests_ViperListPlugin_GeneralListsUnitTest extends AbstractViperList
         $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
 
         $this->moveToKeyword(3, 'right');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
         $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
 
-        $this->click($this->findKeyword(4));
+        $this->sikuli->click($this->findKeyword(4));
         $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
 
         $this->selectKeyword(4);
@@ -184,7 +184,7 @@ class Viper_Tests_ViperListPlugin_GeneralListsUnitTest extends AbstractViperList
         $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
 
         $this->moveToKeyword(4, 'right');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
         $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
 
     }//end testListToolsAreNotAvailableForAQuote()
@@ -200,7 +200,7 @@ class Viper_Tests_ViperListPlugin_GeneralListsUnitTest extends AbstractViperList
         $this->useTest(5);
 
         // Test single line div
-        $this->click($this->findKeyword(1));
+        $this->sikuli->click($this->findKeyword(1));
         $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
 
         $this->selectKeyword(1);
@@ -210,11 +210,11 @@ class Viper_Tests_ViperListPlugin_GeneralListsUnitTest extends AbstractViperList
         $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
 
         $this->moveToKeyword(1, 'right');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
         $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
 
         // Test multi-line div
-        $this->click($this->findKeyword(2));
+        $this->sikuli->click($this->findKeyword(2));
         $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
 
         $this->selectKeyword(2);
@@ -224,7 +224,7 @@ class Viper_Tests_ViperListPlugin_GeneralListsUnitTest extends AbstractViperList
         $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
 
         $this->moveToKeyword(2, 'right');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
         $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
 
     }//end testListToolsAreNotAvailableForADiv()
@@ -240,7 +240,7 @@ class Viper_Tests_ViperListPlugin_GeneralListsUnitTest extends AbstractViperList
         $this->useTest(6);
 
         // Test one P inside a Div
-        $this->click($this->findKeyword(1));
+        $this->sikuli->click($this->findKeyword(1));
         $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
 
         $this->selectKeyword(1);
@@ -253,14 +253,14 @@ class Viper_Tests_ViperListPlugin_GeneralListsUnitTest extends AbstractViperList
         $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
 
         $this->moveToKeyword(1, 'right');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
         $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
 
         // Test two P's inside a div
-        $this->click($this->findKeyword(2));
+        $this->sikuli->click($this->findKeyword(2));
         $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
 
-        $this->click($this->findKeyword(1));
+        $this->sikuli->click($this->findKeyword(1));
         sleep(1);
         $this->selectKeyword(2);
         $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
@@ -272,10 +272,10 @@ class Viper_Tests_ViperListPlugin_GeneralListsUnitTest extends AbstractViperList
         $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
 
         $this->moveToKeyword(2, 'right');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
         $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
 
-        $this->click($this->findKeyword(3));
+        $this->sikuli->click($this->findKeyword(3));
         $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
 
         $this->selectKeyword(3);
@@ -288,7 +288,7 @@ class Viper_Tests_ViperListPlugin_GeneralListsUnitTest extends AbstractViperList
         $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
 
         $this->moveToKeyword(3, 'right');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
         $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
 
     }//end testListToolsAvailableForPSectionsInsideDivSection()
@@ -304,7 +304,7 @@ class Viper_Tests_ViperListPlugin_GeneralListsUnitTest extends AbstractViperList
         $this->useTest(7);
 
         // Test one Div inside a Div
-        $this->click($this->findKeyword(1));
+        $this->sikuli->click($this->findKeyword(1));
         $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
 
         $this->selectKeyword(1);
@@ -317,11 +317,11 @@ class Viper_Tests_ViperListPlugin_GeneralListsUnitTest extends AbstractViperList
         $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
 
         $this->moveToKeyword(1, 'right');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
         $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
 
         // Test two P's inside a div
-        $this->click($this->findKeyword(2));
+        $this->sikuli->click($this->findKeyword(2));
         $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
 
         $this->selectKeyword(2);
@@ -334,10 +334,10 @@ class Viper_Tests_ViperListPlugin_GeneralListsUnitTest extends AbstractViperList
         $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
 
         $this->moveToKeyword(2, 'right');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
         $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
 
-        $this->click($this->findKeyword(3));
+        $this->sikuli->click($this->findKeyword(3));
         $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
 
         $this->selectKeyword(3);
@@ -350,7 +350,7 @@ class Viper_Tests_ViperListPlugin_GeneralListsUnitTest extends AbstractViperList
         $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
 
         $this->moveToKeyword(3, 'right');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
         $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
 
     }//end testListToolsAvailableForPSectionsInsideDivSection()
@@ -366,7 +366,7 @@ class Viper_Tests_ViperListPlugin_GeneralListsUnitTest extends AbstractViperList
         $this->useTest(8);
 
         // Test one quote inside a Div
-        $this->click($this->findKeyword(1));
+        $this->sikuli->click($this->findKeyword(1));
         $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
 
         $this->selectKeyword(1);
@@ -382,11 +382,11 @@ class Viper_Tests_ViperListPlugin_GeneralListsUnitTest extends AbstractViperList
         $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
 
         $this->moveToKeyword(1, 'right');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
         $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
 
         // Test two quote's inside a div
-        $this->click($this->findKeyword(2));
+        $this->sikuli->click($this->findKeyword(2));
         $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
 
         $this->selectKeyword(2);
@@ -402,10 +402,10 @@ class Viper_Tests_ViperListPlugin_GeneralListsUnitTest extends AbstractViperList
         $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
 
         $this->moveToKeyword(2, 'right');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
         $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
 
-        $this->click($this->findKeyword(3));
+        $this->sikuli->click($this->findKeyword(3));
         $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
 
         $this->selectKeyword(3);
@@ -421,7 +421,7 @@ class Viper_Tests_ViperListPlugin_GeneralListsUnitTest extends AbstractViperList
         $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
 
         $this->moveToKeyword(3, 'right');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
         $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
 
     }//end testListToolsNotAvailableForQuoteSectionsInsideDivSection()
@@ -437,7 +437,7 @@ class Viper_Tests_ViperListPlugin_GeneralListsUnitTest extends AbstractViperList
         $this->useTest(9);
 
         // Test one Pre inside a Div
-        $this->click($this->findKeyword(1));
+        $this->sikuli->click($this->findKeyword(1));
         $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
 
         $this->selectKeyword(1);
@@ -450,11 +450,11 @@ class Viper_Tests_ViperListPlugin_GeneralListsUnitTest extends AbstractViperList
         $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
 
         $this->moveToKeyword(1, 'right');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
         $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
 
         // Test two Pre's inside a div
-        $this->click($this->findKeyword(2));
+        $this->sikuli->click($this->findKeyword(2));
         $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
 
         $this->selectKeyword(2);
@@ -467,10 +467,10 @@ class Viper_Tests_ViperListPlugin_GeneralListsUnitTest extends AbstractViperList
         $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
 
         $this->moveToKeyword(2, 'right');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
         $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
 
-        $this->click($this->findKeyword(3));
+        $this->sikuli->click($this->findKeyword(3));
         $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
 
         $this->selectKeyword(3);
@@ -483,7 +483,7 @@ class Viper_Tests_ViperListPlugin_GeneralListsUnitTest extends AbstractViperList
         $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
 
         $this->moveToKeyword(3, 'right');
-        $this->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
         $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
 
     }//end testListToolsNotAvailableForPreSectionsInsideDivSection()
@@ -499,7 +499,7 @@ class Viper_Tests_ViperListPlugin_GeneralListsUnitTest extends AbstractViperList
         $this->useTest(10);
 
         // Test in a caption
-        $this->click($this->findKeyword(1));
+        $this->sikuli->click($this->findKeyword(1));
         $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
 
         $this->selectKeyword(1);
@@ -512,7 +512,7 @@ class Viper_Tests_ViperListPlugin_GeneralListsUnitTest extends AbstractViperList
         $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
 
         // Test in a header section
-        $this->click($this->findKeyword(2));
+        $this->sikuli->click($this->findKeyword(2));
         $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
 
         $this->selectKeyword(2);
@@ -531,7 +531,7 @@ class Viper_Tests_ViperListPlugin_GeneralListsUnitTest extends AbstractViperList
         $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
 
         // Test in the footer section
-        $this->click($this->findKeyword(3));
+        $this->sikuli->click($this->findKeyword(3));
         $this->assertIconStatusesCorrect(TRUE, TRUE, NULL, NULL);
 
         $this->selectKeyword(3);
@@ -550,10 +550,10 @@ class Viper_Tests_ViperListPlugin_GeneralListsUnitTest extends AbstractViperList
         $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
 
         // Test in the body section
-        $this->click($this->findKeyword(4));
+        $this->sikuli->click($this->findKeyword(4));
         $this->assertIconStatusesCorrect(TRUE, TRUE, NULL, NULL);
 
-        $this->click($this->findKeyword(3));
+        $this->sikuli->click($this->findKeyword(3));
         sleep(1);
         $this->selectKeyword(4);
         $this->assertIconStatusesCorrect(TRUE, TRUE, NULL, NULL);

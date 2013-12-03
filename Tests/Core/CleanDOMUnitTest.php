@@ -13,8 +13,8 @@ class Viper_Tests_Core_CleanDOMUnitTest extends AbstractViperUnitTest
      */
     public function testCleanDOM()
     {
-        $this->click($this->findKeyword(1));
-        $this->execJS('viper.cleanDOM()');
+        $this->sikuli->click($this->findKeyword(1));
+        $this->sikuli->execJS('viper.cleanDOM()');
 
         $expected = '<p>%1%</p><p><img src="" /><br /><span>test</span></p><ul><li>test</li></ul><table><tbody><tr><td></td></tr></tbody></table><table><tbody><tr><td>test</td></tr></tbody></table><h2>test</h2><p><br /><a name="test"></a><a id="test2" href="">test</a></p>';
 
@@ -30,8 +30,8 @@ class Viper_Tests_Core_CleanDOMUnitTest extends AbstractViperUnitTest
      */
     public function testCleanDOMFiltered()
     {
-        $this->click($this->findKeyword(1));
-        $this->execJS('viper.cleanDOM(dfx.getTag("p")[2])');
+        $this->sikuli->click($this->findKeyword(1));
+        $this->sikuli->execJS('viper.cleanDOM(dfx.getTag("p")[2])');
 
         $expected = '<p>%1%</p><p><img src="" /><br /><span>test</span></p><ul><li>test</li></ul><table><tbody><tr><td></td></tr></tbody></table><table><tbody><tr><td>test</td></tr></tbody></table><h2>test</h2><p><br /><a name="test"></a><a id="test2" href="">test</a></p>';
 

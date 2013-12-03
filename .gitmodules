@@ -4,3 +4,6 @@
 [submodule "Plugins/ViperAccessibilityPlugin/HTML_CodeSniffer"]
 	path = Plugins/ViperAccessibilityPlugin/HTML_CodeSniffer
 	url = git@github.com:squizlabs/HTML_CodeSniffer.git
+[submodule "Tests/PHPSikuli"]
+	path = Tests/PHPSikuli
+	url = git@github.com:squizlabs/php-sikuli.git
