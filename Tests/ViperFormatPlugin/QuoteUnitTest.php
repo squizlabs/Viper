@@ -747,6 +747,53 @@ class Viper_Tests_ViperFormatPlugin_QuoteUnitTest extends AbstractFormatsUnitTes
 
     }//end testCombiningQuoteAndPreSections()
 
+
+    /**
+     * Test splitting a blockquote into two paragraphs.
+     *
+     * @return void
+     */
+    public function testSplittingBlockQuotesIntoTwoParagraphs()
+    {
+        // Change the div to a blockquote
+        $this->selectKeyword(3);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickTopToolbarButton('formats-div', 'active');
+        $this->clickTopToolbarButton('Quote', NULL, TRUE);
+        $this->assertHTMLMatch('<blockquote><p>%1% xtn %2%</p></blockquote><blockquote><p>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p></blockquote><p>%4% is a paragraph to change to a quote</p>');
+
+        $this->moveToKeyword(3, 'right');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->type('test');
+        $this->assertHTMLMatch('<blockquote><p>%1% xtn %2%</p></blockquote><blockquote><p>%3%</p></blockquote><p>test</p><blockquote><p> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p></blockquote><p>%4% is a paragraph to change to a quote</p>');
+
+    }//end testSplittingBlockQuotesIntoTwoParagraphs()
+
+
+    /**
+     * Test splitting a blockquote into two paragraphs and then rejoining them together.
+     *
+     * @return void
+     */
+    public function testSplittingBlockQuotesIntoTwoParagraphsAndThenRejoinging()
+    {
+        $this->moveToKeyword(2, 'left');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->type('%5% test');
+        $this->assertHTMLMatch('<blockquote><p>%1% xtn</p></blockquote><p>%5% test</p><blockquote><p>%2%</p></blockquote><div>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div><p>%4% is a paragraph to change to a quote</p>');
+
+        $this->moveToKeyword(2, 'left');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+
+        $this->moveToKeyword(5, 'left');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->assertHTMLMatch('<blockquote><p>XAX xtn&nbsp;XTX testXBX</p></blockquote><div>XCX Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div><p>XDX is a paragraph to change to a quote</p>');
+
+    }//end testSplittingBlockQuotesIntoTwoParagraphsAndThenRejoinging()
+
+
 }//end class
 
 ?>
