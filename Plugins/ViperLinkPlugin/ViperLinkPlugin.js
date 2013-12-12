@@ -699,15 +699,17 @@ ViperLinkPlugin.prototype = {
                 newWindow = true;
             }
 
-            if (href.indexOf('mailto:') === 0) {
-                isEmailLink   = true;
-                var subjIndex = href.indexOf('?subject=');
-                if (subjIndex >= 0) {
-                    subject = href.substr(subjIndex + 9);
-                    href    = href.substr(0, subjIndex);
+            if (href) {
+                if (href.indexOf('mailto:') === 0) {
+                    isEmailLink   = true;
+                    var subjIndex = href.indexOf('?subject=');
+                    if (subjIndex >= 0) {
+                        subject = href.substr(subjIndex + 9);
+                        href    = href.substr(0, subjIndex);
+                    }
+    
+                    href = href.replace(/\s*mailto:\s*/i, '');
                 }
-
-                href = href.replace(/\s*mailto:\s*/i, '');
             }
         }
 
@@ -743,15 +745,17 @@ ViperLinkPlugin.prototype = {
                 newWindow = true;
             }
 
-            if (href.indexOf('mailto:') === 0) {
-                isEmailLink   = true;
-                var subjIndex = href.indexOf('?subject=');
-                if (subjIndex >= 0) {
-                    subject = href.substr(subjIndex + 9);
-                    href    = href.substr(0, subjIndex);
+            if (href) {
+                if (href.indexOf('mailto:') === 0) {
+                    isEmailLink   = true;
+                    var subjIndex = href.indexOf('?subject=');
+                    if (subjIndex >= 0) {
+                        subject = href.substr(subjIndex + 9);
+                        href    = href.substr(0, subjIndex);
+                    }
+    
+                    href = href.replace(/\s*mailto:\s*/i, '');
                 }
-
-                href = href.replace(/\s*mailto:\s*/i, '');
             }
         }
 
