@@ -90,6 +90,28 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarUnitTest extends Abstrac
 
 
     /**
+     * Test that VITP is not shown when you right click
+     *
+     * @return void
+     */
+    public function testNoToolbarWhenRightClick()
+    {
+
+        $word = $this->findKeyword(1);
+        $this->sikuli->rightClick($word);
+
+        try {
+            $this->getInlineToolbar();
+        } catch (Exception $e) {
+            return;
+        }
+
+        $this->fail('There should be no inline toolbar when you right click.');
+
+    }//end testNoToolbarWhenRightClick()
+
+
+    /**
      * Test that VITP is positioned correctly for a simple word selection.
      *
      * @return void
