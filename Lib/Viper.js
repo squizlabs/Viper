@@ -633,7 +633,7 @@ Viper.prototype = {
             var editableChild = range._getFirstSelectableChild(this.element);
             if (!editableChild) {
                 // Check if any of these elements exist in the content.
-                var tags = 'iframe,img,object';
+                var tags = 'iframe,img,object,table';
                 if (dfx.getTag(tags, this.element).length === 0) {
                     var blockElement = null;
                     for (var node = this.element.firstChild; node; node = node.nextSibling) {
