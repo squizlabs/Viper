@@ -28,7 +28,7 @@
     }
 
     $test = NULL;
-    if (isset($opts['t']) === TRUE) {
+    if (isset($opts['t']) === TRUE && empty($opts['t']) === FALSE) {
         $test = $opts['t'];
     }
 
