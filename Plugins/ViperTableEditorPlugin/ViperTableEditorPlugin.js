@@ -3413,15 +3413,21 @@ ViperTableEditorPlugin.prototype = {
         table.appendChild(tbody);
 
         // Insert table to the bookmarks position.
-        var keyboardEditorPlugin = this.viper.ViperPluginManager.getPlugin('ViperKeyboardEditorPlugin');
-        var prevNode = keyboardEditorPlugin.splitAtRange(true);
-        if (dfx.isTag(prevNode, 'li') === true) {
-            prevNode.appendChild(table);
-            if (dfx.isBlank(dfx.getNodeTextContent(prevNode.nextSibling)) === true) {
-                dfx.remove(prevNode.nextSibling);
-            }
+        var viperHtml = dfx.trim(this.viper.getHtml());
+        if (viperHtml === '' || viperHtml === '<p>&nbsp;</p>') {
+            dfx.empty(this.viper.getViperElement());
+            this.viper.getViperElement().appendChild(table);
         } else {
-            dfx.insertAfter(prevNode, table);
+            var keyboardEditorPlugin = this.viper.ViperPluginManager.getPlugin('ViperKeyboardEditorPlugin');
+            var prevNode = keyboardEditorPlugin.splitAtRange(true);
+            if (dfx.isTag(prevNode, 'li') === true) {
+                prevNode.appendChild(table);
+                if (dfx.isBlank(dfx.getNodeTextContent(prevNode.nextSibling)) === true) {
+                    dfx.remove(prevNode.nextSibling);
+                }
+            } else {
+                dfx.insertAfter(prevNode, table);
+            }
         }
 
         // Now determine if we need to add borders or width to this table.
