@@ -19,16 +19,14 @@ var viperTest = {
         } else {
             return window;
         }
-    },
-    scriptURL: null,
-    stopPolling: false
+    }
 };
 
 function sendResult(result)
 {
     result = JSON.stringify(result);
-    ViperUtil.$.post(viperTest.scriptURL, {res: result, _t:(new Date().getTime())}, function() {
-        viperTest.stopPolling = false;
+    ViperUtil.$.post(PHPSikuliBrowser.getScriptURL(), {res: result, _t:(new Date().getTime())}, function() {
+        PHPSikuliBrowser.startPolling();
     });
 
 }
@@ -363,7 +361,7 @@ function useTest(id)
 
 function pasteFromURL(url)
 {
-    var copyPastePlugin = viperTest.getWindow().viper.getPluginManager().getPlugin('ViperCopyPastePlugin');
+    var copyPastePlugin = viper.getPluginManager().getPlugin('ViperCopyPastePlugin');
 
     ViperUtil.$.post(url, null, function(data) {
         var tmp = document.createElement('div');
