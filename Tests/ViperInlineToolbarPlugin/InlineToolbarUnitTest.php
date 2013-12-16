@@ -96,17 +96,17 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarUnitTest extends Abstrac
      */
     public function testNoToolbarWhenRightClick()
     {
-
         $word = $this->findKeyword(1);
         $this->sikuli->rightClick($word);
 
+        $toolbarExists = TRUE;
         try {
             $this->getInlineToolbar();
         } catch (Exception $e) {
-            return;
+            $toolbarExists = FALSE;
         }
 
-        $this->fail('There should be no inline toolbar when you right click.');
+        $this->assertFalse($toolbarExists, 'There should be no inline toolbar when you right click.');
 
     }//end testNoToolbarWhenRightClick()
 

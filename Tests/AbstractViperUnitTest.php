@@ -1089,7 +1089,14 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
         $match = NULL;
         try {
             $match = $this->sikuli->find($this->getBrowserImagePath().'/vitp_arrow.png', NULL, 0.85);
+            if ($this->sikuli->getX($match) === 0) {
+                $match = NULL;
+            }
         } catch (Exception $e) {
+            $match = NULL;
+        }
+
+        if ($match === NULL) {
             // Get it using JS.
             $elemRect = $this->sikuli->execJS('gVITPArrow()');
             $match    = $this->sikuli->getRegionOnPage($elemRect);
