@@ -13,12 +13,12 @@
   <o:Revision>0</o:Revision>
   <o:TotalTime>0</o:TotalTime>
   <o:Pages>1</o:Pages>
-  <o:Words>36</o:Words>
-  <o:Characters>209</o:Characters>
+  <o:Words>123</o:Words>
+  <o:Characters>703</o:Characters>
   <o:Company>Squiz Labs</o:Company>
-  <o:Lines>1</o:Lines>
+  <o:Lines>5</o:Lines>
   <o:Paragraphs>1</o:Paragraphs>
-  <o:CharactersWithSpaces>244</o:CharactersWithSpaces>
+  <o:CharactersWithSpaces>825</o:CharactersWithSpaces>
   <o:Version>14.0</o:Version>
  </o:DocumentProperties>
  <o:OfficeDocumentSettings>
@@ -327,337 +327,524 @@
 <!--
  /* Font Definitions */
 @font-face
-	{font-family:"Courier New";
-	panose-1:2 7 3 9 2 2 5 2 4 4;
-	mso-font-charset:0;
-	mso-generic-font-family:auto;
-	mso-font-pitch:variable;
-	mso-font-signature:3 0 0 0 1 0;}
+  {font-family:"Courier New";
+  panose-1:2 7 3 9 2 2 5 2 4 4;
+  mso-font-charset:0;
+  mso-generic-font-family:auto;
+  mso-font-pitch:variable;
+  mso-font-signature:-536859905 -1073711037 9 0 511 0;}
 @font-face
-	{font-family:Wingdings;
-	panose-1:5 0 0 0 0 0 0 0 0 0;
-	mso-font-charset:2;
-	mso-generic-font-family:auto;
-	mso-font-pitch:variable;
-	mso-font-signature:0 268435456 0 0 -2147483648 0;}
+  {font-family:Wingdings;
+  panose-1:5 0 0 0 0 0 0 0 0 0;
+  mso-font-charset:2;
+  mso-generic-font-family:auto;
+  mso-font-pitch:variable;
+  mso-font-signature:0 268435456 0 0 -2147483648 0;}
 @font-face
-	{font-family:"Cambria Math";
-	panose-1:2 4 5 3 5 4 6 3 2 4;
-	mso-font-charset:1;
-	mso-generic-font-family:roman;
-	mso-font-format:other;
-	mso-font-pitch:variable;
-	mso-font-signature:0 0 0 0 0 0;}
+  {font-family:"Cambria Math";
+  panose-1:2 4 5 3 5 4 6 3 2 4;
+  mso-font-charset:0;
+  mso-generic-font-family:auto;
+  mso-font-pitch:variable;
+  mso-font-signature:-536870145 1107305727 0 0 415 0;}
 @font-face
-	{font-family:Cambria;
-	panose-1:2 4 5 3 5 4 6 3 2 4;
-	mso-font-charset:0;
-	mso-generic-font-family:auto;
-	mso-font-pitch:variable;
-	mso-font-signature:3 0 0 0 1 0;}
+  {font-family:Cambria;
+  panose-1:2 4 5 3 5 4 6 3 2 4;
+  mso-font-charset:0;
+  mso-generic-font-family:auto;
+  mso-font-pitch:variable;
+  mso-font-signature:-536870145 1073743103 0 0 415 0;}
+@font-face
+  {font-family:"Open Sans";
+  mso-font-alt:"Copperplate Light";
+  mso-font-charset:0;
+  mso-generic-font-family:auto;
+  mso-font-pitch:variable;
+  mso-font-signature:3 0 0 0 1 0;}
+@font-face
+  {font-family:"Lucida Sans Unicode";
+  panose-1:2 11 6 2 3 5 4 2 2 4;
+  mso-font-charset:0;
+  mso-generic-font-family:auto;
+  mso-font-pitch:variable;
+  mso-font-signature:-2147480833 14699 0 0 191 0;}
  /* Style Definitions */
 p.MsoNormal, li.MsoNormal, div.MsoNormal
-	{mso-style-unhide:no;
-	mso-style-qformat:yes;
-	mso-style-parent:"";
-	margin-top:0cm;
-	margin-right:0cm;
-	margin-bottom:10.0pt;
-	margin-left:0cm;
-	line-height:115%;
-	mso-pagination:widow-orphan;
-	font-size:11.0pt;
-	font-family:Cambria;
-	mso-ascii-font-family:Cambria;
-	mso-ascii-theme-font:minor-latin;
-	mso-fareast-font-family:Cambria;
-	mso-fareast-theme-font:minor-latin;
-	mso-hansi-font-family:Cambria;
-	mso-hansi-theme-font:minor-latin;
-	mso-bidi-font-family:"Times New Roman";
-	mso-bidi-theme-font:minor-bidi;}
+  {mso-style-unhide:no;
+  mso-style-qformat:yes;
+  mso-style-parent:"";
+  margin-top:0cm;
+  margin-right:0cm;
+  margin-bottom:10.0pt;
+  margin-left:0cm;
+  line-height:115%;
+  mso-pagination:widow-orphan;
+  font-size:11.0pt;
+  font-family:Cambria;
+  mso-ascii-font-family:Cambria;
+  mso-ascii-theme-font:minor-latin;
+  mso-fareast-font-family:Cambria;
+  mso-fareast-theme-font:minor-latin;
+  mso-hansi-font-family:Cambria;
+  mso-hansi-theme-font:minor-latin;
+  mso-bidi-font-family:"Times New Roman";
+  mso-bidi-theme-font:minor-bidi;}
 p.MsoListParagraph, li.MsoListParagraph, div.MsoListParagraph
-	{mso-style-priority:34;
-	mso-style-unhide:no;
-	mso-style-qformat:yes;
-	margin-top:0cm;
-	margin-right:0cm;
-	margin-bottom:10.0pt;
-	margin-left:36.0pt;
-	mso-add-space:auto;
-	line-height:115%;
-	mso-pagination:widow-orphan;
-	font-size:11.0pt;
-	font-family:Cambria;
-	mso-ascii-font-family:Cambria;
-	mso-ascii-theme-font:minor-latin;
-	mso-fareast-font-family:Cambria;
-	mso-fareast-theme-font:minor-latin;
-	mso-hansi-font-family:Cambria;
-	mso-hansi-theme-font:minor-latin;
-	mso-bidi-font-family:"Times New Roman";
-	mso-bidi-theme-font:minor-bidi;}
+  {mso-style-priority:34;
+  mso-style-unhide:no;
+  mso-style-qformat:yes;
+  margin-top:0cm;
+  margin-right:0cm;
+  margin-bottom:10.0pt;
+  margin-left:36.0pt;
+  mso-add-space:auto;
+  line-height:115%;
+  mso-pagination:widow-orphan;
+  font-size:11.0pt;
+  font-family:Cambria;
+  mso-ascii-font-family:Cambria;
+  mso-ascii-theme-font:minor-latin;
+  mso-fareast-font-family:Cambria;
+  mso-fareast-theme-font:minor-latin;
+  mso-hansi-font-family:Cambria;
+  mso-hansi-theme-font:minor-latin;
+  mso-bidi-font-family:"Times New Roman";
+  mso-bidi-theme-font:minor-bidi;}
 p.MsoListParagraphCxSpFirst, li.MsoListParagraphCxSpFirst, div.MsoListParagraphCxSpFirst
-	{mso-style-priority:34;
-	mso-style-unhide:no;
-	mso-style-qformat:yes;
-	mso-style-type:export-only;
-	margin-top:0cm;
-	margin-right:0cm;
-	margin-bottom:0cm;
-	margin-left:36.0pt;
-	margin-bottom:.0001pt;
-	mso-add-space:auto;
-	line-height:115%;
-	mso-pagination:widow-orphan;
-	font-size:11.0pt;
-	font-family:Cambria;
-	mso-ascii-font-family:Cambria;
-	mso-ascii-theme-font:minor-latin;
-	mso-fareast-font-family:Cambria;
-	mso-fareast-theme-font:minor-latin;
-	mso-hansi-font-family:Cambria;
-	mso-hansi-theme-font:minor-latin;
-	mso-bidi-font-family:"Times New Roman";
-	mso-bidi-theme-font:minor-bidi;}
+  {mso-style-priority:34;
+  mso-style-unhide:no;
+  mso-style-qformat:yes;
+  mso-style-type:export-only;
+  margin-top:0cm;
+  margin-right:0cm;
+  margin-bottom:0cm;
+  margin-left:36.0pt;
+  margin-bottom:.0001pt;
+  mso-add-space:auto;
+  line-height:115%;
+  mso-pagination:widow-orphan;
+  font-size:11.0pt;
+  font-family:Cambria;
+  mso-ascii-font-family:Cambria;
+  mso-ascii-theme-font:minor-latin;
+  mso-fareast-font-family:Cambria;
+  mso-fareast-theme-font:minor-latin;
+  mso-hansi-font-family:Cambria;
+  mso-hansi-theme-font:minor-latin;
+  mso-bidi-font-family:"Times New Roman";
+  mso-bidi-theme-font:minor-bidi;}
 p.MsoListParagraphCxSpMiddle, li.MsoListParagraphCxSpMiddle, div.MsoListParagraphCxSpMiddle
-	{mso-style-priority:34;
-	mso-style-unhide:no;
-	mso-style-qformat:yes;
-	mso-style-type:export-only;
-	margin-top:0cm;
-	margin-right:0cm;
-	margin-bottom:0cm;
-	margin-left:36.0pt;
-	margin-bottom:.0001pt;
-	mso-add-space:auto;
-	line-height:115%;
-	mso-pagination:widow-orphan;
-	font-size:11.0pt;
-	font-family:Cambria;
-	mso-ascii-font-family:Cambria;
-	mso-ascii-theme-font:minor-latin;
-	mso-fareast-font-family:Cambria;
-	mso-fareast-theme-font:minor-latin;
-	mso-hansi-font-family:Cambria;
-	mso-hansi-theme-font:minor-latin;
-	mso-bidi-font-family:"Times New Roman";
-	mso-bidi-theme-font:minor-bidi;}
+  {mso-style-priority:34;
+  mso-style-unhide:no;
+  mso-style-qformat:yes;
+  mso-style-type:export-only;
+  margin-top:0cm;
+  margin-right:0cm;
+  margin-bottom:0cm;
+  margin-left:36.0pt;
+  margin-bottom:.0001pt;
+  mso-add-space:auto;
+  line-height:115%;
+  mso-pagination:widow-orphan;
+  font-size:11.0pt;
+  font-family:Cambria;
+  mso-ascii-font-family:Cambria;
+  mso-ascii-theme-font:minor-latin;
+  mso-fareast-font-family:Cambria;
+  mso-fareast-theme-font:minor-latin;
+  mso-hansi-font-family:Cambria;
+  mso-hansi-theme-font:minor-latin;
+  mso-bidi-font-family:"Times New Roman";
+  mso-bidi-theme-font:minor-bidi;}
 p.MsoListParagraphCxSpLast, li.MsoListParagraphCxSpLast, div.MsoListParagraphCxSpLast
-	{mso-style-priority:34;
-	mso-style-unhide:no;
-	mso-style-qformat:yes;
-	mso-style-type:export-only;
-	margin-top:0cm;
-	margin-right:0cm;
-	margin-bottom:10.0pt;
-	margin-left:36.0pt;
-	mso-add-space:auto;
-	line-height:115%;
-	mso-pagination:widow-orphan;
-	font-size:11.0pt;
-	font-family:Cambria;
-	mso-ascii-font-family:Cambria;
-	mso-ascii-theme-font:minor-latin;
-	mso-fareast-font-family:Cambria;
-	mso-fareast-theme-font:minor-latin;
-	mso-hansi-font-family:Cambria;
-	mso-hansi-theme-font:minor-latin;
-	mso-bidi-font-family:"Times New Roman";
-	mso-bidi-theme-font:minor-bidi;}
+  {mso-style-priority:34;
+  mso-style-unhide:no;
+  mso-style-qformat:yes;
+  mso-style-type:export-only;
+  margin-top:0cm;
+  margin-right:0cm;
+  margin-bottom:10.0pt;
+  margin-left:36.0pt;
+  mso-add-space:auto;
+  line-height:115%;
+  mso-pagination:widow-orphan;
+  font-size:11.0pt;
+  font-family:Cambria;
+  mso-ascii-font-family:Cambria;
+  mso-ascii-theme-font:minor-latin;
+  mso-fareast-font-family:Cambria;
+  mso-fareast-theme-font:minor-latin;
+  mso-hansi-font-family:Cambria;
+  mso-hansi-theme-font:minor-latin;
+  mso-bidi-font-family:"Times New Roman";
+  mso-bidi-theme-font:minor-bidi;}
 .MsoChpDefault
-	{mso-style-type:export-only;
-	mso-default-props:yes;
-	font-family:Cambria;
-	mso-ascii-font-family:Cambria;
-	mso-ascii-theme-font:minor-latin;
-	mso-fareast-font-family:"ＭＳ 明朝";
-	mso-fareast-theme-font:minor-fareast;
-	mso-hansi-font-family:Cambria;
-	mso-hansi-theme-font:minor-latin;
-	mso-bidi-font-family:"Times New Roman";
-	mso-bidi-theme-font:minor-bidi;}
+  {mso-style-type:export-only;
+  mso-default-props:yes;
+  font-family:Cambria;
+  mso-ascii-font-family:Cambria;
+  mso-ascii-theme-font:minor-latin;
+  mso-fareast-font-family:"ＭＳ 明朝";
+  mso-fareast-theme-font:minor-fareast;
+  mso-hansi-font-family:Cambria;
+  mso-hansi-theme-font:minor-latin;
+  mso-bidi-font-family:"Times New Roman";
+  mso-bidi-theme-font:minor-bidi;}
 @page WordSection1
-	{size:595.0pt 842.0pt;
-	margin:72.0pt 90.0pt 72.0pt 90.0pt;
-	mso-header-margin:35.4pt;
-	mso-footer-margin:35.4pt;
-	mso-paper-source:0;}
+  {size:595.0pt 842.0pt;
+  margin:72.0pt 90.0pt 72.0pt 90.0pt;
+  mso-header-margin:35.4pt;
+  mso-footer-margin:35.4pt;
+  mso-paper-source:0;}
 div.WordSection1
-	{page:WordSection1;}
+  {page:WordSection1;}
  /* List Definitions */
 @list l0
-	{mso-list-id:984313488;
-	mso-list-type:hybrid;
-	mso-list-template-ids:-1882845518 201916431 201916419 201916421 201916417 201916419 201916421 201916417 201916419 201916421;}
+  {mso-list-id:984313488;
+  mso-list-type:hybrid;
+  mso-list-template-ids:-1882845518 201916431 201916419 201916421 201916417 201916419 201916421 201916417 201916419 201916421;}
 @list l0:level1
-	{mso-level-tab-stop:none;
-	mso-level-number-position:left;
-	margin-left:18.0pt;
-	text-indent:-18.0pt;}
+  {mso-level-tab-stop:none;
+  mso-level-number-position:left;
+  margin-left:18.0pt;
+  text-indent:-18.0pt;}
 @list l0:level2
-	{mso-level-number-format:bullet;
-	mso-level-text:o;
-	mso-level-tab-stop:none;
-	mso-level-number-position:left;
-	margin-left:54.0pt;
-	text-indent:-18.0pt;
-	font-family:"Courier New";
-	mso-bidi-font-family:"Courier New";}
+  {mso-level-number-format:bullet;
+  mso-level-text:o;
+  mso-level-tab-stop:none;
+  mso-level-number-position:left;
+  margin-left:54.0pt;
+  text-indent:-18.0pt;
+  font-family:"Courier New";}
 @list l0:level3
-	{mso-level-number-format:bullet;
-	mso-level-text:;
-	mso-level-tab-stop:none;
-	mso-level-number-position:left;
-	margin-left:90.0pt;
-	text-indent:-18.0pt;
-	font-family:Wingdings;}
+  {mso-level-number-format:bullet;
+  mso-level-text:;
+  mso-level-tab-stop:none;
+  mso-level-number-position:left;
+  margin-left:90.0pt;
+  text-indent:-18.0pt;
+  font-family:Wingdings;}
 @list l0:level4
-	{mso-level-number-format:bullet;
-	mso-level-text:;
-	mso-level-tab-stop:none;
-	mso-level-number-position:left;
-	margin-left:126.0pt;
-	text-indent:-18.0pt;
-	font-family:Symbol;}
+  {mso-level-number-format:bullet;
+  mso-level-text:;
+  mso-level-tab-stop:none;
+  mso-level-number-position:left;
+  margin-left:126.0pt;
+  text-indent:-18.0pt;
+  font-family:Symbol;}
 @list l0:level5
-	{mso-level-number-format:bullet;
-	mso-level-text:o;
-	mso-level-tab-stop:none;
-	mso-level-number-position:left;
-	margin-left:162.0pt;
-	text-indent:-18.0pt;
-	font-family:"Courier New";
-	mso-bidi-font-family:"Courier New";}
+  {mso-level-number-format:bullet;
+  mso-level-text:o;
+  mso-level-tab-stop:none;
+  mso-level-number-position:left;
+  margin-left:162.0pt;
+  text-indent:-18.0pt;
+  font-family:"Courier New";}
 @list l0:level6
-	{mso-level-number-format:bullet;
-	mso-level-text:;
-	mso-level-tab-stop:none;
-	mso-level-number-position:left;
-	margin-left:198.0pt;
-	text-indent:-18.0pt;
-	font-family:Wingdings;}
+  {mso-level-number-format:bullet;
+  mso-level-text:;
+  mso-level-tab-stop:none;
+  mso-level-number-position:left;
+  margin-left:198.0pt;
+  text-indent:-18.0pt;
+  font-family:Wingdings;}
 @list l0:level7
-	{mso-level-number-format:bullet;
-	mso-level-text:;
-	mso-level-tab-stop:none;
-	mso-level-number-position:left;
-	margin-left:234.0pt;
-	text-indent:-18.0pt;
-	font-family:Symbol;}
+  {mso-level-number-format:bullet;
+  mso-level-text:;
+  mso-level-tab-stop:none;
+  mso-level-number-position:left;
+  margin-left:234.0pt;
+  text-indent:-18.0pt;
+  font-family:Symbol;}
 @list l0:level8
-	{mso-level-number-format:bullet;
-	mso-level-text:o;
-	mso-level-tab-stop:none;
-	mso-level-number-position:left;
-	margin-left:270.0pt;
-	text-indent:-18.0pt;
-	font-family:"Courier New";
-	mso-bidi-font-family:"Courier New";}
+  {mso-level-number-format:bullet;
+  mso-level-text:o;
+  mso-level-tab-stop:none;
+  mso-level-number-position:left;
+  margin-left:270.0pt;
+  text-indent:-18.0pt;
+  font-family:"Courier New";}
 @list l0:level9
-	{mso-level-number-format:bullet;
-	mso-level-text:;
-	mso-level-tab-stop:none;
-	mso-level-number-position:left;
-	margin-left:306.0pt;
-	text-indent:-18.0pt;
-	font-family:Wingdings;}
+  {mso-level-number-format:bullet;
+  mso-level-text:;
+  mso-level-tab-stop:none;
+  mso-level-number-position:left;
+  margin-left:306.0pt;
+  text-indent:-18.0pt;
+  font-family:Wingdings;}
 @list l1
-	{mso-list-id:1242132095;
-	mso-list-type:hybrid;
-	mso-list-template-ids:-1612414702 201916417 201916419 201916421 201916417 201916419 201916421 201916417 201916419 201916421;}
+  {mso-list-id:1242132095;
+  mso-list-type:hybrid;
+  mso-list-template-ids:-1612414702 201916417 201916419 201916421 201916417 201916419 201916421 201916417 201916419 201916421;}
 @list l1:level1
-	{mso-level-number-format:bullet;
-	mso-level-text:;
-	mso-level-tab-stop:none;
-	mso-level-number-position:left;
-	text-indent:-18.0pt;
-	font-family:Symbol;}
+  {mso-level-number-format:bullet;
+  mso-level-text:;
+  mso-level-tab-stop:none;
+  mso-level-number-position:left;
+  text-indent:-18.0pt;
+  font-family:Symbol;}
 @list l1:level2
-	{mso-level-number-format:bullet;
-	mso-level-text:o;
-	mso-level-tab-stop:none;
-	mso-level-number-position:left;
-	text-indent:-18.0pt;
-	font-family:"Courier New";
-	mso-bidi-font-family:"Courier New";}
+  {mso-level-number-format:bullet;
+  mso-level-text:o;
+  mso-level-tab-stop:none;
+  mso-level-number-position:left;
+  text-indent:-18.0pt;
+  font-family:"Courier New";}
 @list l1:level3
-	{mso-level-number-format:bullet;
-	mso-level-text:;
-	mso-level-tab-stop:none;
-	mso-level-number-position:left;
-	text-indent:-18.0pt;
-	font-family:Wingdings;}
+  {mso-level-number-format:bullet;
+  mso-level-text:;
+  mso-level-tab-stop:none;
+  mso-level-number-position:left;
+  text-indent:-18.0pt;
+  font-family:Wingdings;}
 @list l1:level4
-	{mso-level-number-format:bullet;
-	mso-level-text:;
-	mso-level-tab-stop:none;
-	mso-level-number-position:left;
-	text-indent:-18.0pt;
-	font-family:Symbol;}
+  {mso-level-number-format:bullet;
+  mso-level-text:;
+  mso-level-tab-stop:none;
+  mso-level-number-position:left;
+  text-indent:-18.0pt;
+  font-family:Symbol;}
 @list l1:level5
-	{mso-level-number-format:bullet;
-	mso-level-text:o;
-	mso-level-tab-stop:none;
-	mso-level-number-position:left;
-	text-indent:-18.0pt;
-	font-family:"Courier New";
-	mso-bidi-font-family:"Courier New";}
+  {mso-level-number-format:bullet;
+  mso-level-text:o;
+  mso-level-tab-stop:none;
+  mso-level-number-position:left;
+  text-indent:-18.0pt;
+  font-family:"Courier New";}
 @list l1:level6
-	{mso-level-number-format:bullet;
-	mso-level-text:;
-	mso-level-tab-stop:none;
-	mso-level-number-position:left;
-	text-indent:-18.0pt;
-	font-family:Wingdings;}
+  {mso-level-number-format:bullet;
+  mso-level-text:;
+  mso-level-tab-stop:none;
+  mso-level-number-position:left;
+  text-indent:-18.0pt;
+  font-family:Wingdings;}
 @list l1:level7
-	{mso-level-number-format:bullet;
-	mso-level-text:;
-	mso-level-tab-stop:none;
-	mso-level-number-position:left;
-	text-indent:-18.0pt;
-	font-family:Symbol;}
+  {mso-level-number-format:bullet;
+  mso-level-text:;
+  mso-level-tab-stop:none;
+  mso-level-number-position:left;
+  text-indent:-18.0pt;
+  font-family:Symbol;}
 @list l1:level8
-	{mso-level-number-format:bullet;
-	mso-level-text:o;
-	mso-level-tab-stop:none;
-	mso-level-number-position:left;
-	text-indent:-18.0pt;
-	font-family:"Courier New";
-	mso-bidi-font-family:"Courier New";}
+  {mso-level-number-format:bullet;
+  mso-level-text:o;
+  mso-level-tab-stop:none;
+  mso-level-number-position:left;
+  text-indent:-18.0pt;
+  font-family:"Courier New";}
 @list l1:level9
-	{mso-level-number-format:bullet;
-	mso-level-text:;
-	mso-level-tab-stop:none;
-	mso-level-number-position:left;
-	text-indent:-18.0pt;
-	font-family:Wingdings;}
+  {mso-level-number-format:bullet;
+  mso-level-text:;
+  mso-level-tab-stop:none;
+  mso-level-number-position:left;
+  text-indent:-18.0pt;
+  font-family:Wingdings;}
+@list l2
+  {mso-list-id:1336106448;
+  mso-list-type:hybrid;
+  mso-list-template-ids:1979981158 201916431 201916441 201916443 201916431 201916441 201916443 201916431 201916441 201916443;}
+@list l2:level1
+  {mso-level-tab-stop:none;
+  mso-level-number-position:left;
+  text-indent:-18.0pt;}
+@list l2:level2
+  {mso-level-number-format:alpha-lower;
+  mso-level-tab-stop:none;
+  mso-level-number-position:left;
+  text-indent:-18.0pt;}
+@list l2:level3
+  {mso-level-number-format:roman-lower;
+  mso-level-tab-stop:none;
+  mso-level-number-position:right;
+  text-indent:-9.0pt;}
+@list l2:level4
+  {mso-level-tab-stop:none;
+  mso-level-number-position:left;
+  text-indent:-18.0pt;}
+@list l2:level5
+  {mso-level-number-format:alpha-lower;
+  mso-level-tab-stop:none;
+  mso-level-number-position:left;
+  text-indent:-18.0pt;}
+@list l2:level6
+  {mso-level-number-format:roman-lower;
+  mso-level-tab-stop:none;
+  mso-level-number-position:right;
+  text-indent:-9.0pt;}
+@list l2:level7
+  {mso-level-tab-stop:none;
+  mso-level-number-position:left;
+  text-indent:-18.0pt;}
+@list l2:level8
+  {mso-level-number-format:alpha-lower;
+  mso-level-tab-stop:none;
+  mso-level-number-position:left;
+  text-indent:-18.0pt;}
+@list l2:level9
+  {mso-level-number-format:roman-lower;
+  mso-level-tab-stop:none;
+  mso-level-number-position:right;
+  text-indent:-9.0pt;}
+@list l3
+  {mso-list-id:1500273205;
+  mso-list-type:hybrid;
+  mso-list-template-ids:-1079113816 201916417 201916419 201916421 201916417 201916419 201916421 201916417 201916419 201916421;}
+@list l3:level1
+  {mso-level-number-format:bullet;
+  mso-level-text:;
+  mso-level-tab-stop:none;
+  mso-level-number-position:left;
+  text-indent:-18.0pt;
+  font-family:Symbol;}
+@list l3:level2
+  {mso-level-number-format:bullet;
+  mso-level-text:o;
+  mso-level-tab-stop:none;
+  mso-level-number-position:left;
+  text-indent:-18.0pt;
+  font-family:"Courier New";}
+@list l3:level3
+  {mso-level-number-format:bullet;
+  mso-level-text:;
+  mso-level-tab-stop:none;
+  mso-level-number-position:left;
+  text-indent:-18.0pt;
+  font-family:Wingdings;}
+@list l3:level4
+  {mso-level-number-format:bullet;
+  mso-level-text:;
+  mso-level-tab-stop:none;
+  mso-level-number-position:left;
+  text-indent:-18.0pt;
+  font-family:Symbol;}
+@list l3:level5
+  {mso-level-number-format:bullet;
+  mso-level-text:o;
+  mso-level-tab-stop:none;
+  mso-level-number-position:left;
+  text-indent:-18.0pt;
+  font-family:"Courier New";}
+@list l3:level6
+  {mso-level-number-format:bullet;
+  mso-level-text:;
+  mso-level-tab-stop:none;
+  mso-level-number-position:left;
+  text-indent:-18.0pt;
+  font-family:Wingdings;}
+@list l3:level7
+  {mso-level-number-format:bullet;
+  mso-level-text:;
+  mso-level-tab-stop:none;
+  mso-level-number-position:left;
+  text-indent:-18.0pt;
+  font-family:Symbol;}
+@list l3:level8
+  {mso-level-number-format:bullet;
+  mso-level-text:o;
+  mso-level-tab-stop:none;
+  mso-level-number-position:left;
+  text-indent:-18.0pt;
+  font-family:"Courier New";}
+@list l3:level9
+  {mso-level-number-format:bullet;
+  mso-level-text:;
+  mso-level-tab-stop:none;
+  mso-level-number-position:left;
+  text-indent:-18.0pt;
+  font-family:Wingdings;}
+@list l4
+  {mso-list-id:1946189202;
+  mso-list-type:hybrid;
+  mso-list-template-ids:446214758 134807553 134807555 134807557 134807553 134807555 134807557 134807553 134807555 134807557;}
+@list l4:level1
+  {mso-level-number-format:bullet;
+  mso-level-text:;
+  mso-level-tab-stop:none;
+  mso-level-number-position:left;
+  text-indent:-18.0pt;
+  font-family:Symbol;}
+@list l4:level2
+  {mso-level-number-format:bullet;
+  mso-level-text:o;
+  mso-level-tab-stop:none;
+  mso-level-number-position:left;
+  text-indent:-18.0pt;
+  font-family:"Courier New";}
+@list l4:level3
+  {mso-level-number-format:bullet;
+  mso-level-text:;
+  mso-level-tab-stop:none;
+  mso-level-number-position:left;
+  text-indent:-18.0pt;
+  font-family:Wingdings;}
+@list l4:level4
+  {mso-level-number-format:bullet;
+  mso-level-text:;
+  mso-level-tab-stop:none;
+  mso-level-number-position:left;
+  text-indent:-18.0pt;
+  font-family:Symbol;}
+@list l4:level5
+  {mso-level-number-format:bullet;
+  mso-level-text:o;
+  mso-level-tab-stop:none;
+  mso-level-number-position:left;
+  text-indent:-18.0pt;
+  font-family:"Courier New";}
+@list l4:level6
+  {mso-level-number-format:bullet;
+  mso-level-text:;
+  mso-level-tab-stop:none;
+  mso-level-number-position:left;
+  text-indent:-18.0pt;
+  font-family:Wingdings;}
+@list l4:level7
+  {mso-level-number-format:bullet;
+  mso-level-text:;
+  mso-level-tab-stop:none;
+  mso-level-number-position:left;
+  text-indent:-18.0pt;
+  font-family:Symbol;}
+@list l4:level8
+  {mso-level-number-format:bullet;
+  mso-level-text:o;
+  mso-level-tab-stop:none;
+  mso-level-number-position:left;
+  text-indent:-18.0pt;
+  font-family:"Courier New";}
+@list l4:level9
+  {mso-level-number-format:bullet;
+  mso-level-text:;
+  mso-level-tab-stop:none;
+  mso-level-number-position:left;
+  text-indent:-18.0pt;
+  font-family:Wingdings;}
 ol
-	{margin-bottom:0cm;}
+  {margin-bottom:0cm;}
 ul
-	{margin-bottom:0cm;}
+  {margin-bottom:0cm;}
 -->
 </style>
 <!--[if gte mso 10]>
 <style>
  /* Style Definitions */
 table.MsoNormalTable
-	{mso-style-name:"Table Normal";
-	mso-tstyle-rowband-size:0;
-	mso-tstyle-colband-size:0;
-	mso-style-noshow:yes;
-	mso-style-priority:99;
-	mso-style-parent:"";
-	mso-padding-alt:0cm 5.4pt 0cm 5.4pt;
-	mso-para-margin:0cm;
-	mso-para-margin-bottom:.0001pt;
-	mso-pagination:widow-orphan;
-	font-size:12.0pt;
-	font-family:Cambria;
-	mso-ascii-font-family:Cambria;
-	mso-ascii-theme-font:minor-latin;
-	mso-hansi-font-family:Cambria;
-	mso-hansi-theme-font:minor-latin;}
+  {mso-style-name:"Table Normal";
+  mso-tstyle-rowband-size:0;
+  mso-tstyle-colband-size:0;
+  mso-style-noshow:yes;
+  mso-style-priority:99;
+  mso-style-parent:"";
+  mso-padding-alt:0cm 5.4pt 0cm 5.4pt;
+  mso-para-margin:0cm;
+  mso-para-margin-bottom:.0001pt;
+  mso-pagination:widow-orphan;
+  font-size:12.0pt;
+  font-family:Cambria;
+  mso-ascii-font-family:Cambria;
+  mso-ascii-theme-font:minor-latin;
+  mso-hansi-font-family:Cambria;
+  mso-hansi-theme-font:minor-latin;}
 </style>
 <![endif]-->
 
@@ -665,19 +852,19 @@ table.MsoNormalTable
 
 <!--StartFragment-->
 
-<p class="MsoNormal">My complex numbered lists<o:p></o:p></p>
+<p class="MsoNormal">Complex number list one<o:p></o:p></p>
 
 <p class="MsoListParagraphCxSpFirst" style="margin-left:18.0pt;mso-add-space:
 auto;text-indent:-18.0pt;mso-list:l0 level1 lfo2"><!--[if !supportLists]--><span style="mso-bidi-font-family:Cambria;mso-bidi-theme-font:minor-latin"><span style="mso-list:Ignore">1.<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;
 </span></span></span><!--[endif]-->Asdadsads<o:p></o:p></p>
 
 <p class="MsoListParagraphCxSpMiddle" style="margin-left:54.0pt;mso-add-space:
-auto;text-indent:-18.0pt;mso-list:l0 level2 lfo2"><!--[if !supportLists]--><span style="font-family:&quot;Courier New&quot;;mso-fareast-font-family:&quot;Courier New&quot;;
-mso-bidi-font-family:&quot;Courier New&quot;"><span style="mso-list:Ignore">o<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp; </span></span></span><!--[endif]-->Dsfsdfsfd<o:p></o:p></p>
+auto;text-indent:-18.0pt;mso-list:l0 level2 lfo2"><!--[if !supportLists]--><span style="font-family:&quot;Courier New&quot;;mso-fareast-font-family:&quot;Courier New&quot;"><span style="mso-list:Ignore">o<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;
+</span></span></span><!--[endif]-->Dsfsdfsfd<o:p></o:p></p>
 
 <p class="MsoListParagraphCxSpMiddle" style="margin-left:54.0pt;mso-add-space:
-auto;text-indent:-18.0pt;mso-list:l0 level2 lfo2"><!--[if !supportLists]--><span style="font-family:&quot;Courier New&quot;;mso-fareast-font-family:&quot;Courier New&quot;;
-mso-bidi-font-family:&quot;Courier New&quot;"><span style="mso-list:Ignore">o<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp; </span></span></span><!--[endif]-->Sdfsdfsfd<o:p></o:p></p>
+auto;text-indent:-18.0pt;mso-list:l0 level2 lfo2"><!--[if !supportLists]--><span style="font-family:&quot;Courier New&quot;;mso-fareast-font-family:&quot;Courier New&quot;"><span style="mso-list:Ignore">o<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;
+</span></span></span><!--[endif]-->Sdfsdfsfd<o:p></o:p></p>
 
 <p class="MsoListParagraphCxSpMiddle" style="margin-left:90.0pt;mso-add-space:
 auto;text-indent:-18.0pt;mso-list:l0 level3 lfo2"><!--[if !supportLists]--><span style="font-family:Wingdings;mso-fareast-font-family:Wingdings;mso-bidi-font-family:
@@ -700,12 +887,12 @@ Wingdings"><span style="mso-list:Ignore">§<span style="font:7.0pt &quot;Times N
 </span></span></span><!--[endif]-->sdfsdf<o:p></o:p></p>
 
 <p class="MsoListParagraphCxSpMiddle" style="margin-left:54.0pt;mso-add-space:
-auto;text-indent:-18.0pt;mso-list:l0 level2 lfo2"><!--[if !supportLists]--><span style="font-family:&quot;Courier New&quot;;mso-fareast-font-family:&quot;Courier New&quot;;
-mso-bidi-font-family:&quot;Courier New&quot;"><span style="mso-list:Ignore">o<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp; </span></span></span><!--[endif]-->Sdfsdfsfd<o:p></o:p></p>
+auto;text-indent:-18.0pt;mso-list:l0 level2 lfo2"><!--[if !supportLists]--><span style="font-family:&quot;Courier New&quot;;mso-fareast-font-family:&quot;Courier New&quot;"><span style="mso-list:Ignore">o<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;
+</span></span></span><!--[endif]-->Sdfsdfsfd<o:p></o:p></p>
 
 <p class="MsoListParagraphCxSpMiddle" style="margin-left:54.0pt;mso-add-space:
-auto;text-indent:-18.0pt;mso-list:l0 level2 lfo2"><!--[if !supportLists]--><span style="font-family:&quot;Courier New&quot;;mso-fareast-font-family:&quot;Courier New&quot;;
-mso-bidi-font-family:&quot;Courier New&quot;"><span style="mso-list:Ignore">o<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp; </span></span></span><!--[endif]-->sdfsdfsfd<o:p></o:p></p>
+auto;text-indent:-18.0pt;mso-list:l0 level2 lfo2"><!--[if !supportLists]--><span style="font-family:&quot;Courier New&quot;;mso-fareast-font-family:&quot;Courier New&quot;"><span style="mso-list:Ignore">o<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;
+</span></span></span><!--[endif]-->sdfsdfsfd<o:p></o:p></p>
 
 <p class="MsoListParagraphCxSpMiddle" style="margin-left:18.0pt;mso-add-space:
 auto;text-indent:-18.0pt;mso-list:l0 level1 lfo2"><!--[if !supportLists]--><span style="mso-bidi-font-family:Cambria;mso-bidi-theme-font:minor-latin"><span style="mso-list:Ignore">2.<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;
@@ -723,19 +910,62 @@ auto;text-indent:-18.0pt;mso-list:l0 level1 lfo2"><!--[if !supportLists]--><span
 text-indent:-18.0pt;mso-list:l0 level1 lfo2"><!--[if !supportLists]--><span style="mso-bidi-font-family:Cambria;mso-bidi-theme-font:minor-latin"><span style="mso-list:Ignore">5.<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;
 </span></span></span><!--[endif]-->Asdasdasd<o:p></o:p></p>
 
-<p class="MsoNormal">My complex bulleted lists<o:p></o:p></p>
+<p class="MsoNormal">Complex number list two<o:p></o:p></p>
+
+<p class="MsoListParagraphCxSpFirst" style="text-indent:-18.0pt;mso-list:l2 level1 lfo4"><!--[if !supportLists]--><span style="mso-bidi-font-family:Cambria;mso-bidi-theme-font:minor-latin"><span style="mso-list:Ignore">1.<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><!--[endif]-->One baby<o:p></o:p></p>
+
+<p class="MsoListParagraphCxSpMiddle" style="margin-left:72.0pt;mso-add-space:
+auto;text-indent:-18.0pt;mso-list:l2 level2 lfo4"><!--[if !supportLists]--><span style="mso-bidi-font-family:Cambria;mso-bidi-theme-font:minor-latin"><span style="mso-list:Ignore">a.<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><!--[endif]-->Sub baby<o:p></o:p></p>
+
+<p class="MsoListParagraphCxSpMiddle" style="margin-left:108.0pt;mso-add-space:
+auto;text-indent:-108.0pt;mso-text-indent-alt:-9.0pt;mso-list:l2 level3 lfo4"><!--[if !supportLists]--><span style="mso-bidi-font-family:Cambria;mso-bidi-theme-font:minor-latin"><span style="mso-list:Ignore"><span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span>i.<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><!--[endif]-->Sub
+sub baby!<o:p></o:p></p>
+
+<p class="MsoListParagraphCxSpMiddle" style="margin-left:108.0pt;mso-add-space:
+auto;text-indent:-108.0pt;mso-text-indent-alt:-9.0pt;mso-list:l2 level3 lfo4"><!--[if !supportLists]--><span style="mso-bidi-font-family:Cambria;mso-bidi-theme-font:minor-latin"><span style="mso-list:Ignore"><span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span>ii.<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><!--[endif]-->Sdfdsfsdf<o:p></o:p></p>
+
+<p class="MsoListParagraphCxSpMiddle" style="margin-left:108.0pt;mso-add-space:
+auto;text-indent:-108.0pt;mso-text-indent-alt:-9.0pt;mso-list:l2 level3 lfo4"><!--[if !supportLists]--><span style="mso-bidi-font-family:Cambria;mso-bidi-theme-font:minor-latin"><span style="mso-list:Ignore"><span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span>iii.<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><!--[endif]-->sdfsdfsdf<o:p></o:p></p>
+
+<p class="MsoListParagraphCxSpMiddle" style="text-indent:-18.0pt;mso-list:l2 level1 lfo4"><!--[if !supportLists]--><span style="mso-bidi-font-family:Cambria;mso-bidi-theme-font:minor-latin"><span style="mso-list:Ignore">2.<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><!--[endif]-->Two baby<o:p></o:p></p>
+
+<p class="MsoListParagraphCxSpMiddle" style="margin-left:72.0pt;mso-add-space:
+auto;text-indent:-18.0pt;mso-list:l2 level2 lfo4"><!--[if !supportLists]--><span style="mso-bidi-font-family:Cambria;mso-bidi-theme-font:minor-latin"><span style="mso-list:Ignore">a.<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><!--[endif]-->Sdfsfdds<o:p></o:p></p>
+
+<p class="MsoListParagraphCxSpMiddle" style="margin-left:72.0pt;mso-add-space:
+auto;text-indent:-18.0pt;mso-list:l2 level2 lfo4"><!--[if !supportLists]--><span style="mso-bidi-font-family:Cambria;mso-bidi-theme-font:minor-latin"><span style="mso-list:Ignore">b.<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><!--[endif]-->Sdfsfdsfd<o:p></o:p></p>
+
+<p class="MsoListParagraphCxSpMiddle" style="margin-left:72.0pt;mso-add-space:
+auto;text-indent:-18.0pt;mso-list:l2 level2 lfo4"><!--[if !supportLists]--><span style="mso-bidi-font-family:Cambria;mso-bidi-theme-font:minor-latin"><span style="mso-list:Ignore">c.<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><!--[endif]-->sfdsdfsdf<o:p></o:p></p>
+
+<p class="MsoListParagraphCxSpMiddle" style="text-indent:-18.0pt;mso-list:l2 level1 lfo4"><!--[if !supportLists]--><span style="mso-bidi-font-family:Cambria;mso-bidi-theme-font:minor-latin"><span style="mso-list:Ignore">3.<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><!--[endif]-->Three baby<o:p></o:p></p>
+
+<p class="MsoListParagraphCxSpLast" style="text-indent:-18.0pt;mso-list:l2 level1 lfo4"><!--[if !supportLists]--><span style="mso-bidi-font-family:Cambria;mso-bidi-theme-font:minor-latin"><span style="mso-list:Ignore">4.<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><!--[endif]-->Four<o:p></o:p></p>
+
+<p class="MsoNormal">Complex bulleted list one<o:p></o:p></p>
 
 <p class="MsoListParagraphCxSpFirst" style="text-indent:-18.0pt;mso-list:l1 level1 lfo1"><!--[if !supportLists]--><span style="font-family:Symbol;mso-fareast-font-family:Symbol;mso-bidi-font-family:
 Symbol"><span style="mso-list:Ignore">·<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 </span></span></span><!--[endif]-->Sadsadasda<o:p></o:p></p>
 
 <p class="MsoListParagraphCxSpMiddle" style="margin-left:72.0pt;mso-add-space:
-auto;text-indent:-18.0pt;mso-list:l1 level2 lfo1"><!--[if !supportLists]--><span style="font-family:&quot;Courier New&quot;;mso-fareast-font-family:&quot;Courier New&quot;;
-mso-bidi-font-family:&quot;Courier New&quot;"><span style="mso-list:Ignore">o<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp; </span></span></span><!--[endif]-->Sdfdsf<o:p></o:p></p>
+auto;text-indent:-18.0pt;mso-list:l1 level2 lfo1"><!--[if !supportLists]--><span style="font-family:&quot;Courier New&quot;;mso-fareast-font-family:&quot;Courier New&quot;"><span style="mso-list:Ignore">o<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;
+</span></span></span><!--[endif]-->Sdfdsf<o:p></o:p></p>
 
 <p class="MsoListParagraphCxSpMiddle" style="margin-left:72.0pt;mso-add-space:
-auto;text-indent:-18.0pt;mso-list:l1 level2 lfo1"><!--[if !supportLists]--><span style="font-family:&quot;Courier New&quot;;mso-fareast-font-family:&quot;Courier New&quot;;
-mso-bidi-font-family:&quot;Courier New&quot;"><span style="mso-list:Ignore">o<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp; </span></span></span><!--[endif]-->Sdfsdfsdf<o:p></o:p></p>
+auto;text-indent:-18.0pt;mso-list:l1 level2 lfo1"><!--[if !supportLists]--><span style="font-family:&quot;Courier New&quot;;mso-fareast-font-family:&quot;Courier New&quot;"><span style="mso-list:Ignore">o<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;
+</span></span></span><!--[endif]-->Sdfsdfsdf<o:p></o:p></p>
 
 <p class="MsoListParagraphCxSpMiddle" style="margin-left:108.0pt;mso-add-space:
 auto;text-indent:-18.0pt;mso-list:l1 level3 lfo1"><!--[if !supportLists]--><span style="font-family:Wingdings;mso-fareast-font-family:Wingdings;mso-bidi-font-family:
@@ -748,16 +978,87 @@ Wingdings"><span style="mso-list:Ignore">§<span style="font:7.0pt &quot;Times N
 </span></span></span><!--[endif]-->sdfsdfsdf<o:p></o:p></p>
 
 <p class="MsoListParagraphCxSpMiddle" style="margin-left:72.0pt;mso-add-space:
-auto;text-indent:-18.0pt;mso-list:l1 level2 lfo1"><!--[if !supportLists]--><span style="font-family:&quot;Courier New&quot;;mso-fareast-font-family:&quot;Courier New&quot;;
-mso-bidi-font-family:&quot;Courier New&quot;"><span style="mso-list:Ignore">o<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp; </span></span></span><!--[endif]-->Sdfsdfsfd<o:p></o:p></p>
+auto;text-indent:-18.0pt;mso-list:l1 level2 lfo1"><!--[if !supportLists]--><span style="font-family:&quot;Courier New&quot;;mso-fareast-font-family:&quot;Courier New&quot;"><span style="mso-list:Ignore">o<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;
+</span></span></span><!--[endif]-->Sdfsdfsfd<o:p></o:p></p>
 
 <p class="MsoListParagraphCxSpMiddle" style="margin-left:72.0pt;mso-add-space:
-auto;text-indent:-18.0pt;mso-list:l1 level2 lfo1"><!--[if !supportLists]--><span style="font-family:&quot;Courier New&quot;;mso-fareast-font-family:&quot;Courier New&quot;;
-mso-bidi-font-family:&quot;Courier New&quot;"><span style="mso-list:Ignore">o<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp; </span></span></span><!--[endif]-->sdfsfdsdf<o:p></o:p></p>
+auto;text-indent:-18.0pt;mso-list:l1 level2 lfo1"><!--[if !supportLists]--><span style="font-family:&quot;Courier New&quot;;mso-fareast-font-family:&quot;Courier New&quot;"><span style="mso-list:Ignore">o<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;
+</span></span></span><!--[endif]-->sdfsfdsdf<o:p></o:p></p>
 
 <p class="MsoListParagraphCxSpLast" style="text-indent:-18.0pt;mso-list:l1 level1 lfo1"><!--[if !supportLists]--><span style="font-family:Symbol;mso-fareast-font-family:Symbol;mso-bidi-font-family:
 Symbol"><span style="mso-list:Ignore">·<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 </span></span></span><!--[endif]-->Asdasdsad<o:p></o:p></p>
+
+<p class="MsoNormal">Complex bulleted list two<o:p></o:p></p>
+
+<p class="MsoListParagraphCxSpFirst" style="text-indent:-18.0pt;mso-list:l3 level1 lfo5"><!--[if !supportLists]--><span style="font-family:Symbol;mso-fareast-font-family:Symbol;mso-bidi-font-family:
+Symbol"><span style="mso-list:Ignore">·<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><!--[endif]-->One bullet<o:p></o:p></p>
+
+<p class="MsoListParagraphCxSpMiddle" style="margin-left:72.0pt;mso-add-space:
+auto;text-indent:-18.0pt;mso-list:l3 level2 lfo5"><!--[if !supportLists]--><span style="font-family:&quot;Courier New&quot;;mso-fareast-font-family:&quot;Courier New&quot;"><span style="mso-list:Ignore">o<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;
+</span></span></span><!--[endif]-->Dsfsdfsdf<o:p></o:p></p>
+
+<p class="MsoListParagraphCxSpMiddle" style="margin-left:108.0pt;mso-add-space:
+auto;text-indent:-18.0pt;mso-list:l3 level3 lfo5"><!--[if !supportLists]--><span style="font-family:Wingdings;mso-fareast-font-family:Wingdings;mso-bidi-font-family:
+Wingdings"><span style="mso-list:Ignore">§<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;
+</span></span></span><!--[endif]-->Sdfsfdsdf<o:p></o:p></p>
+
+<p class="MsoListParagraphCxSpMiddle" style="margin-left:108.0pt;mso-add-space:
+auto;text-indent:-18.0pt;mso-list:l3 level3 lfo5"><!--[if !supportLists]--><span style="font-family:Wingdings;mso-fareast-font-family:Wingdings;mso-bidi-font-family:
+Wingdings"><span style="mso-list:Ignore">§<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;
+</span></span></span><!--[endif]-->sdfsdf<o:p></o:p></p>
+
+<p class="MsoListParagraphCxSpMiddle" style="text-indent:-18.0pt;mso-list:l3 level1 lfo5"><!--[if !supportLists]--><span style="font-family:Symbol;mso-fareast-font-family:Symbol;mso-bidi-font-family:
+Symbol"><span style="mso-list:Ignore">·<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><!--[endif]-->Two bullet<o:p></o:p></p>
+
+<p class="MsoListParagraphCxSpMiddle" style="margin-left:72.0pt;mso-add-space:
+auto;text-indent:-18.0pt;mso-list:l3 level2 lfo5"><!--[if !supportLists]--><span style="font-family:&quot;Courier New&quot;;mso-fareast-font-family:&quot;Courier New&quot;"><span style="mso-list:Ignore">o<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;
+</span></span></span><!--[endif]-->Dsfsfd<o:p></o:p></p>
+
+<p class="MsoListParagraphCxSpMiddle" style="margin-left:72.0pt;mso-add-space:
+auto;text-indent:-18.0pt;mso-list:l3 level2 lfo5"><!--[if !supportLists]--><span style="font-family:&quot;Courier New&quot;;mso-fareast-font-family:&quot;Courier New&quot;"><span style="mso-list:Ignore">o<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;
+</span></span></span><!--[endif]-->sdfsdfsf<o:p></o:p></p>
+
+<p class="MsoListParagraphCxSpMiddle" style="text-indent:-18.0pt;mso-list:l3 level1 lfo5"><!--[if !supportLists]--><span style="font-family:Symbol;mso-fareast-font-family:Symbol;mso-bidi-font-family:
+Symbol"><span style="mso-list:Ignore">·<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><!--[endif]-->Three bullet<o:p></o:p></p>
+
+<p class="MsoListParagraphCxSpMiddle" style="text-indent:-18.0pt;mso-list:l3 level1 lfo5"><!--[if !supportLists]--><span style="font-family:Symbol;mso-fareast-font-family:Symbol;mso-bidi-font-family:
+Symbol"><span style="mso-list:Ignore">·<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><!--[endif]-->Four<o:p></o:p></p>
+
+<p class="MsoListParagraphCxSpLast" style="margin-left:72.0pt;mso-add-space:auto;
+text-indent:-18.0pt;mso-list:l3 level2 lfo5"><!--[if !supportLists]--><span style="font-family:&quot;Courier New&quot;;mso-fareast-font-family:&quot;Courier New&quot;"><span style="mso-list:Ignore">o<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;
+</span></span></span><!--[endif]-->sdfsdfsfd<o:p></o:p></p>
+
+<p class="MsoNormal">Paragraph with a number then an unordered list<o:p></o:p></p>
+
+<p class="MsoNormal"><b style="mso-bidi-font-weight:normal"><span style="font-size:10.0pt;line-height:115%;font-family:&quot;Open Sans&quot;;mso-bidi-font-family:
+&quot;Lucida Sans Unicode&quot;">6. The solution<o:p></o:p></span></b></p>
+
+<p class="MsoListParagraphCxSpFirst" style="margin-bottom:0cm;margin-bottom:.0001pt;
+mso-add-space:auto;text-indent:-18.0pt;line-height:normal;mso-list:l4 level1 lfo3"><!--[if !supportLists]--><span style="font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol"><span style="mso-list:Ignore">·<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><!--[endif]--><span style="font-size:10.0pt;font-family:&quot;Open Sans&quot;;mso-bidi-font-family:&quot;Lucida Sans Unicode&quot;">What
+did you deliver? <o:p></o:p></span></p>
+
+<p class="MsoListParagraphCxSpMiddle" style="margin-bottom:0cm;margin-bottom:
+.0001pt;mso-add-space:auto;text-indent:-18.0pt;line-height:normal;mso-list:
+l4 level1 lfo3"><!--[if !supportLists]--><span style="font-size:10.0pt;font-family:
+Symbol;mso-fareast-font-family:Symbol;mso-bidi-font-family:Symbol"><span style="mso-list:Ignore">·<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><!--[endif]--><span style="font-size:10.0pt;font-family:&quot;Open Sans&quot;;
+mso-bidi-font-family:&quot;Lucida Sans Unicode&quot;">As well as the technical solution,
+also focus on the benefits that your product / service delivered - for every
+product feature you want to talk about, balance it with the corresponding
+benefit to your client<o:p></o:p></span></p>
+
+<p class="MsoListParagraphCxSpLast" style="margin-bottom:0cm;margin-bottom:.0001pt;
+mso-add-space:auto;text-indent:-18.0pt;line-height:normal;mso-list:l4 level1 lfo3"><!--[if !supportLists]--><span style="font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol"><span style="mso-list:Ignore">·<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><!--[endif]--><span style="font-size:10.0pt;font-family:&quot;Open Sans&quot;;mso-bidi-font-family:&quot;Lucida Sans Unicode&quot;">Did
+we do anything particularly cool?<o:p></o:p></span></p>
+
+<p class="MsoNormal"><o:p>&nbsp;</o:p></p>
 
 <!--EndFragment-->
 

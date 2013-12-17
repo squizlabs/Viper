@@ -34,12 +34,10 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteForMacSafariUnitTest extends Abs
         $this->runTestFor('osx', 'safari');
         $this->useTest(1);
 
-        $this->moveToKeyword(1, 'right');
-        $this->sikuli->keyDown('Key.ENTER');
+        $this->selectKeyword(1);
         $this->pasteFromURL($this->getTestURL('/ViperCopyPastePlugin/TextFiles/MacSafari/ListsTestDoc.txt'));
 
-        $this->assertHTMLMatch('<p>%1%</p><p>My complex numbered lists</p><ol><li>Asdadsads<ul><li>Dsfsdfsfd</li><li>Sdfsdfsfd<ul><li>Sfd</li><li>Sfdsfd</li><li>Dsfsdf</li><li>sdfsdf</li></ul></li><li>Sdfsdfsfd</li><li>sdfsdfsfd</li></ul></li><li>Asdadsasd</li><li>Sfdsfds</li><li>Asdasdasd</li><li>Asdasdasd</li></ol><p>My complex bulleted lists</p><ul><li>Sadsadasda<ul><li>Sdfdsf</li><li>Sdfsdfsdf<ul><li>Sdfsfdsdf</li><li>sdfsdfsdf</li></ul></li><li>Sdfsdfsfd</li><li>sdfsfdsdf</li></ul></li><li>Asdasdsad</li></ul>');
-
+       $this->assertHTMLMatch('<p>Complex number list one</p><ol><li>Asdadsads<ul><li>Dsfsdfsfd</li><li>Sdfsdfsfd<ul><li>Sfd</li><li>Sfdsfd</li><li>Dsfsdf</li><li>sdfsdf</li></ul></li><li>Sdfsdfsfd</li><li>sdfsdfsfd</li></ul></li><li>Asdadsasd</li><li>Sfdsfds</li><li>Asdasdasd</li><li>Asdasdasd</li></ol><p>Complex number list two</p><ol><li>One baby<ol type="a"><li>Sub baby<ol type="i"><li>Sub sub baby!</li><li>Sdfdsfsdf</li><li>sdfsdfsdf</li></ol></li></ol></li><li>Two baby<ol type="a"><li>Sdfsfdds</li><li>Sdfsfdsfd</li><li>sfdsdfsdf</li></ol></li><li>Three baby</li><li>Four</li></ol><p>Complex bulleted list one</p><ul><li>Sadsadasda<ul><li>Sdfdsf</li><li>Sdfsdfsdf<ul><li>Sdfsfdsdf</li><li>sdfsdfsdf</li></ul></li><li>Sdfsdfsfd</li><li>sdfsfdsdf</li></ul></li><li>Asdasdsad</li></ul><p>Complex bulleted list two</p><ul><li>One bullet<ul><li>Dsfsdfsdf<ul><li>Sdfsfdsdf</li><li>sdfsdf</li></ul></li></ul></li><li>Two bullet<ul><li>Dsfsfd</li><li>sdfsdfsf</li></ul></li><li>Three bullet</li><li>Four<ul><li>sdfsdfsfd</li></ul></li></ul><p>Paragraph with a number then an unordered list</p><p><strong>6. The solution</strong></p><ul><li>What did you deliver?</li><li>As well as the technical solution, also focus on the benefits that your product / service delivered - for every product feature you want to talk about, balance it with the corresponding benefit to your client </li><li>Did we do anything particularly cool? </li></ul>');
 
     }//end testListTestDocCopyPaste()
 
@@ -60,25 +58,6 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteForMacSafariUnitTest extends Abs
         $this->assertHTMLMatch('<ol><li>First item</li><li>Second item</li><li>Third Item</li></ol><ol><li>First item</li><li>Second item</li><li>Third Item</li></ol><ol type="A"><li>First item</li><li>Second item</li><li>Third item</li></ol><ol type="a"><li>First item</li><li>Second item</li><li>Third item</li></ol><ol type="a"><li>First item</li><li>Second item</li><li>Third item</li></ol><ol type="I"><li>First item</li><li>Second item</li><li>Third item</li></ol><ol type="i"><li>First item</li><li>Second item</li><li>Third item</li></ol>');
 
     }//end testOrderedListsFormatsDocCopyPaste()
-
-
-    /**
-     * Test that copying/pasting from the ComplexListDoc works correctly.
-     *
-     * @return void
-     */
-    public function testComplexListDocCopyPaste()
-    {
-        $this->runTestFor('osx', 'safari');
-        $this->useTest(1);
-
-        $this->moveToKeyword(1, 'right');
-        $this->sikuli->keyDown('Key.ENTER');
-        $this->pasteFromURL($this->getTestURL('/ViperCopyPastePlugin/TextFiles/MacSafari/ComplexListDoc.txt'));
-
-        $this->assertHTMLMatch('<p>%1%</p><h1>My Complex Lists Dude!</h1><p>Here is a numbered list&hellip;</p><ol><li>One baby<ol><li>Sub baby<ol><li>Sub sub baby!</li><li>Sdfdsfsdf</li><li>sdfsdfsdf</li></ol></li></ol></li><li>Two baby<ol><li>Sdfsfdds</li><li>Sdfsfdsfd</li><li>sfdsdfsdf</li></ol></li><li>Three baby</li><li>Four</li></ol><p>Here is mu bulleted list&hellip;</p><ul><li>One bullet<ul><li>Dsfsdfsdf<ul><li>Sdfsfdsdf</li><li>sdfsdf</li></ul></li></ul></li><li>Two bullet<ul><li>Dsfsfd</li><li>sdfsdfsf</li></ul></li><li>Three bullet</li><li>Four<ul><li>sdfsdfsfd</li></ul></li></ul><p>Woot to lists!</p>');
-
-    }//end testListTestDocCopyPaste()
 
 
     /**

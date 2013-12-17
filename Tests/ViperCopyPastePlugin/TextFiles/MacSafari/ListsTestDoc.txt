@@ -10,12 +10,12 @@
   <o:Revision>0</o:Revision>
   <o:TotalTime>0</o:TotalTime>
   <o:Pages>1</o:Pages>
-  <o:Words>36</o:Words>
-  <o:Characters>209</o:Characters>
+  <o:Words>123</o:Words>
+  <o:Characters>703</o:Characters>
   <o:Company>Squiz Labs</o:Company>
-  <o:Lines>1</o:Lines>
+  <o:Lines>5</o:Lines>
   <o:Paragraphs>1</o:Paragraphs>
-  <o:CharactersWithSpaces>244</o:CharactersWithSpaces>
+  <o:CharactersWithSpaces>825</o:CharactersWithSpaces>
   <o:Version>14.0</o:Version>
  </o:DocumentProperties>
  <o:OfficeDocumentSettings>
@@ -325,22 +325,22 @@
 <style>
  /* Style Definitions */
 table.MsoNormalTable
-	{mso-style-name:"Table Normal";
-	mso-tstyle-rowband-size:0;
-	mso-tstyle-colband-size:0;
-	mso-style-noshow:yes;
-	mso-style-priority:99;
-	mso-style-parent:"";
-	mso-padding-alt:0cm 5.4pt 0cm 5.4pt;
-	mso-para-margin:0cm;
-	mso-para-margin-bottom:.0001pt;
-	mso-pagination:widow-orphan;
-	font-size:12.0pt;
-	font-family:Cambria;
-	mso-ascii-font-family:Cambria;
-	mso-ascii-theme-font:minor-latin;
-	mso-hansi-font-family:Cambria;
-	mso-hansi-theme-font:minor-latin;}
+  {mso-style-name:"Table Normal";
+  mso-tstyle-rowband-size:0;
+  mso-tstyle-colband-size:0;
+  mso-style-noshow:yes;
+  mso-style-priority:99;
+  mso-style-parent:"";
+  mso-padding-alt:0cm 5.4pt 0cm 5.4pt;
+  mso-para-margin:0cm;
+  mso-para-margin-bottom:.0001pt;
+  mso-pagination:widow-orphan;
+  font-size:12.0pt;
+  font-family:Cambria;
+  mso-ascii-font-family:Cambria;
+  mso-ascii-theme-font:minor-latin;
+  mso-hansi-font-family:Cambria;
+  mso-hansi-theme-font:minor-latin;}
 </style>
 <![endif]-->
 
@@ -348,98 +348,208 @@ table.MsoNormalTable
 
 <!--StartFragment-->
 
-<p class="MsoNormal">My complex numbered lists<o:p></o:p></p>
+<p class="MsoNormal">Complex number list one<o:p></o:p></p>
 
 <p class="MsoListParagraphCxSpFirst" style="margin-left:18.0pt;mso-add-space:
-auto;text-indent:-18.0pt;mso-list:l0 level1 lfo2"><!--[if !supportLists]-->1.<span style="font-size: 7pt; font-family: 'Times New Roman'; ">&nbsp;&nbsp;&nbsp;&nbsp;
+auto;text-indent:-18.0pt;mso-list:l0 level1 lfo2"><!--[if !supportLists]-->1.<span style="font-size: 7pt; font-family: 'Times New Roman';">&nbsp;&nbsp;&nbsp;&nbsp;
 </span><!--[endif]-->Asdadsads<o:p></o:p></p>
 
 <p class="MsoListParagraphCxSpMiddle" style="margin-left:54.0pt;mso-add-space:
-auto;text-indent:-18.0pt;mso-list:l0 level2 lfo2"><!--[if !supportLists]--><span style="font-family:&quot;Courier New&quot;;mso-fareast-font-family:&quot;Courier New&quot;;
-mso-bidi-font-family:&quot;Courier New&quot;">o<span style="font-size: 7pt; font-family: 'Times New Roman'; ">&nbsp;&nbsp; </span></span><!--[endif]-->Dsfsdfsfd<o:p></o:p></p>
+auto;text-indent:-18.0pt;mso-list:l0 level2 lfo2"><!--[if !supportLists]--><span style="font-family:&quot;Courier New&quot;;mso-fareast-font-family:&quot;Courier New&quot;">o<span style="font-size: 7pt; font-family: 'Times New Roman';">&nbsp;&nbsp;
+</span></span><!--[endif]-->Dsfsdfsfd<o:p></o:p></p>
 
 <p class="MsoListParagraphCxSpMiddle" style="margin-left:54.0pt;mso-add-space:
-auto;text-indent:-18.0pt;mso-list:l0 level2 lfo2"><!--[if !supportLists]--><span style="font-family:&quot;Courier New&quot;;mso-fareast-font-family:&quot;Courier New&quot;;
-mso-bidi-font-family:&quot;Courier New&quot;">o<span style="font-size: 7pt; font-family: 'Times New Roman'; ">&nbsp;&nbsp; </span></span><!--[endif]-->Sdfsdfsfd<o:p></o:p></p>
+auto;text-indent:-18.0pt;mso-list:l0 level2 lfo2"><!--[if !supportLists]--><span style="font-family:&quot;Courier New&quot;;mso-fareast-font-family:&quot;Courier New&quot;">o<span style="font-size: 7pt; font-family: 'Times New Roman';">&nbsp;&nbsp;
+</span></span><!--[endif]-->Sdfsdfsfd<o:p></o:p></p>
 
 <p class="MsoListParagraphCxSpMiddle" style="margin-left:90.0pt;mso-add-space:
 auto;text-indent:-18.0pt;mso-list:l0 level3 lfo2"><!--[if !supportLists]--><span style="font-family:Wingdings;mso-fareast-font-family:Wingdings;mso-bidi-font-family:
-Wingdings">§<span style="font-size: 7pt; font-family: 'Times New Roman'; ">&nbsp;
+Wingdings">§<span style="font-size: 7pt; font-family: 'Times New Roman';">&nbsp;
 </span></span><!--[endif]-->Sfd<o:p></o:p></p>
 
 <p class="MsoListParagraphCxSpMiddle" style="margin-left:90.0pt;mso-add-space:
 auto;text-indent:-18.0pt;mso-list:l0 level3 lfo2"><!--[if !supportLists]--><span style="font-family:Wingdings;mso-fareast-font-family:Wingdings;mso-bidi-font-family:
-Wingdings">§<span style="font-size: 7pt; font-family: 'Times New Roman'; ">&nbsp;
+Wingdings">§<span style="font-size: 7pt; font-family: 'Times New Roman';">&nbsp;
 </span></span><!--[endif]-->Sfdsfd<o:p></o:p></p>
 
 <p class="MsoListParagraphCxSpMiddle" style="margin-left:90.0pt;mso-add-space:
 auto;text-indent:-18.0pt;mso-list:l0 level3 lfo2"><!--[if !supportLists]--><span style="font-family:Wingdings;mso-fareast-font-family:Wingdings;mso-bidi-font-family:
-Wingdings">§<span style="font-size: 7pt; font-family: 'Times New Roman'; ">&nbsp;
+Wingdings">§<span style="font-size: 7pt; font-family: 'Times New Roman';">&nbsp;
 </span></span><!--[endif]-->Dsfsdf<o:p></o:p></p>
 
 <p class="MsoListParagraphCxSpMiddle" style="margin-left:90.0pt;mso-add-space:
 auto;text-indent:-18.0pt;mso-list:l0 level3 lfo2"><!--[if !supportLists]--><span style="font-family:Wingdings;mso-fareast-font-family:Wingdings;mso-bidi-font-family:
-Wingdings">§<span style="font-size: 7pt; font-family: 'Times New Roman'; ">&nbsp;
+Wingdings">§<span style="font-size: 7pt; font-family: 'Times New Roman';">&nbsp;
 </span></span><!--[endif]-->sdfsdf<o:p></o:p></p>
 
 <p class="MsoListParagraphCxSpMiddle" style="margin-left:54.0pt;mso-add-space:
-auto;text-indent:-18.0pt;mso-list:l0 level2 lfo2"><!--[if !supportLists]--><span style="font-family:&quot;Courier New&quot;;mso-fareast-font-family:&quot;Courier New&quot;;
-mso-bidi-font-family:&quot;Courier New&quot;">o<span style="font-size: 7pt; font-family: 'Times New Roman'; ">&nbsp;&nbsp; </span></span><!--[endif]-->Sdfsdfsfd<o:p></o:p></p>
+auto;text-indent:-18.0pt;mso-list:l0 level2 lfo2"><!--[if !supportLists]--><span style="font-family:&quot;Courier New&quot;;mso-fareast-font-family:&quot;Courier New&quot;">o<span style="font-size: 7pt; font-family: 'Times New Roman';">&nbsp;&nbsp;
+</span></span><!--[endif]-->Sdfsdfsfd<o:p></o:p></p>
 
 <p class="MsoListParagraphCxSpMiddle" style="margin-left:54.0pt;mso-add-space:
-auto;text-indent:-18.0pt;mso-list:l0 level2 lfo2"><!--[if !supportLists]--><span style="font-family:&quot;Courier New&quot;;mso-fareast-font-family:&quot;Courier New&quot;;
-mso-bidi-font-family:&quot;Courier New&quot;">o<span style="font-size: 7pt; font-family: 'Times New Roman'; ">&nbsp;&nbsp; </span></span><!--[endif]-->sdfsdfsfd<o:p></o:p></p>
+auto;text-indent:-18.0pt;mso-list:l0 level2 lfo2"><!--[if !supportLists]--><span style="font-family:&quot;Courier New&quot;;mso-fareast-font-family:&quot;Courier New&quot;">o<span style="font-size: 7pt; font-family: 'Times New Roman';">&nbsp;&nbsp;
+</span></span><!--[endif]-->sdfsdfsfd<o:p></o:p></p>
 
 <p class="MsoListParagraphCxSpMiddle" style="margin-left:18.0pt;mso-add-space:
-auto;text-indent:-18.0pt;mso-list:l0 level1 lfo2"><!--[if !supportLists]-->2.<span style="font-size: 7pt; font-family: 'Times New Roman'; ">&nbsp;&nbsp;&nbsp;&nbsp;
+auto;text-indent:-18.0pt;mso-list:l0 level1 lfo2"><!--[if !supportLists]-->2.<span style="font-size: 7pt; font-family: 'Times New Roman';">&nbsp;&nbsp;&nbsp;&nbsp;
 </span><!--[endif]-->Asdadsasd<o:p></o:p></p>
 
 <p class="MsoListParagraphCxSpMiddle" style="margin-left:18.0pt;mso-add-space:
-auto;text-indent:-18.0pt;mso-list:l0 level1 lfo2"><!--[if !supportLists]-->3.<span style="font-size: 7pt; font-family: 'Times New Roman'; ">&nbsp;&nbsp;&nbsp;&nbsp;
+auto;text-indent:-18.0pt;mso-list:l0 level1 lfo2"><!--[if !supportLists]-->3.<span style="font-size: 7pt; font-family: 'Times New Roman';">&nbsp;&nbsp;&nbsp;&nbsp;
 </span><!--[endif]-->Sfdsfds&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <o:p></o:p></p>
 
 <p class="MsoListParagraphCxSpMiddle" style="margin-left:18.0pt;mso-add-space:
-auto;text-indent:-18.0pt;mso-list:l0 level1 lfo2"><!--[if !supportLists]-->4.<span style="font-size: 7pt; font-family: 'Times New Roman'; ">&nbsp;&nbsp;&nbsp;&nbsp;
+auto;text-indent:-18.0pt;mso-list:l0 level1 lfo2"><!--[if !supportLists]-->4.<span style="font-size: 7pt; font-family: 'Times New Roman';">&nbsp;&nbsp;&nbsp;&nbsp;
 </span><!--[endif]-->Asdasdasd<o:p></o:p></p>
 
 <p class="MsoListParagraphCxSpLast" style="margin-left:18.0pt;mso-add-space:auto;
-text-indent:-18.0pt;mso-list:l0 level1 lfo2"><!--[if !supportLists]-->5.<span style="font-size: 7pt; font-family: 'Times New Roman'; ">&nbsp;&nbsp;&nbsp;&nbsp;
+text-indent:-18.0pt;mso-list:l0 level1 lfo2"><!--[if !supportLists]-->5.<span style="font-size: 7pt; font-family: 'Times New Roman';">&nbsp;&nbsp;&nbsp;&nbsp;
 </span><!--[endif]-->Asdasdasd<o:p></o:p></p>
 
-<p class="MsoNormal">My complex bulleted lists<o:p></o:p></p>
+<p class="MsoNormal">Complex number list two<o:p></o:p></p>
+
+<p class="MsoListParagraphCxSpFirst" style="text-indent:-18.0pt;mso-list:l2 level1 lfo4"><!--[if !supportLists]-->1.<span style="font-size: 7pt; font-family: 'Times New Roman';">&nbsp;&nbsp;&nbsp;&nbsp;
+</span><!--[endif]-->One baby<o:p></o:p></p>
+
+<p class="MsoListParagraphCxSpMiddle" style="margin-left:72.0pt;mso-add-space:
+auto;text-indent:-18.0pt;mso-list:l2 level2 lfo4"><!--[if !supportLists]-->a.<span style="font-size: 7pt; font-family: 'Times New Roman';">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span><!--[endif]-->Sub baby<o:p></o:p></p>
+
+<p class="MsoListParagraphCxSpMiddle" style="margin-left:108.0pt;mso-add-space:
+auto;text-indent:-108.0pt;mso-text-indent-alt:-9.0pt;mso-list:l2 level3 lfo4"><!--[if !supportLists]--><span style="font-size: 7pt; font-family: 'Times New Roman';">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span>i.<span style="font-size: 7pt; font-family: 'Times New Roman';">&nbsp;&nbsp;&nbsp;&nbsp; </span><!--[endif]-->Sub
+sub baby!<o:p></o:p></p>
+
+<p class="MsoListParagraphCxSpMiddle" style="margin-left:108.0pt;mso-add-space:
+auto;text-indent:-108.0pt;mso-text-indent-alt:-9.0pt;mso-list:l2 level3 lfo4"><!--[if !supportLists]--><span style="font-size: 7pt; font-family: 'Times New Roman';">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span>ii.<span style="font-size: 7pt; font-family: 'Times New Roman';">&nbsp;&nbsp;&nbsp;&nbsp; </span><!--[endif]-->Sdfdsfsdf<o:p></o:p></p>
+
+<p class="MsoListParagraphCxSpMiddle" style="margin-left:108.0pt;mso-add-space:
+auto;text-indent:-108.0pt;mso-text-indent-alt:-9.0pt;mso-list:l2 level3 lfo4"><!--[if !supportLists]--><span style="font-size: 7pt; font-family: 'Times New Roman';">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span>iii.<span style="font-size: 7pt; font-family: 'Times New Roman';">&nbsp;&nbsp;&nbsp;&nbsp; </span><!--[endif]-->sdfsdfsdf<o:p></o:p></p>
+
+<p class="MsoListParagraphCxSpMiddle" style="text-indent:-18.0pt;mso-list:l2 level1 lfo4"><!--[if !supportLists]-->2.<span style="font-size: 7pt; font-family: 'Times New Roman';">&nbsp;&nbsp;&nbsp;&nbsp;
+</span><!--[endif]-->Two baby<o:p></o:p></p>
+
+<p class="MsoListParagraphCxSpMiddle" style="margin-left:72.0pt;mso-add-space:
+auto;text-indent:-18.0pt;mso-list:l2 level2 lfo4"><!--[if !supportLists]-->a.<span style="font-size: 7pt; font-family: 'Times New Roman';">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span><!--[endif]-->Sdfsfdds<o:p></o:p></p>
+
+<p class="MsoListParagraphCxSpMiddle" style="margin-left:72.0pt;mso-add-space:
+auto;text-indent:-18.0pt;mso-list:l2 level2 lfo4"><!--[if !supportLists]-->b.<span style="font-size: 7pt; font-family: 'Times New Roman';">&nbsp;&nbsp;&nbsp;&nbsp;
+</span><!--[endif]-->Sdfsfdsfd<o:p></o:p></p>
+
+<p class="MsoListParagraphCxSpMiddle" style="margin-left:72.0pt;mso-add-space:
+auto;text-indent:-18.0pt;mso-list:l2 level2 lfo4"><!--[if !supportLists]-->c.<span style="font-size: 7pt; font-family: 'Times New Roman';">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span><!--[endif]-->sfdsdfsdf<o:p></o:p></p>
+
+<p class="MsoListParagraphCxSpMiddle" style="text-indent:-18.0pt;mso-list:l2 level1 lfo4"><!--[if !supportLists]-->3.<span style="font-size: 7pt; font-family: 'Times New Roman';">&nbsp;&nbsp;&nbsp;&nbsp;
+</span><!--[endif]-->Three baby<o:p></o:p></p>
+
+<p class="MsoListParagraphCxSpLast" style="text-indent:-18.0pt;mso-list:l2 level1 lfo4"><!--[if !supportLists]-->4.<span style="font-size: 7pt; font-family: 'Times New Roman';">&nbsp;&nbsp;&nbsp;&nbsp;
+</span><!--[endif]-->Four<o:p></o:p></p>
+
+<p class="MsoNormal">Complex bulleted list one<o:p></o:p></p>
 
 <p class="MsoListParagraphCxSpFirst" style="text-indent:-18.0pt;mso-list:l1 level1 lfo1"><!--[if !supportLists]--><span style="font-family:Symbol;mso-fareast-font-family:Symbol;mso-bidi-font-family:
-Symbol">·<span style="font-size: 7pt; font-family: 'Times New Roman'; ">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Symbol">·<span style="font-size: 7pt; font-family: 'Times New Roman';">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 </span></span><!--[endif]-->Sadsadasda<o:p></o:p></p>
 
 <p class="MsoListParagraphCxSpMiddle" style="margin-left:72.0pt;mso-add-space:
-auto;text-indent:-18.0pt;mso-list:l1 level2 lfo1"><!--[if !supportLists]--><span style="font-family:&quot;Courier New&quot;;mso-fareast-font-family:&quot;Courier New&quot;;
-mso-bidi-font-family:&quot;Courier New&quot;">o<span style="font-size: 7pt; font-family: 'Times New Roman'; ">&nbsp;&nbsp; </span></span><!--[endif]-->Sdfdsf<o:p></o:p></p>
+auto;text-indent:-18.0pt;mso-list:l1 level2 lfo1"><!--[if !supportLists]--><span style="font-family:&quot;Courier New&quot;;mso-fareast-font-family:&quot;Courier New&quot;">o<span style="font-size: 7pt; font-family: 'Times New Roman';">&nbsp;&nbsp;
+</span></span><!--[endif]-->Sdfdsf<o:p></o:p></p>
 
 <p class="MsoListParagraphCxSpMiddle" style="margin-left:72.0pt;mso-add-space:
-auto;text-indent:-18.0pt;mso-list:l1 level2 lfo1"><!--[if !supportLists]--><span style="font-family:&quot;Courier New&quot;;mso-fareast-font-family:&quot;Courier New&quot;;
-mso-bidi-font-family:&quot;Courier New&quot;">o<span style="font-size: 7pt; font-family: 'Times New Roman'; ">&nbsp;&nbsp; </span></span><!--[endif]-->Sdfsdfsdf<o:p></o:p></p>
+auto;text-indent:-18.0pt;mso-list:l1 level2 lfo1"><!--[if !supportLists]--><span style="font-family:&quot;Courier New&quot;;mso-fareast-font-family:&quot;Courier New&quot;">o<span style="font-size: 7pt; font-family: 'Times New Roman';">&nbsp;&nbsp;
+</span></span><!--[endif]-->Sdfsdfsdf<o:p></o:p></p>
 
 <p class="MsoListParagraphCxSpMiddle" style="margin-left:108.0pt;mso-add-space:
 auto;text-indent:-18.0pt;mso-list:l1 level3 lfo1"><!--[if !supportLists]--><span style="font-family:Wingdings;mso-fareast-font-family:Wingdings;mso-bidi-font-family:
-Wingdings">§<span style="font-size: 7pt; font-family: 'Times New Roman'; ">&nbsp;
+Wingdings">§<span style="font-size: 7pt; font-family: 'Times New Roman';">&nbsp;
 </span></span><!--[endif]-->Sdfsfdsdf<o:p></o:p></p>
 
 <p class="MsoListParagraphCxSpMiddle" style="margin-left:108.0pt;mso-add-space:
 auto;text-indent:-18.0pt;mso-list:l1 level3 lfo1"><!--[if !supportLists]--><span style="font-family:Wingdings;mso-fareast-font-family:Wingdings;mso-bidi-font-family:
-Wingdings">§<span style="font-size: 7pt; font-family: 'Times New Roman'; ">&nbsp;
+Wingdings">§<span style="font-size: 7pt; font-family: 'Times New Roman';">&nbsp;
 </span></span><!--[endif]-->sdfsdfsdf<o:p></o:p></p>
 
 <p class="MsoListParagraphCxSpMiddle" style="margin-left:72.0pt;mso-add-space:
-auto;text-indent:-18.0pt;mso-list:l1 level2 lfo1"><!--[if !supportLists]--><span style="font-family:&quot;Courier New&quot;;mso-fareast-font-family:&quot;Courier New&quot;;
-mso-bidi-font-family:&quot;Courier New&quot;">o<span style="font-size: 7pt; font-family: 'Times New Roman'; ">&nbsp;&nbsp; </span></span><!--[endif]-->Sdfsdfsfd<o:p></o:p></p>
+auto;text-indent:-18.0pt;mso-list:l1 level2 lfo1"><!--[if !supportLists]--><span style="font-family:&quot;Courier New&quot;;mso-fareast-font-family:&quot;Courier New&quot;">o<span style="font-size: 7pt; font-family: 'Times New Roman';">&nbsp;&nbsp;
+</span></span><!--[endif]-->Sdfsdfsfd<o:p></o:p></p>
 
 <p class="MsoListParagraphCxSpMiddle" style="margin-left:72.0pt;mso-add-space:
-auto;text-indent:-18.0pt;mso-list:l1 level2 lfo1"><!--[if !supportLists]--><span style="font-family:&quot;Courier New&quot;;mso-fareast-font-family:&quot;Courier New&quot;;
-mso-bidi-font-family:&quot;Courier New&quot;">o<span style="font-size: 7pt; font-family: 'Times New Roman'; ">&nbsp;&nbsp; </span></span><!--[endif]-->sdfsfdsdf<o:p></o:p></p>
+auto;text-indent:-18.0pt;mso-list:l1 level2 lfo1"><!--[if !supportLists]--><span style="font-family:&quot;Courier New&quot;;mso-fareast-font-family:&quot;Courier New&quot;">o<span style="font-size: 7pt; font-family: 'Times New Roman';">&nbsp;&nbsp;
+</span></span><!--[endif]-->sdfsfdsdf<o:p></o:p></p>
 
 <p class="MsoListParagraphCxSpLast" style="text-indent:-18.0pt;mso-list:l1 level1 lfo1"><!--[if !supportLists]--><span style="font-family:Symbol;mso-fareast-font-family:Symbol;mso-bidi-font-family:
-Symbol">·<span style="font-size: 7pt; font-family: 'Times New Roman'; ">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Symbol">·<span style="font-size: 7pt; font-family: 'Times New Roman';">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 </span></span><!--[endif]-->Asdasdsad<o:p></o:p></p>
+
+<p class="MsoNormal">Complex bulleted list two<o:p></o:p></p>
+
+<p class="MsoListParagraphCxSpFirst" style="text-indent:-18.0pt;mso-list:l3 level1 lfo5"><!--[if !supportLists]--><span style="font-family:Symbol;mso-fareast-font-family:Symbol;mso-bidi-font-family:
+Symbol">·<span style="font-size: 7pt; font-family: 'Times New Roman';">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><!--[endif]-->One bullet<o:p></o:p></p>
+
+<p class="MsoListParagraphCxSpMiddle" style="margin-left:72.0pt;mso-add-space:
+auto;text-indent:-18.0pt;mso-list:l3 level2 lfo5"><!--[if !supportLists]--><span style="font-family:&quot;Courier New&quot;;mso-fareast-font-family:&quot;Courier New&quot;">o<span style="font-size: 7pt; font-family: 'Times New Roman';">&nbsp;&nbsp;
+</span></span><!--[endif]-->Dsfsdfsdf<o:p></o:p></p>
+
+<p class="MsoListParagraphCxSpMiddle" style="margin-left:108.0pt;mso-add-space:
+auto;text-indent:-18.0pt;mso-list:l3 level3 lfo5"><!--[if !supportLists]--><span style="font-family:Wingdings;mso-fareast-font-family:Wingdings;mso-bidi-font-family:
+Wingdings">§<span style="font-size: 7pt; font-family: 'Times New Roman';">&nbsp;
+</span></span><!--[endif]-->Sdfsfdsdf<o:p></o:p></p>
+
+<p class="MsoListParagraphCxSpMiddle" style="margin-left:108.0pt;mso-add-space:
+auto;text-indent:-18.0pt;mso-list:l3 level3 lfo5"><!--[if !supportLists]--><span style="font-family:Wingdings;mso-fareast-font-family:Wingdings;mso-bidi-font-family:
+Wingdings">§<span style="font-size: 7pt; font-family: 'Times New Roman';">&nbsp;
+</span></span><!--[endif]-->sdfsdf<o:p></o:p></p>
+
+<p class="MsoListParagraphCxSpMiddle" style="text-indent:-18.0pt;mso-list:l3 level1 lfo5"><!--[if !supportLists]--><span style="font-family:Symbol;mso-fareast-font-family:Symbol;mso-bidi-font-family:
+Symbol">·<span style="font-size: 7pt; font-family: 'Times New Roman';">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><!--[endif]-->Two bullet<o:p></o:p></p>
+
+<p class="MsoListParagraphCxSpMiddle" style="margin-left:72.0pt;mso-add-space:
+auto;text-indent:-18.0pt;mso-list:l3 level2 lfo5"><!--[if !supportLists]--><span style="font-family:&quot;Courier New&quot;;mso-fareast-font-family:&quot;Courier New&quot;">o<span style="font-size: 7pt; font-family: 'Times New Roman';">&nbsp;&nbsp;
+</span></span><!--[endif]-->Dsfsfd<o:p></o:p></p>
+
+<p class="MsoListParagraphCxSpMiddle" style="margin-left:72.0pt;mso-add-space:
+auto;text-indent:-18.0pt;mso-list:l3 level2 lfo5"><!--[if !supportLists]--><span style="font-family:&quot;Courier New&quot;;mso-fareast-font-family:&quot;Courier New&quot;">o<span style="font-size: 7pt; font-family: 'Times New Roman';">&nbsp;&nbsp;
+</span></span><!--[endif]-->sdfsdfsf<o:p></o:p></p>
+
+<p class="MsoListParagraphCxSpMiddle" style="text-indent:-18.0pt;mso-list:l3 level1 lfo5"><!--[if !supportLists]--><span style="font-family:Symbol;mso-fareast-font-family:Symbol;mso-bidi-font-family:
+Symbol">·<span style="font-size: 7pt; font-family: 'Times New Roman';">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><!--[endif]-->Three bullet<o:p></o:p></p>
+
+<p class="MsoListParagraphCxSpMiddle" style="text-indent:-18.0pt;mso-list:l3 level1 lfo5"><!--[if !supportLists]--><span style="font-family:Symbol;mso-fareast-font-family:Symbol;mso-bidi-font-family:
+Symbol">·<span style="font-size: 7pt; font-family: 'Times New Roman';">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><!--[endif]-->Four<o:p></o:p></p>
+
+<p class="MsoListParagraphCxSpLast" style="margin-left:72.0pt;mso-add-space:auto;
+text-indent:-18.0pt;mso-list:l3 level2 lfo5"><!--[if !supportLists]--><span style="font-family:&quot;Courier New&quot;;mso-fareast-font-family:&quot;Courier New&quot;">o<span style="font-size: 7pt; font-family: 'Times New Roman';">&nbsp;&nbsp;
+</span></span><!--[endif]-->sdfsdfsfd<o:p></o:p></p>
+
+<p class="MsoNormal">Paragraph with a number then an unordered list<o:p></o:p></p>
+
+<p class="MsoNormal"><b><span style="font-size:10.0pt;line-height:115%;font-family:&quot;Open Sans&quot;;mso-bidi-font-family:
+&quot;Lucida Sans Unicode&quot;">6. The solution<o:p></o:p></span></b></p>
+
+<p class="MsoListParagraphCxSpFirst" style="margin-bottom: 0.0001pt; text-indent: -18pt;"><!--[if !supportLists]--><span style="font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol">·<span style="font-size: 7pt; font-family: 'Times New Roman';">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><!--[endif]--><span style="font-size:10.0pt;font-family:&quot;Open Sans&quot;;mso-bidi-font-family:&quot;Lucida Sans Unicode&quot;">What
+did you deliver? <o:p></o:p></span></p>
+
+<p class="MsoListParagraphCxSpMiddle" style="margin-bottom: 0.0001pt; text-indent: -18pt;"><!--[if !supportLists]--><span style="font-size:10.0pt;font-family:
+Symbol;mso-fareast-font-family:Symbol;mso-bidi-font-family:Symbol">·<span style="font-size: 7pt; font-family: 'Times New Roman';">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><!--[endif]--><span style="font-size:10.0pt;font-family:&quot;Open Sans&quot;;
+mso-bidi-font-family:&quot;Lucida Sans Unicode&quot;">As well as the technical solution,
+also focus on the benefits that your product / service delivered - for every
+product feature you want to talk about, balance it with the corresponding
+benefit to your client<o:p></o:p></span></p>
+
+<p class="MsoListParagraphCxSpLast" style="margin-bottom: 0.0001pt; text-indent: -18pt;"><!--[if !supportLists]--><span style="font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol">·<span style="font-size: 7pt; font-family: 'Times New Roman';">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><!--[endif]--><span style="font-size:10.0pt;font-family:&quot;Open Sans&quot;;mso-bidi-font-family:&quot;Lucida Sans Unicode&quot;">Did
+we do anything particularly cool?<o:p></o:p></span></p>
+
+<p class="MsoNormal"><o:p>&nbsp;</o:p></p>
 
 <!--EndFragment-->&nbsp;
