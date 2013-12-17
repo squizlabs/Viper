@@ -92,7 +92,7 @@ ViperPluginManager.prototype = {
     addPlugin: function(pluginName, settings, batch)
     {
         var pluginConstructor = window[pluginName];
-        if (dfx.isset(pluginConstructor) === true) {
+        if (ViperUtil.isset(pluginConstructor) === true) {
             if (typeof pluginConstructor !== 'function') {
                 console.error('Plugin ' + pluginName + 'must be a constructor function');
             }
@@ -105,7 +105,7 @@ ViperPluginManager.prototype = {
             this._plugins[pluginName] = pluginObj;
 
             // Set plugin settings.
-            if (dfx.isset(settings) === true) {
+            if (ViperUtil.isset(settings) === true) {
                 pluginObj.setSettings(settings);
             } else if (this._pluginSettings[pluginName]) {
                 pluginObj.setSettings(this._pluginSettings[pluginName]);
@@ -139,7 +139,7 @@ ViperPluginManager.prototype = {
         if (this._plugins[pluginName]) {
 
             // Call the remove fn of the plugin incase it needs to do cleanup.
-            if (dfx.isFn(this._plugins[pluginName].remove) === true) {
+            if (ViperUtil.isFn(this._plugins[pluginName].remove) === true) {
                 this._plugins[pluginName].remove();
             }
 

@@ -77,8 +77,8 @@ ViperHistoryManager.prototype = {
             var task  = {
                 content: this.viper.getRawHTML(),
                 range: {
-                    startContainer: dfx.getPath(range.startContainer),
-                    endContainer: dfx.getPath(range.endContainer),
+                    startContainer: ViperUtil.getXPath(range.startContainer),
+                    endContainer: ViperUtil.getXPath(range.endContainer),
                     startOffset: range.startOffset,
                     endOffset: range.endOffset,
                     collapsed: range.collapsed
@@ -145,8 +145,8 @@ ViperHistoryManager.prototype = {
         var endPath   = null;
 
         try {
-            startPath = dfx.getPath(range.startContainer);
-            endPath   = dfx.getPath(range.endContainer);
+            startPath = ViperUtil.getXPath(range.startContainer);
+            endPath   = ViperUtil.getXPath(range.endContainer);
         } catch(e) {}
 
         var currentState = {
@@ -250,7 +250,7 @@ ViperHistoryManager.prototype = {
 
         var self   = this;
         var loaded = false;
-        dfx.foreach(this.historyStore, function(key) {
+        ViperUtil.foreach(this.historyStore, function(key) {
             if (self.historyStore[key].element === elem) {
                 self._loadHistory(key);
                 loaded = true;
@@ -260,7 +260,7 @@ ViperHistoryManager.prototype = {
 
         if (loaded === false) {
             // Need to add a new historyStore.
-            var key = dfx.getUniqueId();
+            var key = ViperUtil.getUniqueId();
             this.historyStore[key] = {
                 undo: [],
                 redo: [],
@@ -283,8 +283,8 @@ ViperHistoryManager.prototype = {
 
         // Select.
         try {
-            var startContainer = dfx.getNode(task.range.startContainer);
-            var endContainer   = dfx.getNode(task.range.endContainer);
+            var startContainer = ViperUtil.getNodeFromXPath(task.range.startContainer);
+            var endContainer   = ViperUtil.getNodeFromXPath(task.range.endContainer);
             var range = this.viper.getCurrentRange();
             range.setEnd(endContainer, task.range.endOffset);
             range.setStart(startContainer, task.range.startOffset);

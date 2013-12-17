@@ -35,7 +35,7 @@ ViperCharMapPlugin.prototype = {
         this.viper.registerCallback('ViperToolbarPlugin:updateToolbar', 'ViperCharMapPlugin', function(data) {
             if (data.range) {
                 var nodeSelection = data.range.getNodeSelection();
-                if (nodeSelection && dfx.isStubElement(nodeSelection) === true) {
+                if (nodeSelection && ViperUtil.isStubElement(nodeSelection) === true) {
                     self.viper.ViperTools.disableButton('insertCharacter');
                     return;
                 }
@@ -89,7 +89,7 @@ ViperCharMapPlugin.prototype = {
 
         var wrapper = '<div class="VCMP-wrapper">' + list + '<div class="VCMP-tablesWrapper">' + catTable + '</div></div>';
 
-        dfx.setHtml(subContent, wrapper);
+        ViperUtil.setHtml(subContent, wrapper);
 
         var tools = this.viper.ViperTools;
 
@@ -100,24 +100,24 @@ ViperCharMapPlugin.prototype = {
         toolbar.addButton(toggle);
 
         // Table cell click event.
-        var listItems = dfx.getTag('li', subContent);
-        var tables    = dfx.getTag('table', subContent);
+        var listItems = ViperUtil.getTag('li', subContent);
+        var tables    = ViperUtil.getTag('table', subContent);
 
         // Select the initial item.
-        dfx.addClass(listItems[0], 'Viper-selected');
+        ViperUtil.addClass(listItems[0], 'Viper-selected');
 
-        dfx.addEvent(listItems, 'click', function(e) {
-            var target = dfx.getMouseEventTarget(e);
-            if (dfx.isTag(target, 'li') === false) {
+        ViperUtil.addEvent(listItems, 'click', function(e) {
+            var target = ViperUtil.getMouseEventTarget(e);
+            if (ViperUtil.isTag(target, 'li') === false) {
                 target = target.parentNode;
             }
 
-            dfx.removeClass(listItems, 'Viper-selected');
-            dfx.addClass(target, 'Viper-selected');
+            ViperUtil.removeClass(listItems, 'Viper-selected');
+            ViperUtil.addClass(target, 'Viper-selected');
 
             var index = 0;
             while (target.previousSibling) {
-                if (dfx.isTag(target.previousSibling, 'li') === true) {
+                if (ViperUtil.isTag(target.previousSibling, 'li') === true) {
                     index++;
                 }
 
@@ -125,31 +125,31 @@ ViperCharMapPlugin.prototype = {
             }
 
             // Show the table at this index.
-            dfx.removeClass(tables, 'Viper-visible');
-            dfx.addClass(tables[index], 'Viper-visible');
+            ViperUtil.removeClass(tables, 'Viper-visible');
+            ViperUtil.addClass(tables[index], 'Viper-visible');
         });
 
         var btn = document.createElement('div');
-        dfx.addClass(btn, 'VCMP-hoverBtn Viper-button');
+        ViperUtil.addClass(btn, 'VCMP-hoverBtn Viper-button');
         subContent.appendChild(btn);
 
-        dfx.addEvent(btn, 'click', function() {
+        ViperUtil.addEvent(btn, 'click', function() {
              var charCode = btn.firstChild.data.charCodeAt(0);
              self.insertCharacter(charCode);
         });
 
-        dfx.hover(dfx.getTag('td', subContent), function(e) {
-            dfx.setHtml(btn, dfx.getHtml(e.target));
-            var mapCoords    = dfx.getElementCoords(map);
-            var coords       = dfx.getElementCoords(e.target);
+        ViperUtil.hover(ViperUtil.getTag('td', subContent), function(e) {
+            ViperUtil.setHtml(btn, ViperUtil.getHtml(e.target));
+            var mapCoords    = ViperUtil.getElementCoords(map);
+            var coords       = ViperUtil.getElementCoords(e.target);
 
-            dfx.setStyle(btn, 'left', (coords.x - mapCoords.x) + 'px');
-            dfx.setStyle(btn, 'top', (coords.y - mapCoords.y) + 'px');
-            dfx.setStyle(btn, 'display', 'block');
+            ViperUtil.setStyle(btn, 'left', (coords.x - mapCoords.x) + 'px');
+            ViperUtil.setStyle(btn, 'top', (coords.y - mapCoords.y) + 'px');
+            ViperUtil.setStyle(btn, 'display', 'block');
         }, function(e) {});
 
-        dfx.hover(btn, function() {}, function() {
-            dfx.setStyle(btn, 'display', 'none');
+        ViperUtil.hover(btn, function() {}, function() {
+            ViperUtil.setStyle(btn, 'display', 'none');
         });
 
     },

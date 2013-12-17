@@ -144,7 +144,7 @@ ViperSourceViewPlugin.prototype = {
             this._childWindow.close();
             this._inNewWindow = false;
             this._childWindow = false;
-            dfx.remove(this._sourceView);
+            ViperUtil.remove(this._sourceView);
             this._sourceView = null;
             this._editor     = null;
         } else if (this._sourceView) {
@@ -159,7 +159,7 @@ ViperSourceViewPlugin.prototype = {
 
     toggleSourceView: function()
     {
-        if (!this._sourceView || (!this._sourceView.parentNode || this._sourceView.nodeType !== dfx.DOCUMENT_FRAGMENT_NODE)) {
+        if (!this._sourceView || (!this._sourceView.parentNode || this._sourceView.nodeType !== ViperUtil.DOCUMENT_FRAGMENT_NODE)) {
             this.showSourceView();
         } else {
             this.hideSourceView();
@@ -241,7 +241,7 @@ ViperSourceViewPlugin.prototype = {
 
         // Confirm change panel.
         var popupTop = document.createElement('div');
-        dfx.addClass(popupTop, 'VSVP-confirmPanel');
+        ViperUtil.addClass(popupTop, 'VSVP-confirmPanel');
         var discardButton = tools.createButton('VSVP:discard', _('Discard'), _('Discard Changes'), 'VSVP-confirmButton-discard', function() {
             self.viper.ViperTools.closePopup('VSVP:popup', 'discardChanges');
         });
@@ -249,19 +249,19 @@ ViperSourceViewPlugin.prototype = {
             self.updatePageContents();
             self.viper.ViperTools.closePopup('VSVP:popup', 'applyChanges');
         });
-        dfx.setHtml(popupTop, '<div class="VSVP-confirmText">' + _('Would you like to apply your changes?') + '</div>');
+        ViperUtil.setHtml(popupTop, '<div class="VSVP-confirmText">' + _('Would you like to apply your changes?') + '</div>');
         popupTop.appendChild(applyButton);
         popupTop.appendChild(discardButton);
         this._closeConfirm = popupTop;
 
         var source = document.createElement('div');
-        dfx.addClass(source, 'VSVP-source');
+        ViperUtil.addClass(source, 'VSVP-source');
         content.appendChild(source);
         this._sourceCont = source;
 
         // Add the bottom section.
         var popupBottom = document.createElement('div');
-        dfx.addClass(popupBottom, 'VSVP-bottomPanel');
+        ViperUtil.addClass(popupBottom, 'VSVP-bottomPanel');
 
         if (this.viper.isBrowser('msie') === false && (this.viper.getViperPath() || this.getViperURL())) {
             var newWindowButton = tools.createButton('VSVP:newWindow', '', _('Open In new window'), 'VSVP-bottomPanel-newWindow Viper-sourceNewWindow', function() {
@@ -613,7 +613,7 @@ ViperSourceViewPlugin.prototype = {
 
     isPluginElement: function(element)
     {
-        if (element !== this._sourceView && dfx.isChildOf(element, this._sourceView) === false) {
+        if (element !== this._sourceView && ViperUtil.isChildOf(element, this._sourceView) === false) {
             return false;
         }
 

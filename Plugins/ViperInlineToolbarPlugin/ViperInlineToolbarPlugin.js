@@ -57,7 +57,7 @@ ViperInlineToolbarPlugin.prototype = {
             var currentLinIndex = self.getCurrentLineageIndex();
 
             var element = lineage[currentLinIndex];
-            if (element && element.nodeType !== dfx.TEXT_NODE) {
+            if (element && element.nodeType !== ViperUtil.TEXT_NODE) {
                 return element;
             }
 
@@ -101,8 +101,8 @@ ViperInlineToolbarPlugin.prototype = {
 
         // Add lineage container to the toolbar.
         var lineage = document.createElement('ul');
-        dfx.addClass(lineage, 'ViperITP-lineage');
-        dfx.insertBefore(toolbarElem.firstChild, lineage);
+        ViperUtil.addClass(lineage, 'ViperITP-lineage');
+        ViperUtil.insertBefore(toolbarElem.firstChild, lineage);
         this._lineage = lineage;
 
         var toolbar = tools.getItem(toolbarid);
@@ -154,7 +154,7 @@ ViperInlineToolbarPlugin.prototype = {
         }
 
         if (this.viper.isBrowser('firefox') === true
-            && dfx.isTag(lineage[(lineage.length - 1)], 'br') === true
+            && ViperUtil.isTag(lineage[(lineage.length - 1)], 'br') === true
         ) {
             this.hideToolbar();
             return false;
@@ -281,9 +281,9 @@ ViperInlineToolbarPlugin.prototype = {
      */
     selectLineageItem: function(index)
     {
-        var tags = dfx.getTag('li', this._lineage);
+        var tags = ViperUtil.getTag('li', this._lineage);
         if (tags[index]) {
-            dfx.trigger(tags[index], 'click');
+            ViperUtil.trigger(tags[index], 'click');
         }
 
     },
@@ -321,7 +321,7 @@ ViperInlineToolbarPlugin.prototype = {
     _updateLineage: function(lineage)
     {
         // Remove the contents of the lineage container.
-        dfx.empty(this._lineage);
+        ViperUtil.empty(this._lineage);
 
         var viper    = this.viper;
         var c        = lineage.length;
@@ -336,19 +336,19 @@ ViperInlineToolbarPlugin.prototype = {
 
             var tagName = lineage[i].tagName.toLowerCase();
             var parent  = document.createElement('li');
-            dfx.addClass(parent, 'ViperITP-lineageItem');
+            ViperUtil.addClass(parent, 'ViperITP-lineageItem');
 
             if (i === (c - 1)) {
-                dfx.addClass(parent, 'Viper-selected');
+                ViperUtil.addClass(parent, 'Viper-selected');
             }
 
-            dfx.setHtml(parent, this.getReadableTagName(tagName));
+            ViperUtil.setHtml(parent, this.getReadableTagName(tagName));
             this._lineage.appendChild(parent);
             linElems.push(parent);
 
             (function(clickElem, selectionElem, index) {
                 // When clicked set the user selection to the selected element.
-                dfx.addEvent(clickElem, 'click.ViperInlineToolbarPlugin', function(e) {
+                ViperUtil.addEvent(clickElem, 'click.ViperInlineToolbarPlugin', function(e) {
                     self.viper.fireCallbacks('ViperInlineToolbarPlugin:lineageClicked');
 
                     // We set the _lineageClicked to true here so that when the
@@ -356,8 +356,8 @@ ViperInlineToolbarPlugin.prototype = {
                     self._lineageClicked = true;
                     self._setCurrentLineageIndex(index);
 
-                    dfx.removeClass(linElems, 'Viper-selected');
-                    dfx.addClass(clickElem, 'Viper-selected');
+                    ViperUtil.removeClass(linElems, 'Viper-selected');
+                    ViperUtil.addClass(clickElem, 'Viper-selected');
 
                     if (self.viper.isBrowser('msie') === true) {
                         // IE changes the range when the mouse is released on an element
@@ -371,7 +371,7 @@ ViperInlineToolbarPlugin.prototype = {
                         self._selectNode(selectionElem);
                     }
 
-                    dfx.preventDefault(e);
+                    ViperUtil.preventDefault(e);
 
                     return false;
                 });
@@ -379,7 +379,7 @@ ViperInlineToolbarPlugin.prototype = {
         }//end for
 
         if (this._originalRange.collapsed === true
-            || (lineage[(lineage.length - 1)].nodeType !== dfx.TEXT_NODE)
+            || (lineage[(lineage.length - 1)].nodeType !== ViperUtil.TEXT_NODE)
         ) {
             // No need to add the 'Selection' item as its collapsed or a node is selected.
             return;
@@ -387,12 +387,12 @@ ViperInlineToolbarPlugin.prototype = {
 
         // Add the original user selection to the lineage.
         var parent = document.createElement('li');
-        dfx.addClass(parent, 'ViperITP-lineageItem Viper-selected');
-        dfx.setHtml(parent, _('Selection'));
+        ViperUtil.addClass(parent, 'ViperITP-lineageItem Viper-selected');
+        ViperUtil.setHtml(parent, _('Selection'));
         linElems.push(parent);
         this._lineage.appendChild(parent);
 
-        dfx.addEvent(parent, 'click.ViperInlineToolbarPlugin', function(e) {
+        ViperUtil.addEvent(parent, 'click.ViperInlineToolbarPlugin', function(e) {
             self.viper.fireCallbacks('ViperInlineToolbarPlugin:lineageClicked');
 
             // When clicked set the selection to the original selection.
@@ -401,8 +401,8 @@ ViperInlineToolbarPlugin.prototype = {
             var prevIndex = self._currentLineageIndex;
             self._setCurrentLineageIndex(lineage.length - 1);
 
-            dfx.removeClass(linElems, 'Viper-selected');
-            dfx.addClass(parent, 'Viper-selected');
+            ViperUtil.removeClass(linElems, 'Viper-selected');
+            ViperUtil.addClass(parent, 'Viper-selected');
 
             if (self.viper.isBrowser('msie') === true) {
                 // IE changes the range when the mouse is released on an element
@@ -415,7 +415,7 @@ ViperInlineToolbarPlugin.prototype = {
                 self._selectPreviousRange(lineage, prevIndex);
             }
 
-            dfx.preventDefault(e);
+            ViperUtil.preventDefault(e);
             return false;
         });
 
@@ -526,18 +526,18 @@ ViperInlineToolbarPlugin.prototype = {
             var startNode = range.getStartNode();
             if (!startNode) {
                 return lineage;
-            } else if (startNode.nodeType == dfx.TEXT_NODE
-                && (startNode.data.length === 0 || dfx.isBlank(dfx.trim(startNode.data)) === true)
+            } else if (startNode.nodeType == ViperUtil.TEXT_NODE
+                && (startNode.data.length === 0 || ViperUtil.isBlank(ViperUtil.trim(startNode.data)) === true)
                 && startNode.nextSibling
-                && startNode.nextSibling.nodeType === dfx.TEXT_NODE
+                && startNode.nextSibling.nodeType === ViperUtil.TEXT_NODE
             ) {
                 // The startNode is an empty textnode, most likely due to node splitting
                 // if the next node is a text node use that instead.
                 startNode = startNode.nextSibling;
             }
 
-            if (startNode.nodeType !== dfx.TEXT_NODE || dfx.isBlank(startNode.data) !== true) {
-                if (startNode !== dfx.TEXT_NODE && startNode !== range.getEndNode()) {
+            if (startNode.nodeType !== ViperUtil.TEXT_NODE || ViperUtil.isBlank(startNode.data) !== true) {
+                if (startNode !== ViperUtil.TEXT_NODE && startNode !== range.getEndNode()) {
                     lineage.push(range.getEndNode());
                 } else {
                     lineage.push(startNode);

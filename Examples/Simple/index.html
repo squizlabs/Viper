@@ -3,17 +3,18 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Viper Demo</title>
-    <script type="text/javascript" src="../../DfxJSLib/dfx.js"></script>
+    <script type="text/javascript" src="../jquery.js"></script>
+    <script type="text/javascript" src="../jquery.ui.js"></script>
     <script type="text/javascript" src="../../Viper-all.js"></script>
     <script type="text/javascript">
         var viper = null;
         ViperReadyCallback = function() {
             var viper = new Viper('test');
             viper.getPluginManager().setPlugins(['ViperCoreStylesPlugin', 'ViperKeyboardEditorPlugin', 'ViperInlineToolbarPlugin', 'ViperHistoryPlugin', 'ViperToolbarPlugin']);
-            var editableEl = dfx.getId('editable');
-            dfx.addEvent(dfx.getId('clickToEdit'), 'click', function(e) {
-               //dfx.preventDefault(e);
-               dfx.hideElement(dfx.getId('clickToEdit'));
+            var editableEl = ViperUtil.getid('editable');
+            ViperUtil.addEvent(ViperUtil.getid('clickToEdit'), 'click', function(e) {
+               //ViperUtil.preventDefault(e);
+               ViperUtil.hideElement(ViperUtil.getid('clickToEdit'));
                viper.setEditableElement(editableEl);
                viper.focus();
             });

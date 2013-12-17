@@ -694,7 +694,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->clickInlineToolbarButton('cssClass');
         $this->clickInlineToolbarButton('italic', 'active');
 
-        $viperBookmarkElements = $this->sikuli->execJS('viperTest.getWindow().dfx.getClass("viperBookmark").length');
+        $viperBookmarkElements = $this->sikuli->execJS('viperTest.getWindow().ViperUtil.getClass("viperBookmark").length');
         $this->assertEquals(0, $viperBookmarkElements, 'There should be no viper bookmark elements');
 
         $this->assertHTMLMatch('<p>%1% <strong>%2%</strong> %3%</p><p class="test">sit amet <strong>%4%</strong></p><p><em>Test</em> %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><strong>%8%</strong> %9% the lazy dog</p>');

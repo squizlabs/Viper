@@ -66,7 +66,7 @@ ViperKeyboardEditorPlugin.prototype = {
                 prev.appendChild(node.firstChild);
             }
 
-            dfx.remove(node);
+            ViperUtil.remove(node);
         });
 
         ViperChangeTracker.addChangeType('createContainer', 'Insert', 'insert');
@@ -77,7 +77,7 @@ ViperKeyboardEditorPlugin.prototype = {
             ViperChangeTracker.removeTrackChanges(node);
         });
         ViperChangeTracker.setRejectCallback('createContainer', function(clone, node) {
-            dfx.remove(node);
+            ViperUtil.remove(node);
         });
 
     },
@@ -86,19 +86,19 @@ ViperKeyboardEditorPlugin.prototype = {
     {
         var pImgURL = this.viper.getStylesURL() + '/icon-p_tag.png';
         var pImg    = Viper.document.createElement('img');
-        dfx.attr(pImg, 'src', pImgURL);
-        dfx.attr(pImg, 'title', 'Paragraph Break');
+        ViperUtil.attr(pImg, 'src', pImgURL);
+        ViperUtil.attr(pImg, 'title', 'Paragraph Break');
         var desc = pImg;
 
         if (changeType !== 'splitContainer') {
             for (var child = node.firstChild; child; child = child.nextSibling) {
-                if (child.nodeType === dfx.TEXT_NODE && dfx.trim(child.nodeValue).length === 0) {
+                if (child.nodeType === ViperUtil.TEXT_NODE && ViperUtil.trim(child.nodeValue).length === 0) {
                     continue;
                 } else if (ViperChangeTracker.isTrackingNode(child) === true) {
                     var ctnType = ViperChangeTracker.getCTNTypeFromNode(child);
                     if (ViperChangeTracker.isInsertType(ctnType) === true) {
                         var extraDesc = ViperChangeTracker.getDescriptionForNode(child);
-                        if (dfx.isObj(extraDesc) === false) {
+                        if (ViperUtil.isObj(extraDesc) === false) {
                             extraDesc = Viper.document.createTextNode(extraDesc);
                         }
 
@@ -167,7 +167,7 @@ ViperKeyboardEditorPlugin.prototype = {
             if (!endNode) {
                 if (startNode) {
                     endNode = startNode;
-                } else if (range.startContainer.nodeType === dfx.ELEMENT_NODE
+                } else if (range.startContainer.nodeType === ViperUtil.ELEMENT_NODE
                     && !range.startContainer.childNodes[range.startOffset]
                     && range.startContainer.childNodes[(range.startOffset - 1)]
                 ) {
@@ -176,14 +176,14 @@ ViperKeyboardEditorPlugin.prototype = {
             }
 
             try {
-                if (!startNode && !endNode && range.collapsed === true && dfx.isTag(range.startContainer, 'br') === true) {
+                if (!startNode && !endNode && range.collapsed === true && ViperUtil.isTag(range.startContainer, 'br') === true) {
                     startNode = range.startContainer;
                     endNode   = startNode;
                 }
 
                 if (endNode
-                    && endNode.nodeType === dfx.TEXT_NODE
-                    && dfx.trim(dfx.trim(endNode.data)).replace(String.fromCharCode(160), '') === ''
+                    && endNode.nodeType === ViperUtil.TEXT_NODE
+                    && ViperUtil.trim(ViperUtil.trim(endNode.data)).replace(String.fromCharCode(160), '') === ''
                 ) {
                     endNode.data = '';
                 }
@@ -195,17 +195,17 @@ ViperKeyboardEditorPlugin.prototype = {
             // Break out of blockquote tag when enter is pressed twice at the start, end and middle of a P tag in a
             // blockquote.
             if (range.collapsed === true
-                && (startNode && startNode.nodeType === dfx.TEXT_NODE || dfx.isTag(startNode, 'br') === true)
+                && (startNode && startNode.nodeType === ViperUtil.TEXT_NODE || ViperUtil.isTag(startNode, 'br') === true)
                 && !startNode.previousSibling
                 && range.startOffset === 0
-                && dfx.getParents(startNode, 'blockquote', this.viper.getViperElement()).length > 0
-                && dfx.isTag(dfx.getFirstBlockParent(startNode), 'p') === true
+                && ViperUtil.getParents(startNode, 'blockquote', this.viper.getViperElement()).length > 0
+                && ViperUtil.isTag(ViperUtil.getFirstBlockParent(startNode), 'p') === true
             ) {
                 // Make sure this is not the first P tag in a blockquote.
-                var parentPtag = dfx.getFirstBlockParent(startNode);
+                var parentPtag = ViperUtil.getFirstBlockParent(startNode);
                 var prevTag    = parentPtag.previousSibling;
                 while (prevTag) {
-                    if (dfx.isBlockElement(prevTag) === true) {
+                    if (ViperUtil.isBlockElement(prevTag) === true) {
                         break;
                     }
 
@@ -213,7 +213,7 @@ ViperKeyboardEditorPlugin.prototype = {
                 }
 
                 if (prevTag) {
-                    var parentBlockquote = dfx.getParents(parentPtag, 'blockquote', this.viper.getViperElement())[0];
+                    var parentBlockquote = ViperUtil.getParents(parentPtag, 'blockquote', this.viper.getViperElement())[0];
                     var newBlockquote    = parentBlockquote.cloneNode(false);
 
                     // Move the sibliings after the current P tag to the new blockquote element.
@@ -221,13 +221,13 @@ ViperKeyboardEditorPlugin.prototype = {
                         // Do not move empty block elements.
                         while (parentPtag.nextSibling) {
                             if (this.isEmptyBlockElement(parentPtag.nextSibling) === true) {
-                                dfx.remove(parentPtag.nextSibling);
+                                ViperUtil.remove(parentPtag.nextSibling);
                             } else {
                                 newBlockquote.appendChild(parentPtag.nextSibling);
                             }
                         }
 
-                        dfx.insertBefore(newBlockquote.firstChild, parentPtag);
+                        ViperUtil.insertBefore(newBlockquote.firstChild, parentPtag);
                     } else {
                         newBlockquote.appendChild(parentPtag);
                     }
@@ -235,19 +235,19 @@ ViperKeyboardEditorPlugin.prototype = {
                     // If the current P tag is empty then remove it. This happens when the caret is at the end of a P
                     // tag and enter is pressed twice.
                     if (this.isEmptyBlockElement(parentPtag) === true) {
-                        dfx.remove(parentPtag);
+                        ViperUtil.remove(parentPtag);
                     }
 
                     // Final check to make sure that we do not create an empty blockquote element.
-                    dfx.removeEmptyNodes(newBlockquote);
+                    ViperUtil.removeEmptyNodes(newBlockquote);
                     if (this.isEmptyBlockElement(newBlockquote) === false) {
-                        dfx.insertAfter(parentBlockquote, newBlockquote);
+                        ViperUtil.insertAfter(parentBlockquote, newBlockquote);
                     }
 
                     // Create a new P tag to be placed between two blockquotes.
                     var midP = document.createElement('p');
                     midP.appendChild(document.createElement('br'));
-                    dfx.insertAfter(parentBlockquote, midP);
+                    ViperUtil.insertAfter(parentBlockquote, midP);
 
                     // Set the caret to the newly created P tag.
                     range.selectNode(midP.firstChild);
@@ -258,19 +258,19 @@ ViperKeyboardEditorPlugin.prototype = {
                 }
             }//end if
 
-            var firstBlock = dfx.getFirstBlockParent(endNode);
+            var firstBlock = ViperUtil.getFirstBlockParent(endNode);
             if (range.collapsed === true
-                && ((endNode.nodeType === dfx.TEXT_NODE && range.endOffset === endNode.data.length)
-                || endNode.nodeType === dfx.ELEMENT_NODE && dfx.isTag(endNode, 'br'))
+                && ((endNode.nodeType === ViperUtil.TEXT_NODE && range.endOffset === endNode.data.length)
+                || endNode.nodeType === ViperUtil.ELEMENT_NODE && ViperUtil.isTag(endNode, 'br'))
                 && !endNode.nextSibling
                 && (range._getLastSelectableChild(firstBlock, true) === endNode
-                || range._getLastSelectableChild(firstBlock, true) === null && dfx.isTag(endNode, 'br') === true || (endNode.nodeType === dfx.TEXT_NODE && endNode.data.length === 0))
+                || range._getLastSelectableChild(firstBlock, true) === null && ViperUtil.isTag(endNode, 'br') === true || (endNode.nodeType === ViperUtil.TEXT_NODE && endNode.data.length === 0))
             ) {
                 if (firstBlock && !defaultTagName && firstBlock === this.viper.getViperElement()) {
                     var br = document.createElement('br');
                     this.viper.insertNodeAtCaret(br);
                     if (!br.nextSibling) {
-                        dfx.insertAfter(br, document.createElement('br'));
+                        ViperUtil.insertAfter(br, document.createElement('br'));
                     }
 
                     range.setStart(br.nextSibling, 0);
@@ -279,14 +279,14 @@ ViperKeyboardEditorPlugin.prototype = {
 
                     return false;
                 } else if (firstBlock) {
-                    var firstBlockTagName = dfx.getTagName(firstBlock);
+                    var firstBlockTagName = ViperUtil.getTagName(firstBlock);
                     var handleEnter       = false;
                     var removeFirstBlock  = false;
-                    if (this._tagList.inArray(firstBlockTagName) === true) {
+                    if (ViperUtil.inArray(firstBlockTagName, this._tagList) === true) {
                         handleEnter = true;
                     } else if (firstBlockTagName === 'li'
                         && (this.viper.isBrowser('chrome') === true || this.viper.isBrowser('safari') === true)
-                        && dfx.trim(dfx.getNodeTextContent(firstBlock)) === ''
+                        && ViperUtil.trim(ViperUtil.getNodeTextContent(firstBlock)) === ''
                     ) {
                         handleEnter = true;
                         removeFirstBlock = true;
@@ -295,7 +295,7 @@ ViperKeyboardEditorPlugin.prototype = {
                     if (handleEnter === true) {
                         if (defaultTagName === '') {
                             var br = document.createElement('br');
-                            dfx.insertAfter(firstBlock, br);
+                            ViperUtil.insertAfter(firstBlock, br);
                             range.setStart(br, 0);
                             range.collapse(true);
                             ViperSelection.addRange(range);
@@ -309,31 +309,31 @@ ViperKeyboardEditorPlugin.prototype = {
 
                         var tagName = defaultTagName;
                         var p = document.createElement(tagName);
-                        dfx.setHtml(p, content);
+                        ViperUtil.setHtml(p, content);
 
                         // If the firstBlock is a P tag and it's parent is not the
                         // Viper editable element and its the last child then move this
                         // new P tag after its parent element.
-                        if (dfx.isTag(firstBlock, 'p') === true
+                        if (ViperUtil.isTag(firstBlock, 'p') === true
                             && firstBlock.parentNode !== this.viper.getViperElement()
                             && !firstBlock.nextSibling
-                            && dfx.trim(dfx.getNodeTextContent(firstBlock)) === ''
+                            && ViperUtil.trim(ViperUtil.getNodeTextContent(firstBlock)) === ''
                         ) {
-                            dfx.insertAfter(firstBlock.parentNode, p);
+                            ViperUtil.insertAfter(firstBlock.parentNode, p);
                             removeFirstBlock = true;
                         } else {
                             if (firstBlockTagName === 'li') {
                                 if (this.viper.isBrowser('chrome') === true || this.viper.isBrowser('safari') === true) {
-                                    var parentListItem = dfx.getFirstBlockParent(firstBlock.parentNode);
-                                    if (parentListItem && dfx.isTag(parentListItem, 'li') === true) {
+                                    var parentListItem = ViperUtil.getFirstBlockParent(firstBlock.parentNode);
+                                    if (parentListItem && ViperUtil.isTag(parentListItem, 'li') === true) {
                                         newList = document.createElement('li');
                                         newList.appendChild(document.createElement('br'));
 
                                         var subList = null;
                                         while (firstBlock.nextSibling) {
-                                            if (dfx.isTag(firstBlock.nextSibling, 'li') === true) {
+                                            if (ViperUtil.isTag(firstBlock.nextSibling, 'li') === true) {
                                                 if (!subList) {
-                                                    subList = document.createElement(dfx.getTagName(firstBlock.parentNode));
+                                                    subList = document.createElement(ViperUtil.getTagName(firstBlock.parentNode));
                                                     newList.appendChild(subList);
                                                 }
 
@@ -345,8 +345,8 @@ ViperKeyboardEditorPlugin.prototype = {
                                             }
                                         }
 
-                                        dfx.remove(firstBlock);
-                                        dfx.insertAfter(parentListItem, newList);
+                                        ViperUtil.remove(firstBlock);
+                                        ViperUtil.insertAfter(parentListItem, newList);
                                         range.selectNode(newList.firstChild);
                                         range.collapse(true);
                                         ViperSelection.addRange(range);
@@ -356,26 +356,26 @@ ViperKeyboardEditorPlugin.prototype = {
 
                                 // Need to move rest of the list items to a new
                                 // list.
-                                var newList = document.createElement(dfx.getTagName(firstBlock.parentNode));
+                                var newList = document.createElement(ViperUtil.getTagName(firstBlock.parentNode));
                                 while (firstBlock.nextSibling) {
                                     newList.appendChild(firstBlock.nextSibling);
                                 }
 
-                                if (dfx.getTag('li', newList).length > 0) {
-                                    dfx.insertAfter(firstBlock.parentNode, newList);
+                                if (ViperUtil.getTag('li', newList).length > 0) {
+                                    ViperUtil.insertAfter(firstBlock.parentNode, newList);
                                 }
 
-                                dfx.insertAfter(firstBlock.parentNode, p);
+                                ViperUtil.insertAfter(firstBlock.parentNode, p);
                             } else {
-                                dfx.insertAfter(firstBlock, p);
+                                ViperUtil.insertAfter(firstBlock, p);
                             }
                         }
 
                         if (removeFirstBlock === true) {
-                            dfx.remove(firstBlock);
+                            ViperUtil.remove(firstBlock);
                         }
 
-                        if (p.firstChild.nodeType === dfx.TEXT_NODE) {
+                        if (p.firstChild.nodeType === ViperUtil.TEXT_NODE) {
                             if (this.viper.isBrowser('msie') === true
                                 && p.firstChild.data === String.fromCharCode(160)
                             ) {
@@ -410,30 +410,30 @@ ViperKeyboardEditorPlugin.prototype = {
             var blockParent = null;
             if (!startNode) {
                 startNode = range.startContainer;
-                if (dfx.isBlockElement(startNode) === true) {
+                if (ViperUtil.isBlockElement(startNode) === true) {
                     blockParent = startNode;
                 }
             } else {
-                blockParent = dfx.getFirstBlockParent(startNode);
+                blockParent = ViperUtil.getFirstBlockParent(startNode);
             }
 
-            if (startNode && dfx.isTag(blockParent, 'pre') === true) {
+            if (startNode && ViperUtil.isTag(blockParent, 'pre') === true) {
                 if (startNode.parentNode === blockParent
-                    && startNode.nodeType === dfx.TEXT_NODE
-                    && dfx.trim(startNode.data) === ''
+                    && startNode.nodeType === ViperUtil.TEXT_NODE
+                    && ViperUtil.trim(startNode.data) === ''
                 ) {
                     if (startNode.nextSibling
                         && !startNode.nextSibling.nextSibling
-                        && startNode.nextSibling.nodeType === dfx.TEXT_NODE
-                        && dfx.trim(startNode.nextSibling.data) === ''
+                        && startNode.nextSibling.nodeType === ViperUtil.TEXT_NODE
+                        && ViperUtil.trim(startNode.nextSibling.data) === ''
                     ) {
-                        dfx.remove(startNode.nextSibling);
+                        ViperUtil.remove(startNode.nextSibling);
                     }
 
-                    dfx.remove(startNode);
+                    ViperUtil.remove(startNode);
                     var p = document.createElement('p');
-                    dfx.setHtml(p, '<br />');
-                    dfx.insertAfter(blockParent, p);
+                    ViperUtil.setHtml(p, '<br />');
+                    ViperUtil.insertAfter(blockParent, p);
                     range.selectNode(p.firstChild);
                     range.collapse(true);
                     ViperSelection.addRange(range);
@@ -443,7 +443,7 @@ ViperKeyboardEditorPlugin.prototype = {
 
                 return false;
             } else if (blockParent === this.viper.getViperElement() && !defaultTagName) {
-                if (startNode.nodeType === dfx.TEXT_NODE
+                if (startNode.nodeType === ViperUtil.TEXT_NODE
                     && startNode.data.length > (range.startOffset + 1)
                     && startNode.data.charCodeAt(range.startOffset) === 32
                 ) {
@@ -464,20 +464,20 @@ ViperKeyboardEditorPlugin.prototype = {
             } else if (this.viper.isBrowser('msie') === true
                 && range.startOffset === 0
                 && range.collapsed === true
-                && dfx.isTag(startNode, 'li') === true
+                && ViperUtil.isTag(startNode, 'li') === true
             ) {
-                if (!startNode.nextSibling || (startNode.nextSibling.nodeType === dfx.TEXT_NODE && !startNode.nextSibling.nextSibling)) {
+                if (!startNode.nextSibling || (startNode.nextSibling.nodeType === ViperUtil.TEXT_NODE && !startNode.nextSibling.nextSibling)) {
                     if (startNode.parentNode.parentNode === this.viper.getViperElement()) {
                         var p = document.createElement('p');
-                        dfx.setHtml(p, '&nbsp');
-                        dfx.insertAfter(startNode.parentNode, p);
+                        ViperUtil.setHtml(p, '&nbsp');
+                        ViperUtil.insertAfter(startNode.parentNode, p);
                         range.setEnd(p.firstChild, 1);
                         range.moveEnd('character', -1);
                         range.collapse(false);
                         ViperSelection.addRange(range);
 
                         this.viper.fireSelectionChanged();
-                        dfx.remove(startNode);
+                        ViperUtil.remove(startNode);
                         return false;
                     }
                 }
@@ -493,9 +493,9 @@ ViperKeyboardEditorPlugin.prototype = {
                 }
 
                 var elem = document.createElement(defaultTagName);
-                dfx.setHtml(elem, '<br />');
+                ViperUtil.setHtml(elem, '<br />');
                 if (viperElem.firstChild) {
-                    dfx.insertBefore(viperElem.firstChild, elem);
+                    ViperUtil.insertBefore(viperElem.firstChild, elem);
                 } else {
                     viperElem.appendChild(elem);
                 }
@@ -508,13 +508,13 @@ ViperKeyboardEditorPlugin.prototype = {
             } else if (!selectedNode
                 && startNode
                 && startNode === endNode
-                && startNode.nodeType === dfx.ELEMENT_NODE
-                && (this.viper.isBrowser('firefox') !== true || !(dfx.isTag(startNode, 'br') === true && (!blockParent || dfx.isTag(blockParent, 'li') === true)))
-                && dfx.isStubElement(startNode) === false
+                && startNode.nodeType === ViperUtil.ELEMENT_NODE
+                && (this.viper.isBrowser('firefox') !== true || !(ViperUtil.isTag(startNode, 'br') === true && (!blockParent || ViperUtil.isTag(blockParent, 'li') === true)))
+                && ViperUtil.isStubElement(startNode) === false
             ) {
                 var elem = document.createElement(defaultTagName);
-                dfx.setHtml(elem, '<br />');
-                dfx.insertBefore(startNode, elem);
+                ViperUtil.setHtml(elem, '<br />');
+                ViperUtil.insertBefore(startNode, elem);
                 range.selectNode(elem.firstChild);
                 range.collapse(true);
                 ViperSelection.addRange(range);
@@ -524,16 +524,16 @@ ViperKeyboardEditorPlugin.prototype = {
                 && startNode
                 && endNode
                 && startNode !== endNode
-                && startNode.nodeType === dfx.ELEMENT_NODE
-                && endNode.nodeType === dfx.ELEMENT_NODE
+                && startNode.nodeType === ViperUtil.ELEMENT_NODE
+                && endNode.nodeType === ViperUtil.ELEMENT_NODE
             ) {
                 var elem = document.createElement(defaultTagName);
-                dfx.setHtml(elem, '<br />');
+                ViperUtil.setHtml(elem, '<br />');
 
-                if (dfx.isStubElement(endNode) === true) {
-                    dfx.insertAfter(startNode, elem);
+                if (ViperUtil.isStubElement(endNode) === true) {
+                    ViperUtil.insertAfter(startNode, elem);
                 } else {
-                    dfx.insertAfter(endNode, elem);
+                    ViperUtil.insertAfter(endNode, elem);
                 }
 
                 range.selectNode(elem.firstChild);
@@ -542,12 +542,12 @@ ViperKeyboardEditorPlugin.prototype = {
                 this.viper.fireSelectionChanged();
                 return false;
             } else if (this.viper.isBrowser('firefox') === true
-                && startNode.nodeType === dfx.TEXT_NODE
+                && startNode.nodeType === ViperUtil.TEXT_NODE
                 && endNode === startNode
                 && range.startOffset === startNode.data.length
                 && range.collapsed === true
-                && dfx.isTag(blockParent, 'li') === true
-                && dfx.isChildOf(dfx.getFirstBlockParent(range.getNextContainer(startNode)), blockParent)
+                && ViperUtil.isTag(blockParent, 'li') === true
+                && ViperUtil.isChildOf(ViperUtil.getFirstBlockParent(range.getNextContainer(startNode)), blockParent)
             ) {
                 // There is a sublist and the range is at the end of the main list
                 // item. When enter is pressed Firefox creates a new main list item
@@ -559,21 +559,21 @@ ViperKeyboardEditorPlugin.prototype = {
                     li.appendChild(startNode.nextSibling);
                 }
 
-                dfx.insertAfter(blockParent, li);
+                ViperUtil.insertAfter(blockParent, li);
                 range.selectNode(li.firstChild);
                 range.collapse(true);
                 ViperSelection.addRange(range);
                 return false;
             } else if (selectedNode
-                && dfx.isTag(selectedNode, 'li') === true
+                && ViperUtil.isTag(selectedNode, 'li') === true
                 && blockParent === selectedNode
                 && startNode === endNode
-                && dfx.isTag(startNode, 'br') === true
+                && ViperUtil.isTag(startNode, 'br') === true
                 && range.collapsed === true
                 && !startNode.nextSibling
             ) {
-                var parentListItem = dfx.getFirstBlockParent(blockParent.parentNode);
-                if (parentListItem && dfx.isTag(parentListItem, 'li') === true) {
+                var parentListItem = ViperUtil.getFirstBlockParent(blockParent.parentNode);
+                if (parentListItem && ViperUtil.isTag(parentListItem, 'li') === true) {
                     // Pressing enter at the start of an empty sub list item should
                     // be creating a new main list item and moving all remaining
                     // sub list items to the new list item.
@@ -585,9 +585,9 @@ ViperKeyboardEditorPlugin.prototype = {
 
                     var subList = null;
                     while (blockParent.nextSibling) {
-                        if (dfx.isTag(blockParent.nextSibling, 'li') === true) {
+                        if (ViperUtil.isTag(blockParent.nextSibling, 'li') === true) {
                             if (!subList) {
-                                subList = document.createElement(dfx.getTagName(blockParent.parentNode));
+                                subList = document.createElement(ViperUtil.getTagName(blockParent.parentNode));
                                 li.appendChild(subList);
                             }
 
@@ -599,8 +599,8 @@ ViperKeyboardEditorPlugin.prototype = {
                         }
                     }
 
-                    dfx.remove(blockParent);
-                    dfx.insertAfter(parentListItem, li);
+                    ViperUtil.remove(blockParent);
+                    ViperUtil.insertAfter(parentListItem, li);
                     range.selectNode(li.firstChild);
                     range.collapse(true);
                     ViperSelection.addRange(range);
@@ -617,26 +617,26 @@ ViperKeyboardEditorPlugin.prototype = {
                         elem = document.createElement('br');
                     }
 
-                    dfx.insertAfter(blockParent.parentNode, elem);
+                    ViperUtil.insertAfter(blockParent.parentNode, elem);
 
                     // If the list item is not the last one we need to move
                     // the rest of them to a new list.
                     var listItems = [];
                     for (var node = blockParent; node; node = node.nextSibling) {
-                        if (dfx.isTag(node, 'li') === true) {
+                        if (ViperUtil.isTag(node, 'li') === true) {
                             listItems.push(node);
                         }
                     }
 
                     if (listItems.length > 0) {
-                        var newList = document.createElement(dfx.getTagName(blockParent.parentNode));
-                        dfx.insertAfter(elem, newList);
+                        var newList = document.createElement(ViperUtil.getTagName(blockParent.parentNode));
+                        ViperUtil.insertAfter(elem, newList);
                         while (listItems.length > 0) {
                             newList.appendChild(listItems.shift());
                         }
                     }
 
-                    dfx.remove(blockParent);
+                    ViperUtil.remove(blockParent);
 
                     if (defaultTagName) {
                         range.selectNode(elem.firstChild);
@@ -649,7 +649,7 @@ ViperKeyboardEditorPlugin.prototype = {
                     return false;
                 }
             } else if (range.collapsed === true
-                && startNode.nodeType === dfx.TEXT_NODE
+                && startNode.nodeType === ViperUtil.TEXT_NODE
                 && startNode.data.length > (range.startOffset + 1)
                 && startNode.data.charCodeAt(range.startOffset) === 32
             ) {
@@ -701,61 +701,61 @@ ViperKeyboardEditorPlugin.prototype = {
             // See http://goo.gl/QPB0v
             if (e.keyCode === 46
                 && range.collapsed === true
-                && range.startContainer.nodeType === dfx.TEXT_NODE
+                && range.startContainer.nodeType === ViperUtil.TEXT_NODE
                 && range.startOffset === range.startContainer.data.length
                 && !range.startContainer.nextSibling
             ) {
                 // At the end of an element. Check to see if next available
                 // element is a block.
                 var nextSelectable = range.getNextContainer(range.startContainer, null, true);
-                var currentParent  = dfx.getFirstBlockParent(range.startContainer);
-                var nextParent     = dfx.getFirstBlockParent(nextSelectable);
+                var currentParent  = ViperUtil.getFirstBlockParent(range.startContainer);
+                var nextParent     = ViperUtil.getFirstBlockParent(nextSelectable);
                 if (currentParent !== nextParent && this.viper.isOutOfBounds(nextSelectable) === false) {
                     while (nextParent.firstChild) {
                         currentParent.appendChild(nextParent.firstChild);
                     }
 
-                    dfx.remove(nextParent);
-                    dfx.preventDefault(e);
+                    ViperUtil.remove(nextParent);
+                    ViperUtil.preventDefault(e);
                     this.viper.fireNodesChanged();
                     return false;
                 }
             } if (e.keyCode === 46
                 && range.collapsed === true
-                && range.startContainer.nodeType === dfx.ELEMENT_NODE
-                && dfx.isTag(range.getStartNode(), 'br') === true
+                && range.startContainer.nodeType === ViperUtil.ELEMENT_NODE
+                && ViperUtil.isTag(range.getStartNode(), 'br') === true
             ) {
-                dfx.remove(range.getStartNode());
-                dfx.preventDefault(e);
+                ViperUtil.remove(range.getStartNode());
+                ViperUtil.preventDefault(e);
                 this.viper.fireNodesChanged();
                 return false;
             } else if (e.keyCode === 8
                 && range.collapsed === true
-                && range.startContainer.nodeType === dfx.TEXT_NODE
+                && range.startContainer.nodeType === ViperUtil.TEXT_NODE
                 && (range.startOffset === 0 || (range.startOffset === 1 && range.startContainer.data.charAt(0) === ' '))
-                && (!range.startContainer.previousSibling || dfx.isTag(range.startContainer.previousSibling, 'br') === true)
+                && (!range.startContainer.previousSibling || ViperUtil.isTag(range.startContainer.previousSibling, 'br') === true)
             ) {
                 // At the start of an element. Check to see if the previous
                 // element is a part of another block element. If it is then
                 // join these elements.
                 var prevSelectable = range.getPreviousContainer(range.startContainer, null, true, true);
-                var currentParent  = dfx.getFirstBlockParent(range.startContainer);
-                var prevParent     = dfx.getFirstBlockParent(prevSelectable);
+                var currentParent  = ViperUtil.getFirstBlockParent(range.startContainer);
+                var prevParent     = ViperUtil.getFirstBlockParent(prevSelectable);
                 if (currentParent !== prevParent && this.viper.isOutOfBounds(prevSelectable) === false) {
                     // Check if there are any other elements in between.
-                    var elemsBetween = dfx.getElementsBetween(prevParent, currentParent);
+                    var elemsBetween = ViperUtil.getElementsBetween(prevParent, currentParent);
                     if (elemsBetween.length > 0) {
                         // There is at least one non block element in between.
                         // Remove it.
-                        dfx.remove(elemsBetween[(elemsBetween.length - 1)]);
+                        ViperUtil.remove(elemsBetween[(elemsBetween.length - 1)]);
                     } else {
                         while (currentParent.firstChild) {
                             prevParent.appendChild(currentParent.firstChild);
                         }
 
-                        dfx.remove(currentParent);
+                        ViperUtil.remove(currentParent);
 
-                        if (prevSelectable.nodeType === dfx.TEXT_NODE) {
+                        if (prevSelectable.nodeType === ViperUtil.TEXT_NODE) {
                             range.setStart(prevSelectable, prevSelectable.data.length);
                         } else {
                             range.setStartAfter(prevSelectable);
@@ -765,20 +765,20 @@ ViperKeyboardEditorPlugin.prototype = {
                         ViperSelection.addRange(range);
                     }
 
-                    dfx.preventDefault(e);
+                    ViperUtil.preventDefault(e);
                     this.viper.fireNodesChanged();
 
                     return false;
-                } else if (dfx.isTag(prevSelectable, 'br') === true) {
-                    dfx.remove(prevSelectable);
-                    dfx.preventDefault(e);
+                } else if (ViperUtil.isTag(prevSelectable, 'br') === true) {
+                    ViperUtil.remove(prevSelectable);
+                    ViperUtil.preventDefault(e);
                     this.viper.fireNodesChanged();
                     return false;
                 }
             } else if (
                 range.collapsed === false
                 && range.startContainer !== range.endContainer
-                && range.startContainer.nodeType === dfx.TEXT_NODE
+                && range.startContainer.nodeType === ViperUtil.TEXT_NODE
             ) {
                 // This is a selection on different text nodes. Check to see
                 // if these nodes are part of two different block elements.
@@ -788,18 +788,18 @@ ViperKeyboardEditorPlugin.prototype = {
                         var defaultTagName = this.viper.getDefaultBlockTag();
                         if (defaultTagName !== '') {
                             var defTag = document.createElement(defaultTagName);
-                            dfx.setHtml(defTag, '&nbsp;');
-                            dfx.setHtml(nodeSelection, '');
+                            ViperUtil.setHtml(defTag, '&nbsp;');
+                            ViperUtil.setHtml(nodeSelection, '');
                             nodeSelection.appendChild(defTag);
                         } else {
-                            dfx.setHtml(nodeSelection, '<br />');
+                            ViperUtil.setHtml(nodeSelection, '<br />');
                         }
                     } else {
-                        dfx.remove(nodeSelection);
+                        ViperUtil.remove(nodeSelection);
                     }
                 } else {
-                    var startParent = dfx.getFirstBlockParent(range.startContainer);
-                    var endParent   = dfx.getFirstBlockParent(range.endContainer);
+                    var startParent = ViperUtil.getFirstBlockParent(range.startContainer);
+                    var endParent   = ViperUtil.getFirstBlockParent(range.endContainer);
                     if (startParent !== endParent) {
                         // Two different parents. We need to join these parents.
                         // First remove all elements in between.
@@ -809,13 +809,13 @@ ViperKeyboardEditorPlugin.prototype = {
                         // start parent.
                         var nextSelectable = range.getNextContainer(range.startContainer, null, true);
                         if (this.viper.isOutOfBounds(nextSelectable) === false) {
-                            var nextParent     = dfx.getFirstBlockParent(nextSelectable);
+                            var nextParent     = ViperUtil.getFirstBlockParent(nextSelectable);
 
                             while (nextParent.firstChild) {
                                 startParent.appendChild(nextParent.firstChild);
                             }
 
-                            dfx.remove(nextParent);
+                            ViperUtil.remove(nextParent);
                         }
                     } else {
                         // Same container just remove contents.
@@ -823,7 +823,7 @@ ViperKeyboardEditorPlugin.prototype = {
                     }//end if
                 }//end if
 
-                dfx.preventDefault(e);
+                ViperUtil.preventDefault(e);
                 range.collapse(true);
                 ViperSelection.addRange(range);
                 this.viper.fireNodesChanged();
@@ -841,21 +841,21 @@ ViperKeyboardEditorPlugin.prototype = {
 
         if (range.collapsed === true && e.keyCode === 8) {
             var startNode = range.getStartNode();
-            if (startNode && startNode.nodeType === dfx.TEXT_NODE) {
+            if (startNode && startNode.nodeType === ViperUtil.TEXT_NODE) {
                 var skippedBlockElem = [];
                 var node      = range.getPreviousContainer(startNode, skippedBlockElem, true, true);
                 if (this.viper.isOutOfBounds(node) === true) {
                     // Range is at the start of the editable element, nothing to delete except any blank block elements.
                     if (skippedBlockElem.length > 0) {
                         for (var i = 0; i < skippedBlockElem.length; i++) {
-                            if (dfx.isTag(skippedBlockElem[i], 'p') === true) {
-                                dfx.remove(skippedBlockElem[i]);
+                            if (ViperUtil.isTag(skippedBlockElem[i], 'p') === true) {
+                                ViperUtil.remove(skippedBlockElem[i]);
                             }
                         }
-                    } else if (startNode.nodeType !== dfx.TEXT_NODE || startNode.data.length === 0) {
+                    } else if (startNode.nodeType !== ViperUtil.TEXT_NODE || startNode.data.length === 0) {
                         node = range.getNextContainer(startNode, skippedBlockElem, true, true);
                         if (node && this.viper.isOutOfBounds(node) === false) {
-                            dfx.remove(dfx.getSurroundingParents(startNode));
+                            ViperUtil.remove(ViperUtil.getSurroundingParents(startNode));
                             range.setStart(node, 0);
                             range.collapse(true);
                             ViperSelection.addRange(range);
@@ -874,7 +874,7 @@ ViperKeyboardEditorPlugin.prototype = {
             ) {
                 // The whole Viper element is selected, remove all of its content
                 // and then initialise the Viper element.
-                dfx.setHtml(viperElement, '');
+                ViperUtil.setHtml(viperElement, '');
                 this.viper.initEditableElement();
 
                 if (this.viper.isBrowser('chrome') === true
@@ -892,31 +892,31 @@ ViperKeyboardEditorPlugin.prototype = {
             // Remove HR elements in IE..
             var rangeClone = range.cloneRange();
             rangeClone.moveStart('character', -2);
-            if (dfx.trim(rangeClone.getHTMLContents()) === '<HR>') {
+            if (ViperUtil.trim(rangeClone.getHTMLContents()) === '<HR>') {
                 range.moveStart('character', -2);
                 range.deleteContents();
             } else {
-                if (rangeClone.endContainer.nodeType === dfx.ELEMENT_NODE
+                if (rangeClone.endContainer.nodeType === ViperUtil.ELEMENT_NODE
                     && rangeClone.endOffset === 0
                     && rangeClone.endContainer.innerHTML === ''
                 ) {
                     var nextNode = rangeClone.getNextContainer(rangeClone.startContainer, null, true);
-                    dfx.remove(rangeClone.endContainer);
+                    ViperUtil.remove(rangeClone.endContainer);
                     rangeClone.setEnd(nextNode, 0);
                     rangeClone.collapse(false);
                     ViperSelection.addRange(rangeClone);
 
                     return false;
                 } else if (range.startContainer
-                    && range.startContainer.nodeType === dfx.TEXT_NODE
+                    && range.startContainer.nodeType === ViperUtil.TEXT_NODE
                     && range.endContainer
-                    && range.endContainer.nodeType === dfx.TEXT_NODE
+                    && range.endContainer.nodeType === ViperUtil.TEXT_NODE
                     && range.startOffset === 0
                     && range.endOffset === range.endContainer.data.length
                 ) {
                     // Remove a whle list element. IE seems to remove the list
                     // items but not the UL/OL element...
-                    var parentLists = dfx.getParents(range.startContainer, 'ul,ol', this.viper.getViperElement());
+                    var parentLists = ViperUtil.getParents(range.startContainer, 'ul,ol', this.viper.getViperElement());
                     while (parentLists.length > 0) {
                         var parentList = parentLists.shift();
                         var firstSelectable = range._getFirstSelectableChild(parentList);
@@ -928,13 +928,13 @@ ViperKeyboardEditorPlugin.prototype = {
                             if (!newSelectable || this.viper.isOutOfBounds(newSelectable) === true) {
                                 newSelectable = range.getPreviousContainer(firstSelectable, null, true);
                                 if (newSelectable) {
-                                    dfx.remove(parentList);
+                                    ViperUtil.remove(parentList);
                                     range.setEnd(newSelectable, newSelectable.data.length);
                                     range.collapse(false);
                                     ViperSelection.addRange(range);
                                 }
                             } else {
-                                dfx.remove(parentList);
+                                ViperUtil.remove(parentList);
                                 range.setEnd(newSelectable, 0);
                                 range.collapse(false);
                                 ViperSelection.addRange(range);
@@ -949,18 +949,18 @@ ViperKeyboardEditorPlugin.prototype = {
             }//end if
         } else if (range.startOffset === 0
             && range.collapsed === true
-            && range.startContainer.nodeType === dfx.TEXT_NODE
+            && range.startContainer.nodeType === ViperUtil.TEXT_NODE
             && this.viper.isBrowser('firefox') === true
         ) {
-            var firstBlock = dfx.getFirstBlockParent(range.startContainer);
+            var firstBlock = ViperUtil.getFirstBlockParent(range.startContainer);
             if (firstBlock
                 && range._getFirstSelectableChild(firstBlock) === range.startContainer
                 && firstBlock.previousSibling
-                && dfx.isStubElement(firstBlock.previousSibling) === true
+                && ViperUtil.isStubElement(firstBlock.previousSibling) === true
             ) {
                 // Firefox does not handle deletion at the start of a block element
                 // very well when the previous sibling is a stub element (e.g. HR).
-                dfx.remove(firstBlock.previousSibling);
+                ViperUtil.remove(firstBlock.previousSibling);
                 return false;
             }
         } else if (range.startOffset === 0
@@ -976,28 +976,28 @@ ViperKeyboardEditorPlugin.prototype = {
             // causing all sorts of issues. It should only remove the list item
             // contents and leave the list item un touched..
             if (startNode === endNode
-                && startNode.nodeType === dfx.TEXT_NODE
-                && dfx.isTag(startNode.parentNode, 'li') === true
+                && startNode.nodeType === ViperUtil.TEXT_NODE
+                && ViperUtil.isTag(startNode.parentNode, 'li') === true
                 && startNode.data.length === range.endOffset
             ) {
-                dfx.setHtml(startNode.parentNode, '<br />');
+                ViperUtil.setHtml(startNode.parentNode, '<br />');
                 return false;
-            } else if ((dfx.isTag(range.commonAncestorContainer, 'ul') || dfx.isTag(range.commonAncestorContainer, 'ol'))) {
+            } else if ((ViperUtil.isTag(range.commonAncestorContainer, 'ul') || ViperUtil.isTag(range.commonAncestorContainer, 'ol'))) {
                 // Second issue is with removing multiple list items.
                 if (endNode.data.length === range.endOffset) {
-                    var endItem = dfx.getParents(endNode, 'li')[0];
+                    var endItem = ViperUtil.getParents(endNode, 'li')[0];
                     if (endNode === range._getLastSelectableChild(endItem)) {
                         // Whole list item is selected.
                         // Get the start list item and all other list items until
                         // the end list item.
-                        var startItem = dfx.getParents(startNode, 'li')[0];
+                        var startItem = ViperUtil.getParents(startNode, 'li')[0];
                         if (startNode === range._getFirstSelectableChild(startItem)) {
-                            var elements = dfx.getElementsBetween(startItem, endItem);
+                            var elements = ViperUtil.getElementsBetween(startItem, endItem);
                             elements.push(startItem, endItem);
 
                             // Find a new node we can put caret in.
                             var newSelContainer = range.getNextContainer(endNode, null, true);
-                            dfx.remove(elements);
+                            ViperUtil.remove(elements);
 
                             if (newSelContainer) {
                                 // Set the caret location.
@@ -1020,18 +1020,18 @@ ViperKeyboardEditorPlugin.prototype = {
             && range.collapsed === true
             && range.startContainer === range.endContainer
             && e.keyCode === 8
-            && (this.viper.elementIsEmpty(range.startContainer) === true || dfx.getHtml(range.startContainer) === '<br>')
+            && (this.viper.elementIsEmpty(range.startContainer) === true || ViperUtil.getHtml(range.startContainer) === '<br>')
         ) {
             var skippedBlockElem = [];
             var endCont = range.endContainer;
             var node    = range.getPreviousContainer(range.startContainer, skippedBlockElem, true, true);
 
             var startOffset = 0;
-            if (!node || dfx.isChildOf(node, this.viper.element) === false) {
+            if (!node || ViperUtil.isChildOf(node, this.viper.element) === false) {
                 if (skippedBlockElem.length > 0) {
                     for (var i = 0; i < skippedBlockElem.length; i++) {
-                        if (dfx.isTag(skippedBlockElem[i], 'p') === true) {
-                            dfx.remove(skippedBlockElem[i]);
+                        if (ViperUtil.isTag(skippedBlockElem[i], 'p') === true) {
+                            ViperUtil.remove(skippedBlockElem[i]);
                         }
                     }
                 }
@@ -1042,7 +1042,7 @@ ViperKeyboardEditorPlugin.prototype = {
                 if (this.viper.isOutOfBounds(node) === true) {
                     node = endCont;
                 }
-            } else if (node.nodeType === dfx.TEXT_NODE) {
+            } else if (node.nodeType === ViperUtil.TEXT_NODE) {
                 startOffset = node.data.length;
             }
 
@@ -1051,14 +1051,14 @@ ViperKeyboardEditorPlugin.prototype = {
             ViperSelection.addRange(range);
 
             if (endCont
-                && endCont.nodeType === dfx.ELEMENT_NODE
-                && (dfx.isTag(endCont, 'td') === true || dfx.isTag(endCont, 'th') === true)
+                && endCont.nodeType === ViperUtil.ELEMENT_NODE
+                && (ViperUtil.isTag(endCont, 'td') === true || ViperUtil.isTag(endCont, 'th') === true)
             ) {
                 return;
             }
 
             var parent = endCont.parentNode;
-            dfx.remove(endCont);
+            ViperUtil.remove(endCont);
             while (parent.childNodes.length === 0) {
                 if (parent === viperElement) {
                     break;
@@ -1066,7 +1066,7 @@ ViperKeyboardEditorPlugin.prototype = {
 
                 var remove = parent;
                 parent = parent.parentNode;
-                dfx.remove(remove);
+                ViperUtil.remove(remove);
             }
 
             return false;
@@ -1076,12 +1076,12 @@ ViperKeyboardEditorPlugin.prototype = {
             && range.collapsed === false
             && this.viper.isBrowser('msie') !== true
             && range.startContainer !== range.endContainer
-            && range.startContainer.nodeType === dfx.TEXT_NODE
-            && range.endContainer.nodeType === dfx.TEXT_NODE
+            && range.startContainer.nodeType === ViperUtil.TEXT_NODE
+            && range.endContainer.nodeType === ViperUtil.TEXT_NODE
             && range.endOffset === range.endContainer.data.length
         ) {
-            var startParent     = dfx.getFirstBlockParent(range.startContainer);
-            var endParent       = dfx.getFirstBlockParent(range.endContainer);
+            var startParent     = ViperUtil.getFirstBlockParent(range.startContainer);
+            var endParent       = ViperUtil.getFirstBlockParent(range.endContainer);
             var firstSelectable = range._getFirstSelectableChild(startParent);
             var lastSelectable  = range._getLastSelectableChild(endParent);
 
@@ -1090,19 +1090,19 @@ ViperKeyboardEditorPlugin.prototype = {
             ) {
                 if (defaultTagName !== '') {
                     var p = document.createElement(defaultTagName);
-                    dfx.setHtml(p, '<br />');
-                    dfx.insertBefore(startParent, p);
-                    dfx.remove(dfx.getElementsBetween(startParent, endParent));
-                    dfx.remove(startParent);
-                    dfx.remove(endParent);
+                    ViperUtil.setHtml(p, '<br />');
+                    ViperUtil.insertBefore(startParent, p);
+                    ViperUtil.remove(ViperUtil.getElementsBetween(startParent, endParent));
+                    ViperUtil.remove(startParent);
+                    ViperUtil.remove(endParent);
                     range.setStart(p, 0);
                     range.collapse(true);
                 } else {
                     var br = document.createElement('br');
-                    dfx.insertBefore(startParent, br);
-                    dfx.remove(dfx.getElementsBetween(startParent, endParent));
-                    dfx.remove(startParent);
-                    dfx.remove(endParent);
+                    ViperUtil.insertBefore(startParent, br);
+                    ViperUtil.remove(ViperUtil.getElementsBetween(startParent, endParent));
+                    ViperUtil.remove(startParent);
+                    ViperUtil.remove(endParent);
                     range.setStart(br, 0);
                     range.collapse(true);
                 }
@@ -1123,7 +1123,7 @@ ViperKeyboardEditorPlugin.prototype = {
         range = range || this.viper.getViperRange();
 
         var selectedNode = range.getNodeSelection();
-        if (selectedNode && selectedNode.nodeType === dfx.ELEMENT_NODE) {
+        if (selectedNode && selectedNode.nodeType === ViperUtil.ELEMENT_NODE) {
             selectedNode.innerHTML = '&nbsp;';
             return selectedNode;
         }
@@ -1142,29 +1142,29 @@ ViperKeyboardEditorPlugin.prototype = {
             }
         }
 
-        if (range.startContainer.nodeType === dfx.TEXT_NODE) {
+        if (range.startContainer.nodeType === ViperUtil.TEXT_NODE) {
             // Find the first parent block element.
             var parent = range.startContainer.parentNode;
             if (parent === this.viper.getViperElement()) {
                 // Check if there are any block elements before this node.
                 if (range.startContainer.previousSibling
-                    && range.startContainer.previousSibling.nodeType !== dfx.TEXT_NODE
+                    && range.startContainer.previousSibling.nodeType !== ViperUtil.TEXT_NODE
                 ) {
                     return range.startContainer.previousSibling;
                 } else {
                     // Cretae a new paragraph and insert it at range position.
                     var para = document.createElement('p');
-                    dfx.setHtml(para, '&nbsp;');
-                    dfx.insertAfter(range.startContainer, para);
+                    ViperUtil.setHtml(para, '&nbsp;');
+                    ViperUtil.insertAfter(range.startContainer, para);
                     return para;
                 }
             }
 
-            var blockQuote = dfx.getParents(range.startContainer, 'blockquote', this.viper.element);
+            var blockQuote = ViperUtil.getParents(range.startContainer, 'blockquote', this.viper.element);
 
             while (parent) {
-                if (dfx.isBlockElement(parent) === true) {
-                    if (blockQuote.length === 0 || dfx.isTag(parent, 'blockquote') === true) {
+                if (ViperUtil.isBlockElement(parent) === true) {
+                    if (blockQuote.length === 0 || ViperUtil.isTag(parent, 'blockquote') === true) {
                         break;
                     }
                 }
@@ -1176,12 +1176,12 @@ ViperKeyboardEditorPlugin.prototype = {
                 parent = parent.parentNode;
             }
         } else if (range.startContainer === range.endContainer
-            && dfx.isStubElement(range.startContainer)
+            && ViperUtil.isStubElement(range.startContainer)
             && range.startContainer.parentNode.firstChild === range.startContainer
             && range.startContainer.parentNode.lastChild === range.startContainer
         ) {
             parent = range.startContainer.parentNode;
-            dfx.setHtml(parent, '&nbsp;');
+            ViperUtil.setHtml(parent, '&nbsp;');
             range.setStart(parent.firstChild, 0);
             range.collapse(true);
         } else {
@@ -1194,11 +1194,11 @@ ViperKeyboardEditorPlugin.prototype = {
 
         // If the parent is not part of the editable element then we need to
         // create two new P tags.
-        if (dfx.isChildOf(parent, this.viper.element) === false) {
+        if (ViperUtil.isChildOf(parent, this.viper.element) === false) {
             // Find the next non block sibling.
             var node = range.endContainer;
-            while (dfx.isset(node.nextSibling) === true) {
-                if (dfx.isBlockElement(node.nextSibling) === true) {
+            while (ViperUtil.isset(node.nextSibling) === true) {
+                if (ViperUtil.isBlockElement(node.nextSibling) === true) {
                     break;
                 }
 
@@ -1212,13 +1212,13 @@ ViperKeyboardEditorPlugin.prototype = {
 
             this.viper.deleteContents();
             elem.appendChild(docFrag);
-            dfx.insertAfter(range.startContainer, elem);
+            ViperUtil.insertAfter(range.startContainer, elem);
             range.collapse(true);
 
             // Find the previous non block sibling.
             node = range.startContainer;
-            while (dfx.isset(node.previousSibling) === true) {
-                if (dfx.isBlockElement(node.previousSibling) === true) {
+            while (ViperUtil.isset(node.previousSibling) === true) {
+                if (ViperUtil.isBlockElement(node.previousSibling) === true) {
                     break;
                 }
 
@@ -1230,7 +1230,7 @@ ViperKeyboardEditorPlugin.prototype = {
             var felem = Viper.document.createElement('p');
             docFrag   = range.extractContents('p');
             felem.appendChild(docFrag);
-            dfx.insertBefore(elem, felem);
+            ViperUtil.insertBefore(elem, felem);
 
             range.setStart(elem.firstChild, 0);
             range.collapse(true);
@@ -1261,12 +1261,12 @@ ViperKeyboardEditorPlugin.prototype = {
         // If the selection is at the end of text node and has no next sibling
         // then move the range out of its parent node to prevent empty tags being
         // created by range.extractContents().
-        if (range.startContainer.nodeType === dfx.TEXT_NODE
+        if (range.startContainer.nodeType === ViperUtil.TEXT_NODE
             && range.startOffset === range.startContainer.data.length
         ) {
             if (!range.startContainer.nextSibling) {
                 var newTextNode = Viper.document.createTextNode('');
-                dfx.insertAfter(range.startContainer.parentNode, newTextNode);
+                ViperUtil.insertAfter(range.startContainer.parentNode, newTextNode);
                 range.setEnd(newTextNode, 0);
                 range.collapse(false);
             }
@@ -1290,14 +1290,14 @@ ViperKeyboardEditorPlugin.prototype = {
 
         // Remove DEL tags before getting the text content.
         var elemClone = elem.cloneNode(true);
-        dfx.remove(dfx.getTag('del', elemClone));
+        ViperUtil.remove(ViperUtil.getTag('del', elemClone));
 
-        if (dfx.isBlank(dfx.getNodeTextContent(elemClone)) === true) {
+        if (ViperUtil.isBlank(ViperUtil.getNodeTextContent(elemClone)) === true) {
             // Do not need this empty element.
             elem = null;
         }
 
-        if (elem === null || (elem.tagName && elem.tagName.toLowerCase() !== 'li' && dfx.isBlockElement(elem) === false)) {
+        if (elem === null || (elem.tagName && elem.tagName.toLowerCase() !== 'li' && ViperUtil.isBlockElement(elem) === false)) {
             // If the newly created element is not a block element then
             // create a P tag and make it the elem's parent.
             var newTag = 'p';
@@ -1311,7 +1311,7 @@ ViperKeyboardEditorPlugin.prototype = {
             if (elem !== null) {
                 pelem.appendChild(elem);
             } else {
-                dfx.setHtml(pelem, '&nbsp;');
+                ViperUtil.setHtml(pelem, '&nbsp;');
             }
 
             elem = pelem;
@@ -1322,11 +1322,11 @@ ViperKeyboardEditorPlugin.prototype = {
         }//end if
 
         if (this.viper.elementIsEmpty(parent) === true) {
-            dfx.setHtml(parent, '&nbsp;');
+            ViperUtil.setHtml(parent, '&nbsp;');
         }
 
         // Insert the new element after the current parent.
-        dfx.insertAfter(parent, elem);
+        ViperUtil.insertAfter(parent, elem);
 
         range.setStart(elem, 0);
         range.setStart(elem, 0);
@@ -1343,8 +1343,8 @@ ViperKeyboardEditorPlugin.prototype = {
         // Check the parent element contents.
         // If the parent element is now empty and its a block element
         // then add a space to it.
-        if (dfx.isBlockElement(parent) === true && dfx.trim(dfx.getHtml(parent)) === '') {
-            dfx.setHtml(parent, '&nbsp;');
+        if (ViperUtil.isBlockElement(parent) === true && ViperUtil.trim(ViperUtil.getHtml(parent)) === '') {
+            ViperUtil.setHtml(parent, '&nbsp;');
         }
 
         this.viper.fireNodesChanged('ViperKeyboardEditorPlugin:enter');
@@ -1373,7 +1373,7 @@ ViperKeyboardEditorPlugin.prototype = {
         if (e) {
             var range     = this.viper.getCurrentRange();
             var startNode = range.getStartNode();
-            if (startNode && dfx.isTag(dfx.getFirstBlockParent(startNode), 'pre') === true) {
+            if (startNode && ViperUtil.isTag(ViperUtil.getFirstBlockParent(startNode), 'pre') === true) {
                 this.insertTextAtRange(range, "\n");
                 return false;
             }
@@ -1382,13 +1382,13 @@ ViperKeyboardEditorPlugin.prototype = {
         var node = Viper.document.createElement('br');
         this.viper.insertNodeAtCaret(node);
 
-        if (dfx.isTag(node.previousSibling, 'br') === true) {
+        if (ViperUtil.isTag(node.previousSibling, 'br') === true) {
             // The previous sibling is also a br tag and to be able to position
             // caret between these two br tags we need to insert a text node in
             // between them.
             this.viper.insertAfter(node.previousSibling, this.viper.createSpaceNode());
-        } else if (!node.nextSibling && dfx.isBlockElement(node.parentNode) === false) {
-            dfx.insertAfter(node.parentNode, node);
+        } else if (!node.nextSibling && ViperUtil.isBlockElement(node.parentNode) === false) {
+            ViperUtil.insertAfter(node.parentNode, node);
         }
 
         return !this.viper.setCaretAfterNode(node);
@@ -1399,20 +1399,20 @@ ViperKeyboardEditorPlugin.prototype = {
     {
         var node = range.startContainer;
         // Assuming the range is collapsed already.
-        if (node.nodeType === dfx.TEXT_NODE) {
+        if (node.nodeType === ViperUtil.TEXT_NODE) {
             // Split the text node and insert new line char.
             var newNode = node.splitText(range.startOffset);
-            dfx.insertBefore(newNode, document.createTextNode(text));
+            ViperUtil.insertBefore(newNode, document.createTextNode(text));
         } else {
             // Element node..
             node = range.startContainer.childNodes[range.startOffset];
-            if (node.nodeType === dfx.TEXT_NODE) {
+            if (node.nodeType === ViperUtil.TEXT_NODE) {
                 // Split the text node and insert new line char.
                 var newNode = node.splitText(range.startOffset);
-                dfx.insertBefore(newNode, document.createTextNode(text));
+                ViperUtil.insertBefore(newNode, document.createTextNode(text));
             } else {
                 newNode = document.createTextNode(text);
-                dfx.insertAfter(node, newNode);
+                ViperUtil.insertAfter(node, newNode);
             }
         }
 
@@ -1429,11 +1429,11 @@ ViperKeyboardEditorPlugin.prototype = {
             if (newNode.nextSibling) {
                 var sibling = newNode.nextSibling;
                 ctNode      = ViperChangeTracker.createCTNode('ins', 'textAdd', newNode);
-                dfx.insertBefore(sibling, ctNode);
+                ViperUtil.insertBefore(sibling, ctNode);
             } else if (newNode.previousSibling) {
                 var sibling = newNode.previousSibling;
                 ctNode      = ViperChangeTracker.createCTNode('ins', 'textAdd', newNode);
-                dfx.insertAfter(sibling, ctNode);
+                ViperUtil.insertAfter(sibling, ctNode);
             } else {
                 var parent  = newNode.parentNode;
                 ctNode      = ViperChangeTracker.createCTNode('ins', 'textAdd', newNode);
@@ -1449,7 +1449,7 @@ ViperKeyboardEditorPlugin.prototype = {
 
     cleanPreTags: function()
     {
-        var preTags = dfx.getTag('pre', this.viper.getViperElement());
+        var preTags = ViperUtil.getTag('pre', this.viper.getViperElement());
         var c       = preTags.length;
 
         var bookmark = this.viper.createBookmark();
@@ -1468,33 +1468,33 @@ ViperKeyboardEditorPlugin.prototype = {
             return;
         }
 
-        var elems = dfx.getTag('p,div', pre);
+        var elems = ViperUtil.getTag('p,div', pre);
         var c     = elems.length;
 
         for (var i = 0; i < c; i++) {
             var elem = elems[i];
             while (elem.firstChild) {
-                dfx.insertBefore(elem, elem.firstChild);
+                ViperUtil.insertBefore(elem, elem.firstChild);
             }
 
-            dfx.insertBefore(elem, document.createTextNode("\n\n"));
-            dfx.remove(elem);
+            ViperUtil.insertBefore(elem, document.createTextNode("\n\n"));
+            ViperUtil.remove(elem);
         }
 
-        var elems = dfx.getTag('br', pre);
+        var elems = ViperUtil.getTag('br', pre);
         var c     = elems.length;
 
         for (var i = 0; i < c; i++) {
             var elem = elems[i];
-            dfx.insertBefore(elem, document.createTextNode("\n"));
-            dfx.remove(elem);
+            ViperUtil.insertBefore(elem, document.createTextNode("\n"));
+            ViperUtil.remove(elem);
         }
 
     },
 
     isEmptyBlockElement: function(element)
     {
-        if (dfx.isBlockElement(element) === false) {
+        if (ViperUtil.isBlockElement(element) === false) {
             return false;
         }
 
@@ -1505,14 +1505,14 @@ ViperKeyboardEditorPlugin.prototype = {
         var brCount = 0;
         for (var i = 0; i < element.childNodes.length; i++) {
             var el = element.childNodes[i];
-            if (el.nodeType === dfx.TEXT_NODE) {
-                if (dfx.trim(el.data).length !== 0) {
+            if (el.nodeType === ViperUtil.TEXT_NODE) {
+                if (ViperUtil.trim(el.data).length !== 0) {
                     return false;
                 } else {
                     // Ignore empty text nodes.
                     continue;
                 }
-            } else if (dfx.isTag(el, 'br') === false) {
+            } else if (ViperUtil.isTag(el, 'br') === false) {
                 return false;
             } else if (brCount !== 0) {
                 return false;

@@ -443,8 +443,8 @@ ViperDOMRange.prototype = {
 
         while (container.previousSibling) {
             container = container.previousSibling;
-            if (container.nodeType !== dfx.TEXT_NODE) {
-                if (dfx.isStubElement(container) === true) {
+            if (container.nodeType !== ViperUtil.TEXT_NODE) {
+                if (ViperUtil.isStubElement(container) === true) {
                     return container;
                 } else {
                     var child = this._getLastSelectableChild(container, skipEmptyNodes, brIsSelectable);
@@ -469,11 +469,11 @@ ViperDOMRange.prototype = {
         container = container.previousSibling;
         if (this._isSelectable(container) === true) {
             return container;
-        } else if (skippedBlockElem && dfx.isBlockElement(container) === true) {
+        } else if (skippedBlockElem && ViperUtil.isBlockElement(container) === true) {
             skippedBlockElem.push(container);
         }
 
-        if (container && container.nodeType !== dfx.TEXT_NODE) {
+        if (container && container.nodeType !== ViperUtil.TEXT_NODE) {
             var selChild = this._getLastSelectableChild(container, skipEmptyNodes, brIsSelectable);
             if (selChild !== null) {
                 return selChild;
@@ -487,7 +487,7 @@ ViperDOMRange.prototype = {
     _isSelectable: function(container)
     {
         if (container
-            && container.nodeType === dfx.TEXT_NODE
+            && container.nodeType === ViperUtil.TEXT_NODE
             && container.data.length !== 0
             && container.data.match(/^\n\s*$/) === null
         ) {
@@ -517,7 +517,7 @@ ViperDOMRange.prototype = {
 
         while (container.nextSibling) {
             container = container.nextSibling;
-            if (container.nodeType !== dfx.TEXT_NODE) {
+            if (container.nodeType !== ViperUtil.TEXT_NODE) {
                 var child = this._getFirstSelectableChild(container);
                 if (child !== null) {
                     return child;
@@ -539,12 +539,12 @@ ViperDOMRange.prototype = {
         container = container.nextSibling;
         if (this._isSelectable(container) === true) {
             return container;
-        } else if (skippedBlockElem && dfx.isBlockElement(container) === true) {
+        } else if (skippedBlockElem && ViperUtil.isBlockElement(container) === true) {
             skippedBlockElem.push(container);
         }
 
         var selChild = this._getFirstSelectableChild(container);
-        if (selChild !== null && (skipSpaceTextNodes !== true || dfx.trim(selChild.data) !== '')) {
+        if (selChild !== null && (skipSpaceTextNodes !== true || ViperUtil.trim(selChild.data) !== '')) {
             return selChild;
         }
 
@@ -555,7 +555,7 @@ ViperDOMRange.prototype = {
     _getFirstSelectableChild: function(element)
     {
         if (element) {
-            if (element.nodeType !== dfx.TEXT_NODE) {
+            if (element.nodeType !== ViperUtil.TEXT_NODE) {
                 var child = element.firstChild;
                 while (child) {
                     if (this._isSelectable(child) === true) {
@@ -585,10 +585,10 @@ ViperDOMRange.prototype = {
     _getLastSelectableChild: function(element, skipEmptyNodes, brIsSelectable)
     {
         if (element) {
-            if (element.nodeType !== dfx.TEXT_NODE) {
+            if (element.nodeType !== ViperUtil.TEXT_NODE) {
                 var child = element.lastChild;
                 while (child) {
-                    if (this._isSelectable(child) === true || (brIsSelectable === true && dfx.isTag(child, 'br') === true)) {
+                    if (this._isSelectable(child) === true || (brIsSelectable === true && ViperUtil.isTag(child, 'br') === true)) {
                         return child;
                     } else if (child.lastChild) {
                         // This node does have child nodes.
@@ -617,19 +617,19 @@ ViperDOMRange.prototype = {
     _normalizeNode: function(node)
     {
         // Joins all sibling text elements.
-        if (node.nodeType === dfx.ELEMENT_NODE) {
+        if (node.nodeType === ViperUtil.ELEMENT_NODE) {
             var c      = node.childNodes.length;
             var str    = '';
             var mChild = null;
             for (var i = 0; i < c; i++) {
                 var child = node.childNodes[i];
-                if (child.nodeType === dfx.TEXT_NODE) {
+                if (child.nodeType === ViperUtil.TEXT_NODE) {
                     str += child.data;
                     if (mChild === null) {
                         mChild = child;
                     } else {
                         // Remove this node.
-                        dfx.remove(child);
+                        ViperUtil.remove(child);
                     }
                 } else if (mChild !== null) {
                     mChild.data = str;
@@ -640,7 +640,7 @@ ViperDOMRange.prototype = {
             if (mChild !== null) {
                 mChild.nodeValue = str;
             }
-        } else if (node.nodeType === dfx.TEXT_NODE) {
+        } else if (node.nodeType === ViperUtil.TEXT_NODE) {
             this._normalizeNode(node.parentNode);
         }//end if
 
@@ -670,7 +670,7 @@ ViperDOMRange.prototype = {
             return null;
         }
 
-        if (this.startContainer.nodeType === dfx.ELEMENT_NODE) {
+        if (this.startContainer.nodeType === ViperUtil.ELEMENT_NODE) {
             return this.startContainer.childNodes[this.startOffset];
         }
 
@@ -684,7 +684,7 @@ ViperDOMRange.prototype = {
             return null;
         }
 
-        if (this.endContainer.nodeType === dfx.ELEMENT_NODE) {
+        if (this.endContainer.nodeType === ViperUtil.ELEMENT_NODE) {
             return this.endContainer.childNodes[this.endOffset];
         }
 
@@ -745,7 +745,7 @@ ViperDOMRange.prototype = {
             this._nodeSel.node = null;
             return null;
         } else if (startNode && !endNode) {
-            if (startNode.nodeType === dfx.TEXT_NODE && dfx.trim(startNode.data) === '') {
+            if (startNode.nodeType === ViperUtil.TEXT_NODE && ViperUtil.trim(startNode.data) === '') {
                 this._nodeSel.node = null;
                 return null;
             }
@@ -755,33 +755,33 @@ ViperDOMRange.prototype = {
         } else if (!startNode && endNode) {
             this._nodeSel.node = endNode;
             return endNode;
-        } else if (startNode.nodeType === dfx.TEXT_NODE
-            && endNode.nodeType === dfx.TEXT_NODE
+        } else if (startNode.nodeType === ViperUtil.TEXT_NODE
+            && endNode.nodeType === ViperUtil.TEXT_NODE
             && startNode === endNode
             && range.startOffset === 0
             && range.endOffset === endNode.data.length
             && range.collapsed === false
             && endNode.nextSibling
-            && (!dfx.isTag(endNode.nextSibling, 'br') || endNode.nextSibling.nextSibling)
+            && (!ViperUtil.isTag(endNode.nextSibling, 'br') || endNode.nextSibling.nextSibling)
         ) {
             this._nodeSel.node = null;
             return null;
-        } else if (startNode.nodeType === dfx.TEXT_NODE
-            && endNode.nodeType === dfx.TEXT_NODE
+        } else if (startNode.nodeType === ViperUtil.TEXT_NODE
+            && endNode.nodeType === ViperUtil.TEXT_NODE
             && startNode === endNode
             && range.startOffset === startNode.data.length
             && range.collapsed === true
         ) {
             this._nodeSel.node = null;
             return null;
-        } else if (startNode.nodeType === dfx.ELEMENT_NODE
-            && range.endContainer.nodeType === dfx.ELEMENT_NODE
+        } else if (startNode.nodeType === ViperUtil.ELEMENT_NODE
+            && range.endContainer.nodeType === ViperUtil.ELEMENT_NODE
             && startNode.nextSibling === endNode
         ) {
             this._nodeSel.node = startNode;
             return startNode;
-        } else if (startNode.nodeType === dfx.TEXT_NODE
-            && endNode.nodeType === dfx.TEXT_NODE
+        } else if (startNode.nodeType === ViperUtil.TEXT_NODE
+            && endNode.nodeType === ViperUtil.TEXT_NODE
             && range.startOffset === 0
             && range.endOffset === endNode.data.length
             && this._getFirstSelectableChild(common) === startNode
@@ -790,37 +790,37 @@ ViperDOMRange.prototype = {
             this._nodeSel.node = common;
             return common;
         } else if (range.startContainer === range.endContainer
-            && range.startContainer.nodeType === dfx.ELEMENT_NODE
+            && range.startContainer.nodeType === ViperUtil.ELEMENT_NODE
             && range.startOffset === 0
             && range.endOffset === 0
         ) {
             this._nodeSel.node = range.startContainer;
             return range.startContainer;
-        } else if (startNode.nodeType === dfx.ELEMENT_NODE
-            && endNode.nodeType === dfx.TEXT_NODE
+        } else if (startNode.nodeType === ViperUtil.ELEMENT_NODE
+            && endNode.nodeType === ViperUtil.TEXT_NODE
             && range.endOffset === endNode.data.length
             && this._getLastSelectableChild(startNode) === endNode
         ) {
             this._nodeSel.node = startNode;
             return startNode;
-        } else if (dfx.isStubElement(startNode) === true
-            && endNode.nodeType === dfx.TEXT_NODE
+        } else if (ViperUtil.isStubElement(startNode) === true
+            && endNode.nodeType === ViperUtil.TEXT_NODE
             && endNode.data.length === range.endOffset
         ) {
             return startNode;
-        } else if (startNode.nodeType === dfx.TEXT_NODE
-            && endNode.nodeType === dfx.TEXT_NODE
+        } else if (startNode.nodeType === ViperUtil.TEXT_NODE
+            && endNode.nodeType === ViperUtil.TEXT_NODE
             && range.startOffset === 0
             && range.endOffset === endNode.data.length
             && range.commonAncestorContainer
-            && range.commonAncestorContainer.nodeType === dfx.ELEMENT_NODE
+            && range.commonAncestorContainer.nodeType === ViperUtil.ELEMENT_NODE
             && this._getFirstSelectableChild(range.commonAncestorContainer) === startNode
             && this._getLastSelectableChild(range.commonAncestorContainer) === endNode
         ) {
             this._nodeSel.node = range.commonAncestorContainer;
             return range.commonAncestorContainer;
-        } else if (startNode.nodeType === dfx.TEXT_NODE
-            && endNode.nodeType === dfx.TEXT_NODE
+        } else if (startNode.nodeType === ViperUtil.TEXT_NODE
+            && endNode.nodeType === ViperUtil.TEXT_NODE
             && range.startOffset === 0
             && range.endOffset === endNode.data.length
             && common
@@ -833,7 +833,7 @@ ViperDOMRange.prototype = {
 
         // We may need to adjust the "startNode" depending on its offset.
         var startMoved = null;
-        if (startNode.nodeType === dfx.TEXT_NODE) {
+        if (startNode.nodeType === ViperUtil.TEXT_NODE) {
             if (range.startOffset !== 0) {
                 if (range.startOffset !== startNode.data.length) {
                     this._nodeSel.node = null;
@@ -859,8 +859,8 @@ ViperDOMRange.prototype = {
                     }
                 }
             }
-        } else if (startNode.nodeType === dfx.ELEMENT_NODE
-            && endNode.nodeType === dfx.ELEMENT_NODE
+        } else if (startNode.nodeType === ViperUtil.ELEMENT_NODE
+            && endNode.nodeType === ViperUtil.ELEMENT_NODE
             && common === startNode
         ) {
             this._nodeSel.node = startNode;
@@ -868,7 +868,7 @@ ViperDOMRange.prototype = {
         }
 
         if (startNode.previousSibling) {
-            if (startNode.previousSibling.nodeType !== dfx.TEXT_NODE
+            if (startNode.previousSibling.nodeType !== ViperUtil.TEXT_NODE
                 || startNode.previousSibling.data.length !== 0
             ) {
                 if (startMoved) {
@@ -880,7 +880,7 @@ ViperDOMRange.prototype = {
             }
         }
 
-        if (endNode.nodeType === dfx.TEXT_NODE) {
+        if (endNode.nodeType === ViperUtil.TEXT_NODE) {
             if (range.endOffset !== 0) {
                 if (range.endOffset === endNode.data.length
                     && !endNode.nextSibling
@@ -894,7 +894,7 @@ ViperDOMRange.prototype = {
                     return null;
                 }
             }
-        } else if (!endNode.nextSibling && dfx.isTag(endNode, 'br') === true) {
+        } else if (!endNode.nextSibling && ViperUtil.isTag(endNode, 'br') === true) {
             // Handle Firefox _moz_dirty at the end of an element.
             if (this._getLastSelectableChild(startNode.parentNode) === endNode.previousSibling) {
                 this._nodeSel.node = startNode.parentNode;
@@ -913,7 +913,7 @@ ViperDOMRange.prototype = {
         }
 
         var nextSibling = startParent.nextSibling;
-        if (!nextSibling && startParent.nodeType !== dfx.TEXT_NODE) {
+        if (!nextSibling && startParent.nodeType !== ViperUtil.TEXT_NODE) {
             this._nodeSel.node = startNode.parentNode;
             return startNode.parentNode;
         }
@@ -924,8 +924,8 @@ ViperDOMRange.prototype = {
         }
 
         while (nextSibling
-            && nextSibling.nodeType === dfx.TEXT_NODE
-            && dfx.isBlank(nextSibling.data) === true
+            && nextSibling.nodeType === ViperUtil.TEXT_NODE
+            && ViperUtil.isBlank(nextSibling.data) === true
         ) {
             nextSibling = nextSibling.nextSibling;
         }

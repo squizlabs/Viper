@@ -4,7 +4,8 @@
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <title>Viper - Simple Example</title>
     <link rel="stylesheet" media="screen" href="main.css">
-    <script type="text/javascript" src="../../DfxJSLib/dfx.js"></script>
+    <script type="text/javascript" src="../jquery.js"></script>
+    <script type="text/javascript" src="../jquery.ui.js"></script>
     <script type="text/javascript" src="../../Viper-all.js"></script>
     <script type="text/javascript" src="../../Plugins/ViperSourceViewPlugin/jsbeautifier.js"></script>
     <script type="text/javascript">
@@ -27,7 +28,7 @@
                 var html = pasteElement.innerHTML;
 
                 if (!_tmpNode) {
-                    dfx.getId('rawContent').value = html;
+                    ViperUtil.getid('rawContent').value = html;
                 }
 
                 defaultFunction.apply(this, arguments);
@@ -39,16 +40,16 @@
                     // thinking they are only text.
                     viperHtml = viperHtml.replace('&lt;', '<', 'g');
                     viperHtml = viperHtml.replace('&gt;', '>', 'g');
-                    dfx.setHtml(viper.element, viperHtml);
-                    dfx.getId('cleanContent').value = StyleHTML(dfx.getHtml(viper.element));
+                    ViperUtil.setHtml(viper.element, viperHtml);
+                    ViperUtil.getid('cleanContent').value = StyleHTML(ViperUtil.getHtml(viper.element));
                 } else {
-                    dfx.getId('cleanContent').value = StyleHTML(viperHtml);
+                    ViperUtil.getid('cleanContent').value = StyleHTML(viperHtml);
                 }
 
             };
 
-            var rawContent     = dfx.getId('rawContent');
-            var cleanContent   = dfx.getId('cleanContent');
+            var rawContent     = ViperUtil.getid('rawContent');
+            var cleanContent   = ViperUtil.getid('cleanContent');
             rawContent.value   = '';
             cleanContent.value = '';
 
@@ -56,18 +57,18 @@
                 setTimeout(function() {
                     viper.element.focus();
                     var tmp = document.createElement('div');
-                    dfx.setHtml(tmp, rawContent.value);
-                    copyPastePlugin._handleFormattedPasteValue(false, tmp, dfx.getId('content').firstChild.firstChild);
+                    ViperUtil.setHtml(tmp, rawContent.value);
+                    copyPastePlugin._handleFormattedPasteValue(false, tmp, ViperUtil.getid('content').firstChild.firstChild);
                 }, 30);
             };
 
-            dfx.remove(dfx.getId('loading'));
-            dfx.setStyle(dfx.getId('mainContent'), 'display', 'block');
+            ViperUtil.remove(ViperUtil.getid('loading'));
+            ViperUtil.setStyle(ViperUtil.getid('mainContent'), 'display', 'block');
         };
 
         setTimeout(function() {
-            if (dfx.getId('loading')) {
-                dfx.setHtml(dfx.getId('loading'), 'Loading... FAILED!');
+            if (ViperUtil.getid('loading')) {
+                ViperUtil.setHtml(ViperUtil.getid('loading'), 'Loading... FAILED!');
             }
 
         }, 5000);

@@ -36,10 +36,10 @@ ViperTrackChangesPlugin.prototype = {
         ViperChangeTracker.addChangeType('viperComment', 'Comment', 'comment');
         ViperChangeTracker.setRejectCallback('viperComment', function(clone, node) {
             while (node.firstChild) {
-                dfx.insertBefore(node, node.firstChild);
+                ViperUtil.insertBefore(node, node.firstChild);
             }
 
-            dfx.remove(node);
+            ViperUtil.remove(node);
         });
 
         // Change Tracker will ask for the description of the change.
@@ -47,7 +47,7 @@ ViperTrackChangesPlugin.prototype = {
         // read other comments. Comment in change object is updated when the subElement is disabled.
         ViperChangeTracker.setDescriptionCallback('viperComment', function(node, ctnType, changeid) {
             var div = Viper.document.createElement('div');
-            dfx.addClass(div, 'viperCommentDiv');
+            ViperUtil.addClass(div, 'viperCommentDiv');
 
             // Set the changeid of this div so that when subElementDisabled event
             // is fired, we can determine the changeid of active comment.
@@ -55,13 +55,13 @@ ViperTrackChangesPlugin.prototype = {
             div.setAttribute('id', 'viperComment-' + changeid);
 
             var comment = ViperChangeTracker._comments[changeid] || '&nbsp;';
-            dfx.setHtml(div, comment);
+            ViperUtil.setHtml(div, comment);
 
-            dfx.addEvent(div, 'mousedown', function() {
+            ViperUtil.addEvent(div, 'mousedown', function() {
                 self.viper.setSubElementState(div, true);
 
-                dfx.removeEvent(div, 'mouseup.viperSubElem');
-                dfx.addEvent(div, 'mouseup.viperSubElem', function(e) {
+                ViperUtil.removeEvent(div, 'mouseup.viperSubElem');
+                ViperUtil.addEvent(div, 'mouseup.viperSubElem', function(e) {
                     setTimeout(function() {
                         self.viper.mouseUp(e);
                     }, 200);
@@ -70,7 +70,7 @@ ViperTrackChangesPlugin.prototype = {
                 // We need to add a new class to top level element so the box
                 // stays on top of others.
                 var parent = div.parentNode.parentNode.parentNode;
-                dfx.addClass(parent, 'active');
+                ViperUtil.addClass(parent, 'active');
             });
 
             if (self._newCommentid === changeid) {
@@ -81,7 +81,7 @@ ViperTrackChangesPlugin.prototype = {
 
                     var markerElem = ViperChangeTracker.getMarker(changeid);
                     if (markerElem) {
-                        dfx.trigger(markerElem, 'click');
+                        ViperUtil.trigger(markerElem, 'click');
                     }
 
                     self.viper.setSubElementState(div, true);
@@ -90,7 +90,7 @@ ViperTrackChangesPlugin.prototype = {
                     // We need to add a new class to top level element so the box
                     // stays on top of others.
                     var parent = div.parentNode.parentNode.parentNode;
-                    dfx.addClass(parent, 'active');
+                    ViperUtil.addClass(parent, 'active');
 
                     var range = self.viper.getCurrentRange();
                     range.setStart(div.firstChild, 0);
@@ -108,7 +108,7 @@ ViperTrackChangesPlugin.prototype = {
         this.viper.registerCallback('subElementDisabled', 'ViperTrackChangesPlugin', function(elem) {
             if (elem && elem.parentNode && elem.parentNode.parentNode) {
                 var parent = elem.parentNode.parentNode.parentNode;
-                dfx.removeClass(parent, 'active');
+                ViperUtil.removeClass(parent, 'active');
             }
         });
 
@@ -139,7 +139,7 @@ ViperTrackChangesPlugin.prototype = {
         this.viper.focus();
         var info     = ViperHistoryManager.createNodeChangeInfo(this.viper.element);
         var bookmark = this.viper.createBookmark();
-        var elements = dfx.getElementsBetween(bookmark.start, bookmark.end);
+        var elements = ViperUtil.getElementsBetween(bookmark.start, bookmark.end);
 
         var eln      = elements.length;
         var changeid = ViperChangeTracker.addChange('viperComment');
@@ -148,7 +148,7 @@ ViperTrackChangesPlugin.prototype = {
 
         if (eln === 0) {
             var el = Viper.document.createElement('span');
-            dfx.insertBefore(bookmark.start, el);
+            ViperUtil.insertBefore(bookmark.start, el);
             ViperChangeTracker.addNodeToChange(changeid, el);
         } else {
             for (var i = 0; i < eln; i++) {

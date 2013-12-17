@@ -4,22 +4,24 @@
         <title>Viper Testing</title>
         __TEST_VIPER_INCLUDE__
         <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-        <script type="text/javascript" src="./test.js"></script>
-        <script type="text/javascript" src="./PHPSikuli/PHPSikuliBrowser.js"></script>
-        <link rel="stylesheet" media="screen" href="./test.css" />
+        <script type="text/javascript" src="../../Examples/jquery.js"></script>
+        <script type="text/javascript" src="../../Examples/jquery.ui.js"></script>
+        <script type="text/javascript" src="../Web/test.js"></script>
+        <script type="text/javascript" src="../PHPSikuli/PHPSikuliBrowser.js"></script>
+        <link rel="stylesheet" media="screen" href="../Web/test.css" />
         <!--[if IE]>
-            <link rel="stylesheet" type="text/css" href="./test-ie.css" />
+            <link rel="stylesheet" type="text/css" href="../Web/test-ie.css" />
         <![endif]-->
         __TEST_JS_INCLUDE__
         <script type="text/javascript">
             var viper   = null;
             ViperReadyCallback = function() {
-                var contentElement = dfx.getId('content');
+                var contentElement = ViperUtil.getid('content');
 
                 viper = new Viper('test', null, null, [contentElement]);
                 viper.getPluginManager().setPlugins(['ViperCoreStylesPlugin', 'ViperKeyboardEditorPlugin', 'ViperInlineToolbarPlugin', 'ViperHistoryPlugin', 'ViperListPlugin', 'ViperFormatPlugin', 'ViperToolbarPlugin', 'ViperTableEditorPlugin', 'ViperCopyPastePlugin', 'ViperImagePlugin', 'ViperLinkPlugin', 'ViperAccessibilityPlugin', 'ViperSourceViewPlugin', 'ViperSearchReplacePlugin', 'ViperLangToolsPlugin', 'ViperCharMapPlugin', 'ViperTrackChangesPlugin']);
 
-                dfxjQuery('.Viper-button[title]').removeAttr('title');
+                $('.Viper-button[title]').removeAttr('title');
 
                 var readyCallbacks = viperTest.getReadyCallbacks();
                 if (readyCallbacks) {
@@ -29,21 +31,20 @@
                 }
 
                 // Check for test cases.
-                var testCases = dfx.find(contentElement, 'div[id^="test"]');
+                var testCases = ViperUtil.find(contentElement, 'div[id^="test"]');
                 if (testCases.length > 0) {
                     var testCasesHtml = [];
                     for (var i = 0; i < testCases.length; i++) {
-                        testCasesHtml[testCases[i].id] = dfx.getHtml(testCases[i]);
+                        testCasesHtml[testCases[i].id] = ViperUtil.getHtml(testCases[i]);
                     }
 
                     viperTest.set('testCases', testCasesHtml);
-                    dfx.empty(contentElement);
+                    ViperUtil.empty(contentElement);
                 }
             };
         </script>
     </head>
     <body spellcheck="false" class="Viper-unitTest">
-        <!--<img id="windowTarget" src="./Core/Images/window-target.png" onclick="if (viper) viper.destroy();location.reload();" />-->
         <div id="content" class="__TEST_BROWSER__">__TEST_CONTENT__</div>
         <div id="menu">
             <div id="testTitle"><em>Running:</em> __TEST_TITLE__<em id="testCaseTitle"></em></div>

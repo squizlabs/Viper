@@ -18,7 +18,7 @@ ViperAccessibilityPlugin_WCAG2_Principle2_Guideline2_4 = {
                 var editPanel = this.parent.getResolutionActionsContainer(contentElement);
 
                 var titleid =  null;
-                titleid     = dfx.getUniqueId();
+                titleid     = ViperUtil.getUniqueId();
                 var title   = viper.ViperTools.createTextbox(titleid, 'Title', element.getAttribute('title') || '');
                 editPanel.appendChild(title);
 
@@ -28,7 +28,7 @@ ViperAccessibilityPlugin_WCAG2_Principle2_Guideline2_4 = {
                 };
 
                 this.parent.addActionButton(action, contentElement, [titleid], null, null, function() {
-                    var titleVal = dfx.trim(viper.ViperTools.getItem(titleid).getValue());
+                    var titleVal = ViperUtil.trim(viper.ViperTools.getItem(titleid).getValue());
                     if (!titleVal) {
                         return false;
                     }

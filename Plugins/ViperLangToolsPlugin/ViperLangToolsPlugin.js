@@ -38,7 +38,7 @@ ViperLangToolsPlugin.prototype = {
         var element = null;
 
         if (node) {
-            if (dfx.isTag(node, tagName) === true) {
+            if (ViperUtil.isTag(node, tagName) === true) {
                 // Update attribute.
                 node.setAttribute('title', titleAttribute);
                 element = node;
@@ -53,7 +53,7 @@ ViperLangToolsPlugin.prototype = {
                     element = document.createElement(tagName);
                     element.setAttribute('title', titleAttribute);
 
-                    dfx.insertBefore(node, element);
+                    ViperUtil.insertBefore(node, element);
                     element.appendChild(node);
                 }
             }
@@ -62,13 +62,13 @@ ViperLangToolsPlugin.prototype = {
             element = document.createElement(tagName);
             element.setAttribute('title', titleAttribute);
 
-            var elems = dfx.getElementsBetween(bookmark.start, bookmark.end);
+            var elems = ViperUtil.getElementsBetween(bookmark.start, bookmark.end);
             var c     = elems.length;
             for (var i = 0; i < c; i++) {
                 element.appendChild(elems[i]);
             }
 
-            dfx.insertBefore(bookmark.start, element);
+            ViperUtil.insertBefore(bookmark.start, element);
 
             this.viper.removeBookmark(bookmark);
         }//end if
@@ -93,7 +93,7 @@ ViperLangToolsPlugin.prototype = {
         var node    = this.viper.getNodeSelection();
         var element = null;
 
-        if ((node && node.nodeType !== dfx.TEXT_NODE) || range.collapsed === true) {
+        if ((node && node.nodeType !== ViperUtil.TEXT_NODE) || range.collapsed === true) {
             if (!node) {
                 var node = range.getStartNode();
                 if (!node) {
@@ -103,7 +103,7 @@ ViperLangToolsPlugin.prototype = {
                     }
                 }
 
-                if (node.nodeType === dfx.TEXT_NODE) {
+                if (node.nodeType === ViperUtil.TEXT_NODE) {
                     node = node.parentNode;
                 }
             }//end if
@@ -115,13 +115,13 @@ ViperLangToolsPlugin.prototype = {
             element = document.createElement('span');
             element.setAttribute('lang', langAttribute);
 
-            var elems = dfx.getElementsBetween(bookmark.start, bookmark.end);
+            var elems = ViperUtil.getElementsBetween(bookmark.start, bookmark.end);
             var c     = elems.length;
             for (var i = 0; i < c; i++) {
                 element.appendChild(elems[i]);
             }
 
-            dfx.insertBefore(bookmark.start, element);
+            ViperUtil.insertBefore(bookmark.start, element);
 
             this.viper.removeBookmark(bookmark);
         }//end if
@@ -146,10 +146,10 @@ ViperLangToolsPlugin.prototype = {
         var lastChild  = elem.lastChild;
 
         while (elem.firstChild) {
-            dfx.insertBefore(elem, elem.firstChild);
+            ViperUtil.insertBefore(elem, elem.firstChild);
         }
 
-        dfx.remove(elem);
+        ViperUtil.remove(elem);
 
         var range = this.viper.getViperRange();
         if (firstChild === lastChild) {
@@ -157,7 +157,7 @@ ViperLangToolsPlugin.prototype = {
         } else {
             range.setStart(firstChild, 0);
 
-            if (lastChild.nodeType === dfx.TEXT_NODE) {
+            if (lastChild.nodeType === ViperUtil.TEXT_NODE) {
                 range.setEnd(lastChild, lastChild.data.length);
             } else {
                 var lastSelectable = range._getLastSelectableChild(lastChild);
@@ -176,15 +176,15 @@ ViperLangToolsPlugin.prototype = {
     getTagFromRange: function(range, tagName)
     {
         var selectedNode = this.viper.getNodeSelection();
-        if (selectedNode && selectedNode.nodeType === dfx.ELEMENT_NODE) {
-            if (tagName && dfx.isTag(selectedNode, tagName) === true) {
+        if (selectedNode && selectedNode.nodeType === ViperUtil.ELEMENT_NODE) {
+            if (tagName && ViperUtil.isTag(selectedNode, tagName) === true) {
                 return selectedNode;
-            } else if (tagName === 'lang' && dfx.hasAttribute(selectedNode, 'lang') === true) {
+            } else if (tagName === 'lang' && ViperUtil.hasAttribute(selectedNode, 'lang') === true) {
                 return selectedNode;
             } else if (!tagName) {
-                if (dfx.isTag(selectedNode, 'abbr') === true || dfx.isTag(selectedNode, 'acronym') === true) {
+                if (ViperUtil.isTag(selectedNode, 'abbr') === true || ViperUtil.isTag(selectedNode, 'acronym') === true) {
                     return selectedNode;
-                } else if (dfx.hasAttribute(selectedNode, 'lang') === true) {
+                } else if (ViperUtil.hasAttribute(selectedNode, 'lang') === true) {
                     return selectedNode;
                 } else {
                     return null;
@@ -198,20 +198,20 @@ ViperLangToolsPlugin.prototype = {
         var common    = range.getCommonElement();
         while (common) {
             if (tagName) {
-                if (dfx.isTag(common, tagName) === true) {
+                if (ViperUtil.isTag(common, tagName) === true) {
                     return common;
-                } else if (tagName === 'lang' && dfx.hasAttribute(common, 'lang') === true) {
+                } else if (tagName === 'lang' && ViperUtil.hasAttribute(common, 'lang') === true) {
                     return common;
                 }
             } else {
-                if (dfx.isTag(common, 'abbr') === true || dfx.isTag(common, 'acronym') === true) {
+                if (ViperUtil.isTag(common, 'abbr') === true || ViperUtil.isTag(common, 'acronym') === true) {
                     return common;
-                } else if (dfx.hasAttribute(common, 'lang') === true) {
+                } else if (ViperUtil.hasAttribute(common, 'lang') === true) {
                     return common;
                 }
             }
 
-            if (common === viperElem || dfx.isBlockElement(common) === true) {
+            if (common === viperElem || ViperUtil.isBlockElement(common) === true) {
                 break;
             }
 
@@ -242,16 +242,16 @@ ViperLangToolsPlugin.prototype = {
             var c = parent.childNodes.length;
             for (var i = 0; i < c; i++) {
                 var child = parent.childNodes[i];
-                if (child.nodeType == dfx.ELEMENT_NODE) {
+                if (child.nodeType == ViperUtil.ELEMENT_NODE) {
                     if (child !== node) {
                         return parents;
                     }
-                } else if (dfx.isBlank(dfx.trim(child.data)) !== true) {
+                } else if (ViperUtil.isBlank(ViperUtil.trim(child.data)) !== true) {
                     return parents;
                 }
             }
 
-            if (!tagName || dfx.isTag(parent, tagName) === true) {
+            if (!tagName || ViperUtil.isTag(parent, tagName) === true) {
                 parents.push(parent);
             }
 
@@ -265,14 +265,14 @@ ViperLangToolsPlugin.prototype = {
 
     handleAcronym: function()
     {
-        var value = dfx.trim(this.viper.ViperTools.getItem('VLTP:acronymInput').getValue());
+        var value = ViperUtil.trim(this.viper.ViperTools.getItem('VLTP:acronymInput').getValue());
 
         if (value) {
             this.rangeToTag('acronym', value);
         } else {
             var node = this.viper.getViperRange().getNodeSelection();
             if (node) {
-                if (dfx.isTag(node, 'acronym') !== true) {
+                if (ViperUtil.isTag(node, 'acronym') !== true) {
                     var parents = this.getSurroundingParents(node, 'acronym');
                     for (var i = 0; i < parents.length; i++) {
                         this.removeElement(parents[i]);
@@ -287,14 +287,14 @@ ViperLangToolsPlugin.prototype = {
 
     handleAbbreviation: function()
     {
-        var value = dfx.trim(this.viper.ViperTools.getItem('VLTP:abbrInput').getValue());
+        var value = ViperUtil.trim(this.viper.ViperTools.getItem('VLTP:abbrInput').getValue());
 
         if (value) {
             this.rangeToTag('abbr', value);
         } else {
             var node = this.viper.getViperRange().getNodeSelection();
             if (node) {
-                if (dfx.isTag(node, 'abbr') !== true) {
+                if (ViperUtil.isTag(node, 'abbr') !== true) {
                     var parents = this.getSurroundingParents(node, 'abbr');
                     for (var i = 0; i < parents.length; i++) {
                         this.removeElement(parents[i]);
@@ -309,16 +309,16 @@ ViperLangToolsPlugin.prototype = {
 
     handleLanguage: function()
     {
-        var value = dfx.trim(this.viper.ViperTools.getItem('VLTP:langInput').getValue());
+        var value = ViperUtil.trim(this.viper.ViperTools.getItem('VLTP:langInput').getValue());
 
         if (value) {
             this.rangeToLang(value);
         } else {
             var node = this.viper.getViperRange().getNodeSelection();
             if (node) {
-                if (node && dfx.hasAttribute(node, 'lang') === true) {
+                if (node && ViperUtil.hasAttribute(node, 'lang') === true) {
                     node.removeAttribute('lang');
-                    if (!node.className && !node.id && dfx.isTag(node, 'span') === true) {
+                    if (!node.className && !node.id && ViperUtil.isTag(node, 'span') === true) {
                         this.removeElement(node);
                     } else {
                         this.viper.fireNodesChanged();
@@ -327,7 +327,7 @@ ViperLangToolsPlugin.prototype = {
                     var parents = this.getSurroundingParents(node);
                     for (var i = 0; i < parents.length; i++) {
                         parents[i].removeAttribute('lang');
-                        if (!parents[i].className && !parents[i].id && dfx.isTag(parents[i], 'span') === true) {
+                        if (!parents[i].className && !parents[i].id && ViperUtil.isTag(parents[i], 'span') === true) {
                             this.removeElement(parents[i]);
                         }
                     }
@@ -459,7 +459,7 @@ ViperLangToolsPlugin.prototype = {
                 tools.enableButton('ViperLangToolsPlugin:langButton');
                 tools.enableButton('langTools');
 
-                if (node && dfx.isBlockElement(node) === true) {
+                if (node && ViperUtil.isBlockElement(node) === true) {
                     tools.disableButton('ViperLangToolsPlugin:abbrButton');
                     tools.disableButton('ViperLangToolsPlugin:acronymButton');
                 } else {
@@ -489,11 +489,11 @@ ViperLangToolsPlugin.prototype = {
                     hasActive = true;
 
                     // Also activate the button for the sub section buttons.
-                    if (dfx.isTag(element, 'abbr') === true) {
+                    if (ViperUtil.isTag(element, 'abbr') === true) {
                         // Abbreviation.
                         tools.setButtonActive('ViperLangToolsPlugin:abbrButton');
                         self.viper.ViperTools.getItem('VLTP:abbrInput').setValue(element.getAttribute('title'));
-                    } else if (dfx.isTag(element, 'acronym') === true) {
+                    } else if (ViperUtil.isTag(element, 'acronym') === true) {
                         // Acronym.
                         tools.setButtonActive('ViperLangToolsPlugin:acronymButton');
                         self.viper.ViperTools.getItem('VLTP:acronymInput').setValue(element.getAttribute('title'));
