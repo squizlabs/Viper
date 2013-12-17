@@ -199,6 +199,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
         $numErrors  = ViperTestListener::getErrors();
         $totalTests = ViperTestListener::getNumberOfTests();
         $testsRun   = ViperTestListener::getTestsRun();
+
         ViperTestListener::$browserid    = $this->sikuli->getBrowserid();
         ViperTestListener::$viperTestObj = $this;
 
@@ -538,7 +539,6 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
                          '_disabled' => ' Viper-disabled',
                         );
 
-
         if ($this->sikuli->getBrowserid() === 'ie8') {
             $browserClass = 'Viper-browser-msie Viper-browserVer-msie8';
         }
@@ -575,7 +575,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
         copy($vitpImage, $imgPath.'/vitp_arrow.png');
 
         // Left arrow.
-        $vitp      = $this->sikuli->execJS('getVITP("left")');
+        $vitp = $this->sikuli->execJS('getVITP("left")');
         sleep(1);
         $vitp['x'] = $this->sikuli->getPageXRelativeToScreen($vitp['x']);
         $vitp['y'] = $this->sikuli->getPageYRelativeToScreen($vitp['y']);
@@ -585,7 +585,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
         copy($vitpImage, $imgPath.'/vitp_arrowLeft.png');
 
         // Right arrow.
-        $vitp      = $this->sikuli->execJS('getVITP("right")');
+        $vitp = $this->sikuli->execJS('getVITP("right")');
         sleep(1);
         $vitp['x'] = $this->sikuli->getPageXRelativeToScreen($vitp['x']);
         $vitp['y'] = $this->sikuli->getPageYRelativeToScreen($vitp['y']);
@@ -1726,7 +1726,6 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
                 throw new Exception('Failed to find keyword: '.$this->getKeyword($keyword));
             }
 
-
             $loc = $this->sikuli->getRegionOnPage($loc);
         }
 
@@ -2119,8 +2118,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
                 break;
 
                 default:
-                    throw new Exception('Right click testing for this browser has not been implemented');
-                break;
+                throw new Exception('Right click testing for this browser has not been implemented');
             }//end switch
         }//end if
 
@@ -2193,5 +2191,3 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
 
 
 }//end class
-
-?>
