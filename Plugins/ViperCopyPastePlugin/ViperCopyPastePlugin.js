@@ -789,17 +789,9 @@ ViperCopyPastePlugin.prototype = {
             return replacement;
         });
 
-        // Convert viperListst attributes to style attributes.
-        // This is required for the list-style-type CSS.
-        content = content.replace(new RegExp('<(\\w[^>]*) _viperlistst="([^"]*)"([^>]*)', 'gi'), "<$1 style=\"$2\"$3");
-
         // Page breaks?
         content = content.replace('<br clear="all">', '');
-
-
-
         content = this._removeWordTags(content);
-
         content = this._convertTags(content);
 
         return content;
@@ -1293,14 +1285,6 @@ ViperCopyPastePlugin.prototype = {
             }
         }
 
-        // Clean up list tags.
-        tags = dfx.getTag('ol,ul', tmp);
-        var c    = tags.length;
-        for (var i = 0; i < c; i++) {
-            dfx.removeAttr(tags[i], 'type');
-            dfx.removeAttr(tags[i], 'start');
-        }
-
         if (this.viper.isBrowser('msie') === true && dfx.getTag('p', tmp).length > 0) {
             // Move any content that is not inside a paragraph in to a previous paragraph..
             var steps = 2;
@@ -1432,7 +1416,11 @@ ViperCopyPastePlugin.prototype = {
                 circle: ['^(?:' + circleChars + ')(?:\\s|&nbsp;)+']
             },
             ol: {
-                decimal: ['^(?:\\d+|[a-z]+)\\.(?:\\s|&nbsp;)+']
+                'i': ['^[ivxlcdm]+[\\.\\)](\\s|&nbsp;)+'],
+                'I': ['^[IVXLCDM]+[\\.\\)](\\s|&nbsp;)+'],
+                'a': ['^[a-z]+[\\.\\)](\\s|&nbsp;)+'],
+                'A': ['^[A-Z]+[\\.\\)](\\s|&nbsp;)+'],
+                decimal: ['^(?:\\d+|[a-z]+)[\\.\\)](?:\\s|&nbsp;)+']
             }
         };
 
@@ -1470,6 +1458,10 @@ ViperCopyPastePlugin.prototype = {
                 ul        = document.createElement(listType);
                 indentLvl = {};
 
+                if (listStyle !== 'decimal' && listStyle !== 'circle') {
+                    ul.setAttribute('type', listStyle);
+                }
+
                 indentLvl[level] = ul;
                 dfx.insertBefore(pEl, ul);
             } else {
@@ -1485,7 +1477,10 @@ ViperCopyPastePlugin.prototype = {
                     } else if (level > prevLevel) {
                         // Sub list, create a new list.
                         ul = document.createElement(listType);
-                        //dfx.attr(ul, '_viperlistst', 'list-style-type:' + listStyle);
+                        if (listStyle !== 'decimal' && listStyle !== 'circle') {
+                            ul.setAttribute('type', listStyle);
+                        }
+
                         li.appendChild(ul);
 
                         indentLvl[level] = ul;
