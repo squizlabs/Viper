@@ -45,6 +45,28 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteForMacFirefoxUnitTest extends Ab
 
 
     /**
+     * Test that copying/pasting from the OrderedListsFormatsDoc works correctly.
+     *
+     * @return void
+     */
+    public function testOrderedListsFormatsDocCopyPaste()
+    {
+        // Stop here and mark this test as incomplete.
+        $this->markTestIncomplete('This needs to be fixed first in Viper before the html can be added to the test');
+
+        $this->runTestFor('osx', 'firefox');
+        $this->useTest(1);
+
+        $this->moveToKeyword(1, 'right');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->pasteFromURL($this->getTestURL('/ViperCopyPastePlugin/TextFiles/MacFirefox/OrderedListsFormatsDoc.txt'));
+
+        $this->assertHTMLMatch('');
+
+    }//end testOrderedListsFormatsDocCopyPaste()
+
+
+    /**
      * Test that copying/pasting from the ComplexListDoc works correctly.
      *
      * @return void

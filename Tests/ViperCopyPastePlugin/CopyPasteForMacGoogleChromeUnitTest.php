@@ -11,9 +11,9 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteForMacGoogleChromeUnitTest exten
      *
      * @return void
      */
-    public function testSpecialCharactersDocCopyPasteA()
+    public function testSpecialCharactersDocCopyPaste()
     {
-        $this->runTestFor('osx', 'googlechrome');
+        $this->runTestFor('osx', 'chrome');
         $this->useTest(1);
 
         $this->selectKeyword(1);
@@ -29,9 +29,9 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteForMacGoogleChromeUnitTest exten
      *
      * @return void
      */
-    public function testListTestDocCopyPaste2()
+    public function testListTestDocCopyPaste()
     {
-        $this->runTestFor('osx', 'googlechrome');
+        $this->runTestFor('osx', 'chrome');
         $this->useTest(1);
 
         $this->moveToKeyword(1, 'right');
@@ -40,8 +40,29 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteForMacGoogleChromeUnitTest exten
 
         $this->assertHTMLMatch('<p>%1%</p><p>My complex numbered lists</p><ol><li>Asdadsads<ul><li>Dsfsdfsfd</li><li>Sdfsdfsfd<ul><li>Sfd</li><li>Sfdsfd</li><li>Dsfsdf</li><li>sdfsdf</li></ul></li><li>Sdfsdfsfd</li><li>sdfsdfsfd</li></ul></li><li>Asdadsasd</li><li>Sfdsfds</li><li>Asdasdasd</li><li>Asdasdasd</li></ol><p>My complex bulleted lists</p><ul><li>Sadsadasda<ul><li>Sdfdsf</li><li>Sdfsdfsdf<ul><li>Sdfsfdsdf</li><li>sdfsdfsdf</li></ul></li><li>Sdfsdfsfd</li><li>sdfsfdsdf</li></ul></li><li>Asdasdsad</li></ul>');
 
-
     }//end testListTestDocCopyPaste()
+
+
+    /**
+     * Test that copying/pasting from the OrderedListsFormatsDoc works correctly.
+     *
+     * @return void
+     */
+    public function testOrderedListsFormatsDocCopyPaste()
+    {
+        // Stop here and mark this test as incomplete.
+        $this->markTestIncomplete('This needs to be fixed first in Viper before the html can be added to the test');
+
+        $this->runTestFor('osx', 'chrome');
+        $this->useTest(1);
+
+        $this->moveToKeyword(1, 'right');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->pasteFromURL($this->getTestURL('/ViperCopyPastePlugin/TextFiles/MacGoogleChrome/OrderedListsFormatsDoc.txt'));
+
+        $this->assertHTMLMatch('');
+
+    }//end testOrderedListsFormatsDocCopyPaste()
 
 
     /**
@@ -51,7 +72,7 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteForMacGoogleChromeUnitTest exten
      */
     public function testComplexListDocCopyPaste()
     {
-        $this->runTestFor('osx', 'googlechrome');
+        $this->runTestFor('osx', 'chrome');
         $this->useTest(1);
 
         $this->moveToKeyword(1, 'right');
@@ -70,7 +91,7 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteForMacGoogleChromeUnitTest exten
      */
     public function testWordTablesWithAttributesCopyPaste2()
     {
-        $this->runTestFor('osx', 'googlechrome');
+        $this->runTestFor('osx', 'chrome');
         $this->useTest(1);
 
         $this->moveToKeyword(1, 'right');
@@ -91,7 +112,7 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteForMacGoogleChromeUnitTest exten
      */
     public function testWordTableExamplesDocCopyPaste()
     {
-        $this->runTestFor('osx', 'googlechrome');
+        $this->runTestFor('osx', 'chrome');
         $this->useTest(1);
 
         $this->moveToKeyword(1, 'right');
@@ -113,7 +134,7 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteForMacGoogleChromeUnitTest exten
      */
     public function testTextAlignmentDocCopyPaste()
     {
-        $this->runTestFor('osx', 'googlechrome');
+        $this->runTestFor('osx', 'chrome');
         $this->useTest(1);
 
         $this->moveToKeyword(1, 'right');
@@ -134,7 +155,7 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteForMacGoogleChromeUnitTest exten
      */
     public function testViperTestDocCopyPasteWithPasteShortcut()
     {
-        $this->runTestFor('osx', 'googlechrome');
+        $this->runTestFor('osx', 'chrome');
         $this->useTest(1);
 
         $this->moveToKeyword(1, 'right');
