@@ -51,17 +51,13 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteForMacFirefoxUnitTest extends Ab
      */
     public function testOrderedListsFormatsDocCopyPaste()
     {
-        // Stop here and mark this test as incomplete.
-        $this->markTestIncomplete('This needs to be fixed first in Viper before the html can be added to the test');
-
         $this->runTestFor('osx', 'firefox');
         $this->useTest(1);
 
-        $this->moveToKeyword(1, 'right');
-        $this->sikuli->keyDown('Key.ENTER');
+        $this->selectKeyword(1);
         $this->pasteFromURL($this->getTestURL('/ViperCopyPastePlugin/TextFiles/MacFirefox/OrderedListsFormatsDoc.txt'));
 
-        $this->assertHTMLMatch('');
+        $this->assertHTMLMatch('<ol><li>First item</li><li>Second item</li><li>Third Item</li></ol><ol><li>First item</li><li>Second item</li><li>Third Item</li></ol><ol type="A"><li>First item</li><li>Second item</li><li>Third item</li></ol><ol type="a"><li>First item</li><li>Second item</li><li>Third item</li></ol><ol type="a"><li>First item</li><li>Second item</li><li>Third item</li></ol><ol type="I"><li>First item</li><li>Second item</li><li>Third item</li></ol><ol type="i"><li>First item</li><li>Second item</li><li>Third item</li></ol>');
 
     }//end testOrderedListsFormatsDocCopyPaste()
 
@@ -76,8 +72,7 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteForMacFirefoxUnitTest extends Ab
         $this->runTestFor('osx', 'firefox');
         $this->useTest(1);
 
-        $this->moveToKeyword(1, 'right');
-        $this->sikuli->keyDown('Key.ENTER');
+        $this->selectKeyword(1);
         $this->pasteFromURL($this->getTestURL('/ViperCopyPastePlugin/TextFiles/MacFirefox/ComplexListDoc.txt'));
 
         $this->assertHTMLMatch('<p>%1%</p><h1>My Complex Lists Dude!</h1><p>Here is a numbered list&hellip;</p><ol><li>One baby<ol><li>Sub baby<ol><li>Sub sub baby!</li><li>Sdfdsfsdf</li><li>sdfsdfsdf</li></ol></li></ol></li><li>Two baby<ol><li>Sdfsfdds</li><li>Sdfsfdsfd</li><li>sfdsdfsdf</li></ol></li><li>Three baby</li><li>Four</li></ol><p>Here is mu bulleted list&hellip;</p><ul><li>One bullet<ul><li>Dsfsdfsdf<ul><li>Sdfsfdsdf</li><li>sdfsdf</li></ul></li></ul></li><li>Two bullet<ul><li>Dsfsfd</li><li>sdfsdfsf</li></ul></li><li>Three bullet</li><li>Four<ul><li>sdfsdfsfd</li></ul></li></ul><p>Woot to lists!</p>');

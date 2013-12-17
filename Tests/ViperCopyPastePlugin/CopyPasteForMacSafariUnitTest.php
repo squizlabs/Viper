@@ -51,17 +51,13 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteForMacSafariUnitTest extends Abs
      */
     public function testOrderedListsFormatsDocCopyPaste()
     {
-        // Stop here and mark this test as incomplete.
-        $this->markTestIncomplete('This needs to be fixed first in Viper before the html can be added to the test');
-
         $this->runTestFor('osx', 'safari');
         $this->useTest(1);
 
-        $this->moveToKeyword(1, 'right');
-        $this->sikuli->keyDown('Key.ENTER');
+        $this->selectKeyword(1);
         $this->pasteFromURL($this->getTestURL('/ViperCopyPastePlugin/TextFiles/MacSafari/OrderedListsFormatsDoc.txt'));
 
-        $this->assertHTMLMatch('');
+        $this->assertHTMLMatch('<ol><li>First item</li><li>Second item</li><li>Third Item</li></ol><ol><li>First item</li><li>Second item</li><li>Third Item</li></ol><ol type="A"><li>First item</li><li>Second item</li><li>Third item</li></ol><ol type="a"><li>First item</li><li>Second item</li><li>Third item</li></ol><ol type="a"><li>First item</li><li>Second item</li><li>Third item</li></ol><ol type="I"><li>First item</li><li>Second item</li><li>Third item</li></ol><ol type="i"><li>First item</li><li>Second item</li><li>Third item</li></ol>');
 
     }//end testOrderedListsFormatsDocCopyPaste()
 
