@@ -363,7 +363,7 @@ function pasteFromURL(url)
 {
     var copyPastePlugin = viper.getPluginManager().getPlugin('ViperCopyPastePlugin');
 
-    ViperUtil.$.post(url, null, function(data) {
+    ViperUtil.$.get(url, null, function(data) {
         var tmp = document.createElement('div');
         ViperUtil.setHtml(tmp, data);
 
