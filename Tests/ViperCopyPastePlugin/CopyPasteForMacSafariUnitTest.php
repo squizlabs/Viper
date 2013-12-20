@@ -37,27 +37,9 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteForMacSafariUnitTest extends Abs
         $this->selectKeyword(1);
         $this->pasteFromURL($this->getTestURL('/ViperCopyPastePlugin/TextFiles/MacSafari/ListsTestDoc.txt'));
 
-       $this->assertHTMLMatch('<p>Complex number list one</p><ol><li>Asdadsads<ul><li>Dsfsdfsfd</li><li>Sdfsdfsfd<ul><li>Sfd</li><li>Sfdsfd</li><li>Dsfsdf</li><li>sdfsdf</li></ul></li><li>Sdfsdfsfd</li><li>sdfsdfsfd</li></ul></li><li>Asdadsasd</li><li>Sfdsfds</li><li>Asdasdasd</li><li>Asdasdasd</li></ol><p>Complex number list two</p><ol><li>One baby<ol type="a"><li>Sub baby<ol type="i"><li>Sub sub baby!</li><li>Sdfdsfsdf</li><li>sdfsdfsdf</li></ol></li></ol></li><li>Two baby<ol type="a"><li>Sdfsfdds</li><li>Sdfsfdsfd</li><li>sfdsdfsdf</li></ol></li><li>Three baby</li><li>Four</li></ol><p>Complex bulleted list one</p><ul><li>Sadsadasda<ul><li>Sdfdsf</li><li>Sdfsdfsdf<ul><li>Sdfsfdsdf</li><li>sdfsdfsdf</li></ul></li><li>Sdfsdfsfd</li><li>sdfsfdsdf</li></ul></li><li>Asdasdsad</li></ul><p>Complex bulleted list two</p><ul><li>One bullet<ul><li>Dsfsdfsdf<ul><li>Sdfsfdsdf</li><li>sdfsdf</li></ul></li></ul></li><li>Two bullet<ul><li>Dsfsfd</li><li>sdfsdfsf</li></ul></li><li>Three bullet</li><li>Four<ul><li>sdfsdfsfd</li></ul></li></ul><p>Paragraph with a number then an unordered list</p><p><strong>6. The solution</strong></p><ul><li>What did you deliver?</li><li>As well as the technical solution, also focus on the benefits that your product / service delivered - for every product feature you want to talk about, balance it with the corresponding benefit to your client </li><li>Did we do anything particularly cool? </li></ul>');
+       $this->assertHTMLMatch('<p>Complex number list one</p><ol><li>Asdadsads<ul><li>Dsfsdfsfd</li><li>Sdfsdfsfd<ul><li>Sfd</li><li>Sfdsfd</li><li>Dsfsdf</li><li>sdfsdf</li></ul></li><li>Sdfsdfsfd</li><li>sdfsdfsfd</li></ul></li><li>Asdadsasd</li><li>Sfdsfds</li><li>Asdasdasd</li><li>Asdasdasd</li></ol><p>Complex number list two</p><ol><li>One baby<ol type="a"><li>Sub baby<ol type="i"><li>Sub sub baby!</li><li>Sdfdsfsdf</li><li>sdfsdfsdf</li></ol></li></ol></li><li>Two baby<ol type="a"><li>Sdfsfdds</li><li>Sdfsfdsfd</li><li>sfdsdfsdf</li></ol></li><li>Three baby</li><li>Four</li></ol><p>Complex bulleted list one</p><ul><li>Sadsadasda<ul><li>Sdfdsf</li><li>Sdfsdfsdf<ul><li>Sdfsfdsdf</li><li>sdfsdfsdf</li></ul></li><li>Sdfsdfsfd</li><li>sdfsfdsdf</li></ul></li><li>Asdasdsad</li></ul><p>Complex bulleted list two</p><ul><li>One bullet<ul><li>Dsfsdfsdf<ul><li>Sdfsfdsdf</li><li>sdfsdf</li></ul></li></ul></li><li>Two bullet<ul><li>Dsfsfd</li><li>sdfsdfsf</li></ul></li><li>Three bullet</li><li>Four<ul><li>sdfsdfsfd</li></ul></li></ul><p>Paragraph with a number then an unordered list</p><p><strong>6. The solution</strong></p><ul><li>What did you deliver?</li><li>As well as the technical solution, also focus on the benefits that your product / service delivered - for every product feature you want to talk about, balance it with the corresponding benefit to your client</li><li>Did we do anything particularly cool?</li></ul><p>Complex list with numbers, letters and roman numerals</p><ol><li>First item<ol type="a"><li>Sub item 1<ol type="i"><li>Sub of sub item 1</li><li>Sub of sub item 2</li></ol></li><li>Sub item 2</li></ol></li><li>Second item</li><li>Third Item<ol type="a"><li>Sub item 1</li></ol></li></ol><p>Complex list with roman numerals, letters and numbers</p><ol type="I"><li>First item<ol type="A"><li>Sub item 1<ol><li>Sub of sub item 1</li></ol></li><li>Sub item 2</li></ol></li><li>Second item</li><li>Third Item<ol type="A"><li>Sub item 1</li></ol></li></ol>');
 
     }//end testListTestDocCopyPaste()
-
-
-    /**
-     * Test that copying/pasting from the OrderedListsFormatsDoc works correctly.
-     *
-     * @return void
-     */
-    public function testOrderedListsFormatsDocCopyPaste()
-    {
-        $this->runTestFor('osx', 'safari');
-        $this->useTest(1);
-
-        $this->selectKeyword(1);
-        $this->pasteFromURL($this->getTestURL('/ViperCopyPastePlugin/TextFiles/MacSafari/OrderedListsFormatsDoc.txt'));
-
-        $this->assertHTMLMatch('<ol><li>First item</li><li>Second item</li><li>Third Item</li></ol><ol><li>First item</li><li>Second item</li><li>Third Item</li></ol><ol type="A"><li>First item</li><li>Second item</li><li>Third item</li></ol><ol type="a"><li>First item</li><li>Second item</li><li>Third item</li></ol><ol type="a"><li>First item</li><li>Second item</li><li>Third item</li></ol><ol type="I"><li>First item</li><li>Second item</li><li>Third item</li></ol><ol type="i"><li>First item</li><li>Second item</li><li>Third item</li></ol>');
-
-    }//end testOrderedListsFormatsDocCopyPaste()
 
 
     /**
