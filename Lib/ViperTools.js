@@ -1374,6 +1374,12 @@ ViperTools.prototype = {
                 this.closeActiveSubsection(true);
                 this._activeSection = null;
                 ViperUtil.removeClass(toolbar, 'Viper-visible');
+
+                // Disable all subsection action buttons.
+                for (subsectionid in this._subSectionActionWidgets) {
+                    tools.disableButton(subsectionid + '-applyButton');
+                }
+
                 return true;
 
             },
