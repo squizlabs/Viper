@@ -1084,6 +1084,8 @@ ViperTools.prototype = {
             }
         }
 
+        this.viper.fireCallbacks('ViperTools:popup:open', id);
+
         ViperUtil.$(popup.element).draggable('enable');
 
         ViperUtil.setStyle(popupElement, 'visibility', 'visible');
@@ -1105,6 +1107,8 @@ ViperTools.prototype = {
         if (popup.element.parentNode) {
             popup.element.parentNode.removeChild(popup.element);
         }
+
+        this.viper.fireCallbacks('ViperTools:popup:close', id);
 
     },
 

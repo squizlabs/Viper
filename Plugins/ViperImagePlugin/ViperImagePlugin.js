@@ -112,18 +112,6 @@ ViperImagePlugin.prototype = {
             }
         });
 
-        this.viper.registerCallback('ViperHistoryManager:beforeUndo', 'ViperImagePlugin', function() {
-            self.hideImageResizeHandles();
-        });
-
-        this.viper.registerCallback('ViperCoreStylesPlugin:beforeImageUpdate', 'ViperImagePlugin', function(image) {
-            self.hideImageResizeHandles();
-        });
-
-        this.viper.registerCallback('ViperCoreStylesPlugin:afterImageUpdate', 'ViperImagePlugin', function(image) {
-            self.showImageResizeHandles(image);
-        });
-
         this.viper.registerCallback('Viper:getHtml', 'ViperImagePlugin', function(data) {
             var tags = ViperUtil.getClass('ui-resizable', data.element);
             for (var i = 0; i < tags.length; i++) {
@@ -148,9 +136,17 @@ ViperImagePlugin.prototype = {
             self.viper.ViperTools.enableButton('image');
         });
 
-        this.viper.registerCallback('Viper:clickedOutside', 'ViperImagePlugin', function(range) {
-            self.hideImageResizeHandles();
+        this.viper.registerCallback('ViperCoreStylesPlugin:afterImageUpdate', 'ViperImagePlugin', function(image) {
+            self.showImageResizeHandles(image);
         });
+
+        this.viper.registerCallback(
+            ['ViperHistoryManager:beforeUndo', 'Viper:clickedOutside', 'ViperTools:popup:open', 'ViperCoreStylesPlugin:beforeImageUpdate'],
+            'ViperImagePlugin',
+            function() {
+                self.hideImageResizeHandles();
+            }
+        );
 
     },
 
@@ -453,7 +449,6 @@ ViperImagePlugin.prototype = {
             this.updateImagePreview(image.getAttribute('src'));
         } else {
             tools.enableButton('image');
-
             tools.setButtonInactive('image');
 
             tools.getItem(toolbarPrefix + ':isDecorative').setValue(false);
@@ -818,6 +813,8 @@ ViperImagePlugin.prototype = {
         if (this._resizeHandles) {
             ViperUtil.remove(this._resizeHandles);
             this._resizeHandles = null;
+            this._inlineToolbar.hide();
+            this._updateToolbars();
         }
 
         this._resizeImage = null;

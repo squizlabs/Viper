@@ -179,6 +179,7 @@ ViperSourceViewPlugin.prototype = {
         }
 
         this.viper.setHtml(value);
+        this.viper.fireSelectionChanged(null, true);
 
     },
 
