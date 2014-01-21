@@ -1267,6 +1267,71 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
     }//end testAutoCreatingLinks()
 
 
+    /**
+     * Test that the Update Changes button is inactive after you cancel changes.
+     *
+     * @return void
+     */
+    public function testUpdateChangesButtonIsDisabledInlineAfterCancellingChanges()
+    {
+        $this->useTest(6);
+
+        $this->selectKeyword(1);
+
+        $this->clickInlineToolbarButton('link');
+        $this->assertTrue($this->inlineToolbarButtonExists('link', 'selected'), 'Toolbar button icon is not correct');
+
+        $this->type('http://www.squizlabs.com');
+        $this->selectKeyword(2);
+
+        // Make sure the link was not created
+        $this->assertHTMLMatch('<p>Link test %1%</p><p>test</p><p>test again</p><p>test yet again</p><p>another paragraph</p><p>The last paragraph in this content on the page %2%</p>');
+
+        $this->clickInlineToolbarButton('link');
+        $this->assertTrue($this->inlineToolbarButtonExists('link', 'selected'), 'Toolbar button icon is not correct');
+        $this->assertTrue($this->inlineToolbarButtonExists('Update Changes', 'disabled', TRUE), 'Update changes button should be disabled');
+
+        $this->type('http://www.squizlabs.com');
+        sleep(2);
+        $this->clickInlineToolbarButton('Update Changes', NULL, TRUE);
+
+        $this->assertHTMLMatch('<p>Link test %1%</p><p>test</p><p>test again</p><p>test yet again</p><p>another paragraph</p><p>The last paragraph in this content on the page <a href="http://www.squizlabs.com">%2%</a></p>');
+
+    }//end testUpdateChangesButtonIsDisabledInlineAfterCancellingChanges()
+
+
+    /**
+     * Test that the Update Changes button is inactive after you cancel changes.
+     *
+     * @return void
+     */
+    public function testUpdateChangesButtonInTopToolbarIsDisabledAfterCancellingChanges()
+    {
+        $this->useTest(6);
+
+        $this->selectKeyword(1);
+
+        $this->clickTopToolbarButton('link');
+        $this->assertTrue($this->topToolbarButtonExists('link', 'selected'), 'Toolbar button icon is not correct');
+
+        $this->type('http://www.squizlabs.com');
+        sleep(2);
+        $this->selectKeyword(2);
+
+        // Make sure the link was not created
+        $this->assertHTMLMatch('<p>Link test %1%</p><p>test</p><p>test again</p><p>test yet again</p><p>another paragraph</p><p>The last paragraph in this content on the page %2%</p>');
+
+        $this->clickTopToolbarButton('link');
+        $this->assertTrue($this->topToolbarButtonExists('link', 'selected'), 'Toolbar button icon is not correct');
+        $this->assertTrue($this->topToolbarButtonExists('Update Changes', 'disabled', TRUE), 'Update changes button should be disabled');
+
+        $this->type('http://www.squizlabs.com');
+        sleep(2);
+        $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
+        $this->assertHTMLMatch('<p>Link test %1%</p><p>test</p><p>test again</p><p>test yet again</p><p>another paragraph</p><p>The last paragraph in this content on the page <a href="http://www.squizlabs.com">%2%</a></p>');
+
+    }//end testUpdateChangesButtonInTopToolbarIsDisabledAfterCancellingChanges()
+
 }//end class
 
 ?>
