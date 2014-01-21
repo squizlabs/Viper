@@ -975,6 +975,39 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperImagePlugi
     }//end testUndoAndRedoForInsertingAnImage()
 
 
+    /**
+     * Test that the Update Changes button is inactive after you cancel changes.
+     *
+     * @return void
+     */
+    public function testUpdateChangesButtonIsDisabledAfterCancellingChanges()
+    {
+        $this->selectKeyword(1);
+        $this->type('Key.RIGHT');
+
+        $this->clickTopToolbarButton('image');
+        $this->type($this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png'));
+        sleep(2);
+        $this->sikuli->keyDown('Key.TAB');
+        $this->type('Alt tag');
+        $this->selectKeyword(3);
+
+        // Make sure the link was not created
+        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%1% %2%</p><p>sit amet <strong>%3%</strong></p>');
+
+        $this->clickTopToolbarButton('image');
+        $this->assertTrue($this->topToolbarButtonExists('Update Changes', 'disabled', TRUE), 'Update changes button should be disabled');
+
+        $this->type($this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png'));
+        sleep(2);
+        $this->sikuli->keyDown('Key.TAB');
+        $this->type('Alt tag');
+        sleep(2);
+        $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
+        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%1% %2%</p><p>sit amet <strong>%3%</strong><img src="'.$this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png').'" alt="Alt tag" /></p>');
+
+    }//end testUpdateChangesButtonIsDisabledAfterCancellingChanges()
+
 }//end class
 
 ?>
