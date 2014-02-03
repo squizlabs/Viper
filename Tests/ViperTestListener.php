@@ -146,15 +146,34 @@ class ViperTestListener implements PHPUnit_Framework_TestListener
             self::$_startTime = time();
 
             $filter = getenv('VIPER_TEST_FILTER');
+
             if ($filter) {
-                $tests = $suite->tests();
-                foreach ($tests as $test) {
-                    if (preg_match('#'.$filter.'#', $test->getName()) > 0) {
-                        self::$_numTests += $test->count();
-                    } else {
-                        foreach ($test->tests() as $testCase) {
-                            if (preg_match('#'.$filter.'#', $testCase->getName()) > 0) {
-                                self::$_numTests++;
+                if (strpos($filter, '::') !== FALSE) {
+                    $testName  = '';
+                    $className = '';
+                    list($className, $testName) = explode('::', $filter);
+
+                    if ($className !== $suite->getName()) {
+                        return;
+                    }
+
+                    $tests = $suite->tests();
+                    foreach ($tests as $test) {
+                        if ($testName === $test->getName()) {
+                            self::$_numTests++;
+                            return;
+                        }
+                    }
+                } else if (method_exists($suite, 'tests') === TRUE) {
+                    $tests = $suite->tests();
+                    foreach ($tests as $test) {
+                        if (preg_match('#'.$filter.'#', $test->getName()) > 0) {
+                            self::$_numTests += $test->count();
+                        } else {
+                            foreach ($test->tests() as $testCase) {
+                                if (preg_match('#'.$filter.'#', $testCase->getName()) > 0) {
+                                    self::$_numTests++;
+                                }
                             }
                         }
                     }
