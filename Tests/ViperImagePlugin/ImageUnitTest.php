@@ -982,31 +982,69 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperImagePlugi
      */
     public function testUpdateChangesButtonIsDisabledAfterCancellingChanges()
     {
-        $this->selectKeyword(1);
-        $this->type('Key.RIGHT');
-
+        $this->moveToKeyword(1, 'right');
         $this->clickTopToolbarButton('image');
         $this->type($this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png'));
         sleep(2);
         $this->sikuli->keyDown('Key.TAB');
         $this->type('Alt tag');
-        $this->selectKeyword(3);
+        $this->moveToKeyword(3, 'right');
 
-        // Make sure the link was not created
+        // Make sure the image wasn't inserted into the content
         $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%1% %2%</p><p>sit amet <strong>%3%</strong></p>');
 
         $this->clickTopToolbarButton('image');
         $this->assertTrue($this->topToolbarButtonExists('Update Changes', 'disabled', TRUE), 'Update changes button should be disabled');
-
         $this->type($this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png'));
-        sleep(2);
         $this->sikuli->keyDown('Key.TAB');
         $this->type('Alt tag');
-        sleep(2);
         $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
-        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%1% %2%</p><p>sit amet <strong>%3%</strong><img src="'.$this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png').'" alt="Alt tag" /></p>');
+        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%1% %2%</p><p>sit amet <strong>%3%<img src="'.$this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png').'" alt="Alt tag" /></strong></p>');
 
     }//end testUpdateChangesButtonIsDisabledAfterCancellingChanges()
+
+
+    /**
+     * Test that the Update Changes button is inactive after you cancel changes to an image.
+     *
+     * @return void
+     */
+    public function testUpdateChangesButtonIsDisabledAfterCancellingChangesToAnImage()
+    {
+        // Insert the image
+        $this->selectKeyword(1);
+        $this->type('Key.RIGHT');
+        $this->clickTopToolbarButton('image');
+        $this->type($this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png'));
+        $this->clickField('Image is decorative');
+        $this->sikuli->keyDown('Key.ENTER');
+        //sleep(1);
+        $this->clickTopToolbarButton('image', 'selected');
+        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%1%<img src="'.$this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png').'" alt="" /> %2%</p><p>sit amet <strong>%3%</strong></p>');
+
+        $this->moveToKeyword(3, 'left');
+        //sleep(2);
+        $this->clickElement('img', 0);
+        $this->clickTopToolbarButton('image', 'active');
+        $this->clickField('Image is decorative');
+        $this->sikuli->keyDown('Key.TAB');
+        $this->type('Alt tag');
+        $this->moveToKeyword(3, 'left');
+
+        // Make sure the image wasn't changed
+        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%1%<img src="'.$this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png').'" alt="" /> %2%</p><p>sit amet <strong>%3%</strong></p>');
+
+        $this->clickElement('img', 0);
+        $this->clickTopToolbarButton('image', 'active');
+        $this->assertTrue($this->topToolbarButtonExists('Update Changes', 'disabled', TRUE), 'Update changes button should be disabled');
+        $this->clickField('Image is decorative');
+        $this->sikuli->keyDown('Key.TAB');
+        $this->type('Alt tag');
+        $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
+        $this->assertTrue($this->topToolbarButtonExists('Update Changes', 'disabled', TRUE), 'Update changes button should be disabled');
+
+    }//end testUpdateChangesButtonIsDisabledAfterCancellingChangesToAnImage()
+
 
 }//end class
 
