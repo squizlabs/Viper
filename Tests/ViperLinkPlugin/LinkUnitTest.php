@@ -1268,7 +1268,7 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
 
 
     /**
-     * Test that the Update Changes button is inactive after you cancel changes.
+     * Test that the Update Changes button is inactive in the inline toolbar after you cancel changes.
      *
      * @return void
      */
@@ -1292,12 +1292,51 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->assertTrue($this->inlineToolbarButtonExists('Update Changes', 'disabled', TRUE), 'Update changes button should be disabled');
 
         $this->type('http://www.squizlabs.com');
-        sleep(2);
         $this->clickInlineToolbarButton('Update Changes', NULL, TRUE);
 
         $this->assertHTMLMatch('<p>Link test %1%</p><p>test</p><p>test again</p><p>test yet again</p><p>another paragraph</p><p>The last paragraph in this content on the page <a href="http://www.squizlabs.com">%2%</a></p>');
 
     }//end testUpdateChangesButtonIsDisabledInlineAfterCancellingChanges()
+
+
+    /**
+     * Test that the Update Changes button is inactive in the inline toolbar after you cancel changes to a link.
+     *
+     * @return void
+     */
+    public function testUpdateChangesButtonIsDisabledInlineAfterCancellingChangesToALink()
+    {
+        $this->useTest(6);
+
+        // Insert a link
+        $this->selectKeyword(1);
+        $this->clickInlineToolbarButton('link');
+        $this->type('http://www.squizlabs');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>Link test <a href="http://www.squizlabs">%1%</a></p><p>test</p><p>test again</p><p>test yet again</p><p>another paragraph</p><p>The last paragraph in this content on the page %2%</p>');
+
+        $this->selectKeyword(2);
+
+        // Select link and make changes without saving
+        $this->selectKeyword(1);
+        $this->clickInlineToolbarButton('link', 'active');
+        $this->type('.com');
+        $this->selectKeyword(2);
+
+        // Check to make sure the HTML did not change.
+        $this->assertHTMLMatch('<p>Link test <a href="http://www.squizlabs">%1%</a></p><p>test</p><p>test again</p><p>test yet again</p><p>another paragraph</p><p>The last paragraph in this content on the page %2%</p>');
+
+        // Select the link again and make sure the Update Changes button is inactive
+        $this->selectKeyword(1);
+        $this->clickInlineToolbarButton('link', 'active');
+        $this->assertTrue($this->inlineToolbarButtonExists('Update Changes', 'disabled', TRUE), 'Update changes button should be disabled');
+
+        // Edit the link and make sure the Update Changes button still works.
+        $this->type('.com');
+        $this->clickInlineToolbarButton('Update Changes', NULL, TRUE);
+        $this->assertHTMLMatch('<p>Link test <a href="http://www.squizlabs.com">%1%</a></p><p>test</p><p>test again</p><p>test yet again</p><p>another paragraph</p><p>The last paragraph in this content on the page %2%</p>');
+
+    }//end testUpdateChangesButtonIsDisabledInlineAfterCancellingChangesToALink()
 
 
     /**
@@ -1315,7 +1354,6 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->assertTrue($this->topToolbarButtonExists('link', 'selected'), 'Toolbar button icon is not correct');
 
         $this->type('http://www.squizlabs.com');
-        sleep(2);
         $this->selectKeyword(2);
 
         // Make sure the link was not created
@@ -1326,11 +1364,50 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->assertTrue($this->topToolbarButtonExists('Update Changes', 'disabled', TRUE), 'Update changes button should be disabled');
 
         $this->type('http://www.squizlabs.com');
-        sleep(2);
         $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
         $this->assertHTMLMatch('<p>Link test %1%</p><p>test</p><p>test again</p><p>test yet again</p><p>another paragraph</p><p>The last paragraph in this content on the page <a href="http://www.squizlabs.com">%2%</a></p>');
 
     }//end testUpdateChangesButtonInTopToolbarIsDisabledAfterCancellingChanges()
+
+
+    /**
+     * Test that the Update Changes button is inactive after you cancel changes to a link.
+     *
+     * @return void
+     */
+    public function testUpdateChangesButtonInTopToolbarIsDisabledAfterCancellingChangesToALink()
+    {
+        $this->useTest(6);
+
+        // Insert a link
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('link');
+        $this->type('http://www.squizlabs');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>Link test <a href="http://www.squizlabs">%1%</a></p><p>test</p><p>test again</p><p>test yet again</p><p>another paragraph</p><p>The last paragraph in this content on the page %2%</p>');
+
+        $this->selectKeyword(2);
+
+        // Select link and make changes without saving
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('link', 'active');
+        $this->type('.com');
+        $this->selectKeyword(2);
+
+        // Check to make sure the HTML did not change.
+        $this->assertHTMLMatch('<p>Link test <a href="http://www.squizlabs">%1%</a></p><p>test</p><p>test again</p><p>test yet again</p><p>another paragraph</p><p>The last paragraph in this content on the page %2%</p>');
+
+        // Select the link again and make sure the Update Changes button is inactive
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('link', 'active');
+        $this->assertTrue($this->topToolbarButtonExists('Update Changes', 'disabled', TRUE), 'Update changes button should be disabled');
+
+        // Edit the link and make sure the Update Changes button still works.
+        $this->type('.com');
+        $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
+        $this->assertHTMLMatch('<p>Link test <a href="http://www.squizlabs.com">%1%</a></p><p>test</p><p>test again</p><p>test yet again</p><p>another paragraph</p><p>The last paragraph in this content on the page %2%</p>');
+
+    }//end testUpdateChangesButtonInTopToolbarIsDisabledAfterCancellingChangesToALink()
 
 }//end class
 
