@@ -836,6 +836,63 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
     }//end testTableNavigatingOutOfTable()
 
 
+    /**
+     * Tests pasting content after an empty table.
+     *
+     * @return void
+     */
+    public function testPastingContentAfterAnEmptyTable()
+    {
+        // Copy content
+        $this->moveToKeyword(1, 'left');
+        $this->sikuli->keyDown('Key.CMD + a');
+        $this->sikuli->keyDown('Key.CMD + c');
+    
+        // Insert table
+        $this->insertTable(1);
+
+        // Paste content after table
+        $this->clickCell(11);
+        $this->sikuli->keyDown('Key.DOWN');
+        $this->sikuli->keyDown('Key.CMD + v');
+
+        $this->assertTableWithoutHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><thead><tr><th></th><th></th><th></th><th></th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p>&nbsp;Test %1%</p>');
+
+    }//end testPastingContentAfterAnEmptyTable()
+
+
+    /**
+     * Tests pasting content after a table.
+     *
+     * @return void
+     */
+    public function testPastingContentAfterATable()
+    {
+        // Copy content
+        $this->moveToKeyword(1, 'left');
+        $this->sikuli->keyDown('Key.CMD + a');
+        $this->sikuli->keyDown('Key.CMD + c');
+    
+        // Insert table
+        $this->insertTable(1);
+
+        // Add some content
+        $this->clickCell(9);
+        $this->type('Cell 9');
+        $this->clickCell(10);
+        $this->type('Cell 10');
+        $this->clickCell(11);
+        $this->type('Cell 11');
+
+        // Paste content after table
+        $this->sikuli->keyDown('Key.DOWN');
+        $this->sikuli->keyDown('Key.CMD + v');
+
+        $this->assertTableWithoutHeaders('<p>Test XAX</p><table border="1" style="width: 100%;"><thead><tr><th></th><th></th><th></th><th></th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Cell 9</td><td>Cell 10</td><td>Cell 11</td></tr></tbody></table><p>&nbsp;Test %1%</p>');
+
+    }//end testPastingContentAfterATable()
+
+
 }//end class
 
 ?>
