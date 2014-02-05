@@ -1018,12 +1018,10 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperImagePlugi
         $this->type($this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png'));
         $this->clickField('Image is decorative');
         $this->sikuli->keyDown('Key.ENTER');
-        //sleep(1);
         $this->clickTopToolbarButton('image', 'selected');
         $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%1%<img src="'.$this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png').'" alt="" /> %2%</p><p>sit amet <strong>%3%</strong></p>');
 
         $this->moveToKeyword(3, 'left');
-        //sleep(2);
         $this->clickElement('img', 0);
         $this->clickTopToolbarButton('image', 'active');
         $this->clickField('Image is decorative');
@@ -1044,6 +1042,62 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperImagePlugi
         $this->assertTrue($this->topToolbarButtonExists('Update Changes', 'disabled', TRUE), 'Update changes button should be disabled');
 
     }//end testUpdateChangesButtonIsDisabledAfterCancellingChangesToAnImage()
+
+
+    /**
+     * Test that the Alt field in the pop up is updated when you edit it in the source code.
+     *
+     * @return void
+     */
+    public function testAltFieldIsUpdatedWhenYouUpdateSourceCode()
+    {
+        // Insert the image
+        $this->moveToKeyword(1, 'left');
+        $this->sikuli->keyDown('Key.CMD + a');
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->clickTopToolbarButton('image');
+        $this->type($this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png'));
+        $this->clickField('Image is decorative');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->clickTopToolbarButton('image', 'selected');
+        $this->assertHTMLMatch('<img src="'.$this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png').'" alt="" /><p></p>');
+
+        // Edit the source code
+        $this->clickElement('img', 0);
+        $this->clickTopToolbarButton('sourceView');
+        sleep(2);
+        $this->sikuli->keyDown('Key.CMD + a');
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->type('<img src="'.$this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png').'" alt="New alt tag" />');
+        $this->clickButton('Apply Changes', NULL, TRUE);
+        $this->assertHTMLMatch('<p><img src="'.$this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png').'" alt="New alt tag" /></p>');
+
+        // Check value of alt field
+        $this->clickElement('img', 0);
+        $this->clickTopToolbarButton('image', 'active');
+        $this->sikuli->keyDown('Key.TAB');
+        $altField = $this->sikuli->execJS('document.activeElement.value');
+        $this->assertEquals("New alt tag", $altField, 'Alt field should be updated with new value');
+
+        // Edit the source code
+        $this->clickElement('img', 0);
+        $this->clickTopToolbarButton('sourceView');
+        sleep(2);
+        $this->sikuli->keyDown('Key.CMD + a');
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->type('<img src="'.$this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png').'" alt="" />');
+        $this->clickButton('Apply Changes', NULL, TRUE);
+        $this->assertHTMLMatch('<p><img src="'.$this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png').'" alt="" /></p>');
+
+        // Check value of alt field
+        $this->clickElement('img', 0);
+        $this->clickTopToolbarButton('image', 'active');
+        $this->clickField('Image is decorative');
+        $this->sikuli->keyDown('Key.TAB');
+        $altField = $this->sikuli->execJS('document.activeElement.value');
+        $this->assertEquals("", $altField, 'Alt field should be updated with new value');
+
+    }//end testAltFieldIsUpdatedWhenYouUpdateSourceCode()
 
 
 }//end class
