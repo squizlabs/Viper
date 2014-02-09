@@ -620,7 +620,11 @@ Viper.prototype = {
             ViperUtil.setStyle(this.element, 'outline', 'none');
 
             if (this.isBrowser('msie') === true) {
-                this.element.focus();
+                try {
+                    this.element.focus();
+                } catch (e) {
+                    // Most likely a hidden element.
+                }
             } else {
                 this.focus();
             }
