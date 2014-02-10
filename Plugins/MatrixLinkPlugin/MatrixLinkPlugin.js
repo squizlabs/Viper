@@ -239,24 +239,40 @@ MatrixLinkPlugin.prototype = {
      */
     pickAsset: function(idPrefix)
     {
-        var tools       = this.viper.ViperTools;
-        var urlField    = tools.getItem(idPrefix + ':url').element;
-        EasyEditAssetManager.getCurrentAsset(function(asset){
+	var tools       = this.viper.ViperTools;
+	var urlField    = tools.getItem(idPrefix + ':url').element;
 
-            var initialValue = tools.getItem(idPrefix + ':url').getValue(),
-                focusId = asset.id;
-            if (/^[0-9]+$/.test(initialValue)) {
-                focusId = initialValue;
-            }// End if
+	// if in Matrix backend mode
+	if(typeof EasyEditAssetManager === 'undefined') {
+	    var jsMap = parent.frames.sq_sidenav.JS_Asset_Map;
+	    var name =idPrefix;
+	    var safeName = idPrefix;
+	    if (jsMap.isInUseMeMode(name) === true) {
+		    alert('Asset Finder In Use');
+	    } else if (jsMap.isInUseMeMode() === true) {
+		    jsMap.cancelUseMeMode();
+	    } else {
+		    jsMap.setUseMeMode(name, safeName, undefined, function(assetid) {tools.getItem(idPrefix + ':url').setValue(assetid,false);});
+	    }
+	}
+	else {
+	    // in EES mode
+	    EasyEditAssetManager.getCurrentAsset(function(asset){
 
-            EasyEditAssetFinder.init({
-                focusAssetId: focusId,
-                callback: function(selectedAsset){
-                    tools.getItem(idPrefix + ':url').setValue(selectedAsset.id,false);
-                }
-            });
-        });
+		var initialValue = tools.getItem(idPrefix + ':url').getValue(),
+		    focusId = asset.id;
+		if (/^[0-9]+$/.test(initialValue)) {
+		    focusId = initialValue;
+		}// End if
 
+		EasyEditAssetFinder.init({
+		    focusAssetId: focusId,
+		    callback: function(selectedAsset){
+			tools.getItem(idPrefix + ':url').setValue(selectedAsset.id,false);
+		    }
+		});
+	    });
+	}
     },
 
     /**
