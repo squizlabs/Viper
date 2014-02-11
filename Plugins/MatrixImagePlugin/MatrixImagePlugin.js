@@ -119,49 +119,70 @@ MatrixImagePlugin.prototype = {
      */
     pickAsset: function(idPrefix)
     {
-        var tools       = this.viper.ViperTools;
-        var urlField    = tools.getItem(idPrefix + ':urlInput'),
-            altField    = tools.getItem(idPrefix + ':altInput');
-        EasyEditAssetManager.getCurrentAsset(function(asset){
+	var tools       = this.viper.ViperTools;
+	var urlField    = tools.getItem(idPrefix + ':urlInput'), altField    = tools.getItem(idPrefix + ':altInput');
+    	
+	// if in Matrix backend mode
+	if(typeof EasyEditAssetManager === 'undefined') {
+	    var jsMap = parent.frames.sq_sidenav.JS_Asset_Map;
+	    var name =idPrefix;
+	    var safeName = idPrefix;
+	    if (jsMap.isInUseMeMode(name) === true) {
+		    alert('Asset Finder In Use');
+	    } else if (jsMap.isInUseMeMode() === true) {
+		    jsMap.cancelUseMeMode();
+	    } else {
+		    jsMap.setUseMeMode(name, safeName, undefined, function(data) {
+			if(typeof data.assetid !== 'undefined' && typeof data.attributes.alt !== 'undefined' ) {
+			    urlField.setValue(data.assetid,false);
+			    altField.setValue(data.attributes.alt,false);
+			}
+		    });
+	    }
+	}
+	else {
+	    // if in EES mode
+	    EasyEditAssetManager.getCurrentAsset(function(asset){
 
-            var initialValue = urlField.getValue(),
-                focusId = asset.id;
-            if (/^[0-9]+([:].*)?$/.test(initialValue)) {
-                focusId = initialValue;
-            }// End if
+		var initialValue = urlField.getValue(),
+		    focusId = asset.id;
+		if (/^[0-9]+([:].*)?$/.test(initialValue)) {
+		    focusId = initialValue;
+		}// End if
 
-            var allowedTypes = ['image', 'thumbnail', 'image_variety'];
-            EasyEditAssetFinder.init({
-                focusAssetId: focusId,
-                types: allowedTypes,
-                itemRefiner: function(asset) {
-                    // Unlock image variety from looking dependent. This allows
-                    // them to be selected.
-                    if (asset.type_code === 'image_variety') {
-                        asset.is_dependant = 0;
-                    }
-                    return asset;
-                },
-                callback: function(selectedAsset){
-                    for (var i = 0; i < allowedTypes.length; i++) {
-                        if (selectedAsset.attribute('type_code') === allowedTypes[i]) {
-                            var altText = selectedAsset.attribute('alt');
-                            if (!altText) {
-                                altText = '';
-                            }
+		var allowedTypes = ['image', 'thumbnail', 'image_variety'];
+		EasyEditAssetFinder.init({
+		    focusAssetId: focusId,
+		    types: allowedTypes,
+		    itemRefiner: function(asset) {
+			// Unlock image variety from looking dependent. This allows
+			// them to be selected.
+			if (asset.type_code === 'image_variety') {
+			    asset.is_dependant = 0;
+			}
+			return asset;
+		    },
+		    callback: function(selectedAsset){
+			for (var i = 0; i < allowedTypes.length; i++) {
+			    if (selectedAsset.attribute('type_code') === allowedTypes[i]) {
+				var altText = selectedAsset.attribute('alt');
+				if (!altText) {
+				    altText = '';
+				}
 
-                            urlField.setValue(selectedAsset.id,false);
-                            altField.setValue(altText,false);
-                            break;
-                        }
-                    }
+				urlField.setValue(selectedAsset.id,false);
+				altField.setValue(altText,false);
+				break;
+			    }
+			}
 
-                    if (i >= allowedTypes.length) {
-                        alert(EasyEditLocalise.translate('You have selected a %1 asset. Only image, thumbnail or image variety assets can be selected.',selectedAsset.attribute('type_code')));
-                    }// End if
-                }
-            });
-        });
+			if (i >= allowedTypes.length) {
+			    alert(EasyEditLocalise.translate('You have selected a %1 asset. Only image, thumbnail or image variety assets can be selected.',selectedAsset.attribute('type_code')));
+			}// End if
+		    }
+		});
+	    });
+	}
 
     },
 

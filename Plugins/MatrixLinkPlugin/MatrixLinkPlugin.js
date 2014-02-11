@@ -252,7 +252,11 @@ MatrixLinkPlugin.prototype = {
 	    } else if (jsMap.isInUseMeMode() === true) {
 		    jsMap.cancelUseMeMode();
 	    } else {
-		    jsMap.setUseMeMode(name, safeName, undefined, function(assetid) {tools.getItem(idPrefix + ':url').setValue(assetid,false);});
+		    jsMap.setUseMeMode(name, safeName, undefined, function(data) {
+			if(typeof data.assetid !== 'undefined') {
+			    tools.getItem(idPrefix + ':url').setValue(assetid,false);
+			}
+		    });
 	    }
 	}
 	else {
