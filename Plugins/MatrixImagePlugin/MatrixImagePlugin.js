@@ -121,6 +121,7 @@ MatrixImagePlugin.prototype = {
     {
 	var tools       = this.viper.ViperTools;
 	var urlField    = tools.getItem(idPrefix + ':urlInput'), altField    = tools.getItem(idPrefix + ':altInput');
+	var allowedTypes = ['image', 'thumbnail', 'image_variety'];
     	
 	// if in Matrix backend mode
 	if(typeof EasyEditAssetManager === 'undefined') {
@@ -132,7 +133,7 @@ MatrixImagePlugin.prototype = {
 	    } else if (jsMap.isInUseMeMode() === true) {
 		    jsMap.cancelUseMeMode();
 	    } else {
-		    jsMap.setUseMeMode(name, safeName, undefined, function(data) {
+		    jsMap.setUseMeMode(name, safeName, allowedTypes, function(data) {
 			if(typeof data.assetid !== 'undefined' && typeof data.attributes.alt !== 'undefined' ) {
 			    urlField.setValue(data.assetid,false);
 			    altField.setValue(data.attributes.alt,false);
@@ -150,7 +151,6 @@ MatrixImagePlugin.prototype = {
 		    focusId = initialValue;
 		}// End if
 
-		var allowedTypes = ['image', 'thumbnail', 'image_variety'];
 		EasyEditAssetFinder.init({
 		    focusAssetId: focusId,
 		    types: allowedTypes,
