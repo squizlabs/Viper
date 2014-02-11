@@ -1646,7 +1646,7 @@ ViperTools.prototype = {
                     return false;
                 };
 
-                var button = tools.createButton(subSectionid + '-applyButton', _('Update Changes'), _('Update Changes'), '', subSection.form.onsubmit, true);
+                var button = tools.createButton(subSectionid + '-applyButton', _('Apply Changes'), _('Apply Changes'), '', subSection.form.onsubmit, true);
                 subSection.element.appendChild(button);
 
                 this.addSubSectionActionWidgets(subSectionid, widgetids);

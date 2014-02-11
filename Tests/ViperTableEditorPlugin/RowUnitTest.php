@@ -48,11 +48,11 @@ class Viper_Tests_ViperTableEditorPlugin_RowUnitTest extends AbstractViperTableE
     {
         $this->insertTable(1);
 
-        // Apply a class to the first row and click click Update Changes
+        // Apply a class to the first row and click click Apply Changes
         $this->showTools(0, 'row');
         $this->clickInlineToolbarButton('cssClass');
         $this->type('test');
-        $this->clickButton('Update Changes', NULL, TRUE);
+        $this->clickButton('Apply Changes', NULL, TRUE);
         $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><thead><tr class="test"><th></th><th></th><th></th><th></th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
 
         // Apply a class to the third row and press enter
@@ -62,11 +62,11 @@ class Viper_Tests_ViperTableEditorPlugin_RowUnitTest extends AbstractViperTableE
         $this->sikuli->keyDown('Key.ENTER');
         $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table style="width: 100%;" border="1"><thead><tr class="test"><th></th><th></th><th></th><th></th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td></tr><tr class="abc"><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
 
-        // Remove the class from the first row and click Update Changes
+        // Remove the class from the first row and click Apply Changes
         $this->showTools(0, 'row');
         $this->clickInlineToolbarButton('cssClass', 'active');
         $this->clearFieldValue('Class');
-        $this->clickButton('Update Changes', NULL, TRUE);
+        $this->clickButton('Apply Changes', NULL, TRUE);
 
         $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table style="width: 100%;" border="1"><thead><tr><th></th><th></th><th></th><th></th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td></tr><tr class="abc"><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
 
@@ -125,7 +125,7 @@ class Viper_Tests_ViperTableEditorPlugin_RowUnitTest extends AbstractViperTableE
         // Change the first row to be a header column
         $this->showTools(0, 'row');
         $this->clickField('Heading');
-        $this->clickButton('Update Changes', NULL, TRUE);
+        $this->clickButton('Apply Changes', NULL, TRUE);
         $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><thead><tr><th>One</th><th></th><th></th><th></th></tr></thead><tbody><tr><td>Two</td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td>Three</td><td></td><td></td><td></td></tr></tbody></table><p></p>');
 
     }//end testRowsInANewTableWithoutHeaders()
@@ -177,7 +177,7 @@ class Viper_Tests_ViperTableEditorPlugin_RowUnitTest extends AbstractViperTableE
         // Change the first row to be a header row
         $this->showTools(0, 'row');
         $this->clickField('Heading');
-        $this->clickButton('Update Changes', NULL, TRUE);
+        $this->clickButton('Apply Changes', NULL, TRUE);
         $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><thead><tr><th>One</th><th></th><th></th><th></th></tr></thead><tbody><tr><th>Two</th><td></td><td></td><td></td></tr><tr><th></th><td></td><td></td><td></td></tr><tr><th>Three</th><td></td><td></td><td></td></tr></tbody></table><p></p>');
 
     }//end testRowsInANewTableWithLeftHeaders()
@@ -230,13 +230,13 @@ class Viper_Tests_ViperTableEditorPlugin_RowUnitTest extends AbstractViperTableE
         // Change the first row to be a header row
         $this->showTools(0, 'row');
         $this->clickField('Heading');
-        $this->clickButton('Update Changes', NULL, TRUE);
+        $this->clickButton('Apply Changes', NULL, TRUE);
         $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><thead><tr><th></th><th></th><th></th><th></th></tr></thead><tbody><tr><td>Two</td><td></td><td></td><td></td></tr><tr><th>One</th><th></th><th></th><th></th></tr><tr><td>Three</td><td></td><td></td><td></td></tr></tbody></table><p></p>');
 
          // Change the third row not to be a header row
         $this->showTools(10, 'row');
         $this->clickField('Heading');
-        $this->clickButton('Update Changes', NULL, TRUE);
+        $this->clickButton('Apply Changes', NULL, TRUE);
         $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table style="width: 100%;" border="1"><thead><tr><th></th><th></th><th></th><th></th></tr></thead><tbody><tr><td>Two</td><td></td><td></td><td></td></tr><tr><td>One</td><td></td><td></td><td></td></tr><tr><td>Three</td><td></td><td></td><td></td></tr></tbody></table><p></p>');
 
 
@@ -290,7 +290,7 @@ class Viper_Tests_ViperTableEditorPlugin_RowUnitTest extends AbstractViperTableE
          // Change the third row not to be a header row
         //$this->showTools(10, 'row');
         $this->clickField('Heading');
-        $this->clickButton('Update Changes', NULL, TRUE);
+        $this->clickButton('Apply Changes', NULL, TRUE);
         $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><thead><tr><th></th><th></th><th></th><th></th></tr></thead><tbody><tr><th>Two</th><td></td><td></td><td></td></tr><tr><td>One</td><td></td><td></td><td></td></tr><tr><th>Three</th><td></td><td></td><td></td></tr></tbody></table><p></p>');
 
     }//end testRowsInANewTableWithBothHeaders()
@@ -405,7 +405,7 @@ class Viper_Tests_ViperTableEditorPlugin_RowUnitTest extends AbstractViperTableE
 
         $this->showTools(0, 'row');
         $this->clickField('Heading');
-        $this->clickInlineToolbarButton('Update Changes', NULL, TRUE);
+        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
         $this->assertHTMLMatch('<p>Test %1%</p><table border="1" id="test" style="width: 100%;"><tbody><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
 
         $this->clickTopToolbarButton('historyUndo');

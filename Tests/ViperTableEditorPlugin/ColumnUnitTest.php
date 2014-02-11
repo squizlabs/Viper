@@ -24,7 +24,7 @@ class Viper_Tests_ViperTableEditorPlugin_ColumnUnitTest extends AbstractViperTab
         $this->assertTrue($this->inlineToolbarButtonExists('delete'));
         $this->assertTrue($this->fieldExists('Width'));
         $this->assertTrue($this->fieldExists('Heading'));
-        $this->assertTrue($this->inlineToolbarButtonExists('Update Changes', 'disabled', TRUE));
+        $this->assertTrue($this->inlineToolbarButtonExists('Apply Changes', 'disabled', TRUE));
 
     }//end testColumnToolIconsCorrect()
 
@@ -38,11 +38,11 @@ class Viper_Tests_ViperTableEditorPlugin_ColumnUnitTest extends AbstractViperTab
     {
         $this->insertTable(1);
 
-        // Change the width of the first column and click Update Changes
+        // Change the width of the first column and click Apply Changes
         $this->showTools(0, 'col');
         $this->clickField('Width');
         $this->type('50');
-        $this->clickInlineToolbarButton('Update Changes', NULL, TRUE);
+        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
         $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><thead><tr><th style="width: 50px;"></th><th></th><th></th><th></th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
 
         // Change the width of the last column and press enter
@@ -99,7 +99,7 @@ class Viper_Tests_ViperTableEditorPlugin_ColumnUnitTest extends AbstractViperTab
         $this->showTools(0, 'col');
         $this->clickField('Heading');
         sleep(1);
-        $this->clickInlineToolbarButton('Update Changes', NULL, TRUE);
+        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
         $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><tbody><tr><th>One</th><td>Three</td><td></td><td>Two</td><td>Four</td></tr><tr><th></th><td></td><td></td><td></td><td></td></tr><tr><th></th><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
 
     }//end testColumnsInANewTableWithoutHeaders()
@@ -150,14 +150,14 @@ class Viper_Tests_ViperTableEditorPlugin_ColumnUnitTest extends AbstractViperTab
         $this->showTools(0, 'col');
         $this->clickField('Heading');
         sleep(1);
-        $this->clickInlineToolbarButton('Update Changes', NULL, TRUE);
+        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
         $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><tbody><tr><td>One</td><td>Two</td><td>Three</td><td></td><td>Four</td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
 
         // Change the third colum not to be a header column
         $this->showTools(2, 'col');
         $this->clickField('Heading');
         sleep(1);
-        $this->clickInlineToolbarButton('Update Changes', NULL, TRUE);
+        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
         $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><tbody><tr><td>One</td><td>Two</td><th>Three</th><td></td><td>Four</td></tr><tr><td></td><td></td><th></th><td></td><td></td></tr><tr><td></td><td></td><th></th><td></td><td></td></tr></tbody></table><p></p>');
 
 
@@ -210,14 +210,14 @@ class Viper_Tests_ViperTableEditorPlugin_ColumnUnitTest extends AbstractViperTab
         $this->showTools(0, 'col');
         $this->clickField('Heading');
         sleep(1);
-        $this->clickInlineToolbarButton('Update Changes', NULL, TRUE);
+        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
         $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><thead><tr><th>One</th><th>Two</th><th>Three</th><th></th><th>Four</th></tr></thead><tbody><tr><th></th><td></td><td></td><td></td><td></td></tr><tr><th></th><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
 
         // Change the third colum to be a header column
         $this->showTools(2, 'col');
         $this->clickField('Heading');
         sleep(1);
-        $this->clickInlineToolbarButton('Update Changes', NULL, TRUE);
+        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
         $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><thead><tr><th>One</th><th>Two</th><th>Three</th><th></th><th>Four</th></tr></thead><tbody><tr><th></th><td></td><th></th><td></td><td></td></tr><tr><th></th><td></td><th></th><td></td><td></td></tr></tbody></table><p></p>');
 
     }//end testColumnsInANewTableWithTopHeaders()
@@ -269,14 +269,14 @@ class Viper_Tests_ViperTableEditorPlugin_ColumnUnitTest extends AbstractViperTab
         $this->showTools(2, 'col');
         $this->clickField('Heading');
         sleep(1);
-        $this->clickInlineToolbarButton('Update Changes', NULL, TRUE);
+        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
         $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><thead><tr><th>One</th><th>Two</th><th>Three</th><th></th><th>Four</th></tr></thead><tbody><tr><th></th><td></td><th></th><td></td><td></td></tr><tr><th></th><td></td><th></th><td></td><td></td></tr></tbody></table><p></p>');
 
         // Change the first colum not to be a header column
         $this->showTools(0, 'col');
         $this->clickField('Heading');
         sleep(1);
-        $this->clickInlineToolbarButton('Update Changes', NULL, TRUE);
+        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
         $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><thead><tr><td>One</td><th>Two</th><th>Three</th><th></th><th>Four</th></tr></thead><tbody><tr><td></td><td></td><th></th><td></td><td></td></tr><tr><td></td><td></td><th></th><td></td><td></td></tr></tbody></table><p></p>');
 
 
@@ -373,11 +373,11 @@ class Viper_Tests_ViperTableEditorPlugin_ColumnUnitTest extends AbstractViperTab
 
         $this->showTools(0, 'col');
         $this->clickField('Heading');
-        $this->clickInlineToolbarButton('Update Changes', NULL, TRUE);
+        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
         $this->assertHTMLMatch('<p>Test %1%</p><table style="width: 100%;" id="test" border="1"><tbody><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
 
         $this->clickField('Heading');
-        $this->clickInlineToolbarButton('Update Changes', NULL, TRUE);
+        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
 
         $this->assertHTMLMatch('<p>Test %1%</p><table style="width: 100%;" id="test" border="1"><tbody><tr><th id="testr1c1"></th><td headers="testr1c1"></td><td headers="testr1c1"></td><td headers="testr1c1"></td></tr><tr><th id="testr2c1"></th><td headers="testr2c1"></td><td headers="testr2c1"></td><td headers="testr2c1"></td></tr><tr><th id="testr3c1"></th><td headers="testr3c1"></td><td headers="testr3c1"></td><td headers="testr3c1"></td></tr></tbody></table><p></p>');
 
@@ -397,7 +397,7 @@ class Viper_Tests_ViperTableEditorPlugin_ColumnUnitTest extends AbstractViperTab
 
         $this->showTools(0, 'col');
         $this->clickField('Heading');
-        $this->clickInlineToolbarButton('Update Changes', NULL, TRUE);
+        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
         $this->assertHTMLMatch('<p>Test %1%</p><table style="width: 100%;" id="test" border="1"><tbody><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
 
         $this->clickTopToolbarButton('historyUndo');

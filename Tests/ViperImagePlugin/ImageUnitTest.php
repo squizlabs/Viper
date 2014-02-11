@@ -54,7 +54,7 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperImagePlugi
         $this->type($this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png'));
         $this->clickField('Image is decorative');
         sleep(1);
-        $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
 
         $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%1% %2%<img src="'.$this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png').'" alt="" /></p><p>sit amet<img src="'.$this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png').'" alt="" /></p>');
 
@@ -85,7 +85,7 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperImagePlugi
         $this->sikuli->keyDown('Key.TAB');
         $this->type('Another Alt tag');
         sleep(1);
-        $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
 
         $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%1% %2%<img src="'.$this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png').'" alt="Alt tag" /></p><p>sit amet<img src="'.$this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png').'" alt="Another Alt tag" /></p>');
 
@@ -175,7 +175,7 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperImagePlugi
         $this->sikuli->keyDown('Key.TAB');
         $this->type('Another Title tag');
         sleep(1);
-        $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
 
         $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%1% %2%<img src="'.$this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png').'" alt="Alt tag" title="Title tag" /></p><p>sit amet<img src="'.$this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png').'" alt="Another Alt tag" title="Another Title tag" /></p>');
 
@@ -227,7 +227,7 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperImagePlugi
         $this->sikuli->keyDown('Key.TAB');
         $this->type('Alt tag');
         sleep(1);
-        $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
 
         $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%1% %2%<img src="'.$this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png').'" alt="Alt tag" /></p><p>sit amet <strong>%3%<img src="'.$this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png').'" alt="Alt tag" /></strong></p>');
 
@@ -260,7 +260,7 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperImagePlugi
         $this->sikuli->keyDown('Key.TAB');
         $this->type('Alt tag');
         sleep(1);
-        $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
 
         $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%1%<img src="'.$this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png').'" alt="Alt tag" /> %2%</p><p>sit amet <img src="'.$this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png').'" alt="Alt tag" /><strong>%3%</strong></p>');
 
@@ -313,7 +313,7 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperImagePlugi
         $this->sikuli->keyDown('Key.TAB');
         $this->type('Alt tag');
         sleep(1);
-        $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
 
         $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p><img src="'.$this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png').'" alt="Alt tag" /></p><p>sit amet<img src="'.$this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png').'" alt="Alt tag" /></p>');
 
@@ -880,7 +880,7 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperImagePlugi
         $this->clickField('Image is decorative');
         $this->sikuli->keyDown('Key.TAB');
         $this->type('Alt text');
-        $this->clickInlineToolbarButton('Update Changes', NULL, TRUE);
+        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
 
         $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>LOREM XuT</p><p><img src="'.$this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png').'" alt="Alt text" width="369" height="167" /></p><p>LABS is ORSM</p>');
 
@@ -976,7 +976,7 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperImagePlugi
 
 
     /**
-     * Test that the Update Changes button is inactive after you cancel changes.
+     * Test that the Apply Changes button is inactive after you cancel changes.
      *
      * @return void
      */
@@ -994,18 +994,18 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperImagePlugi
         $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%1% %2%</p><p>sit amet <strong>%3%</strong></p>');
 
         $this->clickTopToolbarButton('image');
-        $this->assertTrue($this->topToolbarButtonExists('Update Changes', 'disabled', TRUE), 'Update changes button should be disabled');
+        $this->assertTrue($this->topToolbarButtonExists('Apply Changes', 'disabled', TRUE), 'Update changes button should be disabled');
         $this->type($this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png'));
         $this->sikuli->keyDown('Key.TAB');
         $this->type('Alt tag');
-        $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
         $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%1% %2%</p><p>sit amet <strong>%3%<img src="'.$this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png').'" alt="Alt tag" /></strong></p>');
 
     }//end testUpdateChangesButtonIsDisabledAfterCancellingChanges()
 
 
     /**
-     * Test that the Update Changes button is inactive after you cancel changes to an image.
+     * Test that the Apply Changes button is inactive after you cancel changes to an image.
      *
      * @return void
      */
@@ -1034,12 +1034,12 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperImagePlugi
 
         $this->clickElement('img', 0);
         $this->clickTopToolbarButton('image', 'active');
-        $this->assertTrue($this->topToolbarButtonExists('Update Changes', 'disabled', TRUE), 'Update changes button should be disabled');
+        $this->assertTrue($this->topToolbarButtonExists('Apply Changes', 'disabled', TRUE), 'Update changes button should be disabled');
         $this->clickField('Image is decorative');
         $this->sikuli->keyDown('Key.TAB');
         $this->type('Alt tag');
-        $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
-        $this->assertTrue($this->topToolbarButtonExists('Update Changes', 'disabled', TRUE), 'Update changes button should be disabled');
+        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
+        $this->assertTrue($this->topToolbarButtonExists('Apply Changes', 'disabled', TRUE), 'Update changes button should be disabled');
 
     }//end testUpdateChangesButtonIsDisabledAfterCancellingChangesToAnImage()
 

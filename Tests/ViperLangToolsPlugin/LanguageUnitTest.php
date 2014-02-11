@@ -23,7 +23,7 @@ class Viper_Tests_ViperLangToolsPlugin_LanguageUnitTest extends AbstractViperUni
 
 
     /**
-     * Test that the Update Changes button remains inactvie.
+     * Test that the Apply Changes button remains inactvie.
      *
      * @return void
      */
@@ -35,7 +35,7 @@ class Viper_Tests_ViperLangToolsPlugin_LanguageUnitTest extends AbstractViperUni
         $this->clickTopToolbarButton('Language', NULL, TRUE);
 
         // Check to make sure the update changes button is disabled.
-        $this->assertTrue($this->topToolbarButtonExists('Update Changes', 'disabled', TRUE), 'The update changes button should be disabled.');
+        $this->assertTrue($this->topToolbarButtonExists('Apply Changes', 'disabled', TRUE), 'The update changes button should be disabled.');
 
     }//end testUpdateChangesButton()
 
@@ -66,7 +66,7 @@ class Viper_Tests_ViperLangToolsPlugin_LanguageUnitTest extends AbstractViperUni
         $this->clickTopToolbarButton('langTools');
         $this->clickTopToolbarButton('Language', NULL, TRUE);
         $this->type('def');
-        $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
 
         $this->assertHTMLMatch('<p>%1% <span lang="en">%2%</span> <span lang="def">%3%</span></p><p lang="en">sit amet <strong>%4%</strong></p><p>Test %5%</p><p>Squiz <span lang="en">%6%</span> is orsm</p><p><em>ThE</em> %7% brown fox</p><p><strong>%8%</strong> <em>%9%</em> the lazy dog</p>');
 
@@ -128,7 +128,7 @@ class Viper_Tests_ViperLangToolsPlugin_LanguageUnitTest extends AbstractViperUni
         $this->clickTopToolbarButton('langTools');
         $this->clickTopToolbarButton('Language', NULL, TRUE);
         $this->type('en');
-        $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
 
         $this->assertHTMLMatch('<p lang="en">%1% %2% %3%</p><p lang="en">sit amet <strong>%4%</strong></p><p lang="en">Test %5%</p><p>Squiz <span lang="en">%6%</span> is orsm</p><p><em>ThE</em> %7% brown fox</p><p><strong>%8%</strong> <em>%9%</em> the lazy dog</p>');
 
@@ -160,7 +160,7 @@ class Viper_Tests_ViperLangToolsPlugin_LanguageUnitTest extends AbstractViperUni
 
         $this->assertTrue($this->topToolbarButtonExists('langTools'), 'Language icon is still active in ThE Top Toolbar.');
 
-        // Reapply ThE language so that we can delete it with ThE Update Changes button
+        // Reapply ThE language so that we can delete it with ThE Apply Changes button
         $this->clickTopToolbarButton('langTools');
         $this->clickTopToolbarButton('Language', NULL, TRUE);
         $this->type('en');
@@ -172,7 +172,7 @@ class Viper_Tests_ViperLangToolsPlugin_LanguageUnitTest extends AbstractViperUni
         $this->clickTopToolbarButton('langTools', 'active');
         $this->clickTopToolbarButton('Language', 'active', TRUE);
         $this->clearFieldValue('Language');
-        $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
 
         $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit amet <strong>%4%</strong></p><p>Test %5%</p><p>Squiz <span lang="en">%6%</span> is orsm</p><p><em>ThE</em> %7% brown fox</p><p><strong>%8%</strong> <em>%9%</em> the lazy dog</p>');
 
@@ -200,7 +200,7 @@ class Viper_Tests_ViperLangToolsPlugin_LanguageUnitTest extends AbstractViperUni
         $this->selectKeyword(6);
         $this->assertTrue($this->topToolbarButtonExists('langTools'), 'Language icon is still active in ThE Top Toolbar.');
 
-        // Reapply ThE language so that we can delete it with ThE Update Changes button
+        // Reapply ThE language so that we can delete it with ThE Apply Changes button
         $this->clickTopToolbarButton('langTools');
         $this->clickTopToolbarButton('Language', NULL, TRUE);
         $this->type('en');
@@ -212,7 +212,7 @@ class Viper_Tests_ViperLangToolsPlugin_LanguageUnitTest extends AbstractViperUni
         $this->clickTopToolbarButton('langTools', 'active');
         $this->clickTopToolbarButton('Language', 'active', TRUE);
         $this->clearFieldValue('Language');
-        $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
 
         $this->assertHTMLMatch('<p>%1% %2% %3%</p><p lang="en">sit amet <strong>%4%</strong></p><p>Test %5%</p><p>Squiz %6% is orsm</p><p><em>ThE</em> %7% brown fox</p><p><strong>%8%</strong> <em>%9%</em> the lazy dog</p>');
 

@@ -28,7 +28,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->selectKeyword(3);
         $this->clickInlineToolbarButton('cssClass');
         $this->type('class');
-        $this->clickInlineToolbarButton('Update Changes', NULL, TRUE);
+        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
         $this->assertHTMLMatch('<p>%1% <span class="test">%2%</span> <span class="class">%3%</span></p><p class="test">sit amet <strong>%4%</strong></p><p><em>Test</em> %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><strong>%8%</strong> %9% the lazy dog</p>');
 
     }//end testAddingClassAttributeToAWordUsingTheInlineToolbar()
@@ -73,7 +73,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->selectKeyword(3);
         $this->clickTopToolbarButton('cssClass');
         $this->type('class');
-        $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
         $this->assertHTMLMatch('<p>%1% <span class="test">%2%</span> <span class="class">%3%</span></p><p class="test">sit amet <strong>%4%</strong></p><p><em>Test</em> %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><strong>%8%</strong> %9% the lazy dog</p>');
 
 
@@ -89,11 +89,11 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
     {
         $this->selectKeyword(2);
         $this->clickTopToolbarButton('cssClass');
-        $this->assertTrue($this->topToolbarButtonExists('Update Changes', 'disabled', TRUE), 'Update Changes button should be disabled.');
+        $this->assertTrue($this->topToolbarButtonExists('Apply Changes', 'disabled', TRUE), 'Apply Changes button should be disabled.');
 
         $this->selectKeyword(3);
         $this->clickInlineToolbarButton('cssClass');
-        $this->assertTrue($this->inlineToolbarButtonExists('Update Changes', 'disabled', TRUE), 'Update Changes button should be disabled.');
+        $this->assertTrue($this->inlineToolbarButtonExists('Apply Changes', 'disabled', TRUE), 'Apply Changes button should be disabled.');
 
     }//end testUpdateChangesButtonIsDisabledForClassIcon()
 
@@ -121,7 +121,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->assertTrue($this->topToolbarButtonExists('cssClass'), 'Class icon is still active in the Top Toolbar.');
         $this->assertTrue($this->inlineToolbarButtonExists('cssClass'), 'Class icon is still active in the inline toolbar.');
 
-        // Reapply the class so that we can delete it with the Update Changes button
+        // Reapply the class so that we can delete it with the Apply Changes button
         $this->clickTopToolbarButton('cssClass');
         $this->type('test');
         $this->sikuli->keyDown('Key.ENTER');
@@ -133,7 +133,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         sleep(1);
         $this->clickInlineToolbarButton('cssClass', 'active');
         $this->clearFieldValue('Class');
-        $this->clickInlineToolbarButton('Update Changes', NULL, TRUE);
+        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
 
         $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p><em>Test</em> %5%</p><p>Squiz %6% is %7%</p><p><strong>%8%</strong> %9% the lazy dog</p>');
 
@@ -164,7 +164,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->assertTrue($this->topToolbarButtonExists('cssClass'), 'Class icon is still active in the Top Toolbar.');
         $this->assertTrue($this->inlineToolbarButtonExists('cssClass'), 'Class icon is still active in the inline toolbar.');
 
-        // Reapply the class so that we can delete it with the Update Changes button
+        // Reapply the class so that we can delete it with the Apply Changes button
         $this->clickTopToolbarButton('cssClass');
         $this->type('test');
         $this->sikuli->keyDown('Key.ENTER');
@@ -173,7 +173,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->selectKeyword(6);
         $this->clickTopToolbarButton('cssClass', 'active');
         $this->clearFieldValue('Class');
-        $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
 
         $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p><em>Test</em> %5%</p><p>Squiz %6% is %7%</p><p><strong>%8%</strong> %9% the lazy dog</p>');
 
@@ -201,7 +201,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->selectKeyword(6);
         $this->clickInlineToolbarButton('cssClass', 'active');
         $this->type('def');
-        $this->clickInlineToolbarButton('Update Changes', NULL, TRUE);
+        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
 
         $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p><em>Test</em> %5%</p><p>Squiz <span class="myclassabcdef">%6%</span> is %7%</p><p><strong>%8%</strong> %9% the lazy dog</p>');
 
@@ -229,7 +229,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->selectKeyword(6);
         $this->clickTopToolbarButton('cssClass', 'active');
         $this->type('def');
-        $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
 
         $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p><em>Test</em> %5%</p><p>Squiz <span class="myclassabcdef">%6%</span> is %7%</p><p><strong>%8%</strong> %9% the lazy dog</p>');
 
@@ -265,7 +265,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->selectInlineToolbarLineageItem(0);
         $this->clickInlineToolbarButton('cssClass');
         $this->type('class');
-        $this->clickInlineToolbarButton('Update Changes', NULL, TRUE);
+        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
         $this->assertHTMLMatch('<p class="test">%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p class="class"><em>Test</em> %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><strong>%8%</strong> %9% the lazy dog</p>');
 
     }//end testAddingClassAttributeToAParagraphUsingTheInlineToolbar()
@@ -300,7 +300,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->selectInlineToolbarLineageItem(0);
         $this->clickTopToolbarButton('cssClass');
         $this->type('class');
-        $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
         $this->assertHTMLMatch('<p class="test">%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p class="class"><em>Test</em> %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><strong>%8%</strong> %9% the lazy dog</p>');
 
     }//end testAddingClassAttributeToAParagraphUsingTheTopToolbar()
@@ -360,7 +360,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->assertTrue($this->topToolbarButtonExists('cssClass'), 'Class icon is still active in the Top Toolbar.');
         $this->assertTrue($this->inlineToolbarButtonExists('cssClass'), 'Class icon is still active in the inline toolbar.');
 
-        // Reapply the class so that we can delete again using the Update Changes button.
+        // Reapply the class so that we can delete again using the Apply Changes button.
         $this->clickInlineToolbarButton('cssClass');
         $this->type('test');
         $this->sikuli->keyDown('Key.ENTER');
@@ -372,7 +372,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->selectInlineToolbarLineageItem(0);
         $this->clickInlineToolbarButton('cssClass', 'active');
         $this->clearFieldValue('Class');
-        $this->clickInlineToolbarButton('Update Changes', NULL, TRUE);
+        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
 
         $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit amet <strong>%4%</strong></p><p><em>Test</em> %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><strong>%8%</strong> %9% the lazy dog</p>');
 
@@ -405,7 +405,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->assertTrue($this->topToolbarButtonExists('cssClass'), 'Class icon is still active in the Top Toolbar.');
         $this->assertTrue($this->inlineToolbarButtonExists('cssClass'), 'Class icon is still active in the inline toolbar.');
 
-        //Reapply the class so that we can delete again using the Update Changes button
+        //Reapply the class so that we can delete again using the Apply Changes button
         $this->clickTopToolbarButton('cssClass');
         $this->type('test');
         $this->sikuli->keyDown('Key.ENTER');
@@ -417,7 +417,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->selectInlineToolbarLineageItem(0);
         $this->clickTopToolbarButton('cssClass', 'active');
         $this->clearFieldValue('Class');
-        $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
 
         $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit amet <strong>%4%</strong></p><p><em>Test</em> %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><strong>%8%</strong> %9% the lazy dog</p>');
 
@@ -446,7 +446,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->selectInlineToolbarLineageItem(0);
         $this->clickInlineToolbarButton('cssClass', 'active');
         $this->type('def');
-        $this->clickInlineToolbarButton('Update Changes', NULL, TRUE);
+        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
 
         $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="testabcdef">sit amet <strong>%4%</strong></p><p><em>Test</em> %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><strong>%8%</strong> %9% the lazy dog</p>');
 
@@ -476,7 +476,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->selectInlineToolbarLineageItem(0);
         $this->clickTopToolbarButton('cssClass', 'active');
         $this->type('def');
-        $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
 
         $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="testabcdef">sit amet <strong>%4%</strong></p><p><em>Test</em> %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><strong>%8%</strong> %9% the lazy dog</p>');
 

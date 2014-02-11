@@ -46,7 +46,7 @@ class Viper_Tests_ViperLangToolsPlugin_LangToolsInTablesUnitTest extends Abstrac
         $this->clickTopToolbarButton('langTools', 'active');
         $this->clickTopToolbarButton('Language', 'active', TRUE);
         $this->type('def');
-        $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
         $this->assertHTMLMatchNoHeaders('<table cellpadding="2" cellspacing="3" lang="abcdef"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 %2%</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>sapien vel %4%</td><td>nec porta ante</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Test deleting the language
@@ -117,7 +117,7 @@ class Viper_Tests_ViperLangToolsPlugin_LangToolsInTablesUnitTest extends Abstrac
         $this->clickTopToolbarButton('langTools', 'active');
         $this->clickTopToolbarButton('Acronym', 'active', TRUE);
         $this->type('def');
-        $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
         $this->assertHTMLMatchNoHeaders('<table cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text <acronym title="abcdef">%1%</acronym></caption><thead><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 %2%</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>sapien vel %4%</td><td>nec porta ante</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Test deleting the acronym
@@ -126,7 +126,7 @@ class Viper_Tests_ViperLangToolsPlugin_LangToolsInTablesUnitTest extends Abstrac
         $this->clickTopToolbarButton('langTools', 'active');
         $this->clickTopToolbarButton('Acronym', 'active', TRUE);
         $this->clearFieldValue('Acronym');
-        $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
         $this->assertHTMLMatchNoHeaders('<table cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 %2%</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>sapien vel %4%</td><td>nec porta ante</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Test undo and redo
@@ -160,7 +160,7 @@ class Viper_Tests_ViperLangToolsPlugin_LangToolsInTablesUnitTest extends Abstrac
         $this->clickTopToolbarButton('langTools', 'active');
         $this->clickTopToolbarButton('Abbreviation', 'active', TRUE);
         $this->type('def');
-        $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
         $this->assertHTMLMatchNoHeaders('<table cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text <abbr title="abcdef">%1%</abbr></caption><thead><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 %2%</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>sapien vel %4%</td><td>nec porta ante</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Test deleting the abbreviation
@@ -169,7 +169,7 @@ class Viper_Tests_ViperLangToolsPlugin_LangToolsInTablesUnitTest extends Abstrac
         $this->clickTopToolbarButton('langTools', 'active');
         $this->clickTopToolbarButton('Abbreviation', 'active', TRUE);
         $this->clearFieldValue('Abbreviation');
-        $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
         $this->assertHTMLMatchNoHeaders('<table cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 %2%</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>sapien vel %4%</td><td>nec porta ante</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Test undo and redo
@@ -203,7 +203,7 @@ class Viper_Tests_ViperLangToolsPlugin_LangToolsInTablesUnitTest extends Abstrac
         $this->clickTopToolbarButton('langTools', 'active');
         $this->clickTopToolbarButton('Language', 'active', TRUE);
         $this->type('def');
-        $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
         $this->assertHTMLMatchNoHeaders('<table cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text <span lang="abcdef">%1%</span></caption><thead><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 %2%</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>sapien vel %4%</td><td>nec porta ante</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Test deleting the language
@@ -212,7 +212,7 @@ class Viper_Tests_ViperLangToolsPlugin_LangToolsInTablesUnitTest extends Abstrac
         $this->clickTopToolbarButton('langTools', 'active');
         $this->clickTopToolbarButton('Language', 'active', TRUE);
         $this->clearFieldValue('Language');
-        $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
         $this->assertHTMLMatchNoHeaders('<table cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 %2%</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>sapien vel %4%</td><td>nec porta ante</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Test applying language to the full caption
@@ -222,7 +222,7 @@ class Viper_Tests_ViperLangToolsPlugin_LangToolsInTablesUnitTest extends Abstrac
         $this->clickTopToolbarButton('langTools');
         $this->clickTopToolbarButton('Language', NULL, TRUE);
         $this->type('test');
-        $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
         $this->assertHTMLMatchNoHeaders('<table cellpadding="2" cellspacing="3"><caption lang="test"><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 %2%</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>sapien vel %4%</td><td>nec porta ante</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Test undo and redo
@@ -296,7 +296,7 @@ class Viper_Tests_ViperLangToolsPlugin_LangToolsInTablesUnitTest extends Abstrac
         $this->clickTopToolbarButton('langTools', 'active');
         $this->clickTopToolbarButton('Acronym', 'active', TRUE);
         $this->type('def');
-        $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
         $this->assertHTMLMatchNoHeaders('<table cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 <acronym title="abcdef">%2%</acronym></th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>sapien vel %4%</td><td>nec porta ante</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Test deleting the acronym.
@@ -305,7 +305,7 @@ class Viper_Tests_ViperLangToolsPlugin_LangToolsInTablesUnitTest extends Abstrac
         $this->clickTopToolbarButton('langTools', 'active');
         $this->clickTopToolbarButton('Acronym', 'active', TRUE);
         $this->clearFieldValue('Acronym');
-        $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
         $this->assertHTMLMatchNoHeaders('<table cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 %2%</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>sapien vel %4%</td><td>nec porta ante</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Test undo and redo
@@ -339,7 +339,7 @@ class Viper_Tests_ViperLangToolsPlugin_LangToolsInTablesUnitTest extends Abstrac
         $this->clickTopToolbarButton('langTools', 'active');
         $this->clickTopToolbarButton('Abbreviation', 'active', TRUE);
         $this->type('def');
-        $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
         $this->assertHTMLMatchNoHeaders('<table cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 <abbr title="abcdef">%2%</abbr></th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>sapien vel %4%</td><td>nec porta ante</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Test deleting the abbreviation
@@ -348,7 +348,7 @@ class Viper_Tests_ViperLangToolsPlugin_LangToolsInTablesUnitTest extends Abstrac
         $this->clickTopToolbarButton('langTools', 'active');
         $this->clickTopToolbarButton('Abbreviation', 'active', TRUE);
         $this->clearFieldValue('Abbreviation');
-        $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
         $this->assertHTMLMatchNoHeaders('<table cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 %2%</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>sapien vel %4%</td><td>nec porta ante</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Test undo and redo
@@ -382,7 +382,7 @@ class Viper_Tests_ViperLangToolsPlugin_LangToolsInTablesUnitTest extends Abstrac
         $this->clickTopToolbarButton('langTools', 'active');
         $this->clickTopToolbarButton('Language', 'active', TRUE);
         $this->type('def');
-        $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
         $this->assertHTMLMatchNoHeaders('<table cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 <span lang="abcdef">%2%</span></th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>sapien vel %4%</td><td>nec porta ante</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Test deleting the language
@@ -391,7 +391,7 @@ class Viper_Tests_ViperLangToolsPlugin_LangToolsInTablesUnitTest extends Abstrac
         $this->clickTopToolbarButton('langTools', 'active');
         $this->clickTopToolbarButton('Language', 'active', TRUE);
         $this->clearFieldValue('Language');
-        $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
         $this->assertHTMLMatchNoHeaders('<table cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 %2%</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>sapien vel %4%</td><td>nec porta ante</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Test undo and redo
@@ -408,7 +408,7 @@ class Viper_Tests_ViperLangToolsPlugin_LangToolsInTablesUnitTest extends Abstrac
         $this->clickTopToolbarButton('langTools');
         $this->clickTopToolbarButton('Language', NULL, TRUE);
         $this->type('test');
-        $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
         $this->assertHTMLMatchNoHeaders('<table cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 Header</th><th lang="test">Col3 %2%</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>sapien vel %4%</td><td>nec porta ante</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Test applying language to the row cell
@@ -418,7 +418,7 @@ class Viper_Tests_ViperLangToolsPlugin_LangToolsInTablesUnitTest extends Abstrac
         $this->clickTopToolbarButton('langTools');
         $this->clickTopToolbarButton('Language', NULL, TRUE);
         $this->type('test');
-        $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
         $this->assertHTMLMatchNoHeaders('<table cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr lang="test"><th>Col1 Header</th><th>Col2 Header</th><th lang="test">Col3 %2%</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>sapien vel %4%</td><td>nec porta ante</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Test applying language to the thead cell
@@ -428,7 +428,7 @@ class Viper_Tests_ViperLangToolsPlugin_LangToolsInTablesUnitTest extends Abstrac
         $this->clickTopToolbarButton('langTools');
         $this->clickTopToolbarButton('Language', NULL, TRUE);
         $this->type('test');
-        $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
         $this->assertHTMLMatchNoHeaders('<table cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead lang="test"><tr lang="test"><th>Col1 Header</th><th>Col2 Header</th><th lang="test">Col3 %2%</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>sapien vel %4%</td><td>nec porta ante</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
     }//end testLanguageInTableHeader()
@@ -494,7 +494,7 @@ class Viper_Tests_ViperLangToolsPlugin_LangToolsInTablesUnitTest extends Abstrac
         $this->clickTopToolbarButton('langTools', 'active');
         $this->clickTopToolbarButton('Acronym', 'active', TRUE);
         $this->type('def');
-        $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
         $this->assertHTMLMatchNoHeaders('<table cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 %2%</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer <acronym title="abcdef">%3%</acronym></td></tr></tfoot><tbody><tr><td>sapien vel %4%</td><td>nec porta ante</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Test deleting the acronym
@@ -502,7 +502,7 @@ class Viper_Tests_ViperLangToolsPlugin_LangToolsInTablesUnitTest extends Abstrac
         $this->clickTopToolbarButton('langTools', 'active');
         $this->clickTopToolbarButton('Acronym', 'active', TRUE);
         $this->clearFieldValue('Acronym');
-        $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
         $this->assertHTMLMatchNoHeaders('<table cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 %2%</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>sapien vel %4%</td><td>nec porta ante</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Test undo and redo
@@ -535,7 +535,7 @@ class Viper_Tests_ViperLangToolsPlugin_LangToolsInTablesUnitTest extends Abstrac
         $this->clickTopToolbarButton('langTools', 'active');
         $this->clickTopToolbarButton('Abbreviation', 'active', TRUE);
         $this->type('def');
-        $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
         $this->assertHTMLMatchNoHeaders('<table cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 %2%</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer <abbr title="abcdef">%3%</abbr></td></tr></tfoot><tbody><tr><td>sapien vel %4%</td><td>nec porta ante</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Test deleting the abbreviation
@@ -543,7 +543,7 @@ class Viper_Tests_ViperLangToolsPlugin_LangToolsInTablesUnitTest extends Abstrac
         $this->clickTopToolbarButton('langTools', 'active');
         $this->clickTopToolbarButton('Abbreviation', 'active', TRUE);
         $this->clearFieldValue('Abbreviation');
-        $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
         $this->assertHTMLMatchNoHeaders('<table cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 %2%</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>sapien vel %4%</td><td>nec porta ante</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Test undo and redo
@@ -576,7 +576,7 @@ class Viper_Tests_ViperLangToolsPlugin_LangToolsInTablesUnitTest extends Abstrac
         $this->clickTopToolbarButton('langTools', 'active');
         $this->clickTopToolbarButton('Language', 'active', TRUE);
         $this->type('def');
-        $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
         $this->assertHTMLMatchNoHeaders('<table cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 %2%</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer <span lang="abcdef">%3%</span></td></tr></tfoot><tbody><tr><td>sapien vel %4%</td><td>nec porta ante</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Test deleting the language
@@ -584,7 +584,7 @@ class Viper_Tests_ViperLangToolsPlugin_LangToolsInTablesUnitTest extends Abstrac
         $this->clickTopToolbarButton('langTools', 'active');
         $this->clickTopToolbarButton('Language', 'active', TRUE);
         $this->clearFieldValue('Language');
-        $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
         $this->assertHTMLMatchNoHeaders('<table cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 %2%</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>sapien vel %4%</td><td>nec porta ante</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Test undo and redo
@@ -600,7 +600,7 @@ class Viper_Tests_ViperLangToolsPlugin_LangToolsInTablesUnitTest extends Abstrac
         $this->clickTopToolbarButton('langTools');
         $this->clickTopToolbarButton('Language', NULL, TRUE);
         $this->type('test');
-        $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
         $this->assertHTMLMatchNoHeaders('<table cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 %2%</th></tr></thead><tfoot><tr><td colspan="3" lang="test">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>sapien vel %4%</td><td>nec porta ante</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Test applying language to the row cell
@@ -609,7 +609,7 @@ class Viper_Tests_ViperLangToolsPlugin_LangToolsInTablesUnitTest extends Abstrac
         $this->clickTopToolbarButton('langTools');
         $this->clickTopToolbarButton('Language', NULL, TRUE);
         $this->type('test');
-        $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
         $this->assertHTMLMatchNoHeaders('<table cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 %2%</th></tr></thead><tfoot><tr lang="test"><td colspan="3" lang="test">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>sapien vel %4%</td><td>nec porta ante</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Test applying language to the thead cell
@@ -618,7 +618,7 @@ class Viper_Tests_ViperLangToolsPlugin_LangToolsInTablesUnitTest extends Abstrac
         $this->clickTopToolbarButton('langTools');
         $this->clickTopToolbarButton('Language', NULL, TRUE);
         $this->type('test');
-        $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
         $this->assertHTMLMatchNoHeaders('<table cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 %2%</th></tr></thead><tfoot lang="test"><tr lang="test"><td colspan="3" lang="test">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>sapien vel %4%</td><td>nec porta ante</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
     }//end testLanguageInTableFooter()
@@ -684,7 +684,7 @@ class Viper_Tests_ViperLangToolsPlugin_LangToolsInTablesUnitTest extends Abstrac
         $this->clickTopToolbarButton('langTools', 'active');
         $this->clickTopToolbarButton('Acronym', 'active', TRUE);
         $this->type('def');
-        $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
         $this->assertHTMLMatchNoHeaders('<table cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 %2%</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>sapien vel <acronym title="abcdef">%4%</acronym></td><td>nec porta ante</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Test deleting the acronym
@@ -692,7 +692,7 @@ class Viper_Tests_ViperLangToolsPlugin_LangToolsInTablesUnitTest extends Abstrac
         $this->clickTopToolbarButton('langTools', 'active');
         $this->clickTopToolbarButton('Acronym', 'active', TRUE);
         $this->clearFieldValue('Acronym');
-        $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
         $this->assertHTMLMatchNoHeaders('<table cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 %2%</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>sapien vel %4%</td><td>nec porta ante</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Test undo and redo
@@ -725,7 +725,7 @@ class Viper_Tests_ViperLangToolsPlugin_LangToolsInTablesUnitTest extends Abstrac
         $this->clickTopToolbarButton('langTools', 'active');
         $this->clickTopToolbarButton('Abbreviation', 'active', TRUE);
         $this->type('def');
-        $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
         $this->assertHTMLMatchNoHeaders('<table cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 %2%</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>sapien vel <abbr title="abcdef">%4%</abbr></td><td>nec porta ante</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Test deleting the abbreviation
@@ -733,7 +733,7 @@ class Viper_Tests_ViperLangToolsPlugin_LangToolsInTablesUnitTest extends Abstrac
         $this->clickTopToolbarButton('langTools', 'active');
         $this->clickTopToolbarButton('Abbreviation', 'active', TRUE);
         $this->clearFieldValue('Abbreviation');
-        $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
         $this->assertHTMLMatchNoHeaders('<table cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 %2%</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>sapien vel %4%</td><td>nec porta ante</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Test undo and redo
@@ -766,7 +766,7 @@ class Viper_Tests_ViperLangToolsPlugin_LangToolsInTablesUnitTest extends Abstrac
         $this->clickTopToolbarButton('langTools', 'active');
         $this->clickTopToolbarButton('Language', 'active', TRUE);
         $this->type('def');
-        $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
         $this->assertHTMLMatchNoHeaders('<table cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 %2%</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>sapien vel <span lang="abcdef">%4%</span></td><td>nec porta ante</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Test deleting the language
@@ -774,7 +774,7 @@ class Viper_Tests_ViperLangToolsPlugin_LangToolsInTablesUnitTest extends Abstrac
         $this->clickTopToolbarButton('langTools', 'active');
         $this->clickTopToolbarButton('Language', 'active', TRUE);
         $this->clearFieldValue('Language');
-        $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
         $this->assertHTMLMatchNoHeaders('<table cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 %2%</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>sapien vel %4%</td><td>nec porta ante</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Test undo and redo
@@ -790,7 +790,7 @@ class Viper_Tests_ViperLangToolsPlugin_LangToolsInTablesUnitTest extends Abstrac
         $this->clickTopToolbarButton('langTools');
         $this->clickTopToolbarButton('Language', NULL, TRUE);
         $this->type('test');
-        $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
         $this->assertHTMLMatchNoHeaders('<table cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 %2%</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td lang="test">sapien vel %4%</td><td>nec porta ante</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Test applying language to the row cell
@@ -799,7 +799,7 @@ class Viper_Tests_ViperLangToolsPlugin_LangToolsInTablesUnitTest extends Abstrac
         $this->clickTopToolbarButton('langTools');
         $this->clickTopToolbarButton('Language', NULL, TRUE);
         $this->type('test');
-        $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
         $this->assertHTMLMatchNoHeaders('<table cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 %2%</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr lang="test"><td lang="test">sapien vel %4%</td><td>nec porta ante</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Test applying language to the tbdoy cell
@@ -808,7 +808,7 @@ class Viper_Tests_ViperLangToolsPlugin_LangToolsInTablesUnitTest extends Abstrac
         $this->clickTopToolbarButton('langTools');
         $this->clickTopToolbarButton('Language', NULL, TRUE);
         $this->type('test');
-        $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
         $this->assertHTMLMatchNoHeaders('<table cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 %2%</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody lang="test"><tr lang="test"><td lang="test">sapien vel %4%</td><td>nec porta ante</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
     }//end testLanguageInTableBody()

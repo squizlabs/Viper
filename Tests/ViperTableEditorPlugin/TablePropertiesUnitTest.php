@@ -47,14 +47,14 @@ class Viper_Tests_ViperTableEditorPlugin_TablePropertiesUnitTest extends Abstrac
         $this->showTools(0, 'table');
         $this->clickField('Summary');
         $this->type('Summary');
-        $this->clickButton('Update Changes', NULL, TRUE);
+        $this->clickButton('Apply Changes', NULL, TRUE);
 
         $this->assertHTMLMatchNoHeaders('<table border="1" style="width: 100%;" summary="Summary"><tbody><tr><th colspan="2" rowspan="2">Survey</th><th rowspan="2">All Genders</th><th colspan="2">By Gender</th></tr><tr><th>Males</th><th>Females</th></tr><tr><th rowspan="2">All Regions</th><th>N</th><td>3</td><td>1</td><td>2</td></tr><tr><th>S</th><td>3</td><td>1</td><td>2</td></tr></tbody></table>');
 
         $this->clickField('Summary');
         $this->sikuli->keyDown('Key.CMD + a');
         $this->sikuli->keyDown('Key.DELETE');
-        $this->clickButton('Update Changes', NULL, TRUE);
+        $this->clickButton('Apply Changes', NULL, TRUE);
         $this->assertHTMLMatchNoHeaders('<table border="1" style="width: 100%;"><tbody><tr><th colspan="2" rowspan="2">Survey</th><th rowspan="2">All Genders</th><th colspan="2">By Gender</th></tr><tr><th>Males</th><th>Females</th></tr><tr><th rowspan="2">All Regions</th><th>N</th><td>3</td><td>1</td><td>2</td></tr><tr><th>S</th><td>3</td><td>1</td><td>2</td></tr></tbody></table>');
 
     }//end testAddingTableSummary()
@@ -70,7 +70,7 @@ class Viper_Tests_ViperTableEditorPlugin_TablePropertiesUnitTest extends Abstrac
         $this->showTools(0, 'table');
         $this->clickField('Summary');
         $this->type('Summary');
-        $this->clickButton('Update Changes', NULL, TRUE);
+        $this->clickButton('Apply Changes', NULL, TRUE);
 
         $this->clickCell(7);
         $this->clickCell(7);
@@ -92,7 +92,7 @@ class Viper_Tests_ViperTableEditorPlugin_TablePropertiesUnitTest extends Abstrac
         $this->showTools(0, 'table');
         $this->clearFieldValue('Width');
         $this->type('50%');
-        $this->clickButton('Update Changes', NULL, TRUE);
+        $this->clickButton('Apply Changes', NULL, TRUE);
 
         $this->assertHTMLMatchNoHeaders('<table border="1" style="width: 50%;"><tbody><tr><th colspan="2" rowspan="2">Survey</th><th rowspan="2">All Genders</th><th colspan="2">By Gender</th></tr><tr><th>Males</th><th>Females</th></tr><tr><th rowspan="2">All Regions</th><th>N</th><td>3</td><td>1</td><td>2</td></tr><tr><th>S</th><td>3</td><td>1</td><td>2</td></tr></tbody></table>');
 
@@ -118,7 +118,7 @@ class Viper_Tests_ViperTableEditorPlugin_TablePropertiesUnitTest extends Abstrac
         $this->showTools(0, 'table');
         $this->clearFieldValue('Width');
         $this->type('50%');
-        $this->clickButton('Update Changes', NULL, TRUE);
+        $this->clickButton('Apply Changes', NULL, TRUE);
 
         // Check that the top toolbar exists when you click in another cell.
         $this->clickCell(1);
@@ -139,13 +139,13 @@ class Viper_Tests_ViperTableEditorPlugin_TablePropertiesUnitTest extends Abstrac
         $this->clickInlineToolbarButton('cssClass');
         $this->clickField('Class');
         $this->type('test');
-        $this->clickButton('Update Changes', NULL, TRUE);
+        $this->clickButton('Apply Changes', NULL, TRUE);
 
         $this->assertHTMLMatchNoHeaders('<table border="1" style="width: 100%;" class="test"><tbody><tr><th colspan="2" rowspan="2">Survey</th><th rowspan="2">All Genders</th><th colspan="2">By Gender</th></tr><tr><th>Males</th><th>Females</th></tr><tr><th rowspan="2">All Regions</th><th>N</th><td>3</td><td>1</td><td>2</td></tr><tr><th>S</th><td>3</td><td>1</td><td>2</td></tr></tbody></table>');
 
-        // Remove the class from the table and click Update Changes
+        // Remove the class from the table and click Apply Changes
         $this->clearFieldValue('Class');
-        $this->clickButton('Update Changes', NULL, TRUE);
+        $this->clickButton('Apply Changes', NULL, TRUE);
         $this->assertHTMLMatchNoHeaders('<table border="1" style="width: 100%;"><tbody><tr><th colspan="2" rowspan="2">Survey</th><th rowspan="2">All Genders</th><th colspan="2">By Gender</th></tr><tr><th>Males</th><th>Females</th></tr><tr><th rowspan="2">All Regions</th><th>N</th><td>3</td><td>1</td><td>2</td></tr><tr><th>S</th><td>3</td><td>1</td><td>2</td></tr></tbody></table>');
 
         // Apply a class to the table and press enter
@@ -189,13 +189,13 @@ class Viper_Tests_ViperTableEditorPlugin_TablePropertiesUnitTest extends Abstrac
         //Apply the caption and click update changes
         $this->showTools(0, 'table');
         $this->clickField('Use Caption');
-        $this->clickButton('Update Changes', NULL, TRUE);
+        $this->clickButton('Apply Changes', NULL, TRUE);
         usleep(50000);
         $this->assertHTMLMatchNoHeaders('<table border="1" style="width: 100%;"><caption></caption><tbody><tr><th colspan="2" rowspan="2">Survey</th><th rowspan="2">All Genders</th><th colspan="2">By Gender</th></tr><tr><th>Males</th><th>Females</th></tr><tr><th rowspan="2">All Regions</th><th>N</th><td>3</td><td>1</td><td>2</td></tr><tr><th>S</th><td>3</td><td>1</td><td>2</td></tr></tbody></table>');
 
         //Remove the caption and click update changes
         $this->clickField('Use Caption');
-        $this->clickButton('Update Changes', NULL, TRUE);
+        $this->clickButton('Apply Changes', NULL, TRUE);
         usleep(50000);
         $this->assertHTMLMatchNoHeaders('<table border="1" style="width: 100%;"><tbody><tr><th colspan="2" rowspan="2">Survey</th><th rowspan="2">All Genders</th><th colspan="2">By Gender</th></tr><tr><th>Males</th><th>Females</th></tr><tr><th rowspan="2">All Regions</th><th>N</th><td>3</td><td>1</td><td>2</td></tr><tr><th>S</th><td>3</td><td>1</td><td>2</td></tr></tbody></table>');
 
