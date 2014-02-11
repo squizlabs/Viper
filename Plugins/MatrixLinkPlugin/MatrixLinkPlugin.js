@@ -254,7 +254,7 @@ MatrixLinkPlugin.prototype = {
 	    } else {
 		    jsMap.setUseMeMode(name, safeName, undefined, function(data) {
 			if(typeof data.assetid !== 'undefined') {
-			    tools.getItem(idPrefix + ':url').setValue(assetid,false);
+			    tools.getItem(idPrefix + ':url').setValue(data.assetid,false);
 			}
 		    });
 	    }
