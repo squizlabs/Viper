@@ -203,6 +203,11 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
         ViperTestListener::$browserid    = $this->sikuli->getBrowserid();
         ViperTestListener::$viperTestObj = $this;
 
+        $screenshotDir = getenv('VIPER_TEST_SCREENSHOT_DIR');
+        if (empty($screenshotDir) === FALSE) {
+            ViperTestListener::$exportDir = $screenshotDir;
+        }
+
         $testTitle .= '['.$testsRun.'/'.$totalTests.']';
 
         if ($numFails !== 0 || $numErrors !== 0) {

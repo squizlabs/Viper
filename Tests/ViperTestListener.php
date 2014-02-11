@@ -9,12 +9,22 @@ class ViperTestListener implements PHPUnit_Framework_TestListener
     public static $browserid      = NULL;
     private static $_startTime    = NULL;
     public static $viperTestObj   = NULL;
-    private static $_minTestCount = 10;
+    private static $_minTestCount = 0;
+    public static $exportDir      = '';
 
     private static function _getExportPath()
     {
-        $exportPath  = dirname(__FILE__).'/tmp/'.self::$browserid.'/results/';
-        $exportPath .= date('d_M_y_H-i', self::$_startTime);
+        $exportPath = '';
+        if (self::$exportDir !== '') {
+            $exportPath = self::$exportDir;
+        } else {
+            $exportPath  = dirname(__FILE__).'/tmp/'.self::$browserid.'/results/';
+            $exportPath .= date('d_M_y_H-i', self::$_startTime);
+        }
+
+        if (file_exists($exportPath) === FALSE) {
+            mkdir($exportPath, 0755, TRUE);
+        }
 
         return $exportPath;
 
@@ -22,14 +32,8 @@ class ViperTestListener implements PHPUnit_Framework_TestListener
 
     private function _exportFail($type, $test, $e)
     {
-        $exportPath = self::_getExportPath();
-
-        $exportPath .= '/'.get_class($test);
-        if (file_exists($exportPath) === FALSE) {
-            mkdir($exportPath, 0755, TRUE);
-        }
-
-        $exportPath .= '/'.$type.'-'.$test->getName().'.txt';
+        $exportPath  = self::_getExportPath();
+        $exportPath .= '/'.$type.'-'.get_class($test).'-'.$test->getName().'.txt';
 
         $msg  = PHPUnit_Framework_TestFailure::exceptionToString($e)."\n";
         $msg .= PHPUnit_Util_Filter::getFilteredStacktrace($e);
@@ -40,14 +44,8 @@ class ViperTestListener implements PHPUnit_Framework_TestListener
 
     private function _screenshot($test, $e, $type='error')
     {
-        $exportPath = self::_getExportPath();
-
-        $exportPath .= '/'.get_class($test);
-        if (file_exists($exportPath) === FALSE) {
-            mkdir($exportPath, 0755, TRUE);
-        }
-
-        $exportPath .= '/'.$type.'-'.$test->getName().'.png';
+        $exportPath  = self::_getExportPath();
+        $exportPath .= '/'.$type.'-'.get_class($test).'-'.$test->getName().'.jpg';
 
         $sikuli = self::$viperTestObj->getSikuli();
         if (empty($sikuli) === FALSE) {
@@ -55,6 +53,9 @@ class ViperTestListener implements PHPUnit_Framework_TestListener
             $imagePath = str_replace('u\'', '', $imagePath);
             $imagePath = trim($imagePath, '\'');
             rename($imagePath, $exportPath);
+
+            // Resize image.
+            exec('mogrify -resize 75% -quality 80 '.$exportPath.' > /dev/null 2>&1');
         }
 
     }
@@ -97,6 +98,7 @@ class ViperTestListener implements PHPUnit_Framework_TestListener
 
         if (self::$_numTests > self::$_minTestCount) {
             $this->_exportFail('failure', $test, $e);
+            $this->_screenshot($test, $e, 'failure');
         }
 
     }

@@ -2,7 +2,7 @@
 
     chdir(dirname(__FILE__));
 
-    $opts = getopt('b::u::t::cv', array('url::', 'built', 'log::', 'help'));
+    $opts = getopt('b::u::t::cv', array('url::', 'built', 'log::', 'screenshot::', 'help'));
 
     if (isset($opts['help']) === TRUE) {
         printHelp();
@@ -48,6 +48,10 @@
     $logFilePath = '';
     if (array_key_exists('log', $opts) === TRUE) {
         $logFilePath = $opts['log'];
+    }
+
+    if (array_key_exists('screenshot', $opts) === TRUE) {
+        putenv('VIPER_TEST_SCREENSHOT_DIR='.$opts['screenshot']);
     }
 
     $urlFile = dirname(__FILE__).'/tmp/url.inc';
