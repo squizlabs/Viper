@@ -133,7 +133,7 @@ MatrixImagePlugin.prototype = {
 	    } else if (jsMap.isInUseMeMode() === true) {
 		    jsMap.cancelUseMeMode();
 	    } else {
-		    jsMap.setUseMeMode(name, safeName, allowedTypes, function(data) {
+		    jsMap.setUseMeMode(name, safeName, allowedTypes, true, function(data) {
 			if(typeof data.assetid !== 'undefined' && typeof data.attributes.alt !== 'undefined' ) {
 			    urlField.setValue(data.assetid,false);
 			    altField.setValue(data.attributes.alt,false);
