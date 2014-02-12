@@ -1,0 +1,15 @@
+.Viper-buttonIcon.Viper-keywords {
+  background-position: 0 -675px;
+}
+.Viper-button.Viper-active .Viper-buttonIcon.Viper-keywords,
+.Viper-button.Viper-selected .Viper-buttonIcon.Viper-keywords {
+  background-position: -33px -675px;
+}
+
+.Viper-buttonIcon.Viper-snippet {
+  background-position: 0 -675px;
+}
+.Viper-button.Viper-active .Viper-buttonIcon.Viper-snippet,
+.Viper-button.Viper-selected .Viper-buttonIcon.Viper-snippet {
+  background-position: -33px -675px;
+}
