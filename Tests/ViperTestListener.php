@@ -2,63 +2,209 @@
 class ViperTestListener implements PHPUnit_Framework_TestListener
 {
     private $_test                = NULL;
-    private static $_failures     = 0;
-    private static $_errors       = 0;
-    private static $_numTests     = 0;
-    private static $_testsRun     = 0;
-    public static $browserid      = NULL;
-    private static $_startTime    = NULL;
-    public static $viperTestObj   = NULL;
-    private static $_minTestCount = 0;
-    public static $exportDir      = '';
 
-    private static function _getExportPath()
+    /**
+     * Number of failures.
+     *
+     * @var integer
+     */
+    private static $_failures = 0;
+
+    /**
+     * Number of errors.
+     *
+     * @var integer
+     */
+    private static $_errors = 0;
+
+    /**
+     * Total number of tests.
+     *
+     * @var integer
+     */
+    private static $_numTests = 0;
+
+    /**
+     * Number of tests run.
+     *
+     * @var integer
+     */
+    private static $_testsRun = 0;
+
+    /**
+     * Start time of the tests.
+     *
+     * @var integer
+     */
+    private static $_startTime = NULL;
+
+    /**
+     * Path to the log directory.
+     *
+     * @var string
+     */
+    private static $_logPath = NULL;
+
+    /**
+     * Sikuli handler.
+     *
+     * @var PHPSikuliBrowser
+     */
+    private static $_sikuli = NULL;
+
+    /**
+     * The test filter.
+     *
+     * @var string
+     */
+    private static $_filter = NULL;
+
+
+    /**
+     * Set sikuli handler.
+     *
+     * @param object $sikuli The Sikuli handle.
+     *
+     * @return void
+     */
+    public static function setSikuli($sikuli)
     {
-        $exportPath = '';
-        if (self::$exportDir !== '') {
-            $exportPath = self::$exportDir;
-        } else {
-            $exportPath  = dirname(__FILE__).'/tmp/'.self::$browserid.'/results/';
-            $exportPath .= date('d_M_y_H-i', self::$_startTime);
+        self::$_sikuli = $sikuli;
+
+    }//end setSikuli()
+
+
+    /**
+     * Returns the Sikuli object.
+     *
+     * @return object
+     */
+    public function getSikuli()
+    {
+        return self::$_sikuli;
+
+    }//end getSikuli()
+
+
+    /**
+     * Set the test filter thats being used.
+     *
+     * @param string $filter The test filter thats in use.
+     *
+     * @return void
+     */
+    public static function setFilter($filter)
+    {
+        self::$_filter = $filter;
+
+    }//end setFilter()
+
+
+    /**
+     * Returns the test filter.
+     *
+     * @return string
+     */
+    public function getFilter()
+    {
+        return self::$_filter;
+
+    }//end getFilter()
+
+
+    /**
+     * Set the log path.
+     *
+     * @param string $path The log path.
+     *
+     * @return void
+     */
+    public static function setLogPath($path)
+    {
+        if (empty($path) === TRUE) {
+            return;
         }
 
-        if (file_exists($exportPath) === FALSE) {
-            mkdir($exportPath, 0755, TRUE);
+        self::$_logPath = $path;
+        if (file_exists($path) === FALSE) {
+            mkdir($path, 0755, TRUE);
         }
 
-        return $exportPath;
+    }//end setLogPath()
 
-    }
 
-    private function _exportFail($type, $test, $e)
+    /**
+     * Returns the log path.
+     *
+     * @return string
+     */
+    public static function getLogPath()
     {
-        $exportPath  = self::_getExportPath();
-        $exportPath .= '/'.$type.'-'.get_class($test).'-'.$test->getName().'.txt';
+        return self::$_logPath;
+
+    }//end getLogPath()
+
+
+    /**
+     * Adds a log message.
+     *
+     * @param string                 $type The log type (e.g. error, failure).
+     * @param PHPUnit_Framework_Test $test The PHPUnit test object.
+     * @param Exception              $e    The exception object.
+     *
+     * @return void
+     */
+    private function _addLog($type, PHPUnit_Framework_Test $test, Exception $e)
+    {
+        $path = $this->getLogPath();
+        if (empty($path) === TRUE) {
+            return;
+        }
+
+        $path .= '/'.$type.'-'.get_class($test).'-'.$test->getName().'.log';
 
         $msg  = PHPUnit_Framework_TestFailure::exceptionToString($e)."\n";
         $msg .= PHPUnit_Util_Filter::getFilteredStacktrace($e);
 
-        file_put_contents($exportPath, $msg);
+        file_put_contents($path, $msg);
 
-    }
+        $this->_screenshot($type, $test, $e);
 
-    private function _screenshot($test, $e, $type='error')
+    }//end _addLog()
+
+
+    /**
+     * Captures a screenshot of the entire screen.
+     *
+     * @param string                 $type The log type (e.g. error, failure).
+     * @param PHPUnit_Framework_Test $test The PHPUnit test object.
+     * @param Exception              $e    The exception object.
+     *
+     * @return void
+     */
+    private function _screenshot($type, PHPUnit_Framework_Test $test, Exception $e)
     {
-        $exportPath  = self::_getExportPath();
-        $exportPath .= '/'.$type.'-'.get_class($test).'-'.$test->getName().'.jpg';
+        $path = $this->getLogPath();
+        if (empty($path) === TRUE) {
+            return;
+        }
 
-        $sikuli = self::$viperTestObj->getSikuli();
-        if (empty($sikuli) === FALSE) {
+        $path .= '/'.$type.'-'.get_class($test).'-'.$test->getName().'.jpg';
+
+        $sikuli = $this->getSikuli();
+        if ($sikuli !== NULL) {
+            // Capture screenshot of the entire screen.
             $imagePath = $sikuli->capture();
             $imagePath = str_replace('u\'', '', $imagePath);
             $imagePath = trim($imagePath, '\'');
-            rename($imagePath, $exportPath);
+            rename($imagePath, $path);
 
             // Resize image.
-            exec('mogrify -resize 75% -quality 80 '.$exportPath.' > /dev/null 2>&1');
+            exec('mogrify -resize 75% -quality 80 '.$path.' > /dev/null 2>&1');
         }
 
-    }
+    }//end _screenshot()
+
 
     public function startTest(PHPUnit_Framework_Test $test)
     {
@@ -69,14 +215,11 @@ class ViperTestListener implements PHPUnit_Framework_TestListener
 
     public function endTestSuite(PHPUnit_Framework_TestSuite $suite)
     {
-        if (self::$viperTestObj !== NULL
+        if (self::$_sikuli !== NULL
             && $suite->getName() === '.'
             && $this->_test !== NULL
         ) {
-            $sikuli = self::$viperTestObj->getSikuli();
-            if (empty($sikuli) === FALSE) {
-                $sikuli->stopJSPolling();
-            }
+            self::$_sikuli->stopJSPolling();
         }
 
     }
@@ -85,21 +228,14 @@ class ViperTestListener implements PHPUnit_Framework_TestListener
     {
         self::$_errors++;
 
-        if (self::$_numTests > self::$_minTestCount) {
-            $this->_exportFail('error', $test, $e);
-            $this->_screenshot($test, $e, 'error');
-        }
+        $this->_addLog('error', $test, $e);
 
     }
 
     public function addFailure(PHPUnit_Framework_Test $test, PHPUnit_Framework_AssertionFailedError $e, $time)
     {
         self::$_failures++;
-
-        if (self::$_numTests > self::$_minTestCount) {
-            $this->_exportFail('failure', $test, $e);
-            $this->_screenshot($test, $e, 'failure');
-        }
+        $this->_addLog('failure', $test, $e);
 
     }
 
@@ -114,31 +250,27 @@ class ViperTestListener implements PHPUnit_Framework_TestListener
     public function endTest(PHPUnit_Framework_Test $test, $time)
     {
         // Report progress.
-        if (self::$_numTests > self::$_minTestCount && ((self::$_testsRun >= self::$_numTests) || ((self::$_testsRun - 1) % 10) === 0)) {
-            $startTime   = date('d M y, H:i', self::$_startTime);
-            $currentTime = date('d M y, H:i', time());
+        // Report progress.
+        $path = $this->getLogPath();
+        if (empty($path) === FALSE) {
+            if ((self::$_testsRun >= self::$_numTests) || ((self::$_testsRun - 1) % 10) === 0) {
+                $progress = array(
+                             'tests' => self::$_numTests,
+                             'completed'   => self::$_testsRun,
+                             'errors'      => self::$_errors,
+                             'failure'     => self::$_failures,
+                             'startTime'   => self::$_startTime,
+                             'lastUpdated' => time(),
+                            );
 
-            $datetime1 = new DateTime($startTime);
-            $datetime2 = new DateTime($currentTime);
-            $interval = $datetime1->diff($datetime2);
+                // Init export dir.
+                if (file_exists($path) === FALSE) {
+                    mkdir($path, 0755, TRUE);
+                }
 
-            $progress  = 'Tests: '.self::$_numTests."\n";
-            $progress .= 'Completed: '.self::$_testsRun.' ('.((int) ((self::$_testsRun / self::$_numTests) * 100))."%)\n";
-            $progress .= 'Errors: '.self::$_errors."\n";
-            $progress .= 'Failures: '.self::$_failures."\n";
-            $progress .= 'Start Time: '.$startTime."\n";
-            $progress .= 'Last Updated: '.$currentTime."\n";
-            $progress .= 'Run Time: '.$interval->format('%hh %im')."\n";
-
-            // Init export dir.
-            $path = self::_getExportPath();
-            if (file_exists($path) === FALSE) {
-                mkdir($path, 0755, TRUE);
+                file_put_contents($path.'/progress.json', json_encode($progress));
             }
-
-            $path = self::_getExportPath().'/progress.txt';
-            file_put_contents($path, $progress);
-        }
+        }//end if
 
     }
 
@@ -147,39 +279,46 @@ class ViperTestListener implements PHPUnit_Framework_TestListener
         if (self::$_numTests === 0) {
             self::$_startTime = time();
 
-            $filter = getenv('VIPER_TEST_FILTER');
-
-            if ($filter) {
-                if (strpos($filter, '::') !== FALSE) {
-                    $testName  = '';
-                    $className = '';
-                    list($className, $testName) = explode('::', $filter);
-
-                    if ($className !== $suite->getName()) {
-                        return;
-                    }
-
-                    $tests = $suite->tests();
-                    foreach ($tests as $test) {
-                        if ($testName === $test->getName()) {
-                            self::$_numTests++;
-                            return;
+            $filters = getenv('VIPER_TEST_FILTER');
+            if (empty($filters) === FALSE) {
+                $filters = trim($filters, '/');
+                $filters = explode('|', $filters);
+                foreach ($filters as $filter) {
+                    if (method_exists($suite, 'tests') === TRUE) {
+                        $testName = $filter;
+                        if (strpos($filter, '::') !== FALSE) {
+                            list($className, $testName) = explode('::', $filter);
                         }
-                    }
-                } else if (method_exists($suite, 'tests') === TRUE) {
-                    $tests = $suite->tests();
-                    foreach ($tests as $test) {
-                        if (preg_match('#'.$filter.'#', $test->getName()) > 0) {
-                            self::$_numTests += $test->count();
-                        } else {
-                            foreach ($test->tests() as $testCase) {
-                                if (preg_match('#'.$filter.'#', $testCase->getName()) > 0) {
-                                    self::$_numTests++;
+
+                        $tests = $suite->tests();
+                        foreach ($tests as $test) {
+                            if (preg_match('#'.$testName.'#', $test->getName()) > 0) {
+                                self::$_numTests += $test->count();
+                            } else if (method_exists($test, 'tests') === TRUE) {
+                                foreach ($test->tests() as $testCase) {
+                                    if (preg_match('#'.$testName.'#', $testCase->getName()) > 0) {
+                                        self::$_numTests++;
+                                    }
                                 }
                             }
                         }
+                    } else if (strpos($filter, '::') !== FALSE) {
+                        $testName  = '';
+                        $className = '';
+                        list($className, $testName) = explode('::', $filter);
+                        if ($className !== $suite->getName()) {
+                            continue;
+                        }
+
+                        $tests = $suite->tests();
+                        foreach ($tests as $test) {
+                            if ($testName === $test->getName()) {
+                                self::$_numTests++;
+                                continue;
+                            }
+                        }
                     }
-                }
+                }//end foreach
             } else {
                 self::$_numTests = $suite->count();
             }//end if

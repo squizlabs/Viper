@@ -2,7 +2,7 @@
 
     chdir(dirname(__FILE__));
 
-    $opts = getopt('b::u::t::cv', array('url::', 'built', 'log::', 'screenshot::', 'help'));
+    $opts = getopt('b::u::t::cv', array('url::', 'built', 'log::', 'help'));
 
     if (isset($opts['help']) === TRUE) {
         printHelp();
@@ -47,11 +47,8 @@
 
     $logFilePath = '';
     if (array_key_exists('log', $opts) === TRUE) {
+        putenv('VIPER_TEST_LOG_PATH='.$opts['log']);
         $logFilePath = $opts['log'];
-    }
-
-    if (array_key_exists('screenshot', $opts) === TRUE) {
-        putenv('VIPER_TEST_SCREENSHOT_DIR='.$opts['screenshot']);
     }
 
     $urlFile = dirname(__FILE__).'/tmp/url.inc';
@@ -94,18 +91,13 @@
         }
 
         // Setup logging if there is no filter.
-        if ($test === NULL || empty($logFilePath) === FALSE) {
-            if (empty($logFilePath) === TRUE) {
-                $logFilePath = $browserTmpPath.'/test.log';
+        if (empty($logFilePath) === FALSE) {
+            if (file_exists($logFilePath) === FALSE) {
+                mkdir($logFilePath, 0755, TRUE);
             }
 
-            $phpunitCMD .= '--log-junit '.$logFilePath;
-
-            // If there is an existing log file, move it.
-            if (file_exists($logFilePath) === TRUE) {
-                copy($logFilePath, $browserTmpPath.'/test_'.date('d_m_y', filemtime($logFilePath)).'.log');
-            }
-
+            $logFilePath .= '/phpunit.xml';
+            $phpunitCMD  .= '--log-junit '.$logFilePath;
         }
 
         if ($unitTests !== NULL) {
