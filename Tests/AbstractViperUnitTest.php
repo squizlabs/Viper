@@ -2066,7 +2066,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      * @return void
      * @throws Exception If the browser is not supported.
      */
-    protected function paste($rightClick=FALSE, $sourceURL=NULL)
+    protected function paste($rightClick=FALSE)
     {
         if ($rightClick !== TRUE) {
             $this->sikuli->keyDown('Key.CMD + v');
@@ -2080,42 +2080,25 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
                 case 'firefox':
                     // Click the paste item in the right click menu.
                     $this->sikuli->click($this->sikuli->mouseMoveOffset(30, 80));
+                    $this->_rightClickPasteDiv();
 
-                    if ($sourceURL !== NULL) {
-                        $this->pasteFromURL($sourceURL);
-                        $this->sikuli->execJS('viper.ViperTools.getItem(\'ViperCopyPastePlugin-paste\').hide()');
-                    } else {
-                        $this->_rightClickPasteDiv();
-
-                        // Click the paste item in the right click menu.
-                        $this->sikuli->click($this->sikuli->mouseMoveOffset(30, 80));
-                    }
+                    // Click the paste item in the right click menu.
+                    $this->sikuli->click($this->sikuli->mouseMoveOffset(30, 80));
                 break;
 
                 case 'safari':
                     // Click the paste item in the right click menu.
                     $this->sikuli->click($this->sikuli->mouseMoveOffset(30, 100));
-
                     $this->_rightClickPasteDiv();
 
-                    if ($sourceURL !== NULL) {
-                        $this->pasteFromURL($sourceURL);
-                        $this->sikuli->execJS('viper.ViperTools.getItem(\'ViperCopyPastePlugin-paste\').hide()');
-                    } else {
-                        // Click the paste item in the right click menu.
-                        $this->sikuli->click($this->sikuli->mouseMoveOffset(30, 40));
-                    }
+                    // Click the paste item in the right click menu.
+                    $this->sikuli->click($this->sikuli->mouseMoveOffset(30, 40));
                 break;
 
-                case 'googlechrome':
-                    if ($sourceURL !== NULL) {
-                        $this->pasteFromURL($sourceURL);
-                        $this->sikuli->execJS('viper.ViperTools.getItem(\'ViperCopyPastePlugin-paste\').hide()');
-                    } else {
-                        // Google does not need the right click pop for pasting, just
-                        // click the paste from the right click menu.
-                        $this->sikuli->click($this->sikuli->mouseMoveOffset(30, 95));
-                    }
+                case 'chrome':
+                    // Google does not need the right click pop for pasting, just
+                    // click the paste from the right click menu.
+                    $this->sikuli->click($this->sikuli->mouseMoveOffset(30, 95));
                 break;
 
                 default:
