@@ -1,0 +1,219 @@
+<font color="#000000" face="Times New Roman" size="3">
+
+</font><p style="margin: 0cm 0cm 10pt;"><font color="#000000" face="Calibri" size="3">First para default.</font></p><font color="#000000" face="Times New Roman" size="3">
+
+</font><p align="center" style="margin: 0cm 0cm 10pt; text-align: center;"><font color="#000000" face="Calibri" size="3">Second para centered.</font></p><font color="#000000" face="Times New Roman" size="3">
+
+</font><p align="right" style="margin: 0cm 0cm 10pt; text-align: right;"><font color="#000000" face="Calibri" size="3">Third para right
+aligned.</font></p><font color="#000000" face="Times New Roman" size="3">
+
+</font><p style="margin: 0cm 0cm 10pt; text-align: justify;"><font color="#000000" face="Calibri" size="3">Fourth para justified (by love).</font></p><font color="#000000" face="Times New Roman" size="3">
+
+</font><p style="margin: 0cm 0cm 10pt;"><font color="#000000" face="Calibri" size="3">Fifth para changed from justified to left align.</font></p><font color="#000000" face="Times New Roman" size="3">
+
+</font><h3 style="margin: 10pt 0cm 0pt;"><span style="mso-fareast-language: EN-US;"><font color="#4f81bd" face="Cambria" size="3">Table Editing With Aligned Text</font></span></h3><font color="#000000" face="Times New Roman" size="3">
+
+</font><ul style="list-style-type: disc; direction: ltr;"><li style="font-weight: normal;"><p align="right" style="text-align: right; font-weight: normal; margin-top: 0cm; margin-bottom: 0pt; mso-list: l0 level1 lfo1;">One</p></li><li style='color: rgb(0, 0, 0); font-family: "Calibri","sans-serif"; font-size: 11pt; font-style: normal; font-weight: normal;'><p align="right" style='text-align: right; color: rgb(0, 0, 0); font-family: "Calibri","sans-serif"; font-size: 11pt; font-style: normal; font-weight: normal; margin-top: 0cm; margin-bottom: 0pt; mso-list: l0 level1 lfo1;'>Two</p></li><li style='color: rgb(0, 0, 0); font-family: "Calibri","sans-serif"; font-size: 11pt; font-style: normal; font-weight: normal;'><p align="right" style='text-align: right; color: rgb(0, 0, 0); font-family: "Calibri","sans-serif"; font-size: 11pt; font-style: normal; font-weight: normal; margin-top: 0cm; margin-bottom: 0pt; mso-list: l0 level1 lfo1;'>Three</p><ul style="list-style-type: circle;"><li style='color: rgb(0, 0, 0); font-family: "Calibri","sans-serif"; font-size: 11pt; font-style: normal; font-weight: normal;'><p align="right" style='text-align: right; color: rgb(0, 0, 0); font-family: "Calibri","sans-serif"; font-size: 11pt; font-style: normal; font-weight: normal; margin-top: 0cm; margin-bottom: 0pt; mso-add-space: auto; mso-list: l0 level2 lfo1;'>Sub One</p></li><li style='color: rgb(0, 0, 0); font-family: "Calibri","sans-serif"; font-size: 11pt; font-style: normal; font-weight: normal;'><p align="right" style='text-align: right; color: rgb(0, 0, 0); font-family: "Calibri","sans-serif"; font-size: 11pt; font-style: normal; font-weight: normal; margin-top: 0cm; margin-bottom: 0pt; mso-add-space: auto; mso-list: l0 level2 lfo1;'>Sub Two</p></li></ul></li><li style='color: rgb(0, 0, 0); font-family: "Calibri","sans-serif"; font-size: 11pt; font-style: normal; font-weight: normal;'><p align="right" style='text-align: right; color: rgb(0, 0, 0); font-family: "Calibri","sans-serif"; font-size: 11pt; font-style: normal; font-weight: normal; margin-top: 0cm; margin-bottom: 0pt; mso-list: l0 level1 lfo1;'>Four</p></li></ul><font color="#000000" face="Times New Roman" size="3">
+
+
+
+
+
+
+
+
+
+
+
+</font><ol style="list-style-type: decimal; direction: ltr;"><li style="font-weight: normal;"><p align="center" style="text-align: center; font-weight: normal; margin-top: 0cm; margin-bottom: 0pt; mso-list: l1 level1 lfo2;">One</p></li><li style='color: rgb(0, 0, 0); font-family: "Calibri","sans-serif"; font-size: 11pt; font-style: normal; font-weight: normal;'><p align="center" style='text-align: center; color: rgb(0, 0, 0); font-family: "Calibri","sans-serif"; font-size: 11pt; font-style: normal; font-weight: normal; margin-top: 0cm; margin-bottom: 0pt; mso-list: l1 level1 lfo2;'>Two</p></li><li style='color: rgb(0, 0, 0); font-family: "Calibri","sans-serif"; font-size: 11pt; font-style: normal; font-weight: normal;'><p align="center" style='text-align: center; color: rgb(0, 0, 0); font-family: "Calibri","sans-serif"; font-size: 11pt; font-style: normal; font-weight: normal; margin-top: 0cm; margin-bottom: 0pt; mso-list: l1 level1 lfo2;'>Three</p><ol style="list-style-type: lower-alpha;"><li style='color: rgb(0, 0, 0); font-family: "Calibri","sans-serif"; font-size: 11pt; font-style: normal; font-weight: normal;'><p align="center" style='text-align: center; color: rgb(0, 0, 0); font-family: "Calibri","sans-serif"; font-size: 11pt; font-style: normal; font-weight: normal; margin-top: 0cm; margin-bottom: 0pt; mso-add-space: auto; mso-list: l1 level2 lfo2;'>Sub One</p></li><li style='color: rgb(0, 0, 0); font-family: "Calibri","sans-serif"; font-size: 11pt; font-style: normal; font-weight: normal;'><p align="center" style='text-align: center; color: rgb(0, 0, 0); font-family: "Calibri","sans-serif"; font-size: 11pt; font-style: normal; font-weight: normal; margin-top: 0cm; margin-bottom: 0pt; mso-add-space: auto; mso-list: l1 level2 lfo2;'>Sub Two</p></li></ol></li><li style='color: rgb(0, 0, 0); font-family: "Calibri","sans-serif"; font-size: 11pt; font-style: normal; font-weight: normal;'><p align="center" style='text-align: center; color: rgb(0, 0, 0); font-family: "Calibri","sans-serif"; font-size: 11pt; font-style: normal; font-weight: normal; margin-top: 0cm; margin-bottom: 10pt; mso-list: l1 level1 lfo2;'>Four</p></li></ol><font color="#000000" face="Times New Roman" size="3">
+
+
+
+
+
+
+
+
+
+
+
+</font><h3 style="margin: 10pt 0cm 0pt;"><span style="mso-fareast-language: EN-US;"><font color="#4f81bd" face="Cambria" size="3">Table Editing With Aligned Text</font></span></h3><font color="#000000" face="Times New Roman" size="3">
+
+</font><table width="100%" style="border: currentColor; border-image: none; width: 100%; border-collapse: collapse; mso-border-alt: solid windowtext .5pt; mso-yfti-tbllook: 1184; mso-border-insideh: .5pt solid windowtext; mso-border-insidev: .5pt solid windowtext;" border="1" cellspacing="0" cellpadding="0"><font color="#000000" face="Times New Roman" size="3">
+ </font><tbody><tr style="mso-yfti-irow: 0; mso-yfti-firstrow: yes;"><font color="#000000" face="Times New Roman" size="3">
+  </font><td style="padding: 0.75pt; border: 1pt solid windowtext; border-image: none; background-color: transparent; mso-border-alt: solid windowtext .5pt;"><font color="#000000" face="Times New Roman" size="3">
+  </font><p align="center" style="margin: 0cm 0cm 0pt; text-align: center;"><span style='line-height: 115%; font-family: "Times","serif"; font-size: 10pt; mso-fareast-font-family: "Times New Roman"; mso-bidi-font-family: "Times New Roman"; mso-bidi-font-weight: bold;'><font color="#000000">Item </font></span></p><font color="#000000" face="Times New Roman" size="3">
+  </font></td><font color="#000000" face="Times New Roman" size="3">
+  </font><td style="border-width: 1pt 1pt 1pt 0px; border-style: solid solid solid none; border-color: windowtext windowtext windowtext rgb(0, 0, 0); padding: 0.75pt; border-image: none; background-color: transparent; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt;"><font color="#000000" face="Times New Roman" size="3">
+  </font><p align="center" style="margin: 0cm 0cm 0pt; text-align: center;"><span style='line-height: 115%; font-family: "Times","serif"; font-size: 10pt; mso-fareast-font-family: "Times New Roman"; mso-bidi-font-family: "Times New Roman"; mso-bidi-font-weight: bold;'><font color="#000000">Price </font></span></p><font color="#000000" face="Times New Roman" size="3">
+  </font></td><font color="#000000" face="Times New Roman" size="3">
+  </font><td style="border-width: 1pt 1pt 1pt 0px; border-style: solid solid solid none; border-color: windowtext windowtext windowtext rgb(0, 0, 0); padding: 0.75pt; border-image: none; background-color: transparent; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt;"><font color="#000000" face="Times New Roman" size="3">
+  </font><p align="center" style="margin: 0cm 0cm 0pt; text-align: center;"><span style='line-height: 115%; font-family: "Times","serif"; font-size: 10pt; mso-fareast-font-family: "Times New Roman"; mso-bidi-font-family: "Times New Roman"; mso-bidi-font-weight: bold;'><font color="#000000">Quantity </font></span></p><font color="#000000" face="Times New Roman" size="3">
+  </font></td><font color="#000000" face="Times New Roman" size="3">
+ </font></tr><font color="#000000" face="Times New Roman" size="3">
+ </font><tr style="mso-yfti-irow: 1;"><font color="#000000" face="Times New Roman" size="3">
+  </font><td style="border-width: 0px 1pt 1pt; border-style: none solid solid; border-color: rgb(0, 0, 0) windowtext windowtext; padding: 0.75pt; border-image: none; background-color: transparent; mso-border-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt;"><font color="#000000" face="Times New Roman" size="3">
+  </font><p style="margin: 0cm 0cm 0pt;"><span style='line-height: 115%; font-family: "Times","serif"; font-size: 10pt; mso-fareast-font-family: "Times New Roman"; mso-bidi-font-family: "Times New Roman";'><font color="#000000">Book
+  (hard cover) </font></span></p><font color="#000000" face="Times New Roman" size="3">
+  </font></td><font color="#000000" face="Times New Roman" size="3">
+  </font><td style="border-width: 0px 1pt 1pt 0px; border-style: none solid solid none; border-color: rgb(0, 0, 0) windowtext windowtext rgb(0, 0, 0); padding: 0.75pt; background-color: transparent; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt;"><font color="#000000" face="Times New Roman" size="3">
+  </font><p align="center" style="margin: 0cm 0cm 0pt; text-align: center;"><span style='line-height: 115%; font-family: "Times","serif"; font-size: 10pt; mso-fareast-font-family: "Times New Roman"; mso-bidi-font-family: "Times New Roman";'><font color="#000000">$15.60</font></span></p><font color="#000000" face="Times New Roman" size="3">
+  </font></td><font color="#000000" face="Times New Roman" size="3">
+  </font><td style="border-width: 0px 1pt 1pt 0px; border-style: none solid solid none; border-color: rgb(0, 0, 0) windowtext windowtext rgb(0, 0, 0); padding: 0.75pt; background-color: transparent; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt;"><font color="#000000" face="Times New Roman" size="3">
+  </font><p align="center" style="margin: 0cm 0cm 0pt; text-align: center;"><span style='line-height: 115%; font-family: "Times","serif"; font-size: 10pt; mso-fareast-font-family: "Times New Roman"; mso-bidi-font-family: "Times New Roman";'><font color="#000000">3</font></span></p><font color="#000000" face="Times New Roman" size="3">
+  </font></td><font color="#000000" face="Times New Roman" size="3">
+ </font></tr><font color="#000000" face="Times New Roman" size="3">
+ </font><tr style="mso-yfti-irow: 2; mso-yfti-lastrow: yes;"><font color="#000000" face="Times New Roman" size="3">
+  </font><td style="border-width: 0px 1pt 1pt; border-style: none solid solid; border-color: rgb(0, 0, 0) windowtext windowtext; padding: 0.75pt; border-image: none; background-color: transparent; mso-border-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt;"><font color="#000000" face="Times New Roman" size="3">
+  </font><p style="margin: 0cm 0cm 0pt;"><span style='line-height: 115%; font-family: "Times","serif"; font-size: 10pt; mso-fareast-font-family: "Times New Roman"; mso-bidi-font-family: "Times New Roman";'><font color="#000000">DVD
+  </font></span></p><font color="#000000" face="Times New Roman" size="3">
+  </font></td><font color="#000000" face="Times New Roman" size="3">
+  </font><td style="border-width: 0px 1pt 1pt 0px; border-style: none solid solid none; border-color: rgb(0, 0, 0) windowtext windowtext rgb(0, 0, 0); padding: 0.75pt; background-color: transparent; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt;"><font color="#000000" face="Times New Roman" size="3">
+  </font><p align="center" style="margin: 0cm 0cm 0pt; text-align: center;"><span style='line-height: 115%; font-family: "Times","serif"; font-size: 10pt; mso-fareast-font-family: "Times New Roman"; mso-bidi-font-family: "Times New Roman";'><font color="#000000">$8.50</font></span></p><font color="#000000" face="Times New Roman" size="3">
+  </font></td><font color="#000000" face="Times New Roman" size="3">
+  </font><td style="border-width: 0px 1pt 1pt 0px; border-style: none solid solid none; border-color: rgb(0, 0, 0) windowtext windowtext rgb(0, 0, 0); padding: 0.75pt; background-color: transparent; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt;"><font color="#000000" face="Times New Roman" size="3">
+  </font><p align="center" style="margin: 0cm 0cm 0pt; text-align: center;"><span style='line-height: 115%; font-family: "Times","serif"; font-size: 10pt; mso-fareast-font-family: "Times New Roman"; mso-bidi-font-family: "Times New Roman";'><font color="#000000">1</font></span></p><font color="#000000" face="Times New Roman" size="3">
+  </font></td><font color="#000000" face="Times New Roman" size="3">
+ </font></tr><font color="#000000" face="Times New Roman" size="3">
+</font></tbody></table><font color="#000000" face="Times New Roman" size="3">
+
+</font><p style="margin: 0cm 0cm 10pt;"><font color="#000000" face="Calibri" size="3">&nbsp;</font></p><font color="#000000" face="Times New Roman" size="3">
+
+</font><table style="border: currentColor; border-image: none; border-collapse: collapse; mso-yfti-tbllook: 1184; mso-border-top-alt: solid #4F81BD 1.0pt; mso-border-top-themecolor: accent1; mso-border-bottom-alt: solid #4F81BD 1.0pt; mso-border-bottom-themecolor: accent1; mso-padding-alt: 0cm 5.4pt 0cm 5.4pt;" border="1" cellspacing="0" cellpadding="0"><font color="#000000" face="Times New Roman" size="3">
+ </font><tbody><tr style="mso-yfti-irow: -1; mso-yfti-firstrow: yes;"><font color="#000000" face="Times New Roman" size="3">
+  </font><td width="62" valign="top" style="border-width: 1pt 0px; border-style: solid none; border-color: rgb(79, 129, 189) rgb(0, 0, 0); padding: 0cm 5.4pt; width: 46.2pt; background-color: transparent; mso-border-top-themecolor: accent1; mso-border-bottom-themecolor: accent1;"><font color="#000000" face="Times New Roman" size="3">
+  </font><p align="center" style="margin: 0cm 0cm 0pt; text-align: center; line-height: normal; mso-yfti-cnfc: 5;"><b><span style="color: rgb(54, 95, 145); mso-themecolor: accent1; mso-themeshade: 191;"><font face="Calibri" size="3">H1</font></span></b></p><font color="#000000" face="Times New Roman" size="3">
+  </font></td><font color="#000000" face="Times New Roman" size="3">
+  </font><td width="62" valign="top" style="border-width: 1pt 0px; border-style: solid none; border-color: rgb(79, 129, 189) rgb(0, 0, 0); padding: 0cm 5.4pt; width: 46.2pt; background-color: transparent; mso-border-top-themecolor: accent1; mso-border-bottom-themecolor: accent1;"><font color="#000000" face="Times New Roman" size="3">
+  </font><p align="center" style="margin: 0cm 0cm 0pt; text-align: center; line-height: normal; mso-yfti-cnfc: 1;"><b><span style="color: rgb(54, 95, 145); mso-themecolor: accent1; mso-themeshade: 191;"><font face="Calibri" size="3">H2</font></span></b></p><font color="#000000" face="Times New Roman" size="3">
+  </font></td><font color="#000000" face="Times New Roman" size="3">
+  </font><td width="62" valign="top" style="border-width: 1pt 0px; border-style: solid none; border-color: rgb(79, 129, 189) rgb(0, 0, 0); padding: 0cm 5.4pt; width: 46.2pt; background-color: transparent; mso-border-top-themecolor: accent1; mso-border-bottom-themecolor: accent1;"><font color="#000000" face="Times New Roman" size="3">
+  </font><p align="center" style="margin: 0cm 0cm 0pt; text-align: center; line-height: normal; mso-yfti-cnfc: 1;"><b><span style="color: rgb(54, 95, 145); mso-themecolor: accent1; mso-themeshade: 191;"><font face="Calibri" size="3">H3</font></span></b></p><font color="#000000" face="Times New Roman" size="3">
+  </font></td><font color="#000000" face="Times New Roman" size="3">
+  </font><td width="62" valign="top" style="border-width: 1pt 0px; border-style: solid none; border-color: rgb(79, 129, 189) rgb(0, 0, 0); padding: 0cm 5.4pt; width: 46.2pt; background-color: transparent; mso-border-top-themecolor: accent1; mso-border-bottom-themecolor: accent1;"><font color="#000000" face="Times New Roman" size="3">
+  </font><p align="center" style="margin: 0cm 0cm 0pt; text-align: center; line-height: normal; mso-yfti-cnfc: 1;"><b><span style="color: rgb(54, 95, 145); mso-themecolor: accent1; mso-themeshade: 191;"><font face="Calibri" size="3">H4</font></span></b></p><font color="#000000" face="Times New Roman" size="3">
+  </font></td><font color="#000000" face="Times New Roman" size="3">
+  </font><td width="62" valign="top" style="border-width: 1pt 0px; border-style: solid none; border-color: rgb(79, 129, 189) rgb(0, 0, 0); padding: 0cm 5.4pt; width: 46.2pt; background-color: transparent; mso-border-top-themecolor: accent1; mso-border-bottom-themecolor: accent1;"><font color="#000000" face="Times New Roman" size="3">
+  </font><p align="center" style="margin: 0cm 0cm 0pt; text-align: center; line-height: normal; mso-yfti-cnfc: 1;"><b><span style="color: rgb(54, 95, 145); mso-themecolor: accent1; mso-themeshade: 191;"><font face="Calibri" size="3">H5</font></span></b></p><font color="#000000" face="Times New Roman" size="3">
+  </font></td><font color="#000000" face="Times New Roman" size="3">
+  </font><td width="62" valign="top" style="border-width: 1pt 0px; border-style: solid none; border-color: rgb(79, 129, 189) rgb(0, 0, 0); padding: 0cm 5.4pt; width: 46.2pt; background-color: transparent; mso-border-top-themecolor: accent1; mso-border-bottom-themecolor: accent1;"><font color="#000000" face="Times New Roman" size="3">
+  </font><p align="center" style="margin: 0cm 0cm 0pt; text-align: center; line-height: normal; mso-yfti-cnfc: 1;"><b><span style="color: rgb(54, 95, 145); mso-themecolor: accent1; mso-themeshade: 191;"><font face="Calibri" size="3">H6</font></span></b></p><font color="#000000" face="Times New Roman" size="3">
+  </font></td><font color="#000000" face="Times New Roman" size="3">
+  </font><td width="62" valign="top" style="border-width: 1pt 0px; border-style: solid none; border-color: rgb(79, 129, 189) rgb(0, 0, 0); padding: 0cm 5.4pt; width: 46.2pt; background-color: transparent; mso-border-top-themecolor: accent1; mso-border-bottom-themecolor: accent1;"><font color="#000000" face="Times New Roman" size="3">
+  </font><p align="center" style="margin: 0cm 0cm 0pt; text-align: center; line-height: normal; mso-yfti-cnfc: 1;"><b><span style="color: rgb(54, 95, 145); mso-themecolor: accent1; mso-themeshade: 191;"><font face="Calibri" size="3">H7</font></span></b></p><font color="#000000" face="Times New Roman" size="3">
+  </font></td><font color="#000000" face="Times New Roman" size="3">
+  </font><td width="62" valign="top" style="border-width: 1pt 0px; border-style: solid none; border-color: rgb(79, 129, 189) rgb(0, 0, 0); padding: 0cm 5.4pt; width: 46.2pt; background-color: transparent; mso-border-top-themecolor: accent1; mso-border-bottom-themecolor: accent1;"><font color="#000000" face="Times New Roman" size="3">
+  </font><p align="center" style="margin: 0cm 0cm 0pt; text-align: center; line-height: normal; mso-yfti-cnfc: 1;"><b><span style="color: rgb(54, 95, 145); mso-themecolor: accent1; mso-themeshade: 191;"><font face="Calibri" size="3">H8</font></span></b></p><font color="#000000" face="Times New Roman" size="3">
+  </font></td><font color="#000000" face="Times New Roman" size="3">
+  </font><td width="62" valign="top" style="border-width: 1pt 0px; border-style: solid none; border-color: rgb(79, 129, 189) rgb(0, 0, 0); padding: 0cm 5.4pt; width: 46.25pt; background-color: transparent; mso-border-top-themecolor: accent1; mso-border-bottom-themecolor: accent1;"><font color="#000000" face="Times New Roman" size="3">
+  </font><p align="center" style="margin: 0cm 0cm 0pt; text-align: center; line-height: normal; mso-yfti-cnfc: 1;"><b><span style="color: rgb(54, 95, 145); mso-themecolor: accent1; mso-themeshade: 191;"><font face="Calibri" size="3">H9</font></span></b></p><font color="#000000" face="Times New Roman" size="3">
+  </font></td><font color="#000000" face="Times New Roman" size="3">
+  </font><td width="62" valign="top" style="border-width: 1pt 0px; border-style: solid none; border-color: rgb(79, 129, 189) rgb(0, 0, 0); padding: 0cm 5.4pt; width: 46.25pt; background-color: transparent; mso-border-top-themecolor: accent1; mso-border-bottom-themecolor: accent1;"><font color="#000000" face="Times New Roman" size="3">
+  </font><p align="center" style="margin: 0cm 0cm 0pt; text-align: center; line-height: normal; mso-yfti-cnfc: 1;"><b><span style="color: rgb(54, 95, 145); mso-themecolor: accent1; mso-themeshade: 191;"><font face="Calibri" size="3">H10</font></span></b></p><font color="#000000" face="Times New Roman" size="3">
+  </font></td><font color="#000000" face="Times New Roman" size="3">
+ </font></tr><font color="#000000" face="Times New Roman" size="3">
+ </font><tr style="mso-yfti-irow: 0;"><font color="#000000" face="Times New Roman" size="3">
+  </font><td width="62" valign="top" style="background: rgb(211, 223, 238); padding: 0cm 5.4pt; border: 0px rgb(0, 0, 0); border-image: none; width: 46.2pt; mso-background-themecolor: accent1; mso-background-themetint: 63;"><font color="#000000" face="Times New Roman" size="3">
+  </font><p align="center" style="margin: 0cm 0cm 0pt; text-align: center; line-height: normal; mso-yfti-cnfc: 68;"><b><span style="color: rgb(54, 95, 145); mso-themecolor: accent1; mso-themeshade: 191;"><font face="Calibri" size="3">1a</font></span></b></p><font color="#000000" face="Times New Roman" size="3">
+  </font></td><font color="#000000" face="Times New Roman" size="3">
+  </font><td width="62" valign="top" style="background: rgb(211, 223, 238); padding: 0cm 5.4pt; border: 0px rgb(0, 0, 0); border-image: none; width: 46.2pt; mso-background-themecolor: accent1; mso-background-themetint: 63;"><font color="#000000" face="Times New Roman" size="3">
+  </font><p align="center" style="margin: 0cm 0cm 0pt; text-align: center; line-height: normal; mso-yfti-cnfc: 64;"><span style="color: rgb(54, 95, 145); mso-themecolor: accent1; mso-themeshade: 191;"><font face="Calibri" size="3">2a</font></span></p><font color="#000000" face="Times New Roman" size="3">
+  </font></td><font color="#000000" face="Times New Roman" size="3">
+  </font><td width="62" valign="top" style="background: rgb(211, 223, 238); padding: 0cm 5.4pt; border: 0px rgb(0, 0, 0); border-image: none; width: 46.2pt; mso-background-themecolor: accent1; mso-background-themetint: 63;"><font color="#000000" face="Times New Roman" size="3">
+  </font><p align="center" style="margin: 0cm 0cm 0pt; text-align: center; line-height: normal; mso-yfti-cnfc: 64;"><span style="color: rgb(54, 95, 145); mso-themecolor: accent1; mso-themeshade: 191;"><font face="Calibri" size="3">3a</font></span></p><font color="#000000" face="Times New Roman" size="3">
+  </font></td><font color="#000000" face="Times New Roman" size="3">
+  </font><td width="62" valign="top" style="background: rgb(211, 223, 238); padding: 0cm 5.4pt; border: 0px rgb(0, 0, 0); border-image: none; width: 46.2pt; mso-background-themecolor: accent1; mso-background-themetint: 63;"><font color="#000000" face="Times New Roman" size="3">
+  </font><p align="center" style="margin: 0cm 0cm 0pt; text-align: center; line-height: normal; mso-yfti-cnfc: 64;"><span style="color: rgb(54, 95, 145); mso-themecolor: accent1; mso-themeshade: 191;"><font face="Calibri" size="3">4a</font></span></p><font color="#000000" face="Times New Roman" size="3">
+  </font></td><font color="#000000" face="Times New Roman" size="3">
+  </font><td width="62" valign="top" style="background: rgb(211, 223, 238); padding: 0cm 5.4pt; border: 0px rgb(0, 0, 0); border-image: none; width: 46.2pt; mso-background-themecolor: accent1; mso-background-themetint: 63;"><font color="#000000" face="Times New Roman" size="3">
+  </font><p align="center" style="margin: 0cm 0cm 0pt; text-align: center; line-height: normal; mso-yfti-cnfc: 64;"><span style="color: rgb(54, 95, 145); mso-themecolor: accent1; mso-themeshade: 191;"><font face="Calibri" size="3">5a</font></span></p><font color="#000000" face="Times New Roman" size="3">
+  </font></td><font color="#000000" face="Times New Roman" size="3">
+  </font><td width="62" valign="top" style="background: rgb(211, 223, 238); padding: 0cm 5.4pt; border: 0px rgb(0, 0, 0); border-image: none; width: 46.2pt; mso-background-themecolor: accent1; mso-background-themetint: 63;"><font color="#000000" face="Times New Roman" size="3">
+  </font><p align="center" style="margin: 0cm 0cm 0pt; text-align: center; line-height: normal; mso-yfti-cnfc: 64;"><span style="color: rgb(54, 95, 145); mso-themecolor: accent1; mso-themeshade: 191;"><font face="Calibri" size="3">6a</font></span></p><font color="#000000" face="Times New Roman" size="3">
+  </font></td><font color="#000000" face="Times New Roman" size="3">
+  </font><td width="62" valign="top" style="background: rgb(211, 223, 238); padding: 0cm 5.4pt; border: 0px rgb(0, 0, 0); border-image: none; width: 46.2pt; mso-background-themecolor: accent1; mso-background-themetint: 63;"><font color="#000000" face="Times New Roman" size="3">
+  </font><p align="center" style="margin: 0cm 0cm 0pt; text-align: center; line-height: normal; mso-yfti-cnfc: 64;"><span style="color: rgb(54, 95, 145); mso-themecolor: accent1; mso-themeshade: 191;"><font face="Calibri" size="3">7a</font></span></p><font color="#000000" face="Times New Roman" size="3">
+  </font></td><font color="#000000" face="Times New Roman" size="3">
+  </font><td width="62" valign="top" style="background: rgb(211, 223, 238); padding: 0cm 5.4pt; border: 0px rgb(0, 0, 0); border-image: none; width: 46.2pt; mso-background-themecolor: accent1; mso-background-themetint: 63;"><font color="#000000" face="Times New Roman" size="3">
+  </font><p align="center" style="margin: 0cm 0cm 0pt; text-align: center; line-height: normal; mso-yfti-cnfc: 64;"><span style="color: rgb(54, 95, 145); mso-themecolor: accent1; mso-themeshade: 191;"><font face="Calibri" size="3">8a</font></span></p><font color="#000000" face="Times New Roman" size="3">
+  </font></td><font color="#000000" face="Times New Roman" size="3">
+  </font><td width="62" valign="top" style="background: rgb(211, 223, 238); padding: 0cm 5.4pt; border: 0px rgb(0, 0, 0); border-image: none; width: 46.25pt; mso-background-themecolor: accent1; mso-background-themetint: 63;"><font color="#000000" face="Times New Roman" size="3">
+  </font><p align="center" style="margin: 0cm 0cm 0pt; text-align: center; line-height: normal; mso-yfti-cnfc: 64;"><span style="color: rgb(54, 95, 145); mso-themecolor: accent1; mso-themeshade: 191;"><font face="Calibri" size="3">9a</font></span></p><font color="#000000" face="Times New Roman" size="3">
+  </font></td><font color="#000000" face="Times New Roman" size="3">
+  </font><td width="62" valign="top" style="background: rgb(211, 223, 238); padding: 0cm 5.4pt; border: 0px rgb(0, 0, 0); border-image: none; width: 46.25pt; mso-background-themecolor: accent1; mso-background-themetint: 63;"><font color="#000000" face="Times New Roman" size="3">
+  </font><p align="center" style="margin: 0cm 0cm 0pt; text-align: center; line-height: normal; mso-yfti-cnfc: 64;"><span style="color: rgb(54, 95, 145); mso-themecolor: accent1; mso-themeshade: 191;"><font face="Calibri" size="3">10a</font></span></p><font color="#000000" face="Times New Roman" size="3">
+  </font></td><font color="#000000" face="Times New Roman" size="3">
+ </font></tr><font color="#000000" face="Times New Roman" size="3">
+ </font><tr style="mso-yfti-irow: 1;"><font color="#000000" face="Times New Roman" size="3">
+  </font><td width="62" valign="top" style="padding: 0cm 5.4pt; border: 0px rgb(0, 0, 0); border-image: none; width: 46.2pt; background-color: transparent;"><font color="#000000" face="Times New Roman" size="3">
+  </font><p align="right" style="margin: 0cm 0cm 0pt; text-align: right; line-height: normal; mso-yfti-cnfc: 4;"><b><span style="color: rgb(54, 95, 145); mso-themecolor: accent1; mso-themeshade: 191;"><font face="Calibri" size="3">1b</font></span></b></p><font color="#000000" face="Times New Roman" size="3">
+  </font></td><font color="#000000" face="Times New Roman" size="3">
+  </font><td width="62" valign="top" style="padding: 0cm 5.4pt; border: 0px rgb(0, 0, 0); border-image: none; width: 46.2pt; background-color: transparent;"><font color="#000000" face="Times New Roman" size="3">
+  </font><p align="right" style="margin: 0cm 0cm 0pt; text-align: right; line-height: normal;"><span style="color: rgb(54, 95, 145); mso-themecolor: accent1; mso-themeshade: 191;"><font face="Calibri" size="3">2b</font></span></p><font color="#000000" face="Times New Roman" size="3">
+  </font></td><font color="#000000" face="Times New Roman" size="3">
+  </font><td width="62" valign="top" style="padding: 0cm 5.4pt; border: 0px rgb(0, 0, 0); border-image: none; width: 46.2pt; background-color: transparent;"><font color="#000000" face="Times New Roman" size="3">
+  </font><p align="right" style="margin: 0cm 0cm 0pt; text-align: right; line-height: normal;"><span style="color: rgb(54, 95, 145); mso-themecolor: accent1; mso-themeshade: 191;"><font face="Calibri" size="3">3b</font></span></p><font color="#000000" face="Times New Roman" size="3">
+  </font></td><font color="#000000" face="Times New Roman" size="3">
+  </font><td width="62" valign="top" style="padding: 0cm 5.4pt; border: 0px rgb(0, 0, 0); border-image: none; width: 46.2pt; background-color: transparent;"><font color="#000000" face="Times New Roman" size="3">
+  </font><p align="right" style="margin: 0cm 0cm 0pt; text-align: right; line-height: normal;"><span style="color: rgb(54, 95, 145); mso-themecolor: accent1; mso-themeshade: 191;"><font face="Calibri" size="3">4b</font></span></p><font color="#000000" face="Times New Roman" size="3">
+  </font></td><font color="#000000" face="Times New Roman" size="3">
+  </font><td width="62" valign="top" style="padding: 0cm 5.4pt; border: 0px rgb(0, 0, 0); border-image: none; width: 46.2pt; background-color: transparent;"><font color="#000000" face="Times New Roman" size="3">
+  </font><p align="right" style="margin: 0cm 0cm 0pt; text-align: right; line-height: normal;"><span style="color: rgb(54, 95, 145); mso-themecolor: accent1; mso-themeshade: 191;"><font face="Calibri" size="3">5b</font></span></p><font color="#000000" face="Times New Roman" size="3">
+  </font></td><font color="#000000" face="Times New Roman" size="3">
+  </font><td width="62" valign="top" style="padding: 0cm 5.4pt; border: 0px rgb(0, 0, 0); border-image: none; width: 46.2pt; background-color: transparent;"><font color="#000000" face="Times New Roman" size="3">
+  </font><p align="right" style="margin: 0cm 0cm 0pt; text-align: right; line-height: normal;"><span style="color: rgb(54, 95, 145); mso-themecolor: accent1; mso-themeshade: 191;"><font face="Calibri" size="3">6b</font></span></p><font color="#000000" face="Times New Roman" size="3">
+  </font></td><font color="#000000" face="Times New Roman" size="3">
+  </font><td width="62" valign="top" style="padding: 0cm 5.4pt; border: 0px rgb(0, 0, 0); border-image: none; width: 46.2pt; background-color: transparent;"><font color="#000000" face="Times New Roman" size="3">
+  </font><p align="right" style="margin: 0cm 0cm 0pt; text-align: right; line-height: normal;"><span style="color: rgb(54, 95, 145); mso-themecolor: accent1; mso-themeshade: 191;"><font face="Calibri" size="3">7b</font></span></p><font color="#000000" face="Times New Roman" size="3">
+  </font></td><font color="#000000" face="Times New Roman" size="3">
+  </font><td width="62" valign="top" style="padding: 0cm 5.4pt; border: 0px rgb(0, 0, 0); border-image: none; width: 46.2pt; background-color: transparent;"><font color="#000000" face="Times New Roman" size="3">
+  </font><p align="right" style="margin: 0cm 0cm 0pt; text-align: right; line-height: normal;"><span style="color: rgb(54, 95, 145); mso-themecolor: accent1; mso-themeshade: 191;"><font face="Calibri" size="3">8b</font></span></p><font color="#000000" face="Times New Roman" size="3">
+  </font></td><font color="#000000" face="Times New Roman" size="3">
+  </font><td width="62" valign="top" style="padding: 0cm 5.4pt; border: 0px rgb(0, 0, 0); border-image: none; width: 46.25pt; background-color: transparent;"><font color="#000000" face="Times New Roman" size="3">
+  </font><p align="right" style="margin: 0cm 0cm 0pt; text-align: right; line-height: normal;"><span style="color: rgb(54, 95, 145); mso-themecolor: accent1; mso-themeshade: 191;"><font face="Calibri" size="3">9b</font></span></p><font color="#000000" face="Times New Roman" size="3">
+  </font></td><font color="#000000" face="Times New Roman" size="3">
+  </font><td width="62" valign="top" style="padding: 0cm 5.4pt; border: 0px rgb(0, 0, 0); border-image: none; width: 46.25pt; background-color: transparent;"><font color="#000000" face="Times New Roman" size="3">
+  </font><p align="right" style="margin: 0cm 0cm 0pt; text-align: right; line-height: normal;"><span style="color: rgb(54, 95, 145); mso-themecolor: accent1; mso-themeshade: 191;"><font face="Calibri" size="3">10b</font></span></p><font color="#000000" face="Times New Roman" size="3">
+  </font></td><font color="#000000" face="Times New Roman" size="3">
+ </font></tr><font color="#000000" face="Times New Roman" size="3">
+ </font><tr style="mso-yfti-irow: 2; mso-yfti-lastrow: yes;"><font color="#000000" face="Times New Roman" size="3">
+  </font><td width="62" valign="top" style="background: rgb(211, 223, 238); border-width: 0px 0px 1pt; border-style: none none solid; border-color: rgb(0, 0, 0) rgb(0, 0, 0) rgb(79, 129, 189); padding: 0cm 5.4pt; border-image: none; width: 46.2pt; mso-border-bottom-themecolor: accent1; mso-background-themecolor: accent1; mso-background-themetint: 63;"><font color="#000000" face="Times New Roman" size="3">
+  </font><p style="margin: 0cm 0cm 0pt; line-height: normal; mso-yfti-cnfc: 68;"><b><span style="color: rgb(54, 95, 145); mso-themecolor: accent1; mso-themeshade: 191;"><font face="Calibri" size="3">1c</font></span></b></p><font color="#000000" face="Times New Roman" size="3">
+  </font></td><font color="#000000" face="Times New Roman" size="3">
+  </font><td width="62" valign="top" style="background: rgb(211, 223, 238); border-width: 0px 0px 1pt; border-style: none none solid; border-color: rgb(0, 0, 0) rgb(0, 0, 0) rgb(79, 129, 189); padding: 0cm 5.4pt; border-image: none; width: 46.2pt; mso-border-bottom-themecolor: accent1; mso-background-themecolor: accent1; mso-background-themetint: 63;"><font color="#000000" face="Times New Roman" size="3">
+  </font><p style="margin: 0cm 0cm 0pt; line-height: normal; mso-yfti-cnfc: 64;"><span style="color: rgb(54, 95, 145); mso-themecolor: accent1; mso-themeshade: 191;"><font face="Calibri" size="3">2c</font></span></p><font color="#000000" face="Times New Roman" size="3">
+  </font></td><font color="#000000" face="Times New Roman" size="3">
+  </font><td width="62" valign="top" style="background: rgb(211, 223, 238); border-width: 0px 0px 1pt; border-style: none none solid; border-color: rgb(0, 0, 0) rgb(0, 0, 0) rgb(79, 129, 189); padding: 0cm 5.4pt; border-image: none; width: 46.2pt; mso-border-bottom-themecolor: accent1; mso-background-themecolor: accent1; mso-background-themetint: 63;"><font color="#000000" face="Times New Roman" size="3">
+  </font><p style="margin: 0cm 0cm 0pt; line-height: normal; mso-yfti-cnfc: 64;"><span style="color: rgb(54, 95, 145); mso-themecolor: accent1; mso-themeshade: 191;"><font face="Calibri" size="3">3c</font></span></p><font color="#000000" face="Times New Roman" size="3">
+  </font></td><font color="#000000" face="Times New Roman" size="3">
+  </font><td width="62" valign="top" style="background: rgb(211, 223, 238); border-width: 0px 0px 1pt; border-style: none none solid; border-color: rgb(0, 0, 0) rgb(0, 0, 0) rgb(79, 129, 189); padding: 0cm 5.4pt; border-image: none; width: 46.2pt; mso-border-bottom-themecolor: accent1; mso-background-themecolor: accent1; mso-background-themetint: 63;"><font color="#000000" face="Times New Roman" size="3">
+  </font><p style="margin: 0cm 0cm 0pt; line-height: normal; mso-yfti-cnfc: 64;"><span style="color: rgb(54, 95, 145); mso-themecolor: accent1; mso-themeshade: 191;"><font face="Calibri" size="3">4c</font></span></p><font color="#000000" face="Times New Roman" size="3">
+  </font></td><font color="#000000" face="Times New Roman" size="3">
+  </font><td width="62" valign="top" style="background: rgb(211, 223, 238); border-width: 0px 0px 1pt; border-style: none none solid; border-color: rgb(0, 0, 0) rgb(0, 0, 0) rgb(79, 129, 189); padding: 0cm 5.4pt; border-image: none; width: 46.2pt; mso-border-bottom-themecolor: accent1; mso-background-themecolor: accent1; mso-background-themetint: 63;"><font color="#000000" face="Times New Roman" size="3">
+  </font><p style="margin: 0cm 0cm 0pt; line-height: normal; mso-yfti-cnfc: 64;"><span style="color: rgb(54, 95, 145); mso-themecolor: accent1; mso-themeshade: 191;"><font face="Calibri" size="3">5c</font></span></p><font color="#000000" face="Times New Roman" size="3">
+  </font></td><font color="#000000" face="Times New Roman" size="3">
+  </font><td width="62" valign="top" style="background: rgb(211, 223, 238); border-width: 0px 0px 1pt; border-style: none none solid; border-color: rgb(0, 0, 0) rgb(0, 0, 0) rgb(79, 129, 189); padding: 0cm 5.4pt; border-image: none; width: 46.2pt; mso-border-bottom-themecolor: accent1; mso-background-themecolor: accent1; mso-background-themetint: 63;"><font color="#000000" face="Times New Roman" size="3">
+  </font><p style="margin: 0cm 0cm 0pt; line-height: normal; mso-yfti-cnfc: 64;"><span style="color: rgb(54, 95, 145); mso-themecolor: accent1; mso-themeshade: 191;"><font face="Calibri" size="3">6c</font></span></p><font color="#000000" face="Times New Roman" size="3">
+  </font></td><font color="#000000" face="Times New Roman" size="3">
+  </font><td width="62" valign="top" style="background: rgb(211, 223, 238); border-width: 0px 0px 1pt; border-style: none none solid; border-color: rgb(0, 0, 0) rgb(0, 0, 0) rgb(79, 129, 189); padding: 0cm 5.4pt; border-image: none; width: 46.2pt; mso-border-bottom-themecolor: accent1; mso-background-themecolor: accent1; mso-background-themetint: 63;"><font color="#000000" face="Times New Roman" size="3">
+  </font><p style="margin: 0cm 0cm 0pt; line-height: normal; mso-yfti-cnfc: 64;"><span style="color: rgb(54, 95, 145); mso-themecolor: accent1; mso-themeshade: 191;"><font face="Calibri" size="3">7c</font></span></p><font color="#000000" face="Times New Roman" size="3">
+  </font></td><font color="#000000" face="Times New Roman" size="3">
+  </font><td width="62" valign="top" style="background: rgb(211, 223, 238); border-width: 0px 0px 1pt; border-style: none none solid; border-color: rgb(0, 0, 0) rgb(0, 0, 0) rgb(79, 129, 189); padding: 0cm 5.4pt; border-image: none; width: 46.2pt; mso-border-bottom-themecolor: accent1; mso-background-themecolor: accent1; mso-background-themetint: 63;"><font color="#000000" face="Times New Roman" size="3">
+  </font><p style="margin: 0cm 0cm 0pt; line-height: normal; mso-yfti-cnfc: 64;"><span style="color: rgb(54, 95, 145); mso-themecolor: accent1; mso-themeshade: 191;"><font face="Calibri" size="3">8c</font></span></p><font color="#000000" face="Times New Roman" size="3">
+  </font></td><font color="#000000" face="Times New Roman" size="3">
+  </font><td width="62" valign="top" style="background: rgb(211, 223, 238); border-width: 0px 0px 1pt; border-style: none none solid; border-color: rgb(0, 0, 0) rgb(0, 0, 0) rgb(79, 129, 189); padding: 0cm 5.4pt; border-image: none; width: 46.25pt; mso-border-bottom-themecolor: accent1; mso-background-themecolor: accent1; mso-background-themetint: 63;"><font color="#000000" face="Times New Roman" size="3">
+  </font><p style="margin: 0cm 0cm 0pt; line-height: normal; mso-yfti-cnfc: 64;"><span style="color: rgb(54, 95, 145); mso-themecolor: accent1; mso-themeshade: 191;"><font face="Calibri" size="3">9c</font></span></p><font color="#000000" face="Times New Roman" size="3">
+  </font></td><font color="#000000" face="Times New Roman" size="3">
+  </font><td width="62" valign="top" style="background: rgb(211, 223, 238); border-width: 0px 0px 1pt; border-style: none none solid; border-color: rgb(0, 0, 0) rgb(0, 0, 0) rgb(79, 129, 189); padding: 0cm 5.4pt; border-image: none; width: 46.25pt; mso-border-bottom-themecolor: accent1; mso-background-themecolor: accent1; mso-background-themetint: 63;"><font color="#000000" face="Times New Roman" size="3">
+  </font><p style="margin: 0cm 0cm 0pt; line-height: normal; mso-yfti-cnfc: 64;"><span style="color: rgb(54, 95, 145); mso-themecolor: accent1; mso-themeshade: 191;"><font face="Calibri" size="3">10c</font></span></p><font color="#000000" face="Times New Roman" size="3">
+  </font></td><font color="#000000" face="Times New Roman" size="3">
+ </font></tr><font color="#000000" face="Times New Roman" size="3">
+</font></tbody></table><font color="#000000" face="Times New Roman" size="3">
+
+</font><p style="margin: 0cm 0cm 10pt;"><a name="_GoBack"></a><font color="#000000" face="Calibri" size="3">&nbsp;</font></p><font color="#000000" face="Times New Roman" size="3">
+
+</font><p style="margin: 0cm 0cm 10pt;"><font color="#000000" face="Calibri" size="3">&nbsp;</font></p><font color="#000000" face="Times New Roman" size="3">
+
+</font><p style="margin: 0cm 0cm 10pt;"><font color="#000000" face="Calibri" size="3">&nbsp;</font></p><font color="#000000" face="Times New Roman" size="3">
+
+</font>

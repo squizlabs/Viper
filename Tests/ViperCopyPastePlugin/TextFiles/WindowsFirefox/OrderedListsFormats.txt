@@ -4,100 +4,115 @@
  </o:OfficeDocumentSettings>
 </xml><![endif]-->
 
-<h1>My Complex <a name="_GoBack"></a>Lists Dude!</h1>
+<p class="MsoListParagraphCxSpFirst" style="text-indent:-18.0pt;mso-list:l5 level1 lfo7"><span style="mso-fareast-font-family:Cambria;mso-fareast-theme-font:minor-latin;
+mso-bidi-font-family:Cambria;mso-bidi-theme-font:minor-latin" lang="EN-US"><span style="mso-list:Ignore">1.<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><span lang="EN-US">First item<a name="_GoBack"></a></span></p>
 
-<p class="MsoNormal">Here is a numbered list…</p>
+<p class="MsoListParagraphCxSpMiddle" style="text-indent:-18.0pt;mso-list:l5 level1 lfo7"><span style="mso-fareast-font-family:Cambria;mso-fareast-theme-font:minor-latin;
+mso-bidi-font-family:Cambria;mso-bidi-theme-font:minor-latin" lang="EN-US"><span style="mso-list:Ignore">2.<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><span lang="EN-US">Second item</span></p>
 
-<p class="MsoListParagraphCxSpFirst" style="text-indent:-18.0pt;mso-list:l0 level1 lfo1"><span style="mso-bidi-font-family:Calibri;mso-bidi-theme-font:minor-latin"><span style="mso-list:Ignore">1.<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span></span></span>One baby</p>
+<p class="MsoListParagraphCxSpLast" style="text-indent:-18.0pt;mso-list:l5 level1 lfo7"><span style="mso-fareast-font-family:Cambria;mso-fareast-theme-font:minor-latin;
+mso-bidi-font-family:Cambria;mso-bidi-theme-font:minor-latin" lang="EN-US"><span style="mso-list:Ignore">3.<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><span lang="EN-US">Third Item</span></p>
 
-<p class="MsoListParagraphCxSpMiddle" style="margin-left:72.0pt;mso-add-space:
-auto;text-indent:-18.0pt;mso-list:l0 level2 lfo1"><span style="mso-bidi-font-family:Calibri;mso-bidi-theme-font:minor-latin"><span style="mso-list:Ignore">a.<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span></span></span>Sub baby</p>
+<p class="MsoNormal"><span lang="EN-US">&nbsp;</span></p>
 
-<p class="MsoListParagraphCxSpMiddle" style="margin-left:108.0pt;mso-add-space:
-auto;text-indent:-108.0pt;mso-text-indent-alt:-9.0pt;mso-list:l0 level3 lfo1"><span style="mso-bidi-font-family:Calibri;mso-bidi-theme-font:minor-latin"><span style="mso-list:Ignore"><span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span>i.<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span></span></span>Sub sub baby!</p>
+<p class="MsoListParagraphCxSpFirst" style="text-indent:-18.0pt;mso-list:l4 level1 lfo1"><span style="mso-fareast-font-family:Cambria;mso-fareast-theme-font:minor-latin;
+mso-bidi-font-family:Cambria;mso-bidi-theme-font:minor-latin" lang="EN-US"><span style="mso-list:Ignore">1)<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><span lang="EN-US">First item</span></p>
 
-<p class="MsoListParagraphCxSpMiddle" style="margin-left:108.0pt;mso-add-space:
-auto;text-indent:-108.0pt;mso-text-indent-alt:-9.0pt;mso-list:l0 level3 lfo1"><span style="mso-bidi-font-family:Calibri;mso-bidi-theme-font:minor-latin"><span style="mso-list:Ignore"><span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span>ii.<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span></span></span>Sdfdsfsdf</p>
+<p class="MsoListParagraphCxSpMiddle" style="text-indent:-18.0pt;mso-list:l4 level1 lfo1"><span style="mso-fareast-font-family:Cambria;mso-fareast-theme-font:minor-latin;
+mso-bidi-font-family:Cambria;mso-bidi-theme-font:minor-latin" lang="EN-US"><span style="mso-list:Ignore">2)<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><span lang="EN-US">Second item</span></p>
 
-<p class="MsoListParagraphCxSpMiddle" style="margin-left:108.0pt;mso-add-space:
-auto;text-indent:-108.0pt;mso-text-indent-alt:-9.0pt;mso-list:l0 level3 lfo1"><span style="mso-bidi-font-family:Calibri;mso-bidi-theme-font:minor-latin"><span style="mso-list:Ignore"><span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span>iii.<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span></span></span>sdfsdfsdf</p>
+<p class="MsoListParagraphCxSpLast" style="text-indent:-18.0pt;mso-list:l4 level1 lfo1"><span style="mso-fareast-font-family:Cambria;mso-fareast-theme-font:minor-latin;
+mso-bidi-font-family:Cambria;mso-bidi-theme-font:minor-latin" lang="EN-US"><span style="mso-list:Ignore">3)<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><span lang="EN-US">Third Item</span></p>
 
-<p class="MsoListParagraphCxSpMiddle" style="text-indent:-18.0pt;mso-list:l0 level1 lfo1"><span style="mso-bidi-font-family:Calibri;mso-bidi-theme-font:minor-latin"><span style="mso-list:Ignore">2.<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span></span></span>Two baby</p>
+<p class="MsoNormal"><span lang="EN-US">&nbsp;</span></p>
 
-<p class="MsoListParagraphCxSpMiddle" style="margin-left:72.0pt;mso-add-space:
-auto;text-indent:-18.0pt;mso-list:l0 level2 lfo1"><span style="mso-bidi-font-family:Calibri;mso-bidi-theme-font:minor-latin"><span style="mso-list:Ignore">a.<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span></span></span>Sdfsfdds</p>
+<p class="MsoListParagraphCxSpFirst" style="text-indent:-18.0pt;mso-list:l0 level1 lfo2"><span style="mso-fareast-font-family:Cambria;mso-fareast-theme-font:minor-latin;
+mso-bidi-font-family:Cambria;mso-bidi-theme-font:minor-latin" lang="EN-US"><span style="mso-list:Ignore">A.<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><span lang="EN-US">First item</span></p>
 
-<p class="MsoListParagraphCxSpMiddle" style="margin-left:72.0pt;mso-add-space:
-auto;text-indent:-18.0pt;mso-list:l0 level2 lfo1"><span style="mso-bidi-font-family:Calibri;mso-bidi-theme-font:minor-latin"><span style="mso-list:Ignore">b.<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span></span></span>Sdfsfdsfd</p>
+<p class="MsoListParagraphCxSpMiddle" style="text-indent:-18.0pt;mso-list:l0 level1 lfo2"><span style="mso-fareast-font-family:Cambria;mso-fareast-theme-font:minor-latin;
+mso-bidi-font-family:Cambria;mso-bidi-theme-font:minor-latin" lang="EN-US"><span style="mso-list:Ignore">B.<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><span lang="EN-US">Second item</span></p>
 
-<p class="MsoListParagraphCxSpMiddle" style="margin-left:72.0pt;mso-add-space:
-auto;text-indent:-18.0pt;mso-list:l0 level2 lfo1"><span style="mso-bidi-font-family:Calibri;mso-bidi-theme-font:minor-latin"><span style="mso-list:Ignore">c.<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span></span></span>sfdsdfsdf</p>
+<p class="MsoListParagraphCxSpLast" style="text-indent:-18.0pt;mso-list:l0 level1 lfo2"><span style="mso-fareast-font-family:Cambria;mso-fareast-theme-font:minor-latin;
+mso-bidi-font-family:Cambria;mso-bidi-theme-font:minor-latin" lang="EN-US"><span style="mso-list:Ignore">C.<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><span lang="EN-US">Third item</span></p>
 
-<p class="MsoListParagraphCxSpMiddle" style="text-indent:-18.0pt;mso-list:l0 level1 lfo1"><span style="mso-bidi-font-family:Calibri;mso-bidi-theme-font:minor-latin"><span style="mso-list:Ignore">3.<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span></span></span>Three baby</p>
+<p class="MsoNormal"><span lang="EN-US">&nbsp;</span></p>
 
-<p class="MsoListParagraphCxSpLast" style="text-indent:-18.0pt;mso-list:l0 level1 lfo1"><span style="mso-bidi-font-family:Calibri;mso-bidi-theme-font:minor-latin"><span style="mso-list:Ignore">4.<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span></span></span>Four</p>
+<p class="MsoListParagraphCxSpFirst" style="text-indent:-18.0pt;mso-list:l3 level1 lfo3"><span style="mso-fareast-font-family:Cambria;mso-fareast-theme-font:minor-latin;
+mso-bidi-font-family:Cambria;mso-bidi-theme-font:minor-latin" lang="EN-US"><span style="mso-list:Ignore">a)<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><span lang="EN-US">First item</span></p>
 
-<p class="MsoNormal">Here is mu bulleted list…</p>
+<p class="MsoListParagraphCxSpMiddle" style="text-indent:-18.0pt;mso-list:l3 level1 lfo3"><span style="mso-fareast-font-family:Cambria;mso-fareast-theme-font:minor-latin;
+mso-bidi-font-family:Cambria;mso-bidi-theme-font:minor-latin" lang="EN-US"><span style="mso-list:Ignore">b)<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><span lang="EN-US">Second item</span></p>
 
-<p class="MsoListParagraphCxSpFirst" style="text-indent:-18.0pt;mso-list:l1 level1 lfo2"><span style="font-family:Symbol;mso-fareast-font-family:Symbol;mso-bidi-font-family:
-Symbol"><span style="mso-list:Ignore">·<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span></span></span>One bullet</p>
+<p class="MsoListParagraphCxSpLast" style="text-indent:-18.0pt;mso-list:l3 level1 lfo3"><span style="mso-fareast-font-family:Cambria;mso-fareast-theme-font:minor-latin;
+mso-bidi-font-family:Cambria;mso-bidi-theme-font:minor-latin" lang="EN-US"><span style="mso-list:Ignore">c)<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><span lang="EN-US">Third item</span></p>
 
-<p class="MsoListParagraphCxSpMiddle" style="margin-left:72.0pt;mso-add-space:
-auto;text-indent:-18.0pt;mso-list:l1 level2 lfo2"><span style="font-family:&quot;Courier New&quot;;mso-fareast-font-family:&quot;Courier New&quot;"><span style="mso-list:Ignore">o<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;
-</span></span></span>Dsfsdfsdf</p>
+<p class="MsoNormal"><span lang="EN-US">&nbsp;</span></p>
 
-<p class="MsoListParagraphCxSpMiddle" style="margin-left:108.0pt;mso-add-space:
-auto;text-indent:-18.0pt;mso-list:l1 level3 lfo2"><span style="font-family:Wingdings;mso-fareast-font-family:Wingdings;mso-bidi-font-family:
-Wingdings"><span style="mso-list:Ignore">§<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;
-</span></span></span>Sdfsfdsdf</p>
+<p class="MsoListParagraphCxSpFirst" style="text-indent:-18.0pt;mso-list:l2 level1 lfo4"><span style="mso-fareast-font-family:Cambria;mso-fareast-theme-font:minor-latin;
+mso-bidi-font-family:Cambria;mso-bidi-theme-font:minor-latin" lang="EN-US"><span style="mso-list:Ignore">a.<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><span lang="EN-US">First item</span></p>
 
-<p class="MsoListParagraphCxSpMiddle" style="margin-left:108.0pt;mso-add-space:
-auto;text-indent:-18.0pt;mso-list:l1 level3 lfo2"><span style="font-family:Wingdings;mso-fareast-font-family:Wingdings;mso-bidi-font-family:
-Wingdings"><span style="mso-list:Ignore">§<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;
-</span></span></span>sdfsdf</p>
+<p class="MsoListParagraphCxSpMiddle" style="text-indent:-18.0pt;mso-list:l2 level1 lfo4"><span style="mso-fareast-font-family:Cambria;mso-fareast-theme-font:minor-latin;
+mso-bidi-font-family:Cambria;mso-bidi-theme-font:minor-latin" lang="EN-US"><span style="mso-list:Ignore">b.<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><span lang="EN-US">Second item</span></p>
 
-<p class="MsoListParagraphCxSpMiddle" style="text-indent:-18.0pt;mso-list:l1 level1 lfo2"><span style="font-family:Symbol;mso-fareast-font-family:Symbol;mso-bidi-font-family:
-Symbol"><span style="mso-list:Ignore">·<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span></span></span>Two bullet</p>
+<p class="MsoListParagraphCxSpLast" style="text-indent:-18.0pt;mso-list:l2 level1 lfo4"><span style="mso-fareast-font-family:Cambria;mso-fareast-theme-font:minor-latin;
+mso-bidi-font-family:Cambria;mso-bidi-theme-font:minor-latin" lang="EN-US"><span style="mso-list:Ignore">c.<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><span lang="EN-US">Third item</span></p>
 
-<p class="MsoListParagraphCxSpMiddle" style="margin-left:72.0pt;mso-add-space:
-auto;text-indent:-18.0pt;mso-list:l1 level2 lfo2"><span style="font-family:&quot;Courier New&quot;;mso-fareast-font-family:&quot;Courier New&quot;"><span style="mso-list:Ignore">o<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;
-</span></span></span>Dsfsfd</p>
+<p class="MsoNormal"><span lang="EN-US">&nbsp;</span></p>
 
-<p class="MsoListParagraphCxSpMiddle" style="margin-left:72.0pt;mso-add-space:
-auto;text-indent:-18.0pt;mso-list:l1 level2 lfo2"><span style="font-family:&quot;Courier New&quot;;mso-fareast-font-family:&quot;Courier New&quot;"><span style="mso-list:Ignore">o<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;
-</span></span></span>sdfsdfsf</p>
+<p class="MsoListParagraphCxSpFirst" style="margin-left:27.0pt;mso-add-space:
+auto;text-indent:-27.0pt;mso-text-indent-alt:-9.0pt;mso-list:l6 level1 lfo5"><span style="mso-fareast-font-family:Cambria;mso-fareast-theme-font:minor-latin;
+mso-bidi-font-family:Cambria;mso-bidi-theme-font:minor-latin" lang="EN-US"><span style="mso-list:Ignore"><span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span>I.<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><span lang="EN-US">First item</span></p>
 
-<p class="MsoListParagraphCxSpMiddle" style="text-indent:-18.0pt;mso-list:l1 level1 lfo2"><span style="font-family:Symbol;mso-fareast-font-family:Symbol;mso-bidi-font-family:
-Symbol"><span style="mso-list:Ignore">·<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span></span></span>Three bullet</p>
+<p class="MsoListParagraphCxSpMiddle" style="margin-left:27.0pt;mso-add-space:
+auto;text-indent:-27.0pt;mso-text-indent-alt:-9.0pt;mso-list:l6 level1 lfo5"><span style="mso-fareast-font-family:Cambria;mso-fareast-theme-font:minor-latin;
+mso-bidi-font-family:Cambria;mso-bidi-theme-font:minor-latin" lang="EN-US"><span style="mso-list:Ignore"><span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span>II.<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><span lang="EN-US">Second item</span></p>
 
-<p class="MsoListParagraphCxSpMiddle" style="text-indent:-18.0pt;mso-list:l1 level1 lfo2"><span style="font-family:Symbol;mso-fareast-font-family:Symbol;mso-bidi-font-family:
-Symbol"><span style="mso-list:Ignore">·<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span></span></span>Four</p>
+<p class="MsoListParagraphCxSpLast" style="margin-left:27.0pt;mso-add-space:auto;
+text-indent:-27.0pt;mso-text-indent-alt:-9.0pt;mso-list:l6 level1 lfo5"><span style="mso-fareast-font-family:Cambria;mso-fareast-theme-font:minor-latin;
+mso-bidi-font-family:Cambria;mso-bidi-theme-font:minor-latin" lang="EN-US"><span style="mso-list:Ignore"><span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;
+</span>III.<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><span lang="EN-US">Third item</span></p>
 
-<p class="MsoListParagraphCxSpLast" style="margin-left:72.0pt;mso-add-space:auto;
-text-indent:-18.0pt;mso-list:l1 level2 lfo2"><span style="font-family:&quot;Courier New&quot;;mso-fareast-font-family:&quot;Courier New&quot;"><span style="mso-list:Ignore">o<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;
-</span></span></span>sdfsdfsfd</p>
+<p class="MsoNormal"><span lang="EN-US">&nbsp;</span></p>
 
-<p class="MsoNormal">Woot to lists!</p>
+<p class="MsoListParagraphCxSpFirst" style="text-indent:-36.0pt;mso-text-indent-alt:
+-18.0pt;mso-list:l1 level1 lfo6"><span style="mso-fareast-font-family:Cambria;mso-fareast-theme-font:minor-latin;
+mso-bidi-font-family:Cambria;mso-bidi-theme-font:minor-latin" lang="EN-US"><span style="mso-list:Ignore"><span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span>i.<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><span lang="EN-US">First item</span></p>
 
-<p class="MsoNormal">&nbsp;</p>
+<p class="MsoListParagraphCxSpMiddle" style="text-indent:-36.0pt;mso-text-indent-alt:
+-18.0pt;mso-list:l1 level1 lfo6"><span style="mso-fareast-font-family:Cambria;mso-fareast-theme-font:minor-latin;
+mso-bidi-font-family:Cambria;mso-bidi-theme-font:minor-latin" lang="EN-US"><span style="mso-list:Ignore"><span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span>ii.<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><span lang="EN-US">Second item</span></p>
+
+<p class="MsoListParagraphCxSpLast" style="text-indent:-36.0pt;mso-text-indent-alt:
+-18.0pt;mso-list:l1 level1 lfo6"><span style="mso-fareast-font-family:Cambria;mso-fareast-theme-font:minor-latin;
+mso-bidi-font-family:Cambria;mso-bidi-theme-font:minor-latin" lang="EN-US"><span style="mso-list:Ignore"><span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;
+</span>iii.<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><span lang="EN-US">Third item</span></p>
+
+<p class="MsoNormal"><span lang="EN-US">&nbsp;</span></p>
 
 <!--[if gte mso 9]><xml>
  <w:WordDocument>
@@ -126,7 +141,9 @@ text-indent:-18.0pt;mso-list:l1 level2 lfo2"><span style="font-family:&quot;Cour
    <w:DontVertAlignInTxbx/>
    <w:Word11KerningPairs/>
    <w:CachedColBalance/>
+   <w:UseFELayout/>
   </w:Compatibility>
+  <w:DoNotOptimizeForBrowser/>
   <m:mathPr>
    <m:mathFont m:val="Cambria Math"/>
    <m:brkBin m:val="before"/>
@@ -171,7 +188,6 @@ text-indent:-18.0pt;mso-list:l1 level2 lfo2"><span style="font-family:&quot;Cour
   <w:LsdException Locked="false" Priority="1" Name="Default Paragraph Font"/>
   <w:LsdException Locked="false" Priority="11" SemiHidden="false"
    UnhideWhenUsed="false" QFormat="true" Name="Subtitle"/>
-  <w:LsdException Locked="false" Priority="0" Name="Hyperlink"/>
   <w:LsdException Locked="false" Priority="22" SemiHidden="false"
    UnhideWhenUsed="false" QFormat="true" Name="Strong"/>
   <w:LsdException Locked="false" Priority="20" SemiHidden="false"
@@ -409,20 +425,16 @@ text-indent:-18.0pt;mso-list:l1 level2 lfo2"><span style="font-family:&quot;Cour
 	mso-style-qformat:yes;
 	mso-style-parent:"";
 	mso-padding-alt:0cm 5.4pt 0cm 5.4pt;
-	mso-para-margin-top:0cm;
-	mso-para-margin-right:0cm;
-	mso-para-margin-bottom:10.0pt;
-	mso-para-margin-left:0cm;
-	line-height:115%;
+	mso-para-margin:0cm;
+	mso-para-margin-bottom:.0001pt;
 	mso-pagination:widow-orphan;
-	font-size:11.0pt;
-	font-family:"Calibri","sans-serif";
-	mso-ascii-font-family:Calibri;
+	font-size:12.0pt;
+	font-family:"Cambria","serif";
+	mso-ascii-font-family:Cambria;
 	mso-ascii-theme-font:minor-latin;
-	mso-hansi-font-family:Calibri;
+	mso-hansi-font-family:Cambria;
 	mso-hansi-theme-font:minor-latin;
-	mso-bidi-font-family:"Times New Roman";
-	mso-bidi-theme-font:minor-bidi;
+	mso-ansi-language:EN-US;
 	mso-fareast-language:EN-US;}
 </style>
 <![endif]-->
