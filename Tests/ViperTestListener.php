@@ -1,7 +1,39 @@
 <?php
+/**
+ * Class ViperTestListener for PHPUnit.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License, version 2, as
+ * published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program as the file license.txt. If not, see
+ * <http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt>
+ *
+ * @package    Viper
+ * @subpackage Testing
+ * @author     Squiz Pty Ltd <products@squiz.net>
+ * @copyright  2010 Squiz Pty Ltd (ABN 77 084 670 600)
+ * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt GPLv2
+ */
+
+/**
+ * ViperTestListener Class.
+ */
 class ViperTestListener implements PHPUnit_Framework_TestListener
 {
-    private $_test                = NULL;
+
+    /**
+     * Current test object.
+     *
+     * @var object
+     */
+    private $_test = NULL;
 
     /**
      * Number of failures.
@@ -206,13 +238,28 @@ class ViperTestListener implements PHPUnit_Framework_TestListener
     }//end _screenshot()
 
 
+    /**
+     * A test started.
+     *
+     * @param PHPUnit_Framework_Test $test The test that started.
+     *
+     * @return void
+     */
     public function startTest(PHPUnit_Framework_Test $test)
     {
         $this->_test = $test;
         self::$_testsRun++;
 
-    }
+    }//end startTest()
 
+
+    /**
+     * A test suite ended.
+     *
+     * @param PHPUnit_Framework_TestSuite $suite The test suite.
+     *
+     * @return void
+     */
     public function endTestSuite(PHPUnit_Framework_TestSuite $suite)
     {
         if (self::$_sikuli !== NULL
@@ -222,134 +269,215 @@ class ViperTestListener implements PHPUnit_Framework_TestListener
             self::$_sikuli->stopJSPolling();
         }
 
-    }
+    }//end endTestSuite()
 
+
+    /**
+     * An error occurred.
+     *
+     * @param PHPUnit_Framework_Test $test Current test.
+     * @param Exception              $e    The exception object.
+     * @param float                  $time Time taken.
+     *
+     * @return void
+     */
     public function addError(PHPUnit_Framework_Test $test, Exception $e, $time)
     {
         self::$_errors++;
 
         $this->_addLog('error', $test, $e);
 
-    }
+    }//end addError()
 
+
+    /**
+     * A failure occurred.
+     *
+     * @param PHPUnit_Framework_Test                 $test Current test.
+     * @param PHPUnit_Framework_AssertionFailedError $e    The exception object.
+     * @param float                                  $time Time taken.
+     *
+     * @return void
+     */
     public function addFailure(PHPUnit_Framework_Test $test, PHPUnit_Framework_AssertionFailedError $e, $time)
     {
         self::$_failures++;
         $this->_addLog('failure', $test, $e);
 
-    }
+    }//end addFailure()
 
-    public function addIncompleteTest(PHPUnit_Framework_Test $test, Exception $e, $time)
-    {
-    }
 
-    public function addSkippedTest(PHPUnit_Framework_Test $test, Exception $e, $time)
-    {
-    }
-
+    /**
+     * A test ended.
+     *
+     * @param PHPUnit_Framework_Test $test The test that ended.
+     * @param float                  $time Time taken for the test.
+     *
+     * @return void
+     */
     public function endTest(PHPUnit_Framework_Test $test, $time)
     {
         // Report progress.
-        // Report progress.
         $path = $this->getLogPath();
         if (empty($path) === FALSE) {
-            if ((self::$_testsRun >= self::$_numTests) || ((self::$_testsRun - 1) % 10) === 0) {
-                $progress = array(
-                             'tests' => self::$_numTests,
-                             'completed'   => self::$_testsRun,
-                             'errors'      => self::$_errors,
-                             'failure'     => self::$_failures,
-                             'startTime'   => self::$_startTime,
-                             'lastUpdated' => time(),
-                            );
+            $progress = array(
+                         'tests'       => self::$_numTests,
+                         'completed'   => self::$_testsRun,
+                         'errors'      => self::$_errors,
+                         'failure'     => self::$_failures,
+                         'startTime'   => self::$_startTime,
+                         'lastUpdated' => time(),
+                        );
 
-                // Init export dir.
-                if (file_exists($path) === FALSE) {
-                    mkdir($path, 0755, TRUE);
-                }
-
-                file_put_contents($path.'/progress.json', json_encode($progress));
+            // Init export dir.
+            if (file_exists($path) === FALSE) {
+                mkdir($path, 0755, TRUE);
             }
+
+            file_put_contents($path.'/progress.json', json_encode($progress));
         }//end if
 
-    }
+    }//end endTest()
 
+
+    /**
+     * A test suite started.
+     *
+     * @param PHPUnit_Framework_TestSuite $suite The suite object.
+     *
+     * @return void
+     */
     public function startTestSuite(PHPUnit_Framework_TestSuite $suite)
     {
-        if (self::$_numTests === 0) {
-            self::$_startTime = time();
+        if (self::$_numTests !== 0) {
+            return;
+        }
 
-            $filters = getenv('VIPER_TEST_FILTER');
-            if (empty($filters) === FALSE) {
-                $filters = trim($filters, '/');
-                $filters = explode('|', $filters);
-                foreach ($filters as $filter) {
-                    if (method_exists($suite, 'tests') === TRUE) {
-                        $testName = $filter;
-                        if (strpos($filter, '::') !== FALSE) {
-                            list($className, $testName) = explode('::', $filter);
-                        }
+        self::$_startTime = time();
+        $filters = getenv('VIPER_TEST_FILTER');
 
-                        $tests = $suite->tests();
-                        foreach ($tests as $test) {
-                            if (preg_match('#'.$testName.'#', $test->getName()) > 0) {
-                                self::$_numTests += $test->count();
-                            } else if (method_exists($test, 'tests') === TRUE) {
-                                foreach ($test->tests() as $testCase) {
-                                    if (preg_match('#'.$testName.'#', $testCase->getName()) > 0) {
-                                        self::$_numTests++;
-                                    }
+        if (empty($filters) === FALSE) {
+            $filters = trim($filters, '/');
+            $filters = explode('|', $filters);
+            foreach ($filters as $filter) {
+                if (method_exists($suite, 'tests') === TRUE) {
+                    $testName = $filter;
+                    if (strpos($filter, '::') !== FALSE) {
+                        list($className, $testName) = explode('::', $filter);
+                    }
+
+                    $tests = $suite->tests();
+                    foreach ($tests as $test) {
+                        if (preg_match('#'.$testName.'#', $test->getName()) > 0) {
+                            self::$_numTests += $test->count();
+                        } else if (method_exists($test, 'tests') === TRUE) {
+                            foreach ($test->tests() as $testCase) {
+                                if (preg_match('#'.$testName.'#', $testCase->getName()) > 0) {
+                                    self::$_numTests++;
                                 }
                             }
                         }
-                    } else if (strpos($filter, '::') !== FALSE) {
-                        $testName  = '';
-                        $className = '';
-                        list($className, $testName) = explode('::', $filter);
-                        if ($className !== $suite->getName()) {
+                    }
+                } else if (strpos($filter, '::') !== FALSE) {
+                    $testName  = '';
+                    $className = '';
+                    list($className, $testName) = explode('::', $filter);
+                    if ($className !== $suite->getName()) {
+                        continue;
+                    }
+
+                    $tests = $suite->tests();
+                    foreach ($tests as $test) {
+                        if ($testName === $test->getName()) {
+                            self::$_numTests++;
                             continue;
                         }
-
-                        $tests = $suite->tests();
-                        foreach ($tests as $test) {
-                            if ($testName === $test->getName()) {
-                                self::$_numTests++;
-                                continue;
-                            }
-                        }
                     }
-                }//end foreach
-            } else {
-                self::$_numTests = $suite->count();
-            }//end if
-        }
+                }//end if
+            }//end foreach
+        } else {
+            self::$_numTests = $suite->count();
+        }//end if
 
-    }
+    }//end startTestSuite()
 
+
+    /**
+     * Returns the number of failures.
+     *
+     * @return integer
+     */
     public function getFailures()
     {
         return self::$_failures;
 
-    }
+    }//end getFailures()
 
+
+    /**
+     * Returns the number of errors.
+     *
+     * @return integer
+     */
     public function getErrors()
     {
         return self::$_errors;
 
-    }
+    }//end getErrors()
 
 
+    /**
+     * Returns the total number of tests.
+     *
+     * @return integer
+     */
     public function getNumberOfTests()
     {
         return self::$_numTests;
 
-    }
+    }//end getNumberOfTests()
 
+
+    /**
+     * Returns the number of tests run.
+     *
+     * @return integer
+     */
     public function getTestsRun()
     {
         return self::$_testsRun;
 
-    }
+    }//end getTestsRun()
 
-}
-?>
+
+    /**
+     * Incomplete test.
+     *
+     * @param PHPUnit_Framework_Test $test The test object.
+     * @param Exception              $e    The exception.
+     * @param float                  $time Time of the error.
+     *
+     * @return void
+     */
+    public function addIncompleteTest(PHPUnit_Framework_Test $test, Exception $e, $time)
+    {
+
+    }//end addIncompleteTest()
+
+
+    /**
+     * Skipped test.
+     *
+     * @param PHPUnit_Framework_Test $test The test object.
+     * @param Exception              $e    The exception.
+     * @param float                  $time Time of the error.
+     *
+     * @return void
+     */
+    public function addSkippedTest(PHPUnit_Framework_Test $test, Exception $e, $time)
+    {
+
+    }//end addSkippedTest()
+
+
+}//end class
