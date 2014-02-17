@@ -188,21 +188,48 @@ class ViperTestListener implements PHPUnit_Framework_TestListener
      */
     private function _addLog($type, PHPUnit_Framework_Test $test, Exception $e)
     {
+        $errMsg  = PHPUnit_Framework_TestFailure::exceptionToString($e)."\n";
+        $errMsg .= PHPUnit_Util_Filter::getFilteredStacktrace($e);
+
+        $this->_addResult($test, $type, $errMsg);
+        $this->_screenshot($type, $test, $e);
+
+    }//end _addLog()
+
+
+    /**
+     * Add a result to the results log file.
+     *
+     * @param PHPUnit_Framework_Test $test   The PHPUnit test object.
+     * @param string                 $status The status of the test.
+     * @param string                 $msg    The error/failure message.
+     *
+     * @return void
+     */
+    private function _addResult(PHPUnit_Framework_Test $test, $status, $msg='')
+    {
         $path = $this->getLogPath();
         if (empty($path) === TRUE) {
             return;
         }
 
-        $path .= '/'.$type.'-'.get_class($test).'-'.$test->getName().'.log';
+        $path .= '/results.inc';
 
-        $msg  = PHPUnit_Framework_TestFailure::exceptionToString($e)."\n";
-        $msg .= PHPUnit_Util_Filter::getFilteredStacktrace($e);
+        $result = array(
+                   'testClass'  => get_class($test),
+                   'testName'   => $test->getName(),
+                   'status'     => $status,
+                   'message'    => $msg,
+                   'time'       => 0,
+                  );
 
-        file_put_contents($path, $msg);
+        $resultCont  = '<'.'?php $results[] = ';
+        $resultCont .= var_export($result, TRUE);
+        $resultCont .= "; ?>\n";
 
-        $this->_screenshot($type, $test, $e);
+        file_put_contents($path, $resultCont, FILE_APPEND);
 
-    }//end _addLog()
+    }//end _addResult()
 
 
     /**
@@ -221,7 +248,7 @@ class ViperTestListener implements PHPUnit_Framework_TestListener
             return;
         }
 
-        $path .= '/'.$type.'-'.get_class($test).'-'.$test->getName().'.jpg';
+        $path .= '/'.get_class($test).'-'.$test->getName().'.jpg';
 
         $sikuli = $this->getSikuli();
         if ($sikuli !== NULL) {
@@ -284,7 +311,6 @@ class ViperTestListener implements PHPUnit_Framework_TestListener
     public function addError(PHPUnit_Framework_Test $test, Exception $e, $time)
     {
         self::$_errors++;
-
         $this->_addLog('error', $test, $e);
 
     }//end addError()
@@ -335,6 +361,10 @@ class ViperTestListener implements PHPUnit_Framework_TestListener
             }
 
             file_put_contents($path.'/progress.json', json_encode($progress));
+
+            if ($test->getStatus() === 0) {
+                $this->_addResult($test, 'pass');
+            }
         }//end if
 
     }//end endTest()
