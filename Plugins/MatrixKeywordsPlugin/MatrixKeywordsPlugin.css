@@ -13,3 +13,107 @@
 .Viper-button.Viper-selected .Viper-buttonIcon.Viper-snippet {
   background-position: -33px -675px;
 }
+
+/* Matrix Viper Selection input */
+.Matrix-Viper-selection {
+  margin-bottom: 0.6em;
+  -moz-transition: opacity 0.2s ease-in;
+  -webkit-transition: opacity 0.2s ease-in;
+}
+.Matrix-Viper-selection .Viper-selection-textArea {
+  resize: none;
+}
+.Matrix-Viper-selection.Viper-disabled {
+  opacity: 0.4;
+  filter: alpha(opacity = 40);
+}
+.Matrix-Viper-selection-label {
+  display: block;
+  padding: 4px 2px;
+  position: relative;
+  clear: both;
+  text-align: left;
+  color: #DDD;
+  background: #2b2b2b;
+  border-radius: 0.4em;
+  -moz-transition-property: color, background;
+  -moz-transition-duration: 0.3s;
+  -webkit-transition-property: color, background;
+  -webkit-transition-duration: 0.3s;
+  border-top: 1px solid #000;
+  border-bottom: 1px solid #777;
+  color: #5A8BD0;
+  box-shadow: 0 0 3px #000 inset;
+}
+.Matrix-Viper-disabled .Viper-selection-label {
+  filter: alpha(opacity = 40);
+}
+.Matrix-Viper-selection.Viper-active .Viper-selection-label {
+  background: #205caf;
+}
+.Matrix-Viper-selection:after {
+  display: block;
+  content: "";
+  clear: both;
+}
+.Matrix-Viper-selection-main {
+  position: relative;
+  padding-right: 0.3em;
+}
+.Matrix-Viper-selection.Viper-actionRevert .Viper-selection-main,
+.Matrix-Viper-selection.Viper-actionClear .Viper-selection-main {
+  padding-right: 22px;
+}
+.Matrix-Viper-selection-title {
+  position: absolute;
+  left: 0px;
+  top: 0;
+  overflow: hidden;
+    text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #DDD;
+  text-shadow: 0 -1px 0 #000000;
+  text-shadow: none;
+  line-height: 1.85em;
+  font-size: 1.2em;
+  padding: 0 10px;
+  margin: 0 0 0 0.2em;
+  background-color: #404040;
+  border-radius: 0.2em;
+  height: 100%;
+  -moz-transition-property: color, background;
+  -moz-transition-duration: 0.3s;
+  -webkit-transition-property: color, background;
+  -webkit-transition-duration: 0.3s;
+}
+.Matrix-Viper-disabled .Viper-selection-title {
+  filter: alpha(opacity = 40);
+}
+.Matrix-Viper-selection.Viper-active .Viper-selection-title,
+.Matrix-Viper-selection.Viper-required.Viper-active .Viper-selection-title {
+  background-color: #366cb7;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.5);
+}
+.Matrix-Viper-selection-input {
+    font-family: Arial;
+    font-size: 1.49em;
+    font-weight: bold;
+    padding: 0.1em 0 0.15em;
+    width: 100%;
+    outline: 0;
+    border:none;
+/*  
+    it's really difficult to style a dropdown box for consistent look across browsers, so let's leave it
+    color: #5A8BD0;
+    background: none repeat scroll 0 0 rgba(0, 0, 0, 0);
+    -webkit-appearance: button;
+    -moz-appearance: window;
+    -ms-appearance: none;
+    -o-appearance: none;
+    appearance: none;
+    box-shadow: none;
+*/
+}
+
+  
+  
