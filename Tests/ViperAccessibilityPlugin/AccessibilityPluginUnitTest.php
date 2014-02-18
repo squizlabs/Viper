@@ -135,16 +135,14 @@ class Viper_Tests_ViperAccessibilityPlugin_AccessibilityPluginUnitTest extends A
         $this->sikuli->click($this->findKeyword(1));
 
         // Open and copy the text file
-        $this->openFile(dirname(__FILE__).'/TableIdErrorCountExampleContent.txt', $this->sikuli->getBrowserName());
-        sleep(2);
+        $this->openFile($this->getTestURL().'/ViperAccessibilityPlugin/TableIdErrorCountExampleContent.txt', $this->sikuli->getBrowserName());
+        sleep(1);
 
         // Copy text.
         $this->sikuli->keyDown('Key.CMD + a');
         $this->sikuli->keyDown('Key.CMD + c');
         $this->sikuli->keyDown('Key.CMD + w');
-        sleep(5);
-
-        $this->sikuli->switchApp($this->sikuli->getBrowserName());
+        sleep(2);
 
         // Open source view and paste the content in.
         $this->clickTopToolbarButton('sourceView');
@@ -158,6 +156,7 @@ class Viper_Tests_ViperAccessibilityPlugin_AccessibilityPluginUnitTest extends A
 
         // Check error count
         $this->clickTopToolbarButton('accessAudit');
+        sleep(5);
         $errorCount = (int) $this->getHtml('.HTMLCS-error strong');
 
         // The true error count should be 8 but it is 9 in unit tests due to the styling of the unit test page
