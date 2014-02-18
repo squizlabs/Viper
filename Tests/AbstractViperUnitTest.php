@@ -1966,10 +1966,8 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
     protected function openFile($filePath, $appName)
     {
         if ($appName === $this->sikuli->getBrowserName()) {
-            // Open a new tab in this browser.
-            $this->sikuli->keyDown('Key.CMD + t');
-            sleep(1);
-            $this->sikuli->goToURL($filePath);
+            // Open a new tab in this browser. Popup blocker must be disabled.
+            $this->sikuli->execJS('window.open("'.$filePath.'", "_blank")');
             return TRUE;
         }
 
