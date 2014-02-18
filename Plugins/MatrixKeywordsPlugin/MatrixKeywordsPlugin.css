@@ -9,12 +9,12 @@
 }
 
 .Viper-buttonIcon.Viper-snippet {
-  background-image: url(../Images/matrixButtonIcons.png);  
+  background-image: url(./Images/matrixButtonIcons.png);  
   background-position: 0 -27px;
 }
 .Viper-button.Viper-active .Viper-buttonIcon.Viper-snippet,
 .Viper-button.Viper-selected .Viper-buttonIcon.Viper-snippet {
-  background-image: url(../Images/matrixButtonIcons.png);    
+  background-image: url(./Images/matrixButtonIcons.png);    
   background-position: -33px -27px;
 }
 
