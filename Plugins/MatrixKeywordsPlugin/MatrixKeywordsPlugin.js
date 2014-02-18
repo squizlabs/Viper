@@ -50,10 +50,10 @@ MatrixKeywordsPlugin.prototype = {
 	toolbar.addButton(btnGroup);
 	
 	// create bubble for keyword plugin
-	toolbar.createBubble(prefix + ':vtp:keywords', _('Insert Keywords'), insertKeywordContent, null, null);
+	toolbar.createBubble(prefix + ':vtp:keywords', _('Insert Matrix Keywords'), insertKeywordContent, null, null);
 	
 	// create bubble for snippet plugin
-	toolbar.createBubble(prefix + ':vtp:snippet', _('Insert Snippet'), insertSnippetContent, null, null);
+	toolbar.createBubble(prefix + ':vtp:snippet', _('Insert Matrix Snippet'), insertSnippetContent, null, null);
 	
 	// Keyword Insert Selection.
 	var keywordSelect = this._createSelection(prefix + ':insertKeywordSelect', prefix + ':insertKeywordSelect', 'Keyword', null);

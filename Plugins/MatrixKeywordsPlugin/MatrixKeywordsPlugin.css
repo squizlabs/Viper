@@ -1,17 +1,21 @@
 .Viper-buttonIcon.Viper-keywords {
-  background-position: 0 -675px;
+  background-image: url(./Images/matrixButtonIcons.png);  
+  background-position: 0 -0px;
 }
 .Viper-button.Viper-active .Viper-buttonIcon.Viper-keywords,
 .Viper-button.Viper-selected .Viper-buttonIcon.Viper-keywords {
-  background-position: -33px -675px;
+  background-image: url(./Images/matrixButtonIcons.png);  
+  background-position: -33px -0px;
 }
 
 .Viper-buttonIcon.Viper-snippet {
-  background-position: 0 -675px;
+  background-image: url(../Images/matrixButtonIcons.png);  
+  background-position: 0 -27px;
 }
 .Viper-button.Viper-active .Viper-buttonIcon.Viper-snippet,
 .Viper-button.Viper-selected .Viper-buttonIcon.Viper-snippet {
-  background-position: -33px -675px;
+  background-image: url(../Images/matrixButtonIcons.png);    
+  background-position: -33px -27px;
 }
 
 /* Matrix Viper Selection input */
