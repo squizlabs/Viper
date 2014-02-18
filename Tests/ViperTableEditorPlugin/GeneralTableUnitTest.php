@@ -893,6 +893,29 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
     }//end testPastingContentAfterATable()
 
 
+    /**
+     * Tests that you can click inside an empty table that has been created in a div section.
+     *
+     * @return void
+     */
+    public function testClickingInsideEmptyTableInDiv()
+    {
+        $this->selectKeyword(1);
+
+        $this->clickTopToolbarButton('sourceView');
+        sleep(2);
+        $this->sikuli->keyDown('Key.CMD + a');
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->type('<div><table style="width: 100%;"><tbody><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table></div>');
+
+        $this->clickButton('Apply Changes', NULL, TRUE);
+
+        $this->clickCell(0);
+        $this->assertTableWithoutHeaders('<div><table style="width: 100%;"><tbody><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table></div>');
+
+    }//end testClickingInsideEmptyTableInDiv()
+
+
 }//end class
 
 ?>
