@@ -93,26 +93,32 @@ MatrixKeywordsPlugin.prototype = {
 		var editableElement = self.viper.getEditableElement();
 		
 		// get the keywords current editting div
-		var dataKeywords = JSON.parse(editableElement.dataset.keywords);
-		// make sure it's valid JSON assoicate array, not an array object.
-		if(typeof dataKeywords !== 'undefined' && typeof dataKeywords.length === 'undefined') {
-		    // enable button and insert those keywords as options
-		    tools.enableButton('insertKeywords');
-		    var selectField  = tools.getItem(prefix + ':insertKeywordSelect');
-		    if(selectField.getValue() === null) {
-			tools.getItem(prefix + ':insertKeywordSelect').setValue(dataKeywords);
+		var datasetKeywords = editableElement.dataset.keywords;
+		if(typeof datasetKeywords !== 'undefined') {
+		    var dataKeywords = JSON.parse(editableElement.dataset.keywords);
+		    // make sure it's valid JSON assoicate array, not an array object.
+		    if(typeof dataKeywords.length === 'undefined') {
+			// enable button and insert those keywords as options
+			tools.enableButton('insertKeywords');
+			var selectField  = tools.getItem(prefix + ':insertKeywordSelect');
+			if(selectField.getValue() === null) {
+			    tools.getItem(prefix + ':insertKeywordSelect').setValue(dataKeywords);
+			}
 		    }
 		}
 		
 		// get snippet for current div
-		var dataSnippets = JSON.parse(editableElement.dataset.snippets);
-		// if empty JSON array
-		if(typeof dataSnippets !== 'undefined' && typeof dataSnippets.length === 'undefined') {		
-		    // enable button and insert those snippets as options
-		    tools.enableButton('insertSnippets');
-		    var selectField  = tools.getItem(prefix + ':insertSnippetSelect');
-		    if(selectField.getValue() === null) {
-			tools.getItem(prefix + ':insertSnippetSelect').setValue(dataSnippets);
+		var datasetSnippet = editableElement.dataset.snippets;
+		    if(typeof datasetSnippet !== 'undefined') {
+		    var dataSnippets = JSON.parse(editableElement.dataset.snippets);
+		    // if empty JSON array
+		    if(typeof dataSnippets.length === 'undefined') {		
+			// enable button and insert those snippets as options
+			tools.enableButton('insertSnippets');
+			var selectField  = tools.getItem(prefix + ':insertSnippetSelect');
+			if(selectField.getValue() === null) {
+			    tools.getItem(prefix + ':insertSnippetSelect').setValue(dataSnippets);
+			}
 		    }
 		}
 	    });
