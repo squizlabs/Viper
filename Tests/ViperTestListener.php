@@ -437,7 +437,7 @@ class ViperTestListener implements PHPUnit_Framework_TestListener
      *
      * @return integer
      */
-    public function getFailures()
+    public static function getFailures()
     {
         return self::$_failures;
 
@@ -449,7 +449,7 @@ class ViperTestListener implements PHPUnit_Framework_TestListener
      *
      * @return integer
      */
-    public function getErrors()
+    public static function getErrors()
     {
         return self::$_errors;
 
@@ -461,7 +461,7 @@ class ViperTestListener implements PHPUnit_Framework_TestListener
      *
      * @return integer
      */
-    public function getNumberOfTests()
+    public static function getNumberOfTests()
     {
         return self::$_numTests;
 
@@ -473,7 +473,7 @@ class ViperTestListener implements PHPUnit_Framework_TestListener
      *
      * @return integer
      */
-    public function getTestsRun()
+    public static function getTestsRun()
     {
         return self::$_testsRun;
 
