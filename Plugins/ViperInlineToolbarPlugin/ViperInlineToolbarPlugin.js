@@ -522,8 +522,14 @@ ViperInlineToolbarPlugin.prototype = {
         if (nodeSelection) {
             parent = nodeSelection;
         } else {
-            parent        = range.getCommonElement();
             var startNode = range.getStartNode();
+            var endNode   = range.getStartNode();
+            if (startNode === endNode) {
+                parent = startNode.parentNode;
+            } else {
+                parent = range.getCommonElement();
+            }
+
             if (!startNode) {
                 return lineage;
             } else if (startNode.nodeType == ViperUtil.TEXT_NODE
