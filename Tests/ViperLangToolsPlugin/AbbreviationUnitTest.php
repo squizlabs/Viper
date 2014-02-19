@@ -30,7 +30,7 @@ class Viper_Tests_ViperLangToolsPlugin_AbbreviationUnitTest extends AbstractVipe
 
 
     /**
-     * Test that the Update Changes button remains inactvie.
+     * Test that the Apply Changes button remains inactvie.
      *
      * @return void
      */
@@ -43,7 +43,7 @@ class Viper_Tests_ViperLangToolsPlugin_AbbreviationUnitTest extends AbstractVipe
         $this->clickTopToolbarButton('Abbreviation', NULL, TRUE);
 
         // Check to make sure the update changes button is disabled.
-        $this->assertTrue($this->topToolbarButtonExists('Update Changes', 'disabled', TRUE), 'The update changes button should be disabled.');
+        $this->assertTrue($this->topToolbarButtonExists('Apply Changes', 'disabled', TRUE), 'The update changes button should be disabled.');
 
     }//end testUpdateChangesButton()
 
@@ -78,7 +78,7 @@ class Viper_Tests_ViperLangToolsPlugin_AbbreviationUnitTest extends AbstractVipe
         $this->clickTopToolbarButton('langTools');
         $this->clickTopToolbarButton('Abbreviation', NULL, TRUE);
         $this->type('def');
-        $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
 
         $this->assertHTMLMatch('<p>%1% <abbr title="abc">%2%</abbr> <abbr title="def">%3%</abbr></p><p>sit amet <strong>%4%</strong></p><p>Squiz <abbr title="abc">%5%</abbr> is orsm</p><p>The <em>%6%</em> brown fox</p>');
 
@@ -127,7 +127,7 @@ class Viper_Tests_ViperLangToolsPlugin_AbbreviationUnitTest extends AbstractVipe
         $this->clickTopToolbarButton('langTools', 'active');
         $this->clickTopToolbarButton('Abbreviation', 'active', TRUE);
         $this->clearFieldValue('Abbreviation');
-        $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
 
         $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit amet <strong>%4%</strong></p><p>Squiz %5% is orsm</p><p>The <em>%6%</em> brown fox</p>');
 
@@ -157,7 +157,7 @@ class Viper_Tests_ViperLangToolsPlugin_AbbreviationUnitTest extends AbstractVipe
         $this->clickTopToolbarButton('langTools', 'active');
         $this->clickTopToolbarButton('Abbreviation', 'active', TRUE);
         $this->type('ghi');
-        $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
 
         $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit amet <strong>%4%</strong></p><p>Squiz <abbr title="abcdefghi">%5%</abbr> is orsm</p><p>The <em>%6%</em> brown fox</p>');
 

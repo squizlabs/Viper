@@ -28,7 +28,7 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->selectKeyword(2);
         $this->clickInlineToolbarButton('link');
         $this->type('http://www.squizlabs.com');
-        $this->clickInlineToolbarButton('Update Changes', NULL, TRUE);
+        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
 
         $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com">%1%</a> link test test <a href="http://www.squizlabs.com">%2%</a></p>');
 
@@ -97,7 +97,7 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->selectKeyword(2);
         $this->clickTopToolbarButton('link');
         $this->type('http://www.squizlabs.com');
-        $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
 
         $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com">%1%</a> link test test <a href="http://www.squizlabs.com">%2%</a></p>');
 
@@ -162,7 +162,7 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->type('Squiz Labs');
         $this->clickField('Open a New Window');
         sleep(1);
-        $this->clickInlineToolbarButton('Update Changes', NULL, TRUE);
+        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
 
         $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com" title="Squiz Labs" target="_blank">%1%</a> link test test <a href="http://www.squizlabs.com" title="Squiz Labs" target="_blank">%2%</a></p>');
 
@@ -197,7 +197,7 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->type('Squiz Labs');
         $this->clickField('Open a New Window');
         sleep(1);
-        $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
 
         $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com" title="Squiz Labs" target="_blank">%1%</a> link test test <a href="http://www.squizlabs.com" title="Squiz Labs" target="_blank">%2%</a></p>');
 
@@ -470,7 +470,7 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->clickInlineToolbarButton('link', 'active');
         $this->clearFieldValue('URL');
         $this->type('http://www.google.com');
-        $this->clickInlineToolbarButton('Update Changes', NULL, TRUE);
+        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
 
         $this->assertHTMLMatch('<p><a href="http://www.google.com">%1%</a> link test test %2%</p>');
 
@@ -526,7 +526,7 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->clickTopToolbarButton('link', 'active');
         $this->clearFieldValue('URL');
         $this->type('http://www.google.com');
-        $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
 
         $this->assertHTMLMatch('<p><a href="http://www.google.com">%1%</a> link test test %2%</p>');
 
@@ -566,7 +566,7 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->clickInlineToolbarButton('link', 'active');
         $this->clickField('Title');
         $this->type('abc');
-        $this->clickInlineToolbarButton('Update Changes', NULL, TRUE);
+        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
 
         $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com" title="titleabc">%1%</a> link test test %2%</p>');
 
@@ -602,7 +602,7 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->clickTopToolbarButton('link', 'active');
         $this->clickField('Title');
         $this->type('abc');
-        $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
 
         $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com" title="titleabc">%1%</a> link test test %2%</p>');
 
@@ -978,7 +978,7 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->selectKeyword(2);
         $this->clickInlineToolbarButton('link');
         $this->type('mailto: labs@squiz.com.au');
-        $this->clickInlineToolbarButton('Update Changes', NULL, TRUE);
+        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
         $this->assertHTMLMatch('<p><a href="mailto:labs@squiz.com.au">%1%</a> link test test <a href="mailto:labs@squiz.com.au">%2%</a></p>');
 
     }//end testCreatingAMailToLinkUsingTheInlineToolbar()
@@ -1010,7 +1010,7 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->type('mailto: labs@squiz.com.au');
         $this->sikuli->keyDown('Key.TAB');
         $this->type('Subject');
-        $this->clickInlineToolbarButton('Update Changes', NULL, TRUE);
+        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
         $this->assertHTMLMatch('<p><a href="mailto:labs@squiz.com.au?subject=Subject">%1%</a> link test test <a href="mailto:labs@squiz.com.au?subject=Subject">%2%</a></p>');
 
     }//end testCreatingAMailToLinkWithSubjectUsingTheInlineToolbar()
@@ -1041,7 +1041,7 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->sikuli->keyDown('Key.ENTER');
         $this->clickField('Subject');
         $this->type('Test');
-        $this->clickInlineToolbarButton('Update Changes', NULL, TRUE);
+        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
 
         $this->assertHTMLMatch('<p><a href="mailto:labs@squiz.com.au?subject=Subject">%1%</a> link test test <a href="mailto:labs@squiz.com.au?subject=Test">%2%</a></p>');
 
@@ -1070,7 +1070,7 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->selectKeyword(2);
         $this->clickTopToolbarButton('link');
         $this->type('mailto: labs@squiz.com.au');
-        $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
         $this->assertHTMLMatch('<p><a href="mailto:labs@squiz.com.au">%1%</a> link test test <a href="mailto:labs@squiz.com.au">%2%</a></p>');
 
     }//end testCreatingAMailToLinkUsingTheTopToolbar()
@@ -1103,7 +1103,7 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->type('mailto: labs@squiz.com.au');
         $this->sikuli->keyDown('Key.TAB');
         $this->type('Subject');
-        $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
         $this->assertHTMLMatch('<p><a href="mailto:labs@squiz.com.au?subject=Subject">%1%</a> link test test <a href="mailto:labs@squiz.com.au?subject=Subject">%2%</a></p>');
 
     }//end testCreatingAMailToLinkWithSubjectUsingTheTopToolbar()
@@ -1266,6 +1266,148 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
 
     }//end testAutoCreatingLinks()
 
+
+    /**
+     * Test that the Apply Changes button is inactive in the inline toolbar after you cancel changes.
+     *
+     * @return void
+     */
+    public function testUpdateChangesButtonIsDisabledInlineAfterCancellingChanges()
+    {
+        $this->useTest(6);
+
+        $this->selectKeyword(1);
+
+        $this->clickInlineToolbarButton('link');
+        $this->assertTrue($this->inlineToolbarButtonExists('link', 'selected'), 'Toolbar button icon is not correct');
+
+        $this->type('http://www.squizlabs.com');
+        $this->selectKeyword(2);
+
+        // Make sure the link was not created
+        $this->assertHTMLMatch('<p>Link test %1%</p><p>test</p><p>test again</p><p>test yet again</p><p>another paragraph</p><p>The last paragraph in this content on the page %2%</p>');
+
+        $this->clickInlineToolbarButton('link');
+        $this->assertTrue($this->inlineToolbarButtonExists('link', 'selected'), 'Toolbar button icon is not correct');
+        $this->assertTrue($this->inlineToolbarButtonExists('Apply Changes', 'disabled', TRUE), 'Update changes button should be disabled');
+
+        $this->type('http://www.squizlabs.com');
+        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
+
+        $this->assertHTMLMatch('<p>Link test %1%</p><p>test</p><p>test again</p><p>test yet again</p><p>another paragraph</p><p>The last paragraph in this content on the page <a href="http://www.squizlabs.com">%2%</a></p>');
+
+    }//end testUpdateChangesButtonIsDisabledInlineAfterCancellingChanges()
+
+
+    /**
+     * Test that the Apply Changes button is inactive in the inline toolbar after you cancel changes to a link.
+     *
+     * @return void
+     */
+    public function testUpdateChangesButtonIsDisabledInlineAfterCancellingChangesToALink()
+    {
+        $this->useTest(6);
+
+        // Insert a link
+        $this->selectKeyword(1);
+        $this->clickInlineToolbarButton('link');
+        $this->type('http://www.squizlabs');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>Link test <a href="http://www.squizlabs">%1%</a></p><p>test</p><p>test again</p><p>test yet again</p><p>another paragraph</p><p>The last paragraph in this content on the page %2%</p>');
+
+        $this->selectKeyword(2);
+
+        // Select link and make changes without saving
+        $this->selectKeyword(1);
+        $this->clickInlineToolbarButton('link', 'active');
+        $this->type('.com');
+        $this->selectKeyword(2);
+
+        // Check to make sure the HTML did not change.
+        $this->assertHTMLMatch('<p>Link test <a href="http://www.squizlabs">%1%</a></p><p>test</p><p>test again</p><p>test yet again</p><p>another paragraph</p><p>The last paragraph in this content on the page %2%</p>');
+
+        // Select the link again and make sure the Apply Changes button is inactive
+        $this->selectKeyword(1);
+        $this->clickInlineToolbarButton('link', 'active');
+        $this->assertTrue($this->inlineToolbarButtonExists('Apply Changes', 'disabled', TRUE), 'Update changes button should be disabled');
+
+        // Edit the link and make sure the Apply Changes button still works.
+        $this->type('.com');
+        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
+        $this->assertHTMLMatch('<p>Link test <a href="http://www.squizlabs.com">%1%</a></p><p>test</p><p>test again</p><p>test yet again</p><p>another paragraph</p><p>The last paragraph in this content on the page %2%</p>');
+
+    }//end testUpdateChangesButtonIsDisabledInlineAfterCancellingChangesToALink()
+
+
+    /**
+     * Test that the Apply Changes button is inactive after you cancel changes.
+     *
+     * @return void
+     */
+    public function testUpdateChangesButtonInTopToolbarIsDisabledAfterCancellingChanges()
+    {
+        $this->useTest(6);
+
+        $this->selectKeyword(1);
+
+        $this->clickTopToolbarButton('link');
+        $this->assertTrue($this->topToolbarButtonExists('link', 'selected'), 'Toolbar button icon is not correct');
+
+        $this->type('http://www.squizlabs.com');
+        $this->selectKeyword(2);
+
+        // Make sure the link was not created
+        $this->assertHTMLMatch('<p>Link test %1%</p><p>test</p><p>test again</p><p>test yet again</p><p>another paragraph</p><p>The last paragraph in this content on the page %2%</p>');
+
+        $this->clickTopToolbarButton('link');
+        $this->assertTrue($this->topToolbarButtonExists('link', 'selected'), 'Toolbar button icon is not correct');
+        $this->assertTrue($this->topToolbarButtonExists('Apply Changes', 'disabled', TRUE), 'Update changes button should be disabled');
+
+        $this->type('http://www.squizlabs.com');
+        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
+        $this->assertHTMLMatch('<p>Link test %1%</p><p>test</p><p>test again</p><p>test yet again</p><p>another paragraph</p><p>The last paragraph in this content on the page <a href="http://www.squizlabs.com">%2%</a></p>');
+
+    }//end testUpdateChangesButtonInTopToolbarIsDisabledAfterCancellingChanges()
+
+
+    /**
+     * Test that the Apply Changes button is inactive after you cancel changes to a link.
+     *
+     * @return void
+     */
+    public function testUpdateChangesButtonInTopToolbarIsDisabledAfterCancellingChangesToALink()
+    {
+        $this->useTest(6);
+
+        // Insert a link
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('link');
+        $this->type('http://www.squizlabs');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>Link test <a href="http://www.squizlabs">%1%</a></p><p>test</p><p>test again</p><p>test yet again</p><p>another paragraph</p><p>The last paragraph in this content on the page %2%</p>');
+
+        $this->selectKeyword(2);
+
+        // Select link and make changes without saving
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('link', 'active');
+        $this->type('.com');
+        $this->selectKeyword(2);
+
+        // Check to make sure the HTML did not change.
+        $this->assertHTMLMatch('<p>Link test <a href="http://www.squizlabs">%1%</a></p><p>test</p><p>test again</p><p>test yet again</p><p>another paragraph</p><p>The last paragraph in this content on the page %2%</p>');
+
+        // Select the link again and make sure the Apply Changes button is inactive
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('link', 'active');
+        $this->assertTrue($this->topToolbarButtonExists('Apply Changes', 'disabled', TRUE), 'Update changes button should be disabled');
+
+        // Edit the link and make sure the Apply Changes button still works.
+        $this->type('.com');
+        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
+        $this->assertHTMLMatch('<p>Link test <a href="http://www.squizlabs.com">%1%</a></p><p>test</p><p>test again</p><p>test yet again</p><p>another paragraph</p><p>The last paragraph in this content on the page %2%</p>');
+
+    }//end testUpdateChangesButtonInTopToolbarIsDisabledAfterCancellingChangesToALink()
 
 }//end class
 

@@ -1,0 +1,187 @@
+body {
+    margin: 50px;
+    background-color: #EEE;
+    font-size: 20px;
+    font-family: monospace;
+}
+
+.type-wrapper {
+    display: none;
+}
+
+#content {
+    width: 1000px;
+    height: 650px;
+    margin: 90px 0 0 90px;
+    overflow: auto;
+}
+
+#menu {
+    position: fixed;
+    right: 100px;
+    width: 100px;
+    top: 50px;
+}
+
+#testTitle {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #666;
+    color: #EEE;
+    font-size: 18px;
+    text-align: center;
+    font-weight: bold;
+    padding: 5px 0;
+}
+
+#testTitle em {
+    color: #000;
+}
+
+#windowTarget {
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 999999;
+}
+
+#msg {
+    bottom: 30px;
+    font-size: 12px;
+    left: 10px;
+    position: fixed;
+}
+
+* {
+    font-style: normal;
+    font-weight: normal;
+    text-decoration: none;
+}
+
+#content table {
+    font-size: 20px;
+    border: none;
+}
+
+em {
+    color: green;
+}
+
+strong {
+    color: red;
+}
+
+strong em,
+em strong {
+    color: brown;
+}
+
+sub, sup {
+    vertical-align: middle;
+    font-size: 20px;
+    font-family: monospace;
+}
+
+caption {
+    text-align: center;
+}
+
+.Viper-button .Viper-buttonIcon,
+.Viper-button.Viper-selected .Viper-buttonIcon,
+.Viper-button.Viper-selected.Viper-active .Viper-buttonIcon,
+body.Viper-unitTest .ViperAccessibilityPlugin #HTMLCS-wrapper .Viper-buttonIcon {
+    margin-left: -16px;
+    margin-top: -6px;
+}
+
+.Viper-button.Viper-disabled .Viper-buttonIcon {
+    margin-left: -8px;
+    margin-top: -15px;
+}
+
+.Viper-button.Viper-active .Viper-buttonIcon {
+    margin-top: -14px;
+    margin-left: -17px;
+}
+
+.Viper-buttonIcon.Viper-justifyBlock {
+    width: 10px;
+}
+
+
+#__allBtns {
+    top: 20px;
+    left: 20px;
+    position: fixed;
+}
+
+#__textFields {
+    position: fixed;
+    top: 400px;
+}
+
+#content.__calibrate-image {
+    height: 100px;
+}
+
+h1,h2,h3,h4,h5,h6 {
+    font-size: 20px;
+}
+
+#content td, #content th {
+    min-width: 30px;
+    padding: 4px 2px;
+    border: none;
+}
+
+#content.googlechrome td {
+    padding: 5px 4px;
+}
+
+#content.googlechrome th {
+    padding: 0 10px;
+}
+
+#content.googlechrome th p {
+    margin: 0;
+}
+
+#content table {
+    white-space: nowrap;
+}
+
+#content.firefox td {
+    padding: 15px;
+    line-height: 26px;
+}
+
+#content.firefox th {
+    padding: 0;
+    line-height: 26px;
+}
+
+.Viper-button {
+    font-family: monospace;
+}
+
+.Viper-button.Viper-active {
+    text-align: left;
+}
+
+#content div[id^="test"] {
+    display: none;
+}
+
+/* Paste Div target */
+.ViperCopyPastePlugin-pasteWrapper {
+    background: url("./Core/Images/window-target2.png") no-repeat;
+}
+
+/* Disable inline toolbar animation */
+.ViperITP {
+    transition-duration: 0s !important;
+    -ms-transition-duration: 0s !important;
+    -webkit-transition-duration: 0s !important;
+}

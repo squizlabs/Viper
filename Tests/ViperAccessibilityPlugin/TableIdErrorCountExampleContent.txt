@@ -1,0 +1,427 @@
+<h2>
+  Resolution Interfaces
+</h2>
+<p>
+Squiz Viper is a true inline WYSIWYG editor that can also be used in-context to provide a truly integrated editing experience. Inline editing tools are provided to help content authors reach common editing tools based on their current selection. An integrated WCAG2 accessibility auditor based on HTML_CodeSniffer provides inline accessibility checking with resolution interfaces for common mistakes.
+</p>
+<p>
+  The following resolution interfaces are provided by Squiz Viper:
+</p>
+<h3>
+  Image is only content of a hyperlink and is missing ALT text
+</h3>
+<p><strong>Ref:</strong>[Standard].Principle1.Guideline1_1.1_1_1.H30.2<br/><strong>Error:</strong> Img element is the only content of the link, but is missing alt text. The alt text should describe the purpose of the link.<br /><strong>Solution:</strong> Make sure the image's alt text describes the purpose of the link it's being used for.<br /><strong>Example:</strong>
+</p>
+<div><pre>&lt;a href="http://placebox.es/120/120/"&gt;&lt;img src="http://placebox.es/120/120/" /&gt;&lt;/a&gt;
+</pre>
+</div>
+<p><a href="http://placebox.es/120/120/"><img src="http://placebox.es/120/120/" /></a></p>
+<hr/>
+<h3>
+  ALT attribute missing from IMG tag
+</h3>
+<p><strong>Ref:</strong>[Standard].Principle1.Guideline1_1.1_1_1.H37<br/><strong>Error:</strong> Img element missing an alt attribute. Use the alt attribute to specify a short text alternative.<br /><strong>Solution:</strong> Enter a short text description of the image, or define the image as purely decorative.<br /><strong>Example:</strong>
+</p>
+<div><pre>&lt;img src="http://placebox.es/170/120/d97f19/f1f1f1/" /&gt;
+</pre>
+</div>
+<p><img src="http://placebox.es/170/120/d97f19/f1f1f1/" /></p>
+<hr/>
+<h3>
+  IMG element with empty alt text must have absent or empty title attribute
+</h3>
+<p><strong>Ref:</strong>[Standard].Principle1.Guideline1_1.1_1_1.H67.1<br/><strong>Error:</strong> Img element with empty alt text must have absent or empty title attribute.<br /><strong>Solution:</strong> Ensure this image is purely decorative. If not, enter appropriate alt and title text.<br /><strong>Example:</strong>
+</p>
+<div><pre>&lt;img src="http://placebox.es/150/150/666666/f1f1f1/" alt="" title="Link title text" /&gt;
+</pre>
+</div>
+<p><img src="http://placebox.es/150/150/666666/f1f1f1/" alt="" title="Link title text" /></p>
+<hr/>
+<h3>
+  IMG element has empty ALT text - make sure it is purely decorative
+</h3>
+<p><strong>Ref:</strong>[Standard].Principle1.Guideline1_1.1_1_1.H67.2<br/><strong>Warning:</strong> Img element is marked so that it is ignored by Assistive Technology.<br /><strong>Solution:</strong> Ensure this image is purely decorative. If not, enter appropriate alt and title text.<br /><strong>Example:</strong>
+</p>
+<div><pre>&lt;img src="http://placebox.es/140/140/000033/f1f1f1/" alt="" /&gt;
+</pre>
+</div>
+<p><img src="http://placebox.es/140/140/000033/f1f1f1/" alt="" /></p>
+<hr/>
+<h3>
+  IMG has ALT text - make sure it describes the image correctly
+</h3>
+<p><strong>Ref:</strong>[Standard].Principle1.Guideline1_1.1_1_1.G94.Image<br/><strong>Notice:</strong> Ensure that the img element's alt text serves the same purpose and presents the same information as the image.<br /><strong>Solution:</strong> Ensure the image's alt text describes the purpose or content of the image.<br /><strong>Example:</strong>
+</p>
+<div><pre>&lt;img src="http://placebox.es/135/160/000000/f1f1f1/" alt="Example placeholder image" /&gt;
+</pre>
+</div>
+<p><img src="http://placebox.es/135/160/000000/f1f1f1/" alt="Example placeholder image" /></p>
+<hr/>
+<h3>
+  IMG inside text link cannot duplicate alt text with link text
+</h3>
+<p><strong>Ref:</strong>[Standard].Principle1.Guideline1_1.1_1_1.H2.EG3<br/><strong>Error:</strong> Img element inside a link must not use alt text that duplicates the content of a text link beside it.<br /><strong>Solution:</strong> Update the image's alt text to something other than the nearby link "[Link text]".<br /><strong>Example:</strong>
+</p>
+<div><pre>&lt;a href=""&gt;&lt;img src="" alt="My link text"&gt; My link text&lt;/a&gt;
+</pre>
+</div>
+<p><a href="http://placebox.es/120/120/"><img src="http://placebox.es/120/120/" alt="My link text" /> My link text</a></p>
+<hr/>
+<h3>
+  Table cannot have duplicate SUMMARY and CAPTION text values
+</h3>
+<p><strong>Ref:</strong>[Standard].Principle1.Guideline1_3.1_3_1.H39,H73.4<br/><strong>Error:</strong> If both a summary attribute and a caption element are present for this data table, the summary should not duplicate the caption<br /><strong>Solution:</strong> Update either the table's caption or summary so they are not identical.<br /><strong>Example:</strong>
+</p>
+<div><pre>&lt;table summary="Information about the table"&gt;
+  &lt;caption&gt;Information about the table&lt;/caption&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;&lt;th&gt;Heading&lt;/th&gt;&lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;&lt;td&gt;Content&lt;/td&gt;&lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+</pre>
+</div>
+<table summary="Information about the table" style="width:100%">
+  <caption>Information about the table</caption>
+  <thead>
+    <tr><th>Heading</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Content</td></tr>
+  </tbody>
+</table>
+<hr/>
+<h3>
+  Incorrect HEADERS attribute on a TD element
+</h3>
+<p><strong>Ref:</strong> [Standard].Principle1.Guideline1_3.1_3_1.H43.IncorrectAttr<br /><strong>Error:</strong> Incorrect headers attribute on this td element. Expected [expected headers] but found [actual headers]<br /><strong>Solution:</strong> Fix the header attribute of this cell.<br /><strong>Example:</strong>
+</p>
+<div><pre>&lt;table summary="Information about the table"&gt;
+  &lt;caption&gt;Caption for the table&lt;/caption&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;&lt;th id="heading"&gt;Heading&lt;/th&gt;&lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;&lt;td headers="content"&gt;Content&lt;/td&gt;&lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+</pre>
+</div>
+<table summary="Information about the table" style="width: 100%">
+  <caption>Caption for the table</caption>
+  <thead>
+    <tr><th id="heading">Heading</th></tr>
+  </thead>
+  <tbody>
+    <tr><td headers="content">Content</td></tr>
+  </tbody>
+</table>
+<hr/>
+<h3>
+  Content appears to have the visual appearance of a bulleted list
+</h3>
+<p><strong>Ref:</strong> [Standard].Principle1.Guideline1_3.1_3_1.H48.1<br /><strong>Warning:</strong> Content appears to have the visual appearance of a bulleted list. It may be appropriate to mark this content up using a ul element.<br /><strong>Solution:</strong> This section of content resembles a content list. If this is intentional, it should be converted to the proper
+  list format.<br /><strong>Example:</strong>
+</p>
+<div><pre>&lt;p&gt;* First item&lt;br /&gt;* Second item&lt;/p&gt;
+</pre>
+</div>
+<p>* First item<br />* Second item<br />* Third item</p>
+<hr/>
+<h3>
+  Content appears to have the visual appearance of a numbered list
+</h3>
+<p><strong>Ref:</strong> [Standard].Principle1.Guideline1_3.1_3_1.H48.2<br /><strong>Warning:</strong> Content appears to have the visual appearance of a numbered list. It may be appropriate to mark this content up using an ol element.<br /><strong>Solution:</strong> This section of content resembles a numbered list. If this is intentional it should be converted to the proper
+  list format.<br /><strong>Example:</strong>
+</p>
+<div><pre>&lt;p&gt;1. First item&lt;br /&gt;2. Second item&lt;/p&gt;
+</pre>
+</div>
+<p>1. First item<br />2. Second item<br />3. Third item</p>
+<hr/>
+<h3>
+  Convert B to STRONG
+</h3>
+<p><strong>Ref:</strong> [Standard].Principle1.Guideline1_3.1_3_1.H49.b<br /><strong>Error:</strong> Semantic markup should be used to mark emphasised or special text so that it can be programmatically determined.<br /><strong>Solution:</strong> Convert the B tag to the more appropriate STRONG tag.<br /><strong>Example:</strong>
+</p>
+<div><pre>&lt;b&gt;My text&lt;/b&gt;
+</pre>
+</div>
+<p><b>My bold text</b></p>
+<hr/>
+<h3>
+  Convert I to EM
+</h3>
+<p><strong>Ref:</strong> [Standard].Principle1.Guideline1_3.1_3_1.H49.i<br /><strong>Error:</strong> Semantic markup should be used to mark emphasised or special text so that it can be programmatically determined.<br /><strong>Solution:</strong> Convert the I tag to the more appropriate EM tag.<br /><strong>Example:</strong>
+</p>
+<div><pre>&lt;i&gt;My text&lt;/i&gt;
+</pre>
+</div>
+<p><i>My italicized text</i></p>
+<hr/>
+<h3>
+  Use of U tag to underline text can be confused with hyperlinks
+</h3>
+<p><strong>Ref:</strong> [Standard].Principle1.Guideline1_3.1_3_1.H49.u<br /><strong>Error:</strong> Semantic markup should be used to mark emphasised or special text so that it can be programmatically determined.<br /><strong>Solution:</strong> The U tag should be removed to reduce confusion with links.<br /><strong>Example:</strong>
+</p>
+<div><pre>&lt;u&gt;My text&lt;/u&gt;
+</pre>
+</div>
+<p><u>My underlined text</u></p>
+<hr/>
+<h3>
+  The S tag needs to be replaced with a DEL tag
+</h3>
+<p><strong>Ref:</strong> [Standard].Principle1.Guideline1_3.1_3_1.H49.s<br /><strong>Error:</strong> Semantic markup should be used to mark emphasised or special text so that it can be programmatically determined.<br /><strong>Solution:</strong> The S tag needs to be replaced with a DEL tag.<br /><strong>Example:</strong>
+</p>
+<div><pre>&lt;s&gt;My text&lt;/s&gt;
+</pre>
+</div>
+<p><s>My text with strike through using s tag</s></p>
+<hr/>
+<h3>
+  The STRIKE tag needs to be replaced with a DEL tag
+</h3>
+<p><strong>Ref:</strong> [Standard].Principle1.Guideline1_3.1_3_1.H49.strike<br /><strong>Error:</strong> Semantic markup should be used to mark emphasised or special text so that it can be programmatically determined.<br /><strong>Solution:</strong> The Strike tag needs to be replaced with a DEL tag.<br /><strong>Example:</strong>
+</p>
+<div><pre>&lt;strike&gt;My text&lt;/strike&gt;
+</pre>
+</div>
+<p><strike>My text with strike through using strike tag</strike></p>
+<hr/>
+<h3>
+  The TT tag needs to be replaced with a CODE tag
+</h3>
+<p><strong>Ref:</strong> [Standard].Principle1.Guideline1_3.1_3_1.H49.tt<br /><strong>Error:</strong> Semantic markup should be used to mark emphasised or special text so that it can be programmatically determined.<br /><strong>Solution:</strong> The TT tag needs to be replaced with a CODE tag.<br /><strong>Example:</strong>
+</p>
+<div><pre>&lt;tt&gt;My text&lt;/tt&gt;
+</pre>
+</div>
+<p><tt>My text using teletype tag</tt></p>
+<hr/>
+<h3>
+  The BIG tag needs to be removed
+</h3>
+<p><strong>Ref:</strong> [Standard].Principle1.Guideline1_3.1_3_1.H49.big<br /><strong>Error:</strong> Semantic markup should be used to mark emphasised or special text so that it can be programmatically determined.<br /><strong>Solution:</strong> The BIG tag needs to be removed.<br /><strong>Example:</strong>
+</p>
+<div><pre>&lt;big&gt;My text&lt;/big&gt;
+</pre>
+</div>
+<p><big>My text using big tag</big></p>
+<hr/>
+<h3>
+  The SMALL tag needs to be removed
+</h3>
+<p><strong>Ref:</strong> [Standard].Principle1.Guideline1_3.1_3_1.H49.small<br /><strong>Error:</strong> Semantic markup should be used to mark emphasised or special text so that it can be programmatically determined.<br /><strong>Solution:</strong> The SMALL tag needs to be removed.<br /><strong>Example:</strong>
+</p>
+<div><pre>&lt;small&gt;My text&lt;/small&gt;
+</pre>
+</div>
+<p><small>My text using small tag</small></p>
+<hr/>
+<h3>
+  The CENTER tag needs to be converted to a CSS based alignment method
+</h3>
+<p><strong>Ref:</strong> [Standard].Principle1.Guideline1_3.1_3_1.H49.center<br /><strong>Error:</strong> Semantic markup should be used to mark emphasised or special text so that it can be programmatically determined.<br /><strong>Solution:</strong> The CENTER tag needs to be converted to a CSS based alignment method.<br /><strong>Example:</strong>
+</p>
+<div><pre>&lt;center&gt;My text&lt;/center&gt;
+</pre>
+</div>
+<p><center>My text using center tag</center></p>
+<hr/>
+<h3>
+  The FONT tag needs to be removed
+</h3>
+<p><strong>Ref:</strong> [Standard].Principle1.Guideline1_3.1_3_1.H49.font <br/><strong>Error:</strong> Semantic markup should be used to mark emphasised or special text so that it can be programmatically determined.<br /><strong>Solution:</strong> The FONT tag needs to be removed. Consider using a CSS class on the containing element to achieve variations in fonts/colours/sizes
+  etc.<br /><strong>Example:</strong>
+</p>
+<div><pre>&lt;font size="2"&gt;My text&lt;/font&gt;
+</pre>
+</div>
+<p><font size="2">My text using font tag</font></p>
+<hr/>
+<h3>
+  The ALIGN attribute needs to be converted to a CSS based alignment method
+</h3>
+<p><strong>Ref:</strong> [Standard].Principle1.Guideline1_3.1_3_1.H49.AlignAttr<br /><strong>Error:</strong> Semantic markup should be used to mark emphasised or special text so that it can be programmatically determined.<br /><strong>Solution:</strong> The ALIGN attribute needs to be converted to a CSS based alignment method.<br /><strong>Example:</strong>
+</p>
+<div><pre>&lt;p align="right"&gt;My text&lt;/p&gt;
+</pre>
+</div>
+<p align="right">My text aligned right using align attribute</p>
+<hr/>
+<h3>
+  Bold text may be used to simulate heading
+</h3>
+<p><strong>Ref:</strong> [Standard].Principle1.Guideline1_3.1_3_1.H42<br /><strong>Warning:</strong> Heading markup should be used if this content is intended as a heading.<br /><strong>Solution:</strong> If a paragraph's content consists solely of bold or italic text to simulate a heading it should be converted to the appropriate heading level.<br /><strong>Example:</strong>
+</p>
+<div><pre>&lt;p&gt;&lt;strong&gt;My heading text&lt;/strong&gt;&lt;/p&gt;
+</pre>
+</div>
+<p><strong>My heading text using strong instead of H tag</strong></p>
+<hr/>
+<h3>
+  Consider using SUMMARY in a TABLE to provide overview of its data
+</h3>
+<p><strong>Ref:</strong> [Standard].Principle1.Guideline1_3.1_3_1.H73.3.NoSummary<br /><strong>Warning:</strong> Consider using the summary attribute of the table element to give an overview of this data table.<br /><strong>Solution:</strong> Enter a summary for the table.<br /><strong>Example:</strong>
+</p>
+<div><pre>&lt;table&gt;
+  &lt;caption&gt;Table caption&lt;/caption&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;&lt;th&gt;Heading&lt;/th&gt;&lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;&lt;td&gt;Content&lt;/td&gt;&lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+</pre>
+</div>
+<table style="width: 100%">
+  <caption>Table caption</caption>
+  <thead>
+    <tr><th>Heading</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Content</td></tr>
+  </tbody>
+</table>
+<hr/>
+<h3>
+  Check that the SUMMARY of a TABLE is decribes its data or usage
+</h3>
+<p><strong>Ref:</strong> [Standard].Principle1.Guideline1_3.1_3_1.H73.3.Check<br /><strong>Notice:</strong> Check that the summary attribute describes the table's organization or explains how to use the table.<br /><strong>Solution:</strong> Enter a summary for the table.<br /><strong>Example:</strong>
+</p>
+<div><pre>&lt;table summary="Table summary"&gt;
+  &lt;caption&gt;Table caption&lt;/caption&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;&lt;th&gt;Heading&lt;/th&gt;&lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;&lt;td&gt;Content&lt;/td&gt;&lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+</pre>
+</div>
+<table summary="Table summary" style="width:100%">
+  <caption>Table caption</caption>
+  <thead>
+    <tr><th>Heading</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Content</td></tr>
+  </tbody>
+</table>
+<hr/>
+<h3>
+  Consider using a CAPTION for a TABLE to identify the table data
+</h3>
+<p><strong>Ref:</strong> [Standard].Principle1.Guideline1_3.1_3_1.H39.3.NoCaption <br/><strong>Warning:</strong> Consider using a caption element to the table element to identify this data table.<br /><strong>Solution:</strong> Enter a caption for the table.<br /><strong>Example:</strong>
+</p>
+<div><pre>&lt;table summary="Table summary"&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;&lt;th&gt;Heading&lt;/th&gt;&lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;&lt;td&gt;Content&lt;/td&gt;&lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+</pre>
+</div>
+<table summary="Table summary" style="width: 100%">
+  <thead>
+    <tr><th>Heading</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Content</td></tr>
+  </tbody>
+</table>
+<hr/>
+<h3>
+  Check that the CAPTION element accurately describes this TABLE
+</h3>
+<p><strong>Ref:</strong> [Standard].Principle1.Guideline1_3.1_3_1.H39.3.Check<br /><strong>Notice:</strong> Check that the caption element accurately describes this table.<br /><strong>Solution:</strong> Enter a caption for the table.<br /><strong>Example:</strong>
+</p>
+<div><pre>&lt;table summary="Table summary"&gt;
+  &lt;caption&gt;Table caption&lt;/caption&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;&lt;th&gt;Heading&lt;/th&gt;&lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;&lt;td&gt;Content&lt;/td&gt;&lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+</pre>
+</div>
+<table summary="Table summary" style="width:100%">
+  <caption>Table caption</caption>
+  <thead>
+    <tr><th>Heading</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Content</td></tr>
+  </tbody>
+</table>
+<hr/>
+<h3>
+  Iframe element requires a non-empty title attribute that identifies the frame
+</h3>
+<p><strong>Ref:</strong> [Standard].Principle2.Guideline2_4.2_4_1.H64.1<br /><strong>Error:</strong> Iframe element requires a non-empty title attribute that identifies the frame.<br /><strong>Solution:</strong> Enter an appropriate title for the iframe to describe it's purpose.<br /><strong>Example:</strong>
+</p>
+<div><pre>&lt;iframe src=""&gt;&lt;/iframe&gt;
+</pre>
+</div>
+<iframe src=""></iframe> 
+<hr/>
+<h3>
+  Check that the title attribute of this element contains text that identifies the frame
+</h3>
+<p><strong>Ref:</strong> [Standard].Principle2.Guideline2_4.2_4_1.H64.2<br /><strong>Notice:</strong> Check that the title attribute of this element contains text that identifies the frame.<br /><strong>Solution:</strong> Enter an appropriate title for the iframe to describe it's purpose.<br /><strong>Example:</strong>
+</p>
+<div><pre>&lt;iframe src="" title="Frame title text"&gt;&lt;/iframe&gt;
+</pre>
+</div>
+<iframe src="" title="Frame title text"></iframe>
+<hr/>
+<h3>
+  Duplicate ID values found in multiple HTML elements
+</h3>
+<p><strong>Ref:</strong> [Standard].Principle4.Guideline4_1.4_1_1.F77<br /><strong>Error:</strong> Duplicate id attribute value "[Element ID]" found on the web page.<br /><strong>Solution:</strong> Update the ID to be unique.<br /><strong>Example:</strong>
+</p>
+<div><pre>&lt;p id="myid"&gt;Para 1&lt;/p&gt;&lt;p id="myid"&gt;Para 2&lt;/p&gt;
+</pre>
+</div>
+<p id="myid">Para 1</p><p id="myid">Para 2</p>
+<hr/>
+<h2>
+  Resolution Interfaces TODO
+</h2>
+<p>
+  The following resolution interfaces are still be completed:
+</p>
+<h3>
+  [Standard].Principle1.Guideline1_3.1_3_1.H43.HeadersRequired
+</h3>
+<p><strong>Error:</strong> Associate data cells with multi-level table headings using the headers attribute.
+</p>
+<h3>
+  [Standard].Principle1.Guideline1_3.1_3_1.H43,H63
+</h3>
+<p><strong>Error:</strong> Associate data cells with table headings using either the scope or headers attribute techniques.
+</p>
+<h3>
+  [Standard].Principle1.Guideline1_3.1_3_1.H43.MissingHeadersAttrs
+</h3>
+<p><strong>Error:</strong> Not all td elements contain a headers attribute, which list the ids of all headers associated with that cell.
+</p>
+<h3>
+  [Standard].Principle1.Guideline1_3.1_3_1.H43.MissingHeaderIds
+</h3>
+<p><strong>Error:</strong> Not all th elements in this table contain an id attribute, so that they may be referenced by td elements' headers attributes.
+</p>
+<h3>
+  [Standard].Principle3.Guideline3_1.3_1_2.H58.1.Lang
+</h3>
+<p><strong>Error:</strong> The language specified in the lang attribute of this element does not appear to be well-formed.
+</p>

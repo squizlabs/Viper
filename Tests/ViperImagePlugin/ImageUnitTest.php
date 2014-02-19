@@ -54,7 +54,7 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperImagePlugi
         $this->type($this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png'));
         $this->clickField('Image is decorative');
         sleep(1);
-        $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
 
         $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%1% %2%<img src="'.$this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png').'" alt="" /></p><p>sit amet<img src="'.$this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png').'" alt="" /></p>');
 
@@ -85,7 +85,7 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperImagePlugi
         $this->sikuli->keyDown('Key.TAB');
         $this->type('Another Alt tag');
         sleep(1);
-        $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
 
         $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%1% %2%<img src="'.$this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png').'" alt="Alt tag" /></p><p>sit amet<img src="'.$this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png').'" alt="Another Alt tag" /></p>');
 
@@ -175,7 +175,7 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperImagePlugi
         $this->sikuli->keyDown('Key.TAB');
         $this->type('Another Title tag');
         sleep(1);
-        $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
 
         $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%1% %2%<img src="'.$this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png').'" alt="Alt tag" title="Title tag" /></p><p>sit amet<img src="'.$this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png').'" alt="Another Alt tag" title="Another Title tag" /></p>');
 
@@ -227,7 +227,7 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperImagePlugi
         $this->sikuli->keyDown('Key.TAB');
         $this->type('Alt tag');
         sleep(1);
-        $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
 
         $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%1% %2%<img src="'.$this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png').'" alt="Alt tag" /></p><p>sit amet <strong>%3%<img src="'.$this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png').'" alt="Alt tag" /></strong></p>');
 
@@ -260,7 +260,7 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperImagePlugi
         $this->sikuli->keyDown('Key.TAB');
         $this->type('Alt tag');
         sleep(1);
-        $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
 
         $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%1%<img src="'.$this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png').'" alt="Alt tag" /> %2%</p><p>sit amet <img src="'.$this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png').'" alt="Alt tag" /><strong>%3%</strong></p>');
 
@@ -313,7 +313,7 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperImagePlugi
         $this->sikuli->keyDown('Key.TAB');
         $this->type('Alt tag');
         sleep(1);
-        $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
 
         $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p><img src="'.$this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png').'" alt="Alt tag" /></p><p>sit amet<img src="'.$this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png').'" alt="Alt tag" /></p>');
 
@@ -880,7 +880,7 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperImagePlugi
         $this->clickField('Image is decorative');
         $this->sikuli->keyDown('Key.TAB');
         $this->type('Alt text');
-        $this->clickInlineToolbarButton('Update Changes', NULL, TRUE);
+        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
 
         $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>LOREM XuT</p><p><img src="'.$this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png').'" alt="Alt text" width="369" height="167" /></p><p>LABS is ORSM</p>');
 
@@ -973,6 +973,131 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperImagePlugi
         $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%1% %2%<img src="'.$this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png').'" alt="Alt tag" title="Title tag" /></p><p>sit amet <strong>%3%</strong></p>');
 
     }//end testUndoAndRedoForInsertingAnImage()
+
+
+    /**
+     * Test that the Apply Changes button is inactive after you cancel changes.
+     *
+     * @return void
+     */
+    public function testUpdateChangesButtonIsDisabledAfterCancellingChanges()
+    {
+        $this->moveToKeyword(1, 'right');
+        $this->clickTopToolbarButton('image');
+        $this->type($this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png'));
+        sleep(2);
+        $this->sikuli->keyDown('Key.TAB');
+        $this->type('Alt tag');
+        $this->moveToKeyword(3, 'right');
+
+        // Make sure the image wasn't inserted into the content
+        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%1% %2%</p><p>sit amet <strong>%3%</strong></p>');
+
+        $this->clickTopToolbarButton('image');
+        $this->assertTrue($this->topToolbarButtonExists('Apply Changes', 'disabled', TRUE), 'Update changes button should be disabled');
+        $this->type($this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png'));
+        $this->sikuli->keyDown('Key.TAB');
+        $this->type('Alt tag');
+        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
+        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%1% %2%</p><p>sit amet <strong>%3%<img src="'.$this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png').'" alt="Alt tag" /></strong></p>');
+
+    }//end testUpdateChangesButtonIsDisabledAfterCancellingChanges()
+
+
+    /**
+     * Test that the Apply Changes button is inactive after you cancel changes to an image.
+     *
+     * @return void
+     */
+    public function testUpdateChangesButtonIsDisabledAfterCancellingChangesToAnImage()
+    {
+        // Insert the image
+        $this->selectKeyword(1);
+        $this->type('Key.RIGHT');
+        $this->clickTopToolbarButton('image');
+        $this->type($this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png'));
+        $this->clickField('Image is decorative');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->clickTopToolbarButton('image', 'selected');
+        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%1%<img src="'.$this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png').'" alt="" /> %2%</p><p>sit amet <strong>%3%</strong></p>');
+
+        $this->moveToKeyword(3, 'left');
+        $this->clickElement('img', 0);
+        $this->clickTopToolbarButton('image', 'active');
+        $this->clickField('Image is decorative');
+        $this->sikuli->keyDown('Key.TAB');
+        $this->type('Alt tag');
+        $this->moveToKeyword(3, 'left');
+
+        // Make sure the image wasn't changed
+        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%1%<img src="'.$this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png').'" alt="" /> %2%</p><p>sit amet <strong>%3%</strong></p>');
+
+        $this->clickElement('img', 0);
+        $this->clickTopToolbarButton('image', 'active');
+        $this->assertTrue($this->topToolbarButtonExists('Apply Changes', 'disabled', TRUE), 'Update changes button should be disabled');
+        $this->clickField('Image is decorative');
+        $this->sikuli->keyDown('Key.TAB');
+        $this->type('Alt tag');
+        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
+        $this->assertTrue($this->topToolbarButtonExists('Apply Changes', 'disabled', TRUE), 'Update changes button should be disabled');
+
+    }//end testUpdateChangesButtonIsDisabledAfterCancellingChangesToAnImage()
+
+
+    /**
+     * Test that the Alt field in the pop up is updated when you edit it in the source code.
+     *
+     * @return void
+     */
+    public function testAltFieldIsUpdatedWhenYouUpdateSourceCode()
+    {
+        // Insert the image
+        $this->moveToKeyword(1, 'left');
+        $this->sikuli->keyDown('Key.CMD + a');
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->clickTopToolbarButton('image');
+        $this->type($this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png'));
+        $this->clickField('Image is decorative');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->clickTopToolbarButton('image', 'selected');
+        $this->assertHTMLMatch('<img src="'.$this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png').'" alt="" /><p></p>');
+
+        // Edit the source code
+        $this->clickElement('img', 0);
+        $this->clickTopToolbarButton('sourceView');
+        sleep(2);
+        $this->sikuli->keyDown('Key.CMD + a');
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->type('<img src="'.$this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png').'" alt="New alt tag" />');
+        $this->clickButton('Apply Changes', NULL, TRUE);
+        $this->assertHTMLMatch('<p><img src="'.$this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png').'" alt="New alt tag" /></p>');
+
+        // Check value of alt field
+        $this->clickElement('img', 0);
+        $this->clickTopToolbarButton('image', 'active');
+        $this->sikuli->keyDown('Key.TAB');
+        $altField = $this->sikuli->execJS('document.activeElement.value');
+        $this->assertEquals("New alt tag", $altField, 'Alt field should be updated with new value');
+
+        // Edit the source code
+        $this->clickElement('img', 0);
+        $this->clickTopToolbarButton('sourceView');
+        sleep(2);
+        $this->sikuli->keyDown('Key.CMD + a');
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->type('<img src="'.$this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png').'" alt="" />');
+        $this->clickButton('Apply Changes', NULL, TRUE);
+        $this->assertHTMLMatch('<p><img src="'.$this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png').'" alt="" /></p>');
+
+        // Check value of alt field
+        $this->clickElement('img', 0);
+        $this->clickTopToolbarButton('image', 'active');
+        $this->clickField('Image is decorative');
+        $this->sikuli->keyDown('Key.TAB');
+        $altField = $this->sikuli->execJS('document.activeElement.value');
+        $this->assertEquals("", $altField, 'Alt field should be updated with new value');
+
+    }//end testAltFieldIsUpdatedWhenYouUpdateSourceCode()
 
 
 }//end class

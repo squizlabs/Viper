@@ -124,6 +124,48 @@ class Viper_Tests_ViperAccessibilityPlugin_AccessibilityPluginUnitTest extends A
     }//end testCaretPositionInAccessibilityAuditor()
 
 
+    /**
+     * Test that when you copy the example content into Viper, that the number of expected errors is 8.
+     *
+     * @return void
+     */
+    public function testTableIdErrorCountInHTMLCS()
+    {
+        $this->useTest(1);
+        $this->sikuli->click($this->findKeyword(1));
+
+        // Open and copy the text file
+        $this->openFile($this->getTestURL().'/ViperAccessibilityPlugin/TableIdErrorCountExampleContent.txt', $this->sikuli->getBrowserName());
+        sleep(1);
+
+        // Copy text.
+        $this->sikuli->keyDown('Key.CMD + a');
+        $this->sikuli->keyDown('Key.CMD + c');
+        $this->sikuli->keyDown('Key.CMD + w');
+        sleep(2);
+
+        // Open source view and paste the content in.
+        $this->clickTopToolbarButton('sourceView');
+        sleep(2);
+        $this->sikuli->keyDown('Key.CMD + a');
+        $this->sikuli->keyDown('Key.DELETE');
+
+        $this->sikuli->keyDown('Key.CMD + v');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->clickButton('Apply Changes', NULL, TRUE);
+
+        // Check error count
+        $this->clickTopToolbarButton('accessAudit');
+        sleep(5);
+        $errorCount = (int) $this->getHtml('.HTMLCS-error strong');
+
+        // The true error count should be 8 but it is 9 in unit tests due to the styling of the unit test page
+        $this->assertEquals(9, $errorCount, 'The page should have 8 errors');
+
+    }//end testTableIdErrorCountInHTMLCS()
+
+
+
 }//end class
 
 ?>

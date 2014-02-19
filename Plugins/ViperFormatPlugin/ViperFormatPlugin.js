@@ -78,15 +78,15 @@ ViperFormatPlugin.prototype = {
                     elem.appendChild(node.firstChild);
                 }
 
-                dfx.insertBefore(node, elem);
+                ViperUtil.insertBefore(node, elem);
             } else {
                 while (node.firstChild) {
-                    dfx.insertBefore(node, node.firstChild);
+                    ViperUtil.insertBefore(node, node.firstChild);
                 }
             }
 
             // Remove node.
-            dfx.remove(node);
+            ViperUtil.remove(node);
         });
 
     },
@@ -104,7 +104,7 @@ ViperFormatPlugin.prototype = {
 
         for (var i = 1; i <= 6; i++) {
             (function(headingCount) {
-                tools.createButton(prefix + 'heading:h' + headingCount, 'H' + headingCount, dfx.sprintf(_('Convert to Heading %s'), headingCount), null, function() {
+                tools.createButton(prefix + 'heading:h' + headingCount, 'H' + headingCount, ViperUtil.sprintf(_('Convert to Heading %s'), headingCount), null, function() {
                     self.handleFormat('h' + headingCount);
                 });
                 tools.addButtonToGroup(prefix + 'heading:h' + headingCount, prefix + 'headingFormats');
@@ -130,7 +130,7 @@ ViperFormatPlugin.prototype = {
 
         for (var tag in formatButtons) {
             (function(tagName) {
-                var button = tools.createButton(prefix + 'formats:' + formatButtons[tagName], formatButtons[tagName], dfx.sprintf(_('Convert to %s'), formatButtons[tagName]), null, function() {
+                var button = tools.createButton(prefix + 'formats:' + formatButtons[tagName], formatButtons[tagName], ViperUtil.sprintf(_('Convert to %s'), formatButtons[tagName]), null, function() {
                     self.handleFormat(tagName);
                 });
                 formatsSubSection.appendChild(button);
@@ -190,9 +190,9 @@ ViperFormatPlugin.prototype = {
         var range        = this.viper.getViperRange();
         var selectedNode = node || range.getNodeSelection();
         if (selectedNode
-            && selectedNode.nodeType === dfx.ELEMENT_NODE
+            && selectedNode.nodeType === ViperUtil.ELEMENT_NODE
             && selectedNode !== this.viper.getViperElement()
-            && dfx.hasAttribute(selectedNode, attributeName) === true
+            && ViperUtil.hasAttribute(selectedNode, attributeName) === true
         ) {
             return selectedNode;
         }
@@ -217,13 +217,13 @@ ViperFormatPlugin.prototype = {
         var c = tagNames.length;
 
         var selectedNode = range.getNodeSelection();
-        if (selectedNode && selectedNode.nodeType === dfx.ELEMENT_NODE) {
+        if (selectedNode && selectedNode.nodeType === ViperUtil.ELEMENT_NODE) {
             if (selectedNode === this.viper.getViperElement()) {
                 return null;
             }
 
             for (var i = 0; i < c; i++) {
-                if (dfx.isTag(selectedNode, tagNames[i]) === true) {
+                if (ViperUtil.isTag(selectedNode, tagNames[i]) === true) {
                     return selectedNode;
                 }
             }
@@ -237,12 +237,12 @@ ViperFormatPlugin.prototype = {
             }
 
             for (var i = 0; i < c; i++) {
-                if (dfx.isTag(common, tagNames[i]) === true) {
+                if (ViperUtil.isTag(common, tagNames[i]) === true) {
                     return common;
                 }
             }
 
-            if (dfx.isBlockElement(common) === true) {
+            if (ViperUtil.isBlockElement(common) === true) {
                 break;
             }
 
@@ -265,12 +265,12 @@ ViperFormatPlugin.prototype = {
             endNode = startNode;
         }
 
-        if (dfx.isChildOf(common, this.viper.getViperElement()) === false) {
+        if (ViperUtil.isChildOf(common, this.viper.getViperElement()) === false) {
             return null;
         }
 
-        var startParents = dfx.getParents(startNode, null, common, true);
-        var endParents   = dfx.getParents(endNode, null, common, true);
+        var startParents = ViperUtil.getParents(startNode, null, common, true);
+        var endParents   = ViperUtil.getParents(endNode, null, common, true);
 
         var startTopParent = common;
         var endTopParent   = common;
@@ -289,7 +289,7 @@ ViperFormatPlugin.prototype = {
         var first = false;
         var last  = null;
         for (var node = common.firstChild; node; node = node.nextSibling) {
-            if (node.nodeType === dfx.TEXT_NODE) {
+            if (node.nodeType === ViperUtil.TEXT_NODE) {
                 continue;
             } else if (node === startTopParent) {
                 first = true;
@@ -389,7 +389,7 @@ ViperFormatPlugin.prototype = {
             for (var i = 1; i <= 6; i++) {
                 var tagName = 'h' + i;
                 for (var j = 0; j < data.lineage.length; j++) {
-                    if (dfx.isTag(data.lineage[j], tagName) === true) {
+                    if (ViperUtil.isTag(data.lineage[j], tagName) === true) {
                         tools.setButtonActive(prefix + 'heading:h' + i);
                         tools.setButtonActive('vitpHeadings');
                     } else {
@@ -417,8 +417,8 @@ ViperFormatPlugin.prototype = {
         var formatButtonStatuses = null;
         var currentElement       = data.lineage[data.current];
 
-        if (dfx.isBlockElement(currentElement) === true && ignoredTags.inArray(dfx.getTagName(currentElement)) === false) {
-            if (currentElement.nodeType === dfx.TEXT_NODE && data.lineage.length === 1) {
+        if (ViperUtil.isBlockElement(currentElement) === true && ViperUtil.inArray(ViperUtil.getTagName(currentElement), ignoredTags) === false) {
+            if (currentElement.nodeType === ViperUtil.TEXT_NODE && data.lineage.length === 1) {
                 formatButtonStatuses = this.getFormatButtonStatuses();
             } else {
                 formatButtonStatuses = this.getFormatButtonStatuses(data.lineage[data.current]);
@@ -444,21 +444,21 @@ ViperFormatPlugin.prototype = {
             if (enableFormatsButton === true) {
                 tools.enableButton('vitpFormats');
 
-                if (currentElement.nodeType === dfx.TEXT_NODE && data.lineage.length > 1) {
+                if (currentElement.nodeType === ViperUtil.TEXT_NODE && data.lineage.length > 1) {
                     currentElement = data.lineage[(data.current - 1)];
-                } else if (dfx.isBlockElement(currentElement) === true) {
+                } else if (ViperUtil.isBlockElement(currentElement) === true) {
                     data.toolbar.showButton('vitpFormats');
                 }
 
                 var isBlockQuote = false;
-                if (dfx.isTag(currentElement, 'p') === true
-                    && dfx.isTag(currentElement.parentNode, 'blockquote') === true
+                if (ViperUtil.isTag(currentElement, 'p') === true
+                    && ViperUtil.isTag(currentElement.parentNode, 'blockquote') === true
                 ) {
                     isBlockQuote = true;
                 }
 
                 for (var tag in formatButtons) {
-                    if (dfx.isTag(currentElement, tag) === true) {
+                    if (ViperUtil.isTag(currentElement, tag) === true) {
                         if (formatButtonStatuses[tag] === true) {
                             tools.enableButton(prefix + 'formats:' + formatButtons[tag]);
 
@@ -480,7 +480,7 @@ ViperFormatPlugin.prototype = {
             } else {
                 tools.disableButton('vitpFormats');
             }
-        } else if ((!currentElement || ignoredTags.inArray(dfx.getTagName(currentElement)) === false) && this.isWholeBlockSelection(data.range)) {
+        } else if ((!currentElement || ViperUtil.inArray(ViperUtil.getTagName(currentElement), ignoredTags) === false) && this.isWholeBlockSelection(data.range)) {
             var pOnly = this._selectionHasPTagsOnly(data.range);
 
             for (var tag in formatButtons) {
@@ -506,8 +506,8 @@ ViperFormatPlugin.prototype = {
             endNode = startNode;
         }
          // Anchor and Class.
-        if (selectedNode.nodeType === dfx.ELEMENT_NODE
-            || dfx.getFirstBlockParent(startNode) === dfx.getFirstBlockParent(endNode)
+        if (selectedNode.nodeType === ViperUtil.ELEMENT_NODE
+            || ViperUtil.getFirstBlockParent(startNode) === ViperUtil.getFirstBlockParent(endNode)
         ) {
             var attrId = this._getAttributeValue('id', selectedNode);
             if (attrId) {
@@ -605,8 +605,8 @@ ViperFormatPlugin.prototype = {
                 endNode = startNode;
             }
 
-            if ((!nodeSelection || nodeSelection.nodeType !== dfx.ELEMENT_NODE || nodeSelection === self.viper.getViperElement())
-                && (data.range.collapsed === true || dfx.getFirstBlockParent(startNode) !== dfx.getFirstBlockParent(endNode))
+            if ((!nodeSelection || nodeSelection.nodeType !== ViperUtil.ELEMENT_NODE || nodeSelection === self.viper.getViperElement())
+                && (data.range.collapsed === true || ViperUtil.getFirstBlockParent(startNode) !== ViperUtil.getFirstBlockParent(endNode))
             ) {
                 tools.disableButton('anchor');
                 tools.disableButton('class');
@@ -628,7 +628,7 @@ ViperFormatPlugin.prototype = {
             var lineage         = self._inlineToolbar.getLineage();
             var currentLinIndex = self._inlineToolbar.getCurrentLineageIndex(true);
             var formatElement   = lineage[currentLinIndex];
-            if (formatElement && formatElement.nodeType !== dfx.TEXT_NODE) {
+            if (formatElement && formatElement.nodeType !== ViperUtil.TEXT_NODE) {
                 nodeSelection = formatElement;
             }
 
@@ -660,21 +660,21 @@ ViperFormatPlugin.prototype = {
             // Heading button will only be enabled if its a whole node selection or
             // no selection and not in a blockquote with multiple paragraphs.
             if (nodeSelection) {
-                if (nodeSelection.nodeType === dfx.TEXT_NODE) {
+                if (nodeSelection.nodeType === ViperUtil.TEXT_NODE) {
                     if (data.range.collapsed === true) {
                         // Disable the heading tag if the selection is in a blockquote
                         // with multiple paragraph tags.
-                        var blockquote = dfx.getParents(nodeSelection, 'blockquote', self.viper.getViperElement());
-                        if (blockquote.length === 0 || dfx.getTag('p', blockquote[0]).length <= 1) {
+                        var blockquote = ViperUtil.getParents(nodeSelection, 'blockquote', self.viper.getViperElement());
+                        if (blockquote.length === 0 || ViperUtil.getTag('p', blockquote[0]).length <= 1) {
                             tools.enableButton('headings');
                         }
                     }
-                } else if ((dfx.isTag(nodeSelection, 'blockquote') !== true
-                    || dfx.getTag('p', nodeSelection).length <= 1)
-                    && ((dfx.isTag(nodeSelection, 'p') !== true)
-                    || dfx.isTag(nodeSelection.parentNode, 'blockquote') === false)
+                } else if ((ViperUtil.isTag(nodeSelection, 'blockquote') !== true
+                    || ViperUtil.getTag('p', nodeSelection).length <= 1)
+                    && ((ViperUtil.isTag(nodeSelection, 'p') !== true)
+                    || ViperUtil.isTag(nodeSelection.parentNode, 'blockquote') === false)
                 ) {
-                    if (dfx.isBlockElement(nodeSelection) === true && ignoredTags.inArray(dfx.getTagName(nodeSelection)) === false) {
+                    if (ViperUtil.isBlockElement(nodeSelection) === true && ViperUtil.inArray(ViperUtil.getTagName(nodeSelection), ignoredTags) === false) {
                         // Check if this node contains any block elements, if it does
                         // then headings cannnot be applied.
                         var blockChildren = self.viper.getBlockChildren(nodeSelection);
@@ -684,17 +684,17 @@ ViperFormatPlugin.prototype = {
                     }
                 }
             } else if (data.range.collapsed === true && formatElement) {
-                var firstBlock = dfx.getFirstBlockParent(formatElement);
-                if (ignoredTags.inArray(dfx.getTagName(firstBlock)) === false) {
+                var firstBlock = ViperUtil.getFirstBlockParent(formatElement);
+                if (ViperUtil.inArray(ViperUtil.getTagName(firstBlock), ignoredTags) === false) {
                     var isBlockQuote = false;
-                    if (dfx.isTag(firstBlock, 'p') === true && dfx.isTag(firstBlock.parentNode, 'blockquote') === true) {
+                    if (ViperUtil.isTag(firstBlock, 'p') === true && ViperUtil.isTag(firstBlock.parentNode, 'blockquote') === true) {
                         firstBlock = firstBlock.parentNode;
                         isBlockQuote = true;
-                    } else if (dfx.isTag(firstBlock, 'blockquote') === true) {
+                    } else if (ViperUtil.isTag(firstBlock, 'blockquote') === true) {
                         isBlockQuote = true;
                     }
 
-                    if (isBlockQuote === false || dfx.getTag('p', firstBlock).length === 1) {
+                    if (isBlockQuote === false || ViperUtil.getTag('p', firstBlock).length === 1) {
                         tools.enableButton('headings');
                     }
                 }
@@ -706,15 +706,15 @@ ViperFormatPlugin.prototype = {
 
             var headingElement = self.getTagFromRange(data.range, headingTags);
             if (headingElement) {
-                var tagName = dfx.getTagName(headingElement);
+                var tagName = ViperUtil.getTagName(headingElement);
                 tools.setButtonActive('headings');
                 tools.setButtonActive(prefix + 'heading:' + tagName);
             }
 
             // Returns the most relevant parent.
             var getValidParent = function(node) {
-                var parent = dfx.getFirstBlockParent(node);
-                if (parent && dfx.isTag(parent, 'p') === true && dfx.isTag(parent.parentNode, 'blockquote') === true) {
+                var parent = ViperUtil.getFirstBlockParent(node);
+                if (parent && ViperUtil.isTag(parent, 'p') === true && ViperUtil.isTag(parent.parentNode, 'blockquote') === true) {
                     parent = parent.parentNode;
                 } else if (parent === self.viper.getViperElement()) {
                     // Ignore the Viper element.
@@ -738,7 +738,7 @@ ViperFormatPlugin.prototype = {
                     tools.enableButton('formats');
 
                     // Set the main toolbar button icon.
-                    var parentTagName = dfx.getTagName(parent, data.range);
+                    var parentTagName = ViperUtil.getTagName(parent, data.range);
                     if (formatButtons[parentTagName]) {
                         tools.getItem('formats').setIconClass('Viper-formats-' + parentTagName);
                     }
@@ -758,15 +758,15 @@ ViperFormatPlugin.prototype = {
                             tools.setButtonInactive(prefix + 'formats:' + formatButtons[tag]);
                         }
                     }
-                } else if (nodeSelection && nodeSelection.nodeType === dfx.ELEMENT_NODE) {
+                } else if (nodeSelection && nodeSelection.nodeType === ViperUtil.ELEMENT_NODE) {
                     // This is an element selection.
                     // First set the correct icon for the main toolbar button.
-                    var parentTagName = dfx.getTagName(nodeSelection);
+                    var parentTagName = ViperUtil.getTagName(nodeSelection);
                     var parent        = nodeSelection;
-                    if (dfx.isBlockElement(nodeSelection) === false) {
+                    if (ViperUtil.isBlockElement(nodeSelection) === false) {
                         parent        = getValidParent(startNode);
-                        parentTagName = dfx.getTagName(parent);
-                    } else if (parentTagName === 'p' && dfx.isTag(parent.parentNode, 'blockquote') === true) {
+                        parentTagName = ViperUtil.getTagName(parent);
+                    } else if (parentTagName === 'p' && ViperUtil.isTag(parent.parentNode, 'blockquote') === true) {
                         parent        = parent.parentNode;
                         parentTagName = 'blockquote';
                     }
@@ -775,12 +775,12 @@ ViperFormatPlugin.prototype = {
                         tools.getItem('formats').setIconClass('Viper-formats-' + parentTagName);
                     }
 
-                    var isBlockElement  = dfx.isBlockElement(nodeSelection);
+                    var isBlockElement  = ViperUtil.isBlockElement(nodeSelection);
                     /*var hasInlineParent = false;
                     if (isBlockElement === true) {
                         var node = nodeSelection.parentNode;
                         while (node && node !== viperElement) {
-                            if (dfx.isBlockElement(node) === false) {
+                            if (ViperUtil.isBlockElement(node) === false) {
                                 hasInlineParent = true;
                                 break;
                             }
@@ -793,9 +793,9 @@ ViperFormatPlugin.prototype = {
                         // If this is a P tag selection and P tag belongs to a
                         // blockquote and blockquote has more than one P tag then
                         // do not allow this P tag to be converted to anything else.
-                        if (dfx.isTag(nodeSelection, 'p') === true
-                            && dfx.isTag(nodeSelection.parentNode, 'blockquote') === true
-                            && dfx.getTag('p', nodeSelection.parentNode).length > 1
+                        if (ViperUtil.isTag(nodeSelection, 'p') === true
+                            && ViperUtil.isTag(nodeSelection.parentNode, 'blockquote') === true
+                            && ViperUtil.getTag('p', nodeSelection.parentNode).length > 1
                         ) {
                             tools.disableButton('formats');
                         } else {
@@ -835,17 +835,17 @@ ViperFormatPlugin.prototype = {
                     }
                 } else {
                     // Its a text selection.
-                    var startBlock    = dfx.getFirstBlockParent(startNode);
+                    var startBlock    = ViperUtil.getFirstBlockParent(startNode);
                     var commonParent  = self.getCommonFormatElement(data.range);
 
-                    if (commonParent && dfx.isBlockElement(commonParent) === false) {
-                        commonParent  = dfx.getFirstBlockParent(commonParent);
+                    if (commonParent && ViperUtil.isBlockElement(commonParent) === false) {
+                        commonParent  = ViperUtil.getFirstBlockParent(commonParent);
                     }
 
-                    var commonTagName = dfx.getTagName(commonParent);
+                    var commonTagName = ViperUtil.getTagName(commonParent);
 
                     if (commonParent && formatButtons[commonTagName]) {
-                        if (commonTagName === 'p' && dfx.isTag(commonParent.parentNode, 'blockquote') === true) {
+                        if (commonTagName === 'p' && ViperUtil.isTag(commonParent.parentNode, 'blockquote') === true) {
                             tools.getItem('formats').setIconClass('Viper-formats-blockquote');
                         } else {
                             tools.getItem('formats').setIconClass('Viper-formats-' + commonTagName);
@@ -892,7 +892,7 @@ ViperFormatPlugin.prototype = {
                             }
                         }
                     } else if (startBlock === self.viper.getViperElement()
-                        && self.viper.getViperElement() === dfx.getFirstBlockParent(endNode)
+                        && self.viper.getViperElement() === ViperUtil.getFirstBlockParent(endNode)
                     ) {
                         // Top level text selection. Allow all formats.
                         tools.enableButton('formats');
@@ -926,7 +926,7 @@ ViperFormatPlugin.prototype = {
                 if (data.range.collapsed === true) {
                     var parent = getValidParent(startNode);
 
-                    var parentTagName = dfx.getTagName(parent);
+                    var parentTagName = ViperUtil.getTagName(parent);
                     if (formatButtons[parentTagName]) {
                         tools.getItem('formats').setIconClass('Viper-formats-' + parentTagName);
                     }
@@ -951,7 +951,7 @@ ViperFormatPlugin.prototype = {
                 break;
 
                 case 'table':
-                    element = dfx.getParents(element, 'table')[0];
+                    element = ViperUtil.getParents(element, 'table')[0];
                 break;
 
                 default:
@@ -963,7 +963,7 @@ ViperFormatPlugin.prototype = {
             var classBtnActive = false;
             var classAttribute = '';
 
-            if (dfx.hasAttribute(element, 'class') === true) {
+            if (ViperUtil.hasAttribute(element, 'class') === true) {
                 classAttribute = element.getAttribute('class');
                 this.viper.ViperTools.setButtonActive(prefix + 'classBtn-' + data.type);
             } else {
@@ -1018,7 +1018,7 @@ ViperFormatPlugin.prototype = {
                     break;
 
                     case 'table':
-                        element = dfx.getParents(element, 'table')[0];
+                        element = ViperUtil.getParents(element, 'table')[0];
                     break;
 
                     default:
@@ -1049,7 +1049,7 @@ ViperFormatPlugin.prototype = {
 
     _setAttributeForElement: function(element, attr, value)
     {
-        if (element.nodeType === dfx.ELEMENT_NODE) {
+        if (element.nodeType === ViperUtil.ELEMENT_NODE) {
             // Set the attribute of this element.
             this.viper.setAttribute(element, attr, value);
             return element;
@@ -1066,9 +1066,9 @@ ViperFormatPlugin.prototype = {
 
         if (selectedNode) {
             var oldVal = '';
-            if (selectedNode.nodeType === dfx.TEXT_NODE) {
+            if (selectedNode.nodeType === ViperUtil.TEXT_NODE) {
                 var span = document.createElement('span');
-                dfx.insertBefore(selectedNode, span);
+                ViperUtil.insertBefore(selectedNode, span);
                 span.appendChild(selectedNode);
                 selectedNode = span;
                 range.selectNode(span);
@@ -1093,7 +1093,7 @@ ViperFormatPlugin.prototype = {
         var span = null;
         if (bookmark.start && bookmark.end) {
             if (bookmark.start.nextSibling
-                && bookmark.start.nextSibling.nodeType === dfx.ELEMENT_NODE
+                && bookmark.start.nextSibling.nodeType === ViperUtil.ELEMENT_NODE
                 && bookmark.start.nextSibling === bookmark.end.previousSibling
             ) {
                 span = bookmark.start.nextSibling;
@@ -1129,10 +1129,10 @@ ViperFormatPlugin.prototype = {
             return false;
         }
 
-        if (node.nodeType === dfx.TEXT_NODE) {
+        if (node.nodeType === ViperUtil.TEXT_NODE) {
             // If this is a text selection then dont show the tools.
             return false;
-        } else if (dfx.isBlockElement(node) === false) {
+        } else if (ViperUtil.isBlockElement(node) === false) {
             return false;
         } else {
             switch (node.tagName.toLowerCase()) {
@@ -1149,10 +1149,10 @@ ViperFormatPlugin.prototype = {
                 break;
 
                 case 'blockquote':
-                    if (dfx.getTag('p', node).length > 1) {
+                    if (ViperUtil.getTag('p', node).length > 1) {
                         return false;
                     } else {
-                        var textContent = dfx.getNodeTextContent(node);
+                        var textContent = ViperUtil.getNodeTextContent(node);
                         if (textContent && textContent.length > 80) {
                             return false;
                         }
@@ -1160,15 +1160,15 @@ ViperFormatPlugin.prototype = {
                 break;
 
                 default:
-                    if (dfx.isTag(node, 'p') === true
-                        && dfx.isTag(node.parentNode, 'blockquote') === true
+                    if (ViperUtil.isTag(node, 'p') === true
+                        && ViperUtil.isTag(node.parentNode, 'blockquote') === true
                     ) {
                         return false;
                     }
 
                     // Check the selection length if the length is too long then
                     // dont show the tools.
-                    var textContent = dfx.getNodeTextContent(node);
+                    var textContent = ViperUtil.getNodeTextContent(node);
                     if (textContent && textContent.length > 80) {
                         return false;
                     }
@@ -1190,26 +1190,26 @@ ViperFormatPlugin.prototype = {
         var viperElement   = this.viper.getViperElement();
 
         // If any of the parents of the element is one of these tags then ignore it.
-        var parents = dfx.getParents(startNode, 'caption,ul,ol,li,img', viperElement);
-        if (parents.length > 0 || (dfx.isStubElement(startNode) === true && dfx.isTag(startNode, 'br') === false)) {
+        var parents = ViperUtil.getParents(startNode, 'caption,ul,ol,li,img', viperElement);
+        if (parents.length > 0 || (ViperUtil.isStubElement(startNode) === true && ViperUtil.isTag(startNode, 'br') === false)) {
             return false;
-        } else if (range.collapsed === true && startNode.nodeType === dfx.TEXT_NODE) {
-            var blockquotes = dfx.getParents(startNode, 'blockquote', viperElement);
-            if (blockquotes.length === 1 && dfx.getTag('p', blockquotes[0]).length > 1) {
+        } else if (range.collapsed === true && startNode.nodeType === ViperUtil.TEXT_NODE) {
+            var blockquotes = ViperUtil.getParents(startNode, 'blockquote', viperElement);
+            if (blockquotes.length === 1 && ViperUtil.getTag('p', blockquotes[0]).length > 1) {
                 return false;
             }
         }
 
         if (nodeSelection) {
-            if (ignoredTags.inArray(dfx.getTagName(nodeSelection)) === true) {
+            if (ViperUtil.inArray(ViperUtil.getTagName(nodeSelection), ignoredTags) === true) {
                 return false;
-            } else if (dfx.isBlockElement(nodeSelection) === false
-                && ignoredTags.inArray(dfx.getTagName(dfx.getFirstBlockParent(nodeSelection))) === true
+            } else if (ViperUtil.isBlockElement(nodeSelection) === false
+                && ViperUtil.inArray(ViperUtil.getTagName(ViperUtil.getFirstBlockParent(nodeSelection)), ignoredTags) === true
             ) {
                 return false;
             }
         } else if (startNode) {
-            if (ignoredTags.inArray(dfx.getTagName(dfx.getFirstBlockParent(startNode))) === true) {
+            if (ViperUtil.inArray(ViperUtil.getTagName(ViperUtil.getFirstBlockParent(startNode)), ignoredTags) === true) {
                 return false;
             }
         }
@@ -1223,20 +1223,20 @@ ViperFormatPlugin.prototype = {
         range = range || this.viper.getViperRange();
 
         var nodeSelection = range.getNodeSelection();
-        if (nodeSelection && dfx.isBlockElement(nodeSelection) === true) {
+        if (nodeSelection && ViperUtil.isBlockElement(nodeSelection) === true) {
             return nodeSelection;
         }
 
-        if (range.startContainer.nodeType === dfx.TEXT_NODE
-            && range.endContainer.nodeType === dfx.TEXT_NODE
+        if (range.startContainer.nodeType === ViperUtil.TEXT_NODE
+            && range.endContainer.nodeType === ViperUtil.TEXT_NODE
             && range.startOffset === 0
             && range.endOffset === range.endContainer.data.length
         ) {
             // Now startContainer must be the first selectable child in its block
             // element. And endContainer must be the last selectable child in its
             // block element.
-            var startBlock = dfx.getFirstBlockParent(range.startContainer);
-            var endBlock   = dfx.getFirstBlockParent(range.endContainer);
+            var startBlock = ViperUtil.getFirstBlockParent(range.startContainer);
+            var endBlock   = ViperUtil.getFirstBlockParent(range.endContainer);
             if (range._getFirstSelectableChild(startBlock) === range.startContainer
                 && range._getLastSelectableChild(endBlock) === range.endContainer
             ) {
@@ -1251,10 +1251,10 @@ ViperFormatPlugin.prototype = {
 
     _selectionHasPTagsOnly: function(range)
     {
-        var startBlock = dfx.getFirstBlockParent(range.startContainer);
-        var endBlock   = dfx.getFirstBlockParent(range.endContainer);
+        var startBlock = ViperUtil.getFirstBlockParent(range.startContainer);
+        var endBlock   = ViperUtil.getFirstBlockParent(range.endContainer);
         var common     = range.getCommonElement();
-        var elements   = dfx.getElementsBetween(startBlock, endBlock);
+        var elements   = ViperUtil.getElementsBetween(startBlock, endBlock);
 
         if (startBlock) {
             elements.push(startBlock);
@@ -1265,18 +1265,18 @@ ViperFormatPlugin.prototype = {
         }
 
         for (var i = 0; i < elements.length; i++) {
-            if (elements[i].nodeType === dfx.TEXT_NODE
-                && dfx.trim(elements[i].data) === ''
+            if (elements[i].nodeType === ViperUtil.TEXT_NODE
+                && ViperUtil.trim(elements[i].data) === ''
             ) {
                 continue;
-            } else if (dfx.isBlockElement(elements[i]) === true
-                && dfx.isTag(elements[i], 'p') === false
+            } else if (ViperUtil.isBlockElement(elements[i]) === true
+                && ViperUtil.isTag(elements[i], 'p') === false
             ) {
                 return false;
             } else {
-                var blockParents = dfx.getParents(elements[i], null, common, true);
+                var blockParents = ViperUtil.getParents(elements[i], null, common, true);
                 for (var j = 0; j < blockParents.length; j++) {
-                    if (dfx.isTag(blockParents[j], 'p') === false) {
+                    if (ViperUtil.isTag(blockParents[j], 'p') === false) {
                         return false;
                     }
                 }
@@ -1309,7 +1309,7 @@ ViperFormatPlugin.prototype = {
         var defaultTag   = this.viper.getDefaultBlockTag();
 
         if (!selectedNode && range.startContainer === range.endContainer && range.collapsed === true) {
-            selectedNode = dfx.getFirstBlockParent(range.startContainer);
+            selectedNode = ViperUtil.getFirstBlockParent(range.startContainer);
         }
 
         if (selectedNode === viperElement) {
@@ -1325,9 +1325,9 @@ ViperFormatPlugin.prototype = {
             var parasOnly        = true;
             var hasBlockChildren = false;
             for (var node = selectedNode.firstChild; node; node = node.nextSibling) {
-                if (dfx.isBlockElement(node) === true) {
+                if (ViperUtil.isBlockElement(node) === true) {
                     hasBlockChildren = true;
-                    if (dfx.isTag(node, 'p') !== true) {
+                    if (ViperUtil.isTag(node, 'p') !== true) {
                         parasOnly = false;
                         break;
                     }
@@ -1346,30 +1346,34 @@ ViperFormatPlugin.prototype = {
             return statuses;
         }
 
-        if (selectedNode && dfx.isBlockElement(selectedNode) === true) {
+        if (selectedNode && ViperUtil.isBlockElement(selectedNode) === true) {
             var isBlockquote = false;
-            if (dfx.isTag(selectedNode, 'p') === true && dfx.isTag(selectedNode.parentNode, 'blockquote') === true) {
+            var singlePTag   = true;
+            if (ViperUtil.isTag(selectedNode, 'p') === true && ViperUtil.isTag(selectedNode.parentNode, 'blockquote') === true) {
                 selectedNode = selectedNode.parentNode;
                 isBlockquote = true;
+                if (ViperUtil.getTag('p', selectedNode).length > 1) {
+                    singlePTag = false;
+                }
             }
 
             for (var tagName in statuses) {
                 if (isBlockquote === true) {
-                    statuses[tagName] = true;
+                    statuses[tagName] = singlePTag;
                     continue;
                 }
 
                 var canConvert = this.canConvert(selectedNode, tagName);
                 statuses[tagName] = canConvert;
                 if (canConvert === true) {
-                    statuses._canChange = true;
+                    statuses._canChange = false;
                 }
             }
 
-            statuses._none = true;
-        } else if (selectedNode && selectedNode.nodeType === dfx.TEXT_NODE) {
-            var parent = dfx.getFirstBlockParent(selectedNode);
-            if (dfx.isTag(parent, 'div') === true) {
+            statuses._none = singlePTag;
+        } else if (selectedNode && selectedNode.nodeType === ViperUtil.TEXT_NODE) {
+            var parent = ViperUtil.getFirstBlockParent(selectedNode);
+            if (ViperUtil.isTag(parent, 'div') === true) {
                 statuses = {
                     p: true,
                     pre: true,
@@ -1380,7 +1384,7 @@ ViperFormatPlugin.prototype = {
         } else {
             var start      = range.getStartNode();
             var end        = range.getEndNode();
-            var elements   = dfx.getElementsBetween(start, end);
+            var elements   = ViperUtil.getElementsBetween(start, end);
             var commonElem = range.getCommonElement();
 
             elements.unshift(start);
@@ -1392,17 +1396,17 @@ ViperFormatPlugin.prototype = {
             var parents = [];
             for (var i = 0; i < elements.length; i++) {
                 var elem = elements[i];
-                if (elem.nodeType === dfx.TEXT_NODE && dfx.trim(elem.data) === '') {
+                if (elem.nodeType === ViperUtil.TEXT_NODE && ViperUtil.trim(elem.data) === '') {
                     continue;
                 }
 
-                if (dfx.isBlockElement(elem) === true) {
+                if (ViperUtil.isBlockElement(elem) === true) {
                     parents.push(elem);
                 }
 
-                var elemParents = dfx.getParents(elem, null, commonElem);
+                var elemParents = ViperUtil.getParents(elem, null, commonElem);
                 for (var j = 0; j < elemParents.length; j++) {
-                    if (dfx.isBlockElement(elemParents[j]) === true) {
+                    if (ViperUtil.isBlockElement(elemParents[j]) === true) {
                         parents.push(elemParents[j]);
                     }
                 }
@@ -1410,8 +1414,8 @@ ViperFormatPlugin.prototype = {
 
             if (parents.length === 0) {
                 // A text node is selected inside the same block parent.
-                var parent = dfx.getFirstBlockParent(start);
-                if (dfx.isTag(parent, 'div') === true) {
+                var parent = ViperUtil.getFirstBlockParent(start);
+                if (ViperUtil.isTag(parent, 'div') === true) {
                     statuses = {
                         p: true,
                         pre: true,
@@ -1436,11 +1440,11 @@ ViperFormatPlugin.prototype = {
 
     canConvert: function(element, toTagName)
     {
-        var tagName = dfx.getTagName(element);
+        var tagName = ViperUtil.getTagName(element);
         if (tagName === 'p') {
             // If the original tag is a P tag and its parent is a blockquote then
             // it cannot be converted or removed.
-            if (dfx.isTag(element.parentNode, 'blockquote') === true) {
+            if (ViperUtil.isTag(element.parentNode, 'blockquote') === true) {
                 return false;
             }
         }
@@ -1465,7 +1469,7 @@ ViperFormatPlugin.prototype = {
                 }
 
                 // Or its in a PRE tag.
-                var preTags = dfx.getParents(element, 'pre', this.viper.getViperElement());
+                var preTags = ViperUtil.getParents(element, 'pre', this.viper.getViperElement());
                 if (preTags.length > 0) {
                     return false;
                 }
@@ -1478,9 +1482,9 @@ ViperFormatPlugin.prototype = {
             break;
 
             case 'blockquote':
-                var tags = dfx.getTag('*', element);
+                var tags = ViperUtil.getTag('*', element);
                 for (var i = 0; i < tags.length; i++) {
-                    if (dfx.isBlockElement(tags[i]) === true && dfx.isTag(tags[i], 'p') === false && dfx.isStubElement(tags[i]) === false) {
+                    if (ViperUtil.isBlockElement(tags[i]) === true && ViperUtil.isTag(tags[i], 'p') === false && ViperUtil.isStubElement(tags[i]) === false) {
                         return false;
                     }
                 }
@@ -1493,13 +1497,13 @@ ViperFormatPlugin.prototype = {
 
     hasBlockChildren: function(element)
     {
-        var isBlockQuote = dfx.isTag(element, 'blockquote');
+        var isBlockQuote = ViperUtil.isTag(element, 'blockquote');
         var hasBlock     = false;
 
-        var tags = dfx.getTag('*', element);
+        var tags = ViperUtil.getTag('*', element);
         for (var i = 0; i < tags.length; i++) {
-            if (dfx.isBlockElement(tags[i]) === true && dfx.isStubElement(tags[i]) === false) {
-                if (isBlockQuote === true && hasBlock === false && dfx.isTag(tags[i], 'p') === true) {
+            if (ViperUtil.isBlockElement(tags[i]) === true && ViperUtil.isStubElement(tags[i]) === false) {
+                if (isBlockQuote === true && hasBlock === false && ViperUtil.isTag(tags[i], 'p') === true) {
                     // In blockquote element only return true if there is more than
                     // one block element.
                     hasBlock = true;
@@ -1529,65 +1533,65 @@ ViperFormatPlugin.prototype = {
         var viperElement    = this.viper.getViperElement();
 
         var formatElement   = lineage[currentLinIndex];
-        if (formatElement && formatElement.nodeType !== dfx.TEXT_NODE) {
+        if (formatElement && formatElement.nodeType !== ViperUtil.TEXT_NODE) {
             selectedNode = formatElement;
         }
 
         if (selectedNode === viperElement) {
             selectedNode = null;
-        } else if (dfx.isBlockElement(selectedNode) === false) {
+        } else if (ViperUtil.isBlockElement(selectedNode) === false) {
             // Not a block element selection, check if its being wrapped with
             // block elements e.g. <p><strong>text</strong></p>.
-            var surroundingBlockElems = dfx.getSurroundingParents(selectedNode, null, true);
+            var surroundingBlockElems = ViperUtil.getSurroundingParents(selectedNode, null, true);
             if (surroundingBlockElems.length > 0) {
                 selectedNode = surroundingBlockElems[0];
             }
         }
 
         if (selectedNode
-            && (selectedNode.nodeType !== dfx.ELEMENT_NODE
-            || dfx.isBlockElement(selectedNode) === false
-            || dfx.isStubElement(selectedNode) === true
+            && (selectedNode.nodeType !== ViperUtil.ELEMENT_NODE
+            || ViperUtil.isBlockElement(selectedNode) === false
+            || ViperUtil.isStubElement(selectedNode) === true
             )
         ) {
-            if (dfx.isBlockElement(selectedNode) === false) {
+            if (ViperUtil.isBlockElement(selectedNode) === false) {
                 selectedNode = null;
             } else {
                 // Text node, get the first block parent.
-                selectedNode = dfx.getFirstBlockParent(selectedNode);
+                selectedNode = ViperUtil.getFirstBlockParent(selectedNode);
             }
         } else if (!selectedNode && (range.collapsed === true || type.match(/^h\d$/))) {
-            selectedNode = dfx.getFirstBlockParent(range.startContainer);
+            selectedNode = ViperUtil.getFirstBlockParent(range.startContainer);
         }
 
         if (selectedNode) {
             var ignoreTags = ['li'];
-            if (ignoreTags.inArray(dfx.getTagName(selectedNode)) === true) {
+            if (ViperUtil.inArray(ViperUtil.getTagName(selectedNode), ignoreTags) === true) {
                 return false;
             }
 
             if (selectedNode !== viperElement) {
                 var bookmark = this.viper.createBookmark();
 
-                if (dfx.isTag(selectedNode, 'td') === true
-                    || dfx.isTag(selectedNode, 'th') === true
-                    || dfx.isTag(selectedNode, 'caption') === true
+                if (ViperUtil.isTag(selectedNode, 'td') === true
+                    || ViperUtil.isTag(selectedNode, 'th') === true
+                    || ViperUtil.isTag(selectedNode, 'caption') === true
                 ) {
                     // Do not convert the TD tag.
                     var newElem = document.createElement(type);
-                    if (type === 'blockquote' && dfx.getTag(selectedNode, 'p').length === 0) {
+                    if (type === 'blockquote' && ViperUtil.getTag(selectedNode, 'p').length === 0) {
                         newElem.appendChild(document.createElement('p'));
                         while (selectedNode.firstChild) {
                             newElem.firstChild.appendChild(selectedNode.firstChild);
                         }
                     } else if (type.match(/^h\d$/)) {
                         while (selectedNode.firstChild) {
-                            if (dfx.isBlockElement(selectedNode.firstChild) === true) {
+                            if (ViperUtil.isBlockElement(selectedNode.firstChild) === true) {
                                 while (selectedNode.firstChild.firstChild) {
                                     newElem.appendChild(selectedNode.firstChild.firstChild);
                                 }
 
-                                dfx.remove(selectedNode.firstChild);
+                                ViperUtil.remove(selectedNode.firstChild);
                             } else {
                                 newElem.appendChild(selectedNode.firstChild);
                             }
@@ -1620,11 +1624,11 @@ ViperFormatPlugin.prototype = {
         } else {
             var start    = range.getStartNode();
             var end      = range.getEndNode();
-            var elements = dfx.getElementsBetween(start, end);
+            var elements = ViperUtil.getElementsBetween(start, end);
             elements.unshift(start);
 
             if (start !== end && end) {
-                if (end.nodeType === dfx.TEXT_NODE && range.endOffset > 0) {
+                if (end.nodeType === ViperUtil.TEXT_NODE && range.endOffset > 0) {
                     elements.push(end);
                 } else {
                     var elem = range.getPreviousContainer(end, null, true);
@@ -1636,13 +1640,13 @@ ViperFormatPlugin.prototype = {
             var parents = [];
             var c       = elements.length;
             for (var i = 0; i < c; i++) {
-                if (elements[i].nodeType === dfx.TEXT_NODE && dfx.isBlank(dfx.trim(elements[i].data)) === true) {
+                if (elements[i].nodeType === ViperUtil.TEXT_NODE && ViperUtil.isBlank(ViperUtil.trim(elements[i].data)) === true) {
                     continue;
-                } else if (dfx.isBlockElement(elements[i]) === true) {
+                } else if (ViperUtil.isBlockElement(elements[i]) === true) {
                     parents.push(elements[i]);
                 } else {
-                    var parent    = dfx.getFirstBlockParent(elements[i]);
-                    if (parent && parents.inArray(parent) === false) {
+                    var parent    = ViperUtil.getFirstBlockParent(elements[i]);
+                    if (parent && ViperUtil.inArray(parent, parents) === false) {
                         parents.push(parent);
                     }
                 }
@@ -1659,11 +1663,11 @@ ViperFormatPlugin.prototype = {
                     contents = '<p>' + contents + '</p>';
                 }
 
-                dfx.setHtml(newElement, contents);
+                ViperUtil.setHtml(newElement, contents);
 
                 var bookmark = this.viper.createBookmark();
-                dfx.remove(dfx.getElementsBetween(bookmark.start, bookmark.end));
-                dfx.insertAfter(bookmark.start, newElement);
+                ViperUtil.remove(ViperUtil.getElementsBetween(bookmark.start, bookmark.end));
+                ViperUtil.insertAfter(bookmark.start, newElement);
                 this.viper.selectBookmark(bookmark);
 
                 this.viper.fireNodesChanged([parent]);
@@ -1684,13 +1688,13 @@ ViperFormatPlugin.prototype = {
             for (var i = 0; i < parents.length; i++) {
                 var parent = parents[i];
                 if (parent !== commonElem && parent.parentNode !== commonElem) {
-                    var parentParents = dfx.getParents(parent, null, commonElem);
+                    var parentParents = ViperUtil.getParents(parent, null, commonElem);
 
                     // Check if any of these parents are already in newParents array.
                     var skip = false;
                     if (newParents.length !== 0) {
                         for (var j = 0; j < parentParents.length; j++) {
-                            if (newParents.inArray(parentParents[j]) === true) {
+                            if (ViperUtil.inArray(parentParents[j], newParents) === true) {
                                 skip = true;
                                 break;
                             }
@@ -1705,7 +1709,7 @@ ViperFormatPlugin.prototype = {
                     for (var j = 0; j < parentParents.length; j++) {
                         var parentParent = parentParents[j];
                         for (var node = parent.previousSibling; node; node = node.previousSibling) {
-                            if (node && node.nodeType === dfx.ELEMENT_NODE || dfx.trim(node.data) !== '') {
+                            if (node && node.nodeType === ViperUtil.ELEMENT_NODE || ViperUtil.trim(node.data) !== '') {
                                 return false;
                             }
                         }
@@ -1722,7 +1726,7 @@ ViperFormatPlugin.prototype = {
             if (newParents.length > 0) {
                 var removeType = false;
 
-                if (dfx.isTag(commonElem, type) === true && commonElem !== viperElement) {
+                if (ViperUtil.isTag(commonElem, type) === true && commonElem !== viperElement) {
                     var lastSelectableParent = range._getLastSelectableChild(commonElem).parentNode;
                     var lastParent = newParents[(newParents.length - 1)];
                     while (lastSelectableParent !== commonElem) {
@@ -1739,22 +1743,22 @@ ViperFormatPlugin.prototype = {
 
                 if (removeType === true) {
                     for (var i = 0; i < newParents.length; i++) {
-                        dfx.insertBefore(commonElem, newParents[i]);
+                        ViperUtil.insertBefore(commonElem, newParents[i]);
                     }
 
-                    dfx.remove(commonElem);
+                    ViperUtil.remove(commonElem);
                 } else {
                     var newElem = document.createElement(type);
-                    dfx.insertBefore(newParents[0], newElem);
+                    ViperUtil.insertBefore(newParents[0], newElem);
                     for (var i = 0; i < newParents.length; i++) {
-                        if (type === 'blockquote' && dfx.isTag(newParents[i], 'p') === false) {
+                        if (type === 'blockquote' && ViperUtil.isTag(newParents[i], 'p') === false) {
                             // Replace any block elements with P tags.
                             var pTag = document.createElement('p');
                             while (newParents[i].firstChild) {
                                 pTag.appendChild(newParents[i].firstChild);
                             }
                             newElem.appendChild(pTag);
-                            dfx.remove(newParents[i]);
+                            ViperUtil.remove(newParents[i]);
                         } else {
                             newElem.appendChild(newParents[i]);
                         }
@@ -1775,14 +1779,14 @@ ViperFormatPlugin.prototype = {
     _convertSingleElement: function(element, type)
     {
         var isBlockQuote = false;
-        if (dfx.isTag(element, 'p') === true && dfx.isTag(element.parentNode, 'blockquote') === true) {
+        if (ViperUtil.isTag(element, 'p') === true && ViperUtil.isTag(element.parentNode, 'blockquote') === true) {
             element      = element.parentNode;
             isBlockQuote = true;
-        } else if (dfx.isTag(element, 'blockquote') === true) {
+        } else if (ViperUtil.isTag(element, 'blockquote') === true) {
             isBlockQuote = true;
         }
 
-        if (dfx.isTag(element, type) === true) {
+        if (ViperUtil.isTag(element, type) === true) {
             if (element.parentNode === this.viper.getViperElement()) {
                 if (this.viper.getDefaultBlockTag() !== '') {
                     if (type === this.viper.getDefaultBlockTag()) {
@@ -1792,20 +1796,20 @@ ViperFormatPlugin.prototype = {
                     } else {
                         var parentElem = null;
                         while (element.firstChild) {
-                            if (dfx.isBlockElement(element.firstChild) === false) {
+                            if (ViperUtil.isBlockElement(element.firstChild) === false) {
                                 if (!parentElem) {
                                     parentElem = document.createElement(this.viper.getDefaultBlockTag());
-                                    dfx.insertBefore(element, parentElem);
+                                    ViperUtil.insertBefore(element, parentElem);
                                 }
 
                                 parentElem.appendChild(element.firstChild);
                             } else {
                                 parentElem = null;
-                                dfx.insertBefore(element, element.firstChild);
+                                ViperUtil.insertBefore(element, element.firstChild);
                             }
                         }
 
-                        dfx.remove(element);
+                        ViperUtil.remove(element);
                         return;
                     }
                 }
@@ -1818,11 +1822,11 @@ ViperFormatPlugin.prototype = {
                     p.appendChild(element.firstChild);
                 }
 
-                dfx.insertBefore(element, p);
+                ViperUtil.insertBefore(element, p);
             } else {
                 // This is element is already the specified type remove the element.
                 while (element.firstChild) {
-                    dfx.insertBefore(element, element.firstChild);
+                    ViperUtil.insertBefore(element, element.firstChild);
                 }
             }
 
@@ -1830,19 +1834,19 @@ ViperFormatPlugin.prototype = {
                 this._convertNewLineToBr(element);
             }
 
-            dfx.remove(element);
+            ViperUtil.remove(element);
         } else if (type === 'blockquote') {
             var newElem = document.createElement(type);
-            dfx.insertBefore(element, newElem);
+            ViperUtil.insertBefore(element, newElem);
 
-            if (dfx.isTag(element, 'p') === true) {
+            if (ViperUtil.isTag(element, 'p') === true) {
                 newElem.appendChild(element);
-            } else if (dfx.getTag('p', element).length > 0) {
+            } else if (ViperUtil.getTag('p', element).length > 0) {
                 while (element.firstChild) {
                     newElem.appendChild(element.firstChild);
                 }
 
-                dfx.remove(element);
+                ViperUtil.remove(element);
             } else {
                 var p = document.createElement('p');
                 newElem.appendChild(p);
@@ -1850,7 +1854,7 @@ ViperFormatPlugin.prototype = {
                     p.appendChild(element.firstChild);
                 }
 
-                dfx.remove(element);
+                ViperUtil.remove(element);
             }
 
             return newElem;
@@ -1868,19 +1872,19 @@ ViperFormatPlugin.prototype = {
                     newElem.appendChild(element.firstChild);
                 }
 
-                var pTag = dfx.getTag('p', newElem)[0];
+                var pTag = ViperUtil.getTag('p', newElem)[0];
                 while (pTag.firstChild) {
                     newElem.appendChild(pTag.firstChild);
                 }
 
-                dfx.remove(pTag);
+                ViperUtil.remove(pTag);
             } else if (isBlockQuote === true && type === 'div') {
-                var childPTags = dfx.getTag('p', element);
+                var childPTags = ViperUtil.getTag('p', element);
                 for (var i = 0; i < childPTags.length; i++) {
                     var childPTag = childPTags[i];
 
                     var div = document.createElement('div');
-                    dfx.insertBefore(element, div);
+                    ViperUtil.insertBefore(element, div);
                     while (childPTag.firstChild) {
                         div.appendChild(childPTag.firstChild);
                     }
@@ -1889,9 +1893,9 @@ ViperFormatPlugin.prototype = {
                 newElem = null;
             } else if (type.match(/^h\d$/)) {
                 while (element.firstChild) {
-                    if (dfx.isBlockElement(element.firstChild) === true) {
+                    if (ViperUtil.isBlockElement(element.firstChild) === true) {
                         var firstChild = element.firstChild;
-                        if (dfx.isTag(firstChild, 'blockquote') === true) {
+                        if (ViperUtil.isTag(firstChild, 'blockquote') === true) {
                             firstChild = firstChild.firstChild;
                         }
 
@@ -1899,7 +1903,7 @@ ViperFormatPlugin.prototype = {
                             newElem.appendChild(firstChild.firstChild);
                         }
 
-                        dfx.remove(element.firstChild);
+                        ViperUtil.remove(element.firstChild);
                     } else {
                         newElem.appendChild(element.firstChild);
                     }
@@ -1913,14 +1917,14 @@ ViperFormatPlugin.prototype = {
             if (newElem) {
                 if (type === 'pre') {
                     this._convertBrToNewLine(newElem);
-                } else if (dfx.isTag(element, 'pre') === true) {
+                } else if (ViperUtil.isTag(element, 'pre') === true) {
                     this._convertNewLineToBr(newElem);
                 }
 
-                dfx.insertBefore(element, newElem);
+                ViperUtil.insertBefore(element, newElem);
             }
 
-            dfx.remove(element);
+            ViperUtil.remove(element);
 
             return newElem;
         }
@@ -1931,18 +1935,18 @@ ViperFormatPlugin.prototype = {
 
     _convertBrToNewLine: function(element)
     {
-        var brTags = dfx.getTag('br', element);
+        var brTags = ViperUtil.getTag('br', element);
         for (var i = 0; i < brTags.length; i++) {
             var node = document.createTextNode("\n");
-            dfx.insertBefore(brTags[i], node);
-            dfx.remove(brTags[i]);
+            ViperUtil.insertBefore(brTags[i], node);
+            ViperUtil.remove(brTags[i]);
         }
 
     },
 
     _convertNewLineToBr: function(element)
     {
-        if (element.nodeType === dfx.TEXT_NODE) {
+        if (element.nodeType === ViperUtil.TEXT_NODE) {
             var nlIndex = -1;
 
             do {
@@ -1950,17 +1954,17 @@ ViperFormatPlugin.prototype = {
                 if (nlIndex >= 0) {
                     var newNode = element.splitText(nlIndex);
                     var br      = document.createElement('br');
-                    dfx.insertBefore(newNode, br);
+                    ViperUtil.insertBefore(newNode, br);
 
                     if (newNode.data.length === 1) {
-                        dfx.remove(newNode);
+                        ViperUtil.remove(newNode);
                     } else {
                         newNode.data = newNode.data.substring(1, newNode.data.length);
                     }
                 }
             } while (nlIndex >= 0);
         } else {
-            var textNodes = dfx.getTextNodes(element);
+            var textNodes = ViperUtil.getTextNodes(element);
             var c         = textNodes.length;
             for (var i = 0; i < c; i++) {
                 var textNode = textNodes[i];
@@ -1979,15 +1983,15 @@ ViperFormatPlugin.prototype = {
 
         // Elements before..
         var node     = bookmark.start;
-        while (node && dfx.isBlockElement(node) === false) {
+        while (node && ViperUtil.isBlockElement(node) === false) {
             elements.unshift(node);
             node = node.previousSibling;
         }
 
-        var insideSelection = dfx.getElementsBetween(bookmark.start, bookmark.end);
+        var insideSelection = ViperUtil.getElementsBetween(bookmark.start, bookmark.end);
         var count = insideSelection.length;
         for (var i = 0; i < count; i++) {
-            if (dfx.isBlockElement(insideSelection[i]) === true && dfx.isStubElement(insideSelection[i]) === false) {
+            if (ViperUtil.isBlockElement(insideSelection[i]) === true && ViperUtil.isStubElement(insideSelection[i]) === false) {
                 var group = [];
                 for (var j = 0; j < insideSelection[i].childNodes.length; j++) {
                     group.push(insideSelection[i].childNodes[j]);
@@ -2000,7 +2004,7 @@ ViperFormatPlugin.prototype = {
 
         // Elements after..
         node = bookmark.end;
-        while (node && dfx.isBlockElement(node) === false) {
+        while (node && ViperUtil.isBlockElement(node) === false) {
             elements.push(node);
             node = node.nextSibling;
         }
@@ -2011,7 +2015,7 @@ ViperFormatPlugin.prototype = {
 
         var newBlock    = document.createElement(type);
         var prevBlock   = newBlock;
-        dfx.insertBefore(elements[0], newBlock);
+        ViperUtil.insertBefore(elements[0], newBlock);
 
         var c = elements.length;
         for (var i = 0; i < c; i++) {
@@ -2021,13 +2025,13 @@ ViperFormatPlugin.prototype = {
                     newBlock.appendChild(elements[i][j]);
                 }
 
-                dfx.insertAfter(prevBlock, newBlock);
+                ViperUtil.insertAfter(prevBlock, newBlock);
                 prevBlock = newBlock;
                 newBlock = null;
             } else {
                 if (!newBlock) {
                     newBlock = document.createElement(type);
-                    dfx.insertAfter(prevBlock, newBlock);
+                    ViperUtil.insertAfter(prevBlock, newBlock);
                     prevBlock = newBlock;
                 }
 

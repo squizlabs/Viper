@@ -1,8 +1,13 @@
 <?php
 
-chdir(dirname(__FILE__));
+    chdir(dirname(__FILE__));
 
-$opts = getopt('s::b::u::t::civ', array('url::', 'built', 'log::'));
+    $opts = getopt('b::u::t::cv', array('url::', 'built', 'log::', 'help'));
+
+    if (isset($opts['help']) === TRUE) {
+        printHelp();
+        exit;
+    }
 
     $browsers = array(
                  'firefox',
@@ -23,7 +28,7 @@ $opts = getopt('s::b::u::t::civ', array('url::', 'built', 'log::'));
     }
 
     $test = NULL;
-    if (isset($opts['t']) === TRUE) {
+    if (isset($opts['t']) === TRUE && empty($opts['t']) === FALSE) {
         $test = $opts['t'];
     }
 
@@ -42,6 +47,7 @@ $opts = getopt('s::b::u::t::civ', array('url::', 'built', 'log::'));
 
     $logFilePath = '';
     if (array_key_exists('log', $opts) === TRUE) {
+        putenv('VIPER_TEST_LOG_PATH='.$opts['log']);
         $logFilePath = $opts['log'];
     }
 
@@ -85,18 +91,13 @@ $opts = getopt('s::b::u::t::civ', array('url::', 'built', 'log::'));
         }
 
         // Setup logging if there is no filter.
-        if ($test === NULL || empty($logFilePath) === FALSE) {
-            if (empty($logFilePath) === TRUE) {
-                $logFilePath = $browserTmpPath.'/test.log';
+        if (empty($logFilePath) === FALSE) {
+            if (file_exists($logFilePath) === FALSE) {
+                mkdir($logFilePath, 0755, TRUE);
             }
 
-            $phpunitCMD .= '--log-junit '.$logFilePath;
-
-            // If there is an existing log file, move it.
-            if (file_exists($logFilePath) === TRUE) {
-                copy($logFilePath, $browserTmpPath.'/test_'.date('d_m_y', filemtime($logFilePath)).'.log');
-            }
-
+            $logFilePath .= '/phpunit.xml';
+            $phpunitCMD  .= '--log-junit '.$logFilePath;
         }
 
         if ($unitTests !== NULL) {
@@ -104,7 +105,7 @@ $opts = getopt('s::b::u::t::civ', array('url::', 'built', 'log::'));
         }
 
         if ($test !== NULL) {
-            $phpunitCMD .= ' --filter "'.$test.'"';
+            $phpunitCMD .= ' --filter \''.$test.'\'';
             putenv('VIPER_TEST_FILTER='.$test);
         }
 
@@ -156,5 +157,25 @@ $opts = getopt('s::b::u::t::civ', array('url::', 'built', 'log::'));
         return $os;
 
     }//end getOS()
+
+    function printHelp()
+    {
+        echo "Usage: php runTests.php <switches>\n\n";
+        echo "  -b            Comma separated browsers to test. I.e: firefox, chrome, safari, ie8, ie9.\n";
+        echo "  -t            Name of the test to run.\n";
+        echo "  -c            Run the test calibration.\n";
+        echo "  -v            Output more verbose information.\n";
+        echo "  --url <url>   Sets the URL for Viper testing. Must point to Viper's Test directory.\n";
+        echo "  --built       Run tests on Viper build.\n";
+        echo "  --log <file>  Logs test execution.\n";
+        echo "  --help        Prints this help message.\n";
+        echo "\nExamples:\n";
+        echo "  # Run calibration on Firefox and run the test named testStartOfParaBold.\n";
+        echo "  php runTests.php -bfirefox -c -ttestStartOfParaBold\n\n";
+        echo "  # Run all tests that contain the ParaBold in their name on Firefox and Chrome.\n";
+        echo "  php runTests.php -bfirefox,chrome -tParaBold";
+        echo "\n\n";
+
+    }//end printHelp()
 
 ?>

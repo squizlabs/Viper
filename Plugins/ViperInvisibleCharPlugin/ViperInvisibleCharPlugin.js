@@ -33,9 +33,9 @@ ViperInvisibleCharPlugin.prototype = {
                 // Make sure we are not in a space span.
                 var range     = self.viper.getViperRange();
                 var startNode = range.getStartNode();
-                if (startNode.nodeType === dfx.TEXT_NODE && dfx.isTag(startNode.parentNode, 'span') === true) {
+                if (startNode.nodeType === ViperUtil.TEXT_NODE && ViperUtil.isTag(startNode.parentNode, 'span') === true) {
                     var textNode = document.createTextNode(String.fromCharCode(e.which));
-                    dfx.insertAfter(startNode.parentNode, textNode);
+                    ViperUtil.insertAfter(startNode.parentNode, textNode);
                     range.setStart(textNode, 1);
 
                     range.collapse(true);
@@ -52,28 +52,28 @@ ViperInvisibleCharPlugin.prototype = {
             }
 
             var startNode = range.getStartNode();
-            if (!startNode || startNode.nodeType !== dfx.TEXT_NODE) {
+            if (!startNode || startNode.nodeType !== ViperUtil.TEXT_NODE) {
                 return;
             }
 
             var text   = startNode.data;
             var offset = range.startOffset;
-            if (offset === 0 || (offset === 1 && dfx.isTag(startNode.parentNode, 'span') === true)) {
+            if (offset === 0 || (offset === 1 && ViperUtil.isTag(startNode.parentNode, 'span') === true)) {
                 if (offset === 0) {
-                    if (!startNode.previousSibling || dfx.isTag(startNode.previousSibling, 'span') === false) {
+                    if (!startNode.previousSibling || ViperUtil.isTag(startNode.previousSibling, 'span') === false) {
                         return;
                     }
 
                     var span = document.createElement('span');
-                    dfx.addClass(span, 'VICP');
-                    dfx.setHtml(span, '&nbsp;');
-                    dfx.insertAfter(startNode.previousSibling, span);
+                    ViperUtil.addClass(span, 'VICP');
+                    ViperUtil.setHtml(span, '&nbsp;');
+                    ViperUtil.insertAfter(startNode.previousSibling, span);
                 } else {
                     // Chrome..
                     var span = document.createElement('span');
-                    dfx.addClass(span, 'VICP');
-                    dfx.setHtml(span, '&nbsp;');
-                    dfx.insertAfter(startNode.parentNode, span);
+                    ViperUtil.addClass(span, 'VICP');
+                    ViperUtil.setHtml(span, '&nbsp;');
+                    ViperUtil.insertAfter(startNode.parentNode, span);
 
                     range.setStart(span.nextSibling, 0);
                     range.collapse(true);
@@ -84,9 +84,9 @@ ViperInvisibleCharPlugin.prototype = {
             } else if (text.charCodeAt(offset - 1) === 32 || text.charCodeAt(offset - 1) === 160) {
                 var nextNode = startNode.splitText(offset);
                 var span     = document.createElement('span');
-                dfx.addClass(span, 'VICP');
-                dfx.setHtml(span, '&nbsp;');
-                dfx.insertBefore(nextNode, span);
+                ViperUtil.addClass(span, 'VICP');
+                ViperUtil.setHtml(span, '&nbsp;');
+                ViperUtil.insertBefore(nextNode, span);
 
                 range.setStart(nextNode, 0);
                 range.collapse(false);

@@ -18,7 +18,8 @@
 
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
-    <script type="text/javascript" src="../../DfxJSLib/dfx.js"></script>
+    <script type="text/javascript" src="../jquery.js"></script>
+    <script type="text/javascript" src="../jquery.ui.js"></script>
     <script type="text/javascript" src="../../Viper-all.js"></script>
     <script type="text/javascript">
         var viper = null;
@@ -29,11 +30,11 @@
             viper.getPluginManager().setPlugins(allPlugins);
 
             var prevViperType = 'complex';
-            var editables     = dfx.getClass('Viper-editable');
+            var editables     = ViperUtil.getClass('Viper-editable');
             for (var i = 0; i < editables.length; i++) {
                 (function(editableElement) {
-                    dfx.addEvent(editableElement, 'mousedown', function() {
-                        if (dfx.hasClass(editableElement, 'viper-simple') === true) {
+                    ViperUtil.addEvent(editableElement, 'mousedown', function() {
+                        if (ViperUtil.hasClass(editableElement, 'viper-simple') === true) {
                             if (prevViperType !== 'simple') {
                                 prevViperType = 'simple';
                                 viper.getPluginManager().removePlugins();

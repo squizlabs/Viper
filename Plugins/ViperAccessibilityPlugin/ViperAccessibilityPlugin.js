@@ -35,7 +35,7 @@ ViperAccessibilityPlugin.prototype = {
         this._createToolbarItems();
 
         this.viper.registerCallback('Viper:clickedOutside', 'ViperAccessibilityPlugin', function() {
-            dfx.remove(dfx.getClass('HTMLCS-pointer'));
+            ViperUtil.remove(ViperUtil.getClass('HTMLCS-pointer'));
         });
 
         this.viper.registerCallback('ViperToolbarPlugin:updateToolbar', 'ViperAccessibilityPlugin', function(data) {
@@ -75,7 +75,7 @@ ViperAccessibilityPlugin.prototype = {
             return;
         }//end if
 
-        dfx.setHtml(this._htmlcsWrapper, '');
+        ViperUtil.setHtml(this._htmlcsWrapper, '');
         HTMLCSAuditor.pointerContainer = this._toolbar.getBubble('VAP:bubble').element;
         HTMLCSAuditor.run(this._standard, this.viper.getViperElement(), {
             noHeader: true,
@@ -117,25 +117,25 @@ ViperAccessibilityPlugin.prototype = {
     _createIssueDetail: function(id, issue, resolutionElem, detailsElem)
     {
         var issueDoneElem = document.createElement('div');
-        dfx.addClass(issueDoneElem, 'Viper-issueDoneCont');
+        ViperUtil.addClass(issueDoneElem, 'Viper-issueDoneCont');
         detailsElem.appendChild(issueDoneElem);
 
         var main = resolutionElem;
-        dfx.addClass(main, 'ViperAP-issuePane');
+        ViperUtil.addClass(main, 'ViperAP-issuePane');
 
         var issueType = this._getIssueType(issue);
 
         var self = this;
         this._loadStandard(issue.code, function(standardObj) {
             var resolutionCont = document.createElement('div');
-            dfx.addClass(resolutionCont, 'ViperAP-issueResolution');
+            ViperUtil.addClass(resolutionCont, 'ViperAP-issueResolution');
 
             var resHtml = '<div class="Viper-resolutionHeader"><strong>Resolution</strong></div>';
 
-            dfx.setHtml(resolutionCont, resHtml);
+            ViperUtil.setHtml(resolutionCont, resHtml);
             main.appendChild(resolutionCont);
 
-            var resolutionHeader = dfx.getClass('Viper-resolutionHeader', resolutionCont)[0];
+            var resolutionHeader = ViperUtil.getClass('Viper-resolutionHeader', resolutionCont)[0];
 
             // Create resolution tools.
             var tools = self.viper.ViperTools;
@@ -145,10 +145,10 @@ ViperAccessibilityPlugin.prototype = {
             resolutionHeader.appendChild(locateBtn);
             var sourceViewBtn = tools.createButton('VAP:showInSource', '', _('Show in Source View'), 'Viper-sourceView', function() {
                 var tmpText = document.createTextNode('__STH__');
-                dfx.insertAfter(issue.element, tmpText);
+                ViperUtil.insertAfter(issue.element, tmpText);
                 var sourceViewPlugin = self.viper.getPluginManager().getPlugin('ViperSourceViewPlugin');
                 var contents = sourceViewPlugin.getContents();
-                dfx.remove(tmpText);
+                ViperUtil.remove(tmpText);
                 sourceViewPlugin.showSourceView(contents, function() {
                     if (self.viper.isBrowser('msie') === true) {
                         sourceViewPlugin.scrollToText('__STH__');
@@ -243,14 +243,14 @@ ViperAccessibilityPlugin.prototype = {
 
     refreshIssue: function(issueNum, issue, issueElem, issueDetails)
     {
-        dfx.addClass(issueElem, 'Viper-rechecking');
+        ViperUtil.addClass(issueElem, 'Viper-rechecking');
 
         // Add the re-checking issue overlay.
         var issueRecheck = document.createElement('div');
-        dfx.addClass(issueRecheck, 'ViperAP-issueRecheck');
+        ViperUtil.addClass(issueRecheck, 'ViperAP-issueRecheck');
         issueDetails.appendChild(issueRecheck);
 
-        dfx.setHtml(issueRecheck, '<div class="Viper-issueChecking">' + _('Re-checking issue') + ' …</div>');
+        ViperUtil.setHtml(issueRecheck, '<div class="Viper-issueChecking">' + _('Re-checking issue') + ' …</div>');
 
         var self     = this;
         this.runChecks(function() {
@@ -264,19 +264,19 @@ ViperAccessibilityPlugin.prototype = {
             }
 
             if (found === false) {
-                dfx.setHtml(issueRecheck, '');
-                dfx.removeClass(issueElem, 'Viper-rechecking');
+                ViperUtil.setHtml(issueRecheck, '');
+                ViperUtil.removeClass(issueElem, 'Viper-rechecking');
 
                 // Mark issue as done.
                 self.fixIssue(issueNum, true);
             } else {
-                dfx.empty(issueRecheck);
+                ViperUtil.empty(issueRecheck);
                 var issueRemains = document.createElement('div');
-                dfx.addClass(issueRemains, 'Viper-issueRemains');
-                dfx.setHtml(issueRemains, '<span class="Viper-recheckMessage">' + _('This issue has not been resolved') + '</span>');
+                ViperUtil.addClass(issueRemains, 'Viper-issueRemains');
+                ViperUtil.setHtml(issueRemains, '<span class="Viper-recheckMessage">' + _('This issue has not been resolved') + '</span>');
                 issueRemains.appendChild(self.viper.ViperTools.createButton('VAP-issues:notResolvedBtn', _('OK'), '', '', function() {
-                    dfx.setHtml(issueRecheck, '');
-                    dfx.removeClass(issueElem, 'Viper-rechecking');
+                    ViperUtil.setHtml(issueRecheck, '');
+                    ViperUtil.removeClass(issueElem, 'Viper-rechecking');
                 }));
                 issueRecheck.appendChild(issueRemains);
             }
@@ -330,16 +330,16 @@ ViperAccessibilityPlugin.prototype = {
     _markAsDone: function(issueNum)
     {
         var issueElement = this.getIssueElement(issueNum, 'details');
-        dfx.addClass(issueElement, 'Viper-issueDone');
+        ViperUtil.addClass(issueElement, 'Viper-issueDone');
 
         var listItem = this.getIssueElement(issueNum, 'listItem');
-        dfx.addClass(listItem, 'Viper-issueDone');
+        ViperUtil.addClass(listItem, 'Viper-issueDone');
 
     },
 
     _moveDismissedIssuesToEnd: function(issues)
     {
-        if (dfx.isEmpty(this._dismissedIssues) === true) {
+        if (ViperUtil.isEmpty(this._dismissedIssues) === true) {
             return issues;
         }
 
@@ -353,7 +353,7 @@ ViperAccessibilityPlugin.prototype = {
                 continue;
             }
 
-            if (this._dismissedIssues[issue.code].inArray(issue.element) === true) {
+            if (ViperUtil.inArray(issue.element, this._dismissedIssues[issue.code]) === true) {
                 toMoveIndexes.push(i);
                 toMoveElements.push(issue);
             }
@@ -373,7 +373,7 @@ ViperAccessibilityPlugin.prototype = {
 
     _remarkDismissedIssues: function(issues)
     {
-        if (dfx.isEmpty(this._dismissedIssues) === true) {
+        if (ViperUtil.isEmpty(this._dismissedIssues) === true) {
             return;
         }
 
@@ -384,7 +384,7 @@ ViperAccessibilityPlugin.prototype = {
                 continue;
             }
 
-            if (this._dismissedIssues[issue.code].inArray(issue.element) === true) {
+            if (ViperUtil.inArray(issue.element, this._dismissedIssues[issue.code]) === true) {
                 this._markAsDone(i);
             }
         }
@@ -393,19 +393,19 @@ ViperAccessibilityPlugin.prototype = {
 
     nextIssue: function()
     {
-        dfx.trigger(dfx.getId('HTMLCS-button-next-issue'), 'click');
+        ViperUtil.trigger(ViperUtil.getid('HTMLCS-button-next-issue'), 'click');
 
     },
 
     getIssueElement: function(issueNum, section)
     {
         if (section === 'listItem') {
-            return dfx.getId('HTMLCS-msg-' + issueNum);
+            return ViperUtil.getid('HTMLCS-msg-' + issueNum);
         }
 
-        var issueElement = dfx.getId('HTMLCS-msg-detail-' + issueNum);
+        var issueElement = ViperUtil.getid('HTMLCS-msg-detail-' + issueNum);
         if (section === 'details') {
-            issueElement = dfx.getClass('HTMLCS-issue-details', issueElement)[0];
+            issueElement = ViperUtil.getClass('HTMLCS-issue-details', issueElement)[0];
         }
 
         return issueElement;
@@ -414,7 +414,7 @@ ViperAccessibilityPlugin.prototype = {
 
     getCurrentIssueNumber: function()
     {
-        var currentIssueElem = dfx.getClass('HTMLCS-current', this._htmlcsWrapper)[0];
+        var currentIssueElem = ViperUtil.getClass('HTMLCS-current', this._htmlcsWrapper)[0];
         var id = Number(currentIssueElem.id.split('-').pop());
         return id;
 
@@ -466,7 +466,7 @@ ViperAccessibilityPlugin.prototype = {
 
     loadObject: function(src, objName, callback)
     {
-        if (window[objName] || this._loadedScripts.find(src) >= 0) {
+        if (window[objName] || ViperUtil.inArray(src, this._loadedScripts) === true) {
             callback.call(this, window[objName]);
             return;
         }
@@ -539,7 +539,7 @@ ViperAccessibilityPlugin.prototype = {
      * @param {function} callback The function to call once the script is loaded.
      */
     includeCss: function(href) {
-        if (this._includedCSS.find(href) >= 0) {
+        if (ViperUtil.inArray(href, this._includedCSS) === true) {
             return;
         }
 

@@ -34,7 +34,7 @@ class Viper_Tests_ViperTableEditorPlugin_TableHeadersUnitTest extends AbstractVi
         // Remove header column and check that ids are taken out
         $this->showTools(0, 'col');
         $this->clickField('Heading');
-        $this->clickInlineToolbarButton('Update Changes', NULL, TRUE);
+        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
         $this->assertHTMLMatch('<p>Test %1%</p><table border="1" id="test" style="width: 100%;"><tbody><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
 
     }//end testHeaderTagsForTableWithLeftColHeaders()
@@ -54,7 +54,7 @@ class Viper_Tests_ViperTableEditorPlugin_TableHeadersUnitTest extends AbstractVi
          // Remove header row and check that ids are taken out
         $this->showTools(0, 'row');
         $this->clickField('Heading');
-        $this->clickInlineToolbarButton('Update Changes', NULL, TRUE);
+        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
         $this->assertHTMLMatch('<p>Test %1%</p><table border="1" id="test" style="width: 100%;"><tbody><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
 
     }//end testHeaderTagsWithTopRowHeaders()
@@ -74,7 +74,7 @@ class Viper_Tests_ViperTableEditorPlugin_TableHeadersUnitTest extends AbstractVi
         // Remove header row and check that ids are taken out
         $this->showTools(0, 'row');
         $this->clickField('Heading');
-        $this->clickInlineToolbarButton('Update Changes', NULL, TRUE);
+        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
         $this->assertHTMLMatch('<p>Test %1%</p><table border="1" id="test" style="width: 100%;"><tbody><tr><td></td><td></td><td></td><td></td></tr><tr><th id="testr2c1"></th><td headers="testr2c1"></td><td headers="testr2c1"></td><td headers="testr2c1"></td></tr><tr><th id="testr3c1"></th><td headers="testr3c1"></td><td headers="testr3c1"></td><td headers="testr3c1"></td></tr></tbody></table><p></p>');
 
         // Remove header column and check that ids are taken out
@@ -147,7 +147,7 @@ class Viper_Tests_ViperTableEditorPlugin_TableHeadersUnitTest extends AbstractVi
 
         $this->showTools(0, 'row');
         $this->clickField('Heading');
-        $this->clickInlineToolbarButton('Update Changes', NULL, TRUE);
+        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
         $this->assertHTMLMatch('<p>Test %1%</p><table border="1" id="test" style="width: 100%;"><thead><tr><th id="testr1c1"></th><th id="testr1c2"></th><th id="testr1c3"></th><th id="testr1c4"></th></tr></thead><tbody><tr><td headers="testr1c1"></td><td headers="testr1c2"></td><td headers="testr1c3"></td><td headers="testr1c4"></td></tr><tr><td headers="testr1c1"></td><td headers="testr1c2"></td><td headers="testr1c3"></td><td headers="testr1c4"></td></tr></tbody></table><p></p>');
 
     }//end testHeaderTagsAddedWhenHeaderRowAdded()
@@ -166,7 +166,7 @@ class Viper_Tests_ViperTableEditorPlugin_TableHeadersUnitTest extends AbstractVi
 
         $this->showTools(0, 'col');
         $this->clickField('Heading');
-        $this->clickInlineToolbarButton('Update Changes', NULL, TRUE);
+        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
         $this->assertHTMLMatch('<p>Test %1%</p><table border="1" id="test" style="width: 100%;"><tbody><tr><th id="testr1c1"></th><td headers="testr1c1"></td><td headers="testr1c1"></td><td headers="testr1c1"></td></tr><tr><th id="testr2c1"></th><td headers="testr2c1"></td><td headers="testr2c1"></td><td headers="testr2c1"></td></tr><tr><th id="testr3c1"></th><td headers="testr3c1"></td><td headers="testr3c1"></td><td headers="testr3c1"></td></tr></tbody></table><p></p>');
 
     }//end testHeaderTagsAddedWhenHeaderColAdded()

@@ -1,0 +1,26 @@
+<style type="text/css">h2.western { font-family: "Liberation Sans",sans-serif; font-size: 16pt; }h2.cjk { font-family: "SimSun"; font-size: 16pt; }h2.ctl { font-family: "Lucida Sans"; font-size: 16pt; }h1 { margin-bottom: 0.21cm; }h1.western { font-family: "Liberation Sans",sans-serif; font-size: 18pt; }h1.cjk { font-family: "SimSun"; font-size: 18pt; }h1.ctl { font-family: "Lucida Sans"; font-size: 18pt; }p { margin-bottom: 0.25cm; line-height: 120%; }</style>
+
+
+<h1 class="western">Heading 1</h1>
+<p style="margin-bottom: 0cm; line-height: 100%">This is a document
+that has been created using LibreOffice</p>
+<p style="margin-bottom: 0cm; line-height: 100%"><br>
+</p>
+<h2 class="western">Heading 2</h2>
+<p style="margin-bottom: 0cm; line-height: 100%">More text under
+heading two.</p>
+<p style="margin-bottom: 0cm; line-height: 100%"><br>
+</p>
+<p style="margin-bottom: 0cm; line-height: 100%">Numbered list:</p>
+<ol><li><p style="margin-bottom: 0cm; line-height: 100%">One</p>
+	</li><li><p style="margin-bottom: 0cm; line-height: 100%">Two</p>
+	</li><li><p style="margin-bottom: 0cm; line-height: 100%">Three</p>
+</li></ol>
+<p style="margin-bottom: 0cm; line-height: 100%"><br>
+</p>
+<p style="margin-bottom: 0cm; line-height: 100%">Ordered List:</p>
+<ul><li><p style="margin-bottom: 0cm; line-height: 100%">One</p>
+	</li><li><p style="margin-bottom: 0cm; line-height: 100%">Two</p>
+	</li><li><p style="margin-bottom: 0cm; line-height: 100%">Three</p>
+</li></ul>
+

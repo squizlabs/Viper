@@ -548,7 +548,7 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
     {
         $this->moveToKeyword(1, 'right');
 
-        $this->sikuli->execJS('(function(){var input = document.createElement("input");dfx.insertBefore(document.body.firstChild, input);input.focus();return true;})()');
+        $this->sikuli->execJS('(function(){var input = document.createElement("input");ViperUtil.insertBefore(document.body.firstChild, input);input.focus();return true;})()');
         sleep(2);
         $this->sikuli->keyDown('Key.TAB');
         $this->type('123456');
@@ -569,7 +569,7 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
         $this->sikuli->keyDown('Key.CMD + a');
         $this->sikuli->keyDown('Key.DELETE');
 
-        $this->sikuli->execJS('(function(){var input = document.createElement("input");dfx.insertBefore(document.body.firstChild, input);input.focus();return true;})()');
+        $this->sikuli->execJS('(function(){var input = document.createElement("input");ViperUtil.insertBefore(document.body.firstChild, input);input.focus();return true;})()');
         sleep(2);
         $this->sikuli->keyDown('Key.TAB');
         $this->type('123456');

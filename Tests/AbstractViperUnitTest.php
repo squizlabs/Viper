@@ -151,7 +151,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
         $jsFilePath = $this->_getTestFile('js');
         $jsInclude  = '';
         if ($jsFilePath !== NULL) {
-            $jsFilePath = str_replace($baseDir, '.', $jsFilePath);
+            $jsFilePath = str_replace($baseDir, '../', $jsFilePath);
             $jsInclude  = '<script type="text/javascript" src="'.$jsFilePath.'"></script>';
         }
 
@@ -177,7 +177,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
 
         // Get the contents of the test file template.
         if (self::$_testContent === NULL) {
-            self::$_testContent = file_get_contents($baseDir.'/test.html');
+            self::$_testContent = file_get_contents($baseDir.'/Web/test-template.html');
         }
 
         $viperInclude = '';
@@ -187,11 +187,10 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
                 throw new Exception('Could not find: '.$path);
             }
 
-            $viperInclude = '<script type="text/javascript" src="../build/viper.js"></script>
-                             <link rel="stylesheet" media="screen" href="../build/viper.css" />';
+            $viperInclude = '<script type="text/javascript" src="../../build/viper.js"></script>
+                             <link rel="stylesheet" media="screen" href="../../build/viper.css" />';
         } else {
-            $viperInclude = '<script type="text/javascript" src="../DfxJSLib/dfx.js"></script>
-                             <script type="text/javascript" src="../Viper-all.js"></script>';
+            $viperInclude = '<script type="text/javascript" src="../../Viper-all.js"></script>';
         }
 
         // Get stats.
@@ -200,8 +199,10 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
         $numErrors  = ViperTestListener::getErrors();
         $totalTests = ViperTestListener::getNumberOfTests();
         $testsRun   = ViperTestListener::getTestsRun();
-        ViperTestListener::$browserid    = $this->sikuli->getBrowserid();
-        ViperTestListener::$viperTestObj = $this;
+
+        ViperTestListener::setSikuli($this->sikuli);
+        ViperTestListener::setFilter(getenv('VIPER_TEST_FILTER'));
+        ViperTestListener::setLogPath(getenv('VIPER_TEST_LOG_PATH'));
 
         $testTitle .= '['.$testsRun.'/'.$totalTests.']';
 
@@ -216,7 +217,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
         $contents = str_replace('__TEST_VIPER_INCLUDE__', $viperInclude, $contents);
         $contents = str_replace('__TEST_TITLE__', $testTitle, $contents);
         $contents = str_replace('__TEST_JS_INCLUDE__', $jsInclude, $contents);
-        $dest     = $baseDir.'/test_tmp.html';
+        $dest     = $baseDir.'/tmp/test_tmp.html';
         file_put_contents($dest, $contents);
 
         $this->sikuli->resize();
@@ -244,7 +245,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
                 }
             }
 
-            $this->sikuli->goToURL($this->_getBaseUrl().'/test_tmp.html');
+            $this->sikuli->goToURL($this->_getBaseUrl().'/tmp/test_tmp.html');
             $this->sikuli->setAutoWaitTimeout(1);
             $this->_waitForViper();
 
@@ -424,7 +425,11 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
     {
         // Clean up old files.
         $imgPath = $this->getBrowserImagePath();
-        exec('rm '.$imgPath.'/*.png');
+        @exec('rm '.$imgPath.'/*.png');
+
+        $url = $this->_getBaseUrl().'/Web/calibrate.html';
+        $this->sikuli->goToURL($url);
+        sleep(3);
 
         $this->_calibrateKeywords();
         $this->_calibrateIcons();
@@ -443,21 +448,15 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
         $this->sikuli->setAutoWaitTimeout(0.5);
 
         // Calibrate image recognition.
-        $baseDir = dirname(__FILE__);
         $imgPath = $this->getBrowserImagePath();
 
         if (file_exists($imgPath) === FALSE) {
             mkdir($imgPath, 0755, TRUE);
         }
 
-        $dest = $baseDir.'/calibrate-text.html';
+        $this->sikuli->execJS('calibrate("keywords")');
 
-        $url = $this->_getBaseUrl().'/calibrate-text.html';
-
-        $this->sikuli->goToURL($url);
-        sleep(3);
-
-        $texts = $this->sikuli->execJS('getCoords('.json_encode(self::_getKeywordsList()).')');
+        $texts = $this->sikuli->execJS('getKeywordCoords('.json_encode(self::_getKeywordsList()).')');
         $count = count($texts);
 
         $i      = 1;
@@ -531,21 +530,15 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
         $matches = array();
         preg_match_all('#.Viper-buttonIcon.Viper-([\w-_]+)#', $cssContents, $matches);
 
-        $buttonNames = array_values(array_unique($matches[1]));
-
-        // Create the temp calibration file.
-        $tmpFile = $baseDir.'/tmp-calibrate.html';
-
-        $statuses = array(
-                     ''          => ' Viper-dummyClass',
-                     '_selected' => ' Viper-selected',
-                     '_active'   => ' Viper-active',
-                     '_disabled' => ' Viper-disabled',
-                    );
-
-        $buttonHTML = '';
-
+        $buttonHTML   = '';
         $browserClass = '';
+        $buttonNames  = array_values(array_unique($matches[1]));
+        $statuses     = array(
+                         ''          => ' Viper-dummyClass',
+                         '_selected' => ' Viper-selected',
+                         '_active'   => ' Viper-active',
+                         '_disabled' => ' Viper-disabled',
+                        );
 
         if ($this->sikuli->getBrowserid() === 'ie8') {
             $browserClass = 'Viper-browser-msie Viper-browserVer-msie8';
@@ -567,21 +560,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
 
         $buttonHTML .= '</div></div>';
 
-        $calibrateHtml = file_get_contents($baseDir.'/calibrate.html');
-        $calibrateHtml = str_replace('__TEST_CONTENT__', $buttonHTML, $calibrateHtml);
-
-        file_put_contents($tmpFile, $calibrateHtml);
-
-        $dest = $baseDir.'/tmp-calibrate.html';
-
-        $url = $this->_getBaseUrl().'/tmp-calibrate.html';
-
-        $this->sikuli->goToURL($url);
-        sleep(3);
-
-        if ($this->sikuli->execJS('testJSExec()') !== 'Pass') {
-            throw new Exception('JavaScript execution test failed!!');
-        }
+        $this->sikuli->execJS('calibrate("icons", '.json_encode($buttonHTML).')');
 
         // Create image for the inline toolbar pattern (the arrow on top).
         sleep(2);
@@ -597,7 +576,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
         copy($vitpImage, $imgPath.'/vitp_arrow.png');
 
         // Left arrow.
-        $vitp      = $this->sikuli->execJS('getVITP("left")');
+        $vitp = $this->sikuli->execJS('getVITP("left")');
         sleep(1);
         $vitp['x'] = $this->sikuli->getPageXRelativeToScreen($vitp['x']);
         $vitp['y'] = $this->sikuli->getPageYRelativeToScreen($vitp['y']);
@@ -607,7 +586,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
         copy($vitpImage, $imgPath.'/vitp_arrowLeft.png');
 
         // Right arrow.
-        $vitp      = $this->sikuli->execJS('getVITP("right")');
+        $vitp = $this->sikuli->execJS('getVITP("right")');
         sleep(1);
         $vitp['x'] = $this->sikuli->getPageXRelativeToScreen($vitp['x']);
         $vitp['y'] = $this->sikuli->getPageYRelativeToScreen($vitp['y']);
@@ -620,11 +599,11 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
         $this->sikuli->execJS('viper.destroy()');
 
         // Create image for the text field actions.
-        $textFieldActionRevertRegion = $this->sikuli->getRegionOnPage($this->sikuli->execJS('dfx.getBoundingRectangle(dfx.getId("textboxActionRevert"))'));
+        $textFieldActionRevertRegion = $this->sikuli->getRegionOnPage($this->sikuli->execJS('ViperUtil.getBoundingRectangle(ViperUtil.getid("textboxActionRevert"))'));
         $textFieldActionRevertImage  = $this->sikuli->capture($textFieldActionRevertRegion);
         copy($textFieldActionRevertImage, $imgPath.'/textField_action_revert.png');
 
-        $textFieldActionClearRegion = $this->sikuli->getRegionOnPage($this->sikuli->execJS('dfx.getBoundingRectangle(dfx.getId("textboxActionClear"))'));
+        $textFieldActionClearRegion = $this->sikuli->getRegionOnPage($this->sikuli->execJS('ViperUtil.getBoundingRectangle(ViperUtil.getid("textboxActionClear"))'));
         $textFieldActionClearImage  = $this->sikuli->capture($textFieldActionClearRegion);
         copy($textFieldActionClearImage, $imgPath.'/textField_action_clear.png');
 
@@ -677,9 +656,6 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
 
             break;
         }//end for
-
-        // Remove the temp calibrate file.
-        unlink($tmpFile);
 
         $this->addData('buttonSimmilarity', $similarity);
 
@@ -1114,7 +1090,14 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
         $match = NULL;
         try {
             $match = $this->sikuli->find($this->getBrowserImagePath().'/vitp_arrow.png', NULL, 0.85);
+            if ($this->sikuli->getX($match) === 0) {
+                $match = NULL;
+            }
         } catch (Exception $e) {
+            $match = NULL;
+        }
+
+        if ($match === NULL) {
             // Get it using JS.
             $elemRect = $this->sikuli->execJS('gVITPArrow()');
             $match    = $this->sikuli->getRegionOnPage($elemRect);
@@ -1123,10 +1106,14 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
             }
         }
 
-        $this->sikuli->setX($match, ($this->sikuli->getX($match) - 200));
+        $x = ($this->sikuli->getX($match) - 200);
+        if ($x < 0) {
+            $x = 10;
+        }
+
+        $this->sikuli->setX($match, $x);
         $this->sikuli->setW($match, ($this->sikuli->getW($match) + 400));
         $this->sikuli->setH($match, ($this->sikuli->getH($match) + 200));
-
         $this->sikuli->setAutoWaitTimeout(0.3, $match);
 
         return $match;
@@ -1744,7 +1731,6 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
                 throw new Exception('Failed to find keyword: '.$this->getKeyword($keyword));
             }
 
-
             $loc = $this->sikuli->getRegionOnPage($loc);
         }
 
@@ -1984,10 +1970,8 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
     protected function openFile($filePath, $appName)
     {
         if ($appName === $this->sikuli->getBrowserName()) {
-            // Open a new tab in this browser.
-            $this->sikuli->keyDown('Key.CMD + t');
-            sleep(1);
-            $this->sikuli->goToURL($filePath);
+            // Open a new tab in this browser. Popup blocker must be disabled.
+            $this->sikuli->execJS('window.open("'.$filePath.'", "_blank")');
             return TRUE;
         }
 
@@ -2084,7 +2068,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      * @return void
      * @throws Exception If the browser is not supported.
      */
-    protected function paste($rightClick=FALSE, $sourceURL=NULL)
+    protected function paste($rightClick=FALSE)
     {
         if ($rightClick !== TRUE) {
             $this->sikuli->keyDown('Key.CMD + v');
@@ -2098,47 +2082,29 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
                 case 'firefox':
                     // Click the paste item in the right click menu.
                     $this->sikuli->click($this->sikuli->mouseMoveOffset(30, 80));
+                    $this->_rightClickPasteDiv();
 
-                    if ($sourceURL !== NULL) {
-                        $this->pasteFromURL($sourceURL);
-                        $this->sikuli->execJS('viper.ViperTools.getItem(\'ViperCopyPastePlugin-paste\').hide()');
-                    } else {
-                        $this->_rightClickPasteDiv();
-
-                        // Click the paste item in the right click menu.
-                        $this->sikuli->click($this->sikuli->mouseMoveOffset(30, 80));
-                    }
+                    // Click the paste item in the right click menu.
+                    $this->sikuli->click($this->sikuli->mouseMoveOffset(30, 80));
                 break;
 
                 case 'safari':
                     // Click the paste item in the right click menu.
                     $this->sikuli->click($this->sikuli->mouseMoveOffset(30, 100));
-
                     $this->_rightClickPasteDiv();
 
-                    if ($sourceURL !== NULL) {
-                        $this->pasteFromURL($sourceURL);
-                        $this->sikuli->execJS('viper.ViperTools.getItem(\'ViperCopyPastePlugin-paste\').hide()');
-                    } else {
-                        // Click the paste item in the right click menu.
-                        $this->sikuli->click($this->sikuli->mouseMoveOffset(30, 40));
-                    }
+                    // Click the paste item in the right click menu.
+                    $this->sikuli->click($this->sikuli->mouseMoveOffset(30, 40));
                 break;
 
-                case 'googlechrome':
-                    if ($sourceURL !== NULL) {
-                        $this->pasteFromURL($sourceURL);
-                        $this->sikuli->execJS('viper.ViperTools.getItem(\'ViperCopyPastePlugin-paste\').hide()');
-                    } else {
-                        // Google does not need the right click pop for pasting, just
-                        // click the paste from the right click menu.
-                        $this->sikuli->click($this->sikuli->mouseMoveOffset(30, 95));
-                    }
+                case 'chrome':
+                    // Google does not need the right click pop for pasting, just
+                    // click the paste from the right click menu.
+                    $this->sikuli->click($this->sikuli->mouseMoveOffset(30, 95));
                 break;
 
                 default:
-                    throw new Exception('Right click testing for this browser has not been implemented');
-                break;
+                throw new Exception('Right click testing for this browser has not been implemented');
             }//end switch
         }//end if
 
@@ -2166,7 +2132,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      */
     private function _rightClickPasteDiv()
     {
-        $targetIcon = $this->sikuli->find(dirname(__FILE__).'/Core/Images/window-target2.png');
+        $targetIcon = $this->sikuli->find(dirname(dirname(__FILE__)).'/Core/Images/window-target2.png');
         $topLeft    = $this->sikuli->getTopLeft($targetIcon);
         $loc        = array(
                        'x' => ($this->sikuli->getX($topLeft) + 50),
@@ -2211,5 +2177,3 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
 
 
 }//end class
-
-?>

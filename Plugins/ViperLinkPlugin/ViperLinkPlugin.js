@@ -54,7 +54,7 @@ ViperLinkPlugin.prototype = {
         }
 
         var startNode = range.getStartNode();
-        if (!startNode || startNode.nodeType !== dfx.TEXT_NODE) {
+        if (!startNode || startNode.nodeType !== ViperUtil.TEXT_NODE) {
             return;
         }
 
@@ -78,7 +78,7 @@ ViperLinkPlugin.prototype = {
         var length = url.length;
         var a      = document.createElement('a');
 
-        dfx.setHtml(a, url);
+        ViperUtil.setHtml(a, url);
 
         if (url.match(/^[^:]+(?=:\/\/)/) === null) {
             url = 'http://' + url;
@@ -87,7 +87,7 @@ ViperLinkPlugin.prototype = {
         a.setAttribute('href', url);
 
         var nextNode = startNode.splitText((range.startOffset - mod - length));
-        dfx.insertBefore(nextNode, a);
+        ViperUtil.insertBefore(nextNode, a);
 
         nextNode.data = nextNode.data.slice(length);
 
@@ -99,7 +99,35 @@ ViperLinkPlugin.prototype = {
 
     isEmail: function(url)
     {
-        return dfx.validateEmail(url);
+        return this.validateEmail(url);
+
+    },
+
+    /**
+     * Validates an email.
+     *
+     * Chose not to use a domain white list given .anything is on the way.  A feature
+     * this regex currently does not support is <Name Part> of an email so add if
+     * needed.  This expression is based on Arluison Guillaume http://www.mi-ange.net/
+     * email regex.
+     *
+     * @return boolean
+     */
+    validateEmail: function(email)
+    {
+        var regExStr = '^[-a-z0-9~!$%^&*_=+}{\'?]+(\.[-a-z0-9~!$%^&*_=+}{\'?]+)*@([a-z0-9_][-a-z0-9_]*(\.[-a-z0-9_]+)*\.([a-z][a-z]+)|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$';
+
+        var regExp = new RegExp(regExStr, 'i');
+
+        // Finally run the regular expression.
+        var matches = email.match(regExp);
+        if (matches === null) {
+            var emailValid = false;
+        } else {
+            var emailValid = true;
+        }
+
+        return emailValid;
 
     },
 
@@ -122,9 +150,9 @@ ViperLinkPlugin.prototype = {
         if (this.viper.isBrowser('msie') === true) {
             // IE for whatever reason, changed the content of the link to be the href
             // when its a mailto link.....
-            var linkContent = dfx.getHtml(link);
+            var linkContent = ViperUtil.getHtml(link);
             link.setAttribute('href', url);
-            dfx.setHtml(link, linkContent);
+            ViperUtil.setHtml(link, linkContent);
         } else {
             link.setAttribute('href', url);
         }
@@ -148,7 +176,7 @@ ViperLinkPlugin.prototype = {
         var range = this.viper.getViperRange();
         var node  = range.getNodeSelection();
 
-        if (dfx.isTag(node, 'a') === false) {
+        if (ViperUtil.isTag(node, 'a') === false) {
             node = this.getLinkFromRange(range);
             if (!node) {
                 return this.rangeToLink(idPrefix);
@@ -182,7 +210,7 @@ ViperLinkPlugin.prototype = {
             // IE fix for Img selections.
             var prevSibling = range.startContainer.previousSibling;
             if (prevSibling
-                && dfx.isTag(prevSibling, 'img') === true
+                && ViperUtil.isTag(prevSibling, 'img') === true
                 && range.startOffset === 0
                 && range.endOffset === 0
                 && range.startContainer === range.endContainer
@@ -191,20 +219,20 @@ ViperLinkPlugin.prototype = {
             }
         }
 
-        if (node && node.nodeType === dfx.ELEMENT_NODE) {
-            if (dfx.isStubElement(node) === true) {
-                dfx.insertBefore(node, a);
+        if (node && node.nodeType === ViperUtil.ELEMENT_NODE) {
+            if (ViperUtil.isStubElement(node) === true) {
+                ViperUtil.insertBefore(node, a);
                 a.appendChild(node);
             } else {
                 var prevNode = null;
                 while (node.firstChild) {
                     var firstChild = node.firstChild;
                     if (prevNode
-                        && prevNode.nodeType === dfx.TEXT_NODE
-                        && firstChild.nodeType === dfx.TEXT_NODE
+                        && prevNode.nodeType === ViperUtil.TEXT_NODE
+                        && firstChild.nodeType === ViperUtil.TEXT_NODE
                     ) {
                         prevNode.data += firstChild.data;
-                        dfx.remove(firstChild);
+                        ViperUtil.remove(firstChild);
                     } else {
                         a.appendChild(firstChild);
                     }
@@ -212,15 +240,15 @@ ViperLinkPlugin.prototype = {
                     prevNode = firstChild;
                 }
 
-                if (dfx.isTag(node, 'span') === true && this.viper.isViperHighlightElement(node) === false) {
+                if (ViperUtil.isTag(node, 'span') === true && this.viper.isViperHighlightElement(node) === false) {
                     // Replace the span tag with the link tag, make sure its not the
                     // Viper highlight element, if it is dont copy its attributes.
                     for (var i = 0; i < node.attributes.length; i++) {
                         a.setAttribute(node.attributes[i].nodeName, node.attributes[i].nodeValue)
                     }
 
-                    dfx.insertBefore(node, a);
-                    dfx.remove(node);
+                    ViperUtil.insertBefore(node, a);
+                    ViperUtil.remove(node);
                 } else {
                     node.appendChild(a);
                 }
@@ -254,10 +282,10 @@ ViperLinkPlugin.prototype = {
         var lastChild  = linkTag.lastChild;
 
         while (linkTag.firstChild) {
-            dfx.insertBefore(linkTag, linkTag.firstChild);
+            ViperUtil.insertBefore(linkTag, linkTag.firstChild);
         }
 
-        dfx.remove(linkTag);
+        ViperUtil.remove(linkTag);
 
         this.viper.selectBookmark(bookmark);
 
@@ -275,23 +303,23 @@ ViperLinkPlugin.prototype = {
         var range    = this.viper.getViperRange();
         var nodeSelection = range.getNodeSelection();
         if (nodeSelection) {
-            var links = dfx.getTag('a', nodeSelection);
+            var links = ViperUtil.getTag('a', nodeSelection);
             var c     = links.length;
             for (var i = 0; i < c; i++) {
                 var elem = links[i];
                 while (elem.firstChild) {
-                    if (elem.firstChild.nodeType == dfx.TEXT_NODE
+                    if (elem.firstChild.nodeType == ViperUtil.TEXT_NODE
                         && elem.previousSibling
-                        && elem.previousSibling.nodeType === dfx.TEXT_NODE
+                        && elem.previousSibling.nodeType === ViperUtil.TEXT_NODE
                     ) {
                         elem.previousSibling.data += elem.firstChild.data;
-                        dfx.remove(elem.firstChild);
+                        ViperUtil.remove(elem.firstChild);
                     } else {
-                        dfx.insertBefore(elem, elem.firstChild);
+                        ViperUtil.insertBefore(elem, elem.firstChild);
                     }
                 }
 
-                dfx.remove(elem);
+                ViperUtil.remove(elem);
             }
 
             range.selectNode(nodeSelection);
@@ -299,16 +327,16 @@ ViperLinkPlugin.prototype = {
             this.viper.fireSelectionChanged(range, true);
         } else {
             var bookmark = this.viper.createBookmark();
-            var elems = dfx.getElementsBetween(bookmark.start, bookmark.end);
+            var elems = ViperUtil.getElementsBetween(bookmark.start, bookmark.end);
 
-            dfx.walk(bookmark.start, function(elem) {
-                if (elem.nodeType === dfx.ELEMENT_NODE && dfx.isTag(elem, 'a') === true) {
+            ViperUtil.walk(bookmark.start, function(elem) {
+                if (elem.nodeType === ViperUtil.ELEMENT_NODE && ViperUtil.isTag(elem, 'a') === true) {
                     var nextSibling = elem.firstChild;
                     while (elem.lastChild) {
-                        dfx.insertAfter(elem, elem.lastChild);
+                        ViperUtil.insertAfter(elem, elem.lastChild);
                     }
 
-                    dfx.remove(elem);
+                    ViperUtil.remove(elem);
 
                     return nextSibling;
                 }
@@ -332,9 +360,9 @@ ViperLinkPlugin.prototype = {
             if (range.startContainer === range.endContainer
                 && range.startOffset === 0
                 && range.endOffset === 0
-                && range.startContainer.nodeType === dfx.TEXT_NODE
+                && range.startContainer.nodeType === ViperUtil.TEXT_NODE
                 && range.startContainer.previousSibling
-                && dfx.isTag(range.startContainer.previousSibling, 'img') === true
+                && ViperUtil.isTag(range.startContainer.previousSibling, 'img') === true
             ) {
                 startNode = range.startContainer.previousSibling;
                 common    = startNode.parentNode;
@@ -343,16 +371,16 @@ ViperLinkPlugin.prototype = {
             }
         }
 
-        if (selectedNode && dfx.isTag(selectedNode, 'a') === true) {
+        if (selectedNode && ViperUtil.isTag(selectedNode, 'a') === true) {
             return selectedNode;
         }
 
         var viperElem = this.viper.getViperElement();
 
         while (common) {
-            if (dfx.isTag(common, 'a') === true) {
+            if (ViperUtil.isTag(common, 'a') === true) {
                 return common;
-            } else if (common === viperElem || dfx.isBlockElement(common) === true) {
+            } else if (common === viperElem || ViperUtil.isBlockElement(common) === true) {
                 break;
             }
 
@@ -372,7 +400,7 @@ ViperLinkPlugin.prototype = {
         }
 
         var nodeSelection = range.getNodeSelection();
-        if (nodeSelection && dfx.isTag(nodeSelection, 'a') === true) {
+        if (nodeSelection && ViperUtil.isTag(nodeSelection, 'a') === true) {
             // Let the getLinkFromRange handle this.
             return false;
         }
@@ -414,7 +442,7 @@ ViperLinkPlugin.prototype = {
         main.appendChild(newWindowRow);
 
         var subSectionElem = this.viper.ViperTools.getItem(idPrefix + ':link').element;
-        dfx.addClass(subSectionElem, 'Viper-externalLink');
+        ViperUtil.addClass(subSectionElem, 'Viper-externalLink');
 
         // URL field changed event, when the url field is changed if the url is an
         // email address then show the email address related fields.
@@ -422,11 +450,11 @@ ViperLinkPlugin.prototype = {
             var urlValue = tools.getItem(idPrefix + ':url').getValue();
             if (urlValue.toLowerCase().indexOf('mailto:') === 0 || self.isEmail(urlValue) === true) {
                 // Show the subject field and hide the title field.
-                dfx.removeClass(subSectionElem, 'Viper-externalLink');
-                dfx.addClass(subSectionElem, 'Viper-emailLink');
+                ViperUtil.removeClass(subSectionElem, 'Viper-externalLink');
+                ViperUtil.addClass(subSectionElem, 'Viper-emailLink');
             } else {
-                dfx.removeClass(subSectionElem, 'Viper-emailLink');
-                dfx.addClass(subSectionElem, 'Viper-externalLink');
+                ViperUtil.removeClass(subSectionElem, 'Viper-emailLink');
+                ViperUtil.addClass(subSectionElem, 'Viper-externalLink');
             }
         });
 
@@ -528,9 +556,9 @@ ViperLinkPlugin.prototype = {
         var currentIsLink = false;
 
         // Check if we need to show the link options.
-        if ((dfx.isTag(data.lineage[data.current], 'img') !== true
-            && dfx.isBlockElement(data.lineage[data.current]) === true)
-            || ('thead,tfoot'.split(',')).inArray(dfx.getTagName(data.lineage[data.current])) === true
+        if ((ViperUtil.isTag(data.lineage[data.current], 'img') !== true
+            && ViperUtil.isBlockElement(data.lineage[data.current]) === true)
+            || ViperUtil.inArray(ViperUtil.getTagName(data.lineage[data.current]), ('thead,tfoot'.split(','))) === true
         ) {
             return false;
         }
@@ -549,24 +577,24 @@ ViperLinkPlugin.prototype = {
 
         if (startNode
             && endNode
-            && dfx.getFirstBlockParent(startNode) !== dfx.getFirstBlockParent(endNode)
+            && ViperUtil.getFirstBlockParent(startNode) !== ViperUtil.getFirstBlockParent(endNode)
         ) {
             return false;
         }
 
-        if (dfx.isTag(data.lineage[data.current], 'a') === true) {
+        if (ViperUtil.isTag(data.lineage[data.current], 'a') === true) {
             // If the selection is a whole A tag then by default show the
             // link sub section.
             currentIsLink    = true;
         }
 
         if (currentIsLink !== true
-            && (data.lineage[data.current].nodeType !== dfx.TEXT_NODE
-            || dfx.isTag(data.lineage[data.current].parentNode, 'a') === false)
+            && (data.lineage[data.current].nodeType !== ViperUtil.TEXT_NODE
+            || ViperUtil.isTag(data.lineage[data.current].parentNode, 'a') === false)
             && range.collapsed === true
         ) {
-            if (range.collapsed === true && data.lineage[data.current].nodeType === dfx.TEXT_NODE) {
-                var parents = dfx.getParents(data.lineage[data.current].parentNode, 'a', this.viper.getViperElement());
+            if (range.collapsed === true && data.lineage[data.current].nodeType === ViperUtil.TEXT_NODE) {
+                var parents = ViperUtil.getParents(data.lineage[data.current].parentNode, 'a', this.viper.getViperElement());
                 if (parents.length > 0) {
                     return true;
                 }
@@ -661,14 +689,14 @@ ViperLinkPlugin.prototype = {
                 if (range.collapsed === true
                     || startNode
                     && endNode
-                    && dfx.getFirstBlockParent(startNode) !== dfx.getFirstBlockParent(endNode)
+                    && ViperUtil.getFirstBlockParent(startNode) !== ViperUtil.getFirstBlockParent(endNode)
                 ) {
                     tools.disableButton('insertLink');
                     toolbar.closeBubble('ViperLinkPlugin:vtp:link');
                 } else {
                     if (nodeSelection
-                        && nodeSelection.nodeType === dfx.ELEMENT_NODE
-                        && ('tr,table,thead,tfoot'.split(',')).inArray(dfx.getTagName(nodeSelection))
+                        && nodeSelection.nodeType === ViperUtil.ELEMENT_NODE
+                        && ViperUtil.inArray(ViperUtil.getTagName(nodeSelection), ('tr,table,thead,tfoot'.split(',')))
                     ) {
                         tools.disableButton('insertLink');
                     } else {
@@ -715,11 +743,11 @@ ViperLinkPlugin.prototype = {
 
         var main = this.viper.ViperTools.getItem('ViperLinkPlugin:vtp:link').element;
         if (isEmailLink === true) {
-            dfx.addClass(main, 'Viper-emailLink');
-            dfx.removeClass(main, 'Viper-externalLink');
+            ViperUtil.addClass(main, 'Viper-emailLink');
+            ViperUtil.removeClass(main, 'Viper-externalLink');
         } else {
-            dfx.addClass(main, 'Viper-externalLink');
-            dfx.removeClass(main, 'Viper-emailLink');
+            ViperUtil.addClass(main, 'Viper-externalLink');
+            ViperUtil.removeClass(main, 'Viper-emailLink');
         }
 
         var tools = this.viper.ViperTools;
@@ -761,11 +789,11 @@ ViperLinkPlugin.prototype = {
 
         var main = this.viper.ViperTools.getItem('ViperLinkPlugin:vitp:link').element;
         if (isEmailLink === true) {
-            dfx.addClass(main, 'Viper-emailLink');
-            dfx.removeClass(main, 'Viper-externalLink');
+            ViperUtil.addClass(main, 'Viper-emailLink');
+            ViperUtil.removeClass(main, 'Viper-externalLink');
         } else {
-            dfx.addClass(main, 'Viper-externalLink');
-            dfx.removeClass(main, 'Viper-emailLink');
+            ViperUtil.addClass(main, 'Viper-externalLink');
+            ViperUtil.removeClass(main, 'Viper-emailLink');
         }
 
         var tools = this.viper.ViperTools;

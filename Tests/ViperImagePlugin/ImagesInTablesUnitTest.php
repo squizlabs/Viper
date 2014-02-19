@@ -98,7 +98,7 @@ class Viper_Tests_ViperImagePlugin_ImagesInTablesUnitTest extends AbstractViperI
         $this->sikuli->keyDown('Key.TAB');
         $this->type('Alt tag');
         sleep(1);
-        $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
 
         $this->assertHTMLMatchNoHeaders('<table border="0" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU %1%<img src="%url%/ViperImagePlugin/Images/html-codesniffer.png" alt="Alt tag" /> FoX %2%</td><td><strong><em>WoW</em></strong> sapien vel aliquet</td><td>Another cell</td></tr><tr><td><h3>%3%</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
@@ -106,7 +106,7 @@ class Viper_Tests_ViperImagePlugin_ImagesInTablesUnitTest extends AbstractViperI
         $this->clickTopToolbarButton('image', 'active');
 
         $this->clickField('Image is decorative');
-        $this->clickTopToolbarButton('Update Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
         $this->clickTopToolbarButton('image', 'selected');
 
         $this->assertHTMLMatchNoHeaders('<table border="0" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU %1%<img src="%url%/ViperImagePlugin/Images/html-codesniffer.png" alt="" /> FoX %2%</td><td><strong><em>WoW</em></strong> sapien vel aliquet</td><td>Another cell</td></tr><tr><td><h3>%3%</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');

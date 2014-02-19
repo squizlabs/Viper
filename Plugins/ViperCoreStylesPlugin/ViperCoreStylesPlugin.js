@@ -194,9 +194,9 @@ ViperCoreStylesPlugin.prototype = {
 
         this.viper.registerCallback('Viper:mouseDown', 'ViperCoreStylesPlugin', function(e) {
             self._selectedImage = null;
-            var target = dfx.getMouseEventTarget(e);
-            if (target && dfx.isTag(target, 'hr') !== true) {
-                if (dfx.isTag(target, 'img') === true) {
+            var target = ViperUtil.getMouseEventTarget(e);
+            if (target && ViperUtil.isTag(target, 'hr') !== true) {
+                if (ViperUtil.isTag(target, 'img') === true) {
                     self.viper.ViperTools.disableButton('ViperCoreStylesPlugin:vtp:block');
                     self._selectedImage = target;
                     self._updateToolbarButtonStates();
@@ -212,11 +212,11 @@ ViperCoreStylesPlugin.prototype = {
                 if (target.previousSibling) {
                     var sibling = target.previousSibling;
                     target.parentNode.removeChild(target);
-                    dfx.insertAfter(sibling, target);
+                    ViperUtil.insertAfter(sibling, target);
                 } else if (target.nextSibling) {
                     var sibling = target.nextSibling;
                     target.parentNode.removeChild(target);
-                    dfx.insertBefore(sibling, target);
+                    ViperUtil.insertBefore(sibling, target);
                 } else {
                     var parent = target.parentNode;
                     target.parentNode.removeChild(target);
@@ -228,9 +228,9 @@ ViperCoreStylesPlugin.prototype = {
             // HR create a new P tag.
             var blockSibling = target.nextSibling;
             while (blockSibling) {
-                if (dfx.isBlockElement(blockSibling) === true) {
+                if (ViperUtil.isBlockElement(blockSibling) === true) {
                     break;
-                } else if (blockSibling.nodeType === dfx.TEXT_NODE && dfx.trim(blockSibling.data) !== '') {
+                } else if (blockSibling.nodeType === ViperUtil.TEXT_NODE && ViperUtil.trim(blockSibling.data) !== '') {
                     blockSibling = null;
                     break;
                 }
@@ -240,10 +240,10 @@ ViperCoreStylesPlugin.prototype = {
 
             if (!blockSibling) {
                 blockSibling = document.createElement('p');
-                dfx.setHtml(blockSibling, '&nbsp;');
-                dfx.insertAfter(target, blockSibling);
-            } else if (dfx.getHtml(blockSibling) === '') {
-                dfx.setHtml(blockSibling, '&nbsp;');
+                ViperUtil.setHtml(blockSibling, '&nbsp;');
+                ViperUtil.insertAfter(target, blockSibling);
+            } else if (ViperUtil.getHtml(blockSibling) === '') {
+                ViperUtil.setHtml(blockSibling, '&nbsp;');
             }
 
             var range      = self.viper.getViperRange();
@@ -251,7 +251,7 @@ ViperCoreStylesPlugin.prototype = {
             if (!selectable) {
                 selectable = document.createTextNode(' ');
                 if (blockSibling.firstChild) {
-                    dfx.insertBefore(blockSibling.firstChild, selectable);
+                    ViperUtil.insertBefore(blockSibling.firstChild, selectable);
                 } else {
                     blockSibling.appendChild(selectable);
                 }
@@ -269,13 +269,13 @@ ViperCoreStylesPlugin.prototype = {
             var copyAttr = ['class', 'viperchangeid', 'time'];
             if (mode === 'original') {
                 // Format changes need to be converted to span/div/etc..
-                dfx.foreach(nodes, function(i) {
+                ViperUtil.foreach(nodes, function(i) {
                     var node = nodes[i];
                     var span = Viper.document.createElement('span');
-                    dfx.foreach(copyAttr, function(j) {
-                        var attrVal = dfx.attr(node, copyAttr[j]);
-                        if (dfx.isset(attrVal) === true) {
-                            dfx.attr(span, copyAttr[j], attrVal);
+                    ViperUtil.foreach(copyAttr, function(j) {
+                        var attrVal = ViperUtil.attr(node, copyAttr[j]);
+                        if (ViperUtil.isset(attrVal) === true) {
+                            ViperUtil.attr(span, copyAttr[j], attrVal);
                         }
                     });
 
@@ -287,17 +287,17 @@ ViperCoreStylesPlugin.prototype = {
                         span.appendChild(node.firstChild);
                     }
 
-                    var changeid = dfx.attr(span, 'viperchangeid');
+                    var changeid = ViperUtil.attr(span, 'viperchangeid');
                     if (changeid) {
                         ViperChangeTracker.addNodeToChange(changeid, span, node);
                     }
 
-                    dfx.insertBefore(node, span);
-                    dfx.remove(node);
+                    ViperUtil.insertBefore(node, span);
+                    ViperUtil.remove(node);
                 });
             } else {
                 // Format changes need to be converted to strong/em/etc..
-                dfx.foreach(nodes, function(i) {
+                ViperUtil.foreach(nodes, function(i) {
                     var node    = nodes[i];
                     var origTag = ViperChangeTracker.getCTData(node, 'tagName');
                     if (!origTag) {
@@ -306,10 +306,10 @@ ViperCoreStylesPlugin.prototype = {
                     }
 
                     var span = Viper.document.createElement(origTag);
-                    dfx.foreach(copyAttr, function(j) {
-                        var attrVal = dfx.attr(node, copyAttr[j]);
-                        if (dfx.isset(attrVal) === true) {
-                            dfx.attr(span, copyAttr[j], attrVal);
+                    ViperUtil.foreach(copyAttr, function(j) {
+                        var attrVal = ViperUtil.attr(node, copyAttr[j]);
+                        if (ViperUtil.isset(attrVal) === true) {
+                            ViperUtil.attr(span, copyAttr[j], attrVal);
                         }
                     });
 
@@ -318,13 +318,13 @@ ViperCoreStylesPlugin.prototype = {
                         span.appendChild(node.firstChild);
                     }
 
-                    var changeid = dfx.attr(span, 'viperchangeid');
+                    var changeid = ViperUtil.attr(span, 'viperchangeid');
                     if (changeid) {
                         ViperChangeTracker.addNodeToChange(changeid, span, node);
                     }
 
-                    dfx.insertBefore(node, span);
-                    dfx.remove(node);
+                    ViperUtil.insertBefore(node, span);
+                    ViperUtil.remove(node);
                 });
             }//end if
 
@@ -332,25 +332,25 @@ ViperCoreStylesPlugin.prototype = {
             if (nodes) {
                 // Change the text alignment.
                 if (mode === 'original') {
-                    dfx.foreach(nodes, function(i) {
+                    ViperUtil.foreach(nodes, function(i) {
                         var node  = nodes[i];
                         var align = ViperChangeTracker.getCTData(node, 'text-align');
                         if (!align) {
                             align = '';
                         }
 
-                        ViperChangeTracker.setCTData(node, 'fin-text-align', dfx.getStyle(node, 'text-align'));
-                        dfx.setStyle(node, 'text-align', align);
+                        ViperChangeTracker.setCTData(node, 'fin-text-align', ViperUtil.getStyle(node, 'text-align'));
+                        ViperUtil.setStyle(node, 'text-align', align);
                     });
                 } else {
-                    dfx.foreach(nodes, function(i) {
+                    ViperUtil.foreach(nodes, function(i) {
                         var node  = nodes[i];
                         var align = ViperChangeTracker.getCTData(node, 'fin-text-align');
                         if (!align) {
                             align = '';
                         }
 
-                        dfx.setStyle(node, 'text-align', align);
+                        ViperUtil.setStyle(node, 'text-align', align);
                     });
                 }//end if
             }//end if
@@ -358,7 +358,7 @@ ViperCoreStylesPlugin.prototype = {
             var nodes = ViperChangeTracker.getCTNodes('removedFormat');
             if (nodes) {
                 if (mode === 'original') {
-                    dfx.foreach(nodes, function(i) {
+                    ViperUtil.foreach(nodes, function(i) {
                         var node    = nodes[i];
                         var origTag = ViperChangeTracker.getCTData(node, 'tagName');
                         if (!origTag) {
@@ -369,10 +369,10 @@ ViperCoreStylesPlugin.prototype = {
                         var span = Viper.document.createElement(origTag);
                         ViperChangeTracker.setCTData(span, 'formatRemoved', origTag);
 
-                        dfx.foreach(copyAttr, function(j) {
-                            var attrVal = dfx.attr(node, copyAttr[j]);
-                            if (dfx.isset(attrVal) === true) {
-                                dfx.attr(span, copyAttr[j], attrVal);
+                        ViperUtil.foreach(copyAttr, function(j) {
+                            var attrVal = ViperUtil.attr(node, copyAttr[j]);
+                            if (ViperUtil.isset(attrVal) === true) {
+                                ViperUtil.attr(span, copyAttr[j], attrVal);
                             }
                         });
 
@@ -381,16 +381,16 @@ ViperCoreStylesPlugin.prototype = {
                             span.appendChild(node.firstChild);
                         }
 
-                        var changeid = dfx.attr(span, 'viperchangeid');
+                        var changeid = ViperUtil.attr(span, 'viperchangeid');
                         if (changeid) {
                             ViperChangeTracker.addNodeToChange(changeid, span, node);
                         }
 
-                        dfx.insertBefore(node, span);
-                        dfx.remove(node);
+                        ViperUtil.insertBefore(node, span);
+                        ViperUtil.remove(node);
                     });
                 } else {
-                    dfx.foreach(nodes, function(i) {
+                    ViperUtil.foreach(nodes, function(i) {
                         var node    = nodes[i];
                         var origTag = ViperChangeTracker.getCTData(node, 'formatRemoved');
                         if (!origTag) {
@@ -401,10 +401,10 @@ ViperCoreStylesPlugin.prototype = {
                         var span = Viper.document.createElement('span');
                         ViperChangeTracker.setCTData(span, 'tagName', origTag);
 
-                        dfx.foreach(copyAttr, function(j) {
-                            var attrVal = dfx.attr(node, copyAttr[j]);
-                            if (dfx.isset(attrVal) === true) {
-                                dfx.attr(span, copyAttr[j], attrVal);
+                        ViperUtil.foreach(copyAttr, function(j) {
+                            var attrVal = ViperUtil.attr(node, copyAttr[j]);
+                            if (ViperUtil.isset(attrVal) === true) {
+                                ViperUtil.attr(span, copyAttr[j], attrVal);
                             }
                         });
 
@@ -413,13 +413,13 @@ ViperCoreStylesPlugin.prototype = {
                             span.appendChild(node.firstChild);
                         }
 
-                        var changeid = dfx.attr(span, 'viperchangeid');
+                        var changeid = ViperUtil.attr(span, 'viperchangeid');
                         if (changeid) {
                             ViperChangeTracker.addNodeToChange(changeid, span, node);
                         }
 
-                        dfx.insertBefore(node, span);
-                        dfx.remove(node);
+                        ViperUtil.insertBefore(node, span);
+                        ViperUtil.remove(node);
                     });
                 }//end if
             }//end if
@@ -435,8 +435,8 @@ ViperCoreStylesPlugin.prototype = {
             var ctNodes = ViperChangeTracker.getCTNodes('removedFormat', node);
             ctNodes.unshift(node);
 
-            dfx.foreach(ctNodes, function(i) {
-                if (dfx.isTag(ctNodes[i], 'span') === true) {
+            ViperUtil.foreach(ctNodes, function(i) {
+                if (ViperUtil.isTag(ctNodes[i], 'span') === true) {
                     var ctdata = ViperChangeTracker.getCTData(ctNodes[i], 'tagName');
                     if (tagNames[ctdata]) {
                         changes.push('Not ' + tagNames[ctdata]);
@@ -454,7 +454,7 @@ ViperCoreStylesPlugin.prototype = {
             var changes = [];
             var ctNodes = ViperChangeTracker.getCTNodes('formatChange', node);
             ctNodes.unshift(node);
-            dfx.foreach(ctNodes, function(i) {
+            ViperUtil.foreach(ctNodes, function(i) {
                 var tagName = ctNodes[i].tagName.toLowerCase();
                 if (tagNames[tagName]) {
                     changes.push(tagNames[tagName]);
@@ -475,11 +475,11 @@ ViperCoreStylesPlugin.prototype = {
             if (ViperChangeTracker.getCurrentMode() === 'original') {
                 style = ViperChangeTracker.getCTData(node, 'fin-text-align') || '';
             } else {
-                style = dfx.getStyle(node, 'text-align') || '';
+                style = ViperUtil.getStyle(node, 'text-align') || '';
             }
 
             if (style) {
-                style = 'Aligned ' + dfx.ucFirst(style);
+                style = 'Aligned ' + ViperUtil.ucFirst(style);
             }
 
             return style;
@@ -492,11 +492,11 @@ ViperCoreStylesPlugin.prototype = {
         ViperChangeTracker.setRejectCallback('formatChange', function(clone, node) {
             // Remove all nodes insede the specified node before it.
             while (node.firstChild) {
-                dfx.insertBefore(node, node.firstChild);
+                ViperUtil.insertBefore(node, node.firstChild);
             }
 
             // Remove node.
-            dfx.remove(node);
+            ViperUtil.remove(node);
         });
 
         ViperChangeTracker.setRejectCallback('removedFormat', function(clone, node) {
@@ -504,7 +504,7 @@ ViperCoreStylesPlugin.prototype = {
             ctNodes.unshift(node);
 
             var mode = ViperChangeTracker.getCurrentMode();
-            dfx.foreach(ctNodes, function(i) {
+            ViperUtil.foreach(ctNodes, function(i) {
                 var elem = ctNodes[i];
                 if (!elem.parentNode) {
                     return;
@@ -523,8 +523,8 @@ ViperCoreStylesPlugin.prototype = {
                         newElem.appendChild(elem.firstChild);
                     }
 
-                    dfx.insertBefore(elem, newElem);
-                    dfx.remove(elem);
+                    ViperUtil.insertBefore(elem, newElem);
+                    ViperUtil.remove(elem);
                 }
             });
         });
@@ -534,17 +534,17 @@ ViperCoreStylesPlugin.prototype = {
             ctNodes.unshift(node);
 
             var mode = ViperChangeTracker.getCurrentMode();
-            dfx.foreach(ctNodes, function(i) {
+            ViperUtil.foreach(ctNodes, function(i) {
                 var elem = ctNodes[i];
                 if (mode === 'original') {
                     var tag = ViperChangeTracker.getCTData(elem, 'formatRemoved');
                     if (tag) {
-                        dfx.insertBefore(elem, elem.childNodes);
-                        dfx.remove(elem);
+                        ViperUtil.insertBefore(elem, elem.childNodes);
+                        ViperUtil.remove(elem);
                     }
-                } else if (dfx.isTag(elem, 'span') === true && elem.getAttribute('ctdata')) {
-                    dfx.insertBefore(elem, elem.childNodes);
-                    dfx.remove(elem);
+                } else if (ViperUtil.isTag(elem, 'span') === true && elem.getAttribute('ctdata')) {
+                    ViperUtil.insertBefore(elem, elem.childNodes);
+                    ViperUtil.remove(elem);
                 }
             });
         });
@@ -552,7 +552,7 @@ ViperCoreStylesPlugin.prototype = {
         ViperChangeTracker.setApproveCallback('alignmentChange', function(clone, node) {
             if (ViperChangeTracker.getCurrentMode() === 'original') {
                 var finAlignment = ViperChangeTracker.getCTData(node, 'fin-text-align') || '';
-                dfx.setStyle(node, 'text-align', finAlignment);
+                ViperUtil.setStyle(node, 'text-align', finAlignment);
             }
 
             ViperChangeTracker.removeTrackChanges(node);
@@ -565,7 +565,7 @@ ViperCoreStylesPlugin.prototype = {
                 style = 'left';
             }
 
-            dfx.setStyle(node, 'text-align', style);
+            ViperUtil.setStyle(node, 'text-align', style);
             ViperChangeTracker.removeTrackChanges(node);
         });
 
@@ -591,9 +591,9 @@ ViperCoreStylesPlugin.prototype = {
             common = this.getFirstBlockParent(common);
         }
 
-        if (dfx.isBlockElement(common) === true
-            && ['tr', 'table'].inArray(dfx.getTagName(common)) === false
-            && dfx.isChildOf(common, this.viper.element) === true
+        if (ViperUtil.isBlockElement(common) === true
+            && ViperUtil.inArray(ViperUtil.getTagName(common), ['tr', 'table']) === false
+            && ViperUtil.isChildOf(common, this.viper.element) === true
         ) {
             this.setJustifyChangeTrackInfo(common);
             this.toggleJustify(common, type);
@@ -602,11 +602,11 @@ ViperCoreStylesPlugin.prototype = {
             var bookmark     = null;
             var elemsBetween = [];
 
-            if (range.collapsed !== true || dfx.isStubElement(start) === false) {
+            if (range.collapsed !== true || ViperUtil.isStubElement(start) === false) {
                 bookmark     = this.viper.createBookmark();
-                elemsBetween = dfx.getElementsBetween(bookmark.start, bookmark.end);
+                elemsBetween = ViperUtil.getElementsBetween(bookmark.start, bookmark.end);
             } else {
-                elemsBetween = dfx.getElementsBetween(start, end);
+                elemsBetween = ViperUtil.getElementsBetween(start, end);
                 elemsBetween.unshift(start);
                 elemsBetween.push(end);
             }
@@ -614,12 +614,12 @@ ViperCoreStylesPlugin.prototype = {
             var toggleAlignment = true;
             var parentElements  = [];
             while (node = elemsBetween.shift()) {
-                if (dfx.isBlockElement(node) === true) {
-                    if (dfx.getStyle(node, 'text-align') !== type) {
+                if (ViperUtil.isBlockElement(node) === true) {
+                    if (ViperUtil.getStyle(node, 'text-align') !== type) {
                         toggleAlignment = false;
                     }
 
-                    if (parentElements.inArray(node) === false) {
+                    if (ViperUtil.inArray(node, parentElements) === false) {
                         parentElements.push(node);
                     }
 
@@ -627,16 +627,16 @@ ViperCoreStylesPlugin.prototype = {
                 } else if (parent === null && (parent = this.getFirstBlockParent(node))) {
                     // If we havent found a good parent and the node's parent is a block
                     // element then set the style of that parent.
-                    if (dfx.getStyle(parent, 'text-align') !== type) {
+                    if (ViperUtil.getStyle(parent, 'text-align') !== type) {
                         toggleAlignment = false;
                     }
 
-                    if (parentElements.inArray(parent) === false) {
+                    if (ViperUtil.inArray(parent, parentElements) === false) {
                         parentElements.push(parent);
                     }
 
                     parent = null;
-                } else if (node.nodeType == dfx.TEXT_NODE && dfx.isBlank(dfx.trim(node.data)) === true) {
+                } else if (node.nodeType == ViperUtil.TEXT_NODE && ViperUtil.isBlank(ViperUtil.trim(node.data)) === true) {
                     continue;
                 } else {
                     // This is not a block element so we need to insert
@@ -646,17 +646,17 @@ ViperCoreStylesPlugin.prototype = {
                         parent = Viper.document.createElement('p');
 
                         // Insert the new P tag before this node.
-                        dfx.insertBefore(node, parent);
+                        ViperUtil.insertBefore(node, parent);
                     }
 
-                    if (dfx.getStyle(parent, 'text-align') !== type) {
+                    if (ViperUtil.getStyle(parent, 'text-align') !== type) {
                         toggleAlignment = false;
                     }
 
                     // Add the node to the new P elem.
                     parent.appendChild(node);
 
-                    if (parentElements.inArray(parent) === false) {
+                    if (ViperUtil.inArray(parent, parentElements) === false) {
                         parentElements.push(parent);
                     }
                 }//end if
@@ -685,15 +685,15 @@ ViperCoreStylesPlugin.prototype = {
     {
         var current = node.style.textAlign;
         if (force !== true && current === type) {
-            dfx.setStyle(node, 'text-align', '');
+            ViperUtil.setStyle(node, 'text-align', '');
 
-            if (dfx.hasAttribute(node, 'style') === true
+            if (ViperUtil.hasAttribute(node, 'style') === true
                 && node.getAttribute('style') === ''
             ) {
                 node.removeAttribute('style');
             }
         } else {
-            dfx.setStyle(node, 'text-align', type);
+            ViperUtil.setStyle(node, 'text-align', type);
         }
 
     },
@@ -713,27 +713,27 @@ ViperCoreStylesPlugin.prototype = {
 
         switch (type) {
             case 'left':
-                dfx.setStyle(image, 'float', 'left');
-                dfx.setStyle(image, 'margin', '1em 1em 1em 0px');
-                dfx.setStyle(image, 'display', '');
+                ViperUtil.setStyle(image, 'float', 'left');
+                ViperUtil.setStyle(image, 'margin', '1em 1em 1em 0px');
+                ViperUtil.setStyle(image, 'display', '');
             break;
 
             case 'right':
-                dfx.setStyle(image, 'float', 'right');
-                dfx.setStyle(image, 'margin', '1em 0px 1em 1em');
-                dfx.setStyle(image, 'display', '');
+                ViperUtil.setStyle(image, 'float', 'right');
+                ViperUtil.setStyle(image, 'margin', '1em 0px 1em 1em');
+                ViperUtil.setStyle(image, 'display', '');
             break;
 
             case 'center':
-                dfx.setStyle(image, 'margin', '1em auto');
-                dfx.setStyle(image, 'float', '');
-                dfx.setStyle(image, 'display', 'block');
+                ViperUtil.setStyle(image, 'margin', '1em auto');
+                ViperUtil.setStyle(image, 'float', '');
+                ViperUtil.setStyle(image, 'display', 'block');
             break;
 
             default:
-                dfx.setStyle(image, 'margin', '');
-                dfx.setStyle(image, 'float', '');
-                dfx.setStyle(image, 'display', '');
+                ViperUtil.setStyle(image, 'margin', '');
+                ViperUtil.setStyle(image, 'float', '');
+                ViperUtil.setStyle(image, 'display', '');
             break;
         }//end switch
 
@@ -754,7 +754,7 @@ ViperCoreStylesPlugin.prototype = {
 
         if (type !== null) {
             this.viper.ViperTools.setButtonActive('ViperCoreStylesPlugin:vtp:' + type);
-            this.viper.ViperTools.getItem('justify').setIconClass('Viper-justify' + dfx.ucFirst(type));
+            this.viper.ViperTools.getItem('justify').setIconClass('Viper-justify' + ViperUtil.ucFirst(type));
         } else {
             this.viper.ViperTools.getItem('justify').setIconClass('Viper-justifyLeft');
         }
@@ -775,12 +775,12 @@ ViperCoreStylesPlugin.prototype = {
         }
 
         var type  = '';
-        var imgFloat = dfx.getStyle(image, 'float');
+        var imgFloat = ViperUtil.getStyle(image, 'float');
         if (imgFloat === 'left') {
             type = 'left';
         } else if (imgFloat === 'right') {
             type = 'right';
-        } else if (dfx.getStyle(image, 'display') === 'block') {
+        } else if (ViperUtil.getStyle(image, 'display') === 'block') {
             type = 'center';
         }
 
@@ -796,7 +796,7 @@ ViperCoreStylesPlugin.prototype = {
     {
         if (node && ViperChangeTracker.isTrackingNode(node) === false) {
             // Get current style.
-            var style = dfx.getStyle(node, 'text-align');
+            var style = ViperUtil.getStyle(node, 'text-align');
             if (style
                 && ( style === 'left'
                 || style === 'right'
@@ -829,35 +829,35 @@ ViperCoreStylesPlugin.prototype = {
         var prev = keyboardEditorPlugin.splitAtRange(true, null);
         var nextSibling = prev.nextSibling;
 
-        dfx.insertAfter(prev, hr);
+        ViperUtil.insertAfter(prev, hr);
 
-        if (!nextSibling || dfx.isBlockElement(nextSibling) === false) {
+        if (!nextSibling || ViperUtil.isBlockElement(nextSibling) === false) {
             var p = document.createElement('p');
-            dfx.setHtml(p, '&nbsp;');
-            dfx.insertAfter(hr, p);
+            ViperUtil.setHtml(p, '&nbsp;');
+            ViperUtil.insertAfter(hr, p);
             nextSibling = p;
         } else {
-            if (dfx.trim(dfx.getNodeTextContent(nextSibling)) === '') {
-                dfx.setHtml(nextSibling, '&nbsp;');
+            if (ViperUtil.trim(ViperUtil.getNodeTextContent(nextSibling)) === '') {
+                ViperUtil.setHtml(nextSibling, '&nbsp;');
 
                 var nextEmptyElem = nextSibling.nextSibling;
                 while (nextEmptyElem) {
-                    if (dfx.isBlockElement(nextEmptyElem) === true) {
-                        var html = dfx.getHtml(nextEmptyElem);
+                    if (ViperUtil.isBlockElement(nextEmptyElem) === true) {
+                        var html = ViperUtil.getHtml(nextEmptyElem);
                         if (html === '' || html === '<br>' || html === '&nbsp;') {
                             // This is an empty block element that is after the next sibling.. remove it..
                             nextEmptyElem.parentNode.removeChild(nextEmptyElem);
                         }
 
                         break;
-                    } else if (nextEmptyElem.nodeType === dfx.TEXT_NODE && dfx.trim(nextEmptyElem.data) !== '') {
+                    } else if (nextEmptyElem.nodeType === ViperUtil.TEXT_NODE && ViperUtil.trim(nextEmptyElem.data) !== '') {
                         break;
                     }
 
                     nextEmptyElem = nextEmptyElem.nextSibling;
                 }
-            } else if (range.startOffset === 0 && dfx.trim(dfx.getNodeTextContent(prev)) === '') {
-                dfx.remove(prev);
+            } else if (range.startOffset === 0 && ViperUtil.trim(ViperUtil.getNodeTextContent(prev)) === '') {
+                ViperUtil.remove(prev);
             }
         }//end if
 
@@ -875,12 +875,12 @@ ViperCoreStylesPlugin.prototype = {
 
     getFirstBlockParent: function(elem)
     {
-        if (dfx.isBlockElement(elem) === true) {
+        if (ViperUtil.isBlockElement(elem) === true) {
             return elem;
         }
 
         // Get the parents of the start node.
-        var parents = dfx.getParents(elem);
+        var parents = ViperUtil.getParents(elem);
 
         var parent = null;
         var pln    = parents.length;
@@ -890,7 +890,7 @@ ViperCoreStylesPlugin.prototype = {
                 return null;
             }
 
-            if (dfx.isBlockElement(parent) === true) {
+            if (ViperUtil.isBlockElement(parent) === true) {
                 return parent;
             }
         }
@@ -902,14 +902,14 @@ ViperCoreStylesPlugin.prototype = {
     {
         var parent = this.getFirstBlockParent(element);
         if (parent !== null) {
-            return dfx.getStyle(parent, 'text-align');
+            return ViperUtil.getStyle(parent, 'text-align');
         }
 
     },
 
     setAlignment: function(element, type)
     {
-        dfx.setStyle(element, 'text-align', type);
+        ViperUtil.setStyle(element, 'text-align', type);
 
     },
 
@@ -924,7 +924,7 @@ ViperCoreStylesPlugin.prototype = {
         var bookmark      = null;
 
         if (nodeSelection) {
-            var sParents  = dfx.getSurroundingParents(nodeSelection);
+            var sParents  = ViperUtil.getSurroundingParents(nodeSelection);
             if (sParents.length > 0 && sParents[0] !== this.viper.getViperElement()) {
                 nodeSelection = sParents[0];
             }
@@ -936,12 +936,12 @@ ViperCoreStylesPlugin.prototype = {
 
         if (!nodeSelection) {
             var startNode = range.getStartNode();
-            if (dfx.isChildOf(startNode, this.viper.element) === false) {
+            if (ViperUtil.isChildOf(startNode, this.viper.element) === false) {
                 range.setStart(this.viper.element, 0);
             }
 
             var endNode = range.getEndNode();
-            if (dfx.isChildOf(endNode, this.viper.element) === false) {
+            if (ViperUtil.isChildOf(endNode, this.viper.element) === false) {
                 range.setEnd(this.viper.element, this.viper.element.childNodes.length);
             }
 
@@ -949,8 +949,8 @@ ViperCoreStylesPlugin.prototype = {
             bookmark = this.viper.createBookmark();
 
             // Get the parent block element of the bookmark so its styles are removed as well.
-            startNode = dfx.getFirstBlockParent(bookmark.start);
-            if (dfx.isChildOf(startNode, this.viper.element) === false) {
+            startNode = ViperUtil.getFirstBlockParent(bookmark.start);
+            if (ViperUtil.isChildOf(startNode, this.viper.element) === false) {
                 startNode = bookmark.start;
             }
         } else {
@@ -962,22 +962,22 @@ ViperCoreStylesPlugin.prototype = {
             stopElem = range._getLastSelectableChild(nodeSelection);
         }
 
-        dfx.walk(startNode, function(elem) {
+        ViperUtil.walk(startNode, function(elem) {
             if (bookmark && elem === bookmark.end) {
                 return false;
             }
 
             if (!bookmark || elem !== bookmark.start) {
-                if (elem.nodeType === dfx.ELEMENT_NODE) {
-                    dfx.removeAttr(elem, 'style');
-                    dfx.removeAttr(elem, 'class');
+                if (elem.nodeType === ViperUtil.ELEMENT_NODE) {
+                    ViperUtil.removeAttr(elem, 'style');
+                    ViperUtil.removeAttr(elem, 'class');
 
-                    if (elem.attributes.length === 0 && dfx.isTag(elem, 'span') === true) {
+                    if (elem.attributes.length === 0 && ViperUtil.isTag(elem, 'span') === true) {
                         while (elem.firstChild) {
-                            dfx.insertBefore(elem, elem.firstChild);
+                            ViperUtil.insertBefore(elem, elem.firstChild);
                         }
 
-                        dfx.remove(elem);
+                        ViperUtil.remove(elem);
                         if (nodeSelection === elem) {
                             return false;
                         }
@@ -1024,7 +1024,7 @@ ViperCoreStylesPlugin.prototype = {
             this.viper.fireNodesChanged();
 
             if (nodeSelection
-                && dfx.isTag(nodeSelection, 'table') === true
+                && ViperUtil.isTag(nodeSelection, 'table') === true
                 && (this.viper.isBrowser('chrome') === true || this.viper.isBrowser('safari') === true)
             ) {
                 // Webkit seems to fail to return the correct position for table
@@ -1048,7 +1048,7 @@ ViperCoreStylesPlugin.prototype = {
         while (style = this._onChangeAddStyle.shift()) {
             var nodes = this.viper.splitNodeAtRange(style, range, true);
 
-            if (removeStyle === true || dfx.isTag(nodes.prevNode, style) === true || dfx.isTag(nodes.nextNode, style) === true) {
+            if (removeStyle === true || ViperUtil.isTag(nodes.prevNode, style) === true || ViperUtil.isTag(nodes.nextNode, style) === true) {
                 if (this._onChangeAddStyle.length > 0) {
                     removeStyle = true;
                     node.data = '';
@@ -1059,8 +1059,8 @@ ViperCoreStylesPlugin.prototype = {
                 // Removing styles..
                 if (nodes.midNode === null) {
                     // Create an empty text node in between two new nodes.
-                    dfx.insertAfter(nodes.prevNode, node);
-                } else if (nodes.midNode.nodeType === dfx.TEXT_NODE) {
+                    ViperUtil.insertAfter(nodes.prevNode, node);
+                } else if (nodes.midNode.nodeType === ViperUtil.TEXT_NODE) {
                     nodes.midNode.data = node.data + nodes.midNode.data;
                     node = nodes.midNode;
                 } else {
@@ -1074,8 +1074,8 @@ ViperCoreStylesPlugin.prototype = {
                 }
 
                 // Make sure nextNode is not empty.
-                if (dfx.getNodeTextContent(nodes.nextNode).length === 0) {
-                    dfx.remove(nodes.nextNode);
+                if (ViperUtil.getNodeTextContent(nodes.nextNode).length === 0) {
+                    ViperUtil.remove(nodes.nextNode);
                 }
 
                 if ((!nodes.midNode
@@ -1083,22 +1083,22 @@ ViperCoreStylesPlugin.prototype = {
                     && (nodes.prevNode
                     && nodes.prevNode.parentNode)
                 ) {
-                    dfx.insertAfter(nodes.prevNode, node);
+                    ViperUtil.insertAfter(nodes.prevNode, node);
                 }
 
                 var emptyTextNode = null;
                 while (emptyTextNode = node.nextSibling) {
-                    if (emptyTextNode.nodeType === dfx.TEXT_NODE
+                    if (emptyTextNode.nodeType === ViperUtil.TEXT_NODE
                         && emptyTextNode.data.length === 0
                     ) {
-                        dfx.remove(emptyTextNode);
+                        ViperUtil.remove(emptyTextNode);
                     } else {
                         break;
                     }
                 }
 
-                if (!node.nextSibling && node.nodeType === dfx.TEXT_NODE) {
-                    dfx.insertAfter(node, document.createElement('br'));
+                if (!node.nextSibling && node.nodeType === ViperUtil.TEXT_NODE) {
+                    ViperUtil.insertAfter(node, document.createElement('br'));
                 }
 
                 if (node.data.length > 0) {
@@ -1138,9 +1138,9 @@ ViperCoreStylesPlugin.prototype = {
 
         if (range.collapsed === true) {
             // Range is collapsed. We need to listen for next insertion.
-            var index = this._onChangeAddStyle.find(style);
+            var index = ViperUtil.arraySearch(style, this._onChangeAddStyle);
             if (index >= 0) {
-                dfx.removeArrayIndex(this._onChangeAddStyle, index);
+                ViperUtil.removeArrayIndex(this._onChangeAddStyle, index);
                 this.viper.ViperTools.setButtonInactive(this._buttons[style]);
             } else {
                 this._onChangeAddStyle.push(style);
@@ -1171,7 +1171,7 @@ ViperCoreStylesPlugin.prototype = {
 
         if (!endNode) {
             endNode = startNode;
-        } else if (endNode.nodeType === dfx.ELEMENT_NODE && this.viper.isBrowser('msie') === true) {
+        } else if (endNode.nodeType === ViperUtil.ELEMENT_NODE && this.viper.isBrowser('msie') === true) {
             endNode = range._getLastSelectableChild(endNode);
             range.setEnd(endNode, endNode.data.length);
             ViperSelection.addRange(range);
@@ -1181,16 +1181,16 @@ ViperCoreStylesPlugin.prototype = {
 
         if (startNode === endNode
             && ((startNode === viperElement)
-            || (startNode.nodeType === dfx.TEXT_NODE
-            && dfx.trim(startNode.data) === ''
+            || (startNode.nodeType === ViperUtil.TEXT_NODE
+            && ViperUtil.trim(startNode.data) === ''
             && startNode === viperElement.firstChild))
         ) {
             // Whole content is selected.
             startNode = range._getFirstSelectableChild(viperElement);
             endNode   = range._getLastSelectableChild(viperElement);
 
-            if (dfx.getParents(startNode, style, viperElement).length > 0
-                && dfx.getParents(endNode, style, viperElement).length > 0
+            if (ViperUtil.getParents(startNode, style, viperElement).length > 0
+                && ViperUtil.getParents(endNode, style, viperElement).length > 0
             ) {
                 // Selection is inside the style tags. Remove styles.
                 var changeid = ViperChangeTracker.startBatchChange('removedFormat');
@@ -1203,10 +1203,10 @@ ViperCoreStylesPlugin.prototype = {
             }
         }
 
-        if (dfx.isTag(commonParent, style) === true
-            || dfx.isTag(startNode, style) === true
-            || (dfx.getParents(startNode, style).length > 0
-            && dfx.getParents(endNode, style).length > 0)
+        if (ViperUtil.isTag(commonParent, style) === true
+            || ViperUtil.isTag(startNode, style) === true
+            || (ViperUtil.getParents(startNode, style).length > 0
+            && ViperUtil.getParents(endNode, style).length > 0)
         ) {
             // This selection is already styles, remove it.
             var changeid = ViperChangeTracker.startBatchChange('removedFormat');
@@ -1236,7 +1236,7 @@ ViperCoreStylesPlugin.prototype = {
     getStyleTags: function()
     {
         var range = this.viper.getViperRange();
-        var tags  = dfx.getParents(range.startContainer, this.styleTags.join(','));
+        var tags  = ViperUtil.getParents(range.startContainer, this.styleTags.join(','));
         return tags;
 
     },
@@ -1259,18 +1259,18 @@ ViperCoreStylesPlugin.prototype = {
             return true;
         }
 
-        var tagName = dfx.getTagName(node);
-        if (dfx.isBlockElement(node) === true) {
-            if (dfx.isTag(node, 'li') !== true
-                && dfx.isTag(node, 'td') !== true
-                && dfx.isTag(node, 'th') !== true
-                && dfx.isTag(node, 'img') !== true
+        var tagName = ViperUtil.getTagName(node);
+        if (ViperUtil.isBlockElement(node) === true) {
+            if (ViperUtil.isTag(node, 'li') !== true
+                && ViperUtil.isTag(node, 'td') !== true
+                && ViperUtil.isTag(node, 'th') !== true
+                && ViperUtil.isTag(node, 'img') !== true
             ) {
                 return false;
             }
         } else {
             var tagNames = ['thead', 'tfoot'];
-            if (tagNames.inArray(tagName) === true) {
+            if (ViperUtil.inArray(tagName, tagNames) === true) {
                 return false;
             }
         }
@@ -1309,7 +1309,7 @@ ViperCoreStylesPlugin.prototype = {
 
         if (this._canStyleNode(data.lineage[data.current]) !== true) {
             return;
-        } else if (dfx.isTag(data.lineage[data.current], 'img') === true) {
+        } else if (ViperUtil.isTag(data.lineage[data.current], 'img') === true) {
             return;
         }
 
@@ -1318,12 +1318,12 @@ ViperCoreStylesPlugin.prototype = {
 
         var activeStates = {};
         for (var i = 0; i < data.lineage.length; i++) {
-            if (dfx.isTag(data.lineage[i], 'a') === true) {
+            if (ViperUtil.isTag(data.lineage[i], 'a') === true) {
                 // Dont want to show style buttons for links.
                 return;
-            } else if (dfx.isTag(data.lineage[i], 'strong') === true) {
+            } else if (ViperUtil.isTag(data.lineage[i], 'strong') === true) {
                 this.viper.ViperTools.setButtonActive('vitpBold');
-            } else if (dfx.isTag(data.lineage[i], 'em') === true) {
+            } else if (ViperUtil.isTag(data.lineage[i], 'em') === true) {
                 this.viper.ViperTools.setButtonActive('vitpItalic');
             }
         }
@@ -1388,7 +1388,7 @@ ViperCoreStylesPlugin.prototype = {
 
                 if (type) {
                     tools.setButtonActive('ViperCoreStylesPlugin:vtp:' + type);
-                    tools.getItem('justify').setIconClass('Viper-justify' + dfx.ucFirst(type));
+                    tools.getItem('justify').setIconClass('Viper-justify' + ViperUtil.ucFirst(type));
                     tools.setButtonActive('justify');
                 }
             }
@@ -1438,7 +1438,7 @@ ViperCoreStylesPlugin.prototype = {
 
                 if (buttons.justify[i] === justify) {
                     tools.setButtonActive('ViperCoreStylesPlugin:vtp:' + buttons.justify[i]);
-                    toolbarButton.setIconClass('Viper-justify' + dfx.ucFirst(justify));
+                    toolbarButton.setIconClass('Viper-justify' + ViperUtil.ucFirst(justify));
                     tools.setButtonActive('justify');
                     setToggleInactive = false;
                 } else {
@@ -1453,12 +1453,12 @@ ViperCoreStylesPlugin.prototype = {
 
         var enableHr     = true;
         var hrIgnoreTags = 'tr,td,th,li,caption,img,ul,ol,table';
-        if (hrIgnoreTags.split(',').inArray(dfx.getTagName(startNode)) === true) {
+        if (ViperUtil.inArray(ViperUtil.getTagName(startNode), hrIgnoreTags.split(',')) === true) {
             enableHr = false;
         }
 
         if (enableHr === true) {
-            var parents = dfx.getParents(startNode, hrIgnoreTags, this.viper.getViperElement());
+            var parents = ViperUtil.getParents(startNode, hrIgnoreTags, this.viper.getViperElement());
             if (parents.length > 0) {
                 enableHr = false;
             }
@@ -1502,21 +1502,21 @@ ViperCoreStylesPlugin.prototype = {
             activeStates.alignment = null;
 
             var startParent = null;
-            if (!selectedNode || dfx.isBlockElement(selectedNode) === false) {
-                startParent = dfx.getFirstBlockParent(startNode);
+            if (!selectedNode || ViperUtil.isBlockElement(selectedNode) === false) {
+                startParent = ViperUtil.getFirstBlockParent(startNode);
             } else {
                 startParent = selectedNode;
             }
 
             if (startNode !== endNode) {
-                var endParent = dfx.getFirstBlockParent(endNode);
-                var elems     = dfx.getElementsBetween(startParent, endParent);
+                var endParent = ViperUtil.getFirstBlockParent(endNode);
+                var elems     = ViperUtil.getElementsBetween(startParent, endParent);
                 elems.unshift(startParent);
                 elems.push(endParent);
                 var c         = elems.length;
                 for (var i = 0; i < c; i++) {
-                    if (elems[i].nodeType === dfx.ELEMENT_NODE && dfx.isBlockElement(elems[i]) === true) {
-                        var alignment = dfx.getStyle(elems[i], 'text-align');
+                    if (elems[i].nodeType === ViperUtil.ELEMENT_NODE && ViperUtil.isBlockElement(elems[i]) === true) {
+                        var alignment = ViperUtil.getStyle(elems[i], 'text-align');
                         if (activeStates.alignment !== null && alignment !== activeStates.alignment) {
                             activeStates.alignment = null;
                             break;
@@ -1533,10 +1533,10 @@ ViperCoreStylesPlugin.prototype = {
                 || range.getNodeSelection()
             ) {
                 while (startNode
-                    && dfx.isBlockElement(startNode) !== true
+                    && ViperUtil.isBlockElement(startNode) !== true
                     && startNode !== this.viper.getViperElement()
                 ) {
-                    var pos = tagNames.find(dfx.getTagName(startNode));
+                    var pos = ViperUtil.arraySearch(ViperUtil.getTagName(startNode), tagNames);
                     if (pos >= 0) {
                         activeStates.push(tagNames[pos]);
                     }
@@ -1546,10 +1546,10 @@ ViperCoreStylesPlugin.prototype = {
             } else {
                 var foundTags = [];
                 while (startNode
-                    && dfx.isBlockElement(startNode) !== true
+                    && ViperUtil.isBlockElement(startNode) !== true
                     && startNode !== this.viper.getViperElement()
                 ) {
-                    var pos = tagNames.find(dfx.getTagName(startNode));
+                    var pos = ViperUtil.arraySearch(ViperUtil.getTagName(startNode), tagNames);
                     if (pos >= 0) {
                         foundTags.push(tagNames[pos]);
                     }
@@ -1558,11 +1558,11 @@ ViperCoreStylesPlugin.prototype = {
                 }
 
                 while (endNode
-                    && dfx.isBlockElement(endNode) !== true
+                    && ViperUtil.isBlockElement(endNode) !== true
                     && endNode !== this.viper.getViperElement()
                 ) {
-                    var tagName = dfx.getTagName(endNode);
-                    var pos = foundTags.find(tagName);
+                    var tagName = ViperUtil.getTagName(endNode);
+                    var pos = ViperUtil.arraySearch(tagName, foundTags);
                     if (pos >= 0) {
                         activeStates.push(tagName);
                     }
