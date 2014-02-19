@@ -94,8 +94,8 @@ MatrixKeywordsPlugin.prototype = {
 		
 		// get the keywords current editting div
 		var datasetKeywords = editableElement.dataset.keywords;
-		if(typeof datasetKeywords !== 'undefined') {
-		    var dataKeywords = JSON.parse(editableElement.dataset.keywords);
+		if(typeof datasetKeywords !== 'undefined' && datasetKeywords !== '') {
+		    var dataKeywords = JSON.parse(datasetKeywords);
 		    // make sure it's valid JSON assoicate array, not an array object.
 		    if(typeof dataKeywords.length === 'undefined') {
 			// enable button and insert those keywords as options
@@ -108,9 +108,9 @@ MatrixKeywordsPlugin.prototype = {
 		}
 		
 		// get snippet for current div
-		var datasetSnippet = editableElement.dataset.snippets;
-		    if(typeof datasetSnippet !== 'undefined') {
-		    var dataSnippets = JSON.parse(editableElement.dataset.snippets);
+		var datasetSnippets = editableElement.dataset.snippets;
+		    if(typeof datasetSnippets !== 'undefined' && datasetSnippets !== '') {
+		    var dataSnippets = JSON.parse(datasetSnippets);
 		    // if empty JSON array
 		    if(typeof dataSnippets.length === 'undefined') {		
 			// enable button and insert those snippets as options
