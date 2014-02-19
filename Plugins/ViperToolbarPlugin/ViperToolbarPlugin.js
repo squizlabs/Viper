@@ -122,10 +122,6 @@ ViperToolbarPlugin.prototype = {
             this._toolbar.innerHTML = '';
         }
 
-        var logo = document.createElement('div');
-        logo.setAttribute('title', _('Viper by Squiz'));
-        ViperUtil.addClass(logo, 'Viper-logo');
-        this._toolbar.appendChild(logo);
 
         var buttonsLen = buttons.length;
         for (var i = 0; i < buttonsLen; i++) {
@@ -164,10 +160,6 @@ ViperToolbarPlugin.prototype = {
     {
         var elem = document.createElement('div');
 
-        var logo = document.createElement('div');
-        logo.setAttribute('title', _('Viper by Squiz'));
-        ViperUtil.addClass(logo, 'Viper-logo');
-        elem.appendChild(logo);
 
         ViperUtil.addClass(elem, 'ViperTP-bar Viper-themeDark Viper-scalable');
         this._toolbar = elem;
