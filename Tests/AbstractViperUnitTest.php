@@ -1106,10 +1106,14 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
             }
         }
 
-        $this->sikuli->setX($match, ($this->sikuli->getX($match) - 200));
+        $x = ($this->sikuli->getX($match) - 200);
+        if ($x < 0) {
+            $x = 10;
+        }
+
+        $this->sikuli->setX($match, $x);
         $this->sikuli->setW($match, ($this->sikuli->getW($match) + 400));
         $this->sikuli->setH($match, ($this->sikuli->getH($match) + 200));
-
         $this->sikuli->setAutoWaitTimeout(0.3, $match);
 
         return $match;
