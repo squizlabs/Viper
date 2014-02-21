@@ -1007,7 +1007,7 @@ ViperCoreStylesPlugin.prototype = {
 
         ViperChangeTracker.endBatchChange(changeid);
 
-        if (this.viper.isBrowser('msie') === true && nodeSelection && !bookmark) {
+        if (this.viper.isBrowser('msie', '<11') === true && nodeSelection && !bookmark) {
             var self = this;
             setTimeout(function() {
                 ViperSelection.addRange(range);

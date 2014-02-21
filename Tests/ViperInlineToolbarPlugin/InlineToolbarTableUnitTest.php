@@ -28,7 +28,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarTABLEUnitTest extends Ab
         $this->assertEquals('<li class="ViperITP-lineageItem">TABLE</li><li class="ViperITP-lineageItem">CAPTION</li><li class="ViperITP-lineageItem Viper-selected">Selection</li>', $lineage);
 
         $this->selectInlineToolbarLineageItem(0);
-        $this->assertEquals($this->replaceKeywords('Table 1.2: The table caption text %1%\n  \n    \n      Col1 Header\n      Col2 %2%\n      Col3 Header\n    \n  \n  \n    \n      Note: this is the table footer %3%\n    \n  \n  \n    \n      nec porta ante\n      sapien vel %4%\n      \n        \n          purus neque luctus, vel %5%\n          purus neque luctus\n          vel molestie arcu\n        \n      \n    \n    \n      nec porta ante\n      purus neque luctus %6%, vel molestie arcu'), $this->getSelectedText(), 'Table content is not selected.');
+        $this->assertEquals($this->replaceKeywords('Table 1.2: The table caption text %1%Col1 HeaderCol2 %2%Col3 HeaderNote: this is the table footer %3%nec porta antesapien vel %4%purus neque luctus, vel %5%purus neque luctusvel molestie arcunec porta antepurus neque luctus %6%, vel molestie arcu'), $this->getSelectedText(), 'Table content is not selected.');
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem Viper-selected">TABLE</li><li class="ViperITP-lineageItem">CAPTION</li><li class="ViperITP-lineageItem">Selection</li>', $lineage);
 
@@ -62,7 +62,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarTABLEUnitTest extends Ab
         $this->assertEquals('<li class="ViperITP-lineageItem">TABLE</li><li class="ViperITP-lineageItem">THEAD</li><li class="ViperITP-lineageItem">Row</li><li class="ViperITP-lineageItem">Header</li><li class="ViperITP-lineageItem Viper-selected">Selection</li>', $lineage);
 
         $this->selectInlineToolbarLineageItem(2);
-        $this->assertEquals($this->replaceKeywords('Col1 Header\n      Col2 %2%\n      Col3 Header'), $this->getSelectedText(), 'row content is not selected');
+        $this->assertEquals($this->replaceKeywords('Col1 HeaderCol2 %2%Col3 Header'), $this->getSelectedText(), 'row content is not selected');
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">TABLE</li><li class="ViperITP-lineageItem">THEAD</li><li class="ViperITP-lineageItem Viper-selected">Row</li><li class="ViperITP-lineageItem">Header</li><li class="ViperITP-lineageItem">Selection</li>', $lineage);
 
@@ -72,7 +72,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarTABLEUnitTest extends Ab
         $this->assertEquals('<li class="ViperITP-lineageItem">TABLE</li><li class="ViperITP-lineageItem">THEAD</li><li class="ViperITP-lineageItem">Row</li><li class="ViperITP-lineageItem">Header</li><li class="ViperITP-lineageItem Viper-selected">Selection</li>', $lineage);
 
         $this->selectInlineToolbarLineageItem(1);
-        $this->assertEquals($this->replaceKeywords('Col1 Header\n      Col2 %2%\n      Col3 Header'), $this->getSelectedText(), 'row content is not selected');
+        $this->assertEquals($this->replaceKeywords('Col1 HeaderCol2 %2%Col3 Header'), $this->getSelectedText(), 'row content is not selected');
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">TABLE</li><li class="ViperITP-lineageItem Viper-selected">THEAD</li><li class="ViperITP-lineageItem">Row</li><li class="ViperITP-lineageItem">Header</li><li class="ViperITP-lineageItem">Selection</li>', $lineage);
 
@@ -82,7 +82,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarTABLEUnitTest extends Ab
         $this->assertEquals('<li class="ViperITP-lineageItem">TABLE</li><li class="ViperITP-lineageItem">THEAD</li><li class="ViperITP-lineageItem">Row</li><li class="ViperITP-lineageItem">Header</li><li class="ViperITP-lineageItem Viper-selected">Selection</li>', $lineage);
 
         $this->selectInlineToolbarLineageItem(0);
-        $this->assertEquals($this->replaceKeywords('Table 1.2: The table caption text %1%\n  \n    \n      Col1 Header\n      Col2 %2%\n      Col3 Header\n    \n  \n  \n    \n      Note: this is the table footer %3%\n    \n  \n  \n    \n      nec porta ante\n      sapien vel %4%\n      \n        \n          purus neque luctus, vel %5%\n          purus neque luctus\n          vel molestie arcu\n        \n      \n    \n    \n      nec porta ante\n      purus neque luctus %6%, vel molestie arcu'), $this->getSelectedText(), 'Table content is not selected.');
+        $this->assertEquals($this->replaceKeywords('Table 1.2: The table caption text %1%Col1 HeaderCol2 %2%Col3 HeaderNote: this is the table footer %3%nec porta antesapien vel %4%purus neque luctus, vel %5%purus neque luctusvel molestie arcunec porta antepurus neque luctus %6%, vel molestie arcu'), $this->getSelectedText(), 'Table content is not selected.');
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem Viper-selected">TABLE</li><li class="ViperITP-lineageItem">THEAD</li><li class="ViperITP-lineageItem">Row</li><li class="ViperITP-lineageItem">Header</li><li class="ViperITP-lineageItem">Selection</li>', $lineage);
 
@@ -136,7 +136,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarTABLEUnitTest extends Ab
         $this->assertEquals('<li class="ViperITP-lineageItem">TABLE</li><li class="ViperITP-lineageItem">TFOOT</li><li class="ViperITP-lineageItem">Row</li><li class="ViperITP-lineageItem">Cell</li><li class="ViperITP-lineageItem Viper-selected">Selection</li>', $lineage);
 
         $this->selectInlineToolbarLineageItem(0);
-        $this->assertEquals($this->replaceKeywords('Table 1.2: The table caption text %1%\n  \n    \n      Col1 Header\n      Col2 %2%\n      Col3 Header\n    \n  \n  \n    \n      Note: this is the table footer %3%\n    \n  \n  \n    \n      nec porta ante\n      sapien vel %4%\n      \n        \n          purus neque luctus, vel %5%\n          purus neque luctus\n          vel molestie arcu\n        \n      \n    \n    \n      nec porta ante\n      purus neque luctus %6%, vel molestie arcu'), $this->getSelectedText(), 'Table content is not selected.');
+        $this->assertEquals($this->replaceKeywords('Table 1.2: The table caption text %1%Col1 HeaderCol2 %2%Col3 HeaderNote: this is the table footer %3%nec porta antesapien vel %4%purus neque luctus, vel %5%purus neque luctusvel molestie arcunec porta antepurus neque luctus %6%, vel molestie arcu'), $this->getSelectedText(), 'Table content is not selected.');
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem Viper-selected">TABLE</li><li class="ViperITP-lineageItem">TFOOT</li><li class="ViperITP-lineageItem">Row</li><li class="ViperITP-lineageItem">Cell</li><li class="ViperITP-lineageItem">Selection</li>', $lineage);
 
@@ -170,7 +170,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarTABLEUnitTest extends Ab
         $this->assertEquals('<li class="ViperITP-lineageItem">TABLE</li><li class="ViperITP-lineageItem">TBODY</li><li class="ViperITP-lineageItem">Row</li><li class="ViperITP-lineageItem">Cell</li><li class="ViperITP-lineageItem Viper-selected">Selection</li>', $lineage);
 
         $this->selectInlineToolbarLineageItem(2);
-        $this->assertEquals($this->replaceKeywords('nec porta ante\n      sapien vel %4%\n      \n        \n          purus neque luctus, vel %5%\n          purus neque luctus\n          vel molestie arcu'), $this->getSelectedText(), 'row content is not selected');
+        $this->assertEquals($this->replaceKeywords('nec porta antesapien vel %4%purus neque luctus, vel %5%purus neque luctusvel molestie arcu'), $this->getSelectedText(), 'row content is not selected');
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">TABLE</li><li class="ViperITP-lineageItem">TBODY</li><li class="ViperITP-lineageItem Viper-selected">Row</li><li class="ViperITP-lineageItem">Cell</li><li class="ViperITP-lineageItem">Selection</li>', $lineage);
 
@@ -180,7 +180,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarTABLEUnitTest extends Ab
         $this->assertEquals('<li class="ViperITP-lineageItem">TABLE</li><li class="ViperITP-lineageItem">TBODY</li><li class="ViperITP-lineageItem">Row</li><li class="ViperITP-lineageItem">Cell</li><li class="ViperITP-lineageItem Viper-selected">Selection</li>', $lineage);
 
         $this->selectInlineToolbarLineageItem(1);
-        $this->assertEquals($this->replaceKeywords('nec porta ante\n      sapien vel %4%\n      \n        \n          purus neque luctus, vel %5%\n          purus neque luctus\n          vel molestie arcu\n        \n      \n    \n    \n      nec porta ante\n      purus neque luctus %6%, vel molestie arcu'), $this->getSelectedText(), 'table content is not selected');
+        $this->assertEquals($this->replaceKeywords('nec porta antesapien vel %4%purus neque luctus, vel %5%purus neque luctusvel molestie arcunec porta antepurus neque luctus %6%, vel molestie arcu'), $this->getSelectedText(), 'table content is not selected');
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">TABLE</li><li class="ViperITP-lineageItem Viper-selected">TBODY</li><li class="ViperITP-lineageItem">Row</li><li class="ViperITP-lineageItem">Cell</li><li class="ViperITP-lineageItem">Selection</li>', $lineage);
 
@@ -190,7 +190,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarTABLEUnitTest extends Ab
         $this->assertEquals('<li class="ViperITP-lineageItem">TABLE</li><li class="ViperITP-lineageItem">TBODY</li><li class="ViperITP-lineageItem">Row</li><li class="ViperITP-lineageItem">Cell</li><li class="ViperITP-lineageItem Viper-selected">Selection</li>', $lineage);
 
         $this->selectInlineToolbarLineageItem(0);
-        $this->assertEquals($this->replaceKeywords('Table 1.2: The table caption text %1%\n  \n    \n      Col1 Header\n      Col2 %2%\n      Col3 Header\n    \n  \n  \n    \n      Note: this is the table footer %3%\n    \n  \n  \n    \n      nec porta ante\n      sapien vel %4%\n      \n        \n          purus neque luctus, vel %5%\n          purus neque luctus\n          vel molestie arcu\n        \n      \n    \n    \n      nec porta ante\n      purus neque luctus %6%, vel molestie arcu'), $this->getSelectedText(), 'Table content is not selected.');
+        $this->assertEquals($this->replaceKeywords('Table 1.2: The table caption text %1%Col1 HeaderCol2 %2%Col3 HeaderNote: this is the table footer %3%nec porta antesapien vel %4%purus neque luctus, vel %5%purus neque luctusvel molestie arcunec porta antepurus neque luctus %6%, vel molestie arcu'), $this->getSelectedText(), 'Table content is not selected.');
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem Viper-selected">TABLE</li><li class="ViperITP-lineageItem">TBODY</li><li class="ViperITP-lineageItem">Row</li><li class="ViperITP-lineageItem">Cell</li><li class="ViperITP-lineageItem">Selection</li>', $lineage);
 
@@ -224,7 +224,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarTABLEUnitTest extends Ab
         $this->assertEquals('<li class="ViperITP-lineageItem">TABLE</li><li class="ViperITP-lineageItem">TBODY</li><li class="ViperITP-lineageItem">Row</li><li class="ViperITP-lineageItem">Cell</li><li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem Viper-selected">Selection</li>', $lineage);
 
         $this->selectInlineToolbarLineageItem(4);
-        $this->assertEquals($this->replaceKeywords('purus neque luctus, vel %5%\n          purus neque luctus\n          vel molestie arcu'), $this->getSelectedText(), 'list items are not selected');
+        $this->assertEquals($this->replaceKeywords('purus neque luctus, vel %5%purus neque luctusvel molestie arcu'), $this->getSelectedText(), 'list items are not selected');
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">TABLE</li><li class="ViperITP-lineageItem">TBODY</li><li class="ViperITP-lineageItem">Row</li><li class="ViperITP-lineageItem">Cell</li><li class="ViperITP-lineageItem Viper-selected">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem">Selection</li>', $lineage);
 
@@ -234,7 +234,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarTABLEUnitTest extends Ab
         $this->assertEquals('<li class="ViperITP-lineageItem">TABLE</li><li class="ViperITP-lineageItem">TBODY</li><li class="ViperITP-lineageItem">Row</li><li class="ViperITP-lineageItem">Cell</li><li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem Viper-selected">Selection</li>', $lineage);
 
         $this->selectInlineToolbarLineageItem(3);
-        $this->assertEquals($this->replaceKeywords('purus neque luctus, vel %5%\n          purus neque luctus\n          vel molestie arcu'), $this->getSelectedText(), 'list items are not selected');
+        $this->assertEquals($this->replaceKeywords('purus neque luctus, vel %5%purus neque luctusvel molestie arcu'), $this->getSelectedText(), 'list items are not selected');
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">TABLE</li><li class="ViperITP-lineageItem">TBODY</li><li class="ViperITP-lineageItem">Row</li><li class="ViperITP-lineageItem Viper-selected">Cell</li><li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem">Selection</li>', $lineage);
 
@@ -244,7 +244,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarTABLEUnitTest extends Ab
         $this->assertEquals('<li class="ViperITP-lineageItem">TABLE</li><li class="ViperITP-lineageItem">TBODY</li><li class="ViperITP-lineageItem">Row</li><li class="ViperITP-lineageItem">Cell</li><li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem Viper-selected">Selection</li>', $lineage);
 
         $this->selectInlineToolbarLineageItem(2);
-        $this->assertEquals($this->replaceKeywords('nec porta ante\n      sapien vel %4%\n      \n        \n          purus neque luctus, vel %5%\n          purus neque luctus\n          vel molestie arcu'), $this->getSelectedText(), 'row content is not selected');
+        $this->assertEquals($this->replaceKeywords('nec porta antesapien vel %4%purus neque luctus, vel %5%purus neque luctusvel molestie arcu'), $this->getSelectedText(), 'row content is not selected');
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">TABLE</li><li class="ViperITP-lineageItem">TBODY</li><li class="ViperITP-lineageItem Viper-selected">Row</li><li class="ViperITP-lineageItem">Cell</li><li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem">Selection</li>', $lineage);
 
@@ -254,7 +254,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarTABLEUnitTest extends Ab
         $this->assertEquals('<li class="ViperITP-lineageItem">TABLE</li><li class="ViperITP-lineageItem">TBODY</li><li class="ViperITP-lineageItem">Row</li><li class="ViperITP-lineageItem">Cell</li><li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem Viper-selected">Selection</li>', $lineage);
 
         $this->selectInlineToolbarLineageItem(1);
-        $this->assertEquals($this->replaceKeywords('nec porta ante\n      sapien vel %4%\n      \n        \n          purus neque luctus, vel %5%\n          purus neque luctus\n          vel molestie arcu\n        \n      \n    \n    \n      nec porta ante\n      purus neque luctus %6%, vel molestie arcu'), $this->getSelectedText(), 'table content is not selected');
+        $this->assertEquals($this->replaceKeywords('nec porta antesapien vel %4%purus neque luctus, vel %5%purus neque luctusvel molestie arcunec porta antepurus neque luctus %6%, vel molestie arcu'), $this->getSelectedText(), 'table content is not selected');
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">TABLE</li><li class="ViperITP-lineageItem Viper-selected">TBODY</li><li class="ViperITP-lineageItem">Row</li><li class="ViperITP-lineageItem">Cell</li><li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem">Selection</li>', $lineage);
 
@@ -264,7 +264,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarTABLEUnitTest extends Ab
         $this->assertEquals('<li class="ViperITP-lineageItem">TABLE</li><li class="ViperITP-lineageItem">TBODY</li><li class="ViperITP-lineageItem">Row</li><li class="ViperITP-lineageItem">Cell</li><li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem Viper-selected">Selection</li>', $lineage);
 
         $this->selectInlineToolbarLineageItem(0);
-        $this->assertEquals($this->replaceKeywords('Table 1.2: The table caption text %1%\n  \n    \n      Col1 Header\n      Col2 %2%\n      Col3 Header\n    \n  \n  \n    \n      Note: this is the table footer %3%\n    \n  \n  \n    \n      nec porta ante\n      sapien vel %4%\n      \n        \n          purus neque luctus, vel %5%\n          purus neque luctus\n          vel molestie arcu\n        \n      \n    \n    \n      nec porta ante\n      purus neque luctus %6%, vel molestie arcu'), $this->getSelectedText(), 'Table content is not selected.');
+        $this->assertEquals($this->replaceKeywords('Table 1.2: The table caption text %1%Col1 HeaderCol2 %2%Col3 HeaderNote: this is the table footer %3%nec porta antesapien vel %4%purus neque luctus, vel %5%purus neque luctusvel molestie arcunec porta antepurus neque luctus %6%, vel molestie arcu'), $this->getSelectedText(), 'Table content is not selected.');
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem Viper-selected">TABLE</li><li class="ViperITP-lineageItem">TBODY</li><li class="ViperITP-lineageItem">Row</li><li class="ViperITP-lineageItem">Cell</li><li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem">Selection</li>', $lineage);
 
@@ -306,7 +306,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarTABLEUnitTest extends Ab
         $this->assertEquals('<li class="ViperITP-lineageItem">TABLE</li><li class="ViperITP-lineageItem">TBODY</li><li class="ViperITP-lineageItem">Row</li><li class="ViperITP-lineageItem">Cell</li><li class="ViperITP-lineageItem">Link</li>', $lineage);
 
         $this->selectInlineToolbarLineageItem(2);
-        $this->assertEquals($this->replaceKeywords('nec porta ante\n      purus neque luctus %6%, vel molestie arcu'), $this->getSelectedText(), 'Row content should be selected');
+        $this->assertEquals($this->replaceKeywords('nec porta antepurus neque luctus %6%, vel molestie arcu'), $this->getSelectedText(), 'Row content should be selected');
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">TABLE</li><li class="ViperITP-lineageItem">TBODY</li><li class="ViperITP-lineageItem Viper-selected">Row</li><li class="ViperITP-lineageItem">Cell</li><li class="ViperITP-lineageItem">Link</li>', $lineage);
 
@@ -315,7 +315,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarTABLEUnitTest extends Ab
         $this->assertEquals('<li class="ViperITP-lineageItem">TABLE</li><li class="ViperITP-lineageItem">TBODY</li><li class="ViperITP-lineageItem">Row</li><li class="ViperITP-lineageItem">Cell</li><li class="ViperITP-lineageItem">Link</li>', $lineage);
 
         $this->selectInlineToolbarLineageItem(1);
-        $this->assertEquals($this->replaceKeywords('nec porta ante\n      sapien vel %4%\n      \n        \n          purus neque luctus, vel %5%\n          purus neque luctus\n          vel molestie arcu\n        \n      \n    \n    \n      nec porta ante\n      purus neque luctus %6%, vel molestie arcu'), $this->getSelectedText(), 'table content is not selected');
+        $this->assertEquals($this->replaceKeywords('nec porta antesapien vel %4%purus neque luctus, vel %5%purus neque luctusvel molestie arcunec porta antepurus neque luctus %6%, vel molestie arcu'), $this->getSelectedText(), 'table content is not selected');
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">TABLE</li><li class="ViperITP-lineageItem Viper-selected">TBODY</li><li class="ViperITP-lineageItem">Row</li><li class="ViperITP-lineageItem">Cell</li><li class="ViperITP-lineageItem">Link</li>', $lineage);
 
@@ -324,7 +324,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarTABLEUnitTest extends Ab
         $this->assertEquals('<li class="ViperITP-lineageItem">TABLE</li><li class="ViperITP-lineageItem">TBODY</li><li class="ViperITP-lineageItem">Row</li><li class="ViperITP-lineageItem">Cell</li><li class="ViperITP-lineageItem">Link</li>', $lineage);
 
         $this->selectInlineToolbarLineageItem(0);
-        $this->assertEquals($this->replaceKeywords('Table 1.2: The table caption text %1%\n  \n    \n      Col1 Header\n      Col2 %2%\n      Col3 Header\n    \n  \n  \n    \n      Note: this is the table footer %3%\n    \n  \n  \n    \n      nec porta ante\n      sapien vel %4%\n      \n        \n          purus neque luctus, vel %5%\n          purus neque luctus\n          vel molestie arcu\n        \n      \n    \n    \n      nec porta ante\n      purus neque luctus %6%, vel molestie arcu'), $this->getSelectedText(), 'Table content is not selected.');
+        $this->assertEquals($this->replaceKeywords('Table 1.2: The table caption text %1%Col1 HeaderCol2 %2%Col3 HeaderNote: this is the table footer %3%nec porta antesapien vel %4%purus neque luctus, vel %5%purus neque luctusvel molestie arcunec porta antepurus neque luctus %6%, vel molestie arcu'), $this->getSelectedText(), 'Table content is not selected.');
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem Viper-selected">TABLE</li><li class="ViperITP-lineageItem">TBODY</li><li class="ViperITP-lineageItem">Row</li><li class="ViperITP-lineageItem">Cell</li><li class="ViperITP-lineageItem">Link</li>', $lineage);
 
@@ -360,7 +360,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarTABLEUnitTest extends Ab
         $this->assertEquals('<li class="ViperITP-lineageItem">TABLE</li><li class="ViperITP-lineageItem">TBODY</li><li class="ViperITP-lineageItem">Row</li><li class="ViperITP-lineageItem">Cell</li><li class="ViperITP-lineageItem Viper-selected">Image</li>', $lineage);
 
         $this->selectInlineToolbarLineageItem(2);
-        $this->assertEquals($this->replaceKeywords('nec porta ante\n      sapien vel %4%\n      \n        \n          purus neque luctus, vel %5%\n          purus neque luctus\n          vel molestie arcu'), $this->getSelectedText(), 'Row content should be selected');
+        $this->assertEquals($this->replaceKeywords('nec porta antesapien vel %4%purus neque luctus, vel %5%purus neque luctusvel molestie arcu'), $this->getSelectedText(), 'Row content should be selected');
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">TABLE</li><li class="ViperITP-lineageItem">TBODY</li><li class="ViperITP-lineageItem Viper-selected">Row</li><li class="ViperITP-lineageItem">Cell</li><li class="ViperITP-lineageItem">Image</li>', $lineage);
 
@@ -369,7 +369,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarTABLEUnitTest extends Ab
         $this->assertEquals('<li class="ViperITP-lineageItem">TABLE</li><li class="ViperITP-lineageItem">TBODY</li><li class="ViperITP-lineageItem">Row</li><li class="ViperITP-lineageItem">Cell</li><li class="ViperITP-lineageItem Viper-selected">Image</li>', $lineage);
 
         $this->selectInlineToolbarLineageItem(1);
-        $this->assertEquals($this->replaceKeywords('nec porta ante\n      sapien vel %4%\n      \n        \n          purus neque luctus, vel %5%\n          purus neque luctus\n          vel molestie arcu\n        \n      \n    \n    \n      nec porta ante\n      purus neque luctus %6%, vel molestie arcu'), $this->getSelectedText(), 'table content is not selected');
+        $this->assertEquals($this->replaceKeywords('nec porta antesapien vel %4%purus neque luctus, vel %5%purus neque luctusvel molestie arcunec porta antepurus neque luctus %6%, vel molestie arcu'), $this->getSelectedText(), 'table content is not selected');
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">TABLE</li><li class="ViperITP-lineageItem Viper-selected">TBODY</li><li class="ViperITP-lineageItem">Row</li><li class="ViperITP-lineageItem">Cell</li><li class="ViperITP-lineageItem">Image</li>', $lineage);
 
@@ -378,7 +378,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarTABLEUnitTest extends Ab
         $this->assertEquals('<li class="ViperITP-lineageItem">TABLE</li><li class="ViperITP-lineageItem">TBODY</li><li class="ViperITP-lineageItem">Row</li><li class="ViperITP-lineageItem">Cell</li><li class="ViperITP-lineageItem Viper-selected">Image</li>', $lineage);
 
         $this->selectInlineToolbarLineageItem(0);
-        $this->assertEquals($this->replaceKeywords('Table 1.2: The table caption text %1%\n  \n    \n      Col1 Header\n      Col2 %2%\n      Col3 Header\n    \n  \n  \n    \n      Note: this is the table footer %3%\n    \n  \n  \n    \n      nec porta ante\n      sapien vel %4%\n      \n        \n          purus neque luctus, vel %5%\n          purus neque luctus\n          vel molestie arcu\n        \n      \n    \n    \n      nec porta ante\n      purus neque luctus %6%, vel molestie arcu'), $this->getSelectedText(), 'Table content is not selected.');
+        $this->assertEquals($this->replaceKeywords('Table 1.2: The table caption text %1%Col1 HeaderCol2 %2%Col3 HeaderNote: this is the table footer %3%nec porta antesapien vel %4%purus neque luctus, vel %5%purus neque luctusvel molestie arcunec porta antepurus neque luctus %6%, vel molestie arcu'), $this->getSelectedText(), 'Table content is not selected.');
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem Viper-selected">TABLE</li><li class="ViperITP-lineageItem">TBODY</li><li class="ViperITP-lineageItem">Row</li><li class="ViperITP-lineageItem">Cell</li><li class="ViperITP-lineageItem">Image</li>', $lineage);
 

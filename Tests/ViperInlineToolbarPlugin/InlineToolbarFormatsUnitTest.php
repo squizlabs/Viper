@@ -220,7 +220,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarFormatsUnitTest extends 
         $this->assertEquals($this->replaceKeywords('%8% long paragraph for testing that the heading icon does not appear in the inline toolbar.'), $this->getSelectedText(), 'The second Pre section should be selected');
 
         $this->selectInlineToolbarLineageItem(0);
-        $this->assertEquals($this->replaceKeywords('sit amet %7%\n        %8% long paragraph for testing that the heading icon does not appear in the inline toolbar.'), $this->getSelectedText(), 'The div section should be selected');
+        $this->assertEquals($this->replaceKeywords('sit amet %7%%8% long paragraph for testing that the heading icon does not appear in the inline toolbar.'), $this->getSelectedText(), 'The div section should be selected');
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem Viper-selected">DIV</li><li class="ViperITP-lineageItem">PRE</li><li class="ViperITP-lineageItem">Selection</li>', $lineage);
 
@@ -237,7 +237,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarFormatsUnitTest extends 
         $this->assertEquals($this->replaceKeywords('sit amet %5%'), $this->getSelectedText(), 'The Quote inside the first quote section should be selected');
 
         $this->selectInlineToolbarLineageItem(0);
-        $this->assertEquals($this->replaceKeywords('sit amet %5%\n        %6% long paragraph for testing that the heading icon does not appear in the inline toolbar.'), $this->getSelectedText(), 'The second Pre section should be selected');
+        $this->assertEquals($this->replaceKeywords('sit amet %5%%6% long paragraph for testing that the heading icon does not appear in the inline toolbar.'), $this->getSelectedText(), 'The second Pre section should be selected');
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem Viper-selected">DIV</li><li class="ViperITP-lineageItem">Quote</li><li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Selection</li>', $lineage);
 
@@ -249,7 +249,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarFormatsUnitTest extends 
         $this->assertEquals($this->replaceKeywords('%4% long paragraph for testing that the heading icon does not appear in the inline toolbar.'), $this->getSelectedText(), 'The second div section should be selected');
 
         $this->selectInlineToolbarLineageItem(0);
-        $this->assertEquals($this->replaceKeywords('sit amet %3%\n        %4% long paragraph for testing that the heading icon does not appear in the inline toolbar.'), $this->getSelectedText(), 'The second Pre section should be selected');
+        $this->assertEquals($this->replaceKeywords('sit amet %3%%4% long paragraph for testing that the heading icon does not appear in the inline toolbar.'), $this->getSelectedText(), 'The second Pre section should be selected');
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem Viper-selected">DIV</li><li class="ViperITP-lineageItem">DIV</li><li class="ViperITP-lineageItem">Selection</li>', $lineage);
 
@@ -261,7 +261,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarFormatsUnitTest extends 
         $this->assertEquals($this->replaceKeywords('sit amet %1%'), $this->getSelectedText(), 'The first P section should be selected');
 
         $this->selectInlineToolbarLineageItem(0);
-        $this->assertEquals($this->replaceKeywords('sit amet %1%\n        %2% long paragraph for testing that the heading icon does not appear in the inline toolbar.'), $this->getSelectedText(), 'The second Pre section should be selected');
+        $this->assertEquals($this->replaceKeywords('sit amet %1%%2% long paragraph for testing that the heading icon does not appear in the inline toolbar.'), $this->getSelectedText(), 'The second Pre section should be selected');
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem Viper-selected">DIV</li><li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Selection</li>', $lineage);
 

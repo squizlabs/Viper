@@ -113,15 +113,10 @@ ViperToolbarPlugin.prototype = {
     {
         this._settingButtons = buttons;
 
-        // Remove all buttons that were adding by other plugins.
-        if (this.viper.isBrowser('msie') === true) {
-            while(this._toolbar.firstChild) {
-                this._toolbar.removeChild(this._toolbar.firstChild);
-            }
-        } else {
-            this._toolbar.innerHTML = '';
+        // Remove all buttons that were added by other plugins.
+        while(this._toolbar.firstChild) {
+            this._toolbar.removeChild(this._toolbar.firstChild);
         }
-
 
         var buttonsLen = buttons.length;
         for (var i = 0; i < buttonsLen; i++) {
@@ -508,7 +503,7 @@ ViperToolbarPlugin.prototype = {
         if (useCustomToggler !== true) {
             ViperUtil.removeEvent(button, 'mousedown');
             ViperUtil.addEvent(button, 'mousedown', function(e) {
-                if (self.viper.isBrowser('msie') === true) {
+                if (self.viper.isBrowser('msie', '<11') === true) {
                     // This block of code prevents IE moving user selection to the.
                     // button element when clicked. When the button element is removed
                     // and added back to DOM selection is not moved. Seriously, IE?
@@ -812,7 +807,7 @@ ViperToolbarPlugin.prototype = {
             return;
         }
 
-        if (this.viper.isBrowser('msie') === true) {
+        if (this.viper.isBrowser('msie', '<11') === true) {
             // IE fix.. When a toolbar button is clicked IE moves the selection to that
             // button unless the button no longer exists... So we remove the toolbar
             // here to prevent selection changing......
@@ -824,7 +819,7 @@ ViperToolbarPlugin.prototype = {
 
         this.viper.fireCallbacks('ViperToolbarPlugin:updateToolbar', {range: range});
 
-        if (this.viper.isBrowser('msie') === true) {
+        if (this.viper.isBrowser('msie', '<11') === true) {
             parent.appendChild(this._toolbar);
         }
 

@@ -359,7 +359,7 @@ ViperInlineToolbarPlugin.prototype = {
                     ViperUtil.removeClass(linElems, 'Viper-selected');
                     ViperUtil.addClass(clickElem, 'Viper-selected');
 
-                    if (self.viper.isBrowser('msie') === true) {
+                    if (self.viper.isBrowser('msie', '<11') === true) {
                         // IE changes the range when the mouse is released on an element
                         // that is not part of viper causing Viper to lose focus..
                         // Use time out to set the range back in to Viper..
@@ -404,7 +404,7 @@ ViperInlineToolbarPlugin.prototype = {
             ViperUtil.removeClass(linElems, 'Viper-selected');
             ViperUtil.addClass(parent, 'Viper-selected');
 
-            if (self.viper.isBrowser('msie') === true) {
+            if (self.viper.isBrowser('msie', '<11') === true) {
                 // IE changes the range when the mouse is released on an element
                 // that is not part of viper causing Viper to lose focus..
                 // Use time out to set the range back in to Viper..
@@ -523,13 +523,6 @@ ViperInlineToolbarPlugin.prototype = {
             parent = nodeSelection;
         } else {
             var startNode = range.getStartNode();
-            var endNode   = range.getStartNode();
-            if (startNode === endNode) {
-                parent = startNode.parentNode;
-            } else {
-                parent = range.getCommonElement();
-            }
-
             if (!startNode) {
                 return lineage;
             } else if (startNode.nodeType == ViperUtil.TEXT_NODE
@@ -552,6 +545,15 @@ ViperInlineToolbarPlugin.prototype = {
         }
 
         var viperElement = this.viper.getViperElement();
+
+        if (parent === null) {
+            var endNode = range.getEndNode();
+            if (startNode && startNode === endNode) {
+                parent = startNode.parentNode;
+            } else {
+                parent = range.getCommonElement();
+            }
+        }
 
         if (parent === viperElement) {
             return lineage;

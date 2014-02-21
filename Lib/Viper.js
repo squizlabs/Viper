@@ -403,13 +403,49 @@ Viper.prototype = {
     /**
      * Checks if specified browser type is the current browser.
      *
-     * @param {string} browser The browser type to test.
+     * @param {string}  browser The browser type to test.
+     * @param {string}  version The version of the browser. Example formats: 23, <10, >=11.
      *
      * @return {boolean}
      */
-    isBrowser: function(browser)
+    isBrowser: function(browser, version)
     {
-        return (this.getBrowserType() === browser);
+        if (this.getBrowserType() !== browser) {
+            return false;
+        } else if (!version) {
+            return true;
+        }
+
+        version        = version.toString();
+        var currentVer = this.getBrowserVersion().toString();
+        if (version === currentVer) {
+            return true;
+        }
+
+        var match = version.match(/^(<=|>=|<|>)([\d\.]+$)/);
+        if (!match) {
+            return false;
+        }
+
+        version = parseFloat(match[2]);
+        switch (match[1]) {
+            case '<=':
+                return (currentVer <= version);
+
+            case '>=':
+                return (currentVer >= version);
+
+            case '<':
+                return (currentVer < version);
+
+            case '>':
+                return (currentVer > version);
+
+            default:
+                return false;
+        }
+
+        return false;
 
     },
 
@@ -509,7 +545,7 @@ Viper.prototype = {
         this._removeEvents(elem);
         var self = this;
 
-        if (this.isBrowser('msie') === true) {
+        if (this.isBrowser('msie', '<11') === true) {
             ViperUtil.addEvent(elem, 'mouseup.' + namespace, function(e) {
                 return self.mouseUp(e);
             });
@@ -1457,7 +1493,7 @@ Viper.prototype = {
             // this._document, so that we don't have document fragments within our this._document,
             // as they don't have parentNodes and are hard to work with.
             if (node.nodeType === ViperUtil.DOCUMENT_FRAGMENT_NODE) {
-                if (this.isBrowser('msie') === true) {
+                if (this.isBrowser('msie', '<11') === true) {
                     // Insert a marker span tag to the caret positioon.
                     range.rangeObj.pasteHTML('<span id="__viperMarker"></span>');
                     var marker = ViperUtil.getid('__viperMarker');
@@ -3039,7 +3075,7 @@ Viper.prototype = {
     createSpaceNode: function()
     {
         var node = null;
-        if (this.isBrowser('msie') === true) {
+        if (this.isBrowser('msie', '<11') === true) {
             node = Viper.document.createTextNode(String.fromCharCode(160));
         } else {
             node = Viper.document.createTextNode(' ');
@@ -3612,7 +3648,6 @@ Viper.prototype = {
 
             var span = document.createElement('span');
             span.setAttribute('class', '__viper_selHighlight');
-
             this.surroundContents('span', attributes, range, true);
         }
 
@@ -4862,7 +4897,7 @@ Viper.prototype = {
         var self = this;
         this.fireCallbacks('setHtml', {element: clone}, function() {
             var html = ViperUtil.getHtml(clone);
-            if (self.isBrowser('msie') === true && self.getBrowserVersion() === 8) {
+            if (self.isBrowser('msie', 8) === true) {
                 // IE8 has problems with param tags, it removes them from the content
                 // so Viper needs to change the tag name when content is being set
                 // and change it back to original when content is being retrieved.

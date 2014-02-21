@@ -735,7 +735,7 @@ ViperLinkPlugin.prototype = {
                         subject = href.substr(subjIndex + 9);
                         href    = href.substr(0, subjIndex);
                     }
-    
+
                     href = href.replace(/\s*mailto:\s*/i, '');
                 }
             }
@@ -781,7 +781,7 @@ ViperLinkPlugin.prototype = {
                         subject = href.substr(subjIndex + 9);
                         href    = href.substr(0, subjIndex);
                     }
-    
+
                     href = href.replace(/\s*mailto:\s*/i, '');
                 }
             }

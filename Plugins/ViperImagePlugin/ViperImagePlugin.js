@@ -50,7 +50,7 @@ ViperImagePlugin.prototype = {
                 self.viper.fireSelectionChanged(range, true);
                 ViperSelection.removeAllRanges();
 
-                if (self.viper.isBrowser('msie') === true && ViperUtil.isTag(target, 'img') === true) {
+                if (self.viper.isBrowser('msie', '<11') === true && ViperUtil.isTag(target, 'img') === true) {
                     self._ieImageResize = target;
                     self.viper.registerCallback('Viper:mouseUp', 'ViperImagePlugin:ie', function(e) {
                        ViperSelection.removeAllRanges();
@@ -400,7 +400,7 @@ ViperImagePlugin.prototype = {
         }
 
         var image = this._resizeImage;
-        if (this.viper.isBrowser('msie') === true) {
+        if (this.viper.isBrowser('msie', '<11') === true) {
             image = this._ieImageResize;
         }
 

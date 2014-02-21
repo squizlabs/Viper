@@ -1915,11 +1915,20 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
     /**
      * Returns the text that is selected.
      *
+     * @param boolean $clean If TRUE then the content is cleaned up, e.g. new lines and extra spaces removed.
+     *
      * @return string
      */
-    protected function getSelectedText()
+    protected function getSelectedText($clean=TRUE)
     {
-        return $this->sikuli->execJS('gText()');
+        $text = $this->sikuli->execJS('gText()');
+
+        if ($clean !== TRUE) {
+            return $text;
+        }
+
+        $text = preg_replace('/\\\n\s+/', '', $text);
+        return $text;
 
     }//end getSelectedText()
 

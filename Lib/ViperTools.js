@@ -763,7 +763,7 @@ ViperTools.prototype = {
 
         var self = this;
 
-        if (this.viper.isBrowser('msie') === true) {
+        if (this.viper.isBrowser('msie', '<11') === true) {
             // IE does not trigger the click event for input when the label
             // element is clicked, so add the click event to label element and change
             // the checkbox state.
@@ -1318,12 +1318,8 @@ ViperTools.prototype = {
                         }
                     }
                 } else {
-                    if (self.viper.isBrowser('msie') === true) {
-                        while(toolsContainer.firstChild) {
-                            toolsContainer.removeChild(toolsContainer.firstChild);
-                        }
-                    } else {
-                        toolsContainer.innerHTML = '';
+                    while(toolsContainer.firstChild) {
+                        toolsContainer.removeChild(toolsContainer.firstChild);
                     }
 
                     for (var i = 0; i < buttonElements.length; i++) {
@@ -1702,12 +1698,8 @@ ViperTools.prototype = {
                 }
 
                 // Clear the buttons container contents.
-                if (self.viper.isBrowser('msie') === true) {
-                    while(toolsContainer.firstChild) {
-                        toolsContainer.removeChild(toolsContainer.firstChild);
-                    }
-                } else {
-                    toolsContainer.innerHTML = '';
+                while(toolsContainer.firstChild) {
+                    toolsContainer.removeChild(toolsContainer.firstChild);
                 }
 
                 // Get the button ids and their elements.

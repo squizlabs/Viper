@@ -327,7 +327,17 @@ ViperMozRange.prototype = {
             startContainer = this.rangeObj.startContainer;
         }
 
-        this.rangeObj.deleteContents();
+        if (startContainer === this.endContainer
+            && startContainer.nodeType === ViperUtil.TEXT_NODE
+        ) {
+            // IE11 fix. IE to removes the node from DOM when the entire contents of a textnode is deleted.
+            // This fix works for the other browsers as well.
+            var before = this.startContainer.data.substring(0, this.startOffset);
+            var after  = this.startContainer.data.substring(this.endOffset);
+            this.startContainer.data = before + after;
+        } else {
+            this.rangeObj.deleteContents();
+        }
 
         // Because we rely on normalisation when we get call getRangeCoords()
         // we have to explicitly set the start container and offset, as using

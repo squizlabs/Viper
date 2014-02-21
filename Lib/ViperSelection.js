@@ -45,12 +45,12 @@ var ViperSelection = {
     createRange: function()
     {
          var rangeObj = null;
-         if (Viper.document.body.createTextRange) {
-             rangeObj = Viper.document.body.createTextRange();
-             return new ViperIERange(rangeObj);
-         } else if (Viper.document.createRange) {
+         if (Viper.document.createRange) {
              rangeObj = Viper.document.createRange();
              return new ViperMozRange(rangeObj);
+         } else if (Viper.document.body.createTextRange) {
+             rangeObj = Viper.document.body.createTextRange();
+             return new ViperIERange(rangeObj);
          } else {
              throw Error('UnsupportedOperationException: createRange() not supported.');
          }
@@ -107,7 +107,7 @@ var ViperSelection = {
     {
         this._selection = ViperSelection._getSelection();
 
-        if (this._viper.isBrowser('msie') === true) {
+        if (this._viper.isBrowser('msie', '<11') === true) {
             // IE.
             try {
                 range.rangeObj.select();
