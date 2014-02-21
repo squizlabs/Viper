@@ -809,6 +809,20 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      */
     protected function replaceKeywords($content)
     {
+        return self::_replaceKeywords($content);
+
+    }//end replaceKeywords()
+
+
+    /**
+     * Replaces the keywords in given content.
+     *
+     * @param string $content The content to search.
+     *
+     * @return string
+     */
+    private static function _replaceKeywords($content)
+    {
         $keywords = self::_getKeywordsList();
         foreach ($keywords as $index => $keyword) {
             $content = str_replace('%'.($index + 1).'%', $keyword, $content);
@@ -824,7 +838,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
 
         return $content;
 
-    }//end replaceKeywords()
+    }//end _replaceKeywords()
 
 
     /**
@@ -949,7 +963,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      */
     public static function assertEquals($expected, $actual, $message='', $delta=0, $maxDepth=10, $canonicalize=FALSE, $ignoreCase=FALSE)
     {
-        $expected = self::replaceKeywords($expected);
+        $expected = self::_replaceKeywords($expected);
 
         return parent::assertEquals($expected, $actual, $message, $delta, $maxDepth, $canonicalize, $ignoreCase);
 
