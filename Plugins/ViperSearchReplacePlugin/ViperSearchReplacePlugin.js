@@ -221,7 +221,18 @@ ViperSearchReplacePlugin.prototype = {
 
         if (this.viper.isBrowser('msie') === true) {
             // Range search.
-            viperRange.collapse(false);
+
+            if (this.viper.isBrowser('msie', '>=11') === true) {
+                viperRange = this.viper.getViperRange();
+                viperRange.collapse(false);
+                var textRange = new ViperIERange(document.body.createTextRange());
+                textRange.setStart(viperRange.startContainer, viperRange.startOffset);
+                textRange.setEnd(viperRange.endContainer, viperRange.endOffset);
+                viperRange = textRange;
+            } else {
+                viperRange.collapse(false);
+            }
+
             this._finding = true;
             var found = viperRange.rangeObj.findText(text);
             if (testOnly !== true && found === true) {
