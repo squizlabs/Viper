@@ -3377,8 +3377,11 @@ Viper.prototype = {
         }
 
         // Move the range to where it was before.
-        range.setStart(startContainer, startOffset);
-        range.collapse(true);
+        if (startContainer.parentNode) {
+            // This check is to pevent IE11 stuffing up empty text nodes when range is collapsed.
+            range.setStart(startContainer, startOffset);
+            range.collapse(true);
+        }
 
         // Create the start bookmark.
         var startBookmark           = Viper.document.createElement('span');
@@ -3388,7 +3391,11 @@ Viper.prototype = {
         startBookmark.setAttribute('viperBookmark', 'start');
 
         try {
-            range.insertNode(startBookmark);
+            if (startContainer.parentNode) {
+                range.insertNode(startBookmark);
+            } else {
+                ViperUtil.insertBefore(endBookmark, startBookmark);
+            }
 
             // Make sure start and end are in correct position.
             if (startBookmark.previousSibling === endBookmark) {
