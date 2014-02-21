@@ -161,7 +161,7 @@ ViperTools.prototype = {
         var self           = this;
         if (clickAction) {
             ViperUtil.addEvent(button, 'mousedown.' + this.viper.getEventNamespace(), function(e) {
-                if (self.viper.isBrowser('msie') === true) {
+                if (self.viper.isBrowser('msie', '<11') === true) {
                     // This block of code prevents IE moving user selection to the.
                     // button element when clicked. When the button element is removed
                     // and added back to DOM selection is not moved. Seriously, IE?
@@ -1453,7 +1453,7 @@ ViperTools.prototype = {
 
                 ViperUtil.removeEvent(button, 'mousedown');
                 ViperUtil.addEvent(button, 'mousedown', function(e) {
-                    if (viper.isBrowser('msie') === true) {
+                    if (viper.isBrowser('msie', '<11') === true) {
                         // This block of code prevents IE moving user selection to the.
                         // button element when clicked. When the button element is removed
                         // and added back to DOM selection is not moved. Seriously, IE?
