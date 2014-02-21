@@ -21,10 +21,14 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreStylesUnitTest extends AbstractViper
         $this->clickTopToolbarButton('superscript');
         $this->clickTopToolbarButton('strikethrough');
 
-        // Remove strike and sub.
-        $this->clickTopToolbarButton('strikethrough', 'active');
-        $this->clickTopToolbarButton('subscript', 'active');
+        $this->assertHTMLMatch('<p><strong><em><sub><sup><del>%1%</del></sup></sub></em></strong> %2% %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
+        // Remove strike.
+        $this->clickTopToolbarButton('strikethrough', 'active');
+        $this->assertHTMLMatch('<p><strong><em><sub><sup>%1%</sup></sub></em></strong> %2% %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
+
+        // Remove sub.
+        $this->clickTopToolbarButton('subscript', 'active');
         $this->assertHTMLMatch('<p><strong><em><sup>%1%</sup></em></strong> %2% %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
         //Remove italics
@@ -34,6 +38,10 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreStylesUnitTest extends AbstractViper
         //Remove bold
         $this->clickTopToolbarButton('bold', 'active');
         $this->assertHTMLMatch('<p><sup>%1%</sup> %2% %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
+
+        //Remove superscript
+        $this->clickTopToolbarButton('superscript', 'active');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
     }//end testAllStyles()
 
