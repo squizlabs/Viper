@@ -697,141 +697,17 @@ ViperKeyboardEditorPlugin.prototype = {
         var range = this.viper.getViperRange();
 
         if (this.viper.isBrowser('chrome') === true) {
-            // This block of code is a workaround for the delete bug in Chrome.
-            // See http://goo.gl/QPB0v
-            if (e.keyCode === 46
-                && range.collapsed === true
-                && range.startContainer.nodeType === ViperUtil.TEXT_NODE
-                && range.startOffset === range.startContainer.data.length
-                && !range.startContainer.nextSibling
-            ) {
-                // At the end of an element. Check to see if next available
-                // element is a block.
-                var nextSelectable = range.getNextContainer(range.startContainer, null, true);
-                var currentParent  = ViperUtil.getFirstBlockParent(range.startContainer);
-                var nextParent     = ViperUtil.getFirstBlockParent(nextSelectable);
-                if (currentParent !== nextParent && this.viper.isOutOfBounds(nextSelectable) === false) {
-                    while (nextParent.firstChild) {
-                        currentParent.appendChild(nextParent.firstChild);
-                    }
+            // Latest Chrome versions have strange issue with all content deletion, handle it in another method.
+            return this._handleDeleteForChrome(e, range);
+        }
 
-                    ViperUtil.remove(nextParent);
-                    ViperUtil.preventDefault(e);
-                    this.viper.fireNodesChanged();
-                    return false;
-                }
-            } if (e.keyCode === 46
-                && range.collapsed === true
-                && range.startContainer.nodeType === ViperUtil.ELEMENT_NODE
-                && ViperUtil.isTag(range.getStartNode(), 'br') === true
-            ) {
-                ViperUtil.remove(range.getStartNode());
-                ViperUtil.preventDefault(e);
-                this.viper.fireNodesChanged();
-                return false;
-            } else if (e.keyCode === 8
-                && range.collapsed === true
-                && range.startContainer.nodeType === ViperUtil.TEXT_NODE
-                && (range.startOffset === 0 || (range.startOffset === 1 && range.startContainer.data.charAt(0) === ' '))
-                && (!range.startContainer.previousSibling || ViperUtil.isTag(range.startContainer.previousSibling, 'br') === true)
-            ) {
-                // At the start of an element. Check to see if the previous
-                // element is a part of another block element. If it is then
-                // join these elements.
-                var prevSelectable = range.getPreviousContainer(range.startContainer, null, true, true);
-                var currentParent  = ViperUtil.getFirstBlockParent(range.startContainer);
-                var prevParent     = ViperUtil.getFirstBlockParent(prevSelectable);
-                if (currentParent !== prevParent && this.viper.isOutOfBounds(prevSelectable) === false) {
-                    // Check if there are any other elements in between.
-                    var elemsBetween = ViperUtil.getElementsBetween(prevParent, currentParent);
-                    if (elemsBetween.length > 0) {
-                        // There is at least one non block element in between.
-                        // Remove it.
-                        ViperUtil.remove(elemsBetween[(elemsBetween.length - 1)]);
-                    } else {
-                        while (currentParent.firstChild) {
-                            prevParent.appendChild(currentParent.firstChild);
-                        }
-
-                        ViperUtil.remove(currentParent);
-
-                        if (prevSelectable.nodeType === ViperUtil.TEXT_NODE) {
-                            range.setStart(prevSelectable, prevSelectable.data.length);
-                        } else {
-                            range.setStartAfter(prevSelectable);
-                        }
-
-                        range.collapse(true);
-                        ViperSelection.addRange(range);
-                    }
-
-                    ViperUtil.preventDefault(e);
-                    this.viper.fireNodesChanged();
-
-                    return false;
-                } else if (ViperUtil.isTag(prevSelectable, 'br') === true) {
-                    ViperUtil.remove(prevSelectable);
-                    ViperUtil.preventDefault(e);
-                    this.viper.fireNodesChanged();
-                    return false;
-                }
-            } else if (
-                range.collapsed === false
-                && range.startContainer !== range.endContainer
-                && range.startContainer.nodeType === ViperUtil.TEXT_NODE
-            ) {
-                // This is a selection on different text nodes. Check to see
-                // if these nodes are part of two different block elements.
-                var nodeSelection = range.getNodeSelection();
-                if (nodeSelection) {
-                    if (nodeSelection === this.viper.getViperElement()) {
-                        var defaultTagName = this.viper.getDefaultBlockTag();
-                        if (defaultTagName !== '') {
-                            var defTag = document.createElement(defaultTagName);
-                            ViperUtil.setHtml(defTag, '&nbsp;');
-                            ViperUtil.setHtml(nodeSelection, '');
-                            nodeSelection.appendChild(defTag);
-                        } else {
-                            ViperUtil.setHtml(nodeSelection, '<br />');
-                        }
-                    } else {
-                        ViperUtil.remove(nodeSelection);
-                    }
-                } else {
-                    var startParent = ViperUtil.getFirstBlockParent(range.startContainer);
-                    var endParent   = ViperUtil.getFirstBlockParent(range.endContainer);
-                    if (startParent !== endParent) {
-                        // Two different parents. We need to join these parents.
-                        // First remove all elements in between.
-                        range.deleteContents();
-
-                        // Now bring the contents of the next selectable to the
-                        // start parent.
-                        var nextSelectable = range.getNextContainer(range.startContainer, null, true);
-                        if (this.viper.isOutOfBounds(nextSelectable) === false) {
-                            var nextParent     = ViperUtil.getFirstBlockParent(nextSelectable);
-
-                            while (nextParent.firstChild) {
-                                startParent.appendChild(nextParent.firstChild);
-                            }
-
-                            ViperUtil.remove(nextParent);
-                        }
-                    } else {
-                        // Same container just remove contents.
-                        range.deleteContents();
-                    }//end if
-                }//end if
-
-                ViperUtil.preventDefault(e);
-                range.collapse(true);
-                ViperSelection.addRange(range);
-                this.viper.fireNodesChanged();
-                return false;
-            }//end if
-        }//end if
+        if (e.which === 46) {
+            // Handle deletion from the right of the caret.
+            return this._handleDeleteFromRight(e, range);
+        }
 
         if (range.startOffset !== 0) {
+            // No need to handle any case where caret is not at the start of a node.
             return;
         }
 
@@ -889,61 +765,90 @@ ViperKeyboardEditorPlugin.prototype = {
                 return false;
             }
         } else if (this.viper.isBrowser('msie') === true) {
-            // Remove HR elements in IE..
             var rangeClone = range.cloneRange();
-            rangeClone.moveStart('character', -2);
-            if (ViperUtil.trim(rangeClone.getHTMLContents()) === '<HR>') {
-                range.moveStart('character', -2);
-                range.deleteContents();
-            } else {
-                if (rangeClone.endContainer.nodeType === ViperUtil.ELEMENT_NODE
-                    && rangeClone.endOffset === 0
-                    && rangeClone.endContainer.innerHTML === ''
-                ) {
-                    var nextNode = rangeClone.getNextContainer(rangeClone.startContainer, null, true);
-                    ViperUtil.remove(rangeClone.endContainer);
-                    rangeClone.setEnd(nextNode, 0);
-                    rangeClone.collapse(false);
-                    ViperSelection.addRange(rangeClone);
 
-                    return false;
-                } else if (range.startContainer
-                    && range.startContainer.nodeType === ViperUtil.TEXT_NODE
-                    && range.endContainer
-                    && range.endContainer.nodeType === ViperUtil.TEXT_NODE
-                    && range.startOffset === 0
-                    && range.endOffset === range.endContainer.data.length
-                ) {
-                    // Remove a whle list element. IE seems to remove the list
-                    // items but not the UL/OL element...
-                    var parentLists = ViperUtil.getParents(range.startContainer, 'ul,ol', this.viper.getViperElement());
-                    while (parentLists.length > 0) {
-                        var parentList = parentLists.shift();
-                        var firstSelectable = range._getFirstSelectableChild(parentList);
-                        var lastSelectable  = range._getLastSelectableChild(parentList);
-                        if (firstSelectable === range.startContainer
-                            && lastSelectable === range.endContainer
-                        ) {
-                            var newSelectable = range.getNextContainer(lastSelectable, null, true);
-                            if (!newSelectable || this.viper.isOutOfBounds(newSelectable) === true) {
-                                newSelectable = range.getPreviousContainer(firstSelectable, null, true);
-                                if (newSelectable) {
-                                    ViperUtil.remove(parentList);
-                                    range.setEnd(newSelectable, newSelectable.data.length);
-                                    range.collapse(false);
-                                    ViperSelection.addRange(range);
-                                }
-                            } else {
+            if (this.viper.isBrowser('msie', '>=11') === true) {
+                // Check if the previous sibling of a parent is HR element and then remove it if found.
+                var startNode = range.getStartNode();
+                var foundSib  = false;
+                while (startNode) {
+                    for (var node = startNode.previousSibling; node; node = node.previousSibling) {
+                        if (node.nodeType === ViperUtil.ELEMENT_NODE && ViperUtil.isTag(node, 'hr') === true) {
+                            // Found the HR element, remove it.
+                            ViperUtil.remove(node);
+                            ViperUtil.preventDefault(e);
+                            this.viper.fireNodesChanged();
+                            return false;
+                        } else if (node.nodeType !== ViperUtil.TEXT_NODE || ViperUtil.trim(node.data).length !== 0) {
+                            // Not an empty text node or another node type, no need to continue.
+                            foundSib = true;
+                            break;
+                        }
+                    }
+
+                    if (foundSib === true) {
+                        break;
+                    }
+
+                    startNode = startNode.parentNode;
+                }
+            } else {
+                // Remove HR elements in <IE11..
+                rangeClone.moveStart('character', -2);
+                if (ViperUtil.trim(rangeClone.getHTMLContents()) === '<HR>') {
+                    range.moveStart('character', -2);
+                    range.deleteContents();
+                    return;
+                }
+            }
+
+            if (rangeClone.endContainer.nodeType === ViperUtil.ELEMENT_NODE
+                && rangeClone.endOffset === 0
+                && rangeClone.endContainer.innerHTML === ''
+            ) {
+                var nextNode = rangeClone.getNextContainer(rangeClone.startContainer, null, true);
+                ViperUtil.remove(rangeClone.endContainer);
+                rangeClone.setEnd(nextNode, 0);
+                rangeClone.collapse(false);
+                ViperSelection.addRange(rangeClone);
+
+                return false;
+            } else if (range.startContainer
+                && range.startContainer.nodeType === ViperUtil.TEXT_NODE
+                && range.endContainer
+                && range.endContainer.nodeType === ViperUtil.TEXT_NODE
+                && range.startOffset === 0
+                && range.endOffset === range.endContainer.data.length
+            ) {
+                // Remove a whle list element. IE seems to remove the list
+                // items but not the UL/OL element...
+                var parentLists = ViperUtil.getParents(range.startContainer, 'ul,ol', this.viper.getViperElement());
+                while (parentLists.length > 0) {
+                    var parentList = parentLists.shift();
+                    var firstSelectable = range._getFirstSelectableChild(parentList);
+                    var lastSelectable  = range._getLastSelectableChild(parentList);
+                    if (firstSelectable === range.startContainer
+                        && lastSelectable === range.endContainer
+                    ) {
+                        var newSelectable = range.getNextContainer(lastSelectable, null, true);
+                        if (!newSelectable || this.viper.isOutOfBounds(newSelectable) === true) {
+                            newSelectable = range.getPreviousContainer(firstSelectable, null, true);
+                            if (newSelectable) {
                                 ViperUtil.remove(parentList);
-                                range.setEnd(newSelectable, 0);
+                                range.setEnd(newSelectable, newSelectable.data.length);
                                 range.collapse(false);
                                 ViperSelection.addRange(range);
                             }
+                        } else {
+                            ViperUtil.remove(parentList);
+                            range.setEnd(newSelectable, 0);
+                            range.collapse(false);
+                            ViperSelection.addRange(range);
+                        }
 
-                            this.viper.fireNodesChanged();
+                        this.viper.fireNodesChanged();
 
-                            return false;
-                        }//end if
+                        return false;
                     }//end if
                 }//end if
             }//end if
@@ -1115,6 +1020,195 @@ ViperKeyboardEditorPlugin.prototype = {
                 return false;
             }
         }
+
+    },
+
+    _handleDeleteFromRight: function(e, range)
+    {
+        if (range.collapsed !== true) {
+            // If range is not collapsed then everything in the selection should be removed which is handled by
+            // the browser.
+            return;
+        }
+
+        var startNode = range.getStartNode();
+        if (!startNode) {
+            if (!range.startContainer
+                || range.startContainer.nodeType !== ViperUtil.ELEMENT_NODE
+                || range.startContainer !== range.endContainer
+            ) {
+                return;
+            }
+
+            startNode = range.startContainer;
+        }
+
+        if (startNode.nodeType === ViperUtil.TEXT_NODE) {
+            // In a text node.
+            if (range.startOffset === startNode.data.length) {
+                // End of the text node.
+                // Check for HR element.
+                var foundSib  = false;
+                while (startNode) {
+                    for (var node = startNode.nextSibling; node; node = node.nextSibling) {
+                        if (node.nodeType === ViperUtil.ELEMENT_NODE && ViperUtil.isTag(node, 'hr') === true) {
+                            // Found the HR element, remove it.
+                            ViperUtil.remove(node);
+                            ViperUtil.preventDefault(e);
+                            this.viper.fireNodesChanged();
+                            return false;
+                        } else if (node.nodeType !== ViperUtil.TEXT_NODE || ViperUtil.trim(node.data).length !== 0) {
+                            // Not an empty text node or another node type, no need to continue.
+                            foundSib = true;
+                            break;
+                        }
+                    }
+
+                    if (foundSib === true) {
+                        break;
+                    }
+
+                    startNode = startNode.parentNode;
+                }//end while
+            }//end if
+        }//end if
+
+    },
+
+    _handleDeleteForChrome: function(e, range)
+    {
+        // This block of code is a workaround for the delete bug in Chrome.
+        // See http://goo.gl/QPB0v
+        if (e.keyCode === 46
+            && range.collapsed === true
+            && range.startContainer.nodeType === ViperUtil.TEXT_NODE
+            && range.startOffset === range.startContainer.data.length
+            && !range.startContainer.nextSibling
+        ) {
+            // At the end of an element. Check to see if next available
+            // element is a block.
+            var nextSelectable = range.getNextContainer(range.startContainer, null, true);
+            var currentParent  = ViperUtil.getFirstBlockParent(range.startContainer);
+            var nextParent     = ViperUtil.getFirstBlockParent(nextSelectable);
+            if (currentParent !== nextParent && this.viper.isOutOfBounds(nextSelectable) === false) {
+                while (nextParent.firstChild) {
+                    currentParent.appendChild(nextParent.firstChild);
+                }
+
+                ViperUtil.remove(nextParent);
+                ViperUtil.preventDefault(e);
+                this.viper.fireNodesChanged();
+                return false;
+            }
+        } if (e.keyCode === 46
+            && range.collapsed === true
+            && range.startContainer.nodeType === ViperUtil.ELEMENT_NODE
+            && ViperUtil.isTag(range.getStartNode(), 'br') === true
+        ) {
+            ViperUtil.remove(range.getStartNode());
+            ViperUtil.preventDefault(e);
+            this.viper.fireNodesChanged();
+            return false;
+        } else if (e.keyCode === 8
+            && range.collapsed === true
+            && range.startContainer.nodeType === ViperUtil.TEXT_NODE
+            && (range.startOffset === 0 || (range.startOffset === 1 && range.startContainer.data.charAt(0) === ' '))
+            && (!range.startContainer.previousSibling || ViperUtil.isTag(range.startContainer.previousSibling, 'br') === true)
+        ) {
+            // At the start of an element. Check to see if the previous
+            // element is a part of another block element. If it is then
+            // join these elements.
+            var prevSelectable = range.getPreviousContainer(range.startContainer, null, true, true);
+            var currentParent  = ViperUtil.getFirstBlockParent(range.startContainer);
+            var prevParent     = ViperUtil.getFirstBlockParent(prevSelectable);
+            if (currentParent !== prevParent && this.viper.isOutOfBounds(prevSelectable) === false) {
+                // Check if there are any other elements in between.
+                var elemsBetween = ViperUtil.getElementsBetween(prevParent, currentParent);
+                if (elemsBetween.length > 0) {
+                    // There is at least one non block element in between.
+                    // Remove it.
+                    ViperUtil.remove(elemsBetween[(elemsBetween.length - 1)]);
+                } else {
+                    while (currentParent.firstChild) {
+                        prevParent.appendChild(currentParent.firstChild);
+                    }
+
+                    ViperUtil.remove(currentParent);
+
+                    if (prevSelectable.nodeType === ViperUtil.TEXT_NODE) {
+                        range.setStart(prevSelectable, prevSelectable.data.length);
+                    } else {
+                        range.setStartAfter(prevSelectable);
+                    }
+
+                    range.collapse(true);
+                    ViperSelection.addRange(range);
+                }
+
+                ViperUtil.preventDefault(e);
+                this.viper.fireNodesChanged();
+
+                return false;
+            } else if (ViperUtil.isTag(prevSelectable, 'br') === true) {
+                ViperUtil.remove(prevSelectable);
+                ViperUtil.preventDefault(e);
+                this.viper.fireNodesChanged();
+                return false;
+            }
+        } else if (
+            range.collapsed === false
+            && range.startContainer !== range.endContainer
+            && range.startContainer.nodeType === ViperUtil.TEXT_NODE
+        ) {
+            // This is a selection on different text nodes. Check to see
+            // if these nodes are part of two different block elements.
+            var nodeSelection = range.getNodeSelection();
+            if (nodeSelection) {
+                if (nodeSelection === this.viper.getViperElement()) {
+                    var defaultTagName = this.viper.getDefaultBlockTag();
+                    if (defaultTagName !== '') {
+                        var defTag = document.createElement(defaultTagName);
+                        ViperUtil.setHtml(defTag, '&nbsp;');
+                        ViperUtil.setHtml(nodeSelection, '');
+                        nodeSelection.appendChild(defTag);
+                    } else {
+                        ViperUtil.setHtml(nodeSelection, '<br />');
+                    }
+                } else {
+                    ViperUtil.remove(nodeSelection);
+                }
+            } else {
+                var startParent = ViperUtil.getFirstBlockParent(range.startContainer);
+                var endParent   = ViperUtil.getFirstBlockParent(range.endContainer);
+                if (startParent !== endParent) {
+                    // Two different parents. We need to join these parents.
+                    // First remove all elements in between.
+                    range.deleteContents();
+
+                    // Now bring the contents of the next selectable to the
+                    // start parent.
+                    var nextSelectable = range.getNextContainer(range.startContainer, null, true);
+                    if (this.viper.isOutOfBounds(nextSelectable) === false) {
+                        var nextParent     = ViperUtil.getFirstBlockParent(nextSelectable);
+
+                        while (nextParent.firstChild) {
+                            startParent.appendChild(nextParent.firstChild);
+                        }
+
+                        ViperUtil.remove(nextParent);
+                    }
+                } else {
+                    // Same container just remove contents.
+                    range.deleteContents();
+                }//end if
+            }//end if
+
+            ViperUtil.preventDefault(e);
+            range.collapse(true);
+            ViperSelection.addRange(range);
+            this.viper.fireNodesChanged();
+            return false;
+        }//end if
 
     },
 
