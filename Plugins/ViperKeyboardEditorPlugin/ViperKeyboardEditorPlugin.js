@@ -977,6 +977,10 @@ ViperKeyboardEditorPlugin.prototype = {
             return false;
         }//end if
 
+        if (this._handleBackspaceAtStartOfLi(e, range) === false) {
+            return false;
+        }
+
         if (range.startOffset === 0
             && range.collapsed === false
             && this.viper.isBrowser('msie') !== true
@@ -1020,6 +1024,46 @@ ViperKeyboardEditorPlugin.prototype = {
                 return false;
             }
         }
+
+    },
+
+    _handleBackspaceAtStartOfLi: function(e, range)
+    {
+        if (e.which === 46 && range.startOffset !== 0) {
+            return;
+        }
+
+        // Handle backspace at the start of a list (LI) element.
+        if (range.collapsed === true && range.startContainer.nodeType === ViperUtil.TEXT_NODE) {
+            var firstBlock      = ViperUtil.getFirstBlockParent(range.startContainer);
+            var firstSelectable = range._getFirstSelectableChild(firstBlock);
+            if (firstBlock
+                && ViperUtil.isTag(firstBlock, 'li') === true
+                && firstSelectable === range.startContainer
+            ) {
+                 // Check if there is a parent element with a selectable.
+                var prevSelectable = range.getPreviousContainer(firstSelectable, null, true, true);
+                if (prevSelectable) {
+                    while (firstBlock.firstChild) {
+                        ViperUtil.insertAfter(prevSelectable, firstBlock.firstChild);
+                    }
+
+                    var firstBlockParent = firstBlock.parentNode;
+                    ViperUtil.remove(firstBlock);
+                    if (ViperUtil.getTag('li', firstBlockParent).length === 0) {
+                        ViperUtil.remove(firstBlockParent);
+                    }
+
+                    range.setStart(firstSelectable, 0);
+                    range.collapse(true);
+                    ViperSelection.addRange(range);
+
+                    ViperUtil.preventDefault(e);
+                    this.viper.fireNodesChanged();
+                    return false;
+                }
+            }//end if
+        }//end if
 
     },
 
@@ -1077,6 +1121,10 @@ ViperKeyboardEditorPlugin.prototype = {
 
     _handleDeleteForChrome: function(e, range)
     {
+        if (this._handleBackspaceAtStartOfLi(e, range) === false) {
+            return false;
+        }
+
         // This block of code is a workaround for the delete bug in Chrome.
         // See http://goo.gl/QPB0v
         if (e.keyCode === 46
