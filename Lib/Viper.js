@@ -655,7 +655,7 @@ Viper.prototype = {
             this.element.setAttribute('contentEditable', true);
             ViperUtil.setStyle(this.element, 'outline', 'none');
 
-            if (this.isBrowser('msie') === true) {
+            if (this.isBrowser('msie', '<11') === true) {
                 try {
                     this.element.focus();
                 } catch (e) {
