@@ -5,6 +5,11 @@ body {
     font-family: monospace;
 }
 
+::selection {
+    background: #DDD;
+    color: #000;
+}
+
 .type-wrapper {
     display: none;
 }
