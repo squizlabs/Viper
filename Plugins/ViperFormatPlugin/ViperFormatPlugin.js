@@ -1383,6 +1383,10 @@ ViperFormatPlugin.prototype = {
             }
         } else {
             var start      = range.getStartNode();
+            if (!start) {
+                return statuses;
+            }
+
             var end        = range.getEndNode();
             var elements   = ViperUtil.getElementsBetween(start, end);
             var commonElem = range.getCommonElement();
