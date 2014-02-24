@@ -1044,8 +1044,8 @@ ViperKeyboardEditorPlugin.prototype = {
                  // Check if there is a parent element with a selectable.
                 var prevSelectable = range.getPreviousContainer(firstSelectable, null, true, true);
                 if (prevSelectable) {
-                    while (firstBlock.firstChild) {
-                        ViperUtil.insertAfter(prevSelectable, firstBlock.firstChild);
+                    while (firstBlock.lastChild) {
+                        ViperUtil.insertAfter(prevSelectable, firstBlock.lastChild);
                     }
 
                     var firstBlockParent = firstBlock.parentNode;
