@@ -264,7 +264,7 @@ ViperSourceViewPlugin.prototype = {
         var popupBottom = document.createElement('div');
         ViperUtil.addClass(popupBottom, 'VSVP-bottomPanel');
 
-        if (this.viper.isBrowser('msie') === false && (this.viper.getViperPath() || this.getViperURL())) {
+        if (this.viper.isBrowser('msie', '<10') === false && (this.viper.getViperPath() || this.getViperURL())) {
             var newWindowButton = tools.createButton('VSVP:newWindow', '', _('Open In new window'), 'VSVP-bottomPanel-newWindow Viper-sourceNewWindow', function() {
                 self.openInNewWindow();
             });
@@ -312,7 +312,7 @@ ViperSourceViewPlugin.prototype = {
             }
         );
 
-        if (this.viper.isBrowser('msie') === true) {
+        if (this.viper.isBrowser('msie', '<9') === true) {
             this._includeStyleHTML(function() {
                 var editor = document.createElement('textarea');
                 self._textEditor = editor;
@@ -468,9 +468,9 @@ ViperSourceViewPlugin.prototype = {
             var scripts  = [];
 
             var acePath =  path + '/Plugins/ViperSourceViewPlugin/Ace';
-            scripts.push(acePath + '/src/ace.js');
-            scripts.push(acePath + '/src/theme-viper.js');
-            scripts.push(acePath + '/src/mode-html.js');
+            scripts.push(acePath + '/ace.js');
+            scripts.push(acePath + '/theme-viper.js');
+            scripts.push(acePath + '/mode-html.js');
 
             // Include JSBeautifier.
             scripts.push(path + '/Plugins/ViperSourceViewPlugin/jsbeautifier.js');
@@ -553,9 +553,9 @@ ViperSourceViewPlugin.prototype = {
         } else {
             content += '<link href="' + path + '/Css/viper_tools.css" media="screen" rel="stylesheet" />';
             content += '<link href="' + path + '/Plugins/ViperSourceViewPlugin/ViperSourceViewPlugin.css" media="screen" rel="stylesheet" />';
-            content += '<script src="' + path + '/Plugins/ViperSourceViewPlugin/Ace/src/ace.js" type="text/javascript" charset="utf-8"></script>';
-            content += '<script src="' + path + '/Plugins/ViperSourceViewPlugin/Ace/src/theme-viper.js" type="text/javascript" charset="utf-8"></script>';
-            content += '<script src="' + path + '/Plugins/ViperSourceViewPlugin/Ace/src/mode-html.js" type="text/javascript" charset="utf-8"></script>';
+            content += '<script src="' + path + '/Plugins/ViperSourceViewPlugin/Ace/ace.js" type="text/javascript" charset="utf-8"></script>';
+            content += '<script src="' + path + '/Plugins/ViperSourceViewPlugin/Ace/theme-viper.js" type="text/javascript" charset="utf-8"></script>';
+            content += '<script src="' + path + '/Plugins/ViperSourceViewPlugin/Ace/mode-html.js" type="text/javascript" charset="utf-8"></script>';
         }
 
         content += '</head>';
