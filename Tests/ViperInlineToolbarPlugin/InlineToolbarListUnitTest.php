@@ -51,7 +51,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarListUnitTest extends Abs
         $this->assertEquals('<li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem Viper-selected">Selection</li>', $lineage);
 
         $this->selectInlineToolbarLineageItem(0);
-        $this->assertEquals($this->replaceKeywords('aaa bbbbb ccccc\n    4 %2% templates\n    Audit XuT content'), $this->getSelectedText(), 'List item is not selected.');
+        $this->assertEquals($this->replaceKeywords('aaa bbbbb ccccc4 %2% templatesAudit XuT content'), $this->getSelectedText(), 'List item is not selected.');
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem Viper-selected">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem">Selection</li>', $lineage);
 
@@ -63,7 +63,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarListUnitTest extends Abs
         $this->assertEquals('<li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem Viper-selected">Selection</li>', $lineage);
 
         $this->selectInlineToolbarLineageItem(0);
-        $this->assertEquals($this->replaceKeywords('Unordered list\n    %3% is cool\n    Another list item'), $this->getSelectedText(), 'List item is not selected.');
+        $this->assertEquals($this->replaceKeywords('Unordered list%3% is coolAnother list item'), $this->getSelectedText(), 'List item is not selected.');
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem Viper-selected">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem">Selection</li>', $lineage);
 
@@ -90,7 +90,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarListUnitTest extends Abs
         $this->assertEquals('<li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem Viper-selected">Item</li><li class="ViperITP-lineageItem">Selection</li>', $lineage);
 
         $this->selectInlineToolbarLineageItem(0);
-        $this->assertEquals($this->replaceKeywords('aaa bbbbb ccccc\n    4 %2% templates\n    Audit XuT content'), $this->getSelectedText(), 'List item is not selected.');
+        $this->assertEquals($this->replaceKeywords('aaa bbbbb ccccc4 %2% templatesAudit XuT content'), $this->getSelectedText(), 'List item is not selected.');
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem Viper-selected">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem">Selection</li>', $lineage);
 
@@ -186,7 +186,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarListUnitTest extends Abs
         $this->assertEquals($this->replaceKeywords('aaa bbbbb ccccc4 %2% templates'), $this->getSelectedText(), 'List item is not selected.');
 
         $this->selectInlineToolbarLineageItem(0);
-        $this->assertEquals($this->replaceKeywords('aaa bbbbb ccccc4 %2% templates\n    \n    Audit XuT content'), $this->getSelectedText(), 'List item is not selected.');
+        $this->assertEquals($this->replaceKeywords('aaa bbbbb ccccc4 %2% templatesAudit XuT content'), $this->getSelectedText(), 'List item is not selected.');
 
         $this->selectKeyword(2);
         $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
@@ -208,7 +208,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarListUnitTest extends Abs
         $this->assertEquals($this->replaceKeywords('Unordered list%3% is cool'), $this->getSelectedText(), 'List item is not selected.');
 
         $this->selectInlineToolbarLineageItem(0);
-        $this->assertEquals($this->replaceKeywords('Unordered list%3% is cool\n    \n    Another list item'), $this->getSelectedText(), 'List item is not selected.');
+        $this->assertEquals($this->replaceKeywords('Unordered list%3% is coolAnother list item'), $this->getSelectedText(), 'List item is not selected.');
 
         $this->selectKeyword(3);
         $this->sikuli->keyDown('Key.SHIFT + Key.TAB');

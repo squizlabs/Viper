@@ -13,7 +13,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarImageUnitTest extends Ab
      */
     public function testImageInLineage()
     {
-        $this->clickElement('img', 1);
+        $this->clickElement('img', 0);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Image</li>', $lineage);
         $this->assertTrue($this->inlineToolbarButtonExists('image', 'active'), 'Image icon should be active.');

@@ -1172,7 +1172,7 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
     {
         $this->useTest(4);
 
-        $this->clickElement('img', 1);
+        $this->clickElement('img', 0);
         $this->clickInlineToolbarButton('link');
         $this->type('www.squizlabs.com');
         $this->sikuli->keyDown('Key.TAB');
@@ -1183,7 +1183,7 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
 
         $this->sikuli->click($this->findKeyword(1));
 
-        $this->clickElement('img', 1);
+        $this->clickElement('img', 0);
         $this->clickInlineToolbarButton('linkRemove');
         $this->assertHTMLMatch('<p>%1% XuT</p><img src="%url%/ViperImagePlugin/Images/html-codesniffer.png" alt="Alt tag" /><p>second paragraph</p>');
 
@@ -1199,7 +1199,7 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
     {
         $this->useTest(4);
 
-        $this->clickElement('img', 1);
+        $this->clickElement('img', 0);
         $this->clickTopToolbarButton('link');
         $this->type('www.squizlabs.com');
         $this->sikuli->keyDown('Key.TAB');
@@ -1208,7 +1208,7 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
 
         $this->assertHTMLMatch('<p>%1% XuT</p><a href="www.squizlabs.com" title="Squiz Labs"><img src="%url%/ViperImagePlugin/Images/html-codesniffer.png" alt="Alt tag" /></a><p>second paragraph</p>');
 
-        $this->clickElement('img', 1);
+        $this->clickElement('img', 0);
         $this->clickTopToolbarButton('linkRemove');
         $this->assertHTMLMatch('<p>%1% XuT</p><img src="%url%/ViperImagePlugin/Images/html-codesniffer.png" alt="Alt tag" /><p>second paragraph</p>');
 

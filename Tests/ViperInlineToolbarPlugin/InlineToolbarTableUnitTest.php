@@ -346,7 +346,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarTABLEUnitTest extends Ab
         $this->type('Alt tag');
         $this->sikuli->keyDown('Key.ENTER');
 
-        $this->clickElement('img', 1);
+        $this->clickElement('img', 0);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">TABLE</li><li class="ViperITP-lineageItem">TBODY</li><li class="ViperITP-lineageItem">Row</li><li class="ViperITP-lineageItem">Cell</li><li class="ViperITP-lineageItem Viper-selected">Image</li>', $lineage);
 
