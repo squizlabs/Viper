@@ -222,6 +222,11 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
 
         $this->sikuli->resize();
 
+        if (strpos($this->sikuli->getBrowserid(), 'ie') === 0) {
+            // Set click delay.
+            $this->sikuli->setClickDelay(250);
+        }
+
         // Change browser and then change the URL.
         if (self::$_testRun === TRUE) {
             // URL is already changed to the test runner, so just reload.
@@ -245,7 +250,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
                 }
             }
 
-            $this->sikuli->goToURL($this->_getBaseUrl().'/tmp/test_tmp.html');
+            $this->sikuli->goToURL($this->_getBaseUrl().'/tmp/test_tmp.html?_t='.time());
             $this->sikuli->setAutoWaitTimeout(1);
             $this->_waitForViper();
 
