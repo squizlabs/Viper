@@ -359,7 +359,7 @@ ViperInlineToolbarPlugin.prototype = {
                     ViperUtil.removeClass(linElems, 'Viper-selected');
                     ViperUtil.addClass(clickElem, 'Viper-selected');
 
-                    if (self.viper.isBrowser('msie', '<11') === true) {
+                    if (self.viper.isBrowser('msie') === true) {
                         // IE changes the range when the mouse is released on an element
                         // that is not part of viper causing Viper to lose focus..
                         // Use time out to set the range back in to Viper..
@@ -404,7 +404,7 @@ ViperInlineToolbarPlugin.prototype = {
             ViperUtil.removeClass(linElems, 'Viper-selected');
             ViperUtil.addClass(parent, 'Viper-selected');
 
-            if (self.viper.isBrowser('msie', '<11') === true) {
+            if (self.viper.isBrowser('msie') === true) {
                 // IE changes the range when the mouse is released on an element
                 // that is not part of viper causing Viper to lose focus..
                 // Use time out to set the range back in to Viper..
@@ -471,8 +471,14 @@ ViperInlineToolbarPlugin.prototype = {
             range.setEnd(this._originalRange.endContainer, this._originalRange.endOffset);
         }
 
-        ViperSelection.addRange(range);
-
+        if (this.viper.isBrowser('msie') === true) {
+            // Another timing issue  with IE.
+            setTimeout(function() {
+                ViperSelection.addRange(range);
+            }, 10);
+        } else {
+            ViperSelection.addRange(range);
+        }
 
         this._toolbarWidget.closeActiveSubsection(true);
         this._toolbarWidget.setVerticalUpdateOnly(true);
