@@ -745,9 +745,20 @@ ViperDOMRange.prototype = {
             this._nodeSel.node = null;
             return null;
         } else if (startNode && !endNode) {
-            if (startNode.nodeType === ViperUtil.TEXT_NODE && ViperUtil.trim(startNode.data) === '') {
-                this._nodeSel.node = null;
-                return null;
+            if (startNode.nodeType === ViperUtil.TEXT_NODE) {
+                if (ViperUtil.trim(startNode.data) === '') {
+                    this._nodeSel.node = null;
+                    return null;
+                } else if (this._nodeSel.startOffset === startNode.data.length
+                    && startNode.nextSibling
+                    && startNode.nextSibling.nodeType === ViperUtil.ELEMENT_NODE
+                    && this._nodeSel.endContainer.childNodes.length === this._nodeSel.endOffset
+                    && this._nodeSel.endContainer.childNodes[(this._nodeSel.endOffset - 1)] === startNode.nextSibling
+                ) {
+                    // Inline element selection at the end of a block element (IE).
+                    this._nodeSel.node = startNode.nextSibling;
+                    return this._nodeSel.node;
+                }
             }
 
             this._nodeSel.node = startNode;
