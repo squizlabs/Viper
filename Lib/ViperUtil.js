@@ -1370,6 +1370,89 @@ var ViperUtil = {
 
     },
 
+
+    /**
+     * Provides an domtree traversal method for retrieving the node for the
+     * specified path.
+     *
+     * @param string path The path for the wanted node.
+     *
+     * @return DOMNode
+     */
+    getNodeFromPath: function(path)
+    {
+        var paths  = path.split('/');
+        var parent = document;
+        var pln    = paths.length;
+        for (var i = 0; i < pln; i++) {
+            if (ViperUtil.trim(paths[i]) === '') {
+                continue;
+            }
+
+            parent = ViperUtil.getNodeFromPathSegment(parent, paths[i]);
+        }
+
+        return parent;
+
+    },
+
+    /**
+     * Returns the node for the specified path segment under the specified parent.
+     *
+     * @param DOMElement parent The parent to retreive the child for.
+     * @param string     path   The path segment that identifies the child.
+     *
+     * @return DOMNode
+     */
+    getNodeFromPathSegment: function(parent, path)
+    {
+        var pos = path.match(/\[(\d+)\]/);
+
+        if (!pos) {
+            pos = 1;
+        } else {
+            pos = parseInt(pos[1]);
+            if (!pos) {
+                pos = 1;
+            }
+        }
+
+        var brPos = path.indexOf('[') || path.length;
+        var type  = path.substr(0, brPos);
+
+        if (!type) {
+            type = path;
+        }
+
+        var node, found = 1;
+        var cln         = parent.childNodes.length;
+        for (var i = 0; i < cln; i++) {
+            node = parent.childNodes[i];
+
+            if (node.nodeType === ViperUtil.DOCUMENT_TYPE_NODE) {
+                continue;
+            }
+
+            if (type === 'node()') {
+                if (found === pos) {
+                    return node;
+                }
+
+                found++;
+            } else if (node.nodeName && type === node.nodeName.toLowerCase()) {
+                if (found === pos) {
+                    return node;
+                }
+
+                found++;
+            }
+        }
+
+        throw Error('XPath: node could not be found');
+
+    },
+
+
     /**
      * Returns the loaded DOM Documents (main window, iframes, etc).
      *
