@@ -172,6 +172,11 @@ ViperKeyboardEditorPlugin.prototype = {
                     && range.startContainer.childNodes[(range.startOffset - 1)]
                 ) {
                     endNode = range.startContainer.childNodes[(range.startOffset - 1)];
+                } else if (range.startContainer.nodeType === ViperUtil.ELEMENT_NODE
+                    && range.startContainer.childNodes.length === 0
+                    && !endNode
+                ) {
+                    endNode = range.startContainer;
                 }
             }
 
