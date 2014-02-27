@@ -133,7 +133,6 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
      */
     public function testTableEditingIconAndTools()
     {
-
         $this->insertTable(1);
 
         // Get the first cell of the table.
@@ -164,7 +163,7 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
         usleep(200);
 
         // Check to make sure the table editing tools appear.
-        $this->assertTrue($this->buttonExists('tableCell'));
+        $this->assertTrue($this->inlineToolbarButtonExists('tableCell'));
 
         // Check the highlight for table icon.
         $this->sikuli->mouseMove($this->getToolsButton('table'));
@@ -847,7 +846,7 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
         $this->moveToKeyword(1, 'left');
         $this->sikuli->keyDown('Key.CMD + a');
         $this->sikuli->keyDown('Key.CMD + c');
-    
+
         // Insert table
         $this->insertTable(1);
 
@@ -872,7 +871,7 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
         $this->moveToKeyword(1, 'left');
         $this->sikuli->keyDown('Key.CMD + a');
         $this->sikuli->keyDown('Key.CMD + c');
-    
+
         // Insert table
         $this->insertTable(1);
 
