@@ -51,11 +51,11 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
         $this->clickTopToolbarButton('table', 'active');
 
         // Check to make sure the table editing tools appear.
-        $this->assertTrue($this->buttonExists('tableCell'), 'Table tools did not appear on screen');
+        $this->assertTrue($this->topToolbarButtonExists('tableCell'), 'Table tools did not appear on screen');
         $this->clickTopToolbarButton('table', 'active');
 
         // Check to make sure the table editing tools don't appear.
-        $this->assertFalse($this->buttonExists('tableCell'), 'The table icons should no longer appear on the screen');
+        $this->assertFalse($this->topToolbarButtonExists('tableCell'), 'The table icons should no longer appear on the screen');
 
     }//end testUsingTableIconInTopToolbar()
 
