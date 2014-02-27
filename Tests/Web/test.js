@@ -200,24 +200,25 @@ function execJS()
  */
 function gBRec(selector, index)
 {
-    var rect = viperTest.getWindow().ViperUtil.getBoundingRectangle(viperTest.getWindow().ViperUtil.$(selector)[index]);
-    rect.x1 = parseInt(rect.x1);
-    rect.x2 = parseInt(rect.x2);
-    rect.y1 = parseInt(rect.y1);
-    rect.y2 = parseInt(rect.y2);
+    var elem = ViperUtil.$(selector)[index];
+    var rect = viperTest.getWindow().ViperUtil.getBoundingRectangle(elem);
+    rect.x1  = parseInt(rect.x1);
+    rect.x2  = parseInt(rect.x2);
+    rect.y1  = parseInt(rect.y1);
+    rect.y2  = parseInt(rect.y2);
+
     return rect;
 
 }
 
 function gVITPArrow()
 {
-    var toolbar = viperTest.getWindow().viper.getPluginManager().getPlugin('ViperInlineToolbarPlugin').getToolbar().element;
-    if (ViperUtil.hasClass(toolbar, 'Viper-visible') === false) {
-        return null;
+    var toolbar = ViperUtil.getClass('ViperITP Viper-visible')[0];
+    if (!toolbar) {
+        return  null;
     }
 
-    var rect    = viperTest.getWindow().ViperUtil.getBoundingRectangle(toolbar);
-
+    var rect  = viperTest.getWindow().ViperUtil.getBoundingRectangle(toolbar);
     var arrow = {
         x1: rect.x1 + (((rect.x2 - rect.x1) / 2) - 10),
         x2: rect.x1 + (((rect.x2 - rect.x1) / 2) + 10),
