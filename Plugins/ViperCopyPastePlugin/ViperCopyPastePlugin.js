@@ -545,9 +545,17 @@ ViperCopyPastePlugin.prototype = {
 
         // Clean paste from word document.
         var html = ViperUtil.getHtml(pasteElement);
-        html     = this._cleanWordPaste(html);
-        html     = this._removeAttributes(html);
-        html     = this._updateElements(html);
+        if (pasteElement.firstChild
+            && ViperUtil.isTag(pasteElement.firstChild, 'b') === true
+            || (ViperUtil.isTag(pasteElement.firstChild, 'meta') === true && ViperUtil.isTag(pasteElement.firstChild.nextSibling, 'b') === true)
+        ) {
+            // Google Docs.
+            html = this._cleanGoogleDocsPaste(html);
+        } else {
+            html = this._cleanWordPaste(html);
+            html = this._removeAttributes(html);
+            html = this._updateElements(html);
+        }
 
         var self = this;
         this.viper.fireCallbacks('ViperCopyPastePlugin:cleanPaste', {html: html, stripTags: stripTags}, function(obj, newHTML) {
@@ -766,6 +774,123 @@ ViperCopyPastePlugin.prototype = {
         // Convert Words orsm "lists"..
         content = this._convertWordPasteList(content);
 
+        content = this._cleanStyleAttributes(content);
+
+        // Page breaks?
+        content = content.replace('<br clear="all">', '');
+        content = this._removeWordTags(content);
+        content = this._convertTags(content);
+
+        return content;
+
+    },
+
+    _cleanGoogleDocsPaste: function(content)
+    {
+        var tmp = document.createElement('div');
+        ViperUtil.setHtml(tmp, content);
+
+        // Remove the wrapping b tag.
+        ViperUtil.setHtml(tmp, ViperUtil.getHtml(ViperUtil.getTag('b', tmp)[0]));
+        content = ViperUtil.getHtml(tmp);
+
+        content = this._cleanStyleAttributes(content, 'google_docs');
+
+        var validStyles = {
+            'font-weight:bold': 'strong',
+            'font-style:italic': 'em',
+            'text-decoration:line-through': 'del',
+            'vertical-align:sub': 'sub',
+            'vertical-align:super': 'sup'
+        };
+
+        // Convert span tags with styles to the proper tags.
+        ViperUtil.setHtml(tmp, content);
+        var spanTags = ViperUtil.getTag('span', tmp);
+        for (var i = 0; i < spanTags.length; i++) {
+            var span     = spanTags[i];
+            var newTag   = null;
+            var outerTag = null;
+            if (ViperUtil.hasAttribute(span, 'style') === true) {
+                for (var style in validStyles) {
+                    if (ViperUtil.attr(span, 'style').indexOf(style) >= 0) {
+                        // Create a new tag for this style.
+                        var t = document.createElement(validStyles[style]);
+
+                        if (newTag) {
+                            newTag.appendChild(t);
+                        } else {
+                            outerTag = t;
+                        }
+
+                        newTag = t;
+                    }
+                }
+            }//end if
+
+            if (newTag) {
+                // A new tag was created insert the contents of the span to this new tag.
+                while (span.firstChild) {
+                    newTag.appendChild(span.firstChild);
+                }
+
+                ViperUtil.insertBefore(span, outerTag);
+            } else {
+                while (span.firstChild) {
+                    ViperUtil.insertBefore(span, span.firstChild);
+                }
+
+            }
+
+            // Remove this span tag.
+            ViperUtil.remove(span);
+        }//end for
+
+        // Remove all p tags inside LI elements.
+        var pInLI = ViperUtil.find(tmp, 'li > p');
+        for (var i = 0; i < pInLI.length; i++) {
+            while (pInLI[i].firstChild) {
+                ViperUtil.insertBefore(pInLI[i], pInLI[i].firstChild);
+            }
+
+            ViperUtil.remove(pInLI[i]);
+        }
+
+        // Find all ol/ul tags inside other ol/ul tags.
+        var nestedLists = ViperUtil.find(tmp, 'ol > ol,ol > ul, ul > ul, ul > ol');
+        for (var i = 0; i < nestedLists.length; i++) {
+            var list = nestedLists[i];
+            // Get the previous list item.
+            for (var prevSib = list.previousSibling; prevSib; prevSib = prevSib.previousSibling) {
+                if (ViperUtil.isTag(prevSib, 'li') === false) {
+                    continue;
+                }
+
+                // Found the previous list item, append this list to this list item.
+                prevSib.appendChild(list);
+                break;
+            }
+        }
+
+        // Remove BR tags from main element.
+        var brTags = ViperUtil.find(tmp, ' > br');
+        if (brTags.length > 0) {
+            ViperUtil.remove(brTags);
+        }
+
+        content = ViperUtil.getHtml(tmp);
+
+        // Remove all remaining span tags.
+        content = content.replace(/<\/?span[^>]*>/gi, "");
+
+        // Clean all font-weight etc.
+        content = this._cleanStyleAttributes(content);
+
+        return content;
+    },
+
+    _cleanStyleAttributes: function(content, contentType)
+    {
         var self = this;
         content  = content.replace(new RegExp('<(\\w[^>]*) style="([^"]*)"([^>]*)', 'gi'), function() {
             var styles      = arguments[2];
@@ -774,7 +899,7 @@ ViperCopyPastePlugin.prototype = {
             var replacement = '';
             for (var i = 0; i < stylesList.length; i++) {
                 var style = ViperUtil.trim(stylesList[i].replace("\n", ''));
-                if (self.isAllowedStyle(style) === true) {
+                if (self.isAllowedStyle(style, contentType) === true) {
                     validStyles.push(style);
                 }
             }
@@ -789,16 +914,11 @@ ViperCopyPastePlugin.prototype = {
             return replacement;
         });
 
-        // Page breaks?
-        content = content.replace('<br clear="all">', '');
-        content = this._removeWordTags(content);
-        content = this._convertTags(content);
-
         return content;
 
     },
 
-    isAllowedStyle: function(style)
+    isAllowedStyle: function(style, contentType)
     {
         if (style.indexOf('mso-') === 0) {
             return false;
@@ -806,6 +926,11 @@ ViperCopyPastePlugin.prototype = {
 
         var styleName     = style.split(':');
         var allowedStyles = ['height', 'width', 'padding', 'text-align', 'text-indent', 'border-collapse', 'border', 'border-top', 'border-bottom', 'border-right', 'border-left'];
+
+        if (contentType === 'google_docs') {
+            allowedStyles = allowedStyles.concat(['font-weight', 'font-style', 'vertical-align', 'text-decoration']);
+        }
+
         if (ViperUtil.inArray(styleName[0], allowedStyles) === true) {
             return true;
         }
