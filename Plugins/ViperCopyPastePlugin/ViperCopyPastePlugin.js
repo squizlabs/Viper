@@ -548,6 +548,7 @@ ViperCopyPastePlugin.prototype = {
         if (pasteElement.firstChild
             && ViperUtil.isTag(pasteElement.firstChild, 'b') === true
             || (ViperUtil.isTag(pasteElement.firstChild, 'meta') === true && ViperUtil.isTag(pasteElement.firstChild.nextSibling, 'b') === true)
+            || (pasteElement.firstChild.id && pasteElement.firstChild.id.indexOf('docs-internal-guid-') === 0)
         ) {
             // Google Docs.
             html = this._cleanGoogleDocsPaste(html);
@@ -796,55 +797,9 @@ ViperCopyPastePlugin.prototype = {
 
         content = this._cleanStyleAttributes(content, 'google_docs');
 
-        var validStyles = {
-            'font-weight:bold': 'strong',
-            'font-style:italic': 'em',
-            'text-decoration:line-through': 'del',
-            'vertical-align:sub': 'sub',
-            'vertical-align:super': 'sup'
-        };
-
         // Convert span tags with styles to the proper tags.
         ViperUtil.setHtml(tmp, content);
-        var spanTags = ViperUtil.getTag('span', tmp);
-        for (var i = 0; i < spanTags.length; i++) {
-            var span     = spanTags[i];
-            var newTag   = null;
-            var outerTag = null;
-            if (ViperUtil.hasAttribute(span, 'style') === true) {
-                for (var style in validStyles) {
-                    if (ViperUtil.attr(span, 'style').indexOf(style) >= 0) {
-                        // Create a new tag for this style.
-                        var t = document.createElement(validStyles[style]);
-
-                        if (newTag) {
-                            newTag.appendChild(t);
-                        } else {
-                            outerTag = t;
-                        }
-
-                        newTag = t;
-                    }
-                }
-            }//end if
-
-            if (newTag) {
-                // A new tag was created insert the contents of the span to this new tag.
-                while (span.firstChild) {
-                    newTag.appendChild(span.firstChild);
-                }
-
-                ViperUtil.insertBefore(span, outerTag);
-            } else {
-                while (span.firstChild) {
-                    ViperUtil.insertBefore(span, span.firstChild);
-                }
-
-            }
-
-            // Remove this span tag.
-            ViperUtil.remove(span);
-        }//end for
+        this._convertSpansToStyleTags(tmp);
 
         // Remove all p tags inside LI elements.
         var pInLI = ViperUtil.find(tmp, 'li > p');
@@ -878,6 +833,16 @@ ViperCopyPastePlugin.prototype = {
             ViperUtil.remove(brTags);
         }
 
+        // Remove strong/em tags from H1..H6 elements.
+        var strongAndEmTags = ViperUtil.find(tmp, 'h1 > strong,h2 > strong,h3 > strong,h4 > strong,h5 > strong,h6 > strong,h1 > em,h2 > em,h3 > em,h4 > em,h5 > em,h6 > em');
+        for (var i = 0; i < strongAndEmTags.length; i++) {
+            while (strongAndEmTags[i].firstChild) {
+                ViperUtil.insertBefore(strongAndEmTags[i], strongAndEmTags[i].firstChild);
+            }
+
+            ViperUtil.remove(strongAndEmTags[i]);
+        }
+
         content = ViperUtil.getHtml(tmp);
 
         // Remove all remaining span tags.
@@ -887,6 +852,63 @@ ViperCopyPastePlugin.prototype = {
         content = this._cleanStyleAttributes(content);
 
         return content;
+    },
+
+    _convertSpansToStyleTags: function(elem)
+    {
+        var validStyles = {
+            'font-weight:\\s*bold': 'strong',
+            'font-style:\\s*italic': 'em',
+            'text-decoration:\\s*line-through': 'del',
+            'vertical-align:\\s*sub': 'sub',
+            'vertical-align:\\s*super': 'sup'
+        };
+
+        var spanTags = ViperUtil.getTag('span', elem);
+        var regexs   = {};
+        for (var i = 0; i < spanTags.length; i++) {
+            var span     = spanTags[i];
+            var newTag   = null;
+            var outerTag = null;
+            if (ViperUtil.hasAttribute(span, 'style') === true) {
+                for (var style in validStyles) {
+                    if (!regexs[style]) {
+                        regexs[style] = new RegExp(style);
+                    }
+
+                    if (ViperUtil.attr(span, 'style').match(regexs[style]) !== null) {
+                        // Create a new tag for this style.
+                        var t = document.createElement(validStyles[style]);
+
+                        if (newTag) {
+                            newTag.appendChild(t);
+                        } else {
+                            outerTag = t;
+                        }
+
+                        newTag = t;
+                    }
+                }
+            }//end if
+
+            if (newTag) {
+                // A new tag was created insert the contents of the span to this new tag.
+                while (span.firstChild) {
+                    newTag.appendChild(span.firstChild);
+                }
+
+                ViperUtil.insertBefore(span, outerTag);
+            } else {
+                while (span.firstChild) {
+                    ViperUtil.insertBefore(span, span.firstChild);
+                }
+
+            }
+
+            // Remove this span tag.
+            ViperUtil.remove(span);
+        }//end for
+
     },
 
     _cleanStyleAttributes: function(content, contentType)
@@ -925,7 +947,7 @@ ViperCopyPastePlugin.prototype = {
         }
 
         var styleName     = style.split(':');
-        var allowedStyles = ['height', 'width', 'padding', 'text-align', 'text-indent', 'border-collapse', 'border', 'border-top', 'border-bottom', 'border-right', 'border-left'];
+        var allowedStyles = ['height', 'width', 'padding', 'text-align', 'text-indent', 'border-collapse', 'border', 'border-top', 'border-bottom', 'border-right', 'border-left', 'list-style-type'];
 
         if (contentType === 'google_docs') {
             allowedStyles = allowedStyles.concat(['font-weight', 'font-style', 'vertical-align', 'text-decoration']);
