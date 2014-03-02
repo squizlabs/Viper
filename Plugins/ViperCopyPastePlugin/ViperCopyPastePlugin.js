@@ -646,7 +646,7 @@ ViperCopyPastePlugin.prototype = {
 
             var prevCheckCont = ViperUtil.trim(ViperUtil.getNodeTextContent(prevBlock));
             if (prevCheckCont !== '') {
-                // Lets to another check for IE..
+                // Lets do another check for IE..
                 if (prevCheckCont.length === 1 && prevCheckCont.charCodeAt(0) !== 160) {
                     prevBlock = prevBlock.nextSibling;
                 }
@@ -666,15 +666,15 @@ ViperCopyPastePlugin.prototype = {
 
             var changeid  = ViperChangeTracker.startBatchChange('textAdded');
             var prevChild = null;
-            while (fragment.firstChild) {
-                if (prevChild === fragment.firstChild) {
+            while (fragment.lastChild) {
+                if (prevChild === fragment.lastChild) {
                     break;
                 }
 
-                prevChild = fragment.firstChild;
+                prevChild = fragment.lastChild;
                 var ctNode = null;
-                if (ViperUtil.isBlockElement(fragment.firstChild) === true) {
-                    ctNode = fragment.firstChild;
+                if (ViperUtil.isBlockElement(fragment.lastChild) === true) {
+                    ctNode = fragment.lastChild;
                     ViperChangeTracker.addChange('textAdd', [ctNode]);
 
                     if (convertBrTags === true) {
@@ -686,11 +686,19 @@ ViperCopyPastePlugin.prototype = {
                         }
                     }
                 } else {
-                    ctNode = ViperChangeTracker.createCTNode('ins', 'textAdd', fragment.firstChild);
+                    ctNode = ViperChangeTracker.createCTNode('ins', 'textAdd', fragment.lastChild);
                     ViperChangeTracker.addNodeToChange(changeid, ctNode);
                 }
 
-                ViperUtil.insertBefore(prevBlock, ctNode);
+                ViperUtil.insertAfter(prevBlock, ctNode);
+            }
+
+            // Check that previous container is not empty.
+            if (prevBlock) {
+                prevCheckCont = ViperUtil.trim(ViperUtil.getNodeTextContent(prevBlock));
+                if (prevCheckCont === '' || (prevCheckCont.length === 1 && prevCheckCont.charCodeAt(0) === 160)) {
+                    ViperUtil.remove(prevBlock);
+                }
             }
 
             ViperChangeTracker.endBatchChange(changeid);
