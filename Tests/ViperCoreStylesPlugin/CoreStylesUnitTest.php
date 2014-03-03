@@ -86,35 +86,20 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreStylesUnitTest extends AbstractViper
 
 
     /**
-     * Tests that adding styles spanning multiple paragraphs work.
+     * Tests that adding and removing styles spanning multiple paragraphs work.
      *
      * @return void
      */
-    public function testMultiParaApplyStyle()
+    public function testMultiParaApplyAndRemoveStyle()
     {
-        $this->sikuli->click($this->findKeyword(2));
         $this->selectKeyword(1, 4);
         $this->sikuli->keyDown('Key.CMD + b');
-
         $this->assertHTMLMatch('<p><strong>%1% %2% %3%</strong></p><p><strong>sit <em>%4%</em></strong> <strong>%5%</strong></p>');
 
-    }//end testMultiParaApplyStyle()
-
-
-    /**
-     * Tests that removing styles spanning multiple paragraphs work.
-     *
-     * @return void
-     */
-    public function testMultiParaRemoveStyle()
-    {
-        $this->selectKeyword(1, 4);
         $this->sikuli->keyDown('Key.CMD + b');
-        $this->sikuli->keyDown('Key.CMD + b');
-
         $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
-    }//end testMultiParaRemoveStyle()
+    }//end testMultiParaApplyAndRemoveStyle()
 
 
     /**
